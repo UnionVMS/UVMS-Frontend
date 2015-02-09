@@ -1,0 +1,62 @@
+.headermenu {
+  width: 1070px;
+  margin: 0 auto;
+  height: 55px;
+}
+.menucell {
+  min-width: 85px;
+  float: left;
+  padding: 15px;
+}
+a .menucell,
+a:visited .menucell {
+  font-size: 18px;
+  font-weight: bold;
+  color: #000000;
+  text-decoration: none;
+}
+a:hover .menucell,
+.menucell:hover {
+  background-color: #e4e4e4;
+  text-decoration: none;
+  cursor: pointer;
+}
+.menucell:hover {
+  background-color: #e4e4e4;
+  text-decoration: none;
+  cursor: pointer;
+  border-bottom: solid 2px #000000;
+}
+.headerbuffer {
+  overflow: hidden;
+}
+ul.today li .today,
+ul .vessel li .vessel {
+  background-color: #e4e4e4;
+  text-decoration: none;
+  cursor: pointer;
+  border-bottom: solid 2px #000000;
+}
+/*.vessel{background-color:pink;}
+*/
+/* test menu*/
+nav {
+  display: inline-block;
+  margin: 60px auto 45px;
+  background-color: sandybrown;
+}
+nav a {
+  background-color: transparent;
+  -webkit-transition: background-color 0.25s;
+  -moz-transition: background-color 0.25s;
+}
+nav.today .today,
+nav.reporting .reporting,
+nav.vessel .vessel,
+nav.user .user,
+nav.alarmconditioins .alarmconditioins,
+nav.communication .communication,
+nav.gis .gis,
+nav.configuration .configuration {
+  background-color: #c0c0c0;
+}

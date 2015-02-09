@@ -1,0 +1,35 @@
+
+
+<div class="headermenu">
+    <div class="headerbuffer">
+    <div class="col-md-12" ng-controller="HeaderCtrl">
+        <ul>
+             <li class="menucelll" ng-repeat="page in menu" ng-class="{active: isActive(page.url)}">
+             <!--    <div class="menubox">-->
+                    <a ng-href="/#/{{page.url}}">
+                        <div class="menucell">{{page.title}}</div>
+                    </a>
+                <!--</div>-->
+            </li>
+        </ul>
+    </div>
+    </div>
+</div>
+
+
+<!--
+<div class="headermenu col-md-12">
+    <nav class="{{active}}">
+        <a ng-href="#today" class="today" ng-click="active='today'">Today</a>
+        <a ng-href="#reporting" class="reporting" ng-click="active='reporting'">Today</a>
+        <a ng-href="#user" class="user" ng-click="active='user'">User</a>
+        <a class="vessel" ng-click="active='vessel'" ng-href="/#/vessel">Vessel</a>
+        <a ng-href="#alarmconditioins" class="alarmconditions" ng-click="active='alarmconditions'">Alarm conditions</a>
+        <a ng-href="#communication" class="communication" ng-click="active='communicaiton'">Communication</a>
+        <a ng-href="#configuration" class="configuration" ng-click="active='configuration'">Configuration</a>
+        <a ng-href="#gis" class="gis" ng-click="active='gis'">GIS</a>
+    </nav>
+</div>
+-->
+
+

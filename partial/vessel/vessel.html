@@ -1,0 +1,157 @@
+<div ng-controller="VesselCtrl">
+   <div class="vesselsearchboxcontainer">
+    <div class="vesselsearchbox">
+        <form class="col-md-3">
+            <input type="text" class="form-control" placeholder="Search" ng-model="searchFilter">
+            <!--<div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                    <input type="text" class="form-control" placeholder="Search" ng-model="searchFilter">
+                </div>
+            </div>-->
+
+        </form>
+        <!-- Button -->
+        <button type="button" class="btn btn-default btn-lg">
+         <span class="fa fa-search" aria-hidden="true"></span>
+        </button>
+
+
+
+    </div>
+
+
+
+
+
+       <hr>
+       <div class="btn-group">
+           <button class="btn btn-primary">Checked option</button>
+           <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" data-placeholder="false"><span class="caret"></span></button>
+           <ul class="dropdown-menu">
+               <li><input type="checkbox" id="ID" name="NAME" value="VALUE"><label for="ID">Label</label></li>
+               <li><input type="checkbox" id="ID1" name="NAME1" value="VALUE"><label for="ID1">Label1</label></li>
+               <!-- Other items -->
+           </ul>
+       </div>
+       <hr>
+
+
+   </div>
+
+    <div class="vesselsearchresultcontainer">
+    <div class="vesselsearchresult">
+        <table class="col-md-12">
+            <thead>
+            <tr>
+                <th><input type="checkbox" ng-model="item.selectedAll" ng-click="checkAll()"/></th>
+                <th>
+                    <a href="" ng-click="sortType='id'; sortReverse = !sortReverse">
+                        Id
+                        <span ng-show="sortType == 'id' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'id' && sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sortType != 'id'" class="fa fa-sort"></span>
+                    </a>
+                </th>
+                <th>
+                    <a href="" ng-click="sortType='name'; sortReverse = !sortReverse">
+                        Name
+                        <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sortType != 'name'" class="fa fa-sort"></span>
+                    </a>
+                </th>
+                <th>
+                    <a href="" ng-click="sortType='state'; sortReverse = !sortReverse">
+                        State
+                        <span ng-show="sortType == 'state' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'state' && sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sortType != 'state'" class="fa fa-sort"></span>
+                    </a>
+                </th>
+                <th>
+                    <a href="" ng-click="sortType='extno'; sortReverse = !sortReverse">
+                        Ext.No
+                        <span ng-show="sortType == 'extno' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'extno' && sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sortType != 'extno'" class="fa fa-sort"></span>
+                    </a>
+                </th>
+                <th>
+                    <a href="" ng-click="sortType='type'; sortReverse = !sortReverse">
+                        Type
+                        <span ng-show="sortType == 'type' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'type' && sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sortType != 'type'" class="fa fa-sort"></span>
+                    </a>
+                </th>
+                <th>
+                    <a href="" ng-click="sortType='signal'; sortReverse = !sortReverse">
+                        Signal
+                        <span ng-show="sortType == 'signal' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'signal' && sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sortType != 'signal'" class="fa fa-sort"></span>
+                    </a>
+                </th>
+                <th>
+                    <a href="" ng-click="sortType='comm'; sortReverse = !sortReverse">
+                        Comm
+                        <span ng-show="sortType == 'comm' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'comm' && sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sortType != 'comm'" class="fa fa-sort"></span>
+                    </a>
+                </th>
+                <th>
+                    <a href="" ng-click="sortType='memberno'; sortReverse = !sortReverse">
+                        Member No.
+                        <span ng-show="sortType == 'memberno' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'memberno' && sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sortType != 'memberno'" class="fa fa-sort"></span>
+                    </a>
+                </th>
+                <th>
+                    <a href="" ng-click="sortType='terminals'; sortReverse = !sortReverse">
+                        Terminals
+                        <span ng-show="sortType == 'terminals' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'terminals' && sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sortType != 'terminals'" class="fa fa-sort"></span>
+                    </a>
+                </th>
+                <th>
+                    <a href="" ng-click="sortType='lastreport'; sortReverse = !sortReverse">
+                        Last report
+                        <span ng-show="sortType == 'lastreport' && !sortReverse" class="fa fa-caret-down"></span><span ng-show="sortType == 'lastreport' && sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sortType != 'lastreport'" class="fa fa-sort"></span>
+                    </a>
+                </th>
+                <th>Details</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in vessels | orderBy:sortType:sortReverse | filter:searchFilter">
+                <td><input type="checkbox" ng-model="item.Selected"/></td>
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.state}}</td>
+                <td>{{item.extno}}</td>
+                <td>{{item.type}}</td>
+                <td>{{item.signal}}</td>
+                <td>{{item.comm}}</td>
+                <td>{{item.memberno}}</td>
+                <!--  <td>{{item.terminals | filtered}}</td>-->
+                <td item.terminals>
+                    {{item.terminals.length}}
+                </td>
+                <td>{{item.lastreport}}h</td>
+                <td>
+                    <button class="btn button">view</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    {{error}}
+    </div>
+
+</div>
