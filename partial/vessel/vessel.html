@@ -1,42 +1,69 @@
-<div ng-controller="VesselCtrl">
+<div ng-controller="VesselCtrl" ng-init="getInitialVessels()">
    <div class="vesselsearchboxcontainer">
     <div class="vesselsearchbox">
-        <form class="col-md-3">
-            <input type="text" class="form-control" placeholder="Search" ng-model="searchFilter">
-            <!--<div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                    <input type="text" class="form-control" placeholder="Search" ng-model="searchFilter">
-                </div>
-            </div>-->
 
-        </form>
-        <!-- Button -->
-        <button type="button" class="btn btn-default btn-lg">
-         <span class="fa fa-search" aria-hidden="true"></span>
-        </button>
+        <div class="vesselsearchtools">
+            <form class="vesselsearch">
+                <input type="text" class="form-control" placeholder="Search" ng-model="searchFilter">
+                <!--<div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                        <input type="text" class="form-control" placeholder="Search" ng-model="searchFilter">
+                    </div>
+                </div>-->
+            </form>
 
+            <!-- Dropdown -->
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="vesselDropdown" data-toggle="dropdown" aria-expanded="true">
+                    <div class="vesseldropdowntext">All</div>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Vessels</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+                </ul>
+            </div>
 
+            <!-- Search button -->
+            <button type="button" class="btn btn-default btn-lg" ng-click="checkVessels()">
+                <span class="fa fa-search" aria-hidden="true" ></span>
+            </button>
+
+        </div>
+        <div class="vesselsearchgroups">
+            <savedSearchesButton></savedSearchesButton>
+        </div>
+
+        {{selected}}
+
+    </div>
+       <div class="advancesearchcontainer">
+           <div class="advancesearchbody animate-show" ng-show="showadvanced"></div>
+            <p class="advancesearchtag" ng-click="toogleAdvancedsearch()">+ Advanced search</p>
+
+       </div>
+    <div class="vesselsearchboxfooter">
+        <!-- Dropdown -->
+        <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="vesselDropdown" data-toggle="dropdown" aria-expanded="true">
+                <div class="vesseldropdowntext">All</div>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Vessels</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
+            </ul>
+        </div>
+        <!-- add new button -->
+        <button class="btn btn-sm btn-primary right" type="button"> Add new &nbsp;&nbsp;&nbsp;&nbsp;<span>+</span></button>
 
     </div>
 
-
-
-
-
-       <hr>
-       <div class="btn-group">
-           <button class="btn btn-primary">Checked option</button>
-           <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" data-placeholder="false"><span class="caret"></span></button>
-           <ul class="dropdown-menu">
-               <li><input type="checkbox" id="ID" name="NAME" value="VALUE"><label for="ID">Label</label></li>
-               <li><input type="checkbox" id="ID1" name="NAME1" value="VALUE"><label for="ID1">Label1</label></li>
-               <!-- Other items -->
-           </ul>
-       </div>
-       <hr>
-
-
+       <br>
    </div>
 
     <div class="vesselsearchresultcontainer">
@@ -46,11 +73,11 @@
             <tr>
                 <th><input type="checkbox" ng-model="item.selectedAll" ng-click="checkAll()"/></th>
                 <th>
-                    <a href="" ng-click="sortType='id'; sortReverse = !sortReverse">
+                    <a href="" ng-click="sortType='internalId'; sortReverse = !sortReverse">
                         Id
-                        <span ng-show="sortType == 'id' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'id' && sortReverse" class="fa fa-caret-up"></span>
-                        <span ng-show="sortType != 'id'" class="fa fa-sort"></span>
+                        <span ng-show="sortType == 'internalId' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'internalId' && sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sortType != 'internalId'" class="fa fa-sort"></span>
                     </a>
                 </th>
                 <th>
@@ -70,35 +97,35 @@
                     </a>
                 </th>
                 <th>
-                    <a href="" ng-click="sortType='extno'; sortReverse = !sortReverse">
-                        Ext.No
-                        <span ng-show="sortType == 'extno' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'extno' && sortReverse" class="fa fa-caret-up"></span>
-                        <span ng-show="sortType != 'extno'" class="fa fa-sort"></span>
+                    <a href="" ng-click="sortType='externalMarking'; sortReverse = !sortReverse">
+                        Ext.Ma
+                        <span ng-show="sortType == 'externalMarking' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'externalMarking' && sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sortType != 'externalMarking'" class="fa fa-sort"></span>
                     </a>
                 </th>
                 <th>
-                    <a href="" ng-click="sortType='type'; sortReverse = !sortReverse">
-                        Type
-                        <span ng-show="sortType == 'type' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'type' && sortReverse" class="fa fa-caret-up"></span>
-                        <span ng-show="sortType != 'type'" class="fa fa-sort"></span>
+                    <a href="" ng-click="sortType='vesselType'; sortReverse = !sortReverse">
+                        Vesseltype
+                        <span ng-show="sortType == 'vesselType' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'vesselType' && sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sortType != 'vesselType'" class="fa fa-sort"></span>
                     </a>
                 </th>
                 <th>
-                    <a href="" ng-click="sortType='signal'; sortReverse = !sortReverse">
+                    <a href="" ng-click="sortType='ircs'; sortReverse = !sortReverse">
                         Signal
-                        <span ng-show="sortType == 'signal' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'signal' && sortReverse" class="fa fa-caret-up"></span>
-                        <span ng-show="sortType != 'signal'" class="fa fa-sort"></span>
+                        <span ng-show="sortType == 'ircs' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'ircs' && sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sortType != 'ircs'" class="fa fa-sort"></span>
                     </a>
                 </th>
                 <th>
-                    <a href="" ng-click="sortType='comm'; sortReverse = !sortReverse">
+                    <a href="" ng-click="sortType='cfr'; sortReverse = !sortReverse">
                         Comm
-                        <span ng-show="sortType == 'comm' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'comm' && sortReverse" class="fa fa-caret-up"></span>
-                        <span ng-show="sortType != 'comm'" class="fa fa-sort"></span>
+                        <span ng-show="sortType == 'cfr' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'cfr' && sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sortType != 'cfr'" class="fa fa-sort"></span>
                     </a>
                 </th>
                 <th>
@@ -131,27 +158,25 @@
             <tbody>
             <tr ng-repeat="item in vessels | orderBy:sortType:sortReverse | filter:searchFilter">
                 <td><input type="checkbox" ng-model="item.Selected"/></td>
-                <td>{{item.id}}</td>
+                <td>{{item.internalId}}</td>
                 <td>{{item.name}}</td>
-                <td>{{item.state}}</td>
-                <td>{{item.extno}}</td>
-                <td>{{item.type}}</td>
-                <td>{{item.signal}}</td>
-                <td>{{item.comm}}</td>
-                <td>{{item.memberno}}</td>
-                <!--  <td>{{item.terminals | filtered}}</td>-->
-                <td item.terminals>
-                    {{item.terminals.length}}
-                </td>
-                <td>{{item.lastreport}}h</td>
+                <td>{{item.source}}</td>
+                <td>{{item.externalMarking}}</td>
+                <td>{{item.vesselType}}</td>
+                <td>{{item.ircs}}</td>
+                <td>Not present</td>
+                <td>Not present</td>
+                <td>Not present</td>
+                <td>Not present</td>
                 <td>
                     <button class="btn button">view</button>
                 </td>
             </tr>
             </tbody>
         </table>
+        <p style="color: orangered">{{error}}</p>
     </div>
-    {{error}}
+
     </div>
 
 </div>

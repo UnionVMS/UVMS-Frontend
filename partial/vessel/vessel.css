@@ -1,10 +1,10 @@
 .vesselsearchboxcontainer {
   background-color: white;
+  margin-bottom: 25px;
 }
 .vesselsearchbox {
   width: 1170px;
   margin: 5px auto;
-  height: 200px;
   padding: 20px 0;
 }
 .vesselsearchbox input {
@@ -19,14 +19,88 @@
 .vesselsearchbox form {
   padding-left: 0px;
 }
+.vesselsearchtools {
+  float: left;
+  width: 600px;
+}
+.vesselsearchtools .col-md-2 {
+  padding-left: 0px;
+}
+.vesselsearchtools .vesselsearch {
+  float: left;
+  margin-right: 10px;
+}
+.vesselsearchtools .dropdown {
+  float: left;
+  margin-right: 10px;
+}
+.vesselsearchtools #vesselDropdown {
+  /*min-width: 150px;
+        */
+  height: 45px;
+}
+.vesselsearchtools .vesseldropdowntext {
+  float: left;
+  padding-right: 120px;
+}
+.vesselsearchgroups {
+  float: right;
+  width: 400px;
+}
 .vesselsearchresultcontainer {
   background-color: #EBEBEB;
 }
 .vesselsearchresult {
   width: 1170px;
   margin: 5px auto;
-  min-height: 200px;
   overflow: hidden;
+}
+.advancesearchcontainer {
+  width: 1170px;
+  margin: 5px auto;
+  overflow: hidden;
+}
+.advancesearchcontainer .advancesearchtag {
+  color: #35A7DF;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.advancesearchcontainer .advancesearchbody {
+  opacity: 1;
+  border: 1px solid black;
+  height: 200px;
+  background-color: #3a87ad;
+}
+.advancesearchcontainer .animate-show {
+  opacity: 1;
+}
+.advancesearchcontainer .animate-show.ng-hide-add.ng-hide-add-active,
+.advancesearchcontainer .animate-show.ng-hide-remove.ng-hide-remove-active {
+  -webkit-transition: all linear 0.5s;
+  transition: all linear 0.5s;
+}
+.advancesearchcontainer .animate-show.ng-hide {
+  opacity: 0;
+}
+.advancesearchtag {
+  color: #35A7DF;
+}
+.vesselsearchboxfooter {
+  width: 1170px;
+  margin: 50px auto;
+}
+.vesselsearchboxfooter .right {
+  float: right;
+}
+.vesselsearchboxfooter .left {
+  float: left;
+}
+.vesselsearchboxfooter .vesseldropdowntext {
+  float: left;
+  padding-right: 120px;
+}
+.vesselsearchboxfooter .dropdown {
+  float: left;
 }
 .vesselsearchresult table thead {
   border-bottom: solid 2px #C5C5C4;
@@ -62,7 +136,4 @@
          border-width: 1px;
          border-radius: 4px;
         */
-}
-.vesselsearchresult table .button .button:hover {
-  background-color: pink;
 }

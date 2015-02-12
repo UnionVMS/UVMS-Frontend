@@ -1,13 +1,14 @@
 //Var
 @containerwidth: 1170px;
 @containerposition: 5px auto;
+
 .vesselsearchboxcontainer{
     background-color: white;
+    margin-bottom: 25px;
 }
 .vesselsearchbox{
     width: @containerwidth;
     margin: @containerposition;
-    height: 200px;
     padding: 20px 0;
     input{
         background-color: #EBEBEB;
@@ -22,15 +23,105 @@
         padding-left: 0px;
     }
 }
+
+.vesselsearchtools{
+    float: left;
+    width: 600px;
+    .col-md-2{
+        padding-left: 0px;
+    }
+    .vesselsearch{
+        float:left;
+        margin-right: 10px;
+    }
+    .dropdown{
+        float:left;
+        margin-right: 10px;
+    }
+    #vesselDropdown{
+        /*min-width: 150px;
+        */
+        height: 45px;
+    }
+    .vesseldropdowntext{
+        float: left;
+        padding-right: 120px
+    }
+
+}
+.vesselsearchgroups{
+    float: right;
+    width: 400px;
+}
+
 .vesselsearchresultcontainer{
     background-color: #EBEBEB;
 }
 .vesselsearchresult{
     width: @containerwidth;
     margin: @containerposition;
-    min-height: 200px;
     overflow: hidden;
 }
+
+.advancesearchcontainer
+{
+    width: @containerwidth;
+    margin: @containerposition;
+    overflow: hidden;
+
+    .advancesearchtag{
+        color: #35A7DF;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    .advancesearchbody{
+        opacity: 1;
+        border: 1px solid black;
+
+        height: 200px;
+        background-color: #3a87ad;
+    }
+
+    .animate-show {
+        opacity: 1;
+    }
+
+    .animate-show.ng-hide-add.ng-hide-add-active,
+    .animate-show.ng-hide-remove.ng-hide-remove-active {
+        -webkit-transition: all linear 0.5s;
+        transition: all linear 0.5s;
+    }
+
+    .animate-show.ng-hide {
+        opacity: 0;
+    }
+
+}
+.advancesearchtag{
+    color: #35A7DF;
+}
+
+.vesselsearchboxfooter{
+    width: @containerwidth;
+    margin: 50px auto;
+
+    .right{
+        float:right;
+    }
+    .left{
+        float:left;
+    }
+    .vesseldropdowntext
+    {
+        float: left;
+        padding-right: 120px
+    }
+    .dropdown{
+        float: left;
+    }
+
+}
+
 
 //table
 .vesselsearchresult{
@@ -73,9 +164,6 @@
          border-radius: 4px;
         */
 
-         .button:hover{
-             background-color: pink;
-         }
      }
  }
 }

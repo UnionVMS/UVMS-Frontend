@@ -1,14 +1,21 @@
-angular.module('unionvmsWeb').directive('vesselMultiselectDropdown', function() {
-	return {
-		restrict: 'E',
-		replace: true,
-		scope: {
+angular.module('unionvmsWeb')
+    .controller('vesselmultiselectCtrl', function($scope, savedsearches) {
 
-		},
-		templateUrl: 'directive/vesselMultiselectDropdown/vesselMultiselectDropdown.html',
-		link: function(scope, element, attrs, fn) {
+        $scope.selectedgroup = function(item){
+            $scope.$parent.selected = "ID: " + item.id + " name: " +item.name + " Filter: " + item.filter;
+            $scope.$parent.dropdowntitle = item.name;
+            $scope.$parent.searchFilter = item.filter;
+        };
 
+        $scope.predefinedgroups = savedsearches.getPredefinedGroups();
+        $scope.groups = savedsearches.getGroups();
+        $scope.dropdowntitle = 'Saved searches and groups';
 
-		}
-	};
-});
+    })
+    .directive('vesselmultiselectdropdown', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'directive/vesselmultiselectdropdown/vesselmultiselectdropdown.html'
+        };
+    });
+

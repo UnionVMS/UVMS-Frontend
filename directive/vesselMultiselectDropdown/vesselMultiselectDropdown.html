@@ -1,4 +1,26 @@
-<div>
+<div ng-controller="vesselmultiselectCtrl">
 <p>MULTISELECT</p>
+
+    <a class="btn btn-primary" ng-click="fix()"><i class="icon-star"></i> Add new </a>
+
+
+
+    <div class="btn-group" dropdown>
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+            {{dropdowntitle}}
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li role="presentation" class="dropdown-header">Groups</li>
+            <li role="presentation" ng-repeat="item in groups">
+                <a role="menuitem" ng-click="selectedgroup(item)">{{item.name}}</a>
+            </li>
+            <li role="presentation" class="dropdown-header">Saved searches</li>
+            <li role="presentation" ng-repeat="item in predefinedgroups">
+                <a role="menuitem" ng-click="selectedgroup(item)">{{item.name}}</a>
+            </li>
+
+        </ul>
+    </div>
 
 </div>

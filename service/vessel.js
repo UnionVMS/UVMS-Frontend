@@ -6,14 +6,33 @@
 //});
 
 (function(){
-    var vessel = function($http){
+    var vessel = function($http, $log){
 
          var getDummyDataFromGithub = function(){
             return $http.get("https://api.github.com/users/angular")
                 .then(function(response){
-                 return response.data;
-             });
+                    return response.data;
+                },
+                function(reason){
+                    return reason.data;
+                });
          };
+//  return $http.get("http://livm67u:28080/vessel-rest/vessel/list")
+        var getVesselList = function(){
+            return $http.get("http://livm67u:28080/vessel-rest/vessel/list");
+             //  .then(onvesselComplete,onError);
+        };
+
+      /* */ var onError = function(reason){
+
+            $log.write("something when trying to get vessels");
+            return "Something triggered an error...";
+
+        };
+
+        var onvesselComplete = function(response){
+            return response;
+        };
 
         var createdummies = function(){
             return  [
@@ -126,9 +145,11 @@
 
         var getVessels = function(){
             var result = createdummies();
+            var i = 0;
             for (i = 0; i < 20; i++)
             {
                 var x = createdummies();
+                var index = 0;
 
                 for(index = 0; index < x.length; index++){
                     x[index]["id"] = x[index]["id"] + Math.floor((Math.random() * 999) + 1);
@@ -141,7 +162,8 @@
 
         return{
             getDummyDataFromGithub : getDummyDataFromGithub,
-            getVessels : getVessels
+            getVessels : getVessels,
+            getVesselList: getVesselList
         };
     };
 

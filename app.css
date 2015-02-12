@@ -2367,8 +2367,8 @@ input[type="button"].btn-block {
 }
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url('../fonts/glyphicons-halflings-regular.eot');
-  src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+  src: url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot');
+  src: url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff') format('woff'), url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 .glyphicon {
   position: relative;
@@ -7127,7 +7127,7 @@ a .menucell,
 a:visited .menucell {
   font-size: 18px;
   font-weight: bold;
-  color: #000000;
+  color: #35A7DF;
   text-decoration: none;
 }
 a:hover .menucell,
@@ -7177,11 +7177,11 @@ nav.configuration .configuration {
 }
 .vesselsearchboxcontainer {
   background-color: white;
+  margin-bottom: 25px;
 }
 .vesselsearchbox {
   width: 1170px;
   margin: 5px auto;
-  height: 200px;
   padding: 20px 0;
 }
 .vesselsearchbox input {
@@ -7196,14 +7196,88 @@ nav.configuration .configuration {
 .vesselsearchbox form {
   padding-left: 0px;
 }
+.vesselsearchtools {
+  float: left;
+  width: 600px;
+}
+.vesselsearchtools .col-md-2 {
+  padding-left: 0px;
+}
+.vesselsearchtools .vesselsearch {
+  float: left;
+  margin-right: 10px;
+}
+.vesselsearchtools .dropdown {
+  float: left;
+  margin-right: 10px;
+}
+.vesselsearchtools #vesselDropdown {
+  /*min-width: 150px;
+        */
+  height: 45px;
+}
+.vesselsearchtools .vesseldropdowntext {
+  float: left;
+  padding-right: 120px;
+}
+.vesselsearchgroups {
+  float: right;
+  width: 400px;
+}
 .vesselsearchresultcontainer {
   background-color: #EBEBEB;
 }
 .vesselsearchresult {
   width: 1170px;
   margin: 5px auto;
-  min-height: 200px;
   overflow: hidden;
+}
+.advancesearchcontainer {
+  width: 1170px;
+  margin: 5px auto;
+  overflow: hidden;
+}
+.advancesearchcontainer .advancesearchtag {
+  color: #35A7DF;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.advancesearchcontainer .advancesearchbody {
+  opacity: 1;
+  border: 1px solid black;
+  height: 200px;
+  background-color: #3a87ad;
+}
+.advancesearchcontainer .animate-show {
+  opacity: 1;
+}
+.advancesearchcontainer .animate-show.ng-hide-add.ng-hide-add-active,
+.advancesearchcontainer .animate-show.ng-hide-remove.ng-hide-remove-active {
+  -webkit-transition: all linear 0.5s;
+  transition: all linear 0.5s;
+}
+.advancesearchcontainer .animate-show.ng-hide {
+  opacity: 0;
+}
+.advancesearchtag {
+  color: #35A7DF;
+}
+.vesselsearchboxfooter {
+  width: 1170px;
+  margin: 50px auto;
+}
+.vesselsearchboxfooter .right {
+  float: right;
+}
+.vesselsearchboxfooter .left {
+  float: left;
+}
+.vesselsearchboxfooter .vesseldropdowntext {
+  float: left;
+  padding-right: 120px;
+}
+.vesselsearchboxfooter .dropdown {
+  float: left;
 }
 .vesselsearchresult table thead {
   border-bottom: solid 2px #C5C5C4;
@@ -7240,8 +7314,11 @@ nav.configuration .configuration {
          border-radius: 4px;
         */
 }
-.vesselsearchresult table .button .button:hover {
-  background-color: pink;
+.savedsearchdropdownmenu {
+  float: right;
+}
+.savedsearchdropdownmenu .dropdown-menu {
+  width: 100%;
 }
 /* Add Component LESS Above */
 /* Required for Angular UI Bootstrap */
@@ -7265,6 +7342,7 @@ nav.configuration .configuration {
 body {
   width: 100%;
   background-color: #ffffff;
+  font-family: Lato, Arial;
 }
 /*article{
     width: 1070px;
