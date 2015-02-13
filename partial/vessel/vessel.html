@@ -1,4 +1,9 @@
 <div ng-controller="VesselCtrl" ng-init="getInitialVessels()">
+<div class="addvessel fadeaddvesselin fadeaddvesselout" ng-show="addnewvesselvisible.active">
+    <div class="closenewvessel" ng-click="toggleaddnewvessel()"> X </div>
+    <addNewVessel></addNewVessel>
+</div>
+<div class="vesselcontainerwrapper fadeaddvesselin fadeaddvesselout" ng-hide="addnewvesselvisible.active">
    <div class="vesselsearchboxcontainer">
     <div class="vesselsearchbox">
 
@@ -41,14 +46,14 @@
 
     </div>
        <div class="advancesearchcontainer">
-           <div class="advancesearchbody animate-show" ng-show="showadvanced"></div>
-            <p class="advancesearchtag" ng-click="toogleAdvancedsearch()">+ Advanced search</p>
+           <div class="advancesearchbody fadein fadeout" ng-show="advancesearch.active"></div>
+            <p class="advancesearchtag" ng-click="toggleanim()">+ Advanced search</p>
 
        </div>
     <div class="vesselsearchboxfooter">
         <!-- Dropdown -->
         <div class="dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" id="vesselDropdown" data-toggle="dropdown" aria-expanded="true">
+            <button class="btn btn-default dropdown-toggle" type="button" id="vesselDropdownn" data-toggle="dropdown" aria-expanded="true">
                 <div class="vesseldropdowntext">All</div>
                 <span class="caret"></span>
             </button>
@@ -59,7 +64,7 @@
             </ul>
         </div>
         <!-- add new button -->
-        <button class="btn btn-sm btn-primary right" type="button"> Add new &nbsp;&nbsp;&nbsp;&nbsp;<span>+</span></button>
+        <button class="btn btn-sm btn-primary right" ng-click="toggleaddnewvessel()" type="button"> Add new &nbsp;&nbsp;&nbsp;&nbsp;<span>+</span></button>
 
     </div>
 
@@ -178,5 +183,5 @@
     </div>
 
     </div>
-
+</div>
 </div>

@@ -8,6 +8,7 @@ angular.module('unionvmsWeb').config(function($routeProvider) {
     /* Add New Routes Above */
     $routeProvider.otherwise({redirectTo:'/today'});
 
+
 });
 
 angular.module('unionvmsWeb').run(function($rootScope) {
