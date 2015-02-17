@@ -10,7 +10,14 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
     };
 
     var onVesselSuccess = function(response){
+        if(response.data.data.length === 0)
+        {
+            $scope.error = "No vessels could be retrieved at this time.";
+            console.log("No vessels in database?");
+        }
+        else{
         $scope.vessels = response.data.data;//.code;//.data.id;
+         }
     };
     var onError = function(response){
         $scope.error = "Opps, we are sorry... Something took a wrong turn. To err is human but to arr is pirate!!";

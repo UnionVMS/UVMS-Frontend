@@ -7333,16 +7333,16 @@ nav.configuration .configuration {
 }
 .fadeaddvesselin,
 .fadeaddvesselout {
-  -webkit-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
-  -moz-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
-  -o-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
-  transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
+  -webkit-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s;
+  -moz-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s;
+  -o-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s;
+  transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s;
 }
 .addvessel {
   width: 1170px;
   margin: 5px auto;
-  height: 500px;
-  background-color: #23b5ff;
+  /*height: 500px;
+    background-color: #23b5ff;*/
 }
 .vesselcontainerwrapper.ng-hide-add,
 .vesselcontainerwrapper.ng-hide-remove.ng-hide-remove-active,
@@ -7365,6 +7365,29 @@ nav.configuration .configuration {
 }
 .savedsearchdropdownmenu .dropdown-menu {
   width: 100%;
+}
+.vesseleditmodule {
+  /*
+    .id{
+        width: 50px;
+    }*/
+}
+.vesseleditmodule .row {
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.vesseleditmodule .inputgroup .labelheaders {
+  height: 20px;
+  margin-bottom: 0;
+}
+.vesseleditmodule .inputgroup input[type=text] {
+  background-color: #EBEBEB;
+  /*   border: medium none;
+              color: #9CA1BB;
+              font-size: 20px;
+              font-style: italic;
+          /* height: 40px;
+              padding-left: 25px*/
 }
 /* Add Component LESS Above */
 /* Required for Angular UI Bootstrap */

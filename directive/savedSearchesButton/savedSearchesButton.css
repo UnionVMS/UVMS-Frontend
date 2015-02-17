@@ -1,0 +1,6 @@
+.savedsearchdropdownmenu {
+  float: right;
+}
+.savedsearchdropdownmenu .dropdown-menu {
+  width: 100%;
+}

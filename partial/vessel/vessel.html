@@ -1,7 +1,10 @@
 <div ng-controller="VesselCtrl" ng-init="getInitialVessels()">
+
 <div class="addvessel fadeaddvesselin fadeaddvesselout" ng-show="addnewvesselvisible.active">
-    <div class="closenewvessel" ng-click="toggleaddnewvessel()"> X </div>
-    <addNewVessel></addNewVessel>
+    <div class="row">
+        <div class="closenewvessel pull-right" ng-click="toggleaddnewvessel()"> X </div>
+    </div>
+        <addNewVessel></addNewVessel>
 </div>
 <div class="vesselcontainerwrapper fadeaddvesselin fadeaddvesselout" ng-hide="addnewvesselvisible.active">
    <div class="vesselsearchboxcontainer">

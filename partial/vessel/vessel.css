@@ -156,16 +156,16 @@
 }
 .fadeaddvesselin,
 .fadeaddvesselout {
-  -webkit-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
-  -moz-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
-  -o-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
-  transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
+  -webkit-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s;
+  -moz-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s;
+  -o-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s;
+  transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s;
 }
 .addvessel {
   width: 1170px;
   margin: 5px auto;
-  height: 500px;
-  background-color: #23b5ff;
+  /*height: 500px;
+    background-color: #23b5ff;*/
 }
 .vesselcontainerwrapper.ng-hide-add,
 .vesselcontainerwrapper.ng-hide-remove.ng-hide-remove-active,
