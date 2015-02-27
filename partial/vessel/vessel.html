@@ -1,29 +1,47 @@
 <div ng-controller="VesselCtrl" ng-init="getInitialVessels()">
 
-<div class="addvessel fadeaddvesselin fadeaddvesselout" ng-show="addnewvesselvisible.active">
-    <div class="row">
-        <div class="closenewvessel pull-right" ng-click="toggleaddnewvessel()"> X </div>
+<div class="addvessel fadeaddvesselin fadeaddvesselout" ng-show="addNewVesselVisible.active">
+    <div class="row col-md-12">
+        <p class="createResponseMessage">{{createResponseMessage}}</p>
+       <div class="pull-right">
+           <div class="col-md-1">
+            <button class="btn btn-sm pull-right createnewvesselbutton" type="button" ng-click="createNewVessel()"> Create New Vessel </button>
+        </div>
+        <div class="col-md-1">
+            <div class="closenewvessel pull-right" ng-click="toggleAddNewVessel()"> <img src="assets\close.png" /></div>
+        </div>
+       </div>
     </div>
-        <addNewVessel></addNewVessel>
+    <newVessel></newVessel>
 </div>
-<div class="vesselcontainerwrapper fadeaddvesselin fadeaddvesselout" ng-hide="addnewvesselvisible.active">
+
+    <div class="getvessel fadegetvesselin fadegetvesselout" ng-show="getVesselVisible.active">
+        <div class="row col-md-12">
+            <p class="updateResponseMessage">{{updateResponseMessage}}</p>
+            <div class="pull-right">
+                <div class="col-md-1">
+                    <button class="btn btn-sm updatevesselbutton pull-right" type="button" ng-click="updateVessel()"> Update </button>
+                </div>
+                <div class="col-md-1">
+                    <div class="closegetvessel pull-right" ng-click="toggleGetVessel()"><img src="assets\close.png" /></div>
+                </div>
+            </div>
+        </div>
+        <getVessel carrier="{{selectedCarrier}}"></getVessel>
+    </div>
+
+<div class="vesselcontainerwrapper fadeaddvesselin fadeaddvesselout" ng-show="vesselSearchContainerVisible.active">
    <div class="vesselsearchboxcontainer">
     <div class="vesselsearchbox">
 
         <div class="vesselsearchtools">
             <form class="vesselsearch">
                 <input type="text" class="form-control" placeholder="Search" ng-model="searchFilter">
-                <!--<div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                        <input type="text" class="form-control" placeholder="Search" ng-model="searchFilter">
-                    </div>
-                </div>-->
             </form>
 
             <!-- Dropdown -->
             <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="vesselDropdown" data-toggle="dropdown" aria-expanded="true">
+                <button class="btn btn-default vesseldropdown dropdown-toggle" type="button" id="vesselDropdown" data-toggle="dropdown" aria-expanded="true">
                     <div class="vesseldropdowntext">All</div>
                     <span class="caret"></span>
                 </button>
@@ -51,7 +69,6 @@
        <div class="advancesearchcontainer">
            <div class="advancesearchbody fadein fadeout" ng-show="advancesearch.active"></div>
             <p class="advancesearchtag" ng-click="toggleanim()">+ Advanced search</p>
-
        </div>
     <div class="vesselsearchboxfooter">
         <!-- Dropdown -->
@@ -67,7 +84,7 @@
             </ul>
         </div>
         <!-- add new button -->
-        <button class="btn btn-sm btn-primary right" ng-click="toggleaddnewvessel()" type="button"> Add new &nbsp;&nbsp;&nbsp;&nbsp;<span>+</span></button>
+        <button class="btn btn-sm pull-right addvesselbtn" ng-click="toggleAddNewVessel()" type="button"> Add new &nbsp;&nbsp;&nbsp;&nbsp;<span>+</span></button>
 
     </div>
 
@@ -177,7 +194,7 @@
                 <td>Not present</td>
                 <td>Not present</td>
                 <td>
-                    <button class="btn button">view</button>
+                    <button class="btn vesselbtn button" ng-click="toggleGetVessel(item)">View</button>
                 </td>
             </tr>
             </tbody>

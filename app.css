@@ -7127,17 +7127,16 @@ a .menucell,
 a:visited .menucell {
   font-size: 18px;
   font-weight: bold;
-  color: #35A7DF;
+  color: #ffffff;
   text-decoration: none;
 }
 a:hover .menucell,
 .menucell:hover {
-  background-color: #e4e4e4;
   text-decoration: none;
   cursor: pointer;
 }
 .menucell:hover {
-  background-color: #e4e4e4;
+  background-color: #008e61;
   text-decoration: none;
   cursor: pointer;
   border-bottom: solid 2px #000000;
@@ -7187,7 +7186,7 @@ nav.configuration .configuration {
 .vesselsearchbox input {
   background-color: #EBEBEB;
   border: medium none;
-  color: #9CA1BB;
+  color: #918D8F;
   font-size: 20px;
   font-style: italic;
   height: 45px;
@@ -7217,9 +7216,18 @@ nav.configuration .configuration {
   height: 45px;
 }
 .vesselsearchtools .vesseldropdowntext {
-  float: left;
   padding-right: 120px;
 }
+.vesseldropdown {
+  color: #ffffff;
+  background-color: #008e61;
+  border-color: #bde5bf;
+  border-radius: 4px 4px 4px 4px;
+}
+/*
+.vesseldropdown:hover{
+    background-color: red;
+}*/
 .vesselsearchgroups {
   float: right;
   width: 400px;
@@ -7262,6 +7270,36 @@ nav.configuration .configuration {
 .advancesearchtag {
   color: #35A7DF;
 }
+.addvesselbtn {
+  background-color: #008e61;
+  color: #ffffff;
+  width: 120px;
+}
+.addvesselbtn:hover {
+  background-color: #007D52;
+  color: #ffffff;
+  width: 120px;
+}
+.createnewvesselbutton {
+  background-color: #008e61;
+  color: #ffffff;
+  width: 120px;
+}
+.createnewvesselbutton:hover {
+  background-color: #007D52;
+  color: #ffffff;
+  width: 120px;
+}
+.updatevesselbutton {
+  background-color: #008e61;
+  color: #ffffff;
+  width: 120px;
+}
+.updatevesselbutton:hover {
+  background-color: #007D52;
+  color: #ffffff;
+  width: 120px;
+}
 .vesselsearchboxfooter {
   width: 1170px;
   margin: 50px auto;
@@ -7273,7 +7311,6 @@ nav.configuration .configuration {
   float: left;
 }
 .vesselsearchboxfooter .vesseldropdowntext {
-  float: left;
   padding-right: 120px;
 }
 .vesselsearchboxfooter .dropdown {
@@ -7284,35 +7321,21 @@ nav.configuration .configuration {
 }
 .vesselsearchresult table th {
   height: 40px;
-  color: #35A7DF;
+  color: #008e61;
 }
 .vesselsearchresult table th a {
   font-weight: bold;
-  color: #35A7DF;
+  color: #008e61;
 }
 .vesselsearchresult table tbody tr {
   border-bottom: solid 1px #C5C5C4;
   height: 40px;
 }
 .vesselsearchresult table .button {
-  background-color: #35A7DF;
   height: 24px;
   text-align: center;
   padding: 0px 12px;
   font-size: 12px;
-  color: #ffffff;
-  /*       display:inline-block;
-         font-weight: normal;
-
-         vertical-align: middle;
-         cursor:pointer;
-         background-image: none;
-
-         background-color: #35A7DF;
-         border-color: #d3d3d3;
-         border-width: 1px;
-         border-radius: 4px;
-        */
 }
 .fadein,
 .fadeout {
@@ -7331,14 +7354,17 @@ nav.configuration .configuration {
   opacity: 1;
   display: block !important;
 }
+.fadegetvesselin,
+.fadegetvesselout,
 .fadeaddvesselin,
 .fadeaddvesselout {
-  -webkit-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s;
-  -moz-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s;
-  -o-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s;
-  transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s;
+  -webkit-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s;
+  -moz-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s;
+  -o-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s;
+  transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s;
 }
-.addvessel {
+.addvessel,
+.getvessel {
   width: 1170px;
   margin: 5px auto;
   /*height: 500px;
@@ -7346,6 +7372,8 @@ nav.configuration .configuration {
 }
 .vesselcontainerwrapper.ng-hide-add,
 .vesselcontainerwrapper.ng-hide-remove.ng-hide-remove-active,
+.fadegetvesselin.ng-hide-remove,
+.fadegetvesselout.ng-hide-add.ng-hide-add-active,
 .fadeaddvesselin.ng-hide-remove,
 .fadeaddvesselout.ng-hide-add.ng-hide-add-active {
   transform: scale(0.01) translate3d(0, 0, 0);
@@ -7354,11 +7382,18 @@ nav.configuration .configuration {
 }
 .vesselcontainerwrapper.ng-hide-remove,
 .vesselcontainerwrapper.ng-hide-add.ng-hide-add-active,
+.fadegetvesselout.ng-hide-add,
+.fadegetvesselin.ng-hide-remove.ng-hide-remove-active,
 .fadeaddvesselout.ng-hide-add,
 .fadeaddvesselin.ng-hide-remove.ng-hide-remove-active {
   transform: scale(1) translate3d(0, 0, 0);
   opacity: 1;
   display: block !important;
+}
+.updateResponseMessage,
+.createResponseMessage {
+  font-weight: bold;
+  font-size: 14px;
 }
 .savedsearchdropdownmenu {
   float: right;
@@ -7366,21 +7401,18 @@ nav.configuration .configuration {
 .savedsearchdropdownmenu .dropdown-menu {
   width: 100%;
 }
-.vesseleditmodule {
-  /*
-    .id{
-        width: 50px;
-    }*/
-}
-.vesseleditmodule .row {
+/*@import "directive/addNewVessel/addNewVessel.less";
+@import "directive/vesselEditModule/vesselEditModule.less";
+*/
+.newvessel .row {
   margin-bottom: 15px;
   margin-top: 15px;
 }
-.vesseleditmodule .inputgroup .labelheaders {
+.newvessel .inputgroup .labelheaders {
   height: 20px;
   margin-bottom: 0;
 }
-.vesseleditmodule .inputgroup input[type=text] {
+.newvessel .inputgroup input[type=text] {
   background-color: #EBEBEB;
   /*   border: medium none;
               color: #9CA1BB;
@@ -7388,6 +7420,13 @@ nav.configuration .configuration {
               font-style: italic;
           /* height: 40px;
               padding-left: 25px*/
+}
+.newvessel .dropdowntext {
+  float: left;
+}
+.newvessel .caret {
+  clear: both;
+  margin-left: 10px;
 }
 /* Add Component LESS Above */
 /* Required for Angular UI Bootstrap */
@@ -7430,11 +7469,12 @@ body {
 .pageinfo {
   height: 100px;
   width: 100%;
-  background-color: #9F9F9F;
+  background-color: #231f20;
+  color: #FFFFFF;
 }
 .header {
   width: 100%;
-  background-color: #d8d8d8;
+  background-color: #231f20;
 }
 #content {
   whidth: 100%;
@@ -7443,4 +7483,42 @@ body {
 ul,
 li {
   list-style: none;
+}
+.dropdown {
+  color: #ffffff;
+}
+.dropdown button,
+.dropdown button:hover {
+  background-color: #008e61;
+  text-align: left;
+  width: 100%;
+  color: #ffffff;
+}
+.dropdown .caret {
+  position: relative;
+  bottom: 10px;
+  float: right;
+}
+.dropdown .btn.btn-default.dropdown-toggle {
+  background-color: #008e61;
+  color: #ffffff;
+}
+.inputgroup input[type="text"] {
+  height: 38px;
+}
+.mobileterminalcontainer {
+  background-color: #F0F0F0;
+  border-radius: 2px 2px 2px 2px;
+  margin: 10px 0;
+}
+.vesselbtn {
+  background-color: #008e61;
+  color: #ffffff;
+}
+.vesselbtn:hover {
+  background-color: #007D52;
+  color: #ffffff;
+}
+.closenewvessel img {
+  cursor: pointer;
 }
