@@ -1,0 +1,71 @@
+<div>
+   <!-- <p>{{communicationchannel}}</p>
+-->
+    <div class="col-md-12">
+        <div>
+            <div class="col-md-2">
+                <input type="text" value="communicationchannel.number" name="comnumberinput" class="form-control" ng-model="communicationchannel.number">
+            </div>
+
+            <div class="inputgroup col-md-1" ng-controller="communicationCtrl">
+             <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="comnumberdropdown" data-toggle="dropdown" aria-expanded="true">
+                    <div class="dropdowntext">{{numberSelected}}</div>
+                        <span class="caret"></span>
+                    </button>
+                 <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
+                     <li><a tabindex="-1" ng-click="selectNumber(1)">1</a></li>
+                     <li><a tabindex="-1" ng-click="selectNumber(2)">2</a></li>
+                     <li><a tabindex="-1" ng-click="selectNumber(3)">3</a></li>
+                 </ul>
+                </div>
+            </div>
+
+            <div class="col-md-1">
+                <input type="text" value="communicationchannel.name" name="comnameinput" class="form-control" ng-model="communicationchannel.name">
+            </div>
+
+            <div class="col-md-1">
+                <input type="text" value="communicationchannel.id" name="comidinput" class="form-control" ng-model="communicationchannel.id">
+            </div>
+
+            <div class="inputgroup col-md-1" ng-controller="communicationCtrl">
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="comorderiddropdown" data-toggle="dropdown" aria-expanded="true">
+                        <div class="dropdowntext">{{orderSelected}}</div>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="orderDropdown">
+                        <li><a tabindex="-1" ng-click="selectOrder(1)">1</a></li>
+                        <li><a tabindex="-1" ng-click="selectOrder(2)">2</a></li>
+                        <li><a tabindex="-1" ng-click="selectOrder(3)">3</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <input type="text" value="communicationchannel.note" name="comnoteinput" class="form-control" ng-model="communicationchannel.note">
+            </div>
+            <div ng-controller="communicationCtrl">
+            <div class="col-md-2">
+                <p class="input-group">
+                    <input type="text" class="form-control" ng-model="communicationchannel.startDate" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['startedOn']" close-text="Close" />
+                <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'startedOn')"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+                </p>
+            </div>
+
+            <div class="col-md-2">
+                <p class="input-group">
+                    <input type="text" class="form-control" ng-model="communicationchannel.endDate" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['endDate']" close-text="Close" />
+                <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'endDate')"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+                </p>
+            </div>
+            </div>
+        </div>
+    </div>
+
+</div>

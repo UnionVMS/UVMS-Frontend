@@ -1,0 +1,24 @@
+.newvessel .row {
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.newvessel .inputgroup .labelheaders {
+  height: 20px;
+  margin-bottom: 0;
+}
+.newvessel .inputgroup input[type=text] {
+  background-color: #EBEBEB;
+  /*   border: medium none;
+              color: #9CA1BB;
+              font-size: 20px;
+              font-style: italic;
+          /* height: 40px;
+              padding-left: 25px*/
+}
+.newvessel .dropdowntext {
+  float: left;
+}
+.newvessel .caret {
+  clear: both;
+  margin-left: 10px;
+}

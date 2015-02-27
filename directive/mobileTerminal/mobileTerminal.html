@@ -1,0 +1,98 @@
+<div>
+    <div class="row col-md-12 mobileterminals">
+        <span class="vesselterminals">MOBILE TERMINALS</span>
+        <div class="row">
+            <div class="col-md-3">
+                <p class="labelheaders">SATELLITE SYSTEMS</p>
+                <select class="form-control" ng-options="s.name for s in terminal.satelliteSystem" ng-model="selectedSatellite" required>
+                    <option value=""> -- Choose satellite -- </option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <p class="labelheaders">OCEAN REGION</p>
+                <select class="form-control" ng-options="o.name for o in terminal.oceanRegions" ng-model="selectedOcean" required>
+                    <option value=""> -- Choose ocean -- </option>
+                </select>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <p class="labelheaders">TRANSCEIVER TYPE</p>
+                <input type="text" name="terminaltranseiverinput" class="form-control" ng-model="terminal.transeiverType">
+            </div>
+            <div class="col-md-3">
+                <p class="labelheaders">SERIAL NO.</p>
+                <input type="text" name="terminalserialinput" class="form-control" ng-model="terminal.serialNo">
+            </div>
+
+            <div class="col-md-2">
+                <p class="labelheaders">SOFTWARE VERSION</p>
+                <input type="text" name="terminalsoftvareinput" class="form-control" ng-model="terminal.softvareVersion">
+            </div>
+            <div class="col-md-2">
+                <p class="labelheaders">ANTENNA</p>
+                <input type="text" name="terminalantennainput" class="form-control" ng-model="terminal.antenna">
+            </div>
+            <div class="col-md-2">
+                <p class="labelheaders">SATELLITE NUMBER</p>
+                <input type="text" name="terminalsatelliteinput" class="form-control" ng-model="terminal.satelliteNo">
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <p class="labelheaders">ANSWER-BACK</p>
+                <input type="text" name="terminalanswerinput" class="form-control" ng-model="terminal.answerBack">
+            </div>
+            <div class="col-md-3">
+                <p class="labelheaders">INSTALLED BY</p>
+                <input type="text" name="terminalinstalledinput" class="form-control" ng-model="terminal.installedBy">
+            </div>
+<div ng-controller="terminalCtrl">
+            <div class="col-md-2">
+                <p class="labelheaders">INSTALLED ON</p>
+                <!-- <input type="text" name="terminalsoftvareinput" class="form-control" ng-model="dt">-->
+                <p class="input-group">
+                    <input type="text" class="form-control" ng-model="terminal.dateInstalled" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['dateInstalled']" close-text="Close" />
+                <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'dateInstalled')"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+                </p>
+            </div>
+            <div class="col-md-2">
+                <p class="labelheaders">STARTED ON</p>
+                <!--<input type="text" name="terminalstartedinput" class="form-control" ng-model="dt">-->
+                <p class="input-group">
+                    <input type="text" class="form-control" ng-model="terminal.dateStarted" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['dateStarted']" close-text="Close" />
+                <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'dateStarted')"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+                </p>
+            </div>
+            <div class="col-md-2">
+                <p class="labelheaders">UNINSTALLED ON</p>
+                <!--                <input type="text" name="terminaluninstalledinput" class="form-control" ng-model="dt">-->
+                <div class="input-group">
+                    <input type="text" class="form-control" datepicker-popup="{{datePicker.format}}" ng-model="terminal.dateUninstalled" is-open="datePicker.instances['dateUninstalled']" min-date="minDate" max-date="'2015-06-22'" datepicker-options="datePicker.options" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'dateUninstalled')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+            </div>
+</div>
+
+        </div>
+        <div ng-controller="terminalCtrl">
+            <a href="" ng-click="addComChannel()"> + Add New Channel</a>
+        </div>
+        <p><b>Communication Channels</b></p>
+        <div ng-repeat="item in terminal.communicationChannels">
+            <communication-Channel communicationchannel="item"></communication-Channel>
+        </div>
+
+    </div>
+
+    <div class="row col-md-12"> <hr></div>
+</div>
+
