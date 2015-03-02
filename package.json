@@ -24,6 +24,7 @@
     "karma-jasmine": "~0.1.5",
     "karma-mocha-reporter": "~0.2.5",
     "karma-phantomjs-launcher": "~0.1.4",
-    "load-grunt-tasks": "~0.2"
+    "load-grunt-tasks": "~0.2",
+    "grunt-contrib-compress": "~0.13.0"
   }
 }
