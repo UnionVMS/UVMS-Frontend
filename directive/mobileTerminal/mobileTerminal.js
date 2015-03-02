@@ -37,7 +37,9 @@ angular.module('unionvmsWeb')
 
             console.log($scope);
             if($scope.terminal.communicationChannels === undefined)
+            {
                 $scope.terminal.communicationChannels = [];
+            }
 
             $scope.terminal.communicationChannels.push(newChannel);
         };
