@@ -15,7 +15,7 @@ angular.module('unionvmsWeb')
     .directive('vesselmultiselectdropdown', function() {
         return {
             restrict: 'E',
-            templateUrl: 'directive/vesselmultiselectdropdown/vesselmultiselectdropdown.html'
+            templateUrl: 'directive/vesselMultiSelectDropdown/vesselMultiSelectDropdown.html'
         };
     });
 

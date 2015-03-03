@@ -6,7 +6,7 @@ angular.module('unionvmsWeb')
         return {
             restrict: 'E',
             replace: true,
-            templateUrl: 'directive/vesseleditmodule/vesseleditmodule.html'
+            templateUrl: 'directive/vesselEditModule/vesselEditModule.html'
         };
     });
 

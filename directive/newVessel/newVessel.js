@@ -78,7 +78,7 @@ angular.module('unionvmsWeb')
             restrict: 'E',
             replace: true,
 
-            templateUrl: 'directive/newvessel/newvessel.html',
+            templateUrl: 'directive/newVessel/newVessel.html',
             link: function (scope, element, attrs, fn) {
 
 

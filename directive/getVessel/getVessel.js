@@ -73,7 +73,7 @@ angular.module('unionvmsWeb')
 		replace: true,
 
 
-		templateUrl: 'directive/getvessel/getvessel.html',
+		templateUrl: 'directive/getVessel/getVessel.html',
 		link: function(scope, element, attrs, fn) {
 
 
