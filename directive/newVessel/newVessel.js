@@ -1,8 +1,10 @@
 angular.module('unionvmsWeb')
     .controller('newVesselCtrl', function ($scope, $http) {
 
-        $scope.removeNewMobileSystem = function (item) {
-            $scope.newVesselObj.mobileTerminals.splice(item, 1);
+        $scope.removeNewMobileSystem = function (item, idx) {
+            if (idx >= 0){
+                $scope.newVesselObj.mobileTerminals.splice(idx, 1);
+            }
         };
 
         $scope.addNewMobileTerminalToNewVessel = function () {

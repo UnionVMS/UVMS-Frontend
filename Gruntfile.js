@@ -95,7 +95,12 @@ module.exports = function (grunt) {
         files: [
           {src: ['img/**'], dest: 'dist/'},
           {src: ['bower_components/font-awesome/fonts/**'], dest: 'dist/',filter:'isFile',expand:true},
-          {src: ['bower_components/bootstrap/fonts/**'], dest: 'dist/',filter:'isFile',expand:true}
+          {src: ['bower_components/bootstrap/fonts/**'], dest: 'dist/',filter:'isFile',expand:true},
+          {src: ['assets/**/*'], dest: 'dist/'},
+            {src: ['directive/**/*'], dest: 'dist/'},
+            {src: ['partial/**/*'], dest: 'dist/'},
+            {src: ['service/**/*'], dest: 'dist/'}
+
           //{src: ['bower_components/angular-ui-utils/ui-utils-ieshiv.min.js'], dest: 'dist/'},
           //{src: ['bower_components/select2/*.png','bower_components/select2/*.gif'], dest:'dist/css/',flatten:true,expand:true},
           //{src: ['bower_components/angular-mocks/angular-mocks.js'], dest: 'dist/'}
@@ -178,16 +183,41 @@ module.exports = function (grunt) {
     //     }]
     //   }
     // },
-    compress: {
-		dist: {
-			options: {
-				archive: 'dist/unionvms-web.zip'
-			},
-            files: [
-                {expand: true, cwd: 'dist/', src: ['**/*'], dest: '/'} // includes files in dist
-            ]
-        }
-    }
+
+
+      compress: {
+          /*main: {
+              options: {
+                  archive: 'dist/unionvms-web.zip'
+              },
+              files: [
+                  {src: ['**'], dest: '/'} // includes files in dist
+              ]
+          },*/
+          dist: {
+              options: {
+                  archive: 'dist/unionvms-web.zip'
+              },
+
+              files: [
+                  {
+                      expand: true,
+                      cwd: 'dist/',
+                      src: ['**/*'],
+                      dest: '/'}
+              ]
+          }
+      }
+    //compress: {
+	//	dist: {
+	//		options: {
+	//			archive: 'dist/unionvms-web.zip'
+	//		},
+    //        files: [
+    //            {expand: true, cwd: 'dist/', src: ['**/*'], dest: '/'} // includes files in dist
+    //        ]
+    //    }
+    //}
   });
 
   grunt.registerTask('build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy','htmlmin','clean:after','compress:dist']);

@@ -171,7 +171,7 @@
     </div>
     <hr>
     <div class="mobileterminalcontainer row" ng-repeat = "item in selectedVessel.mobileTerminals">
-        <a ng-click="removeMobileSystem(item)">-REMOVE SATELLITE SYSTEM</a>
+        <a ng-click="removeMobileSystem(item, $index)">-REMOVE SATELLITE SYSTEM</a>
         <mobileterminal terminal="item"></mobileterminal>
     </div>
     <div class="row col-md-12">

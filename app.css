@@ -2367,8 +2367,8 @@ input[type="button"].btn-block {
 }
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot');
-  src: url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff') format('woff'), url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+  src: url('../fonts/glyphicons-halflings-regular.eot');
+  src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 .glyphicon {
   position: relative;
@@ -7428,6 +7428,9 @@ nav.configuration .configuration {
   clear: both;
   margin-left: 10px;
 }
+.mobileterminalcontainer a {
+  cursor: pointer;
+}
 /* Add Component LESS Above */
 /* Required for Angular UI Bootstrap */
 .nav,
@@ -7467,7 +7470,7 @@ body {
   padding: 35px;
 }
 .pageinfo {
-  height: 100px;
+  height: 50px;
   width: 100%;
   background-color: #231f20;
   color: #FFFFFF;

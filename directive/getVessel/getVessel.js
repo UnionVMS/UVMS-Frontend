@@ -55,9 +55,11 @@ angular.module('unionvmsWeb')
             $scope.selectedVessel.hasIrcs = (item.code === "1");
         };
 
-        $scope.removeMobileSystem = function(item){
-            $scope.selectedVessel.mobileTerminals.splice(item,1);
-        };
+        $scope.removeMobileSystem = function(item, idx){
+            if (idx >= idx){
+                $scope.selectedVessel.mobileTerminals.splice(idx,1);
+            }
+            };
 
         $scope.changeVesselStatus = function(){
             $scope.selectedVessel.active = $scope.selectedVessel.active === true ? false : true;
