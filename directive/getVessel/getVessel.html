@@ -1,6 +1,6 @@
 <div class="newvessel" ng-controller="getVesselCtrl">
     <div class="row">
-        <div class="vesselname">{{selectedVessel.name}}</div><p>TYPE....</p>
+        <div class="vesselname">{{selectedVessel.name}}</div>
         <span class="vesselstatus col-md-12">
             <div ng-show="selectedVessel.active == true">STATUS: <b> Active</b><a ng-click="changeVesselStatus()"> set as inactive</a></div>
             <div ng-show="selectedVessel.active == false">STATUS: <b> Inactive</b><a ng-click="changeVesselStatus()" > set as active</a></div>
