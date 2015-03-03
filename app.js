@@ -23,6 +23,4 @@ angular.module('unionvmsWeb').run(function($rootScope) {
         }
     };
 
-
-
 });
