@@ -4,10 +4,10 @@
     <div class="headerbuffer">
     <div class="col-md-12" ng-controller="HeaderCtrl">
         <ul>
-             <li class="cell" ng-repeat="page in menu" ng-class="{active: isActive(page.url)}">
+             <li class="cell" ng-repeat="page in menu">
              <!--    <div class="menubox">-->
-                    <a ng-href="#/{{page.url}}">
-                        <div class="menucell">{{page.title}}</div>
+                    <a ng-href="#{{page.url}}">
+                        <div class="menucell"  ng-class="{active: isActive(page.url)}">{{page.title}}</div>
                     </a>
                 <!--</div>-->
             </li>

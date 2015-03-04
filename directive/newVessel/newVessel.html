@@ -1,7 +1,17 @@
 <div class="newvessel" ng-controller="newVesselCtrl">
 
         <div class="row">
-            <span class="vesselstatus col-md-12">STATUS: <b>Active </b><a href="">set as inactive</a></span>
+            <div class="row col-md-12">
+                <span class="vesselstatus col-md-10">STATUS: <b>Active </b><a href="">set as inactive</a></span>
+
+                <div class="col-md-1">
+                    <button class="btn btn-sm createnewvesselbutton" type="button" ng-click="createNewVessel()"> Create New Vessel </button>
+                </div>
+                <div>
+                    <div class="closenewvessel pull-right" ng-click="toggleAddNewVessel()"> <img src="assets\close.png" /></div>
+                </div>
+            </div>
+
 
             <div class="row col-md-4">
                 <div class="inputgroup col-md-4">
@@ -173,9 +183,8 @@
                 </div>
             </div>
         </div>
-        <hr>
         <div class=" col-md-12 mobileterminalcontainer" ng-repeat = "item in newVesselObj.mobileTerminals">
-            <div class="row">
+            <div class="row col-md-12">
                 <a ng-click="removeNewMobileSystem(item, $index)">- REMOVE SATELLITE SYSTEM</a>
             </div>
             <mobileterminal terminal="item"></mobileterminal>

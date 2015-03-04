@@ -5,6 +5,7 @@
 .newvessel .inputgroup .labelheaders {
   height: 20px;
   margin-bottom: 0;
+    margin-top: 10px;
 }
 .newvessel .inputgroup input[type=text] {
   background-color: #EBEBEB;

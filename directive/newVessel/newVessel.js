@@ -49,7 +49,7 @@ angular.module('unionvmsWeb')
 
         $scope.newVesselObj = {
             "active": true,
-            "billing": "Not supported",
+            "billing": "",
             "cfr": null,
             "countryCode": null,
             "externalMarking": null,
@@ -57,12 +57,12 @@ angular.module('unionvmsWeb')
             "hasIrcs": false,
             "hasLicense": false,
             "homePort": null,
-            "imo": "Not supported",
+            "imo": "",
             "internalId": null,
             "ircs": null,
             "lengthBetweenPerpendiculars": null,
             "lengthOverAll": null,
-            "mmsiNo": "Not supported",
+            "mmsiNo": "",
             "name": null,
             "otherGrossTonnage": null,
             "powerAux": null,

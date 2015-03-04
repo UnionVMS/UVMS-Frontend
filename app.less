@@ -2,6 +2,7 @@
 //@import "bower_components/bootstrap/less/theme.less";
 @import "bower_components/font-awesome/less/font-awesome.less";
 @fa-font-path: "bower_components/font-awesome/fonts";
+//@fa-font-path: "bower_components/font-awesome/fonts";
 
 /* Component LESS */
 @import "partial/header/header.less";
@@ -34,6 +35,10 @@
 	}
 }
 
+
+/*global var*/
+@buttoncolor: #18A689;
+
 body{
     width: 100%;
     background-color: #ffffff;
@@ -57,12 +62,12 @@ body{
 .pageinfo{
     height: 50px;
     width: 100%;
-    background-color: #231f20;
+    background-color: #383737;
     color:#FFFFFF;
 }
  .header{
      width: 100%;
-     background-color:#231f20;
+     background-color:#383737;
  }
 
  #content{
@@ -88,12 +93,44 @@ ul, li {
         float:right;
     }
     .btn.btn-default.dropdown-toggle{
-        background-color: #008e61;
+        background-color: @buttoncolor;
         color:#ffffff;
+        border:none;
+        height: 33px;
+        border-radius: 0px;
     }
 }
+/*
 .inputgroup input[type="text"]{
     height: 38px;
+}*/
+
+
+
+input[type="text"]
+{
+    border-radius: none;
+}
+.form-control{
+    background-color: #FFFFFF;
+}
+
+
+
+.form-control::-moz-placeholder {
+    color: #999999;
+    opacity: 1;
+}
+*:before, *:after {
+    -moz-box-sizing: border-box;
+}
+*:before, *:after {
+    -moz-box-sizing: border-box;
+}
+input[type="text"] {
+}
+.form-control{
+    border-radius: none;
 }
 
 .mobileterminalcontainer{
@@ -103,7 +140,7 @@ ul, li {
 }
 
 .vesselbtn{
-    background-color:#008e61;
+    background-color:@buttoncolor;
     color: #ffffff;
 }
 
@@ -113,4 +150,37 @@ ul, li {
 }
 .closenewvessel img{
     cursor: pointer;
+}
+
+
+
+.form-control:hover{
+    border-radius: 0px;
+}
+.form-control{
+    border-radius: 0px;
+}
+.form-control:focus {
+    border-color: #18A689;
+    outline: 0;
+    -webkit-box-shadow: none; /*inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);*/
+    box-shadow: none; /* inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);*/
+}
+
+.labelheaders{
+    margin-top:10px;
+    margin-bottom:0px;
+}
+.glyphicon {
+    color: @buttoncolor;
+}
+
+
+/*Calendar*/
+.dropdown-menu.ng-valid.ng-valid-date.ng-valid-date-disabled.ng-dirty,
+.dropdown-menu.ng-pristine.ng-valid.ng-valid-date.ng-valid-date-disabled
+{
+    width:260px;
+    padding: 10px;
+
 }

@@ -6,7 +6,7 @@
 .menucell{
     min-width: 85px;
     float: left;
-    padding:15px;
+    padding:14px 14px 15px 14px;
 }
 a .menucell,  a:visited .menucell{
     font-size: 18px;
@@ -18,12 +18,14 @@ a:hover .menucell , .menucell:hover{
     text-decoration: none;
     cursor: pointer;
 }
-.menucell:hover{
-     background-color: #008e61;
+.menucell:hover, .menucell.active{
+     background-color: #18A689;
      text-decoration: none;
      cursor: pointer;
-     border-bottom: solid 2px #000000;
+     border-bottom: solid 4px #000000;
  }
+
+
 .headerbuffer{
     overflow: hidden;
 }
@@ -36,8 +38,6 @@ ul .vessel li .vessel{
     border-bottom: solid 2px #000000;
 }
 
-/*.vessel{background-color:pink;}
-*/
 
 /* test menu*/
 nav{

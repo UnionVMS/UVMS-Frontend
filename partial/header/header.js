@@ -1,37 +1,43 @@
-angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope){
+angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $location){
     var setMenu = function(){
         return [
             {
                 'title':'Today',
-                'url':'today'
+                'url':'/today'
             },
             {
                 'title':'Reporting',
-                'url':'reporting'
+                'url':'/reporting'
             },
             {
                 'title':'User',
-                'url':'user'
+                'url':'/user'
             },
             {
                 'title':'Vessel',
-                'url':'vessel'
+                'url':'/vessel'
             },
             {
                 'title':'Alarm Conditions',
-                'url':'alarmconditions'
+                'url':'/alarmconditions'
             },{
                 'title':'Communication',
-                'url':'communication'
+                'url':'/communication'
             },{
                 'title':'Configuration',
-                'url':'configuration'
+                'url':'/configuration'
             },{
                 'title':'GIS',
-                'url':'gis'
+                'url':'/gis'
             }
         ];
     };
 
     $scope.menu = setMenu();
+
+    $scope.isActive = function(viewLocation){
+        var active = (viewLocation === $location.path());
+        return active;
+    };
+
 });
