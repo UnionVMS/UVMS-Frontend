@@ -56,7 +56,7 @@
                 <p class="input-group">
                     <input type="text" class="form-control" ng-model="terminal.dateInstalled" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['dateInstalled']" close-text="Close" />
                 <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'dateInstalled')"><i class="glyphicon glyphicon-calendar"></i></button>
+                <button type="button" class="btn btn-default btn-cal" ng-click="datePicker.open($event, 'dateInstalled')"><i class="glyphicon glyphicon-calendar"></i></button>
                 </span>
                 </p>
             </div>
@@ -66,7 +66,7 @@
                 <p class="input-group">
                     <input type="text" class="form-control" ng-model="terminal.dateStarted" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['dateStarted']" close-text="Close" />
                 <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'dateStarted')"><i class="glyphicon glyphicon-calendar"></i></button>
+                <button type="button" class="btn btn-default btn-cal" ng-click="datePicker.open($event, 'dateStarted')"><i class="glyphicon glyphicon-calendar"></i></button>
                 </span>
                 </p>
             </div>
@@ -76,7 +76,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control" datepicker-popup="{{datePicker.format}}" ng-model="terminal.dateUninstalled" is-open="datePicker.instances['dateUninstalled']" min-date="minDate" max-date="'2015-06-22'" datepicker-options="datePicker.options" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'dateUninstalled')"><i class="glyphicon glyphicon-calendar"></i></button>
+                        <button type="button" class="btn btn-default btn-cal" ng-click="datePicker.open($event, 'dateUninstalled')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                 </div>
             </div>

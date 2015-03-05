@@ -51,7 +51,7 @@
                 <p class="input-group">
                     <input type="text" class="form-control" ng-model="communicationchannel.startDate" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['startedOn']" close-text="Close" />
                 <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'startedOn')"><i class="glyphicon glyphicon-calendar"></i></button>
+                <button type="button" class="btn btn-default btn-cal" ng-click="datePicker.open($event, 'startedOn')"><i class="glyphicon glyphicon-calendar"></i></button>
                 </span>
                 </p>
             </div>
@@ -60,7 +60,7 @@
                 <p class="input-group">
                     <input type="text" class="form-control" ng-model="communicationchannel.endDate" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['endDate']" close-text="Close" />
                 <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'endDate')"><i class="glyphicon glyphicon-calendar"></i></button>
+                <button type="button" class="btn btn-default btn-cal" ng-click="datePicker.open($event, 'endDate')"><i class="glyphicon glyphicon-calendar"></i></button>
                 </span>
                 </p>
             </div>
