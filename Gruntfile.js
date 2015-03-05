@@ -93,10 +93,17 @@ module.exports = function (grunt) {
     copy: {
       main: {
         files: [
-          {src: ['img/**'], dest: 'dist/'},
-          {src: ['bower_components/font-awesome/fonts/**'], dest: 'dist/',filter:'isFile',expand:true},
-          {src: ['bower_components/bootstrap/fonts/**'], dest: 'dist/',filter:'isFile',expand:true},
-          {src: ['assets/**/*'], dest: 'dist/'},
+            {src: ['img/**'], dest: 'dist/'},
+            {src: ['bower_components/font-awesome/fonts/**'], dest: 'dist/',filter:'isFile',expand:true},
+            //{src: ['bower_components/bootstrap/fonts/**'], dest: 'dist/',filter:'isFile',expand:true},
+            {
+                expand:true,
+                flatten: true,
+                src: ['bower_components/bootstrap/fonts/*'],
+                dest: 'dist/fonts/',
+                filter:'isFile'
+            },
+            {src: ['assets/**/*'], dest: 'dist/'},
             {src: ['directive/**/*'], dest: 'dist/'},
             {src: ['partial/**/*'], dest: 'dist/'},
             {src: ['service/**/*'], dest: 'dist/'}

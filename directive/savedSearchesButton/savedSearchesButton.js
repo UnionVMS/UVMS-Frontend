@@ -15,7 +15,7 @@ angular.module('unionvmsWeb')
     .directive('savedsearchesbutton', function() {
         return {
             restrict: 'E',
-            templateUrl: 'directive/savedsearchesbutton/savedsearchesbutton.html'
+            templateUrl: 'directive/savedSearchesButton/savedSearchesButton.html'
         };
     });
 
