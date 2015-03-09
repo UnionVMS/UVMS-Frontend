@@ -1,30 +1,33 @@
 <div class="newvessel" ng-controller="newVesselCtrl">
 
+<form name="newVesselForm" method="post">
         <div class="row">
             <div class="row col-md-12">
                 <span class="vesselstatus col-md-10">STATUS: <b>Active </b><a href="">set as inactive</a></span>
 
                 <div class="col-md-1">
-                    <button class="btn btn-sm createnewvesselbutton" type="button" ng-click="createNewVessel()"> Create New Vessel </button>
+                    <button  type="submit" class="btn btn-sm createnewvesselbutton" ng-click="createNewVessel()"> Create New Vessel </button>
                 </div>
                 <div>
                     <div class="closenewvessel pull-right" ng-click="toggleAddNewVessel()"> <img src="assets/close.png" /></div>
                 </div>
             </div>
+            <vessel-details></vessel-details>
 
-
+<!--
             <div class="row col-md-4">
                 <div class="inputgroup col-md-4">
                     <p class="labelheaders">ID</p>
                     <input type="text" name="newvesselidinput" class="form-control" ng-model="newVesselObj.id" disabled>
                 </div>
-                <div class="inputgroup col-md-8">
+                <div class="inputgroup col-md-8 form-group has-feedback">
                     <p class="labelheaders">NAME</p>
-                    <input type="text" name="newvesselnameinput" class="form-control" ng-model="newVesselObj.name">
+                    <input type="text" name="newvesselnameinput" class="form-control" ng-model="newVesselObj.name" ng-minlength="3" required >
+                    <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="!newVesselForm.newvesselnameinput.$error.minlength && !newVesselForm.newvesselnameinput.$error.required"></span>
                 </div>
                 <div class="inputgroup col-md-6">
                     <p class="labelheaders">CFR</p>
-                    <input type="text" name="newvesselcfrinput" class="form-control" ng-model="newVesselObj.cfr">
+                    <input type="text" name="newvesselcfrinput" class="form-control" ng-model="newVesselObj.cfr" required ng-minlength="3">
                 </div>
                 <div class="inputgroup col-md-6">
                     <p class="labelheaders">IMO</p>
@@ -181,7 +184,14 @@
                     </div>
 
                 </div>
-            </div>
+            </div>-->
+            <!-- ###################################################-->
+        <!--    <div class="inputerrors col-md-12 row" ng-show="newVesselForm.newvesselnameinput.$dirty && newVesselForm.newvesselnameinput.$invalid">
+                <small class="inputerror col-md-12" ng-show="newVesselForm.newvesselnameinput.$error.required"><i class="glyphicon glyphicon-asterisk"></i> Please input a name for the vessel</small>
+                <small class="error col-md-12" ng-show="newVesselForm.newvesselnameinput.$error.minlength"><i class="glyphicon glyphicon-asterisk"></i> Please enter a min length of 3</small>
+                <small class="error col-md-12" ng-show="newVesselForm.newvesselcfrinput.$error.minlength"><i class="glyphicon glyphicon-asterisk"></i> Please enter a min length of 3 characters for the cfr</small>
+
+            </div>-->
         </div>
         <div class=" col-md-12 mobileterminalcontainer" ng-repeat = "item in newVesselObj.mobileTerminals">
             <div class="row col-md-12">
@@ -200,4 +210,6 @@
         <div class="row col-md-12">
             <a ng-click="clearForm()">Clear form</a>
         </div>
+
+    </form>
 </div>

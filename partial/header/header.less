@@ -1,8 +1,17 @@
 .headermenu{
-    width: 1070px;
+    width: @containerwidth;
     margin:0 auto;
     height: 55px;
+
+    .headercontainer {
+        padding-left: 0px;
+
+        ul{
+            padding-left: 0px;
+        }
+    }
 }
+
 .menucell{
     min-width: 85px;
     float: left;
@@ -26,9 +35,6 @@ a:hover .menucell , .menucell:hover{
  }
 
 
-.headerbuffer{
-    overflow: hidden;
-}
 
 ul.today  li .today,
 ul .vessel li .vessel{

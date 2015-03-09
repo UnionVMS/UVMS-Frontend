@@ -1,12 +1,14 @@
 angular.module('unionvmsWeb')
-    .controller('getVesselCtrl', function($scope){
+    .controller('getVesselCtrl', function($scope, vessel){
 
         $scope.addNewMobileTerminalToVessel = function () {
 
-            if ($scope.selectedVessel.mobileTerminals === undefined) {
-                $scope.selectedVessel.mobileTerminals = [];
+
+
+            if ($scope.newVesselObj.mobileTerminals === undefined) {
+                $scope.newVesselObj.mobileTerminals = [];
             }
-            $scope.selectedVessel.mobileTerminals.push({
+            $scope.newVesselObj.mobileTerminals.push({
                 "satelliteSystem": [
                     {
                         "name": 'inmarsat-C',
@@ -44,25 +46,52 @@ angular.module('unionvmsWeb')
 
         $scope.countrySelected = function(item){
             $scope.vesselCountry = item.name;
-            $scope.selectedVessel.countryCode = item.name;
+            $scope.newVesselObj.countryCode = item.name;
         };
         $scope.activitySelected = function(item){
             $scope.vesselActivity = item.name;
-            $scope.selectedVessel.vesselType = item.name;
+            $scope.newVesselObj.vesselType = item.name;
         };
         $scope.ircSelected = function(item){
             $scope.vesselIrc = (item.code === "1");
-            $scope.selectedVessel.hasIrcs = (item.code === "1");
+            $scope.newVesselObj.hasIrcs = (item.code === "1");
         };
 
         $scope.removeMobileSystem = function(item, idx){
             if (idx >= idx){
-                $scope.selectedVessel.mobileTerminals.splice(idx,1);
+                $scope.newVesselObj.mobileTerminals.splice(idx,1);
             }
             };
 
         $scope.changeVesselStatus = function(){
-            $scope.selectedVessel.active = $scope.selectedVessel.active === true ? false : true;
+            $scope.newVesselObj.active = $scope.newVesselObj.active === true ? false : true;
+        };
+
+        $scope.updateVessel = function(){
+            delete $scope.newVesselObj.mobileTerminals; //MobileTerminals remove them cuz they do not exist in backend yet.
+
+            //Feedback to user.
+            $('.updateResponseMessage').fadeIn();
+            //Update Vessel
+            //vessel.updateVessel($scope.newVesselObj);
+            //Hide feedback to user
+            setTimeout(function() {
+                $('.updateResponseMessage').fadeOut();
+            }, 4000 );
+            //Update Vessel and take care of the response(eg. the promise) when the update is done.
+            var updateResponse = vessel.updateVessel($scope.newVesselObj)
+                .then(updateVesselSuccess, updateVesselError);
+        };
+
+        var updateVesselSuccess = function(uppdateResponse){
+            //Message to user
+            $scope.updateResponseMessage = "The vessel has now been updated.";
+        };
+        var updateVesselError = function(error){
+            //Message to user
+            $scope.updateResponseMessage = "We are sorry but something went wrong and we could not update the vessel.";
+            //Write to console in browser
+            console.log("Opps, no update has been done.");
         };
 
     })

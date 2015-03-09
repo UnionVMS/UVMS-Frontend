@@ -1,10 +1,23 @@
 <div class="newvessel" ng-controller="getVesselCtrl">
+    <form name="newVesselForm">
     <div class="row">
-        <div class="vesselname">{{selectedVessel.name}}</div>
-        <span class="vesselstatus col-md-12">
-            <div ng-show="selectedVessel.active == true">STATUS: <b> Active</b><a ng-click="changeVesselStatus()"> set as inactive</a></div>
-            <div ng-show="selectedVessel.active == false">STATUS: <b> Inactive</b><a ng-click="changeVesselStatus()" > &nbsp;(set as active)</a></div>
-        </span>
+        <div class="row col-md-12">
+
+            <div class="vesselname">{{newVesselObj.name}}</div>
+            <span class="vesselstatus col-md-10">
+                <div ng-show="newVesselObj.active == true">STATUS: <b> Active</b><a ng-click="changeVesselStatus()"> set as inactive</a></div>
+                <div ng-show="newVesselObj.active == false">STATUS: <b> Inactive</b><a ng-click="changeVesselStatus()" > &nbsp;(set as active)</a></div>
+            </span>
+            <div class="col-md-1">
+                <button class="btn btn-sm updatevesselbutton" type="submit" ng-click="updateVessel()"> Update </button>
+            </div>
+            <div>
+                <div class="closenewvessel pull-right" ng-click="toggleGetVessel()"> <img src="assets/close.png" /></div>
+            </div>
+        </div>
+        <vessel-details></vessel-details>
+
+<!--
         <div class="row col-md-4">
             <div class="inputgroup col-md-4">
                 <p class="labelheaders">ID</p>
@@ -169,8 +182,8 @@
             </div>
         </div>
     </div>
-    <hr>
-    <div class="mobileterminalcontainer row" ng-repeat = "item in selectedVessel.mobileTerminals">
+    -->
+    <div class="col-md-12 mobileterminalcontainer row" ng-repeat = "item in newVesselObj.mobileTerminals">
         <a ng-click="removeMobileSystem(item, $index)">-REMOVE SATELLITE SYSTEM</a>
         <mobileterminal terminal="item"></mobileterminal>
     </div>

@@ -19,6 +19,7 @@
 @import "directive/communicationChannel/communicationChannel.less";
 @import "directive/getVessel/getVessel.less";
 
+@import "directive/vesselDetails/vesselDetails.less";
 /* Add Component LESS Above */
 
 /* Required for Angular UI Bootstrap */
@@ -40,6 +41,8 @@
 
 /*global var*/
 @buttoncolor: #18A689;
+@containerwidth: 1170px;
+@containerposition: 5px auto;
 
 body{
     width: 100%;
@@ -52,21 +55,66 @@ body{
     margin: 0 auto;
     background-color: white;
 }*/
+
+.uvmslogo{
+    width: 130px;
+}
+
 .headercontainer{
     width: 100%;
 }
 .pagename{
     font-size: 24px;
     font-weight: bold;
-    width: 250px;
-    padding: 35px;
+    width: 100%;
+    padding: 34px 0px 0px 0px;
+    overflow: hidden;
 }
+.headerwarnings{
+    float: right;
+    padding-right: 20px;
+
+    .glyphicon-bell{
+        color:#ffffff;
+    }
+}
+.messagenumbercontainer {
+    background-color: #c25842;
+    border-radius: 12px 12px 12px 12px;
+    bottom: 42px;
+    font-size: 20px;
+    height: 24px;
+    left: 10px;
+    min-width: 24px;
+    position: relative;
+    color:#ffffff;
+}
+.messagenumber {
+    font-size: 19px;
+    left: 6px;
+    margin-right: 13px;
+    position: relative;
+    color:white;
+}
+.headermessages{
+    float: right;
+    margin-right: 30px;
+    .glyphicon-envelope{
+        color:#ffffff;
+    }
+}
+
 .pageinfo{
-    height: 50px;
+    height: 75px;
     width: 100%;
     background-color: #383737;
     color:#FFFFFF;
 }
+.pageinfocontainer{
+    width:@containerwidth;
+    margin:0px auto;
+}
+
  .header{
      width: 100%;
      background-color:#383737;
@@ -135,11 +183,7 @@ input[type="text"] {
     border-radius: none;
 }
 
-.mobileterminalcontainer{
-    background-color: #F0F0F0;
-    border-radius: 2px 2px 2px 2px;
-    margin: 10px 0;
-}
+
 
 .vesselbtn{
     background-color:@buttoncolor;
@@ -194,5 +238,13 @@ input[type="text"] {
 {
     top: -1px;
 }
+
+.inputerrors{
+    .glyphicon{
+        top: 2px;
+    }
+}
+
+
 @icon-font-path: "fonts/";
 

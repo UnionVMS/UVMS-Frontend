@@ -44,14 +44,30 @@
   <script src="directive/mobileTerminal/mobileTerminal.js"></script>
   <script src="directive/communicationChannel/communicationChannel.js"></script>
   <script src="directive/getVessel/getVessel.js"></script>
+  <script src="service/uvmsValidation.js"></script>
+  <script src="directive/vesselDetails/vesselDetails.js"></script>
+  <script src="temp/vesselDetails.js"></script>
   <!-- Add New Component JS Above -->
 
   <header>
       <div class="headercontainer">
           <div class="pageinfo">
-          <div class="pagename">
-           <p >UNION VMS</p>
-          </div>
+              <div class="pageinfocontainer">
+                 <div class="pagename">
+                    <img class="uvmslogo" src="assets/logo.png">
+                     <div class="headerwarnings">
+                         <div class="glyphicon glyphicon-bell">
+                             <div class="messagenumbercontainer">
+                                <div class="messagenumber">5</div>
+                             </div>
+                         </div>
+                     </div>
+                     <div class="headermessages">
+                         <div class="glyphicon glyphicon-envelope"></div>
+                     </div>
+
+                </div>
+              </div>
           </div>
           <div class="header">
             <div ng-include="'partial/header/header.html'"></div>

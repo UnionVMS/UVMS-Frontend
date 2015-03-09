@@ -61,7 +61,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
 
     $scope.toggleGetVessel = function(item){
         if(item === undefined){
-            $scope.selectedVessel = undefined;
+            $scope.newVesselObj = undefined;
         }
         else
         {
@@ -173,7 +173,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
             }
         ];
             item.mobileTerminals = mobileTerminals;
-            $scope.selectedVessel = item;
+            $scope.newVesselObj = item;
         }
         $scope.getVesselVisible.active = !$scope.getVesselVisible.active;
         $scope.vesselSearchContainerVisible.active = !$scope.vesselSearchContainerVisible.active;
@@ -275,6 +275,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         }
     };
 
+    /*
     //UpdateVessel
     $scope.updateVessel = function(){
         delete $scope.selectedVessel.mobileTerminals; //MobileTerminals remove them cuz they do not exist in backend yet.
@@ -303,8 +304,10 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         console.log("Opps, no update has been done.");
     };
 
+    */
+
     //CreateNewVessel
-    $scope.createNewVessel = function(){
+ /*   $scope.createNewVessel = function(){
         //delete $scope.newVesselObj;
         delete $scope.newVesselObj.mobileTerminals; //MobileTerminals remove them cuz they do not exist in backend yet.
 
@@ -335,5 +338,5 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         console.log = "ERROR: " + error.statusText;
         console.log = "ERROR: " + error.status ;
     };
-
+    */
 });
