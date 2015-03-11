@@ -44,8 +44,6 @@ angular.module('unionvmsWeb')
             $scope.terminal.communicationChannels.push(newChannel);
         };
 
-
-
     })
 
     .directive('mobileterminal', function() {

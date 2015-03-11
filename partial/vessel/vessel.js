@@ -190,10 +190,10 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
     $scope.vesselEffect = "Effect";
 
 
-    $scope.vesselCountries =[{'name':'Swe','code':'46'},{'name':'DK','code':'47'},{'name':'NOR','code':'48'}];
+    $scope.vesselCountries =[{'name':'Swe','code':'SWE'},{'name':'DK','code':'DK'},{'name':'NOR','code':'NOR'}];
     $scope.vesselactivitytypes =[{'name':'Fishing','code':'1124'},{'name':'Dock','code':'001'},{'name':'Trawling','code':'002'}];
-    $scope.vesselircstypes =[{'name':'YES','code':'1'},{'name':'NO','code':'0'}];
-    $scope.vesselLicensTypes =[{'name':'YES','code':'1'},{'name':'NO','code':'0'}];
+    $scope.vesselircstypes =[{'name':'YES','code':'true'},{'name':'NO','code':'false'}];
+    $scope.vesselLicensTypes =[{'name':'YES','code':'true'},{'name':'NO','code':'false'}];
     $scope.vesseloveralltypes =[{'name':'Overall 1','code':'1'},{'name':'Overall 2','code':'0'},{'name':'Overall 3','code':'20'}];
     $scope.vesselCities =[{'name':'London','code':'133'},{'name':'Gothenburg','code':'99'},{'name':'Amsterdam','code':'23'}];
     $scope.vesselEffectTypes =[{'name':'hp','code':'133'},{'name':'kW','code':'99'}];

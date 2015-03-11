@@ -183,7 +183,8 @@
             <tbody>
             <tr ng-repeat="item in vessels | orderBy:sortType:sortReverse | filter:searchFilter">
                 <td><input type="checkbox" ng-model="item.Selected"/></td>
-                <td>{{item.internalId}}</td>
+                <td>{{item.vesselId.value}}</td>
+<!--                <td>{{item.internalId}}</td>-->
                 <td>{{item.name}}</td>
                 <td>{{item.source}}</td>
                 <td>{{item.externalMarking}}</td>

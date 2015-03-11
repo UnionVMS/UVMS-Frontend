@@ -83,7 +83,7 @@ angular.module('unionvmsWeb')
                 .then(updateVesselSuccess, updateVesselError);
         };
 
-        var updateVesselSuccess = function(uppdateResponse){
+        var updateVesselSuccess = function(updateResponse){
             //Message to user
             $scope.updateResponseMessage = "The vessel has now been updated.";
         };

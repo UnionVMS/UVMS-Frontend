@@ -4,17 +4,20 @@
             <div class="row col-md-4">
                 <div class="inputgroup col-md-4">
                     <p class="labelheaders">ID</p>
-                    <input type="text" name="newvesselidinput" class="form-control" ng-model="newVesselObj.id" disabled>
+                    <input type="text" name="newvesselidinput" class="form-control" ng-model="newVesselObj.vesselId.value" disabled>
                 </div>
                 <div class="inputgroup col-md-8 form-group has-feedback">
                     <p class="labelheaders">NAME</p>
                     <input type="text" name="newvesselnameinput" class="form-control" ng-model="newVesselObj.name" ng-minlength="3" required  >
-                    <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="!newVesselForm.newvesselnameinput.$error.minlength && !newVesselForm.newvesselnameinput.$error.required"></span>
+                   <!-- <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="!newVesselForm.newvesselnameinput.$error.minlength && !newVesselForm.newvesselnameinput.$error.required"></span>
+                    -->
                 </div>
                 <div class="inputgroup col-md-6 has-feedback">
                     <p class="labelheaders">CFR</p>
                     <input type="text" name="newvesselcfrinput" class="form-control" ng-model="newVesselObj.cfr" required ng-minlength="3" ng-pattern="/^[0-9]*$/" >
+                   <!--
                     <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="!newVesselForm.newvesselcfrinput.$error.minlength && !newVesselForm.newvesselcfrinput.$error.pattern"></span>
+                    -->
                 </div>
                 <div class="inputgroup col-md-6">
                     <p class="labelheaders">IMO</p>
@@ -53,15 +56,14 @@
                             </li>
                         </ul>
                     </div>
-
                 </div>
                 <div class="inputgroup col-md-8">
                     <p class="labelheaders">MMSI NO.</p>
-                    <input type="text" name="newvesselmmsiofnput" class="form-control" ng-model="newVessel.mmsio">
+                    <input type="text" name="newvesselmmsiofnput" class="form-control" ng-model="newVesselObj.mmsiNo">
                 </div>
                 <div class="inputgroup col-md-4">
                     <p class="labelheaders">BILLING</p>
-                    <input type="text" name="newvesselbillinginput" class="form-control" ng-model="newVesssel.billing">
+                    <input type="text" name="newvesselbillinginput" class="form-control" ng-model="newVesselObj.billing">
                 </div>
 
             </div>
@@ -69,7 +71,7 @@
                 <div class="inputgroup col-md-4">
                     <p class="labelheaders">IRCS</p>
                     <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="vesselirc" data-toggle="dropdown" aria-expanded="true" required>
+                        <button class="btn btn-default dropdown-toggle" type="button" id="vesselirc" data-toggle="dropdown" aria-expanded="true">
                             <div class="dropdowntext">{{ vesselIrc }}</div>
                             <span class="caret"></span>
                         </button>
@@ -88,7 +90,7 @@
                 <div class="inputgroup col-md-4">
                     <p class="labelheaders">EXT.MARKING</p>
                     <input type="text" name="newvesselextmarkingInput" class="form-control"
-                           ng-model="newVessel.extmarking">
+                           ng-model="newVesselObj.externalMarking">
                 </div>
                 <div class="inputgroup col-md-4">
                     <p class="labelheaders">LICENSE</p>
@@ -107,13 +109,13 @@
                 </div>
                 <div class="inputgroup col-md-6">
                     <p class="labelheaders">HOMEPORT</p>
-                    <input type="text" name="newvesselhomeportinput" class="form-control" ng-model="newVessel.homeport">
+                    <input type="text" name="newvesselhomeportinput" class="form-control" ng-model="newVesselObj.homePort" ng-maxlength="5" required>
                 </div>
             </div>
             <div class="row col-md-4">
                 <div class="inputgroup col-md-4">
                     <p class="labelheaders">LENGTH</p>
-                    <input type="text" name="newvessellengthinput" class="form-control" ng-model="newVessel.length">
+                    <input type="text" name="newvessellengthinput" class="form-control" ng-model="newVesselObj.lengthOverAll">
                 </div>
                 <div class="inputgroup col-md-6">
                     <p class="labelheaders">OVERALL</p>
@@ -134,7 +136,7 @@
             <div class="row col-md-8">
                 <div class="inputgroup col-md-2">
                     <p class="labelheaders">CAPACITY</p>
-                    <input type="text" name="newvesselcapacityinput" class="form-control" ng-model="newVessel.capacity">
+                    <input type="text" name="newvesselcapacityinput" class="form-control" ng-model="newVesselObj.grossTonnage">
                 </div>
                 <div class="inputgroup col-md-2">
                     <p class="labelheaders">City</p>
@@ -153,7 +155,7 @@
                 </div>
                 <div class="inputgroup col-md-2 col-md-offset-1">
                     <p class="labelheaders">POWER</p>
-                    <input type="text" name="newvesselpowerinput" class="form-control" ng-model="newVessel.power">
+                    <input type="text" name="newvesselpowerinput" class="form-control" ng-model="newVesselObj.powerMain">
                 </div>
                 <div class="inputgroup col-md-2">
                     <p class="labelheaders">EFFECT</p>
@@ -172,13 +174,13 @@
 
                 </div>
             </div>
-            <!-- ###################################################-->
+            <!-- ###################################################
             <div class="inputerrors col-md-12 row" ng-show="newVesselForm.newvesselnameinput.$dirty && newVesselForm.newvesselnameinput.$invalid">
                 <small class="inputerror col-md-12" ng-show="newVesselForm.newvesselnameinput.$error.required"><i class="glyphicon glyphicon-asterisk"></i> Please input a name for the vessel</small>
                 <small class="error col-md-12" ng-show="newVesselForm.newvesselnameinput.$error.minlength"><i class="glyphicon glyphicon-asterisk"></i> Please enter a min length of 3</small>
                 <small class="error col-md-12" ng-show="newVesselForm.newvesselcfrinput.$error.minlength"><i class="glyphicon glyphicon-asterisk"></i> Please enter a min length of 3 characters for the cfr</small>
                 <small class="error col-md-12" ng-show="newVesselForm.newvesselcfrinput.$error.pattern"><i class="glyphicon glyphicon-asterisk"></i> Digits only</small>
-            </div>
+            </div>-->
         </div>
 <!--
         <div class=" col-md-12 mobileterminalcontainer" ng-repeat = "item in newVesselObj.mobileTerminals">

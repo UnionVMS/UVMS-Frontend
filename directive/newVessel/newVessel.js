@@ -13,6 +13,7 @@ angular.module('unionvmsWeb')
             if ($scope.newVesselObj.mobileTerminals === undefined) {
                 $scope.newVesselObj.mobileTerminals = [];
             }
+
             $scope.newVesselObj.mobileTerminals.push({
                 "satelliteSystem": [
                     {
@@ -48,7 +49,8 @@ angular.module('unionvmsWeb')
         };
 
 
-        $scope.newVesselObj = {
+       $scope.newVesselObj = {
+
             "active": true,
             "billing": "",
             "cfr": null,
@@ -59,7 +61,6 @@ angular.module('unionvmsWeb')
             "hasLicense": false,
             "homePort": null,
             "imo": "",
-            "internalId": null,
             "ircs": null,
             "lengthBetweenPerpendiculars": null,
             "lengthOverAll": null,
@@ -71,7 +72,31 @@ angular.module('unionvmsWeb')
             "safetyGrossTonnage": null,
             "source": "LOCAL",
             "vesselType": null
+
+       /*     "active": true,
+            "source":null ,
+            "name": null,
+            "countryCode": "LOCAL",
+            "vesselType": null,
+            "hasIrcs": null,
+            "ircs": null,
+            "externalMarking": null,
+            "cfr": null,
+            "imo": null,
+            "mmsiNo": null,
+            "billing": null,
+            "hasLicense": null,
+            "homePort": null,
+            "lengthOverAll": null,
+            "lengthBetweenPerpendiculars": null,
+            "grossTonnage": null,
+            "otherGrossTonnage": null,
+            "safetyGrossTonnage": null,
+            "powerMain": null,
+            "powerAux": null
+        */
         };
+
 
         $scope.createNewVessel = function(){
             if($scope.newVesselForm.$valid) {
@@ -91,6 +116,8 @@ angular.module('unionvmsWeb')
             }
         };
 
+
+
         var createVesselSuccess = function(createResponse){
             $scope.createResponseMessage = "The Vessel has been created successfully. You can close this window or just wait and it will close itself.";
             console.log = "The Vessel has now been created successfully";
@@ -105,6 +132,33 @@ angular.module('unionvmsWeb')
             console.log = "The Vessel has NOT been created!";
             console.log = "ERROR: " + error.statusText;
             console.log = "ERROR: " + error.status ;
+        };
+
+        $scope.clearForm = function(){
+            //delete or empty
+            $scope.newVesselObj = {
+                "active": true,
+                "source": "LOCAL",
+                "name": null,
+                "countryCode": null,
+                "vesselType": null,
+                "hasIrcs": null,
+                "ircs": null,
+                "externalMarking": null,
+                "cfr": null,
+                "imo": null,
+                "mmsiNo": null,
+                "billing": null,
+                "hasLicense": null,
+                "homePort": null,
+                "lengthOverAll": null,
+                "lengthBetweenPerpendiculars": null,
+                "grossTonnage": null,
+                "otherGrossTonnage": null,
+                "safetyGrossTonnage": null,
+                "powerMain": null,
+                "powerAux": null
+            };
         };
 
 
