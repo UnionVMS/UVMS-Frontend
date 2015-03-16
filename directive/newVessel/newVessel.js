@@ -61,7 +61,7 @@ angular.module('unionvmsWeb')
             "hasLicense": false,
             "homePort": null,
             "imo": "",
-            "ircs": null,
+            "ircs": "",
             "lengthBetweenPerpendiculars": null,
             "lengthOverAll": null,
             "mmsiNo": "",

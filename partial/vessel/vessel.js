@@ -190,7 +190,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
     $scope.vesselEffect = "Effect";
 
 
-    $scope.vesselCountries =[{'name':'Swe','code':'SWE'},{'name':'DK','code':'DK'},{'name':'NOR','code':'NOR'}];
+    $scope.vesselCountries =[{'name':'SWE','code':'SWE'},{'name':'DNK','code':'DNK'},{'name':'NOR','code':'NOR'}];
     $scope.vesselactivitytypes =[{'name':'Fishing','code':'1124'},{'name':'Dock','code':'001'},{'name':'Trawling','code':'002'}];
     $scope.vesselircstypes =[{'name':'YES','code':'true'},{'name':'NO','code':'false'}];
     $scope.vesselLicensTypes =[{'name':'YES','code':'true'},{'name':'NO','code':'false'}];
