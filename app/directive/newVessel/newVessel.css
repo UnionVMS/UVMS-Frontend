@@ -1,0 +1,45 @@
+.newvessel {
+  border-bottom: 2px solid #918D8F;
+}
+.newvessel .row {
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.newvessel .inputgroup .labelheaders {
+  height: 20px;
+  margin-bottom: 0;
+  margin-top: 10px;
+}
+.newvessel .inputgroup input[type=text] {
+  background-color: #EBEBEB;
+}
+.newvessel .dropdowntext {
+  float: left;
+}
+.newvessel .caret {
+  clear: both;
+  margin-left: 10px;
+}
+.newvessel .closenewvessel {
+  margin-right: 0px;
+}
+.newvessel .btn.btn-sm.createnewvesselbutton {
+  position: relative;
+  right: 13px;
+}
+.newvessel a {
+  cursor: pointer;
+}
+.newvessel .has-feedback .form-control-feedback {
+  position: absolute;
+  top: 29px;
+  right: 0;
+  display: block;
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+  text-align: justify;
+}
+.newvessel .form-group {
+  margin-bottom: 0px;
+}
