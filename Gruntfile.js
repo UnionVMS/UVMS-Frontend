@@ -10,7 +10,7 @@ var pkg = require('./package.json');
 //This enables users to create any directory structure they desire.
 var createFolderGlobs = function(fileTypePatterns) {
   fileTypePatterns = Array.isArray(fileTypePatterns) ? fileTypePatterns : [fileTypePatterns];
-  var ignore = ['node_modules','app/bower_components','dist','temp'];
+  var ignore = ['node_modules','bower_components','dist','temp'];
   var fs = require('fs');
   return fs.readdirSync(process.cwd())
           .map(function(file){
@@ -40,8 +40,8 @@ module.exports = function (grunt) {
     connect: {
       main: {
         options: {
-          port: 9001,
-          base: 'app/'
+          port: 9001
+         // base: 'app/'
         }
       }
     },
@@ -61,7 +61,7 @@ module.exports = function (grunt) {
         options: {
             jshintrc: '.jshintrc'
         },
-        src: [createFolderGlobs('*.js'), '!app/bower_components/**/*.js']
+        src: [createFolderGlobs('*.js'), '!/bower_components/**/*.js']
       }
     },
     clean: {
@@ -94,18 +94,18 @@ module.exports = function (grunt) {
     copy: {
       main: {
         files: [
-            {cwd: 'app/',
+            {
                 src: ['bower_components/font-awesome/fonts/**'], dest: 'dist/',filter:'isFile',expand:true},
             {
                 expand:true,
                 flatten: true,
-                src: ['app/bower_components/bootstrap/fonts/*'],
+                src: ['bower_components/bootstrap/fonts/*'],
                 dest: 'dist/fonts/',
                 filter:'isFile'
             }, {
                 expand:true,
                 flatten: true,
-                src: ['app/bower_components/bootstrap/fonts/*'],
+                src: ['bower_components/bootstrap/fonts/*'],
                 dest: 'fonts/',
                 filter:'isFile'
             },
