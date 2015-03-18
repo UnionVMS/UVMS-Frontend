@@ -35,7 +35,7 @@ angular.module('unionvmsWeb')
                 'endDate':'2015-05-01'
             };
 
-            console.log($scope);
+            //console.log($scope);
             if($scope.terminal.communicationChannels === undefined)
             {
                 $scope.terminal.communicationChannels = [];

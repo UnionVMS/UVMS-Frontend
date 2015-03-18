@@ -1,19 +1,15 @@
 
 
 <div class="headermenu">
-   <!-- <div class="headerbuffer">-->
     <div class="headercontainer col-md-12" ng-controller="HeaderCtrl">
         <ul>
              <li class="cell" ng-repeat="page in menu">
-             <!--    <div class="menubox">-->
                     <a ng-href="#{{page.url}}">
                         <div class="menucell"  ng-class="{active: isActive(page.url)}">{{page.title}}</div>
                     </a>
-                <!--</div>-->
             </li>
         </ul>
     </div>
-<!--    </div>-->
 </div>
 
 

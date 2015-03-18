@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate']);
+angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource']);
 
 angular.module('unionvmsWeb').config(function($routeProvider) {
     $routeProvider

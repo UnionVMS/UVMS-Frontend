@@ -1,16 +1,7 @@
 <div ng-controller="VesselCtrl" ng-init="getInitialVessels()">
-
 <div class="addvessel fadeaddvesselin fadeaddvesselout" ng-show="addNewVesselVisible.active">
     <div class="row col-md-12">
         <p class="createResponseMessage">{{createResponseMessage}}</p>
-        <!--  <div class="pull-right">
-         -  <div class="col-md-1">
-              <button class="btn btn-sm pull-right createnewvesselbutton" type="button" ng-click="createNewVessel()"> Create New Vessel </button>
-          </div>
-          <div class="col-md-1">
-              <div class="closenewvessel pull-right" ng-click="toggleAddNewVessel()"> <img src="assets\close.png" /></div>
-          </div>
-         </div>-->
     </div>
     <newVessel></newVessel>
 </div>
@@ -18,14 +9,7 @@
     <div class="getvessel fadegetvesselin fadegetvesselout" ng-show="getVesselVisible.active">
         <div class="row col-md-12">
             <p class="updateResponseMessage">{{updateResponseMessage}}</p>
-           <!-- <div class="pull-right">
-                <div class="col-md-1">
-                    <button class="btn btn-sm updatevesselbutton pull-right" type="button" ng-click="updateVessel()"> Update </button>
-                </div>
-                <div class="col-md-1">
-                    <div class="closegetvessel pull-right" ng-click="toggleGetVessel()"><img src="assets/close.png" /></div>
-                </div>
-            </div> -->
+
         </div>
         <getVessel carrier="{{selectedCarrier}}"></getVessel>
     </div>
@@ -84,7 +68,7 @@
             </ul>
         </div>
         <!-- add new button -->
-        <button class="btn btn-sm pull-right addvesselbtn" ng-click="toggleAddNewVessel()" type="button"> Add new &nbsp;&nbsp;&nbsp;&nbsp;<span>+</span></button>
+        <button class="btn btn-sm pull-right addvesselbtn" ng-click="toggleAddNewVessel()" type="button"> {{translation.ADD_NEW}}&nbsp;&nbsp;&nbsp;&nbsp;<span>+</span></button>
 
     </div>
 
@@ -98,24 +82,8 @@
             <tr>
                 <th><input type="checkbox" ng-model="item.selectedAll" ng-click="checkAll()"/></th>
                 <th>
-                    <a href="" ng-click="sortType='internalId'; sortReverse = !sortReverse">
-                        Id
-                        <span ng-show="sortType == 'internalId' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'internalId' && sortReverse" class="fa fa-caret-up"></span>
-                        <span ng-show="sortType != 'internalId'" class="fa fa-sort"></span>
-                    </a>
-                </th>
-                <th>
-                    <a href="" ng-click="sortType='name'; sortReverse = !sortReverse">
-                        Name
-                        <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
-                        <span ng-show="sortType != 'name'" class="fa fa-sort"></span>
-                    </a>
-                </th>
-                <th>
                     <a href="" ng-click="sortType='state'; sortReverse = !sortReverse">
-                        State
+                        {{translation.FLAG_STATE}}
                         <span ng-show="sortType == 'state' && !sortReverse" class="fa fa-caret-down"></span>
                         <span ng-show="sortType == 'state' && sortReverse" class="fa fa-caret-up"></span>
                         <span ng-show="sortType != 'state'" class="fa fa-sort"></span>
@@ -123,80 +91,70 @@
                 </th>
                 <th>
                     <a href="" ng-click="sortType='externalMarking'; sortReverse = !sortReverse">
-                        Ext.Ma
+                        {{translation.EXTERNAL_MARKING}}
                         <span ng-show="sortType == 'externalMarking' && !sortReverse" class="fa fa-caret-down"></span>
                         <span ng-show="sortType == 'externalMarking' && sortReverse" class="fa fa-caret-up"></span>
                         <span ng-show="sortType != 'externalMarking'" class="fa fa-sort"></span>
                     </a>
                 </th>
                 <th>
-                    <a href="" ng-click="sortType='vesselType'; sortReverse = !sortReverse">
-                        Vesseltype
-                        <span ng-show="sortType == 'vesselType' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'vesselType' && sortReverse" class="fa fa-caret-up"></span>
-                        <span ng-show="sortType != 'vesselType'" class="fa fa-sort"></span>
+                    <a href="" ng-click="sortType='name'; sortReverse = !sortReverse">
+                        {{translation.NAME}}
+                        <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sortType != 'name'" class="fa fa-sort"></span>
                     </a>
                 </th>
                 <th>
                     <a href="" ng-click="sortType='ircs'; sortReverse = !sortReverse">
-                        Signal
+                        {{translation.SIGNAL}}
                         <span ng-show="sortType == 'ircs' && !sortReverse" class="fa fa-caret-down"></span>
                         <span ng-show="sortType == 'ircs' && sortReverse" class="fa fa-caret-up"></span>
                         <span ng-show="sortType != 'ircs'" class="fa fa-sort"></span>
                     </a>
                 </th>
                 <th>
-                    <a href="" ng-click="sortType='cfr'; sortReverse = !sortReverse">
-                        Comm
-                        <span ng-show="sortType == 'cfr' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'cfr' && sortReverse" class="fa fa-caret-up"></span>
-                        <span ng-show="sortType != 'cfr'" class="fa fa-sort"></span>
+                    <a href="" ng-click="sortType='type'; sortReverse = !sortReverse">
+                        {{translation.TYPE}}
+                        <span ng-show="sortType == 'type' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'type' && sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sortType != 'type'" class="fa fa-sort"></span>
                     </a>
                 </th>
                 <th>
-                    <a href="" ng-click="sortType='memberno'; sortReverse = !sortReverse">
-                        Member No.
-                        <span ng-show="sortType == 'memberno' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'memberno' && sortReverse" class="fa fa-caret-up"></span>
-                        <span ng-show="sortType != 'memberno'" class="fa fa-sort"></span>
-                    </a>
-                </th>
-                <th>
-                    <a href="" ng-click="sortType='terminals'; sortReverse = !sortReverse">
-                        Terminals
-                        <span ng-show="sortType == 'terminals' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'terminals' && sortReverse" class="fa fa-caret-up"></span>
-                        <span ng-show="sortType != 'terminals'" class="fa fa-sort"></span>
+                    <a href="" ng-click="sortType='license'; sortReverse = !sortReverse">
+                        {{translation.LICENSE}}
+                        <span ng-show="sortType == 'license' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'license' && sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sortType != 'license'" class="fa fa-sort"></span>
                     </a>
                 </th>
                 <th>
                     <a href="" ng-click="sortType='lastreport'; sortReverse = !sortReverse">
-                        Last report
-                        <span ng-show="sortType == 'lastreport' && !sortReverse" class="fa fa-caret-down"></span><span ng-show="sortType == 'lastreport' && sortReverse" class="fa fa-caret-up"></span>
+                        {{translation.LAST_REPORT}}
+                        <span ng-show="sortType == 'lastreport' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'lastreport' && sortReverse" class="fa fa-caret-up"></span>
                         <span ng-show="sortType != 'lastreport'" class="fa fa-sort"></span>
                     </a>
                 </th>
-                <th>Details</th>
-
+                <th>{{translation.DETAILS}}</th>
+                <th>{{translation.REPORTS}}</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="item in vessels | orderBy:sortType:sortReverse | filter:searchFilter">
                 <td><input type="checkbox" ng-model="item.Selected"/></td>
-                <td>{{item.vesselId.value}}</td>
-<!--                <td>{{item.internalId}}</td>-->
-                <td>{{item.name}}</td>
-                <td>{{item.source}}</td>
+                <td>{{item.countryCode}}</td>
                 <td>{{item.externalMarking}}</td>
-                <td>{{item.vesselType}}</td>
+                <td>{{item.name}}</td>
                 <td>{{item.ircs}}</td>
-                <td>Not present</td>
-                <td>Not present</td>
-                <td>Not present</td>
-                <td>Not present</td>
+                <td>{{item.vesselType}}</td>
+                <td>{{item.license}}</td>
+                <td>{{item.lastReport}}</td>
                 <td>
-                    <button class="btn vesselbtn button" ng-click="toggleGetVessel(item)">View</button>
+                    <button class="btn vesselbtn button" ng-click="toggleGetVessel(item)">{{translation.DETAILS}}</button>
                 </td>
+                <td>{{translation.REPORT}}</td>
             </tr>
             </tbody>
         </table>

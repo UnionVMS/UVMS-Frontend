@@ -1,0 +1,22 @@
+{
+    "FLAG_STATE": "Flag state",
+    "EXTERNAL_MARKING":"Ext. no.",
+    "NAME": "Name",
+    "SIGNAL": "Signal",
+    "TYPE": "Type",
+    "LICENSE": "License",
+    "LAST_REPORT": "Last report",
+    "DETAILS": "Details",
+    "REPORTS": "Reports",
+    "REPORT": "Report",
+    "OK": "Ok",
+    "SAVE": "Save",
+    "UPDATE": "Update",
+    "DELETE":"Delete",
+    "REMOVE":"Remove",
+    "SEARCH": "Search",
+    "ADD_NEW_WESSEL": "Create vessel",
+    "ADD_NEW": "Add new",
+    "CREATE_RESPONSE_MESSAGE" : "The Vessel has been created successfully. You can close this window or just wait and it will close itself.",
+    "ERROR": "We are sorry... Something took a wrong turn. To err is human but to arr is pirate!!"
+}

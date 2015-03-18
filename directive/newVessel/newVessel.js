@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb')
-    .controller('newVesselCtrl', function ($scope, $http, vessel, $route, uvmsValidation) {
+    .controller('newVesselCtrl', function ($scope, $http, vessel, $route, uvmsValidation, uvmsTranslationService) {
 
         $scope.removeNewMobileSystem = function (item, idx) {
             if (idx >= 0){
@@ -10,9 +10,15 @@ angular.module('unionvmsWeb')
 
 
         $scope.addNewMobileTerminalToNewVessel = function () {
+
+            if  ($scope.newVesselObj === undefined){
+                $scope.clearForm();
+            }
+
             if ($scope.newVesselObj.mobileTerminals === undefined) {
                 $scope.newVesselObj.mobileTerminals = [];
             }
+
 
             $scope.newVesselObj.mobileTerminals.push({
                 "satelliteSystem": [
@@ -73,7 +79,7 @@ angular.module('unionvmsWeb')
             "source": "LOCAL",
             "vesselType": null
 
-       /*     "active": true,
+ /*    /*     "active": true,
             "source":null ,
             "name": null,
             "countryCode": "LOCAL",
@@ -94,7 +100,7 @@ angular.module('unionvmsWeb')
             "safetyGrossTonnage": null,
             "powerMain": null,
             "powerAux": null
-        */
+  */
         };
 
 
@@ -120,13 +126,18 @@ angular.module('unionvmsWeb')
 
         var createVesselSuccess = function(createResponse){
             $scope.createResponseMessage = "The Vessel has been created successfully. You can close this window or just wait and it will close itself.";
-            console.log = "The Vessel has now been created successfully";
+            console.log = "The Vessel has been created successfully";
             setTimeout(function() {
                 $route.reload();
             }, 2000 );
 
         };
-
+/*
+        $scope.translate = function(){
+            uvmsTranslationService.getTranslation($scope);
+        };
+        $scope.translate();
+*/
         var createVesselError = function(error){
             $scope.createResponseMessage = "We are sorry but something went wrong when we tried to create a new Vessel. Please try again in a moment or close the window.";
             console.log = "The Vessel has NOT been created!";
@@ -137,27 +148,30 @@ angular.module('unionvmsWeb')
         $scope.clearForm = function(){
             //delete or empty
             $scope.newVesselObj = {
+
+
                 "active": true,
-                "source": "LOCAL",
-                "name": null,
-                "countryCode": null,
-                "vesselType": null,
-                "hasIrcs": null,
-                "ircs": null,
-                "externalMarking": null,
+                "billing": "",
                 "cfr": null,
-                "imo": null,
-                "mmsiNo": null,
-                "billing": null,
-                "hasLicense": null,
-                "homePort": null,
-                "lengthOverAll": null,
-                "lengthBetweenPerpendiculars": null,
+                "countryCode": null,
+                "externalMarking": null,
                 "grossTonnage": null,
+                "hasIrcs": false,
+                "hasLicense": false,
+                "homePort": null,
+                "imo": "",
+                "ircs": "",
+                "lengthBetweenPerpendiculars": null,
+                "lengthOverAll": null,
+                "mmsiNo": "",
+                "name": "",
                 "otherGrossTonnage": null,
-                "safetyGrossTonnage": null,
+                "powerAux": null,
                 "powerMain": null,
-                "powerAux": null
+                "safetyGrossTonnage": null,
+                "source": "LOCAL",
+                "vesselType": null
+
             };
         };
 

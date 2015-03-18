@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, vessel, $route){
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, vessel, $route, uvmsTranslationService ){
 
     //Load list with vessels when entering page
     $scope.getInitialVessels = function(){
@@ -17,9 +17,15 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
          }
     };
     var onError = function(response){
-        $scope.error = "Opps, we are sorry... Something took a wrong turn. To err is human but to arr is pirate!!";
-        console.log("Opps, we are sorry... To err is human but to arr is pirate!!");
+
+       $scope.error = "We are sorry... Something took a wrong turn. To err is human but to arr is pirate!!";
+        console.log("We are sorry... To err is human but to arr is pirate!!");
     };
+
+    $scope.translate = function(){
+        uvmsTranslationService.getTranslation($scope);
+    };
+    $scope.translate();
 
 
     $scope.checkAll = function(){
@@ -36,7 +42,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         });
     };
 
-    $scope.sortType = 'name';
+    $scope.sortType = 'state';
     $scope.sortReverse = false;
     $scope.sortFilter = '';
 
@@ -275,68 +281,5 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         }
     };
 
-    /*
-    //UpdateVessel
-    $scope.updateVessel = function(){
-        delete $scope.selectedVessel.mobileTerminals; //MobileTerminals remove them cuz they do not exist in backend yet.
 
-        //Feedback to user.
-        $('.updateResponseMessage').fadeIn();
-        //Update Vessel
-        //vessel.updateVessel($scope.selectedVessel);
-        //Hide feedback to user
-        setTimeout(function() {
-            $('.updateResponseMessage').fadeOut();
-        }, 4000 );
-        //Update Vessel and take care of the response(eg. the promise) when the update is done.
-        var updateResponse = vessel.updateVessel($scope.selectedVessel)
-            .then(updateVesselSuccess, updateVesselError);
-    };
-
-    var updateVesselSuccess = function(uppdateResponse){
-        //Message to user
-        $scope.updateResponseMessage = "The vessel has now been updated.";
-    };
-    var updateVesselError = function(error){
-        //Message to user
-        $scope.updateResponseMessage = "We are sorry but something went wrong and we could not update the vessel.";
-        //Write to console in browser
-        console.log("Opps, no update has been done.");
-    };
-
-    */
-
-    //CreateNewVessel
- /*   $scope.createNewVessel = function(){
-        //delete $scope.newVesselObj;
-        delete $scope.newVesselObj.mobileTerminals; //MobileTerminals remove them cuz they do not exist in backend yet.
-
-        //Feedback to user.
-        $('.createResponseMessage').fadeIn();
-        //Hide feedback to user
-        setTimeout(function() {
-            $('.createResponseMessage').fadeOut();
-        }, 4000 );
-        //Create new Vessel and take care of the response(eg. the promise) when the create is done.
-        var createVesselResp = vessel.createNewVessel($scope.newVesselObj)
-            .then(createVesselSuccess, createVesselError);
-    };
-
-    var createVesselSuccess = function(createResponse){
-        $scope.createResponseMessage = "The Vessel has been created successfully. You can close this window or just wait and it will close itself.";
-        console.log = "The Vessel has now been created successfully";
-        setTimeout(function() {
-            $route.reload();
-        }, 2000 );
-
-
-    };
-
-    var createVesselError = function(error){
-        $scope.createResponseMessage = "We are sorry but something went wrong when we tried to create a new Vessel. Please try again in a moment or close the window.";
-        console.log = "The Vessel has NOT been created!";
-        console.log = "ERROR: " + error.statusText;
-        console.log = "ERROR: " + error.status ;
-    };
-    */
 });

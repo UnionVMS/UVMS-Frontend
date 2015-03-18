@@ -14,7 +14,7 @@
                 </div>
                 <div class="inputgroup col-md-6 has-feedback">
                     <p class="labelheaders">CFR</p>
-                    <input type="text" name="newvesselcfrinput" class="form-control" ng-model="newVesselObj.cfr" required ng-minlength="3" ng-pattern="/^[0-9]*$/" >
+                    <input type="text" name="newvesselcfrinput" class="form-control" ng-model="newVesselObj.cfr" required ng-minlength="3" >
                    <!--
                     <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="!newVesselForm.newvesselcfrinput.$error.minlength && !newVesselForm.newvesselcfrinput.$error.pattern"></span>
                     -->
@@ -45,7 +45,7 @@
                 <div class="inputgroup col-md-8">
                     <p class="labelheaders">TYPE</p>
                     <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="vesselactivity" data-toggle="dropdown" aria-expanded="true" required>
+                        <button class="btn btn-default dropdown-toggle" type="button" id="vesselactivity" data-toggle="dropdown" aria-expanded="true">
                             <div class="dropdowntext">{{ vesselActivity }}</div>
                             <span class="caret"></span>
                         </button>
@@ -95,7 +95,7 @@
                 <div class="inputgroup col-md-4">
                     <p class="labelheaders">LICENSE</p>
                     <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="vessellicense" data-toggle="dropdown" aria-expanded="true" required>
+                        <button class="btn btn-default dropdown-toggle" type="button" id="vessellicense" data-toggle="dropdown" aria-expanded="true">
                             <div class="dropdowntext">{{ vesselLicense }}</div>
                             <span class="caret"></span>
                         </button>
@@ -109,7 +109,7 @@
                 </div>
                 <div class="inputgroup col-md-6">
                     <p class="labelheaders">HOMEPORT</p>
-                    <input type="text" name="newvesselhomeportinput" class="form-control" ng-model="newVesselObj.homePort" ng-minlength="3" ng-maxlength="5" required>
+                    <input type="text" name="newvesselhomeportinput" class="form-control" ng-model="newVesselObj.homePort" ng-minlength="3" ng-maxlength="6">
                 </div>
             </div>
             <div class="row col-md-4">
@@ -160,7 +160,7 @@
                 <div class="inputgroup col-md-2">
                     <p class="labelheaders">EFFECT</p>
                     <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="vesselcity" data-toggle="dropdown" aria-expanded="true" required>
+                        <button class="btn btn-default dropdown-toggle" type="button" id="vesselEffect" data-toggle="dropdown" aria-expanded="true">
                             <div class="dropdowntext">{{ vesselEffect}}</div>
                             <span class="caret"></span>
                         </button>

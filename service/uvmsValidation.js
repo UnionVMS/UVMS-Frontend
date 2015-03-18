@@ -3,12 +3,11 @@
     var uvmsValidation = function(){
 
         var digitsOnly = function(data){
-
             return "/^[0-9]*$/";
         };
-         var lettersOnly = function (){
-             return "/^[A-ZÅÄÖa-zåäö]*$/";
-         };
+        var lettersOnly = function (){
+            return "/^[A-ZÅÄÖa-zåäö]*$/";
+        };
 
         return{
             digitsOnly: digitsOnly,
