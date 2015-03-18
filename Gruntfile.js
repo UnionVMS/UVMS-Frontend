@@ -112,10 +112,10 @@ module.exports = function (grunt) {
             {
                 cwd: 'app/',
                 expand:true,
-                src: ['assets/**/*'], dest: 'dist/'}
-           // {src: ['app/directive/**/*'], dest: 'dist/'},
-           // {src: ['app/partial/**/*'], dest: 'dist/'},
-           // {src: ['app/service/**/*'], dest: 'dist/'}
+                src: ['assets/**/*'], dest: 'dist/'},
+            {src: ['directive/**/*'], dest: 'dist/',cwd: 'app/',expand:true},
+            {src: ['partial/**/*'], dest: 'dist/',cwd: 'app/',expand:true},
+            {src: ['service/**/*'], dest: 'dist/',cwd: 'app/',expand:true}
 
           //{src: ['bower_components/angular-ui-utils/ui-utils-ieshiv.min.js'], dest: 'dist/'},
           //{src: ['bower_components/select2/*.png','bower_components/select2/*.gif'], dest:'dist/css/',flatten:true,expand:true},
@@ -127,7 +127,7 @@ module.exports = function (grunt) {
       read: {
         options: {
           read:[
-            {selector:'script[data-concat!="false"]',attribute:'src',writeto:'appjs'},
+            {selector:'script[data-concat!="false"]',attribute:'src',writeto:'appjs', isPath: true},
             {selector:'link[rel="stylesheet"][data-concat!="false"]',attribute:'href',writeto:'appcss'}
           ]
         },
@@ -236,7 +236,7 @@ module.exports = function (grunt) {
     //}
   });
 
-  grunt.registerTask('build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy','htmlmin','clean:after','compress:dist']);
+  grunt.registerTask('build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy','htmlmin','compress:dist','clean:after']);
   grunt.registerTask('serve', ['dom_munger:read','jshint','connect', 'watch']);
 
     grunt.event.on('watch', function(action, filepath) {
