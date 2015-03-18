@@ -85,7 +85,9 @@ module.exports = function (grunt) {
       main: {
         options: {
             module: pkg.name,
-            htmlmin:'<%= htmlmin.main.options %>'
+            htmlmin:'<%= htmlmin.main.options %>',
+            url:    function(url) { return url.replace('app/', ''); }
+
         },
         src: [createFolderGlobs('*.html'),'!index.html','!_SpecRunner.html','!app/bower_components/**/*.html' ],
         dest: 'temp/templates.js'
@@ -112,10 +114,10 @@ module.exports = function (grunt) {
             {
                 cwd: 'app/',
                 expand:true,
-                src: ['assets/**/*'], dest: 'dist/'},
-            {src: ['directive/**/*'], dest: 'dist/',cwd: 'app/',expand:true},
-            {src: ['partial/**/*'], dest: 'dist/',cwd: 'app/',expand:true},
-            {src: ['service/**/*'], dest: 'dist/',cwd: 'app/',expand:true}
+                src: ['assets/**/*'], dest: 'dist/'}
+           // {src: ['directive/**/*'], dest: 'dist/',cwd: 'app/',expand:true},
+           // {src: ['partial/**/*'], dest: 'dist/',cwd: 'app/',expand:true},
+           // {src: ['service/**/*'], dest: 'dist/',cwd: 'app/',expand:true}
 
           //{src: ['bower_components/angular-ui-utils/ui-utils-ieshiv.min.js'], dest: 'dist/'},
           //{src: ['bower_components/select2/*.png','bower_components/select2/*.gif'], dest:'dist/css/',flatten:true,expand:true},
@@ -236,7 +238,7 @@ module.exports = function (grunt) {
     //}
   });
 
-  grunt.registerTask('build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy','htmlmin','compress:dist','clean:after']);
+  grunt.registerTask('build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy','htmlmin','compress:dist','clean:after']);//,'clean:after'
   grunt.registerTask('serve', ['dom_munger:read','jshint','connect', 'watch']);
 
     grunt.event.on('watch', function(action, filepath) {
