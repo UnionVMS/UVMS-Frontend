@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, vessel, $route, uvmsTranslationService ){
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, vessel, $route ){
 
     //Load list with vessels when entering page
     $scope.getInitialVessels = function(){
@@ -21,12 +21,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
        $scope.error = "We are sorry... Something took a wrong turn. To err is human but to arr is pirate!!";
         console.log("We are sorry... To err is human but to arr is pirate!!");
     };
-
-    $scope.translate = function(){
-        uvmsTranslationService.getTranslation($scope);
-    };
-    $scope.translate();
-
 
     $scope.checkAll = function(){
         if($scope.selectedAll)

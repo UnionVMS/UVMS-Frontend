@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource']);
+angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource', 'ngLocalize']);
 
 angular.module('unionvmsWeb').config(function($routeProvider) {
     $routeProvider
@@ -24,3 +24,16 @@ angular.module('unionvmsWeb').run(function($rootScope) {
     };
 
 });
+
+//Configure for i18n
+angular.module('unionvmsWeb').value('localeConf', {
+    basePath: 'i18n',
+    defaultLocale: 'en-US',
+    sharedDictionary: 'common',
+    fileExtension: '.lang.json?ts=' +(new Date()).getTime(),
+    persistSelection: true,
+    cookieName: 'COOKIE_LOCALE_LANG',
+    observableAttrs: new RegExp('^data-(?!ng-|i18n)'),
+    delimiter: '::'
+});
+

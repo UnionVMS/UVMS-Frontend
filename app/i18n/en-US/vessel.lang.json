@@ -1,0 +1,16 @@
+{
+	"add_new" : "Add new",
+	"table_header_flag_state" : "Flag state",
+	"table_header_external_marking" : "Ext no",
+	"table_header_name" : "Name",
+	"table_header_signal" : "Signal",
+	"table_header_type" : "Type",
+	"table_header_license" : "License",
+	"table_header_last_report" : "Last report",
+	"table_header_details" : "Details",
+	"table_header_reports" : "Reports",
+	"table_details_button" : "Details",
+	"table_report_button" : "Report",
+	"search_input_placeholder" : "Search",
+	"search_advanced" : "+ Advanced search"
+}

@@ -20,7 +20,7 @@
 
         <div class="vesselsearchtools">
             <form class="vesselsearch">
-                <input type="text" class="form-control" placeholder="Search" ng-model="searchFilter">
+                <input type="text" class="form-control" placeholder="{{'vessel.search_input_placeholder' | i18n}}" ng-model="searchFilter">
             </form>
 
             <!-- Dropdown -->
@@ -52,7 +52,7 @@
     </div>
        <div class="advancesearchcontainer">
            <div class="advancesearchbody fadein fadeout" ng-show="advancesearch.active"></div>
-            <p class="advancesearchtag" ng-click="toggleanim()">+ Advanced search</p>
+            <p class="advancesearchtag" ng-click="toggleanim()">{{'vessel.search_advanced' | i18n}}</p>
        </div>
     <div class="vesselsearchboxfooter">
         <!-- Dropdown -->
@@ -68,7 +68,7 @@
             </ul>
         </div>
         <!-- add new button -->
-        <button class="btn btn-sm pull-right addvesselbtn" ng-click="toggleAddNewVessel()" type="button"> {{translation.ADD_NEW}}&nbsp;&nbsp;&nbsp;&nbsp;<span>+</span></button>
+        <button class="btn btn-sm pull-right addvesselbtn" ng-click="toggleAddNewVessel()" type="button"> {{'vessel.add_new' | i18n}} &nbsp;&nbsp;&nbsp;&nbsp;<span>+</span></button>
 
     </div>
 
@@ -83,7 +83,7 @@
                 <th><input type="checkbox" ng-model="item.selectedAll" ng-click="checkAll()"/></th>
                 <th>
                     <a href="" ng-click="sortType='state'; sortReverse = !sortReverse">
-                        {{translation.FLAG_STATE}}
+                        {{'vessel.table_header_flag_state' | i18n}}
                         <span ng-show="sortType == 'state' && !sortReverse" class="fa fa-caret-down"></span>
                         <span ng-show="sortType == 'state' && sortReverse" class="fa fa-caret-up"></span>
                         <span ng-show="sortType != 'state'" class="fa fa-sort"></span>
@@ -91,7 +91,7 @@
                 </th>
                 <th>
                     <a href="" ng-click="sortType='externalMarking'; sortReverse = !sortReverse">
-                        {{translation.EXTERNAL_MARKING}}
+                        {{'vessel.table_header_external_marking' | i18n}}
                         <span ng-show="sortType == 'externalMarking' && !sortReverse" class="fa fa-caret-down"></span>
                         <span ng-show="sortType == 'externalMarking' && sortReverse" class="fa fa-caret-up"></span>
                         <span ng-show="sortType != 'externalMarking'" class="fa fa-sort"></span>
@@ -99,7 +99,7 @@
                 </th>
                 <th>
                     <a href="" ng-click="sortType='name'; sortReverse = !sortReverse">
-                        {{translation.NAME}}
+                        {{'vessel.table_header_name' | i18n}}
                         <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
                         <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
                         <span ng-show="sortType != 'name'" class="fa fa-sort"></span>
@@ -107,7 +107,7 @@
                 </th>
                 <th>
                     <a href="" ng-click="sortType='ircs'; sortReverse = !sortReverse">
-                        {{translation.SIGNAL}}
+                        {{'vessel.table_header_signal' | i18n}}
                         <span ng-show="sortType == 'ircs' && !sortReverse" class="fa fa-caret-down"></span>
                         <span ng-show="sortType == 'ircs' && sortReverse" class="fa fa-caret-up"></span>
                         <span ng-show="sortType != 'ircs'" class="fa fa-sort"></span>
@@ -115,7 +115,7 @@
                 </th>
                 <th>
                     <a href="" ng-click="sortType='type'; sortReverse = !sortReverse">
-                        {{translation.TYPE}}
+                        {{'vessel.table_header_type' | i18n}}
                         <span ng-show="sortType == 'type' && !sortReverse" class="fa fa-caret-down"></span>
                         <span ng-show="sortType == 'type' && sortReverse" class="fa fa-caret-up"></span>
                         <span ng-show="sortType != 'type'" class="fa fa-sort"></span>
@@ -123,7 +123,7 @@
                 </th>
                 <th>
                     <a href="" ng-click="sortType='license'; sortReverse = !sortReverse">
-                        {{translation.LICENSE}}
+                        {{'vessel.table_header_license' | i18n}}
                         <span ng-show="sortType == 'license' && !sortReverse" class="fa fa-caret-down"></span>
                         <span ng-show="sortType == 'license' && sortReverse" class="fa fa-caret-up"></span>
                         <span ng-show="sortType != 'license'" class="fa fa-sort"></span>
@@ -131,14 +131,14 @@
                 </th>
                 <th>
                     <a href="" ng-click="sortType='lastreport'; sortReverse = !sortReverse">
-                        {{translation.LAST_REPORT}}
+                        {{'vessel.table_header_last_report' | i18n}}
                         <span ng-show="sortType == 'lastreport' && !sortReverse" class="fa fa-caret-down"></span>
                         <span ng-show="sortType == 'lastreport' && sortReverse" class="fa fa-caret-up"></span>
                         <span ng-show="sortType != 'lastreport'" class="fa fa-sort"></span>
                     </a>
                 </th>
-                <th>{{translation.DETAILS}}</th>
-                <th>{{translation.REPORTS}}</th>
+                <th>{{'vessel.table_header_details' | i18n}}</th>
+                <th>{{'vessel.table_header_reports' | i18n}}</th>
             </tr>
             </thead>
             <tbody>
@@ -152,9 +152,9 @@
                 <td>{{item.license}}</td>
                 <td>{{item.lastReport}}</td>
                 <td>
-                    <button class="btn vesselbtn button" ng-click="toggleGetVessel(item)">{{translation.DETAILS}}</button>
+                    <button class="btn vesselbtn button" ng-click="toggleGetVessel(item)">{{'vessel.table_details_button' | i18n}}</button>
                 </td>
-                <td>{{translation.REPORT}}</td>
+                <td>{{'vessel.table_report_button' | i18n}}</td>
             </tr>
             </tbody>
         </table>

@@ -1,39 +1,45 @@
-angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $location){
+angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $location, locale){
     var setMenu = function(){
         return [
             {
-                'title':'Today',
+                'title': locale.getString('header.menu_today'),
                 'url':'/today'
             },
             {
-                'title':'Reporting',
+                'title':locale.getString('header.menu_reporting'),
                 'url':'/reporting'
             },
             {
-                'title':'User',
+                'title':locale.getString('header.menu_user'),
                 'url':'/user'
             },
             {
-                'title':'Vessel',
+                'title':locale.getString('header.menu_vessel'),
                 'url':'/vessel'
             },
             {
-                'title':'Alarm Conditions',
+                'title':locale.getString('header.menu_alarmconditions'),
                 'url':'/alarmconditions'
-            },{
-                'title':'Communication',
+            },
+            {
+                'title':locale.getString('header.menu_communication'),
                 'url':'/communication'
-            },{
-                'title':'Configuration',
+            },
+            {
+                'title':locale.getString('header.menu_configuration'),
                 'url':'/configuration'
-            },{
-                'title':'GIS',
+            },
+            {
+                'title':locale.getString('header.menu_gis'),
                 'url':'/gis'
             }
         ];
     };
-
-    $scope.menu = setMenu();
+    
+    
+    locale.ready('header').then(function () {
+        $scope.menu = setMenu();
+    });    
 
     $scope.isActive = function(viewLocation){
         var active = (viewLocation === $location.path());

@@ -1,0 +1,10 @@
+{
+	"menu_today" : "Today",
+	"menu_reporting" : "Reporting",
+	"menu_user" : "User",
+	"menu_vessel" : "Vessel",
+	"menu_alarmconditions" : "Alarm conditions",
+	"menu_communication" : "Communication",
+	"menu_configuration" : "Configuration",
+	"menu_gis" : "GIS"
+}

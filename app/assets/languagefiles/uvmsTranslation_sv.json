@@ -1,13 +1,4 @@
 {
-    "FLAG_STATE": "Flag state",
-    "EXTERNAL_MARKING":"Ext. no.",
-    "NAME": "Name",
-    "SIGNAL": "Signal",
-    "TYPE": "Type",
-    "LICENSE": "License",
-    "LAST_REPORT": "Last report",
-    "DETAILS": "Details",
-    "REPORTS": "Reports",
     "REPORT": "Report",
     "OK": "Ok",
     "SAVE": "Save",
