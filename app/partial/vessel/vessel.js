@@ -1,4 +1,6 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, vessel, $route ){
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, vessel, $route, uvmsTranslationService, uvmsAdvancedSearch, $window ){
+
+
 
     //Load list with vessels when entering page
     $scope.getInitialVessels = function(){
@@ -177,51 +179,76 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         }
         $scope.getVesselVisible.active = !$scope.getVesselVisible.active;
         $scope.vesselSearchContainerVisible.active = !$scope.vesselSearchContainerVisible.active;
+        //set selected values in dropdowns accordingly to the selected vesselobject.
+        $scope.setValuesInDropDowns();
+    };
+
+    $scope.setValuesInDropDowns = function(){
+
+        //set values in dropdowns if values in selected vessel corresponds to our dropdowns
+        if( !! $scope.newVesselObj.countryCode ){
+            $scope.vesselCountry = $scope.newVesselObj.countryCode;
+        }
+
+        if(!! $scope.newVesselObj.vesselType )
+        {
+            $scope.vesselActivity = $scope.newVesselObj.vesselType;
+        }
+
+        if(!! $scope.newVesselObj.hasIrcs )
+        {
+            if($scope.newVesselObj.hasIrcs ="true")
+            { $scope.vesselHasIrc = "Yes";}
+            else
+            { $scope.vesselHasIrc = "No";}
+        }
+
+        if(!! $scope.newVesselObj.licenseSelected )
+        {
+            if($scope.newVesselObj.licenseSelected ="true")
+            { $scope.vesselHasLicense = "Yes";}
+            else
+            { $scope.vesselHasLicense = "No";}
+        }
+
+        if(!! $scope.newVesselObj.licenseTypeSelected )
+        {
+            $scope.vesselLicenseType = $scope.newVesselObj.licenseTypeSelected;
+        }
+
+
+    };
+
+    $scope.changeVesselStatus = function(){
+        $scope.newVesselObj.active = $scope.newVesselObj.active === true ? false : true;
     };
 
 
 
+    // DROPDOWNS DUMMIES - Needs to have some sort of connection to database... and needs to be refatoried when settingsfile is correct or present.
     $scope.vesselCountry = "Country";
     $scope.vesselActivity = "Activity";
-    $scope.vesselIrc = "NO";
+    $scope.vesselHasIrc = "No";
     $scope.vesselOverall = "Overall";
-    $scope.vesselLicense = "License";
+    $scope.vesselHasLicense = "No";
+    $scope.vesselLicenseType = "Choose license type";
     $scope.vesselCity = "City";
     $scope.vesselEffect = "Effect";
+    $scope.searchFlagState = "Flag state";
+    $scope.searchLicenseType = "License type";
+    $scope.searchActive = "Active";
+    $scope.searchVesselType = "Type";
 
 
-    $scope.vesselCountries =[{'name':'SWE','code':'SWE'},{'name':'DNK','code':'DNK'},{'name':'NOR','code':'NOR'}];
-    $scope.vesselactivitytypes =[{'name':'Fishing','code':'1124'},{'name':'Dock','code':'001'},{'name':'Trawling','code':'002'}];
-    $scope.vesselircstypes =[{'name':'YES','code':'true'},{'name':'NO','code':'false'}];
-    $scope.vesselLicensTypes =[{'name':'YES','code':'true'},{'name':'NO','code':'false'}];
-    $scope.vesseloveralltypes =[{'name':'Overall 1','code':'1'},{'name':'Overall 2','code':'0'},{'name':'Overall 3','code':'20'}];
-    $scope.vesselCities =[{'name':'London','code':'133'},{'name':'Gothenburg','code':'99'},{'name':'Amsterdam','code':'23'}];
-    $scope.vesselEffectTypes =[{'name':'hp','code':'133'},{'name':'kW','code':'99'}];
-
-    $scope.terminalsatellitetypes =[{'name':'Inmarsat-B','code':'133'},{'name':'Inmarsat-C','code':'998'}];
-    $scope.terminaloceanstypes =[{'name':'Skagerack','code':'3'},{'name':'Kattegatt','code':'99'},{'name':'Östersjön','code':'929'}];
-
-
-
-    $scope.overallSelected = function(item){
+    $scope.countrySelected = function(item){
         if(item === undefined){
-            $scope.vesselOverall = "Overall";
+            $scope.vesselCountry = "Country";
         }
         else
         {
-            $scope.vesselOverall = item.name;
+            $scope.vesselCountry = item.name;
+            $scope.newVesselObj.countryCode = item.name;
         }
-    };
-
-    $scope.ircSelected = function(item){
-        if(item === undefined){
-            $scope.vesselIrc = "NO";
-        }
-        else
-        {
-            $scope.vesselIrc = item.name;
-        }
-
     };
 
     $scope.activitySelected = function(item){
@@ -231,27 +258,51 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         else
         {
             $scope.vesselActivity = item.name;
+            $scope.newVesselObj.vesselType = item.name;
         }
     };
 
-    $scope.countrySelected = function(item){
+    $scope.ircSelected = function(item){
         if(item === undefined){
-            $scope.vesselCountry = "Country";
+            $scope.vesselHasIrc = "No";
         }
         else
         {
-            $scope.vesselCountry = item.name;
+            $scope.vesselHasIrc = item.name;
+            $scope.newVesselObj.hasIrcs = item.code;
         }
-
     };
 
     $scope.licenseSelected = function(item){
         if(item === undefined){
-            $scope.vesselLicense = "License";
+            $scope.vesselHasLicense = "No";
         }
         else
         {
-            $scope.vesselLicense = item.name;
+            $scope.vesselHasLicense = item.name;
+            $scope.newVesselObj.hasLicense = item.code;
+        }
+    };
+
+
+    $scope.licenseTypeSelected = function(item){
+        if(item === undefined){
+            $scope.vesselLicenseType = "Choose license type";
+        }
+        else
+        {
+            $scope.vesselLicenseType = item.name;
+           // $scope.newVesselObj.licenseTypeSelected = item.name;
+        }
+    };
+
+    $scope.overallSelected = function(item){
+        if(item === undefined){
+            $scope.vesselOverall = "Overall";
+        }
+        else
+        {
+            $scope.vesselOverall = item.name;
         }
     };
 
@@ -275,5 +326,124 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         }
     };
 
+    //########### PERFORM SEARCH ###########
+    $scope.wildCardSearch = "";
+    $scope.searchVessels = function(){
+        //If something in searchtextbox perform a wildcardseach
+        if($scope.wildCardSearch !== "")
+        {
+            //call for search method with wildcard and re-populate the vessellist
+            uvmsAdvancedSearch.performWildcardSearch($scope.wildCardSearch);
+            $window.alert($scope.wildCardSearch);
+        }
+        else
+        {
+            //call for search method with searchObj and re-populate the vessellist
+            uvmsAdvancedSearch.performAdvancedSearch();
+            $window.alert($scope.searchObj.FLAG_STATE + " " + $scope.searchObj.NAME + " etc...");
+        }
+    };
 
+
+    //########### ADVANCEDSEARCH ###########
+    $scope.searchObj  = uvmsAdvancedSearch.getAdvSearchObj();
+
+    $scope.searchFlagStateSelected = function(item){
+        if(item === undefined){
+            $scope.searchFlagState = "Flag state";
+            uvmsAdvancedSearch.addFlagState("");
+        }
+        else
+        {
+            $scope.searchFlagState = item.name;
+            uvmsAdvancedSearch.addFlagState(item.code);
+        }
+    };
+
+    $scope.searchVesselTypeSelected = function(item){
+        if(item === undefined){
+            $scope.searchType = "Type";
+            uvmsAdvancedSearch.addType("");
+        }
+        else
+        {
+            $scope.searchType = item.name;
+            uvmsAdvancedSearch.addType(item.name);
+        }
+    };
+
+    $scope.searchActiveSelected = function(item){
+        if(item === undefined){
+            $scope.searchActive = "Active";
+            uvmsAdvancedSearch.addActive("");
+        }
+        else
+        {
+            $scope.searchActive = item.name;
+            uvmsAdvancedSearch.addActive(item.code);
+        }
+    };
+
+    $scope.searchLicenseTypeSelected = function(item){
+        if(item === undefined){
+            $scope.searchType = "License";
+            uvmsAdvancedSearch.addLicenseType("");
+        }
+        else
+        {
+            $scope.searchType = item.name;
+            uvmsAdvancedSearch.addLicenseType(item.name);
+        }
+    };
+
+
+    $scope.searchAddCFR = function(data){
+        uvmsAdvancedSearch.addCFR(data);
+    };
+    $scope.searchAddIRCS = function(data){
+        uvmsAdvancedSearch.addIRCS(data);
+    };
+
+
+    /**/
+    $scope.datePicker = (function () {
+        var method = {};
+        method.instances = [];
+
+        method.open = function ($event, instance) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            method.instances[instance] = true;
+        };
+
+        method.options = {
+            'show-weeks': false,
+            startingDay: 0
+        };
+
+        var formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+        method.format = formats[4];
+
+        return method;
+    }());
+
+
+    //Dummyata for dropdowns....
+    $scope.vesseloveralltypes =[{'name':'Overall','code':'1'},{'name':'Between perpendiculars','code':'0'}];
+    $scope.vesselCities =[{'name':'London','code':'133'},{'name':'Gothenburg','code':'99'},{'name':'Amsterdam','code':'23'}];
+    $scope.vesselEffectTypes =[{'name':'hp','code':'133'},{'name':'kW','code':'99'}];
+    $scope.terminalsatellitetypes =[{'name':'Inmarsat-B','code':'133'},{'name':'Inmarsat-C','code':'998'}];
+    $scope.terminaloceanstypes =[{'name':'Skagerack','code':'3'},{'name':'Kattegatt','code':'99'},{'name':'Östersjön','code':'929'}];
+
+
+
+    $scope.vesselCountries =[{'name':'SWE','code':'SWE'},{'name':'DNK','code':'DNK'},{'name':'NOR','code':'NOR'}];
+    $scope.vesselActivitytTypes =[{'name':'Fishing Vessel','code':'Fishing Vessel'},{'name':'Pilot Vessel','code':'Pilot Vessel'},{'name':'Trawling Vessel','code':'Trawling Vessel'}];
+    $scope.vesselHasIrcTypes =[{'name':'Yes','code':'true'},{'name':'No','code':'false'}];
+    $scope.vesselLicensTypes =[{'name':'Fishing license','code':'Fishing license'},{'name':'Trawling license','code':'Trawling license'}];
+    $scope.searchFlagStates =[{'name':'SWE','code':'SWE'},{'name':'DNK','code':'DNK'},{'name':'NOR','code':'NOR'}];
+    $scope.vesselVesselTypes =[{'name':'Fishing Vessel','code':'Fishing Vessel'},{'name':'Pilot Vessel','code':'Pilot Vessel'},{'name':'Trawling Vessel','code':'Trawling Vessel'}];
+    $scope.searchLicensTypes =[{'name':'Fishing license','code':'Fishing license'},{'name':'Trawling license','code':'Trawling license'}];
+    $scope.searchActiveTypes = [{'name':'Yes','code':'true'},{'name':'No','code':'false'}];
 });

@@ -1,5 +1,203 @@
-
 <div>
+
+<!-- #################################  -->
+    <div class="row col-md-12 vesseldetailsrow">
+        <div class="col-md-1" ng-hide="!newVesselObj.vesselId.value">
+        <p class="labelheaders">ID</p>
+        <p>{{newVesselObj.vesselId.value}}</p>
+    </div>
+        <div class="inputgroup col-md-2 form-group has-feedback">
+        <p class="labelheaders">NAME</p>
+        <input type="text" name="newvesselnameinput" class="form-control" ng-model="newVesselObj.name" ng-minlength="3" required  >
+    </div>
+        <div class="inputgroup col-md-2">
+        <p class="labelheaders">FLAG STATE</p>
+        <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="vesselcountry" data-toggle="dropdown" aria-expanded="true">
+                <div class="dropdowntext">{{ vesselCountry }} </div>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
+                <li><a ng-click="countrySelected(item)" tabindex="-1">None</a></li>
+                <li ng-repeat="item in vesselCountries" role="presentation">
+                    <a ng-click="countrySelected(item)" tabindex="-1">{{item.name}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+        <div class="inputgroup col-md-2">
+        <p class="labelheaders">TYPE</p>
+        <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="vesselactivity" data-toggle="dropdown" aria-expanded="true">
+                <div class="dropdowntext">{{ vesselActivity }}</div>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
+                <li><a ng-click="activitySelected(item)" tabindex="-1">None</a></li>
+                <li ng-repeat="item in vesselActivitytTypes" role="presentation">
+                    <a ng-click="activitySelected(item)" tabindex="-1">{{item.name}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+        <div class="inputgroup col-md-1">
+        <p class="labelheaders">Has IRCS</p>
+        <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="vesselirc" data-toggle="dropdown" aria-expanded="true">
+                <div class="dropdowntext">{{ vesselHasIrc }}</div>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
+                <li><a ng-click="ircSelected(item)" tabindex="-1">No</a></li>
+                <li ng-repeat="item in vesselHasIrcTypes" role="presentation">
+                    <a ng-click="ircSelected(item)" tabindex="-1">{{item.name}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+        <div class="inputgroup col-md-2">
+        <p class="labelheaders">IRCS CODE</p>
+        <input type="text" name="newvesselextinput" class="form-control" ng-model="newVesselObj.ircs">
+    </div>
+        <div class="inputgroup col-md-2">
+        <p class="labelheaders">EXT.MARKING</p>
+        <input type="text" name="newvesselextmarkingInput" class="form-control" ng-model="newVesselObj.externalMarking">
+    </div>
+    </div>
+    <div class="row col-md-12 vesseldetailsrow">
+        <div class="inputgroup col-md-2 has-feedback">
+            <p class="labelheaders">CFR</p>
+            <input type="text" name="newvesselcfrinput" class="form-control" ng-model="newVesselObj.cfr" required ng-minlength="3" >
+        </div>
+        <div class="inputgroup col-md-2">
+            <p class="labelheaders">IMO</p>
+            <input type="text" name="newvesselimoinput" class="form-control" ng-model="newVesselObj.imo">
+        </div>
+        <div class="inputgroup col-md-2">
+            <p class="labelheaders">MMSI NO.</p>
+            <input type="text" name="newvesselmmsiofnput" class="form-control" ng-model="newVesselObj.mmsiNo">
+        </div>
+        <div class="inputgroup col-md-1">
+            <p class="labelheaders">LICENSE</p>
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="vessellicense" data-toggle="dropdown" aria-expanded="true">
+                    <div class="dropdowntext">{{ vesselHasLicense }}</div>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
+                    <li><a ng-click="licenseSelected(item)" tabindex="-1">None</a></li>
+                    <li ng-repeat="item in vesselHasIrcTypes" role="presentation">
+                        <a ng-click="licenseSelected(item)" tabindex="-1">{{item.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="inputgroup col-md-2">
+            <p class="labelheaders">LICENSE TYPE</p>
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="vessellicensetype" data-toggle="dropdown" aria-expanded="true">
+                    <div class="dropdowntext">{{ vesselLicenseType }}</div>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
+                    <li><a ng-click="licenseTypeSelected(item)" tabindex="-1">None</a></li>
+                    <li ng-repeat="item in vesselLicensTypes" role="presentation">
+                        <a ng-click="licenseTypeSelected(item)" tabindex="-1">{{item.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="inputgroup col-md-3">
+            <p class="labelheaders col-md-12 nopaddingleft">HOME PORT CODE - NAME</p>
+            <!--
+            <p class="labelheaders col-md-5"></p>
+           -->
+            <div class="col-md-5 nopaddingleft">
+               <input type="text" name="newvesselhomeportinput" class="form-control " ng-model="newVesselObj.homePort" ng-minlength="3" ng-maxlength="6">
+           </div>
+            <div class="col-md-7 nopaddingright">
+                <input type="text" name="newvesselhomeportinput" class="form-control" ng-model="newVesselObj.homePort" ng-minlength="3" ng-maxlength="6">
+            </div>
+               <!--</div>
+        <div class="inputgroup col-md-2">-->
+
+              </div>
+    </div>
+    <div class="row col-md-12 vesseldetailsrow">
+        <div class="inputgroup col-md-1">
+            <p class="labelheaders">LENGTH</p>
+            <input type="text" name="newvessellengthinput" class="form-control" ng-model="newVesselObj.lengthOverAll">
+        </div>
+        <div class="inputgroup col-md-2">
+            <p class="labelheaders">OVERALL</p>
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="vesselOverall" data-toggle="dropdown" aria-expanded="true">
+                    <div class="dropdowntext">{{ vesselOverall }} </div>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
+                    <li><a ng-click="overallSelected(item)" tabindex="-1">None</a></li>
+                    <li ng-repeat="item in vesseloveralltypes" role="presentation">
+                        <a ng-click="overallSelected(item)" tabindex="-1">{{item.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="inputgroup col-md-1">
+            <p class="labelheaders">G.TONNAGE</p>
+            <input type="text" name="newvesselcapacityinput" class="form-control" ng-model="newVesselObj.grossTonnage">
+        </div>
+        <div class="inputgroup col-md-2">
+            <p class="labelheaders">City</p>
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="vesselcity" data-toggle="dropdown" aria-expanded="true" required>
+                    <div class="dropdowntext">{{ vesselCity}}</div>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
+                    <li><a ng-click="citySelected(item)" tabindex="-1">None</a></li>
+                    <li ng-repeat="item in vesselCities" role="presentation">
+                        <a ng-click="citySelected(item)" tabindex="-1">{{item.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="inputgroup col-md-1">
+            <p class="labelheaders">POWER</p>
+            <input type="text" name="newvesselpowerinput" class="form-control" ng-model="newVesselObj.powerMain">
+        </div>
+        <div class="inputgroup col-md-2">
+            <p class="labelheaders">EFFECT</p>
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="vesselEffect" data-toggle="dropdown" aria-expanded="true">
+                    <div class="dropdowntext">{{ vesselEffect}}</div>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
+                    <li><a ng-click="effectSelected(item)" tabindex="-1">None</a></li>
+                    <li ng-repeat="item in vesselEffectTypes" role="presentation">
+                        <a ng-click="effectSelected(item)" tabindex="-1">{{item.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="inputgroup col-md-3">
+            <p class="labelheaders col-md-12 nopaddingleft">PRODUCER CODE - NAME</p>
+            <div class="col-md-5 nopaddingleft">
+                <input type="text" name="vesselproducername" class="form-control " ng-model="newVesselObj.producerName">
+            </div>
+            <div class="col-md-7 nopaddingright">
+                <input type="text" name="vesselproducercode" class="form-control" ng-model="newVesselObj.producerCode">
+            </div>
+        </div>
+
+    </div>
+
+
+<!--
+
+&lt;!&ndash; #################################  &ndash;&gt;
+
 
             <div class="row col-md-4">
                 <div class="inputgroup col-md-4">
@@ -9,15 +207,15 @@
                 <div class="inputgroup col-md-8 form-group has-feedback">
                     <p class="labelheaders">NAME</p>
                     <input type="text" name="newvesselnameinput" class="form-control" ng-model="newVesselObj.name" ng-minlength="3" required  >
-                   <!-- <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="!newVesselForm.newvesselnameinput.$error.minlength && !newVesselForm.newvesselnameinput.$error.required"></span>
-                    -->
+                   &lt;!&ndash; <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="!newVesselForm.newvesselnameinput.$error.minlength && !newVesselForm.newvesselnameinput.$error.required"></span>
+                    &ndash;&gt;
                 </div>
                 <div class="inputgroup col-md-6 has-feedback">
                     <p class="labelheaders">CFR</p>
                     <input type="text" name="newvesselcfrinput" class="form-control" ng-model="newVesselObj.cfr" required ng-minlength="3" >
-                   <!--
+                   &lt;!&ndash;
                     <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="!newVesselForm.newvesselcfrinput.$error.minlength && !newVesselForm.newvesselcfrinput.$error.pattern"></span>
-                    -->
+                    &ndash;&gt;
                 </div>
                 <div class="inputgroup col-md-6">
                     <p class="labelheaders">IMO</p>
@@ -51,7 +249,7 @@
                         </button>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
                             <li><a ng-click="activitySelected(item)" tabindex="-1">None</a></li>
-                            <li ng-repeat="item in vesselactivitytypes" role="presentation">
+                            <li ng-repeat="item in vesselActivitytTypes" role="presentation">
                                 <a ng-click="activitySelected(item)" tabindex="-1">{{item.name}}</a>
                             </li>
                         </ul>
@@ -69,22 +267,22 @@
             </div>
             <div class="row col-md-4">
                 <div class="inputgroup col-md-4">
-                    <p class="labelheaders">IRCS</p>
+                    <p class="labelheaders">Has IRCS</p>
                     <div class="dropdown">
                         <button class="btn btn-default dropdown-toggle" type="button" id="vesselirc" data-toggle="dropdown" aria-expanded="true">
-                            <div class="dropdowntext">{{ vesselIrc }}</div>
+                            <div class="dropdowntext">{{ vesselHasIrc }}</div>
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
                             <li><a ng-click="ircSelected(item)" tabindex="-1">No</a></li>
-                            <li ng-repeat="item in vesselircstypes" role="presentation">
+                            <li ng-repeat="item in vesselHasIrcTypes" role="presentation">
                                 <a ng-click="ircSelected(item)" tabindex="-1">{{item.name}}</a>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div class="inputgroup col-md-4">
-                    <p class="labelheaders"></p>
+                    <p class="labelheaders">IRCS CODE</p>
                     <input type="text" name="newvesselextinput" class="form-control" ng-model="newVesselObj.ircs">
                 </div>
                 <div class="inputgroup col-md-4">
@@ -95,7 +293,7 @@
                 <div class="inputgroup col-md-4">
                     <p class="labelheaders">LICENSE</p>
                     <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="vessellicense" data-toggle="dropdown" aria-expanded="true">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="vessellicense1" data-toggle="dropdown" aria-expanded="true">
                             <div class="dropdowntext">{{ vesselLicense }}</div>
                             <span class="caret"></span>
                         </button>
@@ -173,7 +371,8 @@
                     </div>
 
                 </div>
-            </div>
+            </div>-->
+
             <!-- ###################################################
             <div class="inputerrors col-md-12 row" ng-show="newVesselForm.newvesselnameinput.$dirty && newVesselForm.newvesselnameinput.$invalid">
                 <small class="inputerror col-md-12" ng-show="newVesselForm.newvesselnameinput.$error.required"><i class="glyphicon glyphicon-asterisk"></i> Please input a name for the vessel</small>
@@ -182,22 +381,3 @@
                 <small class="error col-md-12" ng-show="newVesselForm.newvesselcfrinput.$error.pattern"><i class="glyphicon glyphicon-asterisk"></i> Digits only</small>
             </div>-->
         </div>
-<!--
-        <div class=" col-md-12 mobileterminalcontainer" ng-repeat = "item in newVesselObj.mobileTerminals">
-            <div class="row col-md-12">
-                <a ng-click="removeNewMobileSystem(item, $index)">- REMOVE SATELLITE SYSTEM</a>
-            </div>
-            <mobileterminal terminal="item"></mobileterminal>
-        </div>
-        <div class="row col-md-12">
-            <a ng-click="addNewMobileTerminalToNewVessel()"><b>+ ADD NEW MOBILE TERMINAL</b></a>
-        </div>
-
-        <div class="row col-md-12">
-            <span class="vesselhistory col-md-12">EVENT HISTORY</span>
-            <hr>
-        </div>
-        <div class="row col-md-12">
-            <a ng-click="clearForm()">Clear form</a>
-        </div>
--->

@@ -3,7 +3,6 @@
 
 .vesselsearchboxcontainer{
     background-color: white;
-    margin-bottom: 25px;
 }
 .vesselsearchbox{
     width: @containerwidth;
@@ -21,6 +20,19 @@
     form{
         padding-left: 0px;
     }
+}
+
+.filtertext{
+    margin-right: 30px;
+    background-color: #EBEBEB;
+}
+.searchtext{
+    height: 45px !important;
+    border: solid 1px white !important;
+}
+
+.searchbutton{
+    width: 100px;
 }
 
 .vesselsearchtools{
@@ -76,8 +88,8 @@
 {
     width: @containerwidth;
     margin: @containerposition;
-    overflow: hidden;
-
+    /*overflow: hidden;
+*/
     .advancesearchtag{
         color: #35A7DF;
         text-decoration: underline;
@@ -85,10 +97,7 @@
     }
     .advancesearchbody{
         opacity: 1;
-        border: 1px solid black;
-
-        height: 200px;
-        background-color: #3a87ad;
+        /*height: 200px;*/
     }
 
     .animate-show {
@@ -143,7 +152,7 @@
 
 .vesselsearchboxfooter{
     width: @containerwidth;
-    margin: 50px auto;
+    margin: 30px auto 0px auto;
 
     .right{
         float:right;

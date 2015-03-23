@@ -44,28 +44,15 @@ angular.module('unionvmsWeb')
 
 
 
-        $scope.countrySelected = function(item){
-            $scope.vesselCountry = item.name;
-            $scope.newVesselObj.countryCode = item.name;
-        };
-        $scope.activitySelected = function(item){
-            $scope.vesselActivity = item.name;
-            $scope.newVesselObj.vesselType = item.name;
-        };
-        $scope.ircSelected = function(item){
-            $scope.vesselIrc = (item.code === "1");
-            $scope.newVesselObj.hasIrcs = (item.code === "1");
-        };
-
         $scope.removeMobileSystem = function(item, idx){
             if (idx >= idx){
                 $scope.newVesselObj.mobileTerminals.splice(idx,1);
             }
             };
 
-        $scope.changeVesselStatus = function(){
+       /* $scope.changeVesselStatus = function(){
             $scope.newVesselObj.active = $scope.newVesselObj.active === true ? false : true;
-        };
+        };*/
 
         $scope.updateVessel = function(){
             delete $scope.newVesselObj.mobileTerminals; //MobileTerminals remove them cuz they do not exist in backend yet.
@@ -93,6 +80,10 @@ angular.module('unionvmsWeb')
             //Write to console in browser
             console.log("Opps, no update has been done.");
         };
+
+
+
+
 
     })
 

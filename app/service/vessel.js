@@ -15,10 +15,15 @@
             return $http.post("http://livm67t:28080/vessel-rest/vessel", data);
         };
 
+        var getSearchableFields = function (){
+            return $http.get("http://livm67u:28080/vessel-rest/vessel/config/searchfields");
+        };
+
         return{
             getVesselList: getVesselList,
             updateVessel: updateVessel,
-            createNewVessel: createNewVessel
+            createNewVessel: createNewVessel,
+            getSearchableFields : getSearchableFields
         };
     };
 

@@ -76,9 +76,7 @@
 }
 .advancesearchcontainer .advancesearchbody {
   opacity: 1;
-  border: 1px solid black;
   height: 200px;
-  background-color: #3a87ad;
 }
 .advancesearchcontainer .animate-show {
   opacity: 1;

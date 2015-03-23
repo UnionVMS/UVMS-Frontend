@@ -3,6 +3,7 @@
     <div class="row col-md-12">
         <p class="createResponseMessage">{{createResponseMessage}}</p>
     </div>
+
     <newVessel></newVessel>
 </div>
 
@@ -20,7 +21,8 @@
 
         <div class="vesselsearchtools">
             <form class="vesselsearch">
-                <input type="text" class="form-control" placeholder="{{'vessel.search_input_placeholder' | i18n}}" ng-model="searchFilter">
+                <input type="text" class="form-control" placeholder="Search" ng-model="searchFilter">
+                <input type="text" class="form-control" placeholder="{{'vessel.search_input_placeholder' | i18n}}" ng-model="wildCardSearch">
             </form>
 
             <!-- Dropdown -->
@@ -38,7 +40,7 @@
             </div>
 
             <!-- Search button -->
-            <button type="button" class="btn btn-default btn-lg" ng-click="checkVessels()">
+            <button type="button" class="btn btn-default btn-lg searchbutton" ng-click="searchVessels()">
                 <span class="fa fa-search" aria-hidden="true" ></span>
             </button>
 
@@ -50,11 +52,16 @@
         {{selected}}
 
     </div>
-       <div class="advancesearchcontainer">
-           <div class="advancesearchbody fadein fadeout" ng-show="advancesearch.active"></div>
-            <p class="advancesearchtag" ng-click="toggleanim()">{{'vessel.search_advanced' | i18n}}</p>
+       <div class="advancesearchcontainer row">
+           <div class="advancesearchbody fadein fadeout" ng-show="advancesearch.active">
+              <advanced-search></advanced-search>
+           </div>
+           <div class="col-md-2">
+               <p class="advancesearchtag" ng-click="toggleanim()" ng-show="!advancesearch.active">{{'vessel.search_advanced' | i18n}}</p>
+               <p class="advancesearchtag" ng-click="toggleanim()" ng-show="advancesearch.active">{{'vessel.search_advanced' | i18n}}</p>
+           </div>
        </div>
-    <div class="vesselsearchboxfooter">
+    <div class="vesselsearchboxfooter row">
         <!-- Dropdown -->
         <div class="dropdown">
             <button class="btn btn-default dropdown-toggle" type="button" id="vesselDropdownn" data-toggle="dropdown" aria-expanded="true">
@@ -69,7 +76,7 @@
         </div>
         <!-- add new button -->
         <button class="btn btn-sm pull-right addvesselbtn" ng-click="toggleAddNewVessel()" type="button"> {{'vessel.add_new' | i18n}} &nbsp;&nbsp;&nbsp;&nbsp;<span>+</span></button>
-
+        <input type="text" class="filtertext pull-right" placeholder="Filter" ng-model="searchFilter">
     </div>
 
        <br>

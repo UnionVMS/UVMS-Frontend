@@ -1,0 +1,97 @@
+<div class="advancedSearch">
+    <div class="row col-md-12">
+        <div class="col-md-2 nopaddingleft">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="advancesearchflagstate" data-toggle="dropdown" aria-expanded="true" ng-model="searchObj.FLAG_STATE">
+                    <div class="dropdowntext">{{ searchFlagState }} </div>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
+                    <li><a ng-click="searchFlagStateSelected(item)" tabindex="1">Flag state</a></li>
+                    <li ng-repeat="item in searchFlagStates" role="presentation">
+                        <a ng-click="searchFlagStateSelected(item)" tabindex="1">{{item.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <input type="text" id="searchextno" placeholder="Ext. No." class="form-control" tabindex="2" ng-model="searchObj.EXTERNAL_MARKING">
+        </div>
+        <div class="col-md-2">
+            <input type="text" id="searchname" placeholder="Name" class="form-control" tabindex="3" ng-model="searchObj.NAME">
+        </div>
+        <div class="col-md-2">
+            <input type="text" id="searchsignal" placeholder="Signal/IRCS" class="form-control" tabindex="4" ng-model="searchTemp.IRCS" ng-change="searchAddIRCS(searchTemp.IRCS)">
+        </div>
+        <div class="col-md-1">
+            <input type="text" id="searchcfr" placeholder="CFR" class="form-control" tabindex="5" ng-model="searchTemp.CFR" ng-Change="searchAddCFR(searchTemp.CFR)">
+        </div>
+        <div class="col-md-1">
+            <input type="text" id="searchmmsi" placeholder="MMSI" class="form-control" tabindex="6" ng-model="searchObj.MMSI">
+        </div>
+        <div class="col-md-2">
+            <input type="text" id="searchhomeport" placeholder="Homeport name" class="form-control" tabindex="7" ng-model="searchObj.HOMEPORT">
+        </div>
+    </div>
+    <div class="row col-md-12">
+       <div class="col-md-2 nopaddingleft">
+            <p class="input-group">
+                <input type="text" class="form-control" ng-model="searchTemp.REPORTING_START_DATE" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['reportingStartDate']" close-text="Close" tabindex="8" />
+                <span class="input-group-btn">
+                <button type="button" class="btn btn-default btn-cal" ng-click="datePicker.open($event, 'reportingStartDate')"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </p>
+        </div>
+        <div class="col-md-2">
+            <p class="input-group">
+                <input type="text" class="form-control" ng-model="searchTemp.REPORTING_END_DATE" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['reportingEndDate']" close-text="Close" tabindex="9" />
+                <span class="input-group-btn">
+                <button type="button" class="btn btn-default btn-cal" ng-click="datePicker.open($event, 'reportingEndDate')"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </p>
+        </div>
+        <div class="col-md-2">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="advancesearchtype" data-toggle="dropdown" aria-expanded="true" ng-model="searchObj.TYPE">
+                    <div class="dropdowntext">{{ searchVesselType }} </div>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
+                    <li><a ng-click="searchVesselTypeSelected(item)" tabindex="1">Type</a></li>
+                    <li ng-repeat="item in vesselVesselTypes" role="presentation">
+                        <a ng-click="searchVesselTypeSelected(item)" tabindex="1">{{item.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="advancesearchactive" data-toggle="dropdown" aria-expanded="true" ng-model="searchObj.ACTIVE">
+                    <div class="dropdowntext">{{ searchActive }} </div>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
+                    <li><a ng-click="searchActiveSelected(item)" tabindex="1">Active</a></li>
+                    <li ng-repeat="item in searchActiveTypes" role="presentation">
+                        <a ng-click="searchActiveSelected(item)" tabindex="1">{{item.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="advancesearchtype" data-toggle="dropdown" aria-expanded="true" ng-model="searchObj.LICENSE">
+                    <div class="dropdowntext">{{ searchLicenseType }} </div>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
+                    <li><a ng-click="searchLicenseTypeSelected(item)" tabindex="1">License type</a></li>
+                    <li ng-repeat="item in searchLicensTypes" role="presentation">
+                        <a ng-click="searchLicenseTypeSelected(item)" tabindex="1">{{item.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -177,12 +177,13 @@ angular.module('unionvmsWeb')
 
 
 
+
+
     })
     .directive('newvessel', function () {
         return {
             restrict: 'E',
             replace: true,
-
             templateUrl: 'directive/newVessel/newVessel.html',
             link: function (scope, element, attrs, fn) {
 

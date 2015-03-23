@@ -7178,7 +7178,6 @@ nav.configuration .configuration {
 }
 .vesselsearchboxcontainer {
   background-color: white;
-  margin-bottom: 25px;
 }
 .vesselsearchbox {
   width: 1170px;
@@ -7196,6 +7195,17 @@ nav.configuration .configuration {
 }
 .vesselsearchbox form {
   padding-left: 0px;
+}
+.filtertext {
+  margin-right: 30px;
+  background-color: #EBEBEB;
+}
+.searchtext {
+  height: 45px !important;
+  border: solid 1px white !important;
+}
+.searchbutton {
+  width: 100px;
 }
 .vesselsearchtools {
   float: left;
@@ -7245,7 +7255,8 @@ nav.configuration .configuration {
 .advancesearchcontainer {
   width: 1170px;
   margin: 5px auto;
-  overflow: hidden;
+  /*overflow: hidden;
+*/
 }
 .advancesearchcontainer .advancesearchtag {
   color: #35A7DF;
@@ -7254,9 +7265,7 @@ nav.configuration .configuration {
 }
 .advancesearchcontainer .advancesearchbody {
   opacity: 1;
-  border: 1px solid black;
-  height: 200px;
-  background-color: #3a87ad;
+  /*height: 200px;*/
 }
 .advancesearchcontainer .animate-show {
   opacity: 1;
@@ -7304,7 +7313,7 @@ nav.configuration .configuration {
 }
 .vesselsearchboxfooter {
   width: 1170px;
-  margin: 50px auto;
+  margin: 30px auto 0px auto;
 }
 .vesselsearchboxfooter .right {
   float: right;
@@ -7470,6 +7479,23 @@ nav.configuration .configuration {
 .mobileterminalcontainer a {
   cursor: pointer;
 }
+.vesseldetailsrow {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+.advancedSearch .row {
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.advancedSearch input[type="text"] {
+  height: 30px;
+  background-color: #EBEBEB;
+}
+.advancedSearch .form-control:focus {
+  border-color: #18A689;
+  box-shadow: none;
+  outline: 0 none;
+}
 /* Add Component LESS Above */
 /* Required for Angular UI Bootstrap */
 .nav,
@@ -7594,7 +7620,19 @@ li {
     height: 38px;
 }*/
 input[type="text"] {
-  border-radius: none;
+  border-radius: 0px;
+  /*    background-color: #EBEBEB;*/
+  height: 30px;
+  border: none;
+  padding-left: 5px;
+}
+input[type="text"]:focus {
+  border: 1px solid #18A689;
+  outline: 0;
+  -webkit-box-shadow: none;
+  /*inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);*/
+  box-shadow: none;
+  /* inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);*/
 }
 .form-control {
   background-color: #FFFFFF;
@@ -7650,7 +7688,7 @@ input[type="text"] {
 /*Calendar*/
 .dropdown-menu.ng-valid.ng-valid-date.ng-valid-date-disabled.ng-dirty,
 .dropdown-menu.ng-pristine.ng-valid.ng-valid-date.ng-valid-date-disabled {
-  width: 280px;
+  /* width:280px;*/
   padding: 10px;
 }
 .btn-cal {
@@ -7661,4 +7699,10 @@ input[type="text"] {
 }
 .inputerrors .glyphicon {
   top: 2px;
+}
+.nopaddingleft {
+  padding-left: 0px;
+}
+.nopaddingright {
+  padding-right: 0px;
 }
