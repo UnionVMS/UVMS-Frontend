@@ -21,8 +21,7 @@
 
         <div class="vesselsearchtools">
             <form class="vesselsearch">
-                <input type="text" class="form-control" placeholder="Search" ng-model="searchFilter">
-                <input type="text" class="form-control" placeholder="{{'vessel.search_input_placeholder' | i18n}}" ng-model="wildCardSearch">
+                <input type="text" class="form-control searchtext" placeholder="{{'vessel.search_input_placeholder' | i18n}}" ng-model="wildCardSearch">
             </form>
 
             <!-- Dropdown -->
@@ -57,8 +56,8 @@
               <advanced-search></advanced-search>
            </div>
            <div class="col-md-2">
-               <p class="advancesearchtag" ng-click="toggleanim()" ng-show="!advancesearch.active">{{'vessel.search_advanced' | i18n}}</p>
-               <p class="advancesearchtag" ng-click="toggleanim()" ng-show="advancesearch.active">{{'vessel.search_advanced' | i18n}}</p>
+               <p class="advancesearchtag" ng-click="toggleanim()" ng-show="!advancesearch.active">{{'vessel.search_advanced_expand' | i18n}}</p>
+               <p class="advancesearchtag" ng-click="toggleanim()" ng-show="advancesearch.active">{{'vessel.search_advanced_minify' | i18n}}</p>
            </div>
        </div>
     <div class="vesselsearchboxfooter row">

@@ -229,10 +229,10 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
     $scope.vesselCountry = "Country";
     $scope.vesselActivity = "Activity";
     $scope.vesselHasIrc = "No";
-    $scope.vesselOverall = "Overall";
+    $scope.vesselOverall = "LOA";
     $scope.vesselHasLicense = "No";
     $scope.vesselLicenseType = "Choose license type";
-    $scope.vesselCity = "City";
+    $scope.vesselUnitOfMessure = "London";
     $scope.vesselEffect = "Effect";
     $scope.searchFlagState = "Flag state";
     $scope.searchLicenseType = "License type";
@@ -298,7 +298,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
 
     $scope.overallSelected = function(item){
         if(item === undefined){
-            $scope.vesselOverall = "Overall";
+            $scope.vesselOverall = "LOA";
         }
         else
         {
@@ -306,13 +306,13 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         }
     };
 
-    $scope.citySelected = function(item){
+    $scope.unitOfMessureSelected = function(item){
         if(item === undefined){
-            $scope.vesselCity= "City";
+            $scope.vesselUnitOfMessure= "London";
         }
         else
         {
-            $scope.vesselCity = item.name;
+            $scope.vesselUnitOfMessure = item.name;
         }
     };
 
@@ -430,8 +430,8 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
 
 
     //Dummyata for dropdowns....
-    $scope.vesseloveralltypes =[{'name':'Overall','code':'1'},{'name':'Between perpendiculars','code':'0'}];
-    $scope.vesselCities =[{'name':'London','code':'133'},{'name':'Gothenburg','code':'99'},{'name':'Amsterdam','code':'23'}];
+    $scope.vesseloveralltypes =[{'name':'LOA','code':'1'},{'name':'LBP','code':'0'}];
+    $scope.vesselUnitOfMessures =[{'name':'London','code':'London'}];
     $scope.vesselEffectTypes =[{'name':'hp','code':'133'},{'name':'kW','code':'99'}];
     $scope.terminalsatellitetypes =[{'name':'Inmarsat-B','code':'133'},{'name':'Inmarsat-C','code':'998'}];
     $scope.terminaloceanstypes =[{'name':'Skagerack','code':'3'},{'name':'Kattegatt','code':'99'},{'name':'Östersjön','code':'929'}];

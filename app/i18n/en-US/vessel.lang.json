@@ -12,5 +12,6 @@
 	"table_details_button" : "Details",
 	"table_report_button" : "Report",
 	"search_input_placeholder" : "Search",
-	"search_advanced" : "+ Advanced search"
+	"search_advanced_expand" : "+ Advanced search",
+    "search_advanced_minify" : "- Advanced search"
 }

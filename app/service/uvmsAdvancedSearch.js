@@ -1,25 +1,21 @@
 (function() {
     var uvmsAdvancedSearch = function(uvmsValidation) {
 
-        var advanceSearchJsonObj = {
-         /*   "FLAG_STATE":"",
-            "EXTERNAL_MARKING":"",
-            "NAME":"",
-            "IRCS":"",
+        var advanceSearchJsonObj = {};
+            /*"IRCS":"",
             "CFR":"",
             "MMSI":"",
             "HOMEPORT":"",
             "TYPE":"",
             "ACTIVE":"",
             "LICENSE":""*/
-        };
+
 
         var getAdvSearchObj = function(){
             return advanceSearchJsonObj;
         };
 
         var addFlagState = function(data){
-            //TODO do some cleaning in data. No funny chars, numbers etc..
             if(uvmsValidation.lettersOnly(data))
             {
                 advanceSearchJsonObj.FLAG_STATE = data;
