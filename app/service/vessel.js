@@ -2,9 +2,17 @@
 (function(){
     var vessel = function($http, $log){
 
-
-        var getVesselList = function(){
-            return $http.get("http://livm67t:28080/vessel-rest/vessel/list");
+        var getVesselList = function(listSize, page, criteria){
+            var data =
+            {
+                "pagination":{
+                    "listSize":listSize,
+                    "page":page},
+                "searchCriteria":{
+                    "criterias":criteria
+                }
+            };
+            return $http.post("http://livm67u:28080/vessel-rest/vessel/list", data);
         };
 
         var updateVessel = function(data){

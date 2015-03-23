@@ -1,23 +1,59 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, vessel, $route, uvmsTranslationService, uvmsAdvancedSearch, $window ){
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, vessel, $route, uvmsTranslationService, uvmsAdvancedSearch, uvmsValidation, $window ){
 
 
 
     //Load list with vessels when entering page
     $scope.getInitialVessels = function(){
-        var response = vessel.getVesselList()
+        var response = vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria)
             .then(onVesselSuccess, onError);
     };
 
+    //initial page or the page to get.
+    $scope.page = "1";
+    // listsize = the number of pages to get by page
+    $scope.listSize = "10";
+    //Total Number Of Pages
+    $scope.totalNumberOfPages = "";
+    //search criteria
+    $scope.criteria = {};
+
+    $scope.loadmore = function(){
+        if($scope.page < $scope.totalNumberOfPages )
+        {
+            $scope.page++;
+            vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria)
+                .then(onVesselSuccess, onError);
+        }
+    };
+
+
     var onVesselSuccess = function(response){
-        if( (!response.data.data) || response.data.data.length === 0 )
+        if( (!response.data.data.vessel) || response.data.data.vessel.length === 0 )
         {
             $scope.error = "No vessels could be retrieved at this time.";
             console.log("No vessels in database?");
         }
         else{
-        $scope.vessels = response.data.data;
+            if(!$scope.vessels)
+            {
+                $scope.vessels = response.data.data.vessel;
+                $scope.totalNumberOfPages = response.data.data.totalNumberOfPages;
+            }
+            else
+            {
+               for (i = 0; i < response.data.data.vessel.length; i++)
+               {
+                   $scope.vessels.push(response.data.data.vessel[i]);
+               }
+            }
+
+            if ($scope.totalNumberOfPages == "")
+            {
+                $scope.totalNumberOfPages = response.data.data.totalNumberOfPages;
+            }
          }
     };
+
     var onError = function(response){
 
        $scope.error = "We are sorry... Something took a wrong turn. To err is human but to arr is pirate!!";
@@ -43,11 +79,13 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
     $scope.sortFilter = '';
 
 
-
     $scope.advancesearch = { active: false };
+    $scope.simpleSearch = {enable:false};
     $scope.vesselSearchContainerVisible = { active: true };
     $scope.toggleanim = function () {
         $scope.advancesearch.active = !$scope.advancesearch.active;
+        $scope.wildCardSearch = "";
+        $scope.simpleSearch.enable = !$scope.simpleSearch.enable;
     };
 
 
@@ -333,14 +371,27 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         if($scope.wildCardSearch !== "")
         {
             //call for search method with wildcard and re-populate the vessellist
-            uvmsAdvancedSearch.performWildcardSearch($scope.wildCardSearch);
-            $window.alert($scope.wildCardSearch);
+            //uvmsAdvancedSearch.performWildcardSearch($scope.wildCardSearch);
+            //$window.alert($scope.wildCardSearch);
+            if (uvmsValidation.lettersAndDigits($scope.wildCardSearch))
+            {
+                $scope.criteria = {
+                    "NAME":$scope.wildCardSearch + "*",
+                    "IRCS": $scope.wildCardSearch + "*",
+                    "CFR": $scope.wildCardSearch + "*"
+                };
+
+                delete $scope.vessels;
+                vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria)
+                    .then(onVesselSuccess, onError);
+            }
         }
         else
         {
-            //call for search method with searchObj and re-populate the vessellist
-            uvmsAdvancedSearch.performAdvancedSearch();
-            $window.alert($scope.searchObj.FLAG_STATE + " " + $scope.searchObj.NAME + " etc...");
+            delete $scope.vessels;
+            $scope.criteria = $scope.searchObj;
+            vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria)
+                .then(onVesselSuccess, onError);
         }
     };
 

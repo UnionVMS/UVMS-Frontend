@@ -16,7 +16,7 @@
             <div class="vesselsearchbox">
                 <div class="vesselsearchtools">
                     <form class="vesselsearch">
-                        <input type="text" class="form-control searchtext"
+                        <input type="text" class="form-control searchtext" ng-disabled="simpleSearch.enable"
                                placeholder="{{'vessel.search_input_placeholder' | i18n}}" ng-model="wildCardSearch">
                     </form>
                     <!-- Dropdown -->
@@ -167,6 +167,8 @@
                 </table>
                 <p style="color: orangered">{{error}}</p>
             </div>
+            <p class="vesselshowing">{{'vessel.table_number_of_pages' | i18n}} {{page}} {{'vessel.table_of' | i18n}} {{totalNumberOfPages}}</p>
+            <p class="vesselloadmore" ng-click="loadmore()"> {{'vessel.table_load_more' | i18n | uppercase}}</p>
         </div>
     </div>
 </div>

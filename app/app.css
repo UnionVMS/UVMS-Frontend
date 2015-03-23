@@ -7246,6 +7246,7 @@ nav.configuration .configuration {
 }
 .vesselsearchresultcontainer {
   background-color: #EBEBEB;
+  padding-bottom: 50px;
 }
 .vesselsearchresult {
   width: 1170px;
@@ -7417,6 +7418,20 @@ nav.configuration .configuration {
   font-size: 27px;
   font-width: bold;
 }
+.vesselshowing {
+  width: 1170px;
+  margin: 0px auto;
+}
+.vesselloadmore {
+  width: 100px;
+  margin: 0px auto;
+  color: #35A7DF;
+  cursor: pointer;
+  font-weight: 500;
+}
+.vesselloadmore:hover {
+  text-decoration: underline;
+}
 .savedsearchdropdownmenu {
   float: right;
 }
@@ -7526,6 +7541,16 @@ body {
     margin: 0 auto;
     background-color: white;
 }*/
+footer {
+  background-color: #383737;
+  color: white;
+  height: 75px;
+}
+footer .content {
+  width: 1170px;
+  margin: 0px auto;
+  padding-top: 30px;
+}
 .uvmslogo {
   width: 130px;
 }

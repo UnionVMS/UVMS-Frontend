@@ -11,7 +11,11 @@
 	"table_header_reports" : "Reports",
 	"table_details_button" : "Details",
 	"table_report_button" : "Report",
+    "table_number_of_pages": "Showing page",
+    "table_of": "of",
+    "table_load_more": "Load more",
 	"search_input_placeholder" : "Search",
 	"search_advanced_expand" : "+ Advanced search",
     "search_advanced_minify" : "- Advanced search"
+
 }
