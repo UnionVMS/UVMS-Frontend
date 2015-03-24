@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb')
-    .controller('newVesselCtrl', function ($scope, $http, vessel, $route, uvmsValidation, uvmsTranslationService) {
+    .controller('newVesselCtrl', function ($scope, $http, vessel, $route, uvmsValidation) {
 
         $scope.removeNewMobileSystem = function (item, idx) {
             if (idx >= 0){
@@ -132,12 +132,7 @@ angular.module('unionvmsWeb')
             }, 2000 );
 
         };
-/*
-        $scope.translate = function(){
-            uvmsTranslationService.getTranslation($scope);
-        };
-        $scope.translate();
-*/
+
         var createVesselError = function(error){
             $scope.createResponseMessage = "We are sorry but something went wrong when we tried to create a new Vessel. Please try again in a moment or close the window.";
             console.log = "The Vessel has NOT been created!";

@@ -7511,6 +7511,32 @@ nav.configuration .configuration {
   box-shadow: none;
   outline: 0 none;
 }
+.saveVesselGroupModal {
+  overflow-y: auto;
+}
+.saveVesselGroupModal input[type="text"] {
+  width: 100%;
+  background: #EDEEEE;
+  margin-bottom: 10px;
+  height: 45px;
+  font-size: 20px;
+}
+.saveVesselGroupModal .dropdownMessage {
+  font-weight: bold;
+  padding-left: 15px;
+}
+.saveVesselGroupModal .dropdown {
+  margin-top: 10px;
+}
+.saveVesselGroupModal .dropdown .dropdown-menu {
+  width: 100%;
+  max-height: 200px;
+  overflow-y: scroll;
+}
+.saveVesselGroupModal .btn-primary {
+  background-color: #18a689;
+  color: #ffffff;
+}
 /* Add Component LESS Above */
 /* Required for Angular UI Bootstrap */
 .nav,
@@ -7730,4 +7756,32 @@ input[type="text"]:focus {
 }
 .nopaddingright {
   padding-right: 0px;
+}
+/*Modal*/
+.modal-backdrop {
+  background-color: #ccc;
+}
+.modal-dialog .modal-content {
+  padding: 20px 30px;
+  box-shadow: none;
+  border: none;
+}
+.modal-dialog .modal-content .modal-header {
+  padding: 20px 0px;
+  border-bottom: none;
+}
+.modal-dialog .modal-content .modal-header .modal-title {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.modal-dialog .modal-content .modal-header .close {
+  color: #18a689;
+}
+.modal-dialog .modal-content .modal-body {
+  padding: 0px;
+}
+.modal-dialog .modal-content .modal-footer {
+  margin-top: 15px;
+  padding: 0px;
+  border-top: none;
 }
