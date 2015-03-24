@@ -28,28 +28,22 @@ angular.module('unionvmsWeb').controller('SaveVesselGroupModalInstanceCtrl', fun
 
 
   var onSaveSuccess = function(response){
-    console.log("Save successful");
     $modalInstance.close();
   };
 
   var onSaveError = function(response){
-    console.log("Save error");
+    //Nothing
   };
 
   //Save or update vessel group
   $scope.saveVesselGroup = function () {
-    console.log("Save vessel group");
-    console.log($scope.saveData);
-    console.log(advancedSearch);
     //Update existing group
     if(angular.isDefined($scope.saveData.existingGroup)){
-      console.log("Update vessel group with id: " +$scope.saveData.existingGroup);
       savedsearches.updateVesselGroup($scope.saveData.existingGroup.id, advancedSearch)
         .then(onSaveSuccess, onSaveError);
     }
     //Save new group
     else{
-      console.log("Save to new group");
       savedsearches.createNewVesselGroup($scope.saveData.name, advancedSearch)
         .then(onSaveSuccess, onSaveError);
     }
