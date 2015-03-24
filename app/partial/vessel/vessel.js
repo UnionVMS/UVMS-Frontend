@@ -498,7 +498,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
 
     $scope.searchObj  = uvmsAdvancedSearch.getAdvSearchObj();
     //Watch for changes to the searchObj
-    $scope.$watch(function () { return uvmsAdvancedSearch.getAdvSearchObj()}, function (newVal, oldVal) {
+    $scope.$watch(function () { return uvmsAdvancedSearch.getAdvSearchObj();}, function (newVal, oldVal) {
         if (typeof newVal !== 'undefined') {
             $scope.searchObj  = uvmsAdvancedSearch.getAdvSearchObj();
         }
