@@ -41,13 +41,13 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
             }
             else
             {
-               for (i = 0; i < response.data.data.vessel.length; i++)
+               for (var i = 0; i < response.data.data.vessel.length; i++)
                {
                    $scope.vessels.push(response.data.data.vessel[i]);
                }
             }
 
-            if ($scope.totalNumberOfPages == "")
+            if ($scope.totalNumberOfPages === "")
             {
                 $scope.totalNumberOfPages = response.data.data.totalNumberOfPages;
             }
