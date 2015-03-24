@@ -272,3 +272,34 @@ input[type="text"]:focus{
 }
 @icon-font-path: "fonts/";
 
+/*Modal*/
+.modal-backdrop{
+    background-color: #ccc;
+}
+.modal-dialog{
+    .modal-content{
+        padding:20px 30px;
+        box-shadow:none;
+        border:none;
+
+        .modal-header{
+            padding: 20px 0px;
+            border-bottom:none;
+            .modal-title{
+                text-transform: uppercase;
+                font-weight: bold;
+            }
+            .close{
+                color:@buttoncolor;
+            }
+        }
+        .modal-body{
+            padding: 0px;
+        }
+        .modal-footer{
+            margin-top: 15px;
+            padding: 0px;
+            border-top:none;
+        }
+    }
+}

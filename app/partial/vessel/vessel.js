@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, vessel, $route, uvmsTranslationService, uvmsAdvancedSearch, uvmsValidation, $window ){
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, vessel, $route, uvmsTranslationService, uvmsAdvancedSearch, uvmsValidation, savedsearches, $window ){
 
 
 
@@ -6,7 +6,15 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
     $scope.getInitialVessels = function(){
         var response = vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria)
             .then(onVesselSuccess, onError);
+
+        $scope.getVesselGroupsForUser();            
     };
+
+    $scope.getVesselGroupsForUser = function(){
+        //Load list of VesselGroups            
+        savedsearches.getVesselGroupsForUser()
+        .then(onVesselGroupListSuccess, onVesselGroupListError);        
+    };    
 
     //initial page or the page to get.
     $scope.page = "1";
@@ -59,6 +67,24 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
        $scope.error = "We are sorry... Something took a wrong turn. To err is human but to arr is pirate!!";
         console.log("We are sorry... To err is human but to arr is pirate!!");
     };
+
+
+    $scope.vesselGroups = [];
+    var onVesselGroupListSuccess = function(response){
+        if( (!response.data.data) || response.data.data.length === 0 )
+        {
+            $scope.error = "No vessel groups could be retrieved at this time.";
+            console.log("No vessels groups in database?");
+        }
+        else{
+            $scope.vesselGroups = response.data.data;
+        }
+    };
+    var onVesselGroupListError = function(response){
+       $scope.error = "We are sorry... Something took a wrong turn. To err is human but to arr is pirate!!";
+        console.log("We are sorry... To err is human but to arr is pirate!!");
+    };    
+
 
     $scope.checkAll = function(){
         if($scope.selectedAll)

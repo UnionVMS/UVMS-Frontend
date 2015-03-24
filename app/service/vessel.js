@@ -25,7 +25,7 @@
 
         var getSearchableFields = function (){
             return $http.get("http://livm67u:28080/vessel-rest/vessel/config/searchfields");
-        };
+        };   
 
         return{
             getVesselList: getVesselList,

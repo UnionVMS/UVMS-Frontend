@@ -1,6 +1,6 @@
 (function(){
 
-    var savedsearches = function(){
+    var savedsearches = function($http){
 
         var getSavedSearches = function(){
             return[
@@ -77,10 +77,48 @@
                 }];
         };
 
+        var createSearchFieldsFromAdvancedSearch = function(advancedSearch){
+            var searchFields = [];
+            $.each(advancedSearch, function(key, value){
+                searchFields.push({
+                    "key" : key,
+                    "value" : value
+                });
+                
+            });
+            return searchFields;
+        };
+
+        var userName = "FRONTEND_USER";
+        var getVesselGroupsForUser = function (){
+            return $http.get("http://livm67u:28080/vessel-rest/group/list?user=" +userName);
+        };
+
+        var createNewVesselGroup = function(name, advancedSearch){
+            var data = {
+                "user" : userName,
+                "name" : name,
+                "searchFields" : createSearchFieldsFromAdvancedSearch(advancedSearch)
+            };
+            return $http.post("http://livm67u:28080/vessel-rest/group", data);
+        };        
+
+        var updateVesselGroup = function(groupId, advancedSearch){
+            var data = {
+                "user" : userName,
+                "id" : groupId,
+                "searchFields" : createSearchFieldsFromAdvancedSearch(advancedSearch)
+            };
+            return $http.put("http://livm67u:28080/vessel-rest/group", data);
+        };  
+
         return{
             getSavedSearches : getSavedSearches,
             getGroups : getGroups,
-            getPredefinedGroups : getPredefinedGroups
+            getPredefinedGroups : getPredefinedGroups,
+            getVesselGroupsForUser : getVesselGroupsForUser,
+            createNewVesselGroup : createNewVesselGroup,
+            updateVesselGroup : updateVesselGroup
         };
     };
 
