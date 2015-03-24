@@ -83,6 +83,23 @@
             }
         };
 
+        var  addExternalMarking = function(data){
+            //TODO: Add validation?
+            advanceSearchJsonObj.EXTERNAL_MARKING = data;
+        };
+
+
+        var  addHomePort = function(data){
+            //TODO: Add validation?
+            advanceSearchJsonObj.HOMEPORT = data;
+        };        
+
+        var  addMMSI = function(data){
+            //TODO: Add validation?
+            advanceSearchJsonObj.MMSI = data;
+        };        
+
+
         var performWildcardSearch = function(data){
             if (uvmsValidation.lettersAndDigits()){
                 //do search...
@@ -107,12 +124,15 @@
             addIRCS:addIRCS,
             addType:addType,
             addActive:addActive,
-            addLicenseType:addLicenseType
+            addLicenseType:addLicenseType,
+            addExternalMarking:addExternalMarking,
+            addHomePort:addHomePort,
+            addMMSI:addMMSI,
         };
     };
 
     var module = angular.module('unionvmsWeb');
-    module.factory('uvmsAdvancedSearch',uvmsAdvancedSearch);
+    module.factory('uvmsAdvancedSearch', uvmsAdvancedSearch);
 
 }());
 

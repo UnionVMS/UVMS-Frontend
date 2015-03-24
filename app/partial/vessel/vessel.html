@@ -40,7 +40,23 @@
                     </button>
                 </div>
                 <div class="vesselsearchgroups">
-                    <savedSearchesButton></savedSearchesButton>
+                    <div class="btn-group">
+                        <button class="btn btn-lg btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+                            Saved searches and groups
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li role="presentation" class="dropdown-header">Groups</li>
+                            <li role="presentation" ng-repeat="item in vesselGroups | filter:{dynamic:true} | orderBy:'name'">
+                                <a role="menuitem" ng-click="savedSearchSelected(item)">{{item.name}}</a>
+                            </li>
+                            <li role="presentation" class="dropdown-header">Saved searches</li>
+                            <li role="presentation" ng-repeat="item in vesselGroups | filter:{dynamic:false} | orderBy:'name'">
+                                <a role="menuitem" ng-click="savedSearchSelected(item)">{{item.name}}</a>
+                            </li>
+
+                        </ul>
+                    </div>                    
                 </div>
                 <!-- TODO: Remove "selected" -->
                 {{selected}}

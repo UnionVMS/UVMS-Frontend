@@ -39,12 +39,12 @@ angular.module('unionvmsWeb').controller('SaveVesselGroupModalInstanceCtrl', fun
   $scope.saveVesselGroup = function () {
     //Update existing group
     if(angular.isDefined($scope.saveData.existingGroup)){
-      savedsearches.updateVesselGroup($scope.saveData.existingGroup.id, advancedSearch)
+      savedsearches.updateVesselGroup($scope.saveData.existingGroup.id, advancedSearch, true)
         .then(onSaveSuccess, onSaveError);
     }
     //Save new group
     else{
-      savedsearches.createNewVesselGroup($scope.saveData.name, advancedSearch)
+      savedsearches.createNewVesselGroup($scope.saveData.name, advancedSearch, true)
         .then(onSaveSuccess, onSaveError);
     }
   };
