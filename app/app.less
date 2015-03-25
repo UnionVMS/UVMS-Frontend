@@ -1,7 +1,5 @@
 @import "../bower_components/bootstrap/less/bootstrap.less";
-//@import "bower_components/bootstrap/less/theme.less";
 @import "../bower_components/font-awesome/less/font-awesome.less";
-//@fa-font-path: "bower_components/font-awesome/fonts";
 @fa-font-path: "/bower_components/font-awesome/fonts";
 
 
@@ -10,9 +8,7 @@
 @import "partial/today/today.less";
 @import "partial/vessel/vessel.less";
 @import "directive/vesselMultiselectDropdown/vesselMultiselectDropdown.less";
-/*@import "directive/addNewVessel/addNewVessel.less";
-@import "directive/vesselEditModule/vesselEditModule.less";
-*/
+
 @import "directive/newVessel/newVessel.less";
 @import "directive/mobileTerminal/mobileTerminal.less";
 @import "directive/communicationChannel/communicationChannel.less";
@@ -20,6 +16,7 @@
 
 @import "directive/vesselDetails/vesselDetails.less";
 @import "directive/advancedSearch/advancedSearch.less";
+@import "partial/vessel/vesselHistory/vesselHistory.less";
 /* Add Component LESS Above */
 
 /* Required for Angular UI Bootstrap */
@@ -50,11 +47,6 @@ body{
     font-family: Lato, Arial;
 
 }
-/*article{
-    width: 1070px;
-    margin: 0 auto;
-    background-color: white;
-}*/
 
 footer {
     background-color: #383737;
@@ -170,7 +162,10 @@ li a{
     height: 38px;
 }*/
 
-
+/*dropdown hoverstate*/
+.dropdown .btn.btn-default.dropdown-toggle:hover{
+    background-color: #007D52;
+}
 
 input[type="text"]
 {
@@ -273,7 +268,10 @@ input[type="text"]:focus{
 .nopaddingright{
     padding-right: 0px;
 }
-@icon-font-path: "fonts/";
+.nomargin{
+    margin: 0px !important;
+}
+
 
 /*Modal*/
 .modal-backdrop{
@@ -306,3 +304,6 @@ input[type="text"]:focus{
         }
     }
 }
+
+@icon-font-path: "fonts/";
+
