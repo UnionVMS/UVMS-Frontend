@@ -14,7 +14,7 @@
                 </ul>
             </div>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
             <input type="text" id="searchextno" placeholder="Ext. No." class="form-control" tabindex="2" ng-model="searchObj.EXTERNAL_MARKING">
         </div>
         <div class="col-md-2">
@@ -23,28 +23,29 @@
         <div class="col-md-2">
             <input type="text" id="searchsignal" placeholder="Signal/IRCS" class="form-control" tabindex="4" ng-model="searchTemp.IRCS" ng-change="searchAddIRCS(searchTemp.IRCS)">
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
             <input type="text" id="searchcfr" placeholder="CFR" class="form-control" tabindex="5" ng-model="searchTemp.CFR" ng-Change="searchAddCFR(searchTemp.CFR)">
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
             <input type="text" id="searchmmsi" placeholder="MMSI" class="form-control" tabindex="6" ng-model="searchObj.MMSI">
         </div>
-        <div class="col-md-2">
-            <input type="text" id="searchhomeport" placeholder="Homeport name" class="form-control" tabindex="7" ng-model="searchObj.HOMEPORT">
-        </div>
+
     </div>
     <div class="row col-md-12">
-       <div class="col-md-2 nopaddingleft">
-            <p class="input-group">
-                <input type="text" class="form-control" ng-model="searchTemp.REPORTING_START_DATE" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['reportingStartDate']" close-text="Close" tabindex="8" />
+        <div class="col-md-2 nopaddingleft">
+            <input type="text" id="searchhomeport" placeholder="Homeport name" class="form-control" tabindex="7" ng-model="searchObj.HOMEPORT">
+        </div>
+       <div class="col-md-2">
+            <p class="input-group nomargin">
+                <input type="text" class="form-control datetimeinput" ng-model="searchTemp.REPORTING_START_DATE" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['reportingStartDate']" close-text="Close" tabindex="8" />
                 <span class="input-group-btn">
                 <button type="button" class="btn btn-default btn-cal" ng-click="datePicker.open($event, 'reportingStartDate')"><i class="glyphicon glyphicon-calendar"></i></button>
                 </span>
             </p>
         </div>
         <div class="col-md-2">
-            <p class="input-group">
-                <input type="text" class="form-control" ng-model="searchTemp.REPORTING_END_DATE" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['reportingEndDate']" close-text="Close" tabindex="9" />
+            <p class="input-group nomargin">
+                <input type="text" class="form-control datetimeinput" ng-model="searchTemp.REPORTING_END_DATE" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['reportingEndDate']" close-text="Close" tabindex="9" />
                 <span class="input-group-btn">
                 <button type="button" class="btn btn-default btn-cal" ng-click="datePicker.open($event, 'reportingEndDate')"><i class="glyphicon glyphicon-calendar"></i></button>
                 </span>
@@ -52,7 +53,7 @@
         </div>
         <div class="col-md-2">
             <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="advancesearchtype" data-toggle="dropdown" aria-expanded="true" ng-model="searchObj.TYPE">
+                <button class="btn btn-default dropdown-toggle" type="button" id="advancesearchvesseltype" data-toggle="dropdown" aria-expanded="true" ng-model="searchObj.TYPE">
                     <div class="dropdowntext">{{ searchVesselType }} </div>
                     <span class="caret"></span>
                 </button>
@@ -92,9 +93,11 @@
                 </ul>
             </div>
         </div>
-        <div class="col-md-2">
-            <button type="button" class="btn btn-default" ng-click="openSaveGroupModal()">Save group</button>
-        </div>        
     </div>
+  <!--  <div class="row col-md-12">
+        <div class="col-md-2 pull-right">
+            <button type="button" class="btn btn-default" ng-click="openSaveGroupModal()">Save group</button>
+        </div>
+    </div>-->
 </div>
 

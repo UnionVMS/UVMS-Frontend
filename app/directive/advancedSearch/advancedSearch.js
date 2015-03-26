@@ -24,9 +24,9 @@ angular.module('unionvmsWeb')
 				},
 				vesselGroups: function(){
 					return $scope.vesselGroups;
-				},
+				}
 			  }
-			});	
+			});
 
 			modalInstance.result.then(function () {
 			  //Get updated list of vessel groups

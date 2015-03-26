@@ -7198,34 +7198,39 @@ nav.configuration .configuration {
 }
 .filtertext {
   margin-right: 30px;
-  background-color: #EBEBEB;
+  background-color: #ffffff;
+  border: 1px solid #18a689 !important;
 }
 .searchtext {
-  height: 45px !important;
-  border: solid 1px white !important;
+  height: 47px !important;
 }
 .searchbutton {
   width: 100px;
+  background-color: #18a689;
+  color: #ffffff;
+  border-radius: 3px;
+  border: 1px solid #18a689;
+}
+.searchbutton:hover {
+  background-color: #007D52;
+  color: #ffffff;
+  border: 1px solid #007D52;
 }
 .vesselsearchtools {
   float: left;
-  width: 600px;
-}
-.vesselsearchtools .col-md-2 {
-  padding-left: 0px;
 }
 .vesselsearchtools .vesselsearch {
   float: left;
   margin-right: 10px;
 }
-.vesselsearchtools .dropdown {
-  float: left;
-  margin-right: 10px;
-}
-.vesselsearchtools #vesselDropdown {
-  /*min-width: 150px;
-        */
+.vesselsearchtools #vesseldropdown {
   height: 45px;
+}
+.vesselsearchtools #savedsearches {
+  height: 45px;
+}
+.vesselsearchtools .dropdown-menu {
+  left: 15px !important;
 }
 .vesselsearchtools .vesseldropdowntext {
   padding-right: 120px;
@@ -7241,8 +7246,7 @@ nav.configuration .configuration {
     background-color: red;
 }*/
 .vesselsearchgroups {
-  float: right;
-  width: 400px;
+  /*float: right;*/
 }
 .vesselsearchresultcontainer {
   background-color: #EBEBEB;
@@ -7283,14 +7287,10 @@ nav.configuration .configuration {
   color: #35A7DF;
 }
 .addvesselbtn {
-  background-color: #18a689;
-  color: #ffffff;
   width: 120px;
 }
-.addvesselbtn:hover {
-  background-color: #007D52;
-  color: #ffffff;
-  width: 120px;
+.savedgroupbtn {
+  height: 45px;
 }
 .createnewvesselbutton {
   background-color: #18a689;
@@ -7314,7 +7314,8 @@ nav.configuration .configuration {
 }
 .vesselsearchboxfooter {
   width: 1170px;
-  margin: 30px auto 0px auto;
+  margin: 0px auto 0px auto;
+  padding: 15px 0px;
 }
 .vesselsearchboxfooter .right {
   float: right;
@@ -7432,15 +7433,9 @@ nav.configuration .configuration {
 .vesselloadmore:hover {
   text-decoration: underline;
 }
-.savedsearchdropdownmenu {
-  float: right;
+.datetimeinput {
+  border: 1px solid #cccccc !important;
 }
-.savedsearchdropdownmenu .dropdown-menu {
-  width: 100%;
-}
-/*@import "directive/addNewVessel/addNewVessel.less";
-@import "directive/vesselEditModule/vesselEditModule.less";
-*/
 .newvessel {
   border-bottom: 2px solid #918D8F;
 }
@@ -7562,11 +7557,6 @@ body {
   background-color: #ffffff;
   font-family: Lato, Arial;
 }
-/*article{
-    width: 1070px;
-    margin: 0 auto;
-    background-color: white;
-}*/
 footer {
   background-color: #383737;
   color: white;
@@ -7644,12 +7634,15 @@ ul,
 li {
   list-style: none;
 }
+li a {
+  cursor: pointer;
+}
 .dropdown {
   color: #ffffff;
 }
 .dropdown button,
 .dropdown button:hover {
-  background-color: #008e61;
+  /*background-color: #008e61;*/
   text-align: left;
   width: 100%;
   color: #ffffff;
@@ -7660,16 +7653,26 @@ li {
   float: right;
 }
 .dropdown .btn.btn-default.dropdown-toggle {
-  background-color: #18a689;
-  color: #ffffff;
-  border: none;
+  background-color: white;
   height: 30px;
   border-radius: 0px;
+  border: solid 1px #18A689;
+  color: black;
+  padding: 3px 12px;
 }
-/*
-.inputgroup input[type="text"]{
-    height: 38px;
-}*/
+.dropdown .btn.btn-default.dropdown-toggle .caret {
+  color: #18A689;
+}
+.uvmsbtn {
+  background-color: #18a689;
+  color: #ffffff;
+  border: solid 1px #18a689;
+}
+.uvmsbtn:hover {
+  background-color: #007d52;
+  color: #ffffff;
+  border: solid 1px #007d52;
+}
 input[type="text"] {
   border-radius: 0px;
   /*    background-color: #EBEBEB;*/
@@ -7756,6 +7759,9 @@ input[type="text"]:focus {
 }
 .nopaddingright {
   padding-right: 0px;
+}
+.nomargin {
+  margin: 0px !important;
 }
 /*Modal*/
 .modal-backdrop {

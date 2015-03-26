@@ -7,7 +7,6 @@
 @import "partial/header/header.less";
 @import "partial/today/today.less";
 @import "partial/vessel/vessel.less";
-@import "directive/vesselMultiselectDropdown/vesselMultiselectDropdown.less";
 
 @import "directive/newVessel/newVessel.less";
 @import "directive/mobileTerminal/mobileTerminal.less";
@@ -39,8 +38,10 @@
 
 /*global var*/
 @buttoncolor: #18A689;
+@buttonhovercolor:#007D52;
 @containerwidth: 1170px;
 @containerposition: 5px auto;
+
 
 body{
     width: 100%;
@@ -140,7 +141,7 @@ li a{
 .dropdown{
     color:#ffffff;
     button, button:hover{
-        background-color: #008e61;
+        /*background-color: #008e61;*/
         text-align: left;
         width: 100%;
         color:#ffffff;
@@ -151,21 +152,26 @@ li a{
         float:right;
     }
     .btn.btn-default.dropdown-toggle{
-        background-color: @buttoncolor;
-        color:#ffffff;
-        border:none;
+        background-color: white;
         height: 30px;
         border-radius: 0px;
+        border: solid 1px #18A689;
+        color:black;
+        padding: 3px 12px;
+            .caret{
+                color:#18A689;
+            }
     }
 }
-/*
-.inputgroup input[type="text"]{
-    height: 38px;
-}*/
-
-/*dropdown hoverstate*/
-.dropdown .btn.btn-default.dropdown-toggle:hover{
-    background-color: #007D52;
+.uvmsbtn{
+    background-color: @buttoncolor;
+    color: #ffffff;
+    border: solid 1px @buttoncolor;
+}
+.uvmsbtn:hover{
+    background-color: @buttonhovercolor;
+    color:#ffffff;
+    border: solid 1px @buttonhovercolor;
 }
 
 input[type="text"]

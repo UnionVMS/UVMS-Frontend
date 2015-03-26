@@ -1,5 +1,4 @@
 (function(){
-
     var savedsearches = function($http){
 
         var createSearchFieldsFromAdvancedSearch = function(advancedSearch){
@@ -9,7 +8,7 @@
                     "key" : key,
                     "value" : value
                 });
-                
+
             });
             return searchFields;
         };
@@ -27,18 +26,19 @@
                 "dynamic" : dynamic
             };
             return $http.post("http://livm67u:28080/vessel-rest/group", data);
-        };       
+        };
 
         var updateVesselGroup = function(groupId, advancedSearch, dynamic){
             console.log(advancedSearch);
             var data = {
                 "user" : userName,
+                "name" : name,
                 "id" : groupId,
                 "searchFields" : createSearchFieldsFromAdvancedSearch(advancedSearch),
                 "dynamic" : dynamic
             };
             return $http.put("http://livm67u:28080/vessel-rest/group", data);
-        };  
+        };
 
         return{
             getVesselGroupsForUser : getVesselGroupsForUser,

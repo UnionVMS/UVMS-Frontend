@@ -18,5 +18,6 @@
 	"search_advanced_expand" : "+ Advanced search",
     "search_advanced_minify" : "- Advanced search",
     "event_table_header_code" : "Code",
+    "searchgroup_dropdown" : "Saved groups",
     "event_table_header_date" : "Event date"
 }

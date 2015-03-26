@@ -4,10 +4,12 @@
 
             <div class="col-md-4 vesselname">{{newVesselObj.name}}</div>
             <span class="vesselstatus col-md-10">
-                <input type="checkbox" ng-click="changeVesselStatus()" checked>
-                <div ng-show="newVesselObj.active == true">STATUS: <b> Active</b><a ng-click="changeVesselStatus()"> &nbsp;(set as inactive)</a></div>
-                <div ng-show="newVesselObj.active == false">STATUS: <b> Inactive</b><a ng-click="changeVesselStatus()" > &nbsp;(set as active)</a></div>
-            </span>
+                     <span ng-show="newVesselObj.active == true">Set as inactive</span>
+                     <span ng-show="newVesselObj.active == false">Set as active</span>
+                     <input type="checkbox" ng-click="changeVesselStatus()" checked>
+                     <div ng-show="newVesselObj.active == true">STATUS: <b> Active</b></div>
+                     <div ng-show="newVesselObj.active == false">STATUS: <b> Inactive</b></div>
+                 </span>
             <div class="col-md-1">
                 <button class="btn btn-sm updatevesselbutton" type="submit" ng-click="updateVessel()"> Update </button>
             </div>

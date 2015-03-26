@@ -1,7 +1,7 @@
 (function() {
     var uvmsAdvancedSearch = function(uvmsValidation) {
 
-        var advanceSearchJsonObj = {};
+        var advanceSearchJsonObj = {}; /*{};
             /*"IRCS":"",
             "CFR":"",
             "MMSI":"",
@@ -16,21 +16,19 @@
         };
 
         var addFlagState = function(data){
-            if(uvmsValidation.lettersOnly(data))
-            {
+            if(uvmsValidation.lettersOnly(data)){
                 advanceSearchJsonObj.FLAG_STATE = data;
             }
         };
 
         var addName= function(data){
-            if(uvmsValidation.lettersOnly(data))
-            {
+            if(uvmsValidation.lettersOnly(data)){
                 advanceSearchJsonObj.NAME = data;
             }
         };
 
         var cleanAdvancedSearchJsonObj = function(){
-            advanceSearchJsonObj = {
+            advanceSearchJsonObj ={};// {
              /*   "FLAG_STATE":"",
                 "EXTERNAL_MARKING":"",
                 "NAME":"",
@@ -41,44 +39,38 @@
                 "TYPE":"",
                 "ACTIVE":"",
                 "LICENSE":""*/
-            };
+            //};
         };
 
         var addCFR = function(data){
-            if(uvmsValidation.digitsOnly(data))
-            {
+            if(uvmsValidation.lettersAndDigits(data)){
                 advanceSearchJsonObj.CFR = data;
             }
         };
 
         var addIRCS = function(data){
-
-            if(uvmsValidation.lettersAndDigits(data))
-            {
+            if(uvmsValidation.lettersAndDigits(data)){
                 advanceSearchJsonObj.IRCS = data;
             }
-            if(data === "")
-            {
+            if(data === ""){
                 advanceSearchJsonObj.IRCS = "";
             }
         };
 
         var addType = function(data){
-            if(uvmsValidation.lettersOnly(data))
-            {
+            if(uvmsValidation.lettersOnly(data)){
                 advanceSearchJsonObj.TYPE = data;
             }
         };
 
         var  addActive = function(data){
-            if(uvmsValidation.lettersOnly(data))
-            {
+            if(uvmsValidation.lettersOnly(data)){
                 advanceSearchJsonObj.ACTIVE = data;
             }
         };
+
         var  addLicenseType = function(data){
-            if(uvmsValidation.lettersOnly(data))
-            {
+            if(uvmsValidation.lettersOnly(data)){
                 advanceSearchJsonObj.LICENSE = data;
             }
         };
@@ -88,16 +80,17 @@
             advanceSearchJsonObj.EXTERNAL_MARKING = data;
         };
 
-
         var  addHomePort = function(data){
             //TODO: Add validation?
             advanceSearchJsonObj.HOMEPORT = data;
-        };        
+        };
 
         var  addMMSI = function(data){
             //TODO: Add validation?
-            advanceSearchJsonObj.MMSI = data;
-        };        
+            if(uvmsValidation.lettersAndDigits(data)){
+                advanceSearchJsonObj.MMSI = data;
+            }
+        };
 
 
         var performWildcardSearch = function(data){
@@ -127,7 +120,7 @@
             addLicenseType:addLicenseType,
             addExternalMarking:addExternalMarking,
             addHomePort:addHomePort,
-            addMMSI:addMMSI,
+            addMMSI:addMMSI
         };
     };
 

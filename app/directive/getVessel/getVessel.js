@@ -140,11 +140,8 @@ angular.module('unionvmsWeb')
 	return {
 		restrict: 'E',
 		replace: true,
-
-
 		templateUrl: 'directive/getVessel/getVessel.html',
 		link: function(scope, element, attrs, fn) {
-
 
 		}
 	};

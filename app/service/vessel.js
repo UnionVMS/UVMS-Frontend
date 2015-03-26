@@ -2,15 +2,16 @@
 (function(){
     var vessel = function($http, $log){
 
-        var getVesselList = function(listSize, page, criteria){
+        var getVesselList = function(listSize, page, criteria, isDynamic){
             var data =
             {
                 "pagination":{
                     "listSize":listSize,
-                    "page":page},
+                    "page":page
+                },
                 "searchCriteria":{
-                    "criterias": [],
-                    "isDynamic": "false"
+                    "criterias":criteria,
+                    "isDynamic": isDynamic
                 }
             };
             return $http.post("http://livm67u:28080/vessel-rest/vessel/list", data);
@@ -26,7 +27,7 @@
 
         var getSearchableFields = function (){
             return $http.get("http://livm67u:28080/vessel-rest/vessel/config/searchfields");
-        };   
+        };
 
         var getVesselHistoryListByVesselId = function(vesselId, maxNbr) {
             if(!maxNbr) {

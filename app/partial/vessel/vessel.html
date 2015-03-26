@@ -13,65 +13,88 @@
     </div>
     <div class="vesselcontainerwrapper fadeaddvesselin fadeaddvesselout" ng-show="vesselSearchContainerVisible.active">
         <div class="vesselsearchboxcontainer">
-            <div class="vesselsearchbox">
-                <div class="vesselsearchtools">
-                    <form class="vesselsearch">
+            <div class="vesselsearchbox row">
+                <div class="vesselsearchtools col-md-12 nopaddingleft nopaddingright">
+
+                    <div class="col-md-2 nopaddingleft">
                         <input type="text" class="form-control searchtext" ng-disabled="simpleSearch.enable"
                                placeholder="{{'vessel.search_input_placeholder' | i18n}}" ng-model="wildCardSearch">
-                    </form>
+                    </div>
                     <!-- Dropdown -->
-                    <div class="dropdown">
-                        <button class="btn btn-default vesseldropdown dropdown-toggle" type="button" id="vesselDropdown"
+                    <div class="dropdown col-md-2">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="vesseldropdown"
                                 data-toggle="dropdown" aria-expanded="true">
                             <div class="vesseldropdowntext">All</div>
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Vessels</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a>
-                            </li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="">Vessels</a></li>
                         </ul>
                     </div>
-                    <!-- Search button -->
-                    <button type="button" class="btn btn-default btn-lg searchbutton" ng-click="searchVessels()">
-                        <span class="fa fa-search" aria-hidden="true"></span>
-                    </button>
-                </div>
-                <div class="vesselsearchgroups">
-                    <div class="btn-group">
-                        <button class="btn btn-lg btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
-                            Saved searches and groups
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li role="presentation" class="dropdown-header">Groups</li>
-                            <li role="presentation" ng-repeat="item in vesselGroups | filter:{dynamic:true} | orderBy:'name'">
-                                <a role="menuitem" ng-click="savedSearchSelected(item)">{{item.name}}</a>
-                            </li>
-                            <li role="presentation" class="dropdown-header">Saved searches</li>
-                            <li role="presentation" ng-repeat="item in vesselGroups | filter:{dynamic:false} | orderBy:'name'">
-                                <a role="menuitem" ng-click="savedSearchSelected(item)">{{item.name}}</a>
-                            </li>
+                    <!-- Saved searched -->
+                    <!--
+                    <div class="col-md-2 vesselsearchgroups ">
+                        <div class="btn-group">
+                            <button class="btn btn-lg btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+                                {{'vessel.searchgroup_dropdown' | i18n}}
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li role="presentation" ng-repeat="item in vesselGroups | orderBy:'name'">
+                                    <a role="menuitem" ng-click="savedSearchSelected(item)">{{item.name}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    -->
 
-                        </ul>
-                    </div>                    
+                        <div class="dropdown col-md-2">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="savedsearches" data-toggle="dropdown" aria-expanded="true" ng-model="searchObj.LICENSE">
+                                <div class="dropdowntext">{{'vessel.searchgroup_dropdown' | i18n}} </div>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
+                                <li ng-repeat="item in vesselGroups | orderBy:'name'">
+                                    <a role="menuitem" ng-click="savedSearchSelected(item)">{{item.name}}</a>
+                                </li>
+                            </ul>
+                        </div>
+
+
+                    <!-- Search button -->
+                    <div class="col-md-2" ng-show="!advancesearch.active">
+                        <button type="button" class="btn btn-default btn-lg searchbutton" ng-click="searchVessels()">
+                            <span class="fa fa-search" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div class="col-md-2 pull-right nopaddingright" ng-show="advancesearch.active" >
+                        <button type="button" class="btn btn-default uvmsbtn savedgroupbtn pull-right" ng-click="openSaveGroupModal()">Save group</button>
+                    </div>
                 </div>
-                <!-- TODO: Remove "selected" -->
-                {{selected}}
             </div>
+
             <div class="advancesearchcontainer row">
                 <div class="advancesearchbody fadein fadeout" ng-show="advancesearch.active">
                     <advanced-search></advanced-search>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-12 row">
+                    <!-- Search button -->
+                    <div class="col-md-2 nopaddingleft" ng-show="advancesearch.active">
+                        <button type="button" class="btn btn-default btn-lg searchbutton" ng-click="searchVessels()">
+                            <span class="fa fa-search" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-2 nopaddingleft">
                     <p class="advancesearchtag" ng-click="toggleanim()" ng-show="!advancesearch.active">
                         {{'vessel.search_advanced_expand' | i18n}}</p>
                     <p class="advancesearchtag" ng-click="toggleanim()" ng-show="advancesearch.active">
                         {{'vessel.search_advanced_minify' | i18n}}</p>
                 </div>
             </div>
+
+        </div>
+        <div class="vesselsearchresultcontainer">
             <div class="vesselsearchboxfooter row">
                 <!-- Dropdown -->
                 <div class="dropdown">
@@ -87,12 +110,10 @@
                     </ul>
                 </div>
                 <!-- add new button -->
-                <button class="btn btn-sm pull-right addvesselbtn" ng-click="toggleAddNewVessel()" type="button">
+                <button class="btn btn-sm pull-right addvesselbtn uvmsbtn" ng-click="toggleAddNewVessel()" type="button">
                     {{'vessel.add_new' | i18n}} &nbsp;&nbsp;&nbsp;&nbsp;<span>+</span></button>
                 <input type="text" class="filtertext pull-right" placeholder="Filter" ng-model="searchFilter">
             </div>
-        </div>
-        <div class="vesselsearchresultcontainer">
             <div class="vesselsearchresult">
                 <table class="col-md-12">
                     <thead>

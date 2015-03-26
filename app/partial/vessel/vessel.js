@@ -1,9 +1,8 @@
 angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, vessel, $route, uvmsAdvancedSearch, uvmsValidation, savedsearches, $window ){
 
-
     //Load list with vessels when entering page
     $scope.getInitialVessels = function(){
-        var response = vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria)
+        var response = vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria, $scope.isDynamic)
             .then(onVesselSuccess, onError);
 
         $scope.getVesselGroupsForUser();
@@ -22,13 +21,15 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
     //Total Number Of Pages
     $scope.totalNumberOfPages = "";
     //search criteria
-    $scope.criteria = {};
+    $scope.criteria = [];
+    //search is dynamic
+    $scope.isDynamic = "true";
 
     $scope.loadmore = function(){
         if($scope.page < $scope.totalNumberOfPages )
         {
             $scope.page++;
-            vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria)
+            vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria, $scope.isDynamic)
                 .then(onVesselSuccess, onError);
         }
     };
@@ -392,6 +393,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
 
     //########### PERFORM SEARCH ###########
     $scope.wildCardSearch = "";
+
     $scope.searchVessels = function(){
         //If something in searchtextbox perform a wildcardseach
         if($scope.wildCardSearch !== "")
@@ -401,29 +403,53 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
             //$window.alert($scope.wildCardSearch);
             if (uvmsValidation.lettersAndDigits($scope.wildCardSearch))
             {
-                $scope.criteria = {
-                    "NAME":$scope.wildCardSearch + "*",
-                    "IRCS": $scope.wildCardSearch + "*",
-                    "CFR": $scope.wildCardSearch + "*"
-                };
+                $scope.criteria = [
+                    {
+                        "value": $scope.wildCardSearch + "*",
+                        "key": "NAME"
+                    },
+                    {
+                        "value": $scope.wildCardSearch + "*",
+                        "key": "IRCS"
+                    },
+                    {
+                        "value": $scope.wildCardSearch + "*",
+                        "key": "CFR"
+                    }
+                ];
+
+                $scope.isDynamic = "false";
 
                 delete $scope.vessels;
-                vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria)
+                vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria, $scope.isDynamic)
                     .then(onVesselSuccess, onError);
             }
         }
         else
-        {
+        { /*$scope.criteria = [
+            {
+                "key": "NAME",
+                "value": "Kalles"
+
+            } ];*/
             delete $scope.vessels;
-            $scope.criteria = $scope.searchObj;
-            vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria)
+           // $scope.criteria = $scope.searchObj;
+            $scope.criteria = [];
+            for (var o in $scope.searchObj)
+            {
+                if($scope.searchObj[o] !== "")
+                {
+                    $scope.criteria.push({"key": o, "value":$scope.searchObj[o] });
+                }
+            }
+            $scope.isDynamic = "true";
+            vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria, $scope.isDynamic)
                 .then(onVesselSuccess, onError);
         }
     };
 
 
     //########### ADVANCEDSEARCH ###########
-
     var resetSearch = function(){
         $scope.wildCardSearch = "";
 
@@ -458,13 +484,13 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
                 switch (searchField.key){
                     case "ACTIVE":
                         $scope.searchActiveSelected(selectItem);
-                        break;        
+                        break;
                     case "CFR":
                         $scope.searchAddCFR(selectItem.name);
-                        break;     
+                        break;
                     case "EXTERNAL_MARKING":
                         $scope.searchAddExternalMarking(selectItem.name);
-                        break;                                                            
+                        break;
                     case "FLAG_STATE":
                         $scope.searchFlagStateSelected(selectItem);
                         break;
@@ -473,45 +499,43 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
                         break;
                     case "IRCS":
                         $scope.searchAddIRCS(selectItem.name);
-                        break;                          
+                        break;
                     case "LICENSE":
                         $scope.searchLicenseTypeSelected(selectItem);
                         break;
                     case "MMSI":
                         $scope.searchAddMMSI(selectItem);
-                        break;  
+                        break;
                     case "NAME":
                         $scope.searchAddName(selectItem.name);
-                        break;                                                
+                        break;
                     case "TYPE":
                         $scope.searchVesselTypeSelected(selectItem);
-                        break;                      
+                        break;
                     default:
                         break;
                 }
             });
-        }else{
+        } else {
             console.log("TODO: STATIC SEARCH");
         }
         //Perform the search
         $scope.searchVessels();
     };
 
-    $scope.searchObj  = uvmsAdvancedSearch.getAdvSearchObj();
+    $scope.searchObj  = [];//uvmsAdvancedSearch.getAdvSearchObj();
     //Watch for changes to the searchObj
     $scope.$watch(function () { return uvmsAdvancedSearch.getAdvSearchObj();}, function (newVal, oldVal) {
         if (typeof newVal !== 'undefined') {
             $scope.searchObj  = uvmsAdvancedSearch.getAdvSearchObj();
         }
-    });    
+    });
 
-    $scope.searchFlagStateSelected = function(item){
-        if(item === undefined){
+    $scope.searchFlagStateSelected = function (item) {
+        if (item === undefined) {
             $scope.searchFlagState = "Flag state";
             uvmsAdvancedSearch.addFlagState("");
-        }
-        else
-        {
+        } else {
             $scope.searchFlagState = item.name;
             uvmsAdvancedSearch.addFlagState(item.code);
         }
@@ -519,23 +543,21 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
 
     $scope.searchVesselTypeSelected = function(item){
         if(item === undefined){
-            $scope.searchType = "Type";
+            $scope.searchVesselType = "Type";
             uvmsAdvancedSearch.addType("");
-        }
-        else
-        {
-            $scope.searchType = item.name;
+        } else {
+            $scope.searchVesselType = item.name;
             uvmsAdvancedSearch.addType(item.code);
         }
     };
+
+
 
     $scope.searchActiveSelected = function(item){
         if(item === undefined){
             $scope.searchActive = "Active";
             uvmsAdvancedSearch.addActive("");
-        }
-        else
-        {
+        } else {
             $scope.searchActive = item.name;
             uvmsAdvancedSearch.addActive(item.code);
         }
@@ -543,12 +565,10 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
 
     $scope.searchLicenseTypeSelected = function(item){
         if(item === undefined){
-            $scope.searchType = "License";
+            $scope.searchLicenseType = "License";
             uvmsAdvancedSearch.addLicenseType("");
-        }
-        else
-        {
-            $scope.searchType = item.name;
+        } else {
+            $scope.searchLicenseType = item.name;
             uvmsAdvancedSearch.addLicenseType(item.code);
         }
     };
@@ -557,21 +577,26 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
     $scope.searchAddCFR = function(data){
         uvmsAdvancedSearch.addCFR(data);
     };
+
     $scope.searchAddIRCS = function(data){
         uvmsAdvancedSearch.addIRCS(data);
     };
+
     $scope.searchAddName = function(data){
         uvmsAdvancedSearch.addName(data);
-    };  
+    };
+
     $scope.searchAddExternalMarking = function(data){
         uvmsAdvancedSearch.addExternalMarking(data);
-    };      
+    };
+
     $scope.searchAddHomePort = function(data){
         uvmsAdvancedSearch.addHomePort(data);
-    };      
+    };
+
     $scope.searchAddMMSI = function(data){
         uvmsAdvancedSearch.addMMSI(data);
-    };  
+    };
 
     /**/
     $scope.datePicker = (function () {

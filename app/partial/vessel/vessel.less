@@ -24,35 +24,41 @@
 
 .filtertext{
     margin-right: 30px;
-    background-color: #EBEBEB;
+    background-color: #ffffff;
+    border:1px solid @buttoncolor !important;
 }
 .searchtext{
-    height: 45px !important;
-    border: solid 1px white !important;
+    height: 47px !important;
 }
 
 .searchbutton{
     width: 100px;
+    background-color: #18a689;
+    color: #ffffff;
+    border-radius: 3px;
+    border: 1px solid #18a689;
+}
+.searchbutton:hover{
+    background-color:#007D52;
+    color: #ffffff;
+    border: 1px solid #007D52;
 }
 
 .vesselsearchtools{
     float: left;
-    width: 600px;
-    .col-md-2{
-        padding-left: 0px;
-    }
     .vesselsearch{
         float:left;
         margin-right: 10px;
     }
-    .dropdown{
-        float:left;
-        margin-right: 10px;
-    }
-    #vesselDropdown{
-        /*min-width: 150px;
-        */
+    #vesseldropdown{
         height: 45px;
+    }
+    #savedsearches{
+        height: 45px;
+
+    }
+    .dropdown-menu{
+        left:15px !important;
     }
     .vesseldropdowntext{
         padding-right: 120px;
@@ -71,8 +77,7 @@
 }*/
 
 .vesselsearchgroups{
-    float: right;
-    width: 400px;
+    /*float: right;*/
 }
 
 .vesselsearchresultcontainer{
@@ -120,15 +125,14 @@
     color: #35A7DF;
 }
 .addvesselbtn{
-    background-color: @buttoncolor;
-    color: #ffffff;
+
     width: 120px;
 }
-.addvesselbtn:hover{
-    background-color:#007D52;
-    color: #ffffff;
-    width: 120px;
+
+.savedgroupbtn{
+    height: 45px;
 }
+
 .createnewvesselbutton{
         background-color: @buttoncolor;
         color: #ffffff;
@@ -153,7 +157,8 @@
 
 .vesselsearchboxfooter{
     width: @containerwidth;
-    margin: 30px auto 0px auto;
+    margin: 0px auto 0px auto;
+    padding:15px 0px;
 
     .right{
         float:right;
@@ -296,3 +301,7 @@
     text-decoration:underline;
 }
 
+.datetimeinput
+{
+    border: 1px solid #cccccc !important;
+}
