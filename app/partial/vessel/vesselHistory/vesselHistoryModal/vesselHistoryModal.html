@@ -1,0 +1,52 @@
+<div>
+	<div class="modal-header">
+    <div class="closenewvessel pull-right" ng-click="cancel()"> <img src="assets/images/close.png" /></div>
+    	<div class="col-md-4 vesselname">{{vesselHistory.name}}</div>
+    	<hr/>
+	</div>
+
+
+	<div class="modal-body">
+		<table class="col-md-12">
+			<thead>
+				<tr>
+                    <td>Event code: {{vesselHistory.eventHistory.eventCode}}</td>
+                    <td>Event date: {{vesselHistory.eventHistory.eventDate}}</td>
+                </tr>
+			</thead>
+            <tbody>
+                <tr>
+                	<td>Flag state: {{vesselHistory.countryCode}}</td>
+                	<td>Ext. marking: {{vesselHistory.externalMarking}}</td>
+                </tr>
+                <tr>
+                	<td>Type: {{vesselHistory.vesselType}}</td>
+                	<td>IRCS: {{vesselHistory.ircs}}</td>
+                </tr>
+                <tr>
+                	<td>CFR: {{vesselHistory.cfr}}</td>
+                	<td>MMSI no: {{vesselHistory.mmsiNo}}</td>
+                </tr>
+                <tr>
+                	<td>Home port code: {{vesselHistory.homePort}}</td>
+                	<td>Port name: </td>
+                </tr>
+                <tr>
+                	<td>License: {{vesselHistory.hasLicense}}</td>
+                	<td>Length: {{vesselHistory.lengthOverAll}} {{vesselHistory.lengthBetweenPerpendiculars}}</td>
+                </tr>
+                <tr>
+                	<td>License type: </td>
+                	<td>Capacity: {{vesselHistory.grossTonnage}} {{vesselHistory.otherGrossTonnage}} {{vesselHistory.safetyGrossTonnage}}</td>
+                </tr>
+                <tr>
+                	<td>Power: {{vesselHistory.powerMain}} {{vesselHistory.powerAux}}</td>
+                	<td>&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+	</div>
+	<div class="modal-footer">
+    	<button type="button" class="btn btn-primary" ng-click="cancel()">Close</button>
+	</div>
+</div>

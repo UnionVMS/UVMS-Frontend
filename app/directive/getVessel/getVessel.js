@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb')
-    .controller('getVesselCtrl', function($scope, vessel){
+    .controller('getVesselCtrl', function($scope, $modal, vessel){
 
         $scope.addNewMobileTerminalToVessel = function () {
 
@@ -81,10 +81,59 @@ angular.module('unionvmsWeb')
             console.log("Opps, no update has been done.");
         };
 
+        $scope.enableViewAllEvent = true;
 
+        $scope.onViewAllEvent = function() {
+            $scope.enableViewAllEvent = false;
+            var response = vessel.getVesselHistoryListByVesselId($scope.newVesselObj.vesselId.value)
+                .then(onVesselHistoryListSuccess, onVesselHistoryError);
+        };
 
+        $scope.getVesselHistory = function(vesselId) {
+            var response = vessel.getVesselHistoryListByVesselId(vesselId, 5)
+                .then(onVesselHistoryListSuccess, onVesselHistoryError);
+        };
 
+        $scope.onVesselHistoryClick = function(vesselHistoryId) {
+            var response = vessel.getVesselHistory(vesselHistoryId)
+                .then(onVesselHistorySuccess, onVesselHistoryError);
+        };
 
+        var onVesselHistoryListSuccess = function(response) {
+            if(!response || !response.data || !response.data.data) {
+                console.log("onVesselHistorySuccess has no data");
+            } else {
+                $scope.vesselHistory = response.data.data;
+            }
+        };
+
+        var onVesselHistorySuccess = function(response) {
+            $scope.currentVesselHistory = response.data.data;
+            openVesselHistoryModal();
+        };
+
+        var onVesselHistoryError = function(error) {
+            console.log("onVesselHistoryError: " + error);
+        };
+
+        var openVesselHistoryModal = function(){
+            var modalInstance = $modal.open({
+              templateUrl: 'partial/vessel/vesselHistory/vesselHistoryModal/vesselHistoryModal.html',
+              controller: 'VesselhistorymodalCtrl',
+              //windowClass : "saveVesselGroupModal",
+              size: "small",
+              resolve: {
+                vesselHistory: function() {
+                    return $scope.currentVesselHistory;
+                }
+              }
+            }); 
+
+            modalInstance.result.then(function () {
+            }, function () {
+              //Nothing on cancel
+            });
+        };
     })
 
     .directive('getvessel', function() {

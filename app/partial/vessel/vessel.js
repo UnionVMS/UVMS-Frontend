@@ -244,6 +244,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         $scope.vesselSearchContainerVisible.active = !$scope.vesselSearchContainerVisible.active;
         //set selected values in dropdowns accordingly to the selected vesselobject.
         $scope.setValuesInDropDowns();
+        $scope.getVesselHistory($scope.newVesselObj.vesselId.value);
     };
 
     $scope.setValuesInDropDowns = function(){

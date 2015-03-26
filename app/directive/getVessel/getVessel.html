@@ -1,5 +1,4 @@
 <div class="newvessel" ng-controller="getVesselCtrl">
-    <form name="newVesselForm">
     <div class="row">
         <div class="row col-md-12">
 
@@ -26,7 +25,21 @@
     </div>
     <div class="row col-md-12">
         <span class="vesselhistory col-md-12">EVENT HISTORY</span>
+        <span ng-show="enableViewAllEvent"><a ng-click="onViewAllEvent()">View all events</a></span>
         <hr>
+        <table class="col-md-12">
+            <thead>
+                <tr>
+                    <th>{{'vessel.event_table_header_code' | i18n}}</th>
+                    <th>{{'vessel.event_table_header_date' | i18n}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in vesselHistory">
+                    <td><a ng-click="onVesselHistoryClick(item.eventHistory.eventId)">{{item.eventHistory.eventCode}}</a></td>
+                    <td>{{item.eventHistory.eventDate}}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-
 </div>
