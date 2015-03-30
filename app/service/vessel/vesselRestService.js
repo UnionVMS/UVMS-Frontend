@@ -1,10 +1,10 @@
 angular.module('unionvmsWeb')
-.factory('vesselRestService', function($http, $log, restConstants){
+.factory('vesselRestService', function($http, $log, $q, restConstants, VesselListPage, Vessel){
 
     var baseUrl = "http://"+restConstants.host + ":" + restConstants.port;
 
     var getVesselList = function(listSize, page, criteria, isDynamic){
-        var data = {
+        var postData = {
             "pagination":{
                 "listSize":listSize,
                 "page":page
@@ -14,7 +14,21 @@ angular.module('unionvmsWeb')
                 "isDynamic": isDynamic
             }
         };
-        return $http.post(baseUrl + "/vessel-rest/vessel/list", data);
+
+        var deferred = $q.defer();
+
+        $http.post(baseUrl + "/vessel-rest/vessel/list", postData).success(function(response) {
+            var vessels = [];
+            for (var i = 0; i < response.data.vessel.length; i ++) {
+                vessels.push(new Vessel(response.data.vessel[i]));
+            }
+            var currentPage = response.data.currentPage;
+            var totalNumberOfPages = response.data.totalNumberOfPages;
+            var vesselListPage = new VesselListPage(vessels, currentPage, totalNumberOfPages);
+            deferred.resolve(vesselListPage);
+        });
+
+        return deferred.promise;        
     };
 
     var updateVessel = function(data){
@@ -31,7 +45,7 @@ angular.module('unionvmsWeb')
 
     var getVesselHistoryListByVesselId = function(vesselId, maxNbr) {
         if(!maxNbr) {
-return $http.get(baseUrl + "/vessel-rest/history/vessel?vesselId="+vesselId);
+            return $http.get(baseUrl + "/vessel-rest/history/vessel?vesselId="+vesselId);
         } else {
             return $http.get(baseUrl + "/vessel-rest/history/vessel?vesselId="+vesselId+"&maxNbr="+maxNbr);
         }

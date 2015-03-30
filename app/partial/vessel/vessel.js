@@ -34,23 +34,23 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         }
     };
 
-    var onVesselSuccess = function(response){
-        if( (!response.data.data.vessel) || response.data.data.vessel.length === 0 ){
+    var onVesselSuccess = function(vesselListPage){
+        if(vesselListPage.vessels.length === 0 ){
             $scope.error = "No vessels could be retrieved at this time.";
             console.log("No vessels in database?");
         } else {
             $scope.error = "";
             if(!$scope.vessels){
-                $scope.vessels = response.data.data.vessel;
-                $scope.totalNumberOfPages = response.data.data.totalNumberOfPages;
+                $scope.vessels = vesselListPage.vessels;
+                $scope.totalNumberOfPages = vesselListPage.totalNumberOfPages;
             } else {
-               for (var i = 0; i < response.data.data.vessel.length; i++)
+               for (var i = 0; i < vesselListPage.vessels.length; i++)
                {
-                   $scope.vessels.push(response.data.data.vessel[i]);
+                   $scope.vessels.push(vesselListPage.vessels[i]);
                }
             }
             if ($scope.totalNumberOfPages === ""){
-                $scope.totalNumberOfPages = response.data.data.totalNumberOfPages;
+                $scope.totalNumberOfPages = vesselListPage.totalNumberOfPages;
             }
          }
     };
