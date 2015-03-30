@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, vessel, $route, uvmsAdvancedSearch, uvmsValidation, savedsearches, $window ){
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, vessel, $route, uvmsAdvancedSearch, uvmsValidation, savedsearches, $window,$modal ){
 
     //Load list with vessels when entering page
     $scope.getInitialVessels = function(){
@@ -34,40 +34,31 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         }
     };
 
-
     var onVesselSuccess = function(response){
-        if( (!response.data.data.vessel) || response.data.data.vessel.length === 0 )
-        {
+        if( (!response.data.data.vessel) || response.data.data.vessel.length === 0 ){
             $scope.error = "No vessels could be retrieved at this time.";
             console.log("No vessels in database?");
-        }
-        else{
-            if(!$scope.vessels)
-            {
+        } else {
+            $scope.error = "";
+            if(!$scope.vessels){
                 $scope.vessels = response.data.data.vessel;
                 $scope.totalNumberOfPages = response.data.data.totalNumberOfPages;
-            }
-            else
-            {
+            } else {
                for (var i = 0; i < response.data.data.vessel.length; i++)
                {
                    $scope.vessels.push(response.data.data.vessel[i]);
                }
             }
-
-            if ($scope.totalNumberOfPages === "")
-            {
+            if ($scope.totalNumberOfPages === ""){
                 $scope.totalNumberOfPages = response.data.data.totalNumberOfPages;
             }
          }
     };
 
     var onError = function(response){
-
        $scope.error = "We are sorry... Something took a wrong turn. To err is human but to arr is pirate!!";
         console.log("We are sorry... To err is human but to arr is pirate!!");
     };
-
 
     $scope.vesselGroups = [];
     var onVesselGroupListSuccess = function(response){
@@ -80,31 +71,75 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
             $scope.vesselGroups = response.data.data;
         }
     };
+
     var onVesselGroupListError = function(response){
        $scope.error = "We are sorry... Something took a wrong turn. To err is human but to arr is pirate!!";
         console.log("We are sorry... To err is human but to arr is pirate!!");
     };
 
-
     $scope.checkAll = function(){
         if($scope.selectedAll)
         {
             $scope.selectedAll = false;
-        }
-        else
-        {
+            delete $scope.selectedVessels;
+            angular.forEach($scope.vessels, function(item) {
+                item.Selected = $scope.selectedAll;
+            });
+        } else {
             $scope.selectedAll = true;
+            $scope.selectedVessels = [];
+            angular.forEach($scope.vessels, function(item) {
+                item.Selected = $scope.selectedAll;
+                //$scope.searchObj.selectedVessels.push(item.vesselId);
+               // $scope.searchObj.selectedVessels.push({"key": item.vesselId.type, "value": item.vesselId.value});
+                $scope.selectedVessels.push(item.vesselId.value);
+            });
         }
+    };
+
+    $scope.checkedVessel = function(item){
+        $scope.selectedVessels = [];
+
+        item.Selected = item.Selected === true ? false : true;
+
         angular.forEach($scope.vessels, function(item) {
-            item.Selected = $scope.selectedAll;
+            if(item.Selected){
+               // $scope.searchObj.selectedVessels.push({"key": item.vesselId.type, "value": item.vesselId.value});
+                $scope.selectedVessels.push(item.vesselId.value);
+            }
         });
     };
+
+    $scope.openSelectedSaveGroupModal = function() {
+        var modalInstance = $modal.open({
+            templateUrl: 'directive/advancedSearch/saveVesselGroupModal/saveVesselGroupModal.html',
+            controller: 'SaveVesselGroupModalInstanceCtrl',
+            windowClass: "saveVesselGroupModal",
+            size: "small",
+            resolve: {
+                searchObj: function () {
+                    return $scope.selectedVessels;
+                },
+                vesselGroups: function () {
+                    return $scope.vesselGroups;
+                },
+                advancedSearchClicked: function () {
+                    return false;
+                }
+            }
+        });
+        modalInstance.result.then(function () {
+            //Get updated list of vessel groups
+            $scope.getVesselGroupsForUser();
+        }, function () {
+            //Nothing on cancel
+        });
+    };
+
 
     $scope.sortType = 'state';
     $scope.sortReverse = false;
     $scope.sortFilter = '';
-
-
     $scope.advancesearch = { active: false };
     $scope.simpleSearch = {enable:false};
     $scope.vesselSearchContainerVisible = { active: true };
@@ -288,8 +323,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         $scope.newVesselObj.active = $scope.newVesselObj.active === true ? false : true;
     };
 
-
-
     // DROPDOWNS DUMMIES - Needs to have some sort of connection to database... and needs to be refatoried when settingsfile is correct or present.
     $scope.vesselCountry = "Country";
     $scope.vesselActivity = "Activity";
@@ -308,9 +341,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
     $scope.countrySelected = function(item){
         if(item === undefined){
             $scope.vesselCountry = "Country";
-        }
-        else
-        {
+        } else {
             $scope.vesselCountry = item.name;
             $scope.newVesselObj.countryCode = item.name;
         }
@@ -319,9 +350,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
     $scope.activitySelected = function(item){
         if(item === undefined){
             $scope.vesselActivity = "Activity";
-        }
-        else
-        {
+        } else {
             $scope.vesselActivity = item.name;
             $scope.newVesselObj.vesselType = item.name;
         }
@@ -330,9 +359,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
     $scope.ircSelected = function(item){
         if(item === undefined){
             $scope.vesselHasIrc = "No";
-        }
-        else
-        {
+        } else {
             $scope.vesselHasIrc = item.name;
             $scope.newVesselObj.hasIrcs = item.code;
         }
@@ -341,21 +368,16 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
     $scope.licenseSelected = function(item){
         if(item === undefined){
             $scope.vesselHasLicense = "No";
-        }
-        else
-        {
+        } else {
             $scope.vesselHasLicense = item.name;
             $scope.newVesselObj.hasLicense = item.code;
         }
     };
 
-
     $scope.licenseTypeSelected = function(item){
         if(item === undefined){
             $scope.vesselLicenseType = "Choose license type";
-        }
-        else
-        {
+        } else {
             $scope.vesselLicenseType = item.name;
            // $scope.newVesselObj.licenseTypeSelected = item.name;
         }
@@ -364,9 +386,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
     $scope.overallSelected = function(item){
         if(item === undefined){
             $scope.vesselOverall = "LOA";
-        }
-        else
-        {
+        } else {
             $scope.vesselOverall = item.name;
         }
     };
@@ -374,9 +394,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
     $scope.unitOfMessureSelected = function(item){
         if(item === undefined){
             $scope.vesselUnitOfMessure= "London";
-        }
-        else
-        {
+        } else {
             $scope.vesselUnitOfMessure = item.name;
         }
     };
@@ -384,9 +402,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
     $scope.effectSelected = function(item){
         if(item === undefined){
             $scope.vesselEffect= "Effect";
-        }
-        else
-        {
+        } else {
             $scope.vesselEffect = item.name;
         }
     };
@@ -394,15 +410,11 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
     //########### PERFORM SEARCH ###########
     $scope.wildCardSearch = "";
 
-    $scope.searchVessels = function(){
+    $scope.searchVessels = function(dynamic){
         //If something in searchtextbox perform a wildcardseach
-        if($scope.wildCardSearch !== "")
-        {
+        if($scope.wildCardSearch !== "") {
             //call for search method with wildcard and re-populate the vessellist
-            //uvmsAdvancedSearch.performWildcardSearch($scope.wildCardSearch);
-            //$window.alert($scope.wildCardSearch);
-            if (uvmsValidation.lettersAndDigits($scope.wildCardSearch))
-            {
+            if (uvmsValidation.lettersAndDigits($scope.wildCardSearch)) {
                 $scope.criteria = [
                     {
                         "value": $scope.wildCardSearch + "*",
@@ -417,42 +429,35 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
                         "key": "CFR"
                     }
                 ];
-
                 $scope.isDynamic = "false";
-
                 delete $scope.vessels;
                 vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria, $scope.isDynamic)
                     .then(onVesselSuccess, onError);
             }
-        }
-        else
-        { /*$scope.criteria = [
-            {
-                "key": "NAME",
-                "value": "Kalles"
-
-            } ];*/
+        } else {
             delete $scope.vessels;
-           // $scope.criteria = $scope.searchObj;
             $scope.criteria = [];
-            for (var o in $scope.searchObj)
-            {
-                if($scope.searchObj[o] !== "")
-                {
-                    $scope.criteria.push({"key": o, "value":$scope.searchObj[o] });
+            if(dynamic) {
+                $scope.searchObj = uvmsAdvancedSearch.getAdvSearchObj();
+                for (var i in $scope.searchObj) {
+                    if ($scope.searchObj[i] !== "") {
+                        $scope.criteria.push({"key": i, "value": $scope.searchObj[i]});
+                    }
                 }
+                $scope.isDynamic = "true";
+
+            } else {
+                $scope.criteria = $scope.searchObj;
+                $scope.isDynamic = "false";
             }
-            $scope.isDynamic = "true";
             vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria, $scope.isDynamic)
                 .then(onVesselSuccess, onError);
         }
     };
 
-
     //########### ADVANCEDSEARCH ###########
     var resetSearch = function(){
         $scope.wildCardSearch = "";
-
         uvmsAdvancedSearch.cleanAdvancedSearchJsonObj();
         $scope.searchActiveSelected();
         $scope.searchAddCFR();
@@ -518,12 +523,17 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
             });
         } else {
             console.log("TODO: STATIC SEARCH");
+
+            $scope.searchObj = item.searchFields;
         }
         //Perform the search
-        $scope.searchVessels();
+       // console.log($scope.searchObj);
+       // console.log(uvmsAdvancedSearch.getAdvSearchObj());
+        $scope.searchVessels(item.dynamic);
     };
 
-    $scope.searchObj  = [];//uvmsAdvancedSearch.getAdvSearchObj();
+    $scope.searchObj  = [];
+
     //Watch for changes to the searchObj
     $scope.$watch(function () { return uvmsAdvancedSearch.getAdvSearchObj();}, function (newVal, oldVal) {
         if (typeof newVal !== 'undefined') {
@@ -551,8 +561,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         }
     };
 
-
-
     $scope.searchActiveSelected = function(item){
         if(item === undefined){
             $scope.searchActive = "Active";
@@ -572,7 +580,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
             uvmsAdvancedSearch.addLicenseType(item.code);
         }
     };
-
 
     $scope.searchAddCFR = function(data){
         uvmsAdvancedSearch.addCFR(data);
@@ -598,7 +605,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         uvmsAdvancedSearch.addMMSI(data);
     };
 
-    /**/
     $scope.datePicker = (function () {
         var method = {};
         method.instances = [];
@@ -606,7 +612,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         method.open = function ($event, instance) {
             $event.preventDefault();
             $event.stopPropagation();
-
             method.instances[instance] = true;
         };
 
@@ -617,7 +622,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
 
         var formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
         method.format = formats[4];
-
         return method;
     }());
 
@@ -628,9 +632,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
     $scope.vesselEffectTypes =[{'name':'hp','code':'133'},{'name':'kW','code':'99'}];
     $scope.terminalsatellitetypes =[{'name':'Inmarsat-B','code':'133'},{'name':'Inmarsat-C','code':'998'}];
     $scope.terminaloceanstypes =[{'name':'Skagerack','code':'3'},{'name':'Kattegatt','code':'99'},{'name':'Östersjön','code':'929'}];
-
-
-
     $scope.vesselCountries =[{'name':'SWE','code':'SWE'},{'name':'DNK','code':'DNK'},{'name':'NOR','code':'NOR'}];
     $scope.vesselActivitytTypes =[{'name':'Fishing Vessel','code':'Fishing Vessel'},{'name':'Pilot Vessel','code':'Pilot Vessel'},{'name':'Trawling Vessel','code':'Trawling Vessel'}];
     $scope.vesselHasIrcTypes =[{'name':'Yes','code':'true'},{'name':'No','code':'false'}];

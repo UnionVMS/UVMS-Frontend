@@ -63,7 +63,7 @@
 
                     <!-- Search button -->
                     <div class="col-md-2" ng-show="!advancesearch.active">
-                        <button type="button" class="btn btn-default btn-lg searchbutton" ng-click="searchVessels()">
+                        <button type="button" class="btn btn-default btn-lg searchbutton" ng-click="searchVessels(true)">
                             <span class="fa fa-search" aria-hidden="true"></span>
                         </button>
                     </div>
@@ -80,7 +80,7 @@
                 <div class="col-md-12 row">
                     <!-- Search button -->
                     <div class="col-md-2 nopaddingleft" ng-show="advancesearch.active">
-                        <button type="button" class="btn btn-default btn-lg searchbutton" ng-click="searchVessels()">
+                        <button type="button" class="btn btn-default btn-lg searchbutton" ng-click="searchVessels(true)">
                             <span class="fa fa-search" aria-hidden="true"></span>
                         </button>
                     </div>
@@ -100,13 +100,13 @@
                 <div class="dropdown">
                     <button class="btn btn-default dropdown-toggle" type="button" id="vesselDropdownn"
                             data-toggle="dropdown" aria-expanded="true">
-                        <div class="vesseldropdowntext">All</div>
+                        <div class="vesseldropdowntext">Edit selection</div>
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Vessels</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="openSelectedSaveGroupModal()" href="">Save as Group</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="">View on map</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="">Export selection</a></li>
                     </ul>
                 </div>
                 <!-- add new button -->
@@ -184,7 +184,7 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="item in vessels | orderBy:sortType:sortReverse | filter:searchFilter">
-                        <td><input type="checkbox" ng-model="item.Selected"/></td>
+                        <td><input type="checkbox" ng-model="item.Selected" ng-click="checkedVessel(item)"/></td>
                         <td>{{item.countryCode}}</td>
                         <td>{{item.externalMarking}}</td>
                         <td>{{item.name}}</td>

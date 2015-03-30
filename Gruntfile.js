@@ -93,6 +93,47 @@ module.exports = function (grunt) {
         dest: 'temp/templates.js'
       }
     },
+    replace: {
+      local: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('environment/local.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flattern: true,
+          src: ['environment/restConstants.js'],
+          dest: 'app/service/common/'
+        }]
+      },
+      dev: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('environment/dev.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flattern: true,
+          src: ['environment/restConstants.js'],
+          dest: 'app/service/common/'
+        }]
+      },
+      test: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('environment/test.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flattern: true,
+          src: ['environment/restConstants.js'],
+          dest: 'app/service/common/'
+        }]
+      }
+    },
     copy: {
       main: {
         files: [
@@ -126,13 +167,6 @@ module.exports = function (grunt) {
                 expand:true,
                 src: ['assets/**/*'], dest: 'dist/'
             }
-           // {src: ['directive/**/*'], dest: 'dist/',cwd: 'app/',expand:true},
-           // {src: ['partial/**/*'], dest: 'dist/',cwd: 'app/',expand:true},
-           // {src: ['service/**/*'], dest: 'dist/',cwd: 'app/',expand:true}
-
-          //{src: ['bower_components/angular-ui-utils/ui-utils-ieshiv.min.js'], dest: 'dist/'},
-          //{src: ['bower_components/select2/*.png','bower_components/select2/*.gif'], dest:'dist/css/',flatten:true,expand:true},
-          //{src: ['bower_components/angular-mocks/angular-mocks.js'], dest: 'dist/'}
         ]
       }
     },
@@ -198,58 +232,27 @@ module.exports = function (grunt) {
         }
       }
     },
-    //Imagemin has issues on Windows.
-    //To enable imagemin:
-    // - "npm install grunt-contrib-imagemin"
-    // - Comment in this section
-    // - Add the "imagemin" task after the "htmlmin" task in the build task alias
-    // imagemin: {
-    //   main:{
-    //     files: [{
-    //       expand: true, cwd:'dist/',
-    //       src:['**/{*.png,*.jpg}'],
-    //       dest: 'dist/'
-    //     }]
-    //   }
-    // },
-
-
-      compress: {
-          /*main: {
-              options: {
-                  archive: 'dist/unionvms-web.zip'
-              },
-              files: [
-                  {src: ['**'], dest: '/'} // includes files in dist
-              ]
-          },*/
-          dist: {
-              options: {
-                  archive: 'dist/unionvms-web.zip'
-              },
-
-              files: [
-                  {
-                      expand: true,
-                      cwd: 'dist/',
-                      src: ['**/*'],
-                      dest: '/'}
-              ]
-          }
+    compress: {
+      dist: {
+        options: {
+          archive: 'dist/unionvms-web.zip'
+        },
+        files: [{
+          expand: true,
+          cwd: 'dist/',
+          src: ['**/*'],
+          dest: '/'}]
       }
-    //compress: {
-	//	dist: {
-	//		options: {
-	//			archive: 'dist/unionvms-web.zip'
-	//		},
-    //        files: [
-    //            {expand: true, cwd: 'dist/', src: ['**/*'], dest: '/'} // includes files in dist
-    //        ]
-    //    }
-    //}
+    }
   });
 
-  grunt.registerTask('build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy','htmlmin','compress:dist','clean:after']);//,'clean:after'
+  grunt.registerTask('sub-build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy','htmlmin','compress:dist','clean:after']);//,'clean:after'
+
+  grunt.registerTask('build-local', ['replace:local', 'sub-build']);
+  grunt.registerTask('build-dev', ['replace:dev','sub-build']);
+  grunt.registerTask('build-test', ['replace:test','sub-build']);
+
+  grunt.registerTask('default',['build-dev']);
   grunt.registerTask('serve', ['dom_munger:read','jshint','connect', 'watch']);
 
     grunt.event.on('watch', function(action, filepath) {

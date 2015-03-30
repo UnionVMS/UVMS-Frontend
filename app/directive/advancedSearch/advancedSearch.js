@@ -19,12 +19,15 @@ angular.module('unionvmsWeb')
 			  windowClass : "saveVesselGroupModal",
 			  size: "small",
 			  resolve: {
-				advancedSearch: function () {
+                  searchObj: function () {
 				  return $scope.searchObj;
 				},
 				vesselGroups: function(){
 					return $scope.vesselGroups;
-				}
+				},
+                  advancedSearchClicked: function(){
+                    return true;
+                }
 			  }
 			});
 

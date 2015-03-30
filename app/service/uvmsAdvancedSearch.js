@@ -1,29 +1,25 @@
 (function() {
     var uvmsAdvancedSearch = function(uvmsValidation) {
 
-        var advanceSearchJsonObj = {}; /*{};
-            /*"IRCS":"",
-            "CFR":"",
-            "MMSI":"",
-            "HOMEPORT":"",
-            "TYPE":"",
-            "ACTIVE":"",
-            "LICENSE":""*/
-
+        var advanceSearchJsonObj = {};
 
         var getAdvSearchObj = function(){
             return advanceSearchJsonObj;
         };
 
         var addFlagState = function(data){
-            if(uvmsValidation.lettersOnly(data)){
+            if(data && uvmsValidation.lettersOnly(data)){
                 advanceSearchJsonObj.FLAG_STATE = data;
+            } else{
+                delete advanceSearchJsonObj.FLAG_STATE;
             }
         };
 
         var addName= function(data){
-            if(uvmsValidation.lettersOnly(data)){
+            if(data && uvmsValidation.lettersOnly(data)){
                 advanceSearchJsonObj.NAME = data;
+            } else {
+                delete advanceSearchJsonObj.NAME;
             }
         };
 
@@ -43,55 +39,71 @@
         };
 
         var addCFR = function(data){
-            if(uvmsValidation.lettersAndDigits(data)){
+            if(data && uvmsValidation.lettersAndDigits(data)) {
                 advanceSearchJsonObj.CFR = data;
+            } else {
+                delete advanceSearchJsonObj.CFR;
             }
         };
 
         var addIRCS = function(data){
-            if(uvmsValidation.lettersAndDigits(data)){
+            if(data && uvmsValidation.lettersAndDigits(data)){
                 advanceSearchJsonObj.IRCS = data;
+            } else{
+                delete advanceSearchJsonObj.IRCS;
             }
-            if(data === ""){
-                advanceSearchJsonObj.IRCS = "";
-            }
+
         };
 
         var addType = function(data){
-            if(uvmsValidation.lettersOnly(data)){
+            if(data && uvmsValidation.lettersOnly(data)){
                 advanceSearchJsonObj.TYPE = data;
+            } else{
+                delete advanceSearchJsonObj.TYPE;
             }
         };
 
         var  addActive = function(data){
-            if(uvmsValidation.lettersOnly(data)){
+            if(data && uvmsValidation.lettersOnly(data)){
                 advanceSearchJsonObj.ACTIVE = data;
+            } else {
+                delete advanceSearchJsonObj.ACTIVE;
             }
         };
 
-        var  addLicenseType = function(data){
-            if(uvmsValidation.lettersOnly(data)){
+        var  addLicenseType = function(data) {
+            if(data && uvmsValidation.lettersOnly(data)){
                 advanceSearchJsonObj.LICENSE = data;
+            } else{
+                delete advanceSearchJsonObj.LICENSE;
             }
         };
 
         var  addExternalMarking = function(data){
-            //TODO: Add validation?
-            advanceSearchJsonObj.EXTERNAL_MARKING = data;
+            if(data){
+                advanceSearchJsonObj.EXTERNAL_MARKING = data;
+            } else {
+                delete advanceSearchJsonObj.EXTERNAL_MARKING;
+            }
         };
 
         var  addHomePort = function(data){
             //TODO: Add validation?
-            advanceSearchJsonObj.HOMEPORT = data;
+            if (data){
+                advanceSearchJsonObj.HOMEPORT = data;
+            } else{
+                delete advanceSearchJsonObj.HOMEPORT;
+            }
         };
 
         var  addMMSI = function(data){
             //TODO: Add validation?
-            if(uvmsValidation.lettersAndDigits(data)){
+            if(data && uvmsValidation.lettersAndDigits(data)){
                 advanceSearchJsonObj.MMSI = data;
+            } else {
+                delete advanceSearchJsonObj.MMSI;
             }
         };
-
 
         var performWildcardSearch = function(data){
             if (uvmsValidation.lettersAndDigits()){
