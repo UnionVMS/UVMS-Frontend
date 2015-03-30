@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb')
-    .controller('newVesselCtrl', function ($scope, $http, vessel, $route, uvmsValidation) {
+    .controller('newVesselCtrl', function ($scope, $http, vesselRestService, $route, validationService) {
 
         $scope.removeNewMobileSystem = function (item, idx) {
             if (idx >= 0){
@@ -79,28 +79,6 @@ angular.module('unionvmsWeb')
             "source": "LOCAL",
             "vesselType": null
 
- /*    /*     "active": true,
-            "source":null ,
-            "name": null,
-            "countryCode": "LOCAL",
-            "vesselType": null,
-            "hasIrcs": null,
-            "ircs": null,
-            "externalMarking": null,
-            "cfr": null,
-            "imo": null,
-            "mmsiNo": null,
-            "billing": null,
-            "hasLicense": null,
-            "homePort": null,
-            "lengthOverAll": null,
-            "lengthBetweenPerpendiculars": null,
-            "grossTonnage": null,
-            "otherGrossTonnage": null,
-            "safetyGrossTonnage": null,
-            "powerMain": null,
-            "powerAux": null
-  */
         };
 
 
@@ -117,7 +95,7 @@ angular.module('unionvmsWeb')
                     $('.createResponseMessage').fadeOut();
                 }, 4000);
                 //Create new Vessel and take care of the response(eg. the promise) when the create is done.
-                var createVesselResp = vessel.createNewVessel($scope.newVesselObj)
+                var createVesselResp = vesselRestService.createNewVessel($scope.newVesselObj)
                     .then(createVesselSuccess, createVesselError);
             }
         };
@@ -171,15 +149,12 @@ angular.module('unionvmsWeb')
         };
 
 
-
-
-
     })
     .directive('newvessel', function () {
         return {
             restrict: 'E',
             replace: true,
-            templateUrl: 'directive/newVessel/newVessel.html',
+            templateUrl: 'directive/vessel/newVessel/newVessel.html',
             link: function (scope, element, attrs, fn) {
 
             }

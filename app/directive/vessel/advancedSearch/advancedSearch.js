@@ -3,7 +3,7 @@ angular.module('unionvmsWeb').directive('advancedSearch', function() {
 		restrict: 'E',
 		replace: true,
 		controller: 'AdvancedSearchCtrl',
-		templateUrl: 'directive/advancedSearch/advancedSearch.html',
+		templateUrl: 'directive/vessel/advancedSearch/advancedSearch.html',
 		link: function(scope, element, attrs, fn) {
 		}
 	};
@@ -14,7 +14,7 @@ angular.module('unionvmsWeb')
 
 		$scope.openSaveGroupModal = function(){
 			var modalInstance = $modal.open({
-			  templateUrl: 'directive/advancedSearch/saveVesselGroupModal/saveVesselGroupModal.html',
+			  templateUrl: '/saveVesselGroupModal/saveVesselGroupModal.html',
 			  controller: 'SaveVesselGroupModalInstanceCtrl',
 			  windowClass : "saveVesselGroupModal",
 			  size: "small",

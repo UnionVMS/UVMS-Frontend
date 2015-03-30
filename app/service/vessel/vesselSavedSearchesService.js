@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb')
-.factory('savedsearches', function($http, restConstants) {
+.factory('vesselSavedSearchesService', function($http, restConstants) {
     var baseUrl = "http://"+restConstants.host+":"+restConstants.port;
 
         var createSearchFieldsFromSearchObj = function(searchObj, dynamic){

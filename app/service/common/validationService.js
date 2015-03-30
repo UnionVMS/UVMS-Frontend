@@ -1,6 +1,6 @@
 (function(){
 
-    var uvmsValidation = function(){
+    var validationService = function(){
 
         var digitsOnly = function(data){
             return /^[0-9]*$/.test(data);
@@ -20,7 +20,7 @@
     };
 
     var module = angular.module('unionvmsWeb');
-    module.factory('uvmsValidation',uvmsValidation);
+    module.factory('validationService',validationService);
 
 }());
 

@@ -1,5 +1,5 @@
 (function() {
-    var uvmsAdvancedSearch = function(uvmsValidation) {
+    var vesselAdvancedSearchService = function(validationService) {
 
         var advanceSearchJsonObj = {};
 
@@ -8,7 +8,7 @@
         };
 
         var addFlagState = function(data){
-            if(data && uvmsValidation.lettersOnly(data)){
+            if(data && validationService.lettersOnly(data)){
                 advanceSearchJsonObj.FLAG_STATE = data;
             } else{
                 delete advanceSearchJsonObj.FLAG_STATE;
@@ -16,7 +16,7 @@
         };
 
         var addName= function(data){
-            if(data && uvmsValidation.lettersOnly(data)){
+            if(data && validationService.lettersOnly(data)){
                 advanceSearchJsonObj.NAME = data;
             } else {
                 delete advanceSearchJsonObj.NAME;
@@ -39,7 +39,7 @@
         };
 
         var addCFR = function(data){
-            if(data && uvmsValidation.lettersAndDigits(data)) {
+            if(data && validationService.lettersAndDigits(data)) {
                 advanceSearchJsonObj.CFR = data;
             } else {
                 delete advanceSearchJsonObj.CFR;
@@ -47,7 +47,7 @@
         };
 
         var addIRCS = function(data){
-            if(data && uvmsValidation.lettersAndDigits(data)){
+            if(data && validationService.lettersAndDigits(data)){
                 advanceSearchJsonObj.IRCS = data;
             } else{
                 delete advanceSearchJsonObj.IRCS;
@@ -56,7 +56,7 @@
         };
 
         var addType = function(data){
-            if(data && uvmsValidation.lettersOnly(data)){
+            if(data && validationService.lettersOnly(data)){
                 advanceSearchJsonObj.TYPE = data;
             } else{
                 delete advanceSearchJsonObj.TYPE;
@@ -64,7 +64,7 @@
         };
 
         var  addActive = function(data){
-            if(data && uvmsValidation.lettersOnly(data)){
+            if(data && validationService.lettersOnly(data)){
                 advanceSearchJsonObj.ACTIVE = data;
             } else {
                 delete advanceSearchJsonObj.ACTIVE;
@@ -72,7 +72,7 @@
         };
 
         var  addLicenseType = function(data) {
-            if(data && uvmsValidation.lettersOnly(data)){
+            if(data && validationService.lettersOnly(data)){
                 advanceSearchJsonObj.LICENSE = data;
             } else{
                 delete advanceSearchJsonObj.LICENSE;
@@ -98,7 +98,7 @@
 
         var  addMMSI = function(data){
             //TODO: Add validation?
-            if(data && uvmsValidation.lettersAndDigits(data)){
+            if(data && validationService.lettersAndDigits(data)){
                 advanceSearchJsonObj.MMSI = data;
             } else {
                 delete advanceSearchJsonObj.MMSI;
@@ -106,7 +106,7 @@
         };
 
         var performWildcardSearch = function(data){
-            if (uvmsValidation.lettersAndDigits()){
+            if (validationService.lettersAndDigits()){
                 //do search...
                 //take care of promise
 
@@ -137,7 +137,7 @@
     };
 
     var module = angular.module('unionvmsWeb');
-    module.factory('uvmsAdvancedSearch', uvmsAdvancedSearch);
+    module.factory('vesselAdvancedSearchService', vesselAdvancedSearchService);
 
 }());
 

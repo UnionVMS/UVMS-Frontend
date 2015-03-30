@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb')
-    .controller('getVesselCtrl', function($scope, $modal, vessel){
+    .controller('getVesselCtrl', function($scope, $modal, vesselRestService){
 
         $scope.addNewMobileTerminalToVessel = function () {
 
@@ -66,7 +66,7 @@ angular.module('unionvmsWeb')
                 $('.updateResponseMessage').fadeOut();
             }, 4000 );
             //Update Vessel and take care of the response(eg. the promise) when the update is done.
-            var updateResponse = vessel.updateVessel($scope.newVesselObj)
+            var updateResponse = vesselRestService.updateVessel($scope.newVesselObj)
                 .then(updateVesselSuccess, updateVesselError);
         };
 
@@ -85,17 +85,17 @@ angular.module('unionvmsWeb')
 
         $scope.onViewAllEvent = function() {
             $scope.enableViewAllEvent = false;
-            var response = vessel.getVesselHistoryListByVesselId($scope.newVesselObj.vesselId.value)
+            var response = vesselRestService.getVesselHistoryListByVesselId($scope.newVesselObj.vesselId.value)
                 .then(onVesselHistoryListSuccess, onVesselHistoryError);
         };
 
         $scope.getVesselHistory = function(vesselId) {
-            var response = vessel.getVesselHistoryListByVesselId(vesselId, 5)
+            var response = vesselRestService.getVesselHistoryListByVesselId(vesselId, 5)
                 .then(onVesselHistoryListSuccess, onVesselHistoryError);
         };
 
         $scope.onVesselHistoryClick = function(vesselHistoryId) {
-            var response = vessel.getVesselHistory(vesselHistoryId)
+            var response = vesselRestService.getVesselHistory(vesselHistoryId)
                 .then(onVesselHistorySuccess, onVesselHistoryError);
         };
 
@@ -118,7 +118,7 @@ angular.module('unionvmsWeb')
 
         var openVesselHistoryModal = function(){
             var modalInstance = $modal.open({
-              templateUrl: 'partial/vessel/vesselHistory/vesselHistoryModal/vesselHistoryModal.html',
+              templateUrl: '../../../../partial/vessel/vesselHistory/vesselHistoryModal/vesselHistoryModal.html',
               controller: 'VesselhistorymodalCtrl',
               //windowClass : "saveVesselGroupModal",
               size: "small",
@@ -127,7 +127,7 @@ angular.module('unionvmsWeb')
                     return $scope.currentVesselHistory;
                 }
               }
-            }); 
+            });
 
             modalInstance.result.then(function () {
             }, function () {
@@ -140,7 +140,7 @@ angular.module('unionvmsWeb')
 	return {
 		restrict: 'E',
 		replace: true,
-		templateUrl: 'directive/getVessel/getVessel.html',
+		templateUrl: 'directive/vessel/getVessel/getVessel.html',
 		link: function(scope, element, attrs, fn) {
 
 		}

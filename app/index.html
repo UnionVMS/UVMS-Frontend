@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
   <link href="app.less" type="text/css" rel="stylesheet/less">
-    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css' data-concat="false" data-remove="false">
 </head>
 <body>
 
@@ -35,18 +35,18 @@
   <script src="partial/header/header.js"></script>
   <script src="partial/today/today.js"></script>
   <script src="partial/vessel/vessel.js"></script>
-  <script src="service/vessel.js"></script>
-  <script src="service/savedsearches.js"></script>
+  <script src="service/vessel/vesselRestService.js"></script>
+  <script src="service/vessel/vesselSavedSearchesService.js"></script>
 
-  <script src="directive/newVessel/newVessel.js"></script>
-  <script src="directive/mobileTerminal/mobileTerminal.js"></script>
-  <script src="directive/communicationChannel/communicationChannel.js"></script>
-  <script src="directive/getVessel/getVessel.js"></script>
-  <script src="service/uvmsValidation.js"></script>
-  <script src="directive/vesselDetails/vesselDetails.js"></script>
-  <script src="directive/advancedSearch/advancedSearch.js"></script>
-  <script src="directive/advancedSearch/saveVesselGroupModal/saveVesselGroupModal.js"></script>
-  <script src="service/uvmsAdvancedSearch.js"></script>
+  <script src="directive/vessel/newVessel/newVessel.js"></script>
+  <script src="directive/communication/mobileTerminal/mobileTerminal.js"></script>
+  <script src="directive/communication/communicationChannel/communicationChannel.js"></script>
+  <script src="directive/vessel/getVessel/getVessel.js"></script>
+  <script src="service/common/validationService.js"></script>
+  <script src="directive/vessel/vesselDetails/vesselDetails.js"></script>
+  <script src="directive/vessel/advancedSearch/advancedSearch.js"></script>
+  <script src="directive/vessel/advancedSearch/saveVesselGroupModal/saveVesselGroupModal.js"></script>
+  <script src="service/vessel/vesselAdvancedSearchService.js"></script>
   <script src="partial/vessel/vesselHistory/vesselHistory.js"></script>
   <script src="partial/vessel/vesselHistory/vesselHistoryModal/vesselHistoryModal.js"></script>
   <script src="service/common/environment/restConstants.js"></script>

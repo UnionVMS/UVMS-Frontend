@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb')
-.factory('vessel', function($http, $log, restConstants){
+.factory('vesselRestService', function($http, $log, restConstants){
 
     var baseUrl = "http://"+restConstants.host + ":" + restConstants.port;
 

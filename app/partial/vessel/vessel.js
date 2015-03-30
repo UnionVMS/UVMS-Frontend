@@ -1,8 +1,8 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, vessel, $route, uvmsAdvancedSearch, uvmsValidation, savedsearches, $window,$modal ){
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, vesselRestService, $route, vesselAdvancedSearchService, validationService, vesselSavedSearchesService, $window,$modal ){
 
     //Load list with vessels when entering page
     $scope.getInitialVessels = function(){
-        var response = vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria, $scope.isDynamic)
+        var response = vesselRestService.getVesselList($scope.listSize, $scope.page, $scope.criteria, $scope.isDynamic)
             .then(onVesselSuccess, onError);
 
         $scope.getVesselGroupsForUser();
@@ -10,7 +10,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
 
     $scope.getVesselGroupsForUser = function(){
         //Load list of VesselGroups
-        savedsearches.getVesselGroupsForUser()
+        vesselSavedSearchesService.getVesselGroupsForUser()
         .then(onVesselGroupListSuccess, onVesselGroupListError);
     };
 
@@ -29,7 +29,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         if($scope.page < $scope.totalNumberOfPages )
         {
             $scope.page++;
-            vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria, $scope.isDynamic)
+            vesselRestService.getVesselList($scope.listSize, $scope.page, $scope.criteria, $scope.isDynamic)
                 .then(onVesselSuccess, onError);
         }
     };
@@ -112,7 +112,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
 
     $scope.openSelectedSaveGroupModal = function() {
         var modalInstance = $modal.open({
-            templateUrl: 'directive/advancedSearch/saveVesselGroupModal/saveVesselGroupModal.html',
+            templateUrl: '../../directive/vessel/advancedSearch/saveVesselGroupModal/saveVesselGroupModal.html',
             controller: 'SaveVesselGroupModalInstanceCtrl',
             windowClass: "saveVesselGroupModal",
             size: "small",
@@ -167,112 +167,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         else
         {
             //creating dummy for mobileterminals... Should be removed when there is support in backend for mobile terminals.
-            var mobileTerminals = [
-            {
-                "satelliteSystem":[
-                    {
-                        "name":'inmarsat-C',
-                        "code":'001'
-                    },
-                    {
-                        "name":'inmarsat-B',
-                        "code":'002'
-                    }
-                ],
-                "oceanRegions":[
-                    {
-                        "name":'AORE',
-                        "code":'001'
-                    },
-                    {
-                        "name":'EPOC',
-                        "code":'002'
-                    }
-                ],
-                'transeiverType':'sailor 6140',
-                'serialNo':'4TT097411A33',
-                'softvareVersion':'1.3-6',
-                'antenna':'Sailor 6403',
-                'satelliteNo':'423 654 852',
-                'answerBack':'42655744 SKRM',
-                'installedBy':'Svensson AB',
-                'installedOn':'2014-01-05',
-                'startedOn':'2014-05-01',
-                'uninstalledOn':'',
-                "communicationChannels": [
-                    {
-                        'number':'10689',
-                        'order':'1',
-                        'name':'VMS',
-                        'id':'104',
-                        'orderId':'2',
-                        'note':'EIK, VIZADA',
-                        'startDate':'2015-01-01',
-                        'endDate':'2015-05-01'
-                    }
-                ]
-            },
-            {
-                "satelliteSystem":[
-                    {
-                        "name":'inmarsat-A',
-                        "code":'001'
-                    }
-                ],
-                "oceanRegions":[
-                    {
-                        "name":'AORE',
-                        "code":'001'
-                    },
-                    {
-                        "name":'EPOC',
-                        "code":'002'
-                    }
-                ],
-                'transeiverType':'sailor 6140',
-                'serialNo':'5TT097411A33',
-                'softvareVersion':'1.3-6',
-                'antenna':'Sailor 6403',
-                'satelliteNo':'423 654 852',
-                'anserBack':'42655744 SKRM',
-                'installedBy':'Svensson AB',
-                'installedOn':'2014-01-05',
-                'startedOn':'2014-05-01',
-                'uninstalledOn':'',
-                "communicationChannels": [
-                    {
-                        'number':'1689',
-                        'order':'1',
-                        'name':'VMS',
-                        'id':'104',
-                        'orderId':'2',
-                        'note':'EIK, VIZADA',
-                        'startDate':'2015-01-01',
-                        'endDate':'2015-05-01'
-                    },
-                    {
-                        'number':'689',
-                        'order':'1',
-                        'name':'VMS',
-                        'id':'104',
-                        'orderId':'2',
-                        'note':'EIK, VIZADA',
-                        'startDate':'2015-01-01',
-                        'endDate':'2015-05-01'
-                    },
-                    {
-                        'number':'89',
-                        'order':'1',
-                        'name':'VMS',
-                        'id':'104',
-                        'orderId':'2',
-                        'note':'EIK, VIZADA',
-                        'startDate':'2015-01-01',
-                        'endDate':'2015-05-01'
-                    }
-                ]
-            }
-        ];
+            var mobileTerminals = [];
             item.mobileTerminals = mobileTerminals;
             $scope.newVesselObj = item;
         }
@@ -414,7 +309,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         //If something in searchtextbox perform a wildcardseach
         if($scope.wildCardSearch !== "") {
             //call for search method with wildcard and re-populate the vessellist
-            if (uvmsValidation.lettersAndDigits($scope.wildCardSearch)) {
+            if (validationService.lettersAndDigits($scope.wildCardSearch)) {
                 $scope.criteria = [
                     {
                         "value": $scope.wildCardSearch + "*",
@@ -431,14 +326,14 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
                 ];
                 $scope.isDynamic = "false";
                 delete $scope.vessels;
-                vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria, $scope.isDynamic)
+                vesselRestService.getVesselList($scope.listSize, $scope.page, $scope.criteria, $scope.isDynamic)
                     .then(onVesselSuccess, onError);
             }
         } else {
             delete $scope.vessels;
             $scope.criteria = [];
             if(dynamic) {
-                $scope.searchObj = uvmsAdvancedSearch.getAdvSearchObj();
+                $scope.searchObj = vesselAdvancedSearchService.getAdvSearchObj();
                 for (var i in $scope.searchObj) {
                     if ($scope.searchObj[i] !== "") {
                         $scope.criteria.push({"key": i, "value": $scope.searchObj[i]});
@@ -450,7 +345,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
                 $scope.criteria = $scope.searchObj;
                 $scope.isDynamic = "false";
             }
-            vessel.getVesselList($scope.listSize, $scope.page, $scope.criteria, $scope.isDynamic)
+            vesselRestService.getVesselList($scope.listSize, $scope.page, $scope.criteria, $scope.isDynamic)
                 .then(onVesselSuccess, onError);
         }
     };
@@ -458,7 +353,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
     //########### ADVANCEDSEARCH ###########
     var resetSearch = function(){
         $scope.wildCardSearch = "";
-        uvmsAdvancedSearch.cleanAdvancedSearchJsonObj();
+        vesselAdvancedSearchService.cleanAdvancedSearchJsonObj();
         $scope.searchActiveSelected();
         $scope.searchAddCFR();
         $scope.searchAddExternalMarking();
@@ -528,81 +423,81 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $http, v
         }
         //Perform the search
        // console.log($scope.searchObj);
-       // console.log(uvmsAdvancedSearch.getAdvSearchObj());
+       // console.log(vesselAdvancedSearchService.getAdvSearchObj());
         $scope.searchVessels(item.dynamic);
     };
 
     $scope.searchObj  = [];
 
     //Watch for changes to the searchObj
-    $scope.$watch(function () { return uvmsAdvancedSearch.getAdvSearchObj();}, function (newVal, oldVal) {
+    $scope.$watch(function () { return vesselAdvancedSearchService.getAdvSearchObj();}, function (newVal, oldVal) {
         if (typeof newVal !== 'undefined') {
-            $scope.searchObj  = uvmsAdvancedSearch.getAdvSearchObj();
+            $scope.searchObj  = vesselAdvancedSearchService.getAdvSearchObj();
         }
     });
 
     $scope.searchFlagStateSelected = function (item) {
         if (item === undefined) {
             $scope.searchFlagState = "Flag state";
-            uvmsAdvancedSearch.addFlagState("");
+            vesselAdvancedSearchService.addFlagState("");
         } else {
             $scope.searchFlagState = item.name;
-            uvmsAdvancedSearch.addFlagState(item.code);
+            vesselAdvancedSearchService.addFlagState(item.code);
         }
     };
 
     $scope.searchVesselTypeSelected = function(item){
         if(item === undefined){
             $scope.searchVesselType = "Type";
-            uvmsAdvancedSearch.addType("");
+            vesselAdvancedSearchService.addType("");
         } else {
             $scope.searchVesselType = item.name;
-            uvmsAdvancedSearch.addType(item.code);
+            vesselAdvancedSearchService.addType(item.code);
         }
     };
 
     $scope.searchActiveSelected = function(item){
         if(item === undefined){
             $scope.searchActive = "Active";
-            uvmsAdvancedSearch.addActive("");
+            vesselAdvancedSearchService.addActive("");
         } else {
             $scope.searchActive = item.name;
-            uvmsAdvancedSearch.addActive(item.code);
+            vesselAdvancedSearchService.addActive(item.code);
         }
     };
 
     $scope.searchLicenseTypeSelected = function(item){
         if(item === undefined){
             $scope.searchLicenseType = "License";
-            uvmsAdvancedSearch.addLicenseType("");
+            vesselAdvancedSearchService.addLicenseType("");
         } else {
             $scope.searchLicenseType = item.name;
-            uvmsAdvancedSearch.addLicenseType(item.code);
+            vesselAdvancedSearchService.addLicenseType(item.code);
         }
     };
 
     $scope.searchAddCFR = function(data){
-        uvmsAdvancedSearch.addCFR(data);
+        vesselAdvancedSearchService.addCFR(data);
     };
 
     $scope.searchAddIRCS = function(data){
-        uvmsAdvancedSearch.addIRCS(data);
+        vesselAdvancedSearchService.addIRCS(data);
     };
 
     $scope.searchAddName = function(data){
-        uvmsAdvancedSearch.addName(data);
+        vesselAdvancedSearchService.addName(data);
     };
 
     $scope.searchAddExternalMarking = function(data){
-        uvmsAdvancedSearch.addExternalMarking(data);
+        vesselAdvancedSearchService.addExternalMarking(data);
     };
 
     $scope.searchAddHomePort = function(data){
-        uvmsAdvancedSearch.addHomePort(data);
+        vesselAdvancedSearchService.addHomePort(data);
     };
 
     $scope.searchAddMMSI = function(data){
-        uvmsAdvancedSearch.addMMSI(data);
+        vesselAdvancedSearchService.addMMSI(data);
     };
 
     $scope.datePicker = (function () {

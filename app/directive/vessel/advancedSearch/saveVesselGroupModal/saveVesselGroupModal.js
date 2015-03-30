@@ -2,7 +2,7 @@
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $modal service used above.
 
-angular.module('unionvmsWeb').controller('SaveVesselGroupModalInstanceCtrl', function ($scope, $modalInstance, savedsearches, searchObj, vesselGroups, advancedSearchClicked) {
+angular.module('unionvmsWeb').controller('SaveVesselGroupModalInstanceCtrl', function ($scope, $modalInstance, vesselSavedSearchesService, searchObj, vesselGroups, advancedSearchClicked) {
 
   $scope.existingGroups = vesselGroups;
   $scope.saveData = {
@@ -42,12 +42,12 @@ angular.module('unionvmsWeb').controller('SaveVesselGroupModalInstanceCtrl', fun
       }
     //Update existing group
     if(angular.isDefined($scope.saveData.existingGroup)){
-      savedsearches.updateVesselGroup($scope.saveData.existingGroup, searchObj, isDynamic)
+        vesselSavedSearchesService.updateVesselGroup($scope.saveData.existingGroup, searchObj, isDynamic)
         .then(onSaveSuccess, onSaveError);
     }
     //Save new group
     else{
-      savedsearches.createNewVesselGroup($scope.saveData.name, searchObj, isDynamic)
+        vesselSavedSearchesService.createNewVesselGroup($scope.saveData.name, searchObj, isDynamic)
         .then(onSaveSuccess, onSaveError);
     }
   };

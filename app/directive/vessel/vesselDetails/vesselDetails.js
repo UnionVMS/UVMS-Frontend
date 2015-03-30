@@ -7,7 +7,7 @@ angular.module('unionvmsWeb')
 		restrict: 'E',
 		replace: false,
         //scope: true,
-		templateUrl: 'directive/vesselDetails/vesselDetails.html',
+		templateUrl: 'directive/vessel/vesselDetails/vesselDetails.html',
 		link: function(scope, element, attrs, fn) {
 
 

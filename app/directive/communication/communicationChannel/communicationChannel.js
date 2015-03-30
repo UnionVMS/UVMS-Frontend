@@ -46,7 +46,7 @@ angular.module('unionvmsWeb')
 		scope: {
             communicationchannel:'='
 		},
-		templateUrl: 'directive/communicationChannel/communicationChannel.html',
+		templateUrl: 'directive/communication/communicationChannel/communicationChannel.html',
 		link: function(scope, element, attrs, fn) {
 
 
