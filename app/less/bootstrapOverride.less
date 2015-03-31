@@ -1,0 +1,71 @@
+/*
+ * Override the default Bootstrap styling here.
+ *
+ */
+
+/*Lists*/
+ul, li {
+    list-style: none;
+}
+
+li a{
+    cursor: pointer;
+}
+
+/*Modals*/
+.modal {
+    //Make the modal fade in instead of slide in from the top
+    &.fade {
+        .transition(opacity .3s);
+    }
+    &.fade .modal-dialog {
+        .translate(0,0);
+    }
+}
+
+.modal-backdrop{
+    background-color: @modalBackdropColor;
+}
+.modal-dialog{
+    .modal-content{
+        padding:20px 30px;
+        box-shadow:none;
+        border:none;
+
+        .modal-header{
+            padding: 20px 0px;
+            border-bottom:none;
+            .modal-title{
+                text-transform: uppercase;
+                font-weight: bold;
+            }
+            .close{
+                color:@buttoncolor;
+            }
+        }
+        .modal-body{
+            padding: 0px;
+        }
+        .modal-footer{
+            margin-top: 15px;
+            padding: 0px;
+            border-top:none;
+        }
+    }
+}
+
+/*Buttons*/
+.btn-default{
+    background-color: @btnDefaultColor;
+    color: #ffffff;
+    border: solid 1px @btnDefaultColor;
+
+    &:hover{
+        background-color: @btnDefaultHoverColor;
+        color: #ffffff;
+        border-color: @btnDefaultHoverColor;        
+    }
+}
+.btn-lg{
+    border-radius:3px;
+}

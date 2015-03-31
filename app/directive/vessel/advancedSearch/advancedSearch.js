@@ -14,7 +14,7 @@ angular.module('unionvmsWeb')
 
 		$scope.openSaveGroupModal = function(){
 			var modalInstance = $modal.open({
-			  templateUrl: '/saveVesselGroupModal/saveVesselGroupModal.html',
+			  templateUrl: 'partial/vessel/saveVesselGroupModal/saveVesselGroupModal.html',
 			  controller: 'SaveVesselGroupModalInstanceCtrl',
 			  windowClass : "saveVesselGroupModal",
 			  size: "small",

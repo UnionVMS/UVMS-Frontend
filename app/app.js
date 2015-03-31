@@ -3,7 +3,8 @@ angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','
 angular.module('unionvmsWeb').config(function($routeProvider) {
     $routeProvider
         .when('/today',{templateUrl:'partial/today/today.html'})
-        .when('/vessel', {templateUrl: 'partial/vessel/vessel.html'});
+        .when('/vessel', {templateUrl: 'partial/vessel/vessel.html'})
+        .when('/communication', {templateUrl: 'partial/mobileTerminal/mobileTerminal.html'});
 
     /* Add New Routes Above */
     $routeProvider.otherwise({redirectTo:'/today'});

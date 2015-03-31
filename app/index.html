@@ -48,52 +48,29 @@
   <script src="service/common/validationService.js"></script>
   <script src="directive/vessel/vesselDetails/vesselDetails.js"></script>
   <script src="directive/vessel/advancedSearch/advancedSearch.js"></script>
-  <script src="directive/vessel/advancedSearch/saveVesselGroupModal/saveVesselGroupModal.js"></script>
+  <script src="partial/vessel/saveVesselGroupModal/saveVesselGroupModal.js"></script>
   <script src="service/vessel/vesselAdvancedSearchService.js"></script>
   <script src="partial/vessel/vesselHistory/vesselHistory.js"></script>
   <script src="partial/vessel/vesselHistory/vesselHistoryModal/vesselHistoryModal.js"></script>
   <script src="service/common/environment/restConstants.js"></script>
+  <script src="partial/mobileTerminal/mobileTerminal.js"></script>
+  <script src="partial/header/headerMenu/headerMenu.js"></script>
   <!-- Add New Component JS Above -->
 
-  <header>
-      <div class="headercontainer">
-          <div class="pageinfo">
-              <div class="pageinfocontainer">
-                 <div class="pagename">
-                    <img class="uvmslogo" src="assets/images/logo.png">
-                     <div class="headerwarnings">
-                         <div class="glyphicon glyphicon-bell">
-                             <div class="messagenumbercontainer">
-                                <div class="messagenumber">5</div>
-                             </div>
-                         </div>
-                     </div>
-                     <div class="headermessages">
-                         <div class="glyphicon glyphicon-envelope"></div>
-                     </div>
-                </div>
-              </div>
-          </div>
-          <div class="header">
-            <div ng-include="'partial/header/header.html'"></div>
-          </div>
-      </div>
-  </header>
-  <div>
-      <div id="content">
-          <div class="rowv">
-        <div ng-view>
-        </div>
-      </div>
-    </div>
-  </div>
-<footer>
-    <div class="content">
-        <div class="col-md-12 row">
-            <p>&#169; 2015 UnionVMS</p>
+    
+    <div ng-include="'partial/header/header.html'"></div>
+    <div id="content" class="container-fluid">
+        <div class="row">
+            <div ng-view></div>
         </div>
     </div>
-</footer>
+    <footer>
+        <div class="content">
+            <div class="col-md-12 row">
+                <p>&#169; 2015 UnionVMS</p>
+            </div>
+        </div>
+    </footer>
 
 </body>
 </html>

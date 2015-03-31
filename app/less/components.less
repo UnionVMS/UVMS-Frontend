@@ -1,0 +1,66 @@
+/*
+ * Components that are reused in different places in the application
+ *
+ */
+
+/*Dropdown button*/
+.dropdown{
+    color:#ffffff;
+    button, button:hover{
+        /*background-color: #008e61;*/
+        text-align: left;
+        width: 100%;
+        color:#ffffff;
+    }
+    .caret{
+        position: relative;
+        bottom: 10px;
+        float:right;
+    }
+    .btn.btn-default.dropdown-toggle{
+        background-color: white;
+        height: 30px;
+        border-radius: 0px;
+        border: solid 1px @btnDefaultColor;
+        color:black;
+        padding: 3px 12px;
+            .caret{
+                color:@btnDefaultColor;
+            }
+    }
+}
+
+/*Calendar*/
+.dropdown-menu.ng-valid.ng-valid-date.ng-valid-date-disabled.ng-dirty,
+.dropdown-menu.ng-pristine.ng-valid.ng-valid-date.ng-valid-date-disabled
+{
+   /* width:280px;*/
+    padding: 10px;
+}
+
+.btn-cal{
+    height: 30px;
+}
+
+
+/*Buttons*/
+.uvmsbtn{
+    background-color: @buttoncolor;
+    color: #ffffff;
+    border: solid 1px @buttoncolor;
+}
+.uvmsbtn:hover{
+    background-color: @buttonhovercolor;
+    color:#ffffff;
+    border: solid 1px @buttonhovercolor;
+}
+
+.vesselbtn{
+    background-color:@buttoncolor;
+    color: #ffffff;
+}
+
+.vesselbtn:hover{
+    background-color:#007D52;
+    color: #ffffff;
+}

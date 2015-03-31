@@ -118,7 +118,7 @@ angular.module('unionvmsWeb')
 
         var openVesselHistoryModal = function(){
             var modalInstance = $modal.open({
-              templateUrl: '../../../../partial/vessel/vesselHistory/vesselHistoryModal/vesselHistoryModal.html',
+              templateUrl: 'partial/vessel/vesselHistory/vesselHistoryModal/vesselHistoryModal.html',
               controller: 'VesselhistorymodalCtrl',
               //windowClass : "saveVesselGroupModal",
               size: "small",

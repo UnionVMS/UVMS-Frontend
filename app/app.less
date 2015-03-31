@@ -2,45 +2,35 @@
 @import "../bower_components/font-awesome/less/font-awesome.less";
 @fa-font-path: "../bower_components/font-awesome/fonts";
 
+@import "less/globalVariables.less";
+@import "less/bootstrapOverride.less";
+@import "less/common.less";
+@import "less/components.less";
+@import "less/forms.less";
+@import "less/footer.less";
 
 /* Component LESS */
 @import "partial/header/header.less";
+@import "partial/header/headerMenu/headerMenu.less";
 @import "partial/today/today.less";
-@import "partial/vessel/vessel.less";
 
 @import "directive/vessel/newVessel/newVessel.less";
 @import "directive/communication/mobileTerminal/mobileTerminal.less";
 @import "directive/communication/communicationChannel/communicationChannel.less";
 @import "directive/vessel/getVessel/getVessel.less";
-
 @import "directive/vessel/vesselDetails/vesselDetails.less";
 @import "directive/vessel/advancedSearch/advancedSearch.less";
+
+@import "partial/vessel/vessel.less";
+@import "partial/vessel/saveVesselGroupModal/saveVesselGroupModal.less";
 @import "partial/vessel/vesselHistory/vesselHistory.less";
 @import "partial/vessel/vesselHistory/vesselHistoryModal/vesselHistoryModal.less";
+
+@import "partial/mobileTerminal/mobileTerminal.less";
 /* Add Component LESS Above */
 
 /* Required for Angular UI Bootstrap */
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
-
-/* Personal preference for BS modal.  The LESS below makes the backdrop white and
-   causes the modal to fade in rather than slide in. */
-//@modal-backdrop-bg: white;
-.modal {
-
-	&.fade {
-		.transition(opacity .3s);
-	}
-	&.fade .modal-dialog {
-		.translate(0,0);
-	}
-}
-
-
-/*global var*/
-@buttoncolor: #18A689;
-@buttonhovercolor:#007D52;
-@containerwidth: 1170px;
-@containerposition: 5px auto;
 
 
 body{
@@ -50,267 +40,23 @@ body{
 
 }
 
-footer {
-    background-color: #383737;
-    color: white;
-    height: 75px;
-     .content{
-         width: @containerwidth;
-         margin: 0px auto;
-         padding-top: 30px;
-     }
+#content{
+    whidth:100%;
+    min-height: 400px;
 }
 
-.uvmslogo{
-    width: 130px;
+//TODO: What is this used for?
+.glyphicon {
+    color: @buttoncolor;
+    top: -1px;
 }
 
-.headercontainer{
-    width: 100%;
-}
-.pagename{
-    font-size: 24px;
-    font-weight: bold;
-    width: 100%;
-    padding: 34px 0px 0px 0px;
-    overflow: hidden;
-}
-.headerwarnings{
-    float: right;
-    padding-right: 20px;
-
-    .glyphicon-bell{
-        color:#ffffff;
-    }
-}
-.messagenumbercontainer {
-    background-color: #c25842;
-    border-radius: 12px 12px 12px 12px;
-    bottom: 42px;
-    font-size: 20px;
-    height: 24px;
-    left: 10px;
-    min-width: 24px;
-    position: relative;
-    color:#ffffff;
-}
-.messagenumber {
-    font-size: 19px;
-    left: 6px;
-    margin-right: 13px;
-    position: relative;
-    color:white;
-}
-.headermessages{
-    float: right;
-    margin-right: 30px;
-    .glyphicon-envelope{
-        color:#ffffff;
-    }
-}
-
-.pageinfo{
-    height: 75px;
-    width: 100%;
-    background-color: #383737;
-    color:#FFFFFF;
-}
-.pageinfocontainer{
-    width:@containerwidth;
-    margin:0px auto;
-}
-
- .header{
-     width: 100%;
-     background-color:#383737;
- }
-
- #content{
-     whidth:100%;
-     min-height: 400px;
- }
-
-ul, li {
-    list-style: none;
-}
-
-li a{
-    cursor: pointer;
-}
-
-.dropdown{
-    color:#ffffff;
-    button, button:hover{
-        /*background-color: #008e61;*/
-        text-align: left;
-        width: 100%;
-        color:#ffffff;
-    }
-    .caret{
-        position: relative;
-        bottom: 10px;
-        float:right;
-    }
-    .btn.btn-default.dropdown-toggle{
-        background-color: white;
-        height: 30px;
-        border-radius: 0px;
-        border: solid 1px #18A689;
-        color:black;
-        padding: 3px 12px;
-            .caret{
-                color:#18A689;
-            }
-    }
-}
-.uvmsbtn{
-    background-color: @buttoncolor;
-    color: #ffffff;
-    border: solid 1px @buttoncolor;
-}
-.uvmsbtn:hover{
-    background-color: @buttonhovercolor;
-    color:#ffffff;
-    border: solid 1px @buttonhovercolor;
-}
-
-input[type="text"]
-{
-    border-radius: 0px;
-/*    background-color: #EBEBEB;*/
-    height: 30px;
-    border: none;
-    padding-left: 5px;
-}
-
-input[type="text"]:focus{
-    border:1px solid #18A689;
-    outline: 0;
-    -webkit-box-shadow: none; /*inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);*/
-    box-shadow: none; /* inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);*/
-}
-
-.form-control{
-    background-color: #FFFFFF;
-    height: 30px;
-}
-
-.form-control::-moz-placeholder {
-    color: #999999;
-    opacity: 1;
-}
-*:before, *:after {
-    -moz-box-sizing: border-box;
-}
-*:before, *:after {
-    -moz-box-sizing: border-box;
-}
-
-.form-control{
-    border-radius: none;
-}
-
-
-.vesselbtn{
-    background-color:@buttoncolor;
-    color: #ffffff;
-}
-
-.vesselbtn:hover{
-    background-color:#007D52;
-    color: #ffffff;
-}
+//TODO: REMOVE THIS FROM APP.LESS
 .closenewvessel img{
     cursor: pointer;
 }
 
 
-
-.form-control:hover{
-    border-radius: 0px;
-}
-.form-control{
-    border-radius: 0px;
-}
-.form-control:focus {
-    border-color: #18A689;
-    outline: 0;
-    -webkit-box-shadow: none; /*inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);*/
-    box-shadow: none; /* inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);*/
-}
-
-.labelheaders{
-    margin-top:10px;
-    margin-bottom:0px;
-}
-.glyphicon {
-    color: @buttoncolor;
-}
-
-
-/*Calendar*/
-.dropdown-menu.ng-valid.ng-valid-date.ng-valid-date-disabled.ng-dirty,
-.dropdown-menu.ng-pristine.ng-valid.ng-valid-date.ng-valid-date-disabled
-{
-   /* width:280px;*/
-    padding: 10px;
-}
-
-.btn-cal{
-    height: 30px;
-}
-.glyphicon
-{
-    top: -1px;
-}
-
-.inputerrors{
-    .glyphicon{
-        top: 2px;
-    }
-}
- .nopaddingleft{
-     padding-left: 0px;
- }
-.nopaddingright{
-    padding-right: 0px;
-}
-.nomargin{
-    margin: 0px !important;
-}
-
-
-/*Modal*/
-.modal-backdrop{
-    background-color: #ccc;
-}
-.modal-dialog{
-    .modal-content{
-        padding:20px 30px;
-        box-shadow:none;
-        border:none;
-
-        .modal-header{
-            padding: 20px 0px;
-            border-bottom:none;
-            .modal-title{
-                text-transform: uppercase;
-                font-weight: bold;
-            }
-            .close{
-                color:@buttoncolor;
-            }
-        }
-        .modal-body{
-            padding: 0px;
-        }
-        .modal-footer{
-            margin-top: 15px;
-            padding: 0px;
-            border-top:none;
-        }
-    }
-}
 
 @icon-font-path: "fonts/";
 

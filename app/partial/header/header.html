@@ -1,16 +1,26 @@
+<header>
+    <div class="headercontainer">
+		<div class="header">
+			<div class="pageinfo">
+			  <div class="pageinfocontainer">
+			     <div class="pagename">
+			        <img class="uvmslogo" src="assets/images/logo.png">
+			         <div class="headerwarnings">
+			             <div class="glyphicon glyphicon-bell">
+			                 <div class="messagenumbercontainer">
+			                    <div class="messagenumber">5</div>
+			                 </div>
+			             </div>
+			         </div>
+			         <div class="headermessages">
+			             <div class="glyphicon glyphicon-envelope"></div>
+			         </div>
+			    </div>
+			  </div>
+			</div>  
 
+			<div ng-include="'partial/header/headerMenu/headerMenu.html'"></div>
 
-<div class="headermenu">
-    <div class="headercontainer col-md-12" ng-controller="HeaderCtrl">
-        <ul>
-             <li class="cell" ng-repeat="page in menu">
-
-                    <a ng-href="#{{page.url}}">
-                        <div class="menucell"  ng-class="{active: isActive(page.url)}">{{page.title}}</div>
-                    </a>
-            </li>
-        </ul>
-    </div>
-</div>
-
-
+		</div>
+	</div>			
+</header>

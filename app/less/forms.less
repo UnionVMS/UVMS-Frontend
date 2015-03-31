@@ -1,0 +1,63 @@
+/*
+ * Common styling of forms and inputs
+ *
+ */
+
+input[type="text"]
+{
+    border-radius: 0px;
+    height: 30px;
+    border: none;
+    padding-left: 5px;
+}
+
+input[type="text"]:focus{
+    border:1px solid @formInputActiveBorderColor;
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.form-control{
+    background-color: #FFFFFF;
+    height: 30px;
+}
+
+.form-control::-moz-placeholder {
+    color: #999999;
+    opacity: 1;
+}
+*:before, *:after {
+    -moz-box-sizing: border-box;
+}
+*:before, *:after {
+    -moz-box-sizing: border-box;
+}
+
+.form-control{
+    border-radius: none;
+}
+
+.form-control:hover{
+    border-radius: 0px;
+}
+.form-control{
+    border-radius: 0px;
+}
+.form-control:focus {
+    border-color: @formInputActiveBorderColor;
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.labelheaders{
+    margin-top:10px;
+    margin-bottom:0px;
+}
+
+.inputerrors{
+    .glyphicon{
+        top: 2px;
+    }
+}
