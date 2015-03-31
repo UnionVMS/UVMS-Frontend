@@ -1,0 +1,69 @@
+<div class="searchFormContainer">
+    <div class="row">
+        <div class="searchTools col-md-12">
+
+        <!-- Search input -->
+            <div class="col-md-2 nopaddingleft">
+                <input type="text" class="form-control searchText" ng-disabled="advancedSearchVisible"
+                       placeholder="{{'common.search' | i18n}}" ng-model="wildCardSearch">
+            </div>
+            <!-- Type Dropdown -->
+            <div class="col-md-2">
+	            <div class="dropdown">
+	                <button class="btn btn-default dropdown-toggle" type="button" 
+	                        data-toggle="dropdown" aria-expanded="true">
+	                    <div class="dropdownText">All</div>
+	                    <span class="caret"></span>
+	                </button>
+	                <ul class="dropdown-menu" role="menu">
+	                    <li role="presentation" ng-repeat="item in availableTypes"><a role="menuitem" tabindex="-1" href="">{{item}}</a></li>
+	                </ul>
+            	</div>
+            </div>
+            <!-- Saved groups -->
+            <div class="col-md-2">
+	            <div class="dropdown">
+	                <button class="btn btn-default dropdown-toggle" type="button" id="savedsearches" data-toggle="dropdown" aria-expanded="true">
+	                    <div class="dropdownText">{{'common.search_group_dropdown' | i18n}} </div>
+	                    <span class="caret"></span>
+	                </button>
+	                <ul class="dropdown-menu" role="menu">
+	                    <li ng-repeat="item in savedGroups | orderBy:'name'">
+	                        <a role="menuitem" ng-click="savedSearchSelected(item)">{{item.name}}</a>
+	                    </li>
+	                </ul>
+	            </div>
+	        </div>
+            <!-- Search button -->
+            <div class="col-md-2" ng-show="!advancedSearchVisible">
+                <button type="button" class="btn btn-primary btn-lg searchButton" ng-click="search()">
+                    <span class="fa fa-search" aria-hidden="true"></span>
+                </button>
+            </div>
+            <!-- Save groups button -->
+            <div class="col-md-2 pull-right nopaddingright" ng-show="advancedSearchVisible" >
+                <button type="button" class="btn btn-default uvmsbtn savedgroupbtn pull-right" ng-click="openSaveGroupModal()">{{'common.search_group_save' | i18n}}</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="advancedSearchContainer row" ng-show="advancedSearchAvailable">
+        <div class="advancesearchbody fadein fadeout" ng-show="advancedSearchVisible">
+            <advanced-search></advanced-search>
+        </div>
+        <div class="col-md-12">
+            <!-- Search button -->
+            <div class="col-md-2" ng-show="advancedSearchVisible">
+                <button type="button" class="btn btn-primary btn-lg searchButton" ng-click="search()">
+                    <span class="fa fa-search" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <span class="link" ng-click="toggleAdvancedSearch()" ng-class="advancedSearchVisible ? 'prefixWithMinus' : 'prefixWithPlus'">            
+                {{'common.search_advanced_link' | i18n}}
+            </span>
+        </div>
+    </div>
+
+</div>

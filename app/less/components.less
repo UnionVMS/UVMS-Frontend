@@ -21,11 +21,11 @@
         background-color: white;
         height: 30px;
         border-radius: 0px;
-        border: solid 1px @btnDefaultColor;
+        border: solid 1px @btnPrimaryColor;
         color:black;
         padding: 3px 12px;
             .caret{
-                color:@btnDefaultColor;
+                color:@btnPrimaryColor;
             }
     }
 }
@@ -63,4 +63,41 @@
 .vesselbtn:hover{
     background-color:#007D52;
     color: #ffffff;
+}
+
+/*Lists*/
+ul.horizontal{
+    li{
+        float:left;
+        margin:0 10px;
+        &:first-child{
+            margin-left: 0px;
+        }        
+        &:last-child{
+            margin-right: 0px;
+            border-right:0px;
+        }
+
+    }
+}
+
+ul.pipeSeparator{
+    li + li::before {
+        content: " | ";
+        margin-right: 10px;
+    }   
+}
+
+
+ul.links{
+    li{
+        color:@link-color;
+        text-decoration: none;
+        &.active{
+            color:#000;
+            font-weight: bold;            
+            cursor: default;
+            border-bottom: 1px solid #000;
+        } 
+    }
 }

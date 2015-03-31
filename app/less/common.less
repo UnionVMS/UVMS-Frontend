@@ -4,6 +4,10 @@
  *
  */
 
+.colNoPadding{
+    padding: 0px;
+}
+
 .nopaddingleft{
     padding-left: 0px;
 }
@@ -15,4 +19,21 @@
 }
 .pointer{
     cursor: pointer;
+}
+
+.prefixWithMinus::before{
+    content: '-';
+}
+
+.prefixWithPlus::before{
+    content: '+';
+}
+
+span.link{
+    color:@link-color;
+    cursor: pointer;
+}
+
+.italic{
+    font-style: italic;
 }

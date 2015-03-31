@@ -1,4 +1,8 @@
 {
 	"yes" : "Yes",
-	"no" : "No"	
+	"no" : "No"	,
+	"search" : "Search",
+	"search_advanced_link" : "Advanced search",
+    "search_group_dropdown" : "Saved groups",
+    "search_group_save" : "Save group"
 }

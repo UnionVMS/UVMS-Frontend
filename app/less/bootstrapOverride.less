@@ -3,12 +3,21 @@
  *
  */
 
+/*Container - remove padding*/
+.container{
+    padding:0px;
+}
+
 /*Lists*/
+
+ul{
+    padding: 0px;
+}
 ul, li {
     list-style: none;
 }
 
-li a{
+li, li a{
     cursor: pointer;
 }
 
@@ -55,15 +64,15 @@ li a{
 }
 
 /*Buttons*/
-.btn-default{
-    background-color: @btnDefaultColor;
+.btn-primary{
+    background-color: @btnPrimaryColor;
     color: #ffffff;
-    border: solid 1px @btnDefaultColor;
+    border: solid 1px @btnPrimaryColor;
 
     &:hover{
-        background-color: @btnDefaultHoverColor;
+        background-color: @btnPrimaryHoverColor;
         color: #ffffff;
-        border-color: @btnDefaultHoverColor;        
+        border-color: @btnPrimaryHoverColor;        
     }
 }
 .btn-lg{

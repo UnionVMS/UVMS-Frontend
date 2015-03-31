@@ -1,0 +1,25 @@
+.searchFormContainer{
+    @inputHeight:45px;
+    @searchButtonWidth:100px;
+    margin-top: 20px;
+
+    .searchButton{
+        width: @searchButtonWidth;
+    }
+
+    .searchTools{        
+
+        input{
+            height: @inputHeight;
+            font-size: 20px;
+            .italic();
+            .grayInput();
+        }
+
+        .dropdown {
+            .btn{
+                height: @inputHeight !important;
+            }
+        }
+    }    
+}
