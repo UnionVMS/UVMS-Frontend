@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MobileterminalCtrl',function($scope){
+angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope){
 
     //Callback for the search
     $scope.searchcallback = function(vesselListPage){
