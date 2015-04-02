@@ -9,7 +9,7 @@ Cmder is a lightweight console emulator that fills our need but you can use one 
 Go to http://bliker.github.io/cmder/
 Download and install
 
-2. go to yeoman.io and follwo the installation instructions there. In short you need to install Nodejs, npm (which comes bundled with nodejs) and git to install yeoman.
+2. go to yeoman.io and follow the installation instructions there. In short you need to install Nodejs, npm (which comes bundled with nodejs) and git to install yeoman.
 
 3. Nodejs,	a:	Go to http://nodejs.org
 		b:	Download and install nodejs.

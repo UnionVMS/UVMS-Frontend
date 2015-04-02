@@ -7112,7 +7112,334 @@ button.close {
 .fa-plus-square-o:before {
   content: "\f196";
 }
+/*
+ * Global variables.
+ *
+ */
+/*Buttons*/
+/*Modal*/
+/*Forms*/
+/*
+ * Override the default Bootstrap styling here.
+ *
+ */
+/*Container - remove padding*/
+.container {
+  padding: 0px;
+}
+/*Lists*/
+ul {
+  padding: 0px;
+}
+ul,
+li {
+  list-style: none;
+}
+li,
+li a {
+  cursor: pointer;
+}
+/*Modals*/
+.modal.fade {
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+}
+.modal.fade .modal-dialog {
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+.modal-backdrop {
+  background-color: #cccccc;
+}
+.modal-dialog .modal-content {
+  padding: 20px 30px;
+  box-shadow: none;
+  border: none;
+}
+.modal-dialog .modal-content .modal-header {
+  padding: 20px 0px;
+  border-bottom: none;
+}
+.modal-dialog .modal-content .modal-header .modal-title {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.modal-dialog .modal-content .modal-header .close {
+  color: #18a689;
+}
+.modal-dialog .modal-content .modal-body {
+  padding: 0px;
+}
+.modal-dialog .modal-content .modal-footer {
+  margin-top: 15px;
+  padding: 0px;
+  border-top: none;
+}
+/*Buttons*/
+.btn-primary {
+  background-color: #18a689;
+  color: #ffffff;
+  border: solid 1px #18a689;
+}
+.btn-primary:hover {
+  background-color: #007d52;
+  color: #ffffff;
+  border-color: #007d52;
+}
+.btn-lg,
+.btn-group-lg > .btn {
+  border-radius: 3px;
+}
+/*
+ * Common css classes that can be used everywhere in the application.
+ * Each class should only do one thing, otherwise it should go in components.less
+ *
+ */
+.colNoPadding {
+  padding: 0px;
+}
+.nopaddingleft {
+  padding-left: 0px;
+}
+.nopaddingright {
+  padding-right: 0px;
+}
+.nomargin {
+  margin: 0px !important;
+}
+.pointer {
+  cursor: pointer;
+}
+.prefixWithMinus::before {
+  content: '-';
+}
+.prefixWithPlus::before {
+  content: '+';
+}
+span.link {
+  color: #428bca;
+  cursor: pointer;
+}
+.italic {
+  font-style: italic;
+}
+.underline {
+  text-decoration: underline;
+}
+/*
+ * Components that are reused in different places in the application
+ *
+ */
+/*Dropdown button*/
+.dropdown {
+  color: #ffffff;
+}
+.dropdown button,
+.dropdown button:hover {
+  /*background-color: #008e61;*/
+  text-align: left;
+  width: 100%;
+  color: #ffffff;
+}
+.dropdown .caret {
+  position: relative;
+  bottom: 10px;
+  float: right;
+}
+.dropdown .btn.btn-default.dropdown-toggle {
+  background-color: white;
+  height: 30px;
+  border-radius: 0px;
+  border: solid 1px #18a689;
+  color: black;
+  padding: 3px 12px;
+}
+.dropdown .btn.btn-default.dropdown-toggle .caret {
+  color: #18a689;
+}
+/*Calendar*/
+.dropdown-menu.ng-valid.ng-valid-date.ng-valid-date-disabled.ng-dirty,
+.dropdown-menu.ng-pristine.ng-valid.ng-valid-date.ng-valid-date-disabled {
+  /* width:280px;*/
+  padding: 10px;
+}
+.btn-cal {
+  height: 30px;
+}
+/*Buttons*/
+.uvmsbtn {
+  background-color: #18a689;
+  color: #ffffff;
+  border: solid 1px #18a689;
+}
+.uvmsbtn:hover {
+  background-color: #007d52;
+  color: #ffffff;
+  border: solid 1px #007d52;
+}
+.vesselbtn {
+  background-color: #18a689;
+  color: #ffffff;
+}
+.vesselbtn:hover {
+  background-color: #007D52;
+  color: #ffffff;
+}
+/*Lists*/
+ul.horizontal li {
+  float: left;
+  margin: 0 10px;
+}
+ul.horizontal li:first-child {
+  margin-left: 0px;
+}
+ul.horizontal li:last-child {
+  margin-right: 0px;
+  border-right: 0px;
+}
+ul.pipeSeparator li + li::before {
+  content: " | ";
+  margin-right: 10px;
+}
+ul.links li {
+  color: #428bca;
+  text-decoration: none;
+}
+ul.links li.active {
+  color: #000;
+  font-weight: bold;
+  cursor: default;
+  border-bottom: 1px solid #000;
+}
+/*
+ * Common styling of forms and inputs
+ *
+ */
+input[type="text"] {
+  border-radius: 0px;
+  height: 30px;
+  border: none;
+  padding-left: 5px;
+}
+input[type="text"]:focus {
+  border: 1px solid #18a689;
+  outline: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.form-control {
+  background-color: #FFFFFF;
+  height: 30px;
+}
+.form-control::-moz-placeholder {
+  color: #999999;
+  opacity: 1;
+}
+*:before,
+*:after {
+  -moz-box-sizing: border-box;
+}
+*:before,
+*:after {
+  -moz-box-sizing: border-box;
+}
+.form-control {
+  border-radius: none;
+}
+.form-control:hover {
+  border-radius: 0px;
+}
+.form-control {
+  border-radius: 0px;
+}
+.form-control:focus {
+  border-color: #18a689;
+  outline: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.labelheaders {
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+.inputerrors .glyphicon {
+  top: 2px;
+}
+/*Input styles*/
+.grayInput {
+  background-color: #EBEBEB;
+  border: none;
+  color: #918D8F;
+}
+footer {
+  background-color: #383737;
+  color: white;
+  height: 75px;
+}
+footer .content {
+  width: 1170px;
+  margin: 0px auto;
+  padding-top: 30px;
+}
 /* Component LESS */
+.header {
+  width: 100%;
+  background-color: #383737;
+  margin-bottom: 20px;
+}
+.uvmslogo {
+  width: 130px;
+}
+.pagename {
+  font-size: 24px;
+  font-weight: bold;
+  width: 100%;
+  padding: 34px 0px 0px 0px;
+  overflow: hidden;
+}
+.headerwarnings {
+  float: right;
+  padding-right: 20px;
+}
+.headerwarnings .glyphicon-bell {
+  color: #ffffff;
+}
+.messagenumbercontainer {
+  background-color: #c25842;
+  border-radius: 12px 12px 12px 12px;
+  bottom: 42px;
+  font-size: 20px;
+  height: 24px;
+  left: 10px;
+  min-width: 24px;
+  position: relative;
+  color: #ffffff;
+}
+.messagenumber {
+  font-size: 19px;
+  left: 6px;
+  margin-right: 13px;
+  position: relative;
+  color: white;
+}
+.headermessages {
+  float: right;
+  margin-right: 30px;
+}
+.headermessages .glyphicon-envelope {
+  color: #ffffff;
+}
+.pageinfo {
+  height: 75px;
+  width: 100%;
+  background-color: #383737;
+  color: #FFFFFF;
+}
+.pageinfocontainer {
+  width: 1170px;
+  margin: 0px auto;
+}
 .headermenu {
   width: 1170px;
   margin: 0 auto;
@@ -7176,6 +7503,94 @@ nav.gis .gis,
 nav.configuration .configuration {
   background-color: #c0c0c0;
 }
+.newvessel {
+  border-bottom: 2px solid #918D8F;
+}
+.newvessel .row {
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.newvessel .inputgroup .labelheaders {
+  height: 20px;
+  margin-bottom: 0;
+  margin-top: 10px;
+}
+.newvessel .inputgroup input[type=text] {
+  background-color: #EBEBEB;
+}
+.newvessel .dropdowntext {
+  float: left;
+}
+.newvessel .caret {
+  clear: both;
+  margin-left: 10px;
+}
+.newvessel .closenewvessel {
+  margin-right: 0px;
+}
+.newvessel .btn.btn-sm.createnewvesselbutton {
+  position: relative;
+  right: 13px;
+}
+.newvessel a {
+  cursor: pointer;
+}
+.newvessel .has-feedback .form-control-feedback {
+  position: absolute;
+  top: 29px;
+  right: 0;
+  display: block;
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+  text-align: justify;
+}
+.newvessel .form-group {
+  margin-bottom: 0px;
+}
+.mobileterminalcontainer {
+  background-color: #F0F0F0;
+  border-radius: 2px 2px 2px 2px;
+  margin: 30px 0 0 0;
+}
+.mobileterminalcontainer a {
+  cursor: pointer;
+}
+.vesseldetailsrow {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+.advancedSearch .row {
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.advancedSearch input[type="text"] {
+  height: 30px;
+  background-color: #EBEBEB;
+}
+.advancedSearch .form-control:focus {
+  border-color: #18A689;
+  box-shadow: none;
+  outline: 0 none;
+}
+.searchFormContainer {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.searchFormContainer .searchButton {
+  width: 100px;
+}
+.searchFormContainer .searchTools input {
+  height: 45px;
+  font-size: 20px;
+  font-style: italic;
+  background-color: #EBEBEB;
+  border: none;
+  color: #918D8F;
+}
+.searchFormContainer .searchTools .dropdown .btn {
+  height: 45px !important;
+}
 .vesselsearchboxcontainer {
   background-color: white;
 }
@@ -7206,15 +7621,6 @@ nav.configuration .configuration {
 }
 .searchbutton {
   width: 100px;
-  background-color: #18a689;
-  color: #ffffff;
-  border-radius: 3px;
-  border: 1px solid #18a689;
-}
-.searchbutton:hover {
-  background-color: #007D52;
-  color: #ffffff;
-  border: 1px solid #007D52;
 }
 .vesselsearchtools {
   float: left;
@@ -7329,32 +7735,6 @@ nav.configuration .configuration {
 .vesselsearchboxfooter .dropdown {
   float: left;
 }
-.vesselsearchresult table thead {
-  border-bottom: solid 2px #C5C5C4;
-}
-.vesselsearchresult table th {
-  height: 40px;
-}
-.vesselsearchresult table th a {
-  font-weight: bold;
-  color: #383737;
-}
-.vesselsearchresult table th a .fa.fa-sort,
-.vesselsearchresult table th a .fa.fa-caret-down,
-.vesselsearchresult table th a .fa.fa-caret-up {
-  color: #18A689;
-  margin-left: 7px;
-}
-.vesselsearchresult table tbody tr {
-  border-bottom: solid 1px #C5C5C4;
-  height: 40px;
-}
-.vesselsearchresult table .button {
-  height: 24px;
-  text-align: center;
-  padding: 0px 12px;
-  font-size: 12px;
-}
 .fadein,
 .fadeout {
   -webkit-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
@@ -7436,76 +7816,6 @@ nav.configuration .configuration {
 .datetimeinput {
   border: 1px solid #cccccc !important;
 }
-.newvessel {
-  border-bottom: 2px solid #918D8F;
-}
-.newvessel .row {
-  margin-bottom: 15px;
-  margin-top: 15px;
-}
-.newvessel .inputgroup .labelheaders {
-  height: 20px;
-  margin-bottom: 0;
-  margin-top: 10px;
-}
-.newvessel .inputgroup input[type=text] {
-  background-color: #EBEBEB;
-}
-.newvessel .dropdowntext {
-  float: left;
-}
-.newvessel .caret {
-  clear: both;
-  margin-left: 10px;
-}
-.newvessel .closenewvessel {
-  margin-right: 0px;
-}
-.newvessel .btn.btn-sm.createnewvesselbutton {
-  position: relative;
-  right: 13px;
-}
-.newvessel a {
-  cursor: pointer;
-}
-.newvessel .has-feedback .form-control-feedback {
-  position: absolute;
-  top: 29px;
-  right: 0;
-  display: block;
-  width: 34px;
-  height: 34px;
-  line-height: 34px;
-  text-align: justify;
-}
-.newvessel .form-group {
-  margin-bottom: 0px;
-}
-.mobileterminalcontainer {
-  background-color: #F0F0F0;
-  border-radius: 2px 2px 2px 2px;
-  margin: 30px 0 0 0;
-}
-.mobileterminalcontainer a {
-  cursor: pointer;
-}
-.vesseldetailsrow {
-  margin-top: 0px !important;
-  margin-bottom: 0px !important;
-}
-.advancedSearch .row {
-  margin-bottom: 15px;
-  margin-top: 15px;
-}
-.advancedSearch input[type="text"] {
-  height: 30px;
-  background-color: #EBEBEB;
-}
-.advancedSearch .form-control:focus {
-  border-color: #18A689;
-  box-shadow: none;
-  outline: 0 none;
-}
 .saveVesselGroupModal {
   overflow-y: auto;
 }
@@ -7532,6 +7842,32 @@ nav.configuration .configuration {
   background-color: #18a689;
   color: #ffffff;
 }
+.vesselsearchresult table thead {
+  border-bottom: solid 2px #C5C5C4;
+}
+.vesselsearchresult table th {
+  height: 40px;
+}
+.vesselsearchresult table th a {
+  font-weight: bold;
+  color: #383737;
+}
+.vesselsearchresult table th a .fa.fa-sort,
+.vesselsearchresult table th a .fa.fa-caret-down,
+.vesselsearchresult table th a .fa.fa-caret-up {
+  color: #18A689;
+  margin-left: 7px;
+}
+.vesselsearchresult table tbody tr {
+  border-bottom: solid 1px #C5C5C4;
+  height: 40px;
+}
+.vesselsearchresult table .button {
+  height: 24px;
+  text-align: center;
+  padding: 0px 12px;
+  font-size: 12px;
+}
 /* Add Component LESS Above */
 /* Required for Angular UI Bootstrap */
 .nav,
@@ -7540,254 +7876,19 @@ nav.configuration .configuration {
 .panel-title a {
   cursor: pointer;
 }
-/* Personal preference for BS modal.  The LESS below makes the backdrop white and
-   causes the modal to fade in rather than slide in. */
-.modal.fade {
-  -webkit-transition: opacity 0.3s;
-  transition: opacity 0.3s;
-}
-.modal.fade .modal-dialog {
-  -webkit-transform: translate(0, 0);
-  -ms-transform: translate(0, 0);
-  transform: translate(0, 0);
-}
-/*global var*/
 body {
   width: 100%;
   background-color: #ffffff;
   font-family: Lato, Arial;
 }
-footer {
-  background-color: #383737;
-  color: white;
-  height: 75px;
-}
-footer .content {
-  width: 1170px;
-  margin: 0px auto;
-  padding-top: 30px;
-}
-.uvmslogo {
-  width: 130px;
-}
-.headercontainer {
-  width: 100%;
-}
-.pagename {
-  font-size: 24px;
-  font-weight: bold;
-  width: 100%;
-  padding: 34px 0px 0px 0px;
-  overflow: hidden;
-}
-.headerwarnings {
-  float: right;
-  padding-right: 20px;
-}
-.headerwarnings .glyphicon-bell {
-  color: #ffffff;
-}
-.messagenumbercontainer {
-  background-color: #c25842;
-  border-radius: 12px 12px 12px 12px;
-  bottom: 42px;
-  font-size: 20px;
-  height: 24px;
-  left: 10px;
-  min-width: 24px;
-  position: relative;
-  color: #ffffff;
-}
-.messagenumber {
-  font-size: 19px;
-  left: 6px;
-  margin-right: 13px;
-  position: relative;
-  color: white;
-}
-.headermessages {
-  float: right;
-  margin-right: 30px;
-}
-.headermessages .glyphicon-envelope {
-  color: #ffffff;
-}
-.pageinfo {
-  height: 75px;
-  width: 100%;
-  background-color: #383737;
-  color: #FFFFFF;
-}
-.pageinfocontainer {
-  width: 1170px;
-  margin: 0px auto;
-}
-.header {
-  width: 100%;
-  background-color: #383737;
-}
 #content {
   whidth: 100%;
   min-height: 400px;
 }
-ul,
-li {
-  list-style: none;
-}
-li a {
-  cursor: pointer;
-}
-.dropdown {
-  color: #ffffff;
-}
-.dropdown button,
-.dropdown button:hover {
-  /*background-color: #008e61;*/
-  text-align: left;
-  width: 100%;
-  color: #ffffff;
-}
-.dropdown .caret {
-  position: relative;
-  bottom: 10px;
-  float: right;
-}
-.dropdown .btn.btn-default.dropdown-toggle {
-  background-color: white;
-  height: 30px;
-  border-radius: 0px;
-  border: solid 1px #18A689;
-  color: black;
-  padding: 3px 12px;
-}
-.dropdown .btn.btn-default.dropdown-toggle .caret {
-  color: #18A689;
-}
-.uvmsbtn {
-  background-color: #18a689;
-  color: #ffffff;
-  border: solid 1px #18a689;
-}
-.uvmsbtn:hover {
-  background-color: #007d52;
-  color: #ffffff;
-  border: solid 1px #007d52;
-}
-input[type="text"] {
-  border-radius: 0px;
-  /*    background-color: #EBEBEB;*/
-  height: 30px;
-  border: none;
-  padding-left: 5px;
-}
-input[type="text"]:focus {
-  border: 1px solid #18A689;
-  outline: 0;
-  -webkit-box-shadow: none;
-  /*inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);*/
-  box-shadow: none;
-  /* inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);*/
-}
-.form-control {
-  background-color: #FFFFFF;
-  height: 30px;
-}
-.form-control::-moz-placeholder {
-  color: #999999;
-  opacity: 1;
-}
-*:before,
-*:after {
-  -moz-box-sizing: border-box;
-}
-*:before,
-*:after {
-  -moz-box-sizing: border-box;
-}
-.form-control {
-  border-radius: none;
-}
-.vesselbtn {
-  background-color: #18a689;
-  color: #ffffff;
-}
-.vesselbtn:hover {
-  background-color: #007D52;
-  color: #ffffff;
+.glyphicon {
+  color: #18a689;
+  top: -1px;
 }
 .closenewvessel img {
   cursor: pointer;
-}
-.form-control:hover {
-  border-radius: 0px;
-}
-.form-control {
-  border-radius: 0px;
-}
-.form-control:focus {
-  border-color: #18A689;
-  outline: 0;
-  -webkit-box-shadow: none;
-  /*inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);*/
-  box-shadow: none;
-  /* inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);*/
-}
-.labelheaders {
-  margin-top: 10px;
-  margin-bottom: 0px;
-}
-.glyphicon {
-  color: #18a689;
-}
-/*Calendar*/
-.dropdown-menu.ng-valid.ng-valid-date.ng-valid-date-disabled.ng-dirty,
-.dropdown-menu.ng-pristine.ng-valid.ng-valid-date.ng-valid-date-disabled {
-  /* width:280px;*/
-  padding: 10px;
-}
-.btn-cal {
-  height: 30px;
-}
-.glyphicon {
-  top: -1px;
-}
-.inputerrors .glyphicon {
-  top: 2px;
-}
-.nopaddingleft {
-  padding-left: 0px;
-}
-.nopaddingright {
-  padding-right: 0px;
-}
-.nomargin {
-  margin: 0px !important;
-}
-/*Modal*/
-.modal-backdrop {
-  background-color: #ccc;
-}
-.modal-dialog .modal-content {
-  padding: 20px 30px;
-  box-shadow: none;
-  border: none;
-}
-.modal-dialog .modal-content .modal-header {
-  padding: 20px 0px;
-  border-bottom: none;
-}
-.modal-dialog .modal-content .modal-header .modal-title {
-  text-transform: uppercase;
-  font-weight: bold;
-}
-.modal-dialog .modal-content .modal-header .close {
-  color: #18a689;
-}
-.modal-dialog .modal-content .modal-body {
-  padding: 0px;
-}
-.modal-dialog .modal-content .modal-footer {
-  margin-top: 15px;
-  padding: 0px;
-  border-top: none;
 }

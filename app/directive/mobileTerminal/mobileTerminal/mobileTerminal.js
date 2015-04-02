@@ -53,7 +53,7 @@ angular.module('unionvmsWeb')
 		scope:{
             terminal:'='
         },
-		templateUrl: 'directive/communication/mobileTerminal/mobileTerminal.html',
+		templateUrl: 'directive/mobileTerminal/mobileTerminal/mobileTerminal.html',
 		link: function(scope, element, attrs, fn) {
 
 

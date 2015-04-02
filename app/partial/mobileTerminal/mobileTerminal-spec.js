@@ -1,4 +1,4 @@
-describe('MobileTerminalCtrl', function() {
+describe('MobileterminalCtrl', function() {
 
 	beforeEach(module('unionvmsWeb'));
 
@@ -6,7 +6,7 @@ describe('MobileTerminalCtrl', function() {
 
     beforeEach(inject(function($rootScope, $controller) {
       scope = $rootScope.$new();
-      ctrl = $controller('MobileTerminalCtrl', {$scope: scope});
+      ctrl = $controller('MobileterminalCtrl', {$scope: scope});
     }));	
 
 	it('should ...', inject(function() {
