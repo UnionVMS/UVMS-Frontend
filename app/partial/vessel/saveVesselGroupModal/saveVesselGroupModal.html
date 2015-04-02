@@ -17,7 +17,7 @@
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="groupDropdown">
-                <li ng-repeat="group in existingGroups">
+                <li ng-repeat="group in existingGroups | orderBy:'name'">
                    <a ng-click="setExistingGroupAsSaveTarget(group)">{{group.name}}</a>
                 </li>
             </ul>

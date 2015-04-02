@@ -2,9 +2,9 @@
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $modal service used above.
 
-angular.module('unionvmsWeb').controller('SaveVesselGroupModalInstanceCtrl', function ($scope, $modalInstance, vesselSavedSearchesService, searchObj, vesselGroups, advancedSearchClicked) {
+angular.module('unionvmsWeb').controller('SaveVesselGroupModalInstanceCtrl', function ($scope, $modalInstance, vesselRestService, searchService, SearchField, SavedSearchGroup, savedGroups, selectedVessels, advancedSearchClicked) {
 
-  $scope.existingGroups = vesselGroups;
+  $scope.existingGroups = savedGroups;
   $scope.saveData = {
     name : undefined,
     existingGroup : undefined
@@ -36,18 +36,30 @@ angular.module('unionvmsWeb').controller('SaveVesselGroupModalInstanceCtrl', fun
 
   //Save or update vessel group
   $scope.saveVesselGroup = function () {
-      var isDynamic = false;
+      var isDynamic = false,
+        searchFields;
       if(advancedSearchClicked) {
           isDynamic = true;
+          searchFields = searchService.getAdvancedSearchCriterias();
+      }else{
+            searchFields = [];
+            $.each(selectedVessels, function(key, value){
+                searchFields.push(new SearchField("INTERNAL_ID", value));
+            });
       }
+
+
     //Update existing group
     if(angular.isDefined($scope.saveData.existingGroup)){
-        vesselSavedSearchesService.updateVesselGroup($scope.saveData.existingGroup, searchObj, isDynamic)
+        $scope.saveData.existingGroup.dynamic = isDynamic;
+        $scope.saveData.existingGroup.searchFields = searchFields;
+        vesselRestService.updateVesselGroup($scope.saveData.existingGroup)
         .then(onSaveSuccess, onSaveError);
     }
     //Save new group
     else{
-        vesselSavedSearchesService.createNewVesselGroup($scope.saveData.name, searchObj, isDynamic)
+        var newSavedGroup = new SavedSearchGroup($scope.saveData.name, "", isDynamic, searchFields);
+        vesselRestService.createNewVesselGroup(newSavedGroup)
         .then(onSaveSuccess, onSaveError);
     }
   };

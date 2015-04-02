@@ -1,34 +1,39 @@
 angular.module('unionvmsWeb') 
 .factory('Vessel', function(EventHistory) {
 
-        function Vessel(data){
-            this.active = data.active;
-            this.billing = data.billing;
-            this.cfr = data.cfr;
-            this.countryCode = data.countryCode;
-            this.eventHistory = new EventHistory(data.eventHistory);
-            this.externalMarking = data.externalMarking;
-            this.grossTonnage = data.grossTonnage;
-            this.hasIrcs = data.hasIrcs;
-            this.hasLicense = data.hasLicense;
-            this.homePort = data.homePort;
-            this.imo = data.imo;
-            this.ircs = data.ircs;
-            this.lengthBetweenPerpendiculars = data.lengthBetweenPerpendiculars;
-            this.lengthOverAll = data.lengthOverAll;
-            this.mmsiNo = data.mmsiNo;
-            this.name = data.name;
-            this.otherGrossTonnage = data.otherGrossTonnage;
-            this.powerAux = data.powerAux;
-            this.powerMain = data.powerMain;
-            this.safetyGrossTonnage = data.safetyGrossTonnage;
-            this.source = data.source;
-            this.vesselId = {
+        function Vessel(){
+        }
+
+        Vessel.fromJson = function(data){
+            var vessel = new Vessel();
+            vessel.active = data.active;
+            vessel.billing = data.billing;
+            vessel.cfr = data.cfr;
+            vessel.countryCode = data.countryCode;
+            vessel.eventHistory = new EventHistory(data.eventHistory);
+            vessel.externalMarking = data.externalMarking;
+            vessel.grossTonnage = data.grossTonnage;
+            vessel.hasIrcs = data.hasIrcs;
+            vessel.hasLicense = data.hasLicense;
+            vessel.homePort = data.homePort;
+            vessel.imo = data.imo;
+            vessel.ircs = data.ircs;
+            vessel.lengthBetweenPerpendiculars = data.lengthBetweenPerpendiculars;
+            vessel.lengthOverAll = data.lengthOverAll;
+            vessel.mmsiNo = data.mmsiNo;
+            vessel.name = data.name;
+            vessel.otherGrossTonnage = data.otherGrossTonnage;
+            vessel.powerAux = data.powerAux;
+            vessel.powerMain = data.powerMain;
+            vessel.safetyGrossTonnage = data.safetyGrossTonnage;
+            vessel.source = data.source;
+            vessel.vesselId = {
                 type : data.vesselId.type,
                 value : data.vesselId.value,
             };
-            this.vesselType = data.vesselType;
-        }
+            vessel.vesselType = data.vesselType;
+            return vessel;
+        };
 
         Vessel.prototype.toJson = function(){
             return JSON.stringify({

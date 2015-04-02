@@ -2,10 +2,10 @@
     <div class="row">
         <div class="searchTools col-md-12">
 
-        <!-- Search input -->
+            <!-- Search input -->
             <div class="col-md-2 nopaddingleft">
                 <input type="text" class="form-control searchText" ng-disabled="advancedSearchVisible"
-                       placeholder="{{'common.search' | i18n}}" ng-model="wildCardSearch">
+                       placeholder="{{'common.search' | i18n}}" ng-model="freeText">
             </div>
             <!-- Type Dropdown -->
             <div class="col-md-2">
@@ -28,15 +28,15 @@
 	                    <span class="caret"></span>
 	                </button>
 	                <ul class="dropdown-menu" role="menu">
-	                    <li ng-repeat="item in savedGroups | orderBy:'name'">
-	                        <a role="menuitem" ng-click="savedSearchSelected(item)">{{item.name}}</a>
+	                    <li ng-repeat="item in savedgroups | orderBy:'name'">
+	                        <a role="menuitem" ng-click="onSavedSearchGroupClick(item)">{{item.name}}</a>
 	                    </li>
 	                </ul>
 	            </div>
 	        </div>
             <!-- Search button -->
             <div class="col-md-2" ng-show="!advancedSearchVisible">
-                <button type="button" class="btn btn-primary btn-lg searchButton" ng-click="search()">
+                <button type="button" class="btn btn-primary btn-lg searchButton" ng-click="performFreeTextSearch()">
                     <span class="fa fa-search" aria-hidden="true"></span>
                 </button>
             </div>
@@ -49,18 +49,10 @@
 
     <div class="advancedSearchContainer row" ng-show="advancedSearchAvailable">
         <div class="advancesearchbody fadein fadeout" ng-show="advancedSearchVisible">
-            <advanced-search></advanced-search>
-        </div>
-        <div class="col-md-12">
-            <!-- Search button -->
-            <div class="col-md-2" ng-show="advancedSearchVisible">
-                <button type="button" class="btn btn-primary btn-lg searchButton" ng-click="search()">
-                    <span class="fa fa-search" aria-hidden="true"></span>
-                </button>
-            </div>
+            <advanced-search searchfunc="searchFunc" modeltype="modeltype" advancedsearchvisible="advancedSearchVisible"></advanced-search>
         </div>
         <div class="col-md-2">
-            <span class="link" ng-click="toggleAdvancedSearch()" ng-class="advancedSearchVisible ? 'prefixWithMinus' : 'prefixWithPlus'">            
+            <span class="link underline" ng-click="toggleAdvancedSearch()" ng-class="advancedSearchVisible ? 'prefixWithMinus' : 'prefixWithPlus'">            
                 {{'common.search_advanced_link' | i18n}}
             </span>
         </div>

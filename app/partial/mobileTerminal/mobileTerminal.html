@@ -1,16 +1,14 @@
-<div class="col-md-12" ng-controller="MobileTerminalCtrl">
-	<div class="container pageContainer mobileTerminalContainer">
-		<div class="row">
-			<div class="col-md-12 pageMenu">
-				<ul class="horizontal pipeSeparator links">
-					<li class="active" >{{'mobileterminal.menu_mobileterminals' | i18n}}</li>
-					<li>{{'mobileterminal.menu_polling' | i18n}}</li>
-				</ul>
-			</div>
-			<div class="col-md-12">
-				<search></search>
-				<br>- Include result list
-			</div>
+<div class="col-md-12 mobileTerminalContainer" ng-controller="MobileTerminalCtrl">
+	<div class="row">
+		<div class="col-md-12 pageMenu">
+			<ul class="horizontal pipeSeparator links">
+				<li class="active" >{{'mobileterminal.menu_mobileterminals' | i18n}}</li>
+				<li>{{'mobileterminal.menu_polling' | i18n}}</li>
+			</ul>
+		</div>
+		<div class="col-md-12">
+			<search searchcallback="searchcallback" modeltype="'MOBILE_TERMINAL'"></search>
+			<br>- Include result list
 		</div>
 	</div>
 </div>

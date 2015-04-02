@@ -1,18 +1,29 @@
-describe('VesselhistorymodalCtrl', function() {
+describe('VesselhistorymodalCtrl', function () {
 
-	beforeEach(module('unionvmsWeb'));
+  beforeEach(module('unionvmsWeb'));
 
-	var scope,ctrl;
+  var scope, ctrl, modalInstance, vesselHistory;
 
-    beforeEach(inject(function($rootScope, $controller) {
-      scope = $rootScope.$new();
-      ctrl = $controller('VesselhistorymodalCtrl', {$scope: scope});
-    }));
+  // Initialize the controller and a mock scope
+  beforeEach(inject(
+    function ($controller, $rootScope) {     // Don't bother injecting a 'real' modal
+      scope = $rootScope.$new();      
+      modalInstance = {                    // Create a mock object using spies
+        close: jasmine.createSpy('modalInstance.close'),
+        dismiss: jasmine.createSpy('modalInstance.dismiss'),
+        result: {
+          then: jasmine.createSpy('modalInstance.result.then')
+        }
+      };
+      vesselHistory = {};
+      ctrl = $controller('VesselhistorymodalCtrl', {$scope: scope, $modalInstance: modalInstance, vesselHistory: vesselHistory});
+    })
+  );
 
-	it('should ...', inject(function() {
-
-		expect(1).toEqual(1);
-
-	}));
-
+  describe('Initial state', function () {
+    it('should dismiss the modal on cancel', function () {
+      scope.cancel();
+      expect(modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+    });
+  });
 });

@@ -1,4 +1,4 @@
-<div ng-controller="VesselCtrl" ng-init="getInitialVessels()">
+<div class="col-md-12" ng-controller="VesselCtrl" ng-init="initVessel()">
     <div class="addvessel fadeaddvesselin fadeaddvesselout" ng-show="addNewVesselVisible.active">
         <div class="row col-md-12">
             <p class="createResponseMessage">{{createResponseMessage}}</p>
@@ -11,89 +11,9 @@
         </div>
         <getVessel carrier="{{selectedCarrier}}"></getVessel>
     </div>
+    <search searchcallback="searchcallback" searchsavegroupcallback="savegroupcallback" modeltype="'VESSEL'" savedgroups="vesselGroups" ng-show="vesselSearchContainerVisible.active"></search>
+
     <div class="vesselcontainerwrapper fadeaddvesselin fadeaddvesselout" ng-show="vesselSearchContainerVisible.active">
-        <div class="vesselsearchboxcontainer">
-            <div class="vesselsearchbox row">
-                <div class="vesselsearchtools col-md-12 nopaddingleft nopaddingright">
-
-                    <div class="col-md-2 nopaddingleft">
-                        <input type="text" class="form-control searchtext" ng-disabled="simpleSearch.enable"
-                               placeholder="{{'vessel.search_input_placeholder' | i18n}}" ng-model="wildCardSearch">
-                    </div>
-                    <!-- Dropdown -->
-                    <div class="dropdown col-md-2">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="vesseldropdown"
-                                data-toggle="dropdown" aria-expanded="true">
-                            <div class="vesseldropdowntext">All</div>
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="">Vessels</a></li>
-                        </ul>
-                    </div>
-                    <!-- Saved searched -->
-                    <!--
-                    <div class="col-md-2 vesselsearchgroups ">
-                        <div class="btn-group">
-                            <button class="btn btn-lg btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
-                                {{'vessel.searchgroup_dropdown' | i18n}}
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu">
-                                <li role="presentation" ng-repeat="item in vesselGroups | orderBy:'name'">
-                                    <a role="menuitem" ng-click="savedSearchSelected(item)">{{item.name}}</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    -->
-
-                        <div class="dropdown col-md-2">
-                            <button class="btn btn-default dropdown-toggle" type="button" id="savedsearches" data-toggle="dropdown" aria-expanded="true" ng-model="searchObj.LICENSE">
-                                <div class="dropdowntext">{{'vessel.searchgroup_dropdown' | i18n}} </div>
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
-                                <li ng-repeat="item in vesselGroups | orderBy:'name'">
-                                    <a role="menuitem" ng-click="savedSearchSelected(item)">{{item.name}}</a>
-                                </li>
-                            </ul>
-                        </div>
-
-
-                    <!-- Search button -->
-                    <div class="col-md-2" ng-show="!advancesearch.active">
-                        <button type="button" class="btn btn-default btn-lg searchbutton" ng-click="searchVessels(true)">
-                            <span class="fa fa-search" aria-hidden="true"></span>
-                        </button>
-                    </div>
-                    <div class="col-md-2 pull-right nopaddingright" ng-show="advancesearch.active" >
-                        <button type="button" class="btn btn-default uvmsbtn savedgroupbtn pull-right" ng-click="openSaveGroupModal()">Save group</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="advancesearchcontainer row">
-                <div class="advancesearchbody fadein fadeout" ng-show="advancesearch.active">
-                    <advanced-search></advanced-search>
-                </div>
-                <div class="col-md-12 row">
-                    <!-- Search button -->
-                    <div class="col-md-2 nopaddingleft" ng-show="advancesearch.active">
-                        <button type="button" class="btn btn-default btn-lg searchbutton" ng-click="searchVessels(true)">
-                            <span class="fa fa-search" aria-hidden="true"></span>
-                        </button>
-                    </div>
-                </div>
-                <div class="col-md-2 nopaddingleft">
-                    <p class="advancesearchtag" ng-click="toggleanim()" ng-show="!advancesearch.active">
-                        {{'vessel.search_advanced_expand' | i18n}}</p>
-                    <p class="advancesearchtag" ng-click="toggleanim()" ng-show="advancesearch.active">
-                        {{'vessel.search_advanced_minify' | i18n}}</p>
-                </div>
-            </div>
-
-        </div>
         <div class="vesselsearchresultcontainer">
             <div class="vesselsearchboxfooter row">
                 <!-- Dropdown -->
@@ -114,97 +34,10 @@
                     {{'vessel.add_new' | i18n}} &nbsp;&nbsp;&nbsp;&nbsp;<span>+</span></button>
                 <input type="text" class="filtertext pull-right" placeholder="Filter" ng-model="searchFilter">
             </div>
-            <div class="vesselsearchresult">
-                <table class="col-md-12">
-                    <thead>
-                    <tr>
-                        <th><input type="checkbox" ng-model="item.selectedAll" ng-click="checkAll()"/></th>
-                        <th>
-                            <a href="" ng-click="sortType='state'; sortReverse = !sortReverse">
-                                {{'vessel.table_header_flag_state' | i18n}}
-                                <span ng-show="sortType == 'state' && !sortReverse" class="fa fa-caret-down"></span>
-                                <span ng-show="sortType == 'state' && sortReverse" class="fa fa-caret-up"></span>
-                                <span ng-show="sortType != 'state'" class="fa fa-sort"></span>
-                            </a>
-                        </th>
-                        <th>
-                            <a href="" ng-click="sortType='externalMarking'; sortReverse = !sortReverse">
-                                {{'vessel.table_header_external_marking' | i18n}}
-                                <span ng-show="sortType == 'externalMarking' && !sortReverse"
-                                      class="fa fa-caret-down"></span>
-                                <span ng-show="sortType == 'externalMarking' && sortReverse"
-                                      class="fa fa-caret-up"></span>
-                                <span ng-show="sortType != 'externalMarking'" class="fa fa-sort"></span>
-                            </a>
-                        </th>
-                        <th>
-                            <a href="" ng-click="sortType='name'; sortReverse = !sortReverse">
-                                {{'vessel.table_header_name' | i18n}}
-                                <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
-                                <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
-                                <span ng-show="sortType != 'name'" class="fa fa-sort"></span>
-                            </a>
-                        </th>
-                        <th>
-                            <a href="" ng-click="sortType='ircs'; sortReverse = !sortReverse">
-                                {{'vessel.table_header_signal' | i18n}}
-                                <span ng-show="sortType == 'ircs' && !sortReverse" class="fa fa-caret-down"></span>
-                                <span ng-show="sortType == 'ircs' && sortReverse" class="fa fa-caret-up"></span>
-                                <span ng-show="sortType != 'ircs'" class="fa fa-sort"></span>
-                            </a>
-                        </th>
-                        <th>
-                            <a href="" ng-click="sortType='type'; sortReverse = !sortReverse">
-                                {{'vessel.table_header_type' | i18n}}
-                                <span ng-show="sortType == 'type' && !sortReverse" class="fa fa-caret-down"></span>
-                                <span ng-show="sortType == 'type' && sortReverse" class="fa fa-caret-up"></span>
-                                <span ng-show="sortType != 'type'" class="fa fa-sort"></span>
-                            </a>
-                        </th>
-                        <th>
-                            <a href="" ng-click="sortType='license'; sortReverse = !sortReverse">
-                                {{'vessel.table_header_license' | i18n}}
-                                <span ng-show="sortType == 'license' && !sortReverse" class="fa fa-caret-down"></span>
-                                <span ng-show="sortType == 'license' && sortReverse" class="fa fa-caret-up"></span>
-                                <span ng-show="sortType != 'license'" class="fa fa-sort"></span>
-                            </a>
-                        </th>
-                        <th>
-                            <a href="" ng-click="sortType='lastreport'; sortReverse = !sortReverse">
-                                {{'vessel.table_header_last_report' | i18n}}
-                                <span ng-show="sortType == 'lastreport' && !sortReverse"
-                                      class="fa fa-caret-down"></span>
-                                <span ng-show="sortType == 'lastreport' && sortReverse" class="fa fa-caret-up"></span>
-                                <span ng-show="sortType != 'lastreport'" class="fa fa-sort"></span>
-                            </a>
-                        </th>
-                        <th>{{'vessel.table_header_details' | i18n}}</th>
-                        <th>{{'vessel.table_header_reports' | i18n}}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="item in vessels | orderBy:sortType:sortReverse | filter:searchFilter">
-                        <td><input type="checkbox" ng-model="item.Selected" ng-click="checkedVessel(item)"/></td>
-                        <td>{{item.countryCode}}</td>
-                        <td>{{item.externalMarking}}</td>
-                        <td>{{item.name}}</td>
-                        <td>{{item.ircs}}</td>
-                        <td>{{item.vesselType}}</td>
-                        <td>{{item.license}}</td>
-                        <td>{{item.lastReport}}</td>
-                        <td>
-                            <button class="btn vesselbtn button" ng-click="toggleGetVessel(item)">
-                                {{'vessel.table_details_button' | i18n}}
-                            </button>
-                        </td>
-                        <td>{{'vessel.table_report_button' | i18n}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <p style="color: orangered">{{error}}</p>
-            </div>
-            <p class="vesselshowing">{{'vessel.table_number_of_pages' | i18n}} {{page}} {{'vessel.table_of' | i18n}} {{totalNumberOfPages}}</p>
-            <p class="vesselloadmore" ng-click="loadmore()"> {{'vessel.table_load_more' | i18n | uppercase}}</p>
+            <div ng-include="'partial/vessel/vesselList/vesselList.html'"></div>
+
+            <p class="vesselshowing">{{'vessel.table_number_of_pages' | i18n}} {{currentSearchResults.page}} {{'vessel.table_of' | i18n}} {{currentSearchResults.totalNumberOfPages}}</p>
+            <p class="vesselloadmore" ng-click="loadmore()" ng-hide="currentSearchResults.totalNumberOfPages === currentSearchResults.page"> {{'vessel.table_load_more' | i18n | uppercase}}</p>
         </div>
     </div>
 </div>

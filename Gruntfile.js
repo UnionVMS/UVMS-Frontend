@@ -31,8 +31,8 @@ var createFolderGlobs = function(fileTypePatterns) {
 };
 
 module.exports = function (grunt) {
-
   // load all grunt tasks
+  require('time-grunt')(grunt);
   require('load-grunt-tasks')(grunt);
 
   // Project configuration.
@@ -232,6 +232,28 @@ module.exports = function (grunt) {
         }
       }
     },
+    //Karma testing
+    karma: {
+      options: {
+        frameworks: ['jasmine'],
+        browserNoActivityTimeout: 100000,
+        files: [  //this files data is also updated in the watch handler, if updated change there too        
+          '<%= dom_munger.data.appjs %>',
+          'bower_components/angular-mocks/angular-mocks.js',
+          createFolderGlobs('*-spec.js'),
+        ],
+        logLevel:'INFO',
+        reporters:['mocha'],
+        autoWatch: false, //watching is handled by grunt-contrib-watch
+        singleRun: true
+      },
+      all_tests: {
+        browsers: ['PhantomJS2','Chrome']
+      },
+      during_watch: {
+        browsers: ['PhantomJS2']
+      },
+    },
     compress: {
       dist: {
         options: {
@@ -243,14 +265,15 @@ module.exports = function (grunt) {
           src: ['**/*'],
           dest: '/'}]
       }
-    }
+    }, 
   });
 
-  grunt.registerTask('sub-build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy','htmlmin','compress:dist','clean:after']);//,'clean:after'
+  grunt.registerTask('sub-build',['jshint', 'test', 'clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy','htmlmin','compress:dist','clean:after']);//,'clean:after'
 
   grunt.registerTask('build-local', ['replace:local', 'sub-build']);
   grunt.registerTask('build-dev', ['replace:dev','sub-build']);
   grunt.registerTask('build-test', ['replace:test','sub-build']);
+  grunt.registerTask('test',['dom_munger:read', 'karma:all_tests', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
   grunt.registerTask('serve', ['dom_munger:read','jshint','connect', 'watch']);
@@ -275,8 +298,10 @@ module.exports = function (grunt) {
 
             //if the spec exists then lets run it
             if (grunt.file.exists(spec)) {
-                grunt.config('jasmine.unit.options.specs', spec);
-                grunt.task.run('jasmine:unit');
+                //grunt.config('jasmine.unit.options.specs', spec);
+                //grunt.task.run('jasmine:unit');
+                //grunt.config('karma.options.files', files);
+                grunt.task.run('karma:during_watch');
             }
         }
 
