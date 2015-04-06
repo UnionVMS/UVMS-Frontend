@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb') 
+angular.module('unionvmsWeb')
 .factory('Vessel', function(EventHistory) {
 
         function Vessel(){
@@ -29,7 +29,7 @@ angular.module('unionvmsWeb')
             vessel.source = data.source;
             vessel.vesselId = {
                 type : data.vesselId.type,
-                value : data.vesselId.value,
+                value : data.vesselId.value
             };
             vessel.vesselType = data.vesselType;
             return vessel;

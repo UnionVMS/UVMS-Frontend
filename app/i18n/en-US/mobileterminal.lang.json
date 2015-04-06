@@ -1,4 +1,12 @@
 {
 	"menu_mobileterminals" : "Mobile terminals",
-	"menu_polling" : "Polling"
+	"menu_polling" : "Polling",
+    "table_header_flag_state" : "State",
+    "table_header_vessel_name" : "Vessel name",
+    "table_header_serial_no" : "Serial no.",
+    "table_header_member_no" : "Member no.",
+    "table_header_dnid" : "DNID",
+    "table_header_transponder_type" : "Transponder type",
+    "table_header_detail_button" : "Details",
+    "table_header_logs" : "Logs"
 }

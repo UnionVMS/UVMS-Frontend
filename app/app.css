@@ -7376,6 +7376,9 @@ footer {
   background-color: #383737;
   color: white;
   height: 75px;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
 }
 footer .content {
   width: 1170px;
@@ -7656,7 +7659,8 @@ nav.configuration .configuration {
 }
 .vesselsearchresultcontainer {
   background-color: #EBEBEB;
-  padding-bottom: 50px;
+  padding-bottom: 15px;
+  margin-bottom: 100px;
 }
 .vesselsearchresult {
   width: 1170px;
