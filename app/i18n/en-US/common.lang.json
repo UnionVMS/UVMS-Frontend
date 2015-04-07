@@ -1,6 +1,8 @@
 {
 	"yes" : "Yes",
 	"no" : "No"	,
+    "remove" : "Remove",
+    "save" : "Save",
 	"search" : "Search",
 	"search_advanced_link" : "Advanced search",
     "search_group_dropdown" : "Saved groups",

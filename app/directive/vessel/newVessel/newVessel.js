@@ -1,6 +1,37 @@
 angular.module('unionvmsWeb')
     .controller('newVesselCtrl', function ($scope, $http, vesselRestService, $route, validationService) {
 
+
+        // DROPDOWNS DUMMIES - Needs to have some sort of connection to database... and needs to be refatoried when settingsfile is correct or present.
+        $scope.vesselCountry = "Country";
+        $scope.vesselActivity = "Activity";
+        $scope.vesselHasIrc = "No";
+        $scope.vesselOverall = "LOA";
+        $scope.vesselHasLicense = "No";
+        $scope.vesselLicenseType = "Choose license type";
+        $scope.vesselUnitOfMessure = "London";
+        $scope.vesselEffect = "Effect";
+        $scope.searchFlagState = "Flag state";
+        $scope.searchLicenseType = "License type";
+        $scope.searchActive = "Active";
+        $scope.searchVesselType = "Type";
+
+        //Dummy values for dropdowns
+        $scope.vesseloveralltypes =[{'name':'LOA','code':'1'},{'name':'LBP','code':'0'}];
+        $scope.vesselUnitOfMessures =[{'name':'London','code':'London'}];
+        $scope.vesselEffectTypes =[{'name':'hp','code':'133'},{'name':'kW','code':'99'}];
+        $scope.terminalsatellitetypes =[{'name':'Inmarsat-B','code':'133'},{'name':'Inmarsat-C','code':'998'}];
+        $scope.terminaloceanstypes =[{'name':'Skagerack','code':'3'},{'name':'Kattegatt','code':'99'},{'name':'Östersjön','code':'929'}];
+        $scope.vesselCountries =[{'name':'SWE','code':'SWE'},{'name':'DNK','code':'DNK'},{'name':'NOR','code':'NOR'}];
+        $scope.vesselActivitytTypes =[{'name':'Fishing Vessel','code':'Fishing Vessel'},{'name':'Pilot Vessel','code':'Pilot Vessel'},{'name':'Trawling Vessel','code':'Trawling Vessel'}];
+        $scope.vesselHasIrcTypes =[{'name':'Yes','code':'true'},{'name':'No','code':'false'}];
+        $scope.vesselLicensTypes =[{'name':'Fishing license','code':'Fishing license'},{'name':'Trawling license','code':'Trawling license'}];
+        $scope.searchFlagStates =[{'name':'SWE','code':'SWE'},{'name':'DNK','code':'DNK'},{'name':'NOR','code':'NOR'}];
+        $scope.vesselVesselTypes =[{'name':'Fishing Vessel','code':'Fishing Vessel'},{'name':'Pilot Vessel','code':'Pilot Vessel'},{'name':'Trawling Vessel','code':'Trawling Vessel'}];
+        $scope.searchLicensTypes =[{'name':'Fishing license','code':'Fishing license'},{'name':'Trawling license','code':'Trawling license'}];
+        $scope.searchActiveTypes = [{'name':'Yes','code':'true'},{'name':'No','code':'false'}];    
+
+
         $scope.removeNewMobileSystem = function (item, idx) {
             if (idx >= 0){
                 $scope.newVesselObj.mobileTerminals.splice(idx, 1);

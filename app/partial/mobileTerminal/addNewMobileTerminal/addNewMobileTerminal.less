@@ -1,0 +1,46 @@
+#assignVesselLink{
+    font-weight: bold;
+    text-transform: uppercase;
+    .link();
+    .underline();
+}
+
+.transponderSystemSelects{
+    margin-top: 20px;
+    & div{
+        float:left;
+
+        &:nth-child(2) {
+            margin-left: 10px;
+        }
+    }
+}
+
+.communicationChannels{
+    margin-top: 30px;
+
+    &>div{
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+}
+
+.communicationChannel{
+
+    .fa{
+        cursor: pointer;
+    }
+
+    .sort{
+        float:left;
+        width: 50px;
+        min-width: 50px;
+    }
+
+    //Remove channel
+    .remove{
+        float:left;
+        margin-left: 10px;
+        color:red;
+    }
+}

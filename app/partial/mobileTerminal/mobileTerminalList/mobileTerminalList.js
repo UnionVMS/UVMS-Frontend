@@ -19,7 +19,7 @@ angular.module('unionvmsWeb').controller('MobileterminallistCtrl',function($scop
                 $scope.selectedMobileTerminals.push(item.vesselId.value);
             });
         }*/
-        console.log("CHECKED ALL CLICKED!")
+        console.log("CHECKED ALL CLICKED!");
     };
 
     $scope.mobileTerminalChecked = function(item){

@@ -67,14 +67,21 @@
   <script src="directive/common/search/advancedSearch/vessel/advancedSearchVesselForm.js"></script>
   <script src="partial/vessel/vesselList/vesselList.js"></script>
   <script src="partial/mobileTerminal/mobileTerminalList/mobileTerminalList.js"></script>
+  <script src="partial/mobileTerminal/addNewMobileTerminal/addNewMobileTerminal.js"></script>
+  <script src="directive/common/datepickerInput/datepickerInput.js"></script>
   <!-- Add New Component JS Above -->
 
 
     <div ng-include="'partial/header/header.html'"></div>
-    <div id="content" class="container">
-        <div class="row">
-            <div ng-view></div>
-        </div>
+
+    <!--div style="width:100%;background:red;height:200px;width:100%">
+      <div class="container">
+          asdasd
+      </div>    
+    </div-->    
+    
+    <div id="content">
+      <div ng-view></div>
     </div>
     <footer>
         <div class="content">

@@ -1,0 +1,159 @@
+<div ng-controller="addNewMobileTerminalCtrl">
+    <form name="addNewMobileTerminal" method="post">
+            <div class="row">
+                <div class="col-md-9"><h3>{{'mobileTerminal.add_new_form_header' | i18n}}</h3></div>
+                <div class="col-md-2 textAlignRight">
+                    <button  type="submit" class="btn btn-primary" ng-click="createNewMobileTerminal()">{{'common.save' | i18n}}</button>
+                </div>
+                <div class="col-md-1 pull-right" ng-click="toggleAddNewMobileTerminal()"> <img src="assets/images/close.png" /></div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <span id="assignVesselLink" ng-click="toggleAssignVessel()">{{'mobileTerminal.assign_vessel' | i18n}}</span>
+                </div>
+            </div>
+
+
+            <div class="row transponderSystemSelects">
+                <div class="col-md-12">
+                    <div>
+                        <p class="labelheaders">{{'mobileTerminal.add_new_form_transponder_system_label' | i18n}}</p>
+                        <select ng-options="item.name for item in transponderSystems track by item.code" ng-model="selectedValues.transponderSystem">
+                             <option value='' disabled>{{ transponderSystem }}</option>
+                        </select>                    
+                    </div>
+    
+                    <div ng-show="selectedValues.transponderSystem">
+                        <p class="labelheaders">{{'mobileTerminal.add_new_form_ocean_region_label' | i18n}}</p>
+                        <select ng-options="item.name for item in oceanRegions track by item.code" ng-model="selectedValues.oceanRegion">
+                             <option value='' disabled>{{ oceanRegion }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="selectedValues.oceanRegion">
+                <div class="row">
+                    <div class="col-md-2">
+                        <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_sattelite_number_label' | i18n}}</p>
+                        <input type="text" class="form-control grayInput" ng-model="selectedValues.satteliteNumber">
+                    </div>
+                    <div class="col-md-2">
+                        <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_serial_no_label' | i18n}}</p>
+                        <input type="text" class="form-control grayInput" ng-model="selectedValues.serialNo">
+                    </div>
+                    <div class="col-md-2">
+                        <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_transceiver_type_label' | i18n}}</p>
+                        <input type="text" class="form-control grayInput" ng-model="selectedValues.transceiverType">
+                    </div>           
+                    <div class="col-md-2">
+                        <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_software_version_label' | i18n}}</p>
+                        <input type="text" class="form-control grayInput" ng-model="selectedValues.softwareVersion">
+                    </div>
+                    <div class="col-md-2">
+                        <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_antenna_label' | i18n}}</p>
+                        <input type="text" class="form-control grayInput" ng-model="selectedValues.antenna">
+                    </div>
+                    <div class="col-md-2">
+                        <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_answer_back_label' | i18n}}</p>
+                        <input type="text" class="form-control grayInput" ng-model="selectedValues.answerBack">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_installed_by_label' | i18n}}</p>
+                        <input type="text" class="form-control grayInput" ng-model="selectedValues.installedBy">
+                    </div>
+                    <div class="col-md-2">
+                        <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_installed_on_label' | i18n}}</p>
+                        <datepicker-input model="selectedValues.installedOn"></datepicker-input>
+                    </div>
+                    <div class="col-md-2">
+                        <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_started_on_label' | i18n}}</p>
+                        <datepicker-input model="selectedValues.startedOn"></datepicker-input>
+                    </div>
+                    <div class="col-md-2">
+                        <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_uninstalled_on_label' | i18n}}</p>
+                        <datepicker-input model="selectedValues.unInstalledOn"></datepicker-input>
+                    </div>
+                    <div class="col-md-2">
+                        <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_land_earth_station_label' | i18n}}</p>
+                        <input type="text" class="form-control grayInput" ng-model="selectedValues.landEarthStation">
+                    </div>
+                    <div class="col-md-2">
+                        <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_expected_rep_freq_label' | i18n}}</p>
+                        <input type="text" class="form-control grayInput" ng-model="selectedValues.expectedRepFreq">
+                    </div>
+                    <div class="col-md-2">
+                        <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_grace_period_label' | i18n}}</p>
+                        <input type="text" class="form-control grayInput" ng-model="selectedValues.gracePeriod">
+                    </div>
+                    <div class="col-md-2">
+                        <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_in_port_grace_period_label' | i18n}}</p>
+                        <input type="text" class="form-control grayInput" ng-model="selectedValues.inPortGracePeriod">
+                    </div>
+                </div>
+                <div class="row communicationChannels">
+                    <div class="col-md-6">
+                        {{'mobileTerminal.form_inmarsatc_communication_channels_header' | i18n}}
+                    </div>
+                    <div class="col-md-5 textAlignRight">
+                        <span class="link underline" ng-click="addNewChannel()">{{'mobileTerminal.form_inmarsatc_communication_channels_add_new_button' | i18n}}</span>
+                    </div>
+                </div>
+                <div class="row-same-height communicationChannel" ng-repeat="communicationChannel in selectedValues.communicationChannels" >
+    
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-2 nopaddingleft">
+                                <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_communication_channel_dnid_label' | i18n}}</p>
+                                <input type="text" class="form-control grayInput" ng-model="communicationChannel.dnid">
+                            </div>
+                            <div class="col-md-2">
+                                <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_communication_channel_channel_label' | i18n}}</p>
+                                <input type="text" class="form-control grayInput" ng-model="communicationChannel.channel">
+                            </div>
+                            <div class="col-md-2">
+                                <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_communication_channel_member_no_label' | i18n}}</p>
+                                <input type="text" class="form-control grayInput" ng-model="communicationChannel.memberNo">
+                            </div>
+                            <div class="col-md-2">
+                                <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_communication_channel_land_station_label' | i18n}}</p>
+                                <input type="text" class="form-control grayInput" ng-model="communicationChannel.landStation">
+                            </div>
+                            <div class="col-md-2">
+                                <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_communication_channel_started_label' | i18n}}</p>
+                                <datepicker-input model="communicationChannel.started"></datepicker-input>
+                            </div>
+                            <div class="col-md-2">
+                                <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_communication_channel_stopped_label' | i18n}}</p>
+                                <datepicker-input model="communicationChannel.stopped"></datepicker-input>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="col-md-2 bottom-column">
+                        <div class="sort">
+                            <i class="fa fa-lg fa-arrow-up" title="{{'mobileTerminal.form_inmarsatc_communication_channel_sort_up_title' | i18n}}" ng-click="moveChannel($index, $index-1)" ng-show="$index >= 1"></i>
+                            <i class="fa fa-lg fa-arrow-down" title="{{'mobileTerminal.form_inmarsatc_communication_channel_sort_down_title' | i18n}}" ng-click="moveChannel($index, $index+1)" ng-show="$index < selectedValues.communicationChannels.length -1"></i>
+                            &nbsp;
+                        </div>
+                        <div class="remove">
+                            <i class="fa fa-lg fa-times" title="{{'common.remove' | i18n}}" ng-click="removeChannel($index)"></i>
+                        </div>
+                        
+                    </div>
+                </div>                    
+
+            </div>
+
+
+            <div class="row" style="margin-top:100px">
+                <div class="col-md-12">
+                    <a ng-click="clearForm()">Clear form</a>
+                </div>
+            </div>
+
+        </form>
+
+</div>
