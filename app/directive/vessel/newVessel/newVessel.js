@@ -29,7 +29,7 @@ angular.module('unionvmsWeb')
         $scope.searchFlagStates =[{'name':'SWE','code':'SWE'},{'name':'DNK','code':'DNK'},{'name':'NOR','code':'NOR'}];
         $scope.vesselVesselTypes =[{'name':'Fishing Vessel','code':'Fishing Vessel'},{'name':'Pilot Vessel','code':'Pilot Vessel'},{'name':'Trawling Vessel','code':'Trawling Vessel'}];
         $scope.searchLicensTypes =[{'name':'Fishing license','code':'Fishing license'},{'name':'Trawling license','code':'Trawling license'}];
-        $scope.searchActiveTypes = [{'name':'Yes','code':'true'},{'name':'No','code':'false'}];    
+        $scope.searchActiveTypes = [{'name':'Yes','code':'true'},{'name':'No','code':'false'}];
 
 
         $scope.removeNewMobileSystem = function (item, idx) {
@@ -120,10 +120,10 @@ angular.module('unionvmsWeb')
                 delete $scope.newVesselObj.mobileTerminals; //MobileTerminals remove them cuz they do not exist in backend yet.
 
                 //Feedback to user.
-                $('.createResponseMessage').slideIn('slow');
+                $('.createResponseMessage').slideDown('slow');
                 //Hide feedback to user
                 setTimeout(function () {
-                    $('.createResponseMessage').slideOut('slow');
+                    $('.createResponseMessage').slideUp('slow');
                 }, 4000);
                 //Create new Vessel and take care of the response(eg. the promise) when the create is done.
                 var createVesselResp = vesselRestService.createNewVessel($scope.newVesselObj)

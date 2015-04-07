@@ -7196,6 +7196,20 @@ li a {
  * Each class should only do one thing, otherwise it should go in components.less
  *
  */
+.containerWrapper {
+  width: 100%;
+}
+.grayContainer {
+  background-color: #EBEBEB;
+}
+.row-same-height {
+  display: table;
+}
+.bottom-column {
+  float: none;
+  display: table-cell;
+  vertical-align: bottom;
+}
 .colNoPadding {
   padding: 0px;
 }
@@ -7208,6 +7222,15 @@ li a {
 .nomargin {
   margin: 0px !important;
 }
+.textAlignCenter {
+  text-align: center;
+}
+.textAlignRight {
+  text-align: right;
+}
+.textAlignLeft {
+  text-align: left;
+}
 .pointer {
   cursor: pointer;
 }
@@ -7217,7 +7240,7 @@ li a {
 .prefixWithPlus::before {
   content: '+';
 }
-span.link {
+.link {
   color: #428bca;
   cursor: pointer;
 }
@@ -7362,9 +7385,19 @@ input[type="text"]:focus {
 .labelheaders {
   margin-top: 10px;
   margin-bottom: 0px;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+@media (min-width: 1200px) {
+  .labelheaders {
+    font-size: 14px;
+  }
 }
 .inputerrors .glyphicon {
   top: 2px;
+}
+select {
+  padding: 10px;
 }
 /*Input styles*/
 .grayInput {
@@ -7379,11 +7412,8 @@ footer {
   position: fixed;
   bottom: 0px;
   width: 100%;
-}
-footer .content {
-  width: 1170px;
-  margin: 0px auto;
-  padding-top: 30px;
+  z-index: 5;
+  padding-top: 5px;
 }
 /* Component LESS */
 .header {
@@ -7439,12 +7469,7 @@ footer .content {
   background-color: #383737;
   color: #FFFFFF;
 }
-.pageinfocontainer {
-  width: 1170px;
-  margin: 0px auto;
-}
 .headermenu {
-  width: 1170px;
   margin: 0 auto;
   height: 55px;
 }
@@ -7597,23 +7622,6 @@ nav.configuration .configuration {
 .vesselsearchboxcontainer {
   background-color: white;
 }
-.vesselsearchbox {
-  width: 1170px;
-  margin: 5px auto;
-  padding: 20px 0;
-}
-.vesselsearchbox input {
-  background-color: #EBEBEB;
-  border: medium none;
-  color: #918D8F;
-  font-size: 20px;
-  font-style: italic;
-  height: 45px;
-  padding-left: 25px;
-}
-.vesselsearchbox form {
-  padding-left: 0px;
-}
 .filtertext {
   margin-right: 30px;
   background-color: #ffffff;
@@ -7650,52 +7658,6 @@ nav.configuration .configuration {
   border-color: #bde5bf;
   border-radius: 4px 4px 4px 4px;
 }
-/*
-.vesseldropdown:hover{
-    background-color: red;
-}*/
-.vesselsearchgroups {
-  /*float: right;*/
-}
-.vesselsearchresultcontainer {
-  background-color: #EBEBEB;
-  padding-bottom: 15px;
-  margin-bottom: 100px;
-}
-.vesselsearchresult {
-  width: 1170px;
-  margin: 5px auto;
-  overflow: hidden;
-}
-.advancesearchcontainer {
-  width: 1170px;
-  margin: 5px auto;
-  /*overflow: hidden;
-*/
-}
-.advancesearchcontainer .advancesearchtag {
-  color: #35A7DF;
-  text-decoration: underline;
-  cursor: pointer;
-}
-.advancesearchcontainer .advancesearchbody {
-  opacity: 1;
-  /*height: 200px;*/
-}
-.advancesearchcontainer .animate-show {
-  opacity: 1;
-}
-.advancesearchcontainer .animate-show.ng-hide-add.ng-hide-add-active,
-.advancesearchcontainer .animate-show.ng-hide-remove.ng-hide-remove-active {
-  -webkit-transition: all linear 0.5s;
-  transition: all linear 0.5s;
-}
-.advancesearchcontainer .animate-show.ng-hide {
-  opacity: 0;
-}
-.advancesearchtag {
-  color: #35A7DF;
-}
 .addvesselbtn {
   width: 120px;
 }
@@ -7723,7 +7685,6 @@ nav.configuration .configuration {
   width: 120px;
 }
 .vesselsearchboxfooter {
-  width: 1170px;
   margin: 0px auto 0px auto;
   padding: 15px 0px;
 }
@@ -7765,13 +7726,6 @@ nav.configuration .configuration {
   -o-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s;
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s;
 }
-.addvessel,
-.getvessel {
-  width: 1170px;
-  margin: 5px auto;
-  /*height: 500px;
-    background-color: #23b5ff;*/
-}
 .vesselcontainerwrapper.ng-hide-add,
 .vesselcontainerwrapper.ng-hide-remove.ng-hide-remove-active,
 .fadegetvesselin.ng-hide-remove,
@@ -7796,20 +7750,16 @@ nav.configuration .configuration {
 .createResponseMessage {
   font-weight: bold;
   font-size: 14px;
-  height: 35px;
-  width: 400px;
+  height: 20px;
 }
 .vesselname {
   font-size: 27px;
   font-width: bold;
 }
-.vesselshowing {
-  width: 1170px;
-  margin: 0px auto;
-}
 .vesselloadmore {
   width: 100px;
   margin: 0px auto;
+  margin-bottom: 20px;
   color: #35A7DF;
   cursor: pointer;
   font-weight: 500;
@@ -7846,6 +7796,19 @@ nav.configuration .configuration {
   background-color: #18a689;
   color: #ffffff;
 }
+.modal-header .closehistorymodal {
+  position: relative;
+  bottom: 40px;
+  right: 5px;
+}
+.modal-header .vesselname {
+  border-bottom-colors: #e4e4e4;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+.vesselsearchresult table {
+  width: 100%;
+}
 .vesselsearchresult table thead {
   border-bottom: solid 2px #C5C5C4;
 }
@@ -7872,6 +7835,42 @@ nav.configuration .configuration {
   padding: 0px 12px;
   font-size: 12px;
 }
+#assignVesselLink {
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #428bca;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.transponderSystemSelects {
+  margin-top: 20px;
+}
+.transponderSystemSelects div {
+  float: left;
+}
+.transponderSystemSelects div:nth-child(2) {
+  margin-left: 10px;
+}
+.communicationChannels {
+  margin-top: 30px;
+}
+.communicationChannels > div {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.communicationChannel .fa {
+  cursor: pointer;
+}
+.communicationChannel .sort {
+  float: left;
+  width: 50px;
+  min-width: 50px;
+}
+.communicationChannel .remove {
+  float: left;
+  margin-left: 10px;
+  color: red;
+}
 /* Add Component LESS Above */
 /* Required for Angular UI Bootstrap */
 .nav,
@@ -7888,6 +7887,7 @@ body {
 #content {
   whidth: 100%;
   min-height: 400px;
+  margin-bottom: 85px;
 }
 .glyphicon {
   color: #18a689;
