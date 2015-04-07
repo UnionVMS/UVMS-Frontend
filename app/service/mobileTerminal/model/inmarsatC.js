@@ -27,7 +27,7 @@ angular.module('unionvmsWeb')
                 channel.push(data.communicationChannels.endDate);
                 channel.push(data.communicationChannels.startDate);
                 this.communicationChannels.push(data.channel);
-            };
+            }
         }
 
         InmarsatC.prototype.toJson = function(){
