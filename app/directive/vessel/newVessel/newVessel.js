@@ -120,10 +120,10 @@ angular.module('unionvmsWeb')
                 delete $scope.newVesselObj.mobileTerminals; //MobileTerminals remove them cuz they do not exist in backend yet.
 
                 //Feedback to user.
-                $('.createResponseMessage').fadeIn();
+                $('.createResponseMessage').slideIn('slow');
                 //Hide feedback to user
                 setTimeout(function () {
-                    $('.createResponseMessage').fadeOut();
+                    $('.createResponseMessage').slideOut('slow');
                 }, 4000);
                 //Create new Vessel and take care of the response(eg. the promise) when the create is done.
                 var createVesselResp = vesselRestService.createNewVessel($scope.newVesselObj)

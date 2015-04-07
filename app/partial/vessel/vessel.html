@@ -1,20 +1,26 @@
-<div class="col-md-12" ng-controller="VesselCtrl" ng-init="initVessel()">
-    <div class="addvessel fadeaddvesselin fadeaddvesselout" ng-show="addNewVesselVisible.active">
-        <div class="row col-md-12">
-            <p class="createResponseMessage">{{createResponseMessage}}</p>
+<div ng-controller="VesselCtrl" ng-init="initVessel()">
+    <div class="container">
+        <div class="addvessel fadeaddvesselin fadeaddvesselout" ng-show="addNewVesselVisible.active">
+            <div class="row col-md-12" ng-show="updateResponseMessage">
+                <p class="createResponseMessage">{{createResponseMessage}}</p>
+            </div>
+            <newVessel></newVessel>
         </div>
-        <newVessel></newVessel>
-    </div>
-    <div class="getvessel fadegetvesselin fadegetvesselout" ng-show="getVesselVisible.active">
-        <div class="row col-md-12">
-            <p class="updateResponseMessage">{{updateResponseMessage}}</p>
+        <div class="getvessel fadegetvesselin fadegetvesselout" ng-show="getVesselVisible.active">
+            <div class="row col-md-12" ng-show="updateResponseMessage">
+                <p class="updateResponseMessage">{{updateResponseMessage}}</p>
+            </div>
+            <getVessel carrier="{{selectedCarrier}}"></getVessel>
         </div>
-        <getVessel carrier="{{selectedCarrier}}"></getVessel>
     </div>
-    <search searchcallback="searchcallback" searchsavegroupcallback="savegroupcallback" modeltype="'VESSEL'" savedgroups="vesselGroups" ng-show="vesselSearchContainerVisible.active"></search>
 
-    <div class="vesselcontainerwrapper fadeaddvesselin fadeaddvesselout" ng-show="vesselSearchContainerVisible.active">
-        <div class="vesselsearchresultcontainer">
+
+    <div class="container">
+        <search searchcallback="searchcallback" searchsavegroupcallback="savegroupcallback" modeltype="'VESSEL'" savedgroups="vesselGroups" ng-show="vesselSearchContainerVisible.active"></search>
+    </div>
+
+    <div class="containerWrapper grayContainer">
+        <div class="vesselcontainerwrapper container fadeaddvesselin fadeaddvesselout" ng-show="vesselSearchContainerVisible.active">
             <div class="vesselsearchboxfooter row">
                 <!-- Dropdown -->
                 <div class="dropdown">
@@ -38,6 +44,7 @@
 
             <p class="vesselshowing">{{'vessel.table_number_of_pages' | i18n}} {{currentSearchResults.page}} {{'vessel.table_of' | i18n}} {{currentSearchResults.totalNumberOfPages}}</p>
             <p class="vesselloadmore" ng-click="loadmore()" ng-hide="currentSearchResults.totalNumberOfPages === currentSearchResults.page"> {{'vessel.table_load_more' | i18n | uppercase}}</p>
+
         </div>
     </div>
 </div>

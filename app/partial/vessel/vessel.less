@@ -4,23 +4,6 @@
 .vesselsearchboxcontainer{
     background-color: white;
 }
-.vesselsearchbox{
-    width: @containerwidth;
-    margin: @containerposition;
-    padding: 20px 0;
-    input{
-        background-color: #EBEBEB;
-        border: medium none;
-        color: #918D8F;
-        font-size: 20px;
-        font-style: italic;
-        height: 45px;
-        padding-left: 25px
-    }
-    form{
-        padding-left: 0px;
-    }
-}
 
 .filtertext{
     margin-right: 30px;
@@ -62,61 +45,8 @@
     border-color: #bde5bf;
     border-radius: 4px 4px 4px 4px;
 }
-/*
-.vesseldropdown:hover{
-    background-color: red;
-}*/
 
-.vesselsearchgroups{
-    /*float: right;*/
-}
 
-.vesselsearchresultcontainer{
-    background-color: #EBEBEB;
-    padding-bottom: 15px;
-    margin-bottom: 100px;
-
-}
-.vesselsearchresult{
-    width: @containerwidth;
-    margin: @containerposition;
-    overflow: hidden;
-}
-
-.advancesearchcontainer
-{
-    width: @containerwidth;
-    margin: @containerposition;
-    /*overflow: hidden;
-*/
-    .advancesearchtag{
-        color: #35A7DF;
-        text-decoration: underline;
-        cursor: pointer;
-    }
-    .advancesearchbody{
-        opacity: 1;
-        /*height: 200px;*/
-    }
-
-    .animate-show {
-        opacity: 1;
-    }
-
-    .animate-show.ng-hide-add.ng-hide-add-active,
-    .animate-show.ng-hide-remove.ng-hide-remove-active {
-        -webkit-transition: all linear 0.5s;
-        transition: all linear 0.5s;
-    }
-
-    .animate-show.ng-hide {
-        opacity: 0;
-    }
-
-}
-.advancesearchtag{
-    color: #35A7DF;
-}
 .addvesselbtn{
 
     width: 120px;
@@ -149,7 +79,6 @@
 }
 
 .vesselsearchboxfooter{
-    width: @containerwidth;
     margin: 0px auto 0px auto;
     padding:15px 0px;
 
@@ -202,13 +131,6 @@
     transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.3s;
 }
 
-.addvessel, .getvessel{
-    width: @containerwidth;
-    margin: @containerposition;
-    /*height: 500px;
-    background-color: #23b5ff;*/
-}
-
 .vesselcontainerwrapper.ng-hide-add,
 .vesselcontainerwrapper.ng-hide-remove.ng-hide-remove-active,
 .fadegetvesselin.ng-hide-remove,
@@ -230,28 +152,24 @@
    transform: scale(1.0) translate3d(0,0,0);
     opacity: 1;
     display: block !important;
-    //display:none;
 }
 
 .updateResponseMessage, .createResponseMessage
 {
     font-weight: bold;
     font-size: 14px;
-    height: 35px;
-    width: 400px;
+    height: 20px;
 }
 
 .vesselname{
     font-size: 27px;
     font-width: bold;
 }
-.vesselshowing{
-    width: @containerwidth;
-    margin: 0px auto;
-}
+
 .vesselloadmore{
     width: 100px;
     margin: 0px auto;
+    margin-bottom: 20px;
     color: #35A7DF;
     cursor: pointer;
     font-weight: 500;
