@@ -1,7 +1,7 @@
 angular.module('unionvmsWeb')
 .factory('vesselRestService', function($http, $log, $q, restConstants, VesselListPage, Vessel, SavedSearchGroup){
 
-    var baseUrl = "http://"+restConstants.host + ":" + restConstants.port;
+    var baseUrl = restConstants.baseUrl;
 
     var getVesselList = function(getListRequest){
         var deferred = $q.defer();

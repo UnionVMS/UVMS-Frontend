@@ -1,4 +1,5 @@
 angular.module('unionvmsWeb').constant('restConstants', {
     host : "@@host",
-    port : "@@port"
+    port : "@@port",
+    baseUrl : "http://@@host:@@port"
 });

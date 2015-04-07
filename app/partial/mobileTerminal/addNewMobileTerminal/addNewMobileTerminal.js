@@ -1,48 +1,67 @@
-angular.module('unionvmsWeb').controller('addNewMobileTerminalCtrl',function($scope){
+angular.module('unionvmsWeb').controller('addNewMobileTerminalCtrl',function($scope, mobileTerminalRestService){
 
-        $scope.transponderSystem = "Choose transponder system";
-        $scope.oceanRegion = "Choose ocean region";
+    var init = function(){
+        //Get list transponder systems
+        mobileTerminalRestService.getTranspondersConfig()
+        .then(
+            function(data){
+                $.each(data, function(index, value){
+                    //Set a view name
+                    if(value.terminalSystemType === "INMARSAT_C"){
+                        data[index].name = "Inmarsat-C Eik";
+                    }
 
-        //Dummy values for dropdowns
-        $scope.transponderSystems =[{'name':'Inmarsat-C Eik','code':'inmarsatc'}];
-        $scope.oceanRegions =[{'name':'AORE','code':'aore'}];
-
-        $scope.selectedValues = {
-            transponderSystem : '',
-            oceanRegion : '',
-            communicationChannels : []
-        };
-
-        //TODO: REMOVE THIS. It's just used for testing.
-        function makeid()
-        {
-            var text = "";
-            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-            for( var i=0; i < 5; i++ ){
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
+                });
+                $scope.transponderSystems = data;
+            },
+            function(error){
+                console.error(error);
             }
+        );
+    }; 
 
-            return text;
+    //Values for dropdowns
+    $scope.transponderSystems =[];
+    $scope.oceanRegions =[{'name':'AORE','code':'aore'}];
+
+    //The values for the new mobile terminal
+    $scope.selectedValues = {
+        transponderSystem : '',
+        oceanRegion : '',
+        communicationChannels : []
+    };
+
+    //TODO: REMOVE THIS. It's just used for testing.
+    function makeid()
+    {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( var i=0; i < 5; i++ ){
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
         }
 
-        $scope.addNewChannel = function(){
-            console.log("ADD NEW CHANNEL");
-            $scope.selectedValues.communicationChannels.push({
-                "dnid" : makeid()
-            });
-        };
+        return text;
+    }
 
-        $scope.removeChannel = function(channelIndex){
-            $scope.selectedValues.communicationChannels.splice(channelIndex, 1);
-        };
+    //Add a new channel to the end of the list of channels
+    $scope.addNewChannel = function(){
+        $scope.selectedValues.communicationChannels.push({
+            "dnid" : makeid()
+        });
+    };
 
-        $scope.moveChannel = function(oldIndex, newIndex){
-            console.log("moveChannel");
-            console.log(oldIndex);
-            console.log(newIndex);
-            $scope.selectedValues.communicationChannels.splice(newIndex, 0, $scope.selectedValues.communicationChannels.splice(oldIndex, 1)[0]);
-        };
+    //Remove a channel from the list of channels
+    $scope.removeChannel = function(channelIndex){
+        $scope.selectedValues.communicationChannels.splice(channelIndex, 1);
+    };
+
+    //Move channel in the list. Used when sorting the channels up and down
+    $scope.moveChannel = function(oldIndex, newIndex){
+        $scope.selectedValues.communicationChannels.splice(newIndex, 0, $scope.selectedValues.communicationChannels.splice(oldIndex, 1)[0]);
+    };
+
+    init();
 
 
 });

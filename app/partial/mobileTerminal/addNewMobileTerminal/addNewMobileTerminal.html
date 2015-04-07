@@ -18,15 +18,15 @@
                 <div class="col-md-12">
                     <div>
                         <p class="labelheaders">{{'mobileTerminal.add_new_form_transponder_system_label' | i18n}}</p>
-                        <select ng-options="item.name for item in transponderSystems track by item.code" ng-model="selectedValues.transponderSystem">
-                             <option value='' disabled>{{ transponderSystem }}</option>
+                        <select ng-options="item.name for item in transponderSystems track by item.terminalSystemType" ng-model="selectedValues.transponderSystem">
+                             <option value='' disabled>{{'mobileTerminal.add_new_form_transponder_system_placeholder' | i18n}}</option>
                         </select>                    
                     </div>
     
                     <div ng-show="selectedValues.transponderSystem">
                         <p class="labelheaders">{{'mobileTerminal.add_new_form_ocean_region_label' | i18n}}</p>
                         <select ng-options="item.name for item in oceanRegions track by item.code" ng-model="selectedValues.oceanRegion">
-                             <option value='' disabled>{{ oceanRegion }}</option>
+                            <option value='' disabled>{{'mobileTerminal.add_new_form_ocean_region_label_placeholder' | i18n}}</option>
                         </select>
                     </div>
                 </div>
