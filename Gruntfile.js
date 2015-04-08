@@ -248,10 +248,10 @@ module.exports = function (grunt) {
         singleRun: true
       },
       all_tests: {
-        browsers: ['PhantomJS2','Chrome']
+        browsers: ['PhantomJS','Chrome']
       },
       during_watch: {
-        browsers: ['PhantomJS2']
+        browsers: ['PhantomJS']
       },
     },
     compress: {
@@ -268,9 +268,9 @@ module.exports = function (grunt) {
     }, 
   });
 
-  grunt.registerTask('sub-build',['jshint', 'test', 'clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy','htmlmin','compress:dist','clean:after']);//,'clean:after'
+  grunt.registerTask('sub-build',['jshint', 'clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy','htmlmin','compress:dist','clean:after']);//,'clean:after'
 
-  grunt.registerTask('build-local', ['replace:local', 'sub-build']);
+  grunt.registerTask('build-local', ['replace:local', 'test', 'sub-build']);
   grunt.registerTask('build-dev', ['replace:dev','sub-build']);
   grunt.registerTask('build-test', ['replace:test','sub-build']);
   grunt.registerTask('test',['dom_munger:read', 'karma:all_tests', 'clean:after']);
