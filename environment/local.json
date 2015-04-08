@@ -1,4 +1,5 @@
 {
+    "envName": "local",
     "host":"localhost",
     "port":"8080"
 }

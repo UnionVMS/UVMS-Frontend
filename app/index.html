@@ -69,6 +69,7 @@
   <script src="partial/mobileTerminal/mobileTerminalList/mobileTerminalList.js"></script>
   <script src="partial/mobileTerminal/addNewMobileTerminal/addNewMobileTerminal.js"></script>
   <script src="directive/common/datepickerInput/datepickerInput.js"></script>
+  <script src="partial/footer/footer.js"></script>
   <!-- Add New Component JS Above -->
 
 
@@ -83,15 +84,8 @@
     <div id="content">
       <div ng-view></div>
     </div>
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <p>&#169; 2015 UnionVMS</p>
-                </div>
-            </div>
-        </div>
-    </footer>
+
+    <div ng-include="'partial/footer/footer.html'"></div>
 
 </body>
 </html>

@@ -1,4 +1,5 @@
 {
+    "envName": "dev",
     "host":"livm67u",
     "port":"28080"
 }
