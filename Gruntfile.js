@@ -138,8 +138,9 @@ module.exports = function (grunt) {
       main: {
         files: [
             {
-                src: ['bower_components/font-awesome/fonts/**'], 
-                dest: 'dist/',
+                cwd: 'bower_components/',
+                src: ['font-awesome/fonts/**'], 
+                dest: 'dist/assets',
                 filter:'isFile',
                 expand:true
             },
@@ -168,7 +169,18 @@ module.exports = function (grunt) {
                 src: ['assets/**/*'], dest: 'dist/'
             }
         ]
-      }
+      },
+      serve: {
+        files: [
+            {
+                cwd: 'bower_components/',
+                src: ['font-awesome/fonts/**'], 
+                dest: 'app/assets',
+                filter:'isFile',
+                expand:true
+            },
+        ]
+      }      
     },
     dom_munger:{
       read: {
@@ -276,7 +288,7 @@ module.exports = function (grunt) {
   grunt.registerTask('test',['dom_munger:read', 'karma:all_tests', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
-  grunt.registerTask('serve', ['replace:local', 'dom_munger:read','jshint','connect', 'watch']);
+  grunt.registerTask('serve', ['replace:local', 'copy:serve', 'dom_munger:read','jshint','connect', 'watch']);
 
     grunt.event.on('watch', function(action, filepath) {
         //https://github.com/gruntjs/grunt-contrib-watch/issues/156
