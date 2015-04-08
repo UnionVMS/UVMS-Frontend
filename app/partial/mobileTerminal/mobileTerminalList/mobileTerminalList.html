@@ -7,7 +7,7 @@
                 <th><input type="checkbox" ng-model="item.selectedAll" ng-click="checkAll()"/></th>
                 <th>
                     <a href="" ng-click="sortType='state'; sortReverse = !sortReverse">
-                        {{'mobileterminal.table_header_flag_state' | i18n}}
+                        {{'mobileTerminal.table_header_flag_state' | i18n}}
                         <span ng-show="sortType == 'state' && !sortReverse" class="fa fa-caret-down"></span>
                         <span ng-show="sortType == 'state' && sortReverse" class="fa fa-caret-up"></span>
                         <span ng-show="sortType != 'state'" class="fa fa-sort"></span>
@@ -15,7 +15,7 @@
                 </th>
                 <th>
                     <a href="" ng-click="sortType='vesselname'; sortReverse = !sortReverse">
-                        {{'mobileterminal.table_header_vessel_name' | i18n}}
+                        {{'mobileTerminal.table_header_vessel_name' | i18n}}
                     <span ng-show="sortType == 'vesselname' && !sortReverse"
                           class="fa fa-caret-down"></span>
                     <span ng-show="sortType == 'vesselname' && sortReverse"
@@ -25,7 +25,7 @@
                 </th>
                 <th>
                     <a href="" ng-click="sortType='serialno'; sortReverse = !sortReverse">
-                        {{'mobileterminal.table_header_serial_no' | i18n}}
+                        {{'mobileTerminal.table_header_serial_no' | i18n}}
                         <span ng-show="sortType == 'serialno' && !sortReverse" class="fa fa-caret-down"></span>
                         <span ng-show="sortType == 'serialno' && sortReverse" class="fa fa-caret-up"></span>
                         <span ng-show="sortType != 'serialno'" class="fa fa-sort"></span>
@@ -33,7 +33,7 @@
                 </th>
                 <th>
                     <a href="" ng-click="sortType='memberno'; sortReverse = !sortReverse">
-                        {{'mobileterminal.table_header_member_no' | i18n}}
+                        {{'mobileTerminal.table_header_member_no' | i18n}}
                         <span ng-show="sortType == 'memberno' && !sortReverse" class="fa fa-caret-down"></span>
                         <span ng-show="sortType == 'memberno' && sortReverse" class="fa fa-caret-up"></span>
                         <span ng-show="sortType != 'memberno'" class="fa fa-sort"></span>
@@ -41,7 +41,7 @@
                 </th>
                 <th>
                     <a href="" ng-click="sortType='dnid'; sortReverse = !sortReverse">
-                        {{'mobileterminal.table_header_dnid' | i18n}}
+                        {{'mobileTerminal.table_header_dnid' | i18n}}
                         <span ng-show="sortType == 'dnid' && !sortReverse" class="fa fa-caret-down"></span>
                         <span ng-show="sortType == 'dnid' && sortReverse" class="fa fa-caret-up"></span>
                         <span ng-show="sortType != 'dnid'" class="fa fa-sort"></span>
@@ -49,14 +49,14 @@
                 </th>
                 <th>
                     <a href="" ng-click="sortType='transpondertype'; sortReverse = !sortReverse">
-                        {{'mobileterminal.table_header_transponder_type' | i18n}}
+                        {{'mobileTerminal.table_header_transponder_type' | i18n}}
                         <span ng-show="sortType == 'transpondertype' && !sortReverse" class="fa fa-caret-down"></span>
                         <span ng-show="sortType == 'transpondertype' && sortReverse" class="fa fa-caret-up"></span>
                         <span ng-show="sortType != 'transpondertype'" class="fa fa-sort"></span>
                     </a>
                 </th>
-                <th>{{'mobileterminal.table_header_detail_button' | i18n}}</th>
-                <th>{{'mobileterminal.table_header_logs' | i18n}}</th>
+                <th>{{'mobileTerminal.table_header_detail_button' | i18n}}</th>
+                <th>{{'mobileTerminal.table_header_logs' | i18n}}</th>
             </tr>
             </thead>
             <tbody>
@@ -71,10 +71,10 @@
                 <td>{{item}}</td>
                 <td>
                     <button class="btn mobileterminalbtn button" ng-click="mobileTerminalChecked(item)">
-                        {{'mobileterminal.table_header_detail_button' | i18n}}
+                        {{'mobileTerminal.table_header_detail_button' | i18n}}
                     </button>
                 </td>
-                <td>{{'mobileterminal.table_header_logs' | i18n}}</td>
+                <td>{{'mobileTerminal.table_header_logs' | i18n}}</td>
             </tr>
             </tbody>
         </table>
