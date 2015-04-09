@@ -4,10 +4,11 @@ angular.module('unionvmsWeb').directive('search', function() {
         replace: true,
         controller : 'searchCtrl',
         scope: {
-            searchcallback: "=",
-            searchsavegroupcallback: "=",
-            modeltype : "=",
-            savedgroups : "="
+            resultscallback: "=",
+            savegroupcallback: "=",
+            modeltype : "@",
+            savedgroups : "=",
+            advanced : "@"
         },
         templateUrl: 'directive/common/search/search.html',
         link: function(scope, element, attrs, fn) {
@@ -21,17 +22,15 @@ angular.module('unionvmsWeb')
     .controller('searchCtrl', function($scope, $modal, searchService, VesselListPage, vesselRestService){
     
     $scope.availableTypes = [];
-    $scope.advancedSearchAvailable = false;
+    $scope.advancedSearchAvailable = $scope.advanced;
+    $scope.advancedSearchVisible = false;
     $scope.freeText = "";
     $scope.searchFunc = undefined;
 
     //Init the directive
     var init = function(){
         if($scope.modeltype === 'VESSEL'){
-            $scope.availableTypes = ['Vessel'];
-            $scope.advancedSearchAvailable = true;
-            $scope.advancedSearchVisible = false;
-            //$scope.loadSavedSearches();
+            $scope.availableTypes = ['Vessel'];            
             $scope.searchFunc = $scope.searchVessel;
         }
     };
@@ -45,10 +44,10 @@ angular.module('unionvmsWeb')
 
     //Handle Search results
     var onSearchSuccess = function(vesselListPage){
-        $scope.searchcallback(vesselListPage);
+        $scope.resultscallback(vesselListPage);
     };
     var onSearchError = function(response){
-        $scope.searchcallback(response);
+        $scope.resultscallback(response);
     };
 
     //on click on item in saved search groups dropdown
@@ -128,7 +127,7 @@ angular.module('unionvmsWeb')
 
         modalInstance.result.then(function () {
           //Get updated list of vessel groups
-          $scope.searchsavegroupcallback();
+          $scope.savegroupcallback();
         }, function () {
           //Nothing on cancel
         });

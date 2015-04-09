@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-md-12 mobileTerminalContainer" ng-controller="MobileTerminalCtrl">
 			<div class="row" ng-show="isVisible.search">
-				<div class="col-md-12 pageMenu">
+				<div class="col-md-12 pageMenu" ng-cloak>
 					<ul class="horizontal pipeSeparator links">
 						<li class="active" >{{'mobileTerminal.menu_mobileterminals' | i18n}}</li>
 						<li>{{'mobileTerminal.menu_polling' | i18n}}</li>
@@ -11,7 +11,7 @@
 			</div>
 			<div class="row" ng-show="isVisible.search">
 				<div class="col-md-12">
-					<search searchcallback="searchcallback" modeltype="'MOBILE_TERMINAL'"></search>
+					<search resultscallback="searchcallback" modeltype="'MOBILE_TERMINAL'" advanced="false"></search>
 				</div>
 			</div>	
 

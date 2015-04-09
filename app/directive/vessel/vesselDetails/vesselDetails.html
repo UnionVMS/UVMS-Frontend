@@ -1,12 +1,12 @@
-<div>
-    <div class="row col-md-12 vesseldetailsrow">
-        <div class="col-md-1" ng-hide="!newVesselObj.vesselId.value">
+<div class="vesselDetailsContainer">
+    <div class="row vesseldetailsrow">
+        <div class="col-md-1" ng-hide="!vessel.vesselId.value">
             <p class="labelheaders">ID</p>
-            <p>{{newVesselObj.vesselId.value}}</p>
+            <p>{{vessel.vesselId.value}}</p>
         </div>
         <div class="inputgroup col-md-2 form-group has-feedback">
             <p class="labelheaders">NAME</p>
-            <input type="text" name="newvesselnameinput" class="form-control" ng-model="newVesselObj.name"
+            <input type="text" name="newvesselnameinput" class="form-control" ng-model="vessel.name"
                    ng-minlength="3" required>
         </div>
         <div class="inputgroup col-md-2">
@@ -59,27 +59,27 @@
         </div>
         <div class="inputgroup col-md-2">
             <p class="labelheaders">IRCS CODE</p>
-            <input type="text" name="newvesselextinput" class="form-control" ng-model="newVesselObj.ircs">
+            <input type="text" name="newvesselextinput" class="form-control" ng-model="vessel.ircs">
         </div>
         <div class="inputgroup col-md-2">
             <p class="labelheaders">EXT.MARKING</p>
             <input type="text" name="newvesselextmarkingInput" class="form-control"
-                   ng-model="newVesselObj.externalMarking">
+                   ng-model="vessel.externalMarking">
         </div>
     </div>
-    <div class="row col-md-12 vesseldetailsrow">
+    <div class="row vesseldetailsrow">
         <div class="inputgroup col-md-2 has-feedback">
             <p class="labelheaders">CFR</p>
-            <input type="text" name="newvesselcfrinput" class="form-control" ng-model="newVesselObj.cfr" required
+            <input type="text" name="newvesselcfrinput" class="form-control" ng-model="vessel.cfr" required
                    ng-minlength="3">
         </div>
         <div class="inputgroup col-md-2">
             <p class="labelheaders">IMO</p>
-            <input type="text" name="newvesselimoinput" class="form-control" ng-model="newVesselObj.imo">
+            <input type="text" name="newvesselimoinput" class="form-control" ng-model="vessel.imo">
         </div>
         <div class="inputgroup col-md-2">
             <p class="labelheaders">MMSI NO.</p>
-            <input type="text" name="newvesselmmsiofnput" class="form-control" ng-model="newVesselObj.mmsiNo">
+            <input type="text" name="newvesselmmsiofnput" class="form-control" ng-model="vessel.mmsiNo">
         </div>
         <div class="inputgroup col-md-1">
             <p class="labelheaders">LICENSE</p>
@@ -117,19 +117,19 @@
         <div class="inputgroup col-md-3">
             <p class="labelheaders col-md-12 nopaddingleft">HOME PORT CODE - NAME</p>
             <div class="col-md-5 nopaddingleft">
-                <input type="text" name="newvesselhomeportinput" class="form-control " ng-model="newVesselObj.homePort"
+                <input type="text" name="newvesselhomeportinput" class="form-control " ng-model="vessel.homePort"
                        ng-minlength="3" ng-maxlength="6">
             </div>
             <div class="col-md-7 nopaddingright nopaddingleft">
-                <input type="text" name="newvesselhomeportinput" class="form-control" ng-model="newVesselObj.homePort"
+                <input type="text" name="newvesselhomeportinput" class="form-control" ng-model="vessel.homePort"
                        ng-minlength="3" ng-maxlength="6">
             </div>
         </div>
     </div>
-    <div class="row col-md-12 vesseldetailsrow">
+    <div class="row vesseldetailsrow">
         <div class="inputgroup col-md-1">
             <p class="labelheaders">LENGTH</p>
-            <input type="text" name="newvessellengthinput" class="form-control" ng-model="newVesselObj.lengthOverAll">
+            <input type="text" name="newvessellengthinput" class="form-control" ng-model="vessel.lengthOverAll">
         </div>
         <div class="inputgroup col-md-1 nopaddingleft">
             <p class="labelheaders"></p>
@@ -148,7 +148,7 @@
         </div>
         <div class="inputgroup col-md-1">
             <p class="labelheaders">G.TONNAGE</p>
-            <input type="text" name="newvesselcapacityinput" class="form-control" ng-model="newVesselObj.grossTonnage">
+            <input type="text" name="newvesselcapacityinput" class="form-control" ng-model="vessel.grossTonnage">
         </div>
         <div class="inputgroup col-md-1 nopaddingleft">
             <p class="labelheaders"></p>
@@ -167,7 +167,7 @@
         </div>
         <div class="inputgroup col-md-1">
             <p class="labelheaders">POWER</p>
-            <input type="text" name="newvesselpowerinput" class="form-control" ng-model="newVesselObj.powerMain">
+            <input type="text" name="newvesselpowerinput" class="form-control" ng-model="vessel.powerMain">
         </div>
         <div class="inputgroup col-md-1 nopaddingleft">
             <p class="labelheaders"></p>
@@ -188,10 +188,10 @@
         <div class="inputgroup col-md-3">
             <p class="labelheaders col-md-12 nopaddingleft">PRODUCER CODE - NAME</p>
             <div class="col-md-5 nopaddingleft">
-                <input type="text" name="vesselproducername" class="form-control " ng-model="newVesselObj.producerName">
+                <input type="text" name="vesselproducername" class="form-control " ng-model="vessel.producerName">
             </div>
             <div class="col-md-7 nopaddingright nopaddingleft">
-                <input type="text" name="vesselproducercode" class="form-control" ng-model="newVesselObj.producerCode">
+                <input type="text" name="vesselproducercode" class="form-control" ng-model="vessel.producerCode">
             </div>
         </div>
     </div>

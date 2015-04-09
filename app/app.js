@@ -37,4 +37,3 @@ angular.module('unionvmsWeb').value('localeConf', {
     observableAttrs: new RegExp('^data-(?!ng-|i18n)'),
     delimiter: '::'
 });
-

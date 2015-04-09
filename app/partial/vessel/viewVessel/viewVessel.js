@@ -1,14 +1,19 @@
-angular.module('unionvmsWeb')
-    .controller('getVesselCtrl', function($scope, $modal, vesselRestService){
+angular.module('unionvmsWeb').controller('ViewVesselCtrl',function($scope, $modal, vesselRestService){
+
+        //Watch for changes to the vesselObj
+        $scope.$watch(function () { return $scope.vesselObj;}, function (newVal, oldVal) {
+            if (typeof newVal !== 'undefined') {
+                console.log("new vessel view");
+                getVesselHistory($scope.vesselObj.vesselId.value);
+            }
+        });   
 
         $scope.addNewMobileTerminalToVessel = function () {
 
-
-
-            if ($scope.newVesselObj.mobileTerminals === undefined) {
-                $scope.newVesselObj.mobileTerminals = [];
+            if ($scope.vesselObj.mobileTerminals === undefined) {
+                $scope.vesselObj.mobileTerminals = [];
             }
-            $scope.newVesselObj.mobileTerminals.push({
+            $scope.vesselObj.mobileTerminals.push({
                 "satelliteSystem": [
                     {
                         "name": 'inmarsat-C',
@@ -43,53 +48,60 @@ angular.module('unionvmsWeb')
         };
 
 
-
+        //Remove mobileTerminal system at index idx
         $scope.removeMobileSystem = function(item, idx){
             if (idx >= idx){
-                $scope.newVesselObj.mobileTerminals.splice(idx,1);
+                $scope.vesselObj.mobileTerminals.splice(idx,1);
             }
-            };
+        };
 
-       /* $scope.changeVesselStatus = function(){
-            $scope.newVesselObj.active = $scope.newVesselObj.active === true ? false : true;
-        };*/
+        //Toggle the vessel status
+        $scope.changeVesselStatus = function(){
+            $scope.vesselObj.active = !$scope.vesselObj.active;
+        };
 
-        $scope.updateVessel = function(){
-            delete $scope.newVesselObj.mobileTerminals; //MobileTerminals remove them cuz they do not exist in backend yet.
-
-            //Feedback to user.
+        //Show a message for 4 seconds
+        var showMessage = function(){
             $('.updateResponseMessage').slideDown('slow');
-            //Update Vessel
-            //vessel.updateVessel($scope.newVesselObj);
-            //Hide feedback to user
             setTimeout(function() {
                 $('.updateResponseMessage').slideUp('slow');
             }, 4000 );
+        };
+
+        //Update the Vessel
+        $scope.updateVessel = function(){
+            //MobileTerminals remove them cuz they do not exist in backend yet.
+            delete $scope.vesselObj.mobileTerminals; 
+
             //Update Vessel and take care of the response(eg. the promise) when the update is done.
-            var updateResponse = vesselRestService.updateVessel($scope.newVesselObj)
+            var updateResponse = vesselRestService.updateVessel($scope.vesselObj)
                 .then(updateVesselSuccess, updateVesselError);
         };
 
+        //Vessel was successfully updated
         var updateVesselSuccess = function(updateResponse){
+            console.log("The vessel has now been updated.");
             //Message to user
             $scope.updateResponseMessage = "The vessel has now been updated.";
+            showMessage();
         };
+        //Error updating vessel
         var updateVesselError = function(error){
+            console.log("Opps, no update has been done.");
             //Message to user
             $scope.updateResponseMessage = "We are sorry but something went wrong and we could not update the vessel.";
-            //Write to console in browser
-            console.log("Opps, no update has been done.");
+            showMessage();
         };
 
         $scope.enableViewAllEvent = true;
 
         $scope.onViewAllEvent = function() {
             $scope.enableViewAllEvent = false;
-            var response = vesselRestService.getVesselHistoryListByVesselId($scope.newVesselObj.vesselId.value)
+            var response = vesselRestService.getVesselHistoryListByVesselId($scope.vesselObj.vesselId.value)
                 .then(onVesselHistoryListSuccess, onVesselHistoryError);
         };
 
-        $scope.getVesselHistory = function(vesselId) {
+        var getVesselHistory = function(vesselId) {
             var response = vesselRestService.getVesselHistoryListByVesselId(vesselId, 5)
                 .then(onVesselHistoryListSuccess, onVesselHistoryError);
         };
@@ -134,15 +146,5 @@ angular.module('unionvmsWeb')
               //Nothing on cancel
             });
         };
-    })
 
-    .directive('getvessel', function() {
-	return {
-		restrict: 'E',
-		replace: true,
-		templateUrl: 'directive/vessel/getVessel/getVessel.html',
-		link: function(scope, element, attrs, fn) {
-
-		}
-	};
 });

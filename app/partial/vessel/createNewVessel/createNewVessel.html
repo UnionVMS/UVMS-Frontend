@@ -1,6 +1,6 @@
-<div class="newvessel" ng-controller="newVesselCtrl">
+<div class="newvessel" ng-controller="CreateNewVesselCtrl">
 
-<form name="newVesselForm" method="post">
+    <form name="newVesselForm" method="post">
         <div class="row">
             <div class="row col-md-12">
                 <div class="col-md-4 vesselname">{{newVesselObj.name}}</div>
@@ -15,10 +15,10 @@
                     <button  type="submit" class="btn btn-sm createnewvesselbutton" ng-click="createNewVessel()"> Create New Vessel </button>
                 </div>
                 <div>
-                    <div class="closenewvessel pull-right" ng-click="toggleAddNewVessel()"> <img src="assets/images/close.png" /></div>
+                    <div class="closenewvessel pull-right" ng-click="toggleCreateNewVessel()"> <img src="assets/images/close.png" /></div>
                 </div>
             </div>
-            <vessel-details></vessel-details>
+            <vessel-details vessel="newVesselObj"></vessel-details>
         </div>
         <div class=" col-md-12 mobileterminalcontainer" ng-repeat = "item in newVesselObj.mobileTerminals">
             <div class="row col-md-12">
@@ -30,14 +30,8 @@
             <a ng-click="addNewMobileTerminalToNewVessel()"><b>+ ADD NEW MOBILE TERMINAL</b></a>
         </div>
 
-        <!--
-        <div class="row col-md-12" ng-show="false">
-            <span class="vesselhistory col-md-12">EVENT HISTORY</span>
-            <hr>
-        </div>-->
         <div class="row col-md-12">
             <a ng-click="clearForm()">Clear form</a>
         </div>
-
     </form>
 </div>

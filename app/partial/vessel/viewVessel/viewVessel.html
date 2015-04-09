@@ -1,24 +1,24 @@
-<div class="newvessel" ng-controller="getVesselCtrl">
+<div class="newvessel" ng-controller="ViewVesselCtrl">
     <div class="row">
         <div class="row col-md-12">
 
-            <div class="col-md-4 vesselname">{{newVesselObj.name}}</div>
+            <div class="col-md-4 vesselname">{{vesselObj.name}}</div>
             <span class="vesselstatus col-md-10">
-                     <span ng-show="newVesselObj.active == true">Set as inactive</span>
-                     <span ng-show="newVesselObj.active == false">Set as active</span>
+                     <span ng-show="vesselObj.active == true">Set as inactive</span>
+                     <span ng-show="vesselObj.active == false">Set as active</span>
                      <input type="checkbox" ng-click="changeVesselStatus()" checked>
-                     <div ng-show="newVesselObj.active == true">STATUS: <b> Active</b></div>
-                     <div ng-show="newVesselObj.active == false">STATUS: <b> Inactive</b></div>
+                     <div ng-show="vesselObj.active == true">STATUS: <b> Active</b></div>
+                     <div ng-show="vesselObj.active == false">STATUS: <b> Inactive</b></div>
                  </span>
             <div class="col-md-1">
                 <button class="btn btn-sm updatevesselbutton" type="submit" ng-click="updateVessel()"> Update </button>
             </div>
             <div>
-                <div class="closenewvessel pull-right" ng-click="toggleGetVessel()"> <img src="assets/images/close.png" /></div>
+                <div class="closenewvessel pull-right" ng-click="toggleViewVessel()"> <img src="assets/images/close.png" /></div>
             </div>
         </div>
-        <vessel-details></vessel-details>
-    <div class="col-md-12 mobileterminalcontainer row" ng-repeat = "item in newVesselObj.mobileTerminals">
+        <vessel-details vessel="vesselObj"></vessel-details>
+    <div class="col-md-12 mobileterminalcontainer row" ng-repeat = "item in vesselObj.mobileTerminals">
         <a ng-click="removeMobileSystem(item, $index)">-REMOVE SATELLITE SYSTEM</a>
         <mobileterminal terminal="item"></mobileterminal>
     </div>

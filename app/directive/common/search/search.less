@@ -7,20 +7,18 @@
     .searchButton{
         width: @searchButtonWidth;
     }
+   
 
-    .searchTools{        
+    input{
+        height: @inputHeight;
+        font-size: 20px;
+        .italic();
+        .grayInput();
+    }
 
-        input{
-            height: @inputHeight;
-            font-size: 20px;
-            .italic();
-            .grayInput();
+    .dropdown {
+        .btn{
+            height: @inputHeight !important;
         }
-
-        .dropdown {
-            .btn{
-                height: @inputHeight !important;
-            }
-        }
-    }    
+    }
 }

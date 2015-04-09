@@ -5,6 +5,43 @@
     .underline();
 }
 
+.assignVesselsContainer{
+    width:100%;
+    border-top: 1px solid #999;
+    border-bottom: 1px solid #999;
+    padding: 20px 0;
+
+    table{
+        width: 100%;
+        thead{
+            border-bottom: solid 2px #C5C5C4;
+        }
+        tr:nth-child(even){
+            background: #eee;
+        }        
+
+        button{
+            margin: 2px 0;
+        }
+    }
+
+    .pagination{
+        width: 100%;
+        span{
+            .link();
+            .underline();
+            .pointer();
+        }
+    }
+
+    .detailsFooter{
+        margin-top: 20px;
+        .link();
+        .underline();
+        .pointer();        
+    }
+}
+
 .transponderSystemSelects{
     margin-top: 20px;
     & div{

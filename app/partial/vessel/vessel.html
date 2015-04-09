@@ -1,26 +1,30 @@
-<div ng-controller="VesselCtrl" ng-init="initVessel()">
+<div ng-controller="VesselCtrl">
     <div class="container">
-        <div class="addvessel fadeaddvesselin fadeaddvesselout" ng-show="addNewVesselVisible.active">
-            <div class="row col-md-12" ng-show="createResponseMessage">
-                <p class="createResponseMessage">{{createResponseMessage}}</p>
+        <div class="addvessel fadeaddvesselin fadeaddvesselout" ng-show="isVisible.createNewVessel">
+            <div class="row" ng-show="createResponseMessage">
+                <div class="col-md-12">
+                    <p class="createResponseMessage">{{createResponseMessage}}</p>
+                </div>
             </div>
-            <newVessel></newVessel>
+            <div ng-include="'partial/vessel/createNewVessel/createNewVessel.html'"></div>
         </div>
-        <div class="getvessel fadegetvesselin fadegetvesselout" ng-show="getVesselVisible.active">
-            <div class="row col-md-12" ng-show="updateResponseMessage">
-                <p class="updateResponseMessage">{{updateResponseMessage}}</p>
+        <div class="getvessel fadegetvesselin fadegetvesselout" ng-show="isVisible.viewVessel">
+            <div class="row" ng-show="updateResponseMessage">
+                <div class="col-md-12">
+                    <p class="updateResponseMessage">{{updateResponseMessage}}</p>
+                </div>
             </div>
-            <getVessel carrier="{{selectedCarrier}}"></getVessel>
+            <div ng-include="'partial/vessel/viewVessel/viewVessel.html'"></div>
         </div>
     </div>
 
 
     <div class="container">
-        <search searchcallback="searchcallback" searchsavegroupcallback="savegroupcallback" modeltype="'VESSEL'" savedgroups="vesselGroups" ng-show="vesselSearchContainerVisible.active"></search>
+        <search resultscallback="searchCallback" savegroupcallback="saveGroupCallback" modeltype="VESSEL" savedgroups="vesselGroups" advanced="true" ng-show="isVisible.search"></search>
     </div>
 
     <div class="containerWrapper grayContainer">
-        <div class="vesselcontainerwrapper container fadeaddvesselin fadeaddvesselout" ng-show="vesselSearchContainerVisible.active">
+        <div class="vesselcontainerwrapper container fadeaddvesselin fadeaddvesselout" ng-show="isVisible.search">
             <div class="vesselsearchboxfooter row">
                 <!-- Dropdown -->
                 <div class="dropdown">
@@ -36,14 +40,14 @@
                     </ul>
                 </div>
                 <!-- add new button -->
-                <button class="btn btn-sm pull-right addvesselbtn uvmsbtn" ng-click="toggleAddNewVessel()" type="button">
+                <button class="btn btn-sm pull-right addvesselbtn uvmsbtn" ng-click="toggleCreateNewVessel()" type="button">
                     {{'vessel.add_new' | i18n}} &nbsp;&nbsp;&nbsp;&nbsp;<span>+</span></button>
                 <input type="text" class="filtertext pull-right" placeholder="Filter" ng-model="searchFilter">
             </div>
             <div ng-include="'partial/vessel/vesselList/vesselList.html'"></div>
 
             <p class="vesselshowing">{{'vessel.table_number_of_pages' | i18n}} {{currentSearchResults.page}} {{'vessel.table_of' | i18n}} {{currentSearchResults.totalNumberOfPages}}</p>
-            <p class="vesselloadmore" ng-click="loadmore()" ng-hide="currentSearchResults.totalNumberOfPages === currentSearchResults.page"> {{'vessel.table_load_more' | i18n | uppercase}}</p>
+            <p class="vesselloadmore" ng-click="loadNextPage()" ng-hide="currentSearchResults.totalNumberOfPages === currentSearchResults.page"> {{'vessel.table_load_more' | i18n | uppercase}}</p>
 
         </div>
     </div>
