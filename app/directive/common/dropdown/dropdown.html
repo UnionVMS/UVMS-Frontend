@@ -1,0 +1,12 @@
+<div>
+    <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+            <div class="dropdowntext">{{currentItemLabel}}</div>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
+            <li ng-repeat="item in items" role="presentation" ng-click="selectVal(item,$index)">
+                <a role="menuitem" tabindex="-1">{{item.text}}</a>
+            </li>
+        </ul>
+    </div>
+</div>
