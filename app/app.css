@@ -5782,8 +5782,8 @@ button.close {
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('../bower_components/font-awesome/fonts/fontawesome-webfont.eot?v=4.0.3');
-  src: url('../bower_components/font-awesome/fonts/fontawesome-webfont.eot?#iefix&v=4.0.3') format('embedded-opentype'), url('../bower_components/font-awesome/fonts/fontawesome-webfont.woff?v=4.0.3') format('woff'), url('../bower_components/font-awesome/fonts/fontawesome-webfont.ttf?v=4.0.3') format('truetype'), url('../bower_components/font-awesome/fonts/fontawesome-webfont.svg?v=4.0.3#fontawesomeregular') format('svg');
+  src: url('assets/font-awesome/fonts/fontawesome-webfont.eot?v=4.0.3');
+  src: url('assets/font-awesome/fonts/fontawesome-webfont.eot?#iefix&v=4.0.3') format('embedded-opentype'), url('assets/font-awesome/fonts/fontawesome-webfont.woff?v=4.0.3') format('woff'), url('assets/font-awesome/fonts/fontawesome-webfont.ttf?v=4.0.3') format('truetype'), url('assets/font-awesome/fonts/fontawesome-webfont.svg?v=4.0.3#fontawesomeregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -7182,7 +7182,9 @@ li a {
   color: #ffffff;
   border: solid 1px #18a689;
 }
-.btn-primary:hover {
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus {
   background-color: #007d52;
   color: #ffffff;
   border-color: #007d52;
@@ -7405,16 +7407,6 @@ select {
   border: none;
   color: #918D8F;
 }
-footer {
-  background-color: #383737;
-  color: white;
-  height: 75px;
-  position: fixed;
-  bottom: 0px;
-  width: 100%;
-  z-index: 5;
-  padding-top: 5px;
-}
 /* Component LESS */
 .header {
   width: 100%;
@@ -7468,6 +7460,20 @@ footer {
   width: 100%;
   background-color: #383737;
   color: #FFFFFF;
+}
+footer {
+  background-color: #383737;
+  color: white;
+  height: 75px;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  z-index: 5;
+  padding-top: 5px;
+}
+footer span.envName {
+  font-weight: bold;
+  text-transform: uppercase;
 }
 .headermenu {
   margin: 0 auto;
@@ -7531,51 +7537,6 @@ nav.gis .gis,
 nav.configuration .configuration {
   background-color: #c0c0c0;
 }
-.newvessel {
-  border-bottom: 2px solid #918D8F;
-}
-.newvessel .row {
-  margin-bottom: 15px;
-  margin-top: 15px;
-}
-.newvessel .inputgroup .labelheaders {
-  height: 20px;
-  margin-bottom: 0;
-  margin-top: 10px;
-}
-.newvessel .inputgroup input[type=text] {
-  background-color: #EBEBEB;
-}
-.newvessel .dropdowntext {
-  float: left;
-}
-.newvessel .caret {
-  clear: both;
-  margin-left: 10px;
-}
-.newvessel .closenewvessel {
-  margin-right: 0px;
-}
-.newvessel .btn.btn-sm.createnewvesselbutton {
-  position: relative;
-  right: 13px;
-}
-.newvessel a {
-  cursor: pointer;
-}
-.newvessel .has-feedback .form-control-feedback {
-  position: absolute;
-  top: 29px;
-  right: 0;
-  display: block;
-  width: 34px;
-  height: 34px;
-  line-height: 34px;
-  text-align: justify;
-}
-.newvessel .form-group {
-  margin-bottom: 0px;
-}
 .mobileterminalcontainer {
   background-color: #F0F0F0;
   border-radius: 2px 2px 2px 2px;
@@ -7584,9 +7545,37 @@ nav.configuration .configuration {
 .mobileterminalcontainer a {
   cursor: pointer;
 }
-.vesseldetailsrow {
+.vesselDetailsContainer .vesseldetailsrow {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
+}
+.vesselDetailsContainer .inputgroup .labelheaders {
+  height: 20px;
+  margin-bottom: 0;
+  margin-top: 10px;
+}
+.vesselDetailsContainer .inputgroup input[type=text] {
+  background-color: #EBEBEB;
+}
+.vesselDetailsContainer .dropdowntext {
+  float: left;
+}
+.vesselDetailsContainer .caret {
+  clear: both;
+  margin-left: 10px;
+}
+.vesselDetailsContainer .form-group {
+  margin-bottom: 0px;
+}
+.vesselDetailsContainer .has-feedback .form-control-feedback {
+  position: absolute;
+  top: 29px;
+  right: 0;
+  display: block;
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+  text-align: justify;
 }
 .advancedSearch .row {
   margin-bottom: 15px;
@@ -7608,7 +7597,7 @@ nav.configuration .configuration {
 .searchFormContainer .searchButton {
   width: 100px;
 }
-.searchFormContainer .searchTools input {
+.searchFormContainer input {
   height: 45px;
   font-size: 20px;
   font-style: italic;
@@ -7616,7 +7605,7 @@ nav.configuration .configuration {
   border: none;
   color: #918D8F;
 }
-.searchFormContainer .searchTools .dropdown .btn {
+.searchFormContainer .dropdown .btn {
   height: 45px !important;
 }
 .vesselsearchboxcontainer {
@@ -7770,6 +7759,52 @@ nav.configuration .configuration {
 .datetimeinput {
   border: 1px solid #cccccc !important;
 }
+.newvessel {
+  border-bottom: 2px solid #918D8F;
+}
+.newvessel .row {
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.newvessel .closenewvessel {
+  margin-right: 0px;
+}
+.newvessel .btn.btn-sm.createnewvesselbutton {
+  position: relative;
+  right: 13px;
+}
+.newvessel a {
+  cursor: pointer;
+}
+.vesselsearchresult table {
+  width: 100%;
+}
+.vesselsearchresult table thead {
+  border-bottom: solid 2px #C5C5C4;
+}
+.vesselsearchresult table th {
+  height: 40px;
+}
+.vesselsearchresult table th a {
+  font-weight: bold;
+  color: #383737;
+}
+.vesselsearchresult table th a .fa.fa-sort,
+.vesselsearchresult table th a .fa.fa-caret-down,
+.vesselsearchresult table th a .fa.fa-caret-up {
+  color: #18A689;
+  margin-left: 7px;
+}
+.vesselsearchresult table tbody tr {
+  border-bottom: solid 1px #C5C5C4;
+  height: 40px;
+}
+.vesselsearchresult table .button {
+  height: 24px;
+  text-align: center;
+  padding: 0px 12px;
+  font-size: 12px;
+}
 .saveVesselGroupModal {
   overflow-y: auto;
 }
@@ -7806,41 +7841,44 @@ nav.configuration .configuration {
   border-bottom-width: 1px;
   border-bottom-style: solid;
 }
-.vesselsearchresult table {
-  width: 100%;
-}
-.vesselsearchresult table thead {
-  border-bottom: solid 2px #C5C5C4;
-}
-.vesselsearchresult table th {
-  height: 40px;
-}
-.vesselsearchresult table th a {
-  font-weight: bold;
-  color: #383737;
-}
-.vesselsearchresult table th a .fa.fa-sort,
-.vesselsearchresult table th a .fa.fa-caret-down,
-.vesselsearchresult table th a .fa.fa-caret-up {
-  color: #18A689;
-  margin-left: 7px;
-}
-.vesselsearchresult table tbody tr {
-  border-bottom: solid 1px #C5C5C4;
-  height: 40px;
-}
-.vesselsearchresult table .button {
-  height: 24px;
-  text-align: center;
-  padding: 0px 12px;
-  font-size: 12px;
-}
 #assignVesselLink {
   font-weight: bold;
   text-transform: uppercase;
   color: #428bca;
   cursor: pointer;
   text-decoration: underline;
+}
+.assignVesselsContainer {
+  width: 100%;
+  border-top: 1px solid #999;
+  border-bottom: 1px solid #999;
+  padding: 20px 0;
+}
+.assignVesselsContainer table {
+  width: 100%;
+}
+.assignVesselsContainer table thead {
+  border-bottom: solid 2px #C5C5C4;
+}
+.assignVesselsContainer table tr:nth-child(even) {
+  background: #eee;
+}
+.assignVesselsContainer table button {
+  margin: 2px 0;
+}
+.assignVesselsContainer .pagination {
+  width: 100%;
+}
+.assignVesselsContainer .pagination span {
+  color: #428bca;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.assignVesselsContainer .detailsFooter {
+  margin-top: 20px;
+  color: #428bca;
+  text-decoration: underline;
+  cursor: pointer;
 }
 .transponderSystemSelects {
   margin-top: 20px;

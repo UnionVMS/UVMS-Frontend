@@ -2,6 +2,7 @@
     <div class="dropdown">
         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
             <div class="dropdowntext">{{currentItemLabel}}</div>
+            <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
             <li ng-repeat="item in items" role="presentation" ng-click="selectVal(item,$index)">

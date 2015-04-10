@@ -12,24 +12,53 @@ angular.module('unionvmsWeb')
 		link: function(scope, element, attrs, fn) {
 
             scope.setLabel = function() {
-                if (scope.ngModel === "") {
+                if ((scope.ngModel !== undefined && scope.ngModel === "" ) || scope.ngModel === null) {
                     scope.currentItemLabel = attrs.initialtext;
                 } else {
-                    for (var i = 0; i < scope.items.length; i++){
-                        console.log(scope.items[i].text);
-                        if(scope.items[i].text === scope.ngModel)                        {
-                            scope.currentItemLabel = scope.items[i].text;
+                    if(scope.items !== undefined){
+                        for (var i = 0; i < scope.items.length; i++){
+                            console.log(scope.items[i].text);
+                            if(scope.items[i].code === scope.ngModel)                        {
+                                scope.currentItemLabel = scope.items[i].text;
+                            }
                         }
                     }
                 }
             };
 
+            //Watch for changes to the ngModel
+            scope.$watch(function () { return scope.ngModel;}, function (newVal, oldVal) {
+                if (typeof newVal !== 'undefined') {
+                    console.log(scope.items);
+                    if(scope.ngModel !== null &&  scope.currentItemLabel !== attrs.initialtext){
+                        for(var i = 0; i < scope.items.length; i++){
+                            console.log(scope.items[i]);
+                            if(scope.ngModel === scope.items[i].code){
+                                scope.currentItemLabel = scope.items[i].text;
+                            }
+                        }
+                    }else{
+                        scope.currentItemLabel = attrs.initialtext;
+                    }
+                }
+            });
+
             scope.selectVal = function(item){
-                scope.ngModel = item.code;
-                scope.currentItemLabel = item.text;
+                    scope.ngModel = item.code;
+                    scope.currentItemLabel = item.text;
+            };
+
+            scope.addDefaultValueToDropDown = function(){
+                if (scope.items !== undefined && attrs.initialtext !== ""){
+                    var initialValue = {};
+                    initialValue.code = "";
+                    initialValue.text = attrs.initialtext;
+                    scope.items.unshift(initialValue);
+                }
             };
 
             scope.setLabel();
+            scope.addDefaultValueToDropDown();
 		}
 	};
 });

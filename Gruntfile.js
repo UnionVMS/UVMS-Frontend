@@ -139,7 +139,7 @@ module.exports = function (grunt) {
         files: [
             {
                 cwd: 'bower_components/',
-                src: ['font-awesome/fonts/**'], 
+                src: ['font-awesome/fonts/**'],
                 dest: 'dist/assets',
                 filter:'isFile',
                 expand:true
@@ -150,19 +150,19 @@ module.exports = function (grunt) {
                 src: ['bower_components/bootstrap/fonts/*'],
                 dest: 'dist/fonts/',
                 filter:'isFile'
-            }, 
+            },
             {
                 expand:true,
                 flatten: true,
                 src: ['bower_components/bootstrap/fonts/*'],
                 dest: 'fonts/',
                 filter:'isFile'
-            }, 
+            },
             {
                 cwd: 'app/',
                 expand:true,
                 src: ['i18n/**/*'], dest: 'dist/'
-            },        
+            },
             {
                 cwd: 'app/',
                 expand:true,
@@ -174,13 +174,13 @@ module.exports = function (grunt) {
         files: [
             {
                 cwd: 'bower_components/',
-                src: ['font-awesome/fonts/**'], 
+                src: ['font-awesome/fonts/**'],
                 dest: 'app/assets',
                 filter:'isFile',
                 expand:true
             },
         ]
-      }      
+      }
     },
     dom_munger:{
       read: {
@@ -249,7 +249,7 @@ module.exports = function (grunt) {
       options: {
         frameworks: ['jasmine'],
         browserNoActivityTimeout: 100000,
-        files: [  //this files data is also updated in the watch handler, if updated change there too        
+        files: [  //this files data is also updated in the watch handler, if updated change there too
           '<%= dom_munger.data.appjs %>',
           'bower_components/angular-mocks/angular-mocks.js',
           createFolderGlobs('*-spec.js'),
@@ -264,7 +264,7 @@ module.exports = function (grunt) {
       },
       during_watch: {
         browsers: ['PhantomJS']
-      },
+      }
     },
     compress: {
       dist: {
@@ -277,7 +277,7 @@ module.exports = function (grunt) {
           src: ['**/*'],
           dest: '/'}]
       }
-    }, 
+    }
   });
 
   grunt.registerTask('sub-build',['jshint', 'clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy','htmlmin','compress:dist','clean:after']);//,'clean:after'

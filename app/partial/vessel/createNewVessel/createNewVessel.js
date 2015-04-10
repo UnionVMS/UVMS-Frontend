@@ -9,8 +9,8 @@ angular.module('unionvmsWeb').controller('CreateNewVesselCtrl',function($scope, 
         "countryCode": null,
         "externalMarking": null,
         "grossTonnage": null,
-        "hasIrcs": false,
-        "hasLicense": false,
+        "hasIrcs": null,
+        "hasLicense": null,
         "homePort": null,
         "imo": "",
         "ircs": "",
@@ -88,7 +88,7 @@ angular.module('unionvmsWeb').controller('CreateNewVesselCtrl',function($scope, 
         setTimeout(function() {
             $('.createResponseMessage').slideUp('slow');
         }, 4000 );
-    };        
+    };
 
     //Create a new vessel
     $scope.createNewVessel = function(){
