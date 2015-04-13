@@ -10,8 +10,11 @@ angular.module('unionvmsWeb')
                 return $resource(baseUrl+ '/unionvms-api/sec/active/:mobileterminal');
             },
             getMobileTerminalsWithoutVessels : function(){
-                return $resource(baseUrl +'/mobile-rest/mobile/list');
-            }
+                return $resource(baseUrl +'/mobileterminal-rest/mobile/list');
+            },
+            mobileTerminal : function(){
+                return $resource(baseUrl +'/mobileterminal-rest/mobileTerminal/');
+            },            
         };
     })
     .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, MobileTerminal){
@@ -32,7 +35,24 @@ angular.module('unionvmsWeb')
                     deferred.reject(error);
                 });
                 return deferred.promise;
-            }
+            },
+
+            createNewMobileTerminal : function(mobileTerminal){
+                console.log("create new mobile terminal!");
+                console.log(mobileTerminal.toJson());
+                var deferred = $q.defer();
+                mobileTerminalRestFactory.mobileTerminal().save(mobileTerminal.toJson(), function(response) {
+                    console.log("Create response!");
+                    console.log(response);
+                    //TODO: Parse response
+                    deferred.resolve(response.data);
+                }, function(error) {
+                    console.error("Error creating mobile terminal.");
+                    console.error(error);
+                    deferred.reject(error);
+                });
+                return deferred.promise;                
+            },
         };
 
         return mobileTerminalRestService;

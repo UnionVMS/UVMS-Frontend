@@ -1,19 +1,21 @@
 <div ng-controller="addNewMobileTerminalCtrl">
-    <div class="row">
-        <div class="col-md-12" ng-show="errorMessage">
-            {{errorMessage}}
+    <div class="row" ng-show="createResponseMessage">
+        <div class="col-md-12">
+            <p class="createResponseMessage">{{createResponseMessage}}</p>
         </div>
     </div>
+    
     <div class="row">
         <div class="col-md-9"><h3>{{'mobileTerminal.add_new_form_header' | i18n}}</h3></div>
         <div class="col-md-2 textAlignRight">
-            <button  type="submit" class="btn btn-primary" ng-click="createNewMobileTerminal()" ng-hide="transponderSystems.length == 0">{{'common.save' | i18n}}</button>
+            <button  type="submit" ng-disabled="!newMobileTerminal.attributes.oceanRegion" class="btn btn-primary" ng-click="createNewMobileTerminal()" ng-hide="transponderSystems.length == 0">{{'common.save' | i18n}}</button>
         </div>
         <div class="col-md-1 pull-right" ng-click="toggleAddNewMobileTerminal()"> <img src="assets/images/close.png" /></div>
     </div>
 
     <div ng-include="'partial/mobileTerminal/assignVessel/assignVessel.html'" ng-show="transponderSystems.length > 0" ></div>
 
+    <form name="newMobileTerminalForm" method="post">  
         <div class="row" ng-hide="isVisible.assignVessel">
             <div class="col-md-12">
                 <span id="assignVesselLink" ng-click="toggleAssignVessel()">{{'mobileTerminal.assign_vessel' | i18n}}</span>
@@ -23,81 +25,79 @@
 
         <div class="row transponderSystemSelects">
             <div class="col-md-12">
-                <div>
+                <div class="transponderSystemSelect">
                     <p class="labelheaders">{{'mobileTerminal.add_new_form_transponder_system_label' | i18n}}</p>
-                    <select ng-options="item.name for item in transponderSystems track by item.terminalSystemType" ng-model="selectedValues.transponderSystem">
-                         <option value='' disabled>{{'mobileTerminal.add_new_form_transponder_system_placeholder' | i18n}}</option>
-                    </select>                    
+
+                    <dropdown ng-model="newMobileTerminal.mobileTerminalId.systemType" initialtext="{{ 'mobileTerminal.add_new_form_transponder_system_placeholder' | i18n }}" items="transponderSystems"></dropdown>                    
                 </div>
 
-                <div ng-show="selectedValues.transponderSystem">
+                <div class="transponderSystemSelect" ng-show="newMobileTerminal.mobileTerminalId.systemType">
                     <p class="labelheaders">{{'mobileTerminal.add_new_form_ocean_region_label' | i18n}}</p>
-                    <select ng-options="item.name for item in oceanRegions track by item.code" ng-model="selectedValues.oceanRegion">
-                        <option value='' disabled>{{'mobileTerminal.add_new_form_ocean_region_label_placeholder' | i18n}}</option>
-                    </select>
+
+                    <dropdown ng-model="newMobileTerminal.attributes.oceanRegion" initialtext="{{ 'mobileTerminal.add_new_form_ocean_region_label_placeholder' | i18n }}" items="oceanRegions"></dropdown>
                 </div>
             </div>
         </div>
 
-        <div ng-show="selectedValues.oceanRegion">
+        <div ng-show="newMobileTerminal.attributes.oceanRegion">
             <div class="row">
                 <div class="col-md-2">
                     <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_sattelite_number_label' | i18n}}</p>
-                    <input type="text" class="form-control grayInput" ng-model="selectedValues.satteliteNumber">
+                    <input type="text" class="form-control grayInput" ng-model="newMobileTerminal.attributes.SATELLITE_NUMBER">
                 </div>
                 <div class="col-md-2">
                     <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_serial_no_label' | i18n}}</p>
-                    <input type="text" class="form-control grayInput" ng-model="selectedValues.serialNo">
+                    <input type="text" class="form-control grayInput" ng-model="newMobileTerminal.mobileTerminalId.serialNumber" required>
                 </div>
                 <div class="col-md-2">
                     <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_transceiver_type_label' | i18n}}</p>
-                    <input type="text" class="form-control grayInput" ng-model="selectedValues.transceiverType">
+                    <input type="text" class="form-control grayInput" ng-model="newMobileTerminal.attributes.TRANSCEIVER_TYPE">
                 </div>           
                 <div class="col-md-2">
                     <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_software_version_label' | i18n}}</p>
-                    <input type="text" class="form-control grayInput" ng-model="selectedValues.softwareVersion">
+                    <input type="text" class="form-control grayInput" ng-model="newMobileTerminal.attributes.SOFTWARE_VERSION">
                 </div>
                 <div class="col-md-2">
                     <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_antenna_label' | i18n}}</p>
-                    <input type="text" class="form-control grayInput" ng-model="selectedValues.antenna">
+                    <input type="text" class="form-control grayInput" ng-model="newMobileTerminal.attributes.ANTENNA">
                 </div>
                 <div class="col-md-2">
                     <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_answer_back_label' | i18n}}</p>
-                    <input type="text" class="form-control grayInput" ng-model="selectedValues.answerBack">
+                    <input type="text" class="form-control grayInput" ng-model="newMobileTerminal.attributes.ANSWER_BACK">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-2">
                     <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_installed_by_label' | i18n}}</p>
-                    <input type="text" class="form-control grayInput" ng-model="selectedValues.installedBy">
+                    <input type="text" class="form-control grayInput" ng-model="newMobileTerminal.attributes.INSTALLED_BY">
                 </div>
                 <div class="col-md-2">
                     <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_installed_on_label' | i18n}}</p>
-                    <datepicker-input model="selectedValues.installedOn"></datepicker-input>
+                    <datepicker-input model="newMobileTerminal.attributes.INSTALLED_ON"></datepicker-input>
                 </div>
                 <div class="col-md-2">
                     <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_started_on_label' | i18n}}</p>
-                    <datepicker-input model="selectedValues.startedOn"></datepicker-input>
+                    <datepicker-input model="newMobileTerminal.attributes.STARTED_ON"></datepicker-input>
                 </div>
                 <div class="col-md-2">
                     <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_uninstalled_on_label' | i18n}}</p>
-                    <datepicker-input model="selectedValues.unInstalledOn"></datepicker-input>
+                    <datepicker-input model="newMobileTerminal.attributes.UNINSTALLED_ON"></datepicker-input>
                 </div>
                 <div class="col-md-2">
                     <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_land_earth_station_label' | i18n}}</p>
-                    <input type="text" class="form-control grayInput" ng-model="selectedValues.landEarthStation">
+                    <input type="text" class="form-control grayInput" ng-model="newMobileTerminal.attributes.landEarthStation" disabled placeholder="NOT IMPLEMENTED">
                 </div>
                 <div class="col-md-2">
                     <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_expected_rep_freq_label' | i18n}}</p>
-                    <input type="text" class="form-control grayInput" ng-model="selectedValues.expectedRepFreq">
+                    <input type="text" class="form-control grayInput" ng-model="newMobileTerminal.attributes.expectedRepFreq" disabled placeholder="NOT IMPLEMENTED">
                 </div>
                 <div class="col-md-2">
                     <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_grace_period_label' | i18n}}</p>
-                    <input type="text" class="form-control grayInput" ng-model="selectedValues.gracePeriod">
+                    <input type="text" class="form-control grayInput" ng-model="newMobileTerminal.attributes.gracePeriod" disabled placeholder="NOT IMPLEMENTED">
                 </div>
                 <div class="col-md-2">
                     <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_in_port_grace_period_label' | i18n}}</p>
-                    <input type="text" class="form-control grayInput" ng-model="selectedValues.inPortGracePeriod">
+                    <input type="text" class="form-control grayInput" ng-model="newMobileTerminal.attributes.inPortGracePeriod" disabled placeholder="NOT IMPLEMENTED">
                 </div>
             </div>
             <div class="row communicationChannels">
@@ -108,33 +108,30 @@
                     <span class="link underline" ng-click="addNewChannel()">{{'mobileTerminal.form_inmarsatc_communication_channels_add_new_button' | i18n}}</span>
                 </div>
             </div>
-            <div class="row-same-height communicationChannel" ng-repeat="communicationChannel in selectedValues.communicationChannels" >
+            <div class="row-same-height communicationChannel" ng-repeat="communicationChannel in newMobileTerminal.channels" >
 
                 <div class="col-md-10">
                     <div class="row">
                         <div class="col-md-2 nopaddingleft">
                             <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_communication_channel_dnid_label' | i18n}}</p>
-                            <input type="text" class="form-control grayInput" ng-model="communicationChannel.dnid">
+                            <input type="text" class="form-control grayInput" ng-model="communicationChannel.dnid" required>
                         </div>
                         <div class="col-md-2">
                             <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_communication_channel_channel_label' | i18n}}</p>
-                            <input type="text" class="form-control grayInput" ng-model="communicationChannel.channel">
+                            <dropdown ng-model="communicationChannel.channelType" initialtext="" items="channelTypes"></dropdown>     
+                                                   
                         </div>
                         <div class="col-md-2">
                             <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_communication_channel_member_no_label' | i18n}}</p>
-                            <input type="text" class="form-control grayInput" ng-model="communicationChannel.memberNo">
+                            <input type="text" name="memberId" class="form-control grayInput" ng-model="communicationChannel.memberId" required>
                         </div>
-                        <div class="col-md-2">
-                            <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_communication_channel_land_station_label' | i18n}}</p>
-                            <input type="text" class="form-control grayInput" ng-model="communicationChannel.landStation">
-                        </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_communication_channel_started_label' | i18n}}</p>
-                            <datepicker-input model="communicationChannel.started"></datepicker-input>
+                            <datepicker-input model="communicationChannel.startDate"></datepicker-input>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <p class="labelheaders">{{'mobileTerminal.form_inmarsatc_communication_channel_stopped_label' | i18n}}</p>
-                            <datepicker-input model="communicationChannel.stopped"></datepicker-input>
+                            <datepicker-input model="communicationChannel.stopDate"></datepicker-input>
                         </div>
                     </div>
                 </div>
@@ -142,7 +139,7 @@
                 <div class="col-md-2 bottom-column">
                     <div class="sort">
                         <i class="fa fa-lg fa-arrow-up" title="{{'mobileTerminal.form_inmarsatc_communication_channel_sort_up_title' | i18n}}" ng-click="moveChannel($index, $index-1)" ng-show="$index >= 1"></i>
-                        <i class="fa fa-lg fa-arrow-down" title="{{'mobileTerminal.form_inmarsatc_communication_channel_sort_down_title' | i18n}}" ng-click="moveChannel($index, $index+1)" ng-show="$index < selectedValues.communicationChannels.length -1"></i>
+                        <i class="fa fa-lg fa-arrow-down" title="{{'mobileTerminal.form_inmarsatc_communication_channel_sort_down_title' | i18n}}" ng-click="moveChannel($index, $index+1)" ng-show="$index < newMobileTerminal.channels.length -1"></i>
                         &nbsp;
                     </div>
                     <div class="remove">
@@ -156,13 +153,9 @@
 
         <div class="row" style="margin-top:100px">
             <div class="col-md-12">
-                <a ng-click="clearForm()">Clear form</a>
+                <a ng-click="clearForm()" class="pointer">Clear form</a>
             </div>
         </div>        
-    </div>
-
-
-
-
+    </form>
 
 </div>

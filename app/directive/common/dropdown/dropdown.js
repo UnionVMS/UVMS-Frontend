@@ -12,7 +12,7 @@ angular.module('unionvmsWeb')
 		link: function(scope, element, attrs, fn) {
 
             scope.setLabel = function() {
-                if ((scope.ngModel !== undefined && scope.ngModel === "" ) || scope.ngModel === null) {
+                if ((scope.ngModel !== undefined && scope.ngModel === "" ) || scope.ngModel === null || scope.ngModel === undefined) {
                     scope.currentItemLabel = attrs.initialtext;
                 } else {
                     if(scope.items !== undefined){
