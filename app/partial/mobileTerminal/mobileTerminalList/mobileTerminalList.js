@@ -1,5 +1,7 @@
 angular.module('unionvmsWeb').controller('MobileterminallistCtrl',function($scope){
 
+    $scope.getMobileTerminalList =
+
     $scope.checkAll = function(){
 
         /*TODO: REFACTOR THIS WHEN WE KNOW WHAT WE SHOULD DO WITH IT

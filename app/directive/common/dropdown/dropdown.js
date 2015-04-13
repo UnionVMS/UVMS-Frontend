@@ -41,8 +41,8 @@ angular.module('unionvmsWeb')
             });
 
             scope.selectVal = function(item){
-                    scope.ngModel = item.code;
-                    scope.currentItemLabel = item.text;
+               scope.ngModel = item.code;
+               scope.currentItemLabel = item.text;
             };
 
             scope.addDefaultValueToDropDown = function(){
@@ -56,6 +56,14 @@ angular.module('unionvmsWeb')
 
             scope.setLabel();
             scope.addDefaultValueToDropDown();
+
+          /*  scope.callback = function(func){
+              func();
+                if(typeof func == 'function'){
+                    console.log("callbackfunction is called");
+                }
+            };
+*/
 		}
 	};
 });

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('searchService',function(GetListRequest, SearchField, vesselRestService) {
+angular.module('unionvmsWeb').factory('searchService',function(GetListRequest, SearchField, vesselRestService, mobileTerminalRestService) {
 
 	var getListRequest = new GetListRequest(1, 10, true, []),
         advancedSearchObject  = {};
@@ -9,7 +9,7 @@ angular.module('unionvmsWeb').factory('searchService',function(GetListRequest, S
 			return vesselRestService.getVesselList(getListRequest);
 		},
         searchMobileTerminals : function(){
-            //return mobileTerminalRestService.getVesselList(getListRequest);
+            return mobileTerminalRestService.getMobileTerminalList(getListRequest);
         },
 
         //Modify search request
@@ -24,7 +24,7 @@ angular.module('unionvmsWeb').factory('searchService',function(GetListRequest, S
 		},
 		resetSearchCriterias : function(){
 			getListRequest.resetCriterias();
-		},		
+		},
 		addSearchCriteria : function(key, value){
 			getListRequest.addSearchCriteria(key, value);
 		},
@@ -48,7 +48,7 @@ angular.module('unionvmsWeb').factory('searchService',function(GetListRequest, S
                     criterias.push(new SearchField(key, value));
                 }
             });
-            return criterias;            
+            return criterias;
         },
         setSearchCriteriasToAdvancedSearch : function(){
             this.setSearchCriterias(this.getAdvancedSearchCriterias());

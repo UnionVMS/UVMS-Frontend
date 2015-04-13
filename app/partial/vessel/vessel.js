@@ -4,7 +4,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, 
     $scope.isVisible = {
         search : true,
         createNewVessel : false,
-        viewVessel : false,
+        viewVessel : false
     };
 
     //Search objects and results
@@ -47,7 +47,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, 
     var onVesselGroupListError = function(response){
        $scope.error = "We are sorry... Something took a wrong turn. To err is human but to arr is pirate!!";
        console.error("We are sorry... To err is human but to arr is pirate!!");
-    };    
+    };
 
     //Load the next page of the search results
     $scope.loadNextPage = function(){
@@ -68,18 +68,18 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, 
 
         //Success?
         if(vesselListPage.vessels !== undefined){
-            updateSearchResults(vesselListPage);    
+            updateSearchResults(vesselListPage);
         }else{
             onGetSearchResultsError();
         }
-        
+
     };
 
     //Callback from the search when a search has been saved to a vesselGroup
     $scope.saveGroupCallback = function(vesselListPage){
         $scope.getVesselGroupsForUser();
     };
-    
+
 
     //Update the search results
     var updateSearchResults = function(vesselListPage){
@@ -99,7 +99,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, 
         }
         //Update page info
         $scope.currentSearchResults.totalNumberOfPages = vesselListPage.totalNumberOfPages;
-        $scope.currentSearchResults.page = vesselListPage.currentPage;         
+        $scope.currentSearchResults.page = vesselListPage.currentPage;
     };
 
     //Handle error from search results (listing vessel)
@@ -111,7 +111,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, 
         $scope.currentSearchResults.page = 1;
     };
 
-    
+
     //Check all vessels in the result list
     $scope.checkAll = function(){
         if($scope.selectedAll)
@@ -160,7 +160,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, 
                 },
                 selectedVessels: function(){
                     return $scope.selectedVessels;
-                }                
+                }
             }
         });
         modalInstance.result.then(function () {

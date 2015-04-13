@@ -33,7 +33,8 @@
     "vessel_details_home_port_code": "Home port code - name",
     "vessel_details_length": "Length",
     "vessel_details_tonnage": "G.tonnage",
-    "vessel_details_power": "Power"
+    "vessel_details_power": "Power",
+    "vessel_details_name": "Name"
 
 
 

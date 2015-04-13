@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb') 
+angular.module('unionvmsWeb')
 .factory('GetListRequest', function(SearchField) {
 
     function GetListRequest(page, listSize, isDynamic, criterias){
@@ -7,13 +7,21 @@ angular.module('unionvmsWeb')
         this.isDynamic = angular.isDefined(isDynamic) ? isDynamic : true;
         this.criterias = angular.isDefined(criterias) ? criterias : [];
     }
-
-    GetListRequest.prototype.toJson = function(){
+        GetListRequest.prototype.toJson = function(){
         return JSON.stringify({
             pagination : {page: this.page, listSize: this.listSize},
             searchCriteria : {isDynamic: this.isDynamic, criterias: this.criterias}
         });
     };
+
+        GetListRequest.prototype.toJsonforMobile = function(){
+            return JSON.stringify({
+                pagination : {page: this.page, listsize: this.listSize},
+                criteria : this.criterias
+            });
+        };
+
+
 
     GetListRequest.prototype.setPage = function(newPage){
         this.page = newPage;
@@ -22,11 +30,11 @@ angular.module('unionvmsWeb')
 
     GetListRequest.prototype.addSearchCriteria = function(key, value){
         this.criterias.push(new SearchField(key, value));
-    };    
+    };
 
     GetListRequest.prototype.setSearchCriterias = function(criterias){
         this.criterias = criterias;
-    };  
+    };
 
     GetListRequest.prototype.resetCriterias = function(){
         this.criterias = [];

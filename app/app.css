@@ -7189,6 +7189,25 @@ li a {
   color: #ffffff;
   border-color: #007d52;
 }
+.btn-primary.disabled,
+.btn-primary[disabled],
+fieldset[disabled] .btn-primary,
+.btn-primary.disabled:hover,
+.btn-primary[disabled]:hover,
+fieldset[disabled] .btn-primary:hover,
+.btn-primary.disabled:focus,
+.btn-primary[disabled]:focus,
+fieldset[disabled] .btn-primary:focus,
+.btn-primary.disabled:active,
+.btn-primary[disabled]:active,
+fieldset[disabled] .btn-primary:active,
+.btn-primary.disabled.active,
+.btn-primary[disabled].active,
+fieldset[disabled] .btn-primary.active {
+  background-color: #1ed3ae;
+  color: #ffffff;
+  border-color: #1ed3ae;
+}
 .btn-lg,
 .btn-group-lg > .btn {
   border-radius: 3px;
@@ -7251,6 +7270,35 @@ li a {
 }
 .underline {
   text-decoration: underline;
+}
+table.searchResults {
+  width: 100%;
+}
+table.searchResults thead {
+  border-bottom: solid 2px #C5C5C4;
+}
+table.searchResults th {
+  height: 40px;
+}
+table.searchResults th a {
+  font-weight: bold;
+  color: #383737;
+}
+table.searchResults th a .fa.fa-sort,
+table.searchResults th a .fa.fa-caret-down,
+table.searchResults th a .fa.fa-caret-up {
+  color: #18A689;
+  margin-left: 7px;
+}
+table.searchResults tbody tr {
+  border-bottom: solid 1px #C5C5C4;
+  height: 40px;
+}
+table.searchResults button {
+  height: 24px;
+  text-align: center;
+  padding: 0px 12px;
+  font-size: 12px;
 }
 /*
  * Components that are reused in different places in the application
@@ -7848,45 +7896,13 @@ nav.configuration .configuration {
   cursor: pointer;
   text-decoration: underline;
 }
-.assignVesselsContainer {
-  width: 100%;
-  border-top: 1px solid #999;
-  border-bottom: 1px solid #999;
-  padding: 20px 0;
-}
-.assignVesselsContainer table {
-  width: 100%;
-}
-.assignVesselsContainer table thead {
-  border-bottom: solid 2px #C5C5C4;
-}
-.assignVesselsContainer table tr:nth-child(even) {
-  background: #eee;
-}
-.assignVesselsContainer table button {
-  margin: 2px 0;
-}
-.assignVesselsContainer .pagination {
-  width: 100%;
-}
-.assignVesselsContainer .pagination span {
-  color: #428bca;
-  text-decoration: underline;
-  cursor: pointer;
-}
-.assignVesselsContainer .detailsFooter {
-  margin-top: 20px;
-  color: #428bca;
-  text-decoration: underline;
-  cursor: pointer;
-}
 .transponderSystemSelects {
   margin-top: 20px;
 }
-.transponderSystemSelects div {
+.transponderSystemSelects .transponderSystemSelect {
   float: left;
 }
-.transponderSystemSelects div:nth-child(2) {
+.transponderSystemSelects .transponderSystemSelect:nth-child(2) {
   margin-left: 10px;
 }
 .communicationChannels {
@@ -7908,6 +7924,37 @@ nav.configuration .configuration {
   float: left;
   margin-left: 10px;
   color: red;
+}
+.assignVesselsContainer {
+  width: 100%;
+  padding: 20px 0;
+  border-bottom: 1px solid #999;
+}
+.assignVesselsContainer .searchVesselContainer {
+  border-right: 1px solid #000;
+}
+.assignVesselsContainer .searchVesselContainer table button {
+  margin: 2px 0;
+}
+.assignVesselsContainer .searchVesselContainer .pagination {
+  width: 100%;
+}
+.assignVesselsContainer .searchVesselContainer .pagination span {
+  color: #428bca;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.assignVesselsContainer .createNewVesselContainer {
+  padding-top: 10px;
+}
+.assignVesselsContainer .createNewVesselContainer button {
+  text-transform: uppercase;
+}
+.detailsFooter {
+  margin-top: 20px;
+  color: #428bca;
+  text-decoration: underline;
+  cursor: pointer;
 }
 /* Add Component LESS Above */
 /* Required for Angular UI Bootstrap */

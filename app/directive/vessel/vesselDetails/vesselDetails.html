@@ -5,7 +5,7 @@
             <p>{{vessel.vesselId.value}}</p>
         </div>
         <div class="inputgroup col-md-2 form-group has-feedback">
-            <p class="labelheaders">NAME</p>
+            <p class="labelheaders">{{ 'vessel.vessel_details_name' | i18n }}</p>
             <input type="text" name="newvesselnameinput" class="form-control" ng-model="vessel.name" ng-minlength="3" required>
         </div>
         <div class="inputgroup col-md-2">

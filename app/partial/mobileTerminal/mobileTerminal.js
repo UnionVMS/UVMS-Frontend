@@ -1,10 +1,9 @@
-angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope){
+angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService){
 
     $scope.isVisible = {
         search : true,
-        addNewMobileTerminal : false,
+        addNewMobileTerminal : false
     };
-
 
     //Callback for the search
     $scope.searchcallback = function(vesselListPage){
@@ -28,5 +27,22 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope){
     ];
 
     $scope.selectedItem = "";
+
+    //Init function when entering page
+    var init = function(){
+        //Load list with vessels
+        var response = searchService.searchMobileTerminals()
+            .then(updateSearchResults, onGetSearchResultsError);
+    };
+
+    var updateSearchResults = function(mobileTerminalListPage){
+        console.log("SUCCEEDED RETRIEVING MOBILETERMINALS!");
+    };
+
+    var onGetSearchResultsError = function(){
+        console.log("ERROR RETRIEVING MOBILETERMINALS!");
+    };
+
+    init();
 
 });
