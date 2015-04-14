@@ -33,29 +33,31 @@ angular.module('unionvmsWeb')
 
             getMobileTerminalList : function(getListRequest){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.getMobileTerminals().list(getListRequest.toJsonforMobile(), function(response){
-                    console.log("SUCCESS");
-                    console.log(response);
-                /*
+                mobileTerminalRestFactory.getMobileTerminals().list(getListRequest.toJson(), function(response){
+                        console.log("SUCCESS");
+                        console.log(response);
                         var mobileTerminals = [];
-                        if(angular.isArray(response.data.mobileTerminal)){
-                            for (var i = 0; i < response.data.mobileTerminal.length; i++){
-                                mobileTerminals.push(MobileTerminal.fromJson(response.data.mobileTerminal[i]));
-                            }
-                            var currentPage = response.data.currentPage;
-                            var totalNumberOfPages = response.data.totalNumberOfPages;
-                            var mobileTerminalListPage = new MobileTerminalListPage(mobileTerminals, currentPage, totalNumberOfPages);
-                            deferred.resolve(mobileTerminalListPage);
-                        }*/
+
+                         if(angular.isArray(response.data.mobileTerminal)) {
+                             for (var i = 0; i < response.data.mobileTerminal.length; i++) {
+                                 mobileTerminals.push(MobileTerminal.fromJson(response.data.mobileTerminal[i]));
+                             }
+                             var currentPage = response.data.currentPage;
+                             var totalNumberOfPages = response.data.totalNumberOfPages;
+                             var mobileTerminalListPage = new MobileTerminalListPage(mobileTerminals, currentPage, totalNumberOfPages);
+                             deferred.resolve(mobileTerminalListPage);
+                         }
 
                         deferred.resolve(response.data);
                     },
-                function(error){
-                        console.log("ERROR GETTING MOBILETERMIALS");
-                        console.log(error);
-                        deferred.reject(error);
-                    }
-                );
+                function(error) {
+                    console.log("ERROR GETTING MOBILETERMIALS");
+                    console.log(error);
+                    //TODO: When retrieving real objects from db use deferred.reject (error) here and take care of the real respons above
+
+                    deferred.reject(error);
+
+                });
                 return deferred.promise;
 
             },

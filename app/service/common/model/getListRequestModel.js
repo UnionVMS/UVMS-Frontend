@@ -14,15 +14,6 @@ angular.module('unionvmsWeb')
         });
     };
 
-        GetListRequest.prototype.toJsonforMobile = function(){
-            return JSON.stringify({
-                pagination : {page: this.page, listsize: this.listSize},
-                criteria : this.criterias
-            });
-        };
-
-
-
     GetListRequest.prototype.setPage = function(newPage){
         this.page = newPage;
         return this.page;

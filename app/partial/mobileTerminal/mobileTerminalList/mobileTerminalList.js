@@ -1,6 +1,8 @@
 angular.module('unionvmsWeb').controller('MobileterminallistCtrl',function($scope){
 
-    $scope.getMobileTerminalList =
+    console.log("LISTPAGE");
+    console.log($scope.currentSearchResults);
+    console.log("LISTPAGE");
 
     $scope.checkAll = function(){
 
@@ -22,6 +24,11 @@ angular.module('unionvmsWeb').controller('MobileterminallistCtrl',function($scop
             });
         }*/
         console.log("CHECKED ALL CLICKED!");
+    };
+
+    $scope.showLog = function (item){
+        console.log("Show log info for this item:");
+        console.log(item);
     };
 
     $scope.mobileTerminalChecked = function(item){

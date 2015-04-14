@@ -24,7 +24,7 @@ angular.module('unionvmsWeb')
             mobileTerminal.mobileTerminalId = {
                 systemType : data.mobileTerminalId.systemType,
                 serialNumber : data.mobileTerminalId.serialNumber
-            };            
+            };
 
             //CarrierId
             if(angular.isDefined(data.carrierId)){
@@ -32,23 +32,37 @@ angular.module('unionvmsWeb')
             }
 
             //Attributes
+            if(data.attributes !== null){
             mobileTerminal.attributes = {};
-            for (var i = 0; i < data.attributes.length; i ++) {
-                //mobileTerminal.attributes.push(MobileTerminalAttribute.fromJson(data.attributes[i]));
-                mobileTerminal.attributes[data.attributes[i].fieldType.toUpperCase()] = data.attributes[i].value;
+                for (var i = 0; i < data.attributes.length; i ++) {
+                    //mobileTerminal.attributes.push(MobileTerminalAttribute.fromJson(data.attributes[i]));
+                    mobileTerminal.attributes[data.attributes[i].fieldType.toUpperCase()] = data.attributes[i].value;
+                }
             }
 
             //Channels
-            mobileTerminal.channels = [];
-            for (i = 0; i < data.channels.length; i ++) {
-                mobileTerminal.channels.push(CommunicationChannel.fromJson(data.channels[i]));
+            if(data.channels !== null) {
+                mobileTerminal.channels = [];
+                for (var idx = 0; idx < data.channels.length; idx++) {
+                    mobileTerminal.channels.push(CommunicationChannel.fromJson(data.channels[idx]));
+                }
+                //sortchannels by order
+                if(mobileTerminal.channels.length > 1){
+                    mobileTerminal.channels.sort(function (obj1, obj2){
+                        if (obj1.order !== undefined && obj2.order !== undefined){
+                            return obj1.order - obj2.order;
+                        } else {
+                            return;
+                        }
+                    });
+                }
             }
 
             //Active
             mobileTerminal.active = data.active;
 
             return mobileTerminal;
-            
+
         };
 
         MobileTerminal.prototype.toJson = function(){
@@ -82,7 +96,7 @@ angular.module('unionvmsWeb')
                     carrierId : this.carrierId,
                     attributes : attributesObjects,
                     channels : jsonChannels,
-                    active : this.active,
+                    active : this.active
                 });
             } else{
                 return JSON.stringify({
@@ -92,8 +106,8 @@ angular.module('unionvmsWeb')
                     },
                     attributes : attributesObjects,
                     channels : jsonChannels,
-                    active : this.active,
-                });                
+                    active : this.active
+                });
             }
         };
 

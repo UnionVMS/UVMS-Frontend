@@ -1,20 +1,24 @@
-<div class="container" ng-controller="MobileTerminalCtrl">
-	<div class="row" ng-show="isVisible.search">
-		<div class="col-md-12 pageMenu">
-			<ul class="horizontal pipeSeparator links">
-				<li class="active" >{{'mobileTerminal.menu_mobileterminals' | i18n}}</li>
-				<li>{{'mobileTerminal.menu_polling' | i18n}}</li>
-			</ul>
-		</div>
-	</div>
-
-	<div class="row" ng-show="isVisible.search">
-		<div class="col-md-12">
-			<search resultscallback="searchcallback" modeltype="'MOBILE_TERMINAL'" advanced="false"></search>
-			<button type="button" class="btn btn-default" ng-click="toggleAddNewMobileTerminal()" ng-show="!isVisible.addNewMobileTerminal">+ Add new</button>			
-		</div>
-	</div>
-	
-    <div ng-include="'partial/mobileTerminal/mobileTerminalList/mobileTerminalList.html'" ng-show="isVisible.search"></div>
-    <div ng-include="'partial/mobileTerminal/addNewMobileTerminal/addNewMobileTerminal.html'" ng-show="isVisible.addNewMobileTerminal"></div>
+<div ng-controller="MobileTerminalCtrl">
+    <div class="container">
+        <div class="row" ng-show="isVisible.search">
+            <div class="col-md-12 pageMenu">
+                <ul class="horizontal pipeSeparator links">
+                    <li class="active" >{{'mobileTerminal.menu_mobileterminals' | i18n}}</li>
+                    <li>{{'mobileTerminal.menu_polling' | i18n}}</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row" ng-show="isVisible.search">
+            <div class="col-md-12">
+                <search resultscallback="searchcallback" modeltype="'MOBILE_TERMINAL'" advanced="false"></search>
+                <button type="button" class="btn btn-default" ng-click="toggleAddNewMobileTerminal()" ng-show="!isVisible.addNewMobileTerminal">+ Add new</button>
+            </div>
+        </div>
+        <div ng-include="'partial/mobileTerminal/addNewMobileTerminal/addNewMobileTerminal.html'" ng-show="isVisible.addNewMobileTerminal"></div>
+    </div>
+    <div class="containerWrapper grayContainer">
+        <div class="container">
+            <div ng-include="'partial/mobileTerminal/mobileTerminalList/mobileTerminalList.html'" ng-show="isVisible.search"></div>
+        </div>
+    </div>
 </div>

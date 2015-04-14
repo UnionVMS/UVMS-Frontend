@@ -1,4 +1,6 @@
-angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService, alertService){
+angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService, alertService,MobileTerminalListPage){
+
+    $scope.currentSearchResults = new MobileTerminalListPage();
 
     $scope.isVisible = {
         search : true,
@@ -33,11 +35,11 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
     };
 
     var updateSearchResults = function(mobileTerminalListPage){
-        console.log("SUCCEEDED RETRIEVING MOBILETERMINALS!");
+        $scope.currentSearchResults = mobileTerminalListPage.mobileTerminals;
     };
 
-    var onGetSearchResultsError = function(){
-        console.log("ERROR RETRIEVING MOBILETERMINALS!");
+    var onGetSearchResultsError = function(error){
+        console.log(error);
     };
 
     $scope.$on("$destroy", function() {
