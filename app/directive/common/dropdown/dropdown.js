@@ -6,7 +6,8 @@ angular.module('unionvmsWeb')
         require: "^ngModel",
 		scope: {
             items : '=',
-            ngModel:'='
+            ngModel:'=',
+            callback : '='
 		},
 		templateUrl: 'directive/common/dropdown/dropdown.html',
 		link: function(scope, element, attrs, fn) {
@@ -43,6 +44,9 @@ angular.module('unionvmsWeb')
             scope.selectVal = function(item){
                scope.ngModel = item.code;
                scope.currentItemLabel = item.text;
+               if(angular.isDefined(scope.callback)){
+                    scope.callback(item);
+               }
             };
 
             scope.addDefaultValueToDropDown = function(){

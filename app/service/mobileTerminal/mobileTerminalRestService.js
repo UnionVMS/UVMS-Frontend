@@ -15,7 +15,7 @@ angular.module('unionvmsWeb')
             }
         };
     })
-    .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, MobileTerminal, MobileTerminalListPage){
+    .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, MobileTerminal, MobileTerminalListPage, TranspondersConfig){
 
         var mobileTerminalRestService = {
 
@@ -23,13 +23,9 @@ angular.module('unionvmsWeb')
                 var deferred = $q.defer();
                 mobileTerminalRestFactory.getTranspondersConfig().get({
                 }, function(response) {
-                    console.log("Got config!");
-                    console.log(response);
-                    //TODO: Parse response
-                    deferred.resolve(response.data);
+                    deferred.resolve(TranspondersConfig.fromJson(response.data));
                 }, function(error) {
-                    console.error("Error getting transponders config.");
-                    console.error(error);
+                    console.error("Error getting transponders config");
                     deferred.reject(error);
                 });
                 return deferred.promise;

@@ -1,29 +1,6 @@
 angular.module('unionvmsWeb').controller('addNewMobileTerminalCtrl',function($scope, $route, locale, MobileTerminal, mobileTerminalRestService, alertService){
 
-    var init = function(){
-        //Get list transponder systems
-        mobileTerminalRestService.getTranspondersConfig()
-        .then(
-            function(data){
-                $.each(data, function(index, value){
-                    var text = value.terminalSystemType,
-                        code = value.terminalSystemType;
-
-                    //Set a view text
-                    if(value.terminalSystemType === "INMARSAT_C"){
-                        text = "Inmarsat-C Eik";
-                    }
-
-                    $scope.transponderSystems.push({text : text, code :code});
-
-                });
-            },
-            function(error){
-                alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_load_transponders_error'));
-            }
-        );
-    }; 
-
+    //Visibility statuses
     $scope.isVisible = {
         assignVessel : false,
     };
@@ -33,12 +10,31 @@ angular.module('unionvmsWeb').controller('addNewMobileTerminalCtrl',function($sc
     $scope.oceanRegions =[{'text':'AORE','code':'aore'}];
     $scope.channelTypes =[{'text':'VMS','code':'VMS'}, {'text':'ELOG','code':'ELOG'}];
 
+    //TranspondersConfig to use for the form
+    var transpondersConfig;
+
     //Has form submit been atempted?
     $scope.submitAttempted = false;
-
     
     //The values for the new mobile terminal
     $scope.newMobileTerminal = new MobileTerminal();
+
+    var init = function(){
+        //Get list transponder systems
+        mobileTerminalRestService.getTranspondersConfig()
+        .then(
+            function(transpConfig){
+                transpondersConfig = transpConfig;
+                //Create dropdown values
+                $.each(transpConfig.terminalConfigs, function(key, config){
+                    $scope.transponderSystems.push({text : config.viewName, code : config.systemType});
+                });
+            },
+            function(error){
+                alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_load_transponders_error'));
+            }
+        );
+    }; 
 
     //Success creating the new mobile terminal
     var createSuccess = function(){
@@ -51,6 +47,12 @@ angular.module('unionvmsWeb').controller('addNewMobileTerminalCtrl',function($sc
     //Error creating the new mobile terminal
     var createError = function(){
         alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_error'));
+    };
+
+    //On terminal system selected
+    $scope.onTerminalSystemSelect = function(item){
+        //Set the terminalConfig to use
+        $scope.terminalConfig = transpondersConfig.getTerminalConfigBySystemName(item.code);
     };
 
     //Create the mobile terminal
