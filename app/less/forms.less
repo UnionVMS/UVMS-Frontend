@@ -51,6 +51,12 @@ input[type="text"]:focus{
     box-shadow: none;
 }
 
+label{
+    font-weight: normal;
+    text-transform: uppercase;
+    margin-bottom: 0px;
+}
+
 .labelheaders{
     margin-top:10px;
     margin-bottom:0px;
@@ -65,7 +71,25 @@ input[type="text"]:focus{
 
 }
 
+.has-error{
+    input, textarea{
+        border:1px solid red;
+    }
+    box-shadow:none;
+}
 
+
+.form-group{
+    .help-block{
+        display: none;
+    }
+}
+
+.form-group.has-error{
+    .help-block{
+        display: block;
+    }
+}
 
 .inputerrors{
     .glyphicon{

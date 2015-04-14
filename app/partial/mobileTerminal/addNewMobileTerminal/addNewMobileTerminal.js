@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('addNewMobileTerminalCtrl',function($scope, $route, MobileTerminal, mobileTerminalRestService){
+angular.module('unionvmsWeb').controller('addNewMobileTerminalCtrl',function($scope, $route, locale, MobileTerminal, mobileTerminalRestService, alertService){
 
     var init = function(){
         //Get list transponder systems
@@ -17,12 +17,9 @@ angular.module('unionvmsWeb').controller('addNewMobileTerminalCtrl',function($sc
                     $scope.transponderSystems.push({text : text, code :code});
 
                 });
-                //$scope.transponderSystems = data;
             },
             function(error){
-                console.error(error);
-                $scope.createResponseMessage = "You cannot create a mobile terminal at the moment. Error information: Failed to load terminal systems from the server. ";
-                showMessage();
+                alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_load_transponders_error'));
             }
         );
     }; 
@@ -36,21 +33,16 @@ angular.module('unionvmsWeb').controller('addNewMobileTerminalCtrl',function($sc
     $scope.oceanRegions =[{'text':'AORE','code':'aore'}];
     $scope.channelTypes =[{'text':'VMS','code':'VMS'}, {'text':'ELOG','code':'ELOG'}];
 
+    //Has form submit been atempted?
+    $scope.submitAttempted = false;
+
+    
     //The values for the new mobile terminal
     $scope.newMobileTerminal = new MobileTerminal();
 
-    //Show a message for 4 seconds
-    var showMessage = function(){
-        $('.createResponseMessage').slideDown('slow');
-        setTimeout(function() {
-            $('.createResponseMessage').slideUp('slow');
-        }, 4000 );
-    };
-
     //Success creating the new mobile terminal
     var createSuccess = function(){
-        $scope.createResponseMessage = "The Mobile Terminal has been created successfully. You can close this window or just wait and it will close itself.";
-        showMessage();
+        alertService.showSuccessMessage(locale.getString('mobileTerminal.add_new_alert_message_on_success'));                      
         setTimeout(function() {
             $route.reload();
         }, 2000 );        
@@ -58,18 +50,28 @@ angular.module('unionvmsWeb').controller('addNewMobileTerminalCtrl',function($sc
 
     //Error creating the new mobile terminal
     var createError = function(){
-        $scope.createResponseMessage = "The mobile terminal could not be created.";
-        showMessage();                
+        alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_error'));
     };
 
     //Create the mobile terminal
     $scope.createNewMobileTerminal = function(){
-        if($scope.newMobileTerminalForm.$valid){
-            mobileTerminalRestService.createNewMobileTerminal($scope.newMobileTerminal)
-                .then(createSuccess, createError);
-        }else{
-            $scope.createResponseMessage = "Form is not valid.";
+        $scope.submitAttempted = true;
+
+        //Validate form
+        if(!$scope.newMobileTerminalForm.$valid){
+            alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_form_validation_error'));
+            return false;
         }
+
+        //Validate at least one channel
+        if($scope.newMobileTerminal.channels.length === 0){
+            alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_channels_missing_validation_error'));
+            return false;            
+        }
+        
+        //Create
+        mobileTerminalRestService.createNewMobileTerminal($scope.newMobileTerminal)
+                .then(createSuccess, createError);
     };    
 
     //Update order attribute in all channels according to their position in the channels list

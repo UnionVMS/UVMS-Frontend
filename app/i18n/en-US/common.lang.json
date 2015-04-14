@@ -1,10 +1,13 @@
 {
-	"yes" : "Yes",
-	"no" : "No"	,
+    "no" : "No" ,
     "remove" : "Remove",
     "save" : "Save",
 	"search" : "Search",
 	"search_advanced_link" : "Advanced search",
     "search_group_dropdown" : "Saved groups",
-    "search_group_save" : "Save group"
+    "search_group_save" : "Save group",
+    "validation_required" : "Required",
+    "validation_digits_only" : "Only digits",
+    "validation_letters_only" : "Only letters",
+    "yes" : "Yes"
 }

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService){
+angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService, alertService){
 
     $scope.isVisible = {
         search : true,
@@ -12,12 +12,9 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
     };
 
     $scope.toggleAddNewMobileTerminal = function(){
+        alertService.hideMessage();
         $scope.isVisible.addNewMobileTerminal = !$scope.isVisible.addNewMobileTerminal;
         $scope.isVisible.search = !$scope.isVisible.search;
-    };
-
-    $scope.createNewMobileTerminal = function(){
-        console.log("createNewMobileTerminal");
     };
 
     $scope.testItems = [
@@ -42,6 +39,10 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
     var onGetSearchResultsError = function(){
         console.log("ERROR RETRIEVING MOBILETERMINALS!");
     };
+
+    $scope.$on("$destroy", function() {
+        alertService.hideMessage();
+    });
 
     init();
 
