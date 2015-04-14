@@ -10,6 +10,8 @@
     "table_header_transponder_type" : "Transponder type",
     "table_header_detail_button" : "Details",
     "table_header_logs" : "Logs",
+    "table_header_satellite_number" :"Satellite number",
+    "table_header_mmsi_no" :"MMSI no.",
     "add_new_form_header" : "NEW MOBILE TERMINAL information",
     "add_new_form_transponder_system_label" : "Transponder system",
     "add_new_form_transponder_system_placeholder" : "Choose transponder system",
