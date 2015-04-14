@@ -1,12 +1,13 @@
 <div class="headermenu container" ng-controller="HeaderMenuCtrl">
-    <div class="headercontainer col-md-12">
-        <ul>
-             <li class="cell" ng-repeat="page in menu">
-
+    <div class="row">
+        <div class="headercontainer col-md-12">
+            <ul>
+                 <li class="cell" ng-repeat="page in menu">
                     <a ng-href="#{{page.url}}">
-                        <div class="menucell"  ng-class="{active: isActive(page.url)}">{{page.title}}</div>
+                        <div class="menucell" ng-class="{active: isActive(page.url)}">{{page.title}}</div>
                     </a>
-            </li>
-        </ul>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>

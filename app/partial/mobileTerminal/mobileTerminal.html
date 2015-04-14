@@ -1,24 +1,20 @@
 <div class="container" ng-controller="MobileTerminalCtrl">
-	<response-message alertlevel="{{responseMessage.type}}" message="{{responseMessage.message}}"></response-message>
-	<div class="row">
-		<div class="col-md-12 mobileTerminalContainer">
-			<div class="row" ng-show="isVisible.search">
-				<div class="col-md-12 pageMenu" ng-cloak>
-					<ul class="horizontal pipeSeparator links">
-						<li class="active" >{{'mobileTerminal.menu_mobileterminals' | i18n}}</li>
-						<li>{{'mobileTerminal.menu_polling' | i18n}}</li>
-					</ul>
-				</div>
-			</div>
-			<div class="row" ng-show="isVisible.search">
-				<div class="col-md-12">
-					<search resultscallback="searchcallback" modeltype="'MOBILE_TERMINAL'" advanced="false"></search>
-				</div>
-			</div>
-
-			<button type="button" class="btn btn-default" ng-click="toggleAddNewMobileTerminal()" ng-show="!isVisible.addNewMobileTerminal">+ Add new</button>
-	        <div ng-include="'partial/mobileTerminal/mobileTerminalList/mobileTerminalList.html'" ng-show="isVisible.search"></div>
-	        <div ng-include="'partial/mobileTerminal/addNewMobileTerminal/addNewMobileTerminal.html'" ng-show="isVisible.addNewMobileTerminal"></div>
+	<div class="row" ng-show="isVisible.search">
+		<div class="col-md-12 pageMenu">
+			<ul class="horizontal pipeSeparator links">
+				<li class="active" >{{'mobileTerminal.menu_mobileterminals' | i18n}}</li>
+				<li>{{'mobileTerminal.menu_polling' | i18n}}</li>
+			</ul>
 		</div>
 	</div>
+
+	<div class="row" ng-show="isVisible.search">
+		<div class="col-md-12">
+			<search resultscallback="searchcallback" modeltype="'MOBILE_TERMINAL'" advanced="false"></search>
+			<button type="button" class="btn btn-default" ng-click="toggleAddNewMobileTerminal()" ng-show="!isVisible.addNewMobileTerminal">+ Add new</button>			
+		</div>
+	</div>
+	
+    <div ng-include="'partial/mobileTerminal/mobileTerminalList/mobileTerminalList.html'" ng-show="isVisible.search"></div>
+    <div ng-include="'partial/mobileTerminal/addNewMobileTerminal/addNewMobileTerminal.html'" ng-show="isVisible.addNewMobileTerminal"></div>
 </div>
