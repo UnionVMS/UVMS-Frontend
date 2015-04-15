@@ -1,0 +1,12 @@
+<div ng-controller="viewMobileTerminalCtrl">   
+    <div class="row">
+        <div class="col-md-9"><h3>{{'mobileTerminal.view_header' | i18n}}</h3></div>
+        <div class="col-md-2 textAlignRight">
+            <button  type="submit" ng-disabled="!currentMobileTerminal.mobileTerminalId.systemType || !terminalConfig" class="btn btn-primary" ng-click="updateMobileTerminal()" ng-hide="transponderSystems.length == 0">{{'common.update' | i18n}}</button>
+        </div>
+        <div class="col-md-1 pull-right" ng-click="toggleMobileTerminalDetails()"> <img src="assets/images/close.png" /></div>
+    </div>
+
+    <div static-include="partial/mobileTerminal/mobileTerminalForm/mobileTerminalForm.html"></div>
+
+</div>
