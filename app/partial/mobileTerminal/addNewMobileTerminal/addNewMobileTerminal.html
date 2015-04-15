@@ -2,162 +2,17 @@
     <div class="row">
         <div class="col-md-9"><h3>{{'mobileTerminal.add_new_form_header' | i18n}}</h3></div>
         <div class="col-md-2 textAlignRight">
-            <button  type="submit" ng-disabled="!newMobileTerminal.attributes.oceanRegion || !terminalConfig" class="btn btn-primary" ng-click="createNewMobileTerminal()" ng-hide="transponderSystems.length == 0">{{'common.save' | i18n}}</button>
+            <button  type="submit" ng-disabled="!currentMobileTerminal.mobileTerminalId.systemType || !terminalConfig" class="btn btn-primary" ng-click="createNewMobileTerminal()" ng-hide="transponderSystems.length == 0">{{'common.save' | i18n}}</button>
         </div>
         <div class="col-md-1 pull-right" ng-click="toggleAddNewMobileTerminal()"> <img src="assets/images/close.png" /></div>
     </div>
 
-    <div class="row" ng-show="isVisible.assignVessel">
-        <div class="col-md-6">
-            <label class="section">ASSIGN VESSEL</label>
+    <div static-include="partial/mobileTerminal/mobileTerminalForm/mobileTerminalForm.html"></div>
+
+    <div class="row" style="margin-top:100px">
+        <div class="col-md-12">
+            <a ng-click="clearForm()" class="pointer">Clear form</a>
         </div>
-        <div class="col-md-6 textAlignRight">
-            <span class="link underline"ng-click="toggleAssignVessel()">CANCEL</span>
-        </div>            
-    </div>
-
-    <div ng-show="newMobileTerminal.carrierId && !isVisible.assignVessel">        
-        <div class="row">
-            <div class="col-md-6">
-                <label class="section">ASSIGNED VESSEL</label>
-            </div>
-            <div class="col-md-6">
-                <button class="btn btn-primary" ng-click="unassignVessel()"><i class="fa fa-chain-broken"></i> {{'mobileTerminal.unassign_vessel' | i18n}}</span>
-            </div>            
-        </div>
-        <vessel-details vessel="selectedVessel" disable-form="true" ></vessel-details>
-        <div class="row">
-            <div class="col-md-12">
-                Type: {{newMobileTerminal.carrierId.carrierType}}<br>
-                ID: {{newMobileTerminal.carrierId.value}} ({{newMobileTerminal.carrierId.idType}})
-            </div>
-        </div>        
-    </div>
-
-
-    <div ng-include="'partial/mobileTerminal/assignVessel/assignVessel.html'" ng-show="transponderSystems.length > 0" ></div>
-
-    <div class="row" ng-hide="isVisible.assignVessel">
-        <div class="col-md-12" ng-hide="newMobileTerminal.carrierId">
-            <span id="assignVesselLink" ng-click="toggleAssignVessel()">{{'mobileTerminal.assign_vessel' | i18n}}</span>
-        </div>    
-    </div>
-
-    <form name="newMobileTerminalForm" method="post" novalidate>  
-
-        <div class="row transponderSystemSelects">
-            <div class="col-md-12">
-                <div class="transponderSystemSelect form-group">
-                    <label>{{'mobileTerminal.add_new_form_transponder_system_label' | i18n}}</label>
-                    <dropdown ng-model="newMobileTerminal.mobileTerminalId.systemType" initialtext="{{ 'mobileTerminal.add_new_form_transponder_system_placeholder' | i18n }}" items="transponderSystems" callback="onTerminalSystemSelect"></dropdown>                    
-                </div>
-
-                <div class="transponderSystemSelect form-group" ng-show="newMobileTerminal.mobileTerminalId.systemType">
-                    <label>{{'mobileTerminal.add_new_form_ocean_region_label' | i18n}}</label>
-                    <dropdown ng-model="newMobileTerminal.attributes.oceanRegion" initialtext="{{ 'mobileTerminal.add_new_form_ocean_region_label_placeholder' | i18n }}" items="oceanRegions"></dropdown>
-                </div>
-            </div>
-        </div>
-
-        <div ng-show="newMobileTerminal.attributes.oceanRegion && terminalConfig">
-            <div class="row">
-                <div class="col-md-2 form-group" ng-if="terminalConfig.terminalFields.SATELLITE_NUMBER">
-                    <label>{{'mobileTerminal.form_inmarsatc_sattelite_number_label' | i18n}}</label>
-                    <input type="text" name="sattelite_number" class="form-control grayInput" ng-model="newMobileTerminal.attributes.SATELLITE_NUMBER" />
-                </div>
-                <div class="col-md-2 form-group" ng-class="{'has-error': newMobileTerminalForm.serialNumber.$invalid && (submitAttempted || newMobileTerminalForm.serialNumber.$dirty)}">
-                    <label>{{'mobileTerminal.form_inmarsatc_serial_no_label' | i18n}}</label>
-                    <input name="serialNumber" class="form-control grayInput" ng-model="newMobileTerminal.mobileTerminalId.ids.SERIAL_NUMBER" required />
-                    <span class="help-block" ng-show="newMobileTerminalForm.serialNumber.$error.required">{{'common.validation_required' | i18n}}</span>
-                </div>
-                <div class="col-md-2 form-group" ng-if="terminalConfig.terminalFields.TRANSCEIVER_TYPE">
-                    <label>{{'mobileTerminal.form_inmarsatc_transceiver_type_label' | i18n}}</label>
-                    <input type="text" class="form-control grayInput" ng-model="newMobileTerminal.attributes.TRANSCEIVER_TYPE">
-                </div>           
-                <div class="col-md-2 form-group" ng-if="terminalConfig.terminalFields.SOFTWARE_VERSION">
-                    <label>{{'mobileTerminal.form_inmarsatc_software_version_label' | i18n}}</label>
-                    <input type="text" class="form-control grayInput" ng-model="newMobileTerminal.attributes.SOFTWARE_VERSION">
-                </div>
-                <div class="col-md-2 form-group" ng-if="terminalConfig.terminalFields.ANTENNA">
-                    <label>{{'mobileTerminal.form_inmarsatc_antenna_label' | i18n}}</label>
-                    <input type="text" class="form-control grayInput" ng-model="newMobileTerminal.attributes.ANTENNA">
-                </div>
-                <div class="col-md-2 form-group" ng-if="terminalConfig.terminalFields.ANSWER_BACK">
-                    <label>{{'mobileTerminal.form_inmarsatc_answer_back_label' | i18n}}</label>
-                    <input type="text" class="form-control grayInput" ng-model="newMobileTerminal.attributes.ANSWER_BACK">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-2 form-group" ng-if="terminalConfig.terminalFields.INSTALLED_BY">
-                    <label>{{'mobileTerminal.form_inmarsatc_installed_by_label' | i18n}}</label>
-                    <input type="text" class="form-control grayInput" ng-model="newMobileTerminal.attributes.INSTALLED_BY">
-                </div>
-                <div class="col-md-2 form-group" ng-if="terminalConfig.terminalFields.INSTALLED_ON">
-                    <label>{{'mobileTerminal.form_inmarsatc_installed_on_label' | i18n}}</label>
-                    <datepicker-input model="newMobileTerminal.attributes.INSTALLED_ON"></datepicker-inpu>
-                </div>
-                <div class="col-md-2 form-group" ng-if="terminalConfig.terminalFields.STARTED_ON">
-                    <label>{{'mobileTerminal.form_inmarsatc_started_on_label' | i18n}}</label>
-                    <datepicker-input model="newMobileTerminal.attributes.STARTED_ON"></datepicker-input>
-                </div>
-                <div class="col-md-2 form-group" ng-if="terminalConfig.terminalFields.UNINSTALLED_ON">
-                    <label>{{'mobileTerminal.form_inmarsatc_uninstalled_on_label' | i18n}}</label>
-                    <datepicker-input model="newMobileTerminal.attributes.UNINSTALLED_ON"></datepicker-input>
-                </div>
-            </div>
-            <div class="row communicationChannels">
-                <div class="col-md-6">
-                    <label class="section">{{'mobileTerminal.form_inmarsatc_communication_channels_header' | i18n}}</label>&
-                </div>
-                <div class="col-md-5 textAlignRight">
-                    <span class="link underline" ng-click="addNewChannel()">{{'mobileTerminal.form_inmarsatc_communication_channels_add_new_button' | i18n}}</span>
-                </div>
-            </div>
-            <div class="row-same-height communicationChannel" ng-repeat="communicationChannel in newMobileTerminal.channels" >
-
-                <div class="col-md-8">
-                    <div class="row" ng-form="channelForm">
-                        <div class="col-md-4 form-group" ng-class="{'has-error': channelForm.dnid.$invalid && (submitAttempted || channelForm.dnid.$dirty)}" ng-if="terminalConfig.channelFields.DNID">
-                            <label>{{'mobileTerminal.form_inmarsatc_communication_channel_dnid_label' | i18n}}</label>
-                            <input type="text" name="dnid" class="form-control grayInput" ng-model="communicationChannel.ids.DNID" required only-digits>
-                            <span class="help-block" ng-show="channelForm.dnid.$error.required">{{'common.validation_required' | i18n}}</span>
-                            <span class="help-block" ng-show="channelForm.dnid.$error.onlyDigits">{{'common.validation_digits_only' | i18n}}</span>
-                        </div>
-
-                        <div class="col-md-4 form-group" ng-if="terminalConfig.channelFields.CHANNEL">
-                            <label>{{'mobileTerminal.form_inmarsatc_communication_channel_channel_label' | i18n}}</label>
-                            <dropdown ng-model="communicationChannel.channelType" initialtext="" items="channelTypes"></dropdown>     
-                        </div>
-
-                        <div class="col-md-4 form-group" ng-class="{'has-error': channelForm.memberId.$invalid && (submitAttempted || channelForm.memberId.$dirty)}" ng-if="terminalConfig.channelFields.MEMBER_ID">
-                            <label>{{'mobileTerminal.form_inmarsatc_communication_channel_member_no_label' | i18n}}</label>
-                            <input type="text" name="memberId" class="form-control grayInput" ng-model="communicationChannel.ids.MEMBER_ID" required only-digits>
-                            <span class="help-block" ng-show="channelForm.memberId.$error.required">{{'common.validation_required' | i18n}}</span>
-                            <span class="help-block" ng-show="channelForm.memberId.$error.onlyDigits">{{'common.validation_digits_only' | i18n}}</span>
-                        </div>
-                    </div>
-                </div>
-        
-                <div class="col-md-4 top-column sortAndRemove">
-                    <div class="sort">
-                        <i class="fa fa-lg fa-arrow-up" title="{{'mobileTerminal.form_inmarsatc_communication_channel_sort_up_title' | i18n}}" ng-click="moveChannel($index, $index-1)" ng-show="$index >= 1"></i>
-                        <i class="fa fa-lg fa-arrow-down" title="{{'mobileTerminal.form_inmarsatc_communication_channel_sort_down_title' | i18n}}" ng-click="moveChannel($index, $index+1)" ng-show="$index < newMobileTerminal.channels.length -1"></i>
-                        &nbsp;
-                    </div>
-                    <div class="remove">
-                        <i class="fa fa-lg fa-times" title="{{'common.remove' | i18n}}" ng-click="removeChannel($index)"></i>
-                    </div>
-                    
-                </div>
-            </div>                    
-
-        </div>       
-
-        <div class="row" style="margin-top:100px">
-            <div class="col-md-12">
-                <a ng-click="clearForm()" class="pointer">Clear form</a>
-            </div>
-        </div>        
-    </form>
+    </div>  
 
 </div>

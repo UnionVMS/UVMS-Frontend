@@ -46,5 +46,8 @@
     "form_inmarsatc_communication_channel_stopped_label" : "Stopped",
     "form_inmarsatc_communication_channel_sort_up_title" : "Move up",
     "form_inmarsatc_communication_channel_sort_down_title" : "Move down",
-    "unassign_vessel" : "Unassign vessel"
+    "view_header" : "Mobile terminal information",
+    "unassign_vessel" : "Unassign vessel",
+    "update_alert_message_on_success" : "The Mobile Terminal has been updated successfully.",
+    "update_alert_message_on_error" : "The Mobile Terminal could not be updated."    
 }

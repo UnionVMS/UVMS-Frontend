@@ -17,6 +17,14 @@
     padding-bottom:15px;
 }
 
+//Remove outer padding from first and last column in row
+.row.no-outer-padding [class*='col-']:first-child{
+  padding-left: 0;  
+}
+.row.no-outer-padding [class*='col-']:last-child{
+  padding-right: 0;  
+}
+
 .row-same-height {
     display: table;
     width: 100%;
