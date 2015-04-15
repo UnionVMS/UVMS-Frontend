@@ -7,10 +7,12 @@ angular.module('unionvmsWeb')
 		scope: {
             items : '=',
             ngModel:'=',
-            callback : '='
+            callback : '=',
+            disabled : '='
 		},
 		templateUrl: 'directive/common/dropdown/dropdown.html',
 		link: function(scope, element, attrs, fn) {
+
 
             scope.setLabel = function() {
                 if ((scope.ngModel !== undefined && scope.ngModel === "" ) || scope.ngModel === null || scope.ngModel === undefined) {
@@ -18,7 +20,7 @@ angular.module('unionvmsWeb')
                 } else {
                     if(scope.items !== undefined){
                         for (var i = 0; i < scope.items.length; i++){
-                            if(scope.items[i].code === scope.ngModel)                        {
+                            if(scope.items[i].code === scope.ngModel){
                                 scope.currentItemLabel = scope.items[i].text;
                             }
                         }
@@ -29,14 +31,14 @@ angular.module('unionvmsWeb')
             //Watch for changes to the ngModel
             scope.$watch(function () { return scope.ngModel;}, function (newVal, oldVal) {
                 if (typeof newVal !== 'undefined') {
-                    if(scope.ngModel !== null &&  scope.currentItemLabel !== attrs.initialtext){
+                    if(newVal === null || newVal === undefined || newVal === ""){
+                        scope.currentItemLabel = attrs.initialtext;
+                    }else{
                         for(var i = 0; i < scope.items.length; i++){
-                            if(scope.ngModel === scope.items[i].code){
+                            if((newVal +'') === (scope.items[i].code +'')){
                                 scope.currentItemLabel = scope.items[i].text;
                             }
                         }
-                    }else{
-                        scope.currentItemLabel = attrs.initialtext;
                     }
                 }
             });

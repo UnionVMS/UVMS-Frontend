@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, GetListRequest, vesselRestService, mobileTerminalRestService){
+angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $location, GetListRequest, vesselRestService, mobileTerminalRestService){
 
 
     //Search objects and results
@@ -64,28 +64,48 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, Get
     };
 
     //Get next page
-    $scope.onNextPageInAssignVesselSearchResults = function(){
+    $scope.gotoNextPageInAssignVesselSearchResults = function(){
         getListRequest.page += 1;
         vesselRestService.getVesselList(getListRequest)
             .then(onSearchVesselSuccess, onSearchVesselError);
     };
 
     //Get prev page
-    $scope.onPrevPageInAssignVesselSearchResults = function(){
+    $scope.gotoPrevPageInAssignVesselSearchResults = function(){
         getListRequest.page -= 1;
         vesselRestService.getVesselList(getListRequest)
             .then(onSearchVesselSuccess, onSearchVesselError);
     };
 
-    //Handle click event on assign button
-    $scope.onAssignVesselClick = function(vessel){
+    //Handle click event on select vessel button
+    $scope.selectVessel = function(vessel){
         $scope.selectedVessel = vessel;
         $scope.newVesselObj = vessel;
     };
 
+    //Handle click event on ASSIGN  button
+    $scope.assignToSelectedVessel = function(){
+        console.log("ASSIGN TO VESSEL!");
+        console.log($scope.selectedVessel);
+
+        if($scope.selectedVessel.vesselId.type === 'ID'){
+            var internalVesselId = $scope.selectedVessel.vesselId.value;
+            $scope.newMobileTerminal.assignToVesselWithInternalId(internalVesselId);
+            $scope.toggleAssignVessel();
+            $scope.goBackToAssignVesselSearchResultsClick();
+        }else{
+            console.error("Vessel is missing internalId so assigning the mobile terminal to the vessel is not possible.");
+        }
+    };
+
     //Go back to search results
-    $scope.onBackToAssignVesselSearchResultsClick = function(){
+    $scope.goBackToAssignVesselSearchResultsClick = function(){
         $scope.selectedVessel = undefined;
+    };
+
+    //Create new vessel
+    $scope.gotoCreateNewVessel = function(){
+        $location.path("/vessel");
     };
 
 

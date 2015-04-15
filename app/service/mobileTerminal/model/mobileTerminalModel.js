@@ -6,25 +6,29 @@ angular.module('unionvmsWeb')
         function MobileTerminal(){
             this.mobileTerminalId = {
                 systemType : undefined,
-                serialNumber : ""
+                ids : {}
             };
             this.attributes = {};
             this.channels = [];
             //Add an initial channel
-            this.channels.push(new CommunicationChannel());
+            this.channels.push(new CommunicationChannel(1));
 
             this.active = true;
-            this.carrierId = new CarrierId();
+            this.carrierId = undefined;
         }
 
         MobileTerminal.fromJson = function(data){
             var mobileTerminal = new MobileTerminal();
 
             //MobileTerminalId
-            mobileTerminal.mobileTerminalId = {
-                systemType : data.mobileTerminalId.systemType,
-                serialNumber : data.mobileTerminalId.serialNumber
-            };
+            mobileTerminal.mobileTerminalId.systemType = data.mobileTerminalId.systemType;
+
+            //IdList
+            for (var i = 0; i < data.mobileTerminalId.idList.length; i ++) {
+                var idType = data.mobileTerminalId.idList[i].type,
+                    idValue = data.mobileTerminalId.idList[i].value;
+                mobileTerminal.mobileTerminalId.ids[idType] = idValue;
+            }            
 
             //CarrierId
             if(angular.isDefined(data.carrierId)){
@@ -33,9 +37,8 @@ angular.module('unionvmsWeb')
 
             //Attributes
             if(data.attributes !== null){
-            mobileTerminal.attributes = {};
-                for (var i = 0; i < data.attributes.length; i ++) {
-                    //mobileTerminal.attributes.push(MobileTerminalAttribute.fromJson(data.attributes[i]));
+                mobileTerminal.attributes = {};
+                for (i = 0; i < data.attributes.length; i ++) {
                     mobileTerminal.attributes[data.attributes[i].fieldType.toUpperCase()] = data.attributes[i].value;
                 }
             }
@@ -87,11 +90,17 @@ angular.module('unionvmsWeb')
                 jsonChannels.push(channelObject);
             });
 
+            //Create idList
+            var idList = [];
+            $.each(this.mobileTerminalId.ids, function(key, value){
+                idList.push({"type": key, "value": value});
+            });
+
             if(angular.isDefined(this.carrierId) && angular.isDefined(this.carrierId.value)){
                 return JSON.stringify({
                     mobileTerminalId : {
                         systemType : this.mobileTerminalId.systemType,
-                        serialNumber : this.mobileTerminalId.serialNumber,
+                        idList : idList,
                     },
                     carrierId : this.carrierId,
                     attributes : attributesObjects,
@@ -102,7 +111,7 @@ angular.module('unionvmsWeb')
                 return JSON.stringify({
                     mobileTerminalId : {
                         systemType : this.mobileTerminalId.systemType,
-                        serialNumber : this.mobileTerminalId.serialNumber,
+                        idList : idList,
                     },
                     attributes : attributesObjects,
                     channels : jsonChannels,
@@ -137,5 +146,21 @@ angular.module('unionvmsWeb')
             this.channels.push(new CommunicationChannel(this.channels.length + 1));
         };
 
+        //Add a new channel to the end of the list
+        MobileTerminal.prototype.addNewChannel = function(){
+            this.channels.push(new CommunicationChannel(this.channels.length + 1));
+        };
+
+        //Unassign the mobileTerminal from its carrier
+        MobileTerminal.prototype.unassign = function(){
+            this.carrierId = undefined;
+        };
+
+        //Assign the mobileTerminal to a vessel by internalId
+        MobileTerminal.prototype.assignToVesselWithInternalId = function(internalId){
+            this.carrierId = CarrierId.createVesselWithInternalId(internalId);
+        };
+
+        
         return MobileTerminal;
     });

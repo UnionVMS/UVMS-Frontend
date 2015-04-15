@@ -100,6 +100,10 @@ angular.module('unionvmsWeb').controller('addNewMobileTerminalCtrl',function($sc
         updateChannelOrders();
     };
 
+    $scope.unassignVessel = function(){
+        $scope.newMobileTerminal.unassign();
+    };
+
     //Show/hide assign vessel
     $scope.toggleAssignVessel = function(){
         $scope.isVisible.assignVessel = !$scope.isVisible.assignVessel;

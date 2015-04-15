@@ -5,7 +5,8 @@ angular.module('unionvmsWeb')
 		replace: false,
         controller: 'vesselDetailsCtrl',
         scope: {
-            vessel : '='
+            vessel : '=',
+            disableForm : '@',
         },
 		templateUrl: 'directive/vessel/vesselDetails/vesselDetails.html',
 		link: function(scope, element, attrs, fn) {
@@ -16,15 +17,6 @@ angular.module('unionvmsWeb')
 
 angular.module('unionvmsWeb')
     .controller('vesselDetailsCtrl', function($scope){
-
-        //Watch for changes to the vessel object
-        $scope.$watch(function () { return $scope.vessel;}, function (newVal, oldVal) {
-            if (typeof newVal !== 'undefined') {
-                console.log("vessel details updated");
-                //$scope.setValuesInDropDowns();
-            }
-        });
-
         // DROPDOWNS DUMMIES - Needs to have some sort of connection to database... and needs to be refactored when settingsfile is correct or present.
         $scope.vesselCountries =[{'text':'SWE','code':'SWE'},{'text': 'DNK','code':'DNK'},{'text':'NOR','code':'NOR'}];
         $scope.vesselActivitytTypes =[{'text':'Fishing Vessel','code':'Fishing Vessel'},{'text':'Pilot Vessel','code':'Pilot Vessel'},{'text':'Trawling Vessel','code':'Trawling Vessel'}];

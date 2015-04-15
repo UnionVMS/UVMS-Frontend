@@ -45,6 +45,6 @@
     "form_inmarsatc_communication_channel_started_label" : "Started",
     "form_inmarsatc_communication_channel_stopped_label" : "Stopped",
     "form_inmarsatc_communication_channel_sort_up_title" : "Move up",
-    "form_inmarsatc_communication_channel_sort_down_title" : "Move down"
-
+    "form_inmarsatc_communication_channel_sort_down_title" : "Move down",
+    "unassign_vessel" : "Unassign vessel"
 }

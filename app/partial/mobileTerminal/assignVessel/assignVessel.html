@@ -1,13 +1,14 @@
 <div ng-controller="AssignvesselCtrl">
     <div class="assignVesselsContainer" ng-show="isVisible.assignVessel">
+
         <div ng-show="selectedVessel">
-            <vessel-details vessel="selectedVessel" ></vessel-details>
+            <vessel-details vessel="selectedVessel" disable-form="true" ></vessel-details>
             <div class="row detailsFooter">
                 <div class="col-md-6">
-                    <button type="button" class="btn btn-default" ng-click="onBackToAssignVesselSearchResultsClick()">GO BACK TO SEARCH RESULT</button>
+                    <button type="button" class="btn btn-primary" ng-click="goBackToAssignVesselSearchResultsClick()">GO BACK TO SEARCH RESULT</button>
                 </div>
                 <div class="col-md-6 textAlignRight">
-                    <button type="button" class="btn btn-primary">CONNECT</button>
+                    <button type="button" class="btn btn-primary" ng-click="assignToSelectedVessel()"> <i class="fa fa-link"></i> ASSIGN</button>
                 </div>
             </div>
         </div>
@@ -56,7 +57,9 @@
                                 <td>{{vessel.name}}</td>
                                 <td>{{vessel.ircs}}</td>
                                 <td>{{vessel.type}}</td>
-                                <td class="textAlignRight"><button type="button" class="btn btn-primary" ng-click="onAssignVesselClick(vessel)">ASSIGN</button></td>
+                                <td class="textAlignRight">
+                                    <button type="button" class="btn btn-primary" ng-click="selectVessel(vessel)">SELECT</button>
+                                </td>
                             </tr>
                         </table>                            
                         <span ng-show="searchError">{{searchError}}</span>
@@ -66,19 +69,19 @@
                     </div>
                     <div class="pagination" ng-show="assignVesselSearchResults.vessels.length > 0 && !assignVesselSearchInProgress">
                         <div class="col-md-4">
-                            <span ng-show="assignVesselSearchResults.page > 1" ng-click="onPrevPageInAssignVesselSearchResults()">&lt; Previous page</span>
+                            <span ng-show="assignVesselSearchResults.page > 1" ng-click="gotoPrevPageInAssignVesselSearchResults()">&lt; Previous page</span>
                         </div>
                         <div class="col-md-4 textAlignCenter">
                             {{'vessel.table_number_of_pages' | i18n}} {{assignVesselSearchResults.page}} {{'vessel.table_of' | i18n}} {{assignVesselSearchResults.totalNumberOfPages}}
                         </div>
                         <div class="col-md-4 textAlignRight" >
-                            <span ng-show="assignVesselSearchResults.page < assignVesselSearchResults.totalNumberOfPages" ng-click="onNextPageInAssignVesselSearchResults()">Next page ></span>
+                            <span ng-show="assignVesselSearchResults.page < assignVesselSearchResults.totalNumberOfPages" ng-click="gotoNextPageInAssignVesselSearchResults()">Next page ></span>
                         </div>                        
                     </div>
                 </div>
             </div>
             <div class="col-md-4 textAlignCenter createNewVesselContainer">
-                <button type="button" class="btn btn-primary btn-lg">Create new vessel</button>
+                <button type="button" class="btn btn-primary btn-lg" ng-click="gotoCreateNewVessel()">Create new vessel</button>
             </div>
         </div>        
     </div>

@@ -3,22 +3,31 @@ describe('CommunicationChannel', function() {
   beforeEach(module('unionvmsWeb'));
 
     var responseData = {
-         channelType: "VMS",
-         memberId: 2,
-         dnid: 1,
-         order: 1,
-         startDate: 1418652232,
-         stopDate: 1428655732
+        channelType: "VMS",
+        order: 1,
+        startDate: 1418652232,
+        stopDate: 1428655732,
+        idList : [
+            {
+                "type":"DNID",
+                "value":"1"
+            },
+            {
+                "type":"MEMBER_ID",
+                "value":"1123"
+            }
+        ]
     };
 
     it('fromJson should build a correct object', inject(function(CommunicationChannel) {
         var channel = CommunicationChannel.fromJson(responseData);
         expect(channel.channelType).toEqual(responseData.channelType);
-        expect(channel.memberId).toEqual(responseData.memberId);
-        expect(channel.dnid).toEqual(responseData.dnid);
         expect(channel.order).toEqual(responseData.order);
         expect(channel.startDate).toEqual(responseData.startDate);
         expect(channel.stopDate).toEqual(responseData.stopDate);
+        expect(Object.keys(channel.ids).length).toEqual(2);
+        expect(channel.ids["DNID"]).toEqual("1");
+        expect(channel.ids["MEMBER_ID"]).toEqual("1123");        
     }));
 
     it('toJson should return correctly formatted data', inject(function(CommunicationChannel) {

@@ -5,26 +5,38 @@ angular.module('unionvmsWeb')
         function CommunicationChannel(order){
             this.order = order;
             this.channelType = "VMS";
+            this.ids = {};
         }
 
         CommunicationChannel.fromJson = function(data){
             var channel = new CommunicationChannel(data.order);
             channel.channelType = data.channelType;
-            channel.memberId = data.memberId;
-            channel.dnid = data.dnid;
             channel.startDate = data.startDate;
             channel.stopDate = data.stopDate;
+
+            //IdList
+            for (var i = 0; i < data.idList.length; i ++) {
+                var idType = data.idList[i].type,
+                    idValue = data.idList[i].value;
+                channel.ids[idType] = idValue;
+            } 
+
             return channel;
         };
 
         CommunicationChannel.prototype.toJson = function(){
+            //Create idList
+            var idList = [];
+            $.each(this.ids, function(key, value){
+                idList.push({"type": key, "value": value});
+            });
+
             return JSON.stringify({
                 channelType : angular.isDefined(this.channelType) ? this.channelType : '',
-                memberId : angular.isDefined(this.memberId) ? this.memberId : '',
-                dnid : angular.isDefined(this.dnid) ? this.dnid : '',
                 order : angular.isDefined(this.order) ? this.order : '',
                 startDate : angular.isDefined(this.startDate) ? this.startDate : '',
-                stopDate : angular.isDefined(this.stopDate) ? this.stopDate : ''
+                stopDate : angular.isDefined(this.stopDate) ? this.stopDate : '',
+                idList : idList
             });
         };
 
