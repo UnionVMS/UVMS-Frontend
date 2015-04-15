@@ -1,6 +1,6 @@
-<div class="col-md-12" ng-controller="MobileterminallistCtrl">
-    <div class="listcontainer">
-        <table class="col-md-12 searchResults">
+<div class="row" ng-controller="MobileterminallistCtrl">
+    <div class="col-md-12">
+        <table class="searchResults">
             <thead>
             <tr>
                 <th><input type="checkbox" ng-model="item.selectedAll" ng-click="checkAll()"/></th>
@@ -77,7 +77,7 @@
                 <td>{{item.attributes.SATELLITE_NUMBER}}</td>
                 <td></td>
                 <td>
-                    <button class="btn mobileterminalbtn button" ng-click="mobileTerminalChecked(item)">
+                    <button class="btn btn-primary" ng-click="mobileTerminalChecked(item)">
                         {{'mobileTerminal.table_header_detail_button' | i18n}}
                     </button>
                 </td>

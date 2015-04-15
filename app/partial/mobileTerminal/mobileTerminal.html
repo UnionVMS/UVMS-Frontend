@@ -11,14 +11,25 @@
         <div class="row" ng-show="isVisible.search">
             <div class="col-md-12">
                 <search resultscallback="searchcallback" modeltype="'MOBILE_TERMINAL'" advanced="false"></search>
-                <button type="button" class="btn btn-default" ng-click="toggleAddNewMobileTerminal()" ng-show="!isVisible.addNewMobileTerminal">+ Add new</button>
             </div>
         </div>
         <div ng-include="'partial/mobileTerminal/addNewMobileTerminal/addNewMobileTerminal.html'" ng-show="isVisible.addNewMobileTerminal"></div>
     </div>
-    <div class="containerWrapper grayContainer">
-        <div class="container">
-            <div ng-include="'partial/mobileTerminal/mobileTerminalList/mobileTerminalList.html'" ng-show="isVisible.search"></div>
+    <div class="containerWrapper grayContainer" ng-show="isVisible.search">
+        <div class="container containerWithTopBottomPadding">
+            <div class="row editSelectionsContainer">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dropdown ng-model="editSelection" initialtext="Edit selection" items="editSelectionDropdownItems"></dropdown>     
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 textAlignRight">
+                    <button type="button" class="btn btn-sm btn-primary" ng-click="toggleAddNewMobileTerminal()">+ Add new</button>                
+                </div>
+            </div>
+            <div ng-include="'partial/mobileTerminal/mobileTerminalList/mobileTerminalList.html'"></div>
         </div>
     </div>
 </div>

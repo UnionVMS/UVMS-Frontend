@@ -7,6 +7,8 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
         addNewMobileTerminal : false
     };
 
+    $scope.editSelectionDropdownItems =[{'text':'Poll terminals','code':'POLL'}, {'text':'Export selection','code':'EXPORT'}];
+    
     //Callback for the search
     $scope.searchcallback = function(vesselListPage){
         console.log("search results!");
@@ -19,11 +21,6 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
         $scope.isVisible.search = !$scope.isVisible.search;
     };
 
-    $scope.testItems = [
-        { code: 'sv-se', text: 'Sweden' },
-        { code: 'dn-dk', text: 'Denmark' },
-        { code: 'no-no', text: 'Norway' }
-    ];
 
     $scope.selectedItem = "";
 
