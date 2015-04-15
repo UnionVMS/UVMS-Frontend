@@ -20,19 +20,12 @@
                         <input type="text" class="form-control searchText"
                                placeholder="Search for vessel" ng-model="assignVesselFreeText">
                     </div>
+                    
                     <!-- Type Dropdown -->
                     <div class="col-md-4">
-                        <div class="dropdown">
-                            <button class="btn btn-default dropdown-toggle" type="button" 
-                                    data-toggle="dropdown" aria-expanded="true">
-                                <div class="dropdownText">Name/CFR/IRCS</div>
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu">
-                                <li role="presentation" ng-repeat="item in assignVesselSearchTypes"><a role="menuitem" tabindex="-1" href="">{{item}}</a></li>
-                            </ul>
-                        </div>
+                        <dropdown ng-model="assignVesselSearchType" initialtext="" items="assignVesselSearchTypes"></dropdown>                        
                     </div>
+
                     <!-- Search button -->
                     <div class="col-md-4">
                         <button type="button" class="btn btn-primary btn-lg searchButton" ng-click="assignVesselSearch()">

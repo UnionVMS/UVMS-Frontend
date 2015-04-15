@@ -3,7 +3,8 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
 
     //Search objects and results
     $scope.assignVesselFreeText = "";
-    $scope.assignVesselSearchTypes = ['NAME', 'CFR', 'IRCS'];
+    $scope.assignVesselSearchType = "ALL";
+    $scope.assignVesselSearchTypes =[{'text':'Name/CFR/IRCS','code':'ALL'}, {'text':'Name','code':'NAME'}, {'text':'CFR','code':'CFR'}, {'text':'IRCS','code':'IRCS'}];
     $scope.assignVesselSearchInProgress = false;
     $scope.assignVesselSearchResults = {
         page : 1,
@@ -22,9 +23,13 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
 
         //Set search criterias
         var searchValue = $scope.assignVesselFreeText +"*";
-        getListRequest.addSearchCriteria("NAME", searchValue);
-        getListRequest.addSearchCriteria("CFR", searchValue);
-        getListRequest.addSearchCriteria("IRCS", searchValue);        
+        if($scope.assignVesselSearchType === "ALL"){
+            getListRequest.addSearchCriteria("NAME", searchValue);
+            getListRequest.addSearchCriteria("CFR", searchValue);
+            getListRequest.addSearchCriteria("IRCS", searchValue);
+        }else{
+            getListRequest.addSearchCriteria($scope.assignVesselSearchType, searchValue);
+        }
 
         //Do the search
         vesselRestService.getVesselList(getListRequest)
