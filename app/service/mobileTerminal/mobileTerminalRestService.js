@@ -16,7 +16,13 @@ angular.module('unionvmsWeb')
             getMobileTerminals : function(){
                 return $resource(baseUrl +'/mobileterminal-rest/mobileTerminal/list/',{},{list : { method: 'POST'}
                 });
-            }
+            },
+            assignMobileTerminal : function(){
+                return $resource(baseUrl +'/mobileterminal-rest/mobileTerminal/assign/');
+            },
+            unassignMobileTerminal : function(){
+                return $resource(baseUrl +'/mobileterminal-rest/mobileTerminal/unassign/');
+            },                         
         };
     })
     .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, MobileTerminal, MobileTerminalListPage, TranspondersConfig){
@@ -115,6 +121,48 @@ angular.module('unionvmsWeb')
                 });
                 return deferred.promise;
             },            
+
+            assignMobileTerminal : function(mobileTerminal){
+                console.log("assign mobile terminal!");
+                console.log(mobileTerminal.toAssignJson());
+                var deferred = $q.defer();
+                mobileTerminalRestFactory.assignMobileTerminal().save(mobileTerminal.toAssignJson(), function(response) {
+                    console.log("Assign response!");
+                    console.log(response);
+                    if(response.code !== "200"){
+                        deferred.reject("Invalid response status");
+                        return;
+                    }                    
+                    //TODO: Parse response
+                    deferred.resolve(response.data);
+                }, function(error) {
+                    console.error("Error assigning mobile terminal.");
+                    console.error(error);
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            },           
+            unassignMobileTerminal : function(mobileTerminal){
+                console.log("unassign mobile terminal!");
+                console.log(mobileTerminal.toUnassignJson());
+                var deferred = $q.defer();
+                mobileTerminalRestFactory.unassignMobileTerminal().save(mobileTerminal.toUnassignJson(), function(response) {
+                    console.log("Unassign response!");
+                    console.log(response);
+                    if(response.code !== "200"){
+                        deferred.reject("Invalid response status");
+                        return;
+                    }                    
+                    //TODO: Parse response
+                    deferred.resolve(response.data);
+                }, function(error) {
+                    console.error("Error unassigning mobile terminal.");
+                    console.error(error);
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            },               
+
 
         };
         return mobileTerminalRestService;

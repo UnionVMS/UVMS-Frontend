@@ -99,6 +99,27 @@ describe('MobileTerminalModel', function() {
      "code": "200"
   };
 
+    var assignJsonPost = {
+        "mobileTerminalId":       {
+           "systemType": "INMARSAT_C",
+           "idList": [
+              {
+                "type": "SERIAL_NUMBER", 
+                "value": "SSE3456"
+              }, 
+              {
+                "type": "INTERNAL_ID", 
+                "value": "260"
+              }
+            ]
+        },
+        "carrierId":       {
+           "carrierType": "VESSEL",
+           "idType": "IRCS",
+           "value": "ASDASD"
+        }
+    };
+
   responseData = responseData.data;
 
     it('create new should set correct values', inject(function(MobileTerminal) {
@@ -153,6 +174,12 @@ describe('MobileTerminalModel', function() {
         var mobileTerminal = MobileTerminal.fromJson(responseData);
         var toJsonObject = JSON.parse(mobileTerminal.toJson());
         expect(angular.equals(toJsonObject, responseData)).toBeTruthy();
+    }));
+
+    it('toAssignJson should return correctly formatted data', inject(function(MobileTerminal) {
+        var mobileTerminal = MobileTerminal.fromJson(responseData);
+        var toJsonObject = JSON.parse(mobileTerminal.toAssignJson());
+        expect(angular.equals(toJsonObject, assignJsonPost)).toBeTruthy();
     }));
 
 

@@ -49,9 +49,6 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
 
     var updateAndAssignSuccess = function(){
         alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.update_alert_message_on_success'));
-        setTimeout(function() {
-            $route.reload();
-        }, 2000 );
     };
 
     //Error creating the new mobile terminal

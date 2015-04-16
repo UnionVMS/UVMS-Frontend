@@ -15,6 +15,9 @@ angular.module('unionvmsWeb')
 
             this.active = true;
             this.carrierId = undefined;
+            this.oldCarrierId = undefined;
+
+            this.assignedCarrierHasBeenUpdated = false;
         }
 
         MobileTerminal.fromJson = function(data){
@@ -33,6 +36,7 @@ angular.module('unionvmsWeb')
             //CarrierId
             if(angular.isDefined(data.carrierId)){
                 mobileTerminal.carrierId = CarrierId.fromJson(data.carrierId);
+                mobileTerminal.oldCarrierId = CarrierId.fromJson(data.carrierId);
             }
 
             //Attributes
@@ -102,7 +106,7 @@ angular.module('unionvmsWeb')
                         systemType : this.mobileTerminalId.systemType,
                         idList : idList,
                     },
-                    carrierId : this.carrierId,
+                    carrierId : JSON.parse(this.carrierId.toJson()),
                     attributes : attributesObjects,
                     channels : jsonChannels,
                     active : this.active
@@ -119,6 +123,38 @@ angular.module('unionvmsWeb')
                 });
             }
         };
+
+        MobileTerminal.prototype.toUnassignJson = function(){
+            //Create idList
+            var idList = [];
+            $.each(this.mobileTerminalId.ids, function(key, value){
+                idList.push({"type": key, "value": value});
+            });
+
+            return JSON.stringify({
+                mobileTerminalId : {
+                    systemType : this.mobileTerminalId.systemType,
+                    idList : idList,
+                },
+                carrierId : this.oldCarrierId
+            });
+        };     
+
+        MobileTerminal.prototype.toAssignJson = function(){
+            //Create idList
+            var idList = [];
+            $.each(this.mobileTerminalId.ids, function(key, value){
+                idList.push({"type": key, "value": value});
+            });
+
+            return JSON.stringify({
+                mobileTerminalId : {
+                    systemType : this.mobileTerminalId.systemType,
+                    idList : idList,
+                },
+                carrierId : this.carrierId
+            });
+        };        
 
         MobileTerminal.prototype.setSystemTypeToInmarsatC = function(){
             this.mobileTerminalId.systemType = "INMARSAT_C";
@@ -153,13 +189,27 @@ angular.module('unionvmsWeb')
 
         //Unassign the mobileTerminal from its carrier
         MobileTerminal.prototype.unassign = function(){
+            this.assignedCarrierHasBeenUpdated = true;
             this.carrierId = undefined;
+        };
+
+        //Check if the mobileTerminal is assigned to a carrier
+        MobileTerminal.prototype.isAssigned = function(){
+            return this.carrierId !== undefined && this.carrierId.value !== undefined;
+        };
+
+        //Check if the mobileTerminal has been assigned to a different carrier
+        MobileTerminal.prototype.hasAssignedCarrierBeenUpdated = function(){
+            return this.assignedCarrierHasBeenUpdated;
         };
 
         //Assign the mobileTerminal to a vessel by internalId
         MobileTerminal.prototype.assignToVesselWithInternalId = function(internalId){
+            this.assignedCarrierHasBeenUpdated = true;
             this.carrierId = CarrierId.createVesselWithInternalId(internalId);
         };
+
+        
 
         
         return MobileTerminal;

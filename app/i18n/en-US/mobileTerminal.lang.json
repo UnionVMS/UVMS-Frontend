@@ -21,6 +21,7 @@
     "add_new_alert_message_on_channels_missing_validation_error" : "There must at least exist one communication channel. Please add one and try to save again.",
     "add_new_alert_message_on_success" : "The Mobile Terminal has been created successfully. You can close this window or just wait and it will close itself.",
     "add_new_alert_message_on_error" : "The mobile terminal could not be created.",
+    "add_new_alert_message_on_assign_error" : "The mobile terminal has been created but could not be assigned to the carrier.",
     "add_new_alert_message_on_load_transponders_error" : "You cannot create a mobile terminal at the moment. Error information: Failed to load terminal systems from the server.",
     "form_inmarsatc_sattelite_number_label" : "Sattelite number",
     "form_inmarsatc_serial_no_label" : "Serial no",
@@ -49,5 +50,6 @@
     "view_header" : "Mobile terminal information",
     "unassign_vessel" : "Unassign vessel",
     "update_alert_message_on_success" : "The Mobile Terminal has been updated successfully.",
-    "update_alert_message_on_error" : "The Mobile Terminal could not be updated."    
+    "update_alert_message_on_error" : "The Mobile Terminal could not be updated.",
+    "update_alert_message_on_assign_error" : "The mobile terminal has been updated but the assigned carrier failed to update.."
 }
