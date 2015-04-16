@@ -224,6 +224,9 @@ module.exports = function (grunt) {
     },
     uglify: {
       main: {
+        options: {
+          banner: '/*Version: <%= grunt.template.today("yyyy-mm-dd HH:MM") %> */'
+        },
         src: 'temp/app.full.js',
         dest:'dist/app.full.min.js'
       }
