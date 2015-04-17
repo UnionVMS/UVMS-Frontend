@@ -65,7 +65,7 @@
                             <span ng-show="assignVesselSearchResults.page > 1" ng-click="gotoPrevPageInAssignVesselSearchResults()">&lt; Previous page</span>
                         </div>
                         <div class="col-md-4 textAlignCenter">
-                            {{'vessel.table_number_of_pages' | i18n}} {{assignVesselSearchResults.page}} {{'vessel.table_of' | i18n}} {{assignVesselSearchResults.totalNumberOfPages}}
+                            {{'common.search_results_current_page' | i18n:[assignVesselSearchResults.page, assignVesselSearchResults.totalNumberOfPages]}}
                         </div>
                         <div class="col-md-4 textAlignRight" >
                             <span ng-show="assignVesselSearchResults.page < assignVesselSearchResults.totalNumberOfPages" ng-click="gotoNextPageInAssignVesselSearchResults()">Next page ></span>

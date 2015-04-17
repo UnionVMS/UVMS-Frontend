@@ -7,6 +7,8 @@
 	"search_advanced_link" : "Advanced search",
     "search_group_dropdown" : "Saved groups",
     "search_group_save" : "Save group",
+    "search_results_load_more" : "Load more",
+    "search_results_current_page" : "Showing page {1} of {2}",
     "validation_required" : "Required",
     "validation_digits_only" : "Only digits",
     "validation_letters_only" : "Only letters",

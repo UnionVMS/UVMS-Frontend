@@ -67,7 +67,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="item in currentSearchResults | orderBy:sortType:sortReverse | filter:searchFilter">
+            <tr ng-repeat="item in currentSearchResults.mobileTerminals | orderBy:sortType:sortReverse | filter:searchFilter">
                 <td><input type="checkbox" ng-model="item.Selected" ng-click="checkedVessel(item)"/></td>
                 <td>{{item.carrierId.value}}</td>
                 <td>{{item.mobileTerminalId.ids.SERIAL_NUMBER}}</td>
