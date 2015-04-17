@@ -11,8 +11,8 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
 
     //Search objects and results
     $scope.currentSearchResults = {
-        page : 1,
-        totalNumberOfPages : 1,
+        page : 0,
+        totalNumberOfPages : 0,
         mobileTerminals : []
     };    
 
@@ -110,6 +110,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
 
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
+        searchService.reset();
     });
 
     init();

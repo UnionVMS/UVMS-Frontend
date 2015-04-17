@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, GetListRequest, searchService, vesselRestService, validationService){
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, GetListRequest, searchService, vesselRestService, alertService){
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -9,8 +9,8 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, 
 
     //Search objects and results
     $scope.currentSearchResults = {
-        page : 1,
-        totalNumberOfPages : 1,
+        page : 0,
+        totalNumberOfPages : 0,
         vessels : []
     };
 
@@ -192,6 +192,11 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, 
         $scope.isVisible.viewVessel = !$scope.isVisible.viewVessel;
         $scope.isVisible.search = !$scope.isVisible.search;
     };
+
+    $scope.$on("$destroy", function() {
+        alertService.hideMessage();
+        searchService.reset();
+    });    
 
     init();
 });
