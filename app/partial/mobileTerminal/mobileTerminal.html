@@ -31,14 +31,14 @@
                 </div>
             </div>
             <div ng-include="'partial/mobileTerminal/mobileTerminalList/mobileTerminalList.html'"></div>
-            <div class="row">
+            <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0">
                 <div class="col-md-12">
                     {{'common.search_results_current_page' | i18n:[currentSearchResults.page, currentSearchResults.totalNumberOfPages]}}
                 </div>
             </div>
-            <div class="row">
+            <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0 && currentSearchResults.totalNumberOfPages > currentSearchResults.page">
                 <div class="col-md-12 textAlignCenter">
-                    <span class="link" ng-click="loadNextPage()" ng-hide="currentSearchResults.totalNumberOfPages === currentSearchResults.page"> {{'common.search_results_load_more' | i18n | uppercase}}</span>            
+                    <span class="link" ng-click="loadNextPage()"> {{'common.search_results_load_more' | i18n | uppercase}}</span>            
                 </div>
             </div>
         </div>
