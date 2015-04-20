@@ -1,9 +1,11 @@
 {
     "no" : "No" ,
     "remove" : "Remove",
+    "reset" : "Reset",
     "save" : "Save",
     "update" : "Update",
-	"search" : "Search",
+    "search" : "Search",
+	"search_failed_error" : "Something went wrong. Please try again.",
 	"search_advanced_link" : "Advanced search",
     "search_group_dropdown" : "Saved groups",
     "search_group_save" : "Save group",

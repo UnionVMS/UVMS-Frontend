@@ -52,5 +52,17 @@
     "unassign_vessel" : "Unassign vessel",
     "update_alert_message_on_success" : "The Mobile Terminal has been updated successfully.",
     "update_alert_message_on_error" : "The Mobile Terminal could not be updated.",
-    "update_alert_message_on_assign_error" : "The mobile terminal has been updated but the assigned carrier failed to update.."
+    "update_alert_message_on_assign_error" : "The mobile terminal has been updated but the assigned carrier failed to update..",
+    "search_name_placeholder" : "Name",
+    "search_IRCS_placeholder" : "IRCS",
+    "search_externalMarking_placeholder" : "Ext. no.",
+    "search_CFR_placeholder" : "CFR",
+    "search_homeport_placeholder" : "Homeport name",
+    "search_mmsi_placeholder" : "MMSI",
+    "search_serialNumber_placeholder" : "Serial number",
+    "search_dnid_placeholder" : "DNID",
+    "search_reportingStartDate_placeholder" : "Reporting start date",
+    "search_reportingEndDate_placeholder" : "Reporting end date",
+    "search_selectVesselGroup_placeholder" : "Select vessel groups",
+    "search_zero_results_error" : "No mobile terminals matching you search criteria was found."
 }

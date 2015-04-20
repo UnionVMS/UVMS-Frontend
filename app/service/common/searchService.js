@@ -54,16 +54,12 @@ angular.module('unionvmsWeb').factory('searchService',function(GetListRequest, S
             this.setSearchCriterias(this.getAdvancedSearchCriterias());
         },
         reset : function(){
-            console.log("RESET SEARCH");
             getListRequest = new GetListRequest(1, 10, true, []);
             advancedSearchObject = {};
-        }
-
-        /*validate : function(){
-
-        }*/
-
-
+        },
+        resetAdvancedSearch : function(){
+            advancedSearchObject = {};
+        },
 
 	};
 

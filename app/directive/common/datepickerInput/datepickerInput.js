@@ -4,7 +4,9 @@ angular.module('unionvmsWeb').directive('datepickerInput', function() {
 		replace: true,
         controller: 'datepickerInputCtrl',
 		scope: {
-            model : '='
+            model : '=',
+            placeholder : '@',
+            disabled : '='
 		},
 		templateUrl: 'directive/common/datepickerInput/datepickerInput.html',
 		link: function(scope, element, attrs, fn) {
@@ -16,7 +18,7 @@ angular.module('unionvmsWeb').directive('datepickerInput', function() {
 
 angular.module('unionvmsWeb')
     .controller('datepickerInputCtrl', function($scope, searchService, SearchField){
-            $scope.datePicker = (function () {
+        $scope.datePicker = (function () {
         var method = {};
         method.instances = [];
 

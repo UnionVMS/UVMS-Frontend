@@ -10,7 +10,7 @@
         </div>
         <div class="row" ng-show="isVisible.search">
             <div class="col-md-12">
-                <search resultscallback="searchcallback" modeltype="'MOBILE_TERMINAL'" advanced="false"></search>
+                <advanced-search searchfunc="searchMobileTerminals" modeltype="'MOBILE_TERMINAL'" advancedsearchvisible="true"></advanced-search>                
             </div>
         </div>
         <div ng-include="'partial/mobileTerminal/addNewMobileTerminal/addNewMobileTerminal.html'" ng-show="isVisible.addNewMobileTerminal"></div>

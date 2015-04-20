@@ -18,8 +18,17 @@ angular.module('unionvmsWeb').directive('advancedSearch', function() {
 angular.module('unionvmsWeb')
     .controller('AdvancedSearchCtrl', function($scope, searchService, SearchField){
 
-    if($scope.modeltype === 'VESSEL'){        
-        $scope.formPartial = 'directive/common/search/advancedSearch/vessel/advancedSearchVesselForm.html';
+
+    //Set form partial depending on modelType
+    switch($scope.modeltype) {
+        case "VESSEL":
+            $scope.formPartial = 'directive/common/search/advancedSearch/vessel/advancedSearchVesselForm.html';
+            break;
+        case "MOBILE_TERMINAL":
+            $scope.formPartial = 'directive/common/search/advancedSearch/mobileTerminal/advancedSearchMobileTerminalForm.html';
+            break;
+        default:
+            console.error("ModelType is missing for advanced search.");
     }
 
     $scope.advancedSearchObject  = searchService.getAdvancedSearchObject();
@@ -40,12 +49,17 @@ angular.module('unionvmsWeb')
         searchService.setDynamic(true);
         searchService.setSearchCriteriasToAdvancedSearch();
 
-        //TODO: Validate?
-
         //Do the search
         $scope.searchfunc();        
     };
 
+    //Reset the advacned search form inputs
+    $scope.resetAdvancedSearchForm = function(){
+        searchService.resetAdvancedSearch();    
+        $scope.advancedSearchObject  = searchService.getAdvancedSearchObject();
+    };
+
+    //TODO: Remove when advanced search form for vessel has been updated to use datepicker-input directive
     $scope.datePicker = (function () {
         var method = {};
         method.instances = [];

@@ -13,7 +13,9 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
     $scope.currentSearchResults = {
         page : 0,
         totalNumberOfPages : 0,
-        mobileTerminals : []
+        mobileTerminals : [],
+        errorMessage : "",
+        loading : false
     };    
 
     $scope.editSelectionDropdownItems =[{'text':'Poll terminals','code':'POLL'}, {'text':'Export selection','code':'EXPORT'}];
@@ -46,8 +48,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
     //Init function when entering page
     var init = function(){
         //Load list with mobileTerminals
-        var response = searchService.searchMobileTerminals()
-            .then(updateSearchResults, onGetSearchResultsError);
+        $scope.searchMobileTerminals();
 
         //Get list transponder systems
         mobileTerminalRestService.getTranspondersConfig()
@@ -65,13 +66,24 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
         );
     }; 
 
+    //Get list of Mobile Terminals matching the current search criterias
+    $scope.searchMobileTerminals = function(){
+        $scope.currentSearchResults.errorMessage = "";
+        $scope.currentSearchResults.loading = true;
+        $scope.currentSearchResults.mobileTerminals.length = 0;
+        $scope.currentSearchResults.page = 0;
+        $scope.currentSearchResults.totalNumberOfPages = 0;
+        searchService.searchMobileTerminals()
+                .then(updateSearchResults, onGetSearchResultsError);
+    };    
+
     //Update the search results
     var updateSearchResults = function(mobileTerminalListPage){
-        $scope.mobileTerminalListPage = mobileTerminalListPage;
-        if(mobileTerminalListPage.mobileTerminals.length === 0 ){
-            $scope.error = "No mobile terminals matching you search criteria was found.";
+        $scope.currentSearchResults.loading = false;
+        if(mobileTerminalListPage.totalNumberOfPages === 0 ){
+            $scope.currentSearchResults.errorMessage = locale.getString('mobileTerminal.search_zero_results_error');
         } else {
-            $scope.error = "";
+            $scope.currentSearchResults.errorMessage = "";
             if(!$scope.currentSearchResults.mobileTerminals){
                 $scope.currentSearchResults.mobileTerminals = mobileTerminalListPage.mobileTerminals;
             }
@@ -94,16 +106,17 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
         {
             //Increase page by 1
             searchService.increasePage();
-        var response = searchService.searchMobileTerminals()
-            .then(updateSearchResults, onGetSearchResultsError);
+            $scope.currentSearchResults.loading = true;
+            var response = searchService.searchMobileTerminals()
+                .then(updateSearchResults, onGetSearchResultsError);
         }
     };
 
 
+    //Error during search
     var onGetSearchResultsError = function(error){
-        $scope.error = "We are sorry... Something took a wrong turn. To err is human but to arr is pirate!!";
-        console.log("We are sorry... To err is human but to arr is pirate!!");
-
+        $scope.currentSearchResults.loading = false;
+        $scope.currentSearchResults.errorMessage = locale.getString('common.search_failed_error');
         $scope.currentSearchResults.totalNumberOfPages = 1;
         $scope.currentSearchResults.page = 1;
     };

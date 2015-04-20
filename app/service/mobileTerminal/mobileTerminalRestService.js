@@ -61,10 +61,10 @@ angular.module('unionvmsWeb')
                             for (var i = 0; i < response.data.mobileTerminal.length; i++) {
                                 mobileTerminals.push(MobileTerminal.fromJson(response.data.mobileTerminal[i]));
                             }
-                            var currentPage = response.data.currentPage;
-                            var totalNumberOfPages = response.data.totalNumberOfPages;
-                            mobileTerminalListPage = new MobileTerminalListPage(mobileTerminals, currentPage, totalNumberOfPages);
                         }
+                        var currentPage = response.data.currentPage;
+                        var totalNumberOfPages = response.data.totalNumberOfPages;
+                        mobileTerminalListPage = new MobileTerminalListPage(mobileTerminals, currentPage, totalNumberOfPages);
 
                         //Get vessels for the mobileTerminals?
                         try{
