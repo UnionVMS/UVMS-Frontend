@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('addNewMobileTerminalCtrl',function($scope, $route, locale, MobileTerminal, mobileTerminalRestService, alertService, $controller){
+angular.module('unionvmsWeb').controller('addNewMobileTerminalCtrl',function($scope, locale, MobileTerminal, mobileTerminalRestService, alertService, $controller){
 
     $controller('mobileTerminalFormCtrl', { $scope: $scope });
 
@@ -29,34 +29,13 @@ angular.module('unionvmsWeb').controller('addNewMobileTerminalCtrl',function($sc
     };
 
     //Success creating the new mobile terminal
-    var createSuccess = function(){
-        //Assign to a carrier?
-        if($scope.currentMobileTerminal.isAssigned()){
-            mobileTerminalRestService.assignMobileTerminal($scope.currentMobileTerminal)
-                .then(createAndAssignSuccess, createError);
-        }else{
-            createAndAssignSuccess();
-        }
-    };
-
-    var createAndAssignSuccess = function(){
+    var createSuccess = function(terminalObject) {
+        $scope.currentMobileTerminal = MobileTerminal.fromJson(terminalObject);
         alertService.showSuccessMessage(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
-        setTimeout(function() {
-            $route.reload();
-        }, 2000 );
     };
 
     //Error creating the new mobile terminal
     var createError = function(){
         alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_error'));
     };
-
-    //Error assigning the new mobile terminal
-    var assignError = function(){
-        alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_assign_error'));
-        setTimeout(function() {
-            $route.reload();
-        }, 3000 );        
-    };
 });
-

@@ -25,29 +25,7 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
                 .then(updateSuccess, updateError);
     };
 
-
-
-    //Success creating the new mobile terminal
     var updateSuccess = function(){
-        //Assign to a carrier?
-        if($scope.currentMobileTerminal.hasAssignedCarrierBeenUpdated()){
-            //Check if the mobile temrinal has been assigned to a new carrier or been unassigned
-            if($scope.currentMobileTerminal.isAssigned()){
-                //Assign
-                mobileTerminalRestService.assignMobileTerminal($scope.currentMobileTerminal)
-                    .then(updateAndAssignSuccess, assignError);
-            }
-            else{
-                //Unassign
-                mobileTerminalRestService.unassignMobileTerminal($scope.currentMobileTerminal)
-                    .then(updateAndAssignSuccess, assignError);            
-            }
-        }else{
-            updateAndAssignSuccess();
-        }
-    };
-
-    var updateAndAssignSuccess = function(){
         alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.update_alert_message_on_success'));
     };
 
@@ -55,13 +33,4 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
     var updateError = function(){
         alertService.showErrorMessage(locale.getString('mobileTerminal.update_alert_message_on_error'));
     };
-
-    //Error assigning the new mobile terminal
-    var assignError = function(){
-        alertService.showErrorMessage(locale.getString('mobileTerminal.update_alert_message_on_assign_error'));     
-    };
-
-
-
-
 });

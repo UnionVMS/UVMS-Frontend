@@ -31,7 +31,7 @@
 
     <div class="row" ng-hide="isVisible.assignVessel">
         <div class="col-md-12" ng-hide="currentMobileTerminal.carrierId">
-            <span id="assignVesselLink" ng-click="toggleAssignVessel()">{{'mobileTerminal.assign_vessel' | i18n}}</span>
+            <span id="assignVesselLink" ng-click="toggleAssignVessel()" ng-show="currentMobileTerminal.hasInternalId()">{{'mobileTerminal.assign_vessel' | i18n}}</span>
         </div>    
     </div>
 

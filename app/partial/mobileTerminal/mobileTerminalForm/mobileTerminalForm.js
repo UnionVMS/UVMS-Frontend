@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scope, $route, locale, MobileTerminal, mobileTerminalRestService, alertService){
+angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scope, locale, MobileTerminal, mobileTerminalRestService, alertService){
 
     //Visibility statuses
     $scope.isVisible = {
@@ -54,8 +54,17 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         updateChannelOrders();
     };
 
-    $scope.unassignVessel = function(){
+    $scope.unassignVessel = function() {
         $scope.currentMobileTerminal.unassign();
+        mobileTerminalRestService.unassignMobileTerminal($scope.currentMobileTerminal).then(unassignSuccess, unassignError);
+    };
+
+    var unassignSuccess = function () {
+        alertService.showSuccessMessage(locale.getString('mobileTerminal.unassign_vessel_message_on_success'));
+    };
+
+    var unassignError = function () {
+        alertService.showErrorMessage(locale.getString('mobileTerminal.unassign_vessel_message_on_error'));
     };
 
     //Show/hide assign vessel

@@ -102,28 +102,14 @@ angular.module('unionvmsWeb')
                 idList.push({"type": key, "value": value});
             });
 
-            if(angular.isDefined(this.carrierId) && angular.isDefined(this.carrierId.value)){
-                return JSON.stringify({
-                    mobileTerminalId : {
-                        systemType : this.mobileTerminalId.systemType,
-                        idList : idList,
-                    },
-                    carrierId : JSON.parse(this.carrierId.toJson()),
-                    attributes : attributesObjects,
-                    channels : jsonChannels,
-                    active : this.active
-                });
-            } else{
-                return JSON.stringify({
-                    mobileTerminalId : {
-                        systemType : this.mobileTerminalId.systemType,
-                        idList : idList,
-                    },
-                    attributes : attributesObjects,
-                    channels : jsonChannels,
-                    active : this.active
-                });
-            }
+            return JSON.stringify({
+                mobileTerminalId : {
+                    systemType : this.mobileTerminalId.systemType,
+                    idList : idList,
+                },
+                attributes : attributesObjects,
+                channels : jsonChannels
+            });
         };
 
         MobileTerminal.prototype.toUnassignJson = function(){
@@ -216,5 +202,9 @@ angular.module('unionvmsWeb')
             return this.associatedVessel = vessel;
         };
         
+        MobileTerminal.prototype.hasInternalId = function() {
+            return this.mobileTerminalId.ids.hasOwnProperty("INTERNAL_ID");
+        };
+
         return MobileTerminal;
     });

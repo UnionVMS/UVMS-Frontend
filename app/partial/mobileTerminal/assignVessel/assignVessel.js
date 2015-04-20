@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $location, GetListRequest, vesselRestService, mobileTerminalRestService){
+angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $location, GetListRequest, vesselRestService, mobileTerminalRestService, alertService, locale){
 
 
     //Search objects and results
@@ -93,15 +93,26 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
         console.log("ASSIGN TO VESSEL!");
         console.log($scope.selectedVessel);
 
-        if($scope.selectedVessel.vesselId.type === 'ID'){
+        if ($scope.currentMobileTerminal && $scope.selectedVessel.vesselId.type === 'ID'){
             var internalVesselId = $scope.selectedVessel.vesselId.value;
             $scope.currentMobileTerminal.assignToVesselWithInternalId(internalVesselId);
             $scope.toggleAssignVessel();
             $scope.goBackToAssignVesselSearchResultsClick();
-        }else{
+
+            mobileTerminalRestService.assignMobileTerminal($scope.currentMobileTerminal).then(assignSuccess, assignError);
+        }
+        else {
             console.error("Vessel is missing internalId so assigning the mobile terminal to the vessel is not possible.");
         }
     };
+
+    function assignSuccess() {
+        alertService.showSuccessMessage(locale.getString('mobileTerminal.assign_vessel_message_on_success'));
+    }
+
+    function assignError() {
+        alertService.showErrorMessage(locale.getString('mobileTerminal.assign_vessel_message_on_error'));
+    }
 
     //Go back to search results
     $scope.goBackToAssignVesselSearchResultsClick = function(){

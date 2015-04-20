@@ -2,125 +2,128 @@ describe('MobileTerminalModel', function() {
 
   beforeEach(module('unionvmsWeb'));
 
-    var responseData = {
-     "data":    {
-        "attributes":       [
-                    {
-              "fieldType": "SATELLITE_NUMBER",
-              "value": "12345"
-           },
-                    {
-              "fieldType": "TRANSCEIVER_TYPE",
-              "value": "TRANS_1"
-           },
-                    {
-              "fieldType": "SOFTWARE_VERSION",
-              "value": "2.0.3"
-           },
-                    {
-              "fieldType": "ANTENNA",
-              "value": "MY ANTENNA"
-           },
-                    {
-              "fieldType": "ANSWER_BACK",
-              "value": "BACKBACK"
-           },
-                    {
-              "fieldType": "INSTALLED_BY",
-              "value": "JOHN SMITH"
-           },
-                    {
-              "fieldType": "INSTALLED_ON",
-              "value": "2006-04-03"
-           },
-                    {
-              "fieldType": "STARTED_ON",
-              "value": "2006-04-03"
-           },
-                    {
-              "fieldType": "UNINSTALLED_ON",
-              "value": "2009-12-22"
-           }
-        ],
-        "channels": [      
+    var attributes = [
+        {
+            "fieldType": "SATELLITE_NUMBER",
+            "value": "12345"
+        },
+        {
+            "fieldType": "TRANSCEIVER_TYPE",
+            "value": "TRANS_1"
+        },
+        {
+            "fieldType": "SOFTWARE_VERSION",
+            "value": "2.0.3"
+        },
+        {
+            "fieldType": "ANTENNA",
+            "value": "MY ANTENNA"
+        },
+        {
+            "fieldType": "ANSWER_BACK",
+            "value": "BACKBACK"
+        },
+        {
+            "fieldType": "INSTALLED_BY",
+            "value": "JOHN SMITH"
+        },
+        {
+            "fieldType": "INSTALLED_ON",
+            "value": "2006-04-03"
+        },
+        {
+            "fieldType": "STARTED_ON",
+            "value": "2006-04-03"
+        },
+        {
+            "fieldType": "UNINSTALLED_ON",
+            "value": "2009-12-22"
+        }
+    ];
+
+    var channels = [      
+        {
+            "channelType": "VMS",
+            "idList": [
+                {
+                    "type":"DNID",
+                    "value":"999"
+                },
+                {
+                    "type":"MEMBER_ID",
+                    "value":"4444"
+                }
+            ],
+            "order": 1,
+            "startDate": 1428357600000,
+            "stopDate": 1428357600000
+        },
+        {
+            "channelType": "VMS",
+            "order": 3,
+            "startDate": 1428357600000,
+           "stopDate": 1428357600000,
+            "idList": [
+                {
+                    "type":"DNID",
+                    "value":"234"
+                },
+                {
+                    "type":"MEMBER_ID",
+                    "value":"67567"
+                }
+            ],             
+        }];
+
+    var mobileTerminalId = {
+        "systemType": "INMARSAT_C",
+        "idList": [
             {
-                "channelType": "VMS",
-                "idList":[
-                    {
-                        "type":"DNID",
-                        "value":"999"
-                    },
-                    {
-                        "type":"MEMBER_ID",
-                        "value":"4444"
-                    }
-                ],    
-               "order": 1,
-               "startDate": 1428357600000,
-               "stopDate": 1428357600000
-            },
-            {
-               "channelType": "VMS",
-               "order": 3,
-               "startDate": 1428357600000,
-               "stopDate": 1428357600000,
-                "idList":[
-                    {
-                        "type":"DNID",
-                        "value":"234"
-                    },
-                    {
-                        "type":"MEMBER_ID",
-                        "value":"67567"
-                    }
-                ],             
-            }        
-        ],
-        "mobileTerminalId":       {
-           "systemType": "INMARSAT_C",
-           "idList": [
-              {
                 "type": "SERIAL_NUMBER", 
                 "value": "SSE3456"
-              }, 
-              {
+            }, 
+            {
                 "type": "INTERNAL_ID", 
                 "value": "260"
-              }
-            ]
+            }
+        ]
+    };
+
+    var carrierId = {
+        "carrierType": "VESSEL",
+        "idType": "IRCS",
+        "value": "ASDASD"
+    };
+
+    /* Message send TO the server */
+    var requestData = {
+        "attributes": attributes,
+        "channels": channels,
+        "mobileTerminalId": mobileTerminalId
+    };
+
+    /* Message received FROM the server */
+    var responseData = {
+        "data": {
+            "attributes": attributes,
+            "channels": channels,
+            "mobileTerminalId": mobileTerminalId,
+            "carrierId": carrierId,
+            "active": false            
         },
-        "carrierId":       {
-           "carrierType": "VESSEL",
-           "idType": "IRCS",
-           "value": "ASDASD"
-        },
-        "active": false
-     },
-     "code": "200"
-  };
+        "code": "200"
+    };
 
     var assignJsonPost = {
-        "mobileTerminalId":       {
-           "systemType": "INMARSAT_C",
-           "idList": [
-              {
-                "type": "SERIAL_NUMBER", 
-                "value": "SSE3456"
-              }, 
-              {
-                "type": "INTERNAL_ID", 
-                "value": "260"
-              }
-            ]
-        },
-        "carrierId":       {
+        "mobileTerminalId": mobileTerminalId,
+        "carrierId": {
            "carrierType": "VESSEL",
            "idType": "IRCS",
            "value": "ASDASD"
         }
     };
 
-  responseData = responseData.data;
+    responseData = responseData.data;
 
     it('create new should set correct values', inject(function(MobileTerminal) {
         var mobileTerminal = new MobileTerminal();
@@ -171,9 +174,9 @@ describe('MobileTerminalModel', function() {
     }));
 
     it('toJson should return correctly formatted data', inject(function(MobileTerminal) {
-        var mobileTerminal = MobileTerminal.fromJson(responseData);
+        var mobileTerminal = MobileTerminal.fromJson(requestData);
         var toJsonObject = JSON.parse(mobileTerminal.toJson());
-        expect(angular.equals(toJsonObject, responseData)).toBeTruthy();
+        expect(angular.equals(toJsonObject, requestData)).toBeTruthy();
     }));
 
     it('toAssignJson should return correctly formatted data', inject(function(MobileTerminal) {
