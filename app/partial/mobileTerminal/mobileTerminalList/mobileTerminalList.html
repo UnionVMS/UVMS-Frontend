@@ -69,13 +69,17 @@
             <tbody>
             <tr ng-repeat="item in currentSearchResults.mobileTerminals | orderBy:sortType:sortReverse | filter:searchFilter">
                 <td><input type="checkbox" ng-model="item.Selected" ng-click="checkedVessel(item)"/></td>
-                <td>{{item.carrierId.value}}</td>
+                <td>
+                    <span ng-show="item.associatedVessel">{{item.associatedVessel.name}}</span>
+                    <span ng-show="item.carrierId && !item.associatedVessel">{{item.carrierId.carrierType}} with {{item.carrierId.idType}}: {{item.carrierId.value}}</span>
+                    <span ng-show="!item.carrierId && !item.associatedVessel">{{'mobileTerminal.table_vessel_name_not_assigned' | i18n}}</span>
+                </td>
                 <td>{{item.mobileTerminalId.ids.SERIAL_NUMBER}}</td>
                 <td>{{item.channels[0].ids.MEMBER_ID}}</td>
                 <td>{{item.channels[0].ids.DNID}}</td>
                 <td>{{item.mobileTerminalId.systemType}}</td>
                 <td>{{item.attributes.SATELLITE_NUMBER}}</td>
-                <td></td>
+                <td><span ng-show="item.associatedVessel">{{item.associatedVessel.mmsiNo}}</span></td>
                 <td>
                     <button class="btn btn-primary" ng-click="toggleMobileTerminalDetails(item)">
                         {{'mobileTerminal.table_header_detail_button' | i18n}}
@@ -88,3 +92,4 @@
         <p style="color: orangered">{{error}}</p>
     </div>
 </div>
+

@@ -25,7 +25,7 @@ angular.module('unionvmsWeb')
             },                         
         };
     })
-    .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, MobileTerminal, MobileTerminalListPage, TranspondersConfig){
+    .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, vesselRestService, MobileTerminal, MobileTerminalListPage, TranspondersConfig, GetListRequest){
 
         var mobileTerminalRestService = {
 
@@ -47,34 +47,71 @@ angular.module('unionvmsWeb')
 
             getMobileTerminalList : function(getListRequest){
                 var deferred = $q.defer();
+                //Get list of mobile terminals
                 mobileTerminalRestFactory.getMobileTerminals().list(getListRequest.toJson(), function(response){
                         if(response.code !== "200"){
                             deferred.reject("Invalid response status");
                             return;
                         }                    
-                        console.log("SUCCESS");
-                        console.log(response);
-                        var mobileTerminals = [];
+                        var mobileTerminals = [],
+                            mobileTerminalListPage;
 
-                         if(angular.isArray(response.data.mobileTerminal)) {
-                             for (var i = 0; i < response.data.mobileTerminal.length; i++) {
-                                 mobileTerminals.push(MobileTerminal.fromJson(response.data.mobileTerminal[i]));
-                             }
-                             var currentPage = response.data.currentPage;
-                             var totalNumberOfPages = response.data.totalNumberOfPages;
-                             var mobileTerminalListPage = new MobileTerminalListPage(mobileTerminals, currentPage, totalNumberOfPages);
-                             deferred.resolve(mobileTerminalListPage);
-                         }
+                        //Create a MobileTerminalListPage object from the response
+                        if(angular.isArray(response.data.mobileTerminal)) {
+                            for (var i = 0; i < response.data.mobileTerminal.length; i++) {
+                                mobileTerminals.push(MobileTerminal.fromJson(response.data.mobileTerminal[i]));
+                            }
+                            var currentPage = response.data.currentPage;
+                            var totalNumberOfPages = response.data.totalNumberOfPages;
+                            mobileTerminalListPage = new MobileTerminalListPage(mobileTerminals, currentPage, totalNumberOfPages);
+                        }
 
-                        deferred.resolve(response.data);
+                        //Get vessels for the mobileTerminals?
+                        try{
+                            if(mobileTerminalListPage.isOneOrMoreAssignedToACarrier()){
+                                //Create getListRequest Get vessels for all mobileTerminals
+                                var getVesselListRequest = new GetListRequest(1, getListRequest.listSize, false, []);
+                                $.each(mobileTerminalListPage.mobileTerminals, function(index, mobileTerminal){
+                                    if(angular.isDefined(mobileTerminal.carrierId)){
+                                        if(mobileTerminal.carrierId.carrierType === "VESSEL" && mobileTerminal.carrierId.idType === "ID" && typeof mobileTerminal.carrierId.value === 'string'){
+                                            getVesselListRequest.addSearchCriteria("INTERNAL_ID", mobileTerminal.carrierId.value);
+                                        }                            
+                                    }
+                                });
+
+                                //Get vessels
+                                vesselRestService.getVesselList(getVesselListRequest).then(
+                                    function(vesselListPage){
+                                        //Connect the mobileTerminals to the vessels
+                                        $.each(mobileTerminalListPage.mobileTerminals, function(index, mobileTerminal){
+                                            if(angular.isDefined(mobileTerminal.carrierId)){
+                                                if(mobileTerminal.carrierId.carrierType === "VESSEL" && mobileTerminal.carrierId.idType === "ID" && typeof mobileTerminal.carrierId.value === 'string'){
+                                                    var matchingVessel = vesselListPage.getVesselByInternalId(mobileTerminal.carrierId.value);
+                                                    if(angular.isDefined(matchingVessel)){
+                                                        mobileTerminal.setAssociatedVessel(matchingVessel);
+                                                    }
+                                                }
+                                            }
+                                        });                                    
+                                        deferred.resolve(mobileTerminalListPage);
+                                    },
+                                    function(error){
+                                        console.error("Error getting Vessels for the mobileTerminals");
+                                        deferred.resolve(mobileTerminalListPage);
+                                    }                            
+                                );
+                            //No mobileTerminals assigned to carriers
+                            }else{
+                                deferred.resolve(mobileTerminalListPage);
+                            }
+                        }catch(err){
+                            deferred.resolve(mobileTerminalListPage);
+                        }
                     },
                 function(error) {
-                    console.log("ERROR GETTING MOBILETERMIALS");
-                    console.log(error);
-                    //TODO: When retrieving real objects from db use deferred.reject (error) here and take care of the real respons above
-
+                    console.error("Error getting mobile terminals");
+                    console.error(error);
                     deferred.reject(error);
-
                 });
                 return deferred.promise;
 

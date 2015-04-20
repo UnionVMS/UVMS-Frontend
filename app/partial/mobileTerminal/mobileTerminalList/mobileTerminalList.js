@@ -1,9 +1,5 @@
 angular.module('unionvmsWeb').controller('MobileterminallistCtrl',function($scope){
 
-    console.log("LISTPAGE");
-    console.log($scope.currentSearchResults);
-    console.log("LISTPAGE");
-
     $scope.checkAll = function(){
 
         /*TODO: REFACTOR THIS WHEN WE KNOW WHAT WE SHOULD DO WITH IT

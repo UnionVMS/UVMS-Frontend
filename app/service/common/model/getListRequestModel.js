@@ -43,5 +43,9 @@ angular.module('unionvmsWeb')
         this.isDynamic = true;
     };
 
+    GetListRequest.prototype.getNumberOfSearchCriterias = function(){
+        return this.criterias.length;
+    };    
+
     return GetListRequest;
 });

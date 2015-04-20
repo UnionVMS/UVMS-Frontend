@@ -18,6 +18,8 @@ angular.module('unionvmsWeb')
             this.oldCarrierId = undefined;
 
             this.assignedCarrierHasBeenUpdated = false;
+
+            this.associatedVessel = undefined;
         }
 
         MobileTerminal.fromJson = function(data){
@@ -209,8 +211,10 @@ angular.module('unionvmsWeb')
             this.carrierId = CarrierId.createVesselWithInternalId(internalId);
         };
 
-        
-
+        //Set associated vessel
+        MobileTerminal.prototype.setAssociatedVessel = function(vessel){
+            return this.associatedVessel = vessel;
+        };
         
         return MobileTerminal;
     });
