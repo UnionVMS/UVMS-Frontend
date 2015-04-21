@@ -6,14 +6,22 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
     $scope.assignVesselSearchType = "ALL";
     $scope.assignVesselSearchTypes =[{'text':'Name/CFR/IRCS','code':'ALL'}, {'text':'Name','code':'NAME'}, {'text':'CFR','code':'CFR'}, {'text':'IRCS','code':'IRCS'}];
     $scope.assignVesselSearchInProgress = false;
-    $scope.assignVesselSearchResults = {
-        page : 1,
-        totalNumberOfPages : 1,
-        vessels : []
+    var getListRequest;
+
+    var resetSearch = function() {
+        $scope.assignVesselSearchResults = {
+            page : 1,
+            totalNumberOfPages : 1,
+            vessels : []
+        };
+        $scope.assignVesselSearchResultsSortType = 'name';
+        $scope.assignVesselSearchResultsSortReverse = false;    
+        getListRequest = new GetListRequest(1, 5, false, []);
     };
-    $scope.assignVesselSearchResultsSortType = 'name';
-    $scope.assignVesselSearchResultsSortReverse = false;    
-    var getListRequest = new GetListRequest(1, 5, false, []);
+
+    var init = function() {
+        resetSearch();        
+    };
 
     //Perform the serach
     $scope.assignVesselSearch = function(){
@@ -94,24 +102,23 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
         console.log($scope.selectedVessel);
 
         if ($scope.currentMobileTerminal && $scope.selectedVessel.ircs){
-            $scope.currentMobileTerminal.assignToVesselWithIrcs($scope.selectedVessel.ircs);
-            $scope.toggleAssignVessel();
-            $scope.goBackToAssignVesselSearchResultsClick();
+            mobileTerminalRestService.assignMobileTerminal($scope.currentMobileTerminal, $scope.selectedVessel.ircs).then(function(res) {
+                $scope.currentMobileTerminal.assignToVesselWithIrcs($scope.selectedVessel.ircs);
+                $scope.currentMobileTerminal.associatedVessel = $scope.selectedVessel;
+                $scope.toggleAssignVessel();
+                $scope.goBackToAssignVesselSearchResultsClick();
+                resetSearch();
 
-            mobileTerminalRestService.assignMobileTerminal($scope.currentMobileTerminal).then(assignSuccess, assignError);
+                alertService.showSuccessMessage(locale.getString('mobileTerminal.assign_vessel_message_on_success'));
+            },
+            function() {
+                alertService.showErrorMessage(locale.getString('mobileTerminal.assign_vessel_message_on_error'));
+            });
         }
         else {
             console.error("Vessel is missing internalId so assigning the mobile terminal to the vessel is not possible.");
         }
     };
-
-    function assignSuccess() {
-        alertService.showSuccessMessage(locale.getString('mobileTerminal.assign_vessel_message_on_success'));
-    }
-
-    function assignError() {
-        alertService.showErrorMessage(locale.getString('mobileTerminal.assign_vessel_message_on_error'));
-    }
 
     //Go back to search results
     $scope.goBackToAssignVesselSearchResultsClick = function(){
@@ -123,5 +130,6 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
         $location.path("/vessel");
     };
 
+    init();
 
 });

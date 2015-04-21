@@ -17,7 +17,7 @@
                 <button class="btn btn-primary" ng-click="unassignVessel()"><i class="fa fa-chain-broken"></i> {{'mobileTerminal.unassign_vessel' | i18n}}</span>
             </div>            
         </div>
-        <vessel-details vessel="selectedVessel" disable-form="true" ></vessel-details>
+        <vessel-details vessel="currentMobileTerminal.associatedVessel" disable-form="true" ></vessel-details>
         <div class="row">
             <div class="col-md-12">
                 Type: {{currentMobileTerminal.carrierId.carrierType}}<br>

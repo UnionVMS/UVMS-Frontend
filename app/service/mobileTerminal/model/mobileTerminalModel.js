@@ -15,7 +15,6 @@ angular.module('unionvmsWeb')
 
             this.active = true;
             this.carrierId = undefined;
-            this.oldCarrierId = undefined;
 
             this.associatedVessel = undefined;
         }
@@ -36,7 +35,6 @@ angular.module('unionvmsWeb')
             //CarrierId
             if(angular.isDefined(data.carrierId)){
                 mobileTerminal.carrierId = CarrierId.fromJson(data.carrierId);
-                mobileTerminal.oldCarrierId = CarrierId.fromJson(data.carrierId);
             }
 
             //Attributes
@@ -128,12 +126,29 @@ angular.module('unionvmsWeb')
         };     
 
         //Used when assigning and unassigning
-        MobileTerminal.prototype.toAssignJson = function(){
+        MobileTerminal.prototype.toAssignJson = function(carrierId){
             //Create idList
             var idList = [];
             $.each(this.mobileTerminalId.ids, function(key, value){
                 idList.push({"type": key, "value": value});
             });
+
+            return JSON.stringify({
+                mobileTerminalId : {
+                    systemType : this.mobileTerminalId.systemType,
+                    idList : idList,
+                },
+                carrierId : carrierId
+            });
+        };        
+
+        //Used when assigning and unassigning
+        MobileTerminal.prototype.toUnassignJson = function(){
+            //Create idList
+            var idList = [];
+            $.each(this.mobileTerminalId.ids, function(key, value){
+                idList.push({"type": key, "value": value});
+                });
 
             return JSON.stringify({
                 mobileTerminalId : {

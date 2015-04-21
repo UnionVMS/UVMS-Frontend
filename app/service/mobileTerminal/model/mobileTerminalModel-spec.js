@@ -185,9 +185,11 @@ describe('MobileTerminalModel', function() {
         expect(angular.equals(toJsonObject, requestData)).toBeTruthy();
     }));
 
-    it('toAssignJson should return correctly formatted data', inject(function(MobileTerminal) {
+    it('toAssignJson should return correctly formatted data', inject(function(MobileTerminal, CarrierId) {
         var mobileTerminal = MobileTerminal.fromJson(responseData);
-        var toJsonObject = JSON.parse(mobileTerminal.toAssignJson());
+        var carrierId = CarrierId.createVesselWithIrcs("ASDASD");
+        var toJsonObject = JSON.parse(mobileTerminal.toAssignJson(carrierId));
+        console.log(toJsonObject);
         expect(angular.equals(toJsonObject, assignJsonPost)).toBeTruthy();
     }));
 

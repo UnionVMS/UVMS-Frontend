@@ -55,16 +55,15 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     };
 
     $scope.unassignVessel = function() {
-        $scope.currentMobileTerminal.unassign();
-        mobileTerminalRestService.unassignMobileTerminal($scope.currentMobileTerminal).then(unassignSuccess, unassignError);
-    };
-
-    var unassignSuccess = function () {
-        alertService.showSuccessMessage(locale.getString('mobileTerminal.unassign_vessel_message_on_success'));
-    };
-
-    var unassignError = function () {
-        alertService.showErrorMessage(locale.getString('mobileTerminal.unassign_vessel_message_on_error'));
+        mobileTerminalRestService.unassignMobileTerminal($scope.currentMobileTerminal).then(function(res) {
+            // Success
+            $scope.currentMobileTerminal.unassign();
+            alertService.showSuccessMessage(locale.getString('mobileTerminal.unassign_vessel_message_on_success'));
+        }, 
+        function(res) {
+            // Error
+            alertService.showErrorMessage(locale.getString('mobileTerminal.unassign_vessel_message_on_error'));
+        });
     };
 
     //Show/hide assign vessel

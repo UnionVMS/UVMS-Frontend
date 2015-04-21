@@ -38,7 +38,7 @@ angular.module('unionvmsWeb')
             }
         };
     })
-    .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, vesselRestService, MobileTerminal, MobileTerminalListPage, TranspondersConfig, GetListRequest){
+    .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, vesselRestService, MobileTerminal, MobileTerminalListPage, TranspondersConfig, GetListRequest, CarrierId){
 
         var mobileTerminalRestService = {
 
@@ -172,11 +172,12 @@ angular.module('unionvmsWeb')
                 return deferred.promise;
             },            
 
-            assignMobileTerminal : function(mobileTerminal){
+            assignMobileTerminal : function(mobileTerminal, ircs){
                 console.log("assign mobile terminal!");
-                console.log(mobileTerminal.toAssignJson());
+                var carrierId = CarrierId.createVesselWithIrcs(ircs);
+                console.log(mobileTerminal.toAssignJson(carrierId));
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.assignMobileTerminal().save(mobileTerminal.toAssignJson(), function(response) {
+                mobileTerminalRestFactory.assignMobileTerminal().save(mobileTerminal.toAssignJson(carrierId), function(response) {
                     console.log("Assign response!");
                     console.log(response);
                     if(response.code !== "200"){
@@ -194,9 +195,10 @@ angular.module('unionvmsWeb')
             },           
             unassignMobileTerminal : function(mobileTerminal){
                 console.log("unassign mobile terminal!");
-                console.log(mobileTerminal.toAssignJson());
+                var unassignJson = mobileTerminal.toUnassignJson();
+                console.log(mobileTerminal.toUnassignJson());
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.unassignMobileTerminal().save(mobileTerminal.toAssignJson(), function(response) {
+                mobileTerminalRestFactory.unassignMobileTerminal().save(mobileTerminal.toUnassignJson(), function(response) {
                     console.log("Unassign response!");
                     console.log(response);
                     if(response.code !== "200"){
