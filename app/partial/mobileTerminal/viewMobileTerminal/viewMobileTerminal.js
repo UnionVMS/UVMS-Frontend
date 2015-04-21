@@ -33,4 +33,38 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
     var updateError = function(){
         alertService.showErrorMessage(locale.getString('mobileTerminal.update_alert_message_on_error'));
     };
+
+    //Handle click event on inactive link
+    $scope.setStatusToInactive = function(){
+        console.log("Set status to inactive");
+        mobileTerminalRestService.inactivateMobileTerminal($scope.currentMobileTerminal).then(setStatusToInactiveSuccess, setStatusToInactiveError);
+    };
+
+    //Inactivate status success
+    function setStatusToInactiveSuccess(updatedMobileTerminal) {
+        alertService.showSuccessMessage(locale.getString('mobileTerminal.inactivate_message_on_success'));
+        //Update the mobileTerminal object with the returned one
+        $scope.currentMobileTerminal = updatedMobileTerminal;
+    }
+
+    function setStatusToInactiveError() {
+        alertService.showErrorMessage(locale.getString('mobileTerminal.inactivate_message_on_error'));
+    }
+
+    //Handle click event on activate link
+    $scope.setStatusToActive = function(){
+        mobileTerminalRestService.activateMobileTerminal($scope.currentMobileTerminal).then(setStatusToActiveSuccess, setStatusToActiveError);
+    };
+
+    //Activate status success
+    function setStatusToActiveSuccess(updatedMobileTerminal) {
+        alertService.showSuccessMessage(locale.getString('mobileTerminal.activate_message_on_success'));
+        //Update the mobileTerminal object with the returned one
+        $scope.currentMobileTerminal = updatedMobileTerminal;
+    }
+
+    function setStatusToActiveError() {
+        alertService.showErrorMessage(locale.getString('mobileTerminal.activate_message_on_error'));
+    }    
+
 });

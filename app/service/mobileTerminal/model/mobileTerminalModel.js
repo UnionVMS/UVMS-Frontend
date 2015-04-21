@@ -68,7 +68,10 @@ angular.module('unionvmsWeb')
             }
 
             //Active
-            mobileTerminal.active = data.active;
+            mobileTerminal.active = !data.inactive;
+
+            //Source
+            mobileTerminal.source = data.source;
 
             return mobileTerminal;
 
@@ -112,7 +115,8 @@ angular.module('unionvmsWeb')
             });
         };
 
-        MobileTerminal.prototype.toUnassignJson = function(){
+        //Used when activating, inactivating and removing
+        MobileTerminal.prototype.toSetStatusJson = function(){
             //Create idList
             var idList = [];
             $.each(this.mobileTerminalId.ids, function(key, value){
@@ -120,14 +124,12 @@ angular.module('unionvmsWeb')
             });
 
             return JSON.stringify({
-                mobileTerminalId : {
-                    systemType : this.mobileTerminalId.systemType,
-                    idList : idList,
-                },
-                carrierId : this.oldCarrierId
+                systemType : this.mobileTerminalId.systemType,
+                idList : idList,
             });
         };     
 
+        //Used when assigning and unassigning
         MobileTerminal.prototype.toAssignJson = function(){
             //Create idList
             var idList = [];

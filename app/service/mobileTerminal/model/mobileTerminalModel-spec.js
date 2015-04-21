@@ -109,7 +109,8 @@ describe('MobileTerminalModel', function() {
             "channels": channels,
             "mobileTerminalId": mobileTerminalId,
             "carrierId": carrierId,
-            "active": false            
+            "inactive": false,
+            "source" : "INTERNAL"
         },
         "code": "200"
     };
@@ -122,6 +123,8 @@ describe('MobileTerminalModel', function() {
            "value": "ASDASD"
         }
     };
+
+    var mobileTerminalIdOnlyJson = mobileTerminalId;
 
     responseData = responseData.data;
 
@@ -141,7 +144,7 @@ describe('MobileTerminalModel', function() {
         //Channels (should be 1 from the start)
         expect(mobileTerminal.channels.length).toEqual(1);
 
-        //Active
+        //Inactive
         expect(mobileTerminal.active).toEqual(true);
 
     }));
@@ -169,7 +172,10 @@ describe('MobileTerminalModel', function() {
         expect(mobileTerminal.channels[1].ids["MEMBER_ID"]).toEqual("67567");
 
         //Active
-        expect(mobileTerminal.active).toEqual(false);
+        expect(mobileTerminal.active).toEqual(true);
+
+        //Source
+        expect(mobileTerminal.source).toEqual("INTERNAL");
 
     }));
 
@@ -184,6 +190,13 @@ describe('MobileTerminalModel', function() {
         var toJsonObject = JSON.parse(mobileTerminal.toAssignJson());
         expect(angular.equals(toJsonObject, assignJsonPost)).toBeTruthy();
     }));
+
+    it('toSetStatusJson should return correctly formatted data', inject(function(MobileTerminal) {
+        var mobileTerminal = MobileTerminal.fromJson(responseData);
+        var toJsonObject = JSON.parse(mobileTerminal.toSetStatusJson());
+        expect(angular.equals(toJsonObject, mobileTerminalIdOnlyJson)).toBeTruthy();
+    }));
+    
 
 
     it('setSystemTypeToInmarsatC should set systemType to correct value', inject(function(MobileTerminal) {

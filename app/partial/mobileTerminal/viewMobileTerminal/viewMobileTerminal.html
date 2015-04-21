@@ -1,8 +1,18 @@
 <div ng-controller="viewMobileTerminalCtrl">   
     <div class="row">
-        <div class="col-md-9"><h3>{{'mobileTerminal.view_header' | i18n}}</h3></div>
-        <div class="col-md-2 textAlignRight">
-            <button  type="submit" ng-disabled="!currentMobileTerminal.mobileTerminalId.systemType || !terminalConfig" class="btn btn-primary" ng-click="updateMobileTerminal()" ng-hide="transponderSystems.length == 0">{{'common.update' | i18n}}</button>
+        <div class="col-md-7"><h3>{{'mobileTerminal.view_header' | i18n}}</h3></div>
+        <div class="col-md-4 textAlignRight">
+            <div class="floatRight">
+                <button  type="submit" ng-disabled="!currentMobileTerminal.mobileTerminalId.systemType || !terminalConfig" class="btn btn-primary" ng-click="updateMobileTerminal()" ng-hide="transponderSystems.length == 0">{{'common.update' | i18n}}</button>
+            </div>
+            <div class="floatRight setStatusContainer">
+                <span class="link" ng-show="currentMobileTerminal.active" ng-click="setStatusToInactive()">
+                    <i class="fa fa-lg fa-check-circle-o"></i> {{'mobileTerminal.inactivate_link' | i18n}}
+                </span>
+                <span class="link" ng-hide="currentMobileTerminal.active" ng-click="setStatusToActive()">
+                    <i class="fa fa-lg fa-circle-o"></i> {{'mobileTerminal.activate_link' | i18n}}
+                </span>            
+            </div>         
         </div>
         <div class="col-md-1 pull-right" ng-click="toggleMobileTerminalDetails()"> <img src="assets/images/close.png" /></div>
     </div>
