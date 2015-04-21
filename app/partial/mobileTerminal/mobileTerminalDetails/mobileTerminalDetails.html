@@ -5,12 +5,12 @@
             <div class="col-md-12">
                 <div class="transponderSystemSelect form-group">
                     <label>{{'mobileTerminal.add_new_form_transponder_system_label' | i18n}}</label>
-                    <dropdown ng-model="currentMobileTerminal.mobileTerminalId.systemType" initialtext="{{ 'mobileTerminal.add_new_form_transponder_system_placeholder' | i18n }}" items="transponderSystems" callback="onTerminalSystemSelect"></dropdown>                    
+                    <dropdown ng-model="currentMobileTerminal.mobileTerminalId.systemType" initialtext="{{ 'mobileTerminal.add_new_form_transponder_system_placeholder' | i18n }}" no-placeholder-item items="transponderSystems" callback="onTerminalSystemSelect"></dropdown>                    
                 </div>
 
                 <div class="transponderSystemSelect form-group" ng-show="currentMobileTerminal.mobileTerminalId.systemType">
                     <label>{{'mobileTerminal.add_new_form_ocean_region_label' | i18n}}</label>
-                    <dropdown ng-model="currentMobileTerminal.attributes.oceanRegion" initialtext="{{ 'mobileTerminal.add_new_form_ocean_region_label_placeholder' | i18n }}" items="oceanRegions"></dropdown>
+                    <dropdown ng-model="currentMobileTerminal.attributes.oceanRegion" initialtext="{{ 'mobileTerminal.add_new_form_ocean_region_label_placeholder' | i18n }}" no-placeholder-item items="oceanRegions"></dropdown>
                 </div>
             </div>
         </div>

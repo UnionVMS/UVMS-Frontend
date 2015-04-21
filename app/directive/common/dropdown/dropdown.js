@@ -13,6 +13,11 @@ angular.module('unionvmsWeb')
 		templateUrl: 'directive/common/dropdown/dropdown.html',
 		link: function(scope, element, attrs, fn) {
 
+            if('noPlaceholderItem' in attrs){
+                scope.initialitem = false;
+            }else{
+                scope.initialitem = true;
+            }
 
             scope.setLabel = function() {
                 if ((scope.ngModel !== undefined && scope.ngModel === "" ) || scope.ngModel === null || scope.ngModel === undefined) {
@@ -61,15 +66,12 @@ angular.module('unionvmsWeb')
             };
 
             scope.setLabel();
-            scope.addDefaultValueToDropDown();
 
-          /*  scope.callback = function(func){
-              func();
-                if(typeof func == 'function'){
-                    console.log("callbackfunction is called");
-                }
-            };
-*/
+            //Create a list item with the initaltext?
+            if(scope.initialitem){
+                scope.addDefaultValueToDropDown();
+            }        
+
 		}
 	};
 });
