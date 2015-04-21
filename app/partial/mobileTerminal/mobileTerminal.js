@@ -22,12 +22,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
     $scope.transponderSystems = [];
     $scope.currentMobileTerminal = undefined;
 
-    //Callback for the search
-    $scope.searchcallback = function(vesselListPage){
-        console.log("search results!");
-        console.log(vesselListPage);
-    };
-
+    //Toggle (show/hide) new mobile terminal
     $scope.toggleAddNewMobileTerminal = function(){
         alertService.hideMessage();
         $scope.currentMobileTerminal = new MobileTerminal();
@@ -35,10 +30,10 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
         $scope.isVisible.search = !$scope.isVisible.search;        
     };
 
+    //Toggle (show/hide) viewing of a mobile terminal
     $scope.toggleMobileTerminalDetails = function(item){
-        console.log(item);
+        alertService.hideMessage();
         $scope.currentMobileTerminal = item;
-        console.log($scope.currentMobileTerminal);
         $scope.isVisible.viewMobileTerminal = !$scope.isVisible.viewMobileTerminal;
         $scope.isVisible.search = !$scope.isVisible.search;
     };

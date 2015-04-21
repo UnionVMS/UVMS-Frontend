@@ -53,6 +53,18 @@ angular.module('unionvmsWeb')
         $scope.searchfunc();        
     };
 
+    //Search by a saved group
+    $scope.performSavedGroupSearch = function(savedSearchGroup){
+        searchService.resetPage();
+        searchService.resetSearchCriterias();
+        //Set search criterias
+        searchService.setDynamic(savedSearchGroup.dynamic);
+        searchService.setSearchCriterias(savedSearchGroup.searchFields);
+
+        //Do the search
+        $scope.searchfunc();
+    };  
+
     //Reset the advacned search form inputs
     $scope.resetAdvancedSearchForm = function(){
         searchService.resetAdvancedSearch();    

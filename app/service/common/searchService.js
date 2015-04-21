@@ -1,15 +1,84 @@
-angular.module('unionvmsWeb').factory('searchService',function(GetListRequest, SearchField, vesselRestService, mobileTerminalRestService) {
+angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService) {
 
 	var getListRequest = new GetListRequest(1, 10, true, []),
         advancedSearchObject  = {};
 	var searchService = {
 
-        //Do the search!
+        //Do the search for vessels
 		searchVessels : function(){
 			return vesselRestService.getVesselList(getListRequest);
 		},
+        //Do the search for mobile terminals
         searchMobileTerminals : function(){
-            return mobileTerminalRestService.getMobileTerminalList(getListRequest);
+            var newSearchCriterias = [],
+                vesselSearchCriteria = [];
+
+            //Search keys that belong to vessel
+            var vesselSearchKeys = [
+                "NAME", 
+                "IRCS", 
+                "MMSI", 
+                "EXTERNAL_MARKING", 
+                "CFR", 
+                "HOMEPORT", 
+                "ACTIVE", 
+                "FLAG_STATE", 
+                "LICENSE", 
+                "TYPE",
+            ];
+
+            //Check if there are any search criterias that need vessels to be searched first
+            // and remove those search criterias
+            $.each(this.getSearchCriterias(),function(index, crit){
+                if(_.contains(vesselSearchKeys, crit.key)){
+                    vesselSearchCriteria.push(crit);
+                }else{
+                    newSearchCriterias.push(crit);
+                }
+            });
+
+            //Set the new search criterias (without vessel criterias)
+            this.setSearchCriterias(newSearchCriterias);
+
+            //Get vessels first?
+            if(vesselSearchCriteria.length > 0){
+                var deferred = $q.defer();
+                var getVesselListRequest = new GetListRequest(1, 1000, true, vesselSearchCriteria);
+                var outerThis = this;
+                //Get the vessels
+                vesselRestService.getAllMatchingVessels(getVesselListRequest).then(
+                    //TODO: Get more pages of vessels or error message that too many vessels were returned?
+                    function(vessels){
+                        //If no matchin vessels found
+                        if(vessels.length === 0){
+                            return deferred.resolve(new MobileTerminalListPage());
+                        }
+
+                        //Iterate over the vessels to add new search criterias with IRCS as key
+                        $.each(vessels, function(index, vessel){
+                            outerThis.addSearchCriteria("IRCS", vessel.ircs);
+                        });
+                        //Get mobile terminals
+                        mobileTerminalRestService.getMobileTerminalList(getListRequest).then(
+                            function(mobileTerminaListPage){
+                                return deferred.resolve(mobileTerminaListPage);
+                            },
+                            function(error){
+                                return deferred.reject(error);
+                            }
+                        );
+                    },
+                    function(error){
+                        console.error("Error getting vessels for mobile search.");
+                        return deferred.reject(error);
+                    }
+                );
+                return deferred.promise;
+            }
+            //No need to get vessels
+            else{
+                return mobileTerminalRestService.getMobileTerminalList(getListRequest);
+            }
         },
 
         //Modify search request

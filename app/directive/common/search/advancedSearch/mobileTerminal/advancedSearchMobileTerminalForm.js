@@ -1,7 +1,13 @@
 angular.module('unionvmsWeb')
-    .controller('AdvancedSearchMobileTerminalFormCtrl', function($scope, $modal, vesselRestService){
+    .controller('AdvancedSearchMobileTerminalFormCtrl', function($scope, $modal, searchService, vesselRestService){
 
         $scope.vesselGroupDropdownItems = [];
+        $scope.selectedVesselGroup = "";
+
+        //Watch for changes to the searchService criterias
+        $scope.onSearchInputChange = function(){
+            $scope.selectedVesselGroup = "";
+        };
 
         //Init form
         var init = function(){
@@ -14,8 +20,6 @@ angular.module('unionvmsWeb')
             //Load list of VesselGroups
             vesselRestService.getVesselGroupsForUser()
             .then(onVesselGroupListSuccess, onVesselGroupListError);
-
-            $scope.channelTypes =[{'text':'VMS','code':'VMS'}, {'text':'ELOG','code':'ELOG'}];
         };
 
         //Success getting vesselGroups for the user
@@ -31,9 +35,25 @@ angular.module('unionvmsWeb')
            console.error("Failed to load list of saved searches.");
         };
 
-        $scope.searchSelectedGroup = function(groupId){
-            console.log("SELECTED GROUP: " +groupId);
-            console.log("TODO: IMPLEMENT SEARCH");
+        //Reset the form
+        $scope.resetAdvancedMobileSearchForm = function(){
+            $scope.selectedVesselGroup = "";
+            $scope.resetAdvancedSearchForm();    
+        };        
+
+        //Select a vessel group to search mobile terminals for
+        $scope.searchSelectedGroup = function(selectedItem){
+            var savedSearchGroup;
+            //Find the selected group
+            $.each($scope.vesselGroups, function(index, group){
+                if(group.id === selectedItem.code){
+                    savedSearchGroup = group;
+                }
+            });
+            $scope.resetAdvancedSearchForm();
+            console.log("search for group");
+            console.log(savedSearchGroup);
+            $scope.performSavedGroupSearch(savedSearchGroup);
         };
 
         init();

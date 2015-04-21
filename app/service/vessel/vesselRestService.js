@@ -26,6 +26,46 @@ angular.module('unionvmsWeb')
         return deferred.promise;        
     };
 
+    //Get all vessels matching the search criterias in the list request
+    var getAllMatchingVessels = function(getListRequest){
+
+        //chunkSize: same as listSize in getListRequest
+        //maxItems: max number of items to get
+        var chunkSize = 50,
+            maxItems = 10000;
+
+        var deferred = $q.defer();
+        var vessels = [];
+        var onSuccess = function(vesselListPage){
+            vessels = vessels.concat(vesselListPage.vessels);
+            
+            //Last page, then return
+            if(vesselListPage.isLastPage() || vesselListPage.vessels.length === 0 || vesselListPage.vessels.length < getListRequest.listSize){
+                console.log("Found " +vessels.length +" vessels");
+                return deferred.resolve(vessels);
+            }
+            //If more than maxItems, then return as well
+            else if(vessels.length >= maxItems){
+                console.log("Max number of items (" +maxItems +") have been found. Returning.");
+                return deferred.resolve(vessels);
+            }
+
+            //Get next page
+            getListRequest.page += 1;
+            getVesselList(getListRequest).then(onSuccess, onError);                
+        };
+        var onError = function(error){
+            console.error("Error getting vessels.");
+            return deferred.resolve(error);            
+        };
+
+        //Get vessels
+        getListRequest.listSize = chunkSize;
+        getVesselList(getListRequest).then(onSuccess, onError);
+
+        return deferred.promise;
+    };
+
     var updateVessel = function(data){
         return $http.put(baseUrl + "/vessel-rest/vessel", data );
     };
@@ -83,29 +123,17 @@ angular.module('unionvmsWeb')
 
     var createNewVesselGroup = function(savedSearchGroup){
         savedSearchGroup.user = userName;
-        /*var data = {
-            "user" : userName,
-            "name" : name,
-            "searchFields" : createSearchFieldsFromSearchObj(searchObj, dynamic),
-            "dynamic" : dynamic
-        };*/
         return $http.post(baseUrl+"/vessel-rest/group", savedSearchGroup.toJson());
     };
 
     var updateVesselGroup = function(savedSearchGroup){
         savedSearchGroup.user = userName;
-        /*var data = {
-            "user" : userName,
-            "name" : name,
-            "id" : groupId,
-            "searchFields" : createSearchFieldsFromSearchObj(searchObj, dynamic),
-            "dynamic" : dynamic
-        };*/
         return $http.put(baseUrl+"/vessel-rest/group", savedSearchGroup.toJson());
     };    
 
     return {
         getVesselList: getVesselList,
+        getAllMatchingVessels: getAllMatchingVessels,
         updateVessel: updateVessel,
         createNewVessel: createNewVessel,
         getSearchableFields : getSearchableFields,

@@ -3,37 +3,37 @@
         <div class="col-md-9">
             <div class="row">
                 <div class="col-md-2">
-                    <input type="text" placeholder="{{'mobileTerminal.search_name_placeholder' | i18n}}" class="form-control" tabindex="1" ng-model="advancedSearchObject.NAME" disabled>
+                    <input type="text" placeholder="{{'mobileTerminal.search_name_placeholder' | i18n}}" class="form-control" tabindex="1" ng-model="advancedSearchObject.NAME" ng-change="onSearchInputChange()">
                 </div>
                 <div class="col-md-2">
-                    <input type="text" placeholder="{{'mobileTerminal.search_IRCS_placeholder' | i18n}}"  class="form-control" tabindex="2" ng-model="advancedSearchObject.IRCS" disabled>
+                    <input type="text" placeholder="{{'mobileTerminal.search_IRCS_placeholder' | i18n}}"  class="form-control" tabindex="2" ng-model="advancedSearchObject.IRCS" ng-change="onSearchInputChange()">
                 </div>
                 <div class="col-md-2">
-                    <input type="text" placeholder="{{'mobileTerminal.search_externalMarking_placeholder' | i18n}}"  class="form-control" tabindex="3" ng-model="searchTemp.EXTERNAL_MARKING" disabled>
+                    <input type="text" placeholder="{{'mobileTerminal.search_externalMarking_placeholder' | i18n}}" class="form-control" tabindex="3" ng-model="searchTemp.EXTERNAL_MARKING" ng-change="onSearchInputChange()">
                 </div>
                 <div class="col-md-3">
-                    <input type="text" placeholder="{{'mobileTerminal.search_CFR_placeholder' | i18n}}"  class="form-control" tabindex="4" ng-model="searchTemp.CFR" disabled>
+                    <input type="text" placeholder="{{'mobileTerminal.search_CFR_placeholder' | i18n}}"  class="form-control" tabindex="4" ng-model="searchTemp.CFR" ng-change="onSearchInputChange()">
                 </div>
                 <div class="col-md-3">
-                    <input type="text" placeholder="{{'mobileTerminal.search_homeport_placeholder' | i18n}}"  class="form-control" tabindex="5" ng-model="advancedSearchObject.HOMEPORT" disabled>
+                    <input type="text" placeholder="{{'mobileTerminal.search_homeport_placeholder' | i18n}}"  class="form-control" tabindex="5" ng-model="advancedSearchObject.HOMEPORT" ng-change="onSearchInputChange()">
                 </div>
 
             </div>
             <div class="row">
                 <div class="col-md-2">
-                    <input type="text" placeholder="{{'mobileTerminal.search_mmsi_placeholder' | i18n}}"  class="form-control" tabindex="6" ng-model="advancedSearchObject.MMSI" disabled>
+                    <input type="text" placeholder="{{'mobileTerminal.search_mmsi_placeholder' | i18n}}"  class="form-control" tabindex="6" ng-model="advancedSearchObject.MMSI" ng-change="onSearchInputChange()">
                 </div>
                 <div class="col-md-2">
-                    <input type="text" placeholder="{{'mobileTerminal.search_serialNumber_placeholder' | i18n}}"  class="form-control" tabindex="7" ng-model="advancedSearchObject.SERIAL_NUMBER">
+                    <input type="text" placeholder="{{'mobileTerminal.search_serialNumber_placeholder' | i18n}}"  class="form-control" tabindex="7" ng-model="advancedSearchObject.SERIAL_NUMBER"ng-change="onSearchInputChange()">
                 </div>
                 <div class="col-md-2">
-                    <input type="text" placeholder="{{'mobileTerminal.search_dnid_placeholder' | i18n}}"  class="form-control" tabindex="8" ng-model="advancedSearchObject.DNID">
+                    <input type="text" placeholder="{{'mobileTerminal.search_dnid_placeholder' | i18n}}"  class="form-control" tabindex="8" ng-model="advancedSearchObject.DNID" ng-change="onSearchInputChange()">
                 </div>                                
                <div class="col-md-3">
-                    <datepicker-input model="advancedSearchObject.REPORING_START_DATE" placeholder="{{'mobileTerminal.search_reportingStartDate_placeholder' | i18n}}" disabled="true"></datepicker-input>
+                    <datepicker-input model="advancedSearchObject.REPORTING_START_DATE" placeholder="{{'mobileTerminal.search_reportingStartDate_placeholder' | i18n}}" disabled="true" ></datepicker-input>
                 </div>
                 <div class="col-md-3">
-                    <datepicker-input model="advancedSearchObject.REPORING_END_DATE" placeholder="{{'mobileTerminal.search_reportingEndDate_placeholder' | i18n}}" disabled="true"></datepicker-input>
+                    <datepicker-input model="advancedSearchObject.REPORTING_END_DATE" placeholder="{{'mobileTerminal.search_reportingEndDate_placeholder' | i18n}}" disabled="true" ></datepicker-input>
                 </div>                
             </div>   
         </div>
@@ -46,7 +46,7 @@
             <div class="row resetAndSearchContainer">
                <!-- Reset button -->
                 <div class="col-md-6">
-                    <button type="button" class="btn btn-default btn-sm" ng-click="resetAdvancedSearchForm()">
+                    <button type="button" class="btn btn-default btn-sm" ng-click="resetAdvancedMobileSearchForm()">
                         {{'common.reset' | i18n}}
                     </button>
                 </div>

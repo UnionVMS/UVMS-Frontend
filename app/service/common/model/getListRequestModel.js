@@ -20,7 +20,18 @@ angular.module('unionvmsWeb')
     };
 
     GetListRequest.prototype.addSearchCriteria = function(key, value){
-        this.criterias.push(new SearchField(key, value));
+        var alreadyExists = false;
+
+        //Only add if it doesnt already exists
+        $.each(this.criterias, function(index, crit){
+            if(key === crit.key && value === crit.value){
+                alreadyExists = true;
+                return false;
+            }
+        });
+        if(!alreadyExists){
+            this.criterias.push(new SearchField(key, value));
+        }
     };
 
     GetListRequest.prototype.setSearchCriterias = function(criterias){
