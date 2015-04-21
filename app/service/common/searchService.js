@@ -15,6 +15,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
 
             //Search keys that belong to vessel
             var vesselSearchKeys = [
+                "INTERNAL_ID", 
                 "NAME", 
                 "IRCS", 
                 "MMSI", 
@@ -29,8 +30,12 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
 
             //Check if there are any search criterias that need vessels to be searched first
             // and remove those search criterias
+            var vesselSearchIsDynamic = true;
             $.each(this.getSearchCriterias(),function(index, crit){
                 if(_.contains(vesselSearchKeys, crit.key)){
+                    if(crit.key === 'INTERNAL_ID'){
+                        vesselSearchIsDynamic = false;
+                    }
                     vesselSearchCriteria.push(crit);
                 }else{
                     newSearchCriterias.push(crit);
@@ -43,7 +48,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
             //Get vessels first?
             if(vesselSearchCriteria.length > 0){
                 var deferred = $q.defer();
-                var getVesselListRequest = new GetListRequest(1, 1000, true, vesselSearchCriteria);
+                var getVesselListRequest = new GetListRequest(1, 1000, vesselSearchIsDynamic, vesselSearchCriteria);
                 var outerThis = this;
                 //Get the vessels
                 vesselRestService.getAllMatchingVessels(getVesselListRequest).then(
