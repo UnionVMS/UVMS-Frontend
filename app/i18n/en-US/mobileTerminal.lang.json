@@ -74,5 +74,7 @@
     "search_reportingStartDate_placeholder" : "Reporting start date",
     "search_reportingEndDate_placeholder" : "Reporting end date",
     "search_selectVesselGroup_placeholder" : "Select vessel groups",
-    "search_zero_results_error" : "No mobile terminals matching you search criteria was found."
+    "search_zero_results_error" : "No mobile terminals matching you search criteria was found.",
+    "history_alert_message_on_failed_to_load_error" : "Failed to load history for the mobile terminal."
+
 }

@@ -189,7 +189,6 @@ describe('MobileTerminalModel', function() {
         var mobileTerminal = MobileTerminal.fromJson(responseData);
         var carrierId = CarrierId.createVesselWithIrcs("ASDASD");
         var toJsonObject = JSON.parse(mobileTerminal.toAssignJson(carrierId));
-        console.log(toJsonObject);
         expect(angular.equals(toJsonObject, assignJsonPost)).toBeTruthy();
     }));
 

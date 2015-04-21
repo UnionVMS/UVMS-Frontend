@@ -12,7 +12,8 @@ angular.module('unionvmsWeb')
                 });
             },
             getMobileTerminals : function(){
-                return $resource(baseUrl +'/mobileterminal-rest/mobileTerminal/list/',{},{list : { method: 'POST'}
+                return $resource(baseUrl +'/mobileterminal-rest/mobileTerminal/list/',{},{
+                    list : { method: 'POST'}
                 });
             },
             assignMobileTerminal : function(){
@@ -35,10 +36,15 @@ angular.module('unionvmsWeb')
                 return $resource(baseUrl +'/mobileterminal-rest/mobileTerminal/status/remove', {}, {
                     save: {method: 'PUT'},
                 });
-            }
+            },
+            mobileTerminalHistory : function(){
+                return $resource(baseUrl +'/mobileterminal-rest/mobileTerminal/history', {}, {
+                    list : { method: 'PUT'}
+                });
+            },            
         };
     })
-    .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, vesselRestService, MobileTerminal, MobileTerminalListPage, TranspondersConfig, GetListRequest, CarrierId){
+    .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, vesselRestService, MobileTerminal, MobileTerminalListPage, TranspondersConfig, GetListRequest, CarrierId, MobileTerminalHistory){
 
         var mobileTerminalRestService = {
 
@@ -257,7 +263,28 @@ angular.module('unionvmsWeb')
                     deferred.reject(error);
                 });
                 return deferred.promise;
-            },  
+            }, 
+            getHistoryForMobileTerminal : function(mobileTerminal){
+                var deferred = $q.defer();
+                mobileTerminalRestFactory.mobileTerminalHistory().list(mobileTerminal.toSetStatusJson(), function(response) {
+                    if(response.code !== "200"){
+                        deferred.reject("Invalid response status");
+                        return;
+                    }   
+                    //Create list of MobileTerminalHistory
+                    var history = [];
+                    if(angular.isArray(response.data)){
+                        for (var i = 0; i < response.data.length; i ++) {
+                            history.push(MobileTerminalHistory.fromJson(response.data[i]));
+                        }
+                    }                                     
+                    deferred.resolve(history);
+                }, function(error) {
+                    console.error("Error getting mobile terminal history.");
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            },                 
 
         };
         return mobileTerminalRestService;

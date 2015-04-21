@@ -4,6 +4,20 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
 
     $scope.disableSerialNumber = true;
 
+    //Watch for changes to the vesselObj
+    $scope.$watch(function () { return $scope.currentMobileTerminal;}, function (newVal, oldVal) {
+        if (typeof newVal !== 'undefined') {
+            console.log("new mobile view");
+            //Remove history items
+            $scope.currentMobileTerminalHistory = [];
+
+            //Get new history
+            if($scope.currentMobileTerminal.hasInternalId()){
+                getMobileTerminalHistoryForCurrentMobileTerminal();
+            }
+        }
+    });       
+
     //Update the mobile terminal
     $scope.updateMobileTerminal = function(){
         $scope.submitAttempted = true;
@@ -66,5 +80,21 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
     function setStatusToActiveError() {
         alertService.showErrorMessage(locale.getString('mobileTerminal.activate_message_on_error'));
     }    
+
+    //Get the history list for the mobile terminal
+    var getMobileTerminalHistoryForCurrentMobileTerminal = function() {
+        var response = mobileTerminalRestService.getHistoryForMobileTerminal($scope.currentMobileTerminal)
+            .then(onGetMobileTerminalHistorySuccess, onGetMobileTerminalHistoryError);
+    };
+
+    //Success getting history
+    var onGetMobileTerminalHistorySuccess = function(historyList) {
+        $scope.currentMobileTerminalHistory = historyList;
+    };
+
+    //Error getting history
+    var onGetMobileTerminalHistoryError = function(error) {
+        alertService.showErrorMessage(locale.getString('mobileTerminal.history_alert_message_on_failed_to_load_error'));
+    };    
 
 });
