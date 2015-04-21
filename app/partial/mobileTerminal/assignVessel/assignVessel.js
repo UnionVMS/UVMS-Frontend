@@ -93,9 +93,8 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
         console.log("ASSIGN TO VESSEL!");
         console.log($scope.selectedVessel);
 
-        if ($scope.currentMobileTerminal && $scope.selectedVessel.vesselId.type === 'ID'){
-            var internalVesselId = $scope.selectedVessel.vesselId.value;
-            $scope.currentMobileTerminal.assignToVesselWithInternalId(internalVesselId);
+        if ($scope.currentMobileTerminal && $scope.selectedVessel.ircs){
+            $scope.currentMobileTerminal.assignToVesselWithIrcs($scope.selectedVessel.ircs);
             $scope.toggleAssignVessel();
             $scope.goBackToAssignVesselSearchResultsClick();
 

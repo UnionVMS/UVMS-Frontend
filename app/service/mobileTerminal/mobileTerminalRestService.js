@@ -86,9 +86,9 @@ angular.module('unionvmsWeb')
                                 var getVesselListRequest = new GetListRequest(1, getListRequest.listSize, false, []);
                                 $.each(mobileTerminalListPage.mobileTerminals, function(index, mobileTerminal){
                                     if(angular.isDefined(mobileTerminal.carrierId)){
-                                        if(mobileTerminal.carrierId.carrierType === "VESSEL" && mobileTerminal.carrierId.idType === "ID" && typeof mobileTerminal.carrierId.value === 'string'){
-                                            getVesselListRequest.addSearchCriteria("INTERNAL_ID", mobileTerminal.carrierId.value);
-                                        }                            
+                                        if (mobileTerminal.carrierId.carrierType === "VESSEL" && mobileTerminal.carrierId.idType === "IRCS" && typeof mobileTerminal.carrierId.value === 'string') {
+                                            getVesselListRequest.addSearchCriteria("IRCS", mobileTerminal.carrierId.value);
+                                        }
                                     }
                                 });
 
@@ -98,8 +98,8 @@ angular.module('unionvmsWeb')
                                         //Connect the mobileTerminals to the vessels
                                         $.each(mobileTerminalListPage.mobileTerminals, function(index, mobileTerminal){
                                             if(angular.isDefined(mobileTerminal.carrierId)){
-                                                if(mobileTerminal.carrierId.carrierType === "VESSEL" && mobileTerminal.carrierId.idType === "ID" && typeof mobileTerminal.carrierId.value === 'string'){
-                                                    var matchingVessel = vesselListPage.getVesselByInternalId(mobileTerminal.carrierId.value);
+                                                if(mobileTerminal.carrierId.carrierType === "VESSEL" && mobileTerminal.carrierId.idType === "IRCS" && typeof mobileTerminal.carrierId.value === 'string'){
+                                                    var matchingVessel = vesselListPage.getVesselByIrcs(mobileTerminal.carrierId.value);
                                                     if(angular.isDefined(matchingVessel)){
                                                         mobileTerminal.setAssociatedVessel(matchingVessel);
                                                     }

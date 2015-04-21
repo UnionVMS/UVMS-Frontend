@@ -14,11 +14,11 @@ angular.module('unionvmsWeb')
         return carrierId;
     };
 
-    CarrierId.createVesselWithInternalId = function(internalId){
+    CarrierId.createVesselWithIrcs = function(ircs){
         var carrierId = new CarrierId();
         carrierId.carrierType = CARRIER_TYPE_VESSEL;
-        carrierId.idType = "ID";
-        carrierId.value = internalId;
+        carrierId.idType = "IRCS";
+        carrierId.value = ircs;
         return carrierId;
     };
 

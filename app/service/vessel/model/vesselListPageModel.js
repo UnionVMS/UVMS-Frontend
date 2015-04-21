@@ -12,10 +12,10 @@ angular.module('unionvmsWeb')
         };
  
         //Find a vessel in the list of vessels by its internal id
-        VesselListPage.prototype.getVesselByInternalId = function(internalId) {
+        VesselListPage.prototype.getVesselByIrcs = function(ircs) {
             var foundVessel;
             $.each(this.vessels, function(index, vessel){
-                if(vessel.vesselId.type === 'ID' && vessel.vesselId.value === internalId){
+                if(vessel.ircs === ircs){
                     foundVessel = vessel;
                     return false;
                 }

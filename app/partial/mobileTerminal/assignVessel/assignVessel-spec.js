@@ -9,7 +9,7 @@ describe('AssignvesselCtrl', function() {
 		ctrl = $controller('AssignvesselCtrl', {$scope: scope});
 		scope.currentMobileTerminal = new MobileTerminal();
 		scope.toggleAssignVessel = function() {};
-		scope.selectedVessel = { "vesselId": { "type": "ID","value": "123" } };
+		scope.selectedVessel = { "vesselId": { "type": "ID","value": "123" }, "ircs": "123" };
     }));	
 
 	it('should assign mobile terminal when assigning to selected vessel', inject(function($q, mobileTerminalRestService) {

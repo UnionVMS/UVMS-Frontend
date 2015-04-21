@@ -17,8 +17,6 @@ angular.module('unionvmsWeb')
             this.carrierId = undefined;
             this.oldCarrierId = undefined;
 
-            this.assignedCarrierHasBeenUpdated = false;
-
             this.associatedVessel = undefined;
         }
 
@@ -179,7 +177,6 @@ angular.module('unionvmsWeb')
 
         //Unassign the mobileTerminal from its carrier
         MobileTerminal.prototype.unassign = function(){
-            this.assignedCarrierHasBeenUpdated = true;
             this.carrierId = undefined;
         };
 
@@ -188,15 +185,9 @@ angular.module('unionvmsWeb')
             return this.carrierId !== undefined && this.carrierId.value !== undefined;
         };
 
-        //Check if the mobileTerminal has been assigned to a different carrier
-        MobileTerminal.prototype.hasAssignedCarrierBeenUpdated = function(){
-            return this.assignedCarrierHasBeenUpdated;
-        };
-
         //Assign the mobileTerminal to a vessel by internalId
-        MobileTerminal.prototype.assignToVesselWithInternalId = function(internalId){
-            this.assignedCarrierHasBeenUpdated = true;
-            this.carrierId = CarrierId.createVesselWithInternalId(internalId);
+        MobileTerminal.prototype.assignToVesselWithIrcs = function(ircs){
+            this.carrierId = CarrierId.createVesselWithIrcs(ircs);
         };
 
         //Set associated vessel
