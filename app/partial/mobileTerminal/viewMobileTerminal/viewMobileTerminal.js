@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scope, $route, $controller, locale, alertService, mobileTerminalRestService, modalComment){
+angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scope, $route, $controller, $modal, locale, alertService, mobileTerminalRestService, modalComment){
 
     $controller('mobileTerminalFormCtrl', { $scope: $scope });
 
@@ -116,6 +116,36 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
     //Error getting history
     var onGetMobileTerminalHistoryError = function(error) {
         alertService.showErrorMessage(locale.getString('mobileTerminal.history_alert_message_on_failed_to_load_error'));
-    };    
+    };
+
+    //Historymodal
+    $scope.onMobileTerminalHistoryClick = function(){
+        //TODO: add carriername...
+        openMobileTerminalHistoryModal($scope.currentMobileTerminalHistory, $scope.currentMobileTerminal.mobileTerminalId);
+    };
+
+   var openMobileTerminalHistoryModal = function(currentMobileTerminalHistory, mobileTerminalId){
+            console.info("HISTORYMODAL OPEN");
+            console.info(currentMobileTerminalHistory);
+                    
+            var modalInstance = $modal.open({
+              templateUrl: 'partial/mobileTerminal/mobileTerminalHistoryModal/mobileTerminalHistoryModal.html',
+              controller: 'mobileTerminalHistoryModalCtrl',
+              size: "lg",
+              resolve: {
+                currentMobileTerminalHistory: function() {
+                    return currentMobileTerminalHistory;
+                },
+                mobileTerminalId: function(){
+                    return mobileTerminalId;
+                }
+              }
+            });
+
+            modalInstance.result.then(function () {
+            }, function () {
+              //Nothing on cancel
+            });
+        };
 
 });

@@ -20,7 +20,9 @@
     </div>
 
     <div static-include="partial/mobileTerminal/mobileTerminalForm/mobileTerminalForm.html"></div>
-
-    History:<br>{{currentMobileTerminalHistory}}
-
+    <div>
+        <a ng-click="onMobileTerminalHistoryClick()">
+            <p>{{'mobileTerminal.history_view_mobileterminal_history' | i18n }}</p>
+        </a>
+    </div>
 </div>

@@ -1,0 +1,50 @@
+<div>
+
+	<div class="modal-header row">
+		<div class="col-md-12">
+       		<div class="closehistorymodal row pull-right" ng-click="cancel()"> <img src="assets/images/close.png" /></div>
+        	<div class="vesselname">{{ 'mobileTerminal.history_modal_header' | i18n | uppercase}}</div>
+		</div>
+	</div>
+	<div class="modal-body row">
+		<div class="col-md-12">
+			<div class="modalhistoryheader"><p>{{'mobileTerminal.history_modal_sattelitenumber' | i18n | uppercase }}</p><p>{{ mobileTerminalId.systemType | uppercase}}</p></div>
+			<div class="modalhistoryheader"><p>{{'mobileTerminal.history_modal_transpondertype' | i18n | uppercase}}</p><p>{{ mobileTerminalId.ids.SERIAL_NUMBER | uppercase}}</p></div>
+			<table class="col-md-12">
+				<thead>
+					<tr>
+						<th sortable-table-header by="sortType" reverse="sortReverse" order="'eventCode'">{{'mobileTerminal.history_modal_eventcode' | i18n }}</th>
+						<th sortable-table-header by="sortType" reverse="sortReverse" order="'vesselname'">{{'mobileTerminal.history_modal_vesselname' | i18n }}</th>
+						<th sortable-table-header by="sortType" reverse="sortReverse" order="'dnid'">{{'mobileTerminal.history_modal_dnid' | i18n }}</th>
+						<th sortable-table-header by="sortType" reverse="sortReverse" order="'memberId'">{{'mobileTerminal.history_modal_memberno' | i18n }}</th>
+						<th sortable-table-header by="sortType" reverse="sortReverse" order="'installed'">{{'mobileTerminal.history_modal_installed' | i18n }}</th>
+						<th sortable-table-header by="sortType" reverse="sortReverse" order="'uninstalled'">{{'mobileTerminal.history_modal_uninstalled' | i18n }}</th>
+						<th sortable-table-header by="sortType" reverse="sortReverse" order="'satelliteNumber'">{{'mobileTerminal.history_modal_satelliteno' | i18n }}</th>
+						<th sortable-table-header by="sortType" reverse="sortReverse" order="'changeDate'">{{'mobileTerminal.history_modal_changeddate' | i18n }}</th>
+						<th sortable-table-header by="sortType" reverse="sortReverse" order="'comment'">{{'mobileTerminal.history_modal_comments' | i18n }}</th>
+						<th><p>{{'mobileTerminal.history_modal_auditlogs' | i18n }}</p></th>
+					</tr>
+				</thead>
+	            <tbody>
+	            	<tr ng-repeat="item in currentMobileTerminalHistory | orderBy:sortType:sortReverse">
+	            		<td>{{item.eventCode}}</td>
+	                    <td>VESSEL NAME</td>
+	                    <td>{{item.dnid}}</td>
+	                    <td>{{item.memberId}}</td>
+	                    <td>{{item.getFormattedInstalled()}}</td>
+	                    <td>{{item.getFormattedUninstalled()}}</td>
+	                    <td>{{item.satelliteNumber}}</td>
+	                    <td>{{item.getFormattedChangeDate()}}</td>
+	                    <td>{{item.comment}}</td>
+	                    <td><a href="">Audit</a></td>
+	                </tr>
+	             </tbody>
+	        </table>
+		</div>
+	</div>
+	<div class="modal-footer row">
+		<div class="col-md-12">
+    		<button type="button" class="btn btn-primary" ng-click="cancel()">{{ 'mobileTerminal.history_modal_closebutton' | i18n }}</button>
+		</div>
+	</div>
+</div>

@@ -83,6 +83,23 @@
     "unassign" : "Unassign",
     "unassigning_from_vessel" : "Unassigning {1} from {2}",
     "updating" : "Updating {1}",
-    "history_alert_message_on_failed_to_load_error" : "Failed to load history for the mobile terminal."
-
+    "history_alert_message_on_failed_to_load_error" : "Failed to load history for the mobile terminal.",
+    "history_view_mobileterminal_history" : "View history",
+    "history_modal_header" : "Mobile Terminal History",
+    "history_modal_serialnumber" : "Serial number:",
+    "history_modal_transpondertype" : "Transponder type:",
+    "history_modal_closebutton" : "Close",
+    "history_modal_eventcode" : "Event code",
+    "history_modal_dnid" : "DNID",
+    "history_modal_memberno" : "Member no",
+    "history_modal_installed" : "Installed",
+    "history_modal_uninstalled" : "Uninstalled",
+    "history_modal_satelliteno" : "Satellite no",
+    "history_modal_changeddate" : "Changed date",
+    "history_modal_comments" : "Comments",
+    "history_modal_auditlogs" : "Audit logs",
+    "history_modal_vesselname" : "Vessel name",
+    "history_modal_sattelitenumber" : "Satellite number: ",
+    "history_modal_transpondertype" : "Transponder type: " 
+    
 }
