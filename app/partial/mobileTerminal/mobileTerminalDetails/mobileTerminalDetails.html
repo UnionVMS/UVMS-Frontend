@@ -5,12 +5,12 @@
             <div class="col-md-12">
                 <div class="transponderSystemSelect form-group">
                     <label>{{'mobileTerminal.add_new_form_transponder_system_label' | i18n}}</label>
-                    <dropdown ng-model="currentMobileTerminal.mobileTerminalId.systemType" initialtext="{{ 'mobileTerminal.add_new_form_transponder_system_placeholder' | i18n }}" no-placeholder-item items="transponderSystems" callback="onTerminalSystemSelect"></dropdown>                    
+                    <dropdown ng-model="currentMobileTerminal.mobileTerminalId.systemType" initialtext="{{ 'common.choose' | i18n }}" no-placeholder-item items="transponderSystems" callback="onTerminalSystemSelect"></dropdown>                    
                 </div>
 
                 <div class="transponderSystemSelect form-group" ng-show="currentMobileTerminal.mobileTerminalId.systemType">
                     <label>{{'mobileTerminal.add_new_form_ocean_region_label' | i18n}}</label>
-                    <dropdown ng-model="currentMobileTerminal.attributes.oceanRegion" initialtext="{{ 'mobileTerminal.add_new_form_ocean_region_label_placeholder' | i18n }}" no-placeholder-item items="oceanRegions"></dropdown>
+                    <dropdown ng-model="currentMobileTerminal.attributes.oceanRegion" initialtext="{{ 'common.choose' | i18n }}" no-placeholder-item items="oceanRegions"></dropdown>
                 </div>
             </div>
         </div>
@@ -43,24 +43,7 @@
                     <input type="text" class="form-control" ng-model="currentMobileTerminal.attributes.ANSWER_BACK">
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-2 form-group" ng-if="terminalConfig.terminalFields.INSTALLED_BY">
-                    <label>{{'mobileTerminal.form_inmarsatc_installed_by_label' | i18n}}</label>
-                    <input type="text" class="form-control" ng-model="currentMobileTerminal.attributes.INSTALLED_BY">
-                </div>
-                <div class="col-md-2 form-group" ng-if="terminalConfig.terminalFields.INSTALLED_ON">
-                    <label>{{'mobileTerminal.form_inmarsatc_installed_on_label' | i18n}}</label>
-                    <datepicker-input model="currentMobileTerminal.attributes.INSTALLED_ON"></datepicker-input>
-                </div>
-                <div class="col-md-2 form-group" ng-if="terminalConfig.terminalFields.STARTED_ON">
-                    <label>{{'mobileTerminal.form_inmarsatc_started_on_label' | i18n}}</label>
-                    <datepicker-input model="currentMobileTerminal.attributes.STARTED_ON"></datepicker-input>
-                </div>
-                <div class="col-md-2 form-group" ng-if="terminalConfig.terminalFields.UNINSTALLED_ON">
-                    <label>{{'mobileTerminal.form_inmarsatc_uninstalled_on_label' | i18n}}</label>
-                    <datepicker-input model="currentMobileTerminal.attributes.UNINSTALLED_ON"></datepicker-input>
-                </div>
-            </div>
+
             <div class="row communicationChannels">
                 <div class="col-md-12">
                     <label class="section">{{'mobileTerminal.form_inmarsatc_communication_channels_header' | i18n}}</label>
@@ -113,12 +96,30 @@
                     
                 </div>
             </div>       
-            <div class="row">  
+            <div class="row addNewChannelWrapper">  
                 <div class="col-md-12">
                     <span class="link underline" ng-click="addNewChannel()">{{'mobileTerminal.form_inmarsatc_communication_channels_add_new_button' | i18n}}</span>
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-md-2 form-group" ng-if="terminalConfig.terminalFields.INSTALLED_BY">
+                    <label>{{'mobileTerminal.form_inmarsatc_installed_by_label' | i18n}}</label>
+                    <input type="text" class="form-control" ng-model="currentMobileTerminal.attributes.INSTALLED_BY">
+                </div>
+                <div class="col-md-2 form-group" ng-if="terminalConfig.terminalFields.INSTALLED_ON">
+                    <label>{{'mobileTerminal.form_inmarsatc_installed_on_label' | i18n}}</label>
+                    <datepicker-input model="currentMobileTerminal.attributes.INSTALLED_ON"></datepicker-input>
+                </div>
+                <div class="col-md-2 form-group" ng-if="terminalConfig.terminalFields.STARTED_ON">
+                    <label>{{'mobileTerminal.form_inmarsatc_started_on_label' | i18n}}</label>
+                    <datepicker-input model="currentMobileTerminal.attributes.STARTED_ON"></datepicker-input>
+                </div>
+                <div class="col-md-2 form-group" ng-if="terminalConfig.terminalFields.UNINSTALLED_ON">
+                    <label>{{'mobileTerminal.form_inmarsatc_uninstalled_on_label' | i18n}}</label>
+                    <datepicker-input model="currentMobileTerminal.attributes.UNINSTALLED_ON"></datepicker-input>
+                </div>
+            </div>
 
         </div>       
 
