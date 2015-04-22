@@ -94,12 +94,12 @@
 
                         <div class="col-md-3 form-group" ng-class="{'has-error': channelForm.started.$invalid && (submitAttempted || channelForm.started.$dirty)}" ng-if="terminalConfig.channelFields.STARTED">
                             <label>{{'mobileTerminal.form_inmarsatc_communication_channel_started_label' | i18n}}</label>
-                            <datepicker-input name="started" model="communicationChannel.ids.STARTED"></datepicker-input>
+                            <datepicker-input name="started" model="communicationChannel.ids.STARTED" disabled="true"></datepicker-input>
                         </div>
 
                         <div class="col-md-3 form-group" ng-class="{'has-error': channelForm.stopped.$invalid && (submitAttempted || channelForm.stopped.$dirty)}" ng-if="terminalConfig.channelFields.STOPPED">
                             <label>{{'mobileTerminal.form_inmarsatc_communication_channel_stopped_label' | i18n}}</label>
-                            <datepicker-input name="stopped" model="communicationChannel.ids.STOPPED"></datepicker-input>
+                            <datepicker-input name="stopped" model="communicationChannel.ids.STOPPED" disabled="true"></datepicker-input>
                         </div>                            
                     </div>
                 </div>
