@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $location, GetListRequest, vesselRestService, mobileTerminalRestService, alertService, locale){
+angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $location, GetListRequest, vesselRestService, mobileTerminalRestService, alertService, locale, $modal){
 
 
     //Search objects and results
@@ -96,28 +96,38 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
         $scope.newVesselObj = vessel;
     };
 
-    //Handle click event on ASSIGN  button
-    $scope.assignToSelectedVessel = function(){
-        console.log("ASSIGN TO VESSEL!");
-        console.log($scope.selectedVessel);
-
-        if ($scope.currentMobileTerminal && $scope.selectedVessel.ircs){
-            mobileTerminalRestService.assignMobileTerminal($scope.currentMobileTerminal, $scope.selectedVessel.ircs).then(function(res) {
-                $scope.currentMobileTerminal.assignToVesselWithIrcs($scope.selectedVessel.ircs);
-                $scope.currentMobileTerminal.associatedVessel = $scope.selectedVessel;
-                $scope.toggleAssignVessel();
-                $scope.goBackToAssignVesselSearchResultsClick();
-                resetSearch();
-
-                alertService.showSuccessMessage(locale.getString('mobileTerminal.assign_vessel_message_on_success'));
-            },
-            function() {
-                alertService.showErrorMessage(locale.getString('mobileTerminal.assign_vessel_message_on_error'));
-            });
-        }
-        else {
+    $scope.assignToSelectedVesselWithComment = function(comment) {
+        var validAssignment = $scope.currentMobileTerminal && $scope.selectedVessel.ircs;
+        if (!validAssignment) {
             console.error("Vessel is missing internalId so assigning the mobile terminal to the vessel is not possible.");
+            return;
         }
+
+        mobileTerminalRestService.assignMobileTerminal($scope.currentMobileTerminal, $scope.selectedVessel.ircs, comment).then(function() {
+            $scope.currentMobileTerminal.assignToVesselWithIrcs($scope.selectedVessel.ircs);
+            $scope.currentMobileTerminal.associatedVessel = $scope.selectedVessel;
+            $scope.toggleAssignVessel();
+            $scope.goBackToAssignVesselSearchResultsClick();
+            resetSearch();
+
+            alertService.showSuccessMessage(locale.getString('mobileTerminal.assign_vessel_message_on_success'));
+        },
+        function() {
+            alertService.showErrorMessage(locale.getString('mobileTerminal.assign_vessel_message_on_error'));
+        });
+    };
+
+    $scope.assignToSelectedVessel = function() {
+        // Show modal Comment dialog.
+        $modal.open({
+            templateUrl: "partial/mobileTerminal/assignVessel/assignVesselComment/assignVesselComment.html",
+            controller: "AssignVesselCommentCtrl",
+            resolve: {
+                vesselName: function() {
+                    return $scope.selectedVessel.name;
+                }
+            }
+        }).result.then($scope.assignToSelectedVesselWithComment);
     };
 
     //Go back to search results

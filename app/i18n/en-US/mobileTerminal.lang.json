@@ -23,6 +23,7 @@
     "add_new_alert_message_on_success" : "The Mobile Terminal has been created successfully.",
     "add_new_alert_message_on_error" : "The mobile terminal could not be created.",
     "add_new_alert_message_on_load_transponders_error" : "You cannot create a mobile terminal at the moment. Error information: Failed to load terminal systems from the server.",
+    "assign_vessel_comment_placeholder" : "Write a comment...",
     "assign_vessel_message_on_success" : "The mobile terminal was successfully assigned to the carrier.",
     "assign_vessel_message_on_error" : "The mobile terminal could not be assigned to the carrier.",
     "form_inmarsatc_sattelite_number_label" : "Sattelite number",

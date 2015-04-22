@@ -178,12 +178,12 @@ angular.module('unionvmsWeb')
                 return deferred.promise;
             },            
 
-            assignMobileTerminal : function(mobileTerminal, ircs){
+            assignMobileTerminal : function(mobileTerminal, ircs, comment){
                 console.log("assign mobile terminal!");
                 var carrierId = CarrierId.createVesselWithIrcs(ircs);
                 console.log(mobileTerminal.toAssignJson(carrierId));
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.assignMobileTerminal().save(mobileTerminal.toAssignJson(carrierId), function(response) {
+                mobileTerminalRestFactory.assignMobileTerminal().save({ comment:comment }, mobileTerminal.toAssignJson(carrierId), function(response) {
                     console.log("Assign response!");
                     console.log(response);
                     if(response.code !== "200"){

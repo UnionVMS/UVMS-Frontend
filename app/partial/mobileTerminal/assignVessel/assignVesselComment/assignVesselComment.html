@@ -1,0 +1,13 @@
+<div class="modal-header" style="text-align:left">
+    <div class="pointer pull-right" ng-click="cancel()">
+    	<i class="fa fa-times"></i>
+   	</div>
+    <h4 class="modal-title">{{ 'mobileTerminal.assign_vessel' | i18n }} "{{ vesselName }}"</h4>
+</div>
+<div class="modal-body">
+	<textarea class="form-control" autofocus placeholder="{{'mobileTerminal.assign_vessel_comment_placeholder' | i18n}}" ng-model="comment"></textarea>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="cancel()">{{ 'common.cancel' | i18n }}</button>
+    <button type="button" class="btn btn-primary" ng-click="save()" ng-disabled="comment.length === 0">{{ 'common.save' | i18n }}</button>
+</div>

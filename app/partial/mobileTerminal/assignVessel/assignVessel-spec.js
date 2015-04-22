@@ -29,7 +29,7 @@ describe('AssignvesselCtrl', function() {
 		spyOn(locale, "getString").andReturn();
 		spyOn(alertService, "showSuccessMessage").andReturn();
 		scope.$apply();
-		scope.assignToSelectedVessel();
+		scope.assignToSelectedVesselWithComment("my comment");
 		expect(mobileTerminalRestService.assignMobileTerminal).toHaveBeenCalled();
 	}));
 });
