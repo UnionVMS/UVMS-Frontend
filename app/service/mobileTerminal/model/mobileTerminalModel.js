@@ -216,7 +216,7 @@ angular.module('unionvmsWeb')
 
         MobileTerminal.prototype.getSerialNumber = function() {
             return this.mobileTerminalId.ids["SERIAL_NUMBER"];
-        }
+        };
 
         return MobileTerminal;
     });

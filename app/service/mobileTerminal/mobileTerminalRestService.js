@@ -4,41 +4,41 @@ angular.module('unionvmsWeb')
         var baseUrl = restConstants.baseUrl;
         return {
             getTranspondersConfig : function(){
-                return $resource(baseUrl +'/mobileterminal-rest/mobileTerminal/config/transponders');
+                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/config/transponders');
             },
             mobileTerminal : function(){
-                return $resource(baseUrl +'/mobileterminal-rest/mobileTerminal/', {}, {
+                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/', {}, {
                     update: {method: 'PUT'}                    
                 });
             },
             getMobileTerminals : function(){
-                return $resource(baseUrl +'/mobileterminal-rest/mobileTerminal/list/',{},{
+                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/list/',{},{
                     list : { method: 'POST'}
                 });
             },
             assignMobileTerminal : function(){
-                return $resource(baseUrl +'/mobileterminal-rest/mobileTerminal/assign/');
+                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/assign/');
             },
             unassignMobileTerminal : function(){
-                return $resource(baseUrl +'/mobileterminal-rest/mobileTerminal/unassign/');
+                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/unassign/');
             },
             activateMobileTerminal : function(){
-                return $resource(baseUrl +'/mobileterminal-rest/mobileTerminal/status/activate', {}, {
+                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/status/activate', {}, {
                     save: {method: 'PUT'},
                 });
             },
             inactivateMobileTerminal : function(){
-                return $resource(baseUrl +'/mobileterminal-rest/mobileTerminal/status/inactivate', {}, {
+                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/status/inactivate', {}, {
                     save: {method: 'PUT'},
                 });
             },
             removeMobileTerminal : function(){
-                return $resource(baseUrl +'/mobileterminal-rest/mobileTerminal/status/remove', {}, {
+                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/status/remove', {}, {
                     save: {method: 'PUT'},
                 });
             },
             mobileTerminalHistory : function(){
-                return $resource(baseUrl +'/mobileterminal-rest/mobileTerminal/history', {}, {
+                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/history', {}, {
                     list : { method: 'PUT'}
                 });
             },            
