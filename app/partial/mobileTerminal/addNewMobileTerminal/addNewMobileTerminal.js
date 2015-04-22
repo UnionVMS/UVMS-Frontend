@@ -31,7 +31,11 @@ angular.module('unionvmsWeb').controller('addNewMobileTerminalCtrl',function($sc
     //Success creating the new mobile terminal
     var createSuccess = function(terminalObject) {
         $scope.currentMobileTerminal = MobileTerminal.fromJson(terminalObject);
-        alertService.showSuccessMessage(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
+        alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
+
+        var noHideMessage = true;
+        $scope.toggleAddNewMobileTerminal(noHideMessage);
+        $scope.toggleMobileTerminalDetails($scope.currentMobileTerminal, noHideMessage);
     };
 
     //Error creating the new mobile terminal

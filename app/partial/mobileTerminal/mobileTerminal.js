@@ -23,16 +23,22 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
     $scope.currentMobileTerminal = undefined;
 
     //Toggle (show/hide) new mobile terminal
-    $scope.toggleAddNewMobileTerminal = function(){
-        alertService.hideMessage();
+    $scope.toggleAddNewMobileTerminal = function(noHideMessage){
+        if (!noHideMessage) {
+            alertService.hideMessage();
+        }
+
         $scope.currentMobileTerminal = new MobileTerminal();
         $scope.isVisible.addNewMobileTerminal = !$scope.isVisible.addNewMobileTerminal;
         $scope.isVisible.search = !$scope.isVisible.search;        
     };
 
     //Toggle (show/hide) viewing of a mobile terminal
-    $scope.toggleMobileTerminalDetails = function(item){
-        alertService.hideMessage();
+    $scope.toggleMobileTerminalDetails = function(item, noHideMessage){
+        if (!noHideMessage) {
+            alertService.hideMessage();
+        }
+
         $scope.currentMobileTerminal = item;
         $scope.isVisible.viewMobileTerminal = !$scope.isVisible.viewMobileTerminal;
         $scope.isVisible.search = !$scope.isVisible.search;

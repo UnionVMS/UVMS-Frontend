@@ -65,7 +65,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         mobileTerminalRestService.unassignMobileTerminal($scope.currentMobileTerminal, comment).then(function(res) {
             // Success
             $scope.currentMobileTerminal.unassign();
-            alertService.showSuccessMessage(locale.getString('mobileTerminal.unassign_vessel_message_on_success'));
+            alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.unassign_vessel_message_on_success'));
         }, 
         function(res) {
             // Error

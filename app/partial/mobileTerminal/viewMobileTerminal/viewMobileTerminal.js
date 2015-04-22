@@ -70,7 +70,7 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
 
     //Inactivate status success
     function setStatusToInactiveSuccess(updatedMobileTerminal) {
-        alertService.showSuccessMessage(locale.getString('mobileTerminal.inactivate_message_on_success'));
+        alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.inactivate_message_on_success'));
         //Update the mobileTerminal object with the returned one
         $scope.currentMobileTerminal = updatedMobileTerminal;
     }
@@ -93,7 +93,7 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
 
     //Activate status success
     function setStatusToActiveSuccess(updatedMobileTerminal) {
-        alertService.showSuccessMessage(locale.getString('mobileTerminal.activate_message_on_success'));
+        alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.activate_message_on_success'));
         //Update the mobileTerminal object with the returned one
         $scope.currentMobileTerminal = updatedMobileTerminal;
     }

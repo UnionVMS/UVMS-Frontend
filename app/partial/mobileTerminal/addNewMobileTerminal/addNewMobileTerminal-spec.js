@@ -21,6 +21,14 @@ describe('addNewMobileTerminalCtrl', function() {
 	it('should update currentMobileTerminal with created terminal', inject(function(MobileTerminal, $compile, $q, mobileTerminalRestService, alertService, locale) {
 		scope.currentMobileTerminal = new MobileTerminal();
 
+		scope.toggleAddNewMobileTerminal = function() {
+			// do nothing
+		};
+
+		scope.toggleMobileTerminalDetails = function() {
+			// do nothing
+		};
+
 		// A form to be valid
 		var element = angular.element('<form name="mobileTerminalForm"></form>');
 		$compile(element)(scope);

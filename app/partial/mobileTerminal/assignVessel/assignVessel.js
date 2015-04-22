@@ -110,7 +110,7 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
             $scope.goBackToAssignVesselSearchResultsClick();
             resetSearch();
 
-            alertService.showSuccessMessage(locale.getString('mobileTerminal.assign_vessel_message_on_success'));
+            alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.assign_vessel_message_on_success'));
         },
         function() {
             alertService.showErrorMessage(locale.getString('mobileTerminal.assign_vessel_message_on_error'));
