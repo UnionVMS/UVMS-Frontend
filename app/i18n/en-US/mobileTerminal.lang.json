@@ -1,4 +1,6 @@
 {
+    "assign" : "Assign",
+    "assigning_to_vessel" : "Assigning {1} to {2}",
     "assign_vessel" : "Assign vessel",
 	"menu_mobileterminals" : "Mobile terminals",
 	"menu_polling" : "Polling",
@@ -23,7 +25,6 @@
     "add_new_alert_message_on_success" : "The Mobile Terminal has been created successfully.",
     "add_new_alert_message_on_error" : "The mobile terminal could not be created.",
     "add_new_alert_message_on_load_transponders_error" : "You cannot create a mobile terminal at the moment. Error information: Failed to load terminal systems from the server.",
-    "assign_vessel_comment_placeholder" : "Write a comment...",
     "assign_vessel_message_on_success" : "The mobile terminal was successfully assigned to the carrier.",
     "assign_vessel_message_on_error" : "The mobile terminal could not be assigned to the carrier.",
     "form_inmarsatc_sattelite_number_label" : "Sattelite number",
@@ -76,6 +77,11 @@
     "search_reportingEndDate_placeholder" : "Reporting end date",
     "search_selectVesselGroup_placeholder" : "Select vessel groups",
     "search_zero_results_error" : "No mobile terminals matching you search criteria was found.",
+    "set_active" : "Set {1} as active",
+    "set_inactive" : "Set {1} as inactive",
+    "unassign" : "Unassign",
+    "unassigning_from_vessel" : "Unassigning {1} from {2}",
+    "updating" : "Updating {1}",
     "history_alert_message_on_failed_to_load_error" : "Failed to load history for the mobile terminal."
 
 }

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $location, GetListRequest, vesselRestService, mobileTerminalRestService, alertService, locale, $modal){
+angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $location, GetListRequest, vesselRestService, mobileTerminalRestService, alertService, locale, modalComment){
 
 
     //Search objects and results
@@ -118,16 +118,10 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
     };
 
     $scope.assignToSelectedVessel = function() {
-        // Show modal Comment dialog.
-        $modal.open({
-            templateUrl: "partial/mobileTerminal/assignVessel/assignVesselComment/assignVesselComment.html",
-            controller: "AssignVesselCommentCtrl",
-            resolve: {
-                title: function() {
-                    return locale.getString('mobileTerminal.assign_vessel') + ' "' + $scope.selectedVessel.name + '"';
-                }
-            }
-        }).result.then($scope.assignToSelectedVesselWithComment);
+        modalComment.open($scope.assignToSelectedVesselWithComment, {
+            titleLabel: locale.getString("mobileTerminal.assigning_to_vessel", [$scope.currentMobileTerminal.getSerialNumber(), $scope.selectedVessel.name]),
+            saveLabel: locale.getString('mobileTerminal.assign')
+        });
     };
 
     //Go back to search results

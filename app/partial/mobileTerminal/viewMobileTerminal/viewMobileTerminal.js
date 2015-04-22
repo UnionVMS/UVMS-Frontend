@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scope, $route, $controller, locale, alertService, mobileTerminalRestService, $modal){
+angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scope, $route, $controller, locale, alertService, mobileTerminalRestService, modalComment){
 
     $controller('mobileTerminalFormCtrl', { $scope: $scope });
 
@@ -40,16 +40,10 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
     };
 
     $scope.updateMobileTerminal = function() {
-        // Show modal Comment dialog.
-        $modal.open({
-            templateUrl: "partial/mobileTerminal/assignVessel/assignVesselComment/assignVesselComment.html",
-            controller: "AssignVesselCommentCtrl",
-            resolve: {
-                title: function() {
-                    return locale.getString('common.update');
-                }
-            }
-        }).result.then($scope.updateMobileTerminalWithComment);
+        modalComment.open($scope.updateMobileTerminalWithComment, {
+            titleLabel: locale.getString("mobileTerminal.updating", [$scope.currentMobileTerminal.getSerialNumber()]),
+            saveLabel: locale.getString("common.update")
+        });
     };
 
     var updateSuccess = function(){
@@ -68,16 +62,10 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
     };
 
     $scope.setStatusToInactive = function() {
-        // Show modal Comment dialog.
-        $modal.open({
-            templateUrl: "partial/mobileTerminal/assignVessel/assignVesselComment/assignVesselComment.html",
-            controller: "AssignVesselCommentCtrl",
-            resolve: {
-                title: function() {
-                    return locale.getString('mobileTerminal.inactivate_link');
-                }
-            }
-        }).result.then($scope.setStatusToInactiveWithComment);
+        modalComment.open($scope.setStatusToInactiveWithComment, {
+            titleLabel: locale.getString("mobileTerminal.set_inactive", [$scope.currentMobileTerminal.getSerialNumber()]),
+            saveLabel: locale.getString('mobileTerminal.inactivate_link')
+        });
     };
 
     //Inactivate status success
@@ -97,16 +85,10 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
     };
 
     $scope.setStatusToActive = function() {
-        // Show modal Comment dialog.
-        $modal.open({
-            templateUrl: "partial/mobileTerminal/assignVessel/assignVesselComment/assignVesselComment.html",
-            controller: "AssignVesselCommentCtrl",
-            resolve: {
-                title: function() {
-                    return locale.getString('mobileTerminal.activate_link');
-                }
-            }
-        }).result.then($scope.setStatusToActiveWithComment);
+        modalComment.open($scope.setStatusToActiveWithComment, {
+            titleLabel: locale.getString("mobileTerminal.set_active", [$scope.currentMobileTerminal.getSerialNumber()]),
+            saveLabel: locale.getString('mobileTerminal.activate_link')
+        });
     };
 
     //Activate status success

@@ -214,5 +214,9 @@ angular.module('unionvmsWeb')
             return this.mobileTerminalId.ids.hasOwnProperty("INTERNAL_ID");
         };
 
+        MobileTerminal.prototype.getSerialNumber = function() {
+            return this.mobileTerminalId.ids["SERIAL_NUMBER"];
+        }
+
         return MobileTerminal;
     });

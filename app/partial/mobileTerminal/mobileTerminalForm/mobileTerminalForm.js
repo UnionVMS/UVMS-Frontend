@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scope, locale, MobileTerminal, mobileTerminalRestService, alertService, $modal){
+angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scope, locale, MobileTerminal, mobileTerminalRestService, alertService, modalComment){
 
     //Visibility statuses
     $scope.isVisible = {
@@ -55,16 +55,10 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     };
 
     $scope.unassignVessel = function() {
-        // Show modal Comment dialog.
-        $modal.open({
-            templateUrl: "partial/mobileTerminal/assignVessel/assignVesselComment/assignVesselComment.html",
-            controller: "AssignVesselCommentCtrl",
-            resolve: {
-                title: function() {
-                    return locale.getString('mobileTerminal.unassign_vessel') + ' "' + $scope.currentMobileTerminal.associatedVessel.name + '"';
-                }
-            }
-        }).result.then($scope.unassignVesselWithComment);
+        modalComment.open($scope.unassignVesselWithComment, {
+            titleLabel: locale.getString("mobileTerminal.unassigning_from_vessel", [$scope.currentMobileTerminal.getSerialNumber(), $scope.currentMobileTerminal.associatedVessel.name]),
+            saveLabel: locale.getString("mobileTerminal.unassign")
+        });
     };
 
     $scope.unassignVesselWithComment = function(comment) {

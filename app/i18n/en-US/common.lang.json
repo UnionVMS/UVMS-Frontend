@@ -1,6 +1,8 @@
 {
     "cancel" : "Cancel",
     "close" : "Close" ,
+    "comment" : "Comment",
+    "comment_placeholder" : "Write a comment...",
     "no" : "No" ,
     "remove" : "Remove",
     "reset" : "Reset",
