@@ -199,12 +199,12 @@ angular.module('unionvmsWeb')
                 });
                 return deferred.promise;
             },           
-            unassignMobileTerminal : function(mobileTerminal){
+            unassignMobileTerminal : function(mobileTerminal, comment){
                 console.log("unassign mobile terminal!");
                 var unassignJson = mobileTerminal.toUnassignJson();
                 console.log(mobileTerminal.toUnassignJson());
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.unassignMobileTerminal().save(mobileTerminal.toUnassignJson(), function(response) {
+                mobileTerminalRestFactory.unassignMobileTerminal().save({ comment:comment }, mobileTerminal.toUnassignJson(), function(response) {
                     console.log("Unassign response!");
                     console.log(response);
                     if(response.code !== "200"){

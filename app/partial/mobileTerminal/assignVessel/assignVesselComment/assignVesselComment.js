@@ -1,7 +1,7 @@
-angular.module('unionvmsWeb').controller('AssignVesselCommentCtrl', function($scope, $modalInstance, vesselName) {
+angular.module('unionvmsWeb').controller('AssignVesselCommentCtrl', function($scope, $modalInstance, title) {
 
 	$scope.comment = "";
-	$scope.vesselName = vesselName;
+	$scope.title = title;
 
 	$scope.save = function() {
 		$modalInstance.close($scope.comment);

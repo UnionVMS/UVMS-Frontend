@@ -13,7 +13,7 @@ describe('mobileTerminalFormCtrl', function() {
 	it('should unassign mobile terminal', inject(function($q, mobileTerminalRestService) {
 		var deferred = $q.defer();
 		spyOn(mobileTerminalRestService, "unassignMobileTerminal").andReturn(deferred.promise);
-		scope.unassignVessel();
+		scope.unassignVesselWithComment();
 		deferred.resolve();
 		expect(mobileTerminalRestService.unassignMobileTerminal).toHaveBeenCalled();
 	}));

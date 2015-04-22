@@ -123,8 +123,8 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
             templateUrl: "partial/mobileTerminal/assignVessel/assignVesselComment/assignVesselComment.html",
             controller: "AssignVesselCommentCtrl",
             resolve: {
-                vesselName: function() {
-                    return $scope.selectedVessel.name;
+                title: function() {
+                    return locale.getString('mobileTerminal.assign_vessel') + ' "' + $scope.selectedVessel.name + '"';
                 }
             }
         }).result.then($scope.assignToSelectedVesselWithComment);
