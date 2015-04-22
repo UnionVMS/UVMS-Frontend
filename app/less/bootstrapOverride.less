@@ -10,10 +10,16 @@ ul{
 }
 ul, li {
     list-style: none;
+    &:hover,&:active, &:focus{
+        outline:none !important;
+    }    
 }
 
 li, li a{
     cursor: pointer;
+    &:hover,&:active, &:focus{
+        outline:none !important;
+    }
 }
 
 /*Modals*/
@@ -59,6 +65,11 @@ li, li a{
 }
 
 /*Buttons*/
+button{
+    &:hover,&:active, &:focus{
+        outline:none !important;
+    }
+}
 .btn-primary{
     background-color: @btnPrimaryColor;
     color: #ffffff;

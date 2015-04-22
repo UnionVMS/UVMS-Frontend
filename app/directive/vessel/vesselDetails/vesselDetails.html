@@ -2,7 +2,7 @@
     <div class="row vesseldetailsrow">
         <div class="col-md-1" ng-hide="!vessel.vesselId.value">
             <p class="labelheaders">ID</p>
-            <p>{{vessel.vesselId.value}}</p>
+            <input type="text" name="newvesselid" class="form-control" ng-model="vessel.vesselId.value" ng-disabled="true">            
         </div>
         <div class="inputgroup col-md-2 form-group has-feedback">
             <p class="labelheaders">{{ 'vessel.vessel_details_name' | i18n }}</p>

@@ -1,4 +1,4 @@
-<div>
+<div class="mobileTerminalFormContainer">
     <div class="row" ng-show="isVisible.assignVessel">
         <div class="col-md-6">
             <label class="section">ASSIGN VESSEL</label>
@@ -8,16 +8,16 @@
         </div>            
     </div>
 
-    <div ng-show="currentMobileTerminal.carrierId && !isVisible.assignVessel">        
+    <div class="assignedVesselContainer" ng-show="currentMobileTerminal.carrierId && !isVisible.assignVessel">        
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <label class="section">ASSIGNED VESSEL</label>
-            </div>
-            <div class="col-md-6">
                 <button class="btn btn-primary" ng-click="unassignVessel()"><i class="fa fa-chain-broken"></i> {{'mobileTerminal.unassign_vessel' | i18n}}</span>
             </div>            
         </div>
-        <vessel-details vessel="currentMobileTerminal.associatedVessel" disable-form="true" ></vessel-details>    
+        <div>
+            <vessel-details vessel="currentMobileTerminal.associatedVessel" disable-form="true" ></vessel-details>    
+        </div>
     </div>
 
 

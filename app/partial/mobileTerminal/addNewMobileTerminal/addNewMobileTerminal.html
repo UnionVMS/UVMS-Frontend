@@ -4,7 +4,7 @@
         <div class="col-md-2 textAlignRight">
             <button  type="submit" ng-disabled="!currentMobileTerminal.mobileTerminalId.systemType || !terminalConfig" class="btn btn-primary" ng-click="createNewMobileTerminal()" ng-hide="transponderSystems.length == 0">{{'common.save' | i18n}}</button>
         </div>
-        <div class="col-md-1 pull-right" ng-click="toggleAddNewMobileTerminal()"> <img src="assets/images/close.png" /></div>
+        <div class="col-md-1 textAlignRight" ng-click="toggleAddNewMobileTerminal()"> <img src="assets/images/close.png" /></div>
     </div>
 
     <div static-include="partial/mobileTerminal/mobileTerminalForm/mobileTerminalForm.html"></div>
