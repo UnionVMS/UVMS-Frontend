@@ -157,11 +157,11 @@ angular.module('unionvmsWeb')
                 return deferred.promise;
             },
 
-            updateMobileTerminal : function(mobileTerminal){
+            updateMobileTerminal : function(mobileTerminal, comment){
                 console.log("update mobile terminal!");
                 console.log(mobileTerminal.toJson());
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.mobileTerminal().update(mobileTerminal.toJson(), function(response) {
+                mobileTerminalRestFactory.mobileTerminal().update({ comment:comment }, mobileTerminal.toJson(), function(response) {
                     console.log("Update response!");
                     console.log(response);
                     if(response.code !== "200"){
@@ -219,9 +219,9 @@ angular.module('unionvmsWeb')
                 });
                 return deferred.promise;
             },               
-            activateMobileTerminal : function(mobileTerminal){
+            activateMobileTerminal : function(mobileTerminal, comment){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.activateMobileTerminal().save(mobileTerminal.toSetStatusJson(), function(response) {
+                mobileTerminalRestFactory.activateMobileTerminal().save({ comment:comment }, mobileTerminal.toSetStatusJson(), function(response) {
                     if(response.code !== "200"){
                         deferred.reject("Invalid response status");
                         return;
@@ -234,9 +234,9 @@ angular.module('unionvmsWeb')
                 });
                 return deferred.promise;
             },
-            inactivateMobileTerminal : function(mobileTerminal){
+            inactivateMobileTerminal : function(mobileTerminal, comment){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.inactivateMobileTerminal().save(mobileTerminal.toSetStatusJson(), function(response) {
+                mobileTerminalRestFactory.inactivateMobileTerminal().save({ comment:comment }, mobileTerminal.toSetStatusJson(), function(response) {
                     if(response.code !== "200"){
                         deferred.reject("Invalid response status");
                         return;
