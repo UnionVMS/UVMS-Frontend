@@ -13,6 +13,7 @@ angular.module('unionvmsWeb')
 		templateUrl: 'directive/common/dropdown/dropdown.html',
 		link: function(scope, element, attrs, fn) {
 
+            scope.title = attrs.title;
             if('noPlaceholderItem' in attrs){
                 scope.initialitem = false;
             }else{
@@ -50,7 +51,7 @@ angular.module('unionvmsWeb')
 
             scope.selectVal = function(item){
                scope.ngModel = item.code;
-               scope.currentItemLabel = item.text;
+               scope.currentItemLabel = scope.title ? item[scope.title] : item.text;
                if(angular.isDefined(scope.callback)){
                     scope.callback(item);
                }

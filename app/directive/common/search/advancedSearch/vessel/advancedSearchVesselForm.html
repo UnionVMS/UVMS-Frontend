@@ -21,10 +21,10 @@
             <input type="text" id="searchname" placeholder="Name" class="form-control" tabindex="3" ng-model="advancedSearchObject.NAME">
         </div>
         <div class="col-md-2">
-            <input type="text" id="searchsignal" placeholder="Signal/IRCS" class="form-control" tabindex="4" ng-model="searchTemp.IRCS">
+            <input type="text" id="searchsignal" placeholder="Signal/IRCS" class="form-control" tabindex="4" ng-model="advancedSearchObject.IRCS">
         </div>
         <div class="col-md-2">
-            <input type="text" id="searchcfr" placeholder="CFR" class="form-control" tabindex="5" ng-model="searchTemp.CFR">
+            <input type="text" id="searchcfr" placeholder="CFR" class="form-control" tabindex="5" ng-model="advancedSearchObject.CFR">
         </div>
         <div class="col-md-2">
             <input type="text" id="searchmmsi" placeholder="MMSI" class="form-control" tabindex="6" ng-model="advancedSearchObject.MMSI">
@@ -37,7 +37,7 @@
         </div>
        <div class="col-md-2">
             <p class="input-group nomargin">
-                <input type="text" class="form-control datetimeinput" ng-model="searchTemp.REPORTING_START_DATE" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['reportingStartDate']" close-text="Close" tabindex="8" />
+                <input type="text" class="form-control datetimeinput" ng-model="advancedSearchObject.REPORTING_START_DATE" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['reportingStartDate']" close-text="Close" tabindex="8" />
                 <span class="input-group-btn">
                 <button type="button" class="btn btn-default btn-cal" ng-click="datePicker.open($event, 'reportingStartDate')"><i class="glyphicon glyphicon-calendar"></i></button>
                 </span>
@@ -45,7 +45,7 @@
         </div>
         <div class="col-md-2">
             <p class="input-group nomargin">
-                <input type="text" class="form-control datetimeinput" ng-model="searchTemp.REPORTING_END_DATE" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['reportingEndDate']" close-text="Close" tabindex="9" />
+                <input type="text" class="form-control datetimeinput" ng-model="advancedSearchObject.REPORTING_END_DATE" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['reportingEndDate']" close-text="Close" tabindex="9" />
                 <span class="input-group-btn">
                 <button type="button" class="btn btn-default btn-cal" ng-click="datePicker.open($event, 'reportingEndDate')"><i class="glyphicon glyphicon-calendar"></i></button>
                 </span>

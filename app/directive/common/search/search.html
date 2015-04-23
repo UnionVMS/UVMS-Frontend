@@ -20,19 +20,10 @@
 	                </ul>
             	</div>
             </div>
+
             <!-- Saved groups -->
-            <div class="col-md-2"  ng-show="savedgroups">
-	            <div class="dropdown">
-	                <button class="btn btn-default dropdown-toggle" type="button" id="savedsearches" data-toggle="dropdown" aria-expanded="true">
-	                    <div class="dropdownText">{{'common.search_group_dropdown' | i18n}} </div>
-	                    <span class="caret"></span>
-	                </button>
-	                <ul class="dropdown-menu" role="menu">
-	                    <li ng-repeat="item in savedgroups | orderBy:'name'">
-	                        <a role="menuitem" ng-click="onSavedSearchGroupClick(item)">{{item.name}}</a>
-	                    </li>
-	                </ul>
-	            </div>
+            <div class="col-md-2" ng-show="savedgroups">
+                <dropdown ng-model="savedgroup" initialtext="{{'common.search_group_dropdown' | i18n}}" items="savedgroups" callback="onSavedSearchGroupClick" title="name"></dropdown>
 	        </div>
             <!-- Search button -->
             <div class="col-md-2" ng-show="!advancedSearchVisible">
