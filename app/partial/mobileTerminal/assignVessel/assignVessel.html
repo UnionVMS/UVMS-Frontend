@@ -51,7 +51,7 @@
                                 <td>{{vessel.ircs}}</td>
                                 <td>{{vessel.type}}</td>
                                 <td class="textAlignRight">
-                                    <button type="button" class="btn btn-primary" ng-click="selectVessel(vessel)">SELECT</button>
+                                    <button type="button" class="btn btn-primary" ng-click="selectVessel(vessel)" ng-disabled="!vessel.ircs" title="{{ vessel.ircs ? '' : 'mobileTerminal.assign_vessel_ircs_required' | i18n }}" style="pointer-events: auto;">SELECT</button>
                                 </td>
                             </tr>
                         </table>                            
