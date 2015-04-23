@@ -6,7 +6,7 @@ angular.module('unionvmsWeb').directive('datepickerInput', function() {
 		scope: {
             model : '=',
             placeholder : '@',
-            disabled : '='
+            ngDisabled : '@'
 		},
 		templateUrl: 'directive/common/datepickerInput/datepickerInput.html',
 		link: function(scope, element, attrs, fn) {
@@ -17,7 +17,7 @@ angular.module('unionvmsWeb').directive('datepickerInput', function() {
 });
 
 angular.module('unionvmsWeb')
-    .controller('datepickerInputCtrl', function($scope, searchService, SearchField){
+    .controller('datepickerInputCtrl', function($scope){
         $scope.datePicker = (function () {
         var method = {};
         method.instances = [];
@@ -33,8 +33,8 @@ angular.module('unionvmsWeb')
             startingDay: 0
         };
 
-        var formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-        method.format = formats[4];
+        //TODO: Move date format to configuration
+        method.format = 'yyyy-MM-dd';
         return method;
     }()); 
 });
