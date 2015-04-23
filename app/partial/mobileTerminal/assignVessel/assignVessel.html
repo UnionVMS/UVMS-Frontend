@@ -38,14 +38,14 @@
                         <table class="searchResults" ng-show="assignVesselSearchResults.vessels.length > 0">
                             <thead>
                                 <tr>
-                                    <th sortable-table-header by="assignVesselSearchResultsSortType" reverse="assignVesselSearchResultsSortReverse" order="'countryCode'">Flag State</th>
-                                    <th sortable-table-header by="assignVesselSearchResultsSortType" reverse="assignVesselSearchResultsSortReverse" order="'name'">Vessel name</th>
-                                    <th sortable-table-header by="assignVesselSearchResultsSortType" reverse="assignVesselSearchResultsSortReverse" order="'ircs'">IRCS</th>
-                                    <th sortable-table-header by="assignVesselSearchResultsSortType" reverse="assignVesselSearchResultsSortReverse" order="'type'">Type</th>
+                                    <th sortable-table-header by="assignVesselSearchResults.sortBy" reverse="assignVesselSearchResults.sortReverse" order="'countryCode'">Flag State</th>
+                                    <th sortable-table-header by="assignVesselSearchResults.sortBy" reverse="assignVesselSearchResults.sortReverse" order="'name'">Vessel name</th>
+                                    <th sortable-table-header by="assignVesselSearchResults.sortBy" reverse="assignVesselSearchResults.sortReverse" order="'ircs'">IRCS</th>
+                                    <th sortable-table-header by="assignVesselSearchResults.sortBy" reverse="assignVesselSearchResults.sortReverse" order="'type'">Type</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
-                            <tr ng-repeat="vessel in assignVesselSearchResults.vessels | orderBy:assignVesselSearchResultsSortType:assignVesselSearchResultsSortReverse ">
+                            <tr ng-repeat="vessel in assignVesselSearchResults.vessels | orderBy:assignVesselSearchResults.sortBy:assignVesselSearchResults.sortReverse ">
                                 <td>{{vessel.countryCode}}</td>
                                 <td>{{vessel.name}}</td>
                                 <td>{{vessel.ircs}}</td>
@@ -55,7 +55,7 @@
                                 </td>
                             </tr>
                         </table>                            
-                        <span ng-show="searchError">{{searchError}}</span>
+                        <span ng-show="assignVesselSearchResults.errorMessage">{{assignVesselSearchResults.errorMessage}}</span>
                     </div>
                     <div class="col-md-12" ng-show="assignVesselSearchInProgress">
                         <i class="fa fa-spinner fa-spin fa-pulse"></i> Searching

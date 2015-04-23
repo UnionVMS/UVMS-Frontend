@@ -1,23 +1,39 @@
 angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $location, GetListRequest, vesselRestService, mobileTerminalRestService, alertService, locale, modalComment){
 
+    //Watch for toggle (show) of AssignVessel partial and reset search and selectedVessel when that happens
+    $scope.$watch(function () { 
+        if(angular.isDefined($scope.isVisible)){
+            return $scope.isVisible.assignVessel;
+        }
+    }, function (newVal, oldVal) {
+        if (newVal) {
+            resetSearch();
+            $scope.selectedVessel = undefined;
+        }
+    });   
 
-    //Search objects and results
-    $scope.assignVesselFreeText = "";
-    $scope.assignVesselSearchType = "ALL";
-    $scope.assignVesselSearchTypes =[{'text':'Name/CFR/IRCS','code':'ALL'}, {'text':'Name','code':'NAME'}, {'text':'CFR','code':'CFR'}, {'text':'IRCS','code':'IRCS'}];
-    $scope.assignVesselSearchInProgress = false;
-    var getListRequest;
-
+    //Reset the search for assign vessel
     var resetSearch = function() {
         $scope.assignVesselSearchResults = {
             page : 1,
             totalNumberOfPages : 1,
-            vessels : []
+            vessels : [],
+            sortBy : 'name',
+            sortReverse : false,
+            errorMessage : ""
         };
-        $scope.assignVesselSearchResultsSortType = 'name';
-        $scope.assignVesselSearchResultsSortReverse = false;    
+
+        $scope.assignVesselFreeText = "";
+        $scope.assignVesselSearchType = "ALL";
+        $scope.assignVesselSearchInProgress = false;
         getListRequest = new GetListRequest(1, 5, false, []);
-    };
+    };    
+
+    //Search objects and results
+    $scope.assignVesselSearchTypes =[{'text':'Name/CFR/IRCS','code':'ALL'}, {'text':'Name','code':'NAME'}, {'text':'CFR','code':'CFR'}, {'text':'IRCS','code':'IRCS'}];
+    var getListRequest;
+    resetSearch();
+
 
     var init = function() {
         resetSearch();        
@@ -49,9 +65,9 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
         $scope.assignVesselSearchInProgress = false;
         $scope.assignVesselSearchResults.vessels.length = 0;
         if(vesselListPage.vessels.length === 0 ){
-            $scope.searchError = "No vessels matching you search criteria was found.";
+            $scope.assignVesselSearchResults.errorMessage = "No vessels matching you search criteria was found.";
         } else {
-            $scope.searchError = "";
+            $scope.assignVesselSearchResults.errorMessage = "";
             if(!$scope.assignVesselSearchResults.vessels){
                 $scope.assignVesselSearchResults.vessels = vesselListPage.vessels;
                 $scope.assignVesselSearchResults.totalNumberOfPages = vesselListPage.totalNumberOfPages;
@@ -70,7 +86,7 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
     //Search error
     var onSearchVesselError = function(response){
         $scope.assignVesselSearchInProgress = false;
-        $scope.searchError = "We are sorry... Something took a wrong turn. To err is human but to arr is pirate!!";
+        $scope.assignVesselSearchResults.errorMessage = "We are sorry... Something took a wrong turn. To err is human but to arr is pirate!!";
 
         $scope.assignVesselSearchResults.totalNumberOfPages = 1;
         $scope.assignVesselSearchResults.page = 1;
