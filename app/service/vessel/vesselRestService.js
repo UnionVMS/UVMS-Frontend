@@ -8,6 +8,12 @@ angular.module('unionvmsWeb')
 
         $http.post(baseUrl + "/vessel-rest/vessel/list", getListRequest.toJson())
             .success(function(response, status) {
+
+                if(response.code !== "200"){
+                    deferred.reject("Invalid response status");
+                    return;
+                }
+
                 var vessels = [];
                 if(angular.isArray(response.data.vessel)){
                     for (var i = 0; i < response.data.vessel.length; i ++) {
@@ -56,7 +62,7 @@ angular.module('unionvmsWeb')
         };
         var onError = function(error){
             console.error("Error getting vessels.");
-            return deferred.resolve(error);            
+            return deferred.reject(error);            
         };
 
         //Get vessels

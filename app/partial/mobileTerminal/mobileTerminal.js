@@ -118,8 +118,8 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
     var onGetSearchResultsError = function(error){
         $scope.currentSearchResults.loading = false;
         $scope.currentSearchResults.errorMessage = locale.getString('common.search_failed_error');
-        $scope.currentSearchResults.totalNumberOfPages = 1;
-        $scope.currentSearchResults.page = 1;
+        $scope.currentSearchResults.totalNumberOfPages = 0;
+        $scope.currentSearchResults.page = 0;
     };
 
     $scope.$on("$destroy", function() {
