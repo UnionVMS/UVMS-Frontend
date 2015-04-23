@@ -43,12 +43,24 @@ angular.module('unionvmsWeb')
             return moment(this.installed).format("YYYY-MM-DD");
         };
 
+        MobileTerminalHistory.prototype.getFormattedInstalledDateAndTime = function() {
+            return moment(this.installed).format("YYYY-MM-DD : h:mm:ss");
+        };
+
         MobileTerminalHistory.prototype.getFormattedUninstalled = function() {
             return moment(this.uninstalled).format("YYYY-MM-DD");
         };
 
+        MobileTerminalHistory.prototype.getFormattedUninstalledAndTime = function() {
+            return moment(this.uninstalled).format("YYYY-MM-DD : h:mm:ss");
+        };
+
         MobileTerminalHistory.prototype.getFormattedChangeDate = function() {
             return moment(this.changeDate).format("YYYY-MM-DD");
+        };
+
+        MobileTerminalHistory.prototype.getFormattedChangeDateAndTime = function() {
+            return moment(this.changeDate).format("YYYY-MM-DD : h:mm:ss");
         };
 
         return MobileTerminalHistory;

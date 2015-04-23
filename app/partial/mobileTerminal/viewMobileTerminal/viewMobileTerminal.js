@@ -7,14 +7,7 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
     //Watch for changes to the vesselObj
     $scope.$watch(function () { return $scope.currentMobileTerminal;}, function (newVal, oldVal) {
         if (typeof newVal !== 'undefined') {
-            console.log("new mobile view");
-            //Remove history items
-            $scope.currentMobileTerminalHistory = [];
 
-            //Get new history
-            if($scope.currentMobileTerminal.hasInternalId()){
-                getMobileTerminalHistoryForCurrentMobileTerminal();
-            }
         }
     });       
 
@@ -57,7 +50,6 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
 
     //Handle click event on inactive link
     $scope.setStatusToInactiveWithComment = function(comment){
-        console.log("Set status to inactive");
         mobileTerminalRestService.inactivateMobileTerminal($scope.currentMobileTerminal, comment).then(setStatusToInactiveSuccess, setStatusToInactiveError);
     };
 
@@ -111,6 +103,8 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
     //Success getting history
     var onGetMobileTerminalHistorySuccess = function(historyList) {
         $scope.currentMobileTerminalHistory = historyList;
+         openMobileTerminalHistoryModal($scope.currentMobileTerminalHistory, $scope.currentMobileTerminal.mobileTerminalId);
+
     };
 
     //Error getting history
@@ -121,13 +115,11 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
     //Historymodal
     $scope.onMobileTerminalHistoryClick = function(){
         //TODO: add carriername...
-        openMobileTerminalHistoryModal($scope.currentMobileTerminalHistory, $scope.currentMobileTerminal.mobileTerminalId);
+         getMobileTerminalHistoryForCurrentMobileTerminal();
     };
 
    var openMobileTerminalHistoryModal = function(currentMobileTerminalHistory, mobileTerminalId){
-            console.info("HISTORYMODAL OPEN");
-            console.info(currentMobileTerminalHistory);
-                    
+            
             var modalInstance = $modal.open({
               templateUrl: 'partial/mobileTerminal/mobileTerminalHistoryModal/mobileTerminalHistoryModal.html',
               controller: 'mobileTerminalHistoryModalCtrl',

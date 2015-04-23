@@ -5,7 +5,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalHistoryModalCtrl',functi
 
     //Current filter and sorting for the results table
     $scope.sortType = 'changeDate';
-    $scope.sortReverse = false;
+    $scope.sortReverse = true;
 
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
