@@ -193,6 +193,7 @@ angular.module('unionvmsWeb')
         //Unassign the mobileTerminal from its carrier
         MobileTerminal.prototype.unassign = function(){
             this.carrierId = undefined;
+            this.associatedVessel = undefined;
         };
 
         //Check if the mobileTerminal is assigned to a carrier
