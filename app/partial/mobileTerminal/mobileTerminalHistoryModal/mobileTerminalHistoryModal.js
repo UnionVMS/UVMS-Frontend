@@ -1,14 +1,14 @@
-angular.module('unionvmsWeb').controller('mobileTerminalHistoryModalCtrl',function($scope, $modalInstance, currentMobileTerminalHistory, $filter, mobileTerminalId){
+angular.module('unionvmsWeb').controller('mobileTerminalHistoryModalCtrl',function($scope, $modalInstance, currentMobileTerminalHistory, mobileTerminalId){
 
-$scope.currentMobileTerminalHistory = currentMobileTerminalHistory;
-$scope.mobileTerminalId = mobileTerminalId;
+    $scope.currentMobileTerminalHistory = currentMobileTerminalHistory;
+    $scope.mobileTerminalId = mobileTerminalId;
 
-//Current filter and sorting for the results table
+    //Current filter and sorting for the results table
     $scope.sortType = 'changeDate';
     $scope.sortReverse = false;
 
-$scope.cancel = function () {
-    $modalInstance.dismiss('cancel');
-  };
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
 
 });
