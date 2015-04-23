@@ -10,15 +10,15 @@
         </div>
         <div class="inputgroup col-md-2">
             <p class="labelheaders">{{ 'vessel.vessel_details_flagstate' | i18n }}</p>
-            <dropdown ng-model="vessel.countryCode" initialtext="{{ 'vessel.vessel_details_flagstate' | i18n }}" items="vesselCountries" disabled="disableForm"></dropdown>
+            <dropdown ng-model="vessel.countryCode" initialtext="{{ 'vessel.vessel_details_flagstate' | i18n }}" items="vesselCountries" ng-disabled="disableForm"></dropdown>
         </div>
         <div class="inputgroup col-md-2">
             <p class="labelheaders">{{ 'vessel.vessel_details_type' | i18n }}</p>
-            <dropdown ng-model="vessel.vesselType" initialtext="{{ 'vessel.vessel_details_type' | i18n }}" items="vesselActivitytTypes" disabled="disableForm"></dropdown>
+            <dropdown ng-model="vessel.vesselType" initialtext="{{ 'vessel.vessel_details_type' | i18n }}" items="vesselActivitytTypes" ng-disabled="disableForm"></dropdown>
         </div>
         <div class="inputgroup col-md-1">
             <p class="labelheaders">{{ 'vessel.vessel_details_has_IRCS' | i18n }}</p>
-            <dropdown ng-model="vessel.hasIrcs" initialtext="{{ 'vessel.vessel_details_has_IRCS' | i18n }}" items="vesselHasIrcTypes" disabled="disableForm"></dropdown>
+            <dropdown ng-model="vessel.hasIrcs" initialtext="{{ 'vessel.vessel_details_has_IRCS' | i18n }}" items="vesselHasIrcTypes" ng-disabled="disableForm"></dropdown>
         </div>
         <div class="inputgroup col-md-2">
             <p class="labelheaders">{{ 'vessel.vessel_details_IRCS_code' | i18n }}</p>
@@ -46,11 +46,11 @@
         </div>
         <div class="inputgroup col-md-1">
             <p class="labelheaders">{{ 'vessel.vessel_details_license' | i18n }}</p>
-            <dropdown ng-model="vessel.hasLicense" initialtext="{{ 'vessel.vessel_details_license' | i18n }}" items="vesselHasLicenseTypes" disabled="disableForm"></dropdown>
+            <dropdown ng-model="vessel.hasLicense" initialtext="{{ 'vessel.vessel_details_license' | i18n }}" items="vesselHasLicenseTypes" ng-disabled="disableForm"></dropdown>
         </div>
         <div class="inputgroup col-md-2">
             <p class="labelheaders">{{ 'vessel.vessel_details_license_type' | i18n }}</p>
-            <dropdown ng-model="licensetype" initialtext="{{ 'vessel.vessel_details_license_type' | i18n }}" items="vesselLicensTypes" disabled="disableForm"></dropdown>
+            <dropdown ng-model="licensetype" initialtext="{{ 'vessel.vessel_details_license_type' | i18n }}" items="vesselLicensTypes" ng-disabled="disableForm"></dropdown>
         </div>
         <div class="inputgroup col-md-3">
             <p class="labelheaders col-md-12 nopaddingleft">{{ 'vessel.vessel_details_home_port_code' | i18n }}</p>
@@ -69,7 +69,7 @@
         </div>
         <div class="inputgroup col-md-1 nopaddingleft">
             <p class="labelheaders"></p>
-            <dropdown ng-model="lenght" initialtext="{{ 'vessel.vessel_details_length' | i18n }}" items="vesseloveralltypes" disabled="disableForm"></dropdown>
+            <dropdown ng-model="lenght" initialtext="{{ 'vessel.vessel_details_length' | i18n }}" items="vesseloveralltypes" ng-disabled="disableForm"></dropdown>
         </div>
         <div class="inputgroup col-md-1">
             <p class="labelheaders">{{ 'vessel.vessel_details_tonnage' | i18n }}</p>
@@ -77,7 +77,7 @@
         </div>
         <div class="inputgroup col-md-1 nopaddingleft">
             <p class="labelheaders"></p>
-            <dropdown ng-model="vesselUnitOfMessure" initialtext="{{ 'vessel.vessel_details_tonnage' | i18n }}" items="vesselUnitOfMessures" disabled="disableForm"></dropdown>
+            <dropdown ng-model="vesselUnitOfMessure" initialtext="{{ 'vessel.vessel_details_tonnage' | i18n }}" items="vesselUnitOfMessures" ng-disabled="disableForm"></dropdown>
         </div>
         <div class="inputgroup col-md-1">
             <p class="labelheaders">{{ 'vessel.vessel_details_power' | i18n }}</p>
@@ -85,7 +85,7 @@
         </div>
         <div class="inputgroup col-md-1 nopaddingleft">
             <p class="labelheaders"></p>
-            <dropdown ng-model="vesselEffect" initialtext="{{ 'vessel.vessel_details_power' | i18n }}" items="vesselEffectTypes" disabled="disableForm"></dropdown>
+            <dropdown ng-model="vesselEffect" initialtext="{{ 'vessel.vessel_details_power' | i18n }}" items="vesselEffectTypes" ng-disabled="disableForm"></dropdown>
         </div>
         <div class="inputgroup col-md-3">
             <p class="labelheaders col-md-12 nopaddingleft">PRODUCER CODE - NAME</p>

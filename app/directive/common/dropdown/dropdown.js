@@ -8,7 +8,7 @@ angular.module('unionvmsWeb')
             items : '=',
             ngModel:'=',
             callback : '=',
-            disabled : '='
+            ngDisabled : '='
 		},
 		templateUrl: 'directive/common/dropdown/dropdown.html',
 		link: function(scope, element, attrs, fn) {
