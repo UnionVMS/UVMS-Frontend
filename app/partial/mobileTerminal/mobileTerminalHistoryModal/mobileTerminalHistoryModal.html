@@ -7,8 +7,12 @@
 	</div>
 	<div class="modal-body row">
 		<div class="col-md-12">
-			<div class="modalhistoryheader"><p>{{'mobileTerminal.history_modal_sattelitenumber' | i18n | uppercase }}</p><p>&nbsp;{{ mobileTerminalId.ids.SERIAL_NUMBER | uppercase}}</p></div>
-			<div class="modalhistoryheader"><p>{{'mobileTerminal.history_modal_transpondertype' | i18n | uppercase}}</p><p>&nbsp;{{ mobileTerminalId.systemType | uppercase}}</p></div>
+			<div class="modalhistoryheader">
+                <p>{{'mobileTerminal.history_modal_serialnumber' | i18n | uppercase }}</p><p>&nbsp;{{ mobileTerminalId.ids.SERIAL_NUMBER | uppercase}}</p>
+            </div>
+			<div class="modalhistoryheader">
+                <p>{{'mobileTerminal.history_modal_transpondertype' | i18n | uppercase}}</p><p>&nbsp;{{ mobileTerminalId.systemType | uppercase}}</p>
+            </div>
 			<table class="col-md-12">
 				<thead>
 					<tr>
