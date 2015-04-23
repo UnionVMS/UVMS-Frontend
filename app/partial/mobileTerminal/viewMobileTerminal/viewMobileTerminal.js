@@ -3,13 +3,7 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
     $controller('mobileTerminalFormCtrl', { $scope: $scope });
 
     $scope.disableSerialNumber = true;
-
-    //Watch for changes to the vesselObj
-    $scope.$watch(function () { return $scope.currentMobileTerminal;}, function (newVal, oldVal) {
-        if (typeof newVal !== 'undefined') {
-
-        }
-    });       
+      
 
     //Update the mobile terminal
     $scope.updateMobileTerminalWithComment = function(comment){
