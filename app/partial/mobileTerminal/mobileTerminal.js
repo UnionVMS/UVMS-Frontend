@@ -1,7 +1,5 @@
 angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService, alertService,MobileTerminalListPage, MobileTerminal, mobileTerminalRestService, locale){
 
-    $scope.currentSearchResults = new MobileTerminalListPage();
-
     //Keep track of visibility statuses
     $scope.isVisible = {
         search : true,
@@ -15,7 +13,9 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
         totalNumberOfPages : 0,
         mobileTerminals : [],
         errorMessage : "",
-        loading : false
+        loading : false,
+        sortBy : "",
+        sortReverse : ""
     };    
 
     $scope.editSelectionDropdownItems =[{'text':'Poll terminals','code':'POLL'}, {'text':'Export selection','code':'EXPORT'}];
