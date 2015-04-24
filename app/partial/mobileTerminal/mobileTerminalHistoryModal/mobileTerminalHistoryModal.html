@@ -1,8 +1,8 @@
-<div>
+<div class="mobileTerminalHistoryModal">
 	<div class="modal-header row">
 		<div class="col-md-12">
        		<div class="closehistorymodal row pull-right" ng-click="cancel()"> <img src="assets/images/close.png" /></div>
-        	<div class="vesselname">{{ 'mobileTerminal.history_modal_header' | i18n | uppercase}}</div>
+        	<div class="headerWithBottomBorder">{{ 'mobileTerminal.history_modal_header' | i18n | uppercase}}</div>
 		</div>
 	</div>
 	<div class="modal-body row">
@@ -13,7 +13,7 @@
 			<div class="modalhistoryheader">
                 <p>{{'mobileTerminal.history_modal_transpondertype' | i18n | uppercase}}</p><p>&nbsp;{{ mobileTerminalId.systemType | uppercase}}</p>
             </div>
-			<table class="col-md-12">
+			<table class="col-md-12 searchResults">
 				<thead>
 					<tr>
 						<th sortable-table-header by="sortType" reverse="sortReverse" order="'eventCode'">{{'mobileTerminal.history_modal_eventcode' | i18n }}</th>
@@ -25,7 +25,7 @@
 						<th sortable-table-header by="sortType" reverse="sortReverse" order="'satelliteNumber'">{{'mobileTerminal.history_modal_satelliteno' | i18n }}</th>
 						<th sortable-table-header by="sortType" reverse="sortReverse" order="'changeDate'">{{'mobileTerminal.history_modal_changeddate' | i18n }}</th>
 						<th sortable-table-header by="sortType" reverse="sortReverse" order="'comment'">{{'mobileTerminal.history_modal_comments' | i18n }}</th>
-						<th><p>{{'mobileTerminal.history_modal_auditlogs' | i18n }}</p></th>
+						<th>{{'mobileTerminal.history_modal_auditlogs' | i18n }}</th>
 					</tr>
 				</thead>
 	            <tbody>
@@ -39,7 +39,7 @@
 	                    <td>{{item.satelliteNumber}}</td>
 	                    <td>{{item.getFormattedChangeDateAndTime()}}</td>
 	                    <td>{{item.comment}}</td>
-	                    <td><a href="">Audit</a></td>
+	                    <td><a href="">See logs</a></td>
 	                </tr>
 	             </tbody>
 	        </table>
@@ -47,7 +47,7 @@
 	</div>
 	<div class="modal-footer row">
 		<div class="col-md-12">
-    		<button type="button" class="btn btn-primary" ng-click="cancel()">{{ 'mobileTerminal.history_modal_closebutton' | i18n }}</button>
+    		<button type="button" class="btn btn-primary" ng-click="cancel()">{{ 'mobileTerminal.history_modal_closebutton' | i18n | uppercase}}</button>
 		</div>
 	</div>
 </div>

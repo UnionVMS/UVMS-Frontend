@@ -16,11 +16,11 @@ describe('MobileTerminalHistory', function() {
             "fieldType": "SATELLITE_NUMBER",
             "value": "2345"
         },
-        "installed": {
+        "installedOn": {
             "fieldType": "INSTALLED_ON",
             "value": 1429367200000
         },        
-        "uninstalled": {
+        "uninstalledOn": {
             "fieldType": "UNINSTALLED_ON",
             "value": 1427467200000
         },              
@@ -36,10 +36,9 @@ describe('MobileTerminalHistory', function() {
 
         expect(history.dnid).toEqual(responseData.dnid.value);
         expect(history.memberId).toEqual(responseData.memberId.value);
-        expect(history.memberId).toEqual(responseData.memberId.value);
         expect(history.satelliteNumber).toEqual(responseData.satelliteNumber.value);
-        expect(history.installed).toEqual(responseData.installed.value);
-        expect(history.uninstalled).toEqual(responseData.uninstalled.value);
+        expect(history.installed).toEqual(responseData.installedOn.value);
+        expect(history.uninstalled).toEqual(responseData.uninstalledOn.value);
     }));
 
 

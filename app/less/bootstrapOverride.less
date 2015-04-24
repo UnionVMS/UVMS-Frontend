@@ -64,6 +64,17 @@ li, li a{
     }
 }
 
+//Modal sizes
+@media (min-width: @screen-sm-min) {
+  .modal-lg { width: @screen-sm - 40px; }
+}
+@media (min-width: @screen-md-min) {
+  .modal-lg { width: @screen-md - 40px; }
+}
+@media (min-width: @screen-lg-min) {
+  .modal-lg { width: @screen-lg - 40px; }
+}
+
 /*Buttons*/
 button{
     &:hover,&:active, &:focus{

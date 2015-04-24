@@ -26,13 +26,13 @@ angular.module('unionvmsWeb')
             }
 
             //INSTALLED ON
-            if(angular.isDefined(data.installed)){
-                history.installed = data.installed.value;
+            if(angular.isDefined(data.installedOn)){
+                history.installed = data.installedOn.value;
             }        
 
-            //UNINSTALLED
-            if(angular.isDefined(data.uninstalled)){
-                history.uninstalled = data.uninstalled.value;
+            //UNINSTALLED ON
+            if(angular.isDefined(data.uninstalledOn)){
+                history.uninstalled = data.uninstalledOn.value;
             }                       
 
             return history;
