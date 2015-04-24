@@ -23,8 +23,13 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="item in currentSearchResults.mobileTerminals | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
-                <td><input type="checkbox" ng-model="item.Selected" ng-click="checkedVessel(item)"/></td>
+            <tr ng-repeat="item in currentSearchResults.mobileTerminals | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">            
+                <td>
+                    <div class="iconToTheLeftOfTheTableCell" ng-show="!item.associatedVessel">
+                        <div class="unassignedIcon" tooltip-placement="bottom" tooltip="{{'mobileTerminal.table_not_assigned_icon_tooltip' | i18n}}">!</div>
+                    </div>
+                    <input type="checkbox" ng-model="item.Selected" ng-click="checkedVessel(item)"/>
+                </td>
                 <td>
                     <span ng-show="item.associatedVessel">{{item.associatedVessel.name}}</span>
                     <span ng-show="item.carrierId && !item.associatedVessel">{{item.carrierId.carrierType}} with {{item.carrierId.idType}}: {{item.carrierId.value}}</span>
