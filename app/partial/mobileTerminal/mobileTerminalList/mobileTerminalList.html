@@ -1,6 +1,6 @@
 <div class="row" ng-controller="MobileterminallistCtrl">
     <div class="col-md-12">
-        <table class="searchResults">
+        <table class="searchResults mobileTerminalsTable">
             <thead>
             <tr>
                 <th><input type="checkbox" ng-model="item.selectedAll" ng-click="checkAll()"/></th>
@@ -18,12 +18,14 @@
 
                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.mmsiNo'">{{'mobileTerminal.table_header_mmsi_no' | i18n}}</th>
 
+                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'active'">{{'mobileTerminal.table_header_status' | i18n}}</th>
+
                 <th>{{'mobileTerminal.table_header_detail_button' | i18n}}</th>
                 <th>{{'mobileTerminal.table_header_logs' | i18n}}</th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="item in currentSearchResults.mobileTerminals | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">            
+            <tr ng-repeat="item in currentSearchResults.mobileTerminals | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" ng-class="{'inactive':!item.active}">            
                 <td>
                     <div class="iconToTheLeftOfTheTableCell" ng-show="!item.associatedVessel">
                         <div class="unassignedIcon" tooltip-placement="bottom" tooltip="{{'mobileTerminal.table_not_assigned_icon_tooltip' | i18n}}">!</div>
@@ -35,15 +37,19 @@
                     <span ng-show="item.carrierId && !item.associatedVessel">{{item.carrierId.carrierType}} with {{item.carrierId.idType}}: {{item.carrierId.value}}</span>
                     <span ng-show="!item.carrierId && !item.associatedVessel">{{'mobileTerminal.table_vessel_name_not_assigned' | i18n}}</span>
                 </td>
-                <td>{{item.mobileTerminalId.ids.SERIAL_NUMBER}}</td>
-                <td>{{item.channels[0].ids.MEMBER_ID}}</td>
-                <td>{{item.channels[0].ids.DNID}}</td>
-                <td>{{item.mobileTerminalId.systemType}}</td>
-                <td>{{item.attributes.SATELLITE_NUMBER}}</td>
+                <td class="statusColored">{{item.mobileTerminalId.ids.SERIAL_NUMBER}}</td>
+                <td class="statusColored">{{item.channels[0].ids.MEMBER_ID}}</td>
+                <td class="statusColored">{{item.channels[0].ids.DNID}}</td>
+                <td class="statusColored">{{item.mobileTerminalId.systemType}}</td>
+                <td class="statusColored">{{item.attributes.SATELLITE_NUMBER}}</td>
                 <td>
                     <span ng-show="item.associatedVessel">{{item.associatedVessel.mmsiNo}}</span>
                     <span ng-show="item.associatedVessel && !item.associatedVessel.mmsiNo"> - </span>
-                    </td>
+                </td>
+                <td>
+                    <span ng-show="item.active">{{'common.active' | i18n}}</span>
+                    <span ng-show="!item.active">{{'common.inactive' | i18n}}</span>
+                </td>
                 <td>
                     <button class="btn btn-primary" ng-click="toggleMobileTerminalDetails(item)">
                         {{'mobileTerminal.table_header_detail_button' | i18n}}
