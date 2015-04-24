@@ -3,7 +3,7 @@
     "choose" : "Choose",
     "close" : "Close" ,
     "comment" : "Comment",
-    "comment_placeholder" : "Write a comment...",
+    "comment_modal_comment_placeholder" : "Log a reason to your changes",
     "no" : "No" ,
     "remove" : "Remove",
     "reset" : "Reset",

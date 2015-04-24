@@ -7,7 +7,7 @@ app.controller('modalCommentCtrl', function($scope, $modalInstance, options, loc
 		title: options.titleLabel || locale.getString("common.comment"),
 		save: options.saveLabel || locale.getString("common.save"),
 		cancel: options.cancelLabel || locale.getString("common.cancel"),
-		placeholder: options.placeholderLabel || locale.getString("common.comment_placeholder")
+		placeholder: options.placeholderLabel || locale.getString("common.comment_modal_comment_placeholder")
 	};
 
 	$scope.save = function() {
