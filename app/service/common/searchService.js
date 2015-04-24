@@ -9,7 +9,16 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
 			return vesselRestService.getVesselList(getListRequest);
 		},
         //Do the search for mobile terminals
-        searchMobileTerminals : function(){
+        //If skipVesselSearch=true then no search to vessel module is performed 
+        // and all serach criterias are sent directly to mobile terminal search
+        searchMobileTerminals : function(skipVesselSearch){
+
+            //Get mobile terminals without getting vessels first
+            if(skipVesselSearch){
+                return mobileTerminalRestService.getMobileTerminalList(getListRequest);
+            }
+
+
             var newSearchCriterias = [],
                 vesselSearchCriteria = [];
 

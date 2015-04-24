@@ -1,10 +1,10 @@
 angular.module('unionvmsWeb')
-    .controller('AdvancedSearchMobileTerminalFormCtrl', function($scope, $modal, searchService, vesselRestService){
+    .controller('AdvancedSearchMobileTerminalFormCtrl', function($scope, vesselRestService){
 
         $scope.vesselGroupDropdownItems = [];
         $scope.selectedVesselGroup = "";
 
-        //Watch for changes to the searchService criterias
+        //Watch for changes to the input fields
         $scope.onSearchInputChange = function(){
             $scope.selectedVesselGroup = "";
         };
@@ -24,9 +24,9 @@ angular.module('unionvmsWeb')
 
         //Success getting vesselGroups for the user
         var onVesselGroupListSuccess = function(savedSearchGroups){
-            $.each(savedSearchGroups, function(index, group){
+            /*$.each(savedSearchGroups, function(index, group){
                 $scope.vesselGroupDropdownItems.push({'text': group.name, 'code': group.id});
-            });
+            });*/
             $scope.vesselGroups = savedSearchGroups;
         };
 
@@ -42,17 +42,8 @@ angular.module('unionvmsWeb')
         };        
 
         //Select a vessel group to search mobile terminals for
-        $scope.searchSelectedGroup = function(selectedItem){
-            var savedSearchGroup;
-            //Find the selected group
-            $.each($scope.vesselGroups, function(index, group){
-                if(group.id === selectedItem.code){
-                    savedSearchGroup = group;
-                }
-            });
+        $scope.searchSelectedGroup = function(savedSearchGroup){
             $scope.resetAdvancedSearchForm(false);
-            console.log("search for group");
-            console.log(savedSearchGroup);
             $scope.performSavedGroupSearch(savedSearchGroup);
         };
 

@@ -6,7 +6,7 @@
         </button>
         <ul class="dropdown-menu" role="menu">
             <li ng-class="item.code.length === 0 ? 'disabled' : ''" ng-repeat="item in items" role="presentation" ng-click="selectVal(item,$index)">
-                <a role="menuitem" tabindex="-1">{{ title ? item[title] : item.text }}</a>
+                <a role="menuitem" tabindex="-1">{{getItemLabel(item)}}</a>
             </li>
         </ul>
     </div>
