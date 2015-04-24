@@ -65,11 +65,13 @@ angular.module('unionvmsWeb')
         $scope.searchfunc();
     };  
 
-    //Reset the advacned search form inputs
-    $scope.resetAdvancedSearchForm = function(){
+    //Reset the advacned search form inputs and do a search if sendSearchRequest is set to true
+    $scope.resetAdvancedSearchForm = function(sendSearchRequest){
         searchService.resetAdvancedSearch();    
         $scope.advancedSearchObject  = searchService.getAdvancedSearchObject();
-        $scope.performAdvancedSearch();
+        if(sendSearchRequest){
+            $scope.performAdvancedSearch();
+        }
     };
 
     //TODO: Remove when advanced search form for vessel has been updated to use datepicker-input directive

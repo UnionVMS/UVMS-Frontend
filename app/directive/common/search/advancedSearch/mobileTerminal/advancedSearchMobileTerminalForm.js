@@ -38,7 +38,7 @@ angular.module('unionvmsWeb')
         //Reset the form
         $scope.resetAdvancedMobileSearchForm = function(){
             $scope.selectedVesselGroup = "";
-            $scope.resetAdvancedSearchForm();    
+            $scope.resetAdvancedSearchForm(true);    
         };        
 
         //Select a vessel group to search mobile terminals for
@@ -50,7 +50,7 @@ angular.module('unionvmsWeb')
                     savedSearchGroup = group;
                 }
             });
-            $scope.resetAdvancedSearchForm();
+            $scope.resetAdvancedSearchForm(false);
             console.log("search for group");
             console.log(savedSearchGroup);
             $scope.performSavedGroupSearch(savedSearchGroup);
