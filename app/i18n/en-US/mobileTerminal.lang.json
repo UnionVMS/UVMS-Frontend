@@ -55,6 +55,7 @@
     "form_inmarsatc_communication_channel_stopped_label" : "Stopped",
     "form_inmarsatc_communication_channel_sort_up_title" : "Move up",
     "form_inmarsatc_communication_channel_sort_down_title" : "Move down",
+    "form_inmarsatc_communication_channels_used_for_polling" : "Used for polling!",
     "view_header" : "Mobile terminal information",
     "view_header" : "Mobile terminal information",
     "activate_link" : "Activate",

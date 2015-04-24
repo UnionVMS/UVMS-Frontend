@@ -90,9 +90,10 @@
                         <i class="fa fa-lg fa-arrow-down" title="{{'mobileTerminal.form_inmarsatc_communication_channel_sort_down_title' | i18n}}" ng-click="moveChannel($index, $index+1)" ng-show="$index < currentMobileTerminal.channels.length -1"></i>
                         &nbsp;
                     </div>
-                    <div class="remove">
-                        <i class="fa fa-lg fa-times" title="{{'common.remove' | i18n}}" ng-click="removeChannel($index)" ng-show="$index > 0"></i>
+                    <div class="remove" ng-show="$index > 0">
+                        <i class="fa fa-lg fa-times" title="{{'common.remove' | i18n}}" ng-click="removeChannel($index)"></i>
                     </div>
+                    <div class="pollingInfo" ng-show="$index == 0 && currentMobileTerminal.channels.length > 1">{{'mobileTerminal.form_inmarsatc_communication_channels_used_for_polling' | i18n}}</div>
                     
                 </div>
             </div>       

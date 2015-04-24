@@ -27,10 +27,11 @@
             cursor: pointer;
         }
 
+        @sortWidth:50px;
         .sort{
             float:left;
-            width: 50px;
-            min-width: 50px;
+            width: @sortWidth;
+            min-width: @sortWidth;
         }
 
         //Remove channel
@@ -38,6 +39,14 @@
             float:left;
             margin-left: 10px;
             color:red;
+        }
+        .pollingInfo{
+            float:left;
+            position: relative;
+            top:-17px;
+            margin-left: @sortWidth + 10px;
+            font-size: 10px;
+            font-weight: bold;
         }
     }
 }
