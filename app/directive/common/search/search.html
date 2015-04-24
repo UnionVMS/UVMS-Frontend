@@ -1,15 +1,15 @@
 <div class="searchFormContainer">
     <div class="row">
         <div class="searchTools col-md-12">
-
             <!-- Search input -->
             <div class="col-md-2 nopaddingleft">
                 <input type="text" class="form-control searchText" ng-disabled="advancedSearchVisible"
                        placeholder="{{'common.search' | i18n}}" ng-model="freeText">
             </div>
+
             <!-- Type Dropdown -->
             <div class="col-md-2">
-	            <div class="dropdown">
+	            <div class="dropdown simpleSearch">
 	                <button class="btn btn-default dropdown-toggle" type="button" 
 	                        data-toggle="dropdown" aria-expanded="true">
 	                    <div class="dropdownText">All</div>
@@ -23,7 +23,7 @@
 
             <!-- Saved groups -->
             <div class="col-md-2" ng-show="savedgroups">
-                <dropdown ng-model="savedgroup" initialtext="{{'common.search_group_dropdown' | i18n}}" items="savedgroups" callback="onSavedSearchGroupClick" title="name"></dropdown>
+                <dropdown class="dropdown simpleSearch" ng-model="savedgroup" initialtext="{{'common.search_group_dropdown' | i18n}}" items="savedgroups" callback="onSavedSearchGroupClick" title="name"></dropdown>
 	        </div>
             <!-- Search button -->
             <div class="col-md-2" ng-show="!advancedSearchVisible">
@@ -32,17 +32,17 @@
                 </button>
             </div>
             <!-- Save groups button -->
-            <div class="col-md-2 pull-right nopaddingright" ng-show="advancedSearchVisible" >
+            <div class="col-md-2 pull-right" ng-show="advancedSearchVisible" >
                 <button type="button" class="btn btn-default uvmsbtn savedgroupbtn pull-right" ng-click="openSaveGroupModal()">{{'common.search_group_save' | i18n}}</button>
             </div>
         </div>
     </div>
 
-    <div class="advancedSearchContainer row" ng-show="advancedSearchAvailable">
+    <div class="advancedSearchContainer col-md-12 nopaddingleft" ng-show="advancedSearchAvailable">
         <div class="advancesearchbody fadein fadeout" ng-show="advancedSearchVisible">
             <advanced-search searchfunc="searchFunc" modeltype="modeltype" advancedsearchvisible="advancedSearchVisible"></advanced-search>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2 nopaddingleft">
             <span class="link underline" ng-click="toggleAdvancedSearch()" ng-class="advancedSearchVisible ? 'prefixWithMinus' : 'prefixWithPlus'">            
                 {{'common.search_advanced_link' | i18n}}
             </span>

@@ -25,6 +25,14 @@ describe('mobileTerminalHistoryModalCtrl', function() {
             scope.cancel();
             expect(modalInstance.dismiss).toHaveBeenCalledWith('cancel');
         });
+
+    });
+
+    describe('cancelbutton', function() {
+        it('should dismiss the modal on x button', function(){
+            scope.cancel();
+            expect(modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+        });
     });
 
 });

@@ -12,10 +12,8 @@ angular.module('unionvmsWeb')
             this.channels = [];
             //Add an initial channel
             this.channels.push(new CommunicationChannel(1));
-
             this.active = true;
             this.carrierId = undefined;
-
             this.associatedVessel = undefined;
         }
 

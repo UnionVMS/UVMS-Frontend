@@ -1,6 +1,6 @@
 <div ng-controller="AdvancedSearchVesselFormCtrl">
-    <div class="row">
-        <div class="col-md-2 nopaddingleft">
+    <div class="row nopaddingleft">
+        <div class="col-md-2">
             <div class="dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="advancesearchflagstate" data-toggle="dropdown" aria-expanded="true" ng-model="advancedSearchObject.FLAG_STATE">
                     <div class="dropdowntext">{{ searchFlagState }} </div>
@@ -31,8 +31,8 @@
         </div>
 
     </div>
-    <div class="row">
-        <div class="col-md-2 nopaddingleft">
+    <div class="row nopaddingleft">
+        <div class="col-md-2">
             <input type="text" id="searchhomeport" placeholder="Homeport name" class="form-control" tabindex="7" ng-model="advancedSearchObject.HOMEPORT">
         </div>
        <div class="col-md-2">
@@ -95,10 +95,10 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row nopaddingleft">
         <div class="col-md-12">
             <!-- Search button -->
-            <div class="col-md-2">
+            <div class="col-md-2 nopaddingleft">
                 <button type="button" class="btn btn-primary btn-lg searchButton" ng-click="performAdvancedSearch()">
                     <span class="fa fa-search" aria-hidden="true"></span>
                 </button>

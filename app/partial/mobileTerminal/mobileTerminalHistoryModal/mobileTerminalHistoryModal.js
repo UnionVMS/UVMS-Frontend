@@ -10,5 +10,4 @@ angular.module('unionvmsWeb').controller('mobileTerminalHistoryModalCtrl',functi
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
     };
-
 });
