@@ -108,3 +108,30 @@ button{
     margin-top: 0px;
     margin-bottom: 0px;
 }
+/*TABS*/
+ul.nav-tabs{
+    li{
+        background:@buttoncolor;
+        text-transform: uppercase;
+        
+        a{
+            border-radius: 0px;
+            color:#fff;
+            margin-right: 0px;
+            &:hover, &:focus, &:active{
+                background:@buttonhovercolor;
+                border-color: transparent;
+            }
+        }
+
+        &.active{
+            background: #fff;
+            a{
+                color:#000;
+                &:hover, &:focus, &:active{
+                    background: #fff;
+                }
+            }
+        }
+    }
+}

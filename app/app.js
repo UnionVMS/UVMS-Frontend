@@ -20,8 +20,11 @@ angular.module('unionvmsWeb').config(function($routeProvider) {
         .when('/communication', {
             templateUrl: 'partial/mobileTerminal/mobileTerminal.html', 
             resolve: generalRouteResolves
+        })
+        .when('/communication/polling', {
+            templateUrl: 'partial/polling/polling.html', 
+            resolve: generalRouteResolves
         });
-
     /* Add New Routes Above */
     $routeProvider.otherwise({redirectTo:'/today'});
 
@@ -67,6 +70,7 @@ angular.module('unionvmsWeb').factory('initService',function(locale) {
                 'common',
                 'header',
                 'mobileTerminal',
+                'polling',
                 'vessel'
             ]);
         },

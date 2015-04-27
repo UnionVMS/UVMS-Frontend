@@ -43,7 +43,7 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $loca
     });    
 
     $scope.isActive = function(viewLocation){
-        var active = (viewLocation === $location.path());
+        var active = ($location.path().indexOf(viewLocation) >= 0);
         return active;
     };
 

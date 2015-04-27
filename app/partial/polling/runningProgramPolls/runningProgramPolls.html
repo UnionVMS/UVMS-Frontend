@@ -1,0 +1,53 @@
+<div class="row" ng-controller="RunningProgramPollsCtrl">
+    <div class="col-md-12">
+        <table class="searchResults mobileTerminalsTable">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" ng-model="item.selectedAll" ng-click="checkAll()"/></th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.name'">Name</th>
+
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.ids.SERIAL_NUMBER'">Transponderr</th>
+
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'channels[0].ids.MEMBER_ID'">Start date</th>
+
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'channels[0].ids.DNID'">End date</th>
+
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.systemType'">Poll interval</th>
+
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.SATELLITE_NUMBER'">User</th>
+
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.mmsiNo'">Organization</th>
+
+                    <th>Start</th>
+                    <th>Stop</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in currentSearchResults.programPolls | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">            
+                <td>{{item.name}}</td>
+                <td>{{item.transponder}}</td>
+                <td>{{item.startDate}}</td>
+                <td>{{item.endDate}}</td>
+                <td>{{item.pollInterval}}</td>
+                <td>{{item.user}}</td>
+                <td>{{item.organization}}</td>
+                <td>
+                    <i class="fa fa-play"></i>
+                </td>
+                <td>
+                    <i class="fa fa-stop"></i>
+                </td>
+                <td>
+                    <i class="fa fa-trash"></i>
+                </td>                
+            </tr>
+            </tbody>
+        </table>
+        <span class="error" ng-show="currentSearchResults.errorMessage">{{currentSearchResults.errorMessage}}</span>
+    </div>
+    <div class="col-md-12 searchResultsLoading" ng-show="currentSearchResults.loading">
+        <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>        
+    </div>
+</div>
+

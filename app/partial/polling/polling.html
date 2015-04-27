@@ -1,0 +1,28 @@
+<div ng-controller="PollingCtrl">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 pageMenu">
+                <ul class="horizontal pipeSeparator">
+                    <li><a href="#communication">{{'mobileTerminal.menu_mobileterminals' | i18n}}</a></li>
+                    <li class="active"><a href="#communication/polling">{{'mobileTerminal.menu_polling' | i18n}}</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container pollingTabs">
+        <tabset>
+            <tab heading="New poll">
+                <div ng-include="'partial/polling/newPollWizard/newPollWizard.html'"></div>
+            </tab>
+            <tab heading="Polling logs">
+                Logs of polls
+            </tab>
+            <tab heading="Running program polls">
+                <div ng-include="'partial/polling/runningProgramPolls/runningProgramPolls.html'"></div>
+            </tab>
+        </tabset>
+    </div>
+
+</div>
