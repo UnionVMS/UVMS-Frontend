@@ -27,7 +27,7 @@
     "polling_logs_table_header_user" : "User",
     "polling_logs_table_header_organization" : "Organization",
     "polling_logs_table_header_organization_short" : "Org.",
-    "polling_logs_table_results_link" : "See positions"
+    "polling_logs_table_results_link" : "See positions",
     "running_program_polls_table_header_delete" : "Delete",
 	"wizard_first_step" :"Choose vessels to poll",
 	"wizard_second_step" :"Select polling options",
