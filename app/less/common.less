@@ -104,7 +104,7 @@
     text-decoration: underline;
 }
 span.error{
-    color: @errorSpanColor;
+    color: @errorColor;
 }
 
 
@@ -122,7 +122,7 @@ table.searchResults{
     th{
         height:40px;
 
-        a{
+        >a{
             font-weight: bold;
             color:#383737;
 
@@ -142,14 +142,24 @@ table.searchResults{
             td.inactive{
                 .inactiveTableCell;
             }
+
+
+            >td{
+                button{
+                    height: 28px;
+                    text-align: center;
+                    padding:0px 12px;
+                    font-size: 12px;
+                }
+            }                    
         }
 
     }
-    button{
-        height: 28px;
-        text-align: center;
-        padding:0px 12px;
-        font-size: 12px;
+
+    &.colorOdd{
+        tbody{
+            tr:nth-child(odd) {background: #EEE}
+        }
     }
 }
 
@@ -186,4 +196,10 @@ a:hover{
         border-bottom-width: 1px;
         border-bottom-style: solid;        
     }
+}
+
+
+//Gray border
+.grayBorder{
+    border:1px solid #DDD;
 }

@@ -10,12 +10,23 @@ angular.module('unionvmsWeb')
         this.pollInterval = "12h";
         this.user = "Test user";
         this.organization = "Control Authority 1";
+        this.running = false;
     }
 
     ProgramPoll.fromJson = function(data){
         var programPoll = new ProgramPoll();
         return programPoll;
     };
+
+    ProgramPoll.prototype.start = function(){
+        this.running = true;
+    };
+
+    ProgramPoll.prototype.stop = function(){
+        this.running = false;
+    };
+
+
 
     return ProgramPoll;
 });

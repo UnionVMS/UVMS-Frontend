@@ -1,8 +1,144 @@
-<div ng-controller="pollingLogsCtrl">
+<div ng-controller="pollingLogsCtrl" class="pollingLogsContainer grayBorder">
 
     <div ng-include="'partial/polling/runningProgramPolls/runningProgramPolls.html'"></div>
 
-    <br>
-    TODO: Add pollings logs here
+    <div class="row">
+        <div class="col-md-12">
+
+            <table class="searchResults colorOdd pollingLogsTable">
+                <thead>
+                    <tr class="searchInputRow dateSearch">
+                        <th>&nbsp;</th>
+                        <th>
+                            <dropdown ng-model="dateSearch.selectedItem" items="dateSearchItems"></dropdown>
+                        </th>
+
+                        <th colspan="1">
+                            <datepicker-input model="dateSearch.startDate" placeholder="{{'polling.polling_logs_search_date_from_placeholder' | i18n}}"></datepicker-input>
+                        </th>
+
+                        <th colspan="1">
+                            <datepicker-input model="dateSearch.endDate" placeholder="{{'polling.polling_logs_search_date_to_placeholder' | i18n}}"></datepicker-input>
+                        </th>
+
+                        <th class="textAlignCenter">
+                            <button class="btn btn-primary inputHeigth searchButton">
+                                <span class="fa fa-search"></span>
+                            </button>
+                        </th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th class="printAndExport">
+                            <i class="fa fa-lg fa-file" title="{{'polling.polling_logs_table_header_export_as_csv' | i18n }}" ng-click="exportAsFile()"></i>
+                            <i class="fa fa-lg fa-print" title="{{'polling.polling_logs_table_header_print_page' | i18n }}" ng-click="print()"></i>                                                        
+                        </th>
+                    </tr>                
+                    <tr class="searchInputRow">
+                        <th>&nbsp;</th>
+                        <th>
+                            <input type="text"/ placeholder="{{'polling.polling_logs_table_header_name' | i18n}}">
+                        </th>
+
+                        <th>
+                            <input type="text"/ placeholder="{{'polling.polling_logs_table_header_ext_no' | i18n}}">
+                        </th>
+
+                        <th>
+                            <dropdown ng-model="pollType" initialtext="{{ 'polling.polling_logs_table_header_poll_type' | i18n }}" items="pollTypes"></dropdown>
+                        </th>
+
+                        <th>
+                            <dropdown ng-model="transponderType" initialtext="{{ 'polling.polling_logs_table_header_transponder' | i18n }}" items="transponderTypes"></dropdown>
+                        </th>                        
+
+                        <th>&nbsp;</th>
+    
+                        <th>
+                            <dropdown ng-model="status" initialtext="{{ 'polling.polling_logs_table_header_status_short' | i18n }}" items="statusTypes"></dropdown>
+                        </th>
+
+                        <th>&nbsp;</th>
+                        <th>
+                            <input type="text"/ placeholder="{{'polling.polling_logs_table_header_user' | i18n}}">
+                        </th>
+
+                        <th>
+                            <dropdown ng-model="organization" initialtext="{{ 'polling.polling_logs_table_header_organization_short' | i18n }}" items="organizations"></dropdown>                 
+                        </th>
+                         <th>
+                            <button class="btn btn-primary inputHeigth searchButton">
+                                <span class="fa fa-search"></span>
+                            </button>
+                        </th>
+
+                    </tr>
+                    <tr>
+                        <th><input type="checkbox"/></th>
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.name'">{{'polling.polling_logs_table_header_name' | i18n}}</th>
+
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'extNo'">{{'polling.polling_logs_table_header_ext_no' | i18n}}</th>
+
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'pollType'">{{'polling.polling_logs_table_header_poll_type' | i18n}}</th>
+
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'transponder'">{{'polling.polling_logs_table_header_transponder' | i18n}}</th>
+
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'time'" class="times">{{'polling.polling_logs_table_header_time' | i18n}}</th>
+    
+                        <th>{{'polling.polling_logs_table_header_status' | i18n}}</th>
+                        <th>{{'polling.polling_logs_table_header_results' | i18n}}</th>
+                        <th>{{'polling.polling_logs_table_header_user' | i18n}}</th>
+                        <th>{{'polling.polling_logs_table_header_organization' | i18n}}</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="item in currentSearchResults.polls | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" ng-init="isExpanded = false">            
+                    <td><input type="checkbox"/></td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.extNo}}</td>
+                    <td>{{item.pollType}}</td>
+                    <td>{{item.transponder}}</td>
+                    <td class="statusTime">
+                        <div class="expandIcon" ng-show="item.status.length > 1" ng-click="isExpanded = !isExpanded">
+                            <i class="fa fa-plus-square" ng-show="!isExpanded"></i>
+                            <i class="fa fa-minus-square" ng-show="isExpanded"></i>
+                        </div>
+                        <div class="times">
+                            <span ng-repeat="status in item.status" ng-show="isExpanded || $index === 0">
+                                {{status.time}}<br>
+                            </span>
+                        </div>
+                    </td>
+                    <td class="statusText">
+                        <span ng-repeat="status in item.status" ng-show="isExpanded  || $index === 0" ng-class="{'success': status.text === 'Succeeded', 'failed': status.text === 'Request failed'}">
+                            {{status.text}}<br>
+                        </span>
+                    </td>
+                    <td><a>{{'polling.polling_logs_table_results_link' | i18n}}</a></td>
+                    <td>{{item.user}}</td>
+                    <td>{{item.organization}}</td>
+                    <td>&nbsp;</td>       
+                </tr>
+                </tbody>
+            </table>
+            <span class="error" ng-show="currentSearchResults.errorMessage">{{currentSearchResults.errorMessage}}</span>
+        </div>
+        <div class="col-md-12 searchResultsLoading" ng-show="currentSearchResults.loading">
+            <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>        
+        </div>
+    </div>
+    <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0">
+        <div class="col-md-12">
+            {{'common.search_results_current_page' | i18n:[currentSearchResults.page, currentSearchResults.totalNumberOfPages]}}
+        </div>
+    </div>
+    <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0 && currentSearchResults.totalNumberOfPages > currentSearchResults.page">
+        <div class="col-md-12 textAlignCenter">
+            <span class="link" ng-click="loadNextPage()"> {{'common.search_results_load_more' | i18n | uppercase}}</span>            
+        </div>
+    </div>        
 
 </div>

@@ -1,54 +1,57 @@
-<div class="row runningProgramPollsContainer" ng-controller="RunningProgramPollsCtrl">
+<div class="row runningProgramPollsContainer grayBorder" ng-controller="RunningProgramPollsCtrl">
     <div class="col-md-12">
-        <table class="searchResults mobileTerminalsTable">
-            <thead>
-                <tr>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.name'">{{'polling.running_program_polls_table_header_name' | i18n}}</th>
+        <h5>{{'polling.running_program_polls_header' | i18n}}</h5>
+        <div class="tableContainer">
+            <table class="searchResults">
+                <thead>
+                    <tr>
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.name'">{{'polling.running_program_polls_table_header_name' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.ids.SERIAL_NUMBER'">{{'polling.running_program_polls_table_header_transponder' | i18n}}</th>
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.ids.SERIAL_NUMBER'">{{'polling.running_program_polls_table_header_transponder' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'channels[0].ids.MEMBER_ID'">{{'polling.running_program_polls_table_header_start_date' | i18n}}</th>
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'channels[0].ids.MEMBER_ID'">{{'polling.running_program_polls_table_header_start_date' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'channels[0].ids.DNID'">{{'polling.running_program_polls_table_header_end_date' | i18n}}</th>
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'channels[0].ids.DNID'">{{'polling.running_program_polls_table_header_end_date' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.systemType'">{{'polling.running_program_polls_table_header_interval' | i18n}}</th>
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.systemType'">{{'polling.running_program_polls_table_header_interval' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.SATELLITE_NUMBER'">{{'polling.running_program_polls_table_header_user' | i18n}}</th>
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.SATELLITE_NUMBER'">{{'polling.running_program_polls_table_header_user' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.mmsiNo'">{{'polling.running_program_polls_table_header_organization' | i18n}}</th>
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.mmsiNo'">{{'polling.running_program_polls_table_header_organization' | i18n}}</th>
 
-                    <th class="actionIcon">{{'polling.running_program_polls_table_header_start' | i18n}}</th>
-                    <th class="actionIcon">{{'polling.running_program_polls_table_header_stop' | i18n}}</th>
-                    <th class="actionIcon">{{'polling.running_program_polls_table_header_delete' | i18n}}</th>
-                </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="item in currentSearchResults.programPolls | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">            
-                <td>{{item.name}}</td>
-                <td>{{item.transponder}}</td>
-                <td>{{item.startDate}}</td>
-                <td>{{item.endDate}}</td>
-                <td>{{item.pollInterval}}</td>
-                <td>{{item.user}}</td>
-                <td>{{item.organization}}</td>
-                <td class="actionIcon">
-                    <div class="start">
-                        <i class="fa fa-play"></i>
-                    </div>
-                </td>
-                <td class="actionIcon">
-                    <div class="stop inactive">
-                        <i class="fa fa-stop"></i>
+                        <th class="actionIcon">{{'polling.running_program_polls_table_header_start' | i18n}}</th>
+                        <th class="actionIcon">{{'polling.running_program_polls_table_header_stop' | i18n}}</th>
+                        <th class="actionIcon">{{'polling.running_program_polls_table_header_delete' | i18n}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="item in currentSearchResults.programPolls | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">            
+                    <td>{{item.name}}</td>
+                    <td>{{item.transponder}}</td>
+                    <td>{{item.startDate}}</td>
+                    <td>{{item.endDate}}</td>
+                    <td>{{item.pollInterval}}</td>
+                    <td>{{item.user}}</td>
+                    <td>{{item.organization}}</td>
+                    <td class="actionIcon">
+                        <div class="start" ng-class="{inactive:item.running}" ng-click="startProgramPoll(item)">
+                            <i class="fa fa-play"></i>
+                        </div>
                     </td>
-                </td>
-                <td class="actionIcon">
-                    <div class="delete">
-                        <i class="fa fa-trash-o"></i>
-                    </div>
-                </td>                
-            </tr>
-            </tbody>
-        </table>
+                    <td class="actionIcon">
+                        <div class="stop" ng-class="{inactive:!item.running}" ng-click="stopProgramPoll(item)">
+                            <i class="fa fa-stop"></i>
+                        </td>
+                    </td>
+                    <td class="actionIcon">
+                        <div class="delete" ng-click="deleteProgramPoll(item)">
+                            <i class="fa fa-trash-o"></i>
+                        </div>
+                    </td>                
+                </tr>
+                </tbody>
+            </table>
+        </div>
         <span class="error" ng-show="currentSearchResults.errorMessage">{{currentSearchResults.errorMessage}}</span>
     </div>
     <div class="col-md-12 searchResultsLoading" ng-show="currentSearchResults.loading">

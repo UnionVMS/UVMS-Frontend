@@ -11,15 +11,33 @@
     </div>
 
 
-    <div class="container pollingTabs">
-        <tabset>
-            <tab heading="{{'polling.tabs_new_poll' | i18n}}">
-                <div ng-include="'partial/polling/newPollWizard/newPollWizard.html'"></div>
-            </tab>
-            <tab heading="{{'polling.tabs_logs' | i18n}}">
-                <div ng-include="'partial/polling/pollingLogs/pollingLogs.html'"></div>
-            </tab>
-        </tabset>
+
+
+    <!-- Nav tabs -->
+    <div class="containerWrapper pollingTabs">
+        <div class="container">
+          <ul class="nav nav-tabs" role="tablist" id="mobileTabs">
+            <li role="presentation" class="active">
+                <a aria-controls="newPoll" role="tab" data-toggle="tab" data-target="#newPoll">{{'polling.tabs_new_poll' | i18n}}</a>
+            </li>
+            <li role="presentation">
+                <a aria-controls="pollingLogs" role="tab" data-toggle="tab" data-target="#pollingLogs">{{'polling.tabs_logs' | i18n}}</a>
+            </li>
+          </ul>
+        </div>
     </div>
+
+    <!-- Tab panes -->
+    <div class="container">
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="newPoll">
+                <div ng-include="'partial/polling/newPollWizard/newPollWizard.html'"></div>                
+            </div>
+            <div role="tabpanel" class="tab-pane" id="pollingLogs">
+                <div ng-include="'partial/polling/pollingLogs/pollingLogs.html'"></div>
+            </div>
+        </div>
+    </div>
+
 
 </div>
