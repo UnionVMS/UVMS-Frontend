@@ -1,3 +1,14 @@
 {
-
+    "tabs_new_poll" : "New poll",
+    "tabs_logs" : "Polling logs",
+    "running_program_polls_table_header_name" : "Name",
+    "running_program_polls_table_header_transponder" : "Transponder",
+    "running_program_polls_table_header_start_date" : "Start date",
+    "running_program_polls_table_header_end_date" : "End date",
+    "running_program_polls_table_header_interval" : "Poll interval",
+    "running_program_polls_table_header_user" : "User",
+    "running_program_polls_table_header_organization" : "Organization",
+    "running_program_polls_table_header_start" : "Start",
+    "running_program_polls_table_header_stop" : "Stop",
+    "running_program_polls_table_header_delete" : "Delete"
 }

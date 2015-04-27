@@ -1,0 +1,51 @@
+.runningProgramPollsContainer{
+    border:1px solid #999;
+    margin: 20px 0;
+    padding-bottom: 10px; 
+
+    //Start, stop, delete
+    .actionIcon{
+        @cellWidth:45px;
+        @iconSize:25px;
+        @startColor:#35A948;
+        @stopAndDeleteColor:#E21E27;
+        @inactiveColor:#9B9B9B;
+
+        width: @cellWidth;
+        text-align: center;
+        .iconWrapper(){
+            cursor: pointer;
+            border-radius: 50px;
+            width:@iconSize;
+            height:@iconSize;
+            line-height:@iconSize;
+            margin: auto;
+            text-align: center;
+            font-size: 10px;
+        }
+        .start{
+            .iconWrapper();
+            background: @startColor;
+            color:#fff;
+            i{
+                position: relative;
+                left: 1px;
+            }            
+        }
+        .stop{
+            .iconWrapper();
+            background: @stopAndDeleteColor;
+            color:#fff;
+        }
+        .delete{
+            .iconWrapper();
+            color: @stopAndDeleteColor;
+            font-size: 20px;
+        }
+        .inactive{
+            background:@inactiveColor;
+        }
+
+    }
+
+}

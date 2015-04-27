@@ -13,10 +13,10 @@
 
     <div class="container pollingTabs">
         <tabset>
-            <tab heading="New poll">
+            <tab heading="{{'polling.tabs_new_poll' | i18n}}">
                 <div ng-include="'partial/polling/newPollWizard/newPollWizard.html'"></div>
             </tab>
-            <tab heading="Polling logs">
+            <tab heading="{{'polling.tabs_logs' | i18n}}">
                 <div ng-include="'partial/polling/pollingLogs/pollingLogs.html'"></div>
             </tab>
         </tabset>
