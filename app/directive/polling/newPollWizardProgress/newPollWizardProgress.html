@@ -1,4 +1,5 @@
 <div>
-
-
+	<div class="step" ng-class="{activestep : isFirstStep()}"><p>1 {{'polling.wizard_first_step' | i18n | uppercase}} </p></div>
+	<div class="step" ng-class="{activestep : isSecondStep()}"><p>2 {{'polling.wizard_second_step' | i18n | uppercase}}</p></div>
+	<div class="step" ng-class="{activestep : isLastStep()}"><p>3 {{'polling.wizard_third_step' | i18n | uppercase}}</p></div>
 </div>

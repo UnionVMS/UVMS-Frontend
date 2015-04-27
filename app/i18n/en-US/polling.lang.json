@@ -10,5 +10,8 @@
     "running_program_polls_table_header_organization" : "Organization",
     "running_program_polls_table_header_start" : "Start",
     "running_program_polls_table_header_stop" : "Stop",
-    "running_program_polls_table_header_delete" : "Delete"
+    "running_program_polls_table_header_delete" : "Delete",
+	"wizard_first_step" :"Choose vessels to poll",
+	"wizard_second_step" :"Select polling options",
+	"wizard_third_step" :"Polling results"
 }
