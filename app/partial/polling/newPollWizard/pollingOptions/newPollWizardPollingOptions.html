@@ -8,10 +8,6 @@
                 <input type="radio" ng-model="pollingOptions.type" value="MANUAL"/> <span class="pollType" ng-class="{'activePollType' : isManualPoll()}" ng-click="setPollType('MANUAL')">{{'polling.wizard_second_step_manual_poll' | i18n | uppercase}}</span>
             </div>     
         </div>
-    </div>
-
-    <!--PROGRAM POLL-->
-    <div class="optionsSection">
         <div class="row">
             <div class="col-md-12">
                 <input type="radio" ng-model="pollingOptions.type" value="PROGRAM"/> <span class="pollType" ng-class="{'activePollType' : isProgramPoll()}" ng-click="setPollType('PROGRAM')">{{'polling.wizard_second_step_program_poll' | i18n | uppercase}}</span>
