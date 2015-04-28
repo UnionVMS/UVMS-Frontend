@@ -34,5 +34,14 @@
     "running_program_polls_table_header_delete" : "Delete",
 	"wizard_first_step" :"Choose vessels to poll",
 	"wizard_second_step" :"Select polling options",
-	"wizard_third_step" :"Polling results"
+    "wizard_third_step" :"Polling results",
+    "poll_table_header_vessel_name" :"Vessel name",
+    "poll_table_header_vessel_member_no" :"Member name",
+    "poll_table_header_vessel_dnid" : "DNID",
+    "poll_table_header_vessel_transponder" :"Transponder",
+    "poll_table_button_add_all" : "Add all",
+    "poll_table_button_add_selected" :"Add",
+    "poll_table_button_added" :"Added"
+
+
 }

@@ -27,6 +27,9 @@ angular.module('unionvmsWeb')
         case "MOBILE_TERMINAL":
             $scope.formPartial = 'directive/common/search/advancedSearch/mobileTerminal/advancedSearchMobileTerminalForm.html';
             break;
+        case "POLLING_MOBILE_TERMINAL":
+            $scope.formPartial = 'directive/common/search/advancedSearch/pollingMobileTerminal/searchpollingMobileTerminalForm.html';
+            break;
         default:
             console.error("ModelType is missing for advanced search.");
     }
