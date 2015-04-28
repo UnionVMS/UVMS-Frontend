@@ -4,7 +4,7 @@
 		<new-poll-wizard-progress step="1"></new-poll-wizard-progress>	
 	</div>
 	<div class="row">
-		<advanced-search searchfunc="searchMobileTerminals" modeltype="'POLLING_MOBILE_TERMINAL'" advancedsearchvisible="true"></advanced-search>                
+		<advanced-search searchfunc="searchMobileTerminals" vesselGroupCallback="selectGroupCallback()" modeltype="'POLLING_MOBILE_TERMINAL'" advancedsearchvisible="true"></advanced-search>                
     </div>
     <div class="row">
 			<table class="polltable col-md-12">
@@ -32,4 +32,5 @@
 	    	<!--<p>Visar {{currentSearchResults.totalNumberOfPage}} of {{currentSearchResults.totalNumberOfPage}}</p>-->
     	</div>
 </div>
+{{selectedVesselGroup}}
 

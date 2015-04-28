@@ -53,7 +53,7 @@ angular.module('unionvmsWeb').factory('pollingService',function() {
                 }
                 else {
                     // Remove group itself
-                    removeTerminalGroup(selection.selectedTerminalGroups, terminalGroup);
+                    removeTerminalGroup(selection.selectedMobileTerminalGroups, terminalGroup);
                 }
             }
             else if (terminal) {

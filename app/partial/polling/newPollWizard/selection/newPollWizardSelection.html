@@ -6,7 +6,7 @@
 
 	<ul class="group-list">
 		<li ng-repeat="group in selection.selectedMobileTerminalGroups">
-		    <div class="pointer pull-right" ng-click="removeGroup(group)">
+		    <div class="pointer pull-right" ng-click="remove(group)">
 		    	<i class="fa fa-times"></i>
 		   	</div>
 			<p>{{ 'polling.group' | i18n }}: {{ group.name }}</p>
@@ -29,5 +29,4 @@
 			<p>{{ mt.associatedVessel.name }}: {{ mt.mobileTerminalId.systemType }}</p>
 		</li>
 	</ul>
-
 </div>

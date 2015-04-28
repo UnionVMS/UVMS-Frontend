@@ -1,10 +1,8 @@
-angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl',function($scope, searchService, pollingService, alertService,MobileTerminalListPage, MobileTerminal, mobileTerminalRestService, locale){
+angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl',function($scope, searchService, pollingService, alertService,MobileTerminalListPage, MobileTerminal, mobileTerminalRestService, locale, MobileTerminalGroup){
 
-	$scope.selectAllVessels = function(){
-		console.log("ADD ALL VESSELS TO LIST!");
-	};
-
+	
 	$scope.selectedVesselsToPoll = [];
+    $scope.selectedGroup = {};
 
 	console.log($scope.vesselGroups); 
 
@@ -20,7 +18,10 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
     };    
 
   //Get list of Mobile Terminals matching the current search criterias
-    $scope.searchMobileTerminals = function(){
+    $scope.searchMobileTerminals = function(opt){
+
+        $scope.selectedGroup = opt ||  {};
+
         $scope.currentSearchResults.errorMessage = "";
         $scope.currentSearchResults.loading = true;
         $scope.currentSearchResults.mobileTerminals.length = 0;
@@ -59,10 +60,34 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
         $scope.currentSearchResults.page = 0;
     };
 
-
     //button to add selected vessel    
     $scope.selectVessel = function(item){
         pollingService.addMobileTerminalToSelection(item);
+    };
+    
+    //Select all mobileterminals
+    $scope.selectAllVessels = function(){
+      
+        if(!$.isEmptyObject($scope.selectedGroup)){
+            //create vesselgroup 
+            var mobileTerminalGroup = new MobileTerminalGroup();
+            mobileTerminalGroup.name = $scope.selectedGroup.savedSearchGroup.name;
+            
+            mobileTerminalGroup.mobileTerminals = []; // $scope.currentSearchResults;
+            for (var i = 0; i < $scope.currentSearchResults.mobileTerminals.length; i++) {
+                mobileTerminalGroup.mobileTerminals.push($scope.currentSearchResults.mobileTerminals[i]);
+            }
+
+            //Add terminalgroup.
+            pollingService.addMobileTerminalGroupToSelection(mobileTerminalGroup);
+        }else{
+            //Add terminals as not a group.
+            for(i=0; i < $scope.currentSearchResults.mobileTerminals.length; i ++){
+                pollingService.addMobileTerminalToSelection($scope.currentSearchResults.mobileTerminals[i]);
+            }
+        }
+        
+        //$scope.selectedVesselGroup
     };
 
 

@@ -7,7 +7,7 @@ angular.module('unionvmsWeb').directive('advancedSearch', function() {
             modeltype : "=",
             searchfunc : "=",
             advancedsearchvisible : "=",
-
+            vesselGroupCallback : "="
         },
         templateUrl: 'directive/common/search/advancedSearch/advancedSearch.html',
         link: function(scope, element, attrs, fn) {
@@ -58,6 +58,9 @@ angular.module('unionvmsWeb')
 
     //Search by a saved group
     $scope.performSavedGroupSearch = function(savedSearchGroup){
+        var opt = {};
+        opt.savedSearchGroup = savedSearchGroup;
+        
         searchService.resetPage();
         searchService.resetSearchCriterias();
         //Set search criterias
@@ -65,7 +68,7 @@ angular.module('unionvmsWeb')
         searchService.setSearchCriterias(savedSearchGroup.searchFields);
 
         //Do the search
-        $scope.searchfunc();
+        $scope.searchfunc(opt);
     };  
 
     //Reset the advacned search form inputs and do a search if sendSearchRequest is set to true
