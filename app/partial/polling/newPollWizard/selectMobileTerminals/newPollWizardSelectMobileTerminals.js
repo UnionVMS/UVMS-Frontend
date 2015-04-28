@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl',function($scope, searchService, alertService,MobileTerminalListPage, MobileTerminal, mobileTerminalRestService, locale){
+angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl',function($scope, searchService, pollingService, alertService,MobileTerminalListPage, MobileTerminal, mobileTerminalRestService, locale){
 
 	$scope.selectAllVessels = function(){
 		console.log("ADD ALL VESSELS TO LIST!");
@@ -6,7 +6,6 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
 
 	$scope.selectedVesselsToPoll = [];
 
-	console.log("sdfs");
 	console.log($scope.vesselGroups); 
 
 	 //Search objects and results
@@ -63,13 +62,8 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
 
     //button to add selected vessel    
     $scope.selectVessel = function(item){
-        console.info("SELECTED VESSEL IS: " + item + " ADD THIS TO SELECTED VESSELS");
+        pollingService.addMobileTerminalToSelection(item);
     };
-
-    $scope.removeSelectVessel = function(item){
-        console.info("THE SELECTED VESSEL TO REMOVE IS : " + item + " REMOVE THIS FROM SELECTED VESSELS");
-    };
-
 
 
 });
