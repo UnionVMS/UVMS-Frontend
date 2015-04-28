@@ -1,4 +1,7 @@
 {
+    "carrier_selection": "Carrier selection",
+    "clear_all": "Clear all",
+    "group": "Group",
     "tabs_new_poll" : "New poll",
     "tabs_logs" : "Polling logs",
     "running_program_polls_header" : "Running program polls",

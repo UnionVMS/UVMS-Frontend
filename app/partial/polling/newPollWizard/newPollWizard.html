@@ -1,10 +1,10 @@
 <div ng-controller="NewpollwizardCtrl">
 
-    <div ng-include="'partial/polling/newPollWizard/selectMobileTerminals/newPollWizardSelectMobileTerminals.html'" ng-show="true"></div>
+    <div class="col-xs-8" ng-include="'partial/polling/newPollWizard/selectMobileTerminals/newPollWizardSelectMobileTerminals.html'" ng-show="wizardStep === 1"></div>
 
-    <div ng-include="'partial/polling/newPollWizard/pollingOptions/newPollWizardPollingOptions.html'" ng-show="true"></div>
+    <div class="col-xs-8" ng-include="'partial/polling/newPollWizard/pollingOptions/newPollWizardPollingOptions.html'" ng-show="wizardStep === 2"></div>
 
-    <div ng-include="'partial/polling/newPollWizard/results/newPollWizardResults.html'" ng-show="true"></div>
+    <div class="col-xs-12" ng-include="'partial/polling/newPollWizard/results/newPollWizardResults.html'" ng-show="wizardStep === 3"></div>
 
-    <div ng-include="'partial/polling/newPollWizard/selection/newPollWizardSelection.html'" ng-show="true"></div>        
+    <div class="col-xs-4 col-xs-offset-8" ng-include="'partial/polling/newPollWizard/selection/newPollWizardSelection.html'" ng-show="wizardStep < 3"></div>
 </div>

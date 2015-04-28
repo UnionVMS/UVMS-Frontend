@@ -1,4 +1,33 @@
-<div class="col-md-12" ng-controller="NewpollwizardselectionCtrl">
+<div class="newPollWizardSelectionContainer" ng-controller="NewpollwizardselectionCtrl">
+	<p style="margin-bottom: 20px;">
+		<a class="pull-right">{{ 'polling.clear_all' | i18n }}</a>
+		{{ 'polling.carrier_selection' | i18n }}
+	</p>
 
+	<ul class="group-list">
+		<li ng-repeat="group in selection.selectedMobileTerminalGroups">
+		    <div class="pointer pull-right" ng-click="removeGroup(group)">
+		    	<i class="fa fa-times"></i>
+		   	</div>
+			<p>{{ 'polling.group' | i18n }}: {{ group.name }}</p>
+			<ul>
+				<li ng-repeat="mt in group.mobileTerminals">
+				    <div class="pointer pull-right" ng-click="remove(group, mt)">
+				    	<i class="fa fa-times"></i>
+				   	</div>
+					<p>{{ mt.associatedVessel.name }}: {{ mt.mobileTerminalId.systemType }}</p>
+				</li>
+			</ul>
+		</li>
+	</ul>
+
+	<ul>
+		<li ng-repeat="mt in selection.selectedMobileTerminals">
+		    <div class="pointer pull-right" ng-click="remove(undefined, mt)">
+		    	<i class="fa fa-times"></i>
+		   	</div>
+			<p>{{ mt.associatedVessel.name }}: {{ mt.mobileTerminalId.systemType }}</p>
+		</li>
+	</ul>
 
 </div>
