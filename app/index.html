@@ -1,109 +1,114 @@
 <!DOCTYPE html>
 <html ng-app="unionvmsWeb">
 <head>
-  <title>UnionVMS</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UnionVMS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
-  <link href="app.less" type="text/css" rel="stylesheet/less">
+    <link href="app.less" type="text/css" rel="stylesheet/less">
     <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css' data-concat="false" data-remove="false">
 </head>
 <body>
 
-  <!-- Livereload script for development only (stripped during dist build) -->
-  <script src="http://localhost:35729/livereload.js" data-concat="false"></script>
+    <!-- Livereload script for development only (stripped during dist build) -->
+    <script src="http://localhost:35729/livereload.js" data-concat="false"></script>
 
-  <!-- JS from Bower Components -->
-  <script src="../bower_components/less.js/dist/less-1.6.2.js" data-concat="false"></script>
-  <script src="../bower_components/jquery/jquery.js"></script>
-  <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
-  <script src="../bower_components/underscore/underscore.js"></script>
-  <script src="../bower_components/moment/moment.js"></script>
-  <script src="../bower_components/angular/angular.js"></script>
-  <script src="../bower_components/angular-cookies/angular-cookies.min.js"></script>
-  <script src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
-  <script src="../bower_components/angular-localization/angular-localization.min.js"></script>
-  <script src="../bower_components/angular-route/angular-route.js"></script>
-  <script src="../bower_components/angular-animate/angular-animate.js"></script>
-  <script src="../bower_components/angular-resource/angular-resource.js"></script>
-  <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-  <script src="../bower_components/angular-ui-utils/ui-utils.js"></script>
-  <!-- Add New Bower Component JS Above -->
+    <!-- JS from Bower Components -->
+    <script src="../bower_components/less.js/dist/less-1.6.2.js" data-concat="false"></script>
+    <script src="../bower_components/jquery/jquery.js"></script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="../bower_components/underscore/underscore.js"></script>
+    <script src="../bower_components/moment/moment.js"></script>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/angular-cookies/angular-cookies.min.js"></script>
+    <script src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="../bower_components/angular-localization/angular-localization.min.js"></script>
+    <script src="../bower_components/angular-route/angular-route.js"></script>
+    <script src="../bower_components/angular-animate/angular-animate.js"></script>
+    <script src="../bower_components/angular-resource/angular-resource.js"></script>
+    <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="../bower_components/angular-ui-utils/ui-utils.js"></script>
+    <!-- Add New Bower Component JS Above -->
 
 
-  <!-- Main App JS -->
-  <script src="app.js"></script>
-  <script src="service/common/model/searchFieldModel.js"></script>
-  <script src="service/common/model/savedSearchGroupModel.js"></script>
-  <script src="service/common/model/getListRequestModel.js"></script>
+    <!-- Main App JS -->
+    <script src="app.js"></script>
 
-  <script src="partial/header/header.js"></script>
-  <script src="partial/today/today.js"></script>
-  <script src="partial/vessel/vessel.js"></script>
-  <script src="service/vessel/model/vesselModel.js"></script>
-  <script src="service/vessel/model/vesselListPageModel.js"></script>
-  <script src="service/vessel/model/vesselModel.js"></script>
-  <script src="service/mobileTerminal/model/mobileTerminalListPageModel.js"></script>
-  <script src="service/vessel/model/eventHistoryModel.js"></script>
-  <script src="service/vessel/vesselRestService.js"></script>
-  <script src="service/common/searchService.js"></script>
-  <script src="service/mobileTerminal/mobileTerminalRestService.js"></script>
+    <script src="directive/common/datepickerInput/datepickerInput.js"></script>
+    <script src="directive/common/dropdown/dropdown.js"></script>
+    <script src="directive/common/search/advancedSearch/advancedSearch.js"></script>
+    <script src="directive/common/search/advancedSearch/mobileTerminal/advancedSearchMobileTerminalForm.js"></script>
+    <script src="directive/common/search/advancedSearch/pollingMobileTerminal/searchPollingMobileTerminalForm.js"></script>
+    <script src="directive/common/search/advancedSearch/vessel/advancedSearchVesselForm.js"></script>
+    <script src="directive/common/search/search.js"></script>
+    <script src="directive/common/sortableTableHeader/sortableTableHeader.js"></script>
+    <script src="directive/common/staticInclude/staticInclude.js"></script>
+    <script src="directive/common/validation/customValidators.js"></script>
+    <script src="directive/polling/newPollWizardProgress/newPollWizardProgress.js"></script>
+    <script src="directive/vessel/vesselDetails/vesselDetails.js"></script>
 
-  <script src="service/mobileTerminal/model/mobileTerminalModel.js"></script>
-  <script src="service/mobileTerminal/model/communicationChannelModel.js"></script>
-  <script src="service/mobileTerminal/model/carrierIdModel.js"></script>
-  <script src="service/mobileTerminal/model/mobileTerminalAttributeModel.js"></script>
-  <script src="service/mobileTerminal/model/transpondersConfigModel.js"></script>
-  <script src="service/mobileTerminal/model/mobileTerminalHistoryModel.js"></script>
-  <script src="service/polling/model/programPollModel.js"></script>
-  <script src="service/polling/model/pollModel.js"></script>
-  <script src="service/polling/model/pollStatusModel.js"></script>
-  <script src="service/polling/model/mobileTerminalGroupModel.js"></script>
-  <script src="service/common/modalComment/modalComment.js"></script>
+    <script src="partial/alerts/alerts.js"></script>
+    <script src="partial/footer/footer.js"></script>
+    <script src="partial/header/header.js"></script>
+    <script src="partial/header/headerMenu/headerMenu.js"></script>
 
-  <script src="service/common/validationService.js"></script>
-  <script src="directive/vessel/vesselDetails/vesselDetails.js"></script>
-  <script src="partial/vessel/saveVesselGroupModal/saveVesselGroupModal.js"></script>
-  <script src="partial/vessel/vesselHistory/vesselHistory.js"></script>
-  <script src="partial/vessel/vesselHistory/vesselHistoryModal/vesselHistoryModal.js"></script>
-  <script src="service/common/environment/restConstants.js"></script>
-  <script src="partial/mobileTerminal/mobileTerminal.js"></script>
-  <script src="partial/header/headerMenu/headerMenu.js"></script>
-  <script src="directive/common/search/search.js"></script>
-  <script src="directive/common/search/advancedSearch/advancedSearch.js"></script>
-  <script src="directive/common/search/advancedSearch/vessel/advancedSearchVesselForm.js"></script>
-  <script src="directive/common/search/advancedSearch/mobileTerminal/advancedSearchMobileTerminalForm.js"></script>
-  <script src="directive/common/search/advancedSearch/pollingMobileTerminal/searchPollingMobileTerminalForm.js"></script>
-  <script src="partial/vessel/vesselList/vesselList.js"></script>
-  <script src="partial/mobileTerminal/mobileTerminalList/mobileTerminalList.js"></script>
-  <script src="partial/mobileTerminal/addNewMobileTerminal/addNewMobileTerminal.js"></script>
-  <script src="directive/common/datepickerInput/datepickerInput.js"></script>
-  <script src="directive/common/dropdown/dropdown.js"></script>
-  <script src="partial/footer/footer.js"></script>
-  <script src="partial/vessel/viewVessel/viewVessel.js"></script>
-  <script src="partial/vessel/createNewVessel/createNewVessel.js"></script>
-  <script src="directive/common/sortableTableHeader/sortableTableHeader.js"></script>
-  <script src="partial/mobileTerminal/assignVessel/assignVessel.js"></script>
-  <script src="directive/common/validation/customValidators.js"></script>
-  <script src="service/common/alertService.js"></script>
-  <script src="partial/alerts/alerts.js"></script>
-  <script src="partial/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.js"></script>
-  <script src="partial/mobileTerminal/mobileTerminalForm/mobileTerminalForm.js"></script>
-  <script src="partial/mobileTerminal/viewMobileTerminal/viewMobileTerminal.js"></script>
+    <script src="partial/mobileTerminal/addNewMobileTerminal/addNewMobileTerminal.js"></script>
+    <script src="partial/mobileTerminal/assignVessel/assignVessel.js"></script>
+    <script src="partial/mobileTerminal/mobileTerminal.js"></script>
+    <script src="partial/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.js"></script>
+    <script src="partial/mobileTerminal/mobileTerminalForm/mobileTerminalForm.js"></script>
+    <script src="partial/mobileTerminal/mobileTerminalHistoryModal/mobileTerminalHistoryModal.js"></script>
+    <script src="partial/mobileTerminal/mobileTerminalList/mobileTerminalList.js"></script>
+    <script src="partial/mobileTerminal/viewMobileTerminal/viewMobileTerminal.js"></script>
 
-  <script src="partial/mobileTerminal/mobileTerminalHistoryModal/mobileTerminalHistoryModal.js"></script>
+    <script src="partial/polling/newPollWizard/newPollWizard.js"></script>
+    <script src="partial/polling/newPollWizard/pollingOptions/newPollWizardPollingOptions.js"></script>
+    <script src="partial/polling/newPollWizard/results/newPollWizardResults.js"></script>
+    <script src="partial/polling/newPollWizard/selection/newPollWizardSelection.js"></script>
+    <script src="partial/polling/newPollWizard/selectMobileTerminals/newPollWizardSelectMobileTerminals.js"></script>
+    <script src="partial/polling/polling.js"></script>
+    <script src="partial/polling/pollingLogs/pollingLogs.js"></script>
+    <script src="partial/polling/runningProgramPolls/runningProgramPolls.js"></script>
 
-  <script src="directive/common/staticInclude/staticInclude.js"></script>
-  <script src="partial/polling/polling.js"></script>
-  <script src="partial/polling/runningProgramPolls/runningProgramPolls.js"></script>
-  <script src="service/polling/pollingService.js"></script>
-  <script src="partial/polling/newPollWizard/newPollWizard.js"></script>
-  <script src="partial/polling/newPollWizard/selectMobileTerminals/newPollWizardSelectMobileTerminals.js"></script>
-  <script src="partial/polling/newPollWizard/pollingOptions/newPollWizardPollingOptions.js"></script>
-  <script src="partial/polling/newPollWizard/results/newPollWizardResults.js"></script>
-  <script src="partial/polling/newPollWizard/selection/newPollWizardSelection.js"></script>
-  <script src="directive/polling/newPollWizardProgress/newPollWizardProgress.js"></script>
-  <script src="partial/polling/pollingLogs/pollingLogs.js"></script>
-  <!-- Add New Component JS Above -->
+    <script src="partial/today/today.js"></script>
+
+    <script src="partial/vessel/createNewVessel/createNewVessel.js"></script>
+    <script src="partial/vessel/saveVesselGroupModal/saveVesselGroupModal.js"></script>
+    <script src="partial/vessel/vessel.js"></script>
+    <script src="partial/vessel/vesselHistory/vesselHistory.js"></script>
+    <script src="partial/vessel/vesselHistory/vesselHistoryModal/vesselHistoryModal.js"></script>
+    <script src="partial/vessel/vesselList/vesselList.js"></script>
+    <script src="partial/vessel/viewVessel/viewVessel.js"></script>
+
+    <script src="service/common/alertService.js"></script>  
+    <script src="service/common/environment/restConstants.js"></script>
+    <script src="service/common/modalComment/modalComment.js"></script>  
+    <script src="service/common/model/getListRequestModel.js"></script>
+    <script src="service/common/model/savedSearchGroupModel.js"></script>
+    <script src="service/common/model/searchFieldModel.js"></script>
+    <script src="service/common/searchService.js"></script>
+    <script src="service/common/validationService.js"></script>
+
+    <script src="service/mobileTerminal/mobileTerminalRestService.js"></script>
+    <script src="service/mobileTerminal/model/carrierIdModel.js"></script>
+    <script src="service/mobileTerminal/model/communicationChannelModel.js"></script>
+    <script src="service/mobileTerminal/model/mobileTerminalAttributeModel.js"></script>
+    <script src="service/mobileTerminal/model/mobileTerminalHistoryModel.js"></script>
+    <script src="service/mobileTerminal/model/mobileTerminalListPageModel.js"></script>
+    <script src="service/mobileTerminal/model/mobileTerminalModel.js"></script>
+    <script src="service/mobileTerminal/model/transpondersConfigModel.js"></script>
+
+    <script src="service/polling/model/mobileTerminalGroupModel.js"></script>
+    <script src="service/polling/model/pollModel.js"></script>
+    <script src="service/polling/model/pollStatusModel.js"></script>
+    <script src="service/polling/model/programPollModel.js"></script>
+    <script src="service/polling/pollingService.js"></script>
+    
+    <script src="service/vessel/model/eventHistoryModel.js"></script>
+    <script src="service/vessel/model/vesselListPageModel.js"></script>
+    <script src="service/vessel/model/vesselModel.js"></script>
+    <script src="service/vessel/model/vesselModel.js"></script>
+    <script src="service/vessel/vesselRestService.js"></script>    
+    <!-- Add New Component JS Above -->
 
 
     <div ng-include="'partial/header/header.html'"></div>
