@@ -62,7 +62,8 @@ angular.module('unionvmsWeb').factory('pollingService',function() {
             }
         },
         clearSelection : function(){
-            selection.selectedTerminals = selection.selectedTerminalGroups = [];
+            selection.selectedMobileTerminals = [];
+            selection.selectedMobileTerminalGroups = [];
         },
         getSelection : function(){
             return selection;
