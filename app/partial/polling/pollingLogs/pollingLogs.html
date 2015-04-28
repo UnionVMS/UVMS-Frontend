@@ -10,7 +10,7 @@
                     <tr class="searchInputRow dateSearch">
                         <th>&nbsp;</th>
                         <th>
-                            <dropdown ng-model="dateSearch.selectedItem" items="dateSearchItems"></dropdown>
+                            <dropdown ng-model="dateSearch.selectedItem" items="dateSearchItems" no-placeholder-item></dropdown>
                         </th>
 
                         <th colspan="2">
@@ -37,34 +37,34 @@
                     <tr class="searchInputRow">
                         <th>&nbsp;</th>
                         <th>
-                            <input type="text"/ placeholder="{{'polling.polling_logs_table_header_name' | i18n}}">
+                            <input type="text"/ placeholder="{{'common.all' | i18n}}">
                         </th>
 
                         <th>
-                            <input type="text"/ placeholder="{{'polling.polling_logs_table_header_ext_no' | i18n}}">
+                            <input type="text"/ placeholder="{{'common.all' | i18n}}">
                         </th>
 
                         <th>
-                            <dropdown ng-model="pollType" initialtext="{{ 'polling.polling_logs_table_header_poll_type' | i18n }}" items="pollTypes"></dropdown>
+                            <dropdown ng-model="pollType" items="pollTypes" no-placeholder-item></dropdown>
                         </th>
 
                         <th>
-                            <dropdown ng-model="transponderType" initialtext="{{ 'polling.polling_logs_table_header_transponder' | i18n }}" items="transponderTypes"></dropdown>
+                            <dropdown ng-model="transponderType" items="transponderTypes" no-placeholder-item></dropdown>
                         </th>                        
 
                         <th>&nbsp;</th>
     
                         <th>
-                            <dropdown ng-model="status" initialtext="{{ 'polling.polling_logs_table_header_status_short' | i18n }}" items="statusTypes"></dropdown>
+                            <dropdown ng-model="statusType" items="statusTypes" no-placeholder-item></dropdown>
                         </th>
 
                         <th>&nbsp;</th>
                         <th>
-                            <input type="text"/ placeholder="{{'polling.polling_logs_table_header_user' | i18n}}">
+                            <input type="text"/ placeholder="{{'common.all' | i18n}}">
                         </th>
 
                         <th>
-                            <dropdown ng-model="organization" initialtext="{{ 'polling.polling_logs_table_header_organization_short' | i18n }}" items="organizations"></dropdown>                 
+                            <dropdown ng-model="organization" items="organizations" no-placeholder-item></dropdown>                 
                         </th>
                          <th>
                             <button class="btn btn-primary inputHeigth searchButton">

@@ -12,98 +12,99 @@
     td.searchButton{
         max-width: 100%;
     }
+    
+}
 
 
-    table.pollingLogsTable{
-        &>thead, &>tbody{
-            //Table wrow containing search fields
-            &>tr.searchInputRow{
-                &>th{
-                    padding-right: 5px;
-                    &>input, &>.dropdown{
-                        width:100%;
-                    }
-                    input{
-                        font-weight: normal;
-                    }
+table.pollingLogsTable{
+    &>thead, &>tbody{
+        //Table wrow containing search fields
+        &>tr.searchInputRow{
+            &>th{
+                padding-right: 5px;
+                &>input, &>.dropdown{
+                    width:100%;
                 }
-
-                //Date fields
-                &:first-child{
-                    vertical-align: top;
-                    height: 50px;                
+                input{
+                    font-weight: normal;
                 }
             }
 
-            &>tr{
-                &>td{
-                    vertical-align: top;
-                    padding: 4px 0px;   
-                    //Search
-                    &:last-child {
-                        //width:0%;
-                    }                             
-                }
-                &>td, &>th{
-                    width: 10%;
-
-                    //Checkbox
-                    &:first-child {
-                        padding-left: 10px;
-                    }
-                    //Checkbox
-                    &:nth-child(1){
-                        width: 3%;
-                    }                
-                    //Time
-                    &:nth-child(6) {
-                        width: 14%;
-                        white-space: nowrap     
-                    }
-                    //Search button
-                    &:last-child {
-                        text-align: right;
-                        padding-right: 0px;
-                        padding-left: 5px;
-                    }                
-                }
-
-                th.printAndExport{
-                    i{
-                        color:@link-color;
-                        cursor: pointer;
-                        &:first-child{
-                            padding-right: 5px;
-                        }
-                    }
-                }
-
-                th.times{
-                    padding-left: 25px;
-                }              
-
-                td.statusTime{
-                    .expandIcon{
-                        position: absolute;
-                        width: 20px;
-                        cursor: pointer;
-                        color:@primaryColor;
-                    }
-                    div.times{
-                        padding-left: 25px;
-                    }
-                }  
-
-                td.statusText{
-                    .success{
-                        color:@successColor;
-                    }
-                    .failed{
-                        color:@errorColor;
-                    }        
-                }                
+            //Date fields
+            &:first-child{
+                vertical-align: top;
+                height: 50px;                
             }
         }
 
+        &>tr{
+            &>td{
+                vertical-align: top;
+                padding: 4px 0px;   
+                //Search
+                &:last-child {
+                    //width:0%;
+                }                             
+            }
+            &>td, &>th{
+                width: 10%;
+
+                //Checkbox
+                &:first-child {
+                    padding-left: 10px;
+                }
+                //Checkbox
+                &:nth-child(1){
+                    width: 3%;
+                }                
+                //Time
+                &:nth-child(6) {
+                    width: 14%;
+                    white-space: nowrap     
+                }
+                //Search button
+                &:last-child {
+                    text-align: right;
+                    padding-right: 0px;
+                    padding-left: 5px;
+                }                
+            }
+
+            th.printAndExport{
+                i{
+                    color:@link-color;
+                    cursor: pointer;
+                    &:first-child{
+                        padding-right: 5px;
+                    }
+                }
+            }
+
+            th.times{
+                padding-left: 25px;
+            }              
+
+            td.statusTime{
+                .expandIcon{
+                    position: absolute;
+                    width: 20px;
+                    cursor: pointer;
+                    color:@primaryColor;
+                }
+                div.times{
+                    padding-left: 25px;
+                }
+            }  
+
+            td.statusText{
+                .success{
+                    color:@successColor;
+                }
+                .failed{
+                    color:@errorColor;
+                }        
+            }                
+        }
     }
+
 }

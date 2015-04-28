@@ -27,21 +27,29 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll
     $scope.dateSearchItems.push({"text":"Last month", "code":"last_month"});
     $scope.dateSearchItems.push({"text":"Custom", "code":"custom"});
 
+    $scope.pollType = 'all';
     $scope.pollTypes = [];
+    $scope.pollTypes.push({"text":"All", "code":"all"});
     $scope.pollTypes.push({"text":"Configuration", "code":"configuration"});
     $scope.pollTypes.push({"text":"Manual", "code":"manual"});
     $scope.pollTypes.push({"text":"Program", "code":"program"});
     $scope.pollTypes.push({"text":"Sample", "code":"sample"});
 
+    $scope.statusType = 'all';
     $scope.statusTypes = [];
+    $scope.statusTypes.push({"text":"All", "code":"all"});
     $scope.statusTypes.push({"text":"Initiated", "code":"Initiated"});
     $scope.statusTypes.push({"text":"Succeeded", "code":"Succeeded"});
     $scope.statusTypes.push({"text":"Request failed", "code":"Failed"});
 
+    $scope.transponderType = 'all';
     $scope.transponderTypes = [];
+    $scope.transponderTypes.push({"text":"All", "code":"all"});
     $scope.transponderTypes.push({"text":"Inmarsat-C", "code":"INMARSAT_C"});
 
+    $scope.organization = 'all';
     $scope.organizations = [];
+    $scope.organizations.push({"text":"All", "code":"all"});
     $scope.organizations.push({"text":"Control Authority 1", "code":"CA1"});
     $scope.organizations.push({"text":"Control Authority 2", "code":"CA2"});
 
