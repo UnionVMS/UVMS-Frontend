@@ -68,13 +68,14 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
     //Select all mobileterminals
     $scope.selectAllVessels = function(){
       
+        var i;
         if(!$.isEmptyObject($scope.selectedGroup)){
             //create vesselgroup 
             var mobileTerminalGroup = new MobileTerminalGroup();
             mobileTerminalGroup.name = $scope.selectedGroup.savedSearchGroup.name;
             
             mobileTerminalGroup.mobileTerminals = []; // $scope.currentSearchResults;
-            for (var i = 0; i < $scope.currentSearchResults.mobileTerminals.length; i++) {
+            for (i = 0; i < $scope.currentSearchResults.mobileTerminals.length; i++) {
                 mobileTerminalGroup.mobileTerminals.push($scope.currentSearchResults.mobileTerminals[i]);
             }
 
@@ -82,7 +83,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
             pollingService.addMobileTerminalGroupToSelection(mobileTerminalGroup);
         }else{
             //Add terminals as not a group.
-            for(i=0; i < $scope.currentSearchResults.mobileTerminals.length; i ++){
+            for(i=0; i < $scope.currentSearchResults.mobileTerminals.length; i++){
                 pollingService.addMobileTerminalToSelection($scope.currentSearchResults.mobileTerminals[i]);
             }
         }

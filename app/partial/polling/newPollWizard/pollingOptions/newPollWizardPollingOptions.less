@@ -1,0 +1,53 @@
+.pollingOptionsContainer{
+
+    span.pollType{
+        cursor: pointer;
+    }
+
+    .optionsSection{
+        .grayBorderBottom;
+        margin-top: 15px;
+        padding-bottom: 15px;
+
+        //No border for last optionsSection
+        &:nth-last-child(2){
+            border-bottom:0px !important;
+        }
+    }
+
+    input[type="radio"]{
+        position: relative;
+        top:2px;
+    }
+
+    textarea{
+        min-height: 75px;
+    }
+
+    .indentedSection{
+        padding-left: 15px;
+        padding-top: 5px;
+    }
+
+    .configurationPollOptions{
+        table{
+            margin-top: 5px;
+            th{
+                text-transform: uppercase;
+                font-size: 12px;
+                font-weight: bold;
+                width: 20%;
+            }
+            td{
+                input{
+                    width: 100%;
+                }
+                padding-right: 5px;
+            }
+        }
+    }
+
+    .activePollType{
+        font-weight: bold;
+    }
+}

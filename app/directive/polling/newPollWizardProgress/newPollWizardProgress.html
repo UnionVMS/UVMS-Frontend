@@ -1,5 +1,31 @@
-<div>
-	<div class="step" ng-class="{activestep : isFirstStep()}"><p>1 {{'polling.wizard_first_step' | i18n | uppercase}} </p></div>
-	<div class="step" ng-class="{activestep : isSecondStep()}"><p>2 {{'polling.wizard_second_step' | i18n | uppercase}}</p></div>
-	<div class="step" ng-class="{activestep : isLastStep()}"><p>3 {{'polling.wizard_third_step' | i18n | uppercase}}</p></div>
+<div class="row">
+    <div class="col-md-12">
+    	<div class="step" ng-class="{activestep : isActiveStep(1), finishedstep: isFinishedStep(1)}">
+            <div class="stepIcon">
+                <span ng-show="isFinishedStep(1)"><i class="fa fa-check"></i></span>
+                <span ng-hide="isFinishedStep(1)">1</span>
+            </div>
+            <p>
+                {{'polling.wizard_first_step' | i18n | uppercase}} 
+            </p>
+        </div>
+    	<div class="step" ng-class="{activestep : isActiveStep(2), finishedstep: isFinishedStep(2)}">
+            <div class="stepIcon">
+                <span ng-show="isFinishedStep(2)"><i class="fa fa-check"></i></span>
+                <span ng-hide="isFinishedStep(2)">2</span>
+            </div>
+            <p>
+                {{'polling.wizard_second_step' | i18n | uppercase}}
+            </p>
+        </div>
+    	<div class="step" ng-class="{activestep : isActiveStep(3)}">
+            <div class="stepIcon">
+                <span ng-show="isFinishedStep(3)"><i class="fa fa-check"></i></span>
+                <span ng-hide="isFinishedStep(3)">3</span>
+            </div>
+            <p>
+                {{'polling.wizard_third_step' | i18n | uppercase}}
+            </p>
+        </div>
+    </div>
 </div>

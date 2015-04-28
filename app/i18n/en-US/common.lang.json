@@ -1,11 +1,13 @@
 {
     "active" : "Active",
+    "back" : "Back",
     "cancel" : "Cancel",
     "choose" : "Choose",
     "close" : "Close" ,
     "comment" : "Comment",
     "comment_modal_comment_placeholder" : "Log a reason to your changes",
     "inactive" : "Inactive",
+    "next" : "Next" ,
     "no" : "No" ,
     "remove" : "Remove",
     "reset" : "Reset",

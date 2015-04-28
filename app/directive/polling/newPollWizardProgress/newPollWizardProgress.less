@@ -1,7 +1,42 @@
 .step{
-	float:left;
-	color: grey;
-	margin: 5px;
+    @stepColor:#858687;
+
+    float:left;
+    margin-right: 50px;
+    &:last-child{
+        margin-right: 0px;
+    }
+    
+    color: @stepColor;
+    font-weight: bold;
+
+
+    @iconSize: 20px;
+    .stepIcon{
+        position: absolute;
+        width: @iconSize;
+        height: @iconSize;
+        line-height: @iconSize;
+        border-radius: 50%;
+        text-align: center;
+        background: @stepColor;
+        color:#fff;
+    }
+    p{
+        padding-left: @iconSize + 2px;
+    }
+
+    &.activestep{
+        .stepIcon{
+            background: #000;
+        }
+    }
+    &.finishedstep{
+        .stepIcon{
+            background: @successColor;
+            font-size: 12px;
+        }
+    }    
 }
 
 .activestep{

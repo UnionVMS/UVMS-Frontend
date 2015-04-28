@@ -8,9 +8,12 @@ angular.module('unionvmsWeb').directive('newPollWizardProgress', function() {
 		templateUrl: 'directive/polling/newPollWizardProgress/newPollWizardProgress.html',
 		link: function(scope, element, attrs, fn) {
 
-			scope.isFirstStep = function(){return scope.step === "1";};
-			scope.isSecondStep = function(){return scope.step === "2";};
-			scope.isLastStep = function(){return scope.step === "3";};			
+			scope.isActiveStep = function(step){
+                return parseInt(scope.step) === step;
+            };
+            scope.isFinishedStep = function(step){
+                return parseInt(scope.step) > step;
+            };            
 		}
 	};
 });
