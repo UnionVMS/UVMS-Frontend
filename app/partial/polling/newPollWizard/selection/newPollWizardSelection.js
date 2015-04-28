@@ -5,4 +5,8 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectionCtrl', function(
 	$scope.remove = function(mobileTerminalGroup, mobileTerminal) {
 		pollingService.removeMobileTerminalFromSelection(mobileTerminalGroup, mobileTerminal);
 	};
+
+	$scope.clear = function() {
+		pollingService.clearSelection();
+	};
 });
