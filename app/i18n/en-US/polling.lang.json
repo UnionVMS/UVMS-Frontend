@@ -45,7 +45,7 @@
     "wizard_second_step_request_channel_dropdown_placeholder" :"Comm. channel",
     "wizard_second_step_response_channel_dropdown_placeholder" :"Transmit response by",
     "wizard_second_step_comment_header" :"Comments",
-    "wizard_second_step_comment_placeholder" :"Log the reason(s) for you poll(s)",
+    "wizard_second_step_comment_placeholder" :"Log the reason(s) for your poll(s)",
     "wizard_second_step_manual_poll" :"Manual poll",
     "wizard_second_step_program_poll" :"Program poll",
     "wizard_second_step_program_poll_start_date_placeholder" :"Start date",
