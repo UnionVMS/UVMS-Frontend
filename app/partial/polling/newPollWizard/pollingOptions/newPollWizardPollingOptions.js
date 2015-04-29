@@ -27,7 +27,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
 
 
     $scope.setPollType = function(type){
-        if (!$scope.isSingleMobileTerminalSelected && $scope.isSamplingPoll()) {
+        if (!$scope.isSingleMobileTerminalSelected() && type === "SAMPLING") {
             return;
         }
 
