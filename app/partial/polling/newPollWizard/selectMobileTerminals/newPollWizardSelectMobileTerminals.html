@@ -5,14 +5,16 @@
 		<advanced-search searchfunc="searchMobileTerminals" vesselGroupCallback="selectGroupCallback()" modeltype="'POLLING_MOBILE_TERMINAL'" advancedsearchvisible="true"></advanced-search>                
     </div>
     <div class="row">
-		<table class="polltable col-md-12">
+		<table class="searchResults polltable colorOdd col-md-12">
 	  		<thead>
 				<tr>
 			    	 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vesselName'">{{'polling.poll_table_header_vessel_name' | i18n}}</th>
 			    	 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'memberno'">{{'polling.poll_table_header_vessel_member_no' | i18n}}</th>
 			    	 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'dnid'">{{'polling.poll_table_header_vessel_dnid' | i18n}}</th>
 			    	 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'transponder'">{{'polling.poll_table_header_vessel_transponder' | i18n}}</th>
-			    	 <th><button class="btn btn-primary btn-sm" ng-click="selectAllVessels()">{{'polling.poll_table_button_add_all' | i18n | uppercase}}</button></th>
+			    	 <th>
+			    	 	<button class="btn btn-primary btn-sm polltablebutton" ng-hide="isTerminalGroupSelected()" ng-click="selectAllVessels()">{{'polling.poll_table_button_add_all' | i18n | uppercase}}</button>
+			    	 </th>
 			    </tr>
 		    </thead>
 		    <tbody>
@@ -22,18 +24,19 @@
 		    		<td>{{item.channels[0].ids.DNID}}</td>
 		    		<td>{{item.mobileTerminalId.systemType}}</td>
 		    		<td>
-		    			<button class="btn btn-primary btn-sm selectbutton" ng-click="selectVessel(item)">{{'polling.poll_table_button_add_selected' | i18n | uppercase}}</button>
+		    			<button class="btn btn-primary btn-sm polltablebutton" ng-hide="isTerminalSelected(item)" ng-click="selectVessel(item, $index)">
+		    				{{'polling.poll_table_button_add_selected' | i18n | uppercase}}</button>
+		    			<button class="btn btn-primary btn-sm polltablebutton selected" ng-show="isTerminalSelected(item)"  ng-click="selectVessel(item, $index)">
+		    				<span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
 		    		</td>
 		    	</tr>
 		    </tbody>
     	</table>
-    	<!--<p>Visar {{currentSearchResults.totalNumberOfPage}} of {{currentSearchResults.totalNumberOfPage}}</p>-->
-	</div>
+    </div>
     <div class="row wizardFooter">
         <div class="col-md-12 textAlignRight">
             <button type="button" class="btn btn-primary" ng-click="nextStep()">{{'common.next' | i18n | uppercase}}</button>
         </div>        
     </div>        
 </div>
-{{selectedVesselGroup}}
-
+	

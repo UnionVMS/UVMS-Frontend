@@ -26,7 +26,6 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     };
 
     var setTerminalConfig = function(systemName){
-        console.log("set terminal config :" + systemName);
         $scope.terminalConfig = $scope.transpondersConfig.getTerminalConfigBySystemName(systemName);
     };
 

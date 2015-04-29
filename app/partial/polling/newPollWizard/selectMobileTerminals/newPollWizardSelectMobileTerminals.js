@@ -1,8 +1,8 @@
 angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl',function($scope, searchService, pollingService, alertService,MobileTerminalListPage, MobileTerminal, mobileTerminalRestService, locale, MobileTerminalGroup){
 
 	
-	$scope.selectedVesselsToPoll = [];
     $scope.selectedGroup = {};
+   
 
 	console.log($scope.vesselGroups); 
 
@@ -20,7 +20,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
   //Get list of Mobile Terminals matching the current search criterias
     $scope.searchMobileTerminals = function(opt){
 
-        $scope.selectedGroup = opt ||  {};
+        $scope.selectedGroup = opt || {};
 
         $scope.currentSearchResults.errorMessage = "";
         $scope.currentSearchResults.loading = true;
@@ -61,13 +61,15 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
     };
 
     //button to add selected vessel    
-    $scope.selectVessel = function(item){
+    $scope.selectVessel = function(item, index){
+        console.log("index: " + index);
         pollingService.addMobileTerminalToSelection(item);
+      //  $scope.addToSelectedMobileTerminals(item);
     };
     
+    
     //Select all mobileterminals
-    $scope.selectAllVessels = function(){
-      
+    $scope.selectAllVessels = function(){ 
         var i;
         if(!$.isEmptyObject($scope.selectedGroup)){
             //create vesselgroup 
@@ -77,6 +79,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
             mobileTerminalGroup.mobileTerminals = []; // $scope.currentSearchResults;
             for (i = 0; i < $scope.currentSearchResults.mobileTerminals.length; i++) {
                 mobileTerminalGroup.mobileTerminals.push($scope.currentSearchResults.mobileTerminals[i]);
+                 //$scope.addToSelectedMobileTerminals($scope.currentSearchResults.mobileTerminals[i]);
             }
 
             //Add terminalgroup.
@@ -85,11 +88,32 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
             //Add terminals as not a group.
             for(i=0; i < $scope.currentSearchResults.mobileTerminals.length; i++){
                 pollingService.addMobileTerminalToSelection($scope.currentSearchResults.mobileTerminals[i]);
+                //$scope.addToSelectedMobileTerminals($scope.currentSearchResults.mobileTerminals[i]);
             }
         }
-        
-        //$scope.selectedVesselGroup
     };
 
+    $scope.addToSelectedMobileTerminals = function(item){
+        if($.inArray(item, $scope.selectedMobileTerminals) < 0) {
+            //add to array
+            $scope.selectedMobileTerminals.push(item);
+        }
+        console.info($scope.selectedMobileTerminals);
+    };
+    
+    $scope.isTerminalGroupSelected = function(){
+        
+        var bol = true; 
+        for(i=0; i < $scope.currentSearchResults.mobileTerminals.length; i++){
+           if (pollingService.isMobileTerminalSelected($scope.currentSearchResults.mobileTerminals[i]) === false){
+                bol = false;
+            }
+        }
+        return bol;
+    };
+
+    $scope.isTerminalSelected = function(item){
+      return pollingService.isMobileTerminalSelected(item);
+    };
 
 });

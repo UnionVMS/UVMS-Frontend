@@ -6,40 +6,31 @@ angular.module('unionvmsWeb').factory('pollingService',function() {
         selectedMobileTerminalGroups : []
     };
 
-    function indexOfObject(xs, x) {
-        var i;
-        if (typeof x === "function") {
-            // x = comparator function
-            for (i = 0; i < xs.length; i++) {
-                if (x(xs[i])) {
-                    return i;
-                }
+    function indexOfTerminal(xs, x) {
+        for (var i = 0; i < xs.length; i++) {
+            if (xs[i].isEqualTerminal(x)) {
+                return i;
             }
         }
-        else {
-            // x = object
-            for (i = 0; i < xs.length; i++) {
-                if (xs[i] === x) {
-                    return i;
-                }
-            }
-        }
-
         return -1;
     }
 
-    function isSameTerminalGroup(group) {
-        return function(g) {
-            return g.name === group.name;
-        };
+
+    function indexOfTerminalGroup(xs, name) {
+            for (i = 0; i < xs.length; i++) {
+                if (xs[i].name === name) {
+                    return i;
+                }
+            }
+        return -1;
     }
 
     function containsTerminal(terminals, terminal) {
-        return indexOfObject(terminals, terminal) >= 0;
+        return indexOfTerminal(terminals, terminal) >= 0;
     }
 
     function containsTerminalGroup(groups, group) {
-        return indexOfObject(groups, isSameTerminalGroup(group)) >= 0;
+        return indexOfTerminalGroup(groups, group.name) >= 0;
     }
 
     function isTerminalSelected(terminal) {
@@ -62,7 +53,7 @@ angular.module('unionvmsWeb').factory('pollingService',function() {
     }
 
     function removeTerminalGroup(groups, group) {
-        var idx = indexOfObject(groups, isSameTerminalGroup(group));
+        var idx = indexOfTerminalGroup(groups, group.name);
         if (idx < 0) {
             return;
         }
@@ -71,11 +62,10 @@ angular.module('unionvmsWeb').factory('pollingService',function() {
     }
 
     function removeTerminal(terminals, terminal) {
-        var idx = indexOfObject(terminals, terminal);
+        var idx = indexOfTerminal(terminals, terminal);
         if (idx < 0) {
             return;
         }
-
         terminals.splice(idx, 1);
     }
 

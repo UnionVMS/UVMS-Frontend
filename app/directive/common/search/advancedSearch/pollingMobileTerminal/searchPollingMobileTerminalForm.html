@@ -1,35 +1,38 @@
 <div ng-controller="AdvancedSearchMobileTerminalFormCtrl">
-    <div class="row">
-        <div class="col-md-7">
-                <div class="col-md-3">
-                    <input type="text" placeholder="{{'mobileTerminal.search_name_placeholder' | i18n}}" class="form-control" tabindex="1" ng-model="advancedSearchObject.NAME" ng-change="onSearchInputChange()">
-                </div>
-                <div class="col-md-3">
-                    <input type="text" placeholder="{{'mobileTerminal.search_IRCS_placeholder' | i18n}}"  class="form-control" tabindex="2" ng-model="advancedSearchObject.IRCS" ng-change="onSearchInputChange()">
-                </div>
-                <div class="col-md-3">
-                    <input type="text" placeholder="{{'mobileTerminal.search_externalMarking_placeholder' | i18n}}" class="form-control" tabindex="3" ng-model="advancedSearchObject.EXTERNAL_MARKING" ng-change="onSearchInputChange()">
-                </div>
-                <div class="col-md-3">
-                    <input type="text" placeholder="{{'mobileTerminal.search_CFR_placeholder' | i18n}}"  class="form-control" tabindex="4" ng-model="advancedSearchObject.CFR" ng-change="onSearchInputChange()">
-                </div>
-        </div>
-        <div class="col-md-5">
-            <div class="col-md-6">
+    <div class="pollingmobileterminalform">
+        <div class="row">
+            <div class="col-md-4">
+                <input type="text" placeholder="{{'mobileTerminal.search_name_placeholder' | i18n}}" class="form-control" tabindex="1" ng-model="advancedSearchObject.NAME" ng-change="onSearchInputChange()">
+            </div>
+            <div class="col-md-4">
+                <input type="text" placeholder="{{'mobileTerminal.search_IRCS_placeholder' | i18n}}"  class="form-control" tabindex="2" ng-model="advancedSearchObject.IRCS" ng-change="onSearchInputChange()">
+            </div>
+            <div class="col-md-4">
                 <dropdown ng-model="selectedVesselGroup" initialtext="{{'mobileTerminal.search_selectVesselGroup_placeholder' | i18n}}" items="vesselGroups" title="name" callback="searchSelectedGroup"></dropdown>
             </div>
-            <div class="col-md-3">
-            <!-- Reset button -->
+        </div>
+        <div class="row">
+            
+            <div class="col-md-4">
+                <input type="text" placeholder="{{'mobileTerminal.search_externalMarking_placeholder' | i18n}}" class="form-control" tabindex="3" ng-model="advancedSearchObject.EXTERNAL_MARKING" ng-change="onSearchInputChange()">
+            </div>
+            <div class="col-md-4">
+                <input type="text" placeholder="{{'mobileTerminal.search_CFR_placeholder' | i18n}}"  class="form-control" tabindex="4" ng-model="advancedSearchObject.CFR" ng-change="onSearchInputChange()">
+            </div>
+
+            <div class="col-md-2 ">
+                <!-- Reset button -->
                 <button type="button" class="btn btn-default btn-sm" ng-click="resetAdvancedMobileSearchForm()">
-                        {{'common.reset' | i18n}}
+                    {{'common.reset' | i18n}}
                 </button> 
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <!-- Search button -->
                 <button type="button" class="btn btn-primary btn-sm" ng-click="performAdvancedSearch()">
                     {{'common.search' | i18n}}
                 </button>
             </div>
+
         </div>
     </div>
 </div>

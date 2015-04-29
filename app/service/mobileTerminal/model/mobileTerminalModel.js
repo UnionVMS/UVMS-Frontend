@@ -189,5 +189,17 @@ angular.module('unionvmsWeb')
             return this.mobileTerminalId.ids["SERIAL_NUMBER"];
         };
 
+         MobileTerminal.prototype.getSystemType = function() {
+            return this.mobileTerminalId.systemType;
+        };
+
+        MobileTerminal.prototype.isEqualTerminal = function(item) {
+            if(item.getSerialNumber() === this.getSerialNumber() && item.getSystemType() === this.getSystemType()){
+                return true;
+            }else{
+                return false;
+            }
+        };
+
         return MobileTerminal;
     });
