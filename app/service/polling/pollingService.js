@@ -17,7 +17,7 @@ angular.module('unionvmsWeb').factory('pollingService',function() {
 
 
     function indexOfTerminalGroup(xs, name) {
-            for (i = 0; i < xs.length; i++) {
+            for (var i = 0; i < xs.length; i++) {
                 if (xs[i].name === name) {
                     return i;
                 }
