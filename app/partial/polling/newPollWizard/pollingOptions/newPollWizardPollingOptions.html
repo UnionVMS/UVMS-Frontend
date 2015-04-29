@@ -74,8 +74,10 @@
     <!--SAMPLING-->
     <div class="optionsSection">
         <div class="row">
-            <div class="col-md-4">
-                <input type="radio" ng-model="pollingOptions.type" value="SAMPLING"/> <span class="pollType" ng-class="{'activePollType' : isSamplingPoll()}" ng-click="setPollType('SAMPLING')">{{'polling.wizard_second_step_sampling_poll' | i18n | uppercase}}</span>
+            <div class="col-md-12">
+                <input type="radio" ng-disabled="!isSingleMobileTerminalSelected()" ng-model="pollingOptions.type" value="SAMPLING"/>
+                <span class="pollType" ng-class="{'activePollType' : isSamplingPoll()}" ng-click="setPollType('SAMPLING')">{{'polling.wizard_second_step_sampling_poll' | i18n | uppercase}}</span>
+                <span ng-hide="isSingleMobileTerminalSelected()" class="validation-warning">{{ "polling.sampling_poll_single_carrier_warning" | i18n }}</span>
             </div>
         </div>
         <div class="row">

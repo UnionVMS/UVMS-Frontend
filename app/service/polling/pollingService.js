@@ -7,9 +7,10 @@ angular.module('unionvmsWeb').factory('pollingService',function() {
     };
 
     function indexOfObject(xs, x) {
+        var i;
         if (typeof x === "function") {
             // x = comparator function
-            for (var i = 0; i < xs.length; i++) {
+            for (i = 0; i < xs.length; i++) {
                 if (x(xs[i])) {
                     return i;
                 }
@@ -17,7 +18,7 @@ angular.module('unionvmsWeb').factory('pollingService',function() {
         }
         else {
             // x = object
-            for (var i = 0; i < xs.length; i++) {
+            for (i = 0; i < xs.length; i++) {
                 if (xs[i] === x) {
                     return i;
                 }
@@ -82,6 +83,15 @@ angular.module('unionvmsWeb').factory('pollingService',function() {
         removeTerminal(terminalGroup.mobileTerminals, terminal);
     }
 
+    function isSingleSelection() {
+        var count = selection.selectedMobileTerminals.length;
+        for (var i = 0; i < selection.selectedMobileTerminalGroups.length; i++) {
+            count += selection.selectedMobileTerminalGroups[i].mobileTerminals.length;
+        }
+
+        return count === 1;
+    }
+
 	var pollingService = {
         addMobileTerminalToSelection: function(terminal) {
             if (isTerminalSelected(terminal)) {
@@ -97,7 +107,7 @@ angular.module('unionvmsWeb').factory('pollingService',function() {
 
             // Remove any terminal in this group that was individually selected before
             for (var i = 0; i < terminalGroup.mobileTerminals.length; i++) {
-                var terminal = terminalGroup.mobileTerminals[i]
+                var terminal = terminalGroup.mobileTerminals[i];
                 removeTerminal(selection.selectedMobileTerminals, terminal);
             }
 
@@ -127,7 +137,8 @@ angular.module('unionvmsWeb').factory('pollingService',function() {
             return selection;
         },
         isMobileTerminalSelected: isTerminalSelected,
-        isMobileTerminalGroupSelected: isTerminalGroupSelected
+        isMobileTerminalGroupSelected: isTerminalGroupSelected,
+        isSingleSelection: isSingleSelection
     };
 
 	return pollingService;

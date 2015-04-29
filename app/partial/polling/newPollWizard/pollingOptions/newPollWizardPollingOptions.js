@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',function($scope, alertService){
+angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',function($scope, alertService, pollingService){
 
     //The polling options
     $scope.pollingOptions = {
@@ -27,6 +27,10 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
 
 
     $scope.setPollType = function(type){
+        if (!$scope.isSingleMobileTerminalSelected && $scope.isSamplingPoll()) {
+            return;
+        }
+
         $scope.pollingOptions.type = type;
     };
 
@@ -44,11 +48,22 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
 
     $scope.isSamplingPoll = function(){
         return $scope.pollingOptions.type === 'SAMPLING';
-    };    
+    };
 
     //Run the poll
     $scope.runPoll = function(){
         alertService.showInfoMessageWithTimeout("Running poll...");
         $scope.nextStep();
-    };       
+    };
+
+    // Change polling type if incompatible with current selection
+    $scope.$watch("wizardStep", function(newValue) {
+        if (newValue === 2 && !$scope.isSingleMobileTerminalSelected() && $scope.isSamplingPoll()) {
+            $scope.pollingOptions.type = 'MANUAL';
+        }
+    });
+
+    $scope.isSingleMobileTerminalSelected = function() {
+        return pollingService.isSingleSelection();
+    };
 });
