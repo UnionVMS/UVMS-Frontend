@@ -104,7 +104,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
     $scope.isTerminalGroupSelected = function(){
         
         var bol = true; 
-        for(i=0; i < $scope.currentSearchResults.mobileTerminals.length; i++){
+        for(var i=0; i < $scope.currentSearchResults.mobileTerminals.length; i++){
            if (pollingService.isMobileTerminalSelected($scope.currentSearchResults.mobileTerminals[i]) === false){
                 bol = false;
             }
