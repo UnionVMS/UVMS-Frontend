@@ -1,43 +1,9 @@
 <div ng-controller="PollingCtrl">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 pageMenu">
-                <ul class="horizontal pipeSeparator">
-                    <li><a href="#communication">{{'mobileTerminal.menu_mobileterminals' | i18n}}</a></li>
-                    <li class="active"><a href="#communication/polling">{{'mobileTerminal.menu_polling' | i18n}}</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    <div static-include="partial/polling/pollingPageHeader/pollingPageHeader.html"></div>
 
-
-
-
-    <!-- Nav tabs -->
-    <div class="containerWrapper pollingTabs">
-        <div class="container">
-          <ul class="nav nav-tabs" role="tablist" id="mobileTabs">
-            <li role="presentation" class="active">
-                <a aria-controls="newPoll" role="tab" data-toggle="tab" data-target="#newPoll">{{'polling.tabs_new_poll' | i18n}}</a>
-            </li>
-            <li role="presentation">
-                <a aria-controls="pollingLogs" role="tab" data-toggle="tab" data-target="#pollingLogs">{{'polling.tabs_logs' | i18n}}</a>
-            </li>
-          </ul>
-        </div>
-    </div>
-
-    <!-- Tab panes -->
+    <!-- Content -->
     <div class="container containerWithTopBottomPadding">
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="newPoll">
-                <div ng-include="'partial/polling/newPollWizard/newPollWizard.html'"></div>                
-            </div>
-            <div role="tabpanel" class="tab-pane" id="pollingLogs">
-                <div ng-include="'partial/polling/pollingLogs/pollingLogs.html'"></div>
-            </div>
-        </div>
+        <div ng-include="'partial/polling/newPollWizard/newPollWizard.html'"></div>              
     </div>
-
 
 </div>

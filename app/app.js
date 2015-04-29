@@ -24,7 +24,11 @@ angular.module('unionvmsWeb').config(function($routeProvider) {
         .when('/communication/polling', {
             templateUrl: 'partial/polling/polling.html', 
             resolve: generalRouteResolves
-        });
+        })
+        .when('/communication/polling/logs', {
+            templateUrl: 'partial/polling/pollingLogs/pollingLogs.html', 
+            resolve: generalRouteResolves
+        });        
     /* Add New Routes Above */
     $routeProvider.otherwise({redirectTo:'/today'});
 

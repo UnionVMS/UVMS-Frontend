@@ -15,6 +15,8 @@
     "running_program_polls_table_header_start" : "Start",
     "running_program_polls_table_header_stop" : "Stop",
     "running_program_polls_table_header_delete" : "Delete",
+    "running_program_polls_zero_message" : "There are currently no running program polls.",
+    "running_program_polls_error_message" : "Failed to load program polls. Please try again by refreshing the page.",
     "polling_logs_search_date_from_placeholder" : "From",
     "polling_logs_search_date_to_placeholder" : "To",
     "polling_logs_table_header_export_as_csv" : "Export data in CSV format",

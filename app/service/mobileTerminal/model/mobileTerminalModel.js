@@ -1,13 +1,10 @@
 angular.module('unionvmsWeb')
-    .factory('MobileTerminal', function(CommunicationChannel, CarrierId, MobileTerminalAttribute) {
+    .factory('MobileTerminal', function(MobileTerminalId, CommunicationChannel, CarrierId, MobileTerminalAttribute) {
 
         var INMARSAT_C_ATTRIBUTES = ['SATELLITE_NUMBER', 'TRANSCEIVER_TYPE', 'SOFTWARE_VERSION', 'ANTENNA', 'ANSWER_BACK', 'INSTALLED_BY', 'INSTALLED_ON', 'STARTED_ON', 'UNINSTALLED_ON'];
 
         function MobileTerminal(){
-            this.mobileTerminalId = {
-                systemType : undefined,
-                ids : {}
-            };
+            this.mobileTerminalId = new MobileTerminalId();
             this.attributes = {};
             this.channels = [];
             //Add an initial channel
@@ -21,14 +18,7 @@ angular.module('unionvmsWeb')
             var mobileTerminal = new MobileTerminal();
 
             //MobileTerminalId
-            mobileTerminal.mobileTerminalId.systemType = data.mobileTerminalId.systemType;
-
-            //IdList
-            for (var i = 0; i < data.mobileTerminalId.idList.length; i ++) {
-                var idType = data.mobileTerminalId.idList[i].type,
-                    idValue = data.mobileTerminalId.idList[i].value;
-                mobileTerminal.mobileTerminalId.ids[idType] = idValue;
-            }            
+            mobileTerminal.mobileTerminalId = MobileTerminalId.fromJson(data.mobileTerminalId); 
 
             //CarrierId
             if(angular.isDefined(data.carrierId)){
@@ -38,7 +28,7 @@ angular.module('unionvmsWeb')
             //Attributes
             if(data.attributes !== null){
                 mobileTerminal.attributes = {};
-                for (i = 0; i < data.attributes.length; i ++) {
+                for (var i = 0; i < data.attributes.length; i ++) {
                     mobileTerminal.attributes[data.attributes[i].fieldType.toUpperCase()] = data.attributes[i].value;
                 }
             }
@@ -76,7 +66,7 @@ angular.module('unionvmsWeb')
             var attributesObjects = [];
             var validAttributes;
 
-            if(this.mobileTerminalId.systemType === 'INMARSAT_C'){
+            if(this.mobileTerminalId.isInmarsatC()){
                 validAttributes = INMARSAT_C_ATTRIBUTES;
             }
 
@@ -93,17 +83,8 @@ angular.module('unionvmsWeb')
                 jsonChannels.push(channelObject);
             });
 
-            //Create idList
-            var idList = [];
-            $.each(this.mobileTerminalId.ids, function(key, value){
-                idList.push({"type": key, "value": value});
-            });
-
             return JSON.stringify({
-                mobileTerminalId : {
-                    systemType : this.mobileTerminalId.systemType,
-                    idList : idList,
-                },
+                mobileTerminalId : JSON.parse(this.mobileTerminalId.toJson()),
                 attributes : attributesObjects,
                 channels : jsonChannels
             });
@@ -111,16 +92,7 @@ angular.module('unionvmsWeb')
 
         //Used when activating, inactivating and removing
         MobileTerminal.prototype.toSetStatusJson = function(){
-            //Create idList
-            var idList = [];
-            $.each(this.mobileTerminalId.ids, function(key, value){
-                idList.push({"type": key, "value": value});
-            });
-
-            return JSON.stringify({
-                systemType : this.mobileTerminalId.systemType,
-                idList : idList,
-            });
+            return this.mobileTerminalId.toJson();
         };     
 
         //Used when assigning and unassigning
@@ -158,7 +130,7 @@ angular.module('unionvmsWeb')
         };        
 
         MobileTerminal.prototype.setSystemTypeToInmarsatC = function(){
-            this.mobileTerminalId.systemType = "INMARSAT_C";
+            this.mobileTerminalId.setSystemTypeToInmarsatC();
 
             //TODO: Is this neeeded? /Gustav
             this.oceanRegion = undefined;

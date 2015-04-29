@@ -2,17 +2,16 @@
     <div class="col-md-12">
         <h5>{{'polling.running_program_polls_header' | i18n}}</h5>
         <div class="tableContainer">
-            <table class="searchResults">
+            <table class="searchResults" ng-show="currentSearchResults.programPolls.length > 0">
                 <thead>
                     <tr>
                         <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.name'">{{'polling.running_program_polls_table_header_name' | i18n}}</th>
 
-                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.transponder'">{{'polling.running_program_polls_table_header_transponder' | i18n}}</th>
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.systemType'">{{'polling.running_program_polls_table_header_transponder' | i18n}}</th>
 
                         <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'startDate'">{{'polling.running_program_polls_table_header_start_date' | i18n}}</th>
 
                         <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'endDate'">{{'polling.running_program_polls_table_header_end_date' | i18n}}</th>                        
-
                         <th>{{'polling.running_program_polls_table_header_interval' | i18n}}</th>
 
                         <th>{{'polling.running_program_polls_table_header_user' | i18n}}</th>
@@ -27,10 +26,10 @@
                 <tbody>
                 <tr ng-repeat="item in currentSearchResults.programPolls | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">            
                     <td>{{item.name}}</td>
-                    <td>{{item.transponder}}</td>
-                    <td>{{item.startDate}}</td>
-                    <td>{{item.endDate}}</td>
-                    <td>{{item.pollInterval}}</td>
+                    <td>{{item.mobileTerminalId.systemType}}</td>
+                    <td>{{item.getFormattedStartDate()}}</td>
+                    <td>{{item.getFormattedEndDate()}}</td>
+                    <td>{{item.getFrequencyAsText()}}</td>
                     <td>{{item.user}}</td>
                     <td>{{item.organization}}</td>
                     <td class="actionIcon">

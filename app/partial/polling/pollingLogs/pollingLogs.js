@@ -1,5 +1,6 @@
-angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll, PollStatus, alertService){
+angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll, PollStatus, searchService, alertService){
 
+    $scope.activeTab = "POLLING_LOGS";
 
     //Search objects and results
     $scope.currentSearchResults = {
@@ -89,7 +90,12 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll
         alertService.showInfoMessageWithTimeout("Export as file will soon be available. Stay tuned!");
     };
 
-    init();
 
+    $scope.$on("$destroy", function() {
+        alertService.hideMessage();
+        searchService.reset();
+    });        
+
+    init();
 
 });

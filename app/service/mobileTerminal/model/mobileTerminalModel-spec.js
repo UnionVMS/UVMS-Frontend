@@ -197,8 +197,6 @@ describe('MobileTerminalModel', function() {
         var toJsonObject = JSON.parse(mobileTerminal.toSetStatusJson());
         expect(angular.equals(toJsonObject, mobileTerminalIdOnlyJson)).toBeTruthy();
     }));
-    
-
 
     it('setSystemTypeToInmarsatC should set systemType to correct value', inject(function(MobileTerminal) {
         var mobileTerminal = new MobileTerminal();
