@@ -81,7 +81,6 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
                 mobileTerminalGroup.mobileTerminals.push($scope.currentSearchResults.mobileTerminals[i]);
                  //$scope.addToSelectedMobileTerminals($scope.currentSearchResults.mobileTerminals[i]);
             }
-
             //Add terminalgroup.
             pollingService.addMobileTerminalGroupToSelection(mobileTerminalGroup);
         }else{

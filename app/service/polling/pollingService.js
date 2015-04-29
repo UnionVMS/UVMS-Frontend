@@ -71,6 +71,11 @@ angular.module('unionvmsWeb').factory('pollingService',function() {
 
     function removeTerminalFromGroup(terminalGroup, terminal) {
         removeTerminal(terminalGroup.mobileTerminals, terminal);
+
+        // Last terminal removed from group also removes group
+        if (terminalGroup.mobileTerminals.length === 0) {
+            removeTerminalGroup(selection.selectedMobileTerminalGroups, terminalGroup);
+        }
     }
 
     function isSingleSelection() {
@@ -92,13 +97,16 @@ angular.module('unionvmsWeb').factory('pollingService',function() {
         },
         addMobileTerminalGroupToSelection: function(terminalGroup) {
             if (isTerminalGroupSelected(terminalGroup)) {
-                return;
+                removeTerminalGroup(selection.selectedMobileTerminalGroups, terminalGroup);
             }
 
-            // Remove any terminal in this group that was individually selected before
+            // Remove any terminal in this group that was selected before
             for (var i = 0; i < terminalGroup.mobileTerminals.length; i++) {
                 var terminal = terminalGroup.mobileTerminals[i];
                 removeTerminal(selection.selectedMobileTerminals, terminal);
+                for (var j = 0; j < selection.selectedMobileTerminalGroups.length; j++) {
+                    removeTerminalFromGroup(selection.selectedMobileTerminalGroups[j], terminal);
+                }
             }
 
             selection.selectedMobileTerminalGroups.push(terminalGroup);
