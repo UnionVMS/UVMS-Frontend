@@ -13,6 +13,7 @@ angular.module('unionvmsWeb')
         var init = function(){
             //Get all vesselGroups for the user
             getVesselGroupsForUser();
+            $scope.resetAdvancedSearchForm(true);
         };
 
         //Get all vessel groups that belongs to the user

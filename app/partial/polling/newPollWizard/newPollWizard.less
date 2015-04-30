@@ -1,6 +1,7 @@
 .newPollWizardStep{
+	height: 795px;
+	max-height: 795px;
     .grayBorder;
-    min-height: 755px;
     padding: 30px;
 }
 
@@ -17,5 +18,23 @@
 }
 
 .wizardcontent{
-	height: 640px;
+	height: 680px;
+	max-height: 680px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding: 10px;
+}
+
+.wizardcontent::-webkit-scrollbar {
+    width: 8px;
+}
+ 
+.wizardcontent::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    width: 4px;
+}
+ 
+.wizardcontent::-webkit-scrollbar-thumb {
+  background-color: #ECEFEF;
+  outline: 1px solid #E4E4E4;
 }

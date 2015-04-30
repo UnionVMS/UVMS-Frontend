@@ -115,4 +115,17 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
       return pollingService.isMobileTerminalSelected(item);
     };
 
+    //Load the next page of the search results
+    $scope.loadNextPage = function(){
+
+        if($scope.currentSearchResults.page < $scope.currentSearchResults.totalNumberOfPages )
+        {
+            //Increase page by 1
+            searchService.increasePage();
+            $scope.currentSearchResults.loading = true;
+            var response = searchService.searchMobileTerminals(true)
+                .then(updateSearchResults, onGetSearchResultsError);
+        }
+    };
+
 });

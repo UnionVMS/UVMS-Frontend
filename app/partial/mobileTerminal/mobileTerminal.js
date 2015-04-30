@@ -99,7 +99,6 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
         $scope.currentSearchResults.page = mobileTerminalListPage.currentPage;
     }; 
 
-
     //Load the next page of the search results
     $scope.loadNextPage = function(){
 
@@ -112,7 +111,6 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
                 .then(updateSearchResults, onGetSearchResultsError);
         }
     };
-
 
     //Error during search
     var onGetSearchResultsError = function(error){

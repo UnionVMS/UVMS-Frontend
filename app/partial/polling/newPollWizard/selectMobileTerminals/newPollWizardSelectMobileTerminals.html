@@ -6,17 +6,17 @@
 	    <table class="searchResults polltable colorOdd col-md-12">
 	  		<thead>
 				<tr>
-			    	 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vesselName'">{{'polling.poll_table_header_vessel_name' | i18n}}</th>
-			    	 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'memberno'">{{'polling.poll_table_header_vessel_member_no' | i18n}}</th>
-			    	 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'dnid'">{{'polling.poll_table_header_vessel_dnid' | i18n}}</th>
-			    	 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'transponder'">{{'polling.poll_table_header_vessel_transponder' | i18n}}</th>
+			    	 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.name'">{{'polling.poll_table_header_vessel_name' | i18n}}</th>
+			    	 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'channels[0].ids.MEMBER_ID'">{{'polling.poll_table_header_vessel_member_no' | i18n}}</th>
+			    	 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'channels[0].ids.DNID'">{{'polling.poll_table_header_vessel_dnid' | i18n}}</th>
+			    	 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.systemType'">{{'polling.poll_table_header_vessel_transponder' | i18n}}</th>
 			    	 <th>
 			    	 	<button class="btn btn-primary btn-sm polltablebutton" ng-hide="isTerminalGroupSelected()" ng-click="selectAllVessels()">{{'polling.poll_table_button_add_all' | i18n | uppercase}}</button>
 			    	 </th>
 			    </tr>
 		    </thead>
 			<tbody>
-		    	<tr ng-repeat="item in currentSearchResults.mobileTerminals">
+		    	<tr ng-repeat="item in currentSearchResults.mobileTerminals | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
 		    		<td>{{item.associatedVessel.name}}</td>
 		    		<td>{{item.channels[0].ids.MEMBER_ID}}</td>
 		    		<td>{{item.channels[0].ids.DNID}}</td>
@@ -30,6 +30,19 @@
 		    	</tr>
 			</tbody>
 	    </table>
+	    <div class="col-md-12 searchResultsLoading" ng-show="currentSearchResults.loading">
+        	<i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>        
+   		 </div>
+   		  <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0">
+                <div class="col-md-12">
+                    {{'common.search_results_current_page' | i18n:[currentSearchResults.page, currentSearchResults.totalNumberOfPages]}}
+                </div>
+            </div>
+            <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0 && currentSearchResults.totalNumberOfPages > currentSearchResults.page">
+                <div class="col-md-12 textAlignCenter">
+                    <span class="link" ng-click="loadNextPage()"> {{'common.search_results_load_more' | i18n | uppercase}}</span>            
+                </div>
+            </div>
 	</div>
     <div class="row wizardFooter">
         <div class="col-md-12 textAlignRight">
@@ -38,3 +51,4 @@
     </div>        
 </div>
 	
+
