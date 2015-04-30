@@ -1,6 +1,5 @@
 angular.module('unionvmsWeb')
-.factory('ProgramPoll', function(MobileTerminalId) {
-
+.factory('ProgramPoll', function(MobileTerminalId, locale) {
 
     function ProgramPoll(){
         this.mobileTerminalId = new MobileTerminalId();
@@ -15,6 +14,7 @@ angular.module('unionvmsWeb')
         //MOCKED VALUES
         //TODO: Use real values
         this.running = false;
+        this.vesselName = "MOCK VESSEL";
         this.user = "Test user";
         this.organization = "Control Authority 1";
     }
@@ -35,6 +35,22 @@ angular.module('unionvmsWeb')
         return programPoll;
     };
 
+    ProgramPoll.prototype.toJson = function(){
+        return JSON.stringify({
+            mobileTerminal : JSON.parse(this.mobileTerminalId.toJson()),
+            frequency : this.frequency,
+            comment : this.comment,
+            date : {
+                startDate : this.startDate,
+                endDate : this.endDate
+            },
+            comChannel : {
+                type : this.channel.type,
+                value : this.channel.value
+            }
+        });
+    };
+
     ProgramPoll.prototype.getFormattedStartDate = function() {
         return moment(this.startDate).format("YYYY-MM-DD hh:mm");
     };
@@ -46,29 +62,20 @@ angular.module('unionvmsWeb')
     ProgramPoll.prototype.getFrequencyAsText = function() {
         //Less than 60 seconds
         if(this.frequency < 60){
-            return this.frequency +" s";
+            return this.frequency +" " +locale.getString('common.time_second_short');
         }
         //Return hour and minutes, e.g. 2h 45 min
         var hours = moment.duration(this.frequency, 'seconds').get('hours');
         var minutes = moment.duration((this.frequency -hours*60*60), 'seconds').get('minutes');
         var text = "";
         if(hours > 0){
-            text += hours +"h";
+            text += hours + locale.getString('common.time_hour_short');
         }
         if(minutes > 0){
-            text += (text.length === 0) ? minutes +" min" : " " +minutes +" min" ;
+            text += (text.length === 0) ? "" : " ";
+            text += minutes + " " +locale.getString('common.time_minute_short');
         }
         return text;
-    };
-
-    //TODO: write test for this
-    ProgramPoll.prototype.start = function(){
-        this.running = true;
-    };
-
-    //TODO: write test for this
-    ProgramPoll.prototype.stop = function(){
-        this.running = false;
     };
 
     return ProgramPoll;

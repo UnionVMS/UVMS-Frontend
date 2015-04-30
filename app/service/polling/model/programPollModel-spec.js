@@ -2,6 +2,28 @@ describe('ProgramPoll', function() {
 
   beforeEach(module('unionvmsWeb'));
 
+  var locale;
+
+    beforeEach(function() {
+        locale = {
+            getString : function(s){
+                if(s === 'common.time_second_short'){
+                    return 's';
+                }
+                else if(s === 'common.time_minute_short'){
+                    return 'min';
+                }         
+                else if(s === 'common.time_hour_short'){
+                    return 'h';
+                }                          
+            }
+          };
+
+        module(function ($provide) {
+          $provide.value('locale', locale);
+        });          
+      });      
+  
 
     var responseData =  {
         "frequency": 7200,
@@ -41,6 +63,12 @@ describe('ProgramPoll', function() {
         expect(programPoll.mobileTerminalId.systemType).toEqual(responseData.mobileTerminal.systemType);
         expect(programPoll.mobileTerminalId.ids["INTERNAL_ID"]).toEqual("25");        
         expect(programPoll.mobileTerminalId.ids["SERIAL_NUMBER"]).toEqual("0");
+    }));
+
+    it('toJson should return correctly formatted data', inject(function(ProgramPoll) {
+        var programPoll = ProgramPoll.fromJson(responseData);
+        var toJsonObject = JSON.parse(programPoll.toJson());
+        expect(angular.equals(toJsonObject, responseData)).toBeTruthy();
     }));
 
     it('getFormattedStartDate should format date correct', inject(function(ProgramPoll) {

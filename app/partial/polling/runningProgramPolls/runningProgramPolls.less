@@ -22,6 +22,14 @@
 
         width: @cellWidth;
         text-align: center;
+
+        &.inactive{
+            .start, .stop, .delete{
+                background:@inactiveColor !important;
+                cursor: normal !important;
+            }
+        }
+
         .iconWrapper(){
             cursor: pointer;
             border-radius: 50px;
@@ -32,6 +40,7 @@
             text-align: center;
             font-size: 10px;
         }
+
         .start{
             .iconWrapper();
             background: @startColor;
@@ -51,10 +60,6 @@
             color: @stopAndDeleteColor;
             font-size: 20px;
         }
-        .inactive{
-            background:@inactiveColor;
-        }
-
     }
 
 }
