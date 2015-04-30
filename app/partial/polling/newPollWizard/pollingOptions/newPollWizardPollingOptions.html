@@ -1,4 +1,6 @@
+<!-- step 2 -->
 <div ng-controller="NewpollwizardpollingoptionsCtrl" class="newPollWizardStep pollingOptionsContainer col-md-12">
+    <div class="wizardcontent">
     <new-poll-wizard-progress step="2"></new-poll-wizard-progress>
 
     <!--MANUAL POLL-->
@@ -96,24 +98,24 @@
     <div class="optionsSection">
         <div class="row">
             <div class="indentedSection">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <dropdown ng-model="pollingOptions.requestChannel" initialtext="{{ 'polling.wizard_second_step_request_channel_dropdown_placeholder' | i18n }}" items="requestChannels" ng-disabled="true"></dropdown>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <dropdown ng-model="pollingOptions.responseChannel" initialtext="{{ 'polling.wizard_second_step_response_channel_dropdown_placeholder' | i18n }}" items="reponseChannels" ng-disabled="true"></dropdown>  
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="indentedSection">
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <h5>{{'polling.wizard_second_step_comment_header' | i18n}}</h5>
                     <textarea class="form-control" placeholder="{{'polling.wizard_second_step_comment_placeholder' | i18n }}" ng-model="pollingOptions.comment"></textarea>                    
                 </div>
             </div>
         </div>        
     </div>
-
+</div>
     <div class="row wizardFooter">
         <div class="col-md-4">
             <div class="indentedSection">

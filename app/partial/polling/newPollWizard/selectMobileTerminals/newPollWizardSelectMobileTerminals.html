@@ -1,11 +1,9 @@
 <!-- step 1 -->
 <div class="col-md-12 newPollWizardStep searchMobileTerminalsStep" ng-controller="NewpollwizardselectmobileterminalsCtrl">
-	<new-poll-wizard-progress step="1"></new-poll-wizard-progress> 
-	<div class="row">
+	<div class="wizardcontent">
+		<new-poll-wizard-progress step="1"></new-poll-wizard-progress> 
 		<advanced-search searchfunc="searchMobileTerminals" vesselGroupCallback="selectGroupCallback()" modeltype="'POLLING_MOBILE_TERMINAL'" advancedsearchvisible="true"></advanced-search>                
-    </div>
-    <div class="row">
-		<table class="searchResults polltable colorOdd col-md-12">
+	    <table class="searchResults polltable colorOdd col-md-12">
 	  		<thead>
 				<tr>
 			    	 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vesselName'">{{'polling.poll_table_header_vessel_name' | i18n}}</th>
@@ -17,7 +15,7 @@
 			    	 </th>
 			    </tr>
 		    </thead>
-		    <tbody>
+			<tbody>
 		    	<tr ng-repeat="item in currentSearchResults.mobileTerminals">
 		    		<td>{{item.associatedVessel.name}}</td>
 		    		<td>{{item.channels[0].ids.MEMBER_ID}}</td>
@@ -30,9 +28,9 @@
 		    				<span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
 		    		</td>
 		    	</tr>
-		    </tbody>
-    	</table>
-    </div>
+			</tbody>
+	    </table>
+	</div>
     <div class="row wizardFooter">
         <div class="col-md-12 textAlignRight">
             <button type="button" class="btn btn-primary" ng-click="nextStep()">{{'common.next' | i18n | uppercase}}</button>
