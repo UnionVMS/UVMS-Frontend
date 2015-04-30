@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').directive('datepickerInput', function() {
+angular.module('unionvmsWeb').directive('datepickerInput', function($compile) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -6,12 +6,18 @@ angular.module('unionvmsWeb').directive('datepickerInput', function() {
 		scope: {
             model : '=',
             placeholder : '@',
-            ngDisabled : '='
+            ngDisabled : '=',
+            ngRequired : '='
 		},
 		templateUrl: 'directive/common/datepickerInput/datepickerInput.html',
 		link: function(scope, element, attrs, fn) {
-
-
+          //Add input name if name attribute exists
+          var name = attrs.name;
+          if (name) {
+            element.find('input').attr('name', name);
+            element.removeAttr("name");
+            $compile(element)(scope);
+          }
 		}
 	};
 });

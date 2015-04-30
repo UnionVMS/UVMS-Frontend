@@ -78,13 +78,16 @@ angular.module('unionvmsWeb').factory('pollingService',function() {
         }
     }
 
-    function isSingleSelection() {
+    function getNumberOfSelectedTerminals(){
         var count = selection.selectedMobileTerminals.length;
         for (var i = 0; i < selection.selectedMobileTerminalGroups.length; i++) {
             count += selection.selectedMobileTerminalGroups[i].mobileTerminals.length;
         }
+        return count;        
+    }
 
-        return count === 1;
+    function isSingleSelection() {        
+        return getNumberOfSelectedTerminals() === 1;
     }
 
 	var pollingService = {
@@ -136,7 +139,8 @@ angular.module('unionvmsWeb').factory('pollingService',function() {
         },
         isMobileTerminalSelected: isTerminalSelected,
         isMobileTerminalGroupSelected: isTerminalGroupSelected,
-        isSingleSelection: isSingleSelection
+        isSingleSelection: isSingleSelection,
+        getNumberOfSelectedTerminals: getNumberOfSelectedTerminals
     };
 
 	return pollingService;

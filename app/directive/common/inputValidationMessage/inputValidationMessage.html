@@ -1,0 +1,5 @@
+<div>
+    <span class="help-block" ng-repeat="validationType in validationTypes track by $index" ng-show="showValidationMessage(validationType)">
+        {{getMessage(validationType)}}
+    </span>
+</div>
