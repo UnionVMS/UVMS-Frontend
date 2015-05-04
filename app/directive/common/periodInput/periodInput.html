@@ -1,0 +1,6 @@
+<div class="periodInput" ng-class="{'disabled' : ngDisabled}">
+    <input type="number" ng-model="hours" min="0" max="99" step="1" ng-disabled="ngDisabled" title="{{'common.hours' | i18n}}">
+    :
+    <input type="number" ng-model="minutes" min="0" max="59" step="5" ng-disabled="ngDisabled" title="{{'common.minutes' | i18n}}">
+    <input type="time" ng-model="model" ng-disabled="ngDisabled" ng-required="ngRequired" period="ngRequired">
+</div>

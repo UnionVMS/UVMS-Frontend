@@ -25,6 +25,7 @@ angular.module('unionvmsWeb').controller('inputValidationMessageCtrl',function($
         'required' : locale.getString('common.validation_required'),
         'date' : locale.getString('common.validation_invalid_date'),
         'time' : locale.getString('common.validation_invalid_time'),
+        'period' : locale.getString('common.validation_invalid_period'),
         'number' : locale.getString('common.validation_digits_only'),
         'onlyDigits' : locale.getString('common.validation_digits_only'),
         'onlyLetters' : locale.getString('common.validation_letters_only')
@@ -41,6 +42,10 @@ angular.module('unionvmsWeb').controller('inputValidationMessageCtrl',function($
 
     //Check if a validation message should be shown or not
     $scope.showValidationMessage = function(type){
+        if(angular.isUndefined($scope.input)){
+            return false;
+        }
+        
         return $scope.input.$error[type];
     };
 

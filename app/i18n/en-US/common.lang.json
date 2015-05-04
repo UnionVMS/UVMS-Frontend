@@ -8,8 +8,10 @@
     "close" : "Close" ,
     "comment" : "Comment",
     "comment_modal_comment_placeholder" : "Log a reason to your changes",
+    "hours" : "Hours",
     "inactive" : "Inactive",
     "invalid" : "Invalid",
+    "minutes" : "Minutes",
     "next" : "Next" ,
     "no" : "No" ,
     "remove" : "Remove",
@@ -29,6 +31,7 @@
     "validation_digits_only" : "Only digits",
     "validation_invalid_date" : "Invalid date",
     "validation_invalid_time" : "Invalid time",
+    "validation_invalid_period" : "Invalid period",
     "validation_letters_only" : "Only letters",
     "validation_required" : "Required",
     "yes" : "Yes"

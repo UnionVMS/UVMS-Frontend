@@ -1,6 +1,6 @@
 <div>
-<p class="input-group nomargin">
-    <input type="text" class="form-control datetimeinput" ng-model="model" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['reportingStartDate']" close-text="{{'common.close' | i18n}}" tabindex="8" placeholder="{{placeholder}}" ng-disabled="ngDisabled" ng-required="ngRequired"/>
+<p class="input-group nomargin datepicker">
+    <input type="text" class="form-control datetimeinput" ng-model="model" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['reportingStartDate']" close-text="{{'common.close' | i18n}}" placeholder="{{placeholder}}" ng-disabled="ngDisabled" ng-required="ngRequired"/>
 
     <span class="input-group-btn">
         <button type="button" class="btn btn-default btn-cal" ng-click="datePicker.open($event, 'reportingStartDate')" ng-disabled="ngDisabled">

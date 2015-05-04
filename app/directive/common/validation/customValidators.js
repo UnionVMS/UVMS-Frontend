@@ -28,6 +28,7 @@ angular.module('unionvmsWeb').directive('onlyLetters', [
             restrict: 'A',
             require: 'ngModel',
             link: function(scope, elm, attrs, ctrl) {
+
                 var validateFn = function (viewValue) {
                     if (ctrl.$isEmpty(viewValue) || /^[A-ZÅÄÖa-zåäö ]*$/.test(viewValue)) {
                         ctrl.$setValidity('onlyLetters', true);
@@ -40,6 +41,51 @@ angular.module('unionvmsWeb').directive('onlyLetters', [
 
                 ctrl.$parsers.push(validateFn);
                 ctrl.$formatters.push(validateFn);
+            }
+        };
+}]);
+
+//Time interval
+//Validate that the interval is larger than 0 seconds
+angular.module('unionvmsWeb').directive('period', [
+    function() {
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            scope : {
+                period : "="
+            },
+            link: function(scope, elm, attrs, ctrl) {
+
+                //Watch the period for changes
+                scope.$watch('period', function(newValue, oldValue) {
+                    ctrl.$setValidity('period', isValidPeriod(ctrl.$viewValue));
+                });
+
+                function isValidPeriod(viewValue) {
+                    var timeArray = viewValue.split(":");
+                    var valid = false;
+                    //Check that at least on of the time variables (hours, minutes, seconds) is larger than 0
+                    $.each(timeArray, function(index, value){
+                        if(!isNaN(value) && value > 0){
+                            valid = true;
+                        }
+                    });
+
+                    if (valid || !scope.period) {
+                        return true;
+                    }
+                    return false;
+                }
+
+                ctrl.$parsers.push(function(value){
+                    ctrl.$setValidity('period', isValidPeriod(value));
+                    return value;
+                });
+                ctrl.$formatters.push(function(value){
+                    ctrl.$setValidity('period', isValidPeriod(value));
+                    return value;
+                });
             }
         };
 }]);
