@@ -33,12 +33,12 @@
                     <td>{{item.getFrequencyAsText()}}</td>
                     <td>{{item.user}}</td>
                     <td>{{item.organization}}</td>
-                    <td class="actionIcon" ng-class="{inactive:item.running}">
+                    <td class="actionIcon" ng-class="{inactive:!possibleToStart(item)}">
                         <div class="start" ng-click="startProgramPoll(item)">
                             <i class="fa fa-play"></i>
                         </div>
                     </td>
-                    <td class="actionIcon" ng-class="{inactive:!item.running}">
+                    <td class="actionIcon" ng-class="{inactive:!possibleToStop(item)}">
                         <div class="stop" ng-click="stopProgramPoll(item)">
                             <i class="fa fa-stop"></i>
                         </td>

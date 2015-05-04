@@ -52,11 +52,11 @@ angular.module('unionvmsWeb')
     };
 
     ProgramPoll.prototype.getFormattedStartDate = function() {
-        return moment(this.startDate).format("YYYY-MM-DD hh:mm");
+        return moment(this.startDate).format("YYYY-MM-DD HH:mm");
     };
 
     ProgramPoll.prototype.getFormattedEndDate = function() {
-        return moment(this.endDate).format("YYYY-MM-DD hh:mm");
+        return moment(this.endDate).format("YYYY-MM-DD HH:mm");
     };
 
     ProgramPoll.prototype.getFrequencyAsText = function() {

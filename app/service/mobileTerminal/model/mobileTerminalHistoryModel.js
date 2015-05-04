@@ -44,7 +44,7 @@ angular.module('unionvmsWeb')
         };
 
         MobileTerminalHistory.prototype.getFormattedInstalledDateAndTime = function() {
-            return moment(this.installed).format("YYYY-MM-DD : h:mm:ss");
+            return moment(this.installed).format("YYYY-MM-DD : HH:mm:ss");
         };
 
         MobileTerminalHistory.prototype.getFormattedUninstalled = function() {
@@ -52,7 +52,7 @@ angular.module('unionvmsWeb')
         };
 
         MobileTerminalHistory.prototype.getFormattedUninstalledAndTime = function() {
-            return moment(this.uninstalled).format("YYYY-MM-DD : h:mm:ss");
+            return moment(this.uninstalled).format("YYYY-MM-DD : HH:mm:ss");
         };
 
         MobileTerminalHistory.prototype.getFormattedChangeDate = function() {
@@ -60,7 +60,7 @@ angular.module('unionvmsWeb')
         };
 
         MobileTerminalHistory.prototype.getFormattedChangeDateAndTime = function() {
-            return moment(this.changeDate).format("YYYY-MM-DD : h:mm:ss");
+            return moment(this.changeDate).format("YYYY-MM-DD : HH:mm:ss");
         };
 
         return MobileTerminalHistory;

@@ -39,7 +39,7 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
 
     //Start a program poll
     $scope.startProgramPoll = function(programPoll){
-        if(!programPoll.running){
+        if($scope.possibleToStart(programPoll)){
             pollingRestService.startProgramPoll(programPoll).then(
                 function(updatedProgramPoll){
                     //TODO: remove next two lines when backend is working
@@ -56,7 +56,7 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
 
     //Stop a program poll    
     $scope.stopProgramPoll = function(programPoll){
-        if(programPoll.running){
+        if($scope.possibleToStop(programPoll)){
             pollingRestService.stopProgramPoll(programPoll).then(
                 function(updatedProgramPoll){
                     //TODO: remove next two lines when backend is working
@@ -89,6 +89,28 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
             }
         );
     };    
+
+    //Is it possible to start this program?
+    $scope.possibleToStart = function(programPoll){
+        if(programPoll.running){
+            return false;
+        }
+
+        //Is the current date and time between the startDate and endDate of the program
+        var now = Date.now();
+        if (programPoll.startDate <= now && now <= programPoll.endDate) {
+            return true;
+        }
+        return false;   
+    };
+
+    //Is it possible to stop this program?
+    $scope.possibleToStop = function(programPoll){
+        if(!programPoll.running){
+            return false;
+        }
+        return true;
+    };
 
     init();
 
