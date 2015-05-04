@@ -7,30 +7,30 @@ angular.module('unionvmsWeb')
                 return $resource(baseUrl +'/mobileterminal/rest/poll/running');
             },
             startProgramPoll : function(){
-                return $resource(baseUrl +'/mobileterminal/rest/poll/start', {}, {
-                    save: {method: 'POST'}                    
+                return $resource(baseUrl +'/mobileterminal/rest/poll/start/:id', {}, {
+                    save: {method: 'PUT'}                    
                 });
             },
             stopProgramPoll : function(){
-                return $resource(baseUrl +'/mobileterminal/rest/poll/stop', {}, {
-                    save: {method: 'POST'}                    
+                return $resource(baseUrl +'/mobileterminal/rest/poll/stop/:id', {}, {
+                    save: {method: 'PUT'}                    
                 });
             },
             inactivateProgramPoll : function(){
-                return $resource(baseUrl +'/mobileterminal/rest/poll/inactivate', {}, {
-                    save: {method: 'POST'}                    
+                return $resource(baseUrl +'/mobileterminal/rest/poll/inactivate/:id', {}, {
+                    save: {method: 'PUT'}                    
                 });
             },                        
         };
     })
-    .service('pollingRestService',function($q, pollingRestFactory, ProgramPoll){
+    .service('pollingRestService',function($q, pollingRestFactory, Poll){
 
         var setProgramPollStatusSuccess = function(response, deferred){
             if(response.code !== "200"){
                 deferred.reject("Invalid response status");
                 return;
             }                    
-            var updatedProgramPoll = ProgramPoll.fromJson(response.data);
+            var updatedProgramPoll = Poll.fromJson(response.data);
             deferred.resolve(updatedProgramPoll);
         };
 
@@ -46,10 +46,10 @@ angular.module('unionvmsWeb')
                     }                    
                     var programPolls = [];
 
-                    //Create a list of ProgramPoll objects from the response
+                    //Create a list of Poll objects from the response
                     if(angular.isArray(response.data)) {
                         for (var i = 0; i < response.data.length; i++) {
-                            programPolls.push(ProgramPoll.fromJson(response.data[i]));
+                            programPolls.push(Poll.fromJson(response.data[i]));
                         }
                     }
                     deferred.resolve(programPolls);
@@ -61,7 +61,7 @@ angular.module('unionvmsWeb')
             },
             startProgramPoll : function(programPoll){
                 var deferred = $q.defer();
-                pollingRestFactory.startProgramPoll().save({}, programPoll.toJson(), function(response) {
+                pollingRestFactory.startProgramPoll().save({id: programPoll.id}, {}, function(response) {
                     setProgramPollStatusSuccess(response, deferred);
                 }, function(error) {
                     console.error("Error starting program poll.");
@@ -71,7 +71,7 @@ angular.module('unionvmsWeb')
             },
             stopProgramPoll : function(programPoll){
                 var deferred = $q.defer();
-                pollingRestFactory.stopProgramPoll().save({}, programPoll.toJson(), function(response) {
+                pollingRestFactory.stopProgramPoll().save({id: programPoll.id}, {}, function(response) {
                     setProgramPollStatusSuccess(response, deferred);
                 }, function(error) {
                     console.error("Error stopping program poll.");
@@ -81,7 +81,7 @@ angular.module('unionvmsWeb')
             },
             inactivateProgramPoll : function(programPoll){
                 var deferred = $q.defer();
-                pollingRestFactory.inactivateProgramPoll().save({}, programPoll.toJson(), function(response) {
+                pollingRestFactory.inactivateProgramPoll().save({id: programPoll.id}, {}, function(response) {
                     setProgramPollStatusSuccess(response, deferred);
                 }, function(error) {
                     console.error("Error inactivating program poll.");

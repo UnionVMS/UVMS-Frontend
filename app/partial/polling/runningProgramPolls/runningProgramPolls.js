@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($scope, ProgramPoll, pollingRestService, alertService, locale){
+angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($scope, pollingRestService, alertService, locale){
 
     //Search objects and results
     $scope.currentSearchResults = {
@@ -92,13 +92,13 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
 
     //Is it possible to start this program?
     $scope.possibleToStart = function(programPoll){
-        if(programPoll.running){
+        if(programPoll.attributes.RUNNING){
             return false;
         }
 
         //Is the current date and time between the startDate and endDate of the program
         var now = Date.now();
-        if (programPoll.startDate <= now && now <= programPoll.endDate) {
+        if (programPoll.attributes.START_DATE <= now && now <= programPoll.attributes.END_DATE) {
             return true;
         }
         return false;   
@@ -106,7 +106,7 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
 
     //Is it possible to stop this program?
     $scope.possibleToStop = function(programPoll){
-        if(!programPoll.running){
+        if(!programPoll.attributes.RUNNING){
             return false;
         }
         return true;

@@ -79,11 +79,11 @@
                                 <th><input type="checkbox"/></th>
                                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.name'">{{'polling.polling_logs_table_header_name' | i18n}}</th>
 
-                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'extNo'">{{'polling.polling_logs_table_header_ext_no' | i18n}}</th>
+                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.externalMarking'">{{'polling.polling_logs_table_header_ext_no' | i18n}}</th>
 
-                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'pollType'">{{'polling.polling_logs_table_header_poll_type' | i18n}}</th>
+                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'type'">{{'polling.polling_logs_table_header_poll_type' | i18n}}</th>
 
-                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'transponder'">{{'polling.polling_logs_table_header_transponder' | i18n}}</th>
+                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminal.mobileTerminalId.systemType'">{{'polling.polling_logs_table_header_transponder' | i18n}}</th>
 
                                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'time'" class="times">{{'polling.polling_logs_table_header_time' | i18n}}</th>
             
@@ -97,10 +97,10 @@
                         <tbody>
                         <tr ng-repeat="item in currentSearchResults.polls | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" ng-init="isExpanded = false">            
                             <td><input type="checkbox"/></td>
-                            <td>{{item.name}}</td>
-                            <td>{{item.extNo}}</td>
-                            <td>{{item.pollType}}</td>
-                            <td>{{item.transponder}}</td>
+                            <td>MOCK VESSEL</td>
+                            <td>MOCK EXT NO</td>
+                            <td>{{item.type}}</td>
+                            <td>{{item.mobileTerminal.mobileTerminalId.systemType}}</td>
                             <td class="statusTime">
                                 <div class="expandIcon" ng-show="item.status.length > 1" ng-click="isExpanded = !isExpanded">
                                     <i class="fa fa-plus-square" ng-show="!isExpanded"></i>
@@ -118,8 +118,8 @@
                                 </span>
                             </td>
                             <td><a>{{'polling.polling_logs_table_results_link' | i18n}}</a></td>
-                            <td>{{item.user}}</td>
-                            <td>{{item.organization}}</td>
+                            <td>{{item.attributes.USER}}</td>
+                            <td>{{item.attributes.ORGANIZATION}}</td>
                             <td>&nbsp;</td>       
                         </tr>
                         </tbody>
