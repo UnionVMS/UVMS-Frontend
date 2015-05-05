@@ -23,7 +23,8 @@
     "moment": "~2.5",
     "less.js": "~1.6",
     "font-awesome": "~4.0",
-    "angular-localization": "~1.2.0"
+    "angular-localization": "~1.2.0",
+    "datetimepicker": "https://github.com/xdan/datetimepicker.git#~2.4.3"
   },
   "resolutions": {
     "angular": "1.2.28"

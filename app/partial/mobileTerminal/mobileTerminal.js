@@ -3,8 +3,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
     //Keep track of visibility statuses
     $scope.isVisible = {
         search : true,
-        addNewMobileTerminal : false,
-        viewMobileTerminal : false
+        mobileTerminalForm : false
     };
 
     //Search objects and results
@@ -24,27 +23,37 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
 
     //Toggle (show/hide) new mobile terminal
     $scope.toggleAddNewMobileTerminal = function(noHideMessage){
-        if (!noHideMessage) {
-            alertService.hideMessage();
-        }
-
-        $scope.currentMobileTerminal = new MobileTerminal();
-        $scope.isVisible.addNewMobileTerminal = !$scope.isVisible.addNewMobileTerminal;
-        $scope.isVisible.search = !$scope.isVisible.search;        
+        $scope.createNewMode = true;
+        toggleMobileTerminalForm(new MobileTerminal(), noHideMessage);
     };
 
     //Toggle (show/hide) viewing of a mobile terminal
-    $scope.toggleMobileTerminalDetails = function(item, noHideMessage){
+    $scope.toggleMobileTerminalDetails = function(mobileTerminal, noHideMessage){
+        $scope.createNewMode = false;
+        toggleMobileTerminalForm(mobileTerminal, noHideMessage);
+    };
+
+    var toggleMobileTerminalForm = function(mobileTerminal, noHideMessage){
         if (!noHideMessage) {
             alertService.hideMessage();
         }
 
-        $scope.currentMobileTerminal = item;
-        $scope.isVisible.viewMobileTerminal = !$scope.isVisible.viewMobileTerminal;
+        if(angular.isDefined(mobileTerminal)){
+            $scope.currentMobileTerminal = mobileTerminal;
+        }
+
         $scope.isVisible.search = !$scope.isVisible.search;
+        $scope.isVisible.mobileTerminalForm = !$scope.isVisible.mobileTerminalForm;
     };
 
-    $scope.selectedItem = "";
+    //Are we in create mode?
+    $scope.isCreateNewMode = function(){
+        return $scope.createNewMode;
+    };
+
+    $scope.setCreateMode = function(bool){
+        $scope.createNewMode = bool;
+    };
 
     //Init function when entering page
     var init = function(){
