@@ -208,16 +208,21 @@ a:hover{
    border-bottom:1px solid #DDD;
 }
 
-body::-webkit-scrollbar {
-    width: 8px;
-}
- 
-body::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    width: 4px;
-}
- 
-body::-webkit-scrollbar-thumb {
-  background-color: #ECEFEF;
-  outline: 1px solid #E4E4E4;
+
+/*Styled scrollbar*/
+.scrollbar(){
+    padding-right: 10px;
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+     
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        width: 4px;
+    }
+     
+    &::-webkit-scrollbar-thumb {
+      background-color: #ECEFEF;
+      outline: 1px solid #E4E4E4;
+    }
 }
