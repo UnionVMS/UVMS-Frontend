@@ -24,7 +24,9 @@
     "less.js": "~1.6",
     "font-awesome": "~4.0",
     "angular-localization": "~1.2.0",
-    "datetimepicker": "https://github.com/xdan/datetimepicker.git#~2.4.3"
+    "datetimepicker": "https://github.com/xdan/datetimepicker.git#~2.4.3",
+    "angular-i18n": "~1.2",
+    "angular-dynamic-locale": ">=0.1.27"
   },
   "resolutions": {
     "angular": "1.2.28"

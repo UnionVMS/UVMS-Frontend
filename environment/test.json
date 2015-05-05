@@ -1,5 +1,6 @@
 {
     "envName": "test",
     "host":"livm73t",
-    "port":"28080"
+    "port":"28080",
+	"localeLocationPattern": "assets/locales/angular-locale_{{locale}}.js"
 }

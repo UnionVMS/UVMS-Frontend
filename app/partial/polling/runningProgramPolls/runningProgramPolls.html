@@ -28,8 +28,8 @@
                 <tr ng-repeat="item in currentSearchResults.programPolls | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" class="runningPollItem">
                     <td>MOCK VESSEL</td>
                     <td>{{item.mobileTerminal.mobileTerminalId.systemType}}</td>
-                    <td>{{item.getFormattedStartDate()}}</td>
-                    <td>{{item.getFormattedEndDate()}}</td>
+                    <td>{{item.startDate | date : "medium"}}</td>
+                    <td>{{item.endDate | date : "medium"}}</td>
                     <td>{{item.getFrequencyAsText()}}</td>
                     <td>{{item.attributes.USER}}</td>
                     <td>{{item.attributes.ORGANIZATION}}</td>

@@ -167,6 +167,13 @@ module.exports = function (grunt) {
                 cwd: 'app/',
                 expand:true,
                 src: ['assets/**/*'], dest: 'dist/'
+            },
+            {
+                expand:true,
+                flatten: true,
+                src: ['bower_components/angular-i18n/*'],
+                dest: 'dist/assets/locales',
+                filter:'isFile'
             }
         ]
       },

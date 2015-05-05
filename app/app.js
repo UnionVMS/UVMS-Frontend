@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource', 'ngLocalize']);
+angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource', 'ngLocalize', 'tmh.dynamicLocale']);
 
 //Resolve used for all routes
 var generalRouteResolves =  {
@@ -7,7 +7,10 @@ var generalRouteResolves =  {
     }
 };
 
-angular.module('unionvmsWeb').config(function($routeProvider) {
+angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocaleProvider, restConstants) {
+
+    tmhDynamicLocaleProvider.localeLocationPattern(restConstants.localeLocationPattern);
+
     $routeProvider
         .when('/today',{
             templateUrl:'partial/today/today.html',
@@ -65,7 +68,9 @@ angular.module('unionvmsWeb').value('localeConf', {
 
 
 //Service used for bootstrapping the application
-angular.module('unionvmsWeb').factory('initService',function(locale) {
+angular.module('unionvmsWeb').factory('initService',function(locale, tmhDynamicLocale, $window) {
+
+    tmhDynamicLocale.set($window.navigator.userLanguage || $window.navigator.language);
 
     var initService = {
         //Load the listed i18n files

@@ -108,7 +108,7 @@
                                 </div>
                                 <div class="times">
                                     <span ng-repeat="status in item.status" ng-show="isExpanded || $index === 0">
-                                        {{status.time}}<br>
+                                        {{ status.time | date : "medium" }}<br>
                                     </span>
                                 </div>
                             </td>
