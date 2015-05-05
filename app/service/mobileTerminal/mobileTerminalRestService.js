@@ -147,8 +147,7 @@ angular.module('unionvmsWeb')
                     }
                     console.log("Create response!");
                     console.log(response);
-                    //TODO: Parse response
-                    deferred.resolve(response.data);
+                    deferred.resolve(MobileTerminal.fromJson(response.data));
                 }, function(error) {
                     console.error("Error creating mobile terminal.");
                     console.error(error);
@@ -167,9 +166,8 @@ angular.module('unionvmsWeb')
                     if(response.code !== "200"){
                         deferred.reject("Invalid response status");
                         return;
-                    }                    
-                    //TODO: Parse response
-                    deferred.resolve(response.data);
+                    }          
+                    deferred.resolve(MobileTerminal.fromJson(response.data));
                 }, function(error) {
                     console.error("Error updating mobile terminal.");
                     console.error(error);
@@ -190,8 +188,7 @@ angular.module('unionvmsWeb')
                         deferred.reject("Invalid response status");
                         return;
                     }                    
-                    //TODO: Parse response
-                    deferred.resolve(response.data);
+                    deferred.resolve(MobileTerminal.fromJson(response.data));
                 }, function(error) {
                     console.error("Error assigning mobile terminal.");
                     console.error(error);
@@ -211,8 +208,7 @@ angular.module('unionvmsWeb')
                         deferred.reject("Invalid response status");
                         return;
                     }                    
-                    //TODO: Parse response
-                    deferred.resolve(response.data);
+                    deferred.resolve(MobileTerminal.fromJson(response.data));
                 }, function(error) {
                     console.error("Error unassigning mobile terminal.");
                     deferred.reject(error);
@@ -226,8 +222,7 @@ angular.module('unionvmsWeb')
                         deferred.reject("Invalid response status");
                         return;
                     }                    
-                    var updatedMobileTerminal = MobileTerminal.fromJson(response.data);
-                    deferred.resolve(updatedMobileTerminal);
+                    deferred.resolve(MobileTerminal.fromJson(response.data));
                 }, function(error) {
                     console.error("Error activating mobile terminal.");
                     deferred.reject(error);
@@ -241,8 +236,7 @@ angular.module('unionvmsWeb')
                         deferred.reject("Invalid response status");
                         return;
                     }                    
-                    var updatedMobileTerminal = MobileTerminal.fromJson(response.data);
-                    deferred.resolve(updatedMobileTerminal);
+                    deferred.resolve(MobileTerminal.fromJson(response.data));
                 }, function(error) {
                     console.error("Error inactivating mobile terminal.");
                     deferred.reject(error);
@@ -256,8 +250,7 @@ angular.module('unionvmsWeb')
                         deferred.reject("Invalid response status");
                         return;
                     }                    
-                    var updatedMobileTerminal = MobileTerminal.fromJson(response.data);
-                    deferred.resolve(updatedMobileTerminal);
+                    deferred.resolve(MobileTerminal.fromJson(response.data));
                 }, function(error) {
                     console.error("Error removing mobile terminal.");
                     deferred.reject(error);

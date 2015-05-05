@@ -33,8 +33,13 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
         });
     };
 
-    var updateSuccess = function(){
+    var updateSuccess = function(updatedMobileTerminal){
         alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.update_alert_message_on_success'));
+
+        //Update values in the currentMobileTerminal object
+        $scope.currentMobileTerminal.setAttributes(updatedMobileTerminal.attributes);
+        $scope.currentMobileTerminal.setChannels(updatedMobileTerminal.channels);
+        $scope.currentMobileTerminal.setMobileTerminalId(updatedMobileTerminal.mobileTerminalId);
     };
 
     //Error creating the new mobile terminal
@@ -57,8 +62,9 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
     //Inactivate status success
     function setStatusToInactiveSuccess(updatedMobileTerminal) {
         alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.inactivate_message_on_success'));
-        //Update the mobileTerminal object with the returned one
-        $scope.currentMobileTerminal = updatedMobileTerminal;
+
+        //Update active status in the currentMobileTerminal object
+        $scope.currentMobileTerminal.setActive(updatedMobileTerminal.active);
     }
 
     function setStatusToInactiveError() {
@@ -80,8 +86,9 @@ angular.module('unionvmsWeb').controller('viewMobileTerminalCtrl',function($scop
     //Activate status success
     function setStatusToActiveSuccess(updatedMobileTerminal) {
         alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.activate_message_on_success'));
-        //Update the mobileTerminal object with the returned one
-        $scope.currentMobileTerminal = updatedMobileTerminal;
+
+        //Update active status in the currentMobileTerminal object
+        $scope.currentMobileTerminal.setActive(updatedMobileTerminal.active);        
     }
 
     function setStatusToActiveError() {

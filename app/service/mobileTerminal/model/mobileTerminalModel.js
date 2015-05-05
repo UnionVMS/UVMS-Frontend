@@ -176,6 +176,26 @@ angular.module('unionvmsWeb')
             this.carrierId = CarrierId.createVesselWithIrcs(ircs);
         };
 
+        //Set the mobileTerminalId
+        MobileTerminal.prototype.setMobileTerminalId = function(mobileTerminalId){
+            this.mobileTerminalId = mobileTerminalId;
+        };
+
+        //Set the attributes
+        MobileTerminal.prototype.setAttributes = function(attributes){
+            this.attributes = attributes;
+        };
+
+        //Set the channels
+        MobileTerminal.prototype.setChannels = function(channels){
+            this.channels = channels;
+        };
+
+        //Set the active status
+        MobileTerminal.prototype.setActive = function(active){
+            this.active = active;
+        };
+
         //Set associated vessel
         MobileTerminal.prototype.setAssociatedVessel = function(vessel){
             return this.associatedVessel = vessel;
