@@ -44,7 +44,7 @@ describe('MobileTerminalModel', function() {
     var channels = [      
         {
             "channelType": "VMS",
-            "idList": [
+            "attributes": [
                 {
                     "type":"DNID",
                     "value":"999"
@@ -52,18 +52,22 @@ describe('MobileTerminalModel', function() {
                 {
                     "type":"MEMBER_ID",
                     "value":"4444"
-                }
+                },
+                {
+                    "type":"START_DATE",
+                    "value":1428357600000
+                },
+                {
+                    "type":"STOP_DATE",
+                    "value":1428357600000
+                }                
             ],
             "order": 1,
-            "startDate": 1428357600000,
-            "stopDate": 1428357600000
         },
         {
             "channelType": "VMS",
             "order": 3,
-            "startDate": 1428357600000,
-           "stopDate": 1428357600000,
-            "idList": [
+            "attributes": [
                 {
                     "type":"DNID",
                     "value":"234"
@@ -71,8 +75,16 @@ describe('MobileTerminalModel', function() {
                 {
                     "type":"MEMBER_ID",
                     "value":"67567"
-                }
-            ],             
+                },
+                {
+                    "type":"START_DATE",
+                    "value":1428357600000
+                },
+                {
+                    "type":"STOP_DATE",
+                    "value":1428357600000
+                }                
+            ],          
         }];
 
     var mobileTerminalId = {

@@ -15,9 +15,9 @@ angular.module('unionvmsWeb')
             channel.stopDate = data.stopDate;
 
             //IdList
-            for (var i = 0; i < data.idList.length; i ++) {
-                var idType = data.idList[i].type,
-                    idValue = data.idList[i].value;
+            for (var i = 0; i < data.attributes.length; i ++) {
+                var idType = data.attributes[i].type,
+                    idValue = data.attributes[i].value;
                 channel.ids[idType] = idValue;
             } 
 
@@ -34,18 +34,16 @@ angular.module('unionvmsWeb')
             return JSON.stringify({
                 channelType : angular.isDefined(this.channelType) ? this.channelType : '',
                 order : angular.isDefined(this.order) ? this.order : '',
-                startDate : angular.isDefined(this.startDate) ? this.startDate : '',
-                stopDate : angular.isDefined(this.stopDate) ? this.stopDate : '',
-                idList : idList
+                attributes : idList
             });
         };
 
         CommunicationChannel.prototype.getFormattedStartDate = function() {
-            return moment.utc(this.startDate, 'X').format("YYYY-MM-DD");
+            return moment.utc(this.ids["START_DATE"], 'X').format("YYYY-MM-DD");
         };
 
         CommunicationChannel.prototype.getFormattedStopDate = function() {
-            return moment.utc(this.stopDate, 'X').format("YYYY-MM-DD");
+            return moment.utc(this.ids["STOP_DATE"], 'X').format("YYYY-MM-DD");
         };
 
         return CommunicationChannel;

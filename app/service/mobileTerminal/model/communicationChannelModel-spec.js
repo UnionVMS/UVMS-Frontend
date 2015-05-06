@@ -5,9 +5,7 @@ describe('CommunicationChannel', function() {
     var responseData = {
         channelType: "VMS",
         order: 1,
-        startDate: 1418652232,
-        stopDate: 1428655732,
-        idList : [
+        attributes : [
             {
                 "type":"DNID",
                 "value":"1"
@@ -15,7 +13,15 @@ describe('CommunicationChannel', function() {
             {
                 "type":"MEMBER_ID",
                 "value":"1123"
-            }
+            },
+            {
+                "type":"START_DATE",
+                "value":1418652232
+            },
+            {
+                "type":"STOP_DATE",
+                "value":1428655735
+            }                    
         ]
     };
 
@@ -23,11 +29,11 @@ describe('CommunicationChannel', function() {
         var channel = CommunicationChannel.fromJson(responseData);
         expect(channel.channelType).toEqual(responseData.channelType);
         expect(channel.order).toEqual(responseData.order);
-        expect(channel.startDate).toEqual(responseData.startDate);
-        expect(channel.stopDate).toEqual(responseData.stopDate);
-        expect(Object.keys(channel.ids).length).toEqual(2);
+        expect(Object.keys(channel.ids).length).toEqual(4);
         expect(channel.ids["DNID"]).toEqual("1");
-        expect(channel.ids["MEMBER_ID"]).toEqual("1123");        
+        expect(channel.ids["MEMBER_ID"]).toEqual("1123"); 
+        expect(channel.ids["START_DATE"]).toEqual(1418652232); 
+        expect(channel.ids["STOP_DATE"]).toEqual(1428655735);         
     }));
 
     it('toJson should return correctly formatted data', inject(function(CommunicationChannel) {

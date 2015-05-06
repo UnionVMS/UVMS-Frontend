@@ -30,7 +30,7 @@ describe('Poll', function() {
             "attributes": null,
             "channels": [
                 {
-                    "idList": [
+                    "attributes": [
                         {
                             "type": "MEMBER_ID",
                             "value": "0"
@@ -44,7 +44,7 @@ describe('Poll', function() {
                     "order": 0
                 },
                 {
-                    "idList": [
+                    "attributes": [
                         {
                             "type": "MEMBER_ID",
                             "value": "1"
