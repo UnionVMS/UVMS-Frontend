@@ -310,12 +310,7 @@ module.exports = function (grunt) {
   grunt.registerTask('serve', ['copy:serve', 'dom_munger:read','jshint','connect', 'watch']);
 
     grunt.event.on('watch', function(action, filepath) {
-        //https://github.com/gruntjs/grunt-contrib-watch/issues/156
-        if (filepath.lastIndexOf('18n_sv.json') !== -1 && filepath.lastIndexOf('18n_sv.json') === filepath.length - 11) {
-            grunt.task.run('merge-json:i18n');
-        }
-
-        else if (filepath.lastIndexOf('.js') !== -1 && filepath.lastIndexOf('.js') === filepath.length - 3) {
+        if (filepath.lastIndexOf('.js') !== -1 && filepath.lastIndexOf('.js') === filepath.length - 3) {
 
             //lint the changed js file
             grunt.config('jshint.main.src', filepath);
@@ -338,7 +333,7 @@ module.exports = function (grunt) {
 
         //if index.html changed, we need to reread the <script> tags so our next run of jasmine
         //will have the correct environment
-        if (filepath === 'app/index.html') {
+        if (filepath === 'app\\index.html') {
             grunt.task.run('dom_munger:read');
         }
 
