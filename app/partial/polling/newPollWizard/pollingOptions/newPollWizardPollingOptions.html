@@ -27,12 +27,12 @@
                             <tbody>
                                 <tr>
                                     <td class="form-group" ng-class="{'has-error': pollingOptionsForm.programStartDate.$invalid && (submitAttempted || pollingOptionsForm.programStartDate.$dirty)}">
-                                        <datepicker-input name="programStartDate" model="pollingOptions.programPoll.startDate" ng-disabled="!isProgramPoll()" ng-required="isProgramPoll()"></datepicker-input>
+                                        <datepicker-input name="programStartDate" model="pollingOptions.programPoll.startDate" ng-disabled="!isProgramPoll()" ng-required="isProgramPoll()" time="true"></datepicker-input>
                                         <input-validation-message types="required, date" input="pollingOptionsForm.programStartDate"></input-validation-message>
                                     </td>
 
                                     <td class="form-group" ng-class="{'has-error': pollingOptionsForm.programEndDate.$invalid && (submitAttempted || pollingOptionsForm.programEndDate.$dirty)}">
-                                        <datepicker-input name="programEndDate" model="pollingOptions.programPoll.endtDate" ng-disabled="!isProgramPoll()" ng-required="isProgramPoll()"></datepicker-input>
+                                        <datepicker-input name="programEndDate" model="pollingOptions.programPoll.endDate" ng-disabled="!isProgramPoll()" ng-required="isProgramPoll()" time="true"></datepicker-input>
                                         <input-validation-message types="required, date" input="pollingOptionsForm.programEndDate"></input-validation-message>                    
                                     </td>
                         
