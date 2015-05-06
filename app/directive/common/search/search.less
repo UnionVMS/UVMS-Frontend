@@ -1,23 +1,30 @@
 .searchFormContainer{
-    @inputHeight:45px;
-    @searchButtonWidth:100px;
+    //@inputHeight:45px;
+    //@searchButtonWidth:100px;
     margin-top: 10px;
     margin-bottom: 20px;
 
     .searchButton{
-        width: @searchButtonWidth;
+        width: 100%;// @searchButtonWidth;
     }
-   
 
     input{
-        height: @inputHeight;
-        font-size: 20px;
+        //height: @inputHeight;
+        //font-size: 20px;
         .italic();
     }
 
     .dropdown.simpleSearch {
         .btn{
-            height: @inputHeight !important;
+            //height: @inputHeight !important;
         }
     }
+}
+
+.advancedSearchContainer{
+    margin-bottom: 15px;
+}
+
+.advancedsearchbuttoncontainer{
+    margin-top: 15px;   
 }
