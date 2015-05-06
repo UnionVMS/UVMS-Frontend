@@ -1,6 +1,5 @@
 {
     "envName": "local",
     "host":"localhost",
-    "port":"8080",
-    "localeLocationPattern": "../bower_components/angular-i18n/angular-locale_{{locale}}.js"
+    "port":"8080"
 }

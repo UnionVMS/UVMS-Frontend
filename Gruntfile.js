@@ -52,7 +52,7 @@ module.exports = function (grunt) {
             livereloadOnError: false,
             spawn: false
         },
-        files: [createFolderGlobs(['*.js','*.less','*.html']),'!_SpecRunner.html','!.grunt'],
+        files: [createFolderGlobs(['*.js','*.less','*.html']),'!_SpecRunner.html','!.grunt', '!app/assets/**/*.js'],
         tasks: [] //all the tasks are run dynamically during the watch event handler
       }
     },
@@ -61,7 +61,7 @@ module.exports = function (grunt) {
         options: {
             jshintrc: '.jshintrc'
         },
-        src: [createFolderGlobs('*.js'), '!/bower_components/**/*.js']
+        src: [createFolderGlobs('*.js'), '!/bower_components/**/*.js', '!app/assets/**/*.js']
       }
     },
     clean: {
@@ -186,6 +186,13 @@ module.exports = function (grunt) {
                 filter:'isFile',
                 expand:true
             },
+            {
+                cwd: 'bower_components/angular-i18n/',
+                src: ['*.js'],
+                dest: 'app/assets/locales',
+                filter:'isFile',
+                expand:true
+            }
         ]
       }
     },

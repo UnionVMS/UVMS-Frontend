@@ -7,9 +7,9 @@ var generalRouteResolves =  {
     }
 };
 
-angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocaleProvider, restConstants) {
+angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocaleProvider) {
 
-    tmhDynamicLocaleProvider.localeLocationPattern(restConstants.localeLocationPattern);
+    tmhDynamicLocaleProvider.localeLocationPattern("assets/locales/angular-locale_{{locale}}.js");
 
     $routeProvider
         .when('/today',{
