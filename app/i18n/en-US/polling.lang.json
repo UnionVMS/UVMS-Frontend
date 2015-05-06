@@ -20,9 +20,9 @@
     "running_program_polls_start_success" : "The polling program is now started.",
     "running_program_polls_start_error" : "The polling program couldn't be started.",
     "running_program_polls_stop_success" : "The polling program is now stopped.",
-    "running_program_polls_stop_error" : "The polling program couldn't be stopped.",    
+    "running_program_polls_stop_error" : "The polling program couldn't be stopped.",
     "running_program_polls_delete_success" : "The polling program is now removed.",
-    "running_program_polls_delete_error" : "The polling program couldn't be removed.",        
+    "running_program_polls_delete_error" : "The polling program couldn't be removed.",
     "polling_logs_search_date_from_placeholder" : "From",
     "polling_logs_search_date_to_placeholder" : "To",
     "polling_logs_table_header_export_as_csv" : "Export data in CSV format",
@@ -43,8 +43,9 @@
     "polling_logs_table_logs_link" : "Logs",
     "sampling_poll_single_carrier_warning": "(Obs: Sampling can be applied only to one carrier at a time.)",
     "running_program_polls_table_header_delete" : "Delete",
-	"wizard_first_step" :"Choose vessels to poll",
-	"wizard_second_step" :"Select polling options",
+    "wizard_first_step" :"Choose vessels to poll",
+    "wizard_second_step" :"Select polling options",
+    "wizard_second_step_create_program_poll_button" :"Create program poll",
     "wizard_second_step_run_poll_button" :"Run poll",
     "wizard_third_step" :"Polling results",
     "wizard_third_step_new_poll_button" :"New poll",
@@ -66,7 +67,7 @@
     "wizard_second_step_sampling_poll" :"Sampling poll",
     "wizard_second_step_sampling_poll_start_date" :"Reporting start date",
     "wizard_second_step_sampling_poll_end_date" :"Reporting end date",
-	"wizard_third_step" :"Polling results",
+    "wizard_third_step" :"Polling results",
     "poll_table_header_vessel_name" :"Vessel name",
     "poll_table_header_vessel_member_no" :"Member name",
     "poll_table_header_vessel_dnid" : "DNID",
@@ -74,6 +75,4 @@
     "poll_table_button_add_all" : "Add all",
     "poll_table_button_add_selected" :"Add",
     "poll_table_button_added" :"Added"
-
-
 }

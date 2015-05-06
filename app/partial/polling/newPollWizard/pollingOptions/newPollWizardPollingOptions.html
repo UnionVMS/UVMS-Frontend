@@ -8,12 +8,12 @@
             <div class="row">
                 <div class="col-md-3">
                     <input type="radio" ng-model="pollingOptions.type" value="MANUAL"/> <span class="pollType" ng-class="{'activePollType' : isManualPoll()}" ng-click="setPollType('MANUAL')">{{'polling.wizard_second_step_manual_poll' | i18n | uppercase}}</span>
-                </div>     
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <input type="radio" ng-model="pollingOptions.type" value="PROGRAM"/> <span class="pollType" ng-class="{'activePollType' : isProgramPoll()}" ng-click="setPollType('PROGRAM')">{{'polling.wizard_second_step_program_poll' | i18n | uppercase}}</span>
-                </div>        
+                </div>
                 <div class="indentedSection">
                     <div class="col-md-12">
                         <table>
@@ -35,20 +35,20 @@
                                         <datepicker-input name="programEndDate" model="pollingOptions.programPoll.endDate" ng-disabled="!isProgramPoll()" ng-required="isProgramPoll()" time="true"></datepicker-input>
                                         <input-validation-message types="required, date" input="pollingOptionsForm.programEndDate"></input-validation-message>                    
                                     </td>
-                        
+
                                     <td class="form-group" ng-class="{'has-error': pollingOptionsForm.programTime.$invalid && (submitAttempted || pollingOptionsForm.programTime.$dirty)}">
                                         <period-input name="programTime" model="pollingOptions.programPoll.time" ng-disabled="!isProgramPoll()" ng-required="isProgramPoll()"></period-input>
 
                                         <input-validation-message types="required, period" input="pollingOptionsForm.programTime"></input-validation-message>
-                                           
-                                    </td>                                    
+        
+                                    </td>
                                 </tr>
                             </tbody>
-                        </table>                
-                    </div>                 
-                </div>        
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>    
+        </div>
 
         <!--CONFIGURATION POLL-->
         <div class="optionsSection">
@@ -83,7 +83,7 @@
                                     <td class="form-group" ng-class="{'has-error': pollingOptionsForm.configurationGracePeriodInPort.$invalid && (submitAttempted || pollingOptionsForm.configurationGracePeriodInPort.$dirty)}">
                                         <period-input name="configurationGracePeriodInPort" model="pollingOptions.configurationPoll.inPortGrace" ng-disabled="!isConfigurationPoll()" ng-required="isConfigurationPoll()"></period-input>
                                         <input-validation-message types="required, period" input="pollingOptionsForm.configurationGracePeriodInPort"></input-validation-message>
-                                    </td>                                    
+                                    </td>
 
                                     <td class="form-group" ng-class="{'has-error': pollingOptionsForm.configurationNewDNID.$invalid && (submitAttempted || pollingOptionsForm.configurationNewDNID.$dirty)}">
                                         <input name="configurationNewDNID" type="text" ng-model="pollingOptions.configurationPoll.newDNID" ng-disabled="!isConfigurationPoll()" ng-required="isConfigurationPoll()"/>
@@ -97,8 +97,8 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>        
-                </div>        
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -126,18 +126,18 @@
                                     <td class="form-group" ng-class="{'has-error': pollingOptionsForm.samplingStartDate.$invalid && (submitAttempted || pollingOptionsForm.samplingStartDate.$dirty)}">
                                         <datepicker-input name="samplingStartDate" model="pollingOptions.samplingPoll.startDate" ng-disabled="!isSamplingPoll()" ng-required="isSamplingPoll()"></datepicker-input>
                                         <input-validation-message types="required, date" input="pollingOptionsForm.samplingStartDate"></input-validation-message>
-                                    </td>                    
+                                    </td>
 
                                     <td class="form-group" ng-class="{'has-error': pollingOptionsForm.samplingEndDate.$invalid && (submitAttempted || pollingOptionsForm.samplingEndDate.$dirty)}">
                                         <datepicker-input name="samplingEndDate" model="pollingOptions.samplingPoll.endDate" ng-disabled="!isSamplingPoll()" ng-required="isSamplingPoll()"></datepicker-input>
                                         <input-validation-message types="required, date" input="pollingOptionsForm.samplingEndDate"></input-validation-message>                    
-                                    </td>                                   
+                                    </td>
                                 </tr>
                             </tbody>
-                        </table>                
-                    </div>                    
+                        </table>
+                    </div>
                 </div>
-            </div>              
+            </div>
         </div>
 
         <!--CHANNELS AND COMMENT-->
@@ -160,7 +160,7 @@
                         <input-validation-message types="required" input="pollingOptionsForm.comment"></input-validation-message>                    
                     </div>
                 </div>
-            </div>        
+            </div>
         </div>
 </div>
         <div class="row wizardFooter">
@@ -171,8 +171,10 @@
             </div>
             <div class="col-md-8 textAlignRight">
                 <a ng-click="startNewPoll()">{{'common.cancel' | i18n}}</a> 
-                <button type="button" class="btn btn-primary" ng-click="runPoll()" ng-disabled="getNumberOfSelectedTerminals() === 0">{{'polling.wizard_second_step_run_poll_button' | i18n | uppercase}}</button>
-            </div>        
+                <button type="button" class="btn btn-primary" ng-click="runPoll()" ng-disabled="getNumberOfSelectedTerminals() === 0">
+                    {{ isProgramPoll() ? 'polling.wizard_second_step_create_program_poll_button' : 'polling.wizard_second_step_run_poll_button' | i18n | uppercase}}
+                </button>
+            </div>
         </div>
 
     </form>
