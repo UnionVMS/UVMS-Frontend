@@ -36,20 +36,10 @@
             <input type="text" id="searchhomeport" placeholder="Homeport name" class="form-control" tabindex="7" ng-model="advancedSearchObject.HOMEPORT">
         </div>
        <div class="col-md-2">
-            <p class="input-group nomargin">
-                <input type="text" class="form-control datetimeinput" ng-model="advancedSearchObject.REPORTING_START_DATE" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['reportingStartDate']" close-text="Close" tabindex="8" />
-                <span class="input-group-btn">
-                <button type="button" class="btn btn-default btn-cal" ng-click="datePicker.open($event, 'reportingStartDate')"><i class="glyphicon glyphicon-calendar"></i></button>
-                </span>
-            </p>
+            <datepicker-input name="programStartDate" model="advancedSearchObject.REPORTING_START_DATE"></datepicker-input>
         </div>
         <div class="col-md-2">
-            <p class="input-group nomargin">
-                <input type="text" class="form-control datetimeinput" ng-model="advancedSearchObject.REPORTING_END_DATE" datepicker-popup="{{datePicker.format}}" datepicker-options="datePicker.options" is-open="datePicker.instances['reportingEndDate']" close-text="Close" tabindex="9" />
-                <span class="input-group-btn">
-                <button type="button" class="btn btn-default btn-cal" ng-click="datePicker.open($event, 'reportingEndDate')"><i class="glyphicon glyphicon-calendar"></i></button>
-                </span>
-            </p>
+            <datepicker-input name="programStartDate" model="advancedSearchObject.REPORTING_END_DATE"></datepicker-input>
         </div>
         <div class="col-md-2">
             <div class="dropdown">

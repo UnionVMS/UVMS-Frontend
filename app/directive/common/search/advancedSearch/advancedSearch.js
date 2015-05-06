@@ -79,25 +79,4 @@ angular.module('unionvmsWeb')
             $scope.performAdvancedSearch();
         }
     };
-
-    //TODO: Remove when advanced search form for vessel has been updated to use datepicker-input directive
-    $scope.datePicker = (function () {
-        var method = {};
-        method.instances = [];
-
-        method.open = function ($event, instance) {
-            $event.preventDefault();
-            $event.stopPropagation();
-            method.instances[instance] = true;
-        };
-
-        method.options = {
-            'show-weeks': false,
-            startingDay: 0
-        };
-
-        var formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-        method.format = formats[4];
-        return method;
-    }());     
 });
