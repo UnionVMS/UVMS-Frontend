@@ -6,6 +6,11 @@ angular.module('unionvmsWeb')
             getRunningProgramPolls : function(){
                 return $resource(baseUrl +'/mobileterminal/rest/poll/running');
             },
+            getPolls : function(){
+                return $resource(baseUrl +'/mobileterminal/rest/poll/list/',{},{
+                    list : { method: 'POST'}
+                });
+            },            
             startProgramPoll : function(){
                 return $resource(baseUrl +'/mobileterminal/rest/poll/start/:id', {}, {
                     save: {method: 'PUT'}                    
@@ -23,7 +28,7 @@ angular.module('unionvmsWeb')
             },                        
         };
     })
-    .service('pollingRestService',function($q, pollingRestFactory, Poll){
+    .service('pollingRestService',function($q, pollingRestFactory, Poll, PollListPage){
 
         var setProgramPollStatusSuccess = function(response, deferred){
             if(response.code !== "200"){
@@ -88,7 +93,37 @@ angular.module('unionvmsWeb')
                     deferred.reject(error);
                 });
                 return deferred.promise;
-            },                   
+            },
+            getPollList : function(getListRequest){
+                var deferred = $q.defer();
+                //Get list of polls
+                pollingRestFactory.getPolls().list(getListRequest.toJson(), function(response){
+                        if(response.code !== "200"){
+                            deferred.reject("Invalid response status");
+                            return;
+                        }                    
+                        var polls = [],
+                            pollListPage;
+
+                        //Create a ListPage object from the response
+                        if(angular.isArray(response.data.poll)) {
+                            for (var i = 0; i < response.data.poll.length; i++) {
+                                polls.push(Poll.fromJson(response.data.poll[i]));
+                            }
+                        }
+                        var currentPage = response.data.currentPage;
+                        var totalNumberOfPages = response.data.totalNumberOfPages;
+                        pollListPage = new PollListPage(polls, currentPage, totalNumberOfPages);
+                    
+                        deferred.resolve(pollListPage);
+                    },
+                function(error) {
+                    console.error("Error getting polls");
+                    console.error(error);
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            },            
         };
         return pollingRestService;
     }

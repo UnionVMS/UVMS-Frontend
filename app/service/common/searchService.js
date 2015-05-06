@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService) {
+angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService) {
 
 	var getListRequest = new GetListRequest(1, 10, true, []),
         advancedSearchObject  = {};
@@ -8,6 +8,12 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
 		searchVessels : function(){
 			return vesselRestService.getVesselList(getListRequest);
 		},
+
+        //Do the search for polls
+        searchPolls : function(){
+            return pollingRestService.getPollList(getListRequest);
+        },
+
         //Do the search for mobile terminals
         //If skipVesselSearch=true then no search to vessel module is performed 
         // and all serach criterias are sent directly to mobile terminal search
@@ -127,7 +133,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
             var criterias = [];
             $.each(advancedSearchObject, function(key, value){
                 //Skip empty values
-                if (value.trim().length !== 0){
+                if (typeof value === 'string' && value.trim().length !== 0){
                     criterias.push(new SearchField(key, value));
                 }
             });

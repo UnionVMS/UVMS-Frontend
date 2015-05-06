@@ -20,10 +20,15 @@ angular.module('unionvmsWeb')
 		templateUrl: 'directive/common/dropdown/dropdown.html',
 		link: function(scope, element, attrs, fn) {
 
+            scope.initialitem = true;
             if('noPlaceholderItem' in attrs){
                 scope.initialitem = false;
-            }else{
-                scope.initialitem = true;
+            }
+
+            //Should be able to select the initial text item?
+            scope.initialtextSelectable = false;
+            if('initialtextSelectable' in attrs){
+                scope.initialtextSelectable = true;
             }
 
             //Get the label for an item

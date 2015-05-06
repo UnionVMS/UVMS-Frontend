@@ -12,19 +12,19 @@
                             <tr class="searchInputRow dateSearch">
                                 <th>&nbsp;</th>
                                 <th>
-                                    <dropdown ng-model="dateSearch.selectedItem" items="dateSearchItems" no-placeholder-item></dropdown>
+                                    <dropdown ng-model="advancedSearchObject.DATE" items="dateSearchItems" no-placeholder-item></dropdown>
                                 </th>
 
                                 <th colspan="2">
-                                    <datepicker-input model="dateSearch.startDate" placeholder="{{'polling.polling_logs_search_date_from_placeholder' | i18n}}"></datepicker-input>
+                                    <datepicker-input model="advancedSearchObject.START_DATE" placeholder="{{'polling.polling_logs_search_date_from_placeholder' | i18n}}"></datepicker-input>
                                 </th>
 
                                 <th colspan="2">
-                                    <datepicker-input model="dateSearch.endDate" placeholder="{{'polling.polling_logs_search_date_to_placeholder' | i18n}}"></datepicker-input>
+                                    <datepicker-input model="advancedSearchObject.END_DATE" placeholder="{{'polling.polling_logs_search_date_to_placeholder' | i18n}}"></datepicker-input>
                                 </th>
 
                                 <th class="textAlignCenter">
-                                    <button class="btn btn-primary inputHeigth searchButton">
+                                    <button class="btn btn-primary inputHeigth searchButton" ng-click="searchPolls()">
                                         <span class="fa fa-search"></span>
                                     </button>
                                 </th>
@@ -39,37 +39,37 @@
                             <tr class="searchInputRow">
                                 <th>&nbsp;</th>
                                 <th>
-                                    <input type="text"/ placeholder="{{'common.all' | i18n}}">
+                                    <input type="text"/ placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.NAME">
                                 </th>
 
                                 <th>
-                                    <input type="text"/ placeholder="{{'common.all' | i18n}}">
+                                    <input type="text"/ placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.EXTERNAL_MARKING">
                                 </th>
 
                                 <th>
-                                    <dropdown ng-model="pollType" items="pollTypes" no-placeholder-item></dropdown>
+                                    <dropdown ng-model="advancedSearchObject.POLL_TYPE" items="pollTypes"  initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown >
                                 </th>
 
                                 <th>
-                                    <dropdown ng-model="transponderType" items="transponderTypes" no-placeholder-item></dropdown>
+                                    <dropdown ng-model="advancedSearchObject.TRANSPONDER_TYPE" items="transponderTypes" initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>
                                 </th>                        
 
                                 <th>&nbsp;</th>
             
                                 <th>
-                                    <dropdown ng-model="statusType" items="statusTypes" no-placeholder-item></dropdown>
+                                    <dropdown ng-model="advancedSearchObject.STATUS_TYPE" items="statusTypes"  initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>
                                 </th>
 
                                 <th>&nbsp;</th>
                                 <th>
-                                    <input type="text"/ placeholder="{{'common.all' | i18n}}">
+                                    <input type="text"/ placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.USER" >
                                 </th>
 
                                 <th>
-                                    <dropdown ng-model="organization" items="organizations" no-placeholder-item></dropdown>                 
+                                    <dropdown ng-model="organization" items="organizations"  initialtext="{{ 'common.all' | i18n }}" ng-model="advancedSearchObject.ORGANIZATION" initialtext-selectable></dropdown>                 
                                 </th>
                                  <th>
-                                    <button class="btn btn-primary inputHeigth searchButton">
+                                    <button class="btn btn-primary inputHeigth searchButton" ng-click="searchPolls()">
                                         <span class="fa fa-search"></span>
                                     </button>
                                 </th>
@@ -85,7 +85,7 @@
 
                                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminal.mobileTerminalId.systemType'">{{'polling.polling_logs_table_header_transponder' | i18n}}</th>
 
-                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'time'" class="times">{{'polling.polling_logs_table_header_time' | i18n}}</th>
+                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'status[0].time'" class="times">{{'polling.polling_logs_table_header_time' | i18n}}</th>
             
                                 <th>{{'polling.polling_logs_table_header_status' | i18n}}</th>
                                 <th>{{'polling.polling_logs_table_header_results' | i18n}}</th>
