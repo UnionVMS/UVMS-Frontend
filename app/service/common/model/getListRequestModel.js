@@ -11,7 +11,7 @@ angular.module('unionvmsWeb')
     GetListRequest.prototype.toJson = function(){
         return JSON.stringify({
             pagination : {page: this.page, listSize: this.listSize},
-            searchCriteria : {isDynamic: this.isDynamic, criterias: this.criterias}
+            mobileTerminalSearchCriteria : {isDynamic: this.isDynamic, criterias: this.criterias}
         });
     };
 
