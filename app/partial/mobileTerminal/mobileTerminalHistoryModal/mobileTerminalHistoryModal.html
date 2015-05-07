@@ -17,7 +17,7 @@
 				<thead>
 					<tr>
 						<th sortable-table-header by="sortType" reverse="sortReverse" order="'eventCode'">{{'mobileTerminal.history_modal_eventcode' | i18n }}</th>
-						<th sortable-table-header by="sortType" reverse="sortReverse" order="'vesselname'">{{'mobileTerminal.history_modal_vesselname' | i18n }}</th>
+						<th sortable-table-header by="sortType" reverse="sortReverse" order="'associatedVessel.name'">{{'mobileTerminal.history_modal_vesselname' | i18n }}</th>
 						<th sortable-table-header by="sortType" reverse="sortReverse" order="'channels[0].ids.DNID'">{{'mobileTerminal.history_modal_dnid' | i18n }}</th>
 						<th sortable-table-header by="sortType" reverse="sortReverse" order="'item.channels[0].ids.MEMBER_ID'">{{'mobileTerminal.history_modal_memberno' | i18n }}</th>
 						<th sortable-table-header by="sortType" reverse="sortReverse" order="'attributes.INSTALLED_ON'">{{'mobileTerminal.history_modal_installed' | i18n }}</th>
@@ -31,7 +31,10 @@
 	            <tbody>
 	            	<tr ng-repeat="item in currentMobileTerminalHistory | orderBy:sortType:sortReverse">
 	            		<td>{{item.eventCode}}</td>
-	                    <td>VESSEL NAME</td>
+	                    <td>
+                            <span ng-show="item.associatedVessel">{{item.associatedVessel.name}}</span>
+                            <span ng-show="item.carrierId && !item.associatedVessel">{{item.carrierId.carrierType}} with {{item.carrierId.idType}}: {{item.carrierId.value}}</span>
+                        </td>
 	                    <td>{{item.channels[0].ids.DNID}}</td>
 	                    <td>{{item.channels[0].ids.MEMBER_ID}}</td> 
 	                    <td>{{item.attributes.INSTALLED_ON}}</td>

@@ -46,6 +46,67 @@ angular.module('unionvmsWeb')
     })
     .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, vesselRestService, MobileTerminal, MobileTerminalListPage, TranspondersConfig, GetListRequest, CarrierId, MobileTerminalHistory){
 
+        //Get associated vessel for each object in the list
+        //Gets carrierInfo from "carrierId" and sets "associatedVessel"
+        //Returns list with updated objects (associatedVessel set)
+        var setAssociatedVesselsFromCarrierId = function(listOfObjects){
+            var deferred = $q.defer();
+
+            try{
+                //Check if any object has a carrierId set
+                var oneOrMoreCarrierIdIsSet = false;
+                $.each(listOfObjects, function(index, listObject){
+                    if(angular.isDefined(listObject.carrierId) && angular.isDefined(listObject.carrierId.carrierType)){
+                        oneOrMoreCarrierIdIsSet = true;
+                        return false;
+                    }
+                });                
+
+                if(oneOrMoreCarrierIdIsSet){
+                    //Create getListRequest for getting vessels by IRCS
+                    var getVesselListRequest = new GetListRequest(1, listOfObjects.length, false, []);
+                    $.each(listOfObjects, function(index, listObject){
+                        if(angular.isDefined(listObject.carrierId)){
+                            var carrierId = listObject.carrierId;
+                            if (carrierId.carrierType === "VESSEL" && carrierId.idType === "IRCS" && typeof carrierId.value === 'string') {
+                                getVesselListRequest.addSearchCriteria("IRCS", carrierId.value);
+                            }
+                        }
+                    });
+
+                    //Get vessels
+                    vesselRestService.getVesselList(getVesselListRequest).then(
+                        function(vesselListPage){
+                            //Connect the mobileTerminals to the vessels
+                            $.each(listOfObjects, function(index, listObject){
+                                if(angular.isDefined(listObject.carrierId)){
+                                    var carrierId = listObject.carrierId;
+                                    if(carrierId.carrierType === "VESSEL" && carrierId.idType === "IRCS" && typeof carrierId.value === 'string'){
+                                        var matchingVessel = vesselListPage.getVesselByIrcs(listObject.carrierId.value);
+                                        if(angular.isDefined(matchingVessel)){
+                                            listObject.associatedVessel = matchingVessel;
+                                        }
+                                    }
+                                }
+                            });                                    
+                            deferred.resolve(listOfObjects);
+                        },
+                        function(error){
+                            console.error("Error getting Vessels for the objects");
+                            deferred.resolve(listOfObjects);
+                        }                            
+                    );
+                }
+                //No carrierId to lookup, return list
+                else{
+                    deferred.resolve(listOfObjects);
+                }
+            }catch(err){
+                deferred.resolve(listOfObjects);
+            }
+
+            return deferred.promise;            
+        };
         var mobileTerminalRestService = {
 
             getTranspondersConfig : function(){
@@ -87,42 +148,14 @@ angular.module('unionvmsWeb')
 
                         //Get vessels for the mobileTerminals?
                         try{
-                            if(mobileTerminalListPage.isOneOrMoreAssignedToACarrier()){
-                                //Create getListRequest Get vessels for all mobileTerminals
-                                var getVesselListRequest = new GetListRequest(1, getListRequest.listSize, false, []);
-                                $.each(mobileTerminalListPage.mobileTerminals, function(index, mobileTerminal){
-                                    if(angular.isDefined(mobileTerminal.carrierId)){
-                                        if (mobileTerminal.carrierId.carrierType === "VESSEL" && mobileTerminal.carrierId.idType === "IRCS" && typeof mobileTerminal.carrierId.value === 'string') {
-                                            getVesselListRequest.addSearchCriteria("IRCS", mobileTerminal.carrierId.value);
-                                        }
-                                    }
+                            setAssociatedVesselsFromCarrierId(mobileTerminalListPage.mobileTerminals).then(
+                                function(updatedMobileTerminals){
+                                    mobileTerminalListPage.mobileTerminals = updatedMobileTerminals;
+                                    deferred.resolve(mobileTerminalListPage);
+                                },
+                                function(error){
+                                    deferred.reject(mobileTerminalListPage);
                                 });
-
-                                //Get vessels
-                                vesselRestService.getVesselList(getVesselListRequest).then(
-                                    function(vesselListPage){
-                                        //Connect the mobileTerminals to the vessels
-                                        $.each(mobileTerminalListPage.mobileTerminals, function(index, mobileTerminal){
-                                            if(angular.isDefined(mobileTerminal.carrierId)){
-                                                if(mobileTerminal.carrierId.carrierType === "VESSEL" && mobileTerminal.carrierId.idType === "IRCS" && typeof mobileTerminal.carrierId.value === 'string'){
-                                                    var matchingVessel = vesselListPage.getVesselByIrcs(mobileTerminal.carrierId.value);
-                                                    if(angular.isDefined(matchingVessel)){
-                                                        mobileTerminal.setAssociatedVessel(matchingVessel);
-                                                    }
-                                                }
-                                            }
-                                        });                                    
-                                        deferred.resolve(mobileTerminalListPage);
-                                    },
-                                    function(error){
-                                        console.error("Error getting Vessels for the mobileTerminals");
-                                        deferred.resolve(mobileTerminalListPage);
-                                    }                            
-                                );
-                            //No mobileTerminals assigned to carriers
-                            }else{
-                                deferred.resolve(mobileTerminalListPage);
-                            }
                         }catch(err){
                             deferred.resolve(mobileTerminalListPage);
                         }
@@ -270,8 +303,17 @@ angular.module('unionvmsWeb')
                         for (var i = 0; i < response.data.length; i ++) {
                             history.push(MobileTerminalHistory.fromJson(response.data[i]));
                         }
-                    }                                     
-                    deferred.resolve(history);
+                    }
+
+                    //Get associated carriers for the history items
+                    setAssociatedVesselsFromCarrierId(history).then(
+                        function(updatedHistory){
+                            deferred.resolve(updatedHistory);
+                        },
+                        function(error){
+                            deferred.reject(history);
+                        });
+                    
                 }, function(error) {
                     console.error("Error getting mobile terminal history.");
                     deferred.reject(error);

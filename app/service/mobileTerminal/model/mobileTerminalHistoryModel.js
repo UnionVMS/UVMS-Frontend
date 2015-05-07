@@ -4,6 +4,8 @@ angular.module('unionvmsWeb')
         function MobileTerminalHistory(){
             this.attributes = {};
             this.channels = [];
+            this.carrierId = undefined;
+            this.associatedVessel = undefined;
         }
 
         MobileTerminalHistory.fromJson = function(data){

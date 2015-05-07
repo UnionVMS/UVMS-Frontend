@@ -15,20 +15,6 @@ angular.module('unionvmsWeb')
             return this.mobileTerminals.length;
         };
 
-        //Is one or more of the mobileTerminals assigned to a carrier
-        MobileTerminalListPage.prototype.isOneOrMoreAssignedToACarrier = function() {
-            var result = false;
-            $.each(this.mobileTerminals, function(index, mobileTerminal){
-                if(angular.isDefined(mobileTerminal.carrierId) && angular.isDefined(mobileTerminal.carrierId.carrierType)){
-                    result = true;
-                    return false;
-                }
-            });
-
-            return result;
-        };
-
-
         return MobileTerminalListPage;
     });
 
