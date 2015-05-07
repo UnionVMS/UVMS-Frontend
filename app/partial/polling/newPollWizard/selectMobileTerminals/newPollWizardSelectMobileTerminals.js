@@ -17,7 +17,11 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
         sortReverse : ""
     };    
 
-  //Get list of Mobile Terminals matching the current search criterias
+    var init = function(){
+        $scope.searchMobileTerminals();
+    };
+
+    //Get list of Mobile Terminals matching the current search criterias
     $scope.searchMobileTerminals = function(opt){
 
         $scope.selectedGroup = opt || {};
@@ -127,5 +131,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
                 .then(updateSearchResults, onGetSearchResultsError);
         }
     };
+
+    init();
 
 });
