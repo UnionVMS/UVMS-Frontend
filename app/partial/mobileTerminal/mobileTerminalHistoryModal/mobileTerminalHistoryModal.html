@@ -18,11 +18,11 @@
 					<tr>
 						<th sortable-table-header by="sortType" reverse="sortReverse" order="'eventCode'">{{'mobileTerminal.history_modal_eventcode' | i18n }}</th>
 						<th sortable-table-header by="sortType" reverse="sortReverse" order="'vesselname'">{{'mobileTerminal.history_modal_vesselname' | i18n }}</th>
-						<th sortable-table-header by="sortType" reverse="sortReverse" order="'dnid'">{{'mobileTerminal.history_modal_dnid' | i18n }}</th>
-						<th sortable-table-header by="sortType" reverse="sortReverse" order="'memberId'">{{'mobileTerminal.history_modal_memberno' | i18n }}</th>
-						<th sortable-table-header by="sortType" reverse="sortReverse" order="'installed'">{{'mobileTerminal.history_modal_installed' | i18n }}</th>
-						<th sortable-table-header by="sortType" reverse="sortReverse" order="'uninstalled'">{{'mobileTerminal.history_modal_uninstalled' | i18n }}</th>
-						<th sortable-table-header by="sortType" reverse="sortReverse" order="'satelliteNumber'">{{'mobileTerminal.history_modal_satelliteno' | i18n }}</th>
+						<th sortable-table-header by="sortType" reverse="sortReverse" order="'channels[0].ids.DNID'">{{'mobileTerminal.history_modal_dnid' | i18n }}</th>
+						<th sortable-table-header by="sortType" reverse="sortReverse" order="'item.channels[0].ids.MEMBER_ID'">{{'mobileTerminal.history_modal_memberno' | i18n }}</th>
+						<th sortable-table-header by="sortType" reverse="sortReverse" order="'attributes.INSTALLED_ON'">{{'mobileTerminal.history_modal_installed' | i18n }}</th>
+						<th sortable-table-header by="sortType" reverse="sortReverse" order="'attributes.UNINSTALLED_ON'">{{'mobileTerminal.history_modal_uninstalled' | i18n }}</th>
+						<th sortable-table-header by="sortType" reverse="sortReverse" order="'attributes.SATELLITE_NUMBER'">{{'mobileTerminal.history_modal_satelliteno' | i18n }}</th>
 						<th sortable-table-header by="sortType" reverse="sortReverse" order="'changeDate'">{{'mobileTerminal.history_modal_changeddate' | i18n }}</th>
 						<th sortable-table-header by="sortType" reverse="sortReverse" order="'comment'">{{'mobileTerminal.history_modal_comments' | i18n }}</th>
 						<th>{{'mobileTerminal.history_modal_auditlogs' | i18n }}</th>
@@ -32,12 +32,12 @@
 	            	<tr ng-repeat="item in currentMobileTerminalHistory | orderBy:sortType:sortReverse">
 	            		<td>{{item.eventCode}}</td>
 	                    <td>VESSEL NAME</td>
-	                    <td>{{item.dnid}}</td>
-	                    <td>{{item.memberId}}</td>
-	                    <td>{{item.getFormattedInstalled()}}</td>
-	                    <td>{{item.getFormattedUninstalled()}}</td>
-	                    <td>{{item.satelliteNumber}}</td>
-	                    <td>{{item.getFormattedChangeDateAndTime()}}</td>
+	                    <td>{{item.channels[0].ids.DNID}}</td>
+	                    <td>{{item.channels[0].ids.MEMBER_ID}}</td> 
+	                    <td>{{item.attributes.INSTALLED_ON}}</td>
+	                    <td>{{item.attributes.UNINSTALLED_ON}}</td>
+	                    <td>{{item.attributes.SATELLITE_NUMBER}}</td>
+	                    <td>{{item.changeDate | date : "medium"}}</td>
 	                    <td>{{item.comment}}</td>
 	                    <td><a href="">See logs</a></td>
 	                </tr>

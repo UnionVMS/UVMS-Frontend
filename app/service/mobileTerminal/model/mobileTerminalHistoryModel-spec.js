@@ -2,59 +2,69 @@ describe('MobileTerminalHistory', function() {
 
   beforeEach(module('unionvmsWeb'));
 
-    var responseData = {
-        "eventCode": "MODIFY",
-        "dnid": {
-            "type": "DNID",
-            "value": "66542"
+    var responseData = { 
+        "eventCode": "LINK",
+        "carrier": {
+            "carrierType": "VESSEL",
+            "idType": "IRCS",
+            "value": "HJASDP"
         },
-        "memberId": {
-            "type": "MEMBER_ID",
-            "value": "23456"
-        },
-        "satelliteNumber": {
+        "attributes": [{
             "fieldType": "SATELLITE_NUMBER",
-            "value": "2345"
+            "value": "12345"
         },
-        "installedOn": {
+        {
             "fieldType": "INSTALLED_ON",
-            "value": 1429367200000
-        },        
-        "uninstalledOn": {
+            "value": "2006-04-03"
+        },
+        {
             "fieldType": "UNINSTALLED_ON",
-            "value": 1427467200000
-        },              
-        "changeDate": 1429567200000,
-        "comments": "my comment"
+            "value": "2009-12-22"
+        }],
+        "channels": [{
+            "attributes": [{
+                "type": "DNID",
+                "value": "12345"
+            },
+            {
+                "type": "MEMBER_ID",
+                "value": "7"
+            },
+            {
+                "type": "START_DATE",
+                "value": "2015-04-07T14:27:00"
+            },
+            {
+                "type": "STOP_DATE",
+                "value": "2015-04-09T14:27:00"
+            }],
+            "channelType": "VMS",
+            "order": 1
+        }],
+        "changeDate": 1430949600000,
+        "comments": "Automatic create comment"
     };
+
 
     it('fromJson should build a correct object', inject(function(MobileTerminalHistory) {
         var history = MobileTerminalHistory.fromJson(responseData);
-        expect(history.eventCode).toEqual(responseData.eventCode);
-        expect(history.changeDate).toEqual(responseData.changeDate);        
+        
+        expect(Object.keys(history.attributes).length).toEqual(3);
+        expect(history.attributes.SATELLITE_NUMBER).toEqual("12345");
         expect(history.comment).toEqual(responseData.comments);
+        expect(history.eventCode).toEqual(responseData.eventCode);
+        expect(history.changeDate).toEqual(responseData.changeDate);
+        
+        expect(Object.keys(history.channels[0].ids).length).toEqual(4);
+        expect(history.channels[0].order).toEqual(1);
+        expect(history.channels[0].channelType).toEqual("VMS");
+        expect(history.channels[0].ids.DNID).toEqual("12345");
+        expect(history.channels[0].ids.MEMBER_ID).toEqual("7");
 
-        expect(history.dnid).toEqual(responseData.dnid.value);
-        expect(history.memberId).toEqual(responseData.memberId.value);
-        expect(history.satelliteNumber).toEqual(responseData.satelliteNumber.value);
-        expect(history.installed).toEqual(responseData.installedOn.value);
-        expect(history.uninstalled).toEqual(responseData.uninstalledOn.value);
+        expect(history.carrierId).toBeDefined();
+
+       
     }));
 
-
-    it('getFormattedInstalled should format date correct', inject(function(MobileTerminalHistory) {
-        var history = MobileTerminalHistory.fromJson(responseData);
-        expect(history.getFormattedInstalled()).toEqual("2015-04-18");
-    }));
-
-    it('getFormattedUninstalled should format date correct', inject(function(MobileTerminalHistory) {
-        var history = MobileTerminalHistory.fromJson(responseData);
-        expect(history.getFormattedUninstalled()).toEqual("2015-03-27");
-    }));
-
-    it('getFormattedChangeDate should format date correct', inject(function(MobileTerminalHistory) {
-        var history = MobileTerminalHistory.fromJson(responseData);
-        expect(history.getFormattedChangeDate()).toEqual("2015-04-21");
-    }));
 
 });
