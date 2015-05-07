@@ -67,7 +67,7 @@ angular.module('unionvmsWeb')
             getMobileTerminalList : function(getListRequest){
                 var deferred = $q.defer();
                 //Get list of mobile terminals
-                mobileTerminalRestFactory.getMobileTerminals().list(getListRequest.toJson(), function(response){
+                mobileTerminalRestFactory.getMobileTerminals().list(getListRequest.DTOForMobileTerminal(), function(response){
                         if(response.code !== "200"){
                             deferred.reject("Invalid response status");
                             return;

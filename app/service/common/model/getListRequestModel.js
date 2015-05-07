@@ -7,11 +7,19 @@ angular.module('unionvmsWeb')
         this.isDynamic = angular.isDefined(isDynamic) ? isDynamic : true;
         this.criterias = angular.isDefined(criterias) ? criterias : [];
     }
-        GetListRequest.prototype.toJson = function(){
+
+    GetListRequest.prototype.toJson = function(){
         return JSON.stringify({
             pagination : {page: this.page, listSize: this.listSize},
             searchCriteria : {isDynamic: this.isDynamic, criterias: this.criterias}
         });
+    };
+
+    GetListRequest.prototype.DTOForMobileTerminal = function(){
+        return {
+            pagination : {page: this.page, listSize: this.listSize},
+            mobileTerminalSearchCriteria : {isDynamic: this.isDynamic, criterias: this.criterias}
+        };
     };
 
     GetListRequest.prototype.setPage = function(newPage){

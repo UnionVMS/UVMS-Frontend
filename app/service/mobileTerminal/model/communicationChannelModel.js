@@ -15,11 +15,13 @@ angular.module('unionvmsWeb')
             channel.stopDate = data.stopDate;
 
             //IdList
-            for (var i = 0; i < data.attributes.length; i ++) {
-                var idType = data.attributes[i].type,
-                    idValue = data.attributes[i].value;
-                channel.ids[idType] = idValue;
-            } 
+            if(angular.isArray(data.attributes)){
+                for (var i = 0; i < data.attributes.length; i ++) {
+                    var idType = data.attributes[i].type,
+                        idValue = data.attributes[i].value;
+                    channel.ids[idType] = idValue;
+                } 
+            }
 
             return channel;
         };
