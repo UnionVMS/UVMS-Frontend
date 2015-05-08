@@ -8,7 +8,7 @@ describe('mobileTerminalFormCtrl', function() {
 		scope = $rootScope.$new();
 		ctrl = $controller('mobileTerminalFormCtrl', {$scope: scope});
 		scope.currentMobileTerminal = new MobileTerminal();
-        
+
         //Dummy response for create
         createResponseTerminal = new MobileTerminal();
         createResponseTerminal.mobileTerminalId.ids["INTERNAL_ID"] = "260";                
@@ -29,6 +29,10 @@ describe('mobileTerminalFormCtrl', function() {
             scope.createNewMode = bool;
         };
 
+        scope.getCurrentMobileTerminal = function(){
+            return scope.currentMobileTerminal;
+        };
+
         // A form to be valid
         var element = angular.element('<form name="mobileTerminalForm"></form>');
         $compile(element)(scope);
@@ -45,8 +49,8 @@ describe('mobileTerminalFormCtrl', function() {
 
         // Create new terminal and check INTERNAL_ID set on scope
         scope.createNewMobileTerminal();
-        //scope.$digest();
-        //expect(scope.currentMobileTerminal.mobileTerminalId.ids['INTERNAL_ID']).toBe(createResponseTerminal.mobileTerminalId.ids["INTERNAL_ID"]);
+        scope.$digest();
+        expect(scope.currentMobileTerminal.mobileTerminalId.ids['INTERNAL_ID']).toBe(createResponseTerminal.mobileTerminalId.ids["INTERNAL_ID"]);
         
     }));    
 });

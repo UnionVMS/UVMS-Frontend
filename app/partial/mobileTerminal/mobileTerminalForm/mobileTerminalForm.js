@@ -5,10 +5,8 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         assignVessel : false,
     };
 
-
+    //Watch changes to the currentMobileTerminal model (set in the parent scope)
     $scope.$watch('getCurrentMobileTerminal()', function(newValue) {
-        console.log("CHANGE IN FORM:");
-        console.log(newValue);
         $scope.currentMobileTerminal = $scope.getCurrentMobileTerminal();
     });    
 
