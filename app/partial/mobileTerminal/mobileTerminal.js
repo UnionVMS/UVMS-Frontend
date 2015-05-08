@@ -55,6 +55,10 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
         $scope.createNewMode = bool;
     };
 
+    $scope.getCurrentMobileTerminal = function(bool){
+        return $scope.currentMobileTerminal;
+    };    
+
     //Init function when entering page
     var init = function(){
         //Load list with mobileTerminals
