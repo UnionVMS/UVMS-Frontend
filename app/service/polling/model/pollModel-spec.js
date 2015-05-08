@@ -27,51 +27,17 @@ describe('Poll', function() {
 
     var responseData =  {
         "mobileTerminal": {
-            "attributes": null,
-            "channels": [
+            "systemType": "INMARSAT_C",
+            "idList": [
                 {
-                    "attributes": [
-                        {
-                            "type": "MEMBER_ID",
-                            "value": "0"
-                        },
-                        {
-                            "type": "DNID",
-                            "value": "0"
-                        }
-                    ],
-                    "channelType": "VMS",
-                    "order": 0
+                    "type": "INTERNAL_ID",
+                    "value": "0"
                 },
                 {
-                    "attributes": [
-                        {
-                            "type": "MEMBER_ID",
-                            "value": "1"
-                        },
-                        {
-                            "type": "DNID",
-                            "value": "1"
-                        }
-                    ],
-                    "channelType": "VMS",
-                    "order": 0
+                    "type": "SERIAL_NUMBER",
+                    "value": "0"
                 }
-            ],
-            "mobileTerminalId": {
-                "systemType": "INMARSAT_C",
-                "idList": [
-                    {
-                        "type": "INTERNAL_ID",
-                        "value": "0"
-                    },
-                    {
-                        "type": "SERIAL_NUMBER",
-                        "value": "0"
-                    }
-                ]
-            },
-            "inactive": false
+            ]
         },
         "pollId": 456,
         "pollType": "PROGRAM_POLL",
@@ -114,7 +80,12 @@ describe('Poll', function() {
                 "key": "USER",
                 "value": "username"
             }
-        ]
+        ],
+        "carrierId": {
+            carrierType: "VESSEL",
+            idType: "IRCS",
+            value: "1234"
+        }
     };
 
     it('fromJson should build a correct object', inject(function(Poll) {
@@ -124,16 +95,6 @@ describe('Poll', function() {
         expect(poll.comment).toEqual(responseData.comment);        
         expect(Object.keys(poll.attributes).length).toEqual(9);
         expect(poll.attributes["FREQUENCY"]).toEqual(7200);               
-    }));
-
-    it('getFormattedStartDate should format date correct', inject(function(Poll) {
-        var poll = Poll.fromJson(responseData);
-        expect(poll.getFormattedStartDate()).toEqual("2015-04-29 09:55");
-    }));
-
-    it('getFormattedEndDate should format date correct', inject(function(Poll) {
-        var poll = Poll.fromJson(responseData);
-        expect(poll.getFormattedEndDate()).toEqual("2015-04-29 10:12");
     }));
 
     it('getFrequencyAsText should return correct', inject(function(Poll) {

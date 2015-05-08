@@ -1,37 +1,13 @@
-angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',function($scope, locale, alertService, pollingService){
+angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',function($scope, locale, alertService, pollingService) {
 
     //Has form submit been atempted?
     $scope.submitAttempted = false;
 
     //The polling options
-    $scope.pollingOptions = {};
+    $scope.pollingOptions = pollingService.getPollingOptions();
 
     var resetPollingOptions = function(resetComment){
-        var comment;
-        if(!resetComment){
-            comment = $scope.pollingOptions.comment;
-        }
-
-        //The polling options
-        $scope.pollingOptions = {
-            type : 'MANUAL',
-            requestChannel : undefined,
-            responseChannel : undefined,
-            comment : comment,
-            programPoll : {
-                time : undefined,
-                startDate : undefined,
-                endDate : undefined,
-            },
-            configurationPoll : {
-                freq : undefined,
-                gracePeriod : undefined,
-                inPortGrace : undefined,
-                newDNID : undefined,
-                newMemberNo : undefined
-            }
-
-        };
+        pollingService.resetPollingOptions(resetComment);
     };
 
     var init = function(){
@@ -86,7 +62,9 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
         $scope.submitAttempted = true;
         if($scope.pollingOptionsForm.$valid){
             alertService.showInfoMessageWithTimeout("Running poll...");
-            $scope.nextStep();
+            pollingService.createPolls().then(function() {
+                $scope.nextStep();
+            });
         }else{
             alertService.showErrorMessage(locale.getString('common.alert_message_on_form_validation_error'));
         }

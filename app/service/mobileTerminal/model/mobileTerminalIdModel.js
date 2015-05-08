@@ -22,17 +22,21 @@ angular.module('unionvmsWeb')
             return mobileTerminalId;
         };
 
-        MobileTerminalId.prototype.toJson = function(){
+        MobileTerminalId.prototype.dataTransferObject = function() {
             //Create idList
             var idList = [];
             $.each(this.ids, function(key, value){
                 idList.push({"type": key, "value": value});
             });
 
-            return JSON.stringify({
+            return {
                 systemType : this.systemType,
                 idList : idList,
-            });
+            };
+        };
+
+        MobileTerminalId.prototype.toJson = function(){
+            return JSON.stringify(this.dataTransferObject());
         };
 
         MobileTerminalId.prototype.setSystemTypeToInmarsatC = function(){

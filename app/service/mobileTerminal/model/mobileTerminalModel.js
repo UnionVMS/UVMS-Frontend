@@ -127,7 +127,14 @@ angular.module('unionvmsWeb')
                 },
                 carrierId : this.carrierId
             });
-        };        
+        };
+
+        MobileTerminal.prototype.toCreatePoll = function() {
+            return {
+                mobileTerminal: this.mobileTerminalId.dataTransferObject(),
+                comChannel: this.channels[0].dataTransferObject()
+            };
+        };
 
         MobileTerminal.prototype.setSystemTypeToInmarsatC = function(){
             this.mobileTerminalId.setSystemTypeToInmarsatC();

@@ -27,17 +27,21 @@ angular.module('unionvmsWeb')
         };
 
         CommunicationChannel.prototype.toJson = function(){
+            return JSON.stringify(this.dataTransferObject());
+        };
+
+        CommunicationChannel.prototype.dataTransferObject = function() {
             //Create idList
             var idList = [];
             $.each(this.ids, function(key, value){
                 idList.push({"type": key, "value": value});
             });
 
-            return JSON.stringify({
+            return {
                 channelType : angular.isDefined(this.channelType) ? this.channelType : '',
                 order : angular.isDefined(this.order) ? this.order : '',
                 attributes : idList
-            });
+            };
         };
 
         CommunicationChannel.prototype.getFormattedStartDate = function() {

@@ -92,7 +92,7 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
 
     //Is it possible to start this program?
     $scope.possibleToStart = function(programPoll){
-        if(programPoll.attributes.RUNNING){
+        if(programPoll.attributes.RUNNING === "STARTED"){
             return false;
         }
 
@@ -106,10 +106,7 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
 
     //Is it possible to stop this program?
     $scope.possibleToStop = function(programPoll){
-        if(!programPoll.attributes.RUNNING){
-            return false;
-        }
-        return true;
+        return programPoll.attributes.RUNNING === "STARTED";
     };
 
     init();

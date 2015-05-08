@@ -25,7 +25,10 @@ angular.module('unionvmsWeb')
                 return $resource(baseUrl +'/mobileterminal/rest/poll/inactivate/:id', {}, {
                     save: {method: 'PUT'}                    
                 });
-            },                        
+            },
+            createPolls: function() {
+                return $resource(baseUrl + '/mobileterminal/rest/poll');
+            }
         };
     })
     .service('pollingRestService',function($q, pollingRestFactory, Poll, PollListPage){
@@ -48,13 +51,13 @@ angular.module('unionvmsWeb')
                     if(response.code !== "200"){
                         deferred.reject("Invalid response status");
                         return;
-                    }                    
+                    }
                     var programPolls = [];
 
                     //Create a list of Poll objects from the response
                     if(angular.isArray(response.data)) {
                         for (var i = 0; i < response.data.length; i++) {
-                            programPolls.push(Poll.fromJson(response.data[i]));
+                            programPolls.push(Poll.fromAttributeList(response.data[i].value));
                         }
                     }
                     deferred.resolve(programPolls);
@@ -108,7 +111,7 @@ angular.module('unionvmsWeb')
                         //Create a ListPage object from the response
                         if(angular.isArray(response.data.poll)) {
                             for (var i = 0; i < response.data.poll.length; i++) {
-                                polls.push(Poll.fromJson(response.data.poll[i]));
+                                polls.push(Poll.fromAttributeList(response.data[i].value));
                             }
                         }
                         var currentPage = response.data.currentPage;
@@ -123,7 +126,21 @@ angular.module('unionvmsWeb')
                     deferred.reject(error);
                 });
                 return deferred.promise;
-            },            
+            },
+            createPolls: function(polls) {
+                var deferred = $q.defer();
+                pollingRestFactory.createPolls().save(polls, function(response) {
+                    deferred.resolve(response.data.map(function(attrs) {
+                        return Poll.fromAttributeList(attrs.value);
+                    }));
+                },
+                function(error) {
+                    console.error("Could not add new polls: " + error);
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            }
         };
         return pollingRestService;
     }

@@ -29,6 +29,7 @@ angular.module('unionvmsWeb').directive('datepickerInput', function($compile) {
                 lazyInit: true,
                 format : format,
                 step: 5,
+                closeOnDateSelect: !useTime
             });
 
             if (name) {
@@ -61,4 +62,18 @@ angular.module('unionvmsWeb')
             jQuery("#" +$scope.randomId).trigger("open.xdsoft");
         };
 
+        function leadingZero(value) {
+            if (value < 10) {
+                return "0" + value;
+            }
+
+            return value;
+        }
+
+        $scope.$watch('viewModel', function(newValue) {
+            var d = new Date(newValue);
+            var date = [d.getFullYear(), leadingZero(d.getMonth()), leadingZero(d.getDate())];
+            var time = [leadingZero(d.getHours()), leadingZero(d.getMinutes()), leadingZero(d.getSeconds())];
+            $scope.model = date.join('-') + ' ' + time.join(':');
+        });
 });

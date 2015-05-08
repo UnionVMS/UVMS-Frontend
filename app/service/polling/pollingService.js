@@ -1,10 +1,23 @@
-angular.module('unionvmsWeb').factory('pollingService',function() {
+angular.module('unionvmsWeb').factory('pollingService',function(pollingRestService, Poll, $q, $timeout) {
 
     //The selected terminals
     var selection = {
         selectedMobileTerminals : [],
         selectedMobileTerminalGroups : []
     };
+
+    var result = {
+        polls: [],
+        sortBy : "",
+        sortReverse : "",
+        programPoll: false
+    };
+
+    var pollingOptions = {};
+
+    function init() {
+        resetPollingOptions();
+    }
 
     function indexOfTerminal(xs, x) {
         for (var i = 0; i < xs.length; i++) {
@@ -15,13 +28,13 @@ angular.module('unionvmsWeb').factory('pollingService',function() {
         return -1;
     }
 
-
     function indexOfTerminalGroup(xs, name) {
-            for (var i = 0; i < xs.length; i++) {
-                if (xs[i].name === name) {
-                    return i;
-                }
+        for (var i = 0; i < xs.length; i++) {
+            if (xs[i].name === name) {
+                return i;
             }
+        }
+
         return -1;
     }
 
@@ -90,6 +103,95 @@ angular.module('unionvmsWeb').factory('pollingService',function() {
         return getNumberOfSelectedTerminals() === 1;
     }
 
+    function getSelectedMobileTerminals() {
+        var selectedMobileTerminalsInGroups = selection.selectedMobileTerminalGroups.reduce(function(list, mtg) {
+            return list.concat(mtg.mobileTerminals);
+        }, []);
+
+        return selection.selectedMobileTerminals.concat(selectedMobileTerminalsInGroups);
+    }
+
+    function getAttr(k, v) {
+        return {"key": k, "value": v};
+    }
+
+    function getPollAttributes(type) {
+        if (type === "PROGRAM") {
+            return [
+                getAttr("START_DATE", pollingOptions.programPoll.startDate),
+                getAttr("END_DATE", pollingOptions.programPoll.endDate),
+                getAttr("FREQUENCY", pollingOptions.programPoll.time),
+                getAttr("USER", "frontend user")
+            ];
+        }
+        else if (type === "CONFIGURATION") {
+            return [
+                getAttr("REPORT_FREQUENCY", pollingOptions.configurationPoll.freq),
+                getAttr("GRACE_PERIOD", pollingOptions.configurationPoll.gracePeriod),
+                getAttr("IN_PORT_GRACE", pollingOptions.configurationPoll.inPortGrace),
+                getAttr("DNID", pollingOptions.configurationPoll.newDNID),
+                getAttr("MEMBER_ID", pollingOptions.configurationPoll.newMemberNo),
+                getAttr("USER", "frontend user")
+            ];
+        }
+        else if (type === "SAMPLING") {
+            return [
+                getAttr("START_DATE", pollingOptions.samplingPoll.startDate),
+                getAttr("END_DATE", pollingOptions.samplingPoll.endDate),
+                getAttr("USER", "frontend user")
+            ];
+        }
+        else { // type === MANUAL POLL
+            return [
+                getAttr("USER", "frontend user")
+            ];
+        }
+    }
+
+    function getCreatePollsRequestData() {
+        return {
+            pollType: pollingOptions.type + "_POLL",
+            comment: pollingOptions.comment,
+            attributes: getPollAttributes(pollingOptions.type),
+            mobileTerminals: getSelectedMobileTerminals().map(function(mt) {
+               return mt.toCreatePoll();
+            })
+        };
+    }
+
+    function createPolls() {
+        var deferred = $q.defer();
+        var requestData = getCreatePollsRequestData();
+        pollingRestService.createPolls(requestData).then(function(polls) {
+            result.polls = polls;
+            result.programPoll = requestData.pollType === "PROGRAM_POLL";
+            deferred.resolve();
+        },
+        function(error) {
+            console.log("could not create polls: " + error);
+            result.polls = [];
+            result.programPoll = requestData.pollType === "PROGRAM_POLL";
+            deferred.reject();
+        });
+
+        return deferred.promise;
+    }
+
+    function resetPollingOptions(resetComment) {
+        var comment;
+        if(!resetComment){
+            comment = pollingOptions.comment;
+        }
+
+        pollingOptions.type = 'MANUAL';
+        pollingOptions.requestChannel = undefined;
+        pollingOptions.responseChannel = undefined;
+        pollingOptions.comment = comment;
+        pollingOptions.programPoll = {};
+        pollingOptions.configurationPoll = {};
+		pollingOptions.samplingPoll = {};
+    }
+
 	var pollingService = {
         addMobileTerminalToSelection: function(terminal) {
             if (isTerminalSelected(terminal)) {
@@ -137,11 +239,22 @@ angular.module('unionvmsWeb').factory('pollingService',function() {
         getSelection : function(){
             return selection;
         },
+        getPollingOptions: function() {
+            return pollingOptions;
+        },
         isMobileTerminalSelected: isTerminalSelected,
         isMobileTerminalGroupSelected: isTerminalGroupSelected,
         isSingleSelection: isSingleSelection,
-        getNumberOfSelectedTerminals: getNumberOfSelectedTerminals
+        getNumberOfSelectedTerminals: getNumberOfSelectedTerminals,
+        getSelectedMobileTerminals: getSelectedMobileTerminals,
+        createPolls: createPolls,
+        getResult: function() {
+            return result;
+        },
+        resetPollingOptions: resetPollingOptions
     };
 
-	return pollingService;
+    init();
+
+    return pollingService;
 });

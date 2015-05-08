@@ -63,19 +63,7 @@ angular.module('unionvmsWeb').directive('period', [
                 });
 
                 function isValidPeriod(viewValue) {
-                    var timeArray = viewValue.split(":");
-                    var valid = false;
-                    //Check that at least on of the time variables (hours, minutes, seconds) is larger than 0
-                    $.each(timeArray, function(index, value){
-                        if(!isNaN(value) && value > 0){
-                            valid = true;
-                        }
-                    });
-
-                    if (valid || !scope.period) {
-                        return true;
-                    }
-                    return false;
+                    return !scope.period || viewValue > 0;
                 }
 
                 ctrl.$parsers.push(function(value){

@@ -7,7 +7,38 @@
         </div>    
     </div>    
 
-    <div class="row">
+    <div class="row" ng-if="currentResult.programPoll">
+        <div class="col-md-12">
+            <table class="searchResults colorOdd pollingLogsTable">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" onclick="alert('Please don not click this button!')"/></th>
+                        <th sortable-table-header by="currentResult.sortBy" reverse="currentResult.sortReverse">
+                            {{ 'polling.polling_logs_table_header_name' | i18n }}
+                        </th>
+                        <th sortable-table-header by="currentResult.sortBy" reverse="currentResult.sortReverse">
+                            {{ 'polling.polling_logs_table_header_transponder' | i18n }}
+                        </th>
+                        <th>{{ 'polling.running_program_polls_table_header_start_date' | i18n }}</th>
+                        <th>{{ 'polling.running_program_polls_table_header_end_date' | i18n }}</th>
+                        <th>{{ 'polling.running_program_polls_table_header_interval' | i18n }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in currentResult.polls | orderBy:currentResult.sortBy:currentResult.sortReverse">
+                        <td><input type="checkbox" onclick="alert('Please do not click this button!')"/></td>
+                        <td>{{ item.attributes.VESSEL_NAME }} </td>
+                        <td>{{ item.attributes.TRANSPONDER }} </td>
+                        <td>{{ item.attributes.START_DATE | date : "medium" }}</td>
+                        <td>{{ item.attributes.END_DATE | date : "medium" }}</td>
+                        <td>{{ item.getFrequencyAsText() }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div ng-if="!currentResult.programPoll" class="row">
         <div class="col-md-12">
             <table class="searchResults colorOdd pollingLogsTable">
                 <thead>
@@ -27,8 +58,8 @@
                 <tbody>
                 <tr ng-repeat="item in currentResult.polls | orderBy:currentResult.sortBy:currentResult.sortReverse" ng-init="isExpanded = false">            
                     <td><input type="checkbox"/></td>
-                    <td>{{item.name}}</td>
-                    <td>{{item.transponder}}</td>
+                    <td>{{item.attributes.VESSEL_NAME}}</td>
+                    <td>{{item.attributes.TRANSPONDER}}</td>
                     <td class="statusTime">
                         <div class="expandIcon" ng-show="item.status.length > 1" ng-click="isExpanded = !isExpanded">
                             <i class="fa fa-plus-square" ng-show="!isExpanded"></i>
@@ -36,7 +67,7 @@
                         </div>
                         <div class="times">
                             <span ng-repeat="status in item.status" ng-show="isExpanded || $index === 0">
-                                {{status.time}}<br>
+                                {{status.time | date : "medium"}}<br>
                             </span>
                         </div>
                     </td>

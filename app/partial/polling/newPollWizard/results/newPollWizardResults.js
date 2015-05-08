@@ -1,34 +1,11 @@
-angular.module('unionvmsWeb').controller('NewpollwizardresultsCtrl',function($scope, Poll, PollStatus, alertService){
+angular.module('unionvmsWeb').controller('NewpollwizardresultsCtrl',function($scope, alertService, pollingService){
 
     //Search objects and results
-    $scope.currentResult = {
-        polls : [],
-        sortBy : "",
-        sortReverse : ""
-    };   
-
-    //Add dummy polls
-    $scope.currentResult.polls.push(new Poll());
-    $scope.currentResult.polls.push(new Poll());
-    $scope.currentResult.polls.push(new Poll());
-    var a = new Poll();
-    a.status = [new PollStatus("Request failed")];
-    $scope.currentResult.polls.push(a);
-    $scope.currentResult.polls.push(new Poll());
-    $scope.currentResult.polls.push(new Poll());
-    $scope.currentResult.polls.push(new Poll());
-    $scope.currentResult.polls.push(new Poll());
-    $scope.currentResult.polls.push(new Poll());
-    $scope.currentResult.polls.push(new Poll());
-    $scope.currentResult.polls.push(new Poll());
-    $scope.currentResult.polls.push(new Poll());
-    $scope.currentResult.polls.push(new Poll());
-    $scope.currentResult.polls.push(new Poll());
-    $scope.currentResult.polls.push(new Poll());    
+    $scope.currentResult = pollingService.getResult();
 
     $scope.print = function(){
         console.log("Print...");
-        window.print();        
+        window.print();
     };
 
     $scope.exportAsFile = function(){

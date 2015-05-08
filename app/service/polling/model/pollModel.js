@@ -1,13 +1,29 @@
 angular.module('unionvmsWeb')
-.factory('Poll', function(MobileTerminal, locale) {
+.factory('Poll', function(MobileTerminalId, locale, CarrierId) {
 
     function Poll(){
         this.id = undefined;
         this.type = undefined;
         this.comment = undefined;
-        this.mobileTerminal = new MobileTerminal();
+        this.mobileTerminalId = new MobileTerminalId();
         this.attributes = {};
+        this.carrierId = new CarrierId();
     }
+
+    Poll.fromAttributeList = function(attrs) {
+        var poll = new Poll();
+        for (var i = 0; i < attrs.length; i++) {
+            var attr = attrs[i];
+            poll.attributes[attr["key"]] = attr["value"];
+        }
+
+        poll.mobileTerminalId.systemType = poll.attributes.TRANSPONDER;
+        poll.id = poll.attributes.POLL_ID;
+        poll.type = poll.attributes.POLL_TYPE;
+        poll.startDate = poll.attributes.START_DATE;
+        poll.endDate = poll.attributes.END_DATE;
+        return poll;
+    };
 
     Poll.fromJson = function(data){
         var poll = new Poll();
@@ -17,23 +33,17 @@ angular.module('unionvmsWeb')
         poll.comment = data.comment;        
 
         //Mobile terminal
-        poll.mobileTerminal = MobileTerminal.fromJson(data.mobileTerminal); 
+        poll.mobileTerminalId = MobileTerminalId.fromJson(data.mobileTerminal);
 
         //Attributes
         $.each(data.attributes, function(index, attribute){
             poll.attributes[attribute.key] = attribute.value;
         });
- 
+
+        this.carrierId = CarrierId.fromJson(data.carrierId);
+
 
         return poll;
-    };
-
-    Poll.prototype.getFormattedStartDate = function() {
-        return moment(parseInt(this.attributes["START_DATE"])).format("YYYY-MM-DD HH:mm");
-    };
-
-    Poll.prototype.getFormattedEndDate = function() {
-        return moment(parseInt(this.attributes["END_DATE"])).format("YYYY-MM-DD HH:mm");
     };
 
     Poll.prototype.getFrequencyAsText = function() {
@@ -47,8 +57,8 @@ angular.module('unionvmsWeb')
             return frequency +" " +locale.getString('common.time_second_short');
         }
         //Return hour and minutes, e.g. 2h 45 min
-        var hours = moment.duration(frequency, 'seconds').get('hours');
-        var minutes = moment.duration((frequency -hours*60*60), 'seconds').get('minutes');
+        var hours = Math.floor(frequency / 3600);
+        var minutes = Math.floor((frequency % 3600) / 60);
         var text = "";
         if(hours > 0){
             text += hours + locale.getString('common.time_hour_short');
