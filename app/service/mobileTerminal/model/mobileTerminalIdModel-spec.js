@@ -1,4 +1,4 @@
-escribe('MobileTerminalModelId', function() {
+describe('MobileTerminalModelId', function() {
 
   beforeEach(module('unionvmsWeb'));
 
