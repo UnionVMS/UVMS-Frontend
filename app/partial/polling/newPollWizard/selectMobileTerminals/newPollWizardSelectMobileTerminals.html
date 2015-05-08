@@ -46,7 +46,7 @@
 	</div>
     <div class="row wizardFooter">
         <div class="col-md-12 textAlignRight">
-            <button type="button" class="btn btn-primary" ng-click="nextStep()">{{'common.next' | i18n | uppercase}}</button>
+            <button type="button" class="btn btn-primary" ng-disabled="!readyForNextStep()" ng-click="nextStep()">{{'common.next' | i18n | uppercase}}</button>
         </div>        
     </div>        
 </div>

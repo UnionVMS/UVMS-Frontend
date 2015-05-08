@@ -132,6 +132,17 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
         }
     };
 
+    $scope.readyForNextStep = function(){
+        if(pollingService.getNumberOfSelectedTerminals() > 0 ){
+            return true;
+        }
+        else{
+            return false;
+        }
+    };
+
+
+
     init();
 
 });

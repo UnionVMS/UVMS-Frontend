@@ -40,4 +40,6 @@ angular.module('unionvmsWeb').controller('MobileterminallistCtrl',function($scop
         console.log("MOBILE TERMINAL IS CHECKED");
     };
 
+     $scope.sortType = 'associatedVessel.name';
+
 });

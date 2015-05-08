@@ -4,28 +4,28 @@
             <thead>
             <tr>
                 <th><input type="checkbox" ng-model="item.selectedAll" ng-click="checkAll()"/></th>
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.name'">{{'mobileTerminal.table_header_vessel_name' | i18n}}</th>
+                <th sortable-table-header by="sortType" reverse="sortReverse" order="'associatedVessel.name'">{{'mobileTerminal.table_header_vessel_name' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.ids.SERIAL_NUMBER'">{{'mobileTerminal.table_header_serial_no' | i18n}}</th>
+                <th sortable-table-header by="sortType" reverse="sortReverse" order="'mobileTerminalId.ids.SERIAL_NUMBER'">{{'mobileTerminal.table_header_serial_no' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'channels[0].ids.MEMBER_ID'">{{'mobileTerminal.table_header_member_no' | i18n}}</th>
+                <th sortable-table-header by="sortType" reverse="sortReverse" order="'channels[0].ids.MEMBER_ID'">{{'mobileTerminal.table_header_member_no' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'channels[0].ids.DNID'">{{'mobileTerminal.table_header_dnid' | i18n}}</th>
+                <th sortable-table-header by="sortType" reverse="sortReverse" order="'channels[0].ids.DNID'">{{'mobileTerminal.table_header_dnid' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.systemType'">{{'mobileTerminal.table_header_transponder_type' | i18n}}</th>
+                <th sortable-table-header by="sortType" reverse="sortReverse" order="'mobileTerminalId.systemType'">{{'mobileTerminal.table_header_transponder_type' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.SATELLITE_NUMBER'">{{'mobileTerminal.table_header_satellite_number' | i18n}}</th>
+                <th sortable-table-header by="sortType" reverse="sortReverse" order="'attributes.SATELLITE_NUMBER'">{{'mobileTerminal.table_header_satellite_number' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.mmsiNo'">{{'mobileTerminal.table_header_mmsi_no' | i18n}}</th>
+                <th sortable-table-header by="sortType" reverse="sortReverse" order="'associatedVessel.mmsiNo'">{{'mobileTerminal.table_header_mmsi_no' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'active'">{{'mobileTerminal.table_header_status' | i18n}}</th>
+                <th sortable-table-header by="sortType" reverse="sortReverse" order="'active'">{{'mobileTerminal.table_header_status' | i18n}}</th>
 
                 <th>{{'mobileTerminal.table_header_detail_button' | i18n}}</th>
                 <th>{{'mobileTerminal.table_header_logs' | i18n}}</th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="item in currentSearchResults.mobileTerminals | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" ng-class="{'inactive':!item.active}">            
+            <tr ng-repeat="item in currentSearchResults.mobileTerminals | orderBy:sortType:sortReverse" ng-class="{'inactive':!item.active}">            
                 <td>
                     <div class="iconToTheLeftOfTheTableCell" ng-show="!item.associatedVessel">
                         <div class="unassignedIcon" tooltip-placement="bottom" tooltip="{{'mobileTerminal.table_not_assigned_icon_tooltip' | i18n}}">!</div>
