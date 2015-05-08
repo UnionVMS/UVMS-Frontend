@@ -5,6 +5,13 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         assignVessel : false,
     };
 
+
+    $scope.$watch('getCurrentMobileTerminal()', function(newValue) {
+        console.log("CHANGE IN FORM:");
+        console.log(newValue);
+        $scope.currentMobileTerminal = $scope.getCurrentMobileTerminal();
+    });    
+
     //Values for dropdowns
     $scope.oceanRegions =[{'text':'AORE','code':'aore'}];
     $scope.channelTypes =[{'text':'VMS','code':'VMS'}, {'text':'ELOG','code':'ELOG'}];
