@@ -135,7 +135,6 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
     $scope.readyForNextStep = function(){
         return (pollingService.getNumberOfSelectedTerminals() > 0 ) ? true : false;
     };  
-   
 
     init();
 
