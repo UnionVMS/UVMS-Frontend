@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, GetListRequest, searchService, vesselRestService, alertService){
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, GetListRequest, searchService, vesselRestService, alertService, locale){
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -7,11 +7,14 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, 
         viewVessel : false
     };
 
+    
+
     //Search objects and results
     $scope.currentSearchResults = {
         page : 0,
         totalNumberOfPages : 0,
-        vessels : []
+        vessels : [],
+        loading: true
     };
 
     //Current filter and sorting for the results table
@@ -45,8 +48,9 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, 
 
     //Handle error when getting vesselGroups for the user
     var onVesselGroupListError = function(response){
-       $scope.error = "We are sorry... Something took a wrong turn. To err is human but to arr is pirate!!";
-       console.error("We are sorry... To err is human but to arr is pirate!!");
+        $scope.currentSearchResults.loading = false;
+        $scope.error = locale.getString('common.search_zero_results_error');
+        console.error("We are sorry... To err is human but to arr is pirate!!");
     };
 
     //Load the next page of the search results
@@ -100,6 +104,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, 
         //Update page info
         $scope.currentSearchResults.totalNumberOfPages = vesselListPage.totalNumberOfPages;
         $scope.currentSearchResults.page = vesselListPage.currentPage;
+        $scope.currentSearchResults.loading = false;
     };
 
     //Handle error from search results (listing vessel)

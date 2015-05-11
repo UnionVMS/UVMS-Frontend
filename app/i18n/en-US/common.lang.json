@@ -19,11 +19,12 @@
     "save" : "Save",
     "search" : "Search",
     "search_advanced_link" : "Advanced search",
-    "search_failed_error" : "Something went wrong. Please try again.",
+    "search_failed_error" : "No result could be retrieved at this time. Please try later or with other search criterias.",
     "search_group_dropdown" : "Saved groups",
     "search_group_save" : "Save group",
     "search_results_current_page" : "Showing page {1} of {2}",
     "search_results_load_more" : "Load more",
+    "search_zero_results_error" : "No result matching your search criteria was found.",
     "time_hour_short" : "h",
     "time_minute_short" : "min",
     "time_second_short" : "s",
@@ -35,4 +36,5 @@
     "validation_letters_only" : "Only letters",
     "validation_required" : "Required",
     "yes" : "Yes"
+
 }

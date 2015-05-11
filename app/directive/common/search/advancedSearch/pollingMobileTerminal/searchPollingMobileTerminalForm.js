@@ -47,6 +47,10 @@ angular.module('unionvmsWeb')
             $scope.performSavedGroupSearch(savedSearchGroup);
         };
 
+        $scope.displayVesselGroup = function(){
+            return ($scope.selectedVesselGroup.lenght > 0) ? true : false;
+        }
+
         init();
     }
 );

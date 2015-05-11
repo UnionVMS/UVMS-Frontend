@@ -43,12 +43,16 @@
                     <span class="link" ng-click="loadNextPage()"> {{'common.search_results_load_more' | i18n | uppercase}}</span>            
                 </div>
             </div>
+            <div class="col-md-12 alert alert-danger nosearchresult" ng-show="!currentSearchResults.loading && currentSearchResults.mobileTerminals.length < 1">
+            	<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+            	<span class="nosearchresulttext">{{'polling.wizard_first_step_nos_search_result' | i18n}}</span>
+            </div>
 	</div>
     <div class="row wizardFooter">
         <div class="col-md-12 textAlignRight">
             <button type="button" class="btn btn-primary" ng-disabled="!readyForNextStep()" ng-click="nextStep()">{{'common.next' | i18n | uppercase}}</button>
         </div>        
-    </div>        
+    </div>    
 </div>
 	
 

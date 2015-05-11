@@ -87,7 +87,12 @@
                 </tr>
                 </tbody>
             </table>
-            <p style="color: orangered">{{error}}</p>
+            <div class="row alert alert-danger nosearchresult" ng-show="!currentSearchResults.loading && currentSearchResults.vessels.length < 1">
+                <div class="col-md-12">
+                    <span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+                    <span class="nosearchresulttext">{{error}}</span>
+                </div>
+            </div>
         </div>
     </div>
 
