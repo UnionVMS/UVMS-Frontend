@@ -31,11 +31,13 @@
     <div class="mobileTerminalFormContainer">
 
         <div class="borderSection" ng-show="currentMobileTerminal.carrierId && !isVisible.assignVessel">        
-            <div class="row">
-                <div class="col-md-12">
-                    <label class="section">ASSIGNED VESSEL</label>
+            <div class="row assignedVesselHeader">
+                <div class="col-md-6">
+                    <label class="section">{{'mobileTerminal.assigned_vessel' | i18n | uppercase}}</label>
+                </div>
+                <div class="col-md-6 textAlignRight">
                     <button class="btn btn-primary" ng-click="unassignVessel()"><i class="fa fa-chain-broken"></i> {{'mobileTerminal.unassign_vessel' | i18n}}</span>
-                </div>            
+                </div>
             </div>
             <div>
                 <vessel-details vessel="currentMobileTerminal.associatedVessel" disable-form="true" ></vessel-details>    
@@ -46,10 +48,10 @@
         <div class="borderSection" ng-show="isVisible.assignVessel">
             <div class="row" >
                 <div class="col-md-6">
-                    <label class="section">ASSIGN VESSEL</label>
+                    <label class="section">{{'mobileTerminal.assign_vessel' | i18n | uppercase}}</label>
                 </div>
                 <div class="col-md-6 textAlignRight">
-                    <span class="link underline"ng-click="toggleAssignVessel()">CANCEL</span>
+                    <span class="link underline"ng-click="toggleAssignVessel()">{{'common.cancel' | i18n | uppercase}}</span>
                 </div>            
             </div>        
             <div ng-include="'partial/mobileTerminal/assignVessel/assignVessel.html'" ng-show="transponderSystems.length > 0" ></div>
@@ -67,7 +69,7 @@
 
     <div class="row" style="margin-top:100px" ng-show="isCreateNewMode()">
         <div class="col-md-12">
-            <a ng-click="clearForm()" class="pointer">Clear form</a>
+            <a ng-click="clearForm()" class="pointer">{{'common.clear_form' | i18n}}</a>
         </div>
     </div>  
 

@@ -2,6 +2,7 @@
     "assign" : "Assign",
     "assigning_to_vessel" : "Assigning {1} to {2}",
     "assign_vessel" : "Assign vessel",
+    "assigned_vessel" : "Assigned vessel",
     "assign_vessel_ircs_required": "IRCS required to assign vessel",
     "assigned_carrier_header" : "Assigned carrier",
 	"menu_mobileterminals" : "Mobile terminals",
