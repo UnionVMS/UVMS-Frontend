@@ -13,21 +13,21 @@
             </div>
         </div>
         <div class="row" ng-hide="selectedVessel">
-            <div class="col-md-8 searchVesselContainer">
+            <div class="col-md-12 searchVesselContainer">
                 <div class="row searchFormContainer">
                     <!-- Search input -->
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <input type="text" class="form-control searchText"
                                placeholder="Search for vessel" ng-model="assignVesselFreeText">
                     </div>
                     
                     <!-- Type Dropdown -->
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <dropdown ng-model="assignVesselSearchType" initialtext="" items="assignVesselSearchTypes"></dropdown>                        
                     </div>
 
                     <!-- Search button -->
-                    <div class="col-md-2 pull-right mtsearchbuttoncontainer nopaddingright">
+                    <div class="col-md-2 mtsearchbuttoncontainer">
                         <button type="button" class="btn btn-primary btn-sm searchButton" ng-click="assignVesselSearch()">
                             <span class="fa fa-search" aria-hidden="true"></span>
                         </button>
@@ -72,9 +72,6 @@
                         </div>                        
                     </div>
                 </div>
-            </div>
-            <div class="col-md-2 textAlignCenter createNewVesselContainer">
-                <button type="button" class="btn btn-primary btn-sm mbsearchbutton" ng-click="gotoCreateNewVessel()">Create new vessel</button>
             </div>
         </div>        
     </div>

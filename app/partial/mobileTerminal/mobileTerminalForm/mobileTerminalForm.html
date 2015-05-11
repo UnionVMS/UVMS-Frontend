@@ -29,16 +29,8 @@
 
 
     <div class="mobileTerminalFormContainer">
-        <div class="row" ng-show="isVisible.assignVessel">
-            <div class="col-md-6">
-                <label class="section">ASSIGN VESSEL</label>
-            </div>
-            <div class="col-md-6 textAlignRight">
-                <span class="link underline"ng-click="toggleAssignVessel()">CANCEL</span>
-            </div>            
-        </div>
 
-        <div class="assignedVesselContainer" ng-show="currentMobileTerminal.carrierId && !isVisible.assignVessel">        
+        <div class="borderSection" ng-show="currentMobileTerminal.carrierId && !isVisible.assignVessel">        
             <div class="row">
                 <div class="col-md-12">
                     <label class="section">ASSIGNED VESSEL</label>
@@ -51,7 +43,17 @@
         </div>
 
 
-        <div ng-include="'partial/mobileTerminal/assignVessel/assignVessel.html'" ng-show="transponderSystems.length > 0" ></div>
+        <div class="borderSection" ng-show="isVisible.assignVessel">
+            <div class="row" >
+                <div class="col-md-6">
+                    <label class="section">ASSIGN VESSEL</label>
+                </div>
+                <div class="col-md-6 textAlignRight">
+                    <span class="link underline"ng-click="toggleAssignVessel()">CANCEL</span>
+                </div>            
+            </div>        
+            <div ng-include="'partial/mobileTerminal/assignVessel/assignVessel.html'" ng-show="transponderSystems.length > 0" ></div>
+        </div>
 
         <div class="row" ng-hide="isVisible.assignVessel">
             <div class="col-md-12" ng-hide="currentMobileTerminal.carrierId">
@@ -59,7 +61,7 @@
             </div>    
         </div>
 
-        <div static-include="partial/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.html"></div>
+        <div class="mobileTerminalDetailsContainer" static-include="partial/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.html"></div>
     </div>
 
 
