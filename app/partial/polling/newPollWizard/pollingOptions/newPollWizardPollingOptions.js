@@ -73,8 +73,9 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
     //Watch when entering optins step in the wizard
     $scope.$watch("wizardStep", function(newValue) {
         if (newValue === 2) {
-            //Reset submitAttempted
+            //Reset form and submitAttempted
             $scope.submitAttempted = false;
+            $scope.pollingOptionsForm.$setPristine();
 
             // Change polling type if incompatible with current selection
              if(!$scope.isSingleMobileTerminalSelected() && $scope.isSamplingPoll()){

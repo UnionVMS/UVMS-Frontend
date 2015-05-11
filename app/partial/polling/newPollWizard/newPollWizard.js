@@ -16,6 +16,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardCtrl',function($scope, po
     $scope.startNewPoll = function(){
         $scope.wizardStep = 1;
         pollingService.clearSelection();
+        pollingService.resetPollingOptions(true);
     };
 
 

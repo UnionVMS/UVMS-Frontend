@@ -36,7 +36,7 @@ angular.module('unionvmsWeb').directive('datepickerInput', function($compile) {
                 element.find('input').attr('name', name);
                 element.removeAttr("name");
                 $compile(element)(scope);
-                }
+            }
         }
 	};
 });
@@ -70,10 +70,25 @@ angular.module('unionvmsWeb')
             return value;
         }
 
+        var watchModelChanges = true;
+        //Watch changes of the viewModel
         $scope.$watch('viewModel', function(newValue) {
-            var d = new Date(newValue);
-            var date = [d.getFullYear(), leadingZero(d.getMonth()), leadingZero(d.getDate())];
-            var time = [leadingZero(d.getHours()), leadingZero(d.getMinutes()), leadingZero(d.getSeconds())];
-            $scope.model = date.join('-') + ' ' + time.join(':');
+            //Set watchModelChanges to false so the watch on model doesn't update the viewModel which will cause an inifinte watch loop
+            watchModelChanges = false;
+            if(angular.isDefined(newValue)){
+                var d = new Date(newValue);
+                var date = [d.getFullYear(), leadingZero(d.getMonth()), leadingZero(d.getDate())];
+                var time = [leadingZero(d.getHours()), leadingZero(d.getMinutes()), leadingZero(d.getSeconds())];
+                $scope.model = date.join('-') + ' ' + time.join(':');
+            }
         });
+
+        //Watch changes of the model and update the viewModel when it happens
+        $scope.$watch('model', function(newValue) 
+            //Don't update viewModel if the watch 
+            if(watchModelChanges){
+                $scope.viewModel = newValue;
+            }
+            watchModelChanges = true;
+        });        
 });
