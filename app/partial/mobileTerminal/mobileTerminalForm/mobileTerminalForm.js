@@ -8,6 +8,9 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     //Watch changes to the currentMobileTerminal model (set in the parent scope)
     $scope.$watch('getCurrentMobileTerminal()', function(newValue) {
         $scope.currentMobileTerminal = $scope.getCurrentMobileTerminal();
+        if(angular.isDefined($scope.mobileTerminalForm)){
+            $scope.mobileTerminalForm.$setPristine();
+        }
     });    
 
     //Values for dropdowns

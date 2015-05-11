@@ -68,18 +68,19 @@ angular.module('unionvmsWeb')
 
             //Watch for changes to the ngModel and update the dropdown label
             scope.$watch(function () { return scope.ngModel;}, function (newVal, oldVal) {
-                if (typeof newVal !== 'undefined') {
-                    if(newVal === null || newVal === undefined || newVal === ""){
+                if(newVal === null || newVal === undefined || newVal === ""){
+                    if(attrs.initialtext){
                         scope.currentItemLabel = attrs.initialtext;
-                    }else{
-                        for(var i = 0; i < scope.items.length; i++){
-                            if((newVal +'') === (getItemCode(scope.items[i]) +'')){
-                                scope.currentItemLabel = scope.getItemLabel(scope.items[i]);
-                            }
+                    }
+                }else{
+                    for(var i = 0; i < scope.items.length; i++){
+                        if((newVal +'') === (getItemCode(scope.items[i]) +'')){
+                            scope.currentItemLabel = scope.getItemLabel(scope.items[i]);
                         }
                     }
                 }
             });
+
 
             //Select item in dropdown
             scope.selectVal = function(item){
