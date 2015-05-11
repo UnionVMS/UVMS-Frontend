@@ -84,7 +84,7 @@ angular.module('unionvmsWeb')
         });
 
         //Watch changes of the model and update the viewModel when it happens
-        $scope.$watch('model', function(newValue) 
+        $scope.$watch('model', function(newValue) {
             //Don't update viewModel if the watch 
             if(watchModelChanges){
                 $scope.viewModel = newValue;
