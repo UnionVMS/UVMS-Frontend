@@ -22,6 +22,13 @@ angular.module('unionvmsWeb')
         };
     };
 
+    GetListRequest.prototype.DTOForPoll = function(){
+        return {
+            pagination : {page: this.page, listSize: this.listSize},
+            pollSearchCriteria : {isDynamic: this.isDynamic, criterias: this.criterias}
+        };
+    };
+
     GetListRequest.prototype.setPage = function(newPage){
         this.page = newPage;
         return this.page;

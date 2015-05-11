@@ -100,7 +100,7 @@ angular.module('unionvmsWeb')
             getPollList : function(getListRequest){
                 var deferred = $q.defer();
                 //Get list of polls
-                pollingRestFactory.getPolls().list(getListRequest.toJson(), function(response){
+                pollingRestFactory.getPolls().list(getListRequest.DTOForPoll(), function(response){
                         if(response.code !== "200"){
                             deferred.reject("Invalid response status");
                             return;
