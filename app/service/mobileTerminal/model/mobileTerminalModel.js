@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb')
-    .factory('MobileTerminal', function(MobileTerminalId, CommunicationChannel, CarrierId, MobileTerminalAttribute) {
+    .factory('MobileTerminal', function(MobileTerminalId, CommunicationChannel, CarrierId) {
 
         var INMARSAT_C_ATTRIBUTES = ['SATELLITE_NUMBER', 'TRANSCEIVER_TYPE', 'SOFTWARE_VERSION', 'ANTENNA', 'ANSWER_BACK', 'INSTALLED_BY', 'INSTALLED_ON', 'STARTED_ON', 'UNINSTALLED_ON'];
 
@@ -29,7 +29,10 @@ angular.module('unionvmsWeb')
             if(data.attributes !== null){
                 mobileTerminal.attributes = {};
                 for (var i = 0; i < data.attributes.length; i ++) {
-                    mobileTerminal.attributes[data.attributes[i].fieldType.toUpperCase()] = data.attributes[i].value;
+                    var value = data.attributes[i].value;
+                    if(angular.isDefined(value) && String(value).trim().length > 0){
+                        mobileTerminal.attributes[data.attributes[i].fieldType.toUpperCase()] = value;
+                    }
                 }
             }
 
@@ -62,7 +65,7 @@ angular.module('unionvmsWeb')
         };
 
         MobileTerminal.prototype.toJson = function(){
-            //Create array of MobileTerminalAttributes
+            //Create array of attributes
             var attributesObjects = [];
             var validAttributes;
 
@@ -71,8 +74,8 @@ angular.module('unionvmsWeb')
             }
 
             $.each(this.attributes, function(key, value){
-                if(validAttributes.indexOf(key) >= 0){
-                    attributesObjects.push(new MobileTerminalAttribute(key, value));
+                if(validAttributes.indexOf(key) >= 0 && angular.isDefined(value) && String(value).trim().length > 0){
+                    attributesObjects.push({"fieldType": key, "value": value});
                 }
             });
 

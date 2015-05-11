@@ -79,7 +79,13 @@ angular.module('unionvmsWeb')
                 var d = new Date(newValue);
                 var date = [d.getFullYear(), leadingZero(d.getMonth()), leadingZero(d.getDate())];
                 var time = [leadingZero(d.getHours()), leadingZero(d.getMinutes()), leadingZero(d.getSeconds())];
-                $scope.model = date.join('-') + ' ' + time.join(':');
+                var newModelVal = date.join('-') + ' ' + time.join(':');
+                //Only set model to newModelVal if valid
+                if(newModelVal.indexOf("NaN") < 0){
+                    $scope.model = newModelVal;
+                }else{
+                    $scope.model = undefined;
+                }
             }
         });
 
