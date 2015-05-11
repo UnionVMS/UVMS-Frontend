@@ -49,7 +49,7 @@ angular.module('unionvmsWeb')
 
         $scope.displayVesselGroup = function(){
             return ($scope.selectedVesselGroup.lenght > 0) ? true : false;
-        }
+        };
 
         init();
     }
