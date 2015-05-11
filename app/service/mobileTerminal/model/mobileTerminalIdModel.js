@@ -39,6 +39,18 @@ angular.module('unionvmsWeb')
             return JSON.stringify(this.dataTransferObject());
         };
 
+        MobileTerminalId.prototype.copy = function() {
+            var copy = new MobileTerminalId();
+            copy.systemType = this.systemType;
+            for (var key in this.ids) {
+                if (this.ids.hasOwnProperty(key)) {
+                    copy.ids[key] = this.ids[key];
+                }
+            }
+
+            return copy;
+        };
+
         MobileTerminalId.prototype.setSystemTypeToInmarsatC = function(){
             this.systemType ='INMARSAT_C';
         };

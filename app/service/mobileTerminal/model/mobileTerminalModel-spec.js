@@ -226,5 +226,12 @@ describe('MobileTerminalModel', function() {
 
     }));
 
+    it('should be possible to make a deep copy of a mobile terminal', inject(function(MobileTerminal) {
+        var mt = MobileTerminal.fromJson(responseData);
+        var copy = mt.copy();
+        expect(angular.equals(mt, copy)).toBeTruthy();
 
+        copy.channels[0].ids["DNID"] = "777";
+        expect(angular.equals(mt, copy)).toBe(false);
+    }));
 });

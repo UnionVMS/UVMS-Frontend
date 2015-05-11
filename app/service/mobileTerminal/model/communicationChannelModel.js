@@ -44,6 +44,21 @@ angular.module('unionvmsWeb')
             };
         };
 
+        CommunicationChannel.prototype.copy = function() {
+            var copy = new CommunicationChannel();
+            copy.order = this.order;
+            copy.startDate = this.startDate;
+            copy.stopDate = this.stopDate;
+            copy.channelType = this.channelType;
+            for (key in this.ids) {
+                if (this.ids.hasOwnProperty(key)) {
+                    copy.ids[key] = this.ids[key];
+                }
+            }
+
+            return copy;
+        };
+
         CommunicationChannel.prototype.getFormattedStartDate = function() {
             return moment.utc(this.ids["START_DATE"], 'X').format("YYYY-MM-DD");
         };

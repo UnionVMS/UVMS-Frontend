@@ -30,6 +30,10 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
     //Toggle (show/hide) viewing of a mobile terminal
     $scope.toggleMobileTerminalDetails = function(mobileTerminal, noHideMessage){
         $scope.createNewMode = false;
+        if (mobileTerminal) {
+            mobileTerminal = mobileTerminal.copy();
+        }
+
         toggleMobileTerminalForm(mobileTerminal, noHideMessage);
     };
 
@@ -111,7 +115,16 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
         //Update page info
         $scope.currentSearchResults.totalNumberOfPages = mobileTerminalListPage.totalNumberOfPages;
         $scope.currentSearchResults.page = mobileTerminalListPage.currentPage;
-    }; 
+    };
+
+    $scope.mergeCurrentMobileTerminalIntoSearchResults = function() {
+        for (var i = 0; i < $scope.currentSearchResults.mobileTerminals.length; i++) {
+            if ($scope.currentSearchResults.mobileTerminals[i].isEqualTerminal($scope.currentMobileTerminal)) {
+                $scope.currentSearchResults.mobileTerminals[i] = $scope.currentMobileTerminal;
+                $scope.currentMobileTerminal = $scope.currentSearchResults.mobileTerminals[i].copy();
+            }
+        }
+    };
 
     //Load the next page of the search results
     $scope.loadNextPage = function(){

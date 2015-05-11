@@ -101,6 +101,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         $scope.currentMobileTerminal.setAttributes(updatedMobileTerminal.attributes);
         $scope.currentMobileTerminal.setChannels(updatedMobileTerminal.channels);
         $scope.currentMobileTerminal.setMobileTerminalId(updatedMobileTerminal.mobileTerminalId);
+        $scope.mergeCurrentMobileTerminalIntoSearchResults();
     };
 
     //Error creating the new mobile terminal
@@ -126,6 +127,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
 
         //Update active status in the currentMobileTerminal object
         $scope.currentMobileTerminal.setActive(updatedMobileTerminal.active);
+        $scope.mergeCurrentMobileTerminalIntoSearchResults();
     }
 
     function setStatusToInactiveError() {
@@ -150,6 +152,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
 
         //Update active status in the currentMobileTerminal object
         $scope.currentMobileTerminal.setActive(updatedMobileTerminal.active);        
+        $scope.mergeCurrentMobileTerminalIntoSearchResults();
     }
 
     function setStatusToActiveError() {
@@ -237,6 +240,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         mobileTerminalRestService.unassignMobileTerminal($scope.currentMobileTerminal, comment).then(function(res) {
             // Success
             $scope.currentMobileTerminal.unassign();
+            $scope.mergeCurrentMobileTerminalIntoSearchResults();
             alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.unassign_vessel_message_on_success'));
         }, 
         function(res) {

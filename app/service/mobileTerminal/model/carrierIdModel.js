@@ -30,6 +30,14 @@ angular.module('unionvmsWeb')
         });
     };
 
+    CarrierId.prototype.copy = function() {
+        var copy = new CarrierId();
+        copy.carrierType = this.carrierType;
+        copy.idType = this.idType;
+        copy.value = this.value;
+        return copy;
+    }
+
     CarrierId.prototype.setCarrierTypeToVessel = function(){
         this.carrierType = "VESSEL";
     };

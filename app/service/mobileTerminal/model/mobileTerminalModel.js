@@ -93,6 +93,29 @@ angular.module('unionvmsWeb')
             });
         };
 
+        MobileTerminal.prototype.copy = function() {
+            var copy = new MobileTerminal();
+            copy.active = this.active;
+            copy.associatedVessel = this.associatedVessel;
+            copy.source = this.source;
+            for (var key in this.attributes) {
+                if (this.attributes.hasOwnProperty(key)) {
+                    copy.attributes[key] = this.attributes[key];
+                }
+            }
+
+            copy.mobileTerminalId = this.mobileTerminalId.copy();
+            copy.channels = this.channels.map(function(ch) {
+                return ch.copy();
+            });
+
+            if (this.carrierId) {
+                copy.carrierId = this.carrierId.copy();
+            }
+
+            return copy;
+        };
+
         //Used when activating, inactivating and removing
         MobileTerminal.prototype.toSetStatusJson = function(){
             return this.mobileTerminalId.toJson();

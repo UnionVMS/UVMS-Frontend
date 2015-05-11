@@ -124,6 +124,7 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
             $scope.currentMobileTerminal.associatedVessel = $scope.selectedVessel;
             $scope.toggleAssignVessel();
             $scope.goBackToAssignVesselSearchResultsClick();
+            $scope.mergeCurrentMobileTerminalIntoSearchResults();
             resetSearch();
 
             alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.assign_vessel_message_on_success'));
