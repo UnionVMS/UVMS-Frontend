@@ -3,13 +3,15 @@ angular.module('unionvmsWeb').controller('NewpollwizardCtrl',function($scope, po
     $scope.wizardStep = 1;
 
     $scope.nextStep = function(){
-        //TODO: check step is valid
-        $scope.wizardStep ++;
+        if($scope.wizardStep <= 2){
+            $scope.wizardStep ++;
+        }
     };
 
     $scope.previousStep = function(){
-        //TODO: check step is valid
-        $scope.wizardStep --;
+        if($scope.wizardStep >= 2){
+            $scope.wizardStep --;
+        }
     };
 
     //Start over and reset
@@ -18,6 +20,5 @@ angular.module('unionvmsWeb').controller('NewpollwizardCtrl',function($scope, po
         pollingService.clearSelection();
         pollingService.resetPollingOptions(true);
     };
-
 
 });

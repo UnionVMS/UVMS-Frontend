@@ -49,7 +49,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
 
     //Get number of selected terminals
     $scope.getNumberOfSelectedTerminals = function(){
-        return pollingService.getNumberOfSelectedTerminals() +32;
+        return pollingService.getNumberOfSelectedTerminals();
     };
 
     //Is a single mobile terminal selected?
@@ -83,6 +83,14 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
             }
         }
     });
+
+    //Watch number of selected mobile terminals and go back to step 1 when all terminals are removed
+    $scope.$watch(function(){return pollingService.getNumberOfSelectedTerminals();}, function(newValue) {
+        if ($scope.wizardStep === 2 && newValue === 0) {
+           $scope.previousStep();
+        }
+    });
+
 
     init();
 });
