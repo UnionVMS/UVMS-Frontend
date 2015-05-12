@@ -60,14 +60,8 @@
             </tbody>
         </table>
 
-         <div class="row alert alert-danger nosearchresult" ng-show="currentSearchResults.errorMessage">
-                <div class="col-md-12">
-                    <span class="fa fa-exclamation-circle" aria-hidden="true"></span>
-                    <span class="nosearchresulttext">{{currentSearchResults.errorMessage}}</span>
-                </div>
-            </div>
-        <!--<span class="error" ng-show="currentSearchResults.errorMessage">{{currentSearchResults.errorMessage}}</span>
-    -->
+        <search-result-error-alert ng-show="currentSearchResults.errorMessage">{{currentSearchResults.errorMessage}}</search-result-error-alert>        
+        
     </div>
     <div class="col-md-12 searchResultsLoading" ng-show="currentSearchResults.loading">
         <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>        

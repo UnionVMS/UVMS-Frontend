@@ -87,12 +87,7 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="row alert alert-danger nosearchresult" ng-show="!currentSearchResults.loading && currentSearchResults.vessels.length < 1">
-                <div class="col-md-12">
-                    <span class="fa fa-exclamation-circle" aria-hidden="true"></span>
-                    <span class="nosearchresulttext">{{error}}</span>
-                </div>
-            </div>
+            <search-result-error-alert ng-show="!currentSearchResults.loading && currentSearchResults.vessels.length < 1">{{error}}</search-result-error-alert>           
         </div>
     </div>
 

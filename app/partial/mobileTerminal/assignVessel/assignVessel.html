@@ -55,7 +55,7 @@
                                 </td>
                             </tr>
                         </table>                            
-                        <span ng-show="assignVesselSearchResults.errorMessage">{{assignVesselSearchResults.errorMessage}}</span>
+                        <search-result-error-alert ng-show="assignVesselSearchResults.errorMessage">{{assignVesselSearchResults.errorMessage}}</search-result-error-alert>
                     </div>
                     <div class="col-md-12" ng-show="assignVesselSearchInProgress">
                         <i class="fa fa-spinner fa-spin fa-pulse"></i> Searching
