@@ -50,7 +50,7 @@ angular.module('unionvmsWeb')
             copy.startDate = this.startDate;
             copy.stopDate = this.stopDate;
             copy.channelType = this.channelType;
-            for (key in this.ids) {
+            for (var key in this.ids) {
                 if (this.ids.hasOwnProperty(key)) {
                     copy.ids[key] = this.ids[key];
                 }
