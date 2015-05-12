@@ -1,0 +1,71 @@
+.tagSelectInputContainer{
+    @minHeight: 30px;
+    @minWidth: 160px;
+    @tagHeight:22px;
+
+    //max-width: 200px;
+    min-width: @minWidth;
+
+    .tagSelectInputContainerWrapper{
+        position: relative;
+        min-height: @minHeight;
+        padding-right: 50px;        
+    }
+
+    .tagSelectButton{
+        height: auto !important;
+        min-height: @minHeight !important;
+        padding: 0 2px !important;
+
+        .caretWrapper{            
+            .caret{
+                position: absolute !important;
+                right: 10px !important;
+                top:13px !important;
+            }
+        }
+    }
+
+    .placeholderText{
+        color:#999;
+        margin-right: 20px;
+        margin-left: 5px;
+    }
+
+    .selection{
+        width: 100%;
+        margin-right: 50px;
+        .tag{
+            float: left;
+            margin: 1px 2px 1px 0;
+            padding: 0 3px;
+            height: @tagHeight;
+            line-height: @tagHeight;
+            .grayBorder;
+            border-radius: 4px;
+            background: #fff;
+            color:#000;
+            font-size: 12px;
+            font-weight: normal;
+            cursor: default;
+
+            .textWrapper{
+                position: relative;
+                top:-5px;
+
+                .removeTag{
+                    position: relative;
+                    top:3px;
+                    padding-left: 3px;
+                    font-size: 22px;
+                    color:#ccc;
+                    cursor: pointer;
+                    &:hover, &:active, &:focus{
+                        color:#000;
+                    }
+                }
+            }
+        }
+
+    }
+}

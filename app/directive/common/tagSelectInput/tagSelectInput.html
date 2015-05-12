@@ -1,0 +1,27 @@
+<div class="tagSelectInputContainer">
+    <div class="tagSelectInputContainerWrapper">
+        <div class="dropdown fullWidthDropdown">
+
+        <button class="btn btn-default tagSelectButton dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled">
+            <div class="selection">
+                <div class="tag" ng-repeat="item in selectedItems" ng-click="stopPropagation($event)">
+                    <span class="textWrapper">
+                        {{getItemLabel(item)}} <span class="removeTag" ng-click="removeItem(item)">×</span>
+                    </span>
+                </div>
+            </div>
+            <div class="placeholderText" ng-show="selectedItems.length === 0">
+                {{getPlaceholder()}}
+            </div>
+            <div class="caretWrapper">
+                <span class="caret"></span>                
+            </div>
+        </button>        
+        <ul class="dropdown-menu" role="menu">
+            <li ng-class="{'disabled': isSelected(item)}" ng-repeat="item in items" ng-click="selectItem(item)" ng-hide="isMaxLimitReached()">
+                <a role="menuitem" tabindex="-1">{{getItemLabel(item)}}</a>
+            </li>
+            <li ng-show="isMaxLimitReached()"><a>{{'common.tag_select_input_max_limit_reached'| i18n:[maxLimit]}}</a></li>
+        </ul>   
+    </div>
+</div>

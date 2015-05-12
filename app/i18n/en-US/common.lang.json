@@ -26,6 +26,7 @@
     "search_results_current_page" : "Showing page {1} of {2}",
     "search_results_load_more" : "Load more",
     "search_zero_results_error" : "No result matching your search criteria was found.",
+    "tag_select_input_max_limit_reached" : "You can only add {1} item(s).",
     "time_hour_short" : "h",
     "time_minute_short" : "min",
     "time_second_short" : "s",

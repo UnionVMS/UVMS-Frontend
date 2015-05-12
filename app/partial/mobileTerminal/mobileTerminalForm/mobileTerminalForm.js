@@ -14,8 +14,16 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     });    
 
     //Values for dropdowns
-    $scope.oceanRegions =[{'text':'AORE','code':'aore'}];
-    $scope.channelTypes =[{'text':'VMS','code':'VMS'}, {'text':'ELOG','code':'ELOG'}];
+    $scope.oceanRegions =[
+        {'text':'AOR-E','code':'aore'},
+        {'text':'AOR-W','code':'aorw'}, 
+        {'text':'IOR','code':'ior'}, 
+        {'text':'POR','code':'por'}
+    ];
+    $scope.channelTypes =[
+        {'text':'VMS','code':'VMS'}, 
+        {'text':'ELOG','code':'ELOG'}
+    ];
 
     //Has form submit been atempted?
     $scope.submitAttempted = false;
@@ -160,6 +168,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         }
         
         //Update
+        console.log($scope.currentMobileTerminal);
         mobileTerminalRestService.updateMobileTerminal($scope.currentMobileTerminal, comment)
                 .then(updateMobileTerminalSuccess, updateMobileTerminalError);
     };
