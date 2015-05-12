@@ -77,7 +77,7 @@ angular.module('unionvmsWeb')
             watchModelChanges = false;
             if(angular.isDefined(newValue)){
                 var d = new Date(newValue);
-                var date = [d.getFullYear(), leadingZero(d.getMonth()), leadingZero(d.getDate())];
+                var date = [d.getFullYear(), leadingZero(d.getMonth() + 1), leadingZero(d.getDate())];
                 var time = [leadingZero(d.getHours()), leadingZero(d.getMinutes()), leadingZero(d.getSeconds())];
                 var newModelVal = date.join('-') + ' ' + time.join(':');
                 //Only set model to newModelVal if valid
