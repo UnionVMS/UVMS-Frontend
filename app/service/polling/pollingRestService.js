@@ -37,8 +37,9 @@ angular.module('unionvmsWeb')
             if(response.code !== "200"){
                 deferred.reject("Invalid response status");
                 return;
-            }                    
-            var updatedProgramPoll = Poll.fromJson(response.data);
+            }
+
+            var updatedProgramPoll = Poll.fromAttributeList(response.data.value);
             deferred.resolve(updatedProgramPoll);
         };
 

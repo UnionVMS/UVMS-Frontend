@@ -33,8 +33,10 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
 
     //Update (replace) a program poll in the array of program polls
     var updateProgramPollInResultsArray = function(oldProgramPoll, updatedProgramPoll){
+        console.log($scope.currentSearchResults.programPolls.length + " polls");
         var programPollIndex = $scope.currentSearchResults.programPolls.indexOf(oldProgramPoll);
         $scope.currentSearchResults.programPolls[programPollIndex] = updatedProgramPoll;
+        console.log($scope.currentSearchResults.programPolls.length + " polls");
     };
 
     //Start a program poll
@@ -98,10 +100,7 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
 
         //Is the current date and time between the startDate and endDate of the program
         var now = Date.now();
-        if (programPoll.attributes.START_DATE <= now && now <= programPoll.attributes.END_DATE) {
-            return true;
-        }
-        return false;   
+        return new Date(programPoll.attributes.START_DATE) <= now && now <= new Date(programPoll.attributes.END_DATE);
     };
 
     //Is it possible to stop this program?

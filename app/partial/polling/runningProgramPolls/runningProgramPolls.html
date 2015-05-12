@@ -26,7 +26,7 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="item in currentSearchResults.programPolls | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" class="runningPollItem">
-                    <td>MOCK VESSEL</td>
+                    <td>{{item.attributes.VESSEL_NAME}}</td>
                     <td>{{item.mobileTerminalId.systemType}}</td>
                     <td>{{item.startDate | date : "medium"}}</td>
                     <td>{{item.endDate | date : "medium"}}</td>
