@@ -28,6 +28,73 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         }
     };    
 
+    function isBlank(value) {
+        return value === undefined || value.length === 0;
+    }
+
+    function equalsOrBlank(value1, value2) {
+        if (isBlank(value1) && isBlank(value2)) {
+            return true;
+        }
+
+        return value1 === value2;
+    }
+
+    function equalsAttributes(attrs, mt1, mt2) {
+        for (var i = 0; i < attrs.length; i++) {
+            var attr = attrs[i];
+            if (!equalsOrBlank(mt1.attributes[attr], mt2.attributes[attr])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function equalChannels(ch1, ch2) {
+        if (ch1.channelType !== ch2.channelType) {
+            return false;
+        }
+
+        var attrs = ["DNID", "MEMBER_ID", "START_DATE", "STOP_DATE"];
+        for (var i = 0; i < attrs.length; i++) {
+            var attr = attrs[i];
+            if (!equalsOrBlank(ch1.ids[attr], ch2.ids[attr])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    $scope.isDirty = function() {
+        var original = $scope.getOriginalMobileTerminal();
+        if (!original) {
+            return true;
+        }
+
+        var attrs = ["SATELLITE_NUMBER", "SERIAL_NUMBER", "TRANSCEIVER_TYPE", "SOFTWARE_VERSION", "ANTENNA", "ANSWER_BACK", "INSTALLED_BY", "INSTALLED_ON", "STARTED_ON", "UNINSTALLED_ON", "oceanRegion"];
+        if (!equalsAttributes(attrs, $scope.currentMobileTerminal, original)) {
+            // Attributes have changed
+            return true;
+        }
+
+        if ($scope.currentMobileTerminal.channels.length !== original.channels.length) {
+            return true;
+        }
+
+        for (var i = 0; i < $scope.currentMobileTerminal.channels.length; i++) {
+            var ch1 = $scope.currentMobileTerminal.channels[i];
+            var ch2 = original.channels[i];
+            if (!equalChannels(ch1, ch2)) {
+                // A channel has changed
+                return true;
+            }
+        }
+
+        return false;
+    };
+
     //Clear the form
     $scope.clearForm = function(){
         $scope.currentMobileTerminal = new MobileTerminal();

@@ -5,7 +5,7 @@
         </div>
         <div class="col-md-4 textAlignRight">
             <div class="floatRight">
-                <button  type="submit" ng-disabled="!currentMobileTerminal.mobileTerminalId.systemType" class="btn btn-primary" ng-click="updateMobileTerminal()" ng-hide="transponderSystems.length == 0">{{'common.update' | i18n}}</button>
+                <button  type="submit" ng-disabled="!currentMobileTerminal.mobileTerminalId.systemType || !isDirty()" class="btn btn-primary" ng-click="updateMobileTerminal()" ng-hide="transponderSystems.length == 0">{{'common.update' | i18n}}</button>
             </div>
             <div class="floatRight setStatusContainer">
                 <button type="button" class="btn btn-default" ng-show="currentMobileTerminal.active" ng-click="setStatusToInactive()">

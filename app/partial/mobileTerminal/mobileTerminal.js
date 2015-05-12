@@ -117,6 +117,18 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
         $scope.currentSearchResults.page = mobileTerminalListPage.currentPage;
     };
 
+    $scope.getOriginalMobileTerminal = function() {
+        if (!$scope.currentMobileTerminal) {
+            return;
+        }
+
+        for (var i = 0; i < $scope.currentSearchResults.mobileTerminals.length; i++) {
+            if ($scope.currentSearchResults.mobileTerminals[i].isEqualTerminal($scope.currentMobileTerminal)) {
+                return $scope.currentSearchResults.mobileTerminals[i];
+            }
+        }
+    };
+
     $scope.mergeCurrentMobileTerminalIntoSearchResults = function() {
         for (var i = 0; i < $scope.currentSearchResults.mobileTerminals.length; i++) {
             if ($scope.currentSearchResults.mobileTerminals[i].isEqualTerminal($scope.currentMobileTerminal)) {
