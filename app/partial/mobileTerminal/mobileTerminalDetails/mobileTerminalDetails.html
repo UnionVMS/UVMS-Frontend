@@ -18,7 +18,7 @@
             <div ng-show="currentMobileTerminal.mobileTerminalId.systemType">
                 <div class="row">
                     <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.SATELLITE_NUMBER">
-                        <label>{{'mobileTerminal.form_inmarsatc_sattelite_number_label' | i18n}}</label>
+                        <label>{{'mobileTerminal.form_inmarsatc_satellite_number_label' | i18n}}</label>
                         <input type="text" name="sattelite_number" class="form-control" ng-model="currentMobileTerminal.attributes.SATELLITE_NUMBER" />
                     </div>
                     <div class="col-md-2 form-group" ng-class="{'has-error': mobileTerminalForm.serialNumber.$invalid && (submitAttempted || mobileTerminalForm.serialNumber.$dirty)}">
