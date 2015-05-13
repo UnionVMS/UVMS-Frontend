@@ -20,7 +20,7 @@ angular.module('unionvmsWeb')
             }
 
             //Attributes
-            if (angular.isDefined(data.attributes)){
+            if (angular.isDefined(data.attributes) && data.attributes instanceof Array){
                 history.attributes = {};
                 for (i = 0; i < data.attributes.length; i++) {
                     history.attributes[data.attributes[i].fieldType.toUpperCase()] = data.attributes[i].value;
@@ -28,7 +28,7 @@ angular.module('unionvmsWeb')
             }
  
            //Channel
-            if (angular.isDefined(data.channels)){
+            if (angular.isDefined(data.channels) && data.channels instanceof Array){
                 for (i = 0; i < data.channels.length; i++) {
                     history.channels.push(CommunicationChannel.fromJson(data.channels[i]));
                 }

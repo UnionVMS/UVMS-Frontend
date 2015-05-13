@@ -233,7 +233,7 @@ module.exports = function (grunt) {
     ngAnnotate: {
       main: {
         src:'temp/app.full.js',
-        dest: 'temp/app.full.js'
+        dest: 'dist/app.full.js'
       }
     },
     uglify: {
@@ -241,9 +241,10 @@ module.exports = function (grunt) {
         options: {
           mangle: false,
           beautify: true,
-          banner: '/*Version: <%= grunt.template.today("yyyy-mm-dd HH:MM") %> */'
+          banner: '/*Version: <%= grunt.template.today("yyyy-mm-dd HH:MM") %> */',
+          sourceMap: true,
         },
-        src: 'temp/app.full.js',
+        src: 'dist/app.full.js',
         dest:'dist/app.full.min.js'
       }
     },
