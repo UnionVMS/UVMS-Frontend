@@ -199,6 +199,8 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
                 pollingService.setWizardStep(2);
                 $location.path('communication/polling');
             }
+        }else if(selectedItem.code === 'EXPORT'){
+            alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
         }
     };
 
