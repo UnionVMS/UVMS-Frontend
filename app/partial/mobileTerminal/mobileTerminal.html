@@ -19,7 +19,7 @@
         <div class="container containerWithTopBottomPadding">
             <div class="row editSelectionsContainer">
                 <div class="col-md-2">
-                    <dropdown ng-model="editSelection" initialtext="Edit selection" items="editSelectionDropdownItems"></dropdown>
+                    <dropdown ng-model="editSelection" initialtext="Edit selection" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
                 </div>
                 <div class="col-md-2">
                     <button type="button" class="btn btn-sm btn-primary" ng-click="toggleAddNewMobileTerminal()">+ Add new</button>                

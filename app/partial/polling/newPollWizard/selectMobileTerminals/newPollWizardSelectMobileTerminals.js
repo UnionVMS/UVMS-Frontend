@@ -2,9 +2,6 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
 
 	
     $scope.selectedGroup = {};
-   
-
-	console.log($scope.vesselGroups); 
 
 	 //Search objects and results
     $scope.currentSearchResults = {
@@ -66,9 +63,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
 
     //button to add selected vessel    
     $scope.selectVessel = function(item, index){
-        console.log("index: " + index);
         pollingService.addMobileTerminalToSelection(item);
-      //  $scope.addToSelectedMobileTerminals(item);
     };
     
     
@@ -83,7 +78,6 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
             mobileTerminalGroup.mobileTerminals = []; // $scope.currentSearchResults;
             for (i = 0; i < $scope.currentSearchResults.mobileTerminals.length; i++) {
                 mobileTerminalGroup.mobileTerminals.push($scope.currentSearchResults.mobileTerminals[i]);
-                 //$scope.addToSelectedMobileTerminals($scope.currentSearchResults.mobileTerminals[i]);
             }
             //Add terminalgroup.
             pollingService.addMobileTerminalGroupToSelection(mobileTerminalGroup);
@@ -91,7 +85,6 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
             //Add terminals as not a group.
             for(i=0; i < $scope.currentSearchResults.mobileTerminals.length; i++){
                 pollingService.addMobileTerminalToSelection($scope.currentSearchResults.mobileTerminals[i]);
-                //$scope.addToSelectedMobileTerminals($scope.currentSearchResults.mobileTerminals[i]);
             }
         }
     };
@@ -101,7 +94,6 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
             //add to array
             $scope.selectedMobileTerminals.push(item);
         }
-        console.info($scope.selectedMobileTerminals);
     };
     
     $scope.isTerminalGroupSelected = function(){

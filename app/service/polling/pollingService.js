@@ -1,5 +1,7 @@
 angular.module('unionvmsWeb').factory('pollingService',function(pollingRestService, Poll, $q, $timeout) {
 
+    var wizardStep = 1;
+
     //The selected terminals
     var selection = {
         selectedMobileTerminals : [],
@@ -241,6 +243,12 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
         },
         getPollingOptions: function() {
             return pollingOptions;
+        },
+        getWizardStep : function(){
+            return wizardStep;
+        },
+        setWizardStep : function(newStep){
+            wizardStep = newStep;
         },
         isMobileTerminalSelected: isTerminalSelected,
         isMobileTerminalGroupSelected: isTerminalGroupSelected,

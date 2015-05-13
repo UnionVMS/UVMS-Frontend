@@ -1,25 +1,54 @@
 angular.module('unionvmsWeb').controller('MobileterminallistCtrl',function($scope){
 
-    $scope.checkAll = function(){
 
-        /*TODO: REFACTOR THIS WHEN WE KNOW WHAT WE SHOULD DO WITH IT
-        if($scope.selectedAll)
-        {
-            $scope.selectedAll = false;
+    //Handle click on the top "check all" checkbox
+    $scope.checkAll = function(){        
+        if($scope.isAllChecked()){
+            //Remove all
+            $scope.clearSelection();
+        }else{
+            //Add all
+            $scope.clearSelection();
+            $.each($scope.currentSearchResults.mobileTerminals, function(index, item) {
+                $scope.addToSelection(item);
+            });
+        }
+    };
 
-            delete $scope.selectedMobileTerminals;
-            angular.forEach($scope.currentSearchResults.mobileTerminals, function(item) {
-                item.Selected = $scope.selectedAll;
-            });
-        } else {
-            $scope.selectedAll = true;
-            $scope.selectedMobileTerminals = [];
-            angular.forEach($scope.currentSearchResults.mobileTerminals, function(item) {
-                item.Selected = $scope.selectedAll;
-                $scope.selectedMobileTerminals.push(item.vesselId.value);
-            });
-        }*/
-        console.log("CHECKED ALL CLICKED!");
+    $scope.checkMobileTerminal = function(item){
+        item.Selected = !item.Selected;
+        if($scope.isChecked(item)){
+            //Remove
+            $scope.removeFromSelection(item);
+        }else{
+            $scope.addToSelection(item);
+        }      
+    };
+
+    $scope.isAllChecked = function(){
+        if(angular.isUndefined($scope.currentSearchResults.mobileTerminals) || $scope.selectedMobileTerminals.length === 0){
+            return false;
+        }
+
+        var allChecked = true;
+        $.each($scope.currentSearchResults.mobileTerminals, function(index, item) {
+            if(!$scope.isChecked(item)){
+                allChecked = false;
+                return false;
+            }
+        });
+        return allChecked;
+    };
+
+    $scope.isChecked = function(item){
+        var checked = false;
+        $.each($scope.selectedMobileTerminals, function(index, mobileTerminal){
+            if(mobileTerminal.isEqualTerminal(item)){
+                checked = true;
+                return false;
+            }
+        });
+        return checked;
     };
 
     $scope.showLog = function (item){
@@ -27,19 +56,9 @@ angular.module('unionvmsWeb').controller('MobileterminallistCtrl',function($scop
         console.log(item);
     };
 
-    $scope.mobileTerminalChecked = function(item){
-    /*TODO: REFACTOR THIS WHEN WE KNOW WHY WE SHOULD BE ABLE TO CHECK IT
-        $scope.selectedMobileTerminals = [];
-        item.Selected = !item.Selected;
-        angular.forEach($scope.currentSearchResults.vessels, function(item) {
-            if(item.Selected){
-                $scope.selectedMobileTerminals.push(item.vesselId.value);
-            }
-        });
-        */
-        console.log("MOBILE TERMINAL IS CHECKED");
-    };
 
-     $scope.sortType = 'associatedVessel.name';
+
+
+
 
 });

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService, alertService,MobileTerminalListPage, MobileTerminal, mobileTerminalRestService, locale){
+angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService, alertService,MobileTerminalListPage, MobileTerminal, mobileTerminalRestService, pollingService, $location, locale){
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -13,9 +13,12 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
         mobileTerminals : [],
         errorMessage : "",
         loading : false,
-        sortBy : "",
-        sortReverse : ""
+        sortBy : "mobileTerminalId.ids.SERIAL_NUMBER",
+        sortReverse : false
     };    
+
+    //Selected by checkboxes
+    $scope.selectedMobileTerminals = [];
 
     $scope.editSelectionDropdownItems =[{'text':'Poll terminals','code':'POLL'}, {'text':'Export selection','code':'EXPORT'}];
     $scope.transponderSystems = [];
@@ -86,7 +89,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
 
     //Get list of Mobile Terminals matching the current search criterias
     $scope.searchMobileTerminals = function(){
-        console.log("searchMobileTerminals!!");
+        $scope.clearSelection();
         $scope.currentSearchResults.errorMessage = "";
         $scope.currentSearchResults.loading = true;
         $scope.currentSearchResults.mobileTerminals.length = 0;
@@ -157,6 +160,46 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
         $scope.currentSearchResults.errorMessage = locale.getString('common.search_failed_error');
         $scope.currentSearchResults.totalNumberOfPages = 0;
         $scope.currentSearchResults.page = 0;
+    };
+
+
+    //Clear the selection
+    $scope.clearSelection = function(){
+        $scope.selectedMobileTerminals = [];
+    };
+
+    //Add a mobile terminal to the selection
+    $scope.addToSelection = function(item){
+        $scope.selectedMobileTerminals.push(item);
+    };
+
+    //Remove a mobile terminal from the selection
+    $scope.removeFromSelection = function(item){
+        $.each($scope.selectedMobileTerminals, function(index, mobileTerminal){
+            if(mobileTerminal.isEqualTerminal(item)){
+                $scope.selectedMobileTerminals.splice(index, 1);
+                return false;
+            }
+        });
+    };
+
+    //Callback function for the "edit selection" dropdown
+    $scope.editSelectionCallback = function(selectedItem){
+        //Poll selected temrinals
+        if(selectedItem.code === 'POLL'){
+            //Add selected terminals to poll selection and go to polling page
+            if($scope.selectedMobileTerminals.length > 0){
+                pollingService.clearSelection();
+                $.each($scope.selectedMobileTerminals, function(index, item){
+                    //Only add mobile terminals that are assigned to a carrier
+                    if(angular.isDefined(item.carrierId)){
+                        pollingService.addMobileTerminalToSelection(item);
+                    }
+                });
+                pollingService.setWizardStep(2);
+                $location.path('communication/polling');
+            }
+        }
     };
 
     $scope.$on("$destroy", function() {

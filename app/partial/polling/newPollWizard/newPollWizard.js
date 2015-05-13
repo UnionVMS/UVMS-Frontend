@@ -1,6 +1,6 @@
 angular.module('unionvmsWeb').controller('NewpollwizardCtrl',function($scope, pollingService){
 
-    $scope.wizardStep = 1;
+    $scope.wizardStep = pollingService.getWizardStep();
 
     $scope.nextStep = function(){
         if($scope.wizardStep <= 2){
