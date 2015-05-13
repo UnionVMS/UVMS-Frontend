@@ -3,132 +3,133 @@
 
     <div class="container containerWithTopBottomPadding">
         <div class="pollingLogsContainer grayBorder">
-            <div ng-include="'partial/polling/runningProgramPolls/runningProgramPolls.html'"></div>    
+            <div ng-include="'partial/polling/runningProgramPolls/runningProgramPolls.html'"></div>
             <div class="row">
                 <div class="col-md-12">
+                    <form>
+                        <table class="searchResults colorOdd pollingLogsTable">
+                            <thead>
+                                <tr class="searchInputRow dateSearch">
+                                    <th>&nbsp;</th>
+                                    <th>
+                                        <dropdown ng-model="advancedSearchObject.DATE" items="dateSearchItems" no-placeholder-item></dropdown>
+                                    </th>
 
-                    <table class="searchResults colorOdd pollingLogsTable">
-                        <thead>
-                            <tr class="searchInputRow dateSearch">
-                                <th>&nbsp;</th>
-                                <th>
-                                    <dropdown ng-model="advancedSearchObject.DATE" items="dateSearchItems" no-placeholder-item></dropdown>
-                                </th>
+                                    <th colspan="2">
+                                        <datepicker-input model="advancedSearchObject.START_DATE" placeholder="{{'polling.polling_logs_search_date_from_placeholder' | i18n}}"></datepicker-input>
+                                    </th>
 
-                                <th colspan="2">
-                                    <datepicker-input model="advancedSearchObject.START_DATE" placeholder="{{'polling.polling_logs_search_date_from_placeholder' | i18n}}"></datepicker-input>
-                                </th>
+                                    <th colspan="2">
+                                        <datepicker-input model="advancedSearchObject.END_DATE" placeholder="{{'polling.polling_logs_search_date_to_placeholder' | i18n}}"></datepicker-input>
+                                    </th>
 
-                                <th colspan="2">
-                                    <datepicker-input model="advancedSearchObject.END_DATE" placeholder="{{'polling.polling_logs_search_date_to_placeholder' | i18n}}"></datepicker-input>
-                                </th>
+                                    <th class="textAlignCenter">
+                                        <button type="submit" class="btn btn-primary inputHeigth searchButton" ng-click="searchPolls()">
+                                            <span class="fa fa-search"></span>
+                                        </button>
+                                    </th>
+                                    <th>&nbsp;</th>
+                                    <th>&nbsp;</th>
+                                    <th>&nbsp;</th>
+                                    <th class="printAndExport">
+                                        <i class="fa fa-lg fa-file" title="{{'polling.polling_logs_table_header_export_as_csv' | i18n }}" ng-click="exportAsFile()"></i>
+                                        <i class="fa fa-lg fa-print" title="{{'polling.polling_logs_table_header_print_page' | i18n }}" ng-click="print()"></i>
+                                    </th>
+                                </tr>
+                                <tr class="searchInputRow">
+                                    <th>&nbsp;</th>
+                                    <th>
+                                        <input type="text"/ placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.NAME">
+                                    </th>
 
-                                <th class="textAlignCenter">
-                                    <button class="btn btn-primary inputHeigth searchButton" ng-click="searchPolls()">
-                                        <span class="fa fa-search"></span>
-                                    </button>
-                                </th>
-                                <th>&nbsp;</th>
-                                <th>&nbsp;</th>
-                                <th>&nbsp;</th>
-                                <th class="printAndExport">
-                                    <i class="fa fa-lg fa-file" title="{{'polling.polling_logs_table_header_export_as_csv' | i18n }}" ng-click="exportAsFile()"></i>
-                                    <i class="fa fa-lg fa-print" title="{{'polling.polling_logs_table_header_print_page' | i18n }}" ng-click="print()"></i>                                                        
-                                </th>
-                            </tr>                
-                            <tr class="searchInputRow">
-                                <th>&nbsp;</th>
-                                <th>
-                                    <input type="text"/ placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.NAME">
-                                </th>
+                                    <th>
+                                        <input type="text"/ placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.EXTERNAL_MARKING">
+                                    </th>
 
-                                <th>
-                                    <input type="text"/ placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.EXTERNAL_MARKING">
-                                </th>
+                                    <th>
+                                        <dropdown ng-model="advancedSearchObject.POLL_TYPE" items="pollTypes"  initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown >
+                                    </th>
 
-                                <th>
-                                    <dropdown ng-model="advancedSearchObject.POLL_TYPE" items="pollTypes"  initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown >
-                                </th>
+                                    <th>
+                                        <dropdown ng-model="advancedSearchObject.TRANSPONDER_TYPE" items="transponderTypes" initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>
+                                    </th>
 
-                                <th>
-                                    <dropdown ng-model="advancedSearchObject.TRANSPONDER_TYPE" items="transponderTypes" initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>
-                                </th>                        
+                                    <th>&nbsp;</th>
+                
+                                    <th>
+                                        <dropdown ng-model="advancedSearchObject.STATUS_TYPE" items="statusTypes"  initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>
+                                    </th>
 
-                                <th>&nbsp;</th>
-            
-                                <th>
-                                    <dropdown ng-model="advancedSearchObject.STATUS_TYPE" items="statusTypes"  initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>
-                                </th>
+                                    <th>&nbsp;</th>
+                                    <th>
+                                        <input type="text"/ placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.USER" >
+                                    </th>
 
-                                <th>&nbsp;</th>
-                                <th>
-                                    <input type="text"/ placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.USER" >
-                                </th>
+                                    <th>
+                                        <dropdown ng-model="organization" items="organizations"  initialtext="{{ 'common.all' | i18n }}" ng-model="advancedSearchObject.ORGANIZATION" initialtext-selectable></dropdown>
+                                    </th>
+                                     <th>
+                                        <button type="submit" class="btn btn-primary inputHeigth searchButton" ng-click="searchPolls()">
+                                            <span class="fa fa-search"></span>
+                                        </button>
+                                    </th>
 
-                                <th>
-                                    <dropdown ng-model="organization" items="organizations"  initialtext="{{ 'common.all' | i18n }}" ng-model="advancedSearchObject.ORGANIZATION" initialtext-selectable></dropdown>                 
-                                </th>
-                                 <th>
-                                    <button class="btn btn-primary inputHeigth searchButton" ng-click="searchPolls()">
-                                        <span class="fa fa-search"></span>
-                                    </button>
-                                </th>
+                                </tr>
+                                <tr>
+                                    <th><input type="checkbox"/></th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.name'">{{'polling.polling_logs_table_header_name' | i18n}}</th>
 
-                            </tr>
-                            <tr>
-                                <th><input type="checkbox"/></th>
-                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.name'">{{'polling.polling_logs_table_header_name' | i18n}}</th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.externalMarking'">{{'polling.polling_logs_table_header_ext_no' | i18n}}</th>
 
-                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.externalMarking'">{{'polling.polling_logs_table_header_ext_no' | i18n}}</th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'type'">{{'polling.polling_logs_table_header_poll_type' | i18n}}</th>
 
-                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'type'">{{'polling.polling_logs_table_header_poll_type' | i18n}}</th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.systemType'">{{'polling.polling_logs_table_header_transponder' | i18n}}</th>
 
-                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.systemType'">{{'polling.polling_logs_table_header_transponder' | i18n}}</th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'status[0].time'" class="times">{{'polling.polling_logs_table_header_time' | i18n}}</th>
 
-                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'status[0].time'" class="times">{{'polling.polling_logs_table_header_time' | i18n}}</th>
-            
-                                <th>{{'polling.polling_logs_table_header_status' | i18n}}</th>
-                                <th>{{'polling.polling_logs_table_header_results' | i18n}}</th>
-                                <th>{{'polling.polling_logs_table_header_user' | i18n}}</th>
-                                <th>{{'polling.polling_logs_table_header_organization' | i18n}}</th>
-                                <th>&nbsp;</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="item in currentSearchResults.polls | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" ng-init="isExpanded = false">            
-                            <td><input type="checkbox"/></td>
-                            <td>MOCK VESSEL</td>
-                            <td>MOCK EXT NO</td>
-                            <td>{{item.type}}</td>
-                            <td>{{item.mobileTerminalId.systemType}}</td>
-                            <td class="statusTime">
-                                <div class="expandIcon" ng-show="item.status.length > 1" ng-click="isExpanded = !isExpanded">
-                                    <i class="fa fa-plus-square" ng-show="!isExpanded"></i>
-                                    <i class="fa fa-minus-square" ng-show="isExpanded"></i>
-                                </div>
-                                <div class="times">
-                                    <span ng-repeat="status in item.status" ng-show="isExpanded || $index === 0">
-                                        {{ status.time | date : "medium" }}<br>
+                                    <th>{{'polling.polling_logs_table_header_status' | i18n}}</th>
+                                    <th>{{'polling.polling_logs_table_header_results' | i18n}}</th>
+                                    <th>{{'polling.polling_logs_table_header_user' | i18n}}</th>
+                                    <th>{{'polling.polling_logs_table_header_organization' | i18n}}</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="item in currentSearchResults.polls | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" ng-init="isExpanded = false">            
+                                <td><input type="checkbox"/></td>
+                                <td>MOCK VESSEL</td>
+                                <td>MOCK EXT NO</td>
+                                <td>{{item.type}}</td>
+                                <td>{{item.mobileTerminalId.systemType}}</td>
+                                <td class="statusTime">
+                                    <div class="expandIcon" ng-show="item.status.length > 1" ng-click="isExpanded = !isExpanded">
+                                        <i class="fa fa-plus-square" ng-show="!isExpanded"></i>
+                                        <i class="fa fa-minus-square" ng-show="isExpanded"></i>
+                                    </div>
+                                    <div class="times">
+                                        <span ng-repeat="status in item.status" ng-show="isExpanded || $index === 0">
+                                            {{ status.time | date : "medium" }}<br>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="statusText">
+                                    <span ng-repeat="status in item.status" ng-show="isExpanded  || $index === 0" ng-class="{'success': status.text === 'Succeeded', 'failed': status.text === 'Request failed'}">
+                                        {{status.text}}<br>
                                     </span>
-                                </div>
-                            </td>
-                            <td class="statusText">
-                                <span ng-repeat="status in item.status" ng-show="isExpanded  || $index === 0" ng-class="{'success': status.text === 'Succeeded', 'failed': status.text === 'Request failed'}">
-                                    {{status.text}}<br>
-                                </span>
-                            </td>
-                            <td><a>{{'polling.polling_logs_table_results_link' | i18n}}</a></td>
-                            <td>{{item.attributes.USER}}</td>
-                            <td>{{item.attributes.ORGANIZATION}}</td>
-                            <td>&nbsp;</td>       
-                        </tr>
-                        </tbody>
-                    </table>
+                                </td>
+                                <td><a>{{'polling.polling_logs_table_results_link' | i18n}}</a></td>
+                                <td>{{item.attributes.USER}}</td>
+                                <td>{{item.attributes.ORGANIZATION}}</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </form>
 
                     <search-result-error-alert ng-show="currentSearchResults.errorMessage">{{currentSearchResults.errorMessage}}</search-result-error-alert>
                 </div>
                 <div class="col-md-12 searchResultsLoading" ng-show="currentSearchResults.loading">
-                    <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>        
+                    <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>
                 </div>
             </div>
             <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0">
@@ -138,7 +139,7 @@
             </div>
             <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0 && currentSearchResults.totalNumberOfPages > currentSearchResults.page">
                 <div class="col-md-12 textAlignCenter">
-                    <span class="link" ng-click="loadNextPage()"> {{'common.search_results_load_more' | i18n | uppercase}}</span>            
+                    <span class="link" ng-click="loadNextPage()"> {{'common.search_results_load_more' | i18n | uppercase}}</span>
                 </div>
             </div>
         </div>

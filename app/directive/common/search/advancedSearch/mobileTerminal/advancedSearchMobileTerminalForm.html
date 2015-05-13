@@ -28,14 +28,14 @@
                 </div>
                 <div class="col-md-2">
                     <input type="text" placeholder="{{'mobileTerminal.search_dnid_placeholder' | i18n}}"  class="form-control" tabindex="8" ng-model="advancedSearchObject.DNID" ng-change="onSearchInputChange()">
-                </div>                                
+                </div>
                <div class="col-md-3">
                     <datepicker-input model="advancedSearchObject.REPORTING_START_DATE" placeholder="{{'mobileTerminal.search_reportingStartDate_placeholder' | i18n}}" ng-disabled="true" ></datepicker-input>
                 </div>
                 <div class="col-md-3">
                     <datepicker-input model="advancedSearchObject.REPORTING_END_DATE" placeholder="{{'mobileTerminal.search_reportingEndDate_placeholder' | i18n}}" ng-disabled="true" ></datepicker-input>
-                </div>                
-            </div>   
+                </div>
+            </div>
         </div>
         <div class="col-md-3">
             <div class="row">
@@ -52,12 +52,11 @@
                 </div>
                 <!-- Search button -->
                 <div class="col-md-6">
-                    <button type="button" class="btn btn-primary btn-sm" ng-click="performAdvancedSearch()">
+                    <button type="submit" class="btn btn-primary btn-sm" ng-click="performAdvancedSearch()">
                         {{'common.search' | i18n}}
                     </button>
                 </div>
-            </div>    
+            </div>
         </div>
-
     </div>
 </div>
