@@ -21,6 +21,11 @@ angular.module('unionvmsWeb')
                     update: {method: 'PUT'}                    
                 });
             },
+            deleteVesselGroup : function(){
+                return $resource(baseUrl +'/vessel-rest/group/delete', {}, {
+                    delete: {method: 'PUT'}                    
+                });
+            },
             getVesselGroupsForUser : function(){
                 return $resource(baseUrl +'/vessel-rest/group/list');
             },
@@ -246,6 +251,23 @@ angular.module('unionvmsWeb')
         return deferred.promise;  
     };     
 
+     var deleteVesselGroup = function(savedSearchGroup){
+        var deferred = $q.defer();
+        vesselRestFactory.deleteVesselGroup().delete(savedSearchGroup.toJson(), function(response) {
+            if(response.code !== "200"){
+                deferred.reject("Invalid response status");
+                return;
+            }
+            deferred.resolve(SavedSearchGroup.fromJson(response.data));
+        }, function(error) {
+            console.error("Error when trying to delete a vessel group");
+            console.error(error);
+            deferred.reject(error);
+        });
+        return deferred.promise;  
+    };     
+
+
     return {
         getVesselList: getVesselList,
         getAllMatchingVessels: getAllMatchingVessels,
@@ -255,7 +277,8 @@ angular.module('unionvmsWeb')
         getVesselHistoryListByVesselId : getVesselHistoryListByVesselId,
         getVesselGroupsForUser : getVesselGroupsForUser,
         createNewVesselGroup : createNewVesselGroup,
-        updateVesselGroup : updateVesselGroup        
+        updateVesselGroup : updateVesselGroup,
+        deleteVesselGroup : deleteVesselGroup        
     };
 });
 

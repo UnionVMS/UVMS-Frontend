@@ -23,8 +23,8 @@
                 </div>
 
                 <!-- Saved groups -->
-                <div class="col-md-2" ng-show="savedgroups">
-                    <dropdown class="dropdown simpleSearch" ng-model="savedgroup" initialtext="{{'common.search_group_dropdown' | i18n}}" items="savedgroups" callback="onSavedSearchGroupClick" title="name"></dropdown>
+                <div class="col-md-2">
+                     <saved-vessel-group-dropdown class="dropdown simpleSearch" ng-model="savedgroup" initialtext="{{'common.search_group_dropdown' | i18n}}" callback="onSavedSearchGroupClick"></saved-vessel-group-dropdown>
                 </div>
                 <!-- Search button -->
                 <div class="col-md-2 pull-right" ng-show="!advancedSearchVisible">
@@ -39,6 +39,8 @@
             </div>
         </div>
 
+             
+ 
         <div class="advancedSearchContainer col-md-12 nopaddingleft" ng-show="advancedSearchAvailable">
             <div class="advancesearchbody fadein fadeout" ng-show="advancedSearchVisible">
                 <advanced-search searchfunc="searchFunc" modeltype="modeltype" advancedsearchvisible="advancedSearchVisible"></advanced-search>

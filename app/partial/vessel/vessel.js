@@ -22,7 +22,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, 
     $scope.sortReverse = false;
     $scope.sortFilter = '';
 
-    $scope.vesselGroups = [];
 
     //Init function when entering page
     var init = function(){
@@ -30,27 +29,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, 
         var response = searchService.searchVessels()
             .then(updateSearchResults, onGetSearchResultsError);
 
-        //Get all vesselGroups for the user
-        $scope.getVesselGroupsForUser();
-    };
-
-    //Get all vessel groups that belongs to the user
-    $scope.getVesselGroupsForUser = function(){
-        //Load list of VesselGroups
-        vesselRestService.getVesselGroupsForUser()
-        .then(onVesselGroupListSuccess, onVesselGroupListError);
-    };
-
-    //Success getting vesselGroups for the user
-    var onVesselGroupListSuccess = function(groups){
-        $scope.vesselGroups = groups;
-    };
-
-    //Handle error when getting vesselGroups for the user
-    var onVesselGroupListError = function(response){
-        $scope.currentSearchResults.loading = false;
-        $scope.error = locale.getString('common.search_zero_results_error');
-        console.error("We are sorry... To err is human but to arr is pirate!!");
     };
 
     //Load the next page of the search results
@@ -78,12 +56,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, 
         }
 
     };
-
-    //Callback from the search when a search has been saved to a vesselGroup
-    $scope.saveGroupCallback = function(vesselListPage){
-        $scope.getVesselGroupsForUser();
-    };
-
 
     //Update the search results
     var updateSearchResults = function(vesselListPage){
@@ -157,9 +129,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, 
             windowClass: "saveVesselGroupModal",
             size: "small",
             resolve: {
-                savedGroups: function(){
-                    return $scope.vesselGroups;
-                },
                 advancedSearchClicked: function(){
                     return false;
                 },
@@ -167,12 +136,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, 
                     return $scope.selectedVessels;
                 }
             }
-        });
-        modalInstance.result.then(function () {
-            //Get updated list of vessel groups
-            $scope.getVesselGroupsForUser();
-        }, function () {
-            //Nothing on cancel
         });
     };
 

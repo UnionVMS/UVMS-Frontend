@@ -5,14 +5,11 @@ angular.module('unionvmsWeb').directive('search', function() {
         controller : 'searchCtrl',
         scope: {
             resultscallback: "=",
-            savegroupcallback: "=",
             modeltype : "@",
-            savedgroups : "=",
             advanced : "@"
         },
         templateUrl: 'directive/common/search/search.html',
         link: function(scope, element, attrs, fn) {
-
 
         }
     };
@@ -34,13 +31,6 @@ angular.module('unionvmsWeb')
             $scope.searchFunc = $scope.searchVessel;
         }
     };
-
-        //Watch for changes to the searchService criterias
-        $scope.$watch(function () { return $scope.savedgroups;}, function (newVal, oldVal) {
-            if (typeof newVal !== 'undefined') {
-                $scope.savedgroups = newVal;
-            }
-        });    
 
     //Handle Search results
     var onSearchSuccess = function(vesselListPage){
@@ -113,26 +103,15 @@ angular.module('unionvmsWeb')
           windowClass : "saveVesselGroupModal",
           size: "small",
           resolve: {
-                savedGroups: function(){
-                    return $scope.savedgroups;
-                },
                 advancedSearchClicked: function(){
                     return true;
                 },
                 selectedVessels : function(){
                     return undefined;
                 }
-          }
-        });
-
-        modalInstance.result.then(function () {
-          //Get updated list of vessel groups
-          $scope.savegroupcallback();
-        }, function () {
-          //Nothing on cancel
+            }
         });
     };    
-
 
     init();
 });
