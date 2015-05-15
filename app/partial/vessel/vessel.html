@@ -1,19 +1,9 @@
 <div ng-controller="VesselCtrl">
     <div class="container">
         <div class="addvessel fadeaddvesselin fadeaddvesselout" ng-show="isVisible.createNewVessel">
-            <div class="row" ng-show="createResponseMessage">
-                <div class="col-md-12">
-                    <p class="createResponseMessage">{{createResponseMessage}}</p>
-                </div>
-            </div>
             <div ng-include="'partial/vessel/createNewVessel/createNewVessel.html'"></div>
         </div>
         <div class="getvessel fadegetvesselin fadegetvesselout" ng-show="isVisible.viewVessel">
-            <div class="row" ng-show="updateResponseMessage">
-                <div class="col-md-12">
-                    <p class="updateResponseMessage">{{updateResponseMessage}}</p>
-                </div>
-            </div>
             <div ng-include="'partial/vessel/viewVessel/viewVessel.html'"></div>
         </div>
     </div>

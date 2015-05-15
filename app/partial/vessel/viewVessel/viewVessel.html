@@ -27,7 +27,7 @@
     </div>
     <div class="row col-md-12">
         <span class="vesselhistory col-md-12">EVENT HISTORY</span>
-        <span ng-show="enableViewAllEvent"><a ng-click="onViewAllEvent()">View all events</a></span>
+        <span ng-show="isVisible.showCompleteVesselHistoryLink"><a ng-click="viewCompleteVesselHistory()">View all events</a></span>
         <hr>
         <table class="col-md-12">
             <thead>
@@ -38,8 +38,8 @@
             </thead>
             <tbody>
                 <tr ng-repeat="item in vesselHistory">
-                    <td><a ng-click="onVesselHistoryClick(item.eventHistory.eventId)">{{item.eventHistory.eventCode}}</a></td>
-                    <td>{{item.eventHistory.eventDate}}</td>
+                    <td><a ng-click="viewHistoryDetails(item)">{{item.eventHistory.eventCode}}</a></td>
+                    <td>{{item.eventHistory.eventDate | date : "medium"}}</td>
                 </tr>
             </tbody>
         </table>

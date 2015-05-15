@@ -1,13 +1,45 @@
 angular.module('unionvmsWeb')
-.factory('vesselRestService', function($http, $log, $q, restConstants, VesselListPage, Vessel, SavedSearchGroup){
+    .factory('vesselRestFactory',function($resource, $q, restConstants) {
+
+        var baseUrl = restConstants.baseUrl;
+        return {
+            getSearchableFields : function(){
+                return $resource(baseUrl +'/vessel-rest/vessel/config/searchfields/');
+            },            
+            vessel : function(){
+                return $resource(baseUrl +'/vessel-rest/vessel/', {}, {
+                    update: {method: 'PUT'}                    
+                });
+            },            
+            getVesselList : function(){
+                return $resource(baseUrl +'/vessel-rest/vessel/list/',{},{
+                    list : { method: 'POST'}
+                });
+            },
+            vesselGroup : function(){
+                return $resource(baseUrl +'/vessel-rest/group/', {}, {
+                    update: {method: 'PUT'}                    
+                });
+            },
+            getVesselGroupsForUser : function(){
+                return $resource(baseUrl +'/vessel-rest/group/list');
+            },
+            vesselHistory : function(){
+                return $resource(baseUrl +'/vessel-rest/history/vessel');
+            },  
+            
+        };
+    })
+.factory('vesselRestService', function($q, $http, vesselRestFactory, restConstants, VesselListPage, Vessel, SavedSearchGroup){
 
     var baseUrl = restConstants.baseUrl;
+    var userName = "FRONTEND_USER";
 
     var getVesselList = function(getListRequest){
         var deferred = $q.defer();
 
-        $http.post(baseUrl + "/vessel-rest/vessel/list", getListRequest.toJson())
-            .success(function(response, status) {
+        vesselRestFactory.getVesselList().list(getListRequest.DTOForVessel(), 
+            function(response) {
 
                 if(response.code !== "200"){
                     deferred.reject("Invalid response status");
@@ -24,10 +56,11 @@ angular.module('unionvmsWeb')
                 var totalNumberOfPages = response.data.totalNumberOfPages;
                 var vesselListPage = new VesselListPage(vessels, currentPage, totalNumberOfPages);
                 deferred.resolve(vesselListPage);
-            })
-            .error(function(data, status, headers, config){
-                deferred.reject(data);
-            });
+            },
+            function(err){
+                deferred.reject(err);
+            }
+        );
 
         return deferred.promise;        
     };
@@ -72,70 +105,146 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
-    var updateVessel = function(data){
-        return $http.put(baseUrl + "/vessel-rest/vessel", data );
+    var createNewVessel = function(vessel){
+        var deferred = $q.defer();
+        vesselRestFactory.vessel().save(vessel.DTO(), function(response) {
+            if(response.code !== "200"){
+                deferred.reject("Invalid response status");
+                return;
+            }
+            deferred.resolve(Vessel.fromJson(response.data));
+        }, function(error) {
+            console.error("Error creating vessel");
+            console.error(error);
+            deferred.reject(error);
+        });
+        return deferred.promise;        
     };
 
-    var createNewVessel = function(data){
-        return $http.post(baseUrl + "/vessel-rest/vessel", data);
+    var updateVessel = function(vessel){
+        console.log("ABout to update vessel:");
+        console.log(vessel);
+        var deferred = $q.defer();
+        vesselRestFactory.vessel().update(vessel.DTO(), function(response) {
+            if(response.code !== "200"){
+                deferred.reject("Invalid response status");
+                return;
+            }
+            deferred.resolve(Vessel.fromJson(response.data));
+        }, function(error) {
+            console.error("Error updating vessel");
+            console.error(error);
+            deferred.reject(error);
+        });
+        return deferred.promise;  
     };
 
     var getSearchableFields = function (){
-        return $http.get(baseUrl + "/vessel-rest/vessel/config/searchfields");
-    };
-
-    var getVesselHistoryListByVesselId = function(vesselId, maxNbr) {
-        if(!maxNbr) {
-            return $http.get(baseUrl + "/vessel-rest/history/vessel?vesselId="+vesselId);
-        } else {
-            return $http.get(baseUrl + "/vessel-rest/history/vessel?vesselId="+vesselId+"&maxNbr="+maxNbr);
-        }
-    };
-
-    var getVesselHistory = function(data) {
-        return $http.get(baseUrl + "/vessel-rest/history/"+data);
-    };
-
-    var createSearchFieldsFromSearchObj = function(searchObj, dynamic){
-        var searchFields = [];
-        $.each(searchObj, function(key, value){
-            if(!dynamic){
-                key = "INTERNAL_ID";
+        var deferred = $q.defer();
+        vesselRestFactory.getSearchableFields().get({
+        }, function(response) {
+            if(response.code !== "200"){
+                deferred.reject("Invalid response status");
+                return;
             }
-            searchFields.push({
-                "key": key,
-                "value": value
-            });
+            //TODO: parse and convert response.data to an object
+            deferred.resolve(response.data);
+        }, function(error) {
+            console.error("Error getting searchable fields for vessel");
+            deferred.reject(error);
         });
-        return searchFields;
+        return deferred.promise;
     };
 
-    var userName = "FRONTEND_USER";
+    var getVesselHistoryListByVesselId = function (vesselId, maxNbr){
+        var deferred = $q.defer();
+        //Query object
+        var queryObject = {
+            vesselId : vesselId
+        };
+        if(maxNbr){
+            queryObject['maxNbr'] = maxNbr;
+        }
+
+        vesselRestFactory.vesselHistory().get(queryObject, 
+            function(response) {
+
+                if(response.code !== "200"){
+                    deferred.reject("Invalid response status");
+                    return;
+                }
+
+                var vessels = [];
+                if(angular.isArray(response.data)){
+                    for (var i = 0; i < response.data.length; i ++) {
+                        vessels.push(Vessel.fromJson(response.data[i]));
+                    }
+                }
+                deferred.resolve(vessels);
+            },
+            function(err){
+                deferred.reject(err);
+            }
+        );
+        return deferred.promise;           
+    };
+
     var getVesselGroupsForUser = function (){
         var deferred = $q.defer();
+        vesselRestFactory.getVesselGroupsForUser().get({'user' : userName}, 
+            function(response) {
 
-        $http.get(baseUrl+"/vessel-rest/group/list?user=" +userName).success(function(response) {
-            var groups = [];
-            if(angular.isArray(response.data)){
-                for (var i = 0; i < response.data.length; i ++) {
-                    groups.push(SavedSearchGroup.fromJson(response.data[i]));
+                if(response.code !== "200"){
+                    deferred.reject("Invalid response status");
+                    return;
                 }
-            }
-            deferred.resolve(groups);
-        });
 
+                var groups = [];
+                if(angular.isArray(response.data)){
+                    for (var i = 0; i < response.data.length; i ++) {
+                        groups.push(SavedSearchGroup.fromJson(response.data[i]));
+                    }
+                }
+                deferred.resolve(groups);
+            },
+            function(err){
+                deferred.reject(err);
+            }
+        );
         return deferred.promise;           
     };
 
     var createNewVesselGroup = function(savedSearchGroup){
-        savedSearchGroup.user = userName;
-        return $http.post(baseUrl+"/vessel-rest/group", savedSearchGroup.toJson());
+        var deferred = $q.defer();
+        vesselRestFactory.vesselGroup().save(savedSearchGroup.toJson(), function(response) {
+            if(response.code !== "200"){
+                deferred.reject("Invalid response status");
+                return;
+            }
+            deferred.resolve(SavedSearchGroup.fromJson(response.data));
+        }, function(error) {
+            console.error("Error creating vessel group");
+            console.error(error);
+            deferred.reject(error);
+        });
+        return deferred.promise;        
     };
 
     var updateVesselGroup = function(savedSearchGroup){
-        savedSearchGroup.user = userName;
-        return $http.put(baseUrl+"/vessel-rest/group", savedSearchGroup.toJson());
-    };    
+        var deferred = $q.defer();
+        vesselRestFactory.vesselGroup().update(savedSearchGroup.toJson(), function(response) {
+            if(response.code !== "200"){
+                deferred.reject("Invalid response status");
+                return;
+            }
+            deferred.resolve(SavedSearchGroup.fromJson(response.data));
+        }, function(error) {
+            console.error("Error updating vessel group");
+            console.error(error);
+            deferred.reject(error);
+        });
+        return deferred.promise;  
+    };     
 
     return {
         getVesselList: getVesselList,
@@ -143,7 +252,6 @@ angular.module('unionvmsWeb')
         updateVessel: updateVessel,
         createNewVessel: createNewVessel,
         getSearchableFields : getSearchableFields,
-        getVesselHistory : getVesselHistory,
         getVesselHistoryListByVesselId : getVesselHistoryListByVesselId,
         getVesselGroupsForUser : getVesselGroupsForUser,
         createNewVesselGroup : createNewVesselGroup,

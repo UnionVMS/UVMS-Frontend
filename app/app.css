@@ -7783,12 +7783,6 @@ nav.configuration .configuration {
   opacity: 1;
   display: block !important;
 }
-.updateResponseMessage,
-.createResponseMessage {
-  font-weight: bold;
-  font-size: 14px;
-  height: 20px;
-}
 .vesselname {
   font-size: 27px;
   font-width: bold;

@@ -2,6 +2,7 @@ angular.module('unionvmsWeb')
 .factory('SavedSearchGroup', function(SearchField) {
 
     function SavedSearchGroup(name, user, dynamic, searchFields){
+        this.id = undefined;
         this.name = name;
         this.user = user;
         this.dynamic = dynamic;

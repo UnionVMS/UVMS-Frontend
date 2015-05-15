@@ -1,31 +1,7 @@
-angular.module('unionvmsWeb').controller('CreateNewVesselCtrl',function($scope, $route, vesselRestService){
+angular.module('unionvmsWeb').controller('CreateNewVesselCtrl',function($scope, $route, Vessel, vesselRestService, alertService, locale){
 
     //The new vessel
-   $scope.newVesselObj = {
-
-        "active": true,
-        "billing": "",
-        "cfr": null,
-        "countryCode": null,
-        "externalMarking": null,
-        "grossTonnage": null,
-        "hasIrcs": null,
-        "hasLicense": null,
-        "homePort": null,
-        "imo": "",
-        "ircs": "",
-        "lengthBetweenPerpendiculars": null,
-        "lengthOverAll": null,
-        "mmsiNo": "",
-        "name": "",
-        "otherGrossTonnage": null,
-        "powerAux": null,
-        "powerMain": null,
-        "safetyGrossTonnage": null,
-        "source": "LOCAL",
-        "vesselType": null
-
-    };
+    $scope.newVesselObj = new Vessel();
 
     //Remove the mobile terminal at index idx
     $scope.removeNewMobileSystem = function (item, idx) {
@@ -82,20 +58,9 @@ angular.module('unionvmsWeb').controller('CreateNewVesselCtrl',function($scope, 
     };
 
 
-    //Show a message for 4 seconds
-    var showMessage = function(){
-        $('.createResponseMessage').slideDown('slow');
-        setTimeout(function() {
-            $('.createResponseMessage').slideUp('slow');
-        }, 4000 );
-    };
-
     //Create a new vessel
     $scope.createNewVessel = function(){
         if($scope.newVesselForm.$valid) {
-            //MobileTerminals remove them cuz they do not exist in backend yet.
-            delete $scope.newVesselObj.mobileTerminals;
-
             //Create new Vessel
             vesselRestService.createNewVessel($scope.newVesselObj)
                 .then(createVesselSuccess, createVesselError);
@@ -104,50 +69,20 @@ angular.module('unionvmsWeb').controller('CreateNewVesselCtrl',function($scope, 
 
     //Success creating the new vessel
     var createVesselSuccess = function(createResponse){
-        $scope.createResponseMessage = "The Vessel has been created successfully. You can close this window or just wait and it will close itself.";
-        showMessage();
-        console.log = "The Vessel has been created successfully";
+        alertService.showSuccessMessageWithTimeout(locale.getString('vessel.add_new_alert_message_on_success'));
         setTimeout(function() {
             $route.reload();
         }, 2000 );
-
     };
 
     //Error creating the new vessel
     var createVesselError = function(error){
-        $scope.createResponseMessage = "We are sorry but something went wrong when we tried to create a new Vessel. Please try again in a moment or close the window.";
-        showMessage();
-        console.log = "The Vessel has NOT been created!";
-        console.log = "ERROR: " + error.statusText;
-        console.log = "ERROR: " + error.status ;
+        alertService.showErrorMessage(locale.getString('vessel.add_new_alert_message_on_error'));
     };
 
     //Clear the form
     $scope.clearForm = function(){
-        //delete or empty
-        $scope.newVesselObj = {
-            "active": true,
-            "billing": "",
-            "cfr": null,
-            "countryCode": null,
-            "externalMarking": null,
-            "grossTonnage": null,
-            "hasIrcs": false,
-            "hasLicense": false,
-            "homePort": null,
-            "imo": "",
-            "ircs": "",
-            "lengthBetweenPerpendiculars": null,
-            "lengthOverAll": null,
-            "mmsiNo": "",
-            "name": "",
-            "otherGrossTonnage": null,
-            "powerAux": null,
-            "powerMain": null,
-            "safetyGrossTonnage": null,
-            "source": "LOCAL",
-            "vesselType": null
-        };
+        $scope.newVesselObj = new Vessel();
     };
 
 });

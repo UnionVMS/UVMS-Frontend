@@ -1,5 +1,9 @@
 {
-	"add_new" : "Add new",
+    "add_new" : "Add new",
+	"add_new_alert_message_on_success" : "The vessel has now been created.",
+    "add_new_alert_message_on_error" : "The vessel could not be created.",
+    "update_alert_message_on_success" : "The vessel has been updated successfully.",
+    "update_alert_message_on_error" : "The vessel could not be updated.",    
 	"table_header_flag_state" : "Flag state",
 	"table_header_external_marking" : "Ext no",
 	"table_header_name" : "Name",

@@ -2,6 +2,8 @@ angular.module('unionvmsWeb')
 .factory('Vessel', function(EventHistory) {
 
         function Vessel(){
+            this.active = true;
+            this.source = "LOCAL";
         }
 
         Vessel.fromJson = function(data){
@@ -36,12 +38,15 @@ angular.module('unionvmsWeb')
         };
 
         Vessel.prototype.toJson = function(){
-            return JSON.stringify({
+            return JSON.stringify(this.DTO());
+        };
+
+        Vessel.prototype.DTO = function(){
+            var dto = {
                 active : this.active,
                 billing : this.billing,
                 cfr : this.cfr,
                 countryCode : this.countryCode,
-                eventHistory : this.eventHistory.toJson(),
                 externalMarking : this.externalMarking,
                 grossTonnage : this.grossTonnage,
                 hasIrcs : this.hasIrcs,
@@ -57,13 +62,18 @@ angular.module('unionvmsWeb')
                 powerAux : this.powerAux,
                 powerMain : this.powerMain,
                 safetyGrossTonnage : this.safetyGrossTonnage,
-                source : this.source,
-                vesselId : {
+                source : this.source,                
+                vesselType : this.vesselType
+            };
+
+            if(angular.isDefined(this.vesselId)){
+                dto['vesselId'] = {
                     type : this.vesselId.type,
                     value : this.vesselId.value,
-                },
-                vesselType : this.vesselType
-            });
+                };
+            }
+            
+            return dto;
         };
 
         Vessel.prototype.getId = function() {

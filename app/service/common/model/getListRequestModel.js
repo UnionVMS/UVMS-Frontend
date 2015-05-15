@@ -15,6 +15,13 @@ angular.module('unionvmsWeb')
         });
     };
 
+    GetListRequest.prototype.DTOForVessel = function(){
+        return {
+            pagination : {page: this.page, listSize: this.listSize},
+            searchCriteria : {isDynamic: this.isDynamic, criterias: this.criterias}
+        };
+    };
+
     GetListRequest.prototype.DTOForMobileTerminal = function(){
         return {
             pagination : {page: this.page, listSize: this.listSize},

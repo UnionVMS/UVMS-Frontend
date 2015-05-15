@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb')
-.factory('CarrierId', function(EventHistory) {
+.factory('CarrierId', function() {
 
     var CARRIER_TYPE_VESSEL ="VESSEL";
 

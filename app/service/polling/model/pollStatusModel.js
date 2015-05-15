@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb')
-.factory('PollStatus', function(EventHistory) {
+.factory('PollStatus', function() {
 
 
     function PollStatus(text){
