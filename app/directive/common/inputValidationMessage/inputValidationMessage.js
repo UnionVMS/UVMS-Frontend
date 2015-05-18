@@ -28,7 +28,8 @@ angular.module('unionvmsWeb').controller('inputValidationMessageCtrl',function($
         'period' : locale.getString('common.validation_invalid_period'),
         'number' : locale.getString('common.validation_digits_only'),
         'onlyDigits' : locale.getString('common.validation_digits_only'),
-        'onlyLetters' : locale.getString('common.validation_letters_only')
+        'onlyLetters' : locale.getString('common.validation_letters_only'),
+        'minDate' : locale.getString('common.validation_invalid_date')
     };
 
     //Get validation error message

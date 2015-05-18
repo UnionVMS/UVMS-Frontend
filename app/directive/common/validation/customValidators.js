@@ -77,3 +77,34 @@ angular.module('unionvmsWeb').directive('period', [
             }
         };
 }]);
+
+// End date must be after start date
+angular.module('unionvmsWeb').directive('minDate', function() {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        scope: {
+            minDate: '='
+        },
+        link: function(scope, elm, attrs, ctrl) {
+
+            function updateValidity(date) {
+                ctrl.$setValidity('minDate', date === undefined || scope.minDate === undefined || new Date(date) > new Date(scope.minDate));
+            }
+
+            scope.$watch('minDate', function(newValue) {
+                updateValidity(newValue);
+            });
+
+            ctrl.$parsers.push(function(viewValue) {
+                updateValidity(viewValue);
+                return viewValue;
+            });
+
+            ctrl.$formatters.push(function(viewValue) {
+                updateValidity(viewValue);
+                return viewValue;
+            });
+        }
+    };
+});

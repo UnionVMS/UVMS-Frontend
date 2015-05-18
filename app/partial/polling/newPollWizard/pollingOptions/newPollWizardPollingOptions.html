@@ -32,8 +32,8 @@
                                     </td>
 
                                     <td class="form-group" ng-class="{'has-error': pollingOptionsForm.programEndDate.$invalid && (submitAttempted || pollingOptionsForm.programEndDate.$dirty)}">
-                                        <datepicker-input name="programEndDate" model="pollingOptions.programPoll.endDate" ng-disabled="!isProgramPoll()" ng-required="isProgramPoll()" time="true"></datepicker-input>
-                                        <input-validation-message types="required, date" input="pollingOptionsForm.programEndDate"></input-validation-message>                    
+                                        <datepicker-input name="programEndDate" model="pollingOptions.programPoll.endDate" ng-disabled="!isProgramPoll()" ng-required="isProgramPoll()" start-date="pollingOptions.programPoll.startDate" time="true"></datepicker-input>
+                                        <input-validation-message types="required, date, minDate" input="pollingOptionsForm.programEndDate"></input-validation-message>
                                     </td>
 
                                     <td class="form-group" ng-class="{'has-error': pollingOptionsForm.programTime.$invalid && (submitAttempted || pollingOptionsForm.programTime.$dirty)}">
@@ -130,8 +130,8 @@
                                     </td>
 
                                     <td class="form-group" ng-class="{'has-error': pollingOptionsForm.samplingEndDate.$invalid && (submitAttempted || pollingOptionsForm.samplingEndDate.$dirty)}">
-                                        <datepicker-input name="samplingEndDate" model="pollingOptions.samplingPoll.endDate" ng-disabled="!isSamplingPoll()" ng-required="isSamplingPoll()"></datepicker-input>
-                                        <input-validation-message types="required, date" input="pollingOptionsForm.samplingEndDate"></input-validation-message>                    
+                                        <datepicker-input name="samplingEndDate" model="pollingOptions.samplingPoll.endDate" ng-disabled="!isSamplingPoll()" ng-required="isSamplingPoll()" start-date="pollingOptions.samplingPoll.startDate"></datepicker-input>
+                                        <input-validation-message types="required, date, minDate" input="pollingOptionsForm.samplingEndDate"></input-validation-message>
                                     </td>
                                 </tr>
                             </tbody>

@@ -7,7 +7,8 @@ angular.module('unionvmsWeb').directive('datepickerInput', function($compile) {
             model : '=',
             placeholder : '@',
             ngDisabled : '=',
-            ngRequired : '='
+            ngRequired : '=',
+            startDate : '='
 		},
 		templateUrl: 'directive/common/datepickerInput/datepickerInput.html',
 		link: function(scope, element, attrs, fn) {
