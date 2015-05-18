@@ -37,9 +37,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in vesselHistory">
+                <tr ng-repeat="item in vesselHistory | orderBy :'-eventHistory.eventDate'">
                     <td><a ng-click="viewHistoryDetails(item)">{{item.eventHistory.eventCode}}</a></td>
-                    <td>{{item.eventHistory.eventDate | date : "medium"}}</td>
+                    <td>{{item.eventHistory.eventDate | date : "medium" }}</td>
                 </tr>
             </tbody>
         </table>
