@@ -11,8 +11,8 @@ angular.module('unionvmsWeb')
                     update: {method: 'PUT'}                    
                 });
             },            
-            getVesselList : function(){
-                return $resource(baseUrl +'/vessel-rest/vessel/list/',{},{
+            getVesselList : function(){  
+                return $resource(baseUrl +'/vessel/rest/vessel/list/',{},{
                     list : { method: 'POST'}
                 });
             },
