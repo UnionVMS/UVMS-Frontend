@@ -8,48 +8,50 @@
     }
 }
 
-.communicationChannels{
-    margin-top: 20px;
-
-}
 
 .communicationChannel{
-
+    margin-top: 20px;
     .form-group:first-child{
         .nopaddingleft();
     }
-
-    .sortAndRemove{
-        padding-top: 25px;
-        
-        .fa{
-            cursor: pointer;
-        }
-
-        @sortWidth:50px;
-        .sort{
-            float:left;
-            width: @sortWidth;
-            min-width: @sortWidth;
-        }
-
-        //Remove channel
-        .remove{
-            float:left;
-            margin-left: 10px;
-            color:red;
-        }
-        .pollingInfo{
-            float:left;
-            position: relative;
-            top:-17px;
-            margin-left: @sortWidth + 10px;
-            font-size: 10px;
-            font-weight: bold;
-        }
-    }
 }
+
+.comchannelrow {
+    overflow: hidden;
+    background-color: #f9f9f9;
+    padding-top: 14px;
+    margin-bottom: 10px;
+};
 
 .addNewChannelWrapper{
     margin-bottom: 20px;
+}
+
+body{background:#314559}
+
+input[type='radio']{
+    height: 15px;
+    width: 15px;
+    cursor: pointer;
+    margin: 10px 8px; 
+}
+
+.nomargin{
+    margin-right: 0px;
+    margin-left: 0px;
+}
+.nopadding{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.smallerpadding{
+    padding-left: 7px;
+    padding-right: 7px;
+};
+
+.remove{
+    padding-top: 5px;
+    color:@errorColor;
+    cursor: pointer;
 }

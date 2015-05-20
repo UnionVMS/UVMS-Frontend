@@ -12,6 +12,9 @@ angular.module('unionvmsWeb')
             this.active = true;
             this.carrierId = undefined;
             this.associatedVessel = undefined;
+            this.pollingchannel = "";
+            this.configchannel = "";
+            this.defaultchannel = "";
         }
 
         MobileTerminal.fromJson = function(data){

@@ -332,4 +332,20 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     $scope.toggleAssignVessel = function(){
         $scope.isVisible.assignVessel = !$scope.isVisible.assignVessel;
     };
+
+    $scope.selectedOption = function(itemorder, value){
+    switch (value) {
+        case "POLLING": 
+            $scope.currentMobileTerminal.pollingchannel = itemorder;
+            break;
+        
+        case "CONFIG": 
+            $scope.currentMobileTerminal.configchannel = itemorder;
+            break;
+        
+        case "DEFAULT": 
+            $scope.currentMobileTerminal.defaultchannel = itemorder;
+            break;
+        }
+    };
 });
