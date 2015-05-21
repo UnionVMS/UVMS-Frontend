@@ -1,11 +1,11 @@
 angular.module('unionvmsWeb')
-.factory('Poll', function(MobileTerminalId, locale, CarrierId) {
+.factory('Poll', function(locale, CarrierId) {
 
     function Poll(){
         this.id = undefined;
         this.type = undefined;
         this.comment = undefined;
-        this.mobileTerminalId = new MobileTerminalId();
+        this.mobileTerminalId = undefined;
         this.attributes = {};
         this.carrierId = new CarrierId();
     }
@@ -17,7 +17,6 @@ angular.module('unionvmsWeb')
             poll.attributes[attr["key"]] = attr["value"];
         }
 
-        poll.mobileTerminalId.systemType = poll.attributes.TRANSPONDER;
         poll.id = poll.attributes.POLL_ID;
         poll.type = poll.attributes.POLL_TYPE;
         poll.startDate = poll.attributes.START_DATE;
@@ -30,10 +29,10 @@ angular.module('unionvmsWeb')
 
         poll.id = data.pollId;
         poll.type = data.pollType;
-        poll.comment = data.comment;        
+        poll.comment = data.comment;
 
         //Mobile terminal
-        poll.mobileTerminalId = MobileTerminalId.fromJson(data.mobileTerminal);
+        poll.mobileTerminalId = data.mobileTerminal;
 
         //Attributes
         $.each(data.attributes, function(index, attribute){

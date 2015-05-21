@@ -13,9 +13,9 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
         mobileTerminals : [],
         errorMessage : "",
         loading : false,
-        sortBy : "mobileTerminalId.ids.SERIAL_NUMBER",
+        sortBy : "attributes.SERIAL_NUMBER",
         sortReverse : false
-    };    
+    };
 
     //Selected by checkboxes
     $scope.selectedMobileTerminals = [];

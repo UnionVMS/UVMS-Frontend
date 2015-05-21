@@ -1,221 +1,194 @@
-describe('MobileTerminalModel', function() {
+ddescribe('MobileTerminalModel', function() {
 
   beforeEach(module('unionvmsWeb'));
 
-    var attributes = [
-        {
-            "fieldType": "SATELLITE_NUMBER",
-            "value": "12345"
-        },
-        {
-            "fieldType": "TRANSCEIVER_TYPE",
-            "value": "TRANS_1"
-        },
-        {
-            "fieldType": "SOFTWARE_VERSION",
-            "value": "2.0.3"
-        },
-        {
-            "fieldType": "ANTENNA",
-            "value": "MY ANTENNA"
-        },
-        {
-            "fieldType": "ANSWER_BACK",
-            "value": "BACKBACK"
-        },
-        {
-            "fieldType": "INSTALLED_BY",
-            "value": "JOHN SMITH"
-        },
-        {
-            "fieldType": "INSTALLED_ON",
-            "value": "2006-04-03"
-        },
-        {
-            "fieldType": "STARTED_ON",
-            "value": "2006-04-03"
-        },
-        {
-            "fieldType": "UNINSTALLED_ON",
-            "value": "2009-12-22"
-        }
-    ];
-
-    var channels = [      
-        {
-            "channelType": "VMS",
-            "attributes": [
-                {
-                    "type":"DNID",
-                    "value":"999"
-                },
-                {
-                    "type":"MEMBER_ID",
-                    "value":"4444"
-                },
-                {
-                    "type":"START_DATE",
-                    "value":1428357600000
-                },
-                {
-                    "type":"STOP_DATE",
-                    "value":1428357600000
-                }                
-            ],
-            "order": 1,
-        },
-        {
-            "channelType": "VMS",
-            "order": 3,
-            "attributes": [
-                {
-                    "type":"DNID",
-                    "value":"234"
-                },
-                {
-                    "type":"MEMBER_ID",
-                    "value":"67567"
-                },
-                {
-                    "type":"START_DATE",
-                    "value":1428357600000
-                },
-                {
-                    "type":"STOP_DATE",
-                    "value":1428357600000
-                }                
-            ],          
-        }];
-
-    var mobileTerminalId = {
-        "systemType": "INMARSAT_C",
-        "idList": [
+    var mobileTerminalData = {
+        "attributes": [
             {
-                "type": "SERIAL_NUMBER", 
-                "value": "SSE3456"
-            }, 
+                "type": "TRANSCEIVER_TYPE",
+                "value": "Sailor 6140"
+            },
             {
-                "type": "INTERNAL_ID", 
-                "value": "260"
+                "type": "SERIAL_NUMBER",
+                "value": "4TT097411A33"
+            },
+            {
+                "type": "SOFTWARE_VERSION",
+                "value": "1.3-6"
+            },
+            {
+                "type": "ANTENNA",
+                "value": "Sailor 640"
+            },
+            {
+                "type": "ANTENNA_SERIAL_NUMBER",
+                "value": "12345"
+            },
+            {
+                "type": "SATELLITE_NUMBER",
+                "value": "426 572 212"
             }
-        ]
-    };
-
-    var carrierId = {
-        "carrierType": "VESSEL",
-        "idType": "IRCS",
-        "value": "ASDASD"
-    };
-
-    /* Message send TO the server */
-    var requestData = {
-        "attributes": attributes,
-        "channels": channels,
-        "mobileTerminalId": mobileTerminalId
-    };
-
-    /* Message received FROM the server */
-    var responseData = {
-        "data": {
-            "attributes": attributes,
-            "channels": channels,
-            "mobileTerminalId": mobileTerminalId,
-            "carrierId": carrierId,
-            "inactive": false,
-            "source" : "INTERNAL"
-        },
-        "code": "200"
-    };
-
-    var assignJsonPost = {
-        "mobileTerminalId": mobileTerminalId,
+        ],
         "carrierId": {
-           "carrierType": "VESSEL",
-           "idType": "IRCS",
-           "value": "ASDASD"
-        }
+            "carrierType": "VESSEL",
+            "idType": "IRCS",
+            "value": "MOCK-IRCS"
+        },
+        "channels": [
+            {
+                "attributes": [
+                    {
+                        "type": "DNID",
+                        "value": "11456"
+                    },
+                    {
+                        "type": "MEMBER_NUMBER",
+                        "value": "101"
+                    },
+                    {
+                        "type": "START_DATE",
+                        "value": "2015-01-01 09:00"
+                    },
+                    {
+                        "type": "STOP_DATE",
+                        "value": "2015-05-21 21:00"
+                    }
+                ],
+                "capabilities": [
+                    {
+                        "type": "POLLING",
+                        "value": true
+                    },
+                    {
+                        "type": "CONFIG",
+                        "value": false
+                    }
+                ],
+                "defaultReporting": true,
+                "name": "VMS"
+            },
+            {
+                "attributes": [
+                    {
+                        "type": "DNID",
+                        "value": "11456"
+                    },
+                    {
+                        "type": "MEMBER_NUMBER",
+                        "value": "102"
+                    },
+                    {
+                        "type": "START_DATE",
+                        "value": "2015-02-01 09:00"
+                    },
+                    {
+                        "type": "STOP_DATE",
+                        "value": "2015-06-21 21:00"
+                    }
+                ],
+                "capabilities": [
+                    {
+                        "type": "POLLING",
+                        "value": false
+                    },
+                    {
+                        "type": "CONFIG",
+                        "value": true
+                    }
+                ],
+                "defaultReporting": false,
+                "name": "HAV"
+            }
+        ],
+        "inactive": false,
+        "mobileTerminalId": {
+            "guid": "1234-5678-9012-3456-7891-2345-678901"
+        },
+        "source": "INTERNAL",
+        "type": "INMARSAT_C"
     };
-
-    var mobileTerminalIdOnlyJson = mobileTerminalId;
-
-    responseData = responseData.data;
 
     it('create new should set correct values', inject(function(MobileTerminal) {
         var mobileTerminal = new MobileTerminal();
 
-        //MobileTerminalId
-        expect(mobileTerminal.mobileTerminalId.systemType).toBeUndefined();
-        expect(mobileTerminal.mobileTerminalId.ids).toEqual({});
-
-        //CarrierId
+        expect(mobileTerminal.guid).toBeUndefined();
         expect(mobileTerminal.carrierId).toBeUndefined();
-
-        //Attributes
         expect(Object.keys(mobileTerminal.attributes).length).toEqual(0);
-
-        //Channels (should be 1 from the start)
         expect(mobileTerminal.channels.length).toEqual(1);
-
-        //Inactive
         expect(mobileTerminal.active).toEqual(true);
-
     }));
 
-    it('fromJson should build a correct object', inject(function(MobileTerminal) {
-        var mobileTerminal = MobileTerminal.fromJson(responseData);
-        //MobileTerminalId
-        expect(mobileTerminal.mobileTerminalId.systemType).toEqual(responseData.mobileTerminalId.systemType);
-        expect(Object.keys(mobileTerminal.mobileTerminalId.ids).length).toEqual(2);
-        expect(mobileTerminal.mobileTerminalId.ids["SERIAL_NUMBER"]).toEqual("SSE3456");
-        expect(mobileTerminal.mobileTerminalId.ids["INTERNAL_ID"]).toEqual("260");
+    it("should parse JSON correctly", inject(function(MobileTerminal) {
+        var mt = MobileTerminal.fromJson(mobileTerminalData);
 
-        //CarrierId
-        expect(mobileTerminal.carrierId).toBeDefined();
-        expect(mobileTerminal.carrierId.carrierType).toBeDefined();
+        expect(mt.guid).toBe("1234-5678-9012-3456-7891-2345-678901");
+        expect(mt.source).toBe("INTERNAL");
+        expect(mt.type).toBe("INMARSAT_C");
+        expect(mt.active).toBe(true);
 
-        //Attributes
-        expect(Object.keys(mobileTerminal.attributes).length).toEqual(9);
-        expect(mobileTerminal.attributes["SATELLITE_NUMBER"]).toEqual("12345");
+        expect(mt.carrierId.carrierType).toBe("VESSEL");
+        expect(mt.carrierId.idType).toBe("IRCS");
+        expect(mt.carrierId.value).toBe("MOCK-IRCS");
 
-        //Channels
-        expect(mobileTerminal.channels.length).toEqual(2);
-        expect(mobileTerminal.channels[0].order).toEqual(1);
-        expect(mobileTerminal.channels[0].ids["DNID"]).toEqual("999");
-        expect(mobileTerminal.channels[1].ids["MEMBER_ID"]).toEqual("67567");
+        // Check that all attributes were parsed.
+        expect(mt.attributes.TRANSCEIVER_TYPE).toBe("Sailor 6140");
+        expect(mt.attributes.SERIAL_NUMBER).toBe("4TT097411A33");
+        expect(mt.attributes.SOFTWARE_VERSION).toBe("1.3-6");
+        expect(mt.attributes.ANTENNA).toBe("Sailor 640");
+        expect(mt.attributes.ANTENNA_SERIAL_NUMBER).toBe("12345");
+        expect(mt.attributes.SATELLITE_NUMBER).toBe("426 572 212");
 
-        //Active
-        expect(mobileTerminal.active).toEqual(true);
+        // Check that all channels were parsed.
+        expect(mt.channels.length).toBe(2);
+        expect(mt.channels[0].name).toBe("VMS");
+        expect(mt.channels[0].defaultReporting).toBe(true);
+        expect(mt.channels[0].ids.DNID).toBe("11456");
+        expect(mt.channels[0].ids.MEMBER_NUMBER).toBe("101");
+        expect(mt.channels[0].ids.START_DATE).toBe("2015-01-01 09:00");
+        expect(mt.channels[0].ids.STOP_DATE).toBe("2015-05-21 21:00");
+        expect(mt.channels[0].capabilities.POLLING).toBe(true);
+        expect(mt.channels[0].capabilities.CONFIG).toBe(false);
 
-        //Source
-        expect(mobileTerminal.source).toEqual("INTERNAL");
-
+        expect(mt.channels[1].name).toBe("HAV");
+        expect(mt.channels[1].defaultReporting).toBe(false);
+        expect(mt.channels[1].ids.DNID).toBe("11456");
+        expect(mt.channels[1].ids.MEMBER_NUMBER).toBe("102");
+        expect(mt.channels[1].ids.START_DATE).toBe("2015-02-01 09:00");
+        expect(mt.channels[1].ids.STOP_DATE).toBe("2015-06-21 21:00");
+        expect(mt.channels[1].capabilities.POLLING).toBe(false);
+        expect(mt.channels[1].capabilities.CONFIG).toBe(true);
     }));
 
-    it('toJson should return correctly formatted data', inject(function(MobileTerminal) {
-        var mobileTerminal = MobileTerminal.fromJson(requestData);
-        var toJsonObject = JSON.parse(mobileTerminal.toJson());
-        expect(angular.equals(toJsonObject, requestData)).toBeTruthy();
+    it('should produce a transfer object containing attributes, channels and mobile terminal ID', inject(function(MobileTerminal) {
+        var dto = MobileTerminal.fromJson(mobileTerminalData).dataTransferObject();
+
+        expect(angular.equals(dto.mobileTerminalId, mobileTerminalData.mobileTerminalId)).toBeTruthy();
+        expect(angular.equals(dto.channels, mobileTerminalData.channels)).toBeTruthy();
+        expect(angular.equals(dto.attributes, mobileTerminalData.attributes)).toBeTruthy();
     }));
 
-    it('toAssignJson should return correctly formatted data', inject(function(MobileTerminal, CarrierId) {
-        var mobileTerminal = MobileTerminal.fromJson(responseData);
+    it('should produce a carrier assignment/unassignment data transfer object', inject(function(MobileTerminal, CarrierId) {
+        var mobileTerminal = MobileTerminal.fromJson(mobileTerminalData);
         var carrierId = CarrierId.createVesselWithIrcs("ASDASD");
-        var toJsonObject = JSON.parse(mobileTerminal.toAssignJson(carrierId));
-        expect(angular.equals(toJsonObject, assignJsonPost)).toBeTruthy();
+        var dto = mobileTerminal.getCarrierAssingmentDto(carrierId);
+
+        expect(dto.mobileTerminalId.guid).toEqual("1234-5678-9012-3456-7891-2345-678901");
+        expect(dto.carrierId.carrierType).toEqual("VESSEL");
+        expect(dto.carrierId.idType).toEqual("IRCS");
+        expect(dto.carrierId.value).toEqual("ASDASD");
     }));
 
-    it('toSetStatusJson should return correctly formatted data', inject(function(MobileTerminal) {
-        var mobileTerminal = MobileTerminal.fromJson(responseData);
-        var toJsonObject = JSON.parse(mobileTerminal.toSetStatusJson());
-        expect(angular.equals(toJsonObject, mobileTerminalIdOnlyJson)).toBeTruthy();
+    it('should produce an activating/inactivating data transfer object', inject(function(MobileTerminal) {
+        var mobileTerminal = MobileTerminal.fromJson(mobileTerminalData);
+        var dto = JSON.parse(mobileTerminal.toSetStatusJson());
+        expect(dto.guid).toEqual("1234-5678-9012-3456-7891-2345-678901");
     }));
 
     it('setSystemTypeToInmarsatC should set systemType to correct value', inject(function(MobileTerminal) {
         var mobileTerminal = new MobileTerminal();
-        expect(mobileTerminal.mobileTerminalId.systemType).toBeUndefined();
+        expect(mobileTerminal.type).toBeUndefined();
         mobileTerminal.setSystemTypeToInmarsatC();
-        expect(mobileTerminal.mobileTerminalId.systemType).toEqual("INMARSAT_C");
-
+        expect(mobileTerminal.type).toEqual("INMARSAT_C");
     }));
 
     it('addNewChannel should add a new channel to the end of the list of channels', inject(function(MobileTerminal) {
@@ -223,15 +196,10 @@ describe('MobileTerminalModel', function() {
         expect(mobileTerminal.channels.length).toEqual(1);
         mobileTerminal.addNewChannel();
         expect(mobileTerminal.channels.length).toEqual(2);
-
     }));
 
     it('should be possible to make a deep copy of a mobile terminal', inject(function(MobileTerminal) {
-        var mt = MobileTerminal.fromJson(responseData);
-        var copy = mt.copy();
-        expect(angular.equals(mt, copy)).toBeTruthy();
-
-        copy.channels[0].ids["DNID"] = "777";
-        expect(angular.equals(mt, copy)).toBe(false);
+        var mt = MobileTerminal.fromJson(mobileTerminalData);
+        expect(angular.equals(mt, mt.copy())).toBeTruthy();
     }));
 });

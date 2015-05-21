@@ -1,55 +1,71 @@
-describe('CommunicationChannel', function() {
+ddescribe('CommunicationChannel', function() {
 
-  beforeEach(module('unionvmsWeb'));
+    beforeEach(module('unionvmsWeb'));
 
     var responseData = {
-        channelType: "VMS",
-        order: 1,
+        name: "VMS2",
+        defaultReporting: true,
+        capabilities: [
+            {
+                "type": "POLLING",
+                "value": true
+            },
+            {
+                "type": "CONFIG",
+                "value": false
+            }
+        ],
         attributes : [
             {
-                "type":"DNID",
-                "value":"1"
+                "type" :"DNID",
+                "value": "1"
             },
             {
-                "type":"MEMBER_ID",
-                "value":"1123"
+                "type": "MEMBER_NUMBER",
+                "value": "1123"
             },
             {
-                "type":"START_DATE",
-                "value":1418652232
+                "type": "START_DATE",
+                "value": "2015-01-01 09:00"
             },
             {
-                "type":"STOP_DATE",
-                "value":1428655735
+                "type": "STOP_DATE",
+                "value": "2015-03-01 09:00"
             }                    
         ]
     };
 
-    it('fromJson should build a correct object', inject(function(CommunicationChannel) {
-        var channel = CommunicationChannel.fromJson(responseData);
-        expect(channel.channelType).toEqual(responseData.channelType);
-        expect(channel.order).toEqual(responseData.order);
-        expect(Object.keys(channel.ids).length).toEqual(4);
-        expect(channel.ids["DNID"]).toEqual("1");
-        expect(channel.ids["MEMBER_ID"]).toEqual("1123"); 
-        expect(channel.ids["START_DATE"]).toEqual(1418652232); 
-        expect(channel.ids["STOP_DATE"]).toEqual(1428655735);         
+    function verifyChannel(channel) {
+        expect(channel.name).toEqual("VMS2");
+        expect(channel.defaultReporting).toBe(true);
+        expect(channel.ids.DNID).toEqual("1");
+        expect(channel.ids.MEMBER_NUMBER).toEqual("1123"); 
+        expect(channel.ids.START_DATE).toEqual("2015-01-01 09:00"); 
+        expect(channel.ids.STOP_DATE).toEqual("2015-03-01 09:00");
+        expect(channel.capabilities.POLLING).toBe(true);
+        expect(channel.capabilities.CONFIG).toBe(false);
+    }
+
+    it('should parse JSON input correctly', inject(function(CommunicationChannel) {
+        verifyChannel(CommunicationChannel.fromJson(responseData));
     }));
 
-    it('toJson should return correctly formatted data', inject(function(CommunicationChannel) {
+    it('should produce a transfer object identical to the original data', inject(function(CommunicationChannel) {
         var channel = CommunicationChannel.fromJson(responseData);
-        var toJsonObject = JSON.parse(channel.toJson());
-        expect(angular.equals(toJsonObject, responseData)).toBeTruthy();
+        expect(angular.equals(channel.dataTransferObject(), responseData)).toBeTruthy();
     }));
 
-    it('getFormattedStartDate should return correctly formatted date', inject(function(CommunicationChannel) {
+    it('should format its start date correctly', inject(function(CommunicationChannel) {
         var channel = CommunicationChannel.fromJson(responseData);
-        expect(channel.getFormattedStartDate()).toEqual("2014-12-15");
+        expect(channel.getFormattedStartDate()).toEqual("2015-01-01");
     }));
 
-    it('getFormattedStopDate should return correctly formatted date', inject(function(CommunicationChannel) {
+    it('should format its stop date correctly', inject(function(CommunicationChannel) {
         var channel = CommunicationChannel.fromJson(responseData);
-        expect(channel.getFormattedStopDate()).toEqual("2015-04-10");
+        expect(channel.getFormattedStopDate()).toEqual("2015-03-01");
     }));
 
+    it('should make an exact copy of itself', inject(function(CommunicationChannel) {
+        verifyChannel(CommunicationChannel.fromJson(responseData).copy());
+    }));
 });

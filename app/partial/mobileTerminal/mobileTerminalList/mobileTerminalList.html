@@ -6,13 +6,13 @@
                 <th><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.name'">{{'mobileTerminal.table_header_vessel_name' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.ids.SERIAL_NUMBER'">{{'mobileTerminal.table_header_serial_no' | i18n}}</th>
+                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.SERIAL_NUMBER'">{{'mobileTerminal.table_header_serial_no' | i18n}}</th>
 
                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'channels[0].ids.MEMBER_ID'">{{'mobileTerminal.table_header_member_no' | i18n}}</th>
 
                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'channels[0].ids.DNID'">{{'mobileTerminal.table_header_dnid' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.systemType'">{{'mobileTerminal.table_header_transponder_type' | i18n}}</th>
+                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'type'">{{'mobileTerminal.table_header_transponder_type' | i18n}}</th>
 
                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.SATELLITE_NUMBER'">{{'mobileTerminal.table_header_satellite_number' | i18n}}</th>
 
@@ -37,10 +37,10 @@
                     <span ng-show="item.carrierId && !item.associatedVessel">{{item.carrierId.carrierType}} with {{item.carrierId.idType}}: {{item.carrierId.value}}</span>
                     <span ng-show="!item.carrierId && !item.associatedVessel">{{'mobileTerminal.table_vessel_name_not_assigned' | i18n}}</span>
                 </td>
-                <td class="statusColored">{{item.mobileTerminalId.ids.SERIAL_NUMBER}}</td>
+                <td class="statusColored">{{item.attributes.SERIAL_NUMBER}}</td>
                 <td class="statusColored">{{item.channels[0].ids.MEMBER_ID}}</td>
                 <td class="statusColored">{{item.channels[0].ids.DNID}}</td>
-                <td class="statusColored">{{item.mobileTerminalId.systemType}}</td>
+                <td class="statusColored">{{item.type}}</td>
                 <td class="statusColored">{{item.attributes.SATELLITE_NUMBER}}</td>
                 <td>
                     <span ng-show="item.associatedVessel">{{item.associatedVessel.mmsiNo}}</span>

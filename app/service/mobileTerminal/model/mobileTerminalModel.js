@@ -1,52 +1,67 @@
-angular.module('unionvmsWeb')
-    .factory('MobileTerminal', function(MobileTerminalId, CommunicationChannel, CarrierId) {
+angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationChannel, CarrierId) {
 
-        var INMARSAT_C_ATTRIBUTES = ['SATELLITE_NUMBER', 'TRANSCEIVER_TYPE', 'SOFTWARE_VERSION', 'ANTENNA', 'ANSWER_BACK', 'INSTALLED_BY', 'INSTALLED_ON', 'STARTED_ON', 'UNINSTALLED_ON'];
+        var INMARSAT_C_ATTRIBUTES = [
+            'ANSWER_BACK',
+            'ANTENNA',
+            'ANTENNA_SERIAL_NUMBER',
+            'INSTALLED_BY',
+            'INSTALLED_ON',
+            'SATELLITE_NUMBER', 
+            'SERIAL_NUMBER',
+            'SOFTWARE_VERSION',
+            'STARTED_ON',
+            'TRANSCEIVER_TYPE',
+            'UNINSTALLED_ON'
+        ];
 
         function MobileTerminal(){
-            this.mobileTerminalId = new MobileTerminalId();
             this.attributes = {};
             this.channels = [];
             //Add an initial channel
-            this.channels.push(new CommunicationChannel(1));
+            this.channels.push(new CommunicationChannel());
             this.active = true;
             this.carrierId = undefined;
             this.associatedVessel = undefined;
             this.pollingchannel = "";
             this.configchannel = "";
             this.defaultchannel = "";
+            this.guid = undefined;
+            this.type = undefined;
         }
 
         MobileTerminal.fromJson = function(data){
             var mobileTerminal = new MobileTerminal();
 
-            //MobileTerminalId
-            mobileTerminal.mobileTerminalId = MobileTerminalId.fromJson(data.mobileTerminalId); 
+            mobileTerminal.active = !data.inactive;
+            mobileTerminal.guid = data.mobileTerminalId.guid;
+            mobileTerminal.source = data.source;
+            mobileTerminal.type = data.type;
 
             //CarrierId
-            if(angular.isDefined(data.carrierId)){
+            if (angular.isDefined(data.carrierId)) {
                 mobileTerminal.carrierId = CarrierId.fromJson(data.carrierId);
             }
 
             //Attributes
-            if(data.attributes !== null){
+            if (data.attributes !== null) {
                 mobileTerminal.attributes = {};
-                for (var i = 0; i < data.attributes.length; i ++) {
+                for (var i = 0; i < data.attributes.length; i++) {
                     var value = data.attributes[i].value;
-                    if(angular.isDefined(value) && String(value).trim().length > 0){
-                        mobileTerminal.attributes[data.attributes[i].fieldType.toUpperCase()] = value;
+                    if (angular.isDefined(value) && String(value).trim().length > 0){
+                        mobileTerminal.attributes[data.attributes[i].type.toUpperCase()] = value;
                     }
                 }
             }
 
             //Channels
-            if(data.channels !== null) {
+            if (data.channels !== null) {
                 mobileTerminal.channels = [];
                 for (var idx = 0; idx < data.channels.length; idx++) {
                     mobileTerminal.channels.push(CommunicationChannel.fromJson(data.channels[idx]));
                 }
+
                 //sortchannels by order
-                if(mobileTerminal.channels.length > 1){
+                if (mobileTerminal.channels.length > 1) {
                     mobileTerminal.channels.sort(function (obj1, obj2){
                         if (obj1.order !== undefined && obj2.order !== undefined){
                             return obj1.order - obj2.order;
@@ -57,30 +72,19 @@ angular.module('unionvmsWeb')
                 }
             }
 
-            //Active
-            mobileTerminal.active = !data.inactive;
-
-            //Source
-            mobileTerminal.source = data.source;
-
             return mobileTerminal;
-
         };
 
-        MobileTerminal.prototype.toJson = function(){
+        MobileTerminal.prototype.dataTransferObject = function() {
             //Create array of attributes
             var attributesObjects = [];
-            var validAttributes;
-
-            if(this.mobileTerminalId.isInmarsatC()){
-                validAttributes = INMARSAT_C_ATTRIBUTES;
+            if (this.type === 'INMARSAT_C') {
+                $.each(this.attributes, function(key, value){
+                    if(INMARSAT_C_ATTRIBUTES.indexOf(key) >= 0 && angular.isDefined(value) && String(value).trim().length > 0){
+                        attributesObjects.push({"type": key, "value": value});
+                    }
+                });
             }
-
-            $.each(this.attributes, function(key, value){
-                if(validAttributes.indexOf(key) >= 0 && angular.isDefined(value) && String(value).trim().length > 0){
-                    attributesObjects.push({"fieldType": key, "value": value});
-                }
-            });
 
             //Create array of Channels in json format
             var jsonChannels = [];
@@ -89,11 +93,15 @@ angular.module('unionvmsWeb')
                 jsonChannels.push(channelObject);
             });
 
-            return JSON.stringify({
-                mobileTerminalId : JSON.parse(this.mobileTerminalId.toJson()),
+            return {
                 attributes : attributesObjects,
-                channels : jsonChannels
-            });
+                channels : jsonChannels,
+                mobileTerminalId : { guid: this.guid }
+            };
+        };
+
+        MobileTerminal.prototype.toJson = function(){
+            return JSON.stringify(this.dataTransferObject());
         };
 
         MobileTerminal.prototype.copy = function() {
@@ -107,7 +115,8 @@ angular.module('unionvmsWeb')
                 }
             }
 
-            copy.mobileTerminalId = this.mobileTerminalId.copy();
+            copy.type = this.type;
+            copy.guid = this.guid;
             copy.channels = this.channels.map(function(ch) {
                 return ch.copy();
             });
@@ -120,53 +129,34 @@ angular.module('unionvmsWeb')
         };
 
         //Used when activating, inactivating and removing
-        MobileTerminal.prototype.toSetStatusJson = function(){
-            return this.mobileTerminalId.toJson();
-        };     
+        MobileTerminal.prototype.toSetStatusJson = function() {
+            return JSON.stringify({ guid: this.guid });
+        };
 
-        //Used when assigning and unassigning
+        MobileTerminal.prototype.getCarrierAssingmentDto = function(carrierId) {
+            return {
+                mobileTerminalId: { guid: this.guid },
+                carrierId: carrierId
+            };
+        };
+
         MobileTerminal.prototype.toAssignJson = function(carrierId){
-            //Create idList
-            var idList = [];
-            $.each(this.mobileTerminalId.ids, function(key, value){
-                idList.push({"type": key, "value": value});
-            });
+            return JSON.stringify(this.getCarrierAssingmentDto(carrierId));
+        };
 
-            return JSON.stringify({
-                mobileTerminalId : {
-                    systemType : this.mobileTerminalId.systemType,
-                    idList : idList,
-                },
-                carrierId : carrierId
-            });
-        };        
-
-        //Used when assigning and unassigning
-        MobileTerminal.prototype.toUnassignJson = function(){
-            //Create idList
-            var idList = [];
-            $.each(this.mobileTerminalId.ids, function(key, value){
-                idList.push({"type": key, "value": value});
-                });
-
-            return JSON.stringify({
-                mobileTerminalId : {
-                    systemType : this.mobileTerminalId.systemType,
-                    idList : idList,
-                },
-                carrierId : this.carrierId
-            });
+        MobileTerminal.prototype.toUnassignJson = function() {
+            return JSON.stringify(this.getCarrierAssingmentDto(this.carrierId));
         };
 
         MobileTerminal.prototype.toCreatePoll = function() {
             return {
-                mobileTerminal: this.mobileTerminalId.dataTransferObject(),
+                mobileTerminal: { guid: this.guid },
                 comChannel: this.channels[0].dataTransferObject()
             };
         };
 
         MobileTerminal.prototype.setSystemTypeToInmarsatC = function(){
-            this.mobileTerminalId.setSystemTypeToInmarsatC();
+            this.type = 'INMARSAT_C';
 
             //TODO: Is this neeeded? /Gustav
             this.oceanRegion = undefined;
@@ -188,12 +178,7 @@ angular.module('unionvmsWeb')
 
         //Add a new channel to the end of the list
         MobileTerminal.prototype.addNewChannel = function(){
-            this.channels.push(new CommunicationChannel(this.channels.length + 1));
-        };
-
-        //Add a new channel to the end of the list
-        MobileTerminal.prototype.addNewChannel = function(){
-            this.channels.push(new CommunicationChannel(this.channels.length + 1));
+            this.channels.push(new CommunicationChannel());
         };
 
         //Unassign the mobileTerminal from its carrier
@@ -210,11 +195,6 @@ angular.module('unionvmsWeb')
         //Assign the mobileTerminal to a vessel by internalId
         MobileTerminal.prototype.assignToVesselWithIrcs = function(ircs){
             this.carrierId = CarrierId.createVesselWithIrcs(ircs);
-        };
-
-        //Set the mobileTerminalId
-        MobileTerminal.prototype.setMobileTerminalId = function(mobileTerminalId){
-            this.mobileTerminalId = mobileTerminalId;
         };
 
         //Set the attributes
@@ -236,17 +216,13 @@ angular.module('unionvmsWeb')
         MobileTerminal.prototype.setAssociatedVessel = function(vessel){
             return this.associatedVessel = vessel;
         };
-        
-        MobileTerminal.prototype.hasInternalId = function() {
-            return this.mobileTerminalId.ids.hasOwnProperty("INTERNAL_ID");
-        };
 
         MobileTerminal.prototype.getSerialNumber = function() {
-            return this.mobileTerminalId.ids["SERIAL_NUMBER"];
+            return this.attributes["SERIAL_NUMBER"];
         };
 
-         MobileTerminal.prototype.getSystemType = function() {
-            return this.mobileTerminalId.systemType;
+        MobileTerminal.prototype.getSystemType = function() {
+            return this.type;
         };
 
         MobileTerminal.prototype.isEqualTerminal = function(item) {
