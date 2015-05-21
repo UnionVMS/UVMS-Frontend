@@ -4,10 +4,10 @@ angular.module('unionvmsWeb')
         var baseUrl = restConstants.baseUrl;
         return {
             getSearchableFields : function(){
-                return $resource(baseUrl +'/vessel-rest/vessel/config/searchfields/');
-            },            
+                return $resource(baseUrl +'/vessel/rest/vessel/config/searchfields/');
+            },
             vessel : function(){
-                return $resource(baseUrl +'/vessel-rest/vessel/', {}, {
+                return $resource(baseUrl +'/vessel/rest/vessel/', {}, {
                     update: {method: 'PUT'}                    
                 });
             },            
@@ -17,22 +17,21 @@ angular.module('unionvmsWeb')
                 });
             },
             vesselGroup : function(){
-                return $resource(baseUrl +'/vessel-rest/group/', {}, {
+                return $resource(baseUrl +'/vessel/rest/group/', {}, {
                     update: {method: 'PUT'}                    
                 });
             },
             deleteVesselGroup : function(){
-                return $resource(baseUrl +'/vessel-rest/group/delete', {}, {
+                return $resource(baseUrl +'/vessel/rest/group/delete', {}, {
                     delete: {method: 'PUT'}                    
                 });
             },
             getVesselGroupsForUser : function(){
-                return $resource(baseUrl +'/vessel-rest/group/list');
+                return $resource(baseUrl +'/vessel/rest/group/list');
             },
             vesselHistory : function(){
-                return $resource(baseUrl +'/vessel-rest/history/vessel');
+                return $resource(baseUrl +'/vessel/rest/history/vessel');
             },  
-            
         };
     })
 .factory('vesselRestService', function($q, $http, vesselRestFactory, restConstants, VesselListPage, Vessel, SavedSearchGroup){
