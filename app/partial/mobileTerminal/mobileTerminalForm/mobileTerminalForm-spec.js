@@ -1,26 +1,26 @@
 describe('mobileTerminalFormCtrl', function() {
 
-	beforeEach(module('unionvmsWeb'));
+    beforeEach(module('unionvmsWeb'));
 
-	var scope,ctrl, createResponseTerminal;
+    var scope,ctrl, createResponseTerminal;
 
     beforeEach(inject(function($rootScope, $controller, MobileTerminal) {
-		scope = $rootScope.$new();
-		ctrl = $controller('mobileTerminalFormCtrl', {$scope: scope});
-		scope.currentMobileTerminal = new MobileTerminal();
+        scope = $rootScope.$new();
+        ctrl = $controller('mobileTerminalFormCtrl', {$scope: scope});
+        scope.currentMobileTerminal = new MobileTerminal();
 
         //Dummy response for create
         createResponseTerminal = new MobileTerminal();
-        createResponseTerminal.mobileTerminalId.ids["INTERNAL_ID"] = "260";                
+        createResponseTerminal.guid = "260";
     }));
 
     it('should unassign mobile terminal', inject(function($q, mobileTerminalRestService) {
         var deferred = $q.defer();
         spyOn(mobileTerminalRestService, "unassignMobileTerminal").andReturn(deferred.promise);
         scope.unassignVesselWithComment();
-		deferred.resolve();
-		expect(mobileTerminalRestService.unassignMobileTerminal).toHaveBeenCalled();
-	}));
+        deferred.resolve();
+        expect(mobileTerminalRestService.unassignMobileTerminal).toHaveBeenCalled();
+    }));
 
     it('should update currentMobileTerminal with created terminal', inject(function(MobileTerminal, $compile, $q, mobileTerminalRestService, alertService, locale) {
         scope.currentMobileTerminal = new MobileTerminal();
@@ -50,7 +50,7 @@ describe('mobileTerminalFormCtrl', function() {
         // Create new terminal and check INTERNAL_ID set on scope
         scope.createNewMobileTerminal();
         scope.$digest();
-        expect(scope.currentMobileTerminal.mobileTerminalId.ids['INTERNAL_ID']).toBe(createResponseTerminal.mobileTerminalId.ids["INTERNAL_ID"]);
+        expect(scope.currentMobileTerminal.guid).toBe("260");
         
-    }));    
+    }));
 });

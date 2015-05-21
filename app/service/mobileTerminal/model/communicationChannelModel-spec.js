@@ -1,4 +1,4 @@
-ddescribe('CommunicationChannel', function() {
+describe('CommunicationChannel', function() {
 
     beforeEach(module('unionvmsWeb'));
 
@@ -31,7 +31,7 @@ ddescribe('CommunicationChannel', function() {
             {
                 "type": "STOP_DATE",
                 "value": "2015-03-01 09:00"
-            }                    
+            }
         ]
     };
 

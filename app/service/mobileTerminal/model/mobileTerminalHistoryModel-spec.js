@@ -1,70 +1,57 @@
 describe('MobileTerminalHistory', function() {
 
-  beforeEach(module('unionvmsWeb'));
+    beforeEach(module('unionvmsWeb'));
 
-    var responseData = { 
-        "eventCode": "LINK",
-        "carrier": {
-            "carrierType": "VESSEL",
-            "idType": "IRCS",
-            "value": "HJASDP"
-        },
-        "attributes": [{
-            "fieldType": "SATELLITE_NUMBER",
-            "value": "12345"
-        },
-        {
-            "fieldType": "INSTALLED_ON",
-            "value": "2006-04-03"
-        },
-        {
-            "fieldType": "UNINSTALLED_ON",
-            "value": "2009-12-22"
-        }],
-        "channels": [{
+    var responseData  = {
+        "changeDate": 1432209400084,
+        "comments": "Automatic create comment",
+        "eventCode": "CREATE",
+        "mobileTerminal": {
             "attributes": [{
-                "type": "DNID",
-                "value": "12345"
+                "type": "SATELLITE_NUMBER",
+                "value": "3435"
             },
             {
-                "type": "MEMBER_ID",
-                "value": "7"
-            },
-            {
-                "type": "START_DATE",
-                "value": "2015-04-07T14:27:00"
-            },
-            {
-                "type": "STOP_DATE",
-                "value": "2015-04-09T14:27:00"
+                "type": "ANTENNA",
+                "value": "dgnlkj"
             }],
-            "channelType": "VMS",
-            "order": 1
-        }],
-        "changeDate": 1430949600000,
-        "comments": "Automatic create comment"
+            "channels": [{
+                "attributes": [
+                {
+                    "type": "DNID",
+                    "value": "1253"
+                },
+                {
+                    "type": "MEMBER_NUMBER",
+                    "value": "5370"
+                },
+                {
+                    "type": "START_DATE",
+                    "value": "Thu May 21 13:56:40 CEST 2015"
+                }],
+                "capabilities": null,
+                "defaultReporting": false,
+                "name": "VMS"
+            }],
+            "inactive": false,
+            "mobileTerminalId": {
+                "guid": "909c7e99-0276-4ff1-8574-13221485b42a"
+            },
+            "source": "INTERNAL",
+            "type": "INMARSAT_C"
+        }
     };
-
 
     it('fromJson should build a correct object', inject(function(MobileTerminalHistory) {
         var history = MobileTerminalHistory.fromJson(responseData);
         
-        expect(Object.keys(history.attributes).length).toEqual(3);
-        expect(history.attributes.SATELLITE_NUMBER).toEqual("12345");
+        expect(history.mobileTerminal.attributes.SATELLITE_NUMBER).toEqual("3435");
         expect(history.comment).toEqual(responseData.comments);
         expect(history.eventCode).toEqual(responseData.eventCode);
         expect(history.changeDate).toEqual(responseData.changeDate);
         
-        expect(Object.keys(history.channels[0].ids).length).toEqual(4);
-        expect(history.channels[0].order).toEqual(1);
-        expect(history.channels[0].channelType).toEqual("VMS");
-        expect(history.channels[0].ids.DNID).toEqual("12345");
-        expect(history.channels[0].ids.MEMBER_ID).toEqual("7");
-
-        expect(history.carrierId).toBeDefined();
-
-       
+        expect(history.mobileTerminal.channels[0].name).toEqual("VMS");
+        expect(history.mobileTerminal.channels[0].ids.DNID).toEqual("1253");
+        expect(history.mobileTerminal.channels[0].ids.MEMBER_NUMBER).toEqual("5370");
     }));
-
-
 });
