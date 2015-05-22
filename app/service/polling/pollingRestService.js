@@ -3,27 +3,27 @@ angular.module('unionvmsWeb')
 
         var baseUrl = restConstants.baseUrl;
         return {
-            getRunningProgramPolls : function(){
+            getRunningProgramPolls : function() {
                 return $resource(baseUrl +'/mobileterminal/rest/poll/running');
             },
             getPolls : function(){
                 return $resource(baseUrl +'/mobileterminal/rest/poll/list/',{},{
                     list : { method: 'POST'}
                 });
-            },            
-            startProgramPoll : function(){
+            },
+            startProgramPoll : function() {
                 return $resource(baseUrl +'/mobileterminal/rest/poll/start/:id', {}, {
-                    save: {method: 'PUT'}                    
+                    save: {method: 'PUT'}
                 });
             },
-            stopProgramPoll : function(){
+            stopProgramPoll : function() {
                 return $resource(baseUrl +'/mobileterminal/rest/poll/stop/:id', {}, {
-                    save: {method: 'PUT'}                    
+                    save: {method: 'PUT'}
                 });
             },
-            inactivateProgramPoll : function(){
+            inactivateProgramPoll : function() {
                 return $resource(baseUrl +'/mobileterminal/rest/poll/inactivate/:id', {}, {
-                    save: {method: 'PUT'}                    
+                    save: {method: 'PUT'}
                 });
             },
             createPolls: function() {
@@ -34,7 +34,7 @@ angular.module('unionvmsWeb')
     .service('pollingRestService',function($q, pollingRestFactory, Poll, PollListPage){
 
         var setProgramPollStatusSuccess = function(response, deferred){
-            if(response.code !== "200"){
+            if(response.code !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
@@ -49,7 +49,7 @@ angular.module('unionvmsWeb')
                 var deferred = $q.defer();
                 pollingRestFactory.getRunningProgramPolls().get({
                 }, function(response) {
-                    if(response.code !== "200"){
+                    if(response.code !== 200){
                         deferred.reject("Invalid response status");
                         return;
                     }
@@ -102,10 +102,10 @@ angular.module('unionvmsWeb')
                 var deferred = $q.defer();
                 //Get list of polls
                 pollingRestFactory.getPolls().list(getListRequest.DTOForPoll(), function(response){
-                        if(response.code !== "200"){
+                        if(response.code !== 200){
                             deferred.reject("Invalid response status");
                             return;
-                        }                    
+                        }
                         var polls = [],
                             pollListPage;
 
@@ -131,6 +131,11 @@ angular.module('unionvmsWeb')
             createPolls: function(polls) {
                 var deferred = $q.defer();
                 pollingRestFactory.createPolls().save(polls, function(response) {
+                    if (response.code !== 200) {
+                        deferred.reject("Invalid response status");
+                        return;
+                    }
+
                     deferred.resolve(response.data.map(function(attrs) {
                         return Poll.fromAttributeList(attrs.value);
                     }));
