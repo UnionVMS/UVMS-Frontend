@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-2" ng-show="getTerminalConfig().channelFields.CHANNEL">
                         <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_channel_label' | i18n}}</label>
                     </div>
                     <div class="col-md-2 smallerpadding">
@@ -63,19 +63,19 @@
                             <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_def_label' | i18n}}</label>
                         </div>
                     </div>
-                    <div class="col-md-1 smallerpadding">
+                    <div class="col-md-1 smallerpadding" ng-show="getTerminalConfig().channelFields.DNID">
                         <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_dnid_label' | i18n}}</label>
                     </div>
-                    <div class="col-md-1 smallerpadding">
+                    <div class="col-md-1 smallerpadding" ng-show="getTerminalConfig().channelFields.MEMBER_NUMBER">
                         <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_member_no_label' | i18n}}</label>
                     </div>
-                    <div class="col-md-1 smallerpadding">
+                    <div class="col-md-1 smallerpadding" ng-show="getTerminalConfig().channelFields.LAND_STATION">
                         <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_land_station_label' | i18n}}</label>
                     </div>
-                        <div class="col-md-2 smallerpadding">
+                        <div class="col-md-2 smallerpadding" ng-show="getTerminalConfig().channelFields.START_DATE">
                             <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_started_label' | i18n}}</label>
                         </div>
-                        <div class="col-md-2 smallerpadding">
+                        <div class="col-md-2 smallerpadding" ng-show="getTerminalConfig().channelFields.END_DATE">
                             <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_stopped_label' | i18n}}</label>
                         </div>
                     <div class="col-md-1 smallerpadding">
@@ -90,16 +90,16 @@
                             </div>
                             <div class="col-md-2 smallerpadding">
                                 <div class="col-md-4 smallerpadding">
-                                <!-- Polling -->
-                                    <input type="radio" name="polling" value="POLLING" ng-model="polling" ng-click='selectedOption(communicationChannel.order, polling)'/>
+                                    <!-- Polling -->
+                                    <input type="radio" name="polling" ng-value="$index" ng-model="selectedPollingChannel" ng-model-options="{getterSetter: true}"/>
                                 </div>
                                 <div class="col-md-4 smallerpadding">
-                                <!-- Config -->
-                                    <input type="radio" name="config" value="CONFIG" ng-model="config" ng-click="selectedOption(communicationChannel.order, config)" />
+                                    <!-- Config -->
+                                    <input type="radio" name="config" ng-value="$index" ng-model="selectedConfigChannel" ng-model-options="{getterSetter: true}"/>
                                 </div>
                                 <div class="col-md-4 smallerpadding">
-                                <!-- Default -->
-                                    <input type="radio" name="default" value="DEFAULT" ng-model="default" ng-click="selectedOption(communicationChannel.order, default)" />
+                                    <!-- Default -->
+                                    <input type="radio" name="default" ng-value="$index" ng-model="selectedDefaultChannel" ng-model-options="{getterSetter: true}" disabled/>
                                 </div>
                             </div>
                             <div class="col-md-1 form-group smallerpadding" ng-class="{'has-error': channelForm.dnid.$invalid && (submitAttempted || channelForm.dnid.$dirty)}" ng-show="getTerminalConfig().channelFields.DNID">
@@ -108,23 +108,23 @@
                                 <span class="help-block" ng-show="channelForm.dnid.$error.required">{{'common.validation_required' | i18n}}</span>
                                 <span class="help-block" ng-show="channelForm.dnid.$error.onlyDigits">{{'common.validation_digits_only' | i18n}}</span>
                             </div>
-                            <div class="col-md-1 form-group smallerpadding" ng-class="{'has-error': channelForm.memberId.$invalid && (submitAttempted || channelForm.memberId.$dirty)}" ng-show="getTerminalConfig().channelFields.MEMBER_ID">
+                            <div class="col-md-1 form-group smallerpadding" ng-class="{'has-error': channelForm.memberId.$invalid && (submitAttempted || channelForm.memberId.$dirty)}" ng-show="getTerminalConfig().channelFields.MEMBER_NUMBER">
                             <!-- Member no -->
-                                <input type="text" name="memberId" class="form-control" ng-model="communicationChannel.ids.MEMBER_ID" required only-digits>
+                                <input type="text" name="memberId" class="form-control" ng-model="communicationChannel.ids.MEMBER_NUMBER" required only-digits>
                                 <span class="help-block" ng-show="channelForm.memberId.$error.required">{{'common.validation_required' | i18n}}</span>
                                 <span class="help-block" ng-show="channelForm.memberId.$error.onlyDigits">{{'common.validation_digits_only' | i18n}}</span>
                             </div>
-                            <div class="col-md-1 smallerpadding">
-                            <!-- Landstation -->
-                            <input type="text" name="landStation" class="form-control" ng-model="communicationChannel.ids.landStation">
-                            </div>      
-                                <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': channelForm.started.$invalid && (submitAttempted || channelForm.started.$dirty)}" ng-show="getTerminalConfig().channelFields.STARTED">
+                            <div class="col-md-1 smallerpadding" ng-show="getTerminalConfig().channelFields.LAND_STATION">
+                                <!-- Landstation -->
+                                <input type="text" name="landStation" class="form-control" ng-model="communicationChannel.ids.landStation">
+                            </div>
+                                <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': channelForm.started.$invalid && (submitAttempted || channelForm.started.$dirty)}" ng-show="getTerminalConfig().channelFields.START_DATE">
                                 <!-- Started -->
                                     <datepicker-input name="started" model="communicationChannel.ids.START_DATE" ng-disabled="true"></datepicker-input>
                                 </div>
-                                <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': channelForm.stopped.$invalid && (submitAttempted || channelForm.stopped.$dirty)}" ng-show="getTerminalConfig().channelFields.STOPPED">
+                                <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': channelForm.stopped.$invalid && (submitAttempted || channelForm.stopped.$dirty)}" ng-show="getTerminalConfig().channelFields.END_DATE">
                                 <!-- Stopped -->
-                                    <datepicker-input name="stopped" model="communicationChannel.ids.STOP_DATE" ng-disabled="true"></datepicker-input>
+                                    <datepicker-input name="stopped" model="communicationChannel.ids.END_DATE" ng-disabled="true"></datepicker-input>
                                 </div>
                             
                             <div class="col-md-1 remove" ng-show="$index > 0">

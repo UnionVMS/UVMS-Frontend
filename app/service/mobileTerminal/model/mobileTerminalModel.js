@@ -22,9 +22,6 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             this.active = true;
             this.carrierId = undefined;
             this.associatedVessel = undefined;
-            this.pollingchannel = "";
-            this.configchannel = "";
-            this.defaultchannel = "";
             this.guid = undefined;
             this.type = undefined;
         }

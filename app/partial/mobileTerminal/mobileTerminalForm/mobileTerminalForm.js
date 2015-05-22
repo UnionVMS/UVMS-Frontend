@@ -30,8 +30,8 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
 
     //Get terminal config for the selected terminal type
     $scope.getTerminalConfig = function(item){
-        if(angular.isDefined($scope.currentMobileTerminal) && angular.isDefined($scope.currentMobileTerminal.mobileTerminalId)){
-            var systemName = $scope.currentMobileTerminal.mobileTerminalId.systemType;
+        if(angular.isDefined($scope.currentMobileTerminal)){
+            var systemName = $scope.currentMobileTerminal.type;
             return $scope.transpondersConfig.getTerminalConfigBySystemName(systemName);
         }
     };    
@@ -179,7 +179,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         //Update values in the currentMobileTerminal object
         $scope.currentMobileTerminal.setAttributes(updatedMobileTerminal.attributes);
         $scope.currentMobileTerminal.setChannels(updatedMobileTerminal.channels);
-        $scope.currentMobileTerminal.setMobileTerminalId(updatedMobileTerminal.mobileTerminalId);
+        $scope.currentMobileTerminal.guid = updatedMobileTerminal.mobileTerminalId.guid;
         $scope.mergeCurrentMobileTerminalIntoSearchResults();
     };
 
@@ -262,8 +262,8 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
          getMobileTerminalHistoryForCurrentMobileTerminal();
     };
 
-   var openMobileTerminalHistoryModal = function(currentMobileTerminalHistory, mobileTerminalId){
-            
+    var openMobileTerminalHistoryModal = function(currentMobileTerminalHistory, mobileTerminalId) {
+
         var modalInstance = $modal.open({
           templateUrl: 'partial/mobileTerminal/mobileTerminalHistoryModal/mobileTerminalHistoryModal.html',
           controller: 'mobileTerminalHistoryModalCtrl',
@@ -284,13 +284,6 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         });
     };   
 
-    //Update order attribute in all channels according to their position in the channels list
-    var updateChannelOrders = function(){
-        $.each($scope.currentMobileTerminal.channels, function(index, channel){
-            channel.order = index +1;
-        });
-    };
-
     //Add a new channel to the end of the list of channels
     $scope.addNewChannel = function(){
         $scope.currentMobileTerminal.addNewChannel();
@@ -299,13 +292,36 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     //Remove a channel from the list of channels
     $scope.removeChannel = function(channelIndex){
         $scope.currentMobileTerminal.channels.splice(channelIndex, 1);
-        updateChannelOrders();
+    };
+
+    $scope.selectChannel = function(capability, selected) {
+        for (var i = 0; i < $scope.currentMobileTerminal.channels.length; i++) {
+            if (selected !== undefined) {
+                $scope.currentMobileTerminal.channels[i].capabilities[capability] = selected === i;
+            }
+            else {
+                if ($scope.currentMobileTerminal.channels[i].capabilities[capability]) {
+                    return i;
+                }
+            }
+        }
+    };
+
+    $scope.selectedConfigChannel = function(selected) {
+        return $scope.selectChannel("config", selected);
+    };
+
+    $scope.selectedDefaultChannel = function(selected) {
+        return $scope.selectChannel("default", selected);
+    };
+
+    $scope.selectedPollingChannel = function(selected) {
+        return $scope.selectChannel("polling", selected);
     };
 
     //Move channel in the list. Used when sorting the channels up and down
     $scope.moveChannel = function(oldIndex, newIndex){
         $scope.currentMobileTerminal.channels.splice(newIndex, 0, $scope.currentMobileTerminal.channels.splice(oldIndex, 1)[0]);
-        updateChannelOrders();
     };
 
     $scope.unassignVessel = function() {
@@ -331,21 +347,5 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     //Show/hide assign vessel
     $scope.toggleAssignVessel = function(){
         $scope.isVisible.assignVessel = !$scope.isVisible.assignVessel;
-    };
-
-    $scope.selectedOption = function(itemorder, value){
-    switch (value) {
-        case "POLLING": 
-            $scope.currentMobileTerminal.pollingchannel = itemorder;
-            break;
-        
-        case "CONFIG": 
-            $scope.currentMobileTerminal.configchannel = itemorder;
-            break;
-        
-        case "DEFAULT": 
-            $scope.currentMobileTerminal.defaultchannel = itemorder;
-            break;
-        }
     };
 });

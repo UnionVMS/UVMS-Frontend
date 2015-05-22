@@ -5,6 +5,7 @@ describe('CommunicationChannel', function() {
     var responseData = {
         name: "VMS2",
         defaultReporting: true,
+        guid: "1234-5678-9012-3456-2345-7891-678901",
         capabilities: [
             {
                 "type": "POLLING",
@@ -38,6 +39,7 @@ describe('CommunicationChannel', function() {
     function verifyChannel(channel) {
         expect(channel.name).toEqual("VMS2");
         expect(channel.defaultReporting).toBe(true);
+        expect(channel.guid).toBe("1234-5678-9012-3456-2345-7891-678901");
         expect(channel.ids.DNID).toEqual("1");
         expect(channel.ids.MEMBER_NUMBER).toEqual("1123"); 
         expect(channel.ids.START_DATE).toEqual("2015-01-01 09:00"); 
