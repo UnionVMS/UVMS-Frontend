@@ -40,7 +40,7 @@ angular.module('unionvmsWeb')
             }            
 
             //Create list of terminal fields
-            terminalConfig.terminalFields = {};            
+            terminalConfig.terminalFields = {};
             $.each(data.terminalFieldList, function(index, field){
                 terminalConfig.terminalFields[field] = true;
             });
@@ -50,6 +50,11 @@ angular.module('unionvmsWeb')
             $.each(data.channelFieldList, function(index, field){
                 terminalConfig.channelFields[field] = true;
             });
+
+            terminalConfig.capabilities = {};
+            $.each(data.capabilityList, function(index, field) {
+                terminalConfig.capabilities[field] = true;
+            })
 
             return terminalConfig;
         };
