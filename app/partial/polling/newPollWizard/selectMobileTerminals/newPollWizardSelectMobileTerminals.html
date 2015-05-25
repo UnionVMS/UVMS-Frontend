@@ -9,6 +9,7 @@
                     <thead>
                         <tr>
                             <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.name'">{{'polling.poll_table_header_vessel_name' | i18n}}</th>
+                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.ircs'">{{'polling.poll_table_header_vessel_ircs' | i18n}}</th>
                             <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'channels[0].ids.MEMBER_ID'">{{'polling.poll_table_header_vessel_member_no' | i18n}}</th>
                             <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'channels[0].ids.DNID'">{{'polling.poll_table_header_vessel_dnid' | i18n}}</th>
                             <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.systemType'">{{'polling.poll_table_header_vessel_transponder' | i18n}}</th>
@@ -20,6 +21,7 @@
                     <tbody>
                         <tr ng-repeat="item in currentSearchResults.mobileTerminals | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
                             <td>{{item.associatedVessel.name}}</td>
+                            <td>{{item.associatedVessel.ircs}}</td>
                             <td>{{item.channels[0].ids.MEMBER_ID}}</td>
                             <td>{{item.channels[0].ids.DNID}}</td>
                             <td>{{item.mobileTerminalId.systemType}}</td>

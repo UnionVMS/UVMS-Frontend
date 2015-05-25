@@ -71,6 +71,7 @@
     "wizard_second_step_sampling_poll_single_carrier_warning": "(Obs: Sampling can be applied only to one carrier at a time.)",    
     "wizard_third_step" :"Polling results",
     "poll_table_header_vessel_name" :"Vessel name",
+    "poll_table_header_vessel_ircs" :"IRCS",
     "poll_table_header_vessel_member_no" :"Member name",
     "poll_table_header_vessel_dnid" : "DNID",
     "poll_table_header_vessel_transponder" :"Transponder",

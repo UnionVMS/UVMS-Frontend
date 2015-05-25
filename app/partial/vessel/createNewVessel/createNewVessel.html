@@ -15,7 +15,9 @@
                     <button  type="submit" class="btn btn-sm createnewvesselbutton" ng-click="createNewVessel()"> Create New Vessel </button>
                 </div>
                 <div>
-                    <div class="closenewvessel pull-right" ng-click="toggleCreateNewVessel()"> <img src="assets/images/close.png" /></div>
+                    <div class="closenewvessel pull-right" ng-click="toggleCreateNewVessel()">
+                         <i class="fa fa-times closeicon" title="{{'common.close' | i18n}}"></i>
+                    </div>
                 </div>
             </div>
             <vessel-details vessel="newVesselObj"></vessel-details>

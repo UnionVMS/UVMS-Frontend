@@ -54,7 +54,7 @@ angular.module('unionvmsWeb')
             terminalConfig.capabilities = {};
             $.each(data.capabilityList, function(index, field) {
                 terminalConfig.capabilities[field] = true;
-            })
+            });
 
             return terminalConfig;
         };
