@@ -10,43 +10,43 @@
 		<table class="col-md-12">
 			<thead>
 				<tr>
-                    <td>Event code: {{vesselHistory.eventHistory.eventCode}}</td>
-                    <td>Event date: {{vesselHistory.eventHistory.eventDate}}</td>
+                    <td>{{'vessel.event_code' | i18n }}: {{vesselHistory.eventHistory.eventCode}}</td>
+                    <td>{{'vessel.event_date' | i18n }}: {{vesselHistory.eventHistory.eventDate}}</td>
                 </tr>
 			</thead>
             <tbody>
                 <tr>
-                	<td>Flag state: {{vesselHistory.countryCode}}</td>
-                	<td>Ext. marking: {{vesselHistory.externalMarking}}</td>
+                	<td>{{'vessel.flag_state' | i18n }}: {{vesselHistory.countryCode}}</td>
+                	<td>{{'vessel.ext_marking' | i18n }}: {{vesselHistory.externalMarking}}</td>
                 </tr>
                 <tr>
-                	<td>Type: {{vesselHistory.vesselType}}</td>
-                	<td>IRCS: {{vesselHistory.ircs}}</td>
+                	<td>{{'vessel.type' | i18n }}: {{vesselHistory.vesselType}}</td>
+                	<td>{{'vessel.ircs' | i18n }}: {{vesselHistory.ircs}}</td>
                 </tr>
                 <tr>
-                	<td>CFR: {{vesselHistory.cfr}}</td>
-                	<td>MMSI no: {{vesselHistory.mmsiNo}}</td>
+                	<td>{{'vessel.cfr' | i18n }}: {{vesselHistory.cfr}}</td>
+                	<td>{{'vessel.mmsi_no' | i18n }}: {{vesselHistory.mmsiNo}}</td>
                 </tr>
                 <tr>
-                	<td>Home port code: {{vesselHistory.homePort}}</td>
-                	<td>Port name: </td>
+                	<td>{{'vessel.home_port_code' | i18n }}: {{vesselHistory.homePort}}</td>
+                	<td>{{'vessel.port_name' | i18n }}: </td>
                 </tr>
                 <tr>
-                	<td>License: {{vesselHistory.hasLicense}}</td>
-                	<td>Length: {{vesselHistory.lengthOverAll}} {{vesselHistory.lengthBetweenPerpendiculars}}</td>
+                	<td>{{'vessel.license' | i18n }}: {{vesselHistory.hasLicense}}</td>
+                	<td>{{'vessel.length' | i18n }}: {{vesselHistory.lengthOverAll}} {{vesselHistory.lengthBetweenPerpendiculars}}</td>
                 </tr>
                 <tr>
-                	<td>License type: </td>
-                	<td>Capacity: {{vesselHistory.grossTonnage}} {{vesselHistory.otherGrossTonnage}} {{vesselHistory.safetyGrossTonnage}}</td>
+                	<td>{{'vessel.license_type' | i18n }}: </td>
+                	<td>{{'vessel.capacity' | i18n }}: {{vesselHistory.grossTonnage}} {{vesselHistory.otherGrossTonnage}} {{vesselHistory.safetyGrossTonnage}}</td>
                 </tr>
                 <tr>
-                	<td>Power: {{vesselHistory.powerMain}} {{vesselHistory.powerAux}}</td>
+                	<td>{{'vessel.power' | i18n }}: {{vesselHistory.powerMain}} {{vesselHistory.powerAux}}</td>
                 	<td>&nbsp;</td>
                 </tr>
             </tbody>
         </table>
 	</div>
 	<div class="modal-footer">
-    	<button type="button" class="btn btn-primary" ng-click="cancel()">Close</button>
+    	<button type="button" class="btn btn-primary" ng-click="cancel()">{{'vessel.close' | i18n }}</button>
 	</div>
 </div>

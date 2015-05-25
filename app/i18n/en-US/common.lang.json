@@ -38,6 +38,10 @@
     "validation_invalid_period" : "Invalid period",
     "validation_letters_only" : "Only letters",
     "validation_required" : "Required",
-    "yes" : "Yes"
+    "yes" : "Yes",
+    "edit_selection": "Edit selection",
+    "save_as_group": "Save as Group",
+    "export_selection": "Export selection",
+    "view_on_map" : "View on map"
 
 }

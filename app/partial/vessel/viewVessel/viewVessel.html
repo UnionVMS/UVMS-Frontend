@@ -4,14 +4,14 @@
 
             <div class="col-md-4 vesselname">{{vesselObj.name}}</div>
             <span class="vesselstatus col-md-10">
-                     <span ng-show="vesselObj.active == true">Set as inactive</span>
-                     <span ng-show="vesselObj.active == false">Set as active</span>
+                     <span ng-show="vesselObj.active == true">{{'vessel.set_as_inactive' | i18n}}</span>
+                     <span ng-show="vesselObj.active == false">{{'vessel.set_as_active' | i18n}}</span>
                      <input type="checkbox" ng-click="changeVesselStatus()" checked>
-                     <div ng-show="vesselObj.active == true">STATUS: <b> Active</b></div>
-                     <div ng-show="vesselObj.active == false">STATUS: <b> Inactive</b></div>
+                     <div ng-show="vesselObj.active == true">{{'vessel.status' | i18n}}: <b>{{'vessel.active' | i18n}}</b></div>
+                     <div ng-show="vesselObj.active == false">{{'vessel.status' | i18n}}: <b> {{'vessel.inactive' | i18n}}</b></div>
                  </span>
             <div class="col-md-1">
-                <button class="btn btn-sm updatevesselbutton" type="submit" ng-click="updateVessel()"> Update </button>
+                <button class="btn btn-sm updatevesselbutton" type="submit" ng-click="updateVessel()"> {{'vessel.update' | i18n}} </button>
             </div>
             <div>
                 <div class="closenewvessel pull-right" ng-click="toggleViewVessel()">
@@ -21,15 +21,15 @@
         </div>
         <vessel-details vessel="vesselObj"></vessel-details>
     <div class="col-md-12 mobileterminalcontainer row" ng-repeat = "item in vesselObj.mobileTerminals">
-        <a ng-click="removeMobileSystem(item, $index)">-REMOVE SATELLITE SYSTEM</a>
+        <a ng-click="removeMobileSystem(item, $index)">{{'vessel.remove_satellite_system' | i18n | uppercase}}</a>
         <mobileterminal terminal="item"></mobileterminal>
     </div>
     <div class="row col-md-12">
-        <a ng-click="addNewMobileTerminalToVessel()"><b>+ ADD NEW MOBILE TERMINAL</b></a>
+        <a ng-click="addNewMobileTerminalToVessel()"><b>{{'vessel.add_new_mobile_terminal' | i18n | uppercase}}</b></a>
     </div>
     <div class="row col-md-12">
-        <span class="vesselhistory col-md-12">EVENT HISTORY</span>
-        <span ng-show="isVisible.showCompleteVesselHistoryLink"><a ng-click="viewCompleteVesselHistory()">View all events</a></span>
+        <span class="vesselhistory col-md-12"> {{'vessel.event_history' | i18n | uppercase}}</span>
+        <span ng-show="isVisible.showCompleteVesselHistoryLink"><a ng-click="viewCompleteVesselHistory()">{{'vessel.view_all_events' | i18n}}</a></span>
         <hr>
         <table class="col-md-12">
             <thead>
