@@ -1,0 +1,157 @@
+<div ng-controller="MovementlistCtrl">
+    <table class="searchResults table colorOdd movementtable">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" ng-model="item.selectedAll" ng-click="checkAll()"/></th>
+                    <th>
+                        <a href="" ng-click="sortType='state'; sortReverse = !sortReverse">
+                            {{'movement.table_header_flag_state' | i18n}}
+                            <span ng-show="sortType == 'state' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'state' && sortReverse" class="fa fa-caret-up"></span>
+                            <span ng-show="sortType != 'state'" class="fa fa-sort"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="" ng-click="sortType='externalMarking'; sortReverse = !sortReverse">
+                            {{'movement.table_header_external_marking' | i18n}}
+                            <span ng-show="sortType == 'externalMarking' && !sortReverse"
+                                  class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'externalMarking' && sortReverse"
+                                  class="fa fa-caret-up"></span>
+                            <span ng-show="sortType != 'externalMarking'" class="fa fa-sort"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="" ng-click="sortType='ircs'; sortReverse = !sortReverse">
+                            {{'movement.table_header_ircs' | i18n}}
+                            <span ng-show="sortType == 'ircs' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'ircs' && sortReverse" class="fa fa-caret-up"></span>
+                            <span ng-show="sortType != 'ircs'" class="fa fa-sort"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="" ng-click="sortType='name'; sortReverse = !sortReverse">
+                            {{'movement.table_header_name' | i18n}}
+                            <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                            <span ng-show="sortType != 'name'" class="fa fa-sort"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="" ng-click="sortType='type'; sortReverse = !sortReverse">
+                            {{'vessel.table_header_type' | i18n}}
+                            <span ng-show="sortType == 'type' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'type' && sortReverse" class="fa fa-caret-up"></span>
+                            <span ng-show="sortType != 'type'" class="fa fa-sort"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="" ng-click="sortType='time'; sortReverse = !sortReverse">
+                            {{'movement.table_header_time' | i18n}}
+                            <span ng-show="sortType == 'time' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'time' && sortReverse" class="fa fa-caret-up"></span>
+                            <span ng-show="sortType != 'time'" class="fa fa-sort"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="" ng-click="sortType='latitude'; sortReverse = !sortReverse">
+                            {{'movement.table_header_lantitude' | i18n}}
+                            <span ng-show="sortType == 'latitude' && !sortReverse"
+                                  class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'latitude' && sortReverse" class="fa fa-caret-up"></span>
+                            <span ng-show="sortType != 'latitude'" class="fa fa-sort"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="" ng-click="sortType='longitude'; sortReverse = !sortReverse">
+                            {{'movement.table_header_longitude' | i18n}}
+                            <span ng-show="sortType == 'longitude' && !sortReverse"
+                                  class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'longitude' && sortReverse" class="fa fa-caret-up"></span>
+                            <span ng-show="sortType != 'longitude'" class="fa fa-sort"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="" ng-click="sortType='status'; sortReverse = !sortReverse">
+                            {{'movement.table_header_status' | i18n}}
+                            <span ng-show="sortType == 'status' && !sortReverse"
+                                  class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'status' && sortReverse" class="fa fa-caret-up"></span>
+                            <span ng-show="sortType != 'status'" class="fa fa-sort"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="" ng-click="sortType='ms'; sortReverse = !sortReverse">
+                            {{'movement.table_header_ms' | i18n}}
+                            <span ng-show="sortType == 'ms' && !sortReverse"
+                                  class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'ms' && sortReverse" class="fa fa-caret-up"></span>
+                            <span ng-show="sortType != 'ms'" class="fa fa-sort"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="" ng-click="sortType='cs'; sortReverse = !sortReverse">
+                            {{'movement.table_header_cs' | i18n}}
+                            <span ng-show="sortType == 'cs' && !sortReverse"
+                                  class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'cs' && sortReverse" class="fa fa-caret-up"></span>
+                            <span ng-show="sortType != 'cs'" class="fa fa-sort"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="" ng-click="sortType='course'; sortReverse = !sortReverse">
+                            {{'movement.table_header_course' | i18n}}	
+                            <span ng-show="sortType == 'course' && !sortReverse"
+                                  class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'course' && sortReverse" class="fa fa-caret-up"></span>
+                            <span ng-show="sortType != 'course'" class="fa fa-sort"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="" ng-click="sortType='messagetype'; sortReverse = !sortReverse">
+                            {{'movement.table_header_message_type' | i18n}}
+                            <span ng-show="sortType == 'messagetype' && !sortReverse"
+                                  class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'messagetype' && sortReverse" class="fa fa-caret-up"></span>
+                            <span ng-show="sortType != 'messagetype'" class="fa fa-sort"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="" ng-click="sortType='source'; sortReverse = !sortReverse">
+                            {{'movement.table_header_source' | i18n}}
+                            <span ng-show="sortType == 'source' && !sortReverse"
+                                  class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'source' && sortReverse" class="fa fa-caret-up"></span>
+                            <span ng-show="sortType != 'source'" class="fa fa-sort"></span>
+                        </a>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="movement in currentSearchResults.movements | orderBy:sortType:sortReverse | filter:searchFilter">
+                    <td><input type="checkbox" ng-model="movement.Selected" ng-click="checkedVessel(movement)"/></td>
+                    <td>{{movement.state}}</td>
+                    <td>{{movement.externalMarking}}</td>
+                    <td>{{movement.ircs}}</td>
+                    <td class="movementvesselname">{{movement.name}}</td>
+                    <td>{{movement.type}}</td>
+                    <td>{{movement.time}}</td>
+                    <td>{{movement.latitude}}</td>
+                    <td>{{movement.longitude}}</td>
+                    <td>{{movement.status}}</td>
+                    <td>{{movement.measuredSpeed}}</td>
+                    <td>{{movement.calculatedSpeed}}</td>
+                    <td>{{movement.course}}&deg;</td>
+                    <td>{{movement.messageType}}</td>
+                    <td>{{movement.source}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <search-result-error-alert ng-show="!currentSearchResults.loading && currentSearchResults.vessels.length < 1">{{error}}</search-result-error-alert>           
+        </div>
+        <div class="col-md-12 searchResultsLoading" ng-show="currentSearchResults.loading">
+                <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>        
+            </div>
+    
+<!--{{currentSearchResults}}-->
+</div>

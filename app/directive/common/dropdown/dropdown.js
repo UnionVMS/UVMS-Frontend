@@ -54,7 +54,11 @@ angular.module('unionvmsWeb')
             //Set the label of the dropdown based on the current value of ngMode
             scope.setLabel = function() {
                 if ((scope.ngModel !== undefined && scope.ngModel === "" ) || scope.ngModel === null || scope.ngModel === undefined) {
-                    scope.currentItemLabel = attrs.initialtext;
+                    if(attrs.initialtext){
+                        scope.currentItemLabel = attrs.initialtext;
+                    }else{
+                        scope.currentItemLabel = scope.getItemLabel(scope.items[0]);
+                    }
                 } else {
                     if(scope.items !== undefined){
                         for (var i = 0; i < scope.items.length; i++){

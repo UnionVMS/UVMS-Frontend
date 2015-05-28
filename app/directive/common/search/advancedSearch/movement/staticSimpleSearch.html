@@ -1,0 +1,21 @@
+<div class="col-md-12">
+    <div class="col-md-2 smallerpadding">
+        <input type="text" placeholder="{{'movement.search_ext_to_name_placeholder' | i18n}}"  class="form-control" tabindex="5" ng-model="advancedSearchObject.name">
+    </div>
+    <div class="col-md-2 smallerpadding">
+        <dropdown ng-model="advancedSearchObject.SIMPLETIMESPAN" items="timeSpanDropDownItems"></dropdown>
+    </div>
+    <div class="col-md-2 smallerpadding">
+        <datepicker-input model="advancedSearchObject.MOVEMENT_START_DATE" placeholder="{{'movement.search_movementStartDate_placeholder' | i18n}}" ></datepicker-input>
+    </div>
+    <div class="col-md-2 smallerpadding">
+        <datepicker-input model="advancedSearchObject.MOVEMENT_END_DATE" placeholder="{{'movement.search_movementEndDate_placeholder' | i18n}}" ></datepicker-input>
+    </div>
+    <div class="col-md-1 col-md-offset-2 smallerpadding">
+        <button type="submit" class="btn btn-primary btn-sm searchbutton" ng-click="performAdvancedSearch()">
+                        {{'common.search' | i18n}}</button>
+    </div>
+    <div class="col-md-1">
+        <a class="movementsearchresetbutton" ng-click="resetSearch()">{{'movement.reset_search' | i18n}}</a>
+    </div>
+</div>

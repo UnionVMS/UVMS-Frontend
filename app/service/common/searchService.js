@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService) {
+angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService) {
 
 	var getListRequest = new GetListRequest(1, 10, true, []),
         advancedSearchObject  = {};
@@ -12,6 +12,11 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
         //Do the search for polls
         searchPolls : function(){
             return pollingRestService.getPollList(getListRequest);
+        },
+
+        //Do search for movements
+        searchMovements : function(){
+            return movementRestService.getMovementList(getListRequest);
         },
 
         //Do the search for mobile terminals

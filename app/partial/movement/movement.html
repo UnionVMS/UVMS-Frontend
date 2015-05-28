@@ -1,0 +1,11 @@
+<div ng-controller="MovementCtrl">
+	<div class="container">
+		<div static-include="partial/movement/movementPageHeader/movementPageHeader.html"></div>
+		<advanced-search searchfunc="searchMovements" vesselGroupCallback="selectGroupCallback()" modeltype="'MOVEMENT'" advancedsearchvisible="true"></advanced-search>		
+	</div>		
+		<div class="container movementcontainer">
+			<div ng-include="'partial/movement/movementList/movementList.html'"></div>
+		</div>
+	</div>
+</div>
+

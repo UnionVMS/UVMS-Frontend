@@ -7,6 +7,10 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $loca
                 'url':'/today'
             },
             {
+                'title':locale.getString('header.menu_movement'),
+                'url':'/movement'
+            },
+            {
                 'title':locale.getString('header.menu_reporting'),
                 'url':'/reporting'
             },

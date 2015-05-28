@@ -6,5 +6,6 @@
 	"menu_alarmconditions" : "Alarm conditions",
 	"menu_communication" : "Communication",
 	"menu_configuration" : "Configuration",
-	"menu_gis" : "GIS"
+	"menu_gis" : "GIS",
+	"menu_movement" : "Movement"
 }
