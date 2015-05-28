@@ -20,7 +20,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, movemen
 
     var init = function(){
         //$scope.getMovementsForList();
-        $scope.searchMovements();
+         $scope.searchMovements();
     };
 
 

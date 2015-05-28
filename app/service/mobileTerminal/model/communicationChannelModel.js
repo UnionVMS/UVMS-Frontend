@@ -78,6 +78,7 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function() {
         };
 
         CommunicationChannel.prototype.getFormattedStartDate = function() {
+        
             return moment.utc(this.ids["START_DATE"], 'YYYY-MM-DD HH:mm').format("YYYY-MM-DD");
         };
 

@@ -49,15 +49,15 @@ angular.module('unionvmsWeb')
 
 				var mockdatas = [];
 
-				for (var i = 0; i < 6; i++){
+				for (var i = 0; i < 16; i++){
 					var mockdata = {};
 					mockdata.state = "SWE";
 					mockdata.externalMarking = "FRE 002";
 					mockdata.ircs = 123 + i;
-					mockdata.name = "FREJA";
+					mockdata.name = "FREJA " + i;
 					mockdata.time = "2015-05-06 18:30";
-					mockdata.latitude = "45 deg; 33,43\' N";
-					mockdata.longitude = "52 deg; 41,43\' E";
+					mockdata.latitude = 45 + i +" deg; 33,43\' N";
+					mockdata.longitude = 32 + i * 2 + " deg; 41,43\' E";
 					mockdata.status = "010";
 					mockdata.measuredSpeed = "8.05 kts";
 					mockdata.calculatedSpeed = "9 kts";
