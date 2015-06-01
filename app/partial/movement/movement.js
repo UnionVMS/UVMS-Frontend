@@ -5,6 +5,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, movemen
     $scope.sortReverse = false;
     $scope.sortFilter = '';
     //$scope.movements = [];
+    $scope.editSelectionDropdownItems = [{'text':locale.getString('movement.editselection_see_on_map'),'code':'MAP'}, {'text':locale.getString('movement.editselection_export_selection'),'code':'EXPORT'}, {'text':locale.getString('movement.editselection_inactivate'),'code':'INACTIVE'}];
     
    //Search objects and results
     $scope.currentSearchResults = {

@@ -11,11 +11,20 @@
     <div class="col-md-2 smallerpadding">
         <datepicker-input model="advancedSearchObject.MOVEMENT_END_DATE" placeholder="{{'movement.search_movementEndDate_placeholder' | i18n}}" ></datepicker-input>
     </div>
-    <div class="col-md-1 col-md-offset-2 smallerpadding">
-        <button type="submit" class="btn btn-primary btn-sm searchbutton" ng-click="performAdvancedSearch()">
-                        {{'common.search' | i18n}}</button>
+    <div class="col-md-2 smallerpadding">
+         <dropdown ng-model="advancedSearchObject.FLAGSTATE" initialtext="{{'movement.advanced_search_placeholder_flag_state' | i18n}}" items=""></dropdown>
     </div>
-    <div class="col-md-1">
+    <div class="col-md-2 smallerpadding">
+        <div class="col-md-10 col-md-offset-2 smallerpadding">
+            <button type="submit" class="btn btn-primary btn-sm searchbutton movementadvancedsearchbutton pull-right" ng-click="performAdvancedSearch()">
+                            {{'common.search' | i18n}}
+            </button>
+        </div>
+        <div class="col-md-12 smallerpadding">
+            <a class="movementsearchresetbutton pull-right" ng-click="resetSearch()">{{'movement.reset_search' | i18n}}</a>
+        </div>
+    </div>
+  <!--  <div class="col-md-1">
         <a class="movementsearchresetbutton" ng-click="resetSearch()">{{'movement.reset_search' | i18n}}</a>
-    </div>
+    </div>-->
 </div>

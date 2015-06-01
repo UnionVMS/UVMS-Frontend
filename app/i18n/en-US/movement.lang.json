@@ -42,5 +42,11 @@
 	"advanced_search_placeholder_saved_searches":"Saved searches",
 	"advanced_search_placeholder_date_time_from":"Time from",
 	"advanced_search_placeholder_date_time_to":"Time to",
-	"advanced_search_placeholder_time_span_24":"Last 24h"
+	"advanced_search_placeholder_time_span_24":"Last 24h",
+	"editselection_see_on_map" : "See on map",
+	"editselection_edit_selection" : "Edit selection",
+	"editselection_export_selection" : "Export selection",
+	"editselection_inactivate" : "Inactivate",
+	"movement_speed_unit" : "kts"
+
 }

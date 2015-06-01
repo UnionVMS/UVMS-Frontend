@@ -4,23 +4,22 @@ angular.module('unionvmsWeb')
 
 	return {
 		getMovementList : function(){
-			//TODO: change URL when backend is finished.
-			return $resource(baseUrl + '/movement/rest/movement/list/',{},{
+			return $resource(baseUrl + '/movement/rest/movement/list',{},
+			{ 
 				list : { method : 'POST'}
 			});
 		}
 	};
 })
-.factory('movementRestService',function($q, movementRestFactory, restConstants, MovementListPage, Movement){
+.factory('movementRestService',function($q, movementRestFactory, MovementListPage, Movement){
 	var baseUrl, userName;
-	baseUrl = restConstants.baseUrl;
+	//baseUrl = restConstants.baseUrl;
 	userName = "FRONTEND_USER";
 
-	var getMovementList = function(){
+	var getMovementList = function(getListRequest){
 
 		var deferred = $q.defer();
-		movementRestFactory.getMovementList().list(
-			function(response){
+		movementRestFactory.getMovementList().list(getListRequest.DTOForMovement(), function(response){
 				if(response.code !== "200"){
 					deferred.reject("Invalid response status");
 					return;
@@ -28,23 +27,34 @@ angular.module('unionvmsWeb')
 				var movements = [];
 				var currentPage, totalNumberOfPages;
 
-				if(angular.isArray(response.data.movements)){
-					for (var i = 0; i < response.data.movements.length; i++){
-						movements.push(Movement.fromJson(response.data.movements[i]));
+				if(angular.isArray(response.data)){
+					for (var i = 0; i < response.data.length; i++){
+						movements.push(Movement.fromJson(response.data[i]));
 					}
 				}
-				currentPage = response.data.currentPage;
-				totalNumberOfPages = response.data.totalNumberOfPages;
+				if(!response.data.currentPage){
+						currentPage = 1;
+					} else {
+						currentPage = response.data.currentPage;	
+					}
+				if(!response.data.totalNumberOfPages){
+					totalNumberOfPages = 1;
+				} else {
+					totalNumberOfPages = response.data.totalNumberOfPages;
+				}
+
 				var movementListPage = new MovementListPage(movements, currentPage, totalNumberOfPages);
 
 				deferred.resolve(movementListPage);
 			},
 			function(error){
 				//Mock answer until webservice is up and running....
-				//deferred.reject(error);
+				console.log("Error getting movements.");
+				console.log(error);
+				deferred.reject(error);
 
 				//MOCKING!!!
-				console.info("MOCKING IN PROGRESS!!!!!");
+				/*console.info("MOCKING IN PROGRESS!!!!!");
 				console.log("Mocking answer until webservice is up and running....");
 
 				var mockdatas = [];
@@ -74,6 +84,7 @@ angular.module('unionvmsWeb')
 				
 				var movementListPage = new MovementListPage(mockdatas, currentPage, totalNumberOfPages);
 				deferred.resolve(movementListPage);
+				*/
 			}
 	);
 		return deferred.promise;
