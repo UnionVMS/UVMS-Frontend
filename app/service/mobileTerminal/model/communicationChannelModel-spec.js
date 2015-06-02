@@ -27,11 +27,11 @@ describe('CommunicationChannel', function() {
             },
             {
                 "type": "START_DATE",
-                "value": "2015-01-01 09:00"
+                "value": "2015-06-01 09:00 +02:00"
             },
             {
                 "type": "STOP_DATE",
-                "value": "2015-03-01 09:00"
+                "value": "2015-06-01 09:00 +02:00"
             }
         ]
     };
@@ -42,8 +42,8 @@ describe('CommunicationChannel', function() {
         expect(channel.guid).toBe("1234-5678-9012-3456-2345-7891-678901");
         expect(channel.ids.DNID).toEqual("1");
         expect(channel.ids.MEMBER_NUMBER).toEqual("1123"); 
-        expect(channel.ids.START_DATE).toEqual("2015-01-01 09:00"); 
-        expect(channel.ids.STOP_DATE).toEqual("2015-03-01 09:00");
+        expect(channel.ids.START_DATE).toEqual("2015-06-01 09:00 +02:00"); 
+        expect(channel.ids.STOP_DATE).toEqual("2015-06-01 09:00 +02:00");
         expect(channel.capabilities.POLLING).toBe(true);
         expect(channel.capabilities.CONFIG).toBe(false);
     }
@@ -59,12 +59,12 @@ describe('CommunicationChannel', function() {
 
     it('should format its start date correctly', inject(function(CommunicationChannel) {
         var channel = CommunicationChannel.fromJson(responseData);
-        expect(channel.getFormattedStartDate()).toEqual("2015-01-01");
+        expect(channel.getFormattedStartDate()).toEqual("2015-06-01 09:00 +02:00");
     }));
 
     it('should format its stop date correctly', inject(function(CommunicationChannel) {
         var channel = CommunicationChannel.fromJson(responseData);
-        expect(channel.getFormattedStopDate()).toEqual("2015-03-01");
+        expect(channel.getFormattedStopDate()).toEqual("2015-06-01 09:00 +02:00");
     }));
 
     it('should make an exact copy of itself', inject(function(CommunicationChannel) {

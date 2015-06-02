@@ -101,9 +101,11 @@ angular.module('unionvmsWeb')
                     var initialValue = {};
                     initialValue.code = "";
                     initialValue.text = attrs.initialtext;
-                    scope.items.unshift(initialValue);
+                    scope.initialValue = initialValue;
+                    //scope.items.unshift(initialValue);
                 }
             };
+
 
             scope.setLabel();
 

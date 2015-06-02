@@ -5,6 +5,9 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
+            <li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue" ng-click="selectVal(initialValue)">
+                <a role="menuitem" tabindex="-1">{{initialValue.text}}</a>
+            </li>
             <li ng-class="item.code.length === 0 && !initialtextSelectable ? 'disabled' : ''" ng-repeat="item in items" role="presentation" ng-click="selectVal(item,$index)">
                 <a role="menuitem" tabindex="-1">{{getItemLabel(item)}}</a>
             </li>

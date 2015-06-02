@@ -20,6 +20,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
 
     var init = function(){
          $scope.searchMovements();
+         $scope.setupDropdowns();
     };
 
     //AUTOMATIC REFRESH OF THE MOVEMENTS LIST
@@ -67,14 +68,16 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
 
 
     $scope.resetSearchResult = function(){
+
+        /************* //REMOVE THIS WHEN BACKEND CAN TAKE SEARCHCRITERIAS!!/**********/
+        searchService.resetSearchCriterias(); //<--TO BE REMOVED!
+        /******************************************************************************/
         $scope.currentSearchResults.page = 0;
         $scope.currentSearchResults.totalNumberOfPages = 0;
         $scope.currentSearchResults.movements = [];
         $scope.currentSearchResults.errorMessage ="";
-        searchService.resetPage();
-        searchService.resetSearchCriterias();
-        searchService.setDynamic(true);
-        //searchService.setSearchCriteriasToAdvancedSearch();
+        $scope.currentSearchResults.loading = true;
+
     };
 
     var retriveMovementsSuccess = function(movementListPage){
@@ -123,12 +126,16 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         }
     };
 
+    $scope.setupDropdowns = function(){
+       
+    };
 
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
         searchService.reset();
         $scope.stopAutoRefresh();
     });    
+
 
     init();
 

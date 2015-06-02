@@ -8,6 +8,21 @@ angular.module('unionvmsWeb')
         this.criterias = angular.isDefined(criterias) ? criterias : [];
     }
 
+
+   function checkTimeZone(searchCriteria){
+        for (var i = 0; i < searchCriteria.length; i++) {
+              console.log(addUTCTimeZone(searchCriteria[i].value));
+            if (searchCriteria[i].key === "REPORTING_START_DATE" || searchCriteria[i].key === "REPORTING_END_DATE" || searchCriteria[i].key === "DATETIMEFROM" || searchCriteria[i].key === "DATETIMETO"){
+                searchCriteria[i].value = addUTCTimeZone(searchCriteria[i].value);      
+            }
+        }
+        return searchCriteria;
+    }    
+
+    function addUTCTimeZone(timeDate){
+        return moment(timeDate).format("YYYY-MM-DD HH:mm Z");
+    }
+
     GetListRequest.prototype.toJson = function(){
         return JSON.stringify({
             pagination : {page: this.page, listSize: this.listSize},
@@ -16,13 +31,15 @@ angular.module('unionvmsWeb')
     };
 
     GetListRequest.prototype.DTOForVessel = function(){
+        //var crit = checkTimeZone(this.criterias);
         return {
             pagination : {page: this.page, listSize: this.listSize},
-            vesselSearchCriteria : { isDynamic : this.isDynamic, criterias : this.criterias } //searchCriteria : {isDynamic: this.isDynamic, criterias: this.criterias}
+            vesselSearchCriteria : { isDynamic : this.isDynamic, criterias : checkTimeZone(this.criterias) }
         };
     };
 
     GetListRequest.prototype.DTOForMobileTerminal = function(){
+
         return {
             pagination : {page: this.page, listSize: this.listSize},
             mobileTerminalSearchCriteria : {isDynamic: this.isDynamic, criterias: this.criterias}
@@ -37,8 +54,8 @@ angular.module('unionvmsWeb')
     };
 
     GetListRequest.prototype.DTOForMovement = function(){
-        return {
-            movementSearchCriteria : this.criterias,
+         return {
+            movementSearchCriteria : checkTimeZone(this.criterias),//this.criterias,
             pagination : {page: this.page, listSize: this.listSize}            
         };
     };
@@ -85,7 +102,8 @@ angular.module('unionvmsWeb')
 
     GetListRequest.prototype.getNumberOfSearchCriterias = function(){
         return this.criterias.length;
-    };    
+    };
+
 
     return GetListRequest;
 });

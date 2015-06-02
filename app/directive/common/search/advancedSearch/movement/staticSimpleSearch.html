@@ -1,10 +1,11 @@
 <div class="col-md-12">
+
     <div class="row nomargin">
         <div class="col-md-2 smallerpadding">
             <input type="text" placeholder="{{'movement.search_ext_to_name_placeholder' | i18n}}"  class="form-control" tabindex="5" ng-model="advancedSearchObject.name">
         </div>
         <div class="col-md-2 smallerpadding">
-            <dropdown ng-model="advancedSearchObject.SIMPLETIMESPAN" items="timeSpanDropDownItems"></dropdown>
+            <dropdown ng-model="advancedSearchObject.SIMPLETIMESPAN" no-placeholder-item items="timeSpanDropDownItems"></dropdown>
         </div>
         <div class="col-md-2 smallerpadding">
             <datepicker-input model="advancedSearchObject.MOVEMENT_START_DATE" placeholder="{{'movement.search_movementStartDate_placeholder' | i18n}}" ></datepicker-input>
