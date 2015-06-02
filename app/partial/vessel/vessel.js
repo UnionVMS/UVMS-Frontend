@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, GetListRequest, searchService, vesselRestService, alertService, locale){
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, savedSearchService, GetListRequest, searchService, vesselRestService, alertService){
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -123,20 +123,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $modal, 
 
     //Open modal for saving a selection of vessels to a vesselGroup
     $scope.openSelectedSaveGroupModal = function() {
-        var modalInstance = $modal.open({
-            templateUrl: 'partial/vessel/saveVesselGroupModal/saveVesselGroupModal.html',
-            controller: 'SaveVesselGroupModalInstanceCtrl',
-            windowClass: "saveVesselGroupModal",
-            size: "small",
-            resolve: {
-                advancedSearchClicked: function(){
-                    return false;
-                },
-                selectedVessels: function(){
-                    return $scope.selectedVessels;
-                }
-            }
-        });
+        savedSearchService.openSaveSearchModal("VESSEL", false, $scope.selectedVessels);
     };
 
     //Toggle create new vessel

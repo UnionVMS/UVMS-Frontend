@@ -11,10 +11,9 @@
 					<span ng-show="movementAdvancedSearch">{{'movement.toggle_advanced_search_adv' | i18n}}</span>
 					<span ng-hide="movementAdvancedSearch">{{'movement.toggle_advanced_search_simple' | i18n}}</span>
 				</a>	
-				<a href="" class="linklabel" ng-click="saveSearchAs()">
-					<span ng-show="movementAdvancedSearch">{{'movement.save_search_as' | i18n}}</span>
+				<a href="" class="linklabel" ng-click="openSaveSearchModal()">
+					<span>{{'movement.save_search_as' | i18n}}</span>
 				</a>
 			</div>
 	</div>
 </div>
-<!--<p>Adv searchobj: {{advancedSearchObject}} </p>-->

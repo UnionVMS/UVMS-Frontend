@@ -1,16 +1,17 @@
 <div>
-    <div class="dropdown savedvesselgroupdropdown fullWidthDropdown">
+    <div class="dropdown savedSearchDropdown fullWidthDropdown">
         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled">
             <div class="dropdowntext">{{currentItemLabel}}</div>
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
             <li ng-class="item.code.length === 0 && !initialtextSelectable ? 'disabled' : ''" ng-repeat="item in items | orderBy : 'name'" role="presentation"> 
-                 <a role="menuitem" tabindex="-1">
-            	<span ng-click="selectVal(item,$index)" role="menuitem" tabindex="-1">{{getItemLabel(item)}}</span>
-            	<span class="fa fa-times" ng-click="removeFromSelection(item)"></span>
+                <a role="menuitem" tabindex="-1">
+                	<span ng-click="selectVal(item,$index)" role="menuitem" tabindex="-1">{{getItemLabel(item)}}</span>
+                	<span class="fa fa-times" ng-click="removeSavedSearch(item)"></span>
                 </a>
             </li>
+            <li ng-show="items.length === 0" class="disabled"><a>{{emptyPlaceholder}}</a></li>
         </ul>
     </div>
 </div>

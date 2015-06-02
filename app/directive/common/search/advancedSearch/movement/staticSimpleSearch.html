@@ -1,30 +1,34 @@
 <div class="col-md-12">
-    <div class="col-md-2 smallerpadding">
-        <input type="text" placeholder="{{'movement.search_ext_to_name_placeholder' | i18n}}"  class="form-control" tabindex="5" ng-model="advancedSearchObject.name">
-    </div>
-    <div class="col-md-2 smallerpadding">
-        <dropdown ng-model="advancedSearchObject.SIMPLETIMESPAN" items="timeSpanDropDownItems"></dropdown>
-    </div>
-    <div class="col-md-2 smallerpadding">
-        <datepicker-input model="advancedSearchObject.MOVEMENT_START_DATE" placeholder="{{'movement.search_movementStartDate_placeholder' | i18n}}" ></datepicker-input>
-    </div>
-    <div class="col-md-2 smallerpadding">
-        <datepicker-input model="advancedSearchObject.MOVEMENT_END_DATE" placeholder="{{'movement.search_movementEndDate_placeholder' | i18n}}" ></datepicker-input>
-    </div>
-    <div class="col-md-2 smallerpadding">
-         <dropdown ng-model="advancedSearchObject.FLAGSTATE" initialtext="{{'movement.advanced_search_placeholder_flag_state' | i18n}}" items=""></dropdown>
-    </div>
-    <div class="col-md-2 smallerpadding">
-        <div class="col-md-10 col-md-offset-2 smallerpadding">
-            <button type="submit" class="btn btn-primary btn-sm searchbutton movementadvancedsearchbutton pull-right" ng-click="performAdvancedSearch()">
-                            {{'common.search' | i18n}}
-            </button>
+    <div class="row nomargin">
+        <div class="col-md-2 smallerpadding">
+            <input type="text" placeholder="{{'movement.search_ext_to_name_placeholder' | i18n}}"  class="form-control" tabindex="5" ng-model="advancedSearchObject.name">
         </div>
-        <div class="col-md-12 smallerpadding">
-            <a class="movementsearchresetbutton pull-right" ng-click="resetSearch()">{{'movement.reset_search' | i18n}}</a>
+        <div class="col-md-2 smallerpadding">
+            <dropdown ng-model="advancedSearchObject.SIMPLETIMESPAN" items="timeSpanDropDownItems"></dropdown>
+        </div>
+        <div class="col-md-2 smallerpadding">
+            <datepicker-input model="advancedSearchObject.MOVEMENT_START_DATE" placeholder="{{'movement.search_movementStartDate_placeholder' | i18n}}" ></datepicker-input>
+        </div>
+        <div class="col-md-2 smallerpadding">
+            <datepicker-input model="advancedSearchObject.MOVEMENT_END_DATE" placeholder="{{'movement.search_movementEndDate_placeholder' | i18n}}" ></datepicker-input>
+        </div>
+        <div class="col-md-2 smallerpadding">
+             <dropdown ng-model="advancedSearchObject.FLAGSTATE" initialtext="{{'movement.advanced_search_placeholder_flag_state' | i18n}}" items=""></dropdown>
+        </div>
+        <div class="col-md-2 smallerpadding">
+            <div class="row nomargin">
+                <div class="col-md-12 smallerpadding searchcriteriadropdown">
+                    <saved-search-dropdown type="MOVEMENT" ng-model="selectedSavedSearch" initialtext="{{'movement.advanced_search_placeholder_saved_searches' | i18n}}" callback="performSavedSearch"></saved-search-dropdown>
+                </div>
+                <div class="col-md-12 smallerpadding searchcriteriadropdown">
+                    <button type="submit" class="btn btn-primary btn-sm movementadvancedsearchbutton" ng-click="performAdvancedSearch()">
+                        {{'common.search' | i18n}}
+                    </button>
+                </div>
+                <div class="col-md-12 smallerpadding">
+                    <a class="movementsearchresetbutton pull-right" ng-click="resetSearch()">{{'movement.reset_search' | i18n}}</a>
+                </div>
+            </div>
         </div>
     </div>
-  <!--  <div class="col-md-1">
-        <a class="movementsearchresetbutton" ng-click="resetSearch()">{{'movement.reset_search' | i18n}}</a>
-    </div>-->
 </div>

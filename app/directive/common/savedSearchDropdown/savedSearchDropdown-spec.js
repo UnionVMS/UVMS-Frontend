@@ -1,4 +1,4 @@
-describe('savedVesselGroupDropdown', function() {
+describe('savedSearchDropdown', function() {
 
   beforeEach(module('unionvmsWeb'));
 

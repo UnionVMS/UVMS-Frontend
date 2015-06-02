@@ -41,6 +41,8 @@
     "yes" : "Yes",
     "edit_selection": "Edit selection",
     "save_as_group": "Save as Group",
+    "saved_search_delete_success": "The saved search was succesfully removed.",
+    "saved_search_delete_error": "The saved search couldn't be removed.",
     "export_selection": "Export selection",
     "view_on_map" : "View on map"
 

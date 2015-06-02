@@ -1,76 +1,87 @@
 
 <div class="col-md-3 nopaddingright">
-	<div class="col-md-12 smallerpadding searchcriteria">
-        <input type="text" placeholder="{{'movement.advanced_search_placeholder_by_ircs' | i18n}}"  class="form-control" tabindex="5" ng-model="advancedSearchObject.IRCS">
-    </div>
-     <div class="col-md-6 smallerpadding searchcriteria">
-        <dropdown ng-model="advancedSearchObject.FLAGSTATE" initialtext="{{'movement.advanced_search_placeholder_flag_state' | i18n}}" items=""></dropdown>
-    </div>
-     <div class="col-md-6 smallerpadding searchcriteria">
-        <dropdown ng-model="advancedSearchObject.CARRIERTYPE" initialtext="{{'movement.advanced_search_placeholder_carrier_type' | i18n}}" items=""></dropdown>
-    </div>
-    <div class="col-md-12 smallerpadding searchcriteria">
-    	 <datepicker-input model="advancedSearchObject.DATETIMEFROM" placeholder="{{'movement.advanced_search_placeholder_date_time_from' | i18n}}" ></datepicker-input>
-    </div>
-    <div class="col-md-12 smallerpadding searchcriteria">
-         <datepicker-input model="advancedSearchObject.DATETIMETO" placeholder="{{'movement.advanced_search_placeholder_date_time_to' | i18n}}" ></datepicker-input>
+    <div class="row nomargin">
+    	<div class="col-md-12 smallerpadding searchcriteria">
+            <input type="text" placeholder="{{'movement.advanced_search_placeholder_by_ircs' | i18n}}"  class="form-control" tabindex="5" ng-model="advancedSearchObject.IRCS">
+        </div>
+         <div class="col-md-6 smallerpadding searchcriteria">
+            <dropdown ng-model="advancedSearchObject.FLAGSTATE" initialtext="{{'movement.advanced_search_placeholder_flag_state' | i18n}}" items=""></dropdown>
+        </div>
+         <div class="col-md-6 smallerpadding searchcriteria">
+            <dropdown ng-model="advancedSearchObject.CARRIERTYPE" initialtext="{{'movement.advanced_search_placeholder_carrier_type' | i18n}}" items=""></dropdown>
+        </div>
+        <div class="col-md-12 smallerpadding searchcriteria">
+        	 <datepicker-input model="advancedSearchObject.DATETIMEFROM" placeholder="{{'movement.advanced_search_placeholder_date_time_from' | i18n}}" ></datepicker-input>
+        </div>
+        <div class="col-md-12 smallerpadding searchcriteria">
+             <datepicker-input model="advancedSearchObject.DATETIMETO" placeholder="{{'movement.advanced_search_placeholder_date_time_to' | i18n}}" ></datepicker-input>
+        </div>
     </div>
 </div>
+
 <div class="col-md-3 nopaddingright">
-	<div class="col-md-12 smallerpadding searchcriteria">
-        <input type="text" placeholder="{{'movement.advanced_search_placeholder_by_cfr' | i18n}}"  class="form-control" tabindex="5" ng-model="advancedSearchObject.CFR">
-    </div>
-     <div class="col-md-6 smallerpadding searchcriteria">
-        <dropdown ng-model="advancedSearchObject.GEARTYPE" initialtext="{{'movement.advanced_search_placeholder_gear_type' | i18n}}" items=""></dropdown>
-    </div>
-     <div class="col-md-6 smallerpadding searchcriteria">
-        <dropdown ng-model="advancedSearchObject.LENGTH" initialtext="{{'movement.advanced_search_placeholder_length' | i18n}}" items=""></dropdown>
-    </div>
-     <div class="col-md-6 smallerpadding searchcriteria">
-       <dropdown ng-model="advancedSearchObject.POWER" initialtext="{{'movement.advanced_search_placeholder_power' | i18n}}" items=""></dropdown>
-    </div>
-     <div class="col-md-6 smallerpadding searchcriteria">
-        <dropdown ng-model="advancedSearchObject.PRODUCTOWNER" initialtext="{{'movement.advanced_search_placeholder_product_owner' | i18n}}" items=""></dropdown>
-    </div>
-    <div class="col-md-6 smallerpadding searchcriteria">
-        <dropdown ng-model="advancedSearchObject.ADVANCEDTIMESPAN" items="timeSpanDropDownItems" initialtext="{{'movement.advanced_search_placeholder_time_span_24' | i18n}}"></dropdown>
-    </div>
-     <div class="col-md-6 smallerpadding searchcriteria">
-        <dropdown ng-model="advancedSearchObject.MESSAGETYPE" initialtext="{{'movement.advanced_search_placeholder_msg_type' | i18n}}" items=""></dropdown>
+    <div class="row nomargin">
+    	<div class="col-md-12 smallerpadding searchcriteria">
+            <input type="text" placeholder="{{'movement.advanced_search_placeholder_by_cfr' | i18n}}"  class="form-control" tabindex="5" ng-model="advancedSearchObject.CFR">
+        </div>
+         <div class="col-md-6 smallerpadding searchcriteria">
+            <dropdown ng-model="advancedSearchObject.GEARTYPE" initialtext="{{'movement.advanced_search_placeholder_gear_type' | i18n}}" items=""></dropdown>
+        </div>
+         <div class="col-md-6 smallerpadding searchcriteria">
+            <dropdown ng-model="advancedSearchObject.LENGTH" initialtext="{{'movement.advanced_search_placeholder_length' | i18n}}" items=""></dropdown>
+        </div>
+         <div class="col-md-6 smallerpadding searchcriteria">
+           <dropdown ng-model="advancedSearchObject.POWER" initialtext="{{'movement.advanced_search_placeholder_power' | i18n}}" items=""></dropdown>
+        </div>
+         <div class="col-md-6 smallerpadding searchcriteria">
+            <dropdown ng-model="advancedSearchObject.PRODUCTOWNER" initialtext="{{'movement.advanced_search_placeholder_product_owner' | i18n}}" items=""></dropdown>
+        </div>
+        <div class="col-md-6 smallerpadding searchcriteria">
+            <dropdown ng-model="advancedSearchObject.ADVANCEDTIMESPAN" items="timeSpanDropDownItems" initialtext="{{'movement.advanced_search_placeholder_time_span_24' | i18n}}"></dropdown>
+        </div>
+         <div class="col-md-6 smallerpadding searchcriteria">
+            <dropdown ng-model="advancedSearchObject.MESSAGETYPE" initialtext="{{'movement.advanced_search_placeholder_msg_type' | i18n}}" items=""></dropdown>
+        </div>
     </div>
 </div>
+
 <div class="col-md-3 nopaddingright">
-	<div class="col-md-12 smallerpadding searchcriteria">
-        <input type="text" placeholder="{{'movement.advanced_search_placeholder_by_name' | i18n}}"  class="form-control" tabindex="5" ng-model="advancedSearchObject.NAME">
-    </div>
-    <div class="col-md-6 smallerpadding searchcriteria">
-        <dropdown ng-model="advancedSearchObject.USERORG" initialtext="{{'movement.advanced_search_placeholder_user_org' | i18n}}" items=""></dropdown>
-    </div>
-     <div class="col-md-6 smallerpadding searchcriteria">
-        <dropdown ng-model="advancedSearchObject.MEASSUREDSPEED" initialtext="{{'movement.advanced_search_placeholder_meassured_speed' | i18n}}" items=""></dropdown>
-    </div>
-    <div class="col-md-6 smallerpadding searchcriteria">
-        <dropdown ng-model="advancedSearchObject.STATUS" initialtext="{{'movement.advanced_search_placeholder_status' | i18n}}" items=""></dropdown>
-    </div>
-    <div class="col-md-6 smallerpadding searchcriteria">
-        <dropdown ng-model="advancedSearchObject.GROUPS" initialtext="{{'movement.advanced_search_placeholder_groups' | i18n}}" items=""></dropdown>
-    </div>
-     <div class="col-md-6 smallerpadding searchcriteria">
-        <dropdown ng-model="advancedSearchObject.MAPAREA" initialtext="{{'movement.advanced_search_placeholder_map_area' | i18n}}" items=""></dropdown>
+    <div class="row nomargin">
+    	<div class="col-md-12 smallerpadding searchcriteria">
+            <input type="text" placeholder="{{'movement.advanced_search_placeholder_by_name' | i18n}}"  class="form-control" tabindex="5" ng-model="advancedSearchObject.NAME">
+        </div>
+        <div class="col-md-6 smallerpadding searchcriteria">
+            <dropdown ng-model="advancedSearchObject.USERORG" initialtext="{{'movement.advanced_search_placeholder_user_org' | i18n}}" items=""></dropdown>
+        </div>
+         <div class="col-md-6 smallerpadding searchcriteria">
+            <dropdown ng-model="advancedSearchObject.MEASSUREDSPEED" initialtext="{{'movement.advanced_search_placeholder_meassured_speed' | i18n}}" items=""></dropdown>
+        </div>
+        <div class="col-md-6 smallerpadding searchcriteria">
+            <dropdown ng-model="advancedSearchObject.STATUS" initialtext="{{'movement.advanced_search_placeholder_status' | i18n}}" items=""></dropdown>
+        </div>
+        <div class="col-md-6 smallerpadding searchcriteria">
+            <dropdown ng-model="advancedSearchObject.GROUPS" initialtext="{{'movement.advanced_search_placeholder_groups' | i18n}}" items=""></dropdown>
+        </div>
+         <div class="col-md-6 smallerpadding searchcriteria">
+            <dropdown ng-model="advancedSearchObject.MAPAREA" initialtext="{{'movement.advanced_search_placeholder_map_area' | i18n}}" items=""></dropdown>
+        </div>
     </div>
 </div>
+
 <div class="col-md-3">
-	 <div class="col-md-6 col-md-offset-6 smallerpadding searchcriteriadropdown">
-        <dropdown ng-model="savedSearches" initialtext="{{'movement.advanced_search_placeholder_saved_searches' | i18n}}" items=""></dropdown>
-    </div>
-    <div class="col-md-6 col-md-offset-6 smallerpadding searchcriteriadropdown">
-        <button type="submit" class="btn btn-primary btn-sm movementadvancedsearchbutton" ng-click="performAdvancedSearch()">
-            {{'common.search' | i18n}}
-        </button>
-    </div>
-     <div class="col-md-6 col-md-offset-6 smallerpadding searchcriteriadropdown">
-        <a class="movementadvancesresetbutton pull-right" ng-click="resetSearch()">
-            {{'movement.reset_search' | i18n}}
-        </a>
+    <div class="row nomargin">
+    	<div class="col-md-6 smallerpadding col-md-offset-6 searchcriteriadropdown">
+            <saved-search-dropdown type="MOVEMENT" ng-model="selectedSavedSearch" initialtext="{{'movement.advanced_search_placeholder_saved_searches' | i18n}}" callback="performSavedSearch"></saved-search-dropdown>
+        </div>
+        <div class="col-md-6 smallerpadding col-md-offset-6 searchcriteriadropdown">
+            <button type="submit" class="btn btn-primary btn-sm movementadvancedsearchbutton" ng-click="performAdvancedSearch()">
+                {{'common.search' | i18n}}
+            </button>
+        </div>
+         <div class="col-md-6 smallerpadding col-md-offset-6 searchcriteriadropdown">
+            <a class="movementadvancesresetbutton pull-right" ng-click="resetSearch()">
+                {{'movement.reset_search' | i18n}}
+            </a>
+        </div>
     </div>
 </div>

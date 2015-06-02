@@ -8,7 +8,7 @@
                 <input type="text" placeholder="{{'mobileTerminal.search_IRCS_placeholder' | i18n}}"  class="form-control" tabindex="2" ng-model="advancedSearchObject.IRCS" ng-change="onSearchInputChange()">
             </div>
             <div class="col-md-4">
-                <saved-vessel-group-dropdown class="dropdown simpleSearch" ng-model="selectedVesselGroup" initialtext="{{'mobileTerminal.search_selectVesselGroup_placeholder' | i18n}}" callback="searchSelectedGroup"></saved-vessel-group-dropdown>
+                <saved-search-dropdown type="VESSEL" class="dropdown simpleSearch" ng-model="selectedVesselGroup" initialtext="{{'mobileTerminal.search_selectVesselGroup_placeholder' | i18n}}" callback="searchSelectedGroup"></saved-search-dropdown>
             </div>
         </div>
         <div class="row">

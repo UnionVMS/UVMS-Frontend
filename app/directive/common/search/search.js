@@ -16,7 +16,7 @@ angular.module('unionvmsWeb').directive('search', function() {
 });
 
 angular.module('unionvmsWeb')
-    .controller('searchCtrl', function($scope, $modal, searchService, VesselListPage, vesselRestService){
+    .controller('searchCtrl', function($scope, savedSearchService, searchService, VesselListPage, vesselRestService){
     
     $scope.availableTypes = [];
     $scope.advancedSearchAvailable = $scope.advanced;
@@ -97,20 +97,7 @@ angular.module('unionvmsWeb')
     };
 
     $scope.openSaveGroupModal = function(){
-        var modalInstance = $modal.open({
-          templateUrl: 'partial/vessel/saveVesselGroupModal/saveVesselGroupModal.html',
-          controller: 'SaveVesselGroupModalInstanceCtrl',
-          windowClass : "saveVesselGroupModal",
-          size: "small",
-          resolve: {
-                advancedSearchClicked: function(){
-                    return true;
-                },
-                selectedVessels : function(){
-                    return undefined;
-                }
-            }
-        });
+        savedSearchService.openSaveSearchModal("VESSEL", true);        
     };    
 
     init();
