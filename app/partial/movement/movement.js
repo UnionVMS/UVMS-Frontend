@@ -49,11 +49,12 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
 
     //Start the autmatic refresh
     $scope.startAutoRefresh = function(){
+        $scope.stopAutoRefresh();
         $scope.autoRefresh = true;
         $scope.autoRefreshTimer = AUTO_REFRESH_INTERVAL_SECONDS;
         autoRefreshListWithRegularIntervals();
     };
-    
+
     //Refresh the list
     $scope.refreshMovements = function(){
         $scope.searchMovements();
@@ -65,7 +66,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
             .then(retriveMovementsSuccess, retriveMovementsError);
     };
 
-    
+
     $scope.resetSearchResult = function(){
         $scope.currentSearchResults.page = 0;
         $scope.currentSearchResults.totalNumberOfPages = 0;
