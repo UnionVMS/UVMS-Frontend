@@ -1,24 +1,22 @@
 <div ng-controller="advancedSearchMovementCtrl"> 
-	<div class="row movementsearch">
-		<div class="movementsimplesearchcontent" ng-show="movementAdvancedSearch">
-			<div static-include="directive/common/search/advancedSearch/movement/staticSimpleSearch.html"></div>
-		</div>
-		<div class="movementadvancedsearchcontent" ng-hide="movementAdvancedSearch">
-			<div static-include="directive/common/search/advancedSearch/movement/staticAdvancedSearch.html"></div>
-		</div>
-        <div class="searchFooter">
-    		<div class="col-md-8">
-    			<a ng-click="toggleAdvancedSearch()">
-    				<span ng-show="movementAdvancedSearch">{{'movement.toggle_advanced_search_adv' | i18n}}</span>
-    				<span ng-hide="movementAdvancedSearch">{{'movement.toggle_advanced_search_simple' | i18n}}</span>
-    			</a>	
-    			<a ng-click="openSaveSearchModal()">
-    				<span>{{'movement.save_search_as' | i18n}}</span>
-    			</a>
-    		</div>
-            <div class="col-md-4 floatRight textAlignRight">
-                <a ng-click="resetSearch()">{{'movement.reset_search' | i18n}}</a>
-            </div>
+    <div class="row movementsearch">
+        <div class="movementsimplesearchcontent" ng-show="movementAdvancedSearch">
+            <div static-include="directive/common/search/advancedSearch/movement/staticSimpleSearch.html"></div>
         </div>
-	</div>
+        <div class="movementadvancedsearchcontent" ng-hide="movementAdvancedSearch">
+            <div static-include="directive/common/search/advancedSearch/movement/staticAdvancedSearch.html"></div>
+        </div>
+        <div class="col-md-8 searchFooter">
+            <a ng-click="toggleAdvancedSearch()">
+                <span ng-show="movementAdvancedSearch">{{'movement.toggle_advanced_search_adv' | i18n}}</span>
+                <span ng-hide="movementAdvancedSearch">{{'movement.toggle_advanced_search_simple' | i18n}}</span>
+            </a>    
+            <a ng-click="openSaveSearchModal()">
+                <span>{{'movement.save_search_as' | i18n}}</span>
+            </a>
+        </div>
+        <div class="col-md-4 searchFooter floatRight textAlignRight">
+            <a ng-click="resetSearch()">{{'movement.reset_search' | i18n}}</a>
+        </div>
+    </div>
 </div>
