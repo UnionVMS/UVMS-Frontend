@@ -1,18 +1,20 @@
 <div ng-controller="MovementCtrl">
+    <div static-include="partial/movement/movementPageHeader/movementPageHeader.html"></div>
 	<div class="container">
-		<div static-include="partial/movement/movementPageHeader/movementPageHeader.html"></div>
+        <div class="row">
+            <div class="col-md-12">
+		      <advanced-search searchfunc="searchMovements" vesselGroupCallback="selectGroupCallback()" modeltype="'MOVEMENT'" advancedsearchvisible="true"></advanced-search>
+            </div>
+        </div>
 	</div>
-	<div class="container movementcontainer">
-		<advanced-search searchfunc="searchMovements" vesselGroupCallback="selectGroupCallback()" modeltype="'MOVEMENT'" advancedsearchvisible="true"></advanced-search>
-	</div>		
-	<div class="container movementcontainer">
-		 <div class="row editSelectionsContainer">
+    <div class="containerWrapper grayContainer">		
+    	<div class="container containerWithTopBottomPadding">
+    		<div class="row editSelectionsContainer">
                 <div class="col-md-2">
-                    <dropdown ng-model="editSelection" initialtext="Edit selection" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+                    <dropdown ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
                 </div>
             </div>
-		<div ng-include="'partial/movement/movementList/movementList.html'"></div>
-	</div>
+    		<div ng-include="'partial/movement/movementList/movementList.html'"></div>
+        </div>
+    </div>
 </div>
-
-

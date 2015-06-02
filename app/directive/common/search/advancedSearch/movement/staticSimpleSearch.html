@@ -1,7 +1,7 @@
 <div class="col-md-12">
 
     <div class="row nomargin">
-        <div class="col-md-2 smallerpadding">
+        <div class="col-md-2 nopaddingleft">
             <input type="text" placeholder="{{'movement.search_ext_to_name_placeholder' | i18n}}"  class="form-control" tabindex="5" ng-model="advancedSearchObject.name">
         </div>
         <div class="col-md-2 smallerpadding">
@@ -16,18 +16,15 @@
         <div class="col-md-2 smallerpadding">
              <dropdown ng-model="advancedSearchObject.FLAGSTATE" initialtext="{{'movement.advanced_search_placeholder_flag_state' | i18n}}" items=""></dropdown>
         </div>
-        <div class="col-md-2 smallerpadding">
+        <div class="col-md-2 nopaddingright">
             <div class="row nomargin">
-                <div class="col-md-12 smallerpadding searchcriteriadropdown">
+                <div class="col-md-12 colNoPadding">
                     <saved-search-dropdown type="MOVEMENT" ng-model="selectedSavedSearch" initialtext="{{'movement.advanced_search_placeholder_saved_searches' | i18n}}" callback="performSavedSearch"></saved-search-dropdown>
                 </div>
-                <div class="col-md-12 smallerpadding searchcriteriadropdown">
+                <div class="col-md-12 colNoPadding searchcriteriadropdown">
                     <button type="submit" class="btn btn-primary btn-sm movementadvancedsearchbutton" ng-click="performAdvancedSearch()">
                         {{'common.search' | i18n}}
                     </button>
-                </div>
-                <div class="col-md-12 smallerpadding">
-                    <a class="movementsearchresetbutton pull-right" ng-click="resetSearch()">{{'movement.reset_search' | i18n}}</a>
                 </div>
             </div>
         </div>
