@@ -29,7 +29,6 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     $scope.autoRefreshTimer = AUTO_REFRESH_INTERVAL_SECONDS;
     var autoRefreshListWithRegularIntervals = function(){
         autoRefreshTimer = $timeout(function(){
-            console.log("AUTO REFRESH TIMER");
             $scope.autoRefreshTimer--;
             if($scope.autoRefresh && $scope.autoRefreshTimer <= 0){
                 $scope.refreshMovements();
