@@ -93,7 +93,8 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             return {
                 attributes : attributesObjects,
                 channels : jsonChannels,
-                mobileTerminalId : { guid: this.guid }
+                mobileTerminalId : { guid: this.guid },
+                type : this.type
             };
         };
 
@@ -223,7 +224,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
         };
 
         MobileTerminal.prototype.isEqualTerminal = function(item) {
-            if(item.getSerialNumber() === this.getSerialNumber() && item.getSystemType() === this.getSystemType()){
+            if(item.guid === this.guid){
                 return true;
             }else{
                 return false;

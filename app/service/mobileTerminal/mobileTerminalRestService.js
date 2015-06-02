@@ -38,8 +38,8 @@ angular.module('unionvmsWeb')
                 });
             },
             mobileTerminalHistory : function(){
-                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/history', {}, {
-                    list: { method: 'PUT'}
+                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/history/:id', {}, {
+                    list: { method: 'GET'}
                 });
             },
         };
@@ -292,7 +292,7 @@ angular.module('unionvmsWeb')
             }, 
             getHistoryForMobileTerminal : function(mobileTerminal){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.mobileTerminalHistory().list({guid: mobileTerminal.guid}, function(response) {
+                mobileTerminalRestFactory.mobileTerminalHistory().get({id: mobileTerminal.guid}, function(response) {
                     if (response.code !== 200) {
                         deferred.reject("Invalid response status");
                         return;

@@ -2,12 +2,12 @@ describe('mobileTerminalHistoryModalCtrl', function() {
 
 	beforeEach(module('unionvmsWeb'));
 
-	var scope, ctrl, modalInstance, currentMobileTerminalHistory, mobileTerminalId;
+	var scope, ctrl, modalInstance, currentMobileTerminalHistory, mobileTerminal;
 
     beforeEach(inject(function($rootScope, $controller) {
         scope = $rootScope.$new();
         currentMobileTerminalHistory = {};
-        mobileTerminalId = {};
+        mobileTerminal = {};
         modalInstance = {                    // Create a mock object using spies
             close: jasmine.createSpy('modalInstance.close'),
             dismiss: jasmine.createSpy('modalInstance.dismiss'),
@@ -15,7 +15,7 @@ describe('mobileTerminalHistoryModalCtrl', function() {
               then: jasmine.createSpy('modalInstance.result.then')
             }
         };
-        ctrl = $controller('mobileTerminalHistoryModalCtrl', {$scope: scope, $modalInstance: modalInstance, currentMobileTerminalHistory: currentMobileTerminalHistory, mobileTerminalId: mobileTerminalId});
+        ctrl = $controller('mobileTerminalHistoryModalCtrl', {$scope: scope, $modalInstance: modalInstance, currentMobileTerminalHistory: currentMobileTerminalHistory, mobileTerminal: mobileTerminal});
 
 
     }));	

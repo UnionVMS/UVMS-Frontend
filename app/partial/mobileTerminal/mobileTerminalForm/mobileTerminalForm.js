@@ -247,7 +247,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     //Success getting history
     var onGetMobileTerminalHistorySuccess = function(historyList) {
         $scope.currentMobileTerminalHistory = historyList;
-         openMobileTerminalHistoryModal($scope.currentMobileTerminalHistory, $scope.currentMobileTerminal.mobileTerminalId);
+         openMobileTerminalHistoryModal($scope.currentMobileTerminalHistory, $scope.currentMobileTerminal);
 
     };
 
@@ -262,7 +262,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
          getMobileTerminalHistoryForCurrentMobileTerminal();
     };
 
-    var openMobileTerminalHistoryModal = function(currentMobileTerminalHistory, mobileTerminalId) {
+    var openMobileTerminalHistoryModal = function(currentMobileTerminalHistory, mobileTerminal) {
 
         var modalInstance = $modal.open({
           templateUrl: 'partial/mobileTerminal/mobileTerminalHistoryModal/mobileTerminalHistoryModal.html',
@@ -272,8 +272,8 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
             currentMobileTerminalHistory: function() {
                 return currentMobileTerminalHistory;
             },
-            mobileTerminalId: function(){
-                return mobileTerminalId;
+            mobileTerminal: function(){
+                return mobileTerminal;
             }
           }
         });

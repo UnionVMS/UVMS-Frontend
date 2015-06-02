@@ -1,7 +1,7 @@
-angular.module('unionvmsWeb').controller('mobileTerminalHistoryModalCtrl',function($scope, $modalInstance, currentMobileTerminalHistory, mobileTerminalId){
+angular.module('unionvmsWeb').controller('mobileTerminalHistoryModalCtrl',function($scope, $modalInstance, currentMobileTerminalHistory, mobileTerminal){
 
     $scope.currentMobileTerminalHistory = currentMobileTerminalHistory;
-    $scope.mobileTerminalId = mobileTerminalId;
+    $scope.mobileTerminal = mobileTerminal;
 
     //Current filter and sorting for the results table
     $scope.sortType = 'changeDate';
