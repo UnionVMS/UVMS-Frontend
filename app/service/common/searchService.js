@@ -1,6 +1,6 @@
 angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService) {
 
-	var getListRequest = new GetListRequest(1, 10, true, []),
+	var getListRequest = new GetListRequest(1, 20, true, []),
         advancedSearchObject  = {};
 	var searchService = {
 
@@ -148,7 +148,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
             this.setSearchCriterias(this.getAdvancedSearchCriterias());
         },
         reset : function(){
-            getListRequest = new GetListRequest(1, 10, true, []);
+            getListRequest = new GetListRequest(1, 20, true, []);
             advancedSearchObject = {};
         },
         resetAdvancedSearch : function(){
