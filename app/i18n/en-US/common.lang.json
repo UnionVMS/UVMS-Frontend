@@ -16,6 +16,7 @@
     "next" : "Next" ,
     "no" : "No" ,
     "not_implemented" : "This feature is not implemented yet." ,
+    "no_items_selected" : "At least one item must be selected." ,
     "remove" : "Remove",
     "reset" : "Reset",
     "save" : "Save",

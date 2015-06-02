@@ -19,23 +19,13 @@
         <div class="container containerWithTopBottomPadding">
             <div class="row editSelectionsContainer">
                 <div class="col-md-2">
-                    <dropdown ng-model="editSelection" initialtext="Edit selection" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+                    <dropdown ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
                 </div>
                 <div class="col-md-2">
                     <button type="button" class="btn btn-sm btn-primary" ng-click="toggleAddNewMobileTerminal()">+ Add new</button>                
                 </div>
             </div>
             <div ng-include="'partial/mobileTerminal/mobileTerminalList/mobileTerminalList.html'"></div>
-            <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0">
-                <div class="col-md-12">
-                    {{'common.search_results_current_page' | i18n:[currentSearchResults.page, currentSearchResults.totalNumberOfPages]}}
-                </div>
-            </div>
-            <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0 && currentSearchResults.totalNumberOfPages > currentSearchResults.page">
-                <div class="col-md-12 textAlignCenter">
-                    <span class="link" ng-click="loadNextPage()"> {{'common.search_results_load_more' | i18n | uppercase}}</span>            
-                </div>
-            </div>
         </div>
     </div>
 </div>

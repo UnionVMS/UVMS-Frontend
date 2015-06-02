@@ -24,6 +24,19 @@ angular.module('unionvmsWeb')
 		return movement;
 	};
 
+
+    //TODO: FIX
+    Movement.prototype.isEqualMovement = function(item) {
+        if( item.state === this.state && 
+            item.externalMarking === this.externalMarking &&
+            item.calculatedSpeed === this.calculatedSpeed
+            ){
+            return true;
+        }else{
+            return false;
+        }
+    };    
+
 	return Movement;
 	
 });

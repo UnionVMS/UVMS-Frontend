@@ -17,10 +17,11 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         sortReverse : false
     };
 
-
+    //Selected by checkboxes
+    $scope.selectedMovements = [];
+    
     var init = function(){
          $scope.searchMovements();
-         $scope.setupDropdowns();
     };
 
     //AUTOMATIC REFRESH OF THE MOVEMENTS LIST
@@ -89,6 +90,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         //TODO: REMOVE THIS! JUST USED FOR DEBUGGING
         movementListPage.currentPage = 1;
         movementListPage.totalNumberOfPages = 1;
+        //TODO!!!
 
         if (movementListPage.totalNumberOfPages === 0 ) {
             $scope.currentSearchResults.errorMessage = locale.getString('movement.movement_search_error_result_zero_pages');
@@ -108,8 +110,10 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     };
     
     var retriveMovementsError = function(error){
-        console.error("Error retrieveing movements");
-        console.error(error);
+        $scope.currentSearchResults.loading = false;
+        $scope.currentSearchResults.errorMessage = locale.getString('common.search_failed_error');
+        $scope.currentSearchResults.totalNumberOfPages = 0;
+        $scope.currentSearchResults.page = 0;
     };
 
 
@@ -126,8 +130,44 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         }
     };
 
-    $scope.setupDropdowns = function(){
-       
+   //Clear the selection
+    $scope.clearSelection = function(){
+        $scope.selectedMovements = [];
+    };
+
+    //Add a mobile terminal to the selection
+    $scope.addToSelection = function(item){
+        $scope.selectedMovements.push(item);
+    };
+
+    //Remove a mobile terminal from the selection
+    $scope.removeFromSelection = function(item){
+        $.each($scope.selectedMovements, function(index, movement){
+            if(movement.isEqualMovement(item)){
+                $scope.selectedMovements.splice(index, 1);
+                return false;
+            }
+        });
+    };
+
+    //Callback function for the "Edit selection" dropdown
+    $scope.editSelectionCallback = function(selectedItem){
+        if($scope.selectedMovements.length){
+            //SEE ON MAP
+            if(selectedItem.code === 'MAP'){
+               alertService.showInfoMessageWithTimeout("See on map is not implemented yet. " +$scope.selectedMovements.length +" movements were selected");
+            }
+            //EXPORT SELECTION
+            else if(selectedItem.code === 'EXPORT'){
+                alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
+            }
+            //INACTIVATE
+            else if(selectedItem.code === 'INACTIVATE'){
+                alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
+            }
+        }else{
+            alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
+        }
     };
 
     $scope.$on("$destroy", function() {
