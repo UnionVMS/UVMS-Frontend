@@ -148,8 +148,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
 
         MobileTerminal.prototype.toCreatePoll = function() {
             return {
-                mobileTerminal: { guid: this.guid },
-                comChannel: this.channels[0].dataTransferObject()
+                comChannelId: this.channels[0].guid
             };
         };
 

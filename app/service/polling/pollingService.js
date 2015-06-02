@@ -122,8 +122,7 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
             return [
                 getAttr("START_DATE", pollingOptions.programPoll.startDate),
                 getAttr("END_DATE", pollingOptions.programPoll.endDate),
-                getAttr("FREQUENCY", pollingOptions.programPoll.time),
-                getAttr("USER", "frontend user")
+                getAttr("FREQUENCY", pollingOptions.programPoll.time)
             ];
         }
         else if (type === "CONFIGURATION") {
@@ -132,26 +131,23 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
                 getAttr("GRACE_PERIOD", pollingOptions.configurationPoll.gracePeriod),
                 getAttr("IN_PORT_GRACE", pollingOptions.configurationPoll.inPortGrace),
                 getAttr("DNID", pollingOptions.configurationPoll.newDNID),
-                getAttr("MEMBER_ID", pollingOptions.configurationPoll.newMemberNo),
-                getAttr("USER", "frontend user")
+                getAttr("MEMBER_ID", pollingOptions.configurationPoll.newMemberNo)
             ];
         }
         else if (type === "SAMPLING") {
             return [
                 getAttr("START_DATE", pollingOptions.samplingPoll.startDate),
-                getAttr("END_DATE", pollingOptions.samplingPoll.endDate),
-                getAttr("USER", "frontend user")
+                getAttr("END_DATE", pollingOptions.samplingPoll.endDate)                
             ];
         }
         else { // type === MANUAL POLL
-            return [
-                getAttr("USER", "frontend user")
-            ];
+            return [];
         }
     }
 
     function getCreatePollsRequestData() {
         return {
+            userName: "FRONTEND_USER",
             pollType: pollingOptions.type + "_POLL",
             comment: pollingOptions.comment,
             attributes: getPollAttributes(pollingOptions.type),

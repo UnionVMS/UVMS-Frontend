@@ -15,7 +15,7 @@
 				    <div class="pointer pull-right" ng-click="remove(group, mt)">
 				    	<i class="fa fa-times"></i>
 				   	</div>
-					<p>{{ mt.associatedVessel.name }}: {{ mt.mobileTerminalId.systemType }}</p>
+					<p>{{ mt.associatedVessel.name }}: {{ mt.type }}</p>
 				</li>
 			</ul>
 		</li>
@@ -26,7 +26,7 @@
 		    <div class="pointer pull-right" ng-click="remove(undefined, mt)">
 		    	<i class="fa fa-times"></i>
 		   	</div>
-			<p>{{ mt.associatedVessel.name }}: {{ mt.mobileTerminalId.systemType }}</p>
+			<p>{{ mt.associatedVessel.name }}: {{ mt.type }}</p>
 		</li>
 	</ul>
 </div>
