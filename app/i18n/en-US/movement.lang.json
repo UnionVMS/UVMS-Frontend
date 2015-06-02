@@ -1,7 +1,9 @@
 {
 	"header_position_reports" : "Position reports",
 	"header_manual_position_reports" : "Manual position reports",
-	"refresh" : "Refresh",
+    "refresh" : "Refresh",
+    "refresh_automatic_countdown" : "(Automatic refresh in {1}s)",
+	"refresh_automatic_disabled" : "(Automatic refresh disabled)",
 	"table_header_flag_state" : "F.S",
 	"table_header_external_marking":"Ext.No",
 	"table_header_ircs":"IRCS",

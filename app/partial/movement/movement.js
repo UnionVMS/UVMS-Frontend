@@ -1,13 +1,12 @@
-angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, movementRestService, searchService, locale){
+angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, alertService, movementRestService, searchService, locale){
 
-   //Current filter and sorting for the results table
+    //Current filter and sorting for the results table
     $scope.sortType = 'state';
     $scope.sortReverse = false;
     $scope.sortFilter = '';
-    //$scope.movements = [];
     $scope.editSelectionDropdownItems = [{'text':locale.getString('movement.editselection_see_on_map'),'code':'MAP'}, {'text':locale.getString('movement.editselection_export_selection'),'code':'EXPORT'}, {'text':locale.getString('movement.editselection_inactivate'),'code':'INACTIVE'}];
     
-   //Search objects and results
+    //Search objects and results
     $scope.currentSearchResults = {
         page : 1,
         totalNumberOfPages : 25,
@@ -20,23 +19,53 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, movemen
 
 
     var init = function(){
-        //$scope.getMovementsForList();
          $scope.searchMovements();
     };
 
+    //AUTOMATIC REFRESH OF THE MOVEMENTS LIST
+    var autoRefreshTimer;
+    var AUTO_REFRESH_INTERVAL_SECONDS = 60;
+    $scope.autoRefresh = false;
+    $scope.autoRefreshTimer = AUTO_REFRESH_INTERVAL_SECONDS;
+    var autoRefreshListWithRegularIntervals = function(){
+        autoRefreshTimer = $timeout(function(){
+            console.log("AUTO REFRESH TIMER");
+            $scope.autoRefreshTimer--;
+            if($scope.autoRefresh && $scope.autoRefreshTimer <= 0){
+                $scope.refreshMovements();
+                $scope.autoRefreshTimer = AUTO_REFRESH_INTERVAL_SECONDS;
+            }
+            autoRefreshListWithRegularIntervals();
+        }, 1000);
+    };
+
+    //Stop the autmatic refresh
+    $scope.stopAutoRefresh = function(){
+        $scope.autoRefresh = false;
+        if(angular.isDefined(autoRefreshTimer)){
+            $timeout.cancel(autoRefreshTimer);
+        }
+    };
+
+    //Start the autmatic refresh
+    $scope.startAutoRefresh = function(){
+        $scope.autoRefresh = true;
+        $scope.autoRefreshTimer = AUTO_REFRESH_INTERVAL_SECONDS;
+        autoRefreshListWithRegularIntervals();
+    };
+    
+    //Refresh the list
+    $scope.refreshMovements = function(){
+        $scope.searchMovements();
+    };
 
     $scope.searchMovements = function(){
-        //resetSearchResult
         $scope.resetSearchResult();
-        searchService.searchMovements(false)
+        searchService.searchMovements()
             .then(retriveMovementsSuccess, retriveMovementsError);
     };
 
-/*    $scope.getMovementsForList = function(){
-        movementRestService.getMovementList()
-        .then(retriveMovementsSuccess, retriveMovementsError);
-    };
-*/
+    
     $scope.resetSearchResult = function(){
         $scope.currentSearchResults.page = 0;
         $scope.currentSearchResults.totalNumberOfPages = 0;
@@ -52,6 +81,11 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, movemen
         console.info("Success in retrieveing movements..");
         console.info(movementListPage);
         $scope.currentSearchResults.loading = false;
+        $scope.startAutoRefresh();
+
+        //TODO: REMOVE THIS! JUST USED FOR DEBUGGING
+        movementListPage.currentPage = 1;
+        movementListPage.totalNumberOfPages = 1;
 
         if (movementListPage.totalNumberOfPages === 0 ) {
             $scope.currentSearchResults.errorMessage = locale.getString('movement.movement_search_error_result_zero_pages');
@@ -76,21 +110,25 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, movemen
     };
 
 
-    $scope.refreshMovements = function(){
-        console.info("Lets perform a new search!");
-        $scope.searchMovements();
-    };
-
     $scope.loadNextPage = function(){
         if ($scope.currentSearchResults.page < $scope.currentSearchResults.totalNumberOfPages) {
             //increase page with 1
             searchService.increasePage();
             $scope.currentSearchResults.loading = true;
-            searchService.searchMovements(true)
+            searchService.searchMovements()
                 .then(retriveMovementsSuccess, retriveMovementsError);
+
+            //Stop auto refresh
+            $scope.stopAutoRefresh();
         }
     };
 
+
+    $scope.$on("$destroy", function() {
+        alertService.hideMessage();
+        searchService.reset();
+        $scope.stopAutoRefresh();
+    });    
 
     init();
 
