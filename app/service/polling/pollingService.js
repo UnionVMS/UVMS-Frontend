@@ -120,8 +120,8 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
     function getPollAttributes(type) {
         if (type === "PROGRAM") {
             return [
-                getAttr("START_DATE", pollingOptions.programPoll.startDate),
-                getAttr("END_DATE", pollingOptions.programPoll.endDate),
+                getAttr("START_DATE", addUTCTimeZone(pollingOptions.programPoll.startDate)),
+                getAttr("END_DATE", addUTCTimeZone(pollingOptions.programPoll.endDate)),
                 getAttr("FREQUENCY", pollingOptions.programPoll.time)
             ];
         }
@@ -136,8 +136,8 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
         }
         else if (type === "SAMPLING") {
             return [
-                getAttr("START_DATE", pollingOptions.samplingPoll.startDate),
-                getAttr("END_DATE", pollingOptions.samplingPoll.endDate)                
+                getAttr("START_DATE", addUTCTimeZone(pollingOptions.samplingPoll.startDate)),
+                getAttr("END_DATE", addUTCTimeZone(pollingOptions.samplingPoll.endDate))                
             ];
         }
         else { // type === MANUAL POLL
@@ -188,6 +188,10 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
         pollingOptions.programPoll = {};
         pollingOptions.configurationPoll = {};
 		pollingOptions.samplingPoll = {};
+    }
+
+    function addUTCTimeZone(timeDate){
+        return moment(timeDate).format("YYYY-MM-DD HH:mm:ss Z");
     }
 
 	var pollingService = {

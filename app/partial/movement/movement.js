@@ -70,9 +70,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
 
     $scope.resetSearchResult = function(){
 
-        /************* //REMOVE THIS WHEN BACKEND CAN TAKE SEARCHCRITERIAS!!/**********/
-        searchService.resetSearchCriterias(); //<--TO BE REMOVED!
-        /******************************************************************************/
+      
         $scope.currentSearchResults.page = 0;
         $scope.currentSearchResults.totalNumberOfPages = 0;
         $scope.currentSearchResults.movements = [];

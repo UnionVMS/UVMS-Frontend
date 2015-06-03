@@ -7,7 +7,6 @@ angular.module('unionvmsWeb').directive('advancedSearchMovementForm', function()
 		},
 		templateUrl: 'directive/common/search/advancedSearch/movement/advancedSearchMovementForm.html',
 		link: function(scope, element, attrs, fn) {
-			
 		
 		}
 	};
@@ -22,12 +21,11 @@ angular.module('unionvmsWeb')
 		$scope.toggleAdvancedSearch = function(){
 				$scope.movementAdvancedSearch = !$scope.movementAdvancedSearch;
 				$scope.resetSearch();
-
 			};
 
 		$scope.resetSearch = function(){
 				//empty advancedSearchobject.
-				$scope.markingNameIrcs = "";
+				$scope.extMarkNameIRCS = "";
 				$scope.$selectedSavedSearch = "";
 				$scope.resetAdvancedSearchForm(false);
 		};
@@ -65,7 +63,12 @@ angular.module('unionvmsWeb')
 		$scope.setSimpleSearchCriterias = function (value){
 			$scope.advancedSearchObject.NAME = value + "*";
 			$scope.advancedSearchObject.IRCS = value + "*";
-			$scope.advancedSearchObject.MARKING = value + "*";
+			//Shall we really search on external marking??  
+			//$scope.advancedSearchObject.MARKING = value + "*";
+		};
+
+		$scope.setSelectedTimeSpan = function(selectedItem){
+			console.log(selectedItem);
 		};
 
 		var init = function(){
