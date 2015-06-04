@@ -11,7 +11,7 @@ describe('RunningProgramPollsCtrl', function(Poll) {
 
     it('should be possible to start a current program poll', inject(function(Poll) {
         var p = new Poll();
-        p.attributes.RUNNING = "STOPPED";
+        p.attributes.PROGRAM_RUNNING = "FALSE";
         p.attributes.START_DATE = "2015-05-01";
         p.attributes.END_DATE = "2015-05-15";
 
@@ -21,7 +21,7 @@ describe('RunningProgramPollsCtrl', function(Poll) {
 
     it('should not be possible to start an expired program poll', inject(function(Poll) {
         var p = new Poll();
-        p.attributes.RUNNING = "STOPPED";
+        p.attributes.PROGRAM_RUNNING = "FALSE";
         p.attributes.START_DATE = "2015-03-01";
         p.attributes.END_DATE = "2015-03-15";
 
@@ -31,7 +31,7 @@ describe('RunningProgramPollsCtrl', function(Poll) {
 
     it('should not be possible to start a future program poll', inject(function(Poll) {
         var p = new Poll();
-        p.attributes.RUNNING = "STOPPED";
+        p.attributes.PROGRAM_RUNNING = "FALSE";
         p.attributes.START_DATE = "2015-03-01";
         p.attributes.END_DATE = "2015-03-15";
 
@@ -41,19 +41,21 @@ describe('RunningProgramPollsCtrl', function(Poll) {
 
     it('should not be possible to start an already started program poll', inject(function(Poll) {
         var p = new Poll();
-        p.attributes.RUNNING = "STARTED";
+        p.attributes.PROGRAM_RUNNING = "TRUE";
         expect(scope.possibleToStart(p)).toBe(false);
     }));
 
     it('should be possible to stop a started poll', inject(function(Poll) {
         var p = new Poll();
-        p.attributes.RUNNING = "STARTED";
+        p.attributes.START_DATE = "2015-03-01";
+        p.attributes.END_DATE = "2045-03-15";        
+        p.attributes.PROGRAM_RUNNING = "TRUE";
         expect(scope.possibleToStop(p)).toBe(true);
     }));
 
     it('should not be possible to stop an already stopped program poll', inject(function(Poll) {
         var p = new Poll();
-        p.attributes.RUNNING = "STOPPED";
+        p.attributes.PROGRAM_RUNNING = "FALSE";
         expect(scope.possibleToStop(p)).toBe(false);
     }));
 });
