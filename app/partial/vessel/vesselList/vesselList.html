@@ -4,7 +4,7 @@
             <table class="searchResults">
                 <thead>
                 <tr>
-                    <th><input type="checkbox" ng-model="item.selectedAll" ng-click="checkAll()"/></th>
+                    <th><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
                     <th>
                         <a href="" ng-click="sortType='state'; sortReverse = !sortReverse">
                             {{'vessel.table_header_flag_state' | i18n}}
@@ -70,7 +70,7 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="item in currentSearchResults.vessels | orderBy:sortType:sortReverse | filter:searchFilter">
-                    <td><input type="checkbox" ng-model="item.Selected" ng-click="checkedVessel(item)"/></td>
+                    <td><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)"/></td>
                     <td>{{item.countryCode}}</td>
                     <td>{{item.externalMarking}}</td>
                     <td>{{item.name}}</td>

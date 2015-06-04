@@ -56,7 +56,7 @@ angular.module('unionvmsWeb')
 			$scope.power =[{'text':'100 - 200','code':'100 - 200'},{'text':'201 - 300','code':'201 - 300'}];
 			$scope.carrierLength = [{'text':'100-200','code':'100-200'},{'text':'201-300','code':'201-300'}];
 			$scope.productOwner = [{'text':'SWE','code':'46'},{'text':'IRL','code':'49'}];
-			$scope.messageType = [{'text':'106','code':'106'},{'text':'110','code':'110'}];
+			$scope.messageType = [{'text':'Entry','code':'ENT'},{'text':'110','code':'110'}];
 			$scope.userOrg = [{'text':'111','code':'111'},{'text':'222','code':'222'}];
 			$scope.meassuredSpeed = [{'text':'0 - 5','code':'0 - 5'},{'text':'6 - 10','code':'6 - 10'},{'text':'11 - 15','code':'11 - 15'},{'text':'16 - 20','code':'16 - 20'},{'text':'21 - 25','code':'21 - 25'}];
 			$scope.status = [{'text':'Port','code':'port'},{'text':'Sailing','code':'sailing'}];

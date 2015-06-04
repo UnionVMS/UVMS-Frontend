@@ -15,19 +15,7 @@
     <div class="containerWrapper grayContainer">
         <div class="vesselcontainerwrapper container containerWithTopBottomPadding fadeaddvesselin fadeaddvesselout" ng-show="isVisible.search">
             <div class="vesselsearchboxfooter row">
-                <!-- Dropdown -->
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" id="vesselDropdownn"
-                            data-toggle="dropdown" aria-expanded="true">
-                        <div class="vesseldropdowntext">{{'common.edit_selection' | i18n}}</div>
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
-                        <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="openSelectedSaveGroupModal()" href="">{{'common.save_as_group' | i18n}}</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="">{{'common.view_on_map' | i18n}} View on map</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="">{{'common.export_selection' | i18n}}Export selection</a></li>
-                    </ul>
-                </div>
+                <dropdown ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>               
                 <!-- add new button -->
                 <button class="btn btn-sm pull-right addvesselbtn uvmsbtn" ng-click="toggleCreateNewVessel()" type="button">
                     {{'vessel.add_new' | i18n}} &nbsp;&nbsp;&nbsp;&nbsp;<span>+</span></button>

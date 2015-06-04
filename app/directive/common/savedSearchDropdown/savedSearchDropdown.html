@@ -5,9 +5,9 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <li ng-class="item.code.length === 0 && !initialtextSelectable ? 'disabled' : ''" ng-repeat="item in items | orderBy : 'name'" role="presentation"> 
+            <li ng-class="item.code.length === 0 && !initialtextSelectable ? 'disabled' : ''" ng-repeat="item in items | orderBy : 'name'" role="presentation" ng-click="selectVal(item,$index)">
                 <a role="menuitem" tabindex="-1">
-                	<span ng-click="selectVal(item,$index)" role="menuitem" tabindex="-1">{{getItemLabel(item)}}</span>
+                	<span role="menuitem" tabindex="-1">{{getItemLabel(item)}}</span>
                 	<span class="fa fa-times" ng-click="removeSavedSearch(item)"></span>
                 </a>
             </li>

@@ -80,5 +80,9 @@ angular.module('unionvmsWeb')
             return this.vesselId.value;
         };
 
+        Vessel.prototype.equals = function(item) {
+            return this.vesselId.value === item.vesselId.value && this.vesselId.type === item.vesselId.type;
+        };
+
         return Vessel;
     });

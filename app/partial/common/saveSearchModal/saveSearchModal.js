@@ -47,11 +47,14 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
         if(dynamicSearch) {
             isDynamic = true;
             searchFields = searchService.getAdvancedSearchCriterias();
-        }else{
+        }else{            
             searchFields = [];
-            $.each(selectedItems, function(key, value){
-                searchFields.push(new SearchField("INTERNAL_ID", value));
-            });
+            //LIST OF CHECKED ITEMS
+            if(searchType === "VESSEL"){
+                $.each(selectedItems, function(key, vessel){
+                    searchFields.push(new SearchField(vessel.vesselId.type, vessel.vesselId.value));
+                });
+            }
         }
 
         //Show error message if search criterias is empty

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, savedSearchService, GetListRequest, searchService, vesselRestService, alertService){
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, savedSearchService, GetListRequest, searchService, vesselRestService, alertService){
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -7,8 +7,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, savedSea
         viewVessel : false
     };
 
-    
-
     //Search objects and results
     $scope.currentSearchResults = {
         page : 0,
@@ -16,6 +14,15 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, savedSea
         vessels : [],
         loading: true
     };
+
+    //Selected by checkboxes
+    $scope.selectedVessels = [];
+
+    $scope.editSelectionDropdownItems = [
+        {text:locale.getString('common.save_as_group'), code : 'SAVE'},
+        {text:locale.getString('common.view_on_map'), code : 'MAP'},
+        {text:locale.getString('common.export_selection'), code : 'EXPORT'}
+    ];
 
     //Current filter and sorting for the results table
     $scope.sortType = 'state';
@@ -89,41 +96,24 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, savedSea
     };
 
 
-    //Check all vessels in the result list
-    $scope.checkAll = function(){
-        if($scope.selectedAll)
-        {
-            $scope.selectedAll = false;
-            delete $scope.selectedVessels;
-            angular.forEach($scope.currentSearchResults.vessels, function(item) {
-                item.Selected = $scope.selectedAll;
-            });
-        } else {
-            $scope.selectedAll = true;
-            $scope.selectedVessels = [];
-            angular.forEach($scope.currentSearchResults.vessels, function(item) {
-                item.Selected = $scope.selectedAll;
-                $scope.selectedVessels.push(item.vesselId.value);
-            });
-        }
+    //Clear the selection
+    $scope.clearSelection = function(){
+        $scope.selectedVessels = [];
     };
 
-    //Check one vessel in the result list
-    $scope.checkedVessel = function(item){
-        $scope.selectedVessels = [];
+    //Add a vessel to the selection
+    $scope.addToSelection = function(item){
+        $scope.selectedVessels.push(item);
+    };
 
-        item.Selected = !item.Selected;
-
-        angular.forEach($scope.currentSearchResults.vessels, function(item) {
-            if(item.Selected){
-                $scope.selectedVessels.push(item.vesselId.value);
+    //Remove a vessel from the selection
+    $scope.removeFromSelection = function(item){
+        $.each($scope.selectedVessels, function(index, vessel){
+            if(vessel.equals(item)){
+                $scope.selectedVessels.splice(index, 1);
+                return false;
             }
         });
-    };
-
-    //Open modal for saving a selection of vessels to a vesselGroup
-    $scope.openSelectedSaveGroupModal = function() {
-        savedSearchService.openSaveSearchModal("VESSEL", false, $scope.selectedVessels);
     };
 
     //Toggle create new vessel
@@ -147,6 +137,16 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, savedSea
         $scope.isVisible.viewVessel = !$scope.isVisible.viewVessel;
         $scope.isVisible.search = !$scope.isVisible.search;
     };
+
+    //Callback function for the "edit selection" dropdown
+    $scope.editSelectionCallback = function(selectedItem){
+        //Poll selected temrinals
+        if(selectedItem.code === 'SAVE'){
+            savedSearchService.openSaveSearchModal("VESSEL", false, $scope.selectedVessels);            
+        }else if(selectedItem.code === 'EXPORT'){
+            alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
+        }
+    };    
 
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
