@@ -41,9 +41,9 @@ angular.module('unionvmsWeb')
 
                 var movements = [];
                 
-                if(angular.isArray(response.data)){
-                    for (var i = 0; i < response.data.length; i++){
-                        movements.push(Movement.fromJson(response.data[i]));
+                if(angular.isArray(response.data.movement)){
+                    for (var i = 0; i < response.data.movement.length; i++){
+                        movements.push(Movement.fromJson(response.data.movement[i]));
                     }
                 }
                 var currentPage = response.data.currentPage;

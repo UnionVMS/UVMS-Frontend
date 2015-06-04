@@ -85,11 +85,6 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         $scope.currentSearchResults.loading = false;
         $scope.startAutoRefresh();
 
-        //TODO: REMOVE THIS! JUST USED FOR DEBUGGING
-        movementListPage.currentPage = 1;
-        movementListPage.totalNumberOfPages = 1;
-        //TODO!!!
-
         if (movementListPage.totalNumberOfPages === 0 ) {
             $scope.currentSearchResults.errorMessage = locale.getString('movement.movement_search_error_result_zero_pages');
         } else {
