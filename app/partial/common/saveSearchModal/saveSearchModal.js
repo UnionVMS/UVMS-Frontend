@@ -4,41 +4,64 @@
 
 angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function ($scope, $modalInstance, locale, searchService, SearchField, SavedSearchGroup, savedSearchService, searchType, selectedItems, dynamicSearch) {
 
+    var isDynamic = false,
+        searchFields,
+        saveSearchFunction,
+        updateSearchFunction;
 
-    var saveSearchFunction, updateSearchFunction;
+    var init = function(){
+        $scope.error = false;
+        $scope.allowSaving = true;
+        $scope.saveData = {
+            name : undefined,
+            existingGroup : undefined
+        };
 
-    //Set texts, items, and save/update functions depending on the searchType
-    switch(searchType) {
-        case "VESSEL":
-            $scope.existingGroups = savedSearchService.getVesselGroupsForUser();
-            saveSearchFunction = savedSearchService.createNewVesselGroup;
-            updateSearchFunction = savedSearchService.updateVesselGroup;
-            $scope.modalHeader = locale.getString('vessel.save_group');
-            $scope.inputPlaceholder = locale.getString('vessel.save_group_input_placeholder');
-            $scope.dropdownHeader = locale.getString('vessel.save_as_the_following_group');
-            $scope.dropdownLabel = locale.getString('vessel.select_a_group');
-            $scope.errorMessage = locale.getString('vessel.save_group_error');
-            break;
-        case "MOVEMENT":
-            $scope.existingGroups = savedSearchService.getMovementSearches();
-            saveSearchFunction = savedSearchService.createNewMovementSearch;
-            updateSearchFunction = savedSearchService.updateMovementSearch;
-            $scope.modalHeader = locale.getString('movement.save_search_modal_header');
-            $scope.inputPlaceholder = locale.getString('movement.save_search_modal_input_placeholder');
-            $scope.dropdownHeader = locale.getString('movement.save_search_modal_dropdown_header');
-            $scope.dropdownLabel = locale.getString('movement.save_search_modal_dropdown_label');
-            $scope.errorMessage = locale.getString('movement.save_search_modal_error');
-            break;
-        default:
-            console.error("Search type is missing for save search modal.");
-    }
+        //Set texts, items, and save/update functions depending on the searchType
+        switch(searchType) {
+            case "VESSEL":
+                $scope.existingGroups = savedSearchService.getVesselGroupsForUser();
+                saveSearchFunction = savedSearchService.createNewVesselGroup;
+                updateSearchFunction = savedSearchService.updateVesselGroup;
+                $scope.modalHeader = locale.getString('vessel.save_group');
+                $scope.inputPlaceholder = locale.getString('vessel.save_group_input_placeholder');
+                $scope.dropdownHeader = locale.getString('vessel.save_as_the_following_group');
+                $scope.dropdownLabel = locale.getString('vessel.select_a_group');
+                $scope.errorMessage = locale.getString('vessel.save_group_error');
+                break;
+            case "MOVEMENT":
+                $scope.existingGroups = savedSearchService.getMovementSearches();
+                saveSearchFunction = savedSearchService.createNewMovementSearch;
+                updateSearchFunction = savedSearchService.updateMovementSearch;
+                $scope.modalHeader = locale.getString('movement.save_search_modal_header');
+                $scope.inputPlaceholder = locale.getString('movement.save_search_modal_input_placeholder');
+                $scope.dropdownHeader = locale.getString('movement.save_search_modal_dropdown_header');
+                $scope.dropdownLabel = locale.getString('movement.save_search_modal_dropdown_label');
+                $scope.errorMessage = locale.getString('movement.save_search_modal_error');
+                break;
+            default:
+                console.error("Search type is missing for save search modal.");
+        }
 
+        //Create list of searchFields and set isDynamic flag
+        if(dynamicSearch) {
+            isDynamic = true;
+            searchFields = searchService.getAdvancedSearchCriterias();
+        }else{
+            searchFields = [];
+            $.each(selectedItems, function(key, value){
+                searchFields.push(new SearchField("INTERNAL_ID", value));
+            });
+        }
 
-    $scope.error = false;
-    $scope.saveData = {
-        name : undefined,
-        existingGroup : undefined
+        //Show error message if search criterias is empty
+        if(searchFields.length === 0){
+            $scope.errorMessage = locale.getString('common.saved_search_no_criterias_error');
+            $scope.allowSaving = false;
+            $scope.error = true;
+        }
     };
+
 
     //Ok to save?
     $scope.isValidSaveData = function(){
@@ -68,18 +91,6 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
 
     //Save or update a search
     $scope.saveSearch = function () {
-        var isDynamic = false,
-            searchFields;
-        if(dynamicSearch) {
-            isDynamic = true;
-            searchFields = searchService.getAdvancedSearchCriterias();
-        }else{
-            searchFields = [];
-            $.each(selectedItems, function(key, value){
-                searchFields.push(new SearchField("INTERNAL_ID", value));
-            });
-        }
-
         //Update existing group
         if(angular.isDefined($scope.saveData.existingGroup)){
             $scope.saveData.existingGroup.dynamic = isDynamic;
@@ -99,4 +110,6 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
     };
+
+    init();
 });

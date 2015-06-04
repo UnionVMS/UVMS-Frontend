@@ -26,8 +26,6 @@
     "polling_logs_search_zero_results_error" : "No polls matching you search criteria was found.",
     "polling_logs_search_date_from_placeholder" : "From",
     "polling_logs_search_date_to_placeholder" : "To",
-    "polling_logs_table_header_export_as_csv" : "Export data in CSV format",
-    "polling_logs_table_header_print_page" : "Print page",
     "polling_logs_table_header_name" : "Name",
     "polling_logs_table_header_ext_no" : "Ext no.",
     "polling_logs_table_header_poll_type" : "Poll type",

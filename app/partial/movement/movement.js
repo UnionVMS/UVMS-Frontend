@@ -162,6 +162,15 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         }
     };
 
+    $scope.print = function(){
+        console.log("Print...");
+        window.print();        
+    };
+
+    $scope.exportAsFile = function(){
+        alertService.showInfoMessageWithTimeout("Export as file will soon be available. Stay tuned!");
+    };
+    
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
         searchService.reset();
