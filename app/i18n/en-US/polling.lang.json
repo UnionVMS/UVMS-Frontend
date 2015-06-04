@@ -47,6 +47,8 @@
     "wizard_second_step_run_poll_button" :"Run poll",
     "wizard_third_step" :"Polling results",
     "wizard_third_step_new_poll_button" :"New poll",
+    "wizard_second_step_creating_polls" :"Creating poll(s)...",
+    "wizard_second_step_creating_polls_error" :"Failed to create poll(s)",
     "wizard_second_step_request_channel_dropdown_placeholder" :"Comm. channel",
     "wizard_second_step_response_channel_dropdown_placeholder" :"Transmit response by",
     "wizard_second_step_comment_header" :"Comments",

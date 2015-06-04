@@ -3,6 +3,9 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
     //Has form submit been atempted?
     $scope.submitAttempted = false;
 
+    //Currently waiting for response?
+    $scope.loadingResult = false;
+
     //The polling options
     $scope.pollingOptions = pollingService.getPollingOptions();
 
@@ -61,12 +64,20 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
     $scope.runPoll = function(){
         $scope.submitAttempted = true;
         if($scope.pollingOptionsForm.$valid){
-            alertService.showInfoMessageWithTimeout("Running poll...");
-            pollingService.createPolls().then(function() {
-                $scope.nextStep();
-            });
+            $scope.loadingResult = true;
+            pollingService.createPolls().then(
+                function() {
+                    $scope.loadingResult = false;
+                    $scope.nextStep();
+                }, 
+                function(){
+                    //Error
+                    alertService.showErrorMessage(locale.getString('polling.wizard_second_step_creating_polls_error'));
+                    $scope.loadingResult = false;
+                });
         }else{
-            alertService.showErrorMessage(locale.getString('common.alert_message_on_form_validation_error'));
+            alertService.showErrorMessage(locale.getString('common.alert_message_on_form_validation_error'));        
+            
         }
     };
 
