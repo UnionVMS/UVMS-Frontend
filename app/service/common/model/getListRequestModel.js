@@ -9,7 +9,7 @@ angular.module('unionvmsWeb')
     }
 
 
-   function checkTimeZone(searchCriteria){
+  /* function checkTimeZone(searchCriteria){
         for (var i = 0; i < searchCriteria.length; i++) {
               console.log(addUTCTimeZone(searchCriteria[i].value));
             if (searchCriteria[i].key === "END_DATE" || searchCriteria[i].key === "START_DATE" || searchCriteria[i].key === "REPORTING_START_DATE" || searchCriteria[i].key === "REPORTING_END_DATE" || searchCriteria[i].key === "DATETIMEFROM" || searchCriteria[i].key === "DATETIMETO"){
@@ -22,7 +22,7 @@ angular.module('unionvmsWeb')
     function addUTCTimeZone(timeDate){
         return moment(timeDate).format("YYYY-MM-DD HH:mm:ss Z");
     }
-
+*/
     GetListRequest.prototype.toJson = function(){
         return JSON.stringify({
             pagination : {page: this.page, listSize: this.listSize},
@@ -34,7 +34,7 @@ angular.module('unionvmsWeb')
         //var crit = checkTimeZone(this.criterias);
         return {
             pagination : {page: this.page, listSize: this.listSize},
-            vesselSearchCriteria : { isDynamic : this.isDynamic, criterias : checkTimeZone(this.criterias) }
+            vesselSearchCriteria : { isDynamic : this.isDynamic, criterias : this.criterias }
         };
     };
 
@@ -49,13 +49,13 @@ angular.module('unionvmsWeb')
     GetListRequest.prototype.DTOForPoll = function(){
         return {
             pagination : {page: this.page, listSize: this.listSize},
-            pollSearchCriteria : {isDynamic: this.isDynamic, criterias: checkTimeZone(this.criterias)}
+            pollSearchCriteria : {isDynamic: this.isDynamic, criterias: this.criterias}
         };
     };
 
     GetListRequest.prototype.DTOForMovement = function(){
          return {
-            movementSearchCriteria : checkTimeZone(this.criterias),//this.criterias,
+            movementSearchCriteria : this.criterias,
             pagination : {page: this.page, listSize: this.listSize}            
         };
     };

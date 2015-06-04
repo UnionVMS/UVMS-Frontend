@@ -21,7 +21,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     $scope.selectedMovements = [];
     
     var init = function(){
-         $scope.searchMovements();
+         //$scope.searchMovements();
     };
 
     //AUTOMATIC REFRESH OF THE MOVEMENTS LIST
@@ -66,7 +66,6 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         searchService.searchMovements()
             .then(retriveMovementsSuccess, retriveMovementsError);
     };
-
 
     $scope.resetSearchResult = function(){
 

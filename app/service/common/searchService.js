@@ -2,6 +2,43 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
 
 	var getListRequest = new GetListRequest(1, 20, true, []),
         advancedSearchObject  = {};
+
+    var addUTCTimeZone = function(timeToTransform) {
+        return moment(timeToTransform).format("YYYY-MM-DD HH:mm:ss Z");
+    };
+
+    var checkTimeSpanAndTimeZone = function(searchCriteria){
+        var i, idx;
+        for (i = 0; i < searchCriteria.length; i++) {
+            if(searchCriteria[i].key === "TIME_SPAN"){
+                idx = i;
+                if(searchCriteria[i].value !== "Custom"){
+                        searchCriteria.push(new SearchField("TO_DATE", moment()));
+                        searchCriteria.push(new SearchField("FROM_DATE", moment().add('hours', -searchCriteria[i].value)));
+                        //delete searchCriteria[i];
+                }
+            }
+        }
+
+        if (angular.isDefined(idx)){
+            searchCriteria.splice(idx,1);    
+        }
+        var dateCriterias = ["END_DATE","START_DATE", "REPORTING_START_DATE", "REPORTING_END_DATE", "TO_DATE", "FROM_DATE" ];
+        
+        for (i = 0; i < searchCriteria.length; i++) {
+            if ( dateCriterias.indexOf(searchCriteria[i].key) >= 0){
+                    searchCriteria[i].value = addUTCTimeZone(searchCriteria[i].value);
+            }
+        }
+        
+        return searchCriteria;
+    };  
+
+    /*
+    function addUTCTimeZone(timeDate){
+        return moment(timeDate).format("YYYY-MM-DD HH:mm:ss Z");
+    }*/
+
 	var searchService = {
 
         //Do the search for vessels
@@ -11,11 +48,15 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
 
         //Do the search for polls
         searchPolls : function(){
+            checkTimeSpanAndTimeZone(getListRequest.criterias);
             return pollingRestService.getPollList(getListRequest);
         },
 
         //Do search for movements
         searchMovements : function(){
+            //intercept request and set utc timezone on dates.
+            checkTimeSpanAndTimeZone(getListRequest.criterias);
+            
             return movementRestService.getMovementList(getListRequest);
         },
 
