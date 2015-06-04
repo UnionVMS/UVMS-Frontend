@@ -14,19 +14,19 @@ angular.module('unionvmsWeb')
         VesselListPage.prototype.getNumberOfItems = function() {
             return this.vessels.length;
         };        
- 
-        //Find a vessel in the list of vessels by its internal id
-        VesselListPage.prototype.getVesselByIrcs = function(ircs) {
+
+        //Find a vessel in the list of vessels by it's id and idType
+        VesselListPage.prototype.getVesselById = function(id, idType) {
             var foundVessel;
             $.each(this.vessels, function(index, vessel){
-                if(vessel.ircs === ircs){
+                if(vessel[idType.toLowerCase()] === id){
                     foundVessel = vessel;
                     return false;
                 }
             });
 
             return foundVessel;
-        };
+        };        
 
         return VesselListPage;
     });

@@ -19,7 +19,7 @@
                 <thead>
                     <tr>
                         <th sortable-table-header by="sortType" reverse="sortReverse" order="'eventCode'">{{'mobileTerminal.history_modal_eventcode' | i18n }}</th>
-                        <th sortable-table-header by="sortType" reverse="sortReverse" order="'associatedVessel.name'">{{'mobileTerminal.history_modal_vesselname' | i18n }}</th>
+                        <th sortable-table-header by="sortType" reverse="sortReverse" order="'mobileTerminal.associatedVessel.name'">{{'mobileTerminal.history_modal_vesselname' | i18n }}</th>
                         <th sortable-table-header by="sortType" reverse="sortReverse" order="'channels[0].ids.DNID'">{{'mobileTerminal.history_modal_dnid' | i18n }}</th>
                         <th sortable-table-header by="sortType" reverse="sortReverse" order="'item.channels[0].ids.MEMBER_ID'">{{'mobileTerminal.history_modal_memberno' | i18n }}</th>
                         <th sortable-table-header by="sortType" reverse="sortReverse" order="'attributes.INSTALLED_ON'">{{'mobileTerminal.history_modal_installed' | i18n }}</th>
@@ -34,8 +34,8 @@
                     <tr ng-repeat="item in currentMobileTerminalHistory | orderBy:sortType:sortReverse">
                         <td>{{item.eventCode}}</td>
                         <td>
-                            <span ng-show="item.associatedVessel">{{item.associatedVessel.name}}</span>
-                            <span ng-show="item.carrierId && !item.associatedVessel">{{item.mobileTerminal.carrierId.carrierType}} with {{item.mobileTerminal.carrierId.idType}}: {{item.mobileTerminal.carrierId.value}}</span>
+                            <span ng-show="item.mobileTerminal.associatedVessel">{{item.mobileTerminal.associatedVessel.name}}</span>
+                            <span ng-show="item.mobileTerminal.carrierId && !item.mobileTerminal.associatedVessel">{{item.mobileTerminal.carrierId.carrierType}} with {{item.mobileTerminal.carrierId.idType}}: {{item.mobileTerminal.carrierId.value}}</span>
                         </td>
                         <td>{{item.mobileTerminal.channels[0].ids.DNID}}</td>
                         <td>{{item.mobileTerminal.channels[0].ids.MEMBER_ID}}</td> 

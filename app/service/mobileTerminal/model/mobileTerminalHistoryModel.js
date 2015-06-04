@@ -1,7 +1,6 @@
 angular.module('unionvmsWeb').factory('MobileTerminalHistory', function(MobileTerminal) {
 
     function MobileTerminalHistory(){
-        this.associatedVessel = undefined;
         this.changeDate = undefined;
         this.comment = undefined;
         this.eventCode = undefined;

@@ -38,6 +38,11 @@ angular.module('unionvmsWeb')
         return copy;
     };
 
+
+    CarrierId.prototype.equals = function(item) {
+        return this.carrierType === item.carrierType && this.idType === item.idType && this.value === item.value;
+    };
+
     CarrierId.prototype.setCarrierTypeToVessel = function(){
         this.carrierType = "VESSEL";
     };

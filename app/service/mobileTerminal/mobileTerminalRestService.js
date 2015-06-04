@@ -46,17 +46,14 @@ angular.module('unionvmsWeb')
     })
     .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, vesselRestService, MobileTerminal, MobileTerminalListPage, TranspondersConfig, GetListRequest, CarrierId, MobileTerminalHistory){
 
-        //Get associated vessel for each object in the list
-        //Gets carrierInfo from "carrierId" and sets "associatedVessel"
-        //Returns list with updated objects (associatedVessel set)
-        var setAssociatedVesselsFromCarrierId = function(listOfObjects){
+        var getVesselsForListOfMobileTerminals = function(mobileTerminals){
             var deferred = $q.defer();
 
             try{
                 //Check if any object has a carrierId set
                 var oneOrMoreCarrierIdIsSet = false;
-                $.each(listOfObjects, function(index, listObject){
-                    if(angular.isDefined(listObject.carrierId) && angular.isDefined(listObject.carrierId.carrierType)){
+                $.each(mobileTerminals, function(index, mobileTerminal){
+                    if(angular.isDefined(mobileTerminal.carrierId) && angular.isDefined(mobileTerminal.carrierId.carrierType)){
                         oneOrMoreCarrierIdIsSet = true;
                         return false;
                     }
@@ -64,12 +61,12 @@ angular.module('unionvmsWeb')
 
                 if(oneOrMoreCarrierIdIsSet){
                     //Create getListRequest for getting vessels by IRCS
-                    var getVesselListRequest = new GetListRequest(1, listOfObjects.length, false, []);
-                    $.each(listOfObjects, function(index, listObject){
-                        if(angular.isDefined(listObject.carrierId)){
-                            var carrierId = listObject.carrierId;
-                            if (carrierId.carrierType === "VESSEL" && carrierId.idType === "IRCS" && typeof carrierId.value === 'string') {
-                                getVesselListRequest.addSearchCriteria("IRCS", carrierId.value);
+                    var getVesselListRequest = new GetListRequest(1, mobileTerminals.length, false, []);
+                    $.each(mobileTerminals, function(index, mobileTerminal){
+                        if(angular.isDefined(mobileTerminal.carrierId)){
+                            var carrierId = mobileTerminal.carrierId;
+                            if (carrierId.carrierType === "VESSEL" && typeof carrierId.idType !== "undefined" && typeof carrierId.value === 'string') {
+                                getVesselListRequest.addSearchCriteria(carrierId.idType, carrierId.value);
                             }
                         }
                     });
@@ -77,36 +74,57 @@ angular.module('unionvmsWeb')
                     //Get vessels
                     vesselRestService.getVesselList(getVesselListRequest).then(
                         function(vesselListPage){
-                            //Connect the mobileTerminals to the vessels
-                            $.each(listOfObjects, function(index, listObject){
-                                if(angular.isDefined(listObject.carrierId)){
-                                    var carrierId = listObject.carrierId;
-                                    if(carrierId.carrierType === "VESSEL" && carrierId.idType === "IRCS" && typeof carrierId.value === 'string'){
-                                        var matchingVessel = vesselListPage.getVesselByIrcs(listObject.carrierId.value);
-                                        if(angular.isDefined(matchingVessel)){
-                                            listObject.associatedVessel = matchingVessel;
-                                        }
-                                    }
-                                }
-                            });
-                            deferred.resolve(listOfObjects);
+                            //Return vesselListPage
+                            deferred.resolve(vesselListPage);
                         },
                         function(error){
                             console.error("Error getting Vessels for the objects");
-                            deferred.resolve(listOfObjects);
+                            deferred.resolve(mobileTerminals);
                         }
                     );
                 }
                 //No carrierId to lookup, return list
                 else{
-                    deferred.resolve(listOfObjects);
+                    deferred.resolve(mobileTerminals);
                 }
             }catch(err){
-                deferred.resolve(listOfObjects);
+                deferred.resolve(mobileTerminals);
             }
 
             return deferred.promise;
         };
+
+        //Get associated vessel for each mobileTerminal in the list
+        //Gets carrierInfo from "carrierId" and sets "associatedVessel"
+        //Returns list with updated mobileTerminals (associatedVessel set)
+        var setAssociatedVesselsFromCarrierId = function(mobileTerminals){
+            var deferred = $q.defer();
+            //Get vessels
+            getVesselsForListOfMobileTerminals(mobileTerminals).then(
+                function(vesselListPage){
+                    //Connect the mobileTerminals to the vessels
+                    $.each(mobileTerminals, function(index, listObject){
+                        if(angular.isDefined(listObject.carrierId)){
+                            var carrierId = listObject.carrierId;
+                            if(carrierId.carrierType === "VESSEL" && carrierId.idType !== "undefined" && typeof carrierId.value === 'string'){
+                                var matchingVessel = vesselListPage.getVesselById(listObject.carrierId.value, listObject.carrierId.idType);
+                                if(angular.isDefined(matchingVessel)){
+                                    listObject.associatedVessel = matchingVessel;
+                                }
+                            }
+                        }
+                    });
+                    deferred.resolve(mobileTerminals);
+                },
+                function(error){
+                    console.error("Error getting Vessels for the objects");
+                    deferred.resolve(mobileTerminals);
+                }
+            );
+
+            return deferred.promise;
+        };
+
         var mobileTerminalRestService = {
 
             getTranspondersConfig : function(){
@@ -305,10 +323,28 @@ angular.module('unionvmsWeb')
                         }
                     }
 
-                    //Get associated carriers for the history items
-                    setAssociatedVesselsFromCarrierId(history).then(
-                        function(updatedHistory){
-                            deferred.resolve(updatedHistory);
+                    //Get associated carriers for all mobile terminals in the history items
+                    var mobileTerminals = [];
+                    $.each(history, function(index, historyItem) {
+                        mobileTerminals.push(historyItem.mobileTerminal);
+                    });
+
+                    getVesselsForListOfMobileTerminals(mobileTerminals).then(
+                        function(vesselListPage){
+                            //Connect the mobileTerminals to the vessels
+                            $.each(history, function(index, historyItem){
+                                if(angular.isDefined(historyItem.mobileTerminal.carrierId)){
+                                    var carrierId = historyItem.mobileTerminal.carrierId;
+                                    if(carrierId.carrierType === "VESSEL" && carrierId.idType !== "undefined" && typeof carrierId.value === 'string'){
+                                        var matchingVessel = vesselListPage.getVesselById(carrierId.value, carrierId.idType);
+                                        if(angular.isDefined(matchingVessel)){
+                                            historyItem.mobileTerminal.associatedVessel = matchingVessel;
+                                        }
+                                    }
+                                }
+                            });
+
+                            deferred.resolve(history);
                         },
                         function(error){
                             deferred.reject(history);
