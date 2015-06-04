@@ -27,7 +27,7 @@
             <tbody>
             <tr ng-repeat="item in currentSearchResults.mobileTerminals | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" ng-class="{'inactive':!item.active}">            
                 <td>
-                    <div class="iconToTheLeftOfTheTableCell" ng-show="!item.associatedVessel">
+                    <div class="iconToTheLeftOfTheTableCell" ng-show="!item.carrierId && !item.associatedVessel">
                         <div class="unassignedIcon" tooltip-placement="bottom" tooltip="{{'mobileTerminal.table_not_assigned_icon_tooltip' | i18n}}">!</div>
                     </div>
                     <input type="checkbox" ng-checked="isChecked(item)" ng-click="checkMobileTerminal(item)"/>
