@@ -9,19 +9,14 @@ angular.module('unionvmsWeb')
                 list : { method : 'POST'}
             });
         },
-        savedSearch : function(){
-            return $resource(baseUrl +'/movement/rest/movement/group/', {}, {
+        savedSearch : function() {
+            return $resource(baseUrl + '/movement/rest/movement/group/:groupId', {}, {
                 update: {method: 'PUT'}                    
             });
         },
-        deleteSavedSearch : function(){
-            return $resource(baseUrl +'/movement/rest/movement/group/delete', {}, {
-                delete: {method: 'PUT'}                    
-            });
+        getSavedSearches : function() {
+            return $resource(baseUrl + '/movement/rest/movement/groups');
         },
-        getSavedSearches : function(){
-            return $resource(baseUrl +'/movement/rest/movement/group/list');
-        },        
     };
 })
 .factory('movementRestService',function($q, movementRestFactory, MovementListPage, Movement, SavedSearchGroup){
@@ -61,7 +56,7 @@ angular.module('unionvmsWeb')
 
     var getSavedSearches = function (){
         var deferred = $q.defer();
-        movementRestFactory.getSavedSearches().get({}, 
+        movementRestFactory.getSavedSearches().get({user: 'FRONTEND_USER'}, 
             function(response) {
 
                 if(response.code !== "200"){
@@ -118,7 +113,7 @@ angular.module('unionvmsWeb')
 
      var deleteSavedSearch = function(savedSearchGroup){
         var deferred = $q.defer();
-        movementRestFactory.deleteSavedSearch().delete(savedSearchGroup.toJson(), function(response) {
+        movementRestFactory.savedSearch().delete({ groupId: savedSearchGroup.id }, function(response) {
             if(response.code !== "200"){
                 deferred.reject("Invalid response status");
                 return;
