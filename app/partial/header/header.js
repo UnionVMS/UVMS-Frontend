@@ -1,3 +1,3 @@
-angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope){
+angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $location){
 
 });

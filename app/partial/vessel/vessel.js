@@ -146,7 +146,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         }else if(selectedItem.code === 'EXPORT'){
             alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
         }
-    };    
+    };
 
     $scope.$on("$destroy", function() {
         alertService.hideMessage();

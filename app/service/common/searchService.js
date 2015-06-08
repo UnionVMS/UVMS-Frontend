@@ -15,7 +15,6 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
                 if(searchCriteria[i].value !== "Custom"){
                         searchCriteria.push(new SearchField("TO_DATE", moment()));
                         searchCriteria.push(new SearchField("FROM_DATE", moment().add('hours', -searchCriteria[i].value)));
-                        //delete searchCriteria[i];
                 }
             }
         }
@@ -32,12 +31,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
         }
         
         return searchCriteria;
-    };  
-
-    /*
-    function addUTCTimeZone(timeDate){
-        return moment(timeDate).format("YYYY-MM-DD HH:mm:ss Z");
-    }*/
+    };    
 
 	var searchService = {
 

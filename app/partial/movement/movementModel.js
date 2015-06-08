@@ -7,10 +7,12 @@ angular.module('unionvmsWeb')
 
 	Movement.fromJson = function(data){
 		var movement = new Movement();
-		movement.state = data.carrier.flagState;
-		movement.externalMarking = data.carrier.externalMarking;
-		movement.ircs = data.carrier.ircs;
-		movement.name = data.carrier.name;
+		if (data.carrier){
+			movement.state = data.carrier.flagState;
+			movement.externalMarking = data.carrier.externalMarking;
+			movement.ircs = data.carrier.ircs;
+			movement.name = data.carrier.name;
+		}
 		movement.time = "NOT PRESENT";//data.time;
 		movement.latitude = data.position.latitude;
 		movement.longitude = data.position.longitude;
