@@ -64,7 +64,7 @@ angular.module('unionvmsWeb').run(function($rootScope) {
 //Configure for i18n
 angular.module('unionvmsWeb').value('localeConf', {
     basePath: 'i18n',
-    defaultLocale: 'en-US',
+    defaultLocale: 'en-us',
     sharedDictionary: 'common',
     fileExtension: '.lang.json?ts=' +(new Date()).getTime(),
     persistSelection: true,
