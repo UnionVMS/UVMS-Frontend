@@ -63,6 +63,29 @@
 	"external_marking_filter_external_marking" : "Ext. No",
 	"external_marking_filter_ircs" : "IRCS",
 	"external_marking_filter_cfr" : "CFR",
-	"external_marking_filter_name" : "Name"
+	"external_marking_filter_name" : "Name",
+
+	"manual_position_header_new": "New manual position report",
+
+	"manual_position_field_label_flag_state": "F.S.",
+	"manual_position_field_label_ircs": "IRCS",
+	"manual_position_field_label_cfr": "CFR",
+	"manual_position_field_label_external_marking": "Ext. Marking",
+	"manual_position_field_label_name": "Name",
+	"manual_position_field_label_status": "Status",
+	"manual_position_field_label_date_time": "Date/Time",
+	"manual_position_field_label_latitude": "Lat.",
+	"manual_position_field_label_longitude": "Long.",
+	"manual_position_field_label_measured_speed": "Meas. Speed",
+	"manual_position_field_label_course": "Course",
+
+	"manual_position_field_unit_degrees": "\u00b0",
+	"manual_position_field_unit_knots": "kts",
+
+	"manual_position_label_add_another": "Add another",
+
+	"manual_position_button_send": "Send",
+	"manual_position_button_clear": "Clear"
+
 
 }

@@ -1,0 +1,112 @@
+<div class='manualPositionReportModal'>
+
+	<div class='buttonGroups'>
+		<div class='buttonGroup'>
+			<h4>{{'movement.manual_position_header_new' | i18n}}</h4>
+		</div>
+		<div class="buttonGroup button-group-right">
+			<i class="fa fa-times closeicon" ng-click="dismiss()"/>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-2">
+			<label>
+				{{'movement.manual_position_field_label_flag_state' | i18n}}
+				<input class="form-control" ng-model="flagState" ng-disabled="true"/>
+			</label>
+		</div>
+		<div class="col-md-2">
+			<label>
+				{{'movement.manual_position_field_label_ircs' | i18n}}
+				<input class="form-control" ng-model="ircs"/>
+			</label>
+		</div>
+		<div class="col-md-4">
+			<label>
+				{{'movement.manual_position_field_label_cfr' | i18n}}
+				<input class="form-control" ng-model="cfr"/>
+			</label>
+		</div>
+		<div class="col-md-4">
+			<label>
+				{{'movement.manual_position_field_label_external_marking' | i18n}}
+				<input class="form-control" ng-model="externalMarking"/>
+			</label>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-4">
+			<label>
+				{{'movement.manual_position_field_label_name' | i18n}}
+				<input class="form-control" ng-model="name"/>
+			</label>
+		</div>
+		<div class="col-md-3">
+			<label>
+				{{'movement.manual_position_field_label_status' | i18n}}
+				<input class="form-control" ng-model="status" ng-disabled="true"/>
+			</label>
+		</div>
+		<div class="col-md-5">
+			<label>
+				{{'movement.manual_position_field_label_date_time' | i18n}}
+				<datepicker-input time="true" model="dateTime"></datepicker-input>
+			</label>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-3">
+			<label>
+				{{'movement.manual_position_field_label_latitude' | i18n}}
+				<input class="form-control" ng-model="latitude"/>
+			</label>
+		</div>
+		<div class="col-md-3">
+			<label>
+				{{'movement.manual_position_field_label_longitude' | i18n}}
+				<input class="form-control" ng-model="longitude"/>
+			</label>
+		</div>
+		<div class="col-md-3">
+			<label>
+				{{'movement.manual_position_field_label_measured_speed' | i18n}}
+				<div class="unit-input">
+					<input class="form-control" ng-model="measuredSpeed"/>
+					<div class="unit-box">{{"movement.manual_position_field_unit_knots" | i18n}}</div>
+				</div>
+			</label>
+		</div>
+		<div class="col-md-3">
+			<label>
+				{{'movement.manual_position_field_label_course' | i18n}}
+				<div class="unit-input">
+					<input class="form-control" ng-model="course"/>
+					<div class="unit-box">{{"movement.manual_position_field_unit_degrees" | i18n}}</div>
+				</div>
+			</label>
+		</div>
+	</div>
+
+	<div class="row buttons">
+		<div class="buttonGroups">
+			<div class="buttonGroup">
+				<a class="button">{{"common.cancel" | i18n}}</a>
+				<a class="button">{{"movement.manual_position_button_clear" | i18n}}</a>
+			</div>
+			<div class="buttonGroup button-group-right">
+				<label class="button">
+					<input type="checkbox"/>
+					{{"movement.manual_position_label_add_another" | i18n}}
+				</label>
+				<a class="button">Save</a>
+				<button class="btn btn-primary button" style="margin-left:10px" type="submit">
+					{{"movement.manual_position_button_send" | i18n}}
+				</button>
+			</div>
+		</div>
+	</div>
+
+</div>

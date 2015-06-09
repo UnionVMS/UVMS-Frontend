@@ -1,6 +1,10 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope,searchService, locale) {
+angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope,searchService, locale, ManualPositionReportModal) {
 
-     //Search objects and results
+    $scope.showModal = function() {
+        ManualPositionReportModal.show();
+    };
+
+    //Search objects and results
     $scope.currentSearchResults = {
         page : 1,
         totalNumberOfPages : 25,
