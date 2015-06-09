@@ -1,4 +1,8 @@
 {
+    "advanced_search_placeholder_flag_state":"Flag State",
+    "advanced_search_placeholder_active":"Active",
+    "advanced_search_placeholder_license_type":"License type",
+    "advanced_search_placeholder_type":"Type",
     "add_new" : "Add new",
 	"add_new_alert_message_on_success" : "The vessel has now been created.",
     "add_new_alert_message_on_error" : "The vessel could not be created.",

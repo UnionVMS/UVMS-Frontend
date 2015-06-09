@@ -6,7 +6,6 @@ angular.module('unionvmsWeb').directive('advancedSearch', function() {
         scope: {
             modeltype : "=",
             searchfunc : "=",
-            advancedsearchvisible : "=",
             vesselGroupCallback : "="
         },
         templateUrl: 'directive/common/search/advancedSearch/advancedSearch.html',
@@ -39,13 +38,6 @@ angular.module('unionvmsWeb')
 
     $scope.advancedSearchObject  = searchService.getAdvancedSearchObject();
 
-    $scope.updateAdvancedSearchObject = function(key, value){
-        if(value === undefined || (typeof value === 'string' && value.trim().length === 0) ){
-            delete $scope.advancedSearchObject[key];
-        }else{
-            $scope.advancedSearchObject[key] = value;
-        }
-    };
 
     //Search by the advanced search form inputs
     $scope.performAdvancedSearch = function(){
@@ -59,16 +51,32 @@ angular.module('unionvmsWeb')
         $scope.searchfunc();        
     };
 
+    $scope.updateAdvancedSearchObject = function(key, value){
+        if(value === undefined || (typeof value === 'string' && value.trim().length === 0) ){
+            delete $scope.advancedSearchObject[key];
+        }else{
+            $scope.advancedSearchObject[key] = value;
+        }
+    };
+
     //Search by a saved group
-    $scope.performSavedGroupSearch = function(savedSearchGroup){
+    $scope.performSavedGroupSearch = function(savedSearchGroup, updateAdvancedSearchObject){
         var opt = {};
         opt.savedSearchGroup = savedSearchGroup;
         
+        //Reset page and set search criterias and dynamic
         searchService.resetPage();
         searchService.resetSearchCriterias();
-        //Set search criterias
         searchService.setDynamic(savedSearchGroup.dynamic);
         searchService.setSearchCriterias(savedSearchGroup.searchFields);
+
+        //Update advancedSearchObject with values from the saved search
+        searchService.resetAdvancedSearch();
+        if(updateAdvancedSearchObject){
+            $.each(searchService.getSearchCriterias(), function(index, searchField){
+                $scope.updateAdvancedSearchObject(searchField.key, searchField.value);
+            });                
+        }    
 
         //Do the search
         $scope.searchfunc(opt);

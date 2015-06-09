@@ -5,71 +5,27 @@
                 <thead>
                 <tr>
                     <th><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
-                    <th>
-                        <a href="" ng-click="sortType='state'; sortReverse = !sortReverse">
-                            {{'vessel.table_header_flag_state' | i18n}}
-                            <span ng-show="sortType == 'state' && !sortReverse" class="fa fa-caret-down"></span>
-                            <span ng-show="sortType == 'state' && sortReverse" class="fa fa-caret-up"></span>
-                            <span ng-show="sortType != 'state'" class="fa fa-sort"></span>
-                        </a>
-                    </th>
-                    <th>
-                        <a href="" ng-click="sortType='externalMarking'; sortReverse = !sortReverse">
-                            {{'vessel.table_header_external_marking' | i18n}}
-                            <span ng-show="sortType == 'externalMarking' && !sortReverse"
-                                  class="fa fa-caret-down"></span>
-                            <span ng-show="sortType == 'externalMarking' && sortReverse"
-                                  class="fa fa-caret-up"></span>
-                            <span ng-show="sortType != 'externalMarking'" class="fa fa-sort"></span>
-                        </a>
-                    </th>
-                    <th>
-                        <a href="" ng-click="sortType='name'; sortReverse = !sortReverse">
-                            {{'vessel.table_header_name' | i18n}}
-                            <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
-                            <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
-                            <span ng-show="sortType != 'name'" class="fa fa-sort"></span>
-                        </a>
-                    </th>
-                    <th>
-                        <a href="" ng-click="sortType='ircs'; sortReverse = !sortReverse">
-                            {{'vessel.table_header_signal' | i18n}}
-                            <span ng-show="sortType == 'ircs' && !sortReverse" class="fa fa-caret-down"></span>
-                            <span ng-show="sortType == 'ircs' && sortReverse" class="fa fa-caret-up"></span>
-                            <span ng-show="sortType != 'ircs'" class="fa fa-sort"></span>
-                        </a>
-                    </th>
-                    <th>
-                        <a href="" ng-click="sortType='type'; sortReverse = !sortReverse">
-                            {{'vessel.table_header_type' | i18n}}
-                            <span ng-show="sortType == 'type' && !sortReverse" class="fa fa-caret-down"></span>
-                            <span ng-show="sortType == 'type' && sortReverse" class="fa fa-caret-up"></span>
-                            <span ng-show="sortType != 'type'" class="fa fa-sort"></span>
-                        </a>
-                    </th>
-                    <th>
-                        <a href="" ng-click="sortType='license'; sortReverse = !sortReverse">
-                            {{'vessel.table_header_license' | i18n}}
-                            <span ng-show="sortType == 'license' && !sortReverse" class="fa fa-caret-down"></span>
-                            <span ng-show="sortType == 'license' && sortReverse" class="fa fa-caret-up"></span>
-                            <span ng-show="sortType != 'license'" class="fa fa-sort"></span>
-                        </a>
-                    </th>
-                    <th>
-                        <a href="" ng-click="sortType='lastreport'; sortReverse = !sortReverse">
-                            {{'vessel.table_header_last_report' | i18n}}
-                            <span ng-show="sortType == 'lastreport' && !sortReverse"
-                                  class="fa fa-caret-down"></span>
-                            <span ng-show="sortType == 'lastreport' && sortReverse" class="fa fa-caret-up"></span>
-                            <span ng-show="sortType != 'lastreport'" class="fa fa-sort"></span>
-                        </a>
-                    </th>
+
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'state'">{{'vessel.table_header_flag_state' | i18n}}</th>
+
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'externalMarking'">{{'vessel.table_header_external_marking' | i18n}}</th>
+
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'name'">{{'vessel.table_header_name' | i18n}}</th>
+
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'ircs'">{{'vessel.table_header_signal' | i18n}}</th>
+
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'type'">{{'vessel.table_header_type' | i18n}}</th>
+
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'license'">{{'vessel.table_header_license' | i18n}}</th>
+
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'lastreport'">{{'vessel.table_header_last_report' | i18n}}</th>                    
+
                     <th>{{'vessel.table_header_details' | i18n}}</th>
                     <th>{{'vessel.table_header_reports' | i18n}}</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="item in currentSearchResults.vessels | orderBy:sortType:sortReverse | filter:searchFilter">
+                <tr ng-repeat="item in currentSearchResults.vessels | orderBy:currentSearchResults.sortType:currentSearchResults.sortReverse | filter:currentSearchResults.filter">
                     <td><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)"/></td>
                     <td>{{item.countryCode}}</td>
                     <td>{{item.externalMarking}}</td>
@@ -87,8 +43,18 @@
                 </tr>
                 </tbody>
             </table>
-            <search-result-error-alert ng-show="!currentSearchResults.loading && currentSearchResults.vessels.length < 1">{{error}}</search-result-error-alert>           
+            <search-result-error-alert ng-show="currentSearchResults.errorMessage">{{currentSearchResults.errorMessage}}</search-result-error-alert>
+        </div>
+        <div class="col-md-12 searchResultsLoading" ng-show="currentSearchResults.loading">
+            <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>        
+        </div>
+        <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0">
+            <div class="col-md-12">{{'common.search_results_current_page' | i18n:[currentSearchResults.page, currentSearchResults.totalNumberOfPages]}}</div>
+        </div>
+        <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0 && currentSearchResults.totalNumberOfPages > currentSearchResults.page">
+            <div class="col-md-12 textAlignCenter">
+                <span class="link" ng-click="loadNextPage()"> {{'common.search_results_load_more' | i18n | uppercase}}</span>
+            </div>
         </div>
     </div>
-
 </div>

@@ -1,98 +1,23 @@
-<div ng-controller="AdvancedSearchVesselFormCtrl">
-    <div class="row nopaddingleft">
-        <div class="col-md-2">
-            <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="advancesearchflagstate" data-toggle="dropdown" aria-expanded="true" ng-model="advancedSearchObject.FLAG_STATE">
-                    <div class="dropdowntext">{{ searchFlagState }} </div>
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
-                    <li><a ng-click="searchFlagStateSelected(item)" tabindex="1">Flag state</a></li>
-                    <li ng-repeat="item in searchFlagStates" role="presentation">
-                        <a ng-click="searchFlagStateSelected(item)" tabindex="1">{{item.name}}</a>
-                    </li>
-                </ul>
-            </div>
+<div ng-controller="AdvancedSearchVesselFormCtrl"> 
+    <div class="row">
+        <div ng-hide="advancedSearch">
+            <div static-include="directive/common/search/advancedSearch/vessel/staticSimpleSearch.html"></div>
         </div>
-        <div class="col-md-2">
-            <input type="text" id="searchextno" placeholder="Ext. No." class="form-control" tabindex="2" ng-model="advancedSearchObject.EXTERNAL_MARKING">
-        </div>
-        <div class="col-md-2">
-            <input type="text" id="searchname" placeholder="Name" class="form-control" tabindex="3" ng-model="advancedSearchObject.NAME">
-        </div>
-        <div class="col-md-2">
-            <input type="text" id="searchsignal" placeholder="Signal/IRCS" class="form-control" tabindex="4" ng-model="advancedSearchObject.IRCS">
-        </div>
-        <div class="col-md-2">
-            <input type="text" id="searchcfr" placeholder="CFR" class="form-control" tabindex="5" ng-model="advancedSearchObject.CFR">
-        </div>
-        <div class="col-md-2">
-            <input type="text" id="searchmmsi" placeholder="MMSI" class="form-control" tabindex="6" ng-model="advancedSearchObject.MMSI">
+        <div ng-show="advancedSearch">
+            <div static-include="directive/common/search/advancedSearch/vessel/staticAdvancedSearch.html"></div>
         </div>
 
-    </div>
-    <div class="row nopaddingleft">
-        <div class="col-md-2">
-            <input type="text" id="searchhomeport" placeholder="Homeport name" class="form-control" tabindex="7" ng-model="advancedSearchObject.HOMEPORT">
+        <div class="col-md-8 searchFooter">
+            <a ng-click="toggleAdvancedSearch()">
+                <span ng-hide="advancedSearch">{{'common.advanced_search' | i18n}}</span>
+                <span ng-show="advancedSearch">{{'common.simple_search' | i18n}}</span>
+            </a>
+            <a ng-show="advancedSearch" ng-click="openSaveGroupModal()">
+                <span>{{'common.search_group_save' | i18n}}</span>
+            </a>
         </div>
-       <div class="col-md-2">
-            <datepicker-input name="programStartDate" placeholder="Reporting start date" model="advancedSearchObject.REPORTING_START_DATE"></datepicker-input>
-        </div>
-        <div class="col-md-2">
-            <datepicker-input name="programStartDate" placeholder="Reporting end date" model="advancedSearchObject.REPORTING_END_DATE"></datepicker-input>
-        </div>
-        <div class="col-md-2">
-            <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="advancesearchvesseltype" data-toggle="dropdown" aria-expanded="true" ng-model="advancedSearchObject.TYPE">
-                    <div class="dropdowntext">{{ searchVesselType }} </div>
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
-                    <li><a ng-click="searchVesselTypeSelected(item)" tabindex="1">Type</a></li>
-                    <li ng-repeat="item in vesselVesselTypes" role="presentation">
-                        <a ng-click="searchVesselTypeSelected(item)" tabindex="1">{{item.name}}</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="advancesearchactive" data-toggle="dropdown" aria-expanded="true" ng-model="advancedSearchObject.ACTIVE">
-                    <div class="dropdowntext">{{ searchActive }} </div>
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
-                    <li><a ng-click="searchActiveSelected(item)" tabindex="1">Active</a></li>
-                    <li ng-repeat="item in searchActiveTypes" role="presentation">
-                        <a ng-click="searchActiveSelected(item)" tabindex="1">{{item.name}}</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="advancesearchtype" data-toggle="dropdown" aria-expanded="true" ng-model="advancedSearchObject.LICENSE">
-                    <div class="dropdowntext">{{ searchLicenseType }} </div>
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="vesselDropdown">
-                    <li><a ng-click="searchLicenseTypeSelected(item)" tabindex="1">License type</a></li>
-                    <li ng-repeat="item in searchLicensTypes" role="presentation">
-                        <a ng-click="searchLicenseTypeSelected(item)" tabindex="1">{{item.name}}</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="row nopaddingleft">
-        <div class="col-md-12 nopaddingleft">
-            <!-- Search button -->
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary btn-sm searchButton" ng-click="performAdvancedSearch()">
-                    <span class="fa fa-search" aria-hidden="true"></span>
-                </button>
-            </div>
+        <div class="col-md-4 searchFooter floatRight textAlignRight">
+            <a ng-click="resetSearch()">{{'common.reset' | i18n}}</a>
         </div>
     </div>
 </div>

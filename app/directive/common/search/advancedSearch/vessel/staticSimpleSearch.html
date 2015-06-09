@@ -1,0 +1,33 @@
+<div class="col-md-12">
+    <div class="row nomargin">
+        <!-- Search input -->
+        <div class="col-md-2 nopaddingleft searchcriteria">
+            <input type="text" class="form-control searchText" ng-disabled="advancedSearchVisible" placeholder="{{'common.search' | i18n}}" ng-model="freeText">
+        </div>
+
+        <!-- Type Dropdown -->
+        <div class="col-md-2 smallerpadding searchcriteria">
+            <dropdown ng-model="TYPE" initialtext="{{'common.all' | i18n}}" items="types"></dropdown>
+        </div>
+
+        <div class="col-md-2 col-md-offset-4 smallerpadding">
+            <div class="row nomargin">
+                <div class="col-md-12 colNoPadding searchcriteria">
+                    <saved-search-dropdown type="VESSEL" class="dropdown simpleSearch" ng-model="selectedVesselGroup" initialtext="{{'common.search_group_dropdown' | i18n}}" callback="performSavedSearch"></saved-search-dropdown>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2 nopaddingright">
+            <div class="row nomargin">
+                <div class="col-md-12 colNoPadding searchcriteriadropdown">
+                    <button type="submit" class="btn btn-primary btn-sm fullWidth" ng-click="performSearch()">
+                        {{'common.search' | i18n}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+       
+    </div>
+</div>

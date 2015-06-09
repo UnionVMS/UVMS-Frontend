@@ -15,21 +15,21 @@ angular.module('unionvmsWeb').directive('advancedSearchMovementForm', function()
 angular.module('unionvmsWeb')
 	.controller('advancedSearchMovementCtrl', function($scope, locale, savedSearchService){
 	
-		var DATE_CUSTOM = "Custom";
-    
+		var DATE_CUSTOM = "Custom";    
         $scope.selectedSavedSearch = "";
-		$scope.movementAdvancedSearch = true;
-		$scope.advancedSearchObject.TIME_SPAN = "24";
+        $scope.selectedVesselGroup = "";
+		$scope.advancedSearch = false;
 	
 		$scope.toggleAdvancedSearch = function(){
-				$scope.movementAdvancedSearch = !$scope.movementAdvancedSearch;
-				$scope.resetSearch();
-			};
+			$scope.advancedSearch = !$scope.advancedSearch;
+			$scope.resetSearch();
+		};
 
 		$scope.resetSearch = function(){
 				//empty advancedSearchobject.
-				$scope.extMarkNameIRCS = "";
+				$scope.SIMPLE_NAME = "";
 				$scope.selectedSavedSearch = "";
+                $scope.selectedVesselGroup = "";
 				$scope.resetAdvancedSearchForm(false);
 				$scope.advancedSearchObject.TIME_SPAN = "24";
 		};
@@ -42,10 +42,15 @@ angular.module('unionvmsWeb')
             savedSearchService.openSaveSearchModal("MOVEMENT", true);        
         };
 
+        $scope.selectVesselGroup = function(savedSearchGroup){
+            console.log("Select vessel group!");
+            console.log("NOT IMPLEMENTED!");
+        };
+
         $scope.performSavedSearch = function(savedSearchGroup){
             console.log("performSavedSearch!");
-            $scope.resetAdvancedSearchForm(false);
-            $scope.performSavedGroupSearch(savedSearchGroup);
+            $scope.advancedSearch = true;
+            $scope.performSavedGroupSearch(savedSearchGroup, true);
         };
 
         var setupDropdowns = function(){
@@ -69,10 +74,10 @@ angular.module('unionvmsWeb')
 			if(!value)
 			{
 				delete $scope.advancedSearchObject.NAME; 
-				delete $scope.advancedSearchObject.IRCS;
+				//delete $scope.advancedSearchObject.IRCS;
 			} else {
 				$scope.advancedSearchObject.NAME = value + "*";
-				$scope.advancedSearchObject.IRCS = value + "*";
+				//$scope.advancedSearchObject.IRCS = value + "*";
 			}
 		};
 
@@ -99,6 +104,7 @@ angular.module('unionvmsWeb')
 
 		var init = function(){
 			setupDropdowns();
+            $scope.resetSearch();
 			$scope.performAdvancedSearch();
 		};
 

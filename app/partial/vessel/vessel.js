@@ -12,7 +12,11 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         page : 0,
         totalNumberOfPages : 0,
         vessels : [],
-        loading: true
+        errorMessage : "",
+        loading : false,
+        sortBy : "state",
+        sortReverse : false,
+        filter : ""
     };
 
     //Selected by checkboxes
@@ -24,18 +28,11 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         {text:locale.getString('common.export_selection'), code : 'EXPORT'}
     ];
 
-    //Current filter and sorting for the results table
-    $scope.sortType = 'state';
-    $scope.sortReverse = false;
-    $scope.sortFilter = '';
-
 
     //Init function when entering page
     var init = function(){
         //Load list with vessels
-        var response = searchService.searchVessels()
-            .then(updateSearchResults, onGetSearchResultsError);
-
+        $scope.searchVessels();
     };
 
     //Load the next page of the search results
@@ -45,32 +42,33 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         {
             //Increase page by 1
             searchService.increasePage();
-        var response = searchService.searchVessels()
+            $scope.currentSearchResults.loading = true;
+            searchService.searchVessels()
             .then(updateSearchResults, onGetSearchResultsError);
-
         }
     };
 
-    //Callback for the search
-    $scope.searchCallback = function(vesselListPage){
-        $scope.currentSearchResults.vessels.length = 0;
-
-        //Success?
-        if(vesselListPage.vessels !== undefined){
-            updateSearchResults(vesselListPage);
-        }else{
-            onGetSearchResultsError();
-        }
-
+    $scope.resetSearchResult = function(){      
+        $scope.currentSearchResults.page = 0;
+        $scope.currentSearchResults.totalNumberOfPages = 0;
+        $scope.currentSearchResults.vessels = [];
+        $scope.currentSearchResults.errorMessage ="";
+        $scope.currentSearchResults.loading = true;
     };
+
+    $scope.searchVessels = function(){
+        $scope.resetSearchResult();
+        searchService.searchVessels()
+            .then(updateSearchResults, onGetSearchResultsError);
+    };    
 
     //Update the search results
     var updateSearchResults = function(vesselListPage){
         $scope.vesselListPage = vesselListPage;
         if(vesselListPage.vessels.length === 0 ){
-            $scope.error = "No vessels matching you search criteria was found.";
+            $scope.currentSearchResults.errorMessage = "No vessels matching you search criteria was found.";
         } else {
-            $scope.error = "";
+            $scope.currentSearchResults.errorMessage = "";
             if(!$scope.currentSearchResults.vessels){
                 $scope.currentSearchResults.vessels = vesselListPage.vessels;
             }
@@ -88,11 +86,10 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
 
     //Handle error from search results (listing vessel)
     var onGetSearchResultsError = function(response){
-        $scope.error = "We are sorry... Something took a wrong turn. To err is human but to arr is pirate!!";
-        console.log("We are sorry... To err is human but to arr is pirate!!");
-
-        $scope.currentSearchResults.totalNumberOfPages = 1;
-        $scope.currentSearchResults.page = 1;
+        $scope.currentSearchResults.loading = false;
+        $scope.currentSearchResults.errorMessage = "We are sorry... Something took a wrong turn. To err is human but to arr is pirate!!";
+        $scope.currentSearchResults.totalNumberOfPages = 0;
+        $scope.currentSearchResults.page = 0;
     };
 
 

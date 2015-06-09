@@ -58,7 +58,7 @@ angular.module('unionvmsWeb').directive('savedSearchDropdown', function() {
 
             //Select item in dropdown
             scope.selectVal = function(item){
-                scope.ngModel = item.code;
+                scope.ngModel = item.id;
                 scope.currentItemLabel = scope.getItemLabel(item);
                 if(angular.isDefined(scope.callback)){
                     scope.callback(item);

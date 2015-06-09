@@ -70,7 +70,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
 
             //Search keys that belong to vessel
             var vesselSearchKeys = [
-                "INTERNAL_ID", 
+                "GUID", 
                 "NAME", 
                 "IRCS", 
                 "MMSI", 
@@ -88,7 +88,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
             var vesselSearchIsDynamic = true;
             $.each(this.getSearchCriterias(),function(index, crit){
                 if(_.contains(vesselSearchKeys, crit.key)){
-                    if(crit.key === 'INTERNAL_ID'){
+                    if(crit.key === 'GUID'){
                         vesselSearchIsDynamic = false;
                     }
                     vesselSearchCriteria.push(crit);
@@ -184,10 +184,12 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
         },
         reset : function(){
             getListRequest = new GetListRequest(1, 20, true, []);
-            advancedSearchObject = {};
+            this.resetAdvancedSearch();
         },
         resetAdvancedSearch : function(){
-            advancedSearchObject = {};
+            for (var item in advancedSearchObject){
+                delete advancedSearchObject[item];
+            }
         },
 
 	};

@@ -1,0 +1,71 @@
+<div>
+    <div class="col-md-12">
+        <div class="row nomargin">
+            <div class="col-md-2 col-md-offset-8 smallerpadding">
+                <div class="row nomargin">
+                    <div class="col-md-12 colNoPadding searchcriteria">
+                        <saved-search-dropdown type="VESSEL" class="dropdown simpleSearch" ng-model="selectedVesselGroup" initialtext="{{'common.search_group_dropdown' | i18n}}" callback="performSavedSearch"></saved-search-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 nopaddingright">
+                <div class="row nomargin">
+                    <div class="col-md-12 colNoPadding searchcriteriadropdown">
+                        <button type="submit" class="btn btn-primary btn-sm fullWidth" ng-click="performSearch()">
+                            {{'common.search' | i18n}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+           
+        </div>
+    </div>
+
+    <div class="col-md-12 smallerpadding">
+        <div class="row nomargin">
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <dropdown ng-model="advancedSearchObject.FLAG_STATE" initialtext="{{'vessel.advanced_search_placeholder_flag_state' | i18n}}" items="flagStates"></dropdown>
+            </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <input type="text" id="searchextno" placeholder="Ext. No." class="form-control" tabindex="2" ng-model="advancedSearchObject.EXTERNAL_MARKING">
+            </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <input type="text" id="searchname" placeholder="Name" class="form-control" tabindex="3" ng-model="advancedSearchObject.NAME">
+            </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <input type="text" id="searchsignal" placeholder="Signal/IRCS" class="form-control" tabindex="4" ng-model="advancedSearchObject.IRCS">
+            </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <input type="text" id="searchcfr" placeholder="CFR" class="form-control" tabindex="5" ng-model="advancedSearchObject.CFR">
+            </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <input type="text" id="searchmmsi" placeholder="MMSI" class="form-control" tabindex="6" ng-model="advancedSearchObject.MMSI">
+            </div>
+
+        </div>
+
+        <div class="row nomargin">
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <input type="text" id="searchhomeport" placeholder="Homeport name" class="form-control" tabindex="7" ng-model="advancedSearchObject.HOMEPORT">
+            </div>
+           <div class="col-md-2 smallerpadding searchcriteria">
+                <datepicker-input name="programStartDate" placeholder="Reporting start date" model="advancedSearchObject.REPORTING_START_DATE"></datepicker-input>
+            </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <datepicker-input name="programStartDate" placeholder="Reporting end date" model="advancedSearchObject.REPORTING_END_DATE"></datepicker-input>
+            </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <dropdown ng-model="advancedSearchObject.ACTIVE" initialtext="{{'vessel.advanced_search_placeholder_active' | i18n}}" items="activeTypes"></dropdown>
+            </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <dropdown ng-model="advancedSearchObject.TYPE" initialtext="{{'vessel.advanced_search_placeholder_type' | i18n}}" items="vesselTypes"></dropdown>
+            </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <dropdown ng-model="advancedSearchObject.TYPE" initialtext="{{'vessel.advanced_search_placeholder_license_type' | i18n}}" items="licenseTypes"></dropdown>
+            </div>
+        </div>
+
+    </div>
+</div>

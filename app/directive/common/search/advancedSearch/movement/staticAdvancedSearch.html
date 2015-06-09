@@ -59,7 +59,7 @@
             <dropdown ng-model="advancedSearchObject.STATUS" initialtext="{{'movement.advanced_search_placeholder_status' | i18n}}" items="status"></dropdown>
         </div>
         <div class="col-md-6 smallerpadding searchcriteria">
-            <dropdown ng-model="advancedSearchObject.GROUP_ID" initialtext="{{'movement.advanced_search_placeholder_groups' | i18n}}" items="groups"></dropdown>
+            <saved-search-dropdown type="VESSEL" class="dropdown simpleSearch" ng-model="selectedVesselGroup" initialtext="{{'common.search_group_dropdown' | i18n}}" callback="selectVesselGroup"></saved-search-dropdown>
         </div>
          <div class="col-md-6 smallerpadding searchcriteria">
             <dropdown ng-model="advancedSearchObject.MAP_AREA" initialtext="{{'movement.advanced_search_placeholder_map_area' | i18n}}" items="mapArea"></dropdown>
@@ -74,7 +74,7 @@
             <saved-search-dropdown type="MOVEMENT" ng-model="selectedSavedSearch" initialtext="{{'movement.advanced_search_placeholder_saved_searches' | i18n}}" callback="performSavedSearch"></saved-search-dropdown>
         </div>
         <div class="col-md-8 col-md-offset-4 colNoPadding searchcriteriadropdown">
-            <button type="submit" class="btn btn-primary btn-sm movementadvancedsearchbutton" ng-click="performAdvancedSearch()">
+            <button type="submit" class="btn btn-primary btn-sm fullWidth" ng-click="performAdvancedSearch()">
                 {{'common.search' | i18n}}
             </button>
         </div>
