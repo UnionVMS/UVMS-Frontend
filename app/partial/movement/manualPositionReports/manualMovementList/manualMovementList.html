@@ -40,6 +40,8 @@
                     <th sortable-table-header by="currentSearchResult.sortBy" reverse="currentSearchResult.sortReverse" order="'longitude'">{{'movement.table_header_longitude' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResult.sortBy" reverse="currentSearchResult.sortReverse" order="'type'">{{'movement.table_header_meassured_speed' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResult.sortBy" reverse="currentSearchResult.sortReverse" order="'course'">{{'movement.table_header_course' | i18n}}</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -55,11 +57,20 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td>
+                    	<a href ng-click="deletePosition()">
+                    		<i class="positionedit fa fa-pencil-square-o fa-lg"></i>
+                    	</a>
+                    </td>
+                    <td>
+                    	<a href ng-click="editPosition()">
+                    		<i class="positionremove fa fa-trash-o fa-lg"></i>
+                    	</a>
+                    </td>
                 </tr>
             </tbody>
         </table>
-        <!--<search-result-error-alert ng-show="currentSearchResults.errorMessage">{{currentSearchResults.errorMessage}}</search-result-error-alert>
-    -->
+        <search-result-error-alert ng-show="currentSearchResults.errorMessage">{{currentSearchResults.errorMessage}}</search-result-error-alert>
     </div>
     <div class="col-md-12 searchResultsLoading" ng-show="currentSearchResult.loading">
         <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>        

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService) {
+angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService) {
 
 	var getListRequest = new GetListRequest(1, 20, true, []),
         advancedSearchObject  = {};
@@ -50,8 +50,11 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
         searchMovements : function(){
             //intercept request and set utc timezone on dates.
             checkTimeSpanAndTimeZone(getListRequest.criterias);
-            
             return movementRestService.getMovementList(getListRequest);
+        },
+
+        searchManualPositions : function(){
+            return manualPositionRestService.getManualPositionList(getListRequest);
         },
 
         //Do the search for mobile terminals
