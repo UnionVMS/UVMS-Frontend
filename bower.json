@@ -27,7 +27,7 @@
     "font-awesome": "~4.0",
     "datetimepicker": "~2.4.3",
     "angular-dynamic-locale": ">=0.1.27",
-    "angucomplete":">=1.0.0"
+    "angucomplete": "darylrowland/angucomplete"
   },
   "resolutions": {
     "angular": "^1.3"
