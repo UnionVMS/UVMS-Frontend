@@ -35,7 +35,10 @@ angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocalePr
         .when('/communication/polling/logs', {
             templateUrl: 'partial/polling/pollingLogs/pollingLogs.html', 
             resolve: generalRouteResolves
-        });        
+        })
+        .when('/movement/manual', {
+            templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html'
+        });
     /* Add New Routes Above */
     $routeProvider.otherwise({redirectTo:'/today'});
 
