@@ -7,6 +7,7 @@
 	"table_header_flag_state" : "F.S",
 	"table_header_external_marking":"Ext.No",
 	"table_header_ircs":"IRCS",
+	"table_header_cfr" : "CFR",
     "table_header_name":"Name",
 	"table_header_type":"Type",
 	"table_header_time":"Time",
@@ -17,6 +18,7 @@
 	"table_header_cs" : "CS",
 	"table_header_course" : "Course",
 	"table_header_message_type" : "Msg.Type",
+	"table_header_meassured_speed":	"Meassured speed",
 	"table_header_source" : "Source",
 	"movement_search_error_result_zero_pages" : "No movements could be retrieved at this time.",
 	"toggle_advanced_search_simple" : "Simple search",
@@ -56,6 +58,11 @@
 	"editselection_edit_selection" : "Edit selection",
 	"editselection_export_selection" : "Export selection",
 	"editselection_inactivate" : "Inactivate",
-	"movement_speed_unit" : "kts"
+	"movement_speed_unit" : "kts",
+	"manual_add_new_manual_report" : "New manual report",
+	"external_marking_filter_external_marking" : "Ext. No",
+	"external_marking_filter_ircs" : "IRCS",
+	"external_marking_filter_cfr" : "CFR",
+	"external_marking_filter_name" : "Name"
 
 }

@@ -1,2 +1,18 @@
 <div class="col-md-12" ng-controller="ManualPositionReportsCtrl">
+    <div static-include="partial/movement/movementPageHeader/movementPageHeader.html"></div>
+    <div class="autoMovement">
+        <div class="container">
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary btn-sm addmanualmovementbutton" ng-click="">
+                    <span class="fa fa-plus-square" aria-hidden="true"></span> &nbsp;
+                    <span>{{'movement.manual_add_new_manual_report' | i18n }}</span>
+                </button>
+            </div>
+        </div>
+        <div class="containerWrapper grayContainer">
+            <div class="container">
+            	<div ng-include="'partial/movement/manualMovementList/manualMovementList.html'"></div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -25,8 +25,9 @@
     "moment": "~2.5",
     "less.js": "~2.3",
     "font-awesome": "~4.0",
-    "datetimepicker": "https://github.com/xdan/datetimepicker.git#~2.4.3",
-    "angular-dynamic-locale": ">=0.1.27"
+    "datetimepicker": "~2.4.3",
+    "angular-dynamic-locale": ">=0.1.27",
+    "angucomplete":">=1.0.0"
   },
   "resolutions": {
     "angular": "^1.3"

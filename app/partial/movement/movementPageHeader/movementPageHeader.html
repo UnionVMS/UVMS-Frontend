@@ -2,11 +2,11 @@
     <div class="row">
         <div class="col-md-8 pageMenu">
             <ul class="horizontal pipeSeparator">
-                <li class="active"><a href="#movement">{{'movement.header_position_reports' | i18n }}</a></li>
-                <li><a href="#movement/manualPositionReports">{{'movement.header_manual_position_reports' | i18n }}</a></li>
+                <li ng-class="{active: !isManualMovement == true}"><a href="#/movement">{{'movement.header_position_reports' | i18n }}</a></li>
+                <li ng-class="{active: !isManualMovement == false}"><a href="#/movement/manual">{{'movement.header_manual_position_reports' | i18n }}</a></li>
             </ul>
         </div>
-        <div class="col-md-4 pull-right textAlignRight">
+        <div class="col-md-4 pull-right textAlignRight" ng-hide="isManualMovement">
             <a class="refreshbutton" href="" ng-click="refreshMovements()">
                 <i class="fa fa-refresh"></i>
                 {{'movement.refresh'| i18n}}                     

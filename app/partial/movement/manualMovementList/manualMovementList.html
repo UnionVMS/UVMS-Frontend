@@ -1,0 +1,69 @@
+<div ng-controller="ManualmovementlistCtrl">
+	<div class="manualmovementlistfilter">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-2">
+					<input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_external_marking' | i18n}}" ng-model="searchFilterExternalMarking">
+				</div>
+				<div class="col-md-2">
+					<input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_ircs' | i18n}}" ng-model="searchFilterIRCS">
+				</div>
+				<div class="col-md-2">
+					<input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_cfr' | i18n}}" ng-model="searchFilterCFR">
+				</div>
+				<div class="col-md-2">
+					<input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_name' | i18n}}" ng-model="searchFilterName">
+				</div>
+				 <div class="col-md-1 nopaddingleft nopaddingright">
+	                <button type="submit" class="btn btn-primary btn-sm searchFilterButton" ng-click="">
+	                    <span>{{'common.search' | i18n }}</span>
+	                </button>
+            	</div>
+            	<div class="col-md-2 pull-right textAlignRight printAndExport">
+                        <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportAsFile()"></i>
+                        <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>              
+                </div>
+			</div>
+		</div>
+	</div>
+	<div class="movementtablecontainer">
+        <table class="searchResults table colorOdd movementtable">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
+                    <th sortable-table-header by="manualSearchResult.sortBy" reverse="manualSearchResult.sortReverse" order="'externalMarking'">{{'movement.table_header_external_marking' | i18n}}</th>
+                    <th sortable-table-header by="manualSearchResult.sortBy" reverse="manualSearchResult.sortReverse" order="'ircs'">{{'movement.table_header_ircs' | i18n}}</th>
+					<th sortable-table-header by="manualSearchResult.sortBy" reverse="manualSearchResult.sortReverse" order="'ircs'">{{'movement.table_header_cfr' | i18n}}</th>
+					<th sortable-table-header by="manualSearchResult.sortBy" reverse="manualSearchResult.sortReverse" order="'name'">{{'movement.table_header_name' | i18n}}</th>
+					<th sortable-table-header by="manualSearchResult.sortBy" reverse="manualSearchResult.sortReverse" order="'time'">{{'movement.table_header_time' | i18n}}</th>
+                    <th sortable-table-header by="manualSearchResult.sortBy" reverse="manualSearchResult.sortReverse" order="'latitude'">{{'movement.table_header_latitude' | i18n}}</th>
+                    <th sortable-table-header by="manualSearchResult.sortBy" reverse="manualSearchResult.sortReverse" order="'longitude'">{{'movement.table_header_longitude' | i18n}}</th>
+                    <th sortable-table-header by="manualSearchResult.sortBy" reverse="manualSearchResult.sortReverse" order="'type'">{{'movement.table_header_meassured_speed' | i18n}}</th>
+                    <th sortable-table-header by="manualSearchResult.sortBy" reverse="manualSearchResult.sortReverse" order="'course'">{{'movement.table_header_course' | i18n}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--<tr ng-repeat="movement in currentSearchResults.movements | orderBy:sortType:sortReverse | filter:searchFilter">-->
+                <tr>
+                	<td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <!--<search-result-error-alert ng-show="currentSearchResults.errorMessage">{{currentSearchResults.errorMessage}}</search-result-error-alert>
+    -->
+    </div>
+    <div class="col-md-12 searchResultsLoading" ng-show="manualSearchResult.loading">
+        <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>        
+    </div>
+</div>
+
+

@@ -24,6 +24,8 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
          //$scope.searchMovements();
     };
 
+    $scope.isManualMovement = false;
+
     //AUTOMATIC REFRESH OF THE MOVEMENTS LIST
     var autoRefreshTimer;
     var AUTO_REFRESH_INTERVAL_SECONDS = 60;

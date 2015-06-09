@@ -65,9 +65,15 @@ angular.module('unionvmsWeb')
 		};
 
 		$scope.setSimpleSearchCriterias = function (value){
-			//ng-change for name/ircs input.
-			$scope.advancedSearchObject.NAME = value + "*";
-			$scope.advancedSearchObject.IRCS = value + "*";
+			
+			if(!value)
+			{
+				delete $scope.advancedSearchObject.NAME; 
+				delete $scope.advancedSearchObject.IRCS;
+			} else {
+				$scope.advancedSearchObject.NAME = value + "*";
+				$scope.advancedSearchObject.IRCS = value + "*";
+			}
 		};
 
 		  //Watch for changes to the START DATE input
