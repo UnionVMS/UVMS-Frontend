@@ -6,7 +6,7 @@ describe('ManualPositionReportModalCtrl', function() {
 
     beforeEach(inject(function($rootScope, $controller) {
       scope = $rootScope.$new();
-      ctrl = $controller('ManualPositionReportModalCtrl', {$scope: scope});
+      ctrl = $controller('ManualPositionReportModalCtrl', {$scope: scope, $modalInstance: {}});
     }));	
 
 	it('should ...', inject(function() {
