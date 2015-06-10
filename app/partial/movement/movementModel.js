@@ -7,24 +7,31 @@ angular.module('unionvmsWeb')
 
 	Movement.fromJson = function(data){
 		var movement = new Movement();
-		if (data.movement.carrier){
-			movement.state = data.movement.carrier.flagState;
-			movement.externalMarking = data.movement.carrier.externalMarking;
-			movement.ircs = data.movement.carrier.ircs;
-			movement.name = data.movement.carrier.name;
+		
+		if(data){
+
+			movement.id = data.movement.id;
+			movement.time = "-";//data.time;
+
+			if(data.vessel)
+			{
+				movement.state = data.vessel.flagState;
+				movement.externalMarking = data.vessel.externalMarking;
+				movement.ircs = data.vessel.ircs;
+				movement.name = data.vessel.name;
+
+			}
+			if (data.movement) {
+				movement.latitude = data.movement.latitude;
+				movement.longitude = data.movement.longitude;
+				movement.status = data.movement.status;
+				movement.source = data.movement.source;
+				movement.measuredSpeed = data.movement.measuredSpeed;
+				movement.calculatedSpeed = data.movement.calculatedSpeed;
+				movement.course = data.movement.course;
+				movement.messageType = "-"; //data.movement.messageType;	
+			}
 		}
-		if (data.movement.position) {
-			movement.latitude = data.movement.position.latitude;
-			movement.longitude = data.movement.position.longitude;	
-		}
-		movement.id = data.movement.id;
-		movement.time = "NOT PRESENT";//data.time;	
-		movement.status = data.movement.status;
-		movement.measuredSpeed = data.movement.measuredSpeed;
-		movement.calculatedSpeed = data.movement.calculatedSpeed;
-		movement.course = data.movement.course;
-		movement.messageType = data.movement.messageType;
-		movement.source = data.movement.source;
 
 		return movement;
 	};

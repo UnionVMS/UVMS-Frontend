@@ -73,7 +73,6 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
         $scope.currentSearchResults.movements = [];
         $scope.currentSearchResults.errorMessage ="";
         $scope.currentSearchResults.loading = true;
-
     };
 
     init();
