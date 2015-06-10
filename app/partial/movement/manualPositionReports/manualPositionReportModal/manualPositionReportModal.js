@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, movementRestService) {
 
 	$scope.flagState = "SWE";
 	$scope.ircs = "SKRM";
@@ -11,6 +11,11 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 	$scope.longitude = "11° 58,01' N";
 	$scope.measuredSpeed = "8";
 	$scope.course = "93";
+
+	$scope.center = {
+		autoDiscover: true,
+		zoom: 11
+	};
 
 	$scope.dismiss = function() {
 		$modalInstance.dismiss();

@@ -24,10 +24,11 @@
     "angular-bootstrap": "~0.13",
     "moment": "~2.5",
     "less.js": "~2.3",
-    "font-awesome": "~4.0",
+    "font-awesome": ">=4.0",
     "datetimepicker": "~2.4.3",
     "angular-dynamic-locale": ">=0.1.27",
-    "angucomplete": "darylrowland/angucomplete"
+    "angucomplete": "darylrowland/angucomplete",
+    "angular-leaflet-directive": ">=0.8.2"
   },
   "resolutions": {
     "angular": "^1.3"
