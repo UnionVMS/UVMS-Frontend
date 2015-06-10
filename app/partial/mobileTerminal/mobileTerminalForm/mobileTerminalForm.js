@@ -179,7 +179,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         //Update values in the currentMobileTerminal object
         $scope.currentMobileTerminal.setAttributes(updatedMobileTerminal.attributes);
         $scope.currentMobileTerminal.setChannels(updatedMobileTerminal.channels);
-        $scope.currentMobileTerminal.guid = updatedMobileTerminal.mobileTerminalId.guid;
+        $scope.currentMobileTerminal.guid = updatedMobileTerminal.guid;
         $scope.mergeCurrentMobileTerminalIntoSearchResults();
     };
 

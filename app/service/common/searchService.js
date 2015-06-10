@@ -52,7 +52,11 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
             checkTimeSpanAndTimeZone(getListRequest.criterias);
             return movementRestService.getMovementList(getListRequest);
         },
-
+        //Do search for pollables
+        searchForPollableTerminals : function(){
+            return mobileTerminalRestService.getPollableTerminals(getListRequest);
+        },
+        //search for manual positions.
         searchManualPositions : function(){
             return manualPositionRestService.getManualPositionList(getListRequest);
         },

@@ -16,6 +16,11 @@ angular.module('unionvmsWeb')
                     list: { method: 'POST'}
                 });
             },
+            getPollableTerminals : function(){
+                return $resource(baseUrl +'/mobileterminal/rest/poll/pollable/',{},{
+                    list: { method: 'POST'}
+                });
+            },
             assignMobileTerminal : function(){
                 return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/assign/');
             },
