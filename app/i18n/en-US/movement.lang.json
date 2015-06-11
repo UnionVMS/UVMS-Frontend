@@ -85,7 +85,8 @@
 	"manual_position_label_add_another": "Add another",
 
 	"manual_position_button_send": "Send",
-	"manual_position_button_clear": "Clear"
+    "manual_position_button_clear": "Clear",
+	"manual_position_button_search_error": "Failed to get matching vessels."
 
 
 }

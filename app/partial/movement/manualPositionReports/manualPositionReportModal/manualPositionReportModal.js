@@ -1,7 +1,10 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, movementRestService) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, movementRestService, vesselRestService, GetListRequest) {
 
+    $scope.errorMessage ="";
+
+    //The new manual position report
 	$scope.flagState = "SWE";
-	$scope.ircs = "SKRM";
+	$scope.ircs = "SKRSM";
 	$scope.cfr = "SWE0001234";
 	$scope.externalMarking = "VG40";
 	$scope.name = "Nordvåg";
@@ -20,6 +23,43 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 	$scope.dismiss = function() {
 		$modalInstance.dismiss();
 	};
+
+    //Auto suggestions search
+    var vesselsGetListRequest = new GetListRequest(1, 20, true, []);
+
+    //Get vessels matching search query
+    var getVessels = function() {
+        $scope.errorMessage = "";
+        return vesselRestService.getVesselList(vesselsGetListRequest).then(
+            function(vesselListPage){
+                return vesselListPage.vessels;
+            },
+            function(error){
+                $scope.errorMessage = locale.getString("movement.manual_position_button_search_error");
+                return [];
+            }
+        );
+    };
+
+    $scope.getVesselsByIrcs = function(value){
+        vesselsGetListRequest.resetCriterias();
+        vesselsGetListRequest.addSearchCriteria("IRCS", value +"*");
+        return getVessels();
+    };
+
+    $scope.getVesselsByCFR = function(value){
+        vesselsGetListRequest.resetCriterias();
+        vesselsGetListRequest.addSearchCriteria("CFR", value +"*");
+        return getVessels();
+    };
+    //On select item in search suggestions
+    $scope.onVesselSuggestionSelect = function(item, model, label){
+        //Update values based on selection
+        $scope.ircs = item.ircs;
+        $scope.name = item.name;
+        $scope.externalMarking = item.externalMarking;
+        $scope.cfr = item.cfr;
+    };
 
 });
 

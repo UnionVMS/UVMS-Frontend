@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource', 'ngLocalize', 'tmh.dynamicLocale','angucomplete', 'leaflet-directive']);
+angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource', 'ngLocalize', 'tmh.dynamicLocale', 'leaflet-directive']);
 
 //Resolve used for all routes
 var generalRouteResolves =  {
