@@ -8,7 +8,8 @@ angular.module('unionvmsWeb').directive('datepickerInput', function($compile) {
             placeholder : '@',
             ngDisabled : '=',
             ngRequired : '=',
-            startDate : '='
+            startDate : '=',
+            datepickerMaxDate: '@'
 		},
 		templateUrl: 'directive/common/datepickerInput/datepickerInput.html',
 		link: function(scope, element, attrs, fn) {
@@ -93,7 +94,7 @@ angular.module('unionvmsWeb')
         //Watch changes of the model and update the viewModel when it happens
         $scope.$watch('model', function(newValue) {
             //Don't update viewModel if the watch 
-            if(watchModelChanges){
+            if (watchModelChanges || ($scope.viewModel === undefined && newValue !== undefined)) {
                 $scope.viewModel = newValue;
             }
             watchModelChanges = true;

@@ -108,3 +108,22 @@ angular.module('unionvmsWeb').directive('minDate', function() {
         }
     };
 });
+
+angular.module('unionvmsWeb').directive('maxDate', function() {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, elem, attr, ngModel) {
+            ngModel.$parsers.unshift(function(value) {
+                var valid = new Date(value).getTime() < attr.maxDate;
+                ngModel.$setValidity('maxDate', valid);
+                return value;
+            });
+
+            ngModel.$formatters.unshift(function(value) {
+                ngModel.$setValidity('maxDate', new Date(value).getTime() < attr.maxDate);
+                return value;
+            });
+        }
+    };
+});

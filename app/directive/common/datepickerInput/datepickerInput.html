@@ -1,6 +1,6 @@
 <div>
 <p class="input-group nomargin datepicker">
-    <input type="text" class="form-control datetimeinput" ng-model="viewModel" placeholder="{{placeholder}}" ng-disabled="ngDisabled" ng-required="ngRequired" min-date="startDate" />
+    <input type="text" class="form-control datetimeinput" ng-model="viewModel" placeholder="{{placeholder}}" ng-disabled="ngDisabled" ng-required="ngRequired" min-date="startDate" ng-attr-max-date="{{datepickerMaxDate}}"/>
 
     <span class="input-group-btn">
         <button type="button" class="btn btn-default btn-cal" ng-click="open()" ng-disabled="ngDisabled">

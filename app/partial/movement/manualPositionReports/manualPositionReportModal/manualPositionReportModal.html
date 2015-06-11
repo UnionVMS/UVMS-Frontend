@@ -71,7 +71,7 @@
 			<div ng-class="{'has-error': manualPositionReportForm.dateTime.$invalid}" class="col-md-5">
 				<label>
 					{{'movement.manual_position_field_label_date_time' | i18n}}
-					<datepicker-input time="true" model="dateTime" name="dateTime" ng-required="true"></datepicker-input>
+					<datepicker-input time="true" model="dateTime" name="dateTime" ng-required="true" datepicker-max-date="{{maxDateTime}}"></datepicker-input>
 				</label>
 			</div>
 		</div>
