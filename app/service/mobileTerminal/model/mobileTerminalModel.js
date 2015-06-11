@@ -11,7 +11,10 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             'SOFTWARE_VERSION',
             'STARTED_ON',
             'TRANSCEIVER_TYPE',
-            'UNINSTALLED_ON'
+            'UNINSTALLED_ON',
+            'FREQUENCY_EXPECTED',
+            'FREQUENCY_GRACE_PERIOD',
+            'FREQUENCY_IN_PORT'
         ];
 
         function MobileTerminal(){
@@ -229,6 +232,36 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 return false;
             }
         };
+
+
+        //Check if the list of attributes and channels are equal for this and another mobile terminal
+        MobileTerminal.prototype.isEqualAttributesAndChannels = function(other) {
+            if (!other) {
+                return false;
+            }
+ 
+            //Compare attributes
+            if(!angular.equals(this.attributes, other.attributes)){
+                return false;
+            }
+
+            //Compare channels length
+            if(this.channels.length !== other.channels.length){
+                return false;
+            }
+
+            //Compare channel objects
+            for(var i=0; i<this.channels.length; i++){
+                if(!angular.equals(this.channels[i].dataTransferObject(), other.channels[i].dataTransferObject())){
+                    return false;
+                }
+            }
+
+            return true;
+        };
+        
+
+        
 
         return MobileTerminal;
     });

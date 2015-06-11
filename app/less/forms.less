@@ -116,3 +116,23 @@ label.section{
 select{
     padding: 10px;
 }
+
+
+.unit-input {
+    @unitWidth:30px;
+    position: relative;
+    text-transform: none;
+    padding-right: @unitWidth;
+
+    .unit-box {
+        position: absolute;
+        right:0px;
+        top:0px;
+        width: @unitWidth;
+        height: 100%;
+        padding: 4px 4px 0;
+        background-color: lightgray;
+        border: 1px solid #cccccc;
+        text-align: center;
+    }
+}

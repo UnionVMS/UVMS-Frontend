@@ -156,6 +156,32 @@
                         <datepicker-input model="currentMobileTerminal.attributes.UNINSTALLED_ON"></datepicker-input>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.FREQUENCY_EXPECTED" ng-class="{'has-error': mobileTerminalForm.frequency_expected.$invalid && (submitAttempted || mobileTerminalForm.frequency_expected.$dirty)}">
+                        <label>{{'mobileTerminal.form_inmarsatc_expected_freq_label' | i18n}}</label>
+                        <div class="unit-input">
+                            <input class="form-control" ng-model="currentMobileTerminal.attributes.FREQUENCY_EXPECTED" min="0" type="number" name="frequency_expected"/>
+                            <div class="unit-box">{{"common.time_hour_short" | i18n}}</div>
+                        </div>
+                        <input-validation-message types="number" input="mobileTerminalForm.frequency_expected"></input-validation-message>                        
+                    </div>
+                    <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.FREQUENCY_GRACE_PERIOD" ng-class="{'has-error': mobileTerminalForm.frequency_grace.$invalid && (submitAttempted || mobileTerminalForm.frequency_grace.$dirty)}">
+                        <label>{{'mobileTerminal.form_inmarsatc_grace_period_label' | i18n}}</label>
+                        <div class="unit-input">
+                            <input class="form-control" ng-model="currentMobileTerminal.attributes.FREQUENCY_GRACE_PERIOD" min="0" type="number" name="frequency_grace"/>
+                            <div class="unit-box">{{"common.time_hour_short" | i18n}}</div>
+                        </div>
+                        <input-validation-message types="number" input="mobileTerminalForm.frequency_grace"></input-validation-message>
+                    </div>
+                    <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.FREQUENCY_IN_PORT" ng-class="{'has-error': mobileTerminalForm.frequency_port.$invalid && (submitAttempted || mobileTerminalForm.frequency_port.$dirty)}">
+                        <label>{{'mobileTerminal.form_inmarsatc_in_port_grace_period_label' | i18n}}</label>
+                        <div class="unit-input">
+                            <input class="form-control" ng-model="currentMobileTerminal.attributes.FREQUENCY_IN_PORT" min="0" type="number" name="frequency_port"/>
+                            <div class="unit-box">{{"common.time_hour_short" | i18n}}</div>
+                        </div>
+                        <input-validation-message types="number" input="mobileTerminalForm.frequency_port"></input-validation-message>
+                    </div>                                        
+                </div>
 
             </div>       
         </div>       

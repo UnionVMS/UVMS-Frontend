@@ -202,4 +202,58 @@ describe('MobileTerminalModel', function() {
         var mt = MobileTerminal.fromJson(mobileTerminalData);
         expect(angular.equals(mt, mt.copy())).toBeTruthy();
     }));
+
+    it('isEqualAttributesAndChannels should return true only when all attributes and channels are the same', inject(function(MobileTerminal) {
+        var mt1 = MobileTerminal.fromJson(mobileTerminalData);
+        var mt2 = MobileTerminal.fromJson(mobileTerminalData);
+        expect(mt1.isEqualAttributesAndChannels(mt2)).toBeTruthy();
+    }));    
+
+    it('isEqualAttributesAndChannels should return false when one attribute has changed', inject(function(MobileTerminal) {
+        var mt1 = MobileTerminal.fromJson(mobileTerminalData);
+        var mt2 = MobileTerminal.fromJson(mobileTerminalData);
+        expect(mt1.isEqualAttributesAndChannels(mt2)).toBeTruthy();
+        mt2.attributes.SOFTWARE_VERSION = "changed";
+        expect(mt1.isEqualAttributesAndChannels(mt2)).toBeFalsy();
+    }));
+
+    it('isEqualAttributesAndChannels should return false when one attribute has been added', inject(function(MobileTerminal) {
+        var mt1 = MobileTerminal.fromJson(mobileTerminalData);
+        var mt2 = MobileTerminal.fromJson(mobileTerminalData);
+        expect(mt1.isEqualAttributesAndChannels(mt2)).toBeTruthy();
+        mt2.attributes.NEW = "TEST";
+        expect(mt1.isEqualAttributesAndChannels(mt2)).toBeFalsy();
+    })); 
+
+    it('isEqualAttributesAndChannels should return false when one attribute has been deleted', inject(function(MobileTerminal) {
+        var mt1 = MobileTerminal.fromJson(mobileTerminalData);
+        var mt2 = MobileTerminal.fromJson(mobileTerminalData);
+        expect(mt1.isEqualAttributesAndChannels(mt2)).toBeTruthy();
+        delete mt2.attributes.SOFTWARE_VERSION;
+        expect(mt1.isEqualAttributesAndChannels(mt2)).toBeFalsy();
+    }));
+
+    it('isEqualAttributesAndChannels should return false when a channel has been changed', inject(function(MobileTerminal) {
+        var mt1 = MobileTerminal.fromJson(mobileTerminalData);
+        var mt2 = MobileTerminal.fromJson(mobileTerminalData);
+        expect(mt1.isEqualAttributesAndChannels(mt2)).toBeTruthy();
+        mt2.channels[0].capabilities.POLLING=false;
+        expect(mt1.isEqualAttributesAndChannels(mt2)).toBeFalsy();
+    }));  
+
+    it('isEqualAttributesAndChannels should return false when a channel has been added', inject(function(MobileTerminal, CommunicationChannel) {
+        var mt1 = MobileTerminal.fromJson(mobileTerminalData);
+        var mt2 = MobileTerminal.fromJson(mobileTerminalData);
+        expect(mt1.isEqualAttributesAndChannels(mt2)).toBeTruthy();
+        mt2.channels.push(new CommunicationChannel());
+        expect(mt1.isEqualAttributesAndChannels(mt2)).toBeFalsy();
+    }));    
+
+    it('isEqualAttributesAndChannels should return false when a channel has been deleted', inject(function(MobileTerminal, CommunicationChannel) {
+        var mt1 = MobileTerminal.fromJson(mobileTerminalData);
+        var mt2 = MobileTerminal.fromJson(mobileTerminalData);
+        expect(mt1.isEqualAttributesAndChannels(mt2)).toBeTruthy();
+        mt2.channels.splice(0,1);
+        expect(mt1.isEqualAttributesAndChannels(mt2)).toBeFalsy();
+    }));            
 });
