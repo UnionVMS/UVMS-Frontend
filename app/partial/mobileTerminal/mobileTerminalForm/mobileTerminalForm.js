@@ -35,7 +35,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
             var systemName = $scope.currentMobileTerminal.type;
             return $scope.transpondersConfig.getTerminalConfigBySystemName(systemName);
         }
-    };    
+    };
 
     $scope.isDirty = function() {
         var isDirty = !$scope.currentMobileTerminal.isEqualAttributesAndChannels($scope.getOriginalMobileTerminal());
@@ -247,15 +247,15 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     };
 
     $scope.selectedConfigChannel = function(selected) {
-        return $scope.selectChannel("config", selected);
+        return $scope.selectChannel("CONFIG", selected);
     };
 
     $scope.selectedDefaultChannel = function(selected) {
-        return $scope.selectChannel("default", selected);
+        return $scope.selectChannel("DEFAULT", selected);
     };
 
     $scope.selectedPollingChannel = function(selected) {
-        return $scope.selectChannel("polling", selected);
+        return $scope.selectChannel("POLLING", selected);
     };
 
     //Move channel in the list. Used when sorting the channels up and down
