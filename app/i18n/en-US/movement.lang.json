@@ -86,7 +86,8 @@
 
 	"manual_position_button_send": "Send",
     "manual_position_button_clear": "Clear",
-	"manual_position_button_search_error": "Failed to get matching vessels."
+	"manual_position_button_search_error": "Failed to get matching vessels.",
 
+	"manual_position_warning_high_speed": "Speed is higher than {1} kts."
 
 }

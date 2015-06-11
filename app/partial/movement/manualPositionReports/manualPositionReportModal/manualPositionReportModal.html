@@ -107,6 +107,10 @@
 			</div>
 		</div>
 
+		<div ng-if="isHighSpeed()" class="alert alert-warning" style="padding: 5px 15px; margin: 15px -10px;">
+			{{"movement.manual_position_warning_high_speed" | i18n:[measuredSpeedWarningThreshold]}}
+		</div>
+
 		<leaflet center="center" height="200px" width="100%"></leaflet>
 
 		<div class="row buttons">

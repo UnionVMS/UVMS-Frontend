@@ -15,9 +15,15 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 	$scope.measuredSpeed = 8;
 	$scope.course = 93;
 
+	$scope.measuredSpeedWarningThreshold = 15;
+
 	$scope.center = {
 		autoDiscover: true,
 		zoom: 11
+	};
+
+	$scope.isHighSpeed = function() {
+		return $scope.measuredSpeed > $scope.measuredSpeedWarningThreshold;
 	};
 
 	$scope.dismiss = function() {
