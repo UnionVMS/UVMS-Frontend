@@ -30,6 +30,9 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     //Get vessels matching search query
     var getVessels = function() {
         $scope.errorMessage = "";
+        //Add FLAG_STATE search criteria
+        //TODO: Get flag state from configuration
+        vesselsGetListRequest.addSearchCriteria("FLAG_STATE", "SWE");
         return vesselRestService.getVesselList(vesselsGetListRequest).then(
             function(vesselListPage){
                 return vesselListPage.vessels;
