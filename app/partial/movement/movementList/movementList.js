@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb').controller('MovementlistCtrl',function($scope){
-
+$scope.selectedMovements = [];
     //Handle click on the top "check all" checkbox
     $scope.checkAll = function(){        
         if($scope.isAllChecked()){
@@ -48,6 +48,25 @@ angular.module('unionvmsWeb').controller('MovementlistCtrl',function($scope){
             }
         });
         return checked;
+    };
+          //Clear the selection
+    $scope.clearSelection = function(){
+        $scope.selectedMovements = [];
+    };
+
+    //Add a mobile terminal to the selection
+    $scope.addToSelection = function(item){
+        $scope.selectedMovements.push(item);
+    };
+
+    //Remove a mobile terminal from the selection
+    $scope.removeFromSelection = function(item){
+        $.each($scope.selectedMovements, function(index, movement){
+            if(movement.isEqualMovement(item)){
+                $scope.selectedMovements.splice(index, 1);
+                return false;
+            }
+        });
     };
 
 });

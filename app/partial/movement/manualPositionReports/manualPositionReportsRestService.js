@@ -52,7 +52,7 @@ angular.module('unionvmsWeb')
                     
                     vessel.externalMarking = "VC_11" + i;
                     vessel.cfr = "1334" + i;
-                    vessel.name = "Velo" + i;
+                    vessel.name = "Velo " + i;
                     vessel.ircs = "65" + Math.floor((Math.random() * 3) + 1) + i;
 
                     movement.time =  moment().format("YYYY-MM-DD HH:mm Z");

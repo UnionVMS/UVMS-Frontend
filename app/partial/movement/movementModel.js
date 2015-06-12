@@ -37,9 +37,9 @@ angular.module('unionvmsWeb')
 	};
 
 
-    //TODO: FIX
+    //TODO: FIX - remove/adapt to model. (eg. when we got id from model, remove ircs  )
     Movement.prototype.isEqualMovement = function(item) {
-        if( item.id === this.id ){
+        if( item.id === this.id && item.ircs === this.ircs ){
             return true;
         }else{
             return false;
