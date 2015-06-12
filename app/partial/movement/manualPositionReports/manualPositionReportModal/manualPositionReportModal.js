@@ -1,19 +1,19 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, movementRestService, vesselRestService, GetListRequest, $filter) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, movementRestService, vesselRestService, GetListRequest, $filter, position) {
 
     $scope.errorMessage ="";
 
     //The new manual position report
 	$scope.flagState = "SWE";
-	$scope.ircs = "SKRSM";
-	$scope.cfr = "SWE0001234";
-	$scope.externalMarking = "VG40";
-	$scope.name = "Nordvåg";
+	$scope.ircs = position.vessel.ircs;
+	$scope.cfr = position.vessel.cfr;
+	$scope.externalMarking = position.vessel.externalMarking;
+	$scope.name = position.vessel.name;
 	$scope.status = "010";
-	$scope.dateTime = "2015-06-11 15:45:00";
-	$scope.latitude = 57.714573;
-	$scope.longitude = 11.973001;
-	$scope.measuredSpeed = 8;
-	$scope.course = 93;
+	$scope.dateTime = position.movement.time;
+	$scope.latitude = position.movement.latitude;
+	$scope.longitude = position.movement.longitude;
+	$scope.measuredSpeed = position.movement.measuredSpeed;
+	$scope.course = position.movement.course;
 
 	$scope.measuredSpeedWarningThreshold = 15;
     $scope.maxDateTime = new Date().getTime();
@@ -91,11 +91,16 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
 angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($modal) {
 	return {
-		show: function() {
+		show: function(position) {
 			$modal.open({
 				templateUrl: 'partial/movement/manualPositionReports/manualPositionReportModal/manualPositionReportModal.html',
 				controller: 'ManualPositionReportModalCtrl',
-				size: 'md'
+				size: 'md',
+                resolve:{
+                    position : function (){
+                        return position || {};
+                    }
+                }
 			});
 		}
 	};

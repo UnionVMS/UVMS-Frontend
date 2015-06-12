@@ -55,11 +55,11 @@ angular.module('unionvmsWeb')
                     vessel.name = "Velo" + i;
                     vessel.ircs = "65" + Math.floor((Math.random() * 3) + 1) + i;
 
-                    movement.time = "";
-                    movement.latitude = "23" + i;
-                    movement.longitude = "45" + i;
-                    movement.measuredSpeed = "23" + i;
-                    movement.course = "3" + i;
+                    movement.time =  moment().format("YYYY-MM-DD HH:mm Z");
+                    movement.latitude = 23 + i;
+                    movement.longitude = 45 + i;
+                    movement.measuredSpeed = 23 + i;
+                    movement.course = Math.floor(3 * 10 * i / Math.floor((Math.random() * 3) + 10));
 
                     position.vessel = vessel;
                     position.movement = movement;

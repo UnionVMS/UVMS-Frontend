@@ -40,7 +40,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     };
 
     $scope.editPosition = function(item){
-        console.log("Editing");
+        ManualPositionReportModal.show(item);
     };
 
     
