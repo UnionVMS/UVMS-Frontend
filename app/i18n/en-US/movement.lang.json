@@ -83,6 +83,7 @@
 	"manual_position_field_unit_knots": "kts",
 
 	"manual_position_label_add_another": "Add another",
+	"manual_position_label_new_position": "New position.",
 
 	"manual_position_button_send": "Send",
     "manual_position_button_clear": "Clear",

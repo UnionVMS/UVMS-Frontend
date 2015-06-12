@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, movementRestService, vesselRestService, GetListRequest) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, movementRestService, vesselRestService, GetListRequest, $filter) {
 
     $scope.errorMessage ="";
 
@@ -18,10 +18,26 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 	$scope.measuredSpeedWarningThreshold = 15;
     $scope.maxDateTime = new Date().getTime();
 
-	$scope.center = {
-		autoDiscover: true,
-		zoom: 11
-	};
+    $scope.center = {
+        autoDiscover: true,
+        zoom: 5
+    };
+
+    $scope.markers = {
+        newPosition: {
+            lat: $scope.latitude,
+            lng: $scope.longitude,
+            message: $filter('i18n')("movement.manual_position_label_new_position")
+        }
+    };
+
+    $scope.$watch('latitude', function(newLatitude) {
+        $scope.markers.newPosition.lat = parseFloat(newLatitude);
+    });
+
+    $scope.$watch('longitude', function(newLongitude) {
+        $scope.markers.newPosition.lng = parseFloat(newLongitude);
+    });
 
 	$scope.isHighSpeed = function() {
 		return $scope.measuredSpeed > $scope.measuredSpeedWarningThreshold;
