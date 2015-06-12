@@ -1,7 +1,7 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, searchService, locale, manualPositionRestService, alertService, ManualPositionReportModal, confirmationModal) {
+angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal) {
 
     $scope.showModal = function() {
-        ManualPositionReportModal.show();
+        ManualPositionReportModal.show(new ManualPosition());
     };
 
     $scope.selectedMovements = [];
