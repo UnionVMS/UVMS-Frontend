@@ -23,20 +23,34 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         zoom: 5
     };
 
+    $scope.newPosition = {
+        lat: $scope.latitude,
+        lng: $scope.longitude,
+        message: $filter('i18n')("movement.manual_position_label_new_position")
+    };
+
     $scope.markers = {
-        newPosition: {
-            lat: $scope.latitude,
-            lng: $scope.longitude,
-            message: $filter('i18n')("movement.manual_position_label_new_position")
+        newPosition: $scope.newPosition
+    };
+
+    $scope.updateNewPositionVisibility = function() {
+        var hasCoordinates = !isNaN($scope.longitude) && !isNaN($scope.latitude);
+        if ($scope.markers.newPosition && !hasCoordinates) {
+            $scope.markers = {};
+        }
+        else if (!$scope.markers.newPosition && hasCoordinates) {
+            $scope.markers = { newPosition: $scope.newPosition };
         }
     };
 
     $scope.$watch('latitude', function(newLatitude) {
-        $scope.markers.newPosition.lat = parseFloat(newLatitude);
+        $scope.newPosition.lat = parseFloat(newLatitude);
+        $scope.updateNewPositionVisibility();
     });
 
     $scope.$watch('longitude', function(newLongitude) {
-        $scope.markers.newPosition.lng = parseFloat(newLongitude);
+        $scope.newPosition.lng = parseFloat(newLongitude);
+        $scope.updateNewPositionVisibility();
     });
 
 	$scope.isHighSpeed = function() {
