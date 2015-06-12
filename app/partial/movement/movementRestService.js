@@ -10,12 +10,12 @@ angular.module('unionvmsWeb')
             });
         },
         savedSearch : function() {
-            return $resource(baseUrl + '/movement/rest/movement/group/:groupId', {}, {
+            return $resource(baseUrl + '/movement/rest/search/group/:groupId', {}, {
                 update: {method: 'PUT'}                    
             });
         },
         getSavedSearches : function() {
-            return $resource(baseUrl + '/movement/rest/movement/groups');
+            return $resource(baseUrl + '/movement/rest/search/groups');
         },
     };
 })
