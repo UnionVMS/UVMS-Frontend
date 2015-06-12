@@ -202,6 +202,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
         }else if(selectedItem.code === 'EXPORT'){
             alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
         }
+        $scope.editSelection = "";
     };
 
     $scope.$on("$destroy", function() {

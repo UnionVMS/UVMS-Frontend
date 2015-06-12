@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope,searchService, locale, ManualPositionReportModal) {
+angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope,searchService, locale, ManualPositionReportModal, confirmationModal) {
 
     $scope.showModal = function() {
         ManualPositionReportModal.show();
@@ -18,11 +18,16 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     var init = function(){
         $scope.searchManualPositions();
     };
-
     $scope.isManualMovement = true;
     
     $scope.deletePosition = function(item){
-        console.log("Deleting");
+        var options = {
+            textLabel : locale.getString("movement.manual_position_delete_confirm_text")
+        };
+        confirmationModal.open(function(){
+            console.log("Confirmed!");
+            console.log("TODO: Remove item now");
+        }, options);
     };
 
     $scope.editPosition = function(item){
