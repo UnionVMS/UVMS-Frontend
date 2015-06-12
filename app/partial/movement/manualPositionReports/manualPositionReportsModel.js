@@ -2,12 +2,14 @@ angular.module('unionvmsWeb')
 .factory('ManualPosition', function(){
 
 	function ManualPosition(){
+        this.id = undefined;
 		this.movement = {};
 		this.vessel = {};
 	}
 
 	ManualPosition.fromJson = function(data){
 		var manualPosition = new ManualPosition();
+        manualPosition.id = data.id;
 		if (data.vessel) {
 			manualPosition.vessel.externalMarking = data.vessel.externalMarking;
 			manualPosition.vessel.cfr = data.vessel.cfr;

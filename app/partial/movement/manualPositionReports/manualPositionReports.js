@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope,searchService, locale, ManualPositionReportModal, confirmationModal) {
+angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, searchService, locale, manualPositionRestService, alertService, ManualPositionReportModal, confirmationModal) {
 
     $scope.showModal = function() {
         ManualPositionReportModal.show();
@@ -20,13 +20,20 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     };
     $scope.isManualMovement = true;
     
-    $scope.deletePosition = function(item){
+    $scope.deletePosition = function(manualPositionReport){
         var options = {
             textLabel : locale.getString("movement.manual_position_delete_confirm_text")
         };
         confirmationModal.open(function(){
             console.log("Confirmed!");
-            console.log("TODO: Remove item now");
+            manualPositionRestService.deleteManualPositionReport(manualPositionReport).then(
+                function(manualPositionReport){
+                    alertService.showSuccessMessageWithTimeout(locale.getString('movement.manual_position_delete_success'));
+                },
+                function(error){
+                    alertService.showErrorMessage(locale.getString('movement.manual_position_delete_error'));
+                }
+            );
         }, options);
     };
 
@@ -79,6 +86,11 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
         $scope.currentSearchResults.errorMessage ="";
         $scope.currentSearchResults.loading = true;
     };
+
+    $scope.$on("$destroy", function() {
+        alertService.hideMessage();
+        searchService.reset();
+    });
 
     init();
 

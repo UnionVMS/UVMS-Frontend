@@ -89,7 +89,9 @@
 	"manual_position_button_search_error": "Failed to get matching vessels.",
 
     "manual_position_warning_high_speed": "Speed is higher than {1} kts.",
-	"manual_position_delete_confirm_text": "Are you sure you want to delete this position report?"
+	"manual_position_delete_confirm_text": "Are you sure you want to delete this position report?",
+    "manual_position_delete_error": "Failed to delete the manual position report. Please try again.",
+    "manual_position_delete_success": "The manual position report has been removed."
 
 
 }

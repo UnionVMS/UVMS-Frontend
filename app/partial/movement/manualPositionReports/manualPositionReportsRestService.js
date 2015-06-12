@@ -8,7 +8,10 @@ angular.module('unionvmsWeb')
             { 
                 list : { method : 'POST'}
             });
-        }
+        },
+        deleteManualPositionReport : function(){
+            return $resource(baseUrl +'/movement/rest/movement/delete/:id');
+        },        
     };
 })
 .factory('manualPositionRestService',function($q, manualPositionRestFactory, ManualPositionListPage, ManualPosition){
@@ -49,9 +52,27 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     
     };   
+
+    var deleteManualPositionReport = function(manualPositionReport){
+        var deferred = $q.defer();
+        manualPositionRestFactory.deleteManualPositionReport().delete({id: manualPositionReport.id}, function(response) {
+            if(response.code !== "200"){
+                deferred.reject("Invalid response status");
+                return;
+            }
+            deferred.resolve(ManualPosition.fromJson(response.data));
+        }, function(error) {
+            console.error("Error when trying to delete a manual position report");
+            console.error(error);
+            deferred.reject(error);
+        });
+        return deferred.promise;  
+    };     
+
     
     return {
-        getManualPositionList : getManualPositionList       
+        getManualPositionList : getManualPositionList,
+        deleteManualPositionReport : deleteManualPositionReport       
      };
 
 });
