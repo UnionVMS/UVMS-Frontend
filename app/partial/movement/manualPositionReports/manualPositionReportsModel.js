@@ -9,7 +9,7 @@ angular.module('unionvmsWeb')
 
 	ManualPosition.fromJson = function(data){
 		var manualPosition = new ManualPosition();
-        manualPosition.id = data.id;
+		manualPosition.id = data.id;
 		if (data.vessel) {
 			manualPosition.vessel.externalMarking = data.vessel.externalMarking;
 			manualPosition.vessel.cfr = data.vessel.cfr;
@@ -26,6 +26,15 @@ angular.module('unionvmsWeb')
 
 		return manualPosition;
 	};
+
+    //TODO: FIX
+    ManualPosition.prototype.isEqualMovement = function(item) {
+        if( item.id === this.id ){
+            return true;
+        }else{
+            return false;
+        }
+    };
 
 	return ManualPosition;
 	

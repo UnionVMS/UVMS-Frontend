@@ -3,22 +3,22 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="col-md-2">
-					<input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_external_marking' | i18n}}" ng-model="searchFilterExternalMarking">
+					<input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_external_marking' | i18n}}" ng-model="search.vessel.externalMarking">
 				</div>
 				<div class="col-md-2">
-					<input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_ircs' | i18n}}" ng-model="searchFilterIRCS">
+					<input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_ircs' | i18n}}" ng-model="search.vessel.ircs">
 				</div>
 				<div class="col-md-2">
-					<input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_cfr' | i18n}}" ng-model="searchFilterCFR">
+					<input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_cfr' | i18n}}" ng-model="search.vessel.cfr">
 				</div>
 				<div class="col-md-2">
-					<input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_name' | i18n}}" ng-model="searchFilterName">
+					<input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_name' | i18n}}" ng-model="search.vessel.name">
 				</div>
-				 <div class="col-md-1 nopaddingleft nopaddingright">
+				 <!--<div class="col-md-1 nopaddingleft nopaddingright">
 	                <button type="submit" class="btn btn-primary btn-sm searchFilterButton" ng-click="">
 	                    <span>{{'common.search' | i18n }}</span>
 	                </button>
-            	</div>
+            	</div>-->
             	<div class="col-md-2 pull-right textAlignRight printAndExport">
                         <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportAsFile()"></i>
                         <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>              
@@ -31,32 +31,31 @@
             <thead>
                 <tr>
                     <th><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
-                    <th sortable-table-header by="currentSearchResult.sortBy" reverse="currentSearchResult.sortReverse" order="'externalMarking'">{{'movement.table_header_external_marking' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResult.sortBy" reverse="currentSearchResult.sortReverse" order="'ircs'">{{'movement.table_header_ircs' | i18n}}</th>
-					<th sortable-table-header by="currentSearchResult.sortBy" reverse="currentSearchResult.sortReverse" order="'ircs'">{{'movement.table_header_cfr' | i18n}}</th>
-					<th sortable-table-header by="currentSearchResult.sortBy" reverse="currentSearchResult.sortReverse" order="'name'">{{'movement.table_header_name' | i18n}}</th>
-					<th sortable-table-header by="currentSearchResult.sortBy" reverse="currentSearchResult.sortReverse" order="'time'">{{'movement.table_header_time' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResult.sortBy" reverse="currentSearchResult.sortReverse" order="'latitude'">{{'movement.table_header_latitude' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResult.sortBy" reverse="currentSearchResult.sortReverse" order="'longitude'">{{'movement.table_header_longitude' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResult.sortBy" reverse="currentSearchResult.sortReverse" order="'type'">{{'movement.table_header_meassured_speed' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResult.sortBy" reverse="currentSearchResult.sortReverse" order="'course'">{{'movement.table_header_course' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.externalMarking'">{{'movement.table_header_external_marking' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.ircs'">{{'movement.table_header_ircs' | i18n}}</th>
+					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.cfr'">{{'movement.table_header_cfr' | i18n}}</th>
+					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.name'">{{'movement.table_header_name' | i18n}}</th>
+					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.time'">{{'movement.table_header_time' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.latitude'">{{'movement.table_header_latitude' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.longitude'">{{'movement.table_header_longitude' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.measuredSpeed'">{{'movement.table_header_meassured_speed' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.course'">{{'movement.table_header_course' | i18n}}</th>
                     <th></th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in currentSearchResults.movements | orderBy:sortType:sortReverse | filter:searchFilter">
-                <tr>
-                	<td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                <tr ng-repeat="item in currentSearchResults.movements | orderBy:currentSearchResults.sortBy : currentSearchResults.sortReverse | filter:search">
+                	<td><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)"/></td>
+                    <td>{{item.vessel.externalMarking}}</td>
+                    <td>{{item.vessel.ircs}}</td>
+                    <td>{{item.vessel.cfr}}</td>
+                    <td>{{item.vessel.name}}</td>
+                    <td>{{item.movement.time}}</td>
+                    <td>{{item.movement.latitude}}</td>
+                    <td>{{item.movement.longitude}}</td>
+                    <td>{{item.movement.measuredSpeed}}</td>
+                    <td>{{item.movement.course}}&deg;</td>
                     <td>
                     	<a href ng-click="editPosition()">
                     		<i class="positionedit fa fa-pencil-square-o fa-lg"></i>

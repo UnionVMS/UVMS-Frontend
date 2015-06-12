@@ -4,6 +4,8 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
         ManualPositionReportModal.show();
     };
 
+    $scope.selectedMovements = [];
+
     //Search objects and results
     $scope.currentSearchResults = {
         page : 1,
@@ -11,7 +13,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
         movements : [],
         errorMessage : "",
         loading : false,
-        sortBy : "state",
+        sortBy : "vessel.name",
         sortReverse : false
     };
 
@@ -86,6 +88,78 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
         $scope.currentSearchResults.errorMessage ="";
         $scope.currentSearchResults.loading = true;
     };
+
+         //Clear the selection
+    $scope.clearSelection = function(){
+        $scope.selectedMovements = [];
+    };
+
+    //Add a mobile terminal to the selection
+    $scope.addToSelection = function(item){
+        $scope.selectedMovements.push(item);
+    };
+
+    //Remove a mobile terminal from the selection
+    $scope.removeFromSelection = function(item){
+        $.each($scope.selectedMovements, function(index, movement){
+            if(movement.isEqualMovement(item)){
+                $scope.selectedMovements.splice(index, 1);
+                return false;
+            }
+        });
+    };
+ 
+    //Handle click on the top "check all" checkbox
+    $scope.checkAll = function(){ 
+    if($scope.isAllChecked()){
+            //Remove all
+            $scope.clearSelection();
+        }else{
+            //Add all
+            $scope.clearSelection();
+            $.each($scope.currentSearchResults.movements, function(index, item) {
+                $scope.addToSelection(item);
+            });
+        }
+    };
+
+    $scope.checkItem = function(item){
+        item.Selected = !item.Selected;
+        if($scope.isChecked(item)){
+            //Remove
+            $scope.removeFromSelection(item);
+        }else{
+            $scope.addToSelection(item);
+        }      
+    };
+
+    $scope.isAllChecked = function(){
+        if(angular.isUndefined($scope.currentSearchResults.movements) || $scope.selectedMovements.length === 0){
+            return false;
+        }
+
+        var allChecked = true;
+        $.each($scope.currentSearchResults.movements, function(index, item) {
+            if(!$scope.isChecked(item)){
+                allChecked = false;
+                return false;
+            }
+        });
+        return allChecked;
+        
+    };
+
+     $scope.isChecked = function(item){
+        var checked = false;
+        $.each($scope.selectedMovements, function(index, movement){
+            if(movement.isEqualMovement(item)){
+                checked = true;
+                return false;
+            }
+        });
+        return checked;
+    };
+
 
     $scope.$on("$destroy", function() {
         alertService.hideMessage();

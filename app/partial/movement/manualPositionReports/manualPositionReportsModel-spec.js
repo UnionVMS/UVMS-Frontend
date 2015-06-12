@@ -3,6 +3,7 @@ describe('ManualPosition', function() {
     beforeEach(module('unionvmsWeb'));
 
     var data = {
+        id : "1",
         movement : {
             time: "",
             latitude : "32",
@@ -20,7 +21,7 @@ describe('ManualPosition', function() {
     };
 
      function verifyPosition(position) {
-       
+        expect(position.id).toEqual("1");       
         expect(position.movement.time).toEqual("");
         expect(position.movement.latitude).toEqual("32");
         expect(position.movement.longitude).toEqual("60");

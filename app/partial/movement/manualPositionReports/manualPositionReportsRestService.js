@@ -38,15 +38,44 @@ angular.module('unionvmsWeb')
                 }
                 var currentPage = response.data.currentPage;
                 var totalNumberOfPages = response.data.totalNumberOfPages;
-                var ManualPositionListPage = new ManualPositionListPage(positions, currentPage, totalNumberOfPages);
-                deferred.resolve(ManualPositionListPage);
+                var manualPositionListPage = new ManualPositionListPage(positions, currentPage, totalNumberOfPages);
+                deferred.resolve(manualPositionListPage);
             },
             function(error){
                 console.log("Error getting positions.", error);
                 //TODO: Remove this when we can get data from backend.
+                var positions = [];
+                for (var i = 0; i < 50 ; i++) {
+    
+                    var position = {}, movement = {}, vessel = {};
+                    position.id = "1" + i;
+                    
+                    vessel.externalMarking = "VC_11" + i;
+                    vessel.cfr = "1334" + i;
+                    vessel.name = "Velo" + i;
+                    vessel.ircs = "65" + Math.floor((Math.random() * 3) + 1) + i;
+
+                    movement.time = "";
+                    movement.latitude = "23" + i;
+                    movement.longitude = "45" + i;
+                    movement.measuredSpeed = "23" + i;
+                    movement.course = "3" + i;
+
+                    position.vessel = vessel;
+                    position.movement = movement;
+
+                    positions.push(ManualPosition.fromJson(position));
+    
+                }
+
+                var currentPage = 1;
+                var totalNumberOfPages = 10;
+                var manualPositionListPage = new ManualPositionListPage(positions, currentPage, totalNumberOfPages);
+                deferred.resolve(manualPositionListPage);
+                
                 
                 //******************************
-                deferred.reject(error);
+                //deferred.reject(error);
             }
         );
         return deferred.promise;
