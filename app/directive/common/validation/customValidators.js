@@ -127,3 +127,39 @@ angular.module('unionvmsWeb').directive('maxDate', function() {
         }
     };
 });
+
+angular.module('unionvmsWeb').directive('longitude', function() {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, elem, attr, model) {
+            model.$parsers.unshift(function(value) {
+                model.$setValidity('longitude',  value >= -180 && value <= 180);
+                return value;
+            });
+
+            model.$formatters.unshift(function(value) {
+                model.$setValidity('longitude', value >= -180 && value <= 180);
+                return value;
+            });
+        }
+    };
+});
+
+angular.module('unionvmsWeb').directive('latitude', function() {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, elem, attr, model) {
+            model.$parsers.unshift(function(value) {
+                model.$setValidity('latitude',  value >= -90 && value <= 90);
+                return value;
+            });
+
+            model.$formatters.unshift(function(value) {
+                model.$setValidity('latitude', value >= -90 && value <= 90);
+                return value;
+            });
+        }
+    };
+});

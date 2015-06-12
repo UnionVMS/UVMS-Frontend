@@ -10,8 +10,8 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 	$scope.name = "Nordvåg";
 	$scope.status = "010";
 	$scope.dateTime = "2015-06-11 15:45:00";
-	$scope.latitude = "57° 35,32' N";
-	$scope.longitude = "11° 58,01' N";
+	$scope.latitude = 57.714573;
+	$scope.longitude = 11.973001;
 	$scope.measuredSpeed = 8;
 	$scope.course = 93;
 
