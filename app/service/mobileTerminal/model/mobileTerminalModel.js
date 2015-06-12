@@ -1,22 +1,5 @@
 angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationChannel, CarrierId) {
 
-        var INMARSAT_C_ATTRIBUTES = [
-            'ANSWER_BACK',
-            'ANTENNA',
-            'ANTENNA_SERIAL_NUMBER',
-            'INSTALLED_BY',
-            'INSTALLED_ON',
-            'SATELLITE_NUMBER', 
-            'SERIAL_NUMBER',
-            'SOFTWARE_VERSION',
-            'STARTED_ON',
-            'TRANSCEIVER_TYPE',
-            'UNINSTALLED_ON',
-            'FREQUENCY_EXPECTED',
-            'FREQUENCY_GRACE_PERIOD',
-            'FREQUENCY_IN_PORT'
-        ];
-
         function MobileTerminal(){
             this.attributes = {};
             this.channels = [];
@@ -48,7 +31,17 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 for (var i = 0; i < data.attributes.length; i++) {
                     var value = data.attributes[i].value;
                     if (angular.isDefined(value) && String(value).trim().length > 0){
-                        mobileTerminal.attributes[data.attributes[i].type.toUpperCase()] = value;
+                        var key = data.attributes[i].type.toUpperCase();
+                        //If OCEAN_REGIONS the attribute should be a list
+                        if(key === "OCEAN_REGIONS"){
+                            if(angular.isDefined(mobileTerminal.attributes[key])){
+                                mobileTerminal.attributes[key].push(value);
+                            }else{
+                                mobileTerminal.attributes[key] = [value];
+                            }
+                        }else{
+                            mobileTerminal.attributes[key] = value;
+                        }
                     }
                 }
             }
@@ -78,13 +71,20 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
         MobileTerminal.prototype.dataTransferObject = function() {
             //Create array of attributes
             var attributesObjects = [];
-            if (this.type === 'INMARSAT_C') {
-                $.each(this.attributes, function(key, value){
-                    if(INMARSAT_C_ATTRIBUTES.indexOf(key) >= 0 && angular.isDefined(value) && String(value).trim().length > 0){
-                        attributesObjects.push({"type": key, "value": value});
+            $.each(this.attributes, function(key, value){
+                if(angular.isDefined(value) && String(key).trim().length > 0 && String(value).trim().length > 0){
+                    //Value is an array of values?
+                    if(_.isArray(value)){
+                        $.each(value, function(i, listItem){
+                            attributesObjects.push({"type": key, "value": listItem});
+                        });
                     }
-                });
-            }
+                    //Single value
+                    else{
+                        attributesObjects.push({"type": key, "value": value});                            
+                    }
+                }
+            });
 
             //Create array of Channels in json format
             var jsonChannels = [];

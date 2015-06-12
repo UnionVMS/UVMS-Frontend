@@ -22,6 +22,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
 
     $scope.editSelectionDropdownItems =[{'text':'Poll terminals','code':'POLL'}, {'text':'Export selection','code':'EXPORT'}];
     $scope.transponderSystems = [];
+    $scope.channelNames = [];
     $scope.currentMobileTerminal = undefined;
 
     //Toggle (show/hide) new mobile terminal
@@ -85,6 +86,20 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
                 alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_load_transponders_error'));
             }
         );
+        //Get list of channelNames
+        mobileTerminalRestService.getChannelNames()
+        .then(
+            function(channelNamesList){
+                $scope.channelNames = [];
+                $.each(channelNamesList, function(index, name){
+                    $scope.channelNames.push({text : name, code : name});
+                });
+            },
+            function(error){
+                alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_load_channel_names_error'));
+            }
+        );
+        
     }; 
 
     //Get list of Mobile Terminals matching the current search criterias

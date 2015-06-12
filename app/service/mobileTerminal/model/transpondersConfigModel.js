@@ -51,6 +51,7 @@ angular.module('unionvmsWeb')
                 terminalConfig.channelFields[field] = true;
             });
 
+            //Create list of capabilities
             terminalConfig.capabilities = {};
             $.each(data.capabilityList, function(index, field) {
                 terminalConfig.capabilities[field] = true;

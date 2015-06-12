@@ -6,6 +6,9 @@ angular.module('unionvmsWeb')
             getTranspondersConfig : function(){
                 return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/config/transponders');
             },
+            getChannelNames : function(){
+                return $resource(baseUrl +'/mobileterminal/rest/config/channelnames');
+            },
             mobileTerminal : function(){
                 return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/', {}, {
                     update: {method: 'PUT'}
@@ -143,6 +146,24 @@ angular.module('unionvmsWeb')
                     deferred.resolve(TranspondersConfig.fromJson(response.data));
                 }, function(error) {
                     console.error("Error getting transponders config");
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            },
+
+
+            getChannelNames : function(){
+                var deferred = $q.defer();
+                mobileTerminalRestFactory.getChannelNames().get({
+                }, function(response) {
+                    if(response.code !== 200){
+                        deferred.reject("Invalid response status");
+                        return;
+                    }
+                    //Return array of names
+                    deferred.resolve(response.data);
+                }, function(error) {
+                    console.error("Error getting channel names from config");
                     deferred.reject(error);
                 });
                 return deferred.promise;

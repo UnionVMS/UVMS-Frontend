@@ -6,10 +6,15 @@
                     <label>{{'mobileTerminal.add_new_form_transponder_system_label' | i18n}}</label>
                     <dropdown ng-model="currentMobileTerminal.type" initialtext="{{ 'common.choose' | i18n }}" items="transponderSystems" callback="onTerminalSystemSelect" ng-disabled="!isCreateNewMode()"></dropdown>                    
                 </div>
-                <div class="transponderSystemSelect form-group" ng-show="currentMobileTerminal.type">
+                <div class="transponderSystemSelect form-group" ng-show="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN || !getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
                     <label>{{'mobileTerminal.add_new_form_ocean_region_label' | i18n}}</label>
-                    <tag-select-input ng-model="currentMobileTerminal.attributes.OCEAN_REGION" ng-placeholder="{{'common.choose' | i18n }}" items="oceanRegions" max-limit="2"></tag-select-input>
-                </div>
+                    <div ng-if="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN && !getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
+                        <tag-select-input ng-model="currentMobileTerminal.attributes.OCEAN_REGION" ng-placeholder="{{'common.choose' | i18n }}" items="oceanRegions" ng-attr-max-limit="1"></tag-select-input>
+                    </div>
+                    <div ng-if="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
+                        <tag-select-input ng-model="currentMobileTerminal.attributes.OCEAN_REGIONS" ng-placeholder="{{'common.choose' | i18n }}" items="oceanRegions"></tag-select-input>
+                    </div>                    
+                </div>                 
             </div>
         </div>
         <div>
@@ -49,18 +54,20 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-2" ng-show="getTerminalConfig().channelFields.CHANNEL">
+                    <div class="col-md-2">
                         <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_channel_label' | i18n}}</label>
                     </div>
                     <div class="col-md-2 smallerpadding">
-                        <div class="col-md-4 smallerpadding">
-                            <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_poll_label' | i18n}}</label>
-                        </div>
-                        <div class="col-md-4 smallerpadding">
-                            <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_con_label' | i18n}}</label>
-                        </div>
-                        <div class="col-md-4 smallerpadding">
-                            <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_def_label' | i18n}}</label>
+                        <div class="row">
+                            <div class="col-md-4 smallerpadding">
+                                <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_poll_label' | i18n}}</label>
+                            </div>
+                            <div class="col-md-4 smallerpadding">
+                                <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_con_label' | i18n}}</label>
+                            </div>
+                            <div class="col-md-4 smallerpadding">
+                                <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_def_label' | i18n}}</label>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-1 smallerpadding" ng-show="getTerminalConfig().channelFields.DNID">
@@ -72,21 +79,21 @@
                     <div class="col-md-1 smallerpadding" ng-show="getTerminalConfig().channelFields.LAND_STATION">
                         <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_land_station_label' | i18n}}</label>
                     </div>
-                        <div class="col-md-2 smallerpadding" ng-show="getTerminalConfig().channelFields.START_DATE">
-                            <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_started_label' | i18n}}</label>
-                        </div>
-                        <div class="col-md-2 smallerpadding" ng-show="getTerminalConfig().channelFields.END_DATE">
-                            <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_stopped_label' | i18n}}</label>
-                        </div>
+                    <div class="col-md-2 smallerpadding" ng-show="getTerminalConfig().channelFields.START_DATE">
+                        <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_started_label' | i18n}}</label>
+                    </div>
+                    <div class="col-md-2 smallerpadding" ng-show="getTerminalConfig().channelFields.END_DATE">
+                        <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_stopped_label' | i18n}}</label>
+                    </div>
                     <div class="col-md-1 smallerpadding">
                         <label></label>
                     </div>
                 </div>
                 <div class="row" ng-repeat="communicationChannel in currentMobileTerminal.channels" >
                     <div ng-form="channelForm" ng-class="{comchannelrow: $index== 0}">
-                            <div class="col-md-2 form-group" ng-show="getTerminalConfig().channelFields.CHANNEL">
+                            <div class="col-md-2 form-group">
                             <!-- Channel-->
-                                 <dropdown ng-model="communicationChannel.channelType" initialtext="" items="channelTypes"></dropdown> 
+                                 <dropdown ng-model="communicationChannel.name" initialtext="" items="channelNames"></dropdown> 
                             </div>
                             <div class="col-md-2 smallerpadding">
                                 <div class="col-md-4 smallerpadding" ng-show="getTerminalConfig().capabilities.IS_POLLABLE">

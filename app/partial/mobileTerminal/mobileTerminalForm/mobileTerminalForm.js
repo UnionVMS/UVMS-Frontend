@@ -16,14 +16,10 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
 
     //Values for dropdowns
     $scope.oceanRegions =[
-        {'text':'AOR-E','code':'aore'},
-        {'text':'AOR-W','code':'aorw'}, 
-        {'text':'IOR','code':'ior'}, 
-        {'text':'POR','code':'por'}
-    ];
-    $scope.channelTypes =[
-        {'text':'VMS','code':'VMS'}, 
-        {'text':'ELOG','code':'ELOG'}
+        {'text':'AOR-E','code':581},
+        {'text':'AOR-W','code':584}, 
+        {'text':'IOR','code':583}, 
+        {'text':'POR','code':582}
     ];
 
     //Has form submit been atempted?

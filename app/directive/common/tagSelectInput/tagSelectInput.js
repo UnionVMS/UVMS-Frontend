@@ -104,7 +104,7 @@ angular.module('unionvmsWeb')
                     $scope.selectedItems.length = 0;
                     $.each(newVal, function(index, selectedItem){
                         $.each($scope.items, function(index2, item){
-                            if(getItemCode(item) === selectedItem){
+                            if(String(getItemCode(item)) === String(selectedItem)){
                                 $scope.selectedItems.push(item);
                                 return false;
                             }
