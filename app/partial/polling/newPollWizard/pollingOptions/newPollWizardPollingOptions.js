@@ -63,6 +63,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
     //Run the poll
     $scope.runPoll = function(){
         $scope.submitAttempted = true;
+        alertService.hideMessage();
         if($scope.pollingOptionsForm.$valid){
             $scope.loadingResult = true;
             pollingService.createPolls().then(
