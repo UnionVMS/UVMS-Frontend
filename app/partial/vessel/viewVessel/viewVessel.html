@@ -1,15 +1,19 @@
 <div class="newvessel" ng-controller="ViewVesselCtrl">
     <div class="row">
         <div class="row col-md-12">
-
             <div class="col-md-4 vesselname">{{vesselObj.name}}</div>
-            <span class="vesselstatus col-md-10">
+        </div>
+        <div class="row col-md-12">
+            <span class="vesselstatus col-md-5">
                      <span ng-show="vesselObj.active == true">{{'vessel.set_as_inactive' | i18n}}</span>
                      <span ng-show="vesselObj.active == false">{{'vessel.set_as_active' | i18n}}</span>
                      <input type="checkbox" ng-click="changeVesselStatus()" checked>
                      <div ng-show="vesselObj.active == true">{{'vessel.status' | i18n}}: <b>{{'vessel.active' | i18n}}</b></div>
                      <div ng-show="vesselObj.active == false">{{'vessel.status' | i18n}}: <b> {{'vessel.inactive' | i18n}}</b></div>
-                 </span>
+            </span>
+            <span class="vesselstatus col-md-5">
+                {{'vessel.source' | i18n}} : <b>{{vesselObj.source}}</b>
+            </span>
             <div class="col-md-1">
                 <button class="btn btn-sm updatevesselbutton" type="submit" ng-click="updateVessel()"> {{'vessel.update' | i18n}} </button>
             </div>
