@@ -52,7 +52,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         p.status = $scope.status;
 
         return p;
-    }
+    };
 
     $scope.savePosition = function() {
         $scope.submitAttempted = true;

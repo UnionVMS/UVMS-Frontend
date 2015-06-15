@@ -1,27 +1,24 @@
 <div class="newvessel" ng-controller="CreateNewVesselCtrl">
-
     <form name="newVesselForm" method="post">
-        <div class="row">
-            <div class="row col-md-12">
-                <div class="col-md-4 vesselname">{{newVesselObj.name}}</div>
-                 <span class="vesselstatus col-md-10">
-                     <span ng-show="newVesselObj.active == true">{{'vessel.set_as_inactive' | i18n}}</span>
-                     <span ng-show="newVesselObj.active == false">{{'vessel.set_as_active' | i18n}}</span>
-                     <input type="checkbox" ng-click="changeVesselStatus()" checked>
-                     <div ng-show="newVesselObj.active == true">{{'vessel.status' | i18n}}: <b> {{'vessel.active' | i18n}}</b></div>
-                     <div ng-show="newVesselObj.active == false">{{'vessel.status' | i18n}}: <b> {{'vessel.inactive' | i18n}}</b></div>
-                 </span>
-                <div class="col-md-1">
-                    <button  type="submit" class="btn btn-sm createnewvesselbutton" ng-click="createNewVessel()"> {{'vessel.create_new_vessel' | i18n}}</button>
-                </div>
-                <div>
-                    <div class="closenewvessel pull-right" ng-click="toggleCreateNewVessel()">
-                         <i class="fa fa-times closeicon" title="{{'common.close' | i18n}}"></i>
-                    </div>
+        <div class="row col-md-12">
+            <div class="col-md-4 vesselname">{{newVesselObj.name}}</div>
+             <span class="vesselstatus col-md-10">
+                 <span ng-show="newVesselObj.active == true">{{'vessel.set_as_inactive' | i18n}}</span>
+                 <span ng-show="newVesselObj.active == false">{{'vessel.set_as_active' | i18n}}</span>
+                 <input type="checkbox" ng-click="changeVesselStatus()" checked>
+                 <div ng-show="newVesselObj.active == true">{{'vessel.status' | i18n}}: <b> {{'vessel.active' | i18n}}</b></div>
+                 <div ng-show="newVesselObj.active == false">{{'vessel.status' | i18n}}: <b> {{'vessel.inactive' | i18n}}</b></div>
+             </span>
+            <div class="col-md-1">
+                <button  type="submit" class="btn btn-sm createnewvesselbutton" ng-click="createNewVessel()"> {{'vessel.create_new_vessel' | i18n}}</button>
+            </div>
+            <div>
+                <div class="closenewvessel pull-right" ng-click="toggleCreateNewVessel()">
+                     <i class="fa fa-times closeicon" title="{{'common.close' | i18n}}"></i>
                 </div>
             </div>
-            <vessel-details vessel="newVesselObj"></vessel-details>
         </div>
+        <vessel-details vessel="newVesselObj"></vessel-details>
         <div class=" col-md-12 mobileterminalcontainer" ng-repeat = "item in newVesselObj.mobileTerminals">
             <div class="row col-md-12">
                 <a ng-click="removeNewMobileSystem(item, $index)">{{'vessel.remove_satellite_system' | i18n}}</a>

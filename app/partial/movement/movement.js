@@ -64,20 +64,19 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     };
 
     $scope.searchMovements = function(){
-        $scope.resetSearchResult();
-        searchService.searchMovements()
-            .then(retriveMovementsSuccess, retriveMovementsError);
+        if ($scope.currentSearchResults.loading === false){
+            $scope.resetSearchResult();
+            $scope.currentSearchResults.loading = true;
+            searchService.searchMovements()
+                .then(retriveMovementsSuccess, retriveMovementsError);      
+        }
     };
 
     $scope.resetSearchResult = function(){
-
-      
         $scope.currentSearchResults.page = 0;
         $scope.currentSearchResults.totalNumberOfPages = 0;
         $scope.currentSearchResults.movements = [];
         $scope.currentSearchResults.errorMessage ="";
-        $scope.currentSearchResults.loading = true;
-
     };
 
     var retriveMovementsSuccess = function(movementListPage){
@@ -110,17 +109,18 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         $scope.currentSearchResults.page = 0;
     };
 
-
     $scope.loadNextPage = function(){
-        if ($scope.currentSearchResults.page < $scope.currentSearchResults.totalNumberOfPages) {
-            //increase page with 1
-            searchService.increasePage();
-            $scope.currentSearchResults.loading = true;
-            searchService.searchMovements()
-                .then(retriveMovementsSuccess, retriveMovementsError);
+        if ($scope.currentSearchResults.loading === false){
+            if ($scope.currentSearchResults.page < $scope.currentSearchResults.totalNumberOfPages) {
+                //increase page with 1
+                searchService.increasePage();
+                $scope.currentSearchResults.loading = true;
+                searchService.searchMovements()
+                    .then(retriveMovementsSuccess, retriveMovementsError);
 
-            //Stop auto refresh
-            $scope.stopAutoRefresh();
+                //Stop auto refresh
+                $scope.stopAutoRefresh();
+            }
         }
     };
 

@@ -1,5 +1,5 @@
-<div class="vesselDetailsContainer">
-    <div class="row vesseldetailsrow">
+<div class="row vesselDetailsContainer">
+    <div class="col-md-12 vesseldetailsrow">
         <div class="col-md-1" ng-hide="!vessel.vesselId.value">
             <p class="labelheaders">ID</p>
             <input type="text" name="newvesselid" class="form-control" ng-model="vessel.vesselId.value" ng-disabled="true">            
@@ -30,7 +30,7 @@
                    ng-model="vessel.externalMarking" ng-disabled="disableForm">
         </div>
     </div>
-    <div class="row vesseldetailsrow">
+    <div class="col-md-12 vesseldetailsrow">
         <div class="inputgroup col-md-2 has-feedback">
             <p class="labelheaders">{{ 'vessel.vessel_details_CFR' | i18n }}</p>
             <input type="text" name="newvesselcfrinput" class="form-control" ng-model="vessel.cfr" required
@@ -62,7 +62,7 @@
             </div>
         </div>
     </div>
-    <div class="row vesseldetailsrow">
+    <div class="col-md-12 vesseldetailsrow">
         <div class="inputgroup col-md-1">
             <p class="labelheaders">{{ 'vessel.vessel_details_length' | i18n }}</p>
             <input type="text" name="newvessellengthinput" class="form-control" ng-model="vessel.lengthOverAll" ng-disabled="disableForm">
