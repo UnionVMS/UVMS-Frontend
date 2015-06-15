@@ -68,7 +68,7 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 			extMarking: this.carrier.externalMarking,
 			ircs: this.carrier.ircs,
 			flagState: this.carrier.flagState
-		}
+		};
 
 		data.position = {
 			longitude: this.position.longitude,

@@ -44,27 +44,28 @@ angular.module('unionvmsWeb')
             function(error){
                 console.log("Error getting positions.", error);
                 //TODO: Remove this when we can get data from backend.
+
                 var positions = [];
-                for (var i = 0; i < 50 ; i++) {
-    
-                    var position = {}, movement = {}, vessel = {};
-                    position.id = "1" + i;
-                    
-                    vessel.externalMarking = "VC_11" + i;
-                    vessel.cfr = "1334" + i;
-                    vessel.name = "Velo " + i;
-                    vessel.ircs = "65" + Math.floor((Math.random() * 3) + 1) + i;
+                for (var i = 0; i < 40 ; i++) {
+                    var _mp = new ManualPosition(); 
+                    _mp.position.longitude = 23 + i;
+                    _mp.position.latitude = 45 + i;
+                    _mp.speed = 23 + i;
+                    _mp.course = Math.floor(3 * 10 * i / Math.floor((Math.random() * 3) + 10));
+                    _mp.id = 1 + i;
+                    _mp.guid = "12345-qwert-12345-qwert-12345";
+                    _mp.time = moment().format("YYYY-MM-DD HH:mm Z");
+                    _mp.archived = false;
+                    _mp.status = "";
+                    _mp.updatedTime = "";
 
-                    movement.time =  moment().format("YYYY-MM-DD HH:mm Z");
-                    movement.latitude = 23 + i;
-                    movement.longitude = 45 + i;
-                    movement.measuredSpeed = 23 + i;
-                    movement.course = Math.floor(3 * 10 * i / Math.floor((Math.random() * 3) + 10));
+                    _mp.carrier.extMarking = "VC_11" + i;
+                    _mp.carrier.cfr = "1334" + i;
+                    _mp.carrier.name = "Velo " + i;
+                    _mp.carrier.ircs = "65" + Math.floor((Math.random() * 3) + 1) + i;
+                    _mp.carrier.flagState = "SWE";
 
-                    position.vessel = vessel;
-                    position.movement = movement;
-
-                    positions.push(ManualPosition.fromJson(position));
+                    positions.push(_mp);
     
                 }
 
@@ -72,8 +73,7 @@ angular.module('unionvmsWeb')
                 var totalNumberOfPages = 10;
                 var manualPositionListPage = new ManualPositionListPage(positions, currentPage, totalNumberOfPages);
                 deferred.resolve(manualPositionListPage);
-                
-                
+                                
                 //******************************
                 //deferred.reject(error);
             }
