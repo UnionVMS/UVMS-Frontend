@@ -1,19 +1,19 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, movementRestService, vesselRestService, GetListRequest, $filter, position) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, movementRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition) {
 
     $scope.errorMessage ="";
 
     //The new manual position report
 	$scope.flagState = "SWE";
-	$scope.ircs = position.vessel.ircs;
-	$scope.cfr = position.vessel.cfr;
-	$scope.externalMarking = position.vessel.externalMarking;
-	$scope.name = position.vessel.name;
+	$scope.ircs = position.carrier.ircs;
+	$scope.cfr = position.carrier.cfr;
+	$scope.externalMarking = position.carrier.externalMarking;
+	$scope.name = position.carrier.name;
 	$scope.status = "010";
-	$scope.dateTime = position.movement.time;
-	$scope.latitude = position.movement.latitude;
-	$scope.longitude = position.movement.longitude;
-	$scope.measuredSpeed = position.movement.measuredSpeed;
-	$scope.course = position.movement.course;
+	$scope.dateTime = position.time;
+	$scope.latitude = position.position.latitude;
+	$scope.longitude = position.position.longitude;
+	$scope.measuredSpeed = position.speed;
+	$scope.course = position.course;
 
 	$scope.measuredSpeedWarningThreshold = 15;
     $scope.maxDateTime = new Date().getTime();
@@ -34,8 +34,39 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         newPosition: $scope.newPosition
     };
 
+    $scope.createManualMovement = function() {
+        var p = new ManualPosition();
+
+        p.carrier.flagState = $scope.flagState;
+        p.carrier.ircs = $scope.ircs;
+        p.carrier.cfr = $scope.cfr;
+        p.carrier.name = $scope.name;
+        p.carrier.externalMarking = $scope.externalMarking;
+
+        p.position.longitude = $scope.longitude;
+        p.position.latitude = $scope.latitude;
+
+        p.speed = $scope.measuredSpeed;
+        p.course = $scope.course;
+        p.time = moment($scope.dateTime).format("YYYY-MM-DD HH:mm:ss Z");
+        p.status = $scope.status;
+
+        return p;
+    }
+
     $scope.savePosition = function() {
         $scope.submitAttempted = true;
+        if (!$scope.manualPositionReportForm.$valid) {
+            return;
+        }
+
+        movementRestService.createManualMovement($scope.createManualMovement()).then(function () {
+            // Success
+            $modalInstance.close();
+        },
+        function() {
+            // Fail
+        });
     };
 
     $scope.updateNewPositionVisibility = function() {

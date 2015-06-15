@@ -9,17 +9,20 @@ angular.module('unionvmsWeb')
                 list : { method : 'POST'}
             });
         },
+        manualMovement: function() {
+            return $resource(baseUrl + '/movement/rest/tempmovement');
+        },
         savedSearch : function() {
             return $resource(baseUrl + '/movement/rest/search/group/:groupId', {}, {
-                update: {method: 'PUT'}                    
+                update: {method: 'PUT'}
             });
         },
         getSavedSearches : function() {
             return $resource(baseUrl + '/movement/rest/search/groups');
-        },
+        }
     };
 })
-.factory('movementRestService',function($q, movementRestFactory, MovementListPage, Movement, SavedSearchGroup){
+.factory('movementRestService',function($q, movementRestFactory, MovementListPage, Movement, SavedSearchGroup, ManualPosition){
     var baseUrl, userName;
     userName = "FRONTEND_USER";
 
@@ -54,6 +57,22 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
+    var createManualMovement = function(movement) {
+        var deferred = $q.defer();
+        movementRestFactory.manualMovement().save(movement.getDto(), function(response) {
+            if(response.code !== "200"){
+                deferred.reject("Invalid response status");
+                return;
+            }
+
+            deferred.resolve(ManualPosition.fromJson(response.data));
+        }, function(error) {
+            deferred.reject(error);
+        });
+
+        return deferred.promise;
+    };
+
     var getSavedSearches = function (){
         var deferred = $q.defer();
         movementRestFactory.getSavedSearches().get({user: 'FRONTEND_USER'}, 
@@ -76,7 +95,7 @@ angular.module('unionvmsWeb')
                 deferred.reject(err);
             }
         );
-        return deferred.promise;           
+        return deferred.promise;
     };
 
     var createNewSavedSearch = function(savedSearchGroup){
@@ -92,7 +111,7 @@ angular.module('unionvmsWeb')
             console.error(error);
             deferred.reject(error);
         });
-        return deferred.promise;        
+        return deferred.promise;
     };
 
     var updateSavedSearch = function(savedSearchGroup){
@@ -108,10 +127,10 @@ angular.module('unionvmsWeb')
             console.error(error);
             deferred.reject(error);
         });
-        return deferred.promise;  
+        return deferred.promise;
     };     
 
-     var deleteSavedSearch = function(savedSearchGroup){
+    var deleteSavedSearch = function(savedSearchGroup){
         var deferred = $q.defer();
         movementRestFactory.savedSearch().delete({ groupId: savedSearchGroup.id }, function(response) {
             if(response.code !== "200"){
@@ -124,15 +143,16 @@ angular.module('unionvmsWeb')
             console.error(error);
             deferred.reject(error);
         });
-        return deferred.promise;  
+        return deferred.promise;
     };
 
     return {
         getMovementList : getMovementList,
+        createManualMovement: createManualMovement,
         getSavedSearches : getSavedSearches,
         createNewSavedSearch : createNewSavedSearch,
         updateSavedSearch : updateSavedSearch,
-        deleteSavedSearch : deleteSavedSearch           
+        deleteSavedSearch : deleteSavedSearch
     };
 
 });
