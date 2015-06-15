@@ -114,13 +114,29 @@ span.error{
     color:#999;
 }
 
+
 table.searchResults{
     width: 100%;
     thead{
         border-bottom: solid 2px #C5C5C4;
+
+        //Table wrow containing search fields
+        &>tr.searchInputRow{
+            &>th{
+                padding-right: 5px;
+                &>input, &>.dropdown{
+                    width:100%;
+                }
+                input{
+                    font-weight: normal;
+                }
+            }
+        }        
     }
     th{
         height:40px;
+        border-top: 0px !important;
+        border-bottom: 0px !important;
 
         >a{
             font-weight: bold;

@@ -1,34 +1,33 @@
 <div ng-controller="ManualmovementlistCtrl">
-	<div class="manualmovementlistfilter">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="col-md-2">
-					<input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_external_marking' | i18n}}" ng-model="search.vessel.externalMarking">
-				</div>
-				<div class="col-md-2">
-					<input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_ircs' | i18n}}" ng-model="search.vessel.ircs">
-				</div>
-				<div class="col-md-2">
-					<input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_cfr' | i18n}}" ng-model="search.vessel.cfr">
-				</div>
-				<div class="col-md-2">
-					<input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_name' | i18n}}" ng-model="search.vessel.name">
-				</div>
-				 <!--<div class="col-md-1 nopaddingleft nopaddingright">
-	                <button type="submit" class="btn btn-primary btn-sm searchFilterButton" ng-click="">
-	                    <span>{{'common.search' | i18n }}</span>
-	                </button>
-            	</div>-->
-            	<div class="col-md-2 pull-right textAlignRight printAndExport">
-                        <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportAsFile()"></i>
-                        <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>              
-                </div>
-			</div>
-		</div>
-	</div>
 	<div class="movementtablecontainer">
         <table class="searchResults table colorOdd movementtable">
             <thead>
+                <tr class="searchInputRow">
+                    <th></th>
+                    <th>
+                        <input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_external_marking' | i18n}}" ng-model="search.vessel.externalMarking">
+                    </th>
+                    <th>
+                        <input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_ircs' | i18n}}" ng-model="search.vessel.ircs">
+                    </th>
+                    <th>
+                        <input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_cfr' | i18n}}" ng-model="search.vessel.cfr">
+                    </th>
+                    <th>
+                        <input type="text" class="filtertext" placeholder="{{'movement.external_marking_filter_name' | i18n}}" ng-model="search.vessel.name">
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th class="printAndExport">
+                        <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportAsFile()"></i>           
+                    </th>
+                    <th class="printAndExport">
+                        <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>              
+                    </th>
+                </tr>            
                 <tr>
                     <th><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.externalMarking'">{{'movement.table_header_external_marking' | i18n}}</th>
