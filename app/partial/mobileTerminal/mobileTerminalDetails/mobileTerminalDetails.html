@@ -6,7 +6,7 @@
                     <label>{{'mobileTerminal.add_new_form_transponder_system_label' | i18n}}</label>
                     <dropdown ng-model="currentMobileTerminal.type" initialtext="{{ 'common.choose' | i18n }}" items="transponderSystems" callback="onTerminalSystemSelect" ng-disabled="!isCreateNewMode()"></dropdown>                    
                 </div>
-                <div class="transponderSystemSelect form-group" ng-show="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN || !getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
+                <div class="transponderSystemSelect form-group" ng-show="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN || getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
                     <label>{{'mobileTerminal.add_new_form_ocean_region_label' | i18n}}</label>
                     <div ng-if="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN && !getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
                         <tag-select-input ng-model="currentMobileTerminal.attributes.OCEAN_REGION" ng-placeholder="{{'common.choose' | i18n }}" items="oceanRegions" ng-attr-max-limit="1"></tag-select-input>
