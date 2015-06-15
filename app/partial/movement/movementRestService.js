@@ -9,9 +9,6 @@ angular.module('unionvmsWeb')
                 list : { method : 'POST'}
             });
         },
-        manualMovement: function() {
-            return $resource(baseUrl + '/movement/rest/tempmovement');
-        },
         savedSearch : function() {
             return $resource(baseUrl + '/movement/rest/search/group/:groupId', {}, {
                 update: {method: 'PUT'}
@@ -22,7 +19,7 @@ angular.module('unionvmsWeb')
         }
     };
 })
-.factory('movementRestService',function($q, movementRestFactory, MovementListPage, Movement, SavedSearchGroup, ManualPosition){
+.factory('movementRestService',function($q, movementRestFactory, MovementListPage, Movement, SavedSearchGroup){
     var baseUrl, userName;
     userName = "FRONTEND_USER";
 
@@ -54,22 +51,6 @@ angular.module('unionvmsWeb')
                 deferred.reject(error);
             }
         );
-        return deferred.promise;
-    };
-
-    var createManualMovement = function(movement) {
-        var deferred = $q.defer();
-        movementRestFactory.manualMovement().save(movement.getDto(), function(response) {
-            if(response.code !== "200"){
-                deferred.reject("Invalid response status");
-                return;
-            }
-
-            deferred.resolve(ManualPosition.fromJson(response.data));
-        }, function(error) {
-            deferred.reject(error);
-        });
-
         return deferred.promise;
     };
 
@@ -148,7 +129,6 @@ angular.module('unionvmsWeb')
 
     return {
         getMovementList : getMovementList,
-        createManualMovement: createManualMovement,
         getSavedSearches : getSavedSearches,
         createNewSavedSearch : createNewSavedSearch,
         updateSavedSearch : updateSavedSearch,

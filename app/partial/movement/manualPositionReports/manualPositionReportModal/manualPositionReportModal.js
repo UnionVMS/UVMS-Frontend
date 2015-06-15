@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, movementRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition) {
 
     $scope.errorMessage ="";
 
@@ -60,7 +60,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
             return;
         }
 
-        movementRestService.createManualMovement($scope.createManualMovement()).then(function () {
+        manualPositionRestService.createManualMovement($scope.createManualMovement()).then(function () {
             // Success
             $modalInstance.close();
         },

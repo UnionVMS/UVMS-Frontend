@@ -5,18 +5,39 @@ angular.module('unionvmsWeb')
     return {
         getMovementList : function(){
             return $resource(baseUrl + '/movement/rest/movement/list',{},
-            { 
+            {
                 list : { method : 'POST'}
             });
         },
+        manualMovement: function() {
+            return $resource(baseUrl + '/movement/rest/tempmovement');
+        },
         deleteManualPositionReport : function(){
-            return $resource(baseUrl +'/movement/rest/movement/delete/:id');
-        },        
+            return $resource(baseUrl +'/movement/rest/tempmovement/remove/:guid', {}, {
+                removePut: { method: 'PUT' }
+            });
+        },
     };
 })
 .factory('manualPositionRestService',function($q, manualPositionRestFactory, ManualPositionListPage, ManualPosition){
     var baseUrl, userName;
     userName = "FRONTEND_USER";
+
+    var createManualMovement = function(movement) {
+        var deferred = $q.defer();
+        manualPositionRestFactory.manualMovement().save(movement.getDto(), function(response) {
+            if(response.code !== "200") {
+                deferred.reject("Invalid response status");
+                return;
+            }
+
+            deferred.resolve(ManualPosition.fromJson(response.data));
+        }, function(error) {
+            deferred.reject(error);
+        });
+
+        return deferred.promise;
+    };
 
     var getManualPositionList = function(getListRequest){
 
@@ -84,11 +105,12 @@ angular.module('unionvmsWeb')
 
     var deleteManualPositionReport = function(manualPositionReport){
         var deferred = $q.defer();
-        manualPositionRestFactory.deleteManualPositionReport().delete({id: manualPositionReport.id}, function(response) {
+        manualPositionRestFactory.deleteManualPositionReport().removePut({guid: manualPositionReport.guid}, {}, function(response) {
             if(response.code !== "200"){
                 deferred.reject("Invalid response status");
                 return;
             }
+
             deferred.resolve(ManualPosition.fromJson(response.data));
         }, function(error) {
             console.error("Error when trying to delete a manual position report");
@@ -100,6 +122,7 @@ angular.module('unionvmsWeb')
 
     
     return {
+        createManualMovement: createManualMovement,
         getManualPositionList : getManualPositionList,
         deleteManualPositionReport : deleteManualPositionReport       
      };
