@@ -17,6 +17,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
 	$scope.measuredSpeedWarningThreshold = 15;
     $scope.maxDateTime = new Date().getTime();
+    $scope.submitAttempted = false;
 
     $scope.center = {
         autoDiscover: true,
@@ -31,6 +32,10 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
     $scope.markers = {
         newPosition: $scope.newPosition
+    };
+
+    $scope.savePosition = function() {
+        $scope.submitAttempted = true;
     };
 
     $scope.updateNewPositionVisibility = function() {
