@@ -1,42 +1,54 @@
 describe('ManualPosition', function() {
 
     beforeEach(module('unionvmsWeb'));
+        var data = {
 
-    var data = {
-        id : "1",
-        movement : {
-            time: "",
-            latitude : "32",
-            longitude : "60",
-            measuredSpeed : "22",
-            course : "123"
-        },
-        vessel : {
-
-            externalMarking : "NV 2231",
-            cfr : "2222",
-            name: "Nova",
-            ircs : "1111"
-        },
-    };
+            id : "1",    
+            guid : "12345-qwert-12345-asdfg-1qaz2",
+            speed : 15,
+            course : 34,
+            time : "",
+            updatedTime : "",
+            status : "",
+            archived : false,
+            
+            carrier : {
+                extMarking : "EXTM",
+                cfr : "1111",
+                name :"Nova",
+                ircs :"222",
+                flagState :"Swe"
+                },
+            
+            position : {
+                latitude : 34,
+                longitude : 50
+            }
+        };
+   
 
      function verifyPosition(position) {
-        expect(position.id).toEqual("1");       
-        expect(position.movement.time).toEqual("");
-        expect(position.movement.latitude).toEqual("32");
-        expect(position.movement.longitude).toEqual("60");
-        expect(position.movement.measuredSpeed).toEqual("22");
-        expect(position.movement.course).toEqual("123");
-
-        expect(position.vessel.externalMarking).toEqual("NV 2231");
-        expect(position.vessel.cfr).toEqual("2222");
-        expect(position.vessel.name).toEqual("Nova");
-        expect(position.vessel.ircs).toEqual("1111");
+        expect(position.id).toEqual("1");
+        expect(position.guid).toEqual("12345-qwert-12345-asdfg-1qaz2");       
+        expect(position.speed).toEqual(15);
+        expect(position.course).toEqual(34);
+        expect(position.time).toEqual("");
+        expect(position.updatedTime).toEqual("");
+        expect(position.status).toEqual("");
+        expect(position.archived).toEqual(false);
         
+        expect(position.carrier.externalMarking).toEqual("EXTM");
+        expect(position.carrier.cfr).toEqual("1111");
+        
+        expect(position.carrier.name).toEqual("Nova");
+        expect(position.carrier.ircs).toEqual("222");
+        expect(position.carrier.flagState).toEqual("Swe");
+
+        expect(position.position.latitude).toEqual(34);
+        expect(position.position.longitude).toEqual(50);
      }
 
     it('should parse JSON input correctly', inject(function(ManualPosition) {
-  //      verifyPosition(ManualPosition.fromJson(data));
+        verifyPosition(ManualPosition.fromJson(data));
     }));
-
-});
+ });
