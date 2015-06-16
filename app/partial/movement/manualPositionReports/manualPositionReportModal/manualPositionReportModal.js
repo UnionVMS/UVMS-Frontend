@@ -89,6 +89,10 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         });
     };
 
+    $scope.sendPosition = function() {
+        $scope.submitAttempted = true;
+    };
+
     $scope.cancel = function() {
         $modalInstance.dismiss();
     };
