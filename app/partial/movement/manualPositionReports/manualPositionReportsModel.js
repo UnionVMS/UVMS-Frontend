@@ -30,7 +30,7 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 		manualPosition.guid = data.guid;
 		manualPosition.speed = data.speed;
 		manualPosition.course = data.course;
-		manualPosition.time = data.time;
+		manualPosition.time = formatTime(data.time);
 		manualPosition.updatedTime = data.updatedTime;
 		manualPosition.status = data.status;
 		manualPosition.archived = data.archived;
@@ -81,6 +81,11 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 	ManualPosition.prototype.isEqualMovement = function(item) {
 		return item.id === this.id;
 	};
+
+	function formatTime (time){
+		return moment(time).format("YYYY-MM-DD hh:mm");
+	};
+
 
 	return ManualPosition;
 	
