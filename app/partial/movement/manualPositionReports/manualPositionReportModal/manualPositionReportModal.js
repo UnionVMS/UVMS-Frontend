@@ -2,21 +2,17 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
     $scope.errorMessage ="";
 
-    $scope.resetMovement = function(p) {
-        $scope.flagState = "SWE";
-        $scope.ircs = p ? p.carrier.ircs : undefined;
-        $scope.cfr = p ? p.carrier.cfr : undefined;
-        $scope.externalMarking = p ? p.carrier.externalMarking : undefined;
-        $scope.name = p ? p.carrier.name : undefined;
-        $scope.status = "010";
-        $scope.dateTime = p ? p.time : undefined;
-        $scope.latitude = p ? p.position.latitude : undefined;
-        $scope.longitude = p ? p.position.longitude : undefined;
-        $scope.measuredSpeed = p ? p.speed : undefined;
-        $scope.course = p ? p.course : undefined;
-    };
-
-    $scope.resetMovement(position);
+    $scope.flagState = "SWE";
+    $scope.ircs = position ? position.carrier.ircs : undefined;
+    $scope.cfr = position ? position.carrier.cfr : undefined;
+    $scope.externalMarking = position ? position.carrier.externalMarking : undefined;
+    $scope.name = position ? position.carrier.name : undefined;
+    $scope.status = "010";
+    $scope.dateTime = position ? position.time : undefined;
+    $scope.latitude = position ? position.position.latitude : undefined;
+    $scope.longitude = position ? position.position.longitude : undefined;
+    $scope.measuredSpeed = position ? position.speed : undefined;
+    $scope.course = position ? position.course : undefined;
     $scope.guid = position ? position.guid : undefined;
 
 	$scope.measuredSpeedWarningThreshold = 15;
@@ -40,13 +36,6 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
     $scope.modalStatusClass = undefined;
     $scope.modalStatusText = undefined;
-
-    $scope.reset = function() {
-        $scope.modalStatusText = undefined;
-        $scope.modalStatusClass = undefined;
-        $scope.resetMovement();
-        $scope.guid = undefined;
-    };
 
     $scope.setSuccessText = function(text, action) {
         $scope.modalStatusText = text;
@@ -94,12 +83,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         }
 
         promise.then(function() {
-            if ($scope.addAnother) {
-                $scope.reset();
-            }
-            else {
-                $modalInstance.close();
-            }
+            $modalInstance.close({addAnother: $scope.addAnother});
         }, function(errorMessage) {
             $scope.setErrorText($filter("i18n")("manual_position_save_error"));
         });
