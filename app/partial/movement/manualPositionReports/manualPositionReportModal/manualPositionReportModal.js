@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition, updateMode) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition) {
 
     $scope.errorMessage ="";
 
@@ -66,7 +66,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         var promise;
         var movement = $scope.createManualMovement();
         if (movement.guid) {
-            promise = manualPositionRestService.updateManualMovement(movement)
+            promise = manualPositionRestService.updateManualMovement(movement);
         }
         else {
             promise = manualPositionRestService.createManualMovement(movement);
@@ -152,7 +152,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
 angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($modal) {
 	return {
-		show: function(position, updateMode) {
+		show: function(position) {
 			return $modal.open({
 				templateUrl: 'partial/movement/manualPositionReports/manualPositionReportModal/manualPositionReportModal.html',
 				controller: 'ManualPositionReportModalCtrl',
@@ -160,11 +160,8 @@ angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($mod
                 resolve:{
                     position : function (){
                         return position || {};
-                    },
-                    updateMode: function() {
-                        return updateMode || false;
                     }
-                }
+               }
 			}).result;
 		}
 	};

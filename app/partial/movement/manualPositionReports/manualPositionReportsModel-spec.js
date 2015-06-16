@@ -7,7 +7,7 @@ describe('ManualPosition', function() {
             guid : "12345-qwert-12345-asdfg-1qaz2",
             speed : 15,
             course : 34,
-            time : "",
+            time : "2013-02-08 09:30",
             updatedTime : "",
             status : "",
             archived : false,
@@ -32,7 +32,7 @@ describe('ManualPosition', function() {
         expect(position.guid).toEqual("12345-qwert-12345-asdfg-1qaz2");       
         expect(position.speed).toEqual(15);
         expect(position.course).toEqual(34);
-        expect(position.time).toEqual("");
+        expect(position.time).toEqual("2013-02-08 09:30");
         expect(position.updatedTime).toEqual("");
         expect(position.status).toEqual("");
         expect(position.archived).toEqual(false);
