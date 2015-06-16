@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService, alertService,MobileTerminalListPage, MobileTerminal, mobileTerminalRestService, pollingService, $location, locale){
+angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService, alertService, MobileTerminalListPage, MobileTerminal, SystemTypeAndLES, mobileTerminalRestService, pollingService, $location, locale){
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -67,6 +67,34 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
         return $scope.currentMobileTerminal;
     };    
 
+    //Get model value for the transponder system dropdown by system type and les
+    $scope.getModelValueForTransponderSystemBySystemTypeAndLES = function(type, les){
+        var value;
+        $.each($scope.transponderSystems, function(index, system){
+            var systemAndTypeAndLESItem = system.typeAndLes;
+            if(systemAndTypeAndLESItem.equalsTypeAndLES(type, les)){
+                value = systemAndTypeAndLESItem;
+                return false;
+            }
+        });
+        return value;
+    };
+
+    //Create dropdown for transponder system
+    $scope.createTransponderSystemDropdownOptions = function(){
+        //Create dropdown values
+        $.each($scope.transpondersConfig.terminalConfigs, function(key, config){
+            //LES capability
+            if(config.capabilities["HAS_LES"] && _.isArray(config.capabilities["HAS_LES"])){
+                $.each(config.capabilities["HAS_LES"], function(key2, lesOption){
+                    $scope.transponderSystems.push({text : config.viewName +" - " +lesOption.text, typeAndLes : new SystemTypeAndLES(config.systemType, lesOption.code)});
+                });
+            }else{
+                $scope.transponderSystems.push({text : config.viewName, typeAndLes : new SystemTypeAndLES(config.systemType, undefined)});
+            }
+        });
+    };
+
     //Init function when entering page
     var init = function(){
         //Load list with mobileTerminals
@@ -77,10 +105,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
         .then(
             function(transpConfig){
                 $scope.transpondersConfig = transpConfig;
-                //Create dropdown values
-                $.each(transpConfig.terminalConfigs, function(key, config){
-                    $scope.transponderSystems.push({text : config.viewName, code : config.systemType});
-                });
+                $scope.createTransponderSystemDropdownOptions();
             },
             function(error){
                 alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_load_transponders_error'));

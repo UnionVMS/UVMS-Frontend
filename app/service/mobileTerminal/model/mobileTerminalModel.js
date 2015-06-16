@@ -32,8 +32,8 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                     var value = data.attributes[i].value;
                     if (angular.isDefined(value) && String(value).trim().length > 0){
                         var key = data.attributes[i].type.toUpperCase();
-                        //If OCEAN_REGIONS the attribute should be a list
-                        if(key === "OCEAN_REGIONS"){
+                        //If MULTIPLE_OCEAN the attribute should be a list
+                        if(key === "MULTIPLE_OCEAN"){
                             if(angular.isDefined(mobileTerminal.attributes[key])){
                                 mobileTerminal.attributes[key].push(value);
                             }else{

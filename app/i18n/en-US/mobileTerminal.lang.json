@@ -116,6 +116,11 @@
     "history_modal_auditlogs" : "Audit logs",
     "history_modal_vesselname" : "Vessel name",
     "history_modal_sattelitenumber" : "Satellite number: ",
-    "history_modal_transpondertype" : "Transponder type: " 
-    
+    "history_modal_transpondertype" : "Transponder type: ",
+    "OCEAN_REGION_PACIFIC" : "POR",
+    "OCEAN_REGION_EAST_ATLANTIC" : "AOR-E",
+    "OCEAN_REGION_INDIAN" : "IOR",
+    "OCEAN_REGION_WEST_ATLANTIC" : "AOR-W",
+    "LES_EIK" : "Eik",
+    "LES_BURUM" : "Burum"    
 }

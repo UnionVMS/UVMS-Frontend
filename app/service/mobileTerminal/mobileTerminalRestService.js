@@ -4,7 +4,7 @@ angular.module('unionvmsWeb')
         var baseUrl = restConstants.baseUrl;
         return {
             getTranspondersConfig : function(){
-                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/config/transponders');
+                return $resource(baseUrl +'/mobileterminal/rest/config/transponders');
             },
             getChannelNames : function(){
                 return $resource(baseUrl +'/mobileterminal/rest/config/channelnames');

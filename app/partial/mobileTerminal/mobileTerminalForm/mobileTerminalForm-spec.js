@@ -8,6 +8,7 @@ describe('mobileTerminalFormCtrl', function() {
         scope = $rootScope.$new();
         ctrl = $controller('mobileTerminalFormCtrl', {$scope: scope});
         scope.currentMobileTerminal = new MobileTerminal();
+        scope.getModelValueForTransponderSystemBySystemTypeAndLES = function(){};
 
         //Dummy response for create
         createResponseTerminal = new MobileTerminal();
@@ -52,5 +53,46 @@ describe('mobileTerminalFormCtrl', function() {
         scope.$digest();
         expect(scope.currentMobileTerminal.guid).toBe("260");
         
+    }));
+
+    it('onTerminalSystemSelect should set system type and LES attributes', inject(function($q, SystemTypeAndLES, MobileTerminal) {
+        scope.getCurrentMobileTerminal = function(){
+            return scope.currentMobileTerminal;
+        };
+
+        expect(scope.currentMobileTerminal.type).toBeUndefined();
+        var selectItem = {
+            text : "Inmarsat-C - Burum",
+            typeAndLes : new SystemTypeAndLES("INMARSAT-C", "BURUM")
+        };
+
+        //Select item
+        scope.onTerminalSystemSelect(selectItem);
+        scope.$digest();
+
+        //Type and LES should be updated
+        expect(scope.currentMobileTerminal.attributes.LES).toEqual("BURUM");
+        expect(scope.currentMobileTerminal.type).toEqual("INMARSAT-C");
+    }));
+
+
+    it('onTerminalSystemSelect should set only system type when LES is missing', inject(function($q, SystemTypeAndLES, MobileTerminal) {
+        scope.getCurrentMobileTerminal = function(){
+            return scope.currentMobileTerminal;
+        };
+
+        expect(scope.currentMobileTerminal.type).toBeUndefined();
+        var selectItem = {
+            text : "Iridium",
+            typeAndLes : new SystemTypeAndLES("INMARSAT-C", undefined)
+        };
+
+        //Select item
+        scope.onTerminalSystemSelect(selectItem);
+        scope.$digest();
+
+        //Type and LES should be updated
+        expect(scope.currentMobileTerminal.attributes.LES).toBeUndefined();
+        expect(scope.currentMobileTerminal.type).toEqual("INMARSAT-C");
     }));
 });

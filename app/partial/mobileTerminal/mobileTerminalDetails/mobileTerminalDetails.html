@@ -4,15 +4,15 @@
             <div class="col-md-12">
                 <div class="transponderSystemSelect form-group">
                     <label>{{'mobileTerminal.add_new_form_transponder_system_label' | i18n}}</label>
-                    <dropdown ng-model="currentMobileTerminal.type" initialtext="{{ 'common.choose' | i18n }}" items="transponderSystems" callback="onTerminalSystemSelect" ng-disabled="!isCreateNewMode()"></dropdown>                    
+                    <dropdown ng-model="typeAndLES" initialtext="{{ 'common.choose' | i18n }}" items="transponderSystems" callback="onTerminalSystemSelect" ng-disabled="!isCreateNewMode()" data="typeAndLes"></dropdown>                    
                 </div>
                 <div class="transponderSystemSelect form-group" ng-show="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN || getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
                     <label>{{'mobileTerminal.add_new_form_ocean_region_label' | i18n}}</label>
-                    <div ng-if="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN && !getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
-                        <tag-select-input ng-model="currentMobileTerminal.attributes.OCEAN_REGION" ng-placeholder="{{'common.choose' | i18n }}" items="oceanRegions" ng-attr-max-limit="1"></tag-select-input>
+                    <div ng-if="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN">
+                        <dropdown ng-model="currentMobileTerminal.attributes.SINGLE_OCEAN" initialtext="{{ 'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN"></dropdown>         
                     </div>
                     <div ng-if="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
-                        <tag-select-input ng-model="currentMobileTerminal.attributes.OCEAN_REGIONS" ng-placeholder="{{'common.choose' | i18n }}" items="oceanRegions"></tag-select-input>
+                        <tag-select-input ng-model="currentMobileTerminal.attributes.MULTIPLE_OCEAN" ng-placeholder="{{'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN"></tag-select-input>
                     </div>                    
                 </div>                 
             </div>

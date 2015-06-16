@@ -5,22 +5,20 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         assignVessel : false,
     };
 
+    $scope.typeAndLES = undefined;
     //Watch changes to the currentMobileTerminal model (set in the parent scope)
     $scope.$watch('getCurrentMobileTerminal()', function(newValue) {
         $scope.currentMobileTerminal = $scope.getCurrentMobileTerminal();
         if(angular.isDefined($scope.mobileTerminalForm)){
             $scope.mobileTerminalForm.$setPristine();
             $scope.submitAttempted = false;
+
+            //Update the value for typeAndLES in order for the dropdown to show the correct value
+            if(angular.isDefined($scope.currentMobileTerminal)){
+                $scope.typeAndLES = $scope.getModelValueForTransponderSystemBySystemTypeAndLES($scope.currentMobileTerminal.type, $scope.currentMobileTerminal.attributes.LES);
+            }
         }
     });    
-
-    //Values for dropdowns
-    $scope.oceanRegions =[
-        {'text':'AOR-E','code':581},
-        {'text':'AOR-W','code':584}, 
-        {'text':'IOR','code':583}, 
-        {'text':'POR','code':582}
-    ];
 
     //Has form submit been atempted?
     $scope.submitAttempted = false;
@@ -32,6 +30,21 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
             return $scope.transpondersConfig.getTerminalConfigBySystemName(systemName);
         }
     };
+
+    //Selected terminal
+    $scope.onTerminalSystemSelect = function(selectedItem){
+        if(angular.isDefined(selectedItem) && angular.isDefined(selectedItem.typeAndLes)){
+            $scope.currentMobileTerminal.type = selectedItem.typeAndLes.type;
+            if(angular.isDefined(selectedItem.typeAndLes.les)){
+                $scope.currentMobileTerminal.attributes.LES = selectedItem.typeAndLes.les;
+            }else{
+                delete $scope.currentMobileTerminal.attributes.LES;
+            }
+        }else{
+            $scope.currentMobileTerminal.type = undefined;
+            delete $scope.currentMobileTerminal.attributes.LES;
+        }
+    };    
 
     $scope.isDirty = function() {
         var isDirty = !$scope.currentMobileTerminal.isEqualAttributesAndChannels($scope.getOriginalMobileTerminal());
@@ -243,15 +256,15 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     };
 
     $scope.selectedConfigChannel = function(selected) {
-        return $scope.selectChannel("CONFIG", selected);
+        return $scope.selectChannel("CONFIGURABLE", selected);
     };
 
     $scope.selectedDefaultChannel = function(selected) {
-        return $scope.selectChannel("DEFAULT", selected);
+        return $scope.selectChannel("DEFAULT_REPORTING", selected);
     };
 
     $scope.selectedPollingChannel = function(selected) {
-        return $scope.selectChannel("POLLING", selected);
+        return $scope.selectChannel("POLLABLE", selected);
     };
 
     //Move channel in the list. Used when sorting the channels up and down

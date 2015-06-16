@@ -78,7 +78,7 @@ angular.module('unionvmsWeb')
                     }
                 }else{
                     for(var i = 0; i < scope.items.length; i++){
-                        if((newVal +'') === (getItemCode(scope.items[i]) +'')){
+                        if(angular.equals(newVal, getItemCode(scope.items[i])) ) {
                             scope.currentItemLabel = scope.getItemLabel(scope.items[i]);
                         }
                     }
@@ -88,7 +88,7 @@ angular.module('unionvmsWeb')
 
             //Select item in dropdown
             scope.selectVal = function(item){
-                scope.ngModel = item.code;
+                scope.ngModel = getItemCode(item);
                 scope.currentItemLabel = scope.getItemLabel(item);
                 if(angular.isDefined(scope.callback)){
                     scope.callback(item);
