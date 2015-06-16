@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition, updateMode) {
 
     $scope.errorMessage ="";
 
@@ -19,6 +19,8 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     $scope.maxDateTime = new Date().getTime();
     $scope.submitAttempted = false;
 
+    $scope.guid = position.guid;
+
     $scope.center = {
         autoDiscover: true,
         zoom: 5
@@ -36,6 +38,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
     $scope.createManualMovement = function() {
         var p = new ManualPosition();
+        p.guid = $scope.guid;
 
         p.carrier.flagState = $scope.flagState;
         p.carrier.ircs = $scope.ircs;
@@ -60,11 +63,19 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
             return;
         }
 
-        manualPositionRestService.createManualMovement($scope.createManualMovement()).then(function () {
+        var promise;
+        var movement = $scope.createManualMovement();
+        if (movement.guid) {
+            promise = manualPositionRestService.updateManualMovement(movement)
+        }
+        else {
+            promise = manualPositionRestService.createManualMovement(movement);
+        }
+
+        promise.then(function () {
             // Success
             $modalInstance.close();
-        },
-        function() {
+        }, function() {
             // Fail
         });
     };
@@ -141,17 +152,20 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
 angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($modal) {
 	return {
-		show: function(position) {
-			$modal.open({
+		show: function(position, updateMode) {
+			return $modal.open({
 				templateUrl: 'partial/movement/manualPositionReports/manualPositionReportModal/manualPositionReportModal.html',
 				controller: 'ManualPositionReportModalCtrl',
 				size: 'md',
                 resolve:{
                     position : function (){
                         return position || {};
+                    },
+                    updateMode: function() {
+                        return updateMode || false;
                     }
                 }
-			});
+			}).result;
 		}
 	};
 });

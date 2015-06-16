@@ -10,7 +10,14 @@ angular.module('unionvmsWeb')
             });
         },
         manualMovement: function() {
-            return $resource(baseUrl + '/movement/rest/tempmovement');
+            return $resource(baseUrl + '/movement/rest/tempmovement', {}, {
+                update: { method: 'PUT' }
+            });
+        },
+        manualMovements: function() {
+            return $resource(baseUrl + '/movement/rest/tempmovement/list', {}, {
+                list: { method: 'POST' }
+            });
         },
         deleteManualPositionReport : function(){
             return $resource(baseUrl +'/movement/rest/tempmovement/remove/:guid', {}, {
@@ -39,10 +46,27 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
+    var updateManualMovement = function(movement) {
+        var deferred = $q.defer();
+        manualPositionRestFactory.manualMovement().update(movement.getDto(), function(response) {
+            if(response.code !== "200") {
+                deferred.reject("Invalid response status");
+                return;
+            }
+
+            deferred.resolve(ManualPosition.fromJson(response.data));
+        }, function(error) {
+            deferred.reject(error);
+        });
+
+        return deferred.promise;
+    };
+
     var getManualPositionList = function(getListRequest){
 
         var deferred = $q.defer();
-        manualPositionRestFactory.getMovementList().list(getListRequest.DTOForManualPosition(),
+        getListRequest.listSize = 1000;
+        manualPositionRestFactory.manualMovements().list(getListRequest.DTOForManualPosition(),
             function(response){
 
                 if(response.code !== "200"){
@@ -52,9 +76,9 @@ angular.module('unionvmsWeb')
 
                 var positions = [];
                 
-                if(angular.isArray(response.data.manualposition)){
-                    for (var i = 0; i < response.data.manualposition.length; i++){
-                        positions.push(ManualPosition.fromJson(response.data.manualposition[i]));
+                if(angular.isArray(response.data.movement)){
+                    for (var i = 0; i < response.data.movement.length; i++){
+                        positions.push(ManualPosition.fromJson(response.data.movement[i]));
                     }
                 }
                 var currentPage = response.data.currentPage;
@@ -123,8 +147,9 @@ angular.module('unionvmsWeb')
     
     return {
         createManualMovement: createManualMovement,
+        updateManualMovement: updateManualMovement,
         getManualPositionList : getManualPositionList,
-        deleteManualPositionReport : deleteManualPositionReport       
+        deleteManualPositionReport : deleteManualPositionReport
      };
 
 });

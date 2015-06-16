@@ -13,7 +13,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
         movements : [],
         errorMessage : "",
         loading : false,
-        sortBy : "vessel.name",
+        sortBy : "carrier.name",
         sortReverse : false
     };
 
@@ -21,7 +21,17 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
         $scope.searchManualPositions();
     };
     $scope.isManualMovement = true;
-    
+
+    $scope.removeFromSearchResults = function(report) {
+        var movements = $scope.currentSearchResults.movements;
+        var index = movements.indexOf(report);
+        if (index < 0) {
+            return;
+        }
+
+        movements.splice(index, 1);
+    };
+
     $scope.deletePosition = function(manualPositionReport){
         var options = {
             textLabel : locale.getString("movement.manual_position_delete_confirm_text")
@@ -29,8 +39,9 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
         confirmationModal.open(function(){
             console.log("Confirmed!");
             manualPositionRestService.deleteManualPositionReport(manualPositionReport).then(
-                function(manualPositionReport){
+                function(){
                     alertService.showSuccessMessageWithTimeout(locale.getString('movement.manual_position_delete_success'));
+                    $scope.removeFromSearchResults(manualPositionReport);
                 },
                 function(error){
                     alertService.showErrorMessage(locale.getString('movement.manual_position_delete_error'));
@@ -40,13 +51,13 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     };
 
     $scope.editPosition = function(item){
-        ManualPositionReportModal.show(item);
+        ManualPositionReportModal.show(item, true).then(function() {
+            $scope.searchManualPositions();
+        });
     };
 
-    
-      
     $scope.searchManualPositions = function(){
-        //$scope.resetSearchResult();
+        $scope.resetSearchResult();
         searchService.searchManualPositions()
             .then(retrivePositionSuccess, retrivePositionsError);
     };

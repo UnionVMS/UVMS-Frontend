@@ -62,8 +62,8 @@ angular.module('unionvmsWeb')
 
     GetListRequest.prototype.DTOForManualPosition = function(){
          return {
-            manualPositionSearchCriteria : this.criterias,
-            pagination : {page: this.page, listSize: this.listSize}            
+            movementSearchCriteria : this.criterias,
+            pagination : {page: this.page, listSize: this.listSize}
         };
     };
 
