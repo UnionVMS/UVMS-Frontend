@@ -83,7 +83,7 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 	};
 
 	function formatTime (time){
-		return moment(time).format("YYYY-MM-DD hh:mm");
+		return moment(time).format("YYYY-MM-DD HH:mm");
 	};
 
 
