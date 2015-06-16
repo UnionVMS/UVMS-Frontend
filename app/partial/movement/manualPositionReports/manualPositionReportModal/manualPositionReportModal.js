@@ -1,25 +1,27 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition, $timeout) {
 
     $scope.errorMessage ="";
 
-    //The new manual position report
-	$scope.flagState = "SWE";
-	$scope.ircs = position.carrier.ircs;
-	$scope.cfr = position.carrier.cfr;
-	$scope.externalMarking = position.carrier.externalMarking;
-	$scope.name = position.carrier.name;
-	$scope.status = "010";
-	$scope.dateTime = position.time;
-	$scope.latitude = position.position.latitude;
-	$scope.longitude = position.position.longitude;
-	$scope.measuredSpeed = position.speed;
-	$scope.course = position.course;
+    $scope.resetMovement = function(p) {
+        $scope.flagState = "SWE";
+        $scope.ircs = p ? p.carrier.ircs : undefined;
+        $scope.cfr = p ? p.carrier.cfr : undefined;
+        $scope.externalMarking = p ? p.carrier.externalMarking : undefined;
+        $scope.name = p ? p.carrier.name : undefined;
+        $scope.status = "010";
+        $scope.dateTime = p ? p.time : undefined;
+        $scope.latitude = p ? p.position.latitude : undefined;
+        $scope.longitude = p ? p.position.longitude : undefined;
+        $scope.measuredSpeed = p ? p.speed : undefined;
+        $scope.course = p ? p.course : undefined;
+    };
+
+    $scope.resetMovement(position);
+    $scope.guid = position ? position.guid : undefined;
 
 	$scope.measuredSpeedWarningThreshold = 15;
     $scope.maxDateTime = new Date().getTime();
     $scope.submitAttempted = false;
-
-    $scope.guid = position.guid;
 
     $scope.center = {
         autoDiscover: true,
@@ -34,6 +36,30 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
     $scope.markers = {
         newPosition: $scope.newPosition
+    };
+
+    $scope.modalStatusClass = undefined;
+    $scope.modalStatusText = undefined;
+
+    $scope.reset = function() {
+        $scope.modalStatusText = undefined;
+        $scope.modalStatusClass = undefined;
+        $scope.resetMovement();
+        $scope.guid = undefined;
+    };
+
+    $scope.setSuccessText = function(text, action) {
+        $scope.modalStatusText = text;
+        $scope.modalStatusClass = "alert-success";
+
+        if (action) {
+            $timeout(action, 2000);
+        }
+    };
+
+    $scope.setErrorText = function(text) {
+        $scope.modalStatusText = text;
+        $scope.modalStatusClass = "alert-danger";
     };
 
     $scope.createManualMovement = function() {
@@ -58,11 +84,6 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     };
 
     $scope.savePosition = function() {
-        $scope.submitAttempted = true;
-        if (!$scope.manualPositionReportForm.$valid) {
-            return;
-        }
-
         var promise;
         var movement = $scope.createManualMovement();
         if (movement.guid) {
@@ -72,12 +93,20 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
             promise = manualPositionRestService.createManualMovement(movement);
         }
 
-        promise.then(function () {
-            // Success
-            $modalInstance.close();
-        }, function() {
-            // Fail
+        promise.then(function() {
+            if ($scope.addAnother) {
+                $scope.reset();
+            }
+            else {
+                $modalInstance.close();
+            }
+        }, function(errorMessage) {
+            $scope.setErrorText($filter("i18n")("manual_position_save_error"));
         });
+    };
+
+    $scope.cancel = function() {
+        $modalInstance.dismiss();
     };
 
     $scope.updateNewPositionVisibility = function() {
@@ -159,9 +188,9 @@ angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($mod
 				size: 'md',
                 resolve:{
                     position : function (){
-                        return position || {};
+                        return position;
                     }
-               }
+                }
 			}).result;
 		}
 	};

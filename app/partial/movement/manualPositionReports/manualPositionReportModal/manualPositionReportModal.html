@@ -89,15 +89,17 @@
 					<input class="form-control" ng-model="longitude" name="longitude" required longitude placeholder="112.35813"/>
 				</label>
 			</div>
-			<div class="col-md-6">
-				<label style="margin-right: 10px;">
+			<div class="col-md-3">
+				<label>
 					{{'movement.manual_position_field_label_measured_speed' | i18n}}
 					<div class="unit-input" ng-class="{'has-error': submitAttempted &&  manualPositionReportForm.measuredSpeed.$invalid}">
-						<input class="form-control" ng-model="measuredSpeed" name="measuredSpeed" min="0" type="number" style="width:58px;" required/>
+						<input class="form-control" ng-model="measuredSpeed" name="measuredSpeed" min="0" type="number" required/>
 						<div class="unit-box">{{"movement.manual_position_field_unit_knots" | i18n}}</div>
 					</div>
 				</label>
-				<label>
+			</div>
+			<div class="col-md-3">
+				<label style="width:100%;">
 					{{'movement.manual_position_field_label_course' | i18n}}
 					<div class="unit-input" ng-class="{'has-error': submitAttempted &&  manualPositionReportForm.course.$invalid}">
 						<input class="form-control" ng-model="course" name="course" min="0" max="360" type="number" required/>
@@ -111,22 +113,29 @@
 			{{"movement.manual_position_warning_high_speed" | i18n:[measuredSpeedWarningThreshold]}}
 		</div>
 
+		<div ng-if="modalStatusText" ng-class="modalStatusClass" class="alert" style="padding: 5px 15px; margin: 15px -10px;">
+			{{ modalStatusText }}
+		</div>
+
 		<leaflet center="center" markers="markers" height="200px" width="100%"></leaflet>
 
 		<div class="row buttons">
 			<div class="buttonGroups">
 				<div class="buttonGroup">
-					<a class="button">{{"common.cancel" | i18n}}</a>
-					<a class="button">{{"movement.manual_position_button_clear" | i18n}}</a>
+					<a class="button" ng-click="cancel()">{{"common.cancel" | i18n}}</a>
+					<a class="button" ng-click="resetMovement()">{{"movement.manual_position_button_clear" | i18n}}</a>
 				</div>
 				<div class="buttonGroup button-group-right">
-					<label class="button">
-						<input type="checkbox"/>
+					<label class="button" ng-show="guid === undefined">
+						<input type="checkbox" ng-model="addAnother"/>
 						{{"movement.manual_position_label_add_another" | i18n}}
 					</label>
-					<a class="button" ng-click="savePosition()">Save</a>
-					<button class="btn btn-primary button" style="margin-left:10px" type="submit" ng-disabled="!manualPositionReportForm.$valid">
-						{{"movement.manual_position_button_send" | i18n}}
+					<a class="button" ng-click="savePosition()">{{"common.save" | i18n}}</a>
+					<button class="btn btn-primary button" style="margin-left:10px; width:60px;" type="submit" ng-click="sendPosition()">
+						<span ng-if="!check">
+							{{"movement.manual_position_button_send" | i18n}}
+						</span>
+						<i ng-if="check" class="fa fa-check"></i>
 					</button>
 				</div>
 			</div>

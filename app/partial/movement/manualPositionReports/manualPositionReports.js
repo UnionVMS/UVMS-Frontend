@@ -1,7 +1,7 @@
 angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal) {
 
     $scope.showModal = function() {
-        ManualPositionReportModal.show(new ManualPosition());
+        $scope.editPosition();
     };
 
     $scope.selectedMovements = [];
@@ -51,7 +51,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     };
 
     $scope.editPosition = function(item){
-        ManualPositionReportModal.show(item, true).then(function() {
+        ManualPositionReportModal.show(item).then(function() {
             $scope.searchManualPositions();
         });
     };
