@@ -54,7 +54,12 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
         ManualPositionReportModal.show(item).then(function(result) {
             $scope.searchManualPositions();
             if (result.addAnother) {
-                $scope.editPosition();
+                var p = new ManualPosition();
+                p.carrier.ircs = result.ircs;
+                p.carrier.cfr = result.cfr;
+                p.carrier.externalMarking = result.externalMarking;
+                p.carrier.name = result.name;
+                $scope.editPosition(p);
             }
         });
     };

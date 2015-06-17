@@ -15,6 +15,18 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     $scope.course = position ? position.course : undefined;
     $scope.guid = position ? position.guid : undefined;
 
+    $scope.clearMovement = function() {
+        $scope.ircs = undefined;
+        $scope.cfr = undefined;
+        $scope.externalMarking = undefined;
+        $scope.name = undefined;
+        $scope.dateTime = undefined;
+        $scope.latitude = undefined;
+        $scope.longitude = undefined;
+        $scope.measuredSpeed = undefined;
+        $scope.course = undefined;
+    };
+
 	$scope.measuredSpeedWarningThreshold = 15;
     $scope.maxDateTime = new Date().getTime();
     $scope.submitAttempted = false;
@@ -83,9 +95,17 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         }
 
         promise.then(function() {
-            $modalInstance.close({addAnother: $scope.addAnother});
+            $scope.setSuccessText(locale.getString("movement.manual_position_save_success"), function() {
+                $modalInstance.close({
+                    addAnother: $scope.addAnother,
+                    ircs: $scope.ircs,
+                    cfr: $scope.cfr,
+                    externalMarking: $scope.externalMarking,
+                    name: $scope.name
+                });
+            });
         }, function(errorMessage) {
-            $scope.setErrorText($filter("i18n")("manual_position_save_error"));
+            $scope.setErrorText(locale.getString("movement.manual_position_save_error"));
         });
     };
 
