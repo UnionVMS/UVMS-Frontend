@@ -19,7 +19,7 @@ angular.module('unionvmsWeb')
         }
     };
 })
-.factory('movementRestService',function($q, movementRestFactory, MovementListPage, Movement, SavedSearchGroup){
+.factory('movementRestService',function($q, movementRestFactory, MovementListPage, Movement, SavedSearchGroup, GetListRequest){
     var baseUrl, userName;
     userName = "FRONTEND_USER";
 
@@ -51,6 +51,25 @@ angular.module('unionvmsWeb')
                 deferred.reject(error);
             }
         );
+        return deferred.promise;
+    };
+
+    var getLastMovement = function(vesselGuid) {
+        var query = new GetListRequest(1, 1, true, [{"key": "CARRIER_GUID", "value": vesselGuid}]);
+        var deferred = $q.defer();
+        movementRestFactory.getMovementList().list(query.DTOForMovement(), function(response) {
+            if (response.code !== "200") {
+                deferred.reject("Invalid response status");
+                return;
+            }
+
+            var movements = response.data.movement;
+            var movement = movements.length > 0 ? Movement.fromJson(movements[0]) : undefined;
+            deferred.resolve(movement);
+        }, function() {
+            deferred.reject();
+        });
+
         return deferred.promise;
     };
 
@@ -129,6 +148,7 @@ angular.module('unionvmsWeb')
 
     return {
         getMovementList : getMovementList,
+        getLastMovement: getLastMovement,
         getSavedSearches : getSavedSearches,
         createNewSavedSearch : createNewSavedSearch,
         updateSavedSearch : updateSavedSearch,

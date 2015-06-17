@@ -84,6 +84,7 @@
 
 	"manual_position_label_add_another": "Add another",
 	"manual_position_label_new_position": "New position.",
+	"manual_position_label_previous_position": "Last sent position.",
 
     "manual_position_button_back": "Back",
 	"manual_position_button_confirm": "Confirm",

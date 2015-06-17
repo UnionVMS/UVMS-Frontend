@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition, $timeout) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition, $timeout, movementRestService) {
 
     $scope.errorMessage ="";
 
@@ -43,6 +43,8 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         lng: $scope.longitude,
         message: locale.getString("movement.manual_position_label_new_position")
     };
+
+    $scope.lastPosition = undefined;
 
     $scope.markers = {
         newPosition: $scope.newPosition
@@ -151,6 +153,13 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         else if (!$scope.markers.newPosition && hasCoordinates) {
             $scope.markers = { newPosition: $scope.newPosition };
         }
+
+        if ($scope.lastPosition) {
+            $scope.markers.lastPosition = $scope.lastPosition;
+        }
+        else {
+            delete $scope.markers.lastPosition;
+        }
     };
 
     $scope.$watch('latitude', function(newLatitude) {
@@ -209,8 +218,30 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         $scope.name = item.name;
         $scope.externalMarking = item.externalMarking;
         $scope.cfr = item.cfr;
+
+        $scope.showLastMovementByVessel(item);
     };
 
+    $scope.showLastMovementByVessel = function(vessel) {
+        if (vessel.vesselId === undefined || vessel.vesselId.type !== "GUID" || vessel.vesselId.value === undefined) {
+            return;
+        }
+
+        movementRestService.getLastMovement(vessel.vesselId.value).then(function(pos) {
+            if (pos) {
+                $scope.lastPosition = {
+                    lng: pos.longitude,
+                    lat: pos.latitude,
+                    message: locale.getString("movement.manual_position_label_previous_position")
+                };
+            }
+            else {
+                $scope.lastPosition = undefined;
+            }
+
+            $scope.updateNewPositionVisibility();
+        });
+    };
 });
 
 angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($modal) {
