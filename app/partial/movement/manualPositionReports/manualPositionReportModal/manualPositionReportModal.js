@@ -30,6 +30,8 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 	$scope.measuredSpeedWarningThreshold = 15;
     $scope.maxDateTime = new Date().getTime();
     $scope.submitAttempted = false;
+    $scope.confirmSend = false;
+    $scope.sendSuccess = false;
 
     $scope.center = {
         autoDiscover: true,
@@ -39,7 +41,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     $scope.newPosition = {
         lat: $scope.latitude,
         lng: $scope.longitude,
-        message: $filter('i18n')("movement.manual_position_label_new_position")
+        message: locale.getString("movement.manual_position_label_new_position")
     };
 
     $scope.markers = {
@@ -48,6 +50,21 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
     $scope.modalStatusClass = undefined;
     $scope.modalStatusText = undefined;
+
+    $scope.closeModal = function() {
+        var result = {
+            addAnother: $scope.addAnother
+        };
+
+        if (result.addAnother) {
+            result.ircs = $scope.ircs;
+            result.cfr = $scope.cfr;
+            result.externalMarking = $scope.externalMarking;
+            result.name = $scope.name;
+        }
+
+        $modalInstance.close(result);
+    };
 
     $scope.setSuccessText = function(text, action) {
         $scope.modalStatusText = text;
@@ -95,15 +112,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         }
 
         promise.then(function() {
-            $scope.setSuccessText(locale.getString("movement.manual_position_save_success"), function() {
-                $modalInstance.close({
-                    addAnother: $scope.addAnother,
-                    ircs: $scope.ircs,
-                    cfr: $scope.cfr,
-                    externalMarking: $scope.externalMarking,
-                    name: $scope.name
-                });
-            });
+            $scope.setSuccessText(locale.getString("movement.manual_position_save_success"), $scope.closeModal);
         }, function(errorMessage) {
             $scope.setErrorText(locale.getString("movement.manual_position_save_error"));
         });
@@ -111,10 +120,27 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
     $scope.sendPosition = function() {
         $scope.submitAttempted = true;
+        if ($scope.confirmSend) {
+            var movement = $scope.createManualMovement();
+            manualPositionRestService.sendMovement(movement).then(function() {
+                $scope.sendSuccess = true;
+                $scope.setSuccessText(locale.getString("movement.manual_position_send_success"), $scope.closeModal);
+            }, function() {
+                $scope.sendSuccess = false;
+                $scope.setErrorText(locale.getString("movement.manual_position_send_error"));
+            });
+        }
+        else if ($scope.manualPositionReportForm.$valid) {
+            $scope.confirmSend = true;
+        }
     };
 
     $scope.cancel = function() {
         $modalInstance.dismiss();
+    };
+
+    $scope.back = function() {
+        $scope.confirmSend = false;
     };
 
     $scope.updateNewPositionVisibility = function() {

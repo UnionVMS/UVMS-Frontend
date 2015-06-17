@@ -85,6 +85,8 @@
 	"manual_position_label_add_another": "Add another",
 	"manual_position_label_new_position": "New position.",
 
+    "manual_position_button_back": "Back",
+	"manual_position_button_confirm": "Confirm",
 	"manual_position_button_send": "Send",
     "manual_position_button_clear": "Clear",
 	"manual_position_button_search_error": "Failed to get matching vessels.",
@@ -95,6 +97,8 @@
     "manual_position_delete_success": "The manual position report has been removed.",
     "manual_position_save_error": "Could not save the position.",
     "manual_position_save_success": "The position was saved.",
+    "manual_position_send_error": "Manual position report was not sent successfully.",
+    "manual_position_send_success": "Manual position report sent successfully.",
     "manual_position_filter_no_results": "No position report matches your filter."
 
 }
