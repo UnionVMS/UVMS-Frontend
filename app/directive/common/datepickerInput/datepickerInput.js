@@ -17,21 +17,21 @@ angular.module('unionvmsWeb').directive('datepickerInput', function($compile) {
             var name = attrs.name;
             element.find('input').attr('id', scope.randomId);
 
-            var useTime = false;
+            scope.useTime = false;
             var format = 'Y-m-d';
 
             if(angular.isDefined(attrs.time)){
-                useTime = attrs.time;
+                scope.useTime = attrs.time;
                 format = 'Y-m-d G:i';
             }
 
             jQuery("#" +scope.randomId).datetimepicker({
                 datepicker:true,
-                timepicker:useTime,
+                timepicker:scope.useTime,
                 lazyInit: true,
                 format : format,
                 step: 5,
-                closeOnDateSelect: !useTime
+                closeOnDateSelect: !scope.useTime
             });
 
             if (name) {
@@ -80,8 +80,15 @@ angular.module('unionvmsWeb')
             if(angular.isDefined(newValue)){
                 var d = new Date(newValue);
                 var date = [d.getFullYear(), leadingZero(d.getMonth() + 1), leadingZero(d.getDate())];
-                var time = [leadingZero(d.getHours()), leadingZero(d.getMinutes()), leadingZero(d.getSeconds())];
-                var newModelVal = date.join('-') + ' ' + time.join(':');
+
+                var newModelVal;
+                if($scope.useTime){
+                    var time = [leadingZero(d.getHours()), leadingZero(d.getMinutes()), leadingZero(d.getSeconds())];
+                    newModelVal = date.join('-') + ' ' + time.join(':');
+                }else{
+                    newModelVal = date.join('-');
+                }
+                
                 //Only set model to newModelVal if valid
                 if(newModelVal.indexOf("NaN") < 0){
                     $scope.model = newModelVal;

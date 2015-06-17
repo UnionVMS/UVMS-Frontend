@@ -127,11 +127,11 @@
                             </div>
                                 <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': channelForm.started.$invalid && (submitAttempted || channelForm.started.$dirty)}" ng-show="getTerminalConfig().channelFields.START_DATE">
                                 <!-- Started -->
-                                    <datepicker-input name="started" model="communicationChannel.ids.START_DATE" ng-disabled="true"></datepicker-input>
+                                    <datepicker-input name="started" model="communicationChannel.ids.START_DATE"></datepicker-input>
                                 </div>
                                 <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': channelForm.stopped.$invalid && (submitAttempted || channelForm.stopped.$dirty)}" ng-show="getTerminalConfig().channelFields.END_DATE">
                                 <!-- Stopped -->
-                                    <datepicker-input name="stopped" model="communicationChannel.ids.END_DATE" ng-disabled="true"></datepicker-input>
+                                    <datepicker-input name="stopped" model="communicationChannel.ids.END_DATE"></datepicker-input>
                                 </div>
                             
                             <div class="col-md-1 remove" ng-show="$index > 0">
