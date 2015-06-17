@@ -25,7 +25,9 @@ angular.module('unionvmsWeb')
             });
         },
         sendMovement: function() {
-            return $resource(baseUrl + '/movement/rest/tempmovement/send');
+            return $resource(baseUrl + '/movement/rest/tempmovement/send/:guid', {}, {
+                send: { method: 'PUT' }
+            });
         }
     };
 })
@@ -149,7 +151,7 @@ angular.module('unionvmsWeb')
 
     var sendMovement = function(movement) {
         var deferred = $q.defer();
-        manualPositionRestFactory.sendMovement().save(movement, function() {
+        manualPositionRestFactory.sendMovement().send({guid: movement.guid}, movement, function(response) {
             if (response.code !== "200") {
                 deferred.reject("Invalid response status");
                 return;
