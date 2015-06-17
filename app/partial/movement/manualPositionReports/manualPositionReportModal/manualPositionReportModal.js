@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition, $timeout, movementRestService) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition, $timeout, movementRestService, leafletBoundsHelpers) {
 
     $scope.errorMessage ="";
 
@@ -34,7 +34,8 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     $scope.sendSuccess = false;
 
     $scope.center = {
-        autoDiscover: true,
+        lat: 0,
+        lng: 0,
         zoom: 5
     };
 
@@ -145,6 +146,24 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         $scope.confirmSend = false;
     };
 
+    $scope.getMarkerBounds = function() {
+        var points = [$scope.markers.newPosition, $scope.markers.lastPosition].filter(function(position) {
+            return position !== undefined;        // (1) Filter existing positions
+        }).map(function(position) {
+            return [position.lat, position.lng];  // (2) Convert to [lat,lng] list
+        });
+
+        if (points.length === 0) {
+            points.push([0, 0]);                  // (3) Add [0,0] to empty list
+        }
+
+        if (points.length < 2) {
+            points.push(points[0]);               // (4) Replicate single point (2 required)
+        }
+
+        return points;
+    };
+
     $scope.updateNewPositionVisibility = function() {
         var hasCoordinates = !isNaN($scope.longitude) && !isNaN($scope.latitude);
         if ($scope.markers.newPosition && !hasCoordinates) {
@@ -160,6 +179,8 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         else {
             delete $scope.markers.lastPosition;
         }
+
+        $scope.bounds = leafletBoundsHelpers.createBoundsFromArray($scope.getMarkerBounds());
     };
 
     $scope.$watch('latitude', function(newLatitude) {
@@ -232,7 +253,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
                 $scope.lastPosition = {
                     lng: pos.longitude,
                     lat: pos.latitude,
-                    message: locale.getString("movement.manual_position_label_previous_position")
+                    message: locale.getString("movement.manual_position_label_previous_position", pos.time)
                 };
             }
             else {
