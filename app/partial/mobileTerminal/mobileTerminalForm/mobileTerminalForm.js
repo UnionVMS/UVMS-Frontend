@@ -35,8 +35,12 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     $scope.onTerminalSystemSelect = function(selectedItem){
         if(angular.isDefined(selectedItem) && angular.isDefined(selectedItem.typeAndLes)){
             $scope.currentMobileTerminal.type = selectedItem.typeAndLes.type;
-            if(angular.isDefined(selectedItem.typeAndLes.les)){
-                $scope.currentMobileTerminal.attributes.LES = selectedItem.typeAndLes.les;
+            var selectedLES = selectedItem.typeAndLes.les;
+            if(angular.isDefined(selectedLES)){
+                $scope.currentMobileTerminal.attributes.LES = selectedLES;
+                $.each($scope.currentMobileTerminal.channels, function(index, channel){
+                    channel.setLESDescription(selectedLES);
+                });
             }else{
                 delete $scope.currentMobileTerminal.attributes.LES;
             }

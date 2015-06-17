@@ -52,17 +52,6 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 for (var idx = 0; idx < data.channels.length; idx++) {
                     mobileTerminal.channels.push(CommunicationChannel.fromJson(data.channels[idx]));
                 }
-
-                //sortchannels by order
-                if (mobileTerminal.channels.length > 1) {
-                    mobileTerminal.channels.sort(function (obj1, obj2){
-                        if (obj1.order !== undefined && obj2.order !== undefined){
-                            return obj1.order - obj2.order;
-                        } else {
-                            return;
-                        }
-                    });
-                }
             }
 
             return mobileTerminal;
@@ -178,7 +167,11 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
 
         //Add a new channel to the end of the list
         MobileTerminal.prototype.addNewChannel = function(){
-            this.channels.push(new CommunicationChannel());
+            var newChannel = new CommunicationChannel();
+            if(angular.isDefined(this.attributes.LES)){
+                newChannel.setLESDescription(this.attributes.LES);
+            }
+            this.channels.push(newChannel);
         };
 
         //Unassign the mobileTerminal from its carrier

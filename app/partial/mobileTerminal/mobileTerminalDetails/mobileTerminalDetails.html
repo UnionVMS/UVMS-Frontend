@@ -76,7 +76,7 @@
                     <div class="col-md-1 smallerpadding" ng-show="getTerminalConfig().channelFields.MEMBER_NUMBER">
                         <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_member_no_label' | i18n}}</label>
                     </div>
-                    <div class="col-md-1 smallerpadding" ng-show="getTerminalConfig().channelFields.LAND_STATION">
+                    <div class="col-md-1 smallerpadding" ng-show="getTerminalConfig().channelFields.LES_DESCRIPTION">
                         <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_land_station_label' | i18n}}</label>
                     </div>
                     <div class="col-md-2 smallerpadding" ng-show="getTerminalConfig().channelFields.START_DATE">
@@ -121,9 +121,9 @@
                                 <span class="help-block" ng-show="channelForm.memberId.$error.required">{{'common.validation_required' | i18n}}</span>
                                 <span class="help-block" ng-show="channelForm.memberId.$error.onlyDigits">{{'common.validation_digits_only' | i18n}}</span>
                             </div>
-                            <div class="col-md-1 smallerpadding" ng-show="getTerminalConfig().channelFields.LAND_STATION">
-                                <!-- Landstation -->
-                                <input type="text" name="landStation" class="form-control" ng-model="communicationChannel.ids.landStation">
+                            <div class="col-md-1 smallerpadding" ng-show="getTerminalConfig().channelFields.LES_DESCRIPTION">
+                                <!-- LES_DESCRIPTION -->
+                                <input type="text" name="LES_DESCRIPTION" class="form-control" ng-model="communicationChannel.ids.LES_DESCRIPTION">
                             </div>
                                 <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': channelForm.started.$invalid && (submitAttempted || channelForm.started.$dirty)}" ng-show="getTerminalConfig().channelFields.START_DATE">
                                 <!-- Started -->

@@ -77,6 +77,14 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function() {
             return copy;
         };
 
+        CommunicationChannel.prototype.setLESDescription = function(description) {
+            if(angular.isDefined(description)){
+                this.ids.LES_DESCRIPTION = description;
+            }else{
+                delete this.ids.LES_DESCRIPTION;
+            }
+        };
+
         CommunicationChannel.prototype.getFormattedStartDate = function() {
             return moment(this.ids["START_DATE"], 'YYYY-MM-DD HH:mm').format("YYYY-MM-DD HH:mm Z");
         };

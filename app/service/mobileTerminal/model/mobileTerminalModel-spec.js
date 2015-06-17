@@ -27,7 +27,19 @@ describe('MobileTerminalModel', function() {
             {
                 "type": "SATELLITE_NUMBER",
                 "value": "426 572 212"
-            }
+            },
+            {
+                "type": "LES",
+                "value": "BURUM"
+            },            
+            {
+                "type": "MULTIPLE_OCEAN",
+                "value": "581"
+            },
+            {
+                "type": "MULTIPLE_OCEAN",
+                "value": "582"
+            }                        
         ],
         "carrierId": {
             "carrierType": "VESSEL",
@@ -56,11 +68,11 @@ describe('MobileTerminalModel', function() {
                 ],
                 "capabilities": [
                     {
-                        "type": "POLLING",
+                        "type": "POLLABLE",
                         "value": true
                     },
                     {
-                        "type": "CONFIG",
+                        "type": "CONFIGURABLE",
                         "value": false
                     }
                 ],
@@ -88,11 +100,11 @@ describe('MobileTerminalModel', function() {
                 ],
                 "capabilities": [
                     {
-                        "type": "POLLING",
+                        "type": "POLLABLE",
                         "value": false
                     },
                     {
-                        "type": "CONFIG",
+                        "type": "CONFIGURABLE",
                         "value": true
                     }
                 ],
@@ -137,6 +149,9 @@ describe('MobileTerminalModel', function() {
         expect(mt.attributes.ANTENNA).toBe("Sailor 640");
         expect(mt.attributes.ANTENNA_SERIAL_NUMBER).toBe("12345");
         expect(mt.attributes.SATELLITE_NUMBER).toBe("426 572 212");
+        expect(mt.attributes.MULTIPLE_OCEAN.length).toBe(2);
+        expect(mt.attributes.MULTIPLE_OCEAN[0]).toBe("581");
+        expect(mt.attributes.MULTIPLE_OCEAN[1]).toBe("582");
 
         // Check that all channels were parsed.
         expect(mt.channels.length).toBe(2);
@@ -146,8 +161,8 @@ describe('MobileTerminalModel', function() {
         expect(mt.channels[0].ids.MEMBER_NUMBER).toBe("101");
         expect(mt.channels[0].ids.START_DATE).toBe("2015-01-01 09:00");
         expect(mt.channels[0].ids.STOP_DATE).toBe("2015-05-21 21:00");
-        expect(mt.channels[0].capabilities.POLLING).toBe(true);
-        expect(mt.channels[0].capabilities.CONFIG).toBe(false);
+        expect(mt.channels[0].capabilities.POLLABLE).toBe(true);
+        expect(mt.channels[0].capabilities.CONFIGURABLE).toBe(false);
 
         expect(mt.channels[1].name).toBe("HAV");
         expect(mt.channels[1].defaultReporting).toBe(false);
@@ -155,8 +170,8 @@ describe('MobileTerminalModel', function() {
         expect(mt.channels[1].ids.MEMBER_NUMBER).toBe("102");
         expect(mt.channels[1].ids.START_DATE).toBe("2015-02-01 09:00");
         expect(mt.channels[1].ids.STOP_DATE).toBe("2015-06-21 21:00");
-        expect(mt.channels[1].capabilities.POLLING).toBe(false);
-        expect(mt.channels[1].capabilities.CONFIG).toBe(true);
+        expect(mt.channels[1].capabilities.POLLABLE).toBe(false);
+        expect(mt.channels[1].capabilities.CONFIGURABLE).toBe(true);
     }));
 
     it('should produce a transfer object containing attributes, channels and mobile terminal ID', inject(function(MobileTerminal) {
@@ -237,7 +252,7 @@ describe('MobileTerminalModel', function() {
         var mt1 = MobileTerminal.fromJson(mobileTerminalData);
         var mt2 = MobileTerminal.fromJson(mobileTerminalData);
         expect(mt1.isEqualAttributesAndChannels(mt2)).toBeTruthy();
-        mt2.channels[0].capabilities.POLLING=false;
+        mt2.channels[0].capabilities.POLLABLE=false;
         expect(mt1.isEqualAttributesAndChannels(mt2)).toBeFalsy();
     }));  
 

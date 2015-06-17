@@ -130,7 +130,7 @@ angular.module('unionvmsWeb')
 
     SystemTypeAndLES.prototype.equalsTypeAndLES = function(type, les){
         return this.type === type && this.les === les;
-    }
+    };
 
     return SystemTypeAndLES;
 });
