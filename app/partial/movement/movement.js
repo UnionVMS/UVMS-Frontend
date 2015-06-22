@@ -1,8 +1,6 @@
 angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, alertService, movementRestService, searchService, locale){
 
     //Current filter and sorting for the results table
-    $scope.sortType = 'state';
-    $scope.sortReverse = false;
     $scope.sortFilter = '';
     $scope.editSelectionDropdownItems = [{'text':locale.getString('movement.editselection_see_on_map'),'code':'MAP'}, {'text':locale.getString('movement.editselection_export_selection'),'code':'EXPORT'}, {'text':locale.getString('movement.editselection_inactivate'),'code':'INACTIVE'}];
     
@@ -13,7 +11,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         movements : [],
         errorMessage : "",
         loading : false,
-        sortBy : "state",
+        sortBy : "vessel.name",
         sortReverse : false
     };
 

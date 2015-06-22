@@ -5,19 +5,19 @@
                 <tr>
                     <th><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.state'">{{'movement.table_header_flag_state' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.state'">{{'movement.table_header_flag_state' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.externalMarking'">{{'movement.table_header_external_marking' | i18n}}</th>                    
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.externalMarking'">{{'movement.table_header_external_marking' | i18n}}</th>                    
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.ircs'">{{'movement.table_header_ircs' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.ircs'">{{'movement.table_header_ircs' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.name'">{{'movement.table_header_name' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.name'">{{'movement.table_header_name' | i18n}}</th>
                     <!--    
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'type'">{{'movement.table_header_type' | i18n}}</th>
                     -->
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.time'">{{'movement.table_header_time' | i18n}}</th>    
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.movement.time'">{{'movement.table_header_time' | i18n}}</th>    
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.latitude'">{{'movement.table_header_latitude' | i18n}}</th> 
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.movement.latitude'">{{'movement.table_header_latitude' | i18n}}</th> 
 
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.longitude'">{{'movement.table_header_longitude' | i18n}}</th> 
 
@@ -36,22 +36,22 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="movement in currentSearchResults.movements | orderBy:sortType:sortReverse | filter:searchFilter">
+                <tr ng-repeat="movement in currentSearchResults.movements | orderBy:currentSearchResults.sortBy : currentSearchResults.sortReverse | filter:searchFilter">
                     <td><input type="checkbox" ng-checked="isChecked(movement)" ng-click="checkItem(movement)"/></td>
-                    <td>{{movement.state}}</td>
-                    <td>{{movement.externalMarking}}</td>
-                    <td>{{movement.ircs}}</td>
-                    <td class="movementvesselname">{{movement.name}}</td>
+                    <td>{{movement.vessel.state}}</td>
+                    <td>{{movement.vessel.externalMarking}}</td>
+                    <td>{{movement.vessel.ircs}}</td>
+                    <td class="movementvesselname">{{movement.vessel.name}}</td>
                     <!--<td>{{movement.type}}</td>-->
-                    <td>{{movement.time}}</td>
-                    <td>{{movement.latitude}}</td>
-                    <td>{{movement.longitude}}</td>
-                    <td>{{movement.status}}</td>
-                    <td>{{movement.measuredSpeed}} {{'movement.movement_speed_unit' | i18n}}</td>
-                    <td>{{movement.calculatedSpeed}} {{'movement.movement_speed_unit' | i18n}}</td>
-                    <td>{{movement.course}}&deg;</td>
-                    <td>{{movement.messageType}}</td>
-                    <td>{{movement.source}}</td>
+                    <td>{{movement.movement.time}}</td>
+                    <td>{{movement.movement.latitude}}</td>
+                    <td>{{movement.movement.longitude}}</td>
+                    <td>{{movement.movement.status}}</td>
+                    <td>{{movement.movement.measuredSpeed}} {{'movement.movement_speed_unit' | i18n}}</td>
+                    <td>{{movement.movement.calculatedSpeed}} {{'movement.movement_speed_unit' | i18n}}</td>
+                    <td>{{movement.movement.course}}&deg;</td>
+                    <td>{{movement.movement.messageType}}</td>
+                    <td>{{movement.movement.source}}</td>
                 </tr>
             </tbody>
         </table>

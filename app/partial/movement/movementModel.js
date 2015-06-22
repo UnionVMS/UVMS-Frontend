@@ -3,6 +3,24 @@ angular.module('unionvmsWeb')
 
 	function Movement(){
 		
+		this.id = undefined;
+		this.time = undefined;
+		this.vessel = {
+			state : undefined,
+			externalMarking : undefined,
+			ircs : undefined,
+			name : undefined
+		};
+		this.movement = {
+			latitude : undefined,
+			longitude : undefined,
+			status : undefined,
+			source : undefined,
+			measuredSpeed : undefined, 
+			calculatedSpeed : undefined, 
+			course : undefined,
+			messageType : undefined
+		};
 	}
 
 	Movement.fromJson = function(data){
@@ -10,29 +28,27 @@ angular.module('unionvmsWeb')
 		
 		if(data){
 
-			movement.id = data.movement.id;
+			movement.id = data.id;
 			movement.time = "-";//data.time;
 
 			if(data.vessel)
 			{
-				movement.state = data.vessel.flagState;
-				movement.externalMarking = data.vessel.externalMarking;
-				movement.ircs = data.vessel.ircs;
-				movement.name = data.vessel.name;
-
+				movement.vessel.state = data.vessel.flagState;
+				movement.vessel.externalMarking = data.vessel.externalMarking;
+				movement.vessel.ircs = data.vessel.ircs;
+				movement.vessel.name = data.vessel.name;
 			}
 			if (data.movement) {
-				movement.latitude = data.movement.latitude;
-				movement.longitude = data.movement.longitude;
-				movement.status = data.movement.status;
-				movement.source = data.movement.source;
-				movement.measuredSpeed = data.movement.measuredSpeed;
-				movement.calculatedSpeed = data.movement.calculatedSpeed;
-				movement.course = data.movement.course;
-				movement.messageType = "-"; //data.movement.messageType;	
+				movement.movement.latitude = data.movement.latitude;
+				movement.movement.longitude = data.movement.longitude;
+				movement.movement.status = data.movement.status;
+				movement.movement.source = data.movement.source;
+				movement.movement.measuredSpeed = data.movement.measuredSpeed;
+				movement.movement.calculatedSpeed = data.movement.calculatedSpeed;
+				movement.movement.course = data.movement.course;
+				movement.movement.messageType = "-"; //data.movement.messageType;	
 			}
 		}
-
 		return movement;
 	};
 
