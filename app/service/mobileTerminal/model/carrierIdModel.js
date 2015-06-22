@@ -22,6 +22,14 @@ angular.module('unionvmsWeb')
         return carrierId;
     };
 
+    CarrierId.createVesselFromIdTypeAndId = function(idType, value){
+        var carrierId = new CarrierId();
+        carrierId.carrierType = CARRIER_TYPE_VESSEL;
+        carrierId.idType = idType;
+        carrierId.value = value;
+        return carrierId;
+    };
+
     CarrierId.prototype.toJson = function(){
         return JSON.stringify({
             carrierType : this.carrierType,

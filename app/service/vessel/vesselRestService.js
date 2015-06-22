@@ -74,7 +74,7 @@ angular.module('unionvmsWeb')
 
         //chunkSize: same as listSize in getListRequest
         //maxItems: max number of items to get
-        var chunkSize = 50,
+        var chunkSize = 1000,
             maxItems = 10000;
 
         var deferred = $q.defer();

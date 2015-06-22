@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService) {
+angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, CarrierId, SearchResultListPage) {
 
 	var getListRequest = new GetListRequest(1, 20, true, []),
         advancedSearchObject  = {};
@@ -52,13 +52,57 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
             checkTimeSpanAndTimeZone(getListRequest.criterias);
             return movementRestService.getMovementList(getListRequest);
         },
-        //Do search for pollables
-        searchForPollableTerminals : function(){
-            return mobileTerminalRestService.getPollableTerminals(getListRequest);
-        },
+
         //search for manual positions.
         searchManualPositions : function(){
             return manualPositionRestService.getManualPositionList(getListRequest);
+        },
+
+        //Do search for pollables
+        searchForPollableTerminals : function(){
+            var getPollablesListRequest = new GetPollableListRequest();
+
+            //Get vessels first!
+            if(this.getSearchCriterias().length > 0){
+                var deferred = $q.defer();
+                var outerThis = this;
+                
+                //Get the vessels
+                vesselRestService.getAllMatchingVessels(getListRequest).then(
+                    //TODO: Get more pages of vessels or error message that too many vessels were returned?
+                    function(vessels){
+                        //If no matchin vessels found
+                        if(vessels.length === 0){
+                            return deferred.resolve(new SearchResultListPage());
+                        }
+
+                        //Iterate over the vessels and add new carrierId
+                        $.each(vessels, function(index, vessel){
+                            var carId = CarrierId.createVesselFromIdTypeAndId(vessel.vesselId.type, vessel.vesselId.value);
+                            getPollablesListRequest.addCarrierId(carId);
+                        });
+                        //Get pollable channels
+                        pollingRestService.getPollablesMobileTerminal(getPollablesListRequest).then(
+                            function(pollableListPage){
+                                return deferred.resolve(pollableListPage);
+                            },
+                            function(error){
+                                return deferred.reject(error);
+                            }
+                        );
+                    },
+                    function(error){
+                        console.error("Error getting channels.");
+                        return deferred.reject(error);
+                    }
+                );
+                return deferred.promise;
+            }
+            //No need to get vessels
+            else{
+                return  pollingRestService.getPollablesMobileTerminal(getPollablesListRequest);
+            }
+
         },
 
         //Do the search for mobile terminals

@@ -23,7 +23,7 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
 
     function indexOfTerminal(xs, x) {
         for (var i = 0; i < xs.length; i++) {
-            if (xs[i].isEqualTerminal(x)) {
+            if (xs[i].isEqual(x)) {
                 return i;
             }
         }
@@ -105,7 +105,7 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
         return getNumberOfSelectedTerminals() === 1;
     }
 
-    function getSelectedMobileTerminals() {
+    function getSelectedChannels() {
         var selectedMobileTerminalsInGroups = selection.selectedMobileTerminalGroups.reduce(function(list, mtg) {
             return list.concat(mtg.mobileTerminals);
         }, []);
@@ -131,7 +131,7 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
                 getAttr("GRACE_PERIOD", pollingOptions.configurationPoll.gracePeriod),
                 getAttr("IN_PORT_GRACE", pollingOptions.configurationPoll.inPortGrace),
                 getAttr("DNID", pollingOptions.configurationPoll.newDNID),
-                getAttr("MEMBER_ID", pollingOptions.configurationPoll.newMemberNo)
+                getAttr("MEMBER_NUMBER", pollingOptions.configurationPoll.newMemberNo)
             ];
         }
         else if (type === "SAMPLING") {
@@ -151,8 +151,8 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
             pollType: pollingOptions.type + "_POLL",
             comment: pollingOptions.comment,
             attributes: getPollAttributes(pollingOptions.type),
-            mobileTerminals: getSelectedMobileTerminals().map(function(mt) {
-               return mt.toCreatePoll();
+            mobileTerminals: getSelectedChannels().map(function(channel) {
+               return channel.toCreatePoll();
             })
         };
     }
@@ -199,7 +199,6 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
             if (isTerminalSelected(terminal)) {
                 return;
             }
-
             selection.selectedMobileTerminals.push(terminal);
         },
         addMobileTerminalGroupToSelection: function(terminalGroup) {
@@ -254,7 +253,7 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
         isMobileTerminalGroupSelected: isTerminalGroupSelected,
         isSingleSelection: isSingleSelection,
         getNumberOfSelectedTerminals: getNumberOfSelectedTerminals,
-        getSelectedMobileTerminals: getSelectedMobileTerminals,
+        getSelectedChannels: getSelectedChannels,
         createPolls: createPolls,
         getResult: function() {
             return result;

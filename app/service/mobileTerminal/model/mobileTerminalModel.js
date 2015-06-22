@@ -138,12 +138,6 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             return JSON.stringify(this.getCarrierAssingmentDto(this.carrierId));
         };
 
-        MobileTerminal.prototype.toCreatePoll = function() {
-            return {
-                comChannelId: this.channels[0].guid
-            };
-        };
-
         MobileTerminal.prototype.setSystemTypeToInmarsatC = function(){
             this.type = 'INMARSAT_C';
 

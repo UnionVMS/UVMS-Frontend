@@ -28,10 +28,15 @@ angular.module('unionvmsWeb')
             },
             createPolls: function() {
                 return $resource(baseUrl + '/mobileterminal/rest/poll');
+            },
+            getPollableTerminals : function(){
+                return $resource(baseUrl + '/mobileterminal/rest/poll/pollable',{},{
+                     list : { method: 'POST'}
+                });
             }
         };
     })
-    .service('pollingRestService',function($q, pollingRestFactory, Poll, PollListPage){
+    .service('pollingRestService',function($q, pollingRestFactory, Poll, PollChannel, PollListPage, SearchResultListPage){
 
         var setProgramPollStatusSuccess = function(response, deferred){
             if(response.code !== 200){
@@ -124,6 +129,32 @@ angular.module('unionvmsWeb')
                 function(error) {
                     console.error("Error getting polls");
                     console.error(error);
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            },
+            getPollablesMobileTerminal : function(getPollableListRequest){
+                var deferred = $q.defer();
+                pollingRestFactory.getPollableTerminals().list(getPollableListRequest.DTOForPollable(),function(response) {
+                    if(response.code !== 200){
+                        deferred.reject("Invalid response status");
+                        return;
+                    }
+                        var pollables = [];
+                        //Create a ListPage object from the response
+                        if(angular.isArray(response.data.pollableChannels)) {
+                            for (var i = 0; i < response.data.pollableChannels.length; i++) {
+                                pollables.push(PollChannel.fromJson(response.data.pollableChannels[i]));
+                            }
+                        }
+
+                        var currentPage = response.data.currentPage;
+                        var totalNumberOfPages = response.data.totalNumberOfPages;
+                        var searchResultListPage = new SearchResultListPage(pollables, currentPage, totalNumberOfPages);
+                    
+                    deferred.resolve(searchResultListPage);
+                }, function(error) {
+                    console.error("Error");
                     deferred.reject(error);
                 });
                 return deferred.promise;

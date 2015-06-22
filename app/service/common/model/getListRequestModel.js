@@ -8,21 +8,6 @@ angular.module('unionvmsWeb')
         this.criterias = angular.isDefined(criterias) ? criterias : [];
     }
 
-
-  /* function checkTimeZone(searchCriteria){
-        for (var i = 0; i < searchCriteria.length; i++) {
-              console.log(addUTCTimeZone(searchCriteria[i].value));
-            if (searchCriteria[i].key === "END_DATE" || searchCriteria[i].key === "START_DATE" || searchCriteria[i].key === "REPORTING_START_DATE" || searchCriteria[i].key === "REPORTING_END_DATE" || searchCriteria[i].key === "DATETIMEFROM" || searchCriteria[i].key === "DATETIMETO"){
-                searchCriteria[i].value = addUTCTimeZone(searchCriteria[i].value);      
-            }
-        }
-        return searchCriteria;
-    }    
-
-    function addUTCTimeZone(timeDate){
-        return moment(timeDate).format("YYYY-MM-DD HH:mm:ss Z");
-    }
-*/
     GetListRequest.prototype.toJson = function(){
         return JSON.stringify({
             pagination : {page: this.page, listSize: this.listSize},
