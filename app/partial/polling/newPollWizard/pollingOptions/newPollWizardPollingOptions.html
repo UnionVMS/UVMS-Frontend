@@ -148,17 +148,7 @@
                 </div>
 
                 <!--CHANNELS AND COMMENT-->
-                <div class="optionsSection">
-                    <div class="row">
-                        <div class="indentedSection">
-                            <div class="col-md-4">
-                                <dropdown ng-model="pollingOptions.requestChannel" initialtext="{{ 'polling.wizard_second_step_request_channel_dropdown_placeholder' | i18n }}" items="requestChannels" ng-disabled="true"></dropdown>
-                            </div>
-                            <div class="col-md-4">
-                                <dropdown ng-model="pollingOptions.responseChannel" initialtext="{{ 'polling.wizard_second_step_response_channel_dropdown_placeholder' | i18n }}" items="reponseChannels" ng-disabled="true"></dropdown>  
-                            </div>
-                        </div>
-                    </div>
+                <div class="optionsSection">                    
                     <div class="row">
                         <div class="indentedSection">
                             <div class="col-md-8 form-group" ng-class="{'has-error': pollingOptionsForm.comment.$invalid && (submitAttempted || pollingOptionsForm.comment.$dirty)}">
