@@ -179,9 +179,9 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             return this.carrierId !== undefined && this.carrierId.value !== undefined;
         };
 
-        //Assign the mobileTerminal to a vessel by internalId
-        MobileTerminal.prototype.assignToVesselWithIrcs = function(ircs){
-            this.carrierId = CarrierId.createVesselWithIrcs(ircs);
+        //Assign the mobileTerminal to a vessel by id type and id
+        MobileTerminal.prototype.assignToVesselById = function(idType, idValue){
+            this.carrierId = CarrierId.createVesselFromIdTypeAndId(idType, idValue);
         };
 
         //Set the attributes

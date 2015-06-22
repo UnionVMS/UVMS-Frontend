@@ -119,8 +119,8 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
             return;
         }
 
-        mobileTerminalRestService.assignMobileTerminal($scope.currentMobileTerminal, $scope.selectedVessel.ircs, comment).then(function() {
-            $scope.currentMobileTerminal.assignToVesselWithIrcs($scope.selectedVessel.ircs);
+        mobileTerminalRestService.assignMobileTerminal($scope.currentMobileTerminal, $scope.selectedVessel.vesselId.type, $scope.selectedVessel.vesselId.value, comment).then(function() {
+            $scope.currentMobileTerminal.assignToVesselById($scope.selectedVessel.vesselId.type, $scope.selectedVessel.vesselId.value);
             $scope.currentMobileTerminal.associatedVessel = $scope.selectedVessel;
             $scope.toggleAssignVessel();
             $scope.goBackToAssignVesselSearchResultsClick();

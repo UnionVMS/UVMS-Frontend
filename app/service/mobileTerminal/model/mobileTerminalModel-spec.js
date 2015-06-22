@@ -193,6 +193,16 @@ describe('MobileTerminalModel', function() {
         expect(dto.carrierId.value).toEqual("ASDASD");
     }));
 
+    it('assignToVesselById should create a carrierId with correct values', inject(function(MobileTerminal, CarrierId) {
+        var mobileTerminal = MobileTerminal.fromJson(mobileTerminalData);
+        var guid = "skdjfs-sdf534fg-345te-tg345tg3";
+        mobileTerminal.assignToVesselById("GUID", guid);
+
+        expect(mobileTerminal.carrierId.carrierType).toEqual("VESSEL");
+        expect(mobileTerminal.carrierId.idType).toEqual("GUID");
+        expect(mobileTerminal.carrierId.value).toEqual(guid);
+    }));
+
     it('should produce an activating/inactivating data transfer object', inject(function(MobileTerminal) {
         var mobileTerminal = MobileTerminal.fromJson(mobileTerminalData);
         var dto = JSON.parse(mobileTerminal.toSetStatusJson());
