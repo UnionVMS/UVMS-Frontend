@@ -23,7 +23,7 @@
     <div class="row" ng-show="isCreateNewMode()">
         <div class="col-md-9"><h3>{{'mobileTerminal.add_new_form_header' | i18n}}</h3></div>
         <div class="col-md-2 textAlignRight">
-            <button  type="submit" ng-disabled="!currentMobileTerminal.type" class="btn btn-primary" ng-click="createNewMobileTerminal()" ng-hide="transponderSystems.length == 0">{{'common.save' | i18n}}</button>
+            <button  type="submit" ng-disabled="!currentMobileTerminal.type" class="btn btn-primary" ng-click="createNewMobileTerminal()" ng-hide="transponderSystems.length == 0" ng-disabled="waitingForCreateResponse">{{'common.save' | i18n}}</button>
         </div>
         <div class="col-md-1 textAlignRight" ng-click="toggleAddNewMobileTerminal()"> 
             <i class="fa fa-times closeicon" title="{{'common.close' | i18n}}"></i>

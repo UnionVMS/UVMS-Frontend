@@ -22,6 +22,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
 
     //Has form submit been atempted?
     $scope.submitAttempted = false;
+    $scope.waitingForCreateResponse = false;
 
     //Get terminal config for the selected terminal type
     $scope.getTerminalConfig = function(item){
@@ -62,7 +63,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
 
     //Create the mobile terminal
     $scope.createNewMobileTerminal = function(){
-        $scope.submitAttempted = true;
+        $scope.submitAttempted = true;        
 
         //Validate form
         if(!$scope.mobileTerminalForm.$valid){
@@ -77,21 +78,24 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         }
         
         //Create
+        $scope.waitingForCreateResponse = true;
+        alertService.hideMessage();
         mobileTerminalRestService.createNewMobileTerminal($scope.currentMobileTerminal)
                 .then(createNewMobileTerminalSuccess, createNewMobileTerminalError);
     };
 
     //Success creating the new mobile terminal
     var createNewMobileTerminalSuccess = function(mobileTerminal) {
+        $scope.waitingForCreateResponse = false;
         $scope.currentMobileTerminal = mobileTerminal;
         alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
 
-        //$scope.createNewMode = false;
         $scope.setCreateMode(false);
     };
 
     //Error creating the new mobile terminal
     var createNewMobileTerminalError = function(){
+        $scope.waitingForCreateResponse = false;
         alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_error'));
     };
 
@@ -120,7 +124,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         }
         
         //Update
-        console.log($scope.currentMobileTerminal);
+        alertService.hideMessage();
         mobileTerminalRestService.updateMobileTerminal($scope.currentMobileTerminal, comment)
                 .then(updateMobileTerminalSuccess, updateMobileTerminalError);
     };
