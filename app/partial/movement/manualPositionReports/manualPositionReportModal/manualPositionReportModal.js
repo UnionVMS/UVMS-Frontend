@@ -42,7 +42,8 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     $scope.newPosition = {
         lat: $scope.latitude,
         lng: $scope.longitude,
-        message: locale.getString("movement.manual_position_label_new_position")
+        message: locale.getString("movement.manual_position_label_new_position"),
+        focus: true
     };
 
     $scope.lastPosition = undefined;
@@ -53,6 +54,23 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
     $scope.modalStatusClass = undefined;
     $scope.modalStatusText = undefined;
+
+    $scope.init = function() {
+        if ($scope.ircs && $scope.cfr) {
+            $scope.initLastPosition($scope.ircs, $scope.cfr);
+        }
+    };
+
+    $scope.initLastPosition = function(ircs, cfr) {
+        var request = new GetListRequest(1, 1, true, []);
+        request.addSearchCriteria("IRCS", ircs);
+        request.addSearchCriteria("CFR", cfr);
+        vesselRestService.getVesselList(request).then(function(page) {
+            if (page.vessels.length > 0) {
+                $scope.showLastMovementByVessel(page.vessels[0]);
+            }
+        });
+    };
 
     $scope.closeModal = function() {
         var result = {
@@ -243,26 +261,33 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         $scope.showLastMovementByVessel(item);
     };
 
+    $scope.setLastPosition = function(pos) {
+        if (pos) {
+            $scope.lastPosition = {
+                lng: pos.longitude,
+                lat: pos.latitude,
+                message: locale.getString("movement.manual_position_label_previous_position", pos.time),
+                focus: true
+            };
+        }
+        else {
+            $scope.lastPosition = undefined;
+        }
+
+        $scope.updateNewPositionVisibility();
+    };
+
     $scope.showLastMovementByVessel = function(vessel) {
         if (vessel.vesselId === undefined || vessel.vesselId.type !== "GUID" || vessel.vesselId.value === undefined) {
             return;
         }
 
         movementRestService.getLastMovement(vessel.vesselId.value).then(function(pos) {
-            if (pos) {
-                $scope.lastPosition = {
-                    lng: pos.longitude,
-                    lat: pos.latitude,
-                    message: locale.getString("movement.manual_position_label_previous_position", pos.time)
-                };
-            }
-            else {
-                $scope.lastPosition = undefined;
-            }
-
-            $scope.updateNewPositionVisibility();
+            $scope.setLastPosition(pos);
         });
     };
+
+    $scope.init();
 });
 
 angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($modal) {
