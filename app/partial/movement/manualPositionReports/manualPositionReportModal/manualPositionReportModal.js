@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition, $timeout, movementRestService, leafletBoundsHelpers) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition, $timeout, movementRestService, leafletBoundsHelpers, addAnother) {
 
     $scope.errorMessage ="";
 
@@ -32,6 +32,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     $scope.submitAttempted = false;
     $scope.confirmSend = false;
     $scope.sendSuccess = false;
+    $scope.addAnother = addAnother;
 
     $scope.center = {
         lat: 0,
@@ -292,7 +293,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
 angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($modal) {
 	return {
-		show: function(position) {
+		show: function(position, addAnother) {
 			return $modal.open({
 				templateUrl: 'partial/movement/manualPositionReports/manualPositionReportModal/manualPositionReportModal.html',
 				controller: 'ManualPositionReportModalCtrl',
@@ -300,6 +301,9 @@ angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($mod
                 resolve:{
                     position : function (){
                         return position;
+                    },
+                    addAnother: function() {
+                        return addAnother || false;
                     }
                 }
 			}).result;

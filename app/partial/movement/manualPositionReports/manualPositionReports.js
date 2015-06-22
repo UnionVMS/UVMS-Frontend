@@ -50,8 +50,8 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
         }, options);
     };
 
-    $scope.editPosition = function(item){
-        ManualPositionReportModal.show(item).then(function(result) {
+    $scope.editPosition = function(item, addAnother) {
+        ManualPositionReportModal.show(item, addAnother).then(function(result) {
             $scope.searchManualPositions();
             if (result.addAnother) {
                 var p = new ManualPosition();
@@ -59,7 +59,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
                 p.carrier.cfr = result.cfr;
                 p.carrier.externalMarking = result.externalMarking;
                 p.carrier.name = result.name;
-                $scope.editPosition(p);
+                $scope.editPosition(p, result.addAnother);
             }
         });
     };
