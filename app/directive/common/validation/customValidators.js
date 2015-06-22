@@ -130,19 +130,27 @@ angular.module('unionvmsWeb').directive('maxDate', function() {
     };
 });
 
+var formatThreeDecimals = /^-?\d*(\.\d{0,3})?$/;
+
 angular.module('unionvmsWeb').directive('longitude', function() {
     return {
         restrict: 'A',
         require: 'ngModel',
         link: function(scope, elem, attr, model) {
-            model.$parsers.unshift(function(value) {
-                model.$setValidity('longitude',  value >= -180 && value <= 180);
-                return value;
+
+            function setLongitudeValidity(lng) {
+                model.$setValidity('longitude', !lng || Math.abs(lng) <= 180);
+                model.$setValidity('longitude-format', !lng || formatThreeDecimals.test(lng));
+            }
+
+            model.$parsers.unshift(function(lng) {
+                setLongitudeValidity(lng);
+                return lng;
             });
 
-            model.$formatters.unshift(function(value) {
-                model.$setValidity('longitude', value >= -180 && value <= 180);
-                return value;
+            model.$formatters.unshift(function(lng) {
+                setLongitudeValidity(lng);
+                return lng;
             });
         }
     };
@@ -153,14 +161,20 @@ angular.module('unionvmsWeb').directive('latitude', function() {
         restrict: 'A',
         require: 'ngModel',
         link: function(scope, elem, attr, model) {
-            model.$parsers.unshift(function(value) {
-                model.$setValidity('latitude',  value >= -90 && value <= 90);
-                return value;
+
+            function setLatitudeValidity(lat) {
+                model.$setValidity('latitude', !lat || Math.abs(lat) <= 90);
+                model.$setValidity('latitude-format', !lat || formatThreeDecimals.test(lat));
+            }
+
+            model.$parsers.unshift(function(lat) {
+                setLatitudeValidity(lat);
+                return lat;
             });
 
-            model.$formatters.unshift(function(value) {
-                model.$setValidity('latitude', value >= -90 && value <= 90);
-                return value;
+            model.$formatters.unshift(function(lat) {
+                setLatitudeValidity(lat);
+                return lat;
             });
         }
     };

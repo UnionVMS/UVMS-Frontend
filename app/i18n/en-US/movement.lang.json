@@ -100,6 +100,10 @@
     "manual_position_save_success": "The position was saved.",
     "manual_position_send_error": "Manual position report was not sent successfully.",
     "manual_position_send_success": "Manual position report sent successfully.",
-    "manual_position_filter_no_results": "No position report matches your filter."
+    "manual_position_filter_no_results": "No position report matches your filter.",
 
+	"validation_invalid_latitude": "Invalid latitude",
+	"validation_invalid_latitude_format": "Max 3 decimals",
+	"validation_invalid_longitude": "Invalid longitude",
+    "validation_invalid_longitude_format": "Max 3 decimals"
 }

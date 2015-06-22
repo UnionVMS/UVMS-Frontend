@@ -29,7 +29,11 @@ angular.module('unionvmsWeb').controller('inputValidationMessageCtrl',function($
         'number' : locale.getString('common.validation_digits_only'),
         'onlyDigits' : locale.getString('common.validation_digits_only'),
         'onlyLetters' : locale.getString('common.validation_letters_only'),
-        'minDate' : locale.getString('common.validation_invalid_date')
+        'minDate' : locale.getString('common.validation_invalid_date'),
+        'latitude': locale.getString('movement.validation_invalid_latitude'),
+        'latitude-format': locale.getString('movement.validation_invalid_latitude_format'),
+        'longitude': locale.getString('movement.validation_invalid_longitude'),
+        'longitude-format': locale.getString('movement.validation_invalid_longitude_format')
     };
 
     //Get validation error message
