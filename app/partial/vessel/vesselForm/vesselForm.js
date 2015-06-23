@@ -8,8 +8,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     //Watch for changes to the vesselObj
     //$scope.$watch(function () { return $scope.vesselObj;}, function (newVal, oldVal) {
     $scope.$watch('getVesselObj()', function(newVal) {
-        console.log("Vesselobj updated");
-        console.log(newVal);
         $scope.vesselObj = $scope.getVesselObj();
         if (typeof newVal !== 'undefined') {
             if(!$scope.isCreateNewMode()){
