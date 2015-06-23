@@ -14,7 +14,9 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
                 getVesselHistory();
             }
         }
-    });   
+    });  
+
+    $scope.waitingForCreateResponse = false;
 
     //MOCK FUNCTION
     $scope.addNewMobileTerminalToVessel = function () {
@@ -31,6 +33,8 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     $scope.createNewVessel = function(){
         if($scope.vesselForm.$valid) {
             //Create new Vessel
+            $scope.waitingForCreateResponse = true;
+            alertService.hideMessage();
             vesselRestService.createNewVessel($scope.vesselObj)
                 .then(createVesselSuccess, createVesselError);
         }else{
@@ -40,6 +44,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
 
     //Success creating the new vessel
     var createVesselSuccess = function(createdVessel){
+        $scope.waitingForCreateResponse = false;
         alertService.showSuccessMessageWithTimeout(locale.getString('vessel.add_new_alert_message_on_success'));
         $scope.vesselObj = createdVessel;
         $scope.setCreateMode(false);
@@ -48,6 +53,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
 
     //Error creating the new vessel
     var createVesselError = function(error){
+        $scope.waitingForCreateResponse = false;
         alertService.showErrorMessage(locale.getString('vessel.add_new_alert_message_on_error'));
     };
 
@@ -63,6 +69,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
             delete $scope.vesselObj.mobileTerminals; 
 
             //Update Vessel and take care of the response(eg. the promise) when the update is done.
+            alertService.hideMessage();
             var updateResponse = vesselRestService.updateVessel($scope.vesselObj)
                 .then(updateVesselSuccess, updateVesselError);            
         }else{
