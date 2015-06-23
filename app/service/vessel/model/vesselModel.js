@@ -12,7 +12,7 @@ angular.module('unionvmsWeb')
             vessel.billing = data.billing;
             vessel.cfr = data.cfr;
             vessel.countryCode = data.countryCode;
-            vessel.eventHistory = new EventHistory(data.eventHistory);
+            vessel.eventHistory = EventHistory.fromDTO(data.eventHistory);
             vessel.externalMarking = data.externalMarking;
             vessel.grossTonnage = data.grossTonnage;
             vessel.hasIrcs = data.hasIrcs;
@@ -76,10 +76,47 @@ angular.module('unionvmsWeb')
             return dto;
         };
 
+        Vessel.prototype.copy = function() {
+            var copy = new Vessel();
+            copy.active = this.active;
+            copy.billing = this.billing;
+            copy.cfr = this.cfr;
+            copy.countryCode = this.countryCode;
+            if(this.eventHistory){
+                copy.eventHistory = this.eventHistory.copy();
+            }
+            copy.externalMarking = this.externalMarking;
+            copy.grossTonnage = this.grossTonnage;
+            copy.hasIrcs = this.hasIrcs;
+            copy.hasLicense = this.hasLicense;
+            copy.homePort = this.homePort;
+            copy.imo = this.imo;
+            copy.ircs = this.ircs;
+            copy.lengthBetweenPerpendiculars = this.lengthBetweenPerpendiculars;
+            copy.lengthOverAll = this.lengthOverAll;
+            copy.mmsiNo = this.mmsiNo;
+            copy.name = this.name;
+            copy.otherGrossTonnage = this.otherGrossTonnage;
+            copy.powerAux = this.powerAux;
+            copy.powerMain = this.powerMain;
+            copy.safetyGrossTonnage = this.safetyGrossTonnage;
+            copy.source = this.source;
+            if(this.vesselId){
+                copy.vesselId = {
+                    type : this.vesselId.type,
+                    value : this.vesselId.value
+                };
+            }
+            copy.vesselType = this.vesselType;        
+            return copy;
+        };
+
         Vessel.prototype.getId = function() {
             return this.vesselId.value;
         };
 
+        //Check if the vessel is equal another vessel
+        //Equal means same id
         Vessel.prototype.equals = function(item) {
             return this.vesselId.value === item.vesselId.value && this.vesselId.type === item.vesselId.type;
         };

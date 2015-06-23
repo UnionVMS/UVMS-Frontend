@@ -2,17 +2,133 @@ describe('VesselFormCtrl', function() {
 
 	beforeEach(module('unionvmsWeb'));
 
-	var scope,ctrl;
+	var scope,ctrl, createResponseVessel;
 
-    beforeEach(inject(function($rootScope, $controller) {
-      scope = $rootScope.$new();
-      ctrl = $controller('VesselFormCtrl', {$scope: scope});
+    beforeEach(inject(function($rootScope, $controller, Vessel) {
+        scope = $rootScope.$new();
+        ctrl = $controller('VesselFormCtrl', {$scope: scope});
+        scope.vesselObj = new Vessel();
+
+        //Dummy response for create
+        createResponseVessel = new Vessel();
+        createResponseVessel.vesselId = {
+            type : "GUID",
+            value : "345345345-rf54235f-242f-4rads"
+        };
+
+        scope.setCreateMode = function(bool){
+            scope.createNewMode = bool;
+        };
+
+        scope.isCreateNewMode = function(bool){
+            return scope.createNewMode;
+        };
+
+        scope.getVesselObj = function(){
+            return scope.vesselObj;
+        };
+
+        scope.onVesselHistoryListSuccess = function(){
+            //Nothing
+        };   
+
     }));	
 
-	it('should ...', inject(function() {
+    it('create new vessel should update vesselObj with created vessel and get vessel history afterwards', inject(function(Vessel, $compile, $q, vesselRestService, alertService, locale) {
 
-		expect(1).toEqual(1);
-		
-	}));
+        scope.setCreateMode(true);
+
+        // A form to be valid
+        var element = angular.element('<form name="vesselForm"></form>');
+        $compile(element)(scope);
+
+        // Skip alert message
+        spyOn(locale, "getString").andReturn();
+        spyOn(alertService, "showSuccessMessage").andReturn();
+
+        // Return a mock response for createNewVessel
+        var deferred = $q.defer();
+        spyOn(vesselRestService, "createNewVessel").andReturn(deferred.promise);
+        deferred.resolve(createResponseVessel);
+
+        // Return a mock response for getVesselHistoryListByVesselId
+        var deferred2 = $q.defer();
+        spyOn(vesselRestService, "getVesselHistoryListByVesselId").andReturn(deferred2.promise);
+        deferred2.resolve([]);
+        
+        //CreateMode should be true before creation
+        expect(scope.isCreateNewMode()).toEqual(true);
+
+        // Create new vessel
+        scope.createNewVessel();
+        scope.$digest();
+
+        //CreateMode should now be false
+        expect(scope.isCreateNewMode()).toEqual(false);
+
+        //VesselID should be set on the vesselObj now
+        expect(scope.vesselObj.vesselId.type).toEqual(createResponseVessel.vesselId.type);
+        expect(scope.vesselObj.vesselId.value).toEqual(createResponseVessel.vesselId.value);
+
+        //Check that get vessel history was called afterwards
+        expect(vesselRestService.getVesselHistoryListByVesselId).toHaveBeenCalledWith(scope.vesselObj.vesselId.value,5);
+        
+    }));
+
+
+    it('update a vessel should update vesselObj with the updated vessel and merge into vessel list, and get vessel history afterwards', inject(function(Vessel, $compile, $q, vesselRestService, alertService, locale) {
+
+        scope.mergeCurrentVesselIntoSearchResults = function(){
+            //Nothing
+        };  
+
+        scope.setCreateMode(false);
+
+        // A form to be valid
+        var element = angular.element('<form name="vesselForm"></form>');
+        $compile(element)(scope);
+
+        // Skip alert message
+        spyOn(locale, "getString").andReturn();
+        spyOn(alertService, "showSuccessMessage").andReturn();
+        spyOn(scope, "mergeCurrentVesselIntoSearchResults").andReturn();
+
+        // Return a mock response for updateVessel
+        var deferred = $q.defer();
+        spyOn(vesselRestService, "updateVessel").andReturn(deferred.promise);
+        deferred.resolve(createResponseVessel);
+
+        // Return a mock response for getVesselHistoryListByVesselId
+        var deferred2 = $q.defer();
+        spyOn(vesselRestService, "getVesselHistoryListByVesselId").andReturn(deferred2.promise);
+        deferred2.resolve([]);
+        
+        // Create new vessel
+        scope.updateVessel();
+        scope.$digest();
+
+        //VesselID should be set on the vesselObj now
+        expect(scope.vesselObj.vesselId.type).toEqual(createResponseVessel.vesselId.type);
+        expect(scope.vesselObj.vesselId.value).toEqual(createResponseVessel.vesselId.value);
+
+        //Check that get vessel history was called afterwards
+        expect(vesselRestService.getVesselHistoryListByVesselId).toHaveBeenCalledWith(scope.vesselObj.vesselId.value,5);
+
+        //Check that mergeCurrentVesselIntoSearchResults was called afterwards to update the vessel list
+        expect(scope.mergeCurrentVesselIntoSearchResults).toHaveBeenCalledWith();        
+    }));
+
+    it('isVesselNameSet should return correctly', inject(function(Vessel) {
+        scope.vesselObj =  new Vessel();
+        expect(scope.isVesselNameSet()).toBeFalsy();
+
+        scope.vesselObj.name ="TEST";
+        expect(scope.isVesselNameSet()).toBeTruthy();
+
+        scope.vesselObj.name ="";
+        expect(scope.isVesselNameSet()).toBeFalsy();
+    }));
+
+
 
 });

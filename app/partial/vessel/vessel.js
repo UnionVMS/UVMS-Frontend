@@ -91,6 +91,28 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         $scope.currentSearchResults.page = 0;
     };
 
+    //Get original vessel
+    $scope.getOriginalVessel = function() {
+        if (!$scope.vesselObj) {
+            return;
+        }
+
+        for (var i = 0; i < $scope.currentSearchResults.vessels.length; i++) {
+            if ($scope.currentSearchResults.vessels[i].equals($scope.vesselObj)) {
+                return $scope.currentSearchResults.vessels[i];
+            }
+        }
+    };
+
+    $scope.mergeCurrentVesselIntoSearchResults = function() {
+        var vesselsInList = $scope.currentSearchResults.vessels;
+        for (var i = 0; i < vesselsInList.length; i++) {
+            if (vesselsInList[i].equals($scope.vesselObj)) {
+                vesselsInList[i] = $scope.vesselObj;
+                $scope.vesselObj = vesselsInList[i].copy();
+            }
+        }
+    };    
 
     //Clear the selection
     $scope.clearSelection = function(){
@@ -138,7 +160,12 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
     };
 
     var toggleVesselForm = function(vessel){
-        $scope.vesselObj = vessel;
+        //Create copy of the vessel object so we don't edit the object in the vessel list
+        if(vessel){
+            $scope.vesselObj = vessel.copy();
+        }else{
+            $scope.vesselObj = undefined;
+        }
         alertService.hideMessage();
         $scope.isVisible.vesselForm = !$scope.isVisible.vesselForm;
         $scope.isVisible.search = !$scope.isVisible.search;

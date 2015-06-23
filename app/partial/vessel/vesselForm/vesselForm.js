@@ -86,6 +86,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     var updateVesselSuccess = function(updatedVessel){
         alertService.showSuccessMessageWithTimeout(locale.getString('vessel.update_alert_message_on_success'));
         $scope.vesselObj = updatedVessel;
+        $scope.mergeCurrentVesselIntoSearchResults();
         getVesselHistory();
     };
     //Error updating vessel
