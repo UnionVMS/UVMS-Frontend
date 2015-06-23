@@ -1,12 +1,32 @@
-.modal-header {
-    .closehistorymodal {
-        position: relative;
-        bottom:24px;
-        right: 24px;
+.vesselHistoryContainer{
+
+    .historyHeader{
+        margin-bottom: 5px;
+        font-size: 18px;
+        text-transform: none;
+        .vesselName{
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase
+        }
     }
-    .vesselname{
-        border-bottom-colors: #e4e4e4;
-        border-bottom-width: 1px;
-        border-bottom-style: solid;
+
+    .historyValues{
+        line-height: 22px;
+    }
+
+    text-transform: uppercase;
+    b, h5{
+        text-transform: none;
+    }
+
+    //Section headers
+    h5{
+        color:#777;
+        margin-top: 30px;
+        margin-bottom: 5px;
+        &:first-child{
+            margin-top: 5px;
+        }
     }
 }
