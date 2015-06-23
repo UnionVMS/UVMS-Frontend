@@ -1,0 +1,142 @@
+<div class="vesselForm" ng-controller="VesselFormCtrl">
+    <form name="vesselForm" method="post">
+        <div class="row">
+            <div class="col-md-7">
+                <h3 ng-if="isCreateNewMode()">{{'vessel.create_new_vessel' | i18n}}</h3>
+                <h3 ng-if="!isCreateNewMode() && isVesselNameSet()">{{vesselObj.name}}</h3>
+                <h3 ng-if="!isCreateNewMode() && !isVesselNameSet()">{{'vessel.update_vessel' | i18n}}</h3>
+            </div>
+            <div class="col-md-4 textAlignRight">
+                <div class="floatRight">
+                    <button class="btn btn-primary" type="submit" ng-click="updateVessel()" ng-hide="isCreateNewMode()"> {{'common.update' | i18n}}</button>
+                    <button  type="submit" class="btn btn-sm createnewvesselbutton" ng-click="createNewVessel()" ng-show="isCreateNewMode()">{{'vessel.create_new_vessel' | i18n}}</button>
+                </div>
+                <div class="floatRight setStatusContainer" ng-hide="isCreateNewMode()">
+                    <button type="button" class="btn btn-default" ng-show="vesselObj.active" ng-click="changeVesselStatus()">
+                        {{'mobileTerminal.inactivate_link' | i18n}}
+                    </button>
+                   <button type="button" class="btn btn-default" ng-hide="vesselObj.active" ng-click="changeVesselStatus()">
+                        {{'mobileTerminal.activate_link' | i18n}}
+                    </button>
+                </div>         
+            </div>
+            <div class="col-md-1 textAlignRight" ng-click="toggleViewVessel()">
+                <i class="fa fa-times closeicon" title="{{'common.close' | i18n}}"></i>
+            </div>
+        </div>
+
+
+        <div class="borderSection">
+            <div class="row">
+                <div class="col-md-12 basicInformation">
+                    <div class="floatLeft">
+                        <b ng-if="vesselObj.name.length > 0">{{vesselObj.name}}</b>
+                        <b ng-if="isCreateNewMode() && !isVesselNameSet()">{{'vessel.new_vessel' | i18n}}</b>
+                    </div>
+                    <div class="floatLeft">
+                        <div>{{'vessel.status' | i18n}}: <b>{{vesselObj.active ? ('vessel.active' | i18n) : ('vessel.inactive' | i18n)}}</b></div>
+                    </div>
+                    <div class="floatLeft">
+                        {{'vessel.source' | i18n}} : <b>{{vesselObj.source}}</b>
+                    </div>
+                    <div class="clearFix"></div>
+                </div>
+
+                <div class="detailsContainer">
+                    <vessel-details vessel="vesselObj"></vessel-details>
+                </div>
+
+                <div class="col-md-12 historyAndTerminalInformation">
+                    <div class="row row-same-height ">
+                        <div class="col-md-3 grayBorderRight historyContainer top-column">
+                            <div class="row" ng-if="!isCreateNewMode()">
+                                <div class="col-md-6">
+                                    <h5>{{'vessel.event_history' | i18n | uppercase}}</h5>
+                                </div>
+                                <div class="col-md-6 textAlignRight">
+                                    <span ng-show="isVisible.showCompleteVesselHistoryLink"><a ng-click="viewCompleteVesselHistory()">{{'common.view_all' | i18n}}</a></span>
+                                </div>
+                                <div class="col-md-12">
+                                    <table class="fullWidth">
+                                        <thead>
+                                            <tr>
+                                                <th>{{'vessel.event_table_header_code' | i18n}}</th>
+                                                <th>{{'vessel.event_table_header_date' | i18n}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="item in vesselHistory | orderBy :'-eventHistory.eventDate'">
+                                                <td><a ng-click="viewHistoryDetails(item)">{{item.eventHistory.eventCode}}</a></td>
+                                                <td>{{item.eventHistory.eventDate | date : "medium" }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 grayBorderRight terminalsContainer top-column">
+                            <div class="row" ng-if="!isCreateNewMode()">
+                                <div class="col-md-12">
+                                    <h5>{{'vessel.connected_mobile_terminals' | i18n}}</h5>
+                                </div>
+                                <div class="col-md-12">
+                                    <table class="fullWidth" ng-show="mobileTerminals.length > 0">
+                                        <thead>
+                                            <tr>
+                                                <th>{{'vessel.mobileTerminal_table_header_serial_number' | i18n}}</th>
+                                                <th>{{'vessel.mobileTerminal_table_header_type' | i18n}}</th>
+                                                <th>{{'vessel.mobileTerminal_table_header_started' | i18n}}</th>
+                                                <th>{{'vessel.mobileTerminal_table_header_stopped' | i18n}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="item in mobileTerminals | orderBy :'-started'">
+                                                <td>{{item.serialNumber}}</td>
+                                                <td>{{item.type}}</td>
+                                                <td>{{item.started | date : "medium" }}</td>
+                                                <td>{{item.started | date : "stopped" }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <span>
+                                        {{'vessel.zero_connected_mobile_terminals' | i18n}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 notesContainer top-column">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h5>{{'vessel.notes' | i18n}}</h5>
+                                </div>
+                                <div class="col-md-12">
+                                    <textarea disabled></textarea>
+                                </div>
+                            </div>                        
+                        </div>
+
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="row" ng-if="isCreateNewMode()">
+            <div class="col-md-12">
+                <a ng-click="clearForm()">{{'vessel.clear_form' | i18n}}</a>
+            </div>
+        </div>        
+
+        <div class="row" ng-if="!isCreateNewMode()">
+            <div class="col-md-12">
+                <h3>{{'vessel.connected_mobile_terminals' | i18n}}</h3>
+            </div>
+            <div class="col-md-12">
+                TODO: Repeat mobiles terminals here.
+            </div>
+        </div>
+    </form>
+
+</div>

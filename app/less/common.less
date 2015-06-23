@@ -219,12 +219,16 @@ a:hover{
 
 
 //Gray border
-.grayBorder{
-    border:1px solid #DDD;
-}
+@grayBorder:1px solid #DDD;
+.grayBorder{border:@grayBorder}
+.grayBorderBottom{border-bottom:@grayBorder}
+.grayBorderTop{border-top:@grayBorder}
+.grayBorderRight{border-right:@grayBorder}
+.grayBorderLeft{border-left:@grayBorder}
 
-.grayBorderBottom{
-   border-bottom:1px solid #DDD;
+.borderSection{
+    padding: 15px;    
+    .grayBorder;
 }
 
 

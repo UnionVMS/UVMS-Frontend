@@ -25,8 +25,12 @@
     "event_table_header_code" : "Code",
     "searchgroup_dropdown" : "Saved groups",
     "event_table_header_date" : "Event date",
+    "mobileTerminal_table_header_serial_number" : "Serial no.",
+    "mobileTerminal_table_header_type" : "Type",
+    "mobileTerminal_table_header_started" : "Started",
+    "mobileTerminal_table_header_stopped" : "Stopped",
     "vessel_details_flagstate": "Flag state",
-    "vessel_details_type": "Type",
+    "vessel_details_type": "Carrier type",
     "vessel_details_has_IRCS": "Has IRCS",
     "vessel_details_IRCS_code": "IRCS code",
     "vessel_details_ext_marking": "Ext.Marking",
@@ -46,9 +50,10 @@
     "inactive":"Inactive",
     "update":"update",
     "remove_satellite_system":" - Remove satellite system",
-    "add_new_mobile_terminal" : " + Add new mobile terminal",
-    "event_history" : "Event history",
-    "view_all_events" : "View all events",
+    "connected_mobile_terminals" : "Connected mobile terminals",
+    "zero_connected_mobile_terminals" : "The are no mobile terminals connected to this vessel.",
+    "notes" : "Notes",
+    "event_history" : "Carrier history",
     "event_code":"Event code",
     "event_date": "Event date",
     "flag_state": "Flag state",
@@ -76,7 +81,9 @@
     "status":"Status",
     "source":"Source",
     "create_new_vessel": "Create new vessel",
-    "clear_form": "Clear form"
-
-
+    "new_vessel": "New vessel",
+    "update_vessel": "Update vessel",
+    "clear_form": "Clear form",
+    "add_new_alert_message_on_form_validation_error" : "The data in the form is not valid. Please fix the errors and try to save again."
 }
+

@@ -1,0 +1,56 @@
+.vesselForm{
+    margin-bottom: 20px;
+    
+    .basicInformation{
+        padding-bottom: 10px;
+        .grayBorderBottom();
+        div{
+            margin-right: 30px;
+            &:first-child{
+                margin-right: 90px;
+            }            
+            &:last-child{
+                margin-right: 0px;
+            }
+        }
+    }
+
+    .detailsContainer{
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .historyAndTerminalInformation{
+        .grayBorderTop();
+        margin-top: 20px;
+        padding-bottom: 10px;
+
+        >.row{
+            padding-top: 10px;
+        }
+
+        h5{
+            margin-top: 0px;
+            margin-bottom: 10px;
+        }
+
+        .historyContainer{
+            td{
+                width: 50%;
+            }
+        }
+
+        .terminalsContainer{
+            td{
+                width: 25%;
+            }
+        }
+
+        .notesContainer{
+            textarea{
+                width: 100%;
+                resize: none;
+            }
+        }
+    }
+}

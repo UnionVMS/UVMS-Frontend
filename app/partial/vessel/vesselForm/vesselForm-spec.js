@@ -1,4 +1,4 @@
-describe('ViewVesselCtrl', function() {
+describe('VesselFormCtrl', function() {
 
 	beforeEach(module('unionvmsWeb'));
 
@@ -6,7 +6,7 @@ describe('ViewVesselCtrl', function() {
 
     beforeEach(inject(function($rootScope, $controller) {
       scope = $rootScope.$new();
-      ctrl = $controller('ViewVesselCtrl', {$scope: scope});
+      ctrl = $controller('VesselFormCtrl', {$scope: scope});
     }));	
 
 	it('should ...', inject(function() {

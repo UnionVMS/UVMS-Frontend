@@ -51,5 +51,6 @@
     "validation_letters_only" : "Only letters",
     "validation_required" : "Required",
     "view_on_map" : "View on map",
+    "view_all" : "View all",
     "yes" : "Yes"
 }

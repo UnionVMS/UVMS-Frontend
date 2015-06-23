@@ -1,10 +1,9 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, savedSearchService, GetListRequest, searchService, vesselRestService, alertService){
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, savedSearchService, Vessel, GetListRequest, searchService, vesselRestService, alertService){
 
     //Keep track of visibility statuses
     $scope.isVisible = {
         search : true,
-        createNewVessel : false,
-        viewVessel : false
+        vesselForm : false
     };
 
     //Search objects and results
@@ -113,25 +112,35 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         });
     };
 
+    //Are we in create mode?
+    $scope.isCreateNewMode = function(){
+        return $scope.createNewMode;
+    };
+
+    $scope.setCreateMode = function(bool){
+        $scope.createNewMode = bool;
+    };    
+
+    $scope.getVesselObj = function(){
+        return $scope.vesselObj;
+    };     
+
     //Toggle create new vessel
-    $scope.toggleCreateNewVessel = function(){
-        $scope.isVisible.createNewVessel = !$scope.isVisible.createNewVessel;
-        $scope.isVisible.search = !$scope.isVisible.search;
+    $scope.toggleCreateNewVessel = function(){        
+        $scope.createNewMode = true;
+        toggleVesselForm(new Vessel());
     };
 
     //Toggle viewing of a vessel
     $scope.toggleViewVessel = function(item){
-        if(item === undefined){
-            $scope.vesselObj = undefined;
-        }
-        else
-        {
-            //creating dummy for mobileterminals... Should be removed when there is support in backend for mobile terminals.
-            var mobileTerminals = [];
-            item.mobileTerminals = mobileTerminals;
-            $scope.vesselObj = item;
-        }
-        $scope.isVisible.viewVessel = !$scope.isVisible.viewVessel;
+        $scope.createNewMode = false;
+        toggleVesselForm(item);
+    };
+
+    var toggleVesselForm = function(vessel){
+        $scope.vesselObj = vessel;
+        alertService.hideMessage();
+        $scope.isVisible.vesselForm = !$scope.isVisible.vesselForm;
         $scope.isVisible.search = !$scope.isVisible.search;
     };
 
