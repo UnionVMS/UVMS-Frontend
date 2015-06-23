@@ -6,7 +6,7 @@ describe('ManualPositionReportModalCtrl', function() {
 
     beforeEach(inject(function($rootScope, $controller, Vessel, VesselListPage, ManualPosition) {
       scope = $rootScope.$new();
-      ctrl = $controller('ManualPositionReportModalCtrl', {$scope: scope, $modalInstance: {}, position : new ManualPosition()});
+      ctrl = $controller('ManualPositionReportModalCtrl', {$scope: scope, $modalInstance: {}, position : new ManualPosition(), addAnother : false});
       var vessels = [];
       var vessel1 = new Vessel();
       var vessel2 = new Vessel();

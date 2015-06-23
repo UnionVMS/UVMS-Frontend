@@ -165,9 +165,9 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
                             return deferred.resolve(new MobileTerminalListPage());
                         }
 
-                        //Iterate over the vessels to add new search criterias with IRCS as key
+                        //Iterate over the vessels to add new search criterias with vesselIdType as key
                         $.each(vessels, function(index, vessel){
-                            outerThis.addSearchCriteria("IRCS", vessel.ircs);
+                            outerThis.addSearchCriteria(vessel.vesselId.type, vessel.vesselId.value);
                         });
                         //Get mobile terminals
                         mobileTerminalRestService.getMobileTerminalList(getListRequest).then(

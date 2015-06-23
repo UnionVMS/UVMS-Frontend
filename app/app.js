@@ -28,6 +28,10 @@ angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocalePr
             templateUrl: 'partial/polling/polling.html', 
             resolve: generalRouteResolves
         })
+        .when('/communication/:id', {
+            templateUrl: 'partial/mobileTerminal/mobileTerminal.html', 
+            resolve: generalRouteResolves
+        })        
         .when('/movement', {
             templateUrl: 'partial/movement/movement.html', 
             resolve: generalRouteResolves

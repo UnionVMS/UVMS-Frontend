@@ -19,9 +19,18 @@ angular.module('unionvmsWeb')
         VesselListPage.prototype.getVesselById = function(id, idType) {
             var foundVessel;
             $.each(this.vessels, function(index, vessel){
-                if(vessel[idType.toLowerCase()] === id){
-                    foundVessel = vessel;
-                    return false;
+                if(idType === 'GUID'){
+                    if(vessel.vesselId.type === 'GUID' && vessel.vesselId.value === id){
+                        foundVessel = vessel;
+                        return false;
+                    }
+                }
+                //Check attribute on vessel object
+                else{
+                    if(vessel[idType.toLowerCase()] === id){
+                        foundVessel = vessel;
+                        return false;
+                    }
                 }
             });
 

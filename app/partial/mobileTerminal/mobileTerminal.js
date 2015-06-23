@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService, alertService, MobileTerminalListPage, MobileTerminal, SystemTypeAndLES, mobileTerminalRestService, pollingService, $location, locale){
+angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService, alertService, MobileTerminalListPage, MobileTerminal, SystemTypeAndLES, mobileTerminalRestService, pollingService, $location, locale, $routeParams){
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -97,8 +97,31 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
 
     //Init function when entering page
     var init = function(){
-        //Load list with mobileTerminals
-        $scope.searchMobileTerminals();
+
+        //GET mobileterminal GUID from URL and load details for that MobileTerminal
+        var mobileTerminalGUID = $routeParams.id;
+        if(angular.isDefined(mobileTerminalGUID)){
+            mobileTerminalRestService.getMobileTerminalByGuid(mobileTerminalGUID).then(
+                function(mobileTerminal){
+                    $scope.toggleMobileTerminalDetails(mobileTerminal, false);
+                    searchService.getAdvancedSearchObject().IRCS = mobileTerminal.associatedVessel.ircs;
+                    searchService.getAdvancedSearchObject().NAME = mobileTerminal.associatedVessel.name;
+                    searchService.setSearchCriteriasToAdvancedSearch();
+
+                    //Load list with mobileTerminals
+                    $scope.searchMobileTerminals();                    
+                },
+                function(error){
+                    console.error("Error loading details for mobile terminal with GUID: " +mobileTerminalGUID);
+                }
+            );
+        }
+        else{
+            //Load list with mobileTerminals
+            $scope.searchMobileTerminals();
+        }
+
+
 
         //Get list transponder systems
         mobileTerminalRestService.getTranspondersConfig()
