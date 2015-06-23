@@ -1,0 +1,151 @@
+<div class="mobileTerminal">
+
+    <a href="#/communication/{{mt.guid}}" title="{{'mobileTerminal.edit_mobile_terminal' | i18n}}">
+        <i class="fa fa-pencil-square-o fa-lg editMobileTerminal"></i>
+    </a>
+
+    <div class="row">
+        <div class="col-md-2 mobile-terminal-attribute">
+            <label>
+                {{"mobileTerminal.form_inmarsatc_satellite_number_label" | i18n}}
+                <p>{{mt.attributes.SATELLITE_NUMBER}}</p>
+            </label>
+        </div>
+        <div class="col-md-2 mobile-terminal-attribute">
+            <label>
+                {{"mobileTerminal.form_inmarsatc_serial_no_label" | i18n}}
+                <p>{{mt.attributes.SERIAL_NUMBER}}</p>
+            </label>
+        </div>
+        <div class="col-md-2 mobile-terminal-attribute">
+            <label>
+                {{"mobileTerminal.form_inmarsatc_transceiver_type_label" | i18n}}
+                <p>{{mt.attributes.TRANSCEIVER_TYPE}}</p>
+            </label>
+        </div>
+        <div class="col-md-2 mobile-terminal-attribute">
+            <label>
+                {{"mobileTerminal.form_inmarsatc_software_version_label" | i18n}}
+                <p>{{mt.attributes.SOFTWARE_VERSION}}</p>
+            </label>
+        </div>
+        <div class="col-md-2 mobile-terminal-attribute">
+            <label>
+                {{"mobileTerminal.form_inmarsatc_antenna_label" | i18n}}
+                <p>{{mt.attributes.ANTENNA}}</p>
+            </label>
+        </div>
+        <div class="col-md-2 mobile-terminal-attribute">
+            <label>
+                {{"mobileTerminal.form_inmarsatc_answer_back_label" | i18n}}
+                <p>{{mt.attributes.ANSWER_BACK}}</p>
+            </label>
+        </div>
+    </div>
+
+    <div class="mobileTerminalChannels">
+        <label class="section">{{'mobileTerminal.form_inmarsatc_communication_channels_header' | i18n}}</label>
+
+        <div class="row channelsHeader">
+            <div class="col-md-2">
+                <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_channel_label' | i18n}}</label>
+            </div>
+            <div class="col-md-2 smallerpadding">
+                <div class="col-md-4 smallerpadding">
+                    <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_poll_label' | i18n}}</label>
+                </div>
+                <div class="col-md-4 smallerpadding">
+                    <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_con_label' | i18n}}</label>
+                </div>
+                <div class="col-md-4 smallerpadding">
+                    <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_def_label' | i18n}}</label>
+                </div>
+            </div>
+            <div class="col-md-1 smallerpadding">
+                <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_dnid_label' | i18n}}</label>
+            </div>
+            <div class="col-md-1 smallerpadding">
+                <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_member_no_label' | i18n}}</label>
+            </div>
+            <div class="col-md-1 smallerpadding">
+                <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_land_station_label' | i18n}}</label>
+            </div>
+            <div class="col-md-2 smallerpadding">
+                <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_started_label' | i18n}}</label>
+            </div>
+            <div class="col-md-2 smallerpadding">
+                <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_stopped_label' | i18n}}</label>
+            </div>
+        </div>
+
+        <div ng-repeat="communicationChannel in mt.channels" class="row align-middle mobileTerminalChannel" ng-class="{comchannelrow: $index == 0}">
+            <div class="col-md-2">{{communicationChannel.name}}</div>
+
+            <div class="col-md-2 smallerpadding">
+                <div class="col-md-4 smallerpadding">
+                    <input type="radio" ng-model="communicationChannel.capabilities.POLLABLE" ng-value="true" disabled/>
+                </div>
+                <div class="col-md-4 smallerpadding">
+                    <input type="radio" ng-model="communicationChannel.capabilities.CONFIGURABLE" ng-value="true" disabled/>
+                </div>
+                <div class="col-md-4 smallerpadding">
+                    <input type="radio" ng-model="communicationChannel.capabilities.DEFAULT_REPORTING" ng-value="true" disabled/>
+                </div>
+            </div>
+
+            <div class="col-md-1 smallerpadding">{{communicationChannel.ids.DNID || "-"}}</div>
+            <div class="col-md-1 smallerpadding">{{communicationChannel.ids.MEMBER_NUMBER || "-"}}</div>
+            <div class="col-md-1 smallerpadding">{{communicationChannel.ids.LES_DESCRIPTION || "-"}}</div>
+            <div class="col-md-2 smallerpadding">{{communicationChannel.ids.START_DATE || "-"}}</div>
+            <div class="col-md-2 smallerpadding">{{communicationChannel.ids.END_DATE || "-"}}</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2 form-group mobile-terminal-attribute">
+            <label>
+                {{"mobileTerminal.form_inmarsatc_installed_by_label" | i18n}}
+                <p>{{mt.attributes.INSTALLED_BY || "-"}}</p>
+            </label>
+        </div>
+        <div class="col-md-2 form-group mobile-terminal-attribute">
+            <label>
+                {{"mobileTerminal.form_inmarsatc_installed_on_label" | i18n}}
+                <p>{{mt.attributes.INSTALLED_ON || "-"}}</p>
+            </label>
+        </div>
+        <div class="col-md-2 form-group mobile-terminal-attribute">
+            <label>
+                {{"mobileTerminal.form_inmarsatc_started_on_label" | i18n}}
+                <p>{{mt.attributes.STARTED_ON || "-"}}</p>
+            </label>
+        </div>
+        <div class="col-md-2 form-group mobile-terminal-attribute">
+            <label>
+                {{"mobileTerminal.form_inmarsatc_uninstalled_on_label" | i18n}}
+                <p>{{mt.attributes.UNINSTALLED_ON || "-"}}</p>
+            </label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2 mobile-terminal-attribute">
+            <label>
+                {{"mobileTerminal.form_inmarsatc_expected_freq_label" | i18n}}
+                <p>{{mt.attributes.FREQUENCY_EXPECTED ? mt.attributes.FREQUENCY_EXPECTED + " h" : "-"}}</p>
+            </label>
+        </div>
+        <div class="col-md-2 mobile-terminal-attribute">
+            <label>
+                {{"mobileTerminal.form_inmarsatc_grace_period_label" | i18n}}
+                <p>{{mt.attributes.FREQUENCY_IN_PORT ? mt.attributes.FREQUENCY_GRACE_PERIOD + " h": "-"}}</p>
+            </label>
+        </div>
+        <div class="col-md-2 mobile-terminal-attribute">
+            <label>
+                {{"mobileTerminal.form_inmarsatc_in_port_grace_period_label" | i18n}}
+                <p>{{mt.attributes.FREQUENCY_IN_PORT ? mt.attributes.FREQUENCY_IN_PORT + " h" : "-"}}</p>
+            </label>
+        </div>
+    </div>
+</div>

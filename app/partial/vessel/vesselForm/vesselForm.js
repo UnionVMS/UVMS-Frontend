@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $modal, Vessel, vesselRestService, alertService, locale){
+angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $modal, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService){
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -12,6 +12,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
         if (typeof newVal !== 'undefined') {
             if(!$scope.isCreateNewMode()){
                 getVesselHistory();
+                getMobileTerminals();
             }
         }
     });  
@@ -21,6 +22,15 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     //MOCK FUNCTION
     $scope.addNewMobileTerminalToVessel = function () {
         alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
+    };
+
+    var getMobileTerminals = function() {
+        mobileTerminalRestService.getMobileTerminalsForVessel().then(function(terminals) {
+            $scope.mobileTerminals = terminals;
+        },
+        function() {
+            $scope.mobileTerminals = [];
+        });
     };
 
     //Toggle the vessel status

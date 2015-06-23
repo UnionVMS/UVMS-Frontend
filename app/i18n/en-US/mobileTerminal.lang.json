@@ -5,6 +5,7 @@
     "assigned_vessel" : "Assigned vessel",
     "assign_vessel_ircs_required": "IRCS required to assign vessel",
     "assigned_carrier_header" : "Assigned carrier",
+    "edit_mobile_terminal": "Edit mobile terminal",
 	"menu_mobileterminals" : "Mobile terminals",
 	"menu_polling" : "Polling",
     "table_header_flag_state" : "State",
