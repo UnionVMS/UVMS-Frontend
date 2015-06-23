@@ -28,6 +28,10 @@ angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocalePr
             templateUrl: 'partial/polling/polling.html', 
             resolve: generalRouteResolves
         })
+        .when('/communication/polling/logs', {
+            templateUrl: 'partial/polling/pollingLogs/pollingLogs.html', 
+            resolve: generalRouteResolves
+        })
         .when('/communication/:id', {
             templateUrl: 'partial/mobileTerminal/mobileTerminal.html', 
             resolve: generalRouteResolves
@@ -36,8 +40,12 @@ angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocalePr
             templateUrl: 'partial/movement/movement.html', 
             resolve: generalRouteResolves
         })
-        .when('/communication/polling/logs', {
-            templateUrl: 'partial/polling/pollingLogs/pollingLogs.html', 
+        .when('/audit', {
+            templateUrl: 'partial/audit/audit.html', 
+            resolve: generalRouteResolves
+        })
+        .when('/audit/auditconfiguration', {
+            templateUrl: 'partial/audit/auditConfiguration/auditConfiguration.html', 
             resolve: generalRouteResolves
         })
         .when('/movement/manual', {

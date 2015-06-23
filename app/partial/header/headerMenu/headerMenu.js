@@ -31,6 +31,10 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $loca
                 'url':'/communication'
             },
             {
+                'title':locale.getString('header.menu_audit'),
+                'url':'/audit'
+            },
+            {
                 'title':locale.getString('header.menu_configuration'),
                 'url':'/configuration'
             },

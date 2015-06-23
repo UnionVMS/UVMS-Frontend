@@ -7,5 +7,6 @@
 	"menu_communication" : "Communication",
 	"menu_configuration" : "Configuration",
 	"menu_gis" : "GIS",
-	"menu_movement" : "Movement"
+	"menu_movement" : "Movement",
+	"menu_audit" : "Audit"
 }
