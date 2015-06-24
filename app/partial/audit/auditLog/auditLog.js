@@ -100,6 +100,6 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale)
 
     $scope.loadNextPage = function() {
         // TODO
-    }
+    };
 
 });
