@@ -410,7 +410,11 @@ angular.module('unionvmsWeb')
                 });
                 return deferred.promise;
             },
-
+            getMobileTerminalsForVessel: function() {
+                var deferred = $q.defer();
+                deferred.resolve([]);
+                return deferred.promise;
+            }
         };
         return mobileTerminalRestService;
     }
