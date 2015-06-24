@@ -50,7 +50,7 @@ angular.module('unionvmsWeb')
             },
         };
     })
-    .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, vesselRestService, MobileTerminal, MobileTerminalListPage, TranspondersConfig, GetListRequest, CarrierId, MobileTerminalHistory){
+    .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, vesselRestService, VesselListPage, MobileTerminal, MobileTerminalListPage, TranspondersConfig, GetListRequest, CarrierId, MobileTerminalHistory){
 
         var getVesselsForListOfMobileTerminals = function(mobileTerminals){
             var deferred = $q.defer();
@@ -85,16 +85,16 @@ angular.module('unionvmsWeb')
                         },
                         function(error){
                             console.error("Error getting Vessels for the objects");
-                            deferred.resolve(mobileTerminals);
+                            deferred.resolve(new VesselListPage());
                         }
                     );
                 }
                 //No carrierId to lookup, return list
                 else{
-                    deferred.resolve(mobileTerminals);
+                    deferred.resolve(new VesselListPage());
                 }
             }catch(err){
-                deferred.resolve(mobileTerminals);
+                deferred.resolve(new VesselListPage());
             }
 
             return deferred.promise;
