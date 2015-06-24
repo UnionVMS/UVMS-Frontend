@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale){
+angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale, Audit) {
 
 	// ************ Page setup ************
 
@@ -16,20 +16,10 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale)
         filter : ""
     };
 
-    $scope.currentSearchResults.audits = [{
-        username: "nicand",
-        operation: "Add vessel create rights",
-        objectType: "User",
-        date: "2015-06-24T12:00:01+0200",
-        objectAffected: "000123"
-    },
-    {
-        username: "System",
-        operation: "Create",
-        objectType: "Automatic system report",
-        date: "2015-06-23T12:00:01+0200",
-        objectAffected: "000125"
-    }];
+    $scope.currentSearchResults.audits = [
+        Audit.fromJson({username: "nicand", operation: "Add vessel create rights", objectType: "User", date:"2015-06-24T12:00:01+0200"}),
+        Audit.fromJson({username: "System", operation: "Create", objectType: "Automatic system report", date:"2015-06-23T12:00:01+0200"})
+    ];
 
 	//Sets tabs
 	var setTabs = function (){
