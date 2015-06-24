@@ -4,7 +4,9 @@
 
 		<div class='buttonGroups'>
 			<div class='buttonGroup'>
-				<h4>{{'movement.manual_position_header_new' | i18n}}</h4>
+				<h4 ng-if="!confirmSend && !sendSuccess">{{'movement.manual_position_header_new' | i18n}}</h4>
+				<h4 ng-if="confirmSend && !sendSuccess">{{'movement.manual_position_header_confirm' | i18n}}</h4>
+				<h4 ng-if="sendSuccess">{{'movement.manual_position_header_sent' | i18n}}</h4>
 			</div>
 			<div class="buttonGroup button-group-right">
 				<i class="fa fa-times closeicon" ng-click="dismiss()"></i>

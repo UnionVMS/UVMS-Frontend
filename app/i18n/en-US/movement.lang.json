@@ -66,6 +66,8 @@
 	"external_marking_filter_name" : "Name",
 
 	"manual_position_header_new": "New manual position report",
+	"manual_position_header_confirm": "Please confirm sending the position report",
+	"manual_position_header_sent": "Manual position report sent",
 
 	"manual_position_field_label_flag_state": "F.S.",
 	"manual_position_field_label_ircs": "IRCS",
