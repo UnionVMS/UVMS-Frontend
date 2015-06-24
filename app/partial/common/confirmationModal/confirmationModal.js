@@ -3,8 +3,8 @@ var app = angular.module('unionvmsWeb');
 app.controller('confirmationModalCtrl', function($scope, $modalInstance, options, locale) {
 
     $scope.labels = {
-        title: options.titleLabel || locale.getString("common.are you sure"),
-        text: options.textLabel || locale.getString("common.are you sure"),
+        title: options.titleLabel || locale.getString("common.are_you_sure"),
+        text: options.textLabel || locale.getString("common.are_you_sure"),
         confirm: options.confirmLabel || locale.getString("common.yes"),
         cancel: options.cancelLabel || locale.getString("common.cancel"),
     };

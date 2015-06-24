@@ -12,11 +12,8 @@
                     <button  type="submit" class="btn btn-sm createnewvesselbutton" ng-click="createNewVessel()" ng-show="isCreateNewMode()" ng-disabled="waitingForCreateResponse">{{'vessel.create_new_vessel' | i18n}}</button>
                 </div>
                 <div class="floatRight setStatusContainer" ng-hide="isCreateNewMode()">
-                    <button type="button" class="btn btn-default" ng-show="vesselObj.active" ng-click="changeVesselStatus()">
-                        {{'mobileTerminal.inactivate_link' | i18n}}
-                    </button>
-                   <button type="button" class="btn btn-default" ng-hide="vesselObj.active" ng-click="changeVesselStatus()">
-                        {{'mobileTerminal.activate_link' | i18n}}
+                    <button type="button" class="btn btn-default" ng-show="vesselObj.active" ng-click="archiveVessel()">
+                        {{'common.archive' | i18n}}
                     </button>
                 </div>         
             </div>
@@ -43,7 +40,7 @@
                 </div>
 
                 <div class="detailsContainer">
-                    <vessel-details vessel="vesselObj" vessel-form="vesselForm" submit-attempted="submitAttempted"></vessel-details>
+                    <vessel-details vessel="vesselObj" vessel-form="vesselForm" submit-attempted="submitAttempted" disable-form="!vesselObj.isLocalSource()"></vessel-details>
                 </div>
 
                 <div class="col-md-12 historyAndTerminalInformation">

@@ -6,7 +6,7 @@ angular.module('unionvmsWeb')
         controller: 'vesselDetailsCtrl',
         scope: {
             vessel : '=',
-            disableForm : '@',
+            disableForm : '=',
             vesselForm : '=',
             submitAttempted : '='
         },

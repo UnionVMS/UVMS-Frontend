@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $modal, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService){
+angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $modal, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal){
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -81,10 +81,31 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
         return nonUniqueActiveTerminalTypes;
     };
 
-    //Toggle the vessel status
-    $scope.changeVesselStatus = function(){
-        $scope.vesselObj.active = !$scope.vesselObj.active;
-        alertService.showInfoMessageWithTimeout('You need to click "Update" to persist the status change');
+    //Archive the vessel
+    $scope.archiveVessel = function(){
+        
+
+        var options = {
+            textLabel : locale.getString("vessel.archive_confirm_text")
+        };
+        confirmationModal.open(function(){
+            console.log("Confirmed!");
+            $scope.vesselObj = $scope.getOriginalVessel();
+            //Set active to false, meaning archived
+            $scope.vesselObj.active = false;
+            vesselRestService.updateVessel($scope.vesselObj).then(
+                function(inactivatedVessel){
+                    alertService.showSuccessMessageWithTimeout(locale.getString('vessel.archive_message_on_success'));
+                    $scope.removeCurrentVesselFromSearchResults();
+                    $scope.toggleViewVessel(undefined, true);
+                },
+                function(error){
+                    alertService.showErrorMessage(locale.getString('vessel.archive_message_on_error'));
+                }
+            );
+
+        }, options);
+
     };
 
     //Create a new vessel
