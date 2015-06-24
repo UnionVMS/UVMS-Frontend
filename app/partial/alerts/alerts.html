@@ -1,10 +1,11 @@
 <div class="container" ng-hide="!alert.message" ng-controller="AlertsCtrl">
     <div class="row">
         <div class="col-md-12">
-            <div class="alert" ng-class="{'alert-info' : alert.type==='INFO', 'alert-success' : alert.type==='SUCCESS', 'alert-danger' : alert.type==='ERROR'}" role="alert">
+            <div class="alert" ng-class="{'alert-info' : alert.type==='INFO', 'alert-success' : alert.type==='SUCCESS', 'alert-warning': alert.type === 'WARNING', 'alert-danger' : alert.type==='ERROR'}" role="alert">
                 <div class="icon"> 
                     <i ng-if="alert.type === 'SUCCESS'" class="fa fa fa-check" style=" vertical-align: middle;"></i>
                     <i ng-if="alert.type === 'ERROR'" class="fa fa fa-warning" style=" vertical-align: middle;"></i>
+                    <i ng-if="alert.type === 'WARNING'"  class="fa fa fa-warning" style=" vertical-align: middle;"></i>
                     <i ng-if="alert.type === 'INFO'"  class="fa fa fa-info" style=" vertical-align: middle;"></i>
                 </div>
                 <div class="message"> 

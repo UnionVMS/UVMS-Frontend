@@ -93,6 +93,7 @@
     "vessel_details_power": "Power",
     "vessel_details_tonnage": "G.tonnage",
     "vessel_details_type": "Carrier type",
+    "warning_multiple_terminals": "There is more than one active terminal of the same type for this vessel.",
     "zero_connected_mobile_terminals" : "The are no mobile terminals connected to this vessel."
 }
 

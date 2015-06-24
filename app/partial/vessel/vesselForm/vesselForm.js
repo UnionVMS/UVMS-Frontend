@@ -15,7 +15,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
                 getMobileTerminals();
             }
         }
-    });  
+    });
 
     $scope.waitingForCreateResponse = false;
 
@@ -27,10 +27,49 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     var getMobileTerminals = function() {
         mobileTerminalRestService.getMobileTerminalsForVessel().then(function(terminals) {
             $scope.mobileTerminals = terminals;
+
+            $scope.nonUniqueActiveTerminalTypes = $scope.getNonUniqueActiveTerminalTypes(terminals);
+            if ($scope.hasNonUniqueActiveTerminalTypes()) {
+                alertService.showWarningMessage(locale.getString("vessel.warning_multiple_terminals"));
+            }
         },
         function() {
             $scope.mobileTerminals = [];
         });
+    };
+
+    $scope.isNonUniqueActiveTerminalType = function(type) {
+        return $scope.nonUniqueActiveTerminalTypes[type];
+    };
+
+    $scope.hasNonUniqueActiveTerminalTypes = function() {
+        for (var key in $scope.nonUniqueActiveTerminalTypes) {
+            if ($scope.nonUniqueActiveTerminalTypes.hasOwnProperty(key) && $scope.nonUniqueActiveTerminalTypes[key]) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    $scope.getNonUniqueActiveTerminalTypes = function(terminals) {
+        var activeTerminalsByType = {};
+        var nonUniqueActiveTerminalTypes = {};
+        for (var i = 0; i < terminals.length; i++) {
+            var terminal = terminals[i];
+            if (!terminal.active) {
+                continue;
+            }
+
+            if (activeTerminalsByType[terminal.type]) {
+                nonUniqueActiveTerminalTypes[terminal.type] = true;
+            }
+            else {
+                activeTerminalsByType[terminal.type] = true;
+            }
+        }
+
+        return nonUniqueActiveTerminalTypes;
     };
 
     //Toggle the vessel status
@@ -81,7 +120,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
             //Update Vessel and take care of the response(eg. the promise) when the update is done.
             alertService.hideMessage();
             var updateResponse = vesselRestService.updateVessel($scope.vesselObj)
-                .then(updateVesselSuccess, updateVesselError);            
+                .then(updateVesselSuccess, updateVesselError);
         }else{
             alertService.showErrorMessage(locale.getString('vessel.add_new_alert_message_on_form_validation_error'));
         }
@@ -108,7 +147,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     $scope.viewCompleteVesselHistory = function() {
         $scope.isVisible.showCompleteVesselHistoryLink = false;
         vesselRestService.getVesselHistoryListByVesselId($scope.vesselObj.vesselId.value)
-            .then(onCompleteVesselHistoryListSuccess, onVesselHistoryListError);        
+            .then(onCompleteVesselHistoryListSuccess, onVesselHistoryListError);
     };
 
     //Get first 5 history events for the vessel
@@ -134,7 +173,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     //Error getting vessel history
     var onVesselHistoryListError = function(error) {
         console.error("Error getting vessel history");
-    };                      
+    };
 
     //View history details
     $scope.viewHistoryDetails = function(vesselHistory) {

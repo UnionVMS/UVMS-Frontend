@@ -129,6 +129,33 @@ describe('VesselFormCtrl', function() {
         expect(scope.isVesselNameSet()).toBeFalsy();
     }));
 
+    it('should detect if more than one active terminals are of the same type', inject(function(MobileTerminal) {
+        var mt1 = new MobileTerminal();
+        var mt2 = new MobileTerminal();
+        mt1.type = mt2.type = "A";
+        mt1.active = mt2.active = true;
 
+        var result = scope.getNonUniqueActiveTerminalTypes([mt1, mt2]);
+        expect(result["A"]).toBeTruthy();
 
+        mt2.type = "B";
+        result = scope.getNonUniqueActiveTerminalTypes([mt1, mt2]);
+        expect(result["A"] && result["B"]).toBeFalsy();
+
+        mt2.type = "A";
+        mt2.active = false;
+        result = scope.getNonUniqueActiveTerminalTypes([mt1, mt2]);
+        expect(result["A"] && result["B"]).toBeFalsy();
+    }));
+
+    it('should evaluate if there is more than one active terminal of the same type', inject(function() {
+        scope.nonUniqueActiveTerminalTypes = { "A": true };
+
+        expect(scope.hasNonUniqueActiveTerminalTypes()).toBeTruthy();
+        expect(scope.isNonUniqueActiveTerminalType("A")).toBeTruthy();
+
+        scope.nonUniqueActiveTerminalTypes["A"] = false;
+        expect(scope.hasNonUniqueActiveTerminalTypes()).toBeFalsy();
+        expect(scope.isNonUniqueActiveTerminalType("A")).toBeFalsy();
+    }));
 });

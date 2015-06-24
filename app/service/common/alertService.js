@@ -36,6 +36,12 @@ angular.module('unionvmsWeb').factory('alertService',function($timeout) {
         showErrorMessageWithTimeout : function(message){
             showMessageWithTimeout(message, 'ERROR');
         },        
+        showWarningMessage: function(message) {
+            showMessage(message, 'WARNING');
+        },
+        showWarningMessageWithTimeout: function(message) {
+            showMessageWithTimeout(message, 'WARNING');
+        },
         showInfoMessage : function(message){
             showMessage(message, 'INFO');
         },
@@ -47,7 +53,7 @@ angular.module('unionvmsWeb').factory('alertService',function($timeout) {
         },
         showSuccessMessageWithTimeout : function(message){
             showMessageWithTimeout(message, 'SUCCESS');
-        },        
+        },
         hideMessage : function(){
             currentAlert.message = "";
         },
