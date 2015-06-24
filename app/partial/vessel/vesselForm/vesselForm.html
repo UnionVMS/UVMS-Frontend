@@ -1,5 +1,5 @@
-<div class="vesselForm" ng-controller="VesselFormCtrl">
-    <form name="vesselForm" method="post">
+<div class="vesselForm" ng-controller="VesselFormCtrl">    
+    <form name="vesselForm" method="post" novalidate>
         <div class="row">
             <div class="col-md-7">
                 <h3 ng-if="isCreateNewMode()">{{'vessel.create_new_vessel' | i18n}}</h3>
@@ -39,11 +39,11 @@
                     <div class="floatLeft">
                         {{'vessel.source' | i18n}} : <b>{{vesselObj.source}}</b>
                     </div>
-                    <div class="clearFix"></div>
+                    <div class="clearfix"></div>
                 </div>
 
                 <div class="detailsContainer">
-                    <vessel-details vessel="vesselObj"></vessel-details>
+                    <vessel-details vessel="vesselObj" vessel-form="vesselForm" submit-attempted="submitAttempted"></vessel-details>
                 </div>
 
                 <div class="col-md-12 historyAndTerminalInformation">

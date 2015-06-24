@@ -9,6 +9,8 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     //$scope.$watch(function () { return $scope.vesselObj;}, function (newVal, oldVal) {
     $scope.$watch('getVesselObj()', function(newVal) {
         $scope.vesselObj = $scope.getVesselObj();
+        $scope.vesselForm.$setPristine();
+        $scope.submitAttempted = false;        
         if (typeof newVal !== 'undefined') {
             if(!$scope.isCreateNewMode()){
                 getVesselHistory();
@@ -17,6 +19,8 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
         }
     });
 
+    //Has form submit been atempted?
+    $scope.submitAttempted = false;
     $scope.waitingForCreateResponse = false;
 
     //MOCK FUNCTION
@@ -80,6 +84,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
 
     //Create a new vessel
     $scope.createNewVessel = function(){
+        $scope.submitAttempted = true;
         if($scope.vesselForm.$valid) {
             //Create new Vessel
             $scope.waitingForCreateResponse = true;
@@ -113,6 +118,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
 
     //Update the Vessel
     $scope.updateVessel = function(){
+        $scope.submitAttempted = true;
         if($scope.vesselForm.$valid) {
             //MobileTerminals remove them cuz they do not exist in backend yet.
             delete $scope.vesselObj.mobileTerminals; 

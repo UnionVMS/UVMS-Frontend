@@ -1,99 +1,120 @@
-<div class="row vesselDetailsContainer">
-    <div class="col-md-12 vesseldetailsrow">
+<div class="col-md-12 vesselDetailsContainer">
+    <div class="row">
         <div class="col-md-1" ng-hide="!vessel.vesselId.value">
-            <p class="labelheaders">ID</p>
-            <input type="text" name="newvesselid" class="form-control" ng-model="vessel.vesselId.value" ng-disabled="true">            
+            <label>ID</label>
+            <input type="text" name="vesselid" class="form-control" ng-model="vessel.vesselId.value" ng-disabled="true">
         </div>
-        <div class="inputgroup col-md-2 form-group has-feedback">
-            <p class="labelheaders">{{ 'vessel.vessel_details_name' | i18n }}</p>
-            <input type="text" name="newvesselnameinput" class="form-control" ng-model="vessel.name" ng-minlength="3" required ng-disabled="disableForm">
+
+        <div class="col-md-2 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.name.$dirty) && vesselForm.name.$invalid}">
+            <label>{{ 'vessel.vessel_details_name' | i18n }}</label>
+            <input type="text" name="name" class="form-control" ng-model="vessel.name" ng-maxlength="40" required ng-disabled="disableForm">
+            <input-validation-message types="required,maxlength" input="vesselForm.name"></input-validation-message>
         </div>
-        <div class="inputgroup col-md-2">
-            <p class="labelheaders">{{ 'vessel.vessel_details_flagstate' | i18n }}</p>
-            <dropdown ng-model="vessel.countryCode" initialtext="{{ 'vessel.vessel_details_flagstate' | i18n }}" items="vesselCountries" ng-disabled="disableForm"></dropdown>
+
+        <div class="col-md-2 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.countryCode.$dirty) && vesselForm.countryCode.$invalid}">
+            <label>{{ 'vessel.vessel_details_flagstate' | i18n }}</label>
+            <dropdown name="countryCode" ng-model="vessel.countryCode" initialtext="{{ 'vessel.vessel_details_flagstate' | i18n }}" items="vesselCountries" ng-disabled="disableForm" required></dropdown>
+            <input-validation-message types="required" input="vesselForm.countryCode"></input-validation-message>
         </div>
-        <div class="inputgroup col-md-2">
-            <p class="labelheaders">{{ 'vessel.vessel_details_type' | i18n }}</p>
-            <dropdown ng-model="vessel.vesselType" initialtext="{{ 'vessel.vessel_details_type' | i18n }}" items="vesselActivitytTypes" ng-disabled="disableForm"></dropdown>
+
+        <div class="col-md-2 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.vesselType.$dirty) && vesselForm.vesselType.$invalid}">
+            <label>{{ 'vessel.vessel_details_type' | i18n }}</label>
+            <dropdown name="vesselType" ng-model="vessel.vesselType" initialtext="{{ 'vessel.vessel_details_type' | i18n }}" items="vesselActivitytTypes" ng-disabled="disableForm" required></dropdown>
+            <input-validation-message types="required" input="vesselForm.vesselType"></input-validation-message>
         </div>
-        <div class="inputgroup col-md-1">
-            <p class="labelheaders">{{ 'vessel.vessel_details_has_IRCS' | i18n }}</p>
-            <dropdown ng-model="vessel.hasIrcs" initialtext="{{ 'vessel.vessel_details_has_IRCS' | i18n }}" items="vesselHasIrcTypes" ng-disabled="disableForm"></dropdown>
+
+        <div class="col-md-1 form-group">
+            <label>{{ 'vessel.vessel_details_has_IRCS' | i18n }}</label>
+            <dropdown ng-model="vessel.hasIrcs" no-placeholder-item items="vesselHasIrcTypes" ng-disabled="disableForm" callback="onHasIrcsSelect"></dropdown>
         </div>
-        <div class="inputgroup col-md-2">
-            <p class="labelheaders">{{ 'vessel.vessel_details_IRCS_code' | i18n }}</p>
-            <input type="text" name="newvesselextinput" class="form-control" ng-model="vessel.ircs" ng-disabled="disableForm">
+
+        <div class="col-md-2 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.ircs.$dirty) && vesselForm.ircs.$invalid}">
+            <label>{{ 'vessel.vessel_details_IRCS_code' | i18n }}</label>
+            <input type="text" name="ircs" class="form-control" ng-model="vessel.ircs" ng-maxlength="7" ng-disabled="disableForm || !vessel.hasIrcs" ng-required="vessel.hasIrcs">
+            <input-validation-message types="required,maxlength" input="vesselForm.ircs"></input-validation-message >
         </div>
-        <div class="inputgroup col-md-2">
-            <p class="labelheaders">{{ 'vessel.vessel_details_ext_marking' | i18n }}</p>
-            <input type="text" name="newvesselextmarkingInput" class="form-control"
-                   ng-model="vessel.externalMarking" ng-disabled="disableForm">
-        </div>
-    </div>
-    <div class="col-md-12 vesseldetailsrow">
-        <div class="inputgroup col-md-2 has-feedback">
-            <p class="labelheaders">{{ 'vessel.vessel_details_CFR' | i18n }}</p>
-            <input type="text" name="newvesselcfrinput" class="form-control" ng-model="vessel.cfr" required
-                   ng-minlength="3" ng-disabled="disableForm">
-        </div>
-        <div class="inputgroup col-md-2">
-            <p class="labelheaders">{{ 'vessel.vessel_details_IMO' | i18n }}</p>
-            <input type="text" name="newvesselimoinput" class="form-control" ng-model="vessel.imo" ng-disabled="disableForm">
-        </div>
-        <div class="inputgroup col-md-2">
-            <p class="labelheaders">{{ 'vessel.vessel_details_MMSI_no' | i18n }}</p>
-            <input type="text" name="newvesselmmsiofnput" class="form-control" ng-model="vessel.mmsiNo" ng-disabled="disableForm">
-        </div>
-        <div class="inputgroup col-md-1">
-            <p class="labelheaders">{{ 'vessel.vessel_details_license' | i18n }}</p>
-            <dropdown ng-model="vessel.hasLicense" initialtext="{{ 'vessel.vessel_details_license' | i18n }}" items="vesselHasLicenseTypes" ng-disabled="disableForm"></dropdown>
-        </div>
-        <div class="inputgroup col-md-2">
-            <p class="labelheaders">{{ 'vessel.vessel_details_license_type' | i18n }}</p>
-            <dropdown ng-model="licensetype" initialtext="{{ 'vessel.vessel_details_license_type' | i18n }}" items="vesselLicensTypes" ng-disabled="disableForm"></dropdown>
-        </div>
-        <div class="inputgroup col-md-3">
-            <p class="labelheaders col-md-12 nopaddingleft">{{ 'vessel.vessel_details_home_port_code' | i18n }}</p>
-            <div class="col-md-5 nopaddingleft">
-                <input type="text" name="newvesselhomeportinput" class="form-control " ng-model="vessel.homePort" ng-minlength="3" ng-maxlength="6" ng-disabled="disableForm">
-            </div>
-            <div class="col-md-7 nopaddingright nopaddingleft">
-                <input type="text" name="newvesselhomeportinput" class="form-control" ng-model="vessel.homePort" ng-minlength="3" ng-maxlength="6" ng-disabled="disableForm">
-            </div>
+
+        <div class="col-md-2 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.externalMarking.$dirty) && vesselForm.externalMarking.$invalid}">
+            <label>{{ 'vessel.vessel_details_ext_marking' | i18n }}</label>
+            <input type="text" name="externalMarking" class="form-control" ng-model="vessel.externalMarking" ng-maxlength="14" required ng-disabled="disableForm">
+            <input-validation-message types="required,maxlength" input="vesselForm.externalMarking"></input-validation-message>
         </div>
     </div>
-    <div class="col-md-12 vesseldetailsrow">
-        <div class="inputgroup col-md-1">
-            <p class="labelheaders">{{ 'vessel.vessel_details_length' | i18n }}</p>
-            <input type="text" name="newvessellengthinput" class="form-control" ng-model="vessel.lengthOverAll" ng-disabled="disableForm">
+    <div class="row">
+
+        <div class="col-md-2 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.cfr.$dirty) && vesselForm.cfr.$invalid}">
+            <label>{{ 'vessel.vessel_details_CFR' | i18n }}</label>
+            <input type="text" name="cfr" class="form-control" ng-model="vessel.cfr" ng-disabled="disableForm" ng-required ng-pattern="/^[a-zA-Z]{3}[0-9]{9}$/">
+            <input-validation-message types="pattern,required" input="vesselForm.cfr" custom-messages="{{cfrValidationMessages}}"></input-validation-message >
         </div>
-        <div class="inputgroup col-md-1 nopaddingleft">
-            <p class="labelheaders"></p>
-            <dropdown ng-model="lenght" initialtext="{{ 'vessel.vessel_details_length' | i18n }}" items="vesseloveralltypes" ng-disabled="disableForm"></dropdown>
+
+        <div class="col-md-2 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.imo.$dirty) && vesselForm.imo.$invalid}">
+            <label>{{ 'vessel.vessel_details_IMO' | i18n }}</label>
+            <input type="text" name="imo" class="form-control" ng-model="vessel.imo" required ng-disabled="disableForm">
+            <input-validation-message types="required" input="vesselForm.imo"></input-validation-message >
         </div>
-        <div class="inputgroup col-md-1">
-            <p class="labelheaders">{{ 'vessel.vessel_details_tonnage' | i18n }}</p>
-            <input type="text" name="newvesselcapacityinput" class="form-control" ng-model="vessel.grossTonnage" ng-disabled="disableForm">
+
+        <div class="col-md-2 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.mmsi.$dirty) && vesselForm.mmsi.$invalid}">
+            <label>{{ 'vessel.vessel_details_MMSI_no' | i18n }}</label>
+            <input type="text" name="mmsi" class="form-control" ng-model="vessel.mmsiNo" required only-digits ng-disabled="disableForm">
+            <input-validation-message types="required, onlyDigits" input="vesselForm.mmsi"></input-validation-message >
         </div>
-        <div class="inputgroup col-md-1 nopaddingleft">
-            <p class="labelheaders"></p>
-            <dropdown ng-model="vesselUnitOfMessure" initialtext="{{ 'vessel.vessel_details_tonnage' | i18n }}" items="vesselUnitOfMessures" ng-disabled="disableForm"></dropdown>
+
+        <div class="col-md-1 form-group">
+            <label>{{ 'vessel.vessel_details_license' | i18n }}</label>
+            <dropdown ng-model="vessel.hasLicense" no-placeholder-item items="vesselHasLicenseTypes" callback="onHasLicenseSelect" ng-disabled="disableForm"></dropdown>
         </div>
-        <div class="inputgroup col-md-1">
-            <p class="labelheaders">{{ 'vessel.vessel_details_power' | i18n }}</p>
-            <input type="text" name="newvesselpowerinput" class="form-control" ng-model="vessel.powerMain" ng-disabled="disableForm">
+        <div class="col-md-2 form-group">
+            <label>{{ 'vessel.vessel_details_license_type' | i18n }}</label>
+            <dropdown ng-model="vessel.licenseType" initialtext="{{ 'vessel.vessel_details_license_type' | i18n }}" items="vesselLicensTypes" ng-disabled="disableForm || !vessel.hasLicense"></dropdown>
         </div>
-        <div class="inputgroup col-md-1 nopaddingleft">
-            <p class="labelheaders"></p>
-            <dropdown ng-model="vesselEffect" initialtext="{{ 'vessel.vessel_details_power' | i18n }}" items="vesselEffectTypes" ng-disabled="disableForm"></dropdown>
+        <div class="col-md-2 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.homeport.$dirty) && vesselForm.homeport.$invalid}">
+            <label>{{ 'vessel.vessel_details_home_port' | i18n }}</label>
+            <input type="text" name="homeport" class="form-control" ng-model="vessel.homePort" ng-maxlength="4" ng-disabled="disableForm">
+            <input-validation-message types="maxlength" input="vesselForm.homeport"></input-validation-message >
         </div>
-        <div class="inputgroup col-md-3">
-            <p class="labelheaders col-md-12 nopaddingleft">PRODUCER CODE - NAME</p>
+    </div>
+    <div class="row">
+        <div class="col-md-1 form-group nopaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.length.$dirty) && vesselForm.length.$invalid}">
+            <label>{{ 'vessel.vessel_details_length' | i18n }}</label>
+            <div class="unit-input">
+                <input type="text" name="length" class="form-control" ng-model="vessel.lengthOverAll" ng-maxlength="7" numeric ng-disabled="disableForm">
+                <div class="unit-box">{{"common.meters_short" | i18n}}</div>
+            </div>
+            <input-validation-message types="numeric,maxlength" input="vesselForm.length"></input-validation-message >
+        </div>
+        <div class="col-md-1 nopaddingleft">
+            <label></label>
+            <dropdown ng-model="length" no-placeholder-item items="vesseloveralltypes" ng-disabled="disableForm"></dropdown>
+        </div>
+        <div class="col-md-1 form-group nopaddingright grossTonage" ng-class="{'has-error': (submitAttempted || vesselForm.grossTonnage.$dirty) && vesselForm.grossTonnage.$invalid}">
+            <label>{{ 'vessel.vessel_details_tonnage' | i18n }}</label>
+            <div class="unit-input">
+                <input type="text" name="grossTonnage" class="form-control" ng-model="vessel.grossTonnage" ng-maxlength="7" numeric ng-disabled="disableForm">
+                <div class="unit-box">{{"common.tons" | i18n}}</div>
+            </div>
+            <input-validation-message types="numeric,maxlength" input="vesselForm.grossTonnage"></input-validation-message >
+        </div>
+        <div class="col-md-1 nopaddingleft">
+            <label></label>
+            <dropdown ng-model="unitOfMessaure" no-placeholder-item  items="vesselUnitOfMessures" ng-disabled="disableForm"></dropdown>
+        </div>
+        <div class="col-md-1 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.power.$dirty) && vesselForm.power.$invalid}">
+            <label>{{ 'vessel.vessel_details_power' | i18n }}</label>
+            <input type="text" name="power" class="form-control" ng-model="vessel.powerMain" ng-maxlength="8" numeric ng-disabled="disableForm">
+            <input-validation-message types="numeric,maxlength" input="vesselForm.power"></input-validation-message >
+        </div>
+        <div class="col-md-1 nopaddingleft">
+            <label></label>
+            <dropdown ng-model="vessel.effect" no-placeholder-item  items="vesselEffectTypes" ng-disabled="disableForm"></dropdown>
+        </div>
+        <div class="col-md-3">
+            <label>{{ 'vessel.vessel_details_producer' | i18n }}</label>
             <div class="col-md-5 nopaddingleft">
-                <input type="text" name="vesselproducername" class="form-control " ng-model="vessel.producerName" ng-disabled="disableForm">
+                <input type="text" name="producername" class="form-control " ng-model="vessel.producerName" ng-disabled="disableForm">
             </div>
             <div class="col-md-7 nopaddingright nopaddingleft">
-                <input type="text" name="vesselproducercode" class="form-control" ng-model="vessel.producerCode" ng-disabled="disableForm">
+                <input type="text" name="producercode" class="form-control" ng-model="vessel.producerCode" ng-disabled="disableForm">
             </div>
         </div>
     </div>

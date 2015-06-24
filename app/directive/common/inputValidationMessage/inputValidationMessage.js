@@ -9,6 +9,10 @@ angular.module('unionvmsWeb').directive('inputValidationMessage', function() {
 		},
 		templateUrl: 'directive/common/inputValidationMessage/inputValidationMessage.html',
 		link: function(scope, element, attrs, fn) {
+            scope.customMessages = {};
+            if('customMessages' in attrs){
+                scope.customMessages = scope.$eval(attrs["customMessages"]);
+            }
 		}
 	};
 });
@@ -23,6 +27,9 @@ angular.module('unionvmsWeb').controller('inputValidationMessageCtrl',function($
     //Validation error messages
     var messages = {
         'required' : locale.getString('common.validation_required'),
+        'maxlength' : locale.getString('common.validation_invalid_maxlength'),
+        'minlength' : locale.getString('common.validation_invalid_minlength'),
+        'pattern' : locale.getString('common.validation_invalid_pattern'),
         'date' : locale.getString('common.validation_invalid_date'),
         'time' : locale.getString('common.validation_invalid_time'),
         'period' : locale.getString('common.validation_invalid_period'),
@@ -30,15 +37,24 @@ angular.module('unionvmsWeb').controller('inputValidationMessageCtrl',function($
         'onlyDigits' : locale.getString('common.validation_digits_only'),
         'onlyLetters' : locale.getString('common.validation_letters_only'),
         'minDate' : locale.getString('common.validation_invalid_date'),
+        'numeric' : locale.getString('common.validation_invalid_numeric'),
         'latitude': locale.getString('movement.validation_invalid_latitude'),
         'latitude-format': locale.getString('movement.validation_invalid_latitude_format'),
         'longitude': locale.getString('movement.validation_invalid_longitude'),
-        'longitude-format': locale.getString('movement.validation_invalid_longitude_format')
+        'longitude-format': locale.getString('movement.validation_invalid_longitude_format'),
     };
 
     //Get validation error message
     $scope.getMessage = function(type){
-        var message = messages[type];
+        //First check customMessages
+        var message = $scope.customMessages[type];
+
+        //If not found, check default messages
+        if(angular.isUndefined(message)){
+            message = messages[type];
+        }
+
+        //If not found set message to "invalid"
         if(angular.isUndefined(message)){
             message = locale.getString('common.invalid');
         }
@@ -50,7 +66,6 @@ angular.module('unionvmsWeb').controller('inputValidationMessageCtrl',function($
         if(angular.isUndefined($scope.input)){
             return false;
         }
-        
         return $scope.input.$error[type];
     };
 

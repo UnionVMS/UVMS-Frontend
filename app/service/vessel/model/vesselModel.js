@@ -4,6 +4,11 @@ angular.module('unionvmsWeb')
         function Vessel(){
             this.active = true;
             this.source = "LOCAL";
+            this.hasIrcs = true;
+            this.hasLicense = false;
+            this.unitOfMessaure = "LONDON";
+            this.length = "LOA";
+            this.effect ="KW";
         }
 
         Vessel.fromJson = function(data){

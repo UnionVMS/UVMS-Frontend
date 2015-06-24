@@ -80,9 +80,9 @@
     "update_vessel": "Update vessel",
     "vessel_details_CFR": "CFR",
     "vessel_details_ext_marking": "Ext.Marking",
-    "vessel_details_flagstate": "Flag state",
+    "vessel_details_flagstate": "F. S.",
     "vessel_details_has_IRCS": "Has IRCS",
-    "vessel_details_home_port_code": "Home port code - name",
+    "vessel_details_home_port": "Home port",
     "vessel_details_IMO": "IMO",
     "vessel_details_IRCS_code": "IRCS code",
     "vessel_details_length": "Length",
@@ -91,8 +91,10 @@
     "vessel_details_MMSI_no": "MMSI NO.",
     "vessel_details_name": "Name",
     "vessel_details_power": "Power",
+    "vessel_details_producer": "Producer code - name",
     "vessel_details_tonnage": "G.tonnage",
     "vessel_details_type": "Carrier type",
+    "vessel_details_cfr_pattern_validation_message": "Must be 3 letters followed by 9 digits.",
     "warning_multiple_terminals": "There is more than one active terminal of the same type for this vessel.",
     "zero_connected_mobile_terminals" : "The are no mobile terminals connected to this vessel."
 }

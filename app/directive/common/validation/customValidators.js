@@ -45,6 +45,31 @@ angular.module('unionvmsWeb').directive('onlyLetters', [
         };
 }]);
 
+//Numeric
+//45.432 is ok
+//45,234 is not ok
+angular.module('unionvmsWeb').directive('numeric', [
+    function() {
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            link: function(scope, elm, attrs, ctrl) {
+                var validateFn = function (viewValue) {
+                    if (ctrl.$isEmpty(viewValue) || !isNaN(viewValue)) {
+                        ctrl.$setValidity('numeric', true);
+                        return viewValue;                        
+                    } else {
+                        ctrl.$setValidity('numeric', false);
+                        return undefined;
+                    }
+                };
+
+                ctrl.$parsers.push(validateFn);
+                ctrl.$formatters.push(validateFn);
+            }
+        };
+}]);
+
 //Time interval
 //Validate that the interval is larger than 0 seconds
 angular.module('unionvmsWeb').directive('period', [
