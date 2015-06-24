@@ -2,23 +2,23 @@
     <div class="headercontainer">
 		<div class="header">
 			<div class="pageinfo">
-			  <div class="container">
-			     <div class="pagename">
-			        <a href="#/today">
-			        	<img class="uvmslogo" src="assets/images/logo.png">
-			        </a>
-			         <div class="headerwarnings" ng-controller="HeaderCtrl">
-			             <div class="fa fa-bell-o">
-			                 <div class="messagenumbercontainer">
-			                    <div class="messagenumber">{{randomNumber}}</div>
-			                 </div>
-			             </div>
-			         </div>
-			         <div class="headermessages">
-			             <div class="fa fa-envelope-o"></div>
-			         </div>
-			    </div>
-			  </div>
+				<div class="container">
+					<div class="pagename">
+				        <a href="#/today">
+				        	<img class="uvmslogo" src="assets/images/logo.png">
+				        </a>
+						<div class="headerwarnings" ng-controller="HeaderCtrl">
+							<div class="fa fa-bell-o">
+								<div class="messagenumbercontainer">
+				                	<div class="messagenumber">{{randomNumber}}</div>
+				            	</div>
+				        	</div>
+				        </div>
+				        <div class="headermessages">
+				        	<div class="fa fa-envelope-o"></div>
+					    </div>
+				    </div>
+				</div>
 			</div>
 			<div ng-include="'partial/header/headerMenu/headerMenu.html'"></div>
 		</div>

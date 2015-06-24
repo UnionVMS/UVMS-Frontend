@@ -1,4 +1,18 @@
 <div class="col-md-12" ng-controller="AuditlogCtrl">
-
-
+	<div static-include="partial/audit/auditPageHeader/auditPageHeader.html"></div>
+	<!-- Nav tabs -->
+    <div class="containerWrapper pollingTabs">
+        <div class="container">
+        	<ul class="nav nav-tabs" role="tablist">
+				<li ng-repeat="tab in tabMenu" class="audittab" ng-click="selectTab(tab.tab)" ng-class="{'active': selectedTab === '{{tab.tab}}'}">
+					<span>{{tab.title}}</span>
+				</li>
+			</ul>
+        </div>
+    </div>
+	<div class="container">
+		<advanced-search searchfunc="searchMovements" modeltype="'AUDIT'" advancedsearchvisible="true"></advanced-search>
+			<h1>AUDIT LOGS</h1>
+			{{selectedTab}}
+		</div>
 </div>

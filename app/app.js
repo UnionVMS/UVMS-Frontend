@@ -41,7 +41,11 @@ angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocalePr
             resolve: generalRouteResolves
         })
         .when('/audit', {
-            templateUrl: 'partial/audit/audit.html', 
+            templateUrl: 'partial/audit/auditLog/auditLog.html', 
+            resolve: generalRouteResolves
+        })
+        .when('/audit/auditlog', {
+            templateUrl: 'partial/audit/auditLog/auditLog.html', 
             resolve: generalRouteResolves
         })
         .when('/audit/auditconfiguration', {

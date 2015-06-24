@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $location, locale){
+    angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $location, locale){
 
     var setMenu = function(){
         return [
@@ -32,7 +32,7 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $loca
             },
             {
                 'title':locale.getString('header.menu_audit'),
-                'url':'/audit'
+                'url':'/audit/auditlog'
             },
             {
                 'title':locale.getString('header.menu_configuration'),

@@ -1,4 +1,19 @@
 {
     "pagemenu_audit_logs" : "Audit logs",
-    "pagemenu_audit_configuration" : "Configuration"
+    "pagemenu_audit_configuration" : "Configuration",
+    "search_name_placeholder" : "Username",
+    "search_dateFrom_placeholder" : "From", 
+    "search_dateTo_placeholder" : "To",
+    "search_search_button" : "Search",
+    "search_reset" : "Reset",
+    "search_operation" : "Operation",
+    "search_object_type" : "Object type",
+    "tab_all" : "All",
+    "tab_position_reports" : "Position reports",
+    "tab_assets_and_terminals" : "Assets and terminals",
+    "tab_gis" : "GIS",
+    "tab_catch_and_surveillance" : "Catch and surveillance",
+    "tab_alarms" : "Alarms",
+    "tab_access_control" : "Access control"
+
 }
