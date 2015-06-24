@@ -22,6 +22,8 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     //Has form submit been atempted?
     $scope.submitAttempted = false;
     $scope.waitingForCreateResponse = false;
+    $scope.waitingForHistoryResponse = false;
+    $scope.waitingForMobileTerminalsResponse = false;
 
     //MOCK FUNCTION
     $scope.addNewMobileTerminalToVessel = function () {
@@ -29,6 +31,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     };
 
     var getMobileTerminals = function() {
+        $scope.waitingForMobileTerminalsResponse = true;
         mobileTerminalRestService.getMobileTerminalsForVessel().then(function(terminals) {
             $scope.mobileTerminals = terminals;
 
@@ -36,9 +39,11 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
             if ($scope.hasNonUniqueActiveTerminalTypes()) {
                 alertService.showWarningMessage(locale.getString("vessel.warning_multiple_terminals"));
             }
+            $scope.waitingForMobileTerminalsResponse = false;
         },
         function() {
             $scope.mobileTerminals = [];
+            $scope.waitingForMobileTerminalsResponse = false;
         });
     };
 
@@ -152,6 +157,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     //Get all history events for the vessel
     $scope.viewCompleteVesselHistory = function() {
         $scope.isVisible.showCompleteVesselHistoryLink = false;
+        $scope.waitingForHistoryResponse = true;
         vesselRestService.getVesselHistoryListByVesselId($scope.vesselObj.vesselId.value)
             .then(onCompleteVesselHistoryListSuccess, onVesselHistoryListError);
     };
@@ -159,6 +165,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     //Get first 5 history events for the vessel
     var vesselHistorySize = 5;
     var getVesselHistory = function() {
+        $scope.waitingForHistoryResponse = true;
         vesselRestService.getVesselHistoryListByVesselId($scope.vesselObj.vesselId.value, vesselHistorySize)
             .then(onVesselHistoryListSuccess, onVesselHistoryListError);
     };
@@ -169,11 +176,13 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
         if($scope.vesselHistory.length === vesselHistorySize){
             $scope.isVisible.showCompleteVesselHistoryLink = true;
         }
+        $scope.waitingForHistoryResponse = false;
     };
 
     //Success getting complete vessel history
     var onCompleteVesselHistoryListSuccess = function(vesselHistory){
         $scope.vesselHistory = vesselHistory;
+        $scope.waitingForHistoryResponse = false;
     };
 
     //Error getting vessel history

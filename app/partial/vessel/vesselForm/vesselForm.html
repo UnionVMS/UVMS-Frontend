@@ -57,7 +57,7 @@
                                     <span ng-show="isVisible.showCompleteVesselHistoryLink"><a ng-click="viewCompleteVesselHistory()">{{'common.view_all' | i18n}}</a></span>
                                 </div>
                                 <div class="col-md-12">
-                                    <table class="fullWidth">
+                                    <table class="fullWidth" ng-hide="waitingForHistoryResponse">
                                         <thead>
                                             <tr>
                                                 <th>{{'vessel.event_table_header_code' | i18n}}</th>
@@ -71,6 +71,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <loading-icon ng-show="waitingForHistoryResponse"></loading-icon>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +81,7 @@
                                 <div class="col-md-12">
                                     <h5>{{'vessel.connected_mobile_terminals' | i18n}}</h5>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-md-12" ng-hide="waitingForMobileTerminalsResponse">
                                     <table class="fullWidth" ng-show="mobileTerminals.length > 0">
                                         <thead>
                                             <tr>
@@ -102,6 +103,9 @@
                                     <span>
                                         {{'vessel.zero_connected_mobile_terminals' | i18n}}
                                     </span>
+                                </div>
+                                <div class="col-md-12">
+                                    <loading-icon ng-show="waitingForMobileTerminalsResponse"></loading-icon>
                                 </div>
                             </div>
                         </div>
@@ -132,7 +136,8 @@
         <div class="row" ng-if="!isCreateNewMode()">
             <div class="col-md-12">
                 <h3>{{'vessel.connected_mobile_terminals' | i18n}}</h3>
-            </div>
+                <loading-icon ng-show="waitingForMobileTerminalsResponse"></loading-icon>
+            </div>            
             <div class="col-md-12" ng-repeat="mt in mobileTerminals">
                 <ng-include src="'partial/vessel/vesselForm/mobileTerminal.html'"/>
             </div>
