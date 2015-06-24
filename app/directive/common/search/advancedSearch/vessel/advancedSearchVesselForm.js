@@ -44,10 +44,13 @@ angular.module('unionvmsWeb')
             searchService.resetPage();
             searchService.resetSearchCriterias();
             searchService.setDynamic(false);
-            var searchValue = $scope.freeText +"*";
-            searchService.addSearchCriteria("NAME", searchValue);
-            searchService.addSearchCriteria("CFR", searchValue);
-            searchService.addSearchCriteria("IRCS", searchValue);
+            //Add search criterias
+            if(typeof $scope.freeText === 'string' && $scope.freeText.trim().length > 0){
+                var searchValue = $scope.freeText +"*";
+                searchService.addSearchCriteria("NAME", searchValue);
+                searchService.addSearchCriteria("CFR", searchValue);
+                searchService.addSearchCriteria("IRCS", searchValue);
+            }
 
             //Do the search
             $scope.searchfunc();
