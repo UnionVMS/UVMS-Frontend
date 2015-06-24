@@ -112,7 +112,27 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
                 $scope.vesselObj = vesselsInList[i].copy();
             }
         }
-    };    
+    };
+
+    $scope.removeCurrentVesselFromSearchResults = function() {
+        var vesselsInList = $scope.currentSearchResults.vessels;
+        var index;
+        for (var i = 0; i < vesselsInList.length; i++) {
+            if (vesselsInList[i].equals($scope.vesselObj)) {
+                index = i;
+            }
+        }
+        //Remove vessel from list
+        if(angular.isDefined(index)){
+            $scope.currentSearchResults.vessels.splice(index, 1);
+            $scope.vesselObj = undefined;
+        }
+
+        //Removed last vessel from list?
+        if($scope.currentSearchResults.vessels.length === 0){
+            $scope.searchVessels();
+        }
+    };        
 
     //Clear the selection
     $scope.clearSelection = function(){
@@ -154,19 +174,21 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
     };
 
     //Toggle viewing of a vessel
-    $scope.toggleViewVessel = function(item){
+    $scope.toggleViewVessel = function(item, noHideMessage){
         $scope.createNewMode = false;
-        toggleVesselForm(item);
+        toggleVesselForm(item, noHideMessage);
     };
 
-    var toggleVesselForm = function(vessel){
+    var toggleVesselForm = function(vessel, noHideMessage){
         //Create copy of the vessel object so we don't edit the object in the vessel list
         if(vessel){
             $scope.vesselObj = vessel.copy();
         }else{
             $scope.vesselObj = undefined;
         }
-        alertService.hideMessage();
+        if (!noHideMessage) {
+            alertService.hideMessage();
+        }
         $scope.isVisible.vesselForm = !$scope.isVisible.vesselForm;
         $scope.isVisible.search = !$scope.isVisible.search;
     };
