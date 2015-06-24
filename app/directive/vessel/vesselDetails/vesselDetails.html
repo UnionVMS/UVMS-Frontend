@@ -104,15 +104,13 @@
             <dropdown ng-model="unitOfMessaure" no-placeholder-item  items="vesselUnitOfMessures" ng-disabled="disableForm"></dropdown>
         </div>
 
-        <div class="col-md-1 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.power.$dirty) && vesselForm.power.$invalid}">
+        <div class="col-md-2 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.power.$dirty) && vesselForm.power.$invalid}">
             <label>{{ 'vessel.vessel_details_power' | i18n }}</label>
-            <input type="text" name="power" class="form-control" ng-model="vessel.powerMain" ng-maxlength="8" numeric ng-disabled="disableForm">
+            <div class="unit-input">
+                <input type="text" name="power" class="form-control" ng-model="vessel.powerMain" ng-maxlength="8" numeric ng-disabled="disableForm">
+                <div class="unit-box">{{"common.kw" | i18n}}</div>
+            </div>
             <input-validation-message types="numeric,maxlength" input="vesselForm.power"></input-validation-message >
-        </div>
-
-        <div class="col-md-1 nopaddingleft">
-            <label></label>
-            <dropdown ng-model="vessel.effect" no-placeholder-item  items="vesselEffectTypes" ng-disabled="disableForm"></dropdown>
         </div>
 
         <div class="col-md-3">
