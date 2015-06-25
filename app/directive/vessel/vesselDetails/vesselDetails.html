@@ -19,7 +19,7 @@
 
         <div class="col-md-2 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.vesselType.$dirty) && vesselForm.vesselType.$invalid}">
             <label>{{ 'vessel.vessel_details_type' | i18n }}</label>
-            <dropdown name="vesselType" ng-model="vessel.vesselType" initialtext="{{ 'vessel.vessel_details_type' | i18n }}" items="vesselActivitytTypes" ng-disabled="disableForm" required></dropdown>
+            <dropdown name="vesselType" ng-model="vessel.vesselType" initialtext="{{ 'vessel.vessel_details_type' | i18n }}" items="vesselActivitytTypes" ng-disabled="disableForm || true" required></dropdown>
             <input-validation-message types="required" input="vesselForm.vesselType"></input-validation-message>
         </div>
 
@@ -117,10 +117,10 @@
             <label>{{ 'vessel.vessel_details_producer' | i18n }}</label>
             <div class="row">
                 <div class="col-md-6">
-                    <input type="text" name="producername" class="form-control " ng-model="vessel.producerName" ng-disabled="disableForm">            
+                    <input type="text" name="producername" class="form-control " ng-model="vessel.producerName" ng-disabled="disableForm || true">            
                 </div>
                 <div class="col-md-6">
-                    <input type="text" name="producercode" class="form-control" ng-model="vessel.producerCode" ng-disabled="disableForm">
+                    <input type="text" name="producercode" class="form-control" ng-model="vessel.producerCode" ng-disabled="disableForm || true">
                 </div>
             </div>
         </div>
