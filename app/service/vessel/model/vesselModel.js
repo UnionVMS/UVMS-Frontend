@@ -19,7 +19,10 @@ var SOURCE_LOCAL = "LOCAL";
         vessel.billing = data.billing;
         vessel.cfr = data.cfr;
         vessel.countryCode = data.countryCode;
-        vessel.eventHistory = EventHistory.fromDTO(data.eventHistory);
+        if (data.eventHistory) {
+            vessel.eventHistory = EventHistory.fromDTO(data.eventHistory);
+        }
+
         vessel.externalMarking = data.externalMarking;
         vessel.grossTonnage = data.grossTonnage;
         vessel.hasIrcs = data.hasIrcs;
