@@ -144,7 +144,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         $scope.submitAttempted = true;
         if ($scope.confirmSend) {
             var movement = $scope.createManualMovement();
-            manualPositionRestService.sendMovement(movement).then(function() {
+            manualPositionRestService.saveAndSendMovement(movement).then(function() {
                 $scope.sendSuccess = true;
                 $scope.setSuccessText(locale.getString("movement.manual_position_send_success"), $scope.closeModal);
             }, function() {

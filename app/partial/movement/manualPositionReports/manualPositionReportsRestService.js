@@ -146,7 +146,7 @@ angular.module('unionvmsWeb')
             console.error(error);
             deferred.reject(error);
         });
-        return deferred.promise;  
+        return deferred.promise;
     };
 
     var sendMovement = function(movement) {
@@ -157,10 +157,37 @@ angular.module('unionvmsWeb')
                 return;
             }
 
-            deferred.resolve();
+            deferred.resolve(ManualPosition.fromJson(response.data));
         },
-        function() {
-            deferred.reject();
+        function(error) {
+            deferred.reject(error);
+        });
+
+        return deferred.promise;
+    };
+
+    var saveAndSendMovement = function(movement) {
+        // Update or create movement
+        var createUpdatePromise;
+        if (movement.guid) {
+            createUpdatePromise = updateManualMovement(movement);
+        }
+        else {
+            createUpdatePromise = createManualMovement(movement);
+        }
+
+        // Send the saved movement
+        var deferred = $q.defer();
+        createUpdatePromise.then(function(savedMovement) {
+            sendMovement(savedMovement).then(function(sentMovement) {
+                deferred.resolve(sentMovement);
+            },
+            function(sendError) {
+                deferred.reject(sendError);
+            });
+        },
+        function(createUpdateError) {
+            deferred.reject(createUpdateError);
         });
 
         return deferred.promise;
@@ -171,7 +198,7 @@ angular.module('unionvmsWeb')
         updateManualMovement: updateManualMovement,
         getManualPositionList : getManualPositionList,
         deleteManualPositionReport : deleteManualPositionReport,
-        sendMovement: sendMovement
+        saveAndSendMovement: saveAndSendMovement
      };
 
 });
