@@ -1,4 +1,4 @@
-var app = angular.module('unionvmsWeb').factory('mobileTerminalVesselService', function(vesselRestService, $q) {
+var app = angular.module('unionvmsWeb').factory('mobileTerminalVesselService', function(vesselRestService, $q, GetListRequest, VesselListPage) {
 
     var getVesselsForListOfMobileTerminals = function(mobileTerminals){
         var deferred = $q.defer();
