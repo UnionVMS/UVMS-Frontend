@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale, Audit) {
+angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale, Audit, AuditLogModal) {
 
 	// ************ Page setup ************
 
@@ -90,6 +90,10 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale,
 
     $scope.loadNextPage = function() {
         // TODO
+    };
+
+    $scope.showAuditModal = function(audit) {
+        AuditLogModal.show(audit);
     };
 
 });
