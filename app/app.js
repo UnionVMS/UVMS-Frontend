@@ -16,7 +16,7 @@ angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocalePr
             templateUrl:'partial/today/today.html',
             resolve: generalRouteResolves
         })
-        .when('/vessel',{
+        .when('/assets',{
             templateUrl:'partial/vessel/vessel.html',
             resolve: generalRouteResolves
         })

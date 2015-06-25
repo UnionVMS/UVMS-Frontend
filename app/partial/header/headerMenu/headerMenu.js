@@ -19,8 +19,8 @@
                 'url':'/user'
             },
             {
-                'title':locale.getString('header.menu_vessel'),
-                'url':'/vessel'
+                'title':locale.getString('header.menu_assets'),
+                'url':'/assets'
             },
             {
                 'title':locale.getString('header.menu_alarmconditions'),
