@@ -19,7 +19,8 @@
 
         <div class="col-md-2 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.vesselType.$dirty) && vesselForm.vesselType.$invalid}">
             <label>{{ 'vessel.vessel_details_type' | i18n }}</label>
-            <dropdown name="vesselType" ng-model="vessel.vesselType" initialtext="{{ 'vessel.vessel_details_type' | i18n }}" items="vesselActivitytTypes" ng-disabled="disableForm || true" required></dropdown>
+            <dropdown name="vesselType" ng-model="vessel.vesselType" initialtext="{{ 'vessel.vessel_details_type' | i18n }}" items="vesselActivitytTypes" ng-disabled="disableForm || true"></dropdown>
+            <!--TODO: Add required to type input when enabling it!-->
             <input-validation-message types="required" input="vesselForm.vesselType"></input-validation-message>
         </div>
 
