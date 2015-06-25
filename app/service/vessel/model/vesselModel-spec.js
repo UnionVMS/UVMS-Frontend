@@ -4,6 +4,7 @@ describe('VesselModel', function() {
 
     var vesselData = {
         "vesselId": {
+            "guid" : "50c884e8-f03d-4222-841b-6ad1f2263694",
             "type": "GUID",
             "value": "584f9a8e-d53a-448a-8b21-866f2a492987"
         },
@@ -49,6 +50,7 @@ describe('VesselModel', function() {
 
         expect(vessel.eventHistory).toBeDefined();
 
+        expect(vessel.vesselId.guid).toEqual(vesselData.vesselId.guid);
         expect(vessel.vesselId.value).toEqual(vesselData.vesselId.value);
         expect(vessel.vesselId.type).toEqual(vesselData.vesselId.type);
 
@@ -84,6 +86,7 @@ describe('VesselModel', function() {
 
         expect(vesselCopy.eventHistory).toBeDefined();
 
+        expect(vesselCopy.vesselId.guid).toEqual(origVessel.vesselId.guid);
         expect(vesselCopy.vesselId.value).toEqual(origVessel.vesselId.value);
         expect(vesselCopy.vesselId.type).toEqual(origVessel.vesselId.type);
 
@@ -112,5 +115,41 @@ describe('VesselModel', function() {
         expect(vesselCopy.vesselType).toEqual(origVessel.vesselType);
 
     }));
-      
+
+    it("getGuid should return the vessel guid", inject(function(Vessel) {
+        var vessel = Vessel.fromJson(vesselData);
+        expect(vessel.getGuid()).toEqual(vesselData.vesselId.guid);
+
+        var newVessel = new Vessel();
+        expect(newVessel.getGuid()).toBeUndefined();
+    }));
+
+    it("isLocalSource should return true only when source is LOCAL", inject(function(Vessel) {
+        var vessel = Vessel.fromJson(vesselData);
+        expect(vessel.isLocalSource()).toEqual(true);
+
+        vessel.source = "National";
+        expect(vessel.isLocalSource()).toEqual(false);
+    }));
+
+    it("equals should return true when two vessels have the same guid", inject(function(Vessel) {
+        var vessel = Vessel.fromJson(vesselData);
+        var vessel2 = Vessel.fromJson(vesselData);
+        expect(vessel.equals(vessel2)).toEqual(true);
+    }));    
+     
+    it("equals should return true when two vessels have the same guid even if values are different", inject(function(Vessel) {
+        var vessel = Vessel.fromJson(vesselData);
+        var vessel2 = Vessel.fromJson(vesselData);
+        vessel2.ircs = "CHANGED";
+        expect(vessel.equals(vessel2)).toEqual(true);
+    }));  
+
+    it("equals should return false when two vessels have different guids", inject(function(Vessel) {
+        var vessel = Vessel.fromJson(vesselData);
+        var vessel2 = Vessel.fromJson(vesselData);
+        vessel2.vesselId.guid = "CHANGED";
+        expect(vessel.equals(vessel2)).toEqual(false);
+    }));    
+
 });

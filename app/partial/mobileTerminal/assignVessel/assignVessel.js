@@ -113,14 +113,14 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
     };
 
     $scope.assignToSelectedVesselWithComment = function(comment) {
-        var validAssignment = $scope.currentMobileTerminal && $scope.selectedVessel.ircs;
+        var validAssignment = angular.isDefined($scope.currentMobileTerminal) && angular.isDefined($scope.selectedVessel.getGuid());
         if (!validAssignment) {
-            console.error("Vessel is missing internalId so assigning the mobile terminal to the vessel is not possible.");
+            alertService.showErrorMessage(locale.getString('mobileTerminal.assign_vessel_message_on_missing_guid_error'));
             return;
         }
 
-        mobileTerminalRestService.assignMobileTerminal($scope.currentMobileTerminal, $scope.selectedVessel.vesselId.type, $scope.selectedVessel.vesselId.value, comment).then(function() {
-            $scope.currentMobileTerminal.assignToVesselById($scope.selectedVessel.vesselId.type, $scope.selectedVessel.vesselId.value);
+        mobileTerminalRestService.assignMobileTerminal($scope.currentMobileTerminal, $scope.selectedVessel.getGuid(), comment).then(function() {
+            $scope.currentMobileTerminal.assignToVesselByVesselGuid($scope.selectedVessel.getGuid());
             $scope.currentMobileTerminal.associatedVessel = $scope.selectedVessel;
             $scope.toggleAssignVessel();
             $scope.goBackToAssignVesselSearchResultsClick();

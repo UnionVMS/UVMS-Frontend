@@ -15,22 +15,13 @@ angular.module('unionvmsWeb')
             return this.vessels.length;
         };        
 
-        //Find a vessel in the list of vessels by it's id and idType
-        VesselListPage.prototype.getVesselById = function(id, idType) {
+        //Find a vessel in the list of vessels by it's guid
+        VesselListPage.prototype.getVesselByGuid = function(guid) {
             var foundVessel;
             $.each(this.vessels, function(index, vessel){
-                if(idType === 'GUID'){
-                    if(vessel.vesselId.type === 'GUID' && vessel.vesselId.value === id){
-                        foundVessel = vessel;
-                        return false;
-                    }
-                }
-                //Check attribute on vessel object
-                else{
-                    if(vessel[idType.toLowerCase()] === id){
-                        foundVessel = vessel;
-                        return false;
-                    }
+                if(vessel.getGuid() === guid){
+                    foundVessel = vessel;
+                    return false;
                 }
             });
 

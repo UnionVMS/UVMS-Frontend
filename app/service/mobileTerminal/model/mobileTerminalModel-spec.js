@@ -41,11 +41,7 @@ describe('MobileTerminalModel', function() {
                 "value": "582"
             }                        
         ],
-        "carrierId": {
-            "carrierType": "VESSEL",
-            "idType": "IRCS",
-            "value": "MOCK-IRCS"
-        },
+        "connectId": "ebeec8ef-2eab-4d4f-9d6d-994ad8b57c34",
         "channels": [
             {
                 "attributes": [
@@ -124,7 +120,7 @@ describe('MobileTerminalModel', function() {
         var mobileTerminal = new MobileTerminal();
 
         expect(mobileTerminal.guid).toBeUndefined();
-        expect(mobileTerminal.carrierId).toBeUndefined();
+        expect(mobileTerminal.connectId).toBeUndefined();
         expect(Object.keys(mobileTerminal.attributes).length).toEqual(0);
         expect(mobileTerminal.channels.length).toEqual(1);
         expect(mobileTerminal.active).toEqual(true);
@@ -138,9 +134,7 @@ describe('MobileTerminalModel', function() {
         expect(mt.type).toBe("INMARSAT_C");
         expect(mt.active).toBe(true);
 
-        expect(mt.carrierId.carrierType).toBe("VESSEL");
-        expect(mt.carrierId.idType).toBe("IRCS");
-        expect(mt.carrierId.value).toBe("MOCK-IRCS");
+        expect(mt.connectId).toBe("ebeec8ef-2eab-4d4f-9d6d-994ad8b57c34");
 
         // Check that all attributes were parsed.
         expect(mt.attributes.TRANSCEIVER_TYPE).toBe("Sailor 6140");
@@ -182,25 +176,21 @@ describe('MobileTerminalModel', function() {
         expect(angular.equals(dto.attributes, mobileTerminalData.attributes)).toBeTruthy();
     }));
 
-    it('should produce a carrier assignment/unassignment data transfer object', inject(function(MobileTerminal, CarrierId) {
+    it('should produce a carrier assignment/unassignment data transfer object', inject(function(MobileTerminal) {
         var mobileTerminal = MobileTerminal.fromJson(mobileTerminalData);
-        var carrierId = CarrierId.createVesselWithIrcs("ASDASD");
-        var dto = mobileTerminal.getCarrierAssingmentDto(carrierId);
+        var vesselGuid = "f45tc34-4fr534-5f35f345-asd324";
+        var dto = mobileTerminal.getCarrierAssingmentDto(vesselGuid);
 
         expect(dto.mobileTerminalId.guid).toEqual("1234-5678-9012-3456-7891-2345-678901");
-        expect(dto.carrierId.carrierType).toEqual("VESSEL");
-        expect(dto.carrierId.idType).toEqual("IRCS");
-        expect(dto.carrierId.value).toEqual("ASDASD");
+        expect(dto.connectId).toEqual(vesselGuid);
     }));
 
-    it('assignToVesselById should create a carrierId with correct values', inject(function(MobileTerminal, CarrierId) {
+    it('assignToVesselByVesselGuid should set connectId to correct value', inject(function(MobileTerminal) {
         var mobileTerminal = MobileTerminal.fromJson(mobileTerminalData);
-        var guid = "skdjfs-sdf534fg-345te-tg345tg3";
-        mobileTerminal.assignToVesselById("GUID", guid);
+        var vesselGuid = "f45tc34-4fr534-5f35f345-asd324";
+        mobileTerminal.assignToVesselByVesselGuid(vesselGuid);
 
-        expect(mobileTerminal.carrierId.carrierType).toEqual("VESSEL");
-        expect(mobileTerminal.carrierId.idType).toEqual("GUID");
-        expect(mobileTerminal.carrierId.value).toEqual(guid);
+        expect(mobileTerminal.connectId).toEqual(vesselGuid);
     }));
 
     it('should produce an activating/inactivating data transfer object', inject(function(MobileTerminal) {

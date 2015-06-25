@@ -255,7 +255,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
                 pollingService.clearSelection();
                 $.each($scope.selectedMobileTerminals, function(index, item){
                     //Only add mobile terminals that are assigned to a carrier
-                    if(angular.isDefined(item.carrierId)){
+                    if(angular.isDefined(item.connectId)){
                         pollingService.addMobileTerminalToSelection(item);
                     }
                 });

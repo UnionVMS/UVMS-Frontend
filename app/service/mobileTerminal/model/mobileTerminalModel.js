@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationChannel, CarrierId) {
+angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationChannel) {
 
         function MobileTerminal(){
             this.attributes = {};
@@ -6,7 +6,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             //Add an initial channel
             this.channels.push(new CommunicationChannel());
             this.active = true;
-            this.carrierId = undefined;
+            this.connectId = undefined;
             this.associatedVessel = undefined;
             this.guid = undefined;
             this.type = undefined;
@@ -19,11 +19,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             mobileTerminal.guid = data.mobileTerminalId.guid;
             mobileTerminal.source = data.source;
             mobileTerminal.type = data.type;
-
-            //CarrierId
-            if (angular.isDefined(data.carrierId)) {
-                mobileTerminal.carrierId = CarrierId.fromJson(data.carrierId);
-            }
+            mobileTerminal.connectId = data.connectId;
 
             //Attributes
             if (data.attributes !== null) {
@@ -107,13 +103,11 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
 
             copy.type = this.type;
             copy.guid = this.guid;
+            copy.connectId = this.connectId;
             copy.channels = this.channels.map(function(ch) {
                 return ch.copy();
             });
 
-            if (this.carrierId) {
-                copy.carrierId = this.carrierId.copy();
-            }
 
             return copy;
         };
@@ -123,19 +117,19 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             return JSON.stringify({ guid: this.guid });
         };
 
-        MobileTerminal.prototype.getCarrierAssingmentDto = function(carrierId) {
+        MobileTerminal.prototype.getCarrierAssingmentDto = function(connectId) {
             return {
                 mobileTerminalId: { guid: this.guid },
-                carrierId: carrierId
+                connectId: connectId
             };
         };
 
-        MobileTerminal.prototype.toAssignJson = function(carrierId){
-            return JSON.stringify(this.getCarrierAssingmentDto(carrierId));
+        MobileTerminal.prototype.toAssignJson = function(connectId){
+            return JSON.stringify(this.getCarrierAssingmentDto(connectId));
         };
 
         MobileTerminal.prototype.toUnassignJson = function() {
-            return JSON.stringify(this.getCarrierAssingmentDto(this.carrierId));
+            return JSON.stringify(this.getCarrierAssingmentDto(this.connectId));
         };
 
         MobileTerminal.prototype.setSystemTypeToInmarsatC = function(){
@@ -170,18 +164,18 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
 
         //Unassign the mobileTerminal from its carrier
         MobileTerminal.prototype.unassign = function(){
-            this.carrierId = undefined;
+            this.connectId = undefined;
             this.associatedVessel = undefined;
         };
 
         //Check if the mobileTerminal is assigned to a carrier
         MobileTerminal.prototype.isAssigned = function(){
-            return this.carrierId !== undefined && this.carrierId.value !== undefined;
+            return this.connectId !== undefined && typeof this.connectId === 'string' && this.connectId.trim().length > 0;
         };
 
-        //Assign the mobileTerminal to a vessel by id type and id
-        MobileTerminal.prototype.assignToVesselById = function(idType, idValue){
-            this.carrierId = CarrierId.createVesselFromIdTypeAndId(idType, idValue);
+        //Assign the mobileTerminal to a vessel by a vesselGuid
+        MobileTerminal.prototype.assignToVesselByVesselGuid = function(connectId){
+            this.connectId = connectId;
         };
 
         //Set the attributes

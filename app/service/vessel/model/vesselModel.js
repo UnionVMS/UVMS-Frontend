@@ -37,6 +37,7 @@ var SOURCE_LOCAL = "LOCAL";
         vessel.safetyGrossTonnage = data.safetyGrossTonnage;
         vessel.source = data.source;
         vessel.vesselId = {
+            guid : data.vesselId.guid,
             type : data.vesselId.type,
             value : data.vesselId.value
         };
@@ -110,6 +111,7 @@ var SOURCE_LOCAL = "LOCAL";
         copy.source = this.source;
         if(this.vesselId){
             copy.vesselId = {
+                guid : this.vesselId.guid,
                 type : this.vesselId.type,
                 value : this.vesselId.value
             };
@@ -118,14 +120,16 @@ var SOURCE_LOCAL = "LOCAL";
         return copy;
     };
 
-    Vessel.prototype.getId = function() {
-        return this.vesselId.value;
+    Vessel.prototype.getGuid = function() {
+        if(angular.isDefined(this.vesselId)){
+            return this.vesselId.guid;
+        }
     };
 
     //Check if the vessel is equal another vessel
-    //Equal means same id
+    //Equal means same guid
     Vessel.prototype.equals = function(item) {
-        return this.vesselId.value === item.vesselId.value && this.vesselId.type === item.vesselId.type;
+        return this.vesselId.guid === item.vesselId.guid;
     };
 
     Vessel.prototype.isLocalSource = function() {

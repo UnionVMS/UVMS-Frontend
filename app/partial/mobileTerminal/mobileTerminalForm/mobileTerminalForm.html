@@ -33,7 +33,7 @@
 
     <div class="mobileTerminalFormContainer">
 
-        <div class="borderSection" ng-show="currentMobileTerminal.carrierId && !isVisible.assignVessel">        
+        <div class="borderSection" ng-show="currentMobileTerminal.connectId && !isVisible.assignVessel">        
             <div class="row assignedVesselHeader">
                 <div class="col-md-6">
                     <label class="section">{{'mobileTerminal.assigned_vessel' | i18n | uppercase}}</label>
@@ -61,7 +61,7 @@
         </div>
 
         <div class="row" ng-hide="isVisible.assignVessel">
-            <div class="col-md-12" ng-hide="currentMobileTerminal.carrierId">
+            <div class="col-md-12" ng-hide="currentMobileTerminal.connectId">
                 <span id="assignVesselLink" ng-click="toggleAssignVessel()" ng-show="currentMobileTerminal.guid">{{'mobileTerminal.assign_vessel' | i18n}}</span>
             </div>    
         </div>

@@ -13,12 +13,17 @@ describe('AssignvesselCtrl', function() {
 		channels: []
 	};
 
-    beforeEach(inject(function($rootScope, $controller, MobileTerminal) {
+    beforeEach(inject(function($rootScope, $controller, MobileTerminal, Vessel) {
 		scope = $rootScope.$new();
 		ctrl = $controller('AssignvesselCtrl', {$scope: scope});
 		scope.currentMobileTerminal = new MobileTerminal();
 		scope.toggleAssignVessel = function() {};
-		scope.selectedVessel = { "vesselId": { "type": "ID","value": "123" }, "ircs": "123" };
+		scope.selectedVessel = new Vessel();
+        scope.selectedVessel.vesselId = {
+            guid : "asdasd-234dsaf234we-234234-24",
+            type : "IRCS",
+            value : "TESTIRCS1"
+        };
     }));	
 
 	it('should assign mobile terminal when assigning to selected vessel', inject(function($q, mobileTerminalRestService, locale, alertService) {

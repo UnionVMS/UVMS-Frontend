@@ -1,16 +1,16 @@
 angular.module('unionvmsWeb')
 .factory('GetPollableListRequest', function() {
 
-    function GetPollableListRequest(page, listSize, carrierIds){
+    function GetPollableListRequest(page, listSize, connectIds){
         this.page = angular.isDefined(page) ? page : 1;
         this.listSize = angular.isDefined(listSize) ? listSize : 20;
-        this.carrierIds = angular.isDefined(carrierIds) ? carrierIds : [];
+        this.connectIds = angular.isDefined(connectIds) ? connectIds : [];
     }
 
     GetPollableListRequest.prototype.DTOForPollable = function(){
         return {
             pagination : {page: this.page, listSize: this.listSize},
-            carrierId : this.carrierIds
+            connectIdList : this.connectIds
         };
     };
 
@@ -19,8 +19,8 @@ angular.module('unionvmsWeb')
         return this.page;
     };
 
-    GetPollableListRequest.prototype.addCarrierId = function(carrierId){
-            this.carrierIds.push(carrierId);
+    GetPollableListRequest.prototype.addConnectId = function(connectId){
+            this.connectIds.push(connectId);
     };
 
     return GetPollableListRequest;

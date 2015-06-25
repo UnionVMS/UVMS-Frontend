@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb')
-.factory('Poll', function(locale, CarrierId) {
+.factory('Poll', function(locale) {
 
     function Poll(){
         this.id = undefined;
@@ -7,7 +7,6 @@ angular.module('unionvmsWeb')
         this.comment = undefined;
         this.mobileTerminalId = undefined;
         this.attributes = {};
-        this.carrierId = new CarrierId();
     }
 
     Poll.fromAttributeList = function(attrs) {
@@ -38,8 +37,6 @@ angular.module('unionvmsWeb')
         $.each(data.attributes, function(index, attribute){
             poll.attributes[attribute.key] = attribute.value;
         });
-
-        this.carrierId = CarrierId.fromJson(data.carrierId);
 
 
         return poll;

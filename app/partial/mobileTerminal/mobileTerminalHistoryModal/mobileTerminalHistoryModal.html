@@ -35,7 +35,7 @@
                         <td>{{item.eventCode}}</td>
                         <td>
                             <span ng-show="item.mobileTerminal.associatedVessel">{{item.mobileTerminal.associatedVessel.name}}</span>
-                            <span ng-show="item.mobileTerminal.carrierId && !item.mobileTerminal.associatedVessel">{{item.mobileTerminal.carrierId.carrierType}} with {{item.mobileTerminal.carrierId.idType}}: {{item.mobileTerminal.carrierId.value}}</span>
+                            <span ng-show="item.mobileTerminal.connectId && !item.mobileTerminal.associatedVessel">ConnectId: {{item.mobileTerminal.connectId}}</span>
                         </td>
                         <td>{{item.mobileTerminal.channels[0].ids.DNID}}</td>
                         <td>{{item.mobileTerminal.channels[0].ids.MEMBER_ID}}</td> 

@@ -79,21 +79,20 @@ describe('Poll', function() {
             {
                 "key": "USER",
                 "value": "username"
-            }
+            },
+            {
+                "key": "CONNECTION_ID",
+                "value": "584f9a8e-d53a-448a-8b21-866f2a492987"
+            }            
         ],
-        "carrierId": {
-            carrierType: "VESSEL",
-            idType: "IRCS",
-            value: "1234"
-        }
     };
 
     it('fromJson should build a correct object', inject(function(Poll) {
         var poll = Poll.fromJson(responseData);
         expect(poll.id).toEqual(responseData.pollId);
         expect(poll.type).toEqual(responseData.pollType);
-        expect(poll.comment).toEqual(responseData.comment);        
-        expect(Object.keys(poll.attributes).length).toEqual(9);
+        expect(poll.comment).toEqual(responseData.comment);
+        expect(Object.keys(poll.attributes).length).toEqual(10);
         expect(poll.attributes["FREQUENCY"]).toEqual(7200);               
     }));
 

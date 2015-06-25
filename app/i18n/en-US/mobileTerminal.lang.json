@@ -35,6 +35,7 @@
     "add_new_alert_message_on_load_channel_names_error" : "You cannot create a mobile terminal at the moment. Error information: Failed to load channel names from the server.",
     "assign_vessel_message_on_success" : "The mobile terminal was successfully assigned to the carrier.",
     "assign_vessel_message_on_error" : "The mobile terminal could not be assigned to the carrier.",
+    "assign_vessel_message_on_missing_guid_error" : "Vessel is missing guid so assigning the mobile terminal to the vessel is not possible.",
     "form_inmarsatc_satellite_number_label" : "Satellite number",
     "form_inmarsatc_serial_no_label" : "Serial no",
     "form_inmarsatc_transceiver_type_label" : "Transceiver type",

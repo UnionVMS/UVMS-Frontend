@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, CarrierId, SearchResultListPage) {
+angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage) {
 
 	var getListRequest = new GetListRequest(1, 20, true, []),
         advancedSearchObject  = {};
@@ -76,10 +76,9 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
                             return deferred.resolve(new SearchResultListPage());
                         }
 
-                        //Iterate over the vessels and add new carrierId
+                        //Iterate over the vessels and add vessel guids to the list of connectIds
                         $.each(vessels, function(index, vessel){
-                            var carId = CarrierId.createVesselFromIdTypeAndId(vessel.vesselId.type, vessel.vesselId.value);
-                            getPollablesListRequest.addCarrierId(carId);
+                            getPollablesListRequest.addConnectId(vessel.vesselId.guid);
                         });
                         //Get pollable channels
                         pollingRestService.getPollablesMobileTerminal(getPollablesListRequest).then(
@@ -165,9 +164,11 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
                             return deferred.resolve(new MobileTerminalListPage());
                         }
 
-                        //Iterate over the vessels to add new search criterias with vesselIdType as key
+                        //Iterate over the vessels to add new search criterias with CONNECT_ID as key and vessel GUID as value
                         $.each(vessels, function(index, vessel){
-                            outerThis.addSearchCriteria(vessel.vesselId.type, vessel.vesselId.value);
+                            if(angular.isDefined(vessel.vesselId.guid)){
+                                outerThis.addSearchCriteria("CONNECT_ID", vessel.vesselId.guid);
+                            }
                         });
                         //Get mobile terminals
                         mobileTerminalRestService.getMobileTerminalList(getListRequest).then(
