@@ -4,6 +4,7 @@ angular.module('unionvmsWeb')
     function PollChannel(){
         this.vesselName = undefined;
         this.vesselIrcs = undefined;
+        this.connectId = undefined;
         this.mobileTerminalType = undefined;
         this.guid = undefined;
         this.attributes = {};
@@ -18,6 +19,7 @@ angular.module('unionvmsWeb')
 
         pollChannel.vesselName = data.vesselName; 
         pollChannel.vesselIrcs = data.vesselIrcs;
+        pollChannel.connectId = data.connectId;
         pollChannel.mobileTerminalType = data.mobileTerminalType;
         pollChannel.guid = data.guid;
         

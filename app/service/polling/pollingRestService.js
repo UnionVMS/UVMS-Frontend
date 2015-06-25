@@ -36,7 +36,7 @@ angular.module('unionvmsWeb')
             }
         };
     })
-    .service('pollingRestService',function($q, pollingRestFactory, Poll, PollChannel, PollListPage, SearchResultListPage){
+    .service('pollingRestService',function($q, pollingRestFactory, Poll, PollChannel, PollListPage, SearchResultListPage, vesselRestService, GetListRequest){
 
         var setProgramPollStatusSuccess = function(response, deferred){
             if(response.code !== 200){
@@ -46,6 +46,34 @@ angular.module('unionvmsWeb')
 
             var updatedProgramPoll = Poll.fromAttributeList(response.data.value);
             deferred.resolve(updatedProgramPoll);
+        };
+
+        var updatePollChannelsWithVesselDetails = function(pollChannels) {
+            var request = new GetListRequest(1, pollChannels.length, false, []);
+            for (var i = 0; i < pollChannels.length; i++) {
+                if (pollChannels[i].connectId) {
+                    request.addSearchCriteria("GUID", pollChannels[i].connectId);
+                }
+            }
+
+            var deferred = $q.defer();
+            vesselRestService.getVesselList(request).then(function(page) {
+                for (var i = 0; i < pollChannels.length; i++) {
+                    var pollChannel = pollChannels[i];
+                    var vessel = page.getVesselByGuid(pollChannel.connectId);
+                    if (vessel) {
+                        pollChannel.vesselName = vessel.name;
+                        pollChannel.vesselIrcs = vessel.ircs;
+                    }
+                }
+
+                deferred.resolve(pollChannels);
+            },
+            function(error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
         };
 
         var pollingRestService = {
@@ -136,27 +164,37 @@ angular.module('unionvmsWeb')
             getPollablesMobileTerminal : function(getPollableListRequest){
                 var deferred = $q.defer();
                 pollingRestFactory.getPollableTerminals().list(getPollableListRequest.DTOForPollable(),function(response) {
-                    if(response.code !== 200){
+                    if (response.code !== 200) {
                         deferred.reject("Invalid response status");
                         return;
                     }
-                        var pollables = [];
-                        //Create a ListPage object from the response
-                        if(angular.isArray(response.data.pollableChannels)) {
-                            for (var i = 0; i < response.data.pollableChannels.length; i++) {
-                                pollables.push(PollChannel.fromJson(response.data.pollableChannels[i]));
-                            }
+                    var pollables = [];
+                    //Create a ListPage object from the response
+                    if (angular.isArray(response.data.pollableChannels)) {
+                        for (var i = 0; i < response.data.pollableChannels.length; i++) {
+                            pollables.push(PollChannel.fromJson(response.data.pollableChannels[i]));
                         }
+                    }
 
+                    var resolveChannels = function(channels) {
                         var currentPage = response.data.currentPage;
                         var totalNumberOfPages = response.data.totalNumberOfPages;
-                        var searchResultListPage = new SearchResultListPage(pollables, currentPage, totalNumberOfPages);
-                    
-                    deferred.resolve(searchResultListPage);
-                }, function(error) {
+                        var searchResultListPage = new SearchResultListPage(channels, currentPage, totalNumberOfPages);
+                        deferred.resolve(searchResultListPage);
+                    };
+
+                    updatePollChannelsWithVesselDetails(pollables).then(function(pollablesWithVesselDetails) {
+                        resolveChannels(pollablesWithVesselDetails);
+                    },
+                    function(error) {
+                        resolveChannels(pollables);
+                    });
+                },
+                function(error) {
                     console.error("Error");
                     deferred.reject(error);
                 });
+
                 return deferred.promise;
             },
             createPolls: function(polls) {
