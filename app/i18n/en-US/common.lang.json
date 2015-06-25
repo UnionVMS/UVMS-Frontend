@@ -60,5 +60,8 @@
     "validation_invalid_pattern" : "Invalid pattern",
     "view_on_map" : "View on map",
     "view_all" : "View all",
-    "yes" : "Yes"
+    "yes" : "Yes",
+    "multiple_selected" :"Two or more selected",
+    "one_selected" : "One selected",
+    "multiple_select_dropdown_default_text" : "Select"
 }

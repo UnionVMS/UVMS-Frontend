@@ -15,12 +15,13 @@
     "tab_catch_and_surveillance" : "Catch and surveillance",
     "tab_alarms" : "Alarms",
     "tab_access_control" : "Access control",
-
+    "search_checkall" : "Check all",
+    "search_uncheckall" : "Uncheck all",
+    "tab_access_control" : "Access control",
     "column_username": "Username",
     "column_operation": "Operation",
     "column_object_type": "Object type",
     "column_date": "Date",
     "column_object_affected": "Object affected",
-
     "show_object": "See object"
 }

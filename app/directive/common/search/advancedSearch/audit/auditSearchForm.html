@@ -1,13 +1,13 @@
 <div class="auditSearchForm" ng-controller="AuditsearchformCtrl">
 	<div class="row">
 		<div class="col-md-2">
-			<input type="text" placeholder="{{'audit.search_name_placeholder' | i18n}}" class="form-control" tabindex="1" ng-model="advancedSearchObject.USERNAME">
+			<input type="text" placeholder="{{'audit.search_name_placeholder' | i18n}}" class="form-control" tabindex="1" ngDisable-model="advancedSearchObject.USERNAME">
 		</div>
 		<div class="col-md-2">
-	    	<dropdown ng-model="operation" items="operations" initialtext="{{'audit.search_operation' | i18n}}"></dropdown>
+	    	<multiselect-Drop-Down class="fullWidth" model="selectedItems" pre_selected="member.operations" options="operations" initialtext="{{'audit.search_operation' | i18n}}" checkall="{{'audit.search_checkall' | i18n}}" uncheckall="{{'audit.search_uncheckall' | i18n}}"></multiselect-Drop-Down>
 		</div>
 		<div class="col-md-2">
-	    	<dropdown ng-model="objectType" items="objectTypes" initialtext="{{'audit.search_object_type' | i18n}}"></dropdown>
+			<multiselect-Drop-Down class="fullWidth" model="selectedObjectTypes" pre_selected="member.objecttypes" options="objectTypes" initialtext="{{'audit.search_object_type' | i18n}}" checkall="{{'audit.search_checkall' | i18n}}" uncheckall="{{'audit.search_uncheckall' | i18n}}"></multiselect-Drop-Down>
 		</div>
 		<div class="col-md-2">
 	    	<datepicker-input model="dateFrom" placeholder="{{'audit.search_dateFrom_placeholder' | i18n}}" ></datepicker-input>
@@ -22,12 +22,9 @@
 			<a href="">{{'audit.search_reset' | i18n}}</a>
 		</div>
 	<div>
-	<!--<div class="row">
-		<div class="col-md-2">
-	    	<multiselect-Drop-Down model="operations" pre_selected="selectedItems" options="operations" initialtext="FTW"></multiselect-Drop-Down>
-		</div>
-	</div>
+		
 	<pre> Selected values = {{selectedItems | json}}</pre>
-	<pre>{{objectTypes | json}}</pre>
-	-->
+	<pre> Selected objtype = {{selectedObjectTypes | json}}</pre>
+
+	
 </div>
