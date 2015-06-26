@@ -132,7 +132,7 @@
 
         <div class="row" ng-if="!isCreateNewMode()">
             <div class="col-md-12">
-                <h3>{{'vessel.connected_mobile_terminals' | i18n}}</h3>
+                <h3 ng-show="mobileTerminals.length > 0">{{'vessel.connected_mobile_terminals' | i18n}}</h3>
                 <loading-icon ng-show="waitingForMobileTerminalsResponse"></loading-icon>
             </div>            
             <div class="col-md-12" ng-repeat="mt in mobileTerminals">

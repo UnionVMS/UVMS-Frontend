@@ -1,9 +1,5 @@
 <div class="col-md-12 vesselDetailsContainer">
     <div class="row">
-        <div class="col-md-1" ng-hide="!vessel.vesselId.value">
-            <label>ID</label>
-            <input type="text" name="vesselid" class="form-control" ng-model="vessel.vesselId.value" ng-disabled="true">
-        </div>
 
         <div class="col-md-2 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.name.$dirty) && vesselForm.name.$invalid}">
             <label>{{ 'vessel.vessel_details_name' | i18n }}</label>
@@ -115,17 +111,16 @@
         </div>
 
         <div class="col-md-3">
-            <label>{{ 'vessel.vessel_details_producer' | i18n }}</label>
             <div class="row">
-                <div class="col-md-6">
-                    <input type="text" name="producername" class="form-control " ng-model="vessel.producerName" ng-disabled="disableForm || true">            
-                </div>
-                <div class="col-md-6">
+                <label class="col-md-6">
+                    {{ 'vessel.po_name' | i18n }}
+                    <input type="text" name="producername" class="form-control " ng-model="vessel.producerName" ng-disabled="disableForm || true">
+                </label>
+                <label  class="col-md-6">
+                    {{ 'vessel.po_code' | i18n }}
                     <input type="text" name="producercode" class="form-control" ng-model="vessel.producerCode" ng-disabled="disableForm || true">
-                </div>
+                </label>
             </div>
         </div>
-        
-
     </div>
 </div>
