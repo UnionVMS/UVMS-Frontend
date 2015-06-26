@@ -42,7 +42,7 @@ $scope.selectedMovements = [];
     $scope.isChecked = function(item){
         var checked = false;
         $.each($scope.selectedMovements, function(index, movement){
-            if(movement.isEqualMovement(item)){
+            if (movement === item) {
                 checked = true;
                 return false;
             }
@@ -62,7 +62,7 @@ $scope.selectedMovements = [];
     //Remove a mobile terminal from the selection
     $scope.removeFromSelection = function(item){
         $.each($scope.selectedMovements, function(index, movement){
-            if(movement.isEqualMovement(item)){
+            if (movement === item) {
                 $scope.selectedMovements.splice(index, 1);
                 return false;
             }
