@@ -111,7 +111,7 @@ angular.module('unionvmsWeb')
 
                         //Get vessels for the mobileTerminals?
                         try{
-                            mobileTerminalVesselService.setAssociatedVesselsFromCarrierId(mobileTerminalListPage.mobileTerminals).then(
+                            mobileTerminalVesselService.setAssociatedVesselsFromConnectId(mobileTerminalListPage.mobileTerminals).then(
                                 function(updatedMobileTerminals){
                                     mobileTerminalListPage.mobileTerminals = updatedMobileTerminals;
                                     deferred.resolve(mobileTerminalListPage);
