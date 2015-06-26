@@ -96,7 +96,7 @@ angular.module('unionvmsWeb')
                     }
 
                     var request = new GetListRequest(1, programPolls.length, false, []);
-                    for (var i = 0; i < programPolls.length; i++) {
+                    for (i = 0; i < programPolls.length; i++) {
                         if (programPolls[i].connectionId) {
                             request.addSearchCriteria("GUID", programPolls[i].connectionId);
                         }
