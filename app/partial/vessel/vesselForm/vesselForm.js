@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $modal, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal){
+angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $modal, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest) {
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -31,12 +31,15 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     };
 
     var getMobileTerminals = function() {
-        $scope.waitingForMobileTerminalsResponse = true;
-        mobileTerminalRestService.getMobileTerminalsForVessel().then(function(terminals) {
-            $scope.mobileTerminals = terminals;
+        var request = new GetListRequest(1, 1000, false, []);
+        request.addSearchCriteria("CONNECT_ID", $scope.vesselObj.vesselId.guid);
 
-            $scope.nonUniqueActiveTerminalTypes = $scope.getNonUniqueActiveTerminalTypes(terminals);
-            if ($scope.hasNonUniqueActiveTerminalTypes()) {
+        $scope.waitingForMobileTerminalsResponse = true;
+        mobileTerminalRestService.getMobileTerminalList(request).then(function(page) {
+            $scope.mobileTerminals = page.mobileTerminals;
+
+            $scope.nonUniqueActiveTerminalTypes = $scope.getNonUniqueActiveTerminalTypes($scope.mobileTerminals);
+			if ($scope.hasNonUniqueActiveTerminalTypes()) {
                 alertService.showWarningMessage(locale.getString("vessel.warning_multiple_terminals"));
             }
             $scope.waitingForMobileTerminalsResponse = false;
