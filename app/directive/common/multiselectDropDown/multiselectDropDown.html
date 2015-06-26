@@ -5,12 +5,12 @@
 			<span class="caret"></span>
 		</button>
 		<ul class='dropdown-menu' aria-labelledby='dropdownMenu'>
-			<li class="multiselectdropdownheaderitem" ng-hide="disableCheckall">
+			<li class="multiselectdropdownheaderitem" ng-class="checkAndSelectAll ? 'headeritemselected' : ''" ng-hide="disableCheckall">
 				<a data-ng-click='selectAll()'>
 					<i ng-class="checkAndSelectAll ? 'fa fa-check-square-o' : 'fa fa-square-o'"></i>&nbsp;{{checkAll}}
 				</a>
 			</li>
-			<li class="multiselectdropdownheaderitem" ng-hide="disableCheckall">
+			<li class="multiselectdropdownheaderitem" ng-class="checkAndSelectAll ? '' : 'headeritemselected'" ng-hide="disableCheckall">
 				<a data-ng-click='deselectAll();'>
 					<i ng-class="checkAndSelectAll ? 'fa fa-square-o' : 'fa fa-check-square-o'"></i>&nbsp;{{unCheckAll}}
 				</a>
