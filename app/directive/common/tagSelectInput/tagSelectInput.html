@@ -2,7 +2,7 @@
     <div class="tagSelectInputContainerWrapper">
         <div class="dropdown fullWidthDropdown">
 
-        <button class="btn btn-default tagSelectButton dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled">
+        <div class="btn btn-default tagSelectButton dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled">
             <div class="selection">
                 <div class="tag" ng-repeat="item in selectedItems" ng-click="stopPropagation($event)">
                     <span class="textWrapper">
@@ -16,7 +16,7 @@
             <div class="caretWrapper">
                 <span class="caret"></span>                
             </div>
-        </button>        
+        </div>        
         <ul class="dropdown-menu" role="menu">
             <li ng-class="{'disabled': isSelected(item)}" ng-repeat="item in items" ng-click="selectItem(item)" ng-hide="isMaxLimitReached()">
                 <a role="menuitem" tabindex="-1">{{getItemLabel(item)}}</a>
