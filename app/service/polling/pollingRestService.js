@@ -94,7 +94,28 @@ angular.module('unionvmsWeb')
                             programPolls.push(Poll.fromAttributeList(response.data[i].value));
                         }
                     }
-                    deferred.resolve(programPolls);
+
+                    var request = new GetListRequest(1, programPolls.length, false, []);
+                    for (var i = 0; i < programPolls.length; i++) {
+                        if (programPolls[i].connectionId) {
+                            request.addSearchCriteria("GUID", programPolls[i].connectionId);
+                        }
+                    }
+
+                    vesselRestService.getVesselList(request).then(function(page) {
+                        for (var i = 0; i < programPolls.length; i++) {
+                            var programPoll = programPolls[i];
+                            if (programPoll.connectionId) {
+                                var vessel = page.getVesselByGuid(programPoll.connectionId);
+                                programPoll.setVesselName(vessel.name);
+                            }
+                        }
+
+                        deferred.resolve(programPolls);
+                    },
+                    function() {
+                        deferred.resolve(programPolls);
+                    });
                 }, function(error) {
                     console.error("Error getting running program polls");
                     deferred.reject(error);

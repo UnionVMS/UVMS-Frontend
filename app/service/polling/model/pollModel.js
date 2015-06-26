@@ -6,6 +6,7 @@ angular.module('unionvmsWeb')
         this.type = undefined;
         this.comment = undefined;
         this.mobileTerminalId = undefined;
+        this.connectionId = undefined;
         this.attributes = {};
     }
 
@@ -20,6 +21,7 @@ angular.module('unionvmsWeb')
         poll.type = poll.attributes.POLL_TYPE;
         poll.startDate = poll.attributes.START_DATE;
         poll.endDate = poll.attributes.END_DATE;
+        poll.connectionId = poll.attributes.CONNECTION_ID;
         return poll;
     };
 
@@ -64,6 +66,10 @@ angular.module('unionvmsWeb')
             text += minutes + " " +locale.getString('common.time_minute_short');
         }
         return text;
+    };
+
+    Poll.prototype.setVesselName = function(name) {
+        this.attributes.VESSEL_NAME = name;
     };
 
     return Poll;
