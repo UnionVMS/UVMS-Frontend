@@ -281,8 +281,12 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     };
 
     $scope.unassignVessel = function() {
+        var vesselName = "";
+        if(angular.isDefined($scope.currentMobileTerminal.associatedVessel)){
+            vesselName = $scope.currentMobileTerminal.associatedVessel.name;
+        }
         modalComment.open($scope.unassignVesselWithComment, {
-            titleLabel: locale.getString("mobileTerminal.unassigning_from_vessel", [$scope.currentMobileTerminal.getSerialNumber(), $scope.currentMobileTerminal.associatedVessel.name]),
+            titleLabel: locale.getString("mobileTerminal.unassigning_from_vessel", [$scope.currentMobileTerminal.getSerialNumber(), vesselName]),
             saveLabel: locale.getString("mobileTerminal.unassign")
         });
     };
