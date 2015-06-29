@@ -26,7 +26,11 @@ describe('AssignvesselCtrl', function() {
         };
     }));	
 
-	it('should assign mobile terminal when assigning to selected vessel', inject(function($q, mobileTerminalRestService, locale, alertService) {
+	it('should assign mobile terminal when assigning to selected vessel', inject(function($q, $httpBackend, mobileTerminalRestService, locale, alertService) {
+
+        //Mock locale file
+        $httpBackend.expectGET("").respond({ });
+
 		var deferred = $q.defer();
 		spyOn(mobileTerminalRestService, "assignMobileTerminal").andReturn(deferred.promise);
 		deferred.resolve({data: response});

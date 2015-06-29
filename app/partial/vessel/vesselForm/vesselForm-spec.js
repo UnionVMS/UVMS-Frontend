@@ -34,7 +34,9 @@ describe('VesselFormCtrl', function() {
 
     }));	
 
-    it('create new vessel should update vesselObj with created vessel and get vessel history afterwards', inject(function(Vessel, $compile, $q, vesselRestService, alertService, locale) {
+    it('create new vessel should update vesselObj with created vessel and get vessel history afterwards', inject(function(Vessel, $compile, $q, $httpBackend, vesselRestService, alertService, locale) {
+        //Mock REST request
+        $httpBackend.expectPOST("").respond({ });
 
         scope.setCreateMode(true);
 
@@ -76,7 +78,9 @@ describe('VesselFormCtrl', function() {
     }));
 
 
-    it('update a vessel should update vesselObj with the updated vessel and merge into vessel list, and get vessel history afterwards', inject(function(Vessel, $compile, $q, vesselRestService, alertService, locale) {
+    it('update a vessel should update vesselObj with the updated vessel and merge into vessel list, and get vessel history afterwards', inject(function(Vessel, $compile, $q, $httpBackend, vesselRestService, alertService, locale) {
+        //Mock REST request
+        $httpBackend.expectPOST("").respond({ });
 
         scope.mergeCurrentVesselIntoSearchResults = function(){
             //Nothing
