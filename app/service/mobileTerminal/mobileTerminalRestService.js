@@ -143,7 +143,7 @@ angular.module('unionvmsWeb')
 
                         //Get associated vessel for the mobileTerminal
                         try{
-                            mobileTerminalVesselService.setAssociatedVesselsFromCarrierId(mobileTerminal).then(
+                            mobileTerminalVesselService.setAssociatedVesselsFromConnectId(mobileTerminal).then(
                                 function(mobileTerminalWithAssociatedVessel){
                                     deferred.resolve(mobileTerminalWithAssociatedVessel);
                                 },
