@@ -1,12 +1,11 @@
-angular.module('unionvmsWeb')
-.factory('PollChannel', function() {
+angular.module('unionvmsWeb').factory('PollChannel', function() {
 
     function PollChannel(){
         this.vesselName = undefined;
         this.vesselIrcs = undefined;
         this.connectId = undefined;
         this.mobileTerminalType = undefined;
-        this.guid = undefined;
+        this.comChannelId = undefined;
         this.attributes = {};
     }
 
@@ -17,26 +16,23 @@ angular.module('unionvmsWeb')
             pollChannel.attributes[attr["type"]] = attr["value"];
         }
 
-        pollChannel.vesselName = data.vesselName; 
+        pollChannel.vesselName = data.vesselName;
         pollChannel.vesselIrcs = data.vesselIrcs;
         pollChannel.connectId = data.connectId;
         pollChannel.mobileTerminalType = data.mobileTerminalType;
-        pollChannel.guid = data.guid;
-        
+        pollChannel.comChannelId = data.comChannelId;
+
         return pollChannel;
     };
 
     PollChannel.prototype.isEqual = function(item) {
-        if(item.guid === this.guid){
-            return true;
-        }else{
-            return false;
-        }
+        return item.comChannelId === this.comChannelId;
     };
 
-  PollChannel.prototype.toCreatePoll = function() {
+    PollChannel.prototype.toCreatePoll = function() {
         return {
-            comChannelId: this.guid
+            connectId: this.connectId,
+            comChannelId: this.comChannelId
         };
     };
 
