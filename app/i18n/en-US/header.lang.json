@@ -3,10 +3,10 @@
 	"menu_reporting" : "Reporting",
 	"menu_user" : "User",
 	"menu_assets" : "Assets",
-	"menu_alarmconditions" : "Alarm conditions",
-	"menu_communication" : "Communication",
+	"menu_alarmconditions" : "Alarms",
+	"menu_communication" : "Mobile terminals",
 	"menu_configuration" : "Configuration",
 	"menu_gis" : "GIS",
-	"menu_movement" : "Movement",
+	"menu_movement" : "Positions",
 	"menu_audit" : "Audit"
 }
