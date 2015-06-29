@@ -30,7 +30,20 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
     };    
 
     //Search objects and results
-    $scope.assignVesselSearchTypes =[{'text':'Name/CFR/IRCS','code':'ALL'}, {'text':'Name','code':'NAME'}, {'text':'CFR','code':'CFR'}, {'text':'IRCS','code':'IRCS'}];
+    $scope.assignVesselSearchTypes = [{
+        text: [locale.getString('vessel.ircs'), locale.getString('vessel.name'), locale.getString('vessel.cfr')].join('/'),
+        code: 'ALL'
+    }, {
+        text: locale.getString('vessel.ircs'),
+        code: 'IRCS'
+    }, {
+        text: locale.getString('vessel.name'),
+        code: 'NAME'
+    }, {
+        text: locale.getString('vessel.cfr'),
+        code: 'CFR'
+    }];
+
     var getListRequest;
     resetSearch();
 

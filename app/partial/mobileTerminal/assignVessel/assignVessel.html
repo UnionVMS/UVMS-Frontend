@@ -5,10 +5,10 @@
             <vessel-details vessel="selectedVessel" disable-form="true" ></vessel-details>
             <div class="row detailsFooter">
                 <div class="col-md-6">
-                    <button type="button" class="btn btn-primary" ng-click="goBackToAssignVesselSearchResultsClick()">GO BACK TO SEARCH RESULT</button>
+                    <button type="button" class="btn btn-primary" ng-click="goBackToAssignVesselSearchResultsClick()">{{"vessel.assign_back_to_search_result" | i18n | uppercase}}</button>
                 </div>
                 <div class="col-md-6 textAlignRight">
-                    <button type="button" class="btn btn-primary" ng-click="assignToSelectedVessel()"> <i class="fa fa-link"></i> ASSIGN</button>
+                    <button type="button" class="btn btn-primary" ng-click="assignToSelectedVessel()"> <i class="fa fa-link"></i> {{"vessel.assign" | i18n | uppercase}}</button>
                 </div>
             </div>
         </div>
@@ -38,37 +38,37 @@
                         <table class="searchResults" ng-show="assignVesselSearchResults.vessels.length > 0">
                             <thead>
                                 <tr>
-                                    <th sortable-table-header by="assignVesselSearchResults.sortBy" reverse="assignVesselSearchResults.sortReverse" order="'countryCode'">Flag State</th>
-                                    <th sortable-table-header by="assignVesselSearchResults.sortBy" reverse="assignVesselSearchResults.sortReverse" order="'name'">Vessel name</th>
-                                    <th sortable-table-header by="assignVesselSearchResults.sortBy" reverse="assignVesselSearchResults.sortReverse" order="'ircs'">IRCS</th>
-                                    <th sortable-table-header by="assignVesselSearchResults.sortBy" reverse="assignVesselSearchResults.sortReverse" order="'type'">Type</th>
+                                    <th sortable-table-header by="assignVesselSearchResults.sortBy" reverse="assignVesselSearchResults.sortReverse" order="'ircs'">{{"vessel.ircs" | i18n}}</th>
+                                    <th sortable-table-header by="assignVesselSearchResults.sortBy" reverse="assignVesselSearchResults.sortReverse" order="'name'">{{"vessel.name" | i18n}}</th>
+                                    <th sortable-table-header by="assignVesselSearchResults.sortBy" reverse="assignVesselSearchResults.sortReverse" order="'cfr'">{{"vessel.cfr" | i18n}}</th>
+                                    <th sortable-table-header by="assignVesselSearchResults.sortBy" reverse="assignVesselSearchResults.sortReverse" order="'externalMarking'">{{"vessel.external_marking" | i18n}}</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
-                            <tr ng-repeat="vessel in assignVesselSearchResults.vessels | orderBy:assignVesselSearchResults.sortBy:assignVesselSearchResults.sortReverse ">
-                                <td>{{vessel.countryCode}}</td>
-                                <td>{{vessel.name}}</td>
+                            <tr ng-repeat="vessel in assignVesselSearchResults.vessels | orderBy:assignVesselSearchResults.sortBy:assignVesselSearchResults.sortReverse">
                                 <td>{{vessel.ircs}}</td>
-                                <td>{{vessel.type}}</td>
+                                <td>{{vessel.name}}</td>
+                                <td>{{vessel.cfr}}</td>
+                                <td>{{vessel.externalMarking}}</td>
                                 <td class="textAlignRight">
-                                    <button type="button" class="btn btn-primary" ng-click="selectVessel(vessel)" ng-disabled="!vessel.ircs" title="{{ vessel.ircs ? '' : 'mobileTerminal.assign_vessel_ircs_required' | i18n }}" style="pointer-events: auto;">SELECT</button>
+                                    <button type="button" class="btn btn-primary" ng-click="selectVessel(vessel)" ng-disabled="!vessel.ircs" title="{{ vessel.ircs ? '' : 'mobileTerminal.assign_vessel_ircs_required' | i18n }}" style="pointer-events: auto;">{{"vessel.select" | i18n | uppercase}}</button>
                                 </td>
                             </tr>
                         </table>                            
                         <search-result-error-alert ng-show="assignVesselSearchResults.errorMessage">{{assignVesselSearchResults.errorMessage}}</search-result-error-alert>
                     </div>
                     <div class="col-md-12" ng-show="assignVesselSearchInProgress">
-                        <i class="fa fa-spinner fa-spin fa-pulse"></i> Searching
+                        <i class="fa fa-spinner fa-spin fa-pulse"></i> {{"vessel.searching" | i18n}}
                     </div>
                     <div class="pagination" ng-show="assignVesselSearchResults.vessels.length > 0 && !assignVesselSearchInProgress">
                         <div class="col-md-4">
-                            <span ng-show="assignVesselSearchResults.page > 1" ng-click="gotoPrevPageInAssignVesselSearchResults()">&lt; Previous page</span>
+                            <span ng-show="assignVesselSearchResults.page > 1" ng-click="gotoPrevPageInAssignVesselSearchResults()">&lt; {{"vessel.previous_page" | i18n}}</span>
                         </div>
                         <div class="col-md-4 textAlignCenter">
                             {{'common.search_results_current_page' | i18n:[assignVesselSearchResults.page, assignVesselSearchResults.totalNumberOfPages]}}
                         </div>
                         <div class="col-md-4 textAlignRight" >
-                            <span ng-show="assignVesselSearchResults.page < assignVesselSearchResults.totalNumberOfPages" ng-click="gotoNextPageInAssignVesselSearchResults()">Next page ></span>
+                            <span ng-show="assignVesselSearchResults.page < assignVesselSearchResults.totalNumberOfPages" ng-click="gotoNextPageInAssignVesselSearchResults()">{{"vessel.next_page" | i18n}} &gt;</span>
                         </div>                        
                     </div>
                 </div>
