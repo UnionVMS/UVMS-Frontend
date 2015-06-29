@@ -8,7 +8,6 @@ angular.module('unionvmsWeb')
         $scope.flagStates =[{'text':'SWE','code':'SWE'},{'text':'DNK','code':'DNK'},{'text':'NOR','code':'NOR'}];
         $scope.vesselTypes =[{'text':'Fishing Vessel','code':'Fishing Vessel'},{'text':'Pilot Vessel','code':'Pilot Vessel'},{'text':'Trawling Vessel','code':'Trawling Vessel'}];
         $scope.licenseTypes =[{'text':'Fishing license','code':'Fishing license'},{'text':'Trawling license','code':'Trawling license'}];
-        $scope.activeTypes = [{'text':'Yes','code':'true'},{'text':'No','code':'false'}];
         $scope.types = [{'text':'Vessel','code':'vessel'}];
 
         //Reset all search fields
