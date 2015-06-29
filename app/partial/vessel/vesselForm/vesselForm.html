@@ -89,15 +89,15 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="item in mobileTerminals | orderBy :'-started'">
-                                                <td>{{item.serialNumber}}</td>
-                                                <td>{{item.type}}</td>
-                                                <td>{{item.started | date : "medium" }}</td>
-                                                <td>{{item.started | date : "stopped" }}</td>
+                                            <tr ng-repeat="mt in mobileTerminals | orderBy :'-started'">
+                                                <td>{{mt.attributes.SERIAL_NUMBER}}</td>
+                                                <td>{{mt.type}}</td>
+                                                <td>{{mt.attributes.STARTED_ON || "-"}}</td>
+                                                <td>{{mt.attributes.UNINSTALLED_ON || "-"}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <span>
+                                    <span ng-hide="mobileTerminals.length > 0">
                                         {{'vessel.zero_connected_mobile_terminals' | i18n}}
                                     </span>
                                 </div>
@@ -130,7 +130,7 @@
             </div>
         </div>        
 
-        <div class="row" ng-if="!isCreateNewMode()">
+        <div class="row mobileTerminalsContainer" ng-if="!isCreateNewMode()">
             <div class="col-md-12">
                 <h3 ng-show="mobileTerminals.length > 0">{{'vessel.connected_mobile_terminals' | i18n}}</h3>
                 <loading-icon ng-show="waitingForMobileTerminalsResponse"></loading-icon>
