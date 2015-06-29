@@ -31,6 +31,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     };
 
     var getMobileTerminals = function() {
+        $scope.mobileTerminals = undefined;
         var request = new GetListRequest(1, 1000, false, []);
         request.addSearchCriteria("CONNECT_ID", $scope.vesselObj.vesselId.guid);
 
