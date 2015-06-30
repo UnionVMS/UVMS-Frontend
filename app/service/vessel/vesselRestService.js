@@ -8,22 +8,17 @@ angular.module('unionvmsWeb')
             },
             vessel : function(){
                 return $resource(baseUrl +'/vessel/rest/vessel/', {}, {
-                    update: {method: 'PUT'}                    
+                    update: {method: 'PUT'}
                 });
-            },            
+            },
             getVesselList : function(){  
                 return $resource(baseUrl +'/vessel/rest/vessel/list/',{},{
                     list : { method: 'POST'}
                 });
             },
             vesselGroup : function(){
-                return $resource(baseUrl +'/vessel/rest/group/', {}, {
-                    update: {method: 'PUT'}                    
-                });
-            },
-            deleteVesselGroup : function(){
-                return $resource(baseUrl +'/vessel/rest/group/delete', {}, {
-                    delete: {method: 'PUT'}                    
+                return $resource(baseUrl + '/vessel/rest/group/:id', {}, {
+                    update: {method: 'PUT'}
                 });
             },
             getVesselGroupsForUser : function(){
@@ -45,7 +40,7 @@ angular.module('unionvmsWeb')
     var getVesselList = function(getListRequest){
         var deferred = $q.defer();
 
-        vesselRestFactory.getVesselList().list(getListRequest.DTOForVessel(), 
+        vesselRestFactory.getVesselList().list(getListRequest.DTOForVessel(),
             function(response) {
 
                 if(response.code !== "200"){
@@ -69,7 +64,7 @@ angular.module('unionvmsWeb')
             }
         );
 
-        return deferred.promise;        
+        return deferred.promise;
     };
 
     //Get all vessels matching the search criterias in the list request
@@ -98,11 +93,11 @@ angular.module('unionvmsWeb')
 
             //Get next page
             getListRequest.page += 1;
-            getVesselList(getListRequest).then(onSuccess, onError);                
+            getVesselList(getListRequest).then(onSuccess, onError);
         };
         var onError = function(error){
             console.error("Error getting vessels.");
-            return deferred.reject(error);            
+            return deferred.reject(error);
         };
 
         //Get vessels
@@ -125,7 +120,7 @@ angular.module('unionvmsWeb')
             console.error(error);
             deferred.reject(error);
         });
-        return deferred.promise;        
+        return deferred.promise;
     };
 
     var updateVessel = function(vessel){
@@ -143,7 +138,7 @@ angular.module('unionvmsWeb')
             console.error(error);
             deferred.reject(error);
         });
-        return deferred.promise;  
+        return deferred.promise;
     };
 
     var getSearchableFields = function (){
@@ -189,7 +184,7 @@ angular.module('unionvmsWeb')
             queryObject['maxNbr'] = maxNbr;
         }
 
-        vesselRestFactory.vesselHistory().get(queryObject, 
+        vesselRestFactory.vesselHistory().get(queryObject,
             function(response) {
 
                 if(response.code !== "200"){
@@ -209,12 +204,12 @@ angular.module('unionvmsWeb')
                 deferred.reject(err);
             }
         );
-        return deferred.promise;           
+        return deferred.promise;
     };
 
     var getVesselGroupsForUser = function (){
         var deferred = $q.defer();
-        vesselRestFactory.getVesselGroupsForUser().get({'user' : userName}, 
+        vesselRestFactory.getVesselGroupsForUser().get({'user' : userName},
             function(response) {
 
                 if(response.code !== "200"){
@@ -234,7 +229,7 @@ angular.module('unionvmsWeb')
                 deferred.reject(err);
             }
         );
-        return deferred.promise;           
+        return deferred.promise;
     };
 
     var createNewVesselGroup = function(savedSearchGroup){
@@ -250,7 +245,7 @@ angular.module('unionvmsWeb')
             console.error(error);
             deferred.reject(error);
         });
-        return deferred.promise;        
+        return deferred.promise;
     };
 
     var updateVesselGroup = function(savedSearchGroup){
@@ -266,25 +261,27 @@ angular.module('unionvmsWeb')
             console.error(error);
             deferred.reject(error);
         });
-        return deferred.promise;  
-    };     
+        return deferred.promise;
+    };
 
-     var deleteVesselGroup = function(savedSearchGroup){
+    var deleteVesselGroup = function(savedSearchGroup) {
         var deferred = $q.defer();
-        vesselRestFactory.deleteVesselGroup().delete(savedSearchGroup.toJson(), function(response) {
-            if(response.code !== "200"){
+        vesselRestFactory.vesselGroup().delete({id: savedSearchGroup.id}, function(response) {
+            if (response.code !== "200") {
                 deferred.reject("Invalid response status");
                 return;
             }
+
             deferred.resolve(SavedSearchGroup.fromJson(response.data));
-        }, function(error) {
+        },
+        function(error) {
             console.error("Error when trying to delete a vessel group");
             console.error(error);
             deferred.reject(error);
         });
-        return deferred.promise;  
-    };     
-
+ 
+        return deferred.promise;
+    };
 
     return {
         getVesselList: getVesselList,
@@ -300,8 +297,3 @@ angular.module('unionvmsWeb')
         getConfig : getConfiguration       
     };
 });
-
-
-
-
-
