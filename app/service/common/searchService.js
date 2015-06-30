@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage) {
+angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage, MovementListPage) {
 
 	var getListRequest = new GetListRequest(1, 20, true, []),
         advancedSearchObject  = {};
@@ -31,7 +31,64 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
         }
         
         return searchCriteria;
-    };    
+    };
+
+    var vesselSearchKeys = [
+        "MAX_LENGTH", "MIN_POWER", "MAX_POWER", "MIN_LENGTH", "GEAR_TYPE",
+        "IMO", "INTERNAL_ID", "GUID", "NAME", "IRCS",
+        "MMSI", "EXTERNAL_MARKING", "CFR", "HOMEPORT", "ACTIVE",
+        "FLAG_STATE", "LICENSE", "TYPE", "CARRIER_TYPE"
+    ].reduce(function(map, searchKey) {
+        map[searchKey] = true;
+        return map;
+    }, {});
+
+    var getSearchCriteriaPartition = function(searchCriteria, searchKeysMap) {
+        var partition = {"default": []};
+        $.each(searchKeysMap, function(label, value) {
+            partition[label] = [];
+        });
+
+        $.each(searchCriteria, function(index, searchCriterion) {
+            var part = partition["default"];
+            $.each(searchKeysMap, function(partitionKey, partitionSearchKeys) {
+                if (partitionSearchKeys[searchCriterion.key]) {
+                    part = partition[partitionKey];
+                    return false;
+                }
+            });
+
+            part.push(searchCriterion);
+        });
+
+        return partition;
+    };
+
+    var getMovementsByVessels = function(movementRequest) {
+        return function(vessels) {
+            if (vessels.length === 0) {
+                return new MovementListPage();
+            }
+
+            var vesselsByGuid = {};
+            $.each(vessels, function(index, vessel) {
+                movementRequest.addSearchCriteria("CONNECT_ID", vessel.vesselId.guid);
+                vesselsByGuid[vessel.vesselId.guid] = vessel;
+            });
+
+            return movementRestService.getMovementList(movementRequest).then(function(page) {
+                $.each(page.movements, function(index, movement) {
+                    var vessel = vesselsByGuid[movement.connectId];
+                    movement.vessel.name = vessel.name;
+                    movement.vessel.ircs = vessel.ircs;
+                    movement.vessel.state = vessel.countryCode;
+                    movement.vessel.externalMarking = vessel.externalMarking;
+                });
+
+                return page;
+            });
+        };
+    };
 
 	var searchService = {
 
@@ -50,7 +107,17 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
         searchMovements : function(){
             //intercept request and set utc timezone on dates.
             checkTimeSpanAndTimeZone(getListRequest.criterias);
-            return movementRestService.getMovementList(getListRequest);
+
+            // Split search criteria into vessel and movement
+            var allSearchCriteria = this.getSearchCriterias();
+            var partition = getSearchCriteriaPartition(allSearchCriteria, {vessel: vesselSearchKeys});
+            var movementCritieria = partition["default"];
+            var vesselCriteria = partition["vessel"];
+
+            var vesselRequest = new GetListRequest(1, 1000, true, vesselCriteria);
+            var movementRequest = new GetListRequest(getListRequest.page, getListRequest.listSize, getListRequest.isDynamic, movementCritieria);
+
+            return vesselRestService.getAllMatchingVessels(vesselRequest).then(getMovementsByVessels(movementRequest));
         },
 
         //search for manual positions.

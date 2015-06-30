@@ -5,6 +5,7 @@ angular.module('unionvmsWeb')
 		
 		this.id = undefined;
 		this.time = undefined;
+		this.connectId = undefined;
 		this.vessel = {
 			state : undefined,
 			externalMarking : undefined,
@@ -29,23 +30,17 @@ angular.module('unionvmsWeb')
 		if(data){
 
 			movement.id = data.id;
+			movement.connectId = data.connectId;
 			movement.time = "-";//data.time;
+			movement.movement.source = data.source;
+			movement.movement.measuredSpeed = data.measuredSpeed;
+			movement.movement.course = data.course;
+			movement.movement.status = data.status;
 
-			if(data.vessel)
-			{
-				movement.vessel.state = data.vessel.flagState;
-				movement.vessel.externalMarking = data.vessel.externalMarking;
-				movement.vessel.ircs = data.vessel.ircs;
-				movement.vessel.name = data.vessel.name;
-			}
-			if (data.movement) {
-				movement.movement.latitude = data.movement.latitude;
-				movement.movement.longitude = data.movement.longitude;
-				movement.movement.status = data.movement.status;
-				movement.movement.source = data.movement.source;
-				movement.movement.measuredSpeed = data.movement.measuredSpeed;
-				movement.movement.calculatedSpeed = data.movement.calculatedSpeed;
-				movement.movement.course = data.movement.course;
+			if (data.position) {
+				movement.movement.latitude = data.position.latitude;
+				movement.movement.longitude = data.position.longitude;
+				movement.movement.calculatedSpeed = data.position.calculatedSpeed;
 				movement.movement.messageType = "-"; //data.movement.messageType;	
 			}
 		}
