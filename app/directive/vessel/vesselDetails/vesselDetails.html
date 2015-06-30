@@ -47,8 +47,8 @@
 
         <div class="col-md-2 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.imo.$dirty) && vesselForm.imo.$invalid}">
             <label>{{ 'vessel.vessel_details_IMO' | i18n }}</label>
-            <input type="text" name="imo" class="form-control" ng-model="vessel.imo" required ng-disabled="disableForm">
-            <input-validation-message types="required" input="vesselForm.imo"></input-validation-message >
+            <input type="text" name="imo" class="form-control" ng-model="vessel.imo" required only-digits ng-disabled="disableForm">
+            <input-validation-message types="onlyDigits, required" input="vesselForm.imo"></input-validation-message >
         </div>
 
         <div class="col-md-2 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.mmsi.$dirty) && vesselForm.mmsi.$invalid}">
