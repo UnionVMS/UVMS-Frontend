@@ -1,15 +1,13 @@
 angular.module('unionvmsWeb')
-    .controller('AdvancedSearchVesselFormCtrl', function($scope, $modal, searchService, savedSearchService){
+    .controller('AdvancedSearchVesselFormCtrl', function($scope, $modal, searchService, savedSearchService, configurationService, locale){
 
         $scope.advancedSearch = false;
         $scope.selectedVesselGroup = "";
 
-        //Dummy values for dropdowns
-        $scope.flagStates =[{'text':'SWE','code':'SWE'},{'text':'DNK','code':'DNK'},{'text':'NOR','code':'NOR'}];
-        $scope.vesselTypes =[{'text':'Fishing Vessel','code':'Fishing Vessel'},{'text':'Pilot Vessel','code':'Pilot Vessel'},{'text':'Trawling Vessel','code':'Trawling Vessel'}];
-        $scope.licenseTypes =[{'text':'Fishing license','code':'Fishing license'},{'text':'Trawling license','code':'Trawling license'}];
-        $scope.types = [{'text':'Vessel','code':'vessel'}];
-
+        var init = function(){
+            setUpPage();
+        };
+        
         //Reset all search fields
         var resetSearchFields = function(){
             $scope.freeText = "";
@@ -73,7 +71,42 @@ angular.module('unionvmsWeb')
 
         $scope.openSaveGroupModal = function(){
             savedSearchService.openSaveSearchModal("VESSEL", true);        
-        };    
-      
+        };
+
+        var onGetValuesSuccess = function(response){
+            
+            $scope.flagStates = setTextAndCodeForDropDown(response.FLAG_STATE);
+            $scope.licenseTypes = setTextAndCodeForDropDown(response.LICENSE_TYPE);
+            $scope.vesselTypes = setTextAndCodeForDropDown(response.VESSEL_TYPE);
+            $scope.types = setTextAndCodeForDropDown(response.ASSET_TYPE);
+            
+            //TODO: Need this from backend?
+            $scope.activeTypes = [{'text':'Yes','code':'true'},{'text':'No','code':'false'}];
+        };
+        
+        var onGetValuesFailure = function(error){
+            console.log("error");
+        };
+
+         var setUpPage = function(){
+            //Get values for dropdowns
+            configurationService.getConfigForVessel().then(
+                onGetValuesSuccess, onGetValuesFailure);
+        };
+
+        var setTextAndCodeForDropDown = function(valueToSet){
+            var valueList = [];
+            _.find(valueToSet, 
+                function(val){
+                    valueList.push({'text': translateTextForDropdowns(val), 'code': val});
+                });
+            return valueList;
+        };
+
+        var translateTextForDropdowns = function(textToTranslate){
+            return locale.getString('config.' + textToTranslate);
+        };
+
+        init();
     }
 );

@@ -31,7 +31,10 @@ angular.module('unionvmsWeb')
             },
             vesselHistory : function(){
                 return $resource(baseUrl +'/vessel/rest/history/vessel');
-            },  
+            },
+            getConfigValues : function(){
+                return $resource(baseUrl +'/vessel/rest/config');
+            }  
         };
     })
 .factory('vesselRestService', function($q, $http, vesselRestFactory, restConstants, VesselListPage, Vessel, SavedSearchGroup){
@@ -160,6 +163,22 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
+    var getConfiguration = function(){
+        var deferred = $q.defer();
+        vesselRestFactory.getConfigValues().get({},
+            function(response){
+                if(response.code !== "200"){
+                    deferred.reject("Not valid vessel configuration status.");
+                    return;
+                }
+                deferred.resolve(response.data);
+            }, function(error){
+                console.error("Error geting configuration values for vessel.");
+                deferred.reject(error);
+            });
+        return deferred.promise;
+    };
+
     var getVesselHistoryListByVesselId = function (vesselId, maxNbr){
         var deferred = $q.defer();
         //Query object
@@ -277,7 +296,8 @@ angular.module('unionvmsWeb')
         getVesselGroupsForUser : getVesselGroupsForUser,
         createNewVesselGroup : createNewVesselGroup,
         updateVesselGroup : updateVesselGroup,
-        deleteVesselGroup : deleteVesselGroup        
+        deleteVesselGroup : deleteVesselGroup ,
+        getConfig : getConfiguration       
     };
 });
 

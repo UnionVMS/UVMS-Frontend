@@ -104,7 +104,8 @@ angular.module('unionvmsWeb').factory('initService',function(locale, tmhDynamicL
                 'mobileTerminal',
                 'polling',
                 'vessel',
-                'movement'
+                'movement',
+                'config'
             ]);
         },
     };

@@ -16,8 +16,7 @@ angular.module('unionvmsWeb').directive('advancedSearch', function() {
 
 angular.module('unionvmsWeb')
     .controller('AdvancedSearchCtrl', function($scope, searchService, SearchField){
-
-
+        
     //Set form partial depending on modelType
     switch($scope.modeltype) {
         case "VESSEL":
