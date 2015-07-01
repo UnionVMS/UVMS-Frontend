@@ -38,7 +38,7 @@
     "0-100" : "0-100",
     "100-200" : "100-200",
     "200-300" : "200-300",
-    "300+" : "300+",
+    "300 plus" : "300+",
 
     "LOA" : "LOA",
     "LBP" : "LBP",
@@ -50,7 +50,7 @@
 	"DO" : "Beamer", 
 	"DOX" : "Dredger NEI", 
 	"DRN" : "Driftnetter", 
-	"FO " : "Fish carrier", 
+	"FO" : "Fish carrier", 
 	"FX" : "Fishing vessel NEI", 
 	"GO" : "Gill netter TO Trawler",
 	"HOX" : "Mother ship NEI", 
@@ -92,5 +92,45 @@
 	"ZO" : "Fish research vessel",
 	"ZOT" : "Temporary Fish Research Vessel",
     "London": "London",
-    "Oslo" : "Oslo"
+    "Oslo" : "Oslo",
+
+	"0-5" : "0-5",
+	"6-10" : "6-10",
+    "11-15" : "11-15",
+	"16-20" : "16-20",
+	"21-25" : "21-25",
+    
+	"POS" : "POS",
+	"MAN" : "MAN",
+	"EXI" : "EXI",
+	"EXT" : "EXT",
+
+	"24" : "Last 24h",
+	"48" : "Last 48h",
+	"96" : "Last 96h",
+	"custom" : "Custom",
+     
+
+	"10" : "10",
+	"11" : "11",
+	"30" : "30",
+	"31" : "31",
+	"32" : "32",
+	"33" : "33",
+	"34" : "34",
+	"35" : "35",
+	"36" : "36",
+	"64" : "64",
+	"66" : "66",
+	"68" : "68",
+	"69" : "69",
+	"88" : "88",
+
+	"0-10" : "0-10",
+    "10-20" : "10-20",
+    "20-30": "20-30",
+    "30 plus" : "30+",
+
+    "VESSEL" : "Vessel"
+
 }

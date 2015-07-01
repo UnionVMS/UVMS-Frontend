@@ -53,18 +53,18 @@ angular.module('unionvmsWeb')
 
             //Set the label of the dropdown based on the current value of ngMode
             scope.setLabel = function() {
-                if ((scope.ngModel !== undefined && scope.ngModel === "" ) || scope.ngModel === null || scope.ngModel === undefined) {
+                if ((scope.ngModel !== undefined && scope.ngModel === "") || scope.ngModel === null || scope.ngModel === undefined) {
                     if(attrs.initialtext){
                         scope.currentItemLabel = attrs.initialtext;
                     }else{
-                        scope.currentItemLabel = scope.getItemLabel(scope.items[0]);
+                        scope.currentItemLabel = scope.getItemLabel(scope.ngModel);
                     }
                 } else {
                     if(scope.items !== undefined){
                         for (var i = 0; i < scope.items.length; i++){
                             if(getItemCode(scope.items[i]) === scope.ngModel){
                                 scope.currentItemLabel = scope.getItemLabel(scope.items[i]);
-                            }
+                            } 
                         }
                     }
                 }
@@ -84,7 +84,6 @@ angular.module('unionvmsWeb')
                     }
                 }
             });
-
 
             //Select item in dropdown
             scope.selectVal = function(item){
@@ -106,14 +105,12 @@ angular.module('unionvmsWeb')
                 }
             };
 
-
             scope.setLabel();
 
             //Create a list item with the initaltext?
             if(scope.initialitem){
                 scope.addDefaultValueToDropDown();
             }        
-
 		}
 	};
 });

@@ -33,13 +33,17 @@
            <dropdown ng-model="advancedSearchObject.POWER" initialtext="{{'movement.advanced_search_placeholder_power' | i18n}}" items="power"></dropdown>
         </div>
          <div class="col-md-6 smallerpadding searchcriteria">
+            <!--
             <dropdown ng-model="advancedSearchObject.PRODUCER_ORG" initialtext="{{'movement.advanced_search_placeholder_product_owner' | i18n}}" items="productOwner"></dropdown>
+        -->
+            <dropdown ng-model="advancedSearchObject.MESSAGE_TYPE" initialtext="{{'movement.advanced_search_placeholder_msg_type' | i18n}}" items="messageType"></dropdown>
+
         </div>
         <div class="col-md-6 smallerpadding searchcriteria">
             <dropdown ng-model="advancedSearchObject.TIME_SPAN" no-placeholder-item items="timeSpanDropDownItems"></dropdown>
         </div>
          <div class="col-md-6 smallerpadding searchcriteria">
-            <dropdown ng-model="advancedSearchObject.MESSAGE_TYPE" initialtext="{{'movement.advanced_search_placeholder_msg_type' | i18n}}" items="messageType"></dropdown>
+        
         </div>
     </div>  
 </div>

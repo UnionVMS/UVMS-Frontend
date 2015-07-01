@@ -53,7 +53,8 @@ angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocalePr
             resolve: generalRouteResolves
         })
         .when('/movement/manual', {
-            templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html'
+            templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html',
+            resolve: generalRouteResolves
         });
     /* Add New Routes Above */
     $routeProvider.otherwise({redirectTo:'/today'});

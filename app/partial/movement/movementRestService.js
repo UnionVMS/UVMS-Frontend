@@ -16,6 +16,9 @@ angular.module('unionvmsWeb')
         },
         getSavedSearches : function() {
             return $resource(baseUrl + '/movement/rest/search/groups');
+        },
+        getConfigForMovements : function(){
+            return $resource(baseUrl + '/movement/rest/config');  
         }
     };
 })
@@ -146,13 +149,30 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
+    var getConfiguration = function(){
+    var deferred = $q.defer();
+    movementRestFactory.getConfigForMovements().get({},
+        function(response){
+            if(response.code !== "200"){
+                deferred.reject("Not valid movement configuration status.");
+                return;
+            }
+            deferred.resolve(response.data);
+        }, function(error){
+            console.error("Error geting configuration values for movement.");
+            deferred.reject(error);
+        });
+    return deferred.promise;
+    };
+
     return {
         getMovementList : getMovementList,
         getLastMovement: getLastMovement,
         getSavedSearches : getSavedSearches,
         createNewSavedSearch : createNewSavedSearch,
         updateSavedSearch : updateSavedSearch,
-        deleteSavedSearch : deleteSavedSearch
+        deleteSavedSearch : deleteSavedSearch,
+        getConfig : getConfiguration
     };
 
 });
