@@ -35,7 +35,10 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                             }else{
                                 mobileTerminal.attributes[key] = [value];
                             }
-                        }else{
+                        }
+                        else if (key === "FREQUENCY_EXPECTED" || key === "FREQUENCY_GRACE_PERIOD" || key === "FREQUENCY_IN_PORT") {
+                            mobileTerminal.attributes[key] = Number(value);
+                        } else {
                             mobileTerminal.attributes[key] = value;
                         }
                     }
