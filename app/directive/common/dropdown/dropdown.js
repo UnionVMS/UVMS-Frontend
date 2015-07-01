@@ -57,7 +57,11 @@ angular.module('unionvmsWeb')
                     if(attrs.initialtext){
                         scope.currentItemLabel = attrs.initialtext;
                     }else{
-                        scope.currentItemLabel = scope.getItemLabel(scope.ngModel);
+                        if (scope.ngModel){
+                            scope.currentItemLabel = scope.getItemLabel(scope.ngModel);
+                        }else{
+                            scope.currentItemLabel = scope.getItemLabel(scope.items[0]);
+                        }
                     }
                 } else {
                     if(scope.items !== undefined){
