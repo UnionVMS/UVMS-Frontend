@@ -4,7 +4,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             this.attributes = {};
             this.channels = [];
             //Add an initial channel
-            this.channels.push(new CommunicationChannel());
+            this.channels.push(new CommunicationChannel(true));
             this.active = true;
             this.connectId = undefined;
             this.associatedVessel = undefined;

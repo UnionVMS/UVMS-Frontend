@@ -1,12 +1,15 @@
 angular.module('unionvmsWeb').factory('CommunicationChannel', function() {
 
         //Create a new channel with the default type "VMS"
-        function CommunicationChannel(){
+        function CommunicationChannel(defaultReporting){
             this.capabilities = {};
             this.defaultReporting = undefined;
             this.ids = {};
             this.name = "VMS"; // Default name
-			this.guid = undefined;
+            this.guid = undefined;
+            if (defaultReporting) {
+                this.capabilities["DEFAULT_REPORTING"] = true;
+            }
         }
 
         function objectToTypeValueList(obj) {
