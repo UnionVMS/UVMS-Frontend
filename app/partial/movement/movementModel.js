@@ -31,7 +31,9 @@ angular.module('unionvmsWeb')
 
 			movement.id = data.id;
 			movement.connectId = data.connectId;
-			movement.time = "-";//data.time;
+			movement.time = data.positionTime;
+
+			movement.movement.messageType = data.messageType;
 			movement.movement.source = data.source;
 			movement.movement.measuredSpeed = data.measuredSpeed;
 			movement.movement.course = data.course;
@@ -41,7 +43,6 @@ angular.module('unionvmsWeb')
 				movement.movement.latitude = data.position.latitude;
 				movement.movement.longitude = data.position.longitude;
 				movement.movement.calculatedSpeed = data.position.calculatedSpeed;
-				movement.movement.messageType = "-"; //data.movement.messageType;	
 			}
 		}
 		return movement;
@@ -57,6 +58,10 @@ angular.module('unionvmsWeb')
         }
     };
 
-	return Movement;
-	
+    Movement.prototype.getFormattedTime = function() {
+        return moment(this.time).format("YYYY-MM-DD HH:mm");
+    };
+
+    return Movement;
+
 });
