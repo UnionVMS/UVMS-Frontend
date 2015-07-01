@@ -145,13 +145,13 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
         }
     }
 
-    function getCreatePollsRequestData() {
+    function getCreatePollsRequestData(selectedChannels) {
         return {
             userName: "FRONTEND_USER",
             pollType: pollingOptions.type + "_POLL",
             comment: pollingOptions.comment,
             attributes: getPollAttributes(pollingOptions.type),
-            mobileTerminals: getSelectedChannels().map(function(channel) {
+            mobileTerminals: selectedChannels.map(function(channel) {
                return channel.toCreatePoll();
             })
         };
@@ -159,8 +159,19 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
 
     function createPolls() {
         var deferred = $q.defer();
-        var requestData = getCreatePollsRequestData();
+        var channels = getSelectedChannels();
+
+        var vesselNameByConnectIds = channels.reduce(function(map, channel) {
+            map[channel.connectId] = channel.vesselName;
+            return map;
+        }, {});
+
+        var requestData = getCreatePollsRequestData(channels);
         pollingRestService.createPolls(requestData).then(function(polls) {
+            $.each(polls, function(index, poll) {
+                poll.attributes.VESSEL_NAME = vesselNamesByConnectId[poll.connectionId];
+            });
+
             result.polls = polls;
             result.programPoll = requestData.pollType === "PROGRAM_POLL";
             deferred.resolve();
