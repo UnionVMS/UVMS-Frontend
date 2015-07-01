@@ -161,7 +161,7 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
         var deferred = $q.defer();
         var channels = getSelectedChannels();
 
-        var vesselNameByConnectIds = channels.reduce(function(map, channel) {
+        var vesselNamesByConnectId = channels.reduce(function(map, channel) {
             map[channel.connectId] = channel.vesselName;
             return map;
         }, {});
