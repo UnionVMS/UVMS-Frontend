@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition, $timeout, movementRestService, leafletBoundsHelpers, addAnother) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition, $timeout, movementRestService, leafletBoundsHelpers, addAnother, reloadFunction) {
 
     $scope.errorMessage ="";
 
@@ -134,6 +134,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         }
 
         promise.then(function() {
+            reloadFunction();
             $scope.setSuccessText(locale.getString("movement.manual_position_save_success"), $scope.closeModal);
         }, function(errorMessage) {
             $scope.setErrorText(locale.getString("movement.manual_position_save_error"));
@@ -145,6 +146,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         if ($scope.confirmSend) {
             var movement = $scope.createManualMovement();
             manualPositionRestService.saveAndSendMovement(movement).then(function() {
+                reloadFunction();
                 $scope.sendSuccess = true;
                 $scope.setSuccessText(locale.getString("movement.manual_position_send_success"), $scope.closeModal);
             }, function() {
@@ -293,7 +295,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
 angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($modal) {
 	return {
-		show: function(position, addAnother) {
+		show: function(position, addAnother, reloadFunction) {
 			return $modal.open({
 				templateUrl: 'partial/movement/manualPositionReports/manualPositionReportModal/manualPositionReportModal.html',
 				controller: 'ManualPositionReportModalCtrl',
@@ -304,6 +306,9 @@ angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($mod
                     },
                     addAnother: function() {
                         return addAnother || false;
+                    },
+                    reloadFunction: function() {
+                        return reloadFunction;
                     }
                 }
 			}).result;
