@@ -5,9 +5,16 @@ angular.module('unionvmsWeb')
         $scope.selectedVesselGroup = "";
 
         var init = function(){
-            setUpPage();
+            //Setup dropdowns
+            $scope.flagStates = setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'));
+            $scope.licenseTypes = setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'LICENSE_TYPE'));
+            $scope.vesselTypes = setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'VESSEL_TYPE'));
+            $scope.types = setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'ASSET_TYPE'));
+            
+            //TODO: Need this from backend?
+            $scope.activeTypes = [{'text':'Yes','code':'true'},{'text':'No','code':'false'}];                        
         };
-        
+       
         //Reset all search fields
         var resetSearchFields = function(){
             $scope.freeText = "";
@@ -71,27 +78,6 @@ angular.module('unionvmsWeb')
 
         $scope.openSaveGroupModal = function(){
             savedSearchService.openSaveSearchModal("VESSEL", true);        
-        };
-
-        var onGetValuesSuccess = function(response){
-            
-            $scope.flagStates = setTextAndCodeForDropDown(response.FLAG_STATE);
-            $scope.licenseTypes = setTextAndCodeForDropDown(response.LICENSE_TYPE);
-            $scope.vesselTypes = setTextAndCodeForDropDown(response.VESSEL_TYPE);
-            $scope.types = setTextAndCodeForDropDown(response.ASSET_TYPE);
-            
-            //TODO: Need this from backend?
-            $scope.activeTypes = [{'text':'Yes','code':'true'},{'text':'No','code':'false'}];
-        };
-        
-        var onGetValuesFailure = function(error){
-            console.log("error");
-        };
-
-         var setUpPage = function(){
-            //Get values for dropdowns
-            configurationService.getConfigForVessel().then(
-                onGetValuesSuccess, onGetValuesFailure);
         };
 
         var setTextAndCodeForDropDown = function(valueToSet){

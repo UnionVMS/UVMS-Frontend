@@ -1,11 +1,47 @@
 describe('configurationService', function() {
 
-  beforeEach(module('unionvmsWeb'));
+    var buildings = {HOUSE : 1, CABIN : 2, TENT : 3};
+    var vesselRestSpy;
 
-  it('should ...', inject(function(configurationService) {
+    beforeEach(module('unionvmsWeb'));  
 
-	//expect(configurationService.doSomething()).toEqual('something');
+    beforeEach(inject(function($rootScope, $q, vesselRestService, movementRestService) {
 
-  }));
+        var vesselDeffered = $q.defer();
+        vesselDeffered.resolve({LETTER : 'A', COUNTRY : 'SWE'}); 
+        vesselRestSpy = spyOn(vesselRestService, 'getConfig').andReturn(vesselDeffered.promise); 
+
+        var movementDeffered = $q.defer();
+        movementDeffered.resolve({THEME : 'GREEN', NUMBER : 2, BUILDINGS : buildings}); 
+        spyOn(movementRestService, 'getConfig').andReturn(movementDeffered.promise); 
+    }));
+
+
+    it('should build configs dictionary and return correct values', inject(function($rootScope, configurationService) {
+
+        var vesselLetter, buildings;
+        configurationService.setup().then(function(){
+            vesselLetter = configurationService.getValue('VESSEL', 'LETTER');
+            buildings = configurationService.getValue('MOVEMENT', 'BUILDINGS');
+        });
+
+        $rootScope.$apply();
+        expect(vesselLetter).toBe('A');
+        expect(buildings).toEqual(buildings);
+
+    }));
+
+    it('should return undefined for non existing values', inject(function($rootScope, configurationService) {
+
+        var noModule, noParam;
+        configurationService.setup().then(function(){
+            noModule = configurationService.getValue('NON_EXISTING', 'LETTER');
+            noParam = configurationService.getValue('MOVEMENT', 'NON_EXISTING');
+        });
+
+        $rootScope.$apply();
+        expect(noModule).toBeUndefined();
+        expect(noParam).toBeUndefined();
+    }));
 
 });

@@ -4,7 +4,10 @@ angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','
 var generalRouteResolves =  {
     languages: function(initService){
         return initService.loadLanguageFiles();
-    }
+    },
+    config: function(initService){
+        return initService.loadConfig();
+    }    
 };
 
 angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocaleProvider) {
@@ -92,11 +95,15 @@ angular.module('unionvmsWeb').value('localeConf', {
 
 
 //Service used for bootstrapping the application
-angular.module('unionvmsWeb').factory('initService',function(locale, tmhDynamicLocale, $window) {
+angular.module('unionvmsWeb').factory('initService',function(configurationService, locale, tmhDynamicLocale, $window) {
 
     tmhDynamicLocale.set($window.navigator.userLanguage || $window.navigator.language);
 
     var initService = {
+        //Load the configurations
+        loadConfig : function(){
+            return configurationService.setup();
+        },        
         //Load the listed i18n files
         loadLanguageFiles : function(){
             return locale.ready([
