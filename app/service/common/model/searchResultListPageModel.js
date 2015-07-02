@@ -7,6 +7,10 @@ angular.module('unionvmsWeb')
             this.totalNumberOfPages = _.isNumber(totalNumberOfPages) ? totalNumberOfPages : 0;
         }
 
+        SearchResultListPage.prototype.getNumberOfItems = function(){
+            return this.items.length;
+        };
+
         return SearchResultListPage;
     });
 

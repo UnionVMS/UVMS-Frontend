@@ -8,6 +8,7 @@
     "edit_mobile_terminal": "Edit mobile terminal",
 	"menu_mobileterminals" : "Mobile terminals",
 	"menu_polling" : "Polling",
+    "add_mobile_terminal_to_polling_only_some_were_addded_message" : "Only {pollable} of the {selected} selected mobile terminals could be polled.",
     "table_header_flag_state" : "State",
     "table_header_vessel_name" : "Vessel name",
     "table_header_serial_no" : "Serial no.",

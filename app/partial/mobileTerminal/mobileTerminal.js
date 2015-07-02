@@ -1,4 +1,6 @@
-angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService, alertService, MobileTerminalListPage, MobileTerminal, SystemTypeAndLES, mobileTerminalRestService, pollingService, $location, locale, $routeParams){
+angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService, alertService, MobileTerminalListPage, MobileTerminal, SystemTypeAndLES, mobileTerminalRestService, pollingService, GetPollableListRequest, pollingRestService, $location, locale, $routeParams){
+
+    var hideAlertsOnScopeDestroy = true;
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -253,14 +255,41 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
             //Add selected terminals to poll selection and go to polling page
             if($scope.selectedMobileTerminals.length > 0){
                 pollingService.clearSelection();
+
+                //Create a GetPollabeListRequest to get the pollable channels
+                var getPollableListRequest = new GetPollableListRequest();
+                getPollableListRequest.listSize = $scope.selectedMobileTerminals.length;
+
                 $.each($scope.selectedMobileTerminals, function(index, item){
                     //Only add mobile terminals that are assigned to a carrier
                     if(angular.isDefined(item.connectId)){
-                        pollingService.addMobileTerminalToSelection(item);
+                        getPollableListRequest.addConnectId(item.connectId);
                     }
                 });
-                pollingService.setWizardStep(2);
-                $location.path('communication/polling');
+
+                if(getPollableListRequest.connectIds.length > 0){
+                    pollingRestService.getPollablesMobileTerminal(getPollableListRequest).then(
+                        function(searchResultListPage){
+                            //Add each pollChannel to the selection
+                            $.each(searchResultListPage.items, function(index, item){
+                                pollingService.addMobileTerminalToSelection(item);
+                            });
+
+                            //Show alert message if not all selected mobile terminals could be added to polling
+                            if(searchResultListPage.getNumberOfItems() !== $scope.selectedMobileTerminals.length){
+                                alertService.showInfoMessage(locale.getString('mobileTerminal.add_mobile_terminal_to_polling_only_some_were_addded_message', {selected :$scope.selectedMobileTerminals.length, pollable : searchResultListPage.getNumberOfItems()}));
+                                hideAlertsOnScopeDestroy = false;
+                            }
+
+                            pollingService.setWizardStep(2);
+                            $location.path('communication/polling');                                
+
+                        },
+                        function(error){
+                            console.error("Error getting pollable channels.");
+                        }
+                    );
+                }
             }
         }else if(selectedItem.code === 'EXPORT'){
             alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
@@ -269,7 +298,9 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
     };
 
     $scope.$on("$destroy", function() {
-        alertService.hideMessage();
+        if(hideAlertsOnScopeDestroy){
+            alertService.hideMessage();
+        }
         searchService.reset();
     });
 

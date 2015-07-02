@@ -57,6 +57,10 @@ angular.module('unionvmsWeb')
             }
 
             var deferred = $q.defer();
+            if(request.getNumberOfSearchCriterias() === 0){
+                deferred.resolve(pollChannels);
+            }
+
             vesselRestService.getVesselList(request).then(function(page) {
                 for (var i = 0; i < pollChannels.length; i++) {
                     var pollChannel = pollChannels[i];
