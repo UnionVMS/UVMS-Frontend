@@ -12,7 +12,9 @@
     <div class="containerWrapper grayContainer">
         <div class="vesselcontainerwrapper container containerWithTopBottomPadding " ng-show="isVisible.search">
             <div class="vesselsearchboxfooter row">
-                <dropdown ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>               
+                <div class="col-md-2">
+                    <dropdown class="" ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+                </div>
                 <!-- add new button -->
                 <button class="btn btn-sm pull-right addvesselbtn uvmsbtn" ng-click="toggleCreateNewVessel()" type="button">
                     {{'vessel.add_new' | i18n}} &nbsp;&nbsp;&nbsp;&nbsp;<span>+</span></button>
