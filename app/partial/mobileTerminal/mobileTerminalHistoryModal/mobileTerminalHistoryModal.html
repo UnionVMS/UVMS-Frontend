@@ -21,7 +21,7 @@
                         <th sortable-table-header by="sortType" reverse="sortReverse" order="'eventCode'">{{'mobileTerminal.history_modal_eventcode' | i18n }}</th>
                         <th sortable-table-header by="sortType" reverse="sortReverse" order="'mobileTerminal.associatedVessel.name'">{{'mobileTerminal.history_modal_vesselname' | i18n }}</th>
                         <th sortable-table-header by="sortType" reverse="sortReverse" order="'channels[0].ids.DNID'">{{'mobileTerminal.history_modal_dnid' | i18n }}</th>
-                        <th sortable-table-header by="sortType" reverse="sortReverse" order="'item.channels[0].ids.MEMBER_ID'">{{'mobileTerminal.history_modal_memberno' | i18n }}</th>
+                        <th sortable-table-header by="sortType" reverse="sortReverse" order="'item.channels[0].ids.MEMBER_NUMBER'">{{'mobileTerminal.history_modal_memberno' | i18n }}</th>
                         <th sortable-table-header by="sortType" reverse="sortReverse" order="'attributes.INSTALLED_ON'">{{'mobileTerminal.history_modal_installed' | i18n }}</th>
                         <th sortable-table-header by="sortType" reverse="sortReverse" order="'attributes.UNINSTALLED_ON'">{{'mobileTerminal.history_modal_uninstalled' | i18n }}</th>
                         <th sortable-table-header by="sortType" reverse="sortReverse" order="'attributes.SATELLITE_NUMBER'">{{'mobileTerminal.history_modal_satelliteno' | i18n }}</th>
@@ -38,7 +38,7 @@
                             <span ng-show="item.mobileTerminal.connectId && !item.mobileTerminal.associatedVessel">ConnectId: {{item.mobileTerminal.connectId}}</span>
                         </td>
                         <td>{{item.mobileTerminal.channels[0].ids.DNID}}</td>
-                        <td>{{item.mobileTerminal.channels[0].ids.MEMBER_ID}}</td> 
+                        <td>{{item.mobileTerminal.channels[0].ids.MEMBER_NUMBER}}</td> 
                         <td>{{item.mobileTerminal.attributes.INSTALLED_ON}}</td>
                         <td>{{item.mobileTerminal.attributes.UNINSTALLED_ON}}</td>
                         <td>{{item.mobileTerminal.attributes.SATELLITE_NUMBER}}</td>
