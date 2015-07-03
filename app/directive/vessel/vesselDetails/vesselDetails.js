@@ -8,7 +8,8 @@ angular.module('unionvmsWeb')
             vessel : '=',
             disableForm : '=',
             vesselForm : '=',
-            submitAttempted : '='
+            submitAttempted : '=',
+            spin: '='
         },
 		templateUrl: 'directive/vessel/vesselDetails/vesselDetails.html',
 		link: function(scope, element, attrs, fn) {

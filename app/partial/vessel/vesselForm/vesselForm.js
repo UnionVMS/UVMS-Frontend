@@ -156,6 +156,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
             delete $scope.vesselObj.mobileTerminals; 
 
             //Update Vessel and take care of the response(eg. the promise) when the update is done.
+            $scope.waitingForCreateResponse = true;
             alertService.hideMessage();
             var updateResponse = vesselRestService.updateVessel($scope.vesselObj)
                 .then(updateVesselSuccess, updateVesselError);
@@ -171,6 +172,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
 
     //Vessel was successfully updated
     var updateVesselSuccess = function(updatedVessel){
+        $scope.waitingForCreateResponse = false;
         alertService.showSuccessMessageWithTimeout(locale.getString('vessel.update_alert_message_on_success'));
         $scope.vesselObj = updatedVessel;
         $scope.mergeCurrentVesselIntoSearchResults();
@@ -178,6 +180,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     };
     //Error updating vessel
     var updateVesselError = function(error){
+        $scope.waitingForCreateResponse = false;
         alertService.showErrorMessage(locale.getString('vessel.update_alert_message_on_error'));
     };
 

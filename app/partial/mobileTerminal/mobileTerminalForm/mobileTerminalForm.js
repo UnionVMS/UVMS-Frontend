@@ -124,12 +124,14 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         }
         
         //Update
+        $scope.waitingForCreateResponse = true;
         alertService.hideMessage();
         mobileTerminalRestService.updateMobileTerminal($scope.currentMobileTerminal, comment)
                 .then(updateMobileTerminalSuccess, updateMobileTerminalError);
     };
 
     var updateMobileTerminalSuccess = function(updatedMobileTerminal){
+        $scope.waitingForCreateResponse = false;
         alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.update_alert_message_on_success'));
 
         //Update values in the currentMobileTerminal object
@@ -141,6 +143,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
 
     //Error creating the new mobile terminal
     var updateMobileTerminalError = function(){
+        $scope.waitingForCreateResponse = false;
         alertService.showErrorMessage(locale.getString('mobileTerminal.update_alert_message_on_error'));
     };
 
