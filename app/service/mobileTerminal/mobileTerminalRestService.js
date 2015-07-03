@@ -48,6 +48,10 @@ angular.module('unionvmsWeb')
                     list: { method: 'GET'}
                 });
             },
+            getConfigValues : function(){
+                return $resource(baseUrl + '/mobileterminal/rest/config');
+            }
+
         };
     })
     .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, VesselListPage, MobileTerminal, MobileTerminalListPage, TranspondersConfig, GetListRequest, MobileTerminalHistory, mobileTerminalVesselService){
@@ -267,6 +271,21 @@ angular.module('unionvmsWeb')
                 });
                 return deferred.promise;
             }, 
+            getConfig : function(){
+                var deferred = $q.defer();
+                mobileTerminalRestFactory.getConfigValues().get({},
+                    function(response){
+                        if(response.code !== 200){
+                            deferred.reject("Not valid mobileterminal configuration status.");
+                            return;
+                        }
+                        deferred.resolve(response.data);
+                    }, function(error){
+                        console.error("Error getting configuration values for mobileterminal.");
+                        deferred.reject(error);
+                    });
+                return deferred.promise;
+            },
             getHistoryForMobileTerminal : function(mobileTerminal){
                 var deferred = $q.defer();
                 mobileTerminalRestFactory.mobileTerminalHistory().get({id: mobileTerminal.guid}, function(response) {
