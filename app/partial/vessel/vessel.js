@@ -47,7 +47,8 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         }
     };
 
-    $scope.resetSearchResult = function(){      
+    $scope.resetSearchResult = function(){   
+        $scope.clearSelection();
         $scope.currentSearchResults.page = 0;
         $scope.currentSearchResults.totalNumberOfPages = 0;
         $scope.currentSearchResults.vessels = [];
