@@ -77,7 +77,7 @@
                         <span class="label label-success" ng-show="currentMobileTerminal.active">{{ ('common.active' | i18n)}}</span>
                         <span class="label label-default" ng-hide="currentMobileTerminal.active">{{ ('common.inactive' | i18n)}}</span>
                     </div>
-                    <div class="floatLeft">
+                    <div class="floatLeft" ng-show="currentMobileTerminal.source">
                         {{'common.source' | i18n}} : <b>{{currentMobileTerminal.source}}</b>
                     </div>
                     <div class="clearfix"></div>
