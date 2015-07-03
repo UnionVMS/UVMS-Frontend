@@ -18,7 +18,7 @@
                 </div>         
             </div>
             <div class="col-md-1 textAlignRight" ng-click="toggleViewVessel()">
-                <i class="fa fa-times closeicon" title="{{'common.close' | i18n}}"></i>
+                <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
             </div>
         </div>
 
@@ -66,6 +66,7 @@
                                         </tbody>
                                     </table>
                                     <loading-icon ng-show="waitingForHistoryResponse"></loading-icon>
+                                    <search-result-error-alert ng-show="vesselHistoryError">{{vesselHistoryError}}</search-result-error-alert>                                                   
                                 </div>
                             </div>
                         </div>
@@ -94,12 +95,13 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <span ng-hide="mobileTerminals.length > 0">
+                                    <span ng-hide="mobileTerminals.length > 0 || mobileTerminalsError">
                                         {{'vessel.zero_connected_mobile_terminals' | i18n}}
                                     </span>
                                 </div>
                                 <div class="col-md-12">
                                     <loading-icon ng-show="waitingForMobileTerminalsResponse"></loading-icon>
+                                    <search-result-error-alert ng-show="mobileTerminalsError">{{mobileTerminalsError}}</search-result-error-alert>
                                 </div>
                             </div>
                         </div>

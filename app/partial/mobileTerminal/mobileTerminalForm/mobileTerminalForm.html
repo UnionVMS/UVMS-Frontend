@@ -17,7 +17,7 @@
             </div>         
         </div>
         <div class="col-md-1 textAlignRight" ng-click="toggleMobileTerminalDetails()">
-            <i class="fa fa-times closeicon" title="{{'common.close' | i18n}}"></i>
+            <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
         </div>
     </div>
     <div class="row" ng-show="isCreateNewMode()">
@@ -26,7 +26,7 @@
             <button  type="submit" ng-disabled="!currentMobileTerminal.type" class="btn btn-primary" ng-click="createNewMobileTerminal()" ng-hide="transponderSystems.length == 0" ng-disabled="waitingForCreateResponse">{{'common.save' | i18n}}</button>
         </div>
         <div class="col-md-1 textAlignRight" ng-click="toggleAddNewMobileTerminal()"> 
-            <i class="fa fa-times closeicon" title="{{'common.close' | i18n}}"></i>
+            <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
         </div>
     </div>    
 
