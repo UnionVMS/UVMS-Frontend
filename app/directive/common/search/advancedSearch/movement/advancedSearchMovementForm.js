@@ -55,22 +55,6 @@ angular.module('unionvmsWeb')
             $scope.performSavedGroupSearch(savedSearchGroup, true);
         };
 
-        var setTextAndCodeForDropDown = function(valueToSet){
-            var valueList = [];
-            _.find(valueToSet, 
-                function(val){
-                    valueList.push({'text': translateTextForDropdowns(val), 'code': val});
-                });
-            return valueList;
-        };
-
-        var translateTextForDropdowns = function(textToTranslate){
-            if (textToTranslate.indexOf('+') !== -1) {
-                textToTranslate = textToTranslate.replace("+"," plus");
-            }
-            return locale.getString('config.' + textToTranslate);
-        };
-
         $scope.setSimpleSearchCriterias = function (value){
             
             if(!value)
@@ -106,22 +90,23 @@ angular.module('unionvmsWeb')
 
         var init = function(){
             //Setup dropdowns            
-            $scope.flagStates = setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'));
-            $scope.carrierType =setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'VESSEL_TYPE'));
-            $scope.gearType = setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'GEAR_TYPE'));
-            $scope.power = setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'POWER_SPAN'));
-            $scope.carrierLength = setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'LENGTH_SPAN'));
+            $scope.flagStates = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL' );
+            $scope.carrierType = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'VESSEL_TYPE'), 'CARRIER_TYPE', 'VESSEL');
+            $scope.gearType = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'GEAR_TYPE'), 'GEAR_TYPE', 'VESSEL');
+            $scope.power = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'POWER_SPAN'),'POWER_SPAN','VESSEL');
+            $scope.carrierLength = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'LENGTH_SPAN'), 'LENGTH_SPAN', 'VESSEL');
+            $scope.meassuredSpeed = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'SPEED_SPAN'), 'SPEED_SPAN', 'MOVEMENT');
+            $scope.status = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'STATUS'),'STATUS','MOVEMENT');
+            $scope.messageType = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'MESSAGE_TYPE'),'MESSAGE_TYPE','MOVEMENT');
+           
 
-            var tempTimeSpan = setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'TIME_SPAN'));
-            tempTimeSpan.push({"text":locale.getString('config.custom'), "code":DATE_CUSTOM});
+            var tempTimeSpan = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'TIME_SPAN'), 'TIME_SPAN','MOVEMENT');
+            tempTimeSpan.push({"text":locale.getString('config.MOVEMENT_TIME_SPAN_custom'), "code":DATE_CUSTOM});
             $scope.timeSpanDropDownItems = tempTimeSpan;
             
             $scope.timespan = tempTimeSpan[0];
             $scope.advancedSearchObject.TIME_SPAN = $scope.timespan.code;
             
-            $scope.meassuredSpeed = setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'SPEED_SPAN'));
-            $scope.status = setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'STATUS'));
-            $scope.messageType = setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'MESSAGE_TYPE'));
             $scope.productOwner = [{'text':'P.O. 1','code':'46'},{'text':'P.O. 2','code':'49'}];
             $scope.userOrg = [{'text':'U.O. 1','code':'111'},{'text':'U.O. 2','code':'222'}];
             $scope.groups = [{'text':'Group1','code':'Group1'},{'text':'Group2','code':'Group2'}];

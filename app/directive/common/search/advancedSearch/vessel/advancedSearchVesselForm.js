@@ -6,10 +6,10 @@ angular.module('unionvmsWeb')
 
         var init = function(){
             //Setup dropdowns
-            $scope.flagStates = setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'));
-            $scope.licenseTypes = setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'LICENSE_TYPE'));
-            $scope.vesselTypes = setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'VESSEL_TYPE'));
-            $scope.types = setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'ASSET_TYPE'));
+            $scope.flagStates = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL');  
+            $scope.licenseTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'LICENSE_TYPE'), 'LICENSE_TYPE','VESSEL');
+            $scope.vesselTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'VESSEL_TYPE'), 'CARRIER_TYPE','VESSEL');
+            $scope.types = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'ASSET_TYPE'),'ASSET_TYPE','VESSEL');
             
             //TODO: Need this from backend?
             $scope.activeTypes = [{'text':'Yes','code':'true'},{'text':'No','code':'false'}];                        
@@ -78,19 +78,6 @@ angular.module('unionvmsWeb')
 
         $scope.openSaveGroupModal = function(){
             savedSearchService.openSaveSearchModal("VESSEL", true);        
-        };
-
-        var setTextAndCodeForDropDown = function(valueToSet){
-            var valueList = [];
-            _.find(valueToSet, 
-                function(val){
-                    valueList.push({'text': translateTextForDropdowns(val), 'code': val});
-                });
-            return valueList;
-        };
-
-        var translateTextForDropdowns = function(textToTranslate){
-            return locale.getString('config.' + textToTranslate);
         };
 
         init();

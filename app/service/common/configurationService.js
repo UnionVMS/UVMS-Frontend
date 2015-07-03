@@ -1,7 +1,7 @@
 
 (function(){
 
-    var configurationService = function($q, vesselRestService, movementRestService){
+    var configurationService = function($q, locale, vesselRestService, movementRestService){
 
         //Dict of configuration parameters for all modules
         var configs = {};
@@ -72,13 +72,31 @@
             }
         };
 
+         var setTextAndCodeForDropDown = function(valueToSet, prefix, module){ 
+            var valueList = [];
+            _.find(valueToSet, 
+                function(val){
+                    valueList.push({'text': translateTextForDropdowns(val, prefix, module), 'code': val});
+                });
+            return valueList;
+        };
+
+        var translateTextForDropdowns = function(textToTranslate, prefix, module){
+            if (textToTranslate.indexOf('+') !== -1) {
+                textToTranslate = textToTranslate.replace("+"," plus");
+            }
+            return locale.getString('config.' + module + "_"+ prefix + "_" + textToTranslate);
+        };
+
         return{
             setup: setup,
             getValue: getConfigValue,
+            setTextAndCodeForDropDown : setTextAndCodeForDropDown
+
         };
     };
 
     angular.module('unionvmsWeb')
-	.factory('configurationService',['$q', 'vesselRestService', 'movementRestService', configurationService]);
+	.factory('configurationService',['$q', 'locale', 'vesselRestService', 'movementRestService', configurationService]);
     
 }());

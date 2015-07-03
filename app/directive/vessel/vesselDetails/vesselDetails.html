@@ -9,13 +9,13 @@
 
         <div class="col-md-2 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.countryCode.$dirty) && vesselForm.countryCode.$invalid}">
             <label>{{ 'vessel.vessel_details_flagstate' | i18n }}</label>
-            <dropdown name="countryCode" ng-model="vessel.countryCode" initialtext="{{ 'vessel.vessel_details_flagstate' | i18n }}" items="vesselCountries" ng-disabled="disableForm" required></dropdown>
+            <dropdown name="countryCode" ng-model="vessel.countryCode" initialtext="{{ 'vessel.vessel_details_flagstate' | i18n }}" items="vesselFlagState" ng-disabled="disableForm" required></dropdown>
             <input-validation-message types="required" input="vesselForm.countryCode"></input-validation-message>
         </div>
 
         <div class="col-md-2 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.vesselType.$dirty) && vesselForm.vesselType.$invalid}">
             <label>{{ 'vessel.vessel_details_type' | i18n }}</label>
-            <dropdown name="vesselType" ng-model="vessel.vesselType" initialtext="{{ 'vessel.vessel_details_type' | i18n }}" items="vesselActivitytTypes" ng-disabled="disableForm || true"></dropdown>
+            <dropdown name="vesselType" ng-model="vessel.vesselType" initialtext="{{ 'vessel.vessel_details_type' | i18n }}" items="vesselCarrierType" ng-disabled="disableForm || true"></dropdown>
             <!--TODO: Add required to type input when enabling it!-->
             <input-validation-message types="required" input="vesselForm.vesselType"></input-validation-message>
         </div>

@@ -18,25 +18,28 @@ angular.module('unionvmsWeb')
 });
 
 angular.module('unionvmsWeb')
-    .controller('vesselDetailsCtrl', function($scope, locale){
-        // DROPDOWNS DUMMIES - Needs to have some sort of connection to database... and needs to be refactored when settingsfile is correct or present.
-        $scope.vesselCountries =[{'text':'SWE','code':'SWE'},{'text': 'DNK','code':'DNK'},{'text':'NOR','code':'NOR'}];
-        $scope.vesselActivitytTypes =[{'text':'Fishing Vessel','code':'FISHING'},{'text':'Pilot Vessel','code':'PILOT'},{'text':'Trawling Vessel','code':'TRAWLING'}];
+    .controller('vesselDetailsCtrl', function($scope, locale, configurationService){
+        
+        $scope.vesselFlagState = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL');
+        $scope.vesselLicensTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','LICENSE_TYPE'),'LICENSE_TYPE','VESSEL');
+        $scope.vesselCarrierType = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','CARRIER_TYPE'), 'CARRIER_TYPE','VESSEL');
+        $scope.vesseloveralltypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','LENGTH'),'LENGTH','VESSEL');
+        $scope.vesselUnitOfMessures = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','TONNAGE'), 'TONNAGE','VESSEL');
+
+        //TODO: FIX support for strings instead of true/false
+        //$scope.vesselHasIrcTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','HAS_IRCS'),'HAS_IRCS','VESSEL');
+        //$scope.vesselHasLicenseTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','HAS_LICENSE'),'HAS_LICENSE','VESSEL');
         $scope.vesselHasIrcTypes =[{'text':'Yes','code':true},{'text':'No','code':false}];
         $scope.vesselHasLicenseTypes =[{'text':'Yes','code':true},{'text':'No','code':false}];
-        $scope.vesselLicensTypes =[{'text':'Fishing license','code':'FISHING'},{'text':'Trawling license','code':'TRAWLING'}];
-        $scope.vesseloveralltypes =[{'text':'LOA','code':'LOA'},{'text':'LBP','code':'LBP'}];
-        $scope.vesselUnitOfMessures =[{'text':'London','code':'LONDOND'}, {'text':'Oslo','code':'OSLO'}];
         $scope.vesselEffectTypes =[{'text':'hp','code':'HP'},{'text':'kW','code':'KW'}];
 
         //TODO: This values does not exists in the vesselObject.
-        $scope.vesselUnitOfMessure = "";
-        $scope.vesselEffect = "";
-        $scope.searchFlagState = "";
-        $scope.lenght = "";
-        $scope.licensetype="";
-
-
+        //$scope.vesselUnitOfMessure = "";
+        //$scope.vesselEffect = "";
+        //$scope.searchFlagState = "";
+        //$scope.lenght = "";
+        //$scope.licensetype="";
+        
         $scope.terminalsatellitetypes =[{'name':'Inmarsat-B','code':'133'},{'name':'Inmarsat-C','code':'998'}];
         $scope.terminaloceanstypes =[{'name':'Skagerack','code':'3'},{'name':'Kattegatt','code':'99'},{'name':'Östersjön','code':'929'}];
         $scope.searchFlagStates =[{'name':'SWE','code':'SWE'},{'name':'DNK','code':'DNK'},{'name':'NOR','code':'NOR'}];
@@ -61,5 +64,7 @@ angular.module('unionvmsWeb')
         $scope.cfrValidationMessages = {
             'pattern' : locale.getString('vessel.vessel_details_cfr_pattern_validation_message')
         };
+
+
     }
 );
