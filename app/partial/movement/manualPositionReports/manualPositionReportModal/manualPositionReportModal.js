@@ -34,12 +34,6 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     $scope.sendSuccess = false;
     $scope.addAnother = addAnother;
 
-    $scope.center = {
-        lat: 0,
-        lng: 0,
-        zoom: 5
-    };
-
     $scope.newPosition = {
         lat: $scope.latitude,
         lng: $scope.longitude,
@@ -57,9 +51,25 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     $scope.modalStatusText = undefined;
 
     $scope.init = function() {
+        $scope.resetMap();
         if ($scope.ircs && $scope.cfr) {
             $scope.initLastPosition($scope.ircs, $scope.cfr);
         }
+
+        //Center on newpos if available
+        if($scope.newPosition.lat && $scope.newPosition.lng){
+            $scope.center.lat = $scope.newPosition.lat;
+            $scope.center.lng = $scope.newPosition.lng;
+            $scope.center.zoom = 10;
+        }        
+    };
+
+    $scope.resetMap = function(){
+        $scope.center = {
+            lat: 57.2,
+            lng: 14.2,
+            zoom: 5
+        };
     };
 
     $scope.initLastPosition = function(ircs, cfr) {
@@ -174,14 +184,6 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
             return [position.lat, position.lng];  // (2) Convert to [lat,lng] list
         });
 
-        if (points.length === 0) {
-            points.push([0, 0]);                  // (3) Add [0,0] to empty list
-        }
-
-        if (points.length < 2) {
-            points.push(points[0]);               // (4) Replicate single point (2 required)
-        }
-
         return points;
     };
 
@@ -201,17 +203,37 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
             delete $scope.markers.lastPosition;
         }
 
-        $scope.bounds = leafletBoundsHelpers.createBoundsFromArray($scope.getMarkerBounds());
+        
+        var numberOfMarkers = Object.keys($scope.markers).length;
+        if(numberOfMarkers === 1){
+            var tmpMarker = _.values($scope.markers)[0];
+            $scope.center = {
+                lat: tmpMarker.lat,
+                lng: tmpMarker.lng,
+                zoom: 5
+            };
+        }
+        else if(numberOfMarkers > 1){
+            var bounds = $scope.getMarkerBounds(); 
+            $scope.bounds = leafletBoundsHelpers.createBoundsFromArray(bounds);
+        }
+        else{
+            $scope.resetMap();
+        }
     };
 
     $scope.$watch('latitude', function(newLatitude) {
-        $scope.newPosition.lat = parseFloat(newLatitude);
-        $scope.updateNewPositionVisibility();
+        if(angular.isDefined(newLatitude)){
+            $scope.newPosition.lat = parseFloat(newLatitude);
+            $scope.updateNewPositionVisibility();
+        }
     });
 
     $scope.$watch('longitude', function(newLongitude) {
-        $scope.newPosition.lng = parseFloat(newLongitude);
-        $scope.updateNewPositionVisibility();
+        if(angular.isDefined(newLongitude)){
+            $scope.newPosition.lng = parseFloat(newLongitude);
+            $scope.updateNewPositionVisibility();
+        }
     });
 
 	$scope.isHighSpeed = function() {
@@ -264,12 +286,13 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         $scope.showLastMovementByVessel(item);
     };
 
-    $scope.setLastPosition = function(pos) {
-        if (pos) {
+    $scope.setLastPosition = function(movement) {
+        if (movement) {
+            var formattedTime =  moment(movement.time).format("YYYY-MM-DD HH:mm:ss Z");
             $scope.lastPosition = {
-                lng: pos.longitude,
-                lat: pos.latitude,
-                message: locale.getString("movement.manual_position_label_previous_position", pos.time),
+                lng: movement.movement.longitude,
+                lat: movement.movement.latitude,
+                message: locale.getString("movement.manual_position_label_previous_position", formattedTime),
                 focus: true
             };
         }
@@ -285,8 +308,8 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
             return;
         }
 
-        movementRestService.getLastMovement(vessel.vesselId.value).then(function(pos) {
-            $scope.setLastPosition(pos);
+        movementRestService.getLastMovement(vessel.vesselId.value).then(function(movement) {
+            $scope.setLastPosition(movement);
         });
     };
 
