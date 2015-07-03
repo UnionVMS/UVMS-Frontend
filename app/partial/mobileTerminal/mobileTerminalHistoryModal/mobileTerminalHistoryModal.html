@@ -1,9 +1,9 @@
 <div class="mobileTerminalHistoryModal">
     <div class="modal-header row">
+        <div class="closeIconContainer" ng-click="cancel()">
+            <i class="fa fa-times closeicon" title="{{'common.close' | i18n}}"></i>
+        </div>    
         <div class="col-md-12">
-            <div class="closehistorymodal row pull-right" ng-click="cancel()">
-                <i class="fa fa-times closeicon" title="{{'common.close' | i18n}}"></i>
-            </div>
             <div class="headerWithBottomBorder">{{ 'mobileTerminal.history_modal_header' | i18n | uppercase}}</div>
         </div>
     </div>
