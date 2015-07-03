@@ -26,11 +26,9 @@
             <div class="row">
                 <div class="col-md-12 basicInformation">
                     <div class="floatLeft">
-                        <b ng-if="vesselObj.name.length > 0">{{vesselObj.name}}</b>
-                        <b ng-if="isCreateNewMode() && !isVesselNameSet()">{{'vessel.new_vessel' | i18n}}</b>
-                    </div>
-                    <div class="floatLeft">
-                        <div>{{'vessel.status' | i18n}}: <b>{{vesselObj.active ? ('vessel.active' | i18n) : ('vessel.inactive' | i18n)}}</b></div>
+                        {{'vessel.status' | i18n}}: 
+                        <span class="label label-success" ng-show="vesselObj.active">{{ ('vessel.active' | i18n)}}</span>
+                        <span class="label label-default" ng-hide="vesselObj.active">{{ ('vessel.inactive' | i18n)}}</span>
                     </div>
                     <div class="floatLeft">
                         {{'vessel.source' | i18n}} : <b>{{vesselObj.source}}</b>

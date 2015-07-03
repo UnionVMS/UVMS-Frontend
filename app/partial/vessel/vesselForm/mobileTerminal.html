@@ -5,6 +5,23 @@
     </a>
 
     <div class="row">
+        <div class="col-md-12 basicInformation">
+            <div class="floatLeft">
+                <b>{{mt.type}}</b>
+            </div>
+            <div class="floatLeft">
+                {{'common.status' | i18n}}: 
+                <span class="label label-success" ng-show="mt.active">{{ ('common.active' | i18n)}}</span>
+                <span class="label label-default" ng-hide="mt.active">{{ ('common.inactive' | i18n)}}</span>
+            </div>
+            <div class="floatLeft">
+                {{'common.source' | i18n}} : <b>{{mt.source}}</b>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <div class="row grayBorderBottom infoRow">
         <div class="col-md-2 mobile-terminal-attribute">
             <label>
                 {{"mobileTerminal.form_inmarsatc_satellite_number_label" | i18n}}
@@ -43,10 +60,12 @@
         </div>
     </div>
 
-    <div class="mobileTerminalChannels">
-        <label class="section">{{'mobileTerminal.form_inmarsatc_communication_channels_header' | i18n}}</label>
+    <div class="row mobileTerminalChannels grayBorderBottom">
+        <div class="col-md-12">
+            <label class="section">{{'mobileTerminal.form_inmarsatc_communication_channels_header' | i18n}}</label>
+        </div>
 
-        <div class="row channelsHeader">
+        <div class="channelsHeader">
             <div class="col-md-2">
                 <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_channel_label' | i18n}}</label>
             </div>
@@ -77,27 +96,29 @@
                 <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_stopped_label' | i18n}}</label>
             </div>
         </div>
+        
+        <div class="col-md-12">
+            <div ng-repeat="communicationChannel in mt.channels" class="row align-middle mobileTerminalChannel" ng-class="{comchannelrow: $index == 0}">
+                <div class="col-md-2">{{communicationChannel.name}}</div>
 
-        <div ng-repeat="communicationChannel in mt.channels" class="row align-middle mobileTerminalChannel" ng-class="{comchannelrow: $index == 0}">
-            <div class="col-md-2">{{communicationChannel.name}}</div>
+                <div class="col-md-2 smallerpadding">
+                    <div class="col-md-4 smallerpadding">
+                        <input type="radio" ng-model="communicationChannel.capabilities.POLLABLE" ng-value="true" disabled/>
+                    </div>
+                    <div class="col-md-4 smallerpadding">
+                        <input type="radio" ng-model="communicationChannel.capabilities.CONFIGURABLE" ng-value="true" disabled/>
+                    </div>
+                    <div class="col-md-4 smallerpadding">
+                        <input type="radio" ng-model="communicationChannel.capabilities.DEFAULT_REPORTING" ng-value="true" disabled/>
+                    </div>
+                </div>
 
-            <div class="col-md-2 smallerpadding">
-                <div class="col-md-4 smallerpadding">
-                    <input type="radio" ng-model="communicationChannel.capabilities.POLLABLE" ng-value="true" disabled/>
-                </div>
-                <div class="col-md-4 smallerpadding">
-                    <input type="radio" ng-model="communicationChannel.capabilities.CONFIGURABLE" ng-value="true" disabled/>
-                </div>
-                <div class="col-md-4 smallerpadding">
-                    <input type="radio" ng-model="communicationChannel.capabilities.DEFAULT_REPORTING" ng-value="true" disabled/>
-                </div>
+                <div class="col-md-1 smallerpadding">{{communicationChannel.ids.DNID || "-"}}</div>
+                <div class="col-md-1 smallerpadding">{{communicationChannel.ids.MEMBER_NUMBER || "-"}}</div>
+                <div class="col-md-1 smallerpadding">{{communicationChannel.ids.LES_DESCRIPTION || "-"}}</div>
+                <div class="col-md-2 smallerpadding">{{communicationChannel.ids.START_DATE || "-"}}</div>
+                <div class="col-md-2 smallerpadding">{{communicationChannel.ids.END_DATE || "-"}}</div>
             </div>
-
-            <div class="col-md-1 smallerpadding">{{communicationChannel.ids.DNID || "-"}}</div>
-            <div class="col-md-1 smallerpadding">{{communicationChannel.ids.MEMBER_NUMBER || "-"}}</div>
-            <div class="col-md-1 smallerpadding">{{communicationChannel.ids.LES_DESCRIPTION || "-"}}</div>
-            <div class="col-md-2 smallerpadding">{{communicationChannel.ids.START_DATE || "-"}}</div>
-            <div class="col-md-2 smallerpadding">{{communicationChannel.ids.END_DATE || "-"}}</div>
         </div>
     </div>
 

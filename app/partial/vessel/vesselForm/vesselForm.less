@@ -1,19 +1,5 @@
 .vesselForm{
     margin-bottom: 20px;
-    
-    .basicInformation{
-        padding-bottom: 10px;
-        .grayBorderBottom();
-        div{
-            margin-right: 30px;
-            &:first-child{
-                margin-right: 90px;
-            }            
-            &:last-child{
-                margin-right: 0px;
-            }
-        }
-    }
 
     .detailsContainer{
         padding-top: 20px;
@@ -62,9 +48,8 @@
     .mobileTerminalsContainer{
         margin-top: 20px;
         .mobileTerminal {
+            .borderSection();
             margin-top: 0;
-            padding: 15px;
-            border: 1px solid #dddddd;
             margin-bottom: 15px;
 
             .editMobileTerminal {
@@ -74,9 +59,11 @@
                 z-index: 10;
             }
 
+            .infoRow{
+                padding-top:6px;
+            }
+
             .mobileTerminalChannels {
-                border-bottom: 1px solid #ddd;
-                border-top:1px solid #ddd;
                 padding-top: 6px;
                 margin-bottom: 10px;
 
@@ -103,7 +90,7 @@
         }
 
         .mobileTerminal-warning {
-            border: 2px solid #faebcc;
+            border-color: #faebcc;
         }
     }
 }

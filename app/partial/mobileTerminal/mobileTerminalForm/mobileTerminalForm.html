@@ -66,7 +66,25 @@
             </div>    
         </div>
 
-        <div class="mobileTerminalDetailsContainer" static-include="partial/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.html"></div>
+        <div class="borderSection mobileInformationContainer">
+            <div class="row">
+                <div class="col-md-12 basicInformation">
+                    <div class="floatLeft">
+                        <b>{{currentMobileTerminal.type}}</b>
+                    </div>
+                    <div class="floatLeft">
+                        {{'common.status' | i18n}}: 
+                        <span class="label label-success" ng-show="currentMobileTerminal.active">{{ ('common.active' | i18n)}}</span>
+                        <span class="label label-default" ng-hide="currentMobileTerminal.active">{{ ('common.inactive' | i18n)}}</span>
+                    </div>
+                    <div class="floatLeft">
+                        {{'common.source' | i18n}} : <b>{{currentMobileTerminal.source}}</b>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>        
+            <div class="mobileTerminalDetailsContainer" static-include="partial/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.html"></div>
+        </div>
     </div>
 
 

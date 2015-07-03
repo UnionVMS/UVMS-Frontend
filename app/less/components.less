@@ -3,6 +3,27 @@
  *
  */
 
+ //Basic information containing status, and other short information
+.vesselForm, .mobileInformationContainer, .mobileTerminal{
+    .basicInformation{
+        padding-bottom: 10px;
+        .label{
+            position: relative;
+            top:-1px;
+        }
+        .grayBorderBottom();
+        div{
+            margin-right: 30px;
+            &:first-child{
+                margin-right: 90px;
+            }            
+            &:last-child{
+                margin-right: 0px;
+            }
+        }
+    }
+}
+
 /*Loading icon*/
 .loadingIconContainer{
     width: 100%;

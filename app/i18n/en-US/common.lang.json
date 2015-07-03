@@ -42,6 +42,8 @@
     "search_results_load_more" : "Load more",
     "search_zero_results_error" : "No result matching your search criteria was found.",
     "simple_search" : "Simple search",
+    "source" : "Source",
+    "status" : "Status",
     "tag_select_input_max_limit_reached" : "You can only add {1} item(s).",
     "time_hour_short" : "h",
     "time_minute_short" : "min",
