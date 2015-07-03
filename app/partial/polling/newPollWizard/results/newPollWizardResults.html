@@ -31,7 +31,7 @@
                         <td>{{ item.attributes.TRANSPONDER }} </td>
                         <td>{{ item.attributes.START_DATE | date : "medium" }}</td>
                         <td>{{ item.attributes.END_DATE | date : "medium" }}</td>
-                        <td>{{ item.getFrequencyAsText() }}</td>
+                        <td>{{item.attributes.FREQUENCY | secondsToTimeString}}</td>
                     </tr>
                 </tbody>
             </table>

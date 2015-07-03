@@ -153,19 +153,19 @@
         <div class="col-md-2 mobile-terminal-attribute">
             <label>
                 {{"mobileTerminal.form_inmarsatc_expected_freq_label" | i18n}}
-                <p>{{mt.attributes.FREQUENCY_EXPECTED ? mt.attributes.FREQUENCY_EXPECTED + " h" : "-"}}</p>
+                <p>{{mt.attributes.FREQUENCY_EXPECTED | secondsToTimeString}}</p>
             </label>
         </div>
         <div class="col-md-2 mobile-terminal-attribute">
             <label>
                 {{"mobileTerminal.form_inmarsatc_grace_period_label" | i18n}}
-                <p>{{mt.attributes.FREQUENCY_IN_PORT ? mt.attributes.FREQUENCY_GRACE_PERIOD + " h": "-"}}</p>
+                <p>{{mt.attributes.FREQUENCY_GRACE_PERIOD | secondsToTimeString}}</p>
             </label>
         </div>
         <div class="col-md-2 mobile-terminal-attribute">
             <label>
                 {{"mobileTerminal.form_inmarsatc_in_port_grace_period_label" | i18n}}
-                <p>{{mt.attributes.FREQUENCY_IN_PORT ? mt.attributes.FREQUENCY_IN_PORT + " h" : "-"}}</p>
+                <p>{{mt.attributes.FREQUENCY_IN_PORT | secondsToTimeString}}</p>
             </label>
         </div>
     </div>

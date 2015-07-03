@@ -30,7 +30,7 @@
                     <td>{{item.attributes.TRANSPONDER}}</td>
                     <td>{{item.startDate | date : "medium"}}</td>
                     <td>{{item.endDate | date : "medium"}}</td>
-                    <td>{{item.getFrequencyAsText()}}</td>
+                    <td>{{item.attributes.FREQUENCY | secondsToTimeString}}</td>
                     <td>{{item.attributes.USER}}</td>
                     <td>{{item.attributes.USER_ORGANISATION}}</td>
                     <td class="actionIcon" ng-class="{inactive:!possibleToStart(item)}">

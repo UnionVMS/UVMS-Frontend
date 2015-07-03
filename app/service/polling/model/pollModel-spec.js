@@ -96,27 +96,6 @@ describe('Poll', function() {
         expect(poll.attributes["FREQUENCY"]).toEqual(7200);               
     }));
 
-    it('getFrequencyAsText should return correct', inject(function(Poll) {
-        var poll = Poll.fromJson(responseData);
-        expect(poll.getFrequencyAsText()).toEqual("2h");
-
-        poll.attributes["FREQUENCY"] = 1800;
-        expect(poll.getFrequencyAsText()).toEqual("30 min");
-
-        poll.attributes["FREQUENCY"] = 18600;
-        expect(poll.getFrequencyAsText()).toEqual("5h 10 min");
-
-        poll.attributes["FREQUENCY"] = 5400;
-        expect(poll.getFrequencyAsText()).toEqual("1h 30 min");
-
-        poll.attributes["FREQUENCY"] = 7000;
-        expect(poll.getFrequencyAsText()).toEqual("1h 56 min");        
-
-        poll.attributes["FREQUENCY"] = 24;
-        expect(poll.getFrequencyAsText()).toEqual("24 s");                
-    }));
-
-
 });
 
 

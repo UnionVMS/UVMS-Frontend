@@ -3,7 +3,7 @@
  *
  */
 
-input[type="text"], input[type="time"], input[type="number"], .periodInput
+input[type="text"], input[type="time"], input[type="number"]
 {
     border-radius: 0px;
     height: 30px;
@@ -16,14 +16,14 @@ button.inputHeigth{
     height: 30px;
 }
 
-input[type="text"]:focus, input[type="time"]:focus, input[type="number"]:focus, .periodInput:focus{
+input[type="text"]:focus, input[type="time"]:focus, input[type="number"]:focus{
     border:1px solid @formInputActiveBorderColor;
     outline: 0;
     -webkit-box-shadow: none;
     box-shadow: none;
 }
 
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control, .periodInput.disabled{
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
   cursor: not-allowed;
   background-color: #eeeeee;
   opacity: 1;
