@@ -271,4 +271,20 @@ describe('MobileTerminalModel', function() {
         mt2.channels.splice(0,1);
         expect(mt1.isEqualAttributesAndChannels(mt2)).toBeFalsy();
     }));            
+
+    it('should transfer capabilities of removed channel to default channel', inject(function(CommunicationChannel, MobileTerminal) {
+        var channel = new CommunicationChannel();
+        channel.capabilities = {
+            "POLLABLE": true,
+            "CONFIGURABLE": true
+        };
+
+        var mt = new MobileTerminal();
+        mt.channels.push(channel);
+        mt.removeChannel(1);
+        expect(mt.channels[0].capabilities["POLLABLE"]).toBeTruthy();
+        expect(mt.channels[0].capabilities["CONFIGURABLE"]).toBeTruthy();
+        expect(mt.channels[0].capabilities["DEFAULT_REPORTING"]).toBeTruthy();
+    }));
+
 });

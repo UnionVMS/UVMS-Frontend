@@ -2,9 +2,16 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
 
         function MobileTerminal(){
             this.attributes = {};
-            this.channels = [];
+
             //Add an initial channel
-            this.channels.push(new CommunicationChannel(true));
+            var defaultChannel = new CommunicationChannel();
+            defaultChannel.capabilities = {
+                "CONFIGURABLE": true,
+                "DEFAULT_REPORTING": true,
+                "POLLABLE": true
+            };
+
+            this.channels = [defaultChannel];
             this.active = true;
             this.connectId = undefined;
             this.associatedVessel = undefined;
@@ -163,6 +170,24 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 newChannel.setLESDescription(this.attributes.LES);
             }
             this.channels.push(newChannel);
+        };
+
+        MobileTerminal.prototype.transferCapabilitiesToDefaultChannel = function(removedChannels) {
+            if (this.channels.length === 0) {
+                return;
+            }
+
+            var defaultChannel = this.channels[0];
+            $.each(removedChannels, function(index, removedChannel) {
+                $.each(removedChannel.capabilities, function(capability, removedValue) {
+                    defaultChannel.capabilities[capability] = defaultChannel.capabilities[capability] || removedValue;
+                });
+            });
+        };
+
+        MobileTerminal.prototype.removeChannel = function(channelIndex) {
+            var removedChannels = this.channels.splice(channelIndex, 1);
+            this.transferCapabilitiesToDefaultChannel(removedChannels);
         };
 
         //Unassign the mobileTerminal from its carrier

@@ -247,7 +247,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
 
     //Remove a channel from the list of channels
     $scope.removeChannel = function(channelIndex){
-        $scope.currentMobileTerminal.channels.splice(channelIndex, 1);
+        $scope.currentMobileTerminal.removeChannel(channelIndex);
     };
 
     $scope.selectChannel = function(capability, selected) {
