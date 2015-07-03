@@ -13,17 +13,13 @@
                     </div>
                     <div ng-if="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
                         <tag-select-input ng-model="currentMobileTerminal.attributes.MULTIPLE_OCEAN" ng-placeholder="{{'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN"></tag-select-input>
-                    </div>                    
-                </div>                 
+                    </div>
+                </div>
             </div>
         </div>
         <div>
             <div ng-show="currentMobileTerminal.type">
                 <div class="row">
-                    <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.SATELLITE_NUMBER">
-                        <label>{{'mobileTerminal.form_inmarsatc_satellite_number_label' | i18n}}</label>
-                        <input type="text" name="sattelite_number" class="form-control" ng-model="currentMobileTerminal.attributes.SATELLITE_NUMBER" />
-                    </div>
                     <div class="col-md-2 form-group" ng-class="{'has-error': mobileTerminalForm.serialNumber.$invalid && (submitAttempted || mobileTerminalForm.serialNumber.$dirty)}">
                         <label>{{'mobileTerminal.form_inmarsatc_serial_no_label' | i18n}}</label>
                         <input type="text" name="serialNumber" class="form-control" ng-model="currentMobileTerminal.attributes.SERIAL_NUMBER" required ng-disabled="!isCreateNewMode()"/>
@@ -40,6 +36,10 @@
                     <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.ANTENNA">
                         <label>{{'mobileTerminal.form_inmarsatc_antenna_label' | i18n}}</label>
                         <input type="text" class="form-control" ng-model="currentMobileTerminal.attributes.ANTENNA">
+                    </div>
+                    <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.SATELLITE_NUMBER">
+                        <label>{{'mobileTerminal.form_inmarsatc_satellite_number_label' | i18n}}</label>
+                        <input type="text" name="sattelite_number" class="form-control" ng-model="currentMobileTerminal.attributes.SATELLITE_NUMBER" />
                     </div>
                     <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.ANSWER_BACK">
                         <label>{{'mobileTerminal.form_inmarsatc_answer_back_label' | i18n}}</label>
@@ -91,53 +91,53 @@
                 </div>
                 <div class="row" ng-repeat="communicationChannel in currentMobileTerminal.channels" >
                     <div ng-form="channelForm" ng-class="{comchannelrow: $index== 0}">
-                            <div class="col-md-2 form-group">
-                            <!-- Channel-->
-                                 <dropdown ng-model="communicationChannel.name" initialtext="" items="channelNames"></dropdown> 
+                        <div class="col-md-2 form-group">
+                        <!-- Channel-->
+                             <dropdown ng-model="communicationChannel.name" initialtext="" items="channelNames"></dropdown> 
+                        </div>
+                        <div class="col-md-2 smallerpadding">
+                            <div class="col-md-4 smallerpadding" ng-show="getTerminalConfig().capabilities.IS_POLLABLE">
+                                <!-- Polling -->
+                                <input type="radio" name="polling" ng-value="$index" ng-model="selectedPollingChannel" ng-model-options="{getterSetter: true}"/>
                             </div>
-                            <div class="col-md-2 smallerpadding">
-                                <div class="col-md-4 smallerpadding" ng-show="getTerminalConfig().capabilities.IS_POLLABLE">
-                                    <!-- Polling -->
-                                    <input type="radio" name="polling" ng-value="$index" ng-model="selectedPollingChannel" ng-model-options="{getterSetter: true}"/>
-                                </div>
-                                <div class="col-md-4 smallerpadding" ng-show="getTerminalConfig().capabilities.IS_CONFIGURABLE">
-                                    <!-- Config -->
-                                    <input type="radio" name="config" ng-value="$index" ng-model="selectedConfigChannel" ng-model-options="{getterSetter: true}"/>
-                                </div>
-                                <div class="col-md-4 smallerpadding">
-                                    <!-- Default -->
-                                    <input type="radio" name="default" ng-value="$index" ng-model="selectedDefaultChannel" ng-model-options="{getterSetter: true}" disabled/>
-                                </div>
+                            <div class="col-md-4 smallerpadding" ng-show="getTerminalConfig().capabilities.IS_CONFIGURABLE">
+                                <!-- Config -->
+                                <input type="radio" name="config" ng-value="$index" ng-model="selectedConfigChannel" ng-model-options="{getterSetter: true}"/>
                             </div>
-                            <div class="col-md-1 form-group smallerpadding" ng-class="{'has-error': channelForm.dnid.$invalid && (submitAttempted || channelForm.dnid.$dirty)}" ng-show="getTerminalConfig().channelFields.DNID">
-                            <!-- DNID-->
-                                <input type="text" name="dnid" class="form-control" ng-model="communicationChannel.ids.DNID" only-digits>
-                                <span class="help-block" ng-show="channelForm.dnid.$error.required">{{'common.validation_required' | i18n}}</span>
-                                <span class="help-block" ng-show="channelForm.dnid.$error.onlyDigits">{{'common.validation_digits_only' | i18n}}</span>
+                            <div class="col-md-4 smallerpadding">
+                                <!-- Default -->
+                                <input type="radio" name="default" ng-value="$index" ng-model="selectedDefaultChannel" ng-model-options="{getterSetter: true}" disabled/>
                             </div>
-                            <div class="col-md-1 form-group smallerpadding" ng-class="{'has-error': channelForm.memberId.$invalid && (submitAttempted || channelForm.memberId.$dirty)}" ng-show="getTerminalConfig().channelFields.MEMBER_NUMBER">
-                            <!-- Member no -->
-                                <input type="text" name="memberId" class="form-control" ng-model="communicationChannel.ids.MEMBER_NUMBER" only-digits>
-                                <span class="help-block" ng-show="channelForm.memberId.$error.required">{{'common.validation_required' | i18n}}</span>
-                                <span class="help-block" ng-show="channelForm.memberId.$error.onlyDigits">{{'common.validation_digits_only' | i18n}}</span>
+                        </div>
+                        <div class="col-md-1 form-group smallerpadding" ng-class="{'has-error': channelForm.dnid.$invalid && (submitAttempted || channelForm.dnid.$dirty)}" ng-show="getTerminalConfig().channelFields.DNID">
+                        <!-- DNID-->
+                            <input type="text" name="dnid" class="form-control" ng-model="communicationChannel.ids.DNID" only-digits>
+                            <span class="help-block" ng-show="channelForm.dnid.$error.required">{{'common.validation_required' | i18n}}</span>
+                            <span class="help-block" ng-show="channelForm.dnid.$error.onlyDigits">{{'common.validation_digits_only' | i18n}}</span>
+                        </div>
+                        <div class="col-md-1 form-group smallerpadding" ng-class="{'has-error': channelForm.memberId.$invalid && (submitAttempted || channelForm.memberId.$dirty)}" ng-show="getTerminalConfig().channelFields.MEMBER_NUMBER">
+                        <!-- Member no -->
+                            <input type="text" name="memberId" class="form-control" ng-model="communicationChannel.ids.MEMBER_NUMBER" only-digits>
+                            <span class="help-block" ng-show="channelForm.memberId.$error.required">{{'common.validation_required' | i18n}}</span>
+                            <span class="help-block" ng-show="channelForm.memberId.$error.onlyDigits">{{'common.validation_digits_only' | i18n}}</span>
+                        </div>
+                        <div class="col-md-1 smallerpadding" ng-show="getTerminalConfig().channelFields.LES_DESCRIPTION">
+                            <!-- LES_DESCRIPTION -->
+                            <input type="text" name="LES_DESCRIPTION" class="form-control" ng-model="communicationChannel.ids.LES_DESCRIPTION">
+                        </div>
+                            <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': channelForm.started.$invalid && (submitAttempted || channelForm.started.$dirty)}" ng-show="getTerminalConfig().channelFields.START_DATE">
+                            <!-- Started -->
+                                <datepicker-input name="started" model="communicationChannel.ids.START_DATE"></datepicker-input>
                             </div>
-                            <div class="col-md-1 smallerpadding" ng-show="getTerminalConfig().channelFields.LES_DESCRIPTION">
-                                <!-- LES_DESCRIPTION -->
-                                <input type="text" name="LES_DESCRIPTION" class="form-control" ng-model="communicationChannel.ids.LES_DESCRIPTION">
+                            <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': channelForm.stopped.$invalid && (submitAttempted || channelForm.stopped.$dirty)}" ng-show="getTerminalConfig().channelFields.END_DATE">
+                            <!-- Stopped -->
+                                <datepicker-input name="stopped" model="communicationChannel.ids.END_DATE"></datepicker-input>
                             </div>
-                                <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': channelForm.started.$invalid && (submitAttempted || channelForm.started.$dirty)}" ng-show="getTerminalConfig().channelFields.START_DATE">
-                                <!-- Started -->
-                                    <datepicker-input name="started" model="communicationChannel.ids.START_DATE"></datepicker-input>
-                                </div>
-                                <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': channelForm.stopped.$invalid && (submitAttempted || channelForm.stopped.$dirty)}" ng-show="getTerminalConfig().channelFields.END_DATE">
-                                <!-- Stopped -->
-                                    <datepicker-input name="stopped" model="communicationChannel.ids.END_DATE"></datepicker-input>
-                                </div>
-                            
-                            <div class="col-md-1 remove" ng-show="$index > 0">
-                                    <i class="fa fa-lg fa-times" title="{{'common.remove' | i18n}}" ng-click="removeChannel($index)"></i>
-                            </div>
-                        </div>                    
+                        
+                        <div class="col-md-1 remove" ng-show="$index > 0">
+                                <i class="fa fa-lg fa-times" title="{{'common.remove' | i18n}}" ng-click="removeChannel($index)"></i>
+                        </div>
+                    </div>
                 </div>
                 <div class="row addNewChannelWrapper">  
                     <div class="col-md-12">
@@ -170,7 +170,7 @@
                             <input class="form-control" ng-model="currentMobileTerminal.attributes.FREQUENCY_EXPECTED" min="0" type="number" name="frequency_expected"/>
                             <div class="unit-box">{{"common.time_hour_short" | i18n}}</div>
                         </div>
-                        <input-validation-message types="number" input="mobileTerminalForm.frequency_expected"></input-validation-message>                        
+                        <input-validation-message types="number" input="mobileTerminalForm.frequency_expected"></input-validation-message>
                     </div>
                     <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.FREQUENCY_GRACE_PERIOD" ng-class="{'has-error': mobileTerminalForm.frequency_grace.$invalid && (submitAttempted || mobileTerminalForm.frequency_grace.$dirty)}">
                         <label>{{'mobileTerminal.form_inmarsatc_grace_period_label' | i18n}}</label>
@@ -187,11 +187,11 @@
                             <div class="unit-box">{{"common.time_hour_short" | i18n}}</div>
                         </div>
                         <input-validation-message types="number" input="mobileTerminalForm.frequency_port"></input-validation-message>
-                    </div>                                        
+                    </div>
                 </div>
 
-            </div>       
-        </div>       
+            </div>
+        </div>
 
 
     </form>
