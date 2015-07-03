@@ -58,7 +58,7 @@ angular.module('unionvmsWeb')
     };
 
     var getLastMovement = function(vesselGuid) {
-        var query = new GetListRequest(1, 1, true, [{"key": "CARRIER_GUID", "value": vesselGuid}]);
+        var query = new GetListRequest(1, 1, true, [{"key": "CONNECT_ID", "value": vesselGuid}]);
         var deferred = $q.defer();
         movementRestFactory.getMovementList().list(query.DTOForMovement(), function(response) {
             if (response.code !== "200") {
@@ -67,7 +67,7 @@ angular.module('unionvmsWeb')
             }
 
             var movements = response.data.movement;
-            var movement = movements.length > 0 ? Movement.fromJson(movements[0]) : undefined;
+            var movement = (movements && movements.length > 0) ? Movement.fromJson(movements[0]) : undefined;
             deferred.resolve(movement);
         }, function() {
             deferred.reject();
