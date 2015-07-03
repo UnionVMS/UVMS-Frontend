@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService, alertService, MobileTerminalListPage, MobileTerminal, SystemTypeAndLES, mobileTerminalRestService, pollingService, GetPollableListRequest, pollingRestService, $location, locale, $routeParams){
+angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService, alertService, MobileTerminalListPage, MobileTerminal, SystemTypeAndLES, mobileTerminalRestService, pollingService, GetPollableListRequest, pollingRestService, configurationService, $location, locale, $routeParams){
 
     var hideAlertsOnScopeDestroy = true;
 
@@ -126,30 +126,22 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
 
 
         //Get list transponder systems
-        mobileTerminalRestService.getTranspondersConfig()
-        .then(
-            function(transpConfig){
-                $scope.transpondersConfig = transpConfig;
-                $scope.createTransponderSystemDropdownOptions();
-            },
-            function(error){
-                alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_load_transponders_error'));
-            }
-        );
+        if(angular.isDefined(configurationService.getConfig('MOBILE_TERMINAL_TRANSPONDERS'))){
+            $scope.transpondersConfig = configurationService.getConfig('MOBILE_TERMINAL_TRANSPONDERS');
+            $scope.createTransponderSystemDropdownOptions();
+        }else{
+            alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_load_transponders_error'));
+        }
+
         //Get list of channelNames
-        mobileTerminalRestService.getChannelNames()
-        .then(
-            function(channelNamesList){
-                $scope.channelNames = [];
-                $.each(channelNamesList, function(index, name){
-                    $scope.channelNames.push({text : name, code : name});
-                });
-            },
-            function(error){
-                alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_load_channel_names_error'));
-            }
-        );
-        
+        $scope.channelNames = [];
+        if(angular.isDefined(configurationService.getConfig('MOBILE_TERMINAL_TRANSPONDERS'))){
+            $.each(configurationService.getConfig('MOBILE_TERMINAL_CHANNELS'), function(index, name){
+                $scope.channelNames.push({text : name, code : name});
+            });        
+        }else{
+            alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_load_channel_names_error'));
+        }
     }; 
 
     //Get list of Mobile Terminals matching the current search criterias

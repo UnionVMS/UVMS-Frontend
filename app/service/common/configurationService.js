@@ -1,7 +1,7 @@
 
 (function(){
 
-    var configurationService = function($q, locale, vesselRestService, movementRestService){
+    var configurationService = function($q, locale, vesselRestService, movementRestService, mobileTerminalRestService){
 
         //Dict of configuration parameters for all modules
         var configs = {};
@@ -12,6 +12,8 @@
         var CONFIG_MODULES = {
             "VESSEL" : vesselRestService.getConfig(),
             "MOVEMENT" : movementRestService.getConfig(),
+            "MOBILE_TERMINAL_TRANSPONDERS" : mobileTerminalRestService.getTranspondersConfig(),
+            "MOBILE_TERMINAL_CHANNELS" : mobileTerminalRestService.getChannelNames(),
         };
 
         //Get configuration for all modules
@@ -47,7 +49,7 @@
         };
 
         var getConfigForModule  = function(moduleName, getConfigFunctionCall){
-            console.log("Get config for:" + moduleName);
+            console.log("Get config: " + moduleName);
             var deferred = $q.defer();            
             getConfigFunctionCall.then(
                 function(response){
@@ -72,6 +74,15 @@
             }
         };
 
+        var getConfig = function(moduleName){
+            try{
+                return configs[moduleName];
+            }catch(err){
+                console.error("Config is missing for " +moduleName);
+                return undefined;
+            }
+        };        
+
          var setTextAndCodeForDropDown = function(valueToSet, prefix, module){ 
             var valueList = [];
             _.find(valueToSet, 
@@ -91,12 +102,13 @@
         return{
             setup: setup,
             getValue: getConfigValue,
+            getConfig: getConfig,
             setTextAndCodeForDropDown : setTextAndCodeForDropDown
 
         };
     };
 
     angular.module('unionvmsWeb')
-	.factory('configurationService',['$q', 'locale', 'vesselRestService', 'movementRestService', configurationService]);
+	.factory('configurationService',['$q', 'locale', 'vesselRestService', 'movementRestService', 'mobileTerminalRestService', configurationService]);
     
 }());

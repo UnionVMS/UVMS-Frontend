@@ -5,7 +5,7 @@ describe('configurationService', function() {
 
     beforeEach(module('unionvmsWeb'));  
 
-    beforeEach(inject(function($rootScope, $q, vesselRestService, movementRestService) {
+    beforeEach(inject(function($rootScope, $q, vesselRestService, movementRestService, mobileTerminalRestService) {
 
         var vesselDeffered = $q.defer();
         vesselDeffered.resolve({LETTER : 'A', COUNTRY : 'SWE'}); 
@@ -14,6 +14,11 @@ describe('configurationService', function() {
         var movementDeffered = $q.defer();
         movementDeffered.resolve({THEME : 'GREEN', NUMBER : 2, BUILDINGS : buildings}); 
         spyOn(movementRestService, 'getConfig').andReturn(movementDeffered.promise); 
+
+        var deffered = $q.defer();
+        deffered.resolve({THEME : 'GREEN', NUMBER : 2, BUILDINGS : buildings}); 
+        spyOn(mobileTerminalRestService, 'getTranspondersConfig').andReturn(deffered.promise);         
+        spyOn(mobileTerminalRestService, 'getChannelNames').andReturn(deffered.promise);         
     }));
 
 
