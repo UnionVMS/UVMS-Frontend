@@ -12,7 +12,7 @@
         var CONFIG_MODULES = {
             "VESSEL" : vesselRestService.getConfig(),
             "MOVEMENT" : movementRestService.getConfig(),
-            "MOBILETERMINAL" : mobileTerminalRestService.getConfig()
+            "MOBILETERMINAL" : mobileTerminalRestService.getConfig(),
             "MOBILE_TERMINAL_TRANSPONDERS" : mobileTerminalRestService.getTranspondersConfig(),
             "MOBILE_TERMINAL_CHANNELS" : mobileTerminalRestService.getChannelNames(),
         };

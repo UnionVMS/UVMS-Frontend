@@ -17,8 +17,9 @@ describe('configurationService', function() {
 
         var deffered = $q.defer();
         deffered.resolve({THEME : 'GREEN', NUMBER : 2, BUILDINGS : buildings}); 
-        spyOn(mobileTerminalRestService, 'getTranspondersConfig').andReturn(deffered.promise);         
-        spyOn(mobileTerminalRestService, 'getChannelNames').andReturn(deffered.promise);         
+        spyOn(mobileTerminalRestService, 'getTranspondersConfig').andReturn(deffered.promise);
+        spyOn(mobileTerminalRestService, 'getChannelNames').andReturn(deffered.promise);
+        spyOn(mobileTerminalRestService, 'getConfig').andReturn(deffered.promise);
     }));
 
 
