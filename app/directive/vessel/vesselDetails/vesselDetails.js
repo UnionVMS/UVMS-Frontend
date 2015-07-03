@@ -39,12 +39,6 @@ angular.module('unionvmsWeb')
         //$scope.searchFlagState = "";
         //$scope.lenght = "";
         //$scope.licensetype="";
-        
-        $scope.terminalsatellitetypes =[{'name':'Inmarsat-B','code':'133'},{'name':'Inmarsat-C','code':'998'}];
-        $scope.terminaloceanstypes =[{'name':'Skagerack','code':'3'},{'name':'Kattegatt','code':'99'},{'name':'Östersjön','code':'929'}];
-        $scope.searchFlagStates =[{'name':'SWE','code':'SWE'},{'name':'DNK','code':'DNK'},{'name':'NOR','code':'NOR'}];
-        $scope.searchLicensTypes =[{'name':'Fishing license','code':'Fishing license'},{'name':'Trawling license','code':'Trawling license'}];
-        $scope.searchActiveTypes = [{'name':'Yes','code':'true'},{'name':'No','code':'false'}];
 
         //Reset IRCS on hasIrcs select
         $scope.onHasIrcsSelect = function(item){
