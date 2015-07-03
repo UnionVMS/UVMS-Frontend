@@ -34,7 +34,7 @@
                 {{'vessel.cfr' | i18n }}: <b>{{vesselHistory.cfr}}</b>
             </div>
             <div class="col-md-6">
-                {{'vessel.mmsi_no' | i18n }}: <b>{{vesselHistory.mmsi_no}}</b>
+                {{'vessel.mmsi_no' | i18n }}: <b>{{vesselHistory.mmsiNo}}</b>
             </div>
 
             <div class="col-md-6">
@@ -45,17 +45,14 @@
             </div>
 
             <div class="col-md-6">
-                {{'vessel.home_port_code' | i18n }}: <b>{{vesselHistory.homePort}}</b>
-            </div>
-            <div class="col-md-6">
-                {{'vessel.port_name' | i18n }}: <b>-</b>
-            </div>
-
-            <div class="col-md-6">
                 {{'vessel.po_code' | i18n }}: <b>-</b>
             </div>
             <div class="col-md-6">
                 {{'vessel.po_name' | i18n }}: <b>-</b>
+            </div>
+
+            <div class="col-md-12">
+                {{'vessel.home_port' | i18n }}: <b>{{vesselHistory.homePort}}</b>
             </div>
 
 
@@ -67,14 +64,14 @@
                 {{'vessel.type' | i18n }}: <b>{{vesselHistory.vesselType}}</b>
             </div>
             <div class="col-md-6">
-                {{'vessel.tonnage_gt' | i18n }}: <b>{{vesselHistory.grossTonnage}}</b>
+                {{'vessel.tonnage_gt' | i18n }}: <b>{{vesselHistory.grossTonnage}} {{"common.tons" | i18n}}</b>
             </div>    
 
             <div class="col-md-6">
-                {{'vessel.main_power' | i18n }}: <b>{{vesselHistory.powerMain}}</b>
+                {{'vessel.main_power' | i18n }}: <b>{{vesselHistory.powerMain}} {{"common.kw" | i18n}}</b>
             </div>
             <div class="col-md-6">
-                {{'vessel.length' | i18n }}: <b>{{vesselHistory.lengthOverAll}} {{vesselHistory.lengthBetweenPerpendiculars}}</b>
+                {{'vessel.length' | i18n }}: <b>{{vesselHistory.lengthOverAll}} {{"common.meters_short" | i18n}}</b>
             </div>  
 
             <div class="col-md-6">

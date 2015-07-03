@@ -52,6 +52,7 @@
     "external_marking": "External marking",
     "flag_state": "Flag state",
     "gear_type": "Gear type",
+    "home_port": "Home port",
     "home_port_code": "Home port code",
     "inactive":"Inactive",
     "ircs": "IRCS",
