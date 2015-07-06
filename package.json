@@ -1,6 +1,6 @@
 {
   "name": "unionvmsWeb",
-  "version": "1.0.0",
+  "version": "1.0.10",
   "devDependencies": {
     "grunt": "~0.4",
     "grunt-angular-templates": "~0.5",
