@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
     <link href="app.less" type="text/css" rel="stylesheet/less">
+    <link href="../bower_components/OpenLayers/css/ol.css" type="text/css" rel="stylesheet/less">
     <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css' data-concat="false" data-remove="false">
 </head>
 <body>
@@ -31,6 +32,7 @@
     <script src="../bower_components/angular-dynamic-locale/dist/tmhDynamicLocale.js"></script>
     <script src="../bower_components/leaflet/dist/leaflet.js"></script>
     <script src="../bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
+    <script src="../bower_components/OpenLayers/build/ol-debug.js"></script>
     <!-- Add New Bower Component JS Above -->
 
 
@@ -51,6 +53,7 @@
     <script src="directive/common/tagSelectInput/tagSelectInput.js"></script>
     <script src="directive/common/validation/customValidators.js"></script>
     <script src="directive/common/loadingIndicator/loadingIndicator.js"></script>
+    <script src="directive/common/resize/resize.js"></script>
 
     <script src="directive/polling/newPollWizardProgress/newPollWizardProgress.js"></script>
     <script src="directive/vessel/vesselDetails/vesselDetails.js"></script>
@@ -145,6 +148,9 @@
     <script src="directive/common/loadingIcon/loadingIcon.js"></script>
     <script src="service/common/configurationService.js"></script>
     <script src="filter/common/secondsToTimeString/secondsToTimeString.js"></script>
+    
+    <script src="partial/spatial/spatial.js"></script>
+    <script src="partial/spatial/map.js"></script>
     <!-- Add New Component JS Above -->
 
     <div ng-include="'partial/header/header.html'"></div>

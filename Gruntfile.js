@@ -192,6 +192,13 @@ module.exports = function (grunt) {
                 dest: 'app/assets/locales',
                 filter:'isFile',
                 expand:true
+            },
+            {
+                cwd: 'bower_components/OpenLayers/build',
+                src: ['ol-debug.js'],
+                dest: 'app/OpenLayers',
+                filter:'isFile',
+                expand:true
             }
         ]
       }

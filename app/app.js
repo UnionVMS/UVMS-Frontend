@@ -17,23 +17,23 @@ angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocalePr
     $routeProvider
         .when('/today',{
             templateUrl:'partial/today/today.html',
-            resolve: generalRouteResolves
+//            resolve: generalRouteResolves
         })
         .when('/assets',{
             templateUrl:'partial/vessel/vessel.html',
-            resolve: generalRouteResolves
+//            resolve: generalRouteResolves
         })
         .when('/communication', {
             templateUrl: 'partial/mobileTerminal/mobileTerminal.html', 
-            resolve: generalRouteResolves
+//            resolve: generalRouteResolves
         })
         .when('/communication/polling', {
             templateUrl: 'partial/polling/polling.html', 
-            resolve: generalRouteResolves
+//            resolve: generalRouteResolves
         })
         .when('/communication/polling/logs', {
             templateUrl: 'partial/polling/pollingLogs/pollingLogs.html', 
-            resolve: generalRouteResolves
+//            resolve: generalRouteResolves
         })
         .when('/communication/:id', {
             templateUrl: 'partial/mobileTerminal/mobileTerminal.html', 
@@ -41,23 +41,27 @@ angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocalePr
         })        
         .when('/movement', {
             templateUrl: 'partial/movement/movement.html', 
-            resolve: generalRouteResolves
+            //resolve: generalRouteResolves
         })
         .when('/audit', {
             templateUrl: 'partial/audit/auditLog/auditLog.html', 
-            resolve: generalRouteResolves
+//            resolve: generalRouteResolves
         })
         .when('/audit/auditlog', {
             templateUrl: 'partial/audit/auditLog/auditLog.html', 
-            resolve: generalRouteResolves
+//            resolve: generalRouteResolves
         })
         .when('/audit/auditconfiguration', {
             templateUrl: 'partial/audit/auditConfiguration/auditConfiguration.html', 
-            resolve: generalRouteResolves
+//            resolve: generalRouteResolves
         })
         .when('/movement/manual', {
             templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html',
-            resolve: generalRouteResolves
+//            resolve: generalRouteResolves
+        })
+        .when('/gis', {
+            templateUrl: "partial/spatial/spatial.html",
+            //resolve: generalRouteResolves
         });
     /* Add New Routes Above */
     $routeProvider.otherwise({redirectTo:'/today'});
@@ -113,7 +117,8 @@ angular.module('unionvmsWeb').factory('initService',function(configurationServic
                 'polling',
                 'vessel',
                 'movement',
-                'config'
+                'config',
+                'spatial'
             ]);
         },
     };

@@ -55,8 +55,11 @@ Steps:
 3 Navigate to this folder
 4 run npm install
 5 run bower install
-6 run grunt build
-7 run grunt serve
+6 Navigate to bower_components/OpenLayers
+7 run node .\tasks\build.js .\config\ol-debug.json .\build\ol-debug.js
+8 run grunt build
+9 run grunt serve
+
 
 
 Prerequisities
