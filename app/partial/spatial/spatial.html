@@ -1,5 +1,13 @@
 <div ng-controller="SpatialCtrl">
-	<div static-include="partial/spatial/spatialPageHeader/spatialPageHeader.html"></div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 pageMenu">
+				<ul class="horizontal pipeSeparator">
+					<li ng-repeat="menu in headerMenus" ng-click="selectMenu(menu.menu)" ng-class="{'active': selectedMenu === '{{menu.menu}}'}"><a>{{menu.title}}</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
 	
 	<!-- <div class="container">
 		<div class="row">
@@ -9,20 +17,6 @@
 		</div>
 	</div> -->
 	
-	<div class="containerWrapper">
-		<div class="container spatialpages">
-			<div class="spatialtabpanel">
-				<ul class="nav nav-tabs tabs-left sideways" role="tablist">
-					<li ng-repeat="tab in tabMenu" class="sourcetab" ng-click="selectTab(tab.tab)" ng-class="{'active': selectedTab === '{{tab.tab}}'}"><a>{{tab.title}}</a></li>
-				</ul>
-			</div>
-			<div class="spatialtab-content" ng-show="isTabSelected('MAP')">
-				<div id="map" class="map" ng-controller="MapCtrl" resize ng-style="doResize(80, 345)"></div>
-				<!-- <div id="map" class="map"></div> -->
-			</div>
-			<div class="spatialtab-content" ng-show="isTabSelected('VMS')">
-				Here goes the vms table
-			</div>
-		</div>
-	</div>
+	<div ng-include="'partial/spatial/liveViewPanel/liveViewPanel.html'" ng-show="isMenuSelected('LIVEVIEW')"></div>
+	<div ng-include="'partial/spatial/reportsPanel/reportsPanel.html'" ng-show="isMenuSelected('REPORTS')"></div>
 </div>

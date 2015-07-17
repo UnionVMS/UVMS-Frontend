@@ -1,5 +1,4 @@
-angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale){
-        
+angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale){
     //Define map
     var setMap = function(){
         var osmLayer = new ol.layer.Tile({
@@ -18,23 +17,30 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale){
                 params: {
                     'LAYERS': 'uvms:eez',
                     'TILED': true,
-                    'STYLES': ''
-                    //'cql_filter': "sovereign='Portugal' OR sovereign='Poland'"
+                    'STYLES': '',
+                    'cql_filter': "sovereign='Portugal' OR sovereign='Poland'"
                 }
             })
         });
         
         
         var view = new ol.View({
-            projection: setProjection(3857),
+            projection: setProjection(3857, 'm', true),
             center: ol.proj.transform([-1.81185, 52.44314], 'EPSG:4326', 'EPSG:3857'),
-            zoom: 3
+            zoom: 3,
+            enableRotation: false
         });
         
         var map = new ol.Map({
             target: 'map',
             controls: setControls(),
-            interactions: setInteractions()
+            interactions: setInteractions(),
+            logo: false
+        });
+        
+        map.beforeRender(function(map){
+            //Fix map size when the user changes tabs
+            map.updateSize();
         });
         
         map.addLayer(osmLayer);
@@ -44,11 +50,11 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale){
         return map;
     };
     
-    var setProjection = function(projCode){
+    var setProjection = function(projCode, units, global){
         var projection = new ol.proj.Projection({
             code: 'EPSG:' + projCode,
-            units: 'm',
-            global: true
+            units: units,
+            global: global
         });
         
         return projection;
@@ -65,7 +71,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale){
 //        });
         var scale = new ol.control.ScaleLine();
         
-        return [fullScreen, attribution, zoom, scale];
+        return new ol.Collection([fullScreen, attribution, zoom, scale]);
     };
     
     var setInteractions = function(){
@@ -74,11 +80,11 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale){
 //        var keyZoom = new ol.interaction.KeyboardZoom();
         var mouseWheel = new ol.interaction.MouseWheelZoom();
         
-        return [dragPan, mouseWheel];
+        return new ol.Collection([dragPan, mouseWheel]);
     };
         
    locale.ready('spatial').then(function(){
        $scope.map = setMap();
    });
-   
+
 });

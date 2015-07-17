@@ -1,30 +1,29 @@
 angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, locale){
-    $scope.isLiveView = true;
-    $scope.selectedTab = 'MAP';
+    $scope.selectedMenu = 'LIVEVIEW';
     
-    //Define tabs
-    var setTabs = function(){
+    //Define header menus
+    var setMenus = function(){
             return [
                 {
-                    'tab': 'MAP',
-                    'title': locale.getString('spatial.tab_map')
+                    'menu': 'LIVEVIEW',
+                    'title': locale.getString('spatial.header_live_view')
                 },
                 {
-                    'tab': 'VMS',
-                    'title': locale.getString('spatial.tab_vms')
+                    'menu': 'REPORTS',
+                    'title': locale.getString('spatial.header_reports')
                 }
             ];
         };
         
    locale.ready('spatial').then(function(){
-       $scope.tabMenu = setTabs();
+       $scope.headerMenus = setMenus();
    });
    
-   $scope.selectTab = function(tab){
-       $scope.selectedTab = tab;
+   $scope.selectMenu = function(menu){
+       $scope.selectedMenu = menu;
    };
    
-   $scope.isTabSelected = function(tab){
-       return $scope.selectedTab === tab;
+   $scope.isMenuSelected = function(menu){
+       return $scope.selectedMenu === menu;
    };
 });
