@@ -2,7 +2,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale)
     $scope.selectedVmsTab = 'MOVEMENTS';
     
     //Define VMS tabs
-    var setTabs = function(){
+    var setVmsTabs = function(){
         return [
                 {
                     'tab': 'MOVEMENTS',
@@ -17,15 +17,15 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale)
     
         
    locale.ready('spatial').then(function(){
-       $scope.vmsTabMenu = setTabs();
+       $scope.vmsTabMenu = setVmsTabs();
    });
    
    $scope.selectVmsTab = function(tab){
        $scope.selectedVmsTab = tab;
    };
    
-//   $scope.isVmsTabSelected = function(tab){
-//       return $scope.selectedVmsTab === tab;
-//   };
+   $scope.isVmsTabSelected = function(tab){
+       return $scope.selectedVmsTab === tab;
+   };
 
 });

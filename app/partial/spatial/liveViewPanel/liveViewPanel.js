@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, locale){
+angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $rootScope, locale){
     $scope.selectedTab = 'MAP';
     
     //Define tabs
@@ -21,6 +21,9 @@ angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, lo
    
    $scope.selectTab = function(tab){
        $scope.selectedTab = tab;
+       if (tab === 'MAP'){
+           $rootScope.$broadcast('mapTabSelected');
+       }
    };
    
    $scope.isTabSelected = function(tab){

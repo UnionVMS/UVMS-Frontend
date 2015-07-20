@@ -1,8 +1,13 @@
 <div class="containerWrapper" ng-controller="VmspanelCtrl">
-	<div class="container">
-		<ul class="nav nav-tabs" role="tablist">
+	<div class="container vmspages">
+		<ul class="nav nav-pills" role="tablist">
 			<li ng-repeat="tab in vmsTabMenu" class="vmssourcetab" ng-click="selectVmsTab(tab.tab)" ng-class="{'active': selectedVmsTab === '{{tab.tab}}'}"><a>{{tab.title}}</a></li>
 		</ul>
-		<div>Some content</div>
+		<div class="vmstab-content" ng-show="isVmsTabSelected('MOVEMENTS')">
+			<div>Table with positions</div>
+		</div>
+		<div class="vmstab-content" ng-show="isVmsTabSelected('SEGMENTS')">
+			<div>Table with segments</div>
+		</div>
 	</div>
 </div>

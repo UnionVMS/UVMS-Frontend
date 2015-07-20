@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale){
+angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, $rootScope, $timeout, locale){
     //Define map
     var setMap = function(){
         var osmLayer = new ol.layer.Tile({
@@ -17,8 +17,8 @@ angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale)
                 params: {
                     'LAYERS': 'uvms:eez',
                     'TILED': true,
-                    'STYLES': '',
-                    'cql_filter': "sovereign='Portugal' OR sovereign='Poland'"
+                    'STYLES': ''
+                    //'cql_filter': "sovereign='Portugal' OR sovereign='Poland' OR sovereign='Bulgaria' OR sovereign='Belgium'"
                 }
             })
         });
@@ -39,7 +39,6 @@ angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale)
         });
         
         map.beforeRender(function(map){
-            //Fix map size when the user changes tabs
             map.updateSize();
         });
         
@@ -49,6 +48,13 @@ angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale)
         
         return map;
     };
+    
+    var updateMapSize = function(){
+        $scope.map.updateSize();
+        console.log('inside update function');
+    };
+    
+    
     
     var setProjection = function(projCode, units, global){
         var projection = new ol.proj.Projection({
@@ -83,8 +89,13 @@ angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale)
         return new ol.Collection([dragPan, mouseWheel]);
     };
         
-   locale.ready('spatial').then(function(){
-       $scope.map = setMap();
-   });
+    locale.ready('spatial').then(function(){
+        $scope.map = setMap();
+    });
+   
+    $rootScope.$on('mapTabSelected', function(a){
+        //Fix map size when the user changes tabs
+        $timeout(updateMapSize, 10);
+    });
 
 });
