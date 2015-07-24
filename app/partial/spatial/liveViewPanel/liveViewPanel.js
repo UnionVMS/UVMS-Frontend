@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $rootScope, locale){
+angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $timeout, $window, locale, mapService){
     $scope.selectedTab = 'MAP';
     
     //Define tabs
@@ -15,19 +15,31 @@ angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $r
             ];
         };
         
-   locale.ready('spatial').then(function(){
-       $scope.tabMenu = setTabs();
-   });
-   
    $scope.selectTab = function(tab){
        $scope.selectedTab = tab;
-       if (tab === 'MAP'){
-           $rootScope.$broadcast('mapTabSelected');
-       }
    };
    
    $scope.isTabSelected = function(tab){
        return $scope.selectedTab === tab;
    };
-
+   
+   //Focus map div
+   $scope.focusMap = function(){
+       var mapElement = $window.document.getElementById('map');
+       if(mapElement){
+           mapElement.focus();
+       }
+   };
+   
+   //Refresh map size on tab change
+   $scope.$watch('selectedTab', function(newVal, oldVal){
+       if (newVal === 'MAP'){
+           $timeout(mapService.updateMapSize, 50);
+           $timeout($scope.focusMap, 50);
+       }
+   });
+   
+   locale.ready('spatial').then(function(){
+       $scope.tabMenu = setTabs();
+   });
 });

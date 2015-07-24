@@ -3,10 +3,58 @@
 	height: 100%;
 	margin-left: 3px;
 	display: block;
+	border: 1px solid #DDD;
 }
 
+.map:focus {
+	outline: 0px solid transparent !important;
+}
+
+//Map bottom bar
+.map-bottom{
+	width: 100%;
+	min-height: 30px;
+	margin-left: 3px;
+	border: 1px solid #DDD;
+	line-height: 25px;
+}
+
+//Scale line
+.scale-line {
+	display: inline-block;
+	height: 20px;
+}
+
+.ol-scale-line {
+	position: relative;
+	top: 4px;
+	left: 2px;
+	height: 22px;
+	background-color: #fff !important;
+}
+
+.ol-scale-line-inner {
+	height: 15px;
+	line-height: 11px;
+	font-weight: bold;
+	font-size: 12px !important;
+	color: #428bca !important;
+	border-color: #428bca !important; 
+}
+
+//Mouse coordinates
 .mouse-position {
-	top: 8px;
-	left: 40px;
-	position: absolute;
+	display: inherit;
+	text-align: right;
+}
+
+//Attribution
+.ol-attribution {
+	display: inline-table;
+	bottom: 0px !important;
+	line-height: 20px !important;
+	li {
+		font-size: 12px !important;
+		position: relative;
+	}
 }

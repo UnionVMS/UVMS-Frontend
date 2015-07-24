@@ -11,6 +11,10 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale)
                 {
                     'tab': 'SEGMENTS',
                     'title': locale.getString('spatial.tab_segments')
+                },
+                {
+                    'tab': 'TRACKS',
+                    'title': locale.getString('spatial.tab_tracks')
                 }
             ];
         };

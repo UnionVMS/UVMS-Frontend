@@ -4,5 +4,6 @@
 	"tab_map": "Map View",
 	"tab_vms": "VMS View",
 	"tab_movements": "Positions",
-	"tab_segments": "Segments"
+	"tab_segments": "Segments",
+	"tab_tracks": "Tracks"
 }
