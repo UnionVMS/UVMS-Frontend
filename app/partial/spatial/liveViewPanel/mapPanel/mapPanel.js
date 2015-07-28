@@ -14,13 +14,15 @@ angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale,
                 type: 'drag'
             }, {
                 type: 'scale',
-                units: 'metric' //Possible values: metric, degrees, nautical, us, imperial
+                units: 'nautical' //Possible values: metric, degrees, nautical, us, imperial
             }, {
                 type: 'fullscreen'
             },{
                 type: 'mousecoords',
                 epsgCode: 4326,
                 format: 'dd' //Possible values: dd, dms, ddm, m
+            },{
+                type: 'history'
             }]
         }
     }; 

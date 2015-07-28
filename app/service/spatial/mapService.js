@@ -1,3 +1,129 @@
+ol.control.HistoryControl = function(opt_options){
+    var options = opt_options || {};
+    
+    var this_ = this;
+    
+    this_.backBtn = document.createElement('button');
+    this_.backBtn.className = 'ol-history-back';
+    this_.backBtn.innerHTML = '&#8592';
+    
+    this_.forwardBtn = document.createElement('button');
+    this_.forwardBtn.className = 'ol-history-forward';
+    this_.forwardBtn.innerHTML = '&#8594';
+    
+    this_.historyArray = [];
+    this_.historyLimit = 50;
+    this_.updateByClick = false;
+    
+    //Calculate map state object describing the map view state
+    this_.calculateMapState = function(){
+        var view = this_.getMap().getView();
+        var center = view.getCenter();
+        return {
+            zoom:  view.getZoom(),
+            center: {
+                x: Math.round(center[0] * 100) / 100,
+                y: Math.round(center[1] * 100) / 100
+            }
+        };
+    };
+    
+    //Update history array
+    this_.updateHistory = function(){
+        if (this_.updateByClick === false){
+            var newMapState = this_.calculateMapState();
+            if (typeof this_.historyIndex === 'undefined'){
+                this_.historyArray.push(newMapState);
+                this_.historyIndex = 0;
+            } else {
+                var oldMapState = this_.getMapState(this_.historyIndex);
+                //Check if the new state is not equal to the current index (we need this to avoid 
+                // pushing new states when the screen is being resized)
+                if (this_.compareMapState(oldMapState, newMapState) === false){
+                    if (this_.historyIndex < this_.historyArray.length - 1){
+                        this_.historyArray.splice(this_.historyIndex + 1, this_.historyArray.length - 1 - this_.historyIndex);
+                    }
+                    this_.historyArray.push(newMapState);
+                    this_.historyIndex += 1;
+                }
+                this_.checkHistoryLength();
+            }
+        } else {
+            this_.updateByClick = false;
+        }
+    };
+    
+    //Get the state object of the map at the specified index
+    this_.getMapState = function(idx){
+        return this_.historyArray[idx];
+    };
+    
+    //Check if new map state is equal to the current history index state
+    this_.compareMapState = function(oldState, newState){
+        var isEqual = false;
+        for (var key in oldState){
+            var value = oldState[key];
+            if (typeof value === 'object'){
+                isEqual = this_.compareMapState(oldState[key], newState[key]);
+            } else {
+                if (value === newState[key]){
+                    isEqual = true;
+                }
+            }
+        }
+        
+        return isEqual;
+    };
+    
+    //Check length of history array and remove items if needed
+    this_.checkHistoryLength = function(){
+        if (this_.historyArray.length > this_.historyLimit){
+            this_.historyArray.shift();
+            if (this_.historyIndex !== 0){
+                this_.historyIndex -= 1;
+            }
+        }
+    };
+    
+    //Set map view by index
+    this_.setMapView = function(idx){
+        this_.updateByClick = true;
+        var view = this_.getMap().getView();
+        var viewData = this_.getMapState(idx);
+        view.setZoom(viewData.zoom);
+        view.setCenter([viewData.center.x, viewData.center.y]);
+    };
+    
+    //Click event listeners for the buttons
+    var backClick = function(e){
+        if (this_.historyIndex > 0){
+            this_.setMapView(this_.historyIndex - 1);
+            this_.historyIndex -= 1;
+        }
+    };
+    
+    var forwardClick = function(e){
+        if (this_.historyIndex < this_.historyArray.length - 1){
+            this_.setMapView(this_.historyIndex + 1);
+            this_.historyIndex += 1;
+        }
+    };
+    
+    this_.backBtn.addEventListener('click', backClick, false);
+    this_.forwardBtn.addEventListener('click', forwardClick, false);
+    
+    var element = document.createElement('div');
+    element.className = 'ol-history ol-unselectable ol-control';
+    element.appendChild(this_.backBtn);
+    element.appendChild(this_.forwardBtn);
+    
+    ol.control.Control.call(this, {
+        element: element,
+        target: options.target
+    });
+};
+ol.inherits(ol.control.HistoryControl, ol.control.Control);
+
 angular.module('unionvmsWeb').factory('mapService',function() {
 	var ms = {};
 	ms.controls = [];
@@ -50,6 +176,15 @@ angular.module('unionvmsWeb').factory('mapService',function() {
             map.updateSize();
         });
         
+        map.on('moveend', function(e){
+           var controls = e.map.getControls();
+           controls.forEach(function(control){
+               if (control instanceof ol.control.HistoryControl){
+                   control.updateHistory();
+               }
+           }, controls);
+        });
+        
         map.addLayer(osmLayer);
         map.addLayer(eezLayer);
         map.setView(view);
@@ -77,11 +212,9 @@ angular.module('unionvmsWeb').factory('mapService',function() {
 	    }
 	    
 	    //Always add attribution control
-	    //TODO CSS style for attribution
 	    ms.controls.push(new ol.control.Attribution({
 	        collapsible: false,
 	        collapsed: false
-	        //className: 'map-attribution'
 	    }));
 	    
 	    return [new ol.Collection(ms.controls), new ol.Collection(ms.interactions)];
@@ -94,13 +227,17 @@ angular.module('unionvmsWeb').factory('mapService',function() {
 	    ms.interactions.push(new ol.interaction.KeyboardZoom());
 	};
 	
+	ms.addHistory = function(){
+        var control = new ol.control.HistoryControl('map');
+        ms.controls.push(control);
+    };
+	
 	ms.addFullscreen = function(){
 	    //TODO change height when fullscreen is toggled on/off
 	    ms.controls.push(new ol.control.FullScreen());
 	};
 	
 	ms.addScale = function(ctrl){
-	    //TODO get control definitions and apply style
 	    ms.controls.push(new ol.control.ScaleLine({
 	        units: ctrl.units,
 	        target: angular.element('#map-scale')[0],
