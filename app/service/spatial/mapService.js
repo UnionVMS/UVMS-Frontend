@@ -187,9 +187,28 @@ angular.module('unionvmsWeb').factory('mapService',function() {
         
         map.addLayer(osmLayer);
         map.addLayer(eezLayer);
+        map.addLayer(ms.addOpenSeaMap());
         map.setView(view);
         
         ms.map = map;
+	};
+	
+	//Add layers
+	ms.addOpenSeaMap = function(){
+	    var layer = new ol.layer.Tile({
+	        source: new ol.source.OSM({
+	            attributions:[
+	                new ol.Attribution({
+	                    html: '&copy; <a href="http://www.openseamap.org/">OpenSeaMap</a> contributors.'
+	                }),
+	                ol.source.OSM.ATTRIBUTION
+	            ],
+	            url: 'http://tiles.openseamap.org/seamark/{z}/{x}/{y}.png',
+	            crossOrigin: null
+	        })
+	    });
+	    
+	    return layer;
 	};
 	
 	//Set map projections
