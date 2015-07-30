@@ -1,9 +1,14 @@
 {
 	"header_live_view" : "Live view",
 	"header_reports" : "Reports",
-	"tab_map": "Map View",
-	"tab_vms": "VMS View",
+	"tab_map": "Map",
+	"tab_vms": "VMS",
 	"tab_movements": "Positions",
 	"tab_segments": "Segments",
-	"tab_tracks": "Tracks"
+	"tab_tracks": "Tracks",
+	"map_tip_zoomin": "Zoom in",
+	"map_tip_zoomout": "Zoom out",
+	"map_tip_fullscreen": "Toggle full-screen",
+	"map_tip_go_back": "Previous extent",
+	"map_tip_go_forward": "Next extent"
 }

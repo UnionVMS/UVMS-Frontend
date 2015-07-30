@@ -2,7 +2,6 @@ angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale,
     //Mock config object
     $scope.config = {
         map: {
-            target: 'map',
             projection: {
                 epsgCode: 3857, //So far we only support 3857 and 4326
                 units: 'm',

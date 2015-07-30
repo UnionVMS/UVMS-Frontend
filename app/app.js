@@ -59,7 +59,7 @@ angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocalePr
             templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html',
             resolve: generalRouteResolves
         })
-        .when('/gis', {
+        .when('/reporting', {
             templateUrl: "partial/spatial/spatial.html",
             //resolve: generalRouteResolves
         });

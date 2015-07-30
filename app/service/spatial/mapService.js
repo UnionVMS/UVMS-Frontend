@@ -1,3 +1,4 @@
+//OL Navigation History custom control
 ol.control.HistoryControl = function(opt_options){
     var options = opt_options || {};
     
@@ -5,10 +6,12 @@ ol.control.HistoryControl = function(opt_options){
     
     this_.backBtn = document.createElement('button');
     this_.backBtn.className = 'ol-history-back';
+    this_.backBtn.title = options.backLabel;
     this_.backBtn.innerHTML = '&#8592';
     
     this_.forwardBtn = document.createElement('button');
     this_.forwardBtn.className = 'ol-history-forward';
+    this_.forwardBtn.title = options.forwardLabel;
     this_.forwardBtn.innerHTML = '&#8594';
     
     this_.historyArray = [];
@@ -124,7 +127,7 @@ ol.control.HistoryControl = function(opt_options){
 };
 ol.inherits(ol.control.HistoryControl, ol.control.Control);
 
-angular.module('unionvmsWeb').factory('mapService',function() {
+angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $timeout) {
 	var ms = {};
 	ms.controls = [];
 	ms.interactions = [];
@@ -165,7 +168,7 @@ angular.module('unionvmsWeb').factory('mapService',function() {
         var controlsToMap = ms.setControls(config.map.controls);
         
         var map = new ol.Map({
-            target: config.map.target,
+            target: 'map',
             controls: controlsToMap[0],
             interactions: controlsToMap[1],
             logo: false
@@ -241,19 +244,39 @@ angular.module('unionvmsWeb').factory('mapService',function() {
 	
 	//Add map controls
 	ms.addZoom = function(){
-	    ms.controls.push(new ol.control.Zoom());
+	    ms.controls.push(new ol.control.Zoom({
+	        zoomInTipLabel: locale.getString('spatial.map_tip_zoomin'),
+	        zoomOutTipLabel: locale.getString('spatial.map_tip_zoomout')
+	    }));
 	    ms.interactions.push(new ol.interaction.MouseWheelZoom());
 	    ms.interactions.push(new ol.interaction.KeyboardZoom());
 	};
 	
 	ms.addHistory = function(){
-        var control = new ol.control.HistoryControl('map');
+        var control = new ol.control.HistoryControl({
+            backLabel: locale.getString('spatial.map_tip_go_back'),
+            forwardLabel: locale.getString('spatial.map_tip_go_forward')
+        });
         ms.controls.push(control);
     };
 	
 	ms.addFullscreen = function(){
-	    //TODO change height when fullscreen is toggled on/off
-	    ms.controls.push(new ol.control.FullScreen());
+	    var control = new ol.control.FullScreen({
+            tipLabel: locale.getString('spatial.map_tip_fullscreen')
+        });
+	    
+	    //We need to manually fix map height when map is toggled to fullscreen
+	    control.element.onclick = function(e){
+	        if (this.children[0].className.indexOf('false') !== -1){
+	            //Map is in fullscreen
+	            $timeout(function(){
+	                angular.element('#map')[0].style.height = $window.innerHeight + 'px';
+	                ms.updateMapSize();
+	            }, 150);
+	        }
+	    };
+	    
+	    ms.controls.push(control);
 	};
 	
 	ms.addScale = function(ctrl){
