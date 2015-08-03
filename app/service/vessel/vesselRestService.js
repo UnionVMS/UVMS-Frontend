@@ -43,7 +43,7 @@ angular.module('unionvmsWeb')
         vesselRestFactory.getVesselList().list(getListRequest.DTOForVessel(),
             function(response) {
 
-                if(response.code !== "200"){
+                if(response.code !== 200){
                     deferred.reject("Invalid response status");
                     return;
                 }
@@ -212,7 +212,7 @@ angular.module('unionvmsWeb')
         vesselRestFactory.getVesselGroupsForUser().get({'user' : userName},
             function(response) {
 
-                if(response.code !== "200"){
+                if(response.code !== 200){
                     deferred.reject("Invalid response status");
                     return;
                 }
