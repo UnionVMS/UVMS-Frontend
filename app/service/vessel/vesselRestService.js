@@ -162,7 +162,7 @@ angular.module('unionvmsWeb')
         var deferred = $q.defer();
         vesselRestFactory.getConfigValues().get({},
             function(response){
-                if(response.code !== "200"){
+                if(response.code !== 200){
                     deferred.reject("Not valid vessel configuration status.");
                     return;
                 }
