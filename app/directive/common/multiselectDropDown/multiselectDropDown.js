@@ -31,60 +31,45 @@ angular.module('unionvmsWeb').directive('multiselectDropDown', function(locale) 
             scope.unCheckAll = scope.uncheckall;
 
             scope.openDropdown = function(){
-                for(var i=0; i<scope.pre_selected.length; i++){                        
+                for(var i=0; i<scope.pre_selected.length; i++){
                     scope.selectedItems.push(scope.pre_selected[i].text);
-                }                                     
+                }
+            };
+
+            scope.checkedAndSelectedAll = function() {
+                return scope.options.length === scope.model.length;
             };
 
             scope.selectAll = function () {
                 scope.model = _.pluck(scope.options, 'code');
-                scope.setTitle();
-                scope.checkAndSelectAll = true; 
             };            
-            
+
             scope.deselectAll = function() {
-                scope.model=[];
-                scope.setTitle();
-                scope.checkAndSelectAll = false; 
+                scope.model = [];
             };
-            
+
             scope.setSelectedItem = function(){
                 var code = this.option.code;
                 if (_.contains(scope.model, code)) {
                     scope.model = _.without(scope.model, code);
-                    scope.checkAndSelectAll = false; 
                 } else {
                     scope.model.push(code);
-                    if(scope.model.length === scope.options.length)
-                    {
-                        scope.checkAndSelectAll = true;
-                    }
                 }
-                scope.setTitle();
-                return false;
-            };
-           
-            scope.isChecked = function (code) {                 
-                if (_.contains(scope.model, code)) {
-                    return true;
-                }
+
                 return false;
             };
 
-            scope.setTitle = function(){
+            scope.isChecked = function(code) {
+                return _.contains(scope.model, code);
+            };
+
+            scope.dropdownLabel = function() {
                 switch(scope.model.length) {
-                    case 0:
-                        scope.selection = scope.initialtext || locale.getString("common.multiple_select_dropdown_default_text");
-                        break;
-                    case 1:
-                        scope.selection = locale.getString('common.one_selected');
-                        break;
-                    default:
-                        scope.selection = locale.getString('common.multiple_selected');
-                        break;
-                }                   
+                    case 0: return scope.initialtext || locale.getString("common.multiple_select_dropdown_default_text");
+                    case 1: return locale.getString('common.one_selected');
+                    default: return locale.getString('common.multiple_selected');
+                }
             };
         }
     };
 });
-

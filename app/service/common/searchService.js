@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage, MovementListPage) {
+angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage, MovementListPage, auditLogRestService) {
 
 	var getListRequest = new GetListRequest(1, 20, true, []),
         advancedSearchObject  = {};
@@ -29,7 +29,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
                     searchCriteria[i].value = addUTCTimeZone(searchCriteria[i].value);
             }
         }
-        
+
         return searchCriteria;
     };
 
@@ -260,6 +260,11 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
             }
         },
 
+        searchAuditLogs: function() {
+            checkTimeSpanAndTimeZone(getListRequest.criterias);
+            return auditLogRestService.getAuditLogList(getListRequest);
+        },
+
         //Modify search request
         resetPage : function(){
             getListRequest.page = 1;
@@ -295,6 +300,13 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
                 if (typeof value === 'string' && value.trim().length !== 0){
                     criterias.push(new SearchField(key, value));
                 }
+                else if (value instanceof Array) {
+                    for (var i = 0; i < value.length; i++) {
+                        if (typeof value[i] === 'string' && value[i].trim().length !== 0) {
+                            criterias.push(new SearchField(key, value[i]));
+                        }
+                    }
+                }
             });
             return criterias;
         },
@@ -307,7 +319,12 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
         },
         resetAdvancedSearch : function(){
             for (var item in advancedSearchObject){
-                delete advancedSearchObject[item];
+                if (advancedSearchObject[item] instanceof Array) {
+                    advancedSearchObject[item] = [];
+                }
+                else {
+                    delete advancedSearchObject[item];
+                }
             }
         },
 

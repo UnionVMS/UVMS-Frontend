@@ -12,7 +12,7 @@ angular.module('unionvmsWeb').factory('Audit', function() {
 		audit.username = data.username;
 		audit.operation = data.operation;
 		audit.objectType = data.objectType;
-		audit.date = data.date;
+		audit.date = data.timestamp;
 
 		return audit;
 	};

@@ -41,7 +41,7 @@ angular.module('unionvmsWeb')
     GetListRequest.prototype.DTOForMovement = function(){
          return {
             movementSearchCriteria : this.criterias,
-            pagination : {page: this.page, listSize: this.listSize}            
+            pagination : {page: this.page, listSize: this.listSize}
         };
     };
 
@@ -49,6 +49,13 @@ angular.module('unionvmsWeb')
          return {
             movementSearchCriteria : this.criterias,
             pagination : {page: this.page, listSize: this.listSize}
+        };
+    };
+
+    GetListRequest.prototype.DTOForAuditLogList = function() {
+        return {
+            auditSearchCriteria: this.criterias,
+            pagination: {page: this.page, listSize: this.listSize}
         };
     };
 

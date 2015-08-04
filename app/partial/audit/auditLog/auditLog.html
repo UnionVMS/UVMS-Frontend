@@ -1,4 +1,4 @@
-<div class="col-md-12" ng-controller="AuditlogCtrl">
+<div ng-controller="AuditlogCtrl">
 	<div static-include="partial/audit/auditPageHeader/auditPageHeader.html"></div>
 	<!-- Nav tabs -->
     <div class="containerWrapper pollingTabs">
@@ -12,7 +12,7 @@
     </div>
 	<div class="container">
 		<div class="auditsearchform">
-			<advanced-search searchfunc="searchMovements" modeltype="'AUDIT'" advancedsearchvisible="true"></advanced-search>
+			<advanced-search searchfunc="searchAuditLogs" modeltype="'AUDIT'" advancedsearchvisible="true"></advanced-search>
 		</div>
 		<table class="searchResults">
 			<thead>
@@ -55,7 +55,7 @@
 	        <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>        
 	    </div>
 	    <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0">
-	        <div class="col-md-12">{{'common.search_results_current_page' | i18n:[currentSearchResults.page, currentSearchResults.totalNumberOfPages]}}</div>
+	        <div class="col-md-12">{{'common.search_results_current_page' | i18n:[currentSearchResults.currentPage, currentSearchResults.totalNumberOfPages]}}</div>
 	    </div>
 	    <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0 && currentSearchResults.totalNumberOfPages > currentSearchResults.page">
 	        <div class="col-md-12 textAlignCenter">

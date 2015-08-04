@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale, Audit, AuditLogModal) {
+angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale, Audit, AuditLogModal, auditLogRestService, searchService) {
 
 	// ************ Page setup ************
 
@@ -15,11 +15,6 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale,
         sortReverse : true,
         filter : ""
     };
-
-    $scope.currentSearchResults.audits = [
-        Audit.fromJson({username: "nicand", operation: "Add vessel create rights", objectType: "User", date:"2015-06-24T12:00:01+0200"}),
-        Audit.fromJson({username: "System", operation: "Create", objectType: "Automatic system report", date:"2015-06-23T12:00:01+0200"})
-    ];
 
 	//Sets tabs
 	var setTabs = function (){
@@ -65,6 +60,9 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale,
 
 	$scope.selectTab = function(tab){
 		$scope.selectedTab = tab;
+
+        searchService.reset();
+        $scope.searchAuditLogs();
 	};
 
     $scope.toggleCheckAll = function() {
@@ -89,11 +87,52 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale,
     };
 
     $scope.loadNextPage = function() {
-        // TODO
+        if ($scope.currentSearchResults.currentPage >= $scope.currentSearchResults.totalNumberOfPages) {
+            return;
+        }
+
+        searchService.increasePage();
+        $scope.searchAuditLogs(true);
     };
 
     $scope.showAuditModal = function(audit) {
         AuditLogModal.show(audit);
     };
+
+    $scope.clearSearchResults = function() {
+        $scope.currentSearchResults.page = 0;
+        $scope.currentSearchResults.totalNumberOfPages = 0;
+        $scope.currentSearchResults.audits = [];
+        $scope.currentSearchResults.errorMessage = "";
+        $scope.currentSearchResults.loading = false;
+        $scope.currentSearchResults.sortBy = "date";
+        $scope.currentSearchResults.sortReverse = true;
+        $scope.currentSearchResults.filter = "";
+    };
+
+    $scope.searchAuditLogs = function(append) {
+        if (!append) {
+            $scope.clearSearchResults();
+        }
+
+        $scope.currentSearchResults.loading = true;
+        searchService.searchAuditLogs().then(function(auditLogsPage) {
+            $scope.currentSearchResults.loading = false;
+            $scope.updateSearchResults(auditLogsPage);
+        },
+        function(error) {
+            console.log(error);
+            $scope.currentSearchResults.errorMessage = locale.getString('common.search_failed_error');
+            $scope.currentSearchResults.loading = false;
+        });
+    };
+
+    $scope.updateSearchResults = function(auditLogListPage) {
+        $scope.currentSearchResults.audits = $scope.currentSearchResults.audits.concat(auditLogListPage.auditLogs);
+        $scope.currentSearchResults.currentPage = auditLogListPage.currentPage;
+        $scope.currentSearchResults.totalNumberOfPages = auditLogListPage.totalNumberOfPages;
+    };
+
+    $scope.searchAuditLogs();
 
 });
