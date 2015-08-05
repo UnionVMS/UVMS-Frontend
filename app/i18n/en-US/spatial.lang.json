@@ -10,5 +10,15 @@
 	"map_tip_zoomout": "Zoom out",
 	"map_tip_fullscreen": "Toggle full-screen",
 	"map_tip_go_back": "Previous extent",
-	"map_tip_go_forward": "Next extent"
+	"map_tip_go_forward": "Next extent",
+	"reports_table_header_name": "Name",
+	"reports_table_header_description": "Description",
+	"reports_table_header_created_on": "Created on",
+	"reports_table_header_is_shared": "Is shared",
+	"reports_table_run_label": "Run",
+	"reports_table_config_label": "Report filters",
+	"reports_table_share_label": "Share report",
+	"reports_table_delete_label": "Delete report",
+	"reports_add_new_report": "New report",
+	"reports_delete_report_confirmation_text": "Are you sure you want to delete this report?"
 }

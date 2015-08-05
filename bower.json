@@ -28,7 +28,9 @@
     "datetimepicker": "~2.4.3",
     "angular-dynamic-locale": ">=0.1.27",
     "angular-leaflet-directive": ">=0.8.2",
-    "OpenLayers": "~3.7.0"
+    "OpenLayers": "~3.7.0",
+    "angular-datatables": "~0.4.3",
+    "DataTables": "~1.10.7"
   },
   "resolutions": {
     "angular": "~1.3"

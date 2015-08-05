@@ -1,0 +1,27 @@
+<div class="reportsListTable" ng-controller="ReportslistCtrl as rt">
+	<table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="table table-striped">
+	    <thead>
+	        <tr>
+	            <th>{{'spatial.reports_table_header_name' | i18n }}</th>
+	            <th>{{'spatial.reports_table_header_description' | i18n }}</th>
+	            <th>{{'spatial.reports_table_header_created_on' | i18n }}</th>
+	            <th class="dt-center">{{'spatial.reports_table_header_is_shared' | i18n }}</th>
+	            <th></th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	        <tr ng-repeat="report in reports">
+	            <td>{{ report.name }}</td>
+	            <td>{{ report.desc }}</td>
+	            <td>{{ report.created_on }}</td>
+	            <td class="dt-center is-shared-cl"><span class="fa fa-check-square fa-checkbox" ng-show="report.is_shared"></span></td>
+	            <td>
+                    <button type="button" class="btn btn-success btn-xs" ng-click="runReport($index)"><span class="run-report">{{'spatial.reports_table_run_label' | i18n }}</span></button>
+                    <button type="button" class="btn btn-info btn-xs" title="{{'spatial.reports_table_config_label' | i18n }}" ng-click="showFilters($index)" ng-show="{{ report.editable }}"><span class="fa fa-cog"></span></button>
+                    <button type="button" class="btn btn-info btn-xs" title="{{'spatial.reports_table_share_label' | i18n }}" ng-click="shareReport($index)" ng-show="{{ report.shareable }}"><span class="fa fa-share-alt"></span></button>
+                    <button type="button" class="btn btn-danger btn-xs" title="{{'spatial.reports_table_delete_label' | i18n }}" ng-click="deleteReport($index)" ng-show="{{ report.deletable }}"> <span class="fa fa-trash-o"></span></button>
+                </td>
+	        </tr>
+	    </tbody>
+	</table>
+</div>

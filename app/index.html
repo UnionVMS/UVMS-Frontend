@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
     <link href="app.less" type="text/css" rel="stylesheet/less">
-    <link href="../bower_components/OpenLayers/css/ol.css" type="text/css" rel="stylesheet/less">
     <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css' data-concat="false" data-remove="false">
 </head>
 <body>
@@ -16,6 +15,7 @@
     <!-- JS from Bower Components -->
     <script src="../bower_components/less.js/dist/less.js" data-concat="false"></script>
     <script src="../bower_components/jquery/jquery.js"></script>
+    <script src="../bower_components/DataTables/media/js/jquery.dataTables.min.js"></script>
     <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="../bower_components/underscore/underscore.js"></script>
     <script src="../bower_components/moment/moment.js"></script>
@@ -33,6 +33,8 @@
     <script src="../bower_components/leaflet/dist/leaflet.js"></script>
     <script src="../bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
     <script src="assets/ol-debug.js"></script>
+    <script src="../bower_components/angular-datatables/dist/angular-datatables.min.js"></script>
+    <script src="../bower_components/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
     <!-- Add New Bower Component JS Above -->
 
 
@@ -151,12 +153,15 @@
     <script src="service/common/configurationService.js"></script>
     <script src="filter/common/secondsToTimeString/secondsToTimeString.js"></script>
     
+    <script src="service/spatial/mapService.js"></script>
     <script src="partial/spatial/spatial.js"></script>
     <script src="partial/spatial/liveViewPanel/liveViewPanel.js"></script>
     <script src="partial/spatial/reportsPanel/reportsPanel.js"></script>
     <script src="partial/spatial/liveViewPanel/mapPanel/mapPanel.js"></script>
     <script src="partial/spatial/liveViewPanel/vmsPanel/vmsPanel.js"></script>
-    <script src="service/spatial/mapService.js"></script>
+    <script src="partial/spatial/reportsPanel/reportsList/reportsList.js"></script>
+    <script src="service/spatial/datatablesService.js"></script>
+    <script src="service/reporting/reportRestService.js"></script>
     <!-- Add New Component JS Above -->
 
     <div ng-include="'partial/header/header.html'"></div>
@@ -165,7 +170,7 @@
       <div ng-view></div>
     </div>
 
-    <div ng-include="'partial/footer/footer.html'"></div>
+    <div ng-include="'partial/footer/footer.html'" ></div>
 
 </body>
 </html>

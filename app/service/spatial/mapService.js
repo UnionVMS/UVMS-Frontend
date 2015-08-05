@@ -63,14 +63,16 @@ ol.control.HistoryControl = function(opt_options){
     
     //Check if new map state is equal to the current history index state
     this_.compareMapState = function(oldState, newState){
-        var isEqual = false;
+        var isEqual = true;
         for (var key in oldState){
             var value = oldState[key];
             if (typeof value === 'object'){
-                isEqual = this_.compareMapState(oldState[key], newState[key]);
+                if (value.x !== newState[key].x || value.y !== newState[key].y){
+                    isEqual = false;
+                }
             } else {
-                if (value === newState[key]){
-                    isEqual = true;
+                if (value !== newState[key]){
+                    isEqual = false;
                 }
             }
         }
@@ -129,11 +131,12 @@ ol.inherits(ol.control.HistoryControl, ol.control.Control);
 
 angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $timeout) {
 	var ms = {};
-	ms.controls = [];
-	ms.interactions = [];
 	
 	//Initialize the map
 	ms.setMap = function(config){
+	    ms.controls = [];
+	    ms.interactions = [];
+	    
 	    var osmLayer = new ol.layer.Tile({
             source: new ol.source.OSM()
         });
@@ -150,8 +153,21 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 params: {
                     'LAYERS': 'uvms:eez',
                     'TILED': true,
-                    'STYLES': ''
+                    'STYLES': 'eez_label_geom'
                     //'cql_filter': "sovereign='Portugal' OR sovereign='Poland' OR sovereign='Bulgaria' OR sovereign='Belgium'"
+                }
+            })
+        });
+        
+        var rfmoLayer = new ol.layer.Tile({
+            source: new ol.source.TileWMS({
+                attributions: [attribution],
+                url: 'http://localhost:8080/geoserver/wms',
+                serverType: 'geoserver',
+                params: {
+                    'LAYERS': 'uvms:rfmo',
+                    'TILED': true,
+                    'STYLES': ''
                 }
             })
         });
@@ -172,7 +188,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             controls: controlsToMap[0],
             interactions: controlsToMap[1],
             logo: false
-            //keyboardEventTarget: document.getElementById('map')
         });
         
         map.beforeRender(function(map){
@@ -189,8 +204,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         });
         
         map.addLayer(osmLayer);
-        map.addLayer(eezLayer);
-        map.addLayer(ms.addOpenSeaMap());
+//        map.addLayer(eezLayer);
+//        map.addLayer(rfmoLayer);
+//        map.addLayer(ms.addOpenSeaMap());
         map.setView(view);
         
         ms.map = map;

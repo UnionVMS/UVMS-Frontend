@@ -1,3 +1,15 @@
-<div class="col-md-12" ng-controller="ReportspanelCtrl">
-	Reports table will come here!!
+<div class="containerWrapper" ng-controller="ReportspanelCtrl">
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-2">
+				<button type="submit" class="btn btn-primary btn-sm new-report-btn">
+                    <span class="fa fa-plus-square" aria-hidden="true"></span> &nbsp;
+                    <span>{{'spatial.reports_add_new_report' | i18n }}</span>
+                </button>
+			</div>
+		</div>
+		
+		<div ng-include="'partial/spatial/reportsPanel/reportsList/reportsList.html'"></div>
+	</div>
 </div>

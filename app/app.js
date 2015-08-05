@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource', 'ngLocalize', 'tmh.dynamicLocale', 'leaflet-directive']);
+angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource', 'ngLocalize', 'tmh.dynamicLocale', 'leaflet-directive', 'datatables', 'datatables.bootstrap']);
 
 //Resolve used for all routes
 var generalRouteResolves =  {
@@ -61,7 +61,7 @@ angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocalePr
         })
         .when('/reporting', {
             templateUrl: "partial/spatial/spatial.html",
-            //resolve: generalRouteResolves
+//            resolve: generalRouteResolves
         });
     /* Add New Routes Above */
     $routeProvider.otherwise({redirectTo:'/today'});
@@ -118,7 +118,8 @@ angular.module('unionvmsWeb').factory('initService',function(configurationServic
                 'vessel',
                 'movement',
                 'config',
-                'spatial'
+                'spatial',
+                'datatables'
             ]);
         },
     };
