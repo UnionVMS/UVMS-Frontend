@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AuditsearchformCtrl',function($scope, locale){
+angular.module('unionvmsWeb').controller('AuditsearchformCtrl',function($scope, locale, auditLogsDefaultValues){
 
 	$scope.objectTypes = []; //Objecttype dropdown
 	$scope.objectTypes.push({"text":"Asset", "code":"Asset"});
@@ -18,7 +18,17 @@ angular.module('unionvmsWeb').controller('AuditsearchformCtrl',function($scope, 
 	};
 
 	$scope.resetSearch = function() {
-        $scope.resetAdvancedSearchForm(true);
+        $scope.resetAdvancedSearchForm(false);
+        auditLogsDefaultValues.resetDefaults();
+        $scope.performAdvancedSearch();
 	};
 
+	$scope.performAdvancedSearch = function() {
+		$scope.submitAttempted = true;
+		if (!$scope.advancedSearchForm.$valid) {
+			return false;
+		}
+
+		$scope.$parent.performAdvancedSearch();
+	};
 });

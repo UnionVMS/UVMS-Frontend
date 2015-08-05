@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale, Audit, AuditLogModal, auditLogRestService, searchService) {
+angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale, Audit, AuditLogModal, auditLogRestService, searchService, auditLogsDefaultValues) {
 
 	// ************ Page setup ************
 
@@ -62,6 +62,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale,
 		$scope.selectedTab = tab;
 
         searchService.reset();
+        auditLogsDefaultValues.resetDefaults();
         $scope.searchAuditLogs();
 	};
 
@@ -133,6 +134,29 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale,
         $scope.currentSearchResults.totalNumberOfPages = auditLogListPage.totalNumberOfPages;
     };
 
+    auditLogsDefaultValues.resetDefaults();
     $scope.searchAuditLogs();
 
+}).factory("auditLogsDefaultValues", function(searchService) {
+
+    var offsetDays = function(date, addDays) {
+        date.setHours(date.getHours() + 24 * addDays);
+        return date;
+    };
+
+    var date2String = function(d) {
+        function z(v) { return v < 10 ? "0" + v : v; }
+        var date = [d.getFullYear(), z(d.getMonth() + 1), z(d.getDate())].join("-");
+        var time = [z(d.getHours()), z(d.getMinutes())].join(":");
+        return date + " " + time;
+    };
+
+    return {
+        resetDefaults: function() {
+            var now = new Date();
+            searchService.getAdvancedSearchObject()["TO_DATE"] = date2String(now);
+            searchService.getAdvancedSearchObject()["FROM_DATE"] = date2String(offsetDays(now, -1));
+            searchService.setSearchCriteriasToAdvancedSearch();
+        }
+    };
 });
