@@ -137,6 +137,10 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale,
     auditLogsDefaultValues.resetDefaults();
     $scope.searchAuditLogs();
 
+    $scope.$on("$destroy", function() {
+        searchService.reset();
+    });
+
 }).factory("auditLogsDefaultValues", function(searchService) {
 
     var offsetDays = function(date, addDays) {
