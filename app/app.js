@@ -19,12 +19,12 @@ angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocalePr
             templateUrl:'partial/today/today.html',
             resolve: generalRouteResolves
         })
-        .when('/assets',{
+        .when('/assets/:id?', {
             templateUrl:'partial/vessel/vessel.html',
             resolve: generalRouteResolves
         })
         .when('/communication', {
-            templateUrl: 'partial/mobileTerminal/mobileTerminal.html', 
+            templateUrl: 'partial/mobileTerminal/mobileTerminal.html',
             resolve: generalRouteResolves
         })
         .when('/communication/polling', {

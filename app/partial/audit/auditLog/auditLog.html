@@ -44,7 +44,7 @@
 					<td>{{audit.operation}}</td>
 					<td>{{audit.objectType}}</td>
 					<td>{{audit.date | date:"medium"}}</td>
-					<td><a ng-click="showAuditModal(audit)">{{"audit.show_object" | i18n}}</a></td>
+					<td><a ng-href="#{{affectedObjectPath(audit)}}" ng-show="affectedObjectPath(audit)">{{"audit.show_object" | i18n}}</a></td>
 				</tr>
 			</tbody>
 		</table>

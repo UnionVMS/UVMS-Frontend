@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, savedSearchService, Vessel, GetListRequest, searchService, vesselRestService, alertService){
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, savedSearchService, Vessel, GetListRequest, searchService, vesselRestService, alertService, $routeParams) {
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -32,6 +32,12 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
     var init = function(){
         //Load list with vessels
         $scope.searchVessels();
+
+        if ($routeParams.id) {
+            vesselRestService.getVessel($routeParams.id).then(function(vessel) {
+                $scope.toggleViewVessel(vessel);
+            });
+        }
     };
 
     //Load the next page of the search results
@@ -169,7 +175,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
     };     
 
     //Toggle create new vessel
-    $scope.toggleCreateNewVessel = function(){        
+    $scope.toggleCreateNewVessel = function(){
         $scope.createNewMode = true;
         toggleVesselForm(new Vessel());
     };

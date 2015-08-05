@@ -137,6 +137,15 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale,
     auditLogsDefaultValues.resetDefaults();
     $scope.searchAuditLogs();
 
+    $scope.affectedObjectPath = function(audit) {
+        if (audit.objectType === "Mobile Terminal" && audit.affectedObject) {
+            return "/communication/" + audit.affectedObject;
+        }
+        else  if (audit.objectType === "Asset" && audit.affectedObject) {
+            return "/assets/" + audit.affectedObject;
+        }
+    };
+
     $scope.$on("$destroy", function() {
         searchService.reset();
     });
