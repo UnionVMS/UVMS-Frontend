@@ -51,7 +51,12 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     };
 
     $scope.editPosition = function(item, addAnother) {
-        ManualPositionReportModal.show(item, addAnother, $scope.searchManualPositions).then(function(result) {
+        var modalOptions = {
+            addAnother: addAnother,
+            reloadFunction: $scope.searchManualPositions
+        };
+
+        ManualPositionReportModal.show(item, modalOptions).then(function(result) {
             if (result.addAnother) {
                 var p = new ManualPosition();
                 p.carrier.ircs = result.ircs;

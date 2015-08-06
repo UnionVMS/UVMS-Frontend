@@ -153,6 +153,9 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale
         else  if (audit.objectType === "Asset" && audit.affectedObject) {
             return "/assets/" + audit.affectedObject;
         }
+        else if (audit.objectType === "Reports") {
+            return "/movement/" + audit.affectedObject;
+        }
     };
 
     $scope.$on("$destroy", function() {

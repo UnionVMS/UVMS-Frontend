@@ -9,6 +9,9 @@ angular.module('unionvmsWeb')
                 list : { method : 'POST'}
             });
         },
+        getMovement: function() {
+            return $resource(baseUrl + '/movement/rest/movement/:id');
+        },
         savedSearch : function() {
             return $resource(baseUrl + '/movement/rest/search/group/:groupId', {}, {
                 update: {method: 'PUT'}
@@ -54,6 +57,49 @@ angular.module('unionvmsWeb')
                 deferred.reject(error);
             }
         );
+        return deferred.promise;
+    };
+
+    var getMovement = function(movementId) {
+        var deferred = $q.defer();
+        movementRestFactory.getMovement().get({id: movementId}, function(response) {
+            if (response.code !== "200") {
+                console.log("Invalid response code");
+
+                var m = Movement.fromJson({
+                    id: movementId,
+                    connectId: "12345",
+                    positionTime: "2015-08-01 01:01:01",
+                    messageType: "1",
+                    source: "A",
+                    measuredSpeed: 12,
+                    course: 180,
+                    status: "OK",
+                    position: {
+                        latitude: 58.34123,
+                        longitude: 11.443,
+                        calculatedSpeed: 12
+                    }
+                });
+
+                m.vessel = {
+                    name: "Name",
+                    ircs: "aep",
+                    state: "SWE",
+                    externalMarking: "a"
+                };
+
+                deferred.resolve(m);
+
+                return;
+            }
+
+            deferred.resolve(Movement.fromJson(response.data));
+        },
+        function(error) {
+            deferred.reject(error);
+        });
+
         return deferred.promise;
     };
 
@@ -167,6 +213,7 @@ angular.module('unionvmsWeb')
 
     return {
         getMovementList : getMovementList,
+        getMovement: getMovement,
         getLastMovement: getLastMovement,
         getSavedSearches : getSavedSearches,
         createNewSavedSearch : createNewSavedSearch,

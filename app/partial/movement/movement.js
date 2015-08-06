@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, alertService, movementRestService, searchService, locale){
+angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, alertService, movementRestService, searchService, locale, $routeParams, ManualPositionReportModal){
 
     //Current filter and sorting for the results table
     $scope.sortFilter = '';
@@ -18,8 +18,36 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     //Selected by checkboxes
     $scope.selectedMovements = [];
     
+    var movement2ManualPosition = function(movement) {
+        return {
+            id: movement.id,
+            guid: undefined,
+            speed: movement.movement.measuredSpeed,
+            course: movement.movement.course,
+            time: movement.time,
+            updatedTime: undefined,
+            status: movement.movement.status,
+            archived: undefined,
+            carrier: {
+                cfr: undefined,
+                name: movement.vessel.name,
+                externalMarking: movement.vessel.externalMarking,
+                ircs: movement.vessel.ircs,
+                flagState: movement.vessel.state
+            },
+            position: {
+                longitude: movement.movement.longitude,
+                latitude: movement.movement.latitude
+            }
+        };
+    };
+
     var init = function(){
-         //$scope.searchMovements();
+         if ($routeParams.id) {
+            movementRestService.getMovement($routeParams.id).then(function(movement) {
+                ManualPositionReportModal.show(movement2ManualPosition(movement), {readOnly: true});
+            });
+         }
     };
 
     $scope.isManualMovement = false;

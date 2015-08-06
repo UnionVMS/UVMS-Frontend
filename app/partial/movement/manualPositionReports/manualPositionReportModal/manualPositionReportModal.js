@@ -1,6 +1,7 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition, $timeout, movementRestService, leafletBoundsHelpers, addAnother, reloadFunction) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition, $timeout, movementRestService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly) {
 
     $scope.errorMessage ="";
+    $scope.readOnly = readOnly;
 
     $scope.flagState = "SWE";
     $scope.ircs = position ? position.carrier.ircs : undefined;
@@ -83,6 +84,21 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         });
     };
 
+    $scope.modalTitle = function() {
+        if ($scope.readOnly) {
+            return "movement.position_report_header";
+        }
+        else if ($scope.sendSuccess) {
+            return "movement.manual_position_header_sent";
+        }
+        else if ($scope.confirmSend) {
+            return "movement.manual_position_header_confirm";
+        }
+        else {
+            return "movement.manual_position_header_new";
+        }
+    };
+
     $scope.closeModal = function() {
         var result = {
             addAnother: $scope.addAnother
@@ -144,7 +160,10 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         }
 
         promise.then(function() {
-            reloadFunction();
+            if (angular.isFunction(reloadFunction)) {
+                reloadFunction();
+            }
+
             $scope.setSuccessText(locale.getString("movement.manual_position_save_success"), $scope.closeModal);
         }, function(errorMessage) {
             $scope.setErrorText(locale.getString("movement.manual_position_save_error"));
@@ -156,7 +175,10 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         if ($scope.confirmSend) {
             var movement = $scope.createManualMovement();
             manualPositionRestService.saveAndSendMovement(movement).then(function() {
-                reloadFunction();
+                if (angular.isFunction(reloadFunction)) {
+                    reloadFunction();
+                }
+
                 $scope.sendSuccess = true;
                 $scope.setSuccessText(locale.getString("movement.manual_position_send_success"), $scope.closeModal);
             }, function() {
@@ -318,7 +340,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
 angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($modal) {
 	return {
-		show: function(position, addAnother, reloadFunction) {
+		show: function(position, options) {
 			return $modal.open({
 				templateUrl: 'partial/movement/manualPositionReports/manualPositionReportModal/manualPositionReportModal.html',
 				controller: 'ManualPositionReportModalCtrl',
@@ -328,10 +350,13 @@ angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($mod
                         return position;
                     },
                     addAnother: function() {
-                        return addAnother || false;
+                        return options.addAnother || false;
                     },
                     reloadFunction: function() {
-                        return reloadFunction;
+                        return options.reloadFunction;
+                    },
+                    readOnly: function() {
+                        return !!options.readOnly;
                     }
                 }
 			}).result;
