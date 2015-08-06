@@ -1,9 +1,10 @@
-angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale, Audit, AuditLogModal, auditLogRestService, searchService, auditLogsDefaultValues) {
+angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale, Audit, AuditLogModal, auditLogRestService, searchService, auditLogsDefaultValues, auditLogsTypeOptions) {
 
 	// ************ Page setup ************
 
 	$scope.isAudit = true; //Highlights submenu, aka "AUDIT LOGS"
 	$scope.selectedTab = "ALL"; //Set initial tab
+    auditLogsTypeOptions.setOptions(auditLogsTypeOptions.getOptions($scope.selectedTab));
 
     $scope.currentSearchResults = {
         page : 0,
@@ -60,6 +61,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale,
 
 	$scope.selectTab = function(tab){
 		$scope.selectedTab = tab;
+        auditLogsTypeOptions.setOptions(auditLogsTypeOptions.getOptions(tab));
 
         searchService.reset();
         auditLogsDefaultValues.resetDefaults();
@@ -114,6 +116,13 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale,
     $scope.searchAuditLogs = function(append) {
         if (!append) {
             $scope.clearSearchResults();
+        }
+
+        // If not ALL tab, and to TYPE criteria set, search for all types available on this tab.
+        if ($scope.selectedTab !== "ALL" && !searchService.getSearchCriterias()["TYPE"]) {
+            for (var i = 0; i < auditLogsTypeOptions.options.length; i++) {
+                searchService.addSearchCriteria("TYPE", auditLogsTypeOptions.options[i].code);
+            }
         }
 
         $scope.currentSearchResults.loading = true;
@@ -172,4 +181,45 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl',function($scope, locale,
             searchService.setSearchCriteriasToAdvancedSearch();
         }
     };
+}).factory("auditLogsTypeOptions", function() {
+    var auditLogsTypeOptions = {};
+
+    var createAuditLogType = function(text, code) {
+        return {
+            text: text,
+            code: code || text
+        };
+    };
+
+    var auditLogTypes = {
+        asset: createAuditLogType("Asset"),
+        report: createAuditLogType("Reports"),
+        mobileTerminal: createAuditLogType("Mobile Terminal"),
+        poll: createAuditLogType("Poll")
+    };
+
+    auditLogsTypeOptions.options = [];
+
+    auditLogsTypeOptions.setOptions = function(newOptions) {
+        auditLogsTypeOptions.options.splice(0, auditLogsTypeOptions.options.length);
+        for (var i = 0; i < newOptions.length; i++) {
+            auditLogsTypeOptions.options.push(newOptions[i]);
+        }
+    };
+
+    auditLogsTypeOptions.getOptions = function(tab) {
+        if (tab === "ASSETS_AND_TERMINALS") {
+            return [auditLogTypes.asset, auditLogTypes.mobileTerminal, auditLogTypes.poll];
+        }
+        else if (tab === "POSITION_REPORTS") {
+            return [auditLogTypes.report];
+        }
+        else {
+            return Object.keys(auditLogTypes).map(function(key) {
+                return auditLogTypes[key];
+            });
+        }
+    };
+
+    return auditLogsTypeOptions;
 });

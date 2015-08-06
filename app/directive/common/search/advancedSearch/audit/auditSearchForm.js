@@ -1,11 +1,6 @@
-angular.module('unionvmsWeb').controller('AuditsearchformCtrl',function($scope, locale, auditLogsDefaultValues){
+angular.module('unionvmsWeb').controller('AuditsearchformCtrl',function($scope, locale, auditLogsDefaultValues, auditLogsTypeOptions) {
 
-	$scope.objectTypes = []; //Objecttype dropdown
-	$scope.objectTypes.push({"text":"Asset", "code":"Asset"});
-	$scope.objectTypes.push({"text":"Reports", "code":"Reports"});
-	$scope.objectTypes.push({"text":"Mobile Terminal", "code":"Mobile Terminal"});
-	$scope.objectTypes.push({"text":"Zone system", "code":"Zone system"});
-
+	$scope.objectTypes = auditLogsTypeOptions.options;
 
 	$scope.operations = []; //Operation dropdown
 	$scope.operations.push({"text":"Create", "code":"Create"});
