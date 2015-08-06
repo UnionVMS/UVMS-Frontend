@@ -281,6 +281,16 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
 		addSearchCriteria : function(key, value){
 			getListRequest.addSearchCriteria(key, value);
 		},
+        hasSearchCriteria: function(key) {
+            for (var i = 0; i < getListRequest.criterias.length; i++) {
+                var searchField = getListRequest.criterias[i];
+                if (searchField.key === key) {
+                    return true;
+                }
+            }
+
+            return false;
+        },
 		setSearchCriterias : function(newCriterias){
 			getListRequest.setSearchCriterias(newCriterias);
 		},

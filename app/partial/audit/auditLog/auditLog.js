@@ -119,7 +119,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale
         }
 
         // If not ALL tab, and to TYPE criteria set, search for all types available on this tab.
-        if ($scope.selectedTab !== "ALL" && !searchService.getSearchCriterias()["TYPE"]) {
+        if ($scope.selectedTab !== "ALL" && !searchService.hasSearchCriteria("TYPE")) {
             for (var i = 0; i < auditLogsTypeOptions.options.length; i++) {
                 searchService.addSearchCriteria("TYPE", auditLogsTypeOptions.options[i].code);
             }
