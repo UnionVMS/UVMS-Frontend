@@ -53,7 +53,7 @@
         var absolutePath = path.substr(0,1) === "/";
         var pathComponents = (absolutePath ? path.substr(1, path.length - 1) : path).split("/");
         return absolutePath ? "/" + pathComponents[0] : pathComponents[0];
-    }
+    };
 
     $scope.isActive = function(viewLocation){
         return getFirstPathSegment($location.path()) === (getFirstPathSegment(viewLocation));
