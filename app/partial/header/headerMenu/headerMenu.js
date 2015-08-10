@@ -31,12 +31,8 @@
                 'url':'/communication'
             },
             {
-                'title':locale.getString('header.menu_audit'),
-                'url':'/audit/auditlog'
-            },
-            {
-                'title':locale.getString('header.menu_configuration'),
-                'url':'/configuration'
+                'title':locale.getString('header.menu_admin'),
+                'url':'/admin/auditlog'
             },
             {
                 'title':locale.getString('header.menu_gis'),
@@ -44,15 +40,23 @@
             }
         ];
     };
-    
-    
+
     locale.ready('header').then(function () {
         $scope.menu = setMenu();
-    });    
+    });
+
+    var getFirstPathSegment = function(path) {
+        if (!path) {
+            return "";
+        }
+
+        var absolutePath = path.substr(0,1) === "/";
+        var pathComponents = (absolutePath ? path.substr(1, path.length - 1) : path).split("/");
+        return absolutePath ? "/" + pathComponents[0] : pathComponents[0];
+    }
 
     $scope.isActive = function(viewLocation){
-        var active = ($location.path().indexOf(viewLocation) >= 0);
-        return active;
+        return getFirstPathSegment($location.path()) === (getFirstPathSegment(viewLocation));
     };
 
 });

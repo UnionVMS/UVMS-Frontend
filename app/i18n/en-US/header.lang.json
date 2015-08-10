@@ -5,8 +5,7 @@
 	"menu_assets" : "Assets",
 	"menu_alarmconditions" : "Alarms",
 	"menu_communication" : "Mobile terminals",
-	"menu_configuration" : "Configuration",
 	"menu_gis" : "GIS",
 	"menu_movement" : "Positions",
-	"menu_audit" : "Audit"
+	"menu_admin" : "Admin"
 }

@@ -1,6 +1,6 @@
 {
     "pagemenu_audit_logs" : "Audit logs",
-    "pagemenu_audit_configuration" : "Configuration",
+    "pagemenu_configuration" : "Configuration",
     "search_name_placeholder" : "Username",
     "search_dateFrom_placeholder" : "From", 
     "search_dateTo_placeholder" : "To",

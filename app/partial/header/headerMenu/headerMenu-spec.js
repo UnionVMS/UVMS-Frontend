@@ -2,17 +2,24 @@ describe('HeaderMenuCtrl', function() {
 
 	beforeEach(module('unionvmsWeb'));
 
-	var scope,ctrl;
+	it('should be active', inject(function($rootScope, $controller) {
+		var scope = $rootScope.$new();
+		var ctrl = $controller('HeaderMenuCtrl', {
+			$scope: scope,
+			$location: {
+				path: function() {
+					return "/uvms";
+				}
+			}
+		});
 
-    beforeEach(inject(function($rootScope, $controller) {
-      scope = $rootScope.$new();
-      ctrl = $controller('HeaderMenuCtrl', {$scope: scope});
-    }));	
+		expect(scope.isActive("/uvms")).toBeTruthy();
+		expect(scope.isActive("/uvms/apa")).toBeTruthy();
 
-	it('should ...', inject(function() {
-
-		expect(1).toEqual(1);
-		
+		expect(scope.isActive("uvms/apa")).toBeFalsy();
+		expect(scope.isActive("")).toBeFalsy();
+		expect(scope.isActive("/")).toBeFalsy();
+		expect(scope.isActive("/uvms2")).toBeFalsy();
 	}));
 
 });
