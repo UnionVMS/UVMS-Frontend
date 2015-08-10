@@ -32,7 +32,7 @@
             },
             {
                 'title':locale.getString('header.menu_admin'),
-                'url':'/admin/auditlog'
+                'url':'/admin'
             },
             {
                 'title':locale.getString('header.menu_gis'),
