@@ -59,6 +59,13 @@ angular.module('unionvmsWeb')
         };
     };
 
+    GetListRequest.prototype.DTOForExchangeMessageList = function(){
+        return{
+            exchangeSearchCriteria : this.criterias,
+            pagination: {page: this.page, listSize: this.listSize}
+        };
+    };
+
     GetListRequest.prototype.setPage = function(newPage){
         this.page = newPage;
         return this.page;
