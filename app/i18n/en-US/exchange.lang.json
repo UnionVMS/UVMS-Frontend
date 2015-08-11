@@ -1,4 +1,12 @@
 {
+	"search_forward_rule": "Forward rule",
+	"search_from": "From",
+	"search_message_contains": "Message contains",
+	"search_range": "Range",
+	"search_recipient": "Recipient",
+	"search_sent_by": "Sent by",
+	"search_to": "To",
+
 	"status_failed": "Failed",
 	"status_pending": "Pending",
 	"status_success": "Successful",

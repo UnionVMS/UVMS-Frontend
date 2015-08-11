@@ -1,0 +1,41 @@
+<div class="exchangeSearch">
+	<div class="row">
+		<div class="col-md-2">
+			<datepicker-input model="from" placeholder="{{'exchange.search_from' | i18n}}"></datepicker-input>
+		</div>
+
+		<div class="col-md-2">
+			<datepicker-input model="to" placeholder="{{'exchange.search_to' | i18n}}"></datepicker-input>
+		</div>
+
+		<div class="col-md-1">
+			<dropdown ng-model="range" initialtext="{{'exchange.search_range' | i18n}}" items="[{text:'24h', code:'24h'}]"></dropdown>
+		</div>
+
+		<div class="col-md-1 col-md-offset-1">
+			<a class="pull-right reset">{{'common.reset' | i18n}}</a>
+		</div>
+
+		<div class="col-md-1">
+			<button type="submit" class="btn btn-primary btn-sm">{{'common.search' | i18n}}</button>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-2">
+			<input type="text" placeholder="{{'exchange.search_sent_by' | i18n}}"/>
+		</div>
+
+		<div class="col-md-2">
+			<input type="text" placeholder="{{'exchange.search_message_contains' | i18n}}"/>
+		</div>
+
+		<div class="col-md-2">
+			<dropdown ng-model="forwardRule" initialtext="{{'exchange.search_forward_rule' | i18n}}" items="[{text:'MS Reports',code:'MS Reports'}]"></dropdown>
+		</div>
+
+		<div class="col-md-2">
+			<dropdown ng-model="recipient" initialtext="{{'exchange.search_recipient' | i18n}}" items="[{text:'DNK',code:'DNK'}]"></dropdown>
+		</div>
+	</div>
+</div>

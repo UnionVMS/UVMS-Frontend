@@ -34,6 +34,9 @@ angular.module('unionvmsWeb')
         case "AUDIT":
             $scope.formPartial = "directive/common/search/advancedSearch/audit/auditSearchForm.html";
             break;
+        case "EXCHANGE":
+            $scope.formPartial = "directive/common/search/advancedSearch/exchange/exchangeSearch.html";
+            break;
         default:
             console.error("ModelType is missing for advanced search.");
     }
