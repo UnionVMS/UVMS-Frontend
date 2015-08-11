@@ -1,0 +1,19 @@
+{
+	"status_failed": "Failed",
+	"status_pending": "Pending",
+	"status_success": "Successful",
+
+	"table_header_actions": "Actions",
+	"table_header_date_fwd": "Date fwd.",
+	"table_header_date_received": "Date received",
+	"table_header_fwd_rule": "Fwd . rule",
+	"table_header_message": "Message",
+	"table_header_recipient": "Recipient",
+	"table_header_sent_by": "Sent by",
+	"table_header_status": "Status",
+
+	"title_incoming": "Incoming",
+	"title_outgoing": "Outgoing",
+	"title_reply": "Reply",
+	"title_resend": "Resend"
+}

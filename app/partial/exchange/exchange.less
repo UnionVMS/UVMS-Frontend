@@ -4,3 +4,56 @@
 		height: 200px;
 	}
 }
+
+.exchange-log-wrapper {
+	background-color: white;
+	border: 1px solid #dddddd;
+	border-top: 5px solid lightgray;
+	margin-top: 10px;
+	padding-bottom: 20px;
+
+	table.searchResults {
+		.fa {
+			color: @primaryColor;
+		}
+		li {
+			float: left;
+			padding-right: 20px;
+		}
+		td.message {
+			padding-right: 15px;
+		}
+		td.message div {
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		td.incoming-outgoing {
+			text-align:center;
+			vertical-align: middle;
+
+			.incoming {
+				color: #18a989;
+			}
+
+			.outgoing {
+				color: #0079FF;
+			}
+		}
+
+		thead {
+			border-bottom: none;
+		}
+
+		tbody tr {
+			border-bottom: 1px solid #e0e0e0;
+		}
+
+		tbody tr:last-child {
+			border-bottom: none;
+		}
+
+		tbody tr:nth-child(odd) {
+			background: #f7f7f7;
+		}
+	}
+}

@@ -122,7 +122,8 @@ angular.module('unionvmsWeb').factory('initService',function(configurationServic
                 'movement',
                 'config',
                 'spatial',
-                'datatables'
+                'datatables',
+                'exchange'
             ]);
         },
     };
