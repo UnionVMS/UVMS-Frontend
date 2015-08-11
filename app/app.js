@@ -61,6 +61,10 @@ angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocalePr
         .when('/reporting', {
             templateUrl: "partial/spatial/spatial.html",
 //            resolve: generalRouteResolves
+        })
+        .when('/exchange', {
+            templateUrl: 'partial/exchange/exchange.html',
+            resolve: generalRouteResolves
         });
     /* Add New Routes Above */
     $routeProvider.otherwise({redirectTo:'/today'});

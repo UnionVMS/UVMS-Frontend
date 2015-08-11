@@ -7,5 +7,6 @@
 	"menu_communication" : "Mobile terminals",
 	"menu_gis" : "GIS",
 	"menu_movement" : "Positions",
-	"menu_admin" : "Admin"
+	"menu_admin" : "Admin",
+	"menu_exchange" : "Exchange"
 }

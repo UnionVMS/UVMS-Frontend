@@ -31,6 +31,10 @@
                 'url':'/communication'
             },
             {
+                'title':locale.getString('header.menu_exchange'),
+                'url':'/exchange'
+            },
+            {
                 'title':locale.getString('header.menu_admin'),
                 'url':'/admin'
             },
