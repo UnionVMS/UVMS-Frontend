@@ -66,7 +66,7 @@ angular.module('unionvmsWeb')
                     ].join("//");
                     ex.outgoing = randomOutgoing();
                     ex.recipient = "Somebody";
-                    ex.sentBy = "Somebodys mum";        
+                    ex.sentBy = "Somebodys mum";
                     ex.status = randomStatus();
 
                     exchangeMessages.push(ex);
