@@ -5,7 +5,7 @@ angular.module('unionvmsWeb')
             getExchangeMessages : function(){
                 return $resource(baseUrl + '/exchange/rest/messages/list',{},
                 {
-                    list : { method : 'GET'}
+                    list : { method : 'POST'}
                 });
             },
             resendExchangeMessage : function(){
@@ -23,7 +23,7 @@ angular.module('unionvmsWeb')
         var getExchangeMessages = function(getListRequest){
 
             var deferred = $q.defer();
-            exchangeRestFactory.getExchangeMessages().get(getListRequest.DTOForExchangeMessageList(),
+            exchangeRestFactory.getExchangeMessages().list(getListRequest.DTOForExchangeMessageList(),
             
             function(response){
 

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage, MovementListPage, auditLogRestService) {
+angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage, MovementListPage, auditLogRestService, exchangeRestService) {
 
 	var getListRequest = new GetListRequest(1, 20, true, []),
         advancedSearchObject  = {};
@@ -263,6 +263,11 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
         searchAuditLogs: function() {
             checkTimeSpanAndTimeZone(getListRequest.criterias);
             return auditLogRestService.getAuditLogList(getListRequest);
+        },
+
+        searchExchange: function() {
+            checkTimeSpanAndTimeZone(getListRequest.criterias);
+            return exchangeRestService.getExchangeMessages(getListRequest);
         },
 
         //Modify search request
