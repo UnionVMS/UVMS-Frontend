@@ -7,6 +7,7 @@ angular.module('unionvmsWeb')
 		this.forwardRule = undefined;
 		this.id = undefined;
 		this.message = undefined;
+		this.outgoung = undefined;
 		this.recipient = undefined;
 		this.sentBy = undefined;		
 		this.status = undefined;
@@ -21,6 +22,7 @@ angular.module('unionvmsWeb')
 			exchange.dateForward = data.dateForward;
 			exchange.id = data.id;
 			exchange.message = data.message;
+			exchange.outgoung = data.message;
 			exchange.recipient = data.recipient;
 			exchange.sentBy = data.sentBy;		
 			exchange.status = data.status;

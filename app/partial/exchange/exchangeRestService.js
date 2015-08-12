@@ -47,10 +47,44 @@ angular.module('unionvmsWeb')
             
             function(error){
                 console.log("Error getting exchange messages.", error);
-                deferred.reject(error);
+                //deferred.reject(error);
+                
+                //dummydata  until backend delivers data.
+                var exchangeMessages = []; 
+                 for (var i = 10; i > 0; i--){
+                    var ex = new Exchange();
+                    
+                    ex.dateForward = ex.getFormattedDateForward();
+                    ex.dateRecieved = ex.getFormattedDateRecieved();
+                    ex.forwardRule = "RR";
+                    ex.id = i;
+                    ex.message = "//sd//ss//12//bipbap";
+                    ex.outgoing = randomOutgoing();
+                    ex.recipient = "Somebody";
+                    ex.sentBy = "Somebodys mum";        
+                    ex.status = randomStatus();
+
+                    exchangeMessages.push(ex);
+                 }
+                var currentPage = 1;
+                var totalNumberOfPages = 1;
+                var exchangeListPage = new ExchangeListPage(exchangeMessages, currentPage, totalNumberOfPages);
+                deferred.resolve(exchangeListPage);
             }
         );
         return deferred.promise;
+    };
+
+    //DUMMYDATA USES THIS DELETE WHEN BACKEND DELIVERS DATA
+    function randomStatus() {
+        var text = ["SUCCESSFUL", "PENDING", "ERROR"];
+        var number = Math.floor(Math.random() * 3);
+        return text[number];
+    };
+    //DUMMYDATA USES THIS DELETE WHEN BACKEND DELIVERS DATA
+    function randomOutgoing() {
+        var ran = [true,false];
+        return ran[Math.floor(Math.random() * 2)];
     };
 
     var resendExchangeMessage = function(exchangeMessage){
