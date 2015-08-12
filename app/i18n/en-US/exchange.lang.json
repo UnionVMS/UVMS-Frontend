@@ -9,7 +9,7 @@
 
 	"status_failed": "Failed",
 	"status_pending": "Pending",
-	"status_success": "Successful",
+	"status_successful": "Successful",
 
 	"table_header_actions": "Actions",
 	"table_header_date_fwd": "Date fwd.",

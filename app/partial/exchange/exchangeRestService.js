@@ -58,7 +58,12 @@ angular.module('unionvmsWeb')
                     ex.dateRecieved = ex.getFormattedDateRecieved();
                     ex.forwardRule = "RR";
                     ex.id = i;
-                    ex.message = "//sd//ss//12//bipbap";
+                    ex.message = [
+                        pickOne(["sd", "kz", "ab", "ww"]),
+                        pickOne(["ss", "aa", "cl", "xa"]),
+                        pickOne([12, 144, 24, 8]),
+                        pickOne(["bipbap", "zipzap", "mipmap"])
+                    ].join("//");
                     ex.outgoing = randomOutgoing();
                     ex.recipient = "Somebody";
                     ex.sentBy = "Somebodys mum";        
@@ -73,6 +78,14 @@ angular.module('unionvmsWeb')
             }
         );
         return deferred.promise;
+    };
+
+    function pickOne(array) {
+        return array[rand(array.length)];
+    };
+
+    function rand(mod) {
+        return Math.floor(Math.random() * mod);
     };
 
     //DUMMYDATA USES THIS DELETE WHEN BACKEND DELIVERS DATA

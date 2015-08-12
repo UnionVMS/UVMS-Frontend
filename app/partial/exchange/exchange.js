@@ -4,6 +4,8 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, searchS
 		page: 0,
 		pageCount: 0,
 		messages: [],
+		sortBy: "dateReceived",
+		sortReverse: true,
 		errorMessage: ""
 	};
 
@@ -19,4 +21,6 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, searchS
 
 		});
 	};
+
+	$scope.searchExchange();
 });
