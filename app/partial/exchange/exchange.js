@@ -6,7 +6,16 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, searchS
 		messages: [],
 		sortBy: "dateReceived",
 		sortReverse: true,
-		errorMessage: ""
+		errorMessage: "",
+		incomingOutgoing: "all"
+	};
+
+	$scope.filterIncomingOutgoing = function(message) {
+		if ($scope.searchResults.incomingOutgoing === "all") {
+			return true;
+		}
+
+		return message.outgoing ? $scope.searchResults.incomingOutgoing === "outgoing" : $scope.searchResults.incomingOutgoing === "incoming";
 	};
 
 	$scope.searchExchange = function() {

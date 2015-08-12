@@ -5,6 +5,37 @@
 	}
 }
 
+.incoming-outgoing-toggle,
+.exchange-log-wrapper table.searchResults td.incoming-outgoing {
+	text-align:center;
+	vertical-align: middle;
+
+	.incoming {
+		color: #18a989;
+	}
+
+	.outgoing {
+		color: #0079FF;
+	}
+}
+
+.incoming-outgoing-toggle {
+	border-top: 1px solid #dddddd;
+	padding: 20px 0 10px;
+	text-align: center;
+
+	.btn-default,
+	.btn-default.active {
+		color: gray;
+		border-color: lightgray;
+	}
+
+	.incoming,
+	.outgoing {
+		padding-right: 5px;
+	}
+}
+
 .exchange-log-wrapper {
 	background-color: white;
 	border: 1px solid #dddddd;
@@ -26,18 +57,6 @@
 		td.message div {
 			overflow: hidden;
 			text-overflow: ellipsis;
-		}
-		td.incoming-outgoing {
-			text-align:center;
-			vertical-align: middle;
-
-			.incoming {
-				color: #18a989;
-			}
-
-			.outgoing {
-				color: #0079FF;
-			}
 		}
 
 		thead {
@@ -68,5 +87,7 @@
 	.reset {
 		line-height: 27px;
 	}
-
+	.no-padding {
+		padding: 0;
+	}
 }
