@@ -1,0 +1,87 @@
+.exchange-sending-queue{
+  	overflow-y: scroll;
+  	padding-right: 5px;
+	height: 190px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	.scrollbar();
+}
+.sending-queue-container{
+	border-top: 5px solid #dddddd;
+	border-bottom: 1px solid #dddddd;
+	border-left: 1px solid #dddddd;
+	border-right: 1px solid #dddddd;
+	padding-left: 15px;
+	padding-right: 5px;
+}
+.sending-queue-header{
+	height: 40px;
+	border-bottom: 1px solid #dddddd;
+	padding-top: 10px;
+	i{
+		margin-left: 10px;
+		color: orange;
+	}
+}
+.sending-queue-header-text{
+  		font-weight: bold;
+  		font-size: 14px;
+		text-transform: uppercase;
+		padding-left: 5px;
+}
+.sending-ueue-warning-text{
+  		font-size: 13px;
+}
+table.sendingQueue{
+	display: block;
+	overflow: hidden;
+	padding: 0px 10px 0px 0px;
+
+	td, th{
+		min-width: 130px;
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+	td.recieved, th.recieved{
+		max-width: 150px;
+	}
+	td.from, th.from{
+		max-width: 120px;
+	}
+	td.from{
+		color:#428bca;
+	}
+	td.message, th.message{
+		max-width: 270px;
+		div{
+			text-overflow: ellipsis;
+			overflow: hidden;
+		}
+	}
+	td.reciepient, th.reciepient{
+		max-width: 130px;
+		min-width: 130px;
+	}
+	td.action, th.action
+	{
+		padding-left: 28px;
+		color:#d9534f;
+		cursor: pointer;
+	}
+	thead {
+			border-bottom: none;
+		}
+
+		tbody tr {
+			border-bottom: 1px solid #e0e0e0;
+		}
+
+		tbody tr:last-child {
+			border-bottom: none;
+		}
+
+		tbody tr:nth-child(odd) {
+			background: #f7f7f7 !important;
+		}
+
+}

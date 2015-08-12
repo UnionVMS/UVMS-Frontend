@@ -20,6 +20,14 @@
 	"table_header_sent_by": "Sent by",
 	"table_header_status": "Status",
 
+	"sending_queue_table_header_date_received": "Date received",
+	"sending_queue_table_header_from": "From",
+	"sending_queue_table_header_message": "Message",
+	"sending_queue_table_header_recipient": "Recipient",
+	"sending_queue_table_remove": "Remove",
+	"sending_queue_header" : "Sending queue",
+	"sending_queue_warning" : "There are currently many messages in queue. This might take a while.",
+	
 	"title_incoming": "Incoming",
 	"title_outgoing": "Outgoing",
 	"title_reply": "Reply",

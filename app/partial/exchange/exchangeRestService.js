@@ -93,12 +93,13 @@ angular.module('unionvmsWeb')
         var text = ["SUCCESSFUL", "PENDING", "ERROR"];
         var number = Math.floor(Math.random() * 3);
         return text[number];
-    };
+    }
+
     //DUMMYDATA USES THIS DELETE WHEN BACKEND DELIVERS DATA
     function randomOutgoing() {
         var ran = [true,false];
         return ran[Math.floor(Math.random() * 2)];
-    };
+    }
 
     var resendExchangeMessage = function(exchangeMessage){
         var defer = $q.defer();
