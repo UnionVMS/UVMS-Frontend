@@ -82,11 +82,11 @@ angular.module('unionvmsWeb')
 
     function pickOne(array) {
         return array[rand(array.length)];
-    };
+    }
 
     function rand(mod) {
         return Math.floor(Math.random() * mod);
-    };
+    }
 
     //DUMMYDATA USES THIS DELETE WHEN BACKEND DELIVERS DATA
     function randomStatus() {
