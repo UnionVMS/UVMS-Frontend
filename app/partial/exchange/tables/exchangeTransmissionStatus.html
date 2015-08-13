@@ -1,4 +1,22 @@
-<div class="col-md-12" ng-controller="ExchangetransmissionstatusCtrl">
-
-
+<div class="col-md-12 transmission-status-container">
+	<div class="transmission-queue-header">
+		<span class="transmission-header-text">{{'exchange.transmission_status_header' | i18n}}</span>
+	</div>
+		<table class="searchResults">
+			<thead>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="type">Inmarsat-C</td>
+					<td class="tranmission-action">
+						<span class="label label-success ng-binding ng-scope">{{ 'exchange.transmission_status_online' | i18n}}</td></span>
+				</tr>
+				<tr>
+					<td class="type">Eik</td>
+					<td class="tranmission-action">
+						<span class="label label-danger ng-binding ng-scope">{{ 'exchange.transmission_status_offline' | i18n}}</td></span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 </div>

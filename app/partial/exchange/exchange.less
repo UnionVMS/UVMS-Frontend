@@ -1,8 +1,12 @@
 .exchange-grid-header {
 	height: 200px;
-	.list-container {
+	.sending-queue-list-container {
 		height: 200px;
 		padding:0px 5px 0px 0px;
+	}
+	.transmission-status-list-container {
+		height: 200px;
+		padding:0px 0px 0px 0px;
 	}
 }
 
@@ -90,5 +94,15 @@
 	}
 	.no-padding {
 		padding: 0;
+	}
+}
+
+.sending-queue-header, .transmission-queue-header{
+	height: 40px;
+	border-bottom: 1px solid #dddddd;
+	padding-top: 10px;
+	i{
+		margin-left: 10px;
+		color: orange;
 	}
 }

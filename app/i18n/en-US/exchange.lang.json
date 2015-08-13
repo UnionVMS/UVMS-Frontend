@@ -27,6 +27,10 @@
 	"sending_queue_table_remove": "Remove",
 	"sending_queue_header" : "Sending queue",
 	"sending_queue_warning" : "There are currently many messages in queue. This might take a while.",
+
+	"transmission_status_header" : "Transmission status",
+	"transmission_status_online" : "Online",
+	"transmission_status_offline" : "Offline",
 	
 	"title_all": "All",
 	"title_incoming": "Incoming",
