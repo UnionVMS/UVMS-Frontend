@@ -1,25 +1,20 @@
 <div class="exchangeSearch">
 	<div class="row">
-		<div class="col-md-6 no-padding">
-			<div class="col-md-6">
-				<datepicker-input model="advancedSearchObject.FROM" time="true" placeholder="{{'exchange.search_from' | i18n}}"></datepicker-input>
-			</div>
-
-			<div class="col-md-6">
-				<datepicker-input model="advancedSearchObject.TO" time="true" placeholder="{{'exchange.search_to' | i18n}}"></datepicker-input>
-			</div>
+		<div class="col-md-3">
+			<datepicker-input model="advancedSearchObject.FROM" time="true" placeholder="{{'exchange.search_from' | i18n}}"></datepicker-input>
 		</div>
-		<div class="col-md-6 no-padding">
-			<div class="col-md-3">
-				<dropdown ng-model="advancedSearchObject.RANGE" initialtext="{{'exchange.search_range' | i18n}}" items="[{text:'24h', code:'24h'}]"></dropdown>
+		<div class="col-md-3">
+			<datepicker-input model="advancedSearchObject.TO" time="true" placeholder="{{'exchange.search_to' | i18n}}"></datepicker-input>
+		</div>
+		<div class="col-md-3">
+			<dropdown ng-model="advancedSearchObject.RANGE" initialtext="{{'exchange.search_range' | i18n}}" items="[{text:'24h', code:'24h'}]"></dropdown>
+		</div>
+		<div class="col-md-3 no-padding">
+			<div class="col-md-6">
+				<button class="btn btn-link" ng-click="resetAdvancedSearchForm(true)">{{'common.reset' | i18n}}</button>
 			</div>
-
-			<div class="col-md-3 col-md-offset-3">
-				<a class="pull-right reset" ng-click="resetAdvancedSearchForm(true)">{{'common.reset' | i18n}}</a>
-			</div>
-
-			<div class="col-md-3">
-				<button type="submit" class="btn btn-primary btn-sm" ng-click="performAdvancedSearch()">{{'common.search' | i18n}}</button>
+			<div class="col-md-6">
+				<button type="submit" class="btn btn-primary" ng-click="performAdvancedSearch()">{{'common.search' | i18n}}</button>
 			</div>
 		</div>
 	</div>

@@ -12,12 +12,12 @@
 	"status_successful": "Successful",
 
 	"table_header_actions": "Actions",
-	"table_header_date_fwd": "Date fwd.",
+	"table_header_date_fwd": "Date forwarded",
 	"table_header_date_received": "Date received",
-	"table_header_fwd_rule": "Fwd . rule",
+	"table_header_fwd_rule": "Forward rule",
 	"table_header_message": "Message",
 	"table_header_recipient": "Recipient",
-	"table_header_sent_by": "Sent by",
+	"table_header_sent_by": "From",
 	"table_header_status": "Status",
 
 	"sending_queue_table_header_date_received": "Date received",
