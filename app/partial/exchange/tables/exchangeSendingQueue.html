@@ -7,15 +7,15 @@
 		</div>
 		<table class="sendingQueue searchResults colorOdd">
 			<thead>
-				<th class="recieved">{{'exchange.sending_queue_table_header_date_received' | i18n}}</th>
-				<th class="from">{{'exchange.sending_queue_table_header_from' | i18n}}</th>
-				<th class="message">{{'exchange.sending_queue_table_header_message' | i18n}}</th>
-				<th class="reciepient">{{'exchange.sending_queue_table_header_recipient' | i18n}}</th>
+				<th sortable-table-header reverse="searchResults.sortReverse" class="recieved">{{'exchange.sending_queue_table_header_date_received' | i18n}}</th>
+				<th sortable-table-header reverse="searchResults.sortReverse" order="'from'" class="from">{{'exchange.sending_queue_table_header_from' | i18n}}</th>
+				<th sortable-table-header reverse="searchResults.sortReverse" order="'message'" class="message">{{'exchange.sending_queue_table_header_message' | i18n}}</th>
+				<th sortable-table-header reverse="searchResults.sortReverse" order="'recipient'" class="reciepient">{{'exchange.sending_queue_table_header_recipient' | i18n}}</th>
 				<th class="action"></th>
 			</thead>
 			<tbody>
 				<tr ng-repeat="i in [1,2,3,4,5,6,7,8]">
-					<td class="recieved">2015-02-05 08:00</td>
+					<td class="recieved">1{{i}} aug. 2015 1{{i}}:22:22</td>
 					<td class="from">TUNAFJORD</td>
 					<td class="message"><div title="//SR//AD//SWE//TM//POS//123//ARY//HEJHEJ//TJOHOPP//987//HOMER//">//SR//AD//SWE//TM//POS//123//ARY//HEJHEJ//TJOHOPP//987//HOMER//</div></td>
 					<td class="reciepient">FIN</td>
