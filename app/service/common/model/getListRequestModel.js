@@ -61,7 +61,7 @@ angular.module('unionvmsWeb')
 
     GetListRequest.prototype.DTOForExchangeMessageList = function(){
         return{
-            exchangeSearchCriteria : this.criterias,
+            exchangeSearchCriteria : {criterias: this.criterias, isDynamic: false},
             pagination: {page: this.page, listSize: this.listSize}
         };
     };

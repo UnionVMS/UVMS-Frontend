@@ -28,6 +28,7 @@
 	"sending_queue_header" : "Sending queue",
 	"sending_queue_warning" : "There are currently many messages in queue. This might take a while.",
 	
+	"title_all": "All",
 	"title_incoming": "Incoming",
 	"title_outgoing": "Outgoing",
 	"title_reply": "Reply",

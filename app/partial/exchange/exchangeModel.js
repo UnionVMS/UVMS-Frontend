@@ -17,15 +17,23 @@ angular.module('unionvmsWeb')
 		var exchange = new Exchange();
 		
 		if(data){
-			exchange.forwardRule = data.forwardRule;
+			exchange.forwardRule = data.fwdRule;
 			exchange.dateRecieved = data.dateRecieved;
-			exchange.dateForward = data.dateForward;
+			exchange.dateForward = data.dateFwd;
 			exchange.id = data.id;
 			exchange.message = data.message;
-			exchange.outgoung = data.message;
+			exchange.outgoing = data.outgoing || false;
 			exchange.recipient = data.recipient;
 			exchange.sentBy = data.sentBy;		
 			exchange.status = data.status;
+		}
+
+		if (exchange.status === "SUCCESSFULL") {
+			exchange.status = "SUCCESSFUL";
+		}
+
+		if (exchange.status === "FAILED") {
+			exchange.status = "ERROR";
 		}
 
 		return exchange;

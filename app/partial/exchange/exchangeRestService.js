@@ -3,11 +3,11 @@ angular.module('unionvmsWeb')
         var baseUrl = restConstants.baseUrl;
         return {
             getExchangeMessages : function(){
-                return $resource(baseUrl + '/exchange/rest/messages/list',{},
+                return $resource(baseUrl + '/exchange/rest/exchange/log',{},
                 {
                     list : { method : 'POST'}
                 });
-            },
+            },            
             resendExchangeMessage : function(){
                 return $resource(baseUrl + '/exchange/rest/message/resend',{},
                 {
@@ -16,9 +16,61 @@ angular.module('unionvmsWeb')
             }
         };
     })
-    .factory('exchangeRestService', function($q, exchangeRestFactory, GetListRequest, Exchange, ExchangeListPage){
+    .factory('exchangeRestService', function($q, exchangeRestFactory, GetListRequest, Exchange, ExchangeListPage, vesselRestService){
         var baseUrl, userName;
         userName = "FRONTEND_USER";
+
+        var getVesselNamesByGuid = function(vessels) {
+            var map = {};
+            for (var i = 0; i < vessels.length; i++) {
+                var vessel = vessels[i];
+                map[vessel.vesselId.guid] = vessel.name;
+            }
+
+            return map;
+        };
+
+        var getVesselIds = function(messages) {
+            var uniqueIds = {};
+            for (var i = 0; i < messages.length; i++) {
+                if (messages[i].sentBy) {
+                    uniqueIds[messages[i].sentBy] = messages[i].sentBy;
+                }
+            }
+
+            return Object.keys(uniqueIds);
+        };
+
+        var getVesselListRequest = function(vesselIds) {
+            var request = new GetListRequest(1, vesselIds.uniqueIds);
+            for (var i = 0; i < vesselIds.length; i++){
+                request.addSearchCriteria("GUID", vesselIds[i]);
+            }
+
+            return request;
+        };
+
+        var setVesselNames = function(messages, vesselNamesByGuid) {
+            for (var i = 0; i < messages.length; i++) {
+                var message = messages[i];
+                message.vesselGuid = message.sentBy;
+                message.sentBy = vesselNamesByGuid[message.vesselGuid];
+            }
+        };
+
+        var populateVesselNames = function(messagesPage) {
+            var deferred = $q.defer();
+            var messages = messagesPage.exchangeMessages;
+            vesselRestService.getVesselList(getVesselListRequest(getVesselIds(messages))).then(function(response) {
+                setVesselNames(messages, getVesselNamesByGuid(response.vessels));
+                deferred.resolve(messagesPage);
+            },
+            function(error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        };
 
         var getExchangeMessages = function(getListRequest){
 
@@ -34,15 +86,16 @@ angular.module('unionvmsWeb')
 
                 var exchangeMessages = [];
                 
-                if(angular.isArray(response.data.exchange)){
-                    for (var i = 0; i < response.data.exchange.length; i++){
-                        exchangeMessages.push(Exchange.fromJson(response.data.exchange[i]));
+                if(angular.isArray(response.data)){
+                    for (var i = 0; i < response.data.length; i++){
+                        exchangeMessages.push(Exchange.fromJson(response.data[i]));
                     }
                 }
+
                 var currentPage = response.data.currentPage;
                 var totalNumberOfPages = response.data.totalNumberOfPages;
                 var exchangeListPage = new ExchangeListPage(exchangeMessages, currentPage, totalNumberOfPages);
-                deferred.resolve(exchangeListPage);
+                deferred.resolve(populateVesselNames(exchangeListPage));
             },
             
             function(error){
