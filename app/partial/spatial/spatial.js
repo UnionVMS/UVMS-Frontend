@@ -1,4 +1,5 @@
 angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService){
+    $scope.isMenuVisible = true;
     $scope.selectedMenu = 'LIVEVIEW';
     
     //Define header menus
@@ -25,6 +26,10 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    
    $scope.isMenuSelected = function(menu){
        return $scope.selectedMenu === menu;
+   };
+   
+   $scope.toggleMenuVisibility = function(){
+       $scope.isMenuVisible = !$scope.isMenuVisible;
    };
    
    //Refresh map size on menu change

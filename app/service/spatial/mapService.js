@@ -204,7 +204,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         });
         
         map.addLayer(osmLayer);
-//        map.addLayer(eezLayer);
+        map.addLayer(eezLayer);
 //        map.addLayer(rfmoLayer);
 //        map.addLayer(ms.addOpenSeaMap());
         map.setView(view);

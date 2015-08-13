@@ -78,14 +78,16 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, loca
         console.log(error);
         $scope.reports = [];
     };
+    
+    reportRestService.getReportsList().then(getReportsListSuccess, getReportsListError);
         
     //Listening for loading reports list events
-    $scope.$on('loadReportsList', function(){
-        if ($scope.reports.length === 0){
-            //TODO show loading wheel
-            reportRestService.getReportsList().then(getReportsListSuccess, getReportsListError);
-        }
-    });
+//    $scope.$on('loadReportsList', function(){
+//        if ($scope.reports.length === 0){
+//            //TODO show loading wheel
+//            reportRestService.getReportsList().then(getReportsListSuccess, getReportsListError);
+//        }
+//    });
     
     //Custom sort function for the specified date target format
     $.extend($.fn.dataTableExt.oSort, {
