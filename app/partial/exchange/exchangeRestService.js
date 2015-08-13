@@ -13,6 +13,12 @@ angular.module('unionvmsWeb')
                 {
                     list : { method : 'POST'}
                 });
+            },
+            getSendingQueue : function(){
+                return $resource(baseUrl + '/exchange/rest/exchange/sendingQueue',{},
+                {
+                    list : { method : 'POST'}
+                });
             }
         };
     })
@@ -72,10 +78,25 @@ angular.module('unionvmsWeb')
             return deferred.promise;
         };
 
-        var getExchangeMessages = function(getListRequest){
+        var getExchangeMessages = function(getListRequest, servicePath){
+            return getDataFromBackend(getListRequest, servicePath);
+        };
 
+        var getDataFromBackend = function(getListRequest, servicePath){
+            var service;
             var deferred = $q.defer();
-            exchangeRestFactory.getExchangeMessages().list(getListRequest.DTOForExchangeMessageList(),
+            switch(servicePath){
+                case "MESSAGES":
+                    service = exchangeRestFactory.getExchangeMessages();
+                    break;
+                case "SENDINGQUEUE":
+                    service = exchangeRestFactory.getSendingQueue();
+                    break;
+                default: service = exchangeRestFactory.getExchangeMessages();
+            }
+            
+
+            service.list(getListRequest.DTOForExchangeMessageList(),
             
             function(response){
 
@@ -186,5 +207,6 @@ angular.module('unionvmsWeb')
     return {
         getExchangeMessages : getExchangeMessages,
         resendExchangeMessage : resendExchangeMessage
+        //getSendingQueue : getSendingQueue
     };
 });

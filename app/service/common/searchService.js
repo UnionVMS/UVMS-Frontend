@@ -265,9 +265,9 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
             return auditLogRestService.getAuditLogList(getListRequest);
         },
 
-        searchExchange: function() {
+        searchExchange: function(servicePath) {
             checkTimeSpanAndTimeZone(getListRequest.criterias);
-            return exchangeRestService.getExchangeMessages(getListRequest);
+            return exchangeRestService.getExchangeMessages(getListRequest, servicePath);
         },
 
         //Modify search request

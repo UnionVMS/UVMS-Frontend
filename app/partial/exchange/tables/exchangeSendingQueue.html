@@ -2,15 +2,15 @@
 	<div class="exchange-sending-queue">
 		<div class="sending-queue-header">
 			<span class="sending-queue-header-text">{{'exchange.sending_queue_header' | i18n}}</span>
-			<i class="fa fa-exclamation-triangle fa-md"></i>
-			<span class="sending-queue-warning-text">{{'exchange.sending_queue_warning' | i18n}}</span>
-		</div>
+			<i ng-hide="sendingQueueSearchResults.messages.length <= 5" class="fa fa-exclamation-triangle fa-md"></i>
+			<span ng-hide="sendingQueueSearchResults.messages.length <= 5" class="sending-queue-warning-text">{{'exchange.sending_queue_warning' | i18n}}</span>
+		</div><!--<pre>{{sendingQueueSearchResults | json}}</pre>-->
 		<table class="sendingQueue searchResults colorOdd">
 			<thead>
-				<th sortable-table-header reverse="searchResults.sortReverse" class="recieved">{{'exchange.sending_queue_table_header_date_received' | i18n}}</th>
-				<th sortable-table-header reverse="searchResults.sortReverse" order="'from'" class="from">{{'exchange.sending_queue_table_header_from' | i18n}}</th>
-				<th sortable-table-header reverse="searchResults.sortReverse" order="'message'" class="message">{{'exchange.sending_queue_table_header_message' | i18n}}</th>
-				<th sortable-table-header reverse="searchResults.sortReverse" order="'recipient'" class="reciepient">{{'exchange.sending_queue_table_header_recipient' | i18n}}</th>
+				<th sortable-table-header reverse="sendingQueueSearchResults.sortReverse" order="'dateRecieved'" class="recieved">{{'exchange.sending_queue_table_header_date_received' | i18n}}</th>
+				<th sortable-table-header reverse="sendingQueueSearchResults.sortReverse" order="'from'" class="from">{{'exchange.sending_queue_table_header_from' | i18n}}</th>
+				<th sortable-table-header reverse="sendingQueueSearchResults.sortReverse" order="'message'" class="message">{{'exchange.sending_queue_table_header_message' | i18n}}</th>
+				<th sortable-table-header reverse="sendingQueueSearchResults.sortReverse" order="'recipient'" class="reciepient">{{'exchange.sending_queue_table_header_recipient' | i18n}}</th>
 				<th class="action"></th>
 			</thead>
 			<tbody>
