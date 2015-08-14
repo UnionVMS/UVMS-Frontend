@@ -24,6 +24,10 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource, $
 	        return $resource(baseUrl + '/reporting/rest/report/', {}, {
                 'create': {method: 'POST'}
             });
+	    },
+	    getVmsData: function(){
+	        //return $resource(baseUrl +'/reporting/rest/report/list');
+	        return $resource(baseUrl + '/app/test_data/movements.json');
 	    }
 	};
 })
@@ -34,12 +38,27 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource, $
             var deferred = $q.defer();
             reportRestFactory.getReportsList().get({}, function(response){
                 if (response.code !== 200){
-                    deferred.reject('Invalid response status');
+                    deferred.reject('Invalid response status ReportList');
                     return;
                 }
                 deferred.resolve(response.data);
             }, function(error){
                 console.error('Error getting list of reports');
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+        getVmsData: function(){
+            var deferred = $q.defer();
+            reportRestFactory.getVmsData().get({}, function(response){
+                //FIXME response codes should be integers
+                if (parseInt(response.code) !== 200){
+                    deferred.reject('Invalid response status VmsData');
+                    return;
+                }
+                deferred.resolve(response.data);
+            }, function(error){
+                console.error('Error getting report VMS data');
                 deferred.reject(error);
             });
             return deferred.promise;

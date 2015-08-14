@@ -74,5 +74,19 @@
 	"reports_form_vms_min_duration": "Min.",
 	"reports_form_vms_max_duration": "Max.",
 	"reports_form_vms_field_label_unit_hours": "h",
-	"reports_form_vms_tracks_time_at_sea": "Time at sea:"
+	"reports_form_vms_tracks_time_at_sea": "Time at sea:",
+	"tab_vms_pos_table_header_fs": "F.S",
+	"tab_vms_pos_table_header_ircs": "IRCS",
+	"tab_vms_pos_table_header_cfr": "CFR",
+	"tab_vms_pos_table_header_name": "Name",
+	"tab_vms_pos_table_header_date": "Date",
+	"tab_vms_pos_table_header_lat": "Lat",
+	"tab_vms_pos_table_header_lon": "Lon",
+	"tab_vms_pos_table_header_status": "Status",
+	"tab_vms_pos_table_header_measured_speed": "MS",
+	"tab_vms_pos_table_header_calculated_speed": "CS",
+	"tab_vms_pos_table_header_course": "Course",
+	"tab_vms_pos_table_header_msg_type": "Msg.Type",
+	"tab_vms_pos_table_zoom_btn_title": "Zoom to position",
+	"tab_vms_pos_table_pan_btn_title": "Pan to position"
 }

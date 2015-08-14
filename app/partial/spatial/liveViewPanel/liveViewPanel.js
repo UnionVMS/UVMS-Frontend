@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $timeout, $window, locale, mapService){
-    $scope.selectedTab = 'MAP';
+    $scope.selectedTab = 'VMS';
     
     //Define tabs
     var setTabs = function(){

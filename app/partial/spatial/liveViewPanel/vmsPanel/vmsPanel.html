@@ -4,7 +4,62 @@
 			<li ng-repeat="tab in vmsTabMenu" class="vmssourcetab" ng-click="selectVmsTab(tab.tab)" ng-class="{'active': selectedVmsTab === '{{tab.tab}}'}"><a>{{tab.title}}</a></li>
 		</ul>
 		<div class="vmstab-content" ng-show="isVmsTabSelected('MOVEMENTS')">
-			<div>Table with positions</div>
+			<table datatable="ng" dt-options="posTable.dtOptions" dt-column-defs="posTable.dtColumnDefs" class="table table-striped">
+			    <thead>
+			        <tr>
+			            <th>{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_pos_table_header_name' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_pos_table_header_date' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_pos_table_header_lat' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_pos_table_header_lon' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_pos_table_header_status' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_pos_table_header_measured_speed' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_pos_table_header_calculated_speed' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_pos_table_header_course' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_pos_table_header_msg_type' | i18n }}</th>
+			            <th></th>
+			        </tr>
+			    </thead>
+			    <tfoot class="footerToTop">
+			        <tr>
+			            <th></th>
+			            <th></th>
+			            <th></th>
+			            <th></th>
+			            <th></th>
+			            <th></th>
+			            <th></th>
+			            <th></th>
+			            <th></th>
+			            <th></th>
+			            <th></th>
+			            <th></th>
+			            <th></th>
+			        </tr>
+		        </tfoot>
+			    <tbody>
+			        <tr ng-repeat="position in positions">
+			        	<td>TODO</td>
+			            <td>{{ position.properties.asset.ircs }}</td>
+			            <td>{{ position.properties.asset.cfr }}</td>
+			            <td>{{ position.properties.asset.name }}</td>
+			            <td>TODO</td>
+			            <td>{{ position.geometry.coordinates[1] }}</td>
+			            <td>{{ position.geometry.coordinates[0] }}</td>
+			            <td>{{ position.properties.status }}</td>
+			            <td>{{ position.properties.measuredSpeed }}</td>
+			            <td>{{ position.properties.calculatedSpeed }}</td>
+			            <td>{{ position.properties.course }}</td>
+			            <td>{{ position.properties.messageType }}</td>
+			            <td>
+			            	<button type="button" class="btn btn-info btn-xs" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index)"><span class="fa fa-search"></span></button>
+			            	<button type="button" class="btn btn-info btn-xs" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index)"><span class="fa fa-hand-paper-o"></span></button>
+			            </td>
+			        </tr>
+			    </tbody>
+			</table>
 		</div>
 		<div class="vmstab-content" ng-show="isVmsTabSelected('SEGMENTS')">
 			<div>Table with segments</div>
