@@ -1,4 +1,4 @@
-ddescribe('ExchangeCtrl', function() {
+describe('ExchangeCtrl', function() {
 
 	var scope,ctrl;
 

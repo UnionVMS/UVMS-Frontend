@@ -3,6 +3,10 @@ describe('configurationService', function() {
     var buildings = {HOUSE : 1, CABIN : 2, TENT : 3};
     var vesselRestSpy;
 
+    //Disable console logging
+    console.log = function() {};
+    console.error = function() {};
+
     beforeEach(module('unionvmsWeb'));  
 
     beforeEach(inject(function($rootScope, $q, vesselRestService, movementRestService, mobileTerminalRestService) {

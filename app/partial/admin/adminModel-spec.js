@@ -6,7 +6,7 @@ describe('Audit', function() {
         username: "niclas",
         operation: "Create",
         objectType: "User",
-        date: "2015-06-24T15:53:59Z"
+        timestamp: "2015-06-24T15:53:59Z"
     };
 
     it('should parse transfer object', inject(function(Audit) {

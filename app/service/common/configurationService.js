@@ -31,6 +31,7 @@
             $.each(CONFIG_MODULES, function(key, value){
                 promises.push(getConfigForModule(key, value));
             });
+            console.log("Waiting for all configurations to finish...");
 
             //When all configs are loaded then...
             $q.all(promises).then(
