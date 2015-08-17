@@ -1,0 +1,12 @@
+in order to automate the UNIONVMS-WEB deployment into Wildfly, I created the maven pom.xml.
+You can build and deploy by executing:
+
+\>mvn clean wildfly:deploy
+
+TODO: In environment/dev.json I have paramterized the host and port like the following:
+{
+    "envName": "dev",
+    "host":"${dev.srv.host}",
+    "port":"${dev.srv.http.port}"
+}
+...but I haven't committed it since I would break your tests.

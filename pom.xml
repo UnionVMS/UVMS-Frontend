@@ -1,0 +1,142 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>unionvms-web</groupId>
+  <artifactId>unionvms-web</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <name>unionvms-web</name>
+  <packaging>war</packaging>
+  
+  <properties>
+	<dev.srv.host>localhost</dev.srv.host>
+	<dev.srv.http.port>8080</dev.srv.http.port>
+	<dev.srv.port>9990</dev.srv.port>
+	<dev.srv.username>admin</dev.srv.username>
+	<dev.srv.password>admin</dev.srv.password>
+    <svn.projectname>UNIONVMS</svn.projectname>
+  </properties>
+  
+<!-- here we could create profiles for each environment connection details--> 
+    <profiles/>
+
+    
+  
+  <dependencies/>
+  
+  <build>
+	<!--resources>
+		<resource>
+			<directory>environment</directory>
+			<filtering>true</filtering>
+			<includes>
+				<include>**/dev.json</include>
+			</includes>
+		</resource>
+	</resources-->
+	<plugins>
+		<plugin>
+
+		 <groupId>pl.allegro</groupId>
+		 <artifactId>grunt-maven-plugin</artifactId>
+		 <version>1.5.1</version>
+		 <configuration>
+		 
+				<gruntBuildDirectory>${basedir}</gruntBuildDirectory>
+				<!-- relative to src/main/webapp/, default: static -->
+				<sourceDirectory>${basedir}/app</sourceDirectory>
+				<!--jsSourceDirectory></jsSourceDirectory-->
+				<warTargetDirectory>/</warTargetDirectory>
+
+				<!-- example options usage to get verbose output in logs -->
+				<gruntOptions>
+					<gruntOption>--verbose</gruntOption>
+				</gruntOptions>
+
+				<!-- example npm install env variable 
+				<npmEnvironmentVar>
+					<PHANTOMJS_CDNURL>http://cnpmjs.org/downloads</PHANTOMJS_CDNURL>
+				</npmEnvironmentVar>
+						-->
+				<!-- example options usage to filter variables in given resource 
+				<filteredResources>
+					<filteredResource>environment/dev.json</filteredResource>
+					
+				</filteredResources>-->
+
+		</configuration>
+
+		  <executions>
+			<execution>
+			  <goals>
+				<goal>create-resources</goal>
+				<goal>npm</goal>
+				<!-- or npm-offline if npm failure is not an option -->
+				<goal>bower</goal>
+				<goal>grunt</goal>
+			  </goals>
+			</execution>
+		  </executions>
+		</plugin>
+		 <plugin>
+			<artifactId>maven-war-plugin</artifactId>
+			<version>2.6</version>
+			<configuration>
+				<failOnMissingWebXml>false</failOnMissingWebXml>
+				<webResources>
+					<resource>
+					  <directory>dist</directory>
+					  <!-- override the destination directory for this resource -->
+					  <targetPath>/</targetPath>
+					  <!-- enable filtering -->
+					  <filtering>true</filtering>
+					  <includes>
+						<include>**/app.full.*.js</include>
+					  </includes>
+					</resource>				
+					<resource>
+					  <directory>dist</directory>
+					  <!-- override the destination directory for this resource -->
+					  <targetPath>/</targetPath>
+					  <!-- enable filtering -->
+					  <filtering>false</filtering>
+					  <includes>
+						<include>**/*</include>
+					  </includes>
+					  <excludes>
+						<exclude>**/app.full.*.js</exclude>
+					  </excludes>
+					  <excludes>
+						<exclude>**/*.zip</exclude>
+					  </excludes>
+					</resource>				
+				</webResources>
+			</configuration>
+		</plugin>
+		
+		<plugin>
+			<groupId>org.wildfly.plugins</groupId>
+			<artifactId>wildfly-maven-plugin</artifactId>
+			<version>1.0.2.Final</version>
+			<configuration>
+				<filename>${project.build.finalName}.${project.packaging}</filename>
+				<targetDir>${project.build.directory}</targetDir>
+				<hostname>${dev.srv.host}</hostname>
+				<port>${dev.srv.port}</port>
+				<username>${dev.srv.username}</username>
+				<password>${dev.srv.password}</password>
+			</configuration>
+			<executions>
+				<execution>
+						<phase>package</phase>
+ 						<goals>
+ 							<goal>deploy</goal>
+ 						</goals> 
+				</execution>
+			</executions>
+		</plugin>
+	</plugins>
+  </build>
+  <scm>
+	 <connection>scm:svn:https://webgate.ec.europa.eu/CITnet/svn/UNIONVMS/branches/releases/unionvms-web</connection>
+   </scm>
+</project>
