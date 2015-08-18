@@ -14,6 +14,6 @@ angular.module('unionvmsWeb').controller('ExchangeSearchController', function($s
 		}
 
 		$scope.$parent.performAdvancedSearch();
-	}
+	};
 
 });
