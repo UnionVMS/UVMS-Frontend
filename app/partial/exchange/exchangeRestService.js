@@ -116,7 +116,13 @@ angular.module('unionvmsWeb')
                 var currentPage = response.data.currentPage;
                 var totalNumberOfPages = response.data.totalNumberOfPages;
                 var exchangeListPage = new ExchangeListPage(exchangeMessages, currentPage, totalNumberOfPages);
-                deferred.resolve(populateVesselNames(exchangeListPage));
+                
+                //Get vessel names
+                if(exchangeListPage.exchangeMessages.length > 0){
+                    deferred.resolve(populateVesselNames(exchangeListPage));
+                }else{
+                    deferred.resolve(exchangeListPage);
+                }
             },
             
             function(error){
