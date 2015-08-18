@@ -107,16 +107,16 @@ angular.module('unionvmsWeb')
 
                 var exchangeMessages = [];
                 
-                if(angular.isArray(response.data)){
-                    for (var i = 0; i < response.data.length; i++){
-                        exchangeMessages.push(Exchange.fromJson(response.data[i]));
+                if(angular.isArray(response.data.exchangeLogs)){
+                    for (var i = 0; i < response.data.exchangeLogs.length; i++){
+                        exchangeMessages.push(Exchange.fromJson(response.data.exchangeLogs[i]));
                     }
                 }
 
                 var currentPage = response.data.currentPage;
                 var totalNumberOfPages = response.data.totalNumberOfPages;
                 var exchangeListPage = new ExchangeListPage(exchangeMessages, currentPage, totalNumberOfPages);
-                
+
                 //Get vessel names
                 if(exchangeListPage.exchangeMessages.length > 0){
                     deferred.resolve(populateVesselNames(exchangeListPage));
