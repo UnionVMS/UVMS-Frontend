@@ -4,7 +4,7 @@
 	"search_message_contains": "Message contains",
 	"search_range": "Range",
 	"search_recipient": "Recipient",
-	"search_sent_by": "Sent by",
+	"search_ircs_cfr_name": "IRCS, CFR, Name",
 	"search_to": "To",
 
 	"status_failed": "Failed",
@@ -15,14 +15,12 @@
 	"table_header_date_fwd": "Date forwarded",
 	"table_header_date_received": "Date received",
 	"table_header_fwd_rule": "Forward rule",
-	"table_header_message": "Message",
 	"table_header_recipient": "Recipient",
 	"table_header_sent_by": "From",
 	"table_header_status": "Status",
 
 	"sending_queue_table_header_date_received": "Date received",
 	"sending_queue_table_header_from": "From",
-	"sending_queue_table_header_message": "Message",
 	"sending_queue_table_header_recipient": "Recipient",
 	"sending_queue_table_remove": "Remove",
 	"sending_queue_header" : "Sending queue",

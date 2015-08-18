@@ -9,7 +9,6 @@
 			<thead>
 				<th sortable-table-header reverse="sendingQueueSearchResults.sortReverse" order="'dateRecieved'" class="recieved">{{'exchange.sending_queue_table_header_date_received' | i18n}}</th>
 				<th sortable-table-header reverse="sendingQueueSearchResults.sortReverse" order="'from'" class="from">{{'exchange.sending_queue_table_header_from' | i18n}}</th>
-				<th sortable-table-header reverse="sendingQueueSearchResults.sortReverse" order="'message'" class="message">{{'exchange.sending_queue_table_header_message' | i18n}}</th>
 				<th sortable-table-header reverse="sendingQueueSearchResults.sortReverse" order="'recipient'" class="reciepient">{{'exchange.sending_queue_table_header_recipient' | i18n}}</th>
 				<th class="action"></th>
 			</thead>
@@ -17,7 +16,6 @@
 				<tr ng-repeat="i in [1,2,3,4,5,6,7,8]">
 					<td class="recieved">1{{i}} aug. 2015 1{{i}}:22:22</td>
 					<td class="from">TUNAFJORD</td>
-					<td class="message"><div title="//SR//AD//SWE//TM//POS//123//ARY//HEJHEJ//TJOHOPP//987//HOMER//">//SR//AD//SWE//TM//POS//123//ARY//HEJHEJ//TJOHOPP//987//HOMER//</div></td>
 					<td class="reciepient">FIN</td>
 					<td class="action"><span class="fa fa-times-circle fa-lg" title="{{'exchange.sending_queue_table_remove' | i18n}}"></span></td>
 				</tr>

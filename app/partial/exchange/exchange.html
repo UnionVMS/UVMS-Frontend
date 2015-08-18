@@ -15,7 +15,7 @@
 
 				<!-- Exchange log table advanced search -->
 				<div class="row">
-					<div class="col-md-8 col-md-offset-2">
+					<div class="col-md-12">
 						<advanced-search modeltype="'EXCHANGE'" searchfunc="searchExchange" advancedsearchvisible="true"></advanced-search>
 					</div>
 				</div>
@@ -43,7 +43,6 @@
 						<th></th>
 						<th	sortable-table-header by="searchResults.sortBy" reverse="searchResults.sortReverse" order="'dateReceived'">{{'exchange.table_header_date_received' | i18n}}</th>
 						<th sortable-table-header by="searchResults.sortBy" reverse="searchResults.sortReverse" order="'sentBy'">{{'exchange.table_header_sent_by' | i18n}}</th>
-						<th sortable-table-header by="searchResults.sortBy" reverse="searchResults.sortReverse" order="'message'">{{'exchange.table_header_message' | i18n}}</th>
 						<th sortable-table-header by="searchResults.sortBy" reverse="searchResults.sortReverse" order="'forwardRule'">{{'exchange.table_header_fwd_rule' | i18n}}</th>
 						<th sortable-table-header by="searchResults.sortBy" reverse="searchResults.sortReverse" order="'recipient'">{{'exchange.table_header_recipient' | i18n}}</th>
 						<th sortable-table-header by="searchResults.sortBy" reverse="searchResults.sortReverse" order="'dateForwarded'">{{'exchange.table_header_date_fwd' | i18n}}</th>
@@ -58,7 +57,6 @@
 							</td>
 							<td>{{message.dateRecieved | date:"medium"}}</td>
 							<td>{{message.sentBy}}</td>
-							<td class="message"><div title="{{message.message}}">{{message.message}}</div></td>
 							<td>{{message.forwardRule}}</td>
 							<td>{{message.recipient}}</td>
 							<td>{{message.dateForward | date:"medium"}}</td>
