@@ -1,4 +1,10 @@
 {
+    "message_details_recipient" : "Recipient",
+    "message_details_status" : "Status",
+    "message_details_asset_information" : "Asset information",
+    "message_details_position_information" : "Position information",
+
+    "search_zero_results_error" : "No exchange logs matching your search criteria were found.",
 	"search_forward_rule": "Forward rule",
 	"search_from": "From",
 	"search_message_contains": "Message contains",
@@ -31,6 +37,7 @@
 	"transmission_status_offline" : "Offline",
 	
 	"title_all": "All",
+    "title_details": "Show details",
 	"title_incoming": "Incoming",
 	"title_outgoing": "Outgoing",
 	"title_forward": "Forward",

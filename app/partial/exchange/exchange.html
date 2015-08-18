@@ -1,5 +1,5 @@
 <div ng-controller="ExchangeCtrl">
-	<div class="container">
+	<div class="container containerWithTopBottomPadding">
 
 		<div class="row exchange-grid-header">
 			<!-- Sending queue, transmission status, ... -->
@@ -40,6 +40,7 @@
 				<!-- Exchange log table -->
 				<table class="searchResults exchangeLog colorOdd">
 					<thead>
+                        <th></th>
 						<th></th>
 						<th	sortable-table-header by="searchResults.sortBy" reverse="searchResults.sortReverse" order="'dateReceived'">{{'exchange.table_header_date_received' | i18n}}</th>
 						<th sortable-table-header by="searchResults.sortBy" reverse="searchResults.sortReverse" order="'sentBy'">{{'exchange.table_header_sent_by' | i18n}}</th>
@@ -55,6 +56,7 @@
 								<span ng-switch-when="false" class="fa fa-arrow-down incoming" title="{{'exchange.title_incoming' | i18n}}"></span>
 								<span ng-switch-when="true" class="fa fa-arrow-up outgoing" title="{{'exchange.title_outgoing' | i18n}}"></span>
 							</td>
+                            <td><a href ng-click="showMessageDetails(message)" title="{{'exchange.title_details' | i18n}}"><span class="fa fa-search-plus details"></span></a></td>
 							<td>{{message.dateRecieved | date:"medium"}}</td>
 							<td>{{message.sentBy}}</td>
 							<td>{{message.forwardRule}}</td>
@@ -74,7 +76,14 @@
 						</tr>
 					</tbody>
 				</table>
-			</div>
+
+                <search-result-error-alert ng-show="searchResults.errorMessage">{{searchResults.errorMessage}}</search-result-error-alert>
+
+                <div class="col-md-12 searchResultsLoading" ng-show="searchResults.loading">
+                    <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>        
+                </div>
+            </div>
+
 		</div>
 
 	</div>

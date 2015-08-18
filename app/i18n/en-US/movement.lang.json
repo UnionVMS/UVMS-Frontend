@@ -69,6 +69,7 @@
 	"manual_position_header_confirm": "Please confirm sending the position report",
 	"manual_position_header_sent": "Manual position report sent",
 	"position_report_header": "Position report",
+    "sent_position_report_header": "Sent position report",
 
 	"manual_position_field_label_flag_state": "F.S.",
 	"manual_position_field_label_ircs": "IRCS",

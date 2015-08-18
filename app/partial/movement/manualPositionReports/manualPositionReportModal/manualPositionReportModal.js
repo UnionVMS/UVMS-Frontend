@@ -1,7 +1,13 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition, $timeout, movementRestService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, position, ManualPosition, $timeout, movementRestService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly, sentReport) {
 
     $scope.errorMessage ="";
     $scope.readOnly = readOnly;
+    $scope.sentReport = sentReport;
+    if($scope.sentReport){
+        $scope.readOnly = true;
+    }
+
+    $scope.position = position;
 
     $scope.flagState = "SWE";
     $scope.ircs = position ? position.carrier.ircs : undefined;
@@ -35,10 +41,15 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     $scope.sendSuccess = false;
     $scope.addAnother = addAnother;
 
+    var markerLabel = locale.getString("movement.manual_position_label_new_position");
+    if(sentReport){
+        markerLabel = position.time;
+    }
+
     $scope.newPosition = {
         lat: $scope.latitude,
         lng: $scope.longitude,
-        message: locale.getString("movement.manual_position_label_new_position"),
+        message: markerLabel,
         focus: true
     };
 
@@ -53,16 +64,20 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
     $scope.init = function() {
         $scope.resetMap();
-        if ($scope.ircs && $scope.cfr) {
-            $scope.initLastPosition($scope.ircs, $scope.cfr);
-        }
 
-        //Center on newpos if available
-        if($scope.newPosition.lat && $scope.newPosition.lng){
-            $scope.center.lat = $scope.newPosition.lat;
-            $scope.center.lng = $scope.newPosition.lng;
-            $scope.center.zoom = 10;
-        }        
+        if(!$scope.sentReport){
+            //Show last position 
+            if ($scope.ircs && $scope.cfr) {
+                $scope.initLastPosition($scope.ircs, $scope.cfr);
+            }
+
+            //Center on newpos if available
+            if($scope.newPosition.lat && $scope.newPosition.lng){
+                $scope.center.lat = $scope.newPosition.lat;
+                $scope.center.lng = $scope.newPosition.lng;
+                $scope.center.zoom = 10;
+            }      
+        }
     };
 
     $scope.resetMap = function(){
@@ -85,7 +100,10 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     };
 
     $scope.modalTitle = function() {
-        if ($scope.readOnly) {
+        if ($scope.sentReport) {
+            return "movement.sent_position_report_header";
+        }
+        else if ($scope.readOnly) {
             return "movement.position_report_header";
         }
         else if ($scope.sendSuccess) {
@@ -357,6 +375,9 @@ angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($mod
                     },
                     readOnly: function() {
                         return !!options.readOnly;
+                    },
+                    sentReport : function(){
+                        return !!options.sentReport;
                     }
                 }
 			}).result;
