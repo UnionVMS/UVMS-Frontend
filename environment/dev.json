@@ -1,5 +1,6 @@
 {
     "envName": "dev",
     "host":"livm73u",
-    "port":"28080"
+    "port":"28080",
+    "rest_api_base" : "https://unionvmsdev.havochvatten.se/unionvms/api"
 }

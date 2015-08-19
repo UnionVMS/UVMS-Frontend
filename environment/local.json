@@ -1,5 +1,6 @@
 {
     "envName": "local",
     "host":"localhost",
-    "port":"8080"
+    "port":"8080",
+    "rest_api_base" : "http://localhost:8080"
 }
