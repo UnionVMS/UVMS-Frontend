@@ -119,6 +119,7 @@ angular.module('unionvmsWeb').factory('initService',function(configurationServic
                 'mobileTerminal',
                 'polling',
                 'vessel',
+                'audit',
                 'movement',
                 'config',
                 'spatial',
