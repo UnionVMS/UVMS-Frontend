@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, alertService, movementRestService, searchService, locale, $routeParams, ManualPositionReportModal){
+angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, alertService, movementRestService, searchService, locale, $routeParams, ManualPositionReportModal, csvService){
 
     //Current filter and sorting for the results table
     $scope.sortFilter = '';
@@ -179,7 +179,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
             }
             //EXPORT SELECTION
             else if(selectedItem.code === 'EXPORT'){
-                alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
+                $scope.exportAsCSVFile(true);
             }
             //INACTIVATE
             else if(selectedItem.code === 'INACTIVATE'){
@@ -195,10 +195,66 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         window.print();        
     };
 
-    $scope.exportAsFile = function(){
-        alertService.showInfoMessageWithTimeout("Export as file will soon be available. Stay tuned!");
+    //Export data as CSV file
+    $scope.exportAsCSVFile = function(onlySelectedItems){
+        var filename = 'positionReports.csv';
+
+        //Set the header columns
+        var header = [
+            locale.getString('movement.table_header_flag_state'),
+            locale.getString('movement.table_header_external_marking'),
+            locale.getString('movement.table_header_ircs'),
+            locale.getString('movement.table_header_name'),
+            locale.getString('movement.table_header_time'),
+            locale.getString('movement.table_header_latitude'),
+            locale.getString('movement.table_header_longitude'),
+            locale.getString('movement.table_header_status'),
+            locale.getString('movement.table_header_ms'),
+            locale.getString('movement.table_header_cs'),
+            locale.getString('movement.table_header_course'),
+            locale.getString('movement.table_header_message_type'),
+            locale.getString('movement.table_header_source')
+        ];
+
+        //Set the data columns
+        var getData = function() {            
+            var exportItems;
+            //Export only selected items
+            if(onlySelectedItems){
+                exportItems = $scope.selectedMovements;
+            }
+            //Export all logs in the table
+            else{
+                exportItems = $scope.currentSearchResults.movements;
+            }
+            return exportItems.reduce(
+                function(csvObject, item){ 
+                    var csvRow = [
+                        item.vessel.state,
+                        item.vessel.externalMarking,
+                        item.vessel.ircs,
+                        item.vessel.name,
+                        item.getFormattedTime(),
+                        item.movement.latitude,
+                        item.movement.longitude,
+                        item.movement.status,
+                        item.movement.measuredSpeed +' ' +locale.getString('movement.movement_speed_unit'),
+                        item.movement.calculatedSpeed +' ' +locale.getString('movement.movement_speed_unit'),
+                        item.movement.course,
+                        item.movement.messageType,
+                        item.movement.source
+                    ];
+                    csvObject.push(csvRow);
+                    return csvObject;
+                },[]
+            );
+        };
+
+        //Create and download the file
+        csvService.downloadCSVFile(getData(), header, filename);        
     };
-    
+
+
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
         searchService.reset();

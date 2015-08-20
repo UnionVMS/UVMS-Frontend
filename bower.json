@@ -31,7 +31,8 @@
     "OpenLayers": "~3.7.0",
     "angular-datatables": "~0.4.3",
     "DataTables": "~1.10.7",
-    "jquery-datatables-column-filter": "*"
+    "jquery-datatables-column-filter": "*",
+    "ng-csv": "~0.3.4"
   },
   "resolutions": {
     "angular": "~1.3",

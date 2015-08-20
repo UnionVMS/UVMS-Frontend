@@ -15,31 +15,44 @@
 
 				<!-- Exchange log table advanced search -->
 				<div class="row">
-					<div class="col-md-12">
+					<div class="col-md-11">
 						<advanced-search modeltype="'EXCHANGE'" searchfunc="searchExchange" advancedsearchvisible="true"></advanced-search>
 					</div>
+                    <div class="col-md-1 pull-right textAlignRight printAndExport">
+                        <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
+                        <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>              
+                    </div>                    
 				</div>
 
 				<!-- Toggle: ALL, INCOMING, OUTGOING -->
-				<div class="incoming-outgoing-toggle">
-					<div class="btn-group">
-						<label class="btn btn-default" ng-model="searchResults.incomingOutgoing" btn-radio="'all'">
-							{{'exchange.title_all' | i18n}}
-						</label>
-						<label class="btn btn-default" ng-model="searchResults.incomingOutgoing" btn-radio="'incoming'">
-							<span class="fa fa-arrow-down incoming"></span>
-							{{'exchange.title_incoming' | i18n}}
-						</label>
-						<label class="btn btn-default" ng-model="searchResults.incomingOutgoing" btn-radio="'outgoing'">
-							<span class="fa fa-arrow-up outgoing"></span>
-							{{'exchange.title_outgoing' | i18n}}
-						</label>
-					</div>
-				</div>
+                <div class="row incoming-outgoing-toggle">
+                    <div class="col-md-1 editSelection">
+                        <dropdown ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+                    </div>
+
+                    <div class="col-md-10">
+                        <div class="">
+                            <div class="btn-group">
+                                <label class="btn btn-default" ng-model="searchResults.incomingOutgoing" btn-radio="'all'">
+                                    {{'exchange.title_all' | i18n}}
+                                </label>
+                                <label class="btn btn-default" ng-model="searchResults.incomingOutgoing" btn-radio="'incoming'">
+                                    <span class="fa fa-arrow-down incoming"></span>
+                                    {{'exchange.title_incoming' | i18n}}
+                                </label>
+                                <label class="btn btn-default" ng-model="searchResults.incomingOutgoing" btn-radio="'outgoing'">
+                                    <span class="fa fa-arrow-up outgoing"></span>
+                                    {{'exchange.title_outgoing' | i18n}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 				<!-- Exchange log table -->
 				<table class="searchResults exchangeLog colorOdd">
 					<thead>
+                        <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
                         <th></th>
 						<th></th>
 						<th	sortable-table-header by="searchResults.sortBy" reverse="searchResults.sortReverse" order="'dateReceived'">{{'exchange.table_header_date_received' | i18n}}</th>
@@ -52,6 +65,9 @@
 					</thead>
 					<tbody>
 						<tr ng-repeat="message in searchResults.messages | filter:filterIncomingOutgoing | orderBy:searchResults.sortBy:searchResults.sortReverse">
+                            <td class="checkboxContainer">
+                                <input type="checkbox" ng-checked="isChecked(message)" ng-click="check(message)"/>
+                            </td>                        
 							<td class="incoming-outgoing" ng-switch="message.outgoing">
 								<span ng-switch-when="false" class="fa fa-arrow-down incoming" title="{{'exchange.title_incoming' | i18n}}"></span>
 								<span ng-switch-when="true" class="fa fa-arrow-up outgoing" title="{{'exchange.title_outgoing' | i18n}}"></span>
@@ -62,10 +78,10 @@
 							<td>{{message.forwardRule}}</td>
 							<td>{{message.recipient}}</td>
 							<td>{{message.dateForward | date:"medium"}}</td>
-							<td class="status" ng-switch="message.status">
-								<span ng-switch-when="SUCCESSFUL" class="label label-success">{{'exchange.status_successful' | i18n | uppercase}}</span>
-								<span ng-switch-when="PENDING" class="label label-warning">{{'exchange.status_pending' | i18n | uppercase}}</span>
-								<span ng-switch-when="ERROR" class="label label-danger">{{'exchange.status_failed' | i18n | uppercase}}</span>
+							<td class="status">
+                                <span class="label" ng-class="{SUCCESSFUL:'label-success', PENDING:'label-warning', 'ERROR':'label-danger'}[message.status]">
+                                    {{getStatusLabel(message.status) | uppercase}}
+                                </span>
 							</td>
 							<td>
 								<ul>

@@ -1,7 +1,6 @@
 angular.module('unionvmsWeb').factory('ManualPosition', function() {
 
 	function ManualPosition() {
-		this.id = undefined; // string
 		this.guid = undefined; // string
 		this.speed = undefined; // number
 		this.course = undefined; // number
@@ -26,7 +25,6 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 
 	ManualPosition.fromJson = function(data) {
 		var manualPosition = new ManualPosition();
-		manualPosition.id = data.id;
 		manualPosition.guid = data.guid;
 		manualPosition.speed = data.speed;
 		manualPosition.course = data.course;
@@ -53,7 +51,6 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 
 	ManualPosition.prototype.getDto = function() {
 		var data = {};
-		data.id = this.id;
 		data.guid = this.guid;
 		data.speed = this.speed;
 		data.course = this.course;
@@ -79,7 +76,7 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 	};
 
 	ManualPosition.prototype.isEqualMovement = function(item) {
-		return item.id === this.id;
+		return item.guid === this.guid;
 	};
 
 	function formatTime (time){

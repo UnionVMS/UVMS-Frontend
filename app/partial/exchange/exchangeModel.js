@@ -47,6 +47,10 @@ angular.module('unionvmsWeb')
         return moment(this.dateForward).format("YYYY-MM-DD HH:mm");
     };
 
+    Exchange.prototype.isEqualExchange = function(item) {
+        return angular.isDefined(item) && item.id === this.id;
+    };
+
     return Exchange;
 
 });

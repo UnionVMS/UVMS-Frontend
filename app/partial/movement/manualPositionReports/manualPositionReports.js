@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal) {
+angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal, csvService) {
 
     $scope.showModal = function() {
         $scope.editPosition();
@@ -183,6 +183,56 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
         return checked;
     };
 
+    //Export data as CSV file
+    $scope.exportAsCSVFile = function(onlySelectedItems){
+        var filename = 'manualPositionReports.csv';
+
+        //Set the header columns
+        var header = [
+            locale.getString('movement.table_header_external_marking'),
+            locale.getString('movement.table_header_ircs'),
+            locale.getString('movement.table_header_cfr'),
+            locale.getString('movement.table_header_name'),
+            locale.getString('movement.table_header_time'),
+            locale.getString('movement.table_header_latitude'),
+            locale.getString('movement.table_header_longitude'),
+            locale.getString('movement.table_header_measured_speed'),
+            locale.getString('movement.table_header_course')
+        ];
+
+        //Set the data columns
+        var getData = function() {            
+            var exportItems;
+            //Export only selected items
+            if(onlySelectedItems){
+                exportItems = $scope.selectedMovements;
+            }
+            //Export all logs in the table
+            else{
+                exportItems = $scope.currentSearchResults.movements;
+            }
+            return exportItems.reduce(
+                function(csvObject, item){ 
+                    var csvRow = [
+                        item.carrier.externalMarking,
+                        item.carrier.ircs,
+                        item.carrier.cfr,
+                        item.carrier.name,
+                        item.time,
+                        item.position.latitude,
+                        item.position.longitude,
+                        item.speed,
+                        item.course
+                    ];
+                    csvObject.push(csvRow);
+                    return csvObject;
+                },[]
+            );
+        };
+
+        //Create and download the file
+        csvService.downloadCSVFile(getData(), header, filename);        
+    };
 
     $scope.$on("$destroy", function() {
         alertService.hideMessage();

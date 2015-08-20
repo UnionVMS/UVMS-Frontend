@@ -2,8 +2,6 @@ describe('ManualPosition', function() {
 
     beforeEach(module('unionvmsWeb'));
         var data = {
-
-            id : "1",    
             guid : "12345-qwert-12345-asdfg-1qaz2",
             speed : 15,
             course : 34,
@@ -28,7 +26,6 @@ describe('ManualPosition', function() {
    
 
      function verifyPosition(position) {
-        expect(position.id).toEqual("1");
         expect(position.guid).toEqual("12345-qwert-12345-asdfg-1qaz2");       
         expect(position.speed).toEqual(15);
         expect(position.course).toEqual(34);

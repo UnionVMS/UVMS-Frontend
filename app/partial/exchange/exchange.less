@@ -12,7 +12,6 @@
 
 .incoming-outgoing-toggle,
 .exchange-log-wrapper table.searchResults td.incoming-outgoing {
-	padding: 0 5px;
 	text-align:center;
 	vertical-align: middle;
 
@@ -22,8 +21,15 @@
 
 	.outgoing {
 		color: #0079FF;
-	}
+	}  
 }
+
+.exchange-log-wrapper {
+    .printAndExport{
+        position: relative;
+        top: 18px;
+    }
+}  
 
 .incoming-outgoing-toggle {
 	border-top: 1px solid #dddddd;
@@ -40,6 +46,10 @@
 	.outgoing {
 		padding-right: 5px;
 	}
+
+    .editSelection {
+        text-align:left;
+    }
 }
 
 .exchange-log-wrapper {
@@ -60,28 +70,15 @@
 			float: left;
 			padding-right: 20px;
 		}
+        td.checkboxContainer, th.checkboxContainer{
+            text-align: center;
+        }
 		td.message {
 			padding-right: 15px;
 		}
 		td.message div {
 			overflow: hidden;
 			text-overflow: ellipsis;
-		}
-
-		thead {
-			border-bottom: none;
-		}
-
-		tbody tr {
-			border-bottom: 1px solid #e0e0e0;
-		}
-
-		tbody tr:last-child {
-			border-bottom: none;
-		}
-
-		tbody tr:nth-child(odd) {
-			background: #f7f7f7;
 		}
 	}
 }
