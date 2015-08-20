@@ -1,18 +1,18 @@
 <div class="exchangeSearch" ng-controller="ExchangeSearchController">
 	<div class="row">
 		<div class="col-md-1">
-			<dropdown ng-model="advancedSearchObject.RANGE" initialtext="{{'exchange.search_range' | i18n}}" items="[{text:'24h', code:'24h'}]"></dropdown>
+			<dropdown ng-model="advancedSearchObject.TIME_SPAN" initialtext="{{'exchange.search_range' | i18n}}" items="timeSpanOptions"></dropdown>
 		</div>
 		<div class="col-md-2">
-			<datepicker-input model="advancedSearchObject.FROM" time="true" placeholder="{{'exchange.search_from' | i18n}}"></datepicker-input>
+			<datepicker-input model="advancedSearchObject.FROM_DATE" time="true" placeholder="{{'exchange.search_from' | i18n}}"></datepicker-input>
 		</div>
 		<div class="col-md-2">
-			<datepicker-input model="advancedSearchObject.TO" time="true" placeholder="{{'exchange.search_to' | i18n}}"></datepicker-input>
+			<datepicker-input model="advancedSearchObject.TO_DATE" time="true" placeholder="{{'exchange.search_to' | i18n}}"></datepicker-input>
 		</div>
 		<div class="col-md-2">
 			<input type="text" ng-model="freeText" placeholder="{{'exchange.search_ircs_cfr_name' | i18n}}"/>
 		</div>
-		<div class="col-md-1">
+		<div class="col-md-2">
 			<dropdown ng-model="advancedSearchObject.RECIPIENT" initialtext="{{'exchange.search_recipient' | i18n}}" items="[{text:'DNK',code:'DNK'}]"></dropdown>
 		</div>
 		<div class="col-md-1">

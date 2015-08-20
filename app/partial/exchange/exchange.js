@@ -4,8 +4,6 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         page: 0,
         pageCount: 0,
         messages: [],
-        sortBy: "dateReceived",
-        sortReverse: true,
         errorMessage: ""
     };
 
