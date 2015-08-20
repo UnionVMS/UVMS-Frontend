@@ -1,0 +1,123 @@
+// Adds 3D reusable animations in CSS (with fallbacks for other browsers).
+@import "3l-1.4.4/3L";
+
+.ec-card-animation(
+    @width: 1024px,
+    @card-opacity: 0.2,
+    @flip-duration: 1s,
+    @flip-delay: 0s,
+    @opacity-duration: 1s,
+    @perspective: 1000px,
+    @orientation: "horizontal"
+) when (@orientation = "horizontal") {
+    .ec-card-animation-impl(
+        @width: @width,
+        @card-opacity: @card-opacity,
+        @flip-duration: @flip-duration,
+        @flip-delay: @flip-delay,
+        @opacity-duration: @opacity-duration,
+        @perspective: @perspective,
+        @rotate-transform: rotateY(180deg)
+    );
+}
+
+.ec-card-animation(
+    @width: 1024px,
+    @card-opacity: 0.2,
+    @flip-duration: 1s,
+    @flip-delay: 0s,
+    @opacity-duration: 1s,
+    @perspective: 1000px,
+    @orientation: "vertical"
+) when not (@orientation = "horizontal") {
+    .ec-card-animation-impl(
+        @width: @width,
+        @card-opacity: @card-opacity,
+        @flip-duration: @flip-duration,
+        @flip-delay: @flip-delay,
+        @opacity-duration: @opacity-duration,
+        @perspective: @perspective,
+        @rotate-transform: rotateX(180deg)
+    );
+}
+
+.ec-card-animation-impl(@width: 1024px, @card-opacity: 0.2, @flip-duration: 1s, @flip-delay: 0s, @opacity-duration: 1s, @perspective: 1000px, @rotate-transform: rotateX(180deg)) {
+    .perspective(@perspective);
+
+    .ec-card {
+        .transition-transform(@flip-duration);
+        transition-delay: @flip-delay;
+        -moz-transition-delay: @flip-delay;
+        -webkit-transition-delay: @flip-delay;
+        -o-transition-delay: @flip-delay;
+
+        width: @width;
+        // This must be relative for the IE 8 fallback:
+        position: relative;
+
+        .front,.back {
+            .transition(opacity @opacity-duration);
+            transition-delay: @flip-delay;
+            -moz-transition-delay: @flip-delay;
+            -webkit-transition-delay: @flip-delay;
+            -o-transition-delay: @flip-delay;
+        }
+
+        .back {
+            .transition-transform(@flip-duration);
+
+            // The translateZ correction is used to prevent flickering in the transition on webkit browsers:
+            .transform3d(@rotate-transform, translateZ(1px));
+            .opacity(0);
+            visibility: hidden;
+
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 0;
+        }
+        .back * {
+            .opacity(0);
+            .transition(opacity @opacity-duration);
+        }
+    }
+
+    .ec-card.flipped {
+        .transform3d(@rotate-transform);
+
+        .front {
+            .opacity(@card-opacity);
+        }
+        .back * {
+            .opacity(1.0);
+        }
+        .back {
+            .opacity(1.0);
+            // The translateZ correction is used to prevent flickering in the transition on webkit browsers:
+            .transform3d(@rotate-transform, translateZ(0.00001px));
+            visibility: visible;
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+.lt-ie10 {
+    .ec-card {
+        .front {
+            visibility: visible;
+        }
+        .back {
+            visibility: hidden;
+        }
+    }
+    .ec-card.flipped {
+        .front {
+            z-index: -1;
+            visibility: hidden;
+        }
+        .back {
+            z-index: 2;
+            visibility: visible;
+        }
+    }
+}

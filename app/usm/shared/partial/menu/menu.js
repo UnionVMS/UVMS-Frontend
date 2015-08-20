@@ -1,0 +1,331 @@
+var sharedModule = angular.module('shared');
+
+sharedModule.controller('MenuCtrl',['$scope', '$state', '$translate', '$stateParams', '$log', '$cookies',
+                                    function($scope, $state, $translate, $stateParams, $log, $cookies){
+
+    $scope.init = function (){
+            $scope.lang = $cookies.lang?$cookies.lang:'en';
+            $translate.use($scope.lang);
+    };
+
+    $scope.init();
+
+	$scope.switchLanguage = function (langKey) {
+	    $translate.use(langKey);
+        $cookies.lang = langKey;
+	};
+
+}]);
+sharedModule.controller('FooterController',['$scope', '$log', 'CFG',
+                                    function($scope, $log, CFG){
+
+            $scope.mavenversion = CFG.maven.version?CFG.maven.version:'';
+            $scope.buildTS = CFG.maven.timestamp?CFG.maven.timestamp:CFG.gruntts;
+        	$scope.USM = CFG.USM;
+
+
+}]);
+sharedModule.controller('userMenuController',['$log','$scope','userService','renewloginpanel','$rootScope','$state',function($log,$scope,userService,renewloginpanel,$rootScope,$state){
+    var init = function(){
+    $scope.userName = userService.getUserName();
+    $scope.authenticated = userService.isLoggedIn();
+        $scope.contexts = userService.getContexts();
+        $scope.currentContext = userService.getCurrentContext();
+    };
+    init();
+    $rootScope.$on('AuthenticationSuccess', function () {
+        init();
+    });
+    $rootScope.$on('needsAuthentication', function () {
+        init();
+    });
+    $rootScope.$on('ContextSwitch', function () {
+        init();
+    });
+
+    $scope.logout = function(){
+        userService.logout();
+        init();
+		$state.go('app.usm');
+    };
+    $scope.openlogin = function(){
+        renewloginpanel.show().then(function(){
+            init();
+        });
+    };
+    $scope.switchContext = function(){
+        userService.switchContext().then(function(){
+            init();
+        });
+    };
+
+}]);
+
+sharedModule.controller('setMyPasswordModalInstanceCtrl', ['$log', '$timeout', '$location', '$scope', '$modalInstance', '$localStorage', '$stateParams',
+                                                           'accountService', 'userService',
+                   function ($log, $timeout, $location, $scope, $modalInstance, $localStorage, $stateParams, accountService,userService) {
+
+				   $scope.formDisabled = true;
+                   $scope.editForm = true;
+                   $scope.showSubmit = false;
+                   $scope.showEdit = true;
+
+                   //panel
+                   $scope.userPasswordUpdated = false;
+                   $scope.showConfirmation = false;
+
+                   $scope.cancel = function () {
+                       $modalInstance.dismiss();
+                   };
+
+                   $scope.saveMyPassword = function (passwordData) {
+
+                	   if(userService.getUserName()){
+                	//   if($localStorage.userName){
+                		   var objectToSubmit = passwordSubmitObject(passwordData, userService.getUserName());
+							accountService.changeUserPassword(objectToSubmit).then(
+								function (response) {
+								    var updatedUser = objectToSubmit;
+
+								    $scope.userPasswordUpdated = true;
+								    $scope.messageDivClass = "container alert alert-success";
+								    $scope.actionMessage = "Password has been set";
+
+								    $timeout(function () {
+								     $modalInstance.close(updatedUser);
+								  }, 2000);
+								},
+								function (error) {
+								    $scope.messageDivClass = "container alert alert-danger";
+								    $scope.actionMessage = error;
+
+								    $log.log(error);
+								}
+							);
+                	   }
+                   };
+
+                   // Transformation to submit object
+                   var passwordSubmitObject = function (passwordData, userName) {
+                	    return {
+                	        "userName": userName,
+                	        "currentPassword": passwordData.currentPassword,
+                	        "newPassword": passwordData.newPassword
+                	    };
+                   };
+}]);
+
+sharedModule.controller('ModifyPassword', ['$log', '$scope', '$modal','$stateParams',
+       function ($log, $scope, $modal,$stateParams) {
+
+       $scope.modifyMyPassword= function () {
+    	   	 $scope.passwordData = {
+	              currentPassword: "",
+	              newPassword: "",
+	              confirmPassword: ""
+    	     };
+             var modalInstance = $modal.open({
+                       animation: true,
+                       backdrop: true,
+                       keyboard: true,
+                       templateUrl: 'usm/users/partial/changeMyPassword.html',
+                       controller: 'setMyPasswordModalInstanceCtrl',
+                       resolve: {
+			            	passwordData: function () {
+            	  				return $scope.passwordData;
+							}
+              		   }
+             });
+
+             // It is a promise that resolves when modal is closed and rejected when modal is dismissed
+			 modalInstance.result.then(function (returnedUser) {
+			    // Update the model (user)
+			    $log.log(returnedUser);
+			    $scope.user = returnedUser;
+			    if (_.isEqual($scope.user.status, 'E')) {
+			        $scope.statusClass = 'label label-success';
+			    } else if (_.isEqual($scope.user.status, 'D')) {
+			        $scope.statusClass = 'label label-danger';
+			    } else {
+			        $scope.statusClass = 'label label-warning';
+			    }
+			    //angular.copy(returnedUser, user);
+			 }, function () {
+			    //$log.info('Modal dismissed at: ' + new Date());
+			 });
+
+       };
+ }]);
+
+sharedModule.controller('setMyContactDetailsModalInstanceCtrl',
+  ['$log', '$timeout', '$scope', '$modalInstance', 'personsService', 'userService', 'myContactDetails',
+  function ($log, $timeout, $scope, $modalInstance, personsService, userService, myContactDetails) {
+
+    $scope.formDisabled = true;
+    $scope.editForm = true;
+    $scope.showSubmit = false;
+    $scope.showEdit = true;
+    $scope.myContactDetails = myContactDetails;
+    $scope.myContactDetails.currentPassword = '';
+
+    //panel
+    $scope.contactDetailsUpdated = false;
+    $scope.showConfirmation = false;
+
+    $scope.cancel = function () {
+      $log.info('Modal dismissed at');
+      $modalInstance.dismiss();
+    };
+
+    $scope.saveMyContactDetails = function (contactDetailsData) {
+      $log.info('userService.getUserName(): ' + userService.getUserName());
+
+      if (userService.getUserName()) {
+        var objectToSubmit = contactDetailsSubmitObject(contactDetailsData, userService.getUserName());
+        personsService.updateContactDetails(objectToSubmit).then(
+            function (response) {
+              var updatedDetails = response;
+
+              $scope.contactDetailsUpdated = true;
+              $scope.messageDivClass = "container alert alert-success";
+              $scope.actionMessage = "Contact Details have been saved";
+
+              $timeout(function () {
+                $modalInstance.close(updatedDetails);
+              }, 2000);
+            },
+            function (error) {
+              $scope.messageDivClass = "container alert alert-danger";
+              $scope.actionMessage = error;
+
+              $log.log(error);
+            }
+        );
+      }
+    };
+
+    // Transformation to submit object
+    var contactDetailsSubmitObject = function (contactDetailsData, userName) {
+      return {
+        "userName": userName,
+        "password": contactDetailsData.currentPassword,
+        "email": contactDetailsData.email,
+        "phoneNumber": contactDetailsData.phoneNumber,
+        "mobileNumber": contactDetailsData.mobileNumber,
+        "faxNumber": contactDetailsData.faxNumber
+      };
+    };
+  }]);
+
+sharedModule.controller('ModifyContactDetails',
+  ['$log', '$scope', '$modal', 'personsService', 'userService',
+  function ($log, $scope, $modal, personsService, userService) {
+
+    $scope.modifyMyContactDetails = function () {
+
+      $scope.contactDetailsData = {
+        currentPassword: '',
+        email: '',
+        phoneNumber: '',
+        mobileNumber: '',
+        faxNumber: ''
+      };
+
+      $log.log('Trace: userService.getUserName(): ' + userService.getUserName());
+      if (userService.getUserName()) {
+        personsService.getContactDetails(userService.getUserName()).then(
+          function (response) {
+            $log.log("Trace: getContactDetails:response: " + response);
+            $scope.contactDetailsData.email = response.email;
+            $scope.contactDetailsData.phoneNumber = response.phoneNumber;
+            $scope.contactDetailsData.mobileNumber = response.mobileNumber;
+            $scope.contactDetailsData.faxNumber = response.faxNumber;
+            $log.log("Trace: received contactDetails: " +
+                      $scope.contactDetailsData.email + ", " +
+                      $scope.contactDetailsData.faxNumber + ", " +
+                      $scope.contactDetailsData.mobileNumber + ", " +
+                      $scope.contactDetailsData.phoneNumber);
+          },
+          function (error) {
+            $log.log("getContactDetails:error: " + error);
+          }
+        );
+      }
+
+      var modalInstance = $modal.open({
+        animation: true,
+        backdrop: true,
+        keyboard: true,
+        templateUrl: 'usm/users/partial/updateMyContactDetails.html',
+        controller: 'setMyContactDetailsModalInstanceCtrl',
+        resolve: {
+          myContactDetails: function () {
+            $log.log("Trace: resolved myContactDetails: " +
+                      $scope.contactDetailsData.email + ", " +
+                      $scope.contactDetailsData.faxNumber + ", " +
+                      $scope.contactDetailsData.mobileNumber + ", " +
+                      $scope.contactDetailsData.phoneNumber);
+            return $scope.contactDetailsData;
+          }
+        }
+      });
+
+      modalInstance.result.then(function () {
+        $log.info('Trace: Modal closed');
+      }, function () {
+        $log.info('Trace: Modal dismissed');
+      });
+
+    };
+  }]);
+
+
+
+sharedModule.controller('changeMyPasswordCtlr', ['$log', '$scope', '$modal','$stateParams','userDetailsService',
+       function ($log, $scope, $modal,$stateParams,userDetailsService) {
+
+       $scope.setUserPassword= function (user) {
+              var modalInstance = $modal.open({
+                       animation: true,
+                       backdrop: true,
+                       keyboard: true,
+                       templateUrl: 'users/partial/changeMyPassword.html',
+                       controller: 'setMyPasswordModalInstanceCtrl',
+                       resolve: {
+                             user: function () {
+                             	return angular.copy(user);
+              				 }
+              		  }
+       });
+
+    // It is a promise that resolves when modal is closed and rejected when modal is dismissed
+     modalInstance.result.then(function (returnedUser) {
+    // Update the model (user)
+              $log.log(returnedUser);
+              if (!_.isUndefined($stateParams.userName)) {
+                  $scope.user = returnedUser;
+                  if (_.isEqual($scope.user.status, 'E')) {
+                        $scope.statusClass = 'label label-success';
+                      } else if (_.isEqual($scope.user.status, 'D')) {
+                        $scope.statusClass = 'label label-danger';
+                        } else {
+                            $scope.statusClass = 'label label-warning';
+                                }
+                             } else{
+                                 var copyUser = {
+                                      userName: returnedUser.userName,
+                                      firstName: returnedUser.contactDetails.firstName,
+                                      lastName: returnedUser.contactDetails.lastName,
+                                      activeTo: returnedUser.activeTo,
+                                      activeFrom: returnedUser.activeFrom,
+                                      status: returnedUser.status,
+                                      organisation: returnedUser.organisation.name,
+                                      nation: returnedUser.nation
+                                   };
+                                      angular.copy(copyUser, user);
+                                                      }
+                                   }, function () {
+                                                      //$log.info('Modal dismissed at: ' + new Date());
+                   });
+      };
+}]);

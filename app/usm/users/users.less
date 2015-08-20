@@ -1,0 +1,39 @@
+/* Component LESS */
+@import "account/account.less";
+@import "userContexts/userContexts.less";
+@import "preferences/preferences.less";
+@import "partial/usersController.less";
+/* Add Component LESS Above */
+
+@media (min-width: @screen-sm-min) {
+    .form-inline .form-control {
+        display: inline-block;
+        width: 160px;
+        vertical-align: middle;
+    }
+
+    .form-inline .usm-calendar .form-control {
+        display: inline-block;
+        width: 140px;
+        vertical-align: middle;
+    }
+    /* Table... */
+    .usersGrid {
+        width: 1000px;
+        font-size: 12px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .grid-button-align{
+
+        text-align: center;
+        vertical-align: middle;
+    }
+
+}
+
+div.tooltip .tooltip-inner {
+    color: #000000;
+    background-color: #ffff66;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}

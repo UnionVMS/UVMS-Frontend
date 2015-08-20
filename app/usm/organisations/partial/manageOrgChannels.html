@@ -1,0 +1,96 @@
+<div ng-controller="manageOrganisationChannelsCtrl">
+    <form novalidate class="form-horizontal" name="manageOrgChannelForm" ng-submit="manageOrgChannelForm.$valid && saveUpdateDelete(selectedChannel)">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-md-5">
+                    <h3 ng-if="mode=='new'" class="modal-title">New Channel</h3>
+
+                    <h3 ng-if="mode=='edit'" class="modal-title">Edit Channel</h3>
+
+                    <h3 ng-if="mode=='delete'" class="modal-title">Delete Channel</h3>
+                </div>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12" ng-class="actionDivClass">
+                    <span ng-bind-html="actionMessage" ng-class="messageClass"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1" for="dataFlow">Dataflow
+                        <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup>
+					</label>
+
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="dataFlow" name="dataFlow" ng-model="selectedChannel.dataflow"
+                               required ng-disabled="mode=='delete'">
+
+                        <div ng-show="manageOrgChannelForm.dataFlow.$dirty">
+                        <span class="text-danger small"
+                              ng-show="manageOrgChannelForm.dataFlow.$error.required">Dataflow is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1" for="service">Service
+                        <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup>
+					</label>
+
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="service" name="service" ng-model="selectedChannel.service"
+                               required ng-disabled="mode=='delete'">
+
+                        <div ng-show="manageOrgChannelForm.service.$dirty">
+                        <span class="text-danger small"
+                              ng-show="manageOrgChannelForm.service.$error.required">Service is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1" for="priority">Priority
+                        <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup>
+					</label>
+
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="priority" name="priority" ng-model="selectedChannel.priority"
+                               numbers-only="numbers-only" required ng-disabled="mode=='delete'">
+
+                        <div ng-show="manageOrgChannelForm.priority.$dirty">
+                        <span class="text-danger small"
+                              ng-show="manageOrgChannelForm.priority.$error.required">Priority must be a number and is required.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12" ng-class="messageDivClass">
+                    <span ng-bind-html="successMessage" ng-class="messageClass"></span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-md-offset-8 col-md-4">
+                    <input type="button" class="btn btn-warning btn-sm" ng-show="!actionSucceeded" ng-click="cancel()" value="Cancel"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Save"
+                           ng-disabled="manageOrgChannelForm.$invalid" ng-show="!actionSucceeded && !showConfirmation" ng-if="mode=='new' || mode=='edit'"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Confirm"
+                           ng-disabled="manageOrgChannelForm.$invalid" ng-show="!actionSucceeded && showConfirmation" ng-if="mode=='delete' || mode=='edit'"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Delete"
+                           ng-show="!actionSucceeded && !showConfirmation" ng-if="mode=='delete'"/>
+                    <label class="btn btn-success btn-sm fa fa-check" ng-show="actionSucceeded"></label>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

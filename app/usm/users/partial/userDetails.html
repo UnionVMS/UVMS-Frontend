@@ -1,0 +1,64 @@
+<div class="container" ng-controller="userDetailsCtlr">
+    <!-- INFO PANEL-->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-1">
+                    <label>Username</label>
+                </div>
+                <div class="col-md-2 col-xs-offset-1">
+                    <span ng-bind="user.userName"></span>
+                </div>
+                <div class="col-md-1 text-nowrap">
+                    <label>First Name</label>
+                </div>
+                <div class="col-md-3">
+                    <span ng-bind="user.person.firstName"></span>
+                </div>
+                <div class="col-md-1 text-nowrap">
+                    <label>Last Name</label>
+                </div>
+                <div class="col-md-2">
+                    <span ng-bind="user.person.lastName"></span>
+                </div>
+
+				<div class="col-md-1 text-right">
+                  <span ng-controller="manageUserCtlr">
+                        <button class="btn btn-sm btn-primary" ng-click="editUser(user)">
+                            <span><i class="glyphicon glyphicon-pencil"></i></span>
+                        </button>
+                    </span>
+				</div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-1">
+                    <label>Organisation</label>
+                </div>
+                <div class="col-md-4 col-xs-offset-1">
+                    <span ng-bind="user.organisation.name"></span>
+                </div>
+                <div class="col-md-1 col-md-offset-2">
+                    <label>Status</label>
+                </div>
+                <div class="col-md-3">
+                    <span ng-class="statusClass" ng-bind='"users.status_"+user.status | translate'></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- INFO PANEL END-->
+
+    <tabset type="tabs" vertical="false" class="roleDetailsTabs">
+        <tab heading="Contact and Status Details">
+            <div ng-include src="'usm/users/account/partial/accountDetails.html'"></div>
+        </tab>
+        <tab heading="Contexts">
+          <!--  <div ui-view name="contexts" ></div>-->
+            <div ng-include src="'usm/users/userContexts/partial/userContexts.html'"></div>
+        </tab>
+        <tab heading="Preferences">
+            <div ng-include src="'usm/users/preferences/partial/userPreferences.html'"></div>
+        </tab>
+    </tabset>
+</div>

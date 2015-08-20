@@ -1,0 +1,90 @@
+@ec-bundle:"ec-html-bundle-spa";
+//@import (optional) "@{ec-bundle}/less/ec-html-bundle.less";
+@import (optional) "@{ec-bundle}/less/ec-template.less";
+
+// Custom 3.3.5
+// Bootswatch
+// -----------------------------------------------------
+body {
+  padding-top: 0px;
+  margin: 0 auto;
+  max-width: @container-large-desktop;
+}
+
+// Navbar =====================================================================
+.navbar {
+    border: 0 solid transparent;
+    /* margin-bottom: 20px; */
+    margin-bottom: 0px;
+    .navbar-nav {
+        li {
+            /* Keep the selected navigation active */
+            a.active{
+                color: @navbar-default-link-active-color;
+                background-color: @navbar-default-link-active-bg;
+            }
+        }
+    }
+}
+
+// Buttons ====================================================================
+
+// Typography =================================================================
+
+// Tables =====================================================================
+table {
+  background-color: #fff;
+
+    &.fixed{
+        &.table{
+            width: initial;
+            max-width: initial;
+        }
+        table-layout: fixed;
+
+        td{
+            overflow: hidden;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+    }
+}
+// Forms ======================================================================
+.form-inline .form-control {
+  width: 160px;
+}
+    // Navs =======================================================================
+  .path{
+    background-color: @breadcrumb-bg;
+    .breadcrumb {
+      padding-left:@nav-link-padding-h;
+      padding-right:@nav-link-padding-h;
+      border-radius: 0px;
+      font-size: @breadcrumb-font-size;
+      margin-bottom: @breadcrumb-margin-bottom;
+      a {
+        color: #fff;
+      }
+    }
+  }
+  // Pagination =================================================================
+  .pagination {
+
+    > li {
+      > span.current-page {
+        padding: @padding-xs-vertical @padding-base-horizontal;
+      }
+    }
+  }
+
+
+
+// Indicators =================================================================
+
+// Progress bars ==============================================================
+
+// Containers =================================================================
+
+.modal-open {
+    overflow-y: auto;
+}

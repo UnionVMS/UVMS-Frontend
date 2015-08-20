@@ -1,0 +1,43 @@
+<!-- MAIN MENU: NAVIGATION -->
+<!--
+<div class="navbar navbar-custom" role="navigation" ng-controller="MenuCtrl">
+<ul class="nav navbar-nav">
+    -->
+<div class="navbar navbar-custom container" ng-controller="MenuCtrl">
+    <div class="row">
+        <div class="col-md-12 pageMenu">
+            <ul class="horizontal pipeSeparator">
+                <li>
+                    <a ui-sref=".users" ui-sref-active="active">
+                        {{ 'header.users' | translate }}
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref=".organisations" ui-sref-active="active">
+                        {{ 'header.organisations' | translate }}
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref=".roles" ui-sref-active="active">
+                        {{ 'header.roles' | translate }}
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref=".scopes" ui-sref-active="active">
+                        {{ 'header.scopes' | translate }}
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref=".applications" ui-sref-active="active">
+                        Applications
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div ncy-breadcrumb></div>
+    </div>
+</div>
+
+

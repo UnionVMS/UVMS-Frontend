@@ -1,0 +1,16 @@
+.ui-select-bootstrap .ui-select-toggle {
+  position: relative;
+  /*width: 150px;*/
+}
+
+.ui-select-search {
+	/*width: 120px;*/
+}
+
+.table.table-striped tr th {
+    cursor: pointer;
+}
+
+.ui-select-container .ui-select-bootstrap {
+	/*width: 120px;*/
+}

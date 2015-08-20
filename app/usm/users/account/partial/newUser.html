@@ -1,0 +1,240 @@
+<div ng-app="account" ng-controller="newUserController">
+    <form novalidate name="newUserForm" ng-submit="newUserForm.$valid && save(user)">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-md-4">
+                    <h3 class="modal-title">New User</h3>
+                </div>
+                <div class="form-group col-md-8" align="right">
+                    <input type="button" tabindex="-1" class="btn btn-primary" value="Copy Info From LDAP"
+                           ng-click="copyFromLdap(user)">
+                </div>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="form-group col-md-12" ng-class="messageDivClass">
+                    <span ng-bind="actionMessage" ng-class="messageClass"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="userName">Username<sup class="fa fa-asterisk mandatory"></sup></label>
+                    <input type="text" class="form-control" id="userName" name="userName" ng-model="user.userName"
+                           required ng-disabled="formDisabled">
+
+                    <div ng-show="newUserForm.userName.$dirty">
+                        <span class="text-danger small" ng-show="newUserForm.userName.$error.required">Username is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="firstName">First Name<sup class="fa fa-asterisk mandatory"></sup></label>
+                    <input type="text" class="form-control" name="firstName" id="firstName" ng-model="user.person.firstName"
+                           required ng-disabled="formDisabled">
+
+                    <div ng-show="newUserForm.firstName.$dirty">
+                        <span class="text-danger small" ng-show="newUserForm.firstName.$error.required">First Name is required</span>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="lastName">Last Name<sup class="fa fa-asterisk mandatory"></sup></label>
+                    <input type="text" class="form-control" name="lastName" id="lastName" ng-model="user.person.lastName"
+                           required ng-disabled="formDisabled">
+
+                    <div ng-show="newUserForm.lastName.$dirty">
+                        <span class="text-danger small" ng-show="newUserForm.lastName.$error.required">Last Name is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label for="email">Email<sup class="fa fa-asterisk mandatory"></sup></label>
+                    <input type="email" class="form-control" name="email" id="email" ng-model="user.person.email" required ng-disabled="formDisabled">
+
+                    <div ng-show="newUserForm.email.$dirty">
+                        <span class="text-danger small"
+                              ng-show="newUserForm.email.$error.required">Email is required</span>
+                        <span class="text-danger small" ng-show="newUserForm.email.$error.email">This is not a valid email</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="telephoneNumber">Telephone Number</label>
+                    <input type="text" class="form-control" id="telephoneNumber"
+                           ng-model="user.person.phoneNumber" ng-disabled="formDisabled">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="mobileNumber">Mobile number</label>
+                    <input type="text" class="form-control" id="mobileNumber"
+                           ng-model="user.person.mobileNumber" ng-disabled="formDisabled">
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="faxNumber">Fax Number</label>
+                    <input type="text" class="form-control" id="faxNumber" ng-model="user.person.faxNumber" ng-disabled="formDisabled">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label>{{ 'users.activeFrom' | translate }}<sup class="fa fa-asterisk mandatory"></sup></label>
+                    <!-- This is a custom directive. You need to define the activeFromConfig in the controller-->
+                    <usm-datepicker config="activeFromConfig"></usm-datepicker>
+                    <div>
+                        <span class="text-danger small" ng-show="activeFormRequiredAlert">Active From date is required</span>
+                    </div>
+
+                    <!--
+                    <input id="activeFrom"
+                           type="date"
+                           class="form-control"
+                           datepicker-popup="yyyy-MM-dd"
+                           min-date="1990-01-01"
+                           max-date="'2099-01-01'"
+                           ng-model="user.activeFrom"
+                           is-open="datePicker.opened"
+                           datepicker-options="dateOptions"
+                           close-text="Close"/>
+                      <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="open($event)">
+                                <i class="fa fa-calendar"></i>
+                            </button>
+                      </span>
+                      -->
+
+                    <!--
+                    <input type="text" id="activeFrom"
+                           class="form-control"
+                           ng-model="user.activeFrom"
+                           data-date-format="yyyy-MM-dd"
+                           data-date-type="string"
+                           data-min-date="01-01-1990"
+                           data-max-date="01-01-2099"
+                           data-autoclose="1"
+                           name="searchDateTo"
+                           bs-datepicker>
+                    <!--
+                    <input type="date" class="form-control" id="activeFrom" ng-model="user.activeFrom">
+                    -->
+                </div>
+                <div class="form-group col-md-4">
+                    <label>{{ 'users.activeTo' | translate }}<sup class="fa fa-asterisk mandatory"></sup></label>
+                    <!-- This is a custom directive. You need to define the activeToConfig in the controller-->
+                    <usm-datepicker config="activeToConfig"></usm-datepicker>
+                    <div>
+                        <span class="text-danger small" ng-show="activeToRequiredAlert">Active To date is required</span>
+                    </div>
+                    <!--
+                    <input type="text" id="activeTo"
+                           class="form-control"
+                           ng-model="user.activeTo"
+                           data-date-format="yyyy-MM-dd"
+                           data-date-type="string"
+                           data-min-date="01-01-1990"
+                           data-max-date="01-01-2099"
+                           data-autoclose="1"
+                           name="searchDateTo"
+                           bs-datepicker>
+                    <!--
+                    <input type="date" class="form-control" id="activeTo" ng-model="user.activeTo">
+                    -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="organisationSelect">Organisation<sup class="fa fa-asterisk mandatory"></sup></label>
+
+                    <div>
+                        <select class="form-inline form-control dropdown"
+                                id="organisationSelect"
+                                name="organisationSelect"
+                                ng-model="user.organisationComplex"
+                                ng-options="organisation.parentOrgName for organisation in organisationsList"
+                                required
+                                ng-class="{pointer: pointer}"
+                                ng-mouseenter="pointer=true"
+                                ng-mouseleave="pointer=false"
+                                ng-disabled="formDisabled">
+                            <option value="">Organisation...</option>
+                        </select>
+                        <input type="text" ng-model="user.nation" ng-hide="true" id="nation">
+                    </div>
+                    <!--
+                    <ui-select ng-model="user.organisationName"
+                               theme="bootstrap"
+                               append-to-body="false"
+                               search-enabled="true"
+                               ng-disabled="false" required>
+                        <ui-select-match placeholder="Organisation...">{{$select.selected}}</ui-select-match>
+                        <ui-select-choices repeat="organisation in organisationsList | filter: $select.search">
+                            <div>{{organisation}}</div>
+                        </ui-select-choices>
+                    </ui-select>
+                    -->
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="statusSelect">Status<sup class="fa fa-asterisk mandatory"></sup></label>
+
+                    <div>
+                        <select class="form-inline form-control dropdown"
+                                id="statusSelect"
+                                name="statusSelect"
+                                ng-model="user.status"
+                                ng-change="changeStatus(user.status)"
+                                ng-init="user.status='E'"
+                                ng-options="'users.status_'+status | translate for status in statusList"
+                                required
+                                ng-class="{pointer: pointer}"
+                                ng-mouseenter="pointer=true"
+                                ng-mouseleave="pointer=false"
+                                ng-disabled="formDisabled">
+                        </select>
+                    </div>
+                    <!--
+                    <ui-select ng-model="user.status" theme="bootstrap" search-enabled="true" ng-disabled="false"
+                               required>
+                        <ui-select-match placeholder="Status...">{{"users.status_" + $select.selected | translate}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="status in statusList | filter: $select.search">
+                            <div ng-bind-html="'users.status_' + status | translate">
+                                {{status}}
+                            </div>
+                        </ui-select-choices>
+                    </ui-select>
+                    -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-8">
+                    <label for="notes">Notes<sup ng-show="mandatoryNotes" class="fa fa-asterisk mandatory"></sup></label>
+                    <textarea id="notes" class="form-control" ng-model="user.notes" ng-required="mandatoryNotes" ng-disabled="formDisabled"></textarea>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-md-8 text-left">
+                    <!--
+                    <usm-confirmation usm-confirmation-message="Do you want to create the user account?"></usm-confirmation>
+                    <!--
+                    <div ng-show="showConfirmation">
+                        <input id="confirmInput" type="checkbox" ng-model="confirmCreate" ng-change="changeConfirm(confirmCreate)"/>
+                        <label class="text-warning" for="confirmInput">Do you want to create the user account?</label>
+                    </div>
+                    -->
+                </div>
+                <div class="col-md-4">
+                <input type="button" class="btn btn-warning btn-sm" ng-hide="userCreated" ng-click="cancel()" value="Cancel"/>
+                <input type="submit" class="btn btn-primary btn-sm" value="Save" ng-disabled="newUserForm.$invalid" ng-show="!userCreated"/>
+                <label class="btn btn-success btn-sm fa fa-check" ng-show="userCreated"/>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>

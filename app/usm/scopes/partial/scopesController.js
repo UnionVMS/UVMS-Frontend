@@ -1,0 +1,634 @@
+var scopesModule = angular.module('scopes');
+
+scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$state', 'refData', 'getApplications', 'scopeServices',
+    function ($log, $scope, $stateParams, $state, refData, getApplications, scopeServices) {
+        $scope.sort = {
+            sortColumn: $stateParams.sortColumn || 'name', // Default Sort.
+            sortDirection: $stateParams.sortDirection || 'asc'
+        };
+
+        $scope.isDataLoading = true;
+        $scope.emptyResult = false;
+        $scope.showPagination = true;
+        $scope.emptyResultMessage = "No results found.";
+        // statuses...
+        $scope.statusList = refData.statusesSearch;
+        // applications...
+        getApplications.get().then(
+            function (response) {
+                $scope.applicationsList = response.applications;
+            },
+            function (error) {
+                $scope.applicationsList = [error];
+            }
+        );
+
+        // this method is executed by the pagination directive whenever the current page is changed
+        // (also true for the initial loading).
+        $scope.getPage = function (currentPage) {
+            $scope.criteria = {
+                name: $stateParams.name || '',
+                application: $stateParams.application || '',
+                status: $stateParams.status || 'all'
+            };
+            var criteria = $scope.criteria;
+            criteria.offset = (currentPage - 1) * $scope.paginationConfig.itemsPerPage;
+            criteria.limit = $scope.paginationConfig.itemsPerPage;
+            criteria.sortColumn = $scope.sort.sortColumn;
+            criteria.sortDirection = $scope.sort.sortDirection;
+
+
+            scopeServices.getScopes(criteria).then(
+                function (response) {
+                    $scope.scopeList = response.scopes;
+
+                if (!_.isUndefined($scope.scopeList)) {
+                    $scope.displayedScopes = [].concat($scope.scopeList);
+                    $scope.isDataLoading = false;
+                    $scope.emptyResult = false;
+                    $scope.paginationConfig.totalItems = response.total;
+                    $scope.paginationConfig.pageCount = Math.ceil($scope.paginationConfig.totalItems / $scope.paginationConfig.itemsPerPage);
+                } else {
+                    $scope.emptyResult = true;
+                    $scope.isDataLoading = false;
+                    $scope.showPagination = false;
+                }
+                    changeUrlParams();
+                },
+                function (error) {
+                    $scope.isDataLoading = false;
+                    $scope.emptyResult = true;
+                    $scope.emptyResultMessage = error;
+                }
+            );
+        };
+
+        $scope.searchScope = function (criteria) {
+            // replace null with empty string because null breaks the stateParam application
+            if(_.isNull(criteria.application)){
+                $scope.criteria.application = "";
+            }
+            $scope.paginationConfig.currentPage = 0;
+            criteria.offset = 0;
+            criteria.sortColumn = $scope.sort.sortColumn;
+            criteria.sortDirection = $scope.sort.sortDirection;
+            scopeServices.searchScopes(criteria).then(
+                function (response) {
+                    $scope.scopeList = response.scopes;
+                    if (!_.isUndefined($scope.scopeList)) {
+                        $scope.displayedScopes = [].concat($scope.scopeList);
+                        $scope.emptyResult = false;
+                        $scope.showPagination = true;
+                        $scope.paginationConfig.totalItems = response.total;
+                        $scope.paginationConfig.pageCount = Math.ceil($scope.paginationConfig.totalItems / $scope.paginationConfig.itemsPerPage);
+                        $scope.paginationConfig.currentPage = 1;
+                    } else {
+                        $scope.emptyResult = true;
+                        $scope.isDataLoading = false;
+                        $scope.showPagination = false;
+                    }
+                    changeUrlParams();
+                },
+                function (error) {
+                    $scope.emptyResult = true;
+                    $scope.emptyResultMessage = error;
+                }
+            );
+
+        };
+
+        // Sorting columns
+        $scope.changeSorting = function (column) {
+            var sort = $scope.sort;
+            if (sort.sortColumn === column) {
+                if (sort.sortDirection === 'desc') {
+                    sort.sortDirection = 'asc';
+                } else if (sort.sortDirection === 'asc') {
+                    sort.sortDirection = 'desc';
+                }
+            } else {
+                sort.sortColumn = column;
+                sort.sortDirection = 'asc';
+            }
+            $scope.sort.sortColumn = column;
+            $scope.sort.sortDirection = sort.sortDirection;
+            $scope.getPage($scope.paginationConfig.currentPage);
+        };
+
+        $scope.sortIcon = function (column) {
+            var sort = $scope.sort;
+            if (sort.sortColumn === column) {
+                var sortDirection = sort.sortDirection;
+                return sortDirection === 'desc' ? 'fa-sort-desc' : 'fa-sort-asc';
+            }
+            return 'fa-sort';
+        };
+
+        // change url parameters
+        var changeUrlParams = function () {
+            $state.transitionTo($state.current, {
+                    page: $scope.paginationConfig.currentPage,
+                    sortColumn: $scope.sort.sortColumn,
+                    sortDirection: $scope.sort.sortDirection,
+                    name: $scope.criteria.name,
+                    application: $scope.criteria.application,
+                    status: $scope.criteria.status,
+                    scopeId: $state.params.scopeId
+                },
+                {notify: false});
+        };
+
+        $scope.resetForm = function () {
+            $scope.sort.sortColumn = 'name';
+            $scope.sort.sortDirection = 'asc';
+            $scope.criteria.name = '';
+            $scope.criteria.status = refData.statuses[0];
+            $scope.criteria.application = '';
+            $scope.searchScope($scope.criteria);
+        };
+
+        // configuration for the pagination directive
+        $scope.paginationConfig =
+        {
+            currentPage: '',
+            pageCount: '',
+            totalItems: '',
+            itemsPerPage: 8
+        };
+
+    }]);
+
+scopesModule.controller('scopeDetailsCtrl', ['$log', '$scope', '$stateParams', 'scopeServices',
+    function ($log, $scope, $stateParams, scopeServices) {
+        $scope.emptyResultMessage = "No datasets found. Please try to search again.";
+        $scope.itemsByPage = 10;
+        $scope.emptyResult = true;
+        $scope.status = {};
+        $scope.scopeId = $stateParams.scopeId;
+
+        scopeServices.getScopeDetails($scope.scopeId).then(
+            function (response) {
+                $scope.scopeDetails = response.scopeDetails;
+                if (_.isEqual($scope.scopeDetails.status, 'E')) {
+                    $scope.status.class = 'label label-success';
+                } else if (_.isEqual($scope.scopeDetails.status, 'D')) {
+                    $scope.status.class = 'label label-danger';
+                }
+                if (_.size($scope.scopeDetails.dataSets) !== 0) {
+                    $scope.displayedDatasets = [].concat($scope.scopeDetails.dataSets);
+                    $scope.emptyResult = false;
+                } else {
+                    $scope.emptyResult = true;
+                }
+            },
+            function (error) {
+                $scope.emptyResult = true;
+                $scope.emptyResultMessage = error;
+            }
+        );
+    }]);
+
+scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$modal', '$stateParams',
+    function ($log, $scope, $modal, $stateParams) {
+
+        $scope.manageScope = function (mode, scope) {
+            var modalInstance = $modal.open({
+                animation: true,
+                backdrop: true,
+                keyboard: true,
+                templateUrl: 'usm/scopes/partial/manageScope.html',
+                controller: 'scopesModalInstanceCtrl',
+                resolve: {
+                    mode: function () {
+                        return mode;
+                    },
+                    scope: function () {
+                        return angular.copy(scope);
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (returnedScope) {
+                if (mode === 'new') {
+                    angular.copy(returnedScope, scope);
+                    $scope.scopeList.push(returnedScope);
+                    $scope.displayedScopes = [].concat($scope.scopeList);
+                }
+                if (mode === 'edit') {
+                    angular.copy(returnedScope, scope);
+                    if (!_.isUndefined($stateParams.scopeId)) {
+                        if (_.isEqual(returnedScope.status, 'E')) {
+                            $scope.status.class = 'label label-success';
+                        } else if (_.isEqual(returnedScope.status, 'D')) {
+                            $scope.status.class = 'label label-danger';
+                        }
+                    }
+                }
+                // Remove the deleted role from the list
+                if (mode === 'delete') {
+                    var deleteIndex = $scope.scopeList.indexOf(scope);
+                    $scope.scopeList.splice(deleteIndex, 1);
+                    $scope.displayedScopes = [].concat($scope.scopeList);
+                }
+            }, function () {
+                //$log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+    }]);
+
+scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', '$log', '$timeout', '$location', 'refData', 'getApplications',
+    'scopeServices', 'mode', 'scope', '$stateParams',
+    function ($scope, $modalInstance, $log, $timeout, $location, refData, getApplications, scopeServices, mode, scope, $stateParams) {
+        var confirmCreate = false;
+        $scope.mode = mode;
+        $scope.actionMessage = "";
+        $scope.selectedStatus = "";
+        $scope.organisation = {};
+        $scope.scopeCreated = false;
+        $scope.showConfirmation = false;
+        $scope.formDisabled = false;
+
+        if (!_.isEmpty(scope)) {
+            $scope.scope = scope;
+        } else {
+            $scope.scope = {status: 'E'};
+        }
+        // status dropdown
+        $scope.statusList = refData.statusesEnDis;
+
+        // application dropdown
+        getApplications.get().then(
+            function (response) {
+                $scope.applicationsList = response.applications;
+            },
+            function (error) {
+                $scope.messageDivClass = "container alert alert-danger";
+                $scope.actionMessage = error;
+            }
+        );
+
+        //activeFrom date configuration
+        $scope.activeFromConfig =
+        {
+            id: 'activeFrom',
+            name: 'activeFrom',
+            dataModel: 'scope.activeFrom',
+            defaultValue: $scope.scope.activeFrom,
+            isDefaultValueWatched: true,
+            isRequired: true
+        };
+        // activeTo date configuration
+        $scope.activeToConfig =
+        {
+            id: 'activeTo',
+            name: 'activeTo',
+            dataModel: 'scope.activeTo',
+            defaultValue: $scope.scope.activeTo,
+            isDefaultValueWatched: true,
+            isRequired: true
+        };
+        //dataFrom date configuration
+        $scope.dataFromConfig =
+        {
+            id: 'dataFrom',
+            name: 'dataFrom',
+            dataModel: 'scope.dataFrom',
+            defaultValue: $scope.scope.dataFrom,
+            isDefaultValueWatched: true,
+            isRequired: false
+        };
+        // dataTo date configuration
+        $scope.dataToConfig =
+        {
+            id: 'dataTo',
+            name: 'dataTo',
+            dataModel: 'scope.dataTo',
+            defaultValue: $scope.scope.dataTo,
+            isDefaultValueWatched: true,
+            isRequired: false
+
+        };
+
+        if (_.isEqual(mode, "delete")) {
+            $scope.formDisabled = true;
+            $scope.activeFromConfig.isDisabled = $scope.formDisabled;
+            $scope.activeToConfig.isDisabled = $scope.formDisabled;
+            $scope.dataFromConfig.isDisabled = $scope.formDisabled;
+            $scope.dataToConfig.isDisabled = $scope.formDisabled;
+        }
+
+        $scope.saveUpdateDelete = function (scope) {
+            $log.log(scope);
+            if (mode === 'new') {
+                scopeServices.createScope(scope).then(
+                    function (response) {
+                        $scope.newScope = response.newScope;
+                        $scope.scopeCreated = true;
+                        $scope.messageDivClass = "container alert alert-success";
+                        $scope.actionMessage = "New Scope created";
+                        $timeout(function () {
+                            $modalInstance.close($scope.newScope);
+                        }, 2000);
+                    },
+                    function (error) {
+                        $scope.messageDivClass = "container alert alert-danger";
+                        $scope.actionMessage = error;
+                    }
+                );
+            }
+            if (mode === 'edit') {
+                if (scope.activeUsers === 0 || $scope.showConfirmation) {
+                    if (_.isEqual(scope.dataFrom, "Invalid date")) {
+                        scope.dataFrom = null;
+                    }
+                    if (_.isEqual(scope.dataTo, "Invalid date")) {
+                        scope.dataTo = null;
+                    }
+                    scope.updateDatasets = false;
+                    scopeServices.updateScope(scope).then(
+                        function (response) {
+                            $scope.updatedScope = response.updatedScope;
+                            $scope.scopeCreated = true;
+                            $scope.messageDivClass = "container alert alert-success";
+                            $scope.actionMessage = "Scope Changes Saved";
+                            $timeout(function () {
+                                $modalInstance.close($scope.updatedScope);
+                            }, 2000);
+                        },
+                        function (error) {
+                            $scope.messageDivClass = "container alert alert-danger";
+                            $scope.actionMessage = error;
+                        }
+                    );
+                } else {
+                    $scope.showConfirmation = true;
+                    $scope.messageDivClass = "container alert alert-warning";
+                    $scope.actionMessage = "<strong>Warning: </strong>This scope is assigned to " + scope.activeUsers + " active user(s). Saving this change may have important impact!";
+                }
+            }
+            if (mode === 'delete') {
+                if ((_.isUndefined(scope.activeUsers) || scope.activeUsers === 0) || $scope.showConfirmation) {
+                    scopeServices.deleteScope(scope.scopeId).then(
+                        function (response) {
+                            $scope.deletedScope = scope;
+                            $scope.scopeCreated = true;
+                            $scope.messageDivClass = "container alert alert-success";
+                            $scope.actionMessage = "Scope deleted";
+                            $timeout(function () {
+                                $modalInstance.close($scope.deletedScope);
+                            }, 2000);
+                        },
+                        function (error) {
+                            $scope.messageDivClass = "container alert alert-danger";
+                            $scope.actionMessage = error;
+                        }
+                    );
+                } else {
+                    $scope.showConfirmation = true;
+                    $scope.messageDivClass = "container alert alert-warning";
+                    $scope.actionMessage = "<strong>Warning: </strong>This scope is assigned to " + scope.activeUsers + " active user(s). Saving this change may have important impact!";
+                }
+            }
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss();
+        };
+
+    }]);
+
+scopesModule.controller('manageDatasetsCtrl', ['$log', '$scope', '$modal',
+    function ($log, $scope, $modal) {
+        $scope.manageDatasets = function (scopeDetails) {
+            var modalInstance = $modal.open({
+                animation: true,
+                backdrop: true,
+                keyboard: true,
+                size: 'lg',
+                templateUrl: 'usm/scopes/partial/manageDatasets.html',
+                controller: 'datatsetsModalInstanceCtrl',
+                resolve: {
+                    scopeDetails: function () {
+                        return scopeDetails;
+                    }
+                }
+            });
+
+            // It is a promise that resolves when modal is closed and rejected when modal is dismissed
+            modalInstance.result.then(function (returnedScopeDetails) {
+                if (_.size(returnedScopeDetails.dataSets) > 0) {
+                    $scope.emptyResult = false;
+                } else {
+                    $scope.emptyResult = true;
+                }
+                $scope.scopeDetails.dataSets = returnedScopeDetails.dataSets;
+                $scope.displayedDatasets = [].concat($scope.scopeDetails.dataSets);
+            }, function () {
+                //$log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+    }]);
+
+scopesModule.controller('datatsetsModalInstanceCtrl', ['$log', '$scope', '$modalInstance', '$stateParams', '$timeout', 'scopeDetails',
+    'filterFilter', 'getApplications', 'scopeServices',
+    function ($log, $scope, $modalInstance, $stateParams, $timeout, scopeDetails, filterFilter, getApplications, scopeServices) {
+        $scope.header = {
+            selectAll: false
+        };
+        $scope.emptyResult = true;
+        $scope.isDataLoading = true;
+        $scope.loadingMessage = "Loading... taking some time";
+
+        $scope.actionMessage = "";
+        $scope.datasetsSaved = false;
+        $scope.showConfirmation = false;
+
+        $log.log(scopeDetails);
+
+        // List Of Applications...
+        getApplications.get().then(
+            function (response) {
+                $scope.applicationsList = response.applications;
+            },
+            function (error) {
+                $scope.applicationsList = [error];
+            }
+        );
+        // List Of Categories...
+        scopeServices.getCategories().then(
+            function (response) {
+                $scope.categoryList = response.categories;
+            },
+            function (error) {
+                $scope.categoryList = [error];
+            }
+        );
+
+        // datasets list...
+        scopeServices.getAllDatasets().then(
+            function (response) {
+                $scope.isDataLoading = false;
+                $scope.datasetsList = response.datasets;
+                if (_.size($scope.datasetsList) !== 0) {
+                    var numberOfChecks = 0;
+                    angular.forEach($scope.datasetsList, function (dataset) {
+                        //var scopes = dataset.scopes;
+                        var selectedDatasets = scopeDetails.dataSets;
+                        var isAttachedToTheScope = _.find(selectedDatasets, function (selectedDataset) {
+                            if (_.isEqual(selectedDataset.datasetId, dataset.datasetId)) {
+                                return true;
+                            }
+                        });
+                        if (isAttachedToTheScope || _.contains($scope.selection, dataset.datasetId)) {
+                            numberOfChecks++;
+                            dataset.selected = true;
+                        } else {
+                            dataset.selected = false;
+                        }
+                    });
+                    // Select all checkbox should be checked if all the permissions are checked
+                    if (_.isEqual(_.size($scope.datasetsList), numberOfChecks)) {
+                        $scope.header.selectAll = true;
+                    } else {
+                        $scope.header.selectAll = false;
+                    }
+                    $scope.displayedDatasets = [].concat($scope.datasetsList);
+                    // Collect the selected features
+                    $scope.selection = filterFilter($scope.displayedDatasets, {selected: true}).map(function (dataset) {
+                        return dataset.datasetId;
+                    });
+                    $scope.emptyResult = false;
+                } else {
+                    $scope.emptyResult = true;
+                }
+            },
+            function (error) {
+                $scope.loadingMessage = error;
+            });
+
+        // add the selected items
+        $scope.$watch('displayedDatasets|filter:{selected:true}', function (newValue) {
+            if (!_.isUndefined(newValue) && !_.isNull(newValue)) {
+                $scope.addSelections = newValue.map(function (dataset) {
+                    return dataset.datasetId;
+                });
+                $scope.selection = _.uniq($scope.selection.concat($scope.addSelections));
+            }
+        }, true);
+
+        // remove the unselected items
+        $scope.$watch('displayedDatasets|filter:{selected:false}', function (newValue) {
+            if (!_.isUndefined(newValue) && !_.isNull(newValue)) {
+                $scope.removeSelections = newValue.map(function (dataset) {
+                    return dataset.datasetId;
+                });
+                $scope.selection = _.difference($scope.selection, $scope.removeSelections);
+            }
+        }, true);
+
+        // Check all behaviour
+        $scope.toggleAll = function () {
+            var isAllSelected = $scope.header.selectAll;
+            if (isAllSelected) {
+                $scope.header.selectAll = true;
+            } else {
+                $scope.header.selectAll = false;
+            }
+            angular.forEach($scope.displayedDatasets, function (dataset) {
+                dataset.selected = isAllSelected;
+            });
+        };
+
+        // Check individual checkbox behaviour
+        $scope.toggleItem = function (selected) {
+            if (!selected) {
+                $scope.header.selectAll = false;
+            } else {
+                var findUnselected = _.find($scope.displayedDatasets,
+                    function (dataset) {
+                        if (!dataset.selected) {
+                            return true;
+                        }
+                    });
+                if (findUnselected) {
+                    $scope.header.selectAll = false;
+                } else {
+                    $scope.header.selectAll = true;
+                }
+            }
+        };
+
+        $scope.filterDatasets = function (criteria) {
+            scopeServices.searchDataset(criteria).then(
+                function (response) {
+                    $scope.datasetsList = response.datasets;
+                    if (_.size($scope.datasetsList) !== 0) {
+                        var numberOfChecks = 0;
+                        angular.forEach($scope.datasetsList, function (dataset) {
+                            //var scopes = dataset.scopes;
+                            var selectedDatasets = scopeDetails.dataSets;
+                            var isAttachedToTheScope = _.find(selectedDatasets, function (selectedDataset) {
+                                if (_.isEqual(selectedDataset.datasetId, dataset.datasetId)) {
+                                    return true;
+                                }
+                            });
+                            // keep checked the datasets attached to a scope and the datasets selected from previous filtering
+                            if (isAttachedToTheScope || _.contains($scope.selection, dataset.datasetId)) {
+                                numberOfChecks++;
+                                dataset.selected = true;
+                            } else {
+                                dataset.selected = false;
+                            }
+                        });
+                        // Select all checkbox should be checked if all the permissions are checked
+                        if (_.isEqual(_.size($scope.datasetsList), numberOfChecks)) {
+                            $scope.header.selectAll = true;
+                        } else {
+                            $scope.header.selectAll = false;
+                        }
+                        $scope.displayedDatasets = [].concat($scope.datasetsList);
+                        $scope.emptyResult = false;
+                    } else {
+                        $scope.emptyResult = true;
+                        $scope.emptyResultMessage = "No results found.";
+                    }
+                },
+                function (error) {
+                    $log.log(error);
+                }
+            );
+        };
+
+        $scope.saveScopeDatasets = function () {
+            $log.log($scope.selection);
+            scopeDetails.dataSets = $scope.selection;
+            scopeDetails.scopeId = $stateParams.scopeId;
+            if (scopeDetails.activeUsers === 0 || $scope.showConfirmation) {
+                scopeServices.updateScope(scopeDetails).then(
+                    function (response) {
+                        // Close modal by passing the new user to update the table
+                        $scope.updatedScope = response.updatedScope;
+                        $scope.datasetsSaved = true;
+                        $scope.messageDivClass = "container alert alert-success";
+                        $scope.actionMessage = "Scope Changes Saved";
+                        $log.log($scope.updatedScope);
+                        $timeout(function () {
+                            $modalInstance.close($scope.updatedScope);
+                        }, 2000);
+                    },
+                    function (error) {
+                        $scope.messageDivClass = "container alert alert-danger";
+                        $scope.actionMessage = error;
+                    }
+                );
+            } else {
+                $scope.showConfirmation = true;
+                $scope.messageDivClass = "container alert alert-warning";
+                $scope.actionMessage = "<strong>Warning: </strong>This scope is assigned to " + scopeDetails.activeUsers + " active user(s). Saving this change may have important impact!";
+            }
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss();
+        };
+    }]);

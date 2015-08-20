@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource', 'ngLocalize', 'tmh.dynamicLocale', 'leaflet-directive', 'datatables', 'datatables.bootstrap', 'datatables.columnfilter', 'ngCsv']);
+angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource', 'ngLocalize', 'tmh.dynamicLocale', 'leaflet-directive', 'datatables', 'datatables.bootstrap', 'datatables.columnfilter', 'ngCsv', 'ui.router', 'usm']);
 
 //Resolve used for all routes
 var generalRouteResolves =  {
@@ -10,7 +10,7 @@ var generalRouteResolves =  {
     }    
 };
 
-angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocaleProvider) {
+angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocaleProvider, $urlRouterProvider, $stateProvider) {
 
     tmhDynamicLocaleProvider.localeLocationPattern("assets/locales/angular-locale_{{locale}}.js");
 
@@ -67,11 +67,33 @@ angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocalePr
             resolve: generalRouteResolves
         });
     /* Add New Routes Above */
-    $routeProvider.otherwise({redirectTo:'/today'});
+    //$routeProvider.otherwise({redirectTo:'/today'});
+
+    $stateProvider
+        .state('app', {
+            url: '',
+            views: {
+                module: {
+                    templateUrl: 'usm/usm.html'
+                }
+            }
+        });    
 
 });
 
-
+/*
+angular.module('unionvmsWeb').config(['$urlRouterProvider', '$stateProvider',
+    function ($urlRouterProvider, $stateProvider) {
+        $stateProvider
+            .state('app', {
+                url: '',
+                views: {
+                    module: {
+                        templateUrl: 'usm/usm.html'
+                    }
+                }
+            });
+    }]);*/
 
 angular.module('unionvmsWeb').run(function($rootScope) {
 
@@ -85,6 +107,11 @@ angular.module('unionvmsWeb').run(function($rootScope) {
             this.$apply(fn);
         }
     };
+
+    $rootScope.$on('$locationChangeStart', function (evt, newUrl, oldUrl) {
+        $rootScope.usm = newUrl.indexOf("usm") !== -1;
+
+    });
 
 });
 

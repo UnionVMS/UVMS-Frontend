@@ -1,0 +1,515 @@
+/*
+    Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance with the Licence.
+    You may obtain a copy of the Licence at:
+    http://ec.europa.eu/idabc/eupl
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the Licence is distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the Licence for the specific language governing permissions and limitations under the Licence.
+*/
+
+//@import "3l-1.4.4/3L.less";
+
+/* ----------------------------- */
+/* ==COLORS */
+/* ----------------------------- */
+/*
+Lighter Grey	#f9f9f9
+Light Grey  	#c1c1c1
+Grey 			#8A8A8B
+Dark Grey 		#333333
+Shadow 			#c1c1c1
+yellow 			#f6aa34
+Pink 			#cf3558
+Texte 			#333333
+illu			#474747
+*/
+
+/* ----------------------------- */
+/* ==FONT SIZE */
+/* Vertical Rhythm Tool - http://soqr.fr/vertical-rhythm/
+Font-size : 14px  Line-height : 1.5
+relative to original version delete label, textarea and keep p, ul...  margin: 0 0 1.5em and not margin: 1.5em 0;
+/* ----------------------------- */
+
+html {
+    overflow-y: scroll;
+    font-size: 62.5%;
+}
+
+body {
+    //visibility: hidden;
+    font-family: Verdana, Geneva, sans-serif;
+    color: #333333 !important;
+    background: #505050 url(../img/noise-dark.png);
+    font-size: 1.4em;
+    line-height: 1.5;
+}
+
+p, ul, ol, dl, blockquote, pre, td, th, caption {
+    font-size: 1em; /* equiv 14px */
+    line-height: 1.5em;
+    margin: 0 0 1.5em;
+}
+
+h1 {
+    font-size: 2.4286em; /* equiv 34px */
+    line-height: 1.2352em;
+    margin: .6176em 0 5px 0;
+    text-transform: uppercase;
+}
+
+h2 {
+    font-size: 2.1429em; /* equiv 30px */
+    line-height: 1.4em;
+    margin: .7em 0 5px 0;
+}
+
+h3 {
+    font-size: 1.7143em; /* equiv 24px */
+    line-height: 1.75em;
+    margin: .875em 0 5px 0;
+}
+
+h4 {
+    font-size: 1.4286em; /* equiv 20px */
+    line-height: 1.05em;
+    margin: 1.05em 0 5px 0;
+}
+
+h5 {
+    font-size: 1.2857em; /* equiv 18px */
+    line-height: 1.1667em;
+    margin: 1.1667em 0 5px 0;
+}
+
+h6 {
+    font-size: 1.1429em; /* equiv 16px */
+    line-height: 1.3125em;
+    margin: 1.3125em 0 5px 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+}
+
+hr {
+    clear: both;
+    margin: 40px 0 10px;
+    position: relative;
+    height: 5px;
+    background: #474747;
+    -moz-box-shadow: 4px 4px #c1c1c1;
+    -webkit-box-shadow: 4px 4px #c1c1c1;
+    box-shadow: 4px 4px #c1c1c1;
+}
+
+input::-webkit-input-placeholder, input:-moz-placeholder, input:-moz-placeholder:hover, input:-ms-input-placeholder {
+    color: #999999;
+}
+
+*[required], *[pattern] {
+    background-color: 000 !important;
+    .box-shadow(none);
+}
+
+// Warning: do not comine the following 2 rules to 1 comma-separated line; that won't work!
+*::-moz-selection {
+    color: #ffffff !important;
+    background: #0065a2 !important;
+    text-shadow: none;
+}
+*::selection {
+    color: #ffffff !important;
+    background: #0065a2 !important;
+    text-shadow: none;
+}
+
+/* ----------------------------- */
+/* ==CLASSES */
+/* ----------------------------- */
+/* blocks that needs to be placed under floats */
+.clear {
+    clear: both;
+}
+
+/* ----------------------------- */
+/* ==LINK */
+/* ----------------------------- */
+a, a:link, a:active, a:visited {
+    color: #000;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/*FIRST LETTER*/
+.first-letter:first-letter {
+    float: left;
+    padding: 10px 20px 10px 0;
+    color: #333333;
+    font-size: 3.5em;
+}
+
+/*HIGHLIGHT*/
+.highlight-yellow {
+    color: #FFF;
+    background: #f6aa34;
+}
+
+.highlight-grey {
+    color: #FFF;
+    background: #333333;
+}
+
+/*ERROR*/
+.error {
+    color: #cf3558;
+}
+
+/*DELETE MARGIN*/
+.no-margin {
+    margin: 0
+}
+
+.ec-body {
+    padding: 10px 10px 20px 10px;
+}
+
+.ec-error-dialog .ok-button {
+    text-align: center;
+    margin-left: 48%;
+    margin-top: 10px;
+}
+
+.screen, .default-screen {
+    display: none;
+}
+
+
+/* Global Kendo UI fixes: */
+.k-upload-button {
+    width: auto;
+}
+
+.k-table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    border: 1px dotted #999;
+    width: 100%;
+}
+
+.k-table td, .k-table th {
+    border: 1px dotted #999;
+    padding: 3px;
+}
+
+.k-dropdown-wrap input, .k-picker-wrap input, .k-numeric-wrap input {
+    height: 2em !important;
+}
+
+.k-pager-numbers {
+    .k-link:hover {
+        margin-top: 0 !important;
+    }
+    .k-state-selected {
+        line-height: 2em;
+    }
+}
+
+.k-picker-wrap {
+    .k-select {
+        .k-icon {
+            margin-top: -2px !important;
+        }
+    }
+}
+
+.k-invalid-msg {
+    position: relative !important;
+    top: 2px !important;
+}
+
+.k-datepicker, .k-timepicker {
+    .k-invalid-msg {
+        margin-left: 28px;
+    }
+}
+
+.k-datetimepicker {
+    .k-invalid-msg {
+        margin-left: 48px;
+    }
+}
+
+.k-invalid {
+    .box-shadow(none) !important;
+}
+
+.k-autocomplete {
+    .k-input {
+        min-height: 26px;
+    }
+}
+
+.k-window-content {
+    visibility: visible !important;
+}
+
+
+/*RESPONSIVE FORM*/
+form.responsive {
+    margin: 1.5em 0 0 0;
+
+    .k-textbox {
+        width: 40% !important;
+    }
+    .k-datetimepicker, form .k-timepicker, form .k-datepicker, form .k-dropdown, form .k-combobox, form .k-autocomplete, form .k-numerictextbox {
+        width: 40% !important;
+    }
+    .k-datetimepicker .k-textbox, form .k-timepicker .k-textbox, form .k-datepicker .k-textbox, form .k-combobox .k-textbox, form .k-autocomplete .k-textbox, form .k-numerictextbox .k-textbox {
+        width: 100% !important;
+    }
+    label {
+        width: 20%;
+        display: inline-block;
+        text-align: right;
+        vertical-align: top;
+    }
+    .k-textbox, .k-datetimepicker, .k-timepicker, .k-datepicker, .k-dropdown, .k-combobox, .k-autocomplete, .k-numerictextbox {
+        width:40% !important;
+    }
+    .k-datetimepicker .k-textbox , .k-timepicker .k-textbox , .k-datepicker .k-textbox, .k-combobox .k-textbox, .k-autocomplete .k-textbox, .k-numerictextbox .k-textbox {
+        width:100% !important;
+    }
+    .k-button, .checkbox {
+        margin-left:20%;
+    }
+    .checkbox label {
+        text-align: left;
+    }
+    textarea {
+        padding: 2px 0.3em;
+    }
+    p.input-group input.part {
+        width: 50px !important;
+    }
+    p.checkbox input[type="checkbox"] {
+        margin-top:3px;
+    }
+}
+
+form.responsive.block {
+    label {
+        display: block;
+        text-align: left;
+        width: 100%;
+    }
+    .k-textbox, .k-datetimepicker, .k-timepicker, .k-datepicker, .k-dropdown, .k-combobox, .k-autocomplete, .k-numerictextbox{
+        width: 40% !important;
+    }
+    .k-datetimepicker .k-textbox , .k-timepicker .k-textbox , .k-datepicker .k-textbox, .k-combobox .k-textbox, .k-autocomplete .k-textbox, .k-numerictextbox .k-textbox {
+        width:100% !important;
+    }
+    p.checkbox, .k-button {
+        margin-left: 0;
+    }
+    p.checkbox label {
+        margin:0 0 0 20px;
+        width:80%;
+    }
+    p.checkbox input[type="checkbox"] {
+        float:left;
+    }
+}
+.row2 form.responsive.block {
+    .k-textbox, .k-datetimepicker, .k-timepicker, .k-datepicker, .k-dropdown, .k-combobox, .k-autocomplete, .k-numerictextbox {
+        width: 80% !important;
+    }
+    .k-datetimepicker .k-textbox , .k-timepicker .k-textbox , .k-datepicker .k-textbox, .k-combobox .k-textbox, .k-autocomplete .k-textbox, .k-numerictextbox .k-textbox {
+        width:100% !important;
+    }
+}
+
+/* ----------------------------- */
+/* ==APPLICATION LOADING indicator*/
+/* ----------------------------- */
+body.loading {
+    background: none !important;
+}
+body.loading * {
+    display: none;
+}
+body.loading .ec-application-loading-indicator {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1000;
+    width: 128px;
+    height: 128px;
+    margin-top: -64px;
+    margin-left: -64px;
+}
+
+.ec-application-loading-indicator {
+    background: url("../img/loading-image.gif") no-repeat;
+    position: fixed;
+    z-index: 1000;
+    top: 50%;
+    left: 50%;
+}
+
+
+/* ----------------------------- */
+/* ==RESPONSIVE DESIGN*/
+/* ----------------------------- */
+@media (max-width:1280px) {
+    /* ----------------------------- */
+    /* ==FONT SIZE */
+    /* Vertical Rhythm Tool - http://soqr.fr/vertical-rhythm/
+    Font-size : 12px  Line-height : 1.5
+    relative to original version delete label, textarea and keep p, ul...  margin: 0 0 1.5em and not margin: 1.5em 0;
+    /* ----------------------------- */
+    html {
+        font-size: 62.5%;
+    }
+
+    body {
+        font-size: 1.2em;
+        line-height: 1.5;
+    }
+
+    p, ul, ol, dl, blockquote, pre, td, th, caption {
+        font-size: 1em; /* equiv 12px */
+        line-height: 1.5em;
+        margin: 0 0 1.5em 0;
+    }
+
+    h1 {
+        font-size: 2.6667em; /* equiv 32px */
+        line-height: 1.125em;
+        margin: .5625em 0 5px 0;
+    }
+
+    h2, {
+        font-size: 2.3333em; /* equiv 28px */
+        line-height: 1.2858em;
+        margin: .6429em 0 5px 0;
+    }
+
+    h3 {
+        font-size: 1.8333em; /* equiv 22px */
+        line-height: 1.6364em;
+        margin: .8182em 0 5px 0;
+    }
+
+    h4 {
+        font-size: 1.5em; /* equiv 18px */
+        line-height: 1em;
+        margin: 1em 0 5px 0;
+    }
+
+    h5 {
+        font-size: 1.3333em; /* equiv 16px */
+        line-height: 1.125em;
+        margin: 1.125em 0 5px 0;
+    }
+
+    h6 {
+        font-size: 1.1667em; /* equiv 14px */
+        line-height: 1.2857em;
+        margin: 1.2857em 0 5px 0;
+    }
+}
+
+@media (max-width:768px) {
+    h1 {
+        font-size: 2.1667em; /* equiv 26px */
+        line-height: 0.923em;
+        margin: .4615em 0 5px 0;
+    }
+
+    h2 {
+        font-size: 1.8333em; /* equiv 22px */
+        line-height: 1.091em;
+        margin: .5455em 0 5px 0;
+    }
+
+    h3 {
+        font-size: 1.5em; /* equiv 18px */
+        line-height: 1.3334em;
+        margin: .6667em 0 5px 0;
+    }
+
+    h4 {
+        font-size: 1.3333em; /* equiv 16px */
+        line-height: 1.5em;
+        margin: .75em 0 5px 0;
+    }
+
+    h5 {
+        font-size: 1.1667em; /* equiv 14px */
+        line-height: 1.7142em;
+        margin: .8571em 0 5px 0;
+    }
+
+    h6 {
+        font-size: 1em; /* equiv 12px */
+        line-height: 1em;
+        margin: 1em 0 5px 0;
+    }
+}
+
+@media (max-width:640px) {
+    form.responsive {
+        label {
+            display: block;
+            text-align: left;
+            width: 100%;
+        }
+        .k-textbox, .k-datetimepicker, .k-timepicker, .k-datepicker, .k-dropdown, .k-combobox, .k-autocomplete, .k-numerictextbox{
+            width: 80% !important;
+        }
+        p.checkbox, .k-button {
+            margin-left: 0;
+        }
+        .k-tooltip-validation {
+            margin-top: 5px;
+        }
+        p.checkbox label {
+            margin:0 0 0 20px;
+            width:80%;
+        }
+        p.checkbox input[type="checkbox"] {
+            float:left;
+        }
+    }
+    form.responsive.block {
+        label {
+            display: block;
+            text-align: left;
+            width: 100%;
+        }
+        .k-textbox, .k-datetimepicker, .k-timepicker, .k-datepicker, .k-dropdown, .k-combobox, .k-autocomplete, .k-numerictextbox{
+            width: 80% !important;
+        }
+        p.checkbox, .k-button {
+            margin-left: 0;
+        }
+        .k-tooltip-validation {
+            margin-top: 5px;
+        }
+        p.checkbox label {
+            margin:0 0 0 20px;
+            width:80%;
+        }
+        p.checkbox input[type="checkbox"] {
+            float:left;
+        }
+    }
+}

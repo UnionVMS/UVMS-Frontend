@@ -1,0 +1,204 @@
+
+
+<!-- ng-if="userRights.featureList[24] != 'viewUsers'" -->
+<!-- ng-if="userRights.featureList.indexOf('viewUsers') > -1" -->
+<div id="usersListDiv" class="container">
+    <div class="panel panel-default">
+		<div class="panel-body">
+			<form class="form-inline" name="searchForm" ng-submit="searchUsers(search, search.searchActiveFrom, search.searchActiveTo)">
+				<div class="form-group col-md-2">
+					<label for="user">Name search</label>
+					<span class="glyphicon glyphicon-question-sign" tooltip="{{usernameTooltip}}"></span>
+					<input type="text" class="form-control"
+						   id="user"
+						   name="user"
+						   ng-model="search.user">
+				</div>
+
+				<div class="col-md-2">
+					<div class="form-group">
+						<label for="nation">{{ 'users.nation' | translate }}</label>
+						<div>
+							<select class="form-inline form-control dropdown"
+									id="nation"
+									name="nation"
+									ng-model="search.nation"
+									ng-options="nation for nation in nationsList"
+									ng-class="{pointer: pointer}"
+									ng-mouseenter="pointer=true"
+									ng-mouseleave="pointer=false"
+									>
+								<option value="">Nation...</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-2" style="width:140px; margin-right:4px;">
+					<div class="form-group">
+						<label for="organisation">{{ 'users.organisation' | translate }}</label>
+						<div>
+							<select class="form-inline form-control dropdown"
+									id="organisation"
+									name="organisation"
+									ng-model="search.organisation"
+									ng-options="organisation.parentOrgName for organisation in organisationsList"
+									ng-class="{pointer: pointer}"
+									ng-mouseenter="pointer=true"
+									ng-mouseleave="pointer=false"
+									style="width:140px; margin-right:4px;">
+								<option value="">Organisation...</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-2" style="width:120px; margin-right:5px;">
+					<div class="form-group">
+						<label for="status">{{ 'users.status' | translate }}</label>
+						<div>
+							<select class="form-inline form-control dropdown"
+									id="status"
+									name="status"
+									ng-model="search.status"
+									ng-options="'users.status_'+status | translate for status in statusList"
+									ng-init="search.status = statusList[0]"
+									ng-class="{pointer: pointer}"
+									ng-mouseenter="pointer=true"
+									ng-mouseleave="pointer=false"
+									style="width:120px; margin-right:5px;">
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<div class="form-group usm-calendar" style="width:100px; margin-right:5px;">
+						<label>{{ 'users.activeFrom' | translate }}</label>
+						<div>
+							<usm-datepicker config="searchActiveFromConfig" value=""></usm-datepicker>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<div class="form-group usm-calendar" style="width:100px; margin-right:5px;">
+						<label>{{ 'users.activeTo' | translate }}</label>
+						<div>
+							<usm-datepicker config="searchActiveToConfig" value=""></usm-datepicker>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-1">
+					<label>&nbsp;</label>
+					<div style="width:120px; margin-right:5px;">
+						<button type="submit" id="submit" class="btn btn-default">
+							<span class="glyphicon glyphicon-search"></span>
+						</button>
+						<button type="button" id="button" ng-click="resetForm()" class="btn btn-default">
+							<span class="glyphicon glyphicon-refresh"></span>
+						</button>
+					</div>
+				</div>
+
+			</form>
+		</div>
+    </div>
+
+    <!-- Table -->
+    <div>
+        <table st-table="displayedUsers" st-safe-src="userList" class="table table-striped fixed">
+            <colgroup>
+                <col style="width: 160px;">
+                <col style="width: 160px;">
+                <col style="width: 160px;">
+                <col style="width: 80px;">
+                <col style="width: 160px;">
+                <col style="width: 120px;">
+                <col style="width: 120px;">
+                <col style="width: 80px;">
+                <col style="width: 80px;">
+            </colgroup>
+            <thead>
+				<tr>
+					<th ng-click="changeSorting('userName')">{{ 'users.userName' | translate }}&nbsp;<i class="fa" ng-class="getIcon('userName')"></i></th>
+					<th ng-click="changeSorting('firstName')">{{ 'users.firstName' | translate }}&nbsp;<i class="fa" ng-class="getIcon('firstName')"></i></th>
+					<th ng-click="changeSorting('lastName')">{{ 'users.lastName' | translate }}&nbsp;<i class="fa" ng-class="getIcon('lastName')"></i></th>
+					<th ng-click="changeSorting('nation')">{{ 'users.nation' | translate }}&nbsp;<i class="fa" ng-class="getIcon('nation')"></i></th>
+					<th ng-click="changeSorting('organisation')">{{ 'users.organisation' | translate }}&nbsp;<i class="fa" ng-class="getIcon('organisation')"></i></th>
+					<th ng-click="changeSorting('activeFrom')">{{ 'users.activeFrom' | translate }}&nbsp;<i class="fa" ng-class="getIcon('activeFrom')"></i></th>
+					<th ng-click="changeSorting('activeTo')">{{ 'users.activeTo' | translate }}&nbsp;<i class="fa" ng-class="getIcon('activeTo')"></i></th>
+					<th ng-click="changeSorting('status')">{{ 'users.status' | translate }}&nbsp;<i class="fa" ng-class="getIcon('status')"></i></th>
+					<th class="text-right">
+						<!-- New Button -->
+						<div class="tableHeader" ng-controller="newUserController" ng-if="access.manageUsers">
+							<!-- <label><input type="checkbox" ng-model="inactiveUsers" ng-change="change(inactiveUsers)" ng-true-value="'N'" ng-false-value="'Y'">Show Inactive Users</label> -->
+							<button type="button" ng-click="addNewUser()" class="btn btn-sm btn-primary pull-left">
+								<i class="glyphicon glyphicon-plus"></i> New User
+							</button>
+						</div>
+					</th>
+				</tr>
+            </thead>
+
+            <tbody class="table-bordered" ng-if="!isDataLoading">
+				<tr st-select-row="user" st-select-mode="single" ng-repeat="user in displayedUsers">
+					<td>{{user.userName}}</td>
+					<td >{{user.person.firstName}}</td>
+					<td>{{user.person.lastName}}</td>
+					<td>{{user.organisation.nation}}</td>
+					<td>{{ user.organisation_parent }}</td>
+					<td>{{user.activeFrom | date:'yyyy-MM-dd'}}</td>
+					<td>{{user.activeTo | date:'yyyy-MM-dd'}}</td>
+					<td>
+						<span ng-class="{'label label-success': user.status=='E', 'label label-danger': user.status=='D'}">{{"users.status_"+user.status | translate}}</span>
+					</td>
+					<td class="text-center">
+						 <span ng-controller="manageUserCtlr" ng-if="access.manageUsers">
+							<button type="button" class="btn btn-sm btn-primary" ng-click="editUser(user)">
+								<i class="glyphicon glyphicon-pencil"></i>
+							</button>
+						 </span>
+						<span ng-if="access.manageUsers||access.viewUsers">
+							<button type="button" class="btn btn-sm btn-primary"
+									ui-sref="app.usm.users.userDetails({userName: user.userName})"
+                                ui-sref-opts="{ inherit : false }">
+								<i class="glyphicon glyphicon-eye-open"></i>
+							</button>
+						 </span>
+					</td>
+
+				</tr>
+            </tbody>
+
+            <tbody ng-if="isDataLoading">
+				<tr>
+					<td colspan="5" class="text-center">{{loadingMessage}}</td>
+				</tr>
+            </tbody>
+
+            <tbody ng-if="emptyResult">
+                <tr>
+                 <td colspan="5">{{emptyResultMessage}}</td>
+                </tr>
+             </tbody>
+
+<!--             <tbody ng-hide="displayedUsers.length"> -->
+<!-- 				<tr> -->
+<!-- 					<td colspan="10" class="text-center">No results found.</td> -->
+<!-- 				</tr> -->
+<!--             </tbody> -->
+
+<!--             <tfoot ng-if="!isDataLoading"> -->
+<!--             </tfoot> -->
+        </table>
+
+		<div>
+            <usm-pagination config="paginationConfig"></usm-pagination>
+        </div>
+    </div>
+
+    <div ng-show="isLoading" class="loading-indicator"></div>
+</div>
+

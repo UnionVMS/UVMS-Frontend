@@ -1,0 +1,136 @@
+<div ng-controller="manageScopeCtrl">
+    <form novalidate class="form-horizontal" name="manageScopeForm" ng-submit="manageScopeForm.$valid && saveUpdateDelete(scope)">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-md-4">
+                    <h3 ng-if="mode=='new'" class="modal-title">{{'scopes.newScope' | translate}}</h3>
+
+                    <h3 ng-if="mode=='edit'" class="modal-title">{{'scopes.editScope' | translate}}</h3>
+
+                    <h3 ng-if="mode=='delete'" class="modal-title">{{'scopes.deleteScope' | translate}}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12" ng-class="messageDivClass">
+                    <span ng-bind-html="actionMessage" ng-class="messageClass"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1" for="name">{{'common.name' | translate}}
+                        <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup></label>
+
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" id="name" name="name" ng-model="scope.name"
+                               required ng-disabled="mode=='delete'">
+
+                        <div ng-show="manageScopeForm.name.$dirty">
+                        <span class="text-danger small"
+                              ng-show="manageScopeForm.name.$error.required">Name is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1" for="description">{{'common.description' | translate}}</label>
+
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="description" id="description"
+                               ng-model="scope.description"
+                               ng-disabled="mode=='delete'">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1" for="status">{{'common.status' | translate}}
+                        <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'">
+                    </label>
+
+                    <div class="col-md-4">
+                        <select class="form-inline form-control dropdown"
+                                id="status"
+                                name="status"
+                                ng-model="scope.status"
+                                ng-change="changeStatus(scope.status)"
+                                ng-options="'common.status_'+status | translate for status in statusList"
+                                required
+                                ng-class="{pointer: pointer}"
+                                ng-mouseenter="pointer=true"
+                                ng-mouseleave="pointer=false"
+                                ng-disabled="mode=='delete'">
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1">{{ 'common.activeFrom' | translate }}
+                        <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup>
+                    </label>
+
+                    <div class="col-md-4">
+                        <usm-datepicker config="activeFromConfig" value="scope.activeFrom"></usm-datepicker>
+                        <div>
+                            <span class="text-danger small" ng-show="activeFormRequiredAlert">Active From date is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1">{{ 'common.activeTo' | translate }}
+                        <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup>
+                    </label>
+
+                    <div class="col-md-4">
+                        <usm-datepicker config="activeToConfig" value="scope.activeTo"></usm-datepicker>
+                        <div>
+                            <span class="text-danger small" ng-show="activeToRequiredAlert">Active To date is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1">{{ 'scopes.dataFrom' | translate }}
+                    </label>
+
+                    <div class="col-md-4">
+                        <usm-datepicker config="dataFromConfig" value="scopes.dataFrom"></usm-datepicker>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1">{{ 'scopes.dataTo' | translate }}
+                    </label>
+
+                    <div class="col-md-4">
+                        <usm-datepicker config="dataToConfig" value="scope.dataTo"></usm-datepicker>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-md-offset-8 col-md-4">
+                    <input type="button" class="btn btn-warning btn-sm" ng-show="!scopeCreated" ng-click="cancel()" value="Cancel"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Save"
+                           ng-disabled="manageScopeForm.$invalid" ng-show="!scopeCreated && !showConfirmation" ng-if="mode=='new' || mode=='edit'"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Confirm"
+                           ng-disabled="manageScopeForm.$invalid" ng-show="!scopeCreated && showConfirmation" ng-if="mode=='delete' || mode=='edit'"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Delete"
+                           ng-disabled="manageScopeForm.$invalid" ng-show="!scopeCreated && !showConfirmation" ng-if="mode=='delete'"/>
+                    <label class="btn btn-success btn-sm fa fa-check" ng-show="scopeCreated" />
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>

@@ -1,0 +1,38 @@
+<div class="text-right" style="margin-top: -20px;">
+    <ul class="pagination">
+        <li ng-class="prevPageDisabled()">
+            <a href ng-click="firstPage()" aria-label="Next">
+                <span aria-hidden="true">&#60;&#60;</span>
+            </a>
+        </li>
+        <li ng-class="prevPageDisabled()">
+            <a href ng-click="prevPage()" aria-label="Previous">
+                <span aria-hidden="true">&#60;</span>
+            </a>
+        </li>
+        <li>
+            <span class="current-page">Page <input type="number"
+            				  min="1"
+            				  max="{{ pageCount }}"
+               				  ng-model="currentPage"
+               				  ng-value="{{currentPage}}"
+               				  id="currentPage"
+               				  name="currentPage"
+               				  style="width: 40px;"> / {{ pageCount }} </span>
+        </li>
+        <li ng-class="nextPageDisabled()">
+            <a href ng-click="nextPage()" aria-label="Next">
+                <span aria-hidden="true">&#62;</span>
+            </a>
+        </li>
+        <li ng-class="nextPageDisabled()">
+            <a href ng-click="lastPage()" aria-label="Next">
+                <span aria-hidden="true">&#62;&#62;</span>
+            </a>
+        </li>
+        <li>
+    		<span style="margin-top: 0px;">{{startItems}} - {{limitItems}} of {{ totalItems }} items
+    		</span>
+        </li>
+    </ul>
+</div>

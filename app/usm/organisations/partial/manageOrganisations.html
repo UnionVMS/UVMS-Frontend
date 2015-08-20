@@ -1,0 +1,153 @@
+<div ng-controller="manageOrganisationCtrl">
+    <form novalidate class="form-horizontal" name="manageOrgForm">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-md-5">
+                    <h3 ng-if="mode=='new'" class="modal-title">New Organisation</h3>
+
+                    <h3 ng-if="mode=='edit'" class="modal-title">Edit Organisation</h3>
+
+                    <h3 ng-if="mode=='delete'" class="modal-title">Delete Organisation</h3>
+                </div>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12" ng-class="messageDivClass">
+                    <span ng-bind-html="actionMessage" ng-class="messageClass"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-2 col-md-offset-1" for="orgName">Name
+                        <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup></label>
+
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" id="orgName" name="orgName" ng-model="org.name"
+                               required ng-disabled="mode=='delete'">
+
+                        <div ng-show="manageOrgForm.orgName.$dirty">
+                        <span class="text-danger small"
+                              ng-show="manageOrgForm.orgName.$error.required">Name is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-2 col-md-offset-1" for="orgDescription">Description</label>
+
+                    <div class="col-md-7">
+                        <input type="text" class="form-control" name="orgDescription" id="orgDescription"
+                               ng-model="org.description"
+                               ng-disabled="mode=='delete'">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-2 col-md-offset-1" for="orgNation">Nation<sup
+                        class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup></label>
+
+                    <div class="col-md-5">
+                        <select class="form-inline form-control dropdown"
+                                id="orgNation"
+                                name="orgNation"
+                                ng-model="org.nation_selected"
+                                ng-options="nation for nation in nationsList"
+                                required
+                                ng-class="{pointer: pointer}"
+                                ng-mouseenter="pointer=true"
+                                ng-mouseleave="pointer=false"
+                                ng-disabled="mode=='delete'">
+                            <option value="">Nation...</option>
+                        </select>
+
+                        <div ng-show="manageOrgForm.orgNation.$dirty">
+                            <span class="text-danger small" ng-show="manageOrgForm.orgNation.$error.required">Nation is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-2 col-md-offset-1" for="orgStatus">Status<sup
+                        class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup></label>
+
+                    <div class="col-md-4">
+                        <select class="form-inline form-control dropdown"
+                                id="orgStatus"
+                                name="orgStatus"
+                                ng-model="org.status"
+                                ng-change="changeStatus(org.status)"
+                                ng-options="'users.status_'+status | translate for status in statusList"
+                                required
+                                ng-class="{pointer: pointer}"
+                                ng-mouseenter="pointer=true"
+                                ng-mouseleave="pointer=false"
+                                ng-disabled="mode=='delete'">
+                        </select>
+
+                        <div ng-show="manageOrgForm.orgStatus.$dirty">
+                            <span class="text-danger small" ng-show="manageOrgForm.orgStatus.$error.required">Status is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-2 col-md-offset-1" for="orgParent">Parent</label>
+
+                    <div class="col-md-4">
+                        <select class="form-inline form-control dropdown"
+                                id="orgParent"
+                                name="orgParent"
+                                ng-model="org.parent"
+                                ng-change="changeParent(org.parent)"
+                                ng-options="parent for parent in parentsList"
+                                ng-class="{pointer: pointer}"
+                                ng-mouseenter="pointer=true"
+                                ng-mouseleave="pointer=false"
+                                ng-disabled="mode=='delete'">
+                            <option value="">Parent...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class=" col-md-2 col-md-offset-1" for="orgEmail">Email</label>
+
+                    <div class="col-md-7">
+                        <input type="email" class="form-control" name="orgEmail" id="orgEmail" ng-model="org.email" ng-disabled="mode=='delete'">
+
+                        <div ng-show="manageOrgForm.orgEmail.$dirty">
+                            <span class="text-danger small" ng-show="manageOrgForm.orgEmail.$error.email">This is not a valid email</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-md-offset-8 col-md-4">
+                    <button type="button" class="btn btn-warning btn-sm" ng-show="!actionSucceeded" ng-click="cancel()">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm" ng-click="saveUpdateDelete(org)"
+                           ng-disabled="manageOrgForm.$invalid" ng-show="!actionSucceeded && !showConfirmation" ng-if="mode=='new' || mode=='edit'">Save</button>
+                    <button type="button" class="btn btn-primary btn-sm" ng-click="saveUpdateDelete(org)"
+                           ng-disabled="manageOrgForm.$invalid" ng-show="!actionSucceeded && showConfirmation">Confirm</button>
+                    <button type="button" class="btn btn-primary btn-sm" ng-click="saveUpdateDelete(org)"
+                           ng-show="!actionSucceeded && !showConfirmation" ng-if="mode=='delete'">Delete</button>
+                    <label class="btn btn-success btn-sm fa fa-check" ng-show="actionSucceeded"></label>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>

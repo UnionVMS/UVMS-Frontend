@@ -1,0 +1,140 @@
+<div class="container" ng-controller="rolesListCtrl">
+    <!-- SEARCH PANEL-->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form class="form-inline" id="searchRoleForm">
+                <div class="form-group col-md-2">
+                    <label for="role">Role</label>
+
+                    <div>
+                        <input class="form-control" id="role" ng-model="criteria.role"/>
+                    </div>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="application">Application</label>
+                    <select class="form-control dropdown"
+                            id="application"
+                            name="application"
+                            ng-model="criteria.application"
+                            ng-options="application for application in applicationsList"
+                            ng-class="{pointer: pointer}"
+                            ng-mouseenter="pointer=true"
+                            ng-mouseleave="pointer=false">
+                        <option value="">Application...</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="status">Status</label>
+                    <select class="form-control dropdown"
+                            id="status"
+                            name="status"
+                            ng-model="criteria.status"
+                            ng-options="'users.status_'+status | translate for status in statusList"
+                            ng-init="criteria.status = statusList[0]"
+                            ng-class="{pointer: pointer}"
+                            ng-mouseenter="pointer=true"
+                            ng-mouseleave="pointer=false">
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label>&nbsp;</label>
+
+                    <div>
+                        <!--button id="searchButton" tooltips tooltip-delay={{toolTipsDelay}} tooltip-title="{{'roles.search_filter' | translate}}" class="btn btn-default" ng-click="searchRole(criteria)"-->
+                        <button id="searchButton"
+                                tooltip-popup-delay={{toolTipsDelay}}
+                                tooltip="{{'roles.search_filter' | translate}}"
+                                class="btn btn-default" ng-click="searchRole(criteria)">
+                            <span class="glyphicon glyphicon-search"></span></span>
+                        </button>
+                        <!--button type="button" tooltips tooltip-delay={{toolTipsDelay}} tooltip-title="{{'roles.refresh_filter' | translate}}" class="btn btn-default" ng-click="resetForm()"-->
+                        <button type="button"
+                                tooltip-popup-delay={{toolTipsDelay}}
+                                tooltip="{{'roles.refresh_filter' | translate}}"
+                                class="btn btn-default" ng-click="resetForm()">
+                            <span class="glyphicon glyphicon-refresh"></span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- SEARCH PANEL END-->
+
+    <!-- ROLES TABLE -->
+    <table st-table="displayedRoles" st-safe-src="roleList" class="table table-striped fixed">
+		<colgroup>
+			<col style="width: 300px;">
+			<col style="width: 550px;">
+			<col style="width: 140px;">
+			<col style="width: 150px;">
+		</colgroup>
+        <thead>
+        <tr>
+            <th ng-click="changeSorting('name')">{{'roles.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i></th>
+            <th ng-click="changeSorting('description')">{{'roles.description' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('description')"></i></th>
+            <th ng-click="changeSorting('status')">{{'roles.status' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('status')"></i></th>
+            <th class="text-right">
+                <div ng-controller="manageRoleCtrl">
+                    <button
+                        tooltip-popup-delay={{toolTipsDelay}}
+                        tooltip="{{'roles.new_button_tooltip' | translate}}"
+                        class="btn btn-primary btn-sm" ng-click='manageRole("new", "")'>
+                        <span class="glyphicon glyphicon-plus"></span>
+                        <span>{{'roles.newRole' | translate}}</span>
+                    </button>
+                </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody class="table-bordered" ng-if="!isDataLoading">
+        <tr ng-repeat="role in displayedRoles">
+            <td ng-bind="role.name"></td>
+            <td ng-bind="role.description"></td>
+            <td>
+                <span ng-class="{'label label-success': role.status=='E', 'label label-danger': role.status=='D'}">{{"role.status_"+role.status | translate}}</span>
+            </td>
+            <td class="actionTd text-right">
+                <span ng-controller="manageRoleCtrl">
+					<button type="button"
+                            tooltip-popup-delay={{toolTipsDelay}}
+                            tooltip="{{'roles.edit_button_tooltip' | translate}}"
+                            class="btn btn-sm btn-primary usm-action-btn" ng-click='manageRole("edit", role)'>
+                        <span><i class="glyphicon glyphicon-pencil"></i></span>
+                    </button>
+                </span>
+                <button type="button"
+                        tooltip-popup-delay={{toolTipsDelay}}
+                        tooltip="{{'roles.view_button_tooltip' | translate}}"
+                        class="btn btn-sm btn-primary usm-action-btn"
+                        ui-sref="app.usm.roles.role({roleId: role.roleId})"
+                        ui-sref-opts="{ inherit : false }">
+                    <span><i class="glyphicon glyphicon-eye-open"></i></span>
+                </button>
+                <span ng-controller="manageRoleCtrl">
+					<button type="button"
+                            tooltip-popup-delay={{toolTipsDelay}}
+                            tooltip="{{'roles.del_button_tooltip' | translate}}"
+                            class="btn btn-sm btn-danger usm-action-btn" ng-click='manageRole("delete", role)'>
+                        <span><i class="glyphicon glyphicon-remove"></i></span>
+                    </button>
+                </span>
+            </td>
+        </tr>
+        </tbody>
+        <tbody ng-if="isDataLoading">
+        <tr>
+            <td colspan="5" class="text-center">Loading...</td>
+        </tr>
+        </tbody>
+        <tbody ng-if="emptyResult">
+        <tr>
+            <td colspan="5">{{emptyResultMessage}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <!-- ROLES TABLE END-->
+    <div ng-if="showPagination">
+        <usm-pagination config="paginationConfig"></usm-pagination>
+    </div>
+</div>

@@ -1,0 +1,172 @@
+@import "3l-1.4.4/3L";
+
+@-webkit-keyframes marching-ants-animation {.marching-ants-animation;}
+@-o-keyframes marching-ants-animation {.marching-ants-animation;}
+@keyframes marching-ants-animation {.marching-ants-animation;}
+
+// Work-around for chrome bugs: CSS animations do not update when the rules change dynamically:
+// The work-aroud is a new animation definition (pointing to the same LESS CSS function:
+@-webkit-keyframes marching-ants-animation-fast {.marching-ants-animation;}
+@-o-keyframes marching-ants-animation-fast {.marching-ants-animation;}
+@keyframes marching-ants-animation-fast {.marching-ants-animation;}
+
+@-webkit-keyframes ec-translation-palette-background-animation {.ec-translation-palette-background-animation;}
+@-o-keyframes ec-translation-palette-background-animation {.ec-translation-palette-background-animation;}
+@keyframes ec-translation-palette-background-animation {.ec-translation-palette-background-animation;}
+
+@ant-size: 15px;
+@ant-width: 1px;
+
+@translatable-from-color: ghostwhite;
+@translatable-to-color: black;
+@translatable-ant-walking-duration: 3s;
+
+@highlighted-from-color: ghostwhite;
+@highlighted-to-color: darkred;
+@highlighted-ant-walking-duration: 0.5s;
+
+@palette-width: 300px;
+@palette-padding: 12px;
+@palette-animation-duration: 0.5s;
+@palette-pattern-width: 127px;
+@palette-background-animation-normalized-framerate: 60; // in frames per second
+@palette-background-animation-slow-down-factor: 5;
+@palette-background-animation-duration: @palette-background-animation-slow-down-factor * (unit(@palette-pattern-width, s) / @palette-background-animation-normalized-framerate); // calculated for multiples of 60fps
+
+
+.marching-ants-animation() {
+    0% {
+        background-position: 0 0, 0 100%, 0 0, 100% 0;
+    }
+    100% {
+        background-position: @ant-size 0, -@ant-size 100%, 0 -@ant-size, 100% @ant-size;
+    }
+}
+.ec-translation-palette-background-animation() {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: @palette-pattern-width @palette-pattern-width;
+    }
+}
+
+
+.marching-ants(@from-color, @to-color, @ant-walking-duration) {
+    .animation(marching-ants-animation @ant-walking-duration linear infinite);
+    padding: 2px + @ant-width !important;
+    background-position: 0 0, 0 100%, 0 0, 100% 0;
+    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y !important;
+    background-size: @ant-size @ant-width, @ant-size @ant-width, @ant-width @ant-size, @ant-width @ant-size !important;
+    background-image:
+        repeating-linear-gradient(90deg, @from-color 0, @from-color 50%, @to-color 51%, @to-color 100%),
+        repeating-linear-gradient(90deg, @from-color 0, @from-color 50%, @to-color 51%, @to-color 100%),
+        repeating-linear-gradient(180deg, @from-color 0, @from-color 50%, @to-color 51%, @to-color 100%),
+        repeating-linear-gradient(180deg, @from-color 0, @from-color 50%, @to-color 51%, @to-color 100%) !important;
+}
+
+.ec-translation-label-editable {
+    .marching-ants(@translatable-from-color, @translatable-to-color, @translatable-ant-walking-duration);
+    .box-shadow(0 6px 12px 0 #999999) !important;
+    &:focus {
+        outline: none !important;
+    }
+
+    background-color: ghostwhite;
+    color: #000000;
+}
+
+.ec-translation-label-highlighted {
+    .animation(marching-ants-animation-fast @highlighted-ant-walking-duration linear infinite);
+    .box-shadow(0 6px 12px 0 #333333) !important;
+}
+
+.ec-translation-editor-palette {
+    .box-shadow(0 6px 12px 0 #999999) !important;
+    .animation(ec-translation-palette-background-animation @palette-background-animation-duration linear infinite);
+
+    color: white;
+    cursor: pointer;
+    background-image: url("../img/ec-translation-editor-palette-pattern.png") !important;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 10000;
+    height: 100%;
+    width: @palette-width - @palette-padding;
+    padding: @palette-padding;
+
+    // animations:
+    transform-origin: right center;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    transform: translateX(100%);
+    transition: transform @palette-animation-duration;
+
+    &.slide-in {
+        transform: translateX(0);
+    }
+
+    h1 {
+        font-size: 150%;
+    }
+
+    h1, label, legend {
+        text-shadow: black 0 0 6px;
+    }
+
+    .k-dropdown, .k-combobox {
+        width: 100%;
+    }
+
+    fieldset {
+        border: 2px solid #ffffff;
+        border-radius: 10px;
+        background-color: rgba(0, 0, 0, 0.75);
+
+        legend {
+            margin-left: 20px;
+            font-size: 130%;
+        }
+
+        #ec-translation-editor-export-to-xliff {
+            margin: 12px;
+        }
+
+        a {
+            margin: 12px;
+        }
+    }
+
+    a {
+        color: white;
+        white-space: nowrap;
+    }
+    button.save {
+        vertical-align: baseline;
+    }
+}
+
+#ec-translation-editor-screen_listbox {
+    li {
+        white-space: nowrap !important;
+    }
+}
+
+
+.lt-ie10 {
+    .ec-translation-label-editable {
+        border: 1px dashed @translatable-to-color;
+    }
+    .ec-translation-label-highlighted {
+        border: 1px dashed @highlighted-to-color;
+    }
+}
+
+// "edit mode" on body
+.translations-editable {
+    .ec-body, .ec-header, .ec-footer {
+        margin-right: @palette-width !important;
+        transition: margin @palette-animation-duration;
+    }
+}

@@ -1,0 +1,122 @@
+<div ng-controller="managePermissionCtrl">
+    <form novalidate class="form-horizontal" name="permissionForm">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="modal-title">{{'roleEditPermission.windowTitle' | translate}}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12" ng-class="messageDivClass">
+                    <span ng-bind-html="actionMessage" ng-class="messageClass"></span>
+                </div>
+            </div>
+
+            <div class="row panel-body">
+                <div class="form-inline">
+                    <label for="application">Application</label>
+                    <select class="form-control dropdown" style="width: 300px;"
+                            id="application"
+                            name="application"
+                            ng-model="criteria.application"
+                            ng-options="application for application in applicationsList"
+                            ng-class="{pointer: pointer}"
+                            ng-mouseenter="pointer=true"
+                            ng-mouseleave="pointer=false">
+                        <option value="">All</option>
+                    </select>
+
+                    <label for="group" style="margin-left: 4px;">Group</label>
+                    <select class="form-control dropdown"
+                            id="group"
+                            name="group"
+                            ng-model="criteria.group"
+                            ng-options="group for group in groupsList"
+                            ng-class="{pointer: pointer}"
+                            ng-mouseenter="pointer=true"
+                            ng-mouseleave="pointer=false">
+                        <option value="">All</option>
+                    </select>
+
+                    <span ng-controller="manageRoleCtrl" style="margin-left: 4px;">
+                        <button id="searchButton" class="btn btn-default" ng-click="filterPermissions(criteria)">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </span>
+                    <span ng-controller="manageRoleCtrl" style="margin-left: 4px;">
+						<button class="btn btn-default" ng-click="resetForm(criteria)">
+							<span class="glyphicon glyphicon-refresh"></span>
+						</button>
+                    </span>
+                </div>
+            </div>
+            <!-- PERMISSIONS TABLE -->
+                <table st-table="displayedPermissions" st-safe-src="permissionsList" class="table table-striped fixed">
+					<colgroup>
+						<col style="width: 200px;">
+						<col style="width: 400px;">
+						<col style="width: 120px;">
+						<col style="width: 120px;">
+						<col style="width: 50px;">
+					</colgroup>
+                    <thead>
+                    <tr>
+                        <th st-sort="name" st-sort-default="true">Name</th>
+                        <th st-sort="description">Description</th>
+                        <th st-sort="group">Group</th>
+                        <th st-sort="application">Application</th>
+                        <th>
+                            <input type="checkbox" ng-model="header.selectAll" ng-change="toggleAll()">
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-bordered" ng-if="!emptyResult && !isDataLoading">
+                    <tr ng-repeat="permission in displayedPermissions">
+                        <td ng-bind="permission.name"></td>
+                        <td ng-bind="permission.description"></td>
+                        <td ng-bind="permission.group"></td>
+                        <td ng-bind="permission.applicationName"></td>
+                        <td class="actionTd">
+                            <input type="checkbox" name="" value="" ng-model="permission.selected" ng-change="toggleItem(permission.selected)">
+
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-if="isDataLoading">
+                    <tr>
+                        <td colspan="5" class="text-center">{{loadingMessage}}</td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-if="emptyResult">
+                    <tr>
+                        <td colspan="5">{{emptyResultMessage}}</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="5" class="text-right">
+                            <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            <!-- PERMISSIONS TABLE END-->
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-md-8 text-left"></div>
+                <div class="col-md-4">
+                    <input type="button" class="btn btn-warning btn-sm" ng-show="!permissionsSaved" ng-click="cancel()" value="Cancel"/>
+                    <input type="button" class="btn btn-primary btn-sm" value="Save"
+                           ng-show="!permissionsSaved && !showConfirmation" ng-click="saveRolePermissions()"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Confirm"
+                           ng-show="!permissionsSaved && showConfirmation" ng-click="saveRolePermissions()"/>
+                    <label class="btn btn-success btn-sm fa fa-check" ng-show="permissionsSaved"/>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>

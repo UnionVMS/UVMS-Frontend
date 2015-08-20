@@ -1,0 +1,182 @@
+{
+    "header": {
+        "pageTitle": "USM",
+        "home": "Home",
+        "users": "Users",
+        "organisations": "Organisations",
+        "roles": "Roles",
+        "scopes": "Scopes",
+        "applications": "Applications",
+        "endpoint": "Endpoint"
+    },
+    "common": {
+        "all": "All",
+        "new": "New",
+        "edit": "Edit",
+        "name": "Name",
+        "description": "Description",
+        "application": "Application",
+        "status": "Status",
+        "activeFrom": "Active From",
+        "activeTo": "Active To",
+        "status_E": "Enabled",
+        "status_D": "Disabled",
+        "status_L": "Locked",
+        "status_all": "All"
+    },
+    "users": {
+        "userName": "Username",
+        "user": "User",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "phoneNumber": "Phone Number",
+        "faxNumber": "Fax Number",
+        "mobileNumber": "Mobile Number",
+        "email": "Email",
+        "organisation": "Organisation",
+        "status": "Status",
+        "status_E": "Enabled",
+        "status_D": "Disabled",
+        "status_L": "Locked",
+        "status_all": "All",
+        "nation": "Nation",
+        "activeFrom": "Active From",
+        "activeTo": "Active To",
+        "notes": "Notes"
+    },
+    "roles": {
+        "name": "Name",
+        "description": "Description",
+        "application": "Application",
+        "status": "Status",
+        "new": " New",
+        "newRole": "New Role",
+        "feature": "Feature",
+        "status_E": "Enabled",
+        "status_D": "Disabled",
+        "status_L": "Locked",
+		"new_button_tooltip": "Creates a new Role",
+		"edit_button_tooltip": "Modify this Role",
+		"view_button_tooltip": "View Role permission",
+		"del_button_tooltip": "Delete this Role",
+		"search_filter": "Filter results with current parameters",
+		"refresh_filter": "Reset filter parameter to default"
+    },
+    "role": {
+        "status_E": "Enabled",
+        "status_D": "Disabled",
+        "status_L": "Locked"
+    },
+    "roleDetails": {
+        "status_E": "Enabled",
+        "status_D": "Disabled",
+        "status_L": "Locked"
+    },
+    "roleEditPermission": {
+        "windowTitle": "Edit Permission"
+    },
+    "scopes": {
+        "dataFrom": "Data From",
+        "dataTo": "Data To",
+        "scope": "Scope",
+        "newScope": " New Scope",
+        "editScope": " Edit Scope",
+        "deleteScope": " Delete Scope",
+        "category": "Category"
+    },
+	"userContexts": {
+		"role" : "Role",
+		"roleStatus" : "Role Status",
+		"scope" : "Scope",
+		"scopeStatus" : "Scope Status",
+		"new": " New",
+        "status_E": "Enabled",
+        "status_D": "Disabled",
+        "status_L": "Locked",
+        "newContext": " Add User Context",
+        "editContext": " Edit User Context",
+        "deleteContext": " Remove User Context"
+	},
+	"organisations": {
+	    "organisation": "Organisation",
+        "parent": "Parent",
+        "name": "Name",
+        "description": "Description",
+        "nation": "Nation",
+        "email": " Email",
+        "description": "Description",
+        "newOrganisation": " New Organisation",
+        "status": " Status",
+        "status_E": "Enabled",
+        "status_D": "Disabled",
+        "status_L": "Locked"
+    },
+     "organisation": {
+        "status_E": "Enabled",
+        "status_D": "Disabled",
+        "status_L": "Locked"
+     },
+
+       "endPoints": {
+        "name": "Name",
+        "description": "Description",
+        "email": " E-Mail",
+        "description": "Description",
+        "status": " Status",
+        "status_E": "Enabled",
+        "status_D": "Disabled",
+        "status_L": "Locked"
+    },
+
+    "endPoint":{
+         "status_E": " Enabled",
+         "status_D": " Disabled",
+         "status_L": " Locked"
+    },
+
+     "channels": {
+        "dataflow": " Dataflow",
+        "service": " Service",
+        "priority": " Priority"
+    },
+
+     "contacts": {
+        "firstname": "First Name",
+        "lastname": "Last Name",
+        "email": "E-Mail",
+		"phone": "Phone numbers"
+    },
+
+	"organisationEndpoints": {
+		"name" : "Name",
+		"description" : "Description",
+		"uri" : "URI",
+		"email" : "Email",
+		"status" : "Status",
+		"new": " New",
+        "status_E": "Enabled",
+        "status_D": "Disabled",
+        "status_L": "Locked",
+        "newEndpoint": " New Endpoint",
+        "editEndpoint": " Edit Endpoint",
+        "deleteEndpoint": " Remove Endpoint"
+	},
+
+	"organisationEndpointsChannels": {
+		"dataflow" : "Dataflow",
+		"service" : "Service",
+		"priority" : "Priority",
+        "newEndpointChannel": " Add Endpoint Channel",
+        "editEndpointChannel": " Edit Endpoint Channel",
+        "deleteEndpointChannel": " Remove Endpoint Channel"
+	},
+
+	"organisationEndpointsContacts": {
+		"person" : "Contact Person",
+		"firstName" : "First Name",
+		"lastName" : "Last Name",
+		"email" : "E-Mail",
+        "newEndpointContact": " Assign Contact",
+        "deleteEndpointContact": " Remove Contact"
+	}
+}

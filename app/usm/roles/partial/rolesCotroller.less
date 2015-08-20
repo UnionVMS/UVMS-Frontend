@@ -1,0 +1,27 @@
+.roleDetailsTabs {
+    .nav > li > a {
+        padding: 2px 5px;
+    }
+    //.tab-content{
+    //   border: 1px solid #dddddd;
+    //}
+
+    table tbody, table thead {
+        border: 1px solid #dddddd;
+    }
+
+    /* Rsolves chrome problem with right border
+        https://bugs.webkit.org/show_bug.cgi?id=33858
+    */
+    table tbody td.actionTd, table thead th.actionTh {
+        border-right: 1px solid #dddddd;
+    }
+
+    .st-sort-ascent:after{
+        content: '\25B2';
+    }
+
+    .st-sort-descent:after{
+        content: '\25BC';
+    }
+}

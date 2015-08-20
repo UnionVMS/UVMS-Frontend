@@ -1,0 +1,80 @@
+ <div class="panel panel-default" ng-controller="userContextsControllerCtrl">
+	<table st-table="displayedUserContexts" st-safe-src="userContextsList" class="table table-striped fixed">
+		<colgroup>
+			<col style="width: 360px;">
+			<col style="width: 160px;">
+			<col style="width: 360px;">
+			<col style="width: 160px;">
+			<col style="width: 120px;">
+		</colgroup>
+		<thead class="table_heading">
+		<tr>
+			<th st-sort="role" st-sort-default="true">{{'userContexts.role'  | translate}}</th>
+			<th st-sort="roleStatus">{{'userContexts.roleStatus' | translate}}</th>
+			<th st-sort="scope">{{'userContexts.scope' | translate}}</th>
+			<th st-sort="scopeStatus">{{'userContexts.scopeStatus' | translate}}</th>
+			<th class="text-right">
+				<div ng-controller="manageUserContextsCtrl">
+					<button id="new_user_context" class="btn btn-primary btn-sm" ng-click='manageUserContext("new", "")'>
+						<span class="glyphicon glyphicon-plus"></span>
+						<span>{{'userContexts.new' | translate}}</span>
+					</button>
+				</div>
+			</th>
+		</tr>
+		</thead>
+
+		<tbody class="table-bordered" ng-if="!isDataLoading && !emptyResult">
+			<tr ng-repeat="uc in displayedUserContexts | orderBy:uc.role:sortReverse" ng-if="uc.role !== null">
+				<td>
+					<a ui-sref="app.usm.roles.role({ roleId: uc.roleId })">
+					<span tooltip="{{uc.roleDescription}}">{{ uc.role }}</span>
+				</td>
+				<td>
+					<div class="col-md-3" ng-if="uc.role!==null">
+						<span ng-class="uc.roleClass" ng-bind='"userContexts.status_"+uc.roleStatus | translate'></span>
+					</div>
+				</td>
+				<td>
+					<div ng-if="uc.scope!==null">
+						<a ui-sref="app.usm.scopes.scope({ scopeId: uc.scopeId })">
+						<span tooltip="{{uc.scopeDescription}}">{{ uc.scope }}</span>
+					</div>
+				</td>
+				<td>
+					<div class="col-md-3" ng-if="uc.scope!==null && uc.scopeStatus!==null">
+					<span ng-class="uc.scopeClass" ng-bind='"userContexts.status_"+uc.scopeStatus | translate'></span>
+					</div>
+				</td>
+				<td class="actionTd text-right">
+					<span ng-controller="manageUserContextsCtrl" ng-if="uc.role!==null">
+						<button id="user_context_edit" type="button" class="btn btn-sm btn-primary" ng-click='manageUserContext("edit", uc)'>
+							<span><i class="glyphicon glyphicon-pencil"></i></span>
+						</button>
+					</span>
+					<span ng-controller="manageUserContextsCtrl" ng-if="uc.role!==null">
+						<button id="user_context_delete" type="button" class="btn btn-sm btn-danger" ng-click='manageUserContext("delete", uc)'>
+							<span><i class="glyphicon glyphicon-remove"></i></span>
+						</button>
+					</span>
+				</td>
+			</tr>
+		</tbody>
+
+		<tbody ng-if="isDataLoading">
+		<tr>
+			<td colspan="8">{{loadingMessage}}</td>
+		</tr>
+		</tbody>
+
+		<tbody ng-if="emptyResult">
+		<tr>
+			<td colspan="8">{{emptyResultMessage}}</td>
+		</tr>
+		</tbody>
+
+		<tfoot> <!-- no pagination maybe no need for footer -->
+		</tfoot>
+
+	</table>
+</div>

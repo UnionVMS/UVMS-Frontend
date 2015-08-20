@@ -1,0 +1,77 @@
+<div class="panel panel-default" >
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-2 userDetails-label">
+                <label>Email</label>
+            </div>
+            <div class="col-md-10 userDetails-field">
+                <span ng-bind="user.person.email"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 text-nowrap userDetails-label">
+                <label>Phone Number</label>
+            </div>
+            <div class="col-md-2 userDetails-field">
+                <span ng-bind="user.person.phoneNumber"></span>
+            </div>
+            <div class="col-md-2 text-nowrap userDetails-label">
+                <label>Mobile Number</label>
+            </div>
+            <div class="col-md-2 userDetails-field">
+                <span ng-bind="user.person.mobileNumber"></span>
+            </div>
+            <div class="col-md-2 text-nowrap userDetails-label">
+                <label>Fax Number</label>
+            </div>
+            <div class="col-md-2 userDetails-field">
+                <span ng-bind="user.person.faxNumber"></span>
+            </div>
+        </div>
+        <div class="col-md-12" style="padding: 1px;">
+            <hr style="border-top: 1px solid #000000;">
+        </div>
+        <div class="row">
+            <div class="col-md-2 userDetails-label">
+                <label>Active From</label>
+            </div>
+            <div class="col-md-2 userDetails-field">
+                <span>{{user.activeFrom | date:'yyyy-MM-dd'}}</span>
+            </div>
+            <div class="col-md-2 userDetails-label">
+                <label>Active To</label>
+            </div>
+            <div class="col-md-2 userDetails-field">
+                <span>{{user.activeTo | date:'yyyy-MM-dd'}}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 userDetails-label">
+                <label>Locked out until</label>
+            </div>
+            <div class="col-md-2 userDetails-field">
+                <span>{{user.lockoutTo | date:'yyyy-MM-dd'}}</span>
+            </div>
+            <div class="col-md-2 userDetails-label">
+                <label>Lockout Reason</label>
+            </div>
+            <div class="col-md-2 userDetails-field">
+                <span ng-bind="user.lockoutReason"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 userDetails-label">
+                <label>Notes</label>
+            </div>
+            <div class="col-md-10 userDetails-field">
+                <span ng-bind="user.notes"></span>
+            </div>
+         </div>
+         <div class="row" style="text-align:left; padding-top: 30px; padding-bottom:10px; padding-left:15px;">
+
+         <button type="button" class="btn btn-sm btn-primary pull-left" ng-click="manageUserPassword(user)" >
+                             Set Password
+               </button>
+          </div>
+    </div>
+</div>

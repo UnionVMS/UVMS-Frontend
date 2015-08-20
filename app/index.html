@@ -38,6 +38,18 @@
     <script src="../bower_components/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
     <script src="../bower_components/angular-datatables/dist/plugins/columnfilter/angular-datatables.columnfilter.min.js"></script>
     <script src="../bower_components/ng-csv/build/ng-csv.min.js"></script>    
+
+    <!-- USM -->
+    <script src="../bower_components/angular-translate/angular-translate.js"></script>
+    <script src="../bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+    <script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="../bower_components/angular-ui-router-tabs/src/ui-router-tabs.js"></script>
+    <script src="../bower_components/angular-smart-table/dist/smart-table.min.js"></script>
+    <script src="../bower_components/angular-ui-select/dist/select.js"></script>
+    <script src="../bower_components/ngstorage/ngStorage.min.js"></script>
+    <script src="../bower_components/angular-locker/dist/angular-locker.min.js"></script>
+    <script src="../bower_components/angular-jwt/dist/angular-jwt.js"></script>
+    <script src="../bower_components/angular-breadcrumb/dist/angular-breadcrumb.min.js"></script>    
     <!-- Add New Bower Component JS Above -->
 
 
@@ -178,12 +190,51 @@
     <script src="partial/exchange/exchange.js"></script>
     <script src="directive/common/search/advancedSearch/exchange/exchangeSearch.js"></script>
     <script src="service/common/csvService.js"></script>
+
+    <!-- USM COMPONENTS -->
+    <script src="usm/usm.js"></script>
+    <script src="usm/users/users.js"></script>
+    <script src="usm/organisations/organisations.js"></script>
+    <script src="usm/roles/roles.js"></script>
+    <script src="usm/scenarios/scenarios.js"></script>
+    <script src="usm/scopes/scopes.js"></script>
+    <script src="usm/applications/applications.js"></script>
+    <script src="usm/shared/shared.js"></script>
+    <script src="usm/applications/partial/applicationsController.js"></script>
+    <script src="usm/applications/service/applicationsService.js"></script>
+    <script src="usm/organisations/partial/organisationsController.js"></script>
+    <script src="usm/organisations/service/organisationsService.js"></script>
+    <script src="usm/roles/partial/rolesCotroller.js"></script>
+    <script src="usm/roles/service/rolesService.js"></script>
+    <script src="usm/scenarios/partial/scenariosController.js"></script>
+    <script src="usm/scenarios/service/scenariosService.js"></script>
+    <script src="usm/scopes/partial/scopesController.js"></script>
+    <script src="usm/scopes/service/scopesService.js"></script>
+    <script src="usm/users/account/account.js"></script>
+    <script src="usm/users/account/partial/accountController.js"></script>
+    <script src="usm/users/account/service/accountService.js"></script>
+    <script src="usm/users/userContexts/userContexts.js"></script>
+    <script src="usm/users/userContexts/partial/userContextsController.js"></script>
+    <script src="usm/users/userContexts/service/userContextsService.js"></script>
+    <script src="usm/users/preferences/preferences.js"></script>
+    <script src="usm/users/preferences/partial/preferencesController.js"></script>
+    <script src="usm/users/preferences/service/preferencesService.js"></script>
+    <script src="usm/users/partial/usersController.js"></script>
+    <script src="usm/users/service/usersService.js"></script>
+    <script src="usm/users/service/personsService.js"></script>
+    <script src="usm/shared/services/sharedServices.js"></script>
+    <script src="usm/shared/partial/login/loginController.js"></script>
+    <script src="usm/shared/partial/menu/menu.js"></script>
+    <script src="usm/shared/directive/usmDirectives.js"></script>
+    <script src="usm/shared/services/auth/auth.js"></script>
+    <script src="config.js"></script>
     <!-- Add New Component JS Above -->
 
     <div ng-include="'partial/header/header.html'"></div>
     <div ng-include="'partial/alerts/alerts.html'"></div>
     <div id="content">
-      <div ng-view></div>
+        <div ng-view ng-if="!usm"></div>
+        <div ui-view name="module" ng-if="usm"></div>
     </div>
 
     <div ng-include="'partial/footer/footer.html'" ></div>

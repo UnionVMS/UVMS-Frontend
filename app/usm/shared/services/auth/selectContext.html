@@ -1,0 +1,14 @@
+<div class="modal-header">
+    <h3 class="modal-title">Select Context</h3>
+</div>
+<div class="modal-body">
+    <ul>
+        <li ng-repeat="item in selectableContexts">
+            <a href="#" ng-click="selectContext(item)">{{ item.role.roleName }} - {{ item.scope.scopeName||"(no scope)" }}</a>
+        </li>
+    </ul>
+    Selected: <b>{{ selectedItem.role.roleName }} - {{ selectedItem.scope.scopeName||"(no scope)" }}</b>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>
