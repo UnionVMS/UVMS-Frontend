@@ -65,5 +65,6 @@
     "yes" : "Yes",
     "multiple_selected" :"Two or more selected",
     "one_selected" : "One selected",
-    "multiple_select_dropdown_default_text" : "Select"
+    "multiple_select_dropdown_default_text" : "Select",
+    "error_getting_data_from_server" : "Error getting data from server."
 }

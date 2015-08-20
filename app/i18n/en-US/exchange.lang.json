@@ -34,7 +34,11 @@
 
 	"transmission_status_header" : "Transmission status",
 	"transmission_status_online" : "Online",
-	"transmission_status_offline" : "Offline",
+    "transmission_status_offline" : "Offline",
+	"transmission_status_stopped" : "Stopped",
+
+    "transmission_action_start" : "Start",
+    "transmission_action_stop" : "Stop",
 	
 	"title_all": "All",
     "title_details": "Show details",

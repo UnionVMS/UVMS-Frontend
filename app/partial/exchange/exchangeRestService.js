@@ -2,6 +2,9 @@ angular.module('unionvmsWeb')
     .factory('exchangeRestFactory', function($resource, $q, restConstants){
         var baseUrl = restConstants.baseUrl;
         return {
+            getTransmissionStatuses : function(){
+                return $resource(baseUrl +'/exchange/rest/exchange/list/');
+            },            
             getExchangeMessages : function(){
                 return $resource(baseUrl + '/exchange/rest/exchange/log',{},
                 {
@@ -22,7 +25,7 @@ angular.module('unionvmsWeb')
             }
         };
     })
-    .factory('exchangeRestService', function($q, exchangeRestFactory, GetListRequest, Exchange, ExchangeListPage, vesselRestService){
+    .factory('exchangeRestService', function($q, exchangeRestFactory, GetListRequest, Exchange, ExchangeService, ExchangeListPage, vesselRestService){
         var baseUrl, userName;
         userName = "FRONTEND_USER";
 
@@ -80,6 +83,32 @@ angular.module('unionvmsWeb')
 
         var getExchangeMessages = function(getListRequest, servicePath){
             return getDataFromBackend(getListRequest, servicePath);
+        };
+
+        var getTransmissionStatuses = function(){
+            var deferred = $q.defer();
+            exchangeRestFactory.getTransmissionStatuses().get({},
+                function(response) {
+                    if(response.code !== 200){
+                        deferred.reject("Invalid response status");
+                        return;
+                    }
+                    
+                    var services = [];
+                    
+                    if(angular.isArray(response.data.services)){
+                        for (var i = 0; i < response.data.services.length; i++){
+                            services.push(ExchangeService.fromJson(response.data.services[i]));
+                        }
+                    }                    
+                    deferred.resolve(services);
+                },
+                function(error){
+                    console.log("Error getting exchange services.", error);
+                    deferred.reject(error);
+                }
+            );
+            return deferred.promise;  
         };
 
         var getDataFromBackend = function(getListRequest, servicePath){
@@ -211,8 +240,8 @@ angular.module('unionvmsWeb')
     };
 
     return {
+        getTransmissionStatuses : getTransmissionStatuses,
         getExchangeMessages : getExchangeMessages,
         resendExchangeMessage : resendExchangeMessage
-        //getSendingQueue : getSendingQueue
     };
 });

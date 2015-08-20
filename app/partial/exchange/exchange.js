@@ -1,4 +1,10 @@
-angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter, locale, searchService, exchangeRestService, ManualPositionReportModal, ManualPosition, alertService, csvService){
+angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter, locale, searchService, exchangeRestService, ManualPositionReportModal, ManualPosition, alertService, csvService, ExchangeService){
+
+    $scope.transmissionStatuses = {
+        loading : false,
+        services : [],
+        errorMessage: ""
+    };
 
     $scope.sendingQueueSearchResults = {
         page: 0,
@@ -21,6 +27,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     var init = function(){
         $scope.searchExchange();
         $scope.searchSendingQueue();
+        $scope.getTransmissionStatuses();
     };
 
     $scope.filterIncomingOutgoing = function(message) {
@@ -29,6 +36,48 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         }
 
         return message.outgoing ? $scope.searchResults.incomingOutgoing === "outgoing" : $scope.searchResults.incomingOutgoing === "incoming";
+    };
+
+    //TODO: REMOVE MOCK DATA
+    var mockServices = [];
+    var a = new ExchangeService();
+    a.name = "Inmarsat-C Eik (MOCK)";
+    a.status = "ONLINE";
+    mockServices.push(a);
+    var b = new ExchangeService();
+    b.name = "Inmarsat-C Burum (MOCK)";
+    b.status = "OFFLINE";
+    mockServices.push(b);    
+    $scope.transmissionStatuses.services = mockServices;
+
+    $scope.getTransmissionStatuses = function() {
+        $scope.transmissionStatuses.loading = true;
+        $scope.transmissionStatuses.errorMessage = "";
+        exchangeRestService.getTransmissionStatuses().then(
+            function(services) {
+                $scope.transmissionStatuses.loading = false;
+                $scope.transmissionStatuses.services = services;
+            },
+            function(error) {
+                $scope.transmissionStatuses.loading = false;
+                //Todo: remove mockServices
+                $scope.transmissionStatuses.services = mockServices;
+                $scope.transmissionStatuses.errorMessage = locale.getString('common.error_getting_data_from_server');
+                console.error("Error getting transmission statuses", error);
+            }
+        );
+    };
+
+    //Stop transmission service
+    $scope.stopTransmissionService = function(service){
+        //TODO: Send request to server using REST or WebSocket
+        service.setAsStopped();
+    };
+
+    //Start transmission service
+    $scope.startTransmissionService = function(service){
+        //TODO: Send request to server using REST or WebSocket
+        service.setAsStarted();
     };
 
     $scope.searchExchange = function() {
@@ -93,6 +142,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         });
     };
 
+    //Get status label for the exchange log items
     $scope.getStatusLabel = function(status){
         var label;
         switch(status){
@@ -106,12 +156,31 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
                 label = locale.getString('exchange.status_failed'); 
                 break;
             default:
-                label = "";
+                label = status;
         }
         return label;
     };
 
+    //Get status label for the exchange transmission service items
+    $scope.getTransmissionStatusLabel = function(status){
+        var label;
+        switch(status){
+            case 'ONLINE':
+                label = locale.getString('exchange.transmission_status_online'); 
+                break;
+            case 'OFFLINE':
+                label = locale.getString('exchange.transmission_status_offline'); 
+                break;
+            case 'STOPPED':
+                label = locale.getString('exchange.transmission_status_stopped'); 
+                break;
+            default:
+                label = status;
+        }
+        return label;
+    };
 
+    //Print the exchange logs
     $scope.print = function(){
         alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
     };
