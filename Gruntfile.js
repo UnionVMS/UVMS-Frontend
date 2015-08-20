@@ -38,12 +38,38 @@ module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
     connect: {
-      main: {
-        options: {
-          port: 9001
-         // base: 'app/'
+        server: {
+            options: {
+                port : 9001,
+                hostname: 'localhost',
+
+                middleware: function (connect, options) {
+                    var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
+                    return [
+                        // Include the proxy first
+                        proxy,
+                        // Serve static files.
+                        connect.static(options.base),
+                        // Make empty directories browsable.
+                        connect.directory(options.base)
+                    ];
+                }
+            },
+            proxies: {
+                context: ['/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'],
+                host: 'localhost',
+                //host: 'cygnus-dev.athens.intrasoft-intl.private',
+                port: 8080,
+                //port: 28080,
+                https: false,
+                xforward: false//,
+                //headers: {
+                //    "x-custom-added-header": ""
+                //},
+                //hideHeaders: ['x-removed-header']
+            }
         }
-      }
+
     },
     watch: {
       main: {
@@ -59,7 +85,8 @@ module.exports = function (grunt) {
     jshint: {
       main: {
         options: {
-            jshintrc: '.jshintrc'
+            jshintrc: '.jshintrc',
+            ignores: ['protractor.conf.js', 'app/**/*-spec.js', 'app/**/e2e/*.js','app/**/e2e/**/*.js']
         },
         src: [createFolderGlobs('*.js'), '!/bower_components/**/*.js', '!app/assets/**/*.js']
       }
@@ -132,7 +159,20 @@ module.exports = function (grunt) {
           src: ['environment/restConstants.js'],
           dest: 'app/service/common/'
         }]
-      }
+      },
+      cygnus: {
+           options: {
+               patterns: [{
+                   json: grunt.file.readJSON('environment/cygnus.json')
+               }]
+           },
+           files: [{
+               expand: true,
+               flattern: true,
+               src: ['environment/restConstants.js'],
+               dest: 'app/service/common/'
+           }]
+      }      
     },
     copy: {
       main: {
@@ -303,6 +343,7 @@ module.exports = function (grunt) {
   grunt.registerTask('sub-build',['jshint', 'clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy','htmlmin','compress:dist','clean:after']);//,'clean:after'
 
   grunt.registerTask('build-local', ['replace:local', 'test', 'sub-build']);
+  grunt.registerTask('build-cygnus', ['replace:cygnus', 'sub-build']);
   grunt.registerTask('build-dev', ['replace:dev','sub-build']);
   grunt.registerTask('build-test', ['replace:test','sub-build']);
   grunt.registerTask('test',['dom_munger:read', 'karma:all_tests', 'clean:after']);

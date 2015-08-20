@@ -32,7 +32,17 @@
     "angular-datatables": "~0.4.3",
     "DataTables": "~1.10.7",
     "jquery-datatables-column-filter": "*",
-    "ng-csv": "~0.3.4"
+    "ng-csv": "~0.3.4",
+    "angular-translate": "~2.5.2",
+    "angular-translate-loader-static-files": "~2.5.0",
+    "angular-ui-router": "~0.2.14",
+    "angular-ui-router-tabs": "~1.4.2",
+    "angular-smart-table": "~2.0.2",
+    "angular-ui-select": "0.11.2",
+    "ngstorage": "~0.3.0",
+    "angular-breadcrumb": "~0.4.0",
+    "angular-jwt": "~0.0.9",
+    "angular-locker": "~2.0.1"    
   },
   "resolutions": {
     "angular": "~1.3",

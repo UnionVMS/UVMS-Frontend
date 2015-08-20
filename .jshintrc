@@ -11,6 +11,7 @@
     "eqnull": true,
     "browser": true,
     "smarttabs": true,
+    "-W099": true,
     "globals": {
         "jQuery": true,
         "angular": true,
