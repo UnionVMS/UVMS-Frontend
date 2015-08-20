@@ -25,7 +25,7 @@
     "advanced_search_placeholder_type":"Type",
     "advanced_search_placeholder_external_number":"Ext. No",
     "advanced_search_placeholder_name" : "Name",
-    "advanced_search_placeholder_signal_ircs" : "Signal/IRCS",
+    "advanced_search_placeholder_signal_ircs" : "IRCS",
     "advanced_search_placeholder_cfr" : "CFR",
     "advanced_search_placeholder_mmsi" : "MMSI",
     "advanced_search_placeholder_homeport_name":"Homeport name",
