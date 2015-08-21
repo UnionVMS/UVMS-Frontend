@@ -28,7 +28,8 @@
 	"sending_queue_table_header_date_received": "Date received",
 	"sending_queue_table_header_from": "From",
 	"sending_queue_table_header_recipient": "Recipient",
-	"sending_queue_table_remove": "Remove",
+	"sending_queue_table_pause": "Pause",
+	"sending_queue_table_resend": "Resend",
 	"sending_queue_header" : "Sending queue",
 	"sending_queue_warning" : "There are currently many messages in queue. This might take a while.",
 

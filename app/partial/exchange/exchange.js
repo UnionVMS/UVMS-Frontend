@@ -13,6 +13,8 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         errorMessage: ""
     };
 
+    $scope.pausedQueueItems = {};
+
     $scope.searchResults = {
         page: 0,
         pageCount: 0,

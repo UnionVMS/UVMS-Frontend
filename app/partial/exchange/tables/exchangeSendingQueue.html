@@ -17,7 +17,10 @@
 					<td class="recieved">1{{i}} aug. 2015 1{{i}}:22:22</td>
 					<td class="from">TUNAFJORD</td>
 					<td class="reciepient">FIN</td>
-					<td class="action"><span class="fa fa-times-circle fa-lg" title="{{'exchange.sending_queue_table_remove' | i18n}}"></span></td>
+					<td class="action">
+						<a ng-if="!pausedQueueItems[i]" ng-click="pausedQueueItems[i] = true">{{'exchange.sending_queue_table_pause' | i18n}}</a>
+						<a ng-if="pausedQueueItems[i]" ng-click="pausedQueueItems[i] = false">{{'exchange.sending_queue_table_resend' | i18n}}</a>
+					</td>
 				</tr>
 			</tbody>
 		</table>
