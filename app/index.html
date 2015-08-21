@@ -234,8 +234,7 @@
     <div ng-include="'partial/header/header.html'"></div>
     <div ng-include="'partial/alerts/alerts.html'"></div>
     <div id="content">
-        <div ng-view ng-if="!usm"></div>
-        <div ui-view name="module" ng-if="usm"></div>
+        <div ui-view name="module"></div>
     </div>
 
     <div ng-include="'partial/footer/footer.html'" ></div>

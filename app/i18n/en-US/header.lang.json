@@ -8,5 +8,6 @@
 	"menu_gis" : "GIS",
 	"menu_movement" : "Positions",
 	"menu_admin" : "Admin",
-	"menu_exchange" : "Exchange"
+	"menu_exchange" : "Exchange",
+	"menu_polling": "Polling"
 }

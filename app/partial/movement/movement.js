@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, alertService, movementRestService, searchService, locale, $routeParams, ManualPositionReportModal, csvService){
+angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, alertService, movementRestService, searchService, locale, $stateParams, ManualPositionReportModal, csvService){
 
     //Current filter and sorting for the results table
     $scope.sortFilter = '';
@@ -43,8 +43,8 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     };
 
     var init = function(){
-         if ($routeParams.id) {
-            movementRestService.getMovement($routeParams.id).then(function(movement) {
+         if ($stateParams.id) {
+            movementRestService.getMovement($stateParams.id).then(function(movement) {
                 ManualPositionReportModal.show(movement2ManualPosition(movement), {readOnly: true});
             });
          }

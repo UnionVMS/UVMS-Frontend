@@ -7,16 +7,24 @@
                 'url':'/today'
             },
             {
-                'title':locale.getString('header.menu_movement'),
-                'url':'/movement'
-            },
-            {
                 'title':locale.getString('header.menu_reporting'),
                 'url':'/reporting'
             },
             {
-                'title':locale.getString('header.menu_user'),
-                'url':'/user'
+                'title':locale.getString('header.menu_movement'),
+                'url':'/movement'
+            },
+            {
+                'title':locale.getString('header.menu_exchange'),
+                'url':'/exchange'
+            },
+            {
+                'title':locale.getString('header.menu_polling'),
+                'url':'/polling/logs'
+            },
+            {
+                'title':locale.getString('header.menu_communication'),
+                'url':'/communication'
             },
             {
                 'title':locale.getString('header.menu_assets'),
@@ -27,20 +35,12 @@
                 'url':'/alarmconditions'
             },
             {
-                'title':locale.getString('header.menu_communication'),
-                'url':'/communication'
-            },
-            {
-                'title':locale.getString('header.menu_exchange'),
-                'url':'/exchange'
+                'title':locale.getString('header.menu_user'),
+                'url':'/user'
             },
             {
                 'title':locale.getString('header.menu_admin'),
                 'url':'/admin'
-            },
-            {
-                'title':locale.getString('header.menu_gis'),
-                'url':'/gis'
             }
         ];
     };

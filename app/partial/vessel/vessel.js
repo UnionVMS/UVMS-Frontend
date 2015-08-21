@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, savedSearchService, Vessel, GetListRequest, searchService, vesselRestService, alertService, $routeParams) {
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, savedSearchService, Vessel, GetListRequest, searchService, vesselRestService, alertService, $stateParams) {
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -33,8 +33,8 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         //Load list with vessels
         $scope.searchVessels();
 
-        if ($routeParams.id) {
-            vesselRestService.getVessel($routeParams.id).then(function(vessel) {
+        if ($stateParams.id) {
+            vesselRestService.getVessel($stateParams.id).then(function(vessel) {
                 $scope.toggleViewVessel(vessel);
             });
         }

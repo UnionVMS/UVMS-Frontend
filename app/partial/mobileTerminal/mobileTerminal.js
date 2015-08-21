@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService, alertService, MobileTerminalListPage, MobileTerminal, SystemTypeAndLES, mobileTerminalRestService, pollingService, GetPollableListRequest, pollingRestService, configurationService, $location, locale, $routeParams, csvService){
+angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService, alertService, MobileTerminalListPage, MobileTerminal, SystemTypeAndLES, mobileTerminalRestService, pollingService, GetPollableListRequest, pollingRestService, configurationService, $location, locale, $stateParams, csvService){
 
     var hideAlertsOnScopeDestroy = true;
 
@@ -104,7 +104,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
     var init = function(){
 
         //GET mobileterminal GUID from URL and load details for that MobileTerminal
-        var mobileTerminalGUID = $routeParams.id;
+        var mobileTerminalGUID = $stateParams.id;
         if(angular.isDefined(mobileTerminalGUID)){
             mobileTerminalRestService.getMobileTerminalByGuid(mobileTerminalGUID).then(
                 function(mobileTerminal){

@@ -1,24 +1,13 @@
 <div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 pageMenu">
-                <ul class="horizontal pipeSeparator">
-                    <li><a href="#communication">{{'mobileTerminal.menu_mobileterminals' | i18n}}</a></li>
-                    <li class="active"><a href="#communication/polling">{{'mobileTerminal.menu_polling' | i18n}}</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
     <!-- Nav tabs -->
     <div class="containerWrapper pollingTabs">
         <div class="container">
           <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" ng-class="{'active': activeTab === 'POLLING'}">
-                <a href="#/communication/polling" role="tab" >{{'polling.tabs_new_poll' | i18n}}</a>
-            </li>
             <li role="presentation" ng-class="{'active': activeTab === 'POLLING_LOGS'}">
-                <a href="#/communication/polling/logs" role="tab">{{'polling.tabs_logs' | i18n}}</a>
+                <a href="#/polling/logs" role="tab">{{'polling.tabs_logs' | i18n}}</a>
+            </li>
+            <li role="presentation" ng-class="{'active': activeTab === 'POLLING'}">
+                <a href="#/polling" role="tab" >{{'polling.tabs_new_poll' | i18n}}</a>
             </li>
           </ul>
         </div>

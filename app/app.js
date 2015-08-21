@@ -1,5 +1,14 @@
 angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource', 'ngLocalize', 'tmh.dynamicLocale', 'leaflet-directive', 'datatables', 'datatables.bootstrap', 'datatables.columnfilter', 'ngCsv', 'ui.router', 'usm']);
 
+var getCurrentUserPromise = function() {
+    var currentUserPromise = function(userService) {
+        return userService.findCurrentUser();
+    };
+
+    currentUserPromise.$inject = ['userService'];
+    return currentUserPromise;
+};
+
 //Resolve used for all routes
 var generalRouteResolves =  {
     languages: function(initService){
@@ -8,92 +17,91 @@ var generalRouteResolves =  {
     config: function(initService){
         return initService.loadConfig();
     }    
+    // ,currentUser: getCurrentUserPromise() // TODO: Uncomment to enforce user login
 };
 
-angular.module('unionvmsWeb').config(function($routeProvider, tmhDynamicLocaleProvider, $urlRouterProvider, $stateProvider) {
+angular.module('unionvmsWeb').config(function($stateProvider, tmhDynamicLocaleProvider, $injector) {
 
     tmhDynamicLocaleProvider.localeLocationPattern("assets/locales/angular-locale_{{locale}}.js");
 
-    $routeProvider
-        .when('/today',{
-            templateUrl:'partial/today/today.html',
-            resolve: generalRouteResolves
-        })
-        .when('/assets/:id?', {
-            templateUrl:'partial/vessel/vessel.html',
-            resolve: generalRouteResolves
-        })
-        .when('/communication', {
-            templateUrl: 'partial/mobileTerminal/mobileTerminal.html',
-            resolve: generalRouteResolves
-        })
-        .when('/communication/polling', {
-            templateUrl: 'partial/polling/polling.html', 
-            resolve: generalRouteResolves
-        })
-        .when('/communication/polling/logs', {
-            templateUrl: 'partial/polling/pollingLogs/pollingLogs.html', 
-            resolve: generalRouteResolves
-        })
-        .when('/communication/:id', {
-            templateUrl: 'partial/mobileTerminal/mobileTerminal.html', 
-            resolve: generalRouteResolves
-        })
-        .when('/movement/manual', {
-            templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html',
-            resolve: generalRouteResolves
-        })
-        .when('/movement/:id?', {
-            templateUrl: 'partial/movement/movement.html', 
-            resolve: generalRouteResolves
-        })
-        .when('/admin/auditlog', {
-            templateUrl: 'partial/admin/adminLog/adminLog.html',
-            resolve: generalRouteResolves
-        })
-        .when('/admin', {
-            redirectTo:'/admin/auditlog'
-        })
-        .when('/admin/configuration', {
-            templateUrl: 'partial/admin/adminConfiguration/adminConfiguration.html', 
-            resolve: generalRouteResolves
-        })
-        .when('/reporting', {
-            templateUrl: "partial/spatial/spatial.html",
-//            resolve: generalRouteResolves
-        })
-        .when('/exchange', {
-            templateUrl: 'partial/exchange/exchange.html',
-            resolve: generalRouteResolves
-        });
-    /* Add New Routes Above */
-    //$routeProvider.otherwise({redirectTo:'/today'});
+  
 
     $stateProvider
-        .state('app', {
-            url: '',
-            views: {
-                module: {
-                    templateUrl: 'usm/usm.html'
-                }
-            }
-        });    
-
+        .state('today', {
+            url: '/today',
+            views: { module: { templateUrl: 'partial/today/today.html' } },
+            resolve: generalRouteResolves
+        })
+        .state('movement', {
+            url: '/movement',
+            views: { module: { templateUrl: 'partial/movement/movement.html' } },
+            resolve: generalRouteResolves
+        })
+        .state('movement-id', {
+            url: '/movement/:id',
+            views: { module: { templateUrl: 'partial/movement/movement.html' } },
+            resolve: generalRouteResolves
+        })
+        .state('assets', {
+            url: '/assets',
+            views: { module: { templateUrl: 'partial/vessel/vessel.html' } },
+            resolve: generalRouteResolves
+        })
+        .state('assets-id', {
+            url: '/assets/:id',
+            views: { module: { templateUrl: 'partial/vessel/vessel.html' } },
+            resolve: generalRouteResolves
+        })
+        .state('communication', {
+            url: '/communication',
+            views: { module: { templateUrl: 'partial/mobileTerminal/mobileTerminal.html' } },
+            resolve: generalRouteResolves
+        })
+        .state('communication-id', {
+            url: '/communication/:id',
+            views: { module: { templateUrl: 'partial/mobileTerminal/mobileTerminal.html' } },
+            resolve: generalRouteResolves
+        })
+        .state('polling', {
+            url: '/polling',
+            views: { module: { templateUrl: 'partial/polling/polling.html' } },
+            resolve: generalRouteResolves
+        })
+        .state('pollingLogs', {
+            url: '/polling/logs',
+            views: { module: { templateUrl: 'partial/polling/pollingLogs/pollingLogs.html' } },
+            resolve: generalRouteResolves
+        })
+        .state('manualMovements', {
+            url: '/movement/manual',
+            views: { module: { templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html' } },
+            resolve: generalRouteResolves
+        })
+        .state('auditLog', {
+            url: '/admin/auditLog',
+            views: { module: { templateUrl: 'partial/admin/adminLog/adminLog.html' } },
+            resolve: generalRouteResolves
+        })
+        .state('configuration', {
+            url: '/admin/configuration',
+            views: { module: { templateUrl: 'partial/admin/adminConfiguration/adminConfiguration.html' } },
+            resolve: generalRouteResolves
+        })
+        .state('admin', {
+            url: '/admin',
+            redirectTo: 'auditLog'
+        })
+        .state('reporting', {
+            url: '/reporting',
+            views: { module: { templateUrl: 'partial/spatial/spatial.html' } },
+            // resolve: generalRouteResolves
+        })
+        .state('exchange', {
+            url: '/exchange',
+            views: { module: { templateUrl: 'partial/exchange/exchange.html' } },
+            resolve: generalRouteResolves
+        });
 });
-
-/*
-angular.module('unionvmsWeb').config(['$urlRouterProvider', '$stateProvider',
-    function ($urlRouterProvider, $stateProvider) {
-        $stateProvider
-            .state('app', {
-                url: '',
-                views: {
-                    module: {
-                        templateUrl: 'usm/usm.html'
-                    }
-                }
-            });
-    }]);*/
 
 angular.module('unionvmsWeb').run(function($rootScope) {
 
@@ -107,12 +115,6 @@ angular.module('unionvmsWeb').run(function($rootScope) {
             this.$apply(fn);
         }
     };
-
-    $rootScope.$on('$locationChangeStart', function (evt, newUrl, oldUrl) {
-        $rootScope.usm = newUrl.indexOf("usm") !== -1;
-
-    });
-
 });
 
 //Configure for i18n
