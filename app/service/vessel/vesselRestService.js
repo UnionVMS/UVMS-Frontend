@@ -110,7 +110,7 @@ angular.module('unionvmsWeb')
     var createNewVessel = function(vessel){
         var deferred = $q.defer();
         vesselRestFactory.vessel().save(vessel.DTO(), function(response) {
-            if(response.code !== "200"){
+            if(response.code !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
@@ -145,7 +145,7 @@ angular.module('unionvmsWeb')
         console.log(vessel);
         var deferred = $q.defer();
         vesselRestFactory.vessel().update(vessel.DTO(), function(response) {
-            if(response.code !== "200"){
+            if(response.code !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
@@ -162,7 +162,7 @@ angular.module('unionvmsWeb')
         var deferred = $q.defer();
         vesselRestFactory.getSearchableFields().get({
         }, function(response) {
-            if(response.code !== "200"){
+            if(response.code !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
@@ -204,7 +204,7 @@ angular.module('unionvmsWeb')
         vesselRestFactory.vesselHistory().get(queryObject,
             function(response) {
 
-                if(response.code !== "200"){
+                if(response.code !== 200){
                     deferred.reject("Invalid response status");
                     return;
                 }
@@ -252,7 +252,7 @@ angular.module('unionvmsWeb')
     var createNewVesselGroup = function(savedSearchGroup){
         var deferred = $q.defer();
         vesselRestFactory.vesselGroup().save(savedSearchGroup.toJson(), function(response) {
-            if(response.code !== "200"){
+            if(response.code !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
@@ -268,7 +268,7 @@ angular.module('unionvmsWeb')
     var updateVesselGroup = function(savedSearchGroup){
         var deferred = $q.defer();
         vesselRestFactory.vesselGroup().update(savedSearchGroup.toJson(), function(response) {
-            if(response.code !== "200"){
+            if(response.code !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
@@ -284,7 +284,7 @@ angular.module('unionvmsWeb')
     var deleteVesselGroup = function(savedSearchGroup) {
         var deferred = $q.defer();
         vesselRestFactory.vesselGroup().delete({id: savedSearchGroup.id}, function(response) {
-            if (response.code !== "200") {
+            if (response.code !== 200) {
                 deferred.reject("Invalid response status");
                 return;
             }
