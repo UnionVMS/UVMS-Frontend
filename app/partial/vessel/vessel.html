@@ -15,9 +15,12 @@
                 <div class="col-md-2">
                     <dropdown class="" ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
                 </div>
-                <!-- add new button -->
-                <button class="btn btn-sm pull-right addvesselbtn uvmsbtn" ng-click="toggleCreateNewVessel()" type="button">
-                    {{'vessel.add_new' | i18n}} &nbsp;&nbsp;&nbsp;&nbsp;<span>+</span></button>
+                <div class="col-md-2">
+                    <button class="btn btn-sm addvesselbtn uvmsbtn" ng-click="toggleCreateNewVessel()" type="button">
+                        {{'vessel.add_new' | i18n}} &nbsp;&nbsp;&nbsp;&nbsp;<span>+</span>
+                    </button>
+                </div>
+
                 <input type="text" class="filtertext pull-right" placeholder="Filter" ng-model="currentSearchResults.filter">
             </div>
             <div ng-include="'partial/vessel/vesselList/vesselList.html'"></div>

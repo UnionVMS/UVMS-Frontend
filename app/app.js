@@ -37,6 +37,11 @@ angular.module('unionvmsWeb').config(function($stateProvider, tmhDynamicLocalePr
             views: { module: { templateUrl: 'partial/movement/movement.html' } },
             resolve: generalRouteResolves
         })
+        .state('movement-manual', {
+            url: '/movement/manual',
+            views: { module: { templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html' } },
+            resolve: generalRouteResolves
+        })
         .state('movement-id', {
             url: '/movement/:id',
             views: { module: { templateUrl: 'partial/movement/movement.html' } },
@@ -78,7 +83,7 @@ angular.module('unionvmsWeb').config(function($stateProvider, tmhDynamicLocalePr
             resolve: generalRouteResolves
         })
         .state('auditLog', {
-            url: '/admin/auditLog',
+            url: '/admin/auditlog',
             views: { module: { templateUrl: 'partial/admin/adminLog/adminLog.html' } },
             resolve: generalRouteResolves
         })
@@ -89,7 +94,8 @@ angular.module('unionvmsWeb').config(function($stateProvider, tmhDynamicLocalePr
         })
         .state('admin', {
             url: '/admin',
-            redirectTo: 'auditLog'
+            views: { module: { templateUrl: 'partial/admin/adminLog/adminLog.html' } },
+            resolve: generalRouteResolves
         })
         .state('reporting', {
             url: '/reporting',
