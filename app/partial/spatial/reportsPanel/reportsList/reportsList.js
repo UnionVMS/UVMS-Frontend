@@ -27,15 +27,23 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, loca
         DTColumnDefBuilder.newColumnDef(0),
         DTColumnDefBuilder.newColumnDef(1),
         DTColumnDefBuilder.newColumnDef(2).withOption('type', 'report-date').renderWith(function(data, type, full){
-            var displayDate = full[2];
-            if (moment(displayDate, $scope.config.src_format, true).isValid() === true){
-                displayDate = moment(displayDate, $scope.config.src_format, true).format($scope.config.target_format);
-            }
-            return displayDate;
+            return $scope.renderDate(full[2]);
         }),
-        DTColumnDefBuilder.newColumnDef(3).notSortable(),
-        DTColumnDefBuilder.newColumnDef(4).notSortable()
+        DTColumnDefBuilder.newColumnDef(3),
+        DTColumnDefBuilder.newColumnDef(4).withOption('type', 'report-date').renderWith(function(data, type, full){
+            return $scope.renderDate(full[4]);
+        }),
+        DTColumnDefBuilder.newColumnDef(5).withOption('type', 'visibility'),
+        DTColumnDefBuilder.newColumnDef(6).notSortable()
     ];
+    
+    //Return dates formated according to user definition
+    $scope.renderDate = function(displayDate){
+        if (moment(displayDate, $scope.config.src_format, true).isValid() === true){
+            displayDate = moment(displayDate, $scope.config.src_format, true).format($scope.config.target_format);
+        }
+        return displayDate;
+    };
     
     //Run the report
     $scope.runReport = function(index){
@@ -99,6 +107,22 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, loca
         },
         "report-date-desc": function (a, b){
             return b - a;
-        }
+        },
+        "visibility-pre": function(vis){
+            var value = vis.substr(vis.indexOf('visprop') + 9, 1);
+            if (value === 'p'){
+                return locale.getString('spatial.reports_table_p_label');
+            } else if (value === 's'){
+                return locale.getString('spatial.reports_table_s_label');
+            } else {
+                return locale.getString('spatial.reports_table_g_label');
+            }
+        },
+//        "visibility-asc": function(a, b){
+//            return a;
+//        },
+//        "visibility-desc": function(a, b){
+//            return b;
+//        }
     });
 });

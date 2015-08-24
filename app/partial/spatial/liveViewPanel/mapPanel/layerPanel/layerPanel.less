@@ -23,3 +23,27 @@
   background-color:#abc;
   cursor: pointer;
 }
+
+.layer-panel-tabs {
+	border: none !important;
+	> a {
+		color: #428bca !important;
+		background-color: #ecf0f1;
+		border-bottom: 1px solid #ddd !important;
+		border-right: 1px solid #ddd !important;
+		font-weight: normal;
+	}
+}
+
+.layer-panel-tabs.active{
+	> a {
+		border: none !important;
+		border-right: 1px solid #ddd !important;
+		border-bottom: none !important;
+		font-weight: bold;
+	}
+}
+
+.layer-panel-tabs>a:hover {
+	background-color: white !important;
+}

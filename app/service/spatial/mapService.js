@@ -230,6 +230,110 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	    return layer;
 	};
 	
+	//Add VMS positions layer
+	ms.addPositions = function(geojson) {
+	    var layer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                features: (new ol.format.GeoJSON()).readFeatures(geojson, {
+                    dataProjection: 'EPSG:4326',
+                    featureProjection: ms.getMapProjectionCode()
+                })
+            }),
+            style: ms.setPosStyle
+        });
+	    
+	    ms.map.addLayer(layer);
+	};
+	
+	//Convert degrees to radians
+	ms.degToRad = function(degrees){
+	    return degrees * Math.PI / 180;
+	};
+	
+	//VMS positions style
+	ms.setPosStyle = function(feature, resolution){
+	    var style = new ol.style.Style({
+            text: new ol.style.Text({
+                text: '\uf124',
+                font: 'normal 22px FontAwesome',
+                textBaseline: 'middle',
+                textAlign: 'center',
+                rotation: -0.78 + ms.degToRad(feature.get('course')),
+                fill: new ol.style.Fill({
+                    color: feature.get('asset').color
+                })
+            })
+        });
+	    
+	    return [style];
+	};
+	
+	//Calculate middle point in a linestring geometry
+	ms.getMiddlePoint = function(geometry){
+	    var p1 = geometry.getFirstCoordinate();
+	    var p2 = geometry.getLastCoordinate();
+	    
+	    var x = (p1[0] + p2[0]) / 2;
+	    var y = (p1[1] + p2[1]) / 2;
+	    
+	    return [x,y];
+	};
+	
+	//Calculate rotation to display arrow on segments according to the geometry direction
+	ms.getRotationForArrow = function(geometry){
+	    var p1 = geometry.getFirstCoordinate();
+        var p2 = geometry.getLastCoordinate();
+        
+        var dx = p2[0] - p1[0];
+        var dy = p2[1] - p1[1];
+        
+        return Math.atan2(dy, dx) * -1;
+	};
+	
+	//VMS segments style
+	ms.setSegStyle = function(feature, resolution){
+	    var geometry = feature.getGeometry();
+	    
+	    var style = [
+	        new ol.style.Style({
+	            stroke: new ol.style.Stroke({
+	                color: '#FF00FF',
+	                width: 2
+	            })
+	        }),
+	        new ol.style.Style({
+	            geometry: new ol.geom.Point(ms.getMiddlePoint(geometry)),
+	            text: new ol.style.Text({
+	                text: '\uf105',
+	                font: 'bold 16px FontAwesome',
+	                textBaseline: 'middle',
+	                textAlign: 'center',
+	                rotation: ms.getRotationForArrow(geometry),
+	                fill: new ol.style.Fill({
+	                    color: "#FF00FF"
+	                })
+	            })
+	        })
+	    ];
+	    
+	    return style;
+	};
+	
+	//Add VMS segments layer
+	ms.addSegments = function(geojson){
+	    var layer = new ol.layer.Vector({
+	        source: new ol.source.Vector({
+	            features: (new ol.format.GeoJSON()).readFeatures(geojson, {
+	                dataProjection: 'EPSG:4326',
+	                featureProjection: ms.getMapProjectionCode()
+	            })
+	        }),
+	        style: ms.setSegStyle
+	    });
+	    
+	    ms.map.addLayer(layer);
+	};
+	
 	//Set map projections
 	ms.setProjection = function(projCode, units, global){
         var projection = new ol.proj.Projection({
@@ -239,6 +343,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         });
         
         return projection;
+	};
+	
+	//Get map projection
+	ms.getMapProjectionCode = function(){
+	    return ms.map.getView().getProjection().getCode();
 	};
 	
 	//Set map controls
@@ -287,8 +396,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	            //Map is in fullscreen
 	            $timeout(function(){
 	                angular.element('#map')[0].style.height = $window.innerHeight + 'px';
+	                angular.element('#map')[0].style.width = $window.innerWidth + 'px';
 	                ms.updateMapSize();
 	            }, 150);
+	        } else {
+	            $timeout(function(){
+                    angular.element('#map')[0].style.width = '';
+                    ms.updateMapSize();
+                }, 150);
 	        }
 	    };
 	    
@@ -356,6 +471,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         return Math.floor(x / 3600) + '\u00b0 ' +
             ((x / 60) % 60).toFixed(2) + '\u2032 ' +
             hemispheres.charAt(normalized < 0 ? 1 : 0);
+	};
+	
+	//Zoom to geometry control
+	ms.zoomTo = function(geom){
+	    ms.map.getView().fit(geom, ms.map.getSize());
+	};
+	
+	//Pan to coordinates control
+	ms.panTo = function(coords){
+	    ms.map.getView().setCenter(coords);
 	};
 	
 	//Recalculate map size

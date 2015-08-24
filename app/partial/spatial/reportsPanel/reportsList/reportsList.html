@@ -5,7 +5,9 @@
 	            <th>{{'spatial.reports_table_header_name' | i18n }}</th>
 	            <th>{{'spatial.reports_table_header_description' | i18n }}</th>
 	            <th>{{'spatial.reports_table_header_created_on' | i18n }}</th>
-	            <th class="dt-center">{{'spatial.reports_table_header_is_shared' | i18n }}</th>
+	            <th>{{'spatial.reports_table_header_owner' | i18n }}</th>
+	            <th>{{'spatial.reports_table_header_last_executed' | i18n }}</th>
+	            <th class="dt-center">{{'spatial.reports_table_header_visibility' | i18n }}</th>
 	            <th></th>
 	        </tr>
 	    </thead>
@@ -14,7 +16,13 @@
 	            <td>{{ report.name }}</td>
 	            <td>{{ report.desc }}</td>
 	            <td>{{ report.created_on }}</td>
-	            <td class="dt-center is-shared-cl"><span class="fa fa-check-square fa-checkbox" ng-show="report.is_shared"></span></td>
+	            <td>{{ report.created_by }}</td>
+	            <td>{{ report.executed_on }}</td>
+	            <td class="dt-center">
+	            	<span class="label label-default label-visibility" ng-if="report.visibility === 'p'" visprop="p">{{'spatial.reports_table_p_label' | i18n }}</span>
+	            	<span class="label label-default label-visibility" ng-if="report.visibility === 's'" visprop="s">{{'spatial.reports_table_s_label' | i18n }}</span>
+	            	<span class="label label-default label-visibility" ng-if="report.visibility === 'g'" visprop="g">{{'spatial.reports_table_g_label' | i18n }}</span>
+	            </td>
 	            <td>
                     <button type="button" class="btn btn-success btn-xs" ng-click="runReport($index)"><span class="run-report">{{'spatial.reports_table_run_label' | i18n }}</span></button>
                     <button type="button" class="btn btn-info btn-xs" title="{{'spatial.reports_table_config_label' | i18n }}" ng-click="showFilters($index)" ng-show="{{ report.editable }}"><span class="fa fa-cog"></span></button>

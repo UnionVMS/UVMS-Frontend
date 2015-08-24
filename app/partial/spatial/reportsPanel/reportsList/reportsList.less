@@ -15,9 +15,18 @@ div.dataTables_length select {
 	margin: 0px 5px;
 }
 
+div.dataTables_filter {
+	padding-bottom: 40px;
+}
+
 table.table thead .sorting_asc:before,
 table.table thead .sorting_desc:before {
-	color: #18a689;
+	color: @primaryColor;
+}
+
+table.table {
+	border: 1px solid #ddd;
+	background-color: white;
 }
 
 .dt-center {
@@ -25,13 +34,9 @@ table.table thead .sorting_desc:before {
 }
 
 //Columns
-.is-shared-cl {
-	width: 80px;
-}
-
-//Icons
-.fa-checkbox {
-	color: #8e8e8e;
+.label-visibility {
+	display: inline-block;
+	width: 60px !important;
 }
 
 //Buttons

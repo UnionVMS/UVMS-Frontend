@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $timeout, $window, locale, mapService){
-    $scope.selectedTab = 'VMS';
+    $scope.selectedTab = 'MAP';
     
     //Define tabs
     var setTabs = function(){
@@ -37,6 +37,10 @@ angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $t
            $timeout(mapService.updateMapSize, 50);
            $timeout($scope.focusMap, 50);
        }
+   });
+   
+   $scope.$on('mapAction', function(){
+       $scope.selectedTab = 'MAP';
    });
    
    locale.ready('spatial').then(function(){

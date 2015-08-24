@@ -1,14 +1,14 @@
-<div ng-controller="LayerpanelCtrl" resize ng-style="doResize(115, 345)"
+<div ng-controller="LayerpanelCtrl" resize ng-style="doResize(115, 340)"
     ng-class="{'layer-panel': true, 'layer-expanded': expanded, 'layer-collapsed': !expanded}">
   <div class="handle" ng-click="toggle()"></div>
   <div class="tabbed-view" ng-show="expanded">
 
     <!-- mock content -->
-    <ul id="tabs" class="nav nav-pills" data-tabs="tabs">
-      <li class="vmssourcetab" ng-class="{'active': tab==='LAYERTREE'}">
+    <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+      <li class="layer-panel-tabs" ng-class="{'active': tab==='LAYERTREE'}">
         <a ng-click="tabClick('LAYERTREE')">Layers</a>
       </li>
-      <li class="vmssourcetab"  ng-class="{'active': tab==='LEGEND'}">
+      <li class="layer-panel-tabs"  ng-class="{'active': tab==='LEGEND'}">
         <a ng-click="tabClick('LEGEND')">Legend</a>
       </li>
     </ul>

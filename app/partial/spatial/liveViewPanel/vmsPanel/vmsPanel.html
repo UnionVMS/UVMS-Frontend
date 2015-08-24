@@ -11,7 +11,7 @@
 			            <th>{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}</th>
 			            <th>{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}</th>
 			            <th>{{'spatial.tab_vms_pos_table_header_name' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_pos_table_header_date' | i18n }}</th>
+			            <th style="width:160px;">{{'spatial.tab_vms_pos_table_header_date' | i18n }}</th>
 			            <th>{{'spatial.tab_vms_pos_table_header_lat' | i18n }}</th>
 			            <th>{{'spatial.tab_vms_pos_table_header_lon' | i18n }}</th>
 			            <th>{{'spatial.tab_vms_pos_table_header_status' | i18n }}</th>
@@ -19,7 +19,7 @@
 			            <th>{{'spatial.tab_vms_pos_table_header_calculated_speed' | i18n }}</th>
 			            <th>{{'spatial.tab_vms_pos_table_header_course' | i18n }}</th>
 			            <th>{{'spatial.tab_vms_pos_table_header_msg_type' | i18n }}</th>
-			            <th></th>
+			            <th style="width:80px;"></th>
 			        </tr>
 			    </thead>
 			    <tfoot class="footerToTop">
@@ -28,6 +28,7 @@
 			            <th></th>
 			            <th></th>
 			            <th></th>
+			            <th style="width:160px;"></th>
 			            <th></th>
 			            <th></th>
 			            <th></th>
@@ -35,17 +36,16 @@
 			            <th></th>
 			            <th></th>
 			            <th></th>
-			            <th></th>
-			            <th></th>
+			            <th style="width:80px;"></th>
 			        </tr>
 		        </tfoot>
 			    <tbody>
-			        <tr ng-repeat="position in positions">
-			        	<td>TODO</td>
+			        <tr ng-repeat="position in executedReport.positions">
+			        	<td>{{ position.properties.asset.countryCode }}</td>
 			            <td>{{ position.properties.asset.ircs }}</td>
 			            <td>{{ position.properties.asset.cfr }}</td>
 			            <td>{{ position.properties.asset.name }}</td>
-			            <td>TODO</td>
+			            <td style="width:160px;">{{ position.properties.positionTime }}</td>
 			            <td>{{ position.geometry.coordinates[1] }}</td>
 			            <td>{{ position.geometry.coordinates[0] }}</td>
 			            <td>{{ position.properties.status }}</td>
@@ -53,19 +53,93 @@
 			            <td>{{ position.properties.calculatedSpeed }}</td>
 			            <td>{{ position.properties.course }}</td>
 			            <td>{{ position.properties.messageType }}</td>
-			            <td>
-			            	<button type="button" class="btn btn-info btn-xs" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index)"><span class="fa fa-search"></span></button>
-			            	<button type="button" class="btn btn-info btn-xs" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index)"><span class="fa fa-hand-paper-o"></span></button>
+			            <td style="width:80px;">
+			            	<button type="button" class="btn btn-info btn-xs" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'POSITION')"><span class="fa fa-search"></span></button>
+			            	<button type="button" class="btn btn-info btn-xs" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'POSITION')"><span class="fa fa-hand-paper-o"></span></button>
 			            </td>
 			        </tr>
 			    </tbody>
 			</table>
 		</div>
 		<div class="vmstab-content" ng-show="isVmsTabSelected('SEGMENTS')">
-			<div>Table with segments</div>
+			<table datatable="ng" dt-options="segTable.dtOptions" dt-column-defs="segTable.dtColumnDefs" class="table table-striped">
+			    <thead>
+			        <tr>
+			            <th>{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_pos_table_header_name' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_seg_table_header_distance' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_seg_table_header_duration' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_seg_table_header_avg_speed' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_seg_table_header_avg_course' | i18n }}</th>
+			            <th></th>
+			        </tr>
+			    </thead>
+			    <tfoot class="footerToTop">
+			    	<tr>
+			    		<th></th>
+			    		<th></th>
+			    		<th></th>
+			    		<th></th>
+			    		<th></th>
+			    		<th></th>
+			    		<th></th>
+			    	</tr>
+			    </tfoot>
+			    <tbody>
+			    	<tr ng-repeat="segment in executedReport.segments">
+			    		<td>{{ segment.properties.countryCode }}</td>
+			    		<td>{{ segment.properties.name }}</td>
+			    		<td>{{ segment.properties.distance }}</td>
+			    		<td>{{ segment.properties.duration }}</td>
+			    		<td>{{ segment.properties.avg_speed }}</td>
+			    		<td>{{ segment.properties.avg_course }}</td>
+			    		<td style="width:80px;">
+			            	<button type="button" class="btn btn-info btn-xs" title="{{'spatial.tab_vms_seg_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'SEGMENT')"><span class="fa fa-search"></span></button>
+			            	<button type="button" class="btn btn-info btn-xs" title="{{'spatial.tab_vms_seg_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'SEGMENT')"><span class="fa fa-hand-paper-o"></span></button>
+			            </td>
+			    	</tr>
+			    </tbody>
+			</table>
 		</div>
 		<div class="vmstab-content" ng-show="isVmsTabSelected('TRACKS')">
-			<div>Table with tracks</div>
+			<table datatable="ng" dt-options="tracksTable.dtOptions" dt-column-defs="tracksTable.dtColumnDefs" class="table table-striped">
+			    <thead>
+			        <tr>
+			            <th>{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_pos_table_header_name' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_seg_table_header_distance' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_seg_table_header_duration' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_tracks_table_header_dur_low' | i18n }}</th>
+			            <th>{{'spatial.tab_vms_tracks_table_header_dur_high' | i18n }}</th>
+			            <th></th>
+			        </tr>
+			    </thead>
+			    <tfoot class="footerToTop">
+			    	<tr>
+			    		<th></th>
+			    		<th></th>
+			    		<th></th>
+			    		<th></th>
+			    		<th></th>
+			    		<th></th>
+			    		<th></th>
+			    	</tr>
+			    </tfoot>
+			    <tbody>
+			    	<tr ng-repeat="track in executedReport.tracks">
+			    		<td>{{ track.properties.countryCode }}</td>
+			    		<td>{{ track.properties.name }}</td>
+			    		<td>{{ track.properties.distance }}</td>
+			    		<td>{{ track.properties.duration }}</td>
+			    		<td>{{ track.properties.dur_low }}</td>
+			    		<td>{{ track.properties.dur_high }}</td>
+			    		<td style="width:80px;">
+			            	<button type="button" class="btn btn-info btn-xs" title="{{'spatial.tab_vms_tracks_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'TRACK')"><span class="fa fa-search"></span></button>
+			            	<button type="button" class="btn btn-info btn-xs" title="{{'spatial.tab_vms_tracks_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'TRACK')"><span class="fa fa-hand-paper-o"></span></button>
+			            </td>
+			    	</tr>
+			    </tbody>
+			</table>
 		</div>
 	</div>
 </div>

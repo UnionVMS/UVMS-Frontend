@@ -10,27 +10,26 @@
 			</div>
 		</div>
 		<div class="row fieldesetGroupMargin" ng-show="isVesselMenuVisible('SELECTION')">
-			<div class="col-md-12 deleteSelection" ng-show="vesselsSelection.length > 0">
-				<button type="button" class="btn btn-danger btn-sm pull-right" ng-click="deleteSelectionAll()">
-					<span class="fa fa-minus-square" aria-hidden="true"></span> &nbsp;
-					<span>{{'spatial.reports_form_vessel_selection_table_delete_all_btn' | i18n }}</span>
-				</button>
-			</div>
 			<div class="form-group col-md-12">
-				<table datatable="ng" dt-options="vesselsSelectionTable.dtOptions" dt-column-defs="vesselsSelectionTable.dtColumnDefs" class="table table-strped">
+				<table datatable="ng" dt-options="vesselsSelectionTable.dtOptions" dt-column-defs="vesselsSelectionTable.dtColumnDefs" class="table table-striped">
 					<thead>
 						<tr>
 							<th>{{'spatial.reports_form_vessel_selection_table_header_name' | i18n }}</th>
 							<th>{{'spatial.reports_form_vessel_selection_table_header_type' | i18n }}</th>
-							<th></th>
+							<th>
+								<button type="button" class="btn btn-danger btn-xs pull-right" ng-click="deleteSelectionAll()" ng-show="vesselsSelection.length > 0">
+									<span class="fa fa-minus-square" aria-hidden="true"></span> &nbsp;
+									<span>{{'spatial.reports_form_vessel_selection_table_delete_all_btn' | i18n }}</span>
+								</button>
+							</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr ng-repeat="selection in vesselsSelection">
 							<td>{{ selection.name }}</td>
 							<td>{{ selection.type }}</td>
-							<td class="pull-right">
-								<button type="button" class="btn btn-danger btn-xs" title="{{'spatial.reports_form_vessel_selection_table_delete_btn_title' | i18n }}" ng-click="deleteSelection($index)"> <span class="fa fa-trash-o"></span></button>
+							<td>
+								<button type="button" class="btn btn-danger btn-xs pull-right" title="{{'spatial.reports_form_vessel_selection_table_delete_btn_title' | i18n }}" ng-click="deleteSelection($index)"> <span class="fa fa-trash-o"></span></button>
 							</td>
 						</tr>
 					</tbody>

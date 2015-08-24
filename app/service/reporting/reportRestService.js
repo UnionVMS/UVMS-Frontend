@@ -26,7 +26,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource, $
             });
 	    },
 	    getVmsData: function(){
-	        //return $resource(baseUrl +'/reporting/rest/report/list');
+	        //return $resource('http://localhost:8080/reporting/rest/monitoring/movement/mockdata');
 	        return $resource(baseUrl + '/app/test_data/movements.json');
 	    }
 	};
