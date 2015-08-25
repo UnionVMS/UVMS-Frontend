@@ -110,7 +110,7 @@
     "vessel_details_license_type": "License type",
     "vessel_details_MMSI_no": "MMSI NO.",
     "vessel_details_name": "Name",
-    "vessel_details_power": "Power",
+    "vessel_details_main_power": "Main power",
     "vessel_details_producer": "Producer code - name",
     "vessel_details_tonnage": "G.tonnage",
     "vessel_details_type": "Carrier type",
