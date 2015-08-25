@@ -1,27 +1,25 @@
 <div ng-controller="MovementlistCtrl">
     <div class="movementtablecontainer">
-        <table class="searchResults table colorOdd movementtable">
+        <table class="searchResults colorOdd movementtable">
             <thead>
                 <tr>
                     <th><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
 
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.state'">{{'movement.table_header_flag_state' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.externalMarking'">{{'movement.table_header_external_marking' | i18n}}</th>                    
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.externalMarking'">{{'movement.table_header_external_marking' | i18n}}</th>
 
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.ircs'">{{'movement.table_header_ircs' | i18n}}</th>
 
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.name'">{{'movement.table_header_name' | i18n}}</th>
-                    <!--    
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'type'">{{'movement.table_header_type' | i18n}}</th>
-                    -->
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.movement.time'">{{'movement.table_header_time' | i18n}}</th>    
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.movement.latitude'">{{'movement.table_header_latitude' | i18n}}</th> 
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.movement.time'">{{'movement.table_header_time' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.longitude'">{{'movement.table_header_longitude' | i18n}}</th> 
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.movement.latitude'">{{'movement.table_header_latitude' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.status'">{{'movement.table_header_status' | i18n}}</th>  
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.longitude'">{{'movement.table_header_longitude' | i18n}}</th>
+
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.status'">{{'movement.table_header_status' | i18n}}</th>
 
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.ms'">{{'movement.table_header_ms' | i18n}}</th>
 
@@ -31,7 +29,7 @@
 
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.messagetype'">{{'movement.table_header_message_type' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.source'">{{'movement.table_header_source' | i18n}}</th>  
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.source'">{{'movement.table_header_source' | i18n}}</th>
 
                 </tr>
             </thead>
@@ -58,7 +56,7 @@
         <search-result-error-alert ng-show="currentSearchResults.errorMessage">{{currentSearchResults.errorMessage}}</search-result-error-alert>
     </div>
     <div class="col-md-12 searchResultsLoading" ng-show="currentSearchResults.loading">
-        <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>        
+        <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>
     </div>
     <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0">
         <div class="col-md-12">{{'common.search_results_current_page' | i18n:[currentSearchResults.page, currentSearchResults.totalNumberOfPages]}}</div>

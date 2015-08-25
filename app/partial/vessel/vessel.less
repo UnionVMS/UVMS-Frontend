@@ -5,11 +5,6 @@
     background-color: white;
 }
 
-.filtertext{
-    margin-right: 30px;
-    background-color: #ffffff;
-    border:1px solid @buttoncolor !important;
-}
 .searchtext{
     height: 47px !important;
 }
@@ -46,6 +41,15 @@
     border-radius: 4px 4px 4px 4px;
 }
 
+.vesselbtn{
+    background-color:@buttoncolor;
+    color: #ffffff;
+}
+
+.vesselbtn:hover{
+    background-color: @btnPrimaryHoverColor;
+    color: #ffffff;
+}
 
 .addvesselbtn{
 
@@ -62,7 +66,7 @@
         width: 120px;
 }
 .createnewvesselbutton:hover{
-    background-color:#007D52;
+    background-color: @btnPrimaryHoverColor;
     color: #ffffff;
     width: 120px;
 }
@@ -73,7 +77,7 @@
     width: 120px;
 }
 .updatevesselbutton:hover{
-    background-color:#007D52;
+    background-color: @btnPrimaryHoverColor;
     color: #ffffff;
     width: 120px;
 }

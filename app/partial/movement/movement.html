@@ -1,26 +1,18 @@
 <div ng-controller="MovementCtrl">
     <div static-include="partial/movement/movementPageHeader/movementPageHeader.html"></div>
-	<div class="autoMovement">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-    		      <advanced-search searchfunc="searchMovements" vesselGroupCallback="selectGroupCallback()" modeltype="'MOVEMENT'" advancedsearchvisible="true"></advanced-search>
+    <div class="container containerWithTopBottomPadding">
+        <div class="card">
+            <advanced-search searchfunc="searchMovements" vesselGroupCallback="selectGroupCallback()" modeltype="'MOVEMENT'" advancedsearchvisible="true"></advanced-search>
+      		<div class="row editSelectionsContainer">
+                <div class="col-md-2">
+                    <dropdown ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+                </div>
+                <div class="col-md-6 col-md-offset-4 pull-right textAlignRight printAndExport">
+                    <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportAsCSVFile()"></i>
+                    <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>
                 </div>
             </div>
-    	</div>
-        <div class="containerWrapper grayContainer">		
-        	<div class="container containerWithTopBottomPadding">
-        		<div class="row editSelectionsContainer">
-                    <div class="col-md-2">
-                        <dropdown ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
-                    </div>
-                    <div class="col-md-6 col-md-offset-4 pull-right textAlignRight printAndExport">
-                        <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportAsCSVFile()"></i>
-                        <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>              
-                    </div>
-                </div>
-        		<div ng-include="'partial/movement/movementList/movementList.html'"></div>
-            </div>
+    		<div ng-include="'partial/movement/movementList/movementList.html'"></div>
         </div>
     </div>
 </div>

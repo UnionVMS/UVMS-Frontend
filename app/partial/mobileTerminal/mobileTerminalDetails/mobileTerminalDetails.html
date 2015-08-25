@@ -4,12 +4,12 @@
             <div class="col-md-12">
                 <div class="transponderSystemSelect form-group">
                     <label>{{'mobileTerminal.add_new_form_transponder_system_label' | i18n}}</label>
-                    <dropdown ng-model="typeAndLES" initialtext="{{ 'common.choose' | i18n }}" items="transponderSystems" callback="onTerminalSystemSelect" ng-disabled="!isCreateNewMode()" data="typeAndLes"></dropdown>                    
+                    <dropdown ng-model="typeAndLES" initialtext="{{ 'common.choose' | i18n }}" items="transponderSystems" callback="onTerminalSystemSelect" ng-disabled="!isCreateNewMode()" data="typeAndLes"></dropdown>
                 </div>
                 <div class="transponderSystemSelect form-group" ng-show="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN || getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
                     <label>{{'mobileTerminal.add_new_form_ocean_region_label' | i18n}}</label>
                     <div ng-if="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN">
-                        <dropdown ng-model="currentMobileTerminal.attributes.SINGLE_OCEAN" initialtext="{{ 'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN"></dropdown>         
+                        <dropdown ng-model="currentMobileTerminal.attributes.SINGLE_OCEAN" initialtext="{{ 'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN"></dropdown>
                     </div>
                     <div ng-if="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
                         <tag-select-input ng-model="currentMobileTerminal.attributes.MULTIPLE_OCEAN" ng-placeholder="{{'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN"></tag-select-input>
@@ -28,7 +28,7 @@
                     <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.TRANSCEIVER_TYPE">
                         <label>{{'mobileTerminal.form_inmarsatc_transceiver_type_label' | i18n}}</label>
                         <input type="text" class="form-control" ng-model="currentMobileTerminal.attributes.TRANSCEIVER_TYPE">
-                    </div>           
+                    </div>
                     <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.SOFTWARE_VERSION">
                         <label>{{'mobileTerminal.form_inmarsatc_software_version_label' | i18n}}</label>
                         <input type="text" class="form-control" ng-model="currentMobileTerminal.attributes.SOFTWARE_VERSION">
@@ -93,7 +93,7 @@
                     <div ng-form="channelForm" ng-class="{comchannelrow: $index== 0}">
                         <div class="col-md-2 form-group">
                         <!-- Channel-->
-                             <dropdown ng-model="communicationChannel.name" initialtext="" items="channelNames"></dropdown> 
+                             <dropdown ng-model="communicationChannel.name" initialtext="" items="channelNames"></dropdown>
                         </div>
                         <div class="col-md-2 smallerpadding">
                             <div class="col-md-4 smallerpadding" ng-show="getTerminalConfig().capabilities.IS_POLLABLE">
@@ -133,13 +133,13 @@
                             <!-- Stopped -->
                                 <datepicker-input name="stopped" model="communicationChannel.ids.END_DATE"></datepicker-input>
                             </div>
-                        
+
                         <div class="col-md-1 remove" ng-show="$index > 0">
                                 <i class="fa fa-lg fa-times" title="{{'common.remove' | i18n}}" ng-click="removeChannel($index)"></i>
                         </div>
                     </div>
                 </div>
-                <div class="row addNewChannelWrapper">  
+                <div class="row addNewChannelWrapper">
                     <div class="col-md-12">
                         <span class="link underline" ng-click="addNewChannel()">{{'mobileTerminal.form_inmarsatc_communication_channels_add_new_button' | i18n}}</span>
                     </div>
@@ -165,7 +165,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.FREQUENCY_EXPECTED" ng-class="{'has-error': mobileTerminalForm.frequency_expected.$invalid && (submitAttempted || mobileTerminalForm.frequency_expected.$dirty)}">
-                        <label>{{'mobileTerminal.form_inmarsatc_expected_freq_label' | i18n}}</label>                        
+                        <label>{{'mobileTerminal.form_inmarsatc_expected_freq_label' | i18n}}</label>
                         <period-input name="frequency_expected" model="currentMobileTerminal.attributes.FREQUENCY_EXPECTED"></period-input>
                         <input-validation-message types="number" input="mobileTerminalForm.frequency_expected"></input-validation-message>
                     </div>
@@ -176,7 +176,7 @@
                     </div>
                     <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.FREQUENCY_IN_PORT" ng-class="{'has-error': mobileTerminalForm.frequency_port.$invalid && (submitAttempted || mobileTerminalForm.frequency_port.$dirty)}">
                         <label>{{'mobileTerminal.form_inmarsatc_in_port_grace_period_label' | i18n}}</label>
-                        <period-input name="frequency_port" model="currentMobileTerminal.attributes.FREQUENCY_IN_PORT"></period-input>                        
+                        <period-input name="frequency_port" model="currentMobileTerminal.attributes.FREQUENCY_IN_PORT"></period-input>
                         <input-validation-message types="number" input="mobileTerminalForm.frequency_port"></input-validation-message>
                     </div>
                 </div>

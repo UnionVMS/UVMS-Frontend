@@ -1,12 +1,12 @@
-<div class="vesselForm" ng-controller="VesselFormCtrl">    
+<div class="vesselForm" ng-controller="VesselFormCtrl">
     <form name="vesselForm" method="post" novalidate>
         <div class="row">
-            <div class="col-md-7">
+            <div class="col-md-7 valign">
                 <h3 ng-if="isCreateNewMode()">{{'vessel.create_new_vessel' | i18n}}</h3>
                 <h3 ng-if="!isCreateNewMode() && isVesselNameSet()">{{vesselObj.name}}</h3>
                 <h3 ng-if="!isCreateNewMode() && !isVesselNameSet()">{{'vessel.update_vessel' | i18n}}</h3>
-            </div>
-            <div class="col-md-4 textAlignRight">
+            </div><!-- DO NOT REMOVE this comment!
+         --><div class="col-md-4 textAlignRight valign">
                 <div class="floatRight">
                     <button class="btn btn-primary" type="submit" ng-click="updateVessel()" ng-hide="isCreateNewMode()"> {{'common.update' | i18n}}</button>
                     <button  type="submit" class="btn btn-sm createnewvesselbutton" ng-click="createNewVessel()" ng-show="isCreateNewMode()" ng-disabled="waitingForCreateResponse">{{'vessel.create_new_vessel' | i18n}}</button>
@@ -16,13 +16,13 @@
                         {{'common.archive' | i18n}}
                     </button>
                 </div>         
-            </div>
-            <div class="col-md-1 textAlignRight" ng-click="toggleViewVessel()">
+            </div><!-- DO NOT REMOVE this comment!
+         --><div class="col-md-1 textAlignRight valign" ng-click="toggleViewVessel()">
                 <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
             </div>
         </div>
 
-        <div class="borderSection">
+        <div class="card">
             <div class="row">
                 <div class="col-md-12 basicInformation">
                     <div class="floatLeft">

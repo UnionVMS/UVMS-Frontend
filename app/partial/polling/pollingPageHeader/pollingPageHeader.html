@@ -1,15 +1,6 @@
-<div>
-    <!-- Nav tabs -->
-    <div class="containerWrapper pollingTabs">
-        <div class="container">
-          <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" ng-class="{'active': activeTab === 'POLLING_LOGS'}">
-                <a href="#/polling/logs" role="tab">{{'polling.tabs_logs' | i18n}}</a>
-            </li>
-            <li role="presentation" ng-class="{'active': activeTab === 'POLLING'}">
-                <a href="#/polling" role="tab" >{{'polling.tabs_new_poll' | i18n}}</a>
-            </li>
-          </ul>
-        </div>
-    </div>
+<div class="container containerWithTopBottomPadding nopaddingbottom pageMenu">
+    <ul class="horizontal pipeSeparator">
+        <li ng-class="{active: activeTab === 'POLLING_LOGS'}"><a href="#/polling/logs">{{'polling.tabs_logs' | i18n }}</a></li>
+        <li ng-class="{active: activeTab === 'POLLING'}"><a href="#/polling">{{'polling.tabs_new_poll' | i18n }}</a></li>
+    </ul>
 </div>

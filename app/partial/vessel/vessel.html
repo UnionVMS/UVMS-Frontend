@@ -1,29 +1,26 @@
 <div ng-controller="VesselCtrl">
-    <div class="container">
+    <div class="container containerWithTopBottomPadding">
         <div class="getvessel" ng-show="isVisible.vesselForm">
             <div ng-include="'partial/vessel/vesselForm/vesselForm.html'"></div>
         </div>
-    </div>
 
-    <div class="container">
-        <advanced-search searchfunc="searchVessels" modeltype="'VESSEL'" ng-show="isVisible.search"></advanced-search>
-    </div>
+        <div class="card" ng-show="isVisible.search">
+            <advanced-search searchfunc="searchVessels" modeltype="'VESSEL'"></advanced-search>
+            <div class="vesselcontainerwrapper">
+                <div class="vesselsearchboxfooter row">
+                    <div class="col-md-2">
+                        <dropdown class="" ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-sm addvesselbtn uvmsbtn" ng-click="toggleCreateNewVessel()" type="button">
+                            <span class="fa fa-plus"></span> {{'vessel.add_new' | i18n}}
+                        </button>
+                    </div>
 
-    <div class="containerWrapper grayContainer">
-        <div class="vesselcontainerwrapper container containerWithTopBottomPadding " ng-show="isVisible.search">
-            <div class="vesselsearchboxfooter row">
-                <div class="col-md-2">
-                    <dropdown class="" ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+                    <input type="text" class="pull-right" placeholder="Filter" ng-model="currentSearchResults.filter">
                 </div>
-                <div class="col-md-2">
-                    <button class="btn btn-sm addvesselbtn uvmsbtn" ng-click="toggleCreateNewVessel()" type="button">
-                        {{'vessel.add_new' | i18n}} &nbsp;&nbsp;&nbsp;&nbsp;<span>+</span>
-                    </button>
-                </div>
-
-                <input type="text" class="filtertext pull-right" placeholder="Filter" ng-model="currentSearchResults.filter">
+                <div ng-include="'partial/vessel/vesselList/vesselList.html'"></div>
             </div>
-            <div ng-include="'partial/vessel/vesselList/vesselList.html'"></div>
         </div>
     </div>
 </div>

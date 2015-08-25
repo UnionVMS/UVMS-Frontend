@@ -1,9 +1,9 @@
 <div ng-controller="mobileTerminalFormCtrl">   
     <div class="row" ng-hide="isCreateNewMode()">
-        <div class="col-md-7">
+        <div class="col-md-7 valign">
             <h3>{{'mobileTerminal.view_header' | i18n}}</h3>
-        </div>
-        <div class="col-md-4 textAlignRight">
+        </div><!-- DO NOT REMOVE this comment!
+         --><div class="col-md-4 textAlignRight valign">
             <div class="floatRight">
                 <button  type="submit" ng-disabled="!currentMobileTerminal.type || !isDirty()" class="btn btn-primary" ng-click="updateMobileTerminal()" ng-hide="transponderSystems.length == 0">{{'common.update' | i18n}}</button>
             </div>
@@ -11,13 +11,13 @@
                 <button type="button" class="btn btn-default" ng-show="currentMobileTerminal.active" ng-click="setStatusToInactive()">
                     {{'mobileTerminal.inactivate_link' | i18n}}
                 </button>
-               <button type="button" class="btn btn-default" ng-hide="currentMobileTerminal.active" ng-click="setStatusToActive()">
+                <button type="button" class="btn btn-default" ng-hide="currentMobileTerminal.active" ng-click="setStatusToActive()">
                     {{'mobileTerminal.activate_link' | i18n}}
                 </button>
-            </div>         
-        </div>
-        <div class="col-md-1 textAlignRight" ng-click="toggleMobileTerminalDetails()">
-            <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
+            </div>
+        </div><!-- DO NOT REMOVE this comment!
+         --><div class="col-md-1 textAlignRight valign">
+            <i class="fa fa-sign-out signouticon" ng-click="toggleMobileTerminalDetails()" style="bottom: 0; left: 0;" title="{{'common.close' | i18n}}"></i>
         </div>
     </div>
     <div class="row" ng-show="isCreateNewMode()">
@@ -25,15 +25,15 @@
         <div class="col-md-2 textAlignRight">
             <button  type="submit" ng-disabled="!currentMobileTerminal.type" class="btn btn-primary" ng-click="createNewMobileTerminal()" ng-hide="transponderSystems.length == 0" ng-disabled="waitingForCreateResponse">{{'common.save' | i18n}}</button>
         </div>
-        <div class="col-md-1 textAlignRight" ng-click="toggleAddNewMobileTerminal()"> 
-            <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
+        <div class="col-md-1 textAlignRight"> 
+            <i class="fa fa-sign-out signouticon" ng-click="toggleAddNewMobileTerminal()" title="{{'common.close' | i18n}}"></i>
         </div>
     </div>    
 
 
     <div class="mobileTerminalFormContainer">
 
-        <div class="borderSection" ng-show="currentMobileTerminal.connectId && !isVisible.assignVessel">        
+        <div class="borderSection card" ng-show="currentMobileTerminal.connectId && !isVisible.assignVessel">        
             <div class="row assignedVesselHeader">
                 <div class="col-md-6">
                     <label class="section">{{'mobileTerminal.assigned_vessel' | i18n | uppercase}}</label>
@@ -48,7 +48,7 @@
         </div>
 
 
-        <div class="borderSection" ng-show="isVisible.assignVessel">
+        <div class="borderSection card" ng-show="isVisible.assignVessel">
             <div class="row" >
                 <div class="col-md-6">
                     <label class="section">{{'mobileTerminal.assign_vessel' | i18n | uppercase}}</label>
@@ -66,7 +66,7 @@
             </div>    
         </div>
 
-        <div class="borderSection mobileInformationContainer" loading-indicator="waitingForCreateResponse">
+        <div class="borderSection card mobileInformationContainer" loading-indicator="waitingForCreateResponse">
             <div class="row">
                 <div class="col-md-12 basicInformation">
                     <div class="floatLeft">
@@ -88,7 +88,7 @@
     </div>
 
 
-    <div class="row" style="margin-top:100px" ng-show="isCreateNewMode()">
+    <div class="row" ng-show="isCreateNewMode()">
         <div class="col-md-12">
             <a ng-click="clearForm()" class="pointer">{{'common.clear_form' | i18n}}</a>
         </div>

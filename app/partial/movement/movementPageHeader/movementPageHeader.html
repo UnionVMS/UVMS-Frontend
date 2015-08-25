@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container containerWithTopBottomPadding nopaddingbottom">
     <div class="row">
         <div class="col-md-8 pageMenu">
             <ul class="horizontal pipeSeparator">
@@ -9,7 +9,7 @@
         <div class="col-md-4 pull-right textAlignRight" ng-hide="isManualMovement">
             <a class="refreshbutton" href="" ng-click="refreshMovements()">
                 <i class="fa fa-refresh"></i>
-                {{'movement.refresh'| i18n}}                     
+                {{'movement.refresh'| i18n}}
             </a>
             <br>
             <span ng-show="autoRefresh">{{'movement.refresh_automatic_countdown' | i18n:autoRefreshTimer}}</span>
