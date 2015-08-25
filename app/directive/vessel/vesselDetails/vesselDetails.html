@@ -93,7 +93,7 @@
             </div>
         </div>
 
-        <div class="col-md-2 form-group" ng-class="{'has-error': (submitAttempted || vesselForm.power.$dirty) && vesselForm.power.$invalid}">
+        <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.power.$dirty) && vesselForm.power.$invalid}">
             <label>{{ 'vessel.vessel_details_power' | i18n }}</label>
             <div class="unit-input">
                 <input type="number" name="power" class="form-control" ng-model="vessel.powerMain" ng-maxlength="8" ng-disabled="disableForm">
@@ -104,11 +104,11 @@
 
         <div class="col-md-4">
             <div class="row">
-                <label class="col-md-6">
+                <label class="col-md-6 smallerpadding">
                     {{ 'vessel.po_name' | i18n }}
                     <input type="text" name="producername" class="form-control " ng-model="vessel.producerName" ng-disabled="disableForm || true">
                 </label>
-                <label  class="col-md-6">
+                <label  class="col-md-6 smallerpadding">
                     {{ 'vessel.po_code' | i18n }}
                     <input type="text" name="producercode" class="form-control" ng-model="vessel.producerCode" ng-disabled="disableForm || true">
                 </label>

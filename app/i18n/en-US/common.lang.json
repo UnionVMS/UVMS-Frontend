@@ -49,7 +49,7 @@
     "time_hour_short" : "h",
     "time_minute_short" : "min",
     "time_second_short" : "s",
-    "tons" : "tons",
+    "tons" : "EUtons",
     "update" : "Update",
     "validation_digits_only" : "Only digits",
     "validation_invalid_numeric" : "Must be numeric",
