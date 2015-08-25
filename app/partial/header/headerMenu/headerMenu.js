@@ -34,10 +34,10 @@
                 'title':locale.getString('header.menu_alarmconditions'),
                 'url':'/alarmconditions'
             },
-            {
+          /*  {
                 'title':locale.getString('header.menu_user'),
                 'url':'/user'
-            },
+            },*/
             {
                 'title':locale.getString('header.menu_admin'),
                 'url':'/admin'
