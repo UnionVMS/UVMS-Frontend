@@ -157,38 +157,40 @@
     				</label>
     			</div>
     		</div>
-     
+        
     		<div class="row">
     			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.latitude.$dirty) && manualPositionReportForm.latitude.$invalid}" class="col-md-3">
     				<label>
     					{{'movement.manual_position_field_label_latitude' | i18n}}
     					<input class="form-control" ng-model="$parent.latitude" name="latitude" required latitude ng-disabled="confirmSend || readOnly"/>
-    					<input-validation-message types="latitude, latitude-format" input="manualPositionReportForm.latitude"></input-validation-message>
+    					<input-validation-message types="latitude, format" input="manualPositionReportForm.latitude"></input-validation-message>
     				</label>
     			</div>
     			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.longitude.$dirty) && manualPositionReportForm.longitude.$invalid}" class="col-md-3" ng-disabled="confirmSend">
     				<label>
     					{{'movement.manual_position_field_label_longitude' | i18n}}
     					<input class="form-control" ng-model="$parent.longitude" name="longitude" required longitude ng-disabled="confirmSend || readOnly"/>
-    					<input-validation-message types="longitude, longitude-format" input="manualPositionReportForm.longitude"></input-validation-message>
+    					<input-validation-message types="longitude, format" input="manualPositionReportForm.longitude"></input-validation-message>
     				</label>
     			</div>
-    			<div class="col-md-3">
+    			<div class="col-md-3" ng-class="{'has-error': (submitAttempted || manualPositionReportForm.measuredSpeed.$dirty) &&  manualPositionReportForm.measuredSpeed.$invalid}">
     				<label>
     					{{'movement.manual_position_field_label_measured_speed' | i18n}}
-    					<div class="unit-input" ng-class="{'has-error': (submitAttempted || manualPositionReportForm.measuredSpeed.$dirty) &&  manualPositionReportForm.measuredSpeed.$invalid}">
-    						<input class="form-control" ng-model="$parent.measuredSpeed" name="measuredSpeed" min="0" type="number" ng-disabled="confirmSend || readOnly"/>
+    					<div class="unit-input">
+    						<input class="form-control" ng-model="$parent.measuredSpeed" name="measuredSpeed" min="0" numeric ng-disabled="confirmSend || readOnly"/>
     						<div class="unit-box">{{"movement.manual_position_field_unit_knots" | i18n}}</div>
     					</div>
+                        <input-validation-message types="numeric" input="manualPositionReportForm.measuredSpeed"></input-validation-message>
     				</label>
     			</div>
-    			<div class="col-md-3">
+    			<div class="col-md-3" ng-class="{'has-error': (submitAttempted || manualPositionReportForm.course.$dirty) &&  manualPositionReportForm.course.$invalid}">
     				<label style="width:100%;">
     					{{'movement.manual_position_field_label_course' | i18n}}
-    					<div class="unit-input" ng-class="{'has-error': (submitAttempted || manualPositionReportForm.course.$dirty) &&  manualPositionReportForm.course.$invalid}">
-    						<input class="form-control" ng-model="$parent.course" name="course" min="0" max="360" type="number" required ng-disabled="confirmSend || readOnly"/>
+    					<div class="unit-input">
+    						<input class="form-control" ng-model="$parent.course" name="course" min="0" max="360" numeric required ng-disabled="confirmSend || readOnly"/>
     						<div class="unit-box">{{"movement.manual_position_field_unit_degrees" | i18n}}</div>
     					</div>
+                        <input-validation-message types="numeric" input="manualPositionReportForm.course"></input-validation-message>
     				</label>
     			</div>
     		</div>
