@@ -98,7 +98,7 @@ angular.module('unionvmsWeb').directive('numeric', [function() {
     return {
         restrict: 'A',
         require: 'ngModel',
-        link: function(_, _, _, model) {
+        link: function(s, e, a, model) {
             model.$parsers.push(getCheckNumeric(model));
             model.$parsers.push(toNumberParser);
         }
@@ -196,7 +196,7 @@ angular.module('unionvmsWeb').directive('longitude', function() {
     return {
         restrict: 'A',
         require: 'ngModel',
-        link: function(_, _, _, model) {
+        link: function(s, e, a, model) {
             model.$parsers.push(getCheckFormat(model, formatThreeDecimals)); // a string number with no more than 3 decimal places
             model.$parsers.push(toNumberParser); // make it a number
             model.$parsers.push(getCheckLongitude(model)); // number is within [-180, 180]
@@ -208,7 +208,7 @@ angular.module('unionvmsWeb').directive('latitude', function() {
     return {
         restrict: 'A',
         require: 'ngModel',
-        link: function(_, _, _, model) {
+        link: function(s, e, a, model) {
             model.$parsers.push(getCheckFormat(model, formatThreeDecimals)); // <= 3 decimals
             model.$parsers.push(toNumberParser); // number
             model.$parsers.push(getCheckLatitude(model)); // [-90, 90]
