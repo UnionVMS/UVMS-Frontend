@@ -45,6 +45,9 @@ var SOURCE_LOCAL = "LOCAL";
             value : data.vesselId.value
         };
         vessel.vesselType = data.vesselType;
+        vessel.email = data.email;
+        vessel.contactName = data.contactName;
+        vessel.contactNumber = data.contactNumber;
         return vessel;
     };
 
@@ -74,7 +77,10 @@ var SOURCE_LOCAL = "LOCAL";
             powerMain : this.powerMain,
             safetyGrossTonnage : this.safetyGrossTonnage,
             source : this.source,                
-            vesselType : this.vesselType
+            vesselType : this.vesselType,
+            email : this.email,
+            contactName : this.contactName,
+            contactNumber : this.contactNumber,
         };
 
         if(angular.isDefined(this.vesselId)){

@@ -61,6 +61,7 @@
     "validation_invalid_maxlength" : "Too many characters",
     "validation_invalid_minlength" : "Too few characters",
     "validation_invalid_pattern" : "Invalid pattern",
+    "validation_invalid_email" : "Invalid email address",
     "view_on_map" : "View on map",
     "view_all" : "View all",
     "yes" : "Yes",

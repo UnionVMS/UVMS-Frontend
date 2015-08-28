@@ -115,4 +115,21 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.email.$dirty) && vesselForm.email.$invalid}">
+            <label>{{ 'vessel.vessel_details_email' | i18n }}</label>
+            <input type="email" name="email" class="form-control" ng-model="vessel.email" ng-disabled="disableForm || true"/>
+            <input-validation-message types="email" input="vesselForm.email"></input-validation-message >
+        </div>
+        <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.contactName.$dirty) && vesselForm.contactName.$invalid}">
+            <label>{{ 'vessel.vessel_details_contact_name' | i18n }}</label>
+            <input type="text" name="contactName" class="form-control" ng-model="vessel.contactName" ng-disabled="disableForm || true"/>
+        </div>
+        <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.contactNumber.$dirty) && vesselForm.contactNumber.$invalid}">
+            <label>{{ 'vessel.vessel_details_contact_number' | i18n }}</label>
+            <input type="text" name="contactNumber" class="form-control" ng-model="vessel.contactNumber" ng-disabled="disableForm || true"/>
+        </div>
+    </div>
+
 </div>

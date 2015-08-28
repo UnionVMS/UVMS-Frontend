@@ -115,6 +115,9 @@
     "vessel_details_tonnage": "G.tonnage",
     "vessel_details_type": "Carrier type",
     "vessel_details_cfr_pattern_validation_message": "Must be 3 letters followed by 9 digits.",
+    "vessel_details_email": "Email",
+    "vessel_details_contact_name": "Contact name",
+    "vessel_details_contact_number": "Contact number",
     "warning_multiple_terminals": "There is more than one active terminal of the same type for this vessel.",
     "zero_connected_mobile_terminals" : "The are no mobile terminals connected to this vessel."
 }
