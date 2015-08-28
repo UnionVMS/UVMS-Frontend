@@ -69,6 +69,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
             pollingService.createPolls().then(
                 function() {
                     $scope.loadingResult = false;
+                    pollingService.clearSelection();
                     $scope.nextStep();
                 }, 
                 function(){
