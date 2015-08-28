@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, savedSearchService, Vessel, GetListRequest, searchService, vesselRestService, alertService, $stateParams) {
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, savedSearchService, Vessel, GetListRequest, searchService, vesselRestService, alertService, $stateParams, csvService) {
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -202,13 +202,62 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
 
     //Callback function for the "edit selection" dropdown
     $scope.editSelectionCallback = function(selectedItem){
-        //Poll selected temrinals
         if(selectedItem.code === 'SAVE'){
             savedSearchService.openSaveSearchModal("VESSEL", false, $scope.selectedVessels);            
         }else if(selectedItem.code === 'EXPORT'){
-            alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
-        }
+            $scope.exportTerminalsAsCSVFile(true);
+       }
+       $scope.editSelection = "";
     };
+
+    //Export data as CSV file
+    $scope.exportTerminalsAsCSVFile = function(onlySelectedItems){
+        var filename = 'assets.csv';
+
+        //Set the header columns
+        var header = [
+            locale.getString('vessel.table_header_flag_state'),
+            locale.getString('vessel.table_header_external_marking'),
+            locale.getString('vessel.table_header_name'),
+            locale.getString('vessel.table_header_signal'),
+            locale.getString('vessel.table_header_type'),
+            locale.getString('vessel.table_header_license'),
+            locale.getString('vessel.table_header_last_report'),
+
+        ];
+
+        //Set the data columns
+        var getData = function() {            
+            var exportItems;
+            //Export only selected items
+            if(onlySelectedItems){
+                exportItems = $scope.selectedVessels;
+            }
+            //Export items in the table
+            else{
+                exportItems = $scope.currentSearchResults.vessels;
+            }
+            return exportItems.reduce(
+                function(csvObject, item){ 
+                    var csvRow = [
+                        item.countryCode,
+                        item.externalMarking,
+                        item.name,
+                        item.ircs,
+                        item.vesselType,
+                        item.license,
+                        item.lastReport
+                    ];
+                    csvObject.push(csvRow);
+                    return csvObject;
+                },[]
+            );
+        };
+
+        //Create and download the file
+        csvService.downloadCSVFile(getData(), header, filename);        
+    };
+
 
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
