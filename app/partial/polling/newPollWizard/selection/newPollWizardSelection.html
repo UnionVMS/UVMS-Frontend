@@ -1,32 +1,34 @@
 <div class="newPollWizardSelectionContainer newPollWizardStep card" ng-controller="NewpollwizardselectionCtrl">
-	<p style="margin-bottom: 20px;">
-		<a class="pull-right" ng-click="clear()">{{ 'polling.clear_all' | i18n }}</a>
-		<h5>{{ 'polling.carrier_selection' | i18n }}</h5>
-	</p>
+    <div class="scroller">
+    	<p style="margin-bottom: 20px;">
+    		<a class="pull-right" ng-click="clear()">{{ 'polling.clear_all' | i18n }}</a>
+    		<h5>{{ 'polling.carrier_selection' | i18n }}</h5>
+    	</p>
 
-	<ul class="group-list">
-		<li ng-repeat="group in selection.selectedMobileTerminalGroups">
-		    <div class="pointer pull-right" ng-click="remove(group)">
-		    	<i class="fa fa-times"></i>
-		   	</div>
-			<p>{{ 'polling.group' | i18n }}: {{ group.name }}</p>
-			<ul>
-				<li ng-repeat="mt in group.mobileTerminals">
-				    <div class="pointer pull-right" ng-click="remove(group, mt)">
-				    	<i class="fa fa-times"></i>
-				   	</div>
-					<p>{{ mt.vesselName }}: {{ mt.mobileTerminalType }}</p>
-				</li>
-			</ul>
-		</li>
-	</ul>
+    	<ul class="group-list">
+    		<li ng-repeat="group in selection.selectedMobileTerminalGroups">
+    		    <div class="pointer pull-right" ng-click="remove(group)">
+    		    	<i class="fa fa-times"></i>
+    		   	</div>
+    			<p>{{ 'polling.group' | i18n }}: {{ group.name }}</p>
+    			<ul>
+    				<li ng-repeat="mt in group.mobileTerminals">
+    				    <div class="pointer pull-right" ng-click="remove(group, mt)">
+    				    	<i class="fa fa-times"></i>
+    				   	</div>
+    					<p>{{ mt.vesselName }}: {{ mt.mobileTerminalType }}</p>
+    				</li>
+    			</ul>
+    		</li>
+    	</ul>
 
-	<ul>
-		<li ng-repeat="mt in selection.selectedMobileTerminals">
-		    <div class="pointer pull-right" ng-click="remove(undefined, mt)">
-		    	<i class="fa fa-times"></i>
-		   	</div>
-			<p>{{ mt.vesselName }}: {{ mt.mobileTerminalType }}</p>
-		</li>
-	</ul>
+    	<ul>
+    		<li ng-repeat="mt in selection.selectedMobileTerminals">
+    		    <div class="pointer pull-right" ng-click="remove(undefined, mt)">
+    		    	<i class="fa fa-times"></i>
+    		   	</div>
+    			<p>{{ mt.vesselName }}: {{ mt.mobileTerminalType }}</p>
+    		</li>
+    	</ul>
+    </div>
 </div>
