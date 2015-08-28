@@ -13,7 +13,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         vessels : [],
         errorMessage : "",
         loading : false,
-        sortBy : "state",
+        sortBy : "",
         sortReverse : false,
         filter : ""
     };
