@@ -106,7 +106,22 @@ angular.module('unionvmsWeb').config(function($stateProvider, tmhDynamicLocalePr
             url: '/exchange',
             views: { module: { templateUrl: 'partial/exchange/exchange.html' } },
             resolve: generalRouteResolves
-        });
+        })
+        .state('holdingTable', {
+            url: '/alarms/holdingtable',
+            views: { module: { templateUrl: 'partial/alarms/holdingTable/holdingTable.html' } },
+            resolve: generalRouteResolves
+        })
+        .state('openTickets', {
+            url: '/alarms/opentickets',
+            views: { module: { templateUrl: 'partial/alarms/openTickets/openTickets.html' } },
+            resolve: generalRouteResolves
+        })
+        .state('rules', {
+            url: '/alarms/rules',
+            views: { module: { templateUrl: 'partial/alarms/rules/rules.html' } },
+            resolve: generalRouteResolves
+        });                            
 });
 
 angular.module('unionvmsWeb').run(function($rootScope) {
@@ -159,7 +174,8 @@ angular.module('unionvmsWeb').factory('initService',function(configurationServic
                 'config',
                 'spatial',
                 'datatables',
-                'exchange'
+                'exchange',
+                'alarms'
             ]);
         },
     };

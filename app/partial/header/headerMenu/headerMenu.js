@@ -32,7 +32,7 @@
             },
             {
                 'title':locale.getString('header.menu_alarmconditions'),
-                'url':'/alarmconditions'
+                'url':'/alarms/holdingtable'
             },
           /*  {
                 'title':locale.getString('header.menu_user'),
