@@ -42,7 +42,8 @@
     "ngstorage": "~0.3.0",
     "angular-breadcrumb": "~0.4.0",
     "angular-jwt": "~0.0.9",
-    "angular-locker": "~2.0.1"
+    "angular-locker": "~2.0.1",
+    "angular-google-chart":"latest"
   },
   "resolutions": {
     "angular": "~1.3",

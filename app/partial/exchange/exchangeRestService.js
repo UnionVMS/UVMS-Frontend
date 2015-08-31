@@ -4,13 +4,13 @@ angular.module('unionvmsWeb')
         return {
             getTransmissionStatuses : function(){
                 return $resource(baseUrl +'/exchange/rest/exchange/list/');
-            },            
+            },
             getExchangeMessages : function(){
                 return $resource(baseUrl + '/exchange/rest/exchange/log',{},
                 {
                     list : { method : 'POST'}
                 });
-            },            
+            },
             resendExchangeMessage : function(){
                 return $resource(baseUrl + '/exchange/rest/message/resend',{},
                 {
@@ -93,14 +93,14 @@ angular.module('unionvmsWeb')
                         deferred.reject("Invalid response status");
                         return;
                     }
-                    
+
                     var services = [];
-                    
+
                     if(angular.isArray(response.data.services)){
                         for (var i = 0; i < response.data.services.length; i++){
                             services.push(ExchangeService.fromJson(response.data.services[i]));
                         }
-                    }                    
+                    }
                     deferred.resolve(services);
                 },
                 function(error){
@@ -108,7 +108,7 @@ angular.module('unionvmsWeb')
                     deferred.reject(error);
                 }
             );
-            return deferred.promise;  
+            return deferred.promise;
         };
 
         var getDataFromBackend = function(getListRequest, servicePath){
@@ -123,10 +123,10 @@ angular.module('unionvmsWeb')
                     break;
                 default: service = exchangeRestFactory.getExchangeMessages();
             }
-            
+
 
             service.list(getListRequest.DTOForExchangeMessageList(),
-            
+
             function(response){
 
                 if(response.code !== "200"){
@@ -135,7 +135,7 @@ angular.module('unionvmsWeb')
                 }
 
                 var exchangeMessages = [];
-                
+
                 if(angular.isArray(response.data.exchangeLogs)){
                     for (var i = 0; i < response.data.exchangeLogs.length; i++){
                         exchangeMessages.push(Exchange.fromJson(response.data.exchangeLogs[i]));
@@ -153,16 +153,16 @@ angular.module('unionvmsWeb')
                     deferred.resolve(exchangeListPage);
                 }
             },
-            
+
             function(error){
                 console.log("Error getting exchange messages.", error);
                 //deferred.reject(error);
-                
+
                 //dummydata  until backend delivers data.
-                var exchangeMessages = []; 
+                var exchangeMessages = [];
                  for (var i = 10; i > 0; i--){
                     var ex = new Exchange();
-                    
+
                     ex.dateForward = ex.getFormattedDateForward();
                     ex.dateRecieved = ex.getFormattedDateRecieved();
                     ex.forwardRule = "RR";
@@ -174,8 +174,8 @@ angular.module('unionvmsWeb')
                         pickOne(["bipbap", "zipzap", "mipmap"])
                     ].join("//");
                     ex.outgoing = randomOutgoing();
-                    ex.recipient = "Somebody";
-                    ex.sentBy = "Somebodys mum";
+                    ex.recipient = "Fake state";
+                    ex.sentBy = "Mock";
                     ex.status = randomStatus();
 
                     exchangeMessages.push(ex);
@@ -219,7 +219,7 @@ angular.module('unionvmsWeb')
                     return;
                 }
                 var exchangeMessages = [];
-                
+
                 if(angular.isArray(response.data.exchange)){
                     for (var i = 0; i < response.data.exchange.length; i++){
                         exchangeMessages.push(Exchange.fromJson(response.data.exchange[i]));
