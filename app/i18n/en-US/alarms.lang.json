@@ -1,5 +1,22 @@
 {
     "pagemenu_holding_table" : "Holding table",
     "pagemenu_open_tickets" : "Open tickets",
-    "pagemenu_rules" : "Rules"
+    "pagemenu_rules" : "Rules",
+    "rules_add_new_header" : "Create new rule",
+    "rules_view_header" : "Rule information",
+    "rules_form_name_label" : "Rule name",
+    "rules_form_name_placeholder" : "Type title",
+    "rules_form_type_label" : "Rule type",
+    "rules_form_definition_label" : "Rule definition",
+    "rules_form_definition_if_label" : "IF",
+    "rules_form_definition_then_label" : "THEN",
+    "rules_form_definition_notification_label" : "Notification",
+    "rules_form_definition_assets_label" : "Assets",
+    "rules_form_definition_mobile_terminals_label" : "Mobile terminals",
+    "rules_form_definition_position_reports_label" : "Position reports",
+    "rules_form_definition_asset_type" : "Asset type",
+    "rules_form_add_more" : "Add more",
+    "rules_add_new_alert_message_on_form_validation_error" : "The data in the form is not valid. Please fix the errors and try to save again.",
+    "rules_add_new_alert_message_on_success" : "The rule has been created successfully.",
+    "rules_add_new_alert_message_on_error" : "The rule could not be created."
 }

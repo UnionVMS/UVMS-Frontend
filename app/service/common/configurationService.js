@@ -10,7 +10,7 @@
         var loaded = false;
 
         var CONFIG_MODULES = {
-            "VESSEL" : vesselRestService.getConfig(),
+            //"VESSEL" : vesselRestService.getConfig(),
             "MOVEMENT" : movementRestService.getConfig(),
             "MOBILETERMINAL" : mobileTerminalRestService.getConfig(),
             "MOBILE_TERMINAL_TRANSPONDERS" : mobileTerminalRestService.getTranspondersConfig(),
