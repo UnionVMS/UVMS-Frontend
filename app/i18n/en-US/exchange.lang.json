@@ -46,5 +46,7 @@
 	"title_incoming": "Incoming",
 	"title_outgoing": "Outgoing",
 	"title_forward": "Forward",
-	"title_resend": "Resend"
+	"title_resend": "Resend",
+
+    "message_details_modal_title": "Message details"
 }

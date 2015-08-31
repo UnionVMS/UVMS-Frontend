@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter, locale, searchService, exchangeRestService, ManualPositionReportModal, ManualPosition, alertService, csvService, ExchangeService){
+angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter, locale, searchService, exchangeRestService, infoModal, ManualPosition, alertService, csvService, ExchangeService){
 
     $scope.transmissionStatuses = {
         loading : false,
@@ -114,34 +114,11 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
      };
 
     $scope.showMessageDetails = function(message) {
-        console.log(message);
-
-        //Create dummy report for now
-        //TODO: Use real message values
-        var report = new ManualPosition();
-        report.id = message.id;
-        report.speed = 23.3;
-        report.course = 134;
-        report.time = message.dateRecieved;
-        report.updatedTime = message.dateForward;
-        report.status = "010";
-        report.archived = false;
-        report.position.longitude = 54.56;
-        report.position.latitude = 77.35434;
-        report.carrier.cfr ="SWE0001234";
-        report.carrier.name ="Nordvåg";
-        report.carrier.externalMarking ="VG40";
-        report.carrier.ircs ="SKRM";
-        report.carrier.flagState ="SWE";
-        report.message = message;
-
-        //open modal
-        var modalOptions = {
-            sentReport : true
-        };        
-        ManualPositionReportModal.show(report, modalOptions).then(function(result) {
-            //Nothing
-        });
+        var options = {
+            titleLabel : locale.getString("exchange.message_details_modal_title"),
+            textLabel : message.message
+        };
+        infoModal.open(options);
     };
 
     //Get status label for the exchange log items
