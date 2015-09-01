@@ -16,8 +16,8 @@ var generalRouteResolves =  {
     },
     config: function(initService){
         return initService.loadConfig();
-    }    
-    // ,currentUser: getCurrentUserPromise() // TODO: Uncomment to enforce user login
+    },
+    //currentUser: getCurrentUserPromise() // TODO: Uncomment to enforce user login
 };
 
 angular.module('unionvmsWeb').config(function($stateProvider, tmhDynamicLocaleProvider, $injector) {
@@ -124,7 +124,7 @@ angular.module('unionvmsWeb').config(function($stateProvider, tmhDynamicLocalePr
         });                            
 });
 
-angular.module('unionvmsWeb').run(function($rootScope) {
+angular.module('unionvmsWeb').run(function($rootScope, alertService) {
 
     $rootScope.safeApply = function(fn) {
         var phase = $rootScope.$$phase;
@@ -136,6 +136,20 @@ angular.module('unionvmsWeb').run(function($rootScope) {
             this.$apply(fn);
         }
     };
+
+    //Handle state change error
+    $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error){
+        var message = 'Error showing page.',
+            errorMessage = 'Error message';
+
+        if(angular.isDefined(error)){
+            message += ' ' + errorMessage +': ' +error;
+        }
+
+        //Show error alert
+        alertService.showErrorMessage(message);
+    });
+
 });
 
 //Configure for i18n

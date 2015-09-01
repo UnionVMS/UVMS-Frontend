@@ -43,7 +43,7 @@
                 },
                 function(error){
                     console.error("Failed to load all configurations.");
-                    deferred.reject();
+                    deferred.reject("FAILED TO LOAD ALL CONFIGURATIONS");
                 }
             );
 
