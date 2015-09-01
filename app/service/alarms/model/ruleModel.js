@@ -102,7 +102,7 @@ angular.module('unionvmsWeb').factory('RuleDefinition', function() {
 
         function RuleDefinition(){
             this.section = undefined;
-            this.type = "Rule";
+            this.type = "VESSEL";
             this.attribute = "ID";
             this.compareType = "NEQ";
             this.text = undefined;

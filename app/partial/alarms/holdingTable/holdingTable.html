@@ -1,14 +1,25 @@
 <div ng-controller="HoldingtableCtrl">
     <div static-include="partial/alarms/alarmsPageHeader/alarmsPageHeader.html"></div>
-    
-    <div class="container">
+    <div class="container containerWithTopBottomPadding">
+
         <div class="card">
-            <div class="row">
+            <div class="row card-header">
                 <div class="col-md-12">
-                    <h2>HOLDING TABLE</h2>
+                    <div class="col-md-2 nopaddingleft">
+                        <dropdown class="" ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+                    </div>
+                     <div class="col-md-1 pull-right textAlignRight printAndExport">
+                        <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportItemsAsCSVFile()"></i>
+                        <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>
+                    </div>
+                    <br>
+
                 </div>
             </div>
+            <div static-include="partial/alarms/holdingTable/holdingTableList/holdingTableList.html"></div>
         </div>
+
+
     </div>
 
 </div>
