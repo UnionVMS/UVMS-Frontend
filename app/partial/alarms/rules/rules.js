@@ -39,7 +39,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, locale, cs
 
             rules.push(mockRule);
 
-        };
+        }
 
         return rules;
 	};
