@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, locale, csvService, alertService, $filter, Rule){
+angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, locale, csvService, alertService, $filter, Rule, ruleRestService){
 
     $scope.activeTab = "RULES";
     $scope.selectedRules = []; //Selected rules checkboxes
@@ -62,9 +62,18 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, locale, cs
 
     //delete rule
     $scope.deleteRule = function(item){
-    	console.log("DELETE ITEM -> " + item);
+    	console.log("DELETE ITEM -> " + item.name);
+        ruleRestService.deleteRule(item).then(
+            function() {
+                alertService.showSuccessMessageWithTimeout(locale.getString('alarms.info_removing_rule'));
+            },
+            function(error) {
+                $scope.currentSearchResults.errorMessage = locale.getString('alarms.error_removing_rule');
+                alertService.showErrorMessageWithTimeout($scope.currentSearchResults.errorMessage);
+                console.error("Error removing rule", error);
+            }
+        );
     };
-
 
     //Handle click on the top "check all" checkbox
     $scope.checkAll = function(){

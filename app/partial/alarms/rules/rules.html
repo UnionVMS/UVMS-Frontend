@@ -1,5 +1,6 @@
 <div ng-controller="RulesCtrl">
-    <div class="container containerWithTopBottomPadding">
+      <div static-include="partial/alarms/alarmsPageHeader/alarmsPageHeader.html"></div>
+    <div class="container containerWithTopBottomPadding nopaddingtop">
 
         <div ng-if="isVisible.rulesForm" ng-include="'partial/alarms/rules/rulesForm/rulesForm.html'"></div>
 
