@@ -51,7 +51,24 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleNotif
         };
 
         Rule.prototype.copy = function() {
-            //TODO: Implement this
+            var copy = new Rule();
+
+            copy.name = this.name;
+            copy.type = this.type;
+            copy.assetsOperation = this.assetsOperation;
+            copy.mobileTerminalsOperation = this.mobileTerminalsOperation;
+
+            copy.definitions = [];
+            $.each(this.definitions, function(index, definition){
+                copy.definitions.push(definition.copy());
+            });
+
+            copy.notifications = [];
+            $.each(this.notifications, function(index, notification){
+                copy.notifications.push(notification.copy());
+            });
+
+            return copy;
         };
 
         return Rule;
@@ -99,6 +116,19 @@ angular.module('unionvmsWeb').factory('RuleDefinition', function() {
         RuleDefinition.isPositionReportsDefinition = function(ruleDef){
             return ruleDef.section === POSITION_REPORT_RULE;
         }; 
+
+        RuleDefinition.prototype.copy = function() {
+            var copy = new RuleDefinition();
+
+            copy.section = this.section;
+            copy.type = this.type;
+            copy.attribute = this.attribute;
+            copy.compareType = this.compareType;
+            copy.text = this.text;
+
+            return copy;
+        };        
+
         return RuleDefinition;
     });
 
@@ -109,6 +139,15 @@ angular.module('unionvmsWeb').factory('RuleNotification', function() {
             this.type = "EMAIL";
             this.text = undefined;
         }
+
+        RuleNotification.prototype.copy = function() {
+            var copy = new RuleNotification();
+
+            copy.type = this.type;
+            copy.text = this.text;
+
+            return copy;
+        };        
 
         return RuleNotification;
     });

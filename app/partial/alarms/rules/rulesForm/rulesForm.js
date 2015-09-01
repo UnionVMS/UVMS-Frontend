@@ -83,17 +83,21 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, locale
         }
     };
 
-    //Create the rule
-    $scope.createNewRule = function(){
-        $scope.submitAttempted = true;        
-
-        //Validate form
+    //Check if form is valid and show error message if not
+    var isValidForm = function(){
         if(!$scope.ruleForm.$valid){
             alertService.showErrorMessage(locale.getString('alarms.rules_add_new_alert_message_on_form_validation_error'));
             return false;
         }
-
         ///TODO: More validation of definitions and notification
+    };
+
+    //Create the rule
+    $scope.createNewRule = function(){
+        $scope.submitAttempted = true;
+
+        //Validate form
+        isValidForm();        
 
         //Create
         $scope.waitingForCreateResponse = true;
@@ -102,12 +106,25 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, locale
                 .then(createNewRuleSuccess, createNewRuleError);
     };
 
+    //Update the rule
+    $scope.updateRule = function(){
+        $scope.submitAttempted = true;
+
+        //Validate form
+        isValidForm();        
+
+        //Update
+        $scope.waitingForCreateResponse = true;
+        alertService.hideMessage();
+        ruleRestService.updateRule($scope.currentRule)
+                .then(updateRuleSuccess, updateRuleError);
+    };
+
     //Success creating the rule
     var createNewRuleSuccess = function(rule) {
         $scope.waitingForCreateResponse = false;
-        $scope.currentRule = rule;
         alertService.showSuccessMessageWithTimeout(locale.getString('alarms.rules_add_new_alert_message_on_success'));
-
+        $scope.currentRule = rule;
         $scope.setCreateMode(false);
     };
 
@@ -116,6 +133,20 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, locale
         $scope.waitingForCreateResponse = false;
         alertService.showErrorMessage(locale.getString('alarms.rules_add_new_alert_message_on_error'));
     };    
+
+    //Success updating the rule
+    var updateRuleSuccess = function(updatedRule) {
+        $scope.waitingForCreateResponse = false;
+        alertService.showSuccessMessageWithTimeout(locale.getString('alarms.rules_update_alert_message_on_success'));
+        //TODO: Update currentRule and merge results back to rules list
+    };
+
+    //Error updating the rule
+    var updateRuleError = function(){
+        $scope.waitingForCreateResponse = false;
+        alertService.showErrorMessage(locale.getString('alarms.rules_update_alert_message_on_error'));
+    };    
+
 
     //Clear the form
     $scope.clearForm = function(){

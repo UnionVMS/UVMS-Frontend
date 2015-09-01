@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, Rule){
+angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, Rule, alertService){
 
     $scope.activeTab = "RULES";
 
@@ -6,6 +6,22 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, Rule){
     $scope.isVisible = {
         rulesForm : false
     };
+
+    //TEST RULE
+    $scope.mockRule = new Rule();
+    $scope.mockRule.name = "First rule ever";
+    $scope.mockRule.type = "MS_REPORT";
+    $scope.mockRule.addNewNotification();
+    $scope.mockRule.addNewMobileTerminalDefinition();
+    $scope.mockRule.notifications[0].text = "test@test.com";
+    $scope.mockRule.notifications[1].type = "SMS";
+    $scope.mockRule.notifications[1].text = "0123456789";
+    $scope.mockRule.definitions[0].text = "MONDAY";
+    $scope.mockRule.definitions[1].text = "TUESDAY";
+    $scope.mockRule.definitions[2].text = "TUESDAY";    
+    $scope.mockRule.definitions[2].compareType = "EQ";
+    $scope.mockRule.definitions[3].text = "SUNDAY";
+
 
     $scope.createNewMode = false;
     $scope.currentRule = undefined;
@@ -27,6 +43,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, Rule){
     };
 
     var toggleRuleForm = function(rule){
+        alertService.hideMessage();
         if(angular.isDefined(rule)){
             $scope.currentRule = rule;
         }
