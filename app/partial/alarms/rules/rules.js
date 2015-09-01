@@ -1,30 +1,194 @@
-angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, Rule, alertService){
+angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, locale, csvService, alertService, $filter, Rule){
 
     $scope.activeTab = "RULES";
+    $scope.selectedRules = []; //Selected rules checkboxes
 
     //Keep track of visibility statuses
     $scope.isVisible = {
         rulesForm : false
     };
 
-    //TEST RULE
-    $scope.mockRule = new Rule();
-    $scope.mockRule.name = "First rule ever";
-    $scope.mockRule.type = "MS_REPORT";
-    $scope.mockRule.addNewNotification();
-    $scope.mockRule.addNewMobileTerminalDefinition();
-    $scope.mockRule.notifications[0].text = "test@test.com";
-    $scope.mockRule.notifications[1].type = "SMS";
-    $scope.mockRule.notifications[1].text = "0123456789";
-    $scope.mockRule.definitions[0].text = "MONDAY";
-    $scope.mockRule.definitions[1].text = "TUESDAY";
-    $scope.mockRule.definitions[2].text = "TUESDAY";    
-    $scope.mockRule.definitions[2].compareType = "EQ";
-    $scope.mockRule.definitions[3].text = "SUNDAY";
-
-
     $scope.createNewMode = false;
     $scope.currentRule = undefined;
+
+    $scope.editSelectionDropdownItems = [
+        {text:locale.getString('common.export_selection'), code : 'EXPORT'}
+    ];
+
+
+
+    //dummydatafor rules:
+    var setDummyData = function(){
+    var rules = [];
+
+    for (var i = 5; i >= 0; i--) {
+            var mockRule = new Rule();
+            mockRule.id = i;
+            mockRule.name = "Rule " + i;
+            mockRule.type = "MS_REPORT";
+            mockRule.addNewNotification();
+            mockRule.addNewMobileTerminalDefinition();
+            mockRule.notifications[0].text = "test@test.com";
+            mockRule.notifications[1].type = "SMS";
+            mockRule.notifications[1].text = "0123456789";
+            mockRule.definitions[0].text = "MONDAY";
+            mockRule.definitions[1].text = "TUESDAY";
+            mockRule.definitions[2].text = "TUESDAY";
+            mockRule.definitions[2].compareType = "EQ";
+            mockRule.definitions[3].text = "SUNDAY";
+
+            rules.push(mockRule);
+
+        };
+
+        return rules;
+	};
+
+   $scope.currentSearchResults = {
+        page : 0,
+        totalNumberOfPages : 10000,
+        rules : setDummyData(),//[],
+        errorMessage : "",
+        loading : false,
+        sortBy : "name",
+        sortReverse : false,
+        filter : ""
+    };
+
+    //Details button
+    $scope.details = function(item){
+    	console.log("DETAILS ITEM -> " + item);
+    };
+
+    //delete rule
+    $scope.deleteRule = function(item){
+    	console.log("DELETE ITEM -> " + item);
+    };
+
+
+    //Handle click on the top "check all" checkbox
+    $scope.checkAll = function(){
+        if($scope.isAllChecked()){
+            //Remove all
+            $scope.clearSelection();
+        }else{
+            //Add all
+            $scope.clearSelection();
+            $.each($scope.currentSearchResults.rules, function(index, item) {
+                $scope.addToSelection(item);
+            });
+        }
+    };
+
+    $scope.checkItem = function(item){
+        item.Selected = !item.Selected;
+        if($scope.isChecked(item)){
+            //Remove
+            $scope.removeFromSelection(item);
+        }else{
+            $scope.addToSelection(item);
+        }
+    };
+
+    $scope.isAllChecked = function(){
+        if(angular.isUndefined($scope.currentSearchResults.rules) || $scope.selectedRules.length === 0){
+            return false;
+        }
+
+        var allChecked = true;
+
+        $.each($scope.currentSearchResults.rules, function(index, item) {
+            if(!$scope.isChecked(item)){
+                allChecked = false;
+                return false;
+            }
+        });
+        return allChecked;
+    };
+
+    $scope.isChecked = function(item){
+        var checked = false;
+        $.each($scope.selectedRules, function(index, rule){
+           if(rule.equals(item)){
+                checked = true;
+                return false;
+            }
+        });
+        return checked;
+    };
+
+        //Clear the selection
+    $scope.clearSelection = function(){
+        $scope.selectedRules = [];
+    };
+
+    //Add a rule to the selection
+    $scope.addToSelection = function(item){
+        $scope.selectedRules.push(item);
+    };
+
+    //Remove a rule from the selection
+    $scope.removeFromSelection = function(item){
+        $.each($scope.selectedRules, function(index, rule){
+           if(rule.equals(item)){
+               $scope.selectedRules.splice(index, 1);
+               return false;
+           }
+           return false;
+        });
+    };
+
+    //Print the exchange logs
+    $scope.print = function(){
+        alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
+    };
+
+    //Export data as CSV file
+    $scope.exportRulesAsCSVFile = function(onlySelectedItems){
+        var filename = 'rules.csv';
+
+        //Set the header columns
+        var header = [
+                locale.getString('alarms.rules_table_name'),
+                locale.getString('alarms.rules_table_definition'),
+                locale.getString('alarms.rules_table_description'),
+                locale.getString('alarms.rules_table_recipient'),
+                locale.getString('alarms.rules_table_last_triggered'),
+                locale.getString('alarms.rules_table_createdby'),
+                locale.getString('alarms.rules_table_date_created')
+            ];
+
+        //Set the data columns
+        var getData = function() {
+            var exportItems;
+            //Export only selected items
+            if(onlySelectedItems){
+                exportItems = $scope.selectedRules;
+            }
+            //Export all logs in the table
+            else{
+                exportItems = $scope.currentSearchResults.rules;
+            }
+            return exportItems.reduce(
+                function(csvObject, item){
+                    var csvRow = [
+                            item.name,
+                            item.definitions[0],
+                            item.description,
+                            item.recipient,
+                            item.lastTriggered,
+                            item.createdBy,
+                            item.dateCreated
+                    ];
+                    csvObject.push(csvRow);
+                    return csvObject;
+                },[]
+            );
+        };
+
+        //Create and download the file
+        csvService.downloadCSVFile(getData(), header, filename);
+    };
 
     //Toggle (show/hide) new rule
     $scope.toggleAddNewRule = function(){
@@ -53,7 +217,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, Rule, aler
 
     $scope.getCurrentRule = function(bool){
         return $scope.currentRule;
-    };    
+    };
 
     //Are we in create mode?
     $scope.isCreateNewMode = function(){
@@ -62,7 +226,14 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, Rule, aler
 
     $scope.setCreateMode = function(bool){
         $scope.createNewMode = bool;
-    };    
+    };
 
+    //Callback function for the "edit selection" dropdown
+    $scope.editSelectionCallback = function(selectedItem){
+        if(selectedItem.code === 'EXPORT'){
+            $scope.exportRulesAsCSVFile(true);
+        }
+        $scope.editSelection = "";
+    };
 
 });

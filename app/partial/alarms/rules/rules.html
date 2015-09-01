@@ -1,19 +1,28 @@
 <div ng-controller="RulesCtrl">
-    <div static-include="partial/alarms/alarmsPageHeader/alarmsPageHeader.html"></div>
-    
     <div class="container containerWithTopBottomPadding">
 
         <div ng-if="isVisible.rulesForm" ng-include="'partial/alarms/rules/rulesForm/rulesForm.html'"></div>
 
         <div ng-if="!isVisible.rulesForm" class="card">
-            <div class="row">
+            <div class="row card-header">
                 <div class="col-md-12">
-                    <h2>RULES</h2>
-                    <br>
-                    <button type="button" class="btn btn-sm btn-primary" ng-click="toggleAddNewRule()"><span class="fa fa-plus"></span> {{'common.add_new' | i18n}}</button> 
+                    <div class="col-md-2 nopaddingleft">
+                        <dropdown class="" ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+                    </div>
+                    <div class="col-md-2">
 
-                    <button type="button" class="btn btn-sm btn-primary" ng-click="toggleRuleDetails(mockRule)"><span class="fa fa-plus"></span> Edit mock rule</button> 
+                    <button type="button" class="btn btn-sm btn-primary" ng-click="toggleAddNewRule()"><span class="fa fa-plus"></span> {{'alarms.add_new_rule' | i18n}}</button>
+                    </div>
+                     <div class="col-md-1 pull-right textAlignRight printAndExport">
+                        <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportRulesAsCSVFile()"></i>
+                        <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>
+                    </div>
+                    <br>
+
                 </div>
+            </div>
+            <div class="row">
+                <div static-include="partial/alarms/rules/rulesTable/rulesTable.html"></div>
             </div>
         </div>
 

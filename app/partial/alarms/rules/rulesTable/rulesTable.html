@@ -1,0 +1,37 @@
+<div class="row">
+	<div class="col-md-12 rules-table">
+		<table class="searchResults colorOdd">
+			<thead>
+				<tr>
+					<th class="table-checkbox"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
+					<th></th>
+					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'name'">{{'alarms.rules_table_name' | i18n}}</th>
+					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'definitions[0]'">{{'alarms.rules_table_definition' | i18n}}</th>
+					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'description'">{{'alarms.rules_table_description' | i18n}}</th>
+					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'recipient'">{{'alarms.rules_table_recipient' | i18n}}</th>
+					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'lastTriggered'">{{'alarms.rules_table_last_triggered' | i18n}}</th>
+					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'createdBy'">{{'alarms.rules_table_createdby' | i18n}}</th>
+					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'dateCreated'">{{'alarms.rules_table_date_created' | i18n}}</th>
+					<th>{{'alarms.rules_table_actions' | i18n}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in currentSearchResults.rules | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:currentSearchResult.filter">
+				<td class="table-checkbox"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
+				<td><i class="fa fa-plus-circle detailsIcon" ng-click="details(item)" title="{{'alarms.rules_table_details' | i18n}}"></i></td>
+				<td>{{item.name}}</td>
+				<td class="definition">{{item.definitions[0]}}</td>
+				<td>{{item.description}}</td>
+				<td>{{item.recipient}}</td>
+				<td>{{item.lastTriggered}}</td>
+				<td>{{item.createdBy}}</td>
+				<td>{{item.dateCreated}}</td>
+				<td>
+					<i class="fa fa-pencil editIcon" ng-click="toggleRuleDetails(item)" title="{{'alarms.rules_table_edit'| i18n}}"></i>
+					<i class="fa fa-trash-o deleteIcon" ng-click="deleteRule(item)" title="{{'alarms.rules_table_delete'| i18n}}"></i>
+				</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

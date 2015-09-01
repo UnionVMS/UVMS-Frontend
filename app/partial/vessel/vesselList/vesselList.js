@@ -1,7 +1,7 @@
 angular.module('unionvmsWeb').controller('VesselListCtrl',function($scope){
 
     //Handle click on the top "check all" checkbox
-    $scope.checkAll = function(){        
+    $scope.checkAll = function(){
         if($scope.isAllChecked()){
             //Remove all
             $scope.clearSelection();
@@ -21,7 +21,7 @@ angular.module('unionvmsWeb').controller('VesselListCtrl',function($scope){
             $scope.removeFromSelection(item);
         }else{
             $scope.addToSelection(item);
-        }      
+        }
     };
 
     $scope.isAllChecked = function(){
