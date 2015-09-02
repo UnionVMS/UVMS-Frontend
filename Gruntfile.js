@@ -35,6 +35,8 @@ module.exports = function (grunt) {
   require('time-grunt')(grunt);
   require('load-grunt-tasks')(grunt);
 
+  var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
+
   var rewriteRulesSnippet = require('grunt-connect-rewrite/lib/utils').rewriteRequest;
 
   // Project configuration.
@@ -45,12 +47,20 @@ module.exports = function (grunt) {
       },
       rules: [
           // Internal rewrite
-          {from: 'app/config.json', to: 'environment/local.json'}          
+          {from: 'app/config.json', to: 'environment/local.json'}
       ],
+       proxies: {
+                context: ['/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'],
+                host: 'livm73u',
+                port: 28080
+        },
+
       development: {
           options: {
               middleware: function (connect, options) {
                   var middlewares = [];
+                  //Proxy for development
+                  middlewares.push(proxy);
 
                   // RewriteRules support
                   middlewares.push(rewriteRulesSnippet);
@@ -166,7 +176,7 @@ module.exports = function (grunt) {
             {
                 src: ['temp/config.json'],
                 dest: 'dist/config.json',
-            }            
+            }
         ]
       },
       configLocal:{
@@ -175,15 +185,15 @@ module.exports = function (grunt) {
                 src: 'environment/local.json',
                 dest: 'temp/config.json',
             }
-        ]        
-      },      
+        ]
+      },
       configDev:{
         files: [
             {
                 src: 'environment/dev.json',
                 dest: 'temp/config.json',
             }
-        ]        
+        ]
       },
       configTest:{
         files: [
@@ -191,7 +201,7 @@ module.exports = function (grunt) {
                 src: 'environment/test.json',
                 dest: 'temp/config.json',
             }
-        ]        
+        ]
       },
       configCygnus : {
         files: [
@@ -199,7 +209,7 @@ module.exports = function (grunt) {
                 src: 'environment/cygnus.json',
                 dest: 'temp/config.json',
             }
-        ]          
+        ]
       },
       serve: {
         files: [
@@ -333,7 +343,7 @@ module.exports = function (grunt) {
   grunt.registerTask('test',['dom_munger:read', 'karma:all_tests', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
-  grunt.registerTask('serve', ['dom_munger:read','jshint','configureRewriteRules', 'connect:development', 'watch']);
+  grunt.registerTask('serve', ['dom_munger:read','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development', 'watch']);
   grunt.registerTask('serve-copy', ['copy:serve', 'serve']);
 
     grunt.event.on('watch', function(action, filepath) {

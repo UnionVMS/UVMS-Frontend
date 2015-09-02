@@ -1,4 +1,4 @@
-var unionvmsWebApp = angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource', 'ngLocalize', 'tmh.dynamicLocale', 'leaflet-directive', 'datatables', 'datatables.bootstrap', 'datatables.columnfilter', 'ngCsv', 'ui.router']);
+var unionvmsWebApp = angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource', 'ngLocalize', 'tmh.dynamicLocale', 'leaflet-directive', 'datatables', 'datatables.bootstrap', 'datatables.columnfilter', 'ngCsv', 'ui.router', 'usm']);
 
 var getCurrentUserPromise = function() {
     var currentUserPromise = function(userService) {
@@ -17,7 +17,7 @@ var generalRouteResolves =  {
     config: function(initService){
         return initService.loadConfig();
     },
-    //currentUser: getCurrentUserPromise() // TODO: Uncomment to enforce user login
+    currentUser: getCurrentUserPromise() // TODO: Uncomment to enforce user login
 };
 
 unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $injector) {
@@ -120,7 +120,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             url: '/alarms/rules',
             views: { module: { templateUrl: 'partial/alarms/rules/rules.html' } },
             resolve: generalRouteResolves
-        });                            
+        });
 });
 
 unionvmsWebApp.run(function($rootScope, alertService) {
@@ -173,7 +173,7 @@ unionvmsWebApp.factory('initService',function(configurationService, locale, tmhD
         //Load the configurations
         loadConfig : function(){
             return configurationService.setup();
-        },        
+        },
         //Load the listed i18n files
         loadLanguageFiles : function(){
             return locale.ready([
@@ -206,21 +206,21 @@ unionvmsWebApp.config(function ($httpProvider) {
         '/movement/rest/',
         '/audit/rest/',
         '/rules/rest/',
-        '/reporting/rest/',
-        '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'
+        '/reporting/rest/'
+      //  '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'
     ];
 
     $httpProvider.interceptors.push(function ($q, envConfig, $log) {
          return {
-            'request': function (request) {                                
+            'request': function (request) {
                 var isRESTApiRequest = false;
                 $.each(restApiURLS, function(i, val){
                     if(request.url.indexOf(val) === 0){
                         isRESTApiRequest = true;
                         return false;
-                    }                    
+                    }
                 });
-                //Change request url 
+                //Change request url
                 if(isRESTApiRequest){
                     var restAPIBaseUrl = envConfig.rest_api_base;
                     var newUrl = restAPIBaseUrl + request.url;
@@ -232,7 +232,7 @@ unionvmsWebApp.config(function ($httpProvider) {
             }
          };
     });
-});   
+});
 
 ///Bootstrap the application by getting the environment config that points out the REST api URL
 var envConfigJsonPath = "config.json";
@@ -246,7 +246,7 @@ function handleEnvironmentConfigurationError(error, $log){
         error = "";
     }
     $('#appLoading').remove();
-    $("body").append('<div class="appErrorContainer"><i class="fa fa-exclamation-triangle"></i> Error loading environment configuration<div>' +error +'</div></div>');    
+    $("body").append('<div class="appErrorContainer"><i class="fa fa-exclamation-triangle"></i> Error loading environment configuration<div>' +error +'</div></div>');
 }
 
 function getEnvironmentConfig(envConfig) {
