@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('FooterCtrl',function($scope, restConstants){
-    $scope.envName = restConstants.envName;
-    $scope.apiURL = restConstants.baseUrl;
-});
+angular.module('unionvmsWeb').controller('FooterCtrl',function($scope, envConfig){
+    $scope.envName = envConfig.env_name;
+    $scope.apiURL = envConfig.rest_api_base;
+});  

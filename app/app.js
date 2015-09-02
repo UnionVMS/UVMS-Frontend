@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource', 'ngLocalize', 'tmh.dynamicLocale', 'leaflet-directive', 'datatables', 'datatables.bootstrap', 'datatables.columnfilter', 'ngCsv', 'ui.router']);
+var unionvmsWebApp = angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource', 'ngLocalize', 'tmh.dynamicLocale', 'leaflet-directive', 'datatables', 'datatables.bootstrap', 'datatables.columnfilter', 'ngCsv', 'ui.router']);
 
 var getCurrentUserPromise = function() {
     var currentUserPromise = function(userService) {
@@ -20,11 +20,10 @@ var generalRouteResolves =  {
     //currentUser: getCurrentUserPromise() // TODO: Uncomment to enforce user login
 };
 
-angular.module('unionvmsWeb').config(function($stateProvider, tmhDynamicLocaleProvider, $injector) {
+unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $injector) {
 
     tmhDynamicLocaleProvider.localeLocationPattern("assets/locales/angular-locale_{{locale}}.js");
 
-  
 
     $stateProvider
         .state('today', {
@@ -124,7 +123,7 @@ angular.module('unionvmsWeb').config(function($stateProvider, tmhDynamicLocalePr
         });                            
 });
 
-angular.module('unionvmsWeb').run(function($rootScope, alertService) {
+unionvmsWebApp.run(function($rootScope, alertService) {
 
     $rootScope.safeApply = function(fn) {
         var phase = $rootScope.$$phase;
@@ -153,7 +152,7 @@ angular.module('unionvmsWeb').run(function($rootScope, alertService) {
 });
 
 //Configure for i18n
-angular.module('unionvmsWeb').value('localeConf', {
+unionvmsWebApp.value('localeConf', {
     basePath: 'i18n',
     defaultLocale: 'en-US',
     sharedDictionary: 'common',
@@ -166,7 +165,7 @@ angular.module('unionvmsWeb').value('localeConf', {
 
 
 //Service used for bootstrapping the application
-angular.module('unionvmsWeb').factory('initService',function(configurationService, locale, tmhDynamicLocale, $window) {
+unionvmsWebApp.factory('initService',function(configurationService, locale, tmhDynamicLocale, $window) {
 
     tmhDynamicLocale.set($window.navigator.userLanguage || $window.navigator.language);
 
@@ -196,3 +195,92 @@ angular.module('unionvmsWeb').factory('initService',function(configurationServic
 
     return initService;
 });
+
+//Request interceptor that routes REST api request to the REST api server
+unionvmsWebApp.config(function ($httpProvider) {
+    //URLs that should go the REST apis
+    var restApiURLS = [
+        '/vessel/rest',
+        '/mobileterminal/rest/',
+        '/exchange/rest/',
+        '/movement/rest/',
+        '/audit/rest/',
+        '/rules/rest/',
+        '/reporting/rest/',
+        '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'
+    ];
+
+    $httpProvider.interceptors.push(function ($q, envConfig, $log) {
+         return {
+            'request': function (request) {                                
+                var isRESTApiRequest = false;
+                $.each(restApiURLS, function(i, val){
+                    if(request.url.indexOf(val) === 0){
+                        isRESTApiRequest = true;
+                        return false;
+                    }                    
+                });
+                //Change request url 
+                if(isRESTApiRequest){
+                    var restAPIBaseUrl = envConfig.rest_api_base;
+                    var newUrl = restAPIBaseUrl + request.url;
+                    $log.debug("Reroute request to " + request.url +" to " +newUrl);
+                    request.url = newUrl;
+                }
+
+                return request || $q.when(request);
+            }
+         };
+    });
+});   
+
+///Bootstrap the application by getting the environment config that points out the REST api URL
+var envConfigJsonPath = "config.json";
+
+function handleEnvironmentConfigurationError(error, $log){
+    $log.error("Error loading environment configuration.", error);
+    if(angular.isDefined(error.status) && angular.isDefined(error.statusText)){
+        error = error.status + " : " +error.statusText;
+    }
+    if(typeof error !== 'string'){
+        error = "";
+    }
+    $('#appLoading').remove();
+    $("body").append('<div class="appErrorContainer"><i class="fa fa-exclamation-triangle"></i> Error loading environment configuration<div>' +error +'</div></div>');    
+}
+
+function getEnvironmentConfig(envConfig) {
+    var initInjector = angular.injector(["ng"]);
+    var $http = initInjector.get("$http");
+    var $log = initInjector.get("$log");
+    var $q = initInjector.get("$q");
+
+    var deferred = $q.defer();
+
+    $http.get(envConfigJsonPath).then(function(response) {
+        $log.debug(response.data);
+        var envConfig = response.data;
+        unionvmsWebApp.constant("envConfig", envConfig);
+        //Verify that rest_api_base is available in the config
+        if(angular.isUndefined(envConfig) || angular.isUndefined(envConfig.rest_api_base)){
+            var error ="rest_api_base is missing from the configuration file.";
+            handleEnvironmentConfigurationError(error, $log);
+            deferred.reject(error);
+            return;
+        }
+        $('#appLoading').remove();
+        deferred.resolve();
+    }, function(error) {
+        handleEnvironmentConfigurationError(error, $log);
+        deferred.reject(error);
+    });
+
+    return deferred.promise;
+}
+
+function bootstrapApplication() {
+    angular.element(document).ready(function() {
+        angular.bootstrap(document, ["unionvmsWeb"]);
+    });
+}
+getEnvironmentConfig().then(bootstrapApplication);

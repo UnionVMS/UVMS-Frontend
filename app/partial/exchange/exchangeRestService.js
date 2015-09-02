@@ -1,24 +1,23 @@
 angular.module('unionvmsWeb')
-    .factory('exchangeRestFactory', function($resource, $q, restConstants){
-        var baseUrl = restConstants.baseUrl;
+    .factory('exchangeRestFactory', function($resource){
         return {
             getTransmissionStatuses : function(){
-                return $resource(baseUrl +'/exchange/rest/exchange/list/');
+                return $resource('/exchange/rest/exchange/list/');
             },
             getExchangeMessages : function(){
-                return $resource(baseUrl + '/exchange/rest/exchange/log',{},
+                return $resource( '/exchange/rest/exchange/log',{},
                 {
                     list : { method : 'POST'}
                 });
             },
             resendExchangeMessage : function(){
-                return $resource(baseUrl + '/exchange/rest/message/resend',{},
+                return $resource( '/exchange/rest/message/resend',{},
                 {
                     list : { method : 'POST'}
                 });
             },
             getSendingQueue : function(){
-                return $resource(baseUrl + '/exchange/rest/exchange/sendingQueue',{},
+                return $resource( '/exchange/rest/exchange/sendingQueue',{},
                 {
                     list : { method : 'POST'}
                 });
@@ -26,8 +25,7 @@ angular.module('unionvmsWeb')
         };
     })
     .factory('exchangeRestService', function($q, exchangeRestFactory, GetListRequest, Exchange, ExchangeService, ExchangeListPage, vesselRestService){
-        var baseUrl, userName;
-        userName = "FRONTEND_USER";
+        var userName = "FRONTEND_USER";
 
         var getVesselNamesByGuid = function(vessels) {
             var map = {};

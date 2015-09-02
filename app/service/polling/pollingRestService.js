@@ -1,36 +1,35 @@
 angular.module('unionvmsWeb')
-    .factory('pollingRestFactory',function($resource, $q, restConstants) {
+    .factory('pollingRestFactory',function($resource) {
 
-        var baseUrl = restConstants.baseUrl;
         return {
             getRunningProgramPolls : function() {
-                return $resource(baseUrl +'/mobileterminal/rest/poll/running');
+                return $resource('/mobileterminal/rest/poll/running');
             },
             getPolls : function(){
-                return $resource(baseUrl +'/mobileterminal/rest/poll/list/',{},{
+                return $resource('/mobileterminal/rest/poll/list/',{},{
                     list : { method: 'POST'}
                 });
             },
             startProgramPoll : function() {
-                return $resource(baseUrl +'/mobileterminal/rest/poll/start/:id', {}, {
+                return $resource('/mobileterminal/rest/poll/start/:id', {}, {
                     save: {method: 'PUT'}
                 });
             },
             stopProgramPoll : function() {
-                return $resource(baseUrl +'/mobileterminal/rest/poll/stop/:id', {}, {
+                return $resource('/mobileterminal/rest/poll/stop/:id', {}, {
                     save: {method: 'PUT'}
                 });
             },
             inactivateProgramPoll : function() {
-                return $resource(baseUrl +'/mobileterminal/rest/poll/inactivate/:id', {}, {
+                return $resource('/mobileterminal/rest/poll/inactivate/:id', {}, {
                     save: {method: 'PUT'}
                 });
             },
             createPolls: function() {
-                return $resource(baseUrl + '/mobileterminal/rest/poll');
+                return $resource('/mobileterminal/rest/poll');
             },
             getPollableTerminals : function(){
-                return $resource(baseUrl + '/mobileterminal/rest/poll/pollable',{},{
+                return $resource('/mobileterminal/rest/poll/pollable',{},{
                      list : { method: 'POST'}
                 });
             }

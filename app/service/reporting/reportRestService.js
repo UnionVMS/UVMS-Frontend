@@ -1,33 +1,32 @@
-angular.module('unionvmsWeb').factory('reportRestFactory', function($resource, $q, restConstants) {
+angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
     
-    var baseUrl = restConstants.baseUrl;
 	return {
 	    //FIXME remove mock data and set proper requests
 	    getReportsList: function(){
-	        //return $resource(baseUrl +'/reporting/rest/report/list');
-	        return $resource(baseUrl + '/app/test_data/reports.json');
+	        //return $resource('/reporting/rest/report/list');
+	        return $resource('/app/test_data/reports.json');
 	    },
 	    getReport: function(){
-	        return $resource(baseUrl +'/reporting/rest/report/:id');
+	        return $resource('/reporting/rest/report/:id');
 	    },
 	    deleteReport: function(){
-	        return $resource(baseUrl +'/reporting/rest/report/:id', {}, {
+	        return $resource('/reporting/rest/report/:id', {}, {
 	            'delete': {method: 'DELETE'}
 	        });
 	    },
 	    updateReport: function(){
-	        return $resource(baseUrl +'/reporting/rest/report/:id', {}, {
+	        return $resource('/reporting/rest/report/:id', {}, {
                 'update': {method: 'PUT'}
             });
 	    },
 	    createReport: function(){
-	        return $resource(baseUrl + '/reporting/rest/report/', {}, {
+	        return $resource('/reporting/rest/report/', {}, {
                 'create': {method: 'POST'}
             });
 	    },
 	    getVmsData: function(){
 	        //return $resource('http://localhost:8080/reporting/rest/monitoring/movement/mockdata');
-	        return $resource(baseUrl + '/app/test_data/movements.json');
+	        return $resource('/app/test_data/movements.json');
 	    }
 	};
 })

@@ -1,8 +1,8 @@
-angular.module('unionvmsWeb').factory('auditLogRestFactory', function($resource, restConstants) {
+angular.module('unionvmsWeb').factory('auditLogRestFactory', function($resource) {
 
     return {
         getAuditLogList: function() {
-            return $resource(restConstants.baseUrl + '/audit/rest/audit/list', {}, {
+            return $resource('/audit/rest/audit/list', {}, {
                 list: { method: 'POST' }
             });
         }

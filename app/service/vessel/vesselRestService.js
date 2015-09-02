@@ -1,40 +1,38 @@
 angular.module('unionvmsWeb')
-    .factory('vesselRestFactory',function($resource, $q, restConstants) {
+    .factory('vesselRestFactory',function($resource) {
 
-        var baseUrl = restConstants.baseUrl;
         return {
             getSearchableFields : function(){
-                return $resource(baseUrl +'/vessel/rest/vessel/config/searchfields/');
+                return $resource('/vessel/rest/vessel/config/searchfields/');
             },
             vessel : function(){
-                return $resource(baseUrl +'/vessel/rest/vessel/:id', {}, {
+                return $resource('/vessel/rest/vessel/:id', {}, {
                     update: {method: 'PUT'}
                 });
             },
             getVesselList : function(){  
-                return $resource(baseUrl +'/vessel/rest/vessel/list/',{},{
+                return $resource('/vessel/rest/vessel/list/',{},{
                     list : { method: 'POST'}
                 });
             },
             vesselGroup : function(){
-                return $resource(baseUrl + '/vessel/rest/group/:id', {}, {
+                return $resource( '/vessel/rest/group/:id', {}, {
                     update: {method: 'PUT'}
                 });
             },
             getVesselGroupsForUser : function(){
-                return $resource(baseUrl +'/vessel/rest/group/list');
+                return $resource('/vessel/rest/group/list');
             },
             vesselHistory : function(){
-                return $resource(baseUrl +'/vessel/rest/history/vessel');
+                return $resource('/vessel/rest/history/vessel');
             },
             getConfigValues : function(){
-                return $resource(baseUrl +'/vessel/rest/config');
+                return $resource('/vessel/rest/config');
             }  
         };
     })
-.factory('vesselRestService', function($q, $http, vesselRestFactory, restConstants, VesselListPage, Vessel, SavedSearchGroup){
+.factory('vesselRestService', function($q, $http, vesselRestFactory, VesselListPage, Vessel, SavedSearchGroup){
 
-    var baseUrl = restConstants.baseUrl;
     var userName = "FRONTEND_USER";
 
     var getVesselList = function(getListRequest){

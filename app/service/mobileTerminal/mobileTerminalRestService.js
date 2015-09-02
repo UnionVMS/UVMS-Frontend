@@ -1,55 +1,53 @@
 angular.module('unionvmsWeb')
-    .factory('mobileTerminalRestFactory',function($resource, $q, restConstants) {
-
-        var baseUrl = restConstants.baseUrl;
+    .factory('mobileTerminalRestFactory',function($resource){
         return {
             getTranspondersConfig : function(){
-                return $resource(baseUrl +'/mobileterminal/rest/config/transponders');
+                return $resource('/mobileterminal/rest/config/transponders');
             },
             getChannelNames : function(){
-                return $resource(baseUrl +'/mobileterminal/rest/config/channelnames');
+                return $resource('/mobileterminal/rest/config/channelnames');
             },
             getMobileTerminalByGuid : function(){
-                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/:id');
+                return $resource('/mobileterminal/rest/mobileterminal/:id');
             },            
             mobileTerminal : function(){
-                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/', {}, {
+                return $resource('/mobileterminal/rest/mobileterminal/', {}, {
                     update: {method: 'PUT'}
                 });
             },
             getMobileTerminals : function(){
-                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/list/',{},{
+                return $resource('/mobileterminal/rest/mobileterminal/list/',{},{
                     list: { method: 'POST'}
                 });
             },
             assignMobileTerminal : function(){
-                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/assign/');
+                return $resource('/mobileterminal/rest/mobileterminal/assign/');
             },
             unassignMobileTerminal : function(){
-                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/unassign/');
+                return $resource('/mobileterminal/rest/mobileterminal/unassign/');
             },
             activateMobileTerminal : function(){
-                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/status/activate', {}, {
+                return $resource('/mobileterminal/rest/mobileterminal/status/activate', {}, {
                     save: {method: 'PUT'},
                 });
             },
             inactivateMobileTerminal : function(){
-                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/status/inactivate', {}, {
+                return $resource('/mobileterminal/rest/mobileterminal/status/inactivate', {}, {
                     save: {method: 'PUT'},
                 });
             },
             removeMobileTerminal : function(){
-                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/status/remove', {}, {
+                return $resource('/mobileterminal/rest/mobileterminal/status/remove', {}, {
                     save: {method: 'PUT'},
                 });
             },
             mobileTerminalHistory : function(){
-                return $resource(baseUrl +'/mobileterminal/rest/mobileterminal/history/:id', {}, {
+                return $resource('/mobileterminal/rest/mobileterminal/history/:id', {}, {
                     list: { method: 'GET'}
                 });
             },
             getConfigValues : function(){
-                return $resource(baseUrl + '/mobileterminal/rest/config');
+                return $resource( '/mobileterminal/rest/config');
             }
 
         };

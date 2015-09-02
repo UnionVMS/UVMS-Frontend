@@ -1,19 +1,17 @@
 
 angular.module('unionvmsWeb')
-    .factory('ruleRestFactory',function($resource, $q, restConstants) {
+    .factory('ruleRestFactory',function($resource) {
 
-        var baseUrl = restConstants.baseUrl;
         return {
             rule : function(){
-                return $resource(baseUrl +'/rules/rest/rules/:id', {}, {
+                return $resource('/rules/rest/rules/:id', {}, {
                     update: {method: 'PUT'}
                 });
             }
         };
     })
-.factory('ruleRestService', function($q, $http, ruleRestFactory, restConstants, Rule){
+.factory('ruleRestService', function($q, ruleRestFactory, Rule){
 
-    var baseUrl = restConstants.baseUrl;
     var userName = "FRONTEND_USER";
 
     var createNewRule = function(rule){

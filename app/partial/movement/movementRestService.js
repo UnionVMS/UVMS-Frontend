@@ -1,33 +1,31 @@
 angular.module('unionvmsWeb')
-.factory('movementRestFactory', function($resource, $q, restConstants){
-    var baseUrl = restConstants.baseUrl;
+.factory('movementRestFactory', function($resource){
 
     return {
         getMovementList : function(){
-            return $resource(baseUrl + '/movement/rest/movement/list',{},
+            return $resource('/movement/rest/movement/list',{},
             { 
                 list : { method : 'POST'}
             });
         },
         getMovement: function() {
-            return $resource(baseUrl + '/movement/rest/movement/:id');
+            return $resource('/movement/rest/movement/:id');
         },
         savedSearch : function() {
-            return $resource(baseUrl + '/movement/rest/search/group/:groupId', {}, {
+            return $resource('/movement/rest/search/group/:groupId', {}, {
                 update: {method: 'PUT'}
             });
         },
         getSavedSearches : function() {
-            return $resource(baseUrl + '/movement/rest/search/groups');
+            return $resource('/movement/rest/search/groups');
         },
         getConfigForMovements : function(){
-            return $resource(baseUrl + '/movement/rest/config');  
+            return $resource('/movement/rest/config');  
         }
     };
 })
 .factory('movementRestService',function($q, movementRestFactory, MovementListPage, Movement, SavedSearchGroup, GetListRequest){
-    var baseUrl, userName;
-    userName = "FRONTEND_USER";
+    var userName = "FRONTEND_USER";
 
     var getMovementList = function(getListRequest){
 

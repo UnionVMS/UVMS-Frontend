@@ -35,41 +35,43 @@ module.exports = function (grunt) {
   require('time-grunt')(grunt);
   require('load-grunt-tasks')(grunt);
 
+  var rewriteRulesSnippet = require('grunt-connect-rewrite/lib/utils').rewriteRequest;
+
   // Project configuration.
   grunt.initConfig({
     connect: {
-        server: {
-            options: {
-                port : 9001,
-                hostname: 'localhost',
+      options: {
+        port: 9001,
+      },
+      rules: [
+          // Internal rewrite
+          {from: 'app/config.json', to: 'environment/local.json'}          
+      ],
+      development: {
+          options: {
+              middleware: function (connect, options) {
+                  var middlewares = [];
 
-                middleware: function (connect, options) {
-                    var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
-                    return [
-                        // Include the proxy first
-                        proxy,
-                        // Serve static files.
-                        connect.static(options.base),
-                        // Make empty directories browsable.
-                        connect.directory(options.base)
-                    ];
-                }
-            },
-            proxies: {
-                context: ['/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'],
-                host: 'localhost',
-                //host: 'cygnus-dev.athens.intrasoft-intl.private',
-                port: 8080,
-                //port: 28080,
-                https: false,
-                xforward: false//,
-                //headers: {
-                //    "x-custom-added-header": ""
-                //},
-                //hideHeaders: ['x-removed-header']
-            }
-        }
+                  // RewriteRules support
+                  middlewares.push(rewriteRulesSnippet);
 
+                  if (!Array.isArray(options.base)) {
+                      options.base = [options.base];
+                  }
+
+                  var directory = options.directory || options.base[options.base.length - 1];
+                  options.base.forEach(function (base) {
+                      // Serve static files.
+                      middlewares.push(connect.static(base));
+                  });
+
+                  // Make directory browse-able.
+                  middlewares.push(connect.directory(directory));
+
+                  return middlewares;
+              }
+          }
+      }
     },
     watch: {
       main: {
@@ -120,62 +122,8 @@ module.exports = function (grunt) {
         dest: 'temp/templates.js'
       }
     },
-    replace: {
-      local: {
-        options: {
-          patterns: [{
-            json: grunt.file.readJSON('environment/local.json')
-          }]
-        },
-        files: [{
-          expand: true,
-          flattern: true,
-          src: ['environment/restConstants.js'],
-          dest: 'app/service/common/'
-        }]
-      },
-      dev: {
-        options: {
-          patterns: [{
-            json: grunt.file.readJSON('environment/dev.json')
-          }]
-        },
-        files: [{
-          expand: true,
-          flattern: true,
-          src: ['environment/restConstants.js'],
-          dest: 'app/service/common/'
-        }]
-      },
-      test: {
-        options: {
-          patterns: [{
-            json: grunt.file.readJSON('environment/test.json')
-          }]
-        },
-        files: [{
-          expand: true,
-          flattern: true,
-          src: ['environment/restConstants.js'],
-          dest: 'app/service/common/'
-        }]
-      },
-      cygnus: {
-           options: {
-               patterns: [{
-                   json: grunt.file.readJSON('environment/cygnus.json')
-               }]
-           },
-           files: [{
-               expand: true,
-               flattern: true,
-               src: ['environment/restConstants.js'],
-               dest: 'app/service/common/'
-           }]
-      }      
-    },
     copy: {
-      main: {
+      dist: {
         files: [
             {
                 cwd: 'bower_components/',
@@ -214,8 +162,44 @@ module.exports = function (grunt) {
                 src: ['bower_components/angular-i18n/*'],
                 dest: 'dist/assets/locales',
                 filter:'isFile'
-            }
+            },
+            {
+                src: ['temp/config.json'],
+                dest: 'dist/config.json',
+            }            
         ]
+      },
+      configLocal:{
+        files: [
+            {
+                src: 'environment/local.json',
+                dest: 'temp/config.json',
+            }
+        ]        
+      },      
+      configDev:{
+        files: [
+            {
+                src: 'environment/dev.json',
+                dest: 'temp/config.json',
+            }
+        ]        
+      },
+      configTest:{
+        files: [
+            {
+                src: 'environment/test.json',
+                dest: 'temp/config.json',
+            }
+        ]        
+      },
+      configCygnus : {
+        files: [
+            {
+                src: 'environment/cygnus.json',
+                dest: 'temp/config.json',
+            }
+        ]          
       },
       serve: {
         files: [
@@ -340,16 +324,16 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('sub-build',['jshint', 'clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy','htmlmin','compress:dist','clean:after']);//,'clean:after'
+  grunt.registerTask('sub-build',['jshint', 'less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy:dist','htmlmin','compress:dist','clean:after']);//,'clean:after'
 
-  grunt.registerTask('build-local', ['replace:local', 'test', 'sub-build']);
-  grunt.registerTask('build-cygnus', ['replace:cygnus', 'sub-build']);
-  grunt.registerTask('build-dev', ['replace:dev','sub-build']);
-  grunt.registerTask('build-test', ['replace:test','sub-build']);
+  grunt.registerTask('build-local', ['clean:before', 'copy:configLocal', 'test', 'sub-build']);
+  grunt.registerTask('build-cygnus', ['clean:before', 'copy:configCygnus', 'sub-build']);
+  grunt.registerTask('build-dev', ['clean:before', 'copy:configDev','sub-build']);
+  grunt.registerTask('build-test', ['clean:before', 'copy:configTest','sub-build']);
   grunt.registerTask('test',['dom_munger:read', 'karma:all_tests', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
-  grunt.registerTask('serve', ['dom_munger:read','jshint','connect', 'watch']);
+  grunt.registerTask('serve', ['dom_munger:read','jshint','configureRewriteRules', 'connect:development', 'watch']);
   grunt.registerTask('serve-copy', ['copy:serve', 'serve']);
 
     grunt.event.on('watch', function(action, filepath) {

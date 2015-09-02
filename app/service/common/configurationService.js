@@ -1,4 +1,3 @@
-
 (function(){
 
     var configurationService = function($q, locale, vesselRestService, movementRestService, mobileTerminalRestService){
@@ -10,11 +9,11 @@
         var loaded = false;
 
         var CONFIG_MODULES = {
-            "VESSEL" : vesselRestService.getConfig(),
-            "MOVEMENT" : movementRestService.getConfig(),
-            "MOBILETERMINAL" : mobileTerminalRestService.getConfig(),
-            "MOBILE_TERMINAL_TRANSPONDERS" : mobileTerminalRestService.getTranspondersConfig(),
-            "MOBILE_TERMINAL_CHANNELS" : mobileTerminalRestService.getChannelNames(),
+            //"VESSEL" : vesselRestService.getConfig,
+            "MOVEMENT" : movementRestService.getConfig,
+            "MOBILETERMINAL" : mobileTerminalRestService.getConfig,
+            "MOBILE_TERMINAL_TRANSPONDERS" : mobileTerminalRestService.getTranspondersConfig,
+            "MOBILE_TERMINAL_CHANNELS" : mobileTerminalRestService.getChannelNames,
         };
 
         //Get configuration for all modules
@@ -23,8 +22,9 @@
             var promises = [];
 
             //Config has already been loaded
-            if(loaded){                
-                return deferred.resolve();
+            if(loaded){
+                deferred.resolve();
+                return deferred.promise;
             }
 
             //Load all configs  
@@ -53,7 +53,7 @@
         var getConfigForModule  = function(moduleName, getConfigFunctionCall){
             console.log("Get config: " + moduleName);
             var deferred = $q.defer();            
-            getConfigFunctionCall.then(
+            getConfigFunctionCall().then(
                 function(response){
                     //Update the config dict with the values from the reponse
                     configs[moduleName] = response;

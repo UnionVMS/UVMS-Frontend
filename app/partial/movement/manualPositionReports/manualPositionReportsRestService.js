@@ -1,39 +1,37 @@
 angular.module('unionvmsWeb')
-.factory('manualPositionRestFactory', function($resource, $q, restConstants){
-    var baseUrl = restConstants.baseUrl;
+.factory('manualPositionRestFactory', function($resource){
 
     return {
         getMovementList : function(){
-            return $resource(baseUrl + '/movement/rest/movement/list',{},
+            return $resource('/movement/rest/movement/list',{},
             {
                 list : { method : 'POST'}
             });
         },
         manualMovement: function() {
-            return $resource(baseUrl + '/movement/rest/tempmovement', {}, {
+            return $resource('/movement/rest/tempmovement', {}, {
                 update: { method: 'PUT' }
             });
         },
         manualMovements: function() {
-            return $resource(baseUrl + '/movement/rest/tempmovement/list', {}, {
+            return $resource('/movement/rest/tempmovement/list', {}, {
                 list: { method: 'POST' }
             });
         },
         deleteManualPositionReport : function(){
-            return $resource(baseUrl +'/movement/rest/tempmovement/remove/:guid', {}, {
+            return $resource('/movement/rest/tempmovement/remove/:guid', {}, {
                 removePut: { method: 'PUT' }
             });
         },
         sendMovement: function() {
-            return $resource(baseUrl + '/movement/rest/tempmovement/send/:guid', {}, {
+            return $resource( '/movement/rest/tempmovement/send/:guid', {}, {
                 send: { method: 'PUT' }
             });
         }
     };
 })
 .factory('manualPositionRestService',function($q, manualPositionRestFactory, ManualPositionListPage, ManualPosition){
-    var baseUrl, userName;
-    userName = "FRONTEND_USER";
+    var userName = "FRONTEND_USER";
 
     var createManualMovement = function(movement) {
         var deferred = $q.defer();

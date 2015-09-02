@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="unionvmsWeb">
+<html>
 <head>
     <title>UnionVMS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +8,10 @@
     <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css' data-concat="false" data-remove="false">
 </head>
 <body>
+
+    <div id="appLoading">
+        <div ng-show="loadingIndicator" class="loadingIndicator"><i class="fa fa-spinner fa-spin fa-pulse fa-2x spinner"></i></div>
+    </div>
 
     <!-- Livereload script for development only (stripped during dist build) -->
     <script src="http://localhost:35729/livereload.js" data-concat="false"></script>
@@ -107,7 +111,6 @@
     <script src="partial/vessel/vesselForm/vesselForm.js"></script>
 
     <script src="service/common/alertService.js"></script>
-    <script src="service/common/environment/restConstants.js"></script>
     <script src="service/common/modalComment/modalComment.js"></script>
     <script src="service/common/model/getListRequestModel.js"></script>
     <script src="service/common/model/savedSearchGroupModel.js"></script>
