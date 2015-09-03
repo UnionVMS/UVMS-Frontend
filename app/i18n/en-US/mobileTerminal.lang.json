@@ -126,5 +126,6 @@
     "OCEAN_REGION_INDIAN" : "IOR",
     "OCEAN_REGION_WEST_ATLANTIC" : "AOR-W",
     "LES_EIK" : "Eik",
-    "LES_BURUM" : "Burum"    
+    "LES_BURUM" : "Burum",
+    "transponderNameFilter_INMARSAT_C" : "Inmarsat-C"
 }

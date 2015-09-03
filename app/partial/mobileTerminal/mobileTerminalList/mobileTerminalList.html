@@ -12,7 +12,7 @@
 
                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'channels[0].ids.DNID'">{{'mobileTerminal.table_header_dnid' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'type'">{{'mobileTerminal.table_header_transponder_type' | i18n}}</th>
+                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'type | transponderName'">{{'mobileTerminal.table_header_transponder_type' | i18n}}</th>
 
                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.SATELLITE_NUMBER'">{{'mobileTerminal.table_header_satellite_number' | i18n}}</th>
 
@@ -40,7 +40,7 @@
                 <td class="statusColored">{{item.attributes.SERIAL_NUMBER}}</td>
                 <td class="statusColored">{{item.channels[0].ids.MEMBER_NUMBER}}</td>
                 <td class="statusColored">{{item.channels[0].ids.DNID}}</td>
-                <td class="statusColored">{{item.type}}</td>
+                <td class="statusColored">{{item.type | transponderName}}</td>
                 <td class="statusColored">{{item.attributes.SATELLITE_NUMBER}}</td>
                 <td>
                     <span ng-show="item.associatedVessel">{{item.associatedVessel.mmsiNo}}</span>

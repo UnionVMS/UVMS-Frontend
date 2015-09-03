@@ -83,7 +83,7 @@
 
                                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'type'">{{'polling.polling_logs_table_header_poll_type' | i18n}}</th>
 
-                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.systemType'">{{'polling.polling_logs_table_header_transponder' | i18n}}</th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.systemType | transponderName'">{{'polling.polling_logs_table_header_transponder' | i18n}}</th>
 
                                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'status[0].time'" class="times">{{'polling.polling_logs_table_header_time' | i18n}}</th>
 
@@ -100,7 +100,7 @@
                                 <td>MOCK VESSEL</td>
                                 <td>MOCK EXT NO</td>
                                 <td>{{item.type}}</td>
-                                <td>{{item.mobileTerminalId.systemType}}</td>
+                                <td>{{item.mobileTerminalId.systemType | transponderName}}</td>
                                 <td class="statusTime">
                                     <div class="expandIcon" ng-show="item.status.length > 1" ng-click="isExpanded = !isExpanded">
                                         <i class="fa fa-plus-square" ng-show="!isExpanded"></i>

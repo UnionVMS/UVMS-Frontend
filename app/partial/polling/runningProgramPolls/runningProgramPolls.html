@@ -7,7 +7,7 @@
                 <tr>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.VESSEL_NAME'">{{'polling.running_program_polls_table_header_name' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.TRANSPONDER'">{{'polling.running_program_polls_table_header_transponder' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.TRANSPONDER | transponderName'">{{'polling.running_program_polls_table_header_transponder' | i18n}}</th>
 
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.START_DATE'">{{'polling.running_program_polls_table_header_start_date' | i18n}}</th>
 
@@ -26,7 +26,7 @@
             <tbody>
             <tr ng-repeat="item in currentSearchResults.programPolls | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" class="runningPollItem">
                 <td>{{item.attributes.VESSEL_NAME}}</td>
-                <td>{{item.attributes.TRANSPONDER}}</td>
+                <td>{{item.attributes.TRANSPONDER | transponderName}}</td>
                 <td>{{item.startDate | date : "medium"}}</td>
                 <td>{{item.endDate | date : "medium"}}</td>
                 <td>{{item.attributes.FREQUENCY | secondsToTimeString}}</td>

@@ -89,7 +89,7 @@
                                         <tbody>
                                             <tr ng-repeat="mt in mobileTerminals | orderBy :'[-active, -started]'" ng-class="{inactive : !mt.active}">
                                                 <td>{{mt.attributes.SERIAL_NUMBER}}</td>
-                                                <td>{{mt.type}}</td>
+                                                <td>{{mt.type | transponderName}}</td>
                                                 <td>{{mt.attributes.STARTED_ON || "-"}}</td>
                                                 <td>{{mt.attributes.UNINSTALLED_ON || "-"}}</td>
                                             </tr>

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, searchService, alertService, MobileTerminalListPage, MobileTerminal, SystemTypeAndLES, mobileTerminalRestService, pollingService, GetPollableListRequest, pollingRestService, configurationService, $location, locale, $stateParams, csvService){
+angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $filter, searchService, alertService, MobileTerminalListPage, MobileTerminal, SystemTypeAndLES, mobileTerminalRestService, pollingService, GetPollableListRequest, pollingRestService, configurationService, $location, locale, $stateParams, csvService){
 
     var hideAlertsOnScopeDestroy = true;
 
@@ -326,7 +326,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, s
                         item.attributes.SERIAL_NUMBER,
                         item.channels[0].ids.MEMBER_NUMBER,
                         item.channels[0].ids.DNID,
-                        item.type,
+                        $filter('transponderName')(item.type),
                         item.attributes.SATELLITE_NUMBER,
                         item.associatedVessel? item.associatedVessel.mmsiNo : '',
                         item.active? locale.getString('common.active') : locale.getString('common.inactive')

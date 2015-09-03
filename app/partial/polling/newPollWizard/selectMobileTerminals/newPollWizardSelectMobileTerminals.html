@@ -12,7 +12,7 @@
                             <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vesselIrcs'">{{'polling.poll_table_header_vessel_ircs' | i18n}}</th>
                             <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.DNID'">{{'polling.poll_table_header_vessel_dnid' | i18n}}</th>
                             <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.MEMBER_NUMBER'">{{'polling.poll_table_header_vessel_member_no' | i18n}}</th>
-                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalType'">{{'polling.poll_table_header_vessel_transponder' | i18n}}</th>
+                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalType | transponderName'">{{'polling.poll_table_header_vessel_transponder' | i18n}}</th>
                             <th>
                               <button class="btn btn-primary btn-sm polltablebutton" ng-hide="isTerminalGroupSelected()" ng-click="selectAllVessels()">{{'polling.poll_table_button_add_all' | i18n | uppercase}}</button>
                             </th>
@@ -24,7 +24,7 @@
                             <td>{{item.vesselIrcs}}</td>
                             <td>{{item.attributes.DNID}}</td>
                             <td>{{item.attributes.MEMBER_NUMBER}}</td>
-                            <td>{{item.mobileTerminalType}}</td>
+                            <td>{{item.mobileTerminalType | transponderName}}</td>
                             <td>
                                 <button class="btn btn-primary btn-sm polltablebutton" ng-hide="isTerminalSelected(item)" ng-click="selectChannel(item, $index)">
                                     {{'polling.poll_table_button_add_selected' | i18n | uppercase}}
