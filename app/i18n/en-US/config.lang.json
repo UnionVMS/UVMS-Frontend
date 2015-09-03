@@ -147,6 +147,8 @@
     "MOBILETERMINAL_POLL_TYPE_SAMPLING_POLL" : "SAMPLING_POLL",
     "MOBILETERMINAL_POLL_TIME_SPAN_Today" : "Today",
 
-    "EXCHANGE_TIME_SPAN_custom": "Custom"
+    "EXCHANGE_TIME_SPAN_custom": "Custom",
+
+    "ALARMS_TIME_SPAN_custom": "Custom"
 
 }

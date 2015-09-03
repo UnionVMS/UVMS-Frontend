@@ -16,7 +16,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:currentSearchResult.filter">
+                <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:filterOnStatus">
                     <td class="table-checkbox"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
                     <td class="status">
                         <span class="label" ng-class="{CLOSED:'label-success', OPEN:'label-danger'}[item.status]">

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, locale, Alarm, csvService, alertService){
+angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, locale, Alarm, csvService, alertService){
 
     $scope.activeTab = "HOLDING_TABLE";
     $scope.selectedItems = []; //Selected items by checkboxes
@@ -6,6 +6,15 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, loc
     $scope.editSelectionDropdownItems = [
         {text:locale.getString('common.export_selection'), code : 'EXPORT'}
     ];
+
+    $scope.statusFilter = 'all';
+    $scope.filterOnStatus = function(alarm) {
+        if ($scope.statusFilter === "all") {
+            return true;
+        }
+
+        return alarm.isOpen() ? $scope.statusFilter === "open" : $scope.statusFilter === "closed";
+    };    
 
     //dummydatafor alarms:
     var setDummyData = function(){
@@ -45,6 +54,26 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, loc
         sortReverse : false,
         filter : ""
     };
+
+    $scope.searchAlarms = function() {
+        /*$scope.searchResults.loading = true;
+        $scope.searchResults.messages = [];
+        $scope.searchResults.errorMessage = "";
+        searchService.searchExchange("MESSAGES").then(function(page) {
+            $scope.searchResults.messages = page.exchangeMessages;
+            $scope.searchResults.page = page.currentPage;
+            $scope.searchResults.pageCount = page.totalNumberOfPages;            
+            $scope.searchResults.loading = false;
+            if(page.totalNumberOfPages === 0 ){
+              $scope.searchResults.errorMessage = locale.getString('exchange.search_zero_results_error');            
+            }
+        },
+        function(error) {
+            $scope.searchResults.errorMessage = error;
+            $scope.searchResults.loading = false;
+        });*/
+        $log.debug("Todo: implement search");
+    };    
 
 
     //Handle click on the top "check all" checkbox
@@ -152,16 +181,18 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, loc
             }
             return exportItems.reduce(
                 function(csvObject, item){
-                    var csvRow = [
-                        item.status,
-                        item.openedDate,
-                        item.affectedObject,
-                        item.ruleName,
-                        item.recipient,
-                        item.resolvedDate,
-                        item.resolvedBy
-                    ];
-                    csvObject.push(csvRow);
+                    if($scope.filterOnStatus(item)){
+                        var csvRow = [
+                            item.status,
+                            item.openedDate,
+                            item.affectedObject,
+                            item.ruleName,
+                            item.recipient,
+                            item.resolvedDate,
+                            item.resolvedBy
+                        ];
+                        csvObject.push(csvRow);
+                    }
                     return csvObject;
                 },[]
             );

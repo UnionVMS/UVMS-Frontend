@@ -14,6 +14,13 @@
     "holding_table_table_resolved_by" : "Resolved by",
     "holding_table_table_resolve" : "Resolve",
     "holding_table_table_resolve_title" : "Resolve alarm",
+    "holding_table_filter_all" : "All",
+    "holding_table_filter_open" : "Open",
+    "holding_table_filter_closed" : "Closed",
+
+    "holding_table_search_affected_object_placeholder": "Object name",
+    "holding_table_search_rule": "Rule",
+    "holding_table_search_recipient": "Recipient",
 
     "add_new_rule" : "Create new rule",
     "edit_rule" : "Edit rule",
