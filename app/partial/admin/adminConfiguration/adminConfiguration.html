@@ -1,6 +1,17 @@
 <div class="col-md-12" ng-controller="AuditconfigurationCtrl">
 	<div static-include="partial/admin/adminPageHeader/adminPageHeader.html"></div>
-	<div class="container">
-		<h1>CONFIGURATION</h1>
+	<div class="container audit-configuration">
+		<div class="card">
+			<div class="card-header">
+				<ul>
+					<li ng-class="{active: activeTab === 'GENERAL'}" ng-click="setTab('GENERAL')" class="configuration-header">{{'audit.configuration_header_general' | i18n}}</li>
+					<li ng-class="{active: activeTab === 'IMPORT'}" ng-click="setTab('IMPORT')" class="configuration-header">{{'audit.configuration_header_import' | i18n}}</li>
+					<li ng-class="{active: activeTab === 'OTHER'}" ng-click="setTab('OTHER')" class="configuration-header">{{'audit.configuration_header_other' | i18n}}</li>
+				</ul>
+			</div>
+			<div ng-if="activeTab === 'GENERAL'" static-include="partial\admin\adminConfiguration\configurationGeneral\configurationGeneral.html"></div>
+			<div ng-if="activeTab === 'IMPORT'" static-include="partial\admin\adminConfiguration\configurationImport\configurationImport.html"></div>
+			<div ng-if="activeTab === 'OTHER'" static-include="partial\admin\adminConfiguration\configurationOther\configurationOther.html"></div>
+		</div>
 	</div>
 </div>

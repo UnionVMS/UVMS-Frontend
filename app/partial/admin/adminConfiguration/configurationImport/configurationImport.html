@@ -1,0 +1,25 @@
+<div sng-controller="ConfigurationimportCtrl">
+	<div class="row">
+		<div class="col-md-12 section-header">{{'audit.configuration_import_header_dropdown_list' | i18n }}</div>
+		<div class="col-md-12 section-text">{{'audit.configuration_import_header_asset_type' | i18n }}</div>
+		<div class="col-md-12 section-selection"></div>
+		<div class="col-md-12 section-text">{{'audit.configuration_import_header_producer_organisation' | i18n }}</div>
+		<div class="col-md-12 section-selection"></div>
+		<div class="col-md-12 section-text">{{'audit.configuration_import_header_antenna_type' | i18n }}</div>
+		<div class="col-md-12 section-selection"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 section-footer">
+			<div class="col-md-1 pull-right">
+				<button ng-click="save()" type="button" class="btn btn-primary btn-md">
+		  			{{'audit.save' | i18n }}
+				</button>
+			</div>
+			<div class="col-md-1 pull-right other-cancel">
+				<a href="#" ng-click="cancel()">
+		  			{{'audit.cancel' | i18n }}
+		  		</a>
+			</div>
+		</div>
+	</div>
+</div>

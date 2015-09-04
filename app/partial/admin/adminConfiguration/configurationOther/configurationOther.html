@@ -1,0 +1,37 @@
+<div ng-controller="ConfigurationotherCtrl">
+	<div class="row">
+		<div class="col-md-12 section-header">{{'audit.configuration_other_header_polling' | i18n }}</div>
+		<div class="col-md-12 section-text">{{'audit.configuration_other_information_polling' | i18n }}</div>
+		<div class="col-md-12 section-selection">
+			<button ng-if="!mandatoryPolling" ng-click="toogleMandatory(true)" type="button" class="btn btn-success btn-default btn-md">
+	  			<span class="fa fa-check-square-o"></span>{{'audit.yes' | i18n }}
+			</button>
+			<button ng-if="mandatoryPolling" ng-click="toogleMandatory(false)" type="button" class="btn btn-danger btn-default btn-md">
+	  			<span class="fa fa-square-o"></span>{{'audit.no' | i18n }}
+			</button>
+		</div>
+		<div class="col-md-12 section-text">{{'audit.configuration_other_information_sampling' | i18n }}</div>
+		<div class="col-md-12 section-selection">
+			<button ng-if="!restrictSampling" ng-click="toogleRestrict(true)" type="button" class="btn btn-success btn-default btn-md">
+	  			<span class="fa fa-check-square-o"></span>{{'audit.yes' | i18n }}
+			</button>
+			<button ng-if="restrictSampling" ng-click="toogleRestrict(false)" type="button" class="btn btn-danger btn-default btn-md">
+	  			<span class="fa fa-square-o"></span>{{'audit.no' | i18n }}
+			</button>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 section-footer">
+			<div class="col-md-1 pull-right">
+				<button ng-click="save()" type="button" class="btn btn-primary btn-md">
+		  			{{'audit.save' | i18n }}
+				</button>
+			</div>
+			<div class="col-md-1 pull-right other-cancel">
+				<a href="#" ng-click="cancel()">
+		  			{{'audit.cancel' | i18n }}
+		  		</a>
+			</div>
+		</div>
+	</div>
+</div>

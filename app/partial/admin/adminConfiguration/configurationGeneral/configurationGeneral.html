@@ -1,0 +1,42 @@
+<div ng-controller="ConfigurationgeneralCtrl">
+	<div class="row">
+		<div class="col-md-12 section-header">{{'audit.configuration_import_header_dropdown_list' | i18n }}</div>
+
+		<div class="col-md-4">
+			<div class="col-md-12 section-text">{{'audit.configuration_general_plugins' | i18n}}</div>
+		</div>
+		<div class="col-md-4">
+			<div class="col-md-12 section-text">{{'audit.configuration_general_languages' | i18n}}</div>
+		</div>
+		<div class="col-md-4">
+			<div class="col-md-12 section-text">{{'audit.configuration_general_installation_state' | i18n}}</div>
+		</div>
+		<div class="col-md-4">
+			<div class="col-md-12 section-text">{{'audit.configuration_general_numeric_system' | i18n}}</div>
+		</div>
+		<div class="col-md-4">
+			<div class="col-md-12 section-text">{{'audit.configuration_general_time_format' | i18n}}</div>
+		</div>
+		<div class="col-md-4">
+			<div class="col-md-12 section-text">{{'audit.configuration_general_coordinates_format' | i18n}}</div>
+		</div>
+		<div class="col-md-4">
+			<div class="col-md-12 section-text">{{'audit.configuration_general_default_homepage' | i18n}}</div>
+		</div>
+
+	</div>
+	<div class="row">
+		<div class="col-md-12 section-footer">
+			<div class="col-md-1 pull-right">
+				<button ng-click="save()" type="button" class="btn btn-primary btn-md">
+		  			{{'audit.save' | i18n }}
+				</button>
+			</div>
+			<div class="col-md-1 pull-right other-cancel">
+				<a href="#" ng-click="cancel()">
+		  			{{'audit.cancel' | i18n }}
+		  		</a>
+			</div>
+		</div>
+	</div>
+</div>

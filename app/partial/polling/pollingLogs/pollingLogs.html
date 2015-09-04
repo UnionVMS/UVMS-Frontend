@@ -55,7 +55,7 @@
                                     </th>
 
                                     <th>&nbsp;</th>
-                
+
                                     <th>
                                         <dropdown ng-model="advancedSearchObject.STATUS_TYPE" items="statusTypes"  initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>
                                     </th>
@@ -95,7 +95,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="item in currentSearchResults.polls | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" ng-init="isExpanded = false">            
+                            <tr ng-repeat="item in currentSearchResults.polls | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" ng-init="isExpanded = false">
                                 <td><input type="checkbox"/></td>
                                 <td>MOCK VESSEL</td>
                                 <td>MOCK EXT NO</td>
