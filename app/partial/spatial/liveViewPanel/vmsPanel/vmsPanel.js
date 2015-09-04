@@ -139,6 +139,14 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                                            bRegex: true,
                                            bSmart: true
                                        },{
+                                           type: 'text',
+                                           bRegex: true,
+                                           bSmart: true
+                                       },{
+                                           type: 'text',
+                                           bRegex: true,
+                                           bSmart: true
+                                       },{
                                            type: 'number'
                                        },{
                                            type: 'number'
@@ -165,7 +173,9 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        DTColumnDefBuilder.newColumnDef(3),
        DTColumnDefBuilder.newColumnDef(4),
        DTColumnDefBuilder.newColumnDef(5),
-       DTColumnDefBuilder.newColumnDef(6).notSortable()
+       DTColumnDefBuilder.newColumnDef(6),
+       DTColumnDefBuilder.newColumnDef(7),
+       DTColumnDefBuilder.newColumnDef(9).notSortable()
    ];
    
    //Tracks table config
@@ -188,10 +198,14 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                                            bRegex: true,
                                            bSmart: true
                                        },{
-                                           type: 'number'
+                                           type: 'text',
+                                           bRegex: true,
+                                           bSmart: true
                                        },{
-                                           type: 'number'
-                                       }, {
+                                           type: 'text',
+                                           bRegex: true,
+                                           bSmart: true
+                                       },{
                                            type: 'number'
                                        },{
                                            type: 'number'
@@ -221,10 +235,16 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        var geom;
        if (geomType === 'POSITION'){
            geom = new ol.geom.Point($scope.executedReport.positions[index].geometry.coordinates);
+           geom.set('GeometryType', 'Point');
+           mapService.highlightFeature(geom);
        } else if (geomType === 'SEGMENT'){
            geom = new ol.geom.LineString($scope.executedReport.segments[index].geometry.coordinates);
+           geom.set('GeometryType', 'LineString');
+           mapService.highlightFeature(geom);
        } else {
-           geom = new ol.geom.LineString($scope.executedReport.tracks[index].geometry.coordinates);
+           geom = new ol.geom.Polygon.fromExtent($scope.executedReport.tracks[index].extent);
+           //TODO build linestring
+           //geom.set('GeometryType', 'LineString');
        }
        geom.transform('EPSG:4326', mapService.getMapProjectionCode());
        mapService.zoomTo(geom);
@@ -235,15 +255,18 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        var coords, geom;
        if (geomType === 'POSITION'){
            coords = ol.proj.transform($scope.executedReport.positions[index].geometry.coordinates, 'EPSG:4326', mapService.getMapProjectionCode());
+           geom = new ol.geom.Point(coords);
+           geom.set('GeometryType', 'Point');
+           mapService.highlightFeature(geom);
        } else if (geomType === 'SEGMENT'){
            geom = new ol.geom.LineString($scope.executedReport.segments[index].geometry.coordinates);
            geom.transform('EPSG:4326', mapService.getMapProjectionCode());
+           geom.set('GeometryType', 'LineString');
            coords = mapService.getMiddlePoint(geom);
+           mapService.highlightFeature(geom);
        } else{
-           var idx = Math.round($scope.executedReport.tracks[index].geometry.coordinates.length / 2) - 1;
-           geom = new ol.geom.LineString([$scope.executedReport.tracks[index].geometry.coordinates[idx - 1], $scope.executedReport.tracks[index].geometry.coordinates[idx]]);
-           geom.transform('EPSG:4326', mapService.getMapProjectionCode());
-           coords = mapService.getMiddlePoint(geom);
+           coords = ol.proj.transform($scope.executedReport.tracks[index].nearestPoint, 'EPSG:4326', mapService.getMapProjectionCode());
+           //TODO build linestring
        }
        mapService.panTo(coords);
        $scope.$emit('mapAction');

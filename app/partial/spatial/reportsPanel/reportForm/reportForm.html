@@ -1,13 +1,16 @@
 <div ng-controller="ReportformCtrl">
 	<div class="row">
-		<div class="col-md-11">
-			<h3 class="pull-left">{{'spatial.reports_form_title' | i18n }}</h3>
+		<div class="col-md-11" ng-show="getFormMode('CREATE')">
+			<h3 class="pull-left">{{'spatial.reports_form_title_new_report' | i18n }}</h3>
+		</div>
+		<div class="col-md-11" ng-show="getFormMode('EDIT')">
+			<h3 class="pull-left">{{'spatial.reports_form_title_edit_report' | i18n }}</h3>
 		</div>
 		<div class="col-md-1 textAlignRight" ng-click="toggleReportForm()"> 
             <i class="fa fa-sign-out signouticon signouticon-extented" title="{{'common.close' | i18n}}"></i>
         </div>
 	</div>
-	<div class="row reportFormContainer">
+	<div class="row reportFormContainer" ng-show="!bottomAlert">
 		<div class="reportForm">
 			<form name="reportForm" novalidate>
 				<div class="form-group col-md-3" ng-class="{'has-error': (reportForm.reportName.$dirty || submitingReport === true) && reportForm.reportName.$invalid}">
@@ -16,7 +19,7 @@
 				</div>
 				<div class="form-group col-md-9">
 					<label for="reportDesc">{{'spatial.reports_form_report_description' | i18n}}</label>
-					<textarea class="form-control" rows="2"></textarea>
+					<textarea class="form-control" rows="2" name="reportDesc" ng-model="report.desc"></textarea>
 				</div>
 				<div class="form-group col-md-3" ng-class="{'has-error': (reportForm.startDateTime.$dirty || submitingReport === true) && reportForm.startDateTime.$invalid}">
     				<label for="reportStartDate">{{'spatial.reports_form_start_date_label' | i18n}}</label>
@@ -44,7 +47,7 @@
 							{{'spatial.reports_form_map_component_checkbox' | i18n }}
 						</label>
 						<label class="checkbox-inline checkbox-options">
-							<input type="checkbox" ng-model="report.components.vms.table" ng-checked="report.components.vms.table || !report">
+							<input type="checkbox" ng-model="report.components.vms" ng-checked="report.components.vms || !report">
 							{{'spatial.reports_form_vms_component_checkbox' | i18n }}
 						</label>
    					</div>
@@ -65,18 +68,28 @@
    				</div>
    				
    				
-   				<!-- Fieldset Vessels-->
+   				<!-- Fieldset Vessels -->
    				<div class="form-group row fieldsetPadding" ng-include="'partial/spatial/reportsPanel/reportForm/vesselFieldset/vesselFieldset.html'"></div>
    				
-   				<!-- Fieldset VMS Filters-->
+   				<!-- Fieldset VMS Filters -->
    				<div class="form-group row fieldsetPadding" ng-include="'partial/spatial/reportsPanel/reportForm/vmsFiltersFieldset/vmsFiltersFieldset.html'"></div>
    				
+   				
+   				<!-- Warnings -->
+   				<div class="form-group col-md-12" ng-if="formAlert.visible">
+					<div class="alert alert-danger alert-container" role="alert"> <!-- ng-if="alert.type === 'error'" -->
+						<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+						<span class="alert-message">
+							<span>{{formAlert.msg}}</span>            
+						</span>
+				    </div>
+				</div>
    				
    				<!-- Buttons -->
    				<div class="form-group row">
    					<div class="formBtnGroup">
    						<a class="button" ng-click="toggleReportForm()">{{"common.cancel" | i18n }}</a> &nbsp;
-   						<a class="button" ng-click="resetForm()">{{"spatial.reports_form_clear_btn" | i18n }}</a>
+   						<a class="button" ng-click="resetForm()" ng-show="getFormMode('CREATE')">{{"spatial.reports_form_clear_btn" | i18n }}</a>
    					</div>
    					<div class="formSubmitBtn">
    						<button class="btn btn-primary button" type="submit" ng-click="saveReport()">{{"spatial.reports_form_save_btn" | i18n }}</button>
@@ -84,5 +97,27 @@
    				</div>
 			</form>
 		</div>
+	</div>
+	<!-- <div class="row reportFormContainer" ng-if="!loadReportStatus && formMode === 'EDIT'">
+		<div class="alert alert-danger alert-container col-md-12" role="alert"> ng-if="alert.type === 'error'"
+			<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+			<span class="alert-message">
+				<span>{{'spatial.error_entry_not_found' | i18n}}</span>            
+			</span>
+	    </div>
+	</div> -->
+	<div class="row reportFormContainer" ng-if="bottomAlert">
+	    <div class="alert alert-danger alert-container col-md-12" role="alert" ng-if="formAlert.type === 'error'">
+			<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+			<span class="alert-message">
+				<span>{{formAlert.msg}}</span>            
+			</span>
+	    </div>
+	    <div class="alert alert-success alert-container col-md-12" role="alert" ng-if="formAlert.type === 'success'">
+			<span class="fa fa-check-circle" aria-hidden="true"></span>
+			<span class="alert-message">
+				<span>{{formAlert.msg}}</span>            
+			</span>
+	    </div>
 	</div>
 </div>

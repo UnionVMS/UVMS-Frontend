@@ -1,4 +1,4 @@
-<div class="reportsListTable" ng-controller="ReportslistCtrl as rt">
+<div ng-controller="ReportslistCtrl as rt" class="table-responsive reportsListTable">
 	<table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="table table-striped">
 	    <thead>
 	        <tr>
@@ -10,24 +10,43 @@
 	            <th class="dt-center">{{'spatial.reports_table_header_visibility' | i18n }}</th>
 	            <th></th>
 	        </tr>
+	        <tr ng-if="alert.visible">
+	        	<th colspan="7" ng-class="{fade: alert.startFade}">
+				    <div class="alert alert-danger alert-container" role="alert" ng-if="alert.type === 'error'">
+       					<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+       					<span class="alert-message">
+           					<span>{{ alert.msg }}</span>            
+       					</span>
+				    </div>
+				    <div class="alert alert-success alert-container" role="alert" ng-if="alert.type === 'success'">
+       					<span class="fa fa-check-circle" aria-hidden="true"></span>
+       					<span class="alert-message">
+           					<span>{{ alert.msg }}</span>            
+       					</span>
+				    </div>
+	        	</th>
+	        </tr>
+	        <tr ng-if="isLoading">
+	        	<th colspan="7" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+	        </tr>
 	    </thead>
 	    <tbody>
 	        <tr ng-repeat="report in reports">
 	            <td>{{ report.name }}</td>
 	            <td>{{ report.desc }}</td>
-	            <td>{{ report.created_on }}</td>
-	            <td>{{ report.created_by }}</td>
-	            <td>{{ report.executed_on }}</td>
+	            <td>{{ report.createdOn }}</td>
+	            <td>{{ report.createdBy }}</td>
+	            <td>{{ report.lastExecTime }}</td>
 	            <td class="dt-center">
-	            	<span class="label label-default label-visibility" ng-if="report.visibility === 'p'" visprop="p">{{'spatial.reports_table_p_label' | i18n }}</span>
-	            	<span class="label label-default label-visibility" ng-if="report.visibility === 's'" visprop="s">{{'spatial.reports_table_s_label' | i18n }}</span>
-	            	<span class="label label-default label-visibility" ng-if="report.visibility === 'g'" visprop="g">{{'spatial.reports_table_g_label' | i18n }}</span>
+	            	<span class="label label-default label-visibility" ng-if="report.visibility === 'PRIVATE'" visprop="p">{{'spatial.reports_table_p_label' | i18n }}</span>
+	            	<span class="label label-default label-visibility" ng-if="report.visibility === 'SCOPE'" visprop="s">{{'spatial.reports_table_s_label' | i18n }}</span>
+	            	<span class="label label-default label-visibility" ng-if="report.visibility === 'GLOBAL'" visprop="g">{{'spatial.reports_table_g_label' | i18n }}</span>
 	            </td>
 	            <td>
-                    <button type="button" class="btn btn-success btn-xs" ng-click="runReport($index)"><span class="run-report">{{'spatial.reports_table_run_label' | i18n }}</span></button>
-                    <button type="button" class="btn btn-info btn-xs" title="{{'spatial.reports_table_config_label' | i18n }}" ng-click="showFilters($index)" ng-show="{{ report.editable }}"><span class="fa fa-cog"></span></button>
-                    <button type="button" class="btn btn-info btn-xs" title="{{'spatial.reports_table_share_label' | i18n }}" ng-click="shareReport($index)" ng-show="{{ report.shareable }}"><span class="fa fa-share-alt"></span></button>
-                    <button type="button" class="btn btn-danger btn-xs" title="{{'spatial.reports_table_delete_label' | i18n }}" ng-click="deleteReport($index)" ng-show="{{ report.deletable }}"> <span class="fa fa-trash-o"></span></button>
+                    <button type="button" class="btn btn-success btn-xs btn-bottom-mg" ng-click="runReport($index)"><span class="run-report">{{'spatial.reports_table_run_label' | i18n }}</span></button>
+                    <button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.reports_table_config_label' | i18n }}" ng-click="showFilters($index)" ng-show="{{ report.editable }}"><span class="fa fa-cog"></span></button>
+                    <button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.reports_table_share_label' | i18n }}" ng-click="shareReport($index)" ng-show="{{ report.shareable }}"><span class="fa fa-share-alt"></span></button>
+                    <button type="button" class="btn btn-danger btn-xs btn-bottom-mg" title="{{'spatial.reports_table_delete_label' | i18n }}" ng-click="deleteReport($index)" ng-show="{{ report.deletable }}"> <span class="fa fa-trash-o"></span></button>
                 </td>
 	        </tr>
 	    </tbody>

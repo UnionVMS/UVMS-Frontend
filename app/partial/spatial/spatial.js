@@ -1,9 +1,8 @@
 angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, reportRestService){
     $scope.isMenuVisible = true;
     $scope.selectedMenu = 'LIVEVIEW';
-    $scope.executedReport = {
-            positions: []
-    };
+    $scope.reports = [];
+    $scope.executedReport = {};
     
     //Define header menus
     var setMenus = function(){
@@ -40,7 +39,9 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
        if (newVal === 'LIVEVIEW'){
            $timeout(mapService.updateMapSize, 100);
        } else {
-           $scope.$broadcast('loadReportsList');
+           if ($scope.reports.length === 0){
+               $scope.$broadcast('loadReportsList');
+           }
        }
    });
    
@@ -48,11 +49,13 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    var getVmsDataSuccess = function(data){
        $scope.executedReport.positions = data.movements.features;
        $scope.executedReport.segments = data.segments.features;
-       $scope.executedReport.tracks = data.tracks.features;
+       $scope.executedReport.tracks = data.tracks;
+       
        //Setting up the map
+       mapService.clearMap();
+       mapService.addFeatureOverlay();
        mapService.addSegments(data.segments);
        mapService.addPositions(data.movements);
-       
    };
    
    //Get VMS data Failure callback
@@ -69,7 +72,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
       $scope.selectMenu('LIVEVIEW');
       $scope.headerMenus[0].title = report.name;
       //Getting report data
-      reportRestService.getVmsData().then(getVmsDataSuccess, getVmsDataError);
+      reportRestService.getVmsData(report.id).then(getVmsDataSuccess, getVmsDataError);
    });
    
 //   $scope.$on('panTo', function(event, coords){

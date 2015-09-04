@@ -7,12 +7,19 @@ ol.control.HistoryControl = function(opt_options){
     this_.backBtn = document.createElement('button');
     this_.backBtn.className = 'ol-history-back';
     this_.backBtn.title = options.backLabel;
-    this_.backBtn.innerHTML = '&#8592';
+    var backIcon = document.createElement('span');
+    backIcon.className = 'fa fa-long-arrow-left';
+    backIcon.style.fontSize = '13px';
+    this_.backBtn.appendChild(backIcon);
+    
     
     this_.forwardBtn = document.createElement('button');
     this_.forwardBtn.className = 'ol-history-forward';
     this_.forwardBtn.title = options.forwardLabel;
-    this_.forwardBtn.innerHTML = '&#8594';
+    var forwardIcon = document.createElement('span');
+    forwardIcon.className = 'fa fa-long-arrow-right';
+    forwardIcon.style.fontSize = '13px';
+    this_.forwardBtn.appendChild(forwardIcon);
     
     this_.historyArray = [];
     this_.historyLimit = 50;
@@ -138,6 +145,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	    ms.interactions = [];
 	    
 	    var osmLayer = new ol.layer.Tile({
+	        title: 'osm',
+	        isBaseLayer: true,
             source: new ol.source.OSM()
         });
         
@@ -146,6 +155,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         });
         
         var eezLayer = new ol.layer.Tile({
+            title: 'eez',
+            isBaseLayer: false,
             source: new ol.source.TileWMS({
                 attributions: [attribution],
                 url: 'http://localhost:8080/geoserver/wms',
@@ -160,6 +171,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         });
         
         var rfmoLayer = new ol.layer.Tile({
+            title: 'rfmo',
+            isBaseLayer: false,
             source: new ol.source.TileWMS({
                 attributions: [attribution],
                 url: 'http://localhost:8080/geoserver/wms',
@@ -176,7 +189,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         var view = new ol.View({
             projection: ms.setProjection(config.map.projection.epsgCode, config.map.projection.units, config.map.projection.global),
             center: ol.proj.transform([-1.81185, 52.44314], 'EPSG:4326', 'EPSG:3857'),
+//            extent: [-2734750,3305132,1347335,5935055],
             zoom: 3,
+            maxZoom: 19,
+//            minZoom: 3,
             enableRotation: false
         });
         
@@ -212,9 +228,20 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         ms.map = map;
 	};
 	
+	//Clear map before running a new report
+	ms.clearMap = function(config){
+	    ms.map.removeLayer(ms.getLayerByTitle('highlight'));
+	    ms.map.removeLayer(ms.getLayerByTitle('vmspos'));
+	    ms.map.removeLayer(ms.getLayerByTitle('vmsseg'));
+	    
+	    //TODO change map and view properties according to user definition
+	};
+	
 	//Add layers
 	ms.addOpenSeaMap = function(){
 	    var layer = new ol.layer.Tile({
+	        title: 'oseam',
+	        isBaseLayer: true,
 	        source: new ol.source.OSM({
 	            attributions:[
 	                new ol.Attribution({
@@ -230,9 +257,73 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	    return layer;
 	};
 	
+	//Add highlight layer
+	ms.addFeatureOverlay = function(){
+	    var layer = new ol.layer.Vector({
+	        title: 'highlight',
+	        isBaseLayer: false,
+	        source: new ol.source.Vector({
+	            features: []
+	        }),
+	        style: ms.setHighlightStyle
+	    });
+	    
+	    ms.map.addLayer(layer);
+	};
+	
+	//Highlight styles
+	ms.setHighlightStyle = function(feature, resolution){
+	    var style;
+	    var color = '#FF9966';
+	    var geomType = feature.getGeometry().get('GeometryType');
+	    if (geomType === 'Point'){
+	        style = new ol.style.Style({
+	            image: new ol.style.Circle({
+	                radius: 13,
+	                stroke: new ol.style.Stroke({
+	                    width: 4,
+	                    color: color
+	                })
+	            })
+	        });
+	    } else if (geomType === 'LineString'){
+	        style = new ol.style.Style({
+	            stroke: new ol.style.Stroke({
+	                color: color,
+	                width: 6
+	            })
+	        });
+	    }
+	    
+	    return [style];
+	};
+	
+	//Add highlight feature, geometry should be passed using the same projection of the map
+	ms.highlightFeature = function(geom){
+	    var feature = new ol.Feature({
+            geometry: geom
+        });
+	    
+	    var layer = ms.getLayerByTitle('highlight').getSource();
+	    layer.clear(true);
+	    layer.addFeature(feature);
+	};
+	
+	//Find layers by title
+	ms.getLayerByTitle = function(title){
+	    var layers = ms.map.getLayers().getArray();
+	    var layer = layers.filter(function(layer){
+	        return layer.get('title') === title;
+	    });
+	    
+	    return layer[0];
+	};
+	
 	//Add VMS positions layer
 	ms.addPositions = function(geojson) {
 	    var layer = new ol.layer.Vector({
+	        title: 'vmspos',
+	        isBaseLayer: false,
             source: new ol.source.Vector({
                 features: (new ol.format.GeoJSON()).readFeatures(geojson, {
                     dataProjection: 'EPSG:4326',
@@ -258,9 +349,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 font: 'normal 22px FontAwesome',
                 textBaseline: 'middle',
                 textAlign: 'center',
-                rotation: -0.78 + ms.degToRad(feature.get('course')),
+                rotation: -0.78 + ms.degToRad(feature.get('crs')),
                 fill: new ol.style.Fill({
-                    color: feature.get('asset').color
+                    color: feature.get('color')
                 })
             })
         });
@@ -297,7 +388,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	    var style = [
 	        new ol.style.Style({
 	            stroke: new ol.style.Stroke({
-	                color: '#FF00FF',
+	                color: feature.get('color'),
 	                width: 2
 	            })
 	        }),
@@ -310,7 +401,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	                textAlign: 'center',
 	                rotation: ms.getRotationForArrow(geometry),
 	                fill: new ol.style.Fill({
-	                    color: "#FF00FF"
+	                    color: feature.get('color')
 	                })
 	            })
 	        })
@@ -322,6 +413,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	//Add VMS segments layer
 	ms.addSegments = function(geojson){
 	    var layer = new ol.layer.Vector({
+	        title: 'vmsseg',
+	        isBaseLayer: false,
 	        source: new ol.source.Vector({
 	            features: (new ol.format.GeoJSON()).readFeatures(geojson, {
 	                dataProjection: 'EPSG:4326',
@@ -386,8 +479,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     };
 	
 	ms.addFullscreen = function(){
+	    var fullIcon = document.createElement('span');
+	    fullIcon.className = 'fa fa-arrows-alt';
+	    fullIcon.style.fontSize = '12px';
+	    fullIcon.style.fontWeight = '100';
+	    
 	    var control = new ol.control.FullScreen({
-            tipLabel: locale.getString('spatial.map_tip_fullscreen')
+            tipLabel: locale.getString('spatial.map_tip_fullscreen'),
+            label: fullIcon
         });
 	    
 	    //We need to manually fix map height when map is toggled to fullscreen
@@ -475,7 +574,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	
 	//Zoom to geometry control
 	ms.zoomTo = function(geom){
-	    ms.map.getView().fit(geom, ms.map.getSize());
+	    ms.map.getView().fit(geom, ms.map.getSize(), {maxZoom: 19});
 	};
 	
 	//Pan to coordinates control

@@ -7,7 +7,7 @@ angular.module('unionvmsWeb').controller('ReportspanelCtrl',function($scope){
     
     $scope.editMode = 'CREATE';
     
-    $scope.toggleReportForm = function(mode){
+    $scope.toggleReportForm = function(mode, reportId){
         $scope.editMode = mode;
         $scope.isVisible.reportsList = !$scope.isVisible.reportsList;
         $scope.isVisible.reportForm = !$scope.isVisible.reportForm;
@@ -17,6 +17,16 @@ angular.module('unionvmsWeb').controller('ReportspanelCtrl',function($scope){
         
         if ($scope.editMode === 'CREATE'){
             $scope.$broadcast('openReportForm');
+        } else if ($scope.editMode === 'EDIT') {
+            $scope.$broadcast('openReportForm', {id: reportId});
         }
     };
+    
+    $scope.reloadReportsList = function(){
+        $scope.$broadcast('loadReportsList');
+    };
+    
+    $scope.$on('reloadReportsList', function(){
+        $scope.reloadReportsList();
+    });
 });

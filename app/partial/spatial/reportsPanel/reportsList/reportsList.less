@@ -1,5 +1,5 @@
 .reportsListTable {
-	margin-top: 20px;
+	border: 0px !important;
 }
 
 div.dataTables_length label,
@@ -19,6 +19,7 @@ div.dataTables_filter {
 	padding-bottom: 40px;
 }
 
+
 table.table thead .sorting_asc:before,
 table.table thead .sorting_desc:before {
 	color: @primaryColor;
@@ -27,10 +28,27 @@ table.table thead .sorting_desc:before {
 table.table {
 	border: 1px solid #ddd;
 	background-color: white;
+	width: 100% !important;
 }
 
 .dt-center {
 	text-align: center;
+}
+
+.dt-loading{
+	display: none !important;
+}
+
+//Loading indicator
+.loading-spinner-cl {
+	text-align: center;
+	border-top: none !important;
+	border-bottom: none !important;
+	background-color: #f9f9f9;
+}
+
+.loading-spinner {
+	font-size: 30px;
 }
 
 //Columns
@@ -44,3 +62,17 @@ table.table {
 	text-transform: uppercase;
 }
 
+.alert-container {
+	margin-bottom: 0px !important;	
+}
+
+.alert-message {
+	font-weight: normal !important;
+	padding-left: 5px;
+}
+
+.fade{
+    -webkit-transition: opacity 2s;
+    transition: opacity 2s;
+    opacity: 0;
+}

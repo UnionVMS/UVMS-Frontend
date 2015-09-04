@@ -9,7 +9,23 @@
 				<a ng-class="{'menuActive': selectedVesselMenu === 'ADVANCED'}" ng-click="toggleVesselMenuType('ADVANCED')">{{'spatial.reports_form_advanced_search' | i18n }}</a> 
 			</div>
 		</div>
+		<div class="row fieldesetGroupMargin" ng-show="!vesselsSelectionIsValid">
+			<div class="form-group col-md-12">
+				<div class="alert alert-danger alert-container" role="alert">
+					<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+					<span class="alert-message">
+						<span>{{'spatial.reports_form_vessel_selection_invalid' | i18n }}</span>            
+					</span>
+			    </div>
+		    </div>
+		</div>
 		<div class="row fieldesetGroupMargin" ng-show="isVesselMenuVisible('SELECTION')">
+			<!-- <div class="form-group col-md-2">
+ 				<button type="button" class="btn btn-primary btn-sm" style="width:100%;" ng-click="showModal()">
+                	<span class="fa fa-plus-square" aria-hidden="true"></span> &nbsp;
+                    <span>Select vessels</span>
+            	</button>
+			</div> -->
 			<div class="form-group col-md-12">
 				<table datatable="ng" dt-options="vesselsSelectionTable.dtOptions" dt-column-defs="vesselsSelectionTable.dtColumnDefs" class="table table-striped">
 					<thead>
@@ -17,7 +33,7 @@
 							<th>{{'spatial.reports_form_vessel_selection_table_header_name' | i18n }}</th>
 							<th>{{'spatial.reports_form_vessel_selection_table_header_type' | i18n }}</th>
 							<th>
-								<button type="button" class="btn btn-danger btn-xs pull-right" ng-click="deleteSelectionAll()" ng-show="vesselsSelection.length > 0">
+								<button type="button" class="btn btn-danger btn-xs pull-right" ng-click="deleteSelectionAll()" ng-show="report.vesselsSelection.length > 0">
 									<span class="fa fa-minus-square" aria-hidden="true"></span> &nbsp;
 									<span>{{'spatial.reports_form_vessel_selection_table_delete_all_btn' | i18n }}</span>
 								</button>
@@ -25,9 +41,9 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="selection in vesselsSelection">
+						<tr ng-repeat="selection in report.vesselsSelection">
 							<td>{{ selection.name }}</td>
-							<td>{{ selection.type }}</td>
+							<td>{{ translateSelectionType(selection.type) }}</td>
 							<td>
 								<button type="button" class="btn btn-danger btn-xs pull-right" title="{{'spatial.reports_form_vessel_selection_table_delete_btn_title' | i18n }}" ng-click="deleteSelection($index)"> <span class="fa fa-trash-o"></span></button>
 							</td>
@@ -49,12 +65,12 @@
 				</button>
 			</div>
 			<div class="form-group col-md-3">
-				<button type="button" class="btn btn-primary btn-sm pull-right" ng-disabled="vesselTable.selectedVessels === 0" ng-click="addVesselSelection()">
+				<button type="button" class="btn btn-primary btn-sm pull-right add-vessels-btn" style="margin-bottom: 15px;" ng-disabled="vesselTable.selectedVessels === 0" ng-click="addVesselSelection()">
 					<span class="fa fa-plus-square" aria-hidden="true"></span> &nbsp;
 					<span>{{'spatial.reports_form_vessel_add_vessel_records_btn' | i18n }}</span>
 				</button>
 			</div>
-			<div class="form-group col-md-12">
+			<div class="form-group col-md-12 select-vessel-table">
 				<table datatable="ng" dt-options="vesselTable.dtOptions" dt-column-defs="vesselTable.dtColumnDefs" class="table table-striped">
 					<thead>
 						<tr>

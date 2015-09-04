@@ -35,13 +35,18 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     
     //Delete one selected item (vessel or group)
     $scope.deleteSelection = function(index){
-        $scope.vesselsSelection.splice(index, 1);
+        $scope.report.vesselsSelection.splice(index, 1);
     };
     
     //Delete all selected items
     $scope.deleteSelectionAll = function(){
-        $scope.vesselsSelection = [];
+        $scope.report.vesselsSelection.splice(0,$scope.report.vesselsSelection.length);
     };
+    
+    //TODO
+//    $scope.showModal = function(){
+//        
+//    };
     
     //VESSEL SIMPLE SEARCH TABLE
     //Mock data
@@ -118,22 +123,28 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     //Check if vessel record was already added to the report current selection
     $scope.checkVesselIsSelected = function(vesselSrc){
         var response = false;
-        for (var i = 0; i < $scope.vesselsSelection.length; i++){
-            if (vesselSrc.id === $scope.vesselsSelection[i].id){
+        for (var i = 0; i < $scope.report.vesselsSelection.length; i++){
+            if (vesselSrc.id === $scope.report.vesselsSelection[i].id){
                 response = true;
             }
         }
         return response;
     };
     
+    //Just for display purposes
+    $scope.translateSelectionType = function(type){
+        var searchString = 'spatial.reports_form_vessel_selection_type_' + type;
+        return locale.getString(searchString);
+    };
+    
     $scope.addVesselSelection = function(){
         for (var i = 0; i < $scope.vessels.length; i++){
             var vesselSrc = $scope.vessels[i];
             if (vesselSrc.selected === true && $scope.checkVesselIsSelected(vesselSrc) === false){
-                $scope.vesselsSelection.push({
+                $scope.report.vesselsSelection.push({
                     id: vesselSrc.id,
                     name: vesselSrc.name,
-                    type: locale.getString('spatial.reports_form_vessel_selection_type_vessel')
+                    type: 'vessel'
                 });
             }
         }

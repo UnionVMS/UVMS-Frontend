@@ -3,8 +3,9 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
 	return {
 	    //FIXME remove mock data and set proper requests
 	    getReportsList: function(){
-	        //return $resource('/reporting/rest/report/list');
-	        return $resource('/app/test_data/reports.json');
+	        return $resource('/reporting/rest/report/list', {}, {
+	            'get': {method: 'GET'}
+	        });
 	    },
 	    getReport: function(){
 	        return $resource('/reporting/rest/report/:id');
@@ -16,48 +17,92 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
 	    },
 	    updateReport: function(){
 	        return $resource('/reporting/rest/report/:id', {}, {
-                'update': {method: 'PUT'}
+                'update': {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
             });
 	    },
 	    createReport: function(){
-	        return $resource('/reporting/rest/report/', {}, {
-                'create': {method: 'POST'}
+	        return $resource('/reporting/rest/report', {}, {
+                'create': {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
             });
 	    },
 	    getVmsData: function(){
-	        //return $resource('http://localhost:8080/reporting/rest/monitoring/movement/mockdata');
-	        return $resource('/app/test_data/movements.json');
+	        return $resource('/reporting/rest/vms/mock/:id', {}, {
+	            'get': {method: 'GET'}
+	        });
 	    }
 	};
 })
 .service('reportRestService', function($q, reportRestFactory){
+    //FIXME change to selected scope after login
+    var scope = 123;
     
     var reportRestService = {
         getReportsList: function(){
             var deferred = $q.defer();
-            reportRestFactory.getReportsList().get({}, function(response){
-                if (response.code !== 200){
-                    deferred.reject('Invalid response status ReportList');
-                    return;
-                }
-                deferred.resolve(response.data);
+            reportRestFactory.getReportsList().get({CURRENT_USER_SCOPE: scope}, function(response){
+//                if (response.code !== 200){
+//                    deferred.reject('Invalid response status ReportList');
+//                    return;
+//                }
+                deferred.resolve(response);
             }, function(error){
                 console.error('Error getting list of reports');
                 deferred.reject(error);
             });
             return deferred.promise;
         },
-        getVmsData: function(){
+        getReport: function(reportId){
             var deferred = $q.defer();
-            reportRestFactory.getVmsData().get({}, function(response){
-                //FIXME response codes should be integers
-                if (parseInt(response.code) !== 200){
-                    deferred.reject('Invalid response status VmsData');
-                    return;
-                }
+            reportRestFactory.getReport().get({id: reportId}, function(response){
                 deferred.resolve(response.data);
             }, function(error){
-                console.error('Error getting report VMS data');
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+        deleteReport: function(reportId, reportIdx){
+            var deferred = $q.defer();
+            reportRestFactory.deleteReport().delete({id: reportId}, function(response){
+                response.index = reportIdx;
+                deferred.resolve(response);
+            }, function(error){
+                deferred.reject(error.data);
+            });
+            return deferred.promise;
+        },
+        updateReport: function(report){
+            var deferred = $q.defer();
+            reportRestFactory.updateReport().update({id: report.id}, report.toJson(), function(response){
+                deferred.resolve(response);
+            }, function(error){
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+        createReport: function(report){
+            var deferred = $q.defer();
+            reportRestFactory.createReport().create(report.toJson(), function(response){
+                deferred.resolve(response);
+            }, function(error){
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+        getVmsData: function(reportId){
+            var deferred = $q.defer();
+            reportRestFactory.getVmsData().get({id: reportId}, function(response){
+                deferred.resolve(response.data);
+            }, function(error){
                 deferred.reject(error);
             });
             return deferred.promise;

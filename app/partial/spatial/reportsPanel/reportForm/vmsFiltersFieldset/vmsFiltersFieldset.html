@@ -13,129 +13,129 @@
 				<div class="row col-md-12 bottomPaddingCheckGroup">
 					<label>{{'spatial.reports_form_vms_components' | i18n}}</label> &nbsp; &nbsp;
 					<label class="checkbox-inline checkbox-options">
-						<input type="checkbox" ng-model="report.components.vms.positions" ng-checked="report.components.vms.positions"/>
+						<input type="checkbox" ng-model="report.vmsFilters.positions.active" ng-checked="report.vmsFilters.positions.active"/>
 						{{'spatial.reports_form_vms_positions' | i18n }}
 					</label>
 					<label class="checkbox-inline checkbox-options">
-						<input type="checkbox" ng-model="report.components.vms.segments" ng-checked="report.components.vms.segments"/>
+						<input type="checkbox" ng-model="report.vmsFilters.segments.active" ng-checked="report.vmsFilters.segments.active"/>
 						{{'spatial.reports_form_vms_segments' | i18n }}
 					</label>
 					<label class="checkbox-inline checkbox-options">
-						<input type="checkbox" ng-model="report.components.vms.tracks" ng-checked="report.components.vms.tracks"/>
+						<input type="checkbox" ng-model="report.vmsFilters.tracks.active" ng-checked="report.vmsFilters.tracks.active"/>
 						{{'spatial.reports_form_vms_tracks' | i18n }}
 					</label>
   				</div>
   				<!-- Section Positions -->
-  				<div class="row" ng-show="report.components.vms.positions || !report">
+  				<div class="row" ng-show="report.vmsFilters.positions.active || !report">
   					<div class="col-md-12"><span class="vmsSection">{{'spatial.reports_form_vms_positions' | i18n }}</span></div>
   					<div class="form-group col-md-2">
 						<label class="centerLabel">{{'spatial.reports_form_vms_mov_speed_range' | i18n }}</label>
 					</div>
 					<div class="form-group col-md-2">
-						<label>
+						<label class="vms-labels">
 							{{'spatial.reports_form_vms_min_speed' | i18n }}
 							<div class="unit-input">
-								<input class="form-control" ng-model="vmsFilters.movements.movMinSpeed" name="movMinSpeed" min="0" type="number">
+								<input class="form-control" ng-model="report.vmsFilters.positions.def.movMinSpeed" name="movMinSpeed" min="0" type="number">
 								<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
 							</div>
 						</label>
 					</div>
 					<div class="form-group col-md-2">
-						<label>
+						<label class="vms-labels">
 							{{'spatial.reports_form_vms_max_speed' | i18n }}
 							<div class="unit-input">
-								<input class="form-control" ng-model="vmsFilters.movements.movMaxSpeed" name="movMaxSpeed" min="0" type="number">
+								<input class="form-control" ng-model="report.vmsFilters.positions.def.movMaxSpeed" name="movMaxSpeed" min="0" type="number">
 								<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
 							</div>
 						</label>
 					</div>
 					<div class="form-group col-md-3">
-						<label>
+						<label class="vms-labels">
 							{{'spatial.reports_form_vms_category' | i18n }}
-							<input class="form-control" ng-model="vmsFilters.movements.movCategory" name="movCategory" type="text"/>
+							<input class="form-control" ng-model="report.vmsFilters.positions.def.movCategory" name="movCategory" type="text"/>
 						</label>
 					</div>
 					<div class="form-group col-md-3">
-						<label>
+						<label class="vms-labels">
 							{{'spatial.reports_form_vms_mov_status' | i18n }}
-							<input class="form-control" ng-model="vmsFilters.movements.movStatus" name="movStatus" type="text"/>
+							<input class="form-control" ng-model="report.vmsFilters.positions.def.movStatus" name="movStatus" type="text"/>
 						</label>
 					</div>
 					<div class="col-md-12"><span class="vmsBottomSection"></span></div>
   				</div>
   				<!-- Section Segments -->
-  				<div class="row" ng-show="report.components.vms.segments || !report">
+  				<div class="row" ng-show="report.vmsFilters.segments.active || !report">
   					<div class="col-md-12"><span class="vmsSection">{{'spatial.reports_form_vms_segments' | i18n }}</span></div>
   					<div class="form-group col-md-2">
 						<label class="centerLabel">{{'spatial.reports_form_vms_seg_speed_range' | i18n }}</label>
 					</div>
 					<div class="form-group col-md-2">
-						<label>
+						<label class="vms-labels">
 							{{'spatial.reports_form_vms_min_speed' | i18n }}
 							<div class="unit-input">
-								<input class="form-control" ng-model="vmsFilters.segments.segMinSpeed" name="segMinSpeed" min="0" type="number">
+								<input class="form-control" ng-model="report.vmsFilters.segments.def.segMinSpeed" name="segMinSpeed" min="0" type="number">
 								<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
 							</div>
 						</label>
 					</div>
 					<div class="form-group col-md-2">
-						<label>
+						<label class="vms-labels">
 							{{'spatial.reports_form_vms_max_speed' | i18n }}
 							<div class="unit-input">
-								<input class="form-control" ng-model="vmsFilters.segments.movMaxSpeed" name="segMaxSpeed" min="0" type="number">
+								<input class="form-control" ng-model="report.vmsFilters.segments.def.movMaxSpeed" name="segMaxSpeed" min="0" type="number">
 								<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
 							</div>
 						</label>
 					</div>
 					<div class="form-group col-md-6">
-						<label>
+						<label class="vms-labels">
 							{{'spatial.reports_form_vms_category' | i18n }}
-							<input class="form-control" ng-model="vmsFilters.segments.segCategory" name="segCategory" type="text"/>
+							<input class="form-control" ng-model="report.vmsFilters.segments.def.segCategory" name="segCategory" type="text"/>
 						</label>
 					</div>
 					<div class="form-group col-md-2">
 						<label class="centerLabel">{{'spatial.reports_form_vms_seg_duration_range' | i18n }}</label>
 					</div>
 					<div class="form-group col-md-2">
-						<label>
+						<label class="vms-labels">
 							{{'spatial.reports_form_vms_min_duration' | i18n }}
 							<div class="unit-input">
-								<input class="form-control" ng-model="vmsFilters.segments.segMinDuration" name="segMinDuration" min="0" type="number">
+								<input class="form-control" ng-model="report.vmsFilters.segments.def.segMinDuration" name="segMinDuration" min="0" type="number">
 								<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
 							</div>
 						</label>
 					</div>
 					<div class="form-group col-md-2">
-						<label>
+						<label class="vms-labels">
 							{{'spatial.reports_form_vms_max_duration' | i18n }}
 							<div class="unit-input">
-								<input class="form-control" ng-model="vmsFilters.segments.segMaxDuration" name="segMaxDuration" min="0" type="number">
+								<input class="form-control" ng-model="report.vmsFilters.segments.def.segMaxDuration" name="segMaxDuration" min="0" type="number">
 								<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
 							</div>
 						</label>
 					</div>
 					<div class="col-md-12"><span class="vmsBottomSection"></span></div>
   				</div>
-  				<!-- Section Tracks -->
-  				<div class="row" ng-show="report.components.vms.tracks || !report">
+  				<!-- Section Tracks  -->
+  				<div class="row" ng-show="report.vmsFilters.tracks.active || !report">
   					<div class="col-md-12"><span class="vmsSection">{{'spatial.reports_form_vms_tracks' | i18n }}</span></div>
   					<div class="form-group col-md-2">
 						<label class="centerLabel">{{'spatial.reports_form_vms_tracks_time_at_sea' | i18n }}</label>
 					</div>
 					<div class="form-group col-md-2">
-						<label>
+						<label class="vms-labels">
 							{{'spatial.reports_form_vms_min_duration' | i18n }}
 							<div class="unit-input">
-								<input class="form-control" ng-model="vmsFilters.tracks.trkMinTime" name="trkMinTime" min="0" type="number">
+								<input class="form-control" ng-model="report.vmsFilters.tracks.def.trkMinTime" name="trkMinTime" min="0" type="number">
 								<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
 							</div>
 						</label>
 					</div>
 					<div class="form-group col-md-2">
-						<label>
+						<label class="vms-labels">
 							{{'spatial.reports_form_vms_max_duration' | i18n }}
 							<div class="unit-input">
-								<input class="form-control" ng-model="vmsFilters.tracks.trkMaxTime" name="trkMaxTime" min="0" type="number">
+								<input class="form-control" ng-model="report.vmsFilters.tracks.def.trkMaxTime" name="trkMaxTime" min="0" type="number">
 								<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
 							</div>
 						</label>
@@ -144,19 +144,19 @@
 						<label class="centerLabel">{{'spatial.reports_form_vms_seg_duration_range' | i18n }}</label>
 					</div>
 					<div class="form-group col-md-2">
-						<label>
+						<label class="vms-labels">
 							{{'spatial.reports_form_vms_min_duration' | i18n }}
 							<div class="unit-input">
-								<input class="form-control" ng-model="vmsFilters.tracks.trkMinDuration" name="trkMinDuration" min="0" type="number">
+								<input class="form-control" ng-model="report.vmsFilters.tracks.def.trkMinDuration" name="trkMinDuration" min="0" type="number">
 								<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
 							</div>
 						</label>
 					</div>
 					<div class="form-group col-md-2">
-						<label>
+						<label class="vms-labels">
 							{{'spatial.reports_form_vms_max_duration' | i18n }}
 							<div class="unit-input">
-								<input class="form-control" ng-model="vmsFilters.tracks.trkMaxDuration" name="trkMaxDuration" min="0" type="number">
+								<input class="form-control" ng-model="report.vmsFilters.tracks.def.trkMaxDuration" name="trkMaxDuration" min="0" type="number">
 								<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
 							</div>
 						</label>
