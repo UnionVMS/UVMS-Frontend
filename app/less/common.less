@@ -20,10 +20,10 @@
 
 //Remove outer padding from first and last column in row
 .row.no-outer-padding [class*='col-']:first-child{
-  padding-left: 0;  
+  padding-left: 0;
 }
 .row.no-outer-padding [class*='col-']:last-child{
-  padding-right: 0;  
+  padding-right: 0;
 }
 
 .row-same-height {
@@ -151,7 +151,7 @@ table.searchResults{
                     font-weight: normal;
                 }
             }
-        }        
+        }
     }
     th{
         height:40px;
@@ -170,7 +170,7 @@ table.searchResults{
         }
     }
 
-    td.checkboxContainer, 
+    td.checkboxContainer,
     th.checkboxContainer {
         text-align: center;
     }
@@ -196,7 +196,7 @@ table.searchResults{
                     padding:0px 12px;
                     font-size: 12px;
                 }
-            }                    
+            }
         }
     }
 
@@ -215,16 +215,16 @@ table.searchResults{
 .grayContainer{
     table.searchResults{
         thead{
-            border-bottom: solid 2px #C5C5C4;        
+            border-bottom: solid 2px #C5C5C4;
         }
-        
+
 
         >tbody{
             tr{
                 border-bottom: solid 1px #C5C5C4;
-            }          
+            }
         }
-        
+
         &.colorOdd{
             tbody{
                 tr:nth-child(odd) {background: #EEE}
@@ -237,9 +237,9 @@ td div.iconToTheLeftOfTheTableCell{
     position: absolute;
     left:-25px;
 
-    div.tooltip{ 
-        min-width: 100px;       
-    }        
+    div.tooltip{
+        min-width: 100px;
+    }
 }
 
 div.searchResultsLoading{
@@ -260,16 +260,16 @@ a:hover{
 .modal-header{
     .headerWithBottomBorder{
         font-size: 27px;
-        font-width: bold;        
+        font-width: bold;
         border-bottom-colors: #e4e4e4;
         border-bottom-width: 1px;
-        border-bottom-style: solid;        
+        border-bottom-style: solid;
     }
 
     .closeIconContainer{
       position: absolute;
       right: 20px;
-      top: 20px;        
+      top: 20px;
     }
 }
 
@@ -283,7 +283,7 @@ a:hover{
 .grayBorderLeft{border-left:@grayBorder}
 
 .borderSection{
-    padding: 15px;    
+    padding: 15px;
     .grayBorder;
     border-top-width: 3px;
 }
@@ -295,12 +295,12 @@ a:hover{
     &::-webkit-scrollbar {
         width: 8px;
     }
-     
+
     &::-webkit-scrollbar-track {
         -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
         width: 4px;
     }
-     
+
     &::-webkit-scrollbar-thumb {
       background-color: #ECEFEF;
       outline: 1px solid #E4E4E4;
@@ -320,7 +320,7 @@ a:hover{
     font-size: 24px;
     position: relative;
     cursor: pointer;
-    color: @errorColor;    
+    color: @errorColor;
 }
 
 .searchbtntext{
@@ -342,6 +342,7 @@ a:hover{
     border-top: 5px solid #dddddd;
     margin-top: 10px;
     padding: 15px;
+
 
     .card-header {
         border-bottom: 1px solid #dddddd;
