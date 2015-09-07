@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="col-md-12 rules-table">
+	<div search-results-table search="currentSearchResults" load-next-page-function="loadNextPage" class="col-md-12 rules-table">
 		<table class="searchResults colorOdd">
 			<thead>
 				<tr>
@@ -16,20 +16,20 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="item in currentSearchResults.rules | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:currentSearchResult.filter">
-				<td class="table-checkbox"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
-				<td><i class="fa fa-plus-circle detailsIcon" ng-click="details(item)" title="{{'alarms.rules_table_details' | i18n}}"></i></td>
-				<td>{{item.name}}</td>
-				<td class="definition">{{item.definitions[0]}}</td>
-				<td>{{item.description}}</td>
-				<td>{{item.recipient}}</td>
-				<td>{{item.lastTriggered}}</td>
-				<td>{{item.createdBy}}</td>
-				<td>{{item.dateCreated}}</td>
-				<td>
-					<i class="fa fa-pencil editIcon" ng-click="toggleRuleDetails(item)" title="{{'alarms.rules_table_edit'| i18n}}"></i>
-					<i class="fa fa-trash-o deleteIcon" ng-click="deleteRule(item)" title="{{'alarms.rules_table_delete'| i18n}}"></i>
-				</td>
+				<tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:currentSearchResult.filter">
+    				<td class="table-checkbox"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
+    				<td><i class="fa fa-plus-circle detailsIcon" ng-click="details(item)" title="{{'alarms.rules_table_details' | i18n}}"></i></td>
+    				<td>{{item.name}}</td>
+    				<td class="definition">{{item.definitions[0]}}</td>
+    				<td>{{item.description}}</td>
+    				<td>{{item.recipient}}</td>
+    				<td>{{item.lastTriggered}}</td>
+    				<td>{{item.createdBy}}</td>
+    				<td>{{item.dateCreated}}</td>
+    				<td>
+    					<i class="fa fa-pencil editIcon" ng-click="toggleRuleDetails(item)" title="{{'alarms.rules_table_edit'| i18n}}"></i>
+    					<i class="fa fa-trash-o deleteIcon" ng-click="deleteRule(item)" title="{{'alarms.rules_table_delete'| i18n}}"></i>
+    				</td>
 				</tr>
 			</tbody>
 		</table>

@@ -35,7 +35,7 @@ angular.module('unionvmsWeb')
             }
         };
     })
-    .service('pollingRestService',function($q, pollingRestFactory, Poll, PollChannel, SearchResultListPage, SearchResultListPage, vesselRestService, GetListRequest){
+    .service('pollingRestService',function($q, pollingRestFactory, Poll, PollChannel, SearchResultListPage, vesselRestService, GetListRequest){
 
         var setProgramPollStatusSuccess = function(response, deferred){
             if(response.code !== 200){
