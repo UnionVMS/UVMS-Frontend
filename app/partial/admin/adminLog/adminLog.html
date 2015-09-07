@@ -19,7 +19,7 @@
     			<table class="searchResults colorOdd">
     				<thead>
     					<tr>
-    						<th>
+    						<th class="checkboxContainer">
     							<input type="checkbox" ng-click="toggleCheckAll()" ng-checked="isAllChecked()"/>
     						</th>
     						<th sortable-table-header by="sortBy" reverse="reverseSort" order="'username'">
@@ -41,7 +41,7 @@
     				</thead>
     				<tbody>
     					<tr ng-repeat="audit in currentSearchResults.items | orderBy:sortBy:reverseSort">
-    						<td><input type="checkbox" ng-click="audit.checked = !audit.checked" ng-checked="audit.checked"/></td>
+    						<td class="checkboxContainer"><input type="checkbox" ng-click="audit.checked = !audit.checked" ng-checked="audit.checked"/></td>
     						<td>{{audit.username}}</td>
     						<td>{{audit.operation}}</td>
     						<td>{{audit.objectType}}</td>

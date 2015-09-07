@@ -76,7 +76,7 @@
 
                                 </tr>
                                 <tr>
-                                    <th><input type="checkbox"/></th>
+                                    <th class="checkboxContainer"><input type="checkbox"/></th>
                                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.name'">{{'polling.polling_logs_table_header_name' | i18n}}</th>
 
                                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.externalMarking'">{{'polling.polling_logs_table_header_ext_no' | i18n}}</th>
@@ -96,7 +96,7 @@
                             </thead>
                             <tbody>
                             <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" ng-init="isExpanded = false">
-                                <td><input type="checkbox"/></td>
+                                <td class="checkboxContainer"><input type="checkbox"/></td>
                                 <td>MOCK VESSEL</td>
                                 <td>MOCK EXT NO</td>
                                 <td>{{item.type}}</td>

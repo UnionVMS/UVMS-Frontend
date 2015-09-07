@@ -3,7 +3,7 @@
         <table class="searchResults colorOdd movementtable">
             <thead>
                 <tr>
-                    <th><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
+                    <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
 
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.state'">{{'movement.table_header_flag_state' | i18n}}</th>
 
@@ -35,7 +35,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="movement in currentSearchResults.items | orderBy:currentSearchResults.sortBy : currentSearchResults.sortReverse | filter:searchFilter">
-                    <td><input type="checkbox" ng-checked="isChecked(movement)" ng-click="checkItem(movement)"/></td>
+                    <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(movement)" ng-click="checkItem(movement)"/></td>
                     <td>{{movement.vessel.state}}</td>
                     <td>{{movement.vessel.externalMarking}}</td>
                     <td>{{movement.vessel.ircs}}</td>

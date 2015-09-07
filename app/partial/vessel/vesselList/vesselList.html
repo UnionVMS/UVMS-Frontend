@@ -3,7 +3,7 @@
         <table class="searchResults colorOdd">
             <thead>
             <tr>
-                <th><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
+                <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
 
                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'countryCode'">{{'vessel.table_header_flag_state' | i18n}}</th>
 
@@ -25,7 +25,7 @@
             </thead>
             <tbody>
             <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:currentSearchResults.filter">
-                <td><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)"/></td>
+                <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)"/></td>
                 <td>{{item.countryCode}}</td>
                 <td>{{item.externalMarking}}</td>
                 <td>{{item.name}}</td>

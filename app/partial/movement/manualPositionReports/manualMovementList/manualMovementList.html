@@ -28,7 +28,7 @@
                     </th>
                 </tr>            
                 <tr>
-                    <th><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
+                    <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'carrier.externalMarking'">{{'movement.table_header_external_marking' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'carrier.ircs'">{{'movement.table_header_ircs' | i18n}}</th>
 					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'carrier.cfr'">{{'movement.table_header_cfr' | i18n}}</th>
@@ -44,7 +44,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="item in filtered = (currentSearchResults.items | orderBy:currentSearchResults.sortBy : currentSearchResults.sortReverse | filter:search)">
-                	<td><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)"/></td>
+                	<td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)"/></td>
                     <td>{{item.carrier.externalMarking}}</td>
                     <td>{{item.carrier.ircs}}</td>
                     <td>{{item.carrier.cfr}}</td>
