@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $filter, searchService, alertService, MobileTerminalListPage, MobileTerminal, SystemTypeAndLES, mobileTerminalRestService, pollingService, GetPollableListRequest, pollingRestService, configurationService, $location, locale, $stateParams, csvService){
+angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $filter, searchService, alertService, MobileTerminal, SystemTypeAndLES, mobileTerminalRestService, pollingService, GetPollableListRequest, pollingRestService, configurationService, $location, locale, $stateParams, csvService, SearchResults){
 
     var hideAlertsOnScopeDestroy = true;
 
@@ -8,16 +8,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         mobileTerminalForm : false
     };
 
-    //Search objects and results
-    $scope.currentSearchResults = {
-        page : 0,
-        totalNumberOfPages : 0,
-        mobileTerminals : [],
-        errorMessage : "",
-        loading : false,
-        sortBy : "attributes.SERIAL_NUMBER",
-        sortReverse : false
-    };
+    $scope.currentSearchResults = new SearchResults('attributes.SERIAL_NUMBER', false, locale.getString('mobileTerminal.search_zero_results_error'));
 
     //Selected by checkboxes
     $scope.selectedMobileTerminals = [];
@@ -150,34 +141,14 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
     //Get list of Mobile Terminals matching the current search criterias
     $scope.searchMobileTerminals = function(){
         $scope.clearSelection();
-        $scope.currentSearchResults.errorMessage = "";
-        $scope.currentSearchResults.loading = true;
-        $scope.currentSearchResults.mobileTerminals.length = 0;
-        $scope.currentSearchResults.page = 0;
-        $scope.currentSearchResults.totalNumberOfPages = 0;
+        $scope.currentSearchResults.clearForSearch();        
         searchService.searchMobileTerminals(false)
                 .then(updateSearchResults, onGetSearchResultsError);
     };    
 
     //Update the search results
-    var updateSearchResults = function(mobileTerminalListPage){
-        $scope.currentSearchResults.loading = false;
-        if(mobileTerminalListPage.totalNumberOfPages === 0 ){
-            $scope.currentSearchResults.errorMessage = locale.getString('mobileTerminal.search_zero_results_error');
-        } else {
-            $scope.currentSearchResults.errorMessage = "";
-            if(!$scope.currentSearchResults.mobileTerminals){
-                $scope.currentSearchResults.mobileTerminals = mobileTerminalListPage.mobileTerminals;
-            }
-            else {
-                for (var i = 0; i < mobileTerminalListPage.mobileTerminals.length; i++){
-                    $scope.currentSearchResults.mobileTerminals.push(mobileTerminalListPage.mobileTerminals[i]);
-                }
-            }
-        }
-        //Update page info
-        $scope.currentSearchResults.totalNumberOfPages = mobileTerminalListPage.totalNumberOfPages;
-        $scope.currentSearchResults.page = mobileTerminalListPage.currentPage;
+    var updateSearchResults = function(searchResultsListPage){
+        $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
     };
 
     $scope.getOriginalMobileTerminal = function() {
@@ -185,18 +156,18 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
             return;
         }
 
-        for (var i = 0; i < $scope.currentSearchResults.mobileTerminals.length; i++) {
-            if ($scope.currentSearchResults.mobileTerminals[i].isEqualTerminal($scope.currentMobileTerminal)) {
-                return $scope.currentSearchResults.mobileTerminals[i];
+        for (var i = 0; i < $scope.currentSearchResults.items.length; i++) {
+            if ($scope.currentSearchResults.items[i].isEqualTerminal($scope.currentMobileTerminal)) {
+                return $scope.currentSearchResults.items[i];
             }
         }
     };
 
     $scope.mergeCurrentMobileTerminalIntoSearchResults = function() {
-        for (var i = 0; i < $scope.currentSearchResults.mobileTerminals.length; i++) {
-            if ($scope.currentSearchResults.mobileTerminals[i].isEqualTerminal($scope.currentMobileTerminal)) {
-                $scope.currentSearchResults.mobileTerminals[i] = $scope.currentMobileTerminal;
-                $scope.currentMobileTerminal = $scope.currentSearchResults.mobileTerminals[i].copy();
+        for (var i = 0; i < $scope.currentSearchResults.items.length; i++) {
+            if ($scope.currentSearchResults.items[i].isEqualTerminal($scope.currentMobileTerminal)) {
+                $scope.currentSearchResults.items[i] = $scope.currentMobileTerminal;
+                $scope.currentMobileTerminal = $scope.currentSearchResults.items[i].copy();
             }
         }
     };
@@ -208,7 +179,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         {
             //Increase page by 1
             searchService.increasePage();
-            $scope.currentSearchResults.loading = true;
+            $scope.currentSearchResults.setLoading(true);
             var response = searchService.searchMobileTerminals(true)
                 .then(updateSearchResults, onGetSearchResultsError);
         }
@@ -216,10 +187,8 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
 
     //Error during search
     var onGetSearchResultsError = function(error){
-        $scope.currentSearchResults.loading = false;
-        $scope.currentSearchResults.errorMessage = locale.getString('common.search_failed_error');
-        $scope.currentSearchResults.totalNumberOfPages = 0;
-        $scope.currentSearchResults.page = 0;
+        $scope.currentSearchResults.setLoading(false);
+        $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
     };
 
 
@@ -317,7 +286,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
             }
             //Export items in the table
             else{
-                exportItems = $scope.currentSearchResults.mobileTerminals;
+                exportItems = $scope.currentSearchResults.items;
             }
             return exportItems.reduce(
                 function(csvObject, item){ 

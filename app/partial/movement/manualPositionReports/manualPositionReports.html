@@ -3,10 +3,12 @@
     <div class="container containerWithTopBottomPadding">
         <div class="card">
             <div class="row card-header">
-                <button type="submit" class="btn btn-primary btn-sm" ng-click="showModal()">
-                    <span class="fa fa-plus-square" aria-hidden="true"></span> &nbsp;
-                    <span>{{'movement.manual_add_new_manual_report' | i18n }}</span>
-                </button>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary btn-sm" ng-click="showModal()">
+                        <span class="fa fa-plus-square" aria-hidden="true"></span> &nbsp;
+                        <span>{{'movement.manual_add_new_manual_report' | i18n }}</span>
+                    </button>
+                </div>
             </div>
         	<div ng-include="'partial/movement/manualPositionReports/manualMovementList/manualMovementList.html'"></div>
         </div>

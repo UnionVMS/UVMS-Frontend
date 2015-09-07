@@ -8,7 +8,7 @@ angular.module('unionvmsWeb').factory('auditLogRestFactory', function($resource)
         }
     };
 
-}).service('auditLogRestService', function($q, auditLogRestFactory, AuditLogListPage, Audit) {
+}).service('auditLogRestService', function($q, auditLogRestFactory, SearchResultListPage, Audit) {
 
     return {
         getAuditLogList: function(request) {
@@ -26,7 +26,7 @@ angular.module('unionvmsWeb').factory('auditLogRestFactory', function($resource)
                     }
                 }
 
-                deferred.resolve(new AuditLogListPage(auditLogs, response.data.currentPage, response.data.totalNumberOfPages));
+                deferred.resolve(new SearchResultListPage(auditLogs, response.data.currentPage, response.data.totalNumberOfPages));
             },
             function(error) {
                 deferred.reject(error);

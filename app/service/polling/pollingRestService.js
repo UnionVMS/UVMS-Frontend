@@ -35,7 +35,7 @@ angular.module('unionvmsWeb')
             }
         };
     })
-    .service('pollingRestService',function($q, pollingRestFactory, Poll, PollChannel, PollListPage, SearchResultListPage, vesselRestService, GetListRequest){
+    .service('pollingRestService',function($q, pollingRestFactory, Poll, PollChannel, SearchResultListPage, SearchResultListPage, vesselRestService, GetListRequest){
 
         var setProgramPollStatusSuccess = function(response, deferred){
             if(response.code !== 200){
@@ -164,7 +164,7 @@ angular.module('unionvmsWeb')
                             return;
                         }
                         var polls = [],
-                            pollListPage;
+                            searchResultListPage;
 
                         //Create a ListPage object from the response
                         if(angular.isArray(response.data.poll)) {
@@ -174,9 +174,9 @@ angular.module('unionvmsWeb')
                         }
                         var currentPage = response.data.currentPage;
                         var totalNumberOfPages = response.data.totalNumberOfPages;
-                        pollListPage = new PollListPage(polls, currentPage, totalNumberOfPages);
+                        searchResultListPage = new SearchResultListPage(polls, currentPage, totalNumberOfPages);
                     
-                        deferred.resolve(pollListPage);
+                        deferred.resolve(searchResultListPage);
                     },
                 function(error) {
                     console.error("Error getting polls");

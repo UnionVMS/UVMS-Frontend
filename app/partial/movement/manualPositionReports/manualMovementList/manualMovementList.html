@@ -1,5 +1,5 @@
 <div ng-controller="ManualmovementlistCtrl">
-	<div class="movementtablecontainer">
+	<div search-results-table search="currentSearchResults" class="movementtablecontainer">
         <table class="searchResults colorOdd movementtable">
             <thead>
                 <tr class="searchInputRow">
@@ -43,7 +43,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in filtered = (currentSearchResults.movements | orderBy:currentSearchResults.sortBy : currentSearchResults.sortReverse | filter:search)">
+                <tr ng-repeat="item in filtered = (currentSearchResults.items | orderBy:currentSearchResults.sortBy : currentSearchResults.sortReverse | filter:search)">
                 	<td><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)"/></td>
                     <td>{{item.carrier.externalMarking}}</td>
                     <td>{{item.carrier.ircs}}</td>
@@ -66,12 +66,7 @@
                     </td>
                 </tr>
             </tbody>
-        </table>
-        <search-result-error-alert ng-show="currentSearchResults.errorMessage">{{currentSearchResults.errorMessage}}</search-result-error-alert>
-        <search-result-error-alert ng-show="currentSearchResults.movements.length > 0 && filtered.length === 0">{{'movement.manual_position_filter_no_results' | i18n}}</search-result-error-alert>        
-    </div>
-    <div class="col-md-12 searchResultsLoading" ng-show="currentSearchResult.loading">
-        <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>        
+        </table>        
     </div>
 </div>
 

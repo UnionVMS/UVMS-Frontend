@@ -8,7 +8,7 @@ $scope.selectedMovements = [];
         }else{
             //Add all
             $scope.clearSelection();
-            $.each($scope.currentSearchResults.movements, function(index, item) {
+            $.each($scope.currentSearchResults.items, function(index, item) {
                 $scope.addToSelection(item);
             });
         }
@@ -25,12 +25,12 @@ $scope.selectedMovements = [];
     };
 
     $scope.isAllChecked = function(){
-        if(angular.isUndefined($scope.currentSearchResults.movements) || $scope.selectedMovements.length === 0){
+        if(angular.isUndefined($scope.currentSearchResults.items) || $scope.selectedMovements.length === 0){
             return false;
         }
 
         var allChecked = true;
-        $.each($scope.currentSearchResults.movements, function(index, item) {
+        $.each($scope.currentSearchResults.items, function(index, item) {
             if(!$scope.isChecked(item)){
                 allChecked = false;
                 return false;

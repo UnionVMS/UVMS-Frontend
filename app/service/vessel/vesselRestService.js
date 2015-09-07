@@ -76,10 +76,10 @@ angular.module('unionvmsWeb')
         var deferred = $q.defer();
         var vessels = [];
         var onSuccess = function(vesselListPage){
-            vessels = vessels.concat(vesselListPage.vessels);
+            vessels = vessels.concat(vesselListPage.items);
             
             //Last page, then return
-            if(vesselListPage.isLastPage() || vesselListPage.vessels.length === 0 || vesselListPage.vessels.length < getListRequest.listSize){
+            if(vesselListPage.isLastPage() || vesselListPage.items.length === 0 || vesselListPage.items.length < getListRequest.listSize){
                 console.log("Found " +vessels.length +" vessels");
                 return deferred.resolve(vessels);
             }

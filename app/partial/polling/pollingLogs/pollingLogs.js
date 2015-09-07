@@ -1,17 +1,8 @@
-angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll, PollStatus, searchService, alertService, locale){
+angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll, PollStatus, searchService, alertService, locale, SearchResults){
 
     $scope.activeTab = "POLLING_LOGS";
 
-    //Search objects and results
-    $scope.currentSearchResults = {
-        page : 1,
-        totalNumberOfPages : 25,
-        polls : [],
-        errorMessage : "",
-        loading : false,
-        sortBy : "status[0].time",
-        sortReverse : false
-    };
+    $scope.currentSearchResults = new SearchResults('status[0].time', false, locale.getString('polling.polling_logs_search_zero_results_error'));
 
     //Holds the search criterias
     $scope.advancedSearchObject  = searchService.getAdvancedSearchObject();
@@ -88,11 +79,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll
     $scope.searchPolls = function(){
 
         //Reset currentSearchResults
-        $scope.currentSearchResults.errorMessage = "";
-        $scope.currentSearchResults.loading = true;
-        $scope.currentSearchResults.polls.length = 0;
-        $scope.currentSearchResults.page = 0;
-        $scope.currentSearchResults.totalNumberOfPages = 0;
+        $scope.currentSearchResults.clearForSearch();
 
         //Create criterias and do the search
         searchService.resetPage();
@@ -104,24 +91,8 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll
     };    
 
     //Update the search results
-    var updateSearchResults = function(pollListPage){
-        $scope.currentSearchResults.loading = false;
-        if(pollListPage.totalNumberOfPages === 0 ){
-            $scope.currentSearchResults.errorMessage = locale.getString('polling.polling_logs_search_zero_results_error');
-        } else {
-            $scope.currentSearchResults.errorMessage = "";
-            if(!$scope.currentSearchResults.polls){
-                $scope.currentSearchResults.polls = pollListPage.polls;
-            }
-            else {
-                for (var i = 0; i < pollListPage.polls.length; i++){
-                    $scope.currentSearchResults.polls.push(pollListPage.polls[i]);
-                }
-            }
-        }
-        //Update page info
-        $scope.currentSearchResults.totalNumberOfPages = pollListPage.totalNumberOfPages;
-        $scope.currentSearchResults.page = pollListPage.currentPage;
+    var updateSearchResults = function(searchResultsListPage){
+        $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
     }; 
 
     //Load the next page of the search results
@@ -131,7 +102,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll
         {
             //Increase page by 1
             searchService.increasePage();
-            $scope.currentSearchResults.loading = true;
+            $scope.currentSearchResults.setLoading(true);
             var response = searchService.searchPolls(true)
                 .then(updateSearchResults, onGetSearchResultsError);
         }
@@ -139,10 +110,8 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll
 
     //Error during search
     var onGetSearchResultsError = function(error){
-        $scope.currentSearchResults.loading = false;
-        $scope.currentSearchResults.errorMessage = locale.getString('common.search_failed_error');
-        $scope.currentSearchResults.totalNumberOfPages = 0;
-        $scope.currentSearchResults.page = 0;
+        $scope.currentSearchResults.setLoading(false);
+        $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
     };
 
     $scope.$on("$destroy", function() {

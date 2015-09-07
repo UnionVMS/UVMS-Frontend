@@ -1,30 +1,12 @@
-angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter, locale, searchService, exchangeRestService, infoModal, ManualPosition, alertService, csvService, ExchangeService){
+angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter, locale, searchService, exchangeRestService, infoModal, ManualPosition, alertService, csvService, ExchangeService, SearchResults){
 
-    $scope.transmissionStatuses = {
-        loading : false,
-        services : [],
-        errorMessage: ""
-    };
-
-    $scope.sendingQueueSearchResults = {
-        page: 0,
-        pageCount: 0,
-        messages: [],
-        errorMessage: ""
-    };
+    $scope.transmissionStatuses = new SearchResults();
+    $scope.sendingQueueSearchResults = new SearchResults();
 
     $scope.pausedQueueItems = {};
 
-    $scope.searchResults = {
-        page: 0,
-        pageCount: 0,
-        messages: [],
-        sortBy: "dateReceived",
-        sortReverse: true,
-        errorMessage: "",
-        loading : false,
-        incomingOutgoing: "all"
-    };
+    $scope.exchangeLogsSearchResults = new SearchResults('dateReceived', true);
+    $scope.exchangeLogsSearchResults.incomingOutgoing = 'all';
 
     var init = function(){
         $scope.searchExchange();
@@ -33,11 +15,11 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     };
 
     $scope.filterIncomingOutgoing = function(message) {
-        if ($scope.searchResults.incomingOutgoing === "all") {
+        if ($scope.exchangeLogsSearchResults.incomingOutgoing === "all") {
             return true;
         }
 
-        return message.outgoing ? $scope.searchResults.incomingOutgoing === "outgoing" : $scope.searchResults.incomingOutgoing === "incoming";
+        return message.outgoing ? $scope.exchangeLogsSearchResults.incomingOutgoing === "outgoing" : $scope.exchangeLogsSearchResults.incomingOutgoing === "incoming";
     };
 
     //TODO: REMOVE MOCK DATA
@@ -50,21 +32,21 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     b.name = "Inmarsat-C Burum (MOCK)";
     b.status = "OFFLINE";
     mockServices.push(b);    
-    $scope.transmissionStatuses.services = mockServices;
+    
 
     $scope.getTransmissionStatuses = function() {
-        $scope.transmissionStatuses.loading = true;
-        $scope.transmissionStatuses.errorMessage = "";
+        $scope.transmissionStatuses.clearForSearch();
         exchangeRestService.getTransmissionStatuses().then(
             function(services) {
-                $scope.transmissionStatuses.loading = false;
-                $scope.transmissionStatuses.services = services;
+                $scope.transmissionStatuses.setLoading(false);
+                $scope.transmissionStatuses.items = services;
             },
             function(error) {
-                $scope.transmissionStatuses.loading = false;
-                //Todo: remove mockServices
-                $scope.transmissionStatuses.services = mockServices;
-                $scope.transmissionStatuses.errorMessage = locale.getString('common.error_getting_data_from_server');
+                $scope.transmissionStatuses.setLoading(false);
+                //TODO: remove mockServices
+                $scope.transmissionStatuses.items = mockServices;
+
+                $scope.transmissionStatuses.setErrorMessage(locale.getString('common.error_getting_data_from_server'));
                 console.error("Error getting transmission statuses", error);
             }
         );
@@ -83,33 +65,23 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     };
 
     $scope.searchExchange = function() {
-        $scope.searchResults.loading = true;
-        $scope.searchResults.messages = [];
-        $scope.searchResults.errorMessage = "";
+        $scope.exchangeLogsSearchResults.clearForSearch();        
+        
         searchService.searchExchange("MESSAGES").then(function(page) {
-            $scope.searchResults.messages = page.exchangeMessages;
-            $scope.searchResults.page = page.currentPage;
-            $scope.searchResults.pageCount = page.totalNumberOfPages;            
-            $scope.searchResults.loading = false;
-            if(page.totalNumberOfPages === 0 ){
-              $scope.searchResults.errorMessage = locale.getString('exchange.search_zero_results_error');            
-            }
+            $scope.exchangeLogsSearchResults.updateWithNewResults(page);
         },
         function(error) {
-            $scope.searchResults.errorMessage = error;
-            $scope.searchResults.loading = false;
+            $scope.exchangeLogsSearchResults.setLoading(false);
+            $scope.exchangeLogsSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));            
         });
     };
 
      $scope.searchSendingQueue = function(){
         searchService.searchExchange("SENDINGQUEUE").then(function(page) {
-            $scope.sendingQueueSearchResults.messages = page.exchangeMessages;
-            $scope.sendingQueueSearchResults.page = page.currentPage;
-            $scope.sendingQueueSearchResults.pageCount = page.totalNumberOfPages;
-            $scope.sendingQueueSearchResults.errorMessage = "";
+            $scope.sendingQueueSearchResults.updateWithNewResults(page);
         },
         function(error) {
-            $scope.sendingQueueSearchResults.errorMessage = error;
+            $scope.sendingQueueSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
         });
      };
 
@@ -192,7 +164,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
             }
             //Export all logs in the table
             else{
-                exportItems = $scope.searchResults.messages;
+                exportItems = $scope.exchangeLogsSearchResults.items;
             }
             return exportItems.reduce(
                 function(csvObject, item){ 
@@ -235,7 +207,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         }else{
             //Add all
             $scope.clearSelection();
-            $.each($scope.searchResults.messages, function(index, item) {
+            $.each($scope.exchangeLogsSearchResults.items, function(index, item) {
                 $scope.addToSelection(item);
             });
         }
@@ -252,12 +224,12 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     };
 
     $scope.isAllChecked = function(){
-        if(angular.isUndefined($scope.searchResults.messages) || $scope.selectedItems.length === 0){
+        if(angular.isUndefined($scope.exchangeLogsSearchResults.items) || $scope.selectedItems.length === 0){
             return false;
         }
 
         var allChecked = true;
-        $.each($scope.searchResults.messages, function(index, item) {
+        $.each($scope.exchangeLogsSearchResults.items, function(index, item) {
             if(!$scope.isChecked(item)){
                 allChecked = false;
                 return false;

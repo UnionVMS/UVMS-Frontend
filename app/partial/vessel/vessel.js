@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, savedSearchService, Vessel, GetListRequest, searchService, vesselRestService, alertService, $stateParams, csvService) {
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, savedSearchService, Vessel, searchService, vesselRestService, alertService, $stateParams, csvService, SearchResults) {
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -6,17 +6,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         vesselForm : false
     };
 
-    //Search objects and results
-    $scope.currentSearchResults = {
-        page : 0,
-        totalNumberOfPages : 0,
-        vessels : [],
-        errorMessage : "",
-        loading : false,
-        sortBy : "",
-        sortReverse : false,
-        filter : ""
-    };
+    $scope.currentSearchResults = new SearchResults('', false, locale.getString('vessel.search_zero_results_error'));
 
     //Selected by checkboxes
     $scope.selectedVessels = [];
@@ -47,55 +37,28 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         {
             //Increase page by 1
             searchService.increasePage();
-            $scope.currentSearchResults.loading = true;
+            $scope.currentSearchResults.setLoading(true);
             searchService.searchVessels()
             .then(updateSearchResults, onGetSearchResultsError);
         }
     };
 
-    $scope.resetSearchResult = function(){   
-        $scope.clearSelection();
-        $scope.currentSearchResults.page = 0;
-        $scope.currentSearchResults.totalNumberOfPages = 0;
-        $scope.currentSearchResults.vessels = [];
-        $scope.currentSearchResults.errorMessage ="";
-        $scope.currentSearchResults.loading = true;
-    };
-
     $scope.searchVessels = function(){
-        $scope.resetSearchResult();
+        $scope.clearSelection();
+        $scope.currentSearchResults.clearForSearch();
         searchService.searchVessels()
             .then(updateSearchResults, onGetSearchResultsError);
     };    
 
     //Update the search results
     var updateSearchResults = function(vesselListPage){
-        $scope.vesselListPage = vesselListPage;
-        if(vesselListPage.vessels.length === 0 ){
-            $scope.currentSearchResults.errorMessage = "No vessels matching you search criteria was found.";
-        } else {
-            $scope.currentSearchResults.errorMessage = "";
-            if(!$scope.currentSearchResults.vessels){
-                $scope.currentSearchResults.vessels = vesselListPage.vessels;
-            }
-            else {
-                for (var i = 0; i < vesselListPage.vessels.length; i++){
-                    $scope.currentSearchResults.vessels.push(vesselListPage.vessels[i]);
-                }
-            }
-        }
-        //Update page info
-        $scope.currentSearchResults.totalNumberOfPages = vesselListPage.totalNumberOfPages;
-        $scope.currentSearchResults.page = vesselListPage.currentPage;
-        $scope.currentSearchResults.loading = false;
+        $scope.currentSearchResults.updateWithNewResults(vesselListPage);        
     };
 
     //Handle error from search results (listing vessel)
     var onGetSearchResultsError = function(response){
-        $scope.currentSearchResults.loading = false;
-        $scope.currentSearchResults.errorMessage = "We are sorry... Something took a wrong turn. To err is human but to arr is pirate!!";
-        $scope.currentSearchResults.totalNumberOfPages = 0;
-        $scope.currentSearchResults.page = 0;
+        $scope.currentSearchResults.setLoading(false);
+        $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
     };
 
     //Get original vessel
@@ -104,15 +67,15 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
             return;
         }
 
-        for (var i = 0; i < $scope.currentSearchResults.vessels.length; i++) {
-            if ($scope.currentSearchResults.vessels[i].equals($scope.vesselObj)) {
-                return $scope.currentSearchResults.vessels[i];
+        for (var i = 0; i < $scope.currentSearchResults.items.length; i++) {
+            if ($scope.currentSearchResults.items[i].equals($scope.vesselObj)) {
+                return $scope.currentSearchResults.items[i];
             }
         }
     };
 
     $scope.mergeCurrentVesselIntoSearchResults = function() {
-        var vesselsInList = $scope.currentSearchResults.vessels;
+        var vesselsInList = $scope.currentSearchResults.items;
         for (var i = 0; i < vesselsInList.length; i++) {
             if (vesselsInList[i].equals($scope.vesselObj)) {
                 vesselsInList[i] = $scope.vesselObj;
@@ -122,7 +85,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
     };
 
     $scope.removeCurrentVesselFromSearchResults = function() {
-        var vesselsInList = $scope.currentSearchResults.vessels;
+        var vesselsInList = $scope.currentSearchResults.items;
         var index;
         for (var i = 0; i < vesselsInList.length; i++) {
             if (vesselsInList[i].equals($scope.vesselObj)) {
@@ -131,12 +94,12 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         }
         //Remove vessel from list
         if(angular.isDefined(index)){
-            $scope.currentSearchResults.vessels.splice(index, 1);
+            $scope.currentSearchResults.items.splice(index, 1);
             $scope.vesselObj = undefined;
         }
 
         //Removed last vessel from list?
-        if($scope.currentSearchResults.vessels.length === 0){
+        if($scope.currentSearchResults.items.length === 0){
             $scope.searchVessels();
         }
     };        
@@ -235,7 +198,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
             }
             //Export items in the table
             else{
-                exportItems = $scope.currentSearchResults.vessels;
+                exportItems = $scope.currentSearchResults.items;
             }
             return exportItems.reduce(
                 function(csvObject, item){ 

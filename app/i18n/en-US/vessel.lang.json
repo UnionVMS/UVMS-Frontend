@@ -84,6 +84,7 @@
     "save_group_input_placeholder": "Choose a title for your group",
     "search_advanced_minify" : "- Advanced search",
     "searching": "Searching",
+    "search_zero_results_error" : "No asset matching your search criteria was found.",
     "searchgroup_dropdown" : "Saved groups",
     "select": "Select",
     "select_a_group":"Select a group",

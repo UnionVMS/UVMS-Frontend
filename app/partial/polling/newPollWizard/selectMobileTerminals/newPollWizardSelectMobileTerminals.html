@@ -4,7 +4,7 @@
 		<new-poll-wizard-progress step="1"></new-poll-wizard-progress> 
 		<advanced-search searchfunc="getPollableChannels" vesselGroupCallback="selectGroupCallback()" modeltype="'POLLING_MOBILE_TERMINAL'" advancedsearchvisible="true"></advanced-search>                
         <div class="row">
-            <div class="col-md-12">
+            <div search-results-table search="currentSearchResults" load-next-page-function="loadNextPage" class="col-md-12">
                 <table class="searchResults polltable colorOdd">
                     <thead>
                         <tr>
@@ -19,7 +19,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="item in currentSearchResults.pollableChannels | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
+                        <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
                             <td>{{item.vesselName}}</td>
                             <td>{{item.vesselIrcs}}</td>
                             <td>{{item.attributes.DNID}}</td>
@@ -37,23 +37,8 @@
                     </tbody>
                 </table>
 
-                <search-result-error-alert ng-show="!currentSearchResults.loading && currentSearchResults.pollableChannels.length < 1">{{'polling.wizard_first_step_nos_search_result' | i18n}}</search-result-error-alert>                
             </div>
-            <div class="col-md-12 searchResultsLoading" ng-show="currentSearchResults.loading">
-                <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>        
-            </div>
-        </div>
-
-        <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0">
-            <div class="col-md-12">
-                {{'common.search_results_current_page' | i18n:[currentSearchResults.page, currentSearchResults.totalNumberOfPages]}}
-            </div>
-        </div>
-
-        <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0 && currentSearchResults.totalNumberOfPages > currentSearchResults.page">
-            <div class="col-md-12 textAlignCenter">
-                <span class="link" ng-click="loadNextPage()"> {{'common.search_results_load_more' | i18n | uppercase}}</span>            
-            </div>
+          
         </div>
     </div>
 

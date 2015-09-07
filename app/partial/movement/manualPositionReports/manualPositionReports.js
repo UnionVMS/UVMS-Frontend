@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal, csvService) {
+angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal, csvService, SearchResults) {
 
     $scope.showModal = function() {
         $scope.editPosition();
@@ -7,15 +7,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     $scope.selectedMovements = [];
 
     //Search objects and results
-    $scope.currentSearchResults = {
-        page : 1,
-        totalNumberOfPages : 25,
-        movements : [],
-        errorMessage : "",
-        loading : false,
-        sortBy : "carrier.name",
-        sortReverse : false
-    };
+    $scope.currentSearchResults = new SearchResults('carrier.name', false, locale.getString('movement.movement_search_error_result_zero_pages'));
 
     var init = function(){
         $scope.searchManualPositions();
@@ -23,7 +15,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     $scope.isManualMovement = true;
 
     $scope.removeFromSearchResults = function(report) {
-        var movements = $scope.currentSearchResults.movements;
+        var movements = $scope.currentSearchResults.items;
         var index = movements.indexOf(report);
         if (index < 0) {
             return;
@@ -69,50 +61,23 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     };
 
     $scope.searchManualPositions = function(){
-        $scope.resetSearchResult();
+        $scope.currentSearchResults.clearForSearch();
         searchService.searchManualPositions()
             .then(retrivePositionSuccess, retrivePositionsError);
     };
 
-    var retrivePositionSuccess = function(positionListPage){
+    var retrivePositionSuccess = function(searchResultListPage){
         console.info("Success in retrieveing manualPositions.");
-        console.info(positionListPage);
-        $scope.currentSearchResults.loading = false;
-        
-        if (positionListPage.totalNumberOfPages === 0 ) {
-            $scope.currentSearchResults.errorMessage = locale.getString('movement.movement_search_error_result_zero_pages');
-        } else {
-            $scope.currentSearchResults.errorMessage = "";
-            if (!$scope.currentSearchResults.movements) {
-                $scope.currentSearchResults.movements = positionListPage.movements;
-            } else {
-                for (var i = positionListPage.movements.length - 1; i >= 0; i--) {
-                    $scope.currentSearchResults.movements.push(positionListPage.movements[i]);
-                }
-            }
-        }
-        $scope.currentSearchResults.totalNumberOfPages = positionListPage.totalNumberOfPages;
-        $scope.currentSearchResults.page = positionListPage.currentPage;
-
+        console.info(searchResultListPage);
+        $scope.currentSearchResults.updateWithNewResults(searchResultListPage);
     };
     
     var retrivePositionsError = function(error){
-        $scope.currentSearchResults.loading = false;
-        $scope.currentSearchResults.errorMessage = locale.getString('common.search_failed_error');
-        $scope.currentSearchResults.totalNumberOfPages = 0;
-        $scope.currentSearchResults.page = 0;
+        $scope.currentSearchResults.setLoading(false);
+        $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
     };
 
-    $scope.resetSearchResult = function(){
-      
-        $scope.currentSearchResults.page = 0;
-        $scope.currentSearchResults.totalNumberOfPages = 0;
-        $scope.currentSearchResults.movements = [];
-        $scope.currentSearchResults.errorMessage ="";
-        $scope.currentSearchResults.loading = true;
-    };
-
-         //Clear the selection
+    //Clear the selection
     $scope.clearSelection = function(){
         $scope.selectedMovements = [];
     };
@@ -140,7 +105,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
         }else{
             //Add all
             $scope.clearSelection();
-            $.each($scope.currentSearchResults.movements, function(index, item) {
+            $.each($scope.currentSearchResults.items, function(index, item) {
                 $scope.addToSelection(item);
             });
         }
@@ -157,12 +122,12 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     };
 
     $scope.isAllChecked = function(){
-        if(angular.isUndefined($scope.currentSearchResults.movements) || $scope.selectedMovements.length === 0){
+        if(angular.isUndefined($scope.currentSearchResults.items) || $scope.selectedMovements.length === 0){
             return false;
         }
 
         var allChecked = true;
-        $.each($scope.currentSearchResults.movements, function(index, item) {
+        $.each($scope.currentSearchResults.items, function(index, item) {
             if(!$scope.isChecked(item)){
                 allChecked = false;
                 return false;
@@ -209,7 +174,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
             }
             //Export all logs in the table
             else{
-                exportItems = $scope.currentSearchResults.movements;
+                exportItems = $scope.currentSearchResults.items;
             }
             return exportItems.reduce(
                 function(csvObject, item){ 

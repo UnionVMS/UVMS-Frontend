@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale, Audit, AuditLogModal, auditLogRestService, searchService, auditLogsDefaultValues, auditLogsTypeOptions) {
+angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale, Audit, AuditLogModal, auditLogRestService, searchService, auditLogsDefaultValues, auditLogsTypeOptions, SearchResults) {
 
 	// ************ Page setup ************
 
@@ -6,17 +6,8 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale
 	$scope.selectedTab = "ALL"; //Set initial tab
     auditLogsTypeOptions.setOptions(auditLogsTypeOptions.getOptions($scope.selectedTab));
 
-    $scope.currentSearchResults = {
-        page : 0,
-        totalNumberOfPages : 0,
-        audits : [],
-        errorMessage : "",
-        loading : false,
-        sortBy : "date",
-        sortReverse : true,
-        filter : ""
-    };
-
+    $scope.currentSearchResults = new SearchResults('date', false);
+    
 	//Sets tabs
 	var setTabs = function (){
             return [
@@ -56,9 +47,12 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale
     });  
 
 
+    var init = function(){
+        auditLogsDefaultValues.resetDefaults();
+        $scope.searchAuditLogs();        
+    };
 
 	// ************ Functions and Scope ************
-
 	$scope.selectTab = function(tab){
 		$scope.selectedTab = tab;
         auditLogsTypeOptions.setOptions(auditLogsTypeOptions.getOptions(tab));
@@ -70,18 +64,18 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale
 
     $scope.toggleCheckAll = function() {
         var allChecked = $scope.isAllChecked();
-        for (var i = 0; i < $scope.currentSearchResults.audits.length; i++) {
-            $scope.currentSearchResults.audits[i].checked = !allChecked;
+        for (var i = 0; i < $scope.currentSearchResults.items.length; i++) {
+            $scope.currentSearchResults.items[i].checked = !allChecked;
         }
     };
 
     $scope.isAllChecked = function() {
-        if ($scope.currentSearchResults.audits.length === 0) {
+        if ($scope.currentSearchResults.items.length === 0) {
             return false;
         }
 
-        for (var i = 0; i < $scope.currentSearchResults.audits.length; i++) {
-            if (!$scope.currentSearchResults.audits[i].checked) {
+        for (var i = 0; i < $scope.currentSearchResults.items.length; i++) {
+            if (!$scope.currentSearchResults.items[i].checked) {
                 return false;
             }
         }
@@ -102,20 +96,12 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale
         AuditLogModal.show(audit);
     };
 
-    $scope.clearSearchResults = function() {
-        $scope.currentSearchResults.page = 0;
-        $scope.currentSearchResults.totalNumberOfPages = 0;
-        $scope.currentSearchResults.audits = [];
-        $scope.currentSearchResults.errorMessage = "";
-        $scope.currentSearchResults.loading = false;
-        $scope.currentSearchResults.sortBy = "date";
-        $scope.currentSearchResults.sortReverse = true;
-        $scope.currentSearchResults.filter = "";
-    };
-
+   
     $scope.searchAuditLogs = function(append) {
-        if (!append) {
-            $scope.clearSearchResults();
+        if(append){
+            $scope.currentSearchResults.setLoading(true);
+        }else{
+            $scope.currentSearchResults.clearForSearch();
         }
 
         // If not ALL tab, and to TYPE criteria set, search for all types available on this tab.
@@ -125,26 +111,16 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale
             }
         }
 
-        $scope.currentSearchResults.loading = true;
-        searchService.searchAuditLogs().then(function(auditLogsPage) {
-            $scope.currentSearchResults.loading = false;
-            $scope.updateSearchResults(auditLogsPage);
+        searchService.searchAuditLogs().then(function(searchResultListPage) {
+            $scope.currentSearchResults.updateWithNewResults(searchResultListPage);
         },
         function(error) {
             console.log(error);
-            $scope.currentSearchResults.errorMessage = locale.getString('common.search_failed_error');
-            $scope.currentSearchResults.loading = false;
+            $scope.currentSearchResults.setLoading(false);
+            $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
         });
     };
 
-    $scope.updateSearchResults = function(auditLogListPage) {
-        $scope.currentSearchResults.audits = $scope.currentSearchResults.audits.concat(auditLogListPage.auditLogs);
-        $scope.currentSearchResults.currentPage = auditLogListPage.currentPage;
-        $scope.currentSearchResults.totalNumberOfPages = auditLogListPage.totalNumberOfPages;
-    };
-
-    auditLogsDefaultValues.resetDefaults();
-    $scope.searchAuditLogs();
 
     $scope.affectedObjectPath = function(audit) {
         if (audit.objectType === "Mobile Terminal" && audit.affectedObject) {
@@ -161,6 +137,8 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale
     $scope.$on("$destroy", function() {
         searchService.reset();
     });
+
+    init();
 
 }).factory("auditLogsDefaultValues", function(searchService) {
 

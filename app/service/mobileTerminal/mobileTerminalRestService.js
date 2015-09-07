@@ -52,7 +52,7 @@ angular.module('unionvmsWeb')
 
         };
     })
-    .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, VesselListPage, MobileTerminal, MobileTerminalListPage, TranspondersConfig, GetListRequest, MobileTerminalHistory, mobileTerminalVesselService){
+    .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, VesselListPage, MobileTerminal, SearchResultListPage, TranspondersConfig, GetListRequest, MobileTerminalHistory, mobileTerminalVesselService){
 
         var mobileTerminalRestService = {
 
@@ -99,9 +99,9 @@ angular.module('unionvmsWeb')
                             return;
                         }
                         var mobileTerminals = [],
-                            mobileTerminalListPage;
+                            searchResultListPage;
 
-                        //Create a MobileTerminalListPage object from the response
+                        //Create a SearchResultListPage object from the response
                         if(angular.isArray(response.data.mobileTerminal)) {
                             for (var i = 0; i < response.data.mobileTerminal.length; i++) {
                                 mobileTerminals.push(MobileTerminal.fromJson(response.data.mobileTerminal[i]));
@@ -109,20 +109,20 @@ angular.module('unionvmsWeb')
                         }
                         var currentPage = response.data.currentPage;
                         var totalNumberOfPages = response.data.totalNumberOfPages;
-                        mobileTerminalListPage = new MobileTerminalListPage(mobileTerminals, currentPage, totalNumberOfPages);
+                        searchResultListPage = new SearchResultListPage(mobileTerminals, currentPage, totalNumberOfPages);
 
                         //Get vessels for the mobileTerminals?
                         try{
-                            mobileTerminalVesselService.setAssociatedVesselsFromConnectId(mobileTerminalListPage.mobileTerminals).then(
+                            mobileTerminalVesselService.setAssociatedVesselsFromConnectId(searchResultListPage.items).then(
                                 function(updatedMobileTerminals){
-                                    mobileTerminalListPage.mobileTerminals = updatedMobileTerminals;
-                                    deferred.resolve(mobileTerminalListPage);
+                                    searchResultListPage.items = updatedMobileTerminals;
+                                    deferred.resolve(searchResultListPage);
                                 },
                                 function(error){
-                                    deferred.reject(mobileTerminalListPage);
+                                    deferred.reject(searchResultListPage);
                                 });
                         }catch(err){
-                            deferred.resolve(mobileTerminalListPage);
+                            deferred.resolve(searchResultListPage);
                         }
                     },
                 function(error) {

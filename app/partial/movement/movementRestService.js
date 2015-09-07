@@ -24,7 +24,7 @@ angular.module('unionvmsWeb')
         }
     };
 })
-.factory('movementRestService',function($q, movementRestFactory, MovementListPage, Movement, SavedSearchGroup, GetListRequest){
+.factory('movementRestService',function($q, movementRestFactory, SearchResultListPage, Movement, SavedSearchGroup, GetListRequest){
     var userName = "FRONTEND_USER";
 
     var getMovementList = function(getListRequest){
@@ -47,8 +47,8 @@ angular.module('unionvmsWeb')
                 }
                 var currentPage = response.data.currentPage;
                 var totalNumberOfPages = response.data.totalNumberOfPages;
-                var movementListPage = new MovementListPage(movements, currentPage, totalNumberOfPages);
-                deferred.resolve(movementListPage);
+                var searchResultListPage = new SearchResultListPage(movements, currentPage, totalNumberOfPages);
+                deferred.resolve(searchResultListPage);
             },
             function(error){
                 console.log("Error getting movements.", error);

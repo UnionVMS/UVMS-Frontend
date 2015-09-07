@@ -8,7 +8,7 @@ angular.module('unionvmsWeb').controller('VesselListCtrl',function($scope){
         }else{
             //Add all
             $scope.clearSelection();
-            $.each($scope.currentSearchResults.vessels, function(index, item) {
+            $.each($scope.currentSearchResults.items, function(index, item) {
                 $scope.addToSelection(item);
             });
         }
@@ -25,12 +25,12 @@ angular.module('unionvmsWeb').controller('VesselListCtrl',function($scope){
     };
 
     $scope.isAllChecked = function(){
-        if(angular.isUndefined($scope.currentSearchResults.vessels) || $scope.selectedVessels.length === 0){
+        if(angular.isUndefined($scope.currentSearchResults.items) || $scope.selectedVessels.length === 0){
             return false;
         }
 
         var allChecked = true;
-        $.each($scope.currentSearchResults.vessels, function(index, item) {
+        $.each($scope.currentSearchResults.items, function(index, item) {
             if(!$scope.isChecked(item)){
                 allChecked = false;
                 return false;

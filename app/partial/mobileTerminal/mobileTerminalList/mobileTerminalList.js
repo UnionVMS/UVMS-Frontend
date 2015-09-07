@@ -9,7 +9,7 @@ angular.module('unionvmsWeb').controller('MobileterminallistCtrl',function($scop
         }else{
             //Add all
             $scope.clearSelection();
-            $.each($scope.currentSearchResults.mobileTerminals, function(index, item) {
+            $.each($scope.currentSearchResults.items, function(index, item) {
                 $scope.addToSelection(item);
             });
         }
@@ -26,12 +26,12 @@ angular.module('unionvmsWeb').controller('MobileterminallistCtrl',function($scop
     };
 
     $scope.isAllChecked = function(){
-        if(angular.isUndefined($scope.currentSearchResults.mobileTerminals) || $scope.selectedMobileTerminals.length === 0){
+        if(angular.isUndefined($scope.currentSearchResults.items) || $scope.selectedMobileTerminals.length === 0){
             return false;
         }
 
         var allChecked = true;
-        $.each($scope.currentSearchResults.mobileTerminals, function(index, item) {
+        $.each($scope.currentSearchResults.items, function(index, item) {
             if(!$scope.isChecked(item)){
                 allChecked = false;
                 return false;

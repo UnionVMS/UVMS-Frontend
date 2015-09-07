@@ -7,7 +7,7 @@ angular.module('unionvmsWeb')
 		this.forwardRule = undefined;
 		this.id = undefined;
 		this.message = undefined;
-		this.outgoung = undefined;
+		this.outgoing = undefined;
 		this.recipient = undefined;
 		this.sentBy = undefined;		
 		this.status = undefined;

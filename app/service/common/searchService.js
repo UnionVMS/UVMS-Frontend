@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('searchService',function($q, MobileTerminalListPage, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage, MovementListPage, auditLogRestService, exchangeRestService) {
+angular.module('unionvmsWeb').factory('searchService',function($q, GetListRequest, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage, auditLogRestService, exchangeRestService) {
 
 	var getListRequest = new GetListRequest(1, 20, true, []),
         advancedSearchObject  = {};
@@ -67,7 +67,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
     var getMovementsByVessels = function(movementRequest) {
         return function(vessels) {
             if (vessels.length === 0) {
-                return new MovementListPage();
+                return new SearchResultListPage();
             }
 
             var vesselsByGuid = {};
@@ -77,7 +77,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
             });
 
             return movementRestService.getMovementList(movementRequest).then(function(page) {
-                $.each(page.movements, function(index, movement) {
+                $.each(page.items, function(index, movement) {
                     var vessel = vesselsByGuid[movement.connectId];
                     movement.vessel.name = vessel.name;
                     movement.vessel.ircs = vessel.ircs;
@@ -127,7 +127,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
 
         //Do search for pollables
         searchForPollableTerminals : function(){
-            var getPollablesListRequest = new GetPollableListRequest();
+            var getPollablesListRequest = new GetPollableListRequest(getListRequest.page, getListRequest.listSize);
 
             //Get vessels first!
             if(this.getSearchCriterias().length > 0){
@@ -228,7 +228,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, MobileTermina
                     function(vessels){
                         //If no matchin vessels found
                         if(vessels.length === 0){
-                            return deferred.resolve(new MobileTerminalListPage());
+                            return deferred.resolve(new SearchResultListPage());
                         }
 
                         //Iterate over the vessels to add new search criterias with CONNECT_ID as key and vessel GUID as value

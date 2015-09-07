@@ -3,27 +3,25 @@
     	<div class="transmission-queue-header">
     		<span class="transmission-header-text">{{'exchange.transmission_status_header' | i18n}}</span>
     	</div>
-    	<table class="searchResults">
-    		<thead>
-    		</thead>
-    		<tbody>
-    			<tr ng-repeat="item in transmissionStatuses.services">
-    				<td class="tranmission-status">
-                        <span class="label" ng-class="item.isOnline() ? 'label-success': 'label-danger'">
-                            {{getTransmissionStatusLabel(item.status) | uppercase}}
-                        </span>
-                    </td>
-                    <td class="type">{{item.name}}</td>
-                    <td class="tranmission-action">
-                        <span class="link" ng-show="item.isOnline()" ng-click="stopTransmissionService(item)">{{'exchange.transmission_action_stop' | i18n}}</span>
-                        <span class="link" ng-hide="item.isOnline()" ng-click="startTransmissionService(item)">{{'exchange.transmission_action_start' | i18n}}</span>
-                    </td>
-    			</tr>
-    		</tbody>
-    	</table>
-        <search-result-error-alert ng-show="transmissionStatuses.errorMessage">{{transmissionStatuses.errorMessage}}</search-result-error-alert>
-        <div class="col-md-12 searchResultsLoading" ng-show="transmissionStatuses.loading">
-            <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>        
+        <div search-results-table search="transmissionStatuses">
+        	<table class="searchResults">
+        		<thead>
+        		</thead>
+        		<tbody>
+        			<tr ng-repeat="item in transmissionStatuses.items">
+        				<td class="tranmission-status">
+                            <span class="label" ng-class="item.isOnline() ? 'label-success': 'label-danger'">
+                                {{getTransmissionStatusLabel(item.status) | uppercase}}
+                            </span>
+                        </td>
+                        <td class="type">{{item.name}}</td>
+                        <td class="tranmission-action">
+                            <span class="link" ng-show="item.isOnline()" ng-click="stopTransmissionService(item)">{{'exchange.transmission_action_stop' | i18n}}</span>
+                            <span class="link" ng-hide="item.isOnline()" ng-click="startTransmissionService(item)">{{'exchange.transmission_action_start' | i18n}}</span>
+                        </td>
+        			</tr>
+        		</tbody>
+        	</table>
         </div>
     </div>
 </div>

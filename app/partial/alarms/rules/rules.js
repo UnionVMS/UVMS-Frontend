@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, locale, csvService, alertService, $filter, Rule, ruleRestService){
+angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, locale, csvService, alertService, $filter, Rule, ruleRestService, SearchResults, SearchResultListPage){
 
     $scope.activeTab = "RULES";
     $scope.selectedRules = []; //Selected rules checkboxes
@@ -16,44 +16,52 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, locale, cs
     ];
 
 
+    $scope.currentSearchResults = new SearchResults('name', false);
 
-    //dummydatafor rules:
-    var setDummyData = function(){
-    var rules = [];
+    //Add mock data    
+    var mockRules = [];
+    for (var i = 11; i >= 1; i--) {
+        var mockRule = new Rule();
+        mockRule.id = i;
+        mockRule.name = "Rule " + i;
+        mockRule.type = "MS_REPORT";
+        mockRule.addNewNotification();
+        mockRule.addNewMobileTerminalDefinition();
+        mockRule.notifications[0].text = "test@test.com";
+        mockRule.notifications[1].type = "SMS";
+        mockRule.notifications[1].text = "0123456789";
+        mockRule.definitions[0].text = "MONDAY";
+        mockRule.definitions[1].text = "TUESDAY";
+        mockRule.definitions[2].text = "TUESDAY";
+        mockRule.definitions[2].compareType = "EQ";
+        mockRule.definitions[3].text = "SUNDAY";
 
-    for (var i = 5; i >= 0; i--) {
-            var mockRule = new Rule();
-            mockRule.id = i;
-            mockRule.name = "Rule " + i;
-            mockRule.type = "MS_REPORT";
-            mockRule.addNewNotification();
-            mockRule.addNewMobileTerminalDefinition();
-            mockRule.notifications[0].text = "test@test.com";
-            mockRule.notifications[1].type = "SMS";
-            mockRule.notifications[1].text = "0123456789";
-            mockRule.definitions[0].text = "MONDAY";
-            mockRule.definitions[1].text = "TUESDAY";
-            mockRule.definitions[2].text = "TUESDAY";
-            mockRule.definitions[2].compareType = "EQ";
-            mockRule.definitions[3].text = "SUNDAY";
+        mockRules.push(mockRule);
+    }
+    var mockListPage = new SearchResultListPage(mockRules, 1, 34);
+    $scope.currentSearchResults.updateWithNewResults(mockListPage);
 
-            rules.push(mockRule);
 
-        }
 
-        return rules;
-	};
-
-   $scope.currentSearchResults = {
-        page : 0,
-        totalNumberOfPages : 10000,
-        rules : setDummyData(),//[],
-        errorMessage : "",
-        loading : false,
-        sortBy : "name",
-        sortReverse : false,
-        filter : ""
+    $scope.searchRules = function() {
+        /*$scope.clearSelection();
+        $scope.currentSearchResults.clearForSearch();        
+        searchService.searchMobileTerminals(false)
+                .then(updateSearchResults, onGetSearchResultsError);*/
+        $log.debug("Todo: implement search");
     };
+
+
+    //Load the next page of the search results
+    $scope.loadNextPage = function(){
+        $log.debug("Todo: implement next page");
+        $scope.currentSearchResults.setLoading(true);
+        //Increase page by 1
+        /*searchService.increasePage();
+        $scope.currentSearchResults.setLoading(true);
+        var response = searchService.searchMobileTerminals(true)
+           .then(updateSearchResults, onGetSearchResultsError);*/
+    };    
 
     //Details button
     $scope.details = function(item){
@@ -83,7 +91,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, locale, cs
         }else{
             //Add all
             $scope.clearSelection();
-            $.each($scope.currentSearchResults.rules, function(index, item) {
+            $.each($scope.currentSearchResults.items, function(index, item) {
                 $scope.addToSelection(item);
             });
         }
@@ -100,13 +108,13 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, locale, cs
     };
 
     $scope.isAllChecked = function(){
-        if(angular.isUndefined($scope.currentSearchResults.rules) || $scope.selectedRules.length === 0){
+        if(angular.isUndefined($scope.currentSearchResults.items) || $scope.selectedRules.length === 0){
             return false;
         }
 
         var allChecked = true;
 
-        $.each($scope.currentSearchResults.rules, function(index, item) {
+        $.each($scope.currentSearchResults.items, function(index, item) {
             if(!$scope.isChecked(item)){
                 allChecked = false;
                 return false;
@@ -176,7 +184,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, locale, cs
             }
             //Export all logs in the table
             else{
-                exportItems = $scope.currentSearchResults.rules;
+                exportItems = $scope.currentSearchResults.items;
             }
             return exportItems.reduce(
                 function(csvObject, item){

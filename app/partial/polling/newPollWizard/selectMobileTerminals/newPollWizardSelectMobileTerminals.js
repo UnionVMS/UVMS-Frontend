@@ -1,19 +1,9 @@
-angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl',function($scope, searchService, pollingService, alertService,MobileTerminalListPage, MobileTerminal, mobileTerminalRestService, locale, MobileTerminalGroup, pollingRestService){
+angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl',function($scope, searchService, pollingService, alertService, MobileTerminal, mobileTerminalRestService, locale, MobileTerminalGroup, pollingRestService, SearchResults){
 
 	
     $scope.selectedGroup = {};
     
-
-	//Search objects and results
-    $scope.currentSearchResults = {
-        page : 0,
-        totalNumberOfPages : 0,
-        pollableChannels : [],
-        errorMessage : "",
-        loading : false,
-        sortBy : "vesselName",
-        sortReverse : false
-    };  
+    $scope.currentSearchResults = new SearchResults('vesselName', false, locale.getString('polling.wizard_first_step_nos_search_result'));
     
     var init = function(){
         $scope.getPollableChannels();
@@ -27,43 +17,20 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
             searchService.setDynamic(opt.savedSearchGroup.dynamic);
         }
         
-        $scope.currentSearchResults.errorMessage = "";
-        $scope.currentSearchResults.loading = true;
-        $scope.currentSearchResults.pollableChannels.length = 0;
-        $scope.currentSearchResults.page = 0;
-        $scope.currentSearchResults.totalNumberOfPages = 0;
-        
+        $scope.currentSearchResults.clearForSearch();        
         searchService.searchForPollableTerminals()
                 .then(updateSearchResults, onGetSearchResultsError);
     };    
 
     //Update the search results
     var updateSearchResults = function(searchResultListPage){
-        $scope.currentSearchResults.loading = false;
-        if(searchResultListPage.totalNumberOfPages === 0 ){
-            $scope.currentSearchResults.errorMessage = locale.getString('mobileTerminal.search_zero_results_error');
-        } else {
-            $scope.currentSearchResults.errorMessage = "";
-            if(!$scope.currentSearchResults.pollableChannels){
-                $scope.currentSearchResults.pollableChannels = searchResultListPage.items;
-            }
-            else {
-                for (var i = 0; i < searchResultListPage.items.length; i++){
-                    $scope.currentSearchResults.pollableChannels.push(searchResultListPage.items[i]);
-                }
-            }
-        }
-        //Update page info
-        $scope.currentSearchResults.totalNumberOfPages = searchResultListPage.totalNumberOfPages;
-        $scope.currentSearchResults.page = searchResultListPage.currentPage;
+        $scope.currentSearchResults.updateWithNewResults(searchResultListPage);
     }; 
 
     //Error during search
     var onGetSearchResultsError = function(error){
-        $scope.currentSearchResults.loading = false;
-        $scope.currentSearchResults.errorMessage = locale.getString('common.search_failed_error');
-        $scope.currentSearchResults.totalNumberOfPages = 0;
-        $scope.currentSearchResults.page = 0;
+        $scope.currentSearchResults.setLoading(false);
+        $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
     };
 
     //button to add selected vessel    
@@ -81,15 +48,15 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
             mobileTerminalGroup.name = $scope.selectedGroup.savedSearchGroup.name;
             
             mobileTerminalGroup.mobileTerminals = []; // $scope.currentSearchResults;
-            for (i = 0; i < $scope.currentSearchResults.pollableChannels.length; i++) {
-                mobileTerminalGroup.mobileTerminals.push($scope.currentSearchResults.pollableChannels[i]);
+            for (i = 0; i < $scope.currentSearchResults.items.length; i++) {
+                mobileTerminalGroup.mobileTerminals.push($scope.currentSearchResults.items[i]);
             }
             //Add terminalgroup.
             pollingService.addMobileTerminalGroupToSelection(mobileTerminalGroup);
         }else{
             //Add terminals as not a group.
-            for(i=0; i < $scope.currentSearchResults.pollableChannels.length; i++){
-                pollingService.addMobileTerminalToSelection($scope.currentSearchResults.pollableChannels[i]);
+            for(i=0; i < $scope.currentSearchResults.items.length; i++){
+                pollingService.addMobileTerminalToSelection($scope.currentSearchResults.items[i]);
             }
         }
     };
@@ -104,8 +71,8 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
     $scope.isTerminalGroupSelected = function(){
         
         var bol = true; 
-        for(var i=0; i < $scope.currentSearchResults.pollableChannels.length; i++){
-           if (pollingService.isMobileTerminalSelected($scope.currentSearchResults.pollableChannels[i]) === false){
+        for(var i=0; i < $scope.currentSearchResults.items.length; i++){
+           if (pollingService.isMobileTerminalSelected($scope.currentSearchResults.items[i]) === false){
                 bol = false;
             }
         }
@@ -123,7 +90,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
         {
             //Increase page by 1
             searchService.increasePage();
-            $scope.currentSearchResults.loading = true;
+            $scope.currentSearchResults.setLoading(true);
             searchService.searchForPollableTerminals().then(updateSearchResults, onGetSearchResultsError);
         }
     };

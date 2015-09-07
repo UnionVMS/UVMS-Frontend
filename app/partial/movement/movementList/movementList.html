@@ -1,5 +1,5 @@
 <div ng-controller="MovementlistCtrl">
-    <div class="movementtablecontainer">
+    <div search-results-table search="currentSearchResults" load-next-page-function="loadNextPage" class="movementtablecontainer">
         <table class="searchResults colorOdd movementtable">
             <thead>
                 <tr>
@@ -34,7 +34,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="movement in currentSearchResults.movements | orderBy:currentSearchResults.sortBy : currentSearchResults.sortReverse | filter:searchFilter">
+                <tr ng-repeat="movement in currentSearchResults.items | orderBy:currentSearchResults.sortBy : currentSearchResults.sortReverse | filter:searchFilter">
                     <td><input type="checkbox" ng-checked="isChecked(movement)" ng-click="checkItem(movement)"/></td>
                     <td>{{movement.vessel.state}}</td>
                     <td>{{movement.vessel.externalMarking}}</td>
@@ -53,18 +53,6 @@
                 </tr>
             </tbody>
         </table>
-        <search-result-error-alert ng-show="currentSearchResults.errorMessage">{{currentSearchResults.errorMessage}}</search-result-error-alert>
-    </div>
-    <div class="col-md-12 searchResultsLoading" ng-show="currentSearchResults.loading">
-        <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>
-    </div>
-    <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0">
-        <div class="col-md-12">{{'common.search_results_current_page' | i18n:[currentSearchResults.page, currentSearchResults.totalNumberOfPages]}}</div>
-    </div>
-    <div class="row" ng-show="currentSearchResults.totalNumberOfPages > 0 && currentSearchResults.totalNumberOfPages > currentSearchResults.page">
-        <div class="col-md-12 textAlignCenter">
-            <span class="link" ng-click="loadNextPage()"> {{'common.search_results_load_more' | i18n | uppercase}}</span>
-        </div>
     </div>
 </div>
 

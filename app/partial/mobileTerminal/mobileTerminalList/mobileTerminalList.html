@@ -1,5 +1,5 @@
 <div class="row" ng-controller="MobileterminallistCtrl">
-    <div class="col-md-12">
+    <div search-results-table search="currentSearchResults" load-next-page-function="loadNextPage" class="col-md-12">
         <table class="searchResults colorOdd mobileTerminalsTable">
             <thead>
             <tr>
@@ -25,7 +25,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="item in currentSearchResults.mobileTerminals | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" ng-class="{'inactive':!item.active}">            
+            <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" ng-class="{'inactive':!item.active}">            
                 <td class="checkboxContainer">
                     <div class="iconToTheLeftOfTheTableCell" ng-show="!item.connectId && !item.associatedVessel">
                         <div class="unassignedIcon" tooltip-placement="bottom" tooltip="{{'mobileTerminal.table_not_assigned_icon_tooltip' | i18n}}">!</div>
@@ -59,20 +59,9 @@
             </tr>
             </tbody>
         </table>
-
-        <search-result-error-alert ng-show="currentSearchResults.errorMessage">{{currentSearchResults.errorMessage}}</search-result-error-alert>        
-        
-    </div>
-    <div class="col-md-12 searchResultsLoading" ng-show="currentSearchResults.loading">
-        <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>        
     </div>
 
-    <div class="col-md-12" ng-show="currentSearchResults.totalNumberOfPages > 0">
-        {{'common.search_results_current_page' | i18n:[currentSearchResults.page, currentSearchResults.totalNumberOfPages]}}
-    </div>
-    <div class="col-md-12 textAlignCenter" ng-show="currentSearchResults.totalNumberOfPages > 0 && currentSearchResults.totalNumberOfPages > currentSearchResults.page">
-        <span class="link" ng-click="loadNextPage()"> {{'common.search_results_load_more' | i18n | uppercase}}</span>            
-    </div>
+
 
 </div>
 

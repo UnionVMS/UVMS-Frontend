@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, locale, Alarm, csvService, alertService){
+angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage){
 
     $scope.activeTab = "HOLDING_TABLE";
     $scope.selectedItems = []; //Selected items by checkboxes
@@ -16,62 +16,40 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         return alarm.isOpen() ? $scope.statusFilter === "open" : $scope.statusFilter === "closed";
     };    
 
-    //dummydatafor alarms:
-    var setDummyData = function(){
-        var alarms = [];
 
-        for (var i = 17; i >= 1; i--) {
-            var mockAlarm = new Alarm();
-            mockAlarm.id = i;
-            mockAlarm.openedDate = "2015-08-22 08:00";
-            mockAlarm.affectedObject = "Tunafjord";
-            mockAlarm.ruleName = "POS Validation";
-            mockAlarm.recipient = "FMC";
-            
-            var random = Math.floor(Math.random() * 2) + 1;
-            if(random === 2){
-                mockAlarm.setStatusToClosed();
-                mockAlarm.resolvedDate = "2015-08-27 13:37";
-                mockAlarm.resolvedBy = "antkar";                
-            }else{
-                mockAlarm.setStatusToOpen();
-            }
+    $scope.currentSearchResults = new SearchResults('name', false);
 
-            alarms.push(mockAlarm);
-
+    //Add mock data    
+    var mockAlarms = [];
+    for (var i = 17; i >= 1; i--) {
+        var mockAlarm = new Alarm();
+        mockAlarm.id = i;
+        mockAlarm.openedDate = "2015-08-22 08:00";
+        mockAlarm.affectedObject = "Tunafjord";
+        mockAlarm.ruleName = "POS Validation";
+        mockAlarm.recipient = "FMC";
+        
+        var random = Math.floor(Math.random() * 2) + 1;
+        if(random === 2){
+            mockAlarm.setStatusToClosed();
+            mockAlarm.resolvedDate = "2015-08-27 13:37";
+            mockAlarm.resolvedBy = "antkar";                
+        }else{
+            mockAlarm.setStatusToOpen();
         }
 
-        return alarms;
-    };
+        mockAlarms.push(mockAlarm);
+    }
+    var mockListPage = new SearchResultListPage(mockAlarms, 1, 14);
+    $scope.currentSearchResults.updateWithNewResults(mockListPage);
 
-   $scope.currentSearchResults = {
-        page : 1,
-        totalNumberOfPages : 17,
-        items : setDummyData(),//[],
-        errorMessage : "",
-        loading : false,
-        sortBy : "name",
-        sortReverse : false,
-        filter : ""
-    };
+
 
     $scope.searchAlarms = function() {
-        /*$scope.searchResults.loading = true;
-        $scope.searchResults.messages = [];
-        $scope.searchResults.errorMessage = "";
-        searchService.searchExchange("MESSAGES").then(function(page) {
-            $scope.searchResults.messages = page.exchangeMessages;
-            $scope.searchResults.page = page.currentPage;
-            $scope.searchResults.pageCount = page.totalNumberOfPages;            
-            $scope.searchResults.loading = false;
-            if(page.totalNumberOfPages === 0 ){
-              $scope.searchResults.errorMessage = locale.getString('exchange.search_zero_results_error');            
-            }
-        },
-        function(error) {
-            $scope.searchResults.errorMessage = error;
-            $scope.searchResults.loading = false;
-        });*/
+        /*$scope.clearSelection();
+        $scope.currentSearchResults.clearForSearch();        
+        searchService.searchMobileTerminals(false)
+                .then(updateSearchResults, onGetSearchResultsError);*/
         $log.debug("Todo: implement search");
     };    
 

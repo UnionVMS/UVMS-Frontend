@@ -1,19 +1,11 @@
-angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, alertService, movementRestService, searchService, locale, $stateParams, ManualPositionReportModal, csvService){
+angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, alertService, movementRestService, searchService, locale, $stateParams, ManualPositionReportModal, csvService, SearchResults){
 
     //Current filter and sorting for the results table
     $scope.sortFilter = '';
     $scope.editSelectionDropdownItems = [{'text':locale.getString('movement.editselection_see_on_map'),'code':'MAP'}, {'text':locale.getString('movement.editselection_export_selection'),'code':'EXPORT'}, {'text':locale.getString('movement.editselection_inactivate'),'code':'INACTIVE'}];
     
     //Search objects and results
-    $scope.currentSearchResults = {
-        page : 1,
-        totalNumberOfPages : 25,
-        movements : [],
-        errorMessage : "",
-        loading : false,
-        sortBy : "vessel.name",
-        sortReverse : false
-    };
+    $scope.currentSearchResults = new SearchResults('vessel.name', false, locale.getString('movement.movement_search_error_result_zero_pages'));
 
     //Selected by checkboxes
     $scope.selectedMovements = [];
@@ -91,48 +83,20 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
 
     $scope.searchMovements = function(){
         if ($scope.currentSearchResults.loading === false){
-            $scope.resetSearchResult();
-            $scope.currentSearchResults.loading = true;
+            $scope.currentSearchResults.clearForSearch();
             searchService.searchMovements()
                 .then(retriveMovementsSuccess, retriveMovementsError);      
         }
     };
 
-    $scope.resetSearchResult = function(){
-        $scope.currentSearchResults.page = 0;
-        $scope.currentSearchResults.totalNumberOfPages = 0;
-        $scope.currentSearchResults.movements = [];
-        $scope.currentSearchResults.errorMessage ="";
-    };
-
-    var retriveMovementsSuccess = function(movementListPage){
+    var retriveMovementsSuccess = function(searchResultListPage){
         console.info("Success in retrieveing movements..");
-        console.info(movementListPage);
-        $scope.currentSearchResults.loading = false;
-        $scope.startAutoRefresh();
-
-        if (movementListPage.totalNumberOfPages === 0 ) {
-            $scope.currentSearchResults.errorMessage = locale.getString('movement.movement_search_error_result_zero_pages');
-        } else {
-            $scope.currentSearchResults.errorMessage = "";
-            if (!$scope.currentSearchResults.movements) {
-                $scope.currentSearchResults.movements = movementListPage.movements;
-            } else {
-                for (var i = movementListPage.movements.length - 1; i >= 0; i--) {
-                    $scope.currentSearchResults.movements.push(movementListPage.movements[i]);
-                }
-            }
-        }
-        $scope.currentSearchResults.totalNumberOfPages = movementListPage.totalNumberOfPages;
-        $scope.currentSearchResults.page = movementListPage.currentPage;
-
+        $scope.currentSearchResults.updateWithNewResults(searchResultListPage);
     };
     
     var retriveMovementsError = function(error){
-        $scope.currentSearchResults.loading = false;
-        $scope.currentSearchResults.errorMessage = locale.getString('common.search_failed_error');
-        $scope.currentSearchResults.totalNumberOfPages = 0;
-        $scope.currentSearchResults.page = 0;
+        $scope.currentSearchResults.setLoading(false);
+        $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
     };
 
     $scope.loadNextPage = function(){
@@ -140,7 +104,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
             if ($scope.currentSearchResults.page < $scope.currentSearchResults.totalNumberOfPages) {
                 //increase page with 1
                 searchService.increasePage();
-                $scope.currentSearchResults.loading = true;
+                $scope.currentSearchResults.setLoading(true);
                 searchService.searchMovements()
                     .then(retriveMovementsSuccess, retriveMovementsError);
 
@@ -225,7 +189,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
             }
             //Export all logs in the table
             else{
-                exportItems = $scope.currentSearchResults.movements;
+                exportItems = $scope.currentSearchResults.items;
             }
             return exportItems.reduce(
                 function(csvObject, item){ 

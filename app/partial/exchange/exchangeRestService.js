@@ -24,7 +24,7 @@ angular.module('unionvmsWeb')
             }
         };
     })
-    .factory('exchangeRestService', function($q, exchangeRestFactory, GetListRequest, Exchange, ExchangeService, ExchangeListPage, vesselRestService){
+    .factory('exchangeRestService', function($q, exchangeRestFactory, GetListRequest, Exchange, ExchangeService, SearchResultListPage, vesselRestService){
         var userName = "FRONTEND_USER";
 
         var getVesselNamesByGuid = function(vessels) {
@@ -65,12 +65,12 @@ angular.module('unionvmsWeb')
             }
         };
 
-        var populateVesselNames = function(messagesPage) {
+        var populateVesselNames = function(searchResultListPage) {
             var deferred = $q.defer();
-            var messages = messagesPage.exchangeMessages;
-            vesselRestService.getVesselList(getVesselListRequest(getVesselIds(messages))).then(function(response) {
-                setVesselNames(messages, getVesselNamesByGuid(response.vessels));
-                deferred.resolve(messagesPage);
+            var messages = searchResultListPage.items;
+            vesselRestService.getVesselList(getVesselListRequest(getVesselIds(messages))).then(function(vesselListPage) {
+                setVesselNames(messages, getVesselNamesByGuid(vesselListPage.items));
+                deferred.resolve(searchResultListPage);
             },
             function(error) {
                 deferred.reject(error);
@@ -142,13 +142,13 @@ angular.module('unionvmsWeb')
 
                 var currentPage = response.data.currentPage;
                 var totalNumberOfPages = response.data.totalNumberOfPages;
-                var exchangeListPage = new ExchangeListPage(exchangeMessages, currentPage, totalNumberOfPages);
+                var searchResultListPage = new SearchResultListPage(exchangeMessages, currentPage, totalNumberOfPages);
 
                 //Get vessel names
-                if(exchangeListPage.exchangeMessages.length > 0){
-                    deferred.resolve(populateVesselNames(exchangeListPage));
+                if(searchResultListPage.items.length > 0){
+                    deferred.resolve(populateVesselNames(searchResultListPage));
                 }else{
-                    deferred.resolve(exchangeListPage);
+                    deferred.resolve(searchResultListPage);
                 }
             },
 
@@ -157,9 +157,10 @@ angular.module('unionvmsWeb')
                 //deferred.reject(error);
 
                 //dummydata  until backend delivers data.
-                var exchangeMessages = [];
-                 for (var i = 10; i > 0; i--){
-                    var ex = new Exchange();
+                var exchangeMessages = [],
+                    ex;
+                for (var i = 10; i > 0; i--){
+                    ex = new Exchange();
 
                     ex.dateForward = ex.getFormattedDateForward();
                     ex.dateRecieved = ex.getFormattedDateRecieved();
@@ -177,11 +178,11 @@ angular.module('unionvmsWeb')
                     ex.status = randomStatus();
 
                     exchangeMessages.push(ex);
-                 }
+                }
                 var currentPage = 1;
                 var totalNumberOfPages = 1;
-                var exchangeListPage = new ExchangeListPage(exchangeMessages, currentPage, totalNumberOfPages);
-                deferred.resolve(exchangeListPage);
+                var searchResultListPage = new SearchResultListPage(exchangeMessages, currentPage, totalNumberOfPages);
+                deferred.resolve(searchResultListPage);
             }
         );
         return deferred.promise;
@@ -225,8 +226,8 @@ angular.module('unionvmsWeb')
                 }
                 var currentPage = response.data.currentPage;
                 var totalNumberOfPages = response.data.totalNumberOfPages;
-                var exchangeListPage = new ExchangeListPage(exchangeMessages, currentPage, totalNumberOfPages);
-                defer.resolve(exchangeListPage);
+                var searchResultListPage = new SearchResultListPage(exchangeMessages, currentPage, totalNumberOfPages);
+                defer.resolve(searchResultListPage);
 
             },
             function(error){

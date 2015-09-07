@@ -1,5 +1,6 @@
 <div class="row">
-    <div class="col-md-12 holding-table">
+    <div search-results-table search="currentSearchResults" load-next-page-function="loadNextPage" class="col-md-12 holding-table">
+    
         <table class="searchResults colorOdd">
             <thead>
                 <tr>
@@ -36,15 +37,6 @@
                 </tr>
             </tbody>
         </table>
-        <search-result-error-alert ng-show="currentSearchResults.errorMessage">{{currentSearchResults.errorMessage}}</search-result-error-alert>
+        
     </div>
-    <div class="col-md-12 searchResultsLoading" ng-show="currentSearchResults.loading">
-        <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>        
-    </div>
-    <div class="col-md-12" ng-show="currentSearchResults.totalNumberOfPages > 0">
-        {{'common.search_results_current_page' | i18n:[currentSearchResults.page, currentSearchResults.totalNumberOfPages]}}
-    </div>
-    <div class="col-md-12 textAlignCenter" ng-show="currentSearchResults.totalNumberOfPages > 0 && currentSearchResults.totalNumberOfPages > currentSearchResults.page">
-        <span class="link" ng-click="loadNextPage()"> {{'common.search_results_load_more' | i18n | uppercase}}</span>            
-    </div>    
 </div>
