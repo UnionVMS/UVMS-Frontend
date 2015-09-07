@@ -241,7 +241,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         }
         else {
             delete $scope.markers.lastPosition;
-        }
+        }        
 
         
         var numberOfMarkers = Object.keys($scope.markers).length;
@@ -295,7 +295,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         vesselsGetListRequest.addSearchCriteria("FLAG_STATE", "SWE");
         return vesselRestService.getVesselList(vesselsGetListRequest).then(
             function(vesselListPage){
-                return vesselListPage.vessels;
+                return vesselListPage.items;
             },
             function(error){
                 $scope.errorMessage = locale.getString("movement.manual_position_button_search_error");
@@ -326,6 +326,19 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         $scope.showLastMovementByVessel(item);
     };
 
+    //Create a green marker icon for lastPosition
+    var greenMarkerImage_base64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAApCAMAAAD3TXL8AAABKVBMVEUAAABQr2BYr1hVqlpVqllUq1xWrFlWrFtVqlpUq1tWq1pXrFtWq1tXq1tWrFtXrFxWq1xXq1xWq1tesWNVqlpVq1pYrFxarl5ltmlWqltWq1thtWZVq1tWrFxYrV1htGZbr2BarV1fs2RVq1xWq1xktWlXq1xZrl5arV9arl9brmBcr2FdsGJjs2dltWplt2lmtmtntmxnuGxouGxqu21rvG9svHBtvXJuvnNvv3Vwv3ZxuXVxwXZywXdzwnh0xHp1xHp1xHt2xHt3xXx5x356x397vn98yYN9yYSRyZSq1ayr1a202re12rfK5cvU6tb0+vVWq1tvxHRwxHVxxXZyxXd0xnh1xnp2x3t3x3x4x315yH56yH98yYB9yYF+yoJ/yoOAy4T///+z/1++AAAAUXRSTlMAECAwP0BQX2BwgKW0ucfL2Nvn7/Pz8/Pz9PT09fX19fb39/j4+Pn+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7rBU46AAABrElEQVR42nXRf1/SUBQG8MP40VDbEiwzEJNillBauWwlLaM1QkrOroBj7uf7fxFyxpV94H56/mL34Xs4u0CWfOFRoQBCilsvnlWr1QY+Lq6cS4p21osjP4p/6Q0lnxXyvm77E+bMM/EiHeVloZnB2HnITfBT41Xpdc9jThbm9bQSFbm97t3iaDzm8q5bz82bzVaYCjeyfliRy0iFrU0ACa0pPQSXp9jGd98DqqYWSlCuhYsBOBglyfDY8OkxrJVBNWa0kP32X0K5Rot+bGaogL300/m3ZJE/nzxa5vIpYEyN/3HAm+EHn5oYAftpc7LW9BF2zEk67ffKtKm5Awrf4M1yg/SbX1QoHwTp1l/xapSM/rb51gdlkNC+Sd/UfI8d7NCb0ohXEsCT+Tiq5rdj8ttxPEOl/+BlxNZulEW7Mt113Zw6q3HNOlA2nofLM06aG1QQul0nOVigZsREwpErkAwJRESziwpQBMTiQxkgS6X7gDyDSBb5MGYC4cjwMiKgjAiIyDasp0SI2VoRhCifPcfXFRBT1GyXEwHpMScisjgR0REnIsI8/Ccrs+4B7pi2A6D/GpkAAAAASUVORK5CYII=';
+    var shadowImage_base64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAApCAYAAACoYAD2AAAC5ElEQVRYw+2YW4/TMBCF45S0S1luXZCABy5CgLQgwf//S4BYBLTdJLax0fFqmB07nnQfEGqkIydpVH85M+NLjPe++dcPc4Q8Qh4hj5D/AaQJx6H/4TMwB0PeBNwU7EGQAmAtsNfAzoZkgIa0ZgLMa4Aj6CxIAsjhjOCoL5z7Glg1JAOkaicgvQBXuncwJAWjksLtBTWZe04CnYRktUGdilALppZBOgHGZcBzL6OClABvMSVIzyBjazOgrvACf1ydC5mguqAVg6RhdkSWQFj2uxfaq/BrIZOLEWgZdALIDvcMcZLD8ZbLC9de4yR1sYMi4G20S4Q/PWeJYxTOZn5zJXANZHIxAd4JWhPIloTJZhzMQduM89WQ3MUVAE/RnhAXpTycqys3NZALOBbB7kFrgLesQl2h45Fcj8L1tTSohUwuxhy8H/Qg6K7gIs+3kkaigQCOcyEXCHN07wyQazhrmIulvKMQAwMcmLNqyCVyMAI+BuxSMeTk3OPikLY2J1uE+VHQk6ANrhds+tNARqBeaGc72cK550FP4WhXmFmcMGhTwAR1ifOe3EvPqIegFmF+C8gVy0OfAaWQPMR7gF1OQKqGoBjq90HPMP01BUjPOqGFksC4emE48tWQAH0YmvOgF3DST6xieJgHAWxPAHMuNhrImIdvoNOKNWIOcE+UXE0pYAnkX6uhWsgVXDxHdTfCmrEEmMB2zMFimLVOtiiajxiGWrbU52EeCdyOwPEQD8LqyPH9Ti2kgYMf4OhSKB7qYILbBv3CuVTJ11Y80oaseiMWOONc/Y7kJYe0xL2f0BaiFTxknHO5HaMGMublKwxFGzYdWsBF174H/QDknhTHmHHN39iWFnkZx8lPyM8WHfYELmlLKtgWNmFNzQcC1b47gJ4hL19i7o65dhH0Negbca8vONZoP7doIeOC9zXm8RjuL0Gf4d4OYaU5ljo3GYiqzrWQHfJxA6ALhDpVKv9qYeZA8eM3EhfPSCmpuD0AAAAASUVORK5CYII=";
+
+    var greenIcon = {
+        iconUrl: greenMarkerImage_base64,
+        shadowUrl: shadowImage_base64,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]            
+    };
+
     $scope.setLastPosition = function(movement) {
         if (movement) {
             var formattedTime =  moment(movement.time).format("YYYY-MM-DD HH:mm:ss Z");
@@ -333,7 +346,8 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
                 lng: movement.movement.longitude,
                 lat: movement.movement.latitude,
                 message: locale.getString("movement.manual_position_label_previous_position", formattedTime),
-                focus: true
+                focus: true,
+                icon: greenIcon
             };
         }
         else {
