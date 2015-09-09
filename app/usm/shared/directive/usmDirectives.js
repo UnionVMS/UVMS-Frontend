@@ -244,3 +244,15 @@ sharedModule.directive('usmConfirmation', ['$log', function ($log) {
     };
 }]);
 
+sharedModule.directive('focusMe', ["$timeout", function ($timeout) {    
+    return {    
+        restrict: 'A',
+        transclude: true,
+        scope: {},
+        link: function (scope, element, attrs, model) {                
+            $timeout(function () {
+                element[0].focus();
+            });
+        }
+    };
+}]);	

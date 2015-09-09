@@ -52,10 +52,9 @@ userManagementApp.config(['$translateProvider','LOCALES',function ($translatePro
     $translateProvider.useStaticFilesLoader({
         prefix: 'usm/assets/translate/locale-',
         suffix: '.json'
-    });
-
-    // defaulting to english if the selected language is not supported
-    $translateProvider.preferredLanguage('en');
+    })
+        //let's make sure that unsupported languages fallback to english
+        .fallbackLanguage('en');
 }]);
 
 userManagementApp.config(['$logProvider',function ($logProvider) {
@@ -76,7 +75,7 @@ userManagementApp.controller('TranslateController', ['$translate', '$scope', '$c
 
 userManagementApp.config(['$urlRouterProvider', '$stateProvider','$urlMatcherFactoryProvider','$breadcrumbProvider','ACCESS','$injector',
     function ($urlRouterProvider, $stateProvider,$urlMatcherFactoryProvider,$breadcrumbProvider,ACCESS,$injector) {
-
+        $urlRouterProvider.when('/usm','usm/home');
 
     //$urlRouterProvider.when('','usm');
         //trying a fix to https://github.com/angular-ui/ui-router/issues/600
@@ -99,33 +98,38 @@ userManagementApp.config(['$urlRouterProvider', '$stateProvider','$urlMatcherFac
             return userService.findCurrentUser();
         };
         currentUserPromise.$inject =    ['userService'];
+        var currentContextPromise = function(userService){
+            return userService.findSelectedContext();
+        };
+        currentContextPromise.$inject =    ['userService'];
     $stateProvider
         .state('app.usm', {
             url: '/usm',
             views: {
-                nav: {
+                "modulenav": {
                     templateUrl: 'usm/shared/partial/menu/menu.html',
-                    controller:"MenuCtrl"
+                    controller: "MenuCtrl"
                 },
-                page: {
+                "module": {templateUrl: 'usm/usm.html'}
+            },
+            ncyBreadcrumb: {
+                label: 'USM'
+            }
+        })
+        .state('app.usm.home', {
+            url: '/home',
+            views: {
+
+                "page": {
                     templateUrl: 'usm/home/home.html'
                 }
 
             },
             ncyBreadcrumb: {
-                label: 'USM'
+                label: 'home'
             },
             resolve:{
-                //currentUser:currentUserPromise
-            }
-        })
-        .state('login', {
-            url: '/login',
-            views: {
-                module: {
-                    templateUrl: 'usm/shared/partial/login/login.html',
-                    controller: 'LogincontrollerCtrl'
-                }
+                currentContext: currentContextPromise
             }
         });
 
@@ -172,6 +176,7 @@ userManagementApp.run(['$rootScope', '$location', '$log', '$http', '$localStorag
         } else {
             lang = navigator.languages? navigator.languages[0] :(navigator.language || navigator.userLanguage);
             lang = lang.substr(0,2);
+            //TODO: check that this is one of the supported languages. If the navigator preferred language is not
             $cookies.lang = lang;
         }
         $translate.use(lang);
@@ -179,33 +184,19 @@ userManagementApp.run(['$rootScope', '$location', '$log', '$http', '$localStorag
         // Check if current user exist
         // cookie is preserved between tabs
         // session storage is NOT preserve between tabs
-        if ($localStorage.token) {
+        /*if ($localStorage.token) {
             userService.login($localStorage.token);
         } else {
             // reset session in case the log out have done in another tab
             $localStorage.token = null;
             //$rootScope.$broadcast('event:loginRequired');
-        }
+        }*/
     }]);
 
 userManagementApp.config(['routeProtectionProvider',function(routeProtectionProvider){
     routeProtectionProvider.anonRoute = "/anon";
 }]);
 
-userManagementApp.config(['$httpProvider', 'authInterceptorProvider', function Config($httpProvider, authInterceptorProvider, $log) {
-    // Please note we're annotating the function so that the $injector works when the file is minified
-
-    authInterceptorProvider.authFilter = ['config', '$log', function (config, $log) {
-        //myService.doSomething();
-
-        var skipURL = /^(template|usm|assets).*?\.(html|json)$/i.test(config.url);
-        var logmsg = skipURL?'SKIPPING':'setting auth';
-        $log.debug('authFilter '+ logmsg +' on url :' + config.url);
-        return skipURL;
-    }];
-
-    $httpProvider.interceptors.push('authInterceptor');
-}]);
 
 
 

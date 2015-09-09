@@ -1,22 +1,18 @@
 var usersModule = angular.module('users');
 
 usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$location', '$resource', '$state', '$stateParams', '$cookies',
-                        'UsersListService', 'organisationsService', 'refData','$log','userService','$rootScope',
+                        'UsersListService', 'organisationsService', 'refData','$log','userService','$rootScope','orgNations', 'orgNames',
     function ($scope, $filter, $http, $location, $resource, $state, $stateParams, $cookies,
-              UsersListService, organisationsService, refData, $log,userService,$rootScope) {
-
-        var init = function(){
-            //access:
-
-            $scope.access = {
-                manageUsers :userService.isAllowed("manageUsers","USM",true),
-                viewUsers :userService.isAllowed("viewUsers","USM",true)
-            };
-        };
-        init();
-        $rootScope.$on('ContextSwitch', function () {
+              UsersListService, organisationsService, refData, $log,userService,$rootScope, orgNations, orgNames) {
+       //init();
+       /* $rootScope.$on('ContextSwitch', function () {
             init();
-        });
+        });*/
+
+        $scope.checkAccess = function(feature) {
+        	return userService.isAllowed(feature,"USM",true);
+        };
+
         var initLists = function(){
         //TODO: get the tooltip into the translated strings
         $scope.usernameTooltip = "This will look for a match anywhere in username, first name and last name";
@@ -39,7 +35,6 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
         $scope.emptyResultMessage = "No results found. ";
         $scope.loadingMessage = "Loading... taking some time";
 
-
 		// Criteria...
 		$scope.criteria = {};
 
@@ -48,6 +43,7 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
            sortDirection: $stateParams.sortDirection || 'desc'
         };
 
+		//object to control the URL's changes
         $scope.pageData = {
            user: $stateParams.user || '',
            nation: $stateParams.nation || '',
@@ -64,32 +60,12 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
 
         // 2. List Of nations
         $scope.nation = {};
-        $scope.getNations = function(){
-          organisationsService.getNations().then(
-              function (response) {
-                  $scope.nationsList = response.nations;
-              },
-              function (error) {
-                  $scope.nationsList = [error];
-              }
-          );
-        };
-        $scope.getNations();
-
+        $scope.nationsList = orgNations;
+        
         // 3.List Of Organisations...
         $scope.organisation = {};
-        $scope.getOrganisations = function(){
-          organisationsService.get().then(
-              function (response) {
-                  $scope.organisationsList = response.organisations;
-              },
-              function (error) {
-                  $scope.organisationsList = [error];
-              }
-          );
-        };
-        $scope.getOrganisations();
-
+        $scope.organisationsList  = orgNames;
+        
         $scope.formatDate = function(date){
             var d = new Date(date),
                 month = '' + (d.getMonth() + 1),
@@ -106,64 +82,25 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
         };
 
         };
+        
         initLists();
+		
+		var changeUrlParams = function(){
 
-        var changeUrlParams = function(){
-
-            var organisation = '';
-
-            if ($scope.pageData.organisation !== null && $scope.pageData.organisation !== '' && !_.isUndefined($scope.pageData.organisation) ){
-            	organisation = $scope.pageData.organisation;
-
-            	//to take off the symbols from the URL for organisation
-            	var parentURL = organisation.search("%");
-                if(parentURL!== -1){
-                	organisation = organisation.replace("%20%252F%20"," / ");
-                    organisation = organisation.replace("%2F","/");
-                 }
-            }
-
-        	$scope.search.user = $scope.pageData.user;
-
-            $scope.search.status = $scope.pageData.status || 'all';
-
-            $scope.search.user = $scope.pageData.user;
-
-            $scope.search.nation = $scope.pageData.nation;
-
-            $scope.search.organisation = organisation;
-
-            //$scope.search.status = $scope.pageData.status;
-
-            if ($scope.pageData.activeFrom !== null && $scope.pageData.activeFrom !== '' && !_.isUndefined($scope.pageData.activeFrom) ){
-               $scope.search.activeFrom = $scope.formatDate($scope.pageData.activeFrom);
-            }else{
-            	$scope.pageData.activeFrom = '';
-            	$scope.search.activeFrom = '';
-            }
-
-            if ($scope.pageData.activeTo !== null && $scope.pageData.activeTo !== '' && !_.isUndefined($scope.pageData.activeTo) ){
-                $scope.search.activeTo = $scope.formatDate($scope.pageData.activeTo);
-            }else{
-            	$scope.pageData.activeTo = '';
-            	$scope.search.activeTo = '';
-            }
-
-			$state.transitionTo($state.current,
-	    		{
-			 		page: $scope.paginationConfig.currentPage,
-			 		sortColumn: $scope.sort.sortColumn,
-			 		sortDirection: $scope.sort.sortDirection,
-                    user:$scope.pageData.user,
-                    nation: $scope.pageData.nation,
-                    organisation:$scope.pageData.organisation,
-                    status:$scope.pageData.status,
-                    activeTo: $scope.pageData.activeTo,
-                    activeFrom: $scope.pageData.activeFrom
-                },
-                {notify: false}
-			);
+			 $state.go($state.current,
+		    		{
+				 		page: $scope.paginationConfig.currentPage,
+				 		sortColumn: $scope.sort.sortColumn,
+				 		sortDirection: $scope.sort.sortDirection,
+	                    user:$scope.pageData.user,
+	                    nation: $scope.pageData.nation,
+	                    organisation:$scope.pageData.organisation,
+	                    status:$scope.pageData.status,
+	                    activeTo: $scope.pageData.activeTo,
+	                    activeFrom: $scope.pageData.activeFrom
+		    		 });
 		};
+
 
 		// getPaginated data...
 		$scope.getPage = function(){
@@ -173,50 +110,61 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
 			criteria.sortColumn = $scope.sort.sortColumn;
             criteria.sortDirection = $scope.sort.sortDirection;
 
-            var organisation =  "";
 
-            if ($scope.pageData.organisation!== null && $scope.pageData.organisation !== ''&& !_.isUndefined($scope.pageData.organisation)) {
+            if ($scope.pageData.organisation!== null && $scope.pageData.organisation !== '' && !_.isUndefined($scope.pageData.organisation)) {
 
-                organisation =  $scope.pageData.organisation;
+                var organisation =  $scope.pageData.organisation;
                 //to replace the symbols from the URL for organisation
                 var parentURL = organisation.search("%");
 
                 if(parentURL!== -1){
-                    organisation =$scope.pageData.organisation.replace("%20%252F%20"," / ");
                     organisation = $scope.pageData.organisation.replace("%2F","/");
                 }
+                
+                for (var i=0;i< _.size($scope.organisationsList);i++){
+                    if ($scope.organisationsList[i].parentOrgName === organisation)
+                      {
+                   	 $scope.search.organisation = $scope.organisationsList[i];
+                        break;
+                      }
+                 }
+              
 
                 //to extract the organisation parent and send only the organisation name to the Back End
                 var parent = organisation.search("/");
 
                 if(parent!== -1){
                     organisation = organisation.split(' / ');
-                    organisation = organisation[1];
+                    organisation = organisation[1]; 
                 }
-            }
 
-            if ($scope.pageData.user!== null && $scope.pageData.user !== ''&& !_.isUndefined($scope.pageData.user)) {
+                criteria.organisation = organisation;
+            }
+            
+
+            if ($scope.pageData.user!== null && $scope.pageData.user !== '' && !_.isUndefined($scope.pageData.user)) {
                 criteria.user = $scope.pageData.user;
+                $scope.search.user = $scope.pageData.user;
             }
 
-            if ($scope.pageData.nation!== null && $scope.pageData.nation !== ''&& !_.isUndefined($scope.pageData.nation)) {
+            if ($scope.pageData.nation!== null && $scope.pageData.nation !== '' && !_.isUndefined($scope.pageData.nation)) {
                 criteria.nation = $scope.pageData.nation;
-           }
-
-            if ($scope.pageData.organisation!== null && $scope.pageData.organisation !== ''&& !_.isUndefined($scope.pageData.organisation)) {
-            	criteria.organisation = organisation;
+                $scope.search.nation = $scope.pageData.nation;
             }
 
-            if ($scope.pageData.status!== null && $scope.pageData.status !== ''&& !_.isUndefined($scope.pageData.status)) {
+            if ($scope.pageData.status!== null && $scope.pageData.status !== '' && !_.isUndefined($scope.pageData.status)) {
                 criteria.status = $scope.pageData.status;
+                $scope.search.status = $scope.pageData.status;
             }
 
-            if ($scope.pageData.activeTo!== null && $scope.pageData.activeTo !== ''&& !_.isUndefined($scope.pageData.activeTo)) {
+            if ($scope.pageData.activeTo!== null && $scope.pageData.activeTo !== '' && !_.isUndefined($scope.pageData.activeTo)) {
                 criteria.activeTo = $scope.pageData.activeTo;
+                $scope.search.activeTo =  $scope.pageData.activeTo;
             }
 
-            if ($scope.pageData.activeFrom!== null && $scope.pageData.activeFrom !== ''&& !_.isUndefined($scope.pageData.activeFrom)) {
+            if ($scope.pageData.activeFrom!== null && $scope.pageData.activeFrom !== '' && !_.isUndefined($scope.pageData.activeFrom)) {
                 criteria.activeFrom = $scope.pageData.activeFrom;
+                $scope.search.activeFrom = $scope.pageData.activeFrom;
             }
 
 
@@ -237,7 +185,6 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
                      // $scope.showPagination = false;
                   }
 
-					changeUrlParams();
 				},
 				function (error) {
 				    $log.log("error");
@@ -248,52 +195,44 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
             );
 
         };
-		//	Search users
+        
+
         $scope.searchUsers = function (search, searchActiveFrom, searchActiveTo) {
-        	$scope.criteria = {};
-//        	$scope.currentPage = 1;
+
+            $scope.currentPage = 1;
         	$scope.paginationConfig.currentPage = 1;
 
-            if (search.user !== null && search.user !== '' && !_.isUndefined(search.user) ){
-			    $scope.criteria.user = search.user;
-                $scope.pageData.user = $scope.criteria.user;
+            if ($scope.search.user !== null && $scope.search.user !== '' && !_.isUndefined($scope.search.user) ){
+                $scope.pageData.user = $scope.search.user;
 
 			}else{
-
                 $scope.pageData.user = '';
             }
 
-			if (search.nation !== null && !_.isUndefined(search.nation)){
-			    $scope.criteria.nation = search.nation;
-                $scope.pageData.nation = search.nation;
+			if ($scope.search.nation  !== null && $scope.search.nation  !== '' && !_.isUndefined($scope.search.nation )){
+                $scope.pageData.nation = $scope.search.nation ;
 			}else{
                 $scope.pageData.nation = '';
             }
 
-			if (search.organisation !== null && search.organisation !== ''){
-			    $scope.criteria.organisation = search.organisation;
-                $scope.pageData.organisation = search.organisation;
+			if ($scope.search.organisation !== null && $scope.search.organisation !== '' && !_.isUndefined($scope.search.organisation)){
+                $scope.pageData.organisation = $scope.search.organisation.parentOrgName;
 			}else{
                 $scope.pageData.organisation = '';
             }
 
-			if (search.status !== "all") {
-			    $scope.criteria.status = search.status;
-                $scope.pageData.status = search.status;
+			if ($scope.search.status !== "all") {
+                $scope.pageData.status = $scope.search.status;
             }else{
                 $scope.pageData.status = '';
             }
 
 
-			$scope.criteria.activeFrom = new Date(searchActiveFrom).toJSON();
-			$scope.criteria.activeTo = new Date(searchActiveTo).toJSON();
-
-            $scope.pageData.activeTo = new Date(searchActiveTo).toJSON();
-            $scope.pageData.activeFrom = new Date(searchActiveFrom).toJSON();
-
-            $scope.getPage();
+            $scope.pageData.activeTo = new Date($scope.searchActiveTo).toJSON();
+            $scope.pageData.activeFrom = new Date($scope.searchActiveFrom).toJSON();
 
             changeUrlParams();
+
         };
 
         /** This part is added to handle the sorting columns / direction and icon displayed */
@@ -309,7 +248,7 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
 			  sort.sortColumn = column;
 			  sort.sortDirection = 'desc';
 			}
-			$scope.getPage();
+			//$scope.getPage();
 			changeUrlParams();
 		};
 
@@ -342,22 +281,27 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
 
             $scope.search.user = '';
             $scope.search.status = $scope.statusList[0];
-            $scope.search.nation = '';
+            $scope.search.nation  = '';
             $scope.search.organisation = '';
             $scope.search.searchActiveFrom = '';
             $scope.search.searchActiveTo = '';
 
             $scope.criteria = {};
             $scope.pageData = {};
-            $scope.getPage();
-
+            
             changeUrlParams();
+
         };
 
     }]);
 
-usersModule.controller('userDetailsCtlr', ['$log', '$scope', '$modal', '$stateParams', 'refData', 'userDetailsService','userContextsServices',
-    function ($log, $scope, $modal, $stateParams, refData, userDetailsService,userContextsServices) {
+usersModule.controller('userDetailsCtlr', ['$log', '$scope', '$modal', '$stateParams', 'refData', 'userDetailsService','userContextsServices','userService',
+    function ($log, $scope, $modal, $stateParams, refData, userDetailsService,userContextsServices,userService ) {
+
+	    $scope.checkAccess = function(feature) {
+	    	return userService.isAllowed(feature,"USM",true);
+	    };
+
         userDetailsService.getUser($stateParams.userName).then(
             function (response) {
                 $scope.user = response.user;
@@ -407,46 +351,7 @@ usersModule.controller('userDetailsCtlr', ['$log', '$scope', '$modal', '$statePa
         });
 
 
-        /*$scope.editUser = function (user) {
-            var modalInstance = $modal.open({
-                animation: true,
-                backdrop: true,
-                keyboard: true,
-                size: 'lg',
-                templateUrl: 'usm/users/partial/editUser.html',
-                controller: 'editUserModalInstanceCtrl',
-                resolve: {
-                    user: function () {
-                        return angular.copy(user);
-                    }
-                }
-            });
-
-            // It is a promise that resolves when modal is closed and rejected when modal is dismissed
-            modalInstance.result.then(function (returnedUser) {
-                // Update the model (user)
-                $log.log(returnedUser);
-                if (_.isEqual(returnedUser.status, 'E')) {
-                    $scope.statusClass = 'label label-success';
-                } else if (_.isEqual($scope.user.status, 'D')) {
-                    $scope.statusClass = 'label label-danger';
-                } else {
-                    $scope.statusClass = 'label label-warning';
-                }
-                //angular.copy(returnedUser, user);
-                    if (returnedUser.organisation_parent.indexOf('/') !== -1) {
-                        returnedUser.organisation.parent = returnedUser.organisation_parent.split('/')[0].trim();
-                        returnedUser.organisation.name = returnedUser.organisation_parent.split('/')[1].trim();
-                    } else {
-                        returnedUser.organisation.parent = null;
-                        returnedUser.organisation.name = returnedUser.organisation_parent;
-                    }
-            },function (error) {
-            $log.log(error);
-        });
-        };*/
-
-		//to include setUserPassword in the 'userDetailsCtlr'
+     	//to include setUserPassword in the 'userDetailsCtlr'
         $scope.manageUserPassword = function (user) {
             var modalInstance = $modal.open({
                 animation: true,
@@ -465,7 +370,7 @@ usersModule.controller('userDetailsCtlr', ['$log', '$scope', '$modal', '$statePa
             modalInstance.result.then(function (returnedUser) {
                 // Update the model (user)
                 $log.log(returnedUser);
-                $scope.user = returnedUser;
+
                 if (_.isEqual($scope.user.status, 'E')) {
                     $scope.statusClass = 'label label-success';
                 } else if (_.isEqual($scope.user.status, 'D')) {
@@ -485,6 +390,30 @@ usersModule.controller('userDetailsCtlr', ['$log', '$scope', '$modal', '$statePa
 
 usersModule.controller('manageUserCtlr', ['$log', '$scope', '$modal','$stateParams','userDetailsService',
     function ($log, $scope, $modal,$stateParams,userDetailsService) {
+
+		$scope.duplicateUserProfile = function (user) {
+            var modalInstance = $modal.open({
+                animation: true,
+                backdrop: true,
+                keyboard: true,
+                size: 'lg',
+                templateUrl: 'usm/users/partial/duplicateUserProfile.html',
+                controller: 'duplicateUserProfileModalInstanceCtrl',
+                resolve: {
+                    user: function () {
+                        return angular.copy(user);
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (result) {
+				//angular.copy(returnedOrgContact, contact);
+				//$scope.endpoint.persons.push(returnedOrgContact);
+            }, function () {
+                //$log.info('Modal dismissed at: ' + new Date());
+            });
+
+		};
 
         $scope.editUser = function (user) {
             var modalInstance = $modal.open({
@@ -532,6 +461,122 @@ usersModule.controller('manageUserCtlr', ['$log', '$scope', '$modal','$statePara
         };
     }]);
 
+usersModule.controller('duplicateUserProfileModalInstanceCtrl', ['$scope', '$modalInstance', '$timeout', '$log', 'user', 'UsersListService',
+		'userContextsServices', 'userDetailsService',
+    function ($scope, $modalInstance, $timeout, $log, user, UsersListService, userContextsServices, userDetailsService) {
+		$scope.formDisabled = false;
+		$scope.editForm = true;
+        $scope.actionSucceeded = false;
+        $scope.showConfirmation = false;
+
+		// current user
+		$scope.user = user;
+		$scope.destUserName = user.userName;
+		$scope.selectedUsersName = "";
+
+        // flagging whether the loading message must be displayed
+		$scope.isDataLoading = true;
+
+		var maxDisplayedLines = 5;
+		var i = 0;
+
+		//To control the empty and loading table messages
+        $scope.emptyResult = true;
+		$scope.classResultMessage = "alert alert-info";
+        $scope.emptyResultMessage = "Select a \"Copy from User\"";
+        $scope.loadingMessage = ""; // "Loading... taking some time";
+
+        UsersListService.getUsersNames().then(
+            function (response) {
+                $scope.usersNames = response.users;
+				//if($scope.usersNames.length > 0) {
+				//	$scope.selectedUsersName = $scope.usersNames[0];
+				//}
+            },
+            function (error) {
+                $scope.messageDivClass = "container alert alert-danger";
+                $scope.actionMessage = error;
+            }
+        );
+
+		$scope.showUserContext = function(usr) {
+			$log.log(usr);
+
+			$scope.selectedUsersName = usr;
+
+			$scope.classResultMessage = "alert alert-warning";
+			$scope.emptyResultMessage = "Loading... taking some time";
+
+			userContextsServices.getUserContextsServices(usr).then(
+				function (response) {
+					if (_.isUndefined(response.userContexts) || _.size(response.userContexts) < 1 || _.isNull(response.userContexts[0])) {
+						$scope.emptyResult = true;
+						$scope.isDataLoading = false;
+						$scope.userContextsList = [];
+						$scope.userContextsEmptyList = [];
+						for(i = 0; i < maxDisplayedLines; i++) {
+							$scope.userContextsEmptyList.push("");
+						}
+						$scope.classResultMessage = "alert alert-danger";
+						$scope.emptyResultMessage = "No results found. ";
+					} else {
+						$scope.emptyResult = false;
+						$scope.isDataLoading = false;
+						$scope.userContextsList = response.userContexts;
+						$scope.userContextsEmptyList = [];
+						for(i = 0; i < maxDisplayedLines - $scope.userContextsList.length; i++) {
+							$scope.userContextsEmptyList.push("");
+						}
+						$scope.classResultMessage = "alert alert-danger";
+						$scope.emptyResultMessage = "No results found. ";
+					}
+				},function (error) {
+					$log.log("Error: ", error);
+					$scope.userContextsList = [];
+					$scope.userContextsEmptyList = [];
+					for(i = 0; i < maxDisplayedLines; i++) {
+						$scope.userContextsEmptyList.push("");
+					}
+					$scope.emptyResult = true;
+					$scope.isDataLoading = false;
+					$scope.classResultMessage = "alert alert-danger";
+					$scope.emptyResultMessage = "No results found. ";
+				}
+			);
+		};
+
+		$scope.cancel = function () {
+			$log.log("cancel");
+			$modalInstance.dismiss();
+		};
+
+		$scope.duplicateProfile = function (user) {
+			if ($scope.showConfirmation) {
+				var arrComprehensiveUserContext = [];
+				angular.forEach($scope.userContextsList, function(obj) {
+					arrComprehensiveUserContext.push({"userContextId" : obj.userContextId, "roleId": obj.roleId, "scopeId": obj.scopeId});
+				});
+				userDetailsService.copyUserPrefs($scope.destUserName, arrComprehensiveUserContext).then(
+					function (response) {
+						$scope.messageDivClass = "container alert alert-success";
+						$scope.actionMessage = "Profile copied";
+						$scope.actionSucceeded = true;
+						$timeout(function () {
+							$modalInstance.close($scope.destUserName);
+						}, 2000);
+					},
+					function (error) {
+						$scope.messageDivClass = "container alert alert-danger";
+						$scope.actionMessage = error;
+					}
+				);
+			} else {
+				$scope.showConfirmation = true;
+				$scope.messageDivClass = "container alert alert-warning";
+				$scope.actionMessage = "Warning: If a context(s) already exist for the user " + $scope.destUserName + " the existing data will be erased and replaced by the new profile if the action is accepted";
+			}
+		};
+	}]);
 
 usersModule.controller('setUserPasswordModalInstanceCtrl', ['$log', '$timeout', '$location', '$scope', '$modalInstance', '$stateParams', 'refData',
                                                      'userDetailsService',  'accountService', 'user',
@@ -564,7 +609,7 @@ usersModule.controller('setUserPasswordModalInstanceCtrl', ['$log', '$timeout', 
                                $scope.userPasswordUpdated = true;
                                $scope.messageDivClass = "container alert alert-success";
                                $scope.actionMessage = "Password has been set";
-
+                               $scope.user=user;
                                $timeout(function () {
                                 $modalInstance.close(updatedUser);
                              }, 2000);

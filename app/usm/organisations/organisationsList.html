@@ -1,4 +1,4 @@
-<div class="container" ng-controller="organisationsListCtrl">
+<div class="container">
 
     <!-- SEARCH PANEL-->
     <div class="panel panel-default">
@@ -12,7 +12,7 @@
                     <select class="form-control dropdown"
                             id="name"
                             name="name"
-                            ng-model="criteria.name"
+                            ng-model="search.name"
                             ng-options="name.parentOrgName for name in namesList"
                             ng-class="{pointer: pointer}"
                             ng-mouseenter="pointer=true"
@@ -27,7 +27,7 @@
                     <select class="form-control dropdown"
                             id="nation"
                             name="nation"
-                            ng-model="criteria.nation"
+                            ng-model="search.nation"
                             ng-options="nation for nation in nationsList"
                             ng-class="{pointer: pointer}"
                             ng-mouseenter="pointer=true"
@@ -42,9 +42,9 @@
                     <select class="form-control dropdown"
                             id="status"
                             name="status"
-                            ng-model="criteria.status"
+                            ng-model="search.status"
                             ng-options="'users.status_'+status | translate for status in statusList"
-                            ng-init="criteria.status = statusList[0]"
+                            ng-init="search.status = statusList[0]"
                             ng-class="{pointer: pointer}"
                             ng-mouseenter="pointer=true"
                             ng-mouseleave="pointer=false">
@@ -54,7 +54,7 @@
                 <div class="col-md-2">
                     <label>&nbsp;</label>
                     <div>
-                        <button type="button" id="searchButton" class="btn btn-default" ng-click="searchOrganisation(criteria)">
+                        <button type="button" id="searchButton" class="btn btn-default" ng-click="searchOrganisation(search)">
                             <span class="glyphicon glyphicon-search"></span></span>
                         </button>
                         <button type="button" class="btn btn-default" ng-click="resetForm()">
@@ -91,7 +91,7 @@
             <th ng-click="changeSorting('status')">{{'organisations.status' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('status')"></i></th>
 
             <th class="text-right">
-                <div ng-controller="manageOrganisationCtrl">
+                <div ng-controller="manageOrganisationCtrl" ng-if="checkAccess('manageOrganisations')">
                     <button id="newOrgButton" class="btn btn-primary btn-sm" ng-click='manageOrganisation("new", "")'>
                         <span class="glyphicon glyphicon-plus"></span>
                         <span>&nbsp;New</span>
@@ -111,7 +111,7 @@
                 <span ng-class="{'label label-success': organisation.status=='E', 'label label-danger': organisation.status=='D'}">{{"organisation.status_"+organisation.status | translate}}</span>
             </td>
             <td class="actionTd text-right">
-                <span ng-controller="manageOrganisationCtrl">
+                <span ng-controller="manageOrganisationCtrl" ng-if="checkAccess('manageOrganisations')">
                     <button type="button" class="btn btn-sm btn-primary usm-action-btn" ng-click='manageOrganisation("edit", organisation)'>
                         <span><i class="glyphicon glyphicon-pencil"></i></span>
                     </button>
@@ -120,7 +120,7 @@
                         ui-sref="app.usm.organisations.organisation({organisationId: organisation.organisationId})" ui-sref-opts="{ inherit : false }">
                     <span><i class="glyphicon glyphicon-eye-open"></i></span>
                 </button>
-                <span ng-controller="manageOrganisationCtrl">
+                <span ng-controller="manageOrganisationCtrl" ng-if="checkAccess('manageOrganisations')">
                     <button type="button" class="btn btn-sm btn-danger usm-action-btn" ng-click='manageOrganisation("delete", organisation)'>
                         <span><i class="glyphicon glyphicon-remove"></i></span>
                     </button>

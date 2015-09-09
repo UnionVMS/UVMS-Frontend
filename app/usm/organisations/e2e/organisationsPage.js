@@ -1,9 +1,9 @@
 var OrganisationsPage = function () {
     var EC = protractor.ExpectedConditions;
 
-    this.criteriaName = element(by.model('criteria.name'));
-    this.criteriaNation = element(by.model('criteria.nation'));
-    this.criteriaStatus = element(by.model('criteria.status'));
+    this.criteriaName = element(by.model('search.name'));
+    this.criteriaNation = element(by.model('search.nation'));
+    this.criteriaStatus = element(by.model('search.status'));
 
     this.searchButton = element(by.id('searchButton'));
     this.resetButton = element(by.css('[ng-click="resetForm()"]'));

@@ -42,7 +42,9 @@
         "nation": "Nation",
         "activeFrom": "Active From",
         "activeTo": "Active To",
-        "notes": "Notes"
+        "notes": "Notes",
+		"copyToUser": "Copy to User",
+		"copyFromUser": "Copy from User"
     },
     "roles": {
         "name": "Name",

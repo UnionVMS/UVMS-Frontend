@@ -17,6 +17,31 @@ angular.module('users').config(['$urlRouterProvider', '$stateProvider','ACCESS',
             return userService.findSelectedContext();
         };
         currentContextPromise.$inject =    ['userService'];
+
+        var orgNationsPromise = function(organisationsService){
+  	      return organisationsService.getNations().then(
+  	                 function (response) {
+  	                     return response.nations;
+  	                 },
+  	                 function (error) {
+  	                     return [error];
+  	                 }
+  	             );
+  	           };
+  	     orgNationsPromise.$inject =    ['organisationsService'];
+
+  	     var orgNamesPromise = function(organisationsService){
+           return organisationsService.get().then(
+                function (response) {
+                    return response.organisations;
+                },
+                function (error) {
+                    return [error];
+                }
+            );
+          };
+        orgNamesPromise.$inject =    ['organisationsService'];
+
     $stateProvider
         .state('app.usm.users', {
             url: '/users?{page:int}&{sortColumn}&{sortDirection}&{user}&{nation}&{organisation}&{status}&{activeFrom}&{activeTo}',
@@ -44,7 +69,9 @@ angular.module('users').config(['$urlRouterProvider', '$stateProvider','ACCESS',
                 label: 'Users'
             },
             resolve: {
-                currentContext: currentContextPromise
+                currentContext: currentContextPromise,
+                orgNations: orgNationsPromise ,
+            	orgNames: orgNamesPromise
 
             }
         })
@@ -81,7 +108,9 @@ angular.module('users').config(['$urlRouterProvider', '$stateProvider','ACCESS',
                 }
             },
             resolve:{
-                userDetailsService: 'userDetailsService'
+
+                userDetailsService: 'userDetailsService',
+
             },
             ncyBreadcrumb: {
                 label: 'User Details'

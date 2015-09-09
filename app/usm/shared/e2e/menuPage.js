@@ -1,7 +1,7 @@
 var MenuPage = function () {
     var EC = protractor.ExpectedConditions;
     this.home = element.all(by.css('.navbar .nav')).$$('.glyphicon.glyphicon-home');
-    this.users = element.all(by.css('.navbar .nav')).$$('.glyphicon.glyphicon-user');
+    this.users = element.all(by.css('.navbar .nav')).all(by.linkText("Users"));
     this.roles = element.all(by.css('.navbar .nav')).all(by.linkText("Roles"));
     this.organisations = element.all(by.css('.navbar .nav')).all(by.linkText("Organisations"));
     this.scopes = element.all(by.css('.navbar .nav')).all(by.linkText("Scopes"));
@@ -20,6 +20,29 @@ var MenuPage = function () {
     this.cancelButton = element(by.buttonText('Cancel'));
     //Message panel
     this.setPasswordPanelMessage = element(by.binding('actionMessage'));
+
+    //Variables panel Select User Context
+    //button Cancel
+    this.cancelButtonSelectUserContext = element(by.buttonText('Cancel'));
+
+    this.clickCancelButtonSelectUserContext = function () {
+        browser.wait(EC.elementToBeClickable(this.cancelButtonSelectUserContext), 10000);
+        this.cancelButtonSelectUserContext.click();
+    };
+
+   /* this.selectSelectUserContext = element.all(by.repeater('item in selectableContexts')).get(1).
+        element(by.linkText('USM-UserManager - (no scope)'));*/
+
+    this.selectContext= function(context) {
+        element.all(by.css('div .modal-dialog ul li')).all(by.linkText(context)).click();
+    }
+
+    this.clickSelectContext = function(context) {
+    	this.selectContext(context).click();
+       // browser.wait(EC.visibilityOf(this.contextUserTab), 10000);
+    };
+
+    //end panel Select User Context
 
     this.clickHome = function () {
         this.home.click();
@@ -43,7 +66,7 @@ var MenuPage = function () {
         this.userDropDown.click();
         browser.wait(EC.elementToBeClickable(this.logOut), 10000);
         this.logOut.click();
-        browser.wait(EC.elementToBeClickable(this.username), 10000);
+        //browser.wait(EC.elementToBeClickable(this.username), 10000);
     };
     this.clickChangePassword = function () {
         this.userDropDown.click();

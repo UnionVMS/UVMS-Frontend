@@ -4,21 +4,17 @@ var usersPage = function () {
 
     //Variables panel New User
     this.userName =  element.all(by.model('user.userName'));
-    this.firstName = element.all(by.model('user.firstName'));
-    this.lastName= element.all(by.model('user.lastName'));
-    this.phoneNumber= element.all(by.model('user.phoneNumber'));
-    this.email= element.all(by.model('user.email'));
-    this.organization= element.all(by.model('user.organisationName'));
+    this.firstName = element.all(by.model('user.person.firstName'));
+    this.lastName= element.all(by.model('user.person.lastName'));
+    this.phoneNumber= element.all(by.model('user.person.phoneNumber'));
+    this.email= element.all(by.model('user.person.email'));
+    //this.organisation= element.all(by.id('organisationSelect'));
+    this.organisation= element.all(by.model('user.organisationComplex'));
     this.status= element.all(by.model('user.status'));
+  //  this.savedMessage=element.all(by.bind('message'));
 
 
     //Variables Panel User Details
-    //this.userNameMod =  element.all(by.model('user.userName'));
-    this.firstNameMod = element.all(by.model('user.firstName'));
-    this.lastNameMod = element.all(by.model('user.lastName'));
-    this.phoneNumberMod = element.all(by.model('user.contactDetails.phoneNumber'));
-    this.organizationMod = element.all(by.model('user.organisation.organisationName'));
-    this.emailMod = element.all(by.model('user.email'));
     this.checkBoxConfirm = element.all(by.model('confirm'));
 
 
@@ -30,13 +26,13 @@ var usersPage = function () {
 
 
     //Buttons
-    this.newUserButton = element(by.css('[ng-click="addNewUser()"]'));   //to create a new user account
-    this.editButton = element(by.css('[ng-click="changeEditForm()"]'));  //to allow to modify a user account
-    this.SaveButton = element(by.buttonText('Save'));  //to save the changes in the panel
+    this.newUserButton = element(by.id('newUserButton'));   //to create a new user account
+    this.editButton = element(by.id('editButton'));  //to allow to modify a user account
+    this.saveButton = element(by.buttonText('Save'));  //to save the changes in the panel
     this.searchButton = element(by.id('submit'));     //to search a user account
    // this.viewButton =element(by.model('search.status'));
-    this.saveUserPanel = element(by.css('.btn.btn-primary.btn-sm')); //Save button from the panel
-    this.saveUserPanelcheck = element(by.css('.btn.btn-primary.btn-sm.fa.fa-check')); //Save button from the panel
+    //this.saveUserPanel = element(by.css('.btn.btn-primary.btn-sm')); //Save button from the panel
+   // this.saveUserPanel = element(by.id('saveButton')); //Save button from the panel
 
     this.viewButton = element(by.id('viewButton'));
 
@@ -52,28 +48,24 @@ var usersPage = function () {
     };
 
     this.clickDetailButton = function(rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').click();
-      //  browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
+        this.getTableRows().get(rowIndex).$$('td button').get(0).click();
     };
 
-    this.clickEditButton = function(rowIndex) {
-    	element(by.css('[ng-click="changeEditForm()"]')).click();
+    this.clickEditButton = function() {
+        browser.wait(EC.elementToBeClickable(this.editButton), 10000);
+    	this.editButton.click();
     };
 
-    this.clickSaveButtonUser = function() {
-        this.saveUserPanel.click();
-    };
 
-   // this.clickSaveButton = function() {
-    //	this.SaveButton.click();
 
     this.clickSaveButton = function() {
-        this.saveUserPanelcheck.click();
+        browser.wait(EC.elementToBeClickable(this.saveButton), 10000);
+        this.saveButton.click();
     };
+
 
     this.clickDetailButtonTest = function(rowIndex) {
         this.getTableRows().get(rowIndex).$$('td button').click();
-      //  browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
 
     this.getTable = function () {
@@ -98,11 +90,6 @@ var usersPage = function () {
 
     this.getDetailButton = function(rowIndex) {
         return this.getTableRows().get(rowIndex).$$('td button');
-    };
-
-    this.clickDetailButton = function(rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').click();
-        //  browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
 
     this.clickUserViewButton = function(rowIndex) {
@@ -136,16 +123,6 @@ var usersPage = function () {
     };
 
     //Panel modify user
-    this.setPhoneNumberMod = function (phoneNumberMod) {
-        this.phoneNumberMod.clear();
-        this.phoneNumberMod.sendKeys(phoneNumberMod);
-    };
-
-    this.setOrganizationMod = function (organizationMod) {
-    	this.organizationMod.click();
-    	this.organizationMod.sendKeys(organizationMod);
-    };
-
     this.setConfirmUser = function () {
         this.checkBoxConfirm.click();
     };
@@ -176,9 +153,10 @@ var usersPage = function () {
         this.email.sendKeys(email);
     };
 
-    this.setOrganization = function (organization) {
-        this.organization.click();
-        this.organization.sendKeys(organization);
+    this.setOrganisation = function (organisation) {
+        this.organisation.click();
+        this.organisation.sendKeys(organisation);
+        this.organisation.click(); //this fixes a timing-error
     };
 
     this.setStatus = function (status) {
@@ -186,6 +164,9 @@ var usersPage = function () {
         this.status.sendKeys(status);
     };
 
+    this.refreshPage = function () {
+        return browser.navigate().refresh();
     };
+ };
 
  module.exports = usersPage;

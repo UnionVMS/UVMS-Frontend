@@ -75,7 +75,7 @@
             <th ng-click="changeSorting('description')">{{'roles.description' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('description')"></i></th>
             <th ng-click="changeSorting('status')">{{'roles.status' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('status')"></i></th>
             <th class="text-right">
-                <div ng-controller="manageRoleCtrl">
+                <div ng-controller="manageRoleCtrl" ng-if="checkAccess('manageRoles')">
                     <button
                         tooltip-popup-delay={{toolTipsDelay}}
                         tooltip="{{'roles.new_button_tooltip' | translate}}"
@@ -95,7 +95,7 @@
                 <span ng-class="{'label label-success': role.status=='E', 'label label-danger': role.status=='D'}">{{"role.status_"+role.status | translate}}</span>
             </td>
             <td class="actionTd text-right">
-                <span ng-controller="manageRoleCtrl">
+                <span ng-controller="manageRoleCtrl" ng-if="checkAccess('manageRoles')">
 					<button type="button"
                             tooltip-popup-delay={{toolTipsDelay}}
                             tooltip="{{'roles.edit_button_tooltip' | translate}}"
@@ -111,7 +111,7 @@
                         ui-sref-opts="{ inherit : false }">
                     <span><i class="glyphicon glyphicon-eye-open"></i></span>
                 </button>
-                <span ng-controller="manageRoleCtrl">
+                <span ng-controller="manageRoleCtrl" ng-if="checkAccess('manageRoles')">
 					<button type="button"
                             tooltip-popup-delay={{toolTipsDelay}}
                             tooltip="{{'roles.del_button_tooltip' | translate}}"

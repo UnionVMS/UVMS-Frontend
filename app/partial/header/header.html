@@ -1,37 +1,40 @@
-<header ng-controller="HeaderCtrl">
+<header>
     <div class="headercontainer">
 		<div class="header">
 			<div class="pageinfo">
 				<div class="container">
-					<div class="pagename">
-				        <a href="#/today"><img class="uvmslogo" src="assets/images/logo.png"></a>
-						<div class="headerwarnings">
-							<div class="fa fa-bell-o"><span class="badge" ng-bind="randomNumber"></span></div>
-				        </div>
-				        <div class="headermessages">
-				        	<div class="fa fa-envelope-o"></div>
-				        </div>
-				        <div ng-if="!user.name" class="pull-right col-md-2">
-				        	<span class="sign-in" ng-click="signIn()"><i class="fa fa-sign-in"></i>Sign in</span>
-				        </div>
-					    <div ng-if="user.name" class="pull-right col-md-2">
-							<div class="dropdown fullWidthDropdown login-drop-down">
-								<button class="btn btn-default dropdown-toggle" type="button" id="user-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-									<div class="username"> <i class="fa fa-user"></i>{{user.name}}</div>
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu" aria-labelledby="user-menu" >
-									<li class="role-header">Roles</li>
-									<li class="roles" ng-repeat="userRoles in user.roles">{{userRoles.role}}</li>
-									<li role="separator" class="divider"></li>
-									<li ng-click="signOut()"><a href="#"><i class="fa fa-sign-out"></i>Sign out</a></li>
-								</ul>
-							</div>
-						</div>
+					<div class="row">
+                        <div class="col-md-6">
+				            <a href="#/today"><img class="uvmslogo" src="assets/images/logo.png"></a>
+                        </div>
+                        <div class="col-md-4 textAlignRight">
+    						<div class="headerwarnings" ng-if="isAuthenticated">
+    							<div class="fa fa-lg fa-bell-o"><span class="badge" ng-bind="randomNumber"></span></div>
+    				        </div>
+    				        <div class="headermessages" ng-if="isAuthenticated">
+    				        	<div class="fa fa-lg fa-envelope-o"></div>
+    				        </div>
+                        </div>
+                        <div class="col-md-2 textAlignRight" ng-if="isAuthenticated">
+    					    <div>
+    							<div class="dropdown fullWidthDropdown login-drop-down">
+    								<button class="btn btn-default dropdown-toggle" type="button" id="user-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    									<div class="username"> <i class="fa fa-lg fa-user"></i>{{userName}}</div>
+    									<span class="caret"></span>
+    								</button>
+    								<ul class="dropdown-menu" aria-labelledby="user-menu" >
+                                        <li><a href="#"><i class="fa fa-user"></i>as {{currentContext.role.roleName}}</a></li><li ng-click="switchContext()"><a href="#"><i class="fa fa-group"></i>Switch context</a></li>
+                                        <li role="separator" class="divider"></li>
+    									<li ng-click="signOut()"><a href="#"><i class="fa fa-sign-out"></i>Sign out</a></li>
+    								</ul>
+    							</div>
+    						</div>
+                        </div>
+
 				    </div>
 				</div>
 			</div>
-			<div ng-include="'partial/header/headerMenu/headerMenu.html'"></div>
+			<div ng-if="isAuthenticated" ng-include="'partial/header/headerMenu/headerMenu.html'"></div>
 		</div>
 	</div>
 </header>

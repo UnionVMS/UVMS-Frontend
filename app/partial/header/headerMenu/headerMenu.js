@@ -1,53 +1,59 @@
-    angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $location, locale){
+    angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $rootScope, $location, userService, locale){
 
-    var setMenu = function(){
-        return [
-            {
-                'title': locale.getString('header.menu_today'),
-                'url':'/today'
-            },
-            {
-                'title':locale.getString('header.menu_reporting'),
-                'url':'/reporting'
-            },
-            {
-                'title':locale.getString('header.menu_movement'),
-                'url':'/movement'
-            },
-            {
-                'title':locale.getString('header.menu_exchange'),
-                'url':'/exchange'
-            },
-            {
-                'title':locale.getString('header.menu_polling'),
-                'url':'/polling/logs'
-            },
-            {
-                'title':locale.getString('header.menu_communication'),
-                'url':'/communication'
-            },
-            {
-                'title':locale.getString('header.menu_assets'),
-                'url':'/assets'
-            },
-            {
-                'title':locale.getString('header.menu_alarmconditions'),
-                'url':'/alarms/holdingtable'
-            },
-          /*  {
-                'title':locale.getString('header.menu_user'),
-                'url':'/user'
-            },*/
-            {
-                'title':locale.getString('header.menu_admin'),
-                'url':'/admin'
-            }
-        ];
+    var checkAccess = function(module, feature) {
+        return userService.isAllowed(feature,module,true);
     };
 
-    locale.ready('header').then(function () {
-        $scope.menu = setMenu();
-    });
+    $scope.menu = [];
+
+    var addMenuItem = function(text, url){
+        $scope.menu.push({
+            'title':text,
+            'url':url
+        });
+    };
+
+    var setMenu = function(){
+        $scope.menu = [];
+
+        //TODAY
+        addMenuItem(locale.getString('header.menu_today'), '/today');
+
+        //REPORTING
+        addMenuItem(locale.getString('header.menu_reporting'), '/reporting');
+
+        //MOVEMENT
+        addMenuItem(locale.getString('header.menu_movement'), '/movement');
+
+        //EXCHANGE
+        addMenuItem(locale.getString('header.menu_exchange'), '/exchange');
+
+        //POLLING
+        addMenuItem(locale.getString('header.menu_polling'), '/polling/logs');
+
+        //COMMUNICATION
+        addMenuItem(locale.getString('header.menu_communication'), '/communication');
+
+        //ASSETS
+        if(checkAccess('Vessel', 'vesselConfig')){
+            addMenuItem(locale.getString('header.menu_assets'), '/assets');            
+        }
+
+        //ALARMS
+        addMenuItem(locale.getString('header.menu_alarmconditions'), '/alarms/holdingtable');
+        
+        //USM
+        //if(checkAccess('USM', 'viewUsers')){
+            addMenuItem(locale.getString('header.menu_user'), '/usm');
+        //}
+
+        //ADMIN
+        addMenuItem(locale.getString('header.menu_admin'), '/admin');
+    };
+
+    var init = function(){
+        setMenu();        
+    };
 
     var getFirstPathSegment = function(path) {
         if (!path) {
@@ -62,5 +68,21 @@
     $scope.isActive = function(viewLocation){
         return getFirstPathSegment($location.path()) === (getFirstPathSegment(viewLocation));
     };
+
+    locale.ready('header').then(function () {
+        init();    
+    });
+
+    $rootScope.$on('AuthenticationSuccess', function () {
+        init();
+    });
+    $rootScope.$on('needsAuthentication', function () {
+        init();
+    });
+    $rootScope.$on('ContextSwitch', function () {
+        init();
+    });    
+
+    init();
 
 });

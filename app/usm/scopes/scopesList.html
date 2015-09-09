@@ -75,7 +75,7 @@
             <th ng-click="changeSorting('dataFrom')">{{'scopes.dataFrom' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('dataFrom')"></i></th>
             <th ng-click="changeSorting('dataTo')">{{'scopes.dataTo' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('dataTo')"></i></th>
             <th class="text-right">
-                <div ng-controller="manageScopeCtrl">
+                <div ng-controller="manageScopeCtrl" ng-if="checkAccess('manageScopes')">
                     <button class="btn btn-primary btn-sm" ng-click='manageScope("new", "")'>
                         <span class="glyphicon glyphicon-plus"></span>
                         <span>{{'scopes.newScope' | translate}}</span>
@@ -98,7 +98,7 @@
 
             <!--<td class="text-center actionTd">  -->
             <td class="actionTd text-right">
-                <span ng-controller="manageScopeCtrl">
+                <span ng-controller="manageScopeCtrl" ng-if="checkAccess('manageScopes')">
                     <button type="button" class="btn btn-sm btn-primary usm-action-btn" ng-click='manageScope("edit", scope)'>
                         <span><i class="glyphicon glyphicon-pencil"></i></span>
                     </button>
@@ -108,7 +108,7 @@
                         ui-sref-opts="{ inherit : false }">
                     <span><i class="glyphicon glyphicon-eye-open"></i></span>
                 </button>
-                <span ng-controller="manageScopeCtrl">
+                <span ng-controller="manageScopeCtrl" ng-if="checkAccess('manageScopes')">
                     <button type="button" class="btn btn-sm btn-danger usm-action-btn" ng-click='manageScope("delete", scope)'>
                         <span><i class="glyphicon glyphicon-remove"></i></span>
                     </button>

@@ -42,7 +42,9 @@
     "nation": "Nation",
     "activeFrom": "Actif De",
     "activeTo": "Actif jusqu'à",
-    "notes": "Notes"
+    "notes": "Notes",
+	"copyToUser": "Copie vers utilisateur",
+	"copyFromUser": "Copie de l'utilisateur"
   },
   "roles": {
     "name": "Nom",

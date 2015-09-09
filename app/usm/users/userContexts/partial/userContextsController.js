@@ -1,12 +1,16 @@
 var userContextsModule = angular.module('userContexts');
 
-userContextsModule.controller('userContextsControllerCtrl', ['$scope', '$stateParams', 'userContextsServices',
-	function ($scope, $stateParams, userContextsServices) {
+userContextsModule.controller('userContextsControllerCtrl', ['$scope', '$stateParams', 'userContextsServices','userService',
+	function ($scope, $stateParams, userContextsServices,userService) {
 		//$scope.isDataLoading = true;
 	//	$scope.emptyResult = false;
         $scope.emptyResultMessage = "No results found. ";
         $scope.loadingMessage = "Loading... taking some time";
 
+
+        $scope.checkAccess = function(feature) {
+            return userService.isAllowed(feature,"USM",true);
+        };
        $scope.$on('event:loadContexts', function(){
                 $scope.emptyResult = false;
                 $scope.isDataLoading = false;

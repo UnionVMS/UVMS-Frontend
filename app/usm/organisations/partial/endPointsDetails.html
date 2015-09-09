@@ -17,7 +17,7 @@
 						  ng-bind='"endPoint.status_"+endpoint.status | translate' ></span>
 				</div>
                 <div class="col-md-1 text-right">
-					<span ng-controller="manageOrganisationEndpointsCtrl"> <!-- Edit Endpoint Detail from his own detail page -->
+					<span ng-controller="manageOrganisationEndpointsCtrl" ng-if="checkAccess('manageEndpoints')"> <!-- Edit Endpoint Detail from his own detail page -->
 						<button type="button" class="btn btn-sm btn-primary" ng-click='manageEndpoint("edit",endpoint, endpoint.organisationName)'>
 							<span><i class="glyphicon glyphicon-pencil"></i></span>
 						</button>
@@ -57,7 +57,7 @@
     <!-- INFO PANEL END-->
     <tabset class="endPointDetailsTabs">
         <!-- CHANNELS TABLE -->
-        <tab heading="Communication Channels">
+        <tab heading="Communication Channels" ng-if="checkAccess('viewEndpointsDetails')||checkAccess('manageEndpoints')">
             <table st-table="displayedChannels" st-safe-src="endpoint.channelList" class="table table-striped fixed">
 				<colgroup>
 					<col style="width: 420px;">
@@ -71,7 +71,7 @@
 					<th st-sort="service">{{'channels.service' | translate}}</th>
 					<th st-sort="priority">{{'channels.priority' | translate}}</th>
 					<th class="text-right">
-						<div ng-controller="manageOrganisationChannelsCtrl"> <!-- New Communication Channel from organisation detail page -->
+						<div ng-controller="manageOrganisationChannelsCtrl" ng-if="checkAccess('manageEndpoints')"> <!-- New Communication Channel from organisation detail page -->
 							<button id="newOrgChannel" class="btn btn-primary btn-sm" ng-click='manageOrgEndpointsChannel("new", "")'>
 								<span class="glyphicon glyphicon-plus"></span>
 								<span>{{'common.new' | translate}}</span>
@@ -87,12 +87,12 @@
 					<td ng-bind="channelList.priority"></td>
 
 						<td class="actionTd text-right">
-						<span ng-controller="manageOrganisationChannelsCtrl" > <!-- Edit Communication Channel from organisation detail page -->
+						<span ng-controller="manageOrganisationChannelsCtrl" ng-if="checkAccess('manageEndpoints')"> <!-- Edit Communication Channel from organisation detail page -->
 							<button id="editOrgChannel" type="button" class="btn btn-sm btn-primary" ng-click='manageOrgEndpointsChannel("edit", channelList)'>
 								<span><i class="glyphicon glyphicon-pencil"></i></span>
 							</button>
 						</span>
-						<span ng-controller="manageOrganisationChannelsCtrl" > <!-- Delete Communication Channel from organisation detail page -->
+						<span ng-controller="manageOrganisationChannelsCtrl" ng-if="checkAccess('manageEndpoints')"> <!-- Delete Communication Channel from organisation detail page -->
 							<button id="delOrgChannel" type="button" class="btn btn-sm btn-danger" ng-click='manageOrgEndpointsChannel("delete", channelList)'>
 								<span><i class="glyphicon glyphicon-remove"></i></span>
 							</button>
@@ -110,7 +110,7 @@
 		<!-- CHANNELS TABLE END-->
 
 		<!-- CONTACTS TABLE -->
-		<tab heading="Contacts">
+		<tab heading="Contacts" ng-if="checkAccess('viewEndpointsDetails')||checkAccess('manageEndpoints')">
 			<table st-table="displayedContacts" st-safe-src="endpoint.persons" class="table table-striped fixed">
 				<colgroup>
 					<col style="width: 200px;">
@@ -126,7 +126,7 @@
 					<th st-sort="email">{{'contacts.email' | translate}}</th>
 					<th st-sort="phoneNumber">{{'contacts.phone' | translate}}</th>
 					<th class="text-right">
-						<div ng-controller="manageOrganisationContactsCtrl">
+						<div ng-controller="manageOrganisationContactsCtrl" ng-if="checkAccess('manageEndpoints')">
 							<button id="newOrgContact" class="btn btn-primary btn-sm" ng-click='manageOrgEndpointsContact("new", "")'>
 								<span class="glyphicon glyphicon-plus"></span>
 								<span>{{'common.new' | translate}}</span>
@@ -142,7 +142,7 @@
 					<td ng-bind="contact.email"></td>
 					<td ng-bind="contact.phoneNumber"></td>
 					<td class="actionTd text-right">
-						<span ng-controller="manageOrganisationContactsCtrl"> <!-- ng-if="uc.role!==null"> -->
+						<span ng-controller="manageOrganisationContactsCtrl" ng-if="checkAccess('manageEndpoints')"> <!-- ng-if="uc.role!==null"> -->
 							<button id="delOrgContact" type="button" class="btn btn-sm btn-danger" ng-click='manageOrgEndpointsContact("delete", contact)'>
 								<span><i class="glyphicon glyphicon-remove"></i></span>
 							</button>

@@ -1,12 +1,12 @@
 var unionvmsWebApp = angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource', 'ngLocalize', 'tmh.dynamicLocale', 'leaflet-directive', 'datatables', 'datatables.bootstrap', 'datatables.columnfilter', 'ngCsv', 'ui.router', 'usm','googlechart']);
 
-var getCurrentUserPromise = function() {
-    var currentUserPromise = function(userService) {
-        return userService.findCurrentUser();
+var getCurrentUserContextPromise = function() {
+    var currentUserContextPromise = function(userService) {
+        return userService.findSelectedContext();
     };
 
-    currentUserPromise.$inject = ['userService'];
-    return currentUserPromise;
+    currentUserContextPromise.$inject = ['userService'];
+    return currentUserContextPromise;
 };
 
 //Resolve used for all routes
@@ -16,114 +16,264 @@ var generalRouteResolves =  {
     },
     config: function(initService){
         return initService.loadConfig();
-    },
-    currentUser: getCurrentUserPromise() // TODO: Uncomment to enforce user login
+    }
+
 };
 
-unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $injector) {
+unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $injector, $urlRouterProvider, ACCESS) {
 
     tmhDynamicLocaleProvider.localeLocationPattern("assets/locales/angular-locale_{{locale}}.js");
 
 
     $stateProvider
-        .state('today', {
+        .state('app', {
+            abstract : true,   
+            views: { 
+                app: { 
+                    template: '<div ui-view name="modulenav"></div><div ui-view name="modulepage"></div><div ui-view name="page"></div>',                     
+                },
+                unionvmsHeader: { 
+                    templateUrl: 'partial/header/header.html', 
+                    controller: 'HeaderCtrl' 
+                },
+                unionvmsFooter: { 
+                    templateUrl: 'partial/footer/footer.html', 
+                    controller: 'FooterCtrl' 
+                },
+                unionvmsAlerts: { 
+                    templateUrl: 'partial/alerts/alerts.html', 
+                    controller: 'AlertsCtrl' 
+                },                       
+            },            
+            data: {
+                access: ACCESS.AUTH
+            },
+            resolve: {
+                currentContext : getCurrentUserContextPromise
+            }
+        })
+        .state('uvmsheader', {
+            views: { 
+                unionvmsHeader: {
+                    templateUrl: 'partial/header/header.html', 
+                    controller: 'HeaderCtrl' 
+                }
+            },
+        })
+        .state('app.today', {
             url: '/today',
-            views: { module: { templateUrl: 'partial/today/today.html' } },
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/today/today.html', 
+                    controller: 'TodayCtrl' 
+                }
+            },
             resolve: generalRouteResolves
         })
-        .state('movement', {
+        .state('app.movement', {
             url: '/movement',
-            views: { module: { templateUrl: 'partial/movement/movement.html' } },
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/movement/movement.html', 
+                    controller: 'MovementCtrl' 
+                }
+            },
             resolve: generalRouteResolves
         })
-        .state('movement-manual', {
+        .state('app.movement-manual', {
             url: '/movement/manual',
-            views: { module: { templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html' } },
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html', 
+                    controller: 'ManualPositionReportsCtrl' 
+                }
+            },
             resolve: generalRouteResolves
         })
-        .state('movement-id', {
+        .state('app.movement-id', {
             url: '/movement/:id',
-            views: { module: { templateUrl: 'partial/movement/movement.html' } },
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/movement/movement.html', 
+                    controller: 'MovementCtrl' 
+                }
+            },
             resolve: generalRouteResolves
         })
-        .state('assets', {
-            url: '/assets',
-            views: { module: { templateUrl: 'partial/vessel/vessel.html' } },
-            resolve: generalRouteResolves
-        })
-        .state('assets-id', {
-            url: '/assets/:id',
-            views: { module: { templateUrl: 'partial/vessel/vessel.html' } },
-            resolve: generalRouteResolves
-        })
-        .state('communication', {
-            url: '/communication',
-            views: { module: { templateUrl: 'partial/mobileTerminal/mobileTerminal.html' } },
-            resolve: generalRouteResolves
-        })
-        .state('communication-id', {
-            url: '/communication/:id',
-            views: { module: { templateUrl: 'partial/mobileTerminal/mobileTerminal.html' } },
-            resolve: generalRouteResolves
-        })
-        .state('polling', {
-            url: '/polling',
-            views: { module: { templateUrl: 'partial/polling/polling.html' } },
-            resolve: generalRouteResolves
-        })
-        .state('pollingLogs', {
-            url: '/polling/logs',
-            views: { module: { templateUrl: 'partial/polling/pollingLogs/pollingLogs.html' } },
-            resolve: generalRouteResolves
-        })
-        .state('manualMovements', {
+        .state('app.manualMovements', {
             url: '/movement/manual',
-            views: { module: { templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html' } },
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html', 
+                    controller: 'ManualPositionReportsCtrl' 
+                }
+            },
+            resolve: generalRouteResolves
+        })        
+        .state('app.assets', {
+            url: '/assets',
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/vessel/vessel.html', 
+                    controller: 'VesselCtrl' 
+                }
+            },
             resolve: generalRouteResolves
         })
-        .state('auditLog', {
+        .state('app.assets-id', {
+            url: '/assets/:id',
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/vessel/vessel.html', 
+                    controller: 'VesselCtrl' 
+                }
+            },
+            resolve: generalRouteResolves
+        })
+        .state('app.communication', {
+            url: '/communication',
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/mobileTerminal/mobileTerminal.html', 
+                    controller: 'MobileTerminalCtrl'
+                }
+            },
+            resolve: generalRouteResolves
+        })        
+        .state('app.communication-id', {
+            url: '/communication/:id',
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/mobileTerminal/mobileTerminal.html', 
+                    controller: 'MobileTerminalCtrl' 
+                }
+            },
+            resolve: generalRouteResolves
+        })
+        .state('app.polling', {
+            url: '/polling',
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/polling/polling.html', 
+                    controller: 'PollingCtrl' 
+                }
+            },
+            resolve: generalRouteResolves
+        })
+        .state('app.pollingLogs', {
+            url: '/polling/logs',
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/polling/pollingLogs/pollingLogs.html', 
+                    controller: 'pollingLogsCtrl' 
+                }
+            },
+            resolve: generalRouteResolves
+        })
+        .state('app.auditLog', {
             url: '/admin/auditlog',
-            views: { module: { templateUrl: 'partial/admin/adminLog/adminLog.html' } },
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/admin/adminLog/adminLog.html', 
+                    controller: 'AuditlogCtrl' 
+                }
+            },
             resolve: generalRouteResolves
         })
-        .state('configuration', {
+        .state('app.configuration', {
             url: '/admin/configuration',
-            views: { module: { templateUrl: 'partial/admin/adminConfiguration/adminConfiguration.html' } },
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/admin/adminConfiguration/adminConfiguration.html', 
+                    controller: 'AuditconfigurationCtrl' 
+                }
+            },
             resolve: generalRouteResolves
         })
-        .state('admin', {
+        .state('app.admin', {
             url: '/admin',
-            views: { module: { templateUrl: 'partial/admin/adminLog/adminLog.html' } },
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/admin/adminLog/adminLog.html', 
+                    controller: 'AuditlogCtrl' 
+                }
+            },
             resolve: generalRouteResolves
         })
-        .state('reporting', {
+        .state('app.reporting', {
             url: '/reporting',
-            views: { module: { templateUrl: 'partial/spatial/spatial.html' } },
-            // resolve: generalRouteResolves
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/spatial/spatial.html', 
+                    controller: 'SpatialCtrl' 
+                }
+            },
+            resolve: generalRouteResolves
         })
-        .state('exchange', {
+        .state('app.exchange', {
             url: '/exchange',
-            views: { module: { templateUrl: 'partial/exchange/exchange.html' } },
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/exchange/exchange.html', 
+                    controller: 'ExchangeCtrl' 
+                }
+            },
             resolve: generalRouteResolves
         })
-        .state('holdingTable', {
+        .state('app.holdingTable', {
             url: '/alarms/holdingtable',
-            views: { module: { templateUrl: 'partial/alarms/holdingTable/holdingTable.html' } },
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/alarms/holdingTable/holdingTable.html', 
+                    controller: 'HoldingtableCtrl' 
+                }
+            },
             resolve: generalRouteResolves
         })
-        .state('openTickets', {
+        .state('app.openTickets', {
             url: '/alarms/opentickets',
-            views: { module: { templateUrl: 'partial/alarms/openTickets/openTickets.html' } },
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/alarms/openTickets/openTickets.html', 
+                    controller: 'OpenticketsCtrl' 
+                }
+            },
             resolve: generalRouteResolves
         })
-        .state('rules', {
+        .state('app.rules', {
             url: '/alarms/rules',
-            views: { module: { templateUrl: 'partial/alarms/rules/rules.html' } },
+            views: { 
+                modulepage: {
+                    templateUrl: 'partial/alarms/rules/rules.html', 
+                    controller: 'RulesCtrl' 
+                }
+            },
             resolve: generalRouteResolves
+        })    
+        .state('error', {
+            views: { 
+                unionvmsError: {
+                    templateUrl: 'partial/common/error/error.html', 
+                    controller: 'errorCtrl' 
+                },
+                unionvmsHeader: { 
+                    templateUrl: 'partial/header/header.html', 
+                    controller: 'HeaderCtrl' 
+                },
+                unionvmsFooter: { 
+                    templateUrl: 'partial/footer/footer.html', 
+                    controller: 'FooterCtrl' 
+                },                
+            },
+            data: {
+                access: ACCESS.PUBLIC
+            },            
         });
+
+        //$urlRouterProvider.otherwise('/today');
 });
 
-unionvmsWebApp.run(function($rootScope, alertService) {
+unionvmsWebApp.run(function($rootScope, $state, alertService, errorService) {
 
     $rootScope.safeApply = function(fn) {
         var phase = $rootScope.$$phase;
@@ -138,15 +288,18 @@ unionvmsWebApp.run(function($rootScope, alertService) {
 
     //Handle state change error
     $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error){
-        var message = 'Error showing page.',
-            errorMessage = 'Error message';
+        var message = 'Error loading page.',
+            errorMessage = ' Error message';
 
         if(angular.isDefined(error)){
             message += ' ' + errorMessage +': ' +error;
         }
+        ////Show error alert
+        //alertService.showErrorMessage(message);        
 
-        //Show error alert
-        alertService.showErrorMessage(message);
+        errorService.setErrorMessage(error);
+        event.preventDefault();
+        return $state.go('error');
     });
 
 });
@@ -173,7 +326,7 @@ unionvmsWebApp.factory('initService',function(configurationService, locale, tmhD
         //Load the configurations
         loadConfig : function(){
             return configurationService.setup();
-        },
+        },        
         //Load the listed i18n files
         loadLanguageFiles : function(){
             return locale.ready([
@@ -196,6 +349,23 @@ unionvmsWebApp.factory('initService',function(configurationService, locale, tmhD
     return initService;
 });
 
+unionvmsWebApp.config(['$httpProvider', 'authInterceptorProvider', 'envConfig', function Config($httpProvider, authInterceptorProvider, envConfig, $log) {
+    // Please note we're annotating the function so that the $injector works when the file is minified
+
+    /*authInterceptorProvider.authFilter = ['config', '$log', function (config, $log) {
+        //myService.doSomething();
+
+        var skipURL = /^(template|usm|assets).*?\.(html|json)$/i.test(config.url);
+        var logmsg = skipURL?'SKIPPING':'setting auth';
+        $log.debug('authFilter '+ logmsg +' on url :' + config.url);
+        return skipURL;
+    }];*/
+
+    authInterceptorProvider.rest_api_base = envConfig.rest_api_base;
+    $httpProvider.interceptors.push('authInterceptor');
+}]);
+
+/*
 //Request interceptor that routes REST api request to the REST api server
 unionvmsWebApp.config(function ($httpProvider) {
     //URLs that should go the REST apis
@@ -206,21 +376,21 @@ unionvmsWebApp.config(function ($httpProvider) {
         '/movement/rest/',
         '/audit/rest/',
         '/rules/rest/',
-        '/reporting/rest/'
-      //  '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'
+        '/reporting/rest/',
+        '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'
     ];
 
     $httpProvider.interceptors.push(function ($q, envConfig, $log) {
          return {
-            'request': function (request) {
+            'request': function (request) {                                
                 var isRESTApiRequest = false;
                 $.each(restApiURLS, function(i, val){
                     if(request.url.indexOf(val) === 0){
                         isRESTApiRequest = true;
                         return false;
-                    }
+                    }                    
                 });
-                //Change request url
+                //Change request url 
                 if(isRESTApiRequest){
                     var restAPIBaseUrl = envConfig.rest_api_base;
                     var newUrl = restAPIBaseUrl + request.url;
@@ -232,7 +402,10 @@ unionvmsWebApp.config(function ($httpProvider) {
             }
          };
     });
-});
+});   */
+
+
+
 
 ///Bootstrap the application by getting the environment config that points out the REST api URL
 var envConfigJsonPath = "config.json";

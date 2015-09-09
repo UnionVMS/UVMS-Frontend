@@ -1,13 +1,16 @@
 var sharedModule = angular.module('shared');
 
-sharedModule.controller('MenuCtrl',['$scope', '$state', '$translate', '$stateParams', '$log', '$cookies',
-                                    function($scope, $state, $translate, $stateParams, $log, $cookies){
+sharedModule.controller('MenuCtrl',['$scope', '$state', '$translate', '$stateParams', '$log', '$cookies', 'userService',
+                                    function($scope, $state, $translate, $stateParams, $log, $cookies, userService){
+
+    $scope.checkAccess = function(feature) {
+    	return userService.isAllowed(feature,"USM",true);
+    };
 
     $scope.init = function (){
             $scope.lang = $cookies.lang?$cookies.lang:'en';
             $translate.use($scope.lang);
     };
-
     $scope.init();
 
 	$scope.switchLanguage = function (langKey) {
@@ -25,10 +28,10 @@ sharedModule.controller('FooterController',['$scope', '$log', 'CFG',
 
 
 }]);
-sharedModule.controller('userMenuController',['$log','$scope','userService','renewloginpanel','$rootScope','$state',function($log,$scope,userService,renewloginpanel,$rootScope,$state){
+sharedModule.controller('userMenuController',['$log','$scope','userService','renewloginpanel','$rootScope','$state','$location',function($log,$scope,userService,renewloginpanel,$rootScope,$state,$location){
     var init = function(){
-    $scope.userName = userService.getUserName();
-    $scope.authenticated = userService.isLoggedIn();
+		$scope.userName = userService.getUserName();
+		$scope.authenticated = userService.isLoggedIn();
         $scope.contexts = userService.getContexts();
         $scope.currentContext = userService.getCurrentContext();
     };
@@ -47,6 +50,8 @@ sharedModule.controller('userMenuController',['$log','$scope','userService','ren
         userService.logout();
         init();
 		$state.go('app.usm');
+		//$state.go('login');
+		//$scope.openlogin();
     };
     $scope.openlogin = function(){
         renewloginpanel.show().then(function(){

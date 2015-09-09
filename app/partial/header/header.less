@@ -1,6 +1,7 @@
  .header{
      width: 100%;
      background-color:#383737;
+     min-height: 82px;
  }
 
 .uvmslogo{
@@ -8,73 +9,65 @@
 }
 
 .headercontainer{
-    //width: 100%;
-}
-.pagename{
     font-size: 16px;
     font-weight: bold;
     width: 100%;
-    padding: 16px 0px 0px 0px;
-}
-.headerwarnings {
-    float: right;
-    padding-right: 20px;
 
-    .glyphicon-bell {
-        color:#ffffff;
+    .pageinfo{
+        width: 100%;
+        background-color: #383737;
+        color:#FFFFFF;
+        padding: 16px 0px 0px 0px;
+    }    
+
+
+    .headerwarnings {
+        float: right;
+        padding-right: 20px;
+
+        .glyphicon-bell {
+            color:#ffffff;
+        }
+
+        .badge {
+            background-color: red;
+            bottom: 8px;
+            right: 6px;
+            position: relative;
+        }
+    }
+    .headermessages{
+        float: right;
+        margin-right: 30px;
+        .glyphicon-envelope{
+            color:#ffffff;
+        }
     }
 
-    .badge {
-        background-color: red;
-        bottom: 8px;
-        right: 6px;
+
+
+    .login-drop-down{
         position: relative;
-    }
-}
-.headermessages{
-    float: right;
-    margin-right: 30px;
-    .glyphicon-envelope{
-        color:#ffffff;
-    }
-}
+        top:-4px;
+        text-align: left;
 
-.pageinfo{
-    width: 100%;
-    background-color: #383737;
-    color:#FFFFFF;
-}
-
-.login-drop-down{
-    color: white;
-    .username{
-        float:left;
-    }
-    .caret{
-        position: relative;
-            top: 9px;
-            color:white;
-            float: left;
-            margin-left: 4px;
-    }
+        color: white;
+        .username{
+            float:left;
+        }
+        .caret{
+            position: relative;
+                top: 9px;
+                color:white;
+                float: left;
+                margin-left: 4px;
+        }
         i{
             margin-right: 5px;
         }
         ul{
             padding:10px 0;
-        }
-            .role-header{
-                font-weight: bold;
-                padding-left: 10px;
-                cursor: default;
-                color:gray;
-            }
-            .roles{
-                padding-left: 20px;
-                color:gray;
-                cursor: default;
-                font-weight: 500;
-            }
+        }     
 
         .btn.btn-default.dropdown-toggle:focus {
             border:none;
@@ -87,9 +80,6 @@
             .caret{
                 color:white;
             }
-            i{
-                color:@primaryColor;
-            }
         }
         .dropdown-menu {
             color:black;
@@ -98,14 +88,14 @@
                 color:@primaryColor;
             }
         }
-}
-.sign-in{
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: normal;
-    padding-left: 10px;
-    position: relative;
-    top: 3px;
+    }
+    .sign-in{
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: normal;
+        padding-left: 10px;
+        position: relative;
+        top: 3px;
         i{
             color:@primaryColor;
             font-size: 15px;
@@ -113,3 +103,4 @@
         }
     }
 
+}

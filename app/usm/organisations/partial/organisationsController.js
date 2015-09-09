@@ -1,89 +1,105 @@
+
+/**
+ * Controller for the main page of Organisations
+ *
+ */
 var organisationsModule = angular.module('organisations');
 
-organisationsModule.controller('organisationsListCtrl', ['$scope', '$log', 'refData', '$stateParams', '$state', 'organisationsService',
-    function ($scope, $log, refData, $stateParams, $state, organisationsService) {
+organisationsModule.controller('organisationsListCtrl', ['$scope', '$log', 'refData', '$stateParams', 
+      '$state', 'organisationsService', 'userService','orgNations','orgNames' ,                                                
+    function ($scope, $log, refData, $stateParams, $state, organisationsService, userService, orgNations, orgNames) {
         $scope.sort = {
             sortColumn: $stateParams.sortColumn || 'name', // Default Sort.
             sortDirection: $stateParams.sortDirection || 'asc'
         };
-        $scope.showPagination = true;
 
+        $scope.checkAccess = function(feature) {
+        	return userService.isAllowed(feature,"USM",true);
+        };
+
+        $scope.showPagination = true;
         $scope.statusList = refData.statusesSearch;
         $scope.isDataLoading = true;
         $scope.emptyResult = false;
         $scope.emptyResultMessage = "No results found. ";
         $scope.loadingMessage = "Loading... taking some time";
 
-
+        //To fill out the combos in the Search panel
         // 1. List Of Status
         $scope.status = {};
         $scope.statusSelected = "";
 
         // 2. List Of nations
         $scope.nation = {};
-        $scope.getNations = function () {
-            organisationsService.getNations().then(
-                function (response) {
-                    $scope.nationsList = response.nations;
-                },
-                function (error) {
-                    $scope.nationsList = [error];
-                }
-            );
-        };
-        $scope.getNations();
+        $scope.nationsList = orgNations;
+
+       // $scope.getNations();
 
         // 3.List Of Organisations...
         $scope.organisation = {};
         $scope.name = {};
-        $scope.getOrganisations = function () {
-            organisationsService.get().then(
-                function (response) {
-                    $scope.namesList = response.organisations;
-                },
-                function (error) {
-                    $scope.namesList = [error];
-                }
-            );
-        };
+        $scope.namesList = orgNames;
 
-        $scope.getOrganisations();
+        //$scope.getOrganisations();
 
-
-        // Retrieve organisations. This method is executed by the pagination directive whenever the current page is changed
+        // Retrieve the records of organisations in the main table. This method is executed by the pagination directive whenever the current page is changed
         // (also true for the initial loading).
         $scope.organisationsList = [];
+        
         $scope.getPage = function (currentPage) {
-            $scope.criteria = {
-                name: $stateParams.name || '',
-                nation: $stateParams.nation || '',
-                status: $stateParams.status || 'all'
-            };
 
-            var criteria = $scope.criteria;
+        $scope.pageData = {
+              name: $stateParams.name || '',
+              nation: $stateParams.nation || '',
+              status: $stateParams.status || 'all'
+        };
+        
+        // To establish the object Criteria to fill the table for the first time...
+    	$scope.criteria = {};
 
-            criteria.offset = (currentPage - 1) * $scope.paginationConfig.itemsPerPage;
-            criteria.limit = $scope.paginationConfig.itemsPerPage;
-            criteria.sortColumn = $scope.sort.sortColumn;
-            criteria.sortDirection = $scope.sort.sortDirection;
+    	$scope.criteria.offset = (currentPage - 1) * $scope.paginationConfig.itemsPerPage;
+    	$scope.criteria.limit = $scope.paginationConfig.itemsPerPage;
+    	$scope.criteria.sortColumn = $scope.sort.sortColumn;
+    	$scope.criteria.sortDirection = $scope.sort.sortDirection;
 
-            //to replace the symbols from the URL for organisation
-            var name = $scope.criteria.name;
-            var searhName = $scope.criteria.name;
-            var parentURL = name.search("%");
+    	var organisation =  "";
 
-            if (parentURL !== -1) {
-                //  name = criteria.name;
-                name = name.replace("%2F", "/");
-                $scope.criteria.name = name;
+        if ($scope.pageData.name !== null && $scope.pageData.name !== ''&& !_.isUndefined($scope.pageData.name)) {
 
-                searhName = name.split(' / ');
-                searhName = searhName[1];
-                criteria.name = searhName;
-            }
+              organisation =  $scope.pageData.name;
+              
+              //to replace the symbols from the URL for organisation
+              var parentURL = organisation.search("%");
+              if(parentURL!== -1){
+                //  organisation =$scope.pageData.name.replace("%20%252F%20"," / ");
+                  organisation = $scope.pageData.name.replace("%2F","/");
+              }
+              
+              //To fill the search.name field (organisation name field) it is necessary to find the element of the list           
+              for (var i=0;i< _.size($scope.namesList);i++){
+                   if ($scope.namesList[i].parentOrgName === organisation)
+                    {
+                     $scope.search.name = $scope.namesList[i];
+                     break;
+                     }
+               }
+             
+           }
+        
+          $scope.criteria.name = organisation;
 
+          if ($scope.pageData.status!== null && $scope.pageData.status !== ''&& !_.isUndefined($scope.pageData.status)) {
+        	  $scope.criteria.status = $scope.pageData.status;
+        	  $scope.search.status = $scope.pageData.status;
+          }
 
-            organisationsService.getOrganisations(criteria).then(
+          if ($scope.pageData.nation!== null && $scope.pageData.nation !== ''&& !_.isUndefined($scope.pageData.nation)) {
+        	  $scope.criteria.nation = $scope.pageData.nation;
+        	  $scope.search.nation = $scope.pageData.nation;
+          }
+
+          //to call the service with the criteria to retrieve the records of the organisations table 
+          organisationsService.searchOrganisations($scope.criteria).then(
                 function (response) {
                     $scope.organisationsList = response.organisations;
                     if (!_.isUndefined($scope.organisationsList) && $scope.organisationsList !== null && $scope.organisationsList !== '') {
@@ -96,77 +112,44 @@ organisationsModule.controller('organisationsListCtrl', ['$scope', '$log', 'refD
                         $scope.emptyResult = true;
                         $scope.isDataLoading = false;
                         $scope.showPagination = false;
-                    }
-                    criteria.name = name;
-                    $scope.criteria.name = name;
+                    }  
 
-                    changeUrlParams();
-                },
+            },
 
                 function (error) {
                     $scope.isDataLoading = false;
                     $scope.emptyResult = true;
                     $scope.emptyResultMessage = error;
-                }
+                }  
             );
+
         };
 
-        $scope.searchOrganisation = function (criteria) {
-            // replace null with empty string because null breaks the stateParam application
 
-            var name = $scope.criteria.name;
-            var searchName = $scope.criteria.name;
+        $scope.searchOrganisation = function (search) {
+        	
+            if ($scope.search.name !== null && $scope.search.name !== '' && !_.isUndefined($scope.search.name)){
 
-            if (_.isNull(criteria.name)) {
-                $scope.criteria.name = "";
-                searchName = "";
+            	$scope.pageData.name = $scope.search.name.parentOrgName;
 
-            } else {
-                searchName = $scope.criteria.name;
+             }else{
+            	 $scope.pageData.name = "";
+             }
 
-                var parent = $scope.criteria.name.search("/");
+             if ($scope.search.nation !== null && $scope.search.nation !== "" && !_.isUndefined($scope.search.nation)){
+                    $scope.pageData.nation = $scope.search.nation;
+    		 }else{
+                    $scope.pageData.nation = "";
 
-                if (parent !== -1) {
-                    name = $scope.criteria.name.split(' / ');
-                    name = name[1];
-                    $scope.criteria.name = name;
-                }
+             }
 
-            }
-
-            if (_.isNull(criteria.nation)) {
-                $scope.criteria.nation = "";
-            }
-
-            $scope.paginationConfig.currentPage = 0;
-            criteria.offset = 0;
-
-
-            organisationsService.searchOrganisations(criteria).then(
-                function (response) {
-                    $scope.organisationsList = response.organisations;
-                    if (!_.isUndefined($scope.organisationsList) && $scope.organisationsList !== null && $scope.organisationsList !== '') {
-                        $scope.displayedOrganisations = [].concat($scope.organisationsList);
-                        $scope.emptyResult = false;
-                        $scope.showPagination = true;
-                        $scope.paginationConfig.totalItems = response.total;
-                        $scope.paginationConfig.pageCount = Math.ceil($scope.paginationConfig.totalItems / $scope.paginationConfig.itemsPerPage);
-                        $scope.paginationConfig.currentPage = 1;
-                    } else {
-                        $scope.emptyResult = true;
-                        $scope.isDataLoading = false;
-                        $scope.showPagination = false;
-                    }
-
-                    $scope.criteria.name = searchName;
-
-                    changeUrlParams();
-                },
-                function (error) {
-                    $scope.emptyResult = true;
-                    $scope.emptyResultMessage = error;
-                }
-            );
+    		 if (search.status !== "all") {
+                    $scope.pageData.status = search.status;
+             }else{
+                    $scope.pageData.status = "";
+             }
+		
+    		changeUrlParams();
         };
 
         // Sorting columns
@@ -198,25 +181,32 @@ organisationsModule.controller('organisationsListCtrl', ['$scope', '$log', 'refD
 
         // change url parameters
         var changeUrlParams = function () {
-            $state.transitionTo($state.current, {
+
+             $state.go($state.current, {
                     page: $scope.paginationConfig.currentPage,
                     sortColumn: $scope.sort.sortColumn,
                     sortDirection: $scope.sort.sortDirection,
-                    name: $scope.criteria.name,
-                    nation: $scope.criteria.nation,
-                    status: $scope.criteria.status
-                },
-                {notify: false});
-        };
+
+                    name: $scope.pageData.name,
+                    nation: $scope.pageData.nation,
+                    status: $scope.pageData.status
+                });
+             };
+
 
         $scope.resetForm = function () {
             $scope.sort.sortColumn = 'name';
             $scope.sort.sortDirection = 'asc';
-            $scope.criteria.name = '';
-            $scope.criteria.status = refData.statuses[0];
-            $scope.criteria.nation = '';
-            //$scope.criteria.organisation = '';
-            $scope.searchOrganisation($scope.criteria);
+
+            $scope.criteria = {};
+            $scope.pageData = {};
+
+            $scope.search.name = '';
+            $scope.search.nation = '';
+            $scope.search.status = refData.statuses[0];
+            
+            changeUrlParams();
+            
         };
 
         $scope.paginationConfig =
@@ -302,7 +292,7 @@ organisationsModule.controller('manageOrgModalInstanceCtrl', ['$scope', '$modalI
                 $scope.messageDivClass = "container alert alert-danger";
                 $scope.actionMessage = error;
             }
-        ).then(		
+        ).then(
 			function(response){
 				for (var i=0;i< _.size($scope.nationsList);i++){
 					if ($scope.nationsList[i]===$scope.org.nation)
@@ -399,11 +389,9 @@ organisationsModule.controller('manageOrgModalInstanceCtrl', ['$scope', '$modalI
 
 organisationsModule.controller('endPointsDetailsCtrl',
     ["$scope", '$filter', "$http", "$location", "$resource",
-        "$state", "$stateParams", "$log", "$translate", "organisationsService",
-        'refData', 'uiGridConstants',
+        "$state", "$stateParams", "$log", "$translate", "organisationsService","userService",
         function ($scope, $filter, $http, $location, $resource,
-                  $state, $stateParams, $log, $translate, organisationsService,
-                  refData, uiGridConstants) {
+                  $state, $stateParams, $log, $translate, organisationsService,userService) {
             $scope.isDataLoading = true;
 
             $scope.emptyResultContacts = false;
@@ -411,6 +399,10 @@ organisationsModule.controller('endPointsDetailsCtrl',
 
             $scope.emptyResultMessage = "No results found. ";
             $scope.loadingMessage = "Loading... taking some time";
+
+            $scope.checkAccess = function(feature) {
+                return userService.isAllowed(feature,"USM",true);
+            };
 
             organisationsService.getEndPointDetails($stateParams).then(
                 function (response) {
@@ -471,12 +463,17 @@ organisationsModule.controller('endPointsDetailsCtrl',
 			});
         }]);
 
-organisationsModule.controller('organisationDetailsCtrl', ['$rootScope','$log', '$scope', '$modal', '$stateParams', 'refData', 'organisationsService',
-    function ($rootScope,$log, $scope, $modal, $stateParams, refData, organisationsService) {
+organisationsModule.controller('organisationDetailsCtrl', ['$rootScope','$log', '$scope', '$modal', '$stateParams', 'refData', 'organisationsService','userService',
+    function ($rootScope,$log, $scope, $modal, $stateParams, refData, organisationsService, userService) {
         $scope.isDataLoading = true;
         $scope.emptyResult = false;
         $scope.emptyResultMessage = "No results found. ";
         $scope.loadingMessage = "Loading... taking some time";
+
+
+        $scope.checkAccess = function(feature) {
+            return userService.isAllowed(feature,"USM",true);
+        };
 
         $scope.$on('event:addedEndpoint', function () {
             $scope.emptyResult = false;
@@ -519,9 +516,14 @@ organisationsModule.controller('organisationDetailsCtrl', ['$rootScope','$log', 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-organisationsModule.controller('manageOrganisationEndpointsCtrl', ['$log', '$scope', '$modal','$state',
-	function ($log, $scope, $modal,$state) {
-		$scope.manageEndpoint = function (mode, endpoint,organisationName) {
+organisationsModule.controller('manageOrganisationEndpointsCtrl', ['$log', '$scope', '$modal','$state','userService',
+	function ($log, $scope, $modal,userService) {
+
+        $scope.checkAccess = function(feature) {
+            return userService.isAllowed(feature,"USM",true);
+        };
+
+        $scope.manageEndpoint = function (mode, endpoint,organisationName) {
 			var modalInstance = $modal.open({
 				animation: true,
 				backdrop: true,
@@ -899,82 +901,6 @@ organisationsModule.controller('organisationContactsModalInstanceCtrl', ['$scope
 		$scope.emptyResultMessage = "No results found. ";
 		$scope.loadingMessage = "Loading... taking some time";
 
-		/*
-		organisationsService.getEndPointDetails($stateParams).then(
-			function (response) {
-				$scope.endpoint = {};
-				$scope.endpoint = response.endPointDetails;
-				$scope.contacts = [];
-				personsService.getPersons().then(
-					function (response) {
-						$scope.responseContacts = response.persons;
-						angular.forEach($scope.responseContacts, function(obj) {
-							var result = $.grep($scope.endpoint.persons, function(e){
-								return e.personId === obj.personId;
-							});
-							//$log.log('len: ' + result.length + ' ' + obj.personId + ' ' + obj.firstName + ' ' + obj.firstName + ' ' + obj.email);
-							if(result.length === 0) {
-								if(obj.firstName !== null && obj.lastName !== null && obj.email !== null) {
-									obj.fullName = obj.firstName + ' ' + obj.lastName;
-									obj.fullNameAndEmail = obj.firstName + ' ' + obj.lastName + ' ' + obj.email;
-									$scope.contacts.push(obj);
-								}
-							}
-						});
-
-						// Setting defaults for new and saving ids for delete
-						if (_.isEqual(mode, "new")) {
-							$scope.selectedContact = $scope.contacts[0];
-						} else if (_.isEqual(mode, "delete")) {
-							for(var i = 0; i < $scope.responseContacts.length; i++) {
-								if($scope.responseContacts[i].personId === scope.personId) {
-									$scope.selectedContact = scope;
-									break;
-								}
-							}
-						}
-
-						if (_.isEqual(mode, "delete")) {
-							$scope.formDisabled = true;
-						}
-
-					},
-					function (error) {
-						$log.log("error");
-					}
-				);
-
-			},
-			function (error) {
-				$log.log("error");
-			}
-		);
-		*/
-
-		// Retrieve org endpoint contacts
-		//rolesServices.getOrgEndpointContacts().then(
-		//);
-		// ... Mock data ...
-		//$scope.responseContacts = [
-		//	{endPointContactId: 100001, personId: 0, firstName: "Mary", lastName: "Flux", phoneNumber: "+33212345678", email: "mary.flux@mail.eu"},
-		//	{endPointContactId: 100002, personId: 1, firstName: "Jean", lastName: "Flux", phoneNumber: "+33212345679", email: "jean.flux@mail.eu"},
-		//	{endPointContactId: 100003, personId: 2, firstName: "Kostas", lastName: "Flux", phoneNumber: "+33212345680", email: "kostas.flux@mail.eu"},
-		//];
-		//$scope.contacts = [];
-		//angular.forEach($scope.responseContacts, function(obj) {
-			/*
-			var result = $.grep($scope.displayedContacts, function(e){
-					return e.personId == obj.personId;
-			});
-			if (result.length == 0) {
-			*/
-			//	obj.fullName = obj.firstName + ' ' + obj.lastName;
-			//	obj.fullNameAndEmail = obj.firstName + ' ' + obj.lastName + ' ' + obj.email;
-			//	$scope.contacts.push(obj);
-			/*
-			//}
-			*/
-		//});
 
 		$scope.contacts = [];
 		personsService.getPersons().then(

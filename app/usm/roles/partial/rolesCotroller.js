@@ -1,11 +1,16 @@
 var rolesModule = angular.module('roles');
 
-rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refData', '$stateParams', '$state', 'getApplications', 'rolesServices',
-    function ($translate, $scope, $log, refData, $stateParams, $state, getApplications, rolesServices) {
+rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refData', '$stateParams', '$state', 'getApplications', 'rolesServices', 'userService',  
+    function ($translate, $scope, $log, refData, $stateParams, $state, getApplications, rolesServices, userService) {
         $scope.sort = {
             sortColumn: $stateParams.sortColumn || 'name', // Default Sort.
             sortDirection: $stateParams.sortDirection || 'asc'
         };
+        
+        $scope.checkAccess = function(feature) {
+        	return userService.isAllowed(feature,"USM",true);
+        };        
+        
         $scope.showPagination = true;
 
         $scope.statusList = refData.statusesSearch;
@@ -157,9 +162,13 @@ rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refDat
 
     }]);
 
-rolesModule.controller('roleDetailsCtrl', ['$scope', '$stateParams', '$log', 'rolesServices', 'applicationsService', 'permissionServices',
-    function ($scope, $stateParams, $log, rolesServices, applicationsService, permissionServices) {
+rolesModule.controller('roleDetailsCtrl', ['$scope', '$stateParams', '$log', 'rolesServices', 'applicationsService', 'permissionServices', 'userService', 
+    function ($scope, $stateParams, $log, rolesServices, applicationsService, permissionServices, userService) {
 
+    $scope.checkAccess = function(feature) {
+    	return userService.isAllowed(feature,"USM",true);
+    }; 
+	
         $scope.itemsByPage = 10;
         $scope.emptyResult = true;
 
@@ -180,9 +189,13 @@ rolesModule.controller('roleDetailsCtrl', ['$scope', '$stateParams', '$log', 'ro
 
     }]);
 
-rolesModule.controller('manageRoleCtrl', ['$scope', '$modal', '$log', 'rolesServices',
-    function ($scope, $modal, $log, rolesServices) {
+rolesModule.controller('manageRoleCtrl', ['$scope', '$modal', '$log', 'rolesServices', 'userService', 
+    function ($scope, $modal, $log, rolesServices, userService) {
 
+    $scope.checkAccess = function(feature) {
+    	return userService.isAllowed(feature,"USM",true);
+    };  	
+	
         $scope.manageRole = function (mode, role) {
             var modalInstance = $modal.open({
                 animation: true,

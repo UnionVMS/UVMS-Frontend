@@ -1,7 +1,12 @@
 var scopesModule = angular.module('scopes');
 
-scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$state', 'refData', 'getApplications', 'scopeServices',
-    function ($log, $scope, $stateParams, $state, refData, getApplications, scopeServices) {
+scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$state', 'refData', 'getApplications', 'scopeServices', 'userService', 
+    function ($log, $scope, $stateParams, $state, refData, getApplications, scopeServices, userService) {
+	
+	    $scope.checkAccess = function(feature) {
+	    	return userService.isAllowed(feature,"USM",true);
+	    }; 	
+	
         $scope.sort = {
             sortColumn: $stateParams.sortColumn || 'name', // Default Sort.
             sortDirection: $stateParams.sortDirection || 'asc'
@@ -158,8 +163,12 @@ scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$s
 
     }]);
 
-scopesModule.controller('scopeDetailsCtrl', ['$log', '$scope', '$stateParams', 'scopeServices',
-    function ($log, $scope, $stateParams, scopeServices) {
+scopesModule.controller('scopeDetailsCtrl', ['$log', '$scope', '$stateParams', 'scopeServices', 'userService', 
+    function ($log, $scope, $stateParams, scopeServices, userService) {
+	    $scope.checkAccess = function(feature) {
+	    	return userService.isAllowed(feature,"USM",true);
+	    };		
+	
         $scope.emptyResultMessage = "No datasets found. Please try to search again.";
         $scope.itemsByPage = 10;
         $scope.emptyResult = true;
@@ -188,9 +197,13 @@ scopesModule.controller('scopeDetailsCtrl', ['$log', '$scope', '$stateParams', '
         );
     }]);
 
-scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$modal', '$stateParams',
-    function ($log, $scope, $modal, $stateParams) {
+scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$modal', '$stateParams', 'userService', 
+    function ($log, $scope, $modal, $stateParams, userService) {
 
+	    $scope.checkAccess = function(feature) {
+	    	return userService.isAllowed(feature,"USM",true);
+	    }; 	
+	
         $scope.manageScope = function (mode, scope) {
             var modalInstance = $modal.open({
                 animation: true,

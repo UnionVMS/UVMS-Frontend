@@ -14,7 +14,7 @@
         <div class="modal-body">
             <div class="row">
                 <div class="form-group col-md-12" ng-class="messageDivClass">
-                    <span ng-bind="actionMessage" ng-class="messageClass"></span>
+                    <span ng-bind="actionMessage" id="message" ng-class="messageClass"></span>
                 </div>
             </div>
 
@@ -230,8 +230,13 @@
                 </div>
                 <div class="col-md-4">
                 <input type="button" class="btn btn-warning btn-sm" ng-hide="userCreated" ng-click="cancel()" value="Cancel"/>
-                <input type="submit" class="btn btn-primary btn-sm" value="Save" ng-disabled="newUserForm.$invalid" ng-show="!userCreated"/>
-                <label class="btn btn-success btn-sm fa fa-check" ng-show="userCreated"/>
+                <button type="submit" class="btn btn-primary btn-sm" id="saveButton" ng-show="!userCreated" ng-disabled="newUserForm.$invalid">
+                    Save
+                 </button>
+                 <button type="button" id="confirmButton" class="btn btn-success btn-sm" ng-show="userCreated" ng-disabled="true">
+                       <span class="fa fa-check"></span>
+                 </button>
+                <!--<label class="btn btn-success btn-sm fa fa-check" ng-show=""/>-->
                 </div>
             </div>
         </div>
