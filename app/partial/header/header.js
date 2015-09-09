@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $state, $rootScope, $location, $localStorage, userService, renewloginpanel, configurationService){
+angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $state, $rootScope, $location, $localStorage, userService, renewloginpanel, configurationService, infoModal){
 	$scope.randomNumber = 5;
 	$scope.user = {};
 
@@ -48,6 +48,28 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $state, $
             configurationService.clear();
             init();
         });
+    };
+
+    //TODO: REMOVE THIS, ITS JUST USED FOR SHOWING FEATURES DURING DEVELOPMENT
+    $scope.showFeatures = function(){
+        var features = $scope.currentContext.role.features.slice(0);
+        //Sort the features
+        features = _.sortBy(features, function(aFeature) {
+          return [aFeature.applicationName, aFeature.featureName].join("_");
+        });        
+
+        //Create html to show in modal
+        features = features.reduce(function(message, aFeature){
+            message += aFeature.applicationName +" - " + aFeature.featureName +'<br>';
+            return message;
+        }, '');
+
+        var options = {
+            titleLabel: "Features",
+            textLabel: features
+        };
+
+        infoModal.open(options);
     };
 
 });

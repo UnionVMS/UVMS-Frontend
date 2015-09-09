@@ -23,9 +23,10 @@
     									<span class="caret"></span>
     								</button>
     								<ul class="dropdown-menu" aria-labelledby="user-menu" >
-                                        <li><a href="#"><i class="fa fa-user"></i>as {{currentContext.role.roleName}}</a></li><li ng-click="switchContext()"><a href="#"><i class="fa fa-group"></i>Switch context</a></li>
+                                        <li ng-click="showFeatures()"><a><i class="fa fa-user"></i>as {{currentContext.role.roleName}}</a></li>
+                                        <li ng-click="switchContext()"><a><i class="fa fa-group"></i>Switch context</a></li>
                                         <li role="separator" class="divider"></li>
-    									<li ng-click="signOut()"><a href="#"><i class="fa fa-sign-out"></i>Sign out</a></li>
+    									<li ng-click="signOut()"><a><i class="fa fa-sign-out"></i>Sign out</a></li>
     								</ul>
     							</div>
     						</div>

@@ -32,7 +32,9 @@
         addMenuItem(locale.getString('header.menu_polling'), '/polling/logs');
 
         //COMMUNICATION
-        addMenuItem(locale.getString('header.menu_communication'), '/communication');
+        if(checkAccess('MobileTerminal', 'mobileTerminalConfig')){
+            addMenuItem(locale.getString('header.menu_communication'), '/communication');
+        }
 
         //ASSETS
         if(checkAccess('Vessel', 'vesselConfig')){
