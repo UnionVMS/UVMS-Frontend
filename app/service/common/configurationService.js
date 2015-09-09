@@ -1,12 +1,9 @@
 (function(){
 
-    var configurationService = function($q, locale, vesselRestService, movementRestService, mobileTerminalRestService){
+    var configurationService = function($q, $log, locale, vesselRestService, movementRestService, mobileTerminalRestService){
 
         //Dict of configuration parameters for all modules
         var configs = {};
-
-        //Have the configurations already been loaded?
-        var loaded = false;
 
         var CONFIG_MODULES = {
             "VESSEL" : vesselRestService.getConfig,
@@ -16,34 +13,57 @@
             "MOBILE_TERMINAL_CHANNELS" : mobileTerminalRestService.getChannelNames,
         };
 
-        //Get configuration for all modules
-        var setup = function(){
+        //Clear the loaded configs
+        var clear = function(){
+            configs = {};
+        };
+
+        //Load configurations from the REST apis
+        //configsToLoad should be an array of configNames (matching the names in CONFIG_MODULES)
+        var setup = function(configsToLoad){
             var deferred = $q.defer();
+
+            if(angular.isUndefined(configsToLoad)){
+                $log.warn("configurationService.setup() was called without a list of configs to load. No configs will be loaded.");
+                deferred.resolve();
+                return deferred.promise;
+            }
+
+            $log.debug("Load configurations for:" + configsToLoad.join(', '));
             var promises = [];
 
-            //Config has already been loaded
-            if(loaded){
+            //Remove configs that already are loaded
+            var i = configsToLoad.length;
+            while (i--) {
+                if(angular.isDefined(getConfig(configsToLoad[i]))){
+                    $log.debug("Config already loaded for: " +configsToLoad[i]);
+                    configsToLoad.splice(i, 1);
+                }
+            }
+
+            //All configs already loaded?
+            if(configsToLoad.length === 0){
+                $log.debug("All configs are already loaded :)");
                 deferred.resolve();
                 return deferred.promise;
             }
 
             //Load all configs  
-            $.each(CONFIG_MODULES, function(key, value){
-                promises.push(getConfigForModule(key, value));
+            $.each(configsToLoad, function(index, configName){
+                promises.push(getConfigForModule(configName, CONFIG_MODULES[configName]));
             });
-            console.log("Waiting for all configurations to finish...");
+            $log.debug("Waiting for all configurations to finish...");
 
             //When all configs are loaded then...
             $q.all(promises).then(
                 function(response){
-                    console.log("All configurations have been loaded.");
-                    console.log(configs);
-                    loaded = true;
+                    $log.debug("All configurations have been loaded.");
+                    $log.debug(configs);
                     deferred.resolve();
                 },
                 function(error){
-                    console.error("Failed to load all configurations.");
-                    deferred.reject("FAILED TO LOAD ALL CONFIGURATIONS");
+                    $log.error("Failed to load all configurations.");
+                    deferred.reject("FAILED TO LOAD CONFIGURATIONS.");
                 }
             );
 
@@ -51,7 +71,7 @@
         };
 
         var getConfigForModule  = function(moduleName, getConfigFunctionCall){
-            console.log("Get config: " + moduleName);
+            $log.debug("Load config: " + moduleName);
             var deferred = $q.defer();            
             getConfigFunctionCall().then(
                 function(response){
@@ -60,7 +80,7 @@
                     deferred.resolve();
                 },
                 function(error){
-                    console.error("Error loading config for " +moduleName);
+                    $log.error("Error loading config for " +moduleName);
                     deferred.reject();
                 }
             );
@@ -71,7 +91,7 @@
             try{
                 return configs[moduleName][configParameter];
             }catch(err){
-                console.error("Config parameter " +configParameter +" is missing for " +moduleName);
+                $log.error("Config parameter " +configParameter +" is missing for " +moduleName);
                 return undefined;
             }
         };
@@ -80,7 +100,7 @@
             try{
                 return configs[moduleName];
             }catch(err){
-                console.error("Config is missing for " +moduleName);
+                $log.error("Config is missing for " +moduleName);
                 return undefined;
             }
         };        
@@ -102,6 +122,7 @@
         };
 
         return{
+            clear: clear,
             setup: setup,
             getValue: getConfigValue,
             getConfig: getConfig,
@@ -111,6 +132,6 @@
     };
 
     angular.module('unionvmsWeb')
-	.factory('configurationService',['$q', 'locale', 'vesselRestService', 'movementRestService', 'mobileTerminalRestService', configurationService]);
+	.factory('configurationService',['$q', '$log', 'locale', 'vesselRestService', 'movementRestService', 'mobileTerminalRestService', configurationService]);
     
 }());

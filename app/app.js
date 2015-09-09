@@ -9,16 +9,11 @@ var getCurrentUserContextPromise = function() {
     return currentUserContextPromise;
 };
 
-//Resolve used for all routes
-var generalRouteResolves =  {
-    languages: function(initService){
-        return initService.loadLanguageFiles();
-    },
-    config: function(initService){
-        return initService.loadConfig();
-    }
 
+var loadLocales = function(initService) {
+    return initService.loadLanguageFiles();
 };
+
 
 unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $injector, $urlRouterProvider, ACCESS) {
 
@@ -49,7 +44,8 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                 access: ACCESS.AUTH
             },
             resolve: {
-                currentContext : getCurrentUserContextPromise
+                currentContext : getCurrentUserContextPromise,
+                locales : loadLocales
             }
         })
         .state('uvmsheader', {
@@ -68,7 +64,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'TodayCtrl' 
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {}
         })
         .state('app.movement', {
             url: '/movement',
@@ -78,7 +74,11 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'MovementCtrl' 
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {
+                config : function(initService){
+                    return initService.loadConfigFor(["MOVEMENT"]);
+                }
+            }
         })
         .state('app.movement-manual', {
             url: '/movement/manual',
@@ -88,7 +88,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'ManualPositionReportsCtrl' 
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {}
         })
         .state('app.movement-id', {
             url: '/movement/:id',
@@ -98,7 +98,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'MovementCtrl' 
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {}
         })
         .state('app.manualMovements', {
             url: '/movement/manual',
@@ -108,7 +108,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'ManualPositionReportsCtrl' 
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {}
         })        
         .state('app.assets', {
             url: '/assets',
@@ -118,7 +118,11 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'VesselCtrl' 
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {
+                config : function(initService){
+                    return initService.loadConfigFor(["VESSEL"]);
+                }
+            }
         })
         .state('app.assets-id', {
             url: '/assets/:id',
@@ -128,7 +132,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'VesselCtrl' 
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {}
         })
         .state('app.communication', {
             url: '/communication',
@@ -138,7 +142,11 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'MobileTerminalCtrl'
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {
+                config : function(initService){
+                    return initService.loadConfigFor(["MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS", "MOBILE_TERMINAL_CHANNELS"]);
+                }
+            }
         })        
         .state('app.communication-id', {
             url: '/communication/:id',
@@ -148,7 +156,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'MobileTerminalCtrl' 
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {}
         })
         .state('app.polling', {
             url: '/polling',
@@ -158,7 +166,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'PollingCtrl' 
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {}
         })
         .state('app.pollingLogs', {
             url: '/polling/logs',
@@ -168,7 +176,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'pollingLogsCtrl' 
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {}
         })
         .state('app.auditLog', {
             url: '/admin/auditlog',
@@ -178,7 +186,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'AuditlogCtrl' 
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {}
         })
         .state('app.configuration', {
             url: '/admin/configuration',
@@ -188,7 +196,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'AuditconfigurationCtrl' 
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {}
         })
         .state('app.admin', {
             url: '/admin',
@@ -198,7 +206,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'AuditlogCtrl' 
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {}
         })
         .state('app.reporting', {
             url: '/reporting',
@@ -208,7 +216,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'SpatialCtrl' 
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {}
         })
         .state('app.exchange', {
             url: '/exchange',
@@ -218,7 +226,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'ExchangeCtrl' 
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {}
         })
         .state('app.holdingTable', {
             url: '/alarms/holdingtable',
@@ -228,7 +236,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'HoldingtableCtrl' 
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {}
         })
         .state('app.openTickets', {
             url: '/alarms/opentickets',
@@ -238,7 +246,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'OpenticketsCtrl' 
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {}
         })
         .state('app.rules', {
             url: '/alarms/rules',
@@ -248,7 +256,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'RulesCtrl' 
                 }
             },
-            resolve: generalRouteResolves
+            resolve: {}
         })    
         .state('error', {
             views: { 
@@ -273,7 +281,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
         //$urlRouterProvider.otherwise('/today');
 });
 
-unionvmsWebApp.run(function($rootScope, $state, alertService, errorService) {
+unionvmsWebApp.run(function($log, $rootScope, $state, errorService) {
 
     $rootScope.safeApply = function(fn) {
         var phase = $rootScope.$$phase;
@@ -294,8 +302,6 @@ unionvmsWebApp.run(function($rootScope, $state, alertService, errorService) {
         if(angular.isDefined(error)){
             message += ' ' + errorMessage +': ' +error;
         }
-        ////Show error alert
-        //alertService.showErrorMessage(message);        
 
         errorService.setErrorMessage(error);
         event.preventDefault();
@@ -326,6 +332,10 @@ unionvmsWebApp.factory('initService',function(configurationService, locale, tmhD
         //Load the configurations
         loadConfig : function(){
             return configurationService.setup();
+        },        
+        //Load the configurations
+        loadConfigFor : function(modules){
+            return configurationService.setup(modules);
         },        
         //Load the listed i18n files
         loadLanguageFiles : function(){

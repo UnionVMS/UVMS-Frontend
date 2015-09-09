@@ -45,6 +45,7 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $state, $
 
     $scope.switchContext = function(){
         userService.switchContext().then(function(){
+            configurationService.clear();
             init();
         });
     };
