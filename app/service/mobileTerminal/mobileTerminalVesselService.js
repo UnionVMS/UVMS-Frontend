@@ -1,5 +1,6 @@
 var app = angular.module('unionvmsWeb').factory('mobileTerminalVesselService', function(vesselRestService, $q, GetListRequest, VesselListPage, userService) {
 
+    //Is the user allowed to list vessels
     var isAllowedToListVessels = function() {
         return userService.isAllowed('getVesselList', 'Vessel' ,true);
     };
@@ -11,7 +12,7 @@ var app = angular.module('unionvmsWeb').factory('mobileTerminalVesselService', f
             if(!isAllowedToListVessels()){
                 deferred.resolve(new VesselListPage());
                 return deferred.promise;
-            };
+            }
 
             //Check if any object has a connectId set
             var oneOrMoreConnectIdIsSet = false;
@@ -64,7 +65,7 @@ var app = angular.module('unionvmsWeb').factory('mobileTerminalVesselService', f
         if(!isAllowedToListVessels()){
             deferred.resolve(mobileTerminals);
             return deferred.promise;
-        };
+        }
 
         var mobileTerminalsIsAnArray = true;
         //Get vessels
