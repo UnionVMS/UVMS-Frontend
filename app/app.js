@@ -132,7 +132,11 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'VesselCtrl' 
                 }
             },
-            resolve: {}
+            resolve: {
+                config : function(initService){
+                    return initService.loadConfigFor(["VESSEL"]);
+                }
+            }
         })
         .state('app.communication', {
             url: '/communication',
@@ -156,7 +160,11 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'MobileTerminalCtrl' 
                 }
             },
-            resolve: {}
+            resolve: {
+                config : function(initService){
+                    return initService.loadConfigFor(["MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS", "MOBILE_TERMINAL_CHANNELS"]);
+                }
+            }
         })
         .state('app.polling', {
             url: '/polling',

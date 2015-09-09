@@ -104,6 +104,7 @@
     "unassigning_from_vessel" : "Unassigning {1} from {2}",
     "updating" : "Updating {1}",
     "history_alert_message_on_failed_to_load_error" : "Failed to load history for the mobile terminal.",
+    "view_terminal_on_failed_to_load_error" : "Failed to load the mobile terminal details.",
     "history_view_mobileterminal_history" : "View history",
     "history_modal_header" : "Mobile Terminal History",
     "history_modal_serialnumber" : "Serial number:",

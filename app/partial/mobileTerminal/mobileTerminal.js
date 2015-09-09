@@ -109,6 +109,8 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
                 },
                 function(error){
                     console.error("Error loading details for mobile terminal with GUID: " +mobileTerminalGUID);
+                    alertService.showErrorMessage(locale.getString('mobileTerminal.view_terminal_on_failed_to_load_error'));
+                    $scope.searchMobileTerminals();
                 }
             );
         }

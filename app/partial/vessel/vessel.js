@@ -23,10 +23,18 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         //Load list with vessels
         $scope.searchVessels();
 
-        if ($stateParams.id) {
-            vesselRestService.getVessel($stateParams.id).then(function(vessel) {
-                $scope.toggleViewVessel(vessel);
-            });
+        //Load vessel details
+        var vesselGUID = $stateParams.id;
+        if(angular.isDefined(vesselGUID)){
+            vesselRestService.getVessel(vesselGUID).then(
+                function(vessel) {
+                    $scope.toggleViewVessel(vessel);
+                }, 
+                function(error){
+                    console.error("Error loading details for vessel with with GUID: " +vesselGUID);
+                    alertService.showErrorMessage(locale.getString('vessel.view_vessel_on_failed_to_load_error'));                
+                }
+            );
         }
     };
 
