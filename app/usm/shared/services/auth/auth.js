@@ -69,7 +69,7 @@ angular.module('auth',
                         return request;
                     }
 
-                    var isRESTApiRequest = false;
+                    /*var isRESTApiRequest = false;
                     $.each(config.restApiURLS, function(i, val){
                         if(request.url.indexOf(val) === 0){
                             isRESTApiRequest = true;
@@ -81,7 +81,7 @@ angular.module('auth',
                         var newUrl = config.rest_api_base + request.url;
                         $log.debug("Reroute request to " + request.url +" to " +newUrl);
                         request.url = newUrl;
-                    }
+                    }*/
 
                     if (config.urlParam) {
                         request.params = request.params || {};

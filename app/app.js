@@ -383,7 +383,7 @@ unionvmsWebApp.config(['$httpProvider', 'authInterceptorProvider', 'envConfig', 
     $httpProvider.interceptors.push('authInterceptor');
 }]);
 
-/*
+
 //Request interceptor that routes REST api request to the REST api server
 unionvmsWebApp.config(function ($httpProvider) {
     //URLs that should go the REST apis
@@ -420,7 +420,7 @@ unionvmsWebApp.config(function ($httpProvider) {
             }
          };
     });
-});   */
+}); 
 
 
 
