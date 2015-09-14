@@ -1,0 +1,26 @@
+<div class="alarmSearchContainer" ng-controller="AlarmSearchController">
+    <div class="row">
+
+        <div class="col-md-1">
+            <dropdown ng-model="advancedSearchObject.TIME_SPAN" no-placeholder-item items="timeSpanOptions"></dropdown>
+        </div>
+        <div class="col-md-2">
+            <datepicker-input model="advancedSearchObject.FROM_DATE" time="true" placeholder="{{'common.search_from' | i18n}}"></datepicker-input>
+        </div>
+        <div class="col-md-2">
+            <datepicker-input model="advancedSearchObject.TO_DATE" time="true" placeholder="{{'common.search_to' | i18n}}"></datepicker-input>
+        </div>
+        <div class="col-md-2">
+            <input type="text" ng-model="advancedSearchObject.OBJECT_NAME" placeholder="{{'alarms.alarms_search_affected_object_placeholder' | i18n}}"/>
+        </div>
+        <div class="col-md-3">
+            <dropdown ng-model="advancedSearchObject.RULE" initialtext="{{'alarms.alarms_search_rule' | i18n}}" items="[{text:'MOCK_RULE',code:'MOCK_CODE'}]"></dropdown>
+        </div>        
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-primary btn-sm" ng-click="performAdvancedSearch()">{{'common.search' | i18n}}</button>
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-link btn-sm" ng-click="resetSearch(true)">{{'common.reset' | i18n}}</button>
+        </div>
+    </div>
+</div>

@@ -3,6 +3,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
     $scope.selectedItems = []; //Selected items by checkboxes
 
     $scope.editSelectionDropdownItems = [
+        {text:locale.getString('alarms.holding_table_reprocess_reports'), code : 'REPROCESS_REPORTS'},
         {text:locale.getString('common.export_selection'), code : 'EXPORT'}
     ];
 
@@ -26,7 +27,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         mockAlarm.openedDate = "2015-08-22 08:00";
         mockAlarm.affectedObject = "Tunafjord";
         mockAlarm.ruleName = "POS Validation";
-        mockAlarm.recipient = "FMC";
+        mockAlarm.sender = "FMC";
         
         var random = Math.floor(Math.random() * 2) + 1;
         if(random === 2){
@@ -136,13 +137,13 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
 
         //Set the header columns
         var header = [
-                locale.getString('alarms.holding_table_table_status'),
-                locale.getString('alarms.holding_table_table_date_openend'),
-                locale.getString('alarms.holding_table_table_object_affected'),
-                locale.getString('alarms.holding_table_table_rule'),
-                locale.getString('alarms.holding_table_table_recipient'),
-                locale.getString('alarms.holding_table_table_date_resolved'),
-                locale.getString('alarms.holding_table_table_resolved_by'),
+                locale.getString('alarms.alarms_table_status'),
+                locale.getString('alarms.alarms_table_date_openend'),
+                locale.getString('alarms.alarms_table_object_affected'),
+                locale.getString('alarms.alarms_table_rule'),
+                locale.getString('alarms.alarms_table_sender'),
+                locale.getString('alarms.alarms_table_date_resolved'),
+                locale.getString('alarms.alarms_table_resolved_by'),
             ];
 
         //Set the data columns
@@ -164,7 +165,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
                             item.openedDate,
                             item.affectedObject,
                             item.ruleName,
-                            item.recipient,
+                            item.sender,
                             item.resolvedDate,
                             item.resolvedBy
                         ];
@@ -184,6 +185,9 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         if(selectedItem.code === 'EXPORT'){
             $scope.exportItemsAsCSVFile(true);
         }
+        else if(selectedItem.code === 'REPROCESS_REPORTS'){
+            alertService.showInfoMessageWithTimeout("Not yet implemented.");
+        }        
         $scope.editSelection = "";
     };    
 

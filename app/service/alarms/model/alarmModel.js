@@ -5,7 +5,7 @@ angular.module('unionvmsWeb').factory('Alarm', function() {
         this.openedDate = undefined;
         this.affectedObject = undefined;
         this.ruleName = undefined;
-        this.recipient = undefined;
+        this.sender = undefined;
         this.resolvedDate = undefined;
         this.resolvedBy = undefined;
         this.status = undefined;            
@@ -40,7 +40,7 @@ angular.module('unionvmsWeb').factory('Alarm', function() {
         copy.openedDate = this.openedDate;
         copy.affectedObject = this.affectedObject;
         copy.ruleName = this.ruleName;
-        copy.recipient = this.recipient;
+        copy.sender = this.sender;
         copy.resolvedDate = this.resolvedDate;
         copy.resolvedBy = this.resolvedBy;
         copy.status = this.status;

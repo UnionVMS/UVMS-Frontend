@@ -36,6 +36,8 @@
     "saved_search_delete_success": "The saved search was succesfully removed.",
     "saved_search_no_criterias_error": "You can't save this since no search criterias has been selected.",
     "search" : "Search",
+    "search_from": "From",
+    "search_to": "To",
     "search_advanced_link" : "Advanced search",
     "search_failed_error" : "No result could be retrieved at this time. Please try later or with other search criterias.",
     "search_group_dropdown" : "Saved groups",
