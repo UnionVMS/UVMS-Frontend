@@ -1,6 +1,5 @@
 angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage){
 
-    $scope.activeTab = "HOLDING_TABLE";
     $scope.selectedItems = []; //Selected items by checkboxes
 
     $scope.editSelectionDropdownItems = [

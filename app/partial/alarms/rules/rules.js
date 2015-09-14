@@ -1,6 +1,5 @@
 angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, locale, csvService, alertService, $filter, Rule, ruleRestService, SearchResults, SearchResultListPage){
 
-    $scope.activeTab = "RULES";
     $scope.selectedRules = []; //Selected rules checkboxes
 
     //Keep track of visibility statuses
