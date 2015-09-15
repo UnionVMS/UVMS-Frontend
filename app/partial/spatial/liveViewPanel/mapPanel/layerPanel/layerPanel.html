@@ -12,15 +12,11 @@
         <a ng-click="tabClick('LEGEND')">Legend</a>
       </li>
     </ul>
-    <div>
-      <div ng-show="tab==='LAYERTREE'">
-        Layer tree
-      </div>
+
+      <div ng-show="tab==='LAYERTREE'" layer-tree class="layertree-panel"></div>
       <div ng-show="tab==='LEGEND'">
         Legend
       </div>
-    </div>
-    <!-- end of mockup -->
 
   </div>
 </div>

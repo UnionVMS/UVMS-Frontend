@@ -98,6 +98,7 @@ module.exports = function (grunt) {
       main: {
         options: {
             jshintrc: '.jshintrc',
+            force: true,
             ignores: ['protractor.conf.js', 'app/**/*-spec.js', 'app/assets/**/*.js', 'bower_components/**/*.js', 'app/**/e2e/*.js','app/**/e2e/**/*.js', 'node_modules/**/*.js']
         },
         src: [createFolderGlobs('*.js')]
