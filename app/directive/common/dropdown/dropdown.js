@@ -15,6 +15,7 @@ angular.module('unionvmsWeb')
             items : '=',
             ngModel:'=',
             callback : '=',
+            callbackParams : '=',
             ngDisabled : '='
 		},
 		templateUrl: 'directive/common/dropdown/dropdown.html',
@@ -96,7 +97,11 @@ angular.module('unionvmsWeb')
                 scope.ngModel = getItemCode(item);
                 scope.currentItemLabel = scope.getItemLabel(item);
                 if(angular.isDefined(scope.callback)){
-                    scope.callback(item);
+                    var extraParams;
+                    if(angular.isDefined(scope.callbackParams)){
+                        extraParams = scope.callbackParams;
+                    }
+                    scope.callback(item, extraParams);
                 }
             };
 

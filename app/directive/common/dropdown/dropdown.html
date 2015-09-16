@@ -1,15 +1,15 @@
 <div>
     <div class="dropdown fullWidthDropdown">
         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled">
-            <div class="dropdowntext">{{currentItemLabel}}</div>
+            <div class="dropdowntext" ng-bind="currentItemLabel"></div>
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
             <li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue" ng-click="selectVal(initialValue)">
-                <a role="menuitem" tabindex="-1">{{initialValue.text}}</a>
+                <a role="menuitem" tabindex="-1" ng-bind="initialValue.text"></a>
             </li>
             <li ng-class="item.code.length === 0 && !initialtextSelectable ? 'disabled' : ''" ng-repeat="item in items" role="presentation" ng-click="selectVal(item,$index)">
-                <a role="menuitem" tabindex="-1">{{getItemLabel(item)}}</a>
+                <a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>
             </li>
         </ul>
     </div>

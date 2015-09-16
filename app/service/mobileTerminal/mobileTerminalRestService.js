@@ -90,7 +90,7 @@ angular.module('unionvmsWeb')
                 return deferred.promise;
             },
 
-            getMobileTerminalList : function(getListRequest){
+            getMobileTerminalList : function(getListRequest, skipGettingVessel){
                 var deferred = $q.defer();
                 //Get list of mobile terminals
                 mobileTerminalRestFactory.getMobileTerminals().list(getListRequest.DTOForMobileTerminal(), function(response){
@@ -112,6 +112,12 @@ angular.module('unionvmsWeb')
                         searchResultListPage = new SearchResultListPage(mobileTerminals, currentPage, totalNumberOfPages);
 
                         //Get vessels for the mobileTerminals?
+                        if(skipGettingVessel){
+                            deferred.resolve(searchResultListPage);
+                            return;
+                        }
+
+                        //Get the associated vessels
                         try{
                             mobileTerminalVesselService.setAssociatedVesselsFromConnectId(searchResultListPage.items).then(
                                 function(updatedMobileTerminals){

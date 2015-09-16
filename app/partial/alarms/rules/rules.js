@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, locale, csvService, alertService, $filter, Rule, ruleRestService, SearchResults, SearchResultListPage){
+angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, locale, csvService, alertService, $filter, Rule,  RuleDefinition, RuleNotification, ruleRestService, SearchResults, SearchResultListPage){
 
     $scope.selectedRules = []; //Selected rules checkboxes
 
@@ -22,18 +22,49 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
     for (var i = 11; i >= 1; i--) {
         var mockRule = new Rule();
         mockRule.id = i;
-        mockRule.name = "Rule " + i;
-        mockRule.type = "MS_REPORT";
-        mockRule.addNewNotification();
-        mockRule.addNewMobileTerminalDefinition();
-        mockRule.notifications[0].text = "test@test.com";
-        mockRule.notifications[1].type = "SMS";
-        mockRule.notifications[1].text = "0123456789";
-        mockRule.definitions[0].text = "MONDAY";
-        mockRule.definitions[1].text = "TUESDAY";
-        mockRule.definitions[2].text = "TUESDAY";
-        mockRule.definitions[2].compareType = "EQ";
-        mockRule.definitions[3].text = "SUNDAY";
+        mockRule.name = "Mock Rule " + i;
+        mockRule.description = "Generated rule number " + i;
+        mockRule.type = "GLOBAL";
+        mockRule.availability = "PUBLIC";
+
+        var newNotificationRow = new RuleNotification();
+        newNotificationRow.type = "EMAIL";
+        newNotificationRow.text = "myname@mail.com";
+        mockRule.addNotification(newNotificationRow);
+
+        var ruleDef1 = new RuleDefinition();
+        ruleDef1.startOperator =  "(";
+        ruleDef1.criteria =  "VESSEL";
+        ruleDef1.subCriteria =  "CFR";
+        ruleDef1.condition =  "EQ";
+        ruleDef1.value =  "SWE111222";
+        ruleDef1.endOperator =  "";
+        ruleDef1.logicBoolOperator =  "OR";
+        ruleDef1.order = 0;
+
+        var ruleDef2 = new RuleDefinition();
+        ruleDef2.startOperator =  "";
+        ruleDef2.criteria =  "VESSEL";
+        ruleDef2.subCriteria =  "CFR";
+        ruleDef2.condition =  "EQ";
+        ruleDef2.value =  "SWE111333";
+        ruleDef2.endOperator =  ")";
+        ruleDef2.logicBoolOperator =  "AND";
+        ruleDef2.order = 1;
+
+        var ruleDef3 = new RuleDefinition();
+        ruleDef3.startOperator =  "";
+        ruleDef3.criteria =  "MOBILE_TERMINAL";
+        ruleDef3.subCriteria =  "MEMBER_ID";
+        ruleDef3.condition =  "EQ";
+        ruleDef3.value =  "ABC99";
+        ruleDef3.endOperator =  "";
+        ruleDef3.logicBoolOperator =  "NONE";
+        ruleDef3.order = 2;
+
+        mockRule.addDefinition(ruleDef1);
+        mockRule.addDefinition(ruleDef2);
+        mockRule.addDefinition(ruleDef3);
 
         mockRules.push(mockRule);
     }

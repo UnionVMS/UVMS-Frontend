@@ -1,60 +1,136 @@
-angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, locale, alertService, ruleRestService, Rule){
+angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, locale, alertService, ruleRestService, Rule, RuleDefinition, RuleNotification, GetListRequest, vesselRestService, mobileTerminalRestService){
 
     $scope.submitAttempted = false;
+
+    $scope.ruleTest = {
+        success : false,
+        message : undefined,
+        outdated : false
+    };
 
     //Watch changes to the getCurrentRule model (set in the parent scope)
     $scope.$watch('getCurrentRule()', function(newValue) {
         $scope.currentRule = $scope.getCurrentRule();
+        $scope.initForm();
+    });
+
+    $scope.initForm = function(){
+        //Add a new definition row to new rules
+        if($scope.currentRule.getNumberOfDefinitions() === 0){
+            $scope.addDefinitionRow();
+        }
+        //Add a new notification row to new rules
+        if($scope.currentRule.getNumberOfNotifications() === 0){
+            $scope.addNotificationItem();
+        }
+
+        //Reset form validation
         if(angular.isDefined($scope.ruleForm)){
             $scope.ruleForm.$setPristine();
             $scope.submitAttempted = false;
         }
-    });    
+        //Reset test message
+        $scope.ruleTest.message = undefined;
+        $scope.ruleTest.outdated = false;
+
+        //Enable/disable availability dropdown
+        $scope.updateAvailabilityDropdown();        
+
+    };
+
+    var createDropdownItemsWithSameTextAsValue = function(codes){
+        var options = [];
+        $.each(codes, function(index, code){
+            options.push({'text': code,'code':code});
+        });
+        return options;
+    };
 
     //Dropdown values
     //TODO: Get values from config
     $scope.ruleTypes =[    
-        {'text': 'MS Reports','code':'MS_REPORT'},
-        {'text': 'Unknown','code':'UNKNOWN'}
+        {'text': 'Global','code':'GLOBAL'},
+        {'text': 'Event','code':'EVENT'}
     ];
 
-    $scope.operationTypes =[    
-        {'text': 'OR','code':'OR'},
-        {'text': 'AND','code':'AND'}
+    $scope.availabilityTypes =[    
+        {'text': 'Public','code':'PUBLIC'},
+        {'text': 'Private','code':'PRIVATE'}
+    ];
+    $scope.notificationTypes =[    
+        {'text': 'E-mail','code':'EMAIL'},
+        {'text': 'SMS','code':'SMS'},
+    ];     
+
+
+    //DEFINITION VALUES
+    $scope.startOperators = createDropdownItemsWithSameTextAsValue(['(', '((', '(((']);   
+    $scope.endOperators = createDropdownItemsWithSameTextAsValue([')', '))', ')))']);   
+    $scope.logicBoolOperationTypes = createDropdownItemsWithSameTextAsValue(['AND', 'OR', 'NONE']);
+    $scope.criterias =[    
+        {'text': 'Vessel','code':'VESSEL'},
+        {'text': 'Mobile Terminal','code':'MOBILE_TERMINAL'},
+        {'text': 'Geo area','code':'GEO'},
     ];
 
-    $scope.assetTypes =[    
-        {'text': 'Vessel','code':'VESSEL'}
-    ];
+    $scope.subCriterias = {
+        'VESSEL' :  [{'text': 'CFR','code':'CFR'}, {'text': 'IRCS','code':'IRCS'}, {'text': 'Name','code':'NAME'}],
+        'MOBILE_TERMINAL' : [{'text': 'Serial number','code':'SERIAL_NUMBER'}, {'text': 'DNID','code':'DNID'}, {'text': 'Member number','code':'MEMBER_NUMBER'}],
+        'GEO' : [{'text': 'Area id','code':'AREA_ID'}],
+    };
 
-    $scope.assetAttributes =[    
-        {'text': 'Asset id.','code':'ID'},
-        {'text': 'Asset name.','code':'NAME'},
-    ];
-
-    $scope.compareTypes =[    
+    $scope.conditionTypes =[    
         {'text': 'equals to','code':'EQ'},
         {'text': 'not equals to','code':'NEQ'},
     ];    
 
-    $scope.notificationTypes =[    
-        {'text': 'E-mail','code':'EMAIL'},
-        {'text': 'SMS','code':'SMS'},
-    ]; 
 
-    $scope.addAssetDefinition = function(){
-        $scope.currentRule.addNewAssetDefinition();
+    //Add a definition row
+    $scope.addDefinitionRow = function(){
+        var ruleDef = new RuleDefinition();
+        ruleDef.criteria = $scope.criterias[0].code;
+        ruleDef.subCriteria = $scope.subCriterias[ruleDef.criteria][0].code;
+        ruleDef.order = $scope.currentRule.getNumberOfDefinitions();
+        $scope.currentRule.addDefinition(ruleDef);
     };
-    $scope.addMobileTerminalDefinition = function(){
-        $scope.currentRule.addNewMobileTerminalDefinition();
-    };
-    $scope.addPositionReportDefinition = function(){
-        $scope.currentRule.addNewPositionReportDefinition();
-    };
+
+    //Add a notification row
     $scope.addNotificationItem = function(){
-        $scope.currentRule.addNewNotification();
+        var newNotificationRow = new RuleNotification();
+        newNotificationRow.type = $scope.notificationTypes[0].code;
+        $scope.currentRule.addNotification(newNotificationRow);
     };
 
+    //Disable availability dropdown when type is GLOBAL
+    $scope.disableAvailability = false;
+    $scope.updateAvailabilityDropdown = function(selection){
+        var selectedType = angular.isDefined(selection) ? selection.code : $scope.currentRule.type;
+        if(selectedType === 'GLOBAL'){
+            $scope.currentRule.availability = 'PUBLIC';
+            $scope.disableAvailability = true;
+        }else{
+            $scope.disableAvailability = false;
+            if(angular.isUndefined($scope.currentRule.availability)){
+                $scope.currentRule.availability = $scope.availabilityTypes[0].code;
+            }
+        }
+
+    };
+
+    //Callback when selecting criteria in dropdown
+    $scope.criteriaSelected = function(selection, ruleDef){        
+        $log.debug("criteriaSelected");
+        $log.debug(selection);
+        $log.debug(ruleDef);
+        var selectedVal = selection.code;
+        var newSubCriteria;
+        if(Array.isArray($scope.subCriterias[selectedVal]) && $scope.subCriterias[selectedVal].length > 0){
+            newSubCriteria = $scope.subCriterias[selectedVal][0].code;
+        }
+        ruleDef.subCriteria = newSubCriteria; 
+    }; 
+
+    //Remove a rule definition row
     $scope.removeRuleDefinition = function(definitionToBeRemoved){
         var indexToRemove = -1;
         $.each($scope.currentRule.definitions, function(i, def){
@@ -67,8 +143,14 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, locale
         if(indexToRemove >= 0){
             $scope.currentRule.definitions.splice(indexToRemove, 1);
         }
+
+        //Set order
+        $.each($scope.currentRule.definitions, function(i, def){
+            def.order = i; 
+        });        
     };
 
+    //Remove a notification row
     $scope.removeNotificationItem = function(notificationToBeRemoved){
         var indexToRemove = -1;
         $.each($scope.currentRule.notifications, function(i, def){
@@ -147,12 +229,148 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, locale
         alertService.showErrorMessage(locale.getString('alarms.rules_update_alert_message_on_error'));
     };    
 
+    //Test rule
+    $scope.testRule = function(){
+        $log.debug("Test rule");
+        $scope.ruleTest.outdated = false;
+
+        //TODO: Test if rule is valid
+        //TODO: Get matches for the rule
+
+        //TODO: Test
+        if($scope.currentRule.getNumberOfDefinitions() % 2 === 0){
+            $scope.ruleTest.success = true;
+            $scope.ruleTest.message = "Rule definition was successful. You have 2 hits on the last 100 position reports.";
+        }else{
+            $scope.ruleTest.success = false;
+            $scope.ruleTest.message = "Rule definition is invalid.";
+        }
+    };
+        
+    //Watch changes to currentRule.definitionsAsText()
+    $scope.$watch(function () { return $scope.currentRule.definitionsAsText();}, function (newVal, oldVal){
+        var text = $scope.currentRule.definitionsAsText();
+        text += ' ' +locale.getString('alarms.rules_form_definition_then_send_notification');
+        $scope.ruleAsText = text;
+        $scope.ruleTest.outdated = true;
+    });    
+
+
+    //AUTO SUGGESTIONS
+    var maxNumberOfSuggestions = 10;
+    var lastAutoSuggestionRequestTimestamp;
+    var autoSuggestionGetListRequest = new GetListRequest(1, maxNumberOfSuggestions, true, []);
+
+
+    //Handle auto suggest success
+    var autoSuggestSuccess = function(criteria, subCriteria, searchResultListPage){
+        return searchResultListPage.items.reduce(function(suggestions, resultItem){
+            var suggestion;
+
+            //Get the correct suggestion value
+            if(criteria === 'VESSEL'){
+                switch (subCriteria){
+                    case 'CFR':
+                        suggestion = resultItem.cfr;
+                        break;
+                    default:
+                        suggestion = resultItem[subCriteria.toLowerCase()];
+                        break;                    
+                }
+            }
+
+            if(criteria === 'MOBILE_TERMINAL'){
+                switch (subCriteria){
+                    default:
+                        suggestion = resultItem.attributes[subCriteria];
+                        break;
+                }
+            }            
+
+            if(angular.isDefined(suggestion)){
+                //Don't add duplicates
+                if(!_.contains(suggestions, suggestion)){
+                    suggestions.push(suggestion);
+                }
+            }else{
+                $log.info("Couldn't find the auto suggest value.");
+            }
+
+            return suggestions;
+        }, []);
+    };
+
+    //Handle auto suggest error
+    var autoSuggestError = function(error){
+        alertService.showErrorMessage(locale.getString('alarms.rules_form_definition_auto_suggest_error'));
+        return [];
+    };    
+
+    //Get vessels matching search query
+    var getVessels = function(criteria, subCriteria) {        
+        return vesselRestService.getVesselList(autoSuggestionGetListRequest).then(
+            function(vesselResultListPage){
+                return autoSuggestSuccess(criteria, subCriteria, vesselResultListPage);
+            },
+            autoSuggestError
+        );
+    };
+
+    //Get mobileTerminals matching search query
+    var getMobileTerminals = function(criteria, subCriteria) {        
+        return mobileTerminalRestService.getMobileTerminalList(autoSuggestionGetListRequest).then(
+            function(searchResultListPage){
+                return autoSuggestSuccess(criteria, subCriteria, searchResultListPage);
+            },
+            autoSuggestError
+        );
+    };
+
+    //Function for getting auto suggestions
+    $scope.getAutoSuggestValues = function(value, item){
+        if(angular.isDefined(item.criteria) && angular.isDefined(item.subCriteria)){
+            lastAutoSuggestionRequestTimestamp = new Date().getTime();
+            $log.debug("Get suggestions for:" +value);
+            $log.debug(item);
+            //Add the subcritera as search value and append a * at the end
+            autoSuggestionGetListRequest.resetCriterias();
+            autoSuggestionGetListRequest.addSearchCriteria(item.subCriteria, value +"*");
+
+            var searchFunc;
+            $log.debug("Current criteria:" +item.criteria);
+            switch(item.criteria){
+                case 'VESSEL':
+                    searchFunc = getVessels;
+                    break;
+                case 'MOBILE_TERMINAL':
+                    searchFunc = getMobileTerminals;
+                    break;
+                default:
+                    break;
+            }
+            
+            if(angular.isDefined(searchFunc)){
+                return searchFunc(item.criteria, item.subCriteria);
+            }
+
+            //No Search func
+            $log.debug("No search func defined. Return []");
+        }
+        return [];
+    };
+
+    //On select item in value auto suggestion input field
+    $scope.onValueSuggestionSelect = function(selectedItem, selectedLabel, item){
+        //Update value based on selection
+        item.value = selectedLabel;
+    };
 
     //Clear the form
     $scope.clearForm = function(){
+        $log.debug("Clear form!");
         $scope.currentRule = new Rule();
+        $scope.initForm();
     };
-        
         
 
 });

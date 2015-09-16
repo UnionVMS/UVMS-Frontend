@@ -20,7 +20,7 @@
     				<td class="table-checkbox"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
     				<td><i class="fa fa-plus-circle detailsIcon" ng-click="details(item)" title="{{'alarms.rules_table_details' | i18n}}"></i></td>
     				<td>{{item.name}}</td>
-    				<td class="definition">{{item.definitions[0]}}</td>
+    				<td class="definition">{{item.definitionsAsText()}}</td>
     				<td>{{item.description}}</td>
     				<td>{{item.recipient}}</td>
     				<td>{{item.lastTriggered}}</td>

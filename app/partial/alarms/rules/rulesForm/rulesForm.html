@@ -16,7 +16,7 @@
     <div class="row" ng-show="isCreateNewMode()">
         <div class="col-md-9"><h3>{{'alarms.rules_add_new_header' | i18n}}</h3></div>
         <div class="col-md-2 textAlignRight">
-            <button  type="submit" class="btn btn-primary" ng-click="createNewRule()" ng-hide="transponderSystems.length == 0" ng-disabled="waitingForCreateResponse">{{'common.create' | i18n}}</button>
+            <button  type="submit" class="btn btn-primary" ng-click="createNewRule()" ng-disabled="waitingForCreateResponse">{{'common.create' | i18n}}</button>
         </div>
         <div class="col-md-1 textAlignRight"> 
             <i class="fa fa-sign-out signouticon" ng-click="toggleAddNewRule()" title="{{'common.close' | i18n}}"></i>
@@ -38,193 +38,149 @@
         <form name="ruleForm" method="post" novalidate>
             <div class="row nameTypeContainer">
 
-                <div class="col-md-7">
+                <div class="col-md-6">
                     <div class="row">
                         <div class="col-md-8">
                             <div class="form-group">
                                 <label>{{'alarms.rules_form_name_label' | i18n}}</label>
                                 <input type="text" name="name" class="form-control" ng-model="currentRule.name" required placeholder="{{'alarms.rules_form_name_placeholder' | i18n}}"/>
-                                <span class="help-block" ng-show="ruleForm.name.$error.required">{{'common.validation_required' | i18n}}</span>
                             </div>                    
                         </div> 
                        <div class="col-md-4">
                             <div class="form-group">
                                 <label>{{'alarms.rules_form_type_label' | i18n}}</label>
-                                <dropdown ng-model="currentRule.type" initialtext="{{ 'common.choose' | i18n }}" items="ruleTypes"></dropdown>
+                                <dropdown ng-model="currentRule.type" no-placeholder-item items="ruleTypes" callback="updateAvailabilityDropdown"></dropdown>
                             </div>                    
                         </div>                  
                     </div>
-                </div>
-            </div>
-            <div class="row">
-
-                <div class="col-md-7">
                     <div class="row">
-                        <div class="col-md-12">
-                            <label>{{'alarms.rules_form_definition_label' | i18n}}</label>
-                        </div>
-
-                        <div class="col-md-12 definitionsContainer">                            
-                            <label>{{'alarms.rules_form_definition_if_label' | i18n}}</label>
-
-                            <div class="definitionSection">
-                                <label>{{'alarms.rules_form_definition_assets_label' | i18n}}</label>
-                                <div class="definition" ng-repeat="definition in currentRule.getAssetDefinitions()">
-                                    <div class="row" ng-form="definitionForm">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <dropdown ng-model="definition.type" initialtext="{{ 'alarms.rules_form_definition_asset_type' | i18n }}" items="assetTypes" name="type"></dropdown>
-                                            </div>           
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <dropdown ng-model="definition.attribute" items="assetAttributes" no-placeholder-item name="attribute"></dropdown>
-                                            </div>             
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <dropdown ng-model="definition.compareType" items="compareTypes" no-placeholder-item name="compareType"></dropdown>
-                                            </div>           
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <input type="text" name="text" class="form-control" ng-model="definition.text" required/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1 remove" ng-show="$index > 0">
-                                            <i class="fa fa-lg fa-times" title="{{'common.remove' | i18n}}" ng-click="removeRuleDefinition(definition)"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="addMoreLink" ng-click="addAssetDefinition()">{{'alarms.rules_form_add_more' | i18n}}</div
-                                        >
-                                        <dropdown ng-model="rule.assetsOperation" items="operationTypes" no-placeholder-item></dropdown>
-                                    </div>
-                                </div>                                                                
-                            </div>
-
-                            <div class="definitionSection">
-                                <label>{{'alarms.rules_form_definition_mobile_terminals_label' | i18n}}</label>
-                                <div class="definition" ng-repeat="definition in currentRule.getMobileTerminalsDefinitions()">
-                                    <div class="row" ng-form="definitionForm">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <dropdown ng-model="definition.type" initialtext="{{ 'alarms.rules_form_definition_asset_type' | i18n }}" items="assetTypes" name="type"></dropdown>
-                                            </div>           
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <dropdown ng-model="definition.attribute" items="assetAttributes" no-placeholder-item name="attribute"></dropdown>
-                                            </div>             
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <dropdown ng-model="definition.compareType" items="compareTypes" no-placeholder-item name="compareType"></dropdown>
-                                            </div>           
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <input type="text" name="text" class="form-control" ng-model="definition.text" required/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1 remove" ng-show="$index > 0">
-                                            <i class="fa fa-lg fa-times" title="{{'common.remove' | i18n}}" ng-click="removeRuleDefinition(definition)"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="addMoreLink" ng-click="addMobileTerminalDefinition()">{{'alarms.rules_form_add_more' | i18n}}</div
-                                        >
-                                        <dropdown ng-model="rule.mobileTerminalsOperation" items="operationTypes" no-placeholder-item></dropdown>
-                                    </div>
-                                </div>                                                                
-                            </div>                            
-
-                            <div class="definitionSection">
-                                <label>{{'alarms.rules_form_definition_position_reports_label' | i18n}}</label>
-                                <div class="definition" ng-repeat="definition in currentRule.getPositionReportsDefinitions()">
-                                    <div class="row" ng-form="definitionForm">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <dropdown ng-model="definition.type" initialtext="{{ 'alarms.rules_form_definition_asset_type' | i18n }}" items="assetTypes" name="type"></dropdown>
-                                            </div>           
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <dropdown ng-model="definition.attribute" items="assetAttributes" no-placeholder-item name="attribute"></dropdown>
-                                            </div>             
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <dropdown ng-model="definition.compareType" items="compareTypes" no-placeholder-item name="compareType"></dropdown>
-                                            </div>           
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <input type="text" name="text" class="form-control" ng-model="definition.text" required/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1 remove" ng-show="$index > 0">
-                                            <i class="fa fa-lg fa-times" title="{{'common.remove' | i18n}}" ng-click="removeRuleDefinition(definition)"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="addMoreLink" ng-click="addPositionReportDefinition()">{{'alarms.rules_form_add_more' | i18n}}</div
-                                        >
-                                    </div>
-                                </div>                                                                
-                            </div>  
-
-                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>{{'alarms.rules_form_description_label' | i18n}}</label>
+                                <textarea name="description" class="form-control" ng-model="currentRule.description" placeholder="{{'alarms.rules_form_description_placeholder' | i18n}}"/></textarea>
+                            </div>                    
+                        </div> 
+                       <div class="col-md-4">
+                            <div class="form-group">
+                                <label>{{'alarms.rules_form_availability_label' | i18n}}</label>
+                                <dropdown ng-model="currentRule.availability" no-placeholder-item items="availabilityTypes" ng-disabled="disableAvailability"></dropdown>
+                            </div>                    
+                        </div>                  
                     </div>                    
                 </div>
-
-                <div class="col-md-5">
-                    <label>{{'alarms.rules_form_definition_then_label' | i18n}}</label>
-
-                    <div class="definitionSection">
-                        <label>{{'alarms.rules_form_definition_notification_label' | i18n}}</label>
-                        <div class="definition" ng-repeat="notification in currentRule.notifications">
-                            <div class="row" ng-form="notificationForm">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <dropdown ng-model="notification.type" no-placholder-item items="notificationTypes" name="type"></dropdown>
-                                    </div>           
+                <div class="col-md-5 col-md-offset-1">
+                    <label>{{'alarms.rules_form_definition_notification_label' | i18n}}</label>
+                    <div class="definition" ng-repeat="notification in currentRule.notifications">
+                        <div class="row" ng-form="notificationForm">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <dropdown ng-model="notification.type" no-placholder-item items="notificationTypes" name="type"></dropdown>
+                                </div>           
+                            </div>
+                            <div class="col-md-7">
+                                <div class="form-group">
+                                    <input type="text" name="text" class="form-control" ng-model="notification.text" required/>
                                 </div>
-                                <div class="col-md-7">
-                                    <div class="form-group">
-                                        <input type="text" name="text" class="form-control" ng-model="notification.text" required/>
-                                    </div>
-                                </div>
-                                <div class="col-md-1 remove" ng-show="$index > 0">
-                                    <i class="fa fa-lg fa-times" title="{{'common.remove' | i18n}}" ng-click="removeNotificationItem(notification)"></i>
-                                </div>
+                            </div>
+                            <div class="col-md-1 remove" ng-show="$index > 0">
+                                <i class="fa fa-lg fa-times" title="{{'common.remove' | i18n}}" ng-click="removeNotificationItem(notification)"></i>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="addMoreLink" ng-click="addNotificationItem()">{{'alarms.rules_form_add_more' | i18n}}</div
-                                >
-                            </div>
-                        </div>                                                                
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="addMoreLink" ng-click="addNotificationItem()">{{'alarms.rules_form_notification_add' | i18n}}</div
+                            >
+                        </div>
+                    </div>   
+                </div>
+            </div>
 
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label>{{'alarms.rules_form_definition_label' | i18n}}</label>
                 </div>
 
-            </div>
-        </form>
+                <div class="col-md-12 definitionsContainer">                            
+                    <table class="searchResults colorOdd">
+                        <thead>
+                            <tr>
+                                <th>Operator</th>
+                                <th>Criteria</th>
+                                <th>Sub criteria</th>
+                                <th>Condition</th>
+                                <th>Value</th>
+                                <th>Operator</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
+                            <tr ng-repeat="item in currentRule.definitions">
+                                <td class="startOperator">
+                                    <dropdown ng-model="item.startOperator"initialtext="-" initialtext-selectable items="startOperators"></dropdown>
+                                </td>
+                                <td class="criteria">
+                                    <dropdown ng-model="item.criteria" no-placeholder-item items="criterias" callback="criteriaSelected" callback-params="item"></dropdown>
+                                </td>
+                                <td class="subCriteria">
+                                    <dropdown ng-model="item.subCriteria" no-placeholder-item items="subCriterias[item.criteria]"></dropdown>
+                                </td>
+                                <td class="condition">
+                                    <dropdown ng-model="item.condition" no-placeholder-item items="conditionTypes"></dropdown>
+                                </td>
+                                <td class="value">
+                                    <div class="autoSuggestionWrapper fullWidthDropdown">
+                                        <input type="text" class="form-control" ng-model="item.value" name="value" autocomplete="off"
+                                        typeahead="suggestion for suggestion in getAutoSuggestValues($viewValue, item)" 
+                                        typeahead-loading="waitingForAutoSuggest" 
+                                        typeahead-on-select="onValueSuggestionSelect($item, $label, item)" 
+                                        typeahead-select-on-exact="true"
+                                        typeahead-wait-ms="300">
+                                        <span class="loadingIcon" ng-show="waitingForAutoSuggest"><i class="fa fa-refresh fa-spin"></i></span>
+                                    </div>                                    
+                                </td>
+                                <td class="endOperator">
+                                    <dropdown ng-model="item.endOperator" initialtext="-" initialtext-selectable items="endOperators" class="floatLeft"></dropdown>
+                                    <dropdown ng-model="item.logicBoolOperator" no-placeholder-item items="logicBoolOperationTypes" class="floatLeft"></dropdown>
+                                </td>
+                                <td class="remove">
+                                    <i class="fa fa-lg fa-times" ng-click="removeRuleDefinition(item)" ng-show="$index > 0" title="{{'alarms.rules_form_definition_remove' | i18n}}"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-12">
+                    <div class="addMoreLink" ng-click="addDefinitionRow()">{{'alarms.rules_form_definition_add' | i18n}}</div>
+                </div>
+            </div>
+
+            <div class="row ruleTestContainer">
+                <div class="col-md-8 ruleTestMessage">
+                    <span ng-show="ruleTest.message" ng-class="{'success' : ruleTest.success, 'error' : !ruleTest.success, 'outdated' : ruleTest.outdated}">{{ruleTest.message}}</span>
+                </div>
+                <div class="col-md-4 textAlignRight" >
+                    <span class="link" ng-click="testRule()">{{'alarms.rules_form_test_rule' | i18n}}</span>
+                </div>
+            </div>      
+
+            <div class="row ruleAsTextContainer">
+                <div class="col-md-12">
+                    <div class="ruleAsText">
+                        {{ruleAsText}}
+                    </div>
+                </div>
+            </div>    
+        </form>
     </div>
 
     <div class="row" ng-show="isCreateNewMode()">
         <div class="col-md-12">
             <a ng-click="clearForm()">{{'common.clear_form' | i18n}}</a>
         </div>
-    </div>      
+    </div>    
+
 
 </div>
