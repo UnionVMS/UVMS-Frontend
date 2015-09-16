@@ -155,5 +155,5 @@ angular.module('unionvmsWeb').directive('layerTree', function() {
 				}
 			});
 		}
-	}
+	};
 });
