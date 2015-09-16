@@ -19,13 +19,26 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
 
     //Add mock data    
     var mockRules = [];
-    for (var i = 11; i >= 1; i--) {
+    for (var i = 20; i >= 1; i--) {
         var mockRule = new Rule();
         mockRule.id = i;
         mockRule.name = "Mock Rule " + i;
         mockRule.description = "Generated rule number " + i;
+        var random = Math.floor(Math.random() * 5) + 1;
+        if(random === 5){
+            mockRule.active = false;
+        }
+
+        random = Math.floor(Math.random() * 4) + 1;
         mockRule.type = "GLOBAL";
+
         mockRule.availability = "PUBLIC";
+        if(random >= 3){
+            mockRule.type = "EVENT";            
+        }
+        if(random === 4){
+            mockRule.availability = "PRIVATE";
+        }
 
         var newNotificationRow = new RuleNotification();
         newNotificationRow.type = "EMAIL";
@@ -92,11 +105,6 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
         var response = searchService.searchMobileTerminals(true)
            .then(updateSearchResults, onGetSearchResultsError);*/
     };    
-
-    //Details button
-    $scope.details = function(item){
-    	console.log("DETAILS ITEM -> " + item);
-    };
 
     //delete rule
     $scope.deleteRule = function(item){
@@ -190,6 +198,32 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
         alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
     };
 
+    //Get status label
+    $scope.getStatusLabelForRule = function(rule){
+        if(rule.active){
+            return locale.getString('common.active'); 
+        }else{
+            return locale.getString('common.inactive'); 
+        }
+    };    
+
+    //Get type label
+    $scope.getTypeLabelForRule = function(rule){
+        var label;
+        switch(rule.type){
+            case 'GLOBAL':
+                label = locale.getString('alarms.rules_type_global'); 
+                break;
+            case 'EVENT':
+                label = locale.getString('alarms.rules_type_event'); 
+                break;
+            default:
+                label = rule.type;
+                break;
+        }        
+        return label;
+    };   
+
     //Export data as CSV file
     $scope.exportRulesAsCSVFile = function(onlySelectedItems){
         var filename = 'rules.csv';
@@ -197,12 +231,13 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
         //Set the header columns
         var header = [
                 locale.getString('alarms.rules_table_name'),
-                locale.getString('alarms.rules_table_definition'),
-                locale.getString('alarms.rules_table_description'),
-                locale.getString('alarms.rules_table_recipient'),
+                locale.getString('alarms.rules_table_type'),
                 locale.getString('alarms.rules_table_last_triggered'),
+                locale.getString('alarms.rules_table_date_created'),
                 locale.getString('alarms.rules_table_createdby'),
-                locale.getString('alarms.rules_table_date_created')
+                locale.getString('alarms.rules_table_subscription'),
+                locale.getString('alarms.rules_table_status'),
+                locale.getString('alarms.rules_table_availability'),
             ];
 
         //Set the data columns
@@ -220,12 +255,13 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
                 function(csvObject, item){
                     var csvRow = [
                             item.name,
-                            item.definitions[0],
-                            item.description,
-                            item.recipient,
+                            $scope.getTypeLabelForRule(item),
                             item.lastTriggered,
+                            item.dateCreated,
                             item.createdBy,
-                            item.dateCreated
+                            item.subscription,
+                            $scope.getStatusLabelForRule(item),
+                            item.availability
                     ];
                     csvObject.push(csvRow);
                     return csvObject;

@@ -138,6 +138,9 @@ table.fullWidth{
     width: 100%;
 }
 
+@searchResultsTableRowColor: #fff;
+@searchResultsTableOddRowColor: #f7f7f7;
+@searchResultsTableRowBorderColor: #e0e0e0;
 
 table.searchResults{
     width: 100%;
@@ -181,7 +184,8 @@ table.searchResults{
 
     >tbody{
         tr{
-            border-bottom: solid 1px #e0e0e0;
+            background: @searchResultsTableRowColor;
+            border-bottom: solid 1px @searchResultsTableRowBorderColor;
             height: 40px;
 
             &:last-child{
@@ -215,14 +219,14 @@ table.searchResults{
 
     &.colorOdd{
         tbody{
-            tr:nth-child(odd) {background: #f7f7f7}
+            tr:nth-child(odd) {background: @searchResultsTableOddRowColor}
         }
     }
 }
 
 //USM tables
 .table-striped > tbody > tr:nth-child(odd) > td, .table-striped > tbody > tr:nth-child(odd) > th{
-    background: #f7f7f7;
+    background: @searchResultsTableOddRowColor;
 }
 .table{
     .fa.fa-sort, .fa.fa-sort-asc, .fa.fa-sort-desc {

@@ -33,6 +33,10 @@ angular.module('unionvmsWeb').factory('Alarm', function() {
         return this.status === "OPEN";
     };
 
+    Alarm.prototype.isClosed = function() {
+        return this.status === "CLOSED";
+    };
+
     Alarm.prototype.copy = function() {
         var copy = new Alarm();
 

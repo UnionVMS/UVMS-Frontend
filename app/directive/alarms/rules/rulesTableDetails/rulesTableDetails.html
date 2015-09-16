@@ -1,0 +1,91 @@
+<div class="rulesTableDetailsContainer">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="advancedSearch">
+                <form novalidate name="advancedSearchForm">
+                    <div class="alarmSearchContainer">
+                        <div class="row">
+
+                            <div class="col-md-2">
+                                <dropdown ng-model="searchObject.TIME_SPAN" no-placeholder-item items="timeSpanOptions"></dropdown>
+                            </div>
+                            <div class="col-md-2">
+                                <datepicker-input model="searchObject.FROM_DATE" time="true" placeholder="{{'common.search_from' | i18n}}"></datepicker-input>
+                            </div>
+                            <div class="col-md-2">
+                                <datepicker-input model="searchObject.TO_DATE" time="true" placeholder="{{'common.search_to' | i18n}}"></datepicker-input>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary btn-sm" ng-click="searchAlarms()" ng-disabled="currentSearchResults.loading">{{'common.search' | i18n}}</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div search-results-table search="currentSearchResults" class="col-md-8">
+            <table class="searchResults">
+                <thead>
+                    <tr>
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'openedDate'">{{'alarms.alarms_table_date_openend' | i18n}}</th>
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'affectedObject'">{{'alarms.alarms_table_object_affected' | i18n}}</th>
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'ruleName'">{{'alarms.alarms_table_rule' | i18n}}</th>
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'resolvedDate'">{{'alarms.alarms_table_date_resolved' | i18n}}</th>
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'resolvedBy'">{{'alarms.alarms_table_resolved_by' | i18n}}</th>                    
+                        <th class="positions">{{'alarms.alarms_table_position' | i18n}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
+                        <td>
+                            <div class="iconToTheLeftOfTheTableCell" ng-show="item.status">
+                                <i ng-show="item.isClosed()" class="fa fa-lg fa-circle closed" tooltip-placement="bottom" tooltip="{{'alarms.alarms_status_closed' | i18n}}"></i>
+                                <i ng-show="item.isOpen()" class="fa fa-lg fa-circle open" tooltip-placement="bottom" tooltip="{{'alarms.alarms_status_open' | i18n}}"></i>
+                            </div>
+                            {{item.openedDate}}
+                        </td>
+                        <td class="link">{{item.affectedObject}}</td>
+                        <td>{{item.ruleName}}</td>
+                        <td>{{item.resolvedDate}}</td>
+                        <td class="link">{{item.resolvedBy}}</td>
+                        <td class="positions">
+                            <i class="fa fa-globe"></i>                       
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="row prevNextPagination" ng-show="currentSearchResults.items.length > 0 && !currentSearchResults.loading">
+                <div class="col-md-4">
+                    <span class="link" ng-show="currentSearchResults.page > 1" ng-click="prevPage()">&#171;
+                     {{"common.previous_page" | i18n}}</span>
+                </div>
+                <div class="col-md-4 textAlignCenter">
+                    {{'common.search_results_current_page' | i18n:[currentSearchResults.page, currentSearchResults.totalNumberOfPages]}}
+                </div>
+                <div class="col-md-4 textAlignRight" >
+                    <span class="link" ng-show="currentSearchResults.page < currentSearchResults.totalNumberOfPages" ng-click="nextPage()">{{"common.next_page" | i18n}} &#187;</span>
+                </div>
+            </div>    
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+</div>

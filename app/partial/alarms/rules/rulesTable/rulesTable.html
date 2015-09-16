@@ -1,36 +1,50 @@
 <div class="row">
 	<div search-results-table search="currentSearchResults" load-next-page-function="loadNextPage" class="col-md-12 rules-table">
-		<table class="searchResults colorOdd">
+		<table class="searchResults">
 			<thead>
 				<tr>
 					<th class="table-checkbox"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
 					<th></th>
 					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'name'">{{'alarms.rules_table_name' | i18n}}</th>
-					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'definitions[0]'">{{'alarms.rules_table_definition' | i18n}}</th>
-					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'description'">{{'alarms.rules_table_description' | i18n}}</th>
-					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'recipient'">{{'alarms.rules_table_recipient' | i18n}}</th>
+					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'type'">{{'alarms.rules_table_type' | i18n}}</th>
 					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'lastTriggered'">{{'alarms.rules_table_last_triggered' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'dateCreated'">{{'alarms.rules_table_date_created' | i18n}}</th>
 					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'createdBy'">{{'alarms.rules_table_createdby' | i18n}}</th>
-					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'dateCreated'">{{'alarms.rules_table_date_created' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'subscription'">{{'alarms.rules_table_subscription' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'active'">{{'alarms.rules_table_status' | i18n}}</th>                                        
+                    <th></th>
 					<th>{{'alarms.rules_table_actions' | i18n}}</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:currentSearchResult.filter">
+				<tr ng-repeat-start="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:currentSearchResult.filter" ng-init="isExpanded = false" ng-class="isExpanded ? 'basicDataExpanded' : 'basicData'">
     				<td class="table-checkbox"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
-    				<td><i class="fa fa-plus-circle detailsIcon" ng-click="details(item)" title="{{'alarms.rules_table_details' | i18n}}"></i></td>
+    				<td ng-click="isExpanded = !isExpanded">
+                        <i ng-show="!isExpanded" class="fa fa-lg fa-plus-circle detailsIcon" title="{{'alarms.rules_table_details' | i18n}}"></i>                        
+                        <i ng-show="isExpanded" class="fa fa-lg fa-minus-circle detailsIcon" title="{{'alarms.rules_table_details' | i18n}}"></i>
+                    </td>
     				<td>{{item.name}}</td>
-    				<td class="definition">{{item.definitionsAsText()}}</td>
-    				<td>{{item.description}}</td>
-    				<td>{{item.recipient}}</td>
+    				<td>{{getTypeLabelForRule(item)}}</td>
     				<td>{{item.lastTriggered}}</td>
-    				<td>{{item.createdBy}}</td>
-    				<td>{{item.dateCreated}}</td>
-    				<td>
-    					<i class="fa fa-pencil editIcon" ng-click="toggleRuleDetails(item)" title="{{'alarms.rules_table_edit'| i18n}}"></i>
-    					<i class="fa fa-trash-o deleteIcon" ng-click="deleteRule(item)" title="{{'alarms.rules_table_delete'| i18n}}"></i>
+                    <td>{{item.dateCreated}}</td>
+                    <td class="link">{{item.createdBy}}</td>
+                    <td>{{item.subscription}}</td>
+                    <td ng-class="item.active ? 'active' : 'inactive'">{{getStatusLabelForRule(item)}}</td>
+                    <td class="availability textAlignCenter">
+                        <i ng-show="item.availability === 'PUBLIC'" class="fa fa-lg fa-users" tooltip-placement="bottom" tooltip="{{'alarms.rules_availability_public' | i18n}}"></i>
+                        <i ng-show="item.availability === 'PRIVATE'" class="fa fa-lg fa-user" tooltip-placement="bottom" tooltip="{{'alarms.rules_availability_private' | i18n}}"></i>
+                    </td>
+    				<td class="actions">
+    					<i class="fa fa-lg fa-pencil editIcon" ng-click="toggleRuleDetails(item)" title="{{'alarms.rules_table_edit'| i18n}}"></i>
+    					<i class="fa fa-lg fa-trash-o deleteIcon" ng-click="deleteRule(item)" title="{{'alarms.rules_table_delete'| i18n}}"></i>
     				</td>
 				</tr>
+                <tr ng-repeat-end="" ng-show="isExpanded" class="detailData">
+                    <td colspan="2">&nbsp;</td>
+                    <td colspan="9" class="detailsContainer">
+                        <rules-table-details rule="item" ng-if="isExpanded"></rules-table-details>
+                    </td>
+                </tr>
 			</tbody>
 		</table>
 	</div>

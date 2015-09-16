@@ -2,15 +2,16 @@ angular.module('unionvmsWeb').controller('AlarmSearchController', function($scop
 
 	var DATE_CUSTOM = "Custom";
 
-    $scope.advancedSearchObject.TIME_SPAN = '24';
-	$scope.timeSpanOptions = [{
-		text:'24h',
-		code:'24'
-	},
-	{
-		text: locale.getString("config.ALARMS_TIME_SPAN_custom"),
-		code: DATE_CUSTOM
-	}];
+    $scope.timeSpanOptions = [{
+        text:'24' +locale.getString('common.time_hour_short'),
+        code:'24'
+    },
+    {
+        text: locale.getString("config.ALARMS_TIME_SPAN_custom"),
+        code: DATE_CUSTOM
+    }];
+
+    $scope.advancedSearchObject.TIME_SPAN = $scope.timeSpanOptions[0].code;
 
     //Reset the form
     $scope.resetSearch = function(){

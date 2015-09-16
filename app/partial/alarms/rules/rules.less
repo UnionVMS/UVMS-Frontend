@@ -16,15 +16,50 @@
 
 	}
 	.editIcon{
-		color:green;
+		color:@primaryColor;
 		margin-right: 15px;
 	}
 	.deleteIcon{
 		color:red;
 	}
-	.definition{
-		text-overflow: ellipsis;
-		overflow: hidden;
-		padding-right: 10px;
-	}
+}
+
+.rules-table{
+    td.active{
+        color:@successColor;
+    }
+    td.inactive{
+        color:@errorColor;
+    }
+    td.availability{
+        i{
+            cursor: default;
+        }
+    }
+    td.actions{
+        width: 70px;
+        text-align: right;
+        padding-right: 15px;        
+    }
+
+    i{
+        cursor: pointer;
+    }    
+
+    table{
+        tbody{
+            tr{background: @searchResultsTableRowColor;}
+            tr:nth-child(4n+1) {background: @searchResultsTableOddRowColor !important;}
+            tr:nth-child(4n+2) {background: @searchResultsTableOddRowColor !important;}
+            tr.basicDataExpanded{
+                border-bottom: none;
+            }
+
+            tr.detailData{
+                td.detailsContainer{
+                    border-top:1px solid @searchResultsTableRowBorderColor;
+                }
+            }
+        }
+    }
 }

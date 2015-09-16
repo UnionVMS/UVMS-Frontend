@@ -7,30 +7,30 @@ angular.module('unionvmsWeb').factory('searchService',function($q, GetListReques
         return moment(timeToTransform).format("YYYY-MM-DD HH:mm:ss Z");
     };
 
-    var checkTimeSpanAndTimeZone = function(searchCriteria){
+    var checkTimeSpanAndTimeZone = function(searchCriterias){
         var i, idx;
-        for (i = 0; i < searchCriteria.length; i++) {
-            if(searchCriteria[i].key === "TIME_SPAN"){
+        for (i = 0; i < searchCriterias.length; i++) {
+            if(searchCriterias[i].key === "TIME_SPAN"){
                 idx = i;
-                if(searchCriteria[i].value !== "Custom"){
-                        searchCriteria.push(new SearchField("TO_DATE", moment()));
-                        searchCriteria.push(new SearchField("FROM_DATE", moment().add('hours', -searchCriteria[i].value)));
+                if(searchCriterias[i].value.toUpperCase() !== "CUSTOM"){
+                        searchCriterias.push(new SearchField("TO_DATE", moment()));
+                        searchCriterias.push(new SearchField("FROM_DATE", moment().add('hours', -searchCriterias[i].value)));
                 }
             }
         }
 
         if (angular.isDefined(idx)){
-            searchCriteria.splice(idx,1);    
+            searchCriterias.splice(idx,1);    
         }
         var dateCriterias = ["END_DATE","START_DATE", "REPORTING_START_DATE", "REPORTING_END_DATE", "TO_DATE", "FROM_DATE" ];
         
-        for (i = 0; i < searchCriteria.length; i++) {
-            if ( dateCriterias.indexOf(searchCriteria[i].key) >= 0){
-                    searchCriteria[i].value = addUTCTimeZone(searchCriteria[i].value);
+        for (i = 0; i < searchCriterias.length; i++) {
+            if ( dateCriterias.indexOf(searchCriterias[i].key) >= 0){
+                    searchCriterias[i].value = addUTCTimeZone(searchCriterias[i].value);
             }
         }
 
-        return searchCriteria;
+        return searchCriterias;
     };
 
     var vesselSearchKeys = [
@@ -342,6 +342,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, GetListReques
                 }
             }
         },
+        updateTimeSpanAndTimeZone : checkTimeSpanAndTimeZone
 
 	};
 

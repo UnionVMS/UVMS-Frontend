@@ -6,6 +6,7 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleNotif
             this.description = undefined;
             this.type = "GLOBAL";
             this.availability = "PUBLIC";
+            this.active = true;
             this.definitions = [];
             this.notifications = [];
             this.recipient = "FMC";

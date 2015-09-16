@@ -58,13 +58,13 @@
                     </div>                    
                     <div class="pagination" ng-show="currentSearchResults.items.length > 0 && !currentSearchResults.loading">
                         <div class="col-md-4">
-                            <span ng-show="currentSearchResults.page > 1" ng-click="gotoPrevPageInAssignVesselSearchResults()">&lt; {{"vessel.previous_page" | i18n}}</span>
+                            <span ng-show="currentSearchResults.page > 1" ng-click="gotoPrevPageInAssignVesselSearchResults()">&#171; {{"common.previous_page" | i18n}}</span>
                         </div>
                         <div class="col-md-4 textAlignCenter">
                             {{'common.search_results_current_page' | i18n:[currentSearchResults.page, currentSearchResults.totalNumberOfPages]}}
                         </div>
                         <div class="col-md-4 textAlignRight" >
-                            <span ng-show="currentSearchResults.page < currentSearchResults.totalNumberOfPages" ng-click="gotoNextPageInAssignVesselSearchResults()">{{"vessel.next_page" | i18n}} &gt;</span>
+                            <span ng-show="currentSearchResults.page < currentSearchResults.totalNumberOfPages" ng-click="gotoNextPageInAssignVesselSearchResults()">{{"common.next_page" | i18n}} &#187;</span>
                         </div>                        
                     </div>
                 </div>

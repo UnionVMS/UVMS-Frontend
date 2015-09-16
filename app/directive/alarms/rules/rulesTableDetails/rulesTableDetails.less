@@ -1,0 +1,64 @@
+.rulesTableDetailsContainer{
+
+    //font-size: 12px;
+    margin-bottom: 10px;
+
+    .searchResultsContainer{
+        margin-bottom: 30px;
+    }
+
+    table.searchResults{
+
+        thead{
+            border-bottom: none;
+            tr{
+                background: inherit !important;
+            }
+            th{
+                height:30px;
+                >a{
+                    .fa.fa-sort, .fa.fa-caret-down , .fa.fa-caret-up
+                    {
+                        margin-left:7px;
+                    }
+                }
+            }
+
+            th.positions{
+                text-align: center;
+            }
+        }        
+        >tbody{
+            tr{
+                background: inherit !important;
+                border-bottom: none;
+                height: 30px;
+
+                td div.iconToTheLeftOfTheTableCell{
+                    position: absolute;
+                    left:-20px;
+                    i{
+                        cursor: default;
+                    }
+                    .closed{
+                        color: @successColor;
+                    }
+                    .open{
+                        color: @errorColor;
+                    }
+                }
+
+                td.positions,{
+                    text-align: center;
+                    color:@primaryColor;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .prevNextPagination{
+        color:#999;
+    }
+
+}
