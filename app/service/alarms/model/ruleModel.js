@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleNotification) {
+angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition,  RuleTimeInterval) {
 
         function Rule(){
             this.id = undefined;
@@ -8,29 +8,37 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleNotif
             this.availability = "PUBLIC";
             this.active = true;
             this.definitions = [];
-            this.notifications = [];
+            this.timeIntervals = [];
+            this.availableNotifications = {
+                OPEN_TICKET : false,
+                NOTIFICATION : false,
+                EMAIL : false,
+            };
             this.recipient = "FMC";
             this.lastTriggered = "2015-02-05 08:00";
             this.createdBy = "antkar";
             this.dateCreated = "2015-08-31 09:00";
+
+
+            this.notifyByEMail = undefined;
+            this.subscription = undefined;            
         }
 
         Rule.prototype.addDefinition = function(def){
             this.definitions.push(def);
         };
 
-        Rule.prototype.addNotification = function(not){
-            this.notifications.push(not);
-        };
+        Rule.prototype.addTimeInterval = function(inter){
+            this.timeIntervals.push(inter);
+        };        
 
         Rule.prototype.getNumberOfDefinitions = function(){
             return this.definitions.length;
         };
 
-        Rule.prototype.getNumberOfNotifications = function(){
-            return this.notifications.length;
+        Rule.prototype.getNumberOfTimeIntervals = function(){
+            return this.timeIntervals.length;
         };
-
 
         Rule.prototype.definitionsAsText = function(){
             var text = '';
@@ -40,6 +48,11 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleNotif
 
             return text;
         };
+
+        Rule.prototype.isSubscriptionPossible = function(){
+            return this.availableNotifications.OPEN_TICKET || this.availableNotifications.NOTIFICATION;
+        };
+
 
         Rule.fromJson = function(data){
             //TODO: Implement this
@@ -51,14 +64,11 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleNotif
                 description : this.description,
                 type : this.type,
                 availability : this.availability,
+                availableNotifications : this.availableNotifications,
                 definitions : this.definitions.reduce(function(defs, def){
                     defs.push(def.DTO());
                     return defs;
                 },[]),
-                notifications : this.notifications.reduce(function(nots, not){
-                    nots.push(not.DTO());
-                    return nots;
-                },[]),                
             };
         };
 
@@ -68,21 +78,27 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleNotif
             copy.id = this.id;
             copy.name = this.name;
             copy.type = this.type;
+            copy.availability = this.availability;
+            copy.active = this.active;
             copy.description = this.description;
             copy.recipient = this.recipient;
             copy.lastTriggered = this.lastTriggered;
             copy.createdBy = this.createdBy;
             copy.dateCreated = this.dateCreated;
+            copy.availableNotifications = this.availableNotifications;
 
             copy.definitions = [];
             $.each(this.definitions, function(index, definition){
                 copy.definitions.push(definition.copy());
             });
 
-            copy.notifications = [];
-            $.each(this.notifications, function(index, notification){
-                copy.notifications.push(notification.copy());
+            copy.timeIntervals = [];
+            $.each(this.timeIntervals, function(index, timeInterval){
+                copy.timeIntervals.push(timeInterval.copy());
             });
+
+            copy.notifyByEMail = this.notifyByEMail;
+            copy.subscription = this.subscription;
 
             return copy;
         };
@@ -180,29 +196,30 @@ angular.module('unionvmsWeb').factory('RuleDefinition', function() {
     });
 
 
-angular.module('unionvmsWeb').factory('RuleNotification', function() {
+angular.module('unionvmsWeb').factory('RuleTimeInterval', function() {
 
 
-        function RuleNotification(){
-            this.type = "undefined";
-            this.text = undefined;
+        function RuleTimeInterval(){
+            this.start = undefined;
+            this.end = undefined;
         }
 
-        RuleNotification.prototype.copy = function() {
-            var copy = new RuleNotification();
 
-            copy.type = this.type;
-            copy.text = this.text;
+        RuleTimeInterval.prototype.copy = function() {
+            var copy = new RuleTimeInterval();
+
+            copy.start = this.start;
+            copy.end = this.end;
 
             return copy;
         };
 
-        RuleNotification.prototype.DTO = function(){
+        RuleTimeInterval.prototype.DTO = function(){
             return {
-                type : this.type,
-                text : this.text,
+                start : this.start,
+                end : this.end,
             };
         };        
 
-        return RuleNotification;
+        return RuleTimeInterval;
     });

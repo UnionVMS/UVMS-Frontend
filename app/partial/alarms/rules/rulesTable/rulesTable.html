@@ -10,10 +10,11 @@
 					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'lastTriggered'">{{'alarms.rules_table_last_triggered' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'dateCreated'">{{'alarms.rules_table_date_created' | i18n}}</th>
 					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'createdBy'">{{'alarms.rules_table_createdby' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'subscription'">{{'alarms.rules_table_subscription' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'active'">{{'alarms.rules_table_status' | i18n}}</th>                                        
+                    <th>{{'alarms.rules_table_subscription' | i18n}}</th>
+                    <th>{{'alarms.rules_table_notify_by_email' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'active'">{{'alarms.rules_table_status' | i18n}}</th>
                     <th></th>
-					<th>{{'alarms.rules_table_actions' | i18n}}</th>
+                    <th>{{'alarms.rules_table_actions' | i18n}}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -28,7 +29,19 @@
     				<td>{{item.lastTriggered}}</td>
                     <td>{{item.dateCreated}}</td>
                     <td class="link">{{item.createdBy}}</td>
-                    <td>{{item.subscription}}</td>
+                    <td class="subscription">
+                        <div ng-if="item.active && item.isSubscriptionPossible()">
+                            <dropdown ng-model="item.subscription" initialtext="{{'common.none' | i18n}}" initialtext-selectable items="getSubscriptionOptions(item)"></dropdown>
+                        </div>
+                    </td>
+                    <td class="notifyByEmail">
+                        <div ng-show="item.active && item.availableNotifications.EMAIL">
+                            <input type="text" ng-model="item.notifyByEmail" class="form-control" placeholder="{{'alarms.rules_table_notify_by_email_input_placeholder' | i18n}}">
+                        </div>
+                        <div ng-show="item.active && !item.availableNotifications.EMAIL">
+                            <input type="text" disabled class="form-control" placeholder="{{'common.not_available' | i18n}}">
+                        </div>                        
+                    </td>
                     <td ng-class="item.active ? 'active' : 'inactive'">{{getStatusLabelForRule(item)}}</td>
                     <td class="availability textAlignCenter">
                         <i ng-show="item.availability === 'PUBLIC'" class="fa fa-lg fa-users" tooltip-placement="bottom" tooltip="{{'alarms.rules_availability_public' | i18n}}"></i>
@@ -46,6 +59,6 @@
                     </td>
                 </tr>
 			</tbody>
-		</table>
-	</div>
+		</table>        
+    </div>
 </div>

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, locale, alertService, ruleRestService, Rule, RuleDefinition, RuleNotification, GetListRequest, vesselRestService, mobileTerminalRestService){
+angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, locale, alertService, ruleRestService, Rule, RuleDefinition, RuleTimeInterval, GetListRequest, vesselRestService, mobileTerminalRestService){
 
     $scope.submitAttempted = false;
 
@@ -18,10 +18,6 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         //Add a new definition row to new rules
         if($scope.currentRule.getNumberOfDefinitions() === 0){
             $scope.addDefinitionRow();
-        }
-        //Add a new notification row to new rules
-        if($scope.currentRule.getNumberOfNotifications() === 0){
-            $scope.addNotificationItem();
         }
 
         //Reset form validation
@@ -57,11 +53,10 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         {'text': 'Public','code':'PUBLIC'},
         {'text': 'Private','code':'PRIVATE'}
     ];
-    $scope.notificationTypes =[    
-        {'text': 'E-mail','code':'EMAIL'},
-        {'text': 'SMS','code':'SMS'},
-    ];     
-
+    $scope.activeStatuses =[    
+        {'text': 'Active','code':true},
+        {'text': 'Inactive','code':false}
+    ];
 
     //DEFINITION VALUES
     $scope.startOperators = createDropdownItemsWithSameTextAsValue(['(', '((', '(((']);   
@@ -94,11 +89,9 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         $scope.currentRule.addDefinition(ruleDef);
     };
 
-    //Add a notification row
-    $scope.addNotificationItem = function(){
-        var newNotificationRow = new RuleNotification();
-        newNotificationRow.type = $scope.notificationTypes[0].code;
-        $scope.currentRule.addNotification(newNotificationRow);
+    //Add a time interval row
+    $scope.addTimeIntervalItem = function(){
+        $scope.currentRule.addTimeInterval(new RuleTimeInterval());
     };
 
     //Disable availability dropdown when type is GLOBAL
@@ -150,18 +143,18 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         });        
     };
 
-    //Remove a notification row
-    $scope.removeNotificationItem = function(notificationToBeRemoved){
+    //Remove a time interval row
+    $scope.removeTimeIntervalItem = function(intervalToBeRemoved){
         var indexToRemove = -1;
-        $.each($scope.currentRule.notifications, function(i, def){
-            if(notificationToBeRemoved === def){
+        $.each($scope.currentRule.timeIntervals, function(i, interval){
+            if(intervalToBeRemoved === interval){
                 indexToRemove = i;
                 return false;
             }
 
         });
         if(indexToRemove >= 0){
-            $scope.currentRule.notifications.splice(indexToRemove, 1);
+            $scope.currentRule.timeIntervals.splice(indexToRemove, 1);
         }
     };
 
@@ -171,7 +164,7 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
             alertService.showErrorMessage(locale.getString('alarms.rules_add_new_alert_message_on_form_validation_error'));
             return false;
         }
-        ///TODO: More validation of definitions and notification
+        ///TODO: More validation of definitions and other inputs
     };
 
     //Create the rule

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, locale, csvService, alertService, $filter, Rule,  RuleDefinition, RuleNotification, ruleRestService, SearchResults, SearchResultListPage){
+angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, locale, csvService, alertService, $filter, Rule,  RuleDefinition, ruleRestService, SearchResults, SearchResultListPage){
 
     $scope.selectedRules = []; //Selected rules checkboxes
 
@@ -24,26 +24,58 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
         mockRule.id = i;
         mockRule.name = "Mock Rule " + i;
         mockRule.description = "Generated rule number " + i;
-        var random = Math.floor(Math.random() * 5) + 1;
+
+
+        var random = Math.floor(Math.random() * 4) + 1;
+        if(random === 1){
+            mockRule.availableNotifications.NOTIFICATION = true;
+            mockRule.availableNotifications.OPEN_TICKET = true;
+        }
+        else if(random === 2){
+            mockRule.availableNotifications.OPEN_TICKET = true;
+        }
+        else if(random === 3){
+            mockRule.availableNotifications.NOTIFICATION = true;
+        }
+
+
+        random = Math.floor(Math.random() * 5) + 1;
         if(random === 5){
             mockRule.active = false;
+        }else{
+            if(random === 4){
+                if(mockRule.availableNotifications.NOTIFICATION){
+                    mockRule.subscription = 'NOTIFICATION';
+                }
+            }
+            if(random === 3){
+                if(mockRule.availableNotifications.OPEN_TICKET){
+                    mockRule.subscription = 'OPEN_TICKET';
+                }
+            }        
         }
+
 
         random = Math.floor(Math.random() * 4) + 1;
         mockRule.type = "GLOBAL";
 
-        mockRule.availability = "PUBLIC";
+        mockRule.availability = "PUBLIC";        
+        random = Math.floor(Math.random() * 3) + 1;
+        if(random === 1){
+            mockRule.availableNotifications.EMAIL = true;
+        }else if(random === 2){
+            mockRule.availableNotifications.EMAIL = true;
+            mockRule.notifyByEmail = "john.smith@mail.com";
+        }else{
+            mockRule.availableNotifications.EMAIL = false;            
+        }
+
         if(random >= 3){
             mockRule.type = "EVENT";            
         }
         if(random === 4){
             mockRule.availability = "PRIVATE";
         }
-
-        var newNotificationRow = new RuleNotification();
-        newNotificationRow.type = "EMAIL";
-        newNotificationRow.text = "myname@mail.com";
-        mockRule.addNotification(newNotificationRow);
 
         var ruleDef1 = new RuleDefinition();
         ruleDef1.startOperator =  "(";
@@ -223,6 +255,29 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
         }        
         return label;
     };   
+
+    //Subscription dropdown options
+    var openticketsOpt = {'text': locale.getString('alarms.open_ticket'), 'code':'OPEN_TICKET'};
+    var notificationOpt = {'text': locale.getString('alarms.notification'), 'code':'NOTIFICATION'};
+    $scope.subscriptionsAll = [openticketsOpt, notificationOpt];
+    $scope.subscriptionsNotificationOnly = [notificationOpt];
+    $scope.subscriptionsOpenTicketsOnly = [openticketsOpt];
+ 
+    $scope.getSubscriptionOptions = function(rule){
+        console.log(rule);
+        var available = rule.availableNotifications;
+        if(available.OPEN_TICKET && available.NOTIFICATION){
+            return $scope.subscriptionsAll;
+        }
+
+        if(available.NOTIFICATION){
+            return $scope.subscriptionsNotificationOnly;
+        }  
+
+        if(available.OPEN_TICKET){
+            return $scope.subscriptionsOpenTicketsOnly;
+        }
+    };
 
     //Export data as CSV file
     $scope.exportRulesAsCSVFile = function(onlySelectedItems){

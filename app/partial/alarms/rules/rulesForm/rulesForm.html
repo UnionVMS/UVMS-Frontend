@@ -57,42 +57,65 @@
                         <div class="col-md-8">
                             <div class="form-group">
                                 <label>{{'alarms.rules_form_description_label' | i18n}}</label>
-                                <textarea name="description" class="form-control" ng-model="currentRule.description" placeholder="{{'alarms.rules_form_description_placeholder' | i18n}}"></textarea>
+                                <textarea name="description" class="form-control description" ng-model="currentRule.description" placeholder="{{'alarms.rules_form_description_placeholder' | i18n}}"></textarea>
                             </div>                    
                         </div> 
                        <div class="col-md-4">
                             <div class="form-group">
                                 <label>{{'alarms.rules_form_availability_label' | i18n}}</label>
                                 <dropdown ng-model="currentRule.availability" no-placeholder-item items="availabilityTypes" ng-disabled="disableAvailability"></dropdown>
-                            </div>                    
+                            </div>
+                            <div class="form-group">
+                                <label>{{'alarms.rules_form_status_label' | i18n}}</label>
+                                <dropdown ng-model="currentRule.active" no-placeholder-item items="activeStatuses"></dropdown>
+                            </div>                                                   
                         </div>                  
                     </div>                    
                 </div>
                 <div class="col-md-5 col-md-offset-1">
-                    <label>{{'alarms.rules_form_definition_notification_label' | i18n}}</label>
-                    <div class="definition" ng-repeat="notification in currentRule.notifications">
-                        <div class="row" ng-form="notificationForm">
-                            <div class="col-md-4">
+                    <label>{{'alarms.rules_time_interval_header' | i18n}}</label>
+                    <div class="timeInterval" ng-repeat="timeInterval in currentRule.timeIntervals">
+                        <div class="row" ng-form="intervalForm">
+                            <div class="col-md-5">
                                 <div class="form-group">
-                                    <dropdown ng-model="notification.type" no-placholder-item items="notificationTypes" name="type"></dropdown>
+                                    <datepicker-input name="start" model="timeInterval.start"></datepicker-input>
                                 </div>           
                             </div>
-                            <div class="col-md-7">
+                            <div class="col-md-1 toText">
+                                {{'common.date_to' | i18n}}
+                            </div>
+                            <div class="col-md-5">
                                 <div class="form-group">
-                                    <input type="text" name="text" class="form-control" ng-model="notification.text" required/>
+                                    <datepicker-input name="end" model="timeInterval.end"></datepicker-input>
                                 </div>
                             </div>
-                            <div class="col-md-1 remove" ng-show="$index > 0">
-                                <i class="fa fa-lg fa-times" title="{{'common.remove' | i18n}}" ng-click="removeNotificationItem(notification)"></i>
+                            <div class="col-md-1 remove">
+                                <i class="fa fa-lg fa-times" title="{{'common.remove' | i18n}}" ng-click="removeTimeIntervalItem(timeInterval)"></i>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="addMoreLink" ng-click="addNotificationItem()">{{'alarms.rules_form_notification_add' | i18n}}</div
+                            <div class="addMoreLink" ng-click="addTimeIntervalItem()">
+                                <span ng-show="currentRule.getNumberOfTimeIntervals() === 0">{{'alarms.rules_form_time_interval_add' | i18n}}</span>
+                                <span ng-show="currentRule.getNumberOfTimeIntervals() > 0">{{'alarms.rules_form_time_interval_add_another' | i18n}}</span>
+                            </div
                             >
                         </div>
-                    </div>   
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>{{'alarms.rules_form_notifications_label' | i18n}}</label>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="checkbox" ng-model="currentRule.availableNotifications.OPEN_TICKET"> Open ticket
+                            <br>
+                            <input type="checkbox" ng-model="currentRule.availableNotifications.NOTIFICATION"> Notification
+                        </div>
+                        <div class="col-md-6">
+                            <input type="checkbox" ng-model="currentRule.availableNotifications.EMAIL"> E-mail
+                        </div>                        
+                    </div>
                 </div>
             </div>
 
@@ -119,7 +142,7 @@
 
                             <tr ng-repeat="item in currentRule.definitions">
                                 <td class="startOperator">
-                                    <dropdown ng-model="item.startOperator"initialtext="-" initialtext-selectable items="startOperators"></dropdown>
+                                    <dropdown ng-model="item.startOperator" initialtext="-" initialtext-selectable items="startOperators"></dropdown>
                                 </td>
                                 <td class="criteria">
                                     <dropdown ng-model="item.criteria" no-placeholder-item items="criterias" callback="criteriaSelected" callback-params="item"></dropdown>
@@ -182,5 +205,5 @@
         </div>
     </div>    
 
-
+    {{currentRule | json}}
 </div>
