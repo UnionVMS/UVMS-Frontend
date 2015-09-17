@@ -77,6 +77,17 @@
     "rules_add_new_alert_message_on_success" : "The rule has been created successfully.",
     "rules_add_new_alert_message_on_error" : "The rule could not be created.",
     "rules_update_alert_message_on_success" : "The rule has been updated successfully.",
-    "rules_update_alert_message_on_error" : "The rule could not be updated."
+    "rules_update_alert_message_on_error" : "The rule could not be updated.",
 
+
+    "position_report_header" : "Position report",
+    "position_report_accept_and_poll" : "Accept & Poll",
+    "position_report_reject" : "Reject",
+    "position_report_accept" : "Accept",
+    "position_report_recipient" : "Recipient",
+    "position_report_status" : "Status",
+    "position_report_asset_information" : "Asset information",
+    "position_report_position_information" : "Position information",
+    "position_report_inactivate_position" : "Inactivate position (will not show on map)",
+    "position_report_assign_asset_from_list" : "Assign asset from list"
 }

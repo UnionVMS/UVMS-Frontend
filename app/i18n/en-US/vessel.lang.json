@@ -5,6 +5,7 @@
     "add_new_alert_message_on_success" : "The vessel has now been created.",
     "search_advanced_expand" : "+ Advanced search",
     "search_input_placeholder" : "Name/CFR/IRCS",
+    "search_vessel_placeholder" : "Search for vessel",
     "table_details_button" : "Details",
     "table_header_details" : "Details",
     "table_header_external_marking" : "Ext. marking",

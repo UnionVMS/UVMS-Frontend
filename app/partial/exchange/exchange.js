@@ -98,13 +98,13 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         var label;
         switch(status){
             case 'SUCCESSFUL':
-                label = locale.getString('exchange.status_successful'); 
+                label = locale.getString('common.status_successful'); 
                 break;
             case 'PENDING':
-                label = locale.getString('exchange.status_pending'); 
+                label = locale.getString('common.status_pending'); 
                 break;
             case 'ERROR':
-                label = locale.getString('exchange.status_failed'); 
+                label = locale.getString('common.status_failed'); 
                 break;
             default:
                 label = status;

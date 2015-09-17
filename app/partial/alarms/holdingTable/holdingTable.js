@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage){
+angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage, PositionReportModal, ManualPosition){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -190,5 +190,33 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         }        
         $scope.editSelection = "";
     };    
+
+    $scope.resolveItem = function(item){
+
+        //Create dummy position for now
+        //TODO: Use real message values
+        var position = new ManualPosition();
+        position.id = 123456;
+        position.speed = 23.3;
+        position.course = 134;
+        position.time = item.openedDate;
+        position.updatedTime = item.openedDate;
+        position.status = "010";
+        position.archived = false;
+        position.position.longitude = 11.82;
+        position.position.latitude = 54.56;
+        position.carrier.cfr ="SWE0001234";
+        position.carrier.name ="Nordvåg";
+        position.carrier.externalMarking ="VG40";
+        position.carrier.ircs ="SKRM";
+        position.carrier.flagState ="SWE";
+        position.message = {
+            status : 'PENDING'
+        };
+       
+        PositionReportModal.show(position).then(function(result) {
+            //Nothing
+        });
+    };
 
 });

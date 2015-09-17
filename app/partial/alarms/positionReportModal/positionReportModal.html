@@ -1,0 +1,189 @@
+<div class="modal-header" style="text-align:left">
+    <div class="pointer pull-right" ng-click="cancel()">
+        <i class="fa fa-times closeicon"></i>
+    </div>
+    <h4 class="modal-title">{{ 'alarms.position_report_header' | i18n }}</h4>
+</div>
+
+<div class="modal-body">
+
+    <div class="row">
+        <div class="col-md-12">            
+            {{'common.status' | i18n}} 
+            <span class="label" ng-class="{SUCCESSFUL:'label-success', PENDING:'label-warning', 'ERROR':'label-danger'}[position.message.status]">
+                {{getStatusLabel(position.message.status) | uppercase}}
+            </span>
+
+            {{'alarms.position_report_recipient' | i18n}}  <b>{{position.message.recipient}}</b>
+        </div>
+    </div>
+
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="sectionHeader">                        
+                    {{'alarms.position_report_asset_information' | i18n}}
+                </div>
+                <span class="assignAssetLink" ng-click="toggleAssignAsset()">{{'alarms.position_report_assign_asset_from_list' | i18n}}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <label>{{'movement.manual_position_field_label_flag_state' | i18n}}</label>
+                <div class="value">{{position.carrier.flagState}}</div>
+            </div>
+            <div class="col-md-3">
+                <label>{{'movement.manual_position_field_label_ircs' | i18n}}</label>
+                <div class="value">{{position.carrier.ircs}}</div>
+            </div>
+            <div class="col-md-3">
+                <label>{{'movement.manual_position_field_label_cfr' | i18n}}</label>
+                <div class="value">{{position.carrier.cfr}}</div>
+            </div>  
+            <div class="col-md-3">
+                <label>{{'movement.manual_position_field_label_external_marking' | i18n}}</label>
+                <div class="value">{{position.carrier.externalMarking}}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <label>{{'movement.manual_position_field_label_name' | i18n}}</label>
+                <div class="value">{{position.carrier.name}}</div>
+            </div>
+        </div>
+
+        <div class="row" ng-show="isVisible.assignAsset">
+            <div class="col-md-12">
+                <div class="searchVesselContainer">
+                    <div class="row searchFormContainer">
+                        <form>
+                            <!-- Search input -->
+                            <div class="col-md-5">
+                                <input type="text" class="form-control searchText" placeholder="{{'vessel.search_vessel_placeholder' | i18n}}" ng-model="assignAssetSearchText">
+                            </div>
+                            
+                            <!-- Type Dropdown -->
+                            <div class="col-md-5">
+                                <dropdown ng-model="assignAssetSearchType" no-placeholder-item items="assignAssetSearchTypes"></dropdown>                        
+                            </div>
+
+                            <!-- Search button -->
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary btn-sm searchButton" ng-click="searchVessel()" ng-disabled="!assignAssetSearchText">
+                                    <span class="fa fa-search" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="row">
+                        <div search-results-table search="currentSearchResults" class="col-md-12">
+                            <table class="searchResults colorOdd" ng-show="currentSearchResults.items.length > 0">
+                                <thead>
+                                    <tr>
+                                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'ircs'">{{"vessel.ircs" | i18n}}</th>
+                                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'name'">{{"vessel.name" | i18n}}</th>
+                                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'cfr'">{{"vessel.cfr" | i18n}}</th>
+                                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'externalMarking'">{{"vessel.external_marking" | i18n}}</th>
+                                        <th>&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tr ng-repeat="vessel in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
+                                    <td>{{vessel.ircs}}</td>
+                                    <td>{{vessel.name}}</td>
+                                    <td>{{vessel.cfr}}</td>
+                                    <td>{{vessel.externalMarking}}</td>
+                                    <td class="textAlignRight">
+                                        <button type="button" class="btn btn-primary" ng-click="selectVessel(vessel)">
+                                            {{"common.add" | i18n | uppercase}}
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>                                                    
+                        </div>
+                    </div>
+                    <prev-next-page-pagination page="currentSearchResults.page" total="currentSearchResults.totalNumberOfPages" next="nextVesselPage" prev="prevVesselPage"></prev-next-page-pagination>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="sectionHeader">
+                    {{'alarms.position_report_position_information' | i18n}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <label>{{'movement.manual_position_field_label_status' | i18n}}</label>
+                <div class="value">{{position.status}}</div>
+            </div>
+            <div class="col-md-9">
+                <label>{{'movement.manual_position_field_label_date_time' | i18n}}</label>
+                <div class="value">{{position.time}}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <label>{{'movement.manual_position_field_label_latitude' | i18n}}</label>
+                <div class="value">{{position.position.latitude}}</div>
+            </div>  
+            <div class="col-md-3">
+                <label>{{'movement.manual_position_field_label_longitude' | i18n}}</label>
+                <div class="value">{{position.position.longitude}}</div>
+            </div>  
+            <div class="col-md-3">
+                <label>{{'movement.manual_position_field_label_measured_speed' | i18n}}</label>
+                <div class="value">{{position.speed}} {{"movement.manual_position_field_unit_knots" | i18n}}</div>
+            </div>
+            <div class="col-md-3">
+                <label>{{'movement.manual_position_field_label_course' | i18n}}</label>
+                <div class="value">{{position.speed}} {{"movement.manual_position_field_unit_degrees" | i18n}}</div>
+            </div>                
+        </div>            
+    </div>
+
+    <div ng-if="modalStatusText" ng-class="modalStatusClass" class="alert" style="padding: 5px 15px; margin: 15px -10px;">
+        {{ modalStatusText }}
+    </div>
+
+    <div class="mapContainer">
+        <leaflet center="center" markers="markers" height="200px" width="100%"></leaflet>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="sectionHeader">                        
+                {{'common.actions' | i18n}}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <input type="checkbox" ng-model="inactivePosition"/> <span ng-click="inactivePosition = !inactivePosition;">
+                {{'alarms.position_report_inactivate_position' | i18n}}
+            </span>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <div class="row buttons">
+        <div class="buttonGroups">
+            <div class="buttonGroup">
+                <a class="button" ng-click="cancel()">{{"common.cancel" | i18n}}</a>                    
+            </div>
+            <div class="buttonGroup button-group-right">
+                <a ng-show="acceptAndPollIsAllowed()" class="button" ng-click="acceptAndPoll()">
+                    {{"alarms.position_report_accept_and_poll" | i18n}}
+                </a>
+
+                <button class="btn btn-danger button" type="submit" ng-click="reject()">
+                    <i class="fa fa-times"></i> {{"alarms.position_report_reject" | i18n}}
+                </button>
+                <button class="btn btn-success button" type="submit" ng-click="accept()">
+                    <i class="fa fa-check"></i> {{"alarms.position_report_accept" | i18n}}
+                </button>                    
+            </div>
+        </div>
+    </div>
+</div>

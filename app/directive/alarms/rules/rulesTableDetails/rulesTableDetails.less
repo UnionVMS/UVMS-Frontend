@@ -13,6 +13,16 @@
             border-bottom: none;
             tr{
                 background: inherit !important;
+                border-bottom: none;
+
+                &.searchInputRow{
+                    .searchButton{
+                        button{
+                            width: 100%;
+                        }                        
+                    }
+                }
+                
             }
             th{
                 height:30px;
@@ -56,9 +66,4 @@
             }
         }
     }
-
-    .prevNextPagination{
-        color:#999;
-    }
-
 }

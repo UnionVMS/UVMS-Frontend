@@ -1,9 +1,4 @@
 {
-    "message_details_recipient" : "Recipient",
-    "message_details_status" : "Status",
-    "message_details_asset_information" : "Asset information",
-    "message_details_position_information" : "Position information",
-
     "search_zero_results_error" : "No exchange logs matching your search criteria were found.",
 	"search_forward_rule": "Forward rule",
 	"search_from": "From",
@@ -11,11 +6,7 @@
 	"search_range": "Range",
 	"search_recipient": "Recipient",
 	"search_ircs_cfr_name": "IRCS, CFR, Name",
-	"search_to": "To",
-
-	"status_failed": "Failed",
-	"status_pending": "Pending",
-	"status_successful": "Successful",
+	"search_to": "To",	
 
 	"table_header_actions": "Actions",
 	"table_header_date_fwd": "Date forwarded",
@@ -46,7 +37,5 @@
 	"title_incoming": "Incoming",
 	"title_outgoing": "Outgoing",
 	"title_forward": "Forward",
-	"title_resend": "Resend",
-
-    "message_details_modal_title": "Message details"
+	"title_resend": "Resend"
 }

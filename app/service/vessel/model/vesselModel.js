@@ -39,11 +39,13 @@ var SOURCE_LOCAL = "LOCAL";
         vessel.powerMain = data.powerMain;
         vessel.safetyGrossTonnage = data.safetyGrossTonnage;
         vessel.source = data.source;
-        vessel.vesselId = {
-            guid : data.vesselId.guid,
-            type : data.vesselId.type,
-            value : data.vesselId.value
-        };
+        if(angular.isDefined(data.vesselId)){
+            vessel.vesselId = {
+                guid : data.vesselId.guid,
+                type : data.vesselId.type,
+                value : data.vesselId.value
+            };
+        }
         vessel.vesselType = data.vesselType;
         vessel.email = data.email;
         vessel.contactName = data.contactName;

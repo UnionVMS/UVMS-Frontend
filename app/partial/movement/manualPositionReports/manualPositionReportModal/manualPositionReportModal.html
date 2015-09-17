@@ -1,4 +1,4 @@
-<div class='manualPositionReportModal' ng-class="{sentReport : sentReport}">
+<div class='manualPositionReportModal'>
 	<form name="manualPositionReportForm" method="post" novalidate>
 
 		<div class='buttonGroups'>
@@ -10,89 +10,7 @@
 			</div>
 		</div>
 
-        <div class="row" ng-if="sentReport">
-            <div class="col-md-12" ng-switch="position.message.status">            
-                {{'exchange.message_details_status' | i18n}} 
-                <span ng-switch-when="SUCCESSFUL" class="label label-success">{{'exchange.status_successful' | i18n | uppercase}}</span>
-                <span ng-switch-when="PENDING" class="label label-warning">{{'exchange.status_pending' | i18n | uppercase}}</span>
-                <span ng-switch-when="ERROR" class="label label-danger">{{'exchange.status_failed' | i18n | uppercase}}</span>
-
-                {{'exchange.message_details_recipient' | i18n}}  <b>{{position.message.recipient}}</b>
-            </div>
-        </div>
-
-        <div ng-if="sentReport">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="sectionHeader">                        
-                        {{'exchange.message_details_asset_information' | i18n}}
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <label>{{'movement.manual_position_field_label_flag_state' | i18n}}</label>
-                    <div class="value">{{position.carrier.flagState}}</div>
-                </div>
-                <div class="col-md-3">
-                    <label>{{'movement.manual_position_field_label_ircs' | i18n}}</label>
-                    <div class="value">{{position.carrier.ircs}}</div>
-                </div>
-                <div class="col-md-3">
-                    <label>{{'movement.manual_position_field_label_cfr' | i18n}}</label>
-                    <div class="value">{{position.carrier.cfr}}</div>
-                </div>  
-                <div class="col-md-3">
-                    <label>{{'movement.manual_position_field_label_external_marking' | i18n}}</label>
-                    <div class="value">{{position.carrier.externalMarking}}</div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <label>{{'movement.manual_position_field_label_name' | i18n}}</label>
-                    <div class="value">{{position.carrier.name}}</div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="sectionHeader">
-                        {{'exchange.message_details_position_information' | i18n}}
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <label>{{'movement.manual_position_field_label_status' | i18n}}</label>
-                    <div class="value">{{position.status}}</div>
-                </div>
-                <div class="col-md-9">
-                    <label>{{'movement.manual_position_field_label_date_time' | i18n}}</label>
-                    <div class="value">{{position.time}}</div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <label>{{'movement.manual_position_field_label_latitude' | i18n}}</label>
-                    <div class="value">{{position.position.latitude}}</div>
-                </div>  
-                <div class="col-md-3">
-                    <label>{{'movement.manual_position_field_label_longitude' | i18n}}</label>
-                    <div class="value">{{position.position.longitude}}</div>
-                </div>  
-                <div class="col-md-3">
-                    <label>{{'movement.manual_position_field_label_measured_speed' | i18n}}</label>
-                    <div class="value">{{position.speed}} {{"movement.manual_position_field_unit_knots" | i18n}}</div>
-                </div>
-                <div class="col-md-3">
-                    <label>{{'movement.manual_position_field_label_course' | i18n}}</label>
-                    <div class="value">{{position.speed}} {{"movement.manual_position_field_unit_degrees" | i18n}}</div>
-                </div>                
-            </div>            
-        </div>
-
-
-        <div ng-if="!sentReport">
+        <div>
     		<div class="row">
                 <search-result-error-alert ng-show="errorMessage">{{errorMessage}}</search-result-error-alert>
     			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.flagState.$dirty) && manualPositionReportForm.flagState.$invalid}" class="col-md-2">

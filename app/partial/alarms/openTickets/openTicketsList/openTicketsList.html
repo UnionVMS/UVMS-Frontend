@@ -4,7 +4,7 @@
         <table class="searchResults colorOdd">
             <thead>
                 <tr>
-                    <th class="table-checkbox"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
+                    <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
                     <th></th>              
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'openedDate'">{{'alarms.alarms_table_date_openend' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'affectedObject'">{{'alarms.alarms_table_object_affected' | i18n}}</th>
@@ -17,7 +17,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:filterOnStatus">
-                    <td class="table-checkbox"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
+                    <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
                     <td class="status">
                         <span class="label" ng-class="{CLOSED:'label-success', OPEN:'label-danger'}[item.status]">
                             {{item.status}}
@@ -29,7 +29,7 @@
                     <td class="link">{{'alarms.alarms_table_positions_see_on_map' | i18n}}</td>
                     <td>{{item.resolvedDate}}</td>
                     <td class="link">{{item.resolvedBy}}</td>
-                    <td>
+                    <td class="textAlignCenter">
                         <button ng-if="item.isOpen()" type="button" class="btn btn-sm btn-primary" ng-click="closeItem(item)" title="{{'alarms.alarms_table_close_title' | i18n}}">{{'alarms.alarms_table_close' | i18n | uppercase}}</button>                       
                     </td>
                 </tr>
