@@ -4,11 +4,16 @@ describe('mobileTerminalFormCtrl', function() {
 
     var scope,ctrl, createResponseTerminal;
 
-    beforeEach(inject(function($rootScope, $controller, MobileTerminal) {
+    beforeEach(inject(function($rootScope, $httpBackend, $controller, MobileTerminal) {
         scope = $rootScope.$new();
         ctrl = $controller('mobileTerminalFormCtrl', {$scope: scope});
         scope.currentMobileTerminal = new MobileTerminal();
         scope.getModelValueForTransponderSystemBySystemTypeAndLES = function(){};
+
+         //Mock translation files for usm
+         $httpBackend.whenGET(/^usm\//).respond({});
+         //Mock locale file
+         $httpBackend.whenGET(/^i18n\//).respond({});
 
         //Dummy response for create
         createResponseTerminal = new MobileTerminal();
@@ -23,7 +28,7 @@ describe('mobileTerminalFormCtrl', function() {
         expect(mobileTerminalRestService.unassignMobileTerminal).toHaveBeenCalled();
     }));
 
-    it('should update currentMobileTerminal with created terminal', inject(function(MobileTerminal, $compile, $q, mobileTerminalRestService, alertService, locale) {
+    it('should update currentMobileTerminal with created terminal', inject(function(MobileTerminal, $compile, $q, mobileTerminalRestService, alertService) {
         scope.currentMobileTerminal = new MobileTerminal();
 
         scope.setCreateMode = function(bool){
@@ -38,8 +43,7 @@ describe('mobileTerminalFormCtrl', function() {
         var element = angular.element('<form name="mobileTerminalForm"></form>');
         $compile(element)(scope);
 
-        // Skip alert message
-        spyOn(locale, "getString").andReturn();
+        // Skip alert message        
         spyOn(alertService, "showSuccessMessage").andReturn();
         spyOn(scope, "setCreateMode").andReturn();
 

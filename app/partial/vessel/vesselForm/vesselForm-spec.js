@@ -4,10 +4,13 @@ describe('VesselFormCtrl', function() {
 
 	var scope,ctrl, createResponseVessel;
 
-    beforeEach(inject(function($rootScope, $controller, Vessel) {
+    beforeEach(inject(function($rootScope, $httpBackend, $controller, Vessel) {
         scope = $rootScope.$new();
         ctrl = $controller('VesselFormCtrl', {$scope: scope});
         scope.vesselObj = new Vessel();
+
+        //Mock translation files for usm
+        $httpBackend.whenGET(/^usm\//).respond({});
 
         //Dummy response for create
         createResponseVessel = new Vessel();

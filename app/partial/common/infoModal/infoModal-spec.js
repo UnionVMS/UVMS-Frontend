@@ -6,7 +6,7 @@ describe('infoModalCtrl', function() {
 
     beforeEach(inject(function($rootScope, $controller) {
       scope = $rootScope.$new();
-      ctrl = $controller('infoModalCtrl', {$scope: scope});
+      ctrl = $controller('infoModalCtrl', {$scope: scope, $modalInstance: {}, options: {} });
     }));	
 
 	it('should ...', inject(function() {

@@ -9,7 +9,10 @@ describe('configurationService', function() {
 
     beforeEach(module('unionvmsWeb'));  
 
-    beforeEach(inject(function($rootScope, $q, vesselRestService, movementRestService, mobileTerminalRestService) {
+    beforeEach(inject(function($rootScope, $q, $httpBackend, vesselRestService, movementRestService, mobileTerminalRestService) {
+
+        //Mock translation files for usm
+        $httpBackend.whenGET(/^usm\//).respond({});
 
         var vesselDeffered = $q.defer();
         vesselDeffered.resolve({LETTER : 'A', COUNTRY : 'SWE'}); 
@@ -29,29 +32,31 @@ describe('configurationService', function() {
 
     it('should build configs dictionary and return correct values', inject(function($rootScope, configurationService) {
 
-        var vesselLetter, buildings;
-        configurationService.setup().then(function(){
+        var vesselLetter, buildingsFromConfig;
+        configurationService.setup(['VESSEL', 'MOVEMENT']).then(function(){
             vesselLetter = configurationService.getValue('VESSEL', 'LETTER');
-            buildings = configurationService.getValue('MOVEMENT', 'BUILDINGS');
+            buildingsFromConfig = configurationService.getValue('MOVEMENT', 'BUILDINGS');
         });
 
         $rootScope.$apply();
         expect(vesselLetter).toBe('A');
-        expect(buildings).toEqual(buildings);
+        expect(buildingsFromConfig).toEqual(buildings);
 
     }));
 
     it('should return undefined for non existing values', inject(function($rootScope, configurationService) {
 
-        var noModule, noParam;
-        configurationService.setup().then(function(){
+        var noModule, noParam, buildingsFromConfig;
+        configurationService.setup(['VESSEL', 'MOVEMENT']).then(function(){
             noModule = configurationService.getValue('NON_EXISTING', 'LETTER');
             noParam = configurationService.getValue('MOVEMENT', 'NON_EXISTING');
+            buildingsFromConfig = configurationService.getValue('MOVEMENT', 'BUILDINGS');
         });
 
         $rootScope.$apply();
         expect(noModule).toBeUndefined();
         expect(noParam).toBeUndefined();
+        expect(buildingsFromConfig).toEqual(buildings);
     }));
 
 });

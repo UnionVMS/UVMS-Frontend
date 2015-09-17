@@ -4,9 +4,15 @@ describe('ManualPositionReportModalCtrl', function() {
 
 	var scope,ctrl,getVesselsResponse;
 
-    beforeEach(inject(function($rootScope, $controller, Vessel, VesselListPage, ManualPosition) {
+    beforeEach(inject(function($rootScope, $httpBackend, $controller, Vessel, VesselListPage, ManualPosition) {
       scope = $rootScope.$new();
       ctrl = $controller('ManualPositionReportModalCtrl', {$scope: scope, $modalInstance: {}, position : new ManualPosition(), addAnother : false, reloadFunction: function() {}, readOnly : false, sentReport : false});
+
+      //Mock translation files for usm
+      $httpBackend.whenGET(/^usm\//).respond({});
+      //Mock locale file
+      $httpBackend.whenGET(/^i18n\//).respond({});
+
       var vessels = [];
       var vessel1 = new Vessel();
       var vessel2 = new Vessel();
@@ -17,10 +23,7 @@ describe('ManualPositionReportModalCtrl', function() {
       getVesselsResponse = new VesselListPage(vessels, 1, 1);
     }));	
 
-	it('getVesselsByIrcs should return list of vessels', inject(function($q, vesselRestService, alertService, $httpBackend) {
-
-        //Mock locale file
-        $httpBackend.expectGET("").respond({ });
+	it('getVesselsByIrcs should return list of vessels', inject(function($q, vesselRestService, alertService) {
 
         var deferred = $q.defer();
         spyOn(vesselRestService, "getVesselList").andReturn(deferred.promise);
@@ -34,10 +37,7 @@ describe('ManualPositionReportModalCtrl', function() {
 		expect(suggestions.length).toEqual(3);		
 	}));
 
-    it('getVesselsByCFR should return list of vessels', inject(function($q, vesselRestService, alertService, locale, $httpBackend) {
-
-        //Mock locale file
-        $httpBackend.expectGET("").respond({ });
+    it('getVesselsByCFR should return list of vessels', inject(function($q, vesselRestService, alertService, locale) {
 
         var deferred = $q.defer();
         spyOn(vesselRestService, "getVesselList").andReturn(deferred.promise);

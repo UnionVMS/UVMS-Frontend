@@ -50,7 +50,14 @@ module.exports = function (grunt) {
           {from: 'app/config.json', to: 'environment/local.json'}
       ],
        proxies: {
-                context: ['/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'],
+                context: ['/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest',
+                '/vessel/rest',
+                '/mobileterminal/rest/',
+                '/exchange/rest/',
+                '/movement/rest/',
+                '/audit/rest/',
+                '/rules/rest/',
+                '/reporting/rest/'],
                 host: 'livm73u',
                 port: 28080
         },
@@ -305,10 +312,18 @@ module.exports = function (grunt) {
         frameworks: ['jasmine'],
         browserNoActivityTimeout: 100000,
         files: [  //this files data is also updated in the watch handler, if updated change there too
+          {pattern: 'environment/*.json', watched: true, included: false, served: true},          
           '<%= dom_munger.data.appjs %>',
           'bower_components/angular-mocks/angular-mocks.js',
-          createFolderGlobs('*-spec.js'),
+          'test/envConfigForTest.js',                
+          //createFolderGlobs('*-spec.js'),
+          'app/partial/**/*-spec.js',
+          'app/service/**/*-spec.js',
+          'app/directive/**/*-spec.js',
         ],
+        proxies:  {
+            '/config.json': 'http://localhost:9876/base/environment/local.json'
+        },
         logLevel:'INFO',
         reporters:['mocha'],
         autoWatch: false, //watching is handled by grunt-contrib-watch
@@ -365,6 +380,15 @@ module.exports = function (grunt) {
                 //grunt.config('jasmine.unit.options.specs', spec);
                 //grunt.task.run('jasmine:unit');
                 //grunt.config('karma.options.files', files);
+                var files = [
+                    {pattern: 'environment/*.json', watched: true, included: false, served: true},          
+                    '<%= dom_munger.data.appjs %>',
+                    'bower_components/angular-mocks/angular-mocks.js',                
+                    'test/envConfigForTest.js',                
+                    spec
+                ];
+
+                grunt.config('karma.options.files', files);                
                 grunt.task.run('karma:during_watch');
             }
         }

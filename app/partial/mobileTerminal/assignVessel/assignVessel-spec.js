@@ -13,7 +13,7 @@ describe('AssignvesselCtrl', function() {
 		channels: []
 	};
 
-    beforeEach(inject(function($rootScope, $controller, MobileTerminal, Vessel) {
+    beforeEach(inject(function($rootScope, $httpBackend, $controller, MobileTerminal, Vessel) {
 		scope = $rootScope.$new();
 		ctrl = $controller('AssignvesselCtrl', {$scope: scope});
 		scope.currentMobileTerminal = new MobileTerminal();
@@ -24,18 +24,19 @@ describe('AssignvesselCtrl', function() {
             type : "IRCS",
             value : "TESTIRCS1"
         };
+
+         //Mock translation files for usm
+         $httpBackend.whenGET(/^usm\//).respond({});        
+         //Mock locale file
+         $httpBackend.whenGET(/^i18n\//).respond({});         
     }));	
 
-	it('should assign mobile terminal when assigning to selected vessel', inject(function($q, $httpBackend, mobileTerminalRestService, locale, alertService) {
-
-        //Mock locale file
-        $httpBackend.expectGET("").respond({ });
-
+	it('should assign mobile terminal when assigning to selected vessel', inject(function($q, mobileTerminalRestService,
+     alertService) {
 		var deferred = $q.defer();
 		spyOn(mobileTerminalRestService, "assignMobileTerminal").andReturn(deferred.promise);
 		deferred.resolve({data: response});
 		// Skip alert message
-		spyOn(locale, "getString").andReturn();
 		spyOn(alertService, "showSuccessMessage").andReturn();
 		scope.$apply();
 		scope.assignToSelectedVesselWithComment("my comment");
