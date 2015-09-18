@@ -1,22 +1,21 @@
 <div ng-controller="LayerpanelCtrl" resize ng-style="doResize(105, 340)"
     ng-class="{'layer-panel': true, 'layer-expanded': expanded, 'layer-collapsed': !expanded}">
+
   <div class="handle" ng-click="toggle()"></div>
-  <div class="tabbed-view" ng-show="expanded">
+  <div id="layer-panel-wrapper" class="tabbed-view" ng-show="expanded">
 
     <!-- mock content -->
-    <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+    <ul id="layer-tabs-container" class="nav nav-tabs" data-tabs="tabs">
       <li class="layer-panel-tabs" ng-class="{'active': tab==='LAYERTREE'}">
-        <a ng-click="tabClick('LAYERTREE')">Layers</a>
+        <a ng-click="tabClick('LAYERTREE')">{{ 'spatial.layer_panel_layers' | i18n }}</a>
       </li>
       <li class="layer-panel-tabs"  ng-class="{'active': tab==='LEGEND'}">
-        <a ng-click="tabClick('LEGEND')">Legend</a>
+        <a ng-click="tabClick('LEGEND')">{{ 'spatial.layer_panel_legend' | i18n }}</a>
       </li>
     </ul>
-
-      <div ng-show="tab==='LAYERTREE'" layer-tree class="layertree-panel"></div>
-      <div ng-show="tab==='LEGEND'">
-        Legend
+      <div ng-show="tab==='LAYERTREE'">
+        <div id="layer-tree" layer-tree></div>
       </div>
-
+      <div ng-show="tab==='LEGEND'">Legend</div>
   </div>
 </div>

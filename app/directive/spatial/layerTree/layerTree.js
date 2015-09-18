@@ -2,15 +2,13 @@ angular.module('unionvmsWeb').directive('layerTree', function() {
 	return {
 		restrict: 'AE',
 		replace: true,
-		scope: {
-			treeSource: '='
-		},
+		scope: true,
+		controller: 'LayerpanelCtrl',
 		templateUrl: 'directive/spatial/layerTree/layerTree.html',
 		link: function(scope, element, attrs, fn) {
 			scope.updateMap = function( event, data ){
 				// Update map on layer select
 				var foo;
-
 			};
 			var glyph_opts = {
 				map: {
@@ -31,7 +29,7 @@ angular.module('unionvmsWeb').directive('layerTree', function() {
 				}
 			};
 			// Create the tree.
-			element.fancytree(
+		  element.fancytree(
 			{
 				select: scope.updateMap,
 				icons: false,
@@ -60,7 +58,7 @@ angular.module('unionvmsWeb').directive('layerTree', function() {
 				selectMode: 3,
 				source: [
 					{
-						title: 'VMS',
+						title: 'spatial.layer_tree_vms',
 						key: '1',
 						folder: true,
 						expanded: true,
@@ -76,13 +74,13 @@ angular.module('unionvmsWeb').directive('layerTree', function() {
 						]
 					},
 					{
-						title: 'Areas',
+						title: 'spatial.layer_tree_areas',
 						key: '5',
 						folder: true,
 						expanded: true,
 						children: [
 								{
-									title: 'System Areas',
+									title: 'spatial.layer_tree_system_areas',
 									key: '6',
 									folder: true,
 									children: [
@@ -97,7 +95,7 @@ angular.module('unionvmsWeb').directive('layerTree', function() {
 									]
 								},
 								{
-									title: 'User Areas',
+									title: 'spatial.layer_tree_user_areas',
 									key: '10',
 									folder: true,
 									children: [
@@ -118,7 +116,7 @@ angular.module('unionvmsWeb').directive('layerTree', function() {
 							]
 						},
 						{
-							title: 'Background layers',
+							title: 'spatial.layer_tree_background_layers',
 							key: '14',
 							folder: true,
 							expanded: true,
@@ -144,9 +142,9 @@ angular.module('unionvmsWeb').directive('layerTree', function() {
 						}
 				],
 				wide: {
-					iconWidth: '1em',     // Adjust this if @fancy-icon-width != '16px'
-					iconSpacing: '0.5em', // Adjust this if @fancy-icon-spacing != '3px'
-					levelOfs: '1.5em'     // Adjust this if ul padding != '16px'
+					iconWidth: '0em',     // Adjust this if @fancy-icon-width != '16px'
+					iconSpacing: '0.75em', // Adjust this if @fancy-icon-spacing != '3px'
+					levelOfs: '1em'     // Adjust this if ul padding != '16px'
 				},
 				iconClass: function(event, data){
 					// if( data.node.isFolder() ) {
@@ -154,6 +152,7 @@ angular.module('unionvmsWeb').directive('layerTree', function() {
 					// }
 				}
 			});
+
 		}
 	};
 });

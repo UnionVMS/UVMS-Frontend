@@ -113,5 +113,12 @@
 	"success_update_report": "Your report was updated successfully",
 	"error_create_report": "It was not possible to create a new report at this time. Please check your configurations and try again.",
 	"error_update_report": "It was not possible to update the report at this time. Please check your configurations and try again.",
-	"error_entry_not_found": "Report not found."
+	"error_entry_not_found": "Report not found.",
+	"layer_panel_layers": "LAYERS",
+	"layer_panel_legend": "LEGEND",
+	"layer_tree_vms": "VMS",
+	"layer_tree_areas": "Areas",
+	"layer_tree_system_areas": "System areas",
+	"layer_tree_user_areas": "User areas",
+	"layer_tree_background_layers": "Background layers"
 }
