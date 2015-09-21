@@ -139,20 +139,21 @@ angular.module('unionvmsWeb').directive('period', [
 }]);
 
 // End date must be after start date
-angular.module('unionvmsWeb').directive('minDate', function() {
+//Validator with name min-date already exists in Bootstrap so use other name here
+angular.module('unionvmsWeb').directive('datePickerInputMinDate', function() {
     return {
         restrict: 'A',
         require: 'ngModel',
         scope: {
-            minDate: '='
+            datePickerInputMinDate: '='
         },
         link: function(scope, elm, attrs, ctrl) {
 
             function updateValidity(date) {
-                ctrl.$setValidity('minDate', date === undefined || scope.minDate === undefined || new Date(date) > new Date(scope.minDate));
+                ctrl.$setValidity('minDate', date === undefined || scope.datePickerInputMinDate === undefined || new Date(date) > new Date(scope.datePickerInputMinDate));
             }
 
-            scope.$watch('minDate', function(newValue) {
+            scope.$watch('datePickerInputMinDate', function(newValue) {
                 updateValidity(newValue);
             });
 
@@ -169,20 +170,20 @@ angular.module('unionvmsWeb').directive('minDate', function() {
     };
 });
 
-angular.module('unionvmsWeb').directive('maxDate', function() {
+angular.module('unionvmsWeb').directive('datePickerInputMaxDate', function() {
     return {
         restrict: 'A',
         require: 'ngModel',
         link: function(scope, elem, attr, ngModel) {
-            if (attr.maxDate) {
+            if (attr.datePickerInputMaxDate) {
                 ngModel.$parsers.unshift(function(value) {
-                    var valid = new Date(value).getTime() < attr.maxDate;
+                    var valid = new Date(value).getTime() < attr.datePickerInputMaxDate;
                     ngModel.$setValidity('maxDate', valid);
                     return value;
                 });
 
                 ngModel.$formatters.unshift(function(value) {
-                    ngModel.$setValidity('maxDate', new Date(value).getTime() < attr.maxDate);
+                    ngModel.$setValidity('maxDate', new Date(value).getTime() < attr.datePickerInputMaxDate);
                     return value;
                 });
             }
