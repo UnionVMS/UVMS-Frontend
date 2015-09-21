@@ -264,7 +264,6 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
     $scope.subscriptionsOpenTicketsOnly = [openticketsOpt];
  
     $scope.getSubscriptionOptions = function(rule){
-        console.log(rule);
         var available = rule.availableNotifications;
         if(available.OPEN_TICKET && available.NOTIFICATION){
             return $scope.subscriptionsAll;
