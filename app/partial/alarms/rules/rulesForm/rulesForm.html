@@ -125,16 +125,19 @@
                     <label>{{'alarms.rules_form_definition_label' | i18n}}</label>
                 </div>
 
+                <div class="col-md-12">
+                    <label>{{'alarms.rules_form_definition_if_label' | i18n}}</label>
+                </div>
                 <div class="col-md-12 definitionsContainer">                            
                     <table class="searchResults colorOdd">
                         <thead>
                             <tr>
-                                <th>Operator</th>
-                                <th>Criteria</th>
-                                <th>Sub criteria</th>
-                                <th>Condition</th>
-                                <th>Value</th>
-                                <th>Operator</th>
+                                <th>{{'alarms.rules_form_definition_operator_label' | i18n}}</th>
+                                <th>{{'alarms.rules_form_definition_criteria_label' | i18n}}</th>
+                                <th>{{'alarms.rules_form_definition_subcriteria_label' | i18n}}</th>
+                                <th>{{'alarms.rules_form_definition_condition_label' | i18n}}</th>
+                                <th>{{'alarms.rules_form_definition_value_label' | i18n}}</th>
+                                <th>{{'alarms.rules_form_definition_operator_label' | i18n}}</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -178,6 +181,43 @@
                 <div class="col-md-12">
                     <div class="addMoreLink" ng-click="addDefinitionRow()">{{'alarms.rules_form_definition_add' | i18n}}</div>
                 </div>
+
+
+
+                <div class="col-md-12 thenHeader">
+                    <label>{{'alarms.rules_form_definition_then_label' | i18n}}</label>
+                </div>
+                <div class="col-md-12 definitionsContainer">                            
+                    <table class="searchResults colorOdd actionsTable">
+                        <thead>
+                            <tr>
+                                <th class="action">{{'alarms.rules_form_definition_action_label' | i18n}}</th>
+                                <th class="value">{{'alarms.rules_form_definition_value_label' | i18n}}</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in currentRule.actions">
+                                <td class="action">
+                                    <dropdown ng-model="item.action" no-placeholder-item items="thenActions" callback="actionSelected" callback-params="item"></dropdown>
+                                </td>
+                                <td class="value">
+                                    <input type="text" class="form-control" ng-model="item.value" name="value" ng-disabled="item.action !== 'SEND_TO_ENDPOINT'">
+                                </td>
+                                <td class="endOperator">
+                                    <span ng-bind="'alarms.rules_definition_and' | i18n | uppercase" ng-show="$index < currentRule.getNumberOfActions()-1"></span>
+                                </td>
+                                <td class="remove">
+                                    <i class="fa fa-lg fa-times" ng-click="removeRuleAction(item)" ng-show="$index > 0" title="{{'alarms.rules_form_definition_remove' | i18n}}"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-12">
+                    <div class="addMoreLink" ng-click="addActionRow()">{{'alarms.rules_form_definition_add' | i18n}}</div>
+                </div>                
             </div>
 
             <div class="row ruleTestContainer">

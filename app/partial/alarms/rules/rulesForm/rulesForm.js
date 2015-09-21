@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, locale, alertService, ruleRestService, Rule, RuleDefinition, RuleTimeInterval, GetListRequest, vesselRestService, mobileTerminalRestService){
+angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, locale, alertService, ruleRestService, Rule, RuleDefinition, RuleTimeInterval, RuleAction, ruleService, GetListRequest, vesselRestService, mobileTerminalRestService){
 
     $scope.submitAttempted = false;
 
@@ -18,6 +18,11 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         //Add a new definition row to new rules
         if($scope.currentRule.getNumberOfDefinitions() === 0){
             $scope.addDefinitionRow();
+        }
+
+        //Add a new action row to new rules
+        if($scope.currentRule.getNumberOfActions() === 0){
+            $scope.addActionRow();
         }
 
         //Reset form validation
@@ -79,6 +84,12 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         {'text': 'not equals to','code':'NEQ'},
     ];    
 
+    $scope.thenActions =[    
+        {'text': locale.getString('alarms.rules_form_action_Dropdown_SEND_TO_ENDPOINT'),'code':'SEND_TO_ENDPOINT'},
+        {'text': locale.getString('alarms.rules_form_action_Dropdown_MANUAL_POLL'),'code':'MANUAL_POLL'},
+        {'text': locale.getString('alarms.rules_form_action_Dropdown_HOLDING_TABLE'),'code':'HOLDING_TABLE'},
+        {'text': locale.getString('alarms.rules_form_action_Dropdown_SHOW_ON_MAP'),'code':'SHOW_ON_MAP'},
+    ];
 
     //Add a definition row
     $scope.addDefinitionRow = function(){
@@ -87,6 +98,14 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         ruleDef.subCriteria = $scope.subCriterias[ruleDef.criteria][0].code;
         ruleDef.order = $scope.currentRule.getNumberOfDefinitions();
         $scope.currentRule.addDefinition(ruleDef);
+    };
+
+    //Add an action row
+    $scope.addActionRow = function(){
+        var ruleAction = new RuleAction();
+        ruleAction.action = $scope.thenActions[0].code;
+        ruleAction.order = $scope.currentRule.getNumberOfActions();
+        $scope.currentRule.addAction(ruleAction);
     };
 
     //Add a time interval row
@@ -123,6 +142,15 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         ruleDef.subCriteria = newSubCriteria; 
     }; 
 
+    //Callback when selecting action in dropdown
+    $scope.actionSelected = function(selection, ruleAction){        
+        var selectedVal = selection.code;
+        //Unset value if not SEND_TO_ENDPOINT
+        if(selectedVal !== 'SEND_TO_ENDPOINT'){
+            ruleAction.value = undefined;
+        }
+    }; 
+
     //Remove a rule definition row
     $scope.removeRuleDefinition = function(definitionToBeRemoved){
         var indexToRemove = -1;
@@ -142,6 +170,26 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
             def.order = i; 
         });        
     };
+
+    //Remove a rule action row
+    $scope.removeRuleAction = function(actionToBeRemoved){
+        var indexToRemove = -1;
+        $.each($scope.currentRule.actions, function(i, def){
+            if(actionToBeRemoved === def){
+                indexToRemove = i;
+                return false;
+            }
+
+        });
+        if(indexToRemove >= 0){
+            $scope.currentRule.actions.splice(indexToRemove, 1);
+        }
+
+        //Set order
+        $.each($scope.currentRule.actions, function(i, def){
+            def.order = i; 
+        });        
+    };    
 
     //Remove a time interval row
     $scope.removeTimeIntervalItem = function(intervalToBeRemoved){
@@ -240,10 +288,9 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         }
     };
         
-    //Watch changes to currentRule.definitionsAsText()
-    $scope.$watch(function () { return $scope.currentRule.definitionsAsText();}, function (newVal, oldVal){
-        var text = $scope.currentRule.definitionsAsText();
-        text += ' ' +locale.getString('alarms.rules_form_definition_then_send_notification');
+    //Watch changes to ruleService.getRuleAsText($scope.currentRule)
+    $scope.$watch(function () { return ruleService.getRuleAsText($scope.currentRule);}, function (newVal, oldVal){
+        var text = ruleService.getRuleAsText($scope.currentRule);
         $scope.ruleAsText = text;
         $scope.ruleTest.outdated = true;
     });    

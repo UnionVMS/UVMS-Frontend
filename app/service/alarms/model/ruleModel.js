@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition,  RuleTimeInterval) {
+angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeInterval, RuleAction) {
 
         function Rule(){
             this.id = undefined;
@@ -8,6 +8,7 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition,  RuleTime
             this.availability = "PUBLIC";
             this.active = true;
             this.definitions = [];
+            this.actions = [];
             this.timeIntervals = [];
             this.availableNotifications = {
                 OPEN_TICKET : false,
@@ -28,6 +29,10 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition,  RuleTime
             this.definitions.push(def);
         };
 
+        Rule.prototype.addAction = function(action){
+            this.actions.push(action);
+        };
+
         Rule.prototype.addTimeInterval = function(inter){
             this.timeIntervals.push(inter);
         };        
@@ -36,17 +41,12 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition,  RuleTime
             return this.definitions.length;
         };
 
-        Rule.prototype.getNumberOfTimeIntervals = function(){
-            return this.timeIntervals.length;
+        Rule.prototype.getNumberOfActions = function(){
+            return this.actions.length;
         };
 
-        Rule.prototype.definitionsAsText = function(){
-            var text = '';
-            $.each(this.definitions, function(index, def){
-                text = text + def.asText() +' ';
-            });
-
-            return text;
+        Rule.prototype.getNumberOfTimeIntervals = function(){
+            return this.timeIntervals.length;
         };
 
         Rule.prototype.isSubscriptionPossible = function(){
@@ -54,53 +54,83 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition,  RuleTime
         };
 
 
-        Rule.fromJson = function(data){
-            //TODO: Implement this
+        Rule.fromDTO = function(dto){
+            var rule = new Rule();
+
+            rule.id = dto.id;
+            rule.name = dto.name;
+            rule.type = dto.type;
+            rule.availability = dto.availability;
+            rule.active = dto.active;
+            rule.description = dto.description;
+            rule.recipient = dto.recipient;
+            rule.lastTriggered = dto.lastTriggered;
+            rule.createdBy = dto.createdBy;
+            rule.dateCreated = dto.dateCreated;
+
+            $.each(dto.availableNotifications, function(key, notificationType){
+                if(typeof notificationType === 'string'){
+                    rule.availableNotifications[notificationType] = true;
+                }else{
+                    rule.availableNotifications[key] = notificationType;
+                }
+            });
+
+            rule.definitions = [];
+            $.each(dto.definitions, function(index, definition){
+                rule.definitions.push(RuleDefinition.fromDTO(definition));
+            });
+
+            rule.timeIntervals = [];
+            $.each(dto.timeIntervals, function(index, timeInterval){
+                rule.timeIntervals.push(RuleTimeInterval.fromDTO(timeInterval));
+            });
+
+
+            rule.actions = [];
+            $.each(dto.actions, function(index, action){
+                rule.actions.push(RuleAction.fromDTO(action));
+            });
+
+            return rule;
         };
 
         Rule.prototype.DTO = function(){
+            var availableNotifications = [];
+            $.each(this.availableNotifications, function(key, value){
+                if(value){
+                    availableNotifications.push(key);
+                }
+            });
             return {
+                id : this.id,
                 name : this.name,
-                description : this.description,
                 type : this.type,
                 availability : this.availability,
-                availableNotifications : this.availableNotifications,
+                active : this.active,
+                description : this.description,
+                recipient : this.recipient,
+                lastTriggered : this.lastTriggered,
+                createdBy : this.createdBy,
+                dateCreated : this.dateCreated,                
+                availableNotifications : availableNotifications,
+                timeIntervals : this.timeIntervals.reduce(function(intervals, timeInterval){
+                    intervals.push(timeInterval.DTO());
+                    return intervals;
+                },[]),
                 definitions : this.definitions.reduce(function(defs, def){
                     defs.push(def.DTO());
                     return defs;
                 },[]),
+                actions : this.actions.reduce(function(acts, action){
+                    acts.push(action.DTO());
+                    return acts;
+                },[]),                   
             };
         };
 
         Rule.prototype.copy = function() {
-            var copy = new Rule();
-
-            copy.id = this.id;
-            copy.name = this.name;
-            copy.type = this.type;
-            copy.availability = this.availability;
-            copy.active = this.active;
-            copy.description = this.description;
-            copy.recipient = this.recipient;
-            copy.lastTriggered = this.lastTriggered;
-            copy.createdBy = this.createdBy;
-            copy.dateCreated = this.dateCreated;
-            copy.availableNotifications = this.availableNotifications;
-
-            copy.definitions = [];
-            $.each(this.definitions, function(index, definition){
-                copy.definitions.push(definition.copy());
-            });
-
-            copy.timeIntervals = [];
-            $.each(this.timeIntervals, function(index, timeInterval){
-                copy.timeIntervals.push(timeInterval.copy());
-            });
-
-            copy.notifyByEMail = this.notifyByEMail;
-            copy.subscription = this.subscription;
-
-            return copy;
+            return Rule.fromDTO(this.DTO());
         };
 
         //Check if the Rule is equal another Rule
@@ -127,56 +157,8 @@ angular.module('unionvmsWeb').factory('RuleDefinition', function() {
             this.order = undefined; //First one has order 0
         }
 
-        RuleDefinition.prototype.asText = function(){
-            var text = this.startOperator;
-
-            //critera
-            if(typeof this.criteria === 'string' && this.criteria.trim().length > 0){
-                text += this.criteria;
-            }else{
-                text += 'AAAA';
-            }
-
-            //subcriteria
-            text +='.';
-            if(typeof this.subCriteria === 'string' && this.subCriteria.trim().length > 0){
-                text += this.subCriteria;
-            }else{
-                text += 'BB';
-            }
-
-            text +=' ' + this.condition + ' ' ;
-
-            //value
-            if(typeof this.value === 'string' && this.value.trim().length > 0){
-                text += this.value;
-            }else{
-                text += '???';
-            }
-
-            text += this.endOperator;
-
-            if(this.logicBoolOperator !== 'NONE'){
-                 text += ' ' + this.logicBoolOperator;
-            }
-
-            return text;
-        };
-
-
         RuleDefinition.prototype.copy = function() {
-            var copy = new RuleDefinition();
-
-            copy.startOperator = this.startOperator;
-            copy.criteria = this.criteria;
-            copy.subCriteria = this.subCriteria;
-            copy.condition = this.condition;
-            copy.value = this.value;
-            copy.endOperator = this.endOperator;
-            copy.logicBoolOperator = this.logicBoolOperator;
-            copy.order = this.order;
-
-            return copy;
+            return RuleDefinition.fromDTO(this.DTO());
         };
 
         RuleDefinition.prototype.DTO = function(){
@@ -192,7 +174,53 @@ angular.module('unionvmsWeb').factory('RuleDefinition', function() {
             };
         };
 
+        RuleDefinition.fromDTO = function(dto){
+            var ruleDefinition = new RuleDefinition();
+            ruleDefinition.startOperator = dto.startOperator;
+            ruleDefinition.criteria = dto.criteria;
+            ruleDefinition.subCriteria = dto.subCriteria;
+            ruleDefinition.condition = dto.condition;
+            ruleDefinition.value = dto.value;
+            ruleDefinition.endOperator = dto.endOperator;
+            ruleDefinition.logicBoolOperator = dto.logicBoolOperator;
+            ruleDefinition.order = dto.order;
+
+            return ruleDefinition;
+        };        
+
         return RuleDefinition;
+    });
+
+angular.module('unionvmsWeb').factory('RuleAction', function() {
+
+        function RuleAction(){
+            this.action = undefined;
+            this.value = undefined;            
+            this.order = undefined; //First one has order 0
+        }
+
+        RuleAction.prototype.copy = function() {
+            return RuleAction.fromDTO(this.DTO());
+        };
+
+        RuleAction.prototype.DTO = function(){
+            return {
+                action : this.action,
+                value : this.value,
+                order : this.order,
+            };
+        };
+
+        RuleAction.fromDTO = function(dto){
+            var ruleAction = new RuleAction();
+            ruleAction.action = dto.action;
+            ruleAction.value = dto.value;
+            ruleAction.order = dto.order;
+
+            return ruleAction;
+        };        
+
+        return RuleAction;
     });
 
 
@@ -204,21 +232,23 @@ angular.module('unionvmsWeb').factory('RuleTimeInterval', function() {
             this.end = undefined;
         }
 
-
-        RuleTimeInterval.prototype.copy = function() {
-            var copy = new RuleTimeInterval();
-
-            copy.start = this.start;
-            copy.end = this.end;
-
-            return copy;
-        };
-
         RuleTimeInterval.prototype.DTO = function(){
             return {
                 start : this.start,
                 end : this.end,
             };
+        };        
+
+        RuleTimeInterval.fromDTO = function(dto){
+            var ruleTimeInterval = new RuleTimeInterval();
+            ruleTimeInterval.start = dto.start;
+            ruleTimeInterval.end = dto.end;
+
+            return ruleTimeInterval;
+        };
+
+        RuleTimeInterval.prototype.copy = function() {
+            return RuleTimeInterval.fromDTO(this.DTO());
         };        
 
         return RuleTimeInterval;

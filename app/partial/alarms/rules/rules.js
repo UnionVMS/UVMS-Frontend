@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, locale, csvService, alertService, $filter, Rule,  RuleDefinition, ruleRestService, SearchResults, SearchResultListPage){
+angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, locale, csvService, alertService, $filter, Rule,  RuleDefinition, RuleAction, ruleRestService, SearchResults, SearchResultListPage){
 
     $scope.selectedRules = []; //Selected rules checkboxes
 
@@ -110,6 +110,19 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
         mockRule.addDefinition(ruleDef1);
         mockRule.addDefinition(ruleDef2);
         mockRule.addDefinition(ruleDef3);
+
+        random = Math.floor(Math.random() * 2) + 1;
+        if(random === 1){
+            var ruleAction0 = new RuleAction();
+            ruleAction0.action = 'MANUAL_POLL';
+            mockRule.addAction(ruleAction0);
+        }
+        if(random === 2){
+            var ruleAction1 = new RuleAction();
+            ruleAction1.action = 'SEND_TO_ENDPOINT';
+            ruleAction1.value = 'ABC123';
+            mockRule.addAction(ruleAction1);
+        }
 
         mockRules.push(mockRule);
     }
