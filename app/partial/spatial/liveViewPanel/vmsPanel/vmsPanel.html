@@ -6,7 +6,7 @@
 	</div>
 	<div class="container vmstables table-responsive">
 		<div class="vmstab-content" ng-show="isVmsTabSelected('MOVEMENTS')">
-			<table datatable="ng" dt-options="posTable.dtOptions" dt-column-defs="posTable.dtColumnDefs" class="table table-striped">
+			<table datatable="ng" dt-options="posTable.dtOptions" dt-column-defs="posTable.dtColumnDefs" class="table table-striped" style="width: 100%;">
 			    <thead>
 			        <tr>
 			            <th>{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
@@ -64,7 +64,7 @@
 			</table>
 		</div>
 		<div class="vmstab-content" ng-show="isVmsTabSelected('SEGMENTS')">
-			<table datatable="ng" dt-options="segTable.dtOptions" dt-column-defs="segTable.dtColumnDefs" class="table table-striped">
+			<table datatable="ng" dt-options="segTable.dtOptions" dt-column-defs="segTable.dtColumnDefs" class="table table-striped" style="width: 100%;">
 			    <thead>
 			        <tr>
 			            <th>{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
@@ -110,7 +110,7 @@
 			</table>
 		</div>
 		<div class="vmstab-content" ng-show="isVmsTabSelected('TRACKS')">
-			<table datatable="ng" dt-options="tracksTable.dtOptions" dt-column-defs="tracksTable.dtColumnDefs" class="table table-striped">
+			<table datatable="ng" dt-options="tracksTable.dtOptions" dt-column-defs="tracksTable.dtColumnDefs" class="table table-striped" style="width: 100%;">
 			    <thead>
 			        <tr>
 			            <th>{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>

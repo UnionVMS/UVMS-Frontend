@@ -1,5 +1,19 @@
 <div ng-controller="ReportslistCtrl as rt" class="table-responsive reportsListTable">
-	<table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="table table-striped">
+	<div class="row reportBtnGroup" ng-show="isVisible.reportsList">
+		<div class="col-md-6 report-btn-group">
+			<button type="button" class="btn btn-primary btn-sm" ng-click="reloadReportsList()">
+                   <span class="fa fa-refresh" aria-hidden="true"></span>
+               </button>
+			<button type="button" class="btn btn-primary btn-sm" ng-click="toggleReportForm('CREATE')">
+                   <span class="fa fa-plus-square" aria-hidden="true"></span> &nbsp;
+                   <span>{{'spatial.reports_add_new_report' | i18n }}</span>
+               </button>
+		</div>
+		<div class="col-md-6">
+			<input type="text" class="form-control" ng-model="searchString" ng-change="searchTable()" placeholder="{{'spatial.reports_table_search_header' | i18n}}">
+		</div>
+	</div>
+	<table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" dt-instance="reportTableInstance" class="table table-striped" style="width: 100%;">
 	    <thead>
 	        <tr>
 	            <th>{{'spatial.reports_table_header_name' | i18n }}</th>
@@ -37,11 +51,7 @@
 	            <td>{{ report.createdOn }}</td>
 	            <td>{{ report.createdBy }}</td>
 	            <td>{{ report.lastExecTime }}</td>
-	            <td class="dt-center">
-	            	<span class="label label-default label-visibility" ng-if="report.visibility === 'PRIVATE'" visprop="p">{{'spatial.reports_table_p_label' | i18n }}</span>
-	            	<span class="label label-default label-visibility" ng-if="report.visibility === 'SCOPE'" visprop="s">{{'spatial.reports_table_s_label' | i18n }}</span>
-	            	<span class="label label-default label-visibility" ng-if="report.visibility === 'GLOBAL'" visprop="g">{{'spatial.reports_table_g_label' | i18n }}</span>
-	            </td>
+	            <td class="dt-center">{{report.visibility}}</td>
 	            <td>
                     <button type="button" class="btn btn-success btn-xs btn-bottom-mg" ng-click="runReport($index)"><span class="run-report">{{'spatial.reports_table_run_label' | i18n }}</span></button>
                     <button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.reports_table_config_label' | i18n }}" ng-click="showFilters($index)" ng-show="{{ report.editable }}"><span class="fa fa-cog"></span></button>

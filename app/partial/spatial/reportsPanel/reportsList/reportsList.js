@@ -1,4 +1,37 @@
-angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $timeout, $anchorScroll, locale, datatablesService, reportRestService, DTOptionsBuilder, DTColumnDefBuilder, confirmationModal){
+angular.module('unionvmsWeb').factory('reportMsgService', function($timeout){
+    var alert = {
+        visible: false,
+        startFade: false,
+        type: '',
+        msg: ''
+    };
+    
+    alert.show = function(msg, type){
+        var obj = this;
+        this.msg = msg;
+        this.visible = true;
+        this.type = type;
+        $timeout(function(){
+            obj.hide();
+        }, 3000, true, obj);
+    };
+    
+    alert.hide = function(){
+        var obj = this;
+        this.startFade = true;
+        $timeout(function(){
+            obj.visible = false;
+            obj.startFade = false;
+            obj.type = '';
+            obj.msg = '';
+        }, 1000, true, obj);
+    };
+    
+    
+    return alert;
+});
+
+angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, reportMsgService, $anchorScroll, locale, datatablesService, reportRestService, DTOptionsBuilder, DTColumnDefBuilder, DTInstances, confirmationModal){
     //Mock config object
     $scope.config = {
         src_format: 'YYYY-MM-DDTHH:mm:ss',
@@ -6,14 +39,11 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $tim
     };
     
     $scope.isLoading = true;
-    $scope.alert = {
-        visible: false,
-        startFade: false,
-        type: '',
-        msg: ''
-    };
+    $scope.alert = reportMsgService;
     
     $scope.reports = [];
+    $scope.reportTableInstance = {};
+    $scope.searchString = '';
     
     //General table configuration
     $scope.dtOptions = DTOptionsBuilder.newOptions()
@@ -21,8 +51,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $tim
                                     .withPaginationType('simple_numbers')
                                     .withDisplayLength(25)
                                     .withLanguage(datatablesService)
-                                    .withDOM('ftrpi')
-                                    .withOption('responsive', true)
+                                    .withDOM('trpi')
                                     .withOption('order', [[2, 'desc']])
                                     .withBootstrapOptions({
                                         pagination: {
@@ -42,9 +71,17 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $tim
         DTColumnDefBuilder.newColumnDef(4).withOption('type', 'report-date').renderWith(function(data, type, full){
             return $scope.renderDate(full[4]);
         }),
-        DTColumnDefBuilder.newColumnDef(5).withOption('type', 'visibility'),
+        DTColumnDefBuilder.newColumnDef(5).renderWith(function(data, type, full){
+            var str = full[5].toLowerCase();
+            return '<span class="label label-default label-visibility">' + str.substring(0, 1).toUpperCase() + str.substr(1) + '</span>';
+        }),
         DTColumnDefBuilder.newColumnDef(6).notSortable()
     ];
+    
+    //Global table search
+    $scope.searchTable = function(){
+        $scope.reportTableInstance.DataTable.search($scope.searchString, false, false, true).draw();
+    };
     
     //Return dates formated according to user definition
     $scope.renderDate = function(displayDate){
@@ -62,7 +99,8 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $tim
     
     //Report filter definitions
     $scope.showFilters = function(index){
-        $scope.toggleReportForm('EDIT', $scope.reports[index].id);
+        $scope.isLoading = true;
+        reportRestService.getReport($scope.reports[index].id).then(getReportSuccess, getReportError);
     };
     
     //Share report
@@ -75,32 +113,11 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $tim
     //Delete report
     $scope.deleteReport = function(index){
         var options = {
-            textLabel : locale.getString("spatial.reports_delete_report_confirmation_text")
+            textLabel : locale.getString("spatial.reports_delete_report_confirmation_text") + $scope.reports[index].name.toUpperCase() + '?'
         };
         confirmationModal.open(function(){
             reportRestService.deleteReport($scope.reports[index].id, index).then(deleteReportSuccess, deleteReportError);
         }, options);
-    };
-    
-    //Show info section to inform the user about successes and errors
-    $scope.showAlert = function(msg, type){
-        $scope.isLoading = false;
-        $scope.alert.msg = msg;
-        $scope.alert.visible = true;
-        $scope.alert.type = type;
-        $anchorScroll();
-        $timeout(function(){
-            $scope.hideAlert();
-        }, 3000);
-    };
-    
-    //Hide info section
-    $scope.hideAlert = function(){
-        $scope.alert.startFade = true;
-        $timeout(function(){
-            $scope.alert.visible = false;
-            $scope.alert.startFade = false;
-        }, 1000);
     };
     
     //Listening for loading reports list events
@@ -120,23 +137,41 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $tim
     
     //Get Report List Failure callback
     var getReportsListError = function(error){
+        $scope.isLoading = false;
         var msg = locale.getString('spatial.error_get_reports_list');
-        $scope.showAlert(msg, 'error');
+        $scope.alert.show(msg, 'error');
         $scope.reports = [];
+    };
+    
+   //Get Report Configs Success callback
+    var getReportSuccess = function(response){
+        $scope.isLoading = false;
+        $scope.toggleReportForm('EDIT', response);
+    };
+    
+  //Get Report Configs Failure callback
+    var getReportError = function(error){
+        $scope.isLoading = false;
+        $anchorScroll();
+        $scope.alert.show(locale.getString('spatial.error_entry_not_found'), 'error');
     };
     
     //Delete report Success callback
     var deleteReportSuccess = function(resp){
         $scope.reports.splice(resp.index, 1);
+        $scope.isLoading = false;
+        $anchorScroll();
         var msg = locale.getString('spatial.success_delete_report');
-        $scope.showAlert(msg, 'success');
+        $scope.alert.show(msg, 'success');
     };
     
     //Delete report Failure callback
     var deleteReportError = function(error){
+        $scope.isLoading = false;
+        $anchorScroll();
         var searchString = 'spatial.' + error.msg;
         var msg = locale.getString(searchString);
-        $scope.showAlert(msg, 'error');
+        $scope.alert.show(msg, 'error');
     };
     
     
@@ -151,16 +186,6 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $tim
         },
         "report-date-desc": function (a, b){
             return b - a;
-        },
-        "visibility-pre": function(vis){
-            var value = vis.substr(vis.indexOf('visprop') + 9, 1);
-            if (value === 'p'){
-                return locale.getString('spatial.reports_table_p_label');
-            } else if (value === 's'){
-                return locale.getString('spatial.reports_table_s_label');
-            } else {
-                return locale.getString('spatial.reports_table_g_label');
-            }
         }
     });
 });

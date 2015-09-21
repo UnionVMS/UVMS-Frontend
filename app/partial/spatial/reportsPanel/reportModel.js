@@ -7,6 +7,7 @@ angular.module('unionvmsWeb').factory('Report',function() {
 	    this.startDateTime = undefined;
 	    this.endDateTime = undefined;
 	    this.positionSelector = 'all';
+	    this.positionTypeSelector = 'positions';
 	    this.xValue = undefined;
 	    this.components = {
 	        map: true,
@@ -34,22 +35,22 @@ angular.module('unionvmsWeb').factory('Report',function() {
 	    
 	    if(data){
 	        var filter = angular.fromJson(data.filterExpression); //FIXME
-	        console.log(filter.xValue);
 	        
 	        report.id = data.id;
 	        report.name = data.name;
 	        report.desc = data.desc;
 	        report.components = angular.fromJson(data.outComponents); //FIXME
-	        report.startDateTime = filter.startDate;
-	        report.endDateTime = filter.endDate;
+	        report.startDateTime = filter.startDate.slice(0, -3);
+	        report.endDateTime = filter.endDate.slice(0, -3);
 	        report.positionSelector = filter.positionSelector;
+	        if (angular.isDefined(filter.positionTypeSelector)){
+	            report.positionTypeSelector = filter.positionTypeSelector;
+	        }
 	        report.xValue = filter.xValue;
 	        report.vmsFilters = filter.vmsFilters;
 	        report.vesselsSelection = filter.vessels;
 	        report.vmsFilters = filter.vms;
 	    }
-	    
-	    console.log(report);
 	    
 	    return report;
 	};
@@ -63,6 +64,7 @@ angular.module('unionvmsWeb').factory('Report',function() {
             startDate: this.startDateTime,
             endDate: this.endDateTime,
             positionSelector: this.positionSelector,
+            positionTypeSelector: this.positionSelector !== 'all' ? this.positionTypeSelector: undefined,
             xValue: this.xValue,
             vessels: this.vesselsSelection,
             vms: this.vmsFilters

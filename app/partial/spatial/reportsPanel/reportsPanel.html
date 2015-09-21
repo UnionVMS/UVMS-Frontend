@@ -1,17 +1,5 @@
 <div class="containerWrapper" ng-controller="ReportspanelCtrl">
-
 	<div class="container">
-		<div class="row" ng-show="isVisible.reportsList">
-			<div class="col-md-3 report-btn-group">
-				<button type="button" class="btn btn-primary btn-sm" ng-click="reloadReportsList()">
-                    <span class="fa fa-refresh" aria-hidden="true"></span>
-                </button>
-				<button type="button" class="btn btn-primary btn-sm" ng-click="toggleReportForm('CREATE')">
-                    <span class="fa fa-plus-square" aria-hidden="true"></span> &nbsp;
-                    <span>{{'spatial.reports_add_new_report' | i18n }}</span>
-                </button>
-			</div>
-		</div>
 		<div ng-include="'partial/spatial/reportsPanel/reportsList/reportsList.html'" ng-show="isVisible.reportsList"></div>
 		<div class="containerWithTopBottomPadding" ng-include="'partial/spatial/reportsPanel/reportForm/reportForm.html'" ng-show="isVisible.reportForm"></div>
 	</div>

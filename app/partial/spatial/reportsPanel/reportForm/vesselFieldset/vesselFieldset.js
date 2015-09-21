@@ -1,5 +1,5 @@
-angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, locale, datatablesService, DTOptionsBuilder, DTColumnDefBuilder){
-    $scope.selectedVesselMenu = 'SELECTION';
+angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, locale, vesselRestService, GetListRequest, datatablesService, DTOptionsBuilder, DTColumnDefBuilder){
+    $scope.selectedVesselMenu = 'SIMPLE';
     
     $scope.isVesselMenuVisible = function(type){
         return $scope.selectedVesselMenu === type;
@@ -18,7 +18,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
                                     .withPaginationType('simple_numbers')
                                     .withDisplayLength(25)
                                     .withLanguage(datatablesService)
-                                    .withDOM('trpi')
+                                    .withDOM('trp')
                                     .withBootstrapOptions({
                                         pagination: {
                                             classes: {
@@ -30,7 +30,10 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     $scope.vesselsSelectionTable.dtColumnDefs = [
         DTColumnDefBuilder.newColumnDef(0),
         DTColumnDefBuilder.newColumnDef(1),
-        DTColumnDefBuilder.newColumnDef(2).notSortable()
+        DTColumnDefBuilder.newColumnDef(2),
+        DTColumnDefBuilder.newColumnDef(3),
+        DTColumnDefBuilder.newColumnDef(4),
+        DTColumnDefBuilder.newColumnDef(5).notSortable()
     ];
     
     //Delete one selected item (vessel or group)
@@ -43,29 +46,6 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
         $scope.report.vesselsSelection.splice(0,$scope.report.vesselsSelection.length);
     };
     
-    //TODO
-//    $scope.showModal = function(){
-//        
-//    };
-    
-    //VESSEL SIMPLE SEARCH TABLE
-    //Mock data
-    $scope.vessels = [{
-        id: 1,
-        name: 'Vessel 1',
-        fs: 'BE',
-        ircs: '123',
-        cfr: '456',
-        selected: false
-    },{
-        id: 2,
-        name: 'Vessel 2',
-        fs: 'PT',
-        ircs: '789',
-        cfr: '123',
-        selected: false
-    }];
-    
     $scope.vesselTable = {};
     $scope.vesselTable.selectAll = false;
     $scope.vesselTable.selectedVessels = 0;
@@ -77,7 +57,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
                                     .withDisplayLength(25)
                                     .withOption('order', [[1, 'asc']])
                                     .withLanguage(datatablesService)
-                                    .withDOM('trpi')
+                                    .withDOM('trp')
                                     .withBootstrapOptions({
                                         pagination: {
                                             classes: {
@@ -91,16 +71,17 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
         DTColumnDefBuilder.newColumnDef(1),
         DTColumnDefBuilder.newColumnDef(2),
         DTColumnDefBuilder.newColumnDef(3),
-        DTColumnDefBuilder.newColumnDef(4)
+        DTColumnDefBuilder.newColumnDef(4),
+        DTColumnDefBuilder.newColumnDef(5)
     ];
     
     $scope.toggleAllVessels = function(){
-        for (var i = 0; i < $scope.vessels.length; i++){
-            $scope.vessels[i].selected = $scope.vesselTable.selectAll;
+        for (var i = 0; i < $scope.shared.vessels.length; i++){
+            $scope.shared.vessels[i].selected = $scope.vesselTable.selectAll;
         }
         
         if ($scope.vesselTable.selectAll === true){
-            $scope.vesselTable.selectedVessels = $scope.vessels.length;
+            $scope.vesselTable.selectedVessels = $scope.shared.vessels.length;
         } else {
             $scope.vesselTable.selectedVessels = 0;
         }
@@ -113,7 +94,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
             $scope.vesselTable.selectedVessels -= 1;
         }
         
-        if ($scope.vesselTable.selectedVessels === $scope.vessels.length){
+        if ($scope.vesselTable.selectedVessels === $scope.shared.vessels.length){
             $scope.vesselTable.selectAll = true;
         } else {
             $scope.vesselTable.selectAll = false;
@@ -124,7 +105,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     $scope.checkVesselIsSelected = function(vesselSrc){
         var response = false;
         for (var i = 0; i < $scope.report.vesselsSelection.length; i++){
-            if (vesselSrc.id === $scope.report.vesselsSelection[i].id){
+            if (vesselSrc.vesselId.guid === $scope.report.vesselsSelection[i].guid){
                 response = true;
             }
         }
@@ -138,16 +119,43 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     };
     
     $scope.addVesselSelection = function(){
-        for (var i = 0; i < $scope.vessels.length; i++){
-            var vesselSrc = $scope.vessels[i];
+        for (var i = 0; i < $scope.shared.vessels.length; i++){
+            var vesselSrc = $scope.shared.vessels[i];
             if (vesselSrc.selected === true && $scope.checkVesselIsSelected(vesselSrc) === false){
                 $scope.report.vesselsSelection.push({
-                    id: vesselSrc.id,
+                    guid: vesselSrc.vesselId.guid,
+                    fs: vesselSrc.countryCode,
+                    ircs: vesselSrc.ircs,
+                    cfr: vesselSrc.cfr,
+                    em: vesselSrc.externalMarking,
                     name: vesselSrc.name,
                     type: 'vessel'
                 });
             }
         }
+    };
+    
+    $scope.searchVessels = function(){
+        if ($scope.shared.searchVesselString !== ''){
+            var searchableFields = ['FLAG_STATE', 'EXTERNAL_MARKING', 'NAME', 'IRCS', 'CFR'];
+            var getVesselListRequest = new GetListRequest(1, 100000, false, []);
+            
+            for (var i = 0; i < searchableFields.length; i++){
+                //FIXME when case insensitive search is implemented 
+                getVesselListRequest.addSearchCriteria(searchableFields[i], $scope.shared.searchVesselString.toUpperCase() + '*');
+            }
+            
+            vesselRestService.getVesselList(getVesselListRequest).then(getVesselsSuccess, getVesselsError);
+        }
+    };
+    
+    var getVesselsSuccess = function(response){
+        $scope.shared.vessels = response.items;
+    };
+    
+    var getVesselsError = function(error){
+        //TODO warn the user
+        console.log(error);
     };
     
 });
