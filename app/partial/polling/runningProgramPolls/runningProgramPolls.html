@@ -20,9 +20,9 @@
 
                             <th>{{'polling.running_program_polls_table_header_organization' | i18n}}</th>
 
-                            <th show-if-allowed="managePolls" class="actionIcon">{{'polling.running_program_polls_table_header_start' | i18n}}</th>
-                            <th show-if-allowed="managePolls" class="actionIcon">{{'polling.running_program_polls_table_header_stop' | i18n}}</th>
-                            <th show-if-allowed="managePolls" class="actionIcon">{{'polling.running_program_polls_table_header_delete' | i18n}}</th>
+                            <th class="actionIcon">{{'polling.running_program_polls_table_header_start' | i18n}}</th>
+                            <th class="actionIcon">{{'polling.running_program_polls_table_header_stop' | i18n}}</th>
+                            <th ng-if="accessToManagePolls" class="actionIcon">{{'polling.running_program_polls_table_header_delete' | i18n}}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -34,17 +34,17 @@
                         <td>{{item.attributes.FREQUENCY | secondsToTimeString}}</td>
                         <td>{{item.attributes.USER}}</td>
                         <td>{{item.attributes.USER_ORGANISATION}}</td>
-                        <td show-if-allowed="managePolls" class="actionIcon" ng-class="{inactive:!possibleToStart(item)}">
-                            <div class="start" ng-click="startProgramPoll(item)">
+                        <td class="actionIcon" ng-class="{inactive:!possibleToStart(item)}">
+                            <div class="start" ng-click="startProgramPoll(item)" ng-class="{noAccess:!accessToManagePolls}">
                                 <i class="fa fa-play"></i>
                             </div>
                         </td>
-                        <td show-if-allowed="managePolls" class="actionIcon" ng-class="{inactive:!possibleToStop(item)}">
-                            <div class="stop" ng-click="stopProgramPoll(item)">
+                        <td class="actionIcon" ng-class="{inactive:!possibleToStop(item)}">
+                            <div class="stop" ng-click="stopProgramPoll(item)" ng-class="{noAccess:!accessToManagePolls}">
                                 <i class="fa fa-stop"></i>
                             </td>
                         </td>
-                        <td show-if-allowed="managePolls" class="actionIcon">
+                        <td ng-if="accessToManagePolls" class="actionIcon">
                             <div class="delete" ng-click="deleteProgramPoll(item);">
                                 <i class="fa fa-trash-o"></i>
                             </div>

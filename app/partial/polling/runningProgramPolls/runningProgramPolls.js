@@ -1,4 +1,7 @@
-angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($scope, pollingRestService, alertService, locale, SearchResults){
+angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($scope, pollingRestService, alertService, locale, SearchResults, userService){
+
+    //Does the user have access to start/stop/delete program polls?
+    $scope.accessToManagePolls = userService.isAllowed('managePolls', 'Union-VMS', true);
 
     $scope.currentSearchResults = new SearchResults('attributes.VESSEL_NAME', false, locale.getString('polling.running_program_polls_zero_message'));
 
@@ -28,55 +31,61 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
 
     // Start a program poll
     $scope.startProgramPoll = function(programPoll){
-        if($scope.possibleToStart(programPoll)){
-            pollingRestService.startProgramPoll(programPoll).then(
-                function(updatedProgramPoll){
-                    //TODO: remove next two lines when backend is working
-                    updatedProgramPoll.running = true;
-                    updatedProgramPoll.attributes["VESSEL_NAME"] = programPoll.attributes["VESSEL_NAME"];
-                    updateProgramPollInResultsArray(programPoll, updatedProgramPoll);
-                },
-                function(error){
-                    alertService.showErrorMessage(locale.getString('polling.running_program_polls_start_error'));
-                }
-            );
+        if($scope.accessToManagePolls){
+            if($scope.possibleToStart(programPoll)){
+                pollingRestService.startProgramPoll(programPoll).then(
+                    function(updatedProgramPoll){
+                        //TODO: remove next two lines when backend is working
+                        updatedProgramPoll.running = true;
+                        updatedProgramPoll.attributes["VESSEL_NAME"] = programPoll.attributes["VESSEL_NAME"];
+                        updateProgramPollInResultsArray(programPoll, updatedProgramPoll);
+                    },
+                    function(error){
+                        alertService.showErrorMessage(locale.getString('polling.running_program_polls_start_error'));
+                    }
+                );
+            }
         }
     };
 
     // Stop a program poll
     $scope.stopProgramPoll = function(programPoll){
-        if($scope.possibleToStop(programPoll)){
-            pollingRestService.stopProgramPoll(programPoll).then(
-                function(updatedProgramPoll){
-                    //TODO: remove next two lines when backend is working
-                    updatedProgramPoll.running = false;
-                    updatedProgramPoll.attributes["VESSEL_NAME"] = programPoll.attributes["VESSEL_NAME"];
-                    updateProgramPollInResultsArray(programPoll, updatedProgramPoll);
-                },
-                function(error){
-                    alertService.showErrorMessage(locale.getString('polling.running_program_polls_stop_error'));
-                }
-            );
+        if($scope.accessToManagePolls){
+            if($scope.possibleToStop(programPoll)){
+                pollingRestService.stopProgramPoll(programPoll).then(
+                    function(updatedProgramPoll){
+                        //TODO: remove next two lines when backend is working
+                        updatedProgramPoll.running = false;
+                        updatedProgramPoll.attributes["VESSEL_NAME"] = programPoll.attributes["VESSEL_NAME"];
+                        updateProgramPollInResultsArray(programPoll, updatedProgramPoll);
+                    },
+                    function(error){
+                        alertService.showErrorMessage(locale.getString('polling.running_program_polls_stop_error'));
+                    }
+                );
+            }
         }
     };
 
     //Delete a program poll    
     $scope.deleteProgramPoll = function(programPoll){   
-        pollingRestService.inactivateProgramPoll(programPoll).then(
-            function(updatedProgramPoll){
-                //Remove program poll from list
-                var programPollIndex = $scope.currentSearchResults.items.indexOf(programPoll);
-                $scope.currentSearchResults.items.splice(programPollIndex, 1);                
+        if($scope.accessToManagePolls){
+            pollingRestService.inactivateProgramPoll(programPoll).then(
+                function(updatedProgramPoll){
+                    //Remove program poll from list
+                    var programPollIndex = $scope.currentSearchResults.items.indexOf(programPoll);
+                    $scope.currentSearchResults.items.splice(programPollIndex, 1);                
 
-                alertService.showSuccessMessageWithTimeout(locale.getString('polling.running_program_polls_delete_success'));
-                if($scope.currentSearchResults.items.length === 0){
-                    $scope.currentSearchResults.errorMessage = locale.getString("polling.running_program_polls_zero_message");
-                }                
-            },
-            function(error){
-                alertService.showErrorMessage(locale.getString('polling.running_program_polls_delete_error'));
-            }
-        );
+                    alertService.showSuccessMessageWithTimeout(locale.getString('polling.running_program_polls_delete_success'));
+                    if($scope.currentSearchResults.items.length === 0){
+                        $scope.currentSearchResults.errorMessage = locale.getString("polling.running_program_polls_zero_message");
+                    }                
+                },
+                function(error){
+                    alertService.showErrorMessage(locale.getString('polling.running_program_polls_delete_error'));
+                }
+            );
+        }
     };    
 
     //Is it possible to start this program?
