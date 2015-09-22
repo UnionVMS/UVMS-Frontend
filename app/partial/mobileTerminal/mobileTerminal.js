@@ -1,6 +1,10 @@
-angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $filter, searchService, alertService, MobileTerminal, SystemTypeAndLES, mobileTerminalRestService, pollingService, GetPollableListRequest, pollingRestService, configurationService, $location, locale, $stateParams, csvService, SearchResults){
+angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $filter, searchService, alertService, MobileTerminal, SystemTypeAndLES, mobileTerminalRestService, pollingService, GetPollableListRequest, pollingRestService, configurationService, $location, locale, $stateParams, csvService, SearchResults, userService){
 
     var hideAlertsOnScopeDestroy = true;
+
+    var checkAccessToFeature = function(feature) {
+        return userService.isAllowed(feature, 'Union-VMS', true);
+    };
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -13,10 +17,14 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
     //Selected by checkboxes
     $scope.selectedMobileTerminals = [];
 
-    $scope.editSelectionDropdownItems =[    
-        {'text':locale.getString('mobileTerminal.edit_selection_poll_terminals'),'code':'POLL'},
-        {'text':locale.getString('common.export_selection'),'code':'EXPORT'}
-    ];
+    //Edit dropdown
+    $scope.editSelectionDropdownItems = [];    
+    if(checkAccessToFeature('managePolls')){
+        $scope.editSelectionDropdownItems.push({'text':locale.getString('mobileTerminal.edit_selection_poll_terminals'),'code':'POLL'});
+    }
+    $scope.editSelectionDropdownItems.push({'text':locale.getString('common.export_selection'),'code':'EXPORT'});
+
+
     $scope.transponderSystems = [];
     $scope.channelNames = [];
     $scope.currentMobileTerminal = undefined;

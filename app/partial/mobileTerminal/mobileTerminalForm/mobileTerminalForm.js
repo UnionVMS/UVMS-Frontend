@@ -1,4 +1,8 @@
-angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scope, $route, $modal, locale, MobileTerminal, alertService, mobileTerminalRestService, modalComment){
+angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scope, $route, $modal, locale, MobileTerminal, alertService, userService, mobileTerminalRestService, modalComment){
+
+    var checkAccessToFeature = function(feature) {
+        return userService.isAllowed(feature, 'Union-VMS', true);
+    };
 
     //Visibility statuses
     $scope.isVisible = {
@@ -23,6 +27,19 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     //Has form submit been atempted?
     $scope.submitAttempted = false;
     $scope.waitingForCreateResponse = false;
+
+
+    //Disable form
+    $scope.disableForm = function(){
+        if(angular.isDefined($scope.currentMobileTerminal)){
+            //User is allowed to edit/create/assign...?
+            if(!checkAccessToFeature('manageMobileTerminals')){
+                return true;
+            }
+            return false;
+        }
+        return true;
+    };
 
     //Get terminal config for the selected terminal type
     $scope.getTerminalConfig = function(item){
