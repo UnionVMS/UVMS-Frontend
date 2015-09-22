@@ -7,11 +7,11 @@
                 <h3 ng-if="!isCreateNewMode() && !isVesselNameSet()">{{'vessel.update_vessel' | i18n}}</h3>
             </div><!-- DO NOT REMOVE this comment!
          --><div class="col-md-4 textAlignRight valign">
-                <div class="floatRight">
+                <div class="floatRight" ng-hide="disableForm()">
                     <button class="btn btn-primary" type="submit" ng-click="updateVessel()" ng-hide="isCreateNewMode()"> {{'common.update' | i18n}}</button>
                     <button  type="submit" class="btn btn-sm createnewvesselbutton" ng-click="createNewVessel()" ng-show="isCreateNewMode()" ng-disabled="waitingForCreateResponse">{{'vessel.create_new_vessel' | i18n}}</button>
                 </div>
-                <div class="floatRight setStatusContainer" ng-hide="isCreateNewMode()">
+                <div class="floatRight setStatusContainer" ng-hide="isCreateNewMode() || disableForm()">
                     <button type="button" class="btn btn-default" ng-show="vesselObj.active" ng-click="archiveVessel()">
                         {{'common.archive' | i18n}}
                     </button>
@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="detailsContainer">
-                    <vessel-details vessel="vesselObj" vessel-form="vesselForm" submit-attempted="submitAttempted" disable-form="!vesselObj.isLocalSource()" spin="waitingForCreateResponse"></vessel-details>
+                    <vessel-details vessel="vesselObj" vessel-form="vesselForm" submit-attempted="submitAttempted" disable-form="disableForm()" spin="waitingForCreateResponse"></vessel-details>
                 </div>
 
                 <div class="col-md-12 historyAndTerminalInformation">

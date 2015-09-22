@@ -1,4 +1,8 @@
-angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $modal, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest) {
+angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $modal, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService) {
+
+    var checkAccessToFeature = function(feature) {
+        return userService.isAllowed(feature, 'Union-VMS', true);
+    };
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -25,6 +29,23 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     $scope.waitingForHistoryResponse = false;
     $scope.waitingForMobileTerminalsResponse = false;
 
+    //Disable form
+    $scope.disableForm = function(){
+        if(angular.isDefined($scope.vesselObj)){
+            //User is allowed to edit/create?
+            if(!checkAccessToFeature('manageVessels')){
+                return true;
+            }
+            //Only assets with local source can be edited
+            if(!$scope.vesselObj.isLocalSource()){
+                return true;
+            }
+
+            return false;
+        }
+        return true;
+    };
+
     //MOCK FUNCTION
     $scope.addNewMobileTerminalToVessel = function () {
         alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
@@ -38,7 +59,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
 
         $scope.waitingForMobileTerminalsResponse = true;
         mobileTerminalRestService.getMobileTerminalList(request).then(function(page) {
-            $scope.mobileTerminals = page.mobileTerminals;
+            $scope.mobileTerminals = page.items;
 
             $scope.nonUniqueActiveTerminalTypes = $scope.getNonUniqueActiveTerminalTypes($scope.mobileTerminals);
 			if ($scope.hasNonUniqueActiveTerminalTypes()) {
@@ -70,17 +91,19 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     $scope.getNonUniqueActiveTerminalTypes = function(terminals) {
         var activeTerminalsByType = {};
         var nonUniqueActiveTerminalTypes = {};
-        for (var i = 0; i < terminals.length; i++) {
-            var terminal = terminals[i];
-            if (!terminal.active) {
-                continue;
-            }
+        if(angular.isDefined(terminals)){
+            for (var i = 0; i < terminals.length; i++) {
+                var terminal = terminals[i];
+                if (!terminal.active) {
+                    continue;
+                }
 
-            if (activeTerminalsByType[terminal.type]) {
-                nonUniqueActiveTerminalTypes[terminal.type] = true;
-            }
-            else {
-                activeTerminalsByType[terminal.type] = true;
+                if (activeTerminalsByType[terminal.type]) {
+                    nonUniqueActiveTerminalTypes[terminal.type] = true;
+                }
+                else {
+                    activeTerminalsByType[terminal.type] = true;
+                }
             }
         }
 

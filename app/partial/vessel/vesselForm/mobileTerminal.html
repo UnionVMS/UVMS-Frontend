@@ -1,6 +1,6 @@
 <div class="mobileTerminal card" ng-class="{'mobileTerminal-warning': isNonUniqueActiveTerminalType(mt.type)}">
 
-    <a href="#/communication/{{mt.guid}}" title="{{'mobileTerminal.edit_mobile_terminal' | i18n}}">
+    <a show-if-allowed="manageMobileTerminals" href="#/communication/{{mt.guid}}" title="{{'mobileTerminal.edit_mobile_terminal' | i18n}}">
         <i class="fa fa-pencil-square-o fa-lg editMobileTerminal"></i>
     </a>
 

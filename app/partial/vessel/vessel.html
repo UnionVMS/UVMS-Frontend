@@ -12,7 +12,7 @@
                         <dropdown class="" ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
                     </div>
                     <div class="col-md-2">
-                        <button class="btn btn-sm addvesselbtn uvmsbtn" ng-click="toggleCreateNewVessel()" type="button">
+                        <button class="btn btn-sm addvesselbtn uvmsbtn" ng-click="toggleCreateNewVessel()" type="button" show-if-allowed="manageVessels">
                             <span class="fa fa-plus"></span> {{'vessel.add_new' | i18n}}
                         </button>
                     </div>
