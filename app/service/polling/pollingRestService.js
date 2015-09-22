@@ -110,7 +110,9 @@ angular.module('unionvmsWeb')
                             var programPoll = programPolls[i];
                             if (programPoll.connectionId) {
                                 var vessel = page.getVesselByGuid(programPoll.connectionId);
-                                programPoll.setVesselName(vessel.name);
+                                if(angular.isDefined(vessel)){
+                                    programPoll.setVesselName(vessel.name);
+                                }
                             }
                         }
 
