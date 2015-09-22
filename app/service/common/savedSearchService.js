@@ -1,11 +1,20 @@
-angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, SavedSearchGroup, vesselRestService, movementRestService) {
+angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, SavedSearchGroup, vesselRestService, movementRestService, userService) {
+
+    var checkAccessToFeature = function(feature) {
+        return userService.isAllowed(feature, 'Union-VMS', true);
+    };
 
     var vesselGroups = [];
     var movementSearches = [];
 
-    var init = function(){  
-        getVesselGroupsForUser();
-        getMovementSearches();
+    var init = function(){
+        if(checkAccessToFeature('viewVesselsAndMobileTerminals')){
+            getVesselGroupsForUser();
+        }
+
+        if(checkAccessToFeature('viewMovements')){
+            getMovementSearches();
+        }
     };
     
     //Load list of VesselGroups
@@ -38,7 +47,7 @@ angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, 
         //Get all vessel groups that belongs to the user
         getVesselGroupsForUser : function(){
             //Load list of VesselGroups
-            return vesselGroups;          
+            return vesselGroups;
         },
         createNewVesselGroup : function(savedSearchGroup){
             var defer = $q.defer();
