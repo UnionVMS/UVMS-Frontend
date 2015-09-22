@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').directive('layerTree', function() {
+angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale) {
 	return {
 		restrict: 'AE',
 		replace: true,
@@ -8,7 +8,7 @@ angular.module('unionvmsWeb').directive('layerTree', function() {
 		link: function(scope, element, attrs, fn) {
 			scope.updateMap = function( event, data ){
 				// Update map on layer select
-				var foo;
+
 			};
 			var glyph_opts = {
 				map: {
@@ -41,12 +41,21 @@ angular.module('unionvmsWeb').directive('layerTree', function() {
 						if ( node.isFolder() ) {
 							return false;
 						}
+
 						return true;
 					},
 					dragEnter: function(node, data) {
 						/*if ( node.parent !== data.otherNode.parent ) {
 								return false;
 						}*/
+
+						// fancytree is not sending event on drop-marker creation
+						// therefore adding here.
+						$( '#fancytree-drop-marker' )// otherwise drop-marker is not displayed the first time.
+							.css( 'display', 'block' )
+							.css( 'display', 'none' );
+						$( '#fancytree-drop-marker' ).addClass( 'fa fa-arrow-right' );
+
 						return ['before', 'after'];
 					},
 					dragOver: function( node, data ) {},
@@ -59,57 +68,46 @@ angular.module('unionvmsWeb').directive('layerTree', function() {
 				source: [
 					{
 						title: 'spatial.layer_tree_vms',
-						key: '1',
 						folder: true,
 						expanded: true,
 						children: [
 							{
 								title: 'Movements',
-								key: '2'
 							},
 							{
 								title: 'Segments',
-								key: '3'
 							}
 						]
 					},
 					{
 						title: 'spatial.layer_tree_areas',
-						key: '5',
 						folder: true,
 						expanded: true,
 						children: [
 								{
 									title: 'spatial.layer_tree_system_areas',
-									key: '6',
 									folder: true,
 									children: [
 										{
 											title: 'EEZ - 1',
-											key: '7'
 										},
 										{
 											title: 'FAO - 3',
-											key: '8'
 										}
 									]
 								},
 								{
 									title: 'spatial.layer_tree_user_areas',
-									key: '10',
 									folder: true,
 									children: [
 										{
 											title: 'My Area 01',
-											key: '11'
 										},
 										{
 											title: 'My Area 02',
-											key: '12'
 										},
 										{
 											title: 'My Area 03',
-											key: '13'
 										}
 									]
 								}
@@ -117,26 +115,27 @@ angular.module('unionvmsWeb').directive('layerTree', function() {
 						},
 						{
 							title: 'spatial.layer_tree_background_layers',
-							key: '14',
 							folder: true,
 							expanded: true,
 							children: [
 								{
 									title: 'OpenStreetMap',
-									key: '15',
-									selected: true
+									selected: true,
+									data: {
+										exclusive_b: true,
+										dnd_b: false
+									},
+									exclusive_a: true,
+									dnd_a: true
 								},
 								{
 									title: 'MyGeoserverBackgroundLayer',
-									key: '16'
 								},
 								{
 									title: 'OpenSeaMap',
-									key: '17'
 								},
 								{
 									title: 'Graticule',
-									key: '18'
 								}
 							]
 						}
@@ -153,6 +152,14 @@ angular.module('unionvmsWeb').directive('layerTree', function() {
 				}
 			});
 
+			scope.$tree = $( element ).fancytree( 'getTree' );
+
+			locale.ready( 'spatial' ).then( function() {
+		      $( '.fancytree-title' ).each( function( index ) {
+		        var key = $( this ).html();
+		        $( this ).html( locale.getString( key ) );
+		      });
+		  });
 		}
 	};
 });

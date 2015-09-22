@@ -24,11 +24,4 @@ angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $time
     var th = $( '#layer-tabs-container' ).height()+2;
     $( '.fancytree-container' ).css( 'height', wh-th+'px' );
   };
-
-  locale.ready( 'spatial' ).then( function() {
-      $( '.fancytree-title' ).each( function( index ) {
-        var key = $( this ).html();
-        $( this ).html( locale.getString( key ) );
-      });
-  });
 });
