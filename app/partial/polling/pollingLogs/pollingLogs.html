@@ -1,11 +1,12 @@
 <div>
     <div static-include="partial/polling/pollingPageHeader/pollingPageHeader.html"></div>
 
-    <div class="container">
-        <div class="pollingLogsContainer">
-            <div ng-include="'partial/polling/runningProgramPolls/runningProgramPolls.html'"></div>
+    <div class="container containerWithBottomPadding ">
+        <div ng-include="'partial/polling/runningProgramPolls/runningProgramPolls.html'"></div>
+
+        <div class="card pollingLogsContainer">
             <div class="row">
-                <div search-results-table search="currentSearchResults" load-next-page-function="loadNextPage" class="col-md-12 card">
+                <div search-results-table search="currentSearchResults" load-next-page-function="loadNextPage" class="col-md-12">
                     <form>
                         <table class="searchResults colorOdd pollingLogsTable">
                             <thead>
@@ -129,8 +130,8 @@
                 </div>
 
             </div>
-            
         </div>
+                
     </div>
 
 </div>

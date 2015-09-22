@@ -1,13 +1,6 @@
-angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($scope, pollingRestService, alertService, locale){
+angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($scope, pollingRestService, alertService, locale, SearchResults){
 
-    //Search objects and results
-    $scope.currentSearchResults = {
-        programPolls : [],
-        errorMessage : "",
-        loading : true,
-        sortBy : "",
-        sortReverse : ""
-    };   
+    $scope.currentSearchResults = new SearchResults('attributes.VESSEL_NAME', false, locale.getString('polling.running_program_polls_zero_message'));
 
     //Init function when entering page
     var init = function(){
@@ -17,26 +10,20 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
 
     //Success getting running program polls
     var getRunningPollsSuccess = function(runningPolls){
-        $scope.currentSearchResults.loading = false;
-        if(runningPolls.length > 0){
-            $scope.currentSearchResults.programPolls = runningPolls;
-        }else{
-            $scope.currentSearchResults.errorMessage = locale.getString("polling.running_program_polls_zero_message");
-        }
+        $scope.currentSearchResults.setLoading(false);
+        $scope.currentSearchResults.items = runningPolls;
     };
 
     //Error getting running program polls
     var getRunningPollsFail = function(error){
-        $scope.currentSearchResults.loading = false;
-        $scope.currentSearchResults.errorMessage = locale.getString("polling.running_program_polls_error_message");
+        $scope.currentSearchResults.setLoading(false);
+        $scope.currentSearchResults.setErrorMessage(locale.getString('polling.running_program_polls_error_message'));
     };
 
     //Update (replace) a program poll in the array of program polls
     var updateProgramPollInResultsArray = function(oldProgramPoll, updatedProgramPoll){
-        console.log($scope.currentSearchResults.programPolls.length + " polls");
-        var programPollIndex = $scope.currentSearchResults.programPolls.indexOf(oldProgramPoll);
-        $scope.currentSearchResults.programPolls[programPollIndex] = updatedProgramPoll;
-        console.log($scope.currentSearchResults.programPolls.length + " polls");
+        var programPollIndex = $scope.currentSearchResults.items.indexOf(oldProgramPoll);
+        $scope.currentSearchResults.items[programPollIndex] = updatedProgramPoll;        
     };
 
     // Start a program poll
@@ -78,11 +65,11 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
         pollingRestService.inactivateProgramPoll(programPoll).then(
             function(updatedProgramPoll){
                 //Remove program poll from list
-                var programPollIndex = $scope.currentSearchResults.programPolls.indexOf(programPoll);
-                $scope.currentSearchResults.programPolls.splice(programPollIndex, 1);                
+                var programPollIndex = $scope.currentSearchResults.items.indexOf(programPoll);
+                $scope.currentSearchResults.items.splice(programPollIndex, 1);                
 
                 alertService.showSuccessMessageWithTimeout(locale.getString('polling.running_program_polls_delete_success'));
-                if($scope.currentSearchResults.programPolls.length === 0){
+                if($scope.currentSearchResults.items.length === 0){
                     $scope.currentSearchResults.errorMessage = locale.getString("polling.running_program_polls_zero_message");
                 }                
             },
