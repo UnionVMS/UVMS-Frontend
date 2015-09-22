@@ -76,7 +76,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["MOVEMENT"]);
+                    return initService.loadConfigFor(["MOVEMENT", "VESSEL"]);
                 }
             }
         })
@@ -122,7 +122,10 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                 config : function(initService){
                     return initService.loadConfigFor(["VESSEL"]);
                 }
-            }
+            },
+            data: {
+                access: 'viewVesselsAndMobileTerminals'
+            },            
         })
         .state('app.assets-id', {
             url: '/assets/:id',
@@ -136,7 +139,10 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                 config : function(initService){
                     return initService.loadConfigFor(["VESSEL"]);
                 }
-            }
+            },
+            data: {
+                access: 'viewVesselsAndMobileTerminals'
+            },            
         })
         .state('app.communication', {
             url: '/communication',
@@ -148,9 +154,12 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS", "MOBILE_TERMINAL_CHANNELS"]);
+                    return initService.loadConfigFor(["MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS", "MOBILE_TERMINAL_CHANNELS", "VESSEL"]);
                 }
-            }
+            },
+            data: {
+                access: 'viewVesselsAndMobileTerminals'
+            },
         })        
         .state('app.communication-id', {
             url: '/communication/:id',
@@ -162,7 +171,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS", "MOBILE_TERMINAL_CHANNELS"]);
+                    return initService.loadConfigFor(["MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS", "MOBILE_TERMINAL_CHANNELS", "VESSEL"]);
                 }
             }
         })
@@ -174,7 +183,10 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'PollingCtrl' 
                 }
             },
-            resolve: {}
+            resolve: {},
+            data: {
+                access: 'managePolls'
+            },            
         })
         .state('app.pollingLogs', {
             url: '/polling/logs',
@@ -184,7 +196,10 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'pollingLogsCtrl' 
                 }
             },
-            resolve: {}
+            resolve: {},
+            data: {
+                access: 'viewMobileTerminalPolls'
+            },                   
         })
         .state('app.auditLog', {
             url: '/admin/auditlog',

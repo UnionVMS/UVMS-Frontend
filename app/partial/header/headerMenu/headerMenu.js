@@ -23,31 +23,32 @@
         addMenuItem(locale.getString('header.menu_reporting'), '/reporting');
 
         //MOVEMENT
-        addMenuItem(locale.getString('header.menu_movement'), '/movement');
-
-        //EXCHANGE
-        addMenuItem(locale.getString('header.menu_exchange'), '/exchange');
-
-        //POLLING
-        addMenuItem(locale.getString('header.menu_polling'), '/polling/logs');
-
-        //COMMUNICATION
-        if(checkAccess('MobileTerminal', 'mobileTerminalConfig')){
-            addMenuItem(locale.getString('header.menu_communication'), '/communication');
+        if(checkAccess('Movement', 'movementConfig')){
+            addMenuItem(locale.getString('header.menu_movement'), '/movement');
         }
 
-        //ASSETS
-        if(checkAccess('Vessel', 'vesselConfig')){
+        //EXCHANGE
+        if(checkAccess('Exchange', 'viewExchangeLog')){
+            addMenuItem(locale.getString('header.menu_exchange'), '/exchange');
+        }
+
+        //POLLING
+        if(checkAccess('Union-VMS', 'viewMobileTerminalPolls')){
+            addMenuItem(locale.getString('header.menu_polling'), '/polling/logs');        
+        }
+        //COMMUNICATION, ASSETS
+        if(checkAccess('Union-VMS', 'viewVesselsAndMobileTerminals')){
+            addMenuItem(locale.getString('header.menu_communication'), '/communication');
             addMenuItem(locale.getString('header.menu_assets'), '/assets');            
         }
 
         //ALARMS
         addMenuItem(locale.getString('header.menu_alarmconditions'), '/alarms/holdingtable');
         
-        //USM
-        //if(checkAccess('USM', 'viewUsers')){
+        //USERS
+        if(checkAccess('USM', 'viewUsers')){
             addMenuItem(locale.getString('header.menu_user'), '/usm');
-        //}
+        }
 
         //ADMIN
         addMenuItem(locale.getString('header.menu_admin'), '/admin');
