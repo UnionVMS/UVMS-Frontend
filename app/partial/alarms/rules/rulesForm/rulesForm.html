@@ -221,8 +221,15 @@
             </div>
 
             <div class="row ruleTestContainer">
-                <div class="col-md-8 ruleTestMessage">
-                    <span ng-show="ruleTest.message" ng-class="{'success' : ruleTest.success, 'error' : !ruleTest.success, 'outdated' : ruleTest.outdated}">{{ruleTest.message}}</span>
+                <div class="col-md-8 ruleTestMessage" ng-class="{'outdated' : ruleTest.outdated}">
+                    <span ng-show="ruleTest.message" ng-class="{'success' : ruleTest.success, 'error' : !ruleTest.success}">{{ruleTest.message}}</span>
+                    <div class="testProblemsContainer">
+                        <ul>
+                        <li ng-repeat="problem in ruleTest.problems">
+                            <i class="fa fa-times"></i> {{'alarms.rules_test_error_' +problem | i18n}}
+                        </li>                    
+                        </ul>
+                    </div>
                 </div>
                 <div class="col-md-4 textAlignRight" >
                     <span class="link" ng-click="testRule()">{{'alarms.rules_form_test_rule' | i18n}}</span>

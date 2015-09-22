@@ -272,19 +272,17 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
 
     //Test rule
     $scope.testRule = function(){
-        $log.debug("Test rule");
         $scope.ruleTest.outdated = false;
 
-        //TODO: Test if rule is valid
         //TODO: Get matches for the rule
+        var testResult = ruleService.areRuleDefinitionsAndActionsValid($scope.currentRule);
+        $scope.ruleTest.success = testResult.success;
+        $scope.ruleTest.problems = testResult.problems;
 
-        //TODO: Test
-        if($scope.currentRule.getNumberOfDefinitions() % 2 === 0){
-            $scope.ruleTest.success = true;
-            $scope.ruleTest.message = "Rule definition was successful. You have 2 hits on the last 100 position reports.";
+       if(testResult.success){
+            $scope.ruleTest.message = locale.getString('alarms.rules_test_success');
         }else{
-            $scope.ruleTest.success = false;
-            $scope.ruleTest.message = "Rule definition is invalid.";
+            $scope.ruleTest.message = locale.getString('alarms.rules_test_fail');
         }
     };
         

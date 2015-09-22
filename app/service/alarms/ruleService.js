@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('ruleService',function(locale) {
+angular.module('unionvmsWeb').factory('ruleService',function(locale, $log) {
 
 	var ruleService = {
         getRuleAsText : function(rule){
@@ -68,6 +68,109 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale) {
             }
             return text;
         },
+
+        areRuleDefinitionsAndActionsValid : function(rule){
+            var returnObject = {success: false, problems:[]};
+            //Validation rules:
+            //At least 1 definition
+            //At least 1 action
+            //LogicBoolOperator is AND/OR for all but the last that is NONE
+            //parentheses match
+            //No empty criterias field for a definition
+            //No empty subcriterias field  for a definition
+            //No empty values field for a definition
+            //No empty condition field for a definition
+            //No empty value field for an SEND_TO_ENDPOINT action
+            try{
+                //At least 1 definition and at least 1 action
+                if(rule.getNumberOfDefinitions() === 0){                    
+                    returnObject.problems.push('NO_DEFINITIONS');
+                }
+
+                if(rule.getNumberOfActions() === 0 ){                    
+                    returnObject.problems.push('NO_ACTIONS');
+                }
+                
+                var i,
+                    definition,
+                    startOperators = [],
+                    endOperators = [];
+                for (i = rule.definitions.length-1; i >= 0; i--){
+                    definition = rule.definitions[i];
+
+                    //No empty criterias field for a definition
+                    if(typeof definition.criteria !== 'string' || definition.criteria.trim().length === 0){
+                        returnObject.problems.push('INVALID_DEF_CRITERIA');
+                    }
+                    //No empty subcriterias field  for a definition
+                    if(typeof definition.subCriteria !== 'string' || definition.subCriteria.trim().length === 0){
+                        returnObject.problems.push('INVALID_DEF_SUBCRITERIA');
+                    }                    
+                    //No empty values field for a definition
+                    if(typeof definition.value !== 'string' || definition.value.trim().length === 0){
+                        returnObject.problems.push('INVALID_DEF_VALUE');
+                    }                           
+                    //No empty condition field for a definition                    
+                    if(typeof definition.condition !== 'string' || definition.condition.trim().length === 0){
+                        returnObject.problems.push('INVALID_DEF_CONDITION');
+                    }
+
+                    //LogicBoolOperator is AND/OR for all but the last that is NONE
+                    var validOperators = ['AND', 'OR'];
+                    if(i === rule.definitions.length-1){
+                        validOperators = ['NONE'];
+                    }
+                    if(validOperators.indexOf(definition.logicBoolOperator) < 0){
+                        returnObject.problems.push('INVALID_DEF_BOOL');
+                    }
+
+                    //Add start- and endOperators to lists
+                    if(typeof definition.startOperator === 'string' && definition.startOperator.trim().length > 0){
+                        startOperators.push(definition.startOperator);
+                    }
+                    if(typeof definition.endOperator === 'string' && definition.endOperator.trim().length > 0){
+                        endOperators.push(definition.endOperator);
+                    }
+
+                    //parentheses match
+                    //NOTE that iteration is done from the end to the start in this for loop
+                    //startOperators should not be larger than endOperators
+                    if(startOperators.join('').length > endOperators.join('').length){
+                        returnObject.problems.push('PARANTHESES_DONT_MATCH');
+                    }                    
+                }
+
+                //parentheses match
+                //should be same number of chars(parantheses)
+                if(startOperators.join('').length !== endOperators.join('').length){
+                    returnObject.problems.push('PARANTHESES_DONT_MATCH');
+                }
+
+                //No empty value field for an SEND_TO_ENDPOINT action
+                var thenAction;
+                for (i = rule.actions.length-1; i >= 0; i--){
+                    thenAction = rule.actions[i];
+                    if(thenAction.action === 'SEND_TO_ENDPOINT'){
+                        if(typeof thenAction.value !== 'string' || thenAction.value.trim().length === 0){
+                            returnObject.problems.push('INVALID_ACTION_VALUE');
+                        }                            
+                    }
+                }
+
+            }catch(error){
+                $log.error("Error validating rule definitions and actions.", error);
+                returnObject.problems.push('UNKNOWN');
+            }
+
+            if(returnObject.problems.length === 0){
+                returnObject.success = true;
+            }else{
+                //Only want unique items
+                returnObject.problems = _.uniq(returnObject.problems);
+            }
+
+            return returnObject;
+        }
 
     };
 

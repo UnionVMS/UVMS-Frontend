@@ -69,16 +69,23 @@
 
     .ruleTestContainer{
         margin-top: 10px;
+        .outdated{
+            opacity: 0.5;
+        }
         .ruleTestMessage{
             .success{
                 color: @brand-success;
             }
             .error{
                 color: @brand-danger;
+            }     
+        }
+        .testProblemsContainer{
+            ul{
+                li{
+                    cursor:default;
+                }
             }
-            .outdated{
-                opacity: 0.5;
-            }        
         }
     }
 
