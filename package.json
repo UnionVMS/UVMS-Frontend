@@ -1,6 +1,10 @@
 {
   "name": "unionvmsWeb",
   "version": "1.0.10",
+  "repository": {
+    "type": "svn",
+    "url": "https://webgate.ec.europa.eu/CITnet/svn/UNIONVMS/branches/dev/unionvms-web"
+  },
   "devDependencies": {
     "grunt": "~0.4",
     "grunt-angular-templates": "~0.5",
