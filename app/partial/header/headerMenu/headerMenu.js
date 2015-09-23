@@ -23,12 +23,12 @@
         addMenuItem(locale.getString('header.menu_reporting'), '/reporting');
 
         //MOVEMENT
-        if(checkAccess('Movement', 'movementConfig')){
+        if(checkAccess('Movement', 'viewMovements')){
             addMenuItem(locale.getString('header.menu_movement'), '/movement');
         }
 
         //EXCHANGE
-        if(checkAccess('Exchange', 'viewExchangeLog')){
+        if(checkAccess('Exchange', 'viewExchange')){
             addMenuItem(locale.getString('header.menu_exchange'), '/exchange');
         }
 
