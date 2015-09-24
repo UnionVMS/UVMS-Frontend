@@ -13,8 +13,40 @@
         });
     };
 
+    //Features for showing user in menu
+    var userFeatures = [
+        'activateRoles',
+        'activateScopes',
+        'activateUsers',
+        'assignRoles',
+        'assignScopes',
+        'configurePolicies',
+        'copyUserProfile',
+        'manageApplications',
+        'manageEndpoints',
+        'manageOrganisations',
+        'managePersons',
+        'manageRoles',
+        'manageScopes',
+        'manageUserContexts',
+        'manageUserPreferences',
+        'manageUsers',
+        'viewApplications',
+        'viewEndpointsDetails',
+        'viewOrganisationDetails',
+        'viewOrganisations',
+        'viewPersonDetails',
+        'viewRoles',
+        'viewScopes',
+        'viewUserContexts',
+        'viewUserPreferences',
+        'viewUsers',
+    ];
+
     var setMenu = function(){
         $scope.menu = [];
+
+        var unionVMSApplication = 'Union-VMS';
 
         //TODAY
         addMenuItem(locale.getString('header.menu_today'), '/today');
@@ -33,11 +65,11 @@
         }
 
         //POLLING
-        if(checkAccess('Union-VMS', 'viewMobileTerminalPolls')){
+        if(checkAccess(unionVMSApplication, 'viewMobileTerminalPolls')){
             addMenuItem(locale.getString('header.menu_polling'), '/polling/logs');        
         }
         //COMMUNICATION, ASSETS
-        if(checkAccess('Union-VMS', 'viewVesselsAndMobileTerminals')){
+        if(checkAccess(unionVMSApplication, 'viewVesselsAndMobileTerminals')){
             addMenuItem(locale.getString('header.menu_communication'), '/communication');
             addMenuItem(locale.getString('header.menu_assets'), '/assets');            
         }
@@ -46,12 +78,22 @@
         addMenuItem(locale.getString('header.menu_alarmconditions'), '/alarms/holdingtable');
         
         //USERS
-        if(checkAccess('USM', 'viewUsers')){
+        var showUser = false;
+        $.each(userFeatures, function(index, feature){
+            if(checkAccess('USM', feature)){
+                showUser = true;
+                return false;
+            }
+        });
+        if(showUser){
             addMenuItem(locale.getString('header.menu_user'), '/usm');
         }
 
         //ADMIN
-        addMenuItem(locale.getString('header.menu_admin'), '/admin');
+        //TODO: Update features needed, should belong to Union-VMS app
+        if(checkAccess('Audit', 'viewAudit') || checkAccess(unionVMSApplication, 'viewConfiguration')){
+            addMenuItem(locale.getString('header.menu_admin'), '/admin');
+        }
     };
 
     var init = function(){
