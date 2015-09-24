@@ -1,4 +1,4 @@
 {
     "env_name": "cygnus",
-    "rest_api_base" : "http://cygnus-dev.athens.intrasoft-intl.private:28080"
+    "rest_api_base" : "https://cygnus-dev.athens.intrasoft-intl.private:28443"
 }

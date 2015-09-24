@@ -175,6 +175,11 @@ module.exports = function (grunt) {
                 expand:true,
                 src: ['assets/**/*'], dest: 'dist/'
             },
+            {   cwd: 'app/usm',
+                expand: true,
+                src: ['assets/translate/**/*'],
+                dest: 'dist/usm/'
+            },
             {
                 expand:true,
                 flatten: true,
@@ -313,10 +318,10 @@ module.exports = function (grunt) {
         frameworks: ['jasmine'],
         browserNoActivityTimeout: 100000,
         files: [  //this files data is also updated in the watch handler, if updated change there too
-          {pattern: 'environment/*.json', watched: true, included: false, served: true},          
+          {pattern: 'environment/*.json', watched: true, included: false, served: true},
           '<%= dom_munger.data.appjs %>',
           'bower_components/angular-mocks/angular-mocks.js',
-          'test/envConfigForTest.js',                
+          'test/envConfigForTest.js',
           //createFolderGlobs('*-spec.js'),
           'app/partial/**/*-spec.js',
           'app/service/**/*-spec.js',
@@ -382,14 +387,14 @@ module.exports = function (grunt) {
                 //grunt.task.run('jasmine:unit');
                 //grunt.config('karma.options.files', files);
                 var files = [
-                    {pattern: 'environment/*.json', watched: true, included: false, served: true},          
+                    {pattern: 'environment/*.json', watched: true, included: false, served: true},
                     '<%= dom_munger.data.appjs %>',
-                    'bower_components/angular-mocks/angular-mocks.js',                
-                    'test/envConfigForTest.js',                
+                    'bower_components/angular-mocks/angular-mocks.js',
+                    'test/envConfigForTest.js',
                     spec
                 ];
 
-                grunt.config('karma.options.files', files);                
+                grunt.config('karma.options.files', files);
                 grunt.task.run('karma:during_watch');
             }
         }
