@@ -10,10 +10,10 @@
             <dropdown ng-model="advancedSearchObject.TYPE" initialtext="{{'movement.advanced_search_placeholder_carrier_type' | i18n}}" items="carrierType"></dropdown>
         </div>
         <div class="col-md-6 smallerpadding searchcriteria">
-            <dropdown ng-model="advancedSearchObject.LENGTH" initialtext="{{'movement.advanced_search_placeholder_length' | i18n}}" items="carrierLength"></dropdown>
+            <dropdown ng-model="advancedSearchObject.LENGTH_SPAN" initialtext="{{'movement.advanced_search_placeholder_length' | i18n}}" items="carrierLength"></dropdown>
         </div>
         <div class="col-md-6 smallerpadding searchcriteria">
-            <dropdown ng-model="advancedSearchObject.MAP_AREA" initialtext="{{'movement.advanced_search_placeholder_map_area' | i18n}}" items="mapArea"></dropdown>
+            <dropdown ng-model="advancedSearchObject.AREA" initialtext="{{'movement.advanced_search_placeholder_map_area' | i18n}}" items="mapArea"></dropdown>
         </div>
         <div class="col-md-6 smallerpadding searchcriteria">
             <dropdown ng-model="advancedSearchObject.TIME_SPAN" no-placeholder-item items="timeSpanDropDownItems"></dropdown>
@@ -30,12 +30,12 @@
             <saved-search-dropdown type="VESSEL" class="dropdown simpleSearch" ng-model="selectedVesselGroup" initialtext="{{'movement.advanced_search_group_dropdown' | i18n}}" callback="selectVesselGroup"></saved-search-dropdown>
         </div>
         <div class="col-md-6 smallerpadding searchcriteria">
-            <dropdown ng-model="advancedSearchObject.MEAS_SPEED" initialtext="{{'movement.advanced_search_placeholder_measured_speed' | i18n}}" items="meassuredSpeed"></dropdown>
+            <dropdown ng-model="advancedSearchObject.MEAS_SPEED_SPAN" initialtext="{{'movement.advanced_search_placeholder_measured_speed' | i18n}}" items="meassuredSpeed"></dropdown>
         </div>
         <div class="col-md-12 smallerpadding searchcriteria">
              <datepicker-input model="advancedSearchObject.FROM_DATE" time="true" placeholder="{{'movement.advanced_search_placeholder_date_time_from' | i18n}}" ></datepicker-input>
         </div>
-    </div>  
+    </div>
 </div>
 
 <div class="col-md-3 nopaddingleft">
@@ -44,7 +44,7 @@
             <input type="text" placeholder="{{'movement.advanced_search_placeholder_by_cfr' | i18n}}"  class="form-control" tabindex="5" ng-model="advancedSearchObject.CFR">
         </div>
         <div class="col-md-6 smallerpadding searchcriteria">
-            <dropdown ng-model="advancedSearchObject.MESSAGE_TYPE" initialtext="{{'movement.advanced_search_placeholder_msg_type' | i18n}}" items="messageType"></dropdown>
+            <dropdown ng-model="advancedSearchObject.MOVEMENT_TYPE" initialtext="{{'movement.advanced_search_placeholder_msg_type' | i18n}}" items="movementType"></dropdown>
         </div>
         <div class="col-md-6 smallerpadding searchcriteria">
             <dropdown ng-model="advancedSearchObject.STATUS" initialtext="{{'movement.advanced_search_placeholder_status' | i18n}}" items="status"></dropdown>

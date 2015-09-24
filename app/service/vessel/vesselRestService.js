@@ -10,7 +10,7 @@ angular.module('unionvmsWeb')
                     update: {method: 'PUT'}
                 });
             },
-            getVesselList : function(){  
+            getVesselList : function(){
                 return $resource('/vessel/rest/vessel/list/',{},{
                     list : { method: 'POST'}
                 });
@@ -28,12 +28,12 @@ angular.module('unionvmsWeb')
             },
             getConfigValues : function(){
                 return $resource('/vessel/rest/config');
-            }  
+            }
         };
     })
-.factory('vesselRestService', function($q, $http, vesselRestFactory, VesselListPage, Vessel, SavedSearchGroup){
+.factory('vesselRestService', function($q, $http, vesselRestFactory, VesselListPage, Vessel, SavedSearchGroup, userService){
 
-    var userName = "FRONTEND_USER";
+    var userName = userService.getUserName();
 
     var getVesselList = function(getListRequest){
         var deferred = $q.defer();
@@ -67,7 +67,7 @@ angular.module('unionvmsWeb')
                 vessels.push(Vessel.fromJson({cfr:'ASD', name:'Mock name', ircs :'SWE23423'}));
                 //deferred.reject(err);
                 var vesselListPage = new VesselListPage(vessels, 5, 33);
-                deferred.resolve(vesselListPage);                
+                deferred.resolve(vesselListPage);
             }
         );
 
@@ -86,7 +86,7 @@ angular.module('unionvmsWeb')
         var vessels = [];
         var onSuccess = function(vesselListPage){
             vessels = vessels.concat(vesselListPage.items);
-            
+
             //Last page, then return
             if(vesselListPage.isLastPage() || vesselListPage.items.length === 0 || vesselListPage.items.length < getListRequest.listSize){
                 console.log("Found " +vessels.length +" vessels");
@@ -303,7 +303,7 @@ angular.module('unionvmsWeb')
             console.error(error);
             deferred.reject(error);
         });
- 
+
         return deferred.promise;
     };
 
@@ -319,6 +319,6 @@ angular.module('unionvmsWeb')
         createNewVesselGroup : createNewVesselGroup,
         updateVesselGroup : updateVesselGroup,
         deleteVesselGroup : deleteVesselGroup ,
-        getConfig : getConfiguration       
+        getConfig : getConfiguration
     };
 });

@@ -50,14 +50,15 @@ module.exports = function (grunt) {
           {from: 'app/config.json', to: 'environment/local.json'}
       ],
        proxies: {
-                context: ['/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest',
-                '/vessel/rest',
-                '/mobileterminal/rest/',
-                '/exchange/rest/',
-                '/movement/rest/',
-                '/audit/rest/',
-                '/rules/rest/',
-                '/reporting/rest/'],
+                context: [
+                  '/vessel/rest',
+                  '/mobileterminal/rest/',
+                  '/exchange/rest/',
+                  '/movement/rest/',
+                  '/audit/rest/',
+                  '/rules/rest/',
+                  '/reporting/rest/',
+                  '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'],
                 host: 'livm73u',
                 port: 28080
         },

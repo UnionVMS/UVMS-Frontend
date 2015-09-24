@@ -29,7 +29,7 @@ angular.module('unionvmsWeb')
         };
 
         var updateWithMockResults = function(page){
-            //Add mock data    
+            //Add mock data
             var mockAlarms = [];
             for (var i = 6; i >= 1; i--) {
                 var mockAlarm = new Alarm();
@@ -38,7 +38,7 @@ angular.module('unionvmsWeb')
                 mockAlarm.affectedObject = "Tunafjord";
                 mockAlarm.ruleName = "POS Validation";
                 mockAlarm.sender = "FMC";
-                
+
                 var random = Math.floor(Math.random() * 3) + 1;
                 if(random === 3){
                     //Nothing
@@ -46,7 +46,7 @@ angular.module('unionvmsWeb')
                 else if(random === 2){
                     mockAlarm.setStatusToClosed();
                     mockAlarm.resolvedDate = "2015-08-27 13:37";
-                    mockAlarm.resolvedBy = "antkar";                
+                    mockAlarm.resolvedBy = "antkar";
                 }else{
                     mockAlarm.setStatusToOpen();
                 }
@@ -57,20 +57,20 @@ angular.module('unionvmsWeb')
             $scope.currentSearchResults.updateWithNewResults(mockListPage);
         };
 
-        $scope.searchAlarms = function() {            
+        $scope.searchAlarms = function() {
             getListRequest = new GetListRequest(1, 5, false, []);
             $scope.currentSearchResults.clearForSearch();
-            
+
             //Add search criterias to getListRequest
             $.each($scope.searchObject, function(key, value){
                 //Skip empty values
                 if (typeof value === 'string' && value.trim().length !== 0){
                     getListRequest.addSearchCriteria(key, value);
-                }                
+                }
             });
 
             //Fix time criterias
-            getListRequest.setSearchCriterias(searchService.updateTimeSpanAndTimeZone(getListRequest.criterias));
+            getListRequest.setSearchCriterias(searchService.modifySpanAndTimeZone(getListRequest.criterias));
 
             //TODO: Implement search using RestService directly.
             //Don't use the searchService since that can't handle multiple concurrent searches
@@ -89,7 +89,7 @@ angular.module('unionvmsWeb')
             //TODO: Implement real search
             $timeout(function(){
                 updateWithMockResults($scope.currentSearchResults.page+1);
-            }, 1000);                        
+            }, 1000);
         };
 
         $scope.prevPage = function(){
@@ -99,7 +99,7 @@ angular.module('unionvmsWeb')
             //TODO: Implement real search
             $timeout(function(){
                 updateWithMockResults($scope.currentSearchResults.page-1);
-            }, 1000);                        
+            }, 1000);
         };
 
         //SEARCH FORM
@@ -132,6 +132,6 @@ angular.module('unionvmsWeb')
             }
         });
 
-        init(); 
+        init();
     }
 );

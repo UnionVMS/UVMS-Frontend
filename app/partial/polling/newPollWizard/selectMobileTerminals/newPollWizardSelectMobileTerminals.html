@@ -1,8 +1,8 @@
 <!-- step 1 -->
 <div class="col-md-12 newPollWizardStep searchMobileTerminalsStep card" ng-controller="NewpollwizardselectmobileterminalsCtrl">
 	<div class="wizardcontent">
-		<new-poll-wizard-progress step="1"></new-poll-wizard-progress> 
-		<advanced-search searchfunc="getPollableChannels" vesselGroupCallback="selectGroupCallback()" modeltype="'POLLING_MOBILE_TERMINAL'" advancedsearchvisible="true"></advanced-search>                
+		<new-poll-wizard-progress step="1"></new-poll-wizard-progress>
+		<advanced-search searchfunc="getPollableChannels" vesselGroupCallback="selectGroupCallback()" modeltype="'POLLING_MOBILE_TERMINAL'" advancedsearchvisible="true"></advanced-search>
         <div class="row">
             <div search-results-table search="currentSearchResults" load-next-page-function="loadNextPage" class="col-md-12">
                 <table class="searchResults polltable colorOdd">
@@ -22,8 +22,8 @@
                         <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
                             <td>{{item.vesselName}}</td>
                             <td>{{item.vesselIrcs}}</td>
-                            <td>{{item.attributes.DNID}}</td>
-                            <td>{{item.attributes.MEMBER_NUMBER}}</td>
+                            <td>{{item.mobileTerminalAttributes.DNID}}</td>
+                            <td>{{item.mobileTerminalAttributes.MEMBER_NUMBER}}</td>
                             <td>{{item.mobileTerminalType | transponderName}}</td>
                             <td>
                                 <button class="btn btn-primary btn-sm polltablebutton" ng-hide="isTerminalSelected(item)" ng-click="selectChannel(item, $index)">
@@ -38,7 +38,7 @@
                 </table>
 
             </div>
-          
+
         </div>
     </div>
 
@@ -47,7 +47,7 @@
             <button type="button" class="btn btn-primary" ng-disabled="!readyForNextStep()" ng-click="nextStep()">
                 {{'common.next' | i18n | uppercase}}
             </button>
-        </div>        
+        </div>
     </div>
 </div>
 

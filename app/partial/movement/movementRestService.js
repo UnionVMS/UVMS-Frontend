@@ -4,7 +4,7 @@ angular.module('unionvmsWeb')
     return {
         getMovementList : function(){
             return $resource('/movement/rest/movement/list',{},
-            { 
+            {
                 list : { method : 'POST'}
             });
         },
@@ -20,12 +20,13 @@ angular.module('unionvmsWeb')
             return $resource('/movement/rest/search/groups');
         },
         getConfigForMovements : function(){
-            return $resource('/movement/rest/config');  
+            return $resource('/movement/rest/config');
         }
     };
 })
-.factory('movementRestService',function($q, movementRestFactory, SearchResultListPage, Movement, SavedSearchGroup, GetListRequest){
-    var userName = "FRONTEND_USER";
+.factory('movementRestService',function($q, movementRestFactory, SearchResultListPage, Movement, SavedSearchGroup, GetListRequest , userService){
+    var user = {};
+    user.name = userService.getUserName();
 
     var getMovementList = function(getListRequest){
 
@@ -39,7 +40,7 @@ angular.module('unionvmsWeb')
                 }
 
                 var movements = [];
-                
+
                 if(angular.isArray(response.data.movement)){
                     for (var i = 0; i < response.data.movement.length; i++){
                         movements.push(Movement.fromJson(response.data.movement[i]));
@@ -122,7 +123,7 @@ angular.module('unionvmsWeb')
 
     var getSavedSearches = function (){
         var deferred = $q.defer();
-        movementRestFactory.getSavedSearches().get({user: 'FRONTEND_USER'}, 
+        movementRestFactory.getSavedSearches().get({user: user.name},
             function(response) {
 
                 if(response.code !== "200"){
@@ -133,7 +134,7 @@ angular.module('unionvmsWeb')
                 var groups = [];
                 if(angular.isArray(response.data)){
                     for (var i = 0; i < response.data.length; i ++) {
-                        groups.push(SavedSearchGroup.fromJson(response.data[i]));
+                        groups.push(SavedSearchGroup.fromMovementJson(response.data[i]));
                     }
                 }
                 deferred.resolve(groups);
@@ -147,7 +148,7 @@ angular.module('unionvmsWeb')
 
     var createNewSavedSearch = function(savedSearchGroup){
         var deferred = $q.defer();
-        movementRestFactory.savedSearch().save(savedSearchGroup.toJson(), function(response) {
+        movementRestFactory.savedSearch().save(savedSearchGroup.toMovementJson(), function(response) {
             if(response.code !== "200"){
                 deferred.reject("Invalid response status");
                 return;
@@ -175,7 +176,7 @@ angular.module('unionvmsWeb')
             deferred.reject(error);
         });
         return deferred.promise;
-    };     
+    };
 
     var deleteSavedSearch = function(savedSearchGroup){
         var deferred = $q.defer();

@@ -7,23 +7,39 @@ angular.module('unionvmsWeb').factory('searchService',function($q, GetListReques
         return moment(timeToTransform).format("YYYY-MM-DD HH:mm:ss Z");
     };
 
-    var checkTimeSpanAndTimeZone = function(searchCriterias){
-        var i, idx;
+    var modifySpanAndTimeZones = function(searchCriterias){
+        var i, span, idx = [];
         for (i = 0; i < searchCriterias.length; i++) {
+
             if(searchCriterias[i].key === "TIME_SPAN"){
-                idx = i;
+                idx.push(i);
                 if(searchCriterias[i].value.toUpperCase() !== "CUSTOM"){
                         searchCriterias.push(new SearchField("TO_DATE", moment()));
                         searchCriterias.push(new SearchField("FROM_DATE", moment().add('hours', -searchCriterias[i].value)));
                 }
             }
+            if (searchCriterias[i].key === "LENGTH_SPAN") {
+                idx.push(i);
+                span = searchCriterias[i].value.split("-");
+                searchCriterias.push(new SearchField("MIN_LENGTH", span[0]));
+                searchCriterias.push(new SearchField("MAX_LENGTH", span[1]));
+
+            }
+            if (searchCriterias[i].key === "MEAS_SPEED_SPAN") {
+                idx.push(i);
+                span = searchCriterias[i].value.split("-");
+                searchCriterias.push(new SearchField("SPEED_MIN", span[0]));
+                searchCriterias.push(new SearchField("SPEED_MAX", span[1]));
+            }
         }
 
-        if (angular.isDefined(idx)){
-            searchCriterias.splice(idx,1);    
+        for (i = idx.length - 1; i >= 0; i--) {
+            searchCriterias.splice(idx[i],1);
         }
+
+
         var dateCriterias = ["END_DATE","START_DATE", "REPORTING_START_DATE", "REPORTING_END_DATE", "TO_DATE", "FROM_DATE" ];
-        
+
         for (i = 0; i < searchCriterias.length; i++) {
             if ( dateCriterias.indexOf(searchCriterias[i].key) >= 0){
                     searchCriterias[i].value = addUTCTimeZone(searchCriterias[i].value);
@@ -32,6 +48,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, GetListReques
 
         return searchCriterias;
     };
+
 
     var vesselSearchKeys = [
         "MAX_LENGTH", "MIN_POWER", "MAX_POWER", "MIN_LENGTH", "GEAR_TYPE",
@@ -99,14 +116,14 @@ angular.module('unionvmsWeb').factory('searchService',function($q, GetListReques
 
         //Do the search for polls
         searchPolls : function(){
-            checkTimeSpanAndTimeZone(getListRequest.criterias);
+            modifySpanAndTimeZones(getListRequest.criterias);
             return pollingRestService.getPollList(getListRequest);
         },
 
         //Do search for movements
         searchMovements : function(){
             //intercept request and set utc timezone on dates.
-            checkTimeSpanAndTimeZone(getListRequest.criterias);
+            modifySpanAndTimeZones(getListRequest.criterias);
 
             // Split search criteria into vessel and movement
             var allSearchCriteria = this.getSearchCriterias();
@@ -133,7 +150,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, GetListReques
             if(this.getSearchCriterias().length > 0){
                 var deferred = $q.defer();
                 var outerThis = this;
-                
+
                 //Get the vessels
                 vesselRestService.getAllMatchingVessels(getListRequest).then(
                     //TODO: Get more pages of vessels or error message that too many vessels were returned?
@@ -172,7 +189,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, GetListReques
         },
 
         //Do the search for mobile terminals
-        //If skipVesselSearch=true then no search to vessel module is performed 
+        //If skipVesselSearch=true then no search to vessel module is performed
         // and all serach criterias are sent directly to mobile terminal search
         searchMobileTerminals : function(skipVesselSearch){
 
@@ -187,16 +204,16 @@ angular.module('unionvmsWeb').factory('searchService',function($q, GetListReques
 
             //Search keys that belong to vessel
             var vesselSearchKeys = [
-                "GUID", 
-                "NAME", 
-                "IRCS", 
-                "MMSI", 
-                "EXTERNAL_MARKING", 
-                "CFR", 
-                "HOMEPORT", 
-                "ACTIVE", 
-                "FLAG_STATE", 
-                "LICENSE", 
+                "GUID",
+                "NAME",
+                "IRCS",
+                "MMSI",
+                "EXTERNAL_MARKING",
+                "CFR",
+                "HOMEPORT",
+                "ACTIVE",
+                "FLAG_STATE",
+                "LICENSE",
                 "TYPE",
             ];
 
@@ -261,12 +278,12 @@ angular.module('unionvmsWeb').factory('searchService',function($q, GetListReques
         },
 
         searchAuditLogs: function() {
-            checkTimeSpanAndTimeZone(getListRequest.criterias);
+            modifySpanAndTimeZones(getListRequest.criterias);
             return auditLogRestService.getAuditLogList(getListRequest);
         },
 
         searchExchange: function(servicePath) {
-            checkTimeSpanAndTimeZone(getListRequest.criterias);
+            modifySpanAndTimeZones(getListRequest.criterias);
             return exchangeRestService.getExchangeMessages(getListRequest, servicePath);
         },
 
@@ -342,7 +359,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, GetListReques
                 }
             }
         },
-        updateTimeSpanAndTimeZone : checkTimeSpanAndTimeZone
+        modifySpanAndTimeZone : modifySpanAndTimeZones
 
 	};
 

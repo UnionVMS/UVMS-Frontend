@@ -1,19 +1,21 @@
 angular.module('unionvmsWeb').factory('PollChannel', function() {
 
     function PollChannel(){
+
         this.vesselName = undefined;
         this.vesselIrcs = undefined;
         this.connectId = undefined;
         this.mobileTerminalType = undefined;
         this.comChannelId = undefined;
-        this.attributes = {};
+        this.mobileTerminalAttributes = {};
+        this.mobileTerminalId = undefined;
     }
 
     PollChannel.fromJson = function(data) {
         var pollChannel = new PollChannel();
-        for (var i = 0; i < data.attributes.length; i++) {
-            var attr = data.attributes[i];
-            pollChannel.attributes[attr["type"]] = attr["value"];
+        for (var i = 0; i < data.mobileTerminalAttributes.length; i++) {
+            var attr = data.mobileTerminalAttributes[i];
+            pollChannel.mobileTerminalAttributes[attr["type"]] = attr["value"];
         }
 
         pollChannel.vesselName = data.vesselName;
@@ -21,6 +23,7 @@ angular.module('unionvmsWeb').factory('PollChannel', function() {
         pollChannel.connectId = data.connectId;
         pollChannel.mobileTerminalType = data.mobileTerminalType;
         pollChannel.comChannelId = data.comChannelId;
+        pollChannel.mobileTerminalId = data.mobileTerminalId;
 
         return pollChannel;
     };
@@ -32,7 +35,8 @@ angular.module('unionvmsWeb').factory('PollChannel', function() {
     PollChannel.prototype.toCreatePoll = function() {
         return {
             connectId: this.connectId,
-            comChannelId: this.comChannelId
+            comChannelId: this.comChannelId,
+            mobileTerminalId : this.mobileTerminalId
         };
     };
 

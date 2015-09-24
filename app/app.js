@@ -22,24 +22,24 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
 
     $stateProvider
         .state('app', {
-            abstract : true,   
-            views: { 
-                app: { 
-                    template: '<div ui-view name="modulenav"></div><div ui-view name="modulepage"></div><div ui-view name="page"></div>',                     
+            abstract : true,
+            views: {
+                app: {
+                    template: '<div ui-view name="modulenav"></div><div ui-view name="modulepage"></div><div ui-view name="page"></div>',
                 },
-                unionvmsHeader: { 
-                    templateUrl: 'partial/header/header.html', 
-                    controller: 'HeaderCtrl' 
+                unionvmsHeader: {
+                    templateUrl: 'partial/header/header.html',
+                    controller: 'HeaderCtrl'
                 },
-                unionvmsFooter: { 
-                    templateUrl: 'partial/footer/footer.html', 
-                    controller: 'FooterCtrl' 
+                unionvmsFooter: {
+                    templateUrl: 'partial/footer/footer.html',
+                    controller: 'FooterCtrl'
                 },
-                unionvmsAlerts: { 
-                    templateUrl: 'partial/alerts/alerts.html', 
-                    controller: 'AlertsCtrl' 
-                },                       
-            },            
+                unionvmsAlerts: {
+                    templateUrl: 'partial/alerts/alerts.html',
+                    controller: 'AlertsCtrl'
+                },
+            },
             data: {
                 access: ACCESS.AUTH
             },
@@ -49,73 +49,73 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             }
         })
         .state('uvmsheader', {
-            views: { 
+            views: {
                 unionvmsHeader: {
-                    templateUrl: 'partial/header/header.html', 
-                    controller: 'HeaderCtrl' 
+                    templateUrl: 'partial/header/header.html',
+                    controller: 'HeaderCtrl'
                 }
             },
         })
         .state('app.today', {
             url: '/today',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/today/today.html', 
-                    controller: 'TodayCtrl' 
+                    templateUrl: 'partial/today/today.html',
+                    controller: 'TodayCtrl'
                 }
             },
             resolve: {}
         })
         .state('app.movement', {
             url: '/movement',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/movement/movement.html', 
-                    controller: 'MovementCtrl' 
+                    templateUrl: 'partial/movement/movement.html',
+                    controller: 'MovementCtrl'
                 }
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["MOVEMENT", "VESSEL"]);
+                    return initService.loadConfigFor(["MOVEMENT","VESSEL"]);
                 }
             }
         })
         .state('app.movement-manual', {
             url: '/movement/manual',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html', 
-                    controller: 'ManualPositionReportsCtrl' 
+                    templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html',
+                    controller: 'ManualPositionReportsCtrl'
                 }
             },
             resolve: {}
         })
         .state('app.movement-id', {
             url: '/movement/:id',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/movement/movement.html', 
-                    controller: 'MovementCtrl' 
+                    templateUrl: 'partial/movement/movement.html',
+                    controller: 'MovementCtrl'
                 }
             },
             resolve: {}
         })
         .state('app.manualMovements', {
             url: '/movement/manual',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html', 
-                    controller: 'ManualPositionReportsCtrl' 
+                    templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html',
+                    controller: 'ManualPositionReportsCtrl'
                 }
             },
             resolve: {}
-        })        
+        })
         .state('app.assets', {
             url: '/assets',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/vessel/vessel.html', 
-                    controller: 'VesselCtrl' 
+                    templateUrl: 'partial/vessel/vessel.html',
+                    controller: 'VesselCtrl'
                 }
             },
             resolve: {
@@ -129,10 +129,10 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
         })
         .state('app.assets-id', {
             url: '/assets/:id',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/vessel/vessel.html', 
-                    controller: 'VesselCtrl' 
+                    templateUrl: 'partial/vessel/vessel.html',
+                    controller: 'VesselCtrl'
                 }
             },
             resolve: {
@@ -146,9 +146,9 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
         })
         .state('app.communication', {
             url: '/communication',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/mobileTerminal/mobileTerminal.html', 
+                    templateUrl: 'partial/mobileTerminal/mobileTerminal.html',
                     controller: 'MobileTerminalCtrl'
                 }
             },
@@ -160,13 +160,13 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             data: {
                 access: 'viewVesselsAndMobileTerminals'
             },
-        })        
+        })
         .state('app.communication-id', {
             url: '/communication/:id',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/mobileTerminal/mobileTerminal.html', 
-                    controller: 'MobileTerminalCtrl' 
+                    templateUrl: 'partial/mobileTerminal/mobileTerminal.html',
+                    controller: 'MobileTerminalCtrl'
                 }
             },
             resolve: {
@@ -177,10 +177,10 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
         })
         .state('app.polling', {
             url: '/polling',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/polling/polling.html', 
-                    controller: 'PollingCtrl' 
+                    templateUrl: 'partial/polling/polling.html',
+                    controller: 'PollingCtrl'
                 }
             },
             resolve: {},
@@ -190,10 +190,10 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
         })
         .state('app.pollingLogs', {
             url: '/polling/logs',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/polling/pollingLogs/pollingLogs.html', 
-                    controller: 'pollingLogsCtrl' 
+                    templateUrl: 'partial/polling/pollingLogs/pollingLogs.html',
+                    controller: 'pollingLogsCtrl'
                 }
             },
             resolve: {},
@@ -203,102 +203,102 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
         })
         .state('app.auditLog', {
             url: '/admin/auditlog',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/admin/adminLog/adminLog.html', 
-                    controller: 'AuditlogCtrl' 
+                    templateUrl: 'partial/admin/adminLog/adminLog.html',
+                    controller: 'AuditlogCtrl'
                 }
             },
             resolve: {}
         })
         .state('app.configuration', {
             url: '/admin/configuration',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/admin/adminConfiguration/adminConfiguration.html', 
-                    controller: 'AuditconfigurationCtrl' 
+                    templateUrl: 'partial/admin/adminConfiguration/adminConfiguration.html',
+                    controller: 'AuditconfigurationCtrl'
                 }
             },
             resolve: {}
         })
         .state('app.admin', {
             url: '/admin',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/admin/adminLog/adminLog.html', 
-                    controller: 'AuditlogCtrl' 
+                    templateUrl: 'partial/admin/adminLog/adminLog.html',
+                    controller: 'AuditlogCtrl'
                 }
             },
             resolve: {}
         })
         .state('app.reporting', {
             url: '/reporting',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/spatial/spatial.html', 
-                    controller: 'SpatialCtrl' 
+                    templateUrl: 'partial/spatial/spatial.html',
+                    controller: 'SpatialCtrl'
                 }
             },
             resolve: {}
         })
         .state('app.exchange', {
             url: '/exchange',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/exchange/exchange.html', 
-                    controller: 'ExchangeCtrl' 
+                    templateUrl: 'partial/exchange/exchange.html',
+                    controller: 'ExchangeCtrl'
                 }
             },
             resolve: {}
         })
         .state('app.holdingTable', {
             url: '/alarms/holdingtable',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/alarms/holdingTable/holdingTable.html', 
-                    controller: 'HoldingtableCtrl' 
+                    templateUrl: 'partial/alarms/holdingTable/holdingTable.html',
+                    controller: 'HoldingtableCtrl'
                 }
             },
             resolve: {}
         })
         .state('app.openTickets', {
             url: '/alarms/opentickets',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/alarms/openTickets/openTickets.html', 
-                    controller: 'OpenticketsCtrl' 
+                    templateUrl: 'partial/alarms/openTickets/openTickets.html',
+                    controller: 'OpenticketsCtrl'
                 }
             },
             resolve: {}
         })
         .state('app.rules', {
             url: '/alarms/rules',
-            views: { 
+            views: {
                 modulepage: {
-                    templateUrl: 'partial/alarms/rules/rules.html', 
-                    controller: 'RulesCtrl' 
+                    templateUrl: 'partial/alarms/rules/rules.html',
+                    controller: 'RulesCtrl'
                 }
             },
             resolve: {}
-        })    
+        })
         .state('error', {
-            views: { 
+            views: {
                 unionvmsError: {
-                    templateUrl: 'partial/common/error/error.html', 
-                    controller: 'errorCtrl' 
+                    templateUrl: 'partial/common/error/error.html',
+                    controller: 'errorCtrl'
                 },
-                unionvmsHeader: { 
-                    templateUrl: 'partial/header/header.html', 
-                    controller: 'HeaderCtrl' 
+                unionvmsHeader: {
+                    templateUrl: 'partial/header/header.html',
+                    controller: 'HeaderCtrl'
                 },
-                unionvmsFooter: { 
-                    templateUrl: 'partial/footer/footer.html', 
-                    controller: 'FooterCtrl' 
-                },                
+                unionvmsFooter: {
+                    templateUrl: 'partial/footer/footer.html',
+                    controller: 'FooterCtrl'
+                },
             },
             data: {
                 access: ACCESS.PUBLIC
-            },            
+            },
         });
 
         //$urlRouterProvider.otherwise('/today');
@@ -355,11 +355,11 @@ unionvmsWebApp.factory('initService',function(configurationService, locale, tmhD
         //Load the configurations
         loadConfig : function(){
             return configurationService.setup();
-        },        
+        },
         //Load the configurations
         loadConfigFor : function(modules){
             return configurationService.setup(modules);
-        },        
+        },
         //Load the listed i18n files
         loadLanguageFiles : function(){
             return locale.ready([
@@ -415,15 +415,15 @@ unionvmsWebApp.config(function ($httpProvider) {
 
     $httpProvider.interceptors.push(function ($q, envConfig, $log) {
          return {
-            'request': function (request) {                                
+            'request': function (request) {
                 var isRESTApiRequest = false;
                 $.each(restApiURLS, function(i, val){
                     if(request.url.indexOf(val) === 0){
                         isRESTApiRequest = true;
                         return false;
-                    }                    
+                    }
                 });
-                //Change request url 
+                //Change request url
                 if(isRESTApiRequest){
                     var restAPIBaseUrl = envConfig.rest_api_base;
                     var newUrl = restAPIBaseUrl + request.url;
@@ -435,7 +435,7 @@ unionvmsWebApp.config(function ($httpProvider) {
             }
          };
     });
-}); 
+});
 
 
 

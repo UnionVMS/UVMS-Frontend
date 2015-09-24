@@ -2,7 +2,7 @@
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $modal service used above.
 
-angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function ($scope, $modalInstance, locale, searchService, SearchField, SavedSearchGroup, savedSearchService, searchType, selectedItems, dynamicSearch) {
+angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function ($scope, $modalInstance, locale, searchService, SearchField, SavedSearchGroup, savedSearchService, searchType, selectedItems, dynamicSearch, userService) {
 
     var isDynamic = false,
         searchFields,
@@ -47,7 +47,7 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
         if(dynamicSearch) {
             isDynamic = true;
             searchFields = searchService.getAdvancedSearchCriterias();
-        }else{            
+        }else{
             searchFields = [];
             //LIST OF CHECKED ITEMS
             if(searchType === "VESSEL"){
@@ -104,7 +104,7 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
         }
         //Save new group
         else{
-            var newSavedGroup = new SavedSearchGroup($scope.saveData.name, "FRONTEND_USER", isDynamic, searchFields);
+            var newSavedGroup = new SavedSearchGroup($scope.saveData.name, userService.getUserName(), isDynamic, searchFields);
             saveSearchFunction(newSavedGroup)
             .then(onSaveSuccess, onSaveError);
         }

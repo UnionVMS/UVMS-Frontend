@@ -3,13 +3,13 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     //Current filter and sorting for the results table
     $scope.sortFilter = '';
     $scope.editSelectionDropdownItems = [{'text':locale.getString('movement.editselection_see_on_map'),'code':'MAP'}, {'text':locale.getString('movement.editselection_export_selection'),'code':'EXPORT'}, {'text':locale.getString('movement.editselection_inactivate'),'code':'INACTIVE'}];
-    
+
     //Search objects and results
     $scope.currentSearchResults = new SearchResults('vessel.name', false, locale.getString('movement.movement_search_error_result_zero_pages'));
 
     //Selected by checkboxes
     $scope.selectedMovements = [];
-    
+
     var movement2ManualPosition = function(movement) {
         return {
             id: movement.id,
@@ -85,7 +85,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         if ($scope.currentSearchResults.loading === false){
             $scope.currentSearchResults.clearForSearch();
             searchService.searchMovements()
-                .then(retriveMovementsSuccess, retriveMovementsError);      
+                .then(retriveMovementsSuccess, retriveMovementsError);
         }
     };
 
@@ -93,7 +93,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         console.info("Success in retrieveing movements..");
         $scope.currentSearchResults.updateWithNewResults(searchResultListPage);
     };
-    
+
     var retriveMovementsError = function(error){
         $scope.currentSearchResults.setLoading(false);
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
@@ -156,7 +156,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
 
     $scope.print = function(){
         console.log("Print...");
-        window.print();        
+        window.print();
     };
 
     //Export data as CSV file
@@ -181,7 +181,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         ];
 
         //Set the data columns
-        var getData = function() {            
+        var getData = function() {
             var exportItems;
             //Export only selected items
             if(onlySelectedItems){
@@ -192,7 +192,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
                 exportItems = $scope.currentSearchResults.items;
             }
             return exportItems.reduce(
-                function(csvObject, item){ 
+                function(csvObject, item){
                     var csvRow = [
                         item.vessel.state,
                         item.vessel.externalMarking,
@@ -215,7 +215,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         };
 
         //Create and download the file
-        csvService.downloadCSVFile(getData(), header, filename);        
+        csvService.downloadCSVFile(getData(), header, filename);
     };
 
 
@@ -223,7 +223,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         alertService.hideMessage();
         searchService.reset();
         $scope.stopAutoRefresh();
-    });    
+    });
 
 
     init();

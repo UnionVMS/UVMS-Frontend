@@ -110,8 +110,10 @@ angular.module('unionvmsWeb')
                             var programPoll = programPolls[i];
                             if (programPoll.connectionId) {
                                 var vessel = page.getVesselByGuid(programPoll.connectionId);
-                                if(angular.isDefined(vessel)){
+                                if (vessel) {
                                     programPoll.setVesselName(vessel.name);
+                                } else {
+                                    programPoll.setVesselName = "";
                                 }
                             }
                         }
@@ -177,7 +179,7 @@ angular.module('unionvmsWeb')
                         var currentPage = response.data.currentPage;
                         var totalNumberOfPages = response.data.totalNumberOfPages;
                         searchResultListPage = new SearchResultListPage(polls, currentPage, totalNumberOfPages);
-                    
+
                         deferred.resolve(searchResultListPage);
                     },
                 function(error) {
