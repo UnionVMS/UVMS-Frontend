@@ -16,7 +16,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				if ( scope.lastSelectedBasemapNode === data.node &&
 				 			basemaps.length === 1 ) {
 					return ( false );
-				};
+				}
 			};
 
 			// call tree and map update
