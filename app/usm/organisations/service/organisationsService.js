@@ -5,15 +5,15 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
     var _getOrganisations = function (criteria) {
         var message = "";
         var deferred = $q.defer();
-        
-        //to control if the organisation has a parent 
+
+        //to control if the organisation has a parent
         var parent = criteria.name.search("/");
     	if (parent !== -1) {
             var name = criteria.name.split(' / ');
             name = name[1];
             criteria.name = name;
     	}
-    	
+
         var resource = $resource('/usm-administration/rest/organisations');
 
         resource.get(criteria).$promise.then(
@@ -44,9 +44,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
                 });
             },
             function (error) {
-                $log.log(error);
-                message = "Error: " + error.data.message;
-                deferred.reject(message);
+                deferred.reject(error);
             }
         );
         return deferred.promise;
@@ -64,24 +62,22 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
                 });
             },
             function (error) {
-                $log.log(error);
-                message = "Error: " + error.data.message;
-                deferred.reject(message);
+                deferred.reject(error);
             }
         );
         return deferred.promise;
     };
 
     var _searchOrganisations = function (criteria) {
-    	
-    	 //to control if the organisation has a parent 
+
+    	 //to control if the organisation has a parent
     	var parent = criteria.name.search("/");
     	if (parent !== -1) {
             var name = criteria.name.split(' / ');
             name = name[1];
             criteria.name = name;
     	}
-    	
+
         var message = "";
         var deferred = $q.defer();
         var resource = $resource('/usm-administration/rest/organisations');
@@ -325,9 +321,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
                 });
             },
             function (error) {
-                $log.log(error);
-                message = "Error: " + error.data.message;
-                deferred.reject(message);
+                deferred.reject(error);
             }
         );
         return deferred.promise;

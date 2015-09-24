@@ -8,6 +8,8 @@ var usersPage = function () {
     this.lastName= element.all(by.model('user.person.lastName'));
     this.phoneNumber= element.all(by.model('user.person.phoneNumber'));
     this.email= element.all(by.model('user.person.email'));
+	this.activeFrom= element.all(by.id('activeFrom'));
+	this.activeTo= element.all(by.id('activeTo'));
     //this.organisation= element.all(by.id('organisationSelect'));
     this.organisation= element.all(by.model('user.organisationComplex'));
     this.status= element.all(by.model('user.status'));
@@ -54,18 +56,30 @@ var usersPage = function () {
     this.clickEditButton = function() {
         browser.wait(EC.elementToBeClickable(this.editButton), 10000);
     	this.editButton.click();
+		
+        browser.wait(function() {
+            var deferred = protractor.promise.defer();
+            element(by.id('btn-success')).isPresent()
+                .then(function (isPresent) {
+                    deferred.fulfill(!isPresent);
+                });
+            return deferred.promise;
+        });		
     };
-
-
 
     this.clickSaveButton = function() {
         browser.wait(EC.elementToBeClickable(this.saveButton), 10000);
+
         this.saveButton.click();
-    };
-
-
-    this.clickDetailButtonTest = function(rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').click();
+		
+        browser.wait(function() {
+            var deferred = protractor.promise.defer();
+            element(by.id('btn-success')).isPresent()
+                .then(function (isPresent) {
+                    deferred.fulfill(!isPresent);
+                });
+            return deferred.promise;
+        });		
     };
 
     this.getTable = function () {
@@ -74,10 +88,6 @@ var usersPage = function () {
 
     this.getTableRow = function(rowIndex) {
         return this.getTableRows().get(rowIndex);
-    };
-
-    this.getTableRowColumn = function(columnIndex) {
-        return this.getTableRows().get(rowIndex).$$('td');
     };
 
     this.getTableRows = function () {
@@ -153,6 +163,16 @@ var usersPage = function () {
         this.email.sendKeys(email);
     };
 
+    this.setActiveFrom = function (from) {
+        this.activeFrom.clear();
+        this.activeFrom.sendKeys(from);
+    };
+
+    this.setActiveTo = function (to) {
+        this.activeTo.clear();
+        this.activeTo.sendKeys(to);
+    };
+
     this.setOrganisation = function (organisation) {
         this.organisation.click();
         this.organisation.sendKeys(organisation);
@@ -167,6 +187,15 @@ var usersPage = function () {
     this.refreshPage = function () {
         return browser.navigate().refresh();
     };
+	
+    this.clickDetailViewButton = function(rowIndex) {
+        this.getTableRows().get(rowIndex).$$('td button').get(1).click(); //The view details button occupies the second position in the table
+        //  browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
+    };
+	
+	this.clickContextTab = function() {
+		element(by.linkText('Contexts')).click();
+	};
  };
 
  module.exports = usersPage;

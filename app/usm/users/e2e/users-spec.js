@@ -1,4 +1,4 @@
-describe('UserscontrollerCtrl', function() {
+describe('Users Page', function() {
 
 	it('should ...', function() {
 

@@ -1,4 +1,4 @@
-angular.module('preferences', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate']);
+angular.module('preferences', ['userPreferencesServiceModule']);
 
 angular.module('preferences').config(['$routeProvider',function($routeProvider) {
 

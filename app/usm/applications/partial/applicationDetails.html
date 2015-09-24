@@ -1,0 +1,45 @@
+<div class="container">
+    <!-- INFO PANEL-->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-2">
+                        <label for="role">{{"common.application" | translate}}</label>
+                    </div>
+                    <div class="col-md-4">
+                        <span id="role" ng-bind="applicationDetails.name"></span>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="description">{{"common.description" | translate}}</label>
+                    </div>
+                    <div class="col-md-4">
+                        <span id="description" ng-bind="applicationDetails.description"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-2">
+                        <label for="parent">{{"applications.parent" | translate}}</label>
+                    </div>
+                    <div class="col-md-10">
+						<span id="parent" ng-bind="applicationDetails.parent"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <tabset type="tabs" vertical="false" class="roleDetailsTabs">
+        <tab heading="{{'applications.features' | translate}}">
+            <div ng-include src="'usm/applications/partial/applicationFeatures.html'"></div>
+        </tab>
+        <tab heading="{{'applications.datasets' | translate}}">
+            <div ng-include src="'usm/applications/partial/applicationDatasets.html'"></div>
+        </tab>
+        <tab heading="{{'applications.options' | translate}}">
+            <div ng-include src="'usm/applications/partial/applicationOptions.html'"></div>
+        </tab>
+    </tabset>
+</div>

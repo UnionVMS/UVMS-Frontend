@@ -1,6 +1,29 @@
-angular.module('preferences').factory('preferencesService',function() {
+var userPreferencesServiceModule = angular.module('userPreferencesServiceModule', ['ngResource']);
 
-	var preferencesService = {};
+userPreferencesServiceModule.factory('userPreferencesService', ['$resource', '$q', '$log',
+    function ($resource, $q, $log) {
 
-	return preferencesService;
-});
+        return {
+            getUserPreferences: function (userName) {
+                var message = "";
+                var deferred = $q.defer();
+
+                var resource = $resource('/usm-administration/rest/users/:userName/userPreferences', {"userName":userName});
+                resource.get().$promise.then(
+                    function (data) {
+                        deferred.resolve({
+                            userPreferences: data.results
+                        });
+                    },
+                    function (error) {
+                        $log.log(error);
+                        message = error.data.message;
+                        deferred.reject(message);
+                    }
+                );
+
+                return deferred.promise;
+            }
+        };
+
+    }]);

@@ -1,0 +1,58 @@
+<div class="container" ng-controller="changesListCtrl">
+    <!-- CHANGES TABLE -->
+    <table st-table="displayedChanges" st-safe-src="changesList" class="table table-striped fixed">
+        <colgroup>
+            <col style="width: 190px;">
+            <col style="width: 190px;">
+            <col style="width: 190px;">
+            <col style="width: 190px;">
+            <col style="width: 190px;">
+            <col style="width: 190px;">
+        </colgroup>
+        <thead>
+        <tr>
+            <th st-sort="userName" st-sort-default="true">{{'users.userName' | translate}}</th>
+            <th st-sort="phoneNumber">{{'users.phoneNumber' | translate}}</th>
+            <th st-sort="mobileNumber">{{'users.mobileNumber' | translate}}</th>
+            <th st-sort="faxNumber">{{'users.faxNumber' | translate}}</th>
+            <th st-sort="email">{{'users.email' | translate}}</th>
+            <th class="text-center">&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody class="table-bordered" ng-if="!isDataLoading && !emptyResult">
+        <tr ng-repeat="change in displayedChanges">
+            <td ng-bind="change.userName"></td>
+            <td ng-bind="change.phoneNumber"></td>
+            <td ng-bind="change.mobileNumber"></td>
+            <td ng-bind="change.faxNumber"></td>
+            <td ng-bind="change.email"></td>
+
+            <td class="actionTd text-center">
+                <span ng-if="checkAccess('manageUsers')">
+                    <button type="button" class="btn btn-sm btn-primary usm-action-btn" ng-click='manageChange(change)'>
+                        <span><i class="fa fa-pencil"></i></span>
+                    </button>
+                </span>
+            </td>
+        </tr>
+        </tbody>
+        <tbody ng-if="isDataLoading">
+        <tr>
+            <td colspan="6" class="text-center">Loading...</td>
+        </tr>
+        </tbody>
+        <tbody ng-if="emptyResult">
+        <tr>
+            <td colspan="6">{{emptyResultMessage}}</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="6" class="text-right">
+                <div class="st-pagination" st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+    <!-- CHANGES TABLE END-->
+</div>

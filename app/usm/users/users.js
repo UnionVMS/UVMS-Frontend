@@ -7,36 +7,37 @@ angular.module('users', [
     'userContexts',
     'preferences',
     'usersService',
-    'auth'
-]);
+    'auth',
+    'changes',
+    'shared']);
 
-angular.module('users').config(['$urlRouterProvider', '$stateProvider','ACCESS',
-    function ($urlRouterProvider, $stateProvider,ACCESS) {
+angular.module('users').config(['$urlRouterProvider', '$stateProvider', 'ACCESS', 'policyValuesProvider',
+    function ($urlRouterProvider, $stateProvider, ACCESS, policyValues) {
+        policyValues.setPolicyName("ldap.enabled");
+        policyValues.setPolicySubject("Administration");
 
-        var currentContextPromise = function(userService){
+        var currentContextPromise = function (userService) {
             return userService.findSelectedContext();
         };
         currentContextPromise.$inject =    ['userService'];
 
-        var orgNationsPromise = function(organisationsService){
+        var orgNationsPromise = function (organisationsService) {
   	      return organisationsService.getNations().then(
   	                 function (response) {
   	                     return response.nations;
   	                 },
   	                 function (error) {
-  	                     return [error];
   	                 }
   	             );
   	           };
   	     orgNationsPromise.$inject =    ['organisationsService'];
 
-  	     var orgNamesPromise = function(organisationsService){
+        var orgNamesPromise = function (organisationsService) {
            return organisationsService.get().then(
                 function (response) {
                     return response.organisations;
                 },
                 function (error) {
-                    return [error];
                 }
             );
           };
@@ -48,21 +49,21 @@ angular.module('users').config(['$urlRouterProvider', '$stateProvider','ACCESS',
             data: {
                 access: ACCESS.AUTH
             },
-            params : {
-                page:1,
-                sortColumn:'userName',
-                sortDirection:'desc',
-                status:'',
-                user:'',
-                nation:'',
-                organisation:'',
-                activeFrom:'',
-                activeTo:''
+                params: {
+                    page: 1,
+                    sortColumn: 'userName',
+                    sortDirection: 'desc',
+                    status: '',
+                    user: '',
+                    nation: '',
+                    organisation: '',
+                    activeFrom: '',
+                    activeTo: ''
             },
             views: {
-                "page@app": {
+                    "page@app.usm": {
                     templateUrl: 'usm/users/usersList.html',
-                    controller: "usersListController",
+                        controller: "usersListController"
                 }
             },
             ncyBreadcrumb: {
@@ -70,7 +71,7 @@ angular.module('users').config(['$urlRouterProvider', '$stateProvider','ACCESS',
             },
             resolve: {
                 currentContext: currentContextPromise,
-                orgNations: orgNationsPromise ,
+                    orgNations: orgNationsPromise,
             	orgNames: orgNamesPromise
 
             }
@@ -78,42 +79,28 @@ angular.module('users').config(['$urlRouterProvider', '$stateProvider','ACCESS',
         .state('app.usm.users.contactDetails', {
             url: '/{userName}/contactDetails',
             views: {
-                "page@app": {
+                    "page@app.usm": {
                     templateUrl: 'usm/users/contactDetails/partial/contactDetails.html',
                     controller: 'contactDetailsTabsCtrl'
                 }
             }
         })
-        .state('app.usm.users.contactDetails.contactInfo', {
-            url: '/info',
-            templateUrl: 'usm/users/contactDetails/partial/contactInfo/contactInfo.html'
-        })
-        .state('app.usm.users.contactDetails.contactRoles', {
-            url: '/roles',
-            templateUrl: 'usm/users/contactDetails/partial/contactRoles/contactRoles.html'
-        })
-        .state('app.usm.users.contactDetails.contactPreferences', {
-            url: '/preferences',
-            templateUrl: 'usm/users/contactDetails/partial/contactPreferences/contactPreferences.html'
-        })
         .state('app.usm.users.userDetails', {
             url: '/{userName}',
-            params : {
+                params: {
                 userName: ''
             },
             views: {
-                "page@app": {
+                    "page@app.usm": {
                     templateUrl: 'usm/users/partial/userDetails.html',
                     controller: 'userDetailsCtlr'
                 }
             },
-            resolve:{
-
-                userDetailsService: 'userDetailsService',
-
+                resolve: {
+                    userDetailsService: 'userDetailsService'
             },
             ncyBreadcrumb: {
                 label: 'User Details'
             }
         });
-}]);
+    }]);

@@ -44,8 +44,20 @@
         "activeTo": "Active To",
         "notes": "Notes",
 		"copyToUser": "Copy to User",
-		"copyFromUser": "Copy from User"
+		"copyFromUser": "Copy from User",
+		"securityQuestions": "Security questions",
+		"securityQuestions_1": "What is the last name of the teacher who gave you your first failing grade?",
+		"securityQuestions_2": "What was the name of your elementary / primary school?",
+		"securityQuestions_3": "In what city or town does your nearest sibling live?",
+		"securityQuestions_4": "What time of the day were you born? (hh:mm)",
+		"securityQuestions_5": "What is your favorite movie?",
+		"securityQuestions_6": "What was the model of your first car?",
+		"securityQuestions_7": "What is the first name of your oldest cousin?",
+        "securityQuestions_8": "What was the name of your first pet?",
+        "securityQuestions_9": "What was the name of the of street where you grew up?",
+        "securityQuestions_10":"What is your mother's maiden name?"
     },
+
     "roles": {
         "name": "Name",
         "description": "Description",
@@ -99,6 +111,13 @@
         "editContext": " Edit User Context",
         "deleteContext": " Remove User Context"
 	},
+    "userPreferences": {
+        "user" : "User",
+        "roleStatus" : "Role Status",
+        "option" : "Option",
+        "optionDesc" : "Option Description",
+        "value": "Value"
+    },
 	"organisations": {
 	    "organisation": "Organisation",
         "parent": "Parent",
@@ -180,5 +199,19 @@
 		"email" : "E-Mail",
         "newEndpointContact": " Assign Contact",
         "deleteEndpointContact": " Remove Contact"
-	}
+	},
+
+    "applications": {
+        "parent" : "Parent",
+        "features" : "Features",
+        "datasets" : "Datasets",
+        "options" : "Options"
+    },
+
+    "changes": {
+        "pendingChanges": "Pending Changes",
+        "oldValue": "Old value",
+        "newValue": "New value",
+        "email": "E-Mail"
+    }
 }

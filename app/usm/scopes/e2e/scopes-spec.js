@@ -1,4 +1,4 @@
-describe('scopesCtrl', function() {
+describe('Scope Page', function() {
 
 	it('should ...', function() {
 

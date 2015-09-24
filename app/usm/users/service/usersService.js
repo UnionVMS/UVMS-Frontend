@@ -68,8 +68,8 @@ usersService.factory('userDetailsService', ['$resource', '$q', '$log', function 
 
 		return deferred.promise;
 	};
-	
-	var _getUser = function (userName) {	
+
+	var _getUser = function (userName) {
 		var message = "";
 		var deferred = $q.defer();
 		var resource = $resource('/usm-administration/rest/users/:userName', {'userName': userName});
@@ -99,5 +99,55 @@ usersService.factory('userDetailsService', ['$resource', '$q', '$log', function 
 	return {
         getUser: _getUser,
 		copyUserPrefs: _copyUserPrefs
-    };	
+    };
+}]);
+
+usersService.factory('userChallengesService', ['$resource', '$q', '$log', function ($resource, $q, $log) {
+
+    var _setChallenges = function (userName, challengeInformationResponse) {
+        var message = "";
+        var usr = {};
+        usr.userName = userName; //$q.activeUser.userName;
+        var deferred = $q.defer();
+
+        var resource = $resource('/usm-administration/rest/users/:userName/challenges', usr, {_setChallenges: {method: 'PUT'}});
+        resource._setChallenges(challengeInformationResponse).$promise.then(
+            function (data) {
+                deferred.resolve({
+                    challengeInformationResponse: data
+                });
+            },
+            function (error) {
+                message = error.data.message;
+                deferred.reject(message);
+            }
+        );
+
+        return deferred.promise;
+    };
+
+    var _getChallenges = function (userName) {
+        var message = "";
+        var deferred = $q.defer();
+        var resource = $resource('/usm-administration/rest/users/:userName/challenges', {'userName': userName});
+
+        resource.get().$promise.then(
+            function (data) {
+
+                deferred.resolve({
+                    challengeInformationResponse: data.results
+                });
+            },
+            function (error) {
+                message = "Error: " + error.data.message;
+                deferred.reject(message);
+            }
+        );
+        return deferred.promise;
+    };
+
+    return {
+        setChallenges: _setChallenges,
+        getChallenges: _getChallenges
+    };
 }]);

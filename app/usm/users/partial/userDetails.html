@@ -25,7 +25,7 @@
 				<div class="col-md-1 text-right">
                   <span ng-controller="manageUserCtlr" ng-if="checkAccess('manageUsers')">
                         <button class="btn btn-sm btn-primary" ng-click="editUser(user)">
-                            <span><i class="glyphicon glyphicon-pencil"></i></span>
+                            <span><i class="fa fa-pencil"></i></span>
                         </button>
                     </span>
 				</div>
@@ -53,11 +53,11 @@
         <tab heading="Contact and Status Details">
             <div ng-include src="'usm/users/account/partial/accountDetails.html'"></div>
         </tab>
-        <tab heading="Contexts" ng-if="checkAccess('viewUserContexts')||checkAccess('manageUserContexts')">
+        <tab heading="Contexts" ng-if="checkAccess('viewUsers')||checkAccess('manageUsers')">
           <!--  <div ui-view name="contexts" ></div>-->
             <div ng-include src="'usm/users/userContexts/partial/userContexts.html'"></div>
         </tab>
-        <tab heading="Preferences" ng-if="checkAccess('viewUserContexts')||checkAccess('manageUserContexts')">
+        <tab heading="Preferences" ng-if="checkAccess('viewUsers')||checkAccess('manageUsers')">
             <div ng-include src="'usm/users/preferences/partial/userPreferences.html'"></div>
         </tab>
     </tabset>

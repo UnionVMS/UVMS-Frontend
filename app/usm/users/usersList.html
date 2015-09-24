@@ -5,10 +5,10 @@
 <div id="usersListDiv" class="container">
     <div class="panel panel-default">
 		<div class="panel-body">
-			<form class="form-inline" name="searchForm" ng-submit="searchUsers(search, search.searchActiveFrom, search.searchActiveTo)">
+			<form class="form-inline" name="searchForm" ng-submit="searchUsers()">
 				<div class="form-group col-md-2">
 					<label for="user">Name search</label>
-					<span class="glyphicon glyphicon-question-sign" tooltip="{{usernameTooltip}}"></span>
+					<span class="fa fa-question-circle" tooltip="{{usernameTooltip}}"></span>
 					<input type="text" class="form-control"
 						   id="user"
 						   name="user"
@@ -76,7 +76,7 @@
 					<div class="form-group usm-calendar" style="width:100px; margin-right:5px;">
 						<label>{{ 'users.activeFrom' | translate }}</label>
 						<div>
-							<usm-datepicker config="searchActiveFromConfig" value=""></usm-datepicker>
+                            <datepicker-input model="search.activeFrom"></datepicker-input>
 						</div>
 					</div>
 				</div>
@@ -85,7 +85,7 @@
 					<div class="form-group usm-calendar" style="width:100px; margin-right:5px;">
 						<label>{{ 'users.activeTo' | translate }}</label>
 						<div>
-							<usm-datepicker config="searchActiveToConfig" value=""></usm-datepicker>
+                            <datepicker-input model="search.activeTo"></datepicker-input>
 						</div>
 					</div>
 				</div>
@@ -94,10 +94,10 @@
 					<label>&nbsp;</label>
 					<div style="width:120px; margin-right:5px;">
 						<button type="submit" id="submit" class="btn btn-default">
-							<span class="glyphicon glyphicon-search"></span>
+							<span class="fa fa-search"></span>
 						</button>
 						<button type="button" id="button" ng-click="resetForm()" class="btn btn-default">
-							<span class="glyphicon glyphicon-refresh"></span>
+							<span class="fa fa-refresh"></span>
 						</button>
 					</div>
 				</div>
@@ -110,15 +110,16 @@
     <div>
         <table st-table="displayedUsers" st-safe-src="userList" class="table table-striped fixed">
             <colgroup>
-                <col style="width: 160px;">
-                <col style="width: 160px;">
-                <col style="width: 160px;">
+                <!---  Total should be 1140px fo EC template--->
+                <col style="width: 150px;">
+                <col style="width: 150px;">
+                <col style="width: 150px;">
                 <col style="width: 80px;">
-                <col style="width: 160px;">
-                <col style="width: 120px;">
-                <col style="width: 120px;">
+                <col style="width: 180px;">
+                <col style="width: 110px;">
+                <col style="width: 110px;">
                 <col style="width: 80px;">
-                <col style="width: 100px;">
+                <col style="width: 130px;">
             </colgroup>
             <thead>
 				<tr>
@@ -130,12 +131,12 @@
 					<th ng-click="changeSorting('activeFrom')">{{ 'users.activeFrom' | translate }}&nbsp;<i class="fa" ng-class="getIcon('activeFrom')"></i></th>
 					<th ng-click="changeSorting('activeTo')">{{ 'users.activeTo' | translate }}&nbsp;<i class="fa" ng-class="getIcon('activeTo')"></i></th>
 					<th ng-click="changeSorting('status')">{{ 'users.status' | translate }}&nbsp;<i class="fa" ng-class="getIcon('status')"></i></th>
-					<th class="text-right">
+					<th class="text-center">
 						<!-- New Button -->
 						<div class="tableHeader" ng-if="checkAccess('manageUsers')">
 							<!-- <label><input type="checkbox" ng-model="inactiveUsers" ng-change="change(inactiveUsers)" ng-true-value="'N'" ng-false-value="'Y'">Show Inactive Users</label> -->
-							<button type="button" id="newUserButton" ng-controller="newUserController" ng-click="addNewUser()" class="btn btn-sm btn-primary pull-left">
-								<i class="glyphicon glyphicon-plus"></i> New User
+							<button type="button" id="newUserButton" ng-controller="newUserController" ng-click="addNewUser()" class="btn btn-sm btn-primary">
+								<i class="fa fa-plus"></i> New User
 							</button>
 						</div>
 					</th>
@@ -157,19 +158,19 @@
 					<td class="text-center">
 						 <span ng-controller="manageUserCtlr" ng-if="checkAccess('manageUsers')">
 							<button type="button" id="editUser" class="btn btn-sm btn-primary" ng-click="editUser(user)">
-								<i class="glyphicon glyphicon-pencil"></i>
+								<i class="fa fa-pencil"></i>
 							</button>
 						 </span>
 						<span ng-if="checkAccess('manageUsers')||checkAccess('viewUsers')">
-							<button type="button" class="btn btn-sm btn-primary"
+							<button type="button" id="viewUser" class="btn btn-sm btn-primary"
 									ui-sref="app.usm.users.userDetails({userName: user.userName})"
                                 ui-sref-opts="{ inherit : false }">
-								<i class="glyphicon glyphicon-eye-open"></i>
+								<i class="fa fa-eye"></i>
 							</button>
 						 </span>
 						 <span ng-controller="manageUserCtlr" ng-if="checkAccess('manageUsers')">
 							<button type="button" class="btn btn-sm btn-primary" ng-click="duplicateUserProfile(user)">
-								<i class="glyphicon glyphicon-duplicate"></i>
+								<i class="fa fa-files-o"></i>
 							</button>
 						 </span>
 					</td>

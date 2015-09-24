@@ -4,8 +4,8 @@ accountModule.controller('accountController', ['$scope', function ($scope) {
 
 }]);
 
-accountModule.controller('newUserController', ['$scope', '$modal', 'accountService', '$log',
-    function ($scope, $modal, accountService, $log) {
+accountModule.controller('newUserController', ['$scope', '$modal', 'accountService', '$log','policyValues',
+    function ($scope, $modal, accountService, $log, policyValues) {
 
         $scope.addNewUser = function (newUser) {
             var modalInstance = $modal.open({
@@ -21,6 +21,10 @@ accountModule.controller('newUserController', ['$scope', '$modal', 'accountServi
                     //userCreated: $scope.userCreated
                     newUser: function(){
                         return angular.copy(newUser);
+                    },
+                    ldapEnabledPolicy: function(){
+                        var ldapEnabledPolicy = policyValues.getPolicyValue();
+                        return ldapEnabledPolicy;
                     }
                 }
             });
@@ -30,17 +34,16 @@ accountModule.controller('newUserController', ['$scope', '$modal', 'accountServi
                 $scope.userList.push(newUser);
                 $scope.displayedUsers = [].concat($scope.userList);
             }, function () {
-                //$log.info('Modal dismissed at: ' + new Date());
             });
 
         };
 
     }]);
 
-accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '$log', 'organisationsService', 'refData', 'accountService', '$timeout',
-    function ($scope, $modalInstance, $log, organisationsService, refData, accountService, $timeout) {
+accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '$log', 'organisationsService', 'refData', 'accountService', '$timeout','ldapEnabledPolicy',
+    function ($scope, $modalInstance, $log, organisationsService, refData, accountService, $timeout, ldapEnabledPolicy) {
         var confirmCreate = false;
-
+        $scope.ldapEnabled = ldapEnabledPolicy[0].value;
         $scope.actionMessage = "";
         $scope.selectedStatus = "";
         $scope.organisation = {};
@@ -65,8 +68,10 @@ accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '
                 $scope.organisationsList = response.organisations;
             },
             function (error) {
-                $scope.messageDivClass = "container alert alert-danger";
-                $scope.actionMessage = error;
+                if(!_.isEqual(error.status, 404)) {
+                    $scope.messageDivClass = "container alert alert-danger";
+                    $scope.actionMessage = error;
+                }
             }
         );
 

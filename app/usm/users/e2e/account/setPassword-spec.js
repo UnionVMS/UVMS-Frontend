@@ -5,7 +5,7 @@ var UsersPage = require('./usersPage');
 var AccountDetailsPage = require('./accountDetailsPage');
 
 
-describe('usersController', function() {
+describe('User Set Password', function() {
     var menuPage = new MenuPage();
     var loginPage = new LoginPage();
     var usersPage = new UsersPage();
@@ -16,13 +16,13 @@ describe('usersController', function() {
 
 
     beforeEach(function ()  {
-
         //    browser.driver.manage().window().setSize(1280, 1280);
         // login
         loginPage.visit();
         loginPage.login('usm_admin', 'password');
 
         // select users from menu
+		menuPage.selectContext("USM-UserManager - (no scope)");
         menuPage.clickUsers();
 
         usersPage.getTableRows().count().then(function (rowCount) {
@@ -44,7 +44,7 @@ describe('usersController', function() {
         usersPage.clickDetailViewButton(0);
 
         //inspect that the page is Account Details
-        expect(accountDetailsPage.getPageUrl()).toBe(browser.baseUrl +'#/user/'+ userName +'/details');
+        expect(accountDetailsPage.getPageUrl()).toBe(browser.baseUrl +'#/usm/users/'+ userName);
 
         accountDetailsPage.setPasswordButton();
 
@@ -60,24 +60,29 @@ describe('usersController', function() {
         accountDetailsPage.savePasswordButton();
 
         //To inspect that it is possible to enter with the userName updated with the new password
+		loginPage.gotoHome();
         menuPage.clickLogOut();
+		
+		loginPage.visit();
         loginPage.login(userName,passwordRandom);
 
         // select users from menu
         menuPage.clickUsers();
 
         //inspect that the page is Account Details
-        expect(accountDetailsPage.getPageUrl()).toBe(browser.baseUrl +'#/users?page=1&sortColumn=userName&sortDirection=desc');
-
+        expect(accountDetailsPage.getPageUrl()).toBe(browser.baseUrl +'#/usm/users');
     });
 
 
     afterEach(function () {
 
         loginPage.gotoHome();
-        // logout
+        
+		// logout
         menuPage.clickLogOut();
-        expect(loginPage.getPageUrl()).toBe(browser.baseUrl +'#/login');
+
+		browser.executeScript('window.sessionStorage.clear();');
+		browser.executeScript('window.localStorage.clear();');				
     });
 
 });

@@ -19,6 +19,8 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
 
     tmhDynamicLocaleProvider.localeLocationPattern("assets/locales/angular-locale_{{locale}}.js");
 
+	
+    $urlRouterProvider.when('','today');
 
     $stateProvider
         .state('app', {

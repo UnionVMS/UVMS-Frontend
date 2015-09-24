@@ -1,4 +1,4 @@
-describe('PreferencescontrollerCtrl', function() {
+describe('User Preferences page', function() {
 
 	it('should ...', function() {
 

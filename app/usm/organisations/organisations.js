@@ -45,7 +45,7 @@ var organisationsModule = angular.module('organisations', [
                     status:'all'
                 },
 	            views: {
-	            	"page@app": {
+	            	"page@app.usm": {
 	                    templateUrl: 'usm/organisations/organisationsList.html',
 	                    controller: "organisationsListCtrl"
 	                }
@@ -60,8 +60,11 @@ var organisationsModule = angular.module('organisations', [
 	        })
 	        .state('app.usm.organisations.organisation', {
 	            url: '/{organisationId}',
+                params:{
+                    organisationId:null
+                },
 	            views: {
-                    "page@app": {
+                    "page@app.usm": {
 	                    templateUrl: 'usm/organisations/partial/organisationDetails.html'
 	                }
 	            },
@@ -72,8 +75,11 @@ var organisationsModule = angular.module('organisations', [
 
 	    .state('app.usm.organisations.organisation.endpoint', {
             url: '/endpoint/{endPointId}',
+            params:{
+                    endPointId:null
+                },
             views: {
-                "page@app": {
+                "page@app.usm": {
                     templateUrl: 'usm/organisations/partial/endPointsDetails.html'
                 }
             },

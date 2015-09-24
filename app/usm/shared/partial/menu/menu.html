@@ -2,43 +2,20 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
+<!--        <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-        </div>
+        </div>-->
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li ng-controller="MenuCtrl" ng-if="checkAccess('manageUsers')||checkAccess('viewUsers')">
-                    <a ui-sref=".users" ui-sref-active="active">
-                       {{ 'header.users' | translate }}
-                    </a>
-                </li>
-                <li ng-controller="MenuCtrl" ng-if="checkAccess('manageOrganisations')||checkAccess('viewOrganisations')">
-                    <a ui-sref=".organisations" ui-sref-active="active">
-                        {{ 'header.organisations' | translate }}
-                    </a>
-                </li>
-                <li ng-controller="MenuCtrl" ng-if="checkAccess('manageRoles')||checkAccess('viewRoles')">
-                    <a ui-sref=".roles" ui-sref-active="active">
-                        {{ 'header.roles' | translate }}
-                    </a>
-                </li>
-                <li ng-controller="MenuCtrl" ng-if="checkAccess('manageScopes')||checkAccess('viewScopes')">
-                    <a ui-sref=".scopes" ui-sref-active="active">
-                        {{ 'header.scopes' | translate }}
-                    </a>
-                </li>
-                <li ng-controller="MenuCtrl" ng-if="checkAccess('manageApplications')||checkAccess('viewApplications')">
-                    <a ui-sref=".applications" ui-sref-active="active">
-                        Applications
-                    </a>
-                </li>
+            <ul class="nav navbar-nav" ng-controller="MenuCtrl"
+                ng-include="'usm/shared/partial/menu/menuLis.html'">
+
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->

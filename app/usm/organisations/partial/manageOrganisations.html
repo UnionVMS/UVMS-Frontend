@@ -2,11 +2,9 @@
     <form novalidate class="form-horizontal" name="manageOrgForm">
         <div class="modal-header">
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-12">
                     <h3 ng-if="mode=='new'" class="modal-title">New Organisation</h3>
-
                     <h3 ng-if="mode=='edit'" class="modal-title">Edit Organisation</h3>
-
                     <h3 ng-if="mode=='delete'" class="modal-title">Delete Organisation</h3>
                 </div>
             </div>
@@ -51,13 +49,21 @@
                 <div class="form-group">
                     <label class="col-md-2 col-md-offset-1" for="orgNation">Nation<sup
                         class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup></label>
+                    <!--
+                    <div class="col-md-5">
+                        <input type="text" id="orgNation" name="orgNation" class="form-control"
+                               ng-disabled="mode=='delete'"
+                               ng-model="org.nation"
+                               typeahead="nation for nation in nations | filter:$viewValue | limitTo:8">
+                    </div>
+                    -->
 
                     <div class="col-md-5">
                         <select class="form-inline form-control dropdown"
                                 id="orgNation"
                                 name="orgNation"
-                                ng-model="org.nation_selected"
-                                ng-options="nation for nation in nationsList"
+                                ng-model="org.nation"
+                                ng-options="nation for nation in nations"
                                 required
                                 ng-class="{pointer: pointer}"
                                 ng-mouseenter="pointer=true"
@@ -70,6 +76,7 @@
                             <span class="text-danger small" ng-show="manageOrgForm.orgNation.$error.required">Nation is required</span>
                         </div>
                     </div>
+
                 </div>
             </div>
 

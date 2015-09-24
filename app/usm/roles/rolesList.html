@@ -45,14 +45,14 @@
                                 tooltip-popup-delay={{toolTipsDelay}}
                                 tooltip="{{'roles.search_filter' | translate}}"
                                 class="btn btn-default" ng-click="searchRole(criteria)">
-                            <span class="glyphicon glyphicon-search"></span></span>
+                            <span class="fa fa-search"></span></span>
                         </button>
                         <!--button type="button" tooltips tooltip-delay={{toolTipsDelay}} tooltip-title="{{'roles.refresh_filter' | translate}}" class="btn btn-default" ng-click="resetForm()"-->
                         <button type="button"
                                 tooltip-popup-delay={{toolTipsDelay}}
                                 tooltip="{{'roles.refresh_filter' | translate}}"
                                 class="btn btn-default" ng-click="resetForm()">
-                            <span class="glyphicon glyphicon-refresh"></span>
+                            <span class="fa fa-refresh"></span>
                         </button>
                     </div>
                 </div>
@@ -74,13 +74,13 @@
             <th ng-click="changeSorting('name')">{{'roles.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i></th>
             <th ng-click="changeSorting('description')">{{'roles.description' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('description')"></i></th>
             <th ng-click="changeSorting('status')">{{'roles.status' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('status')"></i></th>
-            <th class="text-right">
+            <th class="text-center">
                 <div ng-controller="manageRoleCtrl" ng-if="checkAccess('manageRoles')">
                     <button
                         tooltip-popup-delay={{toolTipsDelay}}
                         tooltip="{{'roles.new_button_tooltip' | translate}}"
                         class="btn btn-primary btn-sm" ng-click='manageRole("new", "")'>
-                        <span class="glyphicon glyphicon-plus"></span>
+                        <span class="fa fa-plus"></span>
                         <span>{{'roles.newRole' | translate}}</span>
                     </button>
                 </div>
@@ -94,13 +94,13 @@
             <td>
                 <span ng-class="{'label label-success': role.status=='E', 'label label-danger': role.status=='D'}">{{"role.status_"+role.status | translate}}</span>
             </td>
-            <td class="actionTd text-right">
+            <td class="actionTd text-center">
                 <span ng-controller="manageRoleCtrl" ng-if="checkAccess('manageRoles')">
 					<button type="button"
                             tooltip-popup-delay={{toolTipsDelay}}
                             tooltip="{{'roles.edit_button_tooltip' | translate}}"
                             class="btn btn-sm btn-primary usm-action-btn" ng-click='manageRole("edit", role)'>
-                        <span><i class="glyphicon glyphicon-pencil"></i></span>
+                        <span><i class="fa fa-pencil"></i></span>
                     </button>
                 </span>
                 <button type="button"
@@ -109,14 +109,14 @@
                         class="btn btn-sm btn-primary usm-action-btn"
                         ui-sref="app.usm.roles.role({roleId: role.roleId})"
                         ui-sref-opts="{ inherit : false }">
-                    <span><i class="glyphicon glyphicon-eye-open"></i></span>
+                    <span><i class="fa fa-eye"></i></span>
                 </button>
                 <span ng-controller="manageRoleCtrl" ng-if="checkAccess('manageRoles')">
 					<button type="button"
                             tooltip-popup-delay={{toolTipsDelay}}
                             tooltip="{{'roles.del_button_tooltip' | translate}}"
                             class="btn btn-sm btn-danger usm-action-btn" ng-click='manageRole("delete", role)'>
-                        <span><i class="glyphicon glyphicon-remove"></i></span>
+                        <span><i class="fa fa-remove"></i></span>
                     </button>
                 </span>
             </td>

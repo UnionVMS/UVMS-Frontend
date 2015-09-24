@@ -19,6 +19,7 @@ var userManagementApp = angular.module('usm',
         'scenarios',
         'scopes',
         'applications',
+		'policies',
         'account',
         'shared',
         'preferences',
@@ -41,14 +42,25 @@ userManagementApp.constant('refData', {
     statusesNoAll: ['E', 'D', 'L'],
     statusesEnDis: ['E', 'D'],
     statusesSearch: ['all', 'E', 'D'],
-    nations: ['BEL', 'EEC', 'FRA', 'GRE', 'SWE'],
+    nations: ['BEL', 'EEC', 'FRA', 'GRC', 'SWE'],
+    securityQuestions: ['What is the last name of the teacher who gave you your first failing grade?',
+                        'What was the name of your elementary / primary school?',
+                        'In what city or town does your nearest sibling live?',
+                        'What time of the day were you born? (hh:mm)',
+                        'What is your favourite movie?',
+                        'What was the model of your first car?',
+                        'What is the first name of your oldest cousin?',
+                        'What was the name of your first pet?',
+                        'What was the name of the of street where you grew up?',
+                        "What is your mother's maiden name?"
+                        ],
     activeDateTo: '2999-01-01',
     minCalendarDate: '1990-01-01',
     maxCalendarDate: '2999-01-01',
     toolTipsDelay: 2000
 });
 
-userManagementApp.config(['$translateProvider','LOCALES',function ($translateProvider, LOCALES) {
+userManagementApp.config(['$translateProvider','LOCALES', function ($translateProvider, LOCALES) {
     $translateProvider.useStaticFilesLoader({
         prefix: 'usm/assets/translate/locale-',
         suffix: '.json'
@@ -57,9 +69,13 @@ userManagementApp.config(['$translateProvider','LOCALES',function ($translatePro
         .fallbackLanguage('en');
 }]);
 
-userManagementApp.config(['$logProvider',function ($logProvider) {
+userManagementApp.config(['$logProvider','policyValuesProvider', function ($logProvider, policyValues) {
 
     $logProvider.debugEnabled(true);
+    /* configure policyValuesProvider if necessary
+    policyValues.setPolicyName("");
+    policyValues.setPolicySubject("");
+    */
 
 }]);
 
@@ -75,11 +91,11 @@ userManagementApp.controller('TranslateController', ['$translate', '$scope', '$c
 
 userManagementApp.config(['$urlRouterProvider', '$stateProvider','$urlMatcherFactoryProvider','$breadcrumbProvider','ACCESS','$injector',
     function ($urlRouterProvider, $stateProvider,$urlMatcherFactoryProvider,$breadcrumbProvider,ACCESS,$injector) {
-        $urlRouterProvider.when('/usm','usm/home');
 
-    //$urlRouterProvider.when('','usm');
+
+    $urlRouterProvider.when('','usm');
+    $urlRouterProvider.when('/usm','usm/home');
         //trying a fix to https://github.com/angular-ui/ui-router/issues/600
-    //$urlRouterProvider.otherwise('usm');
     //    $urlRouterProvider.otherwise( function() {
     //        var $injector = arguments[0];
     //        var $state = $injector.get("$state");
@@ -102,15 +118,27 @@ userManagementApp.config(['$urlRouterProvider', '$stateProvider','$urlMatcherFac
             return userService.findSelectedContext();
         };
         currentContextPromise.$inject =    ['userService'];
+
+
+        var getMenuTemplate = function(){
+            if(typeof unionvmsWebApp !== 'undefined'){
+                return 'usm/shared/partial/menu/integrated-menu.html';
+            } else{
+                return 'usm/shared/partial/menu/menu.html';
+            }
+        };
+
     $stateProvider
         .state('app.usm', {
             url: '/usm',
             views: {
                 "modulenav": {
-                    templateUrl: 'usm/shared/partial/menu/menu.html',
+                    templateUrl: getMenuTemplate(),
                     controller: "MenuCtrl"
                 },
-                "module": {templateUrl: 'usm/usm.html'}
+                "modulepage": {
+                    templateUrl: 'usm/usm.html'
+                }
             },
             ncyBreadcrumb: {
                 label: 'USM'
@@ -120,7 +148,7 @@ userManagementApp.config(['$urlRouterProvider', '$stateProvider','$urlMatcherFac
             url: '/home',
             views: {
 
-                "page": {
+                "page@app.usm": {
                     templateUrl: 'usm/home/home.html'
                 }
 
@@ -193,9 +221,7 @@ userManagementApp.run(['$rootScope', '$location', '$log', '$http', '$localStorag
         }*/
     }]);
 
-userManagementApp.config(['routeProtectionProvider',function(routeProtectionProvider){
-    routeProtectionProvider.anonRoute = "/anon";
-}]);
+
 
 
 

@@ -65,7 +65,7 @@ var EndpointsContactsPage = function () {
         this.getDeleteContactButton().click();
     };
     this.visit = function () {
-        browser.get('#/organisations');
+        browser.get('#/usm/organisations');
         //browser.wait(EC.visibilityOf(this.detailsName), 10000);
     };
     this.getPageUrl = function () {

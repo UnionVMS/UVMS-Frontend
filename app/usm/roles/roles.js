@@ -11,7 +11,7 @@ rolesModule.config(['$urlRouterProvider', '$stateProvider', function ($urlRouter
                 status:'all'
             },
             views: {
-                "page@app": {
+                "page@app.usm": {
                     templateUrl: 'usm/roles/rolesList.html'
                 }
             },
@@ -22,7 +22,7 @@ rolesModule.config(['$urlRouterProvider', '$stateProvider', function ($urlRouter
         .state('app.usm.roles.role', {
             url: '/{roleId}',
             views: {
-                "page@app": {
+                "page@app.usm": {
                     templateUrl: 'usm/roles/partial/roleDetails.html'
                 }
             },

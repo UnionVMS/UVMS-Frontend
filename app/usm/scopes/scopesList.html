@@ -41,10 +41,10 @@
 
                     <div>
                         <button type="button" class="btn btn-default" ng-click="searchScope(criteria)">
-                            <span class="glyphicon glyphicon-search"></span>
+                            <span class="fa fa-search"></span>
                         </button>
                         <button type="button" class="btn btn-default" ng-click="resetForm()">
-                            <span class="glyphicon glyphicon-refresh"></span>
+                            <span class="fa fa-refresh"></span>
                         </button>
                     </div>
                 </div>
@@ -74,10 +74,10 @@
             <th ng-click="changeSorting('activeTo')">{{'common.activeTo' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('activeTo')"></i></th>
             <th ng-click="changeSorting('dataFrom')">{{'scopes.dataFrom' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('dataFrom')"></i></th>
             <th ng-click="changeSorting('dataTo')">{{'scopes.dataTo' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('dataTo')"></i></th>
-            <th class="text-right">
+            <th class="text-center">
                 <div ng-controller="manageScopeCtrl" ng-if="checkAccess('manageScopes')">
                     <button class="btn btn-primary btn-sm" ng-click='manageScope("new", "")'>
-                        <span class="glyphicon glyphicon-plus"></span>
+                        <span class="fa fa-plus"></span>
                         <span>{{'scopes.newScope' | translate}}</span>
                     </button>
                 </div>
@@ -97,20 +97,20 @@
             <td>{{scope.dataTo | date:'yyyy-MM-dd'}}</td>
 
             <!--<td class="text-center actionTd">  -->
-            <td class="actionTd text-right">
+            <td class="actionTd text-center">
                 <span ng-controller="manageScopeCtrl" ng-if="checkAccess('manageScopes')">
                     <button type="button" class="btn btn-sm btn-primary usm-action-btn" ng-click='manageScope("edit", scope)'>
-                        <span><i class="glyphicon glyphicon-pencil"></i></span>
+                        <span><i class="fa fa-pencil"></i></span>
                     </button>
                 </span>
                 <button type="button" class="btn btn-sm btn-primary usm-action-btn"
                         ui-sref="app.usm.scopes.scope({scopeId: scope.scopeId})"
                         ui-sref-opts="{ inherit : false }">
-                    <span><i class="glyphicon glyphicon-eye-open"></i></span>
+                    <span><i class="fa fa-eye"></i></span>
                 </button>
                 <span ng-controller="manageScopeCtrl" ng-if="checkAccess('manageScopes')">
                     <button type="button" class="btn btn-sm btn-danger usm-action-btn" ng-click='manageScope("delete", scope)'>
-                        <span><i class="glyphicon glyphicon-remove"></i></span>
+                        <span><i class="fa fa-remove"></i></span>
                     </button>
                 </span>
             </td>
@@ -130,7 +130,7 @@
         <tfoot>
         <tr>
             <td colspan="5" class="text-right">
-                <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                <div class="st-pagination" st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
             </td>
         </tr>
         </tfoot>

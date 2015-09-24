@@ -1,0 +1,151 @@
+<div>
+    <form novalidate class="form-horizontal" name="manageChangeForm">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="modal-title">{{'changes.pendingChanges' | translate}}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12" ng-class="messageDivClass">
+                    <span ng-bind-html="actionMessage" ng-class="messageClass"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="col-md-2">
+                            <label>{{'users.userName' | translate}}</label>
+                        </div>
+                        <div class="col-md-9">
+                            <span ng-bind="newValue.userName"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="col-md-5 col-md-offset-2">
+                            <label>{{'changes.oldValue' | translate}}</label>
+                        </div>
+                        <div class="col-md-5">
+                            <label>{{'changes.newValue' | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="col-md-2">
+                            <span>{{'users.phoneNumber' | translate}}</span>
+                        </div>
+                        <div class="col-md-5">
+                            <input ng-if="oldValue.phoneNumber===newValue.phoneNumber" type="text" class="form-control" ng-model="oldValue.phoneNumber" ng-readonly="true">
+                            <input type="text" class="form-control" style="background-color: #fff0f5; border-color: #ffc0cb;"
+                                   ng-if="oldValue.phoneNumber!==newValue.phoneNumber"
+                                   ng-model="oldValue.phoneNumber"
+                                   ng-readonly="true">
+                        </div>
+                        <div class="col-md-5">
+                            <input ng-if="oldValue.phoneNumber===newValue.phoneNumber" type="text" class="form-control" ng-model="newValue.phoneNumber" ng-readonly="true">
+                            <input type="text" class="form-control" style="background-color: #D9F1D9; border-color: #8FEC8F;"
+                                   ng-if="oldValue.phoneNumber!==newValue.phoneNumber"
+                                   ng-model="newValue.phoneNumber"
+                                   ng-readonly="true">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="col-md-2">
+                            <span>{{'users.mobileNumber' | translate}}</span>
+                        </div>
+                        <div class="col-md-5">
+                            <input ng-if="oldValue.mobileNumber===newValue.mobileNumber" type="text" class="form-control" ng-model="oldValue.mobileNumber" ng-readonly="true">
+                            <input type="text" class="form-control" style="background-color: #fff0f5; border-color: #ffc0cb;"
+                                   ng-if="oldValue.mobileNumber!==newValue.mobileNumber"
+                                   ng-model="oldValue.mobileNumber"
+                                   ng-readonly="true">
+                        </div>
+                        <div class="col-md-5">
+                            <input ng-if="oldValue.mobileNumber===newValue.mobileNumber" type="text" class="form-control" ng-model="newValue.mobileNumber" ng-readonly="true">
+                            <input type="text" class="form-control" style="background-color: #D9F1D9; border-color: #8FEC8F;"
+                                   ng-if="oldValue.mobileNumber!==newValue.mobileNumber"
+                                   ng-model="newValue.mobileNumber"
+                                   ng-readonly="true">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="col-md-2">
+                            <span>{{'users.faxNumber' | translate}}</span>
+                        </div>
+                        <div class="col-md-5">
+                            <input ng-if="oldValue.faxNumber===newValue.faxNumber" type="text" class="form-control" ng-model="oldValue.faxNumber" ng-readonly="true">
+                            <input type="text" class="form-control" style="background-color: #fff0f5; border-color: #ffc0cb;"
+                                   ng-if="oldValue.faxNumber!==newValue.faxNumber"
+                                   ng-model="oldValue.faxNumber"
+                                   ng-readonly="true">
+                        </div>
+                        <div class="col-md-5">
+                            <input ng-if="oldValue.faxNumber===newValue.faxNumber" type="text" class="form-control" ng-model="newValue.faxNumber" ng-readonly="true">
+                            <input type="text" class="form-control" style="background-color: #D9F1D9; border-color: #8FEC8F;"
+                                   ng-if="oldValue.faxNumber!==newValue.faxNumber"
+                                   ng-model="newValue.faxNumber"
+                                   ng-readonly="true">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="col-md-2">
+                            <span>{{'changes.email' | translate}}</span>
+                        </div>
+                        <div class="col-md-5">
+                            <input ng-if="oldValue.email===newValue.email" type="text" class="form-control" ng-model="oldValue.email" ng-readonly="true">
+                            <input type="text" class="form-control" style="background-color: #fff0f5; border-color: #ffc0cb;"
+                                   ng-if="oldValue.email!==newValue.email"
+                                   ng-model="oldValue.email"
+                                   ng-readonly="true">
+                        </div>
+                        <div class="col-md-5">
+                            <input ng-if="oldValue.email===newValue.email" type="text" class="form-control" ng-model="newValue.email" ng-readonly="true">
+                            <input type="text" class="form-control" style="background-color: #D9F1D9; border-color: #8FEC8F;"
+                                   ng-if="oldValue.email!==newValue.email"
+                                   ng-model="newValue.email"
+                                   ng-readonly="true">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-md-offset-8 col-md-4">
+                    <input type="button" class="btn btn-primary btn-sm" ng-if="!changesSaved" ng-click="approveChange(newValue.userName)" value="Approve"/>
+                    <input type="button" class="btn btn-primary btn-sm" ng-if="!changesSaved" ng-click="rejectChange(newValue.userName)" value="Reject"/>
+                    <input type="button" class="btn btn-primary btn-sm" ng-if="!changesSaved" ng-click="cancel()" value="Cancel"/>
+                    <label class="btn btn-success btn-sm fa fa-check" ng-if="changesSaved" />
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>

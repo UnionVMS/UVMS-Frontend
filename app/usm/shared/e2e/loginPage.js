@@ -5,7 +5,7 @@ var LoginPage = function () {
     this.loginButton = element(by.buttonText('Login'));
     this.loginMessage = element(by.binding('actionMessage'));
     this.visit = function () {
-        browser.get('#');
+        browser.get('#/usm');
         browser.wait(EC.elementToBeClickable(this.username), 10000);
     };
 

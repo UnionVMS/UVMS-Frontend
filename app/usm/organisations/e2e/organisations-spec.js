@@ -5,6 +5,8 @@ var OrganisationsDetailsPage = require('./organisationsDetailsPage');
 var EndpointsChannelsPage = require('./endpointsChannelsPage');
 var EndpointsContactsPage = require('./endpointsContactsPage');
 
+var Table = require('../../shared/e2e/table');
+
 describe('Organisations page', function () {
     var menuPage = new MenuPage();
     var loginPage = new LoginPage();
@@ -23,9 +25,16 @@ describe('Organisations page', function () {
     var orgTestName = "protractorOrg";
     var orgTestUpdatedName = "protractorUpdatedOrg";
 
-    var testRowsOrganisationsTable = function (parent, organisation, description, nation) {
-        organisationsPage.getTableRows().each(function (row) {
+    //Variables for the table
+    var organisationsTable = new Table();
+    var organisationsDetailsTable = new Table();
+
+    var testRowsOrganisationsTable = function ( parent, organisation, description, nation) {
+        organisationsTable.getTableRows().each(function (row) {
             var columns = row.$$('td');
+
+			expect(columns.get(0).getText() == 'No results found.').toBeFalsy();
+
             expect(columns.get(0).getText()).toBe(parent);
             expect(columns.get(1).getText()).toBe(organisation);
             expect(columns.get(2).getText()).toBe(description);
@@ -33,9 +42,8 @@ describe('Organisations page', function () {
         });
     };
 
-
     var testCountRowsTable = function () {
-        organisationsPage.getTableRows().count().then(function (rowCount) {
+        organisationsTable.getTableRows().count().then(function (rowCount) {
             finalOrganisationsCount = rowCount;
             // check the new count to be less equal to the inital one
             expect(finalOrganisationsCount <= initialOrganisationsCount).toBeTruthy();
@@ -43,19 +51,24 @@ describe('Organisations page', function () {
 
     };
 
+
     beforeEach(function () {
         // login
         loginPage.visit();
         loginPage.login('usm_admin', 'password');
+
         // select Organisations from menu
+		menuPage.selectContext("USM-UserManager - (no scope)");
         menuPage.clickOrganisations();
 
         // take the count before searching
-        organisationsPage.getTableRows().count().then(function (rowCount) {
+        organisationsTable.getTableRows().count().then(function (rowCount) {
             initialOrganisationsCount = rowCount;
             expect(initialOrganisationsCount > 0).toBeTruthy();
         });
+
     });
+
 
     it('Test1 - should test organisations page', function () {
         // set the criteria and search
@@ -66,7 +79,7 @@ describe('Organisations page', function () {
         // take the count after searching
         testCountRowsTable(organisationsPage);
 
-        // check the content of the serch results
+        // check the content of the search results
         testRowsOrganisationsTable('', FRA, 'French ministry of agriculture', FRA);
 
     });
@@ -83,36 +96,35 @@ describe('Organisations page', function () {
 
         // check the content of the search results
         testRowsOrganisationsTable('', GRC, GRC_DESCRIPTION, GRC);
+
         var testOrg = organisationsPage.getOrganisationByName(GRC);
         var desc = testOrg.then(function(el){
             return el.element(by.binding('organisation.description')).getText();
         });
         expect(desc).toBe(GRC_DESCRIPTION);
-        //organisationsPage.getViewDetailsButton(GRC).click();
+
         organisationsPage.viewOrganisationDetails(GRC);
-        //browser.pause();
-        //organisationsPage.clickDetailViewButton(0);
+
         //inspect that the page is Organisations Details
         //expect(organisationsDetailsPage.getPageUrl()).toBe(browser.baseUrl +ORGANISATIONS_DETAILS_PAGE);
 
-        organisationsDetailsPage.getTableRows().each(function (row) {
+        organisationsDetailsTable.getTableRows().each(function (row) {
             var columns = row.$$('td');
             expect(columns.get(0).getText()).toMatch(/FLUX.GRC/);
             expect(columns.get(1).getText()).toMatch(/FLUX node for Greece/);
             expect(columns.get(2).getText()).toMatch(/.flux.gr/);
         });
 
-        //inspect that the page is End Points Details
-        organisationsDetailsPage.clickDetailViewButton(1);
+		browser.waitForAngular();
 
+        //inspect that the page is End Points Details
+        organisationsDetailsTable.clickDetailViewButton(0);
 
         //inspect that the page is Endpoints
-        //expect(organisationsDetailsPage.getPageUrl()).toMatch(/endpoint/);
-
-
+        expect(organisationsDetailsPage.getPageUrl()).toMatch(/endpoint/);
     });
 
-    it('Test3 - should test create organisation', function () {
+   it('Test3 - should test create organisation', function () {
         organisationsPage.clickNewOrgButton();
 
         organisationsPage.setOrgName(orgTestName);
@@ -124,7 +136,7 @@ describe('Organisations page', function () {
 
         organisationsPage.clickManageOrgSaveButton();
 
-        organisationsPage.refreshPage();
+        //organisationsPage.refreshPage();
         organisationsPage.search(orgTestName, "EEC", "Enabled");
         testRowsOrganisationsTable('', orgTestName, "new org description", "EEC");
 
@@ -134,14 +146,16 @@ describe('Organisations page', function () {
         organisationsPage.search(orgTestName, "EEC", "Enabled");
         testRowsOrganisationsTable('', orgTestName, "new org description", "EEC");
 
-        organisationsPage.clickRowEditButton(0);
+        organisationsTable.clickRowEditButton(0);
 
         organisationsPage.setOrgName(orgTestUpdatedName);
 
         organisationsPage.clickManageOrgSaveButton();
 
         organisationsPage.refreshPage();
+
         organisationsPage.search(orgTestUpdatedName, "EEC", "Enabled");
+
         testRowsOrganisationsTable('', orgTestUpdatedName, "new org description", "EEC");
 
     });
@@ -150,19 +164,27 @@ describe('Organisations page', function () {
         organisationsPage.search(orgTestUpdatedName, "EEC", "Enabled");
         testRowsOrganisationsTable('', orgTestUpdatedName, "new org description", "EEC");
 
-        organisationsPage.clickRowDeleteButton(0);
+        organisationsTable.clickRowDeleteButton(0);
 
         organisationsPage.clickManageOrgDeleteButton();
         organisationsPage.clickManageOrgConfirmButton();
 
         organisationsPage.refreshPage();
-        organisationsPage.search(orgTestUpdatedName, "EEC", "Enabled");
-        organisationsDetailsPage.getTableRows().each(function (row) {
+        //organisationsPage.search(orgTestUpdatedName, "EEC", "Enabled");
+        //organisationsDetailsPage.getTableRows().each(function (row) {
+        //    var columns = row.$$('td');
+        //    expect(columns.get(0).getText()).toBe('No results found.');
+        //});
+		organisationsPage.search('', "EEC", "Enabled");
+
+        organisationsDetailsTable.getTableRows().each(function (row) {
             var columns = row.$$('td');
-            expect(columns.get(0).getText()).toBe('No results found.');
+			expect(columns.get(0).getText() == orgTestUpdatedName).toBeFalsy();
         });
 
     });
+
+
 
     it('Test6 - should test create new channel', function () {
         var ORG_NAME = 'FRA';
@@ -182,7 +204,7 @@ describe('Organisations page', function () {
         //inspect that the page is Organisations Details
        // expect(organisationsDetailsPage.getPageUrl()).toBe(browser.baseUrl +ORGANISATIONS_DETAILS_PAGE);
 
-
+	   browser.waitForAngular();
 
         //inspect that the page is End Points Details
         organisationsDetailsPage.clickDetailViewButton(1);
@@ -199,6 +221,7 @@ describe('Organisations page', function () {
         endpointsChannelPage.clickManageChannelSaveButton();
     });
 
+
     it('Test7 - should test edit channel', function () {
         var ORG_NAME = 'FRA';
         var ORG_DESC = 'French ministry of agriculture';
@@ -213,12 +236,14 @@ describe('Organisations page', function () {
         // check the content of the serch results
         testRowsOrganisationsTable('', ORG_NAME, ORG_DESC, NAT_NAME);
 
-        organisationsPage.clickDetailViewButton(0);
+        organisationsTable.clickDetailViewButton(0);
         //inspect that the page is Organisations Details
        // expect(organisationsDetailsPage.getPageUrl()).toBe(browser.baseUrl +ORGANISATIONS_DETAILS_PAGE);
 
+		browser.waitForAngular();
+
         //inspect that the page is End Points Details
-        organisationsDetailsPage.clickDetailViewButton(1);
+        organisationsDetailsTable.clickDetailViewButton(1);
 
         //inspect that the page is Endpoints
         //expect(organisationsDetailsPage.getPageUrl()).toMatch(/endpoint/);
@@ -231,6 +256,7 @@ describe('Organisations page', function () {
 
         endpointsChannelPage.clickManageChannelSaveButton();
     });
+
 
     it('Test8 - should test delete channel', function () {
         var ORG_NAME = 'FRA';
@@ -250,8 +276,10 @@ describe('Organisations page', function () {
         //inspect that the page is Organisations Details
         //expect(organisationsDetailsPage.getPageUrl()).toBe(browser.baseUrl +ORGANISATIONS_DETAILS_PAGE);
 
+		browser.waitForAngular();
+
         //inspect that the page is End Points Details
-        organisationsDetailsPage.clickDetailViewButton(1);
+        organisationsTable.clickDetailViewButton(1);
 
         //inspect that the page is Endpoints
       //  expect(organisationsDetailsPage.getPageUrl()).toMatch(/endpoint/);
@@ -262,6 +290,7 @@ describe('Organisations page', function () {
 
         endpointsChannelPage.clickManageChannelConfirmButton();
     });
+
 
     it('Test9 - should test create new contact', function () {
         var ORG_NAME = 'FRA';
@@ -281,14 +310,17 @@ describe('Organisations page', function () {
         //inspect that the page is Organisations Details
         //expect(organisationsDetailsPage.getPageUrl()).toBe(browser.baseUrl +ORGANISATIONS_DETAILS_PAGE);
 
+		browser.waitForAngular();
+
         //inspect that the page is End Points Details
-        organisationsDetailsPage.clickDetailViewButton(1);
+        organisationsDetailsTable.clickDetailViewButton(1);
 
         organisationsDetailsPage.clickContactTab();
 
         endpointsContactPage.clickNewContactButton();
 
         endpointsContactPage.clickManageContactSaveButton();
+
     });
 
     it('Test10 - should test delete contact', function () {
@@ -309,8 +341,10 @@ describe('Organisations page', function () {
         //inspect that the page is Organisations Details
      //   expect(organisationsDetailsPage.getPageUrl()).toBe(browser.baseUrl +ORGANISATIONS_DETAILS_PAGE);
 
+		browser.waitForAngular();
+
         //inspect that the page is End Points Details
-        organisationsDetailsPage.clickDetailViewButton(1);
+        organisationsDetailsTable.clickDetailViewButton(1);
 
         //inspect that the page is Endpoints
       //  expect(organisationsDetailsPage.getPageUrl()).toMatch(/endpoint/);
@@ -322,8 +356,8 @@ describe('Organisations page', function () {
         endpointsContactPage.clickManageContactDelButton();
 
         endpointsContactPage.clickManageContactConfirmButton();
-    });
 
+    });
 
     it('Test11 - should test create new Endpoint', function () {
         var ORG_NAME = 'FRA';
@@ -339,7 +373,7 @@ describe('Organisations page', function () {
         // check the content of the serch results
         testRowsOrganisationsTable('', ORG_NAME, ORG_DESC, NAT_NAME);
 
-        organisationsPage.clickDetailViewButton(0);
+        organisationsTable.clickDetailViewButton(0);
 
         //Open the panel
         organisationsDetailsPage.clickNewEndpointButton();
@@ -369,12 +403,13 @@ describe('Organisations page', function () {
         // check the content of the serch results
         testRowsOrganisationsTable('', ORG_NAME, ORG_DESC, NAT_NAME);
 
-        organisationsPage.clickDetailViewButton(0);
+        organisationsTable.clickDetailViewButton(0);
 
         //inspect that the page is Endpoints
         //expect(organisationsDetailsPage.getPageUrl()).toMatch(/endpoint/);
 
-        organisationsDetailsPage.clickEditEndpointButton();
+        //organisationsDetailsTable.clickEditEndpointButton(0);
+        organisationsDetailsTable.clickRowEditButton(0)
 
         organisationsDetailsPage.setDescription("Description TestNumber5 Mod");
         organisationsDetailsPage.setURI("URI test Mod");
@@ -396,22 +431,24 @@ describe('Organisations page', function () {
         // check the content of the serch results
         testRowsOrganisationsTable('', ORG_NAME, ORG_DESC, NAT_NAME);
 
-        organisationsPage.clickDetailViewButton(0);
+        organisationsTable.clickDetailViewButton(0);
 
-        organisationsDetailsPage.clickDeleteEndpointButton();
+        organisationsDetailsTable.clickRowDeleteButton(0);
 
         organisationsDetailsPage.clickManageEndpointDelButton();
 
         organisationsDetailsPage.clickConfirmButton();
+
     });
 
 
     afterEach(function () {
-
         loginPage.gotoHome();
+
         // logout
         menuPage.clickLogOut();
-      //  expect(loginPage.getPageUrl()).toBe(browser.baseUrl +LOGIN_PAGE);
 
+		browser.executeScript('window.sessionStorage.clear();');
+		browser.executeScript('window.localStorage.clear();');
     });
 });

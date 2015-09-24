@@ -59,6 +59,71 @@ applicationsService.factory('applicationsService', ['$resource', '$q', '$log', f
             );
 
             return deferred.promise;
+        },
+        getApplications: function (criteria) {
+            var message = "";
+            var deferred = $q.defer();
+            var resource = $resource('/usm-administration/rest/applications');
+
+            resource.get(criteria).$promise.then(
+                function (data) {
+                    deferred.resolve({
+                        applications: data.results,
+                        total: data.total
+                    });
+                },
+                function (error) {
+                    message = 'Error: ' + error.data.message;
+                    deferred.reject(message);
+                }
+            );
+
+            return deferred.promise;
+        },
+        getParentApplicationNames: function () {
+            var message = "";
+            var deferred = $q.defer();
+            var resource = $resource('/usm-administration/rest/applications/parent/names');
+
+            resource.get().$promise.then(
+                function (data) {
+                    deferred.resolve({
+                        parents: data.results
+                    });
+                },
+                function (error) {
+                    message = 'Error: ' + error.data.message;
+                    deferred.reject(message);
+                }
+            );
+
+            return deferred.promise;
+        },
+        getApplicationDetails: function (applicationName) {
+            var message = "";
+            var deferred = $q.defer();
+            var resource = $resource('/usm-administration/rest/applications/:applicationName', {"applicationName": applicationName});
+
+            resource.get().$promise.then(
+                function (data) {
+                    deferred.resolve({
+                        applicationDetails: {
+                            name: data.name,
+                            parent: data.parent,
+                            description: data.description,
+                            features: data.feature,
+                            datasets: data.dataset,
+                            options: data.option
+                        }
+                    });
+                },
+                function (error) {
+                    message = 'Error: ' + error.data.message;
+                    deferred.reject(message);
+                }
+            );
+
+            return deferred.promise;
         }
     };
 }]);

@@ -18,8 +18,11 @@ var OrganisationsPage = function () {
     this.orgParent = element(by.model('org.parent'));
     this.orgEmail = element(by.model('org.email'));
 
+    //this.orgNationList = element.all(by.css('[id^="typeahead"]')).get(0);
+	//this.orgNationList = element(by.css('[id^="typeahead"]'));
+
     this.visit = function () {
-        browser.get('#/organisations');
+        browser.get('#/usm/organisations');
         browser.wait(EC.elementToBeClickable(this.criteriaName), 10000);
     };
 
@@ -45,8 +48,12 @@ var OrganisationsPage = function () {
         //  browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
     this.clickDetailViewButton = function (rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').get(1).click(); //The view details button occupies the second position in the table
-        //  browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
+        //this.getTableRows().get(rowIndex).$$('td button').get(1).click(); //The view details button occupies the second position in the table
+		var row = this.getTableRows().get(rowIndex);
+		browser.waitForAngular();
+		var cols = row.$$('td button');
+		cols.get(1).click();
+        //browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
 
     this.clickRowEditButton = function (rowIndex) {
@@ -136,7 +143,7 @@ var OrganisationsPage = function () {
     this.getOrganisationViewButton = function(name){
         return this.getOrganisationByName(name)
             .then(function(el){
-                return el.element(by.css('td button .glyphicon-eye-open'));
+                return el.element(by.css('td button .fa-eye'));
             });
     };
 
@@ -161,6 +168,7 @@ var OrganisationsPage = function () {
         this.newOrgButton.click();
     };
     this.clickManageOrgSaveButton = function () {
+        browser.wait(EC.elementToBeClickable(this.manageOrgSaveButton), 10000);
         this.manageOrgSaveButton.click();
 
         browser.wait(function() {
@@ -171,6 +179,7 @@ var OrganisationsPage = function () {
                 });
             return deferred.promise;
         });
+
     };
     this.clickManageOrgDeleteButton = function () {
         this.manageOrgDeleteButton.click();
@@ -195,12 +204,16 @@ var OrganisationsPage = function () {
         this.orgDescription.sendKeys(description);
     };
     this.setOrgNation = function (nation) {
+        this.orgNation.click();
         this.orgNation.sendKeys(nation);
+        //this.orgNationList.click();
     };
     this.setOrgStatus = function (status) {
+		this.orgStatus.click();
         this.orgStatus.sendKeys(status);
     };
     this.setOrgParent = function (parent) {
+		this.orgParent.click();
         this.orgParent.sendKeys(parent);
     };
     this.setOrgEmail = function (email) {

@@ -14,7 +14,7 @@ var RolesPage = function () {
     this.selectedRoleId='';
 
     this.visit = function () {
-        browser.get('#/roles');
+        browser.get('#/usm/roles');
         browser.wait(EC.elementToBeClickable(this.criteriaRole), 10000);
     };
 
@@ -65,7 +65,14 @@ var RolesPage = function () {
     };
 
     this.clickDetailButton = function(rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').click();
+		browser.waitForAngular();
+		
+		var columns = this.getDetailButton(rowIndex);
+		
+		//this.getDetailButton(rowIndex).get(1).click();
+		columns.get(1).click();
+		
+        //this.getTableRows().get(rowIndex).$$('td button').click();
         browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
 
@@ -98,6 +105,7 @@ var RolesPage = function () {
     };
 
     this.setSelectedRoleId = function(roleId) {
+		//console.log("roleId selected: " + roleId);
         this.selectedRoleId = roleId;
     };
 

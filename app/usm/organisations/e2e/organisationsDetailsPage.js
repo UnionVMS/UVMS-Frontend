@@ -9,6 +9,8 @@ var OrganisationsDetailsPage = function () {
     this.detailsParent = element(by.binding('organisation.parent'));
     this.detailsEmail = element(by.binding('organisation.email'));
     this.detailsStatus = element(by.binding('organisation.status'));
+    this.editEndpointButton = element.all(by.id('endpoint_edit'));
+    this.deleteEndpointButton = element.all(by.id('endpoint_delete'));
 
    // this.newOrgEndpointButton = element(by.id('newOrgEndpointButton'));
     this.newEndpointButton = element(by.id('new_endpoint'));
@@ -151,12 +153,17 @@ var OrganisationsDetailsPage = function () {
     };
 
     this.getDetailButton = function(rowIndex) {
-        return this.getTableRows().get(rowIndex).$$('td button');
+        return this.getTableRow(rowIndex).$$('td button');
     };
 
     this.clickDetailViewButton = function(rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').get(1).click(); //The view details button occupies the second position in the table
-        //  browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
+		this.getTableRows().get(rowIndex).$$('td button').get(1).click(); //The view details button occupies the second position in the table		
+		/*var row = this.getTableRow(rowIndex);
+		browser.waitForAngular();
+		var cols = row.$$('td button');
+		cols.get(1).click();
+		*/
+        //browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
 
     this.getElementTable = function(rowIndex,columnIndex) {
@@ -170,13 +177,8 @@ var OrganisationsDetailsPage = function () {
         this.newEndpointButton.click();
     };
 
-
-    this.editEndpointButton = element(by.id('endpoint_edit'));
-    this.deleteEndpointButton = element(by.id('endpoint_delete'));
-
-    this.clickEditEndpointButton = function () {
+    this.clickEditEndpointButton = function () {		
         this.getEditEndpointButton().click();
-
     };
 
     this.clickDeleteEndpointButton = function () {
@@ -184,13 +186,12 @@ var OrganisationsDetailsPage = function () {
 
     };
 
-
     this.getEditEndpointButton = function(){
-        return this.editEndpointButton;
+		return this.editEndpointButton.get(0);
     };
 
     this.getDeleteEndpointButton = function(){
-        return this.deleteEndpointButton;
+        return this.deleteEndpointButton.get(0);
     };
 
     //PAGE METHODS

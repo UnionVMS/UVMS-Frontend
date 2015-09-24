@@ -11,7 +11,7 @@ scopesModule.config(['$urlRouterProvider', '$stateProvider', function ($urlRoute
                 status:'all'
             },
             views: {
-                "page@app": {
+                "page@app.usm": {
                     templateUrl: 'usm/scopes/scopesList.html'
                 }
             },
@@ -22,7 +22,7 @@ scopesModule.config(['$urlRouterProvider', '$stateProvider', function ($urlRoute
         .state('app.usm.scopes.scope', {
             url: '/{scopeId}',
             views: {
-                "page@app": {
+                "page@app.usm": {
                     templateUrl: 'usm/scopes/partial/scopeDetails.html'
                 }
             },

@@ -9,14 +9,15 @@ describe('User Contexts page', function() {
     var initialRolesCount;
     var finalRolesCount;
 
-    var LOGIN_PAGE = '#/login';
+    var HOME_PAGE = '#/usm';
 
     beforeEach(function () {
         // login
         loginPage.visit();
-        loginPage.login('usm_bootstrap', 'password');
+        loginPage.login('usm_admin', 'password');
 
         // select Users from menu
+		menuPage.selectContext("USM-UserManager - (no scope)");
         menuPage.clickUsers();
 
         // take the count before searching
@@ -26,10 +27,8 @@ describe('User Contexts page', function() {
         });
     });
 
-    it('should test users page serach filters', function () {
+    it('should test users page search filters', function () {
         // set the criteria and search
-		// usersPage.setOrganization("F");
-		// usersPage.setStatus("E")
         usersPage.setSearchUser("vms_user");
 		usersPage.clickSearchButton();
 
@@ -45,8 +44,6 @@ describe('User Contexts page', function() {
             var columns = row.$$('td');
             expect(columns.get(0).getText()).toMatch('vms_user*');
         });
-
-		browser.waitForAngular();
     });
 
     it('should test users view context', function () {
@@ -54,13 +51,9 @@ describe('User Contexts page', function() {
         usersPage.setSearchUser("vms_user");
         usersPage.clickSearchButton();
 
-		// This line click on the last column of the table of results, that should be the view button
-		element.all(by.repeater('user in displayedUsers')).get(0).$('td:last-child span:last-child button').click();
-
-		// This line click on the User 'Context' tab
-		element(by.linkText('Contexts')).click();
-
-		browser.waitForAngular();
+		usersPage.clickDetailViewButton(0);
+	
+		usersPage.clickContextTab();
     });
 
     it('should test users new context', function () {
@@ -68,8 +61,7 @@ describe('User Contexts page', function() {
         usersPage.setSearchUser("vms_user");
         usersPage.clickSearchButton();
 
-		// This line click on the last column of the table of results, that should be the view button
-		element.all(by.repeater('user in displayedUsers')).get(0).$('td:last-child span:last-child button').click();
+		usersPage.clickDetailViewButton(0);
 
 		// This line click on the User 'Context' tab
 		element(by.linkText('Contexts')).click();
@@ -78,17 +70,29 @@ describe('User Contexts page', function() {
 		element(by.id('new_user_context')).click();
 
 		// This line click on the New dialog role's combobox
-		element(by.cssContainingText('option', 'Super User')).click();
+		var allRoles = element.all(by.options('role.name for role in roleList'));
+		allRoles.each(function(option) {
+			option.getText().then(function(opt) {
+				//console.log("option: ", opt);	
+				if(opt == 'Super User') {
+					option.click();	
+				}
+			});
+		});
 
 		// This line click on the New dialog scopes's combobox
-		element(by.cssContainingText('option', 'Some Reports')).click();
+		var allScopes = element.all(by.options('scope.name for scope in scopeList'));
+		allScopes.each(function(option) {
+			option.getText().then(function(opt) {
+				//console.log("option: ", opt);	
+				if(opt == 'Some Reports') {
+					option.click();	
+				}
+			});
+		});
 
-		// This line click on the 'New' button of the selected User Context
+		// This line click on the 'Save' button of the selected User Context
 		element(by.buttonText('Save')).click();
-
-        //element.all(by.repeater('uc in displayedUserContexts')).then(function(rows) {
-        //    console.log(rows.length);
-        //});
 
 		browser.wait(function() {
 		  var deferred = protractor.promise.defer();
@@ -119,20 +123,36 @@ describe('User Contexts page', function() {
         usersPage.setSearchUser("vms_user");
         usersPage.clickSearchButton();
 
-        // This line click on the last column of the table of results, that should be the view button
-        element.all(by.repeater('user in displayedUsers')).get(0).$('td:last-child span:last-child button').click();
+		usersPage.clickDetailViewButton(0);
 
         // This line click on the User 'Context' tab
         element(by.linkText('Contexts')).click();
 
         // This line click on the 'New' button of the selected User Context
-        element(by.id('user_context_edit')).click();
+        //element(by.id('user_context_edit')).click();
+		element.all(by.id('user_context_edit')).get(0).click();
 
         // This line click on the Edit dialog role's combobox
-        element(by.cssContainingText('option', 'User')).click();
-
+		var allRoles = element.all(by.options('role.name for role in roleList'));
+		allRoles.each(function(option) {
+			option.getText().then(function(opt) {
+				//console.log("option: ", opt);	
+				if(opt == 'User') {
+					option.click();	
+				}
+			});
+		});
+		
         // This line click on the Edit dialog scopes's combobox
-        element(by.cssContainingText('option', 'FRA Quotas')).click();
+		var allScopes = element.all(by.options('scope.name for scope in scopeList'));
+		allScopes.each(function(option) {
+			option.getText().then(function(opt) {
+				//console.log("option: ", opt);	
+				if(opt == 'FRA Quotas') {
+					option.click();	
+				}
+			});
+		});
 
         // This line click on the 'New' button of the selected User Context
         element(by.buttonText('Save')).click();
@@ -156,13 +176,14 @@ describe('User Contexts page', function() {
         usersPage.clickSearchButton();
 
         // This line click on the last column of the table of results, that should be the view button
-        element.all(by.repeater('user in displayedUsers')).get(0).$('td:last-child span:last-child button').click();
+		usersPage.clickDetailViewButton(0);
 
         // This line click on the User 'Context' tab
         element(by.linkText('Contexts')).click();
 
         // This line click on the 'New' button of the selected User Context
-        element(by.id('user_context_delete')).click();
+        //element(by.id('user_context_delete')).click();
+		element.all(by.id('user_context_delete')).get(0).click();
 
         // This line click on the 'Delete' button of the selected User Context
         element(by.buttonText('Delete')).click();
@@ -180,11 +201,13 @@ describe('User Contexts page', function() {
         });
     });
 
-    afterEach(function () {
+    afterEach(function () {		
 		loginPage.gotoHome();
 
         // logout
         menuPage.clickLogOut();
-        expect(loginPage.getPageUrl()).toBe(LOGIN_PAGE);
+	
+		browser.executeScript('window.sessionStorage.clear();');
+		browser.executeScript('window.localStorage.clear();');			
     });
 });

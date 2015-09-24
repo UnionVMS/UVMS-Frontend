@@ -1,0 +1,43 @@
+<div>
+    <table st-table="displayedOptions" st-safe-src="applicationDetails.options" class="table table-striped fixed">
+        <colgroup>
+            <col style="width: 290px;">
+            <col style="width: 550px;">
+            <col style="width: 150px;">
+            <col style="width: 150px;">
+        </colgroup>
+        <thead class="table_heading">
+        <tr>
+            <th st-sort="name" st-sort-default="true">Name</th>
+            <th st-sort="description">Description</th>
+            <th st-sort="dataType">Data Type</th>
+            <th st-sort="defaultValue" class="rightBorder">Default Value</th>
+        </tr>
+        </thead>
+        <tbody ng-if="!emptyDatasetsResult && checkAccess('viewApplications')">
+            <tr ng-repeat="option in displayedOptions">
+                <td ng-bind="option.name"></td>
+                <td ng-bind="option.description"></td>
+                <td ng-bind="option.dataType"></td>
+                <td ng-bind="option.defaultValue" class="rightBorder"></td>
+            </tr>
+        </tbody>
+        <tbody ng-if="emptyOptionsResult && checkAccess('viewApplications')">
+            <tr>
+                <td colspan="4" class="text-center rightBorder">No options are defined by this application.</td>
+            </tr>
+        </tbody>
+        <tbody ng-if="!checkAccess('viewApplications')">
+            <tr>
+                <td colspan="4" class="text-center rightBorder">Not authorised.</td>
+            </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="5" class="text-right">
+                <div class="st-pagination" st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>

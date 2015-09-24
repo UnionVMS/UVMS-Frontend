@@ -368,7 +368,7 @@ angular.module('auth',
                                 userService.findSelectedContext().then(function () {
                                     $log.log("retry request succeeded!");
                                     //$state.go(toState);
-                                    $state.go(toState, {}, {reload: true});
+                                    $state.go(toState, toParams, {reload: true});
                                     //return $http(rejection.config);
                                 }, function () {
                                     $log.log("retry request failed!");
@@ -406,7 +406,7 @@ angular.module('auth',
                                     renewloginpanel.show().then(function () {
                                         $log.log("retry request succeeded!");
                                         //$state.go(toState);
-                                        $state.go(toState, {}, {reload: true});
+                                        $state.go(toState, toParams, {reload: true});
                                         //return $http(rejection.config);
                                     }, function () {
                                         $log.log("retry request failed! Logging Out");
@@ -523,6 +523,17 @@ angular.module('auth',
                 };
 
                 var _logout = function () {
+                    var resource = $resource('/usm-authentication/rest/sessions/:sessionId',
+                        {sessionId: $localStorage.sessionId});
+                    resource.delete().$promise.then(
+                        function(data) {
+
+                        },
+                        function(error) {
+
+                        }
+                    );
+
                     _reset();
                     delete $localStorage.token;
                     _clearContexts();
@@ -1033,8 +1044,8 @@ angular.module('auth',
                 };
             }
         ])
-        .factory('authenticateUser',['$http', '$q','$resource', '$log',
-            function($http, $q, $resource, $log) {
+        .factory('authenticateUser',['$http', '$q','$resource', '$log', '$localStorage',
+            function($http, $q, $resource, $log, $localStorage) {
                 return {
                     authenticate : function(loginInfo) {
 
@@ -1045,11 +1056,29 @@ angular.module('auth',
                             function(data){
                                 //$log.log(data);
                                 if (data.authenticated) {
+                                    var sessionInfo = {userName: loginInfo.userName, userSite: data.ip};
+                                    $localStorage.ip = data.ip;
+                                    var sessionsResource = $resource('/usm-authentication/rest/sessions');
+                                    sessionsResource.save({},sessionInfo).$promise.then(
+                                        function(sessionData) {
+                                            if (sessionData.sessionId != null) {
+                                                $localStorage.userName = sessionInfo.userName;
+                                                $localStorage.sessionId = sessionData.sessionId;
                                     deferred.resolve({
                                         authenticated: data.authenticated,
                                         status: data.statusCode,
-                                        token: data.jwtoken
+                                                    token: data.jwtoken,
+                                                    sessionId: sessionData.sessionId
                                     });
+                                } else {
+                                                message = "Error: Maximum number of sessions exceeded";
+                                                deferred.reject(message);
+                                            }
+                                        },
+                                        function(sessionError){
+                                            message = "Error: Maximum number of sessions exceeded";
+                                            deferred.reject(message);
+                                        });
                                 } else {
                                     if(data.statusCode === 49) {
                                         message = "Error: Invalid crendentials";
@@ -1080,6 +1109,7 @@ angular.module('auth',
                                 deferred.reject(message);
                             }
                         );
+
                         return deferred.promise;
                         /*
                          resource.get(loginInfo, function(data, responseHeaders){

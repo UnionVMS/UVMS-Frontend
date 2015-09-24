@@ -117,14 +117,14 @@ sharedModule.directive('usmPagination', ['$log', '$stateParams', function ($log,
         templateUrl: 'usm/shared/directive/usmPagination.html',
         link: function (scope, element, attrs) {
             var page = scope.config.page;
-            scope.currentPage = parseInt($stateParams.page) || 1;
+            //scope.currentPage = parseInt($stateParams.page) || 1;
             scope.itemsPerPage = scope.config.itemsPerPage;
             scope.startItems = scope.itemsPerPage * (scope.currentPage - 1) + 1;
             scope.limitItems = scope.config.itemsPerPage;
             scope.$watch('config.totalItems', function (newValue, oldValue) {
                 if (newValue) {
                     // -1 handles no results
-                    if(_.isEqual(newValue, -1)) {
+                    if (_.isEqual(newValue, -1)) {
                         newValue = 0;
                         scope.totalItems = newValue;
                     } else {
@@ -135,7 +135,7 @@ sharedModule.directive('usmPagination', ['$log', '$stateParams', function ($log,
             scope.$watch('config.pageCount', function (newValue, oldValue) {
                 if (newValue) {
                     // -1 handles no results
-                    if(_.isEqual(newValue, -1)) {
+                    if (_.isEqual(newValue, -1)) {
                         newValue = 0;
                         scope.pageCount = newValue;
                     } else {
@@ -147,12 +147,12 @@ sharedModule.directive('usmPagination', ['$log', '$stateParams', function ($log,
             scope.$watch('config.currentPage', function (newValue, oldValue) {
                 if (newValue && _.isNumber(parseInt(newValue))) {
                     // -1 handles no results
-                    if(_.isEqual(newValue, -1)) {
+                    if (_.isEqual(newValue, -1)) {
                         newValue = 0;
                     }
-                    if(newValue <=  1){
+                    if (newValue <= 1) {
                     	newValue = 1;
-					}else if(newValue >=  scope.pageCount){
+                    } else if (newValue >= scope.pageCount) {
 						newValue = scope.pageCount;
 					}
                     scope.currentPage = newValue;
@@ -160,14 +160,20 @@ sharedModule.directive('usmPagination', ['$log', '$stateParams', function ($log,
             }, true);
 
             scope.$watch("currentPage", function (newValue, oldValue) {
+                // when we first enter the page the newValue is undefined
+                if (_.isUndefined(newValue) || (!_.isEqual(newValue, oldValue) && !_.isUndefined(oldValue))) {
+                    if (_.isUndefined(newValue)) {
+                        newValue = 1;
+                    }
                 scope.currentPage = newValue;
                 scope.$parent.paginationConfig.currentPage = newValue;
                 scope.$parent.getPage(newValue);
 
+                }
                 scope.startItems = scope.itemsPerPage * (scope.currentPage - 1) + 1;
-                if(!_.isUndefined(scope.totalItems)){
+                if (!_.isUndefined(scope.totalItems)) {
                 	scope.limitItems = scope.itemsPerPage * newValue < scope.totalItems ? scope.itemsPerPage * newValue : scope.totalItems;
-                }else{
+                } else {
                 	scope.limitItems = scope.itemsPerPage;
                 }
             });
@@ -201,21 +207,21 @@ sharedModule.directive('usmPagination', ['$log', '$stateParams', function ($log,
 }]);
 
 
-sharedModule.directive("repeatPassword", function() {
+sharedModule.directive("repeatPassword", function () {
     return {
         require: "ngModel",
-        link: function(scope, elem, attrs, ctrl) {
+        link: function (scope, elem, attrs, ctrl) {
             var otherInput = elem.inheritedData("$formController")[attrs.repeatPassword];
 
-            ctrl.$parsers.push(function(value) {
-                if(value === otherInput.$viewValue) {
+            ctrl.$parsers.push(function (value) {
+                if (value === otherInput.$viewValue) {
                     ctrl.$setValidity("repeat", true);
                     return value;
                 }
                 ctrl.$setValidity("repeat", false);
             });
 
-            otherInput.$parsers.push(function(value) {
+            otherInput.$parsers.push(function (value) {
                 ctrl.$setValidity("repeat", value === ctrl.$viewValue);
                 return value;
             });

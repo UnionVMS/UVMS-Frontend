@@ -1,4 +1,4 @@
-describe('ScenarioscontrollerCtrl', function() {
+describe('Scenario Page', function() {
 
 	it('should ...', function() {
 
