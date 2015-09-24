@@ -1,9 +1,9 @@
 //OL Navigation History custom control
 ol.control.HistoryControl = function(opt_options){
     var options = opt_options || {};
-    
+
     var this_ = this;
-    
+
     this_.backBtn = document.createElement('button');
     this_.backBtn.className = 'ol-history-back';
     this_.backBtn.title = options.backLabel;
@@ -11,8 +11,8 @@ ol.control.HistoryControl = function(opt_options){
     backIcon.className = 'fa fa-long-arrow-left';
     backIcon.style.fontSize = '13px';
     this_.backBtn.appendChild(backIcon);
-    
-    
+
+
     this_.forwardBtn = document.createElement('button');
     this_.forwardBtn.className = 'ol-history-forward';
     this_.forwardBtn.title = options.forwardLabel;
@@ -20,11 +20,11 @@ ol.control.HistoryControl = function(opt_options){
     forwardIcon.className = 'fa fa-long-arrow-right';
     forwardIcon.style.fontSize = '13px';
     this_.forwardBtn.appendChild(forwardIcon);
-    
+
     this_.historyArray = [];
     this_.historyLimit = 50;
     this_.updateByClick = false;
-    
+
     //Calculate map state object describing the map view state
     this_.calculateMapState = function(){
         var view = this_.getMap().getView();
@@ -37,7 +37,7 @@ ol.control.HistoryControl = function(opt_options){
             }
         };
     };
-    
+
     //Update history array
     this_.updateHistory = function(){
         if (this_.updateByClick === false){
@@ -47,7 +47,7 @@ ol.control.HistoryControl = function(opt_options){
                 this_.historyIndex = 0;
             } else {
                 var oldMapState = this_.getMapState(this_.historyIndex);
-                //Check if the new state is not equal to the current index (we need this to avoid 
+                //Check if the new state is not equal to the current index (we need this to avoid
                 // pushing new states when the screen is being resized)
                 if (this_.compareMapState(oldMapState, newMapState) === false){
                     if (this_.historyIndex < this_.historyArray.length - 1){
@@ -62,12 +62,12 @@ ol.control.HistoryControl = function(opt_options){
             this_.updateByClick = false;
         }
     };
-    
+
     //Get the state object of the map at the specified index
     this_.getMapState = function(idx){
         return this_.historyArray[idx];
     };
-    
+
     //Check if new map state is equal to the current history index state
     this_.compareMapState = function(oldState, newState){
         var isEqual = true;
@@ -83,10 +83,10 @@ ol.control.HistoryControl = function(opt_options){
                 }
             }
         }
-        
+
         return isEqual;
     };
-    
+
     //Check length of history array and remove items if needed
     this_.checkHistoryLength = function(){
         if (this_.historyArray.length > this_.historyLimit){
@@ -96,7 +96,7 @@ ol.control.HistoryControl = function(opt_options){
             }
         }
     };
-    
+
     //Set map view by index
     this_.setMapView = function(idx){
         this_.updateByClick = true;
@@ -105,7 +105,7 @@ ol.control.HistoryControl = function(opt_options){
         view.setZoom(viewData.zoom);
         view.setCenter([viewData.center.x, viewData.center.y]);
     };
-    
+
     //Click event listeners for the buttons
     var backClick = function(e){
         if (this_.historyIndex > 0){
@@ -113,22 +113,22 @@ ol.control.HistoryControl = function(opt_options){
             this_.historyIndex -= 1;
         }
     };
-    
+
     var forwardClick = function(e){
         if (this_.historyIndex < this_.historyArray.length - 1){
             this_.setMapView(this_.historyIndex + 1);
             this_.historyIndex += 1;
         }
     };
-    
+
     this_.backBtn.addEventListener('click', backClick, false);
     this_.forwardBtn.addEventListener('click', forwardClick, false);
-    
+
     var element = document.createElement('div');
     element.className = 'ol-history ol-unselectable ol-control';
     element.appendChild(this_.backBtn);
     element.appendChild(this_.forwardBtn);
-    
+
     ol.control.Control.call(this, {
         element: element,
         target: options.target
@@ -138,22 +138,22 @@ ol.inherits(ol.control.HistoryControl, ol.control.Control);
 
 angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $timeout) {
 	var ms = {};
-	
+
 	//Initialize the map
 	ms.setMap = function(config){
 	    ms.controls = [];
 	    ms.interactions = [];
-	    
+
 	    var osmLayer = new ol.layer.Tile({
 	        title: 'osm',
 	        isBaseLayer: true,
             source: new ol.source.OSM()
         });
-        
+
         var attribution = new ol.Attribution({
             html: 'This is a custom layer from UnionVMS'
         });
-        
+
         var eezLayer = new ol.layer.Tile({
             title: 'eez',
             isBaseLayer: false,
@@ -169,7 +169,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 }
             })
         });
-        
+
         var rfmoLayer = new ol.layer.Tile({
             title: 'rfmo',
             isBaseLayer: false,
@@ -184,8 +184,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 }
             })
         });
-        
-        
+
+
         var view = new ol.View({
             projection: ms.setProjection(config.map.projection.epsgCode, config.map.projection.units, config.map.projection.global),
             center: ol.proj.transform([-1.81185, 52.44314], 'EPSG:4326', 'EPSG:3857'),
@@ -195,21 +195,21 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 //            minZoom: 3,
             enableRotation: false
         });
-        
+
         //Get all controls and interactions that will be added to the map
         var controlsToMap = ms.setControls(config.map.controls);
-        
+
         var map = new ol.Map({
             target: 'map',
             controls: controlsToMap[0],
             interactions: controlsToMap[1],
             logo: false
         });
-        
+
         map.beforeRender(function(map){
             map.updateSize();
         });
-        
+
         map.on('moveend', function(e){
            var controls = e.map.getControls();
            controls.forEach(function(control){
@@ -218,25 +218,25 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                }
            }, controls);
         });
-        
+
         map.addLayer(osmLayer);
         map.addLayer(eezLayer);
 //        map.addLayer(rfmoLayer);
 //        map.addLayer(ms.addOpenSeaMap());
         map.setView(view);
-        
+
         ms.map = map;
 	};
-	
+
 	//Clear map before running a new report
 	ms.clearMap = function(config){
 	    ms.map.removeLayer(ms.getLayerByTitle('highlight'));
 	    ms.map.removeLayer(ms.getLayerByTitle('vmspos'));
 	    ms.map.removeLayer(ms.getLayerByTitle('vmsseg'));
-	    
+
 	    //TODO change map and view properties according to user definition
 	};
-	
+
 	//Add layers
 	ms.addOpenSeaMap = function(){
 	    var layer = new ol.layer.Tile({
@@ -253,10 +253,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	            crossOrigin: null
 	        })
 	    });
-	    
+
 	    return layer;
 	};
-	
+
 	//Add highlight layer
 	ms.addFeatureOverlay = function(){
 	    var layer = new ol.layer.Vector({
@@ -267,10 +267,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	        }),
 	        style: ms.setHighlightStyle
 	    });
-	    
+
 	    ms.map.addLayer(layer);
 	};
-	
+
 	//Highlight styles
 	ms.setHighlightStyle = function(feature, resolution){
 	    var style;
@@ -294,31 +294,31 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	            })
 	        });
 	    }
-	    
+
 	    return [style];
 	};
-	
+
 	//Add highlight feature, geometry should be passed using the same projection of the map
 	ms.highlightFeature = function(geom){
 	    var feature = new ol.Feature({
             geometry: geom
         });
-	    
+
 	    var layer = ms.getLayerByTitle('highlight').getSource();
 	    layer.clear(true);
 	    layer.addFeature(feature);
 	};
-	
+
 	//Find layers by title
 	ms.getLayerByTitle = function(title){
 	    var layers = ms.map.getLayers().getArray();
 	    var layer = layers.filter(function(layer){
 	        return layer.get('title') === title;
 	    });
-	    
+
 	    return layer[0];
 	};
-	
+
 	//Add VMS positions layer
 	ms.addPositions = function(geojson) {
 	    var layer = new ol.layer.Vector({
@@ -332,15 +332,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             }),
             style: ms.setPosStyle
         });
-	    
+
 	    ms.map.addLayer(layer);
 	};
-	
+
 	//Convert degrees to radians
 	ms.degToRad = function(degrees){
 	    return degrees * Math.PI / 180;
 	};
-	
+
 	//VMS positions style
 	ms.setPosStyle = function(feature, resolution){
 	    var style = new ol.style.Style({
@@ -355,36 +355,36 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 })
             })
         });
-	    
+
 	    return [style];
 	};
-	
+
 	//Calculate middle point in a linestring geometry
 	ms.getMiddlePoint = function(geometry){
 	    var p1 = geometry.getFirstCoordinate();
 	    var p2 = geometry.getLastCoordinate();
-	    
+
 	    var x = (p1[0] + p2[0]) / 2;
 	    var y = (p1[1] + p2[1]) / 2;
-	    
+
 	    return [x,y];
 	};
-	
+
 	//Calculate rotation to display arrow on segments according to the geometry direction
 	ms.getRotationForArrow = function(geometry){
 	    var p1 = geometry.getFirstCoordinate();
         var p2 = geometry.getLastCoordinate();
-        
+
         var dx = p2[0] - p1[0];
         var dy = p2[1] - p1[1];
-        
+
         return Math.atan2(dy, dx) * -1;
 	};
-	
+
 	//VMS segments style
 	ms.setSegStyle = function(feature, resolution){
 	    var geometry = feature.getGeometry();
-	    
+
 	    var style = [
 	        new ol.style.Style({
 	            stroke: new ol.style.Stroke({
@@ -406,10 +406,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	            })
 	        })
 	    ];
-	    
+
 	    return style;
 	};
-	
+
 	//Add VMS segments layer
 	ms.addSegments = function(geojson){
 	    var layer = new ol.layer.Vector({
@@ -423,10 +423,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	        }),
 	        style: ms.setSegStyle
 	    });
-	    
+
 	    ms.map.addLayer(layer);
 	};
-	
+
 	//Set map projections
 	ms.setProjection = function(projCode, units, global){
         var projection = new ol.proj.Projection({
@@ -434,15 +434,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             units: units,
             global: global
         });
-        
+
         return projection;
 	};
-	
+
 	//Get map projection
 	ms.getMapProjectionCode = function(){
 	    return ms.map.getView().getProjection().getCode();
 	};
-	
+
 	//Set map controls
 	ms.setControls = function(controls){
 	    for (var i = 0; i < controls.length; i++){
@@ -450,16 +450,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	        var fnName = 'add' + ctrl.type.charAt(0).toUpperCase() + ctrl.type.slice(1);
 	        ms[fnName](ctrl);
 	    }
-	    
+
 	    //Always add attribution control
 	    ms.controls.push(new ol.control.Attribution({
 	        collapsible: false,
 	        collapsed: false
 	    }));
-	    
+
 	    return [new ol.Collection(ms.controls), new ol.Collection(ms.interactions)];
 	};
-	
+
 	//Add map controls
 	ms.addZoom = function(){
 	    ms.controls.push(new ol.control.Zoom({
@@ -469,7 +469,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	    ms.interactions.push(new ol.interaction.MouseWheelZoom());
 	    ms.interactions.push(new ol.interaction.KeyboardZoom());
 	};
-	
+
 	ms.addHistory = function(){
         var control = new ol.control.HistoryControl({
             backLabel: locale.getString('spatial.map_tip_go_back'),
@@ -477,18 +477,18 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         });
         ms.controls.push(control);
     };
-	
+
 	ms.addFullscreen = function(){
 	    var fullIcon = document.createElement('span');
 	    fullIcon.className = 'fa fa-arrows-alt';
 	    fullIcon.style.fontSize = '12px';
 	    fullIcon.style.fontWeight = '100';
-	    
+
 	    var control = new ol.control.FullScreen({
             tipLabel: locale.getString('spatial.map_tip_fullscreen'),
             label: fullIcon
         });
-	    
+
 	    //We need to manually fix map height when map is toggled to fullscreen
 	    control.element.onclick = function(e){
 	        if (this.children[0].className.indexOf('false') !== -1){
@@ -505,10 +505,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 }, 150);
 	        }
 	    };
-	    
+
 	    ms.controls.push(control);
 	};
-	
+
 	ms.addScale = function(ctrl){
 	    ms.controls.push(new ol.control.ScaleLine({
 	        units: ctrl.units,
@@ -516,12 +516,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	        className: 'ol-scale-line'
 	    }));
 	};
-	
+
 	ms.addDrag = function(){
 	    ms.interactions.push(new ol.interaction.DragPan());
 	    ms.interactions.push(new ol.interaction.KeyboardPan());
 	};
-	
+
 	ms.addMousecoords = function(ctrl){
         ms.controls.push(new ol.control.MousePosition({
             projection: 'EPSG:' + ctrl.epsgCode,
@@ -532,7 +532,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             className: 'mouse-position'
         }));
     };
-	
+
 	//Format mouse position coordinates according to the configuration
 	ms.formatCoords = function(coord, ctrl){
 	    var x,y;
@@ -552,7 +552,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	        return ol.coordinate.format(coord, '<b>X:</b> {x} m \u0090 <b>Y:</b> {y} m' , 4);
 	    }
 	};
-	
+
 	//Convert coordinate to DMS
 	ms.coordToDMS = function(degrees, hemispheres){
 	    var normalized = (degrees + 180) % 360 - 180;
@@ -562,7 +562,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             Math.floor(x % 60) + '\u2033 ' +
             hemispheres.charAt(normalized < 0 ? 1 : 0);
 	};
-	
+
 	//Convert coordinate to DDM
 	ms.coordToDDM = function(degrees, hemispheres){
 	    var normalized = (degrees + 180) % 360 - 180;
@@ -571,20 +571,23 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             ((x / 60) % 60).toFixed(2) + '\u2032 ' +
             hemispheres.charAt(normalized < 0 ? 1 : 0);
 	};
-	
+
 	//Zoom to geometry control
 	ms.zoomTo = function(geom){
 	    ms.map.getView().fit(geom, ms.map.getSize(), {maxZoom: 19});
 	};
-	
+
 	//Pan to coordinates control
 	ms.panTo = function(coords){
 	    ms.map.getView().setCenter(coords);
 	};
-	
+
 	//Recalculate map size
     ms.updateMapSize = function(){
-        ms.map.updateSize();
+      if (!ms.map) {
+        return;
+      }
+      ms.map.updateSize();
     };
 
 	return ms;
