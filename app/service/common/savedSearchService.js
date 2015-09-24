@@ -1,22 +1,22 @@
 angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, SavedSearchGroup, vesselRestService, movementRestService, userService) {
 
-    var checkAccessToFeature = function(feature) {
-        return userService.isAllowed(feature, 'Union-VMS', true);
+    var checkAccessToFeature = function(moduleName, feature) {
+        return userService.isAllowed(feature, moduleName, true);
     };
 
     var vesselGroups = [];
     var movementSearches = [];
 
     var init = function(){
-        if(checkAccessToFeature('viewVesselsAndMobileTerminals')){
+        if(checkAccessToFeature('Union-VMS', 'viewVesselsAndMobileTerminals')){
             getVesselGroupsForUser();
         }
 
-        if(checkAccessToFeature('viewMovements')){
+        if(checkAccessToFeature('Movement','viewMovements')){
             getMovementSearches();
         }
     };
-    
+
     //Load list of VesselGroups
     var getVesselGroupsForUser = function(){
         vesselRestService.getVesselGroupsForUser().then(
@@ -60,7 +60,7 @@ angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, 
             });
 
             return defer.promise;
-        
+
         },
         updateVesselGroup : function(savedSearchGroup){
             var defer = $q.defer();
@@ -92,7 +92,7 @@ angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, 
 
         //Get all saved Movement searches
         getMovementSearches : function(){
-            return movementSearches;          
+            return movementSearches;
         },
         createNewMovementSearch : function(savedSearchGroup){
             var defer = $q.defer();
@@ -105,7 +105,7 @@ angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, 
             });
 
             return defer.promise;
-        
+
         },
         updateMovementSearch : function(savedSearchGroup){
             var defer = $q.defer();
@@ -161,4 +161,3 @@ angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, 
 });
 
 
- 
