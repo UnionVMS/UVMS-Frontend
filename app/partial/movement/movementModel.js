@@ -58,6 +58,13 @@ angular.module('unionvmsWeb')
         }
     };
 
+    Movement.prototype.setVesselData = function(vesselModel) {
+        this.vessel.name = vesselModel.name;
+        this.vessel.ircs = vesselModel.ircs;
+        this.vessel.state = vesselModel.countryCode;
+        this.vessel.externalMarking = vesselModel.externalMarking;
+    };
+
     Movement.prototype.getFormattedTime = function() {
         return moment(this.time).format("YYYY-MM-DD HH:mm");
     };

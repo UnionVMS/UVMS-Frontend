@@ -37,4 +37,18 @@ describe('Movement', function() {
         verifyMovement(Movement.fromJson(move));
     }));
 
+
+    it('setVesselData should set correct data', inject(function(Movement, Vessel) {
+        var movement = Movement.fromJson();
+        var vessel = new Vessel();
+        vessel.name = "TestName";
+        vessel.ircs = "TestIRCS";
+        vessel.countryCode = "TestContryCode";
+        vessel.externalMarking = "TestExternalMarking";
+        movement.setVesselData(vessel);
+        expect(movement.vessel.name).toEqual(vessel.name);
+        expect(movement.vessel.ircs).toEqual(vessel.ircs);
+        expect(movement.vessel.state).toEqual(vessel.countryCode);
+        expect(movement.vessel.externalMarking).toEqual(vessel.externalMarking);
+    }));
  });

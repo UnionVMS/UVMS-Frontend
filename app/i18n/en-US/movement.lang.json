@@ -20,7 +20,7 @@
 	"table_header_message_type" : "Msg.Type",
 	"table_header_measured_speed":	"Measured speed",
 	"table_header_source" : "Source",
-	"movement_search_error_result_zero_pages" : "No movements could be retrieved at this time.",
+	"movement_search_error_result_zero_pages" : "No movements matching your search criteria was found.",
 	"toggle_advanced_search_simple" : "Simple search",
 	"toggle_advanced_search_adv" : "Advanced search",
 	"search_ext_to_name_placeholder" : "Name, IRCS",
