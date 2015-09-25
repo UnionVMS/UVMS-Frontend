@@ -15,27 +15,27 @@
                 <search-result-error-alert ng-show="errorMessage">{{errorMessage}}</search-result-error-alert>
     			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.flagState.$dirty) && manualPositionReportForm.flagState.$invalid}" class="col-md-2">
     				<label>{{'movement.manual_position_field_label_flag_state' | i18n}}</label>
-    				<input class="form-control" ng-model="$parent.flagState" name="flagState" required ng-disabled="true"/>    				
+    				<input class="form-control" ng-model="flagState" name="flagState" required ng-disabled="true"/>
     			</div>
     			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.ircs.$dirty) && manualPositionReportForm.ircs.$invalid}" class="col-md-2" ng-disabled="confirmSend">
                     <label>{{'movement.manual_position_field_label_ircs' | i18n}}</label>
                     <div class="autoSuggestionWrapper fullWidthDropdown">
-                            <input type="text" class="form-control" ng-model="$parent.ircs" name="ircs" placeholder="{{'movement.manual_position_field_label_ircs' | i18n}}" ng-disabled="confirmSend || readOnly"
-                            typeahead="ircs as vessel.ircs for vessel in getVesselsByIrcs($viewValue)" 
-                            typeahead-loading="searchByIRCS" 
-                            typeahead-on-select="onVesselSuggestionSelect($item, $model, $label)" 
+                            <input type="text" class="form-control" ng-model="ircs" name="ircs" placeholder="{{'movement.manual_position_field_label_ircs' | i18n}}" ng-disabled="confirmSend || readOnly"
+                            typeahead="ircs as vessel.ircs for vessel in getVesselsByIrcs($viewValue)"
+                            typeahead-loading="searchByIRCS"
+                            typeahead-on-select="onVesselSuggestionSelect($item, $model, $label)"
                             typeahead-wait-ms="300"
                             required>
                             <span class="loadingIcon" ng-show="searchByIRCS"><i class="fa fa-refresh fa-spin"></i></span>
-                        </div>                    
+                        </div>
     			</div>
     			<div ng-class="{'has-error': (submitAttempted ||manualPositionReportForm.cfr.$dirty) && manualPositionReportForm.cfr.$invalid}" class="col-md-4">
                     <label>{{'movement.manual_position_field_label_cfr' | i18n}}</label>
                     <div class="autoSuggestionWrapper fullWidthDropdown">
-                        <input type="text" class="form-control" ng-model="$parent.cfr" name="cfr" placeholder="{{'movement.manual_position_field_label_cfr' | i18n}}" ng-disabled="confirmSend || readOnly"
-                        typeahead="cfr as vessel.cfr for vessel in getVesselsByCFR($viewValue)" 
-                        typeahead-loading="searchByCFR" 
-                        typeahead-on-select="onVesselSuggestionSelect($item, $model, $label)" 
+                        <input type="text" class="form-control" ng-model="cfr" name="cfr" placeholder="{{'movement.manual_position_field_label_cfr' | i18n}}" ng-disabled="confirmSend || readOnly"
+                        typeahead="cfr as vessel.cfr for vessel in getVesselsByCFR($viewValue)"
+                        typeahead-loading="searchByCFR"
+                        typeahead-on-select="onVesselSuggestionSelect($item, $model, $label)"
                         typeahead-wait-ms="300"
                         required>
                         <span class="loadingIcon" ng-show="searchByCFR"><i class="fa fa-refresh fa-spin"></i></span>
@@ -43,42 +43,42 @@
     			</div>
     			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.externalMarking.$dirty) && manualPositionReportForm.externalMarking.$invalid}" class="col-md-4">
 				    <label>{{'movement.manual_position_field_label_external_marking' | i18n}}</label>
-    			    <input class="form-control" ng-model="$parent.externalMarking" name="externalMarking" required ng-disabled="confirmSend || readOnly"/>    				
+    			    <input class="form-control" ng-model="externalMarking" name="externalMarking" required ng-disabled="confirmSend || readOnly"/>
     			</div>
     		</div>
 
     		<div class="row">
     			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.name.$dirty) && manualPositionReportForm.name.$invalid}" class="col-md-4">
     				<label>{{'movement.manual_position_field_label_name' | i18n}}</label>
-    				<input class="form-control" ng-model="$parent.name" name="name" required ng-disabled="confirmSend || readOnly"/>
-    				
+    				<input class="form-control" ng-model="name" name="name" required ng-disabled="confirmSend || readOnly"/>
+
     			</div>
     			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.status.$dirty) && manualPositionReportForm.status.$invalid}" class="col-md-3">
     				<label>{{'movement.manual_position_field_label_status' | i18n}}</label>
-					<input class="form-control" ng-model="$parent.status" name="status" required ng-disabled="true"/>
+					<input class="form-control" ng-model="status" name="status" required ng-disabled="true"/>
     			</div>
     			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.dateTime.$dirty) && manualPositionReportForm.dateTime.$invalid}" class="col-md-5" ng-disabled="confirmSend">
     				<label>{{'movement.manual_position_field_label_date_time' | i18n}}</label>
     				<datepicker-input time="true" model="dateTime" name="dateTime" ng-required="true" datepicker-max-date="{{maxDateTime}}" ng-disabled="confirmSend || readOnly"></datepicker-input>
-    				
+
     			</div>
     		</div>
-        
+
     		<div class="row">
     			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.latitude.$dirty) && manualPositionReportForm.latitude.$invalid}" class="col-md-3">
     				<label>{{'movement.manual_position_field_label_latitude' | i18n}}</label>
-    				<input class="form-control" ng-model="$parent.latitude" name="latitude" required latitude ng-disabled="confirmSend || readOnly"/>
+    				<input class="form-control" ng-model="latitude" name="latitude" required latitude ng-disabled="confirmSend || readOnly"/>
     				<input-validation-message types="latitude, format" input="manualPositionReportForm.latitude"></input-validation-message>
     			</div>
     			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.longitude.$dirty) && manualPositionReportForm.longitude.$invalid}" class="col-md-3" ng-disabled="confirmSend">
     				<label>{{'movement.manual_position_field_label_longitude' | i18n}}</label>
-    				<input class="form-control" ng-model="$parent.longitude" name="longitude" required longitude ng-disabled="confirmSend || readOnly"/>
+    				<input class="form-control" ng-model="longitude" name="longitude" required longitude ng-disabled="confirmSend || readOnly"/>
                     <input-validation-message types="longitude, format" input="manualPositionReportForm.longitude"></input-validation-message>
     			</div>
     			<div class="col-md-3" ng-class="{'has-error': (submitAttempted || manualPositionReportForm.measuredSpeed.$dirty) &&  manualPositionReportForm.measuredSpeed.$invalid}">
     				<label>{{'movement.manual_position_field_label_measured_speed' | i18n}}</label>
 					<div class="unit-input">
-						<input class="form-control" ng-model="$parent.measuredSpeed" name="measuredSpeed" min="0" numeric ng-disabled="confirmSend || readOnly"/>
+						<input class="form-control" ng-model="measuredSpeed" name="measuredSpeed" min="0" numeric ng-disabled="confirmSend || readOnly"/>
 						<div class="unit-box">{{"movement.manual_position_field_unit_knots" | i18n}}</div>
 					</div>
                     <input-validation-message types="numeric" input="manualPositionReportForm.measuredSpeed"></input-validation-message>
@@ -86,10 +86,10 @@
     			<div class="col-md-3" ng-class="{'has-error': (submitAttempted || manualPositionReportForm.course.$dirty) &&  manualPositionReportForm.course.$invalid}">
     				<label style="width:100%;">{{'movement.manual_position_field_label_course' | i18n}}</label>
 					<div class="unit-input">
-						<input class="form-control" ng-model="$parent.course" name="course" min="0" max="360" numeric required ng-disabled="confirmSend || readOnly"/>
+						<input class="form-control" ng-model="course" name="course" min="0" max="360" numeric required ng-disabled="confirmSend || readOnly"/>
 						<div class="unit-box">{{"movement.manual_position_field_unit_degrees" | i18n}}</div>
 					</div>
-                    <input-validation-message types="numeric" input="manualPositionReportForm.course"></input-validation-message>    				
+                    <input-validation-message types="numeric" input="manualPositionReportForm.course"></input-validation-message>
     			</div>
     		</div>
 
@@ -115,7 +115,7 @@
 				</div>
 				<div class="buttonGroup button-group-right">
 					<label class="button" ng-show="guid === undefined">
-						<input type="checkbox" ng-model="$parent.addAnother"/>
+						<input type="checkbox" ng-model="addAnother"/>
 						{{"movement.manual_position_label_add_another" | i18n}}
 					</label>
 					<a class="button" ng-click="savePosition()">{{"common.save" | i18n}}</a>
