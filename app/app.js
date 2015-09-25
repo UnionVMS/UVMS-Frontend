@@ -1,4 +1,21 @@
-var unionvmsWebApp = angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource', 'ngLocalize', 'tmh.dynamicLocale', 'leaflet-directive', 'datatables', 'datatables.bootstrap', 'datatables.columnfilter', 'ngCsv', 'ui.router', 'usm','googlechart', 'ngWebSocket']);
+var unionvmsWebApp = angular.module('unionvmsWeb', [
+    'ui.bootstrap',
+    'ui.utils',
+    'ngRoute',
+    'ngAnimate',
+    'ngResource',
+    'ngLocalize',
+    'tmh.dynamicLocale',
+    'leaflet-directive',
+    'datatables',
+    'datatables.bootstrap',
+    'datatables.columnfilter',
+    'ngCsv',
+    'ui.router',
+    'usm',
+    'googlechart',
+    'ngWebSocket'
+]);
 
 var getCurrentUserContextPromise = function() {
     var currentUserContextPromise = function(userService) {
