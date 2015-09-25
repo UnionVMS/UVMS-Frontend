@@ -93,7 +93,7 @@ userManagementApp.config(['$urlRouterProvider', '$stateProvider','$urlMatcherFac
     function ($urlRouterProvider, $stateProvider,$urlMatcherFactoryProvider,$breadcrumbProvider,ACCESS,$injector) {
 
 
-    $urlRouterProvider.when('','usm');
+
     $urlRouterProvider.when('/usm','usm/home');
         //trying a fix to https://github.com/angular-ui/ui-router/issues/600
     //    $urlRouterProvider.otherwise( function() {
