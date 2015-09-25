@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal, csvService, SearchResults) {
+angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal, csvService, SearchResults, envConfig, $websocket, $log) {
 
     $scope.showModal = function() {
         $scope.editPosition();
@@ -6,12 +6,35 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
 
     $scope.selectedMovements = [];
 
+    var equalGuid = function(a, b) {
+        return a.guid !== undefined && b.guid !== undefined && a.guid === b.guid;
+    };
+
     //Search objects and results
-    $scope.currentSearchResults = new SearchResults('carrier.name', false, locale.getString('movement.movement_search_error_result_zero_pages'));
+    $scope.currentSearchResults = new SearchResults('carrier.name', false, locale.getString('movement.movement_search_error_result_zero_pages'), equalGuid);
+
+    var openWebsocket = function() {
+        if (!envConfig.ws || !envConfig.ws.host) {
+            $log.warn("Websocket host missing in configuration. Socket not opened.");
+            return;
+        }
+
+        var wsHost = envConfig.ws.host;
+        var wsPort = envConfig.ws.port || "80";
+        var ws = $websocket("ws://" + wsHost + ":" + wsPort +  "/movement/activity/manual");
+        ws.onMessage(function(message) {
+            var positionData = JSON.parse(message.data);
+            manualPositionRestService.getManualMovement(positionData.movementGuid).then(function(movement) {
+               $scope.currentSearchResults.updateWithSingleItem(movement);
+            });
+        });
+    };
 
     var init = function(){
         $scope.searchManualPositions();
+        openWebsocket();
     };
+
     $scope.isManualMovement = true;
 
     $scope.removeFromSearchResults = function(report) {

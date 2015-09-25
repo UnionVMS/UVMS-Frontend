@@ -1,4 +1,7 @@
 {
     "env_name": "dev",
-    "rest_api_base" : "https://unionvmsdev.havochvatten.se/unionvms/api"
+    "rest_api_base" : "https://unionvmsdev.havochvatten.se/unionvms/api",
+	"ws": {
+		"host": "unionvmsdev.havochvatten.se"
+	}
 }

@@ -9,7 +9,7 @@ angular.module('unionvmsWeb')
             });
         },
         manualMovement: function() {
-            return $resource('/movement/rest/tempmovement', {}, {
+            return $resource('/movement/rest/tempmovement/:guid', {}, {
                 update: { method: 'PUT' }
             });
         },
@@ -43,6 +43,23 @@ angular.module('unionvmsWeb')
 
             deferred.resolve(ManualPosition.fromJson(response.data));
         }, function(error) {
+            deferred.reject(error);
+        });
+
+        return deferred.promise;
+    };
+
+    var getManualMovement = function(guid) {
+        var deferred = $q.defer();
+        manualPositionRestFactory.manualMovement().get({guid: guid}, function(response) {
+            if (response.code !== "200") {
+                deferred.reject("Invalid response status");
+                return;
+            }
+
+            deferred.resolve(ManualPosition.fromJson(response.data));
+        },
+        function(error) {
             deferred.reject(error);
         });
 
@@ -161,6 +178,7 @@ angular.module('unionvmsWeb')
 
     return {
         createManualMovement: createManualMovement,
+        getManualMovement: getManualMovement,
         updateManualMovement: updateManualMovement,
         getManualPositionList : getManualPositionList,
         deleteManualPositionReport : deleteManualPositionReport,

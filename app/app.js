@@ -1,4 +1,4 @@
-var unionvmsWebApp = angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource', 'ngLocalize', 'tmh.dynamicLocale', 'leaflet-directive', 'datatables', 'datatables.bootstrap', 'datatables.columnfilter', 'ngCsv', 'ui.router', 'usm','googlechart']);
+var unionvmsWebApp = angular.module('unionvmsWeb', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate','ngResource', 'ngLocalize', 'tmh.dynamicLocale', 'leaflet-directive', 'datatables', 'datatables.bootstrap', 'datatables.columnfilter', 'ngCsv', 'ui.router', 'usm','googlechart', 'ngWebSocket']);
 
 var getCurrentUserContextPromise = function() {
     var currentUserContextPromise = function(userService) {
@@ -127,7 +127,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
             data: {
                 access: 'viewVesselsAndMobileTerminals'
-            },            
+            },
         })
         .state('app.assets-id', {
             url: '/assets/:id',
@@ -144,7 +144,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
             data: {
                 access: 'viewVesselsAndMobileTerminals'
-            },            
+            },
         })
         .state('app.communication', {
             url: '/communication',
@@ -188,7 +188,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             resolve: {},
             data: {
                 access: 'managePolls'
-            },            
+            },
         })
         .state('app.pollingLogs', {
             url: '/polling/logs',
@@ -201,7 +201,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             resolve: {},
             data: {
                 access: 'viewMobileTerminalPolls'
-            },                   
+            },
         })
         .state('app.auditLog', {
             url: '/admin/auditlog',

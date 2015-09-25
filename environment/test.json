@@ -1,4 +1,7 @@
 {
     "env_name": "Test",
-    "rest_api_base" : "https://unionvmstest.havochvatten.se/unionvms/api"
+    "rest_api_base" : "https://unionvmstest.havochvatten.se/unionvms/api",
+	"ws": {
+		"host": "unionvmstest.havochvatten.se"
+	}   
 }

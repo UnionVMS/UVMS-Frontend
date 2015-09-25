@@ -45,7 +45,8 @@
     "angular-breadcrumb": "~0.4.0",
     "angular-jwt": "~0.0.9",
     "angular-locker": "~2.0.1",
-    "angular-google-chart":"latest"
+    "angular-google-chart":"latest",
+    "angular-websocket": "~1.0.13"
   },
   "resolutions": {
     "angular": "~1.3",

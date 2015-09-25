@@ -1,7 +1,7 @@
 angular.module('unionvmsWeb')
-.factory('SearchResults', function(SearchField, locale) {
+.factory('SearchResults', function(SearchField, locale, SearchResultListPage) {
 
-    function SearchResults(sortyBy, sortReverse, zeroResultsErrorMessage){
+    function SearchResults(sortyBy, sortReverse, zeroResultsErrorMessage, equals){
         this.page = 0;
         this.totalNumberOfPages = 0;
         this.items = [];
@@ -10,6 +10,7 @@ angular.module('unionvmsWeb')
         this.sortBy = angular.isDefined(sortyBy) ? sortyBy : '';
         this.sortReverse = angular.isDefined(sortReverse) ? sortReverse : false;
         this.zeroResultsErrorMessage = angular.isDefined(zeroResultsErrorMessage) ? zeroResultsErrorMessage : locale.getString('common.search_zero_results_error');
+        this.equals = equals;
     }
 
     //Clear for search
@@ -34,6 +35,29 @@ angular.module('unionvmsWeb')
         this.page = 0;
     };
 
+    var contains = function(items, item, equals) {
+        if (!angular.isFunction(equals)) {
+            return false;
+        }
+
+        for (var i = 0; i < items.length; i++) {
+            if (equals(items[i], item)) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    SearchResults.prototype.updateWithSingleItem = function(item) {
+        var page = new SearchResultListPage();
+        page.items.push(item);
+        page.currentPage = undefined;
+        page.totalNumberOfPages = undefined;
+
+        this.updateWithNewResults(page);
+    }
+
     //Update the search results
     SearchResults.prototype.updateWithNewResults = function(searchResultsListPage){
         this.loading = false;
@@ -46,14 +70,21 @@ angular.module('unionvmsWeb')
             }
             else {
                 for (var i = 0; i < searchResultsListPage.items.length; i++){
-                    this.items.push(searchResultsListPage.items[i]);
+                    if (!contains(this.items, searchResultsListPage.items[i], this.equals)) {
+                        this.items.push(searchResultsListPage.items[i]);
+                    }
                 }
             }
         }
 
         //Update page info
-        this.totalNumberOfPages = searchResultsListPage.totalNumberOfPages;
-        this.page = searchResultsListPage.currentPage;
+        if (angular.isDefined(searchResultsListPage.totalNumberOfPages)) {
+            this.totalNumberOfPages = searchResultsListPage.totalNumberOfPages;
+        }
+
+        if (angular.isDefined(searchResultsListPage.currentPage)) {
+            this.page = searchResultsListPage.currentPage;
+        }
     };
 
     return SearchResults;

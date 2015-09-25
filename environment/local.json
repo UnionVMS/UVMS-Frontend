@@ -1,5 +1,9 @@
 {
     "env_name": "Local",
     "rest_api_base_NOT_USED" : "http://localhost:8080",
-    "rest_api_base" : "http://livm73u:28080"
+    "rest_api_base" : "http://localhost:9001",
+    "ws": {
+    	"host": "localhost",
+    	"port": "9001"
+    }
 }
