@@ -18,11 +18,20 @@
             </div>
         </div>
 
-        <div class="col-md-2 nopaddingright">
+        <div class="col-md-1 nopaddingright">
             <div class="row nomargin">
                 <div class="col-md-12 colNoPadding searchcriteriadropdown">
                     <button type="submit" class="btn btn-primary btn-sm fullWidth" ng-click="performSearch()">
                         {{'common.search' | i18n}}
+                    </button>
+                </div>
+            </div>
+        </div>   
+        <div class="col-md-1 nopaddingright">
+            <div class="row nomargin">
+                <div class="col-md-12 colNoPadding searchcriteriadropdown">
+                    <button type="submit" class="btn btn-default btn-sm fullWidth" ng-click="resetSearch()">
+                        {{'common.reset' | i18n}}
                     </button>
                 </div>
             </div>

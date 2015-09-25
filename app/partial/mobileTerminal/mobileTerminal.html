@@ -14,7 +14,7 @@
                     <dropdown ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
                 </div>
                 <div class="col-md-2">
-                    <button show-if-allowed="manageMobileTerminals" type="button" class="btn btn-sm btn-primary" ng-click="toggleAddNewMobileTerminal()"><span class="fa fa-plus"></span> {{'common.add_new' | i18n}}</button>                
+                    <button show-if-allowed="manageMobileTerminals" type="button" class="btn btn-sm btn-primary" ng-click="toggleAddNewMobileTerminal()"><span class="fa fa-plus-square"></span> {{'mobileTerminal.new_terminal' | i18n}}</button>                
                 </div>
             </div>
             <div ng-include="'partial/mobileTerminal/mobileTerminalList/mobileTerminalList.html'"></div>

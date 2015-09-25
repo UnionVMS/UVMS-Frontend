@@ -31,7 +31,6 @@
                                     </th>
                                     <th>&nbsp;</th>
                                     <th>&nbsp;</th>
-                                    <th>&nbsp;</th>
                                     <th class="printAndExport">
                                         <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportAsFile()"></i>
                                         <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>
@@ -65,10 +64,6 @@
                                     <th>
                                         <input type="text"/ placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.USER" >
                                     </th>
-
-                                    <th>
-                                        <dropdown ng-model="organization" items="organizations"  initialtext="{{ 'common.all' | i18n }}" ng-model="advancedSearchObject.ORGANIZATION" initialtext-selectable></dropdown>
-                                    </th>
                                      <th>
                                         <button type="submit" class="btn btn-primary inputHeigth searchButton" ng-click="searchPolls()">
                                             <span class="fa fa-search"></span>
@@ -91,7 +86,6 @@
                                     <th>{{'polling.polling_logs_table_header_status' | i18n}}</th>
                                     <th>{{'polling.polling_logs_table_header_results' | i18n}}</th>
                                     <th>{{'polling.polling_logs_table_header_user' | i18n}}</th>
-                                    <th>{{'polling.polling_logs_table_header_organization' | i18n}}</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
@@ -120,7 +114,6 @@
                                 </td>
                                 <td><a>{{'polling.polling_logs_table_results_link' | i18n}}</a></td>
                                 <td>{{item.attributes.USER}}</td>
-                                <td>{{item.attributes.ORGANIZATION}}</td>
                                 <td>&nbsp;</td>
                             </tr>
                             </tbody>

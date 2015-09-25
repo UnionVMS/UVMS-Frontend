@@ -20,7 +20,6 @@
                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'lastreport'">{{'vessel.table_header_last_report' | i18n}}</th>
 
                 <th>{{'vessel.table_header_details' | i18n}}</th>
-                <th>{{'vessel.table_header_reports' | i18n}}</th>
             </tr>
             </thead>
             <tbody>
@@ -35,10 +34,9 @@
                 <td>{{item.lastReport}}</td>
                 <td>
                     <button class="btn vesselbtn button" ng-click="toggleViewVessel(item)">
-                        {{'vessel.table_details_button' | i18n}}
+                        <span class="fa fa-eye"></span>
                     </button>
                 </td>
-                <td>{{'vessel.table_report_button' | i18n}}</td>
             </tr>
             </tbody>
         </table>

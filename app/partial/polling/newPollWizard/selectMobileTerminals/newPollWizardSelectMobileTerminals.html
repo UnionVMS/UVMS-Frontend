@@ -1,8 +1,8 @@
 <!-- step 1 -->
 <div class="col-md-12 newPollWizardStep searchMobileTerminalsStep card" ng-controller="NewpollwizardselectmobileterminalsCtrl">
-	<div class="wizardcontent">
 		<new-poll-wizard-progress step="1"></new-poll-wizard-progress>
 		<advanced-search searchfunc="getPollableChannels" vesselGroupCallback="selectGroupCallback()" modeltype="'POLLING_MOBILE_TERMINAL'" advancedsearchvisible="true"></advanced-search>
+    <div class="wizardcontent">
         <div class="row">
             <div search-results-table search="currentSearchResults" load-next-page-function="loadNextPage" class="col-md-12">
                 <table class="searchResults polltable colorOdd">

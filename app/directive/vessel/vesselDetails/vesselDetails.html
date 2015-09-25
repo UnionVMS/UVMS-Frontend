@@ -118,16 +118,16 @@
         </div>
 
         <div class="row">
-            <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.email.$dirty) && vesselForm.email.$invalid}">
-                <label>{{ 'vessel.vessel_details_email' | i18n }}</label>
-                <input type="email" name="email" class="form-control" ng-model="vessel.email" ng-disabled="true"/>
-                <input-validation-message types="email" input="vesselForm.email"></input-validation-message >
-            </div>
             <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.contactName.$dirty) && vesselForm.contactName.$invalid}">
                 <label>{{ 'vessel.vessel_details_contact_name' | i18n }}</label>
                 <input type="text" name="contactName" class="form-control" ng-model="vessel.contactName" ng-disabled="true"/>
             </div>
-            <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.contactNumber.$dirty) && vesselForm.contactNumber.$invalid}">
+            <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.email.$dirty) && vesselForm.email.$invalid}">
+                <label>{{ 'vessel.vessel_details_email' | i18n }}</label>
+                <input type="email" name="email" style="border: 1px #ebebeb;" class="form-control" ng-model="vessel.email" ng-disabled="true"/>
+                <input-validation-message types="email" input="vesselForm.email"></input-validation-message >
+            </div>
+            <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.contactNumber.$dirty) && vesselForm.contactNumber.$invalid}">
                 <label>{{ 'vessel.vessel_details_contact_number' | i18n }}</label>
                 <input type="text" name="contactNumber" class="form-control" ng-model="vessel.contactNumber" ng-disabled="true"/>
             </div>

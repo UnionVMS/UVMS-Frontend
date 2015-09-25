@@ -11,6 +11,8 @@ angular.module('unionvmsWeb').controller('ExchangeSearchController', function($s
 		code: DATE_CUSTOM
 	}];
 
+	$scope.advancedSearchObject.TIME_SPAN = $scope.timeSpanOptions[0].code;
+
 	$scope.performAdvancedSearch = function() {
 		if ($scope.freeText) {
 			$scope.advancedSearchObject.NAME = $scope.freeText + "*";

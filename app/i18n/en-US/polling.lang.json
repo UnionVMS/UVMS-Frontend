@@ -27,7 +27,7 @@
     "polling_logs_search_date_from_placeholder" : "From",
     "polling_logs_search_date_to_placeholder" : "To",
     "polling_logs_table_header_name" : "Name",
-    "polling_logs_table_header_ext_no" : "Ext no.",
+    "polling_logs_table_header_ext_no" : "Ext. marking",
     "polling_logs_table_header_poll_type" : "Poll type",
     "polling_logs_table_header_transponder" : "Transponder",
     "polling_logs_table_header_time" : "Time",

@@ -9,7 +9,7 @@
          --><div class="col-md-4 textAlignRight valign">
                 <div class="floatRight" ng-hide="disableForm()">
                     <button class="btn btn-primary" type="submit" ng-click="updateVessel()" ng-hide="isCreateNewMode()"> {{'common.update' | i18n}}</button>
-                    <button  type="submit" class="btn btn-sm createnewvesselbutton" ng-click="createNewVessel()" ng-show="isCreateNewMode()" ng-disabled="waitingForCreateResponse">{{'vessel.create_new_vessel' | i18n}}</button>
+                    <button  type="submit" class="btn btn-sm createnewvesselbutton" ng-click="createNewVessel()" ng-show="isCreateNewMode()" ng-disabled="waitingForCreateResponse">{{'vessel.save_asset' | i18n}}</button>
                 </div>
                 <div class="floatRight setStatusContainer" ng-hide="isCreateNewMode() || disableForm()">
                     <button type="button" class="btn btn-default" ng-show="vesselObj.active" ng-click="archiveVessel()">

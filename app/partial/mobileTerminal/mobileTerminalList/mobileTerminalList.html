@@ -21,7 +21,6 @@
                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'active'">{{'mobileTerminal.table_header_status' | i18n}}</th>
 
                 <th>{{'mobileTerminal.table_header_detail_button' | i18n}}</th>
-                <th>{{'mobileTerminal.table_header_logs' | i18n}}</th>
             </tr>
             </thead>
             <tbody>
@@ -47,15 +46,14 @@
                     <span ng-show="item.associatedVessel && !item.associatedVessel.mmsiNo"> - </span>
                 </td>
                 <td>
-                    <span ng-show="item.active">{{'common.active' | i18n}}</span>
-                    <span ng-show="!item.active">{{'common.inactive' | i18n}}</span>
+                    <span ng-if="item.active" class="label label-success">{{'common.active' | i18n | uppercase}}</span>
+                    <span ng-if="!item.active" class="label label-danger">{{'common.inactive' | i18n | uppercase}}</span>
                 </td>
                 <td>
                     <button class="btn btn-primary" ng-click="toggleMobileTerminalDetails(item)">
-                        {{'mobileTerminal.table_header_detail_button' | i18n}}
+                        <span class="fa fa-eye"></i>
                     </button>
                 </td>
-                <td><a href="" ng-click="showLog(item)">{{'mobileTerminal.table_header_logs' | i18n}}</a></td>
             </tr>
             </tbody>
         </table>

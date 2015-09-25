@@ -2,19 +2,17 @@
     <form name="mobileTerminalForm" method="post" novalidate>
         <fieldset ng-disabled="disableForm()">
             <div class="row transponderSystemSelects">
-                <div class="col-md-12">
-                    <div class="transponderSystemSelect form-group">
-                        <label>{{'mobileTerminal.add_new_form_transponder_system_label' | i18n}}</label>
-                        <dropdown ng-model="typeAndLES" initialtext="{{ 'common.choose' | i18n }}" items="transponderSystems" callback="onTerminalSystemSelect" ng-disabled="!isCreateNewMode()" data="typeAndLes"></dropdown>
+                <div class="col-md-2 transponderSystemSelect form-group">
+                    <label>{{'mobileTerminal.add_new_form_transponder_system_label' | i18n}}</label>
+                    <dropdown ng-model="typeAndLES" initialtext="{{ 'common.choose' | i18n }}" items="transponderSystems" callback="onTerminalSystemSelect" ng-disabled="!isCreateNewMode()" data="typeAndLes"></dropdown>
+                </div>
+                <div class="col-md-2 transponderSystemSelect form-group" ng-show="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN || getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
+                    <label>{{'mobileTerminal.add_new_form_ocean_region_label' | i18n}}</label>
+                    <div ng-if="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN">
+                        <dropdown ng-model="currentMobileTerminal.attributes.SINGLE_OCEAN" initialtext="{{ 'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN"></dropdown>
                     </div>
-                    <div class="transponderSystemSelect form-group" ng-show="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN || getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
-                        <label>{{'mobileTerminal.add_new_form_ocean_region_label' | i18n}}</label>
-                        <div ng-if="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN">
-                            <dropdown ng-model="currentMobileTerminal.attributes.SINGLE_OCEAN" initialtext="{{ 'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN"></dropdown>
-                        </div>
-                        <div ng-if="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
-                            <tag-select-input ng-model="currentMobileTerminal.attributes.MULTIPLE_OCEAN" ng-placeholder="{{'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN"></tag-select-input>
-                        </div>
+                    <div ng-if="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
+                        <tag-select-input ng-model="currentMobileTerminal.attributes.MULTIPLE_OCEAN" ng-placeholder="{{'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN"></tag-select-input>
                     </div>
                 </div>
             </div>
@@ -48,7 +46,7 @@
                         </div>
                     </div>
 
-                    <div class="row communicationChannels">
+                    <div class="row communicationChannels" style="margin-bottom: 5px;">
                         <div class="col-md-12">
                             <label class="section">{{'mobileTerminal.form_inmarsatc_communication_channels_header' | i18n}}</label>
                         </div>
@@ -60,7 +58,7 @@
                         </div>
                         <div class="col-md-2 smallerpadding">
                             <div class="row">
-                                <div class="col-md-4 smallerpadding">
+                                <div class="col-md-4 smallerpadding" style="text-align:center;">
                                     <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_poll_label' | i18n}}</label>
                                 </div>
                                 <div class="col-md-4 smallerpadding">

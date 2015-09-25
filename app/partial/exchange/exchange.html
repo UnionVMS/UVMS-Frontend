@@ -15,13 +15,9 @@
 
 				<!-- Exchange log table advanced search -->
 				<div class="row">
-					<div class="col-md-11">
-						<advanced-search modeltype="'EXCHANGE'" searchfunc="searchExchange" advancedsearchvisible="true"></advanced-search>
-					</div>
-                    <div class="col-md-1 pull-right textAlignRight printAndExport">
-                        <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
-                        <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>              
-                    </div>                    
+                    <div class="col-md-12">
+                        <advanced-search modeltype="'EXCHANGE'" searchfunc="searchExchange" advancedsearchvisible="true"></advanced-search>
+                    </div>
 				</div>
 
 				<!-- Toggle: ALL, INCOMING, OUTGOING -->
@@ -46,6 +42,11 @@
                                 </label>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="col-md-1 textAlignRight printAndExport">
+                        <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
+                        <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>              
                     </div>
                 </div>
 
