@@ -48,8 +48,8 @@
                         <i ng-show="item.availability === 'PRIVATE'" class="fa fa-lg fa-user" tooltip-placement="bottom" tooltip="{{'alarms.rules_availability_private' | i18n}}"></i>
                     </td>
     				<td class="actions">
-    					<i class="fa fa-lg fa-pencil editIcon" ng-click="toggleRuleDetails(item)" title="{{'alarms.rules_table_edit'| i18n}}"></i>
-    					<i class="fa fa-lg fa-trash-o deleteIcon" ng-click="deleteRule(item)" title="{{'alarms.rules_table_delete'| i18n}}"></i>
+    					<i class="fa fa-lg fa-pencil editIcon" ng-click="toggleRuleDetails(item)" title="{{'alarms.rules_table_edit'| i18n}}" show-if-allowed="Rules:manageAlarmsRules"></i>
+    					<i class="fa fa-lg fa-trash-o deleteIcon" ng-click="deleteRule(item)" title="{{'alarms.rules_table_delete'| i18n}}" show-if-allowed="Rules:manageAlarmsRules"></i>
     				</td>
 				</tr>
                 <tr ng-repeat-end="" ng-show="isExpanded" class="detailData">

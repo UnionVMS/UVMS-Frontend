@@ -43,6 +43,17 @@
         'viewUsers',
     ];
 
+    var accessToAnyFeatureInList = function(application, featureList){
+        var access = false;
+        $.each(featureList, function(index, feature){
+            if(checkAccess(application, feature)){
+                access = true;
+                return false;
+            }
+        });
+        return access;
+    };
+
     var setMenu = function(){
         $scope.menu = [];
 
@@ -75,24 +86,32 @@
         }
 
         //ALARMS
-        addMenuItem(locale.getString('header.menu_alarmconditions'), '/alarms/holdingtable');
+        var alarmsLink = false;
+        if(checkAccess('Rules', 'viewAlarmsHoldingTable')){
+            alarmsLink = '/alarms/holdingtable';
+        }else if(checkAccess('Rules', 'viewAlarmsOpenTickets')){
+            alarmsLink = '/alarms/opentickets';
+        }else if(checkAccess('Rules', 'viewAlarmsRules')){
+            alarmsLink = '/alarms/rules';
+        }
+        if(alarmsLink){
+            addMenuItem(locale.getString('header.menu_alarmconditions'), alarmsLink);
+        }
         
         //USERS
-        var showUser = false;
-        $.each(userFeatures, function(index, feature){
-            if(checkAccess('USM', feature)){
-                showUser = true;
-                return false;
-            }
-        });
-        if(showUser){
+        if(accessToAnyFeatureInList('USM', userFeatures)){
             addMenuItem(locale.getString('header.menu_user'), '/usm');
         }
 
         //ADMIN
-        //TODO: Update features needed, should belong to Union-VMS app
-        if(checkAccess('Audit', 'viewAudit') || checkAccess(unionVMSApplication, 'viewConfiguration')){
-            addMenuItem(locale.getString('header.menu_admin'), '/admin');
+        var adminLink = false;
+        if(checkAccess('Audit', 'viewAudit')){
+            adminLink = '/admin';
+        }else if(checkAccess('Audit', 'viewAlarmsOpenTickets')){
+            adminLink = '/admin/configuration';
+        }
+        if(adminLink){
+            addMenuItem(locale.getString('header.menu_admin'), adminLink);
         }
     };
 

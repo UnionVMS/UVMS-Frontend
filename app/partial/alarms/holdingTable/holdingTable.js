@@ -1,11 +1,17 @@
-angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage, PositionReportModal, ManualPosition){
+angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage, PositionReportModal, ManualPosition, userService){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
-    $scope.editSelectionDropdownItems = [
-        {text:locale.getString('alarms.holding_table_reprocess_reports'), code : 'REPROCESS_REPORTS'},
+    var checkAccessToFeature = function(feature) {
+        return userService.isAllowed(feature, 'Rules', true);
+    };
+
+    $scope.editSelectionDropdownItems = [        
         {text:locale.getString('common.export_selection'), code : 'EXPORT'}
     ];
+    if(checkAccessToFeature('manageAlarmsHoldingTable')){
+        $scope.editSelectionDropdownItems.unshift({text:locale.getString('alarms.holding_table_reprocess_reports'), code : 'REPROCESS_REPORTS'});
+    }
 
     $scope.statusFilter = 'all';
     $scope.filterOnStatus = function(alarm) {

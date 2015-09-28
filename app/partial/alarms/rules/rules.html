@@ -12,7 +12,7 @@
                     </div>
                     <div class="col-md-2">
 
-                    <button type="button" class="btn btn-sm btn-primary" ng-click="toggleAddNewRule()"><span class="fa fa-plus"></span> {{'alarms.add_new_rule' | i18n}}</button>
+                    <button show-if-allowed="Rules:manageAlarmsRules" type="button" class="btn btn-sm btn-primary" ng-click="toggleAddNewRule()"><span class="fa fa-plus"></span> {{'alarms.add_new_rule' | i18n}}</button>
                     </div>
                      <div class="col-md-1 pull-right textAlignRight printAndExport">
                         <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportRulesAsCSVFile()"></i>

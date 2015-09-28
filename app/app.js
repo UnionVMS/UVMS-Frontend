@@ -192,7 +192,10 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                 config : function(initService){
                     return initService.loadConfigFor(["MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS", "MOBILE_TERMINAL_CHANNELS", "VESSEL"]);
                 }
-            }
+            },
+            data: {
+                access: 'viewVesselsAndMobileTerminals'
+            },            
         })
         .state('app.polling', {
             url: '/polling',
@@ -278,7 +281,10 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'HoldingtableCtrl'
                 }
             },
-            resolve: {}
+            resolve: {},
+            data: {
+                access: 'viewAlarmsHoldingTable'
+            },            
         })
         .state('app.openTickets', {
             url: '/alarms/opentickets',
@@ -288,7 +294,10 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'OpenticketsCtrl'
                 }
             },
-            resolve: {}
+            resolve: {},
+            data: {
+                access: 'viewAlarmsOpenTickets'
+            },    
         })
         .state('app.rules', {
             url: '/alarms/rules',
@@ -298,7 +307,10 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'RulesCtrl'
                 }
             },
-            resolve: {}
+            resolve: {},
+            data: {
+                access: 'viewAlarmsRules'
+            },    
         })
         .state('error', {
             views: {

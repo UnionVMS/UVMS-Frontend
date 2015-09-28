@@ -12,7 +12,7 @@
                     <th>{{'alarms.alarms_table_positions' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'resolvedDate'">{{'alarms.alarms_table_date_resolved' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'resolvedBy'">{{'alarms.alarms_table_resolved_by' | i18n}}</th>                    
-                    <th></th>
+                    <th show-if-allowed="Rules:manageAlarmsOpenTickets"></th>
                 </tr>
             </thead>
             <tbody>
@@ -29,7 +29,7 @@
                     <td class="link">{{'alarms.alarms_table_positions_see_on_map' | i18n}}</td>
                     <td>{{item.resolvedDate}}</td>
                     <td class="link">{{item.resolvedBy}}</td>
-                    <td class="textAlignCenter">
+                    <td class="textAlignCenter" show-if-allowed="Rules:manageAlarmsOpenTickets">
                         <button ng-if="item.isOpen()" type="button" class="btn btn-sm btn-primary" ng-click="closeItem(item)" title="{{'alarms.alarms_table_close_title' | i18n}}">{{'alarms.alarms_table_close' | i18n | uppercase}}</button>                       
                     </td>
                 </tr>
