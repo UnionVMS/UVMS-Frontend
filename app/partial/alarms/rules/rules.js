@@ -17,7 +17,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
 
     $scope.currentSearchResults = new SearchResults('name', false);
 
-    //Add mock data    
+    //Add mock data
     var mockRules = [];
     for (var i = 20; i >= 1; i--) {
         var mockRule = new Rule();
@@ -27,51 +27,23 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
 
 
         var random = Math.floor(Math.random() * 4) + 1;
-        if(random === 1){
-            mockRule.availableNotifications.NOTIFICATION = true;
-            mockRule.availableNotifications.OPEN_TICKET = true;
-        }
-        else if(random === 2){
-            mockRule.availableNotifications.OPEN_TICKET = true;
-        }
-        else if(random === 3){
-            mockRule.availableNotifications.NOTIFICATION = true;
-        }
-
 
         random = Math.floor(Math.random() * 5) + 1;
         if(random === 5){
             mockRule.active = false;
-        }else{
-            if(random === 4){
-                if(mockRule.availableNotifications.NOTIFICATION){
-                    mockRule.subscription = 'NOTIFICATION';
-                }
-            }
-            if(random === 3){
-                if(mockRule.availableNotifications.OPEN_TICKET){
-                    mockRule.subscription = 'OPEN_TICKET';
-                }
-            }        
         }
-
 
         random = Math.floor(Math.random() * 4) + 1;
         mockRule.type = "GLOBAL";
 
-        mockRule.availability = "PUBLIC";        
-        random = Math.floor(Math.random() * 3) + 1;
-        if(random === 1){
-            mockRule.availableNotifications.EMAIL = true;
-        }else if(random === 2){
-            mockRule.availableNotifications.EMAIL = true;
-            mockRule.notifyByEmail = "john.smith@mail.com";
-        }else{
-            mockRule.availableNotifications.EMAIL = false;            
-        }
+        mockRule.availability = "PUBLIC";
 
         if(random >= 3){
-            mockRule.type = "EVENT";            
+            mockRule.type = "EVENT";
+            var random2 = Math.floor(Math.random() * 3) + 1;
+            if(random2 === 2){
+                mockRule.notifyByEmail = "john.smith@mail.com";
+            }
         }
         if(random === 4){
             mockRule.availability = "PRIVATE";
@@ -100,8 +72,8 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
         var ruleDef3 = new RuleDefinition();
         ruleDef3.startOperator =  "";
         ruleDef3.criteria =  "MOBILE_TERMINAL";
-        ruleDef3.subCriteria =  "MEMBER_ID";
-        ruleDef3.condition =  "EQ";
+        ruleDef3.subCriteria =  "MEMBER_NUMBER";
+        ruleDef3.condition =  "NEQ";
         ruleDef3.value =  "ABC99";
         ruleDef3.endOperator =  "";
         ruleDef3.logicBoolOperator =  "NONE";
@@ -133,7 +105,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
 
     $scope.searchRules = function() {
         /*$scope.clearSelection();
-        $scope.currentSearchResults.clearForSearch();        
+        $scope.currentSearchResults.clearForSearch();
         searchService.searchMobileTerminals(false)
                 .then(updateSearchResults, onGetSearchResultsError);*/
         $log.debug("Todo: implement search");
@@ -149,7 +121,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
         $scope.currentSearchResults.setLoading(true);
         var response = searchService.searchMobileTerminals(true)
            .then(updateSearchResults, onGetSearchResultsError);*/
-    };    
+    };
 
     //delete rule
     $scope.deleteRule = function(item){
@@ -246,49 +218,36 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
     //Get status label
     $scope.getStatusLabelForRule = function(rule){
         if(rule.active){
-            return locale.getString('common.active'); 
+            return locale.getString('common.active');
         }else{
-            return locale.getString('common.inactive'); 
+            return locale.getString('common.inactive');
         }
-    };    
+    };
 
     //Get type label
     $scope.getTypeLabelForRule = function(rule){
         var label;
         switch(rule.type){
             case 'GLOBAL':
-                label = locale.getString('alarms.rules_type_global'); 
+                label = locale.getString('alarms.rules_type_global');
                 break;
             case 'EVENT':
-                label = locale.getString('alarms.rules_type_event'); 
+                label = locale.getString('alarms.rules_type_event');
                 break;
             default:
                 label = rule.type;
                 break;
-        }        
+        }
         return label;
-    };   
+    };
 
     //Subscription dropdown options
     var openticketsOpt = {'text': locale.getString('alarms.open_ticket'), 'code':'OPEN_TICKET'};
     var notificationOpt = {'text': locale.getString('alarms.notification'), 'code':'NOTIFICATION'};
-    $scope.subscriptionsAll = [openticketsOpt, notificationOpt];
-    $scope.subscriptionsNotificationOnly = [notificationOpt];
-    $scope.subscriptionsOpenTicketsOnly = [openticketsOpt];
- 
+    $scope.subscriptions = [openticketsOpt, notificationOpt];
+
     $scope.getSubscriptionOptions = function(rule){
-        var available = rule.availableNotifications;
-        if(available.OPEN_TICKET && available.NOTIFICATION){
-            return $scope.subscriptionsAll;
-        }
-
-        if(available.NOTIFICATION){
-            return $scope.subscriptionsNotificationOnly;
-        }  
-
-        if(available.OPEN_TICKET){
-            return $scope.subscriptionsOpenTicketsOnly;
-        }
+        return $scope.subscriptions;
     };
 
     //Export data as CSV file

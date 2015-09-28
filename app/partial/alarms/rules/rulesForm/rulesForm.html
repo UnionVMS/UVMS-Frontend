@@ -7,7 +7,7 @@
          --><div class="col-md-4 textAlignRight valign">
             <div class="floatRight">
                 <button  type="submit" class="btn btn-primary" ng-click="updateRule()">{{'common.update' | i18n}}</button>
-            </div>           
+            </div>
         </div><!-- DO NOT REMOVE this comment!
          --><div class="col-md-1 textAlignRight valign">
             <i class="fa fa-sign-out signouticon" ng-click="toggleRuleDetails()" style="bottom: 0; left: 0;" title="{{'common.close' | i18n}}"></i>
@@ -18,10 +18,10 @@
         <div class="col-md-2 textAlignRight">
             <button  type="submit" class="btn btn-primary" ng-click="createNewRule()" ng-disabled="waitingForCreateResponse">{{'common.create' | i18n}}</button>
         </div>
-        <div class="col-md-1 textAlignRight"> 
+        <div class="col-md-1 textAlignRight">
             <i class="fa fa-sign-out signouticon" ng-click="toggleAddNewRule()" title="{{'common.close' | i18n}}"></i>
         </div>
-    </div>  
+    </div>
 
     <div class="card" loading-indicator="waitingForCreateResponse">
         <div class="row">
@@ -41,56 +41,63 @@
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-md-8">
-                            <div class="form-group">
+                            <div class="form-group" ng-class="{'has-error': ruleForm.name.$invalid && (submitAttempted || ruleForm.name.$dirty)}">
                                 <label>{{'alarms.rules_form_name_label' | i18n}}</label>
                                 <input type="text" name="name" class="form-control" ng-model="currentRule.name" required placeholder="{{'alarms.rules_form_name_placeholder' | i18n}}"/>
-                            </div>                    
-                        </div> 
+                                <input-validation-message types="required" input="ruleForm.name"></input-validation-message>
+                            </div>
+                        </div>
                        <div class="col-md-4">
-                            <div class="form-group">
+                            <div class="form-group" ng-class="{'has-error': ruleForm.type.$invalid && (submitAttempted || ruleForm.type.$dirty)}">
                                 <label>{{'alarms.rules_form_type_label' | i18n}}</label>
-                                <dropdown ng-model="currentRule.type" no-placeholder-item items="ruleTypes" callback="updateAvailabilityDropdown"></dropdown>
-                            </div>                    
-                        </div>                  
+                                <dropdown name="type" ng-model="currentRule.type" no-placeholder-item items="ruleTypes" callback="updateAvailabilityDropdown" required></dropdown>
+                                <input-validation-message types="required" input="ruleForm.type"></input-validation-message>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-8">
-                            <div class="form-group">
+                            <div class="form-group" ng-class="{'has-error': ruleForm.description.$invalid && (submitAttempted || ruleForm.description.$dirty)}">
                                 <label>{{'alarms.rules_form_description_label' | i18n}}</label>
-                                <textarea name="description" class="form-control description" ng-model="currentRule.description" placeholder="{{'alarms.rules_form_description_placeholder' | i18n}}"></textarea>
-                            </div>                    
-                        </div> 
-                       <div class="col-md-4">
-                            <div class="form-group">
-                                <label>{{'alarms.rules_form_availability_label' | i18n}}</label>
-                                <dropdown ng-model="currentRule.availability" no-placeholder-item items="availabilityTypes" ng-disabled="disableAvailability"></dropdown>
+                                <textarea name="description" class="form-control description" ng-model="currentRule.description" placeholder="{{'alarms.rules_form_description_placeholder' | i18n}}" required></textarea>
+                                <input-validation-message types="required" input="ruleForm.description"></input-validation-message>
                             </div>
-                            <div class="form-group">
+                        </div>
+                       <div class="col-md-4">
+                            <div class="form-group" ng-class="{'has-error': ruleForm.availability.$invalid && (submitAttempted || ruleForm.availability.$dirty)}">
+                                <label>{{'alarms.rules_form_availability_label' | i18n}}</label>
+                                <dropdown name="availability" ng-model="currentRule.availability" no-placeholder-item items="availabilityTypes" ng-disabled="disableAvailability" required></dropdown>
+                                <input-validation-message types="required" input="ruleForm.availability"></input-validation-message>
+                            </div>
+                            <div class="form-group" ng-class="{'has-error': ruleForm.active.$invalid && (submitAttempted || ruleForm.active.$dirty)}">
                                 <label>{{'alarms.rules_form_status_label' | i18n}}</label>
-                                <dropdown ng-model="currentRule.active" no-placeholder-item items="activeStatuses"></dropdown>
-                            </div>                                                   
-                        </div>                  
-                    </div>                    
+                                <dropdown name="active" ng-model="currentRule.active" no-placeholder-item items="activeStatuses" required></dropdown>
+                                <input-validation-message types="required" input="ruleForm.active"></input-validation-message>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-5 col-md-offset-1">
                     <label>{{'alarms.rules_time_interval_header' | i18n}}</label>
                     <div class="timeInterval" ng-repeat="timeInterval in currentRule.timeIntervals">
                         <div class="row" ng-form="intervalForm">
                             <div class="col-md-5">
-                                <div class="form-group">
-                                    <datepicker-input name="start" model="timeInterval.start"></datepicker-input>
-                                </div>           
+                                <div class="form-group" ng-class="{'has-error': intervalForm.start.$invalid && (submitAttempted || intervalForm.start.$dirty)}">
+                                    <datepicker-input name="start" model="timeInterval.start" ng-required="true"></datepicker-input>
+                                    <input-validation-message types="required,date" input="intervalForm.start"></input-validation-message>
+                                </div>
                             </div>
                             <div class="col-md-1 toText">
                                 {{'common.date_to' | i18n}}
                             </div>
                             <div class="col-md-5">
-                                <div class="form-group">
-                                    <datepicker-input name="end" model="timeInterval.end"></datepicker-input>
+                                <div class="form-group" ng-class="{'has-error': intervalForm.end.$invalid && (submitAttempted || intervalForm.end.$dirty)}">
+                                    <datepicker-input name="end" model="timeInterval.end" ng-required="true"></datepicker-input>
+                                    <input-validation-message types="required, date" input="intervalForm.end"></input-validation-message>
                                 </div>
                             </div>
                             <div class="col-md-1 remove">
-                                <i class="fa fa-lg fa-times" title="{{'common.remove' | i18n}}" ng-click="removeTimeIntervalItem(timeInterval)"></i>
+                                <i class="fa fa-lg fa-times" title="{{'common.remove' | i18n}}" ng-click="removeTimeIntervalItem(timeInterval)"  ng-required="true"></i>
                             </div>
                         </div>
                     </div>
@@ -102,19 +109,6 @@
                             </div
                             >
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label>{{'alarms.rules_form_notifications_label' | i18n}}</label>
-                        </div>
-                        <div class="col-md-6">
-                            <input type="checkbox" ng-model="currentRule.availableNotifications.OPEN_TICKET"> Open ticket
-                            <br>
-                            <input type="checkbox" ng-model="currentRule.availableNotifications.NOTIFICATION"> Notification
-                        </div>
-                        <div class="col-md-6">
-                            <input type="checkbox" ng-model="currentRule.availableNotifications.EMAIL"> E-mail
-                        </div>                        
                     </div>
                 </div>
             </div>
@@ -128,7 +122,7 @@
                 <div class="col-md-12">
                     <label>{{'alarms.rules_form_definition_if_label' | i18n}}</label>
                 </div>
-                <div class="col-md-12 definitionsContainer">                            
+                <div class="col-md-12 definitionsContainer">
                     <table class="searchResults colorOdd">
                         <thead>
                             <tr>
@@ -143,33 +137,47 @@
                         </thead>
                         <tbody>
 
-                            <tr ng-repeat="item in currentRule.definitions">
+                            <tr ng-repeat="item in currentRule.definitions" ng-form="definitionForm">
                                 <td class="startOperator">
-                                    <dropdown ng-model="item.startOperator" initialtext="-" initialtext-selectable items="startOperators"></dropdown>
+                                    <div class="form-group">
+                                        <dropdown name="startOperator" ng-model="item.startOperator" initialtext="-" initialtext-selectable items="startOperators"></dropdown>
+                                    </div>
                                 </td>
+
                                 <td class="criteria">
-                                    <dropdown ng-model="item.criteria" no-placeholder-item items="criterias" callback="criteriaSelected" callback-params="item"></dropdown>
+                                    <div class="form-group" ng-class="{'has-error': definitionForm.criteria.$invalid && (submitAttempted || definitionForm.criteria.$dirty)}">
+                                        <dropdown name="criteria" ng-model="item.criteria" no-placeholder-item items="criterias" callback="criteriaSelected" callback-params="item" required></dropdown>
+                                    </div>
                                 </td>
                                 <td class="subCriteria">
-                                    <dropdown ng-model="item.subCriteria" no-placeholder-item items="subCriterias[item.criteria]"></dropdown>
+                                    <div class="form-group" ng-class="{'has-error': definitionForm.subCriteria.$invalid && (submitAttempted || definitionForm.subCriteria.$dirty)}">
+                                        <dropdown name="subCriteria" ng-model="item.subCriteria" no-placeholder-item items="subCriterias[item.criteria]" required></dropdown>
+                                    </div>
                                 </td>
                                 <td class="condition">
-                                    <dropdown ng-model="item.condition" no-placeholder-item items="conditionTypes"></dropdown>
+                                    <div class="form-group" ng-class="{'has-error': definitionForm.conditionTypes.$invalid && (submitAttempted || definitionForm.conditionTypes.$dirty)}">
+                                        <dropdown name="conditionTypes" ng-model="item.condition" no-placeholder-item items="conditionTypes" required></dropdown>
+                                    </div>
                                 </td>
                                 <td class="value">
-                                    <div class="autoSuggestionWrapper fullWidthDropdown">
-                                        <input type="text" class="form-control" ng-model="item.value" name="value" autocomplete="off"
-                                        typeahead="suggestion for suggestion in getAutoSuggestValues($viewValue, item)" 
-                                        typeahead-loading="waitingForAutoSuggest" 
-                                        typeahead-on-select="onValueSuggestionSelect($item, $label, item)" 
-                                        typeahead-select-on-exact="true"
-                                        typeahead-wait-ms="300">
-                                        <span class="loadingIcon" ng-show="waitingForAutoSuggest"><i class="fa fa-refresh fa-spin"></i></span>
-                                    </div>                                    
+                                    <div class="form-group" ng-class="{'has-error': definitionForm.value.$invalid && (submitAttempted || definitionForm.value.$dirty)}">
+                                        <div class="autoSuggestionWrapper fullWidthDropdown">
+                                            <input type="text" class="form-control" ng-model="item.value" name="value" autocomplete="off"
+                                            typeahead="suggestion for suggestion in getAutoSuggestValues($viewValue, item)"
+                                            typeahead-loading="waitingForAutoSuggest"
+                                            typeahead-on-select="onValueSuggestionSelect($item, $label, item)"
+                                            typeahead-select-on-exact="true"
+                                            typeahead-wait-ms="300"
+                                            required>
+                                            <span class="loadingIcon" ng-show="waitingForAutoSuggest"><i class="fa fa-refresh fa-spin"></i></span>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td class="endOperator">
-                                    <dropdown ng-model="item.endOperator" initialtext="-" initialtext-selectable items="endOperators" class="floatLeft"></dropdown>
-                                    <dropdown ng-model="item.logicBoolOperator" no-placeholder-item items="logicBoolOperationTypes" class="floatLeft"></dropdown>
+                                    <div class="form-group" ng-class="{'has-error': definitionForm.logicBoolOperator.$invalid && (submitAttempted || definitionForm.logicBoolOperator.$dirty)}">
+                                        <dropdown name="endOperator" ng-model="item.endOperator" initialtext="-" initialtext-selectable items="endOperators" class="floatLeft"></dropdown>
+                                        <dropdown name="logicBoolOperator" ng-model="item.logicBoolOperator" no-placeholder-item items="logicBoolOperationTypes" class="floatLeft"></dropdown ng-required="$index +1 < currentRule.getNumberOfDefinitions()">
+                                    </div>
                                 </td>
                                 <td class="remove">
                                     <i class="fa fa-lg fa-times" ng-click="removeRuleDefinition(item)" ng-show="$index > 0" title="{{'alarms.rules_form_definition_remove' | i18n}}"></i>
@@ -187,7 +195,7 @@
                 <div class="col-md-12 thenHeader">
                     <label>{{'alarms.rules_form_definition_then_label' | i18n}}</label>
                 </div>
-                <div class="col-md-12 definitionsContainer">                            
+                <div class="col-md-12 definitionsContainer">
                     <table class="searchResults colorOdd actionsTable">
                         <thead>
                             <tr>
@@ -198,15 +206,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="item in currentRule.actions">
+                            <tr ng-repeat="item in currentRule.actions" ng-form="actionForm">
                                 <td class="action">
-                                    <dropdown ng-model="item.action" no-placeholder-item items="thenActions" callback="actionSelected" callback-params="item"></dropdown>
+                                    <div class="form-group" ng-class="{'has-error': actionForm.action.$invalid && (submitAttempted || definitionForm.action.$dirty)}">
+                                        <dropdown name="action" ng-model="item.action" no-placeholder-item items="thenActions" callback="actionSelected" callback-params="item" required></dropdown>
+                                    </div>
                                 </td>
                                 <td class="value">
-                                    <input type="text" class="form-control" ng-model="item.value" name="value" ng-disabled="item.action !== 'SEND_TO_ENDPOINT'">
+                                    <div class="form-group" ng-class="{'has-error': actionForm.value.$invalid && (submitAttempted || definitionForm.value.$dirty)}">
+                                        <input name="value" type="text" class="form-control" ng-model="item.value" name="value" ng-disabled="item.action !== 'SEND_TO_ENDPOINT'" ng-required="item.action === 'SEND_TO_ENDPOINT'">
+                                    </div>
                                 </td>
                                 <td class="endOperator">
-                                    <span ng-bind="'alarms.rules_definition_and' | i18n | uppercase" ng-show="$index < currentRule.getNumberOfActions()-1"></span>
+                                    <div class="form-group">
+                                        <span ng-bind="'alarms.rules_definition_and' | i18n | uppercase" ng-show="$index < currentRule.getNumberOfActions()-1"></span>
+                                    </div>
                                 </td>
                                 <td class="remove">
                                     <i class="fa fa-lg fa-times" ng-click="removeRuleAction(item)" ng-show="$index > 0" title="{{'alarms.rules_form_definition_remove' | i18n}}"></i>
@@ -217,7 +231,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="addMoreLink" ng-click="addActionRow()">{{'alarms.rules_form_definition_add' | i18n}}</div>
-                </div>                
+                </div>
             </div>
 
             <div class="row ruleTestContainer">
@@ -227,14 +241,14 @@
                         <ul>
                         <li ng-repeat="problem in ruleTest.problems">
                             <i class="fa fa-times"></i> {{'alarms.rules_test_error_' +problem | i18n}}
-                        </li>                    
+                        </li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-md-4 textAlignRight" >
                     <span class="link" ng-click="testRule()">{{'alarms.rules_form_test_rule' | i18n}}</span>
                 </div>
-            </div>      
+            </div>
 
             <div class="row ruleAsTextContainer">
                 <div class="col-md-12">
@@ -242,7 +256,7 @@
                         {{ruleAsText}}
                     </div>
                 </div>
-            </div>    
+            </div>
         </form>
     </div>
 
@@ -250,6 +264,5 @@
         <div class="col-md-12">
             <a ng-click="clearForm()">{{'common.clear_form' | i18n}}</a>
         </div>
-    </div>    
-
+    </div>
 </div>

@@ -12,10 +12,6 @@ describe('Rule', function() {
         "lastTriggered": "2015-08-01 12:43:02",
         "createdBy": "Test user",
         "dateCreated": "2015-06-01 12:44:00",
-        "availableNotifications": [
-            "EMAIL", 
-            "OPEN_TICKET"
-        ],
         "definitions": [
             {
               "startOperator": "(",
@@ -83,7 +79,6 @@ describe('Rule', function() {
         expect(rule.type).toEqual("GLOBAL");
         expect(rule.availability).toEqual("PUBLIC");
 
-        expect(rule.recipient).toEqual("FMC");
         expect(rule.lastTriggered).toEqual("2015-02-05 08:00");
         expect(rule.createdBy).toEqual("antkar");
         expect(rule.dateCreated).toEqual("2015-08-31 09:00");
@@ -91,9 +86,6 @@ describe('Rule', function() {
         expect(rule.notifyByEMail).toBeUndefined();
         expect(rule.subscription).toBeUndefined();
 
-        expect(rule.availableNotifications.OPEN_TICKET).toEqual(false);
-        expect(rule.availableNotifications.OPEN_TICKET).toEqual(false);
-        expect(rule.availableNotifications.EMAIL).toEqual(false);
         expect(rule.timeIntervals.length).toEqual(0);
         expect(rule.definitions.length).toEqual(0);
     }));
@@ -113,15 +105,11 @@ describe('Rule', function() {
         expect(rule.createdBy).toEqual(ruleDTO.createdBy);
         expect(rule.dateCreated).toEqual(ruleDTO.dateCreated);
 
-        expect(rule.availableNotifications.OPEN_TICKET).toEqual(true);
-        expect(rule.availableNotifications.NOTIFICATION).toEqual(false);
-        expect(rule.availableNotifications.EMAIL).toEqual(true);
-
         expect(rule.definitions.length).toEqual(ruleDTO.definitions.length);
         expect(rule.timeIntervals.length).toEqual(ruleDTO.timeIntervals.length);
 
         expect(rule.notifyByEMail).toBeUndefined();
-        expect(rule.subscription).toBeUndefined();        
+        expect(rule.subscription).toBeUndefined();
 
     }));
 
@@ -149,15 +137,11 @@ describe('Rule', function() {
         expect(copy.createdBy).toEqual(rule.createdBy);
         expect(copy.dateCreated).toEqual(rule.dateCreated);
 
-        expect(copy.availableNotifications.OPEN_TICKET).toEqual(rule.availableNotifications.OPEN_TICKET);
-        expect(copy.availableNotifications.NOTIFICATION).toEqual(rule.availableNotifications.NOTIFICATION);
-        expect(copy.availableNotifications.EMAIL).toEqual(rule.availableNotifications.EMAIL);
-
         expect(copy.definitions.length).toEqual(rule.definitions.length);
         expect(copy.timeIntervals.length).toEqual(rule.timeIntervals.length);
 
         expect(copy.notifyByEMail).toBeUndefined();
-        expect(copy.subscription).toBeUndefined();        
+        expect(copy.subscription).toBeUndefined();
     }));
 
 
@@ -181,7 +165,7 @@ describe('Rule', function() {
         var numActionsAfter = rule.getNumberOfActions();
         expect(numActionsAfter).toEqual(numActionsBefore+1);
         expect(rule.actions[numActionsBefore]).toEqual(action);
-    }));    
+    }));
 
 
     it("addTimeInterval should add action to the end of the list", inject(function(Rule, RuleTimeInterval) {
@@ -193,29 +177,18 @@ describe('Rule', function() {
         var numIntervalsAfter = rule.getNumberOfTimeIntervals();
         expect(numIntervalsAfter).toEqual(numIntervalsBefore+1);
         expect(rule.timeIntervals[numIntervalsBefore]).toEqual(inteval);
-    }));   
+    }));
 
     it("isSubscriptionPossible should return correctly", inject(function(Rule) {
         var rule = Rule.fromDTO(ruleDTO);
 
-        //Subscription is only possible when OPEN_TICKET or NOTIFICATION is available in availableNotification
-        rule.availableNotifications.EMAIL = false;
-        rule.availableNotifications.OPEN_TICKET = false;
-        rule.availableNotifications.NOTIFICATION = false;
+        //Subscription is only possible when type is other than 'GLOBAL'
+        rule.type = 'GLOBAL';
         expect(rule.isSubscriptionPossible()).toBeFalsy();
 
-        rule.availableNotifications.OPEN_TICKET = true;
-        rule.availableNotifications.NOTIFICATION = false;
-        expect(rule.isSubscriptionPossible()).toBeTruthy();        
-
-        rule.availableNotifications.OPEN_TICKET = false;
-        rule.availableNotifications.NOTIFICATION = true;
-        expect(rule.isSubscriptionPossible()).toBeTruthy();                
-
-        rule.availableNotifications.OPEN_TICKET = true;
-        rule.availableNotifications.NOTIFICATION = true;
-        expect(rule.isSubscriptionPossible()).toBeTruthy();           
-    }));   
+        rule.type = 'EVENT';
+        expect(rule.isSubscriptionPossible()).toBeTruthy();
+    }));
 
 });
 
@@ -289,7 +262,7 @@ describe('RuleDefinition', function() {
         copy.startOperator = "(((";
 
         expect(copy.startOperator).toEqual("(((");
-        expect(ruleDefinition.startOperator).toEqual(ruleDefinitionDTO.startOperator);       
+        expect(ruleDefinition.startOperator).toEqual(ruleDefinitionDTO.startOperator);
     }));
 
 });
@@ -309,7 +282,7 @@ describe('RuleAction', function() {
     it('create new should set correct values', inject(function(RuleAction) {
         var ruleAction = new RuleAction();
         expect(ruleAction.action).toBeUndefined();
-        expect(ruleAction.value).toBeUndefined(); 
+        expect(ruleAction.value).toBeUndefined();
         expect(ruleAction.order).toBeUndefined();
     }));
 
@@ -344,8 +317,8 @@ describe('RuleAction', function() {
         copy.value = "UPDATED";
 
         expect(copy.value).toEqual("UPDATED");
-        expect(ruleAction.value).toEqual(ruleActionDTO.value);       
-    }));    
+        expect(ruleAction.value).toEqual(ruleActionDTO.value);
+    }));
 
 });
 
@@ -378,7 +351,7 @@ describe('RuleTimeInterval', function() {
         var dto = ruleTimeInterval.DTO();
 
         expect(dto).toEqual(ruleTimeIntervalDTO);
-    }));    
+    }));
 
     it("copy should copy object correctly", inject(function(RuleTimeInterval) {
         var ruleTimeInterval = RuleTimeInterval.fromDTO(ruleTimeIntervalDTO);
@@ -394,7 +367,7 @@ describe('RuleTimeInterval', function() {
         copy.start = "2016-01-02";
 
         expect(copy.start).toEqual("2016-01-02");
-        expect(ruleTimeInterval.start).toEqual(ruleTimeIntervalDTO.start);       
-    }));        
+        expect(ruleTimeInterval.start).toEqual(ruleTimeIntervalDTO.start);
+    }));
 
 });

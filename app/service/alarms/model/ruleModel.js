@@ -10,19 +10,13 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
             this.definitions = [];
             this.actions = [];
             this.timeIntervals = [];
-            this.availableNotifications = {
-                OPEN_TICKET : false,
-                NOTIFICATION : false,
-                EMAIL : false,
-            };
-            this.recipient = "FMC";
             this.lastTriggered = "2015-02-05 08:00";
             this.createdBy = "antkar";
             this.dateCreated = "2015-08-31 09:00";
 
 
             this.notifyByEMail = undefined;
-            this.subscription = undefined;            
+            this.subscription = undefined;
         }
 
         Rule.prototype.addDefinition = function(def){
@@ -35,7 +29,7 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
 
         Rule.prototype.addTimeInterval = function(inter){
             this.timeIntervals.push(inter);
-        };        
+        };
 
         Rule.prototype.getNumberOfDefinitions = function(){
             return this.definitions.length;
@@ -50,7 +44,7 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
         };
 
         Rule.prototype.isSubscriptionPossible = function(){
-            return this.availableNotifications.OPEN_TICKET || this.availableNotifications.NOTIFICATION;
+            return this.type !== 'GLOBAL';
         };
 
 
@@ -63,18 +57,9 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
             rule.availability = dto.availability;
             rule.active = dto.active;
             rule.description = dto.description;
-            rule.recipient = dto.recipient;
             rule.lastTriggered = dto.lastTriggered;
             rule.createdBy = dto.createdBy;
             rule.dateCreated = dto.dateCreated;
-
-            $.each(dto.availableNotifications, function(key, notificationType){
-                if(typeof notificationType === 'string'){
-                    rule.availableNotifications[notificationType] = true;
-                }else{
-                    rule.availableNotifications[key] = notificationType;
-                }
-            });
 
             rule.definitions = [];
             $.each(dto.definitions, function(index, definition){
@@ -96,12 +81,6 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
         };
 
         Rule.prototype.DTO = function(){
-            var availableNotifications = [];
-            $.each(this.availableNotifications, function(key, value){
-                if(value){
-                    availableNotifications.push(key);
-                }
-            });
             return {
                 id : this.id,
                 name : this.name,
@@ -109,11 +88,9 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
                 availability : this.availability,
                 active : this.active,
                 description : this.description,
-                recipient : this.recipient,
                 lastTriggered : this.lastTriggered,
                 createdBy : this.createdBy,
-                dateCreated : this.dateCreated,                
-                availableNotifications : availableNotifications,
+                dateCreated : this.dateCreated,
                 timeIntervals : this.timeIntervals.reduce(function(intervals, timeInterval){
                     intervals.push(timeInterval.DTO());
                     return intervals;
@@ -125,7 +102,7 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
                 actions : this.actions.reduce(function(acts, action){
                     acts.push(action.DTO());
                     return acts;
-                },[]),                   
+                },[]),
             };
         };
 
@@ -186,7 +163,7 @@ angular.module('unionvmsWeb').factory('RuleDefinition', function() {
             ruleDefinition.order = dto.order;
 
             return ruleDefinition;
-        };        
+        };
 
         return RuleDefinition;
     });
@@ -195,7 +172,7 @@ angular.module('unionvmsWeb').factory('RuleAction', function() {
 
         function RuleAction(){
             this.action = undefined;
-            this.value = undefined;            
+            this.value = undefined;
             this.order = undefined; //First one has order 0
         }
 
@@ -218,7 +195,7 @@ angular.module('unionvmsWeb').factory('RuleAction', function() {
             ruleAction.order = dto.order;
 
             return ruleAction;
-        };        
+        };
 
         return RuleAction;
     });
@@ -237,7 +214,7 @@ angular.module('unionvmsWeb').factory('RuleTimeInterval', function() {
                 start : this.start,
                 end : this.end,
             };
-        };        
+        };
 
         RuleTimeInterval.fromDTO = function(dto){
             var ruleTimeInterval = new RuleTimeInterval();
@@ -249,7 +226,7 @@ angular.module('unionvmsWeb').factory('RuleTimeInterval', function() {
 
         RuleTimeInterval.prototype.copy = function() {
             return RuleTimeInterval.fromDTO(this.DTO());
-        };        
+        };
 
         return RuleTimeInterval;
     });

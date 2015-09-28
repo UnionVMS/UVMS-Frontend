@@ -14,7 +14,7 @@
                     <th>{{'alarms.rules_table_notify_by_email' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'active'">{{'alarms.rules_table_status' | i18n}}</th>
                     <th></th>
-                    <th>{{'alarms.rules_table_actions' | i18n}}</th>
+                    <th class="textAlignCenter">{{'alarms.rules_table_actions' | i18n}}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -35,10 +35,10 @@
                         </div>
                     </td>
                     <td class="notifyByEmail">
-                        <div ng-show="item.active && item.availableNotifications.EMAIL">
+                        <div ng-show="item.active && item.isSubscriptionPossible()">
                             <input type="text" ng-model="item.notifyByEmail" class="form-control" placeholder="{{'alarms.rules_table_notify_by_email_input_placeholder' | i18n}}">
                         </div>
-                        <div ng-show="item.active && !item.availableNotifications.EMAIL">
+                        <div ng-hide="item.active">
                             <input type="text" disabled class="form-control" placeholder="{{'common.not_available' | i18n}}">
                         </div>                        
                     </td>
@@ -48,8 +48,17 @@
                         <i ng-show="item.availability === 'PRIVATE'" class="fa fa-lg fa-user" tooltip-placement="bottom" tooltip="{{'alarms.rules_availability_private' | i18n}}"></i>
                     </td>
     				<td class="actions">
-    					<i class="fa fa-lg fa-pencil editIcon" ng-click="toggleRuleDetails(item)" title="{{'alarms.rules_table_edit'| i18n}}" show-if-allowed="Rules:manageAlarmsRules"></i>
-    					<i class="fa fa-lg fa-trash-o deleteIcon" ng-click="deleteRule(item)" title="{{'alarms.rules_table_delete'| i18n}}" show-if-allowed="Rules:manageAlarmsRules"></i>
+                        <span show-if-allowed="Rules:manageAlarmsRules">
+                            <button type="button" class="btn btn-sm btn-primary" ng-click="toggleRuleDetails(item)" title="{{'alarms.rules_table_edit'| i18n}}">
+                                <span class="fa fa-pencil"></i>
+                            </button>
+                        </span>
+
+                        <span show-if-allowed="Rules:manageAlarmsRules">
+                            <button type="button" class="btn btn-sm btn-danger" ng-click="deleteRule(item)" title="{{'alarms.rules_table_delete'| i18n}}">
+                                <span class="fa fa-times"></i>
+                            </button>
+                        </span>
     				</td>
 				</tr>
                 <tr ng-repeat-end="" ng-show="isExpanded" class="detailData">

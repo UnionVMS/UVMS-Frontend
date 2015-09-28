@@ -35,7 +35,7 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         $scope.ruleTest.outdated = false;
 
         //Enable/disable availability dropdown
-        $scope.updateAvailabilityDropdown();        
+        $scope.updateAvailabilityDropdown();
 
     };
 
@@ -49,25 +49,25 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
 
     //Dropdown values
     //TODO: Get values from config
-    $scope.ruleTypes =[    
+    $scope.ruleTypes =[
         {'text': 'Global','code':'GLOBAL'},
         {'text': 'Event','code':'EVENT'}
     ];
 
-    $scope.availabilityTypes =[    
+    $scope.availabilityTypes =[
         {'text': 'Public','code':'PUBLIC'},
         {'text': 'Private','code':'PRIVATE'}
     ];
-    $scope.activeStatuses =[    
+    $scope.activeStatuses =[
         {'text': 'Active','code':true},
         {'text': 'Inactive','code':false}
     ];
 
     //DEFINITION VALUES
-    $scope.startOperators = createDropdownItemsWithSameTextAsValue(['(', '((', '(((']);   
-    $scope.endOperators = createDropdownItemsWithSameTextAsValue([')', '))', ')))']);   
+    $scope.startOperators = createDropdownItemsWithSameTextAsValue(['(', '((', '(((']);
+    $scope.endOperators = createDropdownItemsWithSameTextAsValue([')', '))', ')))']);
     $scope.logicBoolOperationTypes = createDropdownItemsWithSameTextAsValue(['AND', 'OR', 'NONE']);
-    $scope.criterias =[    
+    $scope.criterias =[
         {'text': 'Vessel','code':'VESSEL'},
         {'text': 'Mobile Terminal','code':'MOBILE_TERMINAL'},
         {'text': 'Geo area','code':'GEO'},
@@ -79,12 +79,12 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         'GEO' : [{'text': 'Area id','code':'AREA_ID'}],
     };
 
-    $scope.conditionTypes =[    
+    $scope.conditionTypes =[
         {'text': 'equals to','code':'EQ'},
         {'text': 'not equals to','code':'NEQ'},
-    ];    
+    ];
 
-    $scope.thenActions =[    
+    $scope.thenActions =[
         {'text': locale.getString('alarms.rules_form_action_Dropdown_SEND_TO_ENDPOINT'),'code':'SEND_TO_ENDPOINT'},
         {'text': locale.getString('alarms.rules_form_action_Dropdown_MANUAL_POLL'),'code':'MANUAL_POLL'},
         {'text': locale.getString('alarms.rules_form_action_Dropdown_HOLDING_TABLE'),'code':'HOLDING_TABLE'},
@@ -130,7 +130,7 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
     };
 
     //Callback when selecting criteria in dropdown
-    $scope.criteriaSelected = function(selection, ruleDef){        
+    $scope.criteriaSelected = function(selection, ruleDef){
         $log.debug("criteriaSelected");
         $log.debug(selection);
         $log.debug(ruleDef);
@@ -139,17 +139,17 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         if(Array.isArray($scope.subCriterias[selectedVal]) && $scope.subCriterias[selectedVal].length > 0){
             newSubCriteria = $scope.subCriterias[selectedVal][0].code;
         }
-        ruleDef.subCriteria = newSubCriteria; 
-    }; 
+        ruleDef.subCriteria = newSubCriteria;
+    };
 
     //Callback when selecting action in dropdown
-    $scope.actionSelected = function(selection, ruleAction){        
+    $scope.actionSelected = function(selection, ruleAction){
         var selectedVal = selection.code;
         //Unset value if not SEND_TO_ENDPOINT
         if(selectedVal !== 'SEND_TO_ENDPOINT'){
             ruleAction.value = undefined;
         }
-    }; 
+    };
 
     //Remove a rule definition row
     $scope.removeRuleDefinition = function(definitionToBeRemoved){
@@ -167,8 +167,8 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
 
         //Set order
         $.each($scope.currentRule.definitions, function(i, def){
-            def.order = i; 
-        });        
+            def.order = i;
+        });
     };
 
     //Remove a rule action row
@@ -187,9 +187,9 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
 
         //Set order
         $.each($scope.currentRule.actions, function(i, def){
-            def.order = i; 
-        });        
-    };    
+            def.order = i;
+        });
+    };
 
     //Remove a time interval row
     $scope.removeTimeIntervalItem = function(intervalToBeRemoved){
@@ -209,10 +209,17 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
     //Check if form is valid and show error message if not
     var isValidForm = function(){
         if(!$scope.ruleForm.$valid){
-            alertService.showErrorMessage(locale.getString('alarms.rules_add_new_alert_message_on_form_validation_error'));
+            alertService.showErrorMessage(locale.getString('common.form_validation_error_message'));
             return false;
         }
-        ///TODO: More validation of definitions and other inputs
+
+        //Test syntax of rule and actions
+        if(!$scope.testRule()){
+            alertService.showErrorMessage(locale.getString('alarms.rules_add_new_alert_message_on_form_rule_validation_error'));
+            return false;
+        }
+
+        return true;
     };
 
     //Create the rule
@@ -220,7 +227,9 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         $scope.submitAttempted = true;
 
         //Validate form
-        isValidForm();        
+        if(!isValidForm()){
+            return;
+        }
 
         //Create
         $scope.waitingForCreateResponse = true;
@@ -234,7 +243,9 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         $scope.submitAttempted = true;
 
         //Validate form
-        isValidForm();        
+        if(!isValidForm()){
+            return;
+        }
 
         //Update
         $scope.waitingForCreateResponse = true;
@@ -255,7 +266,7 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
     var createNewRuleError = function(){
         $scope.waitingForCreateResponse = false;
         alertService.showErrorMessage(locale.getString('alarms.rules_add_new_alert_message_on_error'));
-    };    
+    };
 
     //Success updating the rule
     var updateRuleSuccess = function(updatedRule) {
@@ -268,7 +279,7 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
     var updateRuleError = function(){
         $scope.waitingForCreateResponse = false;
         alertService.showErrorMessage(locale.getString('alarms.rules_update_alert_message_on_error'));
-    };    
+    };
 
     //Test rule
     $scope.testRule = function(){
@@ -279,19 +290,21 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         $scope.ruleTest.success = testResult.success;
         $scope.ruleTest.problems = testResult.problems;
 
-       if(testResult.success){
+        if(testResult.success){
             $scope.ruleTest.message = locale.getString('alarms.rules_test_success');
         }else{
             $scope.ruleTest.message = locale.getString('alarms.rules_test_fail');
         }
+
+        return testResult.success;
     };
-        
+
     //Watch changes to ruleService.getRuleAsText($scope.currentRule)
     $scope.$watch(function () { return ruleService.getRuleAsText($scope.currentRule);}, function (newVal, oldVal){
         var text = ruleService.getRuleAsText($scope.currentRule);
         $scope.ruleAsText = text;
         $scope.ruleTest.outdated = true;
-    });    
+    });
 
 
     //AUTO SUGGESTIONS
@@ -313,7 +326,7 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
                         break;
                     default:
                         suggestion = resultItem[subCriteria.toLowerCase()];
-                        break;                    
+                        break;
                 }
             }
 
@@ -323,7 +336,7 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
                         suggestion = resultItem.attributes[subCriteria];
                         break;
                 }
-            }            
+            }
 
             if(angular.isDefined(suggestion)){
                 //Don't add duplicates
@@ -342,10 +355,10 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
     var autoSuggestError = function(error){
         alertService.showErrorMessage(locale.getString('alarms.rules_form_definition_auto_suggest_error'));
         return [];
-    };    
+    };
 
     //Get vessels matching search query
-    var getVessels = function(criteria, subCriteria) {        
+    var getVessels = function(criteria, subCriteria) {
         return vesselRestService.getVesselList(autoSuggestionGetListRequest).then(
             function(vesselResultListPage){
                 return autoSuggestSuccess(criteria, subCriteria, vesselResultListPage);
@@ -355,7 +368,7 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
     };
 
     //Get mobileTerminals matching search query
-    var getMobileTerminals = function(criteria, subCriteria) {        
+    var getMobileTerminals = function(criteria, subCriteria) {
         return mobileTerminalRestService.getMobileTerminalList(autoSuggestionGetListRequest).then(
             function(searchResultListPage){
                 return autoSuggestSuccess(criteria, subCriteria, searchResultListPage);
@@ -386,7 +399,7 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
                 default:
                     break;
             }
-            
+
             if(angular.isDefined(searchFunc)){
                 return searchFunc(item.criteria, item.subCriteria);
             }
@@ -409,6 +422,6 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         $scope.currentRule = new Rule();
         $scope.initForm();
     };
-        
+
 
 });
