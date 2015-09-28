@@ -10,14 +10,14 @@
 				<th class="recieved">{{'exchange.sending_queue_table_header_date_received' | i18n}}</th>
 				<th class="from">{{'exchange.sending_queue_table_header_from' | i18n}}</th>
 				<th class="reciepient">{{'exchange.sending_queue_table_header_recipient' | i18n}}</th>
-				<th class="action"></th>
+				<th class="action" show-if-allowed="Exchange:manageExchangeSendingQueue"></th>
 			</thead>
 			<tbody>
 				<tr ng-repeat="i in [1,2,3,4,5,6,7,8]">
 					<td class="recieved">1{{i}} aug. 2015 1{{i}}:22:22</td>
 					<td class="from">TUNAFJORD</td>
 					<td class="reciepient">FIN</td>
-					<td class="action">
+					<td class="action" show-if-allowed="Exchange:manageExchangeSendingQueue">
 						<a ng-if="!pausedQueueItems[i]" ng-click="pausedQueueItems[i] = true">{{'exchange.sending_queue_table_pause' | i18n}}</a>
 						<a ng-if="pausedQueueItems[i]" ng-click="pausedQueueItems[i] = false">{{'exchange.sending_queue_table_resend' | i18n}}</a>
 					</td>
