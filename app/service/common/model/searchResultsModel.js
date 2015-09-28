@@ -56,7 +56,7 @@ angular.module('unionvmsWeb')
         page.totalNumberOfPages = undefined;
 
         this.updateWithNewResults(page);
-    }
+    };
 
     //Update the search results
     SearchResults.prototype.updateWithNewResults = function(searchResultsListPage){

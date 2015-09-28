@@ -8,6 +8,7 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
     //Init function when entering page
     var init = function(){
         //Get list of running program polls
+        $scope.currentSearchResults.setLoading(true);
         pollingRestService.getRunningProgramPolls().then(getRunningPollsSuccess, getRunningPollsFail);
     };
 
