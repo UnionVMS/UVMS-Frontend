@@ -66,8 +66,14 @@
         addMenuItem(locale.getString('header.menu_reporting'), '/reporting');
 
         //MOVEMENT
+        var movementLink = false;
         if(checkAccess('Movement', 'viewMovements')){
-            addMenuItem(locale.getString('header.menu_movement'), '/movement');
+            movementLink = '/movement';
+        }else if(checkAccess('Movement', 'viewManualMovements')){
+            movementLink = '/movement/manual';
+        }
+        if(movementLink){
+            addMenuItem(locale.getString('header.menu_movement'), movementLink);
         }
 
         //EXCHANGE
@@ -77,12 +83,12 @@
 
         //POLLING
         if(checkAccess(unionVMSApplication, 'viewMobileTerminalPolls')){
-            addMenuItem(locale.getString('header.menu_polling'), '/polling/logs');        
+            addMenuItem(locale.getString('header.menu_polling'), '/polling/logs');
         }
         //COMMUNICATION, ASSETS
         if(checkAccess(unionVMSApplication, 'viewVesselsAndMobileTerminals')){
             addMenuItem(locale.getString('header.menu_communication'), '/communication');
-            addMenuItem(locale.getString('header.menu_assets'), '/assets');            
+            addMenuItem(locale.getString('header.menu_assets'), '/assets');
         }
 
         //ALARMS
@@ -97,7 +103,7 @@
         if(alarmsLink){
             addMenuItem(locale.getString('header.menu_alarmconditions'), alarmsLink);
         }
-        
+
         //USERS
         if(accessToAnyFeatureInList('USM', userFeatures)){
             addMenuItem(locale.getString('header.menu_user'), '/usm');
@@ -116,7 +122,7 @@
     };
 
     var init = function(){
-        setMenu();        
+        setMenu();
     };
 
     var getFirstPathSegment = function(path) {
@@ -134,7 +140,7 @@
     };
 
     locale.ready('header').then(function () {
-        init();    
+        init();
     });
 
     $rootScope.$on('AuthenticationSuccess', function () {
@@ -145,7 +151,7 @@
     });
     $rootScope.$on('ContextSwitch', function () {
         init();
-    });    
+    });
 
     init();
 

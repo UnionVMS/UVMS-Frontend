@@ -22,11 +22,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th class="printAndExport">
-                        <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportAsCSVFile()"></i>
-                        <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>              
-                    </th>
-                </tr>            
+                </tr>
                 <tr>
                     <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'carrier.externalMarking'">{{'movement.table_header_external_marking' | i18n}}</th>
@@ -38,7 +34,6 @@
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'position.longitude'">{{'movement.table_header_longitude' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'speed'">{{'movement.table_header_measured_speed' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'course'">{{'movement.table_header_course' | i18n}}</th>
-                    <th></th>
                     <th></th>
                 </tr>
             </thead>
@@ -55,18 +50,16 @@
                     <td>{{item.speed}}</td>
                     <td>{{item.course}}&deg;</td>
                     <td>
-                    	<a href ng-click="editPosition(item)" ng-if="item.guid">
-                    		<i class="positionedit fa fa-pencil-square-o fa-lg"></i>
-                    	</a>
-                    </td>
-                    <td>
-                    	<a href ng-click="deletePosition(item)" ng-if="item.guid">
-                    		<i class="positionremove fa fa-trash-o fa-lg"></i>
-                    	</a>
+                        <button class="btn btn-primary" ng-click="editPosition(item)" title="{{'common.edit'| i18n}}" ng-if="item.guid" show-if-allowed='Movement:manageManualMovements'>
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger" ng-click="deletePosition(item)" title="{{'common.delete'| i18n}}" show-if-allowed='Movement:manageManualMovements'>
+                            <i class="fa fa-times"></i>
+                        </button>
                     </td>
                 </tr>
             </tbody>
-        </table>        
+        </table>
     </div>
 </div>
 

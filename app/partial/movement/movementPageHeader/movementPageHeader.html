@@ -2,8 +2,12 @@
     <div class="row">
         <div class="col-md-8 pageMenu">
             <ul class="horizontal pipeSeparator">
-                <li ng-class="{active: !isManualMovement == true}"><a href="#/movement">{{'movement.header_position_reports' | i18n }}</a></li>
-                <li ng-class="{active: !isManualMovement == false}"><a href="#/movement/manual">{{'movement.header_manual_position_reports' | i18n }}</a></li>
+                <li ng-class="{active: !isManualMovement}" show-if-allowed='Movement:viewMovements'>
+                    <a href="#/movement">{{'movement.header_position_reports' | i18n }}</a>
+                </li>
+                <li ng-class="{active: isManualMovement}" show-if-allowed='Movement:manageManualMovements,Movement:viewManualMovements' show-if-allowed-any>
+                    <a href="#/movement/manual">{{'movement.header_manual_position_reports' | i18n }}</a>
+                </li>
             </ul>
         </div>
         <div class="col-md-4 pull-right textAlignRight" ng-hide="isManualMovement">

@@ -21,6 +21,7 @@
     "date_to" : "To",
     "date_from" : "From",
     "delete" : "Delete",
+    "edit": "Edit",
     "edit_selection": "Edit",
     "export_as_csv" : "Export data in CSV format",
     "export_selection": "Export selection",
