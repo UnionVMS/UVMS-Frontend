@@ -3,7 +3,7 @@ describe('Rule', function() {
   beforeEach(module('unionvmsWeb'));
 
     var ruleDTO = {
-        "id": "dummyGuid1",
+        "guid": "dummyGuid1",
         "name": "My new rule1",
         "description": "Rule to test the frontend.",
         "type": "GLOBAL",
@@ -58,12 +58,12 @@ describe('Rule', function() {
         ],
         "timeIntervals": [
         {
-          "start": "2015-06-09",
-          "end": "2015-08-09"
+          "start": "2015-06-09 00:00:00",
+          "end": "2015-08-09 00:00:00"
         },
         {
-          "start": "2015-09-09",
-          "end": "2015-12-31"
+          "start": "2015-09-09 00:00:00",
+          "end": "2015-12-31 00:00:00"
         },
       ]
     };
@@ -72,7 +72,7 @@ describe('Rule', function() {
     it('create new should set correct values', inject(function(Rule) {
         var rule = new Rule();
 
-        expect(rule.id).toBeUndefined();
+        expect(rule.guid).toBeUndefined();
         expect(rule.name).toBeUndefined();
         expect(rule.description).toBeUndefined();
         expect(rule.active).toEqual(true);
@@ -94,7 +94,7 @@ describe('Rule', function() {
     it("should parse DTO correctly", inject(function(Rule) {
         var rule = Rule.fromDTO(ruleDTO);
 
-        expect(rule.id).toEqual(ruleDTO.id);
+        expect(rule.guid).toEqual(ruleDTO.guid);
         expect(rule.name).toEqual(ruleDTO.name);
         expect(rule.type).toEqual(ruleDTO.type);
         expect(rule.availability).toEqual(ruleDTO.availability);
@@ -126,7 +126,7 @@ describe('Rule', function() {
         var rule = Rule.fromDTO(ruleDTO);
         var copy = rule.copy();
 
-        expect(copy.id).toEqual(rule.id);
+        expect(copy.guid).toEqual(rule.guid);
         expect(copy.name).toEqual(rule.name);
         expect(copy.type).toEqual(rule.type);
         expect(copy.availability).toEqual(rule.availability);
@@ -328,8 +328,8 @@ describe('RuleTimeInterval', function() {
   beforeEach(module('unionvmsWeb'));
 
     var ruleTimeIntervalDTO = {
-        "start": "2015-02-05",
-        "end": "2015-02-08"
+        "start": "2015-02-05 00:00:00",
+        "end": "2015-02-08 00:00:00"
     };
 
     it('create new should set correct values', inject(function(RuleTimeInterval) {
@@ -342,8 +342,8 @@ describe('RuleTimeInterval', function() {
     it("should parse DTO correctly", inject(function(RuleTimeInterval) {
         var ruleTimeInterval = RuleTimeInterval.fromDTO(ruleTimeIntervalDTO);
 
-        expect(ruleTimeInterval.start).toEqual(ruleTimeIntervalDTO.start);
-        expect(ruleTimeInterval.end).toEqual(ruleTimeIntervalDTO.end);
+        expect(ruleTimeInterval.start).toEqual('2015-02-05');
+        expect(ruleTimeInterval.end).toEqual('2015-02-08');
     }));
 
     it("DTO() should create correct object", inject(function(RuleTimeInterval) {
@@ -367,7 +367,7 @@ describe('RuleTimeInterval', function() {
         copy.start = "2016-01-02";
 
         expect(copy.start).toEqual("2016-01-02");
-        expect(ruleTimeInterval.start).toEqual(ruleTimeIntervalDTO.start);
+        expect(ruleTimeInterval.start).toEqual('2015-02-05');
     }));
 
 });

@@ -44,8 +44,8 @@
                             <div class="col-md-8">
                                 <div class="form-group" ng-class="{'has-error': ruleForm.name.$invalid && (submitAttempted || ruleForm.name.$dirty)}">
                                     <label>{{'alarms.rules_form_name_label' | i18n}}</label>
-                                    <input type="text" name="name" class="form-control" ng-model="currentRule.name" required placeholder="{{'alarms.rules_form_name_placeholder' | i18n}}"/>
-                                    <input-validation-message types="required" input="ruleForm.name"></input-validation-message>
+                                    <input type="text" name="name" class="form-control" ng-model="currentRule.name" required placeholder="{{'alarms.rules_form_name_placeholder' | i18n}}" ng-maxlength="100"/>
+                                    <input-validation-message types="required,maxlength" input="ruleForm.name"></input-validation-message>
                                 </div>
                             </div>
                            <div class="col-md-4">
@@ -60,8 +60,8 @@
                             <div class="col-md-8">
                                 <div class="form-group" ng-class="{'has-error': ruleForm.description.$invalid && (submitAttempted || ruleForm.description.$dirty)}">
                                     <label>{{'alarms.rules_form_description_label' | i18n}}</label>
-                                    <textarea name="description" class="form-control description" ng-model="currentRule.description" placeholder="{{'alarms.rules_form_description_placeholder' | i18n}}" required></textarea>
-                                    <input-validation-message types="required" input="ruleForm.description"></input-validation-message>
+                                    <textarea name="description" class="form-control description" ng-model="currentRule.description" placeholder="{{'alarms.rules_form_description_placeholder' | i18n}}" required ng-maxlength="500"></textarea>
+                                    <input-validation-message types="required,maxlength" input="ruleForm.description"></input-validation-message>
                                 </div>
                             </div>
                            <div class="col-md-4">

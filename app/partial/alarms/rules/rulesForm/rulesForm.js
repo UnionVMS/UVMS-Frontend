@@ -108,8 +108,7 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
     $scope.thenActions =[
         {'text': locale.getString('alarms.rules_form_action_Dropdown_SEND_TO_ENDPOINT'),'code':'SEND_TO_ENDPOINT'},
         {'text': locale.getString('alarms.rules_form_action_Dropdown_MANUAL_POLL'),'code':'MANUAL_POLL'},
-        {'text': locale.getString('alarms.rules_form_action_Dropdown_HOLDING_TABLE'),'code':'HOLDING_TABLE'},
-        {'text': locale.getString('alarms.rules_form_action_Dropdown_SHOW_ON_MAP'),'code':'SHOW_ON_MAP'},
+        {'text': locale.getString('alarms.rules_form_action_Dropdown_HOLDING_TABLE'),'code':'ON_HOLD'}
     ];
 
     //Add a definition row
@@ -147,7 +146,6 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
                 $scope.currentRule.availability = $scope.availabilityTypes[0].code;
             }
         }
-
     };
 
     //Callback when selecting criteria in dropdown
@@ -281,6 +279,7 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         alertService.showSuccessMessageWithTimeout(locale.getString('alarms.rules_add_new_alert_message_on_success'));
         $scope.currentRule = rule;
         $scope.setCreateMode(false);
+        $scope.createdNewRuleCallback();
     };
 
     //Error creating the rule

@@ -1,7 +1,7 @@
 angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeInterval, RuleAction) {
 
         function Rule(){
-            this.id = undefined;
+            this.guid = undefined;
             this.name = undefined;
             this.description = undefined;
             this.type = "GLOBAL";
@@ -51,7 +51,7 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
         Rule.fromDTO = function(dto){
             var rule = new Rule();
 
-            rule.id = dto.id;
+            rule.guid = dto.guid;
             rule.name = dto.name;
             rule.type = dto.type;
             rule.availability = dto.availability;
@@ -62,35 +62,37 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
             rule.dateCreated = dto.dateCreated;
 
             rule.definitions = [];
-            $.each(dto.definitions, function(index, definition){
-                rule.definitions.push(RuleDefinition.fromDTO(definition));
-            });
+            if(angular.isArray(dto.definitions)){
+                $.each(dto.definitions, function(index, definition){
+                    rule.definitions.push(RuleDefinition.fromDTO(definition));
+                });
+            }
 
             rule.timeIntervals = [];
-            $.each(dto.timeIntervals, function(index, timeInterval){
-                rule.timeIntervals.push(RuleTimeInterval.fromDTO(timeInterval));
-            });
-
+            if(angular.isArray(dto.timeIntervals)){
+                $.each(dto.timeIntervals, function(index, timeInterval){
+                    rule.timeIntervals.push(RuleTimeInterval.fromDTO(timeInterval));
+                });
+            }
 
             rule.actions = [];
-            $.each(dto.actions, function(index, action){
-                rule.actions.push(RuleAction.fromDTO(action));
-            });
+            if(angular.isArray(dto.actions)){
+                $.each(dto.actions, function(index, action){
+                    rule.actions.push(RuleAction.fromDTO(action));
+                });
+            }
 
             return rule;
         };
 
         Rule.prototype.DTO = function(){
             return {
-                id : this.id,
+                guid : this.guid,
                 name : this.name,
                 type : this.type,
                 availability : this.availability,
                 active : this.active,
                 description : this.description,
-                lastTriggered : this.lastTriggered,
-                createdBy : this.createdBy,
-                dateCreated : this.dateCreated,
                 timeIntervals : this.timeIntervals.reduce(function(intervals, timeInterval){
                     intervals.push(timeInterval.DTO());
                     return intervals;
@@ -107,13 +109,17 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
         };
 
         Rule.prototype.copy = function() {
-            return Rule.fromDTO(this.DTO());
+            var copy = Rule.fromDTO(this.DTO());
+            copy.lastTriggered = this.lastTriggered;
+            copy.createdBy = this.createdBy;
+            copy.dateCreated = this.dateCreated;
+            return  copy;
         };
 
         //Check if the Rule is equal another Rule
         //Equal means same guid
         Rule.prototype.equals = function(item) {
-            return this.id === item.id;
+            return this.guid === item.guid;
         };
 
         return Rule;
@@ -211,15 +217,15 @@ angular.module('unionvmsWeb').factory('RuleTimeInterval', function() {
 
         RuleTimeInterval.prototype.DTO = function(){
             return {
-                start : this.start,
-                end : this.end,
+                start : this.start + ' 00:00:00',
+                end : this.end +' 00:00:00',
             };
         };
 
         RuleTimeInterval.fromDTO = function(dto){
             var ruleTimeInterval = new RuleTimeInterval();
-            ruleTimeInterval.start = dto.start;
-            ruleTimeInterval.end = dto.end;
+            ruleTimeInterval.start = dto.start.split('00:00:00')[0].trim();
+            ruleTimeInterval.end = dto.end.split('00:00:00')[0].trim();
 
             return ruleTimeInterval;
         };
