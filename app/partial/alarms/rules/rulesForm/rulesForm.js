@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, locale, alertService, ruleRestService, Rule, RuleDefinition, RuleTimeInterval, RuleAction, ruleService, GetListRequest, vesselRestService, mobileTerminalRestService){
+angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, locale, alertService, ruleRestService, Rule, RuleDefinition, RuleTimeInterval, RuleAction, ruleService, GetListRequest, vesselRestService, mobileTerminalRestService, userService){
 
     $scope.submitAttempted = false;
 
@@ -37,6 +37,27 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         //Enable/disable availability dropdown
         $scope.updateAvailabilityDropdown();
 
+    };
+
+
+    //Disable form
+    $scope.disableForm = function(){
+        //User has access to manage rules?
+        if(!userService.isAllowed('manageAlarmsRules', 'Rules', true)){
+            return true;
+        }
+
+        //Create new should never disable form
+        if($scope.isCreateNewMode()){
+            return false;
+        }
+
+        if(angular.isDefined($scope.currentRule)){
+            if($scope.allowedToDeleteOrUpdateRule($scope.currentRule)){
+                return false;
+            }
+        }
+        return true;
     };
 
     var createDropdownItemsWithSameTextAsValue = function(codes){

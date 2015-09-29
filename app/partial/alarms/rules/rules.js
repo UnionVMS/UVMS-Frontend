@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, locale, csvService, alertService, $filter, Rule,  RuleDefinition, RuleAction, ruleRestService, SearchResults, SearchResultListPage){
+angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, locale, csvService, alertService, $filter, Rule,  RuleDefinition, RuleAction, ruleRestService, SearchResults, SearchResultListPage, userService, confirmationModal){
 
     $scope.selectedRules = []; //Selected rules checkboxes
 
@@ -13,7 +13,6 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
     $scope.editSelectionDropdownItems = [
         {text:locale.getString('common.export_selection'), code : 'EXPORT'}
     ];
-
 
     $scope.currentSearchResults = new SearchResults('name', false);
 
@@ -33,6 +32,12 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
             mockRule.active = false;
         }
 
+        var userName = userService.getUserName();
+        random = Math.floor(Math.random() * 2) + 1;
+        if(random >= 2){
+            mockRule.createdBy = userName;
+        }
+
         random = Math.floor(Math.random() * 4) + 1;
         mockRule.type = "GLOBAL";
 
@@ -47,6 +52,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
         }
         if(random === 4){
             mockRule.availability = "PRIVATE";
+            mockRule.createdBy = userName;
         }
 
         var ruleDef1 = new RuleDefinition();
@@ -123,19 +129,46 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
            .then(updateSearchResults, onGetSearchResultsError);*/
     };
 
-    //delete rule
+    //Remove rule from searchResults
+    $scope.removeFromSearchResults = function(rule) {
+        var rules = $scope.currentSearchResults.items;
+        var index = rules.indexOf(rule);
+        if (index < 0) {
+            return;
+        }
+
+        rules.splice(index, 1);
+    };
+
+    //Delete rule
     $scope.deleteRule = function(item){
-    	console.log("DELETE ITEM -> " + item.name);
-        ruleRestService.deleteRule(item).then(
-            function() {
-                alertService.showSuccessMessageWithTimeout(locale.getString('alarms.info_removing_rule'));
-            },
-            function(error) {
-                $scope.currentSearchResults.errorMessage = locale.getString('alarms.error_removing_rule');
-                alertService.showErrorMessageWithTimeout($scope.currentSearchResults.errorMessage);
-                console.error("Error removing rule", error);
-            }
-        );
+        var options = {
+            textLabel : locale.getString("alarms.rule_delete_confirm_text")
+        };
+        confirmationModal.open(function(){
+            ruleRestService.deleteRule(item).then(
+                function() {
+                    alertService.showSuccessMessageWithTimeout(locale.getString('alarms.info_removing_rule'));
+                    $scope.removeFromSearchResults(item);
+                },
+                function(error) {
+                    $scope.currentSearchResults.errorMessage = locale.getString('alarms.error_removing_rule');
+                    alertService.showErrorMessageWithTimeout($scope.currentSearchResults.errorMessage);
+                    $log.error("Error removing rule", error);
+                }
+            );
+        }, options);
+    };
+
+    //Is the user allowed to delete or update the rule?
+    $scope.allowedToDeleteOrUpdateRule = function(rule){
+        var userName = userService.getUserName();
+        //Is this the user that created the rule?
+        if(userName !== rule.createdBy){
+            return false;
+        }
+
+        return true;
     };
 
     //Handle click on the top "check all" checkbox
@@ -244,11 +277,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
     //Subscription dropdown options
     var openticketsOpt = {'text': locale.getString('alarms.open_ticket'), 'code':'OPEN_TICKET'};
     var notificationOpt = {'text': locale.getString('alarms.notification'), 'code':'NOTIFICATION'};
-    $scope.subscriptions = [openticketsOpt, notificationOpt];
-
-    $scope.getSubscriptionOptions = function(rule){
-        return $scope.subscriptions;
-    };
+    $scope.subscriptionsOptions = [openticketsOpt, notificationOpt];
 
     //Export data as CSV file
     $scope.exportRulesAsCSVFile = function(onlySelectedItems){
