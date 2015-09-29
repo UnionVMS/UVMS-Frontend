@@ -19,6 +19,9 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				 			basemaps.length === 1 ) {
 					return ( false );
 				}
+				
+				//FIXME we might do this on a layer basis which would probably be better
+				scope.$parent.$broadcast('reloadLegend');
 			};
 
 			// call tree and map update

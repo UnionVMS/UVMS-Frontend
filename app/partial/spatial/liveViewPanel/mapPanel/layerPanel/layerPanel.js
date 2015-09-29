@@ -2,7 +2,7 @@ angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $time
   $scope.expanded = false;
 
   $scope.tab = "LAYERTREE";
-
+  
   $scope.toggle = function() {
     $scope.expanded = !$scope.expanded;
     if ($scope.expanded) {

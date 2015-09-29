@@ -49,17 +49,11 @@
 								</div>
 							</label>
 						</div>
-						<div class="form-group col-md-3">
-							<label class="vms-labels">
-								{{'spatial.reports_form_vms_category' | i18n }}
-								<input class="form-control" ng-model="report.vmsFilters.positions.def.movCategory" name="movCategory" type="text"/>
-							</label>
+						<div class="form-group col-md-3 field-noLabel">
+							<dropdown ng-model="report.vmsFilters.positions.def.movType" initialtext="{{'spatial.reports_form_vms_mov_type' | i18n }}" items="movementTypes"></dropdown>
 						</div>
-						<div class="form-group col-md-3">
-							<label class="vms-labels">
-								{{'spatial.reports_form_vms_mov_status' | i18n }}
-								<input class="form-control" ng-model="report.vmsFilters.positions.def.movStatus" name="movStatus" type="text"/>
-							</label>
+						<div class="form-group col-md-3 field-noLabel">
+							<dropdown ng-model="report.vmsFilters.positions.def.movActivity" initialtext="{{'spatial.reports_form_vms_mov_activity' | i18n }}" items="activityTypes"></dropdown>
 						</div>
 						<div class="col-md-12"><span class="vmsBottomSection"></span></div>
 	  				</div>
@@ -87,11 +81,8 @@
 								</div>
 							</label>
 						</div>
-						<div class="form-group col-md-6">
-							<label class="vms-labels">
-								{{'spatial.reports_form_vms_category' | i18n }}
-								<input class="form-control" ng-model="report.vmsFilters.segments.def.segCategory" name="segCategory" type="text"/>
-							</label>
+						<div class="form-group col-md-6 field-noLabel">
+							<dropdown ng-model="report.vmsFilters.segemnts.def.segCategory" initialtext="{{'spatial.reports_form_vms_category' | i18n }}" items="categoryTypes"></dropdown>
 						</div>
 						<div class="form-group col-md-2">
 							<label class="centerLabel">{{'spatial.reports_form_vms_seg_duration_range' | i18n }}</label>

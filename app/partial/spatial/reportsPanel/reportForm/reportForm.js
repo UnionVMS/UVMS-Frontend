@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, reportMsgService, locale, Report, reportRestService){
+angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $anchorScroll, reportMsgService, locale, Report, reportRestService, configurationService, movementRestService){
     //Report form mode
     $scope.formMode = 'CREATE';
     
@@ -21,9 +21,16 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, repor
     $scope.vesselSearchItems.push({"text": locale.getString('spatial.reports_form_vessels_search_by_vessel'), "code": "vessel"});
     $scope.vesselSearchItems.push({"text": locale.getString('spatial.reports_form_vessels_search_by_group'), "code": "vgroup"});
     
+    //Set movement type dropdown options
+    $scope.movementTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'MESSAGE_TYPE'),'MESSAGE_TYPE','MOVEMENT');
+    
+    //Set movemment activity type dropdown options
+    $scope.activityTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'ACTIVITY_TYPE'), 'ACTIVITY_TYPE', 'MOVEMENT');
+    
+    //Set movemment activity type dropdown options
+    $scope.categoryTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'CATEGORY_TYPE'), 'CATEGORY_TYPE', 'MOVEMENT');
     
     $scope.submitingReport = false;
-    $scope.vesselSearchBy = 'vessel';
     
     $scope.init = function(){
         $scope.report = new Report();
@@ -36,7 +43,10 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, repor
         $scope.report.vesselsSelection = [];
         
         $scope.shared = {
+            vesselSearchBy: 'vessel',
             searchVesselString: '',
+            selectAll: false,
+            selectedVessels: 0,
             vessels: []
         };
         
@@ -63,7 +73,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, repor
     
     $scope.saveReport = function(){
         $scope.submitingReport = true;
-        $scope.validateVesselsSelection();
+        //$scope.validateVesselsSelection();
         if ($scope.reportForm.$valid && $scope.vesselsSelectionIsValid){
             //console.log($scope.report.toJson());
             if ($scope.formMode === 'CREATE'){
@@ -72,7 +82,12 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, repor
                 reportRestService.updateReport($scope.report).then(updateReportSuccess, updateReportError);
             }
         } else {
-            //TODO error logic if needed
+            $anchorScroll();
+//            if (!$scope.reportForm.$valid){
+//                $anchorScroll('#report-form-top');
+//            } else {
+//                $anchorScroll('#vessel-current-selection');
+//            }
             console.log('there are errors in the form');
         }
     };

@@ -1,0 +1,91 @@
+<div class="reportVesselDetails">
+	<div class="modal-header row">
+        <div class="closeIconContainer" ng-click="cancel()">
+            <i class="fa fa-times closeicon" title="{{'common.close' | i18n}}"></i>
+        </div>
+        <div class="col-md-12 header">
+        	<span class="itemType">{{item.type === 'vessel' ? 'Vessel' : 'Vessel group'}}</span>
+        	<span class="vesselName">{{item.name}}</span>
+        </div>
+    </div>
+    <div class="modal-body row" ng-show="hasError === true">
+    	<div class="col-md-12 loading margin-setup">
+    		<div class="alert alert-danger errorAlert" role="alert">
+    			<span class="fa fa-exclamation-circle ng-scope" aria-hidden="true"></span>
+    			{{'spatial.report_form_details_modal_error_message' | i18n }}
+    		</div>
+    	</div>
+    </div>
+    <div class="modal-body row" ng-show="isLoading === true && hasError === false">
+    	<div class="col-md-12 loading margin-setup">
+    		<i class="fa fa-spinner fa-spin"></i>
+    	</div>
+    </div>
+    <div class="modal-body row withMarginBottom" ng-show="isLoading === false && item.type === 'vgroup' && hasError === false">
+    	<div class="col-md-12">
+    		<table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" dt-instance="groupTableInstance" class="table table-striped">
+    			<thead>
+    				<tr>
+    					<th></th>
+    					<th>{{'spatial.reports_form_details_modal_vessel_name_header' | i18n }}</th>
+    				</tr>
+    			</thead>
+    			<tbody>
+    				<tr ng-repeat="vessel in vesselGroupList">
+    					<td>{{vessel.vesselId.guid}}
+    					<td>{{vessel.name}}</td>
+    				</tr>
+    			</tbody>
+    		</table>
+    	</div>
+    </div>
+    <div class="modal-body row" ng-show="isLoading === false && hasError === false">
+    	<div class="col-md-12 grayBorderTop">
+             <h5>{{'vessel.event_history_administrative_information' | i18n}}</h5>
+         </div>
+    	<div class="col-md-6" ng-show="item.type === 'vgroup'">
+            {{'vessel.name' | i18n }}: <b>{{detailedItem.name}}</b>
+        </div>
+    	<div class="col-md-6">
+            {{'vessel.flag_state' | i18n }}: <b>{{detailedItem.countryCode}}</b>
+        </div>
+        <div class="col-md-6">
+            {{'vessel.ircs' | i18n }}: <b>{{detailedItem.ircs}}</b>
+        </div>
+
+        <div class="col-md-6">
+            {{'vessel.ext_marking' | i18n }}: <b>{{detailedItem.externalMarking}}</b>
+        </div>
+        <div class="col-md-6">
+            {{'vessel.cfr' | i18n }}: <b>{{detailedItem.cfr}}</b>
+        </div>
+        <div class="col-md-6">
+            {{'vessel.mmsi_no' | i18n }}: <b>{{detailedItem.mmsiNo}}</b>
+        </div>
+        <div class="col-md-6">
+                {{'vessel.license' | i18n }}: <b>{{detailedItem.hasLicense ? ('common.yes' | i18n | uppercase) : ('common.no' | i18n | uppercase)}}</b>
+        </div>
+        <div class="col-md-6">
+            {{'vessel.home_port' | i18n }}: <b>{{detailedItem.homePort}}</b>
+        </div>
+
+
+        <div class="col-md-12">
+            <h5>{{'vessel.event_history_technical_information' | i18n}}</h5>
+        </div>
+
+        <div class="col-md-6">
+            {{'vessel.type' | i18n }}: <b>{{detailedItem.vesselType}}</b>
+        </div>
+        <div class="col-md-6">
+            {{'vessel.tonnage_gt' | i18n }}: <b>{{detailedItem.grossTonnage}} {{"common.tons" | i18n}}</b>
+        </div>    
+
+        <div class="col-md-6">
+            {{'vessel.main_power' | i18n }}: <b>{{detailedItem.powerMain}} {{"common.kw" | i18n}}</b>
+        </div>
+        <div class="col-md-6">
+            {{'vessel.length' | i18n }}: <b>{{detailedItem.lengthOverAll}} {{"common.meters_short" | i18n}}</b>
+        </div>  
+    </div>
+</div>

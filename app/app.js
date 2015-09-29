@@ -261,7 +261,11 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'SpatialCtrl'
                 }
             },
-            resolve: {}
+            resolve: {
+                config : function(initService){
+                    return initService.loadConfigFor(["MOVEMENT"]);
+                }
+            }
         })
         .state('app.exchange', {
             url: '/exchange',

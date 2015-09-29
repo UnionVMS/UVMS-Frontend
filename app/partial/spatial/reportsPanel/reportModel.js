@@ -40,8 +40,8 @@ angular.module('unionvmsWeb').factory('Report',function() {
 	        report.name = data.name;
 	        report.desc = data.desc;
 	        report.components = angular.fromJson(data.outComponents); //FIXME
-	        report.startDateTime = filter.startDate.slice(0, -3);
-	        report.endDateTime = filter.endDate.slice(0, -3);
+	        report.startDateTime = angular.isDefined(filter.startDate) ? filter.startDate.slice(0, -3) : undefined;
+	        report.endDateTime = angular.isDefined(filter.endDate) ? filter.endDate.slice(0, -3) : undefined;
 	        report.positionSelector = filter.positionSelector;
 	        if (angular.isDefined(filter.positionTypeSelector)){
 	            report.positionTypeSelector = filter.positionTypeSelector;

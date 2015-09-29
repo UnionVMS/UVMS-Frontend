@@ -1,0 +1,8 @@
+<div class="base-legend">
+	<div ng-repeat="record in legendRecords">
+		<div ng-if="record.type === 'wms' && record.visibility">
+			<span class="legend-text">{{ record.title }}</span>
+			<img class="legend-bottom-space" ng-src="{{record.url}}" />
+		</div>
+	</div>
+</div>

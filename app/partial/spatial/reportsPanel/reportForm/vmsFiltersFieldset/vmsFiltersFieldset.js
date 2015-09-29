@@ -12,6 +12,4 @@ angular.module('unionvmsWeb').controller('VmsfiltersfieldsetCtrl',function($scop
     $scope.toggleVmsMenuType = function(type){
         $scope.selectedVmsMenu = type;
     };
-    
-    
 });

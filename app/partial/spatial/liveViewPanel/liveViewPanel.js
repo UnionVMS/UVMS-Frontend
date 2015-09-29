@@ -6,11 +6,13 @@ angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $t
             return [
                 {
                     'tab': 'MAP',
-                    'title': locale.getString('spatial.tab_map')
+                    'title': locale.getString('spatial.tab_map'),
+                    'visible': true
                 },
                 {
                     'tab': 'VMS',
-                    'title': locale.getString('spatial.tab_vms')
+                    'title': locale.getString('spatial.tab_vms'),
+                    'visible': true
                 }
             ];
         };
