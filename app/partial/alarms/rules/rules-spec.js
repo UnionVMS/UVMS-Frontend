@@ -20,7 +20,7 @@ describe('RulesCtrl', function() {
 
 	}));
 
-    it('should not be possible to delete or edit rules that the current user has created', inject(function(Rule) {
+    it('should not be possible to delete or edit rules that another user has created', inject(function(Rule) {
 
         var rule = new Rule();
         rule.createdBy = otherUser;

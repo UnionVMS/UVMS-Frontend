@@ -1,4 +1,4 @@
-<div>
+<div class="rulesContainer">
     <alarms-page-header active-tab="RULES"></alarms-page-header>
     <div class="container containerWithBottomPadding">
 
@@ -6,20 +6,35 @@
 
         <div ng-if="!isVisible.rulesForm" class="card">
             <div class="row card-header">
-                <div class="col-md-12">
-                    <div class="col-md-2 nopaddingleft">
-                        <dropdown class="" ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
-                    </div>
-                    <div class="col-md-2">
-
+                <div class="col-md-2">
                     <button show-if-allowed="Rules:manageAlarmsRules" type="button" class="btn btn-sm btn-primary" ng-click="toggleAddNewRule()"><span class="fa fa-plus"></span> {{'alarms.add_new_rule' | i18n}}</button>
-                    </div>
-                     <div class="col-md-1 pull-right textAlignRight printAndExport">
-                        <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportRulesAsCSVFile()"></i>
-                        <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>
-                    </div>
-                    <br>
+                </div>
+                <div class="col-md-1 pull-right textAlignRight printAndExport">
+                    <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportRulesAsCSVFile()"></i>
+                    <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>
+                </div>
+            </div>
 
+            <!-- Toggle: ALL, GLOBAL, EVENT -->
+            <div class="row filterRow">
+                <div class="col-md-1 editSelection">
+                    <dropdown class="" ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+                </div>
+
+                <div class="col-md-10">
+                    <div class="">
+                        <div class="btn-group">
+                            <label class="btn btn-default" ng-model="currentSearchResults.typeFilter" btn-radio="'ALL'">
+                                {{'common.all' | i18n}}
+                            </label>
+                            <label class="btn btn-default" ng-model="currentSearchResults.typeFilter" btn-radio="'GLOBAL'">
+                                {{'alarms.rules_type_global' | i18n}}
+                            </label>
+                            <label class="btn btn-default" ng-model="currentSearchResults.typeFilter" btn-radio="'EASVENT'">
+                                {{'alarms.rules_type_event' | i18n}}
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div static-include="partial/alarms/rules/rulesTable/rulesTable.html"></div>

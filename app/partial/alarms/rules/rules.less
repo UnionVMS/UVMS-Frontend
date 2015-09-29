@@ -1,67 +1,55 @@
-.card{
-	.card-header{
-		.btn{
-			float:left;
-		}
-	}
-}
-.rules-table, .holding-table{
-	.table-checkbox{
-		padding-left: 15px;
-		width: 40px;
-	}
-
-	.detailsIcon{
-		color:@primaryColor;
-
-	}
-	.editIcon{
-		color:@primaryColor;
-		margin-right: 15px;
-	}
-	.deleteIcon{
-		color:red;
-	}
-}
-
-.rules-table{
-    td.active{
-        color:@successColor;
+.rulesContainer{
+    .card{
+    	.card-header{
+    		.btn{
+    			float:left;
+    		}
+    	}
     }
-    td.inactive{
-        color:@errorColor;
+
+    .filterRow {
+        border:none;
     }
-    td.availability{
-        i{
-            cursor: default;
+
+    .rules-table{
+        td.active{
+            color:@successColor;
         }
-    }
-    td.notifyByEmail, td.subscription{
-        input, .dropdown{
-            width: 95%;
+        td.inactive{
+            color:@errorColor;
         }
-    }
-    td.actions, th.actions{
-        text-align: left;
-        padding-left: 10px;
-    }
-
-    i{
-        cursor: pointer;
-    }
-
-    table{
-        tbody{
-            tr{background: @searchResultsTableRowColor;}
-            tr:nth-child(4n+1) {background: @searchResultsTableOddRowColor !important;}
-            tr:nth-child(4n+2) {background: @searchResultsTableOddRowColor !important;}
-            tr.basicDataExpanded{
-                border-bottom: none;
+        td.availability{
+            i{
+                cursor: default;
             }
+        }
+        td.notifyByEmail, td.subscription{
+            input, .dropdown{
+                width: 95%;
+            }
+        }
+        td.actions, th.actions{
+            text-align: left;
+            padding-left: 10px;
+        }
 
-            tr.detailData{
-                td.detailsContainer{
-                    border-top:1px solid @searchResultsTableRowBorderColor;
+        i{
+            cursor: pointer;
+        }
+
+        table{
+            tbody{
+                tr{background: @searchResultsTableRowColor;}
+                tr:nth-child(4n+1) {background: @searchResultsTableOddRowColor !important;}
+                tr:nth-child(4n+2) {background: @searchResultsTableOddRowColor !important;}
+                tr.basicDataExpanded{
+                    border-bottom: none;
+                }
+
+                tr.detailData{
+                    td.detailsContainer{
+                        border-top:1px solid @searchResultsTableRowBorderColor;
+                    }
                 }
             }
         }

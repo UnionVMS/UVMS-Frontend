@@ -14,119 +14,46 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
         {text:locale.getString('common.export_selection'), code : 'EXPORT'}
     ];
 
-    $scope.currentSearchResults = new SearchResults('name', false);
+    $scope.currentSearchResults = new SearchResults('name', false, locale.getString('alarms.rules_zero_results_error'));
 
-    //Add mock data
-    var mockRules = [];
-    for (var i = 20; i >= 1; i--) {
-        var mockRule = new Rule();
-        mockRule.id = i;
-        mockRule.name = "Mock Rule " + i;
-        mockRule.description = "Generated rule number " + i;
-
-
-        var random = Math.floor(Math.random() * 4) + 1;
-
-        random = Math.floor(Math.random() * 5) + 1;
-        if(random === 5){
-            mockRule.active = false;
+    //Filter search results on rule type
+    $scope.currentSearchResults.typeFilter = 'ALL';
+    $scope.filterOnType = function(rule) {
+        $log.debug("Filter on type:" +$scope.currentSearchResults.typeFilter);
+        if ($scope.currentSearchResults.typeFilter === "ALL") {
+            return true;
         }
 
-        var userName = userService.getUserName();
-        random = Math.floor(Math.random() * 2) + 1;
-        if(random >= 2){
-            mockRule.createdBy = userName;
-        }
-
-        random = Math.floor(Math.random() * 4) + 1;
-        mockRule.type = "GLOBAL";
-
-        mockRule.availability = "PUBLIC";
-
-        if(random >= 3){
-            mockRule.type = "EVENT";
-            var random2 = Math.floor(Math.random() * 3) + 1;
-            if(random2 === 2){
-                mockRule.notifyByEmail = "john.smith@mail.com";
-            }
-        }
-        if(random === 4){
-            mockRule.availability = "PRIVATE";
-            mockRule.createdBy = userName;
-        }
-
-        var ruleDef1 = new RuleDefinition();
-        ruleDef1.startOperator =  "(";
-        ruleDef1.criteria =  "VESSEL";
-        ruleDef1.subCriteria =  "CFR";
-        ruleDef1.condition =  "EQ";
-        ruleDef1.value =  "SWE111222";
-        ruleDef1.endOperator =  "";
-        ruleDef1.logicBoolOperator =  "OR";
-        ruleDef1.order = 0;
-
-        var ruleDef2 = new RuleDefinition();
-        ruleDef2.startOperator =  "";
-        ruleDef2.criteria =  "VESSEL";
-        ruleDef2.subCriteria =  "CFR";
-        ruleDef2.condition =  "EQ";
-        ruleDef2.value =  "SWE111333";
-        ruleDef2.endOperator =  ")";
-        ruleDef2.logicBoolOperator =  "AND";
-        ruleDef2.order = 1;
-
-        var ruleDef3 = new RuleDefinition();
-        ruleDef3.startOperator =  "";
-        ruleDef3.criteria =  "MOBILE_TERMINAL";
-        ruleDef3.subCriteria =  "MEMBER_NUMBER";
-        ruleDef3.condition =  "NEQ";
-        ruleDef3.value =  "ABC99";
-        ruleDef3.endOperator =  "";
-        ruleDef3.logicBoolOperator =  "NONE";
-        ruleDef3.order = 2;
-
-        mockRule.addDefinition(ruleDef1);
-        mockRule.addDefinition(ruleDef2);
-        mockRule.addDefinition(ruleDef3);
-
-        random = Math.floor(Math.random() * 2) + 1;
-        if(random === 1){
-            var ruleAction0 = new RuleAction();
-            ruleAction0.action = 'MANUAL_POLL';
-            mockRule.addAction(ruleAction0);
-        }
-        if(random === 2){
-            var ruleAction1 = new RuleAction();
-            ruleAction1.action = 'SEND_TO_ENDPOINT';
-            ruleAction1.value = 'ABC123';
-            mockRule.addAction(ruleAction1);
-        }
-
-        mockRules.push(mockRule);
-    }
-    var mockListPage = new SearchResultListPage(mockRules, 1, 34);
-    $scope.currentSearchResults.updateWithNewResults(mockListPage);
-
-
-
-    $scope.searchRules = function() {
-        /*$scope.clearSelection();
-        $scope.currentSearchResults.clearForSearch();
-        searchService.searchMobileTerminals(false)
-                .then(updateSearchResults, onGetSearchResultsError);*/
-        $log.debug("Todo: implement search");
+        return rule.type === $scope.currentSearchResults.typeFilter;
     };
 
+    var init = function(){
+        $scope.searchRules();
+    };
 
-    //Load the next page of the search results
-    $scope.loadNextPage = function(){
-        $log.debug("Todo: implement next page");
-        $scope.currentSearchResults.setLoading(true);
-        //Increase page by 1
-        /*searchService.increasePage();
-        $scope.currentSearchResults.setLoading(true);
-        var response = searchService.searchMobileTerminals(true)
-           .then(updateSearchResults, onGetSearchResultsError);*/
+    //Get list of rules
+    $scope.searchRules = function() {
+        $scope.clearSelection();
+        $scope.currentSearchResults.clearForSearch();
+        ruleRestService.getRulesList()
+                .then(updateSearchResults, onGetSearchResultsError);
+    };
+
+    //Callback when a new Rule has been creatad
+    $scope.createdNewRuleCallback = function(){
+        //Get search results again to include the new rule
+        $scope.searchRules();
+    };
+
+    //Update the search results
+    var updateSearchResults = function(searchResultsListPage){
+        $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
+    };
+
+    //Error during search
+    var onGetSearchResultsError = function(error){
+        $scope.currentSearchResults.setLoading(false);
+        $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
     };
 
     //Remove rule from searchResults
@@ -152,8 +79,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
                     $scope.removeFromSearchResults(item);
                 },
                 function(error) {
-                    $scope.currentSearchResults.errorMessage = locale.getString('alarms.error_removing_rule');
-                    alertService.showErrorMessageWithTimeout($scope.currentSearchResults.errorMessage);
+                    alertService.showErrorMessageWithTimeout(locale.getString('alarms.error_removing_rule'));
                     $log.error("Error removing rule", error);
                 }
             );
@@ -308,17 +234,19 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
             }
             return exportItems.reduce(
                 function(csvObject, item){
-                    var csvRow = [
-                            item.name,
-                            $scope.getTypeLabelForRule(item),
-                            item.lastTriggered,
-                            item.dateCreated,
-                            item.createdBy,
-                            item.subscription,
-                            $scope.getStatusLabelForRule(item),
-                            item.availability
-                    ];
-                    csvObject.push(csvRow);
+                    if($scope.filterOnType(item)){
+                        var csvRow = [
+                                item.name,
+                                $scope.getTypeLabelForRule(item),
+                                item.lastTriggered,
+                                item.dateCreated,
+                                item.createdBy,
+                                item.subscription,
+                                $scope.getStatusLabelForRule(item),
+                                item.availability
+                        ];
+                        csvObject.push(csvRow);
+                    }
                     return csvObject;
                 },[]
             );
@@ -373,5 +301,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
         }
         $scope.editSelection = "";
     };
+
+    init();
 
 });

@@ -1,5 +1,5 @@
 <div class="row">
-	<div search-results-table search="currentSearchResults" load-next-page-function="loadNextPage" class="col-md-12 rules-table">
+	<div search-results-table search="currentSearchResults" class="col-md-12 rules-table">
 		<table class="searchResults">
 			<thead>
 				<tr>
@@ -18,7 +18,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat-start="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:currentSearchResult.filter" ng-init="isExpanded = false" ng-class="isExpanded ? 'basicDataExpanded' : 'basicData'">
+				<tr ng-repeat-start="item in filteredItems = (currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:filterOnType)" ng-init="isExpanded = false" ng-class="isExpanded ? 'basicDataExpanded' : 'basicData'">
     				<td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
     				<td ng-click="isExpanded = !isExpanded">
                         <i ng-show="!isExpanded" class="fa fa-lg fa-plus-circle detailsIcon" title="{{'alarms.rules_table_details' | i18n}}"></i>
@@ -69,5 +69,6 @@
                 </tr>
 			</tbody>
 		</table>
+        <search-result-error-alert ng-show="currentSearchResults.items.length > 0 && filteredItems.length === 0">{{'common.filter_zero_results' | i18n}}</search-result-error-alert>
     </div>
 </div>
