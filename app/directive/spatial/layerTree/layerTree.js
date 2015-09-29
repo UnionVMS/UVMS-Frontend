@@ -6,11 +6,13 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 		//controller: 'LayerpanelCtrl',
 		templateUrl: 'directive/spatial/layerTree/layerTree.html',
 		link: function(scope, element, attrs, fn) {
+			scope.mapService = mapService;
+
 			// check for impossible selections, restrict deselecting radiobutton
 			scope.beforeSelectHandler = function( event, data ) {
 				var selected = scope.$tree.getSelectedNodes(),
 						basemaps = selected.filter( function( node ) {
-							return ( node.data.isBasemap && node.isSelected() );
+							return ( node.data.isBaseLayer && node.isSelected() );
 						});
 
 				if ( scope.lastSelectedBasemapNode === data.node &&
@@ -25,7 +27,9 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				scope.updateMap();
 			};
 
-			// Update map on layer select
+			// store maps layers for updating map.
+			scope.mapLayers = null;
+			// Update map on layer select and initial creation
 			scope.updateMap = function() {
 				var source;
 
@@ -33,21 +37,66 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 					return;
 				}
 
-				source = scope.$tree.toDict;
+				source = scope.$tree.toDict( true ).children;
+				scope.reverse( source );
+				scope.mapLayers = scope.mapService.map.getLayers().getArray();
+				scope.addLayers( source );
+			};
 
-				// compare source with maps layerstack and add / remove layers
-				var foo;
+			scope.reverse = function( array ) {
+				array = array.reverse();
+				$.each( array, function( index, value ) {
+					if ( value.folder ) {
+						scope.reverse( value.children );
+					}
+				});
+			};
 
+			scope.addLayers = function( folder ) {
+				var layersByTitle, layer;
+				$.each( folder, function( index, value ) {
+					if ( value.folder ) {
+						scope.addLayers( value.children );
+						return ( true );// = continue;
+					}
+
+					if ( !value.data ) { return ( true ); }
+
+					layersByTitle = scope.mapLayers.filter( function( layer ){
+			        return layer.get( 'title' ) === value.data.title;
+			    });
+
+					layer = layersByTitle[ 0 ];
+
+					if ( !value.selected ) {
+						if ( layer ) {
+						scope.mapService.map.removeLayer( layer );
+						}
+						return ( true );
+					}
+
+					if ( layer ) { return ( true ); }
+
+					if ( !value.data.mapLayer ) {
+						value.data.mapLayer = scope.mapService.createLayer( value.data );
+					}
+
+					// layer creation failed
+					if ( !value.data.mapLayer ) { return ( true ); }
+
+					scope.mapService.map.addLayer( value.data.mapLayer );
+				});
 			};
 
 			// used to implement selectMode 1 for basemaps
 			scope.lastSelectedBasemapNode = null;
 
+			// apply radiobutton behaviour and set basemap
 			scope.updateBasemap = function( event, data ) {
 				var $span, classStr,
 						layerData = data.node.data;
 
-				if ( !layerData || !layerData.isBasemap ) {
+				if ( !layerData || !layerData.isBaseLayer ) {
 					return;
 				}
 
@@ -72,6 +121,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				}
 			};
 
+			// exchange checkboxes with radiobuttons
 			scope.exchangeCheckboxWithRadio = function ( event, data ) {
 				var $basemaps = jQuery( '.layertree-basemap' );
 
@@ -118,7 +168,21 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 								folder: true,
 								children: [
 									{
-										title: 'EEZ - 1',
+										title: 'EEZ',
+										data: {
+											layerType: 'WMS',
+											title: 'eez',
+											isBaseLayer: false,
+											attributions: [ 'This is a custom layer from UnionVMS' ],
+											url: 'http://localhost:8080/geoserver/wms',
+			                serverType: 'geoserver',
+			                params: {
+			                    'LAYERS': 'uvms:eez',
+			                    'TILED': true,
+			                    'STYLES': 'eez_label_geom'
+			                    //'cql_filter': "sovereign='Portugal' OR sovereign='Poland' OR sovereign='Bulgaria' OR sovereign='Belgium'"
+			                }
+										}
 									},
 									{
 										title: 'FAO - 3',
@@ -154,28 +218,29 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 								selected: true,
 								extraClasses: 'layertree-basemap',
 								data: {
-									isBasemap: true
+									isBaseLayer: true,
+									title: 'osm'
 								}
 							},
 							{
 								title: 'MyGeoserverBackgroundLayer',
 								extraClasses: 'layertree-basemap',
 								data: {
-									isBasemap: true
+									isBaseLayer: true
 								}
 							},
 							{
 								title: 'OpenSeaMap',
 								extraClasses: 'layertree-basemap',
 								data: {
-									isBasemap: true
+									isBaseLayer: true
 								}
 							},
 							{
 								title: 'Graticule',
 								extraClasses: 'layertree-basemap',
 								data: {
-									isBasemap: true
+									isBaseLayer: true
 								}
 							}
 						]
@@ -202,8 +267,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			};
 
 			// Create the tree.
-		  element.fancytree(
-			{
+		  element.fancytree({
 				icons: false,
 				extensions: [ 'dnd', 'glyph', 'wide' ],
 				checkbox: true,
@@ -211,7 +275,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 					focusOnClick: true,
 					dragStart: function( node, data ) {
 						if ( node.isFolder() ||
-									node.data.isBasemap ||
+									node.data.isBaseLayer ||
 									node.data.excludeDnd ) {
 							return false;
 						}
@@ -238,6 +302,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 					dragStop: function( node, data ) {},
 					dragDrop: function( node, data ) {
 						data.otherNode.moveTo( node, data.hitMode );
+						scope.updateMap();
 					}
 				},
 				glyph: glyph_opts,
@@ -251,14 +316,18 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				beforeSelect: scope.beforeSelectHandler,
 				select: scope.selectHandler,
 				createNode: scope.updateBasemap,
+				// fancytree updates the checkboxes on these events
 				expand: scope.exchangeCheckboxWithRadio,
 				init: scope.exchangeCheckboxWithRadio,
 				renderNode: scope.exchangeCheckboxWithRadio,
 				click: scope.exchangeCheckboxWithRadio,
-				activate: scope.exchangeCheckboxWithRadio
+				activate: scope.exchangeCheckboxWithRadio,
+				blurTree: scope.exchangeCheckboxWithRadio
 			});
 
 			scope.$tree = $( element ).fancytree( 'getTree' );
+
+			scope.updateMap();
 
 			locale.ready( 'spatial' ).then( function() {
 		      $( '.fancytree-title' ).each( function( index ) {

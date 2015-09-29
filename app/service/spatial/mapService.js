@@ -144,89 +144,112 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	    ms.controls = [];
 	    ms.interactions = [];
 
-	    var osmLayer = new ol.layer.Tile({
-	        title: 'osm',
-	        isBaseLayer: true,
-            source: new ol.source.OSM()
-        });
+      var attribution = new ol.Attribution({
+          html: 'This is a custom layer from UnionVMS'
+      });
 
-        var attribution = new ol.Attribution({
-            html: 'This is a custom layer from UnionVMS'
-        });
-
-        var eezLayer = new ol.layer.Tile({
-            title: 'eez',
-            isBaseLayer: false,
-            source: new ol.source.TileWMS({
-                attributions: [attribution],
-                url: 'http://localhost:8080/geoserver/wms',
-                serverType: 'geoserver',
-                params: {
-                    'LAYERS': 'uvms:eez',
-                    'TILED': true,
-                    'STYLES': 'eez_label_geom'
-                    //'cql_filter': "sovereign='Portugal' OR sovereign='Poland' OR sovereign='Bulgaria' OR sovereign='Belgium'"
-                }
-            })
-        });
-
-        var rfmoLayer = new ol.layer.Tile({
-            title: 'rfmo',
-            isBaseLayer: false,
-            source: new ol.source.TileWMS({
-                attributions: [attribution],
-                url: 'http://localhost:8080/geoserver/wms',
-                serverType: 'geoserver',
-                params: {
-                    'LAYERS': 'uvms:rfmo',
-                    'TILED': true,
-                    'STYLES': ''
-                }
-            })
-        });
+      var rfmoLayer = new ol.layer.Tile({
+          title: 'rfmo',
+          isBaseLayer: false,
+          source: new ol.source.TileWMS({
+              attributions: [attribution],
+              url: 'http://localhost:8080/geoserver/wms',
+              serverType: 'geoserver',
+              params: {
+                  'LAYERS': 'uvms:rfmo',
+                  'TILED': true,
+                  'STYLES': ''
+              }
+          })
+      });
 
 
-        var view = new ol.View({
-            projection: ms.setProjection(config.map.projection.epsgCode, config.map.projection.units, config.map.projection.global),
-            center: ol.proj.transform([-1.81185, 52.44314], 'EPSG:4326', 'EPSG:3857'),
+      var view = new ol.View({
+          projection: ms.setProjection(config.map.projection.epsgCode, config.map.projection.units, config.map.projection.global),
+          center: ol.proj.transform([-1.81185, 52.44314], 'EPSG:4326', 'EPSG:3857'),
 //            extent: [-2734750,3305132,1347335,5935055],
-            zoom: 3,
-            maxZoom: 19,
+          zoom: 3,
+          maxZoom: 19,
 //            minZoom: 3,
-            enableRotation: false
-        });
+          enableRotation: false
+      });
 
-        //Get all controls and interactions that will be added to the map
-        var controlsToMap = ms.setControls(config.map.controls);
+      //Get all controls and interactions that will be added to the map
+      var controlsToMap = ms.setControls(config.map.controls);
 
-        var map = new ol.Map({
-            target: 'map',
-            controls: controlsToMap[0],
-            interactions: controlsToMap[1],
-            logo: false
-        });
+      var map = new ol.Map({
+          target: 'map',
+          controls: controlsToMap[0],
+          interactions: controlsToMap[1],
+          logo: false
+      });
 
-        map.beforeRender(function(map){
-            map.updateSize();
-        });
+      map.beforeRender(function(map){
+          map.updateSize();
+      });
 
-        map.on('moveend', function(e){
-           var controls = e.map.getControls();
-           controls.forEach(function(control){
-               if (control instanceof ol.control.HistoryControl){
-                   control.updateHistory();
-               }
-           }, controls);
-        });
+      map.on('moveend', function(e){
+         var controls = e.map.getControls();
+         controls.forEach(function(control){
+             if (control instanceof ol.control.HistoryControl){
+                 control.updateHistory();
+             }
+         }, controls);
+      });
 
-        map.addLayer(osmLayer);
-        map.addLayer(eezLayer);
+      //map.addLayer(osmLayer);
+      //map.addLayer(eezLayer);
 //        map.addLayer(rfmoLayer);
 //        map.addLayer(ms.addOpenSeaMap());
-        map.setView(view);
+      map.setView(view);
 
-        ms.map = map;
+      ms.map = map;
 	};
+
+  // create layer, returns ol.layer.* or undefined
+  ms.createLayer = function( config ){
+    var layer;
+
+    switch (config.title) {
+      case 'osm':
+        layer = ms.createOsm( config );
+        break;
+      case 'eez':
+        layer = ms.createWms( config );
+        break;
+      default:
+    }
+
+    return ( layer );
+  };
+
+  ms.createOsm = function( config ){
+    var layer = new ol.layer.Tile({
+      title: config.title,
+      isBaseLayer: config.isBaseLayer,
+      source: new ol.source.OSM()
+    });
+
+    return ( layer );
+  };
+
+  // create WMS tile layer
+  ms.createWms = function( config ){
+    var source = new ol.source.TileWMS({
+      attributions: config.attributions,
+      url: config.url,
+      serverType: config.serverType,
+      params: config.params
+    });
+
+    var layer = new ol.layer.Tile({
+      title: config.title,
+      isBaseLayer: config.isBaseLayer,
+      source: source
+    });
+
+    return ( layer );
+  };
 
 	//Clear map before running a new report
 	ms.clearMap = function(config){
@@ -583,12 +606,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	};
 
 	//Recalculate map size
-    ms.updateMapSize = function(){
-      if (!ms.map) {
-        return;
-      }
-      ms.map.updateSize();
-    };
+  ms.updateMapSize = function(){
+    if (!ms.map) {
+      return;
+    }
+    ms.map.updateSize();
+  };
 
 	return ms;
 });
