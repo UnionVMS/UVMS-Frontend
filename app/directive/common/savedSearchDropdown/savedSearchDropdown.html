@@ -9,7 +9,7 @@
                 <a role="menuitem" tabindex="-1">
                 	<span role="menuitem" tabindex="-1">{{getItemLabel(item)}}</span>	
                 </a>
-                <span class="fa fa-times" ng-click="removeSavedSearch(item); $event.stopPropagation();"></span>
+                <span ng-if="enableDelete" class="fa fa-times" ng-click="deleteSavedSearch(item); $event.stopPropagation();"></span>
             </li>
             <li ng-show="items.length === 0" class="disabled"><a>{{emptyPlaceholder}}</a></li>
         </ul>

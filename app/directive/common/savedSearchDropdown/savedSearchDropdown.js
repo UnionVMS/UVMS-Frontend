@@ -6,13 +6,13 @@ angular.module('unionvmsWeb').directive('savedSearchDropdown', function() {
         require: "^ngModel",
         scope: {
             type : "@",
+            enableDelete : "@",
             ngModel:'=',
             callback : '=',
             ngDisabled : '=',
         },
         templateUrl: 'directive/common/savedSearchDropdown/savedSearchDropdown.html',
         link: function(scope, element, attrs, fn) {
-            
             //Get the label for an item
             //Default item variable "text" is used if no title attr is set
             scope.getItemLabel = function(item){
@@ -23,7 +23,7 @@ angular.module('unionvmsWeb').directive('savedSearchDropdown', function() {
             //Default item variable "code" is used if no data attr is set
             var getItemCode = function(item){
                     return item.id;
-            };            
+            };
 
             //Set the label of the dropdown based on the current value of ngModel
             scope.setLabel = function() {
@@ -72,7 +72,7 @@ angular.module('unionvmsWeb').directive('savedSearchDropdown', function() {
 });
 
 angular.module('unionvmsWeb')
-    .controller('savedSearchDropdownCtrl', function($scope, locale, savedSearchService, alertService){
+    .controller('savedSearchDropdownCtrl', function($scope, locale, savedSearchService, alertService, confirmationModal){
 
             //Get/set items and functions depending on type
             switch($scope.type) {
@@ -90,12 +90,12 @@ angular.module('unionvmsWeb')
                         if(newVal !== oldVal){
                             $scope.items = newVal;
                         }
-                    });                    
+                    });
                     break;
                 case "MOVEMENT":
                     $scope.items = savedSearchService.getMovementSearches();
                     $scope.emptyPlaceholder = locale.getString('movement.advanced_search_placeholder_saved_searches_empty_placeholder');
-                    
+
                     //Delete a saved search
                     $scope.removeSavedSearch = function(item){
                         savedSearchService.deleteMovementSearch(item).then(onDeleteSuccess, onDeleteError);
@@ -106,11 +106,20 @@ angular.module('unionvmsWeb')
                         if(newVal !== oldVal){
                             $scope.items = newVal;
                         }
-                    });        
+                    });
                     break;
                 default:
                     console.error("Type is missing for saved search dropdown.");
             }
+
+            $scope.deleteSavedSearch = function(item){
+                var options = {
+                    textLabel : locale.getString("common.saved_search_delete_confirm_text")
+                };
+                confirmationModal.open(function(){
+                    $scope.removeSavedSearch(item);
+                }, options);
+            };
 
             //Success removing saved search
             var onDeleteSuccess = function(){
