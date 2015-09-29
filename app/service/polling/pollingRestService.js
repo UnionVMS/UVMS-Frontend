@@ -35,7 +35,7 @@ angular.module('unionvmsWeb')
             }
         };
     })
-    .service('pollingRestService',function($q, pollingRestFactory, Poll, PollChannel, SearchResultListPage, vesselRestService, GetListRequest){
+    .service('pollingRestService',function($q, pollingRestFactory, Poll, PollingLog, PollChannel, SearchResultListPage, vesselRestService, GetListRequest){
 
         var setProgramPollStatusSuccess = function(response, deferred){
             if(response.code !== 200){
@@ -167,18 +167,21 @@ angular.module('unionvmsWeb')
                             deferred.reject("Invalid response status");
                             return;
                         }
-                        var polls = [],
+
+                        var pollingLogs = [],
                             searchResultListPage;
 
                         //Create a ListPage object from the response
-                        if(angular.isArray(response.data.poll)) {
-                            for (var i = 0; i < response.data.poll.length; i++) {
-                                polls.push(Poll.fromAttributeList(response.data[i].value));
+                        if(angular.isArray(response.data.pollableChannels)) {
+                            for (var i = 0; i < response.data.pollableChannels.length; i++) {
+                                var pollingLog = new PollingLog();
+                                pollingLog.poll = Poll.fromAttributeList(response.data.pollableChannels[i].poll.value);
+                                pollingLogs.push(pollingLog);
                             }
                         }
                         var currentPage = response.data.currentPage;
                         var totalNumberOfPages = response.data.totalNumberOfPages;
-                        searchResultListPage = new SearchResultListPage(polls, currentPage, totalNumberOfPages);
+                        searchResultListPage = new SearchResultListPage(pollingLogs, currentPage, totalNumberOfPages);
 
                         deferred.resolve(searchResultListPage);
                     },

@@ -13,7 +13,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll
     $scope.dateSearchItems = [];
     $scope.dateSearchItems.push({"text":"Today", "code":DATE_TODAY});
     $scope.dateSearchItems.push({"text":"This week", "code":"this_week"});
-    $scope.dateSearchItems.push({"text":"Last month", "code":"last_month"});    
+    $scope.dateSearchItems.push({"text":"Last month", "code":"last_month"});
     $scope.dateSearchItems.push({"text":"Custom", "code":DATE_CUSTOM});
 
     $scope.pollTypes = [];
@@ -45,7 +45,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll
 
     $scope.print = function(){
         console.log("Print...");
-        window.print();        
+        window.print();
     };
 
     $scope.exportAsFile = function(){
@@ -65,7 +65,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll
         if (typeof newVal !== 'undefined') {
             $scope.advancedSearchObject.DATE = DATE_CUSTOM;
         }
-    });    
+    });
     //Watch for changes to the DATE DROPDOWN
     $scope.$watch(function () { return $scope.advancedSearchObject.DATE;}, function (newVal, oldVal) {
         if (typeof newVal !== 'undefined' && newVal !== DATE_CUSTOM) {
@@ -73,7 +73,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll
             $scope.advancedSearchObject.START_DATE = undefined;
             $scope.advancedSearchObject.END_DATE = undefined;
         }
-    });    
+    });
 
     //Get list of polls matching the current search criterias
     $scope.searchPolls = function(){
@@ -86,14 +86,14 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll
         searchService.resetSearchCriterias();
         searchService.setDynamic(true);
         searchService.setSearchCriteriasToAdvancedSearch();
-        searchService.searchPolls(false)
+        searchService.searchPolls()
                 .then(updateSearchResults, onGetSearchResultsError);
-    };    
+    };
 
     //Update the search results
     var updateSearchResults = function(searchResultsListPage){
         $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
-    }; 
+    };
 
     //Load the next page of the search results
     $scope.loadNextPage = function(){
@@ -117,7 +117,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
         searchService.reset();
-    });        
+    });
 
     init();
 
