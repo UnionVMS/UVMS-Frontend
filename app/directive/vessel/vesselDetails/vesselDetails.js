@@ -20,10 +20,14 @@ angular.module('unionvmsWeb')
 
 angular.module('unionvmsWeb')
     .controller('vesselDetailsCtrl', function($scope, locale, configurationService){
-        
+
         $scope.vesselFlagState = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL');
         $scope.vesselLicensTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','LICENSE_TYPE'),'LICENSE_TYPE','VESSEL');
-        $scope.vesselCarrierType = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','CARRIER_TYPE'), 'CARRIER_TYPE','VESSEL');
+
+        //TODO:When backend supports geartypes use this below instead of hardcoded items.
+        //$scope.vesselGearTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','GEAR_TYPE'), 'GEAR_TYPE','VESSEL');
+        $scope.vesselGearTypes = [{'text':'Bomtrålar','code':'TBB'},{'text':'Partrålare','code':'PTB'},{'text':'Handskrapor','code':'DRH'},{'text':'Dörjlinor','code':'LTL'}];
+
         $scope.vesseloveralltypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','LENGTH'),'LENGTH','VESSEL');
         $scope.vesselUnitOfMessures = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','TONNAGE'), 'TONNAGE','VESSEL');
 
@@ -46,7 +50,7 @@ angular.module('unionvmsWeb')
             if(item.code === false){
                 $scope.vessel.ircs = "";
             }
-        };        
+        };
 
         //Reset licenseType on hasIrcs select
         $scope.onHasLicenseSelect = function(item){
