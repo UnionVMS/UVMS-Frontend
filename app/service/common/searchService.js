@@ -94,9 +94,10 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, GetList
             //Get vessels for all movements in page
             var vesselRequest = new GetListRequest(1, page.getNumberOfItems(), true);
             $.each(page.item, function(index, movement) {
-                vesselRequest.addSearchCriteria("CONNECT_ID", movement.connectId);
+                vesselRequest.addSearchCriteria("GUID", movement.connectId);
             });
-            vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vesselPage){
+            vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vessels){
+                var vesselPage = new VesselListPage(vessels, 1, 1);
                 //Update movement page by connecting each movement to a vessel
                 $.each(page.items, function(index, movement) {
                     var vessel = vesselPage.getVesselByGuid[movement.connectId];
