@@ -12,7 +12,7 @@
 	</div>
 	<div class="row reportFormContainer">
 		<div class="reportForm col-md-12">
-			<form name="reportForm" novalidate>
+			<form name="reportForm" id="reportForm" novalidate>
 				<div class="row">
 					<div class="form-group col-md-4" ng-class="{'has-error': (reportForm.reportName.$dirty || submitingReport === true) && reportForm.reportName.$invalid}">
 						<label for="reportName">{{'spatial.reports_form_report_name' | i18n }}</label>

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $anchorScroll, reportMsgService, locale, Report, reportRestService, configurationService, movementRestService){
+angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, reportMsgService, locale, Report, reportRestService, configurationService, movementRestService){
     //Report form mode
     $scope.formMode = 'CREATE';
     
@@ -59,8 +59,14 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $anch
     
     $scope.resetForm = function(){
         $scope.init();
-        //$scope.vmsFilters = [];
         $scope.reportForm.$setPristine();
+        $scope.clearVmsErrors();
+    };
+    
+    $scope.clearVmsErrors = function(){
+        for (var attr in $scope.reportForm.$error){
+            $scope.reportForm.$setValidity(attr, true);
+        }
     };
     
     $scope.validateVesselsSelection = function(){
@@ -71,24 +77,84 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $anch
         }
     };
     
+    $scope.validateRanges = function(){
+        var min, max, minD, maxD;
+        var status = true;
+        
+        //Validate positions speed range
+        if ($scope.report.vmsFilters.positions.active === true && angular.isDefined($scope.report.vmsFilters.positions.def)){
+            min = $scope.report.vmsFilters.positions.def.movMinSpeed;
+            max = $scope.report.vmsFilters.positions.def.movMaxSpeed;
+            if (angular.isDefined(min) && angular.isDefined(max) && min !== null && max != null && min >= max){
+                $scope.reportForm.$setValidity('movMxSpError', false);
+            } else {
+                $scope.reportForm.$setValidity('movMxSpError', true);
+            }
+        }
+        
+        //Validate segments speed and duration ranges
+        if ($scope.report.vmsFilters.segments.active === true && angular.isDefined($scope.report.vmsFilters.segments.def)){
+            min = $scope.report.vmsFilters.segments.def.segMinSpeed;
+            max = $scope.report.vmsFilters.segments.def.segMaxSpeed;
+            
+            minD = $scope.report.vmsFilters.segments.def.segMinDuration;
+            maxD = $scope.report.vmsFilters.segments.def.segMaxDuration;
+            
+            if (angular.isDefined(min) && angular.isDefined(max) && min !== null && max != null && min >= max){
+                $scope.reportForm.$setValidity('segMxSpError', false);
+            } else {
+                $scope.reportForm.$setValidity('segMxSpError', true);
+            }
+            
+            if (angular.isDefined(minD) && angular.isDefined(maxD) && minD !== null && maxD != null && minD >= maxD){
+                $scope.reportForm.$setValidity('segMxDurError', false);
+            } else {
+                $scope.reportForm.$setValidity('segMxDurError', true);
+            }
+        }
+        
+        //Validate tracks time at sea and duration ranges
+        if ($scope.report.vmsFilters.tracks.active === true && angular.isDefined($scope.report.vmsFilters.tracks.def)){
+            min = $scope.report.vmsFilters.tracks.def.trkMinTime;
+            max = $scope.report.vmsFilters.tracks.def.trkMaxTime;
+            
+            minD = $scope.report.vmsFilters.tracks.def.trkMinDuration;
+            maxD = $scope.report.vmsFilters.tracks.def.trkMaxDuration;
+            
+            if (angular.isDefined(min) && angular.isDefined(max) && min !== null && max != null && min >= max){
+                $scope.reportForm.$setValidity('trkMxTimeError', false);
+            } else {
+                $scope.reportForm.$setValidity('trkMxTimeError', true);
+            }
+            
+            if (angular.isDefined(minD) && angular.isDefined(maxD) && minD !== null && maxD != null && minD >= maxD){
+                $scope.reportForm.$setValidity('trkMxDurError', false);
+            } else {
+                $scope.reportForm.$setValidity('trkMxDurError', true);
+            }
+        }
+    };
+    
     $scope.saveReport = function(){
         $scope.submitingReport = true;
         //$scope.validateVesselsSelection();
+        $scope.validateRanges();
         if ($scope.reportForm.$valid && $scope.vesselsSelectionIsValid){
-            //console.log($scope.report.toJson());
+//            console.log($scope.report.toJson());
             if ($scope.formMode === 'CREATE'){
                 reportRestService.createReport($scope.report).then(createReportSuccess, createReportError);
             } else if ($scope.formMode === 'EDIT'){
                 reportRestService.updateReport($scope.report).then(updateReportSuccess, updateReportError);
             }
         } else {
-            $anchorScroll();
-//            if (!$scope.reportForm.$valid){
-//                $anchorScroll('#report-form-top');
-//            } else {
-//                $anchorScroll('#vessel-current-selection');
-//            }
-            console.log('there are errors in the form');
+            var invalidElm = angular.element('#reportForm')[0].querySelector('.ng-invalid');
+            var errorElm = angular.element('#reportForm')[0].querySelector('.has-error');
+            if (invalidElm){
+                invalidElm.scrollIntoView();
+            } else if (invalidElm === null && errorElm){
+                errorElm.scrollIntoView();
+            }
+//            console.log('there are errors in the form');
         }
     };
     
