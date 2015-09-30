@@ -21,49 +21,23 @@ angular.module('unionvmsWeb')
 angular.module('unionvmsWeb')
     .controller('vesselDetailsCtrl', function($scope, locale, configurationService){
 
-        $scope.vesselFlagState = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL');
-        $scope.vesselLicensTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','LICENSE_TYPE'),'LICENSE_TYPE','VESSEL');
+        //Dropdown values
+        $scope.vesselFlagState = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
+        $scope.vesselLicensTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','LICENSE_TYPE'),'LICENSE_TYPE','VESSEL', true);
+        $scope.vesselGearTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','GEAR_TYPE'), 'GEAR_TYPE','VESSEL', true);
+        $scope.vesselLengthTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','UNIT_LENGTH'),'LENGTH','VESSEL', true);
+        $scope.vesselUnitOfMessures = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','UNIT_TONNAGE'), 'TONNAGE','VESSEL', true);
 
-        //TODO:When backend supports geartypes use this below instead of hardcoded items.
-        //$scope.vesselGearTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','GEAR_TYPE'), 'GEAR_TYPE','VESSEL');
-        $scope.vesselGearTypes = [{'text':'Bomtrålar','code':'TBB'},{'text':'Partrålare','code':'PTB'},{'text':'Handskrapor','code':'DRH'},{'text':'Dörjlinor','code':'LTL'}];
-
-        $scope.vesseloveralltypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','LENGTH'),'LENGTH','VESSEL');
-        $scope.vesselUnitOfMessures = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','TONNAGE'), 'TONNAGE','VESSEL');
-
-        //TODO: FIX support for strings instead of true/false
-        //$scope.vesselHasIrcTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','HAS_IRCS'),'HAS_IRCS','VESSEL');
-        //$scope.vesselHasLicenseTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','HAS_LICENSE'),'HAS_LICENSE','VESSEL');
-        $scope.vesselHasIrcTypes =[{'text':'Yes','code':true},{'text':'No','code':false}];
-        $scope.vesselHasLicenseTypes =[{'text':'Yes','code':true},{'text':'No','code':false}];
-        $scope.vesselEffectTypes =[{'text':'hp','code':'HP'},{'text':'kW','code':'KW'}];
-
-        //TODO: This values does not exists in the vesselObject.
-        //$scope.vesselUnitOfMessure = "";
-        //$scope.vesselEffect = "";
-        //$scope.searchFlagState = "";
-        //$scope.lenght = "";
-        //$scope.licensetype="";
-
-        //Reset IRCS on hasIrcs select
-        $scope.onHasIrcsSelect = function(item){
-            if(item.code === false){
-                $scope.vessel.ircs = "";
-            }
-        };
-
-        //Reset licenseType on hasIrcs select
-        $scope.onHasLicenseSelect = function(item){
-            if(item.code === false){
-                $scope.vessel.licenseType = undefined;
-            }
-        };
-
-        //Validation messages
+        //Validation
         $scope.cfrValidationMessages = {
             'pattern' : locale.getString('vessel.vessel_details_cfr_pattern_validation_message')
         };
-
-
+        $scope.mmsiValidationMessages = {
+            'pattern' : locale.getString('vessel.vessel_details_mmsi_pattern_validation_message')
+        };
+        $scope.maxTwoDecimalsRegexp = new RegExp(/^[0-9]+(\.[0-9][0-9]?)?$/);
+        $scope.maxTwoDecimalsValidationMessages = {
+            'pattern' : locale.getString('vessel.vessel_details_max_decimals_pattern_validation_message', "2")
+        };
     }
 );

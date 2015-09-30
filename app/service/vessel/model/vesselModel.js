@@ -1,44 +1,28 @@
 angular.module('unionvmsWeb')
 .factory('Vessel', function(EventHistory) {
 
-var SOURCE_LOCAL = "LOCAL";
+    var SOURCE_INTERNAL = "INTERNAL";
 
     function Vessel(){
         this.active = true;
-        this.source = SOURCE_LOCAL;
-        this.hasIrcs = true;
-        this.hasLicense = false;
+        this.source = SOURCE_INTERNAL;
         this.unitOfMessaure = "LONDON";
-        this.length = "LOA";
-        this.effect ="KW";
+        this.lengthType = "LOA";
+        this.contact = {
+            name : undefined,
+            number : undefined,
+            email : undefined,
+        };
+        this.producer = {
+            code : undefined,
+            name : undefined,
+        };
+        this.notes = '';
     }
 
     Vessel.fromJson = function(data){
         var vessel = new Vessel();
-        vessel.active = data.active;
-        vessel.billing = data.billing;
-        vessel.cfr = data.cfr;
-        vessel.countryCode = data.countryCode;
-        if (data.eventHistory) {
-            vessel.eventHistory = EventHistory.fromDTO(data.eventHistory);
-        }
 
-        vessel.externalMarking = data.externalMarking;
-        vessel.grossTonnage = data.grossTonnage;
-        vessel.hasIrcs = data.hasIrcs;
-        vessel.hasLicense = data.hasLicense;
-        vessel.homePort = data.homePort;
-        vessel.imo = data.imo;
-        vessel.ircs = data.ircs;
-        vessel.lengthBetweenPerpendiculars = data.lengthBetweenPerpendiculars;
-        vessel.lengthOverAll = data.lengthOverAll;
-        vessel.mmsiNo = data.mmsiNo;
-        vessel.name = data.name;
-        vessel.otherGrossTonnage = data.otherGrossTonnage;
-        vessel.powerAux = data.powerAux;
-        vessel.powerMain = data.powerMain;
-        vessel.safetyGrossTonnage = data.safetyGrossTonnage;
-        vessel.source = data.source;
         if(angular.isDefined(data.vesselId)){
             vessel.vesselId = {
                 guid : data.vesselId.guid,
@@ -46,10 +30,48 @@ var SOURCE_LOCAL = "LOCAL";
                 value : data.vesselId.value
             };
         }
-        vessel.vesselType = data.vesselType;
-        vessel.email = data.email;
-        vessel.contactName = data.contactName;
-        vessel.contactNumber = data.contactNumber;
+        vessel.source = data.source;
+        vessel.active = data.active;
+        vessel.name = data.name;
+        vessel.countryCode = data.countryCode;
+        vessel.cfr = data.cfr;
+        vessel.mmsiNo = data.mmsiNo;
+        vessel.imo = data.imo;
+        vessel.externalMarking = data.externalMarking;
+        vessel.homePort = data.homePort;
+
+        vessel.ircs = data.ircs;
+        vessel.licenseType = data.licenseType;
+
+        vessel.gearType = data.gearType;
+        //Set length value and type
+        if(angular.isDefined(data.lengthBetweenPerpendiculars) && data.lengthBetweenPerpendiculars != null){
+            vessel.lengthValue = data.lengthBetweenPerpendiculars;
+            vessel.lengthType = "LBP";
+        }else{
+            vessel.lengthValue = data.lengthOverAll;
+            vessel.lengthType = "LOA";
+        }
+        vessel.powerMain = data.powerMain;
+        vessel.grossTonnage = data.grossTonnage;
+
+        vessel.notes = data.notes;
+
+        if(angular.isDefined(data.contact)){
+            vessel.contact.name = data.contact.name;
+            vessel.contact.number = data.contact.number;
+            vessel.contact.email = data.contact.email;
+        }
+
+        if(angular.isDefined(data.producer)){
+            vessel.producer.code = data.producer.code;
+            vessel.producer.name = data.producer.name;
+        }
+
+        if (data.eventHistory) {
+            vessel.eventHistory = EventHistory.fromDTO(data.eventHistory);
+        }
+
         return vessel;
     };
 
@@ -58,31 +80,38 @@ var SOURCE_LOCAL = "LOCAL";
     };
 
     Vessel.prototype.DTO = function(){
+        //Only set one of the lengths
+        var lengthOverall, lengthBetweenPerpendiculars;
+        if(this.lengthValue > 0){
+            if(this.lengthType === 'LOA'){
+                lengthOverall = this.lengthValue;
+            }else if(this.lengthType === 'LBP'){
+                lengthBetweenPerpendiculars = this.lengthValue;
+            }
+        }
+
         var dto = {
             active : this.active,
-            billing : this.billing,
+            source : this.source,
             cfr : this.cfr,
-            countryCode : this.countryCode,
-            externalMarking : this.externalMarking,
-            grossTonnage : this.grossTonnage,
-            hasIrcs : this.hasIrcs,
-            hasLicense : this.hasLicense,
-            homePort : this.homePort,
-            imo : this.imo,
-            ircs : this.ircs,
-            lengthBetweenPerpendiculars : this.lengthBetweenPerpendiculars,
-            lengthOverAll : this.lengthOverAll,
-            mmsiNo : this.mmsiNo,
             name : this.name,
-            otherGrossTonnage : this.otherGrossTonnage,
-            powerAux : this.powerAux,
+            countryCode : this.countryCode,
+            imo : this.imo,
+            mmsiNo : this.mmsiNo,
+            externalMarking : this.externalMarking,
+            hasIrcs : this.hasIrcs(),
+            ircs : this.ircs,
+            hasLicense : this.hasLicense(),
+            licenseType : this.licenseType,
+            homePort : this.homePort,
+            lengthOverAll : lengthOverall,
+            lengthBetweenPerpendiculars : lengthBetweenPerpendiculars,
             powerMain : this.powerMain,
-            safetyGrossTonnage : this.safetyGrossTonnage,
-            source : this.source,                
-            vesselType : this.vesselType,
-            email : this.email,
-            contactName : this.contactName,
-            contactNumber : this.contactNumber,
+            gearType : this.gearType,
+            grossTonnage : this.grossTonnage,
+            contact : this.contact,
+            producer : this.producer,
+            notes : this.notes,
         };
 
         if(angular.isDefined(this.vesselId)){
@@ -91,14 +120,13 @@ var SOURCE_LOCAL = "LOCAL";
                 value : this.vesselId.value,
             };
         }
-        
+
         return dto;
     };
 
     Vessel.prototype.copy = function() {
         var copy = new Vessel();
         copy.active = this.active;
-        copy.billing = this.billing;
         copy.cfr = this.cfr;
         copy.countryCode = this.countryCode;
         if(this.eventHistory){
@@ -106,19 +134,17 @@ var SOURCE_LOCAL = "LOCAL";
         }
         copy.externalMarking = this.externalMarking;
         copy.grossTonnage = this.grossTonnage;
-        copy.hasIrcs = this.hasIrcs;
-        copy.hasLicense = this.hasLicense;
+        copy.ircs = this.ircs;
+        copy.licenseType = this.licenseType;
         copy.homePort = this.homePort;
         copy.imo = this.imo;
-        copy.ircs = this.ircs;
-        copy.lengthBetweenPerpendiculars = this.lengthBetweenPerpendiculars;
-        copy.lengthOverAll = this.lengthOverAll;
+        copy.lengthValue = this.lengthValue;
+        copy.lengthType = this.lengthType;
+        //copy.lengthOverAll = this.lengthOverAll;
+        //copy.lengthBetweenPerpendiculars = this.lengthBetweenPerpendiculars;
         copy.mmsiNo = this.mmsiNo;
         copy.name = this.name;
-        copy.otherGrossTonnage = this.otherGrossTonnage;
-        copy.powerAux = this.powerAux;
         copy.powerMain = this.powerMain;
-        copy.safetyGrossTonnage = this.safetyGrossTonnage;
         copy.source = this.source;
         if(this.vesselId){
             copy.vesselId = {
@@ -127,7 +153,21 @@ var SOURCE_LOCAL = "LOCAL";
                 value : this.vesselId.value
             };
         }
-        copy.vesselType = this.vesselType;        
+        if(this.contact){
+            copy.contact = {
+                name : this.contact.name,
+                email : this.contact.email,
+                number : this.contact.number
+            };
+        }
+        if(this.producer){
+            copy.producer = {
+                code : this.producer.code,
+                name : this.producer.name
+            };
+        }
+        copy.gearType = this.gearType;
+        copy.notes = this.notes;
         return copy;
     };
 
@@ -140,13 +180,24 @@ var SOURCE_LOCAL = "LOCAL";
     //Check if the vessel is equal another vessel
     //Equal means same guid
     Vessel.prototype.equals = function(item) {
-        return this.vesselId.guid === item.vesselId.guid;
+        return this.getGuid() === item.getGuid();
     };
 
     Vessel.prototype.isLocalSource = function() {
-        return this.source.toUpperCase() === SOURCE_LOCAL;
+        return this.source.toUpperCase() === SOURCE_INTERNAL;
     };
 
+    Vessel.prototype.hasIrcs = function() {
+        if(typeof this.ircs === 'string' && this.ircs.trim().length > 0){
+            return 'Y';
+        }else{
+            return 'N';
+        }
+    };
+
+    Vessel.prototype.hasLicense = function() {
+        return typeof this.licenseType === 'string' && this.licenseType.trim().length > 0;
+    };
 
     return Vessel;
 });

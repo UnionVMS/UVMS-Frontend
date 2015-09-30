@@ -71,7 +71,7 @@ angular.module('unionvmsWeb')
                         for (var i = 0; i < scope.items.length; i++){
                             if(getItemCode(scope.items[i]) === scope.ngModel){
                                 scope.currentItemLabel = scope.getItemLabel(scope.items[i]);
-                            } 
+                            }
                         }
                     }
                 }
@@ -109,10 +109,9 @@ angular.module('unionvmsWeb')
             scope.addDefaultValueToDropDown = function(){
                 if (scope.items !== undefined && attrs.initialtext !== ""){
                     var initialValue = {};
-                    initialValue.code = "";
+                    initialValue.code = undefined;
                     initialValue.text = attrs.initialtext;
                     scope.initialValue = initialValue;
-                    //scope.items.unshift(initialValue);
                 }
             };
 
@@ -121,7 +120,7 @@ angular.module('unionvmsWeb')
             //Create a list item with the initaltext?
             if(scope.initialitem){
                 scope.addDefaultValueToDropDown();
-            }        
+            }
 		}
 	};
 });

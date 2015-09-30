@@ -6,15 +6,15 @@ angular.module('unionvmsWeb')
 
         var init = function(){
             //Setup dropdowns
-            $scope.flagStates = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL');  
-            $scope.licenseTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'LICENSE_TYPE'), 'LICENSE_TYPE','VESSEL');
-            $scope.vesselTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'VESSEL_TYPE'), 'CARRIER_TYPE','VESSEL');
-            $scope.types = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'ASSET_TYPE'),'ASSET_TYPE','VESSEL');
-            
+            $scope.flagStates = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
+            $scope.licenseTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'LICENSE_TYPE'), 'LICENSE_TYPE','VESSEL', true);
+            $scope.gearTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'GEAR_TYPE'), 'GEAR_TYPE','VESSEL', true);
+            $scope.types = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'ASSET_TYPE'),'ASSET_TYPE','VESSEL', true);
+
             //TODO: Need this from backend?
-            $scope.activeTypes = [{'text':'Yes','code':'true'},{'text':'No','code':'false'}];                        
+            $scope.activeTypes = [{'text':'Yes','code':'true'},{'text':'No','code':'false'}];
         };
-       
+
         //Reset all search fields
         var resetSearchFields = function(){
             $scope.freeText = "";
@@ -60,7 +60,7 @@ angular.module('unionvmsWeb')
             $scope.searchfunc();
         };
 
-        $scope.performSavedSearch = function(savedSearchGroup){  
+        $scope.performSavedSearch = function(savedSearchGroup){
             //Check if advanced search should be shown or hidden
             var toggleAdvancedSearch = true;
             $.each(savedSearchGroup.searchFields, function(key, searchField){
@@ -71,13 +71,13 @@ angular.module('unionvmsWeb')
             });
 
             //Show or hide advanced search
-            $scope.advancedSearch = toggleAdvancedSearch;            
+            $scope.advancedSearch = toggleAdvancedSearch;
             resetSearchFields();
             $scope.performSavedGroupSearch(savedSearchGroup, true);
         };
 
         $scope.openSaveGroupModal = function(){
-            savedSearchService.openSaveSearchModal("VESSEL", true);        
+            savedSearchService.openSaveSearchModal("VESSEL", true);
         };
 
         init();

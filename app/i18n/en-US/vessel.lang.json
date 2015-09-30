@@ -23,7 +23,7 @@
     "add_new_alert_message_on_form_validation_error" : "The data in the form is not valid. Please fix the errors and try to save again.",
     "advanced_search_placeholder_flag_state":"Flag State",
     "advanced_search_placeholder_license_type":"License type",
-    "advanced_search_placeholder_type":"Type",
+    "advanced_search_placeholder_gear_type":"Gear type",
     "advanced_search_placeholder_external_number":"Ext. No",
     "advanced_search_placeholder_name" : "Name",
     "advanced_search_placeholder_signal_ircs" : "IRCS",
@@ -41,6 +41,9 @@
     "close": "Close",
     "connected_mobile_terminals" : "Connected mobile terminals",
     "connected_mobile_terminals_error" : "Failed to get connected mobile terminals from the server.",
+    "contact_name" : "Contact name",
+    "contact_email" : "Contact email",
+    "contact_number" : "Contact number",
     "create_new_vessel": "Create new asset",
     "event_code":"Event code",
     "event_date": "Event date",
@@ -118,6 +121,8 @@
     "vessel_details_gear_type": "Gear type",
     "vessel_details_type": "Main gear type",
     "vessel_details_cfr_pattern_validation_message": "Must be 3 letters followed by 9 digits.",
+    "vessel_details_mmsi_pattern_validation_message": "Must be 9 digits.",
+    "vessel_details_max_decimals_pattern_validation_message": "There can be max {1} decimals.",
     "vessel_details_email": "Email",
     "vessel_details_contact_name": "Contact name",
     "vessel_details_contact_number": "Contact number",
@@ -125,4 +130,3 @@
     "zero_connected_mobile_terminals" : "The are no mobile terminals connected to this vessel.",
     "view_vessel_on_failed_to_load_error" : "Failed to load the vessel  details."
 }
-

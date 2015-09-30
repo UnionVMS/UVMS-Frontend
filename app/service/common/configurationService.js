@@ -48,7 +48,7 @@
                 return deferred.promise;
             }
 
-            //Load all configs  
+            //Load all configs
             $.each(configsToLoad, function(index, configName){
                 promises.push(getConfigForModule(configName, CONFIG_MODULES[configName]));
             });
@@ -72,7 +72,7 @@
 
         var getConfigForModule  = function(moduleName, getConfigFunctionCall){
             $log.debug("Load config: " + moduleName);
-            var deferred = $q.defer();            
+            var deferred = $q.defer();
             getConfigFunctionCall().then(
                 function(response){
                     //Update the config dict with the values from the reponse
@@ -103,14 +103,18 @@
                 $log.error("Config is missing for " +moduleName);
                 return undefined;
             }
-        };        
+        };
 
-         var setTextAndCodeForDropDown = function(valueToSet, prefix, module){ 
+         var setTextAndCodeForDropDown = function(valueToSet, prefix, module, sortAlphabetically){
             var valueList = [];
-            _.find(valueToSet, 
+            _.find(valueToSet,
                 function(val){
                     valueList.push({'text': translateTextForDropdowns(val, prefix, module), 'code': val});
                 });
+
+            if(sortAlphabetically){
+                valueList = _.sortBy(valueList, function(obj){return obj.text;});
+            }
             return valueList;
         };
 
@@ -118,7 +122,12 @@
             if (textToTranslate.indexOf('+') !== -1) {
                 textToTranslate = textToTranslate.replace("+"," plus");
             }
-            return locale.getString('config.' + module + "_"+ prefix + "_" + textToTranslate);
+            var translation = locale.getString('config.' + module + "_"+ prefix + "_" + textToTranslate);
+            //If translation not found, then return untranslated text
+            if(translation.indexOf('KEY_NOT_FOUND') >= 0){
+                translation = textToTranslate;
+            }
+            return translation;
         };
 
         return{
@@ -133,5 +142,5 @@
 
     angular.module('unionvmsWeb')
 	.factory('configurationService',['$q', '$log', 'locale', 'vesselRestService', 'movementRestService', 'mobileTerminalRestService', configurationService]);
-    
+
 }());

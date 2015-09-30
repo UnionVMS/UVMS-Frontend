@@ -15,7 +15,7 @@
                     <button type="button" class="btn btn-default" ng-show="vesselObj.active" ng-click="archiveVessel()">
                         {{'common.archive' | i18n}}
                     </button>
-                </div>         
+                </div>
             </div><!-- DO NOT REMOVE this comment!
          --><div class="col-md-1 textAlignRight valign" ng-click="toggleViewVessel()">
                 <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
@@ -26,7 +26,7 @@
             <div class="row">
                 <div class="col-md-12 basicInformation">
                     <div class="floatLeft">
-                        {{'vessel.status' | i18n}}: 
+                        {{'vessel.status' | i18n}}:
                         <span class="label label-success" ng-show="vesselObj.active">{{ ('vessel.active' | i18n)}}</span>
                         <span class="label label-default" ng-hide="vesselObj.active">{{ ('vessel.inactive' | i18n)}}</span>
                     </div>
@@ -66,7 +66,7 @@
                                         </tbody>
                                     </table>
                                     <loading-icon ng-show="waitingForHistoryResponse"></loading-icon>
-                                    <search-result-error-alert ng-show="vesselHistoryError">{{vesselHistoryError}}</search-result-error-alert>                                                   
+                                    <search-result-error-alert ng-show="vesselHistoryError">{{vesselHistoryError}}</search-result-error-alert>
                                 </div>
                             </div>
                         </div>
@@ -112,14 +112,14 @@
                                     <h5>{{'vessel.notes' | i18n}}</h5>
                                 </div>
                                 <div class="col-md-12">
-                                    <textarea disabled></textarea>
+                                    <textarea ng-model="vesselObj.notes" ng-disabled="disableForm()"></textarea>
                                 </div>
-                            </div>                        
+                            </div>
                         </div>
 
                     </div>
                 </div>
-                
+
             </div>
         </div>
 
@@ -127,13 +127,13 @@
             <div class="col-md-12">
                 <a ng-click="clearForm()">{{'vessel.clear_form' | i18n}}</a>
             </div>
-        </div>        
+        </div>
 
         <div class="row mobileTerminalsContainer" ng-if="!isCreateNewMode()">
             <div class="col-md-12">
                 <h3 ng-show="mobileTerminals.length > 0">{{'vessel.connected_mobile_terminals' | i18n}}</h3>
                 <loading-icon ng-show="waitingForMobileTerminalsResponse"></loading-icon>
-            </div>            
+            </div>
             <div class="col-md-12" ng-repeat="mt in mobileTerminals | orderBy :'[-active, -started]'">
                 <ng-include src="'partial/vessel/vesselForm/mobileTerminal.html'"/>
             </div>
