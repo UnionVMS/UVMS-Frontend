@@ -8,8 +8,8 @@
 					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'name'">{{'alarms.rules_table_name' | i18n}}</th>
 					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'type'">{{'alarms.rules_table_type' | i18n}}</th>
 					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'lastTriggered'">{{'alarms.rules_table_last_triggered' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'dateCreated'">{{'alarms.rules_table_date_created' | i18n}}</th>
-					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'createdBy'">{{'alarms.rules_table_createdby' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'dateUpdated'">{{'alarms.rules_table_date_updated' | i18n}}</th>
+					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'updatedBy'">{{'alarms.rules_table_updated_by' | i18n}}</th>
                     <th>{{'alarms.rules_table_subscription' | i18n}}</th>
                     <th>{{'alarms.rules_table_notify_by_email' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'active'">{{'alarms.rules_table_status' | i18n}}</th>
@@ -27,8 +27,8 @@
     				<td>{{item.name}}</td>
     				<td>{{getTypeLabelForRule(item)}}</td>
     				<td>{{item.lastTriggered}}</td>
-                    <td>{{item.dateCreated}}</td>
-                    <td class="link">{{item.createdBy}}</td>
+                    <td>{{item.dateUpdated}}</td>
+                    <td class="link">{{item.updatedBy}}</td>
                     <td class="subscription">
                         <div ng-if="item.active && item.isSubscriptionPossible()">
                             <dropdown ng-model="item.subscription" initialtext="{{'common.none' | i18n}}" initialtext-selectable items="subscriptionsOptions"></dropdown>

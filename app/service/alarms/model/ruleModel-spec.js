@@ -10,8 +10,8 @@ describe('Rule', function() {
         "availability": "PUBLIC",
         "active": false,
         "lastTriggered": "2015-08-01 12:43:02",
-        "createdBy": "Test user",
-        "dateCreated": "2015-06-01 12:44:00",
+        "updatedBy": "Test user",
+        "updated": "2015-06-01 12:44:00",
         "definitions": [
             {
               "startOperator": "(",
@@ -80,8 +80,8 @@ describe('Rule', function() {
         expect(rule.availability).toEqual("PUBLIC");
 
         expect(rule.lastTriggered).toEqual("2015-02-05 08:00");
-        expect(rule.createdBy).toEqual("antkar");
-        expect(rule.dateCreated).toEqual("2015-08-31 09:00");
+        expect(rule.updatedBy).toEqual("antkar");
+        expect(rule.dateUpdated).toEqual("2015-08-31 09:00");
 
         expect(rule.notifyByEMail).toBeUndefined();
         expect(rule.subscription).toBeUndefined();
@@ -102,8 +102,8 @@ describe('Rule', function() {
 
         expect(rule.recipient).toEqual(ruleDTO.recipient);
         expect(rule.lastTriggered).toEqual(ruleDTO.lastTriggered);
-        expect(rule.createdBy).toEqual(ruleDTO.createdBy);
-        expect(rule.dateCreated).toEqual(ruleDTO.dateCreated);
+        expect(rule.updatedBy).toEqual(ruleDTO.updatedBy);
+        expect(rule.dateUpdated).toEqual(ruleDTO.updated);
 
         expect(rule.definitions.length).toEqual(ruleDTO.definitions.length);
         expect(rule.timeIntervals.length).toEqual(ruleDTO.timeIntervals.length);
@@ -134,8 +134,8 @@ describe('Rule', function() {
 
         expect(copy.recipient).toEqual(rule.recipient);
         expect(copy.lastTriggered).toEqual(rule.lastTriggered);
-        expect(copy.createdBy).toEqual(rule.createdBy);
-        expect(copy.dateCreated).toEqual(rule.dateCreated);
+        expect(copy.updatedBy).toEqual(rule.updatedBy);
+        expect(copy.dateUpdated).toEqual(rule.dateUpdated);
 
         expect(copy.definitions.length).toEqual(rule.definitions.length);
         expect(copy.timeIntervals.length).toEqual(rule.timeIntervals.length);

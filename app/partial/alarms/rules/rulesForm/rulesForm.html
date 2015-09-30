@@ -97,7 +97,7 @@
                                         <input-validation-message types="required, date" input="intervalForm.end"></input-validation-message>
                                     </div>
                                 </div>
-                                <div class="col-md-1 remove">
+                                <div class="col-md-1 remove" ng-hide="disableForm()">
                                     <i class="fa fa-lg fa-times" title="{{'common.remove' | i18n}}" ng-click="removeTimeIntervalItem(timeInterval)"  ng-required="true"></i>
                                 </div>
                             </div>

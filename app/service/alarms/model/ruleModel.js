@@ -11,8 +11,8 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
             this.actions = [];
             this.timeIntervals = [];
             this.lastTriggered = "2015-02-05 08:00";
-            this.createdBy = "antkar";
-            this.dateCreated = "2015-08-31 09:00";
+            this.updatedBy = "antkar";
+            this.dateUpdated = "2015-08-31 09:00";
 
 
             this.notifyByEMail = undefined;
@@ -58,8 +58,8 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
             rule.active = dto.active;
             rule.description = dto.description;
             rule.lastTriggered = dto.lastTriggered;
-            rule.createdBy = dto.createdBy;
-            rule.dateCreated = dto.dateCreated;
+            rule.updatedBy = dto.updatedBy;
+            rule.dateUpdated = dto.updated;
 
             rule.definitions = [];
             if(angular.isArray(dto.definitions)){
@@ -111,8 +111,8 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
         Rule.prototype.copy = function() {
             var copy = Rule.fromDTO(this.DTO());
             copy.lastTriggered = this.lastTriggered;
-            copy.createdBy = this.createdBy;
-            copy.dateCreated = this.dateCreated;
+            copy.updatedBy = this.updatedBy;
+            copy.dateUpdated = this.dateUpdated;
             return  copy;
         };
 
