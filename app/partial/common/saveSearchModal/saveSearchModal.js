@@ -65,6 +65,16 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
         }
     };
 
+    $scope.contains = function(a, obj) {
+        for (var i = 0; i < a.length; i++) {
+            if (a[i].name === obj) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+
 
     //Ok to save?
     $scope.isValidSaveData = function(){
@@ -105,8 +115,13 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
         //Save new group
         else{
             var newSavedGroup = new SavedSearchGroup($scope.saveData.name, userService.getUserName(), isDynamic, searchFields);
-            saveSearchFunction(newSavedGroup)
-            .then(onSaveSuccess, onSaveError);
+                //Check if name of group already exists.
+            if(!$scope.contains($scope.existingGroups,$scope.saveData.name)){
+                saveSearchFunction(newSavedGroup).then(onSaveSuccess, onSaveError);
+            } else {
+                $scope.errorMessage = locale.getString('common.saved_search_group_exists');
+                $scope.error = true;
+            }
         }
     };
 

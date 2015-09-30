@@ -50,6 +50,7 @@
     "saved_search_delete_error": "The saved search couldn't be removed.",
     "saved_search_delete_success": "The saved search was succesfully removed.",
     "saved_search_no_criterias_error": "You can't save this since no search criterias has been selected.",
+    "saved_search_group_exists" : "There is already a group with that name. Please choose another name of the group.",
     "search" : "Search",
     "search_from": "From",
     "search_to": "To",
