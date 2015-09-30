@@ -13,7 +13,7 @@ angular.module('unionvmsWeb').directive('advancedSearchMovementForm', function()
 });
 
 angular.module('unionvmsWeb')
-    .controller('advancedSearchMovementCtrl', function($scope, locale, savedSearchService, configurationService){
+    .controller('advancedSearchMovementCtrl', function($scope, locale, savedSearchService, configurationService, SearchField){
 
         var DATE_CUSTOM = "Custom";
         $scope.selectedSavedSearch = "";
@@ -47,6 +47,10 @@ angular.module('unionvmsWeb')
         $scope.selectVesselGroup = function(savedSearchGroup){
             console.log("Select vessel group!");
             console.log("NOT IMPLEMENTED!");
+            console.log(savedSearchGroup);
+            console.log($scope.advancedSearchObject);
+
+           $scope.advancedSearchObject.assetGroupCriterias = savedSearchGroup.searchFields;
         };
 
         $scope.performSavedSearch = function(savedSearchGroup){

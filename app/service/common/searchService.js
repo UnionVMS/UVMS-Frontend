@@ -434,6 +434,9 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, GetList
                         if (typeof value[i] === 'string' && value[i].trim().length !== 0) {
                             criterias.push(new SearchField(key, value[i]));
                         }
+                        if ( typeof value[i] === "object") {
+                            criterias.push(value[i]);
+                        }
                     }
                 }
             });
