@@ -19,7 +19,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				 			basemaps.length === 1 ) {
 					return ( false );
 				}
-				
+
 				//FIXME we might do this on a layer basis which would probably be better
 				scope.$parent.$broadcast('reloadLegend');
 			};
@@ -27,7 +27,11 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			// call tree and map update
 			scope.selectHandler = function( event, data ){
 				scope.updateBasemap( event, data );
-				scope.updateMap();
+				if ( !data.node.data.mapLayer ) {
+					scope.updateMap();
+					return;
+				}
+				data.node.data.mapLayer.set( 'visible', data.node.isSelected() );
 			};
 
 			// store maps layers for updating map.
@@ -57,6 +61,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 
 			scope.addLayers = function( folder ) {
 				var layersByTitle, layer;
+
 				$.each( folder, function( index, value ) {
 					if ( value.folder ) {
 						scope.addLayers( value.children );
@@ -71,23 +76,18 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 
 					layer = layersByTitle[ 0 ];
 
-					if ( !value.selected ) {
-						if ( layer ) {
+					if ( !layer ) {
+						layer = value.data.mapLayer = scope.mapService.createLayer( value.data );
+
+						if (!layer) { return ( true ) };// layer creation failed
+
+						scope.mapService.map.addLayer( layer );
+					} else {
 						scope.mapService.map.removeLayer( layer );
-						}
-						return ( true );
+						scope.mapService.map.addLayer( layer );
 					}
 
-					if ( layer ) { return ( true ); }
-
-					if ( !value.data.mapLayer ) {
-						value.data.mapLayer = scope.mapService.createLayer( value.data );
-					}
-
-					// layer creation failed
-					if ( !value.data.mapLayer ) { return ( true ); }
-
-					scope.mapService.map.addLayer( value.data.mapLayer );
+					layer.set( 'visible', value.selected );
 				});
 			};
 
@@ -173,10 +173,10 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 									{
 										title: 'EEZ',
 										data: {
-											layerType: 'WMS',
+											type: 'eez',
 											title: 'eez',
 											isBaseLayer: false,
-											attributions: [ 'This is a custom layer from UnionVMS' ],
+											attribution: 'This is a custom layer from UnionVMS',
 											url: 'http://localhost:8080/geoserver/wms',
 			                serverType: 'geoserver',
 			                params: {
@@ -187,8 +187,39 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			                }
 										}
 									},
+									/*{ // debugging
+										title: 'Test',
+										data: {
+											type: 'wms',
+											title: 'test',
+											isBaseLayer: false,
+											attribution: 'This is a custom layer from UnionVMS',
+											url: 'http://localhost:8080/geoserver/uvms/wms',
+			                serverType: 'geoserver',
+											opacity: 0.7,
+			                params: {
+			                    'LAYERS': 'uvms:countries',
+			                    'TILED': true,
+			                    'STYLES': ''
+			                    //'cql_filter': "sovereign='Portugal' OR sovereign='Poland' OR sovereign='Bulgaria' OR sovereign='Belgium'"
+			                }
+										}
+									},*/
 									{
-										title: 'FAO - 3',
+										title: 'RFMO',
+										data: {
+											type: 'wms',
+											isBaseLayer: false,
+											title: 'rfmo',
+											attribution: '',
+											url: 'http://localhost:8080/geoserver/wms',
+											serverType: 'geoserver',
+											params: {
+													'LAYERS': 'uvms:rfmo',
+													'TILED': true,
+													'STYLES': ''
+											}
+										}
 									}
 								]
 							},
@@ -210,6 +241,19 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 						]
 					},
 					{
+						title: 'spatial.layer_tree_additional_cartography',
+						folder: true,
+						expanded: true,
+						children: [
+							{
+								title: 'OpenSeaMap'
+							},
+							{
+								title: 'Graticule'
+							}
+						]
+					},
+					{
 						title: 'spatial.layer_tree_background_layers',
 						folder: true,
 						expanded: true,
@@ -219,28 +263,15 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 							{
 								title: 'OpenStreetMap',
 								selected: true,
-								extraClasses: 'layertree-basemap',
+								extraClasses: 'layertree-basemap layertree-menu',
 								data: {
+									type: 'osm',
 									isBaseLayer: true,
 									title: 'osm'
 								}
 							},
 							{
 								title: 'MyGeoserverBackgroundLayer',
-								extraClasses: 'layertree-basemap',
-								data: {
-									isBaseLayer: true
-								}
-							},
-							{
-								title: 'OpenSeaMap',
-								extraClasses: 'layertree-basemap',
-								data: {
-									isBaseLayer: true
-								}
-							},
-							{
-								title: 'Graticule',
 								extraClasses: 'layertree-basemap',
 								data: {
 									isBaseLayer: true

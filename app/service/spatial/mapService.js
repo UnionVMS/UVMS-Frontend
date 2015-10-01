@@ -210,10 +210,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
   ms.createLayer = function( config ){
     var layer;
 
-    switch (config.title) {
+    switch (config.type) {
       case 'osm':
         layer = ms.createOsm( config );
         break;
+      case 'wms':
       case 'eez':
         layer = ms.createWms( config );
         break;
@@ -235,14 +236,19 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
   // create WMS tile layer
   ms.createWms = function( config ){
-    var source = new ol.source.TileWMS({
-      attributions: config.attributions,
+    var source, layer,
+        attribution = new ol.Attribution({
+          html: config.attribution
+        });
+
+    source = new ol.source.TileWMS({
+      attributions: [ attribution ],
       url: config.url,
       serverType: config.serverType,
       params: config.params
     });
 
-    var layer = new ol.layer.Tile({
+    layer = new ol.layer.Tile({
       title: config.title,
       isBaseLayer: config.isBaseLayer,
       source: source
