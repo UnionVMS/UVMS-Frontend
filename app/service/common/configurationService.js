@@ -105,11 +105,16 @@
             }
         };
 
+
          var setTextAndCodeForDropDown = function(valueToSet, prefix, module, sortAlphabetically){
             var valueList = [];
             _.find(valueToSet,
                 function(val){
-                    valueList.push({'text': translateTextForDropdowns(val, prefix, module), 'code': val});
+                    var text = val;
+                    if(angular.isDefined(prefix) && angular.isDefined(module)){
+                        text = translateTextForDropdowns(val, prefix, module);
+                    }
+                    valueList.push({'text': text, 'code': val});
                 });
 
             if(sortAlphabetically){
@@ -119,13 +124,14 @@
         };
 
         var translateTextForDropdowns = function(textToTranslate, prefix, module){
-            if (textToTranslate.indexOf('+') !== -1) {
-                textToTranslate = textToTranslate.replace("+"," plus");
-            }
+            var origTextToTranslate  = textToTranslate;
+            textToTranslate = textToTranslate.replace("+"," plus");
+            textToTranslate = textToTranslate.replace(","," comma");
+
             var translation = locale.getString('config.' + module + "_"+ prefix + "_" + textToTranslate);
             //If translation not found, then return untranslated text
             if(translation.indexOf('KEY_NOT_FOUND') >= 0){
-                translation = textToTranslate;
+                translation = origTextToTranslate;
             }
             return translation;
         };

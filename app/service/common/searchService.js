@@ -8,38 +8,53 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, GetList
     };
 
     var modifySpanAndTimeZones = function(searchCriterias){
-        var i, span, idx = [];
-        for (i = 0; i < searchCriterias.length; i++) {
+        var i, span, searchCriteriaKey, searchCriteriaValue, idxToRemove = [];
 
-            if(searchCriterias[i].key === "TIME_SPAN"){
-                idx.push(i);
+        //Modify search criterias containing spans
+        for (i = 0; i < searchCriterias.length; i++) {
+            searchCriteriaKey = searchCriterias[i].key;
+            searchCriteriaValue = searchCriterias[i].value;
+
+            //Replace TIME_SPAN with TO_DATE and FROM_DATE
+            if(searchCriteriaKey === "TIME_SPAN"){
+                idxToRemove.push(i);
                 if(searchCriterias[i].value.toUpperCase() !== "CUSTOM"){
-                        searchCriterias.push(new SearchField("TO_DATE", moment()));
-                        searchCriterias.push(new SearchField("FROM_DATE", moment().add('hours', -searchCriterias[i].value)));
+                    searchCriterias.push(new SearchField("TO_DATE", moment()));
+                    searchCriterias.push(new SearchField("FROM_DATE", moment().add('hours', -searchCriteriaValue)));
                 }
             }
-            if (searchCriterias[i].key === "LENGTH_SPAN") {
-                idx.push(i);
-                span = searchCriterias[i].value.split("-");
-                searchCriterias.push(new SearchField("MIN_LENGTH", span[0]));
-                searchCriterias.push(new SearchField("MAX_LENGTH", span[1]));
 
-            }
-            if (searchCriterias[i].key === "MEAS_SPEED_SPAN") {
-                idx.push(i);
-                span = searchCriterias[i].value.split("-");
-                searchCriterias.push(new SearchField("SPEED_MIN", span[0]));
-                searchCriterias.push(new SearchField("SPEED_MAX", span[1]));
+            //Replace spans with min and max values
+            var numberSpans = {
+                'LENGTH_SPAN' : {min : 'MIN_LENGTH', max: 'MAX_LENGTH'},
+                'POWER_SPAN'  : {min : 'MIN_POWER',  max: 'MAX_POWER'},
+                'SPEED_SPAN'  : {min : 'SPEED_MIN',  max: 'SPEED_MAX'},
+            };
+
+            if(searchCriteriaKey in numberSpans){
+                idxToRemove.push(i);
+
+                //Split on -
+                if(searchCriteriaValue.indexOf("-") > 0){
+                    span = searchCriterias[i].value.split("-");
+                    searchCriterias.push(new SearchField(numberSpans[searchCriteriaKey].min, span[0]));
+                    searchCriterias.push(new SearchField(numberSpans[searchCriteriaKey].max, span[1]));
+                }
+                //Split on + (and add only min value)
+                else if(searchCriteriaValue.indexOf("+") > 0){
+                    span = searchCriterias[i].value.split("+");
+                    searchCriterias.push(new SearchField(numberSpans[searchCriteriaKey].min, span[0]));
+                }
             }
         }
 
-        for (i = idx.length - 1; i >= 0; i--) {
-            searchCriterias.splice(idx[i],1);
+        //Remove span criterias
+        for (i = idxToRemove.length - 1; i >= 0; i--) {
+            searchCriterias.splice(idxToRemove[i],1);
         }
 
-
+        //Transform dates to UTC dates
         var dateCriterias = ["END_DATE","START_DATE", "REPORTING_START_DATE", "REPORTING_END_DATE", "TO_DATE", "FROM_DATE" ];
-
         for (i = 0; i < searchCriterias.length; i++) {
             if ( dateCriterias.indexOf(searchCriterias[i].key) >= 0){
                     searchCriterias[i].value = addUTCTimeZone(searchCriterias[i].value);
@@ -164,6 +179,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, GetList
 
         //Do the search for vessels
 		searchVessels : function(){
+            modifySpanAndTimeZones(getListRequest.criterias);
 			return vesselRestService.getVesselList(getListRequest);
 		},
 

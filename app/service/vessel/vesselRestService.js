@@ -58,16 +58,8 @@ angular.module('unionvmsWeb')
                 deferred.resolve(vesselListPage);
             },
             function(err){
-                var vessels = [];
-
-                vessels.push(Vessel.fromJson({cfr:'ASD', name:'Mock name', ircs :'SWE23423'}));
-                vessels.push(Vessel.fromJson({cfr:'FDFG', name:'Mock name', ircs :'SWE23423'}));
-                vessels.push(Vessel.fromJson({cfr:'234', name:'Mock name', ircs :'SWE23423'}));
-                vessels.push(Vessel.fromJson({cfr:'345', name:'Mock name', ircs :'SWE23423'}));
-                vessels.push(Vessel.fromJson({cfr:'ASD', name:'Mock name', ircs :'SWE23423'}));
-                //deferred.reject(err);
-                var vesselListPage = new VesselListPage(vessels, 5, 33);
-                deferred.resolve(vesselListPage);
+                console.error("Error getting vessels.", err);
+                deferred.reject(err);
             }
         );
 

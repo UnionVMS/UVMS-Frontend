@@ -10,6 +10,8 @@ angular.module('unionvmsWeb')
             $scope.licenseTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'LICENSE_TYPE'), 'LICENSE_TYPE','VESSEL', true);
             $scope.gearTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'GEAR_TYPE'), 'GEAR_TYPE','VESSEL', true);
             $scope.assetTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'ASSET_TYPE'),'ASSET_TYPE','VESSEL', true);
+            $scope.powerSpans = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'SPAN_POWER_MAIN'));
+            $scope.lengthSpans = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'SPAN_LENGTH_LOA'));
 
             //TODO: Need this from backend?
             $scope.activeTypes = [{'text':'Yes','code':'true'},{'text':'No','code':'false'}];
