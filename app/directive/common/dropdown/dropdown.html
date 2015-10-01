@@ -8,7 +8,7 @@
             <li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue" ng-click="selectVal(initialValue)">
                 <a role="menuitem" tabindex="-1" ng-bind="initialValue.text"></a>
             </li>
-            <li ng-class="item.code.length === 0 && !initialtextSelectable ? 'disabled' : ''" ng-repeat="item in items" role="presentation" ng-click="selectVal(item,$index)">
+            <li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in items" role="presentation" ng-click="selectVal(item,$index)">
                 <a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>
             </li>
         </ul>

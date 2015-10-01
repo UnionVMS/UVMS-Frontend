@@ -13,6 +13,7 @@ angular.module('unionvmsWeb')
         require: "^ngModel",
 		scope: {
             items : '=',
+            disabledItems : '=',
             ngModel:'=',
             callback : '=',
             callbackParams : '=',
@@ -94,6 +95,11 @@ angular.module('unionvmsWeb')
 
             //Select item in dropdown
             scope.selectVal = function(item){
+                //Disabled item
+                if(scope.disableItem(item)){
+                    return;
+                }
+
                 scope.ngModel = getItemCode(item);
                 scope.currentItemLabel = scope.getItemLabel(item);
                 if(angular.isDefined(scope.callback)){
@@ -113,6 +119,17 @@ angular.module('unionvmsWeb')
                     initialValue.text = attrs.initialtext;
                     scope.initialValue = initialValue;
                 }
+            };
+
+            scope.disableItem = function(item){
+                var itemCode = getItemCode(item);
+                if(angular.isDefined(scope.disabledItems)){
+                    if(scope.ngModel !== itemCode && scope.disabledItems.indexOf(itemCode) >= 0){
+                        return true;
+                    }
+                }
+
+                return false;
             };
 
             scope.setLabel();
