@@ -55,6 +55,7 @@
     "rules_table_actions" : "Actions",
     "rules_table_details" : "Details",
     "error_removing_rule" : "Warning, the rule could not be removed.",
+    "copy_rule_button_title": "Create new rule based on this one",
     "rule_delete_confirm_text": "Are you sure you want to delete this rule?",
     "info_removing_rule" : "The rule has been removed successfully.",
 

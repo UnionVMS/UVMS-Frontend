@@ -23,7 +23,6 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
     //Filter search results on rule type
     $scope.currentSearchResults.typeFilter = 'ALL';
     $scope.filterOnType = function(rule) {
-        $log.debug("Filter on type:" +$scope.currentSearchResults.typeFilter);
         if ($scope.currentSearchResults.typeFilter === "ALL") {
             return true;
         }
@@ -44,9 +43,12 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
     };
 
     //Callback when a new Rule has been creatad
-    $scope.createdNewRuleCallback = function(){
-        //Get search results again to include the new rule
-        $scope.searchRules();
+    $scope.createdNewRuleCallback = function(newRule){
+        //Add new rule to searchResult
+        $scope.currentSearchResults.updateWithSingleItem(newRule);
+
+        //Show search results
+        $scope.isVisible.rulesForm = false;
     };
 
     //Update the search results
@@ -69,6 +71,16 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
         }
 
         rules.splice(index, 1);
+    };
+
+    //Open create form with copy
+    $scope.copyRule = function(rule){
+        $scope.createNewMode = true;
+        rule = rule.copy();
+        rule.lastTriggered = undefined;
+        rule.updatedBy = undefined;
+        rule.dateUpdated = undefined;
+        toggleRuleForm(rule);
     };
 
     //Delete rule
@@ -214,8 +226,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
 
     //Subscription dropdown options
     var openticketsOpt = {'text': locale.getString('alarms.open_ticket'), 'code':'OPEN_TICKET'};
-    var notificationOpt = {'text': locale.getString('alarms.notification'), 'code':'NOTIFICATION'};
-    $scope.subscriptionsOptions = [openticketsOpt, notificationOpt];
+    $scope.subscriptionsOptions = [openticketsOpt];
 
     //Export data as CSV file
     $scope.exportRulesAsCSVFile = function(onlySelectedItems){

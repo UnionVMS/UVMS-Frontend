@@ -200,16 +200,12 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
     $scope.disabledThenActions = [];
     //Update list of disabled actions
     $scope.updateDisabledActions = function(){
-        console.log("updateDisabledActions");
-        console.log($scope.currentRule.actions);
         $scope.disabledThenActions.length = 0;
         $.each($scope.currentRule.actions, function(index, ruleAction){
-            console.log(ruleAction);
             if(!$scope.actionShouldHaveValue(ruleAction.action)){
                 $scope.disabledThenActions.push(ruleAction.action);
             }
         });
-        console.log($scope.disabledThenActions);
     };
 
     //Callback when selecting action in dropdown
@@ -322,7 +318,7 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         alertService.showSuccessMessageWithTimeout(locale.getString('alarms.rules_add_new_alert_message_on_success'));
         $scope.currentRule = rule;
         $scope.setCreateMode(false);
-        $scope.createdNewRuleCallback();
+        $scope.createdNewRuleCallback(rule);
     };
 
     //Error creating the rule
