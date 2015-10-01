@@ -1,5 +1,8 @@
 angular.module('unionvmsWeb').factory('ruleService',function(locale, $log) {
 
+    //List of actions that require a value
+    var actionsWithValue = ['SEND_TO_ENDPOINT', 'SMS', 'MAIL'];
+
 	var ruleService = {
         getRuleAsText : function(rule){
             var text = '';
@@ -14,7 +17,7 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log) {
                     text += ' ';
                 }else{
                     text += ' ' +locale.getString('alarms.rules_definition_and') +' ';
-                } 
+                }
                 text += ruleService.getRuleActionAsText(action);
             });
             return text;
@@ -57,8 +60,8 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log) {
         getRuleActionAsText : function(ruleAction){
             var actionText = locale.getString('alarms.rules_definition_then_' +ruleAction.action);
             var text = actionText;
-            //Show value only for SEND_TO_ENDPOINT
-            if(ruleAction.action === 'SEND_TO_ENDPOINT'){
+            //Show value?
+            if(actionsWithValue.indexOf(ruleAction.action) >=0){
                 text += ' ';
                 if(typeof ruleAction.value === 'string' && ruleAction.value.trim().length > 0){
                      text += ruleAction.value;
@@ -80,17 +83,17 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log) {
             //No empty subcriterias field  for a definition
             //No empty values field for a definition
             //No empty condition field for a definition
-            //No empty value field for an SEND_TO_ENDPOINT action
+            //No empty value field for an action that requires a value
             try{
                 //At least 1 definition and at least 1 action
-                if(rule.getNumberOfDefinitions() === 0){                    
+                if(rule.getNumberOfDefinitions() === 0){
                     returnObject.problems.push('NO_DEFINITIONS');
                 }
 
-                if(rule.getNumberOfActions() === 0 ){                    
+                if(rule.getNumberOfActions() === 0 ){
                     returnObject.problems.push('NO_ACTIONS');
                 }
-                
+
                 var i,
                     definition,
                     startOperators = [],
@@ -105,12 +108,12 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log) {
                     //No empty subcriterias field  for a definition
                     if(typeof definition.subCriteria !== 'string' || definition.subCriteria.trim().length === 0){
                         returnObject.problems.push('INVALID_DEF_SUBCRITERIA');
-                    }                    
+                    }
                     //No empty values field for a definition
                     if(typeof definition.value !== 'string' || definition.value.trim().length === 0){
                         returnObject.problems.push('INVALID_DEF_VALUE');
-                    }                           
-                    //No empty condition field for a definition                    
+                    }
+                    //No empty condition field for a definition
                     if(typeof definition.condition !== 'string' || definition.condition.trim().length === 0){
                         returnObject.problems.push('INVALID_DEF_CONDITION');
                     }
@@ -137,7 +140,7 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log) {
                     //startOperators should not be larger than endOperators
                     if(startOperators.join('').length > endOperators.join('').length){
                         returnObject.problems.push('PARANTHESES_DONT_MATCH');
-                    }                    
+                    }
                 }
 
                 //parentheses match
@@ -146,14 +149,14 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log) {
                     returnObject.problems.push('PARANTHESES_DONT_MATCH');
                 }
 
-                //No empty value field for an SEND_TO_ENDPOINT action
+                //No empty value field for an action that requires a value
                 var thenAction;
                 for (i = rule.actions.length-1; i >= 0; i--){
                     thenAction = rule.actions[i];
-                    if(thenAction.action === 'SEND_TO_ENDPOINT'){
+                    if(actionsWithValue.indexOf(thenAction.action) >=0){
                         if(typeof thenAction.value !== 'string' || thenAction.value.trim().length === 0){
                             returnObject.problems.push('INVALID_ACTION_VALUE');
-                        }                            
+                        }
                     }
                 }
 

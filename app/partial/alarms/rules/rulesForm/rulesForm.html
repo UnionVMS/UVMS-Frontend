@@ -84,7 +84,7 @@
                             <div class="row" ng-form="intervalForm">
                                 <div class="col-md-5">
                                     <div class="form-group" ng-class="{'has-error': intervalForm.start.$invalid && (submitAttempted || intervalForm.start.$dirty)}">
-                                        <datepicker-input name="start" model="timeInterval.start" ng-required="true"></datepicker-input>
+                                        <datepicker-input name="start" model="timeInterval.start" ng-required="true" time="true"></datepicker-input>
                                         <input-validation-message types="required,date" input="intervalForm.start"></input-validation-message>
                                     </div>
                                 </div>
@@ -93,7 +93,7 @@
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group" ng-class="{'has-error': intervalForm.end.$invalid && (submitAttempted || intervalForm.end.$dirty)}">
-                                        <datepicker-input name="end" model="timeInterval.end" ng-required="true"></datepicker-input>
+                                        <datepicker-input name="end" model="timeInterval.end" ng-required="true" time="true"></datepicker-input>
                                         <input-validation-message types="required, date" input="intervalForm.end"></input-validation-message>
                                     </div>
                                 </div>
@@ -136,6 +136,7 @@
                                     <th>{{'alarms.rules_form_definition_condition_label' | i18n}}</th>
                                     <th>{{'alarms.rules_form_definition_value_label' | i18n}}</th>
                                     <th>{{'alarms.rules_form_definition_operator_label' | i18n}}</th>
+                                    <th>{{'alarms.rules_form_definition_logicBoolOperator_label' | i18n}}</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -178,8 +179,12 @@
                                         </div>
                                     </td>
                                     <td class="endOperator">
-                                        <div class="form-group" ng-class="{'has-error': definitionForm.logicBoolOperator.$invalid && (submitAttempted || definitionForm.logicBoolOperator.$dirty)}">
+                                        <div class="form-group">
                                             <dropdown name="endOperator" ng-model="item.endOperator" initialtext="-" initialtext-selectable items="endOperators" class="floatLeft"></dropdown>
+                                        </div>
+                                    </td>
+                                    <td class="logicBoolOperator">
+                                        <div class="form-group" ng-class="{'has-error': definitionForm.logicBoolOperator.$invalid && (submitAttempted || definitionForm.logicBoolOperator.$dirty)}">
                                             <dropdown name="logicBoolOperator" ng-model="item.logicBoolOperator" no-placeholder-item items="logicBoolOperationTypes" class="floatLeft"></dropdown ng-required="$index +1 < currentRule.getNumberOfDefinitions()">
                                         </div>
                                     </td>
@@ -191,7 +196,7 @@
                         </table>
                     </div>
                     <div class="col-md-12" ng-hide="disableForm()">
-                        <div class="addMoreLink" ng-click="addDefinitionRow()">{{'alarms.rules_form_definition_add' | i18n}}</div>
+                        <div class="addMoreLink" ng-click="addDefinitionRow()">{{'alarms.rules_form_definition_add_another' | i18n}}</div>
                     </div>
 
 
@@ -213,12 +218,12 @@
                                 <tr ng-repeat="item in currentRule.actions" ng-form="actionForm">
                                     <td class="action">
                                         <div class="form-group" ng-class="{'has-error': actionForm.action.$invalid && (submitAttempted || definitionForm.action.$dirty)}">
-                                            <dropdown name="action" ng-model="item.action" no-placeholder-item items="thenActions" callback="actionSelected" callback-params="item" required></dropdown>
+                                            <dropdown name="action" ng-model="item.action" no-placeholder-item items="thenActions" disabled-items="disabledThenActions" callback="actionSelected" callback-params="item" required></dropdown>
                                         </div>
                                     </td>
                                     <td class="value">
                                         <div class="form-group" ng-class="{'has-error': actionForm.value.$invalid && (submitAttempted || definitionForm.value.$dirty)}">
-                                            <input name="value" type="text" class="form-control" ng-model="item.value" name="value" ng-disabled="item.action !== 'SEND_TO_ENDPOINT'" ng-required="item.action === 'SEND_TO_ENDPOINT'">
+                                            <input name="value" type="text" class="form-control" ng-model="item.value" name="value" ng-disabled="!actionShouldHaveValue(item.action)" ng-required="actionShouldHaveValue(item.action)">
                                         </div>
                                     </td>
                                     <td class="endOperator">
@@ -234,7 +239,7 @@
                         </table>
                     </div>
                     <div class="col-md-12" ng-hide="disableForm()">
-                        <div class="addMoreLink" ng-click="addActionRow()">{{'alarms.rules_form_definition_add' | i18n}}</div>
+                        <div class="addMoreLink" ng-click="addActionRow()" ng-show="getFirstActionThatIsEnabled()">{{'alarms.rules_form_definition_add' | i18n}}</div>
                     </div>
                 </div>
 
@@ -270,4 +275,6 @@
             <a ng-click="clearForm()">{{'common.clear_form' | i18n}}</a>
         </div>
     </div>
+
+    {{currentRule | json}}
 </div>

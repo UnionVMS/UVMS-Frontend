@@ -1,4 +1,8 @@
-angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, locale, csvService, alertService, $filter, Rule,  RuleDefinition, RuleAction, ruleRestService, SearchResults, SearchResultListPage, userService, confirmationModal){
+angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, locale, csvService, alertService, $filter, Rule,  RuleDefinition, ruleRestService, SearchResults, SearchResultListPage, userService, confirmationModal){
+
+    var checkAccessToFeature = function(feature) {
+        return userService.isAllowed(feature, 'Alarms', true);
+    };
 
     $scope.selectedRules = []; //Selected rules checkboxes
 
@@ -88,13 +92,21 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
 
     //Is the user allowed to delete or update the rule?
     $scope.allowedToDeleteOrUpdateRule = function(rule){
-        var userName = userService.getUserName();
-        //Is this the user that created the rule?
-        if(userName !== rule.createdBy){
-            return false;
+        if(rule.type === 'GLOBAL'){
+            //Allowed to manage global rules
+            if(checkAccessToFeature('manageGlobalAlarmsRules')){
+                return true;
+            }
+        }
+        else{
+            //Event rule, check that the user is the one that create it
+            var userName = userService.getUserName();
+            if(userName === rule.createdBy){
+                return true;
+            }
         }
 
-        return true;
+        return false;
     };
 
     //Handle click on the top "check all" checkbox
@@ -119,7 +131,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
         }else{
             $scope.addToSelection(item);
         }
-    };
+        };
 
     $scope.isAllChecked = function(){
         if(angular.isUndefined($scope.currentSearchResults.items) || $scope.selectedRules.length === 0){

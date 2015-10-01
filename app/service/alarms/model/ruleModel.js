@@ -217,15 +217,15 @@ angular.module('unionvmsWeb').factory('RuleTimeInterval', function() {
 
         RuleTimeInterval.prototype.DTO = function(){
             return {
-                start : this.start + ' 00:00:00',
-                end : this.end +' 00:00:00',
+                start : this.start,
+                end : this.end,
             };
         };
 
         RuleTimeInterval.fromDTO = function(dto){
             var ruleTimeInterval = new RuleTimeInterval();
-            ruleTimeInterval.start = dto.start.split('00:00:00')[0].trim();
-            ruleTimeInterval.end = dto.end.split('00:00:00')[0].trim();
+            ruleTimeInterval.start = dto.start;
+            ruleTimeInterval.end = dto.end;
 
             return ruleTimeInterval;
         };

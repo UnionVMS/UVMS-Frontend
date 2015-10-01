@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, locale, alertService, ruleRestService, Rule, RuleDefinition, RuleTimeInterval, RuleAction, ruleService, GetListRequest, vesselRestService, mobileTerminalRestService, userService){
+angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeout, $log, locale, alertService, ruleRestService, Rule, RuleDefinition, RuleTimeInterval, RuleAction, ruleService, GetListRequest, vesselRestService, mobileTerminalRestService, userService){
 
     $scope.submitAttempted = false;
 
@@ -36,6 +36,8 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
 
         //Enable/disable availability dropdown
         $scope.updateAvailabilityDropdown();
+
+        $scope.updateDisabledActions();
 
     };
 
@@ -105,10 +107,13 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         {'text': 'not equals to','code':'NEQ'},
     ];
 
-    $scope.thenActions =[
-        {'text': locale.getString('alarms.rules_form_action_Dropdown_SEND_TO_ENDPOINT'),'code':'SEND_TO_ENDPOINT'},
-        {'text': locale.getString('alarms.rules_form_action_Dropdown_MANUAL_POLL'),'code':'MANUAL_POLL'},
-        {'text': locale.getString('alarms.rules_form_action_Dropdown_HOLDING_TABLE'),'code':'ON_HOLD'}
+    //Action values
+    $scope.thenActions = [
+        {'text': locale.getString('alarms.rules_form_action_NOTIFY'),'code':'NOTIFY'},
+        {'text': locale.getString('alarms.rules_form_action_MANUAL_POLL'),'code':'MANUAL_POLL'},
+        {'text': locale.getString('alarms.rules_form_action_SEND_TO_ENDPOINT'),'code':'SEND_TO_ENDPOINT'},
+        {'text': 'Send SMS','code':'SMS'},
+        {'text': 'Send EMAIL','code':'MAIL'},
     ];
 
     //Add a definition row
@@ -118,14 +123,6 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         ruleDef.subCriteria = $scope.subCriterias[ruleDef.criteria][0].code;
         ruleDef.order = $scope.currentRule.getNumberOfDefinitions();
         $scope.currentRule.addDefinition(ruleDef);
-    };
-
-    //Add an action row
-    $scope.addActionRow = function(){
-        var ruleAction = new RuleAction();
-        ruleAction.action = $scope.thenActions[0].code;
-        ruleAction.order = $scope.currentRule.getNumberOfActions();
-        $scope.currentRule.addAction(ruleAction);
     };
 
     //Add a time interval row
@@ -161,30 +158,80 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
         ruleDef.subCriteria = newSubCriteria;
     };
 
+    //List of actions that require a value
+    var actionsWithValue = ['SEND_TO_ENDPOINT', 'SMS', 'MAIL'];
+
+    //Check if an action requires a value
+    $scope.actionShouldHaveValue = function(action){
+        return actionsWithValue.indexOf(action) >= 0;
+    };
+
+    //Get first action in action dropdown that isn't disabled (already used if only single value is allowed)
+    $scope.getFirstActionThatIsEnabled = function(){
+        var actionVal;
+        $.each($scope.thenActions, function(index, dropdownItem){
+            if($scope.disabledThenActions.indexOf(dropdownItem.code) < 0){
+                actionVal = dropdownItem.code;
+                return false;
+            }
+        });
+        return actionVal;
+    };
+
+    //Add an action row
+    $scope.addActionRow = function(){
+        var ruleAction = new RuleAction();
+        ruleAction.action = $scope.getFirstActionThatIsEnabled();
+        ruleAction.order = $scope.currentRule.getNumberOfActions();
+        $scope.currentRule.addAction(ruleAction);
+        //Update list of disabled actions
+        $scope.updateDisabledActions();
+    };
+
+    $scope.onActionAddedOrUpdated = function(newRuleAction){
+        //Add notification when selecting MANUAL_POLL
+        if(newRuleAction.action === 'MANUAL_POLL'){
+
+        }
+
+    };
+
+    //List of actions thare are disabled (already selected in another dropdown)
+    $scope.disabledThenActions = [];
+    //Update list of disabled actions
+    $scope.updateDisabledActions = function(){
+        console.log("updateDisabledActions");
+        console.log($scope.currentRule.actions);
+        $scope.disabledThenActions.length = 0;
+        $.each($scope.currentRule.actions, function(index, ruleAction){
+            console.log(ruleAction);
+            if(!$scope.actionShouldHaveValue(ruleAction.action)){
+                $scope.disabledThenActions.push(ruleAction.action);
+            }
+        });
+        console.log($scope.disabledThenActions);
+    };
+
     //Callback when selecting action in dropdown
     $scope.actionSelected = function(selection, ruleAction){
+        console.log("actionSelected: " +selection.code);
         var selectedVal = selection.code;
         //Unset value if not SEND_TO_ENDPOINT
-        if(selectedVal !== 'SEND_TO_ENDPOINT'){
+        //Add to disabledValues if not SEND_TO_ENDPOINT
+        if(!$scope.actionShouldHaveValue(selectedVal.action)){
             ruleAction.value = undefined;
         }
+        $timeout($scope.updateDisabledActions, 10);
     };
 
     //Remove a rule definition row
     $scope.removeRuleDefinition = function(definitionToBeRemoved){
-        var indexToRemove = -1;
-        $.each($scope.currentRule.definitions, function(i, def){
-            if(definitionToBeRemoved === def){
-                indexToRemove = i;
-                return false;
-            }
-
-        });
+        var indexToRemove = $scope.currentRule.definitions.indexOf(definitionToBeRemoved);
         if(indexToRemove >= 0){
             $scope.currentRule.definitions.splice(indexToRemove, 1);
         }
 
-        //Set order
+        //Set new order for definitions
         $.each($scope.currentRule.definitions, function(i, def){
             def.order = i;
         });
@@ -192,22 +239,18 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $log, 
 
     //Remove a rule action row
     $scope.removeRuleAction = function(actionToBeRemoved){
-        var indexToRemove = -1;
-        $.each($scope.currentRule.actions, function(i, def){
-            if(actionToBeRemoved === def){
-                indexToRemove = i;
-                return false;
-            }
-
-        });
+        var indexToRemove = $scope.currentRule.actions.indexOf(actionToBeRemoved);
         if(indexToRemove >= 0){
             $scope.currentRule.actions.splice(indexToRemove, 1);
         }
 
-        //Set order
+        //Set new order for actions
         $.each($scope.currentRule.actions, function(i, def){
             def.order = i;
         });
+
+        //Update list of disabled actions
+        $scope.updateDisabledActions();
     };
 
     //Remove a time interval row

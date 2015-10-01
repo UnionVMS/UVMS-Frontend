@@ -27,8 +27,11 @@
     //Definitions
     .definitionsContainer{
         table{
-            td{
+            th, td{
                 padding:0px 5px;
+            }
+
+            td{
                 text-align: left;
 
                 .form-group{
@@ -36,6 +39,10 @@
                 }
 
                 &.endOperator{
+                    width: 110px;
+                }
+
+                &.logicBoolOperator, &.endOperator{
                     .dropdown{
                         min-width: 100px;
                         margin-right: 5px;

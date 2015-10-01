@@ -35,11 +35,8 @@
                         </div>
                     </td>
                     <td class="notifyByEmail">
-                        <div ng-show="item.active && item.isSubscriptionPossible()">
+                        <div>
                             <input type="text" ng-model="item.notifyByEmail" class="form-control" placeholder="{{'alarms.rules_table_notify_by_email_input_placeholder' | i18n}}">
-                        </div>
-                        <div ng-hide="item.active">
-                            <input type="text" disabled class="form-control" placeholder="{{'common.not_available' | i18n}}">
                         </div>
                     </td>
                     <td ng-class="item.active ? 'active' : 'inactive'">{{getStatusLabelForRule(item)}}</td>
