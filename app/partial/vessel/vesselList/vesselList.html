@@ -13,11 +13,11 @@
 
                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'ircs'">{{'vessel.table_header_signal' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vesselType'">{{'vessel.table_header_type' | i18n}}</th>
+                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'gearType'">{{'vessel.table_header_gear_type' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'license'">{{'vessel.table_header_license' | i18n}}</th>
+                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'licenseType'">{{'vessel.table_header_license_type' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'lastreport'">{{'vessel.table_header_last_report' | i18n}}</th>
+                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'lastReport'">{{'vessel.table_header_last_report' | i18n}}</th>
 
                 <th>{{'vessel.table_header_details' | i18n}}</th>
             </tr>
@@ -29,8 +29,8 @@
                 <td>{{item.externalMarking}}</td>
                 <td>{{item.name}}</td>
                 <td>{{item.ircs}}</td>
-                <td>{{item.vesselType}}</td>
-                <td>{{item.license}}</td>
+                <td>{{item.gearType | vesselGearTypeTranslation}}</td>
+                <td>{{item.licenseType | vesselLicenseTypeTranslation}}</td>
                 <td>{{item.lastReport}}</td>
                 <td>
                     <button class="btn vesselbtn button" ng-click="toggleViewVessel(item)">

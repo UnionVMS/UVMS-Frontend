@@ -2,22 +2,6 @@ angular.module('unionvmsWeb').controller('VesselhistorymodalCtrl',function($scop
 
     $scope.vesselHistory = vesselHistory;
 
-    $scope.gearType = undefined;
-    $scope.licenseType = undefined;
-    if(angular.isDefined(vesselHistory.gearType)){
-        $scope.gearType = locale.getString('config.VESSEL_GEAR_TYPE_' +vesselHistory.gearType);
-        if($scope.gearType.indexOf('KEY_NOT_FOUND') >= 0){
-            $scope.gearType = vesselHistory.gearType;
-        }
-    }
-
-    if(angular.isDefined(vesselHistory.licenseType)){
-        $scope.licenseType = locale.getString('config.VESSEL_LICENSE_TYPE_' +vesselHistory.licenseType);
-        if($scope.licenseType.indexOf('KEY_NOT_FOUND') >= 0){
-            $scope.licenseType = vesselHistory.licenseType;
-        }
-    }
-
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
     };

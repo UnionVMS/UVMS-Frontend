@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, savedSearchService, Vessel, searchService, vesselRestService, alertService, $stateParams, csvService, SearchResults) {
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, savedSearchService, Vessel, searchService, vesselRestService, alertService, $stateParams, csvService, SearchResults, $filter) {
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -29,10 +29,10 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
             vesselRestService.getVessel(vesselGUID).then(
                 function(vessel) {
                     $scope.toggleViewVessel(vessel);
-                }, 
+                },
                 function(error){
                     console.error("Error loading details for vessel with with GUID: " +vesselGUID);
-                    alertService.showErrorMessage(locale.getString('vessel.view_vessel_on_failed_to_load_error'));                
+                    alertService.showErrorMessage(locale.getString('vessel.view_vessel_on_failed_to_load_error'));
                 }
             );
         }
@@ -56,11 +56,11 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         $scope.currentSearchResults.clearForSearch();
         searchService.searchVessels()
             .then(updateSearchResults, onGetSearchResultsError);
-    };    
+    };
 
     //Update the search results
     var updateSearchResults = function(vesselListPage){
-        $scope.currentSearchResults.updateWithNewResults(vesselListPage);        
+        $scope.currentSearchResults.updateWithNewResults(vesselListPage);
     };
 
     //Handle error from search results (listing vessel)
@@ -110,7 +110,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         if($scope.currentSearchResults.items.length === 0){
             $scope.searchVessels();
         }
-    };        
+    };
 
     //Clear the selection
     $scope.clearSelection = function(){
@@ -139,11 +139,11 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
 
     $scope.setCreateMode = function(bool){
         $scope.createNewMode = bool;
-    };    
+    };
 
     $scope.getVesselObj = function(){
         return $scope.vesselObj;
-    };     
+    };
 
     //Toggle create new vessel
     $scope.toggleCreateNewVessel = function(){
@@ -174,7 +174,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
     //Callback function for the "edit selection" dropdown
     $scope.editSelectionCallback = function(selectedItem){
         if(selectedItem.code === 'SAVE'){
-            savedSearchService.openSaveSearchModal("VESSEL", false, $scope.selectedVessels);            
+            savedSearchService.openSaveSearchModal("VESSEL", false, $scope.selectedVessels);
         }else if(selectedItem.code === 'EXPORT'){
             $scope.exportTerminalsAsCSVFile(true);
        }
@@ -191,14 +191,14 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
             locale.getString('vessel.table_header_external_marking'),
             locale.getString('vessel.table_header_name'),
             locale.getString('vessel.table_header_signal'),
-            locale.getString('vessel.table_header_type'),
-            locale.getString('vessel.table_header_license'),
+            locale.getString('vessel.table_header_gear_type'),
+            locale.getString('vessel.table_header_license_type'),
             locale.getString('vessel.table_header_last_report'),
 
         ];
 
         //Set the data columns
-        var getData = function() {            
+        var getData = function() {
             var exportItems;
             //Export only selected items
             if(onlySelectedItems){
@@ -209,14 +209,14 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
                 exportItems = $scope.currentSearchResults.items;
             }
             return exportItems.reduce(
-                function(csvObject, item){ 
+                function(csvObject, item){
                     var csvRow = [
                         item.countryCode,
                         item.externalMarking,
                         item.name,
                         item.ircs,
-                        item.vesselType,
-                        item.license,
+                        $filter('vesselGearTypeTranslation')(item.gearType),
+                        $filter('vesselLicenseTypeTranslation')(item.licenseType),
                         item.lastReport
                     ];
                     csvObject.push(csvRow);
@@ -226,14 +226,14 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         };
 
         //Create and download the file
-        csvService.downloadCSVFile(getData(), header, filename);        
+        csvService.downloadCSVFile(getData(), header, filename);
     };
 
 
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
         searchService.reset();
-    });    
+    });
 
     init();
 });
