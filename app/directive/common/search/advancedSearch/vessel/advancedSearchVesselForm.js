@@ -9,7 +9,7 @@ angular.module('unionvmsWeb')
             $scope.flagStates = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
             $scope.licenseTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'LICENSE_TYPE'), 'LICENSE_TYPE','VESSEL', true);
             $scope.gearTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'GEAR_TYPE'), 'GEAR_TYPE','VESSEL', true);
-            $scope.types = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'ASSET_TYPE'),'ASSET_TYPE','VESSEL', true);
+            $scope.assetTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'ASSET_TYPE'),'ASSET_TYPE','VESSEL', true);
 
             //TODO: Need this from backend?
             $scope.activeTypes = [{'text':'Yes','code':'true'},{'text':'No','code':'false'}];
@@ -54,6 +54,9 @@ angular.module('unionvmsWeb')
                 searchService.addSearchCriteria("NAME", searchValue);
                 searchService.addSearchCriteria("CFR", searchValue);
                 searchService.addSearchCriteria("IRCS", searchValue);
+            }
+            if(typeof $scope.ASSET_TYPE === 'string' && $scope.ASSET_TYPE.trim().length > 0){
+                searchService.addSearchCriteria("ASSET_TYPE", $scope.ASSET_TYPE);
             }
 
             //Do the search

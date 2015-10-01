@@ -26,7 +26,7 @@ angular.module('unionvmsWeb')
         $scope.vesselLicensTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','LICENSE_TYPE'),'LICENSE_TYPE','VESSEL', true);
         $scope.vesselGearTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','GEAR_TYPE'), 'GEAR_TYPE','VESSEL', true);
         $scope.vesselLengthTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','UNIT_LENGTH'),'LENGTH','VESSEL', true);
-        $scope.vesselUnitOfMessures = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','UNIT_TONNAGE'), 'TONNAGE','VESSEL', true);
+        $scope.vesselGrossTonnageUnits = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','UNIT_TONNAGE'), 'TONNAGE','VESSEL', true);
 
         //Validation
         $scope.cfrValidationMessages = {

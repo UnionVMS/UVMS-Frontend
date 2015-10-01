@@ -16,7 +16,6 @@ angular.module('unionvmsWeb')
     };
 
     GetListRequest.prototype.DTOForVessel = function(){
-        //var crit = checkTimeZone(this.criterias);
         return {
             pagination : {page: this.page, listSize: this.listSize},
             vesselSearchCriteria : { isDynamic : this.isDynamic, criterias : this.criterias }

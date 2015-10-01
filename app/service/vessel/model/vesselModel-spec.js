@@ -30,6 +30,7 @@ describe('VesselModel', function() {
         "lengthOverAll": 345,
         "lengthBetweenPerpendiculars": null,
         "grossTonnage": 34.34,
+        "grossTonnageUnit": "LONDON",
         "powerMain": 456.234,
         "notes" : "Test ship",
         "contact" : {
@@ -83,6 +84,7 @@ describe('VesselModel', function() {
         expect(vessel.lengthValue).toEqual(vesselData.lengthOverAll);
         expect(vessel.lengthType).toEqual('LOA');
         expect(vessel.grossTonnage).toEqual(vesselData.grossTonnage);
+        expect(vessel.grossTonnageUnit).toEqual(vesselData.grossTonnageUnit);
         expect(vessel.powerMain).toEqual(vesselData.powerMain);
         expect(vessel.gearType).toEqual(vesselData.gearType);
 
@@ -123,6 +125,7 @@ describe('VesselModel', function() {
         expect(vesselCopy.lengthOverAll).toEqual(origVessel.lengthOverAll);
         expect(vesselCopy.lengthBetweenPerpendiculars).toEqual(origVessel.lengthBetweenPerpendiculars);
         expect(vesselCopy.grossTonnage).toEqual(origVessel.grossTonnage);
+        expect(vesselCopy.grossTonnageUnit).toEqual(origVessel.grossTonnageUnit);
         expect(vesselCopy.powerMain).toEqual(origVessel.powerMain);
         expect(vesselCopy.gearType).toEqual(origVessel.gearType);
 

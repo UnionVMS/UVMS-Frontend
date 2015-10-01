@@ -6,7 +6,7 @@ angular.module('unionvmsWeb')
     function Vessel(){
         this.active = true;
         this.source = SOURCE_INTERNAL;
-        this.unitOfMessaure = "LONDON";
+        this.grossTonnageUnit = "LONDON";
         this.lengthType = "LOA";
         this.contact = {
             name : undefined,
@@ -54,6 +54,7 @@ angular.module('unionvmsWeb')
         }
         vessel.powerMain = data.powerMain;
         vessel.grossTonnage = data.grossTonnage;
+        vessel.grossTonnageUnit = data.grossTonnageUnit;
 
         vessel.notes = data.notes;
 
@@ -109,6 +110,7 @@ angular.module('unionvmsWeb')
             powerMain : this.powerMain,
             gearType : this.gearType,
             grossTonnage : this.grossTonnage,
+            grossTonnageUnit : this.grossTonnageUnit,
             contact : this.contact,
             producer : this.producer,
             notes : this.notes,
@@ -134,6 +136,7 @@ angular.module('unionvmsWeb')
         }
         copy.externalMarking = this.externalMarking;
         copy.grossTonnage = this.grossTonnage;
+        copy.grossTonnageUnit = this.grossTonnageUnit;
         copy.ircs = this.ircs;
         copy.licenseType = this.licenseType;
         copy.homePort = this.homePort;
