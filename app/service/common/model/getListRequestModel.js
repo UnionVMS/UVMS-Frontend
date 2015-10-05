@@ -38,8 +38,43 @@ angular.module('unionvmsWeb')
     };
 
     GetListRequest.prototype.DTOForMovement = function(){
+        //MOVEMENT_SPEED and DATE
+        var rangeKeys = {
+            FROM_DATE : {key: 'DATE', subKey: 'from'},
+            TO_DATE : {key: 'DATE', subKey: 'to'},
+            SPEED_MIN : {key: 'MOVEMENT_SPEED', subKey: 'from'},
+            SPEED_MAX : {key: 'MOVEMENT_SPEED', subKey: 'to'},
+        };
+
+        var rangeCriterias = {};
+        var criterias = [];
+
+        var searchFieldKey, searchFieldValue;
+        $.each(this.criterias, function(index, searchField){
+            searchFieldKey = searchField.key;
+            searchFieldValue = searchField.value;
+            //Range search?
+            if(searchFieldKey in rangeKeys){
+                var rangeKey = rangeKeys[searchFieldKey];
+                if(angular.isUndefined(rangeCriterias[rangeKey.key])){
+                    rangeCriterias[rangeKey.key] = {};
+                }
+                rangeCriterias[rangeKey.key][rangeKey.subKey] = searchFieldValue;
+            }else{
+                criterias.push(searchField);
+            }
+        });
+
+        //Make rangeCriterias a list
+        var rangeCriteriasList = [];
+        $.each(rangeCriterias, function(key, value){
+            value['key'] = key;
+            rangeCriteriasList.push(value);
+        });
+
          return {
-            movementSearchCriteria : this.criterias,
+            movementRangeSearchCriteria : rangeCriteriasList,
+            movementSearchCriteria : criterias,
             pagination : {page: this.page, listSize: this.listSize}
         };
     };

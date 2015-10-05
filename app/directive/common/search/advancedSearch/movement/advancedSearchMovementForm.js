@@ -29,15 +29,13 @@ angular.module('unionvmsWeb')
 
         $scope.resetSearch = function(){
             //empty advancedSearchobject.
-            $scope.SIMPLE_NAME = "";
             $scope.selectedSavedSearch = "";
             $scope.selectedVesselGroup = "";
             $scope.resetAdvancedSearchForm(false);
-            $scope.advancedSearchObject.TIME_SPAN = $scope.timespan.code;
-        };
 
-        $scope.performSearch = function(){
-            console.log("perform search");
+            //Reset timespan dropdown and search!
+            $scope.selectFirstTimeSpanOption();
+            $scope.performAdvancedSearch();
         };
 
         $scope.openSaveSearchModal = function(){
@@ -46,7 +44,6 @@ angular.module('unionvmsWeb')
 
         $scope.selectVesselGroup = function(savedSearchGroup){
             console.log("Select vessel group!");
-            console.log("NOT IMPLEMENTED!");
             console.log(savedSearchGroup);
             console.log($scope.advancedSearchObject);
 
@@ -57,18 +54,6 @@ angular.module('unionvmsWeb')
             console.log("performSavedSearch!");
             $scope.advancedSearch = true;
             $scope.performSavedGroupSearch(savedSearchGroup, true);
-        };
-
-        $scope.setSimpleSearchCriterias = function (value){
-
-            if(!value)
-            {
-                delete $scope.advancedSearchObject.NAME;
-                //delete $scope.advancedSearchObject.IRCS;
-            } else {
-                $scope.advancedSearchObject.NAME = value + "*";
-                //$scope.advancedSearchObject.IRCS = value + "*";
-            }
         };
 
           //Watch for changes to the START DATE input
@@ -92,10 +77,13 @@ angular.module('unionvmsWeb')
             }
         });
 
+        $scope.selectFirstTimeSpanOption = function(){
+            $scope.advancedSearchObject.TIME_SPAN = $scope.timeSpanDropDownItems[0].code;
+        };
+
         var init = function(){
             //Setup dropdowns
             $scope.flagStates = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL' );
-            $scope.carrierType = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'VESSEL_TYPE'), 'CARRIER_TYPE', 'VESSEL');
             $scope.gearType = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'GEAR_TYPE'), 'GEAR_TYPE', 'VESSEL');
             $scope.power = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'SPAN_POWER_MAIN'));
             $scope.carrierLength = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'SPAN_LENGTH_LOA'));
@@ -107,9 +95,7 @@ angular.module('unionvmsWeb')
             var tempTimeSpan = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'TIME_SPAN'), 'TIME_SPAN','MOVEMENT');
             tempTimeSpan.push({"text":locale.getString('config.MOVEMENT_TIME_SPAN_custom'), "code":DATE_CUSTOM});
             $scope.timeSpanDropDownItems = tempTimeSpan;
-
-            $scope.timespan = tempTimeSpan[0];
-            $scope.advancedSearchObject.TIME_SPAN = $scope.timespan.code;
+            $scope.selectFirstTimeSpanOption();
 
             //TODO: Get from config
             $scope.mapArea = [{'text':'Area 1','code':'Area 1'},{'text':'Area 2','code':'Area 2'}];

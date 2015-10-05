@@ -43,20 +43,18 @@ angular.module('unionvmsWeb')
     SavedSearchGroup.prototype.toMovementDTO = function(){
         //List of properties that should have type ASSET
         var assetKeys = [
-            "NAME",
-            "FLAG_STATE",
             "IRCS",
-            "TYPE",
-            "LENGTH",
+            "FLAG_STATE",
             "CFR",
-            "STATUS"
+            "NAME",
+            "ASSET_TYPE"
         ];
 
         //List of properties that should have type OTHER
         var otherKeys = [
             "TIME_SPAN",
             "LENGTH_SPAN",
-            "MEAS_SPEED_SPAN"
+            "SPEED_SPAN"
         ];
 
         var processedSearchFields = [];
