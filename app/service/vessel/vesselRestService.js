@@ -236,7 +236,7 @@ angular.module('unionvmsWeb')
                 var groups = [];
                 if(angular.isArray(response.data)){
                     for (var i = 0; i < response.data.length; i ++) {
-                        groups.push(SavedSearchGroup.fromJson(response.data[i]));
+                        groups.push(SavedSearchGroup.fromVesselDTO(response.data[i]));
                     }
                 }
                 deferred.resolve(groups);
@@ -250,12 +250,12 @@ angular.module('unionvmsWeb')
 
     var createNewVesselGroup = function(savedSearchGroup){
         var deferred = $q.defer();
-        vesselRestFactory.vesselGroup().save(savedSearchGroup.toJson(), function(response) {
+        vesselRestFactory.vesselGroup().save(savedSearchGroup.toVesselDTO(), function(response) {
             if(response.code !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
-            deferred.resolve(SavedSearchGroup.fromJson(response.data));
+            deferred.resolve(SavedSearchGroup.fromVesselDTO(response.data));
         }, function(error) {
             console.error("Error creating vessel group");
             console.error(error);
@@ -266,12 +266,12 @@ angular.module('unionvmsWeb')
 
     var updateVesselGroup = function(savedSearchGroup){
         var deferred = $q.defer();
-        vesselRestFactory.vesselGroup().update(savedSearchGroup.toJson(), function(response) {
+        vesselRestFactory.vesselGroup().update(savedSearchGroup.toVesselDTO(), function(response) {
             if(response.code !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
-            deferred.resolve(SavedSearchGroup.fromJson(response.data));
+            deferred.resolve(SavedSearchGroup.fromVesselDTO(response.data));
         }, function(error) {
             console.error("Error updating vessel group");
             console.error(error);
@@ -288,7 +288,7 @@ angular.module('unionvmsWeb')
                 return;
             }
 
-            deferred.resolve(SavedSearchGroup.fromJson(response.data));
+            deferred.resolve(SavedSearchGroup.fromVesselDTO(response.data));
         },
         function(error) {
             console.error("Error when trying to delete a vessel group");

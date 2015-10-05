@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb')
-.factory('SavedSearchGroup', function(SearchField) {
+.factory('SavedSearchGroup', function(SearchField, searchUtilsService) {
 
     function SavedSearchGroup(name, user, dynamic, searchFields){
 
@@ -10,39 +10,39 @@ angular.module('unionvmsWeb')
         this.searchFields = searchFields;
     }
 
-    SavedSearchGroup.fromJson = function(data){
+    SavedSearchGroup.fromVesselDTO = function(dto){
         var searchFields = [];
-        if($.isArray(data.searchFields)){
-            for (var i = 0; i < data.searchFields.length; i ++) {
-                searchFields.push(SearchField.fromJson(data.searchFields[i]));
+        if($.isArray(dto.searchFields)){
+            for (var i = 0; i < dto.searchFields.length; i ++) {
+                searchFields.push(SearchField.fromJson(dto.searchFields[i]));
             }
         }
-        var savedSearchGroup = new SavedSearchGroup(data.name, data.user, data.dynamic, searchFields);
-        savedSearchGroup.id = data.id;
+        searchUtilsService.replaceMinMaxValuesWithSpans(searchFields);
+        var savedSearchGroup = new SavedSearchGroup(dto.name, dto.user, dto.dynamic, searchFields);
+        savedSearchGroup.id = dto.guid;
         return savedSearchGroup;
     };
 
-    SavedSearchGroup.prototype.toJson = function(){
-        return JSON.stringify({
-            id : this.id,
+    SavedSearchGroup.prototype.toVesselDTO = function(){
+        //Create a copy of the searchFields list
+        var copyOfSearchFields = [];
+        $.each(this.searchFields, function(index, searchField){
+            copyOfSearchFields.push(searchField.copy());
+        });
+        var customSearchFields = searchUtilsService.replaceSpansWithMinMaxValues(copyOfSearchFields);
+
+        return {
+            guid : this.id,
             name : this.name,
             user : this.user,
             dynamic : this.dynamic,
-            searchFields : this.searchFields,
-        });
+            searchFields : customSearchFields,
+        };
     };
 
-    SavedSearchGroup.prototype.toMovementJson = function(){
+    SavedSearchGroup.prototype.toMovementDTO = function(){
+        //List of properties that should have type ASSET
         var assetKeys = [
-            //There are others types in vessel but we dont use them here.
-            /*"GUID",
-            "MMSI",
-            "EXTERNAL_MARKING",
-            "HOMEPORT",
-            "ACTIVE",
-            "LICENSE",
-            "TYPE"*/
-
             "NAME",
             "FLAG_STATE",
             "IRCS",
@@ -52,6 +52,7 @@ angular.module('unionvmsWeb')
             "STATUS"
         ];
 
+        //List of properties that should have type OTHER
         var otherKeys = [
             "TIME_SPAN",
             "LENGTH_SPAN",
@@ -75,24 +76,24 @@ angular.module('unionvmsWeb')
             processedSearchFields.push(sF);
         });
 
-        return JSON.stringify({
+        return {
             id : this.id,
             name : this.name,
             user : this.user,
             dynamic : this.dynamic,
             searchFields : processedSearchFields
-        });
+        };
     };
 
-    SavedSearchGroup.fromMovementJson = function(data){
+    SavedSearchGroup.fromMovementDTO = function(dto){
         var searchFields = [];
-        if($.isArray(data.searchFields)){
-            for (var i = 0; i < data.searchFields.length; i ++) {
-                searchFields.push(SearchField.fromJson(data.searchFields[i]));
+        if($.isArray(dto.searchFields)){
+            for (var i = 0; i < dto.searchFields.length; i ++) {
+                searchFields.push(SearchField.fromJson(dto.searchFields[i]));
             }
         }
-        var savedSearchGroup = new SavedSearchGroup(data.name, data.user, data.dynamic, searchFields);
-        savedSearchGroup.id = data.id;
+        var savedSearchGroup = new SavedSearchGroup(dto.name, dto.user, dto.dynamic, searchFields);
+        savedSearchGroup.id = dto.id;
         return savedSearchGroup;
     };
 

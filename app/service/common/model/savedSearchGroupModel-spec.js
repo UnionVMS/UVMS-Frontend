@@ -4,37 +4,82 @@ describe('SavedSearchGroup', function() {
 
 	var responseData = {
 		dynamic: true,
-		id: 44,
+		guid: 44,
 		name: "Test swe",
 		searchFields: [
 			{
-				key: "FLAG_STATE", 
+				key: "FLAG_STATE",
 				value: "SWE"
 			},
 			{
-				key: "NAME", 
-				value: "Test vessel"
-			},			
+				key: "NAME",
+				value: "TEST"
+			},
+            {
+                key: "MIN_LENGTH",
+                value: "4"
+            },
+            {
+                key: "MAX_LENGTH",
+                value: "12"
+            },
+            {
+                key: "MIN_POWER",
+                value: "5"
+            },
 		],
 		user: "FRONTEND_USER",
 	};
 
 
-	it('fromJson should build a correct object', inject(function(SavedSearchGroup) {
-		var group = SavedSearchGroup.fromJson(responseData);
+	it('fromVesselDTO should build a correct object', inject(function(SavedSearchGroup) {
+		var group = SavedSearchGroup.fromVesselDTO(responseData);
 		expect(group.dynamic).toEqual(responseData.dynamic);
-		expect(group.id).toEqual(responseData.id);
+		expect(group.id).toEqual(responseData.guid);
 		expect(group.name).toEqual(responseData.name);
-		expect(group.user).toEqual(responseData.user);
-		expect(angular.equals(group.searchFields, responseData.searchFields)).toBeTruthy();
+        expect(group.user).toEqual(responseData.user);
+
+		expect(group.searchFields.length).toEqual(4);
+
+        var minLength, lengthSpan, name, searchCriteriaKey, searchCriteriaValue;
+        $.each(group.searchFields, function(index, serachField){
+            searchCriteriaKey = serachField.key;
+            searchCriteriaValue = serachField.value;
+            if(searchCriteriaKey === 'LENGTH_SPAN'){
+                lengthSpan = searchCriteriaValue;
+            }
+            if(searchCriteriaKey === 'MIN_LENGTH'){
+                minLength = searchCriteriaValue;
+            }
+            if(searchCriteriaKey === 'POWER_SPAN'){
+                powerSpan = searchCriteriaValue;
+            }
+            if(searchCriteriaKey === 'NAME'){
+                name = searchCriteriaValue;
+            }
+        });
+        //Correct values?
+        expect(lengthSpan).toEqual('4-12');
+        expect(minLength).toEqual(undefined);
+        expect(powerSpan).toEqual('5+');
+        expect(name).toEqual('TEST');
+
 
 	}));
 
-	it('toJson should return correctly formatted data', inject(function(SavedSearchGroup) {
+	it('toVesselDTO should return correctly formatted data', inject(function(SavedSearchGroup) {
 
-		var group = SavedSearchGroup.fromJson(responseData);
-		var toJsonObject = JSON.parse(group.toJson());
-		expect(angular.equals(toJsonObject, responseData)).toBeTruthy();
+		var group = SavedSearchGroup.fromVesselDTO(responseData);
+        expect(group.searchFields.length).toEqual(4, 'Should be 4 searchFields in the group object');
+
+		var dto = group.toVesselDTO(); //This function should create custom list of searchFields (replace spans with min/max values)
+        expect(dto.guid).toEqual(responseData.guid, 'guid should be set in the dto');
+        expect(dto.name).toEqual(responseData.name, 'name should be set in the dto');
+        expect(dto.dynamic).toEqual(responseData.dynamic, 'dynamic should be set in the dto');
+        expect(dto.searchFields.length).toEqual(5, 'Should be 5 searchFields in the dto');
+
+        //Group searchFields should be untouched
+        expect(group.searchFields.length).toEqual(4, 'Should still be 4 searchFields in the group object');
 
 	}));
 

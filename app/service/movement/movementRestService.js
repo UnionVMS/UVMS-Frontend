@@ -134,7 +134,7 @@ angular.module('unionvmsWeb')
                 var groups = [];
                 if(angular.isArray(response.data)){
                     for (var i = 0; i < response.data.length; i ++) {
-                        groups.push(SavedSearchGroup.fromMovementJson(response.data[i]));
+                        groups.push(SavedSearchGroup.fromMovementDTO(response.data[i]));
                     }
                 }
                 deferred.resolve(groups);
@@ -148,12 +148,12 @@ angular.module('unionvmsWeb')
 
     var createNewSavedSearch = function(savedSearchGroup){
         var deferred = $q.defer();
-        movementRestFactory.savedSearch().save(savedSearchGroup.toMovementJson(), function(response) {
+        movementRestFactory.savedSearch().save(savedSearchGroup.toMovementDTO(), function(response) {
             if(response.code !== "200"){
                 deferred.reject("Invalid response status");
                 return;
             }
-            deferred.resolve(SavedSearchGroup.fromJson(response.data));
+            deferred.resolve(SavedSearchGroup.fromMovementDTO(response.data));
         }, function(error) {
             console.error("Error creating vessel group");
             console.error(error);
@@ -164,12 +164,12 @@ angular.module('unionvmsWeb')
 
     var updateSavedSearch = function(savedSearchGroup){
         var deferred = $q.defer();
-        movementRestFactory.savedSearch().update(savedSearchGroup.toJson(), function(response) {
+        movementRestFactory.savedSearch().update(savedSearchGroup.toMovementDTO(), function(response) {
             if(response.code !== "200"){
                 deferred.reject("Invalid response status");
                 return;
             }
-            deferred.resolve(SavedSearchGroup.fromJson(response.data));
+            deferred.resolve(SavedSearchGroup.fromMovementDTO(response.data));
         }, function(error) {
             console.error("Error updating saved movement search");
             console.error(error);
@@ -185,7 +185,7 @@ angular.module('unionvmsWeb')
                 deferred.reject("Invalid response status");
                 return;
             }
-            deferred.resolve(SavedSearchGroup.fromJson(response.data));
+            deferred.resolve(SavedSearchGroup.fromMovementDTO(response.data));
         }, function(error) {
             console.error("Error when trying to delete a saved movement search");
             console.error(error);

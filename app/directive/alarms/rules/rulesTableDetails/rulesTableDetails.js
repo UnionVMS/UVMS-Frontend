@@ -16,7 +16,7 @@ angular.module('unionvmsWeb').directive('rulesTableDetails', function() {
 });
 
 angular.module('unionvmsWeb')
-    .controller('rulesTableDetailsCtrl', function($scope, $timeout, $log, locale, GetListRequest, SearchResults, Alarm, SearchResultListPage, searchService){
+    .controller('rulesTableDetailsCtrl', function($scope, $timeout, $log, locale, GetListRequest, SearchResults, Alarm, SearchResultListPage, searchUtilsService, searchService){
 
         $scope.searchObject = {};
         $scope.currentSearchResults = new SearchResults('openedDate', false);
@@ -70,7 +70,7 @@ angular.module('unionvmsWeb')
             });
 
             //Fix time criterias
-            getListRequest.setSearchCriterias(searchService.modifySpanAndTimeZone(getListRequest.criterias));
+            getListRequest.setSearchCriterias(searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias));
 
             //TODO: Implement search using RestService directly.
             //Don't use the searchService since that can't handle multiple concurrent searches
