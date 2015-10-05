@@ -38,7 +38,7 @@ angular.module('unionvmsWeb')
     };
 
     GetListRequest.prototype.DTOForMovement = function(){
-        //MOVEMENT_SPEED and DATE
+        //List of search fields that should be in the movementRangeSearchCriteria object
         var rangeKeys = {
             FROM_DATE : {key: 'DATE', subKey: 'from'},
             TO_DATE : {key: 'DATE', subKey: 'to'},
@@ -49,6 +49,7 @@ angular.module('unionvmsWeb')
         var rangeCriterias = {};
         var criterias = [];
 
+        //Build dict with rangeCriterias
         var searchFieldKey, searchFieldValue;
         $.each(this.criterias, function(index, searchField){
             searchFieldKey = searchField.key;
@@ -96,6 +97,21 @@ angular.module('unionvmsWeb')
     GetListRequest.prototype.DTOForExchangeMessageList = function(){
         return{
             exchangeSearchCriteria : {criterias: this.criterias, isDynamic: false},
+            pagination: {page: this.page, listSize: this.listSize}
+        };
+    };
+
+
+    GetListRequest.prototype.DTOForAlarms = function(){
+        return{
+            alarmSearchCriteria : this.criterias,
+            pagination: {page: this.page, listSize: this.listSize}
+        };
+    };
+
+    GetListRequest.prototype.DTOForTickets = function(){
+        return{
+            ticketSearchCriteria : this.criterias,
             pagination: {page: this.page, listSize: this.listSize}
         };
     };

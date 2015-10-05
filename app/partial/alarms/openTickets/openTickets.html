@@ -1,4 +1,4 @@
-<div class="openTicketsContainer">    
+<div class="openTicketsContainer">
     <alarms-page-header active-tab="OPEN_TICKETS"></alarms-page-header>
     <div class="container containerWithBottomPadding">
 
@@ -6,13 +6,13 @@
             <!-- Advanced search -->
             <div class="row">
                 <div class="col-md-11">
-                    <advanced-search modeltype="'ALARMS_OPEN_TICKETS'" searchfunc="searchAlarms" advancedsearchvisible="true"></advanced-search>
-                </div>                
+                    <advanced-search modeltype="'ALARMS_OPEN_TICKETS'" searchfunc="searchTickets" advancedsearchvisible="true"></advanced-search>
+                </div>
                 <div class="col-md-1 pull-right textAlignRight printAndExport">
                     <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportItemsAsCSVFile()"></i>
-                    <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>              
-                </div>                    
-            </div>            
+                    <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>
+                </div>
+            </div>
 
             <!-- Toggle: ALL, OPEN, CLOSED -->
             <div class="row filterRow">

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage, PositionReportModal, ManualPosition, userService){
+angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage, PositionReportModal, ManualPosition, userService, searchService){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -6,13 +6,14 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         return userService.isAllowed(feature, 'Rules', true);
     };
 
-    $scope.editSelectionDropdownItems = [        
+    $scope.editSelectionDropdownItems = [
         {text:locale.getString('common.export_selection'), code : 'EXPORT'}
     ];
     if(checkAccessToFeature('manageAlarmsHoldingTable')){
         $scope.editSelectionDropdownItems.unshift({text:locale.getString('alarms.holding_table_reprocess_reports'), code : 'REPROCESS_REPORTS'});
     }
 
+    $scope.currentSearchResults = new SearchResults('name', false);
     $scope.statusFilter = 'all';
     $scope.filterOnStatus = function(alarm) {
         if ($scope.statusFilter === "all") {
@@ -20,44 +21,29 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         }
 
         return alarm.isOpen() ? $scope.statusFilter === "open" : $scope.statusFilter === "closed";
-    };    
+    };
 
-
-    $scope.currentSearchResults = new SearchResults('name', false);
-
-    //Add mock data    
-    var mockAlarms = [];
-    for (var i = 17; i >= 1; i--) {
-        var mockAlarm = new Alarm();
-        mockAlarm.id = i;
-        mockAlarm.openedDate = "2015-08-22 08:00";
-        mockAlarm.affectedObject = "Tunafjord";
-        mockAlarm.ruleName = "POS Validation";
-        mockAlarm.sender = "FMC";
-        
-        var random = Math.floor(Math.random() * 2) + 1;
-        if(random === 2){
-            mockAlarm.setStatusToClosed();
-            mockAlarm.resolvedDate = "2015-08-27 13:37";
-            mockAlarm.resolvedBy = "antkar";                
-        }else{
-            mockAlarm.setStatusToOpen();
-        }
-
-        mockAlarms.push(mockAlarm);
-    }
-    var mockListPage = new SearchResultListPage(mockAlarms, 1, 14);
-    $scope.currentSearchResults.updateWithNewResults(mockListPage);
-
-
+    var init = function(){
+        $scope.searchAlarms();
+    };
 
     $scope.searchAlarms = function() {
-        /*$scope.clearSelection();
-        $scope.currentSearchResults.clearForSearch();        
-        searchService.searchMobileTerminals(false)
-                .then(updateSearchResults, onGetSearchResultsError);*/
-        $log.debug("Todo: implement search");
-    };    
+        $scope.clearSelection();
+        $scope.currentSearchResults.clearForSearch();
+        searchService.searchAlarms()
+                .then(updateSearchResults, onGetSearchResultsError);
+    };
+
+    //Update the search results
+    var updateSearchResults = function(searchResultsListPage){
+        $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
+    };
+
+    //Error during search
+    var onGetSearchResultsError = function(error){
+        $scope.currentSearchResults.setLoading(false);
+        $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
+    };
 
 
     //Handle click on the top "check all" checkbox
@@ -193,9 +179,9 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         }
         else if(selectedItem.code === 'REPROCESS_REPORTS'){
             alertService.showInfoMessageWithTimeout("Not yet implemented.");
-        }        
+        }
         $scope.editSelection = "";
-    };    
+    };
 
     $scope.resolveItem = function(item){
 
@@ -219,10 +205,12 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         position.message = {
             status : 'PENDING'
         };
-       
+
         PositionReportModal.show(position).then(function(result) {
             //Nothing
         });
     };
+
+    init();
 
 });

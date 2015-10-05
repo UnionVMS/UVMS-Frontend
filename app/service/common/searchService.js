@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchUtilsService, GetListRequest, VesselListPage, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage, auditLogRestService, exchangeRestService) {
+angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchUtilsService, GetListRequest, VesselListPage, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage, auditLogRestService, exchangeRestService, alarmRestService) {
 
 	var getListRequest = new GetListRequest(1, 20, true, []),
         advancedSearchObject  = {};
@@ -13,7 +13,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         map[searchKey] = true;
         return map;
     }, {});
-    
+
     //First get movements, and the get the matching vessels
     var getMovements = function(movementRequest) {
         var deferred = $q.defer();
@@ -55,6 +55,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vessels) {
             if (vessels.length === 0) {
                 deferred.resolve(new SearchResultListPage());
+                return;
             }
 
             var vesselsByGuid = {};
@@ -316,6 +317,16 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         searchExchange: function(servicePath) {
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
             return exchangeRestService.getExchangeMessages(getListRequest, servicePath);
+        },
+
+        searchTickets : function(){
+            searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
+            return alarmRestService.getTicketsList(getListRequest);
+        },
+
+        searchAlarms : function(){
+            searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
+            return alarmRestService.getAlarmsList(getListRequest);
         },
 
         //Modify search request

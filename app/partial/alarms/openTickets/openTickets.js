@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage){
+angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -6,6 +6,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         {text:locale.getString('common.export_selection'), code : 'EXPORT'}
     ];
 
+    $scope.currentSearchResults = new SearchResults('name', false);
     $scope.statusFilter = 'all';
     $scope.filterOnStatus = function(alarm) {
         if ($scope.statusFilter === "all") {
@@ -13,48 +14,29 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         }
 
         return alarm.isOpen() ? $scope.statusFilter === "open" : $scope.statusFilter === "closed";
-    };    
+    };
 
+    var init = function(){
+        $scope.searchTickets();
+    };
 
-    $scope.currentSearchResults = new SearchResults('name', false);
+    $scope.searchTickets = function() {
+        $scope.clearSelection();
+        $scope.currentSearchResults.clearForSearch();
+        searchService.searchTickets()
+                .then(updateSearchResults, onGetSearchResultsError);
+    };
 
-    //Add mock data    
-    var mockAlarms = [];
-    for (var i = 17; i >= 1; i--) {
-        var mockAlarm = new Alarm();
-        mockAlarm.id = i;
-        mockAlarm.openedDate = "2015-08-22 08:00";
-        mockAlarm.affectedObject = "Tunafjord";
-        mockAlarm.ruleName = "POS Validation";
-        mockAlarm.sender = "FMC";
-        
-        var random = Math.floor(Math.random() * 3) + 1;
-        if(random === 3){
-            //Nothing
-        }
-        else if(random === 2){
-            mockAlarm.setStatusToClosed();
-            mockAlarm.resolvedDate = "2015-08-27 13:37";
-            mockAlarm.resolvedBy = "antkar";                
-        }else{
-            mockAlarm.setStatusToOpen();
-        }
+    //Update the search results
+    var updateSearchResults = function(searchResultsListPage){
+        $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
+    };
 
-        mockAlarms.push(mockAlarm);
-    }
-    var mockListPage = new SearchResultListPage(mockAlarms, 1, 14);
-    $scope.currentSearchResults.updateWithNewResults(mockListPage);
-
-
-
-    $scope.searchAlarms = function() {
-        /*$scope.clearSelection();
-        $scope.currentSearchResults.clearForSearch();        
-        searchService.searchMobileTerminals(false)
-                .then(updateSearchResults, onGetSearchResultsError);*/
-        $log.debug("Todo: implement search");
-    };    
-
+    //Error during search
+    var onGetSearchResultsError = function(error){
+        $scope.currentSearchResults.setLoading(false);
+        $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
+    };
 
     //Handle click on the top "check all" checkbox
     $scope.checkAll = function(){
@@ -187,6 +169,8 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
             $scope.exportItemsAsCSVFile(true);
         }
         $scope.editSelection = "";
-    };    
+    };
+
+    init();
 
 });
