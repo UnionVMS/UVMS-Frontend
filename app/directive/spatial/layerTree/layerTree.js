@@ -50,6 +50,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				scope.addLayers( source );
 			};
 
+			// reverse nested array
 			scope.reverse = function( array ) {
 				array = array.reverse();
 				$.each( array, function( index, value ) {
@@ -59,8 +60,9 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				});
 			};
 
+			// add and reorder layers
 			scope.addLayers = function( folder ) {
-				var layersByTitle, layer;
+				var layersByTitle, layer, treeNode;
 
 				$.each( folder, function( index, value ) {
 					if ( value.folder ) {
@@ -77,17 +79,16 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 					layer = layersByTitle[ 0 ];
 
 					if ( !layer ) {
-						layer = value.data.mapLayer = scope.mapService.createLayer( value.data );
-
+						treeNode = scope.$tree.getNodeByKey( value.key );
+						treeNode.data.mapLayer = scope.mapService.createLayer( value.data );
+						layer = treeNode.data.mapLayer;
 						if (!layer) { return ( true ) };// layer creation failed
-
-						scope.mapService.map.addLayer( layer );
 					} else {
-						scope.mapService.map.removeLayer( layer );
-						scope.mapService.map.addLayer( layer );
+						scope.mapService.map.removeLayer( layer );// remove to have it reordered
 					}
 
-					layer.set( 'visible', value.selected );
+					layer.set( 'visible', value.selected );// don't request tiles if not selected
+					scope.mapService.map.addLayer( layer );
 				});
 			};
 
@@ -172,6 +173,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 								children: [
 									{
 										title: 'EEZ',
+										extraClasses: 'layertree-menu',
 										data: {
 											type: 'eez',
 											title: 'eez',
@@ -184,11 +186,35 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			                    'TILED': true,
 			                    'STYLES': 'eez_label_geom'
 			                    //'cql_filter': "sovereign='Portugal' OR sovereign='Poland' OR sovereign='Bulgaria' OR sovereign='Belgium'"
-			                }
+			                },
+											contextItems: {
+												styleA: {
+													name: 'Labels and Geometry',
+													type: 'radio',
+													radio: 'style',
+													value: 'eez_label_geom',
+													selected: true
+												},
+												styleB: {
+													name: 'Geometry only',
+													type: 'radio',
+													radio: 'style',
+													value: 'eez_geom',
+													selected: false
+												},
+												styleC: {
+													name: 'Labels only',
+													type: 'radio',
+													radio: 'style',
+													value: 'eez_label',
+													selected: false
+												}
+											}
 										}
 									},
-									/*{ // debugging
+									/*{ // development: local geoserver
 										title: 'Test',
+										extraClasses: 'layertree-menu',
 										data: {
 											type: 'wms',
 											title: 'test',
@@ -200,9 +226,32 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			                params: {
 			                    'LAYERS': 'uvms:countries',
 			                    'TILED': true,
-			                    'STYLES': ''
+			                    'STYLES': 'polygon'
 			                    //'cql_filter': "sovereign='Portugal' OR sovereign='Poland' OR sovereign='Bulgaria' OR sovereign='Belgium'"
-			                }
+			                },
+											contextItems: {
+												styleA: {
+													name: 'Polygon (default)',
+													type: 'radio',
+													radio: 'style',
+													value: 'polygon',
+													selected: true
+												},
+												styleB: {
+													name: 'Giant polygon',
+													type: 'radio',
+													radio: 'style',
+													value: 'giant_polygon',
+													selected: false
+												},
+												styleC: {
+													name: 'Grass',
+													type: 'radio',
+													radio: 'style',
+													value: 'grass',
+													selected: false
+												}
+											}
 										}
 									},*/
 									{
