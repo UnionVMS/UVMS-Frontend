@@ -211,6 +211,11 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         });
     };
 
+    $scope.$on("$destroy", function() {
+        alertService.hideMessage();
+        searchService.reset();
+    });
+
     init();
 
 });

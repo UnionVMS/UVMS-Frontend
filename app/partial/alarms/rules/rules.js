@@ -325,6 +325,10 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
         $scope.editSelection = "";
     };
 
+    $scope.$on("$destroy", function() {
+        alertService.hideMessage();
+    });
+
     init();
 
 });

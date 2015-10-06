@@ -171,6 +171,11 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         $scope.editSelection = "";
     };
 
+    $scope.$on("$destroy", function() {
+        alertService.hideMessage();
+        searchService.reset();
+    });
+
     init();
 
 });
