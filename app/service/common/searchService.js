@@ -27,7 +27,9 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             //Get vessels for all movements in page
             var vesselRequest = new GetListRequest(1, page.getNumberOfItems(), true);
             $.each(page.items, function(index, movement) {
-                vesselRequest.addSearchCriteria("GUID", movement.connectId);
+                if(angular.isDefined(movement.connectId)){
+                    vesselRequest.addSearchCriteria("GUID", movement.connectId);
+                }
             });
             vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vessels){
                 var vesselPage = new VesselListPage(vessels, 1, 1);
@@ -62,8 +64,10 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 
             var vesselsByGuid = {};
             $.each(vessels, function(index, vessel) {
-                movementRequest.addSearchCriteria("CONNECT_ID", vessel.vesselId.guid);
-                vesselsByGuid[vessel.vesselId.guid] = vessel;
+                if(angular.isDefined(vessel.vesselId)){
+                    movementRequest.addSearchCriteria("CONNECT_ID", vessel.vesselId.guid);
+                    vesselsByGuid[vessel.vesselId.guid] = vessel;
+                }
             });
 
             movementRestService.getMovementList(movementRequest).then(function(page) {
@@ -162,7 +166,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             var movementCritieria = partition["default"];
             var vesselCriteria = partition["vessel"];
 
-            var vesselRequest = new GetListRequest(1, 1000, true, vesselCriteria);
+            var vesselRequest = new GetListRequest(1, 10000, true, vesselCriteria);
             var movementRequest = new GetListRequest(getListRequest.page, getListRequest.listSize, getListRequest.isDynamic, movementCritieria);
 
             //Get vessels first?
@@ -256,7 +260,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             //Get vessels first?
             if(vesselCriteria.length > 0){
                 var deferred = $q.defer();
-                var getVesselListRequest = new GetListRequest(1, 1000, vesselSearchIsDynamic, vesselCriteria);
+                var getVesselListRequest = new GetListRequest(1, 10000, vesselSearchIsDynamic, vesselCriteria);
                 var outerThis = this;
                 //Get the vessels
                 vesselRestService.getAllMatchingVessels(getVesselListRequest).then(
