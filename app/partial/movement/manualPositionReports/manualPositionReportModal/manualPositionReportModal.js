@@ -17,6 +17,12 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     $scope.course = position ? position.course : undefined;
     $scope.guid = position ? position.guid : undefined;
 
+    //CUSTOM VALIDATIONS
+    $scope.maxTwoDecimalsRegexp = new RegExp(/^[0-9]+(\.[0-9]{0,2}?)?$/);
+    $scope.maxTwoDecimalsValidationMessages = {
+        'pattern' : locale.getString('common.validation_max_number_of_decimals', "2")
+    };
+
     $scope.clearMovement = function() {
         $scope.ircs = undefined;
         $scope.cfr = undefined;

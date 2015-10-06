@@ -35,7 +35,7 @@ angular.module('unionvmsWeb')
         $scope.mmsiValidationMessages = {
             'pattern' : locale.getString('vessel.vessel_details_mmsi_pattern_validation_message')
         };
-        $scope.maxTwoDecimalsRegexp = new RegExp(/^[0-9]+(\.[0-9][0-9]?)?$/);
+        $scope.maxTwoDecimalsRegexp = new RegExp(/^[0-9]+(\.[0-9]{0,2}?)?$/);
         $scope.maxTwoDecimalsValidationMessages = {
             'pattern' : locale.getString('vessel.vessel_details_max_decimals_pattern_validation_message', "2")
         };

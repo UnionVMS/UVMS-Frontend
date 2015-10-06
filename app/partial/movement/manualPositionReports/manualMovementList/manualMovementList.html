@@ -47,7 +47,7 @@
                     <td>{{item.time}}</td>
                     <td>{{item.position.latitude}}</td>
                     <td>{{item.position.longitude}}</td>
-                    <td>{{item.speed}}</td>
+                    <td>{{item.speed | number:2}}</td>
                     <td>{{item.course}}&deg;</td>
                     <td>
                         <button class="btn btn-primary" ng-click="editPosition(item)" title="{{'common.edit'| i18n}}" ng-if="item.guid" show-if-allowed='Movement:manageManualMovements'>
