@@ -5,31 +5,31 @@
                 <tr>
                     <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.state'">{{'movement.table_header_flag_state' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.vessel.state'">{{'movement.table_header_flag_state' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.externalMarking'">{{'movement.table_header_external_marking' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.vessel.externalMarking'">{{'movement.table_header_external_marking' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.ircs'">{{'movement.table_header_ircs' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.vessel.ircs'">{{'movement.table_header_ircs' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.name'">{{'movement.table_header_name' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.vessel.name'">{{'movement.table_header_name' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.movement.time'">{{'movement.table_header_time' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.time'">{{'movement.table_header_time' | i18n}}</th>
 
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.movement.latitude'">{{'movement.table_header_latitude' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.longitude'">{{'movement.table_header_longitude' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.movement.longitude'">{{'movement.table_header_longitude' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.status'">{{'movement.table_header_status' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.movement.status'">{{'movement.table_header_status' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.ms'">{{'movement.table_header_ms' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.movement.reportedSpeed'">{{'movement.table_header_ms' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.cs'">{{'movement.table_header_cs' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.movement.calculatedSpeed'">{{'movement.table_header_cs' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.course'">{{'movement.table_header_course' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.movement.reportedCourse'">{{'movement.table_header_course' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.messagetype'">{{'movement.table_header_message_type' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.movement.movementType'">{{'movement.table_header_movement_type' | i18n}}</th>
 
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.source'">{{'movement.table_header_source' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.movement.source'">{{'movement.table_header_source' | i18n}}</th>
 
                 </tr>
             </thead>
@@ -40,16 +40,15 @@
                     <td>{{movement.vessel.externalMarking}}</td>
                     <td>{{movement.vessel.ircs}}</td>
                     <td class="movementvesselname">{{movement.vessel.name}}</td>
-                    <!--<td>{{movement.type}}</td>-->
-                    <td>{{movement.getFormattedTime()}}</td>
+                    <td>{{movement.time |date:"medium"}}</td>
                     <td>{{movement.movement.latitude}}</td>
                     <td>{{movement.movement.longitude}}</td>
                     <td>{{movement.movement.status}}</td>
-                    <td>{{movement.movement.measuredSpeed}} {{'movement.movement_speed_unit' | i18n}}</td>
+                    <td>{{movement.movement.reportedSpeed}} {{'movement.movement_speed_unit' | i18n}}</td>
                     <td>{{movement.movement.calculatedSpeed}} {{'movement.movement_speed_unit' | i18n}}</td>
-                    <td>{{movement.movement.course}}&deg;</td>
-                    <td>{{movement.movement.messageType}}</td>
-                    <td>{{movement.movement.source}}</td>
+                    <td>{{movement.movement.reportedCourse}}&deg;</td>
+                    <td>{{movement.movement.movementType}}</td>
+                    <td>{{movement.movement.source | transponderName}}</td>
                 </tr>
             </tbody>
         </table>

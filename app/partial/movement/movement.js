@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, alertService, movementRestService, searchService, locale, $stateParams, ManualPositionReportModal, csvService, SearchResults){
+angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, $filter, alertService, movementRestService, searchService, locale, $stateParams, ManualPositionReportModal, csvService, SearchResults){
 
     //Current filter and sorting for the results table
     $scope.sortFilter = '';
@@ -176,7 +176,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
             locale.getString('movement.table_header_ms'),
             locale.getString('movement.table_header_cs'),
             locale.getString('movement.table_header_course'),
-            locale.getString('movement.table_header_message_type'),
+            locale.getString('movement.table_header_movement_type'),
             locale.getString('movement.table_header_source')
         ];
 
@@ -202,11 +202,11 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
                         item.movement.latitude,
                         item.movement.longitude,
                         item.movement.status,
-                        item.movement.measuredSpeed +' ' +locale.getString('movement.movement_speed_unit'),
+                        item.movement.reportedSpeed +' ' +locale.getString('movement.movement_speed_unit'),
                         item.movement.calculatedSpeed +' ' +locale.getString('movement.movement_speed_unit'),
-                        item.movement.course,
-                        item.movement.messageType,
-                        item.movement.source
+                        item.movement.reportedSpeedCourse,
+                        item.movement.movementType,
+                        $filter('transponderName')(item.movement.source)
                     ];
                     csvObject.push(csvRow);
                     return csvObject;
