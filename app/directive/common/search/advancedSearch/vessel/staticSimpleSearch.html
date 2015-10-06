@@ -2,12 +2,12 @@
     <div class="row nomargin">
         <!-- Search input -->
         <div class="col-md-2 nopaddingleft searchcriteria">
-            <input type="text" class="form-control searchText" ng-disabled="advancedSearchVisible" placeholder="{{'vessel.search_input_placeholder' | i18n}}" ng-model="freeText">
+            <input type="text" class="form-control searchText" ng-disabled="advancedSearchVisible" placeholder="{{'vessel.search_input_placeholder' | i18n}}" ng-model="freeText" ng-change="resetSelectedVesselGroup()">
         </div>
 
         <!-- Type Dropdown -->
         <div class="col-md-2 smallerpadding searchcriteria">
-            <dropdown ng-model="ASSET_TYPE" initialtext="{{'common.all' | i18n}}" items="assetTypes"></dropdown>
+            <dropdown ng-model="ASSET_TYPE" initialtext="{{'common.all' | i18n}}" items="assetTypes" callback="resetSelectedVesselGroup"></dropdown>
         </div>
 
         <div class="col-md-2 col-md-offset-4 smallerpadding">
@@ -26,7 +26,7 @@
                     </button>
                 </div>
             </div>
-        </div>   
+        </div>
         <div class="col-md-1 nopaddingright">
             <div class="row nomargin">
                 <div class="col-md-12 colNoPadding searchcriteriadropdown">
@@ -35,6 +35,6 @@
                     </button>
                 </div>
             </div>
-        </div>   
+        </div>
     </div>
 </div>
