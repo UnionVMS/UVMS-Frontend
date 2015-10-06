@@ -5,9 +5,14 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <li ng-class="item.code.length === 0 && !initialtextSelectable ? 'disabled' : ''" ng-repeat="item in items | orderBy : 'name'" role="presentation" ng-click="selectVal(item,$index)">
+            <li class="disabled" ng-show="initialValue && items.length > 0" ng-click="selectVal(initialValue)">
                 <a role="menuitem" tabindex="-1">
-                	<span role="menuitem" tabindex="-1">{{getItemLabel(item)}}</span>	
+                    <span role="menuitem" tabindex="-1">{{getItemLabel(initialValue)}}</span>
+                </a>
+            </li>
+            <li ng-repeat="item in items | orderBy : 'name'" role="presentation" ng-click="selectVal(item,$index)">
+                <a role="menuitem" tabindex="-1">
+                	<span role="menuitem" tabindex="-1">{{getItemLabel(item)}}</span>
                 </a>
                 <span ng-if="enableDelete" class="fa fa-times" ng-click="deleteSavedSearch(item); $event.stopPropagation();"></span>
             </li>

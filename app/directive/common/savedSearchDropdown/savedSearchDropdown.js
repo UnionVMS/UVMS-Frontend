@@ -55,6 +55,15 @@ angular.module('unionvmsWeb').directive('savedSearchDropdown', function() {
                 }
             });
 
+            //Add a default value as first item in the dropdown
+            scope.addDefaultValueToDropDown = function(){
+                if (attrs.initialtext !== ""){
+                    var initialTextItem = {};
+                    initialTextItem.id = undefined;
+                    initialTextItem.name = attrs.initialtext;
+                    scope.initialValue = initialTextItem;
+                }
+            };
 
             //Select item in dropdown
             scope.selectVal = function(item){
@@ -65,8 +74,10 @@ angular.module('unionvmsWeb').directive('savedSearchDropdown', function() {
                 }
             };
 
-            scope.setLabel();
+            //Create a list item with the initaltext?
+            scope.addDefaultValueToDropDown();
 
+            scope.setLabel();
         }
     };
 });
