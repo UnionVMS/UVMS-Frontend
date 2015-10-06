@@ -4,7 +4,7 @@
 
     .searchVesselContainer{
 
-        table{   
+        table{
             button{
                 margin: 2px 0;
             }
@@ -37,11 +37,18 @@
         padding-right: 25px;
         min-width: 175px;
     }
-}
 
-.detailsFooter{
-    margin-top: 20px;
-    .link();
-    .underline();
-    .pointer();        
+    .detailsFooter{
+        margin-top: 20px;
+        button, span{
+            .link();
+            .pointer();
+        }
+
+        .backLinkContainer{
+            padding-top: 10px;
+            padding-left: 20px;
+            .underline();
+        }
+    }
 }

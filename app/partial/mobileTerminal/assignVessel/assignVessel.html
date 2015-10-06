@@ -4,8 +4,8 @@
         <div ng-show="selectedVessel">
             <vessel-details vessel="selectedVessel" disable-form="true" ></vessel-details>
             <div class="row detailsFooter">
-                <div class="col-md-6">
-                    <button type="button" class="btn btn-primary" ng-click="goBackToAssignVesselSearchResultsClick()">{{"vessel.assign_back_to_search_result" | i18n | uppercase}}</button>
+                <div class="col-md-6 backLinkContainer">
+                    <span ng-click="goBackToAssignVesselSearchResultsClick()">{{"vessel.assign_back_to_search_result" | i18n | uppercase}}</span>
                 </div>
                 <div class="col-md-6 textAlignRight">
                     <button type="button" class="btn btn-primary" ng-click="assignToSelectedVessel()"> <i class="fa fa-link"></i> {{"vessel.assign" | i18n | uppercase}}</button>
@@ -20,10 +20,10 @@
                         <input type="text" class="form-control searchText"
                                placeholder="{{'vessel.search_vessel_placeholder' | i18n}}" ng-model="assignVesselFreeText">
                     </div>
-                    
+
                     <!-- Type Dropdown -->
                     <div class="col-md-2">
-                        <dropdown ng-model="assignVesselSearchType" initialtext="" items="assignVesselSearchTypes"></dropdown>                        
+                        <dropdown ng-model="assignVesselSearchType" initialtext="" items="assignVesselSearchTypes"></dropdown>
                     </div>
 
                     <!-- Search button -->
@@ -54,10 +54,10 @@
                                     <button type="button" class="btn btn-primary" ng-click="selectVessel(vessel)" ng-disabled="!vessel.ircs" title="{{ vessel.ircs ? '' : 'mobileTerminal.assign_vessel_ircs_required' | i18n }}" style="pointer-events: auto;">{{"vessel.select" | i18n | uppercase}}</button>
                                 </td>
                             </tr>
-                        </table>                                                    
+                        </table>
                     </div>
                 </div>
-                <prev-next-page-pagination page="currentSearchResults.page" total="currentSearchResults.totalNumberOfPages" next="gotoNextPageInAssignVesselSearchResults" prev="gotoPrevPageInAssignVesselSearchResults"></prev-next-page-pagination>                
+                <prev-next-page-pagination page="currentSearchResults.page" total="currentSearchResults.totalNumberOfPages" next="gotoNextPageInAssignVesselSearchResults" prev="gotoPrevPageInAssignVesselSearchResults"></prev-next-page-pagination>
             </div>
-        </div>        
+        </div>
     </div>
