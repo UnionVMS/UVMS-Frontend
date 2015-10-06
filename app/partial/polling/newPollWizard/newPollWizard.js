@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('NewpollwizardCtrl',function($scope, pollingService){
+angular.module('unionvmsWeb').controller('NewpollwizardCtrl',function($scope, pollingService, alertService, searchService){
 
     $scope.wizardStep = pollingService.getWizardStep();
 
@@ -20,5 +20,10 @@ angular.module('unionvmsWeb').controller('NewpollwizardCtrl',function($scope, po
         pollingService.clearSelection();
         pollingService.resetPollingOptions(true);
     };
+
+    $scope.$on("$destroy", function() {
+        alertService.hideMessage();
+        searchService.reset();
+    });
 
 });

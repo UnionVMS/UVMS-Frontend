@@ -174,7 +174,11 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
     //Callback function for the "edit selection" dropdown
     $scope.editSelectionCallback = function(selectedItem){
         if(selectedItem.code === 'SAVE'){
-            savedSearchService.openSaveSearchModal("VESSEL", false, $scope.selectedVessels);
+            var options = {
+                dynamicSearch : false,
+                selectedItems : $scope.selectedVessels
+            };
+            savedSearchService.openSaveSearchModal("VESSEL", options);
         }else if(selectedItem.code === 'EXPORT'){
             $scope.exportTerminalsAsCSVFile(true);
        }

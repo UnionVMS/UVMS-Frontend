@@ -2,12 +2,13 @@
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $modal service used above.
 
-angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function ($scope, $modalInstance, locale, searchService, SearchField, SavedSearchGroup, savedSearchService, searchType, selectedItems, dynamicSearch, userService) {
+angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function ($scope, $modalInstance, locale, searchService, SearchField, SavedSearchGroup, savedSearchService, searchType, options, userService) {
 
     var isDynamic = false,
         searchFields,
         saveSearchFunction,
-        updateSearchFunction;
+        updateSearchFunction,
+        skipSearchCriteriaKeys;
 
     var init = function(){
         $scope.error = false;
@@ -28,6 +29,7 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
                 $scope.dropdownHeader = locale.getString('vessel.save_as_the_following_group');
                 $scope.dropdownLabel = locale.getString('vessel.select_a_group');
                 $scope.errorMessage = locale.getString('vessel.save_group_error');
+                skipSearchCriteriaKeys = [];
                 break;
             case "MOVEMENT":
                 $scope.existingGroups = savedSearchService.getMovementSearches();
@@ -38,23 +40,33 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
                 $scope.dropdownHeader = locale.getString('movement.save_search_modal_dropdown_header');
                 $scope.dropdownLabel = locale.getString('movement.save_search_modal_dropdown_label');
                 $scope.errorMessage = locale.getString('movement.save_search_modal_error');
+                skipSearchCriteriaKeys = ['ASSET_GROUP'];
                 break;
             default:
                 console.error("Search type is missing for save search modal.");
         }
 
         //Create list of searchFields and set isDynamic flag
-        if(dynamicSearch) {
+        if(options.dynamicSearch) {
             isDynamic = true;
-            searchFields = searchService.getAdvancedSearchCriterias();
+            searchFields = searchService.getAdvancedSearchCriterias(skipSearchCriteriaKeys);
         }else{
             searchFields = [];
             //LIST OF CHECKED ITEMS
             if(searchType === "VESSEL"){
-                $.each(selectedItems, function(key, vessel){
-                    searchFields.push(new SearchField(vessel.vesselId.type, vessel.vesselId.value));
-                });
+                if(angular.isDefined(options.selectedItems)){
+                    $.each(options.selectedItems, function(key, vessel){
+                        searchFields.push(new SearchField(vessel.vesselId.type, vessel.vesselId.value));
+                    });
+                }
             }
+        }
+
+        //Any extra search fields to add?
+        if(angular.isDefined(options.extraSearchFields)){
+            $.each(options.extraSearchFields, function(index, searchField){
+                searchFields.push(searchField);
+            });
         }
 
         //Show error message if search criterias is empty

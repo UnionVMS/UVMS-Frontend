@@ -136,6 +136,21 @@ angular.module('unionvmsWeb')
         }
     };
 
+    //Removes criterias with the specified key
+    GetListRequest.prototype.removeSearchCriteria = function(key){
+        var idxToRemove = [];
+        $.each(this.criterias, function(index, crit){
+            if(key === crit.key){
+                idxToRemove.push(index);
+            }
+        });
+
+        //Remove criterias
+        for (var i = idxToRemove.length - 1; i >= 0; i--) {
+            this.criterias.splice(idxToRemove[i],1);
+        }
+    };
+
     GetListRequest.prototype.setSearchCriterias = function(criterias){
         this.criterias = criterias;
     };

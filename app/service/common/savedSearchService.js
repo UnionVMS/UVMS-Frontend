@@ -49,6 +49,17 @@ angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, 
             //Load list of VesselGroups
             return vesselGroups;
         },
+        //Get the vessel group with the specified id
+        getVesselGroupForUserById : function(id){
+            var found;
+            $.each(vesselGroups, function(index, savedSearchGroup){
+                if(savedSearchGroup.id === id){
+                    found = savedSearchGroup;
+                    return false;
+                }
+            });
+            return found;
+        },
         createNewVesselGroup : function(savedSearchGroup){
             var defer = $q.defer();
             vesselRestService.createNewVesselGroup(savedSearchGroup)
@@ -134,7 +145,7 @@ angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, 
             return defer.promise;
         },
 
-        openSaveSearchModal :function(searchType, dynamicSearch, selectedItems){
+        openSaveSearchModal :function(searchType, options){
             var modalInstance = $modal.open({
               templateUrl: 'partial/common/saveSearchModal/saveSearchModal.html',
               controller: 'SaveSearchModalInstanceCtrl',
@@ -144,12 +155,9 @@ angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, 
                     searchType : function(){
                         return searchType;
                     },
-                    dynamicSearch: function(){
-                        return dynamicSearch;
-                    },
-                    selectedItems: function(){
-                        return selectedItems;
-                    },
+                    options: function(){
+                        return options;
+                    }
                 }
             });
         }

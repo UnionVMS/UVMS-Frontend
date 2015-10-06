@@ -67,22 +67,37 @@ describe('GetListRequest', function() {
 		var getListRequest = new GetListRequest();
 		getListRequest.setPage(5);
 		expect(getListRequest.page).toEqual(5);
-	}));		
+	}));
 
-	it('addSearchCriteria to add a search criteria to the list', inject(function(GetListRequest, SearchField) {
+    it('addSearchCriteria to add a search criteria to the list', inject(function(GetListRequest) {
+        var getListRequest = new GetListRequest();
+        expect(getListRequest.criterias.length).toEqual(0);
+
+        //Add criteria 1
+        getListRequest.addSearchCriteria("NAME", "TEST");
+        expect(getListRequest.criterias.length).toEqual(1);
+
+        //Add criteria 2);
+        getListRequest.addSearchCriteria("COUNTRY", "Swe");
+        expect(getListRequest.criterias.length).toEqual(2);
+    }));
+
+	it('removeSearchCriteria to remove a search criteria from the list', inject(function(GetListRequest) {
 		var getListRequest = new GetListRequest();
-		expect(getListRequest.criterias.length).toEqual(0);
 
-		//Add criteria 1
-		var searchField1 = new SearchField("NAME", "TEST");
-		getListRequest.addSearchCriteria(searchField1);
-		expect(getListRequest.criterias.length).toEqual(1);
+		//Add criterias
+        getListRequest.addSearchCriteria("NAME", "TEST");
+        getListRequest.addSearchCriteria("COUNTRY", "Swe");
+        getListRequest.addSearchCriteria("IRCS", "ABCD123");
+		expect(getListRequest.criterias.length).toEqual(3, "Should be 3 search criterias before removeing one");
 
-		//Add criteria 2
-		var searchField2 = new SearchField("COUNTRY", "Swe");
-		getListRequest.addSearchCriteria(searchField2);
-		expect(getListRequest.criterias.length).toEqual(2);		
-	}));		
+        //remove country search criteria
+        getListRequest.removeSearchCriteria("COUNTRY");
+
+        expect(getListRequest.criterias.length).toEqual(2, "Should be 2 search criterias after removing one");
+        expect(getListRequest.criterias[0].key).toEqual("NAME");
+        expect(getListRequest.criterias[1].key).toEqual("IRCS");
+	}));
 
 	it('setSearchCriteria should set the search criteria list', inject(function(GetListRequest, SearchField) {
 		var getListRequest = new GetListRequest();
@@ -98,7 +113,7 @@ describe('GetListRequest', function() {
 		getListRequest.setSearchCriterias(criterias);
 		expect(getListRequest.criterias.length).toEqual(2);
 		expect(getListRequest.criterias[0]).toEqual(searchField1);
-	}));		
+	}));
 
 	it('resetCriterias to remove all search criterias from the list', inject(function(GetListRequest, SearchField) {
 		var searchField1 = new SearchField("NAME", "TEST"),
@@ -111,7 +126,7 @@ describe('GetListRequest', function() {
 		//Reset criterias
 		getListRequest.resetCriterias();
 		expect(getListRequest.criterias.length).toEqual(0);
-	}));		
+	}));
 
 	it('setDynamicToFalse should set dynamic to false', inject(function(GetListRequest) {
 		var getListRequest = new GetListRequest();
@@ -126,5 +141,5 @@ describe('GetListRequest', function() {
 		expect(getListRequest.isDynamic).toEqual(false);
 		getListRequest.setDynamicToTrue();
 		expect(getListRequest.isDynamic).toEqual(true);
-	}));	
+	}));
 });

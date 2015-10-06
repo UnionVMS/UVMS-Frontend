@@ -67,12 +67,12 @@ describe('SavedSearchGroup', function() {
 
 	}));
 
-	it('toVesselDTO should return correctly formatted data', inject(function(SavedSearchGroup) {
+    it('toVesselDTO should return correctly formatted data', inject(function(SavedSearchGroup) {
 
-		var group = SavedSearchGroup.fromVesselDTO(responseData);
+        var group = SavedSearchGroup.fromVesselDTO(responseData);
         expect(group.searchFields.length).toEqual(4, 'Should be 4 searchFields in the group object');
 
-		var dto = group.toVesselDTO(); //This function should create custom list of searchFields (replace spans with min/max values)
+        var dto = group.toVesselDTO(); //This function should create custom list of searchFields (replace spans with min/max values)
         expect(dto.guid).toEqual(responseData.guid, 'guid should be set in the dto');
         expect(dto.name).toEqual(responseData.name, 'name should be set in the dto');
         expect(dto.dynamic).toEqual(responseData.dynamic, 'dynamic should be set in the dto');
@@ -80,6 +80,18 @@ describe('SavedSearchGroup', function() {
 
         //Group searchFields should be untouched
         expect(group.searchFields.length).toEqual(4, 'Should still be 4 searchFields in the group object');
+
+    }));
+
+	it('getSearchFieldsCopy should create a copy of the searchField list', inject(function(SavedSearchGroup) {
+
+		var group = SavedSearchGroup.fromVesselDTO(responseData);
+        var searchFieldsCopy = group.getSearchFieldsCopy();
+        expect(JSON.stringify(searchFieldsCopy)).toEqual(JSON.stringify(group.searchFields));
+
+        //Modifying the copy should not modify the original list
+        searchFieldsCopy[0].key ="CHANGED";
+        expect(JSON.stringify(searchFieldsCopy)).not.toEqual(JSON.stringify(group.searchFields), "Modifying the copy should not modify the original list");
 
 	}));
 

@@ -46,15 +46,19 @@ angular.module('unionvmsWeb')
             "IRCS",
             "FLAG_STATE",
             "CFR",
+            "EXTERNAL_MARKING",
             "NAME",
             "ASSET_TYPE"
         ];
 
         //List of properties that should have type OTHER
         var otherKeys = [
+            "ASSET_GROUP_ID",
             "TIME_SPAN",
             "LENGTH_SPAN",
-            "SPEED_SPAN"
+            "SPEED_SPAN",
+            "FROM_DATE",
+            "TO_DATE"
         ];
 
         var processedSearchFields = [];
@@ -93,6 +97,15 @@ angular.module('unionvmsWeb')
         var savedSearchGroup = new SavedSearchGroup(dto.name, dto.user, dto.dynamic, searchFields);
         savedSearchGroup.id = dto.id;
         return savedSearchGroup;
+    };
+
+    SavedSearchGroup.prototype.getSearchFieldsCopy = function(){
+        var copy = [];
+        $.each(this.searchFields, function(index, searchField){
+            copy.push(searchField.copy());
+        });
+
+        return copy;
     };
 
     return SavedSearchGroup;

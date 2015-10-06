@@ -12,13 +12,13 @@ angular.module('unionvmsWeb')
         //Reset the form
         $scope.resetAdvancedMobileSearchForm = function(){
             $scope.selectedVesselGroup = "";
-            $scope.resetAdvancedSearchForm(true);    
-        };        
+            $scope.resetAdvancedSearchForm(true);
+        };
 
         //Select a vessel group to search mobile terminals for
         $scope.searchSelectedGroup = function(savedSearchGroup){
             $scope.resetAdvancedSearchForm(false);
-            $scope.performSavedGroupSearch(savedSearchGroup);
+            $scope.performSavedGroupSearch(savedSearchGroup, true, true);
         };
 
         $scope.displayVesselGroup = function(){

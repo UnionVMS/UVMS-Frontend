@@ -3,12 +3,12 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 	var getListRequest = new GetListRequest(1, 20, true, []),
         advancedSearchObject  = {};
 
-
+    //Keys that are searchable in the vessel module
     var vesselSearchKeys = [
-        "MAX_LENGTH", "MIN_POWER", "MAX_POWER", "MIN_LENGTH", "GEAR_TYPE",
-        "IMO", "INTERNAL_ID", "GUID", "NAME", "IRCS",
-        "MMSI", "EXTERNAL_MARKING", "CFR", "HOMEPORT", "ACTIVE",
-        "FLAG_STATE", "LICENSE", "TYPE", "CARRIER_TYPE"
+        "MIN_LENGTH", "MAX_LENGTH", "MIN_POWER", "MAX_POWER", "GEAR_TYPE",
+        "IMO", "GUID", "NAME", "IRCS",
+        "MMSI", "EXTERNAL_MARKING", "CFR", "HOMEPORT",
+        "FLAG_STATE", "LICENSE_TYPE", "ASSET_TYPE", "PRODUCER_NAME"
     ].reduce(function(map, searchKey) {
         map[searchKey] = true;
         return map;
@@ -26,15 +26,17 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 
             //Get vessels for all movements in page
             var vesselRequest = new GetListRequest(1, page.getNumberOfItems(), true);
-            $.each(page.item, function(index, movement) {
+            $.each(page.items, function(index, movement) {
                 vesselRequest.addSearchCriteria("GUID", movement.connectId);
             });
             vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vessels){
                 var vesselPage = new VesselListPage(vessels, 1, 1);
                 //Update movement page by connecting each movement to a vessel
                 $.each(page.items, function(index, movement) {
-                    var vessel = vesselPage.getVesselByGuid[movement.connectId];
-                    movement.setVesselData(vessel);
+                    var vessel = vesselPage.getVesselByGuid(movement.connectId);
+                    if(angular.isDefined(vessel)){
+                        movement.setVesselData(vessel);
+                    }
                 });
 
                 deferred.resolve(page);
@@ -67,7 +69,9 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             movementRestService.getMovementList(movementRequest).then(function(page) {
                 $.each(page.items, function(index, movement) {
                     var vessel = vesselsByGuid[movement.connectId];
-                    movement.setVesselData(vessel);
+                    if(angular.isDefined(vessel)){
+                        movement.setVesselData(vessel);
+                    }
                 });
 
                 deferred.resolve(page);
@@ -230,46 +234,29 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                 return mobileTerminalRestService.getMobileTerminalList(getListRequest);
             }
 
-
-            var newSearchCriterias = [],
-                vesselSearchCriteria = [];
-
-            //Search keys that belong to vessel
-            var vesselSearchKeys = [
-                "GUID",
-                "NAME",
-                "IRCS",
-                "MMSI",
-                "EXTERNAL_MARKING",
-                "CFR",
-                "HOMEPORT",
-                "ACTIVE",
-                "FLAG_STATE",
-                "LICENSE",
-                "TYPE",
-            ];
+            // Split search criteria into vessel and mobileTerminal
+            var allSearchCriteria = this.getSearchCriterias();
+            var partition = searchUtilsService.getSearchCriteriaPartition(allSearchCriteria, {vessel: vesselSearchKeys});
+            var mobileCritieria = partition["default"];
+            var vesselCriteria = partition["vessel"];
 
             //Check if there are any search criterias that need vessels to be searched first
             // and remove those search criterias
             var vesselSearchIsDynamic = true;
-            $.each(this.getSearchCriterias(),function(index, crit){
-                if(_.contains(vesselSearchKeys, crit.key)){
-                    if(crit.key === 'GUID'){
-                        vesselSearchIsDynamic = false;
-                    }
-                    vesselSearchCriteria.push(crit);
-                }else{
-                    newSearchCriterias.push(crit);
+            $.each(vesselCriteria,function(index, searchField){
+                if(searchField.key === 'GUID'){
+                    vesselSearchIsDynamic = false;
+                    return false;
                 }
             });
 
             //Set the new search criterias (without vessel criterias)
-            this.setSearchCriterias(newSearchCriterias);
+            this.setSearchCriterias(mobileCritieria);
 
             //Get vessels first?
-            if(vesselSearchCriteria.length > 0){
+            if(vesselCriteria.length > 0){
                 var deferred = $q.defer();
-                var getVesselListRequest = new GetListRequest(1, 1000, vesselSearchIsDynamic, vesselSearchCriteria);
+                var getVesselListRequest = new GetListRequest(1, 1000, vesselSearchIsDynamic, vesselCriteria);
                 var outerThis = this;
                 //Get the vessels
                 vesselRestService.getAllMatchingVessels(getVesselListRequest).then(
@@ -342,8 +329,11 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 		resetSearchCriterias : function(){
 			getListRequest.resetCriterias();
 		},
-		addSearchCriteria : function(key, value){
-			getListRequest.addSearchCriteria(key, value);
+        addSearchCriteria : function(key, value){
+            getListRequest.addSearchCriteria(key, value);
+        },
+        removeSearchCriteria : function(key){
+			getListRequest.removeSearchCriteria(key);
 		},
         hasSearchCriteria: function(key) {
             for (var i = 0; i < getListRequest.criterias.length; i++) {
@@ -367,20 +357,25 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         getAdvancedSearchObject : function(){
             return advancedSearchObject;
         },
-        getAdvancedSearchCriterias : function(){
+        //Get the advanced search criterias as a list of SearchFields
+        //Skip criterias that are in keysToSkipList
+        getAdvancedSearchCriterias : function(keysToSkipList){
             var criterias = [];
             $.each(advancedSearchObject, function(key, value){
-                //Skip empty values
-                if (typeof value === 'string' && value.trim().length !== 0){
-                    criterias.push(new SearchField(key, value));
-                }
-                else if (value instanceof Array) {
-                    for (var i = 0; i < value.length; i++) {
-                        if (typeof value[i] === 'string' && value[i].trim().length !== 0) {
-                            criterias.push(new SearchField(key, value[i]));
-                        }
-                        if ( typeof value[i] === "object") {
-                            criterias.push(value[i]);
+                //Don't use the values in the skipList
+                if(angular.isUndefined(keysToSkipList) || keysToSkipList.indexOf(key) < 0){
+                    //Skip empty values
+                    if (typeof value === 'string' && value.trim().length !== 0){
+                        criterias.push(new SearchField(key, value));
+                    }
+                    else if (value instanceof Array) {
+                        for (var i = 0; i < value.length; i++) {
+                            if (typeof value[i] === 'string' && value[i].trim().length !== 0) {
+                                criterias.push(new SearchField(key, value[i]));
+                            }
+                            if ( typeof value[i] === "object") {
+                                criterias.push(value[i]);
+                            }
                         }
                     }
                 }
