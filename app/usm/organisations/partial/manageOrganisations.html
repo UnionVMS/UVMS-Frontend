@@ -37,7 +37,7 @@
                 <div class="form-group">
                     <label class="col-md-2 col-md-offset-1" for="orgDescription">Description</label>
 
-                    <div class="col-md-7">
+                    <div class="col-md-5">
                         <input type="text" class="form-control" name="orgDescription" id="orgDescription"
                                ng-model="org.description"
                                ng-disabled="mode=='delete'">
@@ -85,7 +85,7 @@
                     <label class="col-md-2 col-md-offset-1" for="orgStatus">Status<sup
                         class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup></label>
 
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <select class="form-inline form-control dropdown"
                                 id="orgStatus"
                                 name="orgStatus"
@@ -110,7 +110,7 @@
                 <div class="form-group">
                     <label class="col-md-2 col-md-offset-1" for="orgParent">Parent</label>
 
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <select class="form-inline form-control dropdown"
                                 id="orgParent"
                                 name="orgParent"
@@ -130,7 +130,7 @@
                 <div class="form-group">
                     <label class=" col-md-2 col-md-offset-1" for="orgEmail">Email</label>
 
-                    <div class="col-md-7">
+                    <div class="col-md-5">
                         <input type="email" class="form-control" name="orgEmail" id="orgEmail" ng-model="org.email" ng-disabled="mode=='delete'">
 
                         <div ng-show="manageOrgForm.orgEmail.$dirty">

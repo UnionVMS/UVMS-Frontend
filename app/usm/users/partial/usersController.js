@@ -284,11 +284,19 @@ usersModule.controller('userDetailsCtlr', ['$log', '$scope', '$modal', '$statePa
     'userDetailsService', 'userContextsServices', 'userService', 'userPreferencesService',
     function ($log, $scope, $modal, $stateParams, refData, userDetailsService, userContextsServices, userService, userPreferencesService) {
         $scope.userName = $stateParams.userName;
-
+        $scope.selectedTab = "Contact";
         $scope.checkAccess = function (feature) {
             return userService.isAllowed(feature, "USM", true);
         };
-
+        //Sets tabs
+        $scope.tabMenu = [
+            {'tab': 'Contact', 'title': 'Contact and Status Details'},
+            {'tab': 'Contexts','title': "Contexts"},
+            {'tab': 'Preferences','title': "Preferences"}
+        ];
+        $scope.selectTab = function(tab) {
+            $scope.selectedTab = tab;
+        };
         userDetailsService.getUser($stateParams.userName).then(
             function (response) {
                 $scope.user = response.user;
@@ -399,7 +407,7 @@ usersModule.controller('manageUserCtlr', ['$log', '$scope', '$modal', '$statePar
                 animation: true,
                 backdrop: true,
                 keyboard: true,
-                size: 'lg',
+                size: 'md',
                 templateUrl: 'usm/users/partial/duplicateUserProfile.html',
                 controller: 'duplicateUserProfileModalInstanceCtrl',
                 resolve: {

@@ -22,7 +22,9 @@
         "status_E": "Enabled",
         "status_D": "Disabled",
         "status_L": "Locked",
-        "status_all": "All"
+        "status_all": "All",
+        "search": "Search",
+        "reset": "Reset"
     },
     "users": {
         "userName": "Username",

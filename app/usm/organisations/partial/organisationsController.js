@@ -218,7 +218,7 @@ organisationsModule.controller('organisationsListCtrl', ['$scope', '$log', 'refD
     }]);
 
 
-organisationsModule.controller('manageOrganisationCtrl', ['$scope', '$modal', '$log', '$state', 'organisationsService','refData',
+organisationsModule.controller('manageOrganisationCtrl', ['$scope', '$modal', '$log', '$state', 'organisationsService', 'refData',
     function ($scope, $modal, $log, $state, organisationsService, refData) {
 
         $scope.manageOrganisation = function (mode, org) {
@@ -238,15 +238,15 @@ organisationsModule.controller('manageOrganisationCtrl', ['$scope', '$modal', '$
                     nations: function () {
                         return refData.nations;
                         /*
-                        return organisationsService.getNations().then(
-                            function (response) {
-                                return response.nations;
-                            },
-                            function (error) {
-                                return [];
-                            }
-                        );
-                        */
+                         return organisationsService.getNations().then(
+                         function (response) {
+                         return response.nations;
+                         },
+                         function (error) {
+                         return [];
+                         }
+                         );
+                         */
                     },
                     parents: function () {
                         return organisationsService.getParents(org).then(
@@ -404,6 +404,7 @@ organisationsModule.controller('endPointsDetailsCtrl',
         "$state", "$stateParams", "$log", "$translate", "organisationsService", "userService",
         function ($scope, $filter, $http, $location, $resource,
                   $state, $stateParams, $log, $translate, organisationsService, userService) {
+            $scope.selectedTab = "Channels";
             $scope.isDataLoading = true;
 
             $scope.emptyResultContacts = false;
@@ -414,6 +415,15 @@ organisationsModule.controller('endPointsDetailsCtrl',
 
             $scope.checkAccess = function (feature) {
                 return userService.isAllowed(feature, "USM", true);
+            };
+
+            //Sets tabs
+            $scope.tabMenu = [
+                {'tab': 'Channels', 'title': 'COMMUNICATION CHANNELS'},
+                {'tab': 'Contacts', 'title': "CONTACTS"}
+            ];
+            $scope.selectTab = function (tab) {
+                $scope.selectedTab = tab;
             };
 
             organisationsService.getEndPointDetails($stateParams).then(

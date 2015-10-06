@@ -31,15 +31,25 @@
         </div>
     </div>
 
-    <tabset type="tabs" vertical="false" class="roleDetailsTabs">
-        <tab heading="{{'applications.features' | translate}}">
-            <div ng-include src="'usm/applications/partial/applicationFeatures.html'"></div>
-        </tab>
-        <tab heading="{{'applications.datasets' | translate}}">
-            <div ng-include src="'usm/applications/partial/applicationDatasets.html'"></div>
-        </tab>
-        <tab heading="{{'applications.options' | translate}}">
-            <div ng-include src="'usm/applications/partial/applicationOptions.html'"></div>
-        </tab>
-    </tabset>
-</div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="containerWrapper pollingTabs">
+                <ul class="nav nav-tabs">
+                    <li ng-repeat="tab in tabMenu" class="audittab" ng-click="selectTab(tab.tab)" ng-class="{'active': selectedTab === '{{tab.tab}}'}">
+                        <span>{{tab.title}}</span>
+                    </li>
+                </ul>
+            </div>
+            <div ng-show="selectedTab==='Features'">
+                <div ng-include src="'usm/applications/partial/applicationFeatures.html'"></div>
+            </div>
+            <div ng-if="checkAccess('viewUsers')||checkAccess('manageUsers')" ng-show="selectedTab==='Datasets'">
+                <!--  <div ui-view name="contexts" ></div>-->
+                <div  ng-include src="'usm/applications/partial/applicationDatasets.html'"></div>
+            </div>
+            <div ng-if="checkAccess('viewUsers')||checkAccess('manageUsers')" ng-show="selectedTab==='Options'">
+                <div ng-include src="'usm/applications/partial/applicationOptions.html'"></div>
+            </div>
+        </div>
+    </div>
+ </div>

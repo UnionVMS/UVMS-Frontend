@@ -39,7 +39,7 @@
                 <div class="form-group">
                     <label class="col-md-3 col-md-offset-1" for="description">{{'common.description' | translate}}</label>
 
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <input type="text" class="form-control" name="description" id="description"
                                ng-model="scope.description"
                                ng-disabled="mode=='delete'">
@@ -52,7 +52,7 @@
                         <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'">
                     </label>
 
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <select class="form-inline form-control dropdown"
                                 id="status"
                                 name="status"
@@ -74,7 +74,7 @@
                         <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup>
                     </label>
 
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <usm-datepicker config="activeFromConfig" value="scope.activeFrom"></usm-datepicker>
                         <div>
                             <span class="text-danger small" ng-show="activeFormRequiredAlert">Active From date is required</span>
@@ -88,7 +88,7 @@
                         <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup>
                     </label>
 
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <usm-datepicker config="activeToConfig" value="scope.activeTo"></usm-datepicker>
                         <div>
                             <span class="text-danger small" ng-show="activeToRequiredAlert">Active To date is required</span>
@@ -101,7 +101,7 @@
                     <label class="col-md-3 col-md-offset-1">{{ 'scopes.dataFrom' | translate }}
                     </label>
 
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <usm-datepicker config="dataFromConfig" value="scopes.dataFrom"></usm-datepicker>
                     </div>
                 </div>
@@ -111,7 +111,7 @@
                     <label class="col-md-3 col-md-offset-1">{{ 'scopes.dataTo' | translate }}
                     </label>
 
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <usm-datepicker config="dataToConfig" value="scope.dataTo"></usm-datepicker>
                     </div>
                 </div>

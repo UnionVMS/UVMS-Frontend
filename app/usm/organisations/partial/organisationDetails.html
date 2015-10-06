@@ -7,22 +7,22 @@
                     <label>Organisation</label>
                 </div>
                 <div class="col-md-5 col-md-offset-1">
-					<span ng-bind="organisation.name"></span>
+                    <span ng-bind="organisation.name"></span>
                 </div>
                 <div class="col-md-1">
                     <label>Status</label>
                 </div>
                 <div class="col-md-3">
-                    <span  ng-class="{'label label-success': organisation.status=='E', 'label label-danger': organisation.status=='D'}"
+                    <span ng-class="{'label label-success': organisation.status=='E', 'label label-danger': organisation.status=='D'}"
                           ng-bind='"organisation.status_"+organisation.status | translate'></span>
                 </div>
-				<div class="col-md-1 text-right">
+                <div class="col-md-1 text-right">
 					<span ng-controller="manageOrganisationCtrl" ng-if="checkAccess('manageOrganisations')">
 						<button type="button" class="btn btn-sm btn-primary" ng-click='manageOrganisation("edit", organisation)'>
-							<span><i class="fa fa-pencil"></i></span>
-						</button>
+                            <span><i class="fa fa-pencil"></i></span>
+                        </button>
 					</span>
-				</div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-1">
@@ -56,92 +56,99 @@
     </div>
     <!-- INFO PANEL END-->
 
-    <tabset class="organisationDetailsTabs">
-        <!-- ENDPOINT TABLE BEGIN -->
-        <tab heading="Endpoints" ng-controller="organisationDetailsCtrl">
-			<table st-table="displayedOrganisationEndpoints" st-safe-src="organisation.endpoints" class="table table-striped fixed">
-				<colgroup>
-					<col style="width: 190px;">
-					<col style="width: 300px;">
-					<col style="width: 200px;">
-					<col style="width: 200px;">
-					<col style="width: 120px;">
-					<col style="width: 130px;">
-				</colgroup>
-				<thead class="table_heading">
-				<tr>
-					<th st-sort="name" st-sort-default="true">{{'organisationEndpoints.name'  | translate}}</th>
-					<th st-sort="description">{{'organisationEndpoints.description' | translate}}</th>
-					<th st-sort="uri">{{'organisationEndpoints.uri' | translate}}</th>
-					<th st-sort="email">{{'organisationEndpoints.email' | translate}}</th>
-					<th st-sort="status">{{'organisationEndpoints.status' | translate}}</th>
-					<th class="text-center">
-						<div ng-controller="manageOrganisationEndpointsCtrl"  ng-if="checkAccess('manageOrganisations')">
-							<button id="new_endpoint" class="btn btn-primary btn-sm" ng-click='manageEndpoint("new", "", organisation.name)'>
-								<span class="fa fa-plus"></span>
-								<span>{{'organisationEndpoints.new' | translate}}</span>
-							</button>
-						</div>
-					</th>
-				</tr>
-				</thead>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="containerWrapper pollingTabs">
+                <ul class="nav nav-tabs">
+                    <li class="audittab" ng-class="{'active': true}">
+                        <span>ENDPOINTS</span>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <div class="panel panel-default" style="margin-top: 0;">
+                    <table st-table="displayedOrganisationEndpoints" st-safe-src="organisation.endpoints" class="searchResults">
+                        <colgroup>
+                            <col style="width: 190px;">
+                            <col style="width: 300px;">
+                            <col style="width: 200px;">
+                            <col style="width: 200px;">
+                            <col style="width: 120px;">
+                            <col style="width: 130px;">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th st-sort="name" st-sort-default="true">{{'organisationEndpoints.name' | translate}}</th>
+                            <th st-sort="description">{{'organisationEndpoints.description' | translate}}</th>
+                            <th st-sort="uri">{{'organisationEndpoints.uri' | translate}}</th>
+                            <th st-sort="email">{{'organisationEndpoints.email' | translate}}</th>
+                            <th st-sort="status">{{'organisationEndpoints.status' | translate}}</th>
+                            <th class="text-center">
+                                <div ng-controller="manageOrganisationEndpointsCtrl" ng-if="checkAccess('manageOrganisations')">
+                                    <button id="new_endpoint" class="btn btn-primary btn-sm" ng-click='manageEndpoint("new", "", organisation.name)'>
+                                        <span class="fa fa-plus"></span>
+                                        <span>{{'organisationEndpoints.new' | translate}}</span>
+                                    </button>
+                                </div>
+                            </th>
+                        </tr>
+                        </thead>
 
-				<tbody class="table-bordered" ng-if="!isDataLoading">
-					<tr ng-repeat="oe in displayedOrganisationEndpoints | orderBy:oe.name:sortReverse">
-						<td>
-							<span>{{ oe.name }}</span> <!--tooltip="{{oe.name}}" -->
-						</td>
-						<td>
-							<span>{{ oe.description }}</span> <!-- tooltip="{{oe.description}}" -->
-						</td>
-						<td>
-							<span>{{ oe.uri }}</span> <!-- tooltip="{{oe.uri}}" -->
-						</td>
-						<td>
-							<span>{{ oe.email }}</span> <!-- tooltip="{{oe.email}}" -->
-						</td>
-						<td>
-							<div class="col-md-3" ng-if="oe.name!==null">
-								<span  ng-class="{'label label-success': oe.status=='E', 'label label-danger': oe.status=='D'}" ng-bind='"organisationEndpoints.status_"+oe.status | translate'></span>
-							</div>
-						</td>
+                        <tbody ng-if="!isDataLoading">
+                        <tr ng-repeat="oe in displayedOrganisationEndpoints | orderBy:oe.name:sortReverse">
+                            <td>
+                                <span>{{ oe.name }}</span> <!--tooltip="{{oe.name}}" -->
+                            </td>
+                            <td>
+                                <span>{{ oe.description }}</span> <!-- tooltip="{{oe.description}}" -->
+                            </td>
+                            <td>
+                                <span>{{ oe.uri }}</span> <!-- tooltip="{{oe.uri}}" -->
+                            </td>
+                            <td>
+                                <span>{{ oe.email }}</span> <!-- tooltip="{{oe.email}}" -->
+                            </td>
+                            <td>
+                                <div class="col-md-3" ng-if="oe.name!==null">
+                                        <span ng-class="{'label label-success': oe.status=='E', 'label label-danger': oe.status=='D'}"
+                                              ng-bind='"organisationEndpoints.status_"+oe.status | translate'></span>
+                                </div>
+                            </td>
 
-						<td class="actionTd text-center">
+                            <td class="actionTd text-center">
 							<span ng-controller="manageOrganisationEndpointsCtrl" ng-if="(oe.name!==null)&&checkAccess('manageOrganisations')">
 								<button id="endpoint_edit" type="button" class="btn btn-sm btn-primary" ng-click='manageEndpoint("edit",oe,organisation.name)'>
-									<span><i class="fa fa-pencil"></i></span>
-								</button>
+                                    <span><i class="fa fa-pencil"></i></span>
+                                </button>
 							</span>
-							<button type="button" class="btn btn-sm btn-primary" ng-if="checkAccess('viewOrganisations')||checkAccess('manageOrganisations')"
-									ui-sref="app.usm.organisations.organisation.endpoint({endPointId: oe.endpointId})">
-								<span><i class="fa fa-eye"></i></span>
-							</button>
+                                <button type="button" class="btn btn-sm btn-primary" ng-if="checkAccess('viewOrganisations')||checkAccess('manageOrganisations')"
+                                        ui-sref="app.usm.organisations.organisation.endpoint({endPointId: oe.endpointId})">
+                                    <span><i class="fa fa-eye"></i></span>
+                                </button>
 							<span ng-controller="manageOrganisationEndpointsCtrl" ng-if="(oe.name!==null)&&checkAccess('manageOrganisations')">
 								<button id="endpoint_delete" type="button" class="btn btn-sm btn-danger" ng-click='manageEndpoint("delete",oe,organisation.name)'>
-									<span><i class="fa fa-remove"></i></span>
-								</button>
+                                    <span><i class="fa fa-remove"></i></span>
+                                </button>
 							</span>
-						</td>
-					</tr>
-				</tbody>
+                            </td>
+                        </tr>
+                        </tbody>
 
-				<tbody ng-if="isDataLoading">
-				<tr>
-					<td colspan="10" class="text-center">{{loadingMessage}}</td>
-				</tr>
-				</tbody>
+                        <tbody ng-if="isDataLoading">
+                        <tr>
+                            <td colspan="10" class="text-center">{{loadingMessage}}</td>
+                        </tr>
+                        </tbody>
 
-				<tbody ng-if="emptyResult">
-				<tr>
-					<td colspan="10">{{emptyResultMessage}}</td>
-				</tr>
-				</tbody>
+                        <tbody ng-if="emptyResult">
+                        <tr>
+                            <td colspan="10">{{emptyResultMessage}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
-				<tfoot> <!-- no pagination maybe no need for footer -->
-				</tfoot>
-
-			</table>
-		</tab>
-		<!-- ENDPOINT TABLE END -->
-    </tabset>
 </div>

@@ -1,5 +1,5 @@
-<div class="panel panel-default" ng-controller="userPreferencesCtrl">
-    <table st-table="displayedUserPreferences" st-safe-src="userPreferencesList" class="table table-striped fixed">
+<div class="panel panel-default" ng-controller="userPreferencesCtrl" style="margin-top: 0;">
+    <table st-table="displayedUserPreferences" st-safe-src="userPreferencesList" class="searchResults">
         <colgroup>
             <col style="width: 360px;">
             <col style="width: 160px;">
@@ -7,7 +7,7 @@
             <col style="width: 160px;">
             <col style="width: 120px;">
         </colgroup>
-        <thead class="table_heading">
+        <thead>
         <tr>
             <th st-sort="role" st-sort-default="true">{{'userPreferences.user' | translate}}</th>
             <th st-sort="roleStatus">{{'userPreferences.option' | translate}}</th>
@@ -25,7 +25,7 @@
         </tr>
         </thead>
 
-        <tbody class="table-bordered" ng-if="!isPreferencesLoading && !emptyPreferenceResult">
+        <tbody ng-if="!isPreferencesLoading && !emptyPreferenceResult">
             <tr ng-repeat="preference in displayedUserPreferences">
                 <td ng-bind="userName"></td>
                 <td ng-bind="preference.optionName"></td>

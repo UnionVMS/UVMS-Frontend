@@ -44,15 +44,15 @@
                         <button id="searchButton"
                                 tooltip-popup-delay={{toolTipsDelay}}
                                 tooltip="{{'roles.search_filter' | translate}}"
-                                class="btn btn-default" ng-click="searchRole(criteria)">
-                            <span class="fa fa-search"></span></span>
+                                class="btn btn-primary btn-sm" ng-click="searchRole(criteria)">
+                            {{'common.search' | translate}}
                         </button>
                         <!--button type="button" tooltips tooltip-delay={{toolTipsDelay}} tooltip-title="{{'roles.refresh_filter' | translate}}" class="btn btn-default" ng-click="resetForm()"-->
                         <button type="button"
                                 tooltip-popup-delay={{toolTipsDelay}}
                                 tooltip="{{'roles.refresh_filter' | translate}}"
-                                class="btn btn-default" ng-click="resetForm()">
-                            <span class="fa fa-refresh"></span>
+                                class="btn btn-link btn-sm" ng-click="resetForm()">
+                            {{'common.reset' | translate}}
                         </button>
                     </div>
                 </div>
@@ -62,39 +62,42 @@
     <!-- SEARCH PANEL END-->
 
     <!-- ROLES TABLE -->
-    <table st-table="displayedRoles" st-safe-src="roleList" class="table table-striped fixed">
-		<colgroup>
-			<col style="width: 300px;">
-			<col style="width: 550px;">
-			<col style="width: 140px;">
-			<col style="width: 150px;">
-		</colgroup>
-        <thead>
-        <tr>
-            <th ng-click="changeSorting('name')">{{'roles.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i></th>
-            <th ng-click="changeSorting('description')">{{'roles.description' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('description')"></i></th>
-            <th ng-click="changeSorting('status')">{{'roles.status' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('status')"></i></th>
-            <th class="text-center">
-                <div ng-controller="manageRoleCtrl" ng-if="checkAccess('manageRoles')">
-                    <button
-                        tooltip-popup-delay={{toolTipsDelay}}
-                        tooltip="{{'roles.new_button_tooltip' | translate}}"
-                        class="btn btn-primary btn-sm" ng-click='manageRole("new", "")'>
-                        <span class="fa fa-plus"></span>
-                        <span>{{'roles.newRole' | translate}}</span>
-                    </button>
-                </div>
-            </th>
-        </tr>
-        </thead>
-        <tbody class="table-bordered" ng-if="!isDataLoading">
-        <tr ng-repeat="role in displayedRoles">
-            <td ng-bind="role.name"></td>
-            <td ng-bind="role.description"></td>
-            <td>
-                <span ng-class="{'label label-success': role.status=='E', 'label label-danger': role.status=='D'}">{{"role.status_"+role.status | translate}}</span>
-            </td>
-            <td class="actionTd text-center">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel">
+                <table st-table="displayedRoles" st-safe-src="roleList" class="searchResults">
+                    <colgroup>
+                        <col style="width: 300px;">
+                        <col style="width: 550px;">
+                        <col style="width: 140px;">
+                        <col style="width: 150px;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th ng-click="changeSorting('name')">{{'roles.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i></th>
+                        <th ng-click="changeSorting('description')">{{'roles.description' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('description')"></i></th>
+                        <th ng-click="changeSorting('status')">{{'roles.status' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('status')"></i></th>
+                        <th class="text-center">
+                            <div ng-controller="manageRoleCtrl" ng-if="checkAccess('manageRoles')">
+                                <button
+                                    tooltip-popup-delay={{toolTipsDelay}}
+                                    tooltip="{{'roles.new_button_tooltip' | translate}}"
+                                    class="btn btn-primary btn-sm" ng-click='manageRole("new", "")'>
+                                    <span class="fa fa-plus"></span>
+                                    <span>{{'roles.newRole' | translate}}</span>
+                                </button>
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody ng-if="!isDataLoading">
+                    <tr ng-repeat="role in displayedRoles">
+                        <td ng-bind="role.name"></td>
+                        <td ng-bind="role.description"></td>
+                        <td>
+                            <span ng-class="{'label label-success': role.status=='E', 'label label-danger': role.status=='D'}">{{"role.status_"+role.status | translate}}</span>
+                        </td>
+                        <td class="actionTd text-center">
                 <span ng-controller="manageRoleCtrl" ng-if="checkAccess('manageRoles')">
 					<button type="button"
                             tooltip-popup-delay={{toolTipsDelay}}
@@ -103,14 +106,14 @@
                         <span><i class="fa fa-pencil"></i></span>
                     </button>
                 </span>
-                <button type="button"
-                        tooltip-popup-delay={{toolTipsDelay}}
-                        tooltip="{{'roles.view_button_tooltip' | translate}}"
-                        class="btn btn-sm btn-primary usm-action-btn"
-                        ui-sref="app.usm.roles.role({roleId: role.roleId})"
-                        ui-sref-opts="{ inherit : false }">
-                    <span><i class="fa fa-eye"></i></span>
-                </button>
+                            <button type="button"
+                                    tooltip-popup-delay={{toolTipsDelay}}
+                                    tooltip="{{'roles.view_button_tooltip' | translate}}"
+                                    class="btn btn-sm btn-primary usm-action-btn"
+                                    ui-sref="app.usm.roles.role({roleId: role.roleId})"
+                                    ui-sref-opts="{ inherit : false }">
+                                <span><i class="fa fa-eye"></i></span>
+                            </button>
                 <span ng-controller="manageRoleCtrl" ng-if="checkAccess('manageRoles')">
 					<button type="button"
                             tooltip-popup-delay={{toolTipsDelay}}
@@ -119,22 +122,25 @@
                         <span><i class="fa fa-remove"></i></span>
                     </button>
                 </span>
-            </td>
-        </tr>
-        </tbody>
-        <tbody ng-if="isDataLoading">
-        <tr>
-            <td colspan="5" class="text-center">Loading...</td>
-        </tr>
-        </tbody>
-        <tbody ng-if="emptyResult">
-        <tr>
-            <td colspan="5">{{emptyResultMessage}}</td>
-        </tr>
-        </tbody>
-    </table>
-    <!-- ROLES TABLE END-->
-    <div ng-if="showPagination">
-        <usm-pagination config="paginationConfig"></usm-pagination>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-if="isDataLoading">
+                    <tr>
+                        <td colspan="5" class="text-center">Loading...</td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-if="emptyResult">
+                    <tr>
+                        <td colspan="5">{{emptyResultMessage}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- ROLES TABLE END-->
+            <div ng-if="showPagination">
+                <usm-pagination config="paginationConfig"></usm-pagination>
+            </div>
+        </div>
     </div>
 </div>

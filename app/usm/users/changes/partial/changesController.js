@@ -69,7 +69,36 @@ changesModule.controller('changesListCtrl', ['$log', '$scope', '$modal', 'change
 
             });
         };
+        $scope.sort = {
+            sortColumn: 'userName', // Default Sort.
+            sortDirection: 'asc'
+        };
 
+        $scope.changeSorting = function (column) {
+            var sort = $scope.sort;
+            if (sort.sortColumn === column) {
+                if (sort.sortDirection === 'desc') {
+                    sort.sortDirection = 'asc';
+                } else if (sort.sortDirection === 'asc') {
+                    sort.sortDirection = 'desc';
+                }
+            } else {
+                sort.sortColumn = column;
+                sort.sortDirection = 'asc';
+            }
+            $scope.sort.sortColumn = column;
+            $scope.sort.sortDirection = sort.sortDirection;
+            //$scope.getPage($scope.paginationConfig.currentPage);
+        };
+
+        $scope.sortIcon = function (column) {
+            var sort = $scope.sort;
+            if (sort.sortColumn === column) {
+                var sortDirection = sort.sortDirection;
+                return sortDirection === 'desc' ? 'fa-sort-desc' : 'fa-sort-asc';
+            }
+            return 'fa-sort';
+        };
     }]);
 
 changesModule.controller('changesModalInstanceCtrl', ['$scope', '$log', '$modalInstance', '$timeout', 'changesService', 'change', 'oldValue',

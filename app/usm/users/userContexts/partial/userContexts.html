@@ -1,5 +1,5 @@
- <div class="panel panel-default" ng-controller="userContextsControllerCtrl">
-	<table st-table="displayedUserContexts" st-safe-src="userContextsList" class="table table-striped fixed">
+ <div class="panel panel-default" ng-controller="userContextsControllerCtrl" style="margin-top: 0;">
+	<table st-table="displayedUserContexts" st-safe-src="userContextsList" class="searchResults">
 		<colgroup>
 			<col style="width: 360px;">
 			<col style="width: 160px;">
@@ -7,7 +7,7 @@
 			<col style="width: 160px;">
 			<col style="width: 120px;">
 		</colgroup>
-		<thead class="table_heading">
+		<thead>
 		<tr>
 			<th st-sort="role" st-sort-default="true">{{'userContexts.role'  | translate}}</th>
 			<th st-sort="roleStatus">{{'userContexts.roleStatus' | translate}}</th>
@@ -25,7 +25,7 @@
 		</tr>
 		</thead>
 
-		<tbody class="table-bordered" ng-if="!isDataLoading && !emptyResult">
+		<tbody ng-if="!isDataLoading && !emptyResult">
 			<tr ng-repeat="uc in displayedUserContexts | orderBy:uc.role:sortReverse" ng-if="uc.role !== null">
 				<td>
 					<a ui-sref="app.usm.roles.role({ roleId: uc.roleId })">

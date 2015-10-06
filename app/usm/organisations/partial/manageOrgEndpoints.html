@@ -40,7 +40,7 @@
                 <div class="form-group">
                     <label class="col-md-3 col-md-offset-1" for="description">{{'common.description' | translate}}</label>
 
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <input type="text" class="form-control" name="description" id="description"
                                ng-model="endpoint.description"
                                ng-disabled="mode=='delete'">
@@ -54,7 +54,7 @@
 					<label class="col-md-3 col-md-offset-1" for="uri">{{'organisationEndpoints.uri' | translate}}
                         <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup></label>
 
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <input type="text" class="form-control" id="uri" name="uri" ng-model="endpoint.uri"
                                required ng-disabled="mode=='delete'">
 
@@ -70,7 +70,7 @@
                 <div class="form-group">
                     <label class="col-md-3 col-md-offset-1" for="email">{{'organisationEndpoints.email' | translate}}</label>
 
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <input type="email" class="form-control" name="email" id="email" ng-model="endpoint.email" ng-disabled="mode=='delete'">
                         <div class="error" ng-show="manageOrganisationEndpointForm.email.$invalid">
                             <small class="text-danger" ng-show="manageOrganisationEndpointForm.email.$error.email">This is not a valid email</small>
@@ -84,7 +84,7 @@
                     <label class="col-md-3 col-md-offset-1" for="status">{{'common.status' | translate}}
                         <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup>
                     </label>
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <select class="form-inline form-control dropdown"
                                 id="status"
                                 name="status"

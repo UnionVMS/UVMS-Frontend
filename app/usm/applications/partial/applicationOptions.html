@@ -1,17 +1,17 @@
-<div>
-    <table st-table="displayedOptions" st-safe-src="applicationDetails.options" class="table table-striped fixed">
+<div class="panel panel-default" style="margin-top: 0;">
+    <table st-table="displayedOptions" st-safe-src="applicationDetails.options" class="searchResults">
         <colgroup>
             <col style="width: 290px;">
             <col style="width: 550px;">
             <col style="width: 150px;">
             <col style="width: 150px;">
         </colgroup>
-        <thead class="table_heading">
+        <thead>
         <tr>
             <th st-sort="name" st-sort-default="true">Name</th>
             <th st-sort="description">Description</th>
             <th st-sort="dataType">Data Type</th>
-            <th st-sort="defaultValue" class="rightBorder">Default Value</th>
+            <th st-sort="defaultValue">Default Value</th>
         </tr>
         </thead>
         <tbody ng-if="!emptyDatasetsResult && checkAccess('viewApplications')">
@@ -19,7 +19,7 @@
                 <td ng-bind="option.name"></td>
                 <td ng-bind="option.description"></td>
                 <td ng-bind="option.dataType"></td>
-                <td ng-bind="option.defaultValue" class="rightBorder"></td>
+                <td ng-bind="option.defaultValue"></td>
             </tr>
         </tbody>
         <tbody ng-if="emptyOptionsResult && checkAccess('viewApplications')">
