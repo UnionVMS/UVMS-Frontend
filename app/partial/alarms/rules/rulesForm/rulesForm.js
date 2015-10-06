@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeout, $log, locale, alertService, ruleRestService, Rule, RuleDefinition, RuleTimeInterval, RuleAction, ruleService, GetListRequest, vesselRestService, mobileTerminalRestService, userService){
+angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeout, $log, locale, alertService, ruleRestService, Rule, RuleDefinition, RuleTimeInterval, RuleAction, ruleService, GetListRequest, vesselRestService, mobileTerminalRestService, userService, confirmationModal){
 
     $scope.submitAttempted = false;
 
@@ -292,8 +292,14 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         //Create
         $scope.waitingForCreateResponse = true;
         alertService.hideMessage();
-        ruleRestService.createNewRule($scope.currentRule)
+
+        var options = {
+            textLabel : locale.getString("alarms.rule_create_confirm_text")
+        };
+        confirmationModal.open(function(){
+            ruleRestService.createNewRule($scope.currentRule)
                 .then(createNewRuleSuccess, createNewRuleError);
+        }, options);
     };
 
     //Update the rule
@@ -308,8 +314,14 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         //Update
         $scope.waitingForCreateResponse = true;
         alertService.hideMessage();
-        ruleRestService.updateRule($scope.currentRule)
+
+        var options = {
+            textLabel : locale.getString("alarms.rule_update_confirm_text")
+        };
+        confirmationModal.open(function(){
+            ruleRestService.updateRule($scope.currentRule)
                 .then(updateRuleSuccess, updateRuleError);
+        }, options);
     };
 
     //Success creating the rule
