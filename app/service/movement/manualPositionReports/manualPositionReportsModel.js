@@ -33,12 +33,12 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 		manualPosition.status = data.status;
 		manualPosition.archived = data.archived;
 
-		if (data.carrier) {
-			manualPosition.carrier.externalMarking = data.carrier.extMarking;
-			manualPosition.carrier.cfr = data.carrier.cfr;
-			manualPosition.carrier.name = data.carrier.name;
-			manualPosition.carrier.ircs = data.carrier.ircs;
-			manualPosition.carrier.flagState = data.carrier.flagState;
+		if (data.asset) {
+			manualPosition.carrier.externalMarking = data.asset.extMarking;
+			manualPosition.carrier.cfr = data.asset.cfr;
+			manualPosition.carrier.name = data.asset.name;
+			manualPosition.carrier.ircs = data.asset.ircs;
+			manualPosition.carrier.flagState = data.asset.flagState;
 		}
 
 		if (data.position) {
@@ -59,7 +59,7 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 		data.status = this.status;
 		data.updatedTime = this.updatedTime;
 
-		data.carrier = {
+		data.asset = {
 			cfr: this.carrier.cfr,
 			name: this.carrier.name,
 			extMarking: this.carrier.externalMarking,
@@ -85,5 +85,5 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 
 
 	return ManualPosition;
-	
+
 });
