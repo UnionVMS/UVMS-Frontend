@@ -8,109 +8,124 @@
             </div>
         </div>
 
-		<div class="modal-body">
-			<div class="row">
-				<div class="col-md-12" ng-class="messageDivClass">
-					<span ng-bind="actionMessage" ng-class="messageClass"></span>
-				</div>
-			</div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12" ng-class="messageDivClass">
+                    <span ng-bind="actionMessage" ng-class="messageClass"></span>
+                </div>
+            </div>
+            <div class="row" ng-if="emptyResult">
+                <div class="col-md-12">
+                    <span class="col-md-12 {{classResultMessage}}">{{emptyResultMessage}}</span>
+                </div>
+            </div>
 
-			<div class="row">
-				<div class="form-group">
-					<label for="userName" class="control-label col-md-3">{{ 'users.copyToUser' | translate }}</label>
-					<div class="col-md-6">
-						<input type="text" class="form-control" id="userNameDst" name="userNameDst" ng-disabled="true"
-							   ng-model="user.userName" required>
-					</div>
-				</div>
-			</div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="userNameDst" class="col-md-3">{{ 'users.copyToUser' | translate }}</label>
 
-			<div class="row">
-				<div class="form-group">
-					<label for="userName" class="control-label col-md-3">{{ 'users.copyFromUser' | translate }}</label>
-					<div class="col-md-6">
-						<select class="form-inline form-control dropdown"
-								id="userNameSrc"
-								name="userNameSrc"
-								ng-model="selectedUsersName"
-								ng-change="showUserContext(selectedUsersName)"
-								ng-options="userName as userName for userName in usersNames"
-								ng-disabled="formDisabled || showConfirmation"
-								required
-								ng-class="{pointer: pointer}"
-								ng-mouseenter="pointer=true"
-								ng-mouseleave="pointer=false"
-								focus-me>
-						</select>
-					</div>
-				</div>
-			</div>
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" id="userNameDst" name="userNameDst" ng-disabled="true"
+                                   ng-model="user.userName" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-			<div class="row">
-				<div class="col-md-12">
-					<!-- USER CONTEXT SUMMARY TABLE -->
-					<table ng-show="userContextsList.length" st-table="displayedPermissions" st-safe-src="permissionsList" class="table table-striped fixed col-md-1">
-						<colgroup>
-							<col style="width: 300px;">
-							<col style="width: 300px;">
-							<col style="width: 276px;">
-						</colgroup>
-						<thead class="table_heading">
-						<tr>
-							<th st-sort="name" st-sort-default="true">Role Name</th>
-							<th st-sort="description">Scope Name</th>
-							<th st-sort="group">Number of preferences</th>
-						</tr>
-						</thead>
-						<tbody class="table-bordered" ng-if="!emptyResult && !isDataLoading">
-							<tr ng-repeat="context in userContextsList">
-								<td ng-bind="context.role"></td>
-								<td ng-bind="context.scope"></td>
-								<td ng-bind="context.userPreferenceCount"></td>
-							</tr>
-							<tr ng-repeat="emptyRow in userContextsEmptyList track by $index">
-								<td colspan="3">&nbsp;</td>
-							</tr>
-						</tbody>
-						<!--tbody ng-if="isDataLoading">
-						<tr>
-							<td class="text-center">{{loadingMessage}}</td>
-						</tr>
-						</tbody>
-						<tbody ng-if="emptyResult">
-						<tr>
-							<td class="text-center">{{emptyResultMessage}}</td>
-						</tr>
-						</tbody>
-						<tfoot>
-						</tfoot-->
-					</table>
-					<table ng-show="!userContextsList.length" class="table table-striped fixed col-md-1">
-						<colgroup>
-							<col style="width: 876px;">
-						</colgroup>
-						<tbody ng-if="emptyResult">
-						</tbody>
-						<tfoot>
-							<td class="text-center"><h3><span class="col-md-12 {{classResultMessage}}">{{emptyResultMessage}}</span></h3></td>
-						</tfoot>
-					</table>
-					<!-- USER CONTEXT SUMMARY TABLE -->
-				</div>
-			</div>
-		</div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="userNameSrc" class="col-md-3">{{ 'users.copyFromUser' | translate }}
+                            <sup class="fa fa-asterisk mandatory"></sup>
+                        </label>
+
+                        <div class="col-md-5">
+                            <select class="form-inline form-control dropdown"
+                                    id="userNameSrc"
+                                    name="userNameSrc"
+                                    ng-model="selectedUsersName"
+                                    ng-change="showUserContext(selectedUsersName)"
+                                    ng-options="userName as userName for userName in usersNames"
+                                    ng-disabled="formDisabled || showConfirmation"
+                                    required
+                                    ng-class="{pointer: pointer}"
+                                    ng-mouseenter="pointer=true"
+                                    ng-mouseleave="pointer=false"
+                                    focus-me>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- USER CONTEXT SUMMARY TABLE -->
+                    <table ng-show="userContextsList.length" st-table="displayedPermissions" st-safe-src="permissionsList" class="table table-striped fixed col-md-1">
+                        <colgroup>
+                            <col style="width: 300px;">
+                            <col style="width: 300px;">
+                            <col style="width: 276px;">
+                        </colgroup>
+                        <thead class="table_heading">
+                        <tr>
+                            <th st-sort="name" st-sort-default="true">Role Name</th>
+                            <th st-sort="description">Scope Name</th>
+                            <th st-sort="group">Number of preferences</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-bordered" ng-if="!emptyResult && !isDataLoading">
+                        <tr ng-repeat="context in userContextsList">
+                            <td ng-bind="context.role"></td>
+                            <td ng-bind="context.scope"></td>
+                            <td ng-bind="context.userPreferenceCount"></td>
+                        </tr>
+                        <tr ng-repeat="emptyRow in userContextsEmptyList track by $index">
+                            <td colspan="3">&nbsp;</td>
+                        </tr>
+                        </tbody>
+                        <!--tbody ng-if="isDataLoading">
+                        <tr>
+                            <td class="text-center">{{loadingMessage}}</td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-if="emptyResult">
+                        <tr>
+                            <td class="text-center">{{emptyResultMessage}}</td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        </tfoot-->
+                    </table>
+                    <!--
+                    <table ng-show="!userContextsList.length" class="table table-striped fixed col-md-1">
+                        <colgroup>
+                            <col style="width: 876px;">
+                        </colgroup>
+                        <tbody ng-if="emptyResult">
+                        </tbody>
+                        <tfoot>
+                        <td class="text-center"><h3><span class="col-md-12 {{classResultMessage}}">{{emptyResultMessage}}</span></h3></td>
+                        </tfoot>
+                    </table>
+                    -->
+                    <!-- USER CONTEXT SUMMARY TABLE -->
+                </div>
+            </div>
+        </div>
 
         <div class="modal-footer">
             <div class="row">
-				<div class="col-md-offset-8 col-md-4">
-					<input type="button" class="btn btn-warning btn-sm" ng-hide="actionSucceeded" ng-click="cancel()" value="Cancel"/>
+                <div class="col-md-offset-8 col-md-4">
+                    <input type="button" class="btn btn-warning btn-sm" ng-hide="actionSucceeded" ng-click="cancel()" value="Cancel"/>
                     <input type="submit" class="btn btn-primary btn-sm" value="Copy profile"
                            ng-disabled="duplicateUserProfileForm.$invalid || !userContextsList.length" ng-show="!actionSucceeded && !showConfirmation"/>
-					<input type="submit" class="btn btn-primary btn-sm" value="Confirm"
-                           ng-disabled="manageUserContextsForm.$invalid" ng-show="!actionSucceeded && showConfirmation" />
-                    <label class="btn btn-success btn-sm fa fa-check" ng-show="actionSucceeded" />
-				</div>
-			</div>
-		</div>
-	</form>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Confirm"
+                           ng-disabled="manageUserContextsForm.$invalid" ng-show="!actionSucceeded && showConfirmation"/>
+                    <label class="btn btn-success btn-sm fa fa-check" ng-show="actionSucceeded"/>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
