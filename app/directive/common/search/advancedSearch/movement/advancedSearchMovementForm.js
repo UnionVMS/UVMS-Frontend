@@ -13,47 +13,134 @@ angular.module('unionvmsWeb').directive('advancedSearchMovementForm', function()
 });
 
 angular.module('unionvmsWeb')
-    .controller('advancedSearchMovementCtrl', function($scope, locale, savedSearchService, configurationService, SearchField){
+    .controller('advancedSearchMovementCtrl', function($scope, locale, searchService, savedSearchService, alertService, configurationService, SearchField){
 
         var DATE_CUSTOM = "Custom";
-        $scope.selectedSavedSearch = "";
-        $scope.selectedVesselGroup = "";
+        var ASSET_GROUP_ID_SEARCH_KEY = 'ASSET_GROUP_ID';
+
+        $scope.selectedSavedSearch = undefined;
+        $scope.selectedVesselGroup = undefined;
         $scope.advancedSearch = false;
         $scope.timespan = {};
         $scope.advancedSearchObject.TIME_SPAN = $scope.timespan.code;
 
-        $scope.toggleAdvancedSearch = function(){
-            $scope.advancedSearch = !$scope.advancedSearch;
-            $scope.resetSearch();
-        };
-
-        $scope.resetSearch = function(){
+        var resetSearchForm = function(){
+            alertService.hideMessage();
             //empty advancedSearchobject.
-            $scope.selectedSavedSearch = "";
-            $scope.selectedVesselGroup = "";
+            $scope.selectedSavedSearch = undefined;
+            $scope.selectedVesselGroup = undefined;
             $scope.resetAdvancedSearchForm(false);
 
             //Reset timespan dropdown and search!
             $scope.selectFirstTimeSpanOption();
+        };
+
+        $scope.toggleAdvancedSearch = function(){
+            $scope.advancedSearch = !$scope.advancedSearch;
+            resetSearchForm();
+        };
+
+        $scope.resetSearch = function(){
+            resetSearchForm();
             $scope.performAdvancedSearch();
         };
 
         $scope.openSaveSearchModal = function(){
-            savedSearchService.openSaveSearchModal("MOVEMENT", true);
+            var options = {
+                dynamicSearch : true,
+            };
+            //Asset group selected?
+            if(angular.isDefined($scope.selectedVesselGroup)){
+                options.extraSearchFields = [new SearchField(ASSET_GROUP_ID_SEARCH_KEY, $scope.selectedVesselGroup)];
+            }
+            savedSearchService.openSaveSearchModal("MOVEMENT", options);
         };
 
         $scope.selectVesselGroup = function(savedSearchGroup){
-            console.log("Select vessel group!");
             console.log(savedSearchGroup);
-            console.log($scope.advancedSearchObject);
+            $scope.resetSavedSearchDropdown();
+            //Set search criterias
+            if(angular.isDefined(savedSearchGroup.searchFields)){
+                $scope.advancedSearchObject['ASSET_GROUP'] = savedSearchGroup.searchFields;
+            }else{
+                delete $scope.advancedSearchObject['ASSET_GROUP'];
+            }
+        };
 
-           $scope.advancedSearchObject.assetGroupCriterias = savedSearchGroup.searchFields;
+        //Reset the saved search dropdown
+        $scope.resetSavedSearchDropdown = function(){
+            $scope.selectedSavedSearch = undefined;
+        };
+
+        //Search by the advanced search form inputs
+        $scope.performAdvancedMovementSearch = function(){
+            alertService.hideMessage();
+            //Restet saved search dropdown
+            $scope.resetSavedSearchDropdown();
+
+            //Create criterias
+            searchService.resetPage();
+            searchService.resetSearchCriterias();
+            searchService.setDynamic(true);
+            //Asset group selected?
+            if(angular.isDefined($scope.selectedVesselGroup)){
+                var savedAssetGroup = savedSearchService.getVesselGroupForUserById($scope.selectedVesselGroup);
+                $scope.advancedSearchObject['ASSET_GROUP'] = savedAssetGroup.searchFields;
+                delete $scope.advancedSearchObject[ASSET_GROUP_ID_SEARCH_KEY];
+            }
+
+            searchService.setSearchCriteriasToAdvancedSearch();
+
+            //Do the search
+            $scope.searchfunc();
         };
 
         $scope.performSavedSearch = function(savedSearchGroup){
-            console.log("performSavedSearch!");
+            //Inital text selected?
+            if(angular.isUndefined(savedSearchGroup.searchFields)){
+                return;
+            }
+
+            alertService.hideMessage();
+            $scope.resetAdvancedSearchForm(false);
+            $scope.performSavedGroupSearch(savedSearchGroup, true, false);
             $scope.advancedSearch = true;
-            $scope.performSavedGroupSearch(savedSearchGroup, true);
+
+            //Saved search includes an asset group?
+            var foundAssetGroup = false;
+            $.each(savedSearchGroup.searchFields, function(index, searchField){
+                if(searchField.key === ASSET_GROUP_ID_SEARCH_KEY){
+                    var savedAssetGroup = savedSearchService.getVesselGroupForUserById(searchField.value);
+                    if(angular.isDefined(savedAssetGroup)){
+                        foundAssetGroup = true;
+
+                        //Set selected vessel group, so the dropdown gets updated
+                        $scope.selectedVesselGroup = savedAssetGroup.id;
+                        //Add search criterias from asset group
+                        $.each(savedAssetGroup.searchFields, function(index, searchField){
+                            searchService.addSearchCriteria(searchField.key, searchField.value);
+                        });
+
+                    }else{
+                        //Show warning that the asset group has been deleted
+                        alertService.showErrorMessage(locale.getString('movement.saved_search_asset_group_deleted_message', {name: savedSearchGroup.name}));
+                    }
+
+                    //Remove ASSET_GROUP_ID from search criterias
+                    searchService.removeSearchCriteria(ASSET_GROUP_ID_SEARCH_KEY);
+                    //Remove ASSET_GROUP_ID from advancedSearchObject
+                    delete $scope.advancedSearchObject[ASSET_GROUP_ID_SEARCH_KEY];
+
+                    return false;
+                }
+            });
+            //Reset asset group dropdown
+            if (!foundAssetGroup) {
+                $scope.selectedVesselGroup = undefined;
+            }
+
+            //Do the search
+            $scope.searchfunc();
         };
 
           //Watch for changes to the START DATE input

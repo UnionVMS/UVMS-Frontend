@@ -8,6 +8,7 @@ angular.module('unionvmsWeb').directive('datepickerInput', function($compile) {
             placeholder : '@',
             ngDisabled : '=',
             ngRequired : '=',
+            ngChangeCallback : '=',
             startDate : '=',
             datepickerMaxDate: '@'
 		},
@@ -72,10 +73,17 @@ angular.module('unionvmsWeb')
             return value;
         }
 
+        //Handle change event
+        $scope.onChange = function(){
+            if(angular.isDefined($scope.ngChangeCallback)){
+                $scope.ngChangeCallback($scope.model);
+            }
+        };
+
         var watchModelChanges = true;
         //Watch changes of the viewModel
         $scope.$watch('viewModel', function(newValue) {
-            //Set watchModelChanges to false so the watch on model doesn't update the viewModel which will cause an inifinte watch loop
+            //Set watchModelChanges to false so the watch on model doesn't update the viewModel which will 4use an inifinte watch loop
             watchModelChanges = false;
             if(angular.isDefined(newValue)){
                 var d = new Date(newValue);
@@ -88,7 +96,7 @@ angular.module('unionvmsWeb')
                 }else{
                     newModelVal = date.join('-');
                 }
-                
+
                 //Only set model to newModelVal if valid
                 if(newModelVal.indexOf("NaN") < 0){
                     $scope.model = newModelVal;
@@ -100,10 +108,10 @@ angular.module('unionvmsWeb')
 
         //Watch changes of the model and update the viewModel when it happens
         $scope.$watch('model', function(newValue) {
-            //Don't update viewModel if the watch 
+            //Don't update viewModel if the watch
             if (watchModelChanges || ($scope.viewModel === undefined && newValue !== undefined)) {
                 $scope.viewModel = newValue;
             }
             watchModelChanges = true;
-        });        
+        });
 });
