@@ -1,16 +1,16 @@
 var rolesModule = angular.module('roles');
 
-rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refData', '$stateParams', '$state', 'getApplications', 'rolesServices', 'userService',  
+rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refData', '$stateParams', '$state', 'getApplications', 'rolesServices', 'userService',
     function ($translate, $scope, $log, refData, $stateParams, $state, getApplications, rolesServices, userService) {
         $scope.sort = {
             sortColumn: $stateParams.sortColumn || 'name', // Default Sort.
             sortDirection: $stateParams.sortDirection || 'asc'
         };
-        
+
         $scope.checkAccess = function(feature) {
-        	return userService.isAllowed(feature,"USM",true);
-        };        
-        
+            return userService.isAllowed(feature,"USM",true);
+        };
+
         $scope.showPagination = true;
 
         $scope.statusList = refData.statusesSearch;
@@ -18,7 +18,7 @@ rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refDat
         $scope.emptyResult = false;
         $scope.emptyResultMessage = "No results found.";
 
-		$scope.toolTipsDelay = refData.toolTipsDelay;
+        $scope.toolTipsDelay = refData.toolTipsDelay;
 
         // List Of Applications...
         getApplications.get().then(
@@ -48,18 +48,18 @@ rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refDat
                 function (response) {
                     $scope.roleList = response.roles;
 
-                 if (!_.isUndefined($scope.roleList)) {
-                    $scope.displayedRoles = [].concat($scope.roleList);
-                    $scope.isDataLoading = false;
-                    $scope.emptyResult = false;
-                    $scope.paginationConfig.totalItems = response.total;
-                    $scope.paginationConfig.pageCount = Math.ceil($scope.paginationConfig.totalItems / $scope.paginationConfig.itemsPerPage);
+                    if (!_.isUndefined($scope.roleList)) {
+                        $scope.displayedRoles = [].concat($scope.roleList);
+                        $scope.isDataLoading = false;
+                        $scope.emptyResult = false;
+                        $scope.paginationConfig.totalItems = response.total;
+                        $scope.paginationConfig.pageCount = Math.ceil($scope.paginationConfig.totalItems / $scope.paginationConfig.itemsPerPage);
 
-                 } else {
-                     $scope.emptyResult = true;
-                     $scope.isDataLoading = false;
-                     $scope.showPagination = false;
-                 }
+                    } else {
+                        $scope.emptyResult = true;
+                        $scope.isDataLoading = false;
+                        $scope.showPagination = false;
+                    }
                     changeUrlParams();
                 },
                 function (error) {
@@ -162,13 +162,13 @@ rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refDat
 
     }]);
 
-rolesModule.controller('roleDetailsCtrl', ['$scope', '$stateParams', '$log', 'rolesServices', 'applicationsService', 'permissionServices', 'userService', 
+rolesModule.controller('roleDetailsCtrl', ['$scope', '$stateParams', '$log', 'rolesServices', 'applicationsService', 'permissionServices', 'userService',
     function ($scope, $stateParams, $log, rolesServices, applicationsService, permissionServices, userService) {
 
-    $scope.checkAccess = function(feature) {
-    	return userService.isAllowed(feature,"USM",true);
-    }; 
-	
+        $scope.checkAccess = function(feature) {
+            return userService.isAllowed(feature,"USM",true);
+        };
+
         $scope.itemsByPage = 10;
         $scope.emptyResult = true;
 
@@ -187,15 +187,46 @@ rolesModule.controller('roleDetailsCtrl', ['$scope', '$stateParams', '$log', 'ro
             }
         );
 
+        $scope.sort = {
+            sortColumn: 'name', // Default Sort.
+            sortDirection: 'asc'
+        };
+
+        $scope.changeSorting = function (column) {
+            var sort = $scope.sort;
+            if (sort.sortColumn === column) {
+                if (sort.sortDirection === 'desc') {
+                    sort.sortDirection = 'asc';
+                } else if (sort.sortDirection === 'asc') {
+                    sort.sortDirection = 'desc';
+                }
+            } else {
+                sort.sortColumn = column;
+                sort.sortDirection = 'asc';
+            }
+            $scope.sort.sortColumn = column;
+            $scope.sort.sortDirection = sort.sortDirection;
+            //$scope.getPage($scope.paginationConfig.currentPage);
+        };
+
+        $scope.sortIcon = function (column) {
+            var sort = $scope.sort;
+            if (sort.sortColumn === column) {
+                var sortDirection = sort.sortDirection;
+                return sortDirection === 'desc' ? 'fa-sort-desc' : 'fa-sort-asc';
+            }
+            return 'fa-sort';
+        };
+
     }]);
 
-rolesModule.controller('manageRoleCtrl', ['$scope', '$modal', '$log', 'rolesServices', 'userService', 
+rolesModule.controller('manageRoleCtrl', ['$scope', '$modal', '$log', 'rolesServices', 'userService',
     function ($scope, $modal, $log, rolesServices, userService) {
 
-    $scope.checkAccess = function(feature) {
-    	return userService.isAllowed(feature,"USM",true);
-    };  	
-	
+        $scope.checkAccess = function(feature) {
+            return userService.isAllowed(feature,"USM",true);
+        };
+
         $scope.manageRole = function (mode, role) {
             var modalInstance = $modal.open({
                 animation: true,
@@ -275,7 +306,6 @@ rolesModule.controller('rolesModalInstanceCtrl', ['$scope', '$modalInstance', '$
                         $scope.newRole = role;
                         $scope.roleCreated = true;
                         $timeout(function () {
-                            $location.path("/role/" + response.newRole.roleId + "/details");
                             $modalInstance.close($scope.newRole);
                         }, 2000);
                     },
@@ -520,20 +550,20 @@ rolesModule.controller('permissionModalInstanceCtrl', ['$scope', '$modalInstance
             }
         };
 
-		// Reset Filter permission
+        // Reset Filter permission
         $scope.resetForm = function (criteria) {
-			if(criteria !== undefined) {
-				criteria.application = null;
-				criteria.group = null;
-				criteria.sortColumn = 'name';
-				criteria.sortDirection = 'asc';
-				$scope.filterPermissions(criteria);
-			} else {
-				var criteriaEmpty = {};
-				criteriaEmpty.application = null;
-				criteriaEmpty.group = null;
-				$scope.filterPermissions(criteriaEmpty);
-			}
+            if(criteria !== undefined) {
+                criteria.application = null;
+                criteria.group = null;
+                criteria.sortColumn = 'name';
+                criteria.sortDirection = 'asc';
+                $scope.filterPermissions(criteria);
+            } else {
+                var criteriaEmpty = {};
+                criteriaEmpty.application = null;
+                criteriaEmpty.group = null;
+                $scope.filterPermissions(criteriaEmpty);
+            }
         };
 
         // Filter permission

@@ -3,7 +3,7 @@
         <div class="panel-body">
             <form class="form-inline" name="searchForm" ng-submit="searchPolicies({name: search.name, subject: policySubjSelected})">
                 <div class="form-group col-md-2">
-                    <label for="policy">Name search</label>
+                    <label for="policyName">Name search</label>
                     <!-- ng-model-options='{ debounce: 1000 }' -->
                     <!-- ng-change="searchPolicies({name: search.name, subject: policySubjSelected})" -->
                     <!-- typeahead="policy.name for policy in displayedPoliciesInit | filter:$viewValue | limitTo:8" -->
@@ -15,7 +15,7 @@
                         ng-model="search.name">
                 </div>
                 <div class="form-group col-md-2">
-                    <label for="policy">Subject</label>
+                    <label for="subject">Subject</label>
                     <!--ng-options="policy.subject for policy in displayedPolicies | unique:'subject'"-->
                     <select class="form-inline form-control dropdown"
                             id="subject"
@@ -32,13 +32,12 @@
 
                 <div class="col-md-1">
                     <label>&nbsp;</label>
-
                     <div style="width:120px; margin-right:5px;">
-                        <button id="searchButton" type="submit" class="btn btn-primary btn-sm">
-                            {{'common.search' | translate}}
+                        <button id="searchButton" type="submit" class="btn btn-default">
+                            <span class="fa fa-search"></span>
                         </button>
-                        <button type="button" id="button" ng-click="resetForm()" class="btn btn-link btn-sm">
-                            {{'common.reset' | translate}}
+                        <button type="button" id="button" ng-click="resetForm()" class="btn btn-default">
+                            <span class="fa fa-refresh"></span>
                         </button>
                     </div>
                 </div>
@@ -46,124 +45,134 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel">
-                <!--div class="panel-body"-->
-                <table st-table="displayedPolicies" st-safe-src="sortPolicies" class="searchResults">
-                    <colgroup>
-                        <col style="width: 200px;">
-                        <col style="width: 540px;">
-                        <col style="width: 120px;">
-                        <col style="width: 180px;">
-                        <col style="width: 100px;">
-                    </colgroup>
-                    <thead>
-                    <!-- typeahead="policy.name for policy in displayedPolicies | filter:$viewValue | limitTo:8"  -->
-                    <!-- ng-enter="searchPolicies(displayedPolicies)" -->
-                    <!--input
-                        ng-model="policySubjSelected"
-                        st-search="subject"
+    <div class="panel panel-default">
+        <!--div class="panel-body"-->
+        <table st-table="displayedPolicies" st-safe-src="sortPolicies" class="table table-striped fixed">
+            <colgroup>
+                <col style="width: 200px;">
+                <col style="width: 540px;">
+                <col style="width: 120px;">
+                <col style="width: 180px;">
+                <col style="width: 100px;">
+            </colgroup>
+            <thead>
+            <!-- typeahead="policy.name for policy in displayedPolicies | filter:$viewValue | limitTo:8"  -->
+            <!-- ng-enter="searchPolicies(displayedPolicies)" -->
+            <!--input
+                ng-model="policySubjSelected"
+                st-search="subject"
+                class="form-control"
+                placeholder="Subject search ..."
+                type="text"/-->
+            <!--tr>
+                <th colspan="1">
+                    <input
+                        ng-model="policyNameSelected"
+                        st-search="name"
+                        st-input-event="change"
                         class="form-control"
-                        placeholder="Subject search ..."
-                        type="text"/-->
-                    <!--tr>
-                        <th colspan="1">
-                            <input
-                                ng-model="policyNameSelected"
-                                st-search="name"
-                                st-input-event="change"
-                                class="form-control"
-                                placeholder="Name search..."
-                                type="text"
-                                />
-                        </th>
-                        <th colspan="1">
-                            <select class="form-inline form-control dropdown"
-                                    id="subject"
-                                    name="subject"
-                                    st-search="policySubjSelected"
-                                    st-input-event="change"
-                                    ng-model="policySubjSelected"
-                                    ng-options="policy.subject for policy in displayedPolicies | unique:'subject'"
-                                    ng-class="{pointer: pointer}"
-                                    ng-mouseenter="pointer=true"
-                                    ng-mouseleave="pointer=false"
-                                    >
-                                <option value="">All subject</option>
-                            </select>
+                        placeholder="Name search..."
+                        type="text"
+                        />
+                </th>
+                <th colspan="1">
+                    <select class="form-inline form-control dropdown"
+                            id="subject"
+                            name="subject"
+                            st-search="policySubjSelected"
+                            st-input-event="change"
+                            ng-model="policySubjSelected"
+                            ng-options="policy.subject for policy in displayedPolicies | unique:'subject'"
+                            ng-class="{pointer: pointer}"
+                            ng-mouseenter="pointer=true"
+                            ng-mouseleave="pointer=false"
+                            >
+                        <option value="">All subject</option>
+                    </select>
 
-                        </th>
-                        <th colspan="1"></th>
-                        <th colspan="1"></th>
-                        <th colspan="3">
-                                <button type="button" st-reset-search id="button" ng-click="resetForm()" class="btn btn-default pull-right">
-                                    <span class="fa fa-refresh"></span>
-                                </button>
-                        </th>
-                        <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
-                    </tr-->
-                    <tr>
-                        <th st-sort="name">Name&nbsp;<i class="fa" ng-class="getIcon('policyName')"></i></th>
-                        <th st-sort="description">Description&nbsp;<i class="fa" ng-class="getIcon('firstName')"></i></th>
-                        <th st-sort="subject">Subject&nbsp;<i class="fa" ng-class="getIcon('lastName')"></i></th>
-                        <th st-sort="value">Value&nbsp;<i class="fa" ng-class="getIcon('nation')"></i></th>
-                        <th class="text-center">
-                            <!-- New Button --> <!-- Removed no new policy can be created by UI, the UI can only edit existing ones -->
-                            <!--div class="tableHeader" ng-if="checkAccess('configurePolicies')">
-                                <button type="button" id="newPolicyButton" ng-controller="policiesListController" ng-click="addNewPolicy()" class="btn btn-sm btn-primary pull-left">
-                                    <i class="fa fa-plus"></i> New Policy
-                                </button>
-                            </div-->
-                        </th>
-                    </tr>
-                    </thead>
+                </th>
+                <th colspan="1"></th>
+                <th colspan="1"></th>
+                <th colspan="3">
+                        <button type="button" st-reset-search id="button" ng-click="resetForm()" class="btn btn-default pull-right">
+                            <span class="fa fa-refresh"></span>
+                        </button>
+                </th>
+                <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
+            </tr-->
+            <tr>
+                <th st-sort="name" st-sort-default="true" ng-click="changeSorting('name')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                    Name&nbsp;<i class="fa" ng-class="sortIcon('name')"></i>
+                </th>
+                <th st-sort="description" ng-click="changeSorting('description')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                    Description&nbsp;<i class="fa" ng-class="sortIcon('description')"></i>
+                </th>
+                <th st-sort="subject" ng-click="changeSorting('subject')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                    Subject&nbsp;<i class="fa" ng-class="sortIcon('subject')"></i>
+                </th>
+                <th st-sort="value" ng-click="changeSorting('value')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                    Value&nbsp;<i class="fa" ng-class="sortIcon('value')"></i>
+                </th>
+                <th class="text-center">
+                    <!-- New Button --> <!-- Removed no new policy can be created by UI, the UI can only edit existing ones -->
+                    <!--div class="tableHeader" ng-if="checkAccess('configurePolicies')">
+                        <button type="button" id="newPolicyButton" ng-controller="policiesListController" ng-click="addNewPolicy()" class="btn btn-sm btn-primary pull-left">
+                            <i class="fa fa-plus"></i> New Policy
+                        </button>
+                    </div-->
+                </th>
+            </tr>
+            </thead>
 
-                    <tbody ng-if="!isDataLoading">
-                    <tr st-select-row="policy" st-select-mode="single" ng-repeat="policy in displayedPolicies">
-                        <td>{{policy.name}}</td>
-                        <td>{{policy.description}}</td>
-                        <td>{{policy.subject}}</td>
-                        <td>{{policy.value}}</td>
-                        <td class="text-center">
+            <tbody class="table-bordered" ng-if="!isDataLoading">
+            <tr st-select-row="policy" st-select-mode="single" ng-repeat="policy in displayedPolicies">
+                <td>{{policy.name}}</td>
+                <td>{{policy.description}}</td>
+                <td>{{policy.subject}}</td>
+                <td>{{policy.value}}</td>
+                <td class="text-center">
 							<span ng-controller="managePolicyCtlr" ng-if="checkAccess('configurePolicies')">
 								<button type="button" id="editPolicy" class="btn btn-sm btn-primary" ng-click="editPolicy(policy)">
                                     <i class="fa fa-pencil"></i>
                                 </button>
 							</span>
-                            <!-- Remove Button --> <!-- Removed no new policy can be removed by UI, the UI can only edit existing ones -->
-                            <!--span ng-controller="policiesListController" ng-if="checkAccess('configurePolicies')">
-                                <button type="button" class="btn btn-sm btn-primary" ng-click="deletePolicy(policy)">
-                                    <i class="fa fa-remove"></i>
-                                </button>
-                            </span-->
-                        </td>
-                    </tr>
-                    </tbody>
+                    <!-- Remove Button --> <!-- Removed no new policy can be removed by UI, the UI can only edit existing ones -->
+                    <!--span ng-controller="policiesListController" ng-if="checkAccess('configurePolicies')">
+                        <button type="button" class="btn btn-sm btn-primary" ng-click="deletePolicy(policy)">
+                            <i class="fa fa-remove"></i>
+                        </button>
+                    </span-->
+                </td>
+            </tr>
+            </tbody>
 
-                    <tbody ng-if="isDataLoading">
-                    <tr>
-                        <td colspan="5" class="text-center">{{loadingMessage}}</td>
-                    </tr>
-                    </tbody>
+            <tbody ng-if="isDataLoading">
+            <tr>
+                <td colspan="5" class="text-center">{{loadingMessage}}</td>
+            </tr>
+            </tbody>
 
-                    <tbody ng-if="emptyResult">
-                    <tr>
-                        <td colspan="5" class="text-center">{{emptyResultMessage}}</td>
-                    </tr>
-                    </tbody>
+            <tbody ng-if="emptyResult">
+            <tr>
+                <td colspan="5" class="text-center">{{emptyResultMessage}}</td>
+            </tr>
+            </tbody>
 
-                    <tfoot>
-                    <tr>
-                        <td colspan="5" class="text-center">
-                            <div class="st-pagination" st-pagination="" st-items-by-page="paginationConfig.itemsPerPage" st-displayed-pages="10"></div>
-                        </td>
-                    </tr>
-                    </tfoot>
+            <tfoot>
+            <tr>
+                <td colspan="5" class="text-right">
+                    <div class="st-pagination" st-pagination="" st-items-by-page="paginationConfig.itemsPerPage" st-displayed-pages="10"></div>
+                </td>
+            </tr>
+            </tfoot>
 
-                </table>
-            </div>
-        </div>
+        </table>
+
+        <!--div>
+            <usm-pagination config="paginationConfig"></usm-pagination>
+        </div-->
+        <!--/div--> <!-- panel body -->
     </div>
+
     <div ng-show="isLoading" class="loading-indicator"></div>
 </div>

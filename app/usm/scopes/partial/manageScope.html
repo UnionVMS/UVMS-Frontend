@@ -39,7 +39,7 @@
                 <div class="form-group">
                     <label class="col-md-3 col-md-offset-1" for="description">{{'common.description' | translate}}</label>
 
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         <input type="text" class="form-control" name="description" id="description"
                                ng-model="scope.description"
                                ng-disabled="mode=='delete'">
@@ -52,7 +52,7 @@
                         <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'">
                     </label>
 
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <select class="form-inline form-control dropdown"
                                 id="status"
                                 name="status"
@@ -74,10 +74,16 @@
                         <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup>
                     </label>
 
-                    <div class="col-md-5">
-                        <usm-datepicker config="activeFromConfig" value="scope.activeFrom"></usm-datepicker>
+                    <div class="col-md-4">
+                        <datepicker-input name="activeFrom"
+                                          model="scope.activeFrom"
+                                          ng-required="true"
+                                          ng-disabled="formDisabled">
+                        </datepicker-input>
                         <div>
-                            <span class="text-danger small" ng-show="activeFormRequiredAlert">Active From date is required</span>
+                            <span class="text-danger small" ng-show="manageScopeForm.activeFrom.$error.required">
+                                Active From date is required
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -88,10 +94,16 @@
                         <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup>
                     </label>
 
-                    <div class="col-md-5">
-                        <usm-datepicker config="activeToConfig" value="scope.activeTo"></usm-datepicker>
+                    <div class="col-md-4">
+                        <datepicker-input name="activeTo"
+                                          model="scope.activeTo"
+                                          ng-required="true"
+                                          ng-disabled="formDisabled">
+                        </datepicker-input>
                         <div>
-                            <span class="text-danger small" ng-show="activeToRequiredAlert">Active To date is required</span>
+                            <span class="text-danger small" ng-show="manageScopeForm.activeTo.$error.required">
+                                Active To date is required
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -101,8 +113,11 @@
                     <label class="col-md-3 col-md-offset-1">{{ 'scopes.dataFrom' | translate }}
                     </label>
 
-                    <div class="col-md-5">
-                        <usm-datepicker config="dataFromConfig" value="scopes.dataFrom"></usm-datepicker>
+                    <div class="col-md-4">
+                        <datepicker-input name="dataFrom"
+                                          model="scope.dataFrom"
+                                          ng-disabled="formDisabled">
+                        </datepicker-input>
                     </div>
                 </div>
             </div>
@@ -111,8 +126,11 @@
                     <label class="col-md-3 col-md-offset-1">{{ 'scopes.dataTo' | translate }}
                     </label>
 
-                    <div class="col-md-5">
-                        <usm-datepicker config="dataToConfig" value="scope.dataTo"></usm-datepicker>
+                    <div class="col-md-4">
+                        <datepicker-input name="dataTo"
+                                          model="scope.dataTo"
+                                          ng-disabled="formDisabled">
+                        </datepicker-input>
                     </div>
                 </div>
             </div>

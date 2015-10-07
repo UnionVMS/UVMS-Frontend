@@ -1,12 +1,12 @@
 var scopesModule = angular.module('scopes');
 
-scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$state', 'refData', 'getApplications', 'scopeServices', 'userService', 
+scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$state', 'refData', 'getApplications', 'scopeServices', 'userService',
     function ($log, $scope, $stateParams, $state, refData, getApplications, scopeServices, userService) {
-	
-	    $scope.checkAccess = function(feature) {
-	    	return userService.isAllowed(feature,"USM",true);
-	    }; 	
-	
+
+        $scope.checkAccess = function(feature) {
+            return userService.isAllowed(feature,"USM",true);
+        };
+
         $scope.sort = {
             sortColumn: $stateParams.sortColumn || 'name', // Default Sort.
             sortDirection: $stateParams.sortDirection || 'asc'
@@ -47,17 +47,17 @@ scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$s
                 function (response) {
                     $scope.scopeList = response.scopes;
 
-                if (!_.isUndefined($scope.scopeList)) {
-                    $scope.displayedScopes = [].concat($scope.scopeList);
-                    $scope.isDataLoading = false;
-                    $scope.emptyResult = false;
-                    $scope.paginationConfig.totalItems = response.total;
-                    $scope.paginationConfig.pageCount = Math.ceil($scope.paginationConfig.totalItems / $scope.paginationConfig.itemsPerPage);
-                } else {
-                    $scope.emptyResult = true;
-                    $scope.isDataLoading = false;
-                    $scope.showPagination = false;
-                }
+                    if (!_.isUndefined($scope.scopeList)) {
+                        $scope.displayedScopes = [].concat($scope.scopeList);
+                        $scope.isDataLoading = false;
+                        $scope.emptyResult = false;
+                        $scope.paginationConfig.totalItems = response.total;
+                        $scope.paginationConfig.pageCount = Math.ceil($scope.paginationConfig.totalItems / $scope.paginationConfig.itemsPerPage);
+                    } else {
+                        $scope.emptyResult = true;
+                        $scope.isDataLoading = false;
+                        $scope.showPagination = false;
+                    }
                     changeUrlParams();
                 },
                 function (error) {
@@ -163,12 +163,12 @@ scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$s
 
     }]);
 
-scopesModule.controller('scopeDetailsCtrl', ['$log', '$scope', '$stateParams', 'scopeServices', 'userService', 
+scopesModule.controller('scopeDetailsCtrl', ['$log', '$scope', '$stateParams', 'scopeServices', 'userService',
     function ($log, $scope, $stateParams, scopeServices, userService) {
-	    $scope.checkAccess = function(feature) {
-	    	return userService.isAllowed(feature,"USM",true);
-	    };		
-	
+        $scope.checkAccess = function(feature) {
+            return userService.isAllowed(feature,"USM",true);
+        };
+
         $scope.emptyResultMessage = "No datasets found. Please try to search again.";
         $scope.itemsByPage = 10;
         $scope.emptyResult = true;
@@ -195,15 +195,46 @@ scopesModule.controller('scopeDetailsCtrl', ['$log', '$scope', '$stateParams', '
                 $scope.emptyResultMessage = error;
             }
         );
+
+        $scope.sort = {
+            sortColumn: 'name', // Default Sort.
+            sortDirection: 'asc'
+        };
+
+        $scope.changeSorting = function (column) {
+            var sort = $scope.sort;
+            if (sort.sortColumn === column) {
+                if (sort.sortDirection === 'desc') {
+                    sort.sortDirection = 'asc';
+                } else if (sort.sortDirection === 'asc') {
+                    sort.sortDirection = 'desc';
+                }
+            } else {
+                sort.sortColumn = column;
+                sort.sortDirection = 'asc';
+            }
+            $scope.sort.sortColumn = column;
+            $scope.sort.sortDirection = sort.sortDirection;
+            //$scope.getPage($scope.paginationConfig.currentPage);
+        };
+
+        $scope.sortIcon = function (column) {
+            var sort = $scope.sort;
+            if (sort.sortColumn === column) {
+                var sortDirection = sort.sortDirection;
+                return sortDirection === 'desc' ? 'fa-sort-desc' : 'fa-sort-asc';
+            }
+            return 'fa-sort';
+        };
     }]);
 
-scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$modal', '$stateParams', 'userService', 
+scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$modal', '$stateParams', 'userService',
     function ($log, $scope, $modal, $stateParams, userService) {
 
-	    $scope.checkAccess = function(feature) {
-	    	return userService.isAllowed(feature,"USM",true);
-	    }; 	
-	
+        $scope.checkAccess = function(feature) {
+            return userService.isAllowed(feature,"USM",true);
+        };
+
         $scope.manageScope = function (mode, scope) {
             var modalInstance = $modal.open({
                 animation: true,

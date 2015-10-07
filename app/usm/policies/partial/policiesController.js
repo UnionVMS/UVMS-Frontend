@@ -1,48 +1,48 @@
 var policiesModule = angular.module('policies');
 
 policiesModule.directive('stResetSearch', function() {
-	return {
-		restrict: 'EA',
-		require: '^stTable',
-		link: function(scope, element, attrs, ctrl) {
-			return element.bind('click', function() {
-				return scope.$apply(function() {
-					var tableState;
-					tableState = ctrl.tableState();
-					tableState.search.predicateObject = {};
-					tableState.pagination.start = 0;
-					return ctrl.pipe();
-				});
-			});
-		}
-	};
+    return {
+        restrict: 'EA',
+        require: '^stTable',
+        link: function(scope, element, attrs, ctrl) {
+            return element.bind('click', function() {
+                return scope.$apply(function() {
+                    var tableState;
+                    tableState = ctrl.tableState();
+                    tableState.search.predicateObject = {};
+                    tableState.pagination.start = 0;
+                    return ctrl.pipe();
+                });
+            });
+        }
+    };
 });
 /*
-policiesModule.directive('stSubmitSearch', function() {
-	return {
-		restrict: 'EA',
-		require: '^stTable',
-		link: function(scope, element, attrs, ctrl) {
-			return element.bind('click', function() {
-				return scope.$apply(function() {
-					return ctrl.pipe();
-				});
-			});
-		}
-	};
-});
-*/
+ policiesModule.directive('stSubmitSearch', function() {
+ return {
+ restrict: 'EA',
+ require: '^stTable',
+ link: function(scope, element, attrs, ctrl) {
+ return element.bind('click', function() {
+ return scope.$apply(function() {
+ return ctrl.pipe();
+ });
+ });
+ }
+ };
+ });
+ */
 policiesModule.directive('ngEnter', function() {
-	return function(scope, element, attrs) {
-		element.bind("keydown keypress", function(event) {
-			if(event.which === 13) {
-				scope.$apply(function(){
-					scope.$eval(attrs.ngEnter, {'event': event});
-				});
-				event.preventDefault();
-			}
-		});
-	};
+    return function(scope, element, attrs) {
+        element.bind("keydown keypress", function(event) {
+            if(event.which === 13) {
+                scope.$apply(function(){
+                    scope.$eval(attrs.ngEnter, {'event': event});
+                });
+                event.preventDefault();
+            }
+        });
+    };
 });
 
 policiesModule.controller('policiesListController', ['$scope', '$resource', '$log', '$stateParams', '$timeout', 'policiesService', 'userService',
@@ -50,132 +50,163 @@ policiesModule.controller('policiesListController', ['$scope', '$resource', '$lo
 
 
         $scope.checkAccess = function(feature) {
-        	return userService.isAllowed(feature, "USM", true);
+            return userService.isAllowed(feature, "USM", true);
         };
 
-		var resetSearchValues = function() {
-			$scope.search = {};
+        var resetSearchValues = function() {
+            $scope.search = {};
             $scope.search.name = '';
             $scope.search.subject = '';
-		};
+        };
 
-		var fillPolicySubjects = function() {
-			policiesService.getPolicySubjList().then(function(obj) {
-				//$log.log("results: ", obj);
-				$scope.displayedPoliciesSubjInit = obj.subjects;
-			},
-			function (error) {
-				$scope.emptyResultMessage = error;
-			});
-		};
+        var fillPolicySubjects = function() {
+            policiesService.getPolicySubjList().then(function(obj) {
+                    //$log.log("results: ", obj);
+                    $scope.displayedPoliciesSubjInit = obj.subjects;
+                },
+                function (error) {
+                    $scope.emptyResultMessage = error;
+                });
+        };
 
-		var callService = function(criteria) {
-			if(criteria.name === '') {
-				criteria.name = undefined;
-			}
-			//$log.log(criteria);
+        var callService = function(criteria) {
+            if(criteria.name === '') {
+                criteria.name = undefined;
+            }
+            //$log.log(criteria);
 
-			// simulating a XMLHttpRequest request delay and retrieve mock data
-			//$timeout(function () {
-				policiesService.getPoliciesList(criteria).then(function(obj) {
-					$scope.displayedPolicies = obj.policies;
-					if($scope.displayedPoliciesInit === undefined) {
-						$scope.displayedPoliciesInit = angular.copy($scope.displayedPolicies);
-					}
-					$scope.sortPolicies = $scope.displayedPolicies;
-					//$log.log($scope.displayedPolicies);
-					//$log.log($scope.sortPolicies);
-					$scope.isDataLoading = false;
+            // simulating a XMLHttpRequest request delay and retrieve mock data
+            //$timeout(function () {
+            policiesService.getPoliciesList(criteria).then(function(obj) {
+                $scope.displayedPolicies = obj.policies;
+                if($scope.displayedPoliciesInit === undefined) {
+                    $scope.displayedPoliciesInit = angular.copy($scope.displayedPolicies);
+                }
+                $scope.sortPolicies = $scope.displayedPolicies;
+                //$log.log($scope.displayedPolicies);
+                //$log.log($scope.sortPolicies);
+                $scope.isDataLoading = false;
 
-					$scope.emptyResult = $scope.displayedPolicies.length === 0 ? true : false;
-				});
-			//}, 1000);
-		};
+                $scope.emptyResult = $scope.displayedPolicies.length === 0 ? true : false;
+            });
+            //}, 1000);
+        };
 
         $scope.searchPolicies = function (obj) {
-			//$log.log("searching: ", obj);
-			$scope.criteria.name = obj.name;
-			$scope.criteria.subject = obj.subject;
+            //$log.log("searching: ", obj);
+            $scope.criteria.name = obj.name;
+            $scope.criteria.subject = obj.subject;
 
             $scope.currentPage = 1;
-        	$scope.paginationConfig.currentPage = 1;
+            $scope.paginationConfig.currentPage = 1;
 
-			/*
-            if ($scope.search.name !== null && $scope.search.name !== '' && !_.isUndefined($scope.search.name) ){
-                $scope.pageData.name = $scope.search.name;
-			} else {
-                $scope.pageData.name = '';
-            }
+            /*
+             if ($scope.search.name !== null && $scope.search.name !== '' && !_.isUndefined($scope.search.name) ){
+             $scope.pageData.name = $scope.search.name;
+             } else {
+             $scope.pageData.name = '';
+             }
 
-			if ($scope.search.subject  !== null && $scope.search.subject  !== '' && !_.isUndefined($scope.search.subject)){
-                $scope.pageData.subject = $scope.search.subject;
-			} else {
-				$scope.pageData.subject = '';
-            }
-			*/
+             if ($scope.search.subject  !== null && $scope.search.subject  !== '' && !_.isUndefined($scope.search.subject)){
+             $scope.pageData.subject = $scope.search.subject;
+             } else {
+             $scope.pageData.subject = '';
+             }
+             */
 
-			callService($scope.criteria);
+            callService($scope.criteria);
         };
 
         $scope.resetForm = function(){
-			//$log.log("reset form");
+            //$log.log("reset form");
 
             $scope.currentPage = 1;
 
-			resetSearchValues();
+            resetSearchValues();
 
             $scope.criteria = {};
             $scope.pageData = {};
 
-			$scope.policySubjSelected = undefined;
+            $scope.policySubjSelected = undefined;
 
-			// simulating a XMLHttpRequest request delay and retrieve mock data
-			callService($scope.criteria);
+            // simulating a XMLHttpRequest request delay and retrieve mock data
+            callService($scope.criteria);
         };
 
-		var initList = function(){
-			//setting up the pagination directive configuration
-			$scope.paginationConfig =
-			{
-				currentPage: parseInt($stateParams.page) || 1,
-				pageCount: '',
-				totalItems: '',
-				itemsPerPage: 10
-			};
-        	$scope.paginationConfig.currentPage = 1;
+        var initList = function(){
+            //setting up the pagination directive configuration
+            $scope.paginationConfig =
+            {
+                currentPage: parseInt($stateParams.page) || 1,
+                pageCount: '',
+                totalItems: '',
+                itemsPerPage: 10
+            };
+            $scope.paginationConfig.currentPage = 1;
             $scope.currentPage = 1;
 
-			resetSearchValues();
+            resetSearchValues();
 
-			$scope.displayedPoliciesInit = undefined;
-			$scope.policySubjSelected = undefined;
+            $scope.displayedPoliciesInit = undefined;
+            $scope.policySubjSelected = undefined;
 
-			$scope.displayedPolicies = {};
+            $scope.displayedPolicies = {};
             $scope.criteria = {};
             $scope.pageData = {};
 
-			// flagging whether the loading message must be displayed
-			$scope.isDataLoading = true;
+            // flagging whether the loading message must be displayed
+            $scope.isDataLoading = true;
 
-			//To control the empty and loading table messages
-			$scope.emptyResult = false;
-			$scope.emptyResultMessage = "No results found. ";
-			$scope.loadingMessage = "Loading... taking some time";
+            //To control the empty and loading table messages
+            $scope.emptyResult = false;
+            $scope.emptyResultMessage = "No results found. ";
+            $scope.loadingMessage = "Loading... taking some time";
 
-			$scope.criteria = {};
+            $scope.criteria = {};
 
-			//$scope.displayedPoliciesSubjInit = ['account', 'password'];
-			fillPolicySubjects();
+            //$scope.displayedPoliciesSubjInit = ['Authentication', 'password'];
+            fillPolicySubjects();
 
-			callService($scope.criteria);
-		};
+            callService($scope.criteria);
+        };
 
-		initList();
+        initList();
 
-	}]);
+        $scope.sort = {
+            sortColumn: 'name', // Default Sort.
+            sortDirection: 'asc'
+        };
+
+        $scope.changeSorting = function (column) {
+            var sort = $scope.sort;
+            if (sort.sortColumn === column) {
+                if (sort.sortDirection === 'desc') {
+                    sort.sortDirection = 'asc';
+                } else if (sort.sortDirection === 'asc') {
+                    sort.sortDirection = 'desc';
+                }
+            } else {
+                sort.sortColumn = column;
+                sort.sortDirection = 'asc';
+            }
+            $scope.sort.sortColumn = column;
+            $scope.sort.sortDirection = sort.sortDirection;
+            //$scope.getPage($scope.paginationConfig.currentPage);
+        };
+
+        $scope.sortIcon = function (column) {
+            var sort = $scope.sort;
+            if (sort.sortColumn === column) {
+                var sortDirection = sort.sortDirection;
+                return sortDirection === 'desc' ? 'fa-sort-desc' : 'fa-sort-asc';
+            }
+            return 'fa-sort';
+        };
+
+    }]);
 
 policiesModule.controller('managePolicyCtlr', ['$log', '$scope', '$modal', '$stateParams',
-	function ($log, $scope, $modal, $stateParams) {
+    function ($log, $scope, $modal, $stateParams) {
         $scope.editPolicy = function (policy) {
             var modalInstance = $modal.open({
                 animation: true,
@@ -203,7 +234,7 @@ policiesModule.controller('managePolicyCtlr', ['$log', '$scope', '$modal', '$sta
                 //$log.info('Modal dismissed at: ' + new Date());
             });
         };
-	}]);
+    }]);
 
 policiesModule.controller('editPolicyModalInstanceCtrl', ['$log', '$timeout', '$location', '$scope', '$modalInstance', '$stateParams', 'refData', 'policy', 'policiesService',
     function ($log, $timeout, $location, $scope, $modalInstance, $stateParams, refData, policy, policiesService) {
@@ -219,14 +250,14 @@ policiesModule.controller('editPolicyModalInstanceCtrl', ['$log', '$timeout', '$
         };
 
         $scope.changeEditForm = function () {
-			//$log.log("changeEditForm");
+            //$log.log("changeEditForm");
             $scope.formDisabled = !$scope.formDisabled;
             $scope.showSubmit = !$scope.showSubmit;
             $scope.showEdit = !$scope.showEdit;
         };
 
         $scope.updatePolicy = function (policy) {
-			$scope.policyUpdated = true;
+            $scope.policyUpdated = true;
             policiesService.updatePolicy(policy).then(
                 function (response) {
                     $scope.policyUpdated = true;
@@ -240,17 +271,17 @@ policiesModule.controller('editPolicyModalInstanceCtrl', ['$log', '$timeout', '$
                     }, 2000);
                 },
                 function (error) {
-					$scope.policyUpdated = false;
+                    $scope.policyUpdated = false;
                     $scope.messageDivClass = "container alert alert-danger";
                     $scope.actionMessage = error;
                 }
             );
-			//$scope.policyUpdated = true;
-			//$scope.messageDivClass = "container alert alert-success";
-			//$scope.actionMessage = "User Details Saved";
-			//$timeout(function () {
-			//	$modalInstance.close(policy);
-			//}, 2000);
+            //$scope.policyUpdated = true;
+            //$scope.messageDivClass = "container alert alert-success";
+            //$scope.actionMessage = "User Details Saved";
+            //$timeout(function () {
+            //	$modalInstance.close(policy);
+            //}, 2000);
         };
 
-	}]);
+    }]);

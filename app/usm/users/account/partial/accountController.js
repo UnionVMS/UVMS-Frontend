@@ -53,6 +53,10 @@ accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '
         //$scope.confirmCheckBox = true;
         //$scope.showConfirmation = false;
         $scope.minDateTo = moment().format('YYYY-MM-DD');
+        $scope.user = {
+            activeTo: refData.activeDateTo,
+            activeFrom: moment().format('YYYY-MM-DD')
+        };
 
         $scope.changeStatus = function (status) {
             if (status !== 'E') {

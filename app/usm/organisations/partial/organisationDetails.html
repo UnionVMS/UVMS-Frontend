@@ -78,11 +78,21 @@
                         </colgroup>
                         <thead>
                         <tr>
-                            <th st-sort="name" st-sort-default="true">{{'organisationEndpoints.name' | translate}}</th>
-                            <th st-sort="description">{{'organisationEndpoints.description' | translate}}</th>
-                            <th st-sort="uri">{{'organisationEndpoints.uri' | translate}}</th>
-                            <th st-sort="email">{{'organisationEndpoints.email' | translate}}</th>
-                            <th st-sort="status">{{'organisationEndpoints.status' | translate}}</th>
+                            <th st-sort="name" st-sort-default="true" ng-click="changeSorting('name')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                                {{'organisationEndpoints.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i>
+                            </th>
+                            <th st-sort="description" ng-click="changeSorting('description')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                                {{'organisationEndpoints.description' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('description')"></i>
+                            </th>
+                            <th st-sort="uri" ng-click="changeSorting('uri')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                                {{'organisationEndpoints.uri' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('uri')"></i>
+                            </th>
+                            <th st-sort="email" ng-click="changeSorting('email')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                                {{'organisationEndpoints.email' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('email')"></i>
+                            </th>
+                            <th class="actionTh" st-sort="status" ng-click="changeSorting('status')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                                {{'organisationEndpoints.status' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('status')"></i>
+                            </th>
                             <th class="text-center">
                                 <div ng-controller="manageOrganisationEndpointsCtrl" ng-if="checkAccess('manageOrganisations')">
                                     <button id="new_endpoint" class="btn btn-primary btn-sm" ng-click='manageEndpoint("new", "", organisation.name)'>

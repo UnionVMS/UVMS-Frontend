@@ -82,9 +82,14 @@
                 <div class="form-group col-md-4">
                     <label>{{ 'users.activeFrom' | translate }}<sup class="fa fa-asterisk mandatory"></sup></label>
                     <!-- This is a custom directive. You need to define the activeFromConfig in the controller-->
+                    <!--
                     <usm-datepicker config="activeFromConfig"></usm-datepicker>
+                    -->
+                    <datepicker-input model="user.activeFrom" ng-required="true" name="activeFrom"></datepicker-input>
                     <div>
-                        <span class="text-danger small" ng-show="activeFormRequiredAlert">Active From date is required</span>
+                        <span class="text-danger small" ng-show="newUserForm.activeFrom.$error.required">
+                            Active From date is required
+                        </span>
                     </div>
 
                     <!--
@@ -123,9 +128,14 @@
                 <div class="form-group col-md-4">
                     <label>{{ 'users.activeTo' | translate }}<sup class="fa fa-asterisk mandatory"></sup></label>
                     <!-- This is a custom directive. You need to define the activeToConfig in the controller-->
-                    <usm-datepicker config="activeToConfig"></usm-datepicker>
+                    <!--
+                        <usm-datepicker config="activeToConfig"></usm-datepicker>
+                    -->
+                    <datepicker-input model="user.activeTo" ng-required="true" name="activeTo"></datepicker-input>
                     <div>
-                        <span class="text-danger small" ng-show="activeToRequiredAlert">Active To date is required</span>
+                        <span class="text-danger small" ng-show="newUserForm.activeTo.$error.required">
+                            Active To date is required
+                        </span>
                     </div>
                     <!--
                     <input type="text" id="activeTo"
@@ -229,14 +239,14 @@
                     -->
                 </div>
                 <div class="col-md-4">
-                <input type="button" class="btn btn-warning btn-sm" ng-hide="userCreated" ng-click="cancel()" value="Cancel"/>
-                <button type="submit" class="btn btn-primary btn-sm" id="saveButton" ng-show="!userCreated" ng-disabled="newUserForm.$invalid">
-                    Save
-                 </button>
-                 <button type="button" id="confirmButton" class="btn btn-success btn-sm" ng-show="userCreated" ng-disabled="true">
-                       <span class="fa fa-check"></span>
-                 </button>
-                <!--<label class="btn btn-success btn-sm fa fa-check" ng-show=""/>-->
+                    <input type="button" class="btn btn-warning btn-sm" ng-hide="userCreated" ng-click="cancel()" value="Cancel"/>
+                    <button type="submit" class="btn btn-primary btn-sm" id="saveButton" ng-show="!userCreated" ng-disabled="newUserForm.$invalid">
+                        Save
+                    </button>
+                    <button type="button" id="confirmButton" class="btn btn-success btn-sm" ng-show="userCreated" ng-disabled="true">
+                        <span class="fa fa-check"></span>
+                    </button>
+                    <!--<label class="btn btn-success btn-sm fa fa-check" ng-show=""/>-->
                 </div>
             </div>
         </div>

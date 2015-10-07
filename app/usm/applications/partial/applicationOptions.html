@@ -1,36 +1,44 @@
-<div class="panel panel-default" style="margin-top: 0;">
-    <table st-table="displayedOptions" st-safe-src="applicationDetails.options" class="searchResults">
+<div>
+    <table st-table="displayedOptions" st-safe-src="applicationDetails.options" class="table table-striped fixed">
         <colgroup>
             <col style="width: 290px;">
             <col style="width: 550px;">
             <col style="width: 150px;">
             <col style="width: 150px;">
         </colgroup>
-        <thead>
+        <thead class="table_heading">
         <tr>
-            <th st-sort="name" st-sort-default="true">Name</th>
-            <th st-sort="description">Description</th>
-            <th st-sort="dataType">Data Type</th>
-            <th st-sort="defaultValue">Default Value</th>
+            <th st-sort="name" st-sort-default="true" ng-click="changeSorting('name')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                {{'common.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i>
+            </th>
+            <th st-sort="description" ng-click="changeSorting('description')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                {{'common.description' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('description')"></i>
+            </th>
+            <th st-sort="dataType" ng-click="changeSorting('dataType')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                Data Type&nbsp;<i class="fa" ng-class="sortIcon('dataType')"></i>
+            </th>
+            <th st-sort="defaultValue" ng-click="changeSorting('defaultValue')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                Default Value&nbsp;<i class="fa" ng-class="sortIcon('defaultValue')"></i>
+            </th>
         </tr>
         </thead>
-        <tbody ng-if="!emptyDatasetsResult && checkAccess('viewApplications')">
-            <tr ng-repeat="option in displayedOptions">
-                <td ng-bind="option.name"></td>
-                <td ng-bind="option.description"></td>
-                <td ng-bind="option.dataType"></td>
-                <td ng-bind="option.defaultValue"></td>
-            </tr>
+        <tbody ng-if="!emptyDatasetsResult && checkAccess('manageApplications')">
+        <tr ng-repeat="option in displayedOptions">
+            <td ng-bind="option.name"></td>
+            <td ng-bind="option.description"></td>
+            <td ng-bind="option.dataType"></td>
+            <td ng-bind="option.defaultValue" class="rightBorder"></td>
+        </tr>
         </tbody>
-        <tbody ng-if="emptyOptionsResult && checkAccess('viewApplications')">
-            <tr>
-                <td colspan="4" class="text-center rightBorder">No options are defined by this application.</td>
-            </tr>
+        <tbody ng-if="emptyOptionsResult && checkAccess('manageApplications')">
+        <tr>
+            <td colspan="4" class="text-center rightBorder">No options are defined by this application.</td>
+        </tr>
         </tbody>
-        <tbody ng-if="!checkAccess('viewApplications')">
-            <tr>
-                <td colspan="4" class="text-center rightBorder">Not authorised.</td>
-            </tr>
+        <tbody ng-if="!checkAccess('manageApplications')">
+        <tr>
+            <td colspan="4" class="text-center rightBorder">Not authorised.</td>
+        </tr>
         </tbody>
         <tfoot>
         <tr>

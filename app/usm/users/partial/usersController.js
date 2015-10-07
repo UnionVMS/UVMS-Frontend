@@ -436,7 +436,14 @@ usersModule.controller('manageUserCtlr', ['$log', '$scope', '$modal', '$statePar
                 controller: 'editUserModalInstanceCtrl',
                 resolve: {
                     user: function () {
-                        return angular.copy(user);
+                        var copyUser = angular.copy(user);
+                        if (!_.isNull(copyUser.activeTo)) {
+                            copyUser.activeTo = moment(copyUser.activeTo).format('YYYY-MM-DD');
+                        }
+                        if (!_.isNull(copyUser.activeFrom)) {
+                            copyUser.activeFrom =  moment(copyUser.activeFrom).format('YYYY-MM-DD');
+                        }
+                        return copyUser;
                     }
                 }
             });

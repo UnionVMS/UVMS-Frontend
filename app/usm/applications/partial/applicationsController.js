@@ -162,21 +162,12 @@ applicationsModule.controller('applicationsListCtrl', ['$log', '$scope', '$state
 applicationsModule.controller('applicationDetailsCtrl', ['$log', '$scope', '$state', '$stateParams', 'applicationsService', 'userService',
     function ($log, $scope, $state, $stateParams, applicationsService, userService) {
         var init = function () {
-            $scope.selectedTab = "Features";
             $scope.itemsByPage = 10;
 
             $scope.checkAccess = function (feature) {
                 return userService.isAllowed(feature, "USM", true);
             };
-            //Sets tabs
-            $scope.tabMenu = [
-                {'tab': 'Features', 'title': 'Features'},
-                {'tab': 'Datasets', 'title': "Datasets"},
-                {'tab': 'Options', 'title': "Options"}
-            ];
-            $scope.selectTab = function (tab) {
-                $scope.selectedTab = tab;
-            };
+
             applicationsService.getApplicationDetails($stateParams.applicationName).then(
                 function (response) {
                     $scope.applicationDetails = response.applicationDetails;
@@ -209,4 +200,36 @@ applicationsModule.controller('applicationDetailsCtrl', ['$log', '$scope', '$sta
             );
         };
         init();
+
+        $scope.sort = {
+            sortColumn: 'name', // Default Sort.
+            sortDirection: 'asc'
+        };
+
+        $scope.changeSorting = function (column) {
+            var sort = $scope.sort;
+            if (sort.sortColumn === column) {
+                if (sort.sortDirection === 'desc') {
+                    sort.sortDirection = 'asc';
+                } else if (sort.sortDirection === 'asc') {
+                    sort.sortDirection = 'desc';
+                }
+            } else {
+                sort.sortColumn = column;
+                sort.sortDirection = 'asc';
+            }
+            $scope.sort.sortColumn = column;
+            $scope.sort.sortDirection = sort.sortDirection;
+            //$scope.getPage($scope.paginationConfig.currentPage);
+        };
+
+        $scope.sortIcon = function (column) {
+            var sort = $scope.sort;
+            if (sort.sortColumn === column) {
+                var sortDirection = sort.sortDirection;
+                return sortDirection === 'desc' ? 'fa-sort-desc' : 'fa-sort-asc';
+            }
+            return 'fa-sort';
+        };
+
     }]);

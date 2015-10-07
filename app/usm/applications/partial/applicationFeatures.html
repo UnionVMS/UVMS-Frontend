@@ -1,33 +1,39 @@
-<div class="panel panel-default" style="margin-top: 0;">
-    <table st-table="displayedFeatures" st-safe-src="applicationDetails.features" class="searchResults">
+<div>
+    <table st-table="displayedFeatures" st-safe-src="applicationDetails.features" class="table table-striped fixed">
         <colgroup>
             <col style="width: 400px;">
             <col style="width: 550px;">
             <col style="width: 190px;">
         </colgroup>
-        <thead>
+        <thead class="table_heading">
         <tr>
-            <th st-sort="name" st-sort-default="true">Name</th>
-            <th st-sort="description">Description</th>
-            <th st-sort="group">Group</th>
+            <th st-sort="name" st-sort-default="true" ng-click="changeSorting('name')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                {{'common.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i>
+            </th>
+            <th st-sort="description" ng-click="changeSorting('description')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                {{'common.description' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('description')"></i>
+            </th>
+            <th st-sort="group" ng-click="changeSorting('group')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                Group&nbsp;<i class="fa" ng-class="sortIcon('group')"></i>
+            </th>
         </tr>
         </thead>
         <tbody ng-if="!emptyFeaturesResult && checkAccess('viewApplications')">
         <tr ng-repeat="feature in displayedFeatures">
             <td ng-bind="feature.name"></td>
             <td ng-bind="feature.description"></td>
-            <td ng-bind="feature.group"></td>
+            <td ng-bind="feature.group" class="rightBorder"></td>
         </tr>
         </tbody>
-        <tbody ng-if="emptyFeaturesResult && checkAccess('viewApplications')">
-            <tr>
-                <td colspan="4" class="text-center rightBorder">No features are defined by this application.</td>
-            </tr>
+        <tbody ng-if="emptyFeaturesResult && checkAccess('manageApplications')">
+        <tr>
+            <td colspan="4" class="text-center rightBorder">No features are defined by this application.</td>
+        </tr>
         </tbody>
-        <tbody ng-if="!checkAccess('viewApplications')">
-            <tr>
-                <td colspan="4" class="text-center rightBorder">Not authorised.</td>
-            </tr>
+        <tbody ng-if="!checkAccess('manageApplications')">
+        <tr>
+            <td colspan="4" class="text-center rightBorder">Not authorised.</td>
+        </tr>
         </tbody>
         <tfoot>
         <tr>
