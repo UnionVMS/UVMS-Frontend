@@ -1,12 +1,12 @@
-<div>
-    <table st-table="displayedOptions" st-safe-src="applicationDetails.options" class="table table-striped fixed">
+<div class="panel panel-default" style="margin-top: 0;">
+    <table st-table="displayedOptions" st-safe-src="applicationDetails.options" class="searchResults">
         <colgroup>
             <col style="width: 290px;">
             <col style="width: 550px;">
             <col style="width: 150px;">
             <col style="width: 150px;">
         </colgroup>
-        <thead class="table_heading">
+        <thead>
         <tr>
             <th st-sort="name" st-sort-default="true" ng-click="changeSorting('name')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
                 {{'common.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i>
@@ -23,22 +23,22 @@
         </tr>
         </thead>
         <tbody ng-if="!emptyDatasetsResult && checkAccess('manageApplications')">
-        <tr ng-repeat="option in displayedOptions">
-            <td ng-bind="option.name"></td>
-            <td ng-bind="option.description"></td>
-            <td ng-bind="option.dataType"></td>
+            <tr ng-repeat="option in displayedOptions">
+                <td ng-bind="option.name"></td>
+                <td ng-bind="option.description"></td>
+                <td ng-bind="option.dataType"></td>
             <td ng-bind="option.defaultValue" class="rightBorder"></td>
-        </tr>
+            </tr>
         </tbody>
         <tbody ng-if="emptyOptionsResult && checkAccess('manageApplications')">
-        <tr>
-            <td colspan="4" class="text-center rightBorder">No options are defined by this application.</td>
-        </tr>
+            <tr>
+                <td colspan="4" class="text-center rightBorder">No options are defined by this application.</td>
+            </tr>
         </tbody>
         <tbody ng-if="!checkAccess('manageApplications')">
-        <tr>
-            <td colspan="4" class="text-center rightBorder">Not authorised.</td>
-        </tr>
+            <tr>
+                <td colspan="4" class="text-center rightBorder">Not authorised.</td>
+            </tr>
         </tbody>
         <tfoot>
         <tr>

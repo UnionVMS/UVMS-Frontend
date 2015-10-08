@@ -162,10 +162,21 @@ applicationsModule.controller('applicationsListCtrl', ['$log', '$scope', '$state
 applicationsModule.controller('applicationDetailsCtrl', ['$log', '$scope', '$state', '$stateParams', 'applicationsService', 'userService',
     function ($log, $scope, $state, $stateParams, applicationsService, userService) {
         var init = function () {
+            $scope.selectedTab = "Features";
             $scope.itemsByPage = 10;
 
             $scope.checkAccess = function (feature) {
                 return userService.isAllowed(feature, "USM", true);
+            };
+
+            //Sets tabs
+            $scope.tabMenu = [
+                {'tab': 'Features', 'title': 'Features'},
+                {'tab': 'Datasets', 'title': "Datasets"},
+                {'tab': 'Options', 'title': "Options"}
+            ];
+            $scope.selectTab = function (tab) {
+                $scope.selectedTab = tab;
             };
 
             applicationsService.getApplicationDetails($stateParams.applicationName).then(
