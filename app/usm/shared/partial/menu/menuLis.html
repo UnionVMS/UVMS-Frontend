@@ -1,35 +1,35 @@
 <li ng-if="checkAccess('manageUsers')||checkAccess('viewUsers')">
-        <a ui-sref=".users" ui-sref-active="active">
-            {{ 'header.users' | translate }}
-        </a>
-    </li>
-                <li ng-if="checkAccess('manageOrganisations')||checkAccess('viewOrganisations')">
-        <a ui-sref=".organisations" ui-sref-active="active">
-            {{ 'header.organisations' | translate }}
-        </a>
-    </li>
-                <li ng-if="checkAccess('manageRoles')||checkAccess('viewRoles')">
-        <a ui-sref=".roles" ui-sref-active="active">
-            {{ 'header.roles' | translate }}
-        </a>
-    </li>
-                <li ng-if="checkAccess('manageScopes')||checkAccess('viewScopes')">
-        <a ui-sref=".scopes" ui-sref-active="active">
-            {{ 'header.scopes' | translate }}
-        </a>
-    </li>
-                <li ng-if="checkAccess('manageApplications')||checkAccess('viewApplications')">
-        <a ui-sref=".applications" ui-sref-active="active">
-            Applications
-        </a>
-    </li>
-                <li ng-if="checkAccess('configurePolicies')">
-                    <a ui-sref=".policies" ui-sref-active="active">
-                        Policies
-                    </a>
-                </li>
-                <li ng-if="checkAccess('manageUsers') && isReviewContactDetailsEnabled">
-                    <a ui-sref=".changes" ui-sref-active="active">
-                        Changes
-                    </a>
-                </li>
+    <a ui-sref=".users" ui-sref-active="active">
+        {{ 'header.users' | translate }}
+    </a>
+</li>
+<li ng-if="checkAccess('manageOrganisations')||checkAccess('viewOrganisations')">
+    <a ui-sref=".organisations" ui-sref-active="active">
+        {{ 'header.organisations' | translate }}
+    </a>
+</li>
+<li ng-if="checkAccess('manageRoles')||checkAccess('viewRoles')">
+    <a ui-sref=".roles" ui-sref-active="active">
+        {{ 'header.roles' | translate }}
+    </a>
+</li>
+<li ng-if="checkAccess('manageScopes')||checkAccess('viewScopes')">
+    <a ui-sref=".scopes" ui-sref-active="active">
+        {{ 'header.scopes' | translate }}
+    </a>
+</li>
+<li ng-if="checkAccess('manageApplications')||checkAccess('viewApplications')">
+    <a ui-sref=".applications" ui-sref-active="active">
+        Applications
+    </a>
+</li>
+<li ng-if="checkAccess('configurePolicies')">
+    <a ui-sref=".policies" ui-sref-active="active">
+        Policies
+    </a>
+</li>
+<li ng-if="checkAccess('manageUsers') && isReviewContactDetailsEnabled">
+    <a ui-sref=".changes" ui-sref-active="active">
+        Changes
+    </a>
+</li>
