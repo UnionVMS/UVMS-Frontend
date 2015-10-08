@@ -1,12 +1,12 @@
-<div class="panel panel-default" ng-controller="userPreferencesCtrl">
-    <table st-table="displayedUserPreferences" st-safe-src="userPreferencesList" class="table table-striped fixed">
+<div class="panel" ng-controller="userPreferencesCtrl">
+    <table st-table="displayedUserPreferences" st-safe-src="userPreferencesList" class="searchResults">
         <colgroup>
             <col style="width: 360px;">
             <col style="width: 220px;">
             <col style="width: 360px;">
             <col style="width: 220px;">
         </colgroup>
-        <thead class="table_heading">
+        <thead>
         <tr>
             <th>{{'userPreferences.user' | translate}}</th>
             <th st-sort="optionName" st-sort-default="true" ng-click="changeSorting('optionName')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
@@ -21,7 +21,7 @@
         </tr>
         </thead>
 
-        <tbody class="table-bordered" ng-if="!isPreferencesLoading && !emptyPreferenceResult">
+        <tbody ng-if="!isPreferencesLoading && !emptyPreferenceResult">
         <tr ng-repeat="preference in displayedUserPreferences">
             <td ng-bind="userName"></td>
             <td ng-bind="preference.optionName"></td>
