@@ -13,15 +13,29 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     //Search objects and results
     $scope.currentSearchResults = new SearchResults('carrier.name', false, locale.getString('movement.movement_search_error_result_zero_pages'), equalGuid);
 
+    var getWebSocketUrl = function(resourcePath) {
+        var url = (envConfig.ws.protocol || "wss") + "://";
+        url += envConfig.ws.host;
+
+        if (envConfig.ws.port) {
+            url += ":" + envConfig.ws.port;
+        }
+
+        if (envConfig.ws.basePath) {
+            url += envConfig.ws.basePath;
+        }
+
+        url += resourcePath;
+        return url;
+    };
+
     var openWebsocket = function() {
         if (!envConfig.ws || !envConfig.ws.host) {
             $log.warn("Websocket host missing in configuration. Socket not opened.");
             return;
         }
 
-        var wsHost = envConfig.ws.host;
-        var wsPort = envConfig.ws.port || "80";
-        var ws = $websocket("ws://" + wsHost + ":" + wsPort +  "/movement/activity/manual");
+        var ws = $websocket(getWebSocketUrl("/movement/activity/manual"));
         ws.onMessage(function(message) {
             var positionData = JSON.parse(message.data);
             manualPositionRestService.getManualMovement(positionData.movementGuid).then(function(movement) {

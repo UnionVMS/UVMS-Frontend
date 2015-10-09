@@ -3,6 +3,6 @@
     "rest_api_base" : "https://cygnus-dev.athens.intrasoft-intl.private:28443"
     "ws": {
     	"host": "cygnus-dev.athens.intrasoft-intl.private",
-    	"port": "28080"
+    	"port": "28443"
     }
 }
