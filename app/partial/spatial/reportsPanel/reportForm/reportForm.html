@@ -58,14 +58,14 @@
 							<input type="checkbox" ng-model="report.components.map" ng-checked="report.components.map || !report">
 							{{'spatial.reports_form_map_component_checkbox' | i18n }}
 						</label>
-						<label class="checkbox-inline checkbox-options">
+						<!-- <label class="checkbox-inline checkbox-options">
 							<input type="checkbox" ng-model="report.components.vms" ng-checked="report.components.vms || !report">
 							{{'spatial.reports_form_vms_component_checkbox' | i18n }}
-						</label>
+						</label> -->
    					</div>
    					<!-- Area selection -->
 	   				<div class="form-group col-md-3">
-	   					<button type="button" class="btn btn-primary btn-sm" style="width:100%;">
+	   					<button type="button" class="btn btn-primary btn-sm" style="width:100%;" ng-click="openAreaSelectionModal()">
 		                    <span class="fa fa-map-marker" aria-hidden="true"></span> &nbsp;
 		                    <span>{{'spatial.reports_form_select_areas' | i18n }}</span>
 		                </button>

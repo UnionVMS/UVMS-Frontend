@@ -497,6 +497,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	    }));
 	    ms.interactions.push(new ol.interaction.MouseWheelZoom());
 	    ms.interactions.push(new ol.interaction.KeyboardZoom());
+	    ms.interactions.push(new ol.interaction.DoubleClickZoom());
 	};
 
 	ms.addHistory = function(){

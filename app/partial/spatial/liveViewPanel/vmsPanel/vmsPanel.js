@@ -47,7 +47,6 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                                    .withDisplayLength(25)
                                    .withLanguage(datatablesService)
                                    .withDOM('trpi')
-                                   .withOption('responsive', true)
                                    .withColumnFilter({
                                        aoColumns: [{
                                            type: 'text',

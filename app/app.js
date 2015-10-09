@@ -445,6 +445,7 @@ unionvmsWebApp.config(function ($httpProvider) {
         '/audit/rest/',
         '/rules/rest/',
         '/reporting/rest/',
+        '/spatial/rest/',
         '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'
     ];
 

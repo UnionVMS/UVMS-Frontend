@@ -63,9 +63,10 @@ angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $mo
                 return;
             }
 
-            deferred.resolve(SavedSearchGroup.fromJson(response.data));
+            deferred.resolve(SavedSearchGroup.fromVesselDTO(response.data));
         },
         function(error) {
+            console.log('error was here');
             console.error("Error when trying to get a vessel group");
             console.error(error);
             deferred.reject(error);
@@ -86,7 +87,7 @@ angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $mo
                     $scope.isLoading = false;
                 });
         } else {
-            $scope.getVesselsForGroup($scope.item.id).then(function(response){
+            $scope.getVesselsForGroup($scope.item.guid).then(function(response){
                 var listRequest = new GetListRequest(1, 100000, response.dynamic, response.searchFields);
                 vesselRestService.getVesselList(listRequest).then(function(response){
                     $scope.vesselGroupList = response.items;

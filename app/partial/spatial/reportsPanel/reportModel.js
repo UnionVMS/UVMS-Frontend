@@ -9,25 +9,26 @@ angular.module('unionvmsWeb').factory('Report',function() {
 	    this.positionSelector = 'all';
 	    this.positionTypeSelector = 'positions';
 	    this.xValue = undefined;
+	    //Components
+//	    this.includeMap = true | false
 	    this.components = {
-	        map: true,
-	        vms: true
+	        map: true
 	    };
+	    //Vessel filter
 	    this.vesselsSelection = [];
+	    this.hasVesselFilter = false;
+	    
+	    //VNS filter
+	    this.hasVmsFilter = false;
+	    this.hasPositionsFilter = false;
+	    this.hasSegmentsFilter = false;
+	    this.hasTracksFilter = false;
 	    this.vmsFilters = {
-            positions: {
-                active: false,
-                def: undefined
-            },
-            segments: {
-                active: false,
-                def: undefined
-            },
-            tracks: {
-                active: false,
-                def: undefined
-            }     
+	        positions: undefined,
+	        segments: undefined,
+	        tracks: undefined
 	    };
+	    this.areas = [];
 	}
 	
 	Report.prototype.fromJson = function(data){
@@ -47,19 +48,56 @@ angular.module('unionvmsWeb').factory('Report',function() {
 	            report.positionTypeSelector = filter.positionTypeSelector;
 	        }
 	        report.xValue = filter.xValue;
-	        report.vmsFilters = filter.vmsFilters;
 	        report.vesselsSelection = filter.vessels;
-	        report.vmsFilters = filter.vms;
+	        report.hasVesselFilter = filter.vessels.length === 0 ? false : true;
+	        
+	        if (angular.isDefined(filter.vms.positions)){
+	            report.vmsFilters.positions = filter.vms.positions[0];
+	        }
+	        
+	        if (angular.isDefined(filter.vms.segments)){
+                report.vmsFilters.segments = filter.vms.segments[0];
+            }
+	        
+	        if (angular.isDefined(filter.vms.tracks)){
+                report.vmsFilters.tracks = filter.vms.tracks[0];
+            }
+	        
+	        if (!angular.equals({}, filter.vms)){
+	            report.hasVmsFilter = true;
+	            for (var i in filter.vms){
+	                var filterName = 'has' + i.substring(0,1).toUpperCase()+i.substring(1) + 'Filter';
+	                report[filterName] = true;
+	            }
+	        }
+	        
+	        report.areas = filter.areas;
 	    }
 	    
 	    return report;
 	};
 	
 	Report.prototype.toJson = function(){
+	    console.log(angular.toJson(this.DTO()));
 	    return angular.toJson(this.DTO());
 	};
 	
 	Report.prototype.DTO = function(){
+	    var vmsFilters = {};
+	    if (this.hasVmsFilter === true){
+	        if (this.hasPositionsFilter === true && angular.isDefined(this.vmsFilters.positions)){
+	            vmsFilters.positions = [this.vmsFilters.positions];
+	        }
+	        
+	        if (this.hasSegmentsFilter === true && angular.isDefined(this.vmsFilters.segments)){
+                vmsFilters.segments = [this.vmsFilters.segments];
+            }
+	        
+	        if (this.hasTracksFilter === true && angular.isDefined(this.vmsFilters.tracks)){
+                vmsFilters.tracks = [this.vmsFilters.tracks];
+            }
+	    }
+	    
 	    var filter = {
             startDate: this.startDateTime,
             endDate: this.endDateTime,
@@ -67,7 +105,8 @@ angular.module('unionvmsWeb').factory('Report',function() {
             positionTypeSelector: this.positionSelector !== 'all' ? this.positionTypeSelector: undefined,
             xValue: this.xValue,
             vessels: this.vesselsSelection,
-            vms: this.vmsFilters
+            vms: vmsFilters,
+            areas: this.areas
 	    };
 	    
 	    var dto = {
@@ -79,7 +118,7 @@ angular.module('unionvmsWeb').factory('Report',function() {
 	        outComponents: angular.toJson(this.components), //FIXME
 	        filterExpression: angular.toJson(filter) //FIXME
 	    };
-	    console.log(dto);
+	    
 	    return dto;
 	};
 	

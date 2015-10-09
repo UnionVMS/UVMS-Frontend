@@ -1,7 +1,6 @@
 angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
     
 	return {
-	    //FIXME remove mock data and set proper requests
 	    getReportsList: function(){
 	        return $resource('/reporting/rest/report/list', {}, {
 	            'get': {method: 'GET'}

@@ -19,9 +19,6 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				 			basemaps.length === 1 ) {
 					return ( false );
 				}
-
-				//FIXME we might do this on a layer basis which would probably be better
-				scope.$parent.$broadcast('reloadLegend');
 			};
 
 			// call tree and map update
@@ -29,9 +26,14 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				scope.updateBasemap( event, data );
 				if ( !data.node.data.mapLayer ) {
 					scope.updateMap();
+					//FIXME we might do this on a layer basis which would probably be better
+	                scope.$parent.$broadcast('reloadLegend');
 					return;
 				}
 				data.node.data.mapLayer.set( 'visible', data.node.isSelected() );
+				
+				//FIXME we might do this on a layer basis which would probably be better
+                scope.$parent.$broadcast('reloadLegend');
 			};
 
 			// store maps layers for updating map.
@@ -82,7 +84,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 						treeNode = scope.$tree.getNodeByKey( value.key );
 						treeNode.data.mapLayer = scope.mapService.createLayer( value.data );
 						layer = treeNode.data.mapLayer;
-						if (!layer) { return ( true ) };// layer creation failed
+						if (!layer) { return ( true ); }// layer creation failed
 					} else {
 						scope.mapService.map.removeLayer( layer );// remove to have it reordered
 					}
@@ -184,7 +186,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			                params: {
 			                    'LAYERS': 'uvms:eez',
 			                    'TILED': true,
-			                    'STYLES': 'eez_label_geom'
+			                    'STYLES': 'eez'
 			                    //'cql_filter': "sovereign='Portugal' OR sovereign='Poland' OR sovereign='Bulgaria' OR sovereign='Belgium'"
 			                },
 											contextItems: {
@@ -193,14 +195,14 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 													type: 'radio',
 													radio: 'style',
 													value: 'eez_label_geom',
-													selected: true
+													selected: false
 												},
 												styleB: {
 													name: 'Geometry only',
 													type: 'radio',
 													radio: 'style',
-													value: 'eez_geom',
-													selected: false
+													value: 'eez',
+													selected: true
 												},
 												styleC: {
 													name: 'Labels only',
@@ -256,6 +258,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 									},*/
 									{
 										title: 'RFMO',
+										extraClasses: 'layertree-menu',
 										data: {
 											type: 'wms',
 											isBaseLayer: false,
@@ -266,8 +269,31 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 											params: {
 													'LAYERS': 'uvms:rfmo',
 													'TILED': true,
-													'STYLES': ''
-											}
+													'STYLES': 'rfmo'
+											},
+											contextItems: {
+                                                styleA: {
+                                                    name: 'Labels and Geometry',
+                                                    type: 'radio',
+                                                    radio: 'style',
+                                                    value: 'rfmo_label_geom',
+                                                    selected: false
+                                                },
+                                                styleB: {
+                                                    name: 'Geometry only',
+                                                    type: 'radio',
+                                                    radio: 'style',
+                                                    value: 'rfmo',
+                                                    selected: true
+                                                },
+                                                styleC: {
+                                                    name: 'Labels only',
+                                                    type: 'radio',
+                                                    radio: 'style',
+                                                    value: 'rfmo_label',
+                                                    selected: false
+                                                }
+                                            }
 										}
 									}
 								]
@@ -386,6 +412,8 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 					dragDrop: function( node, data ) {
 						data.otherNode.moveTo( node, data.hitMode );
 						scope.updateMap();
+						//FIXME we might do this on a layer basis which would probably be better
+	                    scope.$parent.$broadcast('reloadLegend');
 					}
 				},
 				glyph: glyph_opts,
