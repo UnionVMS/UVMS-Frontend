@@ -12,7 +12,7 @@ describe('configurationService', function() {
     beforeEach(inject(function($rootScope, $q, $httpBackend, vesselRestService, movementRestService, mobileTerminalRestService) {
 
         //Mock translation files for usm
-        $httpBackend.whenGET(/^usm\//).respond({});
+        $httpBackend.whenGET(/usm/).respond({});
 
         var vesselDeffered = $q.defer();
         vesselDeffered.resolve({LETTER : 'A', COUNTRY : 'SWE'}); 

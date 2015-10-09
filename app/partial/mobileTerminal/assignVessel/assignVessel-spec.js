@@ -26,10 +26,10 @@ describe('AssignvesselCtrl', function() {
         };
 
          //Mock translation files for usm
-         $httpBackend.whenGET(/^usm\//).respond({});        
+         $httpBackend.whenGET(/usm/).respond({});
          //Mock locale file
-         $httpBackend.whenGET(/^i18n\//).respond({});         
-    }));	
+         $httpBackend.whenGET(/i18n/).respond({});
+    }));
 
 	it('should assign mobile terminal when assigning to selected vessel', inject(function($q, mobileTerminalRestService,
      alertService) {
