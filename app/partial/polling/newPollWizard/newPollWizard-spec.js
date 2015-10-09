@@ -1,4 +1,4 @@
-describe('NewpollwizardCtrl', function() {
+describe('newPollWizardCtrl', function() {
 
 	beforeEach(module('unionvmsWeb'));
 
@@ -6,7 +6,7 @@ describe('NewpollwizardCtrl', function() {
 
     beforeEach(inject(function($rootScope, $controller) {
       scope = $rootScope.$new();
-      ctrl = $controller('NewpollwizardCtrl', {$scope: scope});
+      ctrl = $controller('newPollWizardCtrl', {$scope: scope});
     }));	
 
 	it('should ...', inject(function() {

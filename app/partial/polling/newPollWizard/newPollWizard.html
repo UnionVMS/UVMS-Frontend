@@ -1,6 +1,13 @@
-<div ng-controller="NewpollwizardCtrl" class="wizardContainer">
-    <div class="col-xs-8 colNoPadding" ng-include="'partial/polling/newPollWizard/selectMobileTerminals/newPollWizardSelectMobileTerminals.html'" ng-show="wizardStep === 1"></div>
-    <div class="col-xs-8 colNoPadding" ng-include="'partial/polling/newPollWizard/pollingOptions/newPollWizardPollingOptions.html'" ng-show="wizardStep === 2"></div>
-    <div class="col-xs-12 colNoPadding" ng-include="'partial/polling/newPollWizard/results/newPollWizardResults.html'" ng-show="wizardStep === 3"></div>
-	<div class="col-xs-4 nopaddingright" ng-include="'partial/polling/newPollWizard/selection/newPollWizardSelection.html'" ng-show="wizardStep < 3"></div>
+<div>
+    <div static-include="partial/polling/pollingPageHeader/pollingPageHeader.html"></div>
+
+    <!-- Content -->
+    <div class="container containerWithTopBottomPadding">
+        <div class="wizardContainer row">
+            <div class="col-md-8" ng-include="'partial/polling/newPollWizard/selectMobileTerminals/newPollWizardSelectMobileTerminals.html'" ng-show="wizardStep === 1"></div>
+            <div class="col-md-8" ng-include="'partial/polling/newPollWizard/pollingOptions/newPollWizardPollingOptions.html'" ng-show="wizardStep === 2"></div>
+            <div class="col-md-4 nopaddingleft" ng-include="'partial/polling/newPollWizard/selection/newPollWizardSelection.html'" ng-show="wizardStep < 3"></div>
+        </div>
+    </div>
+
 </div>

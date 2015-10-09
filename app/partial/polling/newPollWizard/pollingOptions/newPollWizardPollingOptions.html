@@ -1,13 +1,13 @@
 <!-- step 2 -->
-<div ng-controller="NewpollwizardpollingoptionsCtrl" class="newPollWizardStep pollingOptionsContainer col-md-12 card">
+<div ng-controller="NewpollwizardpollingoptionsCtrl" class="newPollWizardStep pollingOptionsContainer card">
+    <new-poll-wizard-progress step="2"></new-poll-wizard-progress>
     <div class="wizardcontent">
-        <new-poll-wizard-progress step="2"></new-poll-wizard-progress>
         <div ng-show="loadingResult" class="loadingResultContainer">
             <i class="fa fa-spinner fa-spin fa-pulse fa-2x"></i>
             <br><br>
             {{'polling.wizard_second_step_creating_polls' | i18n}}
-        </div>        
-        <form name="pollingOptionsForm" method="post" novalidate> 
+        </div>
+        <form name="pollingOptionsForm" method="post" novalidate>
             <div ng-hide="loadingResult">
                 <!--MANUAL POLL-->
                 <div class="optionsSection">
@@ -94,7 +94,7 @@
                                             <td class="form-group" ng-class="{'has-error': pollingOptionsForm.configurationNewDNID.$invalid && (submitAttempted || pollingOptionsForm.configurationNewDNID.$dirty)}">
                                                 <input name="configurationNewDNID" type="text" ng-model="pollingOptions.configurationPoll.newDNID" ng-disabled="!isConfigurationPoll() || !isSingleMobileTerminalSelected()" ng-required="isConfigurationPoll() && isSingleMobileTerminalSelected()"/>
                                                 <input-validation-message types="required" input="pollingOptionsForm.configurationNewDNID"></input-validation-message>
-                                                <span ng-show="isConfigurationPoll() && !isSingleMobileTerminalSelected()" class="validation-warning">{{ "polling.wizard_second_step_configuration_poll_new_dnid_multiple_carrier_warning" | i18n }}</span>                                        
+                                                <span ng-show="isConfigurationPoll() && !isSingleMobileTerminalSelected()" class="validation-warning">{{ "polling.wizard_second_step_configuration_poll_new_dnid_multiple_carrier_warning" | i18n }}</span>
                                             </td>
 
                                             <td class="form-group" ng-class="{'has-error': pollingOptionsForm.configurationNewMemberNo.$invalid && (submitAttempted || pollingOptionsForm.configurationNewMemberNo.$dirty)}">
@@ -148,32 +148,31 @@
                 </div>
 
                 <!--CHANNELS AND COMMENT-->
-                <div class="optionsSection">                    
+                <div class="optionsSection">
                     <div class="row">
                         <div class="indentedSection">
                             <div class="col-md-8 form-group" ng-class="{'has-error': pollingOptionsForm.comment.$invalid && (submitAttempted || pollingOptionsForm.comment.$dirty)}">
                                 <h5>{{'polling.wizard_second_step_comment_header' | i18n}}</h5>
                                 <textarea name="comment" class="form-control" placeholder="{{'polling.wizard_second_step_comment_placeholder' | i18n }}" ng-model="pollingOptions.comment" required></textarea>
-                                <input-validation-message types="required" input="pollingOptionsForm.comment"></input-validation-message>                    
+                                <input-validation-message types="required" input="pollingOptionsForm.comment"></input-validation-message>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row wizardFooter">
-                <div class="col-md-4">
-                    <div class="indentedSection">
-                        <a ng-click="previousStep()">{{'common.back' | i18n}}</a>
-                    </div>
-                </div>
-                <div class="col-md-8 textAlignRight">
-                    <a ng-click="startNewPoll()">{{'common.cancel' | i18n}}</a> 
-                    <button type="button" class="btn btn-primary" ng-click="runPoll()" ng-disabled="getNumberOfSelectedTerminals() === 0 || loadingResult">
-                        {{ isProgramPoll() ? 'polling.wizard_second_step_create_program_poll_button' : 'polling.wizard_second_step_run_poll_button' | i18n | uppercase}}
-                    </button>
-                </div>
-            </div>
-
         </form>
+    </div>
+    <div class="row wizardFooter">
+        <div class="col-md-4">
+            <div class="indentedSection">
+                <a ng-click="previousStep()">{{'common.back' | i18n}}</a>
+            </div>
+        </div>
+        <div class="col-md-8 textAlignRight">
+            <a ng-click="startNewPoll()">{{'common.cancel' | i18n}}</a>
+            <button type="button" class="btn btn-primary" ng-click="runPoll()" ng-disabled="getNumberOfSelectedTerminals() === 0 || loadingResult">
+                {{ isProgramPoll() ? 'polling.wizard_second_step_create_program_poll_button' : 'polling.wizard_second_step_run_poll_button' | i18n | uppercase}}
+            </button>
+        </div>
     </div>
 </div>

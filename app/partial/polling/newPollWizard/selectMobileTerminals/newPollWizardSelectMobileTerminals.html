@@ -1,42 +1,43 @@
 <!-- step 1 -->
-<div class="col-md-12 newPollWizardStep searchMobileTerminalsStep card" ng-controller="NewpollwizardselectmobileterminalsCtrl">
-		<new-poll-wizard-progress step="1"></new-poll-wizard-progress>
-		<advanced-search searchfunc="getPollableChannels" vesselGroupCallback="selectGroupCallback()" modeltype="'POLLING_MOBILE_TERMINAL'" advancedsearchvisible="true"></advanced-search>
+<div class="newPollWizardStep searchMobileTerminalsStep card" ng-controller="NewpollwizardselectmobileterminalsCtrl">
+	<new-poll-wizard-progress step="1"></new-poll-wizard-progress>
     <div class="wizardcontent">
+	    <advanced-search searchfunc="getPollableChannels" vesselGroupCallback="selectGroupCallback()" modeltype="'POLLING_MOBILE_TERMINAL'" advancedsearchvisible="true"></advanced-search>
         <div class="row">
             <div search-results-table search="currentSearchResults" load-next-page-function="loadNextPage" class="col-md-12">
-                <table class="searchResults polltable colorOdd">
-                    <thead>
-                        <tr>
-                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vesselName'">{{'polling.poll_table_header_vessel_name' | i18n}}</th>
-                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vesselIrcs'">{{'polling.poll_table_header_vessel_ircs' | i18n}}</th>
-                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.DNID'">{{'polling.poll_table_header_vessel_dnid' | i18n}}</th>
-                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.MEMBER_NUMBER'">{{'polling.poll_table_header_vessel_member_no' | i18n}}</th>
-                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalType | transponderName'">{{'polling.poll_table_header_vessel_transponder' | i18n}}</th>
-                            <th>
-                              <button class="btn btn-primary btn-sm polltablebutton" ng-hide="isTerminalGroupSelected()" ng-click="selectAllVessels()">{{'polling.poll_table_button_add_all' | i18n | uppercase}}</button>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
-                            <td>{{item.vesselName}}</td>
-                            <td>{{item.vesselIrcs}}</td>
-                            <td>{{item.mobileTerminalAttributes.DNID}}</td>
-                            <td>{{item.mobileTerminalAttributes.MEMBER_NUMBER}}</td>
-                            <td>{{item.mobileTerminalType | transponderName}}</td>
-                            <td>
-                                <button class="btn btn-primary btn-sm polltablebutton" ng-hide="isTerminalSelected(item)" ng-click="selectChannel(item, $index)">
-                                    {{'polling.poll_table_button_add_selected' | i18n | uppercase}}
-                                </button>
-                                <button class="btn btn-primary btn-sm polltablebutton selected" ng-show="isTerminalSelected(item)"  ng-click="selectChannel(item, $index)">
-                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
+                <div class="scroller">
+                    <table class="searchResults polltable colorOdd">
+                        <thead>
+                            <tr>
+                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vesselName'">{{'polling.poll_table_header_vessel_name' | i18n}}</th>
+                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vesselIrcs'">{{'polling.poll_table_header_vessel_ircs' | i18n}}</th>
+                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.DNID'">{{'polling.poll_table_header_vessel_dnid' | i18n}}</th>
+                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.MEMBER_NUMBER'">{{'polling.poll_table_header_vessel_member_no' | i18n}}</th>
+                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalType | transponderName'">{{'polling.poll_table_header_vessel_transponder' | i18n}}</th>
+                                <th>
+                                  <button class="btn btn-primary btn-sm polltablebutton" ng-hide="isTerminalGroupSelected()" ng-click="selectAllVessels()">{{'polling.poll_table_button_add_all' | i18n | uppercase}}</button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
+                                <td>{{item.vesselName}}</td>
+                                <td>{{item.vesselIrcs}}</td>
+                                <td>{{item.mobileTerminalAttributes.DNID}}</td>
+                                <td>{{item.mobileTerminalAttributes.MEMBER_NUMBER}}</td>
+                                <td>{{item.mobileTerminalType | transponderName}}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm polltablebutton" ng-hide="isTerminalSelected(item)" ng-click="selectChannel(item, $index)">
+                                        {{'polling.poll_table_button_add_selected' | i18n | uppercase}}
+                                    </button>
+                                    <button class="btn btn-success btn-sm polltablebutton" ng-show="isTerminalSelected(item)" ng-click="unselectChannel(item, $index)">
+                                        <span class="fa fa-check"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
         </div>

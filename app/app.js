@@ -36,7 +36,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
 
     tmhDynamicLocaleProvider.localeLocationPattern("assets/locales/angular-locale_{{locale}}.js");
 
-	
+
     $urlRouterProvider.when('','today');
 
     $stateProvider
@@ -195,14 +195,14 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
             data: {
                 access: 'viewVesselsAndMobileTerminals'
-            },            
+            },
         })
         .state('app.polling', {
             url: '/polling',
             views: {
                 modulepage: {
-                    templateUrl: 'partial/polling/polling.html',
-                    controller: 'PollingCtrl'
+                    templateUrl: 'partial/polling/newPollWizard/newPollWizard.html',
+                    controller: 'newPollWizardCtrl'
                 }
             },
             resolve: {},
@@ -288,7 +288,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             resolve: {},
             data: {
                 access: 'viewAlarmsHoldingTable'
-            },            
+            },
         })
         .state('app.openTickets', {
             url: '/alarms/opentickets',
@@ -301,7 +301,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             resolve: {},
             data: {
                 access: 'viewAlarmsOpenTickets'
-            },    
+            },
         })
         .state('app.rules', {
             url: '/alarms/rules',
@@ -314,7 +314,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             resolve: {},
             data: {
                 access: 'viewAlarmsRules'
-            },    
+            },
         })
         .state('error', {
             views: {

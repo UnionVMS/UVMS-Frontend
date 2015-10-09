@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',function($scope, locale, alertService, pollingService) {
+angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',function($scope, $state, locale, alertService, pollingService) {
 
     //Has form submit been atempted?
     $scope.submitAttempted = false;
@@ -15,7 +15,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
 
     var init = function(){
         resetPollingOptions(true);
-    };    
+    };
 
     //DUMMY DATA FOR DROPDOWNS
     $scope.requestChannels = [];
@@ -70,16 +70,29 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
                 function() {
                     $scope.loadingResult = false;
                     pollingService.clearSelection();
-                    $scope.nextStep();
-                }, 
+                    //Set alert message
+                    var successMessage = locale.getString('polling.wizard_second_step_success_single');
+                    var pollResult = pollingService.getResult();
+                    if(!pollResult.programPoll && pollResult.polls.length > 1){
+                        successMessage = locale.getString('polling.wizard_second_step_success_multiple');
+                    }else if(pollResult.programPoll && pollResult.polls.length === 1){
+                        successMessage = locale.getString('polling.wizard_second_step_success_program_single');
+                    }else if(pollResult.programPoll && pollResult.polls.length > 1){
+                        successMessage = locale.getString('polling.wizard_second_step_success_program_multiple');
+                    }
+
+                    //Show success alert and redirect to polling logs page
+                    $scope.setHideAlertOnScopeDestroy(false);
+                    alertService.showSuccessMessageWithTimeout(successMessage);
+                    $state.go('app.pollingLogs');
+                },
                 function(){
                     //Error
                     alertService.showErrorMessage(locale.getString('polling.wizard_second_step_creating_polls_error'));
                     $scope.loadingResult = false;
                 });
         }else{
-            alertService.showErrorMessage(locale.getString('common.alert_message_on_form_validation_error'));        
-            
+            alertService.showErrorMessage(locale.getString('common.alert_message_on_form_validation_error'));
         }
     };
 

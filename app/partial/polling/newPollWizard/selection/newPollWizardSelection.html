@@ -1,10 +1,16 @@
-<div class="newPollWizardSelectionContainer newPollWizardStep card" ng-controller="NewpollwizardselectionCtrl">
-    <div class="scroller">
-    	<p style="margin-bottom: 20px;">
-    		<a class="pull-right" ng-click="clear()">{{ 'polling.clear_all' | i18n }}</a>
-    		<h5>{{ 'polling.carrier_selection' | i18n }}</h5>
-    	</p>
+<div class="newPollWizardSelectionContainer newPollWizardStep  card" ng-controller="NewpollwizardselectionCtrl">
+    <div class="selectionHeader">
+        <div class="row">
+        	<div class="col-md-6 carrierSelectionText">
+        		{{ 'polling.carrier_selection' | i18n }}
+            </div>
+            <div class="col-md-6 textAlignRight">
+                <a  ng-click="clear()">{{ 'polling.clear_all' | i18n }}</a>
+        	</div>
+        </div>
+    </div>
 
+    <div class="scroller">
     	<ul class="group-list">
     		<li ng-repeat="group in selection.selectedMobileTerminalGroups">
     		    <div class="pointer pull-right" ng-click="remove(group)">

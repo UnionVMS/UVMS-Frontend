@@ -1,6 +1,9 @@
-angular.module('unionvmsWeb').controller('NewpollwizardCtrl',function($scope, pollingService, alertService, searchService){
+angular.module('unionvmsWeb').controller('newPollWizardCtrl',function($scope, pollingService, alertService, searchService){
 
+    $scope.activeTab = "POLLING";
     $scope.wizardStep = pollingService.getWizardStep();
+    $scope.hideAlertsOnScopeDestroy = true;
+
 
     $scope.nextStep = function(){
         if($scope.wizardStep <= 2){
@@ -21,9 +24,17 @@ angular.module('unionvmsWeb').controller('NewpollwizardCtrl',function($scope, po
         pollingService.resetPollingOptions(true);
     };
 
+    $scope.setHideAlertOnScopeDestroy = function(newVal){
+        $scope.hideAlertsOnScopeDestroy = newVal;
+    };
+
     $scope.$on("$destroy", function() {
-        alertService.hideMessage();
+        if($scope.hideAlertsOnScopeDestroy){
+            alertService.hideMessage();
+        }
         searchService.reset();
+        pollingService.clearSelection();
+        pollingService.resetPollingOptions(true);
     });
 
 });
