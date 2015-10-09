@@ -38,6 +38,11 @@ userManagementApp.constant('LOCALES', {
 });
 
 userManagementApp.constant('refData', {
+    // statuses in a readable format for the bootstrap drop down lists
+    statusesDropDown: [{value:'all', label:'All'},
+                        {value:'E', label:'Enabled'},
+                        {value:'D', label:'Disabled'},
+                        {value:'L', label:'Locked'}],
     statuses: ['all', 'E', 'D', 'L'],
     statusesNoAll: ['E', 'D', 'L'],
     statusesEnDis: ['E', 'D'],

@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <form class="form-inline" name="searchForm" ng-submit="searchUsers()">
+                    <form class="form-inline" name="searchForm">
                         <div class="row">
                             <div class="col-md-12 zero-side-padding">
                                 <div class="col-md-2 zero-side-padding" style="width:14%; margin-left: 4px; margin-right: 4px;">
@@ -17,9 +17,10 @@
                                            ng-model="search.user">
                                 </div>
                                 <div class="col-md-2 zero-side-padding" style="width:12%; margin-right: 4px;">
-                                    <label for="nation">{{ 'users.nation' | translate }}</label>
-
+                                    <label>{{ 'users.nation' | translate }}</label>
                                     <div>
+                                        <dropdown ng-model="search.nation" data="value" title="label" items="nationsList"></dropdown>
+                                        <!--
                                         <select class="form-control dropdown" style="width: 100%;"
                                                 id="nation"
                                                 name="nation"
@@ -30,29 +31,31 @@
                                                 ng-mouseleave="pointer=false">
                                             <option value="">Nation...</option>
                                         </select>
+                                        -->
                                     </div>
                                 </div>
                                 <div class="col-md-2 zero-side-padding" style="width:14%; margin-right:4px;">
                                     <div>
                                         <label>{{ 'users.organisation' | translate }}</label>
+                                        <dropdown ng-model="search.organisation" data="value" title="label" items="organisationsList"></dropdown>
                                         <!--
-                                        <dropdown ng-model="search.organisation" data="parentOrgName" title="parentOrgName" items="organisationsList"></dropdown>
-                                        -->
-                                        <select class="form-control dropdown" style="width: 100%;"
-                                                id="organisation"
-                                                name="organisation"
-                                                ng-model="search.organisation"
-                                                ng-options="organisation.parentOrgName for organisation in organisationsList"
-                                                ng-class="{pointer: pointer}"
-                                                ng-mouseenter="pointer=true"
-                                                ng-mouseleave="pointer=false">
-                                            <option value="">Organisation...</option>
-                                        </select>
+                                            <select class="form-control dropdown" style="width: 100%;"
+                                                    id="organisation"
+                                                    name="organisation"
+                                                    ng-model="search.organisation"
+                                                    ng-options="organisation.parentOrgName for organisation in organisationsList"
+                                                    ng-class="{pointer: pointer}"
+                                                    ng-mouseenter="pointer=true"
+                                                    ng-mouseleave="pointer=false">
+                                                <option value="">Organisation...</option>
+                                            </select>
+                                         -->
                                     </div>
                                 </div>
                                 <div class="col-md-2 zero-side-padding" style="width:10%; margin-right:4px;">
-                                    <label for="status">{{ 'users.status' | translate }}</label>
-
+                                    <label>{{ 'users.status' | translate }}</label>
+                                    <dropdown ng-model="search.status" data="value" title="label" items="statusList"></dropdown>
+                                    <!--
                                     <select class="form-control dropdown" style="width: 100%;"
                                             id="status"
                                             name="status"
@@ -63,6 +66,7 @@
                                             ng-mouseenter="pointer=true"
                                             ng-mouseleave="pointer=false">
                                     </select>
+                                    -->
                                 </div>
                                 <div class="col-md-2 zero-side-padding" style="width:17%; margin-right:4px;">
                                     <div>
@@ -87,7 +91,7 @@
                                         <label>&nbsp;</label>
 
                                         <div>
-                                            <button type="submit" id="submit" class="btn btn-primary btn-sm">{{'common.search' | translate}}</button>
+                                            <button type="button" id="submit" ng-click="searchUsers()" class="btn btn-primary btn-sm">{{'common.search' | translate}}</button>
                                             <button type="button" id="button" ng-click="resetForm()" class="btn btn-link btn-sm">{{'common.reset' | translate}}</button>
                                         </div>
                                     </div>
@@ -101,59 +105,59 @@
         </div>
     </div>
 </div>
-    <!-- Table -->
+<!-- Table -->
 <div class="container">
     <div class="row">
         <div class="col-md-12">
             <div class="panel">
-            <table st-table="displayedUsers" st-safe-src="userList" class="searchResults">
-                <colgroup>
-                    <!---  Total should be 1140px fo EC template--->
-                    <col style="width: 150px;">
-                    <col style="width: 150px;">
-                    <col style="width: 150px;">
-                    <col style="width: 80px;">
-                    <col style="width: 180px;">
-                    <col style="width: 110px;">
-                    <col style="width: 110px;">
-                    <col style="width: 80px;">
-                    <col style="width: 130px;">
-                </colgroup>
-                <thead>
-                <tr>
-                    <th ng-click="changeSorting('userName')">{{ 'users.userName' | translate }}&nbsp;<i class="fa" ng-class="getIcon('userName')"></i></th>
-                    <th ng-click="changeSorting('firstName')">{{ 'users.firstName' | translate }}&nbsp;<i class="fa" ng-class="getIcon('firstName')"></i></th>
-                    <th ng-click="changeSorting('lastName')">{{ 'users.lastName' | translate }}&nbsp;<i class="fa" ng-class="getIcon('lastName')"></i></th>
-                    <th ng-click="changeSorting('nation')">{{ 'users.nation' | translate }}&nbsp;<i class="fa" ng-class="getIcon('nation')"></i></th>
-                    <th ng-click="changeSorting('organisation')">{{ 'users.organisation' | translate }}&nbsp;<i class="fa" ng-class="getIcon('organisation')"></i></th>
-                    <th ng-click="changeSorting('activeFrom')">{{ 'users.activeFrom' | translate }}&nbsp;<i class="fa" ng-class="getIcon('activeFrom')"></i></th>
-                    <th ng-click="changeSorting('activeTo')">{{ 'users.activeTo' | translate }}&nbsp;<i class="fa" ng-class="getIcon('activeTo')"></i></th>
-                    <th ng-click="changeSorting('status')">{{ 'users.status' | translate }}&nbsp;<i class="fa" ng-class="getIcon('status')"></i></th>
-                    <th class="text-center">
-                        <!-- New Button -->
-                        <div class="tableHeader" ng-if="checkAccess('manageUsers')">
-                            <!-- <label><input type="checkbox" ng-model="inactiveUsers" ng-change="change(inactiveUsers)" ng-true-value="'N'" ng-false-value="'Y'">Show Inactive Users</label> -->
-                            <button type="button" id="newUserButton" ng-controller="newUserController" ng-click="addNewUser()" class="btn btn-sm btn-primary">
-                                <i class="fa fa-plus"></i> New User
-                            </button>
-                        </div>
-                    </th>
-                </tr>
-                </thead>
+                <table st-table="displayedUsers" st-safe-src="userList" class="searchResults">
+                    <colgroup>
+                        <!---  Total should be 1140px fo EC template--->
+                        <col style="width: 150px;">
+                        <col style="width: 150px;">
+                        <col style="width: 150px;">
+                        <col style="width: 80px;">
+                        <col style="width: 180px;">
+                        <col style="width: 110px;">
+                        <col style="width: 110px;">
+                        <col style="width: 80px;">
+                        <col style="width: 130px;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th ng-click="changeSorting('userName')">{{ 'users.userName' | translate }}&nbsp;<i class="fa" ng-class="getIcon('userName')"></i></th>
+                        <th ng-click="changeSorting('firstName')">{{ 'users.firstName' | translate }}&nbsp;<i class="fa" ng-class="getIcon('firstName')"></i></th>
+                        <th ng-click="changeSorting('lastName')">{{ 'users.lastName' | translate }}&nbsp;<i class="fa" ng-class="getIcon('lastName')"></i></th>
+                        <th ng-click="changeSorting('nation')">{{ 'users.nation' | translate }}&nbsp;<i class="fa" ng-class="getIcon('nation')"></i></th>
+                        <th ng-click="changeSorting('organisation')">{{ 'users.organisation' | translate }}&nbsp;<i class="fa" ng-class="getIcon('organisation')"></i></th>
+                        <th ng-click="changeSorting('activeFrom')">{{ 'users.activeFrom' | translate }}&nbsp;<i class="fa" ng-class="getIcon('activeFrom')"></i></th>
+                        <th ng-click="changeSorting('activeTo')">{{ 'users.activeTo' | translate }}&nbsp;<i class="fa" ng-class="getIcon('activeTo')"></i></th>
+                        <th ng-click="changeSorting('status')">{{ 'users.status' | translate }}&nbsp;<i class="fa" ng-class="getIcon('status')"></i></th>
+                        <th class="text-center">
+                            <!-- New Button -->
+                            <div class="tableHeader" ng-if="checkAccess('manageUsers')">
+                                <!-- <label><input type="checkbox" ng-model="inactiveUsers" ng-change="change(inactiveUsers)" ng-true-value="'N'" ng-false-value="'Y'">Show Inactive Users</label> -->
+                                <button type="button" id="newUserButton" ng-controller="newUserController" ng-click="addNewUser()" class="btn btn-sm btn-primary">
+                                    <i class="fa fa-plus"></i> New User
+                                </button>
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
 
-                <tbody ng-if="!isDataLoading">
-                <tr st-select-row="user" st-select-mode="single" ng-repeat="user in displayedUsers">
-                    <td>{{user.userName}}</td>
-                    <td>{{user.person.firstName}}</td>
-                    <td>{{user.person.lastName}}</td>
-                    <td>{{user.organisation.nation}}</td>
-                    <td>{{ user.organisation_parent }}</td>
-                    <td>{{user.activeFrom | date:'yyyy-MM-dd'}}</td>
-                    <td>{{user.activeTo | date:'yyyy-MM-dd'}}</td>
-                    <td>
-                        <span ng-class="{'label label-success': user.status=='E', 'label label-danger': user.status=='D'}">{{"users.status_"+user.status | translate}}</span>
-                    </td>
-                    <td class="text-center">
+                    <tbody ng-if="!isDataLoading">
+                    <tr st-select-row="user" st-select-mode="single" ng-repeat="user in displayedUsers">
+                        <td>{{user.userName}}</td>
+                        <td>{{user.person.firstName}}</td>
+                        <td>{{user.person.lastName}}</td>
+                        <td>{{user.organisation.nation}}</td>
+                        <td>{{ user.organisation_parent }}</td>
+                        <td>{{user.activeFrom | date:'yyyy-MM-dd'}}</td>
+                        <td>{{user.activeTo | date:'yyyy-MM-dd'}}</td>
+                        <td>
+                            <span ng-class="{'label label-success': user.status=='E', 'label label-danger': user.status=='D'}">{{"users.status_"+user.status | translate}}</span>
+                        </td>
+                        <td class="text-center">
 						 <span ng-controller="manageUserCtlr" ng-if="checkAccess('manageUsers')">
 							<button type="button" id="editUser" class="btn btn-sm btn-primary" ng-click="editUser(user)">
                                 <i class="fa fa-pencil"></i>
@@ -171,32 +175,23 @@
                                 <i class="fa fa-files-o"></i>
                             </button>
 						 </span>
-                    </td>
+                        </td>
 
-                </tr>
-                </tbody>
+                    </tr>
+                    </tbody>
 
-                <tbody ng-if="isDataLoading">
-                <tr>
-                    <td colspan="5" class="text-center">{{loadingMessage}}</td>
-                </tr>
-                </tbody>
+                    <tbody ng-if="isDataLoading">
+                    <tr>
+                        <td colspan="5" class="text-center">{{loadingMessage}}</td>
+                    </tr>
+                    </tbody>
 
-                <tbody ng-if="emptyResult">
-                <tr>
-                    <td colspan="5">{{emptyResultMessage}}</td>
-                </tr>
-                </tbody>
-
-                <!--             <tbody ng-hide="displayedUsers.length"> -->
-                <!-- 				<tr> -->
-                <!-- 					<td colspan="10" class="text-center">No results found.</td> -->
-                <!-- 				</tr> -->
-                <!--             </tbody> -->
-
-                <!--             <tfoot ng-if="!isDataLoading"> -->
-                <!--             </tfoot> -->
-            </table>
+                    <tbody ng-if="emptyResult">
+                    <tr>
+                        <td colspan="5">{{emptyResultMessage}}</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
             <div>
                 <usm-pagination config="paginationConfig"></usm-pagination>

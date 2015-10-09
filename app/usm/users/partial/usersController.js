@@ -8,7 +8,7 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
         /* $rootScope.$on('ContextSwitch', function () {
          init();
          });*/
-
+        $scope.search = {};
         $scope.checkAccess = function (feature) {
             return userService.isAllowed(feature, "USM", true);
         };
@@ -55,16 +55,32 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
 
             // 1. List Of Status
             //$scope.status = 'all';
-            $scope.statusList = refData.statuses;
+            $scope.statusList = refData.statusesDropDown;
             //$scope.statusSelected = "all";
 
             // 2. List Of nations
             $scope.nation = {};
-            $scope.nationsList = orgNations;
+            // transform to dropdown input
+            var orgNationsDropDown = [{label:"Nation...", value:""}];
+            angular.forEach(orgNations, function(item){
+                var nation = {};
+                nation.label = item;
+                nation.value = item;
+                orgNationsDropDown.push(nation);
+            });
+            $scope.nationsList = orgNationsDropDown;
 
             // 3.List Of Organisations...
             $scope.organisation = {};
-            $scope.organisationsList = orgNames;
+            // transform to dropdown input
+            var organisationsDropDown = [{label:"Organisation...", value:""}];
+            angular.forEach(orgNames, function(item){
+                var organisation = {};
+                organisation.label = item.parentOrgName;
+                organisation.value = item.parentOrgName;
+                organisationsDropDown.push(organisation);
+            });
+            $scope.organisationsList = organisationsDropDown;
 
             $scope.formatDate = function (date) {
                 var d = new Date(date),
@@ -122,8 +138,8 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
                 }
 
                 for (var i = 0; i < _.size($scope.organisationsList); i++) {
-                    if ($scope.organisationsList[i].parentOrgName === organisation) {
-                        $scope.search.organisation = $scope.organisationsList[i];
+                    if ($scope.organisationsList[i].value === organisation) {
+                        $scope.search.organisation = $scope.organisationsList[i].value;
                         break;
                     }
                 }
@@ -215,7 +231,7 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
             }
 
             if ($scope.search.organisation !== null && $scope.search.organisation !== '' && !_.isUndefined($scope.search.organisation)) {
-                $scope.pageData.organisation = $scope.search.organisation.parentOrgName;
+                $scope.pageData.organisation = $scope.search.organisation;
             } else {
                 $scope.pageData.organisation = '';
             }
@@ -229,7 +245,7 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
 
             $scope.pageData.activeTo = $scope.search.activeTo;
             $scope.pageData.activeFrom = $scope.search.activeFrom;
-
+            //$scope.getPage();
             changeUrlParams();
 
         };
