@@ -1,4 +1,4 @@
-<div class="container" ng-controller="scopesListCtrl">
+<div class="container">
     <!-- SEARCH PANEL-->
     <div class="panel panel-default">
         <div class="panel-body">
@@ -11,7 +11,9 @@
                     </div>
                 </div>
                 <div class="form-group col-md-2">
-                    <label for="application">{{'common.application' | translate}}</label>
+                    <label>{{'common.application' | translate}}</label>
+                    <dropdown ng-model="criteria.application" initialText="Application..." data="value" title="label" items="applicationsList"></dropdown>
+                    <!--
                     <select class="form-control dropdown"
                             id="application"
                             name="application"
@@ -22,9 +24,12 @@
                             ng-mouseleave="pointer=false">
                         <option value="">Application...</option>
                     </select>
+                    -->
                 </div>
                 <div class="form-group col-md-2">
-                    <label for="status">{{'common.status' | translate}}</label>
+                    <label>{{'common.status' | translate}}</label>
+                    <dropdown ng-model="criteria.status" data="value" title="label" items="statusList"></dropdown>
+                    <!--
                     <select class="form-control dropdown"
                             id="status"
                             name="status"
@@ -35,6 +40,7 @@
                             ng-mouseenter="pointer=true"
                             ng-mouseleave="pointer=false">
                     </select>
+                    -->
                 </div>
                 <div class="col-md-2">
                     <label>&nbsp;</label>

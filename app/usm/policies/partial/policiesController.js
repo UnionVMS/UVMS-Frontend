@@ -45,8 +45,8 @@ policiesModule.directive('ngEnter', function() {
     };
 });
 
-policiesModule.controller('policiesListController', ['$scope', '$resource', '$log', '$stateParams', '$timeout', 'policiesService', 'userService',
-    function ($scope, $resource, $log, $stateParams, $timeout, policiesService, userService) {
+policiesModule.controller('policiesListController', ['$scope', '$resource', '$log', '$stateParams', '$timeout', 'policiesService', 'userService','policySubjects',
+    function ($scope, $resource, $log, $stateParams, $timeout, policiesService, userService, policySubjects) {
 
 
         $scope.checkAccess = function(feature) {
@@ -60,13 +60,16 @@ policiesModule.controller('policiesListController', ['$scope', '$resource', '$lo
         };
 
         var fillPolicySubjects = function() {
-            policiesService.getPolicySubjList().then(function(obj) {
-                    //$log.log("results: ", obj);
-                    $scope.displayedPoliciesSubjInit = obj.subjects;
-                },
-                function (error) {
-                    $scope.emptyResultMessage = error;
-                });
+            // transform to dropdown input
+            var policiesDropDown = [];
+            angular.forEach(policySubjects, function(item){
+                var policy = {};
+                policy.label = item;
+                policy.value = item;
+                policiesDropDown.push(policy);
+            });
+            $scope.displayedPoliciesSubjInit = policiesDropDown;
+
         };
 
         var callService = function(criteria) {

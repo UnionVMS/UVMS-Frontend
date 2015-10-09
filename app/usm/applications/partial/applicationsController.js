@@ -1,7 +1,7 @@
 var applicationsModule = angular.module('applications');
 
-applicationsModule.controller('applicationsListCtrl', ['$log', '$scope', '$state', '$stateParams', 'applicationsService', 'userService',
-    function ($log, $scope, $state, $stateParams, applicationsService, userService) {
+applicationsModule.controller('applicationsListCtrl', ['$log', '$scope', '$state', '$stateParams', 'applicationsService', 'userService','applicationNames',
+    function ($log, $scope, $state, $stateParams, applicationsService, userService, applicationNames) {
 
         var init = function () {
             $scope.checkAccess = function (feature) {
@@ -17,17 +17,17 @@ applicationsModule.controller('applicationsListCtrl', ['$log', '$scope', '$state
             $scope.emptyResult = false;
             $scope.showPagination = true;
             $scope.emptyResultMessage = "No results found.";
-
-            applicationsService.getParentApplicationNames().then(
-                function (response) {
-                    $scope.parentList = response.parents;
-                },
-                function (error) {
-                    $scope.applicationsList = [error];
-                }
-            );
         };
         init();
+
+        var applicationsDropDown = [];
+        angular.forEach(applicationNames, function(item){
+            var application = {};
+            application.label = item;
+            application.value = item;
+            applicationsDropDown.push(application);
+        });
+        $scope.parentList = applicationsDropDown;
 
         // this method is executed by the pagination directive whenever the current page is changed
         // (also true for the initial loading).

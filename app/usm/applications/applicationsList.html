@@ -11,7 +11,9 @@
                     </div>
                 </div>
                 <div class="form-group col-md-2">
-                    <label for="parent">{{'applications.parent' | translate}}</label>
+                    <label>{{'applications.parent' | translate}}</label>
+                    <dropdown ng-model="criteria.parent" initialText="Parent..." data="value" title="label" items="parentList"></dropdown>
+                    <!--
                     <select class="form-control dropdown"
                             id="parent"
                             name="parent"
@@ -22,6 +24,7 @@
                             ng-mouseleave="pointer=false">
                         <option value="">Parent...</option>
                     </select>
+                    -->
                 </div>
                 <div class="col-md-2">
                     <label>&nbsp;</label>

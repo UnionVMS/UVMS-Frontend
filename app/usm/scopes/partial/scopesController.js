@@ -1,8 +1,8 @@
 var scopesModule = angular.module('scopes');
 
-scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$state', 'refData', 'getApplications', 'scopeServices', 'userService',
-    function ($log, $scope, $stateParams, $state, refData, getApplications, scopeServices, userService) {
-
+scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$state', 'refData', 'getApplications', 'scopeServices', 'userService','applicationNames',
+    function ($log, $scope, $stateParams, $state, refData, getApplications, scopeServices, userService, applicationNames) {
+        $scope.criteria = {};
         $scope.checkAccess = function(feature) {
             return userService.isAllowed(feature,"USM",true);
         };
@@ -17,16 +17,17 @@ scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$s
         $scope.showPagination = true;
         $scope.emptyResultMessage = "No results found.";
         // statuses...
-        $scope.statusList = refData.statusesSearch;
+        $scope.statusList = refData.statusesSearchDropDown;
         // applications...
-        getApplications.get().then(
-            function (response) {
-                $scope.applicationsList = response.applications;
-            },
-            function (error) {
-                $scope.applicationsList = [error];
-            }
-        );
+        // List Of Applications...
+        var applicationsDropDown = [];
+        angular.forEach(applicationNames, function(item){
+            var application = {};
+            application.label = item;
+            application.value = item;
+            applicationsDropDown.push(application);
+        });
+        $scope.applicationsList = applicationsDropDown;
 
         // this method is executed by the pagination directive whenever the current page is changed
         // (also true for the initial loading).

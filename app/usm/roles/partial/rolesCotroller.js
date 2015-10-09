@@ -1,19 +1,20 @@
 var rolesModule = angular.module('roles');
 
-rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refData', '$stateParams', '$state', 'getApplications', 'rolesServices', 'userService',
-    function ($translate, $scope, $log, refData, $stateParams, $state, getApplications, rolesServices, userService) {
+rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refData', '$stateParams', '$state', 'getApplications', 'rolesServices', 'userService', 'applicationNames',
+    function ($translate, $scope, $log, refData, $stateParams, $state, getApplications, rolesServices, userService, applicationNames) {
+        $scope.criteria = {};
         $scope.sort = {
             sortColumn: $stateParams.sortColumn || 'name', // Default Sort.
             sortDirection: $stateParams.sortDirection || 'asc'
         };
 
-        $scope.checkAccess = function(feature) {
-            return userService.isAllowed(feature,"USM",true);
+        $scope.checkAccess = function (feature) {
+            return userService.isAllowed(feature, "USM", true);
         };
 
         $scope.showPagination = true;
 
-        $scope.statusList = refData.statusesSearch;
+        $scope.statusList = refData.statusesSearchDropDown;
         $scope.isDataLoading = true;
         $scope.emptyResult = false;
         $scope.emptyResultMessage = "No results found.";
@@ -21,26 +22,26 @@ rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refDat
         $scope.toolTipsDelay = refData.toolTipsDelay;
 
         // List Of Applications...
-        getApplications.get().then(
-            function (response) {
-                $scope.applicationsList = response.applications;
-            },
-            function (error) {
-                $scope.applicationsList = [error];
-            }
-        );
+        var applicationsDropDown = [];
+        angular.forEach(applicationNames, function (item) {
+            var application = {};
+            application.label = item;
+            application.value = item;
+            applicationsDropDown.push(application);
+        });
+        $scope.applicationsList = applicationsDropDown;
 
         // Retrieve roles. This method is executed by the pagination directive whenever the current page is changed
         // (also true for the initial loading).
         $scope.roleList = [];
-        $scope.getPage = function(currentPage) {
+        $scope.getPage = function (currentPage) {
             $scope.criteria = {
                 role: $stateParams.role || '',
                 application: $stateParams.application || '',
                 status: $stateParams.status || 'all'
             };
             var criteria = $scope.criteria;
-            criteria.offset = (currentPage - 1)  * $scope.paginationConfig.itemsPerPage;
+            criteria.offset = (currentPage - 1) * $scope.paginationConfig.itemsPerPage;
             criteria.limit = $scope.paginationConfig.itemsPerPage;
             criteria.sortColumn = $scope.sort.sortColumn;
             criteria.sortDirection = $scope.sort.sortDirection;
@@ -72,7 +73,7 @@ rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refDat
 
         $scope.searchRole = function (criteria) {
             // replace null with empty string because null breaks the stateParam application
-            if(_.isNull(criteria.application)){
+            if (_.isNull(criteria.application) || _.isEqual("", criteria.application)) {
                 $scope.criteria.application = "";
             }
             $scope.paginationConfig.currentPage = 0;
@@ -102,12 +103,12 @@ rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refDat
         };
 
         // Sorting columns
-        $scope.changeSorting = function(column) {
+        $scope.changeSorting = function (column) {
             var sort = $scope.sort;
             if (sort.sortColumn === column) {
-                if(sort.sortDirection === 'desc'){
+                if (sort.sortDirection === 'desc') {
                     sort.sortDirection = 'asc';
-                }else if (sort.sortDirection === 'asc'){
+                } else if (sort.sortDirection === 'asc') {
                     sort.sortDirection = 'desc';
                 }
             } else {
@@ -119,11 +120,11 @@ rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refDat
             $scope.getPage($scope.paginationConfig.currentPage);
         };
 
-        $scope.sortIcon = function(column) {
+        $scope.sortIcon = function (column) {
             var sort = $scope.sort;
             if (sort.sortColumn === column) {
                 var sortDirection = sort.sortDirection;
-                return sortDirection === 'desc' ?'fa-sort-desc':'fa-sort-asc';
+                return sortDirection === 'desc' ? 'fa-sort-desc' : 'fa-sort-asc';
             }
             return 'fa-sort';
         };
@@ -146,8 +147,8 @@ rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refDat
             $scope.sort.sortColumn = 'name';
             $scope.sort.sortDirection = 'asc';
             $scope.criteria.role = '';
-            $scope.criteria.status = refData.statuses[0];
-            $scope.criteria.application = '';
+            $scope.criteria.status = refData.statusesDropDown[0].value;
+            $scope.criteria.application = "";
             $scope.searchRole($scope.criteria);
         };
 
@@ -165,8 +166,8 @@ rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refDat
 rolesModule.controller('roleDetailsCtrl', ['$scope', '$stateParams', '$log', 'rolesServices', 'applicationsService', 'permissionServices', 'userService',
     function ($scope, $stateParams, $log, rolesServices, applicationsService, permissionServices, userService) {
 
-        $scope.checkAccess = function(feature) {
-            return userService.isAllowed(feature,"USM",true);
+        $scope.checkAccess = function (feature) {
+            return userService.isAllowed(feature, "USM", true);
         };
 
         $scope.itemsByPage = 10;
@@ -223,8 +224,8 @@ rolesModule.controller('roleDetailsCtrl', ['$scope', '$stateParams', '$log', 'ro
 rolesModule.controller('manageRoleCtrl', ['$scope', '$modal', '$log', 'rolesServices', 'userService',
     function ($scope, $modal, $log, rolesServices, userService) {
 
-        $scope.checkAccess = function(feature) {
-            return userService.isAllowed(feature,"USM",true);
+        $scope.checkAccess = function (feature) {
+            return userService.isAllowed(feature, "USM", true);
         };
 
         $scope.manageRole = function (mode, role) {
@@ -552,7 +553,7 @@ rolesModule.controller('permissionModalInstanceCtrl', ['$scope', '$modalInstance
 
         // Reset Filter permission
         $scope.resetForm = function (criteria) {
-            if(criteria !== undefined) {
+            if (criteria !== undefined) {
                 criteria.application = null;
                 criteria.group = null;
                 criteria.sortColumn = 'name';

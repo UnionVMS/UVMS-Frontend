@@ -19,7 +19,7 @@
                                 <div class="col-md-2 zero-side-padding" style="width:12%; margin-right: 4px;">
                                     <label>{{ 'users.nation' | translate }}</label>
                                     <div>
-                                        <dropdown ng-model="search.nation" data="value" title="label" items="nationsList"></dropdown>
+                                        <dropdown ng-model="search.nation" initialText="Nation..." data="value" title="label" items="nationsList"></dropdown>
                                         <!--
                                         <select class="form-control dropdown" style="width: 100%;"
                                                 id="nation"
@@ -37,7 +37,7 @@
                                 <div class="col-md-2 zero-side-padding" style="width:14%; margin-right:4px;">
                                     <div>
                                         <label>{{ 'users.organisation' | translate }}</label>
-                                        <dropdown ng-model="search.organisation" data="value" title="label" items="organisationsList"></dropdown>
+                                        <dropdown ng-model="search.organisation" initialText="Organisation..." data="value" title="label" items="organisationsList"></dropdown>
                                         <!--
                                             <select class="form-control dropdown" style="width: 100%;"
                                                     id="organisation"

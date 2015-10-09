@@ -7,6 +7,7 @@ var organisationsModule = angular.module('organisations');
 organisationsModule.controller('organisationsListCtrl', ['$scope', '$log', 'refData', '$stateParams',
     '$state', 'organisationsService', 'userService', 'orgNations', 'orgNames',
     function ($scope, $log, refData, $stateParams, $state, organisationsService, userService, orgNations, orgNames) {
+        $scope.search = {};
         $scope.sort = {
             sortColumn: $stateParams.sortColumn || 'name', // Default Sort.
             sortDirection: $stateParams.sortDirection || 'asc'
@@ -17,7 +18,7 @@ organisationsModule.controller('organisationsListCtrl', ['$scope', '$log', 'refD
         };
 
         $scope.showPagination = true;
-        $scope.statusList = refData.statusesSearch;
+        $scope.statusList = refData.statusesSearchDropDown;
         $scope.isDataLoading = true;
         $scope.emptyResult = false;
         $scope.emptyResultMessage = "No results found. ";
@@ -30,14 +31,31 @@ organisationsModule.controller('organisationsListCtrl', ['$scope', '$log', 'refD
 
         // 2. List Of nations
         $scope.nation = {};
-        $scope.nationsList = orgNations;
+        // transform to dropdown input
+        var orgNationsDropDown = [];
+        angular.forEach(orgNations, function(item){
+            var nation = {};
+            nation.label = item;
+            nation.value = item;
+            orgNationsDropDown.push(nation);
+        });
+        $scope.nationsList = orgNationsDropDown;
 
         // $scope.getNations();
 
         // 3.List Of Organisations...
         $scope.organisation = {};
         $scope.name = {};
-        $scope.namesList = orgNames;
+        $scope.namesList = [];
+        // transform to dropdown input
+        var organisationsDropDown = [];
+        angular.forEach(orgNames, function(item){
+            var organisation = {};
+            organisation.label = item.parentOrgName;
+            organisation.value = item.parentOrgName;
+            organisationsDropDown.push(organisation);
+        });
+        $scope.namesList = organisationsDropDown;
 
         //$scope.getOrganisations();
 
@@ -76,8 +94,8 @@ organisationsModule.controller('organisationsListCtrl', ['$scope', '$log', 'refD
 
                 //To fill the search.name field (organisation name field) it is necessary to find the element of the list
                 for (var i = 0; i < _.size($scope.namesList); i++) {
-                    if ($scope.namesList[i].parentOrgName === organisation) {
-                        $scope.search.name = $scope.namesList[i];
+                    if ($scope.namesList[i].value === organisation) {
+                        $scope.search.name = $scope.namesList[i].value;
                         break;
                     }
                 }
@@ -128,7 +146,7 @@ organisationsModule.controller('organisationsListCtrl', ['$scope', '$log', 'refD
 
             if ($scope.search.name !== null && $scope.search.name !== '' && !_.isUndefined($scope.search.name)) {
 
-                $scope.pageData.name = $scope.search.name.parentOrgName;
+                $scope.pageData.name = $scope.search.name;
 
             } else {
                 $scope.pageData.name = "";

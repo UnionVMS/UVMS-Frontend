@@ -7,8 +7,9 @@
             <form class="form-inline" id="searchOrganisationForm">
 
                 <div class="form-group col-md-2">
-                    <label for="name">{{'organisations.name' | translate}}</label>
-
+                    <label>{{'organisations.name' | translate}}</label>
+                    <dropdown ng-model="search.name" initialText="Organisation..." data="value" title="label" items="namesList"></dropdown>
+                    <!--
                     <select class="form-control dropdown"
                             id="name"
                             name="name"
@@ -19,11 +20,13 @@
                             ng-mouseleave="pointer=false">
                         <option value="">Organisation...</option>
                     </select>
+                    -->
                 </div>
 
                 <div class="form-group col-md-2">
-                    <label for="nation">{{'organisations.nation' | translate}}</label>
-
+                    <label>{{'organisations.nation' | translate}}</label>
+                    <dropdown ng-model="search.nation" initialText="Nation..." data="value" title="label" items="nationsList"></dropdown>
+                    <!--
                     <select class="form-control dropdown"
                             id="nation"
                             name="nation"
@@ -34,11 +37,13 @@
                             ng-mouseleave="pointer=false">
                         <option value="">Nation...</option>
                     </select>
+                    -->
                 </div>
 
                 <div class="form-group col-md-2">
-                    <label for="status">{{'organisations.status' | translate}}</label>
-
+                    <label>{{'organisations.status' | translate}}</label>
+                    <dropdown ng-model="search.status" data="value" title="label" items="statusList"></dropdown>
+                    <!--
                     <select class="form-control dropdown"
                             id="status"
                             name="status"
@@ -49,6 +54,7 @@
                             ng-mouseenter="pointer=true"
                             ng-mouseleave="pointer=false">
                     </select>
+                    -->
                 </div>
 
                 <div class="col-md-2">

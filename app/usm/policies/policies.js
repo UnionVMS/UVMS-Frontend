@@ -18,15 +18,23 @@ angular.module('policies').config(['$urlRouterProvider', '$stateProvider', 'ACCE
 			views: {
 				"page@app.usm": {
 					templateUrl: 'usm/policies/policiesList.html',
-					controller: "policiesListController",
+					controller: "policiesListController"
 				}
 			},
 			ncyBreadcrumb: {
 				label: 'Policies'
-			}/*,
+			},
 			resolve: {
-				policiesService: 'policiesService'
-			}*/
+				policySubjects: function(policiesService){
+                    return policiesService.getPolicySubjList().then(function(obj) {
+                            //$log.log("results: ", obj);
+                            return obj.subjects;
+                        },
+                        function (error) {
+                            return [error];
+                        });
+                }
+			}
 		});
 	}
 ]);

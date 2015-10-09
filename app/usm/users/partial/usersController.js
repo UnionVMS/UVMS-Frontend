@@ -61,7 +61,7 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
             // 2. List Of nations
             $scope.nation = {};
             // transform to dropdown input
-            var orgNationsDropDown = [{label:"Nation...", value:""}];
+            var orgNationsDropDown = [];
             angular.forEach(orgNations, function(item){
                 var nation = {};
                 nation.label = item;
@@ -73,7 +73,7 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
             // 3.List Of Organisations...
             $scope.organisation = {};
             // transform to dropdown input
-            var organisationsDropDown = [{label:"Organisation...", value:""}];
+            var organisationsDropDown = [];
             angular.forEach(orgNames, function(item){
                 var organisation = {};
                 organisation.label = item.parentOrgName;
