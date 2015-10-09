@@ -16,12 +16,12 @@
                                         <dropdown ng-model="advancedSearchObject.DATE" items="dateSearchItems" no-placeholder-item></dropdown>
                                     </th>
 
-                                    <th colspan="2">
-                                        <datepicker-input model="advancedSearchObject.START_DATE" placeholder="{{'polling.polling_logs_search_date_from_placeholder' | i18n}}"></datepicker-input>
+                                    <th colspan="2" class="datepickerStart">
+                                        <datepicker-input model="advancedSearchObject.START_DATE" placeholder="{{'polling.polling_logs_search_date_from_placeholder' | i18n}}" time="true"></datepicker-input>
                                     </th>
 
                                     <th colspan="2">
-                                        <datepicker-input model="advancedSearchObject.END_DATE" placeholder="{{'polling.polling_logs_search_date_to_placeholder' | i18n}}"></datepicker-input>
+                                        <datepicker-input model="advancedSearchObject.END_DATE" placeholder="{{'polling.polling_logs_search_date_to_placeholder' | i18n}}" time="true"></datepicker-input>
                                     </th>
 
                                     <th class="textAlignCenter">
