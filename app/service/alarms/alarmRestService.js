@@ -25,22 +25,18 @@ angular.module('unionvmsWeb')
                     deferred.reject("Invalid response status");
                     return;
                 }
-                var tickets = [],
+                var alarms = [],
                     searchResultListPage;
 
-                if(angular.isArray(response.data)) {
-                    for (var i = 0; i < response.data.length; i++) {
-                        tickets.push(Alarm.fromDTO(response.data[i]));
+                if(angular.isArray(response.data.alarms)) {
+                    for (var i = 0; i < response.data.alarms.length; i++) {
+                        alarms.push(Alarm.fromDTO(response.data.alarms[i]));
                     }
                 }
-                var currentPage = 0,
-                    totalNumberOfPages = 0;
 
-                if(tickets.length > 0){
-                    currentPage = totalNumberOfPages = 1;
-                }
-
-                searchResultListPage = new SearchResultListPage(tickets, currentPage, totalNumberOfPages);
+                var currentPage = response.data.currentPage;
+                var totalNumberOfPages = response.data.totalNumberOfPages;
+                searchResultListPage = new SearchResultListPage(alarms, currentPage, totalNumberOfPages);
 
                 deferred.resolve(searchResultListPage);
             },
@@ -66,18 +62,14 @@ angular.module('unionvmsWeb')
                 var tickets = [],
                     searchResultListPage;
 
-                if(angular.isArray(response.data)) {
-                    for (var i = 0; i < response.data.length; i++) {
-                        tickets.push(Alarm.fromDTO(response.data[i]));
+                if(angular.isArray(response.data.tickets)) {
+                    for (var i = 0; i < response.data.tickets.length; i++) {
+                        tickets.push(Alarm.fromDTO(response.data.tickets[i]));
                     }
                 }
-                var currentPage = 0,
-                    totalNumberOfPages = 0;
 
-                if(tickets.length > 0){
-                    currentPage = totalNumberOfPages = 1;
-                }
-
+                var currentPage = response.data.currentPage;
+                var totalNumberOfPages = response.data.totalNumberOfPages;
                 searchResultListPage = new SearchResultListPage(tickets, currentPage, totalNumberOfPages);
 
                 deferred.resolve(searchResultListPage);
