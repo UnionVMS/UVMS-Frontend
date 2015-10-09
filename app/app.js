@@ -476,7 +476,7 @@ unionvmsWebApp.config(function ($httpProvider) {
 
 
 ///Bootstrap the application by getting the environment config that points out the REST api URL
-var envConfigJsonPath = "config.json";
+var envConfigJsonPath = "config.json?ts=" +(new Date()).getTime();
 
 function handleEnvironmentConfigurationError(error, $log){
     $log.error("Error loading environment configuration.", error);
