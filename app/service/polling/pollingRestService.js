@@ -48,33 +48,37 @@ angular.module('unionvmsWeb')
         };
 
         var updatePollChannelsWithVesselDetails = function(pollChannels) {
-            var request = new GetListRequest(1, pollChannels.length, false, []);
-            for (var i = 0; i < pollChannels.length; i++) {
-                if (pollChannels[i].connectId) {
-                    request.addSearchCriteria("GUID", pollChannels[i].connectId);
-                }
-            }
-
             var deferred = $q.defer();
-            if(request.getNumberOfSearchCriterias() === 0){
-                deferred.resolve(pollChannels);
-            }
-
-            vesselRestService.getVesselList(request).then(function(page) {
+            if(pollChannels.length > 0){
+                var request = new GetListRequest(1, pollChannels.length, false, []);
                 for (var i = 0; i < pollChannels.length; i++) {
-                    var pollChannel = pollChannels[i];
-                    var vessel = page.getVesselByGuid(pollChannel.connectId);
-                    if (vessel) {
-                        pollChannel.vesselName = vessel.name;
-                        pollChannel.vesselIrcs = vessel.ircs;
+                    if (pollChannels[i].connectId) {
+                        request.addSearchCriteria("GUID", pollChannels[i].connectId);
                     }
                 }
 
+                if(request.getNumberOfSearchCriterias() === 0){
+                    deferred.resolve(pollChannels);
+                }
+
+                vesselRestService.getVesselList(request).then(function(page) {
+                    for (var i = 0; i < pollChannels.length; i++) {
+                        var pollChannel = pollChannels[i];
+                        var vessel = page.getVesselByGuid(pollChannel.connectId);
+                        if (vessel) {
+                            pollChannel.vesselName = vessel.name;
+                            pollChannel.vesselIrcs = vessel.ircs;
+                        }
+                    }
+
+                    deferred.resolve(pollChannels);
+                },
+                function(error) {
+                    deferred.reject(error);
+                });
+            }else{
                 deferred.resolve(pollChannels);
-            },
-            function(error) {
-                deferred.reject(error);
-            });
+            }
 
             return deferred.promise;
         };

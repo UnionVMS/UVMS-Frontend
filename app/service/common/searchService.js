@@ -185,6 +185,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         //Do search for pollables
         searchForPollableTerminals : function(){
             var getPollablesListRequest = new GetPollableListRequest(getListRequest.page, getListRequest.listSize);
+            var getVesselsListRequest = getListRequest.copy();
 
             //Get vessels first!
             if(this.getSearchCriterias().length > 0){
@@ -192,7 +193,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                 var outerThis = this;
 
                 //Get the vessels
-                vesselRestService.getAllMatchingVessels(getListRequest).then(
+                vesselRestService.getAllMatchingVessels(getVesselsListRequest).then(
                     //TODO: Get more pages of vessels or error message that too many vessels were returned?
                     function(vessels){
                         //If no matchin vessels found

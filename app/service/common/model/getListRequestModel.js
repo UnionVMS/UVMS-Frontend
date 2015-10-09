@@ -175,6 +175,17 @@ angular.module('unionvmsWeb')
         return this.criterias.length;
     };
 
+    GetListRequest.prototype.copy = function(){
+        var copy = new GetListRequest();
+        copy.page = this.page;
+        copy.listSize = this.listSize;
+        copy.isDynamic = this.isDynamic;
+        copy.criterias = [];
+        $.each(this.criterias, function(index, searchField){
+            copy.criterias.push(searchField.copy());
+        });
+        return copy;
+    };
 
     return GetListRequest;
 });
