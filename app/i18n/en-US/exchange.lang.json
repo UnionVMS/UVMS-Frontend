@@ -6,7 +6,9 @@
 	"search_range": "Range",
 	"search_recipient": "Recipient",
 	"search_ircs_cfr_name": "IRCS, CFR, Name",
-	"search_to": "To",	
+	"search_to": "To",
+
+    "message_details_modal_title" : "Message details",
 
 	"table_header_actions": "Actions",
 	"table_header_date_fwd": "Date forwarded",
@@ -31,7 +33,7 @@
 
     "transmission_action_start" : "Start",
     "transmission_action_stop" : "Stop",
-	
+
 	"title_all": "All",
     "title_details": "Show details",
 	"title_incoming": "Incoming",
