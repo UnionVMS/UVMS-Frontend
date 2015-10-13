@@ -30,6 +30,7 @@ angular.module('unionvmsWeb').directive('layerMenu', function() {
 
 			$.contextMenu({
 				selector: '.layertree-menu',
+				trigger: 'left',
 				build: function( $trigger, e ) {
 					var rootProp, item,
 							node = $.ui.fancytree.getNode( $trigger.context ),

@@ -31,10 +31,30 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 					return;
 				}
 				data.node.data.mapLayer.set( 'visible', data.node.isSelected() );
-				
+
 				//FIXME we might do this on a layer basis which would probably be better
                 scope.$parent.$broadcast('reloadLegend');
 			};
+
+			scope.renderNodeHandler = function( event, data ) {
+				var $title;
+
+				scope.exchangeCheckboxWithRadio( event, data );
+
+				if ( !data.node.data || !data.node.data.contextItems ) {
+					return;
+				}
+
+				$title = $( data.node.span ).children( '.fancytree-title' );
+
+				if ( $title.hasClass( 'layertree-menu' ) ) {
+					return;
+				}
+
+				$title
+					.addClass( 'layertree-menu' )
+					.append( '<span class="fa fa-caret-down"></span>' );
+			}
 
 			// store maps layers for updating map.
 			scope.mapLayers = null;
@@ -175,7 +195,6 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 								children: [
 									{
 										title: 'EEZ',
-										extraClasses: 'layertree-menu',
 										data: {
 											type: 'eez',
 											title: 'eez',
@@ -190,6 +209,11 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			                    //'cql_filter': "sovereign='Portugal' OR sovereign='Poland' OR sovereign='Bulgaria' OR sovereign='Belgium'"
 			                },
 											contextItems: {
+												header: {
+													name: 'Style options',
+													disabled: true,
+													className: 'layer-menu-header'
+												},
 												styleA: {
 													name: 'Labels and Geometry',
 													type: 'radio',
@@ -216,7 +240,6 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 									},
 									/*{ // development: local geoserver
 										title: 'Test',
-										extraClasses: 'layertree-menu',
 										data: {
 											type: 'wms',
 											title: 'test',
@@ -232,6 +255,11 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			                    //'cql_filter': "sovereign='Portugal' OR sovereign='Poland' OR sovereign='Bulgaria' OR sovereign='Belgium'"
 			                },
 											contextItems: {
+												headerA: {
+													name: 'Options',
+													disabled: true,
+													className: 'layer-menu-header'
+												},
 												styleA: {
 													name: 'Polygon (default)',
 													type: 'radio',
@@ -252,13 +280,21 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 													radio: 'style',
 													value: 'grass',
 													selected: false
+												},
+												sepA: '-------',
+												headerB: {
+													name: 'More Options',
+													disabled: true,
+													className: 'layer-menu-header'
+												},
+												styleW: {
+													name: 'Option 1'
 												}
 											}
 										}
 									},*/
 									{
 										title: 'RFMO',
-										extraClasses: 'layertree-menu',
 										data: {
 											type: 'wms',
 											isBaseLayer: false,
@@ -272,28 +308,33 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 													'STYLES': 'rfmo'
 											},
 											contextItems: {
-                                                styleA: {
-                                                    name: 'Labels and Geometry',
-                                                    type: 'radio',
-                                                    radio: 'style',
-                                                    value: 'rfmo_label_geom',
-                                                    selected: false
-                                                },
-                                                styleB: {
-                                                    name: 'Geometry only',
-                                                    type: 'radio',
-                                                    radio: 'style',
-                                                    value: 'rfmo',
-                                                    selected: true
-                                                },
-                                                styleC: {
-                                                    name: 'Labels only',
-                                                    type: 'radio',
-                                                    radio: 'style',
-                                                    value: 'rfmo_label',
-                                                    selected: false
-                                                }
-                                            }
+												header: {
+													name: 'Style options',
+													disabled: true,
+													className: 'layer-menu-header'
+												},
+                        styleA: {
+                          name: 'Labels and Geometry',
+                          type: 'radio',
+                          radio: 'style',
+                          value: 'rfmo_label_geom',
+                          selected: false
+                        },
+                        styleB: {
+                          name: 'Geometry only',
+                          type: 'radio',
+                          radio: 'style',
+                          value: 'rfmo',
+                          selected: true
+                        },
+                        styleC: {
+                          name: 'Labels only',
+                          type: 'radio',
+                          radio: 'style',
+                          value: 'rfmo_label',
+                          selected: false
+                        }
+                      }
 										}
 									}
 								]
@@ -427,10 +468,10 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				beforeSelect: scope.beforeSelectHandler,
 				select: scope.selectHandler,
 				createNode: scope.updateBasemap,
+				renderNode: scope.renderNodeHandler,
 				// fancytree updates the checkboxes on these events
 				expand: scope.exchangeCheckboxWithRadio,
 				init: scope.exchangeCheckboxWithRadio,
-				renderNode: scope.exchangeCheckboxWithRadio,
 				click: scope.exchangeCheckboxWithRadio,
 				activate: scope.exchangeCheckboxWithRadio,
 				blurTree: scope.exchangeCheckboxWithRadio
