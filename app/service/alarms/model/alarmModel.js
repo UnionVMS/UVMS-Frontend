@@ -56,7 +56,7 @@ angular.module('unionvmsWeb').factory('Alarm', function() {
     Alarm.prototype.isVesselAsset = function() {
         if(angular.isDefined(this.assetId) && angular.isDefined(this.assetId.type)){
             return this.assetId.type.toUpperCase() === 'VESSEL';
-        };
+        }
         return false;
     };
 
