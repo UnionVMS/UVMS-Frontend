@@ -80,20 +80,20 @@ describe('Alarm', function() {
 
     it("isVesselAsset() should return true only when assetId type is VESSEL", inject(function(Alarm) {
         var alarm = new Alarm();
-        expect(alarm.isVesselAsset().toBeFalsy();
+        expect(alarm.isVesselAsset()).toBeFalsy();
 
         alarm.assetId = {
-            type : "ASSET",
+            type : "VESSEL",
             value : "test-123"
         };
-        expect(alarm.isVesselAsset().toBeTruthy();
+        expect(alarm.isVesselAsset()).toBeTruthy();
 
        alarm.assetId = {
             type : "OTHER_TYPE",
             value : "test-123"
         };
 
-        expect(alarm.isVesselAsset().toBeFalsy();
+        expect(alarm.isVesselAsset()).toBeFalsy();
     }));
 
 
