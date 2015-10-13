@@ -5,7 +5,7 @@
                 <li ng-class="{active: isAudit == true}">
                     <a href="#/admin/auditlog">{{'audit.pagemenu_audit_logs' | i18n }}</a>
                 </li>
-                <li ng-class="{active: isAudit == false}" show-if-allowed='viewConfiguration'>
+                <li ng-class="{active: isAudit == false}" show-if-allowed='Audit:viewConfiguration'>
                     <a href="#/admin/configuration">{{'audit.pagemenu_configuration' | i18n }}</a>
                 </li>
             </ul>

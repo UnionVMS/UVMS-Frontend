@@ -3,12 +3,9 @@
         <div class="headercontainer col-md-12">
             <ul>
                  <li class="cell" ng-repeat="page in menu">
-                    <a ng-href="#{{page.url}}" ng-if='page.title!=="User"'>
+                    <a ng-href="#{{page.url}}">
                         <div class="menucell" ng-class="{active: isActive(page.url)}">{{page.title}}</div>
                     </a>
-                     <a ui-sref="app.usm.users" ng-if='page.title==="User"'>
-                         <div class="menucell" ng-class="{active: isActive(page.url)}">{{page.title}}</div>
-                     </a>
                 </li>
             </ul>
         </div>

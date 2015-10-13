@@ -106,14 +106,14 @@
 
         //USERS
         if(accessToAnyFeatureInList('USM', userFeatures)){
-            addMenuItem(locale.getString('header.menu_user'), '/usm');
+            addMenuItem(locale.getString('header.menu_user'), '/usm/users');
         }
 
         //ADMIN
         var adminLink = false;
         if(checkAccess('Audit', 'viewAudit')){
-            adminLink = '/admin';
-        }else if(checkAccess('Audit', 'viewAlarmsOpenTickets')){
+            adminLink = '/admin/auditlog';
+        }else if(checkAccess('Configuration', 'viewConfiguration')){
             adminLink = '/admin/configuration';
         }
         if(adminLink){
