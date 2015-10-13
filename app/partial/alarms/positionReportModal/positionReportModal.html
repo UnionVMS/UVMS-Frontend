@@ -8,8 +8,8 @@
 <div class="modal-body">
 
     <div class="row">
-        <div class="col-md-12">            
-            {{'common.status' | i18n}} 
+        <div class="col-md-12">
+            {{'common.status' | i18n}}
             <span class="label" ng-class="{SUCCESSFUL:'label-success', PENDING:'label-warning', 'ERROR':'label-danger'}[position.message.status]">
                 {{getStatusLabel(position.message.status) | uppercase}}
             </span>
@@ -21,10 +21,10 @@
     <div>
         <div class="row">
             <div class="col-md-12">
-                <div class="sectionHeader">                        
+                <div class="sectionHeader">
                     {{'alarms.position_report_asset_information' | i18n}}
                 </div>
-                <span class="assignAssetLink" ng-click="toggleAssignAsset()">{{'alarms.position_report_assign_asset_from_list' | i18n}}</span>
+                <span class="assignAssetLink" ng-click="toggleAssignAsset()" ng-if="!readOnly">{{'alarms.position_report_assign_asset_from_list' | i18n}}</span>
             </div>
         </div>
         <div class="row">
@@ -39,7 +39,7 @@
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_cfr' | i18n}}</label>
                 <div class="value">{{position.carrier.cfr}}</div>
-            </div>  
+            </div>
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_external_marking' | i18n}}</label>
                 <div class="value">{{position.carrier.externalMarking}}</div>
@@ -61,10 +61,10 @@
                             <div class="col-md-5">
                                 <input type="text" class="form-control searchText" placeholder="{{'vessel.search_vessel_placeholder' | i18n}}" ng-model="assignAssetSearchText">
                             </div>
-                            
+
                             <!-- Type Dropdown -->
                             <div class="col-md-5">
-                                <dropdown ng-model="assignAssetSearchType" no-placeholder-item items="assignAssetSearchTypes"></dropdown>                        
+                                <dropdown ng-model="assignAssetSearchType" no-placeholder-item items="assignAssetSearchTypes"></dropdown>
                             </div>
 
                             <!-- Search button -->
@@ -98,7 +98,7 @@
                                         </button>
                                     </td>
                                 </tr>
-                            </table>                                                    
+                            </table>
                         </div>
                     </div>
                     <prev-next-page-pagination page="currentSearchResults.page" total="currentSearchResults.totalNumberOfPages" next="nextVesselPage" prev="prevVesselPage"></prev-next-page-pagination>
@@ -127,11 +127,11 @@
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_latitude' | i18n}}</label>
                 <div class="value">{{position.position.latitude}}</div>
-            </div>  
+            </div>
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_longitude' | i18n}}</label>
                 <div class="value">{{position.position.longitude}}</div>
-            </div>  
+            </div>
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_measured_speed' | i18n}}</label>
                 <div class="value">{{position.speed}} {{"movement.manual_position_field_unit_knots" | i18n}}</div>
@@ -139,8 +139,8 @@
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_course' | i18n}}</label>
                 <div class="value">{{position.speed}} {{"movement.manual_position_field_unit_degrees" | i18n}}</div>
-            </div>                
-        </div>            
+            </div>
+        </div>
     </div>
 
     <div ng-if="modalStatusText" ng-class="modalStatusClass" class="alert" style="padding: 5px 15px; margin: 15px -10px;">
@@ -151,9 +151,9 @@
         <leaflet center="center" markers="markers" height="200px" width="100%"></leaflet>
     </div>
 
-    <div class="row">
+    <div class="row" ng-if="!readOnly">
         <div class="col-md-12">
-            <div class="sectionHeader">                        
+            <div class="sectionHeader">
                 {{'common.actions' | i18n}}
             </div>
         </div>
@@ -167,10 +167,10 @@
 </div>
 
 <div class="modal-footer">
-    <div class="row buttons">
+    <div class="row buttons" ng-if="!readOnly">
         <div class="buttonGroups">
             <div class="buttonGroup">
-                <a class="button" ng-click="cancel()">{{"common.cancel" | i18n}}</a>                    
+                <a class="button" ng-click="cancel()">{{"common.cancel" | i18n}}</a>
             </div>
             <div class="buttonGroup button-group-right">
                 <a ng-show="acceptAndPollIsAllowed()" class="button" ng-click="acceptAndPoll()">
@@ -182,8 +182,15 @@
                 </button>
                 <button class="btn btn-success button" type="submit" ng-click="accept()">
                     <i class="fa fa-check"></i> {{"alarms.position_report_accept" | i18n}}
-                </button>                    
+                </button>
             </div>
+        </div>
+    </div>
+    <div class="row buttons" ng-if="readOnly">
+        <div class="buttonGroup button-group-right">
+            <button class="btn btn-primary button" ng-click="cancel()">
+                {{"common.close" | i18n}}
+            </button>
         </div>
     </div>
 </div>

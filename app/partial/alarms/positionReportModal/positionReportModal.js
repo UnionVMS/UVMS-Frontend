@@ -1,7 +1,9 @@
-angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($scope, $log, $modalInstance, locale, position, GetListRequest, SearchResults, vesselRestService) {
+angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($scope, $log, $modalInstance, locale, position, options, GetListRequest, SearchResults, vesselRestService) {
 
     //TODO: Operate on a copy of the item/alarm/position so we can click cancel without updating the original
     $scope.position = position;
+    $scope.options = options;
+    $scope.readOnly = options.readOnly;
 
     $scope.inactivePosition = false;
 
@@ -14,7 +16,7 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
     //Keep track of visibility statuses
     $scope.isVisible = {
         assignAsset : false
-    };    
+    };
 
     $scope.init = function() {
         $scope.addMarkerToMap();
@@ -49,7 +51,7 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
     };
 
     //Is acceptAndPoll allowed?
-    $scope.acceptAndPollIsAllowed = function() {  
+    $scope.acceptAndPollIsAllowed = function() {
         //Only allowed for national vessels
         var nationalFlagState = 'SWE';
         return $scope.position.carrier.flagState === nationalFlagState;
@@ -60,13 +62,13 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
         var label;
         switch(status){
             case 'SUCCESSFUL':
-                label = locale.getString('common.status_successful'); 
+                label = locale.getString('common.status_successful');
                 break;
             case 'PENDING':
-                label = locale.getString('common.status_pending'); 
+                label = locale.getString('common.status_pending');
                 break;
             case 'ERROR':
-                label = locale.getString('common.status_failed'); 
+                label = locale.getString('common.status_failed');
                 break;
             default:
                 label = status;
@@ -107,7 +109,7 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
     }, {
         text: locale.getString('vessel.cfr'),
         code: 'CFR'
-    }];       
+    }];
     $scope.assignAssetSearchType = $scope.assignAssetSearchTypes[0].code;
 
     //Perform the serach
@@ -177,7 +179,7 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
 
 angular.module('unionvmsWeb').factory('PositionReportModal', function($modal) {
     return {
-        show: function(position) {
+        show: function(position, options) {
             return $modal.open({
                 templateUrl: 'partial/alarms/positionReportModal/positionReportModal.html',
                 controller: 'PositionReportModalCtrl',
@@ -186,6 +188,9 @@ angular.module('unionvmsWeb').factory('PositionReportModal', function($modal) {
                 resolve:{
                     position : function (){
                         return position;
+                    },
+                    options : function (){
+                        return options;
                     },
                 }
             }).result;

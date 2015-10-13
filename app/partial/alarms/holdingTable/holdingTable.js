@@ -152,10 +152,17 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
             return exportItems.reduce(
                 function(csvObject, item){
                     if($scope.filterOnStatus(item)){
+                        var affectedObjectText;
+                        if(angular.isDefined(item.vessel)){
+                            affectedObjectText = item.vessel.name;
+                        }else if(angular.isDefined(item.assetId)){
+                            affectedObjectText = item.assetId.type +' - ' +item.assetId.value;
+                        }
+
                         var csvRow = [
                             item.status,
                             item.openedDate,
-                            item.affectedObject,
+                            affectedObjectText,
                             item.ruleName,
                             item.sender,
                             item.resolvedDate,
@@ -206,7 +213,8 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
             status : 'PENDING'
         };
 
-        PositionReportModal.show(position).then(function(result) {
+        var options = {};
+        PositionReportModal.show(position, options).then(function(result) {
             //Nothing
         });
     };

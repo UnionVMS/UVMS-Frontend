@@ -16,8 +16,6 @@
     "alarms_table_rule" : "Rule",
     "alarms_table_sender" : "Sender",
     "alarms_table_position" : "Position",
-    "alarms_table_positions" : "Positions",
-    "alarms_table_positions_see_on_map" : "See on map",
     "alarms_table_date_resolved" : "Date resolved",
     "alarms_table_resolved_by" : "Resolved by",
     "alarms_table_resolve" : "Resolve",

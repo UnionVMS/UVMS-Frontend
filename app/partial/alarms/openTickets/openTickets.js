@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService){
+angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, PositionReportModal, ManualPosition){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -110,6 +110,35 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         });
     };
 
+    $scope.showOnMap = function(item){
+
+        //Create dummy position for now
+        //TODO: Use real message values
+        var position = new ManualPosition();
+        position.id = 123456;
+        position.speed = 23.3;
+        position.course = 134;
+        position.time = item.openedDate;
+        position.updatedTime = item.openedDate;
+        position.status = "010";
+        position.archived = false;
+        position.position.longitude = 11.82;
+        position.position.latitude = 54.56;
+        position.carrier.cfr ="SWE0001234";
+        position.carrier.name ="Nordvåg";
+        position.carrier.externalMarking ="VG40";
+        position.carrier.ircs ="SKRM";
+        position.carrier.flagState ="SWE";
+        position.message = {
+            status : 'PENDING'
+        };
+
+        var options = {
+            readOnly : true
+        };
+        PositionReportModal.show(position, options);
+    };
+
     //Print the exchange logs
     $scope.print = function(){
         alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
@@ -143,12 +172,17 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
             return exportItems.reduce(
                 function(csvObject, item){
                     if($scope.filterOnStatus(item)){
+                        var affectedObjectText;
+                        if(angular.isDefined(item.vessel)){
+                            affectedObjectText = item.vessel.name;
+                        }else if(angular.isDefined(item.assetId)){
+                            affectedObjectText = item.assetId.type +' - ' +item.assetId.value;
+                        }
                         var csvRow = [
                             item.status,
                             item.openedDate,
-                            item.affectedObject,
+                            affectedObjectText,
                             item.ruleName,
-                            item.sender,
                             item.resolvedDate,
                             item.resolvedBy
                         ];

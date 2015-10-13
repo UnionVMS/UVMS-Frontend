@@ -1,40 +1,44 @@
 <div class="row">
-    <div search-results-table search="currentSearchResults" load-next-page-function="loadNextPage" class="col-md-12 holding-table">
-    
+    <div search-results-table search="currentSearchResults" load-next-page-function="loadNextPage" class="col-md-12 tickets-table">
+
         <table class="searchResults colorOdd">
             <thead>
                 <tr>
                     <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
-                    <th></th>              
+                    <th></th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'openedDate'">{{'alarms.alarms_table_date_openend' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'affectedObject'">{{'alarms.alarms_table_object_affected' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'assetId.vessel.name'">{{'alarms.alarms_table_object_affected' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'ruleName'">{{'alarms.alarms_table_rule' | i18n}}</th>
-                    <th>{{'alarms.alarms_table_positions' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'resolvedDate'">{{'alarms.alarms_table_date_resolved' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'resolvedBy'">{{'alarms.alarms_table_resolved_by' | i18n}}</th>                    
-                    <th show-if-allowed="Rules:manageAlarmsOpenTickets"></th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'resolvedBy'">{{'alarms.alarms_table_resolved_by' | i18n}}</th>
+                    <th class="actions"></th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:filterOnStatus">
                     <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
                     <td class="status">
-                        <span class="label" ng-class="{CLOSED:'label-success', OPEN:'label-danger'}[item.status]">
+                        <span class="label" ng-class="{CLOSED:'label-success', PENDING:'label-warning', OPEN:'label-danger'}[item.status]">
                             {{item.status}}
                         </span>
-                    </td>                    
+                    </td>
                     <td>{{item.openedDate}}</td>
-                    <td class="link">{{item.affectedObject}}</td>
+                    <td>
+                        <span class="link" ng-show="item.vessel">{{item.vessel.name}}</span>
+                        <span ng-show="!item.vessel && item.assetId">{{item.assetId.type}}: {{item.assetId.value}}</span>
+                    </td>
                     <td>{{item.ruleName}}</td>
-                    <td class="link">{{'alarms.alarms_table_positions_see_on_map' | i18n}}</td>
                     <td>{{item.resolvedDate}}</td>
                     <td class="link">{{item.resolvedBy}}</td>
-                    <td class="textAlignCenter" show-if-allowed="Rules:manageAlarmsOpenTickets">
-                        <button ng-if="item.isOpen()" type="button" class="btn btn-sm btn-primary" ng-click="closeItem(item)" title="{{'alarms.alarms_table_close_title' | i18n}}">{{'alarms.alarms_table_close' | i18n | uppercase}}</button>                       
+                    <td>
+                        <button class="btn btn-sm btn-primary" ng-click="showOnMap(item)" title="{{'common.show_on_map' | i18n}}">
+                            <span class="fa fa-map-o"></span>
+                        </button>
+                        <button show-if-allowed="Rules:manageAlarmsOpenTickets"  ng-if="item.isOpen()" type="button" class="btn btn-sm btn-primary" ng-click="closeItem(item)" title="{{'alarms.alarms_table_close_title' | i18n}}">{{'alarms.alarms_table_close' | i18n | uppercase}}</button>
                     </td>
                 </tr>
             </tbody>
         </table>
-        
+
     </div>
 </div>

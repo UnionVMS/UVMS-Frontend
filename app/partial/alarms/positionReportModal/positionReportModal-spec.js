@@ -27,7 +27,7 @@ describe('PositionReportModalCtrl', function() {
             status : 'PENDING'
         };
 
-        ctrl = $controller('PositionReportModalCtrl', {$scope: scope, $modalInstance: {}, position: position});
+        ctrl = $controller('PositionReportModalCtrl', {$scope: scope, $modalInstance: {}, position: position, options: {}});
     }));	
 
 	it('should ...', inject(function() {
