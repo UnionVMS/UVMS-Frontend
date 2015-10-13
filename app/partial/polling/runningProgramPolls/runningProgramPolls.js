@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($scope, pollingRestService, alertService, locale, SearchResults, userService){
+angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($scope, pollingRestService, alertService, locale, SearchResults, SearchResultListPage, userService){
 
     //Does the user have access to start/stop/delete program polls?
     $scope.accessToManagePolls = userService.isAllowed('managePolls', 'Union-VMS', true);
@@ -15,7 +15,10 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
     //Success getting running program polls
     var getRunningPollsSuccess = function(runningPolls){
         $scope.currentSearchResults.setLoading(false);
-        $scope.currentSearchResults.items = runningPolls;
+        var page = new SearchResultListPage(runningPolls);
+        page.currentPage = undefined;
+        page.totalNumberOfPages = undefined;
+        $scope.currentSearchResults.updateWithNewResults(page);
     };
 
     //Error getting running program polls
@@ -27,7 +30,7 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
     //Update (replace) a program poll in the array of program polls
     var updateProgramPollInResultsArray = function(oldProgramPoll, updatedProgramPoll){
         var programPollIndex = $scope.currentSearchResults.items.indexOf(oldProgramPoll);
-        $scope.currentSearchResults.items[programPollIndex] = updatedProgramPoll;        
+        $scope.currentSearchResults.items[programPollIndex] = updatedProgramPoll;
     };
 
     // Start a program poll
@@ -68,26 +71,26 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
         }
     };
 
-    //Delete a program poll    
-    $scope.deleteProgramPoll = function(programPoll){   
+    //Delete a program poll
+    $scope.deleteProgramPoll = function(programPoll){
         if($scope.accessToManagePolls){
             pollingRestService.inactivateProgramPoll(programPoll).then(
                 function(updatedProgramPoll){
                     //Remove program poll from list
                     var programPollIndex = $scope.currentSearchResults.items.indexOf(programPoll);
-                    $scope.currentSearchResults.items.splice(programPollIndex, 1);                
+                    $scope.currentSearchResults.items.splice(programPollIndex, 1);
 
                     alertService.showSuccessMessageWithTimeout(locale.getString('polling.running_program_polls_delete_success'));
                     if($scope.currentSearchResults.items.length === 0){
                         $scope.currentSearchResults.errorMessage = locale.getString("polling.running_program_polls_zero_message");
-                    }                
+                    }
                 },
                 function(error){
                     alertService.showErrorMessage(locale.getString('polling.running_program_polls_delete_error'));
                 }
             );
         }
-    };    
+    };
 
     //Is it possible to start this program?
     $scope.possibleToStart = function(programPoll){
