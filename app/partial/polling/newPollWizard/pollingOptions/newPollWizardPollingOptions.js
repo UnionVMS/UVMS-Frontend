@@ -5,6 +5,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
 
     //Currently waiting for response?
     $scope.loadingResult = false;
+    $scope.loadingMessage = locale.getString('polling.wizard_second_step_creating_polls');
 
     //The polling options
     $scope.pollingOptions = pollingService.getPollingOptions();
