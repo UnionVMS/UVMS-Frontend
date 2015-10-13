@@ -52,15 +52,15 @@ angular.module('unionvmsWeb').factory('Report',function() {
 	        report.hasVesselFilter = filter.vessels.length === 0 ? false : true;
 	        
 	        if (angular.isDefined(filter.vms.positions)){
-	            report.vmsFilters.positions = filter.vms.positions[0];
+	            report.vmsFilters.positions = filter.vms.positions;
 	        }
 	        
 	        if (angular.isDefined(filter.vms.segments)){
-                report.vmsFilters.segments = filter.vms.segments[0];
+                report.vmsFilters.segments = filter.vms.segments;
             }
 	        
 	        if (angular.isDefined(filter.vms.tracks)){
-                report.vmsFilters.tracks = filter.vms.tracks[0];
+                report.vmsFilters.tracks = filter.vms.tracks;
             }
 	        
 	        if (!angular.equals({}, filter.vms)){
@@ -86,24 +86,26 @@ angular.module('unionvmsWeb').factory('Report',function() {
 	    var vmsFilters = {};
 	    if (this.hasVmsFilter === true){
 	        if (this.hasPositionsFilter === true && angular.isDefined(this.vmsFilters.positions)){
-	            vmsFilters.positions = [this.vmsFilters.positions];
+	            vmsFilters.vmsposition = this.vmsFilters.positions;
 	        }
 	        
 	        if (this.hasSegmentsFilter === true && angular.isDefined(this.vmsFilters.segments)){
-                vmsFilters.segments = [this.vmsFilters.segments];
+                vmsFilters.segments = this.vmsFilters.segments;
             }
 	        
 	        if (this.hasTracksFilter === true && angular.isDefined(this.vmsFilters.tracks)){
-                vmsFilters.tracks = [this.vmsFilters.tracks];
+                vmsFilters.tracks = this.vmsFilters.tracks;
             }
 	    }
 	    
 	    var filter = {
-            startDate: this.startDateTime,
-            endDate: this.endDateTime,
-            positionSelector: this.positionSelector,
-            positionTypeSelector: this.positionSelector !== 'all' ? this.positionTypeSelector: undefined,
-            xValue: this.xValue,
+	        common: {
+	            startDate: this.startDateTime,
+	            endDate: this.endDateTime,
+	            positionSelector: this.positionSelector,
+	            positionTypeSelector: this.positionSelector !== 'all' ? this.positionTypeSelector: undefined,
+	            xValue: this.xValue
+	        },
             vessels: this.vesselsSelection,
             vms: vmsFilters,
             areas: this.areas
@@ -113,7 +115,7 @@ angular.module('unionvmsWeb').factory('Report',function() {
 	        id: this.id,
 	        name: this.name,
 	        desc: this.desc !== '' ? this.desc : undefined,
-	        visibility: 'PRIVATE', //FIXME
+	        visibility: angular.isDefined(this.visibility) ? this.visibility : 'PRIVATE',
 	        scopeId: '123', //FIXME
 	        outComponents: angular.toJson(this.components), //FIXME
 	        filterExpression: angular.toJson(filter) //FIXME
