@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, PositionReportModal, ManualPosition){
+angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, PositionReportModal, ManualPosition){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -180,10 +180,10 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
                         }
                         var csvRow = [
                             item.status,
-                            item.openedDate,
+                            $filter('confDateFormat')(item.openedDate),
                             affectedObjectText,
                             item.ruleName,
-                            item.resolvedDate,
+                            $filter('confDateFormat')(item.resolvedDate),
                             item.resolvedBy
                         ];
                         csvObject.push(csvRow);

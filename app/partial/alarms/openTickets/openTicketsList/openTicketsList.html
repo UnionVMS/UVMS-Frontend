@@ -22,13 +22,13 @@
                             {{item.status}}
                         </span>
                     </td>
-                    <td>{{item.openedDate}}</td>
+                    <td>{{item.openedDate | confDateFormat}}</td>
                     <td>
                         <span class="link" ng-show="item.vessel">{{item.vessel.name}}</span>
                         <span ng-show="!item.vessel && item.assetId">{{item.assetId.type}}: {{item.assetId.value}}</span>
                     </td>
                     <td>{{item.ruleName}}</td>
-                    <td>{{item.resolvedDate}}</td>
+                    <td>{{item.resolvedDate | confDateFormat}}</td>
                     <td class="link">{{item.resolvedBy}}</td>
                     <td>
                         <button class="btn btn-sm btn-primary" ng-click="showOnMap(item)" title="{{'common.show_on_map' | i18n}}">

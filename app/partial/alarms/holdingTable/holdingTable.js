@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage, PositionReportModal, ManualPosition, userService, searchService){
+angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage, PositionReportModal, ManualPosition, userService, searchService){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -161,11 +161,11 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
 
                         var csvRow = [
                             item.status,
-                            item.openedDate,
+                            $filter('confDateFormat')(item.openedDate),
                             affectedObjectText,
                             item.ruleName,
                             item.sender,
-                            item.resolvedDate,
+                            $filter('confDateFormat')(item.resolvedDate),
                             item.resolvedBy
                         ];
                         csvObject.push(csvRow);

@@ -261,8 +261,8 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
                         var csvRow = [
                                 item.name,
                                 $scope.getTypeLabelForRule(item),
-                                item.lastTriggered,
-                                item.dateUpdated,
+                                $filter('confDateFormat')(item.lastTriggered),
+                                $filter('confDateFormat')(item.dateUpdated),
                                 item.updatedBy,
                                 item.subscription,
                                 $scope.getStatusLabelForRule(item),

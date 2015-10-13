@@ -75,11 +75,11 @@
     								<span ng-switch-when="true" class="fa fa-arrow-up outgoing" title="{{'exchange.title_outgoing' | i18n}}"></span>
     							</td>
                                 <td><a href ng-click="showMessageDetails(message)" title="{{'exchange.title_details' | i18n}}"><span class="fa fa-search-plus details"></span></a></td>
-    							<td>{{message.dateRecieved | date:"medium"}}</td>
+    							<td>{{message.dateRecieved | confDateFormat}}</td>
     							<td>{{message.sentBy}}</td>
     							<td>{{message.forwardRule}}</td>
     							<td>{{message.recipient}}</td>
-    							<td>{{message.dateForward | date:"medium"}}</td>
+    							<td>{{message.dateForward | confDateFormat}}</td>
     							<td class="status">
                                     <span class="label" ng-class="{SUCCESSFUL:'label-success', PENDING:'label-warning', 'ERROR':'label-danger'}[message.status]">
                                         {{getStatusLabel(message.status) | uppercase}}

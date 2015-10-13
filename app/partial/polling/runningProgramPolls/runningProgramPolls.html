@@ -27,8 +27,8 @@
                     <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" class="runningPollItem">
                         <td>{{item.attributes.VESSEL_NAME}}</td>
                         <td>{{item.attributes.TRANSPONDER | transponderName}}</td>
-                        <td>{{item.startDate | date : "medium"}}</td>
-                        <td>{{item.endDate | date : "medium"}}</td>
+                        <td>{{item.startDate | confDateFormat}}</td>
+                        <td>{{item.endDate | confDateFormat}}</td>
                         <td>{{item.attributes.FREQUENCY | secondsToTimeString}}</td>
                         <td>{{item.attributes.USER}}</td>
                         <td class="actionIcon" ng-class="{inactive:!possibleToStart(item)}">

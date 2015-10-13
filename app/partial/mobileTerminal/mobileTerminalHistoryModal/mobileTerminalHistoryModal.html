@@ -42,7 +42,7 @@
                         <td>{{item.mobileTerminal.attributes.INSTALLED_ON}}</td>
                         <td>{{item.mobileTerminal.attributes.UNINSTALLED_ON}}</td>
                         <td>{{item.mobileTerminal.attributes.SATELLITE_NUMBER}}</td>
-                        <td>{{item.changeDate | date : "medium"}}</td>
+                        <td>{{item.changeDate | confDateFormat}}</td>
                         <td>{{item.comment}}</td>
                         <td><a href="">See logs</a></td>
                     </tr>

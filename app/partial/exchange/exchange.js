@@ -31,8 +31,8 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     var b = new ExchangeService();
     b.name = "Inmarsat-C Burum (MOCK)";
     b.status = "OFFLINE";
-    mockServices.push(b);    
-    
+    mockServices.push(b);
+
 
     $scope.getTransmissionStatuses = function() {
         $scope.transmissionStatuses.clearForSearch();
@@ -65,14 +65,14 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     };
 
     $scope.searchExchange = function() {
-        $scope.exchangeLogsSearchResults.clearForSearch();        
-        
+        $scope.exchangeLogsSearchResults.clearForSearch();
+
         searchService.searchExchange("MESSAGES").then(function(page) {
             $scope.exchangeLogsSearchResults.updateWithNewResults(page);
         },
         function(error) {
             $scope.exchangeLogsSearchResults.setLoading(false);
-            $scope.exchangeLogsSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));            
+            $scope.exchangeLogsSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
         });
     };
 
@@ -98,13 +98,13 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         var label;
         switch(status){
             case 'SUCCESSFUL':
-                label = locale.getString('common.status_successful'); 
+                label = locale.getString('common.status_successful');
                 break;
             case 'PENDING':
-                label = locale.getString('common.status_pending'); 
+                label = locale.getString('common.status_pending');
                 break;
             case 'ERROR':
-                label = locale.getString('common.status_failed'); 
+                label = locale.getString('common.status_failed');
                 break;
             default:
                 label = status;
@@ -117,13 +117,13 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         var label;
         switch(status){
             case 'ONLINE':
-                label = locale.getString('exchange.transmission_status_online'); 
+                label = locale.getString('exchange.transmission_status_online');
                 break;
             case 'OFFLINE':
-                label = locale.getString('exchange.transmission_status_offline'); 
+                label = locale.getString('exchange.transmission_status_offline');
                 break;
             case 'STOPPED':
-                label = locale.getString('exchange.transmission_status_stopped'); 
+                label = locale.getString('exchange.transmission_status_stopped');
                 break;
             default:
                 label = status;
@@ -156,7 +156,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         ];
 
         //Set the data columns
-        var getData = function() {            
+        var getData = function() {
             var exportItems;
             //Export only selected items
             if(onlySelectedItems){
@@ -167,14 +167,14 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
                 exportItems = $scope.exchangeLogsSearchResults.items;
             }
             return exportItems.reduce(
-                function(csvObject, item){ 
+                function(csvObject, item){
                     if($scope.filterIncomingOutgoing(item)){
                         var csvRow = [
-                            $filter('date')(item.dateRecieved, "medium"),
-                            item.sentBy, 
+                            $filter('confDateFormat')(item.dateRecieved),
+                            item.sentBy,
                             item.recipient,
                             item.forwardRule,
-                            $filter('date')(item.dateForward, "medium"),
+                            $filter('confDateFormat')(item.dateForward),
                             $scope.getStatusLabel(item.status)
                         ];
                         csvObject.push(csvRow);
@@ -185,7 +185,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         };
 
         //Create and download the file
-        csvService.downloadCSVFile(getData(), header, filename);        
+        csvService.downloadCSVFile(getData(), header, filename);
     };
 
     //Callback function for the "edit selection" dropdown
@@ -200,7 +200,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     $scope.selectedItems = [];
 
     //Handle click on the top "check all" checkbox
-    $scope.checkAll = function(){ 
+    $scope.checkAll = function(){
         if($scope.isAllChecked()){
             //Remove all
             $scope.clearSelection();
@@ -220,7 +220,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
             $scope.removeFromSelection(item);
         }else{
             $scope.addToSelection(item);
-        }      
+        }
     };
 
     $scope.isAllChecked = function(){

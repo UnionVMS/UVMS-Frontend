@@ -26,8 +26,8 @@
                     </td>
     				<td>{{item.name}}</td>
     				<td>{{getTypeLabelForRule(item)}}</td>
-    				<td>{{item.lastTriggered}}</td>
-                    <td>{{item.dateUpdated}}</td>
+    				<td>{{item.lastTriggered | confDateFormat}}</td>
+                    <td>{{item.dateUpdated | confDateFormat}}</td>
                     <td class="link">{{item.updatedBy}}</td>
                     <td class="subscription">
                         <div ng-if="item.active && item.isSubscriptionPossible()">
