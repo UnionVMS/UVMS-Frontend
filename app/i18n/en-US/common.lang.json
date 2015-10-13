@@ -31,6 +31,9 @@
     "inactive" : "Inactive",
     "invalid" : "Invalid",
     "kw" : "kW",
+    "loading_page" : "Loading data from server...",
+    "loading_page_error" : "Error loading page",
+    "loading_page_error_message" : "Error message",
     "minutes" : "Minutes",
     "meters_short" : "m",
     "next" : "Next" ,
@@ -63,6 +66,7 @@
     "search_zero_results_error" : "No result matching your search criteria was found.",
     "simple_search" : "Simple search",
     "source" : "Source",
+    "show_on_map" : "Show on map",
     "status" : "Status",
     "status_failed": "Failed",
     "status_pending": "Pending",
@@ -91,6 +95,7 @@
     "yes" : "Yes",
     "multiple_selected" :"Two or more selected",
     "one_selected" : "One selected",
+    "all_selected" : "All selected",
     "multiple_select_dropdown_default_text" : "Select",
     "error_getting_data_from_server" : "Error getting data from server."
 }

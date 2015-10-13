@@ -10,7 +10,7 @@
 <body>
 
     <div id="appLoading">
-        <div ng-show="loadingIndicator" class="loadingIndicator"><i class="fa fa-spinner fa-spin fa-pulse fa-2x spinner"></i></div>
+        <div class="loadingIndicator"><div class="spinnerOverlay"></div><div class="spinner"><div class="circle"></div><div class="circle"></div></div></div>
     </div>
 
     <!-- Livereload script for development only (stripped during dist build) -->
@@ -277,14 +277,19 @@
     <script src="service/alarms/alarmRestService.js"></script>
     <script src="service/spatial/spatialRestService.js"></script>
     <script src="partial/spatial/reportsPanel/reportForm/areasSelectionModal/areaModel.js"></script>
+    <script src="service/common/httpPendingRequestsService.js"></script>
     <!-- Add New Component JS Above -->
 
     <div ui-view name="unionvmsHeader"></div>
-    <div ui-view name="unionvmsAlerts"></div>
 
-    <div id="content">
-        <div ui-view name="unionvmsError"></div>
-        <div ui-view name="app"></div>
+    <div id="contentWrapper">
+        <div id="content" loading-indicator="loadingPage" message="loadingPageMessage">
+            <div ng-hide="loadingPage">
+                <div ui-view name="unionvmsAlerts"></div>
+                <div ui-view name="unionvmsError"></div>
+                <div ui-view name="app"></div>
+            </div>
+        </div>
     </div>
 
     <div ui-view name="unionvmsFooter"></div>

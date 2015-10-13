@@ -243,16 +243,6 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
             resolve: {}
         })
-        .state('app.admin', {
-            url: '/admin',
-            views: {
-                modulepage: {
-                    templateUrl: 'partial/admin/adminLog/adminLog.html',
-                    controller: 'AuditlogCtrl'
-                }
-            },
-            resolve: {}
-        })
         .state('app.reporting', {
             url: '/reporting',
             views: {
@@ -336,10 +326,9 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
         });
 
-        //$urlRouterProvider.otherwise('/today');
 });
 
-unionvmsWebApp.run(function($log, $rootScope, $state, errorService) {
+unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, userService, locale, httpPendingRequestsService) {
 
     $rootScope.safeApply = function(fn) {
         var phase = $rootScope.$$phase;
@@ -352,13 +341,44 @@ unionvmsWebApp.run(function($log, $rootScope, $state, errorService) {
         }
     };
 
+    //Show spinner after 600ms when loading page if page hasn't loaded
+    $rootScope.loadingPage = false;
+    var showPageNavigationSpinnerTimeout;
+    var showSpinnerAfterMilliSeconds = 600;
+
+    //Handle state change start
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+        //Cancel http requests on page navigation
+        if (toState.url !== fromState.url) {
+            httpPendingRequestsService.cancelAll();
+        }
+
+        $timeout.cancel(showPageNavigationSpinnerTimeout);
+        //Only show spinner if user is logged in
+        if(userService.isLoggedIn()){
+            showPageNavigationSpinnerTimeout = $timeout(function(){
+                $rootScope.loadingPageMessage = locale.getString('common.loading_page');
+                $rootScope.loadingPage = true;
+            }, showSpinnerAfterMilliSeconds);
+        }
+    });
+
+    //Handle state change success
+    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+        $timeout.cancel(showPageNavigationSpinnerTimeout);
+        $rootScope.loadingPage = false;
+    });
+
     //Handle state change error
     $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error){
-        var message = 'Error loading page.',
-            errorMessage = ' Error message';
+        $timeout.cancel(showPageNavigationSpinnerTimeout);
+        $rootScope.loadingPage = false;
+
+        var message = locale.getString('common.loading_page_error'),
+            errorMessage = locale.getString('common.loading_page_error_message');
 
         if(angular.isDefined(error)){
-            message += ' ' + errorMessage +': ' +error;
+            message += '. ' + errorMessage +': ' +error;
         }
 
         errorService.setErrorMessage(error);
@@ -417,68 +437,54 @@ unionvmsWebApp.factory('initService',function(configurationService, locale, tmhD
     return initService;
 });
 
-unionvmsWebApp.config(['$httpProvider', 'authInterceptorProvider', 'envConfig', function Config($httpProvider, authInterceptorProvider, envConfig, $log) {
-    // Please note we're annotating the function so that the $injector works when the file is minified
-
-    /*authInterceptorProvider.authFilter = ['config', '$log', function (config, $log) {
-        //myService.doSomething();
-
-        var skipURL = /^(template|usm|assets).*?\.(html|json)$/i.test(config.url);
-        var logmsg = skipURL?'SKIPPING':'setting auth';
-        $log.debug('authFilter '+ logmsg +' on url :' + config.url);
-        return skipURL;
-    }];*/
-
-    authInterceptorProvider.rest_api_base = envConfig.rest_api_base;
-    $httpProvider.interceptors.push('authInterceptor');
-}]);
-
+//URLs that should go the REST apis
+var restApiURLS = [
+    '/vessel/rest',
+    '/mobileterminal/rest/',
+    '/exchange/rest/',
+    '/movement/rest/',
+    '/audit/rest/',
+    '/rules/rest/',
+    '/reporting/rest/',
+    '/spatial/rest/',
+    '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'
+];
 
 //Request interceptor that routes REST api request to the REST api server
-unionvmsWebApp.config(function ($httpProvider) {
-    //URLs that should go the REST apis
-    var restApiURLS = [
-        '/vessel/rest',
-        '/mobileterminal/rest/',
-        '/exchange/rest/',
-        '/movement/rest/',
-        '/audit/rest/',
-        '/rules/rest/',
-        '/reporting/rest/',
-        '/spatial/rest/',
-        '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'
-    ];
-
-    $httpProvider.interceptors.push(function ($q, envConfig, $log) {
-         return {
-            'request': function (request) {
-                var isRESTApiRequest = false;
-                $.each(restApiURLS, function(i, val){
-                    if(request.url.indexOf(val) === 0){
-                        isRESTApiRequest = true;
-                        return false;
-                    }
-                });
-                //Change request url
-                if(isRESTApiRequest){
-                    var restAPIBaseUrl = envConfig.rest_api_base;
-                    var newUrl = restAPIBaseUrl + request.url;
-                    $log.debug("Reroute request to " + request.url +" to " +newUrl);
-                    request.url = newUrl;
-                }
-
-                return request || $q.when(request);
+unionvmsWebApp.factory('HttpRequestRESTCallInterceptor', function ($q, envConfig, $log) {
+    return {
+      request: function (request) {
+        var isRESTApiRequest = false;
+        $.each(restApiURLS, function(i, val){
+            if(request.url.indexOf(val) === 0){
+                isRESTApiRequest = true;
+                return false;
             }
-         };
-    });
+        });
+        //Change request url
+        if(isRESTApiRequest){
+            var restAPIBaseUrl = envConfig.rest_api_base;
+            var newUrl = restAPIBaseUrl + request.url;
+            $log.debug("Reroute request to " + request.url +" to " +newUrl);
+            request.url = newUrl;
+        }
+
+        return request || $q.when(request);
+      }
+    };
 });
 
+//Add HTTP request interceptors
+unionvmsWebApp.config(function ($httpProvider) {
+    //Authenticated?
+    $httpProvider.interceptors.push('authInterceptor');
+    //Store request to be able to cancel it
+    $httpProvider.interceptors.push('HttpRequestTimeoutInterceptor');
+    //Update URL for REST api calls
+    $httpProvider.interceptors.push('HttpRequestRESTCallInterceptor');
+});
 
-
-
-///Bootstrap the application by getting the environment config that points out the REST api URL
-var envConfigJsonPath = "config.json?ts=" +(new Date()).getTime();
-
+//Handle error durring app startup
 function handleEnvironmentConfigurationError(error, $log){
     $log.error("Error loading environment configuration.", error);
     if(angular.isDefined(error.status) && angular.isDefined(error.statusText)){
@@ -490,6 +496,9 @@ function handleEnvironmentConfigurationError(error, $log){
     $('#appLoading').remove();
     $("body").append('<div class="appErrorContainer"><i class="fa fa-exclamation-triangle"></i> Error loading environment configuration<div>' +error +'</div></div>');
 }
+
+///Bootstrap the application by getting the environment config that points out the REST api URL
+var envConfigJsonPath = "config.json?ts=" +(new Date()).getTime();
 
 function getEnvironmentConfig(envConfig) {
     var initInjector = angular.injector(["ng"]);

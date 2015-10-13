@@ -123,17 +123,48 @@ html {
   min-height: 100%;
 }
 
+@pageBackgroundColor:#ecf0f1;
+@headerHeight:82px;
 body{
     width: 100%;
-    background-color: #ecf0f1;
+    background-color: @pageBackgroundColor;
     font-family: Lato, Arial;
 }
 
-#content{
-    min-height: 400px;
-    margin-bottom: @footerHeight;
+//Loading indicator shown when app starts
+#appLoading{
+    height: 100%;
+    width: 100%;
 }
 
+//Loading indicator shown when app starts and when a page loads
+#appLoading .loadingIndicator, #content>.loadingIndicator{
+    position:fixed;
+    top:@headerHeight;
+    z-index: 15;
+
+    .spinnerOverlay{
+        background-color:@pageBackgroundColor;
+    }
+}
+
+#contentWrapper{
+    position: relative;
+    #content{
+        min-height: 400px;
+        margin-bottom: @footerHeight;
+
+        //Loading indicator shown when a page loads
+        &>.loadingIndicator{
+            top:82px;
+            .spinner{
+                top:calc(~"50% - 80px");
+            }
+        }
+    }
+}
+
+//Error message shown when app fails (e.g. when page resolves fail)
 .appErrorContainer {
     position:absolute;
     top: 0;
