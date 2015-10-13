@@ -2,7 +2,7 @@
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $modal service used above.
 
-angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function ($scope, $modalInstance, locale, searchService, SearchField, SavedSearchGroup, savedSearchService, searchType, options, userService) {
+angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function ($scope, $modalInstance, locale, searchService, SearchField, SavedSearchGroup, savedSearchService, searchType, options, userService, alertService) {
 
     var isDynamic = false,
         searchFields,
@@ -105,11 +105,16 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
     };
 
     var onSaveSuccess = function(response){
+        alertService.showSuccessMessageWithTimeout(locale.getString('common.saved_search_create_success'));
+        $modalInstance.close();
+    };
+
+    var onUpdateSuccess = function(response){
+        alertService.showSuccessMessageWithTimeout(locale.getString('common.saved_search_updated_success'));
         $modalInstance.close();
     };
 
     var onSaveError = function(response){
-        //Nothing
         console.error("Error saving search");
         $scope.error = true;
     };
@@ -122,7 +127,7 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
             $scope.saveData.existingGroup.searchFields = searchFields;
 
             updateSearchFunction($scope.saveData.existingGroup)
-               .then(onSaveSuccess, onSaveError);
+               .then(onUpdateSuccess, onSaveError);
         }
         //Save new group
         else{

@@ -52,6 +52,8 @@
     "saved_search_delete_confirm_text": "Are you sure you want to delete this saved search?",
     "saved_search_delete_error": "The saved search couldn't be removed.",
     "saved_search_delete_success": "The saved search was succesfully removed.",
+    "saved_search_create_success": "The saved search was succesfully created.",
+    "saved_search_updated_success": "The saved search was succesfully updated.",
     "saved_search_no_criterias_error": "You can't save this since no search criterias has been selected.",
     "saved_search_group_exists" : "There is already a group with that name. Please choose another name of the group.",
     "search" : "Search",
