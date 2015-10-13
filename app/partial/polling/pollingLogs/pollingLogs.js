@@ -1,6 +1,10 @@
-angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll, PollStatus, searchService, alertService, locale, SearchResults){
+angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $stateParams, Poll, PollStatus, searchService, alertService, locale, SearchResults){
 
     $scope.activeTab = "POLLING_LOGS";
+
+    //Show poll by ID
+    $scope.pollId = undefined;
+    $scope.showPollByID = false;
 
     $scope.currentSearchResults = new SearchResults('status[0].time', false, locale.getString('polling.polling_logs_search_zero_results_error'));
 
@@ -35,11 +39,18 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll
     $scope.organizations.push({"text":"Control Authority 2", "code":"CA2"});
 
     var init = function(){
-        //Load list with polls from start
-        $scope.searchPolls();
-
-        //Set search date to today
-        $scope.advancedSearchObject.DATE = DATE_TODAY;
+        $scope.pollId = $stateParams.id;
+        //Load poll details by searching for a poll by GUID
+        if(angular.isDefined($scope.pollId)){
+            $scope.activeTab = "POLLING_LOGS_BY_ID";
+            $scope.currentSearchResults.zeroResultsErrorMessage = locale.getString('polling.polling_logs_by_id_search_zero_results_error');
+            $scope.getPolls($scope.pollId);
+        }else{
+            //Set search date to today
+            $scope.advancedSearchObject.DATE = DATE_TODAY;
+            //Load list with polls from start
+            $scope.searchPolls();
+        }
     };
 
 
@@ -75,8 +86,11 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll
         }
     });
 
+
+
     //Get list of polls matching the current search criterias
-    $scope.searchPolls = function(){
+    //If pollId is set, search for that one
+    $scope.getPolls = function(pollId){
 
         //Reset currentSearchResults
         $scope.currentSearchResults.clearForSearch();
@@ -84,10 +98,22 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, Poll
         //Create criterias and do the search
         searchService.resetPage();
         searchService.resetSearchCriterias();
-        searchService.setDynamic(true);
-        searchService.setSearchCriteriasToAdvancedSearch();
+
+        //Search for pollId
+        if(pollId){
+            $scope.showPollByID = true;
+            searchService.addSearchCriteria('POLL_ID', pollId);
+        }else{
+            searchService.setDynamic(true);
+            searchService.setSearchCriteriasToAdvancedSearch();
+        }
         searchService.searchPolls()
                 .then(updateSearchResults, onGetSearchResultsError);
+    };
+
+    //Callback from search function
+    $scope.searchPolls = function(){
+        $scope.getPolls();
     };
 
     //Update the search results

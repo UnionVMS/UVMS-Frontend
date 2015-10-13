@@ -1,8 +1,8 @@
 <div>
     <div static-include="partial/polling/pollingPageHeader/pollingPageHeader.html"></div>
 
-    <div class="container containerWithBottomPadding ">
-        <div ng-include="'partial/polling/runningProgramPolls/runningProgramPolls.html'"></div>
+    <div class="container containerWithBottomPadding">
+        <div ng-include="'partial/polling/runningProgramPolls/runningProgramPolls.html'" ng-if="!showPollByID"></div>
 
         <div class="card pollingLogsContainer">
             <div class="row">
@@ -10,7 +10,14 @@
                     <form>
                         <table class="searchResults colorOdd pollingLogsTable">
                             <thead>
-                                <tr class="searchInputRow dateSearch">
+                                <tr class="searchInputRow dateSearch" ng-if="showPollByID">
+                                    <th colspan="9">&nbsp;</th>
+                                    <th class="printAndExport">
+                                        <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportAsFile()"></i>
+                                        <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>
+                                    </th>
+                                </tr>
+                                <tr class="searchInputRow dateSearch"  ng-if="!showPollByID">
                                     <th>&nbsp;</th>
                                     <th>
                                         <dropdown ng-model="advancedSearchObject.DATE" items="dateSearchItems" no-placeholder-item></dropdown>
@@ -36,7 +43,7 @@
                                         <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>
                                     </th>
                                 </tr>
-                                <tr class="searchInputRow">
+                                <tr class="searchInputRow" ng-if="!showPollByID">
                                     <th>&nbsp;</th>
                                     <th>
                                         <input type="text"/ placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.NAME">

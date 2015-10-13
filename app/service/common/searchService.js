@@ -114,12 +114,6 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         searchPolls : function(){
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
 
-            //TODO: Replace mock-ids this when exchange is in place
-            getListRequest.criterias = [
-                {"key" :"POLL_ID", "value":"21c481af-6ce4-471a-87e6-7c941aeb3197"},
-                {"key" :"POLL_ID", "value":"020cbba6-06f1-477e-a463-621a27ed0a09"}
-            ];
-
             var deferred = $q.defer();
             pollingRestService.getPollList(getListRequest).then(function(page) {
             //Zero results?

@@ -7,7 +7,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale
     auditLogsTypeOptions.setOptions(auditLogsTypeOptions.getOptions($scope.selectedTab));
 
     $scope.currentSearchResults = new SearchResults('date', false);
-    
+
 	//Sets tabs
 	var setTabs = function (){
             return [
@@ -41,15 +41,15 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale
                 }
             ];
         };
-	
+
 	locale.ready('audit').then(function () {
 		$scope.tabMenu = setTabs();
-    });  
+    });
 
 
     var init = function(){
         auditLogsDefaultValues.resetDefaults();
-        $scope.searchAuditLogs();        
+        $scope.searchAuditLogs();
     };
 
 	// ************ Functions and Scope ************
@@ -96,7 +96,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale
         AuditLogModal.show(audit);
     };
 
-   
+
     $scope.searchAuditLogs = function(append) {
         if(append){
             $scope.currentSearchResults.setLoading(true);
@@ -123,15 +123,27 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale
 
 
     $scope.affectedObjectPath = function(audit) {
-        if (audit.objectType === "Mobile Terminal" && audit.affectedObject) {
-            return "/communication/" + audit.affectedObject;
+        var path;
+        if(audit.affectedObject){
+            switch(audit.objectType){
+                case 'Mobile Terminal':
+                    path = "/communication/" + audit.affectedObject;
+                    break;
+                case 'Asset':
+                    path = "/assets/" + audit.affectedObject;
+                    break;
+                case 'Reports':
+                    path = "/movement/" + audit.affectedObject;
+                    break;
+                case 'Reports':
+                    path = "/movement/" + audit.affectedObject;
+                    break;
+                case 'Poll':
+                    path = "/polling/logs/" + audit.affectedObject;
+                    break;
+            }
         }
-        else  if (audit.objectType === "Asset" && audit.affectedObject) {
-            return "/assets/" + audit.affectedObject;
-        }
-        else if (audit.objectType === "Reports") {
-            return "/movement/" + audit.affectedObject;
-        }
+        return path;
     };
 
     $scope.$on("$destroy", function() {

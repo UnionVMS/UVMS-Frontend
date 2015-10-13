@@ -223,6 +223,19 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                 access: 'viewMobileTerminalPolls'
             },
         })
+        .state('app.pollingLogs-id', {
+            url: '/polling/logs/:id',
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/polling/pollingLogs/pollingLogs.html',
+                    controller: 'pollingLogsCtrl'
+                }
+            },
+            resolve: {},
+            data: {
+                access: 'viewMobileTerminalPolls'
+            },
+        })        
         .state('app.auditLog', {
             url: '/admin/auditlog',
             views: {

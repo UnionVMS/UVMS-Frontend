@@ -24,6 +24,7 @@
     "running_program_polls_delete_success" : "The polling program is now removed.",
     "running_program_polls_delete_error" : "The polling program couldn't be removed.",
     "polling_logs_search_zero_results_error" : "No polls matching you search criteria was found.",
+    "polling_logs_by_id_search_zero_results_error" : "The poll could not be found.",
     "polling_logs_search_date_from_placeholder" : "From",
     "polling_logs_search_date_to_placeholder" : "To",
     "polling_logs_table_header_name" : "Name",
