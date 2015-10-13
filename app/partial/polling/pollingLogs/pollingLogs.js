@@ -13,7 +13,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
 
     //DATA FOR DROPDOWNS
     var DATE_CUSTOM = "custom";
-    var DATE_TODAY = "today";
+    var DATE_TODAY = "24";
     $scope.dateSearchItems = [];
     $scope.dateSearchItems.push({"text":"Today", "code":DATE_TODAY});
     $scope.dateSearchItems.push({"text":"This week", "code":"this_week"});
@@ -47,7 +47,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
             $scope.getPolls($scope.pollId);
         }else{
             //Set search date to today
-            $scope.advancedSearchObject.DATE = DATE_TODAY;
+            $scope.advancedSearchObject.DATE_SPAN = DATE_TODAY;
             //Load list with polls from start
             $scope.searchPolls();
         }
@@ -68,17 +68,17 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     //Watch for changes to the START DATE input
     $scope.$watch(function () { return $scope.advancedSearchObject.START_DATE;}, function (newVal, oldVal) {
         if (typeof newVal !== 'undefined') {
-            $scope.advancedSearchObject.DATE = DATE_CUSTOM;
+            $scope.advancedSearchObject.DATE_SPAN = DATE_CUSTOM;
         }
     });
     //Watch for changes to the END DATE input
     $scope.$watch(function () { return $scope.advancedSearchObject.END_DATE;}, function (newVal, oldVal) {
         if (typeof newVal !== 'undefined') {
-            $scope.advancedSearchObject.DATE = DATE_CUSTOM;
+            $scope.advancedSearchObject.DATE_SPAN = DATE_CUSTOM;
         }
     });
     //Watch for changes to the DATE DROPDOWN
-    $scope.$watch(function () { return $scope.advancedSearchObject.DATE;}, function (newVal, oldVal) {
+    $scope.$watch(function () { return $scope.advancedSearchObject.DATE_SPAN;}, function (newVal, oldVal) {
         if (typeof newVal !== 'undefined' && newVal !== DATE_CUSTOM) {
             //Reset start date and end date when changing to something else than custom
             $scope.advancedSearchObject.START_DATE = undefined;
@@ -105,7 +105,8 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
             searchService.addSearchCriteria('POLL_ID', pollId);
         }else{
             searchService.setDynamic(true);
-            searchService.setSearchCriteriasToAdvancedSearch();
+			//TODO: Enable when Exchange is in place
+            //searchService.setSearchCriteriasToAdvancedSearch();
         }
         searchService.searchPolls()
                 .then(updateSearchResults, onGetSearchResultsError);
