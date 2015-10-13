@@ -13,6 +13,22 @@ angular.module('unionvmsWeb').directive('multiselectDropDown', function(locale) 
         },
         templateUrl: 'directive/common/multiselectDropDown/multiselectDropDown.html',
         link: function(scope, element, attrs, fn) {
+
+            //Close dropdown when clicking outside of it
+            $(document).bind('click', function(event){
+                var isClickedElementChildOfPopup = element
+                    .find(event.target)
+                    .length > 0;
+
+                if (isClickedElementChildOfPopup){
+                    return;
+                }
+
+                scope.$apply(function(){
+                    scope.open = false;
+                });
+            });
+
             scope.model = scope.model || [];
             scope.checkAndSelectAll = false;
 
@@ -40,9 +56,13 @@ angular.module('unionvmsWeb').directive('multiselectDropDown', function(locale) 
                 return scope.options.length === scope.model.length;
             };
 
+            scope.checkedAndSelectedNone = function() {
+                return scope.model.length === 0;
+            };
+
             scope.selectAll = function () {
                 scope.model = _.pluck(scope.options, 'code');
-            };            
+            };
 
             scope.deselectAll = function() {
                 scope.model = [];
@@ -65,9 +85,14 @@ angular.module('unionvmsWeb').directive('multiselectDropDown', function(locale) 
 
             scope.dropdownLabel = function() {
                 switch(scope.model.length) {
-                    case 0: return scope.initialtext || locale.getString("common.multiple_select_dropdown_default_text");
-                    case 1: return locale.getString('common.one_selected');
-                    default: return locale.getString('common.multiple_selected');
+                    case 0:
+                        return scope.initialtext || locale.getString("common.multiple_select_dropdown_default_text");
+                    case scope.options.length:
+                        return locale.getString('common.all_selected');
+                    case 1:
+                        return locale.getString('common.one_selected');
+                    default:
+                        return locale.getString('common.multiple_selected');
                 }
             };
         }

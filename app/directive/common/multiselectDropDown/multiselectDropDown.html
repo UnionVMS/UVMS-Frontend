@@ -5,20 +5,20 @@
 			<span class="caret"></span>
 		</button>
 		<ul class='dropdown-menu' aria-labelledby='dropdownMenu'>
-			<li class="multiselectdropdownheaderitem" ng-class="checkedAndSelectedAll() ? 'headeritemselected' : ''" ng-hide="disableCheckall">
+			<li class="multiselectdropdownheaderitem" ng-class="{itemselected : checkedAndSelectedAll()}" ng-hide="disableCheckall">
 				<a data-ng-click='selectAll()'>
-					<i ng-class="checkedAndSelectedAll() ? 'fa fa-check-square-o' : 'fa fa-square-o'"></i>&nbsp;{{checkAll}}
+					<i class="fa fa-check-square-o"></i>&nbsp;{{checkAll}}
 				</a>
 			</li>
-			<li class="multiselectdropdownheaderitem" ng-class="checkedAndSelectedAll() ? '' : 'headeritemselected'" ng-hide="disableCheckall">
+			<li class="multiselectdropdownheaderitem" ng-class="{itemselected : checkedAndSelectedNone()}" ng-hide="disableCheckall">
 				<a data-ng-click='deselectAll();'>
-					<i ng-class="checkedAndSelectedAll() ? 'fa fa-square-o' : 'fa fa-check-square-o'"></i>&nbsp;{{unCheckAll}}
+					<i class="fa fa-check-square-o"></i>&nbsp;{{unCheckAll}}
 				</a>
 			</li>
 			<li class='divider' ng-hide="disableCheckall"></li>
 			<li data-ng-repeat='option in options' class="multiselectdropdownitem" ng-class="{itemselected : isChecked(option.code)}">
 				<a data-ng-click='setSelectedItem()'>
-					<i ng-show='isChecked(option.code)' class="fa fa-check"></i>&nbsp;{{option.text}}
+					<i class="fa fa-check"></i>&nbsp;{{option.text}}
 				</a>
 			</li>
 		</ul>
