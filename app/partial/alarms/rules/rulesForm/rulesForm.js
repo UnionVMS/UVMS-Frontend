@@ -290,13 +290,12 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         }
 
         //Create
-        $scope.waitingForCreateResponse = true;
-        alertService.hideMessage();
-
         var options = {
             textLabel : locale.getString("alarms.rule_create_confirm_text")
         };
         confirmationModal.open(function(){
+            alertService.hideMessage();
+            $scope.waitingForCreateResponse = true;
             ruleRestService.createNewRule($scope.currentRule)
                 .then(createNewRuleSuccess, createNewRuleError);
         }, options);
@@ -312,13 +311,12 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         }
 
         //Update
-        $scope.waitingForCreateResponse = true;
-        alertService.hideMessage();
-
         var options = {
             textLabel : locale.getString("alarms.rule_update_confirm_text")
         };
         confirmationModal.open(function(){
+            alertService.hideMessage();
+            $scope.waitingForCreateResponse = true;
             ruleRestService.updateRule($scope.currentRule)
                 .then(updateRuleSuccess, updateRuleError);
         }, options);
