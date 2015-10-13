@@ -313,7 +313,53 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 
         searchTickets : function(){
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
-            return alarmRestService.getTicketsList(getListRequest);
+            var deferred = $q.defer();
+            alarmRestService.getTicketsList(getListRequest).then(function(page) {
+                //Zero results?
+                if(page.getNumberOfItems() === 0){
+                    deferred.resolve(page);
+                    return;
+                }
+
+                //Get vessels for all vessel assets in page
+                var vesselRequest = new GetListRequest(1, page.getNumberOfItems(), true);
+                $.each(page.items, function(index, alarm) {
+                    if(angular.isDefined(alarm.assetId)){
+                        if(alarm.isVesselAsset()){
+                            vesselRequest.addSearchCriteria("GUID", alarm.assetId.value);
+                        }
+                    }
+                });
+
+                if(vesselRequest.getNumberOfSearchCriterias() === 0){
+                    deferred.resolve(page);
+                    return;
+                }
+
+                vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vessels){
+                    var vesselPage = new VesselListPage(vessels, 1, 1);
+                    //Update alarms page by connecting each alarm to a vessel
+                    $.each(page.items, function(index, alarm) {
+                        if(alarm.isVesselAsset()){
+                            var vessel = vesselPage.getVesselByGuid(alarm.assetId.value);
+                            if(angular.isDefined(vessel)){
+                                alarm.vessel = vessel;
+                            }
+                        }
+                    });
+
+                    deferred.resolve(page);
+
+                }, function(error){
+                    $log.error("Error getting and connecting vessels to alarms.", error);
+                    deferred.reject(error);
+                });
+            }, function(error){
+                $log.error("Error getting alarms.", error);
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
         },
 
         searchAlarms : function(){
