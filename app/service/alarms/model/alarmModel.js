@@ -41,15 +41,15 @@ angular.module('unionvmsWeb').factory('Alarm', function() {
     };
 
     Alarm.prototype.isOpen = function() {
-        return this.status.toUpperCase() === "OPEN";
+        return typeof this.status === 'string' && this.status.toUpperCase() === "OPEN";
     };
 
     Alarm.prototype.isPending = function() {
-        return this.status.toUpperCase() === "PENDING";
+        return typeof this.status === 'string' && this.status.toUpperCase() === "PENDING";
     };
 
     Alarm.prototype.isClosed = function() {
-        return this.status.toUpperCase() === "CLOSED";
+        return typeof this.status === 'string' && this.status.toUpperCase() === "CLOSED";
     };
 
 
