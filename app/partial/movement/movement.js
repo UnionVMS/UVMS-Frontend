@@ -82,11 +82,10 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     };
 
     $scope.searchMovements = function(){
-        if ($scope.currentSearchResults.loading === false){
-            $scope.currentSearchResults.clearForSearch();
-            searchService.searchMovements()
-                .then(retriveMovementsSuccess, retriveMovementsError);
-        }
+        $scope.clearSelection();
+        $scope.currentSearchResults.setLoading(true);
+        searchService.searchMovements()
+            .then(retriveMovementsSuccess, retriveMovementsError);
     };
 
     var retriveMovementsSuccess = function(searchResultListPage){
@@ -99,18 +98,11 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
     };
 
-    $scope.loadNextPage = function(){
-        if ($scope.currentSearchResults.loading === false){
-            if ($scope.currentSearchResults.page < $scope.currentSearchResults.totalNumberOfPages) {
-                //increase page with 1
-                searchService.increasePage();
-                $scope.currentSearchResults.setLoading(true);
-                searchService.searchMovements()
-                    .then(retriveMovementsSuccess, retriveMovementsError);
-
-                //Stop auto refresh
-                $scope.stopAutoRefresh();
-            }
+    //Goto page in the search results
+    $scope.gotoPage = function(page){
+        if(angular.isDefined(page)){
+            searchService.setPage(page);
+            $scope.searchMovements();
         }
     };
 

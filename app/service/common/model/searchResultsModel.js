@@ -13,15 +13,6 @@ angular.module('unionvmsWeb')
         this.equals = equals;
     }
 
-    //Clear for search
-    SearchResults.prototype.clearForSearch = function(){
-        this.errorMessage = "";
-        this.loading = true;
-        this.items.length = 0;
-        this.page = 0;
-        this.totalNumberOfPages = 0;
-    };
-
     SearchResults.prototype.setLoading = function(newLoading){
         this.loading = newLoading;
     };
@@ -55,12 +46,19 @@ angular.module('unionvmsWeb')
         page.currentPage = undefined;
         page.totalNumberOfPages = undefined;
 
-        this.updateWithNewResults(page);
+        this.updateWithNewResults(page, true);
     };
 
     //Update the search results
-    SearchResults.prototype.updateWithNewResults = function(searchResultsListPage){
+    SearchResults.prototype.updateWithNewResults = function(searchResultsListPage, keepOldItems){
+        //Remove old item, set loading to false and remove old error messages
         this.loading = false;
+        this.errorMessage = "";
+        if(!keepOldItems){
+            this.items.length = 0;
+        }
+
+        //Update with new data
         if(searchResultsListPage.totalNumberOfPages === 0 ){
             this.errorMessage = this.zeroResultsErrorMessage;
         } else {

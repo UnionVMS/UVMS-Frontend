@@ -46,7 +46,7 @@
 
                     <div class="col-md-1 textAlignRight printAndExport">
                         <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
-                        <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>              
+                        <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>
                     </div>
                 </div>
 
@@ -69,7 +69,7 @@
     						<tr ng-repeat="message in exchangeLogsSearchResults.items | filter:filterIncomingOutgoing | orderBy:exchangeLogsSearchResults.sortBy:exchangeLogsSearchResults.sortReverse">
                                 <td class="checkboxContainer">
                                     <input type="checkbox" ng-checked="isChecked(message)" ng-click="check(message)"/>
-                                </td>                        
+                                </td>
     							<td class="incoming-outgoing" ng-switch="message.outgoing">
     								<span ng-switch-when="false" class="fa fa-arrow-down incoming" title="{{'exchange.title_incoming' | i18n}}"></span>
     								<span ng-switch-when="true" class="fa fa-arrow-up outgoing" title="{{'exchange.title_outgoing' | i18n}}"></span>
@@ -96,8 +96,10 @@
     				</table>
 
                 </div>
-    
+
             </div>
+
+            <search-results-pagination page='exchangeLogsSearchResults.page' total='exchangeLogsSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
 
 		</div>
 

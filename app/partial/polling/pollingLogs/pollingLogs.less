@@ -8,7 +8,27 @@
         max-width: 100%;
     }
 
+    .searchResultsContainer{
+        min-height: 180px;
+
+        .loadingIndicator{
+            .spinner{
+                margin-top:70px;
+            }
+        }
+
+        &.isEmpty{
+            .loadingIndicator{
+                .spinner{
+                    margin-top:90px;
+                }
+            }
+        }
+    }
 }
+
+
+
 
 
 table.pollingLogsTable{

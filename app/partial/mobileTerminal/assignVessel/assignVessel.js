@@ -3,7 +3,7 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
     var getListRequest;
 
     //Watch for toggle (show) of AssignVessel partial and reset search and selectedVessel when that happens
-    $scope.$watch(function () { 
+    $scope.$watch(function () {
         if(angular.isDefined($scope.isVisible)){
             return $scope.isVisible.assignVessel;
         }
@@ -12,8 +12,8 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
             resetSearch();
             $scope.selectedVessel = undefined;
         }
-    });   
-    
+    });
+
 
     //Reset the search for assign vessel
     var resetSearch = function() {
@@ -23,7 +23,7 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
         $scope.assignVesselSearchType = "ALL";
         $scope.assignVesselSearchInProgress = false;
         getListRequest = new GetListRequest(1, 5, false, []);
-    };    
+    };
 
     //Search objects and results
     $scope.assignVesselSearchTypes = [{
@@ -38,17 +38,17 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
     }, {
         text: locale.getString('vessel.cfr'),
         code: 'CFR'
-    }];   
+    }];
 
     var init = function() {
-        resetSearch();        
+        resetSearch();
     };
 
     //Perform the serach
     $scope.assignVesselSearch = function(){
         //Create new request
         getListRequest = new GetListRequest(1, 5, false, []);
-        $scope.currentSearchResults.clearForSearch();
+        $scope.currentSearchResults.setLoading(true);
 
         //Set search criterias
         var searchValue = $scope.assignVesselFreeText +"*";
@@ -76,20 +76,14 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
     };
 
-    //Get next page
-    $scope.gotoNextPageInAssignVesselSearchResults = function(){
-        getListRequest.page += 1;
-        $scope.currentSearchResults.clearForSearch();
-        vesselRestService.getVesselList(getListRequest)
-            .then(onSearchVesselSuccess, onSearchVesselError);
-    };
-
-    //Get prev page
-    $scope.gotoPrevPageInAssignVesselSearchResults = function(){
-        getListRequest.page -= 1;
-        $scope.currentSearchResults.clearForSearch();
-        vesselRestService.getVesselList(getListRequest)
-            .then(onSearchVesselSuccess, onSearchVesselError);
+    //Goto page in the search results
+    $scope.gotoPage = function(page){
+        if(angular.isDefined(page)){
+            getListRequest.setPage(page);
+            $scope.currentSearchResults.setLoading(true);
+            vesselRestService.getVesselList(getListRequest)
+                .then(onSearchVesselSuccess, onSearchVesselError);
+        }
     };
 
     //Handle click event on select vessel button

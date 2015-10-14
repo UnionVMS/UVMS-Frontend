@@ -38,22 +38,17 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         }
     };
 
-    //Load the next page of the search results
-    $scope.loadNextPage = function(){
-
-        if($scope.currentSearchResults.page < $scope.currentSearchResults.totalNumberOfPages )
-        {
-            //Increase page by 1
-            searchService.increasePage();
-            $scope.currentSearchResults.setLoading(true);
-            searchService.searchVessels()
-            .then(updateSearchResults, onGetSearchResultsError);
+    //Goto page in the search results
+    $scope.gotoPage = function(page){
+        if(angular.isDefined(page)){
+            searchService.setPage(page);
+            $scope.searchVessels();
         }
     };
 
     $scope.searchVessels = function(){
         $scope.clearSelection();
-        $scope.currentSearchResults.clearForSearch();
+        $scope.currentSearchResults.setLoading(true);
         searchService.searchVessels()
             .then(updateSearchResults, onGetSearchResultsError);
     };

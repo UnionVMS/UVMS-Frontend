@@ -1,8 +1,0 @@
-<div class="row loadMorePagination">
-    <div class="col-md-12" ng-show="total > 0">
-        {{'common.search_results_current_page' | i18n:[page, total]}}
-    </div>
-    <div class="col-md-12 textAlignCenter" ng-show="total > 0 && total > page">
-        <span class="link" ng-click="loadmore()"> {{'common.search_results_load_more' | i18n | uppercase}}</span>            
-    </div>
-</div>

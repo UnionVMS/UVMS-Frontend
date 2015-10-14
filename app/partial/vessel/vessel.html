@@ -4,23 +4,26 @@
             <div ng-include="'partial/vessel/vesselForm/vesselForm.html'"></div>
         </div>
 
-        <div class="card" ng-show="isVisible.search">
-            <advanced-search searchfunc="searchVessels" modeltype="'VESSEL'"></advanced-search>
-            <div class="vesselcontainerwrapper">
-                <div class="vesselsearchboxfooter row">
-                    <div class="col-md-2 nopaddingleft">
-                        <dropdown class="" ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
-                    </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-sm addvesselbtn uvmsbtn" ng-click="toggleCreateNewVessel()" type="button" show-if-allowed="manageVessels">
-                            <span class="fa fa-plus-square"></span> {{'vessel.new_asset' | i18n}}
-                        </button>
-                    </div>
+        <div ng-show="isVisible.search">
+            <div class="card">
+                <advanced-search searchfunc="searchVessels" modeltype="'VESSEL'"></advanced-search>
+                <div class="vesselcontainerwrapper">
+                    <div class="vesselsearchboxfooter row">
+                        <div class="col-md-2 nopaddingleft">
+                            <dropdown class="" ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-sm addvesselbtn uvmsbtn" ng-click="toggleCreateNewVessel()" type="button" show-if-allowed="manageVessels">
+                                <span class="fa fa-plus-square"></span> {{'vessel.new_asset' | i18n}}
+                            </button>
+                        </div>
 
-                    <input type="text" class="pull-right" placeholder="Filter" ng-model="currentSearchResults.filter">
+                        <input type="text" class="pull-right" placeholder="Filter" ng-model="currentSearchResults.filter">
+                    </div>
+                    <div ng-include="'partial/vessel/vesselList/vesselList.html'"></div>
                 </div>
-                <div ng-include="'partial/vessel/vesselList/vesselList.html'"></div>
             </div>
+            <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
         </div>
     </div>
 </div>

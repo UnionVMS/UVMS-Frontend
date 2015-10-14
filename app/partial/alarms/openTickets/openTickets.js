@@ -22,7 +22,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
 
     $scope.searchTickets = function() {
         $scope.clearSelection();
-        $scope.currentSearchResults.clearForSearch();
+        $scope.currentSearchResults.setLoading(true);
         searchService.searchTickets()
                 .then(updateSearchResults, onGetSearchResultsError);
     };
@@ -36,6 +36,15 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
     var onGetSearchResultsError = function(error){
         $scope.currentSearchResults.setLoading(false);
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
+    };
+
+
+    //Goto page in the search results
+    $scope.gotoPage = function(page){
+        if(angular.isDefined(page)){
+            searchService.setPage(page);
+            $scope.searchTickets();
+        }
     };
 
     //Handle click on the top "check all" checkbox

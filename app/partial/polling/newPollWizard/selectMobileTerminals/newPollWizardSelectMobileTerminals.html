@@ -4,7 +4,7 @@
     <div class="wizardcontent">
 	    <advanced-search searchfunc="getPollableChannels" vesselGroupCallback="selectGroupCallback()" modeltype="'POLLING_MOBILE_TERMINAL'" advancedsearchvisible="true"></advanced-search>
         <div class="row">
-            <div search-results-table search="currentSearchResults" load-next-page-function="loadNextPage" class="col-md-12">
+            <div search-results-table search="currentSearchResults" class="col-md-12">
                 <div class="scroller">
                     <table class="searchResults polltable colorOdd">
                         <thead>
@@ -39,8 +39,8 @@
                     </table>
                 </div>
             </div>
-
         </div>
+        <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
     </div>
 
     <div class="row wizardFooter">

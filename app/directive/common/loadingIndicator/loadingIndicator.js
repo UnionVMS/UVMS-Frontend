@@ -2,12 +2,24 @@ angular.module('unionvmsWeb').directive('loadingIndicator', function($compile) {
     return {
         scope: {
             loadingIndicator: "=",
-            message: "="
+            message: "=",
+            size: "@",
+            type: "@"
         },
         restrict: 'A',
         link: function(scope, elem, attrs) {
             elem["0"].style.position = 'relative';
-            elem.append($compile('<div ng-show="loadingIndicator" class="loadingIndicator"><div class="spinnerOverlay"></div><div class="spinner"><div class="circle"></div><div class="circle"></div></div><div class="loadingText" ng-show="message"><span ng-bind="message"></span></div></div>')(scope));
+            var spinnerHTML;
+            //SPINNER
+            if(scope.type === "SPINNER"){
+                spinnerHTML = '<i class="fa fa-spinner fa-spin fa-pulse"></i>';
+            }
+            //CIRCLE BOUNCE
+            else{
+                spinnerHTML = '<div class="circle"></div><div class="circle"></div>';
+            }
+
+            elem.append($compile('<div ng-show="loadingIndicator" class="loadingIndicator" ng-class="size"><div class="spinnerOverlay"></div><div class="spinner">' +spinnerHTML +'</div><div class="loadingText" ng-show="message"><span ng-bind="message"></span></div></div>')(scope));
         }
     };
 });

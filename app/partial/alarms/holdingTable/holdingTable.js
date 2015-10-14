@@ -29,7 +29,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
 
     $scope.searchAlarms = function() {
         $scope.clearSelection();
-        $scope.currentSearchResults.clearForSearch();
+        $scope.currentSearchResults.setLoading(true);
         searchService.searchAlarms()
                 .then(updateSearchResults, onGetSearchResultsError);
     };
@@ -45,6 +45,15 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
     };
 
+    //Goto page in the search results
+    $scope.gotoPage = function(page){
+        if(angular.isDefined(page)){
+            $scope.currentSearchResults.setLoading(true);
+            searchService.setPage(page);
+            searchService.searchAlarms()
+                .then(updateSearchResults, onGetSearchResultsError);
+        }
+    };
 
     //Handle click on the top "check all" checkbox
     $scope.checkAll = function(){

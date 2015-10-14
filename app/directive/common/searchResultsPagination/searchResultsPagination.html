@@ -1,0 +1,34 @@
+<div class="searchResultsPaginationContainer" ng-hide="total === 0 || page === 0">
+    <ul class="pagination">
+        <li ng-class="prevPageDisabled()">
+            <a href ng-click="firstPage()" title="{{'common.search_results_pagination_first_page_title' | i18n}}">
+                <span aria-hidden="true">&#60;&#60;</span>
+            </a>
+        </li>
+        <li ng-class="prevPageDisabled()">
+            <a href ng-click="prevPage()" title="{{'common.search_results_pagination_prev_page_title' | i18n}}">
+                <span aria-hidden="true">&#60;</span>
+            </a>
+        </li>
+        <li class="currentPage disabled">
+            <span>{{'common.search_results_pagination_page' | i18n}} <input type="number"
+                  min="1"
+                  max="{{total}}"
+                  ng-model="inputPage",
+                  ng-change="onInputPageChange()",
+                  id="page"
+                  name="page"> {{'common.search_results_pagination_total' | i18n:[total]}}
+            </span>
+        </li>
+        <li ng-class="nextPageDisabled()">
+            <a href ng-click="nextPage()" title="{{'common.search_results_pagination_next_page_title' | i18n}}">
+                <span aria-hidden="true">&#62;</span>
+            </a>
+        </li>
+        <li ng-class="nextPageDisabled()">
+            <a href ng-click="lastPage()" title="{{'common.search_results_pagination_last_page_title' | i18n}}">
+                <span aria-hidden="true">&#62;&#62;</span>
+            </a>
+        </li>
+    </ul>
+</div>

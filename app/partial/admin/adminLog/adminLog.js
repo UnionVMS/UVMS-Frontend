@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale, Audit, AuditLogModal, auditLogRestService, searchService, auditLogsDefaultValues, auditLogsTypeOptions, SearchResults) {
+angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale, Audit, auditLogRestService, searchService, auditLogsDefaultValues, auditLogsTypeOptions, SearchResults) {
 
 	// ************ Page setup ************
 
@@ -83,26 +83,17 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale
         return true;
     };
 
-    $scope.loadNextPage = function() {
-        if ($scope.currentSearchResults.currentPage >= $scope.currentSearchResults.totalNumberOfPages) {
-            return;
-        }
-
-        searchService.increasePage();
-        $scope.searchAuditLogs(true);
-    };
-
-    $scope.showAuditModal = function(audit) {
-        AuditLogModal.show(audit);
-    };
-
-
-    $scope.searchAuditLogs = function(append) {
-        if(append){
+    //Goto page in the search results
+    $scope.gotoPage = function(page){
+        if(angular.isDefined(page)){
             $scope.currentSearchResults.setLoading(true);
-        }else{
-            $scope.currentSearchResults.clearForSearch();
+            searchService.setPage(page);
+            $scope.searchAuditLogs();
         }
+    };
+
+    $scope.searchAuditLogs = function() {
+        $scope.currentSearchResults.setLoading(true);
 
         // If not ALL tab, and to TYPE criteria set, search for all types available on this tab.
         if ($scope.selectedTab !== "ALL" && !searchService.hasSearchCriteria("TYPE")) {

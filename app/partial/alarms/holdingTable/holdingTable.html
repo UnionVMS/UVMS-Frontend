@@ -1,4 +1,4 @@
-<div class="holdingTableContainer">    
+<div class="holdingTableContainer">
     <alarms-page-header active-tab="HOLDING_TABLE"></alarms-page-header>
     <div class="container containerWithBottomPadding">
 
@@ -7,12 +7,12 @@
             <div class="row">
                 <div class="col-md-11">
                     <advanced-search modeltype="'ALARMS_HOLDING_TABLE'" searchfunc="searchAlarms" advancedsearchvisible="true"></advanced-search>
-                </div>                
+                </div>
                 <div class="col-md-1 pull-right textAlignRight printAndExport">
                     <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportItemsAsCSVFile()"></i>
-                    <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>              
-                </div>                    
-            </div>            
+                    <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>
+                </div>
+            </div>
 
             <!-- Toggle: ALL, OPEN, CLOSED -->
             <div class="row filterRow">
@@ -39,6 +39,8 @@
 
             <div static-include="partial/alarms/holdingTable/holdingTableList/holdingTableList.html"></div>
         </div>
+
+        <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
 
 
     </div>

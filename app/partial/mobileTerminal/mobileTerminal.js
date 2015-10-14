@@ -18,7 +18,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
     $scope.selectedMobileTerminals = [];
 
     //Edit dropdown
-    $scope.editSelectionDropdownItems = [];    
+    $scope.editSelectionDropdownItems = [];
     if(checkAccessToFeature('managePolls')){
         $scope.editSelectionDropdownItems.push({'text':locale.getString('mobileTerminal.edit_selection_poll_terminals'),'code':'POLL'});
     }
@@ -69,7 +69,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
 
     $scope.getCurrentMobileTerminal = function(bool){
         return $scope.currentMobileTerminal;
-    };    
+    };
 
     //Get model value for the transponder system dropdown by system type and les
     $scope.getModelValueForTransponderSystemBySystemTypeAndLES = function(type, les){
@@ -113,7 +113,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
                     searchService.setSearchCriteriasToAdvancedSearch();
 
                     //Load list with mobileTerminals
-                    $scope.searchMobileTerminals();                    
+                    $scope.searchMobileTerminals();
                 },
                 function(error){
                     console.error("Error loading details for mobile terminal with GUID: " +mobileTerminalGUID);
@@ -142,19 +142,19 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         if(angular.isDefined(configurationService.getConfig('MOBILE_TERMINAL_TRANSPONDERS'))){
             $.each(configurationService.getConfig('MOBILE_TERMINAL_CHANNELS'), function(index, name){
                 $scope.channelNames.push({text : name, code : name});
-            });        
+            });
         }else{
             alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_load_channel_names_error'));
         }
-    }; 
+    };
 
     //Get list of Mobile Terminals matching the current search criterias
     $scope.searchMobileTerminals = function(){
         $scope.clearSelection();
-        $scope.currentSearchResults.clearForSearch();        
+        $scope.currentSearchResults.setLoading(true);
         searchService.searchMobileTerminals(false)
                 .then(updateSearchResults, onGetSearchResultsError);
-    };    
+    };
 
     //Update the search results
     var updateSearchResults = function(searchResultsListPage){
@@ -182,16 +182,11 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         }
     };
 
-    //Load the next page of the search results
-    $scope.loadNextPage = function(){
-
-        if($scope.currentSearchResults.page < $scope.currentSearchResults.totalNumberOfPages )
-        {
-            //Increase page by 1
-            searchService.increasePage();
-            $scope.currentSearchResults.setLoading(true);
-            var response = searchService.searchMobileTerminals(true)
-                .then(updateSearchResults, onGetSearchResultsError);
+    //Goto page in the search results
+    $scope.gotoPage = function(page){
+        if(angular.isDefined(page)){
+            searchService.setPage(page);
+            $scope.searchMobileTerminals();
         }
     };
 
@@ -256,7 +251,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
                             }
 
                             pollingService.setWizardStep(2);
-                            $location.path('communication/polling');                                
+                            $location.path('communication/polling');
 
                         },
                         function(error){
@@ -288,7 +283,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         ];
 
         //Set the data columns
-        var getData = function() {            
+        var getData = function() {
             var exportItems;
             //Export only selected items
             if(onlySelectedItems){
@@ -299,7 +294,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
                 exportItems = $scope.currentSearchResults.items;
             }
             return exportItems.reduce(
-                function(csvObject, item){ 
+                function(csvObject, item){
                     var csvRow = [
                         item.associatedVessel? item.associatedVessel.name : locale.getString('mobileTerminal.table_vessel_name_not_assigned'),
                         item.attributes.SERIAL_NUMBER,
@@ -317,7 +312,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         };
 
         //Create and download the file
-        csvService.downloadCSVFile(getData(), header, filename);        
+        csvService.downloadCSVFile(getData(), header, filename);
     };
 
     $scope.$on("$destroy", function() {

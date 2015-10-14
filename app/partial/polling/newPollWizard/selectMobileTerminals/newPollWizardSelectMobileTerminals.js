@@ -17,7 +17,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
             searchService.setDynamic(opt.savedSearchGroup.dynamic);
         }
 
-        $scope.currentSearchResults.clearForSearch();
+        $scope.currentSearchResults.setLoading(true);
         searchService.searchForPollableTerminals()
                 .then(updateSearchResults, onGetSearchResultsError);
     };
@@ -88,15 +88,11 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
       return pollingService.isMobileTerminalSelected(item);
     };
 
-    //Load the next page of the search results
-    $scope.loadNextPage = function(){
-
-        if($scope.currentSearchResults.page < $scope.currentSearchResults.totalNumberOfPages )
-        {
-            //Increase page by 1
-            searchService.increasePage();
-            $scope.currentSearchResults.setLoading(true);
-            searchService.searchForPollableTerminals().then(updateSearchResults, onGetSearchResultsError);
+    //Goto page in the search results
+    $scope.gotoPage = function(page){
+        if(angular.isDefined(page)){
+            searchService.setPage(page);
+            $scope.searchPolls();
         }
     };
 

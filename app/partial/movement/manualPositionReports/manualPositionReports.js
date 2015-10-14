@@ -98,7 +98,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     };
 
     $scope.searchManualPositions = function(){
-        $scope.currentSearchResults.clearForSearch();
+        $scope.currentSearchResults.setLoading(true);
         searchService.searchManualPositions()
             .then(retrivePositionSuccess, retrivePositionsError);
     };
@@ -108,7 +108,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
         console.info(searchResultListPage);
         $scope.currentSearchResults.updateWithNewResults(searchResultListPage);
     };
-    
+
     var retrivePositionsError = function(error){
         $scope.currentSearchResults.setLoading(false);
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
@@ -133,9 +133,9 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
             }
         });
     };
- 
+
     //Handle click on the top "check all" checkbox
-    $scope.checkAll = function(){ 
+    $scope.checkAll = function(){
     if($scope.isAllChecked()){
             //Remove all
             $scope.clearSelection();
@@ -155,7 +155,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
             $scope.removeFromSelection(item);
         }else{
             $scope.addToSelection(item);
-        }      
+        }
     };
 
     $scope.isAllChecked = function(){
@@ -171,7 +171,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
             }
         });
         return allChecked;
-        
+
     };
 
      $scope.isChecked = function(item){
@@ -203,7 +203,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
         ];
 
         //Set the data columns
-        var getData = function() {            
+        var getData = function() {
             var exportItems;
             //Export only selected items
             if(onlySelectedItems){
@@ -214,7 +214,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
                 exportItems = $scope.currentSearchResults.items;
             }
             return exportItems.reduce(
-                function(csvObject, item){ 
+                function(csvObject, item){
                     var csvRow = [
                         item.carrier.externalMarking,
                         item.carrier.ircs,
@@ -233,7 +233,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
         };
 
         //Create and download the file
-        csvService.downloadCSVFile(getData(), header, filename);        
+        csvService.downloadCSVFile(getData(), header, filename);
     };
 
     $scope.$on("$destroy", function() {

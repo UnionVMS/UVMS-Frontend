@@ -1,5 +1,17 @@
 .searchResultsContainer{
-    .loadingIconContainer{
-        padding-top: 20px;
+    min-height: 100px;
+
+    .loadingIndicator{
+        .spinner{
+            margin-top:30px;
+        }
+    }
+
+    &.isEmpty{
+        .loadingIndicator{
+            .spinner{
+                margin-top:50px;
+            }
+        }
     }
 }

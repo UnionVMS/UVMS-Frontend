@@ -35,7 +35,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
 
 
     $scope.getTransmissionStatuses = function() {
-        $scope.transmissionStatuses.clearForSearch();
+        $scope.transmissionStatuses.setLoading(true);
         exchangeRestService.getTransmissionStatuses().then(
             function(services) {
                 $scope.transmissionStatuses.setLoading(false);
@@ -65,7 +65,9 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     };
 
     $scope.searchExchange = function() {
-        $scope.exchangeLogsSearchResults.clearForSearch();
+        $scope.clearSelection();
+        $scope.exchangeLogsSearchResults.setLoading(true);
+        $scope.transmissionStatuses.setLoading(true);
 
         searchService.searchExchange("MESSAGES").then(function(page) {
             $scope.exchangeLogsSearchResults.updateWithNewResults(page);
@@ -76,14 +78,22 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         });
     };
 
-     $scope.searchSendingQueue = function(){
+    //Goto page in the search results
+    $scope.gotoPage = function(page){
+        if(angular.isDefined(page)){
+            searchService.setPage(page);
+            $scope.searchExchange();
+        }
+    };
+
+    $scope.searchSendingQueue = function(){
         searchService.searchExchange("SENDINGQUEUE").then(function(page) {
             $scope.sendingQueueSearchResults.updateWithNewResults(page);
         },
         function(error) {
             $scope.sendingQueueSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
         });
-     };
+    };
 
     $scope.showMessageDetails = function(message) {
         var options = {

@@ -1,8 +1,6 @@
-<div class="searchResultsContainer">
-    <span ng-transclude></span>
-    <search-result-error-alert ng-show="search.errorMessage">{{search.errorMessage}}</search-result-error-alert>        
-    
-    <loading-icon ng-show="search.loading"></loading-icon>
-    
-    <load-more-pagination ng-if="loadNextPageFunction" page='search.page' total='search.totalNumberOfPages' loadmore='loadNextPageFunction'></load-more-pagination>
+<div class="searchResultsContainer" ng-class="{'isEmpty' : search.items.length === 0}">
+    <div loading-indicator="search.loading" size="small" type="SPINNER">
+        <span ng-transclude></span>
+        <search-result-error-alert ng-show="search.errorMessage">{{search.errorMessage}}</search-result-error-alert>
+    </div>
 </div>

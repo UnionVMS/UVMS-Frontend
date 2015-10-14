@@ -122,7 +122,7 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
 
         //Create new request
         getListRequest = new GetListRequest(1, 5, false, []);
-        $scope.currentSearchResults.clearForSearch();
+        $scope.currentSearchResults.setLoading(true);
 
         //Set search criterias
         var searchValue = $scope.assignAssetSearchText +"*";
@@ -153,7 +153,7 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
     //Get next page
     $scope.nextVesselPage = function(){
         getListRequest.page += 1;
-        $scope.currentSearchResults.clearForSearch();
+        $scope.currentSearchResults.setLoading(true);
         vesselRestService.getVesselList(getListRequest)
             .then(onSearchVesselSuccess, onSearchVesselError);
     };
@@ -161,7 +161,7 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
     //Get prev page
     $scope.prevVesselPage = function(){
         getListRequest.page -= 1;
-        $scope.currentSearchResults.clearForSearch();
+        $scope.currentSearchResults.setLoading(true);
         vesselRestService.getVesselList(getListRequest)
             .then(onSearchVesselSuccess, onSearchVesselError);
     };

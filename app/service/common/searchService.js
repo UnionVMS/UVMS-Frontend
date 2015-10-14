@@ -1,6 +1,8 @@
 angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchUtilsService, GetListRequest, VesselListPage, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage, auditLogRestService, exchangeRestService, alarmRestService) {
 
-	var getListRequest = new GetListRequest(1, 20, true, []),
+    var DEFAULT_ITEMS_PER_PAGE = 10;
+
+	var getListRequest = new GetListRequest(1, DEFAULT_ITEMS_PER_PAGE, true, []),
         advancedSearchObject  = {};
 
     //Keys that are searchable in the vessel module
@@ -365,6 +367,9 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         resetPage : function(){
             getListRequest.page = 1;
         },
+        setPage : function(page){
+            getListRequest.page = page;
+        },
 		increasePage : function(){
 			getListRequest.page += 1;
 		},
@@ -431,7 +436,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             this.setSearchCriterias(this.getAdvancedSearchCriterias());
         },
         reset : function(){
-            getListRequest = new GetListRequest(1, 20, true, []);
+            getListRequest = new GetListRequest(1, DEFAULT_ITEMS_PER_PAGE, true, []);
             this.resetAdvancedSearch();
         },
         resetAdvancedSearch : function(){

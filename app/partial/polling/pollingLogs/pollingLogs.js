@@ -91,9 +91,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     //Get list of polls matching the current search criterias
     //If pollId is set, search for that one
     $scope.getPolls = function(pollId){
-
-        //Reset currentSearchResults
-        $scope.currentSearchResults.clearForSearch();
+        $scope.currentSearchResults.setLoading(true);
 
         //Create criterias and do the search
         searchService.resetPage();
@@ -122,16 +120,12 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
         $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
     };
 
-    //Load the next page of the search results
-    $scope.loadNextPage = function(){
 
-        if($scope.currentSearchResults.page < $scope.currentSearchResults.totalNumberOfPages )
-        {
-            //Increase page by 1
-            searchService.increasePage();
-            $scope.currentSearchResults.setLoading(true);
-            var response = searchService.searchPolls(true)
-                .then(updateSearchResults, onGetSearchResultsError);
+    //Goto page in the search results
+    $scope.gotoPage = function(page){
+        if(angular.isDefined(page)){
+            searchService.setPage(page);
+            $scope.searchPolls();
         }
     };
 

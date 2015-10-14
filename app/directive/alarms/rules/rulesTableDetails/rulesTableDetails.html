@@ -1,5 +1,5 @@
 <div class="rulesTableDetailsContainer">
-    
+
     <div class="row">
         <div search-results-table search="currentSearchResults" class="col-md-8">
             <table class="searchResults">
@@ -23,7 +23,7 @@
                         <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'affectedObject'">{{'alarms.alarms_table_object_affected' | i18n}}</th>
                         <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'ruleName'">{{'alarms.alarms_table_rule' | i18n}}</th>
                         <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'resolvedDate'">{{'alarms.alarms_table_date_resolved' | i18n}}</th>
-                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'resolvedBy'">{{'alarms.alarms_table_resolved_by' | i18n}}</th>                    
+                        <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'resolvedBy'">{{'alarms.alarms_table_resolved_by' | i18n}}</th>
                         <th class="positions">{{'alarms.alarms_table_position' | i18n}}</th>
                     </tr>
                 </thead>
@@ -41,7 +41,7 @@
                         <td>{{item.resolvedDate}}</td>
                         <td class="link">{{item.resolvedBy}}</td>
                         <td class="positions">
-                            <i class="fa fa-globe"></i>                       
+                            <i class="fa fa-globe"></i>
                         </td>
                     </tr>
                 </tbody>
@@ -51,7 +51,7 @@
 
     <div class="row">
         <div class="col-md-8">
-            <prev-next-page-pagination page="currentSearchResults.page" total="currentSearchResults.totalNumberOfPages" next="nextPage" prev="prevPage"></prev-next-page-pagination>
+            <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
         </div>
     </div>
 

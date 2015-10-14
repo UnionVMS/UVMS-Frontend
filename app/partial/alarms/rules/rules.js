@@ -37,7 +37,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
     //Get list of rules
     $scope.searchRules = function() {
         $scope.clearSelection();
-        $scope.currentSearchResults.clearForSearch();
+        $scope.currentSearchResults.setLoading(true);
         ruleRestService.getRulesList()
                 .then(updateSearchResults, onGetSearchResultsError);
     };

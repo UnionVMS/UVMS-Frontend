@@ -59,7 +59,7 @@ angular.module('unionvmsWeb')
 
         $scope.searchAlarms = function() {
             getListRequest = new GetListRequest(1, 5, false, []);
-            $scope.currentSearchResults.clearForSearch();
+            $scope.currentSearchResults.setLoading(true);
 
             //Add search criterias to getListRequest
             $.each($scope.searchObject, function(key, value){
@@ -82,24 +82,17 @@ angular.module('unionvmsWeb')
             }, 1000);
         };
 
-        $scope.nextPage = function(){
-            getListRequest.page += 1;
-            $scope.currentSearchResults.items.length = 0;
-            $scope.currentSearchResults.setLoading(true);
-            //TODO: Implement real search
-            $timeout(function(){
-                updateWithMockResults($scope.currentSearchResults.page+1);
-            }, 1000);
-        };
-
-        $scope.prevPage = function(){
-            getListRequest.page -= 1;
-            $scope.currentSearchResults.items.length = 0;
-            $scope.currentSearchResults.setLoading(true);
-            //TODO: Implement real search
-            $timeout(function(){
-                updateWithMockResults($scope.currentSearchResults.page-1);
-            }, 1000);
+        //Goto page in the search results
+        $scope.gotoPage = function(page){
+            if(angular.isDefined(page)){
+                //TODO: Implement real search
+                getListRequest.page = page;
+                $scope.currentSearchResults.setLoading(true);
+                $scope.currentSearchResults.items.length = 0;
+                $timeout(function(){
+                    updateWithMockResults($scope.currentSearchResults.page+1);
+                }, 1000);
+            }
         };
 
         //SEARCH FORM

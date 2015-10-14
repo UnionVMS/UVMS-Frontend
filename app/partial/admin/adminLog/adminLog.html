@@ -15,7 +15,7 @@
 			<div class="auditsearchform">
 				<advanced-search searchfunc="searchAuditLogs" modeltype="'AUDIT'" advancedsearchvisible="true"></advanced-search>
 			</div>
-            <div search-results-table search="currentSearchResults" load-next-page-function="loadNextPage">
+            <div search-results-table search="currentSearchResults">
     			<table class="searchResults colorOdd">
     				<thead>
     					<tr>
@@ -53,5 +53,6 @@
             </div>
 
 	   </div>
+       <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
 	</div>
 </div>

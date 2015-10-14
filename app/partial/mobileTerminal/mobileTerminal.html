@@ -3,21 +3,24 @@
 
         <div ng-if="isVisible.mobileTerminalForm" ng-include="'partial/mobileTerminal/mobileTerminalForm/mobileTerminalForm.html'"></div>
 
-        <div class="card" ng-if="isVisible.search">
-            <div class="row">
-                <div class="col-md-12">
-                    <advanced-search searchfunc="searchMobileTerminals" modeltype="'MOBILE_TERMINAL'" advancedsearchvisible="true"></advanced-search>
+        <div ng-show="isVisible.search">
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-12">
+                        <advanced-search searchfunc="searchMobileTerminals" modeltype="'MOBILE_TERMINAL'" advancedsearchvisible="true"></advanced-search>
+                    </div>
                 </div>
+                <div class="row editSelectionsContainer">
+                    <div class="col-md-2">
+                        <dropdown ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+                    </div>
+                    <div class="col-md-2">
+                        <button show-if-allowed="manageMobileTerminals" type="button" class="btn btn-sm btn-primary" ng-click="toggleAddNewMobileTerminal()"><span class="fa fa-plus-square"></span> {{'mobileTerminal.new_terminal' | i18n}}</button>
+                    </div>
+                </div>
+                <div ng-include="'partial/mobileTerminal/mobileTerminalList/mobileTerminalList.html'"></div>
             </div>
-            <div class="row editSelectionsContainer">
-                <div class="col-md-2">
-                    <dropdown ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
-                </div>
-                <div class="col-md-2">
-                    <button show-if-allowed="manageMobileTerminals" type="button" class="btn btn-sm btn-primary" ng-click="toggleAddNewMobileTerminal()"><span class="fa fa-plus-square"></span> {{'mobileTerminal.new_terminal' | i18n}}</button>                
-                </div>
-            </div>
-            <div ng-include="'partial/mobileTerminal/mobileTerminalList/mobileTerminalList.html'"></div>
+            <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination>
         </div>
     </div>
 </div>
