@@ -158,42 +158,36 @@ describe('dateTimeService', function() {
   }));
 
 
-  it('addUTCTimeZone should format date and time correct', inject(function(dateTimeService) {
+  it('formatUTCDateWithTimezone should format date and time correct', inject(function(dateTimeService) {
     var d;
 
     //Date object
     d = new Date("Sep 2, 2015 12:34:56");
-    expect(dateTimeService.isFormattedWithTimeZone(dateTimeService.addUTCTimeZone(d))).toBeTruthy("1. Should be fomatted with timezone at the end.");
+    expect(dateTimeService.formatUTCDateWithTimezone(d)).toEqual('2015-09-02 12:34:56 +00:00');
 
-    //Text date
+   //Text date
     d = "Feb 13, 2012 12:34:56";
-    expect(dateTimeService.isFormattedWithTimeZone(dateTimeService.addUTCTimeZone(d))).toBeTruthy("2. Should be fomatted with timezone at the end.");
+    expect(dateTimeService.formatUTCDateWithTimezone(d)).toEqual('2012-02-13 12:34:56 +00:00');
 
     //Date object from text date
     d = new Date(d);
-    expect(dateTimeService.isFormattedWithTimeZone(dateTimeService.addUTCTimeZone(d))).toBeTruthy("3. Should be fomatted with timezone at the end.");
+    expect(dateTimeService.formatUTCDateWithTimezone(d)).toEqual('2012-02-13 12:34:56 +00:00');
 
-    //Already formatted
+    //Already formatted with timezone, the change timezone
     d = '2015-11-18 13:49:00 +01:00';
-    expect(dateTimeService.isFormattedWithTimeZone(dateTimeService.addUTCTimeZone(d))).toBeTruthy("4. Should be fomatted with timezone at the end.");
-
-    //Already formatted other timezone
-    var d2 = '2015-11-18 11:49:00 -01:00';
-    expect(dateTimeService.isFormattedWithTimeZone(dateTimeService.addUTCTimeZone(d2))).toBeTruthy("5. Should be fomatted with timezone at the end.");
-
-    expect(dateTimeService.addUTCTimeZone(d2)).toEqual(dateTimeService.addUTCTimeZone(d), "6. Dates should be equal");
+    expect(dateTimeService.formatUTCDateWithTimezone(d)).toEqual('2015-11-18 12:49:00 +00:00');
 
     //String date
     d = '2015-09-18 11:49:00';
-    expect(dateTimeService.isFormattedWithTimeZone(dateTimeService.addUTCTimeZone(d))).toBeTruthy("6. Should be fomatted with timezone at the end.");
+    expect(dateTimeService.formatUTCDateWithTimezone(d)).toEqual('2015-09-18 11:49:00 +00:00');
 
     //Strange format
     d = 'STRANGE DATE FORMAT';
-    expect(dateTimeService.addUTCTimeZone(d)).toEqual(d, "7. Should return input value.");
+    expect(dateTimeService.formatUTCDateWithTimezone(d)).toEqual('Invalid date');
 
     //Undefined
     d = undefined;
-    expect(dateTimeService.addUTCTimeZone(d)).toBeUndefined();
+    expect(dateTimeService.formatUTCDateWithTimezone(d)).toBeUndefined();
   }));
 
 
@@ -250,6 +244,10 @@ describe('confDateFormat filter', function() {
         //Valid date
         d = '2018-02-03 04:05:00';
         expect(filter(d)).toEqual('03 Feb 2018 04:05 UTC');
+
+        //Date object
+        d = new Date(2015,10,14, 16, 25, 13);
+        expect(filter(d)).toEqual('14 Nov 2015 16:25 UTC');
 
         //Undefined
         expect(filter(undefined)).toBeUndefined();

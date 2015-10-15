@@ -1,11 +1,6 @@
-angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField) {
+angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField, dateTimeService) {
 
-    //Add UTC TimeZone to a date string
-    var addUTCTimeZone = function(timeToTransform) {
-        return moment(timeToTransform).format("YYYY-MM-DD HH:mm:ss Z");
-    };
-
-    //Modify span and times zones in list of s
+    //Modify span and times zones in list of search criterias
     var modifySpanAndTimeZones = function(searchCriterias){
         searchCriterias = replaceSpansWithMinMaxValues(searchCriterias);
 
@@ -13,7 +8,8 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField)
         var dateCriterias = ["END_DATE","START_DATE", "REPORTING_START_DATE", "REPORTING_END_DATE", "TO_DATE", "FROM_DATE" ];
         for (var i = 0; i < searchCriterias.length; i++) {
             if ( dateCriterias.indexOf(searchCriterias[i].key) >= 0){
-                    searchCriterias[i].value = addUTCTimeZone(searchCriterias[i].value);
+                    //Values is already in UTC but we need to format it with timezone
+                    searchCriterias[i].value = dateTimeService.formatUTCDateWithTimezone(searchCriterias[i].value);
             }
         }
 
@@ -38,8 +34,8 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField)
             if(searchCriteriaKey === "TIME_SPAN"){
                 idxToRemove.push(i);
                 if(searchCriterias[i].value.toUpperCase() !== "CUSTOM"){
-                    searchCriterias.push(new SearchField("TO_DATE", moment()));
-                    searchCriterias.push(new SearchField("FROM_DATE", moment().add('hours', -searchCriteriaValue)));
+                    searchCriterias.push(new SearchField("TO_DATE", moment.utc()));
+                    searchCriterias.push(new SearchField("FROM_DATE", moment.utc().add('hours', -searchCriteriaValue)));
                 }
             }
 

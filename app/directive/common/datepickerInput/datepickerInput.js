@@ -16,36 +16,53 @@ angular.module('unionvmsWeb').directive('datepickerInput', function($compile) {
 		link: function(scope, element, attrs, fn) {
             //Add input name if name attribute exists
             var name = attrs.name;
-            element.find('input').attr('id', scope.randomId);
-
-            scope.useTime = false;
-            var format = 'Y-m-d';
-
-            if(angular.isDefined(attrs.time)){
-                scope.useTime = attrs.time;
-                format = 'Y-m-d G:i';
-            }
-
-            jQuery("#" +scope.randomId).datetimepicker({
-                datepicker:true,
-                timepicker:scope.useTime,
-                lazyInit: true,
-                format : format,
-                step: 5,
-                closeOnDateSelect: !scope.useTime
-            });
-
-            if (name) {
+            //Add input name if name attribute exists
+            if(name) {
                 element.find('input').attr('name', name);
                 element.removeAttr("name");
                 $compile(element)(scope);
             }
+
+            //Add a random id
+            element.find('input').attr('id', scope.randomId);
+
+            //Date format
+            var dateFormat = 'Y-m-d';
+
+            //DateTimePicker options
+            var options = {
+                datepicker:true,
+                timepicker:false,
+                lazyInit: true,
+                format : dateFormat,
+                closeOnDateSelect: true,
+                dayOfWeekStart:1 //monday
+            };
+
+            //Set default date to current date/time in UTC
+            options.defaultDate = moment.utc().format('YYYY-MM-DD');
+
+            //Use time?
+            scope.useTime = false;
+            if(angular.isDefined(attrs.time) && attrs.time){
+                scope.useTime = true;
+                options.timepicker = true;
+                options.format = 'Y-m-d G:i';
+                options.step = 5;
+                options.roundTime = 'floor';
+                //Set default date with time also
+                options.defaultDate = moment.utc().format('YYYY-MM-DD HH:mm');
+                options.closeOnDateSelect = false;
+            }
+
+            //Crate dateTimePicker
+            jQuery("#" +scope.randomId).datetimepicker(options);
         }
 	};
 });
 
 angular.module('unionvmsWeb')
-    .controller('datepickerInputCtrl', function($scope){
+    .controller('datepickerInputCtrl', function($scope, dateTimeService){
 
         function guid() {
           function s4() {
@@ -65,14 +82,6 @@ angular.module('unionvmsWeb')
             jQuery("#" +$scope.randomId).trigger("open.xdsoft");
         };
 
-        function leadingZero(value) {
-            if (value < 10) {
-                return "0" + value;
-            }
-
-            return value;
-        }
-
         //Handle change event
         $scope.onChange = function(){
             if(angular.isDefined($scope.ngChangeCallback)){
@@ -86,19 +95,11 @@ angular.module('unionvmsWeb')
             //Set watchModelChanges to false so the watch on model doesn't update the viewModel which will 4use an inifinte watch loop
             watchModelChanges = false;
             if(angular.isDefined(newValue)){
-                var d = new Date(newValue);
-                var date = [d.getFullYear(), leadingZero(d.getMonth() + 1), leadingZero(d.getDate())];
-
-                var newModelVal;
-                if($scope.useTime){
-                    var time = [leadingZero(d.getHours()), leadingZero(d.getMinutes()), leadingZero(d.getSeconds())];
-                    newModelVal = date.join('-') + ' ' + time.join(':');
-                }else{
-                    newModelVal = date.join('-');
-                }
+                //Add UTC timezone (+00:00)
+                var newModelVal = dateTimeService.formatUTCDateWithTimezone(newValue);
 
                 //Only set model to newModelVal if valid
-                if(newModelVal.indexOf("NaN") < 0){
+                if(newModelVal.indexOf("Invalid date") < 0){
                     $scope.model = newModelVal;
                 }else{
                     $scope.model = undefined;
@@ -110,7 +111,15 @@ angular.module('unionvmsWeb')
         $scope.$watch('model', function(newValue) {
             //Don't update viewModel if the watch
             if (watchModelChanges || ($scope.viewModel === undefined && newValue !== undefined)) {
-                $scope.viewModel = newValue;
+                //Parse the date/time and format it
+                var newViewValue;
+                //Parse UTC date to viewValue
+                if($scope.useTime){
+                    newViewValue = moment.utc(newValue).format('YYYY-MM-DD HH:mm');
+                }else{
+                    newViewValue = moment.utc(newValue).format('YYYY-MM-DD');
+                }
+                $scope.viewModel = newViewValue;
             }
             watchModelChanges = true;
         });

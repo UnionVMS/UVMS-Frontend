@@ -87,7 +87,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         request.addSearchCriteria("IRCS", ircs);
         request.addSearchCriteria("CFR", cfr);
         vesselRestService.getVesselList(request).then(function(page) {
-            if (page.vessels.length > 0) {
+            if(angular.isDefined(page.vessels) && page.vessels.length > 0) {
                 $scope.showLastMovementByVessel(page.vessels[0]);
             }
         });
@@ -152,7 +152,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
         p.speed = $scope.measuredSpeed;
         p.course = $scope.course;
-        p.time = moment($scope.dateTime).format("YYYY-MM-DD HH:mm:ss Z");
+        p.time = $scope.dateTime;
         p.status = $scope.status;
 
         return p;

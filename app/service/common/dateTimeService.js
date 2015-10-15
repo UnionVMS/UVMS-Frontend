@@ -40,24 +40,16 @@ angular.module('unionvmsWeb').factory('dateTimeService',function() {
                 return output;
             }
         },
-
-        //Add UTC timezone to date
-        addUTCTimeZone : function(dateTimeInput) {
+        //Return date as string with timezone
+        formatUTCDateWithTimezone : function(dateTimeInput) {
             if(angular.isDefined(dateTimeInput)){
-                var output = dateTimeInput;
-                //Already formatted with timezone?
+                //ALready formatted with timezone, then format again with UTC and +00:00
                 if(this.isFormattedWithTimeZone(dateTimeInput)){
                     dateTimeInput = this.toUTC(dateTimeInput);
                 }
-
-                var formatted = moment(dateTimeInput).format("YYYY-MM-DD HH:mm:ss Z");
-                if(formatted !== INVALID_DATE){
-                    output = formatted;
-                }
-                return output;
+                return moment(dateTimeInput).format("YYYY-MM-DD HH:mm:ss +00:00");
             }
         },
-
         //Formatted with time zone in format "2015-11-18 13:49:00 +01:00" or "2015-11-18 13:49:00 +0100"
         isFormattedWithTimeZone : function(dateTime){
             if(typeof dateTime === 'string'){
