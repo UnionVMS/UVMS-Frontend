@@ -17,6 +17,11 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             this.associatedVessel = undefined;
             this.guid = undefined;
             this.type = undefined;
+            this.plugin = {
+                labelName : undefined,
+                serviceName : undefined,
+                //inactive : false,
+            };
         }
 
         MobileTerminal.fromJson = function(data){
@@ -27,6 +32,14 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             mobileTerminal.source = data.source;
             mobileTerminal.type = data.type;
             mobileTerminal.connectId = data.connectId;
+
+            if(angular.isDefined(data.plugin)){
+                mobileTerminal.plugin = {
+                    labelName : data.plugin.labelName,
+                    serviceName : data.plugin.serviceName,
+                    //inactive : data.plugin.inactive
+                };
+            }
 
             //Attributes
             if (data.attributes !== null) {
@@ -76,7 +89,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                     }
                     //Single value
                     else{
-                        attributesObjects.push({"type": key, "value": value});                            
+                        attributesObjects.push({"type": key, "value": value});
                     }
                 }
             });
@@ -92,7 +105,8 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 attributes : attributesObjects,
                 channels : jsonChannels,
                 mobileTerminalId : { guid: this.guid },
-                type : this.type
+                type : this.type,
+                plugin : this.plugin
             };
         };
 
@@ -112,6 +126,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             }
 
             copy.type = this.type;
+            copy.plugin = this.plugin;
             copy.guid = this.guid;
             copy.connectId = this.connectId;
             copy.channels = this.channels.map(function(ch) {
@@ -144,30 +159,13 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
 
         MobileTerminal.prototype.setSystemTypeToInmarsatC = function(){
             this.type = 'INMARSAT_C';
-
-            //TODO: Is this neeeded? /Gustav
-            this.oceanRegion = undefined;
-            this.satteliteNumber = undefined;
-            this.serialNumber = undefined;
-            this.transceiverType = undefined;
-            this.softwareVersion = undefined;
-            this.antenna = undefined;
-            this.answerBack = undefined;
-            this.installedBy = undefined;
-            this.installedOn = undefined;
-            this.startedOn = undefined;
-            this.uninstalledOn = undefined;
-            this.landEarthStation = undefined;
-            this.expectedRepFreq = undefined;
-            this.gracePeriod = undefined;
-            this.inPortGracePeriod = undefined;
         };
 
         //Add a new channel to the end of the list
         MobileTerminal.prototype.addNewChannel = function(){
             var newChannel = new CommunicationChannel();
-            if(angular.isDefined(this.attributes.LES)){
-                newChannel.setLESDescription(this.attributes.LES);
+            if(angular.isDefined(this.plugin.labelName)){
+                newChannel.setLESDescription(this.plugin.labelName);
             }
             this.channels.push(newChannel);
         };
@@ -248,7 +246,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             if (!other) {
                 return false;
             }
- 
+
             //Compare attributes
             if(!angular.equals(this.attributes, other.attributes)){
                 return false;
@@ -268,9 +266,9 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
 
             return true;
         };
-        
 
-        
+
+
 
         return MobileTerminal;
     });

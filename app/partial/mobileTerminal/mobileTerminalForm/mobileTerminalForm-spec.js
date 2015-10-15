@@ -43,7 +43,7 @@ describe('mobileTerminalFormCtrl', function() {
         var element = angular.element('<form name="mobileTerminalForm"></form>');
         $compile(element)(scope);
 
-        // Skip alert message        
+        // Skip alert message
         spyOn(alertService, "showSuccessMessage").andReturn();
         spyOn(scope, "setCreateMode").andReturn();
 
@@ -56,10 +56,10 @@ describe('mobileTerminalFormCtrl', function() {
         scope.createNewMobileTerminal();
         scope.$digest();
         expect(scope.currentMobileTerminal.guid).toBe("260");
-        
+
     }));
 
-    it('onTerminalSystemSelect should set system type and LES attributes', inject(function($q, SystemTypeAndLES, MobileTerminal) {
+    it('onTerminalSystemSelect should set system type and plugin labelName', inject(function($q, SystemTypeAndLES, MobileTerminal) {
         scope.getCurrentMobileTerminal = function(){
             return scope.currentMobileTerminal;
         };
@@ -74,8 +74,8 @@ describe('mobileTerminalFormCtrl', function() {
         scope.onTerminalSystemSelect(selectItem);
         scope.$digest();
 
-        //Type and LES should be updated
-        expect(scope.currentMobileTerminal.attributes.LES).toEqual("BURUM");
+        //Type and plugin labelName should be updated
+        expect(scope.currentMobileTerminal.plugin.labelName).toEqual("BURUM");
         expect(scope.currentMobileTerminal.type).toEqual("INMARSAT-C");
     }));
 
@@ -88,15 +88,15 @@ describe('mobileTerminalFormCtrl', function() {
         expect(scope.currentMobileTerminal.type).toBeUndefined();
         var selectItem = {
             text : "Iridium",
-            typeAndLes : new SystemTypeAndLES("INMARSAT-C", undefined)
+            typeAndLes : new SystemTypeAndLES("IRIDIUM", undefined)
         };
 
         //Select item
         scope.onTerminalSystemSelect(selectItem);
         scope.$digest();
 
-        //Type and LES should be updated
-        expect(scope.currentMobileTerminal.attributes.LES).toBeUndefined();
-        expect(scope.currentMobileTerminal.type).toEqual("INMARSAT-C");
+        //Type and plugin labelName should be updated
+        expect(scope.currentMobileTerminal.plugin.labelName).toBeUndefined();
+        expect(scope.currentMobileTerminal.type).toEqual("IRIDIUM");
     }));
 });

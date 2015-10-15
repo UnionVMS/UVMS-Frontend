@@ -29,17 +29,13 @@ describe('MobileTerminalModel', function() {
                 "value": "426 572 212"
             },
             {
-                "type": "LES",
-                "value": "BURUM"
-            },            
-            {
                 "type": "MULTIPLE_OCEAN",
                 "value": "581"
             },
             {
                 "type": "MULTIPLE_OCEAN",
                 "value": "582"
-            }                        
+            }
         ],
         "connectId": "ebeec8ef-2eab-4d4f-9d6d-994ad8b57c34",
         "channels": [
@@ -113,7 +109,13 @@ describe('MobileTerminalModel', function() {
             "guid": "1234-5678-9012-3456-7891-2345-678901"
         },
         "source": "INTERNAL",
-        "type": "INMARSAT_C"
+        "type": "INMARSAT_C",
+        "plugin" : {
+            "labelName" : "BURUM",
+            "serviceName" : "TestName",
+            //"inactive" : false
+        }
+
     };
 
     it('create new should set correct values', inject(function(MobileTerminal) {
@@ -121,6 +123,7 @@ describe('MobileTerminalModel', function() {
 
         expect(mobileTerminal.guid).toBeUndefined();
         expect(mobileTerminal.connectId).toBeUndefined();
+        expect(mobileTerminal.plugin).toBeDefined();
         expect(Object.keys(mobileTerminal.attributes).length).toEqual(0);
         expect(mobileTerminal.channels.length).toEqual(1);
         expect(mobileTerminal.active).toEqual(true);
@@ -134,6 +137,9 @@ describe('MobileTerminalModel', function() {
         expect(mt.type).toBe("INMARSAT_C");
         expect(mt.active).toBe(true);
 
+        expect(mt.plugin.labelName).toBe("BURUM");
+        expect(mt.plugin.serviceName).toBe("TestName");
+        //expect(mt.plugin.inactive).toBe(false);
         expect(mt.connectId).toBe("ebeec8ef-2eab-4d4f-9d6d-994ad8b57c34");
 
         // Check that all attributes were parsed.
@@ -174,6 +180,7 @@ describe('MobileTerminalModel', function() {
         expect(angular.equals(dto.mobileTerminalId, mobileTerminalData.mobileTerminalId)).toBeTruthy();
         expect(angular.equals(dto.channels, mobileTerminalData.channels)).toBeTruthy();
         expect(angular.equals(dto.attributes, mobileTerminalData.attributes)).toBeTruthy();
+        expect(angular.equals(dto.plugin, mobileTerminalData.plugin)).toBeTruthy();
     }));
 
     it('should produce a carrier assignment/unassignment data transfer object', inject(function(MobileTerminal) {
@@ -222,7 +229,7 @@ describe('MobileTerminalModel', function() {
         var mt1 = MobileTerminal.fromJson(mobileTerminalData);
         var mt2 = MobileTerminal.fromJson(mobileTerminalData);
         expect(mt1.isEqualAttributesAndChannels(mt2)).toBeTruthy();
-    }));    
+    }));
 
     it('isEqualAttributesAndChannels should return false when one attribute has changed', inject(function(MobileTerminal) {
         var mt1 = MobileTerminal.fromJson(mobileTerminalData);
@@ -238,7 +245,7 @@ describe('MobileTerminalModel', function() {
         expect(mt1.isEqualAttributesAndChannels(mt2)).toBeTruthy();
         mt2.attributes.NEW = "TEST";
         expect(mt1.isEqualAttributesAndChannels(mt2)).toBeFalsy();
-    })); 
+    }));
 
     it('isEqualAttributesAndChannels should return false when one attribute has been deleted', inject(function(MobileTerminal) {
         var mt1 = MobileTerminal.fromJson(mobileTerminalData);
@@ -254,7 +261,7 @@ describe('MobileTerminalModel', function() {
         expect(mt1.isEqualAttributesAndChannels(mt2)).toBeTruthy();
         mt2.channels[0].capabilities.POLLABLE=false;
         expect(mt1.isEqualAttributesAndChannels(mt2)).toBeFalsy();
-    }));  
+    }));
 
     it('isEqualAttributesAndChannels should return false when a channel has been added', inject(function(MobileTerminal, CommunicationChannel) {
         var mt1 = MobileTerminal.fromJson(mobileTerminalData);
@@ -262,7 +269,7 @@ describe('MobileTerminalModel', function() {
         expect(mt1.isEqualAttributesAndChannels(mt2)).toBeTruthy();
         mt2.channels.push(new CommunicationChannel());
         expect(mt1.isEqualAttributesAndChannels(mt2)).toBeFalsy();
-    }));    
+    }));
 
     it('isEqualAttributesAndChannels should return false when a channel has been deleted', inject(function(MobileTerminal, CommunicationChannel) {
         var mt1 = MobileTerminal.fromJson(mobileTerminalData);
@@ -270,7 +277,7 @@ describe('MobileTerminalModel', function() {
         expect(mt1.isEqualAttributesAndChannels(mt2)).toBeTruthy();
         mt2.channels.splice(0,1);
         expect(mt1.isEqualAttributesAndChannels(mt2)).toBeFalsy();
-    }));            
+    }));
 
     it('should transfer capabilities of removed channel to default channel', inject(function(CommunicationChannel, MobileTerminal) {
         var channel = new CommunicationChannel();

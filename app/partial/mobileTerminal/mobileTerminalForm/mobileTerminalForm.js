@@ -19,10 +19,10 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
 
             //Update the value for typeAndLES in order for the dropdown to show the correct value
             if(angular.isDefined($scope.currentMobileTerminal)){
-                $scope.typeAndLES = $scope.getModelValueForTransponderSystemBySystemTypeAndLES($scope.currentMobileTerminal.type, $scope.currentMobileTerminal.attributes.LES);
+                $scope.typeAndLES = $scope.getModelValueForTransponderSystemBySystemTypeAndLES($scope.currentMobileTerminal.type, $scope.currentMobileTerminal.plugin.labelName);
             }
         }
-    });    
+    });
 
     //Has form submit been atempted?
     $scope.submitAttempted = false;
@@ -55,18 +55,18 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
             $scope.currentMobileTerminal.type = selectedItem.typeAndLes.type;
             var selectedLES = selectedItem.typeAndLes.les;
             if(angular.isDefined(selectedLES)){
-                $scope.currentMobileTerminal.attributes.LES = selectedLES;
+                $scope.currentMobileTerminal.plugin.labelName = selectedLES;
                 $.each($scope.currentMobileTerminal.channels, function(index, channel){
                     channel.setLESDescription(selectedLES);
                 });
             }else{
-                delete $scope.currentMobileTerminal.attributes.LES;
+                delete $scope.currentMobileTerminal.plugin.labelName;
             }
         }else{
             $scope.currentMobileTerminal.type = undefined;
-            delete $scope.currentMobileTerminal.attributes.LES;
+            delete $scope.currentMobileTerminal.plugin.labelName;
         }
-    };    
+    };
 
     $scope.isDirty = function() {
         var isDirty = !$scope.currentMobileTerminal.isEqualAttributesAndChannels($scope.getOriginalMobileTerminal());
@@ -80,7 +80,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
 
     //Create the mobile terminal
     $scope.createNewMobileTerminal = function(){
-        $scope.submitAttempted = true;        
+        $scope.submitAttempted = true;
 
         //Validate form
         if(!$scope.mobileTerminalForm.$valid){
@@ -91,9 +91,9 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         //Validate at least one channel
         if($scope.currentMobileTerminal.channels.length === 0){
             alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_channels_missing_validation_error'));
-            return false;            
+            return false;
         }
-        
+
         //Create
         $scope.waitingForCreateResponse = true;
         alertService.hideMessage();
@@ -137,9 +137,9 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         //Validate at least one channel
         if($scope.currentMobileTerminal.channels.length === 0){
             alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_channels_missing_validation_error'));
-            return false;            
+            return false;
         }
-        
+
         //Update
         $scope.waitingForCreateResponse = true;
         alertService.hideMessage();
@@ -206,13 +206,13 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.activate_message_on_success'));
 
         //Update active status in the currentMobileTerminal object
-        $scope.currentMobileTerminal.setActive(updatedMobileTerminal.active);        
+        $scope.currentMobileTerminal.setActive(updatedMobileTerminal.active);
         $scope.mergeCurrentMobileTerminalIntoSearchResults();
     }
 
     function setStatusToActiveError() {
         alertService.showErrorMessage(locale.getString('mobileTerminal.activate_message_on_error'));
-    }    
+    }
 
     //Get the history list for the mobile terminal
     var getMobileTerminalHistoryForCurrentMobileTerminal = function() {
@@ -258,7 +258,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         }, function () {
           //Nothing on cancel
         });
-    };   
+    };
 
     //Add a new channel to the end of the list of channels
     $scope.addNewChannel = function(){
@@ -317,7 +317,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
             $scope.currentMobileTerminal.unassign();
             $scope.mergeCurrentMobileTerminalIntoSearchResults();
             alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.unassign_vessel_message_on_success'));
-        }, 
+        },
         function(res) {
             // Error
             alertService.showErrorMessage(locale.getString('mobileTerminal.unassign_vessel_message_on_error'));
