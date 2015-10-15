@@ -54,15 +54,14 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
             });
 	    },
 	    getVmsData: function(){
-	        return $resource('/app/test_data/movements.json');
-//	        return $resource('/reporting/rest/vms/mock/:id', {}, {
-//	            'get': {
-//	                method: 'GET',
-//	                headers: {
-//                        'scopeName': 'EC'
-//                    }
-//	             }
-//	        });
+	        return $resource('/reporting/rest/vms/mock/:id', {}, {
+	            'get': {
+	                method: 'GET',
+	                headers: {
+                        'scopeName': 'EC'
+                    }
+	             }
+	        });
 	    }
 	};
 })
@@ -118,8 +117,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
         },
         getVmsData: function(reportId){
             var deferred = $q.defer();
-            //reportRestFactory.getVmsData().get({id: reportId}, function(response){
-            reportRestFactory.getVmsData().get(function(response){
+            reportRestFactory.getVmsData().get({id: reportId}, function(response){
                 deferred.resolve(response.data);
             }, function(error){
                 deferred.reject(error);

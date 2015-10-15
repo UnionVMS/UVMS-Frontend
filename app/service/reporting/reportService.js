@@ -29,7 +29,7 @@ angular.module('unionvmsWeb').factory('reportService',function(reportRestService
         //Setting up the map
         mapService.clearMap();
         mapService.addFeatureOverlay();
-        //mapService.addSegments(data.segments);
+        mapService.addSegments(data.segments);
         mapService.addPositions(data.movements);
     };
    

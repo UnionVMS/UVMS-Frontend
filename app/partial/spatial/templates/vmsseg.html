@@ -25,51 +25,33 @@
 		<!-- {{#visibility.extMark}}
 		<tr>
 			<td class="col-md-6">{{titles.extMark}}</td>
-			<td class="col-md-6">{{properties.externalmark}}</td>
+			<td class="col-md-6">{{properties.asset.externalmark}}</td>
 		</tr>
 		{{/visibility.extMark}} -->
-		{{#visibility.lon}}
+		{{#visibility.dist}}
 		<tr>
-			<td class="col-md-6">{{titles.lon}}</td>
-			<td class="col-md-6">{{coordinates.lon}}</td>
+			<td class="col-md-6">{{titles.dist}}</td>
+			<td class="col-md-6">{{properties.dist}}</td>
 		</tr>
-		{{/visibility.lon}}
-		{{#visibility.lat}}
+		{{/visibility.dist}}
+		{{#visibility.dur}}
 		<tr>
-			<td class="col-md-6">{{titles.lat}}</td>
-			<td class="col-md-6">{{coordinates.lat}}</td>
+			<td class="col-md-6">{{titles.dur}}</td>
+			<td class="col-md-6">{{properties.dur}}</td>
 		</tr>
-		{{/visibility.lat}}
+		{{/visibility.dur}}
+		{{#visibility.spd}}
+		<tr>
+			<td class="col-md-6">{{titles.spd}}</td>
+			<td class="col-md-6">{{properties.spd_o_gnd}}</td>
+		</tr>
+		{{/visibility.spd}}
 		{{#visibility.crs}}
 		<tr>
 			<td class="col-md-6">{{titles.crs}}</td>
-			<td class="col-md-6">{{properties.crs}}</td>
+			<td class="col-md-6">{{properties.crs_o_gnd}}</td>
 		</tr>
 		{{/visibility.crs}}
-		{{#visibility.m_spd}}
-		<tr>
-			<td class="col-md-6">{{titles.m_spd}}</td>
-			<td class="col-md-6">{{properties.m_spd}}</td>
-		</tr>
-		{{/visibility.m_spd}}
-		{{#visibility.c_spd}}
-		<tr>
-			<td class="col-md-6">{{titles.c_spd}}</td>
-			<td class="col-md-6">{{properties.c_spd}}</td>
-		</tr>
-		{{/visibility.c_spd}}
-		{{#visibility.stat}}
-		<tr>
-			<td class="col-md-6">{{titles.stat}}</td>
-			<td class="col-md-6">{{properties.stat}}</td>
-		</tr>
-		{{/visibility.stat}}
-		{{#visibility.msg_tp}}
-		<tr>
-			<td class="col-md-6">{{titles.msg_tp}}</td>
-			<td class="col-md-6">{{properties.msg_tp}}</td>
-		</tr>
-		{{/visibility.msg_tp}}
 		
 		<!-- {{#visibility.}}
 		<tr>

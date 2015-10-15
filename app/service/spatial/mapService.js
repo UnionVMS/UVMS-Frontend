@@ -136,7 +136,7 @@ ol.control.HistoryControl = function(opt_options){
 };
 ol.inherits(ol.control.HistoryControl, ol.control.Control);
 
-angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $timeout, $templateRequest, $compile) {
+angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $timeout, $templateRequest) {
 	var ms = {};
 
 	//Initialize the map
@@ -203,7 +203,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
           var coordinate = evt.coordinate;
           
           //FIXME this should be set dynamically
-          var activeLayerType = 'vmspos';
+          var activeLayerType = 'vmspos'; //vmspos | vmsseg
           
           var features = [];
           map.forEachFeatureAtPixel(evt.pixel, function(feature, layer){
@@ -212,23 +212,26 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
               }
           });
           
-          var templateURL = 'partial/spatial/templates/' + activeLayerType + '.html';
-          
-          $templateRequest(templateURL).then(function(template){
-//              var rendered = Mustache.render(template, features[0]);
-//              var content = document.getElementById('popup-content');
-//              content.innerHTML = rendered;
+          if (features.length > 0){
+              var templateURL = 'partial/spatial/templates/' + activeLayerType + '.html';
               
-              var rendered = $compile(template)(features[0]);
-              var content = document.getElementById('popup-content');
-              content.innerHTML = rendered;
-              ms.overlay.setPosition(coordinate);
-          }, function(){
-              //error fetching template
-          });
-          
-          
-          //ms.overlay.setPosition(coordinate);
+              $templateRequest(templateURL).then(function(template){
+                  var data;
+                  if (activeLayerType === 'vmspos'){
+                      data = ms.setPositionsObjPopup(features[0]);
+                  } else if (activeLayerType === 'vmsseg'){
+                      data = ms.setSegmentsObjPopup(features[0]);
+                  }
+                  
+                  var rendered = Mustache.render(template, data);
+                  var content = document.getElementById('popup-content');
+                  content.innerHTML = rendered;
+                  ms.overlay.setPosition(coordinate);
+                  
+              }, function(){
+                  //error fetching template
+              });
+          }
       });
 
       //map.addLayer(osmLayer);
@@ -239,6 +242,82 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
       ms.map = map;
 	};
+	
+	
+	//Define the object that will be used in the popup for vms positions
+	ms.setPositionsObjPopup = function(feature){
+	    //TODO fetch visibility of attributes selected by user
+	    var coords = feature.geometry.getCoordinates();
+	    var repCoords = ol.proj.transform(coords, ms.getMapProjectionCode(), 'EPSG:4326');
+	    var data = {
+	        titles: {
+	            vessel_tag: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
+	            fs: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
+	            ircs: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'),
+	            cfr: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'),
+	            extMark: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
+	            lon: locale.getString('spatial.tab_vms_pos_table_header_lon'),
+	            lat: locale.getString('spatial.tab_vms_pos_table_header_lat'),
+	            crs: locale.getString('spatial.tab_vms_pos_table_header_course'),
+	            m_spd: locale.getString('spatial.tab_vms_pos_table_header_measured_speed'),
+	            c_spd: locale.getString('spatial.tab_vms_pos_table_header_calculated_speed'),
+	            stat: locale.getString('spatial.tab_vms_pos_table_header_status'),
+	            msg_tp: locale.getString('spatial.tab_vms_pos_table_header_msg_type')
+	        },
+	        visibility: {
+	            fs: true,
+	            ircs: true,
+	            cfr: true,
+	            extMark: false,
+	            lon: true,
+	            lat: true,
+	            crs: true,
+	            m_spd: true,
+	            c_spd: true,
+	            stat: true,
+	            msg_tp: true
+	        },
+	        properties: feature,
+	        coordinates: {
+	            lon: repCoords[0].toFixed(5).toString() + ' \u00b0',
+	            lat: repCoords[1].toFixed(5).toString() + ' \u00b0'
+	        }
+	    };
+	    
+	    return data;
+	};
+	
+	//Define the object that will be used in the popup for vms positions
+    ms.setSegmentsObjPopup = function(feature){
+        //TODO fetch visibility of attributes selected by user
+        var data = {
+            titles: {
+                vessel_tag: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
+                fs: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
+                ircs: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'),
+                cfr: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'),
+                extMark: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
+                dist: locale.getString('spatial.tab_vms_seg_table_header_distance'),
+                dur: locale.getString('spatial.tab_vms_seg_table_header_duration'),
+                spd: locale.getString('spatial.tab_vms_seg_table_header_speed_ground'),
+                crs: locale.getString('spatial.tab_vms_seg_table_header_course_ground')
+            },
+            visibility: {
+                fs: true,
+                ircs: true,
+                cfr: true,
+                extMark: false,
+                dist: true,
+                dur: true,
+                spd: true,
+                crs: true
+            },
+            properties: feature
+        };
+        
+        return data;
+    };
+	
 
   // create layer, returns ol.layer.* or undefined
   ms.createLayer = function( config ){
