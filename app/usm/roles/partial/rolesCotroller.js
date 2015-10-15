@@ -291,7 +291,7 @@ rolesModule.controller('rolesModalInstanceCtrl', ['$scope', '$modalInstance', '$
             },
             function (error) {
 
-                $scope.messageDivClass = "container alert alert-danger";
+                $scope.messageDivClass = "alert alert-danger";
                 $scope.actionMessage = error;
             }
         );
@@ -301,7 +301,7 @@ rolesModule.controller('rolesModalInstanceCtrl', ['$scope', '$modalInstance', '$
             if (mode === 'new') {
                 rolesServices.createRole(role).then(
                     function (response) {
-                        $scope.messageDivClass = "container alert alert-success";
+                        $scope.messageDivClass = "alert alert-success";
                         $scope.actionMessage = "New Role created";
                         // Close modal by passing the new user to update the table
                         $scope.newRole = role;
@@ -311,7 +311,7 @@ rolesModule.controller('rolesModalInstanceCtrl', ['$scope', '$modalInstance', '$
                         }, 2000);
                     },
                     function (error) {
-                        $scope.messageDivClass = "container alert alert-danger";
+                        $scope.messageDivClass = "alert alert-danger";
                         $scope.actionMessage = error;
                     }
                 );
@@ -323,7 +323,7 @@ rolesModule.controller('rolesModalInstanceCtrl', ['$scope', '$modalInstance', '$
                     role.updateFeatures = false;
                     rolesServices.updateRole(role).then(
                         function (response) {
-                            $scope.messageDivClass = "container alert alert-success";
+                            $scope.messageDivClass = "alert alert-success";
                             $scope.actionMessage = "Role Changes Saved";
                             // Close modal by passing the new user to update the table
                             $scope.newRole = response.newRole;
@@ -333,13 +333,13 @@ rolesModule.controller('rolesModalInstanceCtrl', ['$scope', '$modalInstance', '$
                             }, 2000);
                         },
                         function (error) {
-                            $scope.messageDivClass = "container alert alert-danger";
+                            $scope.messageDivClass = "alert alert-danger";
                             $scope.actionMessage = error;
                         }
                     );
                 } else {
                     $scope.showConfirmation = true;
-                    $scope.messageDivClass = "container alert alert-warning";
+                    $scope.messageDivClass = "alert alert-warning";
                     $scope.actionMessage = "<strong>Warning: </strong>This role is assigned to " + role.activeUsers + " active user(s). Saving this change may have important impact!";
                 }
             }
@@ -347,7 +347,7 @@ rolesModule.controller('rolesModalInstanceCtrl', ['$scope', '$modalInstance', '$
                 if (role.activeUsers === 0 || $scope.showConfirmation) {
                     rolesServices.deleteRole(role).then(
                         function (response) {
-                            $scope.messageDivClass = "container alert alert-success";
+                            $scope.messageDivClass = "alert alert-success";
                             $scope.actionMessage = "Role deleted";
                             // Close modal by passing the new user to update the table
                             $scope.newRole = role;
@@ -357,13 +357,13 @@ rolesModule.controller('rolesModalInstanceCtrl', ['$scope', '$modalInstance', '$
                             }, 2000);
                         },
                         function (error) {
-                            $scope.messageDivClass = "container alert alert-danger";
+                            $scope.messageDivClass = "alert alert-danger";
                             $scope.actionMessage = error;
                         }
                     );
                 } else {
                     $scope.showConfirmation = true;
-                    $scope.messageDivClass = "container alert alert-warning";
+                    $scope.messageDivClass = "alert alert-warning";
                     $scope.actionMessage = "<strong>Warning: </strong>This role is assigned to " + role.activeUsers + " active user(s). Saving this change may have important impact!";
                 }
             }
@@ -615,7 +615,7 @@ rolesModule.controller('permissionModalInstanceCtrl', ['$scope', '$modalInstance
             if (roleDetails.activeUsers === 0 || $scope.showConfirmation) {
                 rolesServices.updateRole(roleDetails).then(
                     function (response) {
-                        $scope.messageDivClass = "container alert alert-success";
+                        $scope.messageDivClass = "alert alert-success";
                         $scope.actionMessage = "Role Changes Saved";
                         // Close modal by passing the new user to update the table
                         $scope.newRole = response.newRole;
@@ -625,13 +625,13 @@ rolesModule.controller('permissionModalInstanceCtrl', ['$scope', '$modalInstance
                         }, 2000);
                     },
                     function (error) {
-                        $scope.messageDivClass = "container alert alert-danger";
+                        $scope.messageDivClass = "alert alert-danger";
                         $scope.actionMessage = error;
                     }
                 );
             } else {
                 $scope.showConfirmation = true;
-                $scope.messageDivClass = "container alert alert-warning";
+                $scope.messageDivClass = "alert alert-warning";
                 $scope.actionMessage = "<strong>Warning: </strong>This role is assigned to " + roleDetails.activeUsers + " active user(s). Saving this change may have important impact!";
             }
         };

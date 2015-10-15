@@ -343,7 +343,7 @@ organisationsModule.controller('manageOrgModalInstanceCtrl', ['$scope', '$modalI
 
                 organisationsService.createOrganisation(newOrg).then(
                     function (response) {
-                        $scope.messageDivClass = "container alert alert-success";
+                        $scope.messageDivClass = "alert alert-success";
                         $scope.actionMessage = "New Organisation Created";
                         // Close modal by passing the new user to update the table
                         //$scope.newOrg = response.newOrg;
@@ -353,7 +353,7 @@ organisationsModule.controller('manageOrgModalInstanceCtrl', ['$scope', '$modalI
                         }, 2000);
                     },
                     function (error) {
-                        $scope.messageDivClass = "container alert alert-danger";
+                        $scope.messageDivClass = "alert alert-danger";
                         $scope.actionMessage = error;
                     }
                 );
@@ -371,7 +371,7 @@ organisationsModule.controller('manageOrgModalInstanceCtrl', ['$scope', '$modalI
 
                 organisationsService.updateOrganisation(edtOrg).then(
                     function (response) {
-                        $scope.messageDivClass = "container alert alert-success";
+                        $scope.messageDivClass = "alert alert-success";
                         $scope.actionMessage = "Organisation Changes Saved";
                         // Close modal by passing the new user to update the table
                         //$scope.updatedOrg = response.updatedOrg;
@@ -381,7 +381,7 @@ organisationsModule.controller('manageOrgModalInstanceCtrl', ['$scope', '$modalI
                         }, 2000);
                     },
                     function (error) {
-                        $scope.messageDivClass = "container alert alert-danger";
+                        $scope.messageDivClass = "alert alert-danger";
                         $scope.actionMessage = error;
                     }
                 );
@@ -390,7 +390,7 @@ organisationsModule.controller('manageOrgModalInstanceCtrl', ['$scope', '$modalI
                 if ($scope.showConfirmation) {
                     organisationsService.deleteOrganisation(org).then(
                         function (response) {
-                            $scope.messageDivClass = "container alert alert-success";
+                            $scope.messageDivClass = "alert alert-success";
                             $scope.actionMessage = "Organisation deleted";
                             // Close modal by passing the new user to update the table
                             $scope.actionSucceeded = true;
@@ -399,13 +399,13 @@ organisationsModule.controller('manageOrgModalInstanceCtrl', ['$scope', '$modalI
                             }, 2000);
                         },
                         function (error) {
-                            $scope.messageDivClass = "container alert alert-danger";
+                            $scope.messageDivClass = "alert alert-danger";
                             $scope.actionMessage = error;
                         }
                     );
                 } else {
                     $scope.showConfirmation = true;
-                    $scope.messageDivClass = "container alert alert-warning";
+                    $scope.messageDivClass = "alert alert-warning";
                     $scope.actionMessage = "<strong>Warning: </strong>This will delete this organisation and related endpoints including channels.";
                 }
             }
@@ -677,7 +677,7 @@ organisationsModule.controller('organisationEndpointsModalInstanceCtrl', ['$root
                 endpoint.organisationName = organisationName;
                 organisationsService.createEndPoint(endpoint).then(
                     function (response) {
-                        $scope.messageDivClass = "container alert alert-success";
+                        $scope.messageDivClass = "alert alert-success";
                         $scope.actionMessage = "New EndPoint Created";
                         $scope.actionSucceeded = true;
                         $scope.showConfirmation = true;
@@ -686,7 +686,7 @@ organisationsModule.controller('organisationEndpointsModalInstanceCtrl', ['$root
                         }, 2000);
                     },
                     function (error) {
-                        $scope.messageDivClass = "container alert alert-danger";
+                        $scope.messageDivClass = "alert alert-danger";
                         $scope.actionMessage = error;
                     }
                 );
@@ -695,7 +695,7 @@ organisationsModule.controller('organisationEndpointsModalInstanceCtrl', ['$root
                 endpoint.organisationName = organisationName;
                 organisationsService.updateEndPoint(endpoint).then(
                     function (response) {
-                        $scope.messageDivClass = "container alert alert-success";
+                        $scope.messageDivClass = "alert alert-success";
                         $scope.actionMessage = "EndPoint Changes Saved";
                         // Close modal by passing the new user to update the table
                         //$scope.updatedOrg = response.updatedOrg;
@@ -705,7 +705,7 @@ organisationsModule.controller('organisationEndpointsModalInstanceCtrl', ['$root
                         }, 2000);
                     },
                     function (error) {
-                        $scope.messageDivClass = "container alert alert-danger";
+                        $scope.messageDivClass = "alert alert-danger";
                         $scope.actionMessage = error;
                     }
                 );
@@ -715,7 +715,7 @@ organisationsModule.controller('organisationEndpointsModalInstanceCtrl', ['$root
                 if ($scope.showConfirmation) {
                     organisationsService.deleteEndPoint(endpoint).then(
                         function (response) {
-                            $scope.messageDivClass = "container alert alert-success";
+                            $scope.messageDivClass = "alert alert-success";
                             $scope.actionMessage = "EndPoint deleted";
                             // Close modal by passing the new user to update the table
                             $scope.actionSucceeded = true;
@@ -724,13 +724,13 @@ organisationsModule.controller('organisationEndpointsModalInstanceCtrl', ['$root
                             }, 2000);
                         },
                         function (error) {
-                            $scope.messageDivClass = "container alert alert-danger";
+                            $scope.messageDivClass = "alert alert-danger";
                             $scope.actionMessage = error;
                         }
                     );
                 } else {
                     $scope.showConfirmation = true;
-                    $scope.messageDivClass = "container alert alert-warning";
+                    $scope.messageDivClass = "alert alert-warning";
                     $scope.actionMessage = "<strong>Warning: </strong>This will delete this endpoint and its channels.";
                 }
             }
@@ -826,7 +826,7 @@ organisationsModule.controller('organisationChannelsModalInstanceCtrl', [
                         $scope.actionSucceeded = true;
                         $scope.showConfirmation = true;
                         $scope.channelCreated = true;
-                        $scope.actionDivClass = "container alert alert-success";
+                        $scope.actionDivClass = "alert alert-success";
                         $scope.actionMessage = "New Channel Created";
 
                         $timeout(function () {
@@ -835,7 +835,7 @@ organisationsModule.controller('organisationChannelsModalInstanceCtrl', [
                         }, 2000);
                     },
                     function (error) {
-                        $scope.messageDivClass = "container alert alert-danger";
+                        $scope.messageDivClass = "alert alert-danger";
                         $scope.successMessage = error;
                     }
                 );
@@ -846,7 +846,7 @@ organisationsModule.controller('organisationChannelsModalInstanceCtrl', [
                         $scope.actionSucceeded = true;
                         $scope.showConfirmation = true;
                         $scope.channelCreated = true;
-                        $scope.actionDivClass = "container alert alert-success";
+                        $scope.actionDivClass = "alert alert-success";
                         $scope.actionMessage = "Channel Changes Saved";
 
                         $timeout(function () {
@@ -855,7 +855,7 @@ organisationsModule.controller('organisationChannelsModalInstanceCtrl', [
                         }, 2000);
                     },
                     function (error) {
-                        $scope.messageDivClass = "container alert alert-danger";
+                        $scope.messageDivClass = "alert alert-danger";
                         $scope.successMessage = error;
                     }
                 );
@@ -866,7 +866,7 @@ organisationsModule.controller('organisationChannelsModalInstanceCtrl', [
                         function (response) {
                             $scope.actionSucceeded = true;
                             $scope.channelCreated = true;
-                            $scope.actionDivClass = "container alert alert-success";
+                            $scope.actionDivClass = "alert alert-success";
                             $scope.actionMessage = "Channel deleted";
 
                             $scope.successMessage = "";
@@ -878,13 +878,13 @@ organisationsModule.controller('organisationChannelsModalInstanceCtrl', [
                             }, 2000);
                         },
                         function (error) {
-                            $scope.messageDivClass = "container alert alert-danger";
+                            $scope.messageDivClass = "alert alert-danger";
                             $scope.successMessage = error;
                         }
                     );
                 } else {
                     $scope.showConfirmation = true;
-                    $scope.messageDivClass = "container alert alert-warning";
+                    $scope.messageDivClass = "alert alert-warning";
                     $scope.successMessage = "<strong>Warning: </strong>This will delete the channel";
                 }
             }
@@ -1028,7 +1028,7 @@ organisationsModule.controller('organisationContactsModalInstanceCtrl', ['$scope
                     function (response) {
                         $scope.showConfirmation = true;
                         $scope.contactCreated = true;
-                        $scope.messageDivClass = "container alert alert-success";
+                        $scope.messageDivClass = "alert alert-success";
                         $scope.actionMessage = "Contact assigned";
 
                         $timeout(function () {
@@ -1037,7 +1037,7 @@ organisationsModule.controller('organisationContactsModalInstanceCtrl', ['$scope
                         }, 2000);
                     },
                     function (error) {
-                        $scope.messageDivClass = "container alert alert-danger";
+                        $scope.messageDivClass = "alert alert-danger";
                         $scope.actionMessage = error;
                     }
                 );
@@ -1048,7 +1048,7 @@ organisationsModule.controller('organisationContactsModalInstanceCtrl', ['$scope
                     organisationsService.deleteEndPointContact(delRequest).then(
                         function (response) {
                             $scope.contactCreated = true;
-                            $scope.messageDivClass = "container alert alert-success";
+                            $scope.messageDivClass = "alert alert-success";
                             $scope.actionMessage = "Contact removed";
 
                             $timeout(function () {
@@ -1056,13 +1056,13 @@ organisationsModule.controller('organisationContactsModalInstanceCtrl', ['$scope
                             }, 2000);
                         },
                         function (error) {
-                            $scope.messageDivClass = "container alert alert-danger";
+                            $scope.messageDivClass = "alert alert-danger";
                             $scope.actionMessage = error;
                         }
                     );
                 } else {
                     $scope.showConfirmation = true;
-                    $scope.messageDivClass = "container alert alert-warning";
+                    $scope.messageDivClass = "alert alert-warning";
                     $scope.actionMessage = "<strong>Warning: </strong>This will remove the contact from endpoint";
                 }
             }

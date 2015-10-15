@@ -112,7 +112,7 @@ userContextsModule.controller('userContextsModalInstanceCtrl', ['$scope', '$moda
 					}
 				},
 				function (error) {
-					$scope.messageDivClass = "container alert alert-danger";
+					$scope.messageDivClass = "alert alert-danger";
 					$scope.actionMessage = error;
 				}
 			);
@@ -136,7 +136,7 @@ userContextsModule.controller('userContextsModalInstanceCtrl', ['$scope', '$moda
 					}
 				},
 				function (error) {
-					$scope.messageDivClass = "container alert alert-danger";
+					$scope.messageDivClass = "alert alert-danger";
 					$scope.actionMessage = error;
 				}
 			);
@@ -161,7 +161,7 @@ userContextsModule.controller('userContextsModalInstanceCtrl', ['$scope', '$moda
 								userContextId : response.newContext.userContextId,
 							};
 							$scope.contextCreated = true;
-							$scope.messageDivClass = "container alert alert-success";
+							$scope.messageDivClass = "alert alert-success";
 							$scope.actionMessage = "New User Context created";
 
 							$timeout(function () {
@@ -169,7 +169,7 @@ userContextsModule.controller('userContextsModalInstanceCtrl', ['$scope', '$moda
 							}, 2000);
 						},
 						function (error) {
-							$scope.messageDivClass = "container alert alert-danger";
+							$scope.messageDivClass = "alert alert-danger";
 							$scope.actionMessage = error;
 						}
 					);
@@ -195,20 +195,20 @@ userContextsModule.controller('userContextsModalInstanceCtrl', ['$scope', '$moda
 								updatedUserContext.scopeStatus		= selectedScope ? selectedScope.status : null;
 
 								$scope.contextCreated = true;
-								$scope.messageDivClass = "container alert alert-success";
+								$scope.messageDivClass = "alert alert-success";
 								$scope.actionMessage = "Context Changes Saved";
 								$timeout(function () {
 									$modalInstance.close(updatedUserContext);
 								}, 2000);
 							},
 							function (error) {
-								$scope.messageDivClass = "container alert alert-danger";
+								$scope.messageDivClass = "alert alert-danger";
 								$scope.actionMessage = error;
 							}
 						);
 					} else {
 						$scope.showConfirmation = true;
-						$scope.messageDivClass = "container alert alert-warning";
+						$scope.messageDivClass = "alert alert-warning";
 						$scope.actionMessage = "<strong>Warning: </strong>This scope is assigned to " + scope.activeUsers + " active user(s). Saving this change may have important impact!";
 					}
 				}
@@ -230,7 +230,7 @@ userContextsModule.controller('userContextsModalInstanceCtrl', ['$scope', '$moda
 						userContextsServices.deleteContext(deletedUserContext).then(
 							function (response) {
 								$scope.contextCreated = true;
-								$scope.messageDivClass = "container alert alert-success";
+								$scope.messageDivClass = "alert alert-success";
 								$scope.actionMessage = "Context deleted";
 
 								$timeout(function () {
@@ -238,13 +238,13 @@ userContextsModule.controller('userContextsModalInstanceCtrl', ['$scope', '$moda
 								}, 2000);
 							},
 							function (error) {
-								$scope.messageDivClass = "container alert alert-danger";
+								$scope.messageDivClass = "alert alert-danger";
 								$scope.actionMessage = error;
 							}
 						);
 					} else {
 						$scope.showConfirmation = true;
-						$scope.messageDivClass = "container alert alert-warning";
+						$scope.messageDivClass = "alert alert-warning";
 						$scope.actionMessage = "<strong>Warning: </strong>This will remove the context from user";
 					}
 				}

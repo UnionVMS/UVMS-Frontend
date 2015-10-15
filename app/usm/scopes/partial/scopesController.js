@@ -307,7 +307,7 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
                 $scope.applicationsList = response.applications;
             },
             function (error) {
-                $scope.messageDivClass = "container alert alert-danger";
+                $scope.messageDivClass = "alert alert-danger";
                 $scope.actionMessage = error;
             }
         );
@@ -369,14 +369,14 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
                     function (response) {
                         $scope.newScope = response.newScope;
                         $scope.scopeCreated = true;
-                        $scope.messageDivClass = "container alert alert-success";
+                        $scope.messageDivClass = "alert alert-success";
                         $scope.actionMessage = "New Scope created";
                         $timeout(function () {
                             $modalInstance.close($scope.newScope);
                         }, 2000);
                     },
                     function (error) {
-                        $scope.messageDivClass = "container alert alert-danger";
+                        $scope.messageDivClass = "alert alert-danger";
                         $scope.actionMessage = error;
                     }
                 );
@@ -394,20 +394,20 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
                         function (response) {
                             $scope.updatedScope = response.updatedScope;
                             $scope.scopeCreated = true;
-                            $scope.messageDivClass = "container alert alert-success";
+                            $scope.messageDivClass = "alert alert-success";
                             $scope.actionMessage = "Scope Changes Saved";
                             $timeout(function () {
                                 $modalInstance.close($scope.updatedScope);
                             }, 2000);
                         },
                         function (error) {
-                            $scope.messageDivClass = "container alert alert-danger";
+                            $scope.messageDivClass = "alert alert-danger";
                             $scope.actionMessage = error;
                         }
                     );
                 } else {
                     $scope.showConfirmation = true;
-                    $scope.messageDivClass = "container alert alert-warning";
+                    $scope.messageDivClass = "alert alert-warning";
                     $scope.actionMessage = "<strong>Warning: </strong>This scope is assigned to " + scope.activeUsers + " active user(s). Saving this change may have important impact!";
                 }
             }
@@ -417,20 +417,20 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
                         function (response) {
                             $scope.deletedScope = scope;
                             $scope.scopeCreated = true;
-                            $scope.messageDivClass = "container alert alert-success";
+                            $scope.messageDivClass = "alert alert-success";
                             $scope.actionMessage = "Scope deleted";
                             $timeout(function () {
                                 $modalInstance.close($scope.deletedScope);
                             }, 2000);
                         },
                         function (error) {
-                            $scope.messageDivClass = "container alert alert-danger";
+                            $scope.messageDivClass = "alert alert-danger";
                             $scope.actionMessage = error;
                         }
                     );
                 } else {
                     $scope.showConfirmation = true;
-                    $scope.messageDivClass = "container alert alert-warning";
+                    $scope.messageDivClass = "alert alert-warning";
                     $scope.actionMessage = "<strong>Warning: </strong>This scope is assigned to " + scope.activeUsers + " active user(s). Saving this change may have important impact!";
                 }
             }
@@ -654,7 +654,7 @@ scopesModule.controller('datatsetsModalInstanceCtrl', ['$log', '$scope', '$modal
                         // Close modal by passing the new user to update the table
                         $scope.updatedScope = response.updatedScope;
                         $scope.datasetsSaved = true;
-                        $scope.messageDivClass = "container alert alert-success";
+                        $scope.messageDivClass = "alert alert-success";
                         $scope.actionMessage = "Scope Changes Saved";
                         $log.log($scope.updatedScope);
                         $timeout(function () {
@@ -662,13 +662,13 @@ scopesModule.controller('datatsetsModalInstanceCtrl', ['$log', '$scope', '$modal
                         }, 2000);
                     },
                     function (error) {
-                        $scope.messageDivClass = "container alert alert-danger";
+                        $scope.messageDivClass = "alert alert-danger";
                         $scope.actionMessage = error;
                     }
                 );
             } else {
                 $scope.showConfirmation = true;
-                $scope.messageDivClass = "container alert alert-warning";
+                $scope.messageDivClass = "alert alert-warning";
                 $scope.actionMessage = "<strong>Warning: </strong>This scope is assigned to " + scopeDetails.activeUsers + " active user(s). Saving this change may have important impact!";
             }
         };

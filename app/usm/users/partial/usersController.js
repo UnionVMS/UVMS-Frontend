@@ -528,7 +528,7 @@ usersModule.controller('duplicateUserProfileModalInstanceCtrl', ['$scope', '$mod
                 //}
             },
             function (error) {
-                $scope.messageDivClass = "container alert alert-danger";
+                $scope.messageDivClass = "alert alert-danger";
                 $scope.actionMessage = error;
             }
         );
@@ -592,7 +592,7 @@ usersModule.controller('duplicateUserProfileModalInstanceCtrl', ['$scope', '$mod
                 });
                 userDetailsService.copyUserPrefs($scope.destUserName, arrComprehensiveUserContext).then(
                     function (response) {
-                        $scope.messageDivClass = "container alert alert-success";
+                        $scope.messageDivClass = "alert alert-success";
                         $scope.actionMessage = "Profile copied";
                         $scope.actionSucceeded = true;
                         $timeout(function () {
@@ -600,13 +600,13 @@ usersModule.controller('duplicateUserProfileModalInstanceCtrl', ['$scope', '$mod
                         }, 2000);
                     },
                     function (error) {
-                        $scope.messageDivClass = "container alert alert-danger";
+                        $scope.messageDivClass = "alert alert-danger";
                         $scope.actionMessage = error;
                     }
                 );
             } else {
                 $scope.showConfirmation = true;
-                $scope.messageDivClass = "container alert alert-warning";
+                $scope.messageDivClass = "alert alert-warning";
                 $scope.actionMessage = "Warning: If a context(s) already exist for the user " + $scope.destUserName + " the existing data will be erased and replaced by the new profile if the action is accepted";
             }
         };
@@ -641,7 +641,7 @@ usersModule.controller('setUserPasswordModalInstanceCtrl', ['$log', '$timeout', 
                     var updatedUser = objectToSubmit;
 
                     $scope.userPasswordUpdated = true;
-                    $scope.messageDivClass = "container alert alert-success";
+                    $scope.messageDivClass = "alert alert-success";
                     $scope.actionMessage = "Password has been set";
                     $scope.user = user;
                     $timeout(function () {
@@ -649,7 +649,7 @@ usersModule.controller('setUserPasswordModalInstanceCtrl', ['$log', '$timeout', 
                     }, 2000);
                 },
                 function (error) {
-                    $scope.messageDivClass = "container alert alert-danger";
+                    $scope.messageDivClass = "alert alert-danger";
                     $scope.actionMessage = error;
 
                     $log.log(error);
@@ -729,7 +729,7 @@ usersModule.controller('editUserModalInstanceCtrl', ['$log', '$timeout', '$locat
             },
             function (error) {
                 if (!_.isEqual(error.status, 404)) {
-                    $scope.messageDivClass = "container alert alert-danger";
+                    $scope.messageDivClass = "alert alert-danger";
                     $scope.actionMessage = error;
                 }
             }
@@ -752,7 +752,7 @@ usersModule.controller('editUserModalInstanceCtrl', ['$log', '$timeout', '$locat
             },
             function (error) {
                 if (!_.isEqual(error.status, 404)) {
-                    $scope.messageDivClass = "container alert alert-danger";
+                    $scope.messageDivClass = "alert alert-danger";
                     $scope.actionMessage = error;
                 }
             });
@@ -830,14 +830,14 @@ usersModule.controller('editUserModalInstanceCtrl', ['$log', '$timeout', '$locat
             accountService.updateUser(objectToSubmit).then(
                 function (response) {
                     $scope.userUpdated = true;
-                    $scope.messageDivClass = "container alert alert-success";
+                    $scope.messageDivClass = "alert alert-success";
                     $scope.actionMessage = "User Details Saved";
                     $timeout(function () {
                         $modalInstance.close(user);
                     }, 2000);
                 },
                 function (error) {
-                    $scope.messageDivClass = "container alert alert-danger";
+                    $scope.messageDivClass = "alert alert-danger";
                     $scope.actionMessage = error;
                 }
             );

@@ -73,7 +73,7 @@ accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '
             },
             function (error) {
                 if(!_.isEqual(error.status, 404)) {
-                    $scope.messageDivClass = "container alert alert-danger";
+                    $scope.messageDivClass = "alert alert-danger";
                     $scope.actionMessage = error;
                 }
             }
@@ -102,7 +102,7 @@ accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '
 		            $scope.messageDivClass = "";
 	            }, function (error) {
 	            	// Error handler code
-	            	$scope.messageDivClass = "container alert alert-danger";
+	            	$scope.messageDivClass = "alert alert-danger";
 	            	if(error.status === 404){
 	            		$scope.actionMessage = "User not found";
 	            	}else{
@@ -121,7 +121,7 @@ accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '
                 $scope.formDisabled = true;
                 accountService.saveUser(userCreated).then(
                     function (response) {
-                        $scope.messageDivClass = "container alert alert-success";
+                        $scope.messageDivClass = "alert alert-success";
                         $scope.actionMessage = "User created";
                         // Close modal by passing the new user to update the table
                         $scope.newUser = user;
@@ -131,7 +131,7 @@ accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '
                         }, 2000);
                     },
                     function (error) {
-                        $scope.messageDivClass = "container alert alert-danger";
+                        $scope.messageDivClass = "alert alert-danger";
                         $scope.actionMessage = error;
                         $scope.formDisabled = false;
                     }

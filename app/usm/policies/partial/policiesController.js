@@ -264,7 +264,7 @@ policiesModule.controller('editPolicyModalInstanceCtrl', ['$log', '$timeout', '$
             policiesService.updatePolicy(policy).then(
                 function (response) {
                     $scope.policyUpdated = true;
-                    $scope.messageDivClass = "container alert alert-success";
+                    $scope.messageDivClass = "alert alert-success";
                     $scope.actionMessage = "Policy Saved";
                     if (_.isEqual("review.contact.details.enabled", policy.name)) {
                         $scope.$emit("ReviewContactDetails");
@@ -275,12 +275,12 @@ policiesModule.controller('editPolicyModalInstanceCtrl', ['$log', '$timeout', '$
                 },
                 function (error) {
                     $scope.policyUpdated = false;
-                    $scope.messageDivClass = "container alert alert-danger";
+                    $scope.messageDivClass = "alert alert-danger";
                     $scope.actionMessage = error;
                 }
             );
             //$scope.policyUpdated = true;
-            //$scope.messageDivClass = "container alert alert-success";
+            //$scope.messageDivClass = "alert alert-success";
             //$scope.actionMessage = "User Details Saved";
             //$timeout(function () {
             //	$modalInstance.close(policy);

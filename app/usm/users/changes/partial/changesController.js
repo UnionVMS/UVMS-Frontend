@@ -110,7 +110,7 @@ changesModule.controller('changesModalInstanceCtrl', ['$scope', '$log', '$modalI
         $scope.approveChange = function (userName) {
             changesService.acceptPendingContactDetails(userName).then(
                 function (response) {
-                    $scope.messageDivClass = "container alert alert-success";
+                    $scope.messageDivClass = "alert alert-success";
                     $scope.actionMessage = "Changes Approved";
                     $scope.changesSaved = true;
                     $timeout(function () {
@@ -118,7 +118,7 @@ changesModule.controller('changesModalInstanceCtrl', ['$scope', '$log', '$modalI
                     }, 2000);
                 },
                 function (error) {
-                    $scope.messageDivClass = "container alert alert-danger";
+                    $scope.messageDivClass = "alert alert-danger";
                     $scope.actionMessage = error;
                 }
             );
@@ -127,7 +127,7 @@ changesModule.controller('changesModalInstanceCtrl', ['$scope', '$log', '$modalI
         $scope.rejectChange = function (userName) {
             changesService.rejectPendingContactDetails(userName).then(
                 function (response) {
-                    $scope.messageDivClass = "container alert alert-success";
+                    $scope.messageDivClass = "alert alert-success";
                     $scope.actionMessage = "Changes Rejected";
                     $scope.changesSaved = true;
                     $timeout(function () {
@@ -135,7 +135,7 @@ changesModule.controller('changesModalInstanceCtrl', ['$scope', '$log', '$modalI
                     }, 2000);
                 },
                 function (error) {
-                    $scope.messageDivClass = "container alert alert-danger";
+                    $scope.messageDivClass = "alert alert-danger";
                     $scope.actionMessage = error;
                 }
             );
