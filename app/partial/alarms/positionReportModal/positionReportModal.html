@@ -101,7 +101,11 @@
                             </table>
                         </div>
                     </div>
-                    <prev-next-page-pagination page="currentSearchResults.page" total="currentSearchResults.totalNumberOfPages" next="nextVesselPage" prev="prevVesselPage"></prev-next-page-pagination>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

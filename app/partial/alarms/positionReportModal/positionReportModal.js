@@ -150,20 +150,14 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
     };
 
-    //Get next page
-    $scope.nextVesselPage = function(){
-        getListRequest.page += 1;
-        $scope.currentSearchResults.setLoading(true);
-        vesselRestService.getVesselList(getListRequest)
-            .then(onSearchVesselSuccess, onSearchVesselError);
-    };
-
-    //Get prev page
-    $scope.prevVesselPage = function(){
-        getListRequest.page -= 1;
-        $scope.currentSearchResults.setLoading(true);
-        vesselRestService.getVesselList(getListRequest)
-            .then(onSearchVesselSuccess, onSearchVesselError);
+    //Goto page in the search results
+    $scope.gotoPage = function(page){
+        if(angular.isDefined(page)){
+            getListRequest.page = page;
+            $scope.currentSearchResults.setLoading(true);
+            vesselRestService.getVesselList(getListRequest)
+                .then(onSearchVesselSuccess, onSearchVesselError);
+        }
     };
 
     //Handle click event on add vessel button
