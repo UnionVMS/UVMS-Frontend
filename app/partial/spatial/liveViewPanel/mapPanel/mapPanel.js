@@ -1,3 +1,9 @@
+angular.module('unionvmsWeb').controller('MapCtrl',function($scope, mapService){
+    $scope.closePopup = function(){
+        mapService.closePopup();
+    };
+});
+
 angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale, mapService){
     //Mock config object
     $scope.config = {
@@ -24,8 +30,8 @@ angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale,
                 type: 'history'
             }]
         }
-    }; 
-        
+    };
+    
     locale.ready('spatial').then(function(){
         mapService.setMap($scope.config);
         $scope.map = mapService.map;

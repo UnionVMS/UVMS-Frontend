@@ -6,10 +6,13 @@
 	</div>
 	<div class="container vmstables table-responsive">
 		<div class="vmstab-content" ng-show="isVmsTabSelected('MOVEMENTS')">
+			<div class="table-tools" ng-show="executedReport.positions.length > 0">
+				<i class="fa fa-lg fa-file" title="{{'spatial.tab_vms_export_csv' | i18n}}" ng-click="exportAsCSV('positions')"></i>
+			</div>
 			<table datatable="ng" dt-options="posTable.dtOptions" dt-column-defs="posTable.dtColumnDefs" class="table table-striped" style="width: 100%;">
 			    <thead>
 			        <tr>
-			            <th>{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
+			            <th style="width: 100px;">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
 			            <th>{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}</th>
 			            <th>{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}</th>
 			            <th>{{'spatial.tab_vms_pos_table_header_name' | i18n }}</th>
@@ -26,7 +29,7 @@
 			    </thead>
 			    <tfoot class="footerToTop">
 			        <tr>
-			            <th></th>
+			            <th style="width: 100px;"></th>
 			            <th></th>
 			            <th></th>
 			            <th></th>
@@ -43,7 +46,7 @@
 		        </tfoot>
 			    <tbody>
 			        <tr ng-repeat="position in executedReport.positions">
-			        	<td>{{ position.properties.cc }}</td>
+			        	<td style="width: 100px;">{{ position.properties.cc }}</td>
 			            <td>{{ position.properties.ircs }}</td>
 			            <td>{{ position.properties.cfr }}</td>
 			            <td>{{ position.properties.name }}</td>
@@ -56,18 +59,21 @@
 			            <td>{{ position.properties.crs }}</td>
 			            <td>{{ position.properties.msg_tp }}</td>
 			            <td style="width:80px;">
-			            	<button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'POSITION')"><span class="fa fa-search"></span></button>
-			            	<button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'POSITION')"><span class="fa fa-hand-paper-o"></span></button>
+			            	<button ng-hide="!executedReport.tabs.map" type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'POSITION')"><span class="fa fa-search"></span></button>
+			            	<button ng-hide="!executedReport.tabs.map" type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'POSITION')"><span class="fa fa-hand-paper-o"></span></button>
 			            </td>
 			        </tr>
 			    </tbody>
 			</table>
 		</div>
 		<div class="vmstab-content" ng-show="isVmsTabSelected('SEGMENTS')">
+			<div class="table-tools" ng-show="executedReport.segments.length > 0">
+				<i class="fa fa-lg fa-file" title="{{'spatial.tab_vms_export_csv' | i18n}}" ng-click="exportAsCSV('segments')"></i>
+			</div>
 			<table datatable="ng" dt-options="segTable.dtOptions" dt-column-defs="segTable.dtColumnDefs" class="table table-striped" style="width: 100%;">
 			    <thead>
 			        <tr>
-			            <th>{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
+			            <th style="width: 100px;">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
 			            <th>{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}</th>
 			            <th>{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}</th>
 			            <th>{{'spatial.tab_vms_pos_table_header_name' | i18n }}</th>
@@ -80,7 +86,7 @@
 			    </thead>
 			    <tfoot class="footerToTop">
 			    	<tr>
-			    		<th></th>
+			    		<th style="width: 100px;"></th>
 			    		<th></th>
 			    		<th></th>
 			    		<th></th>
@@ -93,7 +99,7 @@
 			    </tfoot>
 			    <tbody>
 			    	<tr ng-repeat="segment in executedReport.segments">
-			    		<td>{{ segment.properties.cc }}</td>
+			    		<td style="width: 100px;">{{ segment.properties.cc }}</td>
 			    		<td>{{ segment.properties.ircs }}</td>
 			            <td>{{ segment.properties.cfr }}</td>
 			    		<td>{{ segment.properties.name }}</td>
@@ -110,10 +116,13 @@
 			</table>
 		</div>
 		<div class="vmstab-content" ng-show="isVmsTabSelected('TRACKS')">
+			<div class="table-tools" ng-show="executedReport.tracks.length > 0">
+				<i class="fa fa-lg fa-file" title="{{'spatial.tab_vms_export_csv' | i18n}}" ng-click="exportAsCSV('tracks')"></i>
+			</div>
 			<table datatable="ng" dt-options="tracksTable.dtOptions" dt-column-defs="tracksTable.dtColumnDefs" class="table table-striped" style="width: 100%;">
 			    <thead>
 			        <tr>
-			            <th>{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
+			            <th style="width: 100px;">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
 			            <th>{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}</th>
 			            <th>{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}</th>
 			            <th>{{'spatial.tab_vms_pos_table_header_name' | i18n }}</th>
@@ -126,7 +135,7 @@
 			    </thead>
 			    <tfoot class="footerToTop">
 			    	<tr>
-			    		<th></th>
+			    		<th style="width: 100px;"></th>
 			    		<th></th>
 			    		<th></th>
 			    		<th></th>
@@ -137,7 +146,7 @@
 			    </tfoot>
 			    <tbody>
 			    	<tr ng-repeat="track in executedReport.tracks">
-			    		<td>{{ track.asset.cc }}</td>
+			    		<td style="width: 100px;">{{ track.asset.cc }}</td>
 			    		<td>{{ track.asset.ircs }}</td>
 			    		<td>{{ track.asset.cfr }}</td>
 			    		<td>{{ track.asset.name }}</td>

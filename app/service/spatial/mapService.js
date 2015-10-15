@@ -136,13 +136,14 @@ ol.control.HistoryControl = function(opt_options){
 };
 ol.inherits(ol.control.HistoryControl, ol.control.Control);
 
-angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $timeout) {
+angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $timeout, $templateRequest, $compile) {
 	var ms = {};
 
 	//Initialize the map
 	ms.setMap = function(config){
 	    ms.controls = [];
 	    ms.interactions = [];
+	    ms.overlay = ms.addPopupOverlay();
 
       var attribution = new ol.Attribution({
           html: 'This is a custom layer from UnionVMS'
@@ -181,6 +182,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
           target: 'map',
           controls: controlsToMap[0],
           interactions: controlsToMap[1],
+          overlays: [ms.overlay],
           logo: false
       });
 
@@ -195,6 +197,38 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                  control.updateHistory();
              }
          }, controls);
+      });
+      
+      map.on('singleclick', function(evt){
+          var coordinate = evt.coordinate;
+          
+          //FIXME this should be set dynamically
+          var activeLayerType = 'vmspos';
+          
+          var features = [];
+          map.forEachFeatureAtPixel(evt.pixel, function(feature, layer){
+              if (layer.get('title') === activeLayerType){
+                  features.push(feature.getProperties());
+              }
+          });
+          
+          var templateURL = 'partial/spatial/templates/' + activeLayerType + '.html';
+          
+          $templateRequest(templateURL).then(function(template){
+//              var rendered = Mustache.render(template, features[0]);
+//              var content = document.getElementById('popup-content');
+//              content.innerHTML = rendered;
+              
+              var rendered = $compile(template)(features[0]);
+              var content = document.getElementById('popup-content');
+              content.innerHTML = rendered;
+              ms.overlay.setPosition(coordinate);
+          }, function(){
+              //error fetching template
+          });
+          
+          
+          //ms.overlay.setPosition(coordinate);
       });
 
       //map.addLayer(osmLayer);
@@ -611,14 +645,32 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	ms.panTo = function(coords){
 	    ms.map.getView().setCenter(coords);
 	};
+	
+	//Popup to display vector info
+	ms.addPopupOverlay = function(){
+	    var overlay = new ol.Overlay({
+	        element: document.getElementById('popup'),
+	        autoPan: true,
+	        autoPanAnimation: {
+	            duration: 250
+	        }
+	    });
+	    
+	    return overlay;
+	};
+	
+	ms.closePopup = function(){
+	    ms.overlay.setPosition(undefined);
+	    return false;
+	};
 
 	//Recalculate map size
-  ms.updateMapSize = function(){
-    if (!ms.map) {
-      return;
-    }
-    ms.map.updateSize();
-  };
+	ms.updateMapSize = function(){
+	    if (!ms.map) {
+	        return;
+	    }
+	    ms.map.updateSize();
+	};
 
 	return ms;
 });

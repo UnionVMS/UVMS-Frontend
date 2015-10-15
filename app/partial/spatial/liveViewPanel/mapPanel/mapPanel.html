@@ -1,7 +1,11 @@
-<div>
+<div ng-controller="MapCtrl">
 	<div class="map-container">
 		<div ng-include="'partial/spatial/liveViewPanel/mapPanel/layerPanel/layerPanel.html'"></div>
 		<div id="map" class="map" ng-controller="MappanelCtrl" resize ng-style="doResize(105, 340)" tabIndex="0"></div>
+		<div id="popup" class="ol-popup">
+	      <a href ng-click="closePopup()" id="popup-closer" class="ol-popup-closer"><span class="fa fa-times"></span></a>
+	      <div id="popup-content"></div>
+	    </div>
 	</div>
 	<div class="container map-bottom">
 		<div class="row">

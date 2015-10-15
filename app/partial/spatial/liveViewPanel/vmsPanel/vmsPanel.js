@@ -1,5 +1,6 @@
-angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, mapService, datatablesService, DTOptionsBuilder, DTColumnDefBuilder){
+angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, reportService, mapService, csvWKTService, datatablesService, DTOptionsBuilder, DTColumnDefBuilder){
     $scope.selectedVmsTab = 'MOVEMENTS';
+    $scope.executedReport = reportService;
     
     //Mock config object
     $scope.config = {
@@ -269,6 +270,131 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        }
        mapService.panTo(coords);
        $scope.$emit('mapAction');
+   };
+   
+   //Reduce positions for export
+   $scope.reducePositions = function(data){
+       return data.reduce(
+           function(csvObj, rec){
+               var row = [
+                   rec.properties.cc,
+                   rec.properties.ircs,
+                   rec.properties.cfr,
+                   rec.properties.name,
+                   rec.properties.pos_tm,
+                   rec.geometry.coordinates[1],
+                   rec.geometry.coordinates[0],
+                   rec.properties.stat,
+                   rec.properties.m_spd,
+                   rec.properties.c_spd,
+                   rec.properties.crs,
+                   rec.properties.msg_tp
+               ];
+               
+               csvObj.push(row);
+               return csvObj;
+           }, []
+       );
+   };
+   
+   //Reduce segments for export
+   $scope.reduceSegments = function(data){
+       var wkt = new ol.format.WKT();
+       var geoJson = new ol.format.GeoJSON();
+       return data.reduce(
+           function(csvObj, rec){
+               var geom = wkt.writeGeometry(geoJson.readGeometry(rec.geometry));
+               var row = [
+                   rec.properties.cc,
+                   rec.properties.ircs,
+                   rec.properties.cfr,
+                   rec.properties.name,
+                   rec.properties.dist,
+                   rec.properties.dur,
+                   rec.properties.spd_o_gnd,
+                   rec.properties.crs_o_gnd,
+                   geom
+               ];
+               
+               csvObj.push(row);
+               return csvObj;
+           }, []
+       );
+   };
+   
+   //Reduce tracks for export
+   $scope.reduceTracks = function(data){
+       return data.reduce(
+           function(csvObj, rec){
+               var row = [
+                   rec.asset.cc,
+                   rec.asset.ircs,
+                   rec.asset.cfr,
+                   rec.asset.name,
+                   rec.dist,
+                   rec.dur
+               ];
+               
+               csvObj.push(row);
+               return csvObj;
+           }, []
+       );
+   };
+   
+   $scope.exportAsCSV = function(type){
+       var filename, header, data;
+       
+       if (type === 'positions'){
+           filename = locale.getString('spatial.tab_vms_export_csv_positions_filename');
+           header = [
+               locale.getString('spatial.tab_vms_pos_table_header_fs'),
+               locale.getString('spatial.tab_vms_pos_table_header_ircs'),
+               locale.getString('spatial.tab_vms_pos_table_header_cfr'),
+               locale.getString('spatial.tab_vms_pos_table_header_name'),
+               locale.getString('spatial.tab_vms_pos_table_header_date'),
+               locale.getString('spatial.tab_vms_pos_table_header_lat'),
+               locale.getString('spatial.tab_vms_pos_table_header_lon'),
+               locale.getString('spatial.tab_vms_pos_table_header_status'),
+               locale.getString('spatial.tab_vms_pos_table_header_measured_speed'),
+               locale.getString('spatial.tab_vms_pos_table_header_calculated_speed'),
+               locale.getString('spatial.tab_vms_pos_table_header_course'),
+               locale.getString('spatial.tab_vms_pos_table_header_msg_type')
+           ];
+           
+           data = $scope.reducePositions($scope.executedReport.positions);
+       } else if (type === 'segments'){
+           filename = locale.getString('spatial.tab_vms_export_csv_segments_filename');
+           header = [
+               locale.getString('spatial.tab_vms_pos_table_header_fs'),
+               locale.getString('spatial.tab_vms_pos_table_header_ircs'),
+               locale.getString('spatial.tab_vms_pos_table_header_cfr'),
+               locale.getString('spatial.tab_vms_pos_table_header_name'),
+               locale.getString('spatial.tab_vms_seg_table_header_distance'),
+               locale.getString('spatial.tab_vms_seg_table_header_duration'),
+               locale.getString('spatial.tab_vms_seg_table_header_speed_ground'),
+               locale.getString('spatial.tab_vms_seg_table_header_course_ground'),
+               locale.getString('spatial.tab_vms_seg_table_header_geometry')
+           ];
+           
+           data = $scope.reduceSegments($scope.executedReport.segments);
+       } else if (type === 'tracks'){
+           filename = locale.getString('spatial.tab_vms_export_csv_tracks_filename');
+           header = [
+                 locale.getString('spatial.tab_vms_pos_table_header_fs'),
+                 locale.getString('spatial.tab_vms_pos_table_header_ircs'),
+                 locale.getString('spatial.tab_vms_pos_table_header_cfr'),
+                 locale.getString('spatial.tab_vms_pos_table_header_name'),
+                 locale.getString('spatial.tab_vms_seg_table_header_distance'),
+                 locale.getString('spatial.tab_vms_seg_table_header_duration'),
+             ];
+             
+             data = $scope.reduceTracks($scope.executedReport.tracks);
+       }
+       
+       //Create and download the file
+       if (angular.isDefined(data)){
+           csvWKTService.downloadCSVFile(data, header, filename);
+       }
    };
    
    //Custom sort function for the specified date target format

@@ -4,7 +4,8 @@
             <i class="fa fa-times closeicon" title="{{'common.close' | i18n}}"></i>
         </div>
         <div class="col-md-12 header">
-        	<span class="itemType">{{item.type === 'vessel' ? 'Vessel' : 'Vessel group'}}</span>
+        	<span class="itemType" ng-if="item.type === 'vessel'">{{'spatial.reports_form_vessels_search_by_vessel' | i18n}}</span>
+        	<span class="itemType" ng-if="item.type === 'vgroup'">{{'spatial.reports_form_vessels_search_by_group' | i18n}}</span>
         	<span class="vesselName">{{item.name}}</span>
         </div>
     </div>

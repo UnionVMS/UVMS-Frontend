@@ -48,9 +48,9 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             selectAll: false,
             selectedVessels: 0,
             vessels: [],
-            areas: [],
+            areas: []
 //            hasVesselFilter: false,
-            hasVmsFilter: false
+//            hasVmsFilter: false
         };
         
         angular.element('#reportEndDate').find('input').datetimepicker({

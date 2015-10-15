@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $timeout, $window, locale, mapService){
+angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $timeout, $window, locale, mapService, reportService){
     $scope.selectedTab = 'MAP';
     
     //Define tabs
@@ -7,12 +7,12 @@ angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $t
                 {
                     'tab': 'MAP',
                     'title': locale.getString('spatial.tab_map'),
-                    'visible': true
+                    'visible': reportService.tabs.map
                 },
                 {
                     'tab': 'VMS',
                     'title': locale.getString('spatial.tab_vms'),
-                    'visible': true
+                    'visible': reportService.tabs.vms
                 }
             ];
         };
@@ -23,6 +23,10 @@ angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $t
    
    $scope.isTabSelected = function(tab){
        return $scope.selectedTab === tab;
+   };
+   
+   $scope.isTabVisible = function(tabIdx){
+       return $scope.tabMenu[tabIdx].visible;
    };
    
    //Focus map div
@@ -39,6 +43,19 @@ angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $t
            $timeout(mapService.updateMapSize, 50);
            $timeout($scope.focusMap, 50);
        }
+   });
+   
+   $scope.$watch(function(){return reportService.tabs.map;}, function(newVal, oldVal){
+       $scope.tabMenu[0].visible = newVal;
+       if (newVal === true){
+           $scope.selectTab('MAP');
+       } else {
+           $scope.selectTab('VMS');
+       }
+    });
+   
+   $scope.$watch(function(){return reportService.tabs.vms;}, function(newVal, oldVal){
+      $scope.tabMenu[1].visible = newVal;
    });
    
    $scope.$on('mapAction', function(){

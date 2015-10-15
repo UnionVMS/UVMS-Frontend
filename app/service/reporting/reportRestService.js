@@ -3,15 +3,32 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
 	return {
 	    getReportsList: function(){
 	        return $resource('/reporting/rest/report/list', {}, {
-	            'get': {method: 'GET'}
+	            'get': {
+	                method: 'GET',
+	                headers: {
+	                    'scopeName': 'EC'
+	                }
+	             }
 	        });
 	    },
 	    getReport: function(){
-	        return $resource('/reporting/rest/report/:id');
+	        return $resource('/reporting/rest/report/:id', {}, {
+	            'get': {
+	                method: 'GET',
+	                headers: {
+	                    'scopeName': 'EC'
+	                }
+	            }
+	        });
 	    },
 	    deleteReport: function(){
 	        return $resource('/reporting/rest/report/:id', {}, {
-	            'delete': {method: 'DELETE'}
+	            'delete': {
+	                method: 'DELETE',
+	                headers: {
+                        'scopeName': 'EC'
+                    }
+	             }
 	        });
 	    },
 	    updateReport: function(){
@@ -19,7 +36,8 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
                 'update': {
                     method: 'PUT',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'scopeName': 'EC'
                     }
                 }
             });
@@ -29,30 +47,31 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
                 'create': {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'scopeName': 'EC'
                     }
                 }
             });
 	    },
 	    getVmsData: function(){
-	        return $resource('/reporting/rest/vms/mock/:id', {}, {
-	            'get': {method: 'GET'}
-	        });
+	        return $resource('/app/test_data/movements.json');
+//	        return $resource('/reporting/rest/vms/mock/:id', {}, {
+//	            'get': {
+//	                method: 'GET',
+//	                headers: {
+//                        'scopeName': 'EC'
+//                    }
+//	             }
+//	        });
 	    }
 	};
 })
 .service('reportRestService', function($q, reportRestFactory){
-    //FIXME change to selected scope after login
-    var scope = 123;
-    
+
     var reportRestService = {
         getReportsList: function(){
             var deferred = $q.defer();
-            reportRestFactory.getReportsList().get({CURRENT_USER_SCOPE: scope}, function(response){
-//                if (response.code !== 200){
-//                    deferred.reject('Invalid response status ReportList');
-//                    return;
-//                }
+            reportRestFactory.getReportsList().get(function(response){
                 deferred.resolve(response);
             }, function(error){
                 console.error('Error getting list of reports');
@@ -99,7 +118,8 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
         },
         getVmsData: function(reportId){
             var deferred = $q.defer();
-            reportRestFactory.getVmsData().get({id: reportId}, function(response){
+            //reportRestFactory.getVmsData().get({id: reportId}, function(response){
+            reportRestFactory.getVmsData().get(function(response){
                 deferred.resolve(response.data);
             }, function(error){
                 deferred.reject(error);

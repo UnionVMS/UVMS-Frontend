@@ -54,7 +54,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				$title
 					.addClass( 'layertree-menu' )
 					.append( '<span class="fa fa-caret-down"></span>' );
-			}
+			};
 
 			// store maps layers for updating map.
 			scope.mapLayers = null;

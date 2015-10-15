@@ -5,10 +5,10 @@
 				<li ng-repeat="tab in tabMenu" class="sourcetab" ng-click="selectTab(tab.tab)" ng-class="{'active': selectedTab === '{{tab.tab}}'}" ng-if="tab.visible"><a>{{tab.title}}</a></li>
 			</ul>
 		</div>
-		<div class="spatialtab-content" ng-show="isTabSelected('MAP')">
+		<div class="spatialtab-content" ng-show="isTabSelected('MAP') && isTabVisible(0)">
 			<div ng-include="'partial/spatial/liveViewPanel/mapPanel/mapPanel.html'"></div>
 		</div>
-		<div class="vmstabContainer" ng-show="isTabSelected('VMS')">
+		<div class="vmstabContainer" ng-show="isTabSelected('VMS') && isTabVisible(1)">
 			<div ng-include="'partial/spatial/liveViewPanel/vmsPanel/vmsPanel.html'"></div>
 		</div>
 	</div>

@@ -1,9 +1,9 @@
 <div ng-controller="ReportslistCtrl as rt" class="table-responsive reportsListTable">
 	<div class="row reportBtnGroup" ng-show="isVisible.reportsList">
 		<div class="col-md-6 report-btn-group">
-			<button type="button" class="btn btn-primary btn-sm" ng-click="reloadReportsList()">
-                   <span class="fa fa-refresh" aria-hidden="true"></span>
-               </button>
+			<!-- <button type="button" class="btn btn-primary btn-sm" ng-click="reloadReportsList()">
+                <span class="fa fa-refresh" aria-hidden="true"></span>
+            </button> -->
 			<button type="button" class="btn btn-primary btn-sm" ng-click="toggleReportForm('CREATE')">
                    <span class="fa fa-plus-square" aria-hidden="true"></span> &nbsp;
                    <span>{{'spatial.reports_add_new_report' | i18n }}</span>

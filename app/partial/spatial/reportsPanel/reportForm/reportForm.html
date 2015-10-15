@@ -55,7 +55,7 @@
    					<div class="form-group col-md-6 report-components">
    						<label>{{'spatial.reports_form_report_components' | i18n }}</label> &nbsp; &nbsp;
 						<label class="checkbox-inline checkbox-options">
-							<input type="checkbox" ng-model="report.components.map" ng-checked="report.components.map || !report">
+							<input type="checkbox" ng-model="report.withMap" ng-checked="report.withMap || !report">
 							{{'spatial.reports_form_map_component_checkbox' | i18n }}
 						</label>
 						<!-- <label class="checkbox-inline checkbox-options">
@@ -72,7 +72,7 @@
 	   				</div>
 	   				<!-- Map configuration -->
 	   				<div class="form-group col-md-3">
-	   					<button type="button" class="btn btn-primary btn-sm" style="width:100%;" ng-show="report.components.map || !report">
+	   					<button type="button" class="btn btn-primary btn-sm" style="width:100%;" ng-show="report.withMap || !report">
 		                    <span class="fa fa-map-o" aria-hidden="true"></span> &nbsp;
 		                    <span>{{'spatial.reports_form_map_configuration' | i18n }}</span>
 		                </button>

@@ -31,6 +31,7 @@
         "xdescribe": true,
         "xit": true,
         "spyOn": true,
-        "ol": true
+        "ol": true,
+		"Mustache": true
     }
 }
