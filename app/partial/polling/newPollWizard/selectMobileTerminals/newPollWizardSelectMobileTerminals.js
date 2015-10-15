@@ -3,7 +3,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
 
     $scope.selectedGroup = {};
 
-    $scope.currentSearchResults = new SearchResults('vesselName', false, locale.getString('polling.wizard_first_step_nos_search_result'));
+    $scope.currentSearchResults = new SearchResults('vesselName', false);
 
     var init = function(){
         $scope.getPollableChannels();

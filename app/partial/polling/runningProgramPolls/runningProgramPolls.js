@@ -16,8 +16,10 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
     var getRunningPollsSuccess = function(runningPolls){
         $scope.currentSearchResults.setLoading(false);
         var page = new SearchResultListPage(runningPolls);
-        page.currentPage = undefined;
-        page.totalNumberOfPages = undefined;
+        if(runningPolls.length > 0){
+            page.currentPage = undefined;
+            page.totalNumberOfPages = undefined;
+        }
         $scope.currentSearchResults.updateWithNewResults(page);
     };
 
