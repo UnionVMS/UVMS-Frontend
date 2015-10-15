@@ -24,16 +24,24 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			// call tree and map update
 			scope.selectHandler = function( event, data ){
 				scope.updateBasemap( event, data );
-				if ( !data.node.data.mapLayer ) {
-					scope.updateMap();
-					//FIXME we might do this on a layer basis which would probably be better
-	                scope.$parent.$broadcast('reloadLegend');
-					return;
+				if (data.node.hasChildren() === true){
+				    scope.loopFolderNodes(data.node);
+				} else {
+				    data.node.data.mapLayer.set( 'visible', data.node.isSelected() );
 				}
-				data.node.data.mapLayer.set( 'visible', data.node.isSelected() );
-
+				
 				//FIXME we might do this on a layer basis which would probably be better
                 scope.$parent.$broadcast('reloadLegend');
+			};
+			
+			scope.loopFolderNodes = function(parent){
+			    $.each(parent.children, function(index, node){
+			        if (node.hasChildren()){
+			            scope.loopFolderNodes(node);
+			        } else {
+			            node.data.mapLayer.set('visible', node.isSelected());
+			        }
+			    });
 			};
 
 			scope.renderNodeHandler = function( event, data ) {
@@ -84,7 +92,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 
 			// add and reorder layers
 			scope.addLayers = function( folder ) {
-				var layersByTitle, layer, treeNode;
+				var layersByType, layer, treeNode;
 
 				$.each( folder, function( index, value ) {
 					if ( value.folder ) {
@@ -94,11 +102,11 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 
 					if ( !value.data ) { return ( true ); }
 
-					layersByTitle = scope.mapLayers.filter( function( layer ){
-			        return layer.get( 'title' ) === value.data.title;
-			    });
+					layersByType = scope.mapLayers.filter( function( layer ){
+					    return layer.get( 'type' ) === value.data.type;
+					});
 
-					layer = layersByTitle[ 0 ];
+					layer = layersByType[ 0 ];
 
 					if ( !layer ) {
 						treeNode = scope.$tree.getNodeByKey( value.key );
@@ -196,18 +204,18 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 									{
 										title: 'EEZ',
 										data: {
-											type: 'eez',
-											title: 'eez',
+											type: 'WMS',
+											title: 'EEZ',
 											isBaseLayer: false,
-											attribution: 'This is a custom layer from UnionVMS',
+											attribution: 'Custom layer from UnionVMS',
 											url: 'http://localhost:8080/geoserver/wms',
-			                serverType: 'geoserver',
-			                params: {
-			                    'LAYERS': 'uvms:eez',
-			                    'TILED': true,
-			                    'STYLES': 'eez'
-			                    //'cql_filter': "sovereign='Portugal' OR sovereign='Poland' OR sovereign='Bulgaria' OR sovereign='Belgium'"
-			                },
+											serverType: 'geoserver',
+											params: {
+											    'LAYERS': 'uvms:eez',
+											    'TILED': true,
+											    'STYLES': 'eez'
+											    //'cql_filter': "sovereign='Portugal' OR sovereign='Poland' OR sovereign='Bulgaria' OR sovereign='Belgium'"
+											},
 											contextItems: {
 												header: {
 													name: 'Style options',
@@ -296,16 +304,16 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 									{
 										title: 'RFMO',
 										data: {
-											type: 'wms',
+											type: 'WMS',
 											isBaseLayer: false,
-											title: 'rfmo',
-											attribution: '',
+											title: 'RFMO',
+											attribution: 'Custom layer from UnionVMS',
 											url: 'http://localhost:8080/geoserver/wms',
 											serverType: 'geoserver',
 											params: {
 													'LAYERS': 'uvms:rfmo',
 													'TILED': true,
-													'STYLES': 'rfmo'
+													'STYLES': ''
 											},
 											contextItems: {
 												header: {
@@ -313,32 +321,32 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 													disabled: true,
 													className: 'layer-menu-header'
 												},
-                        styleA: {
-                          name: 'Labels and Geometry',
-                          type: 'radio',
-                          radio: 'style',
-                          value: 'rfmo_label_geom',
-                          selected: false
-                        },
-                        styleB: {
-                          name: 'Geometry only',
-                          type: 'radio',
-                          radio: 'style',
-                          value: 'rfmo',
-                          selected: true
-                        },
-                        styleC: {
-                          name: 'Labels only',
-                          type: 'radio',
-                          radio: 'style',
-                          value: 'rfmo_label',
-                          selected: false
-                        }
-                      }
+                                                styleA: {
+                                                    name: 'Labels and Geometry',
+                                                    type: 'radio',
+                                                    radio: 'style',
+                                                    value: 'rfmo_label_geom',
+                                                    selected: false
+                                                },
+                                                styleB: {
+                                                    name: 'Geometry only',
+                                                    type: 'radio',
+                                                    radio: 'style',
+                                                    value: 'rfmo',
+                                                    selected: true
+                                                },
+                                                styleC: {
+                                                    name: 'Labels only',
+                                                    type: 'radio',
+                                                    radio: 'style',
+                                                    value: 'rfmo_label',
+                                                    selected: false
+                                                }
+                                              }
 										}
 									}
 								]
-							},
+							}/*,
 							{
 								title: 'spatial.layer_tree_user_areas',
 								folder: true,
@@ -353,7 +361,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 										title: 'My Area 03',
 									}
 								]
-							}
+							}*/
 						]
 					},
 					{
@@ -362,11 +370,17 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 						expanded: true,
 						children: [
 							{
-								title: 'OpenSeaMap'
-							},
+								title: 'OpenSeaMap',
+								data: {
+								    type: 'OSEA',
+								    isBaseLayer: false,
+								    title: 'OpenSeaMap'
+								}
+								
+							}/*,
 							{
 								title: 'Graticule'
-							}
+							}*/
 						]
 					},
 					{
@@ -381,18 +395,18 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 								selected: true,
 								extraClasses: 'layertree-basemap layertree-menu',
 								data: {
-									type: 'osm',
+									type: 'OSM',
 									isBaseLayer: true,
-									title: 'osm'
+									title: 'OpenStreetMap'
 								}
-							},
+							}/*,
 							{
 								title: 'MyGeoserverBackgroundLayer',
 								extraClasses: 'layertree-basemap',
 								data: {
 									isBaseLayer: true
 								}
-							}
+							}*/
 						]
 					}
 			];
@@ -400,19 +414,19 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			var glyph_opts = {
 				map: {
 					doc: 'fa fa-file-o',
-          docOpen: 'fa fa-file-o',
-          checkbox: 'fa fa-square-o',
-          checkboxSelected: 'fa fa-check-square-o',
-          checkboxUnknown: 'fa fa-check-square',
-          dragHelper: 'fa arrow-right',
-          dropMarker: 'fa long-arrow-right',
-          error: 'fa fa-warning',
-          expanderClosed: 'fa fa-plus-square-o',
-          expanderLazy: 'fa fa-angle-right',
-          expanderOpen: 'fa fa-minus-square-o',
-          folder: 'fa fa-folder-o',
-          folderOpen: 'fa fa-folder-open-o',
-          loading: 'fa fa-spinner fa-pulse'
+                    docOpen: 'fa fa-file-o',
+                    checkbox: 'fa fa-square-o',
+                    checkboxSelected: 'fa fa-check-square-o',
+                    checkboxUnknown: 'fa fa-check-square',
+                    dragHelper: 'fa arrow-right',
+                    dropMarker: 'fa long-arrow-right',
+                    error: 'fa fa-warning',
+                    expanderClosed: 'fa fa-plus-square-o',
+                    expanderLazy: 'fa fa-angle-right',
+                    expanderOpen: 'fa fa-minus-square-o',
+                    folder: 'fa fa-folder-o',
+                    folderOpen: 'fa fa-folder-open-o',
+                    loading: 'fa fa-spinner fa-pulse'
 				}
 			};
 

@@ -29,7 +29,7 @@ angular.module('unionvmsWeb').directive('layerMenu', function() {
 			};
 
 			$.contextMenu({
-				selector: '.layertree-menu',
+				selector: '.layertree-menu > span',
 				trigger: 'left',
 				build: function( $trigger, e ) {
 					var rootProp, item,

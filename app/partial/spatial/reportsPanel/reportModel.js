@@ -66,9 +66,9 @@ angular.module('unionvmsWeb').factory('Report',function() {
 	        report.xValue = angular.isDefined(filter.common.xValue) ? filter.common.xValue : undefined;
 	        
 	        //Vessel filters
-	        if (angular.isDefined(filter.vessels)){
+	        report.vesselsSelection = filter.vessels;
+	        if (filter.vessels.length > 0){
 	            report.hasVesselFilter = true;
-	            report.vesselsSelection = filter.vessels;
 	        }
 	        
 	        //VMS positions filters
