@@ -58,6 +58,7 @@ angular.module('unionvmsWeb').factory('Report',function() {
 	        report.withMap = data.withMap;
 	        
 	        //Common filters
+			report.commonFilterId = filter.common.id;
 	        report.startDateTime = angular.isDefined(filter.common.startDate) ? convertDate(filter.common.startDate, 'from_server').slice(0,-3) : undefined;
 	        report.endDateTime = angular.isDefined(filter.common.endDate) ? convertDate(filter.common.endDate, 'from_server').slice(0, -3) : undefined;
 	        report.positionSelector = angular.isDefined(filter.common.positionSelector) ? filter.common.positionSelector : 'all';
@@ -123,6 +124,7 @@ angular.module('unionvmsWeb').factory('Report',function() {
 	    
 	    var filter = {
 	        common: {
+				id: this.commonFilterId,
 	            startDate: convertDate(this.startDateTime, 'to_server'),
 	            endDate: convertDate(this.endDateTime, 'to_server'),
 	            positionSelector: this.positionSelector,
