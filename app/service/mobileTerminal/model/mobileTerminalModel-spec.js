@@ -113,7 +113,7 @@ describe('MobileTerminalModel', function() {
         "plugin" : {
             "labelName" : "BURUM",
             "serviceName" : "TestName",
-            //"inactive" : false
+            "inactive" : false
         }
 
     };
@@ -139,7 +139,7 @@ describe('MobileTerminalModel', function() {
 
         expect(mt.plugin.labelName).toBe("BURUM");
         expect(mt.plugin.serviceName).toBe("TestName");
-        //expect(mt.plugin.inactive).toBe(false);
+        expect(mt.plugin.inactive).toBe(false);
         expect(mt.connectId).toBe("ebeec8ef-2eab-4d4f-9d6d-994ad8b57c34");
 
         // Check that all attributes were parsed.
@@ -277,6 +277,22 @@ describe('MobileTerminalModel', function() {
         expect(mt1.isEqualAttributesAndChannels(mt2)).toBeTruthy();
         mt2.channels.splice(0,1);
         expect(mt1.isEqualAttributesAndChannels(mt2)).toBeFalsy();
+    }));
+
+    it('pluginIsInactive should return true when plugin->inactive is defined and set to true', inject(function(MobileTerminal, CommunicationChannel) {
+        var mt = MobileTerminal.fromJson(mobileTerminalData);
+
+        mt.plugin.inactive = true;
+        expect(mt.pluginIsInactive()).toBeTruthy();
+
+        mt.plugin.inactive = false;
+        expect(mt.pluginIsInactive()).toBeFalsy();
+
+        mt.plugin.inactive = undefined;
+        expect(mt.pluginIsInactive()).toBeFalsy();
+
+        mt.plugin = undefined;
+        expect(mt.pluginIsInactive()).toBeFalsy();
     }));
 
     it('should transfer capabilities of removed channel to default channel', inject(function(CommunicationChannel, MobileTerminal) {

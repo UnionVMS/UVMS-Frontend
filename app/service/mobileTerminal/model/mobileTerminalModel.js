@@ -20,7 +20,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             this.plugin = {
                 labelName : undefined,
                 serviceName : undefined,
-                //inactive : false,
+                inactive : false,
             };
         }
 
@@ -37,7 +37,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 mobileTerminal.plugin = {
                     labelName : data.plugin.labelName,
                     serviceName : data.plugin.serviceName,
-                    //inactive : data.plugin.inactive
+                    inactive : data.plugin.inactive
                 };
             }
 
@@ -230,6 +230,10 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
 
         MobileTerminal.prototype.getSystemType = function() {
             return this.type;
+        };
+
+        MobileTerminal.prototype.pluginIsInactive = function() {
+            return angular.isDefined(this.plugin) && this.plugin.inactive;
         };
 
         MobileTerminal.prototype.isEqualTerminal = function(item) {

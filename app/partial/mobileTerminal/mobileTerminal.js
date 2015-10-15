@@ -72,11 +72,12 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
     };
 
     //Get model value for the transponder system dropdown by system type and les
-    $scope.getModelValueForTransponderSystemBySystemTypeAndLES = function(type, les){
-        var value;
+    $scope.getModelValueForTransponderSystemBySystemTypeAndLES = function(type, labelName, serviceName){
+        var value, tmp;
         $.each($scope.transponderSystems, function(index, system){
             var systemAndTypeAndLESItem = system.typeAndLes;
-            if(systemAndTypeAndLESItem.equalsTypeAndLES(type, les)){
+            tmp = new SystemTypeAndLES(type, labelName, serviceName);
+            if(systemAndTypeAndLESItem.equals(tmp)){
                 value = systemAndTypeAndLESItem;
                 return false;
             }
@@ -91,7 +92,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
             //LES capability
             if(config.capabilities["HAS_LES"] && _.isArray(config.capabilities["HAS_LES"])){
                 $.each(config.capabilities["HAS_LES"], function(key2, lesOption){
-                    $scope.transponderSystems.push({text : config.viewName +" - " +lesOption.text, typeAndLes : new SystemTypeAndLES(config.systemType, lesOption.code)});
+                    $scope.transponderSystems.push({text : config.viewName +" - " +lesOption.text, typeAndLes : new SystemTypeAndLES(config.systemType, lesOption.attributes['LABELNAME'], lesOption.attributes['SERVICENAME'])});
                 });
             }else{
                 $scope.transponderSystems.push({text : config.viewName, typeAndLes : new SystemTypeAndLES(config.systemType, undefined)});
@@ -251,7 +252,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
                             }
 
                             pollingService.setWizardStep(2);
-                            $location.path('communication/polling');
+                            $location.path('polling');
 
                         },
                         function(error){

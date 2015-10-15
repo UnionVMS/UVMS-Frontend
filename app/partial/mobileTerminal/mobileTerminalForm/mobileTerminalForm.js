@@ -15,11 +15,18 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         $scope.currentMobileTerminal = $scope.getCurrentMobileTerminal();
         if(angular.isDefined($scope.mobileTerminalForm)){
             $scope.mobileTerminalForm.$setPristine();
-            $scope.submitAttempted = false;
+        }
+        $scope.submitAttempted = false;
 
+        if(angular.isDefined($scope.currentMobileTerminal)){
             //Update the value for typeAndLES in order for the dropdown to show the correct value
-            if(angular.isDefined($scope.currentMobileTerminal)){
-                $scope.typeAndLES = $scope.getModelValueForTransponderSystemBySystemTypeAndLES($scope.currentMobileTerminal.type, $scope.currentMobileTerminal.plugin.labelName);
+            if(angular.isDefined($scope.currentMobileTerminal) && angular.isDefined($scope.currentMobileTerminal.plugin)){
+                $scope.typeAndLES = $scope.getModelValueForTransponderSystemBySystemTypeAndLES($scope.currentMobileTerminal.type, $scope.currentMobileTerminal.plugin.labelName, $scope.currentMobileTerminal.plugin.serviceName);
+            }
+
+            //Show warning message if plugin is inactivated
+            if(!$scope.isCreateNewMode() && $scope.currentMobileTerminal.pluginIsInactive()) {
+                alertService.showWarningMessage(locale.getString("mobileTerminal.warning_plugin_inactive"));
             }
         }
     });
@@ -49,22 +56,26 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         }
     };
 
-    //Selected terminal
+    //Selected terminal type
     $scope.onTerminalSystemSelect = function(selectedItem){
         if(angular.isDefined(selectedItem) && angular.isDefined(selectedItem.typeAndLes)){
             $scope.currentMobileTerminal.type = selectedItem.typeAndLes.type;
-            var selectedLES = selectedItem.typeAndLes.les;
-            if(angular.isDefined(selectedLES)){
-                $scope.currentMobileTerminal.plugin.labelName = selectedLES;
+            var selectedLabelName = selectedItem.typeAndLes.labelName;
+            var selectedServiceName = selectedItem.typeAndLes.serviceName;
+            if(angular.isDefined(selectedLabelName) && angular.isDefined(selectedServiceName)){
+                $scope.currentMobileTerminal.plugin.labelName = selectedLabelName;
+                $scope.currentMobileTerminal.plugin.serviceName = selectedServiceName;
                 $.each($scope.currentMobileTerminal.channels, function(index, channel){
-                    channel.setLESDescription(selectedLES);
+                    channel.setLESDescription(selectedLabelName);
                 });
             }else{
                 delete $scope.currentMobileTerminal.plugin.labelName;
+                delete $scope.currentMobileTerminal.plugin.serviceName;
             }
         }else{
             $scope.currentMobileTerminal.type = undefined;
             delete $scope.currentMobileTerminal.plugin.labelName;
+            delete $scope.currentMobileTerminal.plugin.serviceName;
         }
     };
 
@@ -118,14 +129,6 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
 
     //Update
     $scope.updateMobileTerminal = function() {
-        modalComment.open($scope.updateMobileTerminalWithComment, {
-            titleLabel: locale.getString("mobileTerminal.updating", [$scope.currentMobileTerminal.getSerialNumber()]),
-            saveLabel: locale.getString("common.update")
-        });
-    };
-
-    //Update the mobile terminal
-    $scope.updateMobileTerminalWithComment = function(comment){
         $scope.submitAttempted = true;
 
         //Validate form
@@ -140,7 +143,15 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
             return false;
         }
 
-        //Update
+        modalComment.open($scope.updateMobileTerminalWithComment, {
+            titleLabel: locale.getString("mobileTerminal.updating", [$scope.currentMobileTerminal.getSerialNumber()]),
+            saveLabel: locale.getString("common.update")
+        });
+    };
+
+    //Update the mobile terminal
+    $scope.updateMobileTerminalWithComment = function(comment){
+        //Send update request
         $scope.waitingForCreateResponse = true;
         alertService.hideMessage();
         mobileTerminalRestService.updateMobileTerminal($scope.currentMobileTerminal, comment)

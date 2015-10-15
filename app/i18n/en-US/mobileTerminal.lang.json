@@ -129,5 +129,6 @@
     "OCEAN_REGION_WEST_ATLANTIC" : "AOR-W",
     "LES_EIK" : "Eik",
     "LES_BURUM" : "Burum",
-    "transponderNameFilter_INMARSAT_C" : "Inmarsat-C"
+    "transponderNameFilter_INMARSAT_C" : "Inmarsat-C",
+    "warning_plugin_inactive" : "The plugin that this terminal uses is inactivated."
 }

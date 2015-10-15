@@ -31,10 +31,13 @@ describe('mobileTerminalFormCtrl', function() {
     it('should update currentMobileTerminal with created terminal', inject(function(MobileTerminal, $compile, $q, mobileTerminalRestService, alertService) {
         scope.currentMobileTerminal = new MobileTerminal();
 
+        //Available in parent scope
         scope.setCreateMode = function(bool){
             scope.createNewMode = bool;
         };
-
+        scope.isCreateNewMode = function(){
+            return scope.createNewMode;
+        };
         scope.getCurrentMobileTerminal = function(){
             return scope.currentMobileTerminal;
         };
@@ -42,10 +45,6 @@ describe('mobileTerminalFormCtrl', function() {
         // A form to be valid
         var element = angular.element('<form name="mobileTerminalForm"></form>');
         $compile(element)(scope);
-
-        // Skip alert message
-        spyOn(alertService, "showSuccessMessage").andReturn();
-        spyOn(scope, "setCreateMode").andReturn();
 
         // Return a mock response for createNewMobileTerminal
         var deferred = $q.defer();
@@ -63,11 +62,14 @@ describe('mobileTerminalFormCtrl', function() {
         scope.getCurrentMobileTerminal = function(){
             return scope.currentMobileTerminal;
         };
+        scope.isCreateNewMode = function(){
+            return false;
+        };
 
         expect(scope.currentMobileTerminal.type).toBeUndefined();
         var selectItem = {
             text : "Inmarsat-C - Burum",
-            typeAndLes : new SystemTypeAndLES("INMARSAT-C", "BURUM")
+            typeAndLes : new SystemTypeAndLES("INMARSAT-C", "BURUM", "eu.europa.plugin.inmarsat.burum")
         };
 
         //Select item
@@ -84,11 +86,14 @@ describe('mobileTerminalFormCtrl', function() {
         scope.getCurrentMobileTerminal = function(){
             return scope.currentMobileTerminal;
         };
+        scope.isCreateNewMode = function(){
+            return false;
+        };
 
         expect(scope.currentMobileTerminal.type).toBeUndefined();
         var selectItem = {
             text : "Iridium",
-            typeAndLes : new SystemTypeAndLES("IRIDIUM", undefined)
+            typeAndLes : new SystemTypeAndLES("IRIDIUM", undefined, undefined)
         };
 
         //Select item

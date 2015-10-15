@@ -85,17 +85,25 @@ angular.module('unionvmsWeb')
         this.name = undefined;
         this.code = undefined;
         this.text = undefined; //shown in dropdowns by default
+        this.attributes = {}; //used for special types, e.g. HAS_LES
     }
 
     CapabilityOption.fromJson = function(data, capabilityName){
         var capabilityOption = new CapabilityOption();
+        //Set name and text
         capabilityOption.name = data.name;
         capabilityOption.text = data.name;
 
+        //Set code
         if(angular.isDefined(data.code)){
             capabilityOption.code = data.code;
         }else{
             capabilityOption.code = data.name;
+        }
+
+        //Set all attributes
+        for (var key in data){
+            capabilityOption.attributes[key.toUpperCase()] = data[key];
         }
 
         //Get view name
@@ -103,11 +111,13 @@ angular.module('unionvmsWeb')
         switch(capabilityName){
             case "SUPPORT_SINGLE_OCEAN":
             case "SUPPORT_MULTIPLE_OCEAN":
-                viewName = locale.getString("mobileTerminal.OCEAN_REGION" +"_" +capabilityOption.name);
+                capabilityOption.text = capabilityOption.name;
+                viewName = locale.getString("mobileTerminal.OCEAN_REGION" +"_" +capabilityOption.text);
                 break;
             case "HAS_LES":
-                viewName = locale.getString("mobileTerminal.LES" +"_" +capabilityOption.name);
-                break;                
+                capabilityOption.text = capabilityOption.attributes['LABELNAME'];
+                viewName = locale.getString("mobileTerminal.LES" +"_" +capabilityOption.text);
+                break;
         }
 
         if(angular.isDefined(viewName) && viewName !== "%%KEY_NOT_FOUND%%"){
@@ -123,13 +133,14 @@ angular.module('unionvmsWeb')
 angular.module('unionvmsWeb')
 .factory('SystemTypeAndLES', function(locale) {
 
-    function SystemTypeAndLES(type, les){
+    function SystemTypeAndLES(type, labelName, serviceName){
         this.type = type;
-        this.les = les;
+        this.labelName = labelName;
+        this.serviceName = serviceName;
     }
 
-    SystemTypeAndLES.prototype.equalsTypeAndLES = function(type, les){
-        return this.type === type && this.les === les;
+    SystemTypeAndLES.prototype.equals = function(other){
+        return this.type === other.type && this.labelName === other.labelName && this.serviceName === other.serviceName;
     };
 
     return SystemTypeAndLES;

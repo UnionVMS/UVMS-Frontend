@@ -24,10 +24,13 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" ng-class="{'inactive':!item.active}">            
+            <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" ng-class="{'inactive':!item.active}">
                 <td class="checkboxContainer">
                     <div class="iconToTheLeftOfTheTableCell" ng-show="!item.connectId && !item.associatedVessel">
                         <div class="unassignedIcon" tooltip-placement="bottom" tooltip="{{'mobileTerminal.table_not_assigned_icon_tooltip' | i18n}}">!</div>
+                    </div>
+                    <div class="iconToTheLeftOfTheTableCell" ng-show="item.connectId && item.pluginIsInactive()">
+                        <div class="unassignedIcon" tooltip-placement="bottom" tooltip="{{'mobileTerminal.warning_plugin_inactive' | i18n}}">!</div>
                     </div>
                     <input type="checkbox" ng-checked="isChecked(item)" ng-click="checkMobileTerminal(item)"/>
                 </td>
