@@ -19,17 +19,24 @@
         background-color: #383737;
         color:#FFFFFF;
         padding: 16px 0px 0px 0px;
-    }    
+    }
 
-
-    .headerwarnings {
+    .currentTime, .notifications, .signed-in, .sign-in{
         float: right;
-        padding-right: 20px;
+    }
 
-        .glyphicon-bell {
-            color:#ffffff;
-        }
+    .currentTime, .notifications{
+        padding-right: 40px;
+    }
 
+    .currentTime{
+        position: relative;
+        top:3px;
+        font-weight: normal;
+        font-size: 14px;
+    }
+
+    .notifications {
         .badge {
             background-color: red;
             bottom: 8px;
@@ -37,59 +44,53 @@
             position: relative;
         }
     }
-    .headermessages{
-        float: right;
-        margin-right: 30px;
-        .glyphicon-envelope{
-            color:#ffffff;
-        }
-    }
 
-
-
-    .login-drop-down{
-        position: relative;
-        top:-4px;
-        text-align: left;
-
-        color: white;
-        .username{
-            float:left;
-        }
-        .caret{
+    .signed-in{
+        .login-drop-down{
             position: relative;
-                top: 9px;
-                color:white;
-                float: left;
-                margin-left: 4px;
-        }
-        i{
-            margin-right: 5px;
-        }
-        ul{
-            padding:10px 0;
-        }     
+            top:-4px;
+            text-align: left;
 
-        .btn.btn-default.dropdown-toggle:focus {
-            border:none;
-        }
-
-        .btn.btn-default.dropdown-toggle{
-            background-color:#383737;
-            color:white;
-            border:none;
-            .caret{
-                color:white;
+            color: white;
+            .username{
+                float:left;
             }
-        }
-        .dropdown-menu {
-            color:black;
-            border-radius: 1px;
+            .caret{
+                position: relative;
+                    top: 9px;
+                    color:white;
+                    float: left;
+                    margin-left: 4px;
+            }
             i{
-                color:@primaryColor;
+                margin-right: 5px;
+            }
+            ul{
+                padding:10px 0;
+            }
+
+            .btn.btn-default.dropdown-toggle:focus {
+                border:none;
+            }
+
+            .btn.btn-default.dropdown-toggle{
+                background-color:#383737;
+                color:white;
+                border:none;
+                .caret{
+                    color:white;
+                }
+            }
+            .dropdown-menu {
+                color:black;
+                border-radius: 1px;
+                i{
+                    color:@primaryColor;
+                }
             }
         }
     }
+
     .sign-in{
         cursor: pointer;
         font-size: 14px;
