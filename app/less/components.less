@@ -3,33 +3,6 @@
  *
  */
 
- //Basic information containing status, and other short information
-.vesselForm, .mobileInformationContainer, .mobileTerminal, .ruleFormContainer{
-    .basicInformation{
-        padding-bottom: 10px;
-        .label{
-            position: relative;
-            top:-1px;
-        }
-        .grayBorderBottom();
-        div{
-            margin-right: 30px;
-            &:first-child{
-                margin-right: 90px;
-            }            
-            &:last-child{
-                margin-right: 0px;
-            }
-        }
-    }
-}
-
-/*Loading icon*/
-.loadingIconContainer{
-    width: 100%;
-    text-align: center;
-}
-
 /*Auto suggestion*/
 .autoSuggestionWrapper{
     position: relative;
@@ -38,7 +11,7 @@
         right: 5px;
         top:5px;
     }
-}    
+}
 
 /*Dropdown button*/
 .dropdown{
@@ -61,12 +34,12 @@
         border: solid 1px lightgray;
         color:black;
         padding: 3px 12px;
-            .caret{
-                color:@btnPrimaryColor;
-            }
-    }
-    .btn.btn-default.dropdown-toggle:focus {
-        border-color: @btnPrimaryColor;
+        .caret{
+            color:@btnPrimaryColor;
+        }
+        &:focus, &:hover{
+            border-color: @btnPrimaryColor;
+        }
     }
 }
 
@@ -79,31 +52,6 @@
 .dropdown-menu{
     max-height: 200px;
     overflow-y: auto;
-}
-
-/*Calendar*/
-.dropdown-menu.ng-valid.ng-valid-date.ng-valid-date-disabled.ng-dirty,
-.dropdown-menu.ng-pristine.ng-valid.ng-valid-date.ng-valid-date-disabled
-{
-   /* width:280px;*/
-    padding: 10px;
-}
-
-.btn-cal{
-    height: 30px;
-}
-
-
-/*Buttons*/
-.uvmsbtn{
-    background-color: @buttoncolor;
-    color: #ffffff;
-    border: solid 1px @buttoncolor;
-}
-.uvmsbtn:hover{
-    background-color: @buttonhovercolor;
-    color:#ffffff;
-    border: solid 1px @buttonhovercolor;
 }
 
 //PRINT AND EXPORT
@@ -124,10 +72,10 @@
     font-size: 16px;
     font-weight: bold;
     li.active{
-        a{        
+        a{
             color:#000 !important;
             cursor: default;
-            border-bottom: 2px solid #000;        
+            border-bottom: 2px solid #000;
         }
     }
 
@@ -137,7 +85,7 @@
         left: 0px;
         background-color: red;
         color:#fff;
-    }    
+    }
 }
 
 /*Lists*/
@@ -147,7 +95,7 @@ ul.horizontal{
         margin:0 10px;
         &:first-child{
             margin-left: 0px;
-        }        
+        }
         &:last-child{
             margin-right: 0px;
             border-right:0px;
@@ -161,7 +109,7 @@ ul.pipeSeparator{
         content: " | ";
         margin-right: 10px;
         font-weight: normal;
-    }   
+    }
 }
 
 
@@ -171,9 +119,9 @@ ul.links{
         text-decoration: none;
         &.active{
             color:#000;
-            font-weight: bold;            
+            font-weight: bold;
             cursor: default;
             border-bottom: 1px solid #000;
-        } 
+        }
     }
 }

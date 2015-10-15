@@ -1,41 +1,51 @@
 <div class="vesselForm" ng-controller="VesselFormCtrl">
     <form name="vesselForm" method="post" novalidate>
         <div class="row">
-            <div class="col-md-7 valign">
+            <div class="col-md-12">
                 <h3 ng-if="isCreateNewMode()">{{'vessel.create_new_vessel' | i18n}}</h3>
                 <h3 ng-if="!isCreateNewMode() && isVesselNameSet()">{{vesselObj.name}}</h3>
                 <h3 ng-if="!isCreateNewMode() && !isVesselNameSet()">{{'vessel.update_vessel' | i18n}}</h3>
-            </div><!-- DO NOT REMOVE this comment!
-         --><div class="col-md-4 textAlignRight valign">
-                <div class="floatRight" ng-hide="disableForm()">
-                    <button class="btn btn-primary" type="submit" ng-click="updateVessel()" ng-hide="isCreateNewMode()"> {{'common.update' | i18n}}</button>
-                    <button  type="submit" class="btn btn-sm createnewvesselbutton" ng-click="createNewVessel()" ng-show="isCreateNewMode()" ng-disabled="waitingForCreateResponse">{{'vessel.save_asset' | i18n}}</button>
-                </div>
-                <div class="floatRight setStatusContainer" ng-hide="isCreateNewMode() || disableForm()">
-                    <button type="button" class="btn btn-default" ng-show="vesselObj.active" ng-click="archiveVessel()">
-                        {{'common.archive' | i18n}}
-                    </button>
-                </div>
-            </div><!-- DO NOT REMOVE this comment!
-         --><div class="col-md-1 textAlignRight valign" ng-click="toggleViewVessel()">
-                <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
             </div>
         </div>
 
         <div class="card">
-            <div class="row">
-                <div class="col-md-12 basicInformation">
-                    <div class="floatLeft">
-                        {{'vessel.status' | i18n}}:
-                        <span class="label label-success" ng-show="vesselObj.active">{{ ('vessel.active' | i18n)}}</span>
-                        <span class="label label-default" ng-hide="vesselObj.active">{{ ('vessel.inactive' | i18n)}}</span>
+            <div class="row card-header">
+                <div class="col-md-6">
+                    <div class="metadata">
+                        <div>
+                            {{'vessel.status' | i18n}}:
+                            <span class="label label-success" ng-show="vesselObj.active">{{ ('vessel.active' | i18n)}}</span>
+                            <span class="label label-default" ng-hide="vesselObj.active">{{ ('vessel.inactive' | i18n)}}</span>
+                        </div>
+                        <div>
+                            {{'vessel.source' | i18n}} : <b>{{vesselObj.source}}</b>
+                        </div>
+                        <div class="clearfix"></div>
                     </div>
-                    <div class="floatLeft">
-                        {{'vessel.source' | i18n}} : <b>{{vesselObj.source}}</b>
-                    </div>
-                    <div class="clearfix"></div>
                 </div>
-
+                <div class="col-md-6 textAlignRight">
+                    <div class="actions">
+                        <div class="setStatusContainer" ng-hide="isCreateNewMode() || disableForm()">
+                            <button type="button" class="btn btn-default" ng-show="vesselObj.active" ng-click="archiveVessel()">
+                                {{'common.archive' | i18n}}
+                            </button>
+                        </div>
+                        <div ng-hide="disableForm()">
+                            <button class="btn btn-primary" type="submit" ng-click="updateVessel()" ng-hide="isCreateNewMode()">
+                                {{'common.update' | i18n}}
+                            </button>
+                            <button type="submit" class="btn btn-primary" ng-click="createNewVessel()" ng-show="isCreateNewMode()" ng-disabled="waitingForCreateResponse">
+                                {{'vessel.save_asset' | i18n}}
+                            </button>
+                        </div>
+                        <div class="closeIcon" ng-click="toggleViewVessel()">
+                            <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="detailsContainer">
                     <vessel-details vessel="vesselObj" vessel-form="vesselForm" submit-attempted="submitAttempted" disable-form="disableForm()" spin="waitingForCreateResponse"></vessel-details>
                 </div>

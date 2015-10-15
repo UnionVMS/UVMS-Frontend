@@ -1,6 +1,10 @@
 .runningProgramPollsContainer{
     padding-bottom: 10px;
 
+    .searchResultsContainer.hasError{
+        min-height: 0px;
+    }
+
     .tableContainer{
         max-height: 161px; //3 items visible
         overflow-y: auto;
@@ -28,7 +32,7 @@
                 background:@inactiveColor !important;
                 cursor: default !important;
             }
-        }        
+        }
 
         .iconWrapper(){
             cursor: pointer;
@@ -44,7 +48,7 @@
         .noAccess{
             cursor: default !important;
         }
-        
+
         .start{
             .iconWrapper();
             background: @startColor;

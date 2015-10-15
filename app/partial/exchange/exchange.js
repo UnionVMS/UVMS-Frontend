@@ -46,7 +46,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
                 //TODO: remove mockServices
                 $scope.transmissionStatuses.items = mockServices;
 
-                $scope.transmissionStatuses.setErrorMessage(locale.getString('common.error_getting_data_from_server'));
+                //$scope.transmissionStatuses.setErrorMessage(locale.getString('common.error_getting_data_from_server'));
                 console.error("Error getting transmission statuses", error);
             }
         );

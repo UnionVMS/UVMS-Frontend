@@ -1,4 +1,4 @@
-<div class="searchResultsContainer" ng-class="{'isEmpty' : search.items.length === 0}">
+<div class="searchResultsContainer" ng-class="{'isEmpty' : search.items.length === 0, 'hasError' : search.errorMessage}">
     <div loading-indicator="search.loading" size="small" type="SPINNER">
         <span ng-transclude></span>
         <search-result-error-alert ng-show="search.errorMessage">{{search.errorMessage}}</search-result-error-alert>

@@ -1,55 +1,57 @@
-<div>
-	<div class="container containerWithTopBottomPadding">
+<div class="container containerWithTopBottomPadding exchangeContainer">
 
-		<div class="row exchange-grid-header">
-			<!-- Sending queue, transmission status, ... -->
-			<div class="col-md-5 transmission-status-list-container">
-				<div static-include="partial/exchange/tables/exchangeTransmissionStatus.html"></div>
-			</div>
-            <div class="col-md-7 sending-queue-list-container">
-                <div static-include="partial/exchange/tables/exchangeSendingQueue.html"></div>
+	<div class="row exchange-grid-header">
+		<!-- Sending queue, transmission status, ... -->
+		<div class="col-md-5 smallerpaddingright">
+			<div static-include="partial/exchange/tables/exchangeTransmissionStatus.html"></div>
+		</div>
+        <div class="col-md-7 smallerpaddingleft">
+            <div static-include="partial/exchange/tables/exchangeSendingQueue.html"></div>
+        </div>
+        <div class="clearfix"></div>
+	</div>
+
+    <div class="card exchange-log-wrapper">
+
+		<!-- Exchange log table advanced search -->
+		<div class="row">
+            <div class="col-md-12">
+                <advanced-search modeltype="'EXCHANGE'" searchfunc="searchExchange" advancedsearchvisible="true"></advanced-search>
             </div>
 		</div>
-		<div class="row">
-			<div class="col-md-12 exchange-log-wrapper card">
 
-				<!-- Exchange log table advanced search -->
-				<div class="row">
-                    <div class="col-md-12">
-                        <advanced-search modeltype="'EXCHANGE'" searchfunc="searchExchange" advancedsearchvisible="true"></advanced-search>
-                    </div>
-				</div>
+		<!-- Toggle: ALL, INCOMING, OUTGOING -->
+        <div class="row incoming-outgoing-toggle">
+            <div class="col-md-1 editSelection">
+                <dropdown ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+            </div>
 
-				<!-- Toggle: ALL, INCOMING, OUTGOING -->
-                <div class="row incoming-outgoing-toggle">
-                    <div class="col-md-1 editSelection">
-                        <dropdown ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
-                    </div>
-
-                    <div class="col-md-10">
-                        <div class="">
-                            <div class="btn-group">
-                                <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" btn-radio="'all'">
-                                    {{'exchange.title_all' | i18n}}
-                                </label>
-                                <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" btn-radio="'incoming'">
-                                    <span class="fa fa-arrow-down incoming"></span>
-                                    {{'exchange.title_incoming' | i18n}}
-                                </label>
-                                <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" btn-radio="'outgoing'">
-                                    <span class="fa fa-arrow-up outgoing"></span>
-                                    {{'exchange.title_outgoing' | i18n}}
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-1 textAlignRight printAndExport">
-                        <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
-                        <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>
+            <div class="col-md-10">
+                <div class="">
+                    <div class="btn-group">
+                        <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" btn-radio="'all'">
+                            {{'exchange.title_all' | i18n}}
+                        </label>
+                        <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" btn-radio="'incoming'">
+                            <span class="fa fa-arrow-down incoming"></span>
+                            {{'exchange.title_incoming' | i18n}}
+                        </label>
+                        <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" btn-radio="'outgoing'">
+                            <span class="fa fa-arrow-up outgoing"></span>
+                            {{'exchange.title_outgoing' | i18n}}
+                        </label>
                     </div>
                 </div>
+            </div>
 
+            <div class="col-md-1 textAlignRight printAndExport">
+                <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
+                <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
                 <div search-results-table search="exchangeLogsSearchResults">
     				<!-- Exchange log table -->
     				<table class="searchResults exchangeLog colorOdd">
@@ -98,10 +100,9 @@
                 </div>
 
             </div>
-
-            <search-results-pagination page='exchangeLogsSearchResults.page' total='exchangeLogsSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
-
-		</div>
-
+        </div>
 	</div>
+
+    <search-results-pagination page='exchangeLogsSearchResults.page' total='exchangeLogsSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
+
 </div>

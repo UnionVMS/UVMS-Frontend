@@ -49,6 +49,22 @@
     padding: 0px;
 }
 
+.smallerpadding{
+    padding-left: 7px;
+    padding-right: 7px;
+};
+.smallerpaddingleft{
+    padding-left: 7px;
+}
+.smallerpaddingright{
+  padding-right: 7px;
+}
+
+.nopadding{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
 .nopaddingleft{
     padding-left: 0px;
 }
@@ -176,7 +192,7 @@ table.searchResults{
         }
         &:last-child{
             padding-right: 5px;
-        }        
+        }
     }
 
     td.checkboxContainer,
@@ -216,7 +232,7 @@ table.searchResults{
                 }
                 &:last-child{
                     padding-right: 5px;
-                }                
+                }
             }
         }
     }
@@ -356,11 +372,46 @@ a:hover{
     .card-header {
         border-bottom: 1px solid #dddddd;
         padding-bottom: 15px;
-        padding-right: 15px;
+        .metadata{
+            padding-top: 6px;
+            >div{
+                float:left;
+                margin-right: 30px;
+                &:last-child{
+                    margin-right: 0px;
+                }
+                .label{
+                    position: relative;
+                    top:-1px;
+                }
+            }
+        }
+        .actions{
+            float:right;
+            >div{
+                float: left;
+            }
+        }
+        .closeIcon{
+            padding-left: 50px;
+            padding-top: 4px;
+        }
     }
 
     &.nomargintop {
         margin-top: 0px;
+    }
+
+    //use to make the cardHeader smaller (in height)
+    &.with-small-card-header{
+        padding-top: 10px;
+        .card-header{
+            padding-bottom: 0px;
+            h5{
+                margin-top:5px;
+            }
+        }
+
     }
 }
 
