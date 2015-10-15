@@ -34,11 +34,11 @@
                                 <i ng-show="item.isClosed()" class="fa fa-lg fa-circle closed" tooltip-placement="bottom" tooltip="{{'alarms.alarms_status_closed' | i18n}}"></i>
                                 <i ng-show="item.isOpen()" class="fa fa-lg fa-circle open" tooltip-placement="bottom" tooltip="{{'alarms.alarms_status_open' | i18n}}"></i>
                             </div>
-                            {{item.openedDate}}
+                            {{item.openedDate | confDateFormat}}
                         </td>
                         <td class="link">{{item.affectedObject}}</td>
                         <td>{{item.ruleName}}</td>
-                        <td>{{item.resolvedDate}}</td>
+                        <td>{{item.resolvedDate | confDateFormat}}</td>
                         <td class="link">{{item.resolvedBy}}</td>
                         <td class="positions">
                             <i class="fa fa-globe"></i>
