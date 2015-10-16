@@ -92,7 +92,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 
 			// add and reorder layers
 			scope.addLayers = function( folder ) {
-				var layersByType, layer, treeNode;
+				var layersByTitle, layer, treeNode;
 
 				$.each( folder, function( index, value ) {
 					if ( value.folder ) {
@@ -103,7 +103,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 					if ( !value.data ) { return ( true ); }
 
 					layersByType = scope.mapLayers.filter( function( layer ){
-					    return layer.get( 'type' ) === value.data.type;
+					    return layer.get( 'title' ) === value.data.title;
 					});
 
 					layer = layersByType[ 0 ];
@@ -388,25 +388,36 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 						folder: true,
 						expanded: true,
 						unselectable: true,
+						hideCheckbox: true,
+						extraClasses: 'layertree-baselayer-node',
 						key: 'basemap',
 						children: [
 							{
 								title: 'OpenStreetMap',
 								selected: true,
-								extraClasses: 'layertree-basemap layertree-menu',
+								extraClasses: 'layertree-basemap',
 								data: {
 									type: 'OSM',
 									isBaseLayer: true,
 									title: 'OpenStreetMap'
 								}
-							}/*,
+							},
 							{
-								title: 'MyGeoserverBackgroundLayer',
+								title: 'Countries',
 								extraClasses: 'layertree-basemap',
 								data: {
-									isBaseLayer: true
+									type: 'WMS',
+									title: 'Countries',
+								    isBaseLayer: true,
+								    url: 'http://localhost:8080/geoserver/uvms/wms',
+								    serverType: 'geoserver',
+								    params: {
+								        'LAYERS': 'uvms:countries',
+								        'TILED': true,
+								        'STYLES': 'polygon'
+								    }
 								}
-							}*/
+							}
 						]
 					}
 			];
