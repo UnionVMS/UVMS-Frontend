@@ -102,11 +102,11 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 
 					if ( !value.data ) { return ( true ); }
 
-					layersByType = scope.mapLayers.filter( function( layer ){
+					layersByTitle = scope.mapLayers.filter( function( layer ){
 					    return layer.get( 'title' ) === value.data.title;
 					});
 
-					layer = layersByType[ 0 ];
+					layer = layersByTitle[ 0 ];
 
 					if ( !layer ) {
 						treeNode = scope.$tree.getNodeByKey( value.key );
