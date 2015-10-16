@@ -178,23 +178,23 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	                }
 	            }, controls);
 	    });
-      
+
 	    map.on('singleclick', function(evt){
 	        var coordinate = evt.coordinate;
-          
+
 	        //FIXME this should be set dynamically
 	        var activeLayerType = 'vmspos'; //vmspos | vmsseg
-          
+
 	        var features = [];
 	        map.forEachFeatureAtPixel(evt.pixel, function(feature, layer){
 	            if (layer.get('type') === activeLayerType){
 	                features.push(feature.getProperties());
 	            }
 	        });
-          
+
 	        if (features.length > 0){
 	            var templateURL = 'partial/spatial/templates/' + activeLayerType + '.html';
-              
+
 	            $templateRequest(templateURL).then(function(template){
 	                var data;
 	                if (activeLayerType === 'vmspos'){
@@ -202,12 +202,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	                } else if (activeLayerType === 'vmsseg'){
 	                    data = ms.setSegmentsObjPopup(features[0]);
 	                }
-                  
+
 	                var rendered = Mustache.render(template, data);
 	                var content = document.getElementById('popup-content');
 	                content.innerHTML = rendered;
 	                ms.overlay.setPosition(coordinate);
-                  
+
 	            }, function(){
 	                //error fetching template
 	            });
@@ -218,12 +218,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
 	    ms.map = map;
 	};
-	
+
 	//Add layers
     //create layer, returns ol.layer.* or undefined
     ms.createLayer = function( config ){
         var layer;
-
+        console.log( 'createLayer ' + config.title );
         switch (config.type) {
             case 'OSM':
                 layer = ms.createOsm( config );
@@ -234,12 +234,18 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             case 'WMS':
                 layer = ms.createWms(config);
                 break;
+            case 'SEGMENTS':
+                layer = ms.createSegmentsLayer( config );
+                break;
+            case 'POSITIONS':
+                layer = ms.createPositionsLayer( config );
+                break;
             default:
         }
 
         return ( layer );
     };
-    
+
     //Create OSM layer
     ms.createOsm = function( config ){
         var layer = new ol.layer.Tile({
@@ -251,7 +257,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
         return ( layer );
     };
-    
+
     //Create OpenSeaMap layer
     ms.createOseam = function(config){
         var layer = new ol.layer.Tile({
@@ -295,7 +301,43 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
         return ( layer );
     };
-    
+
+    ms.createSegmentsLayer = function( config ) {
+      var geojson = config.geoJson,
+          layer = new ol.layer.Vector({
+            title: config.title,
+            type: 'vmsseg',
+            isBaseLayer: false,
+            source: new ol.source.Vector({
+              features: (new ol.format.GeoJSON()).readFeatures(geojson, {
+                  dataProjection: 'EPSG:4326',
+                  featureProjection: ms.getMapProjectionCode()
+              })
+            }),
+            style: ms.setSegStyle
+          });
+
+      return( layer );
+    };
+
+    ms.createPositionsLayer = function( config ) {
+      var geojson = config.geoJson,
+          layer = new ol.layer.Vector({
+            title: config.title,
+            type: 'vmspos',
+            isBaseLayer: false,
+            source: new ol.source.Vector({
+              features: (new ol.format.GeoJSON()).readFeatures(geojson, {
+                dataProjection: 'EPSG:4326',
+                featureProjection: ms.getMapProjectionCode()
+              })
+            }),
+            style: ms.setPosStyle
+          });
+
+      return( layer );
+    };
+
     //Add VMS positions layer
     ms.addPositions = function(geojson) {
         var layer = new ol.layer.Vector({
@@ -311,12 +353,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         });
 
         ms.map.addLayer(layer);
-        
+
         //Update map extent
         var geom = new ol.geom.Polygon.fromExtent(layer.getSource().getExtent());
         ms.zoomTo(geom);
     };
-    
+
     //Add VMS segments layer
     ms.addSegments = function(geojson){
         var layer = new ol.layer.Vector({
@@ -333,7 +375,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
         ms.map.addLayer(layer);
     };
-    
+
     //Add highlight layer
     ms.addFeatureOverlay = function(){
         var layer = new ol.layer.Vector({
@@ -347,7 +389,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
         ms.map.addLayer(layer);
     };
-    
+
     //Add highlight feature, geometry should be passed using the same projection of the map
     ms.highlightFeature = function(geom){
         var feature = new ol.Feature({
@@ -358,7 +400,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         layer.clear(true);
         layer.addFeature(feature);
     };
-    
+
     //STYLES
     //Highlight styles
     ms.setHighlightStyle = function(feature, resolution){
@@ -404,7 +446,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
         return [style];
     };
-    
+
     //VMS segments style
     ms.setSegStyle = function(feature, resolution){
         var geometry = feature.getGeometry();
@@ -433,7 +475,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
         return style;
     };
-    
+
     //MAP FUNCTIONS
 	//Clear map before running a new report
 	ms.clearMap = function(config){
@@ -453,7 +495,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
 	    return layer[0];
 	};
-	
+
 	//Find layers by type
     ms.getLayerByType = function(type){
         var layers = ms.map.getLayers().getArray();
@@ -463,12 +505,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
         return layer[0];
     };
-    
+
     //Get map projection
     ms.getMapProjectionCode = function(){
         return ms.map.getView().getProjection().getCode();
     };
-    
+
     //Recalculate map size
     ms.updateMapSize = function(){
         if (!ms.map) {
@@ -476,7 +518,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         }
         ms.map.updateSize();
     };
-	
+
     //GENERIC FUNCTIONS FOR CONTROLS AND STYLES
 	//Convert degrees to radians
 	ms.degToRad = function(degrees){
@@ -544,7 +586,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             hemispheres.charAt(normalized < 0 ? 1 : 0);
     };
 
-	
+
     //SETTERS
 	//Set map projections
 	ms.setProjection = function(projCode, units, global){
@@ -657,7 +699,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	ms.panTo = function(coords){
 	    ms.map.getView().setCenter(coords);
 	};
-	
+
 	//Popup to display vector info
 	ms.addPopupOverlay = function(){
 	    var overlay = new ol.Overlay({
@@ -667,10 +709,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	            duration: 250
 	        }
 	    });
-	    
+
 	    return overlay;
 	};
-	
+
 	ms.closePopup = function(){
 	    ms.overlay.setPosition(undefined);
 	    return false;
@@ -715,10 +757,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 lat: repCoords[1].toFixed(5).toString() + ' \u00b0'
             }
         };
-        
+
         return data;
     };
-    
+
     //POPUP - Define the object that will be used in the popup for vms positions
     ms.setSegmentsObjPopup = function(feature){
         //TODO fetch visibility of attributes selected by user
@@ -746,7 +788,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             },
             properties: feature
         };
-        
+
         return data;
     };
 
