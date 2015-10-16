@@ -187,7 +187,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
           
 	        var features = [];
 	        map.forEachFeatureAtPixel(evt.pixel, function(feature, layer){
-	            if (layer.get('title') === activeLayerType){
+	            if (layer.get('type') === activeLayerType){
 	                features.push(feature.getProperties());
 	            }
 	        });
