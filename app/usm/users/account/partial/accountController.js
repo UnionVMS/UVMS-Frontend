@@ -124,7 +124,7 @@ accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '
                         $scope.messageDivClass = "alert alert-success";
                         $scope.actionMessage = "User created";
                         // Close modal by passing the new user to update the table
-                        $scope.newUser = user;
+                        $scope.newUser = response.newUser;
                         $scope.userCreated = true;
                         $timeout(function () {
                             $modalInstance.close($scope.newUser);

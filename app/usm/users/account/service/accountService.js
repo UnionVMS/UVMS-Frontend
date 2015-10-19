@@ -128,8 +128,8 @@ accountServiceModule.factory('accountService', ['$q', '$resource', '$log', funct
             "lockoutTo": user.lockoutTo,
             "lockoutReason": user.lockoutReason,
             "notes": user.notes,
-            "activeFrom": user.activeFrom,
-            "activeTo": user.activeTo,
+            "activeFrom": moment.utc(user.activeFrom).format('YYYY-MM-DD'),
+            "activeTo": moment.utc(user.activeTo).format('YYYY-MM-DD'),
             "status": user.status,
             "organisation":user.organisation
         };
