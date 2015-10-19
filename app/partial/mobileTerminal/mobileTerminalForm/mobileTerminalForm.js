@@ -273,7 +273,11 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
 
     //Add a new channel to the end of the list of channels
     $scope.addNewChannel = function(){
-        $scope.currentMobileTerminal.addNewChannel();
+        var newChannel = $scope.currentMobileTerminal.addNewChannel();
+        //Set LES for new channel
+        if(angular.isDefined($scope.currentMobileTerminal.plugin.labelName)){
+            newChannel.setLESDescription($scope.currentMobileTerminal.plugin.labelName);
+        }
     };
 
     //Remove a channel from the list of channels

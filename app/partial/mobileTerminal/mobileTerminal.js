@@ -92,7 +92,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
             //LES capability
             if(config.capabilities["HAS_LES"] && _.isArray(config.capabilities["HAS_LES"])){
                 $.each(config.capabilities["HAS_LES"], function(key2, lesOption){
-                    $scope.transponderSystems.push({text : config.viewName +" - " +lesOption.text, typeAndLes : new SystemTypeAndLES(config.systemType, lesOption.attributes['LABELNAME'], lesOption.attributes['SERVICENAME'])});
+                    $scope.transponderSystems.push({text : config.viewName +" : " +lesOption.text, typeAndLes : new SystemTypeAndLES(config.systemType, lesOption.attributes['LABELNAME'], lesOption.attributes['SERVICENAME'])});
                 });
             }else{
                 $scope.transponderSystems.push({text : config.viewName, typeAndLes : new SystemTypeAndLES(config.systemType, undefined)});

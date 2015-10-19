@@ -99,9 +99,7 @@ describe('TranspondersConfig', function() {
         expect(inmarsatConfig1).toEqual(inmarsatConfig2);
     }));
 
-    it("should parse JSON correctly", inject(function(TranspondersConfig, locale) {
-        spyOn(locale, "getString").andReturn("MOCK_TEXT");
-
+    it("should parse JSON correctly", inject(function(TranspondersConfig) {
         var transpondersConfig = TranspondersConfig.fromJson(transponderConfigs);
         expect(Object.keys(transpondersConfig.terminalConfigs).length).toEqual(1);
 
@@ -142,7 +140,6 @@ describe('TranspondersConfig', function() {
         firstOption = LESCapability[0];
         expect(firstOption.attributes['LABELNAME']).toEqual(expectedCapabilites[4].optionList[0].labelName);
         expect(firstOption.attributes['SERVICENAME']).toEqual(expectedCapabilites[4].optionList[0].serviceName);
-        expect(firstOption.text).toEqual('MOCK_TEXT');
 
     }));
 

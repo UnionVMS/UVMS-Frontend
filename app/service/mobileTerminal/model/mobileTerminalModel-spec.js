@@ -213,11 +213,12 @@ describe('MobileTerminalModel', function() {
         expect(mobileTerminal.type).toEqual("INMARSAT_C");
     }));
 
-    it('addNewChannel should add a new channel to the end of the list of channels', inject(function(MobileTerminal) {
+    it('addNewChannel should add a new channel to the end of the list of channels and return the new channel', inject(function(MobileTerminal) {
         var mobileTerminal = new MobileTerminal();
         expect(mobileTerminal.channels.length).toEqual(1);
-        mobileTerminal.addNewChannel();
+        var newChannel = mobileTerminal.addNewChannel();
         expect(mobileTerminal.channels.length).toEqual(2);
+        expect(newChannel).toBeDefined();
     }));
 
     it('should be possible to make a deep copy of a mobile terminal', inject(function(MobileTerminal) {

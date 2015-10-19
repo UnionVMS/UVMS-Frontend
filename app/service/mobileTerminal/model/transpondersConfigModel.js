@@ -22,14 +22,14 @@ angular.module('unionvmsWeb')
     });
 
 angular.module('unionvmsWeb')
-.factory('TerminalConfig', function(CapabilityOption) {
+.factory('TerminalConfig', function(CapabilityOption, locale) {
 
         function TerminalConfig(){
             this.systemType = undefined;
             this.viewName = undefined;
             this.terminalFields = {};
-            this.channelFields = {}; 
-            this.capabilities = {};      
+            this.channelFields = {};
+            this.capabilities = {};
         }
 
         TerminalConfig.fromJson = function(data){
@@ -40,16 +40,17 @@ angular.module('unionvmsWeb')
 
             //Set a view text for the transponder system
             terminalConfig.viewName = data.terminalSystemType;
-            if(data.terminalSystemType === "INMARSAT_C"){
-                terminalConfig.viewName = "Inmarsat-C";
-            }            
+            var viewName = locale.getString("config.MOBILETERMINAL_TRANSPONDERS_" +data.terminalSystemType);
+            if(angular.isDefined(viewName) && viewName !== "%%KEY_NOT_FOUND%%"){
+                terminalConfig.viewName = viewName;
+            }
 
             //Create list of terminal fields
             $.each(data.terminalFieldList, function(index, field){
                 terminalConfig.terminalFields[field] = true;
             });
 
-            //Create list of channel fields                
+            //Create list of channel fields
             $.each(data.channelFieldList, function(index, field){
                 terminalConfig.channelFields[field] = true;
             });
@@ -73,7 +74,7 @@ angular.module('unionvmsWeb')
 
             return terminalConfig;
         };
- 
+
 
         return TerminalConfig;
 });
@@ -112,11 +113,10 @@ angular.module('unionvmsWeb')
             case "SUPPORT_SINGLE_OCEAN":
             case "SUPPORT_MULTIPLE_OCEAN":
                 capabilityOption.text = capabilityOption.name;
-                viewName = locale.getString("mobileTerminal.OCEAN_REGION" +"_" +capabilityOption.text);
+                viewName = locale.getString("config.MOBILETERMINAL_OCEAN_REGION_" +capabilityOption.text);
                 break;
             case "HAS_LES":
                 capabilityOption.text = capabilityOption.attributes['LABELNAME'];
-                viewName = locale.getString("mobileTerminal.LES" +"_" +capabilityOption.text);
                 break;
         }
 

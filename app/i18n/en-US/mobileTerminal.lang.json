@@ -123,12 +123,6 @@
     "history_modal_vesselname" : "Linked asset",
     "history_modal_sattelitenumber" : "Satellite number: ",
     "history_modal_transpondertype" : "Transponder type: ",
-    "OCEAN_REGION_PACIFIC" : "POR",
-    "OCEAN_REGION_EAST_ATLANTIC" : "AOR-E",
-    "OCEAN_REGION_INDIAN" : "IOR",
-    "OCEAN_REGION_WEST_ATLANTIC" : "AOR-W",
-    "LES_EIK" : "Eik",
-    "LES_BURUM" : "Burum",
     "transponderNameFilter_INMARSAT_C" : "Inmarsat-C",
     "warning_plugin_inactive" : "The plugin that this terminal uses is inactivated."
 }
