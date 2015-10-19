@@ -110,7 +110,7 @@ angular.module('unionvmsWeb')
         //Watch changes of the model and update the viewModel when it happens
         $scope.$watch('model', function(newValue) {
             //Don't update viewModel if the watch
-            if (watchModelChanges || ($scope.viewModel === undefined && newValue !== undefined)) {
+            if ((watchModelChanges && newValue !== undefined) || ($scope.viewModel === undefined && newValue !== undefined)) {
                 //Parse the date/time and format it
                 var newViewValue;
                 //Parse UTC date to viewValue
