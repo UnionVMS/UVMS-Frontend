@@ -1,13 +1,11 @@
 <div class="newPollWizardSelectionContainer newPollWizardStep  card with-small-card-header" ng-controller="NewpollwizardselectionCtrl">
-    <div class="selectionHeader">
-        <div class="row">
-        	<div class="col-md-6 carrierSelectionText">
-        		{{ 'polling.carrier_selection' | i18n }}
-            </div>
-            <div class="col-md-6 textAlignRight">
-                <a  ng-click="clear()">{{ 'polling.clear_all' | i18n }}</a>
-        	</div>
+    <div class="row card-header">
+    	<div class="col-md-6">
+    		<h5>{{ 'polling.carrier_selection' | i18n }}</h5>
         </div>
+        <div class="col-md-6 textAlignRight">
+            <a  ng-click="clear()">{{ 'polling.clear_all' | i18n }}</a>
+    	</div>
     </div>
 
     <div class="scroller">
