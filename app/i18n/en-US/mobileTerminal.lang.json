@@ -123,6 +123,5 @@
     "history_modal_vesselname" : "Linked asset",
     "history_modal_sattelitenumber" : "Satellite number: ",
     "history_modal_transpondertype" : "Transponder type: ",
-    "transponderNameFilter_INMARSAT_C" : "Inmarsat-C",
     "warning_plugin_inactive" : "The plugin that this terminal uses is inactivated."
 }
