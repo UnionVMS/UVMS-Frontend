@@ -227,7 +227,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
 
     //Get the history list for the mobile terminal
     var getMobileTerminalHistoryForCurrentMobileTerminal = function() {
-        var response = mobileTerminalRestService.getHistoryForMobileTerminal($scope.currentMobileTerminal)
+        var response = mobileTerminalRestService.getHistoryWithAssociatedVesselForMobileTerminal($scope.currentMobileTerminal)
             .then(onGetMobileTerminalHistorySuccess, onGetMobileTerminalHistoryError);
     };
 

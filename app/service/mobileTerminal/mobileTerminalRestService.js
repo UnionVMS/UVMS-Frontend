@@ -290,9 +290,9 @@ angular.module('unionvmsWeb')
                     });
                 return deferred.promise;
             },
-            getHistoryForMobileTerminal : function(mobileTerminal){
+            getHistoryForMobileTerminalByGUID : function(mobileTerminalGUID){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.mobileTerminalHistory().get({id: mobileTerminal.guid}, function(response) {
+                mobileTerminalRestFactory.mobileTerminalHistory().get({id: mobileTerminalGUID}, function(response) {
                     if (response.code !== 200) {
                         deferred.reject("Invalid response status");
                         return;
@@ -305,6 +305,16 @@ angular.module('unionvmsWeb')
                         }
                     }
 
+                    deferred.resolve(history);
+                }, function(error) {
+                    console.error("Error getting mobile terminal history.");
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            },
+            getHistoryWithAssociatedVesselForMobileTerminal : function(mobileTerminal){
+                var deferred = $q.defer();
+                this.getHistoryForMobileTerminalByGUID(mobileTerminal.guid).then(function(history){
                     //Get associated carriers for all mobile terminals in the history items
                     var mobileTerminals = [];
                     $.each(history, function(index, historyItem) {
@@ -314,7 +324,6 @@ angular.module('unionvmsWeb')
                     mobileTerminalVesselService.getVesselsForListOfMobileTerminals(mobileTerminals).then(
                         function(vesselListPage){
                             //Connect the mobileTerminals to the vessels
-
 
                             $.each(history, function(index, historyItem){
                                 var connectId = historyItem.mobileTerminal.connectId;
@@ -331,7 +340,6 @@ angular.module('unionvmsWeb')
                         function(error){
                             deferred.reject(history);
                         });
-
                 }, function(error) {
                     console.error("Error getting mobile terminal history.");
                     deferred.reject(error);

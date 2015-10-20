@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale, Audit, auditLogRestService, searchService, auditLogsDefaultValues, auditLogsTypeOptions, SearchResults) {
+angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, locale, Audit, auditLogRestService, searchService, auditLogsDefaultValues, auditLogsTypeOptions, SearchResults, GetListRequest, infoModal, dateTimeService, pollingRestService, mobileTerminalRestService) {
 
 	// ************ Page setup ************
 
@@ -112,6 +112,77 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, locale
         });
     };
 
+    //Does the audit log item has a comment?
+    $scope.itemHasComment = function(audit){
+        return audit.objectType === 'Mobile Terminal' || audit.objectType ===  'Poll';
+    };
+
+    //Show comment in info modal
+    $scope.showComment = function(audit){
+        var deferred = $q.defer();
+        var id = audit.affectedObject;
+        //GET THE COMMENT
+        var errorMessage = locale.getString('audit.show_comment_error_text');
+        var getListRequest = new GetListRequest(1, 1,true, []);
+
+        //POLL
+        if(audit.objectType === 'Poll'){
+            getListRequest.addSearchCriteria('POLL_ID', id);
+            pollingRestService.getPollList(getListRequest).then(
+                function(searchResultsListPage){
+                    if(searchResultsListPage.items.length > 0 && angular.isDefined(searchResultsListPage.items[0].poll)){
+                        //deferred.resolve(searchResultsListPage.items[0].comment);
+                        deferred.resolve("TODO: Show poll comment here!");
+                    }else{
+                        deferred.reject(errorMessage);
+                    }
+                },function(){
+                    deferred.reject(errorMessage);
+                }
+            );
+        }
+
+        //Mobile terminal
+        if(audit.objectType === 'Mobile Terminal'){
+            mobileTerminalRestService.getHistoryForMobileTerminalByGUID(id).then(
+                function(historyList){
+                    if(historyList.length > 0){
+                        //Find the matching historyItem by comparing dates
+                        var auditDate = audit.date;
+                        var historyDate, matchingHistoryItem;
+                        _.sortBy(historyList, function(item){return - item.changeDate;});
+                        for(var i = 0; i <  historyList.length; i++){
+                            historyDate = historyList[i].changeDate;
+                            //Audit date should be slightly (milliseconds) later than the mobile history date
+                            if(auditDate >= historyDate){
+                                matchingHistoryItem = historyList[i];
+                            }
+                            //No need to look more
+                            if(auditDate < historyDate){
+                                break;
+                            }
+                        }
+                        //Found matching item?
+                        if(matchingHistoryItem){
+                            deferred.resolve(matchingHistoryItem.comment);
+                        }else{
+                            deferred.reject(errorMessage);
+                        }
+                    }else{
+                        deferred.reject(errorMessage);
+                    }
+                },function(){
+                    deferred.reject(errorMessage);
+                }
+            );
+        }
+
+        var options = {
+            titleLabel : locale.getString('common.comment'),
+            textLabelPromise : deferred.promise,
+        };
+        infoModal.open(options);
+    };
 
     $scope.affectedObjectPath = function(audit) {
         var path;

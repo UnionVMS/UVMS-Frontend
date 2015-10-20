@@ -97,6 +97,7 @@
     "validation_max_number_of_decimals" : "Max {1} decimals are allowed.",
     "view_details" : "View details",
     "view_on_map" : "View on map",
+    "view_comment" : "View comment",
     "view_all" : "View all",
     "yes" : "Yes",
     "multiple_selected" :"Two or more selected",

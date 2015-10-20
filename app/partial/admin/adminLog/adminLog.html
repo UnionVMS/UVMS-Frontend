@@ -37,6 +37,7 @@
     						<th>
     							{{"audit.column_object_affected" | i18n}}
     						</th>
+                            <th></th>
     					</tr>
     				</thead>
     				<tbody>
@@ -47,6 +48,7 @@
     						<td>{{audit.objectType}}</td>
     						<td>{{audit.date | confDateFormat}}</td>
     						<td><a ng-href="#{{affectedObjectPath(audit)}}" ng-show="affectedObjectPath(audit)">{{"audit.show_object" | i18n}}</a></td>
+                            <td class="textAlignCenter"><a ng-show="itemHasComment(audit)" href ng-click="showComment(audit)" title="{{'common.view_comment' | i18n}}"><i class="fa fa-commenting-o fa-lg"></i></a></td>
     					</tr>
     				</tbody>
     			</table>

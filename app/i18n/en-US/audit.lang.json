@@ -24,6 +24,7 @@
     "column_date": "Date",
     "column_object_affected": "Object affected",
     "show_object": "See object",
+    "show_comment_error_text": "Failed to load comment.",
     "configuration_other_header_polling" : "Polling",
     "configuration_other_information_polling" : "Are comments mandatory when emitting polls?",
     "configuration_other_information_sampling" : "Restrict sampling polls to one assets at a time?",
