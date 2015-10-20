@@ -15,7 +15,7 @@ angular.module('unionvmsWeb').directive('multiselectDropDown', function(locale) 
         link: function(scope, element, attrs, fn) {
 
             //Close dropdown when clicking outside of it
-            $(document).bind('click', function(event){
+            var onClickOutsideMultiSelectDropdown = function(event){
                 var isClickedElementChildOfPopup = element
                     .find(event.target)
                     .length > 0;
@@ -27,7 +27,7 @@ angular.module('unionvmsWeb').directive('multiselectDropDown', function(locale) 
                 scope.$apply(function(){
                     scope.open = false;
                 });
-            });
+            };
 
             scope.model = scope.model || [];
             scope.checkAndSelectAll = false;
@@ -95,6 +95,20 @@ angular.module('unionvmsWeb').directive('multiselectDropDown', function(locale) 
                         return locale.getString('common.multiple_selected');
                 }
             };
+
+            var init = function(){
+                $(document).bind('click', onClickOutsideMultiSelectDropdown);
+            };
+
+            var cleanup = function(){
+                $(document).unbind('click', onClickOutsideMultiSelectDropdown);
+            };
+
+            init();
+
+            scope.$on('$destroy', function() {
+                cleanup();
+            });
         }
     };
 });
