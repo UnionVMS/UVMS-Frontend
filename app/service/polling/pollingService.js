@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('pollingService',function(pollingRestService, Poll, $q, $timeout) {
+angular.module('unionvmsWeb').factory('pollingService',function(pollingRestService, Poll, $q, $timeout, dateTimeService) {
 
     var wizardStep = 1;
 
@@ -98,10 +98,10 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
         for (var i = 0; i < selection.selectedMobileTerminalGroups.length; i++) {
             count += selection.selectedMobileTerminalGroups[i].mobileTerminals.length;
         }
-        return count;        
+        return count;
     }
 
-    function isSingleSelection() {        
+    function isSingleSelection() {
         return getNumberOfSelectedTerminals() === 1;
     }
 
@@ -120,8 +120,8 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
     function getPollAttributes(type) {
         if (type === "PROGRAM") {
             return [
-                getAttr("START_DATE", addUTCTimeZone(pollingOptions.programPoll.startDate)),
-                getAttr("END_DATE", addUTCTimeZone(pollingOptions.programPoll.endDate)),
+                getAttr("START_DATE", dateTimeService.formatUTCDateWithTimezone(pollingOptions.programPoll.startDate)),
+                getAttr("END_DATE", dateTimeService.formatUTCDateWithTimezone(pollingOptions.programPoll.endDate)),
                 getAttr("FREQUENCY", pollingOptions.programPoll.time)
             ];
         }
@@ -136,8 +136,8 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
         }
         else if (type === "SAMPLING") {
             return [
-                getAttr("START_DATE", addUTCTimeZone(pollingOptions.samplingPoll.startDate)),
-                getAttr("END_DATE", addUTCTimeZone(pollingOptions.samplingPoll.endDate))                
+                getAttr("START_DATE", dateTimeService.formatUTCDateWithTimezone(pollingOptions.samplingPoll.startDate)),
+                getAttr("END_DATE", dateTimeService.formatUTCDateWithTimezone(pollingOptions.samplingPoll.endDate))
             ];
         }
         else { // type === MANUAL POLL
@@ -199,10 +199,6 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
         pollingOptions.programPoll = {};
         pollingOptions.configurationPoll = {};
 		pollingOptions.samplingPoll = {};
-    }
-
-    function addUTCTimeZone(timeDate){
-        return moment(timeDate).format("YYYY-MM-DD HH:mm:ss Z");
     }
 
 	var pollingService = {
