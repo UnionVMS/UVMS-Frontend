@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $stateParams, $filter, Poll, PollStatus, searchService, alertService, locale, SearchResults, csvService){
+angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $stateParams, $filter, Poll, PollStatus, searchService, alertService, locale, SearchResults, csvService, infoModal){
 
     $scope.activeTab = "POLLING_LOGS";
 
@@ -180,6 +180,15 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
     };
 
+    //Show comment in modal
+    $scope.showComment = function(item){
+        var options = {
+            titleLabel : locale.getString('common.comment'),
+            //textLabel : item.comment,
+            textLabel : "TODO: Show poll comment here!",
+        };
+        infoModal.open(options);
+    };
 
     //Handle click on the top "check all" checkbox
     $scope.checkAll = function(){
