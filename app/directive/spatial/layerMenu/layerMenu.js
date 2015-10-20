@@ -1945,7 +1945,6 @@ angular.module('unionvmsWeb').directive('layerMenu', function() {
 											type: 'WMS',
 											title: 'RFMO',
 											isBaseLayer: false,
-											title: 'RFMO',
 											attribution: 'Custom layer from UnionVMS',
 											url: 'http://localhost:8080/geoserver/wms',
 											serverType: 'geoserver',

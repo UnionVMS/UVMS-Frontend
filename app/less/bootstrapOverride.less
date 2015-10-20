@@ -22,7 +22,7 @@ ul, li {
     list-style: none;
     &:hover,&:active, &:focus{
         outline:none !important;
-    }    
+    }
 }
 
 li, li a{
@@ -99,14 +99,14 @@ button{
     &:hover, &:active, &:focus{
         background-color: @btnPrimaryHoverColor;
         color: #ffffff;
-        border-color: @btnPrimaryHoverColor;        
+        border-color: @btnPrimaryHoverColor;
     }
 }
 
 .btn-primary.disabled, .btn-primary[disabled], fieldset[disabled] .btn-primary, .btn-primary.disabled:hover, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary:hover, .btn-primary.disabled:focus, .btn-primary[disabled]:focus, fieldset[disabled] .btn-primary:focus, .btn-primary.disabled:active, .btn-primary[disabled]:active, fieldset[disabled] .btn-primary:active, .btn-primary.disabled.active, .btn-primary[disabled].active, fieldset[disabled] .btn-primary.active {
-    background-color: #e4e4e4; //lighten(@btnPrimaryColor, 10%); 
+    background-color: #e4e4e4; //lighten(@btnPrimaryColor, 10%);
     color: #ffffff;
-    border-color: gray;//lighten(@btnPrimaryColor, 10%);       
+    border-color: gray;//lighten(@btnPrimaryColor, 10%);
 }
 
 .btn-lg{
@@ -124,7 +124,7 @@ ul.nav-tabs{
         background:@buttoncolor;
         text-transform: uppercase;
         font-weight: bold;
-        
+
         a{
             border-radius: 0px;
             color:#fff;
@@ -146,8 +146,43 @@ ul.nav-tabs{
         }
     }
 }
+/*input groups*/
+.input-group-btn:last-child > .btn{
+    border-radius: 0px;
+    padding: 4px 12px;
+}
 
+.form-control.ng-pristine.ng-valid.ng-touched,
+.form-control.ng-pristine.ng-untouched.ng-valid,
+.form-control.ng-valid.ng-dirty.ng-valid-parse.ng-touched,
+.form-control.ng-valid.ng-touched.ng-dirty.ng-valid-parse,
+.input[type="text"], input[type="time"], input[type="number"], input[type="email"]
+{
+    box-shadow: inset 0px 0px 0px #EBEBEB !important;
+    border: 1px solid #EBEBEB;
+}
 
+.form-control.ng-pristine.ng-valid.ng-touched:hover,
+.form-control.ng-pristine.ng-untouched.ng-valid:hover,
+.form-control.ng-valid.ng-dirty.ng-valid-parse.ng-touched:hover,
+.form-control.ng-valid.ng-touched.ng-dirty.ng-valid-parse:hover,
+input[type="text"]:hover, input[type="time"]:hover, input[type="number"]:hover, input[type="email"]:hover
+.form-control.ng-pristine.ng-valid.ng-touched:focus,
+.form-control.ng-pristine.ng-untouched.ng-valid:focus,
+.form-control.ng-valid.ng-dirty.ng-valid-parse.ng-touched:focus,
+.form-control.ng-valid.ng-touched.ng-dirty.ng-valid-parse:focus,
+input[type="text"]:focus, input[type="time"]:focus, input[type="number"]:focus, input[type="email"]:focus {
+border: 1px solid #3498db;
+outline: 0;
+-webkit-box-shadow: none;
+box-shadow: none;
+}
+.form-control.datetimeinput.ng-valid.ng-isolate-scope.ng-valid-min-date.ng-valid-required.ng-dirty.ng-valid-parse.ng-touched,
+.form-control.datetimeinput.ng-pristine.ng-untouched.ng-valid.ng-isolate-scope.ng-valid-min-date.ng-valid-required
+{
+    box-shadow: inset 0px 0px 0px #EBEBEB !important;
+    border: 1px solid #EBEBEB;
+}
 
 @media (min-width: 1400px)
 {
