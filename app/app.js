@@ -235,7 +235,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             data: {
                 access: 'viewMobileTerminalPolls'
             },
-        })        
+        })
         .state('app.auditLog', {
             url: '/admin/auditlog',
             views: {
@@ -244,7 +244,11 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'AuditlogCtrl'
                 }
             },
-            resolve: {}
+            resolve: {
+                config : function(initService){
+                    //return initService.loadConfigFor(["AUDIT"]);
+                }
+            }
         })
         .state('app.configuration', {
             url: '/admin/configuration',

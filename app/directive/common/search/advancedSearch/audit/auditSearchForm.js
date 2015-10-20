@@ -3,6 +3,7 @@ angular.module('unionvmsWeb').controller('AuditsearchformCtrl',function($scope, 
 	$scope.objectTypes = auditLogsTypeOptions.options;
 
 	$scope.operations = []; //Operation dropdown
+	//$scope.operations = configurationService.getValue('AUDIT', 'OPERATIONS');
 	$scope.operations.push({"text":"Create", "code":"Create"});
 	$scope.operations.push({"text":"Update", "code":"Update"});
 	$scope.operations.push({"text":"Remove", "code":"Remove"});
