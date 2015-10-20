@@ -38,29 +38,58 @@ angular.module('unionvmsWeb')
     };
 
     GetListRequest.prototype.DTOForMovement = function(){
+
         //List of search fields that should be in the movementRangeSearchCriteria object
-        var rangeKeys = {
-            FROM_DATE : {key: 'DATE', subKey: 'from'},
-            TO_DATE : {key: 'DATE', subKey: 'to'},
-            SPEED_MIN : {key: 'MOVEMENT_SPEED', subKey: 'from'},
-            SPEED_MAX : {key: 'MOVEMENT_SPEED', subKey: 'to'},
-        };
+        //Ranges must include both from and to, so that's what the defaultValues are for
+        var ranges = [
+            {
+                key : 'DATE',
+                from : {searchKey: 'FROM_DATE', defaultValue: '1970-01-01 00:00:00 +00:00'},
+                to : {searchKey: 'TO_DATE', defaultValue: '2070-01-01 00:00:00 +00:00'}
+            },
+            {
+                key: 'MOVEMENT_SPEED',
+                from : {searchKey: 'SPEED_MIN', defaultValue: 0},
+                to : {searchKey: 'SPEED_MAX', defaultValue: 99999999}
+            }
+        ];
+
+        //Get a range by the search key
+        function getRangeBySearchKey(key){
+            var range;
+            $.each(ranges, function(i, aRange){
+                if(key === aRange.from.searchKey || key === aRange.to.searchKey){
+                    range = aRange;
+                    return false;
+                }
+            });
+            return range;
+        }
 
         var rangeCriterias = {};
         var criterias = [];
 
         //Build dict with rangeCriterias
-        var searchFieldKey, searchFieldValue;
+        var searchFieldKey, searchFieldValue, range;
         $.each(this.criterias, function(index, searchField){
             searchFieldKey = searchField.key;
             searchFieldValue = searchField.value;
+
             //Range search?
-            if(searchFieldKey in rangeKeys){
-                var rangeKey = rangeKeys[searchFieldKey];
-                if(angular.isUndefined(rangeCriterias[rangeKey.key])){
-                    rangeCriterias[rangeKey.key] = {};
+            range = getRangeBySearchKey(searchFieldKey);
+            if(range){
+                if(angular.isUndefined(rangeCriterias[range.key])){
+                    rangeCriterias[range.key] = {
+                        from : range.from.defaultValue,
+                        to : range.to.defaultValue,
+                    };
                 }
-                rangeCriterias[rangeKey.key][rangeKey.subKey] = searchFieldValue;
+                if(searchFieldKey === range.from.searchKey){
+                    rangeCriterias[range.key]['from'] = searchFieldValue;
+                }
+                else{
+                    rangeCriterias[range.key]['to'] = searchFieldValue;
+                }
             }else{
                 criterias.push(searchField);
             }
