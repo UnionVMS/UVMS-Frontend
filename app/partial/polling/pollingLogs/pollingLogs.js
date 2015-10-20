@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $stateParams, Poll, PollStatus, searchService, alertService, locale, SearchResults){
+angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $stateParams, $filter, Poll, PollStatus, searchService, alertService, locale, SearchResults, csvService){
 
     $scope.activeTab = "POLLING_LOGS";
 
@@ -10,6 +10,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
 
     //Holds the search criterias
     $scope.advancedSearchObject  = searchService.getAdvancedSearchObject();
+    $scope.selectedItems = [];
 
     //DATA FOR DROPDOWNS
     var DATE_CUSTOM = "custom";
@@ -59,8 +60,51 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
         window.print();
     };
 
-    $scope.exportAsFile = function(){
-        alertService.showInfoMessageWithTimeout("Export as file will soon be available. Stay tuned!");
+    //Export data as CSV file
+    $scope.exportLogsAsCSVFile = function(){
+        var filename = 'pollingLogs.csv';
+
+        //Set the header columns
+        var header = [
+            locale.getString('polling.polling_logs_table_header_name'),
+            locale.getString('polling.polling_logs_table_header_ext_no'),
+            locale.getString('polling.polling_logs_table_header_poll_type'),
+            locale.getString('polling.polling_logs_table_header_transponder'),
+            locale.getString('polling.polling_logs_table_header_time'),
+            locale.getString('polling.polling_logs_table_header_status'),
+            locale.getString('polling.polling_logs_table_header_user')
+        ];
+
+        //Set the data columns
+        var getData = function() {
+            var exportItems;
+            //Export only selected items
+            if($scope.selectedItems.length > 0){
+                exportItems = $scope.selectedItems;
+            }
+            //Export all logs in the table
+            else{
+                exportItems = $scope.currentSearchResults.items;
+            }
+            return exportItems.reduce(
+                function(csvObject, item){
+                    var csvRow = [
+                        item.vessel.name,
+                        item.vessel.externalMarking,
+                        $filter('pollTypeName')(item.poll.type),
+                        $filter('transponderName')(item.poll.attributes.TRANSPONDER),
+                        "TODO: List status date",
+                        "TODO: List status text",
+                        item.poll.attributes.USER
+                    ];
+                    csvObject.push(csvRow);
+                    return csvObject;
+                },[]
+            );
+        };
+
+        //Create and download the file
+        csvService.downloadCSVFile(getData(), header, filename);
     };
 
     /*SEARCH POLLING LOGS*/
@@ -92,6 +136,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     //If pollId is set, search for that one
     $scope.getPolls = function(pollId){
         $scope.currentSearchResults.setLoading(true);
+        $scope.clearSelection();
 
         //Create criterias and do the search
         searchService.resetPage();
@@ -134,6 +179,77 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
         $scope.currentSearchResults.setLoading(false);
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
     };
+
+
+    //Handle click on the top "check all" checkbox
+    $scope.checkAll = function(){
+        if($scope.isAllChecked()){
+            //Remove all
+            $scope.clearSelection();
+        }else{
+            //Add all
+            $scope.clearSelection();
+            $.each($scope.currentSearchResults.items, function(index, item) {
+                $scope.addToSelection(item);
+            });
+        }
+    };
+
+    $scope.checkItem = function(item){
+        if($scope.isChecked(item)){
+            //Remove
+            $scope.removeFromSelection(item);
+        }else{
+            $scope.addToSelection(item);
+        }
+    };
+
+    $scope.isAllChecked = function(){
+        if(angular.isUndefined($scope.currentSearchResults.items) || $scope.selectedItems.length === 0){
+            return false;
+        }
+
+        var allChecked = true;
+        $.each($scope.currentSearchResults.items, function(index, item) {
+            if(!$scope.isChecked(item)){
+                allChecked = false;
+                return false;
+            }
+        });
+        return allChecked;
+    };
+
+    $scope.isChecked = function(item){
+        var checked = false;
+        $.each($scope.selectedItems, function(index, item){
+            if(item.isEqualPollId(item)){
+                checked = true;
+                return false;
+            }
+        });
+        return checked;
+    };
+
+    //Clear the selection
+    $scope.clearSelection = function(){
+        $scope.selectedItems = [];
+    };
+
+    //Add an item to the selection
+    $scope.addToSelection = function(item){
+        $scope.selectedItems.push(item);
+    };
+
+    //Remove an item from the selection
+    $scope.removeFromSelection = function(item){
+        $.each($scope.selectedItems, function(index, item){
+            if(item.isEqualPollId(item)){
+                $scope.selectedItems.splice(index, 1);
+                return false;
+            }
+        });
+    };
+
 
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
