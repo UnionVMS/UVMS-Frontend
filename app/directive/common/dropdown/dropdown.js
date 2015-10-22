@@ -19,7 +19,7 @@ angular.module('unionvmsWeb')
             callbackParams : '=',
             ngDisabled : '='
 		},
-		templateUrl: 'directive/common/dropdown/dropdown.html',
+        templateUrl: 'directive/common/dropdown/dropdown.html',
 		link: function(scope, element, attrs, fn) {
 
             scope.initialitem = true;
@@ -83,8 +83,10 @@ angular.module('unionvmsWeb')
                 if(newVal === null || newVal === undefined || newVal === ""){
                     if(attrs.initialtext){
                         scope.currentItemLabel = attrs.initialtext;
+                         scope.setplaceholdercolor = true; //sets css class on first element. (placeholder)
                     }
                 }else{
+                     scope.setplaceholdercolor = false;
                     for(var i = 0; i < scope.items.length; i++){
                         if(angular.equals(newVal, getItemCode(scope.items[i])) ) {
                             scope.currentItemLabel = scope.getItemLabel(scope.items[i]);
@@ -133,7 +135,6 @@ angular.module('unionvmsWeb')
             };
 
             scope.setLabel();
-
             //Create a list item with the initaltext?
             if(scope.initialitem){
                 scope.addDefaultValueToDropDown();

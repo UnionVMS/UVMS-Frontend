@@ -23,7 +23,7 @@
                                         <dropdown ng-model="advancedSearchObject.DATE_SPAN" items="dateSearchItems" no-placeholder-item></dropdown>
                                     </th>
 
-                                    <th colspan="2" class="datepickerStart">
+                                    <th colspan="2">
                                         <datepicker-input model="advancedSearchObject.START_DATE" placeholder="{{'polling.polling_logs_search_date_from_placeholder' | i18n}}" time="true"></datepicker-input>
                                     </th>
 
@@ -31,13 +31,13 @@
                                         <datepicker-input model="advancedSearchObject.END_DATE" placeholder="{{'polling.polling_logs_search_date_to_placeholder' | i18n}}" time="true"></datepicker-input>
                                     </th>
 
+                                    <th>&nbsp;</th>
+                                    <th>&nbsp;</th>
                                     <th class="textAlignCenter">
                                         <button type="submit" class="btn btn-primary inputHeigth searchButton" ng-click="searchPolls()">
-                                            <span class="fa fa-search"></span>
+                                             {{'common.search' | i18n}}
                                         </button>
                                     </th>
-                                    <th>&nbsp;</th>
-                                    <th>&nbsp;</th>
                                     <th class="printAndExport">
                                         <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
                                         <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>
@@ -72,9 +72,6 @@
                                         <input type="text"/ placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.USER" >
                                     </th>
                                      <th>
-                                        <button type="submit" class="btn btn-primary inputHeigth searchButton" ng-click="searchPolls()">
-                                            <span class="fa fa-search"></span>
-                                        </button>
                                     </th>
 
                                 </tr>

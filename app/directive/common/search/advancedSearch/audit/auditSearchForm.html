@@ -1,27 +1,33 @@
 <div class="auditSearchForm" ng-controller="AuditsearchformCtrl">
 	<div class="row">
-		<div class="col-md-2">
-			<input type="text" placeholder="{{'audit.search_name_placeholder' | i18n}}" class="form-control" tabindex="1" ng-model="advancedSearchObject.USER">
+		<div class="col-md-10">
+			<div class="col-md-2">
+				<input type="text" placeholder="{{'audit.search_name_placeholder' | i18n}}" class="form-control" tabindex="1" ng-model="advancedSearchObject.USER">
+			</div>
+			<div class="col-md-2">
+		    	<multiselect-Drop-Down class="fullWidth" model="advancedSearchObject.OPERATION" pre_selected="member.operations" options="operations" initialtext="{{'audit.search_operation' | i18n}}" checkall="{{'audit.search_checkall' | i18n}}" uncheckall="{{'audit.search_uncheckall' | i18n}}"></multiselect-Drop-Down>
+			</div>
+			<div class="col-md-2">
+				<multiselect-Drop-Down class="fullWidth" model="advancedSearchObject.TYPE" pre_selected="member.objecttypes" options="objectTypes" initialtext="{{'audit.search_object_type' | i18n}}" checkall="{{'audit.search_checkall' | i18n}}" uncheckall="{{'audit.search_uncheckall' | i18n}}"></multiselect-Drop-Down>
+			</div>
+			<div class="col-md-3" ng-class="{'has-error': submitAttempted && advancedSearchForm.fromDate.$invalid}">
+		    	<datepicker-input model="advancedSearchObject.FROM_DATE" name="fromDate" time="true" placeholder="{{'audit.search_dateFrom_placeholder' | i18n}}" ng-required="true"></datepicker-input>
+		    	<input-validation-message types="required" input="advancedSearchForm.fromDate" ng-show="submitAttempted"></input-validation-message>
+			</div>
+		    <div class="col-md-3" ng-class="{'has-error': submitAttempted && advancedSearchForm.toDate.$invalid}">
+		    	<datepicker-input model="advancedSearchObject.TO_DATE" name="toDate" time="true" placeholder="{{'audit.search_dateTo_placeholder' | i18n}}" ng-required="true"></datepicker-input>
+		    	<input-validation-message types="required" input="advancedSearchForm.toDate" ng-show="submitAttempted"></input-validation-message>
+			</div>
 		</div>
 		<div class="col-md-2">
-	    	<multiselect-Drop-Down class="fullWidth" model="advancedSearchObject.OPERATION" pre_selected="member.operations" options="operations" initialtext="{{'audit.search_operation' | i18n}}" checkall="{{'audit.search_checkall' | i18n}}" uncheckall="{{'audit.search_uncheckall' | i18n}}"></multiselect-Drop-Down>
-		</div>
-		<div class="col-md-2">
-			<multiselect-Drop-Down class="fullWidth" model="advancedSearchObject.TYPE" pre_selected="member.objecttypes" options="objectTypes" initialtext="{{'audit.search_object_type' | i18n}}" checkall="{{'audit.search_checkall' | i18n}}" uncheckall="{{'audit.search_uncheckall' | i18n}}"></multiselect-Drop-Down>
-		</div>
-		<div class="col-md-2" ng-class="{'has-error': submitAttempted && advancedSearchForm.fromDate.$invalid}">
-	    	<datepicker-input model="advancedSearchObject.FROM_DATE" name="fromDate" time="true" placeholder="{{'audit.search_dateFrom_placeholder' | i18n}}" ng-required="true"></datepicker-input>
-	    	<input-validation-message types="required" input="advancedSearchForm.fromDate" ng-show="submitAttempted"></input-validation-message>
-		</div>
-	    <div class="col-md-2" ng-class="{'has-error': submitAttempted && advancedSearchForm.toDate.$invalid}">
-	    	<datepicker-input model="advancedSearchObject.TO_DATE" name="toDate" time="true" placeholder="{{'audit.search_dateTo_placeholder' | i18n}}" ng-required="true"></datepicker-input>
-	    	<input-validation-message types="required" input="advancedSearchForm.toDate" ng-show="submitAttempted"></input-validation-message>
-		</div>
-		<div class="col-md-1">
-			<button type="submit" class="btn btn-primary btn-sm fullWidth searchbtntext" ng-click="performAdvancedSearch()">{{'audit.search_search_button' | i18n}}</button>
-		</div>
-		<div class="col-md-1 reset">
-			<a href="" ng-click="resetSearch()">{{'audit.search_reset' | i18n}}</a>
+			<div class="col-md-6 nopaddingleft">
+				<button type="submit" class="btn btn-primary btn-sm fullWidth searchbtntext" ng-click="performAdvancedSearch()">{{'audit.search_search_button' | i18n}}</button>
+			</div>
+			<div class="col-md-6 nopaddingleft">
+				<button type="button" class="btn btn-default btn-sm fullWidth resetbtntext" ng-click="resetSearch()">
+					{{'common.reset' | i18n}}
+	            </button>
+			</div>
 		</div>
 	<div>
 </div>

@@ -1,7 +1,7 @@
 <div>
     <div class="dropdown fullWidthDropdown">
         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled">
-            <div class="dropdowntext" ng-bind="currentItemLabel"></div>
+            <div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-bind="currentItemLabel"></div>
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">

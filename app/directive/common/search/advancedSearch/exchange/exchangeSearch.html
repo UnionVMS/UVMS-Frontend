@@ -16,10 +16,11 @@
 			<dropdown ng-model="advancedSearchObject.RECIPIENT" initialtext="{{'exchange.search_recipient' | i18n}}" items="[{text:'DNK',code:'DNK'}]"></dropdown>
 		</div>
 		<div class="col-md-1">
-			<button type="submit" class="btn btn-primary btn-sm" ng-click="performAdvancedSearch()">{{'common.search' | i18n}}</button>
+			<button type="submit" class="btn btn-primary btn-sm searchButton searchbtntext" ng-click="performAdvancedSearch()">{{'common.search' | i18n}}</button>
 		</div>
 		<div class="col-md-1">
-			<button class="btn btn-link btn-sm" ng-click="resetAdvancedSearchForm(true)">{{'common.reset' | i18n}}</button>
+
+			<button type="submit" class="btn btn-default btn-sm resetbtntext" ng-click="resetAdvancedSearchForm(true)">{{'common.reset' | i18n}}</button>
 		</div>
 	</div>
 </div>

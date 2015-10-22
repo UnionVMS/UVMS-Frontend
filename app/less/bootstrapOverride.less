@@ -99,12 +99,12 @@ button{
 .btn-primary{
     background-color: @btnPrimaryColor;
     color: #ffffff;
-    border: solid 1px @btnPrimaryColor;
+    border: solid 1px #2678AE;
 
     &:hover, &:active, &:focus{
         background-color: @btnPrimaryHoverColor;
         color: #ffffff;
-        border-color: @btnPrimaryHoverColor;
+        border-color: #2678AE;
     }
 }
 
@@ -163,8 +163,8 @@ ul.nav-tabs{
 .form-control.ng-valid.ng-touched.ng-dirty.ng-valid-parse,
 .input[type="text"], input[type="time"], input[type="number"], input[type="email"]
 {
-    box-shadow: inset 0px 0px 0px #EBEBEB !important;
-    border: 1px solid #EBEBEB;
+    box-shadow: inset 0px 0px 0px @inputBorderColor !important;
+    border: 1px solid @inputBorderColor;
 }
 
 .form-control.ng-pristine.ng-valid.ng-touched:hover,
@@ -185,8 +185,20 @@ box-shadow: none;
 .form-control.datetimeinput.ng-valid.ng-isolate-scope.ng-valid-min-date.ng-valid-required.ng-dirty.ng-valid-parse.ng-touched,
 .form-control.datetimeinput.ng-pristine.ng-untouched.ng-valid.ng-isolate-scope.ng-valid-min-date.ng-valid-required
 {
-    box-shadow: inset 0px 0px 0px #EBEBEB !important;
-    border: 1px solid #EBEBEB;
+    box-shadow: inset 0px 0px 0px @inputBorderColor !important;
+    border: 1px solid @inputBorderColor;
+}
+
+
+//datetimepicker
+.xdsoft_datetimepicker {
+    border-color:@inputBorderColor !important;
+    margin-top: 2px !important;
+}
+
+//button
+.btn-default{
+    border-color: @inputBorderColor;
 }
 
 @media (min-width: 1400px)

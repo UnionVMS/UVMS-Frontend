@@ -12,24 +12,23 @@
             </div>
         </div>
         <div class="row">
-            
+
             <div class="col-md-4">
                 <input type="text" placeholder="{{'mobileTerminal.search_externalMarking_placeholder' | i18n}}" class="form-control" tabindex="3" ng-model="advancedSearchObject.EXTERNAL_MARKING" ng-change="onSearchInputChange()">
             </div>
             <div class="col-md-4">
                 <input type="text" placeholder="{{'mobileTerminal.search_CFR_placeholder' | i18n}}"  class="form-control" tabindex="4" ng-model="advancedSearchObject.CFR" ng-change="onSearchInputChange()">
             </div>
-
-            <div class="col-md-2 ">
-                <!-- Reset button -->
-                <button type="button" class="btn btn-default btn-sm" ng-click="resetAdvancedMobileSearchForm()">
-                    {{'common.reset' | i18n}}
-                </button> 
-            </div>
             <div class="col-md-2">
                 <!-- Search button -->
-                <button type="submit" class="btn btn-primary btn-sm" ng-click="performAdvancedSearch()">
+                <button type="submit" class="btn btn-primary btn-sm searchbtntext" ng-click="performAdvancedSearch()">
                     {{'common.search' | i18n}}
+                </button>
+            </div>
+            <div class="col-md-2 ">
+                <!-- Reset button -->
+                <button type="button" class="btn btn-default btn-sm resetbtntext" ng-click="resetAdvancedMobileSearchForm()">
+                    {{'common.reset' | i18n}}
                 </button>
             </div>
 
