@@ -24,7 +24,7 @@ sharedModule.controller('LogincontrollerCtrl', ['$rootScope', '$scope','$log', '
             },
             function(error) {
                 //delete $sessionStorage.currentUser;
-                $scope.messageDivClass = "container alert alert-danger";
+                $scope.messageDivClass = "alert alert-danger";
                 $scope.actionMessage= error;
             }
         );

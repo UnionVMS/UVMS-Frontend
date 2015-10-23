@@ -487,7 +487,7 @@ angular.module('auth',
                 var _isAllowed = function (feature, application, currentContextOnly) {
                     // we could probably use the _findContexts() and _findSelectedContext() promises
                     // be for now let's simply return false if the contextset is empty
-
+                    //return true;
                     var ctxt, ctxtSets, allowed = false;
                     if(!contexts) {
                         return false;
@@ -988,12 +988,12 @@ angular.module('auth',
                                 //thought about going to the requested state but this is probably not the right place
                                 $modalInstance.close();
                             } else {
-                                $scope.messageDivClass = "container alert alert-danger";
+                                $scope.messageDivClass = "alert alert-danger";
                                 $scope.actionMessage = "There was a problem logging you in.";
                             }
                         },
                         function (error) {
-                            $scope.messageDivClass = "container alert alert-danger";
+                            $scope.messageDivClass = "alert alert-danger";
                             $scope.actionMessage = error;
                         }
                     );
@@ -1016,7 +1016,7 @@ angular.module('auth',
                             $state.go($stateParams.toState||routeProtection.getHome(),{},{relative:false});
                         },
                         function (error) {
-                            $scope.messageDivClass = "container alert alert-danger";
+                            $scope.messageDivClass = "alert alert-danger";
                             $scope.actionMessage = error;
                         }
                     );

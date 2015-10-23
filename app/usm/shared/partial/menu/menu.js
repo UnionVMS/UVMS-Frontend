@@ -106,7 +106,7 @@ sharedModule.controller('setMyPasswordModalInstanceCtrl', ['$log', '$timeout', '
 								    var updatedUser = objectToSubmit;
 
 								    $scope.userPasswordUpdated = true;
-								    $scope.messageDivClass = "container alert alert-success";
+								    $scope.messageDivClass = "alert alert-success";
 								    $scope.actionMessage = "Password has been set";
 
 								    $timeout(function () {
@@ -114,7 +114,7 @@ sharedModule.controller('setMyPasswordModalInstanceCtrl', ['$log', '$timeout', '
 								  }, 2000);
 								},
 								function (error) {
-								    $scope.messageDivClass = "container alert alert-danger";
+								    $scope.messageDivClass = "alert alert-danger";
 								    $scope.actionMessage = error;
 
 								    $log.log(error);
@@ -225,7 +225,7 @@ sharedModule.controller('setModifySecurityAnswersModalInstanceCtrl',
                             var updatedSecurityAnswers = response;
 
                             $scope.securityQuestionsUpdated = true;
-                            $scope.messageDivClass = "container alert alert-success";
+                            $scope.messageDivClass = "alert alert-success";
                             $scope.actionMessage = "Security questions/answers have been saved";
 
                             $timeout(function () {
@@ -233,7 +233,7 @@ sharedModule.controller('setModifySecurityAnswersModalInstanceCtrl',
                             }, 2000);
                         },
                         function (error) {
-                            $scope.messageDivClass = "container alert alert-danger";
+                            $scope.messageDivClass = "alert alert-danger";
                             $scope.actionMessage = error;
 
                             $log.log(error);
@@ -347,7 +347,7 @@ sharedModule.controller('setMyContactDetailsModalInstanceCtrl',
               var updatedDetails = response;
 
               $scope.contactDetailsUpdated = true;
-              $scope.messageDivClass = "container alert alert-success";
+              $scope.messageDivClass = "alert alert-success";
               $scope.actionMessage = "Contact Details have been saved";
 
               $timeout(function () {
@@ -355,7 +355,7 @@ sharedModule.controller('setMyContactDetailsModalInstanceCtrl',
               }, 2000);
             },
             function (error) {
-              $scope.messageDivClass = "container alert alert-danger";
+              $scope.messageDivClass = "alert alert-danger";
               $scope.actionMessage = error;
 
               $log.log(error);
