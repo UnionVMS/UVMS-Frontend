@@ -5,6 +5,7 @@
 
     "alarms_status_open" : "Open",
     "alarms_status_closed" : "Closed",
+    "alarms_affected_object_unknown" : "Incomplete data",
 
     "notification" : "Notification",
     "open_ticket" : "Notification",
@@ -25,6 +26,7 @@
     "alarms_filter_all" : "All",
     "alarms_filter_open" : "Open",
     "alarms_filter_closed" : "Closed",
+    "alarms_table_number_of_rules" : "{1} rules",
 
     "alarms_search_affected_object_placeholder": "Object name",
     "alarms_search_rule": "Rule",
@@ -133,5 +135,8 @@
     "position_report_asset_information" : "Asset information",
     "position_report_position_information" : "Position information",
     "position_report_inactivate_position" : "Inactivate position (will not show on map)",
-    "position_report_assign_asset_from_list" : "Assign asset from list"
+    "position_report_assign_asset_from_list" : "Assign asset from list",
+
+    "notifications_table_close_title" : "Close notificaton",
+    "notifications_close_error_message" : "Failed to close the notification. Please try again."
 }

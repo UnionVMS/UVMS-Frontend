@@ -32,9 +32,9 @@
                     <td class="link">{{item.resolvedBy}}</td>
                     <td>
                         <button class="btn btn-sm btn-primary" ng-click="showOnMap(item)" title="{{'common.show_on_map' | i18n}}">
-                            <span class="fa fa-map-o"></span>
+                            <span class="fa fa-globe"></span>
                         </button>
-                        <button show-if-allowed="Rules:manageAlarmsOpenTickets"  ng-if="item.isOpen()" type="button" class="btn btn-sm btn-primary" ng-click="closeItem(item)" title="{{'alarms.alarms_table_close_title' | i18n}}">{{'alarms.alarms_table_close' | i18n | uppercase}}</button>
+                        <button show-if-allowed="Rules:manageAlarmsOpenTickets"  ng-if="item.isOpen()" type="button" class="btn btn-sm btn-primary" ng-click="closeTicket(item)" title="{{'alarms.notifications_table_close_title' | i18n}}">{{'alarms.alarms_table_close' | i18n | uppercase}}</button>
                     </td>
                 </tr>
             </tbody>

@@ -47,6 +47,23 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         }
     };
 
+    //Close a ticket
+    $scope.closeTicket = function(ticket){
+        var copy = ticket.copy();
+        copy.setStatusToClosed();
+        alarmRestService.updateTicketStatus(copy).then(
+            function(updatedTicket){
+                //Update ticket values
+                ticket.status = updatedTicket.status;
+                ticket.resolvedDate = updatedTicket.resolvedDate;
+                ticket.resolvedBy = updatedTicket.resolvedBy;
+            },
+            function(error){
+                alertService.showErrorMessageWith(locale.getString('alarms.notifications_close_error_message'));
+            }
+        );
+    };
+
     //Handle click on the top "check all" checkbox
     $scope.checkAll = function(){
         if($scope.isAllChecked()){

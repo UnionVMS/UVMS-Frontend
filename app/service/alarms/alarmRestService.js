@@ -11,10 +11,15 @@ angular.module('unionvmsWeb')
                 return $resource('/rules/rest/tickets/list/',{},{
                     list : { method: 'POST'}
                 });
-            }
+            },
+            ticket : function(){
+                return $resource('/rules/rest/tickets', {}, {
+                    update: {method: 'PUT'}
+                });
+            },
         };
     })
-.factory('alarmRestService', function($q, $log, alarmRestFactory, Alarm, SearchResultListPage){
+.factory('alarmRestService', function($q, $log, alarmRestFactory, Alarm, Ticket, SearchResultListPage, userService){
 
     var getAlarmsList = function(getListRequest){
         var deferred = $q.defer();
@@ -64,7 +69,7 @@ angular.module('unionvmsWeb')
 
                 if(angular.isArray(response.data.tickets)) {
                     for (var i = 0; i < response.data.tickets.length; i++) {
-                        tickets.push(Alarm.fromDTO(response.data.tickets[i]));
+                        tickets.push(Ticket.fromDTO(response.data.tickets[i]));
                     }
                 }
 
@@ -83,8 +88,28 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
+    var updateTicketStatus = function(ticket){
+        //Set resolveBy to the current user
+        ticket.setResolvedBy(userService.getUserName());
+
+        var deferred = $q.defer();
+        alarmRestFactory.ticket().update(ticket.DTO(), function(response) {
+            if(response.code !== 200){
+                deferred.reject("Invalid response status");
+                return;
+            }
+            deferred.resolve(Ticket.fromDTO(response.data));
+        }, function(error) {
+            $log.error("Error updating ticket status");
+            $log.error(error);
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    };
+
     return {
         getAlarmsList: getAlarmsList,
-        getTicketsList: getTicketsList
+        getTicketsList: getTicketsList,
+        updateTicketStatus: updateTicketStatus,
     };
 });
