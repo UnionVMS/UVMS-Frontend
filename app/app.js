@@ -298,7 +298,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
         })
         .state('app.openTickets', {
-            url: '/alarms/opentickets',
+            url: '/alarms/notifications',
             views: {
                 modulepage: {
                     templateUrl: 'partial/alarms/openTickets/openTickets.html',

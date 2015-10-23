@@ -7,7 +7,7 @@
                     <span ng-show="holdingTableNotifications > 0" class="badge notificationsBadge" ng-bind="holdingTableNotifications"></span>
                 </li>
                 <li ng-class="{active: isActiveTab('OPEN_TICKETS')}" show-if-allowed='Rules:viewAlarmsOpenTickets'>
-                    <a href="#/alarms/opentickets">{{'alarms.pagemenu_open_tickets' | i18n }}</a>
+                    <a href="#/alarms/notifications">{{'alarms.pagemenu_open_tickets' | i18n }}</a>
                     <span ng-show="openTicketsNotifications > 0" class="badge notificationsBadge" ng-bind="openTicketsNotifications"></span>
                 </li>
                 <li ng-class="{active: isActiveTab('RULES')}" show-if-allowed='Rules:viewAlarmsRules'>

@@ -96,7 +96,7 @@
         if(checkAccess('Rules', 'viewAlarmsHoldingTable')){
             alarmsLink = '/alarms/holdingtable';
         }else if(checkAccess('Rules', 'viewAlarmsOpenTickets')){
-            alarmsLink = '/alarms/opentickets';
+            alarmsLink = '/alarms/notifications';
         }else if(checkAccess('Rules', 'viewAlarmsRules')){
             alarmsLink = '/alarms/rules';
         }
