@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($scope, $log, $modalInstance, locale, position, options, GetListRequest, SearchResults, vesselRestService) {
+angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($scope, $log, $modalInstance, locale, position, options, GetListRequest, SearchResults, vesselRestService, dateTimeService) {
 
     //TODO: Operate on a copy of the item/alarm/position so we can click cancel without updating the original
     $scope.position = position;
@@ -34,7 +34,7 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
     $scope.addMarkerToMap = function(){
         var latLng = $scope.position.position;
         if(angular.isDefined(latLng.latitude) && angular.isDefined(latLng.longitude)){
-            var formattedTime =  moment(position.time).format("YYYY-MM-DD HH:mm");
+            var formattedTime =  dateTimeService.formatAccordingToUserSettings(position.time);
             var marker = {
                 lng: latLng.longitude,
                 lat: latLng.latitude,

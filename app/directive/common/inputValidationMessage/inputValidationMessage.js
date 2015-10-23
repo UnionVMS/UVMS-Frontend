@@ -39,7 +39,6 @@ angular.module('unionvmsWeb').controller('inputValidationMessageCtrl',function($
         'minDate' : locale.getString('common.validation_invalid_date'),
         'numeric' : locale.getString('common.validation_invalid_numeric'),
         'latitude': locale.getString('movement.validation_invalid_latitude'),
-        'format': locale.getString('movement.validation_invalid_format'),
         'longitude': locale.getString('movement.validation_invalid_longitude'),
         'email': locale.getString('common.validation_invalid_email')
     };

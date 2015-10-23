@@ -45,8 +45,8 @@
                     <td>{{item.carrier.cfr}}</td>
                     <td>{{item.carrier.name}}</td>
                     <td>{{item.time | confDateFormat}}</td>
-                    <td>{{item.position.latitude}}</td>
-                    <td>{{item.position.longitude}}</td>
+                    <td>{{item.position.latitude | confCoordinateFormat}}</td>
+                    <td>{{item.position.longitude | confCoordinateFormat}}</td>
                     <td>{{item.speed | number:2}}</td>
                     <td>{{item.course}}&deg;</td>
                     <td>

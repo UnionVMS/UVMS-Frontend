@@ -41,8 +41,8 @@
                     <td>{{movement.vessel.ircs}}</td>
                     <td class="movementvesselname">{{movement.vessel.name}}</td>
                     <td>{{movement.time | confDateFormat}}</td>
-                    <td>{{movement.movement.latitude}}</td>
-                    <td>{{movement.movement.longitude}}</td>
+                    <td>{{movement.movement.latitude | confCoordinateFormat}}</td>
+                    <td>{{movement.movement.longitude | confCoordinateFormat}}</td>
                     <td>{{movement.movement.status}}</td>
                     <td>{{movement.movement.reportedSpeed | number:2}} {{'movement.movement_speed_unit' | i18n}}</td>
                     <td>{{movement.movement.calculatedSpeed | number:2}} {{'movement.movement_speed_unit' | i18n}}</td>

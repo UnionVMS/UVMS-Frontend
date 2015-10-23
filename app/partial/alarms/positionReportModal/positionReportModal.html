@@ -124,17 +124,17 @@
             </div>
             <div class="col-md-9">
                 <label>{{'movement.manual_position_field_label_date_time' | i18n}}</label>
-                <div class="value">{{position.time}}</div>
+                <div class="value">{{position.time | confDateFormat}}</div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_latitude' | i18n}}</label>
-                <div class="value">{{position.position.latitude}}</div>
+                <div class="value">{{position.position.latitude | confCoordinateFormat}}</div>
             </div>
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_longitude' | i18n}}</label>
-                <div class="value">{{position.position.longitude}}</div>
+                <div class="value">{{position.position.longitude | confCoordinateFormat}}</div>
             </div>
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_measured_speed' | i18n}}</label>
