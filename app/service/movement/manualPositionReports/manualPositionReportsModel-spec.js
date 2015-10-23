@@ -71,4 +71,27 @@ describe('ManualPosition', function() {
         expect(dto.position.latitude).toEqual(data.position.latitude);
         expect(dto.position.longitude).toEqual(data.position.longitude);
     }));
+
+    it('copy() should create a copy of the object', inject(function(ManualPosition) {
+        var position = ManualPosition.fromJson(data);
+        var copy = position.copy();
+
+        expect(copy.guid).toEqual(position.guid);
+        expect(copy.speed).toEqual(position.speed);
+        expect(copy.course).toEqual(position.course);
+        expect(copy.time).toEqual(position.time);
+        expect(copy.updatedTime).toEqual(position.updatedTime);
+        expect(copy.status).toEqual(position.status);
+        expect(copy.archived).toEqual(position.archived);
+
+        expect(copy.carrier.externalMarking).toEqual(position.carrier.externalMarking);
+        expect(copy.carrier.cfr).toEqual(position.carrier.cfr);
+
+        expect(copy.carrier.name).toEqual(position.carrier.name);
+        expect(copy.carrier.ircs).toEqual(position.carrier.ircs);
+        expect(copy.carrier.flagState).toEqual(position.carrier.flagState);
+
+        expect(copy.position.latitude).toEqual(position.position.latitude);
+        expect(copy.position.longitude).toEqual(position.position.longitude);
+    }));
  });

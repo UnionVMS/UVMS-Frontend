@@ -42,8 +42,8 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 		}
 
 		if (data.position) {
-			manualPosition.position.latitude = data.position.latitude;
-			manualPosition.position.longitude = data.position.longitude;
+            manualPosition.position.latitude = data.position.latitude !== null ? data.position.latitude : undefined;
+			manualPosition.position.longitude = data.position.longitude !== null ? data.position.longitude : undefined;
 		}
 
 		return manualPosition;
@@ -74,6 +74,32 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 
 		return data;
 	};
+
+    ManualPosition.prototype.copy = function() {
+        var copy = new ManualPosition();
+        copy.guid = this.guid;
+        copy.speed = this.speed;
+        copy.course = this.course;
+        copy.time = this.time;
+        copy.archived = this.archived;
+        copy.status = this.status;
+        copy.updatedTime = this.updatedTime;
+
+        copy.carrier = {
+            cfr: this.carrier.cfr,
+            name: this.carrier.name,
+            externalMarking: this.carrier.externalMarking,
+            ircs: this.carrier.ircs,
+            flagState: this.carrier.flagState
+        };
+
+        copy.position = {
+            longitude: this.position.longitude,
+            latitude: this.position.latitude
+        };
+
+        return copy;
+    };
 
 	ManualPosition.prototype.isEqualMovement = function(item) {
 		return item.guid === this.guid;

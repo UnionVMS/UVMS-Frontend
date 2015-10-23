@@ -8,7 +8,7 @@ angular.module('unionvmsWeb').directive('onlyDigits', [
                 var validateFn = function (viewValue) {
                     if (ctrl.$isEmpty(viewValue) || /^[0-9]*$/.test(viewValue)) {
                         ctrl.$setValidity('onlyDigits', true);
-                        return viewValue;                        
+                        return viewValue;
                     } else {
                         ctrl.$setValidity('onlyDigits', false);
                         return undefined;
@@ -32,7 +32,7 @@ angular.module('unionvmsWeb').directive('onlyLetters', [
                 var validateFn = function (viewValue) {
                     if (ctrl.$isEmpty(viewValue) || /^[A-ZÅÄÖa-zåäö ]*$/.test(viewValue)) {
                         ctrl.$setValidity('onlyLetters', true);
-                        return viewValue;                        
+                        return viewValue;
                     } else {
                         ctrl.$setValidity('onlyLetters', false);
                         return undefined;
@@ -45,13 +45,6 @@ angular.module('unionvmsWeb').directive('onlyLetters', [
         };
 }]);
 
-var getCheckFormat = function(model, regex) {
-    return function(value) {
-        var match = typeof value === "string" && regex.test(value);
-        model.$setValidity('format', match);
-        return match ? value : undefined;
-    };
-};
 
 var getCheckNumeric = function(model) {
     return function(value) {
@@ -77,21 +70,6 @@ var toNumberParser = function(value) {
     return Number(value);
 };
 
-var getCheckLongitude = function(model) {
-    return function(value) {
-        var longitude = typeof value === "number" && Math.abs(value) <= 180;
-        model.$setValidity('longitude', longitude);
-        return longitude ? value : undefined;
-    };
-};
-
-var getCheckLatitude = function(model) {
-    return function(value) {
-        var latitude = typeof value === "number" && Math.abs(value) <= 90;
-        model.$setValidity('latitude', latitude);
-        return latitude ? value : undefined;
-    };
-};
 
 //Numeric
 angular.module('unionvmsWeb').directive('numeric', [function() {
@@ -191,28 +169,38 @@ angular.module('unionvmsWeb').directive('datePickerInputMaxDate', function() {
     };
 });
 
-var formatThreeDecimals = /^-?\d*[\.,]?(\d{0,3})?$/;
-
-angular.module('unionvmsWeb').directive('longitude', function() {
+//Validate that model value is valid longitude
+angular.module('unionvmsWeb').directive('longitude', function(coordinateFormatService) {
     return {
         restrict: 'A',
         require: 'ngModel',
         link: function(s, e, a, model) {
-            model.$parsers.push(getCheckFormat(model, formatThreeDecimals)); // a string number with no more than 3 decimal places
-            model.$parsers.push(toNumberParser); // make it a number
-            model.$parsers.push(getCheckLongitude(model)); // number is within [-180, 180]
+            model.$parsers.push(function(value) {
+                var isValid = true;
+                if(angular.isDefined(value) && String(value).trim().length > 0){
+                    isValid = coordinateFormatService.isValidLongitude(value);
+                }
+                model.$setValidity('longitude', isValid);
+                return value;
+            });
         }
     };
 });
 
-angular.module('unionvmsWeb').directive('latitude', function() {
+//Validate that model value is valid latitude
+angular.module('unionvmsWeb').directive('latitude', function(coordinateFormatService) {
     return {
         restrict: 'A',
         require: 'ngModel',
         link: function(s, e, a, model) {
-            model.$parsers.push(getCheckFormat(model, formatThreeDecimals)); // <= 3 decimals
-            model.$parsers.push(toNumberParser); // number
-            model.$parsers.push(getCheckLatitude(model)); // [-90, 90]
+            model.$parsers.push(function(value) {
+                var isValid = true;
+                if(angular.isDefined(value) && String(value).trim().length > 0){
+                    isValid = coordinateFormatService.isValidLatitude(value);
+                }
+                model.$setValidity('latitude', isValid);
+                return value;
+            });
         }
     };
 });

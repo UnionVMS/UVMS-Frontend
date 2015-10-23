@@ -6,7 +6,7 @@ describe('ManualPositionReportModalCtrl', function() {
 
     beforeEach(inject(function($rootScope, $httpBackend, $controller, Vessel, VesselListPage, ManualPosition) {
       scope = $rootScope.$new();
-      ctrl = $controller('ManualPositionReportModalCtrl', {$scope: scope, $modalInstance: {}, position : new ManualPosition(), addAnother : false, reloadFunction: function() {}, readOnly : false, sentReport : false});
+      ctrl = $controller('ManualPositionReportModalCtrl', {$scope: scope, $modalInstance: {}, positionReport : new ManualPosition(), addAnother : false, reloadFunction: function() {}, readOnly : false, sentReport : false});
 
       //Mock translation files for usm
       $httpBackend.whenGET(/^usm\//).respond({});
@@ -21,7 +21,7 @@ describe('ManualPositionReportModalCtrl', function() {
       vessels.push(vessel2);
       vessels.push(vessel3);
       getVesselsResponse = new VesselListPage(vessels, 1, 1);
-    }));	
+    }));
 
 	it('getVesselsByIrcs should return list of vessels', inject(function($q, vesselRestService, alertService) {
 
@@ -34,7 +34,7 @@ describe('ManualPositionReportModalCtrl', function() {
             suggestions = data;
         });
         scope.$digest();
-		expect(suggestions.length).toEqual(3);		
+		expect(suggestions.length).toEqual(3);
 	}));
 
     it('getVesselsByCFR should return list of vessels', inject(function($q, vesselRestService, alertService, locale) {
@@ -48,7 +48,7 @@ describe('ManualPositionReportModalCtrl', function() {
             suggestions = data;
         });
         scope.$digest();
-        expect(suggestions.length).toEqual(3);      
+        expect(suggestions.length).toEqual(3);
     }));
 
 });

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal, csvService, SearchResults, envConfig, $websocket, $log) {
+angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, $filter, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal, csvService, SearchResults, envConfig, $websocket, $log) {
 
     $scope.showModal = function() {
         $scope.editPosition();
@@ -84,8 +84,15 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
             addAnother: addAnother,
             reloadFunction: $scope.searchManualPositions
         };
+        
+        var reportObj;
+        if(angular.isDefined(item)){
+            reportObj = item.copy();
+        }else{
+            reportObj = new ManualPosition();
+        }
 
-        ManualPositionReportModal.show(item, modalOptions).then(function(result) {
+        ManualPositionReportModal.show(reportObj, modalOptions).then(function(result) {
             if (result.addAnother) {
                 var p = new ManualPosition();
                 p.carrier.ircs = result.ircs;
@@ -220,9 +227,9 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
                         item.carrier.ircs,
                         item.carrier.cfr,
                         item.carrier.name,
-                        item.time,
-                        item.position.latitude,
-                        item.position.longitude,
+                        $filter('confDateFormat')(item.time),
+                        $filter('confCoordinateFormat')(item.position.latitude),
+                        $filter('confCoordinateFormat')(item.position.longitude),
                         item.speed,
                         item.course
                     ];

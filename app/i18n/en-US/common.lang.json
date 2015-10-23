@@ -92,7 +92,7 @@
     "validation_required" : "Required",
     "validation_invalid_maxlength" : "Too many characters",
     "validation_invalid_minlength" : "Too few characters",
-    "validation_invalid_pattern" : "Invalid pattern",
+    "validation_invalid_pattern" : "Invalid format",
     "validation_invalid_email" : "Invalid email address",
     "validation_max_number_of_decimals" : "Max {1} decimals are allowed.",
     "view_details" : "View details",
