@@ -1,34 +1,52 @@
-angular.module('unionvmsWeb').factory('Alarm', function() {
+angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
 
     function Alarm(){
         this.guid = undefined;
+        this.status = undefined;
         this.openedDate = undefined;
-        this.assetId = undefined;
-        this.vessel = undefined;
-        this.ruleName = undefined;
-        this.sender = undefined;
         this.resolvedDate = undefined;
         this.resolvedBy = undefined;
-        this.status = undefined;
+        this.alarmItems = [];
+        this.movement = undefined;
+        this.asset = {
+            type : undefined,
+            ids : {}
+        };
+        this.vessel = undefined;
     }
 
     Alarm.fromDTO = function(dto){
         var alarm = new Alarm();
         alarm.guid = dto.guid;
+        alarm.status = dto.status;
         alarm.openedDate = dto.openDate;
-
-        if(angular.isDefined(dto.assetId)){
-            alarm.assetId = {
-                type : dto.assetId.type,
-                value : dto.assetId.value
-            };
-        }
-
-        alarm.ruleName = dto.ruleName;
-        alarm.sender = dto.sender;
         alarm.resolvedDate = dto.resolveDate;
         alarm.resolvedBy = dto.resolvedBy;
-        alarm.status = dto.status;
+
+        //AlarmItem
+        var i;
+        if (angular.isDefined(dto.alarmItem)) {
+            for (i = 0; i < dto.alarmItem.length; i++) {
+                alarm.alarmItems.push({guid: dto.alarmItem[i].guid, ruleName: dto.alarmItem[i].ruleName});
+            }
+        }
+
+        //rawMovement
+        var rawMovement = dto.rawMovement;
+        if(angular.isDefined(rawMovement)){
+            alarm.movement = Movement.fromJson(rawMovement);
+
+            //AssetID
+            var assetId = rawMovement.assetId;
+            if(angular.isDefined(assetId)){
+                alarm.asset.type = assetId.assetType;
+
+                for (i = 0; i < assetId.assetIdList.length; i++) {
+                    alarm.asset.ids[assetId.assetIdList[i].idType.toUpperCase()] = assetId.assetIdList[i].value;
+                }
+            }
+        }
+
         return alarm;
     };
 
@@ -52,10 +70,9 @@ angular.module('unionvmsWeb').factory('Alarm', function() {
         return typeof this.status === 'string' && this.status.toUpperCase() === "CLOSED";
     };
 
-
     Alarm.prototype.isVesselAsset = function() {
-        if(angular.isDefined(this.assetId) && angular.isDefined(this.assetId.type)){
-            return this.assetId.type.toUpperCase() === 'VESSEL';
+        if(angular.isDefined(this.asset) && angular.isDefined(this.asset.type)){
+            return this.asset.type.toUpperCase() === 'VESSEL';
         }
         return false;
     };
@@ -63,20 +80,13 @@ angular.module('unionvmsWeb').factory('Alarm', function() {
 
     Alarm.prototype.copy = function() {
         var copy = new Alarm();
-
         copy.guid = this.guid;
-        copy.openedDate = this.openedDate;
-        if(this.assetId){
-            copy.assetId = {
-                type : this.assetId.type,
-                value : this.assetId.value
-            };
-        }
-        copy.ruleName = this.ruleName;
-        copy.sender = this.sender;
-        copy.resolvedDate = this.resolvedDate;
-        copy.resolvedBy = this.resolvedBy;
         copy.status = this.status;
+        copy.openDate = this.openDate;
+        copy.resolveDate = this.resolveDate;
+        copy.resolveBy = this.resolveBy;
+        copy.alarmItems = this.alarmItems;
+        copy.movement = this.movement;
         return copy;
     };
 

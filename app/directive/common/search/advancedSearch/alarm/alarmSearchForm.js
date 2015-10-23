@@ -18,7 +18,8 @@ angular.module('unionvmsWeb').controller('AlarmSearchController', function($scop
         //empty advancedSearchobject.
         $scope.resetAdvancedSearchForm(false);
         $scope.advancedSearchObject.TIME_SPAN = $scope.timeSpanOptions[0].code;
-    };    
+        $scope.performAdvancedSearch();
+    };
 
 	$scope.performAdvancedSearch = function() {
 		$scope.$parent.performAdvancedSearch();

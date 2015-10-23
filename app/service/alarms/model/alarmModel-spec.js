@@ -1,17 +1,56 @@
 describe('Alarm', function() {
 
     var alarmData = {
-        guid: "abcdd-12345-fewf",
-        assetId: {
-            type: "DUMMY_ASSET_TYPE_1",
-            value: "DUMMY_ASSET_TYPE_VALUE_1"
-        },
-        openDate: "2015-10-09 08:13:09 +0200",
-        resolveDate: "2015-10-09 08:13:09 +0200",
-        resolvedBy: "close user",
-        ruleName: "Da Rule",
-        sender: "SWE",
-        status: "CLOSED",
+        "guid": "1",
+        "status": "OPEN",
+        "openDate": "2015-10-23 08:40:56 +0200",
+        "resolveDate": "2015-10-23 08:40:56 +0200",
+        "resolvedBy": "CLOSING USER",
+        "alarmItem": [
+          {
+            "guid": "ALARM_ITEM_GUID_1",
+            "ruleName": "Sanity check - Latitude must exist"
+          },
+          {
+            "guid": "ALARM_ITEM_GUID_2",
+            "ruleName": "Sanity check - Longitude must exist"
+          }
+        ],
+        "rawMovement": {
+            "guid": "RAW_MOVEMENT_GUID_1",
+            "connectId": "connectId_1",
+            "assetId": {
+                "assetType": "VESSEL",
+                "assetIdList": [
+                    {
+                        "idType": "CFR",
+                        "value": "SWE111111"
+                    }
+                ]
+            },
+            "comChannelType": "MOBILE_TERMINAL",
+            "mobileTerminal": {
+                "guid": "MOBILE_TERMINAL_GUID_1",
+                "connectId": "connectid_1",
+                "mobileTerminalIdList": null
+            },
+            "position": {
+                "longitude": 1.11,
+                "latitude": 1.22,
+                "altitude": 0.0
+            },
+            "positionTime": 1445582456984,
+            "status": "010",
+            "reportedSpeed": 11.1,
+            "reportedCourse": 1.11,
+            "movementType": "POS",
+            "source": "INMARSAT_C",
+            "activity": {
+                "messageType": "COE",
+                "messageId": "messageid_1",
+                "callback": "callback_1"
+            }
+        }
     };
 
     beforeEach(module('unionvmsWeb'));
@@ -21,15 +60,19 @@ describe('Alarm', function() {
         var alarm = Alarm.fromDTO(alarmData);
 
         expect(alarm.guid).toEqual(alarmData.guid);
+        expect(alarm.status).toEqual(alarmData.status);
         expect(alarm.openedDate).toEqual(alarmData.openDate);
-        expect(alarm.assetId.type).toEqual(alarmData.assetId.type);
-        expect(alarm.assetId.value).toEqual(alarmData.assetId.value);
-        expect(alarm.ruleName).toEqual(alarmData.ruleName);
-        expect(alarm.sender).toEqual(alarmData.sender);
         expect(alarm.resolvedDate).toEqual(alarmData.resolveDate);
         expect(alarm.resolvedBy).toEqual(alarmData.resolvedBy);
-        expect(alarm.status).toEqual(alarmData.status);
+        expect(alarm.alarmItems.length).toEqual(alarmData.alarmItem.length);
 
+        expect(alarm.asset.type).toEqual(alarmData.rawMovement.assetId.assetType);
+        expect(Object.keys(alarm.asset.ids).length).toEqual(alarmData.rawMovement.assetId.assetIdList.length);
+
+        //Movement
+        expect(alarm.movement.guid).toEqual(alarmData.rawMovement.guid);
+        expect(alarm.movement.movementType).toEqual(alarmData.rawMovement.messageType);
+        expect(alarm.movement.connectId).toEqual(alarmData.rawMovement.connectId);
     }));
 
 
@@ -82,19 +125,11 @@ describe('Alarm', function() {
         var alarm = new Alarm();
         expect(alarm.isVesselAsset()).toBeFalsy();
 
-        alarm.assetId = {
-            type : "VESSEL",
-            value : "test-123"
-        };
+        alarm.asset = {type : "VESsEL"};
         expect(alarm.isVesselAsset()).toBeTruthy();
 
-       alarm.assetId = {
-            type : "OTHER_TYPE",
-            value : "test-123"
-        };
-
+        alarm.asset = {type : "OTHER_TYPE"};
         expect(alarm.isVesselAsset()).toBeFalsy();
     }));
-
 
 });

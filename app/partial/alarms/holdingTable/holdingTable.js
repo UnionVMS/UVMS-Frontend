@@ -55,6 +55,14 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         }
     };
 
+    $scope.getRuleNamesTooltip = function(item){
+        var ruleNames = [];
+        $.each(item.alarmItems, function(index, rule){
+            ruleNames.push(rule.ruleName);
+        });
+        return ruleNames.join(', ');
+    };
+
     //Handle click on the top "check all" checkbox
     $scope.checkAll = function(){
         if($scope.isAllChecked()){
@@ -223,7 +231,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         };
 
         var options = {};
-        PositionReportModal.show(position, options).then(function(result) {
+        PositionReportModal.show(item, options).then(function(result) {
             //Nothing
         });
     };

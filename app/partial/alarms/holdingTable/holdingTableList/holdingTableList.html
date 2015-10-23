@@ -26,9 +26,12 @@
                     <td>{{item.openedDate | confDateFormat}}</td>
                     <td>
                         <span class="link" ng-show="item.vessel">{{item.vessel.name}}</span>
-                        <span ng-show="!item.vessel && item.assetId">{{item.assetId.type}}: {{item.assetId.value}}</span>
+                        <span ng-show="!item.vessel">{{'alarms.alarms_affected_object_unknown' | i18n}}</span>
                     </td>
-                    <td>{{item.ruleName}}</td>
+                    <td>
+                        <span ng-show="item.alarmItems.length === 1" tooltip-placement="bottom" tooltip="{{getRuleNamesTooltip(item)}}">{{item.alarmItems[0].ruleName}}</span>
+                        <span ng-show="item.alarmItems.length > 1 "tooltip-placement="bottom" tooltip="{{getRuleNamesTooltip(item)}}">{{'alarms.alarms_table_number_of_rules' | i18n:item.alarmItems.length}}</span>
+                    </td>
                     <td>{{item.sender}}</td>
                     <td>{{item.resolvedDate | confDateFormat}}</td>
                     <td class="link">{{item.resolvedBy}}</td>

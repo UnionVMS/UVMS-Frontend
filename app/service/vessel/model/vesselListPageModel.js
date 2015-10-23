@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb') 
+angular.module('unionvmsWeb')
 .factory('VesselListPage', function() {
 
         function VesselListPage(items, currentPage, totalNumberOfPages){
@@ -13,20 +13,36 @@ angular.module('unionvmsWeb')
 
         VesselListPage.prototype.getNumberOfItems = function() {
             return this.items.length;
-        };        
+        };
 
         //Find a vessel in the list of items by it's guid
         VesselListPage.prototype.getVesselByGuid = function(guid) {
-            var foundVessel;
-            $.each(this.items, function(index, vessel){
-                if(vessel.getGuid() === guid){
-                    foundVessel = vessel;
-                    return false;
-                }
-            });
+            if(angular.isDefined(guid)){
+                var foundVessel;
+                $.each(this.items, function(index, vessel){
+                    if(vessel.getGuid() === guid){
+                        foundVessel = vessel;
+                        return false;
+                    }
+                });
 
-            return foundVessel;
-        };        
+                return foundVessel;
+            }
+        };
+
+        //Find a vessel in the list of items by it's CFR
+        VesselListPage.prototype.getVesselByCFR = function(cfr) {
+            if(angular.isDefined(cfr)){
+                var foundVessel;
+                $.each(this.items, function(index, vessel){
+                    if(vessel.cfr === cfr){
+                        foundVessel = vessel;
+                        return false;
+                    }
+                });
+                return foundVessel;
+            }
+        };
 
         return VesselListPage;
     });
