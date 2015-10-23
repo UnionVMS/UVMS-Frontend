@@ -279,5 +279,10 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         });
     };
 
+    $scope.$on("$destroy", function() {
+        alertService.hideMessage();
+        searchService.reset();
+    });
+
     init();
 });
