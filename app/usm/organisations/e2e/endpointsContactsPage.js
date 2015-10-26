@@ -4,7 +4,7 @@ var EndpointsContactsPage = function () {
     //PANEL OF END POINTS DETAILS
     //Elements
     this.newContactButton = element(by.id('newOrgContact'));
-    this.delContactButton = element(by.id('delOrgContact'));
+    this.delContactButton = element.all(by.id('delOrgContact')).get(0);
 
     this.manageContactSaveButton = element(by.buttonText("Save"));
     this.manageContactDeleteButton = element(by.buttonText("Delete"));

@@ -1,7 +1,8 @@
 var userPreferencesModule = angular.module('preferences');
 
-userPreferencesModule.controller('userPreferencesCtrl', ['$scope', '$stateParams','$modal',
-    function ($scope, $stateParams, $modal) {
+userPreferencesModule.controller('userPreferencesCtrl', ['$scope', '$stateParams','$modal','userService','userPreferencesService',
+    function ($scope, $stateParams, $modal, userService,userPreferencesService) {
+
         $scope.manageUserPreference = function (mode, userPreference) {
             var modalInstance = $modal.open({
                 animation: true,
@@ -29,6 +30,29 @@ userPreferencesModule.controller('userPreferencesCtrl', ['$scope', '$stateParams
             }, function () {
             });
         };
+
+
+       // $scope.search = { groupName: '' };
+
+        // List Of options
+        userPreferencesService.getUserPreferences($stateParams.userName).then(
+            function (response) {
+                if (_.isUndefined(response.userPreferences) || _.size(response.userPreferences) < 1 || _.isNull(response.userPreferences[0])) {
+                    $scope.emptyPreferenceResult = true;
+                    $scope.isPreferencesLoading = false;
+                    $scope.optionsList = [];
+                   // $scope.displayedUserPreferences = [];
+                }
+                else {
+                    $scope.emptyPreferenceResult = false;
+                  //  $scope.isPreferencesLoading = false;
+                    $scope.optionsList = response.userPreferences;
+                }
+            }, function (error) {
+                $scope.emptyPreferenceResult = true;
+                $scope.isPreferencesLoading = false;
+            });
+
         $scope.sort = {
             sortColumn: 'optionName', // Default Sort.
             sortDirection: 'asc'
@@ -59,6 +83,38 @@ userPreferencesModule.controller('userPreferencesCtrl', ['$scope', '$stateParams
             }
             return 'fa-sort';
         };
+
+
+        $scope.searchApplications = function (option) {
+
+            var group = $scope.option.groupName;
+
+          userPreferencesService.getUserPreferences($stateParams.userName,$scope.option.groupName).then(
+                function (response) {
+                    if (_.isUndefined(response.userPreferences) || _.size(response.userPreferences) < 1 || _.isNull(response.userPreferences[0])) {
+                        $scope.emptyPreferenceResult = true;
+                        $scope.isPreferencesLoading = false;
+                        $scope.userPreferencesList = [];
+                        $scope.displayedUserPreferences = [];
+                    }
+                    else {
+                        $scope.emptyPreferenceResult = false;
+                        $scope.isPreferencesLoading = false;
+                        $scope.userPreferencesList = response.userPreferences;
+                    }
+                }, function (error) {
+                    $scope.emptyPreferenceResult = true;
+                    $scope.isPreferencesLoading = false;
+                });
+
+        };
+
+        $scope.resetForm = function () {
+            $scope.option = '';
+            $scope.searchApplications($stateParams.userName,'');
+
+        };
+
     }
 ]);
 

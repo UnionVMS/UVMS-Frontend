@@ -31,7 +31,13 @@
             </a>
         </li>
         <li>
-    		<span style="margin-top: 0px;">{{startItems}} - {{limitItems}} of {{ totalItems }} items
+    		<span style="margin-top: 0px;">{{startItems}} - 
+    		
+    		<!--  {{ totalItems < limitItems ? totalItems : limitItems }}  is not working, < breaks the html parser during the build -->    		    		
+    		<span ng-if="totalItems <= limitItems">{{ totalItems }}</span>
+    		<span ng-if="totalItems > limitItems">{{ limitItems }}</span>
+    		
+    		of {{ totalItems }} items
     		</span>
         </li>
     </ul>

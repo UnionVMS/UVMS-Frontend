@@ -234,7 +234,12 @@
     <script src="usm/users/partial/usersController.js"></script>
     <script src="usm/users/service/usersService.js"></script>
     <script src="usm/users/service/personsService.js"></script>
-    <script src="usm/shared/services/sharedServices.js"></script>
+    <script src="service/common/auth/controllers.js"></script>
+    <script src="service/common/auth/interceptor.js"></script>
+    <script src="service/common/auth/jwt.js"></script>
+    <script src="service/common/auth/usm-ui-router.js"></script>
+    <script src="service/common/auth/user-service.js"></script>
+    <script src="service/common/auth/auth-modules.js"></script>
     <script src="usm/shared/partial/login/loginController.js"></script>
     <script src="usm/shared/partial/menu/menu.js"></script>
     <script src="usm/shared/directive/usmDirectives.js"></script>
@@ -243,7 +248,6 @@
     <script src="usm/users/changes/service/changesService.js"></script>
     <script src="usm/users/changes/partial/changesController.js"></script>
     <script src="usm/shared/providers/policyValuesProvider.js"></script>
-    <script src="usm/shared/services/auth/auth.js"></script>
     <script src="config.js"></script>
     <!-- END OF USM COMPONENTS -->
 
@@ -283,6 +287,7 @@
     <script src="filter/polling/pollTypeName.js"></script>
     <script src="directive/common/latLngInput/latLngInput.js"></script>
     <script src="service/common/coordinateFormatService.js"></script>
+    <script src="partial/login/loginController.js"></script>    
     <!-- Add New Component JS Above -->
 
     <div ui-view name="unionvmsHeader"></div>

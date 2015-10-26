@@ -55,10 +55,9 @@ describe('Organisations page', function () {
     beforeEach(function () {
         // login
         loginPage.visit();
-        loginPage.login('usm_admin', 'password');
+        loginPage.login('usm_admin', 'password',"USM-UserManager - (no scope)");
 
         // select Organisations from menu
-		menuPage.selectContext("USM-UserManager - (no scope)");
         menuPage.clickOrganisations();
 
         // take the count before searching

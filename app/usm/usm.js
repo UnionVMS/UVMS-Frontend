@@ -118,14 +118,14 @@ userManagementApp.config(['$urlRouterProvider', '$stateProvider','$urlMatcherFac
         templateUrl: 'usm/shared/partial/breadcrumb/template.html'
     });
 
-        var currentUserPromise = function(userService){
+        var identifiedUser = function(userService){
             return userService.findCurrentUser();
         };
-        currentUserPromise.$inject =    ['userService'];
-        var currentContextPromise = function(userService){
+        identifiedUser.$inject =    ['userService'];
+        var currentContextPromise = function(userService,$state,$stateParams){
             return userService.findSelectedContext();
         };
-        currentContextPromise.$inject =    ['userService'];
+        currentContextPromise.$inject =    ['userService','$state','$stateParams'];
 
 
         var getMenuTemplate = function(){
@@ -150,14 +150,26 @@ userManagementApp.config(['$urlRouterProvider', '$stateProvider','$urlMatcherFac
             },
             ncyBreadcrumb: {
                 label: 'USM'
+            },
+            resolve: {
+                selectedContext:currentContextPromise
+            },
+            data: {
+                access: ACCESS.AUTH
             }
         })
         .state('app.usm.home', {
             url: '/home',
+            params:{
+                homeMessage: 'Welcome to USM'
+            },
             views: {
 
                 "page@app.usm": {
-                    templateUrl: 'usm/home/home.html'
+                    templateUrl: 'usm/home/home.html',
+                    controller:['$stateParams','$scope',function($stateParams,$scope){
+                        $scope.homeMessage = $stateParams.homeMessage;
+                    }]
                 }
 
             },
@@ -165,14 +177,42 @@ userManagementApp.config(['$urlRouterProvider', '$stateProvider','$urlMatcherFac
                 label: 'home'
             },
             resolve:{
-                currentContext: currentContextPromise
+                identifiedUser: identifiedUser
+            },
+            data: {
+                access: ACCESS.PUBLIC
+            }
+        })
+        .state('app.usm.logout', {
+            url: '/logout',
+            params:{
+                logoutMessage: 'You have been logged out.'
+            },
+            views: {
+
+                "page@app.usm": {
+                    templateUrl: 'usm/home/logout.html',
+                    controller:['$stateParams','$scope','authRouter','userService',
+                        function($stateParams,$scope,authRouter,userService){
+                            $scope.logoutMessage = $stateParams.logoutMessage;
+                            $scope.loginState = authRouter.getLogin();
+                            userService.logout();
+                    }]
+                }
+
+            },
+            ncyBreadcrumb: {
+                label: 'logout'
+            },
+            data: {
+                access: null
             }
         });
 
 }]);
 
-userManagementApp.run(['$rootScope', '$location', '$log', '$http', '$localStorage', 'jwtHelper','$modalStack', '$cookies', '$translate', 'userService','routeProtection',
-    function ($rootScope, $location, $log, $http, $localStorage, jwtHelper, $modalStack, $cookies, $translate, userService,routeProtection) {
+userManagementApp.run(['$rootScope', '$location', '$log', '$http', '$localStorage', 'jwtHelper','$modalStack', '$cookies', '$translate', 'userService','authRouter',
+    function ($rootScope, $location, $log, $http, $localStorage, jwtHelper, $modalStack, $cookies, $translate, userService,authRouter) {
 
         $rootScope.safeApply = function (fn) {
             var phase = $rootScope.$$phase;
@@ -188,7 +228,6 @@ userManagementApp.run(['$rootScope', '$location', '$log', '$http', '$localStorag
        /* authorisation.getContexts().then(function(data) {
         $log.log(data);
         });*/
-        routeProtection.setHome('app.usm');
 
 
         $rootScope.$on('event:loginRequired', function () {

@@ -26,6 +26,7 @@ var usersPage = function () {
     this.searchOrganisation= element(by.model('search.organisation'));
     this.searchStatus =element(by.model('search.status'));
 
+	this.openEditButton = element(by.css('[ng-click="editUser(user)"]'));
 
     //Buttons
     this.newUserButton = element(by.id('newUserButton'));   //to create a new user account
@@ -50,9 +51,14 @@ var usersPage = function () {
     };
 
     this.clickDetailButton = function(rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').get(0).click();
+        this.getTableRows().get(rowIndex).$$('td button#viewUser').get(0).click();
     };
 
+	this.clickOpenEditButton = function() {
+		browser.wait(EC.elementToBeClickable(this.openEditButton), 10000);
+		this.openEditButton.click();
+	};
+	
     this.clickEditButton = function() {
         browser.wait(EC.elementToBeClickable(this.editButton), 10000);
     	this.editButton.click();

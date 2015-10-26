@@ -114,7 +114,7 @@ usersService.factory('userChallengesService', ['$resource', '$q', '$log', functi
         resource._setChallenges(challengeInformationResponse).$promise.then(
             function (data) {
                 deferred.resolve({
-                    challengeInformationResponse: data
+                    challengeInformationResponse: data.results
                 });
             },
             function (error) {
@@ -149,5 +149,61 @@ usersService.factory('userChallengesService', ['$resource', '$q', '$log', functi
     return {
         setChallenges: _setChallenges,
         getChallenges: _getChallenges
+    };
+}]);
+
+usersService.factory('resetPasswordServices', ['$resource', '$q', '$log', function ($resource, $q, $log) {
+
+    var _resetPassword = function (userName) {
+        var message = "";
+        var deferred = $q.defer();
+
+         var resource = $resource('/usm-administration/rest/users/resetUserPassword',{},{
+              get:{method: 'GET',headers: { 'userName': userName }} });
+
+        resource.get().$promise.then(
+            function (data) {
+        		deferred.resolve({
+                    challengeInformationResponse: data.results
+        					});
+            },
+        	function (error) {
+        		message = "Error: " + error.data.message;
+        		deferred.reject(message);
+            }
+        );
+        	return deferred.promise;
+    };
+
+
+    var _resetPasswordSecurityAnswers = function (userName, challengeInformationResponse) {
+        var message = "";
+        var usr = {};
+        usr.userName = userName; //$q.activeUser.userName;
+        var deferred = $q.defer();
+
+        var resource = $resource('/usm-administration/rest/users/resetUserPassword',{}, {
+          //  put:{ _setSecurityAnswers: {method: 'PUT', headers: { 'userName': userName }}} });
+            update:{method: 'PUT', headers: { 'userName': userName } ,body: { 'challengeInformationResponse': challengeInformationResponse }  } });
+
+        resource.update(userName , challengeInformationResponse).$promise.then(
+            function (data) {
+                deferred.resolve({
+                    challengeInformationResponse: data
+                });
+            },
+
+            function (error) {
+                message = error.data.message;
+                deferred.reject(message);
+            }
+        );
+
+        return deferred.promise;
+    };
+
+    return {
+    	resetPassword: _resetPassword,
+        resetPasswordSecurityAnswers: _resetPasswordSecurityAnswers
     };
 }]);

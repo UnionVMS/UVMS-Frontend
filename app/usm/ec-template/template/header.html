@@ -52,25 +52,24 @@
                                         <span class="fa fa-user"></span>&nbsp;User&nbsp;<span ng-if="authenticated">({{userName}})</span><span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu" role="menu" ng-if="authenticated">
-                                        <span ng-show="contexts.length > 1" >
-                                                <li >
+
+                                        <li ng-show="contexts.length > 1" >
                                             <a ng-click="switchContext()">Switch Context</a>
                                         </li>
-                                        <li class="divider"></li>
-                                            </span>
+                                        <li class="divider" ng-show="contexts.length > 1"></li>
                                         <li ng-controller="ModifyPassword">
                                             <a ng-click="modifyMyPassword()">Change Password</a>
                                         </li>
                                         <li ng-controller="ModifyContactDetails">
                                             <a ng-click="modifyMyContactDetails()">Update Contact Details</a>
                                         </li>
-                                      
-                                         <li ng-controller="ModifySecurityAnswer"> 
-                                            <a ng-click="modifySecurityAnswer()">Change Security Answer</a> 
-                                         </li>   
-                                    
+
+                                         <li ng-controller="ModifySecurityAnswer">
+                                            <a ng-click="modifySecurityAnswer()">Change Security Answer</a>
+                                         </li>
+
                                         <li class="divider"></li>
-                                        <li><a ng-click="logout()">Log out</a></li>
+                                        <li><a ui-sref="{{logoutState}}">Log out</a></li>
                                     </ul>
                                     <ul class="dropdown-menu" role="menu" ng-if="!authenticated">
                                         <li><a ng-click="openlogin()">Login</a></li>
@@ -82,7 +81,7 @@
                 </div>
             </div>
             <div class="title" >
-				<a ui-sref="app.usm">
+				<a>
 					<div class="content">
 						<h1 class="ec-header-application-title">USM</h1>
                     </div>

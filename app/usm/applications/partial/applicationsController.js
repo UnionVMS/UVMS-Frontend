@@ -17,54 +17,54 @@ applicationsModule.controller('applicationsListCtrl', ['$log', '$scope', '$state
             $scope.emptyResult = false;
             $scope.showPagination = true;
             $scope.emptyResultMessage = "No results found.";
+
+            var applicationsDropDown = [];
+            angular.forEach(applicationNames, function(item){
+                var application = {};
+                application.label = item;
+                application.value = item;
+                applicationsDropDown.push(application);
+            });
+            $scope.parentList = applicationsDropDown;
         };
         init();
-
-        var applicationsDropDown = [];
-        angular.forEach(applicationNames, function(item){
-            var application = {};
-            application.label = item;
-            application.value = item;
-            applicationsDropDown.push(application);
-        });
-        $scope.parentList = applicationsDropDown;
 
         // this method is executed by the pagination directive whenever the current page is changed
         // (also true for the initial loading).
         $scope.getPage = function (currentPage) {
-            $scope.criteria = {
-                name: $state.params.name || '',
-                parent: $state.params.parent || ''
-            };
-            var criteria = $scope.criteria;
-            criteria.offset = (currentPage - 1) * $scope.paginationConfig.itemsPerPage;
-            criteria.limit = $scope.paginationConfig.itemsPerPage;
-            criteria.sortColumn = $scope.sort.sortColumn;
-            criteria.sortDirection = $scope.sort.sortDirection;
+                $scope.criteria = {
+                    name: $state.params.name || '',
+                    parent: $state.params.parent || ''
+                };
+                var criteria = $scope.criteria;
+                criteria.offset = (currentPage - 1) * $scope.paginationConfig.itemsPerPage;
+                criteria.limit = $scope.paginationConfig.itemsPerPage;
+                criteria.sortColumn = $scope.sort.sortColumn;
+                criteria.sortDirection = $scope.sort.sortDirection;
 
-            applicationsService.getApplications(criteria).then(
-                function (response) {
-                    $scope.applicationList = response.applications;
+                applicationsService.getApplications(criteria).then(
+                    function (response) {
+                        $scope.applicationList = response.applications;
 
-                    if (!_.isUndefined($scope.applicationList)) {
-                        $scope.displayedApplications = [].concat($scope.applicationList);
+                        if (!_.isUndefined($scope.applicationList)) {
+                            $scope.displayedApplications = [].concat($scope.applicationList);
+                            $scope.isDataLoading = false;
+                            $scope.emptyResult = false;
+                            $scope.paginationConfig.totalItems = response.total;
+                            $scope.paginationConfig.pageCount = Math.ceil($scope.paginationConfig.totalItems / $scope.paginationConfig.itemsPerPage);
+                        } else {
+                            $scope.emptyResult = true;
+                            $scope.isDataLoading = false;
+                            $scope.showPagination = false;
+                        }
+                        changeUrlParams();
+                    },
+                    function (error) {
                         $scope.isDataLoading = false;
-                        $scope.emptyResult = false;
-                        $scope.paginationConfig.totalItems = response.total;
-                        $scope.paginationConfig.pageCount = Math.ceil($scope.paginationConfig.totalItems / $scope.paginationConfig.itemsPerPage);
-                    } else {
                         $scope.emptyResult = true;
-                        $scope.isDataLoading = false;
-                        $scope.showPagination = false;
+                        $scope.emptyResultMessage = error;
                     }
-                    changeUrlParams();
-                },
-                function (error) {
-                    $scope.isDataLoading = false;
-                    $scope.emptyResult = true;
-                    $scope.emptyResultMessage = error;
-                }
-            );
+                );
         };
 
         $scope.searchApplication = function (criteria) {
@@ -162,21 +162,10 @@ applicationsModule.controller('applicationsListCtrl', ['$log', '$scope', '$state
 applicationsModule.controller('applicationDetailsCtrl', ['$log', '$scope', '$state', '$stateParams', 'applicationsService', 'userService',
     function ($log, $scope, $state, $stateParams, applicationsService, userService) {
         var init = function () {
-            $scope.selectedTab = "Features";
             $scope.itemsByPage = 10;
 
             $scope.checkAccess = function (feature) {
                 return userService.isAllowed(feature, "USM", true);
-            };
-
-            //Sets tabs
-            $scope.tabMenu = [
-                {'tab': 'Features', 'title': 'Features'},
-                {'tab': 'Datasets', 'title': "Datasets"},
-                {'tab': 'Options', 'title': "Options"}
-            ];
-            $scope.selectTab = function (tab) {
-                $scope.selectedTab = tab;
             };
 
             applicationsService.getApplicationDetails($stateParams.applicationName).then(

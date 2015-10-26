@@ -1,0 +1,65 @@
+<h1>USM secured application</h1>
+<p>please login</p>
+<div>
+    <form novalidate name="loginForm" class="form-horizontal">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-md-4">
+                    <h3>Log in</h3>
+                </div>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12" ng-class="messageDivClass">
+                    <span ng-bind="actionMessage"></span>
+                </div>
+            </div>
+
+            <p><span ng-bind="infoMessage"></span></p>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="userId" class="col-md-3 control-label">Username</label>
+
+                        <div class="col-md-5">
+                            <input class="form-control" id="userId" name="userName" placeholder="Username" ng-model="login.userName" required>
+
+                            <div ng-show="loginForm.userName.$dirty">
+                                <span class="text-danger small" ng-show="loginForm.userName.$error.required">Username is required</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="password" class="col-md-3 control-label">Password</label>
+
+                        <div class="col-md-5">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password" ng-model="login.password" required>
+
+                            <div ng-show="loginForm.password.$dirty">
+                                <span class="text-danger small" ng-show="loginForm.password.$error.required">Password is required</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-5 col-md-offset-1">
+                    <a style="cursor: pointer; color : #d20000" ng-click="resetPassword()">forgotten password</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-disabled="loginForm.$invalid" ng-click="performLogin(login)">Login</button>
+            <button ng-if="cancel" class="btn btn-danger" ng-click="cancel()">Cancel</button>
+        </div>
+    </form>
+
+</div>

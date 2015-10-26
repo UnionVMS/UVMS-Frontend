@@ -1,15 +1,18 @@
-var rolesModule = angular.module('roles', ['ui.bootstrap', 'ui.utils', 'ui.router', 'ngAnimate', 'applicationsService', 'rolesServiceModule']);
+var rolesModule = angular.module('roles', ['ui.bootstrap', 'ui.utils', 'ui.router', 'ngAnimate', 'applicationsService', 'rolesServiceModule', 'auth']);
 
-rolesModule.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider, $stateProvider) {
-
+rolesModule.config(['$urlRouterProvider', '$stateProvider', 'ACCESS',
+  function ($urlRouterProvider, $stateProvider, ACCESS) {
     $stateProvider
         .state('app.usm.roles', {
             url: '/roles?{page:int}&{sortColumn}&{sortDirection}&{role}&{application}&{status}',
-            params: {
-                page: 1,
-                sortColumn: 'name',
-                sortDirection: 'asc',
-                status: 'all'
+			data: {
+				access: ACCESS.AUTH
+			},
+            params:{
+                page:1,
+                sortColumn:'name',
+                sortDirection:'asc',
+                status:'all'
             },
             views: {
                 "page@app.usm": {
@@ -47,7 +50,7 @@ rolesModule.config(['$urlRouterProvider', '$stateProvider', function ($urlRouter
 }]);
 
 
-rolesModule.factory('rolesCache', ['$cacheFactory', function ($cacheFactory) {
+rolesModule.factory('rolesCache', ['$cacheFactory', function($cacheFactory){
     return $cacheFactory('rolesCache');
 }]);
 

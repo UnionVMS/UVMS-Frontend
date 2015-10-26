@@ -17,14 +17,10 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'ngWebSocket'
 ]);
 
-var getCurrentUserContextPromise = function() {
-    var currentUserContextPromise = function(userService) {
+var currentUserContextPromise = function(userService) {
         return userService.findSelectedContext();
     };
-
-    currentUserContextPromise.$inject = ['userService'];
-    return currentUserContextPromise;
-};
+currentUserContextPromise.$inject = ['userService'];
 
 
 var loadLocales = function(initService) {
@@ -38,6 +34,27 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
 
 
     $urlRouterProvider.when('','today');
+
+    //LOGIN STATE
+    $stateProvider.state('uvmsLogin', {
+        url: '/uvmslogin',
+        params: {
+            toState: {
+                value: function () {
+                    return 'app.today';
+                }
+            },
+            toParams: null,
+            message: "Login required"
+        },
+        data: {access: ACCESS.PUBLIC},
+        views: {
+            app: {
+                templateUrl: 'partial/login/login.html',
+                controller: 'uvmsLoginController'
+            }
+        }
+    });
 
     $stateProvider
         .state('app', {
@@ -57,13 +74,13 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                 unionvmsAlerts: {
                     templateUrl: 'partial/alerts/alerts.html',
                     controller: 'AlertsCtrl'
-                },
+                }
             },
             data: {
                 access: ACCESS.AUTH
             },
             resolve: {
-                currentContext : getCurrentUserContextPromise,
+                currentContext : currentUserContextPromise,
                 locales : loadLocales
             }
         })
@@ -73,7 +90,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     templateUrl: 'partial/header/header.html',
                     controller: 'HeaderCtrl'
                 }
-            },
+            }
         })
         .state('app.today', {
             url: '/today',
@@ -126,8 +143,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html',
                     controller: 'ManualPositionReportsCtrl'
                 }
-            },
-            resolve: {}
+            }
         })
         .state('app.assets', {
             url: '/assets',
@@ -144,7 +160,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
             data: {
                 access: 'viewVesselsAndMobileTerminals'
-            },
+            }
         })
         .state('app.assets-id', {
             url: '/assets/:id',
@@ -161,7 +177,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
             data: {
                 access: 'viewVesselsAndMobileTerminals'
-            },
+            }
         })
         .state('app.communication', {
             url: '/communication',
@@ -298,7 +314,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
         })
         .state('app.openTickets', {
-            url: '/alarms/notifications',
+            url: '/alarms/opentickets',
             views: {
                 modulepage: {
                     templateUrl: 'partial/alarms/openTickets/openTickets.html',
@@ -340,7 +356,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
             data: {
                 access: ACCESS.PUBLIC
-            },
+            }
         });
 
 });
@@ -365,10 +381,6 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
 
     //Handle state change start
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-        //Cancel http requests on page navigation
-        if (toState.url !== fromState.url) {
-            httpPendingRequestsService.cancelAll();
-        }
 
         $timeout.cancel(showPageNavigationSpinnerTimeout);
         //Only show spinner if user is logged in
@@ -500,6 +512,31 @@ unionvmsWebApp.config(function ($httpProvider) {
     //Update URL for REST api calls
     $httpProvider.interceptors.push('HttpRequestRESTCallInterceptor');
 });
+unionvmsWebApp.config(['$httpProvider', 'authInterceptorProvider', function Config($httpProvider, authInterceptorProvider, $log) {
+    // Please note we're annotating the function so that the $injector works when the file is minified
+
+    authInterceptorProvider.authFilter = ['config', '$log', function (config, $log) {
+        //myService.doSomething();
+
+        var skipURL = /^(template|usm|assets|common).*?\.(html|json)$/i.test(config.url);
+        var logmsg = skipURL?'SKIPPING':'setting auth';
+        $log.debug('authFilter '+ logmsg +' on url :' + config.url);
+        return skipURL;
+    }];
+
+    $httpProvider.interceptors.push('authInterceptor');
+}]);
+
+unionvmsWebApp.config(['authRouterProvider',function(authRouterProvider){
+    //authRouterProvider.anonRoute = "/anon";
+    authRouterProvider.setHomeState("app.today");
+    //authRouterProvider.setLogoutState("app.usm.logout");
+    //sets up a 'login' state that creates a default login page.
+    // can be customised by either passing the name of an existing state that must be used for the login page
+    // or by passing a complete state config object
+
+    authRouterProvider.useLoginPage('uvmsLogin');
+}]);
 
 //Handle error durring app startup
 function handleEnvironmentConfigurationError(error, $log){

@@ -41,13 +41,13 @@
                     </select>
 
                     <span ng-controller="manageRoleCtrl" style="margin-left: 4px;">
-                        <button id="searchButton" class="btn btn-primary btn-sm" ng-click="filterPermissions(criteria)">
-                            {{'common.search' | translate}}
+                        <button id="searchButton" class="btn btn-default" ng-click="filterPermissions(criteria)">
+                            <span class="fa fa-search"></span>
                         </button>
                     </span>
                     <span ng-controller="manageRoleCtrl" style="margin-left: 4px;">
-						<button class="btn btn-link btn-sm" ng-click="resetForm(criteria)">
-                            {{'common.reset' | translate}}
+						<button class="btn btn-default" ng-click="resetForm(criteria)">
+							<span class="fa fa-refresh"></span>
 						</button>
                     </span>
                 </div>

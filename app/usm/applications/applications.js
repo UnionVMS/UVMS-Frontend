@@ -1,14 +1,20 @@
-angular.module('applications', ['ui.route']);
+angular.module('applications', [
+     'ui.route',
+     'auth'
+     ]);
 
-angular.module('applications').config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider, $stateProvider) {
-
+angular.module('applications').config(['$urlRouterProvider', '$stateProvider', 'ACCESS',                                       
+ function ($urlRouterProvider, $stateProvider, ACCESS) {
     $stateProvider
         .state('app.usm.applications', {
             url: '/applications?{page:int}&{sortColumn}&{sortDirection}&{name}&{parent}',
-            params: {
-                page: 1,
-                sortColumn: 'name',
-                sortDirection: 'asc'
+			data: {
+				access: ACCESS.AUTH
+			},
+            params:{
+                page:1,
+                sortColumn:'name',
+                sortDirection:'asc'
             },
             views: {
                 "page@app.usm": {

@@ -19,10 +19,9 @@ describe('User Set Password', function() {
         //    browser.driver.manage().window().setSize(1280, 1280);
         // login
         loginPage.visit();
-        loginPage.login('usm_admin', 'password');
+        loginPage.login('usm_admin', 'password',"USM-UserManager - (no scope)");
 
         // select users from menu
-		menuPage.selectContext("USM-UserManager - (no scope)");
         menuPage.clickUsers();
 
         usersPage.getTableRows().count().then(function (rowCount) {
@@ -62,7 +61,7 @@ describe('User Set Password', function() {
         //To inspect that it is possible to enter with the userName updated with the new password
 		loginPage.gotoHome();
         menuPage.clickLogOut();
-		
+
 		loginPage.visit();
         loginPage.login(userName,passwordRandom);
 
@@ -77,12 +76,12 @@ describe('User Set Password', function() {
     afterEach(function () {
 
         loginPage.gotoHome();
-        
+
 		// logout
         menuPage.clickLogOut();
 
 		browser.executeScript('window.sessionStorage.clear();');
-		browser.executeScript('window.localStorage.clear();');				
+		browser.executeScript('window.localStorage.clear();');
     });
 
 });

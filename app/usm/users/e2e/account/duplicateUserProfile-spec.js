@@ -16,11 +16,10 @@ describe('User List Duplicate Profile', function() {
     beforeEach(function ()  {
         // login
         loginPage.visit();
-        loginPage.login('usm_admin', 'password');
+        loginPage.login('usm_admin', 'password',"USM-UserManager - (no scope)");
 
         // select users from menu
-		menuPage.selectContext("USM-UserManager - (no scope)");
-        menuPage.clickUsers();		
+        menuPage.clickUsers();
 
         usersPage.getTableRows().count().then(function (rowCount) {
             initialUsersCount = rowCount;
@@ -39,24 +38,24 @@ describe('User List Duplicate Profile', function() {
 		//$('.navbar .nav').findElement(by.linkText('Users'));
 
 		menuPage.clickUsers();
-		
+
         usersPage.search(userName);
 
 		//expect(accountDetailsPage.getPageUrl()).toBe(browser.baseUrl +'#/usm/users?user='+ userName);
 
 		usersPage.getTableRows().get(0).$$('td button').get(2).click();
-		
-		browser.waitForAngular();		
+
+		browser.waitForAngular();
 		element.all(by.id('userNameSrc')).click();
 		element.all(by.id('userNameSrc')).sendKeys('usm_admin');
-		element.all(by.id('userNameSrc')).sendKeys(protractor.Key.ENTER);		
-		
-		browser.waitForAngular();		
+		element.all(by.id('userNameSrc')).sendKeys(protractor.Key.ENTER);
+
+		browser.waitForAngular();
 		element(by.buttonText("Copy profile")).click();
-		
-		browser.waitForAngular();		
+
+		browser.waitForAngular();
 		element(by.buttonText("Confirm")).click();
-		
+
         browser.wait(function() {
             var deferred = protractor.promise.defer();
             element(by.id('btn-success')).isPresent()
@@ -65,7 +64,7 @@ describe('User List Duplicate Profile', function() {
                 });
             return deferred.promise;
         });
-		
+
 
         //inspect that the page is Account Details
         //expect(accountDetailsPage.getPageUrl()).toBe(browser.baseUrl +'#/usm/users?user='+ userName);
@@ -74,7 +73,7 @@ describe('User List Duplicate Profile', function() {
 
     afterEach(function () {
         loginPage.gotoHome();
-		
+
         // logout
         menuPage.clickLogOut();
         //expect(loginPage.getPageUrl()).toBe(browser.baseUrl +'#/login');

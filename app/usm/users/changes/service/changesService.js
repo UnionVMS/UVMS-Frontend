@@ -15,8 +15,12 @@ changesServiceModule.factory('changesService', ['$resource', '$q', '$log', funct
                     });
                 },
                 function (error) {
-                    message = 'Error: ' + error.data.message;
-                    deferred.reject(message);
+					if (!_.isUndefined(error.data)) {
+						message = 'Error: ' + error.data.message;
+					} else {
+						message = 'Error: undefined';
+					}
+					deferred.reject(message);
                 }
             );
 

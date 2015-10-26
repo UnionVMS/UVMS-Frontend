@@ -20,19 +20,7 @@ var changesPage = function () {
     this.changesTableResultsRows = $$('.table tbody.table-bordered tr');
 
     this.clickDetailButton = function(rowIndex) {
-		//this.getTableRow(0).getText().then(function(text){
-		//this.getTableRowColumn(0, 5).getText().then(function(text){
-		//return this.getTableRow(0).$$('td').get(5).getAttribute('href').then(function(text){
-			
 		this.getTableRow(0).$$('td button').get(0).click();
-		//return this.getTableRow(0).$$('td button').get(0).getAttribute('href').then(function(text){
-		//	console.log(text);
-		//});
-		
-		//this.getTableRows().count().then(function(rowCount) {
-		//	console.log(rowCount);
-		//});
-        //this.getTableRows().get(rowIndex).$$('td button').get(0).click();
     };
 
     this.clickApproveButton = function() {
@@ -87,7 +75,7 @@ var changesPage = function () {
         return this.getTableRows().get(rowIndex).$$('td button');
     };
 
-    this.setUpdateContactDetailsPasswordda = function (value) {
+    this.setUpdateContactDetailsPassword = function (value) {
         this.updateContactDetailsPassword.clear();
         this.updateContactDetailsPassword.sendKeys(value);
     };

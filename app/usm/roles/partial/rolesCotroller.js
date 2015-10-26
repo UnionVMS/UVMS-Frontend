@@ -1,6 +1,6 @@
 var rolesModule = angular.module('roles');
 
-rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refData', '$stateParams', '$state', 'getApplications', 'rolesServices', 'userService', 'applicationNames',
+rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refData', '$stateParams', '$state', 'getApplications', 'rolesServices', 'userService','applicationNames',
     function ($translate, $scope, $log, refData, $stateParams, $state, getApplications, rolesServices, userService, applicationNames) {
         $scope.criteria = {};
         $scope.sort = {
@@ -8,8 +8,8 @@ rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refDat
             sortDirection: $stateParams.sortDirection || 'asc'
         };
 
-        $scope.checkAccess = function (feature) {
-            return userService.isAllowed(feature, "USM", true);
+        $scope.checkAccess = function(feature) {
+        	return userService.isAllowed(feature,"USM",true);
         };
 
         $scope.showPagination = true;
@@ -19,7 +19,7 @@ rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refDat
         $scope.emptyResult = false;
         $scope.emptyResultMessage = "No results found.";
 
-        $scope.toolTipsDelay = refData.toolTipsDelay;
+		$scope.toolTipsDelay = refData.toolTipsDelay;
 
         // List Of Applications...
         var applicationsDropDown = [];
@@ -34,14 +34,14 @@ rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refDat
         // Retrieve roles. This method is executed by the pagination directive whenever the current page is changed
         // (also true for the initial loading).
         $scope.roleList = [];
-        $scope.getPage = function (currentPage) {
+        $scope.getPage = function(currentPage) {
             $scope.criteria = {
                 role: $stateParams.role || '',
                 application: $stateParams.application || '',
                 status: $stateParams.status || 'all'
             };
             var criteria = $scope.criteria;
-            criteria.offset = (currentPage - 1) * $scope.paginationConfig.itemsPerPage;
+            criteria.offset = (currentPage - 1)  * $scope.paginationConfig.itemsPerPage;
             criteria.limit = $scope.paginationConfig.itemsPerPage;
             criteria.sortColumn = $scope.sort.sortColumn;
             criteria.sortDirection = $scope.sort.sortDirection;
@@ -49,18 +49,18 @@ rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refDat
                 function (response) {
                     $scope.roleList = response.roles;
 
-                    if (!_.isUndefined($scope.roleList)) {
-                        $scope.displayedRoles = [].concat($scope.roleList);
-                        $scope.isDataLoading = false;
-                        $scope.emptyResult = false;
-                        $scope.paginationConfig.totalItems = response.total;
-                        $scope.paginationConfig.pageCount = Math.ceil($scope.paginationConfig.totalItems / $scope.paginationConfig.itemsPerPage);
+                 if (!_.isUndefined($scope.roleList)) {
+                    $scope.displayedRoles = [].concat($scope.roleList);
+                    $scope.isDataLoading = false;
+                    $scope.emptyResult = false;
+                    $scope.paginationConfig.totalItems = response.total;
+                    $scope.paginationConfig.pageCount = Math.ceil($scope.paginationConfig.totalItems / $scope.paginationConfig.itemsPerPage);
 
-                    } else {
-                        $scope.emptyResult = true;
-                        $scope.isDataLoading = false;
-                        $scope.showPagination = false;
-                    }
+                 } else {
+                     $scope.emptyResult = true;
+                     $scope.isDataLoading = false;
+                     $scope.showPagination = false;
+                 }
                     changeUrlParams();
                 },
                 function (error) {
@@ -73,7 +73,7 @@ rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refDat
 
         $scope.searchRole = function (criteria) {
             // replace null with empty string because null breaks the stateParam application
-            if (_.isNull(criteria.application) || _.isEqual("", criteria.application)) {
+            if(_.isNull(criteria.application) || _.isEqual("", criteria.application)){
                 $scope.criteria.application = "";
             }
             $scope.paginationConfig.currentPage = 0;
@@ -103,12 +103,12 @@ rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refDat
         };
 
         // Sorting columns
-        $scope.changeSorting = function (column) {
+        $scope.changeSorting = function(column) {
             var sort = $scope.sort;
             if (sort.sortColumn === column) {
-                if (sort.sortDirection === 'desc') {
+                if(sort.sortDirection === 'desc'){
                     sort.sortDirection = 'asc';
-                } else if (sort.sortDirection === 'asc') {
+                }else if (sort.sortDirection === 'asc'){
                     sort.sortDirection = 'desc';
                 }
             } else {
@@ -120,11 +120,11 @@ rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refDat
             $scope.getPage($scope.paginationConfig.currentPage);
         };
 
-        $scope.sortIcon = function (column) {
+        $scope.sortIcon = function(column) {
             var sort = $scope.sort;
             if (sort.sortColumn === column) {
                 var sortDirection = sort.sortDirection;
-                return sortDirection === 'desc' ? 'fa-sort-desc' : 'fa-sort-asc';
+                return sortDirection === 'desc' ?'fa-sort-desc':'fa-sort-asc';
             }
             return 'fa-sort';
         };
@@ -166,9 +166,9 @@ rolesModule.controller('rolesListCtrl', ['$translate', '$scope', '$log', 'refDat
 rolesModule.controller('roleDetailsCtrl', ['$scope', '$stateParams', '$log', 'rolesServices', 'applicationsService', 'permissionServices', 'userService',
     function ($scope, $stateParams, $log, rolesServices, applicationsService, permissionServices, userService) {
 
-        $scope.checkAccess = function (feature) {
-            return userService.isAllowed(feature, "USM", true);
-        };
+    $scope.checkAccess = function(feature) {
+    	return userService.isAllowed(feature,"USM",true);
+    };
 
         $scope.itemsByPage = 10;
         $scope.emptyResult = true;
@@ -224,9 +224,9 @@ rolesModule.controller('roleDetailsCtrl', ['$scope', '$stateParams', '$log', 'ro
 rolesModule.controller('manageRoleCtrl', ['$scope', '$modal', '$log', 'rolesServices', 'userService',
     function ($scope, $modal, $log, rolesServices, userService) {
 
-        $scope.checkAccess = function (feature) {
-            return userService.isAllowed(feature, "USM", true);
-        };
+    $scope.checkAccess = function(feature) {
+    	return userService.isAllowed(feature,"USM",true);
+    };
 
         $scope.manageRole = function (mode, role) {
             var modalInstance = $modal.open({
@@ -381,7 +381,7 @@ rolesModule.controller('managePermissionCtrl', ['$scope', '$modal', '$log',
         $scope.managePermissions = function (roleDetails) {
             var modalInstance = $modal.open({
                 animation: true,
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: true,
                 size: 'lg',
                 templateUrl: 'usm/roles/partial/managePermission.html',
@@ -551,20 +551,20 @@ rolesModule.controller('permissionModalInstanceCtrl', ['$scope', '$modalInstance
             }
         };
 
-        // Reset Filter permission
+		// Reset Filter permission
         $scope.resetForm = function (criteria) {
-            if (criteria !== undefined) {
-                criteria.application = null;
-                criteria.group = null;
-                criteria.sortColumn = 'name';
-                criteria.sortDirection = 'asc';
-                $scope.filterPermissions(criteria);
-            } else {
-                var criteriaEmpty = {};
-                criteriaEmpty.application = null;
-                criteriaEmpty.group = null;
-                $scope.filterPermissions(criteriaEmpty);
-            }
+			if(criteria !== undefined) {
+				criteria.application = null;
+				criteria.group = null;
+				criteria.sortColumn = 'name';
+				criteria.sortDirection = 'asc';
+				$scope.filterPermissions(criteria);
+			} else {
+				var criteriaEmpty = {};
+				criteriaEmpty.application = null;
+				criteriaEmpty.group = null;
+				$scope.filterPermissions(criteriaEmpty);
+			}
         };
 
         // Filter permission
@@ -610,9 +610,11 @@ rolesModule.controller('permissionModalInstanceCtrl', ['$scope', '$modalInstance
         };
 
         $scope.saveRolePermissions = function () {
-            roleDetails.features = $scope.selection;
-            roleDetails.roleId = $stateParams.roleId;
+
             if (roleDetails.activeUsers === 0 || $scope.showConfirmation) {
+            	roleDetails.features = $scope.selection;
+                roleDetails.roleId = $stateParams.roleId;
+
                 rolesServices.updateRole(roleDetails).then(
                     function (response) {
                         $scope.messageDivClass = "alert alert-success";

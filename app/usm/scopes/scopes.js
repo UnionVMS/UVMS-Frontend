@@ -1,14 +1,18 @@
-var scopesModule = angular.module('scopes', ['ui.bootstrap', 'ui.utils', 'ngRoute', 'ngAnimate', 'scopesServiceModule']);
+var scopesModule = angular.module('scopes', ['ui.bootstrap', 'ui.utils', 'ngRoute', 'ngAnimate', 'scopesServiceModule', 'auth']);
 
-scopesModule.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider, $stateProvider) {
+scopesModule.config(['$urlRouterProvider', '$stateProvider', 'ACCESS',
+  function ($urlRouterProvider, $stateProvider, ACCESS) {
     $stateProvider
         .state('app.usm.scopes', {
             url: '/scopes?{page:int}&{sortColumn}&{sortDirection}&{name}&{application}&{status}',
-            params: {
-                page: 1,
-                sortColumn: 'name',
-                sortDirection: 'asc',
-                status: 'all'
+			data: {
+				access: ACCESS.AUTH
+			},
+            params:{
+                page:1,
+                sortColumn:'name',
+                sortDirection:'asc',
+                status:'all'
             },
             views: {
                 "page@app.usm": {

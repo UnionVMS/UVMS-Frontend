@@ -11,20 +11,25 @@ userContextsModule.controller('userContextsControllerCtrl', ['$scope', '$statePa
         $scope.checkAccess = function(feature) {
             return userService.isAllowed(feature,"USM",true);
         };
+
        $scope.$on('event:loadContexts', function(){
                 $scope.emptyResult = false;
                 $scope.isDataLoading = false;
         });
 
-		$scope.$on('event:addedContext', function () {
+		$scope.$on('event:addedContext', function(event, data) {
 			$scope.emptyResult = false;
             $scope.isDataLoading = false;
+            $scope.userContextsList = data;
 		});
-		$scope.$on('event:deletedContext', function () {
-			if (_.size($scope.userContextsList) ===0) {
+
+		$scope.$on('event:deletedContext', function(event, data) {
+			if (_.size(data) ===0) {
 				$scope.emptyResult = true;
                 $scope.isDataLoading = false;
           	}
+			$scope.userContextsList = data;
+
 		});
 
 	}]);
@@ -50,21 +55,27 @@ userContextsModule.controller('manageUserContextsCtrl', ['$log', '$scope', '$mod
 
             modalInstance.result.then(function (returnedUserContext) {
                 if (mode === 'new') {
+                	if(angular.isUndefined($scope.userContextsList)){
+                		$scope.userContextsList = [];
+                	}
+                    $scope.userContextsList.push(returnedUserContext);
 
-                                        $scope.userContextsList.push(returnedUserContext);
-                    $scope.displayedUserContexts = [].concat($scope.userContextsList);
                     angular.copy(returnedUserContext, user_context);
-					$scope.$emit('event:addedContext');
+					$scope.$emit('event:addedContext', $scope.userContextsList);
+
                 }
                 if (mode === 'edit') {
 					angular.copy(returnedUserContext, user_context);
 
                 }
                 if (mode === 'delete') {
+
                     var deleteIndex = $scope.userContextsList.indexOf(user_context);
+
                     $scope.userContextsList.splice(deleteIndex, 1);
-                    $scope.displayedUserContexts = [].concat($scope.userContextsList);
-					$scope.$emit('event:deletedContext');
+
+                    //$scope.displayedUserContexts = [].concat($scope.userContextsList);
+					$scope.$emit('event:deletedContext', $scope.userContextsList);
                 }
             }, function () {
                 //$log.info('Modal dismissed at: ' + new Date());
@@ -151,6 +162,7 @@ userContextsModule.controller('userContextsModalInstanceCtrl', ['$scope', '$moda
 						function (response) {
 							var newUserContext = {
 								role : selectedRole.name,
+								roleId: selectedRole.roleId,
 								roleClass : selectedRole.status === "E" ? "label label-success" : "label label-danger",
 								roleDescription : selectedRole.description,
 								roleStatus : selectedRole.status,
@@ -160,6 +172,9 @@ userContextsModule.controller('userContextsModalInstanceCtrl', ['$scope', '$moda
 								scopeStatus : selectedScope ? selectedScope.status : null,
 								userContextId : response.newContext.userContextId,
 							};
+
+							//$log.info("role: " + newUserContext.role + " " + newUserContext.roleId);
+
 							$scope.contextCreated = true;
 							$scope.messageDivClass = "alert alert-success";
 							$scope.actionMessage = "New User Context created";

@@ -39,11 +39,11 @@ describe('Test the panel of changing the Security Answer', function() {
     beforeEach(function () {
 
         loginPage.visit();
-        loginPage.login('usm_admin', 'password');
+        loginPage.login('usm_admin', 'password',"USM-UserManager - (no scope)");
 
         // select users from menu
         menuPage.clickUsers();
-        menuPage.selectContext("USM-UserManager - (no scope)");
+
 
     });
 

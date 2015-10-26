@@ -3,166 +3,160 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-1">
-                    <label>{{'organisations.organisation' | translate}}</label>
-                </div>
-                <div class="col-md-5 col-md-offset-1">
-                    <span ng-bind="endpoint.organisationName"></span>
-                </div>
-                <div class="col-md-1">
-                    <label>{{'common.status' | translate}}</label>
-                </div>
-                <div class="col-md-3">
+				<div class="col-md-1">
+					<label>{{'organisations.organisation' | translate}}</label>
+				</div>
+				<div class="col-md-5 col-md-offset-1">
+					<span ng-bind="endpoint.organisationName"></span>
+				</div>
+				<div class="col-md-1">
+					<label>{{'common.status' | translate}}</label>
+				</div>
+				<div class="col-md-3">
 					<span ng-class="{'label label-success': endpoint.status=='E', 'label label-danger': endpoint.status=='D'}"
-                          ng-bind='"endPoint.status_"+endpoint.status | translate'></span>
-                </div>
+						  ng-bind='"endPoint.status_"+endpoint.status | translate' ></span>
+				</div>
                 <div class="col-md-1 text-right">
 					<span ng-controller="manageOrganisationEndpointsCtrl" ng-if="checkAccess('manageOrganisations')"> <!-- Edit Endpoint Detail from his own detail page -->
 						<button type="button" class="btn btn-sm btn-primary" ng-click='manageEndpoint("edit",endpoint, endpoint.organisationName)'>
-                            <span><i class="fa fa-pencil"></i></span>
-                        </button>
+							<span><i class="fa fa-pencil"></i></span>
+						</button>
 					</span>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-2 text-nowrap">
-                    <label>{{'common.name' | translate}}</label>
-                </div>
-                <div class="col-md-5">
-                    <span ng-bind="endpoint.name"></span>
-                </div>
-                <div class="col-md-1 text-nowrap">
-                    <label>URI</label>
-                </div>
-                <div class="col-md-2">
-                    <span ng-bind="endpoint.uri"></span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-2 text-nowrap">
-                    <label>{{'common.description' | translate}}</label>
-                </div>
-                <div class="col-md-5">
-                    <span ng-bind="endpoint.description"></span>
-                </div>
-                <div class="col-md-1 text-nowrap">
-                    <label>{{'endPoints.email' | translate}}</label>
-                </div>
-                <div class="col-md-2">
-                    <span ng-bind="endpoint.email"></span>
-                </div>
+			</div>
+			<div class="row">
+				<div class="col-md-2 text-nowrap">
+					<label>{{'common.name' | translate}}</label>
+				</div>
+				<div class="col-md-5">
+					<span ng-bind="endpoint.name"></span>
+				</div>
+				<div class="col-md-1 text-nowrap">
+					<label>URI</label>
+				</div>
+				<div class="col-md-2">
+					<span ng-bind="endpoint.uri"></span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-2 text-nowrap">
+					<label>{{'common.description' | translate}}</label>
+				</div>
+				<div class="col-md-5"">
+					<span ng-bind="endpoint.description"></span>
+				</div>
+				<div class="col-md-1 text-nowrap">
+					<label>{{'endPoints.email' | translate}}</label>
+				</div>
+				<div class="col-md-2">
+					<span ng-bind="endpoint.email"></span>
+				</div>
             </div>
         </div>
     </div>
     <!-- INFO PANEL END-->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="containerWrapper pollingTabs">
-                <ul class="nav nav-tabs">
-                    <li ng-repeat="tab in tabMenu" class="audittab" ng-click="selectTab(tab.tab)" ng-class="{'active': selectedTab === '{{tab.tab}}'}">
-                        <span>{{tab.title}}</span>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <div class="panel panel-default" style="margin-top: 0;" ng-show="selectedTab==='Channels'">
-                    <table st-table="displayedChannels" st-safe-src="endpoint.channelList" class="searchResults">
-                        <colgroup>
-                            <col style="width: 420px;">
-                            <col style="width: 420px;">
-                            <col style="width: 150px;">
-                            <col style="width: 150px;">
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th st-sort="dataflow" st-sort-default="true">{{'channels.dataflow' | translate}}</th>
-                            <th st-sort="service">{{'channels.service' | translate}}</th>
-                            <th st-sort="priority">{{'channels.priority' | translate}}</th>
-                            <th class="text-center">
-                                <div ng-controller="manageOrganisationChannelsCtrl" ng-if="checkAccess('manageOrganisations')"> <!-- New Communication Channel from organisation detail page -->
-                                    <button id="newOrgChannel" class="btn btn-primary btn-sm" ng-click='manageOrgEndpointsChannel("new", "")'>
-                                        <span class="fa fa-plus"></span>
-                                        <span>{{'common.new' | translate}}</span>
-                                    </button>
-                                </div>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="channelList in displayedChannels | orderBy:dataflow:sortReverse">
-                            <td ng-bind="channelList.dataflow"></td>
-                            <td ng-bind="channelList.service"></td>
-                            <td ng-bind="channelList.priority"></td>
+    <tabset class="endPointDetailsTabs">
+        <!-- CHANNELS TABLE -->
+        <tab heading="Communication Channels" ng-if="checkAccess('viewOrganisations')||checkAccess('manageOrganisations')">
+            <table st-table="displayedChannels" st-safe-src="endpoint.channelList" class="table table-striped fixed">
+				<colgroup>
+					<col style="width: 420px;">
+					<col style="width: 420px;">
+					<col style="width: 150px;">
+					<col style="width: 150px;">
+				</colgroup>
+				<thead class="table_heading">
+				<tr>
+					<th st-sort="dataflow" st-sort-default="true">{{'channels.dataflow' | translate}}</th>
+					<th st-sort="service">{{'channels.service' | translate}}</th>
+					<th st-sort="priority">{{'channels.priority' | translate}}</th>
+					<th class="text-center">
+						<div ng-controller="manageOrganisationChannelsCtrl" ng-if="checkAccess('manageOrganisations')"> <!-- New Communication Channel from organisation detail page -->
+							<button id="newOrgChannel" class="btn btn-primary btn-sm" ng-click='manageOrgEndpointsChannel("new", "")'>
+								<span class="fa fa-plus"></span>
+								<span>{{'common.new' | translate}}</span>
+							</button>
+						</div>
+					</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ng-repeat="channelList in displayedChannels | orderBy:dataflow:sortReverse">
+					<td ng-bind="channelList.dataflow"></td>
+					<td ng-bind="channelList.service"></td>
+					<td ng-bind="channelList.priority"></td>
 
-                            <td class="actionTd text-center">
+						<td class="actionTd text-center">
 						<span ng-controller="manageOrganisationChannelsCtrl" ng-if="checkAccess('manageOrganisations')"> <!-- Edit Communication Channel from organisation detail page -->
 							<button id="editOrgChannel" type="button" class="btn btn-sm btn-primary" ng-click='manageOrgEndpointsChannel("edit", channelList)'>
-                                <span><i class="fa fa-pencil"></i></span>
-                            </button>
+								<span><i class="fa fa-pencil"></i></span>
+							</button>
 						</span>
 						<span ng-controller="manageOrganisationChannelsCtrl" ng-if="checkAccess('manageOrganisations')"> <!-- Delete Communication Channel from organisation detail page -->
 							<button id="delOrgChannel" type="button" class="btn btn-sm btn-danger" ng-click='manageOrgEndpointsChannel("delete", channelList)'>
-                                <span><i class="fa fa-remove"></i></span>
-                            </button>
+								<span><i class="fa fa-remove"></i></span>
+							</button>
 						</span>
-                            </td>
-                        </tr>
-                        </tbody>
-                        <tbody ng-if="emptyResultChannels">
-                        <tr>
-                            <td colspan="4" class="text-center">{{emptyResultMessage}}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="panel panel-default" style="margin-top: 0;" ng-show="selectedTab==='Contacts'">
-                    <table st-table="displayedContacts" st-safe-src="endpoint.persons" class="searchResults">
-                        <colgroup>
-                            <col style="width: 200px;">
-                            <col style="width: 250px;">
-                            <col style="width: 350px;">
-                            <col style="width: 200px;">
-                            <col style="width: 140px;">
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th st-sort="firstName" st-sort-default="true">{{'contacts.firstname' | translate}}</th>
-                            <th st-sort="lastName">{{'contacts.lastname' | translate}}</th>
-                            <th st-sort="email">{{'contacts.email' | translate}}</th>
-                            <th st-sort="phoneNumber">{{'contacts.phone' | translate}}</th>
-                            <th class="text-center">
-                                <div ng-controller="manageOrganisationContactsCtrl" ng-if="checkAccess('manageOrganisations')">
-                                    <button id="newOrgContact" class="btn btn-primary btn-sm" ng-click='manageOrgEndpointsContact("new", "")'>
-                                        <span class="fa fa-plus"></span>
-                                        <span>{{'common.new' | translate}}</span>
-                                    </button>
-                                </div>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="contact in displayedContacts | orderBy:firstName:sortReverse">
-                            <td ng-bind="contact.firstName"></td>
-                            <td ng-bind="contact.lastName"></td>
-                            <td ng-bind="contact.email"></td>
-                            <td ng-bind="contact.phoneNumber"></td>
-                            <td class="actionTd text-center">
+					</td>
+				</tr>
+				</tbody>
+				<tbody ng-if="emptyResultChannels">
+				<tr>
+					<td colspan="4" class="text-center">{{emptyResultMessage}}</td>
+				</tr>
+				</tbody>
+			</table>
+		</tab>
+		<!-- CHANNELS TABLE END-->
+
+		<!-- CONTACTS TABLE -->
+		<tab heading="Contacts" ng-if="checkAccess('viewOrganisations')||checkAccess('manageOrganisations')">
+			<table st-table="displayedContacts" st-safe-src="endpoint.persons" class="table table-striped fixed">
+				<colgroup>
+					<col style="width: 200px;">
+					<col style="width: 250px;">
+					<col style="width: 350px;">
+					<col style="width: 200px;">
+					<col style="width: 140px;">
+				</colgroup>
+				<thead class="table_heading">
+				<tr>
+					<th st-sort="firstName" st-sort-default="true">{{'contacts.firstname' | translate}}</th>
+					<th st-sort="lastName">{{'contacts.lastname' | translate}}</th>
+					<th st-sort="email">{{'contacts.email' | translate}}</th>
+					<th st-sort="phoneNumber">{{'contacts.phone' | translate}}</th>
+					<th class="text-center">
+						<div ng-controller="manageOrganisationContactsCtrl" ng-if="checkAccess('manageOrganisations')">
+							<button id="newOrgContact" class="btn btn-primary btn-sm" ng-click='manageOrgEndpointsContact("new", "")'>
+								<span class="fa fa-plus"></span>
+								<span>{{'common.new' | translate}}</span>
+							</button>
+						</div>
+					</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ng-repeat="contact in displayedContacts | orderBy:firstName:sortReverse">
+					<td ng-bind="contact.firstName"></td>
+					<td ng-bind="contact.lastName"></td>
+					<td ng-bind="contact.email"></td>
+					<td ng-bind="contact.phoneNumber"></td>
+					<td class="actionTd text-center">
 						<span ng-controller="manageOrganisationContactsCtrl" ng-if="checkAccess('manageOrganisations')"> <!-- ng-if="uc.role!==null"> -->
 							<button id="delOrgContact" type="button" class="btn btn-sm btn-danger" ng-click='manageOrgEndpointsContact("delete", contact)'>
-                                <span><i class="fa fa-remove"></i></span>
-                            </button>
+								<span><i class="fa fa-remove"></i></span>
+							</button>
 						</span>
-                            </td>
-                        </tr>
-                        </tbody>
-                        <tbody ng-if="emptyResultContacts">
-                        <tr>
-                            <td colspan="8" class="text-center">{{emptyResultMessage}}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+					</td>
+				</tr>
+				</tbody>
+				<tbody ng-if="emptyResultContacts">
+				<tr>
+					<td colspan="8" class="text-center">{{emptyResultMessage}}</td>
+				</tr>
+				</tbody>
+			</table>
+            <!-- CONTACTS TABLE END-->
+		</tab>
+    </tabset>
 </div>

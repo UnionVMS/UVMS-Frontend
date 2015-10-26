@@ -1,12 +1,53 @@
-<div class="panel" ng-controller="userPreferencesCtrl">
-    <table st-table="displayedUserPreferences" st-safe-src="userPreferencesList" class="searchResults">
+<div class="panel panel-default" ng-controller="userPreferencesCtrl">
+
+    <!-- SEARCH PANEL-->
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <form class="form-inline" id="searchApplicationnForm">
+
+                <div class="form-group col-md-2">
+                    <label for="application">Group Name</label>
+
+                    <select class="form-control dropdown"
+                            id="groupName"
+                            name="groupName"
+                            ng-model="option.groupName"
+                            ng-options="option.groupName for option in optionsList | unique:'groupName'"
+                            ng-class="{pointer: pointer}"
+                            ng-mouseenter="pointer=true"
+                            ng-mouseleave="pointer=false">
+                        <option value="">Group Name...</option>
+                    </select>
+                </div>
+
+
+                <div class="col-md-2">
+                    <label>&nbsp;</label>
+                    <div>
+                        <button type="button" id="searchButton" class="btn btn-default" ng-click="searchApplications(option)">
+                            <span class="fa fa-search"></span></span>
+                        </button>
+                        <button type="button" class="btn btn-default" ng-click="resetForm()">
+                            <span class="fa fa-refresh"></span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- SEARCH PANEL END-->
+
+    <table st-table="displayedUserPreferences" st-safe-src="userPreferencesList" class="table table-striped fixed">
         <colgroup>
             <col style="width: 360px;">
             <col style="width: 220px;">
             <col style="width: 360px;">
             <col style="width: 220px;">
         </colgroup>
-        <thead>
+        <thead class="table_heading">
         <tr>
             <th>{{'userPreferences.user' | translate}}</th>
             <th st-sort="optionName" st-sort-default="true" ng-click="changeSorting('optionName')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
@@ -21,7 +62,7 @@
         </tr>
         </thead>
 
-        <tbody ng-if="!isPreferencesLoading && !emptyPreferenceResult">
+        <tbody class="table-bordered" ng-if="!isPreferencesLoading && !emptyPreferenceResult">
         <tr ng-repeat="preference in displayedUserPreferences">
             <td ng-bind="userName"></td>
             <td ng-bind="preference.optionName"></td>

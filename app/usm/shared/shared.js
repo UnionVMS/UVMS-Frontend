@@ -1,4 +1,4 @@
-angular.module('shared', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate', 'sharedServices']);
+angular.module('shared', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate']);
 
 angular.module('shared').config(['$routeProvider',function($routeProvider) {
 

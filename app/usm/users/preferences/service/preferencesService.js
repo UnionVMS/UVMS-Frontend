@@ -4,12 +4,12 @@ userPreferencesServiceModule.factory('userPreferencesService', ['$resource', '$q
     function ($resource, $q, $log) {
 
         return {
-            getUserPreferences: function (userName) {
+            getUserPreferences: function (userName,groupName) {
                 var message = "";
                 var deferred = $q.defer();
 
                 var resource = $resource('/usm-administration/rest/users/:userName/userPreferences', {"userName":userName});
-                resource.get().$promise.then(
+                resource.get(groupName).$promise.then(
                     function (data) {
                         deferred.resolve({
                             userPreferences: data.results

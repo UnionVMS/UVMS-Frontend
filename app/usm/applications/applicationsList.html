@@ -13,18 +13,6 @@
                 <div class="form-group col-md-2">
                     <label>{{'applications.parent' | translate}}</label>
                     <dropdown ng-model="criteria.parent" initialText="Parent..." data="value" title="label" items="parentList"></dropdown>
-                    <!--
-                    <select class="form-control dropdown"
-                            id="parent"
-                            name="parent"
-                            ng-model="criteria.parent"
-                            ng-options="parent for parent in parentList"
-                            ng-class="{pointer: pointer}"
-                            ng-mouseenter="pointer=true"
-                            ng-mouseleave="pointer=false">
-                        <option value="">Parent...</option>
-                    </select>
-                    -->
                 </div>
                 <div class="col-md-2">
                     <label>&nbsp;</label>
@@ -43,11 +31,8 @@
     </div>
     <!-- SEARCH PANEL END-->
 
-    <!-- APPLICATIONS TABLE -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel">
-                <table st-table="displayedApplications" st-safe-src="applicationList" class="searchResults">
+    <!-- SCOPES TABLE -->
+    <table st-table="displayedApplications" st-safe-src="applicationList" class="table table-striped fixed">
                     <colgroup>
                         <col style="width: 300px;">
                         <col style="width: 500px;">
@@ -62,14 +47,14 @@
                         <th class="text-right">&nbsp;</th>
                     </tr>
                     </thead>
-                    <tbody ng-if="!isDataLoading && !emptyResult">
+        <tbody class="table-bordered" ng-if="!isDataLoading && !emptyResult">
                     <tr ng-repeat="application in displayedApplications">
                         <td ng-bind="application.name"></td>
                         <td ng-bind="application.description"></td>
                         <td ng-bind="application.parent"></td>
 
                         <td class="actionTd text-center">
-                <span ng-if="checkAccess('viewApplications')">
+                <span ng-if="checkAccess('manageApplications')||checkAccess('viewApplications')">
                     <button type="button" class="btn btn-sm btn-primary usm-action-btn"
                             ui-sref="app.usm.applications.application({applicationName: application.name})"
                             ui-sref-opts="{ inherit : false }">
@@ -90,11 +75,8 @@
                     </tr>
                     </tbody>
                 </table>
-            </div>
             <div ng-if="showPagination">
                 <usm-pagination config="paginationConfig"></usm-pagination>
-            </div>
-        </div>
     </div>
     <!-- SCOPES TABLE END-->
 </div>

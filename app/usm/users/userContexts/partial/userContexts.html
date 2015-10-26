@@ -1,5 +1,5 @@
- <div class="panel panel-default" ng-controller="userContextsControllerCtrl" style="margin-top: 0;">
-	<table st-table="displayedUserContexts" st-safe-src="userContextsList" class="searchResults">
+ <div class="panel panel-default" ng-controller="userContextsControllerCtrl">
+	<table st-table="displayedUserContexts" st-safe-src="userContextsList" class="table table-striped fixed">
 		<colgroup>
 			<col style="width: 360px;">
 			<col style="width: 160px;">
@@ -7,7 +7,7 @@
 			<col style="width: 160px;">
 			<col style="width: 120px;">
 		</colgroup>
-		<thead>
+		<thead class="table_heading">
 		<tr>
 			<th st-sort="role" st-sort-default="true">{{'userContexts.role'  | translate}}</th>
 			<th st-sort="roleStatus">{{'userContexts.roleStatus' | translate}}</th>
@@ -16,7 +16,7 @@
 			<th class="text-center">
 				<!--div ng-controller="manageUserContextsCtrl" ng-if="checkAccess('manageUserContexts')"-->
 				<div ng-controller="manageUserContextsCtrl" ng-if="checkAccess('manageRoles')">
-					<button id="new_user_context" class="btn btn-primary btn-sm" ng-click='manageUserContext("new", "")'>
+					<button id="new_user_context" class="btn btn-primary btn-sm" ng-click='manageUserContext("new", "")' >
 						<span class="fa fa-plus"></span>
 						<span>{{'userContexts.new' | translate}}</span>
 					</button>
@@ -25,8 +25,8 @@
 		</tr>
 		</thead>
 
-		<tbody ng-if="!isDataLoading && !emptyResult">
-			<tr ng-repeat="uc in displayedUserContexts | orderBy:uc.role:sortReverse" ng-if="uc.role !== null">
+		<tbody class="table-bordered" ng-if="!isDataLoading && !emptyResult">		     
+			<tr ng-repeat="uc in userContextsList | orderBy:uc.role:sortReverse" ng-if="uc.role !== null">
 				<td>
 					<a ui-sref="app.usm.roles.role({ roleId: uc.roleId })">
 					<span tooltip="{{uc.roleDescription}}">{{ uc.role }}</span>

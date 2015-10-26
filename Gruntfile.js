@@ -10,7 +10,7 @@ var pkg = require('./package.json');
 //This enables users to create any directory structure they desire.
 var createFolderGlobs = function(fileTypePatterns) {
   fileTypePatterns = Array.isArray(fileTypePatterns) ? fileTypePatterns : [fileTypePatterns];
-  var ignore = ['node_modules','bower_components','dist','temp'];
+  var ignore = ['node_modules','bower_components','dist','temp','node','target'];
   var fs = require('fs');
   return fs.readdirSync(process.cwd())
           .map(function(file){
@@ -49,7 +49,7 @@ module.exports = function (grunt) {
           // Internal rewrite
           {from: 'app/config.json', to: 'environment/local.json'}
       ],
-       proxies: {
+       proxies:grunt.file.exists('proxies.yaml')?grunt.file.readYAML('proxies.yaml'):{
                 context: [
                   '/vessel/rest',
                   '/mobileterminal/rest/',
@@ -225,6 +225,14 @@ module.exports = function (grunt) {
             }
         ]
       },
+      configMaven : {
+        files: [
+            {
+                src: 'environment/maven.json',
+                dest: 'temp/config.json',
+            }
+        ]
+      },
       serve: {
         files: [
             {
@@ -360,6 +368,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build-local', ['clean:before', 'copy:configLocal', 'test', 'sub-build']);
   grunt.registerTask('build-cygnus', ['clean:before', 'copy:configCygnus', 'sub-build']);
+  grunt.registerTask('build-maven', ['clean:before', 'copy:configMaven', 'sub-build']);
   grunt.registerTask('build-dev', ['clean:before', 'copy:configDev','sub-build']);
   grunt.registerTask('build-test', ['clean:before', 'copy:configTest','sub-build']);
   grunt.registerTask('test',['dom_munger:read', 'karma:all_tests', 'clean:after']);

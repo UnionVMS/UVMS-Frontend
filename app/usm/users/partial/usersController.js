@@ -245,7 +245,7 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
 
             $scope.pageData.activeTo = $scope.search.activeTo;
             $scope.pageData.activeFrom = $scope.search.activeFrom;
-            //$scope.getPage();
+
             changeUrlParams();
 
         };
@@ -299,20 +299,14 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
 usersModule.controller('userDetailsCtlr', ['$log', '$scope', '$modal', '$stateParams', 'refData',
     'userDetailsService', 'userContextsServices', 'userService', 'userPreferencesService',
     function ($log, $scope, $modal, $stateParams, refData, userDetailsService, userContextsServices, userService, userPreferencesService) {
+        $scope.loadingMessage = "Loading...";
+        $scope.emptyResultMessage = "No results found.";
         $scope.userName = $stateParams.userName;
-        $scope.selectedTab = "Contact";
+
         $scope.checkAccess = function (feature) {
             return userService.isAllowed(feature, "USM", true);
         };
-        //Sets tabs
-        $scope.tabMenu = [
-            {'tab': 'Contact', 'title': 'Contact and Status Details'},
-            {'tab': 'Contexts','title': "Contexts"},
-            {'tab': 'Preferences','title': "Preferences"}
-        ];
-        $scope.selectTab = function(tab) {
-            $scope.selectedTab = tab;
-        };
+
         userDetailsService.getUser($stateParams.userName).then(
             function (response) {
                 $scope.user = response.user;
@@ -362,7 +356,6 @@ usersModule.controller('userDetailsCtlr', ['$log', '$scope', '$modal', '$statePa
 
         userPreferencesService.getUserPreferences($stateParams.userName).then(
             function (response) {
-                $log.log(response);
                 if (_.isUndefined(response.userPreferences) || _.size(response.userPreferences) < 1 || _.isNull(response.userPreferences[0])) {
                     $scope.emptyPreferenceResult = true;
                     $scope.isPreferencesLoading = false;
@@ -375,7 +368,8 @@ usersModule.controller('userDetailsCtlr', ['$log', '$scope', '$modal', '$statePa
                     $scope.userPreferencesList = response.userPreferences;
                 }
             }, function (error) {
-                $log.log(error);
+                $scope.emptyPreferenceResult = true;
+                $scope.isPreferencesLoading = false;
             });
 
         //to include setUserPassword in the 'userDetailsCtlr'
@@ -423,7 +417,7 @@ usersModule.controller('manageUserCtlr', ['$log', '$scope', '$modal', '$statePar
                 animation: true,
                 backdrop: true,
                 keyboard: true,
-                size: 'md',
+                size: 'lg',
                 templateUrl: 'usm/users/partial/duplicateUserProfile.html',
                 controller: 'duplicateUserProfileModalInstanceCtrl',
                 resolve: {

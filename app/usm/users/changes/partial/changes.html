@@ -1,74 +1,68 @@
 <div class="container" ng-controller="changesListCtrl">
     <!-- CHANGES TABLE -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel">
-                <table st-table="displayedChanges" st-safe-src="changesList" class="searchResults">
-                    <colgroup>
-                        <col style="width: 190px;">
-                        <col style="width: 190px;">
-                        <col style="width: 190px;">
-                        <col style="width: 190px;">
-                        <col style="width: 190px;">
-                        <col style="width: 190px;">
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th st-sort="userName" st-sort-default="true" ng-click="changeSorting('userName')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
-                            {{'users.userName' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('userName')"></i>
-                        </th>
-                        <th st-sort="phoneNumber" ng-click="changeSorting('phoneNumber')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
-                            {{'users.phoneNumber' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('phoneNumber')"></i>
-                        </th>
-                        <th st-sort="mobileNumber" ng-click="changeSorting('mobileNumber')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
-                            {{'users.mobileNumber' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('mobileNumber')"></i>
-                        </th>
-                        <th st-sort="faxNumber" ng-click="changeSorting('faxNumber')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
-                            {{'users.faxNumber' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('faxNumber')"></i>
-                        </th>
-                        <th st-sort="email" ng-click="changeSorting('email')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
-                            {{'users.email' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('email')"></i>
-                        </th>
-                        <th class="text-center">&nbsp;</th>
-                    </tr>
-                    </thead>
-                    <tbody ng-if="!isDataLoading && !emptyResult">
-                    <tr ng-repeat="change in displayedChanges">
-                        <td ng-bind="change.userName"></td>
-                        <td ng-bind="change.phoneNumber"></td>
-                        <td ng-bind="change.mobileNumber"></td>
-                        <td ng-bind="change.faxNumber"></td>
-                        <td ng-bind="change.email"></td>
+    <table st-table="displayedChanges" st-safe-src="changesList" class="table table-striped fixed">
+        <colgroup>
+            <col style="width: 190px;">
+            <col style="width: 190px;">
+            <col style="width: 190px;">
+            <col style="width: 190px;">
+            <col style="width: 190px;">
+            <col style="width: 190px;">
+        </colgroup>
+        <thead>
+        <tr>
+            <th st-sort="userName" st-sort-default="true" ng-click="changeSorting('userName')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                {{'users.userName' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('userName')"></i>
+            </th>
+            <th st-sort="phoneNumber" ng-click="changeSorting('phoneNumber')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                {{'users.phoneNumber' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('phoneNumber')"></i>
+            </th>
+            <th st-sort="mobileNumber" ng-click="changeSorting('mobileNumber')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                {{'users.mobileNumber' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('mobileNumber')"></i>
+            </th>
+            <th st-sort="faxNumber" ng-click="changeSorting('faxNumber')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                {{'users.faxNumber' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('faxNumber')"></i>
+            </th>
+            <th st-sort="email" ng-click="changeSorting('email')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                {{'users.email' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('email')"></i>
+            </th>
+            <th class="text-center">&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody class="table-bordered" ng-if="!isDataLoading && !emptyResult">
+        <tr ng-repeat="change in displayedChanges">
+            <td ng-bind="change.userName"></td>
+            <td ng-bind="change.phoneNumber"></td>
+            <td ng-bind="change.mobileNumber"></td>
+            <td ng-bind="change.faxNumber"></td>
+            <td ng-bind="change.email"></td>
 
-                        <td class="actionTd text-center">
+            <td class="actionTd text-center">
                 <span ng-if="checkAccess('manageUsers')">
                     <button type="button" class="btn btn-sm btn-primary usm-action-btn" ng-click='manageChange(change)'>
                         <span><i class="fa fa-pencil"></i></span>
                     </button>
                 </span>
-                        </td>
-                    </tr>
-                    </tbody>
-                    <tbody ng-if="isDataLoading">
-                    <tr>
-                        <td colspan="6" class="text-center">Loading...</td>
-                    </tr>
-                    </tbody>
-                    <tbody ng-if="emptyResult">
-                    <tr>
-                        <td colspan="6">{{emptyResultMessage}}</td>
-                    </tr>
-                    </tbody>
-                    <tfoot>
-                    <tr>
-                        <td colspan="6" class="text-right">
-                            <div class="st-pagination" st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
-                        </td>
-                    </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
+            </td>
+        </tr>
+        </tbody>
+        <tbody ng-if="isDataLoading">
+        <tr>
+            <td colspan="6" class="text-center">Loading...</td>
+        </tr>
+        </tbody>
+        <tbody ng-if="emptyResult">
+        <tr>
+            <td colspan="6">{{emptyResultMessage}}</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="6" class="text-right">
+                <div class="st-pagination" st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
     <!-- CHANGES TABLE END-->
 </div>

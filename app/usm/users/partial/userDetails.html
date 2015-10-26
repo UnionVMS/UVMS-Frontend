@@ -22,13 +22,13 @@
                     <span ng-bind="user.person.lastName"></span>
                 </div>
 
-                <div class="col-md-1 text-right">
+				<div class="col-md-1 text-right">
                   <span ng-controller="manageUserCtlr" ng-if="checkAccess('manageUsers')">
                         <button class="btn btn-sm btn-primary" ng-click="editUser(user)">
                             <span><i class="fa fa-pencil"></i></span>
                         </button>
                     </span>
-                </div>
+				</div>
             </div>
 
             <div class="row">
@@ -49,25 +49,16 @@
     </div>
     <!-- INFO PANEL END-->
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="containerWrapper pollingTabs">
-                <ul class="nav nav-tabs">
-                    <li ng-repeat="tab in tabMenu" class="audittab" ng-click="selectTab(tab.tab)" ng-class="{'active': selectedTab === '{{tab.tab}}'}">
-                        <span>{{tab.title}}</span>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <div ng-include src="'usm/users/account/partial/accountDetails.html'" ng-show="selectedTab==='Contact'"></div>
-            </div>
-            <div ng-if="checkAccess('viewUsers')||checkAccess('manageUsers')" ng-show="selectedTab==='Contexts'">
-                <!--  <div ui-view name="contexts" ></div>-->
-                <div ng-include src="'usm/users/userContexts/partial/userContexts.html'"></div>
-            </div>
-            <div ng-if="checkAccess('viewUsers')||checkAccess('manageUsers')" ng-show="selectedTab==='Preferences'">
-                <div ng-include src="'usm/users/preferences/partial/userPreferences.html'"></div>
-            </div>
-        </div>
-    </div>
+    <tabset type="tabs" vertical="false" class="roleDetailsTabs">
+        <tab heading="Contact and Status Details">
+            <div ng-include src="'usm/users/account/partial/accountDetails.html'"></div>
+        </tab>
+        <tab heading="Contexts" ng-if="checkAccess('viewUsers')||checkAccess('manageUsers')">
+          <!--  <div ui-view name="contexts" ></div>-->
+            <div ng-include src="'usm/users/userContexts/partial/userContexts.html'"></div>
+        </tab>
+        <tab heading="Preferences" ng-if="checkAccess('viewUsers')||checkAccess('manageUsers')">
+            <div ng-include src="'usm/users/preferences/partial/userPreferences.html'"></div>
+        </tab>
+    </tabset>
 </div>

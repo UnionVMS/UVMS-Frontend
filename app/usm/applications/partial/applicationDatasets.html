@@ -1,11 +1,11 @@
-<div class="panel panel-default" style="margin-top: 0;">
-    <table st-table="displayedDatasets" st-safe-src="applicationDetails.datasets" class="searchResults">
+<div>
+    <table st-table="displayedDatasets" st-safe-src="applicationDetails.datasets" class="table table-striped fixed">
         <colgroup>
             <col style="width: 400px;">
             <col style="width: 550px;">
             <col style="width: 190px;">
         </colgroup>
-        <thead>
+        <thead class="table_heading">
             <tr>
             <th st-sort="name" st-sort-default="true" ng-click="changeSorting('name')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
                 {{'common.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i>
@@ -18,19 +18,19 @@
             </th>
             </tr>
         </thead>
-        <tbody ng-if="!emptyDatasetsResult && checkAccess('manageApplications')">
+        <tbody ng-if="!emptyDatasetsResult && (checkAccess('manageApplications')||checkAccess('viewApplications'))">
             <tr ng-repeat="dataset in displayedDatasets">
                 <td ng-bind="dataset.name"></td>
                 <td ng-bind="dataset.description"></td>
             <td ng-bind="dataset.category" class="rightBorder"></td>
             </tr>
         </tbody>
-        <tbody ng-if="emptyDatasetsResult && checkAccess('manageApplications')">
+        <tbody ng-if="emptyDatasetsResult && (checkAccess('manageApplications')||checkAccess('viewApplications'))">
             <tr>
                 <td colspan="4" class="text-center rightBorder">No datasets are defined by this application.</td>
             </tr>
         </tbody>
-        <tbody ng-if="!checkAccess('manageApplications')">
+        <tbody ng-if="!(checkAccess('manageApplications')||checkAccess('viewApplications'))">
             <tr>
                 <td colspan="4" class="text-center rightBorder">Not authorised.</td>
             </tr>

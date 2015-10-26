@@ -13,34 +13,10 @@
                 <div class="form-group col-md-2">
                     <label>{{'common.application' | translate}}</label>
                     <dropdown ng-model="criteria.application" initialText="Application..." data="value" title="label" items="applicationsList"></dropdown>
-                    <!--
-                    <select class="form-control dropdown"
-                            id="application"
-                            name="application"
-                            ng-model="criteria.application"
-                            ng-options="application for application in applicationsList"
-                            ng-class="{pointer: pointer}"
-                            ng-mouseenter="pointer=true"
-                            ng-mouseleave="pointer=false">
-                        <option value="">Application...</option>
-                    </select>
-                    -->
                 </div>
                 <div class="form-group col-md-2">
                     <label>{{'common.status' | translate}}</label>
                     <dropdown ng-model="criteria.status" data="value" title="label" items="statusList"></dropdown>
-                    <!--
-                    <select class="form-control dropdown"
-                            id="status"
-                            name="status"
-                            ng-model="criteria.status"
-                            ng-options="'users.status_'+status | translate for status in statusList"
-                            ng-init="criteria.status = statusList[0]"
-                            ng-class="{pointer: pointer}"
-                            ng-mouseenter="pointer=true"
-                            ng-mouseleave="pointer=false">
-                    </select>
-                    -->
                 </div>
                 <div class="col-md-2">
                     <label>&nbsp;</label>
@@ -60,87 +36,90 @@
     <!-- SEARCH PANEL END-->
 
     <!-- SCOPES TABLE -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel">
-                <table st-table="displayedScopes" st-safe-src="scopeList" class="searchResults">
-                    <colgroup>
-                        <col style="width: 150px;">
-                        <col style="width: 300px;">
-                        <col style="width: 80px;">
-                        <col style="width: 120px;">
-                        <col style="width: 120px;">
-                        <col style="width: 120px;">
-                        <col style="width: 120px;">
-                        <col style="width: 130px;">
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th ng-click="changeSorting('name')">{{'common.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i></th>
-                        <th ng-click="changeSorting('description')">{{'common.description' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('description')"></i></th>
-                        <th ng-click="changeSorting('status')">{{'common.status' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('status')"></i></th>
-                        <th ng-click="changeSorting('activeFrom')">{{'common.activeFrom' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('activeFrom')"></i></th>
-                        <th ng-click="changeSorting('activeTo')">{{'common.activeTo' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('activeTo')"></i></th>
-                        <th ng-click="changeSorting('dataFrom')">{{'scopes.dataFrom' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('dataFrom')"></i></th>
-                        <th ng-click="changeSorting('dataTo')">{{'scopes.dataTo' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('dataTo')"></i></th>
-                        <th class="text-center">
-                            <div ng-controller="manageScopeCtrl" ng-if="checkAccess('manageScopes')">
-                                <button class="btn btn-primary btn-sm" ng-click='manageScope("new", "")'>
-                                    <span class="fa fa-plus"></span>
-                                    <span>{{'scopes.newScope' | translate}}</span>
-                                </button>
-                            </div>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody ng-if="!isDataLoading && !emptyResult">
-                    <tr ng-repeat="scope in displayedScopes">
-                        <td ng-bind="scope.name"></td>
-                        <td ng-bind="scope.description"></td>
-                        <td>
-                            <span ng-class="{'label label-success': scope.status=='E', 'label label-danger': scope.status=='D'}">{{"common.status_"+scope.status | translate}}</span>
-                        </td>
-                        <td>{{scope.activeFrom | date:'yyyy-MM-dd'}}</td>
-                        <td>{{scope.activeTo | date:'yyyy-MM-dd'}}</td>
-                        <td>{{scope.dataFrom | date:'yyyy-MM-dd'}}</td>
-                        <td>{{scope.dataTo | date:'yyyy-MM-dd'}}</td>
+    <table st-table="displayedScopes" st-safe-src="scopeList" class="table table-striped fixed">
+		<colgroup>
+			<col style="width: 150px;">
+			<col style="width: 310px;">
+			<col style="width: 80px;">
+			<col style="width: 120px;">
+			<col style="width: 120px;">
+			<col style="width: 120px;">
+			<col style="width: 120px;">
+			<col style="width: 120px;">
+		</colgroup>
+        <thead>
+        <tr>
+            <th ng-click="changeSorting('name')">{{'common.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i></th>
+            <th ng-click="changeSorting('description')">{{'common.description' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('description')"></i></th>
+            <th ng-click="changeSorting('status')">{{'common.status' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('status')"></i></th>
+            <th ng-click="changeSorting('activeFrom')">{{'common.activeFrom' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('activeFrom')"></i></th>
+            <th ng-click="changeSorting('activeTo')">{{'common.activeTo' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('activeTo')"></i></th>
+            <th ng-click="changeSorting('dataFrom')">{{'scopes.dataFrom' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('dataFrom')"></i></th>
+            <th ng-click="changeSorting('dataTo')">{{'scopes.dataTo' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('dataTo')"></i></th>
+            <th class="text-center">
+                <div ng-controller="manageScopeCtrl" ng-if="checkAccess('manageScopes')">
+                    <button class="btn btn-primary btn-sm" ng-click='manageScope("new", "")'>
+                        <span class="fa fa-plus"></span>
+                        <span>{{'scopes.newScope' | translate}}</span>
+                    </button>
+                </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody class="table-bordered" ng-if="!isDataLoading && !emptyResult">
+        <tr ng-repeat="scope in displayedScopes">
+            <td ng-bind="scope.name"></td>
+            <td ng-bind="scope.description"></td>
+            <td>
+                <span ng-class="{'label label-success': scope.status=='E', 'label label-danger': scope.status=='D'}">{{"common.status_"+scope.status | translate}}</span>
+            </td>
+            <td>{{scope.activeFrom | date:'yyyy-MM-dd'}}</td>
+            <td>{{scope.activeTo | date:'yyyy-MM-dd'}}</td>
+            <td>{{scope.dataFrom | date:'yyyy-MM-dd'}}</td>
+            <td>{{scope.dataTo | date:'yyyy-MM-dd'}}</td>
 
-                        <!--<td class="text-center actionTd">  -->
-                        <td class="actionTd text-center">
-                            <span ng-controller="manageScopeCtrl" ng-if="checkAccess('manageScopes')">
-                                <button type="button" class="btn btn-sm btn-primary usm-action-btn" ng-click='manageScope("edit", scope)'>
-                                    <span><i class="fa fa-pencil"></i></span>
-                                </button>
-                            </span>
-                            <button type="button" class="btn btn-sm btn-primary usm-action-btn"
-                                    ui-sref="app.usm.scopes.scope({scopeId: scope.scopeId})"
-                                    ui-sref-opts="{ inherit : false }">
-                                <span><i class="fa fa-eye"></i></span>
-                            </button>
+            <!--<td class="text-center actionTd">  -->
+            <td class="actionTd text-center">
+                <span ng-controller="manageScopeCtrl" ng-if="checkAccess('manageScopes')">
+                    <button type="button" class="btn btn-sm btn-primary usm-action-btn" ng-click='manageScope("edit", scope)'>
+                        <span><i class="fa fa-pencil"></i></span>
+                    </button>
+                </span>
+                <button type="button" class="btn btn-sm btn-primary usm-action-btn"
+                        ui-sref="app.usm.scopes.scope({scopeId: scope.scopeId})"
+                        ui-sref-opts="{ inherit : false }">
+                    <span><i class="fa fa-eye"></i></span>
+                </button>
                 <span ng-controller="manageScopeCtrl" ng-if="checkAccess('manageScopes')">
                     <button type="button" class="btn btn-sm btn-danger usm-action-btn" ng-click='manageScope("delete", scope)'>
                         <span><i class="fa fa-remove"></i></span>
                     </button>
                 </span>
-                        </td>
-                    </tr>
-                    </tbody>
-                    <tbody ng-if="isDataLoading">
-                    <tr>
-                        <td colspan="5" class="text-center">Loading...</td>
-                    </tr>
-                    </tbody>
-                    <tbody ng-if="emptyResult">
-                    <tr>
-                        <td colspan="8">{{emptyResultMessage}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div ng-if="showPagination">
-                <usm-pagination config="paginationConfig"></usm-pagination>
-            </div>
-        </div>
+            </td>
+        </tr>
+        </tbody>
+        <tbody ng-if="isDataLoading">
+        <tr>
+            <td colspan="5" class="text-center">Loading...</td>
+        </tr>
+        </tbody>
+        <tbody ng-if="emptyResult">
+        <tr>
+            <td colspan="8">{{emptyResultMessage}}</td>
+        </tr>
+        </tbody>
+        <!--
+        <tfoot>
+        <tr>
+            <td colspan="5" class="text-right">
+                <div class="st-pagination" st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+            </td>
+        </tr>
+        </tfoot>
+        -->
+    </table>
+    <div ng-if="showPagination">
+        <usm-pagination config="paginationConfig"></usm-pagination>
     </div>
     <!-- SCOPES TABLE END-->
 </div>

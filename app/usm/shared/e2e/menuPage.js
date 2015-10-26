@@ -15,17 +15,18 @@ var MenuPage = function () {
     this.changeSecurityQuestions  = element(by.linkText("Change Security Answer"));
 	this.updateContactDetails = element(by.linkText("Update Contact Details"));
 
-    //this.userDropDown = element(by.id('header')).element(by.css('ul li:last-child.dropdown'));
     this.userDropDown = element(by.css('.dropdown-toggle'));
 
-    //this.logOut = this.userDropDown.element(by.linkText("Log out"));
-    this.logOut = element(by.css('[ng-click="logout()"]'))
+//this.logOut = this.userDropDown.element(by.linkText("Log out"));
+    this.logOut = element(by.linkText('Log out'))
 
     this.switchContext = this.userDropDown.element(by.linkText("Switch Context"));
-    this.username = element(by.model('login.userName'));
-    //this.changePassword = this.userDropDown.element(by.linkText("Change Password"));
+	
+//this.changePassword = this.userDropDown.element(by.linkText("Change Password"));
     this.changePassword = element(by.linkText("Change Password"));
 
+	this.username = element(by.binding('userName'));
+		
     //Buttons panel
     this.saveButton = element.all(by.buttonText('Save')).get(0); //Save button from the panel
     this.cancelButton = element(by.buttonText('Cancel')); //Cancel button from the panel
@@ -51,12 +52,27 @@ var MenuPage = function () {
         this.cancelButtonSelectUserContext.click();
     };
 
+    this.contextLinkElement = function (context){
+        return $('#selectableContext ul').element(by.linkText(context));
+    }
+
+    this.selectedContext = $("#selectableContext b");
+    this.contextLinks = $$("#selectableContext a");
+
     this.selectContext= function(context) {
-        element.all(by.css('div .modal-dialog ul li')).all(by.linkText(context)).click();
+        this.contextLinkElement(context).click();
     }
 
     this.clickSelectContext = function(context) {
-        this.selectContext(context).click();
+        this.contextLinks.filter(function(elem, index) {
+            return elem.getText().then(function(text) {
+                return text === context;
+            });
+        }).then(function(filteredElements) {
+            expect(filteredElements.count()).toBe(1);
+            filteredElements[0].click();
+        });
+
         // browser.wait(EC.visibilityOf(this.contextUserTab), 10000);
     };
 
@@ -87,20 +103,38 @@ var MenuPage = function () {
     };
 
     this.clickMenuSelectContext = function (context) {
-        this.userDropDown.click();
-        browser.wait(EC.elementToBeClickable(this.switchContext), 10000);
+		browser.wait(EC.elementToBeClickable(this.userDropDown), 2100);
+        this.userDropDown.click().then(function() {
+//console.log("userDropDown clicked 1");
+        });
 
+
+        browser.wait(EC.elementToBeClickable(this.switchContext), 2300);
         this.switchContext.click().then(function() {
             //console.log("switchContext clicked");
-            browser.waitForAngular();
-            this.selectContext(context).click();
+            browser.wait(EC.or(EC.presenceOf(this.contextLinkElement(context)),EC.presenceOf(this.selectedContext)),3100);
+            //browser.waitForAngular();
+
+            browser.isElementPresent(this.contextLinkElement(context)).then(function (present) {
+                if (present) {
+                    this.contextLinkElement(context).click();
+                } else {
+                    expect(this.selectedContext.getText()).toBe(context);
+                    this.cancelButton.click();
+                }
+            });
+
         });
     }
 
     this.clickLogOut = function () {
-        this.userDropDown.click();
-        browser.wait(EC.elementToBeClickable(this.logOut), 10000);
+		browser.wait(EC.elementToBeClickable(this.userDropDown), 2100);
+        this.userDropDown.click().then(function() {
+//console.log("userDropDown clicked 2");
+        });
 
+
+        browser.wait(EC.elementToBeClickable(this.logOut), 10000);
         this.logOut.click().then(function() {
             //console.log("logout clicked");
             browser.waitForAngular();
@@ -111,10 +145,11 @@ var MenuPage = function () {
     };
 
     this.clickChangePassword = function () {
+		browser.wait(EC.elementToBeClickable(this.userDropDown), 2100);		
         this.userDropDown.click().then(function() {
-            //console.log("userDropDown clicked");
-            browser.waitForAngular();
+//console.log("userDropDown clicked 3");
         });
+		
         browser.wait(EC.elementToBeClickable(this.changePassword), 10000);
         this.changePassword.click().then(function() {
             //console.log("changePassword clicked");
@@ -123,10 +158,11 @@ var MenuPage = function () {
     };
 
     this.clickUpdateContactDetails = function () {
+		browser.wait(EC.elementToBeClickable(this.userDropDown), 2100);		
         this.userDropDown.click().then(function() {
-            //console.log("userDropDown clicked");
-            browser.waitForAngular();
+//console.log("userDropDown clicked 4");
         });
+		
         browser.wait(EC.elementToBeClickable(this.updateContactDetails), 10000);
         this.updateContactDetails.click().then(function() {
             browser.waitForAngular();
@@ -134,10 +170,11 @@ var MenuPage = function () {
     };
 
     this.clickChangeSecurityQuestions = function () {
+		browser.wait(EC.elementToBeClickable(this.userDropDown), 2100);
         this.userDropDown.click().then(function() {
-            //console.log("userDropDown clicked");
-            browser.waitForAngular();
+//console.log("userDropDown clicked 5");
         });
+		
         browser.wait(EC.elementToBeClickable(this.changeSecurityQuestions), 10000);
         this.changeSecurityQuestions.click().then(function() {
             browser.waitForAngular();

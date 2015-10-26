@@ -4,10 +4,12 @@ var organisationsModule = angular.module('organisations', [
 	'ngRoute',
 	'ngAnimate',
 	'organisationsService',
-	'personsService'
+	'personsService',
+    'auth'
 ]);
 
- organisationsModule.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider, $stateProvider) {
+ organisationsModule.config(['$urlRouterProvider', '$stateProvider', 'ACCESS',
+  function ($urlRouterProvider, $stateProvider, ACCESS) {
 
 	 var orgNationsPromise = function(organisationsService){
 	      return organisationsService.getNations().then(
@@ -19,7 +21,9 @@ var organisationsModule = angular.module('organisations', [
 	                 }
 	             );
 	           };
-	  orgNationsPromise.$inject =    ['organisationsService'];
+      // we must make sure to inject the selectedContext from the parent state
+      // otherwise it might try resolving the promise before the selected context promise is resolved.
+	  orgNationsPromise.$inject =    ['organisationsService','selectedContext'];
 
 	  var orgNamesPromise = function(organisationsService){
 	         return organisationsService.get().then(
@@ -31,11 +35,14 @@ var organisationsModule = angular.module('organisations', [
 	                 }
 	             );
 	   };
-	   orgNamesPromise.$inject =    ['organisationsService'];
+	   orgNamesPromise.$inject =    ['organisationsService','selectedContext'];
 
 	    $stateProvider
 	        .state('app.usm.organisations', {
 	            url: '/organisations?{page:int}&{sortColumn}&{sortDirection}&{name}&{nation}&{status}',
+				//data: {
+				//	access: ACCESS.AUTH
+				//},
                 params:{
                     page:1,
                     sortColumn:'name',
@@ -54,6 +61,7 @@ var organisationsModule = angular.module('organisations', [
                     label: 'Organisations'
                 },
                 resolve:{
+
                 	orgNations:orgNationsPromise,
                 	orgNames:orgNamesPromise
                 }

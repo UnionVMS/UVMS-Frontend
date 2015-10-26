@@ -34,12 +34,10 @@ describe('Application page', function() {
         loginPage.visit();
 		browser.waitForAngular();
 
-        loginPage.login('usm_admin', 'password');
+        loginPage.login('usm_admin', 'password',"USM-UserManager - (no scope)");
 		browser.waitForAngular();
 
-        // select Organisations from menu
-        menuPage.selectContext("USM-UserBrowser - (no scope)");
-		browser.waitForAngular();
+        // select Applications from menu
 
         menuPage.clickApplications();
 		browser.waitForAngular();

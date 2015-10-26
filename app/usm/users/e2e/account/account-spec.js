@@ -16,10 +16,9 @@ describe('Test manage user', function() {
     beforeEach(function () {
         // login
         loginPage.visit();
-        loginPage.login('usm_admin', 'password');
+        loginPage.login('usm_admin', 'password',"USM-UserManager - (no scope)");
 
         // select users from menu
-        menuPage.selectContext("USM-UserManager - (no scope)");		
         menuPage.clickUsers();
 
         usersPage.getTableRows().count().then(function (rowCount) {
@@ -51,9 +50,9 @@ describe('Test manage user', function() {
 		usersPage.setPhoneNumber('99999999');
 
 		browser.waitForAngular();
-		
+
 		usersPage.clickSaveButton();
-		
+
 		usersPage.refreshPage();
 
 		//usersPage.getTableRows().count().then(function (rowCount) {
@@ -86,7 +85,7 @@ describe('Test manage user', function() {
 		// take the count after searching
 		usersPage.getTableRows().count().then(function (rowCount) {
 			finalUsersCount = rowCount;
-			//console.log("finalUsersCount: " + finalUsersCount);			
+			//console.log("finalUsersCount: " + finalUsersCount);
 			// check the new count to be less equal to the inital one
 			expect(finalUsersCount <= initialUsersCount).toBeTruthy();
 			expect(finalUsersCount==1).toBeTruthy();
@@ -102,13 +101,16 @@ describe('Test manage user', function() {
 		expect(columns.get(5).getText()).toBe(today);
 		expect(columns.get(6).getText()).toBe('2999-01-01');
 		expect(columns.get(7).getText()).toBe('Enabled');
-		
+
 		// Select the details button and open the panel
 		usersPage.clickDetailButton(0);
+		
+		usersPage.clickOpenEditButton();
+		
 		usersPage.clickEditButton();
 		usersPage.setPhoneNumber('21111');
 		//usersPage.setOrganisation('FRA');
-		
+
 		usersPage.clickSaveButton();
 		usersPage.refreshPage();
 
@@ -126,7 +128,7 @@ describe('Test manage user', function() {
 		menuPage.clickLogOut();
 
 		browser.executeScript('window.sessionStorage.clear();');
-		browser.executeScript('window.localStorage.clear();');				
+		browser.executeScript('window.localStorage.clear();');
 	});
 
 });

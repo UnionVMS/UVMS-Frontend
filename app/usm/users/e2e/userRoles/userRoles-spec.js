@@ -14,10 +14,9 @@ describe('User Contexts page', function() {
     beforeEach(function () {
         // login
         loginPage.visit();
-        loginPage.login('usm_admin', 'password');
+        loginPage.login('usm_admin', 'password',"USM-UserManager - (no scope)");
 
         // select Users from menu
-		menuPage.selectContext("USM-UserManager - (no scope)");
         menuPage.clickUsers();
 
         // take the count before searching
@@ -52,7 +51,7 @@ describe('User Contexts page', function() {
         usersPage.clickSearchButton();
 
 		usersPage.clickDetailViewButton(0);
-	
+
 		usersPage.clickContextTab();
     });
 
@@ -73,9 +72,9 @@ describe('User Contexts page', function() {
 		var allRoles = element.all(by.options('role.name for role in roleList'));
 		allRoles.each(function(option) {
 			option.getText().then(function(opt) {
-				//console.log("option: ", opt);	
+				//console.log("option: ", opt);
 				if(opt == 'Super User') {
-					option.click();	
+					option.click();
 				}
 			});
 		});
@@ -84,9 +83,9 @@ describe('User Contexts page', function() {
 		var allScopes = element.all(by.options('scope.name for scope in scopeList'));
 		allScopes.each(function(option) {
 			option.getText().then(function(opt) {
-				//console.log("option: ", opt);	
+				//console.log("option: ", opt);
 				if(opt == 'Some Reports') {
-					option.click();	
+					option.click();
 				}
 			});
 		});
@@ -136,20 +135,20 @@ describe('User Contexts page', function() {
 		var allRoles = element.all(by.options('role.name for role in roleList'));
 		allRoles.each(function(option) {
 			option.getText().then(function(opt) {
-				//console.log("option: ", opt);	
+				//console.log("option: ", opt);
 				if(opt == 'User') {
-					option.click();	
+					option.click();
 				}
 			});
 		});
-		
+
         // This line click on the Edit dialog scopes's combobox
 		var allScopes = element.all(by.options('scope.name for scope in scopeList'));
 		allScopes.each(function(option) {
 			option.getText().then(function(opt) {
-				//console.log("option: ", opt);	
+				//console.log("option: ", opt);
 				if(opt == 'FRA Quotas') {
-					option.click();	
+					option.click();
 				}
 			});
 		});
@@ -201,13 +200,13 @@ describe('User Contexts page', function() {
         });
     });
 
-    afterEach(function () {		
+    afterEach(function () {
 		loginPage.gotoHome();
 
         // logout
         menuPage.clickLogOut();
-	
+
 		browser.executeScript('window.sessionStorage.clear();');
-		browser.executeScript('window.localStorage.clear();');			
+		browser.executeScript('window.localStorage.clear();');
     });
 });

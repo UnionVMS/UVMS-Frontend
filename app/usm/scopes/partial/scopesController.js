@@ -1,11 +1,11 @@
 var scopesModule = angular.module('scopes');
 
-scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$state', 'refData', 'getApplications', 'scopeServices', 'userService','applicationNames',
-    function ($log, $scope, $stateParams, $state, refData, getApplications, scopeServices, userService, applicationNames) {
+scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$state', 'refData', 'getApplications', 'scopeServices', 'userService', 'applicationNames',
+    function ($log, $scope, $stateParams, $state, refData, getApplications, scopeServices, userService,applicationNames) {
         $scope.criteria = {};
-        $scope.checkAccess = function(feature) {
-            return userService.isAllowed(feature,"USM",true);
-        };
+	    $scope.checkAccess = function(feature) {
+	    	return userService.isAllowed(feature,"USM",true);
+	    };
 
         $scope.sort = {
             sortColumn: $stateParams.sortColumn || 'name', // Default Sort.
@@ -19,7 +19,6 @@ scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$s
         // statuses...
         $scope.statusList = refData.statusesSearchDropDown;
         // applications...
-        // List Of Applications...
         var applicationsDropDown = [];
         angular.forEach(applicationNames, function(item){
             var application = {};
@@ -48,17 +47,17 @@ scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$s
                 function (response) {
                     $scope.scopeList = response.scopes;
 
-                    if (!_.isUndefined($scope.scopeList)) {
-                        $scope.displayedScopes = [].concat($scope.scopeList);
-                        $scope.isDataLoading = false;
-                        $scope.emptyResult = false;
-                        $scope.paginationConfig.totalItems = response.total;
-                        $scope.paginationConfig.pageCount = Math.ceil($scope.paginationConfig.totalItems / $scope.paginationConfig.itemsPerPage);
-                    } else {
-                        $scope.emptyResult = true;
-                        $scope.isDataLoading = false;
-                        $scope.showPagination = false;
-                    }
+                if (!_.isUndefined($scope.scopeList)) {
+                    $scope.displayedScopes = [].concat($scope.scopeList);
+                    $scope.isDataLoading = false;
+                    $scope.emptyResult = false;
+                    $scope.paginationConfig.totalItems = response.total;
+                    $scope.paginationConfig.pageCount = Math.ceil($scope.paginationConfig.totalItems / $scope.paginationConfig.itemsPerPage);
+                } else {
+                    $scope.emptyResult = true;
+                    $scope.isDataLoading = false;
+                    $scope.showPagination = false;
+                }
                     changeUrlParams();
                 },
                 function (error) {
@@ -166,9 +165,9 @@ scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$s
 
 scopesModule.controller('scopeDetailsCtrl', ['$log', '$scope', '$stateParams', 'scopeServices', 'userService',
     function ($log, $scope, $stateParams, scopeServices, userService) {
-        $scope.checkAccess = function(feature) {
-            return userService.isAllowed(feature,"USM",true);
-        };
+	    $scope.checkAccess = function(feature) {
+	    	return userService.isAllowed(feature,"USM",true);
+	    };
 
         $scope.emptyResultMessage = "No datasets found. Please try to search again.";
         $scope.itemsByPage = 10;
@@ -232,9 +231,9 @@ scopesModule.controller('scopeDetailsCtrl', ['$log', '$scope', '$stateParams', '
 scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$modal', '$stateParams', 'userService',
     function ($log, $scope, $modal, $stateParams, userService) {
 
-        $scope.checkAccess = function(feature) {
-            return userService.isAllowed(feature,"USM",true);
-        };
+	    $scope.checkAccess = function(feature) {
+	    	return userService.isAllowed(feature,"USM",true);
+	    };
 
         $scope.manageScope = function (mode, scope) {
             var modalInstance = $modal.open({

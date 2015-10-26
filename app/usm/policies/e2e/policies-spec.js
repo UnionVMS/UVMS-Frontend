@@ -12,10 +12,9 @@ describe('Policies page', function () {
     beforeEach(function () {
         // login
         loginPage.visit();
-        loginPage.login('usm_admin', 'password');
+        loginPage.login('usm_admin', 'password',"USM-UserManager - (no scope)");
 
         // select policies from menu
-        menuPage.selectContext("USM-UserManager - (no scope)");
         menuPage.clickPolicies();
 
         // take the count before searching
@@ -28,7 +27,7 @@ describe('Policies page', function () {
 
     it('should test policies page filters', function () {
         // set the criteria and search
-        policiesPage.search("account.lockoutDuration", "account");
+        policiesPage.search("account.lockoutDuration", "Authentication");
 
         // take the count after searching
         policiesPage.getTableRows().count().then(function (rowCount) {
@@ -42,13 +41,13 @@ describe('Policies page', function () {
         policiesPage.getTableRows().each(function (row) {
             var columns = row.$$('td');
             expect(columns.get(0).getText()).toMatch(/account.lockoutDuration/);
-            expect(columns.get(2).getText()).toBe('Account');
+            expect(columns.get(2).getText()).toBe('Authentication');
         });
     });
 
     it('should test policies edit value', function () {
         // set the criteria and search
-        policiesPage.search("account.lockoutDuration", "account");
+        policiesPage.search("account.lockoutDuration", "Authentication");
 
         var rowToSelect = Math.floor((Math.random() * initialPoliciesCount - 1) + 1);
         var columns = policiesPage.getTableRow(0).$$('td');
@@ -65,8 +64,8 @@ describe('Policies page', function () {
 
 		// logout
         menuPage.clickLogOut();
-		
+
 		browser.executeScript('window.sessionStorage.clear();');
-		browser.executeScript('window.localStorage.clear();');				
+		browser.executeScript('window.localStorage.clear();');
     });
 });

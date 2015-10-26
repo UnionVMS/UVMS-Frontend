@@ -4,12 +4,17 @@ var RolesPage = function () {
     this.criteriaApplication = element(by.model('criteria.application'));
     this.criteriaStatus = element(by.model('criteria.status'));
     this.searchButton = element(by.id('searchButton'));
+    this.newRoleButton = element(by.id('newRoleButton'));
+    this.manageRoleSaveButton = element(by.buttonText("Save"));
+    this.manageRoleDeleteButton = element(by.buttonText("Delete"));
+    this.manageRoleConfirmButton = element(by.buttonText("Confirm"));
     this.rolesTable = $$('.table');
     this.rolesTableRows = $$('.table tbody tr');
     this.detailsSpanRole = element(by.binding('roleDetails.name'));
     this.detailsSpanApplication = element(by.binding('roleDetails.application.name'));
 
-    this.roleName='';
+    this.roleName= element.all(by.model('role.name'));
+    this.roleDescription= element.all(by.model('role.description'));
     this.applicationName='';
     this.selectedRoleId='';
 
@@ -66,12 +71,12 @@ var RolesPage = function () {
 
     this.clickDetailButton = function(rowIndex) {
 		browser.waitForAngular();
-		
+
 		var columns = this.getDetailButton(rowIndex);
-		
+
 		//this.getDetailButton(rowIndex).get(1).click();
 		columns.get(1).click();
-		
+
         //this.getTableRows().get(rowIndex).$$('td button').click();
         browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
@@ -113,5 +118,70 @@ var RolesPage = function () {
         return this.selectedRoleId;
     };
 
+    this.clickNewRoleButton = function () {
+        this.newRoleButton.click();
+    };
+
+    this.setRoleName = function (name) {
+        this.roleName.clear();
+        this.roleName.sendKeys(name);
+    };
+
+    this.setRoleDescription = function (name) {
+        this.roleDescription.clear();
+        this.roleDescription.sendKeys(name);
+    };
+
+    this.clickManageRoleSaveButton = function () {
+        this.manageRoleSaveButton.click();
+
+        browser.wait(function() {
+            var deferred = protractor.promise.defer();
+            element(by.id('btn-success')).isPresent()
+                .then(function (isPresent) {
+                    deferred.fulfill(!isPresent);
+                });
+            return deferred.promise;
+        });
+    };
+
+    this.clickRowEditButton = function (rowIndex) {
+        this.getTableRows().get(rowIndex).$$('td button').get(0).click(); //The edit button occupies the first position in the table
+        //  browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
+    };
+    this.clickRowDeleteButton = function (rowIndex) {
+        this.getTableRows().get(rowIndex).$$('td button').get(2).click(); //The delete button occupies the third position in the table
+        //  browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
+    };
+
+    this.clickManageRoleDeleteButton = function () {
+        this.manageRoleDeleteButton.click();
+
+        browser.wait(function() {
+            var deferred = protractor.promise.defer();
+            element(by.id('btn-success')).isPresent()
+                .then(function (isPresent) {
+                    deferred.fulfill(!isPresent);
+                });
+            return deferred.promise;
+        });
+    };
+    this.clickManageRoleConfirmButton = function () {
+        this.manageRoleConfirmButton.click();
+
+        browser.wait(function() {
+            var deferred = protractor.promise.defer();
+            element(by.id('btn-success')).isPresent()
+                .then(function (isPresent) {
+                    deferred.fulfill(!isPresent);
+                });
+            return deferred.promise;
+        });
+    };
+
+
+    this.refreshPage = function () {
+        return browser.navigate().refresh();
+    };
 };
 module.exports = RolesPage;
