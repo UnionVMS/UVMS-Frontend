@@ -25,7 +25,7 @@ angular.module('unionvmsWeb').factory('dateTimeService',function() {
 
                 //Unix seconds timestamp?
                 if(this.isFormattedAsUnixSecondsTimstamp(dateTimeInput)){
-                    return moment.unix(dateTimeInput).utc().format(outputFormat);
+                    return moment.unix(dateTimeInput, 'X').utc().format(outputFormat);
                 }
 
                 //No timezone?
@@ -42,12 +42,13 @@ angular.module('unionvmsWeb').factory('dateTimeService',function() {
         },
         //Return date as string with timezone
         formatUTCDateWithTimezone : function(dateTimeInput) {
+            var outputFormat = 'YYYY-MM-DD HH:mm:ss +00:00';
             if(angular.isDefined(dateTimeInput)){
-                //ALready formatted with timezone, then format again with UTC and +00:00
+                //Already formatted with timezone, then format again with UTC and +00:00
                 if(this.isFormattedWithTimeZone(dateTimeInput)){
                     dateTimeInput = this.toUTC(dateTimeInput);
                 }
-                return moment(dateTimeInput).format("YYYY-MM-DD HH:mm:ss +00:00");
+                return moment(dateTimeInput).format(outputFormat);
             }
         },
         //Formatted with time zone in format "2015-11-18 13:49:00 +01:00" or "2015-11-18 13:49:00 +0100"
@@ -77,7 +78,7 @@ angular.module('unionvmsWeb').factory('dateTimeService',function() {
 
                 //TODO: get format from configuraton
                 var format = 'DD MMM YYYY HH:mm UTC';
-                var formatted = moment(dateTimeInput).format(format);
+                var formatted = moment(dateTimeInput, "YYYY-MM-DD HH:mm:ss Z").format(format);
                 if(formatted !== INVALID_DATE){
                     output = formatted;
                 }

@@ -185,6 +185,10 @@ describe('dateTimeService', function() {
     d = 'STRANGE DATE FORMAT';
     expect(dateTimeService.formatUTCDateWithTimezone(d)).toEqual('Invalid date');
 
+    //MomentJS
+    d = moment.utc();
+    expect(dateTimeService.formatUTCDateWithTimezone(d)).not.toEqual('Invalid date');
+
     //Undefined
     d = undefined;
     expect(dateTimeService.formatUTCDateWithTimezone(d)).toBeUndefined();
@@ -246,8 +250,8 @@ describe('confDateFormat filter', function() {
         expect(filter(d)).toEqual('03 Feb 2018 04:05 UTC');
 
         //Date object
-        d = new Date(2015,10,14, 16, 25, 13);
-        expect(filter(d)).toEqual('14 Nov 2015 16:25 UTC');
+        d = 196416552;
+        expect(filter(d)).toEqual('23 Mar 1976 08:09 UTC');
 
         //Undefined
         expect(filter(undefined)).toBeUndefined();

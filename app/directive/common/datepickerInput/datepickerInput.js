@@ -83,7 +83,9 @@ angular.module('unionvmsWeb')
         };
 
         //Update model value and call callback function
+        var watchModelChange = true;
         $scope.onChange = function(){
+            watchModelChange = false;
             //Update model
             if(angular.isDefined($scope.viewModel)){
                 //Add UTC timezone (+00:00)
@@ -103,20 +105,29 @@ angular.module('unionvmsWeb')
 
         //Watch changes of the model and update the viewModel when it happens
         $scope.$watch('model', function(newValue) {
-            //Undefined or empty string?
-            if(typeof newValue !== 'string' || newValue.trim().length === 0){
-                $scope.viewModel = '';
-            }
-            else{
-                //Parse the date/time and format it
-                var newViewValue;
-                //Parse UTC date to viewValue
-                if($scope.useTime){
-                    newViewValue = moment.utc(newValue).format('YYYY-MM-DD HH:mm');
-                }else{
-                    newViewValue = moment.utc(newValue).format('YYYY-MM-DD');
+            if(watchModelChange){
+                //Undefined or empty string?
+                if(typeof newValue !== 'string' || newValue.trim().length === 0){
+                    $scope.viewModel = '';
                 }
-                $scope.viewModel = newViewValue;
+                else{
+                    //Parse the date/time and format it
+                    var newViewValue;
+                    //Parse UTC date to viewValue
+                    if($scope.useTime){
+                        newViewValue = moment.utc(newValue,'YYYY-MM-DD HH:mm:ss Z').format('YYYY-MM-DD HH:mm');
+                    }else{
+                        newViewValue = moment.utc(newValue,'YYYY-MM-DD').format('YYYY-MM-DD');
+                    }
+                    $scope.viewModel = newViewValue;
+                }
             }
+            watchModelChange = true;
+        });
+
+
+        //Watch changes of the startDate
+        $scope.$watch('startDate', function(newValue) {
+            console.log("startDate changed to: " +newValue);
         });
 });
