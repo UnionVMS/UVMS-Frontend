@@ -161,8 +161,15 @@ body{
                 top:calc(~"50% - 80px");
             }
         }
+        &.hiddenLoadingIndicator{
+            .spinner, .loadingText{
+                display: none,
+            }
+        }
     }
 }
+
+
 
 //Error message shown when app fails (e.g. when page resolves fail)
 .appErrorContainer {

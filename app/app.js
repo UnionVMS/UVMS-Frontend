@@ -390,6 +390,7 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
 
     //Show spinner after 600ms when loading page if page hasn't loaded
     $rootScope.loadingPage = false;
+    $rootScope.loadingPageIconHidden = false;
     var showPageNavigationSpinnerTimeout;
     var showSpinnerAfterMilliSeconds = 600;
 
@@ -405,6 +406,13 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
         //Only show spinner if user is logged in
         if(userService.isLoggedIn()){
             showPageNavigationSpinnerTimeout = $timeout(function(){
+                //Hide spinner icon and text when no context selected
+                if(!userService.getCurrentContext()){
+                    $rootScope.loadingPageIconHidden = true;
+                }
+                else{
+                    $rootScope.loadingPageIconHidden = false;
+                }
                 $rootScope.loadingPageMessage = locale.getString('common.loading_page');
                 $rootScope.loadingPage = true;
             }, showSpinnerAfterMilliSeconds);
