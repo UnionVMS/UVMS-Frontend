@@ -136,7 +136,7 @@
     "position_report_asset_information_value_missing" : "Missing",
     "position_report_position_information" : "Position information",
     "position_report_inactivate_position" : "Inactivate position (will not show on map)",
-    "position_report_assign_asset_from_list" : "Assign asset from list",
+    "position_report_assign_asset_from_list" : "Link asset from list",
 
     "notifications_table_close_title" : "Close notificaton",
     "notifications_close_error_message" : "Failed to close the notification. Please try again."
