@@ -61,8 +61,10 @@ angular.module('unionvmsWeb').factory('HttpRequestTimeoutInterceptor', function 
         },
 
         responseError: function (response) {
-            if (response.config.timeout.isGloballyCancelled) {
-              return $q.defer().promise;
+            if(angular.isDefined(response.config) && angular.isDefined(response.config.timeout)){
+                if (response.config.timeout.isGloballyCancelled) {
+                    return $q.defer().promise;
+                }
             }
             return $q.reject(response);
         }
