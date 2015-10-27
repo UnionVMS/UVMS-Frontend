@@ -1,12 +1,8 @@
-angular.module('unionvmsWeb').controller('AuditsearchformCtrl',function($scope, locale, auditLogsDefaultValues, auditLogsTypeOptions) {
+angular.module('unionvmsWeb').controller('AuditsearchformCtrl',function($scope, locale, auditOptionsService) {
 
-	$scope.objectTypes = auditLogsTypeOptions.options;
+	$scope.objectTypes = auditOptionsService.getCurrentOptions().types;
 
-	$scope.operations = []; //Operation dropdown
-	//$scope.operations = configurationService.getValue('AUDIT', 'OPERATIONS');
-	$scope.operations.push({"text":"Create", "code":"Create"});
-	$scope.operations.push({"text":"Update", "code":"Update"});
-	$scope.operations.push({"text":"Remove", "code":"Remove"});
+	$scope.operations = auditOptionsService.getCurrentOptions().operations;
 
 	$scope.member = {
 		operations:[],
@@ -15,7 +11,7 @@ angular.module('unionvmsWeb').controller('AuditsearchformCtrl',function($scope, 
 
 	$scope.resetSearch = function() {
         $scope.resetAdvancedSearchForm(false);
-        auditLogsDefaultValues.resetDefaults();
+        auditOptionsService.resetDefaults();
         $scope.performAdvancedSearch();
 	};
 

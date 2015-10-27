@@ -1,104 +1,76 @@
-angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, locale, Audit, auditLogRestService, searchService, auditLogsDefaultValues, auditLogsTypeOptions, SearchResults, GetListRequest, infoModal, dateTimeService, pollingRestService, mobileTerminalRestService) {
+angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, locale, Audit, auditLogRestService, searchService, auditOptionsService, SearchResults, GetListRequest, infoModal, dateTimeService, pollingRestService, mobileTerminalRestService) {
+
+    //Names used in the backend
+    var TYPE_ASSET = 'Asset';
+    var TYPE_MOBILE_TERMINAL = 'Mobile Terminal';
+    var TYPE_POLL = 'Poll';
 
 	// ************ Page setup ************
 
 	$scope.isAudit = true; //Highlights submenu, aka "AUDIT LOGS"
 	$scope.selectedTab = "ALL"; //Set initial tab
-    auditLogsTypeOptions.setOptions(auditLogsTypeOptions.getOptions($scope.selectedTab));
+    auditOptionsService.setOptions($scope.selectedTab);
 
     $scope.currentSearchResults = new SearchResults('date', false);
 
 	//Sets tabs
 	var setTabs = function (){
-            return [
-                {
-                    'tab': 'ALL',
-                    'title': locale.getString('audit.tab_all')
-                },
-                {
-                    'tab': 'POSITION_REPORTS',
-                    'title': locale.getString('audit.tab_position_reports')
-                },
-                {
-                    'tab': 'ASSETS_AND_TERMINALS',
-                    'title': locale.getString('audit.tab_assets_and_terminals')
-                },
-                {
-                    'tab': 'GIS',
-                    'title': locale.getString('audit.tab_gis')
-                },
-                {
-                    'tab': 'CATCH_AND_SURVEILLANCE',
-                    'title': locale.getString('audit.tab_catch_and_surveillance')
-                },
-                {
-                    'tab': 'ALARMS',
-                    'title': locale.getString('audit.tab_alarms')
-                },
-                {
-                    'tab': 'ACCESS_CONTROL',
-                    'title': locale.getString('audit.tab_access_control')
-                }
-            ];
-        };
-
-	locale.ready('audit').then(function () {
-		$scope.tabMenu = setTabs();
-    });
-
+        return [
+            {
+                'tab': 'ALL',
+                'title': locale.getString('audit.tab_all')
+            },
+            {
+                'tab': 'POSITION_REPORTS',
+                'title': locale.getString('audit.tab_position_reports')
+            },
+            {
+                'tab': 'ASSETS_AND_TERMINALS',
+                'title': locale.getString('audit.tab_assets_and_terminals')
+            },
+            {
+                'tab': 'GIS',
+                'title': locale.getString('audit.tab_gis')
+            },
+            {
+                'tab': 'CATCH_AND_SURVEILLANCE',
+                'title': locale.getString('audit.tab_catch_and_surveillance')
+            },
+            {
+                'tab': 'ALARMS',
+                'title': locale.getString('audit.tab_alarms')
+            },
+            {
+                'tab': 'ACCESS_CONTROL',
+                'title': locale.getString('audit.tab_access_control')
+            }
+        ];
+    };
 
     var init = function(){
-        auditLogsDefaultValues.resetDefaults();
+        $scope.tabMenu = setTabs();
+        auditOptionsService.resetDefaults();
         $scope.searchAuditLogs();
     };
 
 	// ************ Functions and Scope ************
 	$scope.selectTab = function(tab){
 		$scope.selectedTab = tab;
-        auditLogsTypeOptions.setOptions(auditLogsTypeOptions.getOptions(tab));
+        auditOptionsService.setOptions($scope.selectedTab);
 
         searchService.reset();
-        auditLogsDefaultValues.resetDefaults();
+        auditOptionsService.resetDefaults();
         $scope.searchAuditLogs();
 	};
 
-    $scope.toggleCheckAll = function() {
-        var allChecked = $scope.isAllChecked();
-        for (var i = 0; i < $scope.currentSearchResults.items.length; i++) {
-            $scope.currentSearchResults.items[i].checked = !allChecked;
-        }
-    };
-
-    $scope.isAllChecked = function() {
-        if ($scope.currentSearchResults.items.length === 0) {
-            return false;
-        }
-
-        for (var i = 0; i < $scope.currentSearchResults.items.length; i++) {
-            if (!$scope.currentSearchResults.items[i].checked) {
-                return false;
-            }
-        }
-
-        return true;
-    };
-
-    //Goto page in the search results
-    $scope.gotoPage = function(page){
-        if(angular.isDefined(page)){
-            $scope.currentSearchResults.setLoading(true);
-            searchService.setPage(page);
-            $scope.searchAuditLogs();
-        }
-    };
-
+    //Do the search
     $scope.searchAuditLogs = function() {
         $scope.currentSearchResults.setLoading(true);
 
         // If not ALL tab, and to TYPE criteria set, search for all types available on this tab.
         if ($scope.selectedTab !== "ALL" && !searchService.hasSearchCriteria("TYPE")) {
-            for (var i = 0; i < auditLogsTypeOptions.options.length; i++) {
-                searchService.addSearchCriteria("TYPE", auditLogsTypeOptions.options[i].code);
+            for (var i = 0; i < auditOptionsService.getCurrentOptions().types.length; i++) {
+                searchService.addSearchCriteria("TYPE", auditOptionsService.getCurrentOptions().types[i].code);
             }
         }
 
@@ -112,9 +84,18 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
         });
     };
 
+    //Goto page in the search results
+    $scope.gotoPage = function(page){
+        if(angular.isDefined(page)){
+            $scope.currentSearchResults.setLoading(true);
+            searchService.setPage(page);
+            $scope.searchAuditLogs();
+        }
+    };
+
     //Does the audit log item has a comment?
     $scope.itemHasComment = function(audit){
-        return audit.objectType === 'Mobile Terminal' || audit.objectType ===  'Poll';
+        return audit.objectType === TYPE_MOBILE_TERMINAL || audit.objectType ===  TYPE_POLL;
     };
 
     //Show comment in info modal
@@ -126,7 +107,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
         var getListRequest = new GetListRequest(1, 1,true, []);
 
         //POLL
-        if(audit.objectType === 'Poll'){
+        if(audit.objectType === TYPE_POLL){
             getListRequest.addSearchCriteria('POLL_ID', id);
             pollingRestService.getPollList(getListRequest).then(
                 function(searchResultsListPage){
@@ -143,7 +124,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
         }
 
         //Mobile terminal
-        if(audit.objectType === 'Mobile Terminal'){
+        if(audit.objectType === TYPE_MOBILE_TERMINAL){
             mobileTerminalRestService.getHistoryForMobileTerminalByGUID(id).then(
                 function(historyList){
                     if(historyList.length > 0){
@@ -184,28 +165,47 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
         infoModal.open(options);
     };
 
+    //Get the url to the affected object
     $scope.affectedObjectPath = function(audit) {
         var path;
         if(audit.affectedObject){
             switch(audit.objectType){
-                case 'Mobile Terminal':
+                case TYPE_MOBILE_TERMINAL:
                     path = "/communication/" + audit.affectedObject;
                     break;
-                case 'Asset':
+                case TYPE_ASSET:
                     path = "/assets/" + audit.affectedObject;
                     break;
-                case 'Reports':
-                    path = "/movement/" + audit.affectedObject;
-                    break;
-                case 'Reports':
-                    path = "/movement/" + audit.affectedObject;
-                    break;
-                case 'Poll':
+                case TYPE_POLL:
                     path = "/polling/logs/" + audit.affectedObject;
                     break;
             }
         }
         return path;
+    };
+
+
+    //Check all/none
+    $scope.toggleCheckAll = function() {
+        var allChecked = $scope.isAllChecked();
+        for (var i = 0; i < $scope.currentSearchResults.items.length; i++) {
+            $scope.currentSearchResults.items[i].checked = !allChecked;
+        }
+    };
+
+    //Check if all items are checked
+    $scope.isAllChecked = function() {
+        if ($scope.currentSearchResults.items.length === 0) {
+            return false;
+        }
+
+        for (var i = 0; i < $scope.currentSearchResults.items.length; i++) {
+            if (!$scope.currentSearchResults.items[i].checked) {
+                return false;
+            }
+        }
+
+        return true;
     };
 
     $scope.$on("$destroy", function() {
@@ -214,67 +214,4 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
 
     init();
 
-}).factory("auditLogsDefaultValues", function(searchService) {
-
-    var offsetDays = function(date, addDays) {
-        date.setHours(date.getHours() + 24 * addDays);
-        return date;
-    };
-
-    var date2String = function(d) {
-        function z(v) { return v < 10 ? "0" + v : v; }
-        var date = [d.getFullYear(), z(d.getMonth() + 1), z(d.getDate())].join("-");
-        var time = [z(d.getHours()), z(d.getMinutes())].join(":");
-        return date + " " + time;
-    };
-
-    return {
-        resetDefaults: function() {
-            var now = new Date();
-            searchService.getAdvancedSearchObject()["TO_DATE"] = date2String(now);
-            searchService.getAdvancedSearchObject()["FROM_DATE"] = date2String(offsetDays(now, -1));
-            searchService.setSearchCriteriasToAdvancedSearch();
-        }
-    };
-}).factory("auditLogsTypeOptions", function() {
-    var auditLogsTypeOptions = {};
-
-    var createAuditLogType = function(text, code) {
-        return {
-            text: text,
-            code: code || text
-        };
-    };
-
-    var auditLogTypes = {
-        asset: createAuditLogType("Asset"),
-        report: createAuditLogType("Reports"),
-        mobileTerminal: createAuditLogType("Mobile Terminal"),
-        poll: createAuditLogType("Poll")
-    };
-
-    auditLogsTypeOptions.options = [];
-
-    auditLogsTypeOptions.setOptions = function(newOptions) {
-        auditLogsTypeOptions.options.splice(0, auditLogsTypeOptions.options.length);
-        for (var i = 0; i < newOptions.length; i++) {
-            auditLogsTypeOptions.options.push(newOptions[i]);
-        }
-    };
-
-    auditLogsTypeOptions.getOptions = function(tab) {
-        if (tab === "ASSETS_AND_TERMINALS") {
-            return [auditLogTypes.asset, auditLogTypes.mobileTerminal, auditLogTypes.poll];
-        }
-        else if (tab === "POSITION_REPORTS") {
-            return [auditLogTypes.report];
-        }
-        else {
-            return Object.keys(auditLogTypes).map(function(key) {
-                return auditLogTypes[key];
-            });
-        }
-    };
-
-    return auditLogsTypeOptions;
 });

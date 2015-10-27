@@ -290,12 +290,13 @@
     <script src="service/common/coordinateFormatService.js"></script>
     <script src="partial/login/loginController.js"></script>    
     <script src="service/spatial/spatialHelperService.js"></script>
+    <script src="service/audit/auditOptionsService.js"></script>
     <!-- Add New Component JS Above -->
 
     <div ui-view name="unionvmsHeader"></div>
 
     <div id="contentWrapper">
-        <div id="content" loading-indicator="loadingPage" message="loadingPageMessage">
+        <div id="content" loading-indicator="loadingPage" message="loadingPageMessage" ng-class="{'hiddenLoadingIndicator' : loadingPageIconHidden}">
             <div ng-hide="loadingPage">
                 <div ui-view name="unionvmsAlerts"></div>
                 <div ui-view name="unionvmsError"></div>
