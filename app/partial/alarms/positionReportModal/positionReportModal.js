@@ -1,7 +1,7 @@
-angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($scope, $log, $modalInstance, locale, position, options, GetListRequest, SearchResults, vesselRestService, dateTimeService) {
+angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($scope, $log, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService) {
 
-    //TODO: Operate on a copy of the item/alarm/position so we can click cancel without updating the original
-    $scope.position = position;
+    $scope.alarm = alarm;
+    $scope.knownVessel = angular.isDefined(alarm.vessel);
     $scope.options = options;
     $scope.readOnly = options.readOnly;
 
@@ -32,84 +32,101 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
 
     //Add a marker to the map and center map on the marker
     $scope.addMarkerToMap = function(){
-        var latLng = $scope.position.position;
-        if(angular.isDefined(latLng.latitude) && angular.isDefined(latLng.longitude)){
-            var formattedTime =  dateTimeService.formatAccordingToUserSettings(position.time);
-            var marker = {
-                lng: latLng.longitude,
-                lat: latLng.latitude,
-                message: formattedTime,
-                focus: true,
-            };
-            $scope.markers['reportedPosition'] = marker;
+        if(angular.isDefined($scope.alarm.movement) && angular.isDefined($scope.alarm.movement.movement)){
+            var lat = $scope.alarm.movement.movement.latitude;
+            var lng = $scope.alarm.movement.movement.longitude;
+            if(angular.isDefined(lat) && angular.isDefined(lng)){
+                var formattedTime =  dateTimeService.formatAccordingToUserSettings($scope.alarm.movement.time);
+                var marker = {
+                    lng: lat,
+                    lat: lng,
+                    message: formattedTime,
+                    focus: true,
+                };
+                $scope.markers['reportedPosition'] = marker;
 
-            //Center on the marker
-            $scope.center.lat = latLng.latitude;
-            $scope.center.lng = latLng.longitude;
-            $scope.center.zoom = 10;
+                //Center on the marker
+                $scope.center.lat = lat;
+                $scope.center.lng = lng;
+                $scope.center.zoom = 10;
+            }
         }
     };
 
     //Is acceptAndPoll allowed?
     $scope.acceptAndPollIsAllowed = function() {
+        //TODO: Verify that user has access to polling
         //Only allowed for national vessels
-        var nationalFlagState = 'SWE';
-        return $scope.position.carrier.flagState === nationalFlagState;
+        if(angular.isDefined($scope.alarm.vessel)){
+            //TODO: Get flagstate from config
+            var nationalFlagState = 'SWE';
+            return $scope.alarm.vessel.countryCode === nationalFlagState;
+        }
+        return false;
     };
 
     //Get status label
-    $scope.getStatusLabel = function(status){
+    $scope.getStatusLabel = function(alarm){
         var label;
         switch(status){
-            case 'SUCCESSFUL':
-                label = locale.getString('common.status_successful');
+            case alarm.isClosed():
+                label = locale.getString('common.status_closed');
                 break;
-            case 'PENDING':
+            case alarm.isPending():
                 label = locale.getString('common.status_pending');
                 break;
-            case 'ERROR':
-                label = locale.getString('common.status_failed');
+            case alarm.isOpen():
+                label = locale.getString('common.status_open');
                 break;
             default:
-                label = status;
+                label = alarm.status;
         }
         return label;
     };
 
+    //Show/hide assign asset form
     $scope.toggleAssignAsset = function(){
         $scope.isVisible.assignAsset = !$scope.isVisible.assignAsset;
     };
 
+    //Accept and poll alarm
     $scope.acceptAndPoll = function(){
         $log.info("TODO: Implement acceptAndPoll");
     };
 
+    //Accept the alarm
     $scope.accept = function(){
         $log.info("TODO: Implement accept");
     };
 
+    //Reject the alarm
     $scope.reject = function(){
         $log.info("TODO: Implement reject");
     };
 
 
-    //VESSEL SEARCH
-
+    /*VESSEL SEARCH*/
     var getListRequest = new GetListRequest(1, 5, false, []);
     //Search objects and results
-    $scope.assignAssetSearchTypes = [{
-        text: [locale.getString('vessel.ircs'), locale.getString('vessel.name'), locale.getString('vessel.cfr')].join('/'),
-        code: 'ALL'
-    }, {
-        text: locale.getString('vessel.ircs'),
-        code: 'IRCS'
-    }, {
-        text: locale.getString('vessel.name'),
-        code: 'NAME'
-    }, {
-        text: locale.getString('vessel.cfr'),
-        code: 'CFR'
-    }];
+    //Dropdown values
+    $scope.assignAssetSearchTypes = [
+        {
+            text: [locale.getString('vessel.ircs'), locale.getString('vessel.name'), locale.getString('vessel.cfr')].join('/'),
+            code: 'ALL'
+        },
+        {
+            text: locale.getString('vessel.ircs'),
+            code: 'IRCS'
+        },
+        {
+            text: locale.getString('vessel.name'),
+            code: 'NAME'
+        },
+        {
+            text: locale.getString('vessel.cfr'),
+            code: 'CFR'
+        }
+    ];
     $scope.assignAssetSearchType = $scope.assignAssetSearchTypes[0].code;
 
     //Perform the serach
@@ -125,6 +142,7 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
         $scope.currentSearchResults.setLoading(true);
 
         //Set search criterias
+        //TODO: Search for national vessel only???
         var searchValue = $scope.assignAssetSearchText +"*";
         if($scope.assignAssetSearchType === "ALL"){
             getListRequest.addSearchCriteria("NAME", searchValue);
@@ -162,10 +180,15 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
 
     //Handle click event on add vessel button
     $scope.selectVessel = function(vessel){
-        //TODO: Something?
-        $log.info("TODO: What should happen now?");
+        //Set the placeholder vessel
+        $scope.alarm.placeholderVessel = vessel;
     };
 
+    //Handle click event on added vessel button
+    $scope.unselectVessel = function(vessel){
+        //Remove placeholder vessel
+        $scope.alarm.placeholderVessel = undefined;
+    };
 
 
     $scope.init();
@@ -173,15 +196,15 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
 
 angular.module('unionvmsWeb').factory('PositionReportModal', function($modal) {
     return {
-        show: function(position, options) {
+        show: function(alarm, options) {
             return $modal.open({
                 templateUrl: 'partial/alarms/positionReportModal/positionReportModal.html',
                 controller: 'PositionReportModalCtrl',
                 windowClass : "positionReportModal",
                 size: 'md',
                 resolve:{
-                    position : function (){
-                        return position;
+                    alarm : function (){
+                        return alarm;
                     },
                     options : function (){
                         return options;

@@ -48,6 +48,17 @@ angular.module('unionvmsWeb')
 		return movement;
 	};
 
+    Movement.prototype.copy = function(){
+        var copy = new Movement();
+
+        copy.guid = this.guid;
+        copy.connectId = this.connectId;
+        copy.time = this.time;
+        copy.vessel = _.clone(this.vessel);
+        copy.movement = _.clone(this.movement);
+
+        return copy;
+    };
 
     Movement.prototype.isEqualMovement = function(item) {
         return item.guid === this.guid;

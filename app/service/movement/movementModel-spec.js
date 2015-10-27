@@ -39,7 +39,7 @@ describe('Movement', function() {
 
 
     it('setVesselData should set correct data', inject(function(Movement, Vessel) {
-        var movement = Movement.fromJson();
+        var movement = Movement.fromJson(move);
         var vessel = new Vessel();
         vessel.name = "TestName";
         vessel.ircs = "TestIRCS";
@@ -53,8 +53,8 @@ describe('Movement', function() {
     }));
 
     it('isEqualMovement should return true only when guid is the same', inject(function(Movement, Vessel) {
-        var movement = Movement.fromJson();
-        var movement2 = Movement.fromJson();
+        var movement = Movement.fromJson(move);
+        var movement2 = Movement.fromJson(move);
         var movement3 = new Movement();
         movement3.guid = movement.guid;
 
@@ -65,5 +65,18 @@ describe('Movement', function() {
         //Different guid means isEqualMovement is false
         movement2.guid = "changed";
         expect(movement.isEqualMovement(movement2)).toBeFalsy();
+    }));
+
+
+    it('copy should return a copy of the object', inject(function(Movement, Vessel) {
+        var movement = Movement.fromJson(move);
+        var copy = movement.copy();
+
+        //Verify that original item isn't changed
+        copy.movement.status = 'CHANGED';
+        expect(movement.movement.status).not.toEqual('CHANGED');
+
+        expect(copy.isEqualMovement(movement)).toBeTruthy();
+
     }));
  });

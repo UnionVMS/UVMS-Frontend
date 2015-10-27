@@ -132,4 +132,18 @@ describe('Alarm', function() {
         expect(alarm.isVesselAsset()).toBeFalsy();
     }));
 
+
+    it('copy should return a copy of the object', inject(function(Alarm) {
+        var alarm = Alarm.fromDTO(alarmData);
+        var copy = alarm.copy();
+
+        expect(copy.equals(alarm)).toBeTruthy();
+        expect(copy.alarmItems.length).toEqual(alarm.alarmItems.length);
+
+        //Verify that original item isn't changed
+        copy.alarmItems[0].guid = 'CHANGED';
+        expect(alarm.alarmItems[0].guid).not.toEqual('CHANGED');
+
+
+    }));
 });

@@ -32,17 +32,30 @@
         //Value
         .value{
             font-weight: bold;
+
+            &.missing{
+                color:@errorColor;
+                font-style:italic;
+            }
         }
 
         .mapContainer{
             margin-top: 15px;
-        }    
+        }
 
         .searchVesselContainer{
             margin-top: 10px;
             padding-bottom: 10px;
             padding:10px;
             .grayBorder();
+
+            table{
+                td{
+                    button{
+                        width: 100%;
+                    }
+                }
+            }
         }
     }
 
@@ -66,12 +79,12 @@
                     }
                     button{
                         text-transform: uppercase;
-                    }                    
+                    }
                 }
                 .button-group-right {
                     text-align: right;
-                }            
+                }
             }
-        }    
-    }    
+        }
+    }
 }

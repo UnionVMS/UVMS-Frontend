@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, PositionReportModal, ManualPosition){
+angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, PositionReportModal){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -138,31 +138,12 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
 
     $scope.showOnMap = function(item){
 
-        //Create dummy position for now
-        //TODO: Use real message values
-        var position = new ManualPosition();
-        position.id = 123456;
-        position.speed = 23.3;
-        position.course = 134;
-        position.time = item.openedDate;
-        position.updatedTime = item.openedDate;
-        position.status = "010";
-        position.archived = false;
-        position.position.longitude = 11.82;
-        position.position.latitude = 54.56;
-        position.carrier.cfr ="SWE0001234";
-        position.carrier.name ="Nordvåg";
-        position.carrier.externalMarking ="VG40";
-        position.carrier.ircs ="SKRM";
-        position.carrier.flagState ="SWE";
-        position.message = {
-            status : 'PENDING'
-        };
-
+        //Work on a copy of the alarm item so you can cancel the editing
+        var alarmItem = item.copy();
         var options = {
             readOnly : true
         };
-        PositionReportModal.show(position, options);
+        PositionReportModal.show(item, options);
     };
 
     //Print the exchange logs

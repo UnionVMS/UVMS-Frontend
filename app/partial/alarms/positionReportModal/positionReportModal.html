@@ -10,11 +10,11 @@
     <div class="row">
         <div class="col-md-12">
             {{'common.status' | i18n}}
-            <span class="label" ng-class="{SUCCESSFUL:'label-success', PENDING:'label-warning', 'ERROR':'label-danger'}[position.message.status]">
-                {{getStatusLabel(position.message.status) | uppercase}}
+            <span class="label" ng-class="{'label-success': alarm.isClosed(), 'label-danger': alarm.isOpen(), 'label-warning': !alarm.isClosed() && !alarm.isOpen()}">
+                {{getStatusLabel(alarm) | uppercase}}
             </span>
 
-            {{'alarms.position_report_recipient' | i18n}}  <b>{{position.message.recipient}}</b>
+            {{'alarms.position_report_recipient' | i18n}}  <b>TODO: What should be here???</b>
         </div>
     </div>
 
@@ -24,31 +24,46 @@
                 <div class="sectionHeader">
                     {{'alarms.position_report_asset_information' | i18n}}
                 </div>
-                <span class="assignAssetLink" ng-click="toggleAssignAsset()" ng-if="!readOnly">{{'alarms.position_report_assign_asset_from_list' | i18n}}</span>
+                <span class="assignAssetLink" ng-click="toggleAssignAsset()" ng-if="!readOnly && !knownVessel">{{'alarms.position_report_assign_asset_from_list' | i18n}}</span>
             </div>
         </div>
         <div class="row">
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_flag_state' | i18n}}</label>
-                <div class="value">{{position.carrier.flagState}}</div>
+                <div class="value" ng-show="alarm.placeholderVessel">{{alarm.placeholderVessel.countryCode}}</div>
+                <div class="value" ng-show="!alarm.placeholderVessel && alarm.vessel">{{alarm.vessel.countryCode}}</div>
+                <div class="value" ng-show="!alarm.placeholderVessel && !alarm.vessel && alarm.asset.ids.FLAG_STATE">{{alarm.asset.ids.FLAG_STATE}}</div>
+                <div class="value missing" ng-show="!alarm.placeholderVessel && !alarm.vessel && !alarm.asset.ids.FLAG_STATE">{{'alarms.position_report_asset_information_value_missing' | i18n}}</div>
             </div>
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_ircs' | i18n}}</label>
-                <div class="value">{{position.carrier.ircs}}</div>
+                <div class="value" ng-show="alarm.placeholderVessel">{{alarm.placeholderVessel.ircs}}</div>
+                <div class="value" ng-show="!alarm.placeholderVessel && alarm.vessel">{{alarm.vessel.ircs}}</div>
+                <div class="value" ng-show="!alarm.placeholderVessel && !alarm.vessel && alarm.asset.ids.IRCS">{{alarm.asset.ids.IRCS}}</div>
+                <div class="value missing" ng-show="!alarm.placeholderVessel && !alarm.vessel && !alarm.asset.ids.IRCS">{{'alarms.position_report_asset_information_value_missing' | i18n}}</div>
             </div>
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_cfr' | i18n}}</label>
-                <div class="value">{{position.carrier.cfr}}</div>
+                <div class="value" ng-show="alarm.placeholderVessel">{{alarm.placeholderVessel.cfr}}</div>
+                <div class="value" ng-show="!alarm.placeholderVessel && alarm.vessel">{{alarm.vessel.cfr}}</div>
+                <div class="value" ng-show="!alarm.placeholderVessel && !alarm.vessel && alarm.asset.ids.CFR">{{alarm.asset.ids.CFR}}</div>
+                <div class="value missing" ng-show="!alarm.placeholderVessel && !alarm.vessel && !alarm.asset.ids.CFR">{{'alarms.position_report_asset_information_value_missing' | i18n}}</div>
             </div>
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_external_marking' | i18n}}</label>
-                <div class="value">{{position.carrier.externalMarking}}</div>
+                <div class="value" ng-show="alarm.placeholderVessel">{{alarm.placeholderVessel.externalMarking}}</div>
+                <div class="value" ng-show="!alarm.placeholderVessel && alarm.vessel">{{alarm.vessel.externalMarking}}</div>
+                <div class="value" ng-show="!alarm.placeholderVessel && !alarm.vessel && alarm.asset.ids.EXTERNAL_MARKING">{{alarm.asset.ids.EXTERNAL_MARKING}}</div>
+                <div class="value missing" ng-show="!alarm.placeholderVessel && !alarm.vessel && !alarm.asset.ids.EXTERNAL_MARKING">{{'alarms.position_report_asset_information_value_missing' | i18n}}</div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_name' | i18n}}</label>
-                <div class="value">{{position.carrier.name}}</div>
+                <div class="value" ng-show="alarm.placeholderVessel">{{alarm.placeholderVessel.name}}</div>
+                <div class="value" ng-show="!alarm.placeholderVessel && alarm.vessel">{{alarm.vessel.name}}</div>
+                <div class="value" ng-show="!alarm.placeholderVessel && !alarm.vessel && alarm.asset.ids.NAME">{{alarm.asset.ids.NAME}}</div>
+                <div class="value missing" ng-show="!alarm.placeholderVessel && !alarm.vessel && !alarm.asset.ids.NAME">{{'alarms.position_report_asset_information_value_missing' | i18n}}</div>
             </div>
         </div>
 
@@ -93,8 +108,11 @@
                                     <td>{{vessel.cfr}}</td>
                                     <td>{{vessel.externalMarking}}</td>
                                     <td class="textAlignRight">
-                                        <button type="button" class="btn btn-primary" ng-click="selectVessel(vessel)">
+                                        <button ng-show="!alarm.placeholderVessel || !vessel.equals(alarm.placeholderVessel)" type="button" class="btn btn-primary" ng-click="selectVessel(vessel)">
                                             {{"common.add" | i18n | uppercase}}
+                                        </button>
+                                        <button ng-show="alarm.placeholderVessel && vessel.equals(alarm.placeholderVessel)" type="button" class="btn btn-success" ng-click="unselectVessel(vessel)">
+                                            {{"common.added" | i18n | uppercase}}
                                         </button>
                                     </td>
                                 </tr>
@@ -120,29 +138,29 @@
         <div class="row">
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_status' | i18n}}</label>
-                <div class="value">{{position.status}}</div>
+                <div class="value">{{alarm.movement.movement.status}}</div>
             </div>
             <div class="col-md-9">
                 <label>{{'movement.manual_position_field_label_date_time' | i18n}}</label>
-                <div class="value">{{position.time | confDateFormat}}</div>
+                <div class="value">{{alarm.movement.time | confDateFormat}}</div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_latitude' | i18n}}</label>
-                <div class="value">{{position.position.latitude | confCoordinateFormat}}</div>
+                <div class="value">{{alarm.movement.movement.latitude | confCoordinateFormat}}</div>
             </div>
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_longitude' | i18n}}</label>
-                <div class="value">{{position.position.longitude | confCoordinateFormat}}</div>
+                <div class="value">{{alarm.movement.movement.longitude | confCoordinateFormat}}</div>
             </div>
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_measured_speed' | i18n}}</label>
-                <div class="value">{{position.speed}} {{"movement.manual_position_field_unit_knots" | i18n}}</div>
+                <div class="value">{{alarm.movement.movement.reportedSpeed}} {{"movement.manual_position_field_unit_knots" | i18n}}</div>
             </div>
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_course' | i18n}}</label>
-                <div class="value">{{position.speed}} {{"movement.manual_position_field_unit_degrees" | i18n}}</div>
+                <div class="value">{{alarm.movement.movement.reportedCourse}} {{"movement.manual_position_field_unit_degrees" | i18n}}</div>
             </div>
         </div>
     </div>

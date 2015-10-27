@@ -133,6 +133,7 @@
     "position_report_recipient" : "Recipient",
     "position_report_status" : "Status",
     "position_report_asset_information" : "Asset information",
+    "position_report_asset_information_value_missing" : "Missing",
     "position_report_position_information" : "Position information",
     "position_report_inactivate_position" : "Inactivate position (will not show on map)",
     "position_report_assign_asset_from_list" : "Assign asset from list",

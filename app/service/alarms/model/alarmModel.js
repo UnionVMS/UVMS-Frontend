@@ -13,6 +13,7 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
             ids : {}
         };
         this.vessel = undefined;
+        this.placeholderVessel = undefined;
     }
 
     Alarm.fromDTO = function(dto){
@@ -83,10 +84,19 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
         copy.guid = this.guid;
         copy.status = this.status;
         copy.openDate = this.openDate;
-        copy.resolveDate = this.resolveDate;
-        copy.resolveBy = this.resolveBy;
-        copy.alarmItems = this.alarmItems;
-        copy.movement = this.movement;
+        copy.resolvedDate = this.resolvedDate;
+        copy.resolvedBy = this.resolvedBy;
+        for(var i=0; i < this.alarmItems.length; i++){
+            copy.alarmItems.push(_.clone(this.alarmItems[i]));
+        }
+        copy.movement = this.movement.copy();
+        copy.asset = _.clone(this.asset);
+        if(angular.isDefined(this.vessel)){
+            copy.vessel = this.vessel.copy();
+        }
+        if(angular.isDefined(this.placeholderVessel)){
+            copy.placeholderVessel = this.placeholderVessel.copy();
+        }        
         return copy;
     };
 
