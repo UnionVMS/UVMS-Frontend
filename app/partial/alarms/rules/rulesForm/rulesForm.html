@@ -1,40 +1,24 @@
 <div class="ruleFormContainer" ng-controller="RulesformCtrl">
 
-    <div class="row" ng-hide="isCreateNewMode()">
-        <div class="col-md-7 valign">
-            <h3>{{'alarms.rules_view_header' | i18n}}</h3>
-        </div><!-- DO NOT REMOVE this comment!
-         --><div class="col-md-4 textAlignRight valign">
-            <div class="floatRight" ng-hide="disableForm()">
-                <button  type="submit" class="btn btn-primary" ng-click="updateRule()">{{'common.update' | i18n}}</button>
-            </div>
-        </div><!-- DO NOT REMOVE this comment!
-         --><div class="col-md-1 textAlignRight valign">
-            <i class="fa fa-sign-out signouticon" ng-click="toggleRuleDetails()" style="bottom: 0; left: 0;" title="{{'common.close' | i18n}}"></i>
-        </div>
-    </div>
-    <div class="row" ng-show="isCreateNewMode()">
-        <div class="col-md-9"><h3>{{'alarms.rules_add_new_header' | i18n}}</h3></div>
-        <div class="col-md-2 textAlignRight" ng-hide="disableForm()">
-            <button  type="submit" class="btn btn-primary" ng-click="createNewRule()" ng-disabled="waitingForCreateResponse">{{'common.create' | i18n}}</button>
-        </div>
-        <div class="col-md-1 textAlignRight">
-            <i class="fa fa-sign-out signouticon" ng-click="toggleAddNewRule()" title="{{'common.close' | i18n}}"></i>
-        </div>
-    </div>
-
     <div class="card" loading-indicator="waitingForCreateResponse">
-        <div class="row">
-            <div class="col-md-12 basicInformation">
-                <div ng-show="isCreateNewMode()">
-                    <b>{{'alarms.rules_add_new_header' | i18n | uppercase}}</b>
-                </div>
-                <div ng-hide="isCreateNewMode()">
-                    <b>{{'alarms.rules_view_header' | i18n | uppercase}}</b>
+        <div class="row card-header">
+            <div class="col-md-6">
+                <h5 ng-show="isCreateNewMode()">{{'alarms.rules_add_new_header' | i18n | uppercase}}</h5>
+                <h5 ng-hide="isCreateNewMode()">{{'alarms.rules_view_header' | i18n | uppercase}}</h5>
+            </div>
+            <div class="col-md-6 textAlignRight">
+                <div class="actions">
+                    <div ng-hide="disableForm()">
+                        <button ng-show="isCreateNewMode()" type="submit" class="btn btn-primary" ng-click="createNewRule()" ng-disabled="waitingForCreateResponse">{{'common.create' | i18n}}</button>
+                        <button ng-hide="isCreateNewMode()" type="submit" class="btn btn-primary" ng-click="updateRule()">{{'common.update' | i18n}}</button>
+                    </div>
+                    <div class="closeIcon" ng-click="toggleAddNewRule()">
+                        <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
+                    </div>
+                    <div class="clearfix"></div>
                 </div>
             </div>
         </div>
-
         <form name="ruleForm" method="post" novalidate>
             <fieldset ng-disabled="disableForm()">
                 <div class="row nameTypeContainer">
@@ -93,7 +77,7 @@
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group" ng-class="{'has-error': intervalForm.end.$invalid && (submitAttempted || intervalForm.end.$dirty)}">
-                                        <datepicker-input name="end" model="timeInterval.end" ng-required="true" time="true"></datepicker-input>
+                                        <datepicker-input name="end" model="timeInterval.end" ng-required="true" time="true" start-date="timeInterval.start"></datepicker-input>
                                         <input-validation-message types="required, date" input="intervalForm.end"></input-validation-message>
                                     </div>
                                 </div>
