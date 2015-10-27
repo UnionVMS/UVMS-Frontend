@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $state, $rootScope, $location, $localStorage, userService, renewloginpanel, infoModal, configurationService){
+angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $state, $rootScope, $location, $localStorage, userService, renewloginpanel, infoModal, configurationService, selectContextPanel){
     $scope.randomNumber = 5;
     $scope.user = {};
 
@@ -39,10 +39,16 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
     };
 
     $scope.switchContext = function(){
-        userService.switchContext().then(function(){
-            configurationService.clear();
-            init();
-        });
+        selectContextPanel.show().then(
+            function(selectedContext){
+                userService.setCurrentContext(selectedContext);
+                init();
+            },
+            function(error){
+
+                init();
+                $log.error(error);
+            });
     };
 
     //TODO: REMOVE THIS, ITS JUST USED FOR SHOWING FEATURES DURING DEVELOPMENT
