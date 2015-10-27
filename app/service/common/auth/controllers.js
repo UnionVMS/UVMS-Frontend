@@ -144,11 +144,13 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
 					//Check if capslock is on. No easy way to test for this
 					//Tests if letter is upper case and the shift key is NOT pressed.
 					if ( s.toUpperCase() === s && s.toLowerCase() !== s && !e.shiftKey ) {
-						if (!tooltipVisible)
+						if (!tooltipVisible){
 							$password.tooltip('show');
+                        }
 					} else {
-						if (tooltipVisible)
+						if (tooltipVisible){
 							$password.tooltip('hide');
+                        }
 					}				  
 					
 					//Hide the tooltip when moving away from the password field

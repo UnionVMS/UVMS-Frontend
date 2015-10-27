@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $state, $rootScope, $location, $localStorage, userService, renewloginpanel, configurationService, infoModal){
+angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $state, $rootScope, $location, $localStorage, userService, renewloginpanel, infoModal, configurationService){
     $scope.randomNumber = 5;
     $scope.user = {};
 
@@ -30,17 +30,12 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
     $scope.getUser();
 
     $scope.signOut = function(){
-        userService.logout();
-        configurationService.clear();
         init();
-        $state.go('app.today');
+        $state.go('uvmsLogout');
     };
 
     $scope.signIn = function(){
-        console.log("Signing in...");
-        renewloginpanel.show().then(function(){
-            init();
-        });
+        $state.go('uvmsLogin');
     };
 
     $scope.switchContext = function(){
@@ -61,7 +56,7 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
         //Sort the features
         features = _.sortBy(features, function(aFeature) {
           return [aFeature.applicationName, aFeature.featureName].join("_");
-        });        
+        });
 
         //Create html to show in modal
         features = features.reduce(function(message, aFeature){

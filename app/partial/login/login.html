@@ -1,63 +1,55 @@
-<div class="loginContainer">
-    <div class="container containerWithTopBottomPadding">
-        <div class="card">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h1>Union VMS</h1>
-                    </div>
-                </div>
+<div class="loginoutContainer container-fluid">
+    <div class="background"></div>
+    <div class="loginContent">
+            <div class="logoContainer">
+                <img src="assets/images/logo_uvms.png"></a>
+            </div>
 
-                <div class="row">
-                    <div class="col-md-12" ng-class="messageDivClass">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 ng-bind-html="'login.title' | i18n"></h1>
+                    <h2 ng-bind-html="'login.subtitle' | i18n"></h2>
+                </div>
+            </div>
+
+
+            <div class="formContainer">
+                <div class="row errorMessage">
+                    <div class="col-lg-6 col-md-8 col-sm-11">
                         <span ng-bind="actionMessage"></span>
                     </div>
                 </div>
 
-                <p><span ng-bind="infoMessage"></span></p>
                 <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="userId" class="col-md-3 control-label">Username</label>
-
-                            <div class="col-md-5">
-                                <input class="form-control" id="userId" name="userName" placeholder="Username" ng-model="login.userName" required>
-
-                                <div ng-show="loginForm.userName.$dirty">
-                                    <span class="text-danger small" ng-show="loginForm.userName.$error.required">Username is required</span>
-                                </div>
+                    <form novalidate name="loginForm">
+                    <div class="col-lg-2 col-md-3 col-sm-4">
+                            <div class="form-group" ng-class="{'has-error': (submitAttempted || loginForm.userName.$dirty) && loginForm.userName.$invalid}">
+                                <input class="form-control" id="userId" name="userName" placeholder="{{'login.username_placeholder' | i18n}}" ng-model="login.userName" required>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="password" class="col-md-3 control-label">Password</label>
 
-                            <div class="col-md-5">
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" ng-model="login.password" required>
-
-                                <div ng-show="loginForm.password.$dirty">
-                                    <span class="text-danger small" ng-show="loginForm.password.$error.required">Password is required</span>
-                                </div>
+                        <div class="col-lg-2 col-md-3 col-sm-4">
+                            <div class="form-group" ng-class="{'has-error': (submitAttempted || loginForm.password.$dirty) && loginForm.password.$invalid}">
+                                <input type="password" class="form-control" id="password" name="password" placeholder="{{'login.password_placeholder' | i18n}}" ng-model="login.password" required>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <button class="btn btn-primary" ng-disabled="loginForm.$invalid" ng-click="performLogin(login)">Login</button>
+
+                        <div class="col-lg-1 col-md-2 col-sm-3">
+                            <div class="form-group">
+                                <button class="btn btn-primary" type="submit" ng-click="performLogin(login)" ng-bind="'login.login_button_text' | i18n"></button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
+
                 </div>
 
-                <div class="form-group">
-                    <div class="col-md-5 col-md-offset-1">
-                        <a style="cursor: pointer; color : #d20000" ng-click="resetPassword()">forgotten password</a>
+                <div class="row">
+                    <div class="col-md-12">
+                        <a class="forgotPassword" ng-click="resetPassword()" ng-bind="'login.forgot_password_text' | i18n"></a>
                     </div>
                 </div>
+            </div>
 
         </div>
-    </div>
+
 </div>
