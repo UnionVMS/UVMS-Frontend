@@ -2012,7 +2012,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 											}
 										}
 									},
-									{ // development: local geoserver
+									/*{ // development: local geoserver
 										title: 'Test',
 										data: {
 											type: 'WMS',
@@ -2071,7 +2071,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 												}
 											}
 										}
-									},
+									},*/
 									{
 										title: 'RFMO',
 										data: {

@@ -287,11 +287,26 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     
     $scope.getAreaProperties = function(data){
         spatialRestService.getAreaProperties(data).then(function(response){
-            $scope.selectedAreas = response.data;
+            $scope.selectedAreas = $scope.buildSelectedAreasArray(response.data);
         }, function(error){
             //TODO warn the user
             console.log(error);
         });
+    };
+    
+    $scope.buildSelectedAreasArray = function(data){
+        var finalAreas = [];
+        for (var i = 0; i < data.length; i++){
+            var area = data[i];
+            for (var j = 0; j < selectedAreas.length; j++){
+                if (parseInt(selectedAreas[j].gid) === parseInt(data[i].gid) && selectedAreas[j].areaType === data[i].areaType){
+                    area.id = parseInt(selectedAreas[j].id);
+                }
+            }
+            finalAreas.push(area);
+        }
+        
+        return finalAreas;
     };
     
     //Add system areas by search
@@ -356,10 +371,20 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     $scope.exportSelectedAreas = function(){
         var exported = [];
         for (var i = 0; i < $scope.selectedAreas.length; i++){
-            exported.push({
-                gid: $scope.selectedAreas[i].gid,
-                areaType: $scope.selectedAreas[i].areaType
-            });
+            var area = {
+                gid: parseInt($scope.selectedAreas[i].gid),
+                areaType: $scope.selectedAreas[i].areaType    
+            };
+            
+            if (angular.isDefined($scope.selectedAreas[i].id)){
+                area.id = $scope.selectedAreas[i].id;
+            }
+            
+//            if (angular.isDefined($scope.selectedAreas[i].type)){
+//                area.type = $scope.selectedAreas[i].type;
+//            }
+            
+            exported.push(area);
         }
         
         return exported;
@@ -370,8 +395,19 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
         setSystemItems();
         setMap();
         if (angular.isDefined(selectedAreas) && selectedAreas.length > 0){
-            $scope.getAreaProperties(selectedAreas);
+            $scope.getAreaProperties($scope.buildAreaPropArray());
         }
+    };
+    
+    $scope.buildAreaPropArray = function(){
+        var areas = [];
+        for (var i = 0; i < selectedAreas.length; i++){
+            areas.push({
+                gid : selectedAreas[i].gid,
+                areaType: selectedAreas[i].areaType
+            });
+        }
+        return areas;
     };
     
     $modalInstance.rendered.then(function(){

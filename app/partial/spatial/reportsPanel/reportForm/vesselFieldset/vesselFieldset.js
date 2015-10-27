@@ -106,7 +106,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
         for (var i = 0; i < $scope.report.vesselsSelection.length; i++){
             if (angular.isDefined(vesselSrc.vesselId) && $scope.report.vesselsSelection[i].type === 'vessel' && vesselSrc.vesselId.guid === $scope.report.vesselsSelection[i].guid){
                 response = true;
-            } else if (angular.isDefined(vesselSrc.id) && $scope.report.vesselsSelection[i].type === 'vgroup' && vesselSrc.id === $scope.report.vesselsSelection[i].id){
+            } else if (angular.isDefined(vesselSrc.guid) && $scope.report.vesselsSelection[i].type === 'vgroup' && vesselSrc.guid === $scope.report.vesselsSelection[i].guid){
                 response = true;
             }
         }

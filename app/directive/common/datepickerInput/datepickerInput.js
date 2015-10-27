@@ -95,6 +95,8 @@ angular.module('unionvmsWeb')
                     if(angular.isDefined($scope.ngChangeCallback)){
                         $scope.ngChangeCallback($scope.model);
                     }
+                } else {
+                    $scope.model = undefined;
                 }
             }
         };

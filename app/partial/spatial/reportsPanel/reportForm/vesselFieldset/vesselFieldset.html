@@ -64,7 +64,7 @@
 									<td class="col-full-width" ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.externalMarking }}</td>
 									<td class="col-full-width" >{{ vessel.name }}</td>
 									<td class="col-full-width">
-										<button type="button" class="btn vesselbtn btn-xs pull-right" ng-click="viewDetails($index, 'SEARCH')">{{'spatial.reports_form_vessel_selection_table_details_btn' | i18n}}</button>
+										<button type="button" class="btn btn-primary btn-xs pull-right" ng-click="viewDetails($index, 'SEARCH')">{{'spatial.reports_form_vessel_selection_table_details_btn' | i18n}}</button>
 									</td>
 								</tr>
 							</tbody>
@@ -103,7 +103,7 @@
 									<td>{{ selection.name }}</td>
 									<td>{{ translateSelectionType(selection.type) }}</td>
 									<td>
-										<button type="button" class="btn vesselbtn btn-xs pull-right" ng-click="viewDetails($index, 'SELECTION')">{{'spatial.reports_form_vessel_selection_table_details_btn' | i18n}}</button>
+										<button type="button" class="btn btn-primary btn-xs pull-right" ng-click="viewDetails($index, 'SELECTION')">{{'spatial.reports_form_vessel_selection_table_details_btn' | i18n}}</button>
 									</td>
 									<td>
 										<button type="button" class="btn btn-danger btn-xs pull-right" title="{{'spatial.reports_form_vessel_selection_table_delete_btn_title' | i18n }}" ng-click="deleteSelection($index)"> <span class="fa fa-trash-o"></span></button>

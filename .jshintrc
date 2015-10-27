@@ -32,6 +32,7 @@
         "xit": true,
         "spyOn": true,
         "ol": true,
-		"Mustache": true
+		"Mustache": true,
+		"turf": true
     }
 }

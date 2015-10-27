@@ -17,6 +17,7 @@ angular.module('unionvmsWeb').directive('resize', function($window, $document) {
 		            var footerHeight = $document[0].getElementsByTagName('footer')[0].offsetHeight;
 		            var headerHeight = $document[0].getElementsByTagName('header')[0].offsetHeight;
 		            var newHeight = newValue.h - headerHeight - footerHeight - offset;
+		            
 		            if (newHeight < minHeight) {
 		                newHeight = minHeight;
 		            }

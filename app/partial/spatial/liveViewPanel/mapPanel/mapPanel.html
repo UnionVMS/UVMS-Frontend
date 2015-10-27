@@ -1,11 +1,43 @@
 <div ng-controller="MapCtrl">
 	<div class="map-container">
 		<div ng-include="'partial/spatial/liveViewPanel/mapPanel/layerPanel/layerPanel.html'"></div>
-		<div id="map" class="map" ng-controller="MappanelCtrl" resize ng-style="doResize(105, 340)" tabIndex="0"></div>
+		<div id="map-toolbar">
+			<div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
+				<button type="button" ng-class="{active: activeControl === 'measure'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_measure_distance' | i18n }}" ng-click="toggleToolbarBtn('measure')"><span class="fa fa-arrows-h"></span></button>
+				<!-- <button type="button" ng-class="{active: activeControl === 'other'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_measure_distance' | i18n }}" ng-click="toggleToolbarBtn('other')">Another Control</button> -->
+			</div>
+		</div>
+		<div id="map" class="map" ng-controller="MappanelCtrl" resize ng-style="doResize(137, 340)" tabIndex="0">
+			<div id="measure-config" ng-show="showMeasureConfigWin">
+		    	<div class="row">
+		    		<div class="col-md-12">
+		    			<span class="fa fa-bullseye drag-icon pull-right"></span>
+		    		</div>
+		    	</div>
+		    	<div class="row">
+		    		<div class="form-group col-md-12 measure-content">
+		    			<label>{{'spatial.map_measuring_units_label' | i18n }}</label>
+		    			<dropdown ng-model="measureConfigs.units" items="measuringUnits" ng-disabled="measureConfigs.disabled"></dropdown>
+		    		</div>
+		    		<div class="form-group col-md-12 measure-content">
+		    			<label>{{'spatial.map_speed_label' | i18n }}</label>
+		    			<div class="unit-input">
+		    				<input class="form-control" ng-model="measureConfigs.speed" name="selectedSpeed" min="0" type="number" ng-disabled="measureConfigs.disabled">
+		    				<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
+		    			</div>
+		    		</div>
+		    		<div class="form-group col-md-12 measure-content">
+		    			<label>{{'spatial.map_start_date_label' | i18n }}</label>
+		    			<datepicker-input time="true" model="measureConfigs.startDate" name="selectedDate" ng-disabled="measureConfigs.disabled"></datepicker-input>
+		    		</div>
+		    	</div>
+		    </div>
+		</div>
 		<div id="popup" class="ol-popup">
 	      <a href ng-click="closePopup()" id="popup-closer" class="ol-popup-closer"><span class="fa fa-times"></span></a>
 	      <div id="popup-content"></div>
 	    </div>
+	    
 	</div>
 	<div class="container map-bottom">
 		<div class="row">

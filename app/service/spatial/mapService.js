@@ -136,8 +136,9 @@ ol.control.HistoryControl = function(opt_options){
 };
 ol.inherits(ol.control.HistoryControl, ol.control.Control);
 
-angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $timeout, $templateRequest) {
+angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $timeout, $templateRequest, spatialHelperService) {
 	var ms = {};
+	ms.sp = spatialHelperService;
 
 	//Initialize the map
 	ms.setMap = function(config){
@@ -400,12 +401,24 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         layer.clear(true);
         layer.addFeature(feature);
     };
-
+    
+    //Add vector layer for measuring purposes
+    ms.addMeasureLayer = function(){
+        var layer = new ol.layer.Vector({
+            type: 'measure-vector',
+            source: new ol.source.Vector(),
+            style: ms.setMeasureStyle
+        });
+        ms.map.addLayer(layer);
+        
+        return layer;
+    };
+    
     //STYLES
     //Highlight styles
     ms.setHighlightStyle = function(feature, resolution){
         var style;
-        var color = '#FF9966';
+        var color = '#3399CC';
         var geomType = feature.getGeometry().get('GeometryType');
         if (geomType === 'Point'){
             style = new ol.style.Style({
@@ -421,12 +434,55 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             style = new ol.style.Style({
                 stroke: new ol.style.Stroke({
                     color: color,
-                    width: 6
+                    width: 8
                 })
             });
         }
 
         return [style];
+    };
+    
+    //Measure styles
+    ms.setMeasureStyle = function(feature, resolution){
+        var styles = [];
+        var coords = feature.getGeometry().getCoordinates();
+        coords.shift();
+        
+        var bufferLineStyle = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: 'rgba(255, 255, 255, 0.8)',
+                width: 4
+            })
+        });
+        styles.push(bufferLineStyle);
+        
+        var lineStyle = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: 'rgba(120, 120, 120, 1)',
+                width: 2
+            }) 
+        });
+        styles.push(lineStyle);
+        
+        var pointStyle = new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: 5,
+                fill: new ol.style.Fill({
+                    color: 'rgba(120, 120, 120, 1)',
+                    
+                }),
+                stroke: new ol.style.Stroke({
+                    color: 'rgba(255, 255, 255, 0.8)',
+                    width: 2
+                })
+            }),
+            geometry: function(){
+                return new ol.geom.MultiPoint(coords);
+            }
+        });
+        styles.push(pointStyle);
+        
+        return styles;
     };
 
     //VMS positions style
@@ -443,7 +499,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 })
             })
         });
-
+        
+        
         return [style];
     };
 
@@ -699,7 +756,232 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	ms.panTo = function(coords){
 	    ms.map.getView().setCenter(coords);
 	};
-
+	
+	//Measuring interaction
+	ms.measureInteraction = {};
+	ms.startMeasureControl = function(){
+	    var layer = ms.getLayerByType('measure-vector');
+        if (angular.isDefined(layer)){
+            ms.map.removeLayer(layer);
+        }
+        layer = ms.addMeasureLayer();
+        var draw = new ol.interaction.Draw({
+            source: layer.getSource(),
+            type: 'LineString',
+            style: new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: 'rgba(255, 255, 255, 0.2)'
+                }),
+                stroke: new ol.style.Stroke({
+                    color: 'rgba(0, 0, 0, 0.5)',
+                    lineDash: [10, 10],
+                    width: 2
+                }),
+                image: new ol.style.Circle({
+                    radius: 5,
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(0, 0, 0, 0.7)'
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'rgba(255, 255, 255, 0.2)'
+                    })
+                })
+            })
+        });
+        
+        ms.map.addInteraction(draw);
+        ms.registerDrawEvents(draw, layer);
+        ms.measureInteraction = draw;
+	};
+	
+	ms.measurePointsLength = 0;
+	ms.measureOverlays = [];
+	ms.measureETA = undefined;
+	ms.registerDrawEvents = function(draw, layer){
+	    var listener;
+	    draw.on('drawstart', function(evt){
+	        //Clear any vector features previous drawn
+	        layer.getSource().clear();
+	        ms.clearMeasureOverlays();
+	        
+	        //Disable user input on config window
+	        ms.sp.measure.disabled = true;
+	        
+	        var feature = evt.feature;
+	        ms.measurePointsLength = feature.getGeometry().getCoordinates().length - 1; 
+	        
+	        listener = feature.getGeometry().on('change', function(evt){
+	            var coords = evt.target.getCoordinates();
+	            if (coords.length !== ms.measurePointsLength + 1){
+	                ms.measurePointsLength += 1;
+	                var data = ms.calculateLengthAndBearingAndETA(evt.target);
+	                if (angular.isDefined(data)){
+	                    ms.createMeasureTooltip(data);
+	                }
+	            }
+	        });
+	    });
+	    
+	    draw.on('drawend', function(evt){
+	        ms.measurePointsLength = 0;
+	        ms.sp.measure.disabled = false;
+	        ol.Observable.unByKey(listener);
+	        if (ms.measureOverlays.length > 1){
+	            var lastOverlay = ms.measureOverlays.pop();
+	            ms.map.removeOverlay(lastOverlay);
+	        }
+	        ms.measureETA = undefined;
+	    });
+	};
+	
+	//Calculate length over the sphere and bearing
+	ms.calculateLengthAndBearingAndETA = function(line){
+	    var coords = line.getCoordinates();
+	    var sourceProj = ms.getMapProjectionCode();
+	    
+	    //Calculate distance
+	    if (coords.length > 2){
+    	    var c1 = ms.pointCoordsToTurf(ol.proj.transform(coords[coords.length - 3], sourceProj, 'EPSG:4326'));
+    	    var c2 = ms.pointCoordsToTurf(ol.proj.transform(coords[coords.length - 2], sourceProj, 'EPSG:4326'));
+    	    var units = 'kilometers';
+    	    var displayUnits = 'km';
+    	    if (ms.sp.measure.units === 'mi'){
+    	        units = 'miles';
+    	        displayUnits = 'mi';
+    	    }
+    	    
+    	    var distance = turf.distance(c1, c2, units);
+    	    var bearing = turf.bearing(c1, c2);
+    	    
+    	    //Calculate ETA
+            if(angular.isDefined(ms.sp.measure.speed) && angular.isDefined(ms.sp.measure.startDate) && ms.sp.measure.speed != null && ms.sp.measure.speed > 0){
+                //Convert knots to kmh
+                var avgSpeed = ms.sp.measure.speed * 1.852;
+                
+                //Make sure we use distance in km
+                var distanceForETA;
+                if (displayUnits === 'mi'){
+                    distanceForETA = distance * 1.609344;
+                } else {
+                    distanceForETA = distance;
+                }
+                
+                //Calculate necessary time for the specified distance
+                var timeSpent = distanceForETA / avgSpeed; //in hours
+                
+                if (!angular.isDefined(ms.measureETA)){
+                    ms.measureETA = moment.utc(ms.sp.measure.startDate);
+                }
+                ms.measureETA.add(timeSpent, 'hours');
+            }
+    	    
+    	    
+    	    if (ms.sp.measure.units === 'nm'){
+    	        displayUnits = 'nm';
+    	        distance = distance * 1000 / 1852;
+    	    }
+    	    
+    	    if (distance < 1 && displayUnits === 'km'){
+    	        distance = distance * 1000;
+    	        displayUnits = 'm';
+    	    }
+    	    
+    	    if (bearing < 0){
+    	        bearing = bearing + 360;
+    	    }
+    	    
+    	    distance = Math.round(distance * 100) / 100; //2 decimals
+    	    bearing = Math.round(bearing * 100) / 100; //2 decimals
+    	    
+    	    
+    	    var response = {
+    	        distance: distance,
+    	        dist_units: displayUnits, 
+    	        bearing: bearing,
+    	        bearing_units: '\u00b0',
+    	        anchorPosition: coords[coords.length - 2]
+    	    };
+    	    
+    	    if (angular.isDefined(ms.measureETA)){
+    	        response.eta = ms.measureETA.format('YYYY-MM-DD HH:mm:ss');
+    	    }
+    	    
+    	    return response;
+	    }
+	};
+	
+	ms.createMeasureTooltip = function(data){
+	    var el = document.createElement('div');
+	    el.className = 'tooltip tooltip-small';
+	    
+	    data.dist_title = locale.getString('spatial.map_measure_distance_title');
+	    data.bearing_title = locale.getString('spatial.map_measure_bearing_title');
+	    if (angular.isDefined(data.eta)){
+	        data.eta_title = locale.getString('spatial.map_measure_eta_title');
+	        el.className = 'tooltip tooltip-large';
+	    }
+	   
+	    var templateURL = 'partial/spatial/templates/measure_tooltip.html';
+	    $templateRequest(templateURL).then(function(template){
+            var rendered = Mustache.render(template, data);
+            el.innerHTML = rendered;
+        }, function(){
+            //error fetching template
+        });
+	    
+	    var offset = [];
+	    if (data.bearing >= 0 && data.bearing <= 90){
+	        offset = [-135, -45];
+	        if (angular.isDefined(data.eta)){
+	            offset = [-163, -63];
+	        }
+	    } else if (data.bearing > 90 && data.bearing <= 180){
+	        offset = [6, -40];
+	        if (angular.isDefined(data.eta)){
+                offset = [6, -57];
+            }
+	    } else if (data.bearing > 180 && data.bearing <= 270){
+	        offset = [2, 8];
+	    } else {
+	        offset = [-135, 6];
+	        if (angular.isDefined(data.eta)){
+                offset = [-163, 6];
+            }
+	    }
+	    
+	    var tooltip = new ol.Overlay({
+	        element: el,
+	        offset: offset,
+	        insertFirst: false
+	    });
+	    
+	    ms.map.addOverlay(tooltip);
+	    tooltip.setPosition(data.anchorPosition);
+	    ms.measureOverlays.push(tooltip);
+	};
+	
+	ms.clearMeasureOverlays = function(){
+	    for (var i = 0; i < ms.measureOverlays.length; i++){
+	        ms.map.removeOverlay(ms.measureOverlays[i]);
+	    }
+	    ms.measureOverlays = [];
+	};
+	
+	ms.clearMeasureControl = function(){
+	    ms.clearMeasureOverlays();
+	    ms.map.removeInteraction(ms.measureInteraction);
+	    ms.map.removeLayer(ms.getLayerByType('measure-vector'));
+	};
+	
+	ms.pointCoordsToTurf = function(coords){
+	    var format = new ol.format.GeoJSON();
+        var point = new ol.Feature(
+            new ol.geom.Point(coords)
+        );
+        
+        return format.writeFeatureObject(point);
+	};
+	
 	//Popup to display vector info
 	ms.addPopupOverlay = function(){
 	    var overlay = new ol.Overlay({

@@ -77,10 +77,10 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                 }
             },
             data: {
-                access: ACCESS.AUTH
+//                access: ACCESS.AUTH
             },
             resolve: {
-                currentContext : currentUserContextPromise,
+                //currentContext : currentUserContextPromise,
                 locales : loadLocales
             }
         })
@@ -159,7 +159,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                 }
             },
             data: {
-                access: 'viewVesselsAndMobileTerminals'
+                //access: 'viewVesselsAndMobileTerminals'
             }
         })
         .state('app.assets-id', {
