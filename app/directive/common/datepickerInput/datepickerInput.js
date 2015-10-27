@@ -125,9 +125,4 @@ angular.module('unionvmsWeb')
             watchModelChange = true;
         });
 
-
-        //Watch changes of the startDate
-        $scope.$watch('startDate', function(newValue) {
-            console.log("startDate changed to: " +newValue);
-        });
 });
