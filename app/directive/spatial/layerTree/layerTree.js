@@ -6,26 +6,30 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 		//controller: 'LayerpanelCtrl',
 		templateUrl: 'directive/spatial/layerTree/layerTree.html',
 		link: function(scope, element, attrs, fn) {
-			scope.mapService = mapService;
+			// store maps layers for updating map.
+			var mapLayers = null;
+
+			// used to implement selectMode 1 for basemaps
+			var lastSelectedBasemapNode = null;
 
 			// check for impossible selections, restrict deselecting radiobutton
-			scope.beforeSelectHandler = function( event, data ) {
+			var beforeSelectHandler = function( event, data ) {
 				var selected = scope.$tree.getSelectedNodes(),
 						basemaps = selected.filter( function( node ) {
 							return ( node.data.isBaseLayer && node.isSelected() );
 						});
 
-				if ( scope.lastSelectedBasemapNode === data.node &&
+				if ( lastSelectedBasemapNode === data.node &&
 				 			basemaps.length === 1 ) {
 					return ( false );
 				}
 			};
 
 			// call tree and map update
-			scope.selectHandler = function( event, data ){
-				scope.updateBasemap( event, data );
+			var selectHandler = function( event, data ){
+				updateBasemap( event, data );
 				if (data.node.hasChildren() === true){
-				    scope.loopFolderNodes(data.node);
+				    loopFolderNodes(data.node);
 				} else {
 				    data.node.data.mapLayer.set( 'visible', data.node.isSelected() );
 				}
@@ -34,26 +38,61 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
                 scope.$parent.$broadcast('reloadLegend');
 			};
 
-			scope.loopFolderNodes = function(parent){
+			var loopFolderNodes = function(parent){
 			    $.each(parent.children, function(index, node){
 			        if (node.hasChildren()){
-			            scope.loopFolderNodes(node);
+			            loopFolderNodes(node);
 			        } else {
 			            node.data.mapLayer.set('visible', node.isSelected());
 			        }
 			    });
 			};
 
-			scope.renderNodeHandler = function( event, data ) {
-				var $title;
+			var renderNodeHandler = function( event, data ) {
+				exchangeCheckboxWithRadio( event, data );
 
-				scope.exchangeCheckboxWithRadio( event, data );
-
-				if ( !data.node.data || !data.node.data.contextItems ) {
+				if ( !data.node.data ) {
 					return;
 				}
 
-				$title = $( data.node.span ).children( '.fancytree-title' );
+				if ( data.node.data.hasOwnProperty( 'contextItems' ) ) {
+					addContextMenu( data );
+				}
+
+				if ( data.node.data.popupEnabled === true ) {
+					addInfo( data );
+				}
+			};
+
+			var addInfo = function( data ) {
+				var $title = $( data.node.span ).children( '.fancytree-title' ),
+						$info = $title.children('.fa.fa-info');
+
+				if ( $info.length > 0 ) {
+					return;
+				}
+
+				$( '<span class="fa fa-info fancytree-clickable "></span>' )
+					.appendTo( $title )
+					.on( 'click', function(event){
+						var node,
+								$target = $( event.target ),
+								active = $target.hasClass( 'info-selected' );
+
+						$('.info-selected').removeClass( 'info-selected' );
+
+						if ( !active ) {
+							node = $.ui.fancytree.getNode( event.target );
+							$target.addClass( 'info-selected' );
+							mapService.activeLayerType = node.data.type;
+						} else {
+							mapService.activeLayerType = undefined;
+						}
+					});
+			};
+
+			var addContextMenu = function( data ) {
+				var $title = $( data.node.span ).children( '.fancytree-title' );
 
 				if ( $title.hasClass( 'layertree-menu' ) ) {
 					return;
@@ -61,13 +100,11 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 
 				$title
 					.addClass( 'layertree-menu' )
-					.append( '<span class="fa fa-caret-down"></span>' );
+					.append( '<span class="fa fa-caret-down fancytree-clickable "></span>' );
 			};
 
-			// store maps layers for updating map.
-			scope.mapLayers = null;
 			// Update map on layer select and initial creation
-			scope.updateMap = function() {
+			var updateMap = function() {
 				var source;
 
 				if ( !scope.$tree ) {
@@ -75,58 +112,55 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				}
 
 				source = scope.$tree.toDict( true ).children;
-				scope.reverse( source );
-				scope.mapLayers = scope.mapService.map.getLayers().getArray();
-				scope.addLayers( source );
+				reverseTreeSource( source );
+				mapLayers = mapService.map.getLayers().getArray();
+				addLayers( source );
 			};
 
 			// reverse nested array
-			scope.reverse = function( array ) {
+			var reverseTreeSource = function( array ) {
 				array = array.reverse();
 				$.each( array, function( index, value ) {
 					if ( value.folder ) {
-						scope.reverse( value.children );
+						reverseTreeSource( value.children );
 					}
 				});
 			};
 
 			// add and reorder layers
-			scope.addLayers = function( folder ) {
+			var addLayers = function( folder ) {
 				var layersByTitle, layer, treeNode;
 
 				$.each( folder, function( index, value ) {
 					if ( value.folder ) {
-						scope.addLayers( value.children );
+						addLayers( value.children );
 						return ( true );// = continue;
 					}
 
 					if ( !value.data ) { return ( true ); }
 
-					layersByTitle = scope.mapLayers.filter( function( layer ){
+					layersByTitle = mapLayers.filter( function( layer ){
 					    return layer.get( 'title' ) === value.data.title;
 					});
 
 					layer = layersByTitle[ 0 ];
 
 					if ( !layer ) {
-						layer = scope.mapService.createLayer( value.data );
+						layer = mapService.createLayer( value.data );
 						if (!layer) { return ( true ); }// layer creation failed
 					}
 
 					treeNode = scope.$tree.getNodeByKey( value.key );
 					treeNode.data.mapLayer = layer;
 
-					scope.mapService.map.removeLayer( layer );// remove to have it reordered
+					mapService.map.removeLayer( layer );// remove to have it reordered
 					layer.set( 'visible', value.selected );// don't request tiles if not selected
-					scope.mapService.map.addLayer( layer );
+					mapService.map.addLayer( layer );
 				});
 			};
 
-			// used to implement selectMode 1 for basemaps
-			scope.lastSelectedBasemapNode = null;
-
 			// apply radiobutton behaviour and set basemap
-			scope.updateBasemap = function( event, data ) {
+			var updateBasemap = function( event, data ) {
 				var $span, classStr,
 						layerData = data.node.data;
 
@@ -136,9 +170,9 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 
 				// get currently selected node and deselect it
 				if ( scope.$tree &&
-							scope.lastSelectedBasemapNode &&
-							scope.lastSelectedBasemapNode !== data.node ) {
-					scope.lastSelectedBasemapNode.setSelected( false );
+							lastSelectedBasemapNode &&
+							lastSelectedBasemapNode !== data.node ) {
+					lastSelectedBasemapNode.setSelected( false );
 				}
 
 				// get checkbox element and change it to radiobutton
@@ -150,13 +184,13 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				classStr = data.node.selected ? 'fa-dot-circle-o' : 'fa-circle-thin';
 				$span.addClass( classStr );
 
-				if ( scope.lastSelectedBasemapNode !== data.node && data.node.selected ) {
-					scope.lastSelectedBasemapNode = data.node;
+				if ( lastSelectedBasemapNode !== data.node && data.node.selected ) {
+					lastSelectedBasemapNode = data.node;
 				}
 			};
 
 			// exchange checkboxes with radiobuttons
-			scope.exchangeCheckboxWithRadio = function ( event, data ) {
+			var exchangeCheckboxWithRadio = function ( event, data ) {
 				var $basemaps = jQuery( '.layertree-basemap' );
 
 				$basemaps.each( function( index ) {
@@ -172,17 +206,17 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				});
 			};
 
-			scope.updateLayerTreeSource = function( event, source ) {
+			var updateLayerTreeSource = function( event, source ) {
 				scope.$tree.reload( source );
-				scope.updateMap();
-				scope.setLocale();
+				updateMap();
+				setLocale();
 			};
 
-			scope.addLayerTreeNode = function ( event, node ) {
+			var addLayerTreeNode = function ( event, node ) {
 				var root = scope.$tree.getRootNode();
 				root.addChildren( node, scope.$tree.getFirstChild() );
-				scope.updateMap();
-				scope.setLocale();
+				updateMap();
+				setLocale();
 			};
 
 			// mocking source
@@ -197,7 +231,8 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 							data: {
 								excludeDnd: true,
 								title: 'Positions',
-								type: 'POSITIONS',
+								type: 'vmspos',
+								popupEnabled: true,
 								geoJson:{
 									"features": [
 										{
@@ -1310,7 +1345,8 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 							data: {
 								excludeDnd: true,
 								title: 'Segments',
-								type: 'SEGMENTS',
+								type: 'vmsseg',
+								popupEnabled: true,
 								geoJson:{
 									"features": [
 										{
@@ -2195,7 +2231,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			};
 
 			// initially create or update tree
-			scope.createTree = function( source ){
+			var createTree = function( source ){
 				element.fancytree({
 					icons: false,
 					extensions: [ 'dnd', 'glyph', 'wide' ],
@@ -2231,7 +2267,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 						dragStop: function( node, data ) {},
 						dragDrop: function( node, data ) {
 							data.otherNode.moveTo( node, data.hitMode );
-							scope.updateMap();
+							updateMap();
 							//FIXME we might do this on a layer basis which would probably be better
 												scope.$parent.$broadcast('reloadLegend');
 						}
@@ -2244,43 +2280,38 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 						iconSpacing: '0.75em', // Adjust this if @fancy-icon-spacing != '3px'
 						levelOfs: '1em'     // Adjust this if ul padding != '16px'
 					},
-					beforeSelect: scope.beforeSelectHandler,
-					select: scope.selectHandler,
-					createNode: scope.updateBasemap,
-					renderNode: scope.renderNodeHandler,
+					beforeSelect: beforeSelectHandler,
+					select: selectHandler,
+					createNode: updateBasemap,
+					renderNode: renderNodeHandler,
 					// fancytree updates the checkboxes on these events
-					expand: scope.exchangeCheckboxWithRadio,
-					init: scope.exchangeCheckboxWithRadio,
-					click: scope.exchangeCheckboxWithRadio,
-					activate: scope.exchangeCheckboxWithRadio,
-					blurTree: scope.exchangeCheckboxWithRadio
+					expand: exchangeCheckboxWithRadio,
+					init: exchangeCheckboxWithRadio,
+					click: exchangeCheckboxWithRadio,
+					activate: exchangeCheckboxWithRadio,
+					blurTree: exchangeCheckboxWithRadio
 				});
 
 				scope.$tree = $( element ).fancytree( 'getTree' );
 
-				scope.updateMap();
+				updateMap();
 
-				$( '.fancytree-title' ).each( function( index ) {
-					var key = $( this ).html();
-					$( this ).html( locale.getString( key ) );
+				locale.ready( 'spatial' ).then( function() {
+						setLocale();
 				});
 			};
 
-			scope.createTree( scope.source );
-
-			scope.$on( 'updateLayerTreeSource', scope.updateLayerTreeSource );
-			scope.$on( 'addLayerTreeNode', scope.addLayerTreeNode );
-
-			scope.setLocale = function() {
+			var setLocale = function() {
 				$( '.fancytree-title' ).each( function( index ) {
-					var key = $( this ).html();
-					$( this ).html( locale.getString( key ) );
+					var key = this.firstChild.nodeValue;
+					this.firstChild.nodeValue = locale.getString( key );
 				});
 			};
 
-			locale.ready( 'spatial' ).then( function() {
-					scope.setLocale();
-			});
+			createTree( scope.source );
+
+			scope.$on( 'updateLayerTreeSource', updateLayerTreeSource );
+			scope.$on( 'addLayerTreeNode', addLayerTreeNode );
 		}
 	};
 });

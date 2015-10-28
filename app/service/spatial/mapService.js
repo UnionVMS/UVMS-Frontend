@@ -145,6 +145,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	    ms.controls = [];
 	    ms.interactions = [];
 	    ms.overlay = ms.addPopupOverlay();
+      // enables popup on positions and segments
+      ms.activeLayerType = undefined;
 
 	    var view = new ol.View({
 	        projection: ms.setProjection(config.map.projection.epsgCode, config.map.projection.units, config.map.projection.global),
@@ -182,25 +184,21 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
 	    map.on('singleclick', function(evt){
 	        var coordinate = evt.coordinate;
-
-	        //FIXME this should be set dynamically
-	        var activeLayerType = 'vmspos'; //vmspos | vmsseg
-
 	        var features = [];
 	        map.forEachFeatureAtPixel(evt.pixel, function(feature, layer){
-	            if (layer.get('type') === activeLayerType){
+	            if (layer.get('type') === ms.activeLayerType){
 	                features.push(feature.getProperties());
 	            }
 	        });
 
 	        if (features.length > 0){
-	            var templateURL = 'partial/spatial/templates/' + activeLayerType + '.html';
+	            var templateURL = 'partial/spatial/templates/' + ms.activeLayerType + '.html';
 
 	            $templateRequest(templateURL).then(function(template){
 	                var data;
-	                if (activeLayerType === 'vmspos'){
+	                if (ms.activeLayerType === 'vmspos'){
 	                    data = ms.setPositionsObjPopup(features[0]);
-	                } else if (activeLayerType === 'vmsseg'){
+	                } else if (ms.activeLayerType === 'vmsseg'){
 	                    data = ms.setSegmentsObjPopup(features[0]);
 	                }
 
@@ -224,7 +222,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     //create layer, returns ol.layer.* or undefined
     ms.createLayer = function( config ){
         var layer;
-        console.log( 'createLayer ' + config.title );
         switch (config.type) {
             case 'OSM':
                 layer = ms.createOsm( config );
@@ -235,10 +232,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             case 'WMS':
                 layer = ms.createWms(config);
                 break;
-            case 'SEGMENTS':
+            case 'vmsseg'://'SEGMENTS':
                 layer = ms.createSegmentsLayer( config );
                 break;
-            case 'POSITIONS':
+            case 'vmspos'://'POSITIONS':
                 layer = ms.createPositionsLayer( config );
                 break;
             default:
@@ -307,7 +304,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
       var geojson = config.geoJson,
           layer = new ol.layer.Vector({
             title: config.title,
-            type: 'vmsseg',
+            type: config.type,
             isBaseLayer: false,
             source: new ol.source.Vector({
               features: (new ol.format.GeoJSON()).readFeatures(geojson, {
@@ -325,7 +322,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
       var geojson = config.geoJson,
           layer = new ol.layer.Vector({
             title: config.title,
-            type: 'vmspos',
+            type: config.type,
             isBaseLayer: false,
             source: new ol.source.Vector({
               features: (new ol.format.GeoJSON()).readFeatures(geojson, {
