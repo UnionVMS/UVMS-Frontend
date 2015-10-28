@@ -158,5 +158,7 @@
 	"layer_tree_background_layers": "Background layers",
 	"layer_tree_positions": "Positions",
 	"layer_tree_segments": "Segments",
-	"layer_tree_additional_cartography": "Additional cartography"
+	"layer_tree_additional_cartography": "Additional cartography",
+	"layer_tree_tip_popup": "Toggle info popup",
+	"layer_tree_tip_context_menu": "Options"
 }

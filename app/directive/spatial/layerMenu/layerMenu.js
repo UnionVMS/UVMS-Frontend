@@ -62,7 +62,9 @@ angular.module('unionvmsWeb').directive('layerMenu', function() {
 						data: {
 							excludeDnd: true,
 							title: 'Positions',
-							type: 'POSITIONS',
+							type: 'vmspos',//'POSITIONS',
+							popupEnabled: true,
+							popupTip: 'spatial.layer_tree_tip_popup',
 							geoJson:{
 								"features": [
 									{
@@ -1175,7 +1177,9 @@ angular.module('unionvmsWeb').directive('layerMenu', function() {
 						data: {
 							excludeDnd: true,
 							title: 'Segments',
-							type: 'SEGMENTS',
+							type: 'vmsseg',//'SEGMENTS',
+							popupEnabled: true,
+							popupTip: 'spatial.layer_tree_tip_popup',
 							geoJson:{
 								"features": [
 									{
@@ -1849,6 +1853,7 @@ angular.module('unionvmsWeb').directive('layerMenu', function() {
 			                    'STYLES': 'eez'
 			                    //'cql_filter': "sovereign='Portugal' OR sovereign='Poland' OR sovereign='Bulgaria' OR sovereign='Belgium'"
 			                },
+											contextTip: 'spatial.layer_tree_tip_context_menu',
 											contextItems: {
 												header: {
 													name: 'Style options',
@@ -1895,6 +1900,7 @@ angular.module('unionvmsWeb').directive('layerMenu', function() {
 			                    'STYLES': 'polygon'
 			                    //'cql_filter': "sovereign='Portugal' OR sovereign='Poland' OR sovereign='Bulgaria' OR sovereign='Belgium'"
 			                },
+											contextTip: 'spatial.layer_tree_tip_context_menu',
 											contextItems: {
 												headerA: {
 													name: 'Options',
@@ -1953,6 +1959,7 @@ angular.module('unionvmsWeb').directive('layerMenu', function() {
 													'TILED': true,
 													'STYLES': ''
 											},
+											contextTip: 'spatial.layer_tree_tip_context_menu',
 											contextItems: {
 												header: {
 													name: 'Style options',
@@ -2007,6 +2014,7 @@ angular.module('unionvmsWeb').directive('layerMenu', function() {
 						folder: true,
 						expanded: true,
 						unselectable: true,
+						hideCheckbox: true,
 						key: 'basemap',
 						children: [
 							{

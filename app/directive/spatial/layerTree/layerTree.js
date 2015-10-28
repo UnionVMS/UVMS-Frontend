@@ -35,17 +35,17 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				}
 
 				//FIXME we might do this on a layer basis which would probably be better
-                scope.$parent.$broadcast('reloadLegend');
+        scope.$parent.$broadcast('reloadLegend');
 			};
 
 			var loopFolderNodes = function(parent){
-			    $.each(parent.children, function(index, node){
-			        if (node.hasChildren()){
-			            loopFolderNodes(node);
-			        } else {
-			            node.data.mapLayer.set('visible', node.isSelected());
-			        }
-			    });
+		    $.each(parent.children, function(index, node){
+	        if (node.hasChildren()){
+            loopFolderNodes(node);
+	        } else {
+            node.data.mapLayer.set('visible', node.isSelected());
+	        }
+		    });
 			};
 
 			var renderNodeHandler = function( event, data ) {
@@ -64,15 +64,18 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				}
 			};
 
+			// add info button to activate info-popup on layer
 			var addInfo = function( data ) {
-				var $title = $( data.node.span ).children( '.fancytree-title' ),
+				var	tip,
+						$title = $( data.node.span ).children( '.fancytree-title' ),
 						$info = $title.children('.fa.fa-info');
 
 				if ( $info.length > 0 ) {
 					return;
 				}
 
-				$( '<span class="fa fa-info fancytree-clickable "></span>' )
+				tip = data.node.data.popupTip;
+				$( '<span class="fa fa-info fancytree-clickable" title="'+tip+'"></span>' )
 					.appendTo( $title )
 					.on( 'click', function(event){
 						var node,
@@ -91,16 +94,19 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 					});
 			};
 
+			// add button to open context menu on layer
 			var addContextMenu = function( data ) {
-				var $title = $( data.node.span ).children( '.fancytree-title' );
+				var tip,
+						$title = $( data.node.span ).children( '.fancytree-title' );
 
 				if ( $title.hasClass( 'layertree-menu' ) ) {
 					return;
 				}
 
+				tip = data.node.data.contextTip;
 				$title
 					.addClass( 'layertree-menu' )
-					.append( '<span class="fa fa-caret-down fancytree-clickable "></span>' );
+					.append( '<span class="fa fa-caret-down fancytree-clickable" title="'+tip+'"></span>' );
 			};
 
 			// Update map on layer select and initial creation
@@ -207,16 +213,16 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			};
 
 			var updateLayerTreeSource = function( event, source ) {
+				setLocaleOnSource( source );
 				scope.$tree.reload( source );
 				updateMap();
-				setLocale();
 			};
 
 			var addLayerTreeNode = function ( event, node ) {
 				var root = scope.$tree.getRootNode();
+				setLocaleOnSource( node );
 				root.addChildren( node, scope.$tree.getFirstChild() );
 				updateMap();
-				setLocale();
 			};
 
 			// mocking source
@@ -233,6 +239,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 								title: 'Positions',
 								type: 'vmspos',
 								popupEnabled: true,
+								popupTip: 'spatial.layer_tree_tip_popup',
 								geoJson:{
 									"features": [
 										{
@@ -1347,6 +1354,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 								title: 'Segments',
 								type: 'vmsseg',
 								popupEnabled: true,
+								popupTip: 'spatial.layer_tree_tip_popup',
 								geoJson:{
 									"features": [
 										{
@@ -2018,6 +2026,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 											    'STYLES': 'eez'
 											    //'cql_filter': "sovereign='Portugal' OR sovereign='Poland' OR sovereign='Bulgaria' OR sovereign='Belgium'"
 											},
+											contextTip: 'spatial.layer_tree_tip_context_menu',
 											contextItems: {
 												header: {
 													name: 'Style options',
@@ -2048,7 +2057,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 											}
 										}
 									},
-									/*{ // development: local geoserver
+									{ // development: local geoserver
 										title: 'Test',
 										data: {
 											type: 'WMS',
@@ -2064,6 +2073,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			                    'STYLES': 'polygon'
 			                    //'cql_filter': "sovereign='Portugal' OR sovereign='Poland' OR sovereign='Bulgaria' OR sovereign='Belgium'"
 			                },
+											contextTip: 'spatial.layer_tree_tip_context_menu',
 											contextItems: {
 												headerA: {
 													name: 'Options',
@@ -2107,7 +2117,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 												}
 											}
 										}
-									},*/
+									},
 									{
 										title: 'RFMO',
 										data: {
@@ -2122,6 +2132,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 													'TILED': true,
 													'STYLES': ''
 											},
+											contextTip: 'spatial.layer_tree_tip_context_menu',
 											contextItems: {
 												header: {
 													name: 'Style options',
@@ -2210,7 +2221,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 					}
 			];
 
-			// /mocking source
+			// font awesome config for fancy tree
 			var glyph_opts = {
 				map: {
 					doc: 'fa fa-file-o',
@@ -2230,8 +2241,10 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				}
 			};
 
-			// initially create or update tree
+			// initially create tree
 			var createTree = function( source ){
+				setLocaleOnSource( source );
+
 				element.fancytree({
 					icons: false,
 					extensions: [ 'dnd', 'glyph', 'wide' ],
@@ -2269,7 +2282,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 							data.otherNode.moveTo( node, data.hitMode );
 							updateMap();
 							//FIXME we might do this on a layer basis which would probably be better
-												scope.$parent.$broadcast('reloadLegend');
+							scope.$parent.$broadcast('reloadLegend');
 						}
 					},
 					glyph: glyph_opts,
@@ -2293,22 +2306,41 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				});
 
 				scope.$tree = $( element ).fancytree( 'getTree' );
-
 				updateMap();
-
-				locale.ready( 'spatial' ).then( function() {
-						setLocale();
-				});
 			};
 
-			var setLocale = function() {
-				$( '.fancytree-title' ).each( function( index ) {
-					var key = this.firstChild.nodeValue;
-					this.firstChild.nodeValue = locale.getString( key );
-				});
+			// exchange language keys with value for each language key.
+			// TODO: this should go to layerTreeService.js (not yet created)
+			var setLocaleOnSource = function( source ){
+				setLocale( source, 'title', 'spatial.layer_tree_vms' );
+				setLocale( source, 'title', 'spatial.layer_tree_positions' );
+				setLocale( source, 'title', 'spatial.layer_tree_segments' );
+				setLocale( source, 'title', 'spatial.layer_tree_areas' );
+				setLocale( source, 'title', 'spatial.layer_tree_system_areas' );
+				setLocale( source, 'title', 'spatial.layer_tree_additional_cartography' );
+				setLocale( source, 'title', 'spatial.layer_tree_background_layers' );
+				setLocale( source, 'popupTip', 'spatial.layer_tree_tip_popup' );
+				setLocale( source, 'contextTip', 'spatial.layer_tree_tip_context_menu' );
 			};
 
-			createTree( scope.source );
+			// traverses through source object and replaces language key with value
+			var setLocale = function ( source, key, val ){
+				var wording = locale.getString( val );
+				for (var i in source) {
+							if (!source.hasOwnProperty(i)) {
+								continue;
+							}
+							if (typeof source[i] == 'object') {
+									setLocale( source[i], key, val);
+							} else if (i == key && source[key] == val) {
+									source[key] = wording;
+							}
+					}
+			};
+
+			locale.ready( 'spatial' ).then( function() {
+					createTree( scope.source );
+			});
 
 			scope.$on( 'updateLayerTreeSource', updateLayerTreeSource );
 			scope.$on( 'addLayerTreeNode', addLayerTreeNode );
