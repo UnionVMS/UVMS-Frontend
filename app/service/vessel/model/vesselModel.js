@@ -18,6 +18,7 @@ angular.module('unionvmsWeb')
             name : undefined,
         };
         this.notes = '';
+        this.lastMovement = undefined;
     }
 
     Vessel.fromJson = function(data){

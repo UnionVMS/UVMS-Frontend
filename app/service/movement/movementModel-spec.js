@@ -17,6 +17,11 @@ describe('Movement', function() {
         "source": "INMARSAT_C"
     };
 
+    var  lastReportMovement = {
+        "movementGUID": "73",
+        "time": 1431106680000,
+    };
+
      function verifyMovement(movement) {
         expect(movement.guid).toEqual(move.guid);
         expect(movement.time).toEqual(move.positionTime);
@@ -35,6 +40,14 @@ describe('Movement', function() {
 
     it('Should parse JSON input correctly', inject(function(Movement) {
         verifyMovement(Movement.fromJson(move));
+    }));
+
+    it('Should parse lastReport JSON correctly', inject(function(Movement) {
+        //Last report is used in vessel to show the latest report for a vessel
+        //and this movement object has a other format the the ones in the list movements
+        var m = Movement.fromJson(lastReportMovement);
+        expect(m.time).toEqual(lastReportMovement.time);
+        expect(m.guid).toEqual(lastReportMovement.movementGUID);
     }));
 
 

@@ -11,6 +11,22 @@ angular.module('unionvmsWeb')
             return this.items.length;
         };
 
+
+        //Find an item in the list of items by a property
+        SearchResultListPage.prototype.getItemByProperty = function(propertyKey, propertyValue) {
+            if(angular.isDefined(propertyKey) && angular.isDefined(propertyValue)){
+                var foundItem;
+                $.each(this.items, function(index, anItem){
+                    if(anItem[propertyKey] === propertyValue){
+                        foundItem = anItem;
+                        return false;
+                    }
+                });
+
+                return foundItem;
+            }
+        };
+
         return SearchResultListPage;
     });
 

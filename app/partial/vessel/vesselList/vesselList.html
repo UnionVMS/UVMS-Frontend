@@ -31,7 +31,9 @@
                 <td>{{item.ircs}}</td>
                 <td>{{item.gearType | vesselGearTypeTranslation}}</td>
                 <td>{{item.licenseType | vesselLicenseTypeTranslation}}</td>
-                <td>{{item.lastReport}}</td>
+                <td>
+                    <span ng-show="item.lastMovement">{{item.lastMovement.time | timeAgo}}</span>
+                </td>
                 <td>
                     <button class="btn btn-primary btn-sm" ng-click="toggleViewVessel(item)">
                         <span class="fa fa-eye"></span>

@@ -8,6 +8,12 @@ angular.module('unionvmsWeb')
                 list : { method : 'POST'}
             });
         },
+        getLatestMovementsByConnectIds : function(){
+            return $resource('/movement/rest/movement/latest',{},
+            {
+                list : { method : 'POST'}
+            });
+        },
         getMovement: function() {
             return $resource('/movement/rest/movement/:id');
         },
@@ -53,6 +59,34 @@ angular.module('unionvmsWeb')
             },
             function(error){
                 console.log("Error getting movements.", error);
+                deferred.reject(error);
+            }
+        );
+        return deferred.promise;
+    };
+
+    var getLatestMovementsByConnectIds = function(listOfConnectIds){
+
+        var deferred = $q.defer();
+        movementRestFactory.getLatestMovementsByConnectIds().list(listOfConnectIds,
+            function(response){
+
+                if(response.code !== "200"){
+                    deferred.reject("Invalid response status");
+                    return;
+                }
+
+                var movements = [];
+                if(angular.isArray(response.data)){
+                    for (var i = 0; i < response.data.length; i++){
+                        movements.push(Movement.fromJson(response.data[i]));
+                    }
+                }
+                var searchResultListPage = new SearchResultListPage(movements, 1, 1);
+                deferred.resolve(searchResultListPage);
+            },
+            function(error){
+                console.log("Error getting latest movements for list with connectIds.", error);
                 deferred.reject(error);
             }
         );
@@ -212,6 +246,7 @@ angular.module('unionvmsWeb')
 
     return {
         getMovementList : getMovementList,
+        getLatestMovementsByConnectIds : getLatestMovementsByConnectIds,
         getMovement: getMovement,
         getLastMovement: getLastMovement,
         getSavedSearches : getSavedSearches,

@@ -108,8 +108,31 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 
         //Do the search for vessels
 		searchVessels : function(){
+            var deferred = $q.defer();
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
-			return vesselRestService.getVesselList(getListRequest);
+			vesselRestService.getVesselList(getListRequest).then(function(vesselPage){
+                //Get last report for the vessels
+                var connectIds = [];
+                $.each(vesselPage.items, function(index, vessel) {
+                    connectIds.push(vessel.getGuid());
+                });
+
+                movementRestService.getLatestMovementsByConnectIds(connectIds).then(function(movementsPage){
+                    //Map movements to vessels
+                    $.each(vesselPage.items, function(index, vessel) {
+                        var movement = movementsPage.getItemByProperty('connectId', vessel.getGuid());
+                        vessel.lastMovement = movement;
+                    });
+                    deferred.resolve(vesselPage);
+                }, function(error){
+                    $log.error("Error getting last movements for vessels.", error);
+                    deferred.resolve(vesselPage);
+                });
+            }, function(error){
+                $log.error("Error getting vessels.", error);
+                deferred.reject(error);
+            });
+            return deferred.promise;
 		},
 
         //Do the search for polls

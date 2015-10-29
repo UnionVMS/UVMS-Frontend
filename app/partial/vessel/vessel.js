@@ -216,7 +216,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
                         item.ircs,
                         $filter('vesselGearTypeTranslation')(item.gearType),
                         $filter('vesselLicenseTypeTranslation')(item.licenseType),
-                        item.lastReport
+                        $filter('timeAgo')(item.lastMovement.time),
                     ];
                     csvObject.push(csvRow);
                     return csvObject;

@@ -29,9 +29,23 @@ angular.module('unionvmsWeb')
 
 		if(data){
 
-			movement.guid = data.guid;
+            if(data.guid){
+			    movement.guid = data.guid;
+            }
+            //Used by last movement for vessel
+            else if(data.movementGUID){
+                movement.guid = data.movementGUID;
+            }
+
 			movement.connectId = data.connectId;
-			movement.time = data.positionTime;
+            if(data.positionTime){
+			    movement.time = data.positionTime;
+            }
+            //Used by last movement for vessel
+            else if(data.time){
+                movement.time = data.time;
+            }
+
 
 			movement.movement.movementType = data.movementType;
 			movement.movement.source = data.source;
