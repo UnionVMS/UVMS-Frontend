@@ -24,11 +24,11 @@
                                     </th>
 
                                     <th colspan="2">
-                                        <datepicker-input model="advancedSearchObject.START_DATE" placeholder="{{'polling.polling_logs_search_date_from_placeholder' | i18n}}" time="true"></datepicker-input>
+                                        <datepicker-input model="advancedSearchObject.START_DATE" max-date="advancedSearchObject.END_DATE" placeholder="{{'polling.polling_logs_search_date_from_placeholder' | i18n}}" time="true"></datepicker-input>
                                     </th>
 
                                     <th colspan="2">
-                                        <datepicker-input model="advancedSearchObject.END_DATE" placeholder="{{'polling.polling_logs_search_date_to_placeholder' | i18n}}" time="true"></datepicker-input>
+                                        <datepicker-input model="advancedSearchObject.END_DATE" min-date="advancedSearchObject.STAR_DATE"  placeholder="{{'polling.polling_logs_search_date_to_placeholder' | i18n}}" time="true"></datepicker-input>
                                     </th>
 
                                     <th>&nbsp;</th>

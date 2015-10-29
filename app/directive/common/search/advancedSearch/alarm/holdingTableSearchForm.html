@@ -5,10 +5,10 @@
 			<dropdown ng-model="advancedSearchObject.TIME_SPAN" no-placeholder-item items="timeSpanOptions"></dropdown>
 		</div>
 		<div class="col-md-2">
-			<datepicker-input model="advancedSearchObject.FROM_DATE" time="true" placeholder="{{'common.search_from' | i18n}}"></datepicker-input>
+			<datepicker-input model="advancedSearchObject.FROM_DATE" time="true" max-date="advancedSearchObject.TO_DATE"  placeholder="{{'common.search_from' | i18n}}"></datepicker-input>
 		</div>
 		<div class="col-md-2">
-			<datepicker-input model="advancedSearchObject.TO_DATE" time="true" placeholder="{{'common.search_to' | i18n}}"></datepicker-input>
+			<datepicker-input model="advancedSearchObject.TO_DATE" time="true" min-date="advancedSearchObject.FROM_DATE"  placeholder="{{'common.search_to' | i18n}}"></datepicker-input>
 		</div>
 		<div class="col-md-2">
 			<input type="text" ng-model="advancedSearchObject.OBJECT_NAME" placeholder="{{'alarms.alarms_search_affected_object_placeholder' | i18n}}"/>

@@ -37,7 +37,7 @@
             <dropdown ng-model="advancedSearchObject.SPEED_SPAN" initialtext="{{'movement.advanced_search_placeholder_measured_speed' | i18n}}" items="meassuredSpeed" callback="resetSavedSearchDropdown"></dropdown>
         </div>
         <div class="col-md-12 smallerpadding searchcriteria">
-             <datepicker-input model="advancedSearchObject.FROM_DATE" time="true" placeholder="{{'movement.advanced_search_placeholder_date_time_from' | i18n}}" ng-change-callback="resetSavedSearchDropdown"></datepicker-input>
+             <datepicker-input model="advancedSearchObject.FROM_DATE" time="true" max-date="advancedSearchObject.TO_DATE"placeholder="{{'movement.advanced_search_placeholder_date_time_from' | i18n}}" ng-change-callback="resetSavedSearchDropdown"></datepicker-input>
         </div>
     </div>
 </div>
@@ -54,7 +54,7 @@
             <dropdown ng-model="advancedSearchObject.STATUS" initialtext="{{'movement.advanced_search_placeholder_status' | i18n}}" items="status" callback="resetSavedSearchDropdown"></dropdown>
         </div>
         <div class="col-md-12 smallerpadding searchcriteria">
-             <datepicker-input model="advancedSearchObject.TO_DATE" time="true" placeholder="{{'movement.advanced_search_placeholder_date_time_to' | i18n}}" ng-change-callback="resetSavedSearchDropdown"></datepicker-input>
+             <datepicker-input model="advancedSearchObject.TO_DATE" time="true" min-date="advancedSearchObject.FROM_DATE" placeholder="{{'movement.advanced_search_placeholder_date_time_to' | i18n}}" ng-change-callback="resetSavedSearchDropdown"></datepicker-input>
         </div>
     </div>
 </div>
