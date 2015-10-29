@@ -1,6 +1,6 @@
 (function(){
 
-    var configurationService = function($q, $log, locale, vesselRestService, movementRestService, mobileTerminalRestService, auditLogRestService){
+    var configurationService = function($q, $log, locale, vesselRestService, movementRestService, mobileTerminalRestService, auditLogRestService, ruleRestService){
 
         //Dict of configuration parameters for all modules
         var configs = {};
@@ -10,7 +10,8 @@
             "MOBILETERMINAL" : mobileTerminalRestService.getConfig,
             "MOBILE_TERMINAL_TRANSPONDERS" : mobileTerminalRestService.getTranspondersConfig,
             "MOBILE_TERMINAL_CHANNELS" : mobileTerminalRestService.getChannelNames,
-            "AUDIT" : auditLogRestService.getAuditConfiguration
+            "AUDIT" : auditLogRestService.getAuditConfiguration,
+            "RULES" : ruleRestService.getConfig,
         };
 
         //Clear the loaded configs
@@ -147,6 +148,6 @@
     };
 
     angular.module('unionvmsWeb')
-	.factory('configurationService',['$q', '$log', 'locale', 'vesselRestService', 'movementRestService', 'mobileTerminalRestService', 'auditLogRestService', configurationService]);
+	.factory('configurationService',['$q', '$log', 'locale', 'vesselRestService', 'movementRestService', 'mobileTerminalRestService', 'auditLogRestService', 'ruleRestService', configurationService]);
 
 }());

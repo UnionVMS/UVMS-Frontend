@@ -2,6 +2,13 @@ describe('Rule', function() {
 
   beforeEach(module('unionvmsWeb'));
 
+
+    beforeEach(inject(function($httpBackend) {
+        //Mock translation files
+        $httpBackend.whenGET(/usm/).respond({});
+        $httpBackend.whenGET(/i18n/).respond({});
+    }));
+
     var ruleDTO = {
         "guid": "dummyGuid1",
         "name": "My new rule1",
@@ -178,18 +185,6 @@ describe('Rule', function() {
         expect(numIntervalsAfter).toEqual(numIntervalsBefore+1);
         expect(rule.timeIntervals[numIntervalsBefore]).toEqual(inteval);
     }));
-
-    it("isSubscriptionPossible should return correctly", inject(function(Rule) {
-        var rule = Rule.fromDTO(ruleDTO);
-
-        //Subscription is only possible when type is other than 'GLOBAL'
-        rule.type = 'GLOBAL';
-        expect(rule.isSubscriptionPossible()).toBeFalsy();
-
-        rule.type = 'EVENT';
-        expect(rule.isSubscriptionPossible()).toBeTruthy();
-    }));
-
 });
 
 
@@ -238,8 +233,13 @@ describe('RuleDefinition', function() {
     it("DTO() should create correct object", inject(function(RuleDefinition) {
         var ruleDefinition = RuleDefinition.fromDTO(ruleDefinitionDTO);
         var dto = ruleDefinition.DTO();
-
         expect(dto).toEqual(ruleDefinitionDTO);
+
+        //If subcritera is set to 'NONE', then it should be sent as undefined
+        ruleDefinition = RuleDefinition.fromDTO(ruleDefinitionDTO);
+        ruleDefinition.subCriteria = 'NONE';
+        dto = ruleDefinition.DTO();
+        expect(dto.subCriteria).toBeUndefined();
     }));
 
     it("copy should copy object correctly", inject(function(RuleDefinition) {

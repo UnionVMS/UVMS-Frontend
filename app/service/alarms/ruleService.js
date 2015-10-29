@@ -1,10 +1,11 @@
-angular.module('unionvmsWeb').factory('ruleService',function(locale, $log) {
-
-    //List of actions that require a value
-    var actionsWithValue = ['SEND_TO_ENDPOINT', 'SMS', 'MAIL'];
+angular.module('unionvmsWeb').factory('ruleService',function(locale, $log, rulesOptionsService) {
 
 	var ruleService = {
         getRuleAsText : function(rule){
+            if(angular.isUndefined(rule)){
+                return;
+            }
+
             var text = '';
             text += locale.getString('alarms.rules_definition_if');
             $.each(rule.definitions, function(index, def){
@@ -33,11 +34,13 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log) {
             }
 
             //subcriteria
-            text +='.';
-            if(typeof def.subCriteria === 'string' && def.subCriteria.trim().length > 0){
-                text += def.subCriteria;
-            }else{
-                text += 'BB';
+            if(rulesOptionsService.criteriaShouldHaveSubcriteria(def.criteria)){
+                text +='.';
+                if(typeof def.subCriteria === 'string' && def.subCriteria.trim().length > 0){
+                    text += def.subCriteria;
+                }else{
+                    text += 'BB';
+                }
             }
 
             text +=' ' + def.condition + ' ' ;
@@ -58,10 +61,10 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log) {
             return text;
         },
         getRuleActionAsText : function(ruleAction){
-            var actionText = locale.getString('alarms.rules_definition_then_' +ruleAction.action);
+            var actionText = locale.getString('alarms.rules_rule_as_text_action_' +ruleAction.action);
             var text = actionText;
             //Show value?
-            if(actionsWithValue.indexOf(ruleAction.action) >=0){
+            if(rulesOptionsService.actionShouldHaveValue(ruleAction.action)){
                 text += ' ';
                 if(typeof ruleAction.value === 'string' && ruleAction.value.trim().length > 0){
                      text += ruleAction.value;
@@ -80,7 +83,7 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log) {
             //LogicBoolOperator is AND/OR for all but the last that is NONE
             //parentheses match
             //No empty criterias field for a definition
-            //No empty subcriterias field  for a definition
+            //No empty subcriterias field  for a definition that requires a value
             //No empty values field for a definition
             //No empty condition field for a definition
             //No empty value field for an action that requires a value
@@ -105,9 +108,11 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log) {
                     if(typeof definition.criteria !== 'string' || definition.criteria.trim().length === 0){
                         returnObject.problems.push('INVALID_DEF_CRITERIA');
                     }
-                    //No empty subcriterias field  for a definition
-                    if(typeof definition.subCriteria !== 'string' || definition.subCriteria.trim().length === 0){
-                        returnObject.problems.push('INVALID_DEF_SUBCRITERIA');
+                    //No empty subcriterias field  for a definition that requires a value
+                    if(rulesOptionsService.criteriaShouldHaveSubcriteria(definition.criteria)){
+                        if(typeof definition.subCriteria !== 'string' || definition.subCriteria.trim().length === 0){
+                            returnObject.problems.push('INVALID_DEF_SUBCRITERIA');
+                        }
                     }
                     //No empty values field for a definition
                     if(typeof definition.value !== 'string' || definition.value.trim().length === 0){
@@ -153,7 +158,7 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log) {
                 var thenAction;
                 for (i = rule.actions.length-1; i >= 0; i--){
                     thenAction = rule.actions[i];
-                    if(actionsWithValue.indexOf(thenAction.action) >=0){
+                    if(rulesOptionsService.actionShouldHaveValue(thenAction.action)){
                         if(typeof thenAction.value !== 'string' || thenAction.value.trim().length === 0){
                             returnObject.problems.push('INVALID_ACTION_VALUE');
                         }

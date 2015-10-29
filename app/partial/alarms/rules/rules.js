@@ -1,7 +1,7 @@
 angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, locale, csvService, alertService, $filter, Rule,  RuleDefinition, ruleRestService, SearchResults, SearchResultListPage, userService, confirmationModal){
 
     var checkAccessToFeature = function(feature) {
-        return userService.isAllowed(feature, 'Alarms', true);
+        return userService.isAllowed(feature, 'Rules', true);
     };
 
     $scope.selectedRules = []; //Selected rules checkboxes
@@ -46,6 +46,15 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
     $scope.createdNewRuleCallback = function(newRule){
         //Add new rule to searchResult
         $scope.currentSearchResults.updateWithSingleItem(newRule);
+
+        //Show search results
+        $scope.isVisible.rulesForm = false;
+    };
+
+    //Callback when a Rule has been updated
+    $scope.updateRuleCallback = function(updatedTule){
+        //Search for all rules again
+        $scope.searchRules();
 
         //Show search results
         $scope.isVisible.rulesForm = false;
@@ -102,23 +111,38 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
         }, options);
     };
 
+    //User is allowed to manage global rules?
+    $scope.allowedToManageGlobalRules = function(){
+        return checkAccessToFeature('manageGlobalAlarmsRules');
+    };
+
+    //User is allowed to manage non global rules?
+    $scope.allowedToManageRules = function(){
+        return checkAccessToFeature('manageAlarmsRules');
+    };
+
     //Is the user allowed to delete or update the rule?
     $scope.allowedToDeleteOrUpdateRule = function(rule){
         if(rule.type === 'GLOBAL'){
-            //Allowed to manage global rules
-            if(checkAccessToFeature('manageGlobalAlarmsRules')){
+            //Allowed to manage global rules?
+            if($scope.allowedToManageGlobalRules()){
                 return true;
             }
         }
         else{
-            //Event rule, check that the user is the one that create it
-            var userName = userService.getUserName();
-            if(userName === rule.createdBy){
+            //Allowed to manage event rules?
+            if($scope.allowedToManageRules()){
                 return true;
             }
         }
 
         return false;
+    };
+
+
+    //Is it possible to subscripe to the rule?
+    $scope.isSubscriptionPossible = function(rule){
+        return rule.type !== 'GLOBAL';
     };
 
     //Handle click on the top "check all" checkbox

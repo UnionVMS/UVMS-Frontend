@@ -1,23 +1,6 @@
 describe('ruleService', function() {
-  
+
     beforeEach(module('unionvmsWeb'));
-
-
-    beforeEach(inject(function(locale) {
-        var mockLocale = 
-        spyOn(locale, "getString").andCallFake(function(key){
-            if(key === 'alarms.rules_definition_if'){
-                return 'IF';
-            }else if(key === 'alarms.rules_definition_then'){
-                return 'THEN';            
-            }else if(key === 'alarms.rules_definition_and'){
-                return 'AND';
-            }else{
-                return '[TRANSLATED_TEXT]';
-            }
-        });
-        
-    }));
 
     var ruleDTO = {
         "id": "ABC123456789",
@@ -30,14 +13,14 @@ describe('ruleService', function() {
         "createdBy": "Test user",
         "dateCreated": "2015-06-01 12:44:00",
         "availableNotifications": [
-            "EMAIL", 
+            "EMAIL",
             "OPEN_TICKET"
         ],
         "definitions": [
             {
               "startOperator": "(",
-              "criteria": "VESSEL",
-              "subCriteria": "CFR",
+              "criteria": "ASSET_ID",
+              "subCriteria": "ASSET_ID_TYPE",
               "condition": "EQ",
               "value": "SWE111222",
               "endOperator": "",
@@ -46,9 +29,9 @@ describe('ruleService', function() {
             },
             {
               "startOperator": "",
-              "criteria": "VESSEL",
-              "subCriteria": "CFR",
-              "condition": "EQ",
+              "criteria": "ASSET_ID",
+              "subCriteria": "ASSET_ID_VALUE",
+              "condition": "NE",
               "value": "SWE111333",
               "endOperator": ")",
               "logicBoolOperator": "AND",
@@ -56,8 +39,8 @@ describe('ruleService', function() {
             },
             {
               "startOperator": "",
-              "criteria": "MOBILE_TERMINAL",
-              "subCriteria": "MEMBER_NUMBER",
+              "criteria": "LONGITUDE",
+              "subCriteria": "",
               "condition": "NEQ",
               "value": "ABC99",
               "endOperator": "",
@@ -72,7 +55,7 @@ describe('ruleService', function() {
                 "order": 0
             },
             {
-                "action": "HOLDING_TABLE",
+                "action": "ON_HOLD",
                 "value": undefined,
                 "order": 1
             }
@@ -89,43 +72,109 @@ describe('ruleService', function() {
       ]
     };
 
+    var mockActions = {
+        "TOP_BAR_NOTIFICATION": false,
+        "SEND_TO_ENDPOINT": true,
+        "ON_HOLD": false,
+        "EMAIL": true,
+        "TICKET": false,
+        "MANUAL_POLL": false,
+        "SMS": true
+    };
+
+    var mockConditions = [
+        "EQ",
+        "NE",
+        "GT",
+        "GE",
+        "LT",
+        "LE"
+    ];
+
+    var mockLogicOperators = [
+      "AND",
+      "OR",
+      "NONE"
+    ];
+
+    var mockCriterias = {
+        "REPORTED_COURSE": [],
+        "LONGITUDE": [],
+        "POSITION_REPORT_TIME": [],
+        "ASSET_ID": [
+            "ASSET_ID_ASSET_TYPE",
+            "ASSET_ID_TYPE",
+            "ASSET_ID_VALUE"
+        ]
+    };
+
+    beforeEach(inject(function(locale, configurationService) {
+        var mockLocale =
+        spyOn(locale, "getString").andCallFake(function(key){
+            if(key === 'alarms.rules_definition_if'){
+                return 'IF';
+            }else if(key === 'alarms.rules_definition_then'){
+                return 'THEN';
+            }else if(key === 'alarms.rules_definition_and'){
+                return 'AND';
+            }else{
+                return '[TRANSLATED_TEXT]';
+            }
+        });
+
+        var mockConfigurationService =
+        spyOn(configurationService, "getValue").andCallFake(function(module, configName){
+            if(configName === 'ACTIONS'){
+                return mockActions;
+            }else if(configName === 'CONDITIONS'){
+                return mockConditions;
+            }else if(configName === 'LOGIC_OPERATORS'){
+                return mockLogicOperators;
+            }else if(configName === 'CRITERIA'){
+                return mockCriterias;
+            }
+        });
+
+        configurationService.getValue('RULES', 'ACTIONS')
+    }));
+
     it("getRuleAsText should return correct text for complete rule", inject(function(ruleService, Rule) {
         var rule = Rule.fromDTO(ruleDTO);
-        var expectedText = 'IF (VESSEL.CFR EQ SWE111222 OR VESSEL.CFR EQ SWE111333) AND MOBILE_TERMINAL.MEMBER_NUMBER NEQ ABC99 THEN [TRANSLATED_TEXT] ABC123 AND [TRANSLATED_TEXT]';
-        expect(ruleService.getRuleAsText(rule)).toEqual(expectedText);       
-    }));   
+        var expectedText = 'IF (ASSET_ID.ASSET_ID_TYPE EQ SWE111222 OR ASSET_ID.ASSET_ID_VALUE NE SWE111333) AND LONGITUDE NEQ ABC99 THEN [TRANSLATED_TEXT] ABC123 AND [TRANSLATED_TEXT]';
+        expect(ruleService.getRuleAsText(rule)).toEqual(expectedText);
+    }));
 
     it("getRuleDefAsText should return correct text for complete ruleDefinition", inject(function(ruleService, RuleDefinition) {
         var ruleDefinition = RuleDefinition.fromDTO(ruleDTO.definitions[0]);
-        var expectedText = '(VESSEL.CFR EQ SWE111222 OR';
+        var expectedText = '(ASSET_ID.ASSET_ID_TYPE EQ SWE111222 OR';
 
-        expect(ruleService.getRuleDefAsText(ruleDefinition)).toEqual(expectedText);       
-    }));    
+        expect(ruleService.getRuleDefAsText(ruleDefinition)).toEqual(expectedText);
+    }));
 
     it("getRuleDefAsText should return correct text for empty ruleDefinition", inject(function(ruleService, RuleDefinition) {
         var ruleDefinition = new RuleDefinition();
-        var expectedText = 'AAAA.BB EQ ???';
+        var expectedText = 'AAAA EQ ???';
         expect(ruleService.getRuleDefAsText(ruleDefinition)).toEqual(expectedText);
 
-        ruleDefinition.criteria = 'VESSEL';
-        expectedText = 'VESSEL.BB EQ ???';
-        expect(ruleService.getRuleDefAsText(ruleDefinition)).toEqual(expectedText);        
+        ruleDefinition.criteria = 'ASSET_ID';
+        expectedText = 'ASSET_ID.BB EQ ???';
+        expect(ruleService.getRuleDefAsText(ruleDefinition)).toEqual(expectedText);
 
-        ruleDefinition.subCriteria = 'IRCS';
-        expectedText = 'VESSEL.IRCS EQ ???';
-        expect(ruleService.getRuleDefAsText(ruleDefinition)).toEqual(expectedText);                
+        ruleDefinition.subCriteria = 'ASSET_ID_TYPE';
+        expectedText = 'ASSET_ID.ASSET_ID_TYPE EQ ???';
+        expect(ruleService.getRuleDefAsText(ruleDefinition)).toEqual(expectedText);
 
         ruleDefinition.value = 'TEST';
-        expectedText = 'VESSEL.IRCS EQ TEST';
-        expect(ruleService.getRuleDefAsText(ruleDefinition)).toEqual(expectedText);          
-    }));   
+        expectedText = 'ASSET_ID.ASSET_ID_TYPE EQ TEST';
+        expect(ruleService.getRuleDefAsText(ruleDefinition)).toEqual(expectedText);
+    }));
 
     it("getRuleDefAsText should return correct text for condition part", inject(function(ruleService, RuleDefinition) {
         var ruleDefinition = new RuleDefinition();
         ruleDefinition.condition = "NEQ";
-        var expectedText = 'AAAA.BB NEQ ???';
+        var expectedText = 'AAAA NEQ ???';
         expect(ruleService.getRuleDefAsText(ruleDefinition)).toEqual(expectedText);
-    }));  
+    }));
 
     it("getRuleActionAsText should return correct text", inject(function(ruleService, RuleAction) {
         var ruleAction = new RuleAction();
@@ -136,12 +185,12 @@ describe('ruleService', function() {
 
         ruleAction.value = undefined;
         expectedText = '[TRANSLATED_TEXT] ???';
-        expect(ruleService.getRuleActionAsText(ruleAction)).toEqual(expectedText);        
+        expect(ruleService.getRuleActionAsText(ruleAction)).toEqual(expectedText);
 
         ruleAction.value = '';
         expectedText = '[TRANSLATED_TEXT] ???';
-        expect(ruleService.getRuleActionAsText(ruleAction)).toEqual(expectedText);                
-    }));  
+        expect(ruleService.getRuleActionAsText(ruleAction)).toEqual(expectedText);
+    }));
 
     it("areRuleDefinitionsAndActionsValid should return true for a valid rule", inject(function(ruleService, Rule) {
         var rule = Rule.fromDTO(ruleDTO);
@@ -195,15 +244,15 @@ describe('ruleService', function() {
         testResult = ruleService.areRuleDefinitionsAndActionsValid(rule);
         expect(testResult.success).toBeFalsy();
         expect(testResult.problems.indexOf('PARANTHESES_DONT_MATCH') >= 0).toBeTruthy("PARANTHESES_DONT_MATCH should be in problems");
-        
+
         rule.definitions[0].startOperator = '(';
         rule.definitions[0].endOperator = '';
         rule.definitions[1].startOperator = '';
         rule.definitions[1].endOperator = '))';
         rule.definitions[2].startOperator = '(';
-        rule.definitions[2].endOperator = '';            
+        rule.definitions[2].endOperator = '';
         testResult = ruleService.areRuleDefinitionsAndActionsValid(rule);
-        expect(testResult.success).toBeFalsy('Paranteheses must be in the right order');        
+        expect(testResult.success).toBeFalsy('Paranteheses must be in the right order');
         expect(testResult.problems.indexOf('PARANTHESES_DONT_MATCH') >= 0).toBeTruthy("PARANTHESES_DONT_MATCH should be in problems");
     }));
 
@@ -221,7 +270,7 @@ describe('ruleService', function() {
         expect(testResult.problems.indexOf('INVALID_DEF_CRITERIA') >= 0).toBeTruthy("INVALID_DEF_CRITERIA should be in problems");
     }));
 
-    it("areRuleDefinitionsAndActionsValid should return false when a subCriteria is undefined or empty", inject(function(ruleService, Rule) {
+    it("areRuleDefinitionsAndActionsValid should return false when a subCriteria is undefined or empty for a criteria that requires a subCriteria", inject(function(ruleService, Rule) {
         var rule = Rule.fromDTO(ruleDTO);
 
         rule.definitions[1].subCriteria = ' ';
@@ -233,6 +282,13 @@ describe('ruleService', function() {
         testResult = ruleService.areRuleDefinitionsAndActionsValid(rule);
         expect(testResult.success).toBeFalsy();
         expect(testResult.problems.indexOf('INVALID_DEF_SUBCRITERIA') >= 0).toBeTruthy("INVALID_DEF_SUBCRITERIA should be in problems");
+
+        rule = Rule.fromDTO(ruleDTO);
+        //This criteria (LONGTIDE) does not require a subcriteria
+        rule.definitions[2].subCriteria = undefined;
+        testResult = ruleService.areRuleDefinitionsAndActionsValid(rule);
+        expect(testResult.success).toBeTruthy();
+        expect(testResult.problems.indexOf('INVALID_DEF_SUBCRITERIA') >= 0).toBeFalsy("INVALID_DEF_SUBCRITERIA should not be in problems");
     }));
 
     it("areRuleDefinitionsAndActionsValid should return false when a value is undefined or empty", inject(function(ruleService, Rule) {
@@ -252,7 +308,7 @@ describe('ruleService', function() {
     it("areRuleDefinitionsAndActionsValid should return false when a condition is undefined or empty", inject(function(ruleService, Rule) {
         var rule = Rule.fromDTO(ruleDTO);
 
-        rule.definitions[1].condition = ' ';        
+        rule.definitions[1].condition = ' ';
         var testResult = ruleService.areRuleDefinitionsAndActionsValid(rule);
         expect(testResult.success).toBeFalsy();
         expect(testResult.problems.indexOf('INVALID_DEF_CONDITION') >= 0).toBeTruthy("INVALID_DEF_CONDITION should be in problems");
@@ -289,6 +345,6 @@ describe('ruleService', function() {
         var testResult = ruleService.areRuleDefinitionsAndActionsValid(rule);
         expect(testResult.success).toBeFalsy();
         expect(testResult.problems.length > 1).toBeTruthy("Should be more than 1 problem");
-    }));    
+    }));
 
 });

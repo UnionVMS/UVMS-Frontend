@@ -346,7 +346,11 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'RulesCtrl'
                 }
             },
-            resolve: {},
+            resolve: {
+                config : function(initService){
+                    return initService.loadConfigFor(["RULES"]);
+                }
+            },
             data: {
                 access: 'viewAlarmsRules'
             },

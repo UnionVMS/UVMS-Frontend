@@ -30,7 +30,7 @@
                     <td>{{item.dateUpdated | confDateFormat}}</td>
                     <td class="link">{{item.updatedBy}}</td>
                     <td class="subscription">
-                        <div ng-if="item.active && item.isSubscriptionPossible()">
+                        <div ng-if="item.active && isSubscriptionPossible(item)">
                             <dropdown ng-model="item.subscription" initialtext="{{'common.none' | i18n}}" initialtext-selectable items="subscriptionsOptions"></dropdown>
                         </div>
                     </td>

@@ -43,8 +43,12 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
             return this.timeIntervals.length;
         };
 
-        Rule.prototype.isSubscriptionPossible = function(){
-            return this.type !== 'GLOBAL';
+        Rule.prototype.isGlobal = function(){
+            return this.type === 'GLOBAL';
+        };
+
+        Rule.prototype.setUpdatedBy = function(updatedBy){
+            return this.updatedBy = updatedBy;
         };
 
 
@@ -93,6 +97,7 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
                 availability : this.availability,
                 active : this.active,
                 description : this.description,
+                updatedBy : this.updatedBy,
                 timeIntervals : this.timeIntervals.reduce(function(intervals, timeInterval){
                     intervals.push(timeInterval.DTO());
                     return intervals;
@@ -148,7 +153,7 @@ angular.module('unionvmsWeb').factory('RuleDefinition', function() {
             return {
                 startOperator : this.startOperator,
                 criteria : this.criteria,
-                subCriteria : this.subCriteria,
+                subCriteria : this.subCriteria !== 'NONE' ? this.subCriteria : undefined,
                 condition : this.condition,
                 value : this.value,
                 endOperator : this.endOperator,
