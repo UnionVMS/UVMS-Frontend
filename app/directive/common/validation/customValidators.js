@@ -116,59 +116,6 @@ angular.module('unionvmsWeb').directive('period', [
         };
 }]);
 
-// End date must be after start date
-//Validator with name min-date already exists in Bootstrap so use other name here
-angular.module('unionvmsWeb').directive('datePickerInputMinDate', function() {
-    return {
-        restrict: 'A',
-        require: 'ngModel',
-        scope: {
-            datePickerInputMinDate: '='
-        },
-        link: function(scope, elm, attrs, ctrl) {
-
-            function updateValidity(date) {
-                ctrl.$setValidity('minDate', date === undefined || scope.datePickerInputMinDate === undefined || new Date(date) > new Date(scope.datePickerInputMinDate));
-            }
-
-            scope.$watch('datePickerInputMinDate', function(newValue) {
-                updateValidity(newValue);
-            });
-
-            ctrl.$parsers.push(function(viewValue) {
-                updateValidity(viewValue);
-                return viewValue;
-            });
-
-            ctrl.$formatters.push(function(viewValue) {
-                updateValidity(viewValue);
-                return viewValue;
-            });
-        }
-    };
-});
-
-angular.module('unionvmsWeb').directive('datePickerInputMaxDate', function() {
-    return {
-        restrict: 'A',
-        require: 'ngModel',
-        link: function(scope, elem, attr, ngModel) {
-            if (attr.datePickerInputMaxDate) {
-                ngModel.$parsers.unshift(function(value) {
-                    var valid = new Date(value).getTime() < attr.datePickerInputMaxDate;
-                    ngModel.$setValidity('maxDate', valid);
-                    return value;
-                });
-
-                ngModel.$formatters.unshift(function(value) {
-                    ngModel.$setValidity('maxDate', new Date(value).getTime() < attr.datePickerInputMaxDate);
-                    return value;
-                });
-            }
-        }
-    };
-});
-
 //Validate that model value is valid longitude
 angular.module('unionvmsWeb').directive('longitude', function(coordinateFormatService) {
     return {

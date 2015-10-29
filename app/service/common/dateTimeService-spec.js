@@ -161,18 +161,6 @@ describe('dateTimeService', function() {
   it('formatUTCDateWithTimezone should format date and time correct', inject(function(dateTimeService) {
     var d;
 
-    //Date object
-    d = new Date("Sep 2, 2015 12:34:56");
-    expect(dateTimeService.formatUTCDateWithTimezone(d)).toEqual('2015-09-02 12:34:56 +00:00');
-
-   //Text date
-    d = "Feb 13, 2012 12:34:56";
-    expect(dateTimeService.formatUTCDateWithTimezone(d)).toEqual('2012-02-13 12:34:56 +00:00');
-
-    //Date object from text date
-    d = new Date(d);
-    expect(dateTimeService.formatUTCDateWithTimezone(d)).toEqual('2012-02-13 12:34:56 +00:00');
-
     //Already formatted with timezone, the change timezone
     d = '2015-11-18 13:49:00 +01:00';
     expect(dateTimeService.formatUTCDateWithTimezone(d)).toEqual('2015-11-18 12:49:00 +00:00');

@@ -8,55 +8,26 @@ angular.module('unionvmsWeb').directive('datepickerInput', function($compile) {
             placeholder : '@',
             ngDisabled : '=',
             ngRequired : '=',
-            ngChangeCallback : '=',
-            startDate : '=',
-            datepickerMaxDate: '@'
+            ngChangeCallback : '=', //calback onchange
+            time: '@', //use timepicker?
+            minDate : '=', //should be on format "YYYY-MM-DD HH:mm:ss Z"
+            maxDate : '=', //should be on format "YYYY-MM-DD HH:mm:ss Z"
 		},
 		templateUrl: 'directive/common/datepickerInput/datepickerInput.html',
-		link: function(scope, element, attrs, fn) {
+		link: function(scope, element, attrs, ngModel) {
             //Add input name if name attribute exists
             var name = attrs.name;
-            //Add input name if name attribute exists
             if(name) {
                 element.find('input').attr('name', name);
                 element.removeAttr("name");
                 $compile(element)(scope);
             }
 
-            //Add a random id
+            //Add a random id to the input element
             element.find('input').attr('id', scope.randomId);
 
-            //Date format
-            var dateFormat = 'Y-m-d';
-
-            //DateTimePicker options
-            var options = {
-                datepicker:true,
-                timepicker:false,
-                lazyInit: true,
-                format : dateFormat,
-                closeOnDateSelect: true,
-                dayOfWeekStart:1, //monday
-            };
-
-            //Set default date to current date/time in UTC
-            options.defaultDate = moment.utc().format('YYYY-MM-DD');
-
-            //Use time?
-            scope.useTime = false;
-            if(angular.isDefined(attrs.time) && attrs.time){
-                scope.useTime = true;
-                options.timepicker = true;
-                options.format = 'Y-m-d G:i';
-                options.step = 5;
-                options.roundTime = 'floor';
-                //Set default date with time also
-                options.defaultDate = moment.utc().format('YYYY-MM-DD HH:mm');
-                options.closeOnDateSelect = false;
-            }
-
-            //Crate dateTimePicker
-            jQuery("#" +scope.randomId).datetimepicker(options);
+            //Create dateTimePicker and save on scope
+            scope.dateTimePicker = jQuery("#" +scope.randomId).datetimepicker(scope.options);
         }
 	};
 });
@@ -64,7 +35,42 @@ angular.module('unionvmsWeb').directive('datepickerInput', function($compile) {
 angular.module('unionvmsWeb')
     .controller('datepickerInputCtrl', function($scope, dateTimeService){
 
-        function guid() {
+        //Formats used by momentjs and the picker
+        var FORMATS = {
+            WITH_TIMEZONE : {
+                MOMENTJS : 'YYYY-MM-DD HH:mm:ss Z',
+            },
+            YMD : {
+                MOMENTJS : 'YYYY-MM-DD',
+                PICKER : 'Y-m-d',
+            },
+            YMDHM : {
+                MOMENTJS : 'YYYY-MM-DD HH:mm',
+                PICKER : 'Y-m-d G:i',
+            }
+        };
+        $scope.FORMATS = FORMATS; //make them accessible by the formatters/parsers
+
+        //Format used for the defaultDate option
+        var defaultDateFormat = FORMATS.YMD;
+
+        var init = function(){
+            //Use time?
+            $scope.useTime = false;
+            if(typeof $scope.time === 'string' && $scope.time.toLowerCase() === 'true'){
+                $scope.useTime = true;
+                defaultDateFormat = FORMATS.YMDHM;
+            }
+
+            //Create a unique id for the input
+            $scope.randomId = generateGUID();
+
+            //Set options
+            setStartOptions();
+        };
+
+        //Generate guid
+        function generateGUID() {
           function s4() {
             return Math.floor((1 + Math.random()) * 0x10000)
               .toString(16)
@@ -74,55 +80,243 @@ angular.module('unionvmsWeb')
             s4() + '-' + s4() + s4() + s4();
         }
 
-        //Create a unique id for the input
-        $scope.randomId = guid();
+        //Picker options
+        $scope.options = {};
+
+        //Set options for the picker
+        function setStartOptions(){
+            //Set picker options
+            var dateFormat = FORMATS.YMD.PICKER;
+            //DateTimePicker options
+            $scope.options = {
+                datepicker:true,
+                timepicker:false,
+                format : dateFormat,
+                closeOnDateSelect: true,
+                dayOfWeekStart:1, //monday
+            };
+
+            //Set default date to current date/time in UTC
+            $scope.options.defaultDate = moment.utc().format(FORMATS.YMD.MOMENTJS);
+
+            if($scope.useTime){
+                $scope.options.timepicker = true;
+                $scope.options.format = FORMATS.YMDHM.PICKER;
+                $scope.options.step = 5;
+                $scope.options.roundTime = 'ceil';
+                //Set default date with time also
+                $scope.options.defaultDate = moment.utc().format(FORMATS.YMDHM.MOMENTJS);
+                $scope.options.closeOnDateSelect = false;
+            }
+        }
+
+        //Update picker options
+        var updateOptions = function(newOptions){
+            if(angular.isDefined(newOptions)){
+                $.each(newOptions, function(key, val){
+                    $scope.options[key] = val;
+                });
+            }
+            $scope.dateTimePicker.datetimepicker($scope.options);
+        };
 
         //Open on button click
         $scope.open = function () {
-            jQuery("#" +$scope.randomId).trigger("open.xdsoft");
+            $scope.dateTimePicker.trigger("open.xdsoft");
         };
 
-        //Update model value and call callback function
-        var watchModelChange = true;
+        //Call callback  on change
         $scope.onChange = function(){
-            watchModelChange = false;
-            //Update model
-            if(angular.isDefined($scope.viewModel)){
-                //Add UTC timezone (+00:00)
-                var newModelVal = dateTimeService.formatUTCDateWithTimezone($scope.viewModel);
-                //Only set model and call callback if newValue is valid
-                if(newModelVal.indexOf("Invalid date") < 0){
-                    $scope.model = newModelVal;
-                    //Call callback
-                    if(angular.isDefined($scope.ngChangeCallback)){
-                        $scope.ngChangeCallback($scope.model);
-                    }
-                } else {
-                    $scope.model = undefined;
-                }
+            //Call callback
+            if(angular.isDefined($scope.ngChangeCallback)){
+                $scope.ngChangeCallback($scope.model);
             }
         };
 
-        //Watch changes of the model and update the viewModel when it happens
-        $scope.$watch('model', function(newValue) {
-            if(watchModelChange){
-                //Undefined or empty string?
-                if(typeof newValue !== 'string' || newValue.trim().length === 0){
-                    $scope.viewModel = '';
+        //Watch changes of the maxDate
+        $scope.$watch('maxDate', function(maxDate) {
+            var newMaxDate = '2150-12-31',
+                newDefaultDate;
+            if(angular.isDefined(maxDate)){
+                var maxDateMoment = moment.utc(maxDate, FORMATS.WITH_TIMEZONE.MOMENTJS);
+                var prevDayMoment = moment.utc(maxDate, FORMATS.WITH_TIMEZONE.MOMENTJS).subtract(1, 'days');
+                if($scope.useTime){
+                    //newMaxDate be same day if timepicker is used
+                    newMaxDate = maxDateMoment.format(FORMATS.YMD.MOMENTJS);
+                    newDefaultDate = maxDateMoment.format(defaultDateFormat.MOMENTJS);
+                }else{
+                    //newMinDate should be prev day if timepicker isn't used
+                    newMaxDate = prevDayMoment.format(FORMATS.YMD.MOMENTJS);
+                    newDefaultDate = prevDayMoment.format(defaultDateFormat.MOMENTJS);
                 }
-                else{
-                    //Parse the date/time and format it
-                    var newViewValue;
-                    //Parse UTC date to viewValue
-                    if($scope.useTime){
-                        newViewValue = moment.utc(newValue,'YYYY-MM-DD HH:mm:ss Z').format('YYYY-MM-DD HH:mm');
-                    }else{
-                        newViewValue = moment.utc(newValue,'YYYY-MM-DD').format('YYYY-MM-DD');
-                    }
-                    $scope.viewModel = newViewValue;
+
+                //MaxDate before today?
+                var nowMoment = moment.utc();
+                if(maxDateMoment.isBefore(nowMoment)){
+                    newDefaultDate = maxDateMoment.format(defaultDateFormat.MOMENTJS);
+                }else{
+                    newDefaultDate = nowMoment.format(defaultDateFormat.MOMENTJS);
                 }
+            }else{
+                newDefaultDate = moment.utc().format(defaultDateFormat.MOMENTJS);
             }
-            watchModelChange = true;
+
+            //Update max date and default date
+            var newOptions = {
+                maxDate: newMaxDate,
+                formatDate: FORMATS.YMD.PICKER,
+                defaultDate : newDefaultDate,
+                format: defaultDateFormat.PICKER
+            };
+            updateOptions(newOptions);
         });
 
+
+        //Watch changes of the minDate
+        $scope.$watch('minDate', function(minDate) {
+            var newMinDate = '1950-01-01',
+                newDefaultDate;
+            if(angular.isDefined(minDate)){
+                var minDateMoment = moment.utc(minDate, FORMATS.WITH_TIMEZONE.MOMENTJS);
+                var nextDayMoment = moment.utc(minDate, FORMATS.WITH_TIMEZONE.MOMENTJS).add(1, 'days');
+                if($scope.useTime){
+                    //newMinDate be same day if timepicker is used
+                    newMinDate = minDateMoment.format(FORMATS.YMD.MOMENTJS);
+                    newDefaultDate = minDateMoment.format(defaultDateFormat.MOMENTJS);
+                }else{
+                    //newMinDate should be next day if timepicker isn't used
+                    newMinDate = nextDayMoment.format(FORMATS.YMD.MOMENTJS);
+                    newDefaultDate = nextDayMoment.format(defaultDateFormat.MOMENTJS);
+                }
+            }else{
+                newDefaultDate = moment.utc().format(defaultDateFormat.MOMENTJS);
+            }
+
+            //Update min date and default date
+            var newOptions = {
+                minDate: newMinDate,
+                formatDate: FORMATS.YMD.PICKER,
+                defaultDate : newDefaultDate,
+                format: defaultDateFormat.PICKER
+            };
+            updateOptions(newOptions);
+        });
+
+        init();
+});
+
+
+//Format the model and view values
+//The model is updated on the format 'YYYY-MM-DD HH:mm:ss Z' and the view on the format 'YYYY-MM-DD HH:mm' or 'YYYY-MM-DD'
+angular.module('unionvmsWeb').directive('datePickerFormatter', function(dateTimeService) {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, elm, attrs, ctrl) {
+
+            var useTime = false;
+            if(typeof scope.time === 'string' && scope.time.toLowerCase() === 'true'){
+                useTime = true;
+            }
+            //Formats used by momentjs
+            var TIMEZONE_FORMAT = scope.FORMATS.WITH_TIMEZONE.MOMENTJS;
+            var YMD_FORMAT = scope.FORMATS.YMD.MOMENTJS;
+            var YMDHM_FORMAT = scope.FORMATS.YMDHM.MOMENTJS;
+
+            var toView = function (newValue) {
+               //Undefined or empty string?
+                if(typeof newValue !== 'string' || newValue.trim().length === 0){
+                    newValue = '';
+                }
+                else{
+                    ctrl.$setDirty(true);
+                    //Parse UTC date to viewValue
+                    if(useTime){
+                        newValue = moment.utc(newValue,TIMEZONE_FORMAT).format(YMDHM_FORMAT);
+                    }else{
+                        newValue = moment.utc(newValue,TIMEZONE_FORMAT).format(YMD_FORMAT);
+                    }
+                }
+                return newValue;
+            };
+
+            var toModel = function (newValue) {
+                ctrl.$setDirty(true);
+                if(angular.isDefined(newValue)){
+                    //Add UTC timezone (+00:00)
+                    newValue = dateTimeService.formatUTCDateWithTimezone(newValue);
+                    //Only set model and call callback if newValue is valid
+                    if(newValue.indexOf("Invalid date") >= 0){
+                        newValue = undefined;
+                    }
+                }else{
+                    newValue = '';
+                }
+                return newValue;
+            };
+
+            ctrl.$formatters.unshift(toView);
+            ctrl.$parsers.unshift(toModel);
+        }
+    };
+});
+
+/*VALIDATORS*/
+//Date must be after minDate
+//Validator with name min-date already exists in Bootstrap so use other name here
+angular.module('unionvmsWeb').directive('datePickerInputMinDate', function(dateTimeService) {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, elm, attrs, ctrl) {
+
+            function updateValidity(date, minDate) {
+                var valid = true;
+                if(date !== undefined && minDate !== undefined && date.trim().length > 0 && minDate.trim().length > 0){
+                    valid = date > minDate;
+                }
+                ctrl.$setValidity('minDate', valid );
+            }
+            scope.$watch('minDate', function(newValue) {
+                updateValidity(scope.model, newValue);
+            });
+
+            var checkDate = function(currentDate) {
+                updateValidity(currentDate, scope.minDate);
+                return currentDate;
+            };
+            ctrl.$parsers.push(checkDate);
+            ctrl.$formatters.push(checkDate);
+        }
+    };
+});
+
+//Date must be before maxDate
+//Validator with name max-date already exists in Bootstrap so use other name here
+angular.module('unionvmsWeb').directive('datePickerInputMaxDate', function(dateTimeService) {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, elm, attrs, ctrl) {
+
+            function updateValidity(date, maxDate) {
+                var valid = true;
+                if(date !== undefined && maxDate !== undefined && date.trim().length > 0 && maxDate.trim().length > 0){
+                    valid = date < maxDate;
+                }
+                ctrl.$setValidity('maxDate', valid );
+            }
+
+            scope.$watch('maxDate', function(newValue) {
+                updateValidity(scope.model, newValue);
+            });
+
+            var checkDate = function(currentDate) {
+                updateValidity(currentDate, scope.maxDate);
+                return currentDate;
+            };
+            ctrl.$parsers.push(checkDate);
+            ctrl.$formatters.push(checkDate);
+        }
+    };
 });

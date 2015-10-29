@@ -44,11 +44,8 @@ angular.module('unionvmsWeb').factory('dateTimeService',function() {
         formatUTCDateWithTimezone : function(dateTimeInput) {
             var outputFormat = 'YYYY-MM-DD HH:mm:ss +00:00';
             if(angular.isDefined(dateTimeInput)){
-                //Already formatted with timezone, then format again with UTC and +00:00
-                if(this.isFormattedWithTimeZone(dateTimeInput)){
-                    dateTimeInput = this.toUTC(dateTimeInput);
-                }
-                return moment(dateTimeInput).format(outputFormat);
+                dateTimeInput = this.toUTC(dateTimeInput);
+                return moment(dateTimeInput, "YYYY-MM-DD HH:mm:ss").format(outputFormat);
             }
         },
         //Formatted with time zone in format "2015-11-18 13:49:00 +01:00" or "2015-11-18 13:49:00 +0100"
@@ -101,6 +98,20 @@ angular.module('unionvmsWeb').filter('confDateFormat', function($log, dateTimeSe
             }
         }catch(err){
             $log.warn("Failed to format date: " +input, err);
+            return input;
+        }
+    };
+});
+
+//Format date as relative string from now, eg. 2 weeks (works both back in time and in the future)
+angular.module('unionvmsWeb').filter('timeAgo', function($log, dateTimeService) {
+    return function(input) {
+        try{
+            if(angular.isDefined(input)){
+                return moment(dateTimeService.toUTC(input), 'YYYY-MM-DD HH:mm:ss').fromNow();
+            }
+        }catch(err){
+            $log.warn("Failed to format date to time ago: " +input, err);
             return input;
         }
     };

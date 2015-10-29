@@ -86,6 +86,8 @@
     "validation_digits_only" : "Only digits",
     "validation_invalid_numeric" : "Must be numeric",
     "validation_invalid_date" : "Invalid date",
+    "validation_invalid_min_date" : "Date and time must be later",
+    "validation_invalid_max_date" : "Date and time must be earlier",
     "validation_invalid_period" : "Invalid period",
     "validation_invalid_time" : "Invalid time",
     "validation_letters_only" : "Only letters",
