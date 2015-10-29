@@ -24,7 +24,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
             // Loop!
             doLongPolling();
         });
-    }
+    };
 
     var init = function(){
         $scope.searchManualPositions();
