@@ -55,9 +55,11 @@ module.exports = function (grunt) {
                   '/mobileterminal/rest/',
                   '/exchange/rest/',
                   '/movement/rest/',
+                  '/movement/activity',
                   '/audit/rest/',
                   '/rules/rest/',
                   '/reporting/rest/',
+                  '/config/rest',
                   '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'],
                 host: 'livm73u',
                 port: 28080

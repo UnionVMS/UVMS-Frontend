@@ -499,6 +499,8 @@ var restApiURLS = [
     '/mobileterminal/rest/',
     '/exchange/rest/',
     '/movement/rest/',
+    '/movement/activity',
+    '/config/rest',
     '/audit/rest/',
     '/rules/rest/',
     '/reporting/rest/',

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, $filter, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal, csvService, SearchResults, envConfig, $websocket, $log) {
+angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, $filter, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal, csvService, SearchResults, envConfig, $resource, $log) {
 
     $scope.showModal = function() {
         $scope.editPosition();
@@ -13,40 +13,22 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     //Search objects and results
     $scope.currentSearchResults = new SearchResults('carrier.name', false, locale.getString('movement.movement_search_error_result_zero_pages'), equalGuid);
 
-    var getWebSocketUrl = function(resourcePath) {
-        var url = (envConfig.ws.protocol || "wss") + "://";
-        url += envConfig.ws.host;
+    var doLongPolling = function() {
+        $resource("/movement/activity/movement/manual").get(function(response) {
+            if (response.ids.length > 0) {
+                manualPositionRestService.getManualMovement(response.ids[0]).then(function(movement) {
+                   $scope.currentSearchResults.updateWithSingleItem(movement);
+                });
+            }
 
-        if (envConfig.ws.port) {
-            url += ":" + envConfig.ws.port;
-        }
-
-        if (envConfig.ws.basePath) {
-            url += envConfig.ws.basePath;
-        }
-
-        url += resourcePath;
-        return url;
-    };
-
-    var openWebsocket = function() {
-        if (!envConfig.ws || !envConfig.ws.host) {
-            $log.warn("Websocket host missing in configuration. Socket not opened.");
-            return;
-        }
-
-        var ws = $websocket(getWebSocketUrl("/movement/activity/manual"));
-        ws.onMessage(function(message) {
-            var positionData = JSON.parse(message.data);
-            manualPositionRestService.getManualMovement(positionData.movementGuid).then(function(movement) {
-               $scope.currentSearchResults.updateWithSingleItem(movement);
-            });
+            // Loop!
+            doLongPolling();
         });
-    };
+    }
 
     var init = function(){
         $scope.searchManualPositions();
-        openWebsocket();
+        doLongPolling();
     };
 
     $scope.isManualMovement = true;
