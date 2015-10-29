@@ -120,7 +120,7 @@
                         <td>{{user.activeFrom | date:'yyyy-MM-dd'}}</td>
                         <td>{{user.activeTo | date:'yyyy-MM-dd'}}</td>
                         <td>
-                            <span ng-class="{'label label-success': user.status=='E', 'label label-danger': user.status=='D'}">{{"users.status_"+user.status | translate}}</span>
+                            <span ng-class="{'label label-success': user.status=='E', 'label label-danger': user.status=='D', 'label label-warning': user.status=='L'}">{{"users.status_"+user.status | translate}}</span>
                         </td>
                         <td class="text-center">
 						 <span ng-controller="manageUserCtlr" ng-if="checkAccess('manageUsers')">
