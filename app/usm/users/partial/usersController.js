@@ -473,15 +473,15 @@ usersModule.controller('manageUserCtlr', ['$log', '$scope', '$modal', '$statePar
                     }
                 }
                 //} else {//in any case the user_parent must be calculated
-                if (returnedUser.organisationComplex.parentOrgName.indexOf('/') !== -1) {
-                    returnedUser.organisation.parent = returnedUser.organisationComplex.parentOrgName.split('/')[0].trim();
-                    returnedUser.organisation.name = returnedUser.organisationComplex.parentOrgName.split('/')[1].trim();
+                if (returnedUser.organisation_parent.indexOf('/') !== -1) {
+                    returnedUser.organisation.parent = returnedUser.organisation_parent.split('/')[0].trim();
+                    returnedUser.organisation.name = returnedUser.organisation_parent.split('/')[1].trim();
                 } else {
                     returnedUser.organisation.parent = null;
-                    returnedUser.organisation.name = returnedUser.organisationComplex.parentOrgName;
                 }
-                returnedUser.organisation_parent = returnedUser.organisationComplex.parentOrgName;
-                returnedUser.organisation.nation = returnedUser.organisationComplex.nation;
+                if (_.isNull(returnedUser.organisation.parent) || _.isEqual(returnedUser.organisation.parent, "null")) {
+                    returnedUser.organisation_parent = returnedUser.organisation.name;
+                }
                 angular.copy(returnedUser, user);
             }, function () {
                 //$log.info('Modal dismissed at: ' + new Date());
@@ -729,7 +729,7 @@ usersModule.controller('editUserModalInstanceCtrl', ['$log', '$timeout', '$locat
             }
         ).then(
             function (response) {
-                if (!_.isNull($scope.user.organisation.parent) && !_.isUndefined($scope.user.organisation.parent)) {
+                if (!_.isNull($scope.user.organisation.parent) && !_.isUndefined($scope.user.organisation.parent) && !_.isEqual($scope.user.organisation.parent, "null") ) {
                     $scope.user.organisation_parent = $scope.user.organisation.parent + ' / ' + $scope.user.organisation.name;
                 } else {
                     $scope.user.organisation_parent = $scope.user.organisation.name;
@@ -827,7 +827,7 @@ usersModule.controller('editUserModalInstanceCtrl', ['$log', '$timeout', '$locat
                     $scope.messageDivClass = "alert alert-success";
                     $scope.actionMessage = "User Details Saved";
                     $timeout(function () {
-                        $modalInstance.close(user);
+                        $modalInstance.close(response.updatedUser);
                     }, 2000);
                 },
                 function (error) {
