@@ -2,18 +2,15 @@ describe('Ticket', function() {
 
     var ticketData = {
         guid: "abcdd-12345-fewf",
-        assetId: {
-            type: "DUMMY_ASSET_TYPE_1",
-            value: "DUMMY_ASSET_TYPE_VALUE_1"
-        },
+        vesselGuid : "DUMMY_VESSEL_GUID_1",
+        positionGuid : "ABCD234567-JK345",
         openDate: "2015-10-09 08:13:09 +0200",
-        resolveDate: "2015-10-09 08:13:09 +0200",
-        resolvedBy: "close user",
+        updated: "2015-10-09 08:13:09 +0200",
+        updatedBy: "close user",
         ruleName: "Da Rule",
         sender: "SWE",
         status: "CLOSED",
     };
-
     beforeEach(module('unionvmsWeb'));
 
 
@@ -21,13 +18,13 @@ describe('Ticket', function() {
         var ticket = Ticket.fromDTO(ticketData);
 
         expect(ticket.guid).toEqual(ticketData.guid);
-        expect(ticket.openedDate).toEqual(ticketData.openDate);
-        expect(ticket.assetId.type).toEqual(ticketData.assetId.type);
-        expect(ticket.assetId.value).toEqual(ticketData.assetId.value);
+        expect(ticket.openDate).toEqual(ticketData.openDate);
+        expect(ticket.vesselGuid).toEqual(ticketData.vesselGuid);
+        expect(ticket.positionGuid).toEqual(ticketData.positionGuid);
         expect(ticket.ruleName).toEqual(ticketData.ruleName);
         expect(ticket.sender).toEqual(ticketData.sender);
-        expect(ticket.resolvedDate).toEqual(ticketData.resolveDate);
-        expect(ticket.resolvedBy).toEqual(ticketData.resolvedBy);
+        expect(ticket.updated).toEqual(ticketData.updated);
+        expect(ticket.updatedBy).toEqual(ticketData.updatedBy);
         expect(ticket.status).toEqual(ticketData.status);
 
     }));
@@ -78,34 +75,16 @@ describe('Ticket', function() {
         expect(ticket.isPending()).toBeFalsy();
     }));
 
-    it("isVesselAsset() should return true only when assetId type is VESSEL", inject(function(Ticket) {
-        var ticket = new Ticket();
-        expect(ticket.isVesselAsset()).toBeFalsy();
-
-        ticket.assetId = {
-            type : "VESSEL",
-            value : "test-123"
-        };
-        expect(ticket.isVesselAsset()).toBeTruthy();
-
-       ticket.assetId = {
-            type : "OTHER_TYPE",
-            value : "test-123"
-        };
-
-        expect(ticket.isVesselAsset()).toBeFalsy();
-    }));
-
 
     it("DTO() should create an object with guid and status", inject(function(Ticket) {
         var ticket = new Ticket();
         ticket.setStatusToClosed();
-        ticket.setResolvedBy("TEST");
+        ticket.setUpdatedBy("TEST");
         var dto = ticket.DTO();
 
         expect(dto.guid).toEqual(ticket.guid);
         expect(dto.status).toEqual("CLOSED");
-        expect(dto.resolvedBy).toEqual("TEST");
+        expect(dto.updatedBy).toEqual("TEST");
     }));
 
 });

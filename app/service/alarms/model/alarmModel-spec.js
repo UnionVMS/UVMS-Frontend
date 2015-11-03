@@ -4,15 +4,20 @@ describe('Alarm', function() {
         "guid": "1",
         "status": "OPEN",
         "openDate": "2015-10-23 08:40:56 +0200",
-        "resolveDate": "2015-10-23 08:40:56 +0200",
-        "resolvedBy": "CLOSING USER",
+        "updated": "2015-10-23 08:40:56 +0200",
+        "updatedBy": "CLOSING USER",
+        "vesselGuid": "ABCD1234",
+        "recipient" : "FIN",
+        "sender" : "SWE",
         "alarmItem": [
           {
             "guid": "ALARM_ITEM_GUID_1",
+            "ruleGuid": "RULE_GUID",
             "ruleName": "Sanity check - Latitude must exist"
           },
           {
             "guid": "ALARM_ITEM_GUID_2",
+            "ruleGuid": "RULE_GUID",
             "ruleName": "Sanity check - Longitude must exist"
           }
         ],
@@ -61,9 +66,12 @@ describe('Alarm', function() {
 
         expect(alarm.guid).toEqual(alarmData.guid);
         expect(alarm.status).toEqual(alarmData.status);
-        expect(alarm.openedDate).toEqual(alarmData.openDate);
-        expect(alarm.resolvedDate).toEqual(alarmData.resolveDate);
-        expect(alarm.resolvedBy).toEqual(alarmData.resolvedBy);
+        expect(alarm.openDate).toEqual(alarmData.openDate);
+        expect(alarm.updated).toEqual(alarmData.updated);
+        expect(alarm.updatedBy).toEqual(alarmData.updatedBy);
+        expect(alarm.vesselGuid).toEqual(alarmData.vesselGuid);
+        expect(alarm.recipient).toEqual(alarmData.recipient);
+        expect(alarm.sender).toEqual(alarmData.sender);
         expect(alarm.alarmItems.length).toEqual(alarmData.alarmItem.length);
 
         expect(alarm.asset.type).toEqual(alarmData.rawMovement.assetId.assetType);
@@ -121,17 +129,6 @@ describe('Alarm', function() {
         expect(alarm.isPending()).toBeFalsy();
     }));
 
-    it("isVesselAsset() should return true only when assetId type is VESSEL", inject(function(Alarm) {
-        var alarm = new Alarm();
-        expect(alarm.isVesselAsset()).toBeFalsy();
-
-        alarm.asset = {type : "VESsEL"};
-        expect(alarm.isVesselAsset()).toBeTruthy();
-
-        alarm.asset = {type : "OTHER_TYPE"};
-        expect(alarm.isVesselAsset()).toBeFalsy();
-    }));
-
 
     it('copy should return a copy of the object', inject(function(Alarm) {
         var alarm = Alarm.fromDTO(alarmData);
@@ -145,5 +142,29 @@ describe('Alarm', function() {
         expect(alarm.alarmItems[0].guid).not.toEqual('CHANGED');
 
 
+    }));
+
+
+    it("DTO() should create an object with guid and status and linkedVessel", inject(function(Alarm, Vessel) {
+        var alarm = Alarm.fromDTO(alarmData);
+
+        var vessel = new Vessel();
+        vessel.vesselId = {
+            guid: "ABCD123"
+        };
+        alarm.placeholderVessel = vessel;
+
+        alarm.setStatusToClosed();
+        alarm.setUpdatedBy("TEST");
+        alarm.inactivatePosition   = true;
+
+        var dto = alarm.DTO();
+
+        expect(dto.guid).toEqual(alarm.guid);
+        expect(dto.status).toEqual("CLOSED");
+        expect(dto.updatedBy).toEqual("TEST");
+        //Skip linkedVesselGuid for now
+        //expect(dto.linkedVesselGuid).toEqual(vessel.vesselId.guid);
+        expect(dto.inactivatePosition).toEqual(true);
     }));
 });

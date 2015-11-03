@@ -11,10 +11,10 @@
             <datepicker-input model="advancedSearchObject.TO_DATE" time="true" min-date="advancedSearchObject.FROM_DATE" placeholder="{{'common.search_to' | i18n}}"></datepicker-input>
         </div>
         <div class="col-md-2">
-            <input type="text" ng-model="advancedSearchObject.OBJECT_NAME" placeholder="{{'alarms.alarms_search_affected_object_placeholder' | i18n}}"/>
+            <input type="text" ng-model="advancedSearchObject.NAME" placeholder="{{'alarms.alarms_search_affected_object_placeholder' | i18n}}"/>
         </div>
         <div class="col-md-3">
-            <dropdown ng-model="advancedSearchObject.RULE_NAME" initialtext="{{'alarms.alarms_search_rule' | i18n}}" items="[{text:'MOCK_RULE',code:'MOCK_CODE'}]"></dropdown>
+            <dropdown ng-model="advancedSearchObject.RULE_GUID" initialtext="{{'alarms.alarms_search_rule' | i18n}}" items="rules"></dropdown>
         </div>
         <div class="col-md-1">
             <button type="submit" class="btn btn-primary btn-sm" ng-click="performAdvancedSearch()">{{'common.search' | i18n}}</button>

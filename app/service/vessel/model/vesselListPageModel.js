@@ -30,19 +30,5 @@ angular.module('unionvmsWeb')
             }
         };
 
-        //Find a vessel in the list of items by it's CFR
-        VesselListPage.prototype.getVesselByCFR = function(cfr) {
-            if(angular.isDefined(cfr)){
-                var foundVessel;
-                $.each(this.items, function(index, vessel){
-                    if(vessel.cfr === cfr){
-                        foundVessel = vessel;
-                        return false;
-                    }
-                });
-                return foundVessel;
-            }
-        };
-
         return VesselListPage;
     });

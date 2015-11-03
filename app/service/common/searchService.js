@@ -104,6 +104,107 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         deferred.reject(error);
     };
 
+    //Search alarms or ticket
+    //searchType should be TICKETS or ALARMS
+    var searchAlarmsOrTickets = function(searchType){
+        searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
+
+        //Split into alarms/tickets and vessel criterias
+        var partition = searchUtilsService.getSearchCriteriaPartition(getListRequest.criterias, {vessel: vesselSearchKeys});
+        var alarmsOrTicketsCritieria = partition["default"];
+        var vesselCriteria = partition["vessel"];
+
+        var vesselRequest = new GetListRequest(1, 10000, true, vesselCriteria);
+
+        //Set the new search criterias (without vessel criterias)
+        getListRequest.setSearchCriterias(alarmsOrTicketsCritieria);
+
+        var deferred = $q.defer();
+        var vesselDeferred = $q.defer();
+
+        //Get vessels first?
+        if(vesselRequest.getNumberOfSearchCriterias() > 0){
+            vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vessels){
+                //No vessel match? Then return empty page.
+                if (vessels.length === 0) {
+                    deferred.resolve(new SearchResultListPage());
+                    return;
+                }
+
+                //Update alarms/tickest search criterias with vessels
+                $.each(vessels, function(index, vessel) {
+                    if(angular.isDefined(vessel.vesselId)){
+                        getListRequest.addSearchCriteria("ASSET_GUID", vessel.vesselId.guid);
+                    }
+                });
+                vesselDeferred.resolve();
+            }, function(error){
+                $log.error("Error getting vessels and updating " +searchType +" search .", error);
+                deferred.reject(error);
+            });
+        }else{
+            vesselDeferred.resolve();
+        }
+
+        //Get alarms/tickets after vessels (or if vessels skipped)
+        vesselDeferred.promise.then(function(){
+            //Get alarms or tickets
+            var searchPromise;
+            if(searchType === 'ALARMS'){
+                searchPromise = alarmRestService.getAlarmsList(getListRequest);
+            }else if (searchType === 'TICKETS'){
+                searchPromise = alarmRestService.getTicketsList(getListRequest);
+            }
+
+            searchPromise.then(function(page) {
+                //Zero results?
+                if(page.getNumberOfItems() === 0){
+                    deferred.resolve(page);
+                    return;
+                }
+
+                //Get vessels for all vessel assets in page
+                var vesselRequest = new GetListRequest(1, page.getNumberOfItems()*10, true);
+                $.each(page.items, function(index, pageItem) {
+                    //Search for vessels by GUID
+                    if(angular.isDefined(pageItem.vesselGuid)){
+                        vesselRequest.addSearchCriteria('GUID', pageItem.vesselGuid);
+                    }
+                });
+
+                if(vesselRequest.getNumberOfSearchCriterias() === 0){
+                    deferred.resolve(page);
+                    return;
+                }
+
+                vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vessels){
+                    var vesselPage = new VesselListPage(vessels, 1, 1);
+                    //Update alarms/tickets page by connecting each item to a vessel
+                    $.each(page.items, function(index, pageItem) {
+                        if(angular.isDefined(pageItem.vesselGuid)){
+                            var vessel = vesselPage.getVesselByGuid(pageItem.vesselGuid);
+                            if(angular.isDefined(vessel)){
+                                pageItem.vessel = vessel;
+                            }
+                        }
+                    });
+
+                    deferred.resolve(page);
+
+                }, function(error){
+                    $log.error("Error getting and connecting vessels to " +searchType, error);
+                    deferred.reject(error);
+                });
+            }, function(error){
+                $log.error("Error getting " +searchType, error);
+                deferred.reject(error);
+            });
+        });
+
+        return deferred.promise;
+    };
+
+
 	var searchService = {
 
         //Do the search for vessels
@@ -331,102 +432,11 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         },
 
         searchTickets : function(){
-            searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
-            var deferred = $q.defer();
-            alarmRestService.getTicketsList(getListRequest).then(function(page) {
-                //Zero results?
-                if(page.getNumberOfItems() === 0){
-                    deferred.resolve(page);
-                    return;
-                }
-
-                //Get vessels for all vessel assets in page
-                var vesselRequest = new GetListRequest(1, page.getNumberOfItems(), true);
-                $.each(page.items, function(index, alarm) {
-                    if(alarm.isVesselAsset()){
-                        vesselRequest.addSearchCriteria("GUID", alarm.assetId.value);
-                    }
-                });
-
-                if(vesselRequest.getNumberOfSearchCriterias() === 0){
-                    deferred.resolve(page);
-                    return;
-                }
-
-                vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vessels){
-                    var vesselPage = new VesselListPage(vessels, 1, 1);
-                    //Update alarms page by connecting each alarm to a vessel
-                    $.each(page.items, function(index, alarm) {
-                        if(alarm.isVesselAsset()){
-                            var vessel = vesselPage.getVesselByGuid(alarm.assetId.value);
-                            if(angular.isDefined(vessel)){
-                                alarm.vessel = vessel;
-                            }
-                        }
-                    });
-
-                    deferred.resolve(page);
-
-                }, function(error){
-                    $log.error("Error getting and connecting vessels to tickets.", error);
-                    deferred.reject(error);
-                });
-            }, function(error){
-                $log.error("Error getting tickets.", error);
-                deferred.reject(error);
-            });
-
-            return deferred.promise;
+            return searchAlarmsOrTickets('TICKETS');
         },
 
         searchAlarms : function(){
-            searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
-            var deferred = $q.defer();
-            alarmRestService.getAlarmsList(getListRequest).then(function(page) {
-                //Zero results?
-                if(page.getNumberOfItems() === 0){
-                    deferred.resolve(page);
-                    return;
-                }
-
-                //Get vessels for all vessel assets in page
-                var vesselRequest = new GetListRequest(1, page.getNumberOfItems()*10, true);
-                $.each(page.items, function(index, alarm) {
-                    //Search for vessels by CFR
-                    if(alarm.isVesselAsset() && angular.isDefined(alarm.asset.ids['CFR'])){
-                        vesselRequest.addSearchCriteria('CFR', alarm.asset.ids['CFR']);
-                    }
-                });
-
-                if(vesselRequest.getNumberOfSearchCriterias() === 0){
-                    deferred.resolve(page);
-                    return;
-                }
-
-                vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vessels){
-                    var vesselPage = new VesselListPage(vessels, 1, 1);
-                    //Update alarms page by connecting each alarm to a vessel
-                    $.each(page.items, function(index, alarm) {
-                        if(alarm.isVesselAsset() && angular.isDefined(alarm.asset.ids['CFR'])){
-                            var vessel = vesselPage.getVesselByCFR(alarm.asset.ids['CFR']);
-                            if(angular.isDefined(vessel)){
-                                alarm.vessel = vessel;
-                            }
-                        }
-                    });
-
-                    deferred.resolve(page);
-
-                }, function(error){
-                    $log.error("Error getting and connecting vessels to alarms.", error);
-                    deferred.reject(error);
-                });
-            }, function(error){
-                $log.error("Error getting alarms.", error);
-                deferred.reject(error);
-            });
-
-            return deferred.promise;            
+            return searchAlarmsOrTickets('ALARMS');
         },
 
         //Modify search request

@@ -3,26 +3,33 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
     function Alarm(){
         this.guid = undefined;
         this.status = undefined;
-        this.openedDate = undefined;
-        this.resolvedDate = undefined;
-        this.resolvedBy = undefined;
+        this.openDate = undefined;
+        this.updated = undefined;
+        this.updatedBy = undefined;
         this.alarmItems = [];
         this.movement = undefined;
         this.asset = {
             type : undefined,
             ids : {}
         };
+        this.vesselGuid = undefined;
+        this.recipient = undefined;
+        this.sender = undefined;
         this.vessel = undefined;
         this.placeholderVessel = undefined;
+        this.inactivatePosition = false;
     }
 
     Alarm.fromDTO = function(dto){
         var alarm = new Alarm();
         alarm.guid = dto.guid;
         alarm.status = dto.status;
-        alarm.openedDate = dto.openDate;
-        alarm.resolvedDate = dto.resolveDate;
-        alarm.resolvedBy = dto.resolvedBy;
+        alarm.openDate = dto.openDate;
+        alarm.updated = dto.updated;
+        alarm.updatedBy = dto.updatedBy;
+        alarm.vesselGuid = dto.vesselGuid;
+        alarm.recipient = dto.recipient;
+        alarm.sender = dto.sender;
 
         //AlarmItem
         var i;
@@ -55,8 +62,8 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
         this.status = "CLOSED";
     };
 
-    Alarm.prototype.setStatusToOpen = function() {
-        this.status = "OPEN";
+    Alarm.prototype.setStatusToRejected = function() {
+        this.status = "REJECTED";
     };
 
     Alarm.prototype.isOpen = function() {
@@ -71,32 +78,49 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
         return typeof this.status === 'string' && this.status.toUpperCase() === "CLOSED";
     };
 
-    Alarm.prototype.isVesselAsset = function() {
-        if(angular.isDefined(this.asset) && angular.isDefined(this.asset.type)){
-            return this.asset.type.toUpperCase() === 'VESSEL';
-        }
-        return false;
+
+    Alarm.prototype.setUpdatedBy = function(updatedBy) {
+        this.updatedBy = updatedBy;
     };
 
+    //Used for updating status (accepting/rejecting)
+    Alarm.prototype.DTO = function(){
+        var dto = {
+            guid : this.guid,
+            status: this.status,
+        };
+        dto.updatedBy = this.updatedBy;
+        dto.inactivatePosition = this.inactivatePosition;
+
+        //Hide for now
+        /*if(angular.isDefined(this.placeholderVessel)){
+            dto.linkedVesselGuid = this.placeholderVessel.getGuid();
+        }*/
+        return dto;
+    };
 
     Alarm.prototype.copy = function() {
         var copy = new Alarm();
         copy.guid = this.guid;
         copy.status = this.status;
         copy.openDate = this.openDate;
-        copy.resolvedDate = this.resolvedDate;
-        copy.resolvedBy = this.resolvedBy;
+        copy.updated = this.updated;
+        copy.updatedBy = this.updatedBy;
         for(var i=0; i < this.alarmItems.length; i++){
             copy.alarmItems.push(_.clone(this.alarmItems[i]));
         }
         copy.movement = this.movement.copy();
         copy.asset = _.clone(this.asset);
+        copy.vesselGuid = this.vesselGuid;
+        copy.recipient = this.recipient;
+        copy.sender = this.sender;
         if(angular.isDefined(this.vessel)){
             copy.vessel = this.vessel.copy();
         }
         if(angular.isDefined(this.placeholderVessel)){
             copy.placeholderVessel = this.placeholderVessel.copy();
-        }        
+        }
+        copy.inactivatePosition = this.inactivatePosition;
         return copy;
     };
 

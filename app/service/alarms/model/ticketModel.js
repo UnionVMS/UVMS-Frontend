@@ -2,32 +2,30 @@ angular.module('unionvmsWeb').factory('Ticket', function() {
 
     function Ticket(){
         this.guid = undefined;
-        this.openedDate = undefined;
+        this.openDate = undefined;
         this.assetId = undefined;
+        this.vesselGuid = undefined;
         this.vessel = undefined;
+        this.positionGuid = undefined;
         this.ruleName = undefined;
         this.sender = undefined;
-        this.resolvedDate = undefined;
-        this.resolvedBy = undefined;
+        this.updated = undefined;
+        this.updatedBy = undefined;
         this.status = undefined;
+
     }
 
     Ticket.fromDTO = function(dto){
         var ticket = new Ticket();
         ticket.guid = dto.guid;
-        ticket.openedDate = dto.openDate;
+        ticket.openDate = dto.openDate;
 
-        if(angular.isDefined(dto.assetId)){
-            ticket.assetId = {
-                type : dto.assetId.type,
-                value : dto.assetId.value
-            };
-        }
-
+        ticket.vesselGuid = dto.vesselGuid;
+        ticket.positionGuid = dto.positionGuid;
         ticket.ruleName = dto.ruleName;
         ticket.sender = dto.sender;
-        ticket.resolvedDate = dto.resolveDate;
-        ticket.resolvedBy = dto.resolvedBy;
+        ticket.updated = dto.updated;
+        ticket.updatedBy = dto.updatedBy;
         ticket.status = dto.status;
         return ticket;
     };
@@ -48,15 +46,8 @@ angular.module('unionvmsWeb').factory('Ticket', function() {
         return typeof this.status === 'string' && this.status.toUpperCase() === "CLOSED";
     };
 
-    Ticket.prototype.setResolvedBy = function(resolvedBy) {
-        this.resolvedBy = resolvedBy;
-    };
-
-    Ticket.prototype.isVesselAsset = function() {
-        if(angular.isDefined(this.assetId) && angular.isDefined(this.assetId.type)){
-            return this.assetId.type.toUpperCase() === 'VESSEL';
-        }
-        return false;
+    Ticket.prototype.setUpdatedBy = function(updatedBy) {
+        this.updatedBy = updatedBy;
     };
 
 
@@ -65,17 +56,17 @@ angular.module('unionvmsWeb').factory('Ticket', function() {
 
         copy.guid = this.guid;
         copy.openedDate = this.openedDate;
-        if(this.assetId){
-            copy.assetId = {
-                type : this.assetId.type,
-                value : this.assetId.value
-            };
-        }
+        copy.vesselGuid = this.vesselGuid;
+        copy.positionGuid = this.positionGuid;
         copy.ruleName = this.ruleName;
         copy.sender = this.sender;
-        copy.resolvedDate = this.resolvedDate;
-        copy.resolvedBy = this.resolvedBy;
+        copy.updated = this.updated;
+        copy.updatedBy = this.updatedBy;
         copy.status = this.status;
+
+        if(angular.isDefined(this.vessel)){
+            copy.vessel = this.vessel.copy();
+        }
         return copy;
     };
 
@@ -86,7 +77,7 @@ angular.module('unionvmsWeb').factory('Ticket', function() {
             status: this.status,
         };
         if(this.isClosed()){
-            dto.resolvedBy = this.resolvedBy;
+            dto.updatedBy = this.updatedBy;
         }
         return dto;
     };

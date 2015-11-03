@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AlarmSearchController', function($scope, locale) {
+angular.module('unionvmsWeb').controller('AlarmSearchController', function($scope, locale, ruleRestService) {
 
 	var DATE_CUSTOM = "Custom";
 
@@ -12,6 +12,19 @@ angular.module('unionvmsWeb').controller('AlarmSearchController', function($scop
     }];
 
     $scope.advancedSearchObject.TIME_SPAN = $scope.timeSpanOptions[0].code;
+    $scope.rules = [];
+
+    var init = function(){
+        //Populate rules dropdown
+        ruleRestService.getRulesList().then(function(rulesPage){
+            var rulesOptions = [];
+            $.each(rulesPage.items, function(i, rule){
+                rulesOptions.push({text: rule.name, code: rule.guid});
+            });
+            rulesOptions = _.sortBy(rulesOptions, function(obj){return obj.text;});
+            $scope.rules = rulesOptions;
+        });
+    };
 
     //Reset the form
     $scope.resetSearch = function(){
@@ -44,4 +57,5 @@ angular.module('unionvmsWeb').controller('AlarmSearchController', function($scop
 		}
 	});
 
+    init();
 });
