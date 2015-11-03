@@ -1,6 +1,8 @@
 {
     "active" : "Active",
     "actions": "Actions",
+    "access_denied" : "Access denied",
+    "access_denied_text" : "You don't have permission to view this page.",
     "add" : "Add",
     "add_new": "Add new",
     "added" : "Added",

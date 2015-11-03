@@ -69,6 +69,16 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                 }
             }
         })
+        .state('uvmsAccessError', {
+            url: '/accessError',
+            data: {access: ACCESS.PUBLIC},
+            views: {
+                app: {
+                    templateUrl: 'partial/accessDenied/accessDenied.html',
+                    controller: 'accessDeniedCtrl'
+                }
+            }
+        })
         .state('app', {
             abstract : true,
             views: {
@@ -460,7 +470,6 @@ unionvmsWebApp.value('localeConf', {
     delimiter: '::'
 });
 
-
 //Service used for bootstrapping the application
 unionvmsWebApp.factory('initService',function(configurationService, locale, tmhDynamicLocale, $window) {
 
@@ -569,6 +578,7 @@ unionvmsWebApp.config(['authRouterProvider',function(authRouterProvider){
     //authRouterProvider.anonRoute = "/anon";
     authRouterProvider.setHomeState("app.today");
     authRouterProvider.setLogoutState("uvmsLogout");
+    authRouterProvider.setupAccessErrorState("uvmsAccessError");
     //sets up a 'login' state that creates a default login page.
     // can be customised by either passing the name of an existing state that must be used for the login page
     // or by passing a complete state config object
