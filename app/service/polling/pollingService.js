@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('pollingService',function(pollingRestService, Poll, $q, $timeout, dateTimeService) {
+angular.module('unionvmsWeb').factory('pollingService',function(pollingRestService, Poll, $q, $timeout, dateTimeService, userService) {
 
     var wizardStep = 1;
 
@@ -147,7 +147,7 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
 
     function getCreatePollsRequestData(selectedChannels) {
         return {
-            userName: "FRONTEND_USER",
+            userName: userService.getUserName(),
             pollType: pollingOptions.type + "_POLL",
             comment: pollingOptions.comment,
             attributes: getPollAttributes(pollingOptions.type),
