@@ -1,9 +1,9 @@
 <div ng-controller="ReportslistCtrl as rt" class="table-responsive reportsListTable">
 	<div class="row reportBtnGroup" ng-show="isVisible.reportsList">
 		<div class="col-md-6 report-btn-group">
-			<!-- <button type="button" class="btn btn-primary btn-sm" ng-click="reloadReportsList()">
+			<button type="button" class="btn btn-primary btn-sm" ng-click="reloadReportsList()">
                 <span class="fa fa-refresh" aria-hidden="true"></span>
-            </button> -->
+            </button>
 			<button type="button" class="btn btn-primary btn-sm" ng-click="toggleReportForm('CREATE')">
                    <span class="fa fa-plus-square" aria-hidden="true"></span> &nbsp;
                    <span>{{'spatial.reports_add_new_report' | i18n }}</span>
@@ -25,7 +25,7 @@
 	            <th></th>
 	        </tr>
 	        <tr ng-if="alert.visible">
-	        	<th colspan="7" ng-class="{fade: alert.startFade}">
+	        	<th colspan="7">
 				    <div class="alert alert-danger alert-container" role="alert" ng-if="alert.type === 'error'">
        					<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
        					<span class="alert-message">
@@ -50,7 +50,7 @@
 	            <td>{{ report.desc }}</td>
 	            <td>{{ report.createdOn }}</td>
 	            <td>{{ report.createdBy }}</td>
-	            <td>{{ report.lastExecTime }}</td>
+	            <td>{{ report.executedOn }}</td>
 	            <td class="dt-center">{{report.visibility}}</td>
 	            <td>
                     <button type="button" class="btn btn-success btn-xs btn-bottom-mg" ng-click="runReport($index)"><span class="run-report">{{'spatial.reports_table_run_label' | i18n }}</span></button>

@@ -3,6 +3,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     $scope.selectedMenu = 'LIVEVIEW';
     $scope.reports = [];
     $scope.executedReport = {};
+    $scope.repServ = reportService;
     
     //Define header menus
     var setMenus = function(){
@@ -42,6 +43,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
            if ($scope.reports.length === 0){
                $scope.$broadcast('loadReportsList');
            }
+           $scope.$broadcast('untoggleToolbarBtns');
        }
    });
    

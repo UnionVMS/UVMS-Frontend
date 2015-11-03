@@ -191,7 +191,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	            }
 	        });
 
-	        if (features.length > 0){
+	        if (angular.isDefined(ms.activeLayerType) && features.length > 0 && angular.equals({}, ms.measureInteraction)){
 	            var templateURL = 'partial/spatial/templates/' + ms.activeLayerType + '.html';
 
 	            $templateRequest(templateURL).then(function(template){
@@ -208,6 +208,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	                ms.overlay.setPosition(coordinate);
 
 	            }, function(){
+	                console.log('error was here');
 	                //error fetching template
 	            });
 	        }
@@ -293,6 +294,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
         layer = new ol.layer.Tile({
             title: config.title,
+            type: 'WMS',
             isBaseLayer: config.isBaseLayer,
             source: source
         });
@@ -300,80 +302,51 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         return ( layer );
     };
 
-    ms.createSegmentsLayer = function( config ) {
-      var geojson = config.geoJson,
-          layer = new ol.layer.Vector({
-            title: config.title,
-            type: config.type,
-            isBaseLayer: false,
-            source: new ol.source.Vector({
-              features: (new ol.format.GeoJSON()).readFeatures(geojson, {
+    //Add VMS positions layer
+    ms.createPositionsLayer = function( config ) {
+      var layer = new ol.layer.Vector({
+          title: config.title,
+          type: config.type,
+          isBaseLayer: false,
+          source: new ol.source.Vector({
+              features: (new ol.format.GeoJSON()).readFeatures(config.geoJson, {
                   dataProjection: 'EPSG:4326',
                   featureProjection: ms.getMapProjectionCode()
               })
-            }),
-            style: ms.setSegStyle
-          });
-
+          }),
+          style: ms.setPosStyle
+      });
+      
+      //Update map extent
+      var src = layer.getSource();
+      if (src.getFeatures().length > 0){
+          var geom = new ol.geom.Polygon.fromExtent(src.getExtent());
+          ms.zoomTo(geom);
+      }
+      
       return( layer );
     };
 
-    ms.createPositionsLayer = function( config ) {
-      var geojson = config.geoJson,
-          layer = new ol.layer.Vector({
+    //Add VMS segments layer
+    ms.createSegmentsLayer = function( config ) {
+        var layer = new ol.layer.Vector({
             title: config.title,
             type: config.type,
             isBaseLayer: false,
             source: new ol.source.Vector({
-              features: (new ol.format.GeoJSON()).readFeatures(geojson, {
-                dataProjection: 'EPSG:4326',
-                featureProjection: ms.getMapProjectionCode()
-              })
-            }),
-            style: ms.setPosStyle
-          });
-
-      return( layer );
-    };
-
-    //Add VMS positions layer
-    ms.addPositions = function(geojson) {
-        var layer = new ol.layer.Vector({
-            type: 'vmspos',
-            isBaseLayer: false,
-            source: new ol.source.Vector({
-                features: (new ol.format.GeoJSON()).readFeatures(geojson, {
-                    dataProjection: 'EPSG:4326',
-                    featureProjection: ms.getMapProjectionCode()
-                })
-            }),
-            style: ms.setPosStyle
-        });
-
-        ms.map.addLayer(layer);
-
-        //Update map extent
-        var geom = new ol.geom.Polygon.fromExtent(layer.getSource().getExtent());
-        ms.zoomTo(geom);
-    };
-
-    //Add VMS segments layer
-    ms.addSegments = function(geojson){
-        var layer = new ol.layer.Vector({
-            type: 'vmsseg',
-            isBaseLayer: false,
-            source: new ol.source.Vector({
-                features: (new ol.format.GeoJSON()).readFeatures(geojson, {
+                features: (new ol.format.GeoJSON()).readFeatures(config.geoJson, {
                     dataProjection: 'EPSG:4326',
                     featureProjection: ms.getMapProjectionCode()
                 })
             }),
             style: ms.setSegStyle
         });
+        
+        ms.calculateJenkinsIntervals(config.geoJson);
 
-        ms.map.addLayer(layer);
+        return( layer );
     };
-
+    
     //Add highlight layer
     ms.addFeatureOverlay = function(){
         var layer = new ol.layer.Vector({
@@ -482,6 +455,42 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         return styles;
     };
 
+    //VMS styles
+    ms.styles = {
+        positions: undefined,
+        segments: undefined,
+        speedBreaks: []
+    };
+    
+    ms.setFlagStateStyles = function(styles){
+        ms.styles.positions = styles;
+    };
+    
+    ms.setSpeedStyles = function(styles){
+        ms.styles.segments = styles;  
+    };
+    
+    ms.calculateJenkinsIntervals = function(geoJson){
+        var breaks = turf.jenks(geoJson, 'speedOverGround', 4);
+        if (breaks !== null){
+            ms.styles.speedBreaks = breaks;
+            ms.styles.speedBreaks[4] = ms.styles.speedBreaks[4] + 1;
+        }
+    };
+    
+    ms.getColorByFlagState = function(fs){
+        return ms.styles.positions[fs.toLowerCase()];
+    };
+    
+    ms.getColorBySpeed = function(speed){
+        for (var i = 1; i < ms.styles.speedBreaks.length; i++){
+            if (speed >= ms.styles.speedBreaks[i-1] && speed < ms.styles.speedBreaks[i]){
+                var segStyleKey = Object.keys(ms.styles.segments)[i-1];
+                return ms.styles.segments[segStyleKey];
+            }
+        }
+    };
+    
     //VMS positions style
     ms.setPosStyle = function(feature, resolution){
         var style = new ol.style.Style({
@@ -490,9 +499,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 font: 'normal 22px FontAwesome',
                 textBaseline: 'middle',
                 textAlign: 'center',
-                rotation: -0.78 + ms.degToRad(feature.get('crs')),
+                rotation: -0.78 + ms.degToRad(feature.get('calculatedSpeed')), //FIXME
                 fill: new ol.style.Fill({
-                    color: feature.get('color')
+                    color: ms.getColorByFlagState(feature.get('countryCode'))
                 })
             })
         });
@@ -504,11 +513,18 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     //VMS segments style
     ms.setSegStyle = function(feature, resolution){
         var geometry = feature.getGeometry();
+        var color = ms.getColorBySpeed(feature.get('speedOverGround'));
 
         var style = [
             new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                    color: feature.get('color'),
+                    color: 'white',
+                    width: 4
+                })
+            }),
+            new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: color,
                     width: 2
                 })
             }),
@@ -516,28 +532,40 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 geometry: new ol.geom.Point(ms.getMiddlePoint(geometry)),
                 text: new ol.style.Text({
                     text: '\uf105',
-                    font: 'bold 16px FontAwesome',
-                    textBaseline: 'middle',
-                    textAlign: 'center',
+                    font: 'bold 20px FontAwesome',
+                    //textBaseline: 'middle',
+                    //textAlign: 'center',
                     rotation: ms.getRotationForArrow(geometry),
                     fill: new ol.style.Fill({
-                        color: feature.get('color')
+                        color: 'white'
+                    })
+                })
+            }),
+            new ol.style.Style({
+                geometry: new ol.geom.Point(ms.getMiddlePoint(geometry)),
+                text: new ol.style.Text({
+                    text: '\uf105',
+                    font: 'bold 16px FontAwesome',
+                    //textBaseline: 'middle',
+                    //textAlign: 'center',
+                    rotation: ms.getRotationForArrow(geometry),
+                    fill: new ol.style.Fill({
+                        color: color
                     })
                 })
             })
         ];
+        
 
         return style;
     };
 
     //MAP FUNCTIONS
 	//Clear map before running a new report
-	ms.clearMap = function(config){
+	ms.clearVectorLayers = function(config){
 	    ms.map.removeLayer(ms.getLayerByType('highlight'));
 	    ms.map.removeLayer(ms.getLayerByType('vmspos'));
 	    ms.map.removeLayer(ms.getLayerByType('vmsseg'));
-
-	    //TODO change map and view properties according to user definition
 	};
 
 	//Find layers by title
@@ -581,13 +609,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
 	//Calculate middle point in a linestring geometry
 	ms.getMiddlePoint = function(geometry){
-	    var p1 = geometry.getFirstCoordinate();
-	    var p2 = geometry.getLastCoordinate();
-
-	    var x = (p1[0] + p2[0]) / 2;
-	    var y = (p1[1] + p2[1]) / 2;
-
-	    return [x,y];
+	    var sourceProj = ms.getMapProjectionCode();
+	    var p1 = ms.pointCoordsToTurf(ol.proj.transform(geometry.getFirstCoordinate(), sourceProj, 'EPSG:4326'));
+	    var p2 = ms.pointCoordsToTurf(ol.proj.transform(geometry.getLastCoordinate(), sourceProj, 'EPSG:4326'));
+	    
+	    var middlePoint = ms.turfToOlGeom(turf.midpoint(p1, p2));
+	   
+	    return geometry.getClosestPoint(middlePoint.getCoordinates());
 	};
 
 	//Calculate rotation to display arrow on segments according to the geometry direction
@@ -909,13 +937,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	
 	ms.createMeasureTooltip = function(data){
 	    var el = document.createElement('div');
-	    el.className = 'tooltip tooltip-small';
+	    el.className = 'map-tooltip map-tooltip-small';
 	    
 	    data.dist_title = locale.getString('spatial.map_measure_distance_title');
 	    data.bearing_title = locale.getString('spatial.map_measure_bearing_title');
 	    if (angular.isDefined(data.eta)){
 	        data.eta_title = locale.getString('spatial.map_measure_eta_title');
-	        el.className = 'tooltip tooltip-large';
+	        el.className = 'map-tooltip map-tooltip-large';
 	    }
 	   
 	    var templateURL = 'partial/spatial/templates/measure_tooltip.html';
@@ -968,6 +996,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	    ms.clearMeasureOverlays();
 	    ms.map.removeInteraction(ms.measureInteraction);
 	    ms.map.removeLayer(ms.getLayerByType('measure-vector'));
+	    ms.measureInteraction = {};
 	};
 	
 	ms.pointCoordsToTurf = function(coords){
@@ -978,6 +1007,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         
         return format.writeFeatureObject(point);
 	};
+	
+	ms.turfToOlGeom = function(feature){
+        var format = new ol.format.GeoJSON();
+        return format.readFeature(feature).getGeometry().transform('EPSG:4326', ms.getMapProjectionCode());
+    };
 	
 	//Popup to display vector info
 	ms.addPopupOverlay = function(){
@@ -1015,7 +1049,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 m_spd: locale.getString('spatial.tab_vms_pos_table_header_measured_speed'),
                 c_spd: locale.getString('spatial.tab_vms_pos_table_header_calculated_speed'),
                 stat: locale.getString('spatial.tab_vms_pos_table_header_status'),
-                msg_tp: locale.getString('spatial.tab_vms_pos_table_header_msg_type')
+                msg_tp: locale.getString('spatial.tab_vms_pos_table_header_msg_type'),
+                act_tp: locale.getString('spatial.tab_vms_pos_table_header_activity_type')
             },
             visibility: {
                 fs: true,
@@ -1028,7 +1063,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 m_spd: true,
                 c_spd: true,
                 stat: true,
-                msg_tp: true
+                msg_tp: true,
+                act_tp: true
             },
             properties: feature,
             coordinates: {

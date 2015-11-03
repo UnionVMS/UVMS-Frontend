@@ -13,6 +13,7 @@
 	"map_tip_go_forward": "Next extent",
 	"map_tip_reset_layer_filter": "Reset layer filter",
 	"map_tip_measure_distance": "Measure distance",
+	"map_tip_clear_map": "Clear map highlights",
 	"map_measure_distance_title": "Distance",
 	"map_measure_bearing_title": "Bearing",
 	"map_measure_eta_title": "ETA",
@@ -22,6 +23,8 @@
 	"map_measuring_units_label": "Units",
 	"map_speed_label": "Speed",
 	"map_start_date_label": "Start date",
+	"map_loading_report_message": "Loading report ...",
+	"map_error_loading_report": "There was an error while loading the report. Please try again.",
 	"reports_table_search_header": "Search",
 	"reports_table_header_name": "Name",
 	"reports_table_header_description": "Description",
@@ -115,6 +118,7 @@
 	"tab_vms_pos_table_header_calculated_speed": "CS",
 	"tab_vms_pos_table_header_course": "Course",
 	"tab_vms_pos_table_header_msg_type": "Msg.Type",
+	"tab_vms_pos_table_header_activity_type": "Act. type",
 	"tab_vms_pos_table_zoom_btn_title": "Zoom to position",
 	"tab_vms_pos_table_pan_btn_title": "Pan to position",
 	"tab_vms_seg_table_header_distance": "Distance",
@@ -160,5 +164,9 @@
 	"layer_tree_segments": "Segments",
 	"layer_tree_additional_cartography": "Additional cartography",
 	"layer_tree_tip_popup": "Toggle info popup",
-	"layer_tree_tip_context_menu": "Options"
+	"layer_tree_tip_context_menu": "Options",
+	"layer_tree_context_menu_style_title": "Style options",
+	"layer_tree_context_menu_geom_style": "Geometry only",
+	"layer_tree_context_menu_geom_label_style": "Labels and Geometry",
+	"layer_tree_context_menu_label_style": "Labels only"
 }

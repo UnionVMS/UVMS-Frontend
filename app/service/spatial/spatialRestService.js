@@ -34,6 +34,13 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource) 
                     }
                 } 
             });
+        },
+        getConfigsForReport: function(){
+            return $resource('/spatial/rest/config/:id', {}, {
+                'get': {
+                    method: 'GET'
+                }
+            });
         }
     };
 })
@@ -79,6 +86,17 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource) 
             });
             
             return deferred.promise;
+	    },
+	    getConfigsForReport: function(id){
+	        var deferred = $q.defer();
+	        spatialRestFactory.getConfigsForReport().get({id: id}, function(response){
+	            deferred.resolve(response.data);
+	        }, function(error){
+	            console.log('Error get spatial configs for report');
+	            deferred.reject(error);
+	        });
+	        
+	        return deferred.promise;
 	    }
 	};
 

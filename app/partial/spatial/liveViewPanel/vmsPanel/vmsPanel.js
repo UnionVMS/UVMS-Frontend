@@ -87,6 +87,10 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                                            type: 'text',
                                            bRegex: true,
                                            bSmart: true
+                                       },{
+                                           type: 'text',
+                                           bRegex: true,
+                                           bSmart: true
                                        }]
                                    })
                                    .withBootstrapOptions({
@@ -104,8 +108,8 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        DTColumnDefBuilder.newColumnDef(3),
        DTColumnDefBuilder.newColumnDef(4).withOption('type', 'position-date').renderWith(function(data, type, full){
            var displayDate = full[4];
-           if (moment(displayDate, $scope.config.src_format, true).isValid() === true){
-               displayDate = moment(displayDate, $scope.config.src_format, true).format($scope.config.target_format);
+           if (moment.utc(displayDate).isValid()){
+               displayDate = moment.utc(displayDate).format($scope.config.target_format);
            }
            return displayDate;
        }),
@@ -116,7 +120,8 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        DTColumnDefBuilder.newColumnDef(9),
        DTColumnDefBuilder.newColumnDef(10),
        DTColumnDefBuilder.newColumnDef(11),
-       DTColumnDefBuilder.newColumnDef(12).notSortable()
+       DTColumnDefBuilder.newColumnDef(12),
+       DTColumnDefBuilder.newColumnDef(13).notSortable()
    ];
    
    //Segments table config
@@ -236,17 +241,20 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        if (geomType === 'POSITION'){
            geom = new ol.geom.Point($scope.executedReport.positions[index].geometry.coordinates);
            geom.set('GeometryType', 'Point');
-           mapService.highlightFeature(geom);
        } else if (geomType === 'SEGMENT'){
            geom = new ol.geom.LineString($scope.executedReport.segments[index].geometry.coordinates);
            geom.set('GeometryType', 'LineString');
-           mapService.highlightFeature(geom);
        } else {
            geom = new ol.geom.Polygon.fromExtent($scope.executedReport.tracks[index].extent);
            //TODO build linestring
            //geom.set('GeometryType', 'LineString');
        }
+       
        geom.transform('EPSG:4326', mapService.getMapProjectionCode());
+       if (geomType !== 'TRACK'){
+           mapService.highlightFeature(geom);
+       }
+       
        mapService.zoomTo(geom);
        $scope.$emit('mapAction');
    };
@@ -277,18 +285,19 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        return data.reduce(
            function(csvObj, rec){
                var row = [
-                   rec.properties.cc,
+                   rec.properties.countryCode,
                    rec.properties.ircs,
                    rec.properties.cfr,
                    rec.properties.name,
-                   rec.properties.pos_tm,
+                   rec.properties.positionTime,
                    rec.geometry.coordinates[1],
                    rec.geometry.coordinates[0],
-                   rec.properties.stat,
-                   rec.properties.m_spd,
-                   rec.properties.c_spd,
-                   rec.properties.crs,
-                   rec.properties.msg_tp
+                   rec.properties.status,
+                   rec.properties.reportedSpeed,
+                   rec.properties.calculatedSpeed,
+                   rec.properties.calculatedCourse,
+                   rec.properties.movementType,
+                   rec.properties.activityType
                ];
                
                csvObj.push(row);
@@ -305,14 +314,14 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            function(csvObj, rec){
                var geom = wkt.writeGeometry(geoJson.readGeometry(rec.geometry));
                var row = [
-                   rec.properties.cc,
+                   rec.properties.countryCode,
                    rec.properties.ircs,
                    rec.properties.cfr,
                    rec.properties.name,
-                   rec.properties.dist,
-                   rec.properties.dur,
-                   rec.properties.spd_o_gnd,
-                   rec.properties.crs_o_gnd,
+                   rec.properties.distance,
+                   rec.properties.duration,
+                   rec.properties.speedOverGround,
+                   rec.properties.courseOverGround,
                    geom
                ];
                
@@ -327,12 +336,12 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        return data.reduce(
            function(csvObj, rec){
                var row = [
-                   rec.asset.cc,
+                   rec.asset.countryCode,
                    rec.asset.ircs,
                    rec.asset.cfr,
                    rec.asset.name,
-                   rec.dist,
-                   rec.dur
+                   rec.distance,
+                   rec.duration
                ];
                
                csvObj.push(row);

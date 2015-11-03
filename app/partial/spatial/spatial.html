@@ -1,4 +1,11 @@
 <div>
+	<div class="container executing-report" ng-show="repServ.isReportExecuting">
+		<i class="fa fa-spinner fa-spin"></i>
+		<div class="executing-report-msg">
+			<span>{{'spatial.map_loading_report_message' | i18n}}</span>
+		</div>
+		
+	</div>
 	<div class="container containerWithTopBottomPadding" ng-show="isMenuVisible">
 		<div class="row">
 			<div class="col-md-12 pageMenu">
@@ -8,6 +15,15 @@
 			</div>
 		</div>
 	</div>
+	<div class="container containerWithTopBottomPadding spatial-error" ng-show="repServ.hasError">
+		<div class="alert alert-danger alert-container" role="alert">
+			<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+			<span class="alert-message">
+				<span>{{'spatial.map_error_loading_report' | i18n }}</span>          
+			</span>
+	    </div>
+	</div>
+	
 	
 	<!-- <div class="container">
 		<div class="row">

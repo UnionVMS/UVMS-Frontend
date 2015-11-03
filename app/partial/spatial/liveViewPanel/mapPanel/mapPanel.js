@@ -2,6 +2,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, mapS
     $scope.activeControl = '';
     $scope.showMeasureConfigWin = false;
     $scope.measureConfigs = spatialHelperService.measure;
+    $scope.tbControls = spatialHelperService.tbControls;
     
     //Close identify popup
     $scope.closePopup = function(){
@@ -67,6 +68,18 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, mapS
         $scope.measureConfigs.startDate = undefined;
     };
     
+    $scope.clearMapHighlights = function(){
+        var layer = mapService.getLayerByType('highlight');
+        layer.getSource().clear(true);
+    };
+    
+    //Untoggle any toolbar btn when tab is changed
+    $scope.$on('untoggleToolbarBtns', function(evt){
+        if ($scope.activeControl !== ''){
+            $scope.toggleToolbarBtn($scope.activeControl);
+        }
+    });
+    
     //Other controls
 //    $scope.otherEnable = function(){
 //        console.log('enable other');
@@ -77,7 +90,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, mapS
 //    };
 });
 
-angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale, mapService){
+angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale, mapService, spatialHelperService){
     //Mock config object
     $scope.config = {
         map: {
@@ -101,6 +114,9 @@ angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale,
                 format: 'dd' //Possible values: dd, dms, ddm, m
             },{
                 type: 'history'
+            }],
+            tbControls: [{
+                type: 'measure'
             }]
         }
     };
@@ -108,5 +124,6 @@ angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale,
     locale.ready('spatial').then(function(){
         mapService.setMap($scope.config);
         $scope.map = mapService.map;
+        spatialHelperService.setToolbarControls($scope.config);
     });
 });

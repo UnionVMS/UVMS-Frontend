@@ -1,6 +1,9 @@
 angular.module('unionvmsWeb').factory('spatialHelperService',function() {
 
-	var spatialHelperService = {
+	var spServ = {
+	    tbControls: {
+	        measure: false
+	    },
 	    measure: {
 	        units: 'm',
 	        speed: undefined,
@@ -8,6 +11,12 @@ angular.module('unionvmsWeb').factory('spatialHelperService',function() {
 	        disabled: false
 	    }
 	};
+	
+	spServ.setToolbarControls = function(config){
+	    for (var i = 0; i < config.map.tbControls.length; i++){
+	        spServ.tbControls[config.map.tbControls[i].type] = true;
+	    }
+	};
 
-	return spatialHelperService;
+	return spServ;
 });

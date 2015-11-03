@@ -24,6 +24,60 @@ angular.module('unionvmsWeb').directive('legendPanel', function(mapService) {
                 return record;
 		    };
 		    
+		    //VMS positions
+		    this.buildRecVmsPos = function(layer){
+		        var record = {
+		            title: layer.get('title'),
+		            type: 'vmspos',
+		            visibility: layer.get('visible'),
+		            styles: this.getPositionsStyles()
+		        };
+		        
+		        return record;
+		    };
+		    
+		    this.getPositionsStyles = function(){
+		        var styles = mapService.styles.positions;
+		        var keys = Object.keys(styles);
+		        
+		        var finalStyles = [];
+		        for (var i = 0; i < keys.length; i++){
+		            finalStyles.push({
+		               title: keys[i].toUpperCase(),
+		               color: {"color" : styles[keys[i]]}
+		            });
+		        }
+		        return finalStyles;
+		    };
+		    
+		    //VMS segments
+		    this.buildRecVmsSeg = function(layer){
+		        var record = {
+		            title: layer.get('title'),
+		            type: 'vmsseg',
+		            visibility: layer.get('visible'),
+		            styles: this.getSegmentsStyles()
+		        };
+		        
+		        return record;
+		    };
+		    
+		    this.getSegmentsStyles = function(){
+		        var styles = mapService.styles.segments;
+		        var keys = Object.keys(styles);
+		        var breaks = mapService.styles.speedBreaks;
+		        
+		        var finalStyles = [];
+		        for (var i = 0; i < breaks.length - 1; i++){
+		            finalStyles.push({
+		                title: Math.round(breaks[i]*100)/100 + ' - ' + Math.round(breaks[i+1]*100)/100,
+		                color: {"color" : styles[keys[i]]}
+		            });
+		        }
+		        
+		        return finalStyles;
+		    };
+		    
 		    this.init = function(){
 		        var records = [];
 		        var layers = mapService.map.getLayers();
@@ -32,6 +86,19 @@ angular.module('unionvmsWeb').directive('legendPanel', function(mapService) {
 	                if (layer.get('visible')){
 	                    if (layer.getSource() instanceof ol.source.TileWMS){
 	                        records.push(this.buildRecWMS(layer));  
+	                    }
+	                    
+	                    if (layer.getSource() instanceof ol.source.Vector){
+	                        switch (layer.get('type')){
+	                            case 'vmspos':
+	                                records.push(this.buildRecVmsPos(layer));
+	                                break;
+	                            case 'vmsseg':
+                                    records.push(this.buildRecVmsSeg(layer));
+                                    break;
+	                            default:
+	                                return;
+	                        }
 	                    }
 	                }
 	            }, this);

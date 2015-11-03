@@ -1,8 +1,16 @@
 <div class="base-legend">
 	<div ng-repeat="record in legendRecords">
-		<div ng-if="record.type === 'wms' && record.visibility">
+		<div ng-if="record.visibility">
 			<span class="legend-text">{{ record.title }}</span>
-			<img class="legend-bottom-space" ng-src="{{record.url}}" />
+			<img class="legend-bottom-space" ng-src="{{record.url}}" ng-if="record.type === 'wms'" />
+			<div ng-if="record.type === 'vmspos'" ng-repeat="style in record.styles">
+				<span class="fa fa-location-arrow fontMargin" ng-style="style.color" ng-class="{'legend-bottom-space-vector': $last}"></span>
+				<span class="legend-labels" ng-class="{'legend-bottom-space-vector': $last}">{{style.title}}</span>
+			</div>
+			<div ng-if="record.type === 'vmsseg'" ng-repeat="style in record.styles">
+				<span class="fa fa-minus fontMargin" ng-style="style.color" ng-class="{'legend-bottom-space-vector': $last}"></span>
+				<span class="legend-labels" ng-class="{'legend-bottom-space-vector': $last}">{{style.title}}</span>
+			</div>
 		</div>
 	</div>
 </div>

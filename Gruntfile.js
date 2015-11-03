@@ -59,6 +59,7 @@ module.exports = function (grunt) {
                   '/audit/rest/',
                   '/rules/rest/',
                   '/reporting/rest/',
+                  '/spatial/rest/',
                   '/config/rest',
                   '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'],
                 host: 'livm73u',

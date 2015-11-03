@@ -1,7 +1,6 @@
 angular.module('unionvmsWeb').factory('reportMsgService', function($timeout){
     var alert = {
         visible: false,
-        startFade: false,
         type: '',
         msg: ''
     };
@@ -17,16 +16,10 @@ angular.module('unionvmsWeb').factory('reportMsgService', function($timeout){
     };
     
     alert.hide = function(){
-        var obj = this;
-        this.startFade = true;
-        $timeout(function(){
-            obj.visible = false;
-            obj.startFade = false;
-            obj.type = '';
-            obj.msg = '';
-        }, 1000, true, obj);
+        this.visible = false;
+        this.type = '';
+        this.msg = '';
     };
-    
     
     return alert;
 });
