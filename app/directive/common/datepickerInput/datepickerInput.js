@@ -247,7 +247,7 @@ angular.module('unionvmsWeb').directive('datePickerFormatter', function(dateTime
                     newValue = dateTimeService.formatUTCDateWithTimezone(newValue);
                     //Only set model and call callback if newValue is valid
                     if(newValue.indexOf("Invalid date") >= 0){
-                        newValue = undefined;
+                        newValue = '';
                     }
                 }else{
                     newValue = '';
