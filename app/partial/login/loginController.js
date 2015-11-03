@@ -20,12 +20,20 @@ angular.module('unionvmsWeb').controller('uvmsLoginController', function($scope,
                 function (response) {
                     if(response.token) {
                         userService.login(response.token);
-                        $state.go(toState,toParams);
+                        $log.debug("LOGIN DONE!");
+                        $log.debug(response.token);
+                        $log.debug("toState:");
+                        $log.debug(toState);
+                        $log.debug("toParams:");
+                        $log.debug(toParams);
+                        $state.go(toState, toParams, {location: 'replace'});
                     } else {
+                        $log.error("NO TOKEN RECEIEVED");
                         $scope.actionMessage = locale.getString('login.login_error_no_token_received');
                     }
                 },
                 function (error) {
+                    $log.error("Error loggin in!", error);
                     $scope.actionMessage = error;
                 }
             );
