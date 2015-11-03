@@ -44,7 +44,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
     var homeState = 'app.exchange';
     var homeUrl = 'exchange';
 
-    $urlRouterProvider.when('','homeUrl');
+    $urlRouterProvider.when('', homeUrl);
 
     $stateProvider
         .state('uvmsLogin', {
