@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, PositionReportModal){
+angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, PositionReportModal, movementRestService){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -59,7 +59,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
                 ticket.resolvedBy = updatedTicket.resolvedBy;
             },
             function(error){
-                alertService.showErrorMessageWith(locale.getString('alarms.notifications_close_error_message'));
+                alertService.showErrorMessageWithTimeout(locale.getString('alarms.notifications_close_error_message'));
             }
         );
     };
@@ -137,13 +137,17 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
     };
 
     $scope.showOnMap = function(item){
-
         //Work on a copy of the alarm item so you can cancel the editing
-        var alarmItem = item.copy();
+        var copy = item.copy();
         var options = {
             readOnly : true
         };
-        PositionReportModal.show(item, options);
+        //Get movement
+        var movementPromise = movementRestService.getMovement(copy.positionGuid);
+        options.movementPromise = movementPromise;
+
+        //Open modal
+        PositionReportModal.show(copy, options);
     };
 
     //Print the exchange logs
@@ -182,16 +186,16 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
                         var affectedObjectText;
                         if(angular.isDefined(item.vessel)){
                             affectedObjectText = item.vessel.name;
-                        }else if(angular.isDefined(item.assetId)){
-                            affectedObjectText = item.assetId.type +' - ' +item.assetId.value;
+                        }else if(angular.isDefined(item.vesselGuid)){
+                            affectedObjectText = item.vesselGuid;
                         }
                         var csvRow = [
                             item.status,
-                            $filter('confDateFormat')(item.openedDate),
+                            $filter('confDateFormat')(item.openDate),
                             affectedObjectText,
                             item.ruleName,
-                            $filter('confDateFormat')(item.resolvedDate),
-                            item.resolvedBy
+                            item.isOpen()? '' : $filter('confDateFormat')(item.updated),
+                            item.isOpen()? '' : item.updatedBy,
                         ];
                         csvObject.push(csvRow);
                     }

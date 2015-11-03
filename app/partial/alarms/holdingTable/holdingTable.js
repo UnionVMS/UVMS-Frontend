@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage, PositionReportModal, userService, searchService){
+angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage, PositionReportModal, userService, alarmRestService, searchService){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -114,7 +114,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         return checked;
     };
 
-        //Clear the selection
+    //Clear the selection
     $scope.clearSelection = function(){
         $scope.selectedItems = [];
     };
@@ -172,18 +172,18 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
                         var affectedObjectText;
                         if(angular.isDefined(item.vessel)){
                             affectedObjectText = item.vessel.name;
-                        }else if(angular.isDefined(item.assetId)){
-                            affectedObjectText = item.assetId.type +' - ' +item.assetId.value;
+                        }else if(angular.isDefined(item.vesselGuid)){
+                            affectedObjectText = item.vesselGuid;
                         }
 
                         var csvRow = [
                             item.status,
-                            $filter('confDateFormat')(item.openedDate),
+                            $filter('confDateFormat')(item.openDate),
                             affectedObjectText,
                             item.ruleName,
                             item.sender,
-                            $filter('confDateFormat')(item.resolvedDate),
-                            item.resolvedBy
+                            item.isOpen()? '' : $filter('confDateFormat')(item.updated),
+                            item.isOpen()? '' : item.updatedBy,
                         ];
                         csvObject.push(csvRow);
                     }
@@ -202,7 +202,18 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
             $scope.exportItemsAsCSVFile(true);
         }
         else if(selectedItem.code === 'REPROCESS_REPORTS'){
-            alertService.showInfoMessageWithTimeout("Not yet implemented.");
+            var alarmGuids = $scope.selectedItems.reduce(function(guids, alarm){
+                    guids.push(alarm.guid);
+                    return guids;
+                }, []);
+            if(alarmGuids.length === 0){
+                return;
+            }
+            alarmRestService.reprocessAlarms(alarmGuids).then(function(){
+                alertService.showSuccessMessageWithTimeout(locale.getString('alarms.holding_table_reprocess_reports_success_message'));
+            }, function(err){
+                alertService.showErrorMessage(locale.getString('alarms.holding_table_reprocess_reports_error_message'));
+            });
         }
         $scope.editSelection = "";
     };
@@ -210,7 +221,14 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
     $scope.resolveItem = function(item){
         //Work on a copy of the alarm item so you can cancel the editing
         var alarmItem = item.copy();
-        var options = {};
+        var options = {
+            //Update item after status change
+            updateStatusCallback : function(updatedItem){
+                item.status = updatedItem.status;
+                item.updated = updatedItem.updated;
+                item.updatedBy = updatedItem.updatedBy;
+            }
+        };
         PositionReportModal.show(alarmItem, options).then(function(result) {
             //Nothing
         });

@@ -33,6 +33,8 @@
     "alarms_search_sender": "Sender",
 
     "holding_table_reprocess_reports": "Reprocess reports",
+    "holding_table_reprocess_reports_success_message": "Reprocessing of alarm(s) issued.",
+    "holding_table_reprocess_reports_error_message": "Reprocessing of alarm(s) failed.",
 
     "rules_type_global" : "Global",
     "rules_type_event" : "Event",
@@ -137,6 +139,11 @@
     "position_report_position_information" : "Position information",
     "position_report_inactivate_position" : "Inactivate position (will not show on map)",
     "position_report_assign_asset_from_list" : "Link asset from list",
+    "position_report_status_update_accept_success": "The alarm was accepted.",
+    "position_report_status_update_accept_error" : "Failed to set alarm to accepted.",
+    "position_report_status_update_reject_success": "The alarm was rejected.",
+    "position_report_status_update_reject_error" : "Failed to set alarm to rejected.",
+    "position_report_loading_movement_error" : "Failed to load position.",
 
     "notifications_table_close_title" : "Close notificaton",
     "notifications_close_error_message" : "Failed to close the notification. Please try again."

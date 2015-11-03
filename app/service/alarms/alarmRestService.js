@@ -2,6 +2,11 @@ angular.module('unionvmsWeb')
     .factory('alarmRestFactory',function($resource) {
 
         return {
+            alarm : function(){
+                return $resource('/rules/rest/alarms', {}, {
+                    update: {method: 'PUT'}
+                });
+            },
             getAlarms : function(){
                 return $resource('/rules/rest/alarms/list/',{},{
                     list : { method: 'POST'}
@@ -17,9 +22,33 @@ angular.module('unionvmsWeb')
                     update: {method: 'PUT'}
                 });
             },
+            reprocessAlarms : function(){
+                return $resource('/rules/rest/alarms/reprocess', {}, {
+                    reprocess: {method: 'POST'}
+                });
+            },
         };
     })
 .factory('alarmRestService', function($q, $log, alarmRestFactory, Alarm, Ticket, SearchResultListPage, userService){
+
+    var updateAlarmStatus = function(alarm){
+        //Set updatedBy to the current user
+        alarm.setUpdatedBy(userService.getUserName());
+
+        var deferred = $q.defer();
+        alarmRestFactory.alarm().update(alarm.DTO(), function(response) {
+            if(response.code !== 200){
+                deferred.reject("Invalid response status");
+                return;
+            }
+            deferred.resolve(Alarm.fromDTO(response.data));
+        }, function(error) {
+            $log.error("Error updating alarm status");
+            $log.error(error);
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    };
 
     var getAlarmsList = function(getListRequest){
         var deferred = $q.defer();
@@ -54,6 +83,21 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
+    var reprocessAlarms = function(alarmGuids){
+        var deferred = $q.defer();
+        alarmRestFactory.reprocessAlarms().reprocess(alarmGuids, function(response) {
+            if(response.code !== 200){
+                deferred.reject("Invalid response status");
+                return;
+            }
+            deferred.resolve();
+        }, function(error) {
+            $log.error("Error reprocessing alarms");
+            $log.error(error);
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    };
 
     var getTicketsList = function(getListRequest){
         var deferred = $q.defer();
@@ -89,8 +133,8 @@ angular.module('unionvmsWeb')
     };
 
     var updateTicketStatus = function(ticket){
-        //Set resolveBy to the current user
-        ticket.setResolvedBy(userService.getUserName());
+        //Set updatedBy to the current user
+        ticket.setUpdatedBy(userService.getUserName());
 
         var deferred = $q.defer();
         alarmRestFactory.ticket().update(ticket.DTO(), function(response) {
@@ -108,8 +152,10 @@ angular.module('unionvmsWeb')
     };
 
     return {
+        updateAlarmStatus: updateAlarmStatus,
         getAlarmsList: getAlarmsList,
         getTicketsList: getTicketsList,
         updateTicketStatus: updateTicketStatus,
+        reprocessAlarms: reprocessAlarms,
     };
 });

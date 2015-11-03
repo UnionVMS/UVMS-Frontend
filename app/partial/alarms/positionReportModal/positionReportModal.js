@@ -1,14 +1,18 @@
-angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($scope, $log, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService) {
+angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($scope, $log, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService) {
 
     $scope.alarm = alarm;
     $scope.knownVessel = angular.isDefined(alarm.vessel);
     $scope.options = options;
     $scope.readOnly = options.readOnly;
 
-    $scope.inactivePosition = false;
-
     $scope.markers = {};
     $scope.center = {};
+
+    //Status updated successfully
+    $scope.statusUpdatedSuccessfully = false;
+
+    $scope.loadingMovement = false;
+    $scope.loadingMovementError = false;
 
     //Vessel search result
     $scope.currentSearchResults = new SearchResults('name', false, locale.getString('vessel.search_zero_results_error'));
@@ -19,7 +23,24 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
     };
 
     $scope.init = function() {
-        $scope.addMarkerToMap();
+        //MovementPromise in options?
+        if(angular.isDefined(options.movementPromise)){
+            $scope.loadingMovement = true;
+            options.movementPromise.then(function(movement){
+                $scope.alarm.movement = movement;
+                $scope.addMarkerToMap();
+                $scope.loadingMovement = false;
+            }, function(err){
+                $scope.loadingMovementError = true;
+                $scope.setErrorText(locale.getString('alarms.position_report_loading_movement_error'));
+                $scope.loadingMovement = false;
+                $log.error("Error getting movement for ticket.", err);
+            });
+        }
+        //Already got movement
+        else{
+            $scope.addMarkerToMap();
+        }
     };
 
     $scope.closeModal = function() {
@@ -89,21 +110,73 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
         $scope.isVisible.assignAsset = !$scope.isVisible.assignAsset;
     };
 
+    $scope.setSuccessText = function(text, action) {
+        $scope.modalStatusText = text;
+        $scope.modalStatusClass = "alert-success";
+
+        if (action) {
+            $timeout(action, 2000);
+        }
+    };
+
+    $scope.setErrorText = function(text) {
+        $scope.modalStatusText = text;
+        $scope.modalStatusClass = "alert-danger";
+    };
+
+    //Update status in backend
+    var sendStatusUpdateToServer = function(){
+        alarmRestService.updateAlarmStatus($scope.alarm).then(function(){
+            $scope.setSuccessText(locale.getString("movement.manual_position_save_success"), $scope.closeModal);
+        },
+        function(error){
+            $scope.setErrorText(locale.getString("movement.manual_position_save_error"));
+        });
+    };
+
     //Accept and poll alarm
     $scope.acceptAndPoll = function(){
-        $log.info("TODO: Implement acceptAndPoll");
+        $log.info("TODO: Create poll!");
+        $scope.setErrorText(locale.getString("TODO: Create poll!"));
+        $scope.accept();
     };
 
     //Accept the alarm
     $scope.accept = function(){
-        $log.info("TODO: Implement accept");
+        var copy = $scope.alarm.copy();
+        copy.setStatusToClosed();
+        alarmRestService.updateAlarmStatus(copy).then(function(updatedAlarm){
+            $scope.alarm.status = updatedAlarm.status;
+            $scope.statusUpdatedSuccessfully = true;
+            $scope.setSuccessText(locale.getString("alarms.position_report_status_update_accept_success"), $scope.closeModal);
+            $scope.callCallbackFunctionAfterStatusChange(updatedAlarm);
+        },
+        function(error){
+            $scope.setErrorText(locale.getString("alarms.position_report_status_update_accept_error"));
+        });
     };
 
     //Reject the alarm
     $scope.reject = function(){
-        $log.info("TODO: Implement reject");
+        var copy = $scope.alarm.copy();
+        copy.setStatusToRejected();
+        alarmRestService.updateAlarmStatus(copy).then(function(updatedAlarm){
+            $scope.alarm.status = updatedAlarm.status;
+            $scope.statusUpdatedSuccessfully = true;
+            $scope.setSuccessText(locale.getString("alarms.position_report_status_update_reject_success"), $scope.closeModal);
+            $scope.callCallbackFunctionAfterStatusChange(updatedAlarm);
+        },
+        function(error){
+            $scope.setErrorText(locale.getString("alarms.position_report_status_update_reject_error"));
+        });
     };
 
+    //Call callback function
+    $scope.callCallbackFunctionAfterStatusChange = function(updatedAlarm){
+        if(angular.isFunction(options.updateStatusCallback)) {
+            options.updateStatusCallback(updatedAlarm);
+        }
+    };
 
     /*VESSEL SEARCH*/
     var getListRequest = new GetListRequest(1, 5, false, []);

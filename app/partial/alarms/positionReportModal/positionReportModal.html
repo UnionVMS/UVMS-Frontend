@@ -14,7 +14,7 @@
                 {{getStatusLabel(alarm) | uppercase}}
             </span>
 
-            {{'alarms.position_report_recipient' | i18n}}  <b>TODO: What should be here???</b>
+            {{'alarms.position_report_recipient' | i18n}}  <b>{{alarm.recipient}}</b>
         </div>
     </div>
 
@@ -24,7 +24,8 @@
                 <div class="sectionHeader">
                     {{'alarms.position_report_asset_information' | i18n}}
                 </div>
-                <span class="assignAssetLink" ng-click="toggleAssignAsset()" ng-if="!readOnly && !knownVessel">{{'alarms.position_report_assign_asset_from_list' | i18n}}</span>
+                <!-- Hide link for now. -->
+                <span class="assignAssetLink" ng-click="toggleAssignAsset()" ng-if="!readOnly && !knownVessel && false">{{'alarms.position_report_assign_asset_from_list' | i18n}}</span>
             </div>
         </div>
         <div class="row">
@@ -135,32 +136,39 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-3">
-                <label>{{'movement.manual_position_field_label_status' | i18n}}</label>
-                <div class="value">{{alarm.movement.movement.status}}</div>
-            </div>
-            <div class="col-md-9">
-                <label>{{'movement.manual_position_field_label_date_time' | i18n}}</label>
-                <div class="value">{{alarm.movement.time | confDateFormat}}</div>
+        <div class="row loadingMovementContainer" ng-show="loadingMovement">
+            <div class="col-md-12" loading-indicator="loadingMovement" type="SPINNER" size="small">
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-3">
-                <label>{{'movement.manual_position_field_label_latitude' | i18n}}</label>
-                <div class="value">{{alarm.movement.movement.latitude | confCoordinateFormat}}</div>
+
+        <div ng-hide="loadingMovement || loadingMovementError">
+            <div class="row" >
+                <div class="col-md-3">
+                    <label>{{'movement.manual_position_field_label_status' | i18n}}</label>
+                    <div class="value">{{alarm.movement.movement.status}}</div>
+                </div>
+                <div class="col-md-9">
+                    <label>{{'movement.manual_position_field_label_date_time' | i18n}}</label>
+                    <div class="value">{{alarm.movement.time | confDateFormat}}</div>
+                </div>
             </div>
-            <div class="col-md-3">
-                <label>{{'movement.manual_position_field_label_longitude' | i18n}}</label>
-                <div class="value">{{alarm.movement.movement.longitude | confCoordinateFormat}}</div>
-            </div>
-            <div class="col-md-3">
-                <label>{{'movement.manual_position_field_label_measured_speed' | i18n}}</label>
-                <div class="value">{{alarm.movement.movement.reportedSpeed}} {{"movement.manual_position_field_unit_knots" | i18n}}</div>
-            </div>
-            <div class="col-md-3">
-                <label>{{'movement.manual_position_field_label_course' | i18n}}</label>
-                <div class="value">{{alarm.movement.movement.reportedCourse}} {{"movement.manual_position_field_unit_degrees" | i18n}}</div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label>{{'movement.manual_position_field_label_latitude' | i18n}}</label>
+                    <div class="value">{{alarm.movement.movement.latitude | confCoordinateFormat}}</div>
+                </div>
+                <div class="col-md-3">
+                    <label>{{'movement.manual_position_field_label_longitude' | i18n}}</label>
+                    <div class="value">{{alarm.movement.movement.longitude | confCoordinateFormat}}</div>
+                </div>
+                <div class="col-md-3">
+                    <label>{{'movement.manual_position_field_label_measured_speed' | i18n}}</label>
+                    <div class="value">{{alarm.movement.movement.reportedSpeed}} {{"movement.manual_position_field_unit_knots" | i18n}}</div>
+                </div>
+                <div class="col-md-3">
+                    <label>{{'movement.manual_position_field_label_course' | i18n}}</label>
+                    <div class="value">{{alarm.movement.movement.reportedCourse}} {{"movement.manual_position_field_unit_degrees" | i18n}}</div>
+                </div>
             </div>
         </div>
     </div>
@@ -169,7 +177,7 @@
         {{ modalStatusText }}
     </div>
 
-    <div class="mapContainer">
+    <div class="mapContainer" ng-if="!loadingMovement && !loadingMovementError">
         <leaflet center="center" markers="markers" height="200px" width="100%"></leaflet>
     </div>
 
@@ -180,7 +188,7 @@
             </div>
         </div>
         <div class="col-md-12">
-            <input type="checkbox" ng-model="inactivePosition"/> <span ng-click="inactivePosition = !inactivePosition;">
+            <input type="checkbox" ng-model="alarm.inactivatePosition"/> <span ng-click="inactivatePosition  = !inactivatePosition ;">
                 {{'alarms.position_report_inactivate_position' | i18n}}
             </span>
         </div>
@@ -194,7 +202,7 @@
             <div class="buttonGroup">
                 <a class="button" ng-click="cancel()">{{"common.cancel" | i18n}}</a>
             </div>
-            <div class="buttonGroup button-group-right">
+            <div class="buttonGroup button-group-right" ng-hide="statusUpdatedSuccessfully">
                 <a ng-show="acceptAndPollIsAllowed()" class="button" ng-click="acceptAndPoll()">
                     {{"alarms.position_report_accept_and_poll" | i18n}}
                 </a>
