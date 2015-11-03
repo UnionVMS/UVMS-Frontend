@@ -86,7 +86,7 @@ angular.module('unionvmsWeb')
         this.name = undefined;
         this.code = undefined;
         this.text = undefined; //shown in dropdowns by default
-        this.attributes = {}; //used for special types, e.g. HAS_LES
+        this.attributes = {}; //used for special types, e.g. PLUGIN
     }
 
     CapabilityOption.fromJson = function(data, capabilityName){
@@ -115,7 +115,7 @@ angular.module('unionvmsWeb')
                 capabilityOption.text = capabilityOption.name;
                 viewName = locale.getString("config.MOBILETERMINAL_OCEAN_REGION_" +capabilityOption.text);
                 break;
-            case "HAS_LES":
+            case "PLUGIN":
                 capabilityOption.text = capabilityOption.attributes['LABELNAME'];
                 break;
         }
@@ -131,17 +131,19 @@ angular.module('unionvmsWeb')
 
 
 angular.module('unionvmsWeb')
-.factory('SystemTypeAndLES', function(locale) {
+.factory('SystemTypeAndPlugin', function(locale) {
 
-    function SystemTypeAndLES(type, labelName, serviceName){
+    function SystemTypeAndPlugin(type, labelName, serviceName){
         this.type = type;
-        this.labelName = labelName;
-        this.serviceName = serviceName;
+        this.plugin = {
+            labelName : labelName,
+            serviceName : serviceName,
+        };
     }
 
-    SystemTypeAndLES.prototype.equals = function(other){
-        return this.type === other.type && this.labelName === other.labelName && this.serviceName === other.serviceName;
+    SystemTypeAndPlugin.prototype.equals = function(other){
+        return this.type === other.type && this.plugin.labelName === other.plugin.labelName && this.plugin.serviceName === other.plugin.serviceName;
     };
 
-    return SystemTypeAndLES;
+    return SystemTypeAndPlugin;
 });

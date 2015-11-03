@@ -9,7 +9,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         assignVessel : false,
     };
 
-    $scope.typeAndLES = undefined;
+    $scope.typeAndPlugin = undefined;
     //Watch changes to the currentMobileTerminal model (set in the parent scope)
     $scope.$watch('getCurrentMobileTerminal()', function(newValue) {
         $scope.currentMobileTerminal = $scope.getCurrentMobileTerminal();
@@ -21,7 +21,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         if(angular.isDefined($scope.currentMobileTerminal)){
             //Update the value for typeAndLES in order for the dropdown to show the correct value
             if(angular.isDefined($scope.currentMobileTerminal) && angular.isDefined($scope.currentMobileTerminal.plugin)){
-                $scope.typeAndLES = $scope.getModelValueForTransponderSystemBySystemTypeAndLES($scope.currentMobileTerminal.type, $scope.currentMobileTerminal.plugin.labelName, $scope.currentMobileTerminal.plugin.serviceName);
+                $scope.typeAndPlugin = $scope.getModelValueForTransponderSystemBySystemTypeAndPlugin($scope.currentMobileTerminal.type, $scope.currentMobileTerminal.plugin.labelName, $scope.currentMobileTerminal.plugin.serviceName);
             }
 
             //Show warning message if plugin is inactivated
@@ -49,7 +49,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     };
 
     //Get terminal config for the selected terminal type
-    $scope.getTerminalConfig = function(item){
+    $scope.getTerminalConfig = function(){
         if(angular.isDefined($scope.currentMobileTerminal)){
             var systemName = $scope.currentMobileTerminal.type;
             return $scope.transpondersConfig.getTerminalConfigBySystemName(systemName);
@@ -58,15 +58,20 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
 
     //Selected terminal type
     $scope.onTerminalSystemSelect = function(selectedItem){
-        if(angular.isDefined(selectedItem) && angular.isDefined(selectedItem.typeAndLes)){
-            $scope.currentMobileTerminal.type = selectedItem.typeAndLes.type;
-            var selectedLabelName = selectedItem.typeAndLes.labelName;
-            var selectedServiceName = selectedItem.typeAndLes.serviceName;
+        if(angular.isDefined(selectedItem) && angular.isDefined(selectedItem.typeAndPlugin)){
+            $scope.currentMobileTerminal.type = selectedItem.typeAndPlugin.type;
+            var selectedLabelName = selectedItem.typeAndPlugin.plugin.labelName;
+            var selectedServiceName = selectedItem.typeAndPlugin.plugin.serviceName;
             if(angular.isDefined(selectedLabelName) && angular.isDefined(selectedServiceName)){
                 $scope.currentMobileTerminal.plugin.labelName = selectedLabelName;
                 $scope.currentMobileTerminal.plugin.serviceName = selectedServiceName;
+                //Set LES_DESCRIPTION if attribute is used for the channel, otherwise set to undefined
                 $.each($scope.currentMobileTerminal.channels, function(index, channel){
-                    channel.setLESDescription(selectedLabelName);
+                    if($scope.getTerminalConfig().channelFields.LES_DESCRIPTION){
+                        channel.setLESDescription(selectedLabelName);
+                    }else{
+                        channel.setLESDescription(undefined);
+                    }
                 });
             }else{
                 delete $scope.currentMobileTerminal.plugin.labelName;
@@ -276,7 +281,10 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         var newChannel = $scope.currentMobileTerminal.addNewChannel();
         //Set LES for new channel
         if(angular.isDefined($scope.currentMobileTerminal.plugin.labelName)){
-            newChannel.setLESDescription($scope.currentMobileTerminal.plugin.labelName);
+            //Set LES_DESCRIPTION if attribute is used for the channel
+            if($scope.getTerminalConfig().channelFields.LES_DESCRIPTION){
+                newChannel.setLESDescription($scope.currentMobileTerminal.plugin.labelName);
+            }
         }
     };
 

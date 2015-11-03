@@ -9,22 +9,22 @@ describe('MobileTerminalCtrl', function() {
         ctrl = $controller('MobileTerminalCtrl', {$scope: scope});
 
 
-        //Create terminalConfig for InmarsatC with HAS_LES capability
+        //Create terminalConfig for InmarsatC with PLUGIN capability
         inmarsatCConfig = new TerminalConfig();
         inmarsatCConfig.systemType = "INMARSAT_C";
         inmarsatCConfig.viewName = "Inmarsat-C";
 
         var capabilityOptions = [];
         var options1DTO = {labelName: "BURUM", serviceName: "eu.europa.plugin.inmarsat.burum"};
-        options1 = CapabilityOption.fromJson(options1DTO, 'HAS_LES');
+        options1 = CapabilityOption.fromJson(options1DTO, 'PLUGIN');
         var options2DTO = {labelName: "EIK", serviceName: "eu.europa.plugin.inmarsat.eik"};
-        options2 = CapabilityOption.fromJson(options2DTO, 'HAS_LES');
+        options2 = CapabilityOption.fromJson(options2DTO, 'PLUGIN');
         capabilityOptions.push(options1);
         capabilityOptions.push(options2);
 
-        inmarsatCConfig.capabilities["HAS_LES"] = capabilityOptions;
+        inmarsatCConfig.capabilities["PLUGIN"] = capabilityOptions;
 
-        //Create terminalConfig for Iridium without HAS_LES capability
+        //Create terminalConfig for Iridium without PLUGIN capability
         iridiumConfig = new TerminalConfig();
         iridiumConfig.systemType = "IRIDIUM";
         iridiumConfig.viewName = "Iridium";
@@ -46,37 +46,37 @@ describe('MobileTerminalCtrl', function() {
 
         //Validate dropdowns
         expect(scope.transponderSystems.length).toEqual(3);
-        expect(scope.transponderSystems[0].typeAndLes).toBeDefined();
-        expect(scope.transponderSystems[0].typeAndLes.type).toEqual(inmarsatCConfig.systemType);
-        expect(scope.transponderSystems[0].typeAndLes.labelName).toEqual(options1.attributes['LABELNAME']);
-        expect(scope.transponderSystems[0].typeAndLes.serviceName).toEqual(options1.attributes['SERVICENAME']);
+        expect(scope.transponderSystems[0].typeAndPlugin).toBeDefined();
+        expect(scope.transponderSystems[0].typeAndPlugin.type).toEqual(inmarsatCConfig.systemType);
+        expect(scope.transponderSystems[0].typeAndPlugin.plugin.labelName).toEqual(options1.attributes['LABELNAME']);
+        expect(scope.transponderSystems[0].typeAndPlugin.plugin.serviceName).toEqual(options1.attributes['SERVICENAME']);
 
-        expect(scope.transponderSystems[1].typeAndLes).toBeDefined();
-        expect(scope.transponderSystems[1].typeAndLes.type).toEqual(inmarsatCConfig.systemType);
-        expect(scope.transponderSystems[1].typeAndLes.labelName).toEqual(options2.attributes['LABELNAME']);
-        expect(scope.transponderSystems[1].typeAndLes.serviceName).toEqual(options2.attributes['SERVICENAME']);
+        expect(scope.transponderSystems[1].typeAndPlugin).toBeDefined();
+        expect(scope.transponderSystems[1].typeAndPlugin.type).toEqual(inmarsatCConfig.systemType);
+        expect(scope.transponderSystems[1].typeAndPlugin.plugin.labelName).toEqual(options2.attributes['LABELNAME']);
+        expect(scope.transponderSystems[1].typeAndPlugin.plugin.serviceName).toEqual(options2.attributes['SERVICENAME']);
 
-        expect(scope.transponderSystems[2].typeAndLes).toBeDefined();
-        expect(scope.transponderSystems[2].typeAndLes.type).toEqual(iridiumConfig.systemType);
-        expect(scope.transponderSystems[2].typeAndLes.labelName).toBeUndefined();
-        expect(scope.transponderSystems[2].typeAndLes.serviceName).toBeUndefined();
+        expect(scope.transponderSystems[2].typeAndPlugin).toBeDefined();
+        expect(scope.transponderSystems[2].typeAndPlugin.type).toEqual(iridiumConfig.systemType);
+        expect(scope.transponderSystems[2].typeAndPlugin.plugin.labelName).toBeUndefined();
+        expect(scope.transponderSystems[2].typeAndPlugin.plugin.serviceName).toBeUndefined();
 	}));
 
-    it('getModelValueForTransponderSystemBySystemTypeAndLES should return correct value', inject(function(TranspondersConfig, TerminalConfig, CapabilityOption) {
+    it('getModelValueForTransponderSystemBySystemTypeAndPlugin should return correct value', inject(function(TranspondersConfig, TerminalConfig, CapabilityOption) {
         //Create dropdowns
         scope.createTransponderSystemDropdownOptions();
 
-        var returnValue = scope.getModelValueForTransponderSystemBySystemTypeAndLES(inmarsatCConfig.systemType, options2.attributes['LABELNAME'], options2.attributes['SERVICENAME']);
+        var returnValue = scope.getModelValueForTransponderSystemBySystemTypeAndPlugin(inmarsatCConfig.systemType, options2.attributes['LABELNAME'], options2.attributes['SERVICENAME']);
         expect(returnValue).toBeDefined();
         expect(returnValue.type).toEqual(inmarsatCConfig.systemType);
-        expect(returnValue.labelName).toEqual(options2.attributes['LABELNAME']);
-        expect(returnValue.serviceName).toEqual(options2.attributes['SERVICENAME']);
+        expect(returnValue.plugin.labelName).toEqual(options2.attributes['LABELNAME']);
+        expect(returnValue.plugin.serviceName).toEqual(options2.attributes['SERVICENAME']);
 
-        returnValue = scope.getModelValueForTransponderSystemBySystemTypeAndLES(iridiumConfig.systemType);
+        returnValue = scope.getModelValueForTransponderSystemBySystemTypeAndPlugin(iridiumConfig.systemType);
         expect(returnValue).toBeDefined();
         expect(returnValue.type).toEqual(iridiumConfig.systemType);
-        expect(returnValue.labelName).toBeUndefined();
-        expect(returnValue.serviceName).toBeUndefined();
+        expect(returnValue.plugin.labelName).toBeUndefined();
+        expect(returnValue.plugin.serviceName).toBeUndefined();
     }));
 
 

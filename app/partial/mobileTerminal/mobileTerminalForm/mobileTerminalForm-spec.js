@@ -8,7 +8,7 @@ describe('mobileTerminalFormCtrl', function() {
         scope = $rootScope.$new();
         ctrl = $controller('mobileTerminalFormCtrl', {$scope: scope});
         scope.currentMobileTerminal = new MobileTerminal();
-        scope.getModelValueForTransponderSystemBySystemTypeAndLES = function(){};
+        scope.getModelValueForTransponderSystemBySystemTypeAndPlugin = function(){};
 
          //Mock translation files for usm
          $httpBackend.whenGET(/^usm\//).respond({});
@@ -58,18 +58,24 @@ describe('mobileTerminalFormCtrl', function() {
 
     }));
 
-    it('onTerminalSystemSelect should set system type and plugin labelName', inject(function($q, SystemTypeAndLES, MobileTerminal) {
+    it('onTerminalSystemSelect should set system type and plugin labelName', inject(function($q, SystemTypeAndPlugin, MobileTerminal, TranspondersConfig, TerminalConfig) {
         scope.getCurrentMobileTerminal = function(){
             return scope.currentMobileTerminal;
         };
         scope.isCreateNewMode = function(){
             return false;
         };
+        //Mock function
+        scope.getTerminalConfig = function(){
+            return {
+                channelFields: {LES_DESCRIPTION : true}
+            }
+        };
 
         expect(scope.currentMobileTerminal.type).toBeUndefined();
         var selectItem = {
             text : "Inmarsat-C - Burum",
-            typeAndLes : new SystemTypeAndLES("INMARSAT-C", "BURUM", "eu.europa.plugin.inmarsat.burum")
+            typeAndPlugin : new SystemTypeAndPlugin("INMARSAT-C", "BURUM", "eu.europa.plugin.inmarsat.burum")
         };
 
         //Select item
@@ -82,7 +88,7 @@ describe('mobileTerminalFormCtrl', function() {
     }));
 
 
-    it('onTerminalSystemSelect should set only system type when LES is missing', inject(function($q, SystemTypeAndLES, MobileTerminal) {
+    it('onTerminalSystemSelect should set only system type when LES is missing', inject(function($q, SystemTypeAndPlugin, MobileTerminal) {
         scope.getCurrentMobileTerminal = function(){
             return scope.currentMobileTerminal;
         };
@@ -93,7 +99,7 @@ describe('mobileTerminalFormCtrl', function() {
         expect(scope.currentMobileTerminal.type).toBeUndefined();
         var selectItem = {
             text : "Iridium",
-            typeAndLes : new SystemTypeAndLES("IRIDIUM", undefined, undefined)
+            typeAndPlugin : new SystemTypeAndPlugin("IRIDIUM", undefined, undefined)
         };
 
         //Select item

@@ -69,7 +69,7 @@ describe('TranspondersConfig', function() {
                     "optionList": []
                 },
                 {
-                    "name": "HAS_LES",
+                    "name": "PLUGIN",
                     "optionList": [
                         {
                             "labelName": "EIK",
@@ -135,7 +135,7 @@ describe('TranspondersConfig', function() {
 
 
         //Capability with optionsList with options with "name" only
-        var LESCapability = inmarsatConfig.capabilities["HAS_LES"];
+        var LESCapability = inmarsatConfig.capabilities["PLUGIN"];
         expect(LESCapability.length).toEqual(2);
         firstOption = LESCapability[0];
         expect(firstOption.attributes['LABELNAME']).toEqual(expectedCapabilites[4].optionList[0].labelName);

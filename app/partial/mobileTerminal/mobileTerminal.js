@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $filter, searchService, alertService, MobileTerminal, SystemTypeAndLES, mobileTerminalRestService, pollingService, GetPollableListRequest, pollingRestService, configurationService, $location, locale, $stateParams, csvService, SearchResults, userService){
+angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $filter, searchService, alertService, MobileTerminal, SystemTypeAndPlugin, mobileTerminalRestService, pollingService, GetPollableListRequest, pollingRestService, configurationService, $location, locale, $stateParams, csvService, SearchResults, userService){
 
     var hideAlertsOnScopeDestroy = true;
 
@@ -71,14 +71,14 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         return $scope.currentMobileTerminal;
     };
 
-    //Get model value for the transponder system dropdown by system type and les
-    $scope.getModelValueForTransponderSystemBySystemTypeAndLES = function(type, labelName, serviceName){
+    //Get model value for the transponder system dropdown by system type and plugin
+    $scope.getModelValueForTransponderSystemBySystemTypeAndPlugin = function(type, labelName, serviceName){
         var value, tmp;
         $.each($scope.transponderSystems, function(index, system){
-            var systemAndTypeAndLESItem = system.typeAndLes;
-            tmp = new SystemTypeAndLES(type, labelName, serviceName);
-            if(systemAndTypeAndLESItem.equals(tmp)){
-                value = systemAndTypeAndLESItem;
+            var systemAndTypeAndPluginItem = system.typeAndPlugin;
+            tmp = new SystemTypeAndPlugin(type, labelName, serviceName);
+            if(systemAndTypeAndPluginItem.equals(tmp)){
+                value = systemAndTypeAndPluginItem;
                 return false;
             }
         });
@@ -90,12 +90,12 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         //Create dropdown values
         $.each($scope.transpondersConfig.terminalConfigs, function(key, config){
             //LES capability
-            if(config.capabilities["HAS_LES"] && _.isArray(config.capabilities["HAS_LES"])){
-                $.each(config.capabilities["HAS_LES"], function(key2, lesOption){
-                    $scope.transponderSystems.push({text : config.viewName +" : " +lesOption.text, typeAndLes : new SystemTypeAndLES(config.systemType, lesOption.attributes['LABELNAME'], lesOption.attributes['SERVICENAME'])});
+            if(config.capabilities["PLUGIN"] && _.isArray(config.capabilities["PLUGIN"])){
+                $.each(config.capabilities["PLUGIN"], function(key2, pluginOption){
+                    $scope.transponderSystems.push({text : config.viewName +" : " +pluginOption.text, typeAndPlugin : new SystemTypeAndPlugin(config.systemType, pluginOption.attributes['LABELNAME'], pluginOption.attributes['SERVICENAME'])});
                 });
             }else{
-                $scope.transponderSystems.push({text : config.viewName, typeAndLes : new SystemTypeAndLES(config.systemType, undefined)});
+                $scope.transponderSystems.push({text : config.viewName, typeAndPlugin : new SystemTypeAndPlugin(config.systemType, undefined)});
             }
         });
     };
@@ -222,6 +222,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
     $scope.editSelectionCallback = function(selectedItem){
         //Poll selected temrinals
         if(selectedItem.code === 'POLL'){
+            alertService.hideMessage();
             //Add selected terminals to poll selection and go to polling page
             if($scope.selectedMobileTerminals.length > 0){
                 pollingService.clearSelection();
@@ -240,20 +241,23 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
                 if(getPollableListRequest.connectIds.length > 0){
                     pollingRestService.getPollablesMobileTerminal(getPollableListRequest).then(
                         function(searchResultListPage){
-                            //Add each pollChannel to the selection
-                            $.each(searchResultListPage.items, function(index, item){
-                                pollingService.addMobileTerminalToSelection(item);
-                            });
+                            if(searchResultListPage.getNumberOfItems() === 0){
+                                alertService.showInfoMessage(locale.getString('mobileTerminal.add_mobile_terminal_to_polling_zero_items_added_error', {selected :$scope.selectedMobileTerminals.length}));
+                            }else{
+                                //Add each pollChannel to the selection
+                                $.each(searchResultListPage.items, function(index, item){
+                                    pollingService.addMobileTerminalToSelection(item);
+                                });
 
-                            //Show alert message if not all selected mobile terminals could be added to polling
-                            if(searchResultListPage.getNumberOfItems() !== $scope.selectedMobileTerminals.length){
-                                alertService.showInfoMessage(locale.getString('mobileTerminal.add_mobile_terminal_to_polling_only_some_were_addded_message', {selected :$scope.selectedMobileTerminals.length, pollable : searchResultListPage.getNumberOfItems()}));
-                                hideAlertsOnScopeDestroy = false;
+                                //Show alert message if not all selected mobile terminals could be added to polling
+                                if(searchResultListPage.getNumberOfItems() !== $scope.selectedMobileTerminals.length){
+                                    alertService.showInfoMessage(locale.getString('mobileTerminal.add_mobile_terminal_to_polling_only_some_were_addded_message', {selected :$scope.selectedMobileTerminals.length, pollable : searchResultListPage.getNumberOfItems()}));
+                                    hideAlertsOnScopeDestroy = false;
+                                }
+
+                                pollingService.setWizardStep(2);
+                                $location.path('polling');
                             }
-
-                            pollingService.setWizardStep(2);
-                            $location.path('polling');
-
                         },
                         function(error){
                             console.error("Error getting pollable channels.");

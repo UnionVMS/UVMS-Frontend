@@ -4,7 +4,7 @@
             <div class="row transponderSystemSelects">
                 <div class="col-md-2 transponderSystemSelect form-group">
                     <label>{{'mobileTerminal.add_new_form_transponder_system_label' | i18n}}</label>
-                    <dropdown ng-model="typeAndLES" initialtext="{{ 'common.choose' | i18n }}" items="transponderSystems" callback="onTerminalSystemSelect" ng-disabled="!isCreateNewMode()" data="typeAndLes"></dropdown>
+                    <dropdown ng-model="typeAndPlugin" initialtext="{{ 'common.choose' | i18n }}" items="transponderSystems" callback="onTerminalSystemSelect" ng-disabled="!isCreateNewMode()" data="typeAndPlugin"></dropdown>
                 </div>
                 <div class="col-md-2 transponderSystemSelect form-group" ng-show="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN || getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
                     <label>{{'mobileTerminal.add_new_form_ocean_region_label' | i18n}}</label>
@@ -19,9 +19,9 @@
             <div>
                 <div ng-show="currentMobileTerminal.type">
                     <div class="row">
-                        <div class="col-md-2 form-group" ng-class="{'has-error': mobileTerminalForm.serialNumber.$invalid && (submitAttempted || mobileTerminalForm.serialNumber.$dirty)}">
+                        <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.SERIAL_NUMBER" ng-class="{'has-error': mobileTerminalForm.serialNumber.$invalid && (submitAttempted || mobileTerminalForm.serialNumber.$dirty)}">
                             <label>{{'mobileTerminal.form_inmarsatc_serial_no_label' | i18n}}</label>
-                            <input type="text" name="serialNumber" class="form-control" ng-model="currentMobileTerminal.attributes.SERIAL_NUMBER" required ng-disabled="!isCreateNewMode()"/>
+                            <input type="text" name="serialNumber" class="form-control" ng-model="currentMobileTerminal.attributes.SERIAL_NUMBER" ng-required="getTerminalConfig().terminalFields.SERIAL_NUMBER" ng-disabled="!isCreateNewMode()"/>
                             <input-validation-message types="required" input="mobileTerminalForm.serialNumber"></input-validation-message>
                         </div>
                         <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.TRANSCEIVER_TYPE">
@@ -110,12 +110,12 @@
                             </div>
                             <div class="col-md-1 form-group smallerpadding" ng-class="{'has-error': channelForm.dnid.$invalid && (submitAttempted || channelForm.dnid.$dirty)}" ng-show="getTerminalConfig().channelFields.DNID">
                             <!-- DNID-->
-                                <input type="text" name="dnid" class="form-control" ng-model="communicationChannel.ids.DNID" required only-digits>
+                                <input type="text" name="dnid" class="form-control" ng-model="communicationChannel.ids.DNID" ng-required="getTerminalConfig().channelFields.DNID" only-digits>
                                 <input-validation-message types="required,onlyDigits" input="channelForm.dnid"></input-validation-message>
                             </div>
                             <div class="col-md-1 form-group smallerpadding" ng-class="{'has-error': channelForm.memberId.$invalid && (submitAttempted || channelForm.memberId.$dirty)}" ng-show="getTerminalConfig().channelFields.MEMBER_NUMBER">
                             <!-- Member no -->
-                                <input type="text" name="memberId" class="form-control" ng-model="communicationChannel.ids.MEMBER_NUMBER" only-digits required>
+                                <input type="text" name="memberId" class="form-control" ng-model="communicationChannel.ids.MEMBER_NUMBER" only-digits ng-required="getTerminalConfig().channelFields.MEMBER_NUMBER">
                                 <input-validation-message types="required,onlyDigits" input="channelForm.memberId"></input-validation-message>
                             </div>
                             <div class="col-md-1 smallerpadding" ng-show="getTerminalConfig().channelFields.LES_DESCRIPTION">

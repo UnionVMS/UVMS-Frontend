@@ -33,7 +33,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     $scope.statusTypes.push({"text":"Request failed", "code":"Failed"});
 
     $scope.transponderTypes = [];
-    $scope.transponderTypes.push({"text":"Inmarsat-C", "code":"INMARSAT_C"});
+    $scope.transponderTypes.push({"text":"Inmarsat-C", "code":"INMARSAT_C"}, {"text":"Iridium", "code":"IRIDIUM"});
 
     $scope.organizations = [];
     $scope.organizations.push({"text":"Control Authority 1", "code":"CA1"});
