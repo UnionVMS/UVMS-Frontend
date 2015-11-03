@@ -17,10 +17,19 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'ngWebSocket'
 ]);
 
-var currentUserContextPromise = function(userService) {
-        return userService.findSelectedContext();
+var currentUserContextPromise = function(userService, $q) {
+        var deferred = $q.defer();
+        // return userService.findSelectedContext();
+        userService.findSelectedContext().then(function(c){
+            console.log("CONTEXT DONE");
+            console.log(c);
+            deferred.resolve();
+        }, function(err){
+            console.log("CONTEXT ERROR", err);
+        });
+        return deferred.promise;
     };
-currentUserContextPromise.$inject = ['userService'];
+currentUserContextPromise.$inject = ['userService', '$q'];
 
 
 var loadLocales = function(initService) {
@@ -32,7 +41,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
 
     tmhDynamicLocaleProvider.localeLocationPattern("assets/locales/angular-locale_{{locale}}.js");
 
-    var homeState = 'app.exchange'
+    var homeState = 'app.exchange';
     var homeUrl = 'exchange';
 
     $urlRouterProvider.when('','homeUrl');
@@ -391,7 +400,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
 
 unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, userService, locale, httpPendingRequestsService) {
     //Never cancel these request
-    httpPendingRequestsService.setSkipList(['/translate/locale-']);
+    httpPendingRequestsService.setSkipList(['/translate/locale-', '.lang.json']);
 
     $rootScope.safeApply = function(fn) {
         var phase = $rootScope.$$phase;
@@ -471,6 +480,10 @@ unionvmsWebApp.value('localeConf', {
     observableAttrs: new RegExp('^data-(?!ng-|i18n)'),
     delimiter: '::'
 });
+
+//Configure locale in momentjs (used to determine start of week)
+//TODO: get locale from config or browser
+moment.locale('sv');
 
 //Service used for bootstrapping the application
 unionvmsWebApp.factory('initService',function(configurationService, locale, tmhDynamicLocale, $window) {

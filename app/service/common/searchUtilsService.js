@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField, dateTimeService) {
+angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField, dateTimeService, locale) {
 
     //Modify span and times zones in list of search criterias
     var modifySpanAndTimeZones = function(searchCriterias){
@@ -33,9 +33,21 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
             //Replace TIME_SPAN with TO_DATE and FROM_DATE
             if(searchCriteriaKey === "TIME_SPAN"){
                 idxToRemove.push(i);
-                if(searchCriterias[i].value.toUpperCase() !== "CUSTOM"){
-                    searchCriterias.push(new SearchField("TO_DATE", moment.utc()));
-                    searchCriterias.push(new SearchField("FROM_DATE", moment.utc().add('hours', -searchCriteriaValue)));
+                switch(searchCriterias[i].value){
+                    case 'TODAY':
+                        searchCriterias.push(new SearchField("FROM_DATE", moment.utc().startOf('day')));
+                        searchCriterias.push(new SearchField("TO_DATE", moment.utc()));
+                        break;
+                    case 'THIS_WEEK':
+                        searchCriterias.push(new SearchField("FROM_DATE", moment.utc().startOf('week')));
+                        searchCriterias.push(new SearchField("TO_DATE", moment.utc()));
+                        break;
+                    case 'LAST_MONTH':
+                        searchCriterias.push(new SearchField("FROM_DATE", moment.utc().startOf('month')));
+                        searchCriterias.push(new SearchField("TO_DATE", moment.utc()));
+                        break;
+                    default:
+                        break;
                 }
             }
 
@@ -129,12 +141,33 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
         return partition;
     };
 
+    var getTimeSpanOptions = function() {
+        var options = [
+            {text: locale.getString('common.time_span_today'), code:'TODAY'},
+            {text: locale.getString('common.time_span_this_week'), code:'THIS_WEEK'},
+            {text: locale.getString('common.time_span_last_month'), code:'LAST_MONTH'},
+            {text: locale.getString('common.time_span_custom'), code:'CUSTOM'},
+        ];
+
+        return options;
+    };
+
+    var getTimeSpanCodeForToday = function() {
+        return 'TODAY';
+    };
+
+    var getTimeSpanCodeForCustom = function() {
+        return 'CUSTOM';
+    };
 
 	var searchUtilsService = {
         modifySpanAndTimeZones : modifySpanAndTimeZones,
         replaceSpansWithMinMaxValues : replaceSpansWithMinMaxValues,
         replaceMinMaxValuesWithSpans : replaceMinMaxValuesWithSpans,
         getSearchCriteriaPartition : getSearchCriteriaPartition,
+        getTimeSpanOptions : getTimeSpanOptions,
+        getTimeSpanCodeForToday : getTimeSpanCodeForToday,
+        getTimeSpanCodeForCustom : getTimeSpanCodeForCustom,
     };
 
 	return searchUtilsService;

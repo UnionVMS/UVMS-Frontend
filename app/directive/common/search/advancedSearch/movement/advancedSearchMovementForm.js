@@ -15,14 +15,13 @@ angular.module('unionvmsWeb').directive('advancedSearchMovementForm', function()
 angular.module('unionvmsWeb')
     .controller('advancedSearchMovementCtrl', function($scope, locale, searchService, savedSearchService, alertService, configurationService, SearchField){
 
-        var DATE_CUSTOM = "Custom";
+        $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_TODAY;
+
         var ASSET_GROUP_ID_SEARCH_KEY = 'ASSET_GROUP_ID';
 
         $scope.selectedSavedSearch = undefined;
         $scope.selectedVesselGroup = undefined;
         $scope.advancedSearch = false;
-        $scope.timespan = {};
-        $scope.advancedSearchObject.TIME_SPAN = $scope.timespan.code;
 
         var resetSearchForm = function(){
             alertService.hideMessage();
@@ -32,7 +31,7 @@ angular.module('unionvmsWeb')
             $scope.resetAdvancedSearchForm(false);
 
             //Reset timespan dropdown and search!
-            $scope.selectFirstTimeSpanOption();
+            $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_TODAY;
         };
 
         $scope.toggleAdvancedSearch = function(){
@@ -146,27 +145,24 @@ angular.module('unionvmsWeb')
           //Watch for changes to the START DATE input
         $scope.$watch(function () { return $scope.advancedSearchObject.TO_DATE;}, function (newVal, oldVal) {
             if (typeof newVal !== 'undefined') {
-                $scope.advancedSearchObject.TIME_SPAN = DATE_CUSTOM;
+                $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_CUSTOM;
             }
         });
         //Watch for changes to the END DATE input
         $scope.$watch(function () { return $scope.advancedSearchObject.FROM_DATE;}, function (newVal, oldVal) {
             if (typeof newVal !== 'undefined') {
-                $scope.advancedSearchObject.TIME_SPAN = DATE_CUSTOM;
+                $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_CUSTOM;
             }
         });
         //Watch for changes to the DATE DROPDOWN
         $scope.$watch(function () { return $scope.advancedSearchObject.TIME_SPAN;}, function (newVal, oldVal) {
-            if (typeof newVal !== 'undefined' && newVal !== DATE_CUSTOM) {
+            if (typeof newVal !== 'undefined' && newVal !== $scope.DATE_CUSTOM) {
                 //Reset start date and end date when changing to something else than custom
                 $scope.advancedSearchObject.TO_DATE = undefined;
                 $scope.advancedSearchObject.FROM_DATE = undefined;
             }
         });
 
-        $scope.selectFirstTimeSpanOption = function(){
-            $scope.advancedSearchObject.TIME_SPAN = $scope.timeSpanDropDownItems[0].code;
-        };
 
         var init = function(){
             //Setup dropdowns
@@ -178,11 +174,7 @@ angular.module('unionvmsWeb')
             $scope.status = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'STATUS'),'STATUS','MOVEMENT');
             $scope.movementType = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'MESSAGE_TYPE'),'MESSAGE_TYPE','MOVEMENT');
 
-
-            var tempTimeSpan = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'TIME_SPAN'), 'TIME_SPAN','MOVEMENT');
-            tempTimeSpan.push({"text":locale.getString('config.MOVEMENT_TIME_SPAN_custom'), "code":DATE_CUSTOM});
-            $scope.timeSpanDropDownItems = tempTimeSpan;
-            $scope.selectFirstTimeSpanOption();
+            $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_TODAY;
 
             //TODO: Get from config
             $scope.mapArea = [{'text':'Area 1','code':'Area 1'},{'text':'Area 2','code':'Area 2'}];

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $stateParams, $filter, Poll, PollStatus, searchService, alertService, locale, SearchResults, csvService, infoModal){
+angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $stateParams, $filter, Poll, PollStatus, searchService, searchUtilsService, alertService, locale, SearchResults, csvService, infoModal){
 
     $scope.activeTab = "POLLING_LOGS";
 
@@ -13,13 +13,10 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     $scope.selectedItems = [];
 
     //DATA FOR DROPDOWNS
-    var DATE_CUSTOM = "custom";
-    var DATE_TODAY = "24";
-    $scope.dateSearchItems = [];
-    $scope.dateSearchItems.push({"text":"Today", "code":DATE_TODAY});
-    $scope.dateSearchItems.push({"text":"This week", "code":"this_week"});
-    $scope.dateSearchItems.push({"text":"Last month", "code":"last_month"});
-    $scope.dateSearchItems.push({"text":"Custom", "code":DATE_CUSTOM});
+    $scope.DATE_CUSTOM = searchUtilsService.getTimeSpanCodeForCustom();
+    $scope.DATE_TODAY = searchUtilsService.getTimeSpanCodeForToday();
+    $scope.timeSpanOptions = searchUtilsService.getTimeSpanOptions();
+
 
     $scope.pollTypes = [];
     $scope.pollTypes.push({"text":"Configuration", "code":"CONFIGURATION_POLL"});
@@ -48,7 +45,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
             $scope.getPolls($scope.pollId);
         }else{
             //Set search date to today
-            $scope.advancedSearchObject.DATE_SPAN = DATE_TODAY;
+            $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_TODAY;
             //Load list with polls from start
             $scope.searchPolls();
         }
@@ -112,18 +109,18 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     //Watch for changes to the START DATE input
     $scope.$watch(function () { return $scope.advancedSearchObject.START_DATE;}, function (newVal, oldVal) {
         if (typeof newVal !== 'undefined') {
-            $scope.advancedSearchObject.DATE_SPAN = DATE_CUSTOM;
+            $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_CUSTOM;
         }
     });
     //Watch for changes to the END DATE input
     $scope.$watch(function () { return $scope.advancedSearchObject.END_DATE;}, function (newVal, oldVal) {
         if (typeof newVal !== 'undefined') {
-            $scope.advancedSearchObject.DATE_SPAN = DATE_CUSTOM;
+            $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_CUSTOM;
         }
     });
     //Watch for changes to the DATE DROPDOWN
-    $scope.$watch(function () { return $scope.advancedSearchObject.DATE_SPAN;}, function (newVal, oldVal) {
-        if (typeof newVal !== 'undefined' && newVal !== DATE_CUSTOM) {
+    $scope.$watch(function () { return $scope.advancedSearchObject.TIME_SPAN;}, function (newVal, oldVal) {
+        if (typeof newVal !== 'undefined' && newVal !== $scope.DATE_CUSTOM) {
             //Reset start date and end date when changing to something else than custom
             $scope.advancedSearchObject.START_DATE = undefined;
             $scope.advancedSearchObject.END_DATE = undefined;

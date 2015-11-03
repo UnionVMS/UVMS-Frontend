@@ -4,7 +4,7 @@
             <input type="text" placeholder="{{'movement.advanced_search_placeholder_by_name' | i18n}}"  class="form-control" tabindex="5" ng-model="advancedSearchObject.NAME">
         </div>
         <div class="col-md-2 smallerpadding searchcriteria">
-            <dropdown ng-model="advancedSearchObject.TIME_SPAN" no-placeholder-item items="timeSpanDropDownItems"></dropdown>
+            <dropdown ng-model="advancedSearchObject.TIME_SPAN" no-placeholder-item items="timeSpanOptions"></dropdown>
         </div>
         <div class="col-md-2 smallerpadding searchcriteria">
             <datepicker-input model="advancedSearchObject.FROM_DATE" time="true" placeholder="{{'movement.search_movementStartDate_placeholder' | i18n}}" max-date="advancedSearchObject.TO_DATE"></datepicker-input>

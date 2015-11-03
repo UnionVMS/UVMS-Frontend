@@ -15,7 +15,13 @@ angular.module('unionvmsWeb').directive('advancedSearch', function() {
 });
 
 angular.module('unionvmsWeb')
-    .controller('AdvancedSearchCtrl', function($scope, searchService, SearchField){
+    .controller('AdvancedSearchCtrl', function($scope, searchService, searchUtilsService, SearchField){
+
+    $scope.DATE_CUSTOM = searchUtilsService.getTimeSpanCodeForCustom();
+    $scope.DATE_TODAY = searchUtilsService.getTimeSpanCodeForToday();
+
+    $scope.timeSpanOptions = searchUtilsService.getTimeSpanOptions();
+
 
     //Set form partial depending on modelType
     switch($scope.modeltype) {
