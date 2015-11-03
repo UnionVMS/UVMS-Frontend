@@ -335,39 +335,40 @@ angular.module('auth.router', ['ui.bootstrap', 'auth.controllers', 'ui.router', 
 
 
                                     if (userName === "") {
-                            $log.debug('We are NOT logged in.');
-                            //is this a public route
+                                        $log.debug('We are NOT logged in.');
+                                        //is this a public route
                                         if (!('data' in toState) || !('access' in toState.data) || !toState.data.access || toState.data.access === ACCESS.PUBLIC) {
-                                $log.debug("Access undefined for this state, or public. Go ahead");
-                                //in the future we could decide that we do not allow states with undefined access but for now...
-                            } else {
+                                            $log.debug("Access undefined for this state, or public. Go ahead");
+                                            //in the future we could decide that we do not allow states with undefined access but for now...
+                                        } else {
                                             $log.debug('This route has some form of non public access restriction:', toState.data.access);
-                                //We will require a login
-                                //did we have a previous state?
+                                            //We will require a login
+                                            //did we have a previous state?
 
                                             //todo: detect previous state properly, here we only look for a parent
                                             if (fromState.url === '^') {
-                                    $log.debug('Looks like there is no previous state');
-                                    error = 'Please login with an authorised username and password.';
-                                    $log.debug(error);
+                                                $log.debug('Looks like there is no previous state');
+                                                error = 'Please login with an authorised username and password.';
+                                                $log.debug(error);
                                                 preventedState = preventedState || {state: toState, params: toParams};
-                                    event.preventDefault();
-                                } else {
+                                                event.preventDefault();
+                                            } else {
                                                 $log.debug('Looks like there is a previous state: ', fromState);
-                                    error = 'Your session timed out. Please Login again';
-                                    $log.debug(error);
+                                                error = 'Your session timed out. Please Login again';
+                                                $log.debug(error);
                                                 preventedState = preventedState || {state: toState, params: toParams};
-                                    event.preventDefault();
-                                }
+                                                event.preventDefault();
+                                            }
 
                                             $state.go(loginState, {
                                                 'toState': toState,
                                                 'toParams': toParams,
                                                 message: error
                                             }).then(
-                                                function(successTransition){},
-                                                function(transitionError){
-                                                    $log.debug("transistion to loginstate rejected with error ",transitionError);
+                                                function (successTransition) {
+                                                },
+                                                function (transitionError) {
+                                                    $log.debug("transistion to loginstate rejected with error ", transitionError);
                                                 }
                                             );
 
@@ -380,75 +381,94 @@ angular.module('auth.router', ['ui.bootstrap', 'auth.controllers', 'ui.router', 
                                              {
 
                                              //renewloginpanel.show().
-                                userService.findSelectedContext().then(function () {
-                                    $log.log("retry request succeeded!");
-                                    //$state.go(toState);
-                                    $state.go(toState, toParams, {reload: true});
-                                    //return $http(rejection.config);
-                                }, function () {
-                                    $log.log("retry request failed!");
-                                    userService.logout();
-                                    $rootScope.$broadcast('authenticationNeeded');
-                                });
+                                             userService.findSelectedContext().then(function () {
+                                             $log.log("retry request succeeded!");
+                                             //$state.go(toState);
+                                             $state.go(toState, toParams, {reload: true});
+                                             //return $http(rejection.config);
+                                             }, function () {
+                                             $log.log("retry request failed!");
+                                             userService.logout();
+                                             $rootScope.$broadcast('authenticationNeeded');
+                                             });
                                              }*/
-                            }
-                        } else {
+                                        }
+                                    } else {
                                         $log.debug('We ARE logged in!!!! Username: ' + userService.getUserName());
-                            $log.debug(toState);
+                                        $log.debug(toState);
                                         if (!('data' in toState) || !('access' in toState.data) || !toState.data.access || toState.data.access === ACCESS.PUBLIC || toState.data.access === ACCESS.AUTH) {
-                                $log.debug("Access undefined, public or auth. Go ahead");
+                                            $log.debug("Access undefined, public or auth. Go ahead");
                                             preventedState = null;
                                             // In case something goes wrong when fetching the data we could still be redirected to the login
                                             // just for such a case lest store toState and toParams
                                             allowedState = {state: toState, params: toParams};
-                                //in the future we could decide that we do not allow public pages but for now...
-                            } else {
-                                $log.debug('This route has some form of non public access restriction:', toState.data.access);
-                                //now check access auth
-                                if (!userService.isAllowed(toState.data.access)) {
-                                                $log.debug('Preventing access to ' + toState.name + '. It requires ' + toState.data.access);
+                                            //in the future we could decide that we do not allow public pages but for now...
+                                        } else {
+                                            $log.debug('This route has some form of non public access restriction:', toState.data.access);
+                                            // We need to check features and this means we need a user's context.
+                                            userService.findSelectedContext().then(
+                                                function (selectedContext) {
+                                                    $log.debug('User context resolved',selectedContext);
+                                                    //now check access auth
+                                                    if (!userService.isAllowed(toState.data.access)) {
+                                                        $log.debug('Preventing access to ' + toState.name + '. It requires ' + toState.data.access);
 
-                                                preventedState = preventedState || {state: toState, params: toParams};
-                                    event.preventDefault();
-                                                error = 'Your credentials do not allow access to this page. Switch context or login with different credentials';
-                                        $log.debug(error);
+                                                        preventedState = preventedState || {state: toState, params: toParams};
+                                                        event.preventDefault();
+                                                        error = 'Your credentials do not allow access to this page. Switch context or login with different credentials';
+                                                        $log.debug(error);
 
-                                                $state.go(accessErrorState, {
-                                                    'toState': toState,
-                                                    'toParams': toParams,
-                                                    message: error
-                                                }).then(
-                                                    function(successTransition){},
-                                                    function(transitionError){
-                                                        $log.debug("transistion to accessErrorState rejected with error ",transitionError);
-                                    }
-                                                );
-                                                /*
-                                    //todo: get the message to display
-                                    renewloginpanel.show().then(function () {
-                                        $log.log("retry request succeeded!");
-                                        //$state.go(toState);
-                                        $state.go(toState, toParams, {reload: true});
-                                        //return $http(rejection.config);
-                                    }, function () {
-                                        $log.log("retry request failed! Logging Out");
-                                        userService.logout();
-                                        $rootScope.$broadcast('authenticationNeeded');
-                                                 });*/
-                                } else {
-                                    $log.debug('The logged-in user is allowed to access: ', toState.data.access);
+                                                        $state.go(accessErrorState, {
+                                                            'toState': toState,
+                                                            'toParams': toParams,
+                                                            message: error
+                                                        }).then(
+                                                            function (successTransition) {
+                                                            },
+                                                            function (transitionError) {
+                                                                $log.debug("transistion to accessErrorState rejected with error ", transitionError);
+                                                            }
+                                                        );
 
-                                                preventedState = null;
-                                                allowedState = {state: toState, params: toParams};
+                                                    } else {
+                                                        $log.debug('The logged-in user is allowed to access: ', toState.data.access);
+
+                                                        preventedState = null;
+                                                        allowedState = {state: toState, params: toParams};
+                                                    }
+                                                },
+                                                function (error) {
+                                                    $log.error('context Resolution failed');
+                                                    //Let's handle this like a user missing the required feature
+                                                    $log.debug('Preventing access to ' + toState.name + '. It requires ' + toState.data.access);
+
+                                                    preventedState = preventedState || {state: toState, params: toParams};
+                                                    event.preventDefault();
+                                                    error = 'No selected user context. Select context or login with different credentials';
+                                                    $log.debug(error);
+
+                                                    $state.go(accessErrorState, {
+                                                        'toState': toState,
+                                                        'toParams': toParams,
+                                                        message: error
+                                                    }).then(
+                                                        function (successTransition) {
+                                                        },
+                                                        function (transitionError) {
+                                                            $log.debug("transistion to accessErrorState rejected with error ", transitionError);
+                                                        }
+                                                    );
+                                                }
+
+                                            )
                                         }
-                                        }
                                     }
-                            },
-                            function (error) {
+                                },
+                                function (error) {
                                     $log.error('user Resolution failed');
-                            }
-                        );
                                 }
+                            );
+                        }
                     }); // stateChangeStart
                 }]); // $injector.invoke(['$state'...
 
