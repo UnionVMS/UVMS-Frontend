@@ -32,8 +32,10 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
 
     tmhDynamicLocaleProvider.localeLocationPattern("assets/locales/angular-locale_{{locale}}.js");
 
+    var homeState = 'app.exchange'
+    var homeUrl = 'exchange';
 
-    $urlRouterProvider.when('','today');
+    $urlRouterProvider.when('','homeUrl');
 
     $stateProvider
         .state('uvmsLogin', {
@@ -41,7 +43,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             params: {
                 toState: {
                     value: function () {
-                        return 'app.today';
+                        return homeState;
                     }
                 },
                 toParams: null,
@@ -576,7 +578,7 @@ unionvmsWebApp.config(['$httpProvider', 'authInterceptorProvider', function Conf
 //Config login/logout
 unionvmsWebApp.config(['authRouterProvider',function(authRouterProvider){
     //authRouterProvider.anonRoute = "/anon";
-    authRouterProvider.setHomeState("app.today");
+    //authRouterProvider.setHomeState("app.today");
     authRouterProvider.setLogoutState("uvmsLogout");
     authRouterProvider.setupAccessErrorState("uvmsAccessError");
     //sets up a 'login' state that creates a default login page.
