@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchUtilsService, GetListRequest, VesselListPage, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage, auditLogRestService, exchangeRestService, alarmRestService) {
+angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchUtilsService, GetListRequest, VesselListPage, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage, auditLogRestService, exchangeRestService, alarmRestService, userService) {
 
     var DEFAULT_ITEMS_PER_PAGE = 10;
 
@@ -15,6 +15,10 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         map[searchKey] = true;
         return map;
     }, {});
+
+    var checkAccessToFeature = function(module, feature) {
+        return userService.isAllowed(feature, module, true);
+    };
 
     //First get movements, and the get the matching vessels
     var getMovements = function(movementRequest) {
@@ -213,22 +217,26 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
 			vesselRestService.getVesselList(getListRequest).then(function(vesselPage){
                 //Get last report for the vessels
-                var connectIds = [];
-                $.each(vesselPage.items, function(index, vessel) {
-                    connectIds.push(vessel.getGuid());
-                });
-
-                movementRestService.getLatestMovementsByConnectIds(connectIds).then(function(movementsPage){
-                    //Map movements to vessels
+                if(checkAccessToFeature('Movement', 'viewMovements')){
+                    var connectIds = [];
                     $.each(vesselPage.items, function(index, vessel) {
-                        var movement = movementsPage.getItemByProperty('connectId', vessel.getGuid());
-                        vessel.lastMovement = movement;
+                        connectIds.push(vessel.getGuid());
                     });
+
+                    movementRestService.getLatestMovementsByConnectIds(connectIds).then(function(movementsPage){
+                        //Map movements to vessels
+                        $.each(vesselPage.items, function(index, vessel) {
+                            var movement = movementsPage.getItemByProperty('connectId', vessel.getGuid());
+                            vessel.lastMovement = movement;
+                        });
+                        deferred.resolve(vesselPage);
+                    }, function(error){
+                        $log.error("Error getting last movements for vessels.", error);
+                        deferred.resolve(vesselPage);
+                    });
+                }else{
                     deferred.resolve(vesselPage);
-                }, function(error){
-                    $log.error("Error getting last movements for vessels.", error);
-                    deferred.resolve(vesselPage);
-                });
+                }
             }, function(error){
                 $log.error("Error getting vessels.", error);
                 deferred.reject(error);
