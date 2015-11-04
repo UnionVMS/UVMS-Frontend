@@ -31,7 +31,6 @@ angular.module('unionvmsWeb')
     };
 })
 .factory('manualPositionRestService',function($q, manualPositionRestFactory, SearchResultListPage, ManualPosition){
-    var userName = "FRONTEND_USER";
 
     var createManualMovement = function(movement) {
         var deferred = $q.defer();

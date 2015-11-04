@@ -41,7 +41,6 @@ angular.module('unionvmsWeb')
         };
     })
     .factory('exchangeRestService', function($q, exchangeRestFactory, GetListRequest, Exchange, ExchangeService, ExchangeSendingQueue,  SearchResultListPage, vesselRestService){
-        var userName = "FRONTEND_USER";
 
         var getVesselNamesByGuid = function(vessels) {
             var map = {};
