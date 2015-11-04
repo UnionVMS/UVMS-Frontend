@@ -1,9 +1,7 @@
 angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, locale, Audit, auditLogRestService, searchService, auditOptionsService, SearchResults, GetListRequest, infoModal, dateTimeService, pollingRestService, mobileTerminalRestService) {
 
     //Names used in the backend
-    var TYPE_ASSET = 'Asset';
-    var TYPE_MOBILE_TERMINAL = 'Mobile Terminal';
-    var TYPE_POLL = 'Poll';
+    var TYPES = auditOptionsService.getTypes();
 
 	// ************ Page setup ************
 
@@ -79,6 +77,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
         },
         function(error) {
             console.log(error);
+            $scope.currentSearchResults.removeAllItems();
             $scope.currentSearchResults.setLoading(false);
             $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
         });
@@ -95,7 +94,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
 
     //Does the audit log item has a comment?
     $scope.itemHasComment = function(audit){
-        return audit.objectType === TYPE_MOBILE_TERMINAL || audit.objectType ===  TYPE_POLL;
+        return audit.objectType === TYPES.MOBILE_TERMINAL || audit.objectType ===  TYPES.POLL;
     };
 
     //Show comment in info modal
@@ -107,7 +106,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
         var getListRequest = new GetListRequest(1, 1,true, []);
 
         //POLL
-        if(audit.objectType === TYPE_POLL){
+        if(audit.objectType === TYPES.POLL){
             getListRequest.addSearchCriteria('POLL_ID', id);
             pollingRestService.getPollList(getListRequest).then(
                 function(searchResultsListPage){
@@ -124,7 +123,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
         }
 
         //Mobile terminal
-        if(audit.objectType === TYPE_MOBILE_TERMINAL){
+        if(audit.objectType === TYPES.MOBILE_TERMINAL){
             mobileTerminalRestService.getHistoryForMobileTerminalByGUID(id).then(
                 function(historyList){
                     if(historyList.length > 0){
@@ -170,16 +169,20 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
         var path;
         if(audit.affectedObject){
             switch(audit.objectType){
-                case TYPE_MOBILE_TERMINAL:
+                case TYPES.MOBILE_TERMINAL:
                     path = "/communication/" + audit.affectedObject;
                     break;
-                case TYPE_ASSET:
+                case TYPES.ASSET:
                     path = "/assets/" + audit.affectedObject;
                     break;
-                case TYPE_POLL:
+                case TYPES.POLL:
                     path = "/polling/logs/" + audit.affectedObject;
                     break;
+                case TYPES.CUSTOM_RULE:
+                    path = "/alarms/rules/" + audit.affectedObject;
+                    break;
             }
+
         }
         return path;
     };

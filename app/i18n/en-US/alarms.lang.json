@@ -36,6 +36,8 @@
     "holding_table_reprocess_reports_success_message": "Reprocessing of alarm(s) issued.",
     "holding_table_reprocess_reports_error_message": "Reprocessing of alarm(s) failed.",
 
+
+    "rules_by_id_search_zero_results_error" : "The rule could not be found.",
     "rules_type_global" : "Global",
     "rules_type_event" : "Event",
     "rules_availability_public" : "Public",

@@ -18,17 +18,8 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
 ]);
 
 var currentUserContextPromise = function(userService, $q) {
-        var deferred = $q.defer();
-        // return userService.findSelectedContext();
-        userService.findSelectedContext().then(function(c){
-            console.log("CONTEXT DONE");
-            console.log(c);
-            deferred.resolve();
-        }, function(err){
-            console.log("CONTEXT ERROR", err);
-        });
-        return deferred.promise;
-    };
+    return userService.findSelectedContext();
+};
 currentUserContextPromise.$inject = ['userService', '$q'];
 
 
@@ -157,7 +148,10 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'ManualPositionReportsCtrl'
                 }
             },
-            resolve: {}
+            resolve: {},
+            data: {
+                access: 'viewMovements'
+            },
         })
         .state('app.movement-id', {
             url: '/movement/:id',
@@ -167,7 +161,10 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'MovementCtrl'
                 }
             },
-            resolve: {}
+            resolve: {},
+            data: {
+                access: 'viewMovements'
+            },
         })
         .state('app.manualMovements', {
             url: '/movement/manual',
@@ -176,7 +173,10 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html',
                     controller: 'ManualPositionReportsCtrl'
                 }
-            }
+            },
+            data: {
+                access: 'viewManualMovements'
+            },
         })
         .state('app.assets', {
             url: '/assets',
@@ -294,10 +294,13 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                 }
             },
             resolve: {
-                config : function(initService){
-                    //return initService.loadConfigFor(["AUDIT"]);
-                }
-            }
+                /*config : function(initService){
+                    return initService.loadConfigFor(["AUDIT"]);
+                }*/
+            },
+            data: {
+                access: 'viewAudit'
+            },
         })
         .state('app.configuration', {
             url: '/admin/configuration',
@@ -331,7 +334,10 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'ExchangeCtrl'
                 }
             },
-            resolve: {}
+            resolve: {},
+            data: {
+                access: 'viewExchange'
+            },
         })
         .state('app.holdingTable', {
             url: '/alarms/holdingtable',
@@ -361,6 +367,23 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
         })
         .state('app.rules', {
             url: '/alarms/rules',
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/alarms/rules/rules.html',
+                    controller: 'RulesCtrl'
+                }
+            },
+            resolve: {
+                config : function(initService){
+                    return initService.loadConfigFor(["RULES"]);
+                }
+            },
+            data: {
+                access: 'viewAlarmsRules'
+            },
+        })
+        .state('app.rules-id', {
+            url: '/alarms/rules/:id',
             views: {
                 modulepage: {
                     templateUrl: 'partial/alarms/rules/rules.html',

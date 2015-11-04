@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, locale, csvService, alertService, $filter, Rule,  RuleDefinition, ruleRestService, SearchResults, SearchResultListPage, userService, confirmationModal){
+angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $stateParams, locale, csvService, alertService, $filter, Rule,  RuleDefinition, ruleRestService, SearchResults, SearchResultListPage, userService, confirmationModal){
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Rules', true);
@@ -31,6 +31,9 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
     };
 
     var init = function(){
+        $scope.ruleGuid = $stateParams.id;
+
+        //Load all rules
         $scope.searchRules();
     };
 
@@ -38,8 +41,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
     $scope.searchRules = function() {
         $scope.clearSelection();
         $scope.currentSearchResults.setLoading(true);
-        ruleRestService.getRulesList()
-                .then(updateSearchResults, onGetSearchResultsError);
+        ruleRestService.getRulesList().then(updateSearchResults, onGetSearchResultsError);
     };
 
     //Callback when a new Rule has been creatad
@@ -52,7 +54,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
     };
 
     //Callback when a Rule has been updated
-    $scope.updateRuleCallback = function(updatedTule){
+    $scope.updateRuleCallback = function(updatedRule){
         //Search for all rules again
         $scope.searchRules();
 
@@ -63,6 +65,23 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, loca
     //Update the search results
     var updateSearchResults = function(searchResultsListPage){
         $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
+
+        //Check if ruleId is set, the open that rule if found
+        if(angular.isDefined($scope.ruleGuid)){
+            //Look for the rule with the right ruleGuid
+            var theRule;
+            $.each(searchResultsListPage.items, function(i, rule){
+                if(rule.guid === $scope.ruleGuid){
+                    theRule = rule;
+                    $scope.toggleRuleDetails(rule);
+                    return false;
+                }
+            });
+
+            if(!theRule){
+                alertService.showErrorMessage(locale.getString('alarms.rules_by_id_search_zero_results_error'));
+            }
+        }
     };
 
     //Error during search

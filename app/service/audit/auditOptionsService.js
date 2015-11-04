@@ -1,6 +1,16 @@
 //Service for storing the current options (dropdown values) for the audit search
 angular.module('unionvmsWeb').factory("auditOptionsService", function(searchService, dateTimeService) {
 
+    //Names used in the backend
+    var TYPES = {
+        ASSET : 'Asset',
+        MOBILE_TERMINAL : 'Mobile Terminal',
+        POLL : 'Poll',
+        REPORT : 'Report',
+        ALARM : 'Alarm',
+        CUSTOM_RULE : 'Custom rule',
+    };
+
     var currentOptions = {
         types: [],
         operations : []
@@ -16,10 +26,12 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
 
     //All available TYPES
     var auditLogTypes = {
-        asset: createDropdownItem("Asset"),
-        report: createDropdownItem("Reports"),
-        mobileTerminal: createDropdownItem("Mobile Terminal"),
-        poll: createDropdownItem("Poll"),
+        asset: createDropdownItem(TYPES.ASSET),
+        report: createDropdownItem(TYPES.REPORT),
+        mobileTerminal: createDropdownItem(TYPES.MOBILE_TERMINAL),
+        poll: createDropdownItem(TYPES.POLL),
+        alarm: createDropdownItem(TYPES.ALARM),
+        customRule: createDropdownItem(TYPES.CUSTOM_RULE),
     };
 
     //All available OPERATIONS
@@ -32,6 +44,10 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
     };
 
     return{
+        getTypes : function(){
+            return TYPES;
+        },
+
         //Current options
         getCurrentOptions : function(){
             return currentOptions;
@@ -41,7 +57,7 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
         resetDefaults : function() {
             //Reset date fields
             searchService.getAdvancedSearchObject()["TO_DATE"] = dateTimeService.formatUTCDateWithTimezone(moment.utc());
-            searchService.getAdvancedSearchObject()["FROM_DATE"] = dateTimeService.formatUTCDateWithTimezone(moment.utc().add('hours', -24));
+            searchService.getAdvancedSearchObject()["FROM_DATE"] = dateTimeService.formatUTCDateWithTimezone(moment.utc().startOf('day'));
             searchService.setSearchCriteriasToAdvancedSearch();
         },
 
@@ -67,8 +83,8 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
                     newOperations = [auditLogOperations.create, auditLogOperations.update, auditLogOperations.remove];
                     break;
                 case 'ALARMS':
-                    newTypes = [];
-                    newOperations = [auditLogOperations.create, auditLogOperations.update, auditLogOperations.remove];
+                    newTypes = [auditLogTypes.alarm, auditLogTypes.customRule];
+                    newOperations = [auditLogOperations.create];
                     break;
                 case 'ACCESS_CONTROL':
                     newTypes = [];
