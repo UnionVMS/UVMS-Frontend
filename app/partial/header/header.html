@@ -15,15 +15,31 @@
     									<span class="caret"></span>
     								</button>
     								<ul class="dropdown-menu" aria-labelledby="user-menu" >
-                                        <li ng-click="showFeatures()"><a><i class="fa fa-user"></i>as {{currentContext.role.roleName}}</a></li>
-                                        <li ng-click="switchContext()"><a><i class="fa fa-group"></i>Switch context</a></li>
+                                        <li ng-click="showFeatures()">
+                                            <a><i class="fa fa-user"></i>as {{currentContext.role.roleName}}</a>
+                                        </li>
+                                        <li ng-click="switchContext()">
+                                            <a><i class="fa fa-group"></i> <span ng-bind="'header.switch_context' | i18n"></span></a>
+                                        </li>
                                         <li role="separator" class="divider"></li>
-    									<li ng-click="signOut()"><a><i class="fa fa-sign-out"></i>Sign out</a></li>
+                                        <li ng-controller="ModifyContactDetails">
+                                            <a ng-click="modifyMyContactDetails()"><i class="fa fa-user"></i><span ng-bind="'header.update_contact_details' | i18n"></span></a>
+                                        </li>
+                                        <li ng-controller="ModifyPassword">
+                                            <a ng-click="modifyMyPassword()"><i class="fa fa-key"></i> <span ng-bind="'header.change_password' | i18n"></span></a>
+                                        </li>
+                                        <li ng-controller="ModifySecurityAnswer">
+                                            <a ng-click="modifySecurityAnswer()"><i class="fa fa-key"></i> <span ng-bind="'header.change_security_answer' | i18n"></span></a>
+                                         </li>
+                                        <li role="separator" class="divider"></li>
+    									<li ng-click="signOut()">
+                                            <a><i class="fa fa-sign-out"></i> <span ng-bind="'header.sign_out' | i18n"></span></a>
+                                        </li>
     								</ul>
     							</div>
     						</div>
                             <div class="sign-in" ng-if="!isAuthenticated">
-                                <span ng-click="signIn()"><i class="fa fa-lg fa-user"></i> Sign in</span>
+                                <span ng-click="signIn()"><i class="fa fa-lg fa-user"></i><span ng-bind="'header.sign_in' | i18n"></span></a>
                             </div>
                             <div class="notifications" ng-if="isAuthenticated">
                                 <div class="fa fa-lg fa-bell-o" ng-click="viewNotifications()"><span class="badge" ng-bind="randomNumber"></span></div>

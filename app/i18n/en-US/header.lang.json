@@ -9,5 +9,11 @@
 	"menu_movement" : "Positions",
 	"menu_admin" : "Admin",
 	"menu_exchange" : "Exchange",
-	"menu_polling": "Polling"
+    "menu_polling": "Polling",
+    "switch_context": "Switch context",
+    "update_contact_details": "Update contact details",
+    "change_password": "Change password",
+    "change_security_answer": "Change security answer",
+    "sign_in": "Sign in",
+	"sign_out": "Sign out"
 }
