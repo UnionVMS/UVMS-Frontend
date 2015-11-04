@@ -29,6 +29,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
 
     //Error during search
     var onGetSearchResultsError = function(error){
+        $scope.currentSearchResults.removeAllItems();
         $scope.currentSearchResults.setLoading(false);
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
     };

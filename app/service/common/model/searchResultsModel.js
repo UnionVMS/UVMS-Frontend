@@ -40,6 +40,10 @@ angular.module('unionvmsWeb')
         return false;
     };
 
+    SearchResults.prototype.removeAllItems = function() {
+        this.items.length = 0;
+    };
+
     SearchResults.prototype.updateWithSingleItem = function(item) {
         var page = new SearchResultListPage();
         page.items.push(item);

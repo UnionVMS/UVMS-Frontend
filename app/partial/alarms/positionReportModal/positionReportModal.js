@@ -237,6 +237,7 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
 
     //Search error
     var onSearchVesselError = function(response){
+        $scope.currentSearchResults.removeAllItems();
         $scope.currentSearchResults.setLoading(false);
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
     };

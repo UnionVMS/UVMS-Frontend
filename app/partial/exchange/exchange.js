@@ -102,6 +102,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
             $scope.exchangeLogsSearchResults.updateWithNewResults(page);
         },
         function(error) {
+            $scope.exchangeLogsSearchResults.removeAllItems();
             $scope.exchangeLogsSearchResults.setLoading(false);
             $scope.exchangeLogsSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
         });

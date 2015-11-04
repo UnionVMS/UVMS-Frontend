@@ -60,6 +60,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
 
     //Handle error from search results (listing vessel)
     var onGetSearchResultsError = function(response){
+        $scope.currentSearchResults.removeAllItems();
         $scope.currentSearchResults.setLoading(false);
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
     };
