@@ -1,8 +1,9 @@
-angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, $filter, alertService, movementRestService, searchService, locale, $stateParams, ManualPositionReportModal, csvService, SearchResults){
+angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, $filter, alertService, movementRestService, searchService, locale, $stateParams, ManualPositionReportModal, csvService, SearchResults, $resource){
 
     //Current filter and sorting for the results table
     $scope.sortFilter = '';
     $scope.editSelectionDropdownItems = [{'text':locale.getString('movement.editselection_see_on_map'),'code':'MAP'}, {'text':locale.getString('movement.editselection_export_selection'),'code':'EXPORT'}, {'text':locale.getString('movement.editselection_inactivate'),'code':'INACTIVE'}];
+    $scope.newMovementsCount = 0;
 
     //Search objects and results
     $scope.currentSearchResults = new SearchResults('vessel.name', false, locale.getString('movement.movement_search_error_result_zero_pages'));
@@ -34,12 +35,64 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         };
     };
 
+    /* Returns the movement with GUID from page. */
+    var getMovementWithGuid = function(page, guid) {
+        for (var i = 0; i < page.items.length; i++) {
+            if (page.items[i].guid === guid) {
+                return page.items[i];
+            }
+        }
+    };
+
+    /* Performs current search, and adds the movement with given GUID to results, if found.
+     * Otherwise increments new movement count. */
+    var appendSearchWithGuid = function(guid) {
+        searchService.searchMovements().then(function(page) {
+            var movement = getMovementWithGuid(page, guid);
+            if (movement) {
+                $scope.currentSearchResults.updateWithSingleItem(movement);
+            }
+            else {
+                $scope.newMovementsCount++;
+            }
+        });
+    };
+
+    /* If list of IDs not empty, pick the first one and updates the list accordingly. */
+    var receivedNewMovement = function(response) {
+        if (response.ids.length === 0) {
+            return;
+        }
+
+        var guid = response.ids[0];
+        if (searchService.getSearchCriterias().criterias.length > 0) {
+            // Add to search if matching, or increment new movement count.
+            appendSearchWithGuid(guid);
+        }
+        else {
+            // Add to movement list.
+            movementRestService.getMovement(guid).then(function(movement) {
+                $scope.currentSearchResults.updateWithSingleItem(movement);
+            });
+        }
+    };
+
+    /* Do long-polling,  */
+    var doLongPolling = function() {
+        $resource("/movement/activity/movement").get(function(response) {
+            receivedNewMovement(response);
+            doLongPolling();
+        });
+    };
+
     var init = function(){
          if ($stateParams.id) {
             movementRestService.getMovement($stateParams.id).then(function(movement) {
                 ManualPositionReportModal.show(movement2ManualPosition(movement), {readOnly: true});
             });
          }
+
+         doLongPolling();
     };
 
     $scope.isManualMovement = false;
@@ -89,6 +142,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     };
 
     var retriveMovementsSuccess = function(searchResultListPage){
+        $scope.newMovementsCount = 0;
         console.info("Success in retrieveing movements..");
         $scope.currentSearchResults.updateWithNewResults(searchResultListPage);
     };
