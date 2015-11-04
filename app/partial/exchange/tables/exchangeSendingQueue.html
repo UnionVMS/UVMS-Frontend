@@ -10,7 +10,7 @@
 	<div class="row scroller">
         <div class="col-md-12 nopaddingright">
             <!--<pre>{{sendingQueue.items | json}}</pre>-->
-            <h3 ng-show="sendingQueue.items.length <= 0">{{'exchange.sending_queue_all_ok' | i18n}}</h3>
+            <h3 ng-show="sendingQueue.items.length <= 0 && !sendingQueue.errorMessage">{{'exchange.sending_queue_all_ok' | i18n}}</h3>
             <table ng-hide="sendingQueue.items.length <= 0" class="sendingQueue searchResults">
                 <thead>
                     <th></th>
@@ -46,7 +46,7 @@
                     </tr>
                 </tbody>
             </table>
-             <search-result-error-alert ng-show="search.errorMessage">{{search.errorMessage}}</search-result-error-alert>
+             <search-result-error-alert ng-show="sendingQueue.errorMessage">{{sendingQueue.errorMessage}}</search-result-error-alert>
            <!--
             -->
         </div>
