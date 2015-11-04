@@ -12,6 +12,12 @@ angular.module('unionvmsWeb')
                     list : { method: 'POST'}
                 });
             },
+            getAlarm: function() {
+                return $resource('/rules/rest/alarms/:guid');
+            },
+            getTicket: function() {
+                return $resource('/rules/rest/tickets/:guid');
+            },
             getTickets : function(){
                 return $resource('/rules/rest/tickets/list/',{},{
                     list : { method: 'POST'}
@@ -151,11 +157,49 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
+    var getAlarmReport = function(guid) {
+        var deferred = $q.defer();
+        alarmRestFactory.getAlarm().get({guid:guid}, function(response) {
+            if (response.code !== 200) {
+                deferred.reject("Invalid response status");
+                return;
+            }
+
+            var alarmReport = Alarm.fromDTO(response.data);
+            deferred.resolve(alarmReport);
+        },
+        function(error) {
+            deferred.reject("Invalid response status");
+        });
+
+        return deferred.promise;
+    };
+
+    var getTicket = function(guid) {
+        var deferred = $q.defer();
+        alarmRestFactory.getTicket().get({guid:guid}, function(response) {
+            if (response.code !== 200) {
+                deferred.reject("Invalid response status");
+                return;
+            }
+
+            var ticket = Ticket.fromDTO(response.data);
+            deferred.resolve(ticket);
+        },
+        function(error) {
+            deferred.reject("Invalid response status");
+        });
+
+        return deferred.promise;
+    };
+
     return {
         updateAlarmStatus: updateAlarmStatus,
         getAlarmsList: getAlarmsList,
         getTicketsList: getTicketsList,
         updateTicketStatus: updateTicketStatus,
         reprocessAlarms: reprocessAlarms,
+        getAlarmReport: getAlarmReport,
+        getTicket: getTicket
     };
 });

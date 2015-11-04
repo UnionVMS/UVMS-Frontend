@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, PositionReportModal, movementRestService){
+angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, PositionReportModal, movementRestService, $resource){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -16,8 +16,22 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         return alarm.isOpen() ? $scope.statusFilter === "open" : $scope.statusFilter === "closed";
     };
 
+    /* Do long-polling,  */
+    var doLongPolling = function() {
+        $resource("/rules/activity/ticket").get(function(response) {
+            for (var i = 0; i < response.ids.length; i++) {
+                alarmRestService.getTicket(response.ids[i]).then(function(alarmReport) {
+                    $scope.currentSearchResults.updateWithSingleItem(alarmReport);
+                });
+            }
+
+            doLongPolling();
+        });
+    };
+
     var init = function(){
         $scope.searchTickets();
+        doLongPolling();
     };
 
     $scope.searchTickets = function() {

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage, PositionReportModal, userService, alarmRestService, searchService){
+angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage, PositionReportModal, userService, alarmRestService, searchService, $resource){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -23,8 +23,22 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         return alarm.isOpen() ? $scope.statusFilter === "open" : $scope.statusFilter === "closed";
     };
 
+    /* Do long-polling,  */
+    var doLongPolling = function() {
+        $resource("/rules/activity/alarm").get(function(response) {
+            for (var i = 0; i < response.ids.length; i++) {
+                alarmRestService.getAlarmReport(response.ids[i]).then(function(alarmReport) {
+                    $scope.currentSearchResults.updateWithSingleItem(alarmReport);
+                });
+            }
+
+            doLongPolling();
+        });
+    };
+
     var init = function(){
         $scope.searchAlarms();
+        doLongPolling();
     };
 
     $scope.searchAlarms = function() {
