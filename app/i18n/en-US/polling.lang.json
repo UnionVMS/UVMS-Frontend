@@ -63,6 +63,7 @@
     "wizard_second_step_configuration_poll_new_dnid" :"New DNID",
     "wizard_second_step_configuration_poll_new_dnid_multiple_carrier_warning": "Can only be set for one mobile terminal at a time.",
     "wizard_second_step_configuration_poll_new_member_no" :"New member no.",
+    "wizard_second_step_configuration_poll_different_terminal_types": "(Obs. Confgiuration can only be applied to one terminal type at a time.)",
     "wizard_second_step_sampling_poll" :"Sampling poll",
     "wizard_second_step_sampling_poll_start_date" :"Reporting start date",
     "wizard_second_step_sampling_poll_end_date" :"Reporting end date",

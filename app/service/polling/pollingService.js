@@ -126,13 +126,28 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
             ];
         }
         else if (type === "CONFIGURATION") {
-            return [
-                getAttr("REPORT_FREQUENCY", pollingOptions.configurationPoll.freq),
-                getAttr("GRACE_PERIOD", pollingOptions.configurationPoll.gracePeriod),
-                getAttr("IN_PORT_GRACE", pollingOptions.configurationPoll.inPortGrace),
-                getAttr("DNID", pollingOptions.configurationPoll.newDNID),
-                getAttr("MEMBER_NUMBER", pollingOptions.configurationPoll.newMemberNo)
-            ];
+
+            var terminalType;
+            var selectedChannels = getSelectedChannels();
+            if(selectedChannels.length > 0){
+                terminalType = selectedChannels[0].mobileTerminalType;
+            }
+            switch(terminalType){
+                case 'INMARSAT_C':
+                    return [
+                        getAttr("REPORT_FREQUENCY", pollingOptions.configurationPoll.freq),
+                        getAttr("GRACE_PERIOD", pollingOptions.configurationPoll.gracePeriod),
+                        getAttr("IN_PORT_GRACE", pollingOptions.configurationPoll.inPortGrace),
+                        getAttr("DNID", pollingOptions.configurationPoll.newDNID),
+                        getAttr("MEMBER_NUMBER", pollingOptions.configurationPoll.newMemberNo)
+                    ];
+                case 'IRIDIUM':
+                    return [
+                        getAttr("REPORT_FREQUENCY", pollingOptions.configurationPoll.freq),
+                    ];
+                default:
+                    break;
+            }
         }
         else if (type === "SAMPLING") {
             return [

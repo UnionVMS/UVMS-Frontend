@@ -26,6 +26,9 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
         if (!$scope.isSingleMobileTerminalSelected() && type === "SAMPLING") {
             return;
         }
+        if (!$scope.isAllSelectedTerminalsOfTheSameType() && type === "CONFIGURATION") {
+            return;
+        }
         resetPollingOptions(false);
         $scope.submitAttempted = false;
         $scope.pollingOptions.type = type;
@@ -59,6 +62,35 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
     //Is a single mobile terminal selected?
     $scope.isSingleMobileTerminalSelected = function() {
         return pollingService.isSingleSelection();
+    };
+
+    //Is all selected terminals of the same type?
+    $scope.isAllSelectedTerminalsOfTheSameType = function() {
+        var selectedTerminals = pollingService.getSelectedChannels();
+        if(selectedTerminals.length > 1){
+            for(var i = 1; i < selectedTerminals.length ; i++){
+                if(selectedTerminals[i].mobileTerminalType !== selectedTerminals[i-1].mobileTerminalType){
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
+
+    //Get the terminal type of the first selected channel
+    var getTerminalTypeOfFirstSelectedTerminal = function(){
+        var selectedTerminals = pollingService.getSelectedChannels();
+        if(selectedTerminals.length > 0){
+            return selectedTerminals[0].mobileTerminalType;
+        }
+    };
+
+    $scope.enableConfigurationForInmarsatC = function(){
+        return getTerminalTypeOfFirstSelectedTerminal() === 'INMARSAT_C';
+    };
+
+    $scope.enableConfigurationForIridium = function(){
+        return getTerminalTypeOfFirstSelectedTerminal() === 'IRIDIUM';
     };
 
     //Run the poll
