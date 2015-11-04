@@ -1,80 +1,76 @@
-<div ng-controller="ReportslistCtrl as rt" class="table-responsive reportsListTable" st-table="displayedReports" st-safe-src="reports">
+<div ng-controller="ReportslistCtrl as rt" class="reportsListTable" st-table="displayedReports" st-safe-src="reports">
 	
-	<tr>
-   		<th colspan="7" class="stToolsHeader">
-    		<div class="row reportBtnGroup" ng-show="isVisible.reportsList">
-				<div class="col-md-6 report-btn-group">
-					<button type="button" class="btn btn-primary btn-sm" ng-click="reloadReportsList()">
-		                <span class="fa fa-refresh" aria-hidden="true"></span>
-            		</button>
-					<button type="button" class="btn btn-primary btn-sm" ng-click="toggleReportForm('CREATE')">
-		                   <span class="fa fa-plus-square" aria-hidden="true"></span> &nbsp;
-		                   <span>{{'spatial.reports_add_new_report' | i18n }}</span>
-		               </button>
-				</div>
-				<div class="col-md-6">
-					<input type="text" class="form-control" ng-model="searchString" st-searchargs="name|desc|createdOn|createdBy|lastExecTime|visibility" placeholder="{{'spatial.reports_table_search_header' | i18n}}">
-				</div>
-			</div>
-		</th>
-   	</tr>
+  	<div class="row reportBtnGroup" ng-show="isVisible.reportsList">
+		<div class="col-md-6 report-btn-group">
+			<button type="button" class="btn btn-primary btn-sm" ng-click="reloadReportsList()">
+                <span class="fa fa-refresh" aria-hidden="true"></span>
+          	</button>
+			<button type="button" class="btn btn-primary btn-sm" ng-click="toggleReportForm('CREATE')">
+                   <span class="fa fa-plus-square" aria-hidden="true"></span> &nbsp;
+                   <span>{{'spatial.reports_add_new_report' | i18n }}</span>
+            </button>
+		</div>
+		<div class="col-md-6">
+			<input type="text" class="form-control" ng-model="searchString" st-searchargs placeholder="{{'spatial.reports_table_search_header' | i18n}}">
+		</div>
+	</div>
 	
-	<!-- -------------------------------------------------------->
-	
-	<table class="table table-striped" style="width: 100%;">
-	    <thead>
-	        <tr class="stColumnHeaders">
-	            <th st-sort-args="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_name' | i18n }}</th>
-	            <th st-sort-args="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_description' | i18n }}</th>
-	            <th st-sort-args="createdOn" st-skip-natural="true" st-sort-default="reverse"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_created_on' | i18n }}</th>
-	            <th st-sort-args="createdBy" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_owner' | i18n }}</th>
-	            <th st-sort-args="executedOn" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_last_executed' | i18n }}</th>
-	            <th st-sort-args="visibility" st-skip-natural="true"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc" class="dt-center" >{{'spatial.reports_table_header_visibility' | i18n }}</th>
-	            <th></th>
-	        </tr>
-	        <tr ng-if="alert.visible">
-	        	<th colspan="7">
-				    <div class="alert alert-danger alert-container" role="alert" ng-if="alert.type === 'error'">
-       					<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
-       					<span class="alert-message">
-           					<span>{{ alert.msg }}</span>            
-       					</span>
-				    </div>
-				    <div class="alert alert-success alert-container" role="alert" ng-if="alert.type === 'success'">
-       					<span class="fa fa-check-circle" aria-hidden="true"></span>
-       					<span class="alert-message">
-           					<span>{{ alert.msg }}</span>            
-       					</span>
-				    </div>
-	        	</th>
-	        </tr>
-	        <tr ng-if="isLoading">
-	        	<th colspan="7" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
-	        </tr>
-	    </thead>
-	    <tbody>
-	        <!-- <tr ng-repeat="report in displayedReports | stSearch: searchString:displayedReports:displayedColumns">  -->
-	        <tr ng-repeat="report in displayedReports">
-	            <td>{{ report.name }}</td>
-	            <td>{{ report.desc }}</td>
-	            <td>{{ report.createdOn | date:config.target_format }}</td>
-	            <td>{{ report.createdBy }}</td>
-	            <td>{{ report.executedOn | date:config.target_format }}</td>
-	            <td class="dt-center"><span class="label label-default label-visibility">{{report.visibility | capitalize}}</span></td>
-	            <td>
-                    <button type="button" class="btn btn-success btn-xs btn-bottom-mg" ng-click="runReport($index)"><span class="run-report">{{'spatial.reports_table_run_label' | i18n }}</span></button>
-                    <button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.reports_table_config_label' | i18n }}" ng-click="showFilters($index)" ng-show="{{ report.editable }}"><span class="fa fa-cog"></span></button>
-                    <button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.reports_table_share_label' | i18n }}" ng-click="shareReport($index)" ng-show="{{ report.shareable }}"><span class="fa fa-share-alt"></span></button>
-                    <button type="button" class="btn btn-danger btn-xs btn-bottom-mg" title="{{'spatial.reports_table_delete_label' | i18n }}" ng-click="deleteReport($index)" ng-show="{{ report.deletable }}"> <span class="fa fa-trash-o"></span></button>
-                </td>
-	        </tr>
-	    </tbody>
-	    <tfoot class="stFooterPagination">
-			<tr>
-				<td colspan="7" class="text-right">
-					<div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
-				</td>
-			</tr>
-		</tfoot>
-	</table>
+	<div class="table-responsive">
+		<table class="table table-striped" style="width: 100%;">
+		    <thead>
+		        <tr class="stColumnHeaders">
+		            <th st-sort-args="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_name' | i18n }}</th>
+		            <th st-sort-args="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_description' | i18n }}</th>
+		            <th st-sort-args="createdOn" st-skip-natural="true" st-sort-default="reverse"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_created_on' | i18n }}</th>
+		            <th st-sort-args="createdBy" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_owner' | i18n }}</th>
+		            <th st-sort-args="executedOn" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_last_executed' | i18n }}</th>
+		            <th st-sort-args="visibility" st-skip-natural="true"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc" class="dt-center" >{{'spatial.reports_table_header_visibility' | i18n }}</th>
+		            <th></th>
+		        </tr>
+		        <tr class="stColumnHeaders" ng-if="alert.visible">
+		        	<th colspan="7">
+					    <div class="alert alert-danger alert-container" role="alert" ng-if="alert.type === 'error'">
+	       					<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+	       					<span class="alert-message">
+	           					<span>{{ alert.msg }}</span>            
+	       					</span>
+					    </div>
+					    <div class="alert alert-success alert-container" role="alert" ng-if="alert.type === 'success'">
+	       					<span class="fa fa-check-circle" aria-hidden="true"></span>
+	       					<span class="alert-message">
+	           					<span>{{ alert.msg }}</span>            
+	       					</span>
+					    </div>
+		        	</th>
+		        </tr>
+		        <tr ng-if="isLoading">
+		        	<th colspan="7" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+		        </tr>
+		    </thead>
+		    <tbody>
+		        <!-- <tr ng-repeat="report in displayedReports | stSearch: searchString:displayedReports:displayedColumns">  -->
+		        <tr ng-repeat="report in displayedReports">
+		            <td>{{ report.name }}</td>
+		            <td>{{ report.desc }}</td>
+		            <td>{{ report.createdOn | dateUtc:config.target_format }}</td>
+		            <td>{{ report.createdBy }}</td>
+		            <td>{{ report.executedOn | dateUtc:config.target_format }}</td>
+		            <td class="dt-center"><span class="label label-default label-visibility">{{report.visibility | capitalize}}</span></td>
+		            <td>
+	                    <button type="button" class="btn btn-success btn-xs btn-bottom-mg" ng-click="runReport($index)"><span class="run-report">{{'spatial.reports_table_run_label' | i18n }}</span></button>
+	                    <button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.reports_table_config_label' | i18n }}" ng-click="showFilters($index)" ng-show="{{ report.editable }}"><span class="fa fa-cog"></span></button>
+	                    <button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.reports_table_share_label' | i18n }}" ng-click="shareReport($index)" ng-show="{{ report.shareable }}"><span class="fa fa-share-alt"></span></button>
+	                    <button type="button" class="btn btn-danger btn-xs btn-bottom-mg" title="{{'spatial.reports_table_delete_label' | i18n }}" ng-click="deleteReport($index)" ng-show="{{ report.deletable }}"> <span class="fa fa-trash-o"></span></button>
+	                </td>
+		        </tr>
+		    </tbody>
+		    <tfoot class="stFooterPagination">
+				<tr>
+					<td colspan="7" class="text-right">
+						<div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
 </div>

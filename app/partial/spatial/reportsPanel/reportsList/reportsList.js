@@ -28,7 +28,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, repo
     //Mock config object
     $scope.config = {
         src_format: 'YYYY-MM-DDTHH:mm:ss',
-        target_format: 'dd-MM-yyyy HH:mm:ss'
+        target_format: 'DD-MM-YYYY HH:mm:ss'
     };
     
     $scope.isLoading = true;
