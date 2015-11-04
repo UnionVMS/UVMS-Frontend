@@ -4,6 +4,8 @@
 
 angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function ($scope, $modalInstance, locale, searchService, SearchField, SavedSearchGroup, savedSearchService, searchType, options, userService, alertService) {
 
+    $scope.waitingForCreateResponse = false;
+
     var isDynamic = false,
         searchFields,
         saveSearchFunction,
@@ -105,16 +107,19 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
     };
 
     var onSaveSuccess = function(response){
+        $scope.waitingForCreateResponse = false;
         alertService.showSuccessMessageWithTimeout(locale.getString('common.saved_search_create_success'));
         $modalInstance.close();
     };
 
     var onUpdateSuccess = function(response){
+        $scope.waitingForCreateResponse = false;
         alertService.showSuccessMessageWithTimeout(locale.getString('common.saved_search_updated_success'));
         $modalInstance.close();
     };
 
     var onSaveError = function(response){
+        $scope.waitingForCreateResponse = false;
         console.error("Error saving search");
         $scope.error = true;
     };
@@ -126,6 +131,7 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
             $scope.saveData.existingGroup.dynamic = isDynamic;
             $scope.saveData.existingGroup.searchFields = searchFields;
 
+            $scope.waitingForCreateResponse = true;
             updateSearchFunction($scope.saveData.existingGroup)
                .then(onUpdateSuccess, onSaveError);
         }
@@ -136,6 +142,7 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
             $scope.saveData.name = $scope.saveData.name.trim();
             //Check if name of group already exists.
             if(!$scope.contains($scope.existingGroups,$scope.saveData.name)){
+                $scope.waitingForCreateResponse = true;
                 saveSearchFunction(newSavedGroup).then(onSaveSuccess, onSaveError);
             } else {
                 $scope.errorMessage = locale.getString('common.saved_search_group_exists');
