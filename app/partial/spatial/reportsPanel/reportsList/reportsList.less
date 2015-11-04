@@ -78,3 +78,36 @@ table.table {
 	font-weight: normal !important;
 	padding-left: 5px;
 }
+
+
+.spatialModule {
+	[st-table] table {
+		background-color: @pageBackgroundColor;
+		border: 0;
+		.stToolsHeader {
+			padding: 0;
+			border: 0;
+			input {
+				font-weight: normal;
+			}
+		}
+		.stColumnHeaders,
+		tbody {
+			background-color: #fff;
+			border: solid #ddd;
+			border-width: 0 1px;
+		}
+		tfoot.stFooterPagination {
+			padding-top: 20px;
+			//border-width: 0;
+			//border-top-width: 1px;
+			> tr > td {
+				padding: 20px 0 0 0;
+				ul.pagination {
+					margin: 2px;
+				}
+			}
+		}
+	}
+}
+
