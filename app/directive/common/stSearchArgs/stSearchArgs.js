@@ -33,7 +33,7 @@ angular.module('smart-table')
 	        var pagination = ctrl.tableState().pagination;
 	        var output;
 	        
-	        filtered = ctrl.tableState().search.predicateObject ? tableFilter(tableCtrl.tableScope.reports , tableCtrl.tableScope.displayedColumns + ctrl.tableState().search.predicateObject.$) : tableCtrl.tableScope.reports;
+	        filtered = ctrl.tableState().search.predicateObject ? tableFilter(tableCtrl.tableScope.reports , tableCtrl.tableScope.displayedColumns + '|' + ctrl.tableState().search.predicateObject.$) : tableCtrl.tableScope.reports;
 	        if (ctrl.tableState().sort.predicate) {
 	          filtered = orderBy(filtered, ctrl.tableState().sort.predicate, ctrl.tableState().sort.reverse);
 	        }
@@ -46,9 +46,10 @@ angular.module('smart-table')
 	        displaySetter(tableCtrl.tableScope, output || filtered);
 	      };
         
-	      tableCtrl.searchArgs = function search (input, predicate) {
+	      tableCtrl.searchArgs = function search (input, filteredColumns) {
 	        var predicateObject = ctrl.tableState().search.predicateObject || {};
-	        var prop = predicate ? predicate : '$';
+	        tableCtrl.tableScope.displayedColumns = filteredColumns;
+	        var prop = '$';
 	
 	        input = angular.isString(input) ? input.trim() : input;
 	        $parse(prop).assign(predicateObject, input);
@@ -73,7 +74,7 @@ angular.module('smart-table')
         scope.$watch(function () {
           return ctrl.tableState().search;
         }, function (newValue, oldValue) {
-          var predicateExpression = attr.stSearchargs || '$';
+          var predicateExpression = '$';
           if (newValue.predicateObject && $parse(predicateExpression)(newValue.predicateObject) !== element[0].value) {
             element[0].value = $parse(predicateExpression)(newValue.predicateObject) || '';
           }

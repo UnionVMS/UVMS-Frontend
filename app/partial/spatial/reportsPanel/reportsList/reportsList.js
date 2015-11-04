@@ -43,7 +43,6 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, repo
     $scope.itemsByPage = 25;
     
     $scope.displayedReports = [].concat($scope.reports);
-    $scope.displayedColumns = "name|desc|createdOn|createdBy|lastExecTime|visibility|";
     
     //Run the report
     $scope.runReport = function(index){
@@ -130,19 +129,5 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, repo
         var msg = locale.getString(searchString);
         $scope.alert.show(msg, 'error');
     };
-    
-    
-    //Custom sort function for the specified date target format
-    $.extend($.fn.dataTableExt.oSort, {
-        "report-date-pre": function (date){
-            var repDate =  parseInt(moment(date, $scope.config.target_format, true).format('X'));
-            return isNaN(repDate) ? 0 : repDate;
-        },
-        "report-date-asc": function (a, b){
-            return a - b;
-        },
-        "report-date-desc": function (a, b){
-            return b - a;
-        }
-    });
+
 });
