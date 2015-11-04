@@ -23,6 +23,9 @@ angular.module('unionvmsWeb')
                     list : { method : 'POST'}
                 });
             },
+            getExchangeMessage: function() {
+                return $resource('/exchange/rest/exchange/:guid');
+            },
             resendExchangeMessage : function(){
                 return $resource( '/exchange/rest/message/resend',{},
                 {
@@ -321,6 +324,21 @@ angular.module('unionvmsWeb')
         return defer.promise;
     };
 
+    var getExchangeMessage = function(guid) {
+        var deferred = $q.defer();
+        exchangeRestFactory.getExchangeMessage().get({guid: guid}, function(response) {
+            if (response.code !== "200") {
+                deferred.reject("Invalid response");
+            }
+
+            return Exchange.fromJson(response.data);
+        }, function(error) {
+            deferred.reject("Invalid response");
+        });
+
+        return deferred.promise;
+    }; 
+
     return {
         getTransmissionStatuses : getTransmissionStatuses,
         stopTransmission : stopTransmission,
@@ -328,6 +346,7 @@ angular.module('unionvmsWeb')
         getMessages : getMessages,
         resendExchangeMessage : resendExchangeMessage,
         sendQueue: sendQueue,
-        getSendingQueue : getSendingQueue
+        getSendingQueue : getSendingQueue,
+        getExchangeMessage: getExchangeMessage
     };
 });

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter,$location, locale, searchService, exchangeRestService, infoModal, ManualPosition, alertService, csvService, ExchangeService, SearchResults){
+angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter,$location, locale, searchService, exchangeRestService, infoModal, ManualPosition, alertService, csvService, ExchangeService, SearchResults, $resource){
 
     $scope.transmissionStatuses = new SearchResults();
     $scope.sendingQueue = new SearchResults();
@@ -8,10 +8,55 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     $scope.exchangeLogsSearchResults = new SearchResults('dateReceived', true);
     $scope.exchangeLogsSearchResults.incomingOutgoing = 'all';
 
+    /* Do long-polling,  */
+    var doSendingQueueLongPolling = function() {
+        $resource("/exchange/activity/queue").get(function(response) {
+            if (response.ids.length > 0) {
+                $scope.getSendingQueue();
+            }
+
+            doSendingQueueLongPolling();
+        });
+    };
+
+    /* Do long-polling,  */
+    var doTransmissionStatusLongPolling = function() {
+        $resource("/exchange/activity/plugins").get(function(response) {
+            $.each($scope.transmissionStatuses.items, function(index, transmissionStatus) {
+                var status = response[transmissionStatus.serviceClassName];
+                if (status === true) {
+                    transmissionStatus.setAsStarted();
+                }
+                else if (status === false) {
+                    transmissionStatus.setAsStopped();
+                }
+            });
+
+            doTransmissionStatusLongPolling();
+        });
+    };
+
+    /* Do long-polling,  */
+    var doExchangeLogLongPolling = function() {
+        $resource("/exchange/activity/exchange").get(function(response) {
+            for (var i = 0; i < response.ids.length; i++) {
+                alarmRestService.getAlarmReport(response.ids[i]).then(function(exchangeLog) {
+                    $scope.currentSearchResults.updateWithSingleItem(exchangeLog);
+                });
+            }
+
+            doExchangeLogLongPolling();
+        });
+    };
+
     var init = function(){
         //$scope.searchExchange();
         $scope.getSendingQueue();
         $scope.getTransmissionStatuses();
+
+        doExchangeLogLongPolling();
+        doTransmissionStatusLongPolling();
+        doSendingQueueLongPolling();
     };
 
     $scope.filterIncomingOutgoing = function(message) {
