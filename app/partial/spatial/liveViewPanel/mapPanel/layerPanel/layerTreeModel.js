@@ -119,6 +119,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	TreeModel.prototype.fromConfig = function(config){
 	    var tree = [];
 	    
+	    var portNodes = [];
 	    var areaNodes = [];
 	    var userAreaNodes = [];
 	    var baseLayerNodes = [];
@@ -130,6 +131,9 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	                if (def.layerType === 'area' && def.isBaseLayer === false){
 	                    var node = buildWmsNode(def);
 	                    areaNodes.push(node);
+	                } else if (def.layerType === 'port' && def.isBaseLayer === false){
+	                    var node = buildWmsNode(def);
+	                    portNodes.push(node);
 	                } else if (def.isBaseLayer === true){
 	                    baseLayerNodes.push(buildWmsNode(def));
 	                }
@@ -143,12 +147,23 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	        }
 	    }
 	    
+	    //Building port nodes
+	    if (portNodes.length > 0){
+	        var portFolder = {
+                title: locale.getString('spatial.layer_tree_ports'),
+                folder: true,
+                expanded: false,
+                children: portNodes
+	        }
+	        tree.push(portFolder);
+	    }
+	    
 	    //Building area nodes
 	    if (areaNodes.length > 0 || userAreaNodes.length > 0){
 	        var areaFolder = {
                 title: locale.getString('spatial.layer_tree_areas'),
                 folder: true,
-                expanded: true,
+                expanded: false,
                 children: []
             };
 	        
@@ -156,6 +171,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	            areaFolder.children.push({
 	                title: locale.getString('spatial.layer_tree_system_areas'),
 	                folder: true,
+	                expanded: false,
 	                children: areaNodes
 	            });
 	        }

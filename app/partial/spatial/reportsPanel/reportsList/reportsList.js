@@ -115,7 +115,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, repo
     
     //Listening for loading reports list events
     $scope.$on('loadReportsList', function(){
-        $scope.reports = [];
+//        $scope.reports = [];
         $scope.isLoading = true;
         reportRestService.getReportsList().then(getReportsListSuccess, getReportsListError);
     });
@@ -142,7 +142,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, repo
         $scope.toggleReportForm('EDIT', response);
     };
     
-  //Get Report Configs Failure callback
+    //Get Report Configs Failure callback
     var getReportError = function(error){
         $scope.isLoading = false;
         $anchorScroll();

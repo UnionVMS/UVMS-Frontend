@@ -50,13 +50,6 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             vessels: [],
             areas: []
         };
-        
-        angular.element('#reportEndDate').find('input').datetimepicker({
-            defaultDate: false,
-            minDate: '1950-01-01', 
-            formatDate: 'Y-m-d', 
-            format: 'Y-m-d G:i'
-        });
     };
     
     $scope.resetForm = function(){
@@ -68,19 +61,6 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     $scope.clearVmsErrors = function(){
         for (var attr in $scope.reportForm.$error){
             $scope.reportForm.$setValidity(attr, true);
-        }
-    };
-    
-    $scope.clearDateFields = function(){
-      angular.element('#reportStartDate').find('input').val(null);
-      angular.element('#reportEndDate').find('input').val(null);
-    };
-    
-    $scope.validateVesselsSelection = function(){
-        if ($scope.report.vesselsSelection.length === 0){
-            $scope.vesselsSelectionIsValid = false;
-        } else {
-            $scope.vesselsSelectionIsValid = true;
         }
     };
     
@@ -144,7 +124,6 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     
     $scope.saveReport = function(){
         $scope.submitingReport = true;
-        //$scope.validateVesselsSelection();
         $scope.validateRanges();
         if ($scope.reportForm.$valid && $scope.vesselsSelectionIsValid){
             if ($scope.formMode === 'CREATE'){
@@ -215,26 +194,6 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         }
     });
     
-    $scope.$watch('report.startDateTime', function(newVal, oldVal){
-        if (angular.isDefined(newVal)){
-            var dateWidget = angular.element('#reportEndDate').find('input');
-            var startCmp = newVal.split(' ');
-              
-            dateWidget.datetimepicker({
-                minDate: startCmp[0],
-                formatDate: 'Y-m-d',
-                format: 'Y-m-d G:i'
-            });
-            
-            if (angular.isDefined($scope.report.endDateTime)){
-                var validDates = $scope.validateDates(startCmp[0], $scope.report.endDateTime.split(' ')[0]);
-                if (!validDates){
-                    dateWidget.val(null);
-                }
-            }
-        }
-    });
-    
     var createReportSuccess = function(response){
         $scope.toggleReportForm();
         reportMsgService.show(locale.getString('spatial.success_create_report'), 'success');
@@ -249,6 +208,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     var updateReportSuccess = function(response){
         $scope.toggleReportForm();
         reportMsgService.show(locale.getString('spatial.success_update_report'), 'success');
+        $scope.$emit('reloadReportsList');
     };
     
     var updateReportError = function(error){

@@ -82,7 +82,7 @@ angular.module('unionvmsWeb').directive('legendPanel', function(mapService) {
 		        var records = [];
 		        var layers = mapService.map.getLayers();
 		        
-		        layers.forEach(function(layer){
+		        layers.forEach(function(layer, idx){
 	                if (layer.get('visible')){
 	                    if (layer.getSource() instanceof ol.source.TileWMS){
 	                        records.push(this.buildRecWMS(layer));  

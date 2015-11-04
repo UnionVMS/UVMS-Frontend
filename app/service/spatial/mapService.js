@@ -499,7 +499,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 font: 'normal 22px FontAwesome',
                 textBaseline: 'middle',
                 textAlign: 'center',
-                rotation: -0.78 + ms.degToRad(feature.get('calculatedSpeed')), //FIXME
+                rotation: -0.78 + ms.degToRad(feature.get('calculatedCourse')), //FIXME
                 fill: new ol.style.Fill({
                     color: ms.getColorByFlagState(feature.get('countryCode'))
                 })

@@ -249,8 +249,14 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
                     layers.removeAt(scope.startState[i].idxMap);
                 }
                 
+                var startIdx;
+                var counter = 0;
                 for (i in scope.endState){
-                    layers.insertAt(scope.endState[i].idxMap, scope.startState[i].layer);
+                    if (counter === 0){
+                        startIdx = scope.endState[i].idxMap - 1;
+                    }
+                    layers.insertAt(startIdx, scope.startState[i].layer);
+                    counter += 1;
                 }
                 
                 scope.startState = {};

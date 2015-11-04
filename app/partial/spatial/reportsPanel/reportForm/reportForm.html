@@ -42,11 +42,13 @@
 	    			</div>
 	    			<div class="form-group col-md-3" ng-hide="report.positionSelector === 'last' && report.positionTypeSelector === 'hours'"  ng-class="{'has-error': (reportForm.startDateTime.$dirty || submitingReport === true) && reportForm.startDateTime.$invalid}">
 	    				<label for="reportStartDate">{{'spatial.reports_form_start_date_label' | i18n}}</label>
-	    				<datepicker-input id="reportStartDate" time="true" model="report.startDateTime" name="startDateTime" ng-required="report.positionSelector === 'all'"></datepicker-input>
+	    				<!-- <datepicker-input id="reportStartDate" time="true" model="report.startDateTime" name="startDateTime" ng-required="report.positionSelector === 'all'"></datepicker-input> -->
+	    				<datepicker-input id="reportStartDate" time="true" model="report.startDateTime" name="startDateTime" max-date="report.endDateTime"  ng-required="report.positionSelector === 'all'" ng-change-callback="resetDateTimePicker"></datepicker-input>
 	    			</div>
 	    			<div class="form-group col-md-3" ng-hide="report.positionSelector === 'last' && report.positionTypeSelector === 'hours'" ng-class="{'has-error': (reportForm.endDateTime.$dirty || submitingReport === true) && reportForm.endDateTime.$invalid}">
 	    				<label for="reportEndDate">{{'spatial.reports_form_end_date_label' | i18n}}</label>
-	    				<datepicker-input id="reportEndDate" time="true" model="report.endDateTime" name="endDateTime" ng-required="report.positionSelector === 'all'"></datepicker-input>
+	    				<!-- <datepicker-input id="reportEndDate" time="true" model="report.endDateTime" name="endDateTime" ng-required="report.positionSelector === 'all'"></datepicker-input> -->
+	    				<datepicker-input id="reportEndDate" time="true" model="report.endDateTime" name="endDateTime" min-date="report.startDateTime" ng-required="report.positionSelector === 'all'" ng-change-callback="resetDateTimePicker"></datepicker-input>
 	    			</div>
 	    		</div>
     			
