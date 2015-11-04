@@ -78,4 +78,7 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
         infoModal.open(options);
     };
 
+    $scope.viewNotifications = function(){
+        $state.go('app.openTickets');
+    };
 });

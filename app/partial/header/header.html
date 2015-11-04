@@ -5,7 +5,7 @@
 				<div class="container">
 					<div class="row">
                         <div class="col-md-6">
-				            <a href="#/today"><img class="uvmslogo" src="assets/images/logo.png"></a>
+				            <a href="#/exchange"><img class="uvmslogo" src="assets/images/logo.png"></a>
                         </div>
                         <div class="col-md-6">
     					    <div class="signed-in" ng-if="isAuthenticated">
@@ -26,7 +26,7 @@
                                 <span ng-click="signIn()"><i class="fa fa-lg fa-user"></i> Sign in</span>
                             </div>
                             <div class="notifications" ng-if="isAuthenticated">
-                                <div class="fa fa-lg fa-bell-o"><span class="badge" ng-bind="randomNumber"></span></div>
+                                <div class="fa fa-lg fa-bell-o" ng-click="viewNotifications()"><span class="badge" ng-bind="randomNumber"></span></div>
                             </div>
                             <current-time class="currentTime"></current-time>
                         </div>
