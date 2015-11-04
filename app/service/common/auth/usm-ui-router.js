@@ -460,7 +460,7 @@ angular.module('auth.router', ['ui.bootstrap', 'auth.controllers', 'ui.router', 
                                                     );
                                                 }
 
-                                            )
+                                            );
                                         }
                                     }
                                 },
