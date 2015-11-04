@@ -1,7 +1,7 @@
-angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter, locale, searchService, exchangeRestService, infoModal, ManualPosition, alertService, csvService, ExchangeService, SearchResults){
+angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter,$location, locale, searchService, exchangeRestService, infoModal, ManualPosition, alertService, csvService, ExchangeService, SearchResults){
 
     $scope.transmissionStatuses = new SearchResults();
-    $scope.sendingQueueSearchResults = new SearchResults();
+    $scope.sendingQueue = new SearchResults();
 
     $scope.pausedQueueItems = {};
 
@@ -9,8 +9,8 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     $scope.exchangeLogsSearchResults.incomingOutgoing = 'all';
 
     var init = function(){
-        $scope.searchExchange();
-        $scope.searchSendingQueue();
+        //$scope.searchExchange();
+        $scope.getSendingQueue();
         $scope.getTransmissionStatuses();
     };
 
@@ -22,17 +22,34 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         return message.outgoing ? $scope.exchangeLogsSearchResults.incomingOutgoing === "outgoing" : $scope.exchangeLogsSearchResults.incomingOutgoing === "incoming";
     };
 
-    //TODO: REMOVE MOCK DATA
-    var mockServices = [];
-    var a = new ExchangeService();
-    a.name = "Inmarsat-C Eik (MOCK)";
-    a.status = "ONLINE";
-    mockServices.push(a);
-    var b = new ExchangeService();
-    b.name = "Inmarsat-C Burum (MOCK)";
-    b.status = "OFFLINE";
-    mockServices.push(b);
+    $scope.sendQueuedMessages = function(messageIds){
+        exchangeRestService.sendQueue(messageIds).then(
+        function(data){
+            console.log("Message(s) successfully sent.");
+            //get que again
+             $scope.getSendingQueue();
+        },
+        function(error){
+            console.log("Error trying to send messagequeue.");
+        });
+    };
 
+    $scope.getSendingQueue = function(){
+        $scope.sendingQueue.setLoading(true);
+
+        exchangeRestService.getSendingQueue().then(
+            function(data) {
+                $scope.sendingQueue.setLoading(false);
+                $scope.sendingQueue.items = data;
+        },
+        function(error) {
+            $scope.sendingQueue.setLoading(false);
+            $scope.sendingQueue.items = [];
+            console.error("Error getting sendingqueue statuses", error);
+            $scope.sendingQueue.setErrorMessage(locale.getString('common.error_getting_data_from_server'));
+
+        });
+    };
 
     $scope.getTransmissionStatuses = function() {
         $scope.transmissionStatuses.setLoading(true);
@@ -43,33 +60,45 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
             },
             function(error) {
                 $scope.transmissionStatuses.setLoading(false);
-                //TODO: remove mockServices
-                $scope.transmissionStatuses.items = mockServices;
 
-                //$scope.transmissionStatuses.setErrorMessage(locale.getString('common.error_getting_data_from_server'));
+                $scope.transmissionStatuses.setErrorMessage(locale.getString('common.error_getting_data_from_server'));
                 console.error("Error getting transmission statuses", error);
             }
         );
     };
 
     //Stop transmission service
-    $scope.stopTransmissionService = function(service){
-        //TODO: Send request to server using REST or WebSocket
-        service.setAsStopped();
+    $scope.stopTransmissionService = function(model){
+        exchangeRestService.stopTransmission(encodeURI(model.serviceClassName)).then(
+        function(data){
+            console.log("Service successfully stopped.");
+            alertService.showInfoMessageWithTimeout(locale.getString('exchange.transmission_stop_transmission_successfull'));
+            model.setAsStopped();
+        },
+        function(error){
+            console.log("Error trying to send messagequeue.");
+            alertService.showInfoMessageWithTimeout(locale.getString('exchange.transmission_stop_transmission_error'));
+        });
     };
 
     //Start transmission service
-    $scope.startTransmissionService = function(service){
-        //TODO: Send request to server using REST or WebSocket
-        service.setAsStarted();
+    $scope.startTransmissionService = function(model){
+        exchangeRestService.startTransmission(encodeURI(model.serviceClassName)).then(
+        function(data){
+            console.log("Service successfully started.");
+            alertService.showInfoMessageWithTimeout(locale.getString('exchange.transmission_start_transmission_successfull'));
+            model.setAsStarted();
+        },
+        function(error){
+            console.log("Error trying to start plugin.");
+             alertService.showInfoMessageWithTimeout(locale.getString('exchange.transmission_start_transmission_error'));
+        });
     };
 
     $scope.searchExchange = function() {
         $scope.clearSelection();
         $scope.exchangeLogsSearchResults.setLoading(true);
-        $scope.transmissionStatuses.setLoading(true);
-
-        searchService.searchExchange("MESSAGES").then(function(page) {
+        searchService.searchExchange().then(function(page) {
             $scope.exchangeLogsSearchResults.updateWithNewResults(page);
         },
         function(error) {
@@ -86,21 +115,37 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         }
     };
 
-    $scope.searchSendingQueue = function(){
-        searchService.searchExchange("SENDINGQUEUE").then(function(page) {
-            $scope.sendingQueueSearchResults.updateWithNewResults(page);
-        },
-        function(error) {
-            $scope.sendingQueueSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
-        });
+    $scope.showMessageDetails = function(model) {
+    $location.path( "/polling/logs/someid");
+        /*
+        switch(message.type){
+            //MOVEMENT-till movement; POLL- till poll; ALARM- till rules, UNKNOWN
+            case 'POLL':
+                $scope.openPosition(model);
+                break;
+            case 'MOVEMENT' :
+                $scope.openUpModal(model);
+                break;
+            case 'ALARM' :
+                $scope.openUpModal(model);
+                break;
+            default:
+                console.log("No matching type in model");
+                break;
+        }*/
     };
 
-    $scope.showMessageDetails = function(message) {
+    $scope.openUpModal = function(model){
         var options = {
             titleLabel : locale.getString("exchange.message_details_modal_title"),
-            textLabel : message.message
+            textLabel : model.message,
+            message : model
         };
         infoModal.open(options);
+    };
+
+    $scope.openPosition = function(model){
+        console.log("open a page....");
     };
 
     //Get status label for the exchange log items
@@ -120,6 +165,25 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
                 label = status;
         }
         return label;
+    };
+
+    $scope.getStatusLabelClass = function(status){
+        var cssClass;
+        switch(status){
+            case 'SUCCESSFUL' :
+            case 'STARTED' :
+            case 'ONLINE':
+                cssClass = "label-success";
+                break;
+            case 'OFFLINE':
+            case 'STOPPED':
+            case 'ERROR' :
+                cssClass = "label-danger";
+                break;
+            default:
+            cssClass = "label-warning";
+        }
+        return cssClass;
     };
 
     //Get status label for the exchange transmission service items
@@ -284,5 +348,37 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         searchService.reset();
     });
 
+    $scope.refreshSendingQue = function(){
+        console.log("refreshing sendingqueue");
+        $scope.getSendingQueue();
+    };
+
+    $scope.resendAllQueueItemsInGroup = function(item){
+        //All ids in group.
+        var sendingQueuesIds = [];
+        for (var i = item.sendingLogList.length - 1; i >= 0; i--) {
+            sendingQueuesIds.push(item.sendingLogList[i].id);
+        }
+        $scope.sendQueuedMessages(sendingQueuesIds);
+    };
+
+    $scope.resendQueuedItemInGroup = function(id){
+        var sendingQueuesIds = [];
+        console.log("sending item with id: " + id);
+        sendingQueuesIds.push(id);
+        $scope.sendQueuedMessages(sendingQueuesIds);
+    };
+
+    $scope.resendAllQueued = function(){
+        var sendingQueuesIds = [];
+        for (var i = $scope.sendingQueue.items.length - 1; i >= 0; i--){
+           for (var o = $scope.sendingQueue.items[i].sendingLogList.length - 1; o >= 0; o--) {
+               sendingQueuesIds.push($scope.sendingQueue.items[i].sendingLogList[o].id);
+           }
+           //sendingQueuesIds.push($scope.sendingQueue.items[i]);
+        }
+        $scope.sendQueuedMessages(sendingQueuesIds);
+    };
+    $scope.messageVisible = false;
     init();
 });

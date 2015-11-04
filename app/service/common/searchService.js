@@ -426,9 +426,9 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             return auditLogRestService.getAuditLogList(getListRequest);
         },
 
-        searchExchange: function(servicePath) {
+        searchExchange: function() {
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
-            return exchangeRestService.getExchangeMessages(getListRequest, servicePath);
+            return exchangeRestService.getMessages(getListRequest);
         },
 
         searchTickets : function(){

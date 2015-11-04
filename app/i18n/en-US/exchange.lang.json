@@ -20,11 +20,25 @@
 
 	"sending_queue_table_header_date_received": "Date received",
 	"sending_queue_table_header_from": "From",
+	"table_header_sender_reciever" : "Sender/Reciever",
 	"sending_queue_table_header_recipient": "Recipient",
+	"sending_queue_table_pauseall": "Paus all",
 	"sending_queue_table_pause": "Pause",
+	"sending_queue_table_resendall": "Resend all",
+	"sending_queue_table_resendgroup": "Resend group",
 	"sending_queue_table_resend": "Resend",
+	"sending_queue_table_refreshqueue":"Refresh sending queue",
+	"sending_queue_table_number_of_reports" : "reports",
+	"sending_queue_table_allmessages_in_group": "Group",
+	"sending_table_queue_refreshqueue":"Refresh queue",
+
+
 	"sending_queue_header" : "Sending queue",
 	"sending_queue_warning" : "There are currently many messages in queue. This might take a while.",
+	"sending_queue_all_ok" : "Status ok, there is no messages in queue.",
+	"sending_queue_expandgroup" : "Expand group",
+	"sending_queue_collapsegroup" : "Collapse group",
+	"sending_queue_resend": "Resend",
 
 	"transmission_status_header" : "Transmission status",
 	"transmission_status_online" : "Online",
@@ -33,6 +47,10 @@
 
     "transmission_action_start" : "Start",
     "transmission_action_stop" : "Stop",
+    "transmission_start_transmission_error" : "Error. Could not start plugin. Please try again later.",
+    "transmission_start_transmission_successfull" : "Plugin started.",
+    "transmission_stop_transmission_error" : "Error. Could not stop plugin. Please try again later.",
+    "transmission_stop_transmission_successfull" : "Plugin stopped.",
 
 	"title_all": "All",
     "title_details": "Show details",
@@ -40,4 +58,6 @@
 	"title_outgoing": "Outgoing",
 	"title_forward": "Forward",
 	"title_resend": "Resend"
+
+
 }

@@ -5,7 +5,7 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
         searchCriterias = replaceSpansWithMinMaxValues(searchCriterias);
 
         //Transform dates to UTC dates
-        var dateCriterias = ["END_DATE","START_DATE", "REPORTING_START_DATE", "REPORTING_END_DATE", "TO_DATE", "FROM_DATE" ];
+        var dateCriterias = ["END_DATE","START_DATE", "REPORTING_START_DATE", "REPORTING_END_DATE", "TO_DATE", "FROM_DATE", "DATE_RECEIVED_FROM", "DATE_RECEIVED_TO" ];
         for (var i = 0; i < searchCriterias.length; i++) {
             if ( dateCriterias.indexOf(searchCriterias[i].key) >= 0){
                     //Values is already in UTC but we need to format it with timezone
@@ -19,7 +19,12 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
     var numberSpans = {
         'LENGTH_SPAN' : {min : 'MIN_LENGTH', max: 'MAX_LENGTH'},
         'POWER_SPAN'  : {min : 'MIN_POWER',  max: 'MAX_POWER'},
-        'SPEED_SPAN'  : {min : 'SPEED_MIN',  max: 'SPEED_MAX'},
+        'SPEED_SPAN'  : {min : 'SPEED_MIN',  max: 'SPEED_MAX'}
+    };
+
+    var timeSpans = {
+        'TIME_SPAN' : {from : 'FROM_DATE', to: 'TO_DATE'},
+        'EXCHANGE_TIME_SPAN'  : {from : 'DATE_RECEIVED_FROM',  to: 'DATE_RECEIVED_TO'}
     };
 
     var replaceSpansWithMinMaxValues = function(searchCriterias){
@@ -31,20 +36,22 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
             searchCriteriaValue = searchCriterias[i].value;
 
             //Replace TIME_SPAN with TO_DATE and FROM_DATE
-            if(searchCriteriaKey === "TIME_SPAN"){
+            if(searchCriteriaKey in timeSpans){
                 idxToRemove.push(i);
+                var fromDateKey = timeSpans[searchCriteriaKey].from;
+                var toDateKey = timeSpans[searchCriteriaKey].to;
                 switch(searchCriterias[i].value){
                     case 'TODAY':
-                        searchCriterias.push(new SearchField("FROM_DATE", moment.utc().startOf('day')));
-                        searchCriterias.push(new SearchField("TO_DATE", moment.utc()));
+                        searchCriterias.push(new SearchField(fromDateKey, moment.utc().startOf('day')));
+                        searchCriterias.push(new SearchField(toDateKey, moment.utc()));
                         break;
                     case 'THIS_WEEK':
-                        searchCriterias.push(new SearchField("FROM_DATE", moment.utc().startOf('week')));
-                        searchCriterias.push(new SearchField("TO_DATE", moment.utc()));
+                        searchCriterias.push(new SearchField(fromDateKey, moment.utc().startOf('week')));
+                        searchCriterias.push(new SearchField(toDateKey, moment.utc()));
                         break;
                     case 'LAST_MONTH':
-                        searchCriterias.push(new SearchField("FROM_DATE", moment.utc().startOf('month')));
-                        searchCriterias.push(new SearchField("TO_DATE", moment.utc()));
+                        searchCriterias.push(new SearchField(fromDateKey, moment.utc().startOf('month')));
+                        searchCriterias.push(new SearchField(toDateKey, moment.utc()));
                         break;
                     default:
                         break;

@@ -13,7 +13,7 @@
             		<tbody>
             			<tr ng-repeat="item in transmissionStatuses.items">
             				<td class="tranmission-status">
-                                <span class="label" ng-class="item.isOnline() ? 'label-success': 'label-danger'">
+                                <span class="label" ng-class="getStatusLabelClass(item.status)">
                                     {{getTransmissionStatusLabel(item.status) | uppercase}}
                                 </span>
                             </td>

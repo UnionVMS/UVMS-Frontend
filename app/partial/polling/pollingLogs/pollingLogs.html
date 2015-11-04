@@ -19,7 +19,7 @@
                                 </tr>
                                 <tr class="searchInputRow dateSearch"  ng-if="!showPollByID">
                                     <th>&nbsp;</th>
-                                    <th>
+                                    <th colspan="2">
                                         <dropdown ng-model="advancedSearchObject.TIME_SPAN" items="timeSpanOptions" no-placeholder-item></dropdown>
                                     </th>
 
@@ -31,7 +31,6 @@
                                         <datepicker-input model="advancedSearchObject.END_DATE" min-date="advancedSearchObject.STAR_DATE"  placeholder="{{'polling.polling_logs_search_date_to_placeholder' | i18n}}" time="true"></datepicker-input>
                                     </th>
 
-                                    <th>&nbsp;</th>
                                     <th>&nbsp;</th>
                                     <th class="textAlignCenter">
                                         <button type="submit" class="btn btn-primary inputHeigth searchButton" ng-click="searchPolls()">

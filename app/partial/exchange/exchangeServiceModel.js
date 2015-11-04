@@ -2,16 +2,20 @@ angular.module('unionvmsWeb')
 .factory('ExchangeService', function(){
 
     function ExchangeService(){
-        this.name = undefined;
-        this.status = undefined;
+    this.name = undefined;
+    this.serviceClassName = undefined;
+    this.status = undefined;
+    this.type = undefined;
     }
 
     ExchangeService.fromJson = function(data){
         var exchangeService = new ExchangeService();
-        
-        if(data){   
+
+        if(data){
             exchangeService.name = data.name;
+            exchangeService.serviceClassName = data.serviceClassName;
             exchangeService.status = data.status;
+            exchangeService.type = data.type;
         }
 
         return exchangeService;
@@ -19,15 +23,19 @@ angular.module('unionvmsWeb')
 
 
     ExchangeService.prototype.isOnline = function() {
-        return this.status === 'ONLINE';
+        return this.status === 'STARTED';
+    };
+
+    ExchangeService.prototype.isUnkown = function() {
+        return this.status === 'UNKOWN';
     };
 
     ExchangeService.prototype.setAsStopped = function() {
-        this.status ='OFFLINE';
+        this.status ='STOPPED';
     };
 
     ExchangeService.prototype.setAsStarted = function() {
-        this.status ='ONLINE';
+        this.status ='STARTED';
     };
 
     return ExchangeService;

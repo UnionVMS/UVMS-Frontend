@@ -44,10 +44,13 @@
             <div class="col-md-1 smallerpadding searchcriteria">
                 <dropdown ng-model="advancedSearchObject.POWER_SPAN" initialtext="{{'vessel.advanced_search_placeholder_power' | i18n}}" items="powerSpans" callback="resetSelectedVesselGroup"></dropdown>
             </div>
+            <div class="col-md-2">
+                <search-button smallerPadding="true" cancel-callback="resetSearch()" search-callback="performSearch()"><search-button>
+            </div>
             <div class="col-md-1 smallerpadding">
                 <div class="row nomargin">
                     <div class="col-md-12 colNoPadding searchcriteriadropdown">
-                        <button type="submit" class="btn btn-primary btn-sm fullWidth searchbtntext" ng-click="performSearch()">
+                        <button type="submit" class="btn btn-primary btn-sm fullWidth vmsbtn" ng-click="performSearch()">
                             {{'common.search' | i18n}}
                         </button>
                     </div>
@@ -56,7 +59,7 @@
             <div class="col-md-1 smallerpadding">
                 <div class="row nomargin">
                     <div class="col-md-12 colNoPadding searchcriteriadropdown">
-                        <button type="button" class="btn btn-default btn-sm fullWidth resetbtntext" ng-click="resetSearch()">
+                        <button type="button" class="btn btn-default btn-sm fullWidth vmsbtn" ng-click="resetSearch()">
                             {{'common.reset' | i18n}}
                         </button>
                     </div>
