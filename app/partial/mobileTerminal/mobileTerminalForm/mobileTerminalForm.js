@@ -60,6 +60,10 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     $scope.onTerminalSystemSelect = function(selectedItem){
         if(angular.isDefined(selectedItem) && angular.isDefined(selectedItem.typeAndPlugin)){
             $scope.currentMobileTerminal.type = selectedItem.typeAndPlugin.type;
+
+            //Reset channels
+            $scope.currentMobileTerminal.resetChannels();
+
             var selectedLabelName = selectedItem.typeAndPlugin.plugin.labelName;
             var selectedServiceName = selectedItem.typeAndPlugin.plugin.serviceName;
             if(angular.isDefined(selectedLabelName) && angular.isDefined(selectedServiceName)){
@@ -274,6 +278,14 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         }, function () {
           //Nothing on cancel
         });
+    };
+
+    //Is multipel channels allowed for the terminal?
+    $scope.isMultipleChannelsAllowed = function(){
+        if(angular.isDefined($scope.currentMobileTerminal) && angular.isDefined($scope.getTerminalConfig())){
+            return $scope.getTerminalConfig().capabilities.SUPPORT_MULTIPLE_CHANNEL;
+        }
+        return false;
     };
 
     //Add a new channel to the end of the list of channels

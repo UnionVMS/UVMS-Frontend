@@ -4,14 +4,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             this.attributes = {};
 
             //Add an initial channel
-            var defaultChannel = new CommunicationChannel();
-            defaultChannel.capabilities = {
-                "CONFIGURABLE": true,
-                "DEFAULT_REPORTING": true,
-                "POLLABLE": true
-            };
-
-            this.channels = [defaultChannel];
+            this.channels = [createDefaultChannel()];
             this.active = true;
             this.connectId = undefined;
             this.associatedVessel = undefined;
@@ -22,6 +15,16 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 serviceName : undefined,
                 inactive : false,
             };
+        }
+
+        function createDefaultChannel(){
+            var defaultChannel = new CommunicationChannel();
+            defaultChannel.capabilities = {
+                "CONFIGURABLE": true,
+                "DEFAULT_REPORTING": true,
+                "POLLABLE": true
+            };
+            return defaultChannel;
         }
 
         MobileTerminal.fromJson = function(data){
@@ -74,6 +77,10 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             }
 
             return mobileTerminal;
+        };
+
+        MobileTerminal.prototype.resetChannels = function() {
+            this.channels = [createDefaultChannel()];
         };
 
         MobileTerminal.prototype.dataTransferObject = function() {

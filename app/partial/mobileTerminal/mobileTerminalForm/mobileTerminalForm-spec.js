@@ -68,7 +68,8 @@ describe('mobileTerminalFormCtrl', function() {
         //Mock function
         scope.getTerminalConfig = function(){
             return {
-                channelFields: {LES_DESCRIPTION : true}
+                channelFields: {LES_DESCRIPTION : true},
+                capabilities : {TEST:true}
             }
         };
 
@@ -95,7 +96,13 @@ describe('mobileTerminalFormCtrl', function() {
         scope.isCreateNewMode = function(){
             return false;
         };
-
+        //Mock function
+        scope.getTerminalConfig = function(){
+            return {
+                channelFields: {LES_DESCRIPTION : true},
+                capabilities : {TEST:true}
+            }
+        };
         expect(scope.currentMobileTerminal.type).toBeUndefined();
         var selectItem = {
             text : "Iridium",

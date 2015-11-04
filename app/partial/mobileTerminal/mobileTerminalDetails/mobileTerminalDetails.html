@@ -136,7 +136,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row addNewChannelWrapper" ng-hide="disableForm()">
+                    <div class="row addNewChannelWrapper" ng-hide="disableForm() || !isMultipleChannelsAllowed()">
                         <div class="col-md-12">
                             <span class="link underline" ng-click="addNewChannel()">{{'mobileTerminal.form_inmarsatc_communication_channels_add_new_button' | i18n}}</span>
                         </div>
