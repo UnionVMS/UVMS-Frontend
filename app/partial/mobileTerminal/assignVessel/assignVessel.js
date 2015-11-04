@@ -48,6 +48,7 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
     $scope.assignVesselSearch = function(){
         //Create new request
         getListRequest = new GetListRequest(1, 5, false, []);
+        $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.setLoading(true);
 
         //Set search criterias

@@ -136,6 +136,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
 
     $scope.searchMovements = function(){
         $scope.clearSelection();
+        $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.setLoading(true);
         searchService.searchMovements()
             .then(retriveMovementsSuccess, retriveMovementsError);

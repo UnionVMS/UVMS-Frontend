@@ -48,6 +48,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
 
     $scope.searchVessels = function(){
         $scope.clearSelection();
+        $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.setLoading(true);
         searchService.searchVessels()
             .then(updateSearchResults, onGetSearchResultsError);

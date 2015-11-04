@@ -36,6 +36,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
 
     $scope.searchTickets = function() {
         $scope.clearSelection();
+        $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.setLoading(true);
         searchService.searchTickets()
                 .then(updateSearchResults, onGetSearchResultsError);

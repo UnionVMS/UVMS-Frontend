@@ -43,6 +43,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
 
     $scope.searchAlarms = function() {
         $scope.clearSelection();
+        $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.setLoading(true);
         searchService.searchAlarms()
                 .then(updateSearchResults, onGetSearchResultsError);

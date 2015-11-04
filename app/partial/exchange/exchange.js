@@ -36,6 +36,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
 
     $scope.getSendingQueue = function(){
         $scope.sendingQueue.setLoading(true);
+        $scope.sendingQueue.clearErrorMessage();
 
         exchangeRestService.getSendingQueue().then(
             function(data) {
@@ -53,6 +54,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
 
     $scope.getTransmissionStatuses = function() {
         $scope.transmissionStatuses.setLoading(true);
+        $scope.transmissionStatuses.clearErrorMessage();
         exchangeRestService.getTransmissionStatuses().then(
             function(services) {
                 $scope.transmissionStatuses.setLoading(false);
@@ -97,6 +99,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
 
     $scope.searchExchange = function() {
         $scope.clearSelection();
+        $scope.exchangeLogsSearchResults.clearErrorMessage();
         $scope.exchangeLogsSearchResults.setLoading(true);
         searchService.searchExchange().then(function(page) {
             $scope.exchangeLogsSearchResults.updateWithNewResults(page);

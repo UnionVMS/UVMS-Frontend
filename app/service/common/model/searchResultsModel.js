@@ -21,6 +21,10 @@ angular.module('unionvmsWeb')
         this.errorMessage = newErrorMessage;
     };
 
+    SearchResults.prototype.clearErrorMessage = function(){
+        this.errorMessage = undefined;
+    };
+
     SearchResults.prototype.resetPages = function(){
         this.totalNumberOfPages = 0;
         this.page = 0;

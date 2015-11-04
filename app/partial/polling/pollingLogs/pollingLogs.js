@@ -29,8 +29,8 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     $scope.statusTypes.push({"text":"Succeeded", "code":"Succeeded"});
     $scope.statusTypes.push({"text":"Request failed", "code":"Failed"});
 
-    $scope.transponderTypes = [];
-    $scope.transponderTypes.push({"text":"Inmarsat-C", "code":"INMARSAT_C"}, {"text":"Iridium", "code":"IRIDIUM"});
+    $scope.terminalTypes = [];
+    $scope.terminalTypes.push({"text":"Inmarsat-C", "code":"INMARSAT_C"}, {"text":"Iridium", "code":"IRIDIUM"});
 
     $scope.organizations = [];
     $scope.organizations.push({"text":"Control Authority 1", "code":"CA1"});
@@ -132,6 +132,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     //Get list of polls matching the current search criterias
     //If pollId is set, search for that one
     $scope.getPolls = function(pollId){
+        $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.setLoading(true);
         $scope.clearSelection();
 
@@ -145,8 +146,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
             searchService.addSearchCriteria('POLL_ID', pollId);
         }else{
             searchService.setDynamic(true);
-			//TODO: Enable when Exchange is in place
-            //searchService.setSearchCriteriasToAdvancedSearch();
+            searchService.setSearchCriteriasToAdvancedSearch();
         }
         searchService.searchPolls()
                 .then(updateSearchResults, onGetSearchResultsError);

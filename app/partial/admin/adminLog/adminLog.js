@@ -63,6 +63,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
 
     //Do the search
     $scope.searchAuditLogs = function() {
+        $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.setLoading(true);
 
         // If not ALL tab, and to TYPE criteria set, search for all types available on this tab.

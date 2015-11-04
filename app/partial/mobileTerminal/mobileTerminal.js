@@ -152,6 +152,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
     //Get list of Mobile Terminals matching the current search criterias
     $scope.searchMobileTerminals = function(){
         $scope.clearSelection();
+        $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.setLoading(true);
         searchService.searchMobileTerminals(false)
                 .then(updateSearchResults, onGetSearchResultsError);

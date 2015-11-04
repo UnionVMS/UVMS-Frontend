@@ -17,6 +17,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
             searchService.setDynamic(opt.savedSearchGroup.dynamic);
         }
 
+        $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.setLoading(true);
         searchService.searchForPollableTerminals()
                 .then(updateSearchResults, onGetSearchResultsError);
