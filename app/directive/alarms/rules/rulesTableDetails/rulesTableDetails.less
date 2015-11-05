@@ -19,10 +19,10 @@
                     .searchButton{
                         button{
                             width: 100%;
-                        }                        
+                        }
                     }
                 }
-                
+
             }
             th{
                 height:30px;
@@ -37,7 +37,7 @@
             th.positions{
                 text-align: center;
             }
-        }        
+        }
         >tbody{
             tr{
                 background: inherit !important;
@@ -53,6 +53,9 @@
                     .closed{
                         color: @successColor;
                     }
+                    .pending{
+                        color: @warningColor;
+                    }
                     .open{
                         color: @errorColor;
                     }
@@ -61,7 +64,6 @@
                 td.positions,{
                     text-align: center;
                     color:@primaryColor;
-                    cursor: pointer;
                 }
             }
         }

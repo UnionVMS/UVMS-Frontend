@@ -16,45 +16,15 @@ angular.module('unionvmsWeb').directive('rulesTableDetails', function() {
 });
 
 angular.module('unionvmsWeb')
-    .controller('rulesTableDetailsCtrl', function($scope, $timeout, $log, locale, GetListRequest, SearchResults, Alarm, SearchResultListPage, searchUtilsService, searchService){
+    .controller('rulesTableDetailsCtrl', function($scope, $timeout, $log, locale, GetListRequest, SearchResults, SearchResultListPage, searchUtilsService, searchService, alarmRestService, movementRestService, PositionReportModal){
 
         $scope.searchObject = {};
-        $scope.currentSearchResults = new SearchResults('openedDate', false);
+        $scope.currentSearchResults = new SearchResults('openDate', false);
 
-        var getListRequest = new GetListRequest(1, 5, false, []);
-        var DATE_CUSTOM = "CUSTOM";
+        var getListRequest;
 
         var init = function(){
             $scope.searchAlarms();
-        };
-
-        var updateWithMockResults = function(page){
-            //Add mock data
-            var mockAlarms = [];
-            for (var i = 6; i >= 1; i--) {
-                var mockAlarm = new Alarm();
-                mockAlarm.id = i;
-                mockAlarm.openedDate = "2015-08-22 08:00";
-                mockAlarm.affectedObject = "Tunafjord";
-                mockAlarm.ruleName = "POS Validation";
-                mockAlarm.sender = "FMC";
-
-                var random = Math.floor(Math.random() * 3) + 1;
-                if(random === 3){
-                    //Nothing
-                }
-                else if(random === 2){
-                    mockAlarm.setStatusToClosed();
-                    mockAlarm.resolvedDate = "2015-08-27 13:37";
-                    mockAlarm.resolvedBy = "antkar";
-                }else{
-                    mockAlarm.setStatusToOpen();
-                }
-
-                mockAlarms.push(mockAlarm);
-            }
-            var mockListPage = new SearchResultListPage(mockAlarms, page, 12);
-            $scope.currentSearchResults.updateWithNewResults(mockListPage);
         };
 
         $scope.searchAlarms = function() {
@@ -69,42 +39,57 @@ angular.module('unionvmsWeb')
                 }
             });
 
-            //Fix time criterias
-            getListRequest.setSearchCriterias(searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias));
+            //Add ruleGuid as criteria
+            getListRequest.addSearchCriteria('RULE_GUID', $scope.rule.guid);
 
-            //TODO: Implement search using RestService directly.
-            //Don't use the searchService since that can't handle multiple concurrent searches
-            $log.debug("Todo: implement search! Current searchObject:");
-            $log.debug($scope.searchObject);
             $log.debug(getListRequest);
-            $timeout(function(){
-                updateWithMockResults(1);
-            }, 1000);
+            searchService.searchTickets(getListRequest)
+                .then(updateSearchResults, onGetSearchResultsError);
+        };
+
+        //Update the search results
+        var updateSearchResults = function(searchResultsListPage){
+            console.log(searchResultsListPage);
+            $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
+        };
+
+        //Error during search
+        var onGetSearchResultsError = function(error){
+            $scope.currentSearchResults.removeAllItems();
+            $scope.currentSearchResults.setLoading(false);
+            $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
         };
 
         //Goto page in the search results
         $scope.gotoPage = function(page){
             if(angular.isDefined(page)){
-                //TODO: Implement real search
                 getListRequest.page = page;
                 $scope.currentSearchResults.setLoading(true);
-                $scope.currentSearchResults.items.length = 0;
-                $timeout(function(){
-                    updateWithMockResults($scope.currentSearchResults.page+1);
-                }, 1000);
+                alarmRestService.getTicketsList(getListRequest)
+                    .then(updateSearchResults, onGetSearchResultsError);
             }
         };
 
+        $scope.showOnMap = function(item){
+            //Work on a copy of the alarm item so you can cancel the editing
+            var copy = item.copy();
+            var options = {
+                readOnly : true
+            };
+            //Get movement
+            var movementPromise = movementRestService.getMovement(copy.positionGuid);
+            options.movementPromise = movementPromise;
+
+            //Open modal
+            PositionReportModal.show(copy, options);
+        };
+
         //SEARCH FORM
-        $scope.timeSpanOptions = [{
-            text:'24' +locale.getString('common.time_hour_short'),
-            code:'24'
-        },
-        {
-            text: locale.getString("config.ALARMS_TIME_SPAN_custom"),
-            code: DATE_CUSTOM
-        }];
-        $scope.searchObject.TIME_SPAN = $scope.timeSpanOptions[0].code;
+        var DATE_CUSTOM = searchUtilsService.getTimeSpanCodeForCustom();
+        var DATE_TODAY = searchUtilsService.getTimeSpanCodeForToday();
+
+        $scope.timeSpanOptions = searchUtilsService.getTimeSpanOptions();
+        $scope.searchObject.TIME_SPAN = DATE_TODAY;
 
         $scope.$watch("searchObject.FROM_DATE", function(newValue) {
             if (newValue) {
