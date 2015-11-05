@@ -13,6 +13,7 @@ angular.module('unionvmsWeb')
         this.logData = undefined;
         this.forwardRue = undefined;
         this.source = undefined;
+        this.type = undefined;
 	}
 
 	Exchange.fromJson = function(data){
@@ -28,7 +29,8 @@ angular.module('unionvmsWeb')
 	        exchange.status = data.status;
 	        exchange.logData = data.logData;
 			exchange.forwardRule = data.rule;
-			exchange.source = data.source;
+            exchange.source = data.source;
+			exchange.type = data.type;
 
 		}
 

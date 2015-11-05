@@ -7,10 +7,10 @@
         </div>
         <div class="col-md-1 pushright"><i class="fa fa-refresh fa-lg refresh-icon" ng-click="refreshSendingQue()" title="{{'exchange.sending_table_queue_refreshqueue' | i18n}}"></i></div>
     </div>
-	<div class="row scroller">
+	<div class="row scroller" loading-indicator="sendingQueue.loading" size="small" type="SPINNER">
         <div class="col-md-12 nopaddingright">
             <!--<pre>{{sendingQueue.items | json}}</pre>-->
-            <h3 ng-show="sendingQueue.items.length <= 0 && !sendingQueue.errorMessage">{{'exchange.sending_queue_all_ok' | i18n}}</h3>
+            <h3 ng-show="sendingQueue.items.length <= 0 && !sendingQueue.errorMessage && !sendingQueue.loading">{{'exchange.sending_queue_all_ok' | i18n}}</h3>
             <table ng-hide="sendingQueue.items.length <= 0" class="sendingQueue searchResults">
                 <thead>
                     <th></th>

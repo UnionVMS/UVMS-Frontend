@@ -1,24 +1,10 @@
-angular.module('unionvmsWeb').controller('ExchangeSearchController', function($scope, searchService, locale) {
+angular.module('unionvmsWeb').controller('ExchangeSearchController', function($scope, searchService, locale, configurationService) {
 
-	$scope.init = function(){
-		$scope.resetSearch();
-		$scope.exchangeDropdownItems = configurationService.setTextAndCodeForDropDown(configurationService.getValue('EXCHANGE', 'RECIPIENT'), 'RECIPIENT', 'EXCHANGE', true);
-	};
-
-	$scope.advancedSearchObject.EXCHANGE_TIME_SPAN = $scope.DATE_TODAY;
-
-	$scope.performAdvancedSearch = function() {
-		//Searchable enums are... TRANSFER_INCOMING, DATE_RECEIVED_FROM, DATE_RECEIVED_TO, SENDER_RECEIVER, RECIPIENT, TYPE, STATUS
-		if ($scope.freeText) {
-			$scope.advancedSearchObject.SENDER_RECEIVER = $scope.freeText;
-		}
-		else {
-			delete $scope.advancedSearchObject.SENDER_RECEIVER;
-			delete $scope.advancedSearchObject.RECIPIENT;
-		}
-
-		$scope.$parent.performAdvancedSearch();
-	};
+	var init = function(){
+	    $scope.advancedSearchObject.EXCHANGE_TIME_SPAN = $scope.DATE_TODAY;
+        $scope.resetSearch();
+        $scope.recipientItems = configurationService.setTextAndCodeForDropDown(configurationService.getValue('EXCHANGE', 'RECIPIENT'), 'RECIPIENT', 'EXCHANGE', true);
+    };
 
     //Reset the form
     $scope.resetSearch = function(){
@@ -46,4 +32,6 @@ angular.module('unionvmsWeb').controller('ExchangeSearchController', function($s
 			delete $scope.advancedSearchObject.DATE_RECEIVED_TO;
 		}
 	});
+
+    init();
 });

@@ -58,6 +58,8 @@
                             <th></th>
     						<th></th>
     						<th	sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'dateReceived'">{{'exchange.table_header_date_received' | i18n}}</th>
+                            <th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'source'">{{'exchange.table_header_source' | i18n}}</th>
+                            <th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'logData.type'">{{'exchange.table_header_type' | i18n}}</th>
     						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'sender_reciever'">{{'exchange.table_header_sender_reciever' | i18n}}</th>
     						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'forwardRule'">{{'exchange.table_header_fwd_rule' | i18n}}</th>
     						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'recipient'">{{'exchange.table_header_recipient' | i18n}}</th>
@@ -77,11 +79,13 @@
                                     <!--<a ng-show="exchangePath(message)" href="exchangePath(message)" title="{{'exchange.title_details' | i18n}}">
                                         <span class="fa fa-search-plus details"></span>
                                     </a>-->
-                                    <a ng-show="message.logData" ng-click="showMessageDetails(message)" title="{{'exchange.title_details' | i18n}}">
+                                    <a ng-show="false" ng-click="showMessageDetails(message)" title="{{'exchange.title_details' | i18n}}">
                                         <span class="fa fa-search-plus details"></span>
                                     </a>
                                 </td>
     							<td>{{message.dateRecieved | confDateFormat}}</td>
+                                <td>{{message.type}}</td>
+                                <td>{{message.source | transponderName}}</td>
     							<td>{{message.senderRecipient}}</td>
     							<td>{{message.forwardRule}}</td>
     							<td>{{message.recipient}}</td>

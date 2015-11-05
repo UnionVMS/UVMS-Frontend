@@ -274,6 +274,8 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         //Set the header columns
         var header = [
             locale.getString('exchange.table_header_date_received'),
+            locale.getString('exchange.table_header_source'),
+            locale.getString('exchange.table_header_type'),
             locale.getString('exchange.table_header_sent_by'),
             locale.getString('exchange.table_header_fwd_rule'),
             locale.getString('exchange.table_header_recipient'),
@@ -297,9 +299,11 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
                     if($scope.filterIncomingOutgoing(item)){
                         var csvRow = [
                             $filter('confDateFormat')(item.dateRecieved),
-                            item.sentBy,
-                            item.recipient,
+                            angular.isDefined(item.logData) ? item.type :'',
+                            $filter('transponderName')(item.source),
+                            item.senderRecipient,
                             item.forwardRule,
+                            item.recipient,
                             $filter('confDateFormat')(item.dateForward),
                             $scope.getStatusLabel(item.status)
                         ];

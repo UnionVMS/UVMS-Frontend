@@ -16,7 +16,9 @@
 	"table_header_fwd_rule": "Forward rule",
 	"table_header_recipient": "Recipient",
 	"table_header_sent_by": "From",
-	"table_header_status": "Status",
+    "table_header_status": "Status",
+    "table_header_source": "Source",
+	"table_header_type": "Type",
 
 	"sending_queue_table_header_date_received": "Date received",
 	"sending_queue_table_header_from": "From",
