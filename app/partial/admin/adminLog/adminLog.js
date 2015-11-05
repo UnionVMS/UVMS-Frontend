@@ -112,8 +112,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
             pollingRestService.getPollList(getListRequest).then(
                 function(searchResultsListPage){
                     if(searchResultsListPage.items.length > 0 && angular.isDefined(searchResultsListPage.items[0].poll)){
-                        //deferred.resolve(searchResultsListPage.items[0].comment);
-                        deferred.resolve("TODO: Show poll comment here!");
+                        deferred.resolve(searchResultsListPage.items[0].poll.comment);
                     }else{
                         deferred.reject(errorMessage);
                     }
