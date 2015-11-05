@@ -245,11 +245,18 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
         return status;
     };
     
+    //FIXME - remove this later on
+    $scope.fixTempUrl = function(url){
+        var urlComp = url.split(':');
+        var fixedUrl = 'http://' + location.hostname + ':' + urlComp[2];
+        return fixedUrl;
+    };
+    
     $scope.addWms = function(item){
         var layer = new ol.layer.Tile({
             type: item.typeName,
             source: new ol.source.TileWMS({
-                url: item.serviceUrl,
+                url: $scope.fixTempUrl(item.serviceUrl),
                 serverType: 'geoserver',
                 params: {
                     'LAYERS': item.geoName,
