@@ -12,7 +12,9 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function() {
         function objectToTypeValueList(obj) {
             var list = [];
             $.each(obj, function(key, value) {
-                list.push({"type": key, "value": value});
+                if(angular.isDefined(value)){
+                    list.push({"type": key, "value": value});
+                }
             });
 
             return list;

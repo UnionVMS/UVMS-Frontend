@@ -24,10 +24,10 @@ angular.module('unionvmsWeb').directive('datepickerInput', function($compile) {
             }
 
             //Add a random id to the input element
-            element.find('input').attr('id', scope.randomId);
+            element.find('input').attr('id', scope.inputFieldId);
 
             //Create dateTimePicker and save on scope
-            scope.dateTimePicker = jQuery("#" +scope.randomId).datetimepicker(scope.options);
+            scope.dateTimePicker = jQuery("#" +scope.inputFieldId).datetimepicker(scope.options);
         }
 	};
 });
@@ -62,8 +62,9 @@ angular.module('unionvmsWeb')
                 defaultDateFormat = FORMATS.YMDHM;
             }
 
-            //Create a unique id for the input
-            $scope.randomId = generateGUID();
+            //Create a unique id for the input and the datepicker element
+            $scope.inputFieldId = generateGUID();
+            $scope.datepickerId = "picker-" +$scope.inputFieldId;
 
             //Set options
             setStartOptions();
@@ -89,6 +90,7 @@ angular.module('unionvmsWeb')
             var dateFormat = FORMATS.YMD.PICKER;
             //DateTimePicker options
             $scope.options = {
+                id: $scope.datepickerId,
                 datepicker:true,
                 timepicker:false,
                 format : dateFormat,
@@ -202,13 +204,25 @@ angular.module('unionvmsWeb')
             updateOptions(newOptions);
         });
 
+        var cleanup = function(){
+            //Remove the datepicker from the DOM
+            jQuery("#" +$scope.datepickerId).remove();
+
+            //Remove event listeners from input field
+            jQuery("#" +$scope.inputFieldId).off();
+        };
+
+        $scope.$on('$destroy', function() {
+            cleanup();
+        });
+
         init();
 });
 
 
 //Format the model and view values
 //The model is updated on the format 'YYYY-MM-DD HH:mm:ss Z' and the view on the format 'YYYY-MM-DD HH:mm' or 'YYYY-MM-DD'
-angular.module('unionvmsWeb').directive('datePickerFormatter', function(dateTimeService) {
+angular.module('unionvmsWeb').directive('datePickerFormatter', function(dateTimeService, $timeout) {
     return {
         restrict: 'A',
         require: 'ngModel',
@@ -247,10 +261,17 @@ angular.module('unionvmsWeb').directive('datePickerFormatter', function(dateTime
                     newValue = dateTimeService.formatUTCDateWithTimezone(newValue);
                     //Only set model and call callback if newValue is valid
                     if(newValue.indexOf("Invalid date") >= 0){
-                        newValue = '';
+                        newValue = undefined;
                     }
                 }else{
-                    newValue = '';
+                    newValue = undefined;
+                }
+                //TODO: Fix without using a timeout
+                //parse must be set to valid to be able to set model value to undefined after clearing the input
+                if(newValue === undefined){
+                    $timeout(function(){
+                        ctrl.$setValidity('parse', true);
+                    }, 10);
                 }
                 return newValue;
             };
