@@ -5,7 +5,7 @@
     <h4 class="modal-title">{{ 'alarms.position_report_header' | i18n }}</h4>
 </div>
 
-<div class="modal-body">
+<div class="modal-body" loading-indicator="waitingForStatusUpdateResponse">
 
     <div class="row">
         <div class="col-md-12">
@@ -128,6 +128,22 @@
                 </div>
             </div>
         </div>
+<!-- 
+        <div class="row">
+            <div class="col-md-12">
+                <div class="sectionHeader">
+                    {{'alarms.position_report_mobile_terminal_information' | i18n}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <label>{{'alarms.position_report_mobile_terminal_information_type' | i18n}}</label>
+                <div class="value">???</div>
+            </div>
+        </div>
+ -->
+
 
         <div class="row">
             <div class="col-md-12">
@@ -207,10 +223,10 @@
                     {{"alarms.position_report_accept_and_poll" | i18n}}
                 </a>
 
-                <button class="btn btn-danger button" type="submit" ng-click="reject()">
+                <button class="btn btn-danger button" type="submit" ng-click="reject()" ng-disabled="waitingForStatusUpdateResponse">
                     <i class="fa fa-times"></i> {{"alarms.position_report_reject" | i18n}}
                 </button>
-                <button class="btn btn-success button" type="submit" ng-click="accept()">
+                <button class="btn btn-success button" type="submit" ng-click="accept()" ng-disabled="waitingForStatusUpdateResponse">
                     <i class="fa fa-check"></i> {{"alarms.position_report_accept" | i18n}}
                 </button>
             </div>

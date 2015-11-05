@@ -5,6 +5,7 @@
 
     "alarms_status_open" : "Open",
     "alarms_status_closed" : "Closed",
+    "alarms_status_pending" : "Pending",
     "alarms_affected_object_unknown" : "Incomplete data",
 
     "notification" : "Notification",
@@ -138,14 +139,19 @@
     "position_report_status" : "Status",
     "position_report_asset_information" : "Asset information",
     "position_report_asset_information_value_missing" : "Missing",
+    "position_report_mobile_terminal_information" : "Mobile terminal information",
+    "position_report_mobile_terminal_information_type" : "Type",
     "position_report_position_information" : "Position information",
     "position_report_inactivate_position" : "Inactivate position (will not show on map)",
     "position_report_assign_asset_from_list" : "Link asset from list",
+    "position_report_status_update_poll_accept_success": "A poll was created and the alarm was accepted.",
     "position_report_status_update_accept_success": "The alarm was accepted.",
     "position_report_status_update_accept_error" : "Failed to set alarm to accepted.",
     "position_report_status_update_reject_success": "The alarm was rejected.",
     "position_report_status_update_reject_error" : "Failed to set alarm to rejected.",
     "position_report_loading_movement_error" : "Failed to load position.",
+    "position_report_create_poll_comment" : "Accept and poll in holding table.",
+    "position_report_create_poll_error" : "Failed to create poll.",
 
     "notifications_table_close_title" : "Close notificaton",
     "notifications_close_error_message" : "Failed to close the notification. Please try again."
