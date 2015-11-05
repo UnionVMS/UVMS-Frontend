@@ -6,7 +6,7 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
         ASSET : 'Asset',
         MOBILE_TERMINAL : 'Mobile Terminal',
         POLL : 'Poll',
-        REPORT : 'Report',
+        AUTOMATIC_POSITION_REPORT : 'Automatic position report',
         ALARM : 'Alarm',
         CUSTOM_RULE : 'Custom rule',
     };
@@ -27,7 +27,7 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
     //All available TYPES
     var auditLogTypes = {
         asset: createDropdownItem(TYPES.ASSET),
-        report: createDropdownItem(TYPES.REPORT),
+        automaticPositionReport: createDropdownItem(TYPES.AUTOMATIC_POSITION_REPORT),
         mobileTerminal: createDropdownItem(TYPES.MOBILE_TERMINAL),
         poll: createDropdownItem(TYPES.POLL),
         alarm: createDropdownItem(TYPES.ALARM),
@@ -71,8 +71,8 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
                     newOperations = [auditLogOperations.create, auditLogOperations.update, auditLogOperations.remove, auditLogOperations.link, auditLogOperations.unlink];
                     break;
                 case 'POSITION_REPORTS':
-                    newTypes = [auditLogTypes.report];
-                    newOperations = [auditLogOperations.create, auditLogOperations.update, auditLogOperations.remove];
+                    newTypes = [auditLogTypes.automaticPositionReport];
+                    newOperations = [auditLogOperations.create];
                     break;
                 case 'GIS':
                     newTypes = [];

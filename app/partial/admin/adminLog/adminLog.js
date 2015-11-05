@@ -181,6 +181,9 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
                 case TYPES.CUSTOM_RULE:
                     path = "/alarms/rules/" + audit.affectedObject;
                     break;
+                case TYPES.AUTOMATIC_POSITION_REPORT:
+                    path = "/movement/" + audit.affectedObject;
+                    break;
             }
 
         }
