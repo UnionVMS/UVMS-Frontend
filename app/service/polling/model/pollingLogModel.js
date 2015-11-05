@@ -4,7 +4,7 @@ angular.module('unionvmsWeb')
 	function PollingLog(){
 		this.vessel = undefined;
 		this.poll = undefined;
-		this.pollingStatuses = [];
+		this.exchangePoll = undefined;
 	}
 
     //Polls are equal?

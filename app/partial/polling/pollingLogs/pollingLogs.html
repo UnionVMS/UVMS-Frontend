@@ -57,18 +57,18 @@
                                     </th>
 
                                     <th>
-                                        <dropdown ng-model="advancedSearchObject.TRANSPONDER_TYPE" items="transponderTypes" initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>
+                                        <dropdown ng-model="advancedSearchObject.TERMINAL_TYPE" items="terminalTypes" initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>
                                     </th>
 
                                     <th>&nbsp;</th>
 
                                     <th>
-                                        <dropdown ng-model="advancedSearchObject.STATUS_TYPE" items="statusTypes"  initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>
+                                        <dropdown ng-model="advancedSearchObject.STATUS" items="statusTypes"  initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>
                                     </th>
 
                                     <th>&nbsp;</th>
                                     <th>
-                                        <input type="text"/ placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.USER" >
+                                        <input type="text" placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.USER" >
                                     </th>
                                      <th>
                                     </th>
@@ -100,19 +100,19 @@
                                 <td>{{item.poll.type | pollTypeName}}</td>
                                 <td>{{item.poll.attributes.TRANSPONDER | transponderName}}</td>
                                 <td class="statusTime">
-                                    <div class="expandIcon" ng-show="item.status.length > 1" ng-click="isExpanded = !isExpanded">
+                                    <div class="expandIcon" ng-show="item.exchangePoll.history.length > 1" ng-click="isExpanded = !isExpanded">
                                         <i class="fa fa-plus-square" ng-show="!isExpanded"></i>
                                         <i class="fa fa-minus-square" ng-show="isExpanded"></i>
                                     </div>
                                     <div class="times">
-                                        <span ng-repeat="status in item.status" ng-show="isExpanded || $index === 0">
+                                        <span ng-repeat="status in item.exchangePoll.history" ng-show="isExpanded || $index === 0">
                                             {{ status.time | confDateFormat}}<br>
                                         </span>
                                     </div>
                                 </td>
                                 <td class="statusText">
-                                    <span ng-repeat="status in item.status" ng-show="isExpanded  || $index === 0" ng-class="{'success': status.text === 'Succeeded', 'failed': status.text === 'Request failed'}">
-                                        {{status.text}}<br>
+                                    <span ng-repeat="status in item.exchangePoll.history | orderBy:'status.time'" ng-show="isExpanded || $index === 0" ng-class="{'success': status.status === 'Succeeded', 'failed': status.status === 'Request failed'}">
+                                        {{status.status}}<br>
                                     </span>
                                 </td>
                                 <td><a>{{'polling.polling_logs_table_results_link' | i18n}}</a></td>

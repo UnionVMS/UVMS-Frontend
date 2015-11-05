@@ -130,6 +130,24 @@ angular.module('unionvmsWeb')
         };
     };
 
+    GetListRequest.prototype.DTOForExchangePollList = function(){
+        var fromDateSearchField = this.getCriteria('FROM_DATE');
+        var toDateSearchField = this.getCriteria('TO_DATE');
+        var statusSearchField = this.getCriteria('STATUS');
+
+        var searchObj = {};
+        if(fromDateSearchField){
+            searchObj.statusFromDate = fromDateSearchField.value;
+        }
+        if(toDateSearchField){
+            searchObj.statusToDate = toDateSearchField.value;
+        }
+        if(statusSearchField){
+            searchObj.status = statusSearchField.value;
+        }
+        return searchObj;
+    };
+
 
     GetListRequest.prototype.DTOForAlarms = function(){
         return{
@@ -178,6 +196,17 @@ angular.module('unionvmsWeb')
         for (var i = idxToRemove.length - 1; i >= 0; i--) {
             this.criterias.splice(idxToRemove[i],1);
         }
+    };
+
+    GetListRequest.prototype.getCriteria = function(criteria){
+        var found;
+        $.each(this.criterias, function(i, searchField){
+            if(searchField.key === criteria){
+                found = searchField;
+                return false;
+            }
+        });
+        return found;
     };
 
     GetListRequest.prototype.setSearchCriterias = function(criterias){

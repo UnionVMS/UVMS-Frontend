@@ -19,12 +19,14 @@ angular.module('unionvmsWeb')
 
         poll.id = poll.attributes.POLL_ID;
         poll.type = poll.attributes.POLL_TYPE;
+        poll.comment = poll.attributes.POLL_COMMENT;
         poll.startDate = poll.attributes.START_DATE;
         poll.endDate = poll.attributes.END_DATE;
         poll.connectionId = poll.attributes.CONNECTION_ID;
         return poll;
     };
 
+    //Is this used?
     Poll.fromJson = function(data){
         var poll = new Poll();
 

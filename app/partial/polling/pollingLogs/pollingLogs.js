@@ -182,8 +182,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     $scope.showComment = function(item){
         var options = {
             titleLabel : locale.getString('common.comment'),
-            //textLabel : item.comment,
-            textLabel : "TODO: Show poll comment here!",
+            textLabel : item.poll.comment,
         };
         infoModal.open(options);
     };

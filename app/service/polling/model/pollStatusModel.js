@@ -3,9 +3,17 @@ angular.module('unionvmsWeb')
 
 
     function PollStatus(text){
-        this.text = text;
-        this.time = "2015-03-24T10:32:00Z";
+        this.status = undefined;
+        this.time = undefined;
     }
+
+    PollStatus.fromDTO = function(dto){
+        var pollStatus = new PollStatus();
+        pollStatus.status = dto.status;
+        pollStatus.time = dto.timestamp;
+
+        return pollStatus;
+    };
 
     return PollStatus;
 });

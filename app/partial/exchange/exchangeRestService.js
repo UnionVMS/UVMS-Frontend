@@ -5,7 +5,6 @@ angular.module('unionvmsWeb')
                 return $resource('/exchange/rest/plugin/list');
             },
             stopTransmission : function(){
-                //return $resource('/exchange/rest/plugin/stop/:id');
                  return $resource('/exchange/rest/plugin/stop/:serviceClassName',{},
                 {
                     stop : { method: 'PUT'}
@@ -26,6 +25,15 @@ angular.module('unionvmsWeb')
             getExchangeMessage: function() {
                 return $resource('/exchange/rest/exchange/:guid');
             },
+            getPollMessages : function(){
+                return $resource( '/exchange/rest/exchange/poll',{},
+                {
+                    list : { method : 'POST'}
+                });
+            },
+            getPollMessage : function(){
+                return $resource( '/exchange/rest/exchange/poll/:typeRefGuid');
+            },
             resendExchangeMessage : function(){
                 return $resource( '/exchange/rest/message/resend',{},
                 {
@@ -43,7 +51,7 @@ angular.module('unionvmsWeb')
             }
         };
     })
-    .factory('exchangeRestService', function($q, exchangeRestFactory, GetListRequest, Exchange, ExchangeService, ExchangeSendingQueue,  SearchResultListPage, vesselRestService){
+    .factory('exchangeRestService', function($q, exchangeRestFactory, GetListRequest, Exchange, ExchangePoll, ExchangeService, ExchangeSendingQueue,  SearchResultListPage, vesselRestService){
 
         var getVesselNamesByGuid = function(vessels) {
             var map = {};
@@ -270,6 +278,56 @@ angular.module('unionvmsWeb')
             return deferred.promise;
         };
 
+        var getPollMessage = function(typeRefGuid){
+            var deferred = $q.defer();
+            exchangeRestFactory.getPollMessage().get({typeRefGuid : typeRefGuid},
+            function(response){
+                if(response.code !== 200){
+                    deferred.reject("Invalid response status");
+                    return;
+                }
+
+                var pollMessage = ExchangePoll.fromDTO(response.data);
+                deferred.resolve(pollMessage);
+
+            },
+            function(error){
+                console.log("Error getting exchange poll message.", error);
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        };
+
+        var getPollMessages = function(getListRequest){
+            var deferred = $q.defer();
+            exchangeRestFactory.getPollMessages().list(getListRequest.DTOForExchangePollList(),
+            function(response){
+                if(response.code !== 200){
+                    deferred.reject("Invalid response status");
+                    return;
+                }
+
+                var pollMessages = [];
+
+                if(angular.isArray(response.data)){
+                    for (var i = 0; i < response.data.length; i++){
+                        pollMessages.push(ExchangePoll.fromDTO(response.data[i]));
+                    }
+                }
+
+                var currentPage = response.data.currentPage;
+                var totalNumberOfPages = response.data.totalNumberOfPages;
+                var searchResultListPage = new SearchResultListPage(pollMessages, currentPage, totalNumberOfPages);
+
+                deferred.resolve(searchResultListPage);
+
+            },
+            function(error){
+                console.log("Error getting exchange poll messages.", error);
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        };
 
 
     function pickOne(array) {
@@ -344,6 +402,8 @@ angular.module('unionvmsWeb')
         stopTransmission : stopTransmission,
         startTransmission : startTransmission,
         getMessages : getMessages,
+        getPollMessage : getPollMessage,
+        getPollMessages : getPollMessages,
         resendExchangeMessage : resendExchangeMessage,
         sendQueue: sendQueue,
         getSendingQueue : getSendingQueue,

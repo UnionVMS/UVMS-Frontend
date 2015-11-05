@@ -5,16 +5,31 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 	var getListRequest = new GetListRequest(1, DEFAULT_ITEMS_PER_PAGE, true, []),
         advancedSearchObject  = {};
 
-    //Keys that are searchable in the vessel module
-    var vesselSearchKeys = [
+    //Transform array of string to dict with value true
+    var searchKeysToMap = function(keysArray){
+        return keysArray.reduce(function(map, searchKey) {
+            map[searchKey] = true;
+            return map;
+        }, {});
+    };
+
+    //Keys that are searchable in the vessel search
+    var vesselSearchKeys = searchKeysToMap([
         "MIN_LENGTH", "MAX_LENGTH", "MIN_POWER", "MAX_POWER", "GEAR_TYPE",
         "IMO", "GUID", "NAME", "IRCS",
         "MMSI", "EXTERNAL_MARKING", "CFR", "HOMEPORT",
         "FLAG_STATE", "LICENSE_TYPE", "ASSET_TYPE", "PRODUCER_NAME"
-    ].reduce(function(map, searchKey) {
-        map[searchKey] = true;
-        return map;
-    }, {});
+    ]);
+
+    //Keys that are searchable in the exchange search
+    var exchangeSearchKeys = searchKeysToMap([
+        "TRANSFER_INCOMING", "DATE_RECEIVED_FROM", "DATE_RECEIVED_TO", "SENDER_RECEIVER", "RECIPIENT", "TYPE", "STATUS"
+    ]);
+
+    //Keys that are searchable in the exchange poll search
+    var exchangePollSearchKeys = searchKeysToMap([
+        "FROM_DATE", "TO_DATE", "STATUS"
+    ]);
 
     var checkAccessToFeature = function(module, feature) {
         return userService.isAllowed(feature, module, true);
@@ -102,26 +117,26 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         deferred.reject(error);
     };
 
-    //Handle error on get pollinglogs
-    var onGetPollinglogsError = function(error, deferred){
-        $log.error("Error getting Pollinglogs.", error);
-        deferred.reject(error);
-    };
-
     //Search alarms or ticket
     //searchType should be TICKETS or ALARMS
-    var searchAlarmsOrTickets = function(searchType){
-        searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
+    //If a searchGetListRequest is provided, use that one instead of the getListRequest in this searchService
+    var searchAlarmsOrTickets = function(searchType, searchGetListRequest){
+        //Use the default getListRequest if searchListRequest is not provided
+        if(angular.isUndefined(searchGetListRequest)){
+            searchGetListRequest = getListRequest;
+        }
+        console.log(searchGetListRequest);
+        searchUtilsService.modifySpanAndTimeZones(searchGetListRequest.criterias);
 
         //Split into alarms/tickets and vessel criterias
-        var partition = searchUtilsService.getSearchCriteriaPartition(getListRequest.criterias, {vessel: vesselSearchKeys});
+        var partition = searchUtilsService.getSearchCriteriaPartition(searchGetListRequest.criterias, {vessel: vesselSearchKeys});
         var alarmsOrTicketsCritieria = partition["default"];
         var vesselCriteria = partition["vessel"];
 
         var vesselRequest = new GetListRequest(1, 10000, true, vesselCriteria);
 
         //Set the new search criterias (without vessel criterias)
-        getListRequest.setSearchCriterias(alarmsOrTicketsCritieria);
+        searchGetListRequest.setSearchCriterias(alarmsOrTicketsCritieria);
 
         var deferred = $q.defer();
         var vesselDeferred = $q.defer();
@@ -138,7 +153,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                 //Update alarms/tickest search criterias with vessels
                 $.each(vessels, function(index, vessel) {
                     if(angular.isDefined(vessel.vesselId)){
-                        getListRequest.addSearchCriteria("ASSET_GUID", vessel.vesselId.guid);
+                        searchGetListRequest.addSearchCriteria("ASSET_GUID", vessel.vesselId.guid);
                     }
                 });
                 vesselDeferred.resolve();
@@ -155,9 +170,9 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             //Get alarms or tickets
             var searchPromise;
             if(searchType === 'ALARMS'){
-                searchPromise = alarmRestService.getAlarmsList(getListRequest);
+                searchPromise = alarmRestService.getAlarmsList(searchGetListRequest);
             }else if (searchType === 'TICKETS'){
-                searchPromise = alarmRestService.getTicketsList(getListRequest);
+                searchPromise = alarmRestService.getTicketsList(searchGetListRequest);
             }
 
             searchPromise.then(function(page) {
@@ -248,37 +263,164 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         searchPolls : function(){
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
 
-            var deferred = $q.defer();
-            pollingRestService.getPollList(getListRequest).then(function(page) {
-            //Zero results?
-            if(page.getNumberOfItems() === 0){
-                deferred.resolve(page);
-                return;
+            //Split into exchange, vessel and poll criterias
+            var partition = searchUtilsService.getSearchCriteriaPartition(getListRequest.criterias, {exchangePoll: exchangePollSearchKeys, vessel: vesselSearchKeys});
+            var pollingLogsCriteria = partition["default"];
+            var exchangePollCriteria = partition["exchangePoll"];
+            var vesselCriteria = partition["vessel"];
+            getListRequest.setSearchCriterias(pollingLogsCriteria);
+
+            var deferred = $q.defer(),
+                promises = [];
+
+            //Store the related vessels and exchangePollPage
+            var vesselList = [],
+                exchangePollPage;
+
+            //Search for vessels first?
+            var doVesselSearch = false;
+            if(vesselCriteria.length > 0){
+                var vesselDeferred = $q.defer();
+                promises.push(vesselDeferred.promise);
+                doVesselSearch = true;
+                var vesselRequest = new GetListRequest(1, 10000, true, vesselCriteria);
+                vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vessels){
+                    vesselList = vessels;
+                    vesselDeferred.resolve();
+                }, function(err){
+                    vesselDeferred.reject("Error getting vessels.");
+                });
             }
 
-            //Get vessels for all movements in page
-            var vesselRequest = new GetListRequest(1, page.getNumberOfItems(), true);
-            $.each(page.items, function(index, pollinglog) {
-                vesselRequest.addSearchCriteria("GUID", pollinglog.poll.connectionId);
+            //Search in exchange
+            var doExchangePollSearch = false;
+            if(exchangePollCriteria.length > 0){
+                var exchangeDeferred = $q.defer();
+                promises.push(exchangeDeferred.promise);
+                doExchangePollSearch = true;
+                var exchangeRequest = new GetListRequest(1, 10000, true, exchangePollCriteria);
+                exchangeRestService.getPollMessages(exchangeRequest).then(
+                    function(page){
+                        exchangePollPage = page;
+                        exchangeDeferred.resolve();
+                    },
+                    function(err){
+                        exchangeDeferred.reject("Error getting exchange poll messages.");
+                    }
+                );
+            }
+
+            //When we got vessels and exchangePolls
+            $q.all(promises).then(function(){
+                //No vessels found?
+                if(doVesselSearch && vesselList.length === 0){
+                    console.log("no vessels...return empty page");
+                    return deferred.resolve(new SearchResultListPage());
+                }
+                //No exchange logs found?
+                if(doExchangePollSearch && exchangePollPage.getNumberOfItems() === 0){
+                    console.log("no exchange meessages...return empty page");
+                    return deferred.resolve(new SearchResultListPage());
+                }
+
+                //Update serach criterias with pollIds and connectIds
+                $.each(vesselList, function(i, vessel){
+                    getListRequest.addSearchCriteria("CONNECT_ID", vessel.getGuid());
+                });
+                if(angular.isDefined(exchangePollPage)){
+                    $.each(exchangePollPage.items, function(i, exchangePoll){
+                        getListRequest.addSearchCriteria("POLL_ID", exchangePoll.pollGuid);
+                    });
+                }
+
+                //Get polling logs
+                pollingRestService.getPollList(getListRequest).then(
+                    function(page) {
+                        //Zero results?
+                        if(page.getNumberOfItems() === 0){
+                            deferred.resolve(page);
+                            return;
+                        }
+
+                        //Empty promise list
+                        promises.length = 0;
+                        exchangeDeferred = $q.defer();
+                        promises.push(exchangeDeferred.promise);
+                        //Already got exchangePolls?
+                        if(angular.isDefined(exchangePollPage)){
+                            exchangeDeferred.resolve(exchangePollPage);
+                        }
+                        //Get exchangePoll from server
+                        else{
+                            if(page.getNumberOfItems() === 1){
+                                var pollGuid = page.items[0].poll.id;
+                                exchangeRestService.getPollMessage(pollGuid).then(function(exchangePoll){
+                                    exchangePollPage = new SearchResultListPage([exchangePoll], 1, 1);
+                                    exchangeDeferred.resolve();
+                                }, function(err){
+                                    exchangeDeferred.reject("Error getting exchange poll message.");
+                                });
+                            }else{
+                                exchangeDeferred.reject("Cant get exchange items for more than one item at this point. Something went wrong.");
+                            }
+                        }
+
+                        //Connect each poll to a vessel
+                        vesselDeferred = $q.defer();
+                        promises.push(vesselDeferred.promise);
+                        //Already got vessels?
+                        if(vesselList.length > 0){
+                            vesselDeferred.resolve(vesselList);
+                        }
+                        //Get vessels from server
+                        else{
+                            var vesselRequest = new GetListRequest(1, page.getNumberOfItems(), true);
+                            $.each(page.items, function(i, pollinglog) {
+                                vesselRequest.addSearchCriteria("GUID", pollinglog.poll.connectionId);
+                            });
+                            vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vessels){
+                                vesselList = vessels;
+                                vesselDeferred.resolve();
+                            }, function(err){
+                                vesselDeferred.reject("Error getting vessels.");
+                            });
+                        }
+
+                        //Now we get both vessels and exchangePolls so we can connect them to the polling logs
+                        $q.all(promises).then(function(){
+                            //Connect the poll items to exchangePolls
+                            $.each(page.items, function(i, pollinglog){
+                                $.each(exchangePollPage.items, function(j, exchangePoll){
+                                    if(pollinglog.poll.id === exchangePoll.pollGuid){
+                                        pollinglog.exchangePoll = exchangePoll;
+                                        return false;
+                                    }
+                                });
+                            });
+
+                            //Conntect the poll items to vessels
+                            var vesselListPage = new VesselListPage(vesselList, 1, 1);
+                            $.each(page.items, function(i, pollinglog) {
+                                var vessel = vesselListPage.getVesselByGuid(pollinglog.poll.connectionId);
+                                pollinglog.vessel = vessel;
+                            });
+
+                            console.log(page);
+                            deferred.resolve(page);
+                        }, function(err){
+                            $log.error("Error getting Pollinglogs.", err);
+                            deferred.reject(err);
+                        });
+                    },
+                    function(err){
+                        $log.error("Error getting Pollinglogs.", err);
+                        deferred.reject(err);
+                    }
+                );
+            }, function(err){
+                $log.error("Error getting Pollinglogs.", err);
+                deferred.reject(err);
             });
-            vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vessels){
-
-                var vesselListPage = new VesselListPage(vessels, 1, 10000);
-                //Update pollinglog page by connecting each pollinglog to a vessel in order to get vesselname etc.
-                $.each(page.items, function(index, pollinglog) {
-                    var vessel = vesselListPage.getVesselByGuid(pollinglog.poll.connectionId);
-                    pollinglog.vessel = vessel;
-                });
-
-                deferred.resolve(page);
-
-            }, function(error){
-                onGetPollinglogsError(error, deferred);
-               });
-
-            }, function(error){
-                onGetPollinglogsError(error, deferred);
-                });
 
             return deferred.promise;
         },
@@ -439,12 +581,12 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             return exchangeRestService.getMessages(getListRequest);
         },
 
-        searchTickets : function(){
-            return searchAlarmsOrTickets('TICKETS');
+        searchTickets : function(searchGetListRequest){
+            return searchAlarmsOrTickets('TICKETS', searchGetListRequest);
         },
 
-        searchAlarms : function(){
-            return searchAlarmsOrTickets('ALARMS');
+        searchAlarms : function(searchGetListRequest){
+            return searchAlarmsOrTickets('ALARMS', searchGetListRequest);
         },
 
         //Modify search request
