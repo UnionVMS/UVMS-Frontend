@@ -35,7 +35,7 @@ angular.module('unionvmsWeb')
             },
         };
     })
-.factory('alarmRestService', function($q, $log, alarmRestFactory, Alarm, Ticket, SearchResultListPage, userService){
+.factory('alarmRestService', function($q, $log, alarmRestFactory, Alarm, Ticket, SearchResultListPage, userService, vesselRestService){
 
     var updateAlarmStatus = function(alarm){
         //Set updatedBy to the current user
@@ -184,7 +184,13 @@ angular.module('unionvmsWeb')
             }
 
             var ticket = Ticket.fromDTO(response.data);
-            deferred.resolve(ticket);
+
+            vesselRestService.getVessel(response.vesselGuid).then(function(vessel) {
+                ticket.vessel = vessel;
+                deferred.resolve(ticket);
+            }, function(error) {
+                deferred.reject("Could not get vessel for ticket");
+            });
         },
         function(error) {
             deferred.reject("Invalid response status");

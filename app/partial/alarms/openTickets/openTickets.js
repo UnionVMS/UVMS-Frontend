@@ -21,6 +21,12 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         $resource("/rules/activity/ticket").get(function(response) {
             for (var i = 0; i < response.ids.length; i++) {
                 alarmRestService.getTicket(response.ids[i]).then(function(alarmReport) {
+                    for (var i = 0; i < $scope.currentSearchResults.items.length; i++) {
+                        if ($scope.currentSearchResults.items[i].guid === alarmReport.guid) {
+                            $scope.currentSearchResults.items.splice(i, 1);
+                        }
+                    }
+
                     $scope.currentSearchResults.updateWithSingleItem(alarmReport);
                 });
             }
