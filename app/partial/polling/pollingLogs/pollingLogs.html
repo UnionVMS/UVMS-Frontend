@@ -87,8 +87,8 @@
                                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'exchangePoll.history[0].time'" class="times">{{'polling.polling_logs_table_header_time' | i18n}}</th>
 
                                     <th>{{'polling.polling_logs_table_header_status' | i18n}}</th>
-                                    <th>{{'polling.polling_logs_table_header_results' | i18n}}</th>
                                     <th>{{'polling.polling_logs_table_header_user' | i18n}}</th>
+                                    <th></th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
@@ -112,11 +112,10 @@
                                 </td>
                                 <td class="statusText">
                                     <span ng-repeat="status in item.exchangePoll.history | orderBy:'status.time'" ng-show="isExpanded || $index === 0" ng-class="{SUCCESSFUL:'success', FAILED:'failed', PROBABLY_TRANSMITTED:'warning'}[status.status]">
-                                        {{status.status}}<br>
+                                        {{status.status | exchangeStatusName}}<br>
                                     </span>
                                 </td>
-                                <td><a ng-show="pollHasResult(item)">{{'polling.polling_logs_table_results_link' | i18n}}</a></td>
-                                <td>{{item.poll.attributes.USER}}</td>
+                                <td colspan="2">{{item.poll.attributes.USER}}</td>
                                 <td class="textAlignCenter"><a href ng-click="showComment(item)" title="{{'common.view_comment' | i18n}}"><i class="fa fa-commenting-o fa-lg"></i></a></td>
                             </tr>
                             </tbody>

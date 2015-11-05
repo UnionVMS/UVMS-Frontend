@@ -86,8 +86,8 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
                         item.vessel.externalMarking,
                         $filter('pollTypeName')(item.poll.type),
                         $filter('transponderName')(item.poll.attributes.TRANSPONDER),
-                        "TODO: List status date",
-                        "TODO: List status text",
+                        $filter('confDateFormat')(item.exchangePoll.history[0].time),
+                        $filter('exchangeStatusName')(item.exchangePoll.history[0].status),
                         item.poll.attributes.USER
                     ];
                     csvObject.push(csvRow);
@@ -176,18 +176,6 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
         $scope.currentSearchResults.removeAllItems();
         $scope.currentSearchResults.setLoading(false);
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
-    };
-
-    //Check if a poll has a result
-    $scope.pollHasResult = function(item){
-        if(angular.isDefined(item.exchangePoll)){
-            for(var i=0; i< item.exchangePoll.history.length; i++){
-                if(item.exchangePoll.history[i].status === 'SUCCESSFUL'){
-                    return true;
-                }
-            }
-        }
-        return false;
     };
 
     //Show comment in modal
