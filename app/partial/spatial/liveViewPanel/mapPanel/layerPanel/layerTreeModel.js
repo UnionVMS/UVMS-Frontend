@@ -126,13 +126,14 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	    var additionalNodes = [];
 	    for (var i = 0; i < config.length; i++){
 	        var def = config[i];
+	        var node;
 	        switch(def.type){
 	            case 'WMS':
 	                if (def.layerType === 'area' && def.isBaseLayer === false){
-	                    var node = buildWmsNode(def);
+	                    node = buildWmsNode(def);
 	                    areaNodes.push(node);
 	                } else if (def.layerType === 'port' && def.isBaseLayer === false){
-	                    var node = buildWmsNode(def);
+	                    node = buildWmsNode(def);
 	                    portNodes.push(node);
 	                } else if (def.isBaseLayer === true){
 	                    baseLayerNodes.push(buildWmsNode(def));
@@ -154,7 +155,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
                 folder: true,
                 expanded: false,
                 children: portNodes
-	        }
+	        };
 	        tree.push(portFolder);
 	    }
 	    

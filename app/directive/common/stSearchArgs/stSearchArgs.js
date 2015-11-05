@@ -12,13 +12,13 @@ angular.module('smart-table')
         var event = attr.stInputEvent || stConfig.search.inputEvent;
         
         function deepDelete (object, path) {
-            if (path.indexOf('.') != -1) {
+            if (path.indexOf('.') !== -1) {
               var partials = path.split('.');
               var key = partials.pop();
               var parentPath = partials.join('.');
-              var parentObject = $parse(parentPath)(object)
+              var parentObject = $parse(parentPath)(object);
               delete parentObject[key];
-              if (Object.keys(parentObject).length == 0) {
+              if (Object.keys(parentObject).length === 0) {
                 deepDelete(object, parentPath);
               }
             } else {
@@ -33,7 +33,7 @@ angular.module('smart-table')
 	        var pagination = ctrl.tableState().pagination;
 	        var output;
 	        
-	        filtered = ctrl.tableState().search.predicateObject ? tableFilter(tableCtrl.tableScope.reports , tableCtrl.tableScope.displayedColumns + '|' + ctrl.tableState().search.predicateObject.$) : tableCtrl.tableScope.reports;
+	        var filtered = ctrl.tableState().search.predicateObject ? tableFilter(tableCtrl.tableScope.reports , tableCtrl.tableScope.displayedColumns + '|' + ctrl.tableState().search.predicateObject.$) : tableCtrl.tableScope.reports;
 	        if (ctrl.tableState().sort.predicate) {
 	          filtered = orderBy(filtered, ctrl.tableState().sort.predicate, ctrl.tableState().sort.reverse);
 	        }

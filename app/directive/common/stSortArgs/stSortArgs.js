@@ -39,7 +39,7 @@ angular.module('smart-table')
           index++;
           var func;
           predicate = angular.isFunction(getter(scope)) || angular.isArray(getter(scope)) ? getter(scope) : attr.stSortArgs;
-          if (index % 3 === 0 && !!skipNatural !== true) {
+          if (index % 3 === 0 && skipNatural !== true) {
             //manual reset
             index = 0;
             ctrl.tableState().sort = {};

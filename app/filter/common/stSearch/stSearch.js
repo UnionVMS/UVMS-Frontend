@@ -1,9 +1,6 @@
 angular.module('unionvmsWeb').filter('stSearch', function() {
-//	return function(strSearch, rows, columns) {
 	return function(array, predictedObject) {
 		var filteredTable = [];
-//		var columns = JSON.stringify(predictedObject);
-//		columns = columns.substring(columns.indexOf('{')+2, columns.indexOf(':')-1).split("|");
 		var columns = predictedObject.split('|');
 		var input = columns[columns.length-1];
 		columns.splice(-1,1);
@@ -12,17 +9,16 @@ angular.module('unionvmsWeb').filter('stSearch', function() {
 			return array;
 		}
 		
-		if(input)
-		angular.forEach(array, function(row) {
-			for (var i = 0; i<columns.length; i++) {
-				if(row[columns[i]] && row[columns[i]].toLowerCase().indexOf(input.toLowerCase()) > -1) {
-					filteredTable.push(row);
-//					$filter('filter')(input, predicate, true);
-					break;
-				}
-			}
-		});
+		if(input){
+    		angular.forEach(array, function(row) {
+    			for (var i = 0; i<columns.length; i++) {
+    				if(row[columns[i]] && row[columns[i]].toLowerCase().indexOf(input.toLowerCase()) > -1) {
+    					filteredTable.push(row);
+    					break;
+    				}
+    			}
+    		});
+		}
 		return filteredTable;
-//		return $filter('filter')(array, columns, true);
 	};
 });
