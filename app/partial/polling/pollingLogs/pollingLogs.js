@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $stateParams, $filter, Poll, PollStatus, searchService, searchUtilsService, alertService, locale, SearchResults, csvService, infoModal, configurationService){
+angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $stateParams, $resource, $filter, Poll, PollStatus, searchService, searchUtilsService, alertService, locale, SearchResults, csvService, infoModal, configurationService){
 
     $scope.activeTab = "POLLING_LOGS";
 
