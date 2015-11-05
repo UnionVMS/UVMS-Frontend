@@ -76,15 +76,15 @@
                                 </tr>
                                 <tr>
                                     <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
-                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.name'">{{'polling.polling_logs_table_header_name' | i18n}}</th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.name'">{{'polling.polling_logs_table_header_name' | i18n}}</th>
 
-                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.externalMarking'">{{'polling.polling_logs_table_header_ext_no' | i18n}}</th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.externalMarking'">{{'polling.polling_logs_table_header_ext_no' | i18n}}</th>
 
-                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'type'">{{'polling.polling_logs_table_header_poll_type' | i18n}}</th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'poll.type'">{{'polling.polling_logs_table_header_poll_type' | i18n}}</th>
 
-                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalId.systemType | transponderName'">{{'polling.polling_logs_table_header_transponder' | i18n}}</th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'poll.attributes.TRANSPONDER | transponderName'">{{'polling.polling_logs_table_header_transponder' | i18n}}</th>
 
-                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'status[0].time'" class="times">{{'polling.polling_logs_table_header_time' | i18n}}</th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'exchangePoll.history[0].time'" class="times">{{'polling.polling_logs_table_header_time' | i18n}}</th>
 
                                     <th>{{'polling.polling_logs_table_header_status' | i18n}}</th>
                                     <th>{{'polling.polling_logs_table_header_results' | i18n}}</th>
@@ -111,11 +111,11 @@
                                     </div>
                                 </td>
                                 <td class="statusText">
-                                    <span ng-repeat="status in item.exchangePoll.history | orderBy:'status.time'" ng-show="isExpanded || $index === 0" ng-class="{'success': status.status === 'Succeeded', 'failed': status.status === 'Request failed'}">
+                                    <span ng-repeat="status in item.exchangePoll.history | orderBy:'status.time'" ng-show="isExpanded || $index === 0" ng-class="{SUCCESSFUL:'success', FAILED:'failed', PROBABLY_TRANSMITTED:'warning'}[status.status]">
                                         {{status.status}}<br>
                                     </span>
                                 </td>
-                                <td><a>{{'polling.polling_logs_table_results_link' | i18n}}</a></td>
+                                <td><a ng-show="pollHasResult(item)">{{'polling.polling_logs_table_results_link' | i18n}}</a></td>
                                 <td>{{item.poll.attributes.USER}}</td>
                                 <td class="textAlignCenter"><a href ng-click="showComment(item)" title="{{'common.view_comment' | i18n}}"><i class="fa fa-commenting-o fa-lg"></i></a></td>
                             </tr>

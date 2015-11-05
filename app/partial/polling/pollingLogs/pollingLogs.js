@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $stateParams, $filter, Poll, PollStatus, searchService, searchUtilsService, alertService, locale, SearchResults, csvService, infoModal){
+angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $stateParams, $filter, Poll, PollStatus, searchService, searchUtilsService, alertService, locale, SearchResults, csvService, infoModal, configurationService){
 
     $scope.activeTab = "POLLING_LOGS";
 
@@ -6,7 +6,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     $scope.pollId = undefined;
     $scope.showPollByID = false;
 
-    $scope.currentSearchResults = new SearchResults('status[0].time', false, locale.getString('polling.polling_logs_search_zero_results_error'));
+    $scope.currentSearchResults = new SearchResults('exchangePoll.history[0].time', true, locale.getString('polling.polling_logs_search_zero_results_error'));
 
     //Holds the search criterias
     $scope.advancedSearchObject  = searchService.getAdvancedSearchObject();
@@ -24,17 +24,13 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     $scope.pollTypes.push({"text":"Program", "code":"PROGRAM_POLL"});
     $scope.pollTypes.push({"text":"Sample", "code":"SAMPLE_POLL"});
 
-    $scope.statusTypes = [];
-    $scope.statusTypes.push({"text":"Initiated", "code":"Initiated"});
-    $scope.statusTypes.push({"text":"Succeeded", "code":"Succeeded"});
-    $scope.statusTypes.push({"text":"Request failed", "code":"Failed"});
+    $scope.statusTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('EXCHANGE', 'STATUS'),'STATUS','EXCHANGE', true);
 
+    var terminalConfigs = configurationService.getValue('MOBILE_TERMINAL_TRANSPONDERS', 'terminalConfigs');
     $scope.terminalTypes = [];
-    $scope.terminalTypes.push({"text":"Inmarsat-C", "code":"INMARSAT_C"}, {"text":"Iridium", "code":"IRIDIUM"});
-
-    $scope.organizations = [];
-    $scope.organizations.push({"text":"Control Authority 1", "code":"CA1"});
-    $scope.organizations.push({"text":"Control Authority 2", "code":"CA2"});
+    $.each(terminalConfigs, function(index, terminalConfig){
+        $scope.terminalTypes.push({"text":terminalConfig.viewName, "code": terminalConfig.systemType});
+    });
 
     var init = function(){
         $scope.pollId = $stateParams.id;
@@ -167,7 +163,11 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     $scope.gotoPage = function(page){
         if(angular.isDefined(page)){
             searchService.setPage(page);
-            $scope.searchPolls();
+            $scope.currentSearchResults.clearErrorMessage();
+            $scope.currentSearchResults.setLoading(true);
+            $scope.clearSelection();
+            searchService.searchPolls()
+                .then(updateSearchResults, onGetSearchResultsError);
         }
     };
 
@@ -176,6 +176,18 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
         $scope.currentSearchResults.removeAllItems();
         $scope.currentSearchResults.setLoading(false);
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
+    };
+
+    //Check if a poll has a result
+    $scope.pollHasResult = function(item){
+        if(angular.isDefined(item.exchangePoll)){
+            for(var i=0; i< item.exchangePoll.history.length; i++){
+                if(item.exchangePoll.history[i].status === 'SUCCESSFUL'){
+                    return true;
+                }
+            }
+        }
+        return false;
     };
 
     //Show comment in modal

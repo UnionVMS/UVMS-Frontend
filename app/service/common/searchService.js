@@ -261,14 +261,15 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 
         //Do the search for polls
         searchPolls : function(){
-            searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
+            var origGetListRequest = getListRequest.copy();
+            searchUtilsService.modifySpanAndTimeZones(origGetListRequest.criterias);
 
             //Split into exchange, vessel and poll criterias
-            var partition = searchUtilsService.getSearchCriteriaPartition(getListRequest.criterias, {exchangePoll: exchangePollSearchKeys, vessel: vesselSearchKeys});
+            var partition = searchUtilsService.getSearchCriteriaPartition(origGetListRequest.criterias, {exchangePoll: exchangePollSearchKeys, vessel: vesselSearchKeys});
             var pollingLogsCriteria = partition["default"];
             var exchangePollCriteria = partition["exchangePoll"];
             var vesselCriteria = partition["vessel"];
-            getListRequest.setSearchCriterias(pollingLogsCriteria);
+            origGetListRequest.setSearchCriterias(pollingLogsCriteria);
 
             var deferred = $q.defer(),
                 promises = [];
@@ -325,16 +326,16 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 
                 //Update serach criterias with pollIds and connectIds
                 $.each(vesselList, function(i, vessel){
-                    getListRequest.addSearchCriteria("CONNECT_ID", vessel.getGuid());
+                    origGetListRequest.addSearchCriteria("CONNECT_ID", vessel.getGuid());
                 });
                 if(angular.isDefined(exchangePollPage)){
                     $.each(exchangePollPage.items, function(i, exchangePoll){
-                        getListRequest.addSearchCriteria("POLL_ID", exchangePoll.pollGuid);
+                        origGetListRequest.addSearchCriteria("POLL_ID", exchangePoll.pollGuid);
                     });
                 }
 
                 //Get polling logs
-                pollingRestService.getPollList(getListRequest).then(
+                pollingRestService.getPollList(origGetListRequest).then(
                     function(page) {
                         //Zero results?
                         if(page.getNumberOfItems() === 0){

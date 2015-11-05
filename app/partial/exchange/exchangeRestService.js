@@ -236,13 +236,6 @@ angular.module('unionvmsWeb')
                 var totalNumberOfPages = response.data.totalNumberOfPages;
                 var searchResultListPage = new SearchResultListPage(exchangeMessages, currentPage, totalNumberOfPages);
 
-                //Why do we do this??
-                //Get vessel names
-                /*if(searchResultListPage.items.length > 0){
-                    deferred.resolve(populateVesselNames(searchResultListPage));
-                }else{
-                    deferred.resolve(searchResultListPage);
-                }*/
                 deferred.resolve(searchResultListPage);
              },
              function(error){
@@ -342,7 +335,7 @@ angular.module('unionvmsWeb')
 
             return Exchange.fromJson(response.data);
         }, function(error) {
-            deferred.reject("Invalid response");
+            deferred.reject("Failed to get Exchange message");
         });
 
         return deferred.promise;
@@ -352,13 +345,13 @@ angular.module('unionvmsWeb')
         var deferred = $q.defer();
         exchangeRestFactory.getExchangeConfig().get(
             function(response){
-            if (response.code !== 200) {
-                deferred.reject("Invalid response");
-            }
-                return response.data;
+                if (response.code !== 200) {
+                    deferred.reject("Invalid response");
+                }
+                deferred.resolve(response.data);
             },
             function(error) {
-                deferred.reject("Invalid response");
+                deferred.reject("Failed to get Exchange config");
             }
         );
         return deferred.promise;

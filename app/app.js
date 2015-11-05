@@ -267,7 +267,11 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'pollingLogsCtrl'
                 }
             },
-            resolve: {},
+            resolve: {
+                config : function(initService){
+                    return initService.loadConfigFor(["EXCHANGE", "MOBILE_TERMINAL_TRANSPONDERS"]);
+                }
+            },
             data: {
                 access: 'viewMobileTerminalPolls'
             },
@@ -447,8 +451,7 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
     var showSpinnerAfterMilliSeconds = 600;
 
     //Handle state change start
-    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, $modalStack) {
         //Cancel http requests on page navigation
         if (toState.url !== fromState.url) {
             httpPendingRequestsService.cancelAll();
