@@ -63,7 +63,6 @@
     						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'recipient'">{{'exchange.table_header_recipient' | i18n}}</th>
     						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'dateForwarded'">{{'exchange.table_header_date_fwd' | i18n}}</th>
     						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'status'">{{'exchange.table_header_status' | i18n}}</th>
-    						<th>{{'exchange.table_header_actions' | i18n}}</th>
     					</thead>
     					<tbody>
     						<tr ng-repeat="message in exchangeLogsSearchResults.items | filter:filterIncomingOutgoing | orderBy:exchangeLogsSearchResults.sortBy:exchangeLogsSearchResults.sortReverse">
@@ -91,12 +90,6 @@
                                     <span class="label" ng-class="getStatusLabelClass(message.status)">
                                         {{getStatusLabel(message.status) | uppercase}}
                                     </span>
-    							</td>
-    							<td>
-    								<ul>
-    									<li><span class="fa fa-refresh fa-lg" title="{{'exchange.title_resend' | i18n}}"></span></li>
-    									<li><span class="fa fa-share fa-lg" title="{{'exchange.title_forward' | i18n}}"></span></li>
-    								</ul>
     							</td>
     						</tr>
     					</tbody>
