@@ -92,7 +92,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
             });
          }
 
-         doLongPolling();
+         // doLongPolling();
     };
 
     $scope.isManualMovement = false;

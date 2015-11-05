@@ -54,9 +54,9 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         $scope.getSendingQueue();
         $scope.getTransmissionStatuses();
 
-        doExchangeLogLongPolling();
+        // doExchangeLogLongPolling();
         doTransmissionStatusLongPolling();
-        doSendingQueueLongPolling();
+        // doSendingQueueLongPolling();
     };
 
     $scope.filterIncomingOutgoing = function(message) {
