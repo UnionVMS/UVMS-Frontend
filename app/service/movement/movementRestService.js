@@ -97,34 +97,8 @@ angular.module('unionvmsWeb')
         var deferred = $q.defer();
         movementRestFactory.getMovement().get({id: movementId}, function(response) {
             if (response.code !== "200") {
-                console.log("Invalid response code");
-
-                var m = Movement.fromJson({
-                    id: movementId,
-                    connectId: "12345",
-                    positionTime: "2015-08-01 01:01:01",
-                    messageType: "1",
-                    source: "A",
-                    measuredSpeed: 12,
-                    course: 180,
-                    status: "OK",
-                    position: {
-                        latitude: 58.34123,
-                        longitude: 11.443,
-                        calculatedSpeed: 12
-                    }
-                });
-
-                m.vessel = {
-                    name: "Name",
-                    ircs: "aep",
-                    state: "SWE",
-                    externalMarking: "a"
-                };
-
-                deferred.resolve(m);
-
-                return;
+               deferred.reject("Invalid response status");
+               return;
             }
 
             deferred.resolve(Movement.fromJson(response.data));
