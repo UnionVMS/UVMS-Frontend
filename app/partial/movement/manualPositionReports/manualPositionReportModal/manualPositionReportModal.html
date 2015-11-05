@@ -86,7 +86,7 @@
     			<div class="col-md-3" ng-class="{'has-error': (submitAttempted || manualPositionReportForm.course.$dirty) &&  manualPositionReportForm.course.$invalid}">
     				<label style="width:100%;">{{'movement.manual_position_field_label_course' | i18n}}</label>
 					<div class="unit-input">
-						<input class="form-control" ng-model="positionReport.course" name="course" min="0" max="360" numeric required ng-disabled="confirmSend || readOnly"/>
+						<input class="form-control" ng-model="positionReport.course" name="course" min="0" max="360" numeric ng-disabled="confirmSend || readOnly"/>
 						<div class="unit-box">{{"movement.manual_position_field_unit_degrees" | i18n}}</div>
 					</div>
                     <input-validation-message types="numeric" input="manualPositionReportForm.course"></input-validation-message>
