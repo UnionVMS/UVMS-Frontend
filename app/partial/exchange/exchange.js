@@ -165,23 +165,26 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     };
 
     $scope.showMessageDetails = function(model) {
-    $location.path( "/polling/logs/someid");
-        /*
-        switch(message.type){
-            //MOVEMENT-till movement; POLL- till poll; ALARM- till rules, UNKNOWN
-            case 'POLL':
-                $scope.openPosition(model);
-                break;
-            case 'MOVEMENT' :
-                $scope.openUpModal(model);
-                break;
-            case 'ALARM' :
-                $scope.openUpModal(model);
-                break;
-            default:
-                console.log("No matching type in model");
-                break;
-        }*/
+        if (model.logData.type){
+            switch(model.logData.type){
+                case 'POLL':
+                    $location.path('/polling/logs/' + model.logData.guid);
+                    break;
+
+                case 'MOVEMENT':
+                    $location.path('/movement/' + model.logData.guid);
+                    break;
+
+                case 'ALARM':
+                    $location.path('alarms/holdingtable/' + model.logData.guid);
+                    break;
+
+                case 'UNKOWN':
+                default:
+                    console.log("No matching type in model");
+                    break;
+            }
+        };
     };
 
     $scope.openUpModal = function(model){
@@ -429,5 +432,6 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         $scope.sendQueuedMessages(sendingQueuesIds);
     };
     $scope.messageVisible = false;
+
     init();
 });

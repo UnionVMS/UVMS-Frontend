@@ -48,6 +48,9 @@ angular.module('unionvmsWeb')
             },
             getSendingQueue : function(){
                 return $resource( '/exchange/rest/sendingqueue/list');
+            },
+            getExchangeConfig : function(){
+                return $resource('/exchange/rest/config');
             }
         };
     })
@@ -233,46 +236,18 @@ angular.module('unionvmsWeb')
                 var totalNumberOfPages = response.data.totalNumberOfPages;
                 var searchResultListPage = new SearchResultListPage(exchangeMessages, currentPage, totalNumberOfPages);
 
+                //Why do we do this??
                 //Get vessel names
-                if(searchResultListPage.items.length > 0){
+                /*if(searchResultListPage.items.length > 0){
                     deferred.resolve(populateVesselNames(searchResultListPage));
                 }else{
                     deferred.resolve(searchResultListPage);
-                }
-
+                }*/
+                deferred.resolve(searchResultListPage);
              },
              function(error){
                 console.log("Error getting exchange messages.", error);
-
-
-                //dummydata  until backend delivers data.
-                var exchangeMessages = [],
-                    ex;
-                for (var i = 10; i > 0; i--){
-                    ex = new Exchange();
-
-                    ex.dateForward = ex.getFormattedDateForward();
-                    ex.dateRecieved = ex.getFormattedDateRecieved();
-                    ex.forwardRule = "RR";
-                    ex.id = i;
-                    ex.message = [
-                        pickOne(["sd", "kz", "ab", "ww"]),
-                        pickOne(["ss", "aa", "cl", "xa"]),
-                        pickOne([12, 144, 24, 8]),
-                        pickOne(["bipbap", "zipzap", "mipmap"])
-                    ].join("//");
-                    ex.outgoing = randomOutgoing();
-                    ex.recipient = "Fake state";
-                    ex.sentBy = "Mock";
-                    ex.status = randomStatus();
-
-                    exchangeMessages.push(ex);
-                }
-                var currentPage = 1;
-                var totalNumberOfPages = 1;
-                var searchResultListPage = new SearchResultListPage(exchangeMessages, currentPage, totalNumberOfPages);
-               deferred.resolve(searchResultListPage);
-               // deferred.reject(error);
+                deferred.reject(error);
             }
             );
             return deferred.promise;
@@ -329,30 +304,6 @@ angular.module('unionvmsWeb')
             return deferred.promise;
         };
 
-
-    function pickOne(array) {
-        return array[rand(array.length)];
-    }
-
-
-    function rand(mod) {
-        return Math.floor(Math.random() * mod);
-    }
-
-    //DUMMYDATA USES THIS DELETE WHEN BACKEND DELIVERS DATA
-    function randomStatus() {
-        var text = ["SUCCESSFUL", "PENDING", "ERROR"];
-        var number = Math.floor(Math.random() * 3);
-        return text[number];
-    }
-
-    //DUMMYDATA USES THIS DELETE WHEN BACKEND DELIVERS DATA
-    function randomOutgoing() {
-        var ran = [true,false];
-        return ran[Math.floor(Math.random() * 2)];
-    }
-
-
     var resendExchangeMessage = function(exchangeMessage){
         var defer = $q.defer();
         exchangeRestFactory.resendExchangeMessage.list(exchangeMessage,
@@ -395,7 +346,24 @@ angular.module('unionvmsWeb')
         });
 
         return deferred.promise;
-    }; 
+    };
+
+    var getExchangeConfig = function(){
+        var deferred = $q.defer();
+        exchangeRestFactory.getExchangeConfig().get(
+            function(response){
+            if (response.code !== 200) {
+                deferred.reject("Invalid response");
+            }
+                return response.data;
+            },
+            function(error) {
+                deferred.reject("Invalid response");
+            }
+        );
+        return deferred.promise;
+    };
+
 
     return {
         getTransmissionStatuses : getTransmissionStatuses,
@@ -407,6 +375,7 @@ angular.module('unionvmsWeb')
         resendExchangeMessage : resendExchangeMessage,
         sendQueue: sendQueue,
         getSendingQueue : getSendingQueue,
-        getExchangeMessage: getExchangeMessage
+        getExchangeMessage: getExchangeMessage,
+        getExchangeConfig: getExchangeConfig
     };
 });

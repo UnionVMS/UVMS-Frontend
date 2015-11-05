@@ -114,4 +114,6 @@ angular.module('unionvmsWeb')
             $scope.performAdvancedSearch();
         }
     };
+
+
 });

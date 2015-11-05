@@ -1,36 +1,35 @@
 angular.module('unionvmsWeb')
 .factory('Exchange', function(){
 
-
-
-
-
 	function Exchange(){
 
-		this.dateForward = undefined;
-		this.dateRecieved = undefined;
-		this.id = undefined;
-		this.incoming = undefined;
-		this.forwardRule = undefined;
-		this.recipient = undefined;
-		this.source = undefined;
-		this.status = undefined;
-		this.senderRecipient = undefined;
+ 		this.id = undefined;
+        this.incoming = undefined;
+        this.dateRecieved = undefined;
+        this.senderRecipient = undefined;
+        this.recipient = undefined;
+        this.dateFwd = undefined;
+        this.status = undefined;
+        this.logData = undefined;
+        this.forwardRue = undefined;
+        this.source = undefined;
 	}
 
 	Exchange.fromJson = function(data){
 		var exchange = new Exchange();
 
 		if(data){
-			exchange.dateForward = data.dateFwd;
-			exchange.dateRecieved = data.dateRecieved;
 			exchange.id = data.id;
-			exchange.incoming = data.incoming || false;
+	        exchange.incoming = data.incoming || false;
+	        exchange.dateRecieved = data.dateRecieved;
+	        exchange.senderRecipient = data.senderRecipient;
+	        exchange.recipient = data.recipient;
+	        exchange.dateFwd = data.dateFwd;
+	        exchange.status = data.status;
+	        exchange.logData = data.logData;
 			exchange.forwardRule = data.rule;
-			exchange.recipient = data.senderRecipient;
 			exchange.source = data.source;
-			exchange.status = data.status;
-			exchange.senderRecipient = data.senderRecipient;
+
 		}
 
 		if (exchange.status === "SUCCESSFULL") {

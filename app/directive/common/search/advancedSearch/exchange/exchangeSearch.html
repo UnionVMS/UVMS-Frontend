@@ -13,7 +13,7 @@
 			<input type="text" ng-model="freeText" placeholder="{{'exchange.table_header_sender_reciever' | i18n}}"/>
 		</div>
 		<div class="col-md-2">
-			<dropdown ng-model="advancedSearchObject.RECIPIENT" initialtext="{{'exchange.search_recipient' | i18n}}" items="[{text:'DNK (MOCK)',code:'DNK'}]"></dropdown>
+			<dropdown ng-model="advancedSearchObject.RECIPIENT" initialtext="{{'exchange.search_recipient' | i18n}}" items="exchangeDropdownItems"></dropdown>
 		</div>
 		<div class="col-md-1">
 			<button type="submit" class="btn btn-primary btn-sm searchButton vmsbtn" ng-click="performAdvancedSearch()">{{'common.search' | i18n}}</button>

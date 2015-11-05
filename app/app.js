@@ -334,7 +334,11 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'ExchangeCtrl'
                 }
             },
-            resolve: {},
+            resolve: {
+                 config : function(initService){
+                    return initService.loadConfigFor(["EXCHANGE"]);
+                }
+            },
             data: {
                 access: 'viewExchange'
             },

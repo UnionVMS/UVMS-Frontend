@@ -32,11 +32,11 @@
                         <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" btn-radio="'all'">
                             {{'exchange.title_all' | i18n}}
                         </label>
-                        <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" btn-radio="'outgoing'">
+                        <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" btn-radio="'incoming'">
                             <span class="fa fa-arrow-down incoming"></span>
                             {{'exchange.title_incoming' | i18n}}
                         </label>
-                        <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" btn-radio="'incoming'">
+                        <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" btn-radio="'outgoing'">
                             <span class="fa fa-arrow-up outgoing"></span>
                             {{'exchange.title_outgoing' | i18n}}
                         </label>
@@ -77,12 +77,12 @@
                                     <!--<a ng-show="exchangePath(message)" href="exchangePath(message)" title="{{'exchange.title_details' | i18n}}">
                                         <span class="fa fa-search-plus details"></span>
                                     </a>-->
-                                    <a ng-click="showMessageDetails(message)" title="{{'exchange.title_details' | i18n}}">
+                                    <a ng-show="message.logData" ng-click="showMessageDetails(message)" title="{{'exchange.title_details' | i18n}}">
                                         <span class="fa fa-search-plus details"></span>
                                     </a>
                                 </td>
     							<td>{{message.dateRecieved | confDateFormat}}</td>
-    							<td>{{message.sender_reciever}}</td>
+    							<td>{{message.senderRecipient}}</td>
     							<td>{{message.forwardRule}}</td>
     							<td>{{message.recipient}}</td>
     							<td>{{message.dateForward | confDateFormat}}</td>

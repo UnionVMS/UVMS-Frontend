@@ -1,5 +1,10 @@
 angular.module('unionvmsWeb').controller('ExchangeSearchController', function($scope, searchService, locale) {
 
+	$scope.init = function(){
+		$scope.resetSearch();
+		$scope.exchangeDropdownItems = configurationService.setTextAndCodeForDropDown(configurationService.getValue('EXCHANGE', 'RECIPIENT'), 'RECIPIENT', 'EXCHANGE', true);
+	};
+
 	$scope.advancedSearchObject.EXCHANGE_TIME_SPAN = $scope.DATE_TODAY;
 
 	$scope.performAdvancedSearch = function() {
@@ -41,7 +46,4 @@ angular.module('unionvmsWeb').controller('ExchangeSearchController', function($s
 			delete $scope.advancedSearchObject.DATE_RECEIVED_TO;
 		}
 	});
-
-$scope.resetSearch();
-
 });
