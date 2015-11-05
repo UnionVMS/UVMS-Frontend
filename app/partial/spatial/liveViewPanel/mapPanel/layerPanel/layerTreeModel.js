@@ -1,8 +1,15 @@
-angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
+angular.module('unionvmsWeb').factory('TreeModel',function(locale, $location) {
 
 	function TreeModel(){}
 	
 	var baseLayerCounter = 0;
+	
+	//FIXME - remove this later on
+	var fixTempUrl = function(url){
+	    var urlComp = url.split(':');
+	    var fixedUrl = 'http://' + location.hostname + ':' + urlComp[2];
+	    return fixedUrl;
+	};
 	
 	//Build tree node for OSM based layers
 	var buildOsmBasedNodes = function(src){
@@ -39,7 +46,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	            title: src.title,
 	            isBaseLayer: src.isBaseLayer,
 	            attribution: src.attribution,
-	            url: src.url,
+	            url: fixTempUrl(src.url),
 	            serverType: src.serverType,
 	            params: {
 	                'LAYERS': src.layerGeoName,
