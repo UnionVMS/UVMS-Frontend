@@ -9,9 +9,8 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
     };
 
     var result = {
-        polls: [],
-        sortBy : "",
-        sortReverse : "",
+        unsentPolls : [],
+        sentPolls : [],
         programPoll: false
     };
 
@@ -182,18 +181,16 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
         }, {});
 
         var requestData = getCreatePollsRequestData(channels);
-        pollingRestService.createPolls(requestData).then(function(polls) {
-            $.each(polls, function(index, poll) {
-                poll.attributes.VESSEL_NAME = vesselNamesByConnectId[poll.connectionId];
-            });
-
-            result.polls = polls;
+        pollingRestService.createPolls(requestData).then(function(pollResult) {
+            result.sentPolls = pollResult.sentPollGuids;
+            result.unsentPolls = pollResult.unsentPollsGuids;
             result.programPoll = requestData.pollType === "PROGRAM_POLL";
             deferred.resolve();
         },
         function(error) {
             console.log("could not create polls: " + error);
-            result.polls = [];
+            result.sentPolls = [];
+            result.unsentPolls = [];
             result.programPoll = requestData.pollType === "PROGRAM_POLL";
             deferred.reject();
         });

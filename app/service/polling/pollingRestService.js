@@ -35,7 +35,7 @@ angular.module('unionvmsWeb')
             }
         };
     })
-    .service('pollingRestService',function($q, pollingRestFactory, Poll, PollingLog, PollChannel, SearchResultListPage, vesselRestService, GetListRequest){
+    .service('pollingRestService',function($q, pollingRestFactory, Poll, PollingLog, PollResult, PollChannel, SearchResultListPage, vesselRestService, GetListRequest){
 
         var setProgramPollStatusSuccess = function(response, deferred){
             if(response.code !== 200){
@@ -240,12 +240,10 @@ angular.module('unionvmsWeb')
                         return;
                     }
 
-                    deferred.resolve(response.data.map(function(attrs) {
-                        return Poll.fromAttributeList(attrs.value);
-                    }));
+                    deferred.resolve(PollResult.fromDTO(response.data));
                 },
                 function(error) {
-                    console.error("Could not add new polls: " + error);
+                    console.error("Could not create new polls.", error);
                     deferred.reject(error);
                 });
 

@@ -103,21 +103,29 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
                 function() {
                     $scope.loadingResult = false;
                     pollingService.clearSelection();
-                    //Set alert message
-                    var successMessage = locale.getString('polling.wizard_second_step_success_single');
                     var pollResult = pollingService.getResult();
-                    if(!pollResult.programPoll && pollResult.polls.length > 1){
-                        successMessage = locale.getString('polling.wizard_second_step_success_multiple');
-                    }else if(pollResult.programPoll && pollResult.polls.length === 1){
-                        successMessage = locale.getString('polling.wizard_second_step_success_program_single');
-                    }else if(pollResult.programPoll && pollResult.polls.length > 1){
-                        successMessage = locale.getString('polling.wizard_second_step_success_program_multiple');
+                    var redirectPage;
+                    //Any unsent polls?
+                    if(pollResult.unsentPolls.length > 0){
+                        redirectPage = 'app.exchange';
+                        var total = pollResult.sentPolls.length + pollResult.unsentPolls.length;
+                        alertService.showErrorMessage(locale.getString('polling.wizard_second_step_creating_polls_unsent_error',{unsent : pollResult.unsentPolls.length, total: total}));
+                    }else{
+                        redirectPage = 'app.pollingLogs';
+                        var successMessage = locale.getString('polling.wizard_second_step_success_single');
+                        if(!pollResult.programPoll && pollResult.sentPolls.length > 1){
+                            successMessage = locale.getString('polling.wizard_second_step_success_multiple');
+                        }else if(pollResult.programPoll && pollResult.sentPolls.length === 1){
+                            successMessage = locale.getString('polling.wizard_second_step_success_program_single');
+                        }else if(pollResult.programPoll && pollResult.sentPolls.length > 1){
+                            successMessage = locale.getString('polling.wizard_second_step_success_program_multiple');
+                        }
+                        alertService.showSuccessMessageWithTimeout(successMessage);
                     }
 
                     //Show success alert and redirect to polling logs page
                     $scope.setHideAlertOnScopeDestroy(false);
-                    alertService.showSuccessMessageWithTimeout(successMessage);
-                    $state.go('app.pollingLogs');
+                    $state.go(redirectPage);
                 },
                 function(){
                     //Error
