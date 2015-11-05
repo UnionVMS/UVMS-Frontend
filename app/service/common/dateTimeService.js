@@ -108,7 +108,7 @@ angular.module('unionvmsWeb').filter('timeAgo', function($log, dateTimeService) 
     return function(input) {
         try{
             if(angular.isDefined(input)){
-                return moment(dateTimeService.toUTC(input), 'YYYY-MM-DD HH:mm:ss').fromNow();
+                return moment(dateTimeService.toUTC(input), 'YYYY-MM-DD HH:mm:ss').fromNow(true);
             }
         }catch(err){
             $log.warn("Failed to format date to time ago: " +input, err);

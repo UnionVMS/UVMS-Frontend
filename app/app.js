@@ -513,7 +513,7 @@ unionvmsWebApp.value('localeConf', {
 
 //Configure locale in momentjs (used to determine start of week)
 //TODO: get locale from config or browser
-moment.locale('sv');
+moment.locale('en');
 
 //Service used for bootstrapping the application
 unionvmsWebApp.factory('initService',function(configurationService, locale, tmhDynamicLocale, $window) {
