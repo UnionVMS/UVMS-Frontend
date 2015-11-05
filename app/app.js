@@ -14,7 +14,8 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'ui.router',
     'usm',
     'googlechart',
-    'ngWebSocket'
+    'ngWebSocket',
+    'checklist-model'
 ]);
 
 var currentUserContextPromise = function(userService, $q) {

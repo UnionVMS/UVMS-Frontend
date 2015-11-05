@@ -32,19 +32,52 @@
     "no": "No",
     "cancel":"Cancel",
     "save" : "Save",
-    "configuration_header_general":"General",
-    "configuration_header_import":"Import",
+
+    "configuration_header_systemMonitor": "System monitor",
+    "configuration_header_globalSettings": "Global settings",
+    "configuration_header_vessel": "Assets",
+    "configuration_header_mobileTerminal": "Mobile terminals",
+    "configuration_header_reporting": "Reporting",
+    "configuration_header_movement": "Movement",
+    "configuration_header_exchange": "Exchange",
+    "configuration_header_rules": "Rules",
+    "configuration_header_audit": "Audit",
+
+    "configuration_column_key": "Parameter",
+    "configuration_column_value": "Value",
+    "configuration_column_description": "Description",
+    "configuration_column_last_modified": "Last modified",
+    "configuration_column_actions": "Actions",
+
+    "mobileTerminal_setting_1": "First setting",
+    "mobileTerminal_setting_2": "Second setting",
+
     "configuration_header_other":"Other",
     "configuration_import_header_dropdown_list" : "Dropdown lists",
     "configuration_import_header_asset_type" : "Asset type",
     "configuration_import_header_producer_organisation" : "Producer organisation",
     "configuration_import_header_antenna_type" : "Antenna type",
     "configuration_general_plugins" : "Plugins",
-    "configuration_general_languages" : "Antenna type",
+    "configuration_general_languages" : "Available languages",
     "configuration_general_installation_state" : "Installation state",
     "configuration_general_numeric_system" : "Numeric system",
     "configuration_general_time_format" : "Time format",
     "configuration_general_coordinates_format" : "Coordinates format",
-    "configuration_general_default_homepage" : "Default home page"
+    "configuration_general_default_homepage" : "Default home page",
+
+    "language_sv_SE": "Svenska",
+    "language_en_UK": "English",
+    "language_ro_RO": "Română",
+
+    "system_status_name": "System name",
+    "system_status_online_timestamp": "Date",
+
+    "system_status_module_audit": "Audit",
+    "system_status_module_exchange": "Exchange",
+    "system_status_module_exchange-dbaccess": "Exchange local DB",
+    "system_status_module_mobileTerminal": "Mobile terminal",
+    "system_status_module_movement": "Movement",
+    "system_status_module_rules": "Rules",
+    "system_status_module_vessel": "Vessel"
 
 }

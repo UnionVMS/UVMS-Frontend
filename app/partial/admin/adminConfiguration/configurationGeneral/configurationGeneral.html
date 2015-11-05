@@ -1,42 +1,78 @@
-<div ng-controller="ConfigurationgeneralCtrl">
-	<div class="row">
-		<div class="col-md-12 section-header">{{'audit.configuration_import_header_dropdown_list' | i18n }}</div>
+	<div ng-controller="ConfigurationgeneralCtrl" class="configuration-general">
 
-		<div class="col-md-4">
-			<div class="col-md-12 section-text">{{'audit.configuration_general_plugins' | i18n}}</div>
+	<div class="row">
+		<div class="col-md-8 column">
+			<div class="row">
+
+				<!-- Units -->
+				<div class="col-md-6">
+					<h5 class="section-text">{{'audit.configuration_general_numeric_system' | i18n}}</h5>
+					<ul class="radio-buttons">
+						<li ng-repeat="u in measurementSystems">
+							<label>
+								<input type="radio" name="unit" ng-model="unit" ng-model-options="{ getterSetter: true }" ng-value="u"/> {{u}}
+							</label>
+						</li>
+					</ul>
+				</div>
+
+				<!-- Coordinate format -->
+				<div class="col-md-6">
+					<h5 class="section-text">{{'audit.configuration_general_coordinates_format' | i18n}}</h5>
+					<ul class="radio-buttons">
+						<li ng-repeat="cf in coordinateFormats">
+							<label>
+								<input type="radio" name="coordinateFormat" ng-model="coordinateFormat" ng-model-options="{ getterSetter: true }" ng-value="cf"/>
+								{{ ("config.coordinateFormat-" + cf) | i18n }}
+							</label>
+						</li>
+					</ul>
+				</div>
+
+				<!-- Date format -->
+				<div class="col-md-6">
+					<h5 class="section-text">{{'audit.configuration_general_time_format' | i18n}}</h5>
+					<ul class="radio-buttons">
+						<li ng-repeat="df in dateFormats">
+							<label>
+								<input type="radio" name="dateFormat" ng-model="dateFormat" ng-model-options="{ getterSetter: true }" ng-value="df"/> {{df}}
+							</label>
+						</li>
+					</ul>
+				</div>
+
+				<!-- Default homepage -->
+				<div class="col-md-6">
+					<h5 class="section-text">{{'audit.configuration_general_default_homepage' | i18n}}</h5>
+					<dropdown ng-model="defaultHomePage" items="homePages"></dropdown>
+				</div>
+
+			</div>
 		</div>
-		<div class="col-md-4">
-			<div class="col-md-12 section-text">{{'audit.configuration_general_languages' | i18n}}</div>
-		</div>
-		<div class="col-md-4">
-			<div class="col-md-12 section-text">{{'audit.configuration_general_installation_state' | i18n}}</div>
-		</div>
-		<div class="col-md-4">
-			<div class="col-md-12 section-text">{{'audit.configuration_general_numeric_system' | i18n}}</div>
-		</div>
-		<div class="col-md-4">
-			<div class="col-md-12 section-text">{{'audit.configuration_general_time_format' | i18n}}</div>
-		</div>
-		<div class="col-md-4">
-			<div class="col-md-12 section-text">{{'audit.configuration_general_coordinates_format' | i18n}}</div>
-		</div>
-		<div class="col-md-4">
-			<div class="col-md-12 section-text">{{'audit.configuration_general_default_homepage' | i18n}}</div>
+		<div class="col-md-4 column">
+
+			<!-- Languages -->
+			<h5 class="section-text">{{'audit.configuration_general_languages' | i18n}}</h5>
+			<ul>
+				<li ng-repeat="l in languages">
+					<label>
+						<input type="checkbox" checklist-model="getSelectedLanguages()" checklist-value="l" ng-change="setLanguageSelected(l, checked)"> {{ "audit.language_" + l | i18n}}
+					</label>
+				</li>
+			</ul>
 		</div>
 
 	</div>
-	<div class="row">
-		<div class="col-md-12 section-footer">
-			<div class="col-md-1 pull-right">
-				<button ng-click="save()" type="button" class="btn btn-primary btn-md">
-		  			{{'audit.save' | i18n }}
-				</button>
-			</div>
-			<div class="col-md-1 pull-right other-cancel">
-				<a href="#" ng-click="cancel()">
-		  			{{'audit.cancel' | i18n }}
-		  		</a>
-			</div>
+
+	<!--div class="row section-footer">
+		<div class="col-md-1 pull-right">
+			<button ng-click="save()" type="button" class="btn btn-primary btn-md">
+	  			{{'audit.save' | i18n }}
+			</button>
 		</div>
-	</div>
+		<div class="col-md-1 pull-right">
+			<button class="btn btn-link" ng-click="cancel()">{{'audit.cancel' | i18n }}</button>
+		</div>
+	</div-->
+
 </div>

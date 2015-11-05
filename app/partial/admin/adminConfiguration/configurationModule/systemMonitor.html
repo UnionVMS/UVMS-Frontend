@@ -1,0 +1,29 @@
+<div ng-controller="SystemMonitorController">
+	<table class="searchResults colorOdd">
+		<thead>
+			<tr>
+				<th></th>
+				<th sortable-table-header by="sortBy" reverse="reverseSort" order="'key'">
+					{{ "audit.system_status_name" | i18n }}
+				</th>
+				<th sortable-table-header by="sortBy" reverse="reverseSort" order="'value'">
+					{{ "audit.system_status_online_timestamp" | i18n }}
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- <tr ng-repeat="c in settings[activeTab] | orderBy:sortBy:reverseSort"> -->
+			<tr ng-repeat="(system, timestamp) in pings">
+				<td style="width: 100px;">
+					<span class="label" ng-class="isOnline(timestamp) && 'label-success' || 'label-danger'">
+						{{ isOnline(timestamp) ? 'ONLINE' : 'OFFLINE'  }}
+					</span>
+				</td>
+				<td>{{ "audit.system_status_module_" + system | i18n }}</td>
+				<td>{{ timestamp | date:'medium'}}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+</div>

@@ -32,6 +32,17 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
         $scope.terminalTypes.push({"text":terminalConfig.viewName, "code": terminalConfig.systemType});
     });
 
+    /* Do long-polling,  */
+    var doLongPolling = function() {
+        $resource("/exchange/activity/poll").get(function(response) {
+            if (response.ids.length > 0) {
+                $scope.getPolls();
+            }
+
+            doLongPolling();
+        });
+    };
+
     var init = function(){
         $scope.pollId = $stateParams.id;
         //Load poll details by searching for a poll by GUID
@@ -45,6 +56,8 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
             //Load list with polls from start
             $scope.searchPolls();
         }
+
+        doLongPolling();
     };
 
 

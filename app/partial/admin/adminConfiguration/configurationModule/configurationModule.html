@@ -1,0 +1,49 @@
+<div ng-controller="ConfigModuleController" class="config-module" >
+	<table class="searchResults colorOdd">
+		<thead>
+			<tr>
+				<th sortable-table-header by="sortBy" reverse="reverseSort" order="'key'">
+					{{ "audit.configuration_column_key" | i18n }}
+				</th>
+				<th sortable-table-header by="sortBy" reverse="reverseSort" order="'value'">
+					{{ "audit.configuration_column_value" | i18n }}
+				</th>
+				<th sortable-table-header by="sortBy" reverse="reverseSort" order="'description'">
+					{{ "audit.configuration_column_description" | i18n }}
+				</th>
+				<th sortable-table-header by="sortBy" reverse="reverseSort" order="'lastModified'">
+					{{ "audit.configuration_column_last_modified" | i18n }}
+				</th>
+				<th>
+					<!-- {{ "audit.configuration_column_actions" | i18n }} -->
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="c in settings[activeTab] | filter:{global: false} | orderBy:sortBy:reverseSort">
+				<td>{{"audit." + (c.key | replace) | i18n }}</td>
+				<td ng-switch="!!c.editing" class="value" ng-class="{editing: c.editing}">
+					<!-- Value or input -->
+					<span ng-switch-when="false">{{c.value}}</span>
+					<input ng-switch-when="true" type="text" ng-model="c.value"/>
+				</td>
+				<td ng-switch="!!c.editing" class="description" ng-class="{editing: c.editing}">
+					<!-- Value or input -->
+					<span ng-switch-when="false">{{c.description}}</span>
+					<input ng-switch-when="true" type="text" ng-model="c.description"/>
+				</td>
+				<td>recently</td>
+				<td ng-switch on="!!c.editing">
+					<!-- "Edit" or "Done" / "Delete" buttons -->
+					<button ng-switch-when="false" class="btn btn-default" ng-click="c.editing = true" title="{{'common.edit'| i18n}}">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+					<span ng-switch-when="true">
+						<button class="btn btn-primary" ng-click="updateSetting(c)">{{ "common.save" | i18n }}</button>
+					</span>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+</div>

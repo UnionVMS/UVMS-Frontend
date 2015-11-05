@@ -123,5 +123,18 @@
     "VESSEL_LICENSE_TYPE_Steaming" : "Steaming",
     "VESSEL_LICENSE_TYPE_Trans-shipping on or off loading" : "Trans-shipping on or off loading",
     "VESSEL_TONNAGE_LONDON" : "London",
-    "VESSEL_TONNAGE_OSLO" : "Oslo"
+    "VESSEL_TONNAGE_OSLO" : "Oslo",
+
+    "homePage_positions": "Positions",
+    "homePage_exchange": "Exchange",
+    "homePage_polling": "Polling",
+    "homePage_mobileTerminals": "Mobile terminals",
+    "homePage_assets": "Assets",
+    "homePage_alarms": "Alarms",
+    "homePage_admin": "Admin",
+ 
+    "coordinateFormat-degreesMinutesSeconds": "DD MM'SS\"",
+    "coordinateFormat-decimalDegrees": "DD.MMM"
+
+
 }
