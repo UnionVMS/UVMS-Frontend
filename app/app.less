@@ -163,8 +163,10 @@ body{
             }
         }
         &.hiddenLoadingIndicator{
-            .spinner, .loadingText{
-                display: none,
+            &>.loadingIndicator{
+                .spinner, .loadingText{
+                    display: none,
+                }
             }
         }
     }
