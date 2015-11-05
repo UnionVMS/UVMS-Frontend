@@ -549,11 +549,13 @@ var restApiURLS = [
     '/vessel/rest',
     '/mobileterminal/rest/',
     '/exchange/rest/',
+    '/exchange/activity/',
     '/movement/rest/',
     '/movement/activity',
     '/config/rest',
     '/audit/rest/',
     '/rules/rest/',
+    '/rules/activity/',
     '/reporting/rest/',
     '/spatial/rest/',
     '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'
