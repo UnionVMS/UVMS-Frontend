@@ -81,18 +81,32 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
 
         //CRITERIAS
         $.each(configurationService.getValue('RULES', 'CRITERIA'), function(key, subcriterias){
-            DROPDOWNS.CRITERIAS.push(createDropdownValue('CRITERIA', key));
-            DROPDOWNS.SUBCRITERIAS[key] = [];
-            //Create subcriterias
-            if(Array.isArray(subcriterias) && subcriterias.length > 0){
-                criteriaThatRequireSubcriteria.push(key);
-                $.each(subcriterias, function(index, aSubCriteria){
-                    DROPDOWNS.SUBCRITERIAS[key].push(createDropdownValue('CRITERIA_'+key, aSubCriteria));
-                });
-                DROPDOWNS.SUBCRITERIAS[key] = _.sortBy(DROPDOWNS.SUBCRITERIAS[key], function(obj){return obj.text;});
-            }else{
-                //Set code to NONE
-                DROPDOWNS.SUBCRITERIAS[key].push({'text': '-','code': 'NONE'});
+            //Special ROOT element contains list of criterias without subcriterias
+            if(key === 'ROOT'){
+                if(Array.isArray(subcriterias) && subcriterias.length > 0){
+                    $.each(subcriterias, function(index, aSubCriteria){
+                        DROPDOWNS.CRITERIAS.push(createDropdownValue('CRITERIA', aSubCriteria));
+                        //Set code to NONE
+                        DROPDOWNS.SUBCRITERIAS[aSubCriteria] =[{'text': '-','code': 'NONE'}];
+                    });
+                }
+            }
+            //"Normal" critera with list of subcriterias
+            else{
+                DROPDOWNS.CRITERIAS.push(createDropdownValue('CRITERIA', key));
+                DROPDOWNS.SUBCRITERIAS[key] = [];
+
+                //Create subcriterias
+                if(Array.isArray(subcriterias) && subcriterias.length > 0){
+                    criteriaThatRequireSubcriteria.push(key);
+                    $.each(subcriterias, function(index, aSubCriteria){
+                        DROPDOWNS.SUBCRITERIAS[key].push(createDropdownValue('CRITERIA_'+key, aSubCriteria));
+                    });
+                    DROPDOWNS.SUBCRITERIAS[key] = _.sortBy(DROPDOWNS.SUBCRITERIAS[key], function(obj){return obj.text;});
+                }else{
+                    //Set code to NONE
+                    DROPDOWNS.SUBCRITERIAS[key].push({'text': '-','code': 'NONE'});
+                }
             }
         });
         DROPDOWNS.CRITERIAS = _.sortBy(DROPDOWNS.CRITERIAS, function(obj){return obj.text;});
