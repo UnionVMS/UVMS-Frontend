@@ -4,7 +4,7 @@
 			<thead>
 				<tr>
 					<th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
-					<th></th>
+					<!-- <th></th> -->
 					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'name'">{{'alarms.rules_table_name' | i18n}}</th>
 					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'type'">{{'alarms.rules_table_type' | i18n}}</th>
 					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'lastTriggered'">{{'alarms.rules_table_last_triggered' | i18n}}</th>
@@ -20,10 +20,10 @@
 			<tbody>
 				<tr ng-repeat-start="item in filteredItems = (currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:filterOnType)" ng-init="isExpanded = false" ng-class="isExpanded ? 'basicDataExpanded' : 'basicData'">
     				<td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
-    				<td ng-click="isExpanded = !isExpanded">
+ <!--    				<td ng-click="isExpanded = !isExpanded">
                         <i ng-show="!isExpanded" class="fa fa-lg fa-plus-circle detailsIcon" title="{{'alarms.rules_table_details' | i18n}}"></i>
                         <i ng-show="isExpanded" class="fa fa-lg fa-minus-circle detailsIcon" title="{{'alarms.rules_table_details' | i18n}}"></i>
-                    </td>
+                    </td> -->
     				<td>{{item.name}}</td>
     				<td>{{getTypeLabelForRule(item)}}</td>
     				<td>{{item.lastTriggered | confDateFormat}}</td>
