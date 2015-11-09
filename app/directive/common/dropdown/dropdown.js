@@ -36,11 +36,13 @@ angular.module('unionvmsWeb')
             //Get the label for an item
             //Default item variable "text" is used if no title attr is set
             scope.getItemLabel = function(item){
+                var label;
                 if(attrs.title){
-                    return item[attrs.title];
+                    label = item[attrs.title];
                 }else{
-                    return item.text;
+                    label = item.text;
                 }
+                return label;
             };
 
             //Get the code (id) for an item
@@ -75,6 +77,10 @@ angular.module('unionvmsWeb')
                             }
                         }
                     }
+                    //If no label found, show value of ngModel
+                    if(angular.isUndefined(scope.currentItemLabel)){
+                        scope.currentItemLabel = scope.ngModel;
+                    }
                 }
             };
 
@@ -86,10 +92,12 @@ angular.module('unionvmsWeb')
                          scope.setplaceholdercolor = true; //sets css class on first element. (placeholder)
                     }
                 }else{
-                     scope.setplaceholdercolor = false;
-                    for(var i = 0; i < scope.items.length; i++){
-                        if(angular.equals(newVal, getItemCode(scope.items[i])) ) {
-                            scope.currentItemLabel = scope.getItemLabel(scope.items[i]);
+                    scope.setplaceholdercolor = false;
+                    if(Array.isArray(scope.items)){
+                        for(var i = 0; i < scope.items.length; i++){
+                            if(angular.equals(newVal, getItemCode(scope.items[i])) ) {
+                                scope.currentItemLabel = scope.getItemLabel(scope.items[i]);
+                            }
                         }
                     }
                 }
