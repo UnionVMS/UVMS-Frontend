@@ -116,7 +116,7 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 
 	$scope.getSelectedLanguages = function() {
 		return get("availableLanguages", true);
-	}
+	};
 
 	$scope.setLanguageSelected = function(language, selected) {
 		var languages = get("availableLanguages", true);
