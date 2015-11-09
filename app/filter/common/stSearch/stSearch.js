@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').filter('stSearch', function() {
+angular.module('smart-table').filter('stSearch', function() {
 	return function(array, predictedObject) {
 		var filteredTable = [];
 		var columns = predictedObject.split('|');

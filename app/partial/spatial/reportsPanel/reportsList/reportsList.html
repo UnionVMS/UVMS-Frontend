@@ -1,4 +1,4 @@
-<div ng-controller="ReportslistCtrl as rt" class="reportsListTable" st-table="displayedReports" st-safe-src="reports">
+<div ng-controller="ReportslistCtrl as rt" class="reportsListTable" st-table="displayedRecords" st-safe-src="reports">
 	
   	<div class="row reportBtnGroup" ng-show="isVisible.reportsList">
 		<div class="col-md-6 report-btn-group">
@@ -48,8 +48,10 @@
 		        </tr>
 		    </thead>
 		    <tbody>
-		        <!-- <tr ng-repeat="report in displayedReports | stSearch: searchString:displayedReports:displayedColumns">  -->
-		        <tr ng-repeat="report in displayedReports">
+		        <tr ng-if="!displayedRecords.length && !isLoading">
+					<td colspan="7">No data available</td>
+				</tr>
+		        <tr ng-repeat="report in displayedRecords">
 		            <td>{{ report.name }}</td>
 		            <td>{{ report.desc }}</td>
 		            <td>{{ report.createdOn | dateUtc:config.target_format }}</td>
@@ -67,7 +69,7 @@
 		    <tfoot class="stFooterPagination">
 				<tr>
 					<td colspan="7" class="text-right">
-						<div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
+						<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" ng-show="$$childHead.numPages > 1" st-template="partial/spatial/templates/reportsPagination.html"></div>
 					</td>
 				</tr>
 			</tfoot>

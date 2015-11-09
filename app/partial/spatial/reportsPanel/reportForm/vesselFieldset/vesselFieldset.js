@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, locale, $timeout, $modal, vesselRestService, GetListRequest, datatablesService, DTOptionsBuilder, DTColumnDefBuilder){
+angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, locale, $timeout, $modal, vesselRestService, GetListRequest){
     $scope.selectedVesselMenu = 'SIMPLE';
     $scope.vesselSearchLoading = false;
     
@@ -14,31 +14,11 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     $scope.vesselsSelectionTable = {};
     
     //Table config
-    $scope.vesselsSelectionTable.dtOptions = DTOptionsBuilder.newOptions()
-                                    .withBootstrap()
-                                    .withPaginationType('simple_numbers')
-                                    .withDisplayLength(10)
-                                    .withLanguage(datatablesService)
-                                    .withDOM('trp')
-                                    .withOption('autoWidth', true)
-                                    .withBootstrapOptions({
-                                        pagination: {
-                                            classes: {
-                                                ul: 'pagination pagination-sm'
-                                            }
-                                        }
-                                    });
-    
-    $scope.vesselsSelectionTable.dtColumnDefs = [
-        DTColumnDefBuilder.newColumnDef(0),
-        DTColumnDefBuilder.newColumnDef(1),
-        DTColumnDefBuilder.newColumnDef(2).notSortable(),
-        DTColumnDefBuilder.newColumnDef(3).notSortable()
-    ];
+    $scope.vesselsSelectionByPage = 10;
     
     //Delete one selected item (vessel or group)
     $scope.deleteSelection = function(index){
-        $scope.report.vesselsSelection.splice(index, 1);
+        $scope.report.vesselsSelection.splice($scope.report.vesselsSelection.indexOf($scope.displayedRecordsSelection[index]), 1);
     };
     
     //Delete all selected items
@@ -47,57 +27,19 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     };
     
     $scope.vesselTable = {};
+    $scope.vesselsByPage = 10;
     
-    //Table config
-    $scope.vesselTable.dtOptions = DTOptionsBuilder.newOptions()
-                                    .withBootstrap()
-                                    .withPaginationType('simple_numbers')
-                                    .withDisplayLength(10)
-                                    .withOption('order', [[1, 'asc']])
-                                    .withLanguage(datatablesService)
-                                    .withDOM('trp')
-                                    .withBootstrapOptions({
-                                        pagination: {
-                                            classes: {
-                                                ul: 'pagination pagination-sm'
-                                            }
-                                        }
-                                    });
-    
-    $scope.vesselTable.dtColumnDefs = [
-        DTColumnDefBuilder.newColumnDef(0).notSortable(),
-        DTColumnDefBuilder.newColumnDef(1),
-        DTColumnDefBuilder.newColumnDef(2),
-        DTColumnDefBuilder.newColumnDef(3),
-        DTColumnDefBuilder.newColumnDef(4),
-        DTColumnDefBuilder.newColumnDef(5),
-        DTColumnDefBuilder.newColumnDef(6).notSortable()
-    ];
-    
+
     $scope.toggleAllVessels = function(){
-        for (var i = 0; i < $scope.shared.vessels.length; i++){
-            $scope.shared.vessels[i].selected = $scope.shared.selectAll;
+        for (var i = 0; i < $scope.displayedRecords.length; i++){
+            $scope.displayedRecords[i].selected = $scope.shared.selectAll;
         }
-        
-        if ($scope.shared.selectAll === true){
-            $scope.shared.selectedVessels = $scope.shared.vessels.length;
-        } else {
-            $scope.shared.selectedVessels = 0;
-        }
+        $scope.checkIfAnyVesselSelected();
     };
     
     $scope.toggleOneVessel = function(vessel){
-        if (vessel.selected === true){
-            $scope.shared.selectedVessels += 1;
-        } else {
-            $scope.shared.selectedVessels -= 1;
-        }
-        
-        if ($scope.shared.selectedVessels === $scope.shared.vessels.length){
-            $scope.shared.selectAll = true;
-        } else {
-            $scope.shared.selectAll = false;
-        }
+    	$scope.checkIfAllVesselsSelected();
+    	$scope.checkIfAnyVesselSelected();
     };
     
     //Check if vessel record was already added to the report current selection
@@ -113,8 +55,34 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
         return response;
     };
     
+    $scope.checkIfAllVesselsSelected = function(){
+    	if(!$scope.shared || !$scope.displayedRecords.length) {
+    		return;
+    	}
+    	
+    	for (var i = 0; i < $scope.displayedRecords.length; i++){
+            if (!$scope.displayedRecords[i].selected || $scope.displayedRecords[i].selected === false){
+            	$scope.shared.selectAll = false;
+            	return;
+            }
+        }
+    	$scope.shared.selectAll = true;
+    };
+    
+    $scope.checkIfAnyVesselSelected = function(){
+    	if(!$scope.shared || !$scope.displayedRecords.length) {
+    		return;
+    	}
+    	for (var i = 0; i < $scope.displayedRecords.length; i++){
+            if ($scope.displayedRecords[i].selected === true){
+            	$scope.shared.selectAny = true;
+            	return;
+            }
+        }
+    	$scope.shared.selectAny = false;
+    };
+    
     $scope.viewDetails = function(idx, source){
-        //console.log($scope.report.vesselsSelection[idx]);
         var modalInstance = $modal.open({
             templateUrl: 'partial/spatial/reportsPanel/reportForm/vesselFieldset/detailsModal/detailsModal.html',
             controller: 'DetailsmodalCtrl',
@@ -122,6 +90,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
             resolve: {
                 itemForDetail: function(){
                     if (source === 'SEARCH'){
+                    	idx = $scope.shared.vessels.indexOf($scope.displayedRecords[idx]);
                         var item = $scope.shared.vessels[idx];
                         item.type = $scope.shared.vesselSearchBy;
                         if (item.type === 'vessel'){
@@ -130,6 +99,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
                         
                         return item;
                     } else {
+                    	idx = $scope.report.vesselsSelection.indexOf($scope.displayedRecordsSelection[idx]);
                         return $scope.report.vesselsSelection[idx];
                     }
                 }
@@ -144,8 +114,8 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     };
     
     $scope.addVesselSelection = function(){
-        for (var i = 0; i < $scope.shared.vessels.length; i++){
-            var vesselSrc = $scope.shared.vessels[i];
+        for (var i = 0; i < $scope.displayedRecords.length; i++){
+            var vesselSrc = $scope.displayedRecords[i];
             if (vesselSrc.selected === true && $scope.checkVesselIsSelected(vesselSrc) === false){
                 var record = {
                     name: vesselSrc.name
@@ -185,6 +155,9 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     var getVesselsSuccess = function(response){
         $scope.vesselSearchLoading = false;
         $scope.shared.vessels = response.items;
+        $scope.displayedRecords = [].concat($scope.shared.vessels);
+        $scope.checkIfAllVesselsSelected();
+        $scope.checkIfAnyVesselSelected();
     };
     
     var getVesselsError = function(error){
@@ -223,6 +196,9 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     var getVesselGroupsSuccess = function(response){
         $scope.vesselSearchLoading = false;
         $scope.shared.vessels = $scope.buildGroupRecords(response);
+        $scope.displayedRecords = [].concat($scope.shared.vessels);
+        $scope.checkIfAllVesselsSelected();
+        $scope.checkIfAnyVesselSelected();
     };
     
     var getVesselsGroupError = function(error){
@@ -230,5 +206,10 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
         $scope.vesselSearchLoading = false;
         console.log(error);
     };
+    
+    $scope.$watch('displayedRecords', function() {
+    	$scope.checkIfAllVesselsSelected();
+    	$scope.checkIfAnyVesselSelected();
+    });
     
 });

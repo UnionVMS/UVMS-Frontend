@@ -42,23 +42,23 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, repo
     
     $scope.itemsByPage = 25;
     
-    $scope.displayedReports = [].concat($scope.reports);
+    $scope.displayedRecords = [].concat($scope.reports);
     
     //Run the report
     $scope.runReport = function(index){
-        var record = $scope.displayedReports[index];
+        var record = $scope.displayedRecords[index];
         $scope.$emit('runReport', record);
     };
     
     //Report filter definitions
     $scope.showFilters = function(index){
         $scope.isLoading = true;
-        reportRestService.getReport($scope.displayedReports[index].id).then(getReportSuccess, getReportError);
+        reportRestService.getReport($scope.displayedRecords[index].id).then(getReportSuccess, getReportError);
     };
     
     //Share report
     $scope.shareReport = function(index){ 
-        var record = $scope.displayedReports[index];
+        var record = $scope.displayedRecords[index];
         record.is_shared = !record.is_shared;
         //TODO call rest api
     };
@@ -66,10 +66,10 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, repo
     //Delete report
     $scope.deleteReport = function(index){
         var options = {
-            textLabel : locale.getString("spatial.reports_delete_report_confirmation_text") + $scope.displayedReports[index].name.toUpperCase() + '?'
+            textLabel : locale.getString("spatial.reports_delete_report_confirmation_text") + $scope.displayedRecords[index].name.toUpperCase() + '?'
         };
         confirmationModal.open(function(){
-            reportRestService.deleteReport($scope.displayedReports[index].id, index).then(deleteReportSuccess, deleteReportError);
+            reportRestService.deleteReport($scope.displayedRecords[index].id, index).then(deleteReportSuccess, deleteReportError);
         }, options);
     };
     
@@ -111,7 +111,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, repo
     
     //Delete report Success callback
     var deleteReportSuccess = function(resp){
-    	var index = $scope.reports.indexOf($scope.displayedReports[resp.index]);
+    	var index = $scope.reports.indexOf($scope.displayedRecords[resp.index]);
         if (index !== -1) {
             $scope.reports.splice(index, 1);
         }

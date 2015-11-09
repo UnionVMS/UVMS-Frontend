@@ -27,7 +27,7 @@ angular.module('smart-table')
           }
         
         tableCtrl.pipeArgs = function pipe () {
-        	var propertyName = "displayedReports";
+        	var propertyName = "displayedRecords";
             var displayGetter = $parse(propertyName);
             var displaySetter = displayGetter.assign;
 	        var pagination = ctrl.tableState().pagination;
