@@ -10,7 +10,7 @@
  *
  */
 
-angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
+angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
 /**
  * @ngdoc object
  * @name auth.controllers.selectContextController
@@ -30,13 +30,13 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
  * </pre>
  *
  */
-    .controller('selectContextController',['$scope', '$log', '$modalInstance','userService','$state',
-        function ($scope, $log, $modalInstance, userService,$state) {
+    .controller('selectContextController', ['$scope', '$log', '$modalInstance', 'userService', '$state',
+        function ($scope, $log, $modalInstance, userService, $state) {
             $scope.selectableContexts = userService.getContexts();
             $scope.selectedItem = userService.getCurrentContext();
             var toState = null;
-            if($state.params.toState){
-                toState = {state:$state.params.toState,params:$state.params.toParams};
+            if ($state.params.toState) {
+                toState = {state: $state.params.toState, params: $state.params.toParams};
             }
             for (var i = 0, len = $scope.selectableContexts.length; i < len; i++) {
                 var ctxt = $scope.selectableContexts[i];
@@ -56,11 +56,11 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
 
                     }
             $scope.selectContext = function (ctxt) {
-                $log.debug('selected context',ctxt);
+                $log.debug('selected context', ctxt);
                 $modalInstance.close(ctxt);
-                if(toState){
-                    $state.go(toState.state,toState.params);
-                } else{
+                if (toState) {
+                    $state.go(toState.state, toState.params);
+                } else {
                 $state.reload($state.current);
                 }
             };
@@ -70,20 +70,19 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
         };
         }
     ])
-    .controller('modalLoginController',['$scope', '$log', '$modalInstance', 'authenticateUser', 'userService','$state','$stateParams','$modal','$rootScope',
-        function ($scope, $log, $modalInstance, authenticateUser,userService,$state,$stateParams,$modal,$rootScope) {			
+    .controller('modalLoginController', ['$scope', '$log', '$modalInstance', 'authenticateUser', 'userService', '$state', '$stateParams', '$modal', '$rootScope',
+        function ($scope, $log, $modalInstance, authenticateUser, userService, $state, $stateParams, $modal, $rootScope) {
             $scope.infoMessage = $stateParams.message;
 			if (!_.isUndefined($stateParams.toState)) {
-				$log.debug('Login required before accessing state '+$stateParams.toState.name);
+                $log.debug('Login required before accessing state ' + $stateParams.toState.name);
 			} else {
 				$log.debug('Login required before accessing state <undefined>');
             }
-			
             $scope.retry = function (loginInfo) {
                 authenticateUser.authenticate(loginInfo).then(
                     function (response) {
-                        $log.log("renewLoginCtrl: ",response);
-                        if(response.token) {
+                        $log.log("renewLoginCtrl: ", response);
+                        if (response.token) {
 							userService.login(response.token);
                             //thought about going to the requested state but this is probably not the right place
                             $modalInstance.close();
@@ -92,11 +91,11 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
 							$scope.actionMessage = "There was a problem logging you in. No token received";
                         }
 
-						if(response.status === 701) {
+                        if (response.status === 701) {
 							$log.log("_storeToken - status: ", status);
 							//userService.hasToChangePwd = true;
 							$rootScope.$broadcast('NeedChangePassword');
-						} else if(response.status === 773) {
+                        } else if (response.status === 773) {
 							$log.log("_storeToken - status: ", status);
 							$rootScope.$broadcast('WarningChangePassword');
                                     }
@@ -115,8 +114,7 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
                     templateUrl: 'service/common/auth/templates/resetPassword.html',
                     controller: 'resetPasswordController'
                     }).result.then(
-
-                        function(error){
+                    function (error) {
                             $log.error(error);
                     }
                     );
@@ -130,41 +128,17 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
                                 }
 		])
 
-    .controller('loginController',['$scope', '$log', 'authenticateUser', 'userService','$state','$stateParams','authRouter','$modal',
-        function ($scope, $log, authenticateUser,userService,$state,$stateParams,authRouter,$modal) {
-            $log.debug('$stateParams.toState',$stateParams.toState);
+    .controller('loginController', ['$scope', '$log', 'authenticateUser', 'userService', '$state', '$stateParams', 'authRouter', '$modal',
+        function ($scope, $log, authenticateUser, userService, $state, $stateParams, authRouter, $modal) {
+            $log.debug('$stateParams.toState', $stateParams.toState);
             var toState = $stateParams.toState;
             var toParams = $stateParams.toParams;
-			
-				$('[type=password]').keypress(function(e) {
-					var $password = $(this),
-					tooltipVisible = $('.tooltip').is(':visible'),
-					s = String.fromCharCode(e.which);
-				  
-					//Check if capslock is on. No easy way to test for this
-					//Tests if letter is upper case and the shift key is NOT pressed.
-					if ( s.toUpperCase() === s && s.toLowerCase() !== s && !e.shiftKey ) {
-						if (!tooltipVisible){
-							$password.tooltip('show');
-                        }
-					} else {
-						if (tooltipVisible){
-							$password.tooltip('hide');
-                        }
-					}				  
-					
-					//Hide the tooltip when moving away from the password field
-					$password.blur(function(e) {
-						$password.tooltip('hide');
-					});
-				});			
-			
                 $scope.retry = function (loginInfo) {
 					authenticateUser.authenticate(loginInfo).then(
 						function (response) {
-							if(response.token) {
+                        if (response.token) {
 								userService.login(response.token);
-                            $state.go(toState,toParams);
+                            $state.go(toState, toParams);
                         } else {
 								$scope.messageDivClass = "alert alert-danger";
                             $scope.actionMessage = "There was a problem logging you in. No token received";
@@ -182,8 +156,7 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
                     templateUrl: 'service/common/auth/templates/resetPassword.html',
                         controller: 'resetPasswordController'
                      }).result.then(
-
-                       function(error){
+                    function (error) {
                          $log.error(error);
                         }
                      );
@@ -191,8 +164,8 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
         }
     ])
 
-    .controller('logoutController',['$scope', '$log', '$state','$stateParams','userService',
-        function ($scope, $log, $state, $stateParams,userService) {
+    .controller('logoutController', ['$scope', '$log', '$state', '$stateParams', 'userService',
+        function ($scope, $log, $state, $stateParams, userService) {
 
             $scope.loginState = $stateParams.loginState;
             $scope.logoutMessage = $stateParams.logoutMessage;
@@ -201,8 +174,8 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
 
                     }
     ])
-    .controller('accessErrorController',['$scope', '$log', '$state','$stateParams','userService',
-        function ($scope, $log, $state, $stateParams,userService) {
+    .controller('accessErrorController', ['$scope', '$log', '$state', '$stateParams', 'userService',
+        function ($scope, $log, $state, $stateParams, userService) {
 
             $scope.loginState = $stateParams.loginState;
             $scope.message = $stateParams.message;
@@ -210,18 +183,19 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
 
                     }
     ])
-    .service('renewloginpanel', ['$window','$modal', '$log',
-        function ($window, $modal,$log) {
+    .service('renewloginpanel', ['$window', '$modal', '$log',
+        function ($window, $modal, $log) {
             this.show = function () {
                 return $modal.open({
                     templateUrl: 'service/common/auth/templates/renewLogin.html',
-                    controller: 'modalLoginController'
+                    controller: 'modalLoginController',
+                    backdrop: 'static'
                 }).result;
                 };
                     }
     ])
-    .service('selectContextPanel', ['$window','$modal', '$log',
-        function ($window, $modal,$log) {
+    .service('selectContextPanel', ['$window', '$modal', '$log',
+        function ($window, $modal, $log) {
             this.show = function () {
                 return $modal.open({
                     templateUrl: 'service/common/auth/templates/selectContext.html',
@@ -232,8 +206,8 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
 		])
 
 
-        .controller('resetPasswordController',['$scope', '$log', '$modalInstance','resetPasswordServices', '$state','$stateParams','$modal','$timeout',
-            function ($scope, $log, $modalInstance, resetPasswordServices, $state, $stateParams, $modal , $timeout) {
+    .controller('resetPasswordController', ['$scope', '$log', '$modalInstance', 'resetPasswordServices', '$state', '$stateParams', '$modal', '$timeout',
+        function ($scope, $log, $modalInstance, resetPasswordServices, $state, $stateParams, $modal, $timeout) {
 
                 $scope.formDisabled = true;
                 $scope.editForm = true;
@@ -241,7 +215,7 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
                 $scope.showEdit = true;
 
                 $scope.securityQuestionsList = [];
-                $scope.securityQuestions={};
+            $scope.securityQuestions = {};
                 //  securityQuestionsList = []
 
                 //panel
@@ -260,9 +234,9 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
 
                             $scope.securityQuestionsList  = response.challengeInformationResponse;
 
-                            $log.log("resetPasswordController: ",response);
+                        $log.log("resetPasswordController: ", response);
 
-                            if($scope.securityQuestionsList !== null && $scope.securityQuestionsList !== '' && $scope.securityQuestionsList.length !== 0) {
+                        if ($scope.securityQuestionsList !== null && $scope.securityQuestionsList !== '' && $scope.securityQuestionsList.length !== 0) {
 
                                 $scope.resetPasswordUpdated = true;
                                 $scope.messageDivClass = "alert alert-success";
@@ -273,15 +247,15 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
 
                                 var modalInstance = $modal.open({
                                     animation: true,
-                                    backdrop: true,
+                                backdrop: 'static',
                                     keyboard: true,
                                 templateUrl: 'service/common/auth/templates/resetPasswordSecurityQuestions.html',
                                     controller: 'resetPasswordSecurityQuestionsModalInstanceCtrl',
                                     resolve: {
-                                        resetPasswordSecurityQuestions: function() {
+                                    resetPasswordSecurityQuestions: function () {
                                             var resetPassword = {
-                                                userName : userNameInfo,
-                                                securityQuestionsList : $scope.securityQuestionsList
+                                            userName: userNameInfo,
+                                            securityQuestionsList: $scope.securityQuestionsList
                     };
 
                                             return resetPassword;
@@ -297,7 +271,7 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
                                 });
 
                                 } else {
-                                if( response.challengeInformationResponse.length === 0) {
+                            if (response.challengeInformationResponse.length === 0) {
 
                                     $scope.resetPasswordUpdated = true;
                                     $scope.messageDivClass = "alert alert-success";
@@ -307,7 +281,7 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
                                         $modalInstance.close(updatedResetPassword);
                                     }, 2000);
 
-                                }else {
+                            } else {
                                     $scope.messageDivClass = "alert alert-danger";
                                     $scope.actionMessage = "There was a problem by resetting the password.";
                                 }
@@ -324,8 +298,8 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
         ])
 
 
-        .controller('resetPasswordSecurityQuestionsModalInstanceCtrl',['$scope', '$log', '$modalInstance', 'resetPasswordSecurityQuestions','resetPasswordServices','$timeout',
-            function ($scope, $log, $modalInstance, resetPasswordSecurityQuestions ,resetPasswordServices , $timeout) {
+    .controller('resetPasswordSecurityQuestionsModalInstanceCtrl', ['$scope', '$log', '$modalInstance', 'resetPasswordSecurityQuestions', 'resetPasswordServices', '$timeout',
+        function ($scope, $log, $modalInstance, resetPasswordSecurityQuestions, resetPasswordServices, $timeout) {
 
                 $scope.formDisabled = true;
                 $scope.editForm = true;
@@ -333,27 +307,27 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
                 $scope.showEdit = true;
 
                 //To initialize the object $scope.mySecurityQuestions of the html template
-                $scope.mySecurityQuestions={
+            $scope.mySecurityQuestions = {
                     results: [],
                     userPassword: ''
                 };
 
-                for(var i = 0; i< resetPasswordSecurityQuestions.securityQuestionsList.length;i++){
+            for (var i = 0; i < resetPasswordSecurityQuestions.securityQuestionsList.length; i++) {
                     $scope.mySecurityQuestions.results.push({
-                        challenge:resetPasswordSecurityQuestions.securityQuestionsList[i],
-                        response:''
+                    challenge: resetPasswordSecurityQuestions.securityQuestionsList[i],
+                    response: ''
                     });
                                 }
 
                 //To establish the number of questions/answers to display in the panel
-                if($scope.mySecurityQuestions.results.length===2){
+            if ($scope.mySecurityQuestions.results.length === 2) {
                     $scope.show2questions = true;
                     $scope.show3questions = false;
-                }else{
-                    if($scope.mySecurityQuestions.results.length===1) {
+            } else {
+                if ($scope.mySecurityQuestions.results.length === 1) {
                         $scope.show2questions = false;
                         $scope.show3questions = false;
-                    }else{
+                } else {
                         $scope.show2questions = true;
                         $scope.show3questions = true;
                     }
@@ -369,14 +343,14 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
                 };
 
                 $scope.saveMySecurityAnswer = function (mySecurityQuestions) {
-                    $log.info('resetPasswordServices.resetPasswordSecurityAnswers: ',resetPasswordSecurityQuestions.userName );
+                $log.info('resetPasswordServices.resetPasswordSecurityAnswers: ', resetPasswordSecurityQuestions.userName);
 
-                    resetPasswordServices.resetPasswordSecurityAnswers(resetPasswordSecurityQuestions.userName,$scope.mySecurityQuestions).then(
+                resetPasswordServices.resetPasswordSecurityAnswers(resetPasswordSecurityQuestions.userName, $scope.mySecurityQuestions).then(
                         function (response) {
 
                             var updatedResetPasswordSecurityQs = response;
 
-                            $log.log("resetPasswordSecurityAnswers: ",response);
+                        $log.log("resetPasswordSecurityAnswers: ", response);
 
                             $scope.resetPasswordUpdated = true;
                             $scope.messageDivClass = "alert alert-success";
@@ -416,16 +390,16 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
                 this.show = function () {
                     return $modal.open({
 						templateUrl: 'usm/users/partial/warningPassword.html',
-						controller: 'warningPasswordModalInstanceCtrl',
+						controller: 'warningPasswordModalInstanceCtrl'
                     }).result;
                 };
             }
         ])
 
-        .factory('authenticateUser',['$http', '$q','$resource', '$log', '$localStorage',
-            function($http, $q, $resource, $log, $localStorage) {
+    .factory('authenticateUser', ['$http', '$q', '$resource', '$log', '$localStorage',
+        function ($http, $q, $resource, $log, $localStorage) {
                 return {
-                    authenticate : function(loginInfo) {
+                authenticate: function (loginInfo) {
 
                         var message = "";
                         var deferred = $q.defer();
@@ -437,33 +411,10 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
                                     deferred.resolve({
                                         authenticated: data.authenticated,
                                         status: data.statusCode,
-                                        token: data.jwtoken
-                                    });
-                                    /*
-                                    var sessionInfo = {userName: loginInfo.userName, userSite: data.ip};
-                                    $localStorage.ip = data.ip;
-                                    var sessionsResource = $resource('/usm-authentication/rest/sessions');
-                                    sessionsResource.save({},sessionInfo).$promise.then(
-                                        function(sessionData) {
-                                            if (sessionData.sessionId != null) {
-                                                $localStorage.userName = sessionInfo.userName;
-                                                $localStorage.sessionId = sessionData.sessionId;
-                                    deferred.resolve({
-                                        authenticated: data.authenticated,
-                                        status: data.statusCode,
                                                     token: data.jwtoken,
-                                                    sessionId: sessionData.sessionId
+                                        sessionId: data.sessionId
                                                 });
-                                            } else {
-                                                message = "Error: Maximum number of sessions exceeded";
-                                                deferred.reject(message);
-                                            }
-                                        },
-                                        function(sessionError){
-                                            message = "Error: Maximum number of sessions exceeded";
-                                            deferred.reject(message);
-                                        });
-                                        */
+                                    $localStorage.sessionId = data.sessionId;
                                 } else {
                                     if(data.statusCode === 49) {
                                         message = "Error: Invalid crendentials";
@@ -474,10 +425,13 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
                                     } else if(data.statusCode === 701) {
                                         message = "Error: Password expired";
                                     } else if(data.statusCode === 775) {
-                                        message = "Error: Account locked";
+                                        message = "Error: Account locked - " + data.errorDescription;
                                     } else if(data.statusCode === 773) {
                                         message = "Error: Password must be changed";
-                                    } else if(data.statusCode === 1) {
+                                    } else if(data.statusCode === 774) {
+                                        message = "Error: Maximum number of sessions exceeded";
+                                    }
+                                    else if(data.statusCode === 1) {
                                         message = "Error: Internal error";
                                     } else if(data.statusCode === 80) {
                                         message = "Error: Other";
@@ -541,43 +495,42 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
                 };
 
             }])
-        .controller('ecaslogincontroller',['$scope', '$log', '$modalInstance', 'authenticateUser', 'userService','$state','$stateParams','$window',
-            function ($scope, $log, $modalInstance, authenticateUser,userService,$state,$stateParams,$window) {
-                var callback = $window.document.URL.split('#')[0]+'#/jwtcallback';
-                var _url = "/usm-administration/rest/ping?jwtcallback="+callback;
+    .controller('ecaslogincontroller', ['$scope', '$log', '$modalInstance', 'authenticateUser', 'userService', '$state', '$stateParams', '$window',
+        function ($scope, $log, $modalInstance, authenticateUser, userService, $state, $stateParams, $window) {
+            var callback = $window.document.URL.split('#')[0] + '#/jwtcallback';
+            var _url = "/usm-administration/rest/ping?jwtcallback=" + callback;
                 $scope.status = "unopened";
-                var receiveMessage = function (event)
-                {
+            var receiveMessage = function (event) {
                     $scope.status = "Event received";
                     $log.log(event);
                 };
 
                 //credits: http://www.netlobo.com/url_query_string_javascript.html
                 function gup(url, name) {
-                    name = name.replace(/[[]/,"[").replace(/[]]/,"]");
-                    var regexS = "[?&]"+name+"=([^&#]*)";
-                    var regex = new RegExp( regexS );
-                    var results = regex.exec( url );
-                    if( results == null ) {
+                name = name.replace(/[[]/, "[").replace(/[]]/, "]");
+                var regexS = "[?&]" + name + "=([^&#]*)";
+                var regex = new RegExp(regexS);
+                var results = regex.exec(url);
+                if (results == null) {
                         return "";
                     } else {
                         return results[1];
                     }
                 }
 
-                $scope.open = function() {
+            $scope.open = function () {
                     var loginWindow = $window.open(_url, "windowname1", 'width=800, height=600');
                     $scope.status = "window opened";
                     $window.addEventListener("loginWindow", receiveMessage, loginWindow);
 
                     var pollingtries = 0;
-                    var pollTimer   =   $window.setInterval(function() {
+                var pollTimer = $window.setInterval(function () {
                         pollingtries++;
-                        if(pollingtries > 100) {
+                    if (pollingtries > 100) {
                             $scope.status = "could not get token";
                             $window.clearInterval(pollTimer);
                         }
-                        $log.log("starting poll "+loginWindow.document.URL);
+                    $log.log("starting poll " + loginWindow.document.URL);
                         try {
                             $log.log(loginWindow.document.URL);
                             if (loginWindow.document.URL.indexOf("jwt=") > 0) {
@@ -590,7 +543,7 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
                                 $modalInstance.dismiss();
                             }
 
-                        } catch(e) {
+                    } catch (e) {
                         }
                     }, 400);
                 };
@@ -600,8 +553,8 @@ angular.module('auth.controllers', ['ui.bootstrap','ui.router'])
                 };
             }
         ])
-        .service('ecasloginpanel', ['$window','$modal', '$log',
-            function ($window, $modal,$log) {
+    .service('ecasloginpanel', ['$window', '$modal', '$log',
+        function ($window, $modal, $log) {
                 this.show = function () {
                     return $modal.open({
                     templateUrl: 'service/common/auth/templates/EcasLogin.html',

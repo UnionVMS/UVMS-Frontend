@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <form class="form-inline" name="searchForm">
+                    <form class="form-inline" name="searchForm" ng-submit="searchUsers()">
                         <div class="row">
                             <div class="col-md-12 zero-side-padding">
                                 <div class="col-md-2 zero-side-padding" style="width:14%; margin-left: 4px; margin-right: 4px;">
@@ -37,7 +37,7 @@
                                         <label>{{ 'users.activeFrom' | translate }}</label>
 
                                         <div>
-                                            <datepicker-input model="search.activeFrom"></datepicker-input>
+                                            <datepicker-input name="activeFrom" model="search.activeFrom" max-date="search.activeTo"></datepicker-input>
                                         </div>
                                     </div>
                                 </div>
@@ -55,7 +55,7 @@
                                         <label>&nbsp;</label>
 
                                         <div>
-                                            <button type="button" id="submit" ng-click="searchUsers()" class="btn btn-primary btn-sm">{{'common.search' | translate}}</button>
+                                            <input type="submit" id="submit" class="btn btn-primary btn-sm" ng-value="'common.search' | translate"/>
                                             <button type="button" id="button" ng-click="resetForm()" class="btn btn-link btn-sm">{{'common.reset' | translate}}</button>
                                         </div>
                                     </div>
@@ -82,8 +82,8 @@
                         <col style="width: 150px;">
                         <col style="width: 150px;">
                         <col style="width: 80px;">
-                        <col style="width: 180px;">
-                        <col style="width: 110px;">
+                        <col style="width: 170px;">
+                        <col style="width: 120px;">
                         <col style="width: 110px;">
                         <col style="width: 80px;">
                         <col style="width: 130px;">
@@ -116,7 +116,7 @@
                         <td>{{user.person.firstName}}</td>
                         <td>{{user.person.lastName}}</td>
                         <td>{{user.organisation.nation}}</td>
-                        <td>{{user.organisation_parent}}</td>
+                        <td>{{ user.organisation_parent }}</td>
                         <td>{{user.activeFrom | date:'yyyy-MM-dd'}}</td>
                         <td>{{user.activeTo | date:'yyyy-MM-dd'}}</td>
                         <td>

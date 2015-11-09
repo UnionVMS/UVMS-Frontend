@@ -2,7 +2,7 @@
     <!-- SEARCH PANEL-->
     <div class="panel panel-default">
         <div class="panel-body">
-            <form class="form-inline" id="searchApplicationForm">
+            <form class="form-inline" id="searchApplicationForm" ng-submit="searchApplication(criteria)">
                 <div class="form-group col-md-2">
                     <label for="role">{{'common.name' | translate}}</label>
 
@@ -18,9 +18,7 @@
                     <label>&nbsp;</label>
 
                     <div>
-                        <button type="button" class="btn btn-primary btn-sm" ng-click="searchApplication(criteria)">
-                            {{'common.search' | translate}}
-                        </button>
+                        <input type="submit" class="btn btn-primary btn-sm" ng-value="'common.search' | translate" />
                         <button type="button" class="btn btn-link btn-sm" ng-click="resetForm()">
                             {{'common.reset' | translate}}
                         </button>
@@ -33,27 +31,27 @@
 
     <!-- SCOPES TABLE -->
     <table st-table="displayedApplications" st-safe-src="applicationList" class="table table-striped fixed">
-                    <colgroup>
-                        <col style="width: 300px;">
-                        <col style="width: 500px;">
-                        <col style="width: 300px;">
-                        <col style="width: 40px;">
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th ng-click="changeSorting('name')">{{'common.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i></th>
-                        <th ng-click="changeSorting('description')">{{'common.description' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('description')"></i></th>
-                        <th ng-click="changeSorting('parent')">{{'applications.parent' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('parent')"></i></th>
-                        <th class="text-right">&nbsp;</th>
-                    </tr>
-                    </thead>
+        <colgroup>
+            <col style="width: 300px;">
+            <col style="width: 500px;">
+            <col style="width: 300px;">
+            <col style="width: 40px;">
+        </colgroup>
+        <thead>
+        <tr>
+            <th ng-click="changeSorting('name')">{{'common.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i></th>
+            <th ng-click="changeSorting('description')">{{'common.description' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('description')"></i></th>
+            <th ng-click="changeSorting('parent')">{{'applications.parent' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('parent')"></i></th>
+            <th class="text-right">&nbsp;</th>
+        </tr>
+        </thead>
         <tbody class="table-bordered" ng-if="!isDataLoading && !emptyResult">
-                    <tr ng-repeat="application in displayedApplications">
-                        <td ng-bind="application.name"></td>
-                        <td ng-bind="application.description"></td>
-                        <td ng-bind="application.parent"></td>
+        <tr ng-repeat="application in displayedApplications">
+            <td ng-bind="application.name"></td>
+            <td ng-bind="application.description"></td>
+            <td ng-bind="application.parent"></td>
 
-                        <td class="actionTd text-center">
+            <td class="actionTd text-center">
                 <span ng-if="checkAccess('manageApplications')||checkAccess('viewApplications')">
                     <button type="button" class="btn btn-sm btn-primary usm-action-btn"
                             ui-sref="app.usm.applications.application({applicationName: application.name})"
@@ -61,22 +59,22 @@
                         <span><i class="fa fa-eye"></i></span>
                     </button>
                 </span>
-                        </td>
-                    </tr>
-                    </tbody>
-                    <tbody ng-if="isDataLoading">
-                    <tr>
-                        <td colspan="5" class="text-center">Loading...</td>
-                    </tr>
-                    </tbody>
-                    <tbody ng-if="emptyResult">
-                    <tr>
-                        <td colspan="8">{{emptyResultMessage}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            <div ng-if="showPagination">
-                <usm-pagination config="paginationConfig"></usm-pagination>
+            </td>
+        </tr>
+        </tbody>
+        <tbody ng-if="isDataLoading">
+        <tr>
+            <td colspan="5" class="text-center">Loading...</td>
+        </tr>
+        </tbody>
+        <tbody ng-if="emptyResult">
+        <tr>
+            <td colspan="8">{{emptyResultMessage}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <div ng-if="showPagination">
+        <usm-pagination config="paginationConfig"></usm-pagination>
     </div>
     <!-- SCOPES TABLE END-->
 </div>

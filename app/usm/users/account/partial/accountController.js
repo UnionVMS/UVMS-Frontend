@@ -10,7 +10,7 @@ accountModule.controller('newUserController', ['$scope', '$modal', 'accountServi
         $scope.addNewUser = function (newUser) {
             var modalInstance = $modal.open({
                 animation: true,
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: true,
                 templateUrl: 'usm/users/account/partial/newUser.html',
                 controller: 'userModalInstanceCtrl',

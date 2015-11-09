@@ -1,9 +1,12 @@
+
 var LoginPage = require('../../shared/e2e/loginPage');
 var MenuPage = require('../../shared/e2e/menuPage');
 var OrganisationsPage = require('./organisationsPage');
 var OrganisationsDetailsPage = require('./organisationsDetailsPage');
 var EndpointsChannelsPage = require('./endpointsChannelsPage');
 var EndpointsContactsPage = require('./endpointsContactsPage');
+
+var EC = protractor.ExpectedConditions;
 
 var Table = require('../../shared/e2e/table');
 
@@ -21,7 +24,7 @@ describe('Organisations page', function () {
 
     var ORGANISATIONS_DETAILS_PAGE = '#/usm/organisations/';
     var LOGIN_PAGE = '#/login';
-    var E = 'Enable';
+    var E = 'Enabled';
     var orgTestName = "protractorOrg";
     var orgTestUpdatedName = "protractorUpdatedOrg";
 

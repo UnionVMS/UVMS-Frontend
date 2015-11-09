@@ -86,6 +86,9 @@ scopesServiceModule.factory('scopeServices', ['$resource', '$q', '$log', functio
             var resource = $resource('/usm-administration/rest/scopes', {}, {updateScope: {method: 'PUT'}});
             resource.updateScope(scope).$promise.then(
                 function (data) {
+                    //until we find a better way to avoid the issue of getting $promise in the object
+                    delete data.$promise;
+                    delete data.$resolved;
                     deferred.resolve({
                         updatedScope: data
                     });

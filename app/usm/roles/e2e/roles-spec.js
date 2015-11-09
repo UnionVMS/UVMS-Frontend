@@ -112,14 +112,14 @@ describe('Roles page', function () {
         rolesPage.clickManageRoleSaveButton();
 
         rolesPage.refreshPage();
-        rolesPage.search(roleTestName, roleTestDescription, "Enabled");
+        rolesPage.search(roleTestName, null, "Enabled");
 
         testRowsRoleTable(roleTestName, roleTestDescription, "Enabled");
 
     });
 
     it('Test4 - should test edit organisation', function () {
-        rolesPage.search(roleTestName, roleTestDescription, "Enabled");
+        rolesPage.search(roleTestName, null, "Enabled");
         testRowsRoleTable(roleTestName, roleTestDescription, "Enabled");
 
         rolesTable.clickRowEditButton(0);
@@ -129,14 +129,14 @@ describe('Roles page', function () {
         rolesPage.clickManageRoleSaveButton();
 
         rolesPage.refreshPage();
-        rolesPage.search(roleTestUpdatedName, roleTestDescription, "Enabled");
+        rolesPage.search(roleTestUpdatedName, null, "Enabled");
 
         testRowsRoleTable(roleTestUpdatedName, roleTestDescription, "Enabled");
 
     });
 
     it('Test5 - should test delete organisation', function () {
-        rolesPage.search(roleTestUpdatedName, roleTestDescription, "Enabled");
+        rolesPage.search(roleTestUpdatedName, null, "Enabled");
         testRowsRoleTable(roleTestUpdatedName, roleTestDescription, "Enabled");
 
         rolesPage.clickRowDeleteButton(0);
@@ -145,7 +145,7 @@ describe('Roles page', function () {
         // rolesPage.clickManageRoleConfirmButton();
 
         rolesPage.refreshPage();
-        rolesPage.search(roleTestUpdatedName, roleTestDescription, "Enabled");
+        rolesPage.search(roleTestUpdatedName, null, "Enabled");
 
         rolesPage.getTableRows().each(function (row) {
             var columns = row.$$('td');

@@ -242,7 +242,7 @@ organisationsModule.controller('manageOrganisationCtrl', ['$scope', '$modal', '$
         $scope.manageOrganisation = function (mode, org) {
             var modalInstance = $modal.open({
                 animation: true,
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: true,
                 templateUrl: 'usm/organisations/partial/manageOrganisations.html',
                 controller: 'manageOrgModalInstanceCtrl',
@@ -587,7 +587,7 @@ organisationsModule.controller('manageOrganisationEndpointsCtrl', ['$log', '$sco
         $scope.manageEndpoint = function (mode, endpoint, organisationName) {
             var modalInstance = $modal.open({
                 animation: true,
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: true,
                 templateUrl: 'usm/organisations/partial/manageOrgEndpoints.html',
                 controller: 'organisationEndpointsModalInstanceCtrl',
@@ -619,6 +619,8 @@ organisationsModule.controller('manageOrganisationEndpointsCtrl', ['$log', '$sco
                 // Update the model (org)
                 if (mode === 'edit') {
                     angular.copy(returnedEndPoint, endpoint);
+					$scope.endpoint.channelList = $scope.displayedChannels;
+					$scope.endpoint.persons = $scope.displayedContacts;					
                 }
                 if (mode === 'delete') {
                     var deleteIndex = $scope.organisation.endpoints.indexOf(endpoint);
@@ -737,7 +739,7 @@ organisationsModule.controller('manageOrganisationChannelsCtrl', ['$log', '$scop
         $scope.manageOrgEndpointsChannel = function (mode, channel) {
             var modalInstance = $modal.open({
                 animation: true,
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: true,
                 templateUrl: 'usm/organisations/partial/manageOrgChannels.html',
                 controller: 'organisationChannelsModalInstanceCtrl',
@@ -915,7 +917,7 @@ organisationsModule.controller('manageOrganisationContactsCtrl', ['$log', '$scop
         $scope.manageOrgEndpointsContact = function (mode, contact) {
             var modalInstance = $modal.open({
                 animation: true,
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: true,
                 templateUrl: 'usm/organisations/partial/manageOrgContacts.html',
                 controller: 'organisationContactsModalInstanceCtrl',

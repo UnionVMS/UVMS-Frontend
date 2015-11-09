@@ -2,7 +2,7 @@
     <!-- SEARCH PANEL-->
     <div class="panel panel-default">
         <div class="panel-body">
-            <form class="form-inline" id="searchRoleForm">
+            <form class="form-inline" id="searchRoleForm" ng-submit="searchRole(criteria)">
                 <div class="form-group col-md-2">
                     <label for="role">Role</label>
 
@@ -23,12 +23,11 @@
 
                     <div>
                         <!--button id="searchButton" tooltips tooltip-delay={{toolTipsDelay}} tooltip-title="{{'roles.search_filter' | translate}}" class="btn btn-default" ng-click="searchRole(criteria)"-->
-                        <button id="searchButton"
+                        <input type="submit" id="searchButton"
                                 tooltip-popup-delay={{toolTipsDelay}}
                                 tooltip="{{'roles.search_filter' | translate}}"
-                                class="btn btn-primary btn-sm" ng-click="searchRole(criteria)">
-                            {{'common.search' | translate}}
-                        </button>
+                                class="btn btn-primary btn-sm" ng-value="'common.search' | translate" />
+
                         <!--button type="button" tooltips tooltip-delay={{toolTipsDelay}} tooltip-title="{{'roles.refresh_filter' | translate}}" class="btn btn-default" ng-click="resetForm()"-->
                         <button type="button"
                                 tooltip-popup-delay={{toolTipsDelay}}

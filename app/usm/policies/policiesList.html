@@ -22,9 +22,7 @@
 				<div class="col-md-1">
 					<label>&nbsp;</label>
 					<div style="width:120px; margin-right:5px;">
-						<button id="searchButton" type="submit" class="btn btn-primary btn-sm">
-                            {{'common.search' | translate}}
-						</button>
+						<input id="searchButton" type="submit" class="btn btn-primary btn-sm" ng-value="'common.search' | translate" />
 						<button type="button" id="button" ng-click="resetForm()" class="btn btn-link btn-sm">
                             {{'common.reset' | translate}}
 						</button>
@@ -65,7 +63,7 @@
 								/>
 						</th>
 						<th colspan="1">
-							<select class="form-inline form-control dropdown"
+							<select class="form-inline form-control dropdown-select"
 									id="subject"
 									name="subject"
 									st-search="policySubjSelected"

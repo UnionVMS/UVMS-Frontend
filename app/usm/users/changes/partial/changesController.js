@@ -31,7 +31,7 @@ changesModule.controller('changesListCtrl', ['$log', '$scope', '$modal', 'change
         $scope.manageChange = function (change) {
             var modalInstance = $modal.open({
                 animation: true,
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: true,
                 size: 'lg',
                 templateUrl: 'usm/users/changes/partial/manageChange.html',

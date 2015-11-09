@@ -158,11 +158,11 @@
                     <label for="organisationSelect">Organisation<sup class="fa fa-asterisk mandatory"></sup></label>
 
                     <div>
-                        <select class="form-inline form-control dropdown"
+                        <select class="form-inline form-control dropdown-select"
                                 id="organisationSelect"
                                 name="organisationSelect"
                                 ng-model="user.organisationComplex"
-                                ng-options="organisation.parentOrgName for organisation in organisationsList"
+                                ng-options="organisation.parentOrgName for organisation in organisationsList | filter: {status: 'E'}"
                                 required
                                 ng-class="{pointer: pointer}"
                                 ng-mouseenter="pointer=true"
@@ -190,7 +190,7 @@
                     <label for="statusSelect">Status<sup class="fa fa-asterisk mandatory"></sup></label>
 
                     <div>
-                        <select class="form-inline form-control dropdown"
+                        <select class="form-inline form-control dropdown-select"
                                 id="statusSelect"
                                 name="statusSelect"
                                 ng-model="user.status"

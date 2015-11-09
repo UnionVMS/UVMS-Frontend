@@ -123,7 +123,7 @@ var Panel = function () {
 
     this.getLabelText = function (idPanel,index) {
         if (idPanel === undefined){
-            return element.all(by.tagName('label')).get(index).getText()
+            return element.all(by.tagName('label')).get(index).getText();
         }else{
             return element(by.id(idPanel)).all(by.tagName('label')).get(index).getText();
         } 

@@ -36,10 +36,7 @@
                         <label for="password" class="col-md-3 control-label">Password</label>
 
                         <div class="col-md-5">
-                            <input type="password" class="form-control" id="password" name="password" 
-								placeholder="Password" ng-model="login.password" 
-								data-trigger="manual" data-title="Caps lock is on"
-								required>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password" ng-model="login.password" required>
 
                             <div ng-show="loginForm.password.$dirty">
                                 <span class="text-danger small" ng-show="loginForm.password.$error.required">Password is required</span>

@@ -1,9 +1,11 @@
 var OrganisationsPage = function () {
     var EC = protractor.ExpectedConditions;
 
-    this.criteriaName = element(by.model('search.name'));
-    this.criteriaNation = element(by.model('search.nation'));
-    this.criteriaStatus = element(by.model('search.status'));
+    //this.criteriaName = element(by.model('search.name'));
+    this.criteriaDropDowns = $$('button.dropdown-toggle');
+    this.criteriaName = this.criteriaDropDowns.get(0);
+    this.criteriaNation = this.criteriaDropDowns.get(1);
+    this.criteriaStatus = this.criteriaDropDowns.get(2);
 
     this.searchButton = element(by.id('searchButton'));
     this.resetButton = element(by.css('[ng-click="resetForm()"]'));
@@ -26,16 +28,41 @@ var OrganisationsPage = function () {
         browser.wait(EC.elementToBeClickable(this.criteriaName), 10000);
     };
 
+
+
     this.setCriteriaName = function (name) {
-        this.criteriaName.sendKeys(name);
+        //this.criteriaName.sendKeys(name);  //previous to the change of the drop-down
+        browser.wait(EC.elementToBeClickable(this.criteriaName), 2100);
+        this.criteriaName.click().then(function() {
+            browser.wait(EC.elementToBeClickable(element(by.linkText(name))), 10000);
+            element(by.linkText(name)).click().then(function(){
+                browser.waitForAngular();
+            });
+        });
+
     };
 
     this.setCriteriaNation = function (nation) {
-        this.criteriaNation.sendKeys(nation);
+        //this.criteriaNation.sendKeys(nation); //previous to the change of the drop-down
+        browser.wait(EC.elementToBeClickable(this.criteriaNation), 2100);
+        this.criteriaNation.click().then(function() {
+            browser.wait(EC.elementToBeClickable(element(by.linkText(nation))), 10000);
+            element(by.model('search.nation')).all(by.linkText(nation)).click().then(function(){
+                browser.waitForAngular();
+            });
+        });
     };
 
     this.setCriteriaStatus = function (status) {
-        this.criteriaStatus.sendKeys(status);
+        //this.criteriaStatus.sendKeys(status);
+        browser.wait(EC.elementToBeClickable(this.criteriaStatus), 2100);
+        this.criteriaStatus.click().then(function() {
+            browser.wait(EC.elementToBeClickable(element(by.linkText(status))), 10000);
+            element(by.model('search.status')).all(by.linkText(status)).click().then(function(){
+                browser.waitForAngular();
+            });
+        });
+
     };
 
     //TABLE methods and elements
@@ -74,7 +101,9 @@ var OrganisationsPage = function () {
     //TABLE methods and elements
 
     this.setCriteria = function (name, nation, status) {
-        this.setCriteriaName(name);
+        if (name != null && name != "") {
+            this.setCriteriaName(name);
+        }
         this.setCriteriaNation(nation);
         this.setCriteriaStatus(status);
     };

@@ -4,7 +4,7 @@
     <div class="panel panel-default">
         <div class="panel-body">
 
-            <form class="form-inline" id="searchOrganisationForm">
+            <form class="form-inline" id="searchOrganisationForm" ng-submit="searchOrganisation(search)">
 
                 <div class="form-group col-md-2">
                     <label>{{'organisations.name' | translate}}</label>
@@ -24,9 +24,7 @@
                 <div class="col-md-2">
                     <label>&nbsp;</label>
                     <div>
-                        <button type="button" id="searchButton" class="btn btn-primary btn-sm" ng-click="searchOrganisation(search)">
-                            {{'common.search' | translate}}
-                        </button>
+                        <input type="submit" id="searchButton" class="btn btn-primary btn-sm" ng-value="'common.search' | translate"/>
                         <button type="button" class="btn btn-link btn-sm" ng-click="resetForm()">
                             {{'common.reset' | translate}}
                         </button>

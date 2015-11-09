@@ -39,7 +39,7 @@ userContextsModule.controller('manageUserContextsCtrl', ['$log', '$scope', '$mod
 		$scope.manageUserContext = function (mode, user_context) {
 			var modalInstance = $modal.open({
 				animation: true,
-				backdrop: true,
+				backdrop: 'static',
 				keyboard: true,
 				templateUrl: 'usm/users/userContexts/partial/manageUserContexts.html',
 				controller: 'userContextsModalInstanceCtrl',

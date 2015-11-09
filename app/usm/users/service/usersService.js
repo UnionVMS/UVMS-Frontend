@@ -181,10 +181,11 @@ usersService.factory('resetPasswordServices', ['$resource', '$q', '$log', functi
         var usr = {};
         usr.userName = userName; //$q.activeUser.userName;
         var deferred = $q.defer();
+        var isTemporaryPassword = false;
 
         var resource = $resource('/usm-administration/rest/users/resetUserPassword',{}, {
           //  put:{ _setSecurityAnswers: {method: 'PUT', headers: { 'userName': userName }}} });
-            update:{method: 'PUT', headers: { 'userName': userName } ,body: { 'challengeInformationResponse': challengeInformationResponse }  } });
+            update:{method: 'PUT', headers: { 'userName': userName, 'isTemporaryPassword' : isTemporaryPassword } , body: { 'challengeInformationResponse': challengeInformationResponse }  } });
 
         resource.update(userName , challengeInformationResponse).$promise.then(
             function (data) {

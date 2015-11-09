@@ -6,7 +6,7 @@ userPreferencesModule.controller('userPreferencesCtrl', ['$scope', '$stateParams
         $scope.manageUserPreference = function (mode, userPreference) {
             var modalInstance = $modal.open({
                 animation: true,
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: true,
                 templateUrl: 'usm/users/preferences/partial/manageUserPreferences.html',
                 controller: 'userPreferencesModalInstanceCtrl',

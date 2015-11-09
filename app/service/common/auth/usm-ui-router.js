@@ -121,6 +121,7 @@ angular.module('auth.router', ['ui.bootstrap', 'auth.controllers', 'ui.router', 
                                 templateUrl: 'service/common/auth/templates/renewLogin.html',
 
                                 controller: 'modalLoginController',
+                                backdrop: 'static'
                             }).result.finally(function () {
                                     $log.debug('loginpanel modal finally running');
                                     $log.debug('Going to state ', toState.name);
@@ -365,10 +366,9 @@ angular.module('auth.router', ['ui.bootstrap', 'auth.controllers', 'ui.router', 
                                                 'toParams': toParams,
                                                 message: error
                                             }).then(
-                                                function (successTransition) {
-                                                },
-                                                function (transitionError) {
-                                                    $log.debug("transistion to loginstate rejected with error ", transitionError);
+                                                function(successTransition){},
+                                                function(transitionError){
+                                                    $log.debug("transistion to loginstate rejected with error ",transitionError);
                                                 }
                                             );
 

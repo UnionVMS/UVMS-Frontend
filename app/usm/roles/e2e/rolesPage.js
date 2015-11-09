@@ -1,8 +1,9 @@
 var RolesPage = function () {
     var EC = protractor.ExpectedConditions;
+    this.criteriaDropDowns = $$('button.dropdown-toggle');
     this.criteriaRole = element(by.model('criteria.role'));
-    this.criteriaApplication = element(by.model('criteria.application'));
-    this.criteriaStatus = element(by.model('criteria.status'));
+    this.criteriaApplication = this.criteriaDropDowns.get(0);
+    this.criteriaStatus = this.criteriaDropDowns.get(1);
     this.searchButton = element(by.id('searchButton'));
     this.newRoleButton = element(by.id('newRoleButton'));
     this.manageRoleSaveButton = element(by.buttonText("Save"));
@@ -29,19 +30,37 @@ var RolesPage = function () {
     };
 
     this.setCriteriaApplication = function (application) {
-        this.criteriaApplication.click();
-        this.criteriaApplication.sendKeys(application);
+        //this.criteriaApplication.click();
+        //this.criteriaApplication.sendKeys(application);
+        browser.wait(EC.elementToBeClickable(this.criteriaApplication), 2100);
+        this.criteriaApplication.click().then(function() {
+            browser.wait(EC.elementToBeClickable(element(by.linkText(application))), 10000);
+            element(by.model('criteria.application')).all(by.linkText(application)).click().then(function(){
+                browser.waitForAngular();
+            });
+        });
     };
 
     this.setCriteriaStatus = function (status) {
-        this.criteriaStatus.click();
-        this.criteriaStatus.sendKeys(status);
+        //this.criteriaStatus.click();
+        //this.criteriaStatus.sendKeys(status);
+        browser.wait(EC.elementToBeClickable(this.criteriaStatus), 2100);
+        this.criteriaStatus.click().then(function() {
+            browser.wait(EC.elementToBeClickable(element(by.linkText(status))), 10000);
+            element(by.model('criteria.status')).all(by.linkText(status)).click().then(function(){
+                browser.waitForAngular();
+            });
+        });
     };
 
     this.setCriteria = function(role, application, status) {
         this.setCriteriaRole(role);
+        if (application != null) {
         this.setCriteriaApplication(application);
+        }
+        if (status != null) {
         this.setCriteriaStatus(status);
+        }
     };
 
     this.clickSearchButton = function () {

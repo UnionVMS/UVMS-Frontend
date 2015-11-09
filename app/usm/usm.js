@@ -26,7 +26,8 @@ var userManagementApp = angular.module('usm',
         'ngCookies',
         'ngStorage',
         'config',
-        'auth'
+        'auth',
+        'unionvmsWeb'
         ]);
 
 userManagementApp.constant('LOCALES', {
@@ -38,7 +39,6 @@ userManagementApp.constant('LOCALES', {
 });
 
 userManagementApp.constant('refData', {
-    // statuses in a readable format for the bootstrap drop down lists
     statusesDropDown: [{value:'all', label:'All'},
                         {value:'E', label:'Enabled'},
                         {value:'D', label:'Disabled'},

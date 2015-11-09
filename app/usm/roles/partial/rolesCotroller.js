@@ -231,7 +231,7 @@ rolesModule.controller('manageRoleCtrl', ['$scope', '$modal', '$log', 'rolesServ
         $scope.manageRole = function (mode, role) {
             var modalInstance = $modal.open({
                 animation: true,
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: true,
                 templateUrl: 'usm/roles/partial/manageRole.html',
                 controller: 'rolesModalInstanceCtrl',

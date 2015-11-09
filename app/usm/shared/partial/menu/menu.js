@@ -120,7 +120,6 @@ sharedModule.controller('setMyPasswordModalInstanceCtrl', ['$state', '$log', '$t
         $scope.saveMyPassword = function (passwordData) {
 
             if (userService.getUserName()) {
-                //   if($localStorage.userName){
                 var objectToSubmit = passwordSubmitObject(passwordData, userService.getUserName());
                 accountService.changeUserPassword(objectToSubmit).then(
                     function (response) {
@@ -165,7 +164,7 @@ sharedModule.controller('ModifyPassword', ['$log', '$scope', '$modal', '$statePa
             };
             var modalInstance = $modal.open({
                 animation: true,
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: true,
                 templateUrl: 'usm/users/partial/changeMyPassword.html',
                 controller: 'setMyPasswordModalInstanceCtrl',
@@ -338,7 +337,7 @@ sharedModule.controller('ModifySecurityAnswer',
 
                 var modalInstance = $modal.open({
                     animation: true,
-                    backdrop: true,
+                    backdrop: 'static',
                     keyboard: true,
                     templateUrl: 'usm/users/partial/modifySecurityAnswer.html',
                     controller: 'setModifySecurityAnswersModalInstanceCtrl',
@@ -459,7 +458,7 @@ sharedModule.controller('ModifyContactDetails',
 
                 var modalInstance = $modal.open({
                     animation: true,
-                    backdrop: true,
+                    backdrop: 'static',
                     keyboard: true,
                     templateUrl: 'usm/users/partial/updateMyContactDetails.html',
                     controller: 'setMyContactDetailsModalInstanceCtrl',
@@ -491,7 +490,7 @@ sharedModule.controller('changeMyPasswordCtlr', ['$log', '$scope', '$modal', '$s
         $scope.setUserPassword = function (user) {
             var modalInstance = $modal.open({
                 animation: true,
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: true,
                 templateUrl: 'users/partial/changeMyPassword.html',
                 controller: 'setMyPasswordModalInstanceCtrl',

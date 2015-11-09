@@ -376,7 +376,7 @@ usersModule.controller('userDetailsCtlr', ['$log', '$scope', '$modal', '$statePa
         $scope.manageUserPassword = function (user) {
             var modalInstance = $modal.open({
                 animation: true,
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: true,
                 templateUrl: 'usm/users/partial/setUserPassword.html',
                 controller: 'setUserPasswordModalInstanceCtrl',
@@ -415,7 +415,7 @@ usersModule.controller('manageUserCtlr', ['$log', '$scope', '$modal', '$statePar
         $scope.duplicateUserProfile = function (user) {
             var modalInstance = $modal.open({
                 animation: true,
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: true,
                 size: 'lg',
                 templateUrl: 'usm/users/partial/duplicateUserProfile.html',
@@ -439,7 +439,7 @@ usersModule.controller('manageUserCtlr', ['$log', '$scope', '$modal', '$statePar
         $scope.editUser = function (user) {
             var modalInstance = $modal.open({
                 animation: true,
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: true,
                 size: 'lg',
                 templateUrl: 'usm/users/partial/editUser.html',
@@ -673,7 +673,7 @@ usersModule.controller('setUserPasswordCtlr', ['$log', '$scope', '$modal', '$sta
         $scope.setUserPassword = function (user) {
             var modalInstance = $modal.open({
                 animation: true,
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: true,
                 templateUrl: 'usm/users/partial/setUserPassword.html',
                 controller: 'setUserPasswordModalInstanceCtrl',

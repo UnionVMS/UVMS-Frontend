@@ -22,7 +22,7 @@
                 <label class="col-md-3 col-md-offset-1" for="challenge1">Question 1
                     <sup class="fa fa-asterisk mandatory" ></sup></label>
                 <div class="col-md-7">
-                    <select class="form-control dropdown"
+                    <select class="form-control dropdown-select"
                             id="challenge1"
                             name="challenge1Select"
                             ng-model="mySecurityQuestions.results[0].challenge"
@@ -67,7 +67,7 @@
                 <label class="col-md-3 col-md-offset-1" ng-show="show2questions" for="challenge2">Question 2
                     <sup class="fa fa-asterisk mandatory" ></sup></label>
                 <div class="col-md-7">
-                    <select class="form-control dropdown"
+                    <select class="form-control dropdown-select"
                             id="challenge2"
                             name="challenge2Select"
                             ng-model="mySecurityQuestions.results[1].challenge"
@@ -114,7 +114,7 @@
                 <label class="col-md-3 col-md-offset-1" ng-show="show3questions" for="challenge3">Question 3
                     <sup class="fa fa-asterisk mandatory" ></sup></label>
                 <div class="col-md-7">
-                         <select class="form-control dropdown"
+                         <select class="form-control dropdown-select"
                                   id="challenge3"
                                   name="challenge3Select"
                                   ng-model="mySecurityQuestions.results[2].challenge"

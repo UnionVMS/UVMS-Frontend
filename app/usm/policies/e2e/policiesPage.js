@@ -1,7 +1,8 @@
 var PoliciesPage = function () {
     var EC = protractor.ExpectedConditions;
+    this.criteriaDropDowns = $$('button.dropdown-toggle');
     this.criteriaName = element(by.model('search.name'));
-	this.criteriaSubject = element(by.model('policySubjSelected'));
+	this.criteriaSubject = this.criteriaDropDowns.get(0);
     this.searchButton = element(by.id('searchButton'));
     this.modalEditButton = element(by.id('editButton')); //ng-click="editPolicy(policy)
     this.modalPolicyValue= element(by.model('policy.value'));
@@ -9,7 +10,7 @@ var PoliciesPage = function () {
     this.policiesTable = $$('.table');
     this.policiesTableRows = $$('.table tbody tr');
     this.policiesTableResultsRows = $$('.table tbody.table-bordered tr');
-	
+
 
     this.policyName='';
     this.selectedPolicyId='';
@@ -25,13 +26,22 @@ var PoliciesPage = function () {
     };
 
     this.setCriteriaSubject = function (subj) {
-        this.criteriaSubject.click();
-        this.criteriaSubject.sendKeys(subj);
+        //this.criteriaSubject.click();
+        //this.criteriaSubject.sendKeys(subj);
+        browser.wait(EC.elementToBeClickable(this.criteriaSubject), 2100);
+        this.criteriaSubject.click().then(function() {
+            browser.wait(EC.elementToBeClickable(element(by.linkText(subj))), 10000);
+            element(by.model('policySubjSelected')).all(by.linkText(subj)).click().then(function(){
+                browser.waitForAngular();
+            });
+        });
     };
 
     this.setCriteria = function(name, subject) {
         this.setCriteriaName(name);
-        this.setCriteriaSubject(subject);
+        if (subject != null) {
+            this.setCriteriaSubject(subject);
+        }
     };
 
     this.clickSearchButton = function () {
@@ -54,7 +64,7 @@ var PoliciesPage = function () {
     this.getTableRows = function () {
         return this.policiesTableRows;
     };
-	
+
 	this.getTableResultsRows = function () {
 		return this.policiesTableResultsRows;
 	};

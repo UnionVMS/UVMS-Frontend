@@ -24,7 +24,7 @@ describe('User Changes page', function () {
         menuPage.clickPolicies();
 
         // check if policy 'review.contact.details.enabled' is 'true'. if 'false' enable it.
-        policiesPage.search("review.contact.details.enabled", "feature");
+        policiesPage.search("review.contact.details.enabled", "Feature");
         policiesPage.getTableRows().each(function (row) {
             var columns = row.$$('td');
 

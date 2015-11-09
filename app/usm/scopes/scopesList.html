@@ -2,7 +2,7 @@
     <!-- SEARCH PANEL-->
     <div class="panel panel-default">
         <div class="panel-body">
-            <form class="form-inline" id="searchScopeForm">
+            <form class="form-inline" id="searchScopeForm" ng-submit="searchScope(criteria)">
                 <div class="form-group col-md-2">
                     <label for="role">{{'common.name' | translate}}</label>
 
@@ -22,9 +22,7 @@
                     <label>&nbsp;</label>
 
                     <div>
-                        <button type="button" class="btn btn-primary btn-sm" ng-click="searchScope(criteria)">
-                            {{'common.search' | translate}}
-                        </button>
+                        <input type="submit" class="btn btn-primary btn-sm" ng-value="'common.search' | translate" />
                         <button type="button" class="btn btn-link btn-sm" ng-click="resetForm()">
                             {{'common.reset' | translate}}
                         </button>

@@ -238,7 +238,7 @@ scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$modal', '$stateP
         $scope.manageScope = function (mode, scope) {
             var modalInstance = $modal.open({
                 animation: true,
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: true,
                 templateUrl: 'usm/scopes/partial/manageScope.html',
                 controller: 'scopesModalInstanceCtrl',
@@ -246,7 +246,7 @@ scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$modal', '$stateP
                     mode: function () {
                         return mode;
                     },
-                    scope: function () {
+                    scopeItem: function () {
                         return angular.copy(scope);
                     }
                 }
@@ -281,8 +281,8 @@ scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$modal', '$stateP
     }]);
 
 scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', '$log', '$timeout', '$location', 'refData', 'getApplications',
-    'scopeServices', 'mode', 'scope', '$stateParams',
-    function ($scope, $modalInstance, $log, $timeout, $location, refData, getApplications, scopeServices, mode, scope, $stateParams) {
+    'scopeServices', 'mode', 'scopeItem', '$stateParams',
+    function ($scope, $modalInstance, $log, $timeout, $location, refData, getApplications, scopeServices, mode, scopeItem, $stateParams) {
         var confirmCreate = false;
         $scope.mode = mode;
         $scope.actionMessage = "";
@@ -292,8 +292,8 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
         $scope.showConfirmation = false;
         $scope.formDisabled = false;
 
-        if (!_.isEmpty(scope)) {
-            $scope.scope = scope;
+        if (!_.isEmpty(scopeItem)) {
+            $scope.scope = scopeItem;
         } else {
             $scope.scope = {status: 'E'};
         }
@@ -446,7 +446,7 @@ scopesModule.controller('manageDatasetsCtrl', ['$log', '$scope', '$modal',
         $scope.manageDatasets = function (scopeDetails) {
             var modalInstance = $modal.open({
                 animation: true,
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: true,
                 size: 'lg',
                 templateUrl: 'usm/scopes/partial/manageDatasets.html',

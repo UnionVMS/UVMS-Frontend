@@ -1,7 +1,7 @@
-angular.module('auth.user-service',['auth.router'])
+angular.module('auth.user-service', ['auth.router'])
     //todo: remove $state dependency
-    .factory('userService', ['selectContextPanel','$resource', '$q', '$log', '$localStorage', 'jwtHelper', '$rootScope','$http','$state',
-        function (selectContextPanel,$resource, $q, $log, $localStorage, jwtHelper, $rootScope,$http,$state) {
+    .factory('userService', ['selectContextPanel', '$resource', '$q', '$log', '$localStorage', 'jwtHelper', '$rootScope', '$http', '$state',
+        function (selectContextPanel, $resource, $q, $log, $localStorage, jwtHelper, $rootScope, $http, $state) {
                 var userName,
                     token,
                     contexts,
@@ -41,6 +41,7 @@ angular.module('auth.user-service',['auth.router'])
                 var _isAllowedInContext = function (feature, app, ctxt) {
                     var allowed = false;
                     var role = ctxt.role;
+
                     if (role) {
                         if (role.features) {
                             for (var f = 0, lf = role.features.length; f < lf; f++) {
@@ -95,25 +96,26 @@ angular.module('auth.user-service',['auth.router'])
                     return token;
                 };
 
-            var _logout = function (toState,toParams) {
-                    var resource = $resource('/usm-authentication/rest/sessions/:sessionId',
+            var _logout = function (toState, toParams) {
+                var resource = $resource('/usm-administration/rest/sessions/:sessionId',
                         {sessionId: $localStorage.sessionId});
                     resource.delete().$promise.then(
-                        function(data) {
+                    function (data) {
 
                         },
-                        function(error) {
+                    function (error) {
 
                         }
                     );
 
                     _reset();
                     delete $localStorage.token;
+                //do not wait for the success or failure of the call to delete sessions
+                delete $localStorage.sessionId;
                     _clearContexts();
-                if(toState){
-                    $state.go(toState,toParams);
+                if (toState) {
+                    $state.go(toState, toParams);
                 }
-
                 $rootScope.$broadcast('Logout');
                 };
 
@@ -385,7 +387,7 @@ angular.module('auth.user-service',['auth.router'])
                     );
                 };
 
-/*
+            /*
                 var _findCurrentUser = function () {
                     $log.debug('_findCurrentUser() - Enter');
                     var message = "";
@@ -527,15 +529,15 @@ angular.module('auth.user-service',['auth.router'])
                     }
                     $log.debug('_findCurrentUser() - Exit');
                 };
-*/
+             */
 
             var _isUserIdentifiedPromise = function () {
                 $log.debug('_isUserIdentifiedPromise() - Enter');
                 var message = "";
                 var deferred = $q.defer();
 
-                if(_isLoggedIn()) {
-                    $log.debug('_isUserIdentifiedPromise - Immediately Resolving with logged in user : '+_getUserName());
+                if (_isLoggedIn()) {
+                    $log.debug('_isUserIdentifiedPromise - Immediately Resolving with logged in user : ' + _getUserName());
                     //logged in user, resolve immediately
                     deferred.resolve(_getUserName());
                     return deferred.promise;
@@ -553,10 +555,10 @@ angular.module('auth.user-service',['auth.router'])
                         return _backendPing().then(
                         function (response) {
 								if (!_.isUndefined(response.headers()["extstatus"])) {
-									if(response.headers()["extstatus"] === "701") {
+                                    if (response.headers()["extstatus"] === "701") {
 										$rootScope.$broadcast('NeedChangePassword');
 										$log.debug("User authenticated but password expired (701). User should change password NOW!"); 
-									} else if(response.headers()["extstatus"] === "773") {
+                                    } else if (response.headers()["extstatus"] === "773") {
 										$log.debug("User authenticated but password is about to expire (773). User is suggested to change password."); 
 									}									
 								}
@@ -593,45 +595,45 @@ angular.module('auth.user-service',['auth.router'])
                         validToken = false;
             }
                             }
-                    if(!validToken) {
+                if (!validToken) {
                         $log.debug('Token from localstorage was not valid. do a backend ping in case this is a CAS/ECAS handled session.');
                         // we are not logged in
                         return _backendPing().then(
-                            function(response) {
+                        function (response) {
 								if (!_.isUndefined(response.headers()["extstatus"])) {
-									if(response.headers()["extstatus"] === "701") {
+                                if (response.headers()["extstatus"] === "701") {
 										//$rootScope.$broadcast('NeedChangePassword');
 										$log.debug("User authenticated but password expired (701). User should change password NOW!"); 
-									} else if(response.headers()["extstatus"] === "773") {
+                                } else if (response.headers()["extstatus"] === "773") {
 										$log.debug("User authenticated but password is about to expire (773). User is suggested to change password."); 
                         }
             }
-                                if(response.status && response.status+"" === "200") {
-                                    $log.debug('Resolving _backendPing with "Authenticated", response.status: '+ response.status);
-                                    $log.debug('_isUserIdentifiedPromise resolving with username : ',_getUserName());
+                            if (response.status && response.status + "" === "200") {
+                                $log.debug('Resolving _backendPing with "Authenticated", response.status: ' + response.status);
+                                $log.debug('_isUserIdentifiedPromise resolving with username : ', _getUserName());
                                     deferred.resolve(_getUserName());
                                     return deferred.promise;
                                 } else {
-                                    if (response.data && response.data.status && (response.data.status === "ECAS_AUTHENTICATION_REQUIRED" || response.data.status === "CAS_AUTHENTICATION_REQUIRED")){
-                                        $log.debug('ECAS/CAS AUth needed : '+ response.data);
-                                        $log.debug('rejecting _backendPing promise (7): '+ response);
+                                if (response.data && response.data.status && (response.data.status === "ECAS_AUTHENTICATION_REQUIRED" || response.data.status === "CAS_AUTHENTICATION_REQUIRED")) {
+                                    $log.debug('ECAS/CAS AUth needed : ' + response.data);
+                                    $log.debug('rejecting _backendPing promise (7): ' + response);
                                         deferred.reject(message);
                                     } else {
-                                        $log.debug('rejecting _backendPing promise (8): '+ response);
+                                    $log.debug('rejecting _backendPing promise (8): ' + response);
                                         deferred.reject(message);
                                     }
                                     return deferred.promise;
                                 }
                             },
-                            function(error) {
-                                $log.debug('_backendPing error response (10): '+ error);
+                        function (error) {
+                            $log.debug('_backendPing error response (10): ' + error);
                                 var message;
                                 if (error && error.data && error.data.message) {
                                     message = 'Error: ' + error.data.message;
                                 } else {
                                     message = 'Failed';
                         }
-                                $log.debug('rejecting _backendPing promise (9): '+ message);
+                            $log.debug('rejecting _backendPing promise (9): ' + message);
                                 deferred.reject(message);
                                 return deferred.promise;
                             }
@@ -640,14 +642,14 @@ angular.module('auth.user-service',['auth.router'])
 
                 $log.debug('_isUserIdentifiedPromise() - Exit');
 				};
-            var _getIdentifiedUser = function(){
+            var _getIdentifiedUser = function () {
                         var deferred = $q.defer();
                 return _isUserIdentifiedPromise().then(
-                    function(user){
+                    function (user) {
                         deferred.resolve(user);
                         return deferred.promise;
                                         },
-                    function(error){
+                    function (error) {
                         deferred.resolve('');
                         return deferred.promise;
                     }
@@ -664,16 +666,16 @@ angular.module('auth.user-service',['auth.router'])
                 isLoggedIn: _isLoggedIn,
                 isAllowed: _isAllowed,
                 findContexts: _findContexts,
-                getContexts:_getContexts,
-                getCurrentContext:_getCurrentContext,
-                findSelectedContext:_findSelectedContext,
+                getContexts: _getContexts,
+                getCurrentContext: _getCurrentContext,
+                findSelectedContext: _findSelectedContext,
                 findCurrentUser: _getIdentifiedUser,
                 isUserIdentified: _isUserIdentifiedPromise,
-                setCurrentContext:_storeCurrentContext,
-                clearContext:_clearCurrentContext,
-                getRoleName:_getRoleName,
-                getScopeName:_getScopeName,
-                testJWT:_backendPing
+                setCurrentContext: _storeCurrentContext,
+                clearContext: _clearCurrentContext,
+                getRoleName: _getRoleName,
+                getScopeName: _getScopeName,
+                testJWT: _backendPing
                 };
             }
         ]);

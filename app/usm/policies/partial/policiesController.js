@@ -211,7 +211,7 @@ policiesModule.controller('managePolicyCtlr', ['$log', '$scope', '$modal', '$sta
         $scope.editPolicy = function (policy) {
             var modalInstance = $modal.open({
                 animation: true,
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: true,
                 size: 'md',
                 templateUrl: 'usm/policies/partial/editPolicy.html',
