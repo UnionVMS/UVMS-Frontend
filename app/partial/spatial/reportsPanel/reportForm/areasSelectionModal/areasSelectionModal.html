@@ -42,12 +42,12 @@
 		   			</div>
 	   			</div>
 	   			<!-- Search results table -->
-	   			<div class="form-group col-md-12 noPadding">
-	   				<table datatable="ng" dt-options="sysTable.dtOptions" dt-column-defs="sysTable.dtColumnDefs" class="table table-striped">
+	   			<div class="table-responsive form-group col-md-12 noPadding" st-table="displayedRecordsArea" st-safe-src="sysAreaSearch">
+	   				<table class="table table-striped">
 	   					<thead>
-	   						<tr>
-	   							<th>{{'spatial.area_selection_modal_table_name_header' | i18n}}</th>
-	   							<th>{{'spatial.area_selection_modal_table_code_header' | i18n}}</th>
+	   						<tr class="stColumnHeaders">
+	   							<th st-sort-args="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_name_header' | i18n}}</th>
+	   							<th st-sort-args="code" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_code_header' | i18n}}</th>
 	   							<th style="min-width: 80px;"></th>
 	   						</tr>
 	   						<tr ng-if="searchLoading">
@@ -55,7 +55,10 @@
 					        </tr>
 	   					</thead>
 	   					<tbody>
-	   						<tr ng-repeat="area in sysAreaSearch">
+	   						<tr ng-if="!displayedRecordsArea.length && !searchLoading">
+								<td colspan="3">No data available</td>
+							</tr>
+	   						<tr ng-repeat="area in displayedRecordsArea">
 	   							<td>{{area.name}}</td>
 	   							<td>{{area.code}}</td>
 	   							<td style="min-width: 80px;">
@@ -64,6 +67,13 @@
 	   							</td>
 	   						</tr>
 	   					</tbody>
+	   					<tfoot class="stFooterPagination">
+							<tr>
+								<td colspan="3" class="text-right">
+									<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
+								</td>
+							</tr>
+						</tfoot>
 	   				</table>
 	   			</div>
 	   		</div>
@@ -90,19 +100,22 @@
     </div>
     <!-- CURRENT SELECTION -->
     <div class="modal-body row">
-    	<div class="col-md-12">
+    	<div class="table-responsive col-md-12" st-table="displayedRecordsSelection" st-safe-src="selectedAreas">
     		<div><span class="currentSelectionSection">{{'spatial.area_selection_modal_current_selection' | i18n}}</span></div>
-    		<table datatable="ng" dt-options="areaSelectionTable.dtOptions" dt-column-defs="areaSelectionTable.dtcolumnDefs" class="table table-striped">
+    		<table class="table table-striped">
     			<thead>
-					<tr>
-						<th style="min-width: 100px;">{{'spatial.area_selection_modal_table_area_type_header' | i18n}}</th>
-						<th>{{'spatial.area_selection_modal_table_name_header' | i18n}}</th>
-						<th>{{'spatial.area_selection_modal_table_code_header' | i18n}}</th>
+					<tr class="stColumnHeaders">
+						<th st-sort-args="areaType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" style="min-width: 100px;">{{'spatial.area_selection_modal_table_area_type_header' | i18n}}</th>
+						<th st-sort-args="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_name_header' | i18n}}</th>
+						<th st-sort-args="code" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_code_header' | i18n}}</th>
 						<th></th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="area in selectedAreas">
+					<tr ng-if="!displayedRecordsSelection.length">
+						<td colspan="4">No data available</td>
+					</tr>
+					<tr ng-repeat="area in displayedRecordsSelection">
 						<td style="min-width: 100px;">{{area.areaType}}</td>
 						<td>{{area.name}}</td>
 						<td>{{area.code}}</td>
@@ -111,6 +124,13 @@
 						</td>
 					</tr>
 				</tbody>
+				<tfoot class="stFooterPagination">
+					<tr>
+						<td colspan="4" class="text-right">
+							<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
+						</td>
+					</tr>
+				</tfoot>
     		</table>
     	</div>
     </div>

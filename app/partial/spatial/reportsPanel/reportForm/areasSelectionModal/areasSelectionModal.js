@@ -104,54 +104,14 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     //System areas search table
     $scope.sysAreaSearch = [];
     $scope.sysTable = {};
+    $scope.itemsByPage = 25;
+    $scope.displayedRecordsArea = [].concat($scope.sysAreaSearch);
     $scope.searchLoading = false;
-    $scope.sysTable.dtOptions = DTOptionsBuilder.newOptions()
-                        .withBootstrap()
-                        .withPaginationType('simple_numbers')
-                        .withDisplayLength(5)
-                        .withLanguage(datatablesService)
-                        .withDOM('trp')
-                        .withOption('autoWidth', true)
-                        .withBootstrapOptions({
-                            pagination: {
-                                classes: {
-                                    ul: 'pagination pagination-sm'
-                                }
-                            }
-                        });
-    
-    $scope.sysTable.dtColumnDefs = [
-        DTColumnDefBuilder.newColumnDef(0),
-        DTColumnDefBuilder.newColumnDef(1),
-        DTColumnDefBuilder.newColumnDef(2).notSortable()
-    ];
-    
+
     //Selected areas table
     $scope.areaSelectionTable = {};
     $scope.selectedAreas = [];
-    $scope.areaSelectionTable.dtOptions = DTOptionsBuilder.newOptions()
-                        .withBootstrap()
-                        .withPaginationType('simple_numbers')
-                        .withDisplayLength(5)
-                        .withLanguage(datatablesService)
-                        .withDOM('trp')
-                        .withOption('autoWidth', true)
-                        .withBootstrapOptions({
-                            pagination: {
-                                classes: {
-                                    ul: 'pagination pagination-sm'
-                                }
-                            }
-                        });
-    
-    $scope.areaSelectionTable.dtColumnDefs = [
-        DTColumnDefBuilder.newColumnDef(0),
-        DTColumnDefBuilder.newColumnDef(1),
-        DTColumnDefBuilder.newColumnDef(2),
-        DTColumnDefBuilder.newColumnDef(3).notSortable()
-    ];
-    
-    
+    $scope.displayedRecordsArea = [].concat($scope.selectedAreas);
     
     //MAP
     function setMap(){
