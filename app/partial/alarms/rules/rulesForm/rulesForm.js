@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeout, $log, locale, alertService, ruleRestService, Rule, RuleDefinition, RuleTimeInterval, RuleAction, ruleService, GetListRequest, vesselRestService, mobileTerminalRestService, confirmationModal, configurationService, rulesOptionsService){
+angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeout, $log, locale, alertService, ruleRestService, Rule, RuleDefinition, RuleTimeInterval, RuleAction, ruleService, confirmationModal, configurationService, rulesOptionsService, rulesSuggestionsService, savedSearchService){
 
     $scope.submitAttempted = false;
 
@@ -17,6 +17,12 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         if(angular.isDefined(newValue)){
             $scope.updateFormToMatchTheCurrentRule();
         }
+    });
+
+    //Watch for changes to the saved asset groups
+    $scope.$watch(function () { return savedSearchService.getVesselGroupsForUser();}, function (newVal, oldVal) {
+        //Update dropdown values for ruleDefinitions
+        rulesOptionsService.setupRuleDefinitionDropdowns();
     });
 
     //Init the page
@@ -54,6 +60,9 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         //Update list of disabled (already used) actions
         $scope.updateDisabledActions();
 
+        //Reload dropdown values
+        rulesOptionsService.setupRuleDefinitionDropdowns();
+        rulesOptionsService.setupActionDropdowns();
     };
 
 
@@ -123,8 +132,31 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
     //Callback when selecting criteria in dropdown
     $scope.onCriteriaSelection = function(selection, ruleDef){
         var selectedVal = selection.code;
+        //Set value of critera explicit to make sure the value is updated before calling resetRuleDefinitionValue
+        ruleDef.criteria = selectedVal;
         ruleDef.subCriteria = $scope.DROPDOWNS.SUBCRITERIAS[selectedVal][0].code;
+        //Reset value field
+        $scope.resetRuleDefinitionValue(ruleDef);
+    };
 
+    //Callback when selecting subcriteria in dropdown
+    $scope.onSubCriteriaSelection = function(selection, ruleDef){
+        //Set value of subCriteria explicit to make sure the value is updated before calling resetRuleDefinitionValue
+        ruleDef.subCriteria = selection.code;
+        $scope.resetRuleDefinitionValue(ruleDef);
+    };
+
+    //Reset value field, either to undefined or to first dropdown value
+    $scope.resetRuleDefinitionValue = function(ruleDef){
+        ruleDef.value = undefined;
+        //Value type is dropdown? Then select first value in it.
+        var valueType = $scope.getRuleDefinitionValueInputType(ruleDef);
+        if(valueType === 'DROPDOWN'){
+            var valueDropdownOptions = rulesOptionsService.getDropdownValuesForRuleDefinition(ruleDef);
+            if(valueDropdownOptions && valueDropdownOptions.length > 0){
+                ruleDef.value = valueDropdownOptions[0].code;
+            }
+        }
     };
 
     //Check if an action requires a value
@@ -341,120 +373,99 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         updateRuleAsText();
     }, true);
 
-
-    //AUTO SUGGESTIONS
-    var maxNumberOfSuggestions = 10;
-    var lastAutoSuggestionRequestTimestamp;
-    var autoSuggestionGetListRequest = new GetListRequest(1, maxNumberOfSuggestions, true, []);
-
-
-    //Handle auto suggest success
-    var autoSuggestSuccess = function(criteria, subCriteria, searchResultListPage){
-        return searchResultListPage.items.reduce(function(suggestions, resultItem){
-            var suggestion;
-
-            //Get the correct suggestion value
-            if(criteria === 'VESSEL'){
-                switch (subCriteria){
-                    case 'VESSEL_CFR':
-                        suggestion = resultItem.cfr;
-                        break;
-                    case 'VESSEL_IRCS':
-                        suggestion = resultItem.ircs;
-                        break;
-                    case 'VESSEL_NAME':
-                        suggestion = resultItem.name;
-                        break;
-                    default:
-                        break;
-                }
+    //Get the type of input for the ruleDefinition value
+    $scope.getRuleDefinitionValueInputType = function(ruleDefinition){
+        //Dropdown?
+        var dropdownValues = rulesOptionsService.getDropdownValuesForRuleDefinition(ruleDefinition);
+        if(Array.isArray(dropdownValues)){
+            if(dropdownValues.length === 0){
+                return "DROPDOWN_EMPTY";
             }
+            return "DROPDOWN";
 
-            if(criteria === 'MOBILE_TERMINAL'){
-                switch (subCriteria){
-                    default:
-                        suggestion = resultItem.attributes[subCriteria];
-                        break;
-                }
-            }
+        }
 
-            if(angular.isDefined(suggestion)){
-                //Don't add duplicates
-                if(!_.contains(suggestions, suggestion)){
-                    suggestions.push(suggestion);
-                }
-            }else{
-                $log.info("Couldn't find the auto suggest value.");
-            }
+        //Text input with auto suggestion?
+        if(rulesSuggestionsService.isSuggestionsAvailable(ruleDefinition)){
+            return "TEXT_WITH_SUGGESTIONS";
+        }
 
-            return suggestions;
-        }, []);
+        //Speed input?
+        if(rulesOptionsService.isRuleDefinitionValueASpeed(ruleDefinition)){
+            return "SPEED";
+        }
+
+        //Course input?
+        if(rulesOptionsService.isRuleDefinitionValueACourse(ruleDefinition)){
+            return "COURSE";
+        }
+
+        //Longitude input
+        if(rulesOptionsService.isRuleDefinitionValueLongitudeCoordinate(ruleDefinition)){
+            return "LONGITUDE";
+        }
+        //Latitude input
+        if(rulesOptionsService.isRuleDefinitionValueLatitudeCoordinate(ruleDefinition)){
+            return "LATITUDE";
+        }
+
+        //DateTime input?
+        if(rulesOptionsService.isRuleDefinitionValueADateTime(ruleDefinition)){
+            return "DATETIME";
+        }
+        
+        //Default text input
+        return "TEXT";
     };
 
+    //Get the type of input for the action value
+    $scope.getActionValueInputType = function(action){
+        //Dropdown?
+        var dropdownValues = rulesOptionsService.getDropdownValuesForAction(action);
+        if(Array.isArray(dropdownValues)){
+            if(dropdownValues.length === 0){
+                return "DROPDOWN_EMPTY";
+            }
+            return "DROPDOWN";
+
+        }
+        //Autosuggestion?
+        //Text input
+        return "TEXT";
+    };
+
+    //Get dropdown values for the ruleDefinition value
+    $scope.getDropdownValuesForRuleDefinition = function(ruleDefinition){
+        return rulesOptionsService.getDropdownValuesForRuleDefinition(ruleDefinition);
+    };
+
+    //Get dropdown values for the action  value
+    $scope.getDropdownValuesForAction = function(action){
+        return rulesOptionsService.getDropdownValuesForAction(action);
+    };
+    //AUTO SUGGESTIONS
+    var lastAutoSuggestionRequestTimestamp;
     //Handle auto suggest error
     var autoSuggestError = function(error){
         alertService.showErrorMessage(locale.getString('alarms.rules_form_definition_auto_suggest_error'));
         return [];
     };
 
-    //Get vessels matching search query
-    var getVessels = function(criteria, subCriteria) {
-        return vesselRestService.getVesselList(autoSuggestionGetListRequest).then(
-            function(vesselResultListPage){
-                return autoSuggestSuccess(criteria, subCriteria, vesselResultListPage);
-            },
-            autoSuggestError
-        );
-    };
-
-    //Get mobileTerminals matching search query
-    var getMobileTerminals = function(criteria, subCriteria) {
-        return mobileTerminalRestService.getMobileTerminalList(autoSuggestionGetListRequest).then(
-            function(searchResultListPage){
-                return autoSuggestSuccess(criteria, subCriteria, searchResultListPage);
-            },
-            autoSuggestError
-        );
+    //Handle auto suggest success
+    var autoSuggestSuccess = function(suggestions){
+       return suggestions;
     };
 
     //Function for getting auto suggestions
-    $scope.getAutoSuggestValues = function(value, item){
-        if(angular.isDefined(item.criteria) && angular.isDefined(item.subCriteria)){
-            lastAutoSuggestionRequestTimestamp = new Date().getTime();
-            $log.debug("Get suggestions for:" +value);
-            $log.debug(item);
-            //Add the subcritera as search value and append a * at the end
-            autoSuggestionGetListRequest.resetCriterias();
-            var searchKey = item.subCriteria.replace(item.criteria+"_", '');
-            autoSuggestionGetListRequest.addSearchCriteria(searchKey, value +"*");
-
-            var searchFunc;
-            $log.debug("Current criteria:" +item.criteria);
-            switch(item.criteria){
-                case 'VESSEL':
-                    searchFunc = getVessels;
-                    break;
-                case 'MOBILE_TERMINAL':
-                    searchFunc = getMobileTerminals;
-                    break;
-                default:
-                    break;
-            }
-
-            if(angular.isDefined(searchFunc)){
-                return searchFunc(item.criteria, item.subCriteria);
-            }
-
-            //No Search func
-            $log.debug("No search func defined. Return []");
-        }
-        return [];
+    $scope.getAutoSuggestValues = function(value, ruleDefinition){
+        lastAutoSuggestionRequestTimestamp = new Date().getTime();
+        return rulesSuggestionsService.getSuggestions(value, ruleDefinition).then(autoSuggestSuccess, autoSuggestError);
     };
 
-    //On select item in value auto suggestion input field
-    $scope.onValueSuggestionSelect = function(selectedItem, selectedLabel, item){
+    //On select in value auto suggestion input field
+    $scope.onValueSuggestionSelect = function(selectedItem, selectedLabel, ruleDefinition){
         //Update value based on selection
-        item.value = selectedLabel;
+        ruleDefinition.value = selectedLabel;
     };
 
     //Clear the form

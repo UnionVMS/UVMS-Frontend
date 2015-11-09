@@ -169,6 +169,10 @@ angular.module('unionvmsWeb').factory('RuleDefinition', function() {
             ruleDefinition.subCriteria = dto.subCriteria;
             ruleDefinition.condition = dto.condition;
             ruleDefinition.value = dto.value;
+            //Parse to number if possible
+            if(!isNaN(ruleDefinition.value)){
+                ruleDefinition.value = parseFloat(ruleDefinition.value);
+            }
             ruleDefinition.endOperator = dto.endOperator;
             ruleDefinition.logicBoolOperator = dto.logicBoolOperator;
             ruleDefinition.order = dto.order;

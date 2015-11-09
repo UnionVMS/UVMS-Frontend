@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurationService, locale) {
+angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurationService, locale, savedSearchService) {
 
     var actionsThatRequireValue = [];
     var criteriaThatRequireSubcriteria = [];
@@ -14,6 +14,13 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         SUBCRITERIAS : [],
         CONDITIONS : [],
     };
+
+    //Crieterias that should have value input fields of a certain type
+    var longitudesCriterias = ['LONGITUDE'];
+    var latitudeCriterias = ['LATITUDE'];
+    var courseCriterias = ['REPORTED_COURSE', 'CALCULATED_COURSE'];
+    var speedCriterias = ['REPORTED_SPEED', 'CALCULATED_SPEED'];
+    var dateTimeCriterias = ['POSITION_REPORT_TIME'];
 
     var createDropdownItemsWithSameTextAsValue = function(codes){
         var options = [];
@@ -34,7 +41,6 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
     };
 
     var setupDropdowns = function(){
-
         /*HARD CODED BELOW*/
         //Rule types
         DROPDOWNS.RULE_TYPES =[
@@ -61,6 +67,7 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
 
         /*FROM CONFIG BELOW*/
         //Actions
+        DROPDOWNS.ACTIONS = [];
         $.each(configurationService.getValue('RULES', 'ACTIONS'), function(key, requiresValue){
             DROPDOWNS.ACTIONS.push(createDropdownValue('ACTIONS', key));
             if(requiresValue){
@@ -70,16 +77,20 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         DROPDOWNS.ACTIONS = _.sortBy(DROPDOWNS.ACTIONS, function(obj){return obj.text;});
 
         //Conditions
+        DROPDOWNS.CONDITIONS = [];
         $.each(configurationService.getValue('RULES', 'CONDITIONS'), function(index, key){
             DROPDOWNS.CONDITIONS.push(createDropdownValue('CONDITIONS', key));
         });
 
         //LOGIC OPERATIONS
+        DROPDOWNS.LOGIC_OPERATORS = [];
         $.each(configurationService.getValue('RULES', 'LOGIC_OPERATORS'), function(index, key){
             DROPDOWNS.LOGIC_OPERATORS.push(createDropdownValue('LOGIC_OPERATORS', key));
         });
 
         //CRITERIAS
+        DROPDOWNS.CRITERIAS = [];
+        DROPDOWNS.SUBCRITERIAS = [];
         $.each(configurationService.getValue('RULES', 'CRITERIA'), function(key, subcriterias){
             //Special ROOT element contains list of criterias without subcriterias
             if(key === 'ROOT'){
@@ -112,6 +123,44 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         DROPDOWNS.CRITERIAS = _.sortBy(DROPDOWNS.CRITERIAS, function(obj){return obj.text;});
     };
 
+    //Dropdown values for ruleDefintions
+    var ruleDefinitionDropdowns = {
+        FLAG_STATE : [],
+        ASSET_GROUP : [],
+        AREA_TYPE : [],
+        AREA_ID : [],
+        AREA_NAME: [],
+        AREA_CODE: [],
+    };
+    var setupRuleDefinitionDropdowns = function(){
+        //TODO: Get options from configurations
+        ruleDefinitionDropdowns.FLAG_STATE = createDropdownItemsWithSameTextAsValue(['SWE', 'FIN', 'DEN']);
+        ruleDefinitionDropdowns.AREA_TYPE = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
+
+        //Asset groups
+        var assetGroups = savedSearchService.getVesselGroupsForUser();
+        ruleDefinitionDropdowns.ASSET_GROUP = [];
+        $.each(assetGroups, function(i, assetGroup){
+            ruleDefinitionDropdowns.ASSET_GROUP.push({'text': assetGroup.name, 'code':assetGroup.id});
+        });
+        ruleDefinitionDropdowns.ASSET_GROUP = _.sortBy(ruleDefinitionDropdowns.ASSET_GROUP, function(assetGroup){return assetGroup.name;});
+
+        //TODO: Add Areas
+    };
+
+    //Dropdown values for actions
+    var actionDropdowns = {
+        SEND_TO_ENDPOINT : [],
+    };
+    var setupActionDropdowns = function(){
+        actionDropdowns.SEND_TO_ENDPOINT = createDropdownItemsWithSameTextAsValue(['SWE', 'FIN', 'DEN']);
+        //Add reserved word for sending to all countries to dropdown
+        var reservedWord = configurationService.getConfig('RULES_RESERVED_WORDS');
+        if(Array.isArray(reservedWord) && reservedWord.length > 0){
+            actionDropdowns.SEND_TO_ENDPOINT.push({'text': locale.getString('alarms.rules_form_definition_action_send_to_endpoint_closest_country'), 'code':reservedWord[0]});
+        }
+    };
+
 	var rulesOptionsService = {
         //Get all dropdown values
         getDropdownValues : function(){
@@ -127,9 +176,56 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         criteriaShouldHaveSubcriteria : function(criteria){
             return criteriaThatRequireSubcriteria.indexOf(criteria) >= 0;
         },
+
+        //Get dropdown values for a ruleDefinition
+        getDropdownValuesForRuleDefinition : function(ruleDefinition){
+            if(ruleDefinition.criteria in ruleDefinitionDropdowns){
+                return ruleDefinitionDropdowns[ruleDefinition.criteria];
+            }
+            if(ruleDefinition.subCriteria in ruleDefinitionDropdowns){
+                return ruleDefinitionDropdowns[ruleDefinition.subCriteria];
+            }
+        },
+        //Get dropdown values for an action
+        getDropdownValuesForAction : function(action){
+            if(action.action in actionDropdowns){
+                return actionDropdowns[action.action];
+            }
+        },
+        //Is the value a coordinate?
+        isRuleDefinitionValueLongitudeCoordinate : function(ruleDefinition){
+            return longitudesCriterias.indexOf(ruleDefinition.criteria) >= 0;
+        },
+        isRuleDefinitionValueLatitudeCoordinate : function(ruleDefinition){
+            return latitudeCriterias.indexOf(ruleDefinition.criteria) >= 0;
+        },
+        isRuleDefinitionValueASpeed : function(ruleDefinition){
+            return speedCriterias.indexOf(ruleDefinition.criteria) >= 0;
+        },
+        isRuleDefinitionValueACourse : function(ruleDefinition){
+            return courseCriterias.indexOf(ruleDefinition.criteria) >= 0;
+        },
+        isRuleDefinitionValueADateTime : function(ruleDefinition){
+            return dateTimeCriterias.indexOf(ruleDefinition.criteria) >= 0;
+        },
+        setupDropdowns : function(){
+            setupDropdowns();
+        },
+        setupRuleDefinitionDropdowns : function(){
+            setupRuleDefinitionDropdowns();
+        },
+        setupActionDropdowns : function(){
+            setupActionDropdowns();
+        },
     };
 
-    setupDropdowns();
+    var init = function(){
+        setupDropdowns();
+        setupRuleDefinitionDropdowns();
+        setupActionDropdowns();
+    };
+
+    init();
 
 	return rulesOptionsService;
 });

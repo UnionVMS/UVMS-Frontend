@@ -46,9 +46,10 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log, rules
             text +=' ' + def.condition + ' ' ;
 
             //value
-            if(typeof def.value === 'string' && def.value.trim().length > 0){
-                text += def.value;
-            }else{
+            if((typeof def.value === 'string' || typeof def.value === 'number') && String(def.value).trim().length > 0){
+                text += String(def.value);
+            }
+            else{
                 text += '???';
             }
 
@@ -115,7 +116,7 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log, rules
                         }
                     }
                     //No empty values field for a definition
-                    if(typeof definition.value !== 'string' || definition.value.trim().length === 0){
+                    if(!(typeof definition.value === 'string' || typeof definition.value === 'number') || String(definition.value).trim().length === 0){
                         returnObject.problems.push('INVALID_DEF_VALUE');
                     }
                     //No empty condition field for a definition

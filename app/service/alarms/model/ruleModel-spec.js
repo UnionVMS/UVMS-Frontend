@@ -45,7 +45,7 @@ describe('Rule', function() {
               "criteria": "MOBILE_TERMINAL",
               "subCriteria": "MEMBER_NUMBER",
               "condition": "NEQ",
-              "value": "ABC99",
+              "value": 1234567,
               "endOperator": "",
               "logicBoolOperator": "NONE",
               "order": 2
@@ -204,6 +204,17 @@ describe('RuleDefinition', function() {
         "order": "0"
     };
 
+    var ruleDefinitionWithNumberValueDTO = {
+        "startOperator": "(",
+        "criteria": "VESSEL",
+        "subCriteria": "CFR",
+        "condition": "EQ",
+        "value": 12345667,
+        "endOperator": "",
+        "logicBoolOperator": "OR",
+        "order": "0"
+    };
+
     it('create new should set correct values', inject(function(RuleDefinition) {
         var ruleDefinition = new RuleDefinition();
         expect(ruleDefinition.startOperator).toEqual('');
@@ -228,6 +239,9 @@ describe('RuleDefinition', function() {
         expect(ruleDefinition.endOperator).toEqual(ruleDefinitionDTO.endOperator);
         expect(ruleDefinition.logicBoolOperator).toEqual(ruleDefinitionDTO.logicBoolOperator);
         expect(ruleDefinition.order).toEqual(ruleDefinitionDTO.order);
+
+        ruleDefinition = RuleDefinition.fromDTO(ruleDefinitionWithNumberValueDTO);
+        expect(ruleDefinition.value).toEqual(ruleDefinitionWithNumberValueDTO.value);
     }));
 
     it("DTO() should create correct object", inject(function(RuleDefinition) {

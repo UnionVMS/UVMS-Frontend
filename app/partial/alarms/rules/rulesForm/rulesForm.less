@@ -28,16 +28,20 @@
     .definitionsContainer{
         table{
             th, td{
-                padding:0px 5px;
+                padding:5px 5px;
             }
-
             td{
+                vertical-align: top;
                 text-align: left;
 
                 .form-group{
                     margin:0px;
                 }
-
+                &.value{
+                    .dropdown{
+                        min-width: 100%;
+                    }
+                }
                 &.endOperator{
                     width: 110px;
                 }
@@ -68,6 +72,11 @@
     .actionsTable{
         .action, .value{
             width: 25%;
+        }
+        table{
+            td{
+                vertical-align: middle;
+            }
         }
     }
 

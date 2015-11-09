@@ -305,6 +305,14 @@ describe('ruleService', function() {
         expect(testResult.problems.indexOf('INVALID_DEF_VALUE') >= 0).toBeTruthy("INVALID_DEF_VALUE should be in problems");
     }));
 
+    it("areRuleDefinitionsAndActionsValid should return true for ruleDef value that is a number", inject(function(ruleService, Rule) {
+        var rule = Rule.fromDTO(ruleDTO);
+
+        rule.definitions[1].value = 123123;
+        var testResult = ruleService.areRuleDefinitionsAndActionsValid(rule);
+        expect(testResult.success).toBeTruthy();
+    }));
+
     it("areRuleDefinitionsAndActionsValid should return false when a condition is undefined or empty", inject(function(ruleService, Rule) {
         var rule = Rule.fromDTO(ruleDTO);
 

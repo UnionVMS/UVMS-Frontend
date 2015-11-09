@@ -14,13 +14,16 @@ angular.module('unionvmsWeb')
             getConfig : function(){
                 return $resource('/rules/rest/config');
             },
+            getReservedWordConfig : function(){
+                return $resource('/rules/rest/config/reservedword');
+            },
         };
     })
 .factory('ruleRestService', function($q, $log, ruleRestFactory, Rule, SearchResultListPage, userService){
 
-    var getConfig = function(configResource){
+    var getConfigFromResource = function(configResource){
         var deferred = $q.defer();
-        ruleRestFactory.getConfig().get({}, function(response) {
+        configResource.get({}, function(response) {
             if(response.code !== 200){
                 deferred.reject("Invalid response status");
                 return;
@@ -32,6 +35,14 @@ angular.module('unionvmsWeb')
             deferred.reject(error);
         });
         return deferred.promise;
+    };
+
+    var getConfig = function(){
+        return getConfigFromResource(ruleRestFactory.getConfig());
+    };
+
+    var getReservedWordConfig = function(){
+        return getConfigFromResource(ruleRestFactory.getReservedWordConfig());
     };
 
     var getRulesList = function(){
@@ -132,6 +143,7 @@ angular.module('unionvmsWeb')
 
     return {
         getConfig: getConfig,
+        getReservedWordConfig: getReservedWordConfig,
         getRulesList: getRulesList,
         updateRule: updateRule,
         createNewRule: createNewRule,

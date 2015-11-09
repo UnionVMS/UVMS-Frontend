@@ -384,7 +384,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["RULES"]);
+                    return initService.loadConfigFor(["RULES", "RULES_RESERVED_WORDS"]);
                 }
             },
             data: {
@@ -401,7 +401,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["RULES"]);
+                    return initService.loadConfigFor(["RULES", "RULES_RESERVED_WORDS"]);
                 }
             },
             data: {
