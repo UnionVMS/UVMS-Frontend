@@ -30,7 +30,7 @@
 	"sending_queue_table_resendgroup": "Resend group",
 	"sending_queue_table_resend": "Resend",
 	"sending_queue_table_refreshqueue":"Refresh sending queue",
-	"sending_queue_table_number_of_reports" : "reports",
+	"sending_queue_table_number_of_reports" : "message(s)",
 	"sending_queue_table_allmessages_in_group": "Group",
 	"sending_table_queue_refreshqueue":"Refresh queue",
 

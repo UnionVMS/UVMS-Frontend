@@ -11,7 +11,7 @@ angular.module('unionvmsWeb')
 
         if(data){
             exchangeSendingQueue.recipient = data.recipient;
-            exchangeSendingQueue.sendingLogList = data.LogList;
+            exchangeSendingQueue.sendingLogList = data.sendingLogList;
         }
 
         return exchangeSendingQueue;

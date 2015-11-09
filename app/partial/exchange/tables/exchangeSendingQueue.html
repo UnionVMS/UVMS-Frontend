@@ -27,7 +27,7 @@
                             <i class="fa fa-plus fa-md" title="{{'exchange.sending_queue_expandgroup' | i18n}}" ng-click="messageVisible = messageVisible ? false:true" ng-show="!messageVisible"></i>
                             <i class="fa fa-minus fa-md" title="{{'exchange.sending_queue_collapsegroup' | i18n}}" ng-click="messageVisible = !messageVisible ? true:false" ng-show="messageVisible"></i>
                         </th>
-                        <th>{{results.length}} {{'exchange.sending_queue_table_number_of_reports' | i18n}}</th>
+                        <th>{{item.sendingLogList.length}} {{'exchange.sending_queue_table_number_of_reports' | i18n}}</th>
                         <td class="sendingqueue_header">{{item.sendingLogList[0].dateRecieved}}</td>
                         <td class="sendingqueue_header">{{item.recipient}}</td>
                         <!--<td class="reciepient sendingqueue_header">{{'exchange.sending_queue_table_allmessages_in_group' | i18n}}</td>-->
