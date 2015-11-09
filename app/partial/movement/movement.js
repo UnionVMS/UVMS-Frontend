@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, $filter, alertService, movementRestService, searchService, locale, $stateParams, ManualPositionReportModal, csvService, SearchResults, $resource){
+angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, $filter, alertService, movementRestService, searchService, locale, $stateParams, ManualPositionReportModal, csvService, SearchResults, $resource, longPolling){
 
     //Current filter and sorting for the results table
     $scope.sortFilter = '';
@@ -35,22 +35,11 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         };
     };
 
-    /* Returns the movement with GUID from page. */
-    var getMovementWithGuid = function(page, guid) {
-        for (var i = 0; i < page.items.length; i++) {
-            if (page.items[i].guid === guid) {
-                return page.items[i];
-            }
-        }
-    };
-
-    /* Performs current search, and adds the movement with given GUID to results, if found.
-     * Otherwise increments new movement count. */
-    var appendSearchWithGuid = function(guid) {
+    var updateSearchWithGuid = function(guid) {
         searchService.searchMovements().then(function(page) {
-            var movement = getMovementWithGuid(page, guid);
-            if (movement) {
-                $scope.currentSearchResults.updateWithSingleItem(movement);
+            if (page.hasItemWithGuid(guid)) {
+                $scope.clearSelection();
+                retriveMovementsSuccess(page);
             }
             else {
                 $scope.newMovementsCount++;
@@ -58,31 +47,8 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         });
     };
 
-    /* If list of IDs not empty, pick the first one and updates the list accordingly. */
-    var receivedNewMovement = function(response) {
-        if (response.ids.length === 0) {
-            return;
-        }
-
-        var guid = response.ids[0];
-        if (searchService.getSearchCriterias().criterias.length > 0) {
-            // Add to search if matching, or increment new movement count.
-            appendSearchWithGuid(guid);
-        }
-        else {
-            // Add to movement list.
-            movementRestService.getMovement(guid).then(function(movement) {
-                $scope.currentSearchResults.updateWithSingleItem(movement);
-            });
-        }
-    };
-
-    /* Do long-polling,  */
-    var doLongPolling = function() {
-        $resource("/movement/activity/movement").get(function(response) {
-            receivedNewMovement(response);
-            doLongPolling();
-        });
+    $scope.resetSearch = function() {
+        $scope.$broadcast("searchMovements");
     };
 
     var init = function(){
@@ -92,49 +58,15 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
             });
          }
 
-         // doLongPolling();
-    };
-
-    $scope.isManualMovement = false;
-
-    //AUTOMATIC REFRESH OF THE MOVEMENTS LIST
-    var autoRefreshTimer;
-    var AUTO_REFRESH_INTERVAL_SECONDS = 60;
-    $scope.autoRefresh = false;
-    $scope.autoRefreshTimer = AUTO_REFRESH_INTERVAL_SECONDS;
-    var autoRefreshListWithRegularIntervals = function(){
-        autoRefreshTimer = $timeout(function(){
-            $scope.autoRefreshTimer--;
-            if($scope.autoRefresh && $scope.autoRefreshTimer <= 0){
-                $scope.refreshMovements();
-                $scope.autoRefreshTimer = AUTO_REFRESH_INTERVAL_SECONDS;
-            }
-            autoRefreshListWithRegularIntervals();
-        }, 1000);
-    };
-
-    //Stop the autmatic refresh
-    $scope.stopAutoRefresh = function(){
-        $scope.autoRefresh = false;
-        if(angular.isDefined(autoRefreshTimer)){
-            $timeout.cancel(autoRefreshTimer);
-        }
-    };
-
-    //Start the autmatic refresh
-    $scope.startAutoRefresh = function(){
-        $scope.stopAutoRefresh();
-        $scope.autoRefresh = true;
-        $scope.autoRefreshTimer = AUTO_REFRESH_INTERVAL_SECONDS;
-        autoRefreshListWithRegularIntervals();
-    };
-
-    //Refresh the list
-    $scope.refreshMovements = function(){
-        $scope.searchMovements();
+         longPolling.poll("/movement/activity/movement", function(response) {
+            response.ids.length > 0 && updateSearchWithGuid(response.ids[0]);
+         }, function(error) {
+            console.log("movement long-polling was interrupted with error: " + error);
+         });
     };
 
     $scope.searchMovements = function(){
+        $scope.newMovementsCount = 0;
         $scope.clearSelection();
         $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.setLoading(true);
@@ -143,7 +75,6 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     };
 
     var retriveMovementsSuccess = function(searchResultListPage){
-        $scope.newMovementsCount = 0;
         console.info("Success in retrieveing movements..");
         $scope.currentSearchResults.updateWithNewResults(searchResultListPage);
     };
@@ -270,7 +201,6 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
         searchService.reset();
-        $scope.stopAutoRefresh();
     });
 
 

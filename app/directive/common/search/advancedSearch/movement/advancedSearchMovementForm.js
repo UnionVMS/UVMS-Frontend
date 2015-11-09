@@ -15,6 +15,10 @@ angular.module('unionvmsWeb').directive('advancedSearchMovementForm', function()
 angular.module('unionvmsWeb')
     .controller('advancedSearchMovementCtrl', function($scope, locale, searchService, savedSearchService, alertService, configurationService, SearchField){
 
+        $scope.$on("searchMovements", function(event, pingCount) {
+            $scope.resetSearch();
+        });
+
         $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_TODAY;
 
         var ASSET_GROUP_ID_SEARCH_KEY = 'ASSET_GROUP_ID';

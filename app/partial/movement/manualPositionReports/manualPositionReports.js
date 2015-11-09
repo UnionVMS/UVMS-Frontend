@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, $filter, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal, csvService, SearchResults, envConfig, $resource, $log) {
+angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, $filter, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal, csvService, SearchResults, envConfig, $resource, $log, longPolling) {
 
     $scope.showModal = function() {
         $scope.editPosition();
@@ -13,25 +13,17 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     //Search objects and results
     $scope.currentSearchResults = new SearchResults('carrier.name', false, locale.getString('movement.movement_search_error_result_zero_pages'), equalGuid);
 
-    var doLongPolling = function() {
-        $resource("/movement/activity/movement/manual").get(function(response) {
+    var init = function(){
+        $scope.searchManualPositions();
+
+        longPolling.poll("/movement/activity/movement/manual", function(response) {
             if (response.ids.length > 0) {
                 manualPositionRestService.getManualMovement(response.ids[0]).then(function(movement) {
                    $scope.currentSearchResults.updateWithSingleItem(movement);
                 });
             }
-
-            // Loop!
-            doLongPolling();
         });
     };
-
-    var init = function(){
-        $scope.searchManualPositions();
-        doLongPolling();
-    };
-
-    $scope.isManualMovement = true;
 
     $scope.removeFromSearchResults = function(report) {
         var movements = $scope.currentSearchResults.items;

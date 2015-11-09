@@ -10,14 +10,5 @@
                 </li>
             </ul>
         </div>
-        <div class="col-md-4 pull-right textAlignRight" ng-hide="isManualMovement">
-            <a class="refreshbutton" href="" ng-click="refreshMovements()">
-                <i class="fa fa-refresh"></i>
-                {{'movement.refresh'| i18n}}
-            </a>
-            <br>
-            <span ng-show="autoRefresh">{{'movement.refresh_automatic_countdown' | i18n:autoRefreshTimer}}</span>
-            <span ng-hide="autoRefresh">{{'movement.refresh_automatic_disabled' | i18n}}</span>
-        </div>
     </div>
 </div>

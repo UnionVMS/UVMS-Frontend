@@ -7,7 +7,7 @@
                 <div class="col-md-2">
                     <dropdown ng-model="editSelection" initialtext="{{'common.edit_selection' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
                 </div>
-                <div class="col-md-4 available-positions-refresh" ng-click="searchMovements()">
+                <div class="col-md-4 available-positions-refresh" ng-click="resetSearch()">
                     <a ng-if="newMovementsCount > 0"><i class="fa fa-refresh"/> {{ "movement.new_positions_available" | i18n:[newMovementsCount] }}</a>
                 </div>
                 <div class="col-md-6 pull-right textAlignRight printAndExport">

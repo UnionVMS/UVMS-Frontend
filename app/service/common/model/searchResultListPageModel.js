@@ -27,6 +27,10 @@ angular.module('unionvmsWeb')
             }
         };
 
+        SearchResultListPage.prototype.hasItemWithGuid = function(guid) {
+            return !!this.getItemByProperty("guid", guid);
+        }
+
         return SearchResultListPage;
     });
 
