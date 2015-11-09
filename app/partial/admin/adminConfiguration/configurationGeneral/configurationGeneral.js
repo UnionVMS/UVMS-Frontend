@@ -94,7 +94,7 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 		else {
 			return get("coordinateFormat");
 		}
-	}
+	};
 
 	$scope.unit = function(value) {
 		if (value) {
@@ -103,7 +103,7 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 		else {
 			return get("measurementSystem");
 		}
-	}
+	};
 
 	$scope.dateFormat = function(value) {
 		if (value) {
@@ -112,7 +112,7 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 		else {
 			return get("dateTimeFormat");
 		}
-	}
+	};
 
 	$scope.getSelectedLanguages = function() {
 		return get("availableLanguages", true);

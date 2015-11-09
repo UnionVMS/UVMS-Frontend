@@ -8,8 +8,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     $scope.exchangeLogsSearchResults = new SearchResults('dateReceived', true);
     $scope.exchangeLogsSearchResults.incomingOutgoing = 'all';
 
-    /* Do long-polling,  */
-    var doSendingQueueLongPolling = function() {
+    /* Do long-polling,     var doSendingQueueLongPolling = function() {
         $resource("/exchange/activity/queue").get(function(response) {
             if (response.ids.length > 0) {
                 $scope.getSendingQueue();
@@ -18,8 +17,10 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
             doSendingQueueLongPolling();
         });
     };
+     */
 
-    /* Do long-polling,  */
+
+    /* Do long-polling,
     var doTransmissionStatusLongPolling = function() {
         $resource("/exchange/activity/plugins").get(function(response) {
             $.each($scope.transmissionStatuses.items, function(index, transmissionStatus) {
@@ -34,9 +35,9 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
 
             doTransmissionStatusLongPolling();
         });
-    };
+    };*/
 
-    /* Do long-polling,  */
+    /* Do long-polling,
     var doExchangeLogLongPolling = function() {
         $resource("/exchange/activity/exchange").get(function(response) {
             for (var i = 0; i < response.ids.length; i++) {
@@ -47,7 +48,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
 
             doExchangeLogLongPolling();
         });
-    };
+    };*/
 
     var init = function(){
         //$scope.searchExchange();
@@ -179,12 +180,11 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
                     $location.path('alarms/holdingtable/' + model.logData.guid);
                     break;
 
-                case 'UNKOWN':
                 default:
                     console.log("No matching type in model");
                     break;
             }
-        };
+        }
     };
 
     $scope.openUpModal = function(model){

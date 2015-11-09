@@ -17,7 +17,7 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 
 	var Settings = $resource("/config/rest/catalog");
 
-	var SingleSetting = $resource("/config/rest/settings/:id", {}, { 
+	var SingleSetting = $resource("/config/rest/settings/:id", {}, {
 		"update": {
 			method: "PUT"
 		}
@@ -50,7 +50,7 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 		else {
 			return "partial/admin/adminConfiguration/configurationModule/configurationModule.html";
 		}
-	}
+	};
 
 	$scope.updateSetting = function(setting) {
 		SingleSetting.update({ id: setting.id }, setting);
@@ -67,4 +67,4 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
     return function (value) {
         return (!value) ? '' : value.replace(/\./g, "_");
     };
-});;
+});
