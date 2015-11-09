@@ -11,6 +11,8 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     //Selected by checkboxes
     $scope.selectedMovements = [];
 
+    $scope.isManualMovement = false;
+
     var movement2ManualPosition = function(movement) {
         return {
             id: movement.id,

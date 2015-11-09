@@ -6,6 +6,8 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
 
     $scope.selectedMovements = [];
 
+    $scope.isManualMovement = true;
+
     var equalGuid = function(a, b) {
         return a.guid !== undefined && b.guid !== undefined && a.guid === b.guid;
     };
