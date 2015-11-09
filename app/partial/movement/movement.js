@@ -59,7 +59,9 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
          }
 
          longPolling.poll("/movement/activity/movement", function(response) {
-            response.ids.length > 0 && updateSearchWithGuid(response.ids[0]);
+            if (response.ids.length > 0) {
+                updateSearchWithGuid(response.ids[0]);
+            }
          }, function(error) {
             console.log("movement long-polling was interrupted with error: " + error);
          });
