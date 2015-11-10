@@ -1,6 +1,8 @@
-angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage, PositionReportModal, userService, alarmRestService, searchService, $resource){
+angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage, PositionReportModal, userService, alarmRestService, searchService, $resource, longPolling){
 
     $scope.selectedItems = []; //Selected items by checkboxes
+
+    $scope.newAlarmsCount = 0;
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Rules', true);
@@ -23,24 +25,32 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         return alarm.isOpen() ? $scope.statusFilter === "open" : $scope.statusFilter === "closed";
     };
 
-    /* Do long-polling,  */
-    var doLongPolling = function() {
-        $resource("/rules/activity/alarm").get(function(response) {
-            for (var i = 0; i < response.ids.length; i++) {
-                alarmRestService.getAlarmReport(response.ids[i]).then(function(alarmReport) {
-                    $scope.currentSearchResults.updateWithSingleItem(alarmReport);
-                });
-            }
+    $scope.resetSearch = function() {
+        $scope.$broadcast("resetAlarmSearch");
+    };
 
-            doLongPolling();
+    var updateSearchWithGuid = function(guid) {
+        searchService.searchAlarms().then(function(page) {
+            if (page.hasItemWithGuid(guid)) {
+                $scope.clearSelection();
+                updateSearchResults(page);
+            }
+            else {
+                $scope.newAlarmsCount++;
+            }
         });
     };
 
     var init = function(){
-        // doLongPolling();
+        longPolling.poll("/rules/activity/alarm", function(response) {
+            if (response.ids.length > 0) {
+                updateSearchWithGuid(response.ids[0]);
+            }
+        });
     };
 
     $scope.searchAlarms = function() {
+        $scope.newAlarmsCount = 0;
         $scope.clearSelection();
         $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.setLoading(true);

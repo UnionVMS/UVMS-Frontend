@@ -16,6 +16,10 @@ angular.module('unionvmsWeb').controller('AlarmSearchController', function($scop
         });
     };
 
+    $scope.$on("resetAlarmSearch", function() {
+        $scope.resetSearch();
+    });
+
     //Reset the form
     $scope.resetSearch = function(){
         //empty advancedSearchobject.

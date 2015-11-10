@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, PositionReportModal, movementRestService, $resource){
+angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, PositionReportModal, movementRestService, $resource, longPolling){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -8,6 +8,9 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
 
     $scope.currentSearchResults = new SearchResults('name', false);
     $scope.statusFilter = 'all';
+
+    $scope.newTicketsCount = 0;
+
     $scope.filterOnStatus = function(alarm) {
         if ($scope.statusFilter === "all") {
             return true;
@@ -16,30 +19,32 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         return alarm.isOpen() ? $scope.statusFilter === "open" : $scope.statusFilter === "closed";
     };
 
-    /* Do long-polling,  */
-    var doLongPolling = function() {
-        $resource("/rules/activity/ticket").get(function(response) {
-            for (var i = 0; i < response.ids.length; i++) {
-                alarmRestService.getTicket(response.ids[i]).then(function(alarmReport) {
-                    for (var i = 0; i < $scope.currentSearchResults.items.length; i++) {
-                        if ($scope.currentSearchResults.items[i].guid === alarmReport.guid) {
-                            $scope.currentSearchResults.items.splice(i, 1);
-                        }
-                    }
+    $scope.resetSearch = function() {
+        $scope.$broadcast("resetAlarmSearch");
+    };
 
-                    $scope.currentSearchResults.updateWithSingleItem(alarmReport);
-                });
+    var updateSearchWithGuid = function(guid) {
+        searchService.searchTickets().then(function(page) {
+            if (page.hasItemWithGuid(guid)) {
+                $scope.clearSelection();
+                updateSearchResults(page);
             }
-
-            doLongPolling();
+            else {
+                $scope.newTicketCount++;
+            }
         });
     };
 
     var init = function(){
-        // doLongPolling();
+        longPolling.poll("/rules/activity/ticket", function(response) {
+            if (response.ids.length > 0) {
+                updateSearchWithGuid(response.ids[0]);
+            }
+        });
     };
 
     $scope.searchTickets = function() {
+        $scope.newTicketCount = 0;
         $scope.clearSelection();
         $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.setLoading(true);

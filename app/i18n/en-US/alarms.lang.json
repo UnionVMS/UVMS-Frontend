@@ -157,5 +157,8 @@
     "position_report_create_poll_error" : "Failed to create poll.",
 
     "notifications_table_close_title" : "Close notificaton",
-    "notifications_close_error_message" : "Failed to close the notification. Please try again."
+    "notifications_close_error_message" : "Failed to close the notification. Please try again.",
+
+    "new_items_available": "{1} new item(s)"
+
 }
