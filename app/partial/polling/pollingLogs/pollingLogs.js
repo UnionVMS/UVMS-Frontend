@@ -47,7 +47,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
                 updateSearchResults(page);
             }
             else {
-                newPollingLogCount++;
+                $scope.newPollingLogCount++;
             }
         });
     };
