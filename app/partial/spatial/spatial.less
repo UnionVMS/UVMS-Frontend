@@ -4,7 +4,6 @@
 
 .executing-report {
 	position:fixed !important;
-//	position: absolute;
 	width: 100%;
 	height: calc(~'100% - 160px');
     background-color: rgba(221, 221, 221, 0.4);
@@ -36,20 +35,34 @@
 	padding-top: 0px;
 }
 
+.table-responsive-force {
+    width: 100%;
+    margin-bottom: 10px;
+    overflow-y: hidden;
+    overflow-x: auto;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    -webkit-overflow-scrolling: touch;
+}
+
 [st-table] {
 	table.table {
 		background-color: transparent;
 		border-width: 1px 0px 0px 0px;
-		.stColumnHeaders,
+		margin-bottom: 0px;
+		thead,
 		tbody {
 			background-color: #fff;
 			border: solid #ddd;
 			border-width: 0 1px;
+			> tr > th:last-child,
+			> tr > td:last-child {
+				border-right: 1px solid #ddd;
+			}
 		}
 		tfoot.stFooterPagination {
 			padding-top: 20px;
 			> tr > td {
-				padding: 20px 0 0 0;
+				padding: 10px 0 0 0;
 				ul.pagination {
 					margin: 2px;
 				}

@@ -106,6 +106,7 @@
 	"tab_vms_export_csv_positions_filename": "positions.csv",
 	"tab_vms_export_csv_segments_filename": "segments.csv",
 	"tab_vms_export_csv_tracks_filename": "tracks.csv",
+	"table_no_data": "No data available",
 	"tab_vms_pos_table_header_fs": "F.S",
 	"tab_vms_pos_table_header_ircs": "IRCS",
 	"tab_vms_pos_table_header_cfr": "CFR",

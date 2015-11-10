@@ -15,19 +15,19 @@
 		</div>
 	</div>
 	
-	<div class="table-responsive">
+	<div class="table-responsive-force">
 		<table class="table table-striped" style="width: 100%;">
 		    <thead>
-		        <tr class="stColumnHeaders">
-		            <th st-sort-args="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_name' | i18n }}</th>
-		            <th st-sort-args="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_description' | i18n }}</th>
-		            <th st-sort-args="createdOn" st-skip-natural="true" st-sort-default="reverse"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_created_on' | i18n }}</th>
-		            <th st-sort-args="createdBy" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_owner' | i18n }}</th>
-		            <th st-sort-args="executedOn" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_last_executed' | i18n }}</th>
-		            <th st-sort-args="visibility" st-skip-natural="true"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc" class="dt-center" >{{'spatial.reports_table_header_visibility' | i18n }}</th>
+		        <tr>
+		            <th st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_name' | i18n }}</th>
+		            <th st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_description' | i18n }}</th>
+		            <th st-sort="createdOn" st-skip-natural="true" st-sort-default="reverse"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_created_on' | i18n }}</th>
+		            <th st-sort="createdBy" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_owner' | i18n }}</th>
+		            <th st-sort="executedOn" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_last_executed' | i18n }}</th>
+		            <th st-sort="visibility" st-skip-natural="true"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc" class="dt-center" >{{'spatial.reports_table_header_visibility' | i18n }}</th>
 		            <th></th>
 		        </tr>
-		        <tr class="stColumnHeaders" ng-if="alert.visible">
+		        <tr ng-if="alert.visible">
 		        	<th colspan="7">
 					    <div class="alert alert-danger alert-container" role="alert" ng-if="alert.type === 'error'">
 	       					<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
@@ -49,7 +49,7 @@
 		    </thead>
 		    <tbody>
 		        <tr ng-if="!displayedRecords.length && !isLoading">
-					<td colspan="7">No data available</td>
+					<td colspan="7">{{'spatial.table_no_data' | i18n}}</td>
 				</tr>
 		        <tr ng-repeat="report in displayedRecords">
 		            <td>{{ report.name }}</td>

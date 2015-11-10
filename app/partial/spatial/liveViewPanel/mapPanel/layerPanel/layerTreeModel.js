@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('TreeModel',function(locale, $location) {
+angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 
 	function TreeModel(){}
 	

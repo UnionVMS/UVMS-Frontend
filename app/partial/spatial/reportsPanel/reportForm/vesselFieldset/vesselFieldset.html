@@ -40,17 +40,17 @@
 						</div>
 					</div>
 					
-					<div class="form-group col-md-12 search-table table-responsive" st-table="displayedRecords" st-safe-src="shared.vessels">
+					<div class="form-group col-md-12 search-table table-responsive-force" st-table="displayedRecords" st-safe-src="shared.vessels">
 						<table class="table table-striped">
 							<thead>
-								<tr class="stColumnHeaders">
+								<tr>
  									<th style="width: 35px;"><input type="checkbox" ng-model="shared.selectAll" ng-click="toggleAllVessels()"></th>
-									<th class="col-full-width" ng-hide="shared.vesselSearchBy === 'vgroup'" st-sort="countryCode" st-skip-natural="true" st-sort-default="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_search_table_header_flag_state' | i18n }}</th>
-									<th class="col-full-width" ng-hide="shared.vesselSearchBy === 'vgroup'" st-sort="ircs" st-skip-natural="true"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }}</th>
-									<th class="col-full-width" ng-hide="shared.vesselSearchBy === 'vgroup'" st-sort="cfr" st-skip-natural="true"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_search_table_header_cfr' | i18n }}</th>
-									<th class="col-full-width" ng-hide="shared.vesselSearchBy === 'vgroup'" st-sort="externalMarking" st-skip-natural="true"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_search_table_header_external_marking' | i18n }}</th>
-									<th class="col-full-width" st-skip-natural="true" st-sort="name" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_search_table_header_name' | i18n }}</th>
-									<th class="col-full-width"></th>
+									<th ng-hide="shared.vesselSearchBy === 'vgroup'" st-sort="countryCode" st-skip-natural="true" st-sort-default="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_search_table_header_flag_state' | i18n }}</th>
+									<th ng-hide="shared.vesselSearchBy === 'vgroup'" st-sort="ircs" st-skip-natural="true"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }}</th>
+									<th ng-hide="shared.vesselSearchBy === 'vgroup'" st-sort="cfr" st-skip-natural="true"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_search_table_header_cfr' | i18n }}</th>
+									<th ng-hide="shared.vesselSearchBy === 'vgroup'" st-sort="externalMarking" st-skip-natural="true"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_search_table_header_external_marking' | i18n }}</th>
+									<th st-skip-natural="true" st-sort="name" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_search_table_header_name' | i18n }}</th>
+									<th ></th>
 								</tr>
 								<tr ng-if="vesselSearchLoading">
 						        	<th colspan="7" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
@@ -58,23 +58,23 @@
 							</thead>
 							<tbody>
 								<tr ng-if="!displayedRecords.length && !vesselSearchLoading">
-									<td colspan="8">No data available</td>
+									<td colspan="7">{{'spatial.table_no_data' | i18n}}</td>
 								</tr>
 								<tr ng-repeat="vessel in displayedRecords">
  									<td style="width: 35px;"><input type="checkbox" ng-model="vessel.selected" ng-click="toggleOneVessel(vessel)"></td>
-									<td class="col-full-width" ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.countryCode }}</td>
-									<td class="col-full-width" ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.ircs }}</td>
-									<td class="col-full-width" ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.cfr }}</td>
-									<td class="col-full-width" ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.externalMarking }}</td>
-									<td class="col-full-width" >{{ vessel.name }}</td>
-									<td class="col-full-width">
+									<td ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.countryCode }}</td>
+									<td ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.ircs }}</td>
+									<td ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.cfr }}</td>
+									<td ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.externalMarking }}</td>
+									<td>{{ vessel.name }}</td>
+									<td>
 										<button type="button" class="btn btn-primary btn-xs pull-right" ng-click="viewDetails($index, 'SEARCH')">{{'spatial.reports_form_vessel_selection_table_details_btn' | i18n}}</button>
 									</td>
 								</tr>
 							</tbody>
 							<tfoot class="stFooterPagination">
 								<tr>
-									<td colspan="8" class="text-right">
+									<td colspan="7" class="text-right">
 										<div st-pagination st-items-by-page="vesselsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
 									</td>
 								</tr>
@@ -97,10 +97,10 @@
 						    </div>
 						</div>
 						
-						<div class="table-responsive" st-table="displayedRecordsSelection" st-safe-src="report.vesselsSelection">
+						<div class="table-responsive-force" st-table="displayedRecordsSelection" st-safe-src="report.vesselsSelection">
 							<table class="table table-striped">
 								<thead>
-									<tr class="stColumnHeaders">
+									<tr>
 										<th st-sort="name" st-skip-natural="true"  st-class-ascent="sorting_asc" st-sort-default="true" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_selection_table_header_name' | i18n }}</th>
 										<th st-sort="type" st-skip-natural="true"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_selection_table_header_type' | i18n }}</th>
 										<th></th>
@@ -114,7 +114,7 @@
 								</thead>
 								<tbody>
 									<tr ng-if="!displayedRecordsSelection.length">
-										<td colspan="4">No data available</td>
+										<td colspan="4">{{'spatial.table_no_data' | i18n}}</td>
 									</tr>
 									<tr ng-repeat="selection in displayedRecordsSelection">
 										<td>{{ selection.name }}</td>
