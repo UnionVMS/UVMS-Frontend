@@ -21,7 +21,7 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="c in settings[activeTab] | filter:{global: false} | orderBy:sortBy:reverseSort">
-				<td>{{"audit." + (c.key | replace) | i18n }}</td>
+				<td class="key">{{"audit." + (c.key | replace) | i18n }}</td>
 				<td ng-switch="!!c.editing" class="value" ng-class="{editing: c.editing}">
 					<!-- Value or input -->
 					<span ng-switch-when="false">{{c.value}}</span>
