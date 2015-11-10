@@ -58,6 +58,11 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         $scope.isVisible.mobileTerminalForm = !$scope.isVisible.mobileTerminalForm;
     };
 
+    //Is user allowed to edit terminals?
+    $scope.allowedToEditMobileTerminals = function(){
+        return checkAccessToFeature('manageMobileTerminals');
+    };
+
     //Are we in create mode?
     $scope.isCreateNewMode = function(){
         return $scope.createNewMode;

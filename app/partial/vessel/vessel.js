@@ -1,4 +1,8 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, savedSearchService, Vessel, searchService, vesselRestService, alertService, $stateParams, csvService, SearchResults, $filter) {
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, savedSearchService, Vessel, searchService, vesselRestService, alertService, $stateParams, csvService, SearchResults, userService, $filter) {
+
+    var checkAccessToFeature = function(feature) {
+        return userService.isAllowed(feature, 'Union-VMS', true);
+    };
 
     //Keep track of visibility statuses
     $scope.isVisible = {
@@ -64,6 +68,11 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         $scope.currentSearchResults.removeAllItems();
         $scope.currentSearchResults.setLoading(false);
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
+    };
+
+    //Is user allowed to edit vessels?
+    $scope.allowedToEditVessel = function(){
+        return checkAccessToFeature('manageVessels');
     };
 
     //Get original vessel
