@@ -3,7 +3,7 @@ angular.module('unionvmsWeb').controller('AlarmSearchController', function($scop
     $scope.rules = [];
 
     var init = function(){
-        $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_TODAY;
+        $scope.resetSearch();
 
         //Populate rules dropdown
         ruleRestService.getRulesList().then(function(rulesPage){
@@ -23,10 +23,6 @@ angular.module('unionvmsWeb').controller('AlarmSearchController', function($scop
         $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_TODAY;
         $scope.performAdvancedSearch();
     };
-
-	$scope.performAdvancedSearch = function() {
-		$scope.$parent.performAdvancedSearch();
-	};
 
 	$scope.$watch("advancedSearchObject.FROM_DATE", function(newValue) {
 		if (newValue) {

@@ -37,7 +37,6 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
     };
 
     var init = function(){
-        $scope.searchAlarms();
         // doLongPolling();
     };
 

@@ -36,7 +36,6 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
     };
 
     var init = function(){
-        $scope.searchTickets();
         // doLongPolling();
     };
 
