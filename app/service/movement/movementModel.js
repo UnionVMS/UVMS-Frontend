@@ -12,6 +12,11 @@ angular.module('unionvmsWeb')
 			ircs : undefined,
 			name : undefined
 		};
+        this.mobileTerminalData = {
+            guid : undefined,
+            connectId : undefined,
+            ids : {}
+        };
 		this.movement = {
 			latitude : undefined,
 			longitude : undefined,
@@ -58,6 +63,18 @@ angular.module('unionvmsWeb')
 				movement.movement.latitude = data.position.latitude;
 				movement.movement.longitude = data.position.longitude;
 			}
+
+            if (data.mobileTerminal) {
+                movement.mobileTerminalData.guid = data.mobileTerminal.guid;
+                movement.mobileTerminalData.connectId = data.mobileTerminal.connectId;
+                if (data.mobileTerminal.mobileTerminalIdList) {
+                    for (var i = 0; i < data.mobileTerminal.mobileTerminalIdList.length; i++) {
+                        var value = data.mobileTerminal.mobileTerminalIdList[i].value;
+                        var key = data.mobileTerminal.mobileTerminalIdList[i].type.toUpperCase();
+                        movement.mobileTerminalData.ids[key] = value;
+                    }
+                }
+            }
 		}
 		return movement;
 	};
@@ -70,7 +87,7 @@ angular.module('unionvmsWeb')
         copy.time = this.time;
         copy.vessel = _.clone(this.vessel);
         copy.movement = _.clone(this.movement);
-
+        copy.mobileTerminalData = _.clone(this.mobileTerminalData);
         return copy;
     };
 

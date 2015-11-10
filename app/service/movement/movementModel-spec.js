@@ -14,7 +14,21 @@ describe('Movement', function() {
         "status": "33",
         "calculatedSpeed": 12,
         "movementType": "POS",
-        "source": "INMARSAT_C"
+        "source": "INMARSAT_C",
+        "mobileTerminal": {
+            "guid": "MOBILE_TERMINAL_GUID_1",
+            "connectId": "connectid_1",
+            "mobileTerminalIdList": [
+              {
+                "type": "MEMBER_NUMBER",
+                "value": "MEMBER_NUMBER_1"
+              },
+              {
+                "type": "DNID",
+                "value": "DNID_1"
+              }
+            ]
+        },
     };
 
     var  lastReportMovement = {
@@ -36,6 +50,10 @@ describe('Movement', function() {
         expect(movement.movement.reportedSpeed).toEqual(move.reportedSpeed);
         expect(movement.movement.calculatedSpeed).toEqual(move.calculatedSpeed);
         expect(movement.movement.movementType).toEqual(move.movementType);
+        expect(movement.mobileTerminal.guid).toEqual(move.mobileTerminal.guid);
+        expect(movement.mobileTerminal.connectId).toEqual(move.mobileTerminal.connectId);
+        expect(movement.mobileTerminal.ids.length).toEqual(move.mobileTerminal.mobileTerminalIdList.length);
+        expect(movement.mobileTerminal.ids['DNID']).toEqual(move.mobileTerminal.mobileTerminalIdList['DNID']);
     }
 
     it('Should parse JSON input correctly', inject(function(Movement) {

@@ -28,6 +28,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     $scope.confirmSend = false;
     $scope.sendSuccess = false;
     $scope.addAnother = addAnother;
+    $scope.waitingForResponse = false;
 
     //MARKERS
     $scope.markers = {};
@@ -128,40 +129,46 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
     //Save the position
     $scope.savePosition = function() {
-        var promise;
-
-        //Update?
-        if ($scope.positionReport.guid) {
-            promise = manualPositionRestService.updateManualMovement($scope.positionReport);
-        }
-        else {
-            promise = manualPositionRestService.createManualMovement($scope.positionReport);
-        }
-
-        //Handle result
-        promise.then(function() {
-            if (angular.isFunction(reloadFunction)) {
-                reloadFunction();
+        if(!$scope.waitingForResponse){
+            var promise;
+            //Update?
+            if ($scope.positionReport.guid) {
+                promise = manualPositionRestService.updateManualMovement($scope.positionReport);
+            }
+            else {
+                promise = manualPositionRestService.createManualMovement($scope.positionReport);
             }
 
-            $scope.setSuccessText(locale.getString("movement.manual_position_save_success"), $scope.closeModal);
-        }, function(errorMessage) {
-            $scope.setErrorText(locale.getString("movement.manual_position_save_error"));
-        });
+            //Handle result
+            $scope.waitingForResponse = true;
+            promise.then(function() {
+                if (angular.isFunction(reloadFunction)) {
+                    reloadFunction();
+                }
+                $scope.waitingForResponse = false;
+                $scope.setSuccessText(locale.getString("movement.manual_position_save_success"), $scope.closeModal);
+            }, function(errorMessage) {
+                $scope.waitingForResponse = false;
+                $scope.setErrorText(locale.getString("movement.manual_position_save_error"));
+            });
+        }
     };
 
     //Send position
     $scope.sendPosition = function() {
         $scope.submitAttempted = true;
         if ($scope.confirmSend) {
+            $scope.waitingForResponse = true;
             manualPositionRestService.saveAndSendMovement($scope.positionReport).then(function() {
                 if (angular.isFunction(reloadFunction)) {
                     reloadFunction();
                 }
-
+                $scope.waitingForResponse = false;
                 $scope.sendSuccess = true;
                 $scope.setSuccessText(locale.getString("movement.manual_position_send_success"), $scope.closeModal);
-            }, function() {
+            }, function(err) {
+                console.error("Error sending position report.");
+                $scope.waitingForResponse = false;
                 $scope.sendSuccess = false;
                 $scope.setErrorText(locale.getString("movement.manual_position_send_error"));
             });
@@ -274,6 +281,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     $scope.getVesselsByCFR = function(value){
         vesselsGetListRequest.resetCriterias();
         vesselsGetListRequest.addSearchCriteria("CFR", value +"*");
+        var vessels = getVessels();
         return getVessels();
     };
     //On select item in search suggestions
