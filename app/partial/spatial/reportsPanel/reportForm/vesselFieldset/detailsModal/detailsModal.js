@@ -9,42 +9,10 @@ angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $mo
       $modalInstance.dismiss('cancel');
     };
     
-    function rowCallback (nRow, data, idx, idxFull){
-        $('td', nRow).unbind('click');
-        $('td', nRow).bind('click', function() {
-            $(this).parents('tbody').find('td').removeClass('highlightRow');
-            $(this).addClass('highlightRow');
-            $scope.$apply(function() {
-                $scope.clickHandler(data);
-            });
-        });
-        return nRow;
-    }
-    
-    $scope.groupTableInstance = {};
-    $scope.dtOptions = DTOptionsBuilder.newOptions()
-                                    .withBootstrap()
-                                    .withPaginationType('simple_numbers')
-                                    .withDisplayLength(5)
-                                    .withLanguage(datatablesService)
-                                    .withOption('rowCallback', rowCallback)
-                                    .withDOM('trp')
-                                    .withOption('autoWidth', true)
-                                    .withBootstrapOptions({
-                                        pagination: {
-                                            classes: {
-                                                ul: 'pagination pagination-sm'
-                                            }
-                                        }
-                                    });
-    
-    $scope.dtColumnDefs = [
-        DTColumnDefBuilder.newColumnDef(0).notVisible(),
-        DTColumnDefBuilder.newColumnDef(1)
-    ];
+    $scope.vesselsByPage = 5;
     
     $scope.clickHandler = function(data){
-        $scope.detailedItem = $scope.getVesselByGuid(data[0]);
+        $scope.detailedItem = $scope.getVesselByGuid(data);
     };
     
     $scope.getVesselByGuid = function(id){
@@ -91,10 +59,10 @@ angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $mo
                 var listRequest = new GetListRequest(1, 100000, response.dynamic, response.searchFields);
                 vesselRestService.getVesselList(listRequest).then(function(response){
                     $scope.vesselGroupList = response.items;
-                    $scope.detailedItem = $scope.vesselGroupList[$scope.vesselGroupList.length - 1];
+                    $scope.displayedRecords = [].concat($scope.vesselGroupList);
                     $scope.isLoading = false;
                     $timeout(function(){
-                        $scope.groupTableInstance.dataTable.children('tbody').find('td:first').addClass('highlightRow');
+                    	angular.element('[st-safe-src="vesselGroupList"] tbody > tr:first-child').trigger('click');
                     }, 100);
                 }, function(error){
                     $scope.hasError = true;

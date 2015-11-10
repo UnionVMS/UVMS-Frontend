@@ -23,20 +23,27 @@
     	</div>
     </div>
     <div class="modal-body row withMarginBottom" ng-show="isLoading === false && item.type === 'vgroup' && hasError === false">
-    	<div class="col-md-12">
-    		<table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" dt-instance="groupTableInstance" class="table table-striped">
+    	<div class="col-md-12 table-responsive-force" st-table="displayedRecords" st-safe-src="vesselGroupList">
+    		<table class="table table-striped">
     			<thead>
     				<tr>
-    					<th></th>
-    					<th>{{'spatial.reports_form_details_modal_vessel_name_header' | i18n }}</th>
+    					<th class="ng-hide"></th>
+    					<th st-sort="name" st-skip-natural="true" st-sort-default="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_details_modal_vessel_name_header' | i18n }}</th>
     				</tr>
     			</thead>
     			<tbody>
-    				<tr ng-repeat="vessel in vesselGroupList">
-    					<td>{{vessel.vesselId.guid}}
+    				<tr st-select-row="vessel" ng-click="clickHandler(vessel.vesselId.guid)" ng-repeat="vessel in displayedRecords">
+    					<td class="ng-hide">{{vessel.vesselId.guid}}
     					<td>{{vessel.name}}</td>
     				</tr>
     			</tbody>
+    			<tfoot class="stFooterPagination">
+					<tr>
+						<td class="text-right">
+							<div st-pagination st-items-by-page="vesselsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
+						</td>
+					</tr>
+				</tfoot>
     		</table>
     	</div>
     </div>
