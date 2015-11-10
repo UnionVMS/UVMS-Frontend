@@ -35,8 +35,11 @@
                     <td>{{item.sender}}</td>
                     <td><span ng-show="!item.isOpen()" class="link">{{item.updated | confDateFormat}}</span></td>
                     <td><span ng-show="!item.isOpen()" class="link">{{item.updatedBy}}</td>
-                    <td class="textAlignCenter" show-if-allowed="Rules:manageAlarmsHoldingTable">
-                        <button ng-if="item.isOpen()" type="button" class="btn btn-sm btn-primary" ng-click="resolveItem(item)" title="{{'alarms.alarms_table_resolve_title' | i18n}}">{{'alarms.alarms_table_resolve' | i18n | uppercase}}</button>
+                    <td class="textAlignCenter">
+                        <button show-if-allowed="Rules:manageAlarmsHoldingTable" ng-if="item.isOpen()" type="button" class="btn btn-sm btn-primary" ng-click="resolveItem(item)" title="{{'alarms.alarms_table_resolve_title' | i18n}}">{{'alarms.alarms_table_resolve' | i18n | uppercase}}</button>
+                        <button ng-if="!item.isOpen()" type="button" class="btn btn-sm btn-primary" ng-click="viewItemDetails(item)" title="{{'common.view_details' | i18n}}">
+                            <i class="fa fa-eye"></i>
+                        </button>
                     </td>
                 </tr>
             </tbody>

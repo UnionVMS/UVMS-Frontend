@@ -249,6 +249,15 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         });
     };
 
+    //View item details
+    $scope.viewItemDetails = function(item){
+        var alarmItem = item.copy();
+        var options = {
+            readOnly : true
+        };
+        PositionReportModal.show(alarmItem, options);
+    };
+
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
         searchService.reset();
