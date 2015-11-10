@@ -20,6 +20,12 @@
             </div>
 		</div>
 
+        <div class="row">
+            <div class="col-md-4 available-positions-refresh">
+                <a ng-click="resetSearch()" ng-if="newExchangeLogCount > 0"><i class="fa fa-refresh"/> {{ "movement.new_positions_available" | i18n:[newExchangeLogCount] }}</a>
+            </div>
+        </div>
+
 		<!-- Toggle: ALL, INCOMING, OUTGOING -->
         <div class="row incoming-outgoing-toggle">
             <div class="col-md-1 editSelection">

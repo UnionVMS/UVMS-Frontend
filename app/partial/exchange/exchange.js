@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter,$location, locale, searchService, exchangeRestService, infoModal, ManualPosition, alertService, csvService, ExchangeService, SearchResults, $resource){
+angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter,$location, locale, searchService, exchangeRestService, infoModal, ManualPosition, alertService, csvService, ExchangeService, SearchResults, $resource, longPolling){
 
     $scope.transmissionStatuses = new SearchResults();
     $scope.sendingQueue = new SearchResults();
@@ -8,56 +8,55 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     $scope.exchangeLogsSearchResults = new SearchResults('dateReceived', true);
     $scope.exchangeLogsSearchResults.incomingOutgoing = 'all';
 
-    /* Do long-polling,     var doSendingQueueLongPolling = function() {
-        $resource("/exchange/activity/queue").get(function(response) {
-            if (response.ids.length > 0) {
-                $scope.getSendingQueue();
-            }
+    $scope.newExchangeLogCount = 0;
 
-            doSendingQueueLongPolling();
+    var updatePluginStatuses = function(newStatuses) {
+        $.each($scope.transmissionStatuses.items, function(index, plugin) {
+            var newStatus = newStatuses[plugin.serviceClassName];
+            if (newStatus === true) {
+                plugin.setAsStarted();
+            }
+            else if (newStatus === false) {
+                plugin.setAsStopped();
+            }
         });
     };
-     */
 
-
-    /* Do long-polling,
-    var doTransmissionStatusLongPolling = function() {
-        $resource("/exchange/activity/plugins").get(function(response) {
-            $.each($scope.transmissionStatuses.items, function(index, transmissionStatus) {
-                var status = response[transmissionStatus.serviceClassName];
-                if (status === true) {
-                    transmissionStatus.setAsStarted();
-                }
-                else if (status === false) {
-                    transmissionStatus.setAsStopped();
-                }
-            });
-
-            doTransmissionStatusLongPolling();
-        });
-    };*/
-
-    /* Do long-polling,
-    var doExchangeLogLongPolling = function() {
-        $resource("/exchange/activity/exchange").get(function(response) {
-            for (var i = 0; i < response.ids.length; i++) {
-                alarmRestService.getAlarmReport(response.ids[i]).then(function(exchangeLog) {
-                    $scope.currentSearchResults.updateWithSingleItem(exchangeLog);
-                });
+    var updateExchangeLogs = function(guid) {
+        searchService.searchExchange().then(function(page) {
+            if (page.hasItemWithGuid(guid)) {
+                $scope.exchangeLogsSearchResults.updateWithNewResults(page);
             }
-
-            doExchangeLogLongPolling();
+            else {
+                $scope.newExchangeLogCount++;
+            }
         });
-    };*/
+    };
+
+    $scope.resetSearch = function() {
+        $scope.$broadcast("resetExchangeLogSearch");
+    };
 
     var init = function(){
         //$scope.searchExchange();
         $scope.getSendingQueue();
         $scope.getTransmissionStatuses();
 
-        // doExchangeLogLongPolling();
-        // doTransmissionStatusLongPolling();
-        // doSendingQueueLongPolling();
+        longPolling.poll("/exchange/activity/plugins", function(response) {
+            updatePluginStatuses(response);
+        });
+
+        longPolling.poll("/exchange/activity/queue", function(response) {
+            if (response.ids.length > 0) {
+                $scope.getSendingQueue();
+            }
+        });
+
+        longPolling.poll("/exchange/activity/exchange", function(response) {
+            if (response.ids.length > 0) {
+                updateExchangeLogs(response.ids[0]);
+            }
+        });
     };
 
     $scope.filterIncomingOutgoing = function(message) {
@@ -120,12 +119,12 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         exchangeRestService.stopTransmission(encodeURI(model.serviceClassName)).then(
         function(data){
             console.log("Service successfully stopped.");
-            alertService.showInfoMessageWithTimeout(locale.getString('exchange.transmission_stop_transmission_successfull'));
+            alertService.showSuccessMessageWithTimeout(locale.getString('exchange.transmission_stop_transmission_successfull'));
             model.setAsStopped();
         },
         function(error){
             console.log("Error trying to send messagequeue.");
-            alertService.showInfoMessageWithTimeout(locale.getString('exchange.transmission_stop_transmission_error'));
+            alertService.showErrorMessageWithTimeout(locale.getString('exchange.transmission_stop_transmission_error'));
         });
     };
 
@@ -147,6 +146,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         $scope.clearSelection();
         $scope.exchangeLogsSearchResults.clearErrorMessage();
         $scope.exchangeLogsSearchResults.setLoading(true);
+        $scope.newExchangeLogCount = 0;
         searchService.searchExchange().then(function(page) {
             $scope.exchangeLogsSearchResults.updateWithNewResults(page);
         },
@@ -403,11 +403,6 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         alertService.hideMessage();
         searchService.reset();
     });
-
-    $scope.refreshSendingQue = function(){
-        console.log("refreshing sendingqueue");
-        $scope.getSendingQueue();
-    };
 
     $scope.resendAllQueueItemsInGroup = function(item){
         //All ids in group.

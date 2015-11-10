@@ -6,6 +6,10 @@ angular.module('unionvmsWeb').controller('ExchangeSearchController', function($s
         $scope.recipientItems = configurationService.setTextAndCodeForDropDown(configurationService.getValue('EXCHANGE', 'RECIPIENT'), 'RECIPIENT', 'EXCHANGE', true);
     };
 
+    $scope.$on("resetExchangeLogSearch", function() {
+    	$scope.resetSearch();
+    });
+
     //Reset the form
     $scope.resetSearch = function(){
         //empty advancedSearchobject.

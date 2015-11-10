@@ -29,15 +29,13 @@
 	"sending_queue_table_resendall": "Resend all",
 	"sending_queue_table_resendgroup": "Resend group",
 	"sending_queue_table_resend": "Resend",
-	"sending_queue_table_refreshqueue":"Refresh sending queue",
 	"sending_queue_table_number_of_reports" : "message(s)",
 	"sending_queue_table_allmessages_in_group": "Group",
-	"sending_table_queue_refreshqueue":"Refresh queue",
 
 
 	"sending_queue_header" : "Sending queue",
 	"sending_queue_warning" : "There are currently many messages in queue. This might take a while.",
-	"sending_queue_all_ok" : "Status ok, there is no messages in queue.",
+	"sending_queue_all_ok" : "Status ok, there are no messages in queue.",
 	"sending_queue_expandgroup" : "Expand group",
 	"sending_queue_collapsegroup" : "Collapse group",
 	"sending_queue_resend": "Resend",
