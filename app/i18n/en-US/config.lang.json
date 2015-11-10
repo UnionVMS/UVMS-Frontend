@@ -133,7 +133,7 @@
     "homePage_alarms": "Alarms",
     "homePage_admin": "Admin",
  
-    "coordinateFormat-degreesMinutesSeconds": "DD MM'SS\"",
+    "coordinateFormat-degreesMinutesSeconds": "DD MM,SS'",
     "coordinateFormat-decimalDegrees": "DD.MMM"
 
 
