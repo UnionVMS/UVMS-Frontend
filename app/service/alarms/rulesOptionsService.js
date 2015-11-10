@@ -141,7 +141,10 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         var assetGroups = savedSearchService.getVesselGroupsForUser();
         ruleDefinitionDropdowns.ASSET_GROUP = [];
         $.each(assetGroups, function(i, assetGroup){
-            ruleDefinitionDropdowns.ASSET_GROUP.push({'text': assetGroup.name, 'code':assetGroup.id});
+            //Only static groups should be listed
+            if(!assetGroup.dynamic){
+                ruleDefinitionDropdowns.ASSET_GROUP.push({'text': assetGroup.name, 'code':assetGroup.id});
+            }
         });
         ruleDefinitionDropdowns.ASSET_GROUP = _.sortBy(ruleDefinitionDropdowns.ASSET_GROUP, function(assetGroup){return assetGroup.name;});
 

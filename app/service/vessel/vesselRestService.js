@@ -33,8 +33,6 @@ angular.module('unionvmsWeb')
     })
 .factory('vesselRestService', function($q, $http, vesselRestFactory, VesselListPage, Vessel, SavedSearchGroup, userService){
 
-    var userName = userService.getUserName();
-
     var getVesselList = function(getListRequest){
         var deferred = $q.defer();
 
@@ -225,6 +223,7 @@ angular.module('unionvmsWeb')
 
     var getVesselGroupsForUser = function (){
         var deferred = $q.defer();
+        var userName = userService.getUserName();
         vesselRestFactory.getVesselGroupsForUser().get({'user' : userName},
             function(response) {
 
