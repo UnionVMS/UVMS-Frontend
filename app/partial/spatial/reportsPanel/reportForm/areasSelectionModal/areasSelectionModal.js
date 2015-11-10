@@ -307,6 +307,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     };
     
     $scope.mergeParamsWms = function(index){
+    	index = $scope.sysAreaSearch.indexOf($scope.displayedRecordsArea[index]);
         var format = new ol.format.WKT();
         var geom = format.readFeature($scope.sysAreaSearch[index].extent).getGeometry();
         geom.transform('EPSG:4326', 'EPSG:3857');
@@ -325,6 +326,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     };
     
     $scope.addAreaToSelection = function(index){
+    	index = $scope.sysAreaSearch.indexOf($scope.displayedRecordsArea[index]);
         if ($scope.checkAreaIsSelected($scope.sysAreaSearch[index]) === false){
             $scope.selectedAreas.unshift($scope.sysAreaSearch[index]);
         }
@@ -332,6 +334,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     
     //Delete areas from selection
     $scope.deleteArea = function(index){
+    	index = $scope.selectedAreas.indexOf($scope.displayedRecordsSelection[index]);
         $scope.selectedAreas.splice(index, 1);
     };
     
