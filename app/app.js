@@ -33,8 +33,8 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
 
     tmhDynamicLocaleProvider.localeLocationPattern("assets/locales/angular-locale_{{locale}}.js");
 
-    var homeState = 'app.exchange';
-    var homeUrl = 'exchange';
+    var homeState = 'app.home';
+    var homeUrl = 'home';
 
     $urlRouterProvider.when('', homeUrl);
 
@@ -123,6 +123,16 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                 modulepage: {
                     templateUrl: 'partial/today/today.html',
                     controller: 'TodayCtrl'
+                }
+            },
+            resolve: {}
+        })
+        .state('app.home', {
+            url: '/home',
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/login/start.html',
+                    controller: 'StartCtrl'
                 }
             },
             resolve: {}

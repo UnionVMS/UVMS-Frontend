@@ -43,7 +43,7 @@ angular.module('unionvmsWeb').directive('lngInput', function($compile) {
 });
 
 angular.module('unionvmsWeb')
-    .controller('latLngInputCtrl', function($scope, $timeout, coordinateFormatService){
+    .controller('latLngInputCtrl', function($log, $scope, $timeout, coordinateFormatService, globalSettingsService){
 
         var formatConfigs  = {
             DECIMAL_MINUTES : {
@@ -56,8 +56,21 @@ angular.module('unionvmsWeb')
             }
         };
 
-        //TODO: Get format from config
-        $scope.coordinateFormat = "DECIMAL_MINUTES";
+        //Get format from global settings
+        var configFormat = globalSettingsService.getCoordinateFormat();
+        switch(configFormat){
+            case 'degreesMinutesSeconds':
+                $scope.coordinateFormat = "DECIMAL_MINUTES";
+                break;
+            case 'decimalDegrees':
+                $scope.coordinateFormat = "DECIMAL";
+                break;
+            default:
+                $log.warn("Invalid or missing coordinate format. Using decimal degrees.");
+                $scope.coordinateFormat = "DECIMAL";
+                break;
+        }
+
         $scope.coordPattern = formatConfigs[$scope.coordinateFormat].pattern;
 
         //Update model value on input change

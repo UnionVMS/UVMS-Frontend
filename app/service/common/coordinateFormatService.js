@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('coordinateFormatService',function($log) {
+angular.module('unionvmsWeb').factory('coordinateFormatService',function($log, globalSettingsService) {
 
     //This service handles two different coordinate formats
     // * Decimal degrees, eg: 45.343
@@ -138,17 +138,16 @@ angular.module('unionvmsWeb').factory('coordinateFormatService',function($log) {
 
         //Format according to the user settings
         formatAccordingToUserSettings : function(coordinate){
-            //TODO: Get from config
-            var configFormat = 'DECIMAL_MINUTES';
-
-            if(configFormat === 'DECIMAL'){
-                return  this.toDecimalDegrees(coordinate);
-            }
-            else if(configFormat === 'DECIMAL_MINUTES'){
-                return  this.toDegreesWithDecimalMinutes(coordinate);
-            }
-            else{
-                return "INVALID CONFIG FORMAT";
+            //Get format from global settings
+            var configFormat = globalSettingsService.getCoordinateFormat();
+            switch(configFormat){
+                case 'degreesMinutesSeconds':
+                    return this.toDegreesWithDecimalMinutes(coordinate);
+                case 'decimalDegrees':
+                    return this.toDecimalDegrees(coordinate);
+                default:
+                    $log.warn("Invalid or missing coordinate format. Using decimal degrees.");
+                    return this.toDecimalDegrees(coordinate);
             }
         }
     };

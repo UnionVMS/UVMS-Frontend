@@ -1,33 +1,12 @@
-angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($scope, $resource, locale){
+angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($scope, $resource, locale, alertService, globalSettingsService){
 
-	var GlobalSettings = $resource("/config/rest/globals");
-
-	var GlobalSetting = $resource("/config/rest/settings/:id", {}, {
-		'put' : {
-			method: 'PUT'
-		}
-	});
-
-	$scope.langs = [];
 	$scope.settings = {};
 
-	var init = function() {
-		GlobalSettings.get(function(response) {
-			$scope.settings = {};
+    var init = function(){
+        $scope.settings = globalSettingsService.getSettings();
+    };
 
-			$.each(response.data, function(index, setting) {
-				$scope.settings[setting.key] = setting;
-				if (setting.key === "defaultHomePage") {
-					$scope.defaultHomePage = setting.value;
-				}
-			});
-		});
-
-		$scope.$watch('defaultHomePage', function(newValue) {
-			set("defaultHomePage", newValue);
-		});
-	};
-
+    //Options
 	$scope.coordinateFormats = [
 		"degreesMinutesSeconds",
 		"decimalDegrees"
@@ -63,63 +42,54 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 			code: page
 		};
 	});
+    $scope.homePages = _.sortBy($scope.homePages, function(opt){return opt.text;});
 
-	var set = function(key, value, isArray) {
-		if ($scope.settings[key] === undefined) {
-			return;
-		}
+    var saveSettingSuccess = function(){
+        alertService.showSuccessMessageWithTimeout(locale.getString('common.global_setting_save_success_message'));
+    };
 
-		var setting = $scope.settings[key];
-		setting.value = isArray ? value.join() : value;
-		GlobalSetting.put({id: setting.id}, setting);
-	};
-
-	var get = function(key, isArray) {
-		if ($scope.settings[key] === undefined) {
-			return isArray ? [] : undefined;
-		}
-
-		var value = $scope.settings[key].value;
-		if (isArray) {
-			return value.length > 0 ? value.split(",") : [];
-		}
-
-		return value;
-	};
+    var saveSettingError = function(){
+        alertService.showErrorMessage(locale.getString('common.global_setting_save_error_message'));
+    };
 
 	$scope.coordinateFormat = function(value) {
 		if (value) {
-			set("coordinateFormat", value);
+			globalSettingsService.set("coordinateFormat", value).then(saveSettingSuccess, saveSettingError);
 		}
 		else {
-			return get("coordinateFormat");
+			return globalSettingsService.get("coordinateFormat");
 		}
 	};
 
 	$scope.unit = function(value) {
 		if (value) {
-			set("measurementSystem", value);
+			globalSettingsService.set("measurementSystem", value).then(saveSettingSuccess, saveSettingError);
 		}
 		else {
-			return get("measurementSystem");
+			return globalSettingsService.get("measurementSystem");
 		}
 	};
 
 	$scope.dateFormat = function(value) {
 		if (value) {
-			set("dateTimeFormat", value);
+			globalSettingsService.set("dateTimeFormat", value).then(saveSettingSuccess, saveSettingError);
 		}
 		else {
-			return get("dateTimeFormat");
+			return globalSettingsService.get("dateTimeFormat");
 		}
 	};
 
 	$scope.getSelectedLanguages = function() {
-		return get("availableLanguages", true);
+		return globalSettingsService.get("availableLanguages", true);
 	};
 
+    //Callback from the dropdown
+    $scope.setDefaultHomePage = function(selection){
+        globalSettingsService.set("defaultHomePage", selection.code).then(saveSettingSuccess, saveSettingError);
+    };
+
 	$scope.setLanguageSelected = function(language, selected) {
-		var languages = get("availableLanguages", true);
+		var languages = globalSettingsService.get("availableLanguages", true);
 		var index = languages.indexOf(language);
 
 		if (selected && index < 0) {
@@ -132,9 +102,9 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 			return;
 		}
 
-		set("availableLanguages", languages, true);
+		globalSettingsService.set("availableLanguages", languages, true).then(saveSettingSuccess, saveSettingError);
 	};
 
-	init();
+    init();
 
 });

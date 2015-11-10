@@ -31,6 +31,8 @@
     "form_validation_error_message" : "The data in the form is not valid. Please fix the errors and try again.",
     "filter_zero_results" : "No item matches the filter.",
     "hours" : "Hours",
+    "global_setting_save_success_message" : "The setting has been updated.",
+    "global_setting_save_error_message" : "Failed to update the setting.",
     "inactive" : "Inactive",
     "invalid" : "Invalid",
     "kw" : "kW",

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $state, $rootScope, $location, $localStorage, userService, renewloginpanel, infoModal, configurationService, selectContextPanel){
+angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $state, $rootScope, $location, $localStorage, userService, renewloginpanel, infoModal, configurationService, selectContextPanel, startPageService){
     $scope.randomNumber = 5;
     $scope.user = {};
 
@@ -80,5 +80,11 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
 
     $scope.viewNotifications = function(){
         $state.go('app.openTickets');
+    };
+
+    //Go to the start page
+    $scope.gotoStartPage = function(){
+        var homeState = startPageService.getStartPageStateName();
+        $state.go(homeState, {});
     };
 });

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('dateTimeService',function() {
+angular.module('unionvmsWeb').factory('dateTimeService',function($log, globalSettingsService) {
 
     var dateWithTimeZoneWithColonRegexp = new RegExp(/^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\s\-?\+?\d{2}:\d{2}/);
     var dateWithTimeZoneWithoutColonRegexp = new RegExp(/^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\s\-?\+?\d{4}/);
@@ -73,8 +73,12 @@ angular.module('unionvmsWeb').factory('dateTimeService',function() {
                 //Format in UTC
                 dateTimeInput = this.toUTC(dateTimeInput);
 
-                //TODO: get format from configuraton
-                var format = 'DD MMM YYYY HH:mm UTC';
+                //Get format from global settings
+                var format = globalSettingsService.getDateFormat();
+                if(typeof format !== 'string' || format.trim().length < 6){
+                    format = 'DD MMM YYYY HH:mm UTC';
+                    $log.warn("DateFormat from GlobalSettings is missing.");
+                }
                 var formatted = moment(dateTimeInput, "YYYY-MM-DD HH:mm:ss Z").format(format);
                 if(formatted !== INVALID_DATE){
                     output = formatted;
