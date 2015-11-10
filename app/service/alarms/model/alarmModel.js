@@ -78,6 +78,21 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
         return typeof this.status === 'string' && this.status.toUpperCase() === "CLOSED";
     };
 
+    //Get resolved date. Return updated date if alarm is closed.
+    Alarm.prototype.getResolvedDate = function() {
+        if(this.isOpen() || this.isPending()){
+            return;
+        }
+        return this.updated;
+    };
+
+    //Get resolvedBy user. Return updatedBy if alarm is closed.
+    Alarm.prototype.getResolvedBy = function() {
+        if(this.isOpen() || this.isPending()){
+            return;
+        }
+        return this.updatedBy;
+    };
 
     Alarm.prototype.setUpdatedBy = function(updatedBy) {
         this.updatedBy = updatedBy;

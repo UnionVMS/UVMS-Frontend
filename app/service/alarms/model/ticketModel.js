@@ -50,6 +50,21 @@ angular.module('unionvmsWeb').factory('Ticket', function() {
         this.updatedBy = updatedBy;
     };
 
+    //Get resolved date. Return updated date if alarm is closed.
+    Ticket.prototype.getResolvedDate = function() {
+        if(this.isOpen() || this.isPending()){
+            return;
+        }
+        return this.updated;
+    };
+
+    //Get resolvedBy user. Return updatedBy if alarm is closed.
+    Ticket.prototype.getResolvedBy = function() {
+        if(this.isOpen() || this.isPending()){
+            return;
+        }
+        return this.updatedBy;
+    };
 
     Ticket.prototype.copy = function() {
         var copy = new Ticket();

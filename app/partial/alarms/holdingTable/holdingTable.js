@@ -15,7 +15,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         $scope.editSelectionDropdownItems.unshift({text:locale.getString('alarms.holding_table_reprocess_reports'), code : 'REPROCESS_REPORTS'});
     }
 
-    $scope.currentSearchResults = new SearchResults('name', false);
+    $scope.currentSearchResults = new SearchResults('openDate', true);
     $scope.statusFilter = 'all';
     $scope.filterOnStatus = function(alarm) {
         if ($scope.statusFilter === "all") {
@@ -197,18 +197,21 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
                         var affectedObjectText;
                         if(angular.isDefined(item.vessel)){
                             affectedObjectText = item.vessel.name;
-                        }else if(angular.isDefined(item.vesselGuid)){
-                            affectedObjectText = item.vesselGuid;
+                        }else{
+                            affectedObjectText = locale.getString('alarms.alarms_affected_object_unknown');
                         }
 
+                        var ruleNames = item.alarmItems.map(function(alarmItem){
+                            return alarmItem.ruleName;
+                            }).join(' & ');
                         var csvRow = [
                             item.status,
                             $filter('confDateFormat')(item.openDate),
                             affectedObjectText,
-                            item.ruleName,
+                            ruleNames,
                             item.sender,
-                            item.isOpen()? '' : $filter('confDateFormat')(item.updated),
-                            item.isOpen()? '' : item.updatedBy,
+                            $filter('confDateFormat')(item.getResolvedDate()),
+                            item.getResolvedBy()
                         ];
                         csvObject.push(csvRow);
                     }

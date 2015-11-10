@@ -6,12 +6,12 @@
                 <tr>
                     <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
                     <th></th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'openedDate'">{{'alarms.alarms_table_date_openend' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'assetId.vessel.name'">{{'alarms.alarms_table_object_affected' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'ruleName'">{{'alarms.alarms_table_rule' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'openDate'">{{'alarms.alarms_table_date_openend' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.name'">{{'alarms.alarms_table_object_affected' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'alarmItems[0].ruleName'">{{'alarms.alarms_table_rule' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'sender'">{{'alarms.alarms_table_sender' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'updated'">{{'alarms.alarms_table_date_resolved' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'updatedBy'">{{'alarms.alarms_table_resolved_by' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'getResolvedDate()'">{{'alarms.alarms_table_date_resolved' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'getResolvedBy()'">{{'alarms.alarms_table_resolved_by' | i18n}}</th>
                     <th class="actions" show-if-allowed="Rules:manageAlarmsHoldingTable"></th>
                 </tr>
             </thead>
@@ -33,8 +33,8 @@
                         <span ng-show="item.alarmItems.length > 1 "tooltip-placement="bottom" tooltip="{{getRuleNamesTooltip(item)}}">{{'alarms.alarms_table_number_of_rules' | i18n:item.alarmItems.length}}</span>
                     </td>
                     <td>{{item.sender}}</td>
-                    <td><span ng-show="!item.isOpen()" class="link">{{item.updated | confDateFormat}}</span></td>
-                    <td><span ng-show="!item.isOpen()" class="link">{{item.updatedBy}}</td>
+                    <td><span class="link">{{item.getResolvedDate() | confDateFormat}}</span></td>
+                    <td><span class="link">{{item.getResolvedBy()}}</span></td>
                     <td class="textAlignCenter">
                         <button show-if-allowed="Rules:manageAlarmsHoldingTable" ng-if="item.isOpen()" type="button" class="btn btn-sm btn-primary" ng-click="resolveItem(item)" title="{{'alarms.alarms_table_resolve_title' | i18n}}">{{'alarms.alarms_table_resolve' | i18n | uppercase}}</button>
                         <button ng-if="!item.isOpen()" type="button" class="btn btn-sm btn-primary" ng-click="viewItemDetails(item)" title="{{'common.view_details' | i18n}}">

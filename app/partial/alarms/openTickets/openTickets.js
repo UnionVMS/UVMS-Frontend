@@ -6,7 +6,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         {text:locale.getString('common.export_selection'), code : 'EXPORT'}
     ];
 
-    $scope.currentSearchResults = new SearchResults('name', false);
+    $scope.currentSearchResults = new SearchResults('openDate', true);
     $scope.statusFilter = 'all';
 
     $scope.newTicketsCount = 0;
@@ -81,8 +81,8 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
             function(updatedTicket){
                 //Update ticket values
                 ticket.status = updatedTicket.status;
-                ticket.resolvedDate = updatedTicket.resolvedDate;
-                ticket.resolvedBy = updatedTicket.resolvedBy;
+                ticket.updated = updatedTicket.updated;
+                ticket.updatedBy = updatedTicket.updatedBy;
             },
             function(error){
                 alertService.showErrorMessageWithTimeout(locale.getString('alarms.notifications_close_error_message'));
@@ -220,8 +220,8 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
                             $filter('confDateFormat')(item.openDate),
                             affectedObjectText,
                             item.ruleName,
-                            item.isOpen()? '' : $filter('confDateFormat')(item.updated),
-                            item.isOpen()? '' : item.updatedBy,
+                            $filter('confDateFormat')(item.getResolvedDate()),
+                            item.getResolvedBy()
                         ];
                         csvObject.push(csvRow);
                     }
