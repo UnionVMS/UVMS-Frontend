@@ -166,7 +166,7 @@
                                         </div>
                                         <div class="form-group" ng-class="{'has-error': definitionForm.value.$invalid && (submitAttempted || definitionForm.value.$dirty)}" ng-if="getRuleDefinitionValueInputType(item) === 'TEXT_WITH_SUGGESTIONS'">
                                             <div class="autoSuggestionWrapper fullWidthDropdown">
-                                                <input type="text" class="form-control" ng-model="item.value" name="value" autocomplete="off"
+                                                <input type="text" autocomplete="off" class="form-control" ng-model="item.value" name="value" autocomplete="off"
                                                 typeahead="suggestion for suggestion in getAutoSuggestValues($viewValue, item)"
                                                 typeahead-loading="waitingForAutoSuggest"
                                                 typeahead-on-select="onValueSuggestionSelect($item, $label, item)"
