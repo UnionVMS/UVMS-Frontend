@@ -60,6 +60,16 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
         // doLongPolling();
     };
 
+    $scope.getStatusLabelClass = function(status){
+        switch(status){
+            case 'SUCCESSFUL' :
+                return 'label-success';
+            case 'FAILTED' :
+                return 'label-danger';
+            default:
+                return 'label-warning';
+        }
+    };
 
     $scope.print = function(){
         console.log("Print...");

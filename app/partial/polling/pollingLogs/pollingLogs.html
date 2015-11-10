@@ -114,9 +114,11 @@
                                     </div>
                                 </td>
                                 <td class="statusText">
-                                    <span ng-repeat="status in item.exchangePoll.history | orderBy:'status.time'" ng-show="isExpanded || $index === 0" ng-class="{SUCCESSFUL:'success', FAILED:'failed', PROBABLY_TRANSMITTED:'warning'}[status.status]">
-                                        {{status.status | exchangeStatusName}}<br>
-                                    </span>
+                                    <div ng-repeat="status in item.exchangePoll.history | orderBy:'status.time'" ng-show="isExpanded || $index === 0">
+                                        <span class="label" ng-class="getStatusLabelClass(status.status)">
+                                            {{status.status | exchangeStatusName | uppercase}}
+                                        </span><br>
+                                    </div>
                                 </td>
                                 <td colspan="2">{{item.poll.attributes.USER}}</td>
                                 <td class="textAlignCenter"><a href ng-click="showComment(item)" title="{{'common.view_comment' | i18n}}"><i class="fa fa-commenting-o fa-lg"></i></a></td>
