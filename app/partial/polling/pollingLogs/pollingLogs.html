@@ -60,7 +60,13 @@
                                         <dropdown ng-model="advancedSearchObject.TERMINAL_TYPE" items="terminalTypes" initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>
                                     </th>
 
-                                    <th>&nbsp;</th>
+                                    <th>
+                                        <div class="available-positions-refresh">
+                                            <a ng-if="newPollingLogCount > 0" ng-click="resetSearch()">
+                                                <i class="fa fa-refresh"></i> {{ "polling.new_polling_logs_available" | i18n:[newPollingLogCount] }}
+                                            </a>
+                                        </div>
+                                    </th>
 
                                     <th>
                                         <dropdown ng-model="advancedSearchObject.STATUS" items="statusTypes"  initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>

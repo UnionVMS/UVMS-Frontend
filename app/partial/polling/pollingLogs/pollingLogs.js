@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $stateParams, $resource, $filter, Poll, PollStatus, searchService, searchUtilsService, alertService, locale, SearchResults, csvService, infoModal, configurationService){
+angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $stateParams, $resource, $filter, Poll, PollStatus, searchService, searchUtilsService, alertService, locale, SearchResults, csvService, infoModal, configurationService, longPolling){
 
     $scope.activeTab = "POLLING_LOGS";
 
@@ -32,14 +32,23 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
         $scope.terminalTypes.push({"text":terminalConfig.viewName, "code": terminalConfig.systemType});
     });
 
-    /* Do long-polling,  */
-    var doLongPolling = function() {
-        $resource("/exchange/activity/poll").get(function(response) {
-            if (response.ids.length > 0) {
-                $scope.getPolls();
-            }
+    $scope.newPollingLogCount = 0;
 
-            doLongPolling();
+    $scope.resetSearch = function() {
+        searchService.resetAdvancedSearch();
+        $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_TODAY;
+        $scope.getPolls();
+    };
+
+    var updatePollingLogsWithGuid = function(guid) {
+        searchService.searchPolls().then(function(page) {
+            if (page.hasItemWithGuid(guid)) {
+                $scope.clearSelection();
+                updateSearchResults(page);
+            }
+            else {
+                newPollingLogCount++;
+            }
         });
     };
 
@@ -58,6 +67,11 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
         }
 
         // doLongPolling();
+        longPolling.poll("/exchange/activity/poll", function(response) {
+            if (response.ids.length > 0) {
+                updatePollingLogsWithGuid(response.ids[0]);
+            }
+        });
     };
 
     $scope.getStatusLabelClass = function(status){
@@ -151,6 +165,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     //Get list of polls matching the current search criterias
     //If pollId is set, search for that one
     $scope.getPolls = function(pollId){
+        $scope.newPollingLogCount = 0;
         $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.setLoading(true);
         $scope.clearSelection();

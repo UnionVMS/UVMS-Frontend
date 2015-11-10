@@ -81,6 +81,7 @@
     "poll_table_header_vessel_transponder" :"Transponder",
     "poll_table_button_add_all" : "Add all",
     "poll_table_button_add_selected" :"Add",
-    "poll_table_button_added" :"Added"
+    "poll_table_button_added" :"Added",
+    "new_polling_logs_available": "{1} updates available"
 
 }
