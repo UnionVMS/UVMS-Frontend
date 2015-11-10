@@ -8,28 +8,44 @@
 
     <div class="mobileTerminalFormContainer">
 
-        <div class="borderSection card" ng-show="currentMobileTerminal.connectId && !isVisible.assignVessel">
-            <div class="row assignedVesselHeader">
+        <div class="card" ng-show="currentMobileTerminal.connectId && !isVisible.assignVessel">
+            <div class="row card-header assignedVesselHeader">
                 <div class="col-md-6">
-                    <label class="section">{{'mobileTerminal.assigned_vessel' | i18n | uppercase}}</label>
+                    <h5>{{'mobileTerminal.assigned_vessel' | i18n | uppercase}}</h5>
                 </div>
-                <div class="col-md-6 textAlignRight" show-if-allowed="manageMobileTerminals">
-                    <button class="btn btn-primary" ng-click="unassignVessel()"><i class="fa fa-chain-broken"></i> {{'mobileTerminal.unassign_vessel' | i18n}}</span>
+                <div class="col-md-6 textAlignRight">
+                    <div class="actions">
+                        <div show-if-allowed="manageMobileTerminals">
+                            <button class="btn btn-primary" ng-click="unassignVessel()"><i class="fa fa-chain-broken"></i> {{'mobileTerminal.unassign_vessel' | i18n}}</button>
+                        </div>
+                        <div class="closeIcon" ng-click="toggleMobileTerminalDetails()">
+                            <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
                 </div>
             </div>
             <div class="row">
-                <vessel-details vessel="currentMobileTerminal.associatedVessel" disable-form="true" ></vessel-details>
+                <div class="col-md-12" ng-show="!currentMobileTerminal.associatedVessel">
+                    <search-result-error-alert>{{'mobileTerminal.assigned_vessel_not_found_error' | i18n}}</search-result-error-alert>
+                </div>
+                <vessel-details ng-show="currentMobileTerminal.associatedVessel" vessel="currentMobileTerminal.associatedVessel" disable-form="true" ></vessel-details>
             </div>
         </div>
 
 
-        <div class="borderSection card" ng-show="isVisible.assignVessel">
-            <div class="row" >
+        <div class="card with-small-card-header" ng-show="isVisible.assignVessel">
+            <div class="row card-header">
                 <div class="col-md-6">
-                    <label class="section">{{'mobileTerminal.assign_vessel' | i18n | uppercase}}</label>
+                    <h5>{{'mobileTerminal.assign_vessel' | i18n | uppercase}}</h5>
                 </div>
                 <div class="col-md-6 textAlignRight">
-                    <span class="link underline"ng-click="toggleAssignVessel()">{{'common.cancel' | i18n | uppercase}}</span>
+                    <div class="actions">
+                        <div>
+                            <span class="link underline"ng-click="toggleAssignVessel()">{{'common.cancel' | i18n | uppercase}}</span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
                 </div>
             </div>
             <div ng-include="'partial/mobileTerminal/assignVessel/assignVessel.html'" ng-show="transponderSystems.length > 0" ></div>
@@ -41,7 +57,7 @@
             </div>
         </div>
 
-        <div class="borderSection card mobileInformationContainer" loading-indicator="waitingForCreateResponse">
+        <div class="card mobileInformationContainer" loading-indicator="waitingForCreateResponse">
             <div class="row card-header">
                 <div class="col-md-6">
                     <div class="metadata">
@@ -74,7 +90,7 @@
                             <button  type="submit" ng-disabled="!currentMobileTerminal.type || !isDirty()" class="btn btn-primary" ng-click="updateMobileTerminal()" ng-hide="isCreateNewMode() || transponderSystems.length == 0">{{'common.update' | i18n}}</button>
                         </div>
                         <div class="closeIcon" ng-click="toggleMobileTerminalDetails()">
-                            <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
+                            <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}" ng-hide="currentMobileTerminal.connectId"></i>
                         </div>
                         <div class="clearfix"></div>
                     </div>

@@ -3,6 +3,7 @@
     "assigning_to_vessel" : "Linking {1} to {2}",
     "assign_vessel" : "Link asset",
     "assigned_vessel" : "Linked asset",
+    "assigned_vessel_not_found_error" : "The linked asset could not be found.",
     "assign_vessel_ircs_required": "IRCS required to link asset",
     "assigned_carrier_header" : "Linked asset",
     "edit_selection_poll_terminals": "Poll terminals",

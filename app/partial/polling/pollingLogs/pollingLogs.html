@@ -95,7 +95,10 @@
                             <tbody>
                             <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" ng-init="isExpanded = false">
                                 <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="check(item)"/></td>
-                                <td>{{item.vessel.name}}</td>
+                                <td>
+                                    <span ng-show="item.vessel">{{item.vessel.name}}</span>
+                                    <span ng-hide="item.vessel" class="assetNotFound">{{'common.asset_not_found' | i18n}}</span>
+                                </td>
                                 <td>{{item.vessel.externalMarking}}</td>
                                 <td>{{item.poll.type | pollTypeName}}</td>
                                 <td>{{item.poll.attributes.TRANSPONDER | transponderName}}</td>

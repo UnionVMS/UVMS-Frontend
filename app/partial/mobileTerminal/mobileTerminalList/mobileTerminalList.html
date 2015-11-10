@@ -34,9 +34,9 @@
                     </div>
                     <input type="checkbox" ng-checked="isChecked(item)" ng-click="checkMobileTerminal(item)"/>
                 </td>
-                <td>
+                <td class="statusColored">
                     <span ng-show="item.associatedVessel">{{item.associatedVessel.name}}</span>
-                    <span ng-show="item.connectId && !item.associatedVessel">ConnectId:{{item.connectId}}</span>
+                    <span ng-show="item.connectId && !item.associatedVessel" class="assetNotFound">{{'common.asset_not_found' | i18n}}</span>
                     <span ng-show="!item.connectId && !item.associatedVessel">{{'mobileTerminal.table_vessel_name_not_assigned' | i18n}}</span>
                 </td>
                 <td class="statusColored">{{item.attributes.SERIAL_NUMBER}}</td>
