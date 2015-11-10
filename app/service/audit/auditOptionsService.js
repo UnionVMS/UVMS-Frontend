@@ -4,6 +4,7 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
     //Names used in the backend
     var TYPES = {
         ASSET : 'Asset',
+        ASSET_GROUP : 'Asset Group',
         MOBILE_TERMINAL : 'Mobile Terminal',
         POLL : 'Poll',
         AUTOMATIC_POSITION_REPORT : 'Automatic position report',
@@ -27,6 +28,7 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
     //All available TYPES
     var auditLogTypes = {
         asset: createDropdownItem(TYPES.ASSET),
+        assetGroup: createDropdownItem(TYPES.ASSET_GROUP),
         automaticPositionReport: createDropdownItem(TYPES.AUTOMATIC_POSITION_REPORT),
         mobileTerminal: createDropdownItem(TYPES.MOBILE_TERMINAL),
         poll: createDropdownItem(TYPES.POLL),
@@ -36,6 +38,7 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
 
     //All available OPERATIONS
     var auditLogOperations = {
+        archive: createDropdownItem("Archive"),
         create: createDropdownItem("Create"),
         update: createDropdownItem("Update"),
         remove: createDropdownItem("Remove"),
@@ -67,7 +70,7 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
                 newOperations = [];
             switch(tab){
                 case 'ASSETS_AND_TERMINALS':
-                    newTypes = [auditLogTypes.asset, auditLogTypes.mobileTerminal, auditLogTypes.poll];
+                    newTypes = [auditLogTypes.asset, auditLogTypes.mobileTerminal, auditLogTypes.poll, auditLogTypes.assetGroup];
                     newOperations = [auditLogOperations.create, auditLogOperations.update, auditLogOperations.remove, auditLogOperations.link, auditLogOperations.unlink];
                     break;
                 case 'POSITION_REPORTS':
