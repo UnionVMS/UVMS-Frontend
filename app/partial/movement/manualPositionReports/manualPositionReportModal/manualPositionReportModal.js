@@ -19,6 +19,8 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         var oldGuid = positionReport.guid;
         $scope.positionReport = new ManualPosition();
         $scope.guid = oldGuid;
+        $scope.positionReport.carrier.flagState = "SWE";
+        $scope.positionReport.status = "010";
     };
 
     //Max speed - warning is shown is speed is higher

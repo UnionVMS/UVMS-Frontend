@@ -30,6 +30,7 @@
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.movement.movementType'">{{'movement.table_header_movement_type' | i18n}}</th>
 
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.movement.source'">{{'movement.table_header_source' | i18n}}</th>
+                    <th></th>
 
                 </tr>
             </thead>
@@ -49,6 +50,11 @@
                     <td>{{movement.movement.reportedCourse}}&deg;</td>
                     <td>{{movement.movement.movementType}}</td>
                     <td>{{movement.movement.source | transponderName}}</td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-primary" ng-click="viewItemDetails(movement)" title="{{'common.view_details' | i18n}}">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, $filter, alertService, movementRestService, searchService, locale, $stateParams, ManualPositionReportModal, csvService, SearchResults, $resource, longPolling){
+angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, $filter, alertService, movementRestService, searchService, locale, $stateParams, ManualPositionReportModal, csvService, SearchResults, $resource, longPolling, dateTimeService){
 
     //Current filter and sorting for the results table
     $scope.sortFilter = '';
@@ -15,16 +15,15 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
 
     var movement2ManualPosition = function(movement) {
         return {
-            id: movement.id,
-            guid: undefined,
-            speed: movement.movement.measuredSpeed,
-            course: movement.movement.course,
-            time: movement.time,
+            guid: movement.guid,
+            speed: movement.movement.reportedSpeed,
+            course: movement.movement.reportedCourse,
+            time: dateTimeService.toUTC(movement.time),
             updatedTime: undefined,
             status: movement.movement.status,
             archived: undefined,
             carrier: {
-                cfr: undefined,
+                cfr: movement.vessel.cfr,
                 name: movement.vessel.name,
                 externalMarking: movement.vessel.externalMarking,
                 ircs: movement.vessel.ircs,
@@ -140,6 +139,12 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     $scope.print = function(){
         console.log("Print...");
         window.print();
+    };
+
+
+    //View item details
+    $scope.viewItemDetails = function(item){
+        ManualPositionReportModal.show(movement2ManualPosition(item), {readOnly: true});
     };
 
     //Export data as CSV file

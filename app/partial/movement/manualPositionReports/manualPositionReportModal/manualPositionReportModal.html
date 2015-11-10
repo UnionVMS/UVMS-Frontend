@@ -8,118 +8,120 @@
 
     <div class="modal-body" loading-indicator="waitingForResponse">
     	<form name="manualPositionReportForm" method="post" novalidate>
-            <div>
-        		<div class="row">
-                    <div class="col-md-12">
-                        <search-result-error-alert ng-show="errorMessage">{{errorMessage}}</search-result-error-alert>
+            <fieldset ng-disabled="confirmSend || readOnly">
+                <div>
+            		<div class="row">
+                        <div class="col-md-12">
+                            <search-result-error-alert ng-show="errorMessage">{{errorMessage}}</search-result-error-alert>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-        			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.flagState.$dirty) && manualPositionReportForm.flagState.$invalid}" class="col-md-2 smallerpaddingright">
-        				<label>{{'movement.manual_position_field_label_flag_state' | i18n}}</label>
-        				<input class="form-control" ng-model="positionReport.carrier.flagState" name="flagState" required ng-disabled="true"/>
-        			</div>
-        			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.ircs.$dirty) && manualPositionReportForm.ircs.$invalid}" class="col-md-2 smallerpadding" ng-disabled="confirmSend">
-                        <label>{{'movement.manual_position_field_label_ircs' | i18n}}</label>
-                        <div class="autoSuggestionWrapper fullWidthDropdown">
-                                <input type="text" autocomplete="off" class="form-control" ng-model="positionReport.carrier.ircs" name="ircs" placeholder="{{'movement.manual_position_field_label_ircs' | i18n}}" ng-disabled="confirmSend || readOnly"
-                                typeahead="ircs as vessel.ircs for vessel in getVesselsByIrcs($viewValue)"
-                                typeahead-loading="searchByIRCS"
+                    <div class="row">
+            			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.flagState.$dirty) && manualPositionReportForm.flagState.$invalid}" class="col-md-2 smallerpaddingright">
+            				<label>{{'movement.manual_position_field_label_flag_state' | i18n}}</label>
+            				<input class="form-control" ng-model="positionReport.carrier.flagState" name="flagState" required ng-disabled="true"/>
+            			</div>
+            			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.ircs.$dirty) && manualPositionReportForm.ircs.$invalid}" class="col-md-2 smallerpadding" ng-disabled="confirmSend">
+                            <label>{{'movement.manual_position_field_label_ircs' | i18n}}</label>
+                            <div class="autoSuggestionWrapper fullWidthDropdown">
+                                    <input type="text" autocomplete="off" class="form-control" ng-model="positionReport.carrier.ircs" name="ircs" placeholder="{{'movement.manual_position_field_label_ircs' | i18n}}"
+                                    typeahead="ircs as vessel.ircs for vessel in getVesselsByIrcs($viewValue)"
+                                    typeahead-loading="searchByIRCS"
+                                    typeahead-on-select="onVesselSuggestionSelect($item, $model, $label)"
+                                    typeahead-wait-ms="300"
+                                    required>
+                                    <span class="loadingIcon" ng-show="searchByIRCS"><i class="fa fa-refresh fa-spin"></i></span>
+                                </div>
+            			</div>
+            			<div ng-class="{'has-error': (submitAttempted ||manualPositionReportForm.cfr.$dirty) && manualPositionReportForm.cfr.$invalid}" class="col-md-4 smallerpadding">
+                            <label>{{'movement.manual_position_field_label_cfr' | i18n}}</label>
+                            <div class="autoSuggestionWrapper fullWidthDropdown">
+                                <input type="text" autocomplete="off" class="form-control" ng-model="positionReport.carrier.cfr" name="cfr" placeholder="{{'movement.manual_position_field_label_cfr' | i18n}}"
+                                typeahead="cfr as vessel.cfr for vessel in getVesselsByCFR($viewValue)"
+                                typeahead-loading="searchByCFR"
                                 typeahead-on-select="onVesselSuggestionSelect($item, $model, $label)"
                                 typeahead-wait-ms="300"
                                 required>
-                                <span class="loadingIcon" ng-show="searchByIRCS"><i class="fa fa-refresh fa-spin"></i></span>
+                                <span class="loadingIcon" ng-show="searchByCFR"><i class="fa fa-refresh fa-spin"></i></span>
                             </div>
-        			</div>
-        			<div ng-class="{'has-error': (submitAttempted ||manualPositionReportForm.cfr.$dirty) && manualPositionReportForm.cfr.$invalid}" class="col-md-4 smallerpadding">
-                        <label>{{'movement.manual_position_field_label_cfr' | i18n}}</label>
-                        <div class="autoSuggestionWrapper fullWidthDropdown">
-                            <input type="text" autocomplete="off" class="form-control" ng-model="positionReport.carrier.cfr" name="cfr" placeholder="{{'movement.manual_position_field_label_cfr' | i18n}}" ng-disabled="confirmSend || readOnly"
-                            typeahead="cfr as vessel.cfr for vessel in getVesselsByCFR($viewValue)"
-                            typeahead-loading="searchByCFR"
-                            typeahead-on-select="onVesselSuggestionSelect($item, $model, $label)"
-                            typeahead-wait-ms="300"
-                            required>
-                            <span class="loadingIcon" ng-show="searchByCFR"><i class="fa fa-refresh fa-spin"></i></span>
+            			</div>
+            			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.externalMarking.$dirty) && manualPositionReportForm.externalMarking.$invalid}" class="col-md-4 smallerpaddingleft">
+        				    <label>{{'movement.manual_position_field_label_external_marking' | i18n}}</label>
+            			    <input class="form-control" ng-model="positionReport.carrier.externalMarking" name="externalMarking" required/>
+            			</div>
+            		</div>
+
+            		<div class="row">
+            			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.name.$dirty) && manualPositionReportForm.name.$invalid}" class="col-md-4 smallerpaddingright">
+            				<label>{{'movement.manual_position_field_label_name' | i18n}}</label>
+            				<input class="form-control" ng-model="positionReport.carrier.name" name="name" required/>
+
+            			</div>
+            			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.status.$dirty) && manualPositionReportForm.status.$invalid}" class="col-md-3 smallerpadding">
+            				<label>{{'movement.manual_position_field_label_status' | i18n}}</label>
+        					<input class="form-control" ng-model="positionReport.status" name="status" required ng-disabled="true"/>
+            			</div>
+            			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.dateTime.$dirty) && manualPositionReportForm.dateTime.$invalid}" class="col-md-5 smallerpaddingleft" ng-disabled="confirmSend">
+            				<label>{{'movement.manual_position_field_label_date_time' | i18n}}</label>
+            				<datepicker-input time="true" model="positionReport.time" name="dateTime" ng-required="true" max-date="maxDateTime"></datepicker-input>
+
+            			</div>
+            		</div>
+
+            		<div class="row">
+            			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.latitude.$dirty) && manualPositionReportForm.latitude.$invalid}" class="col-md-3 smallerpaddingright">
+            				<label>{{'movement.manual_position_field_label_latitude' | i18n}}</label>
+                            <lat-input name="latitude" model="positionReport.position.latitude" required ></lat-input>
+            				<input-validation-message types="pattern, latitude" input="manualPositionReportForm.latitude"></input-validation-message>
+            			</div>
+            			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.longitude.$dirty) && manualPositionReportForm.longitude.$invalid}" class="col-md-3 smallerpadding" ng-disabled="confirmSend">
+            				<label>{{'movement.manual_position_field_label_longitude' | i18n}}</label>
+                            <lng-input name="longitude" model="positionReport.position.longitude" required ></lng-input>
+                            <input-validation-message types="pattern, longitude" input="manualPositionReportForm.longitude"></input-validation-message>
+            			</div>
+            			<div class="col-md-3 smallerpadding" ng-class="{'has-error': (submitAttempted || manualPositionReportForm.measuredSpeed.$dirty) &&  manualPositionReportForm.measuredSpeed.$invalid}">
+            				<label>{{'movement.manual_position_field_label_measured_speed' | i18n}}</label>
+        					<div class="unit-input">
+        						<input class="form-control" ng-model="positionReport.speed" name="measuredSpeed" min="0" numeric ng-pattern="maxTwoDecimalsRegexp"/>
+        						<div class="unit-box">{{"movement.manual_position_field_unit_knots" | i18n}}</div>
+        					</div>
+                            <input-validation-message types="numeric, pattern" input="manualPositionReportForm.measuredSpeed" custom-messages="{{maxTwoDecimalsValidationMessages}}"></input-validation-message>
+            			</div>
+            			<div class="col-md-3 smallerpaddingleft" ng-class="{'has-error': (submitAttempted || manualPositionReportForm.course.$dirty) &&  manualPositionReportForm.course.$invalid}">
+            				<label style="width:100%;">{{'movement.manual_position_field_label_course' | i18n}}</label>
+        					<div class="unit-input">
+        						<input class="form-control" ng-model="positionReport.course" name="course" min="0" max="360" numeric/>
+        						<div class="unit-box">{{"movement.manual_position_field_unit_degrees" | i18n}}</div>
+        					</div>
+                            <input-validation-message types="numeric" input="manualPositionReportForm.course"></input-validation-message>
+            			</div>
+            		</div>
+
+                    <div class="row" ng-if="isHighSpeed()">
+                        <div class="col-md-12">
+                            <div class="alert alert-warning" style="padding: 5px 15px; margin: 15px 0px;">
+                                {{"movement.manual_position_warning_high_speed" | i18n:[measuredSpeedWarningThreshold]}}
+                            </div>
                         </div>
-        			</div>
-        			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.externalMarking.$dirty) && manualPositionReportForm.externalMarking.$invalid}" class="col-md-4 smallerpaddingleft">
-    				    <label>{{'movement.manual_position_field_label_external_marking' | i18n}}</label>
-        			    <input class="form-control" ng-model="positionReport.carrier.externalMarking" name="externalMarking" required ng-disabled="confirmSend || readOnly"/>
-        			</div>
-        		</div>
+            		</div>
 
-        		<div class="row">
-        			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.name.$dirty) && manualPositionReportForm.name.$invalid}" class="col-md-4 smallerpaddingright">
-        				<label>{{'movement.manual_position_field_label_name' | i18n}}</label>
-        				<input class="form-control" ng-model="positionReport.carrier.name" name="name" required ng-disabled="confirmSend || readOnly"/>
+                </div>
 
-        			</div>
-        			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.status.$dirty) && manualPositionReportForm.status.$invalid}" class="col-md-3 smallerpadding">
-        				<label>{{'movement.manual_position_field_label_status' | i18n}}</label>
-    					<input class="form-control" ng-model="positionReport.status" name="status" required ng-disabled="true"/>
-        			</div>
-        			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.dateTime.$dirty) && manualPositionReportForm.dateTime.$invalid}" class="col-md-5 smallerpaddingleft" ng-disabled="confirmSend">
-        				<label>{{'movement.manual_position_field_label_date_time' | i18n}}</label>
-        				<datepicker-input time="true" model="positionReport.time" name="dateTime" ng-required="true" max-date="maxDateTime" ng-disabled="confirmSend || readOnly"></datepicker-input>
-
-        			</div>
-        		</div>
-
-        		<div class="row">
-        			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.latitude.$dirty) && manualPositionReportForm.latitude.$invalid}" class="col-md-3 smallerpaddingright">
-        				<label>{{'movement.manual_position_field_label_latitude' | i18n}}</label>
-                        <lat-input name="latitude" model="positionReport.position.latitude" required ></lat-input>
-        				<input-validation-message types="pattern, latitude" input="manualPositionReportForm.latitude"></input-validation-message>
-        			</div>
-        			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.longitude.$dirty) && manualPositionReportForm.longitude.$invalid}" class="col-md-3 smallerpadding" ng-disabled="confirmSend">
-        				<label>{{'movement.manual_position_field_label_longitude' | i18n}}</label>
-                        <lng-input name="longitude" model="positionReport.position.longitude" required ></lng-input>
-                        <input-validation-message types="pattern, longitude" input="manualPositionReportForm.longitude"></input-validation-message>
-        			</div>
-        			<div class="col-md-3 smallerpadding" ng-class="{'has-error': (submitAttempted || manualPositionReportForm.measuredSpeed.$dirty) &&  manualPositionReportForm.measuredSpeed.$invalid}">
-        				<label>{{'movement.manual_position_field_label_measured_speed' | i18n}}</label>
-    					<div class="unit-input">
-    						<input class="form-control" ng-model="positionReport.speed" name="measuredSpeed" min="0" numeric ng-pattern="maxTwoDecimalsRegexp" ng-disabled="confirmSend || readOnly"/>
-    						<div class="unit-box">{{"movement.manual_position_field_unit_knots" | i18n}}</div>
-    					</div>
-                        <input-validation-message types="numeric, pattern" input="manualPositionReportForm.measuredSpeed" custom-messages="{{maxTwoDecimalsValidationMessages}}"></input-validation-message>
-        			</div>
-        			<div class="col-md-3 smallerpaddingleft" ng-class="{'has-error': (submitAttempted || manualPositionReportForm.course.$dirty) &&  manualPositionReportForm.course.$invalid}">
-        				<label style="width:100%;">{{'movement.manual_position_field_label_course' | i18n}}</label>
-    					<div class="unit-input">
-    						<input class="form-control" ng-model="positionReport.course" name="course" min="0" max="360" numeric ng-disabled="confirmSend || readOnly"/>
-    						<div class="unit-box">{{"movement.manual_position_field_unit_degrees" | i18n}}</div>
-    					</div>
-                        <input-validation-message types="numeric" input="manualPositionReportForm.course"></input-validation-message>
-        			</div>
-        		</div>
-
-                <div class="row" ng-if="isHighSpeed()">
+                <div class="row" ng-if="modalStatusText">
                     <div class="col-md-12">
-                        <div class="alert alert-warning" style="padding: 5px 15px; margin: 15px 0px;">
-                            {{"movement.manual_position_warning_high_speed" | i18n:[measuredSpeedWarningThreshold]}}
+                        <div ng-class="modalStatusClass" class="alert" style="padding: 5px 15px; margin: 15px 0px;">
+                            {{ modalStatusText }}
                         </div>
                     </div>
         		</div>
 
-            </div>
-
-            <div class="row" ng-if="modalStatusText">
-                <div class="col-md-12">
-                    <div ng-class="modalStatusClass" class="alert" style="padding: 5px 15px; margin: 15px 0px;">
-                        {{ modalStatusText }}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mapContainer">
+        		          <leaflet center="center" markers="markers" height="200px" bounds="bounds" width="100%"></leaflet>
+                        </div>
                     </div>
                 </div>
-    		</div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="mapContainer">
-    		          <leaflet center="center" markers="markers" height="200px" bounds="bounds" width="100%"></leaflet>
-                    </div>
-                </div>
-            </div>
+            </fieldset>
 
     	</form>
 

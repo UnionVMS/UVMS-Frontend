@@ -117,7 +117,8 @@ angular.module('unionvmsWeb')
             if(watchModelChange){
                 if(angular.isDefined(newValue)){
                     if($scope.coordinateFormat === 'DECIMAL'){
-                        $scope.viewModel = newValue;
+                        var decimalDegrees = coordinateFormatService.toDecimalDegrees(newValue, 3); //3 decimals
+                        $scope.viewModel = decimalDegrees;
                     }
                     //DECIMAL_MINUTES
                     else{
