@@ -64,7 +64,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
             return true;
         }
 
-        return message.outgoing ? $scope.exchangeLogsSearchResults.incomingOutgoing === "outgoing" : $scope.exchangeLogsSearchResults.incomingOutgoing === "incoming";
+        return message.incoming ? $scope.exchangeLogsSearchResults.incomingOutgoing === "incoming" : $scope.exchangeLogsSearchResults.incomingOutgoing === "outgoing";
     };
 
     $scope.sendQueuedMessages = function(messageIds){
