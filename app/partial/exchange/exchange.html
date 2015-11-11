@@ -78,8 +78,8 @@
                                     <input type="checkbox" ng-checked="isChecked(message)" ng-click="check(message)"/>
                                 </td>
     							<td class="incoming-outgoing" ng-switch="message.incoming">
-    								<span ng-switch-when="false" class="fa fa-arrow-down incoming" title="{{'exchange.title_incoming' | i18n}}"></span>
-    								<span ng-switch-when="true" class="fa fa-arrow-up outgoing" title="{{'exchange.title_outgoing' | i18n}}"></span>
+    								<span ng-switch-when="true" class="fa fa-arrow-down incoming" title="{{'exchange.title_incoming' | i18n}}"></span>
+    								<span ng-switch-when="false" class="fa fa-arrow-up outgoing" title="{{'exchange.title_outgoing' | i18n}}"></span>
     							</td>
                                 <td>
                                     <!--<a ng-show="exchangePath(message)" href="exchangePath(message)" title="{{'exchange.title_details' | i18n}}">
