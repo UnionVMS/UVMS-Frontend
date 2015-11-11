@@ -6,7 +6,7 @@
    <li ng-repeat="page in pages" ng-class="{active: page==currentPage}" ng-if="numPages > 0">
 	<a ng-click="selectPage(page)" class="ng-binding">{{ page }}</a>
    </li>
-   <li ng-class="{disabled: currentPage==pages.length}">
+   <li ng-class="{disabled: currentPage==numPages}">
    	<a ng-click="selectPage(currentPage+1)" class="next">Next</a>
    </li>
 </ul>
