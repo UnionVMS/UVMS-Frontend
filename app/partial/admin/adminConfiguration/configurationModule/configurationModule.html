@@ -32,7 +32,7 @@
 					<span ng-switch-when="false">{{c.description}}</span>
 					<input ng-switch-when="true" type="text" ng-model="c.description"/>
 				</td>
-				<td>recently</td>
+				<td>{{c.lastModified | confDateFormat }}</td>
 				<td ng-switch on="!!c.editing">
 					<!-- "Edit" or "Done" / "Delete" buttons -->
 					<button ng-switch-when="false" class="btn btn-default" ng-click="setEditing(c, true)" title="{{'common.edit'| i18n}}">

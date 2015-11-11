@@ -83,10 +83,10 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 
 		SingleSetting.update({ id: setting.id }, s, function(response) {
 			$scope.setEditing(setting, false);
+			setting.lastModified = response.data.lastModified;
 		}, function(error) {
 			alertService.showErrorMessage(error);
 		});
-
 	};
 
 	$scope.setTab = function(tab) {
