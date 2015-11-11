@@ -32,7 +32,7 @@
     				</tr>
     			</thead>
     			<tbody>
-    				<tr st-select-row="vessel" ng-click="clickHandler(vessel.vesselId.guid)" ng-repeat="vessel in displayedRecords">
+    				<tr st-select-row-args="vessel" ng-click="clickHandler(vessel.vesselId.guid)" ng-repeat="vessel in displayedRecords">
     					<td class="ng-hide">{{vessel.vesselId.guid}}
     					<td>{{vessel.name}}</td>
     				</tr>

@@ -12,7 +12,7 @@ angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $mo
     $scope.vesselsByPage = 5;
     
     $scope.clickHandler = function(data){
-        $scope.detailedItem = $scope.getVesselByGuid(data);
+    	$scope.detailedItem = $scope.getVesselByGuid(data);
     };
     
     $scope.getVesselByGuid = function(id){
