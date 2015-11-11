@@ -408,7 +408,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         //All ids in group.
         var sendingQueuesIds = [];
         for (var i = item.sendingLogList.length - 1; i >= 0; i--) {
-            sendingQueuesIds.push(item.sendingLogList[i].id);
+            sendingQueuesIds.push(item.sendingLogList[i].messageId);
         }
         $scope.sendQueuedMessages(sendingQueuesIds);
     };

@@ -5,49 +5,45 @@
             <i ng-hide="sendingQueue.items.length <= 5" class="fa fa-exclamation-triangle fa-lg warning-icon"></i>
             <span ng-hide="sendingQueue.items.length <= 5" class="warning-text">{{'exchange.sending_queue_warning' | i18n}}</span>
         </div>
+        <div class="col-md-1 pushright">
+            <!--<i class="fa fa-repeat fa-lg" show-if-allowed="Exchange:manageExchangeSendingQueue" title="{{'exchange.sending_queue_table_resendall' | i18n}}" ng-click="resendAllQueued()"></i>-->
+            <i class="fa fa-refresh fa-lg refresh-icon" ng-click="refreshSendingQue()" title="{{'exchange.sending_table_queue_refreshqueue' | i18n}}"></i>
+        </div>
     </div>
 	<div class="row scroller" loading-indicator="sendingQueue.loading" size="small" type="SPINNER">
         <div class="col-md-12 nopaddingright">
-            <!--<pre>{{sendingQueue.items | json}}</pre>-->
             <h3 ng-show="sendingQueue.items.length <= 0 && !sendingQueue.errorMessage && !sendingQueue.loading">{{'exchange.sending_queue_all_ok' | i18n}}</h3>
-            <table ng-hide="sendingQueue.items.length <= 0" class="sendingQueue searchResults">
-                <thead>
-                    <th></th>
-                    <th></th>
-                    <th class="recieved recievedheader">{{'exchange.sending_queue_table_header_date_received' | i18n}}</th>
-                    <!--<th class="from">{{'exchange.sending_queue_table_header_from' | i18n}}</th>-->
-                    <th class="reciepient recipientheader">{{'exchange.sending_queue_table_header_recipient' | i18n}}</th>
-                   <!-- <th class="from"><{{'exchange.sending_queue_table_header_from' | i18n}}</th>-->
-                    <th class="action" show-if-allowed="Exchange:manageExchangeSendingQueue"><i class="fa fa-repeat fa-lg" title="{{'exchange.sending_queue_table_resendall' | i18n}}" ng-click="resendAllQueued()"></i></th>
-                </thead>
-                <tbody ng-repeat="item in sendingQueue.items | filter:query as results" class="delimiter">
-                    <tr class="sending-queue-group" ng-class-odd="'odd'" ng-class-even="'even'">
-                        <th>
+            <div ng-hide="sendingQueue.items.length <= 0" class="sendingQueue searchResults">
+                <div class="panel_title">
+                </div>
+                <div class="panel_list" ng-repeat="item in sendingQueue.items | filter:query as results">
+                    <div class="list_item">
+                        <div class="list_item_header">
+                            <h3>{{item.sendingLogList.length}}</h3>
                             <i class="fa fa-plus fa-md" title="{{'exchange.sending_queue_expandgroup' | i18n}}" ng-click="messageVisible = messageVisible ? false:true" ng-show="!messageVisible"></i>
                             <i class="fa fa-minus fa-md" title="{{'exchange.sending_queue_collapsegroup' | i18n}}" ng-click="messageVisible = !messageVisible ? true:false" ng-show="messageVisible"></i>
-                        </th>
-                        <th>{{item.sendingLogList.length}} {{'exchange.sending_queue_table_number_of_reports' | i18n}}</th>
-                        <td class="sendingqueue_header">{{item.sendingLogList[0].dateRecieved}}</td>
-                        <td class="sendingqueue_header">{{item.recipient}}</td>
-                        <!--<td class="reciepient sendingqueue_header">{{'exchange.sending_queue_table_allmessages_in_group' | i18n}}</td>-->
-                        <td class="action">
-                            <i class="fa fa-repeat fa-md" title="{{'exchange.sending_queue_table_resendgroup'| i18n}}" ng-click="resendAllQueueItemsInGroup(item)" ng-show="!messageVisible"></i>
-                        </td>
-                    </tr>
-                    <tr ng-show="messageVisible" ng-repeat="sendingLog in item.sendingLogList">
-                        <td></td>
-                        <td></td>
-                        <td class="messagedetails">{{sendingLog.dateRecieved}}</td>
-                        <td class="messagedetails">{{item.recipient}}</td>
-                        <td class="messagedetails action">
-                            <i class="fa fa-repeat fa-sm" title="{{'exchange.sending_queue_table_resend'| i18n}}" ng-click="resendQueuedItemInGroup(sendingLog.id)"></i>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-             <search-result-error-alert ng-show="sendingQueue.errorMessage">{{sendingQueue.errorMessage}}</search-result-error-alert>
-           <!--
-            -->
+                            <small>{{'exchange.sending_queue_table_number_of_reports' | i18n}}</small>
+                        </div>
+                        <div class="list_item_header">
+                            <small class="pull-right message_group">{{item.recipient}}</small>
+                            <div class="group_action pull-right">
+                                <i show-if-allowed="Exchange:manageExchangeSendingQueue" class="fa fa-repeat fa-lg" title="{{'exchange.sending_queue_table_resendgroup'| i18n}}" ng-click="resendAllQueueItemsInGroup(item)" ng-show="!messageVisible"></i>
+                            </div>
+                        </div>
+                        <div class="list_item_container" ng-show="messageVisible">
+                            <ul>
+                                <li class="list_item_details" ng-repeat="sendingLog in item.sendingLogList" ng-class-odd="'odd'" ng-class-even="'even'">
+                                    <div class="details">{{sendingLog.dateRecieved | confDateFormat}}</div>
+                                    <div class="details">{{sendingLog.senderRecipient}}</div>
+                                    <div class="details"></div>
+                                    <div class="details action"><i show-if-allowed="Exchange:manageExchangeSendingQueue" class="fa fa-repeat fa-sm" title="{{'exchange.sending_queue_table_resend'| i18n}}" ng-click="resendQueuedItemInGroup(sendingLog.messageId)"></i></div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <search-result-error-alert ng-show="sendingQueue.errorMessage">{{sendingQueue.errorMessage}}</search-result-error-alert>
         </div>
 	</div>
 </div>

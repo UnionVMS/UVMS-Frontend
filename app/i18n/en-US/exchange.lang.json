@@ -29,7 +29,7 @@
 	"sending_queue_table_resendall": "Resend all",
 	"sending_queue_table_resendgroup": "Resend group",
 	"sending_queue_table_resend": "Resend",
-	"sending_queue_table_number_of_reports" : "message(s)",
+	"sending_queue_table_number_of_reports" : "Total messages in queue",
 	"sending_queue_table_allmessages_in_group": "Group",
 
 

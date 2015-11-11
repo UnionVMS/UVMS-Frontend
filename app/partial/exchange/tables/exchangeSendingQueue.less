@@ -46,4 +46,69 @@
     .sendingqueue_header{
         font-size: 12px;
     }
+
+    .list_item_header{
+        width: 50%;
+        float: left;
+        height: 60px;
+        margin-bottom:4px;
+        h3{
+            color:@primaryColor;
+            font-size: 40px;
+            padding: 0 30px;
+            margin-bottom: 0px;
+            margin-top: 0px;
+        }
+        i{
+            color:@primaryColor;
+        }
+        small{
+            padding-left: 15px;
+        }
+
+    }
+    .list_item{
+        display: block;
+        overflow: hidden;
+        border-bottom: 1px solid #e4e4e4;
+    }
+
+    .list_item_container{
+        ul{
+            margin-bottom: 0px;
+        }
+
+        .list_item_details{
+            display: inline-block;
+            width: 100%;
+            padding-left: 50px;
+            .details{
+                height: 40px;
+                width: 30%;
+                float: left;
+                padding:10px 5px;
+            }
+            .action{
+                color:@primaryColor;
+                width: 10%;
+                i {
+                    float: right;
+                    padding-top:3px;
+                    padding-right: 10px;
+                }
+            }
+        }
+    }
+    .message_group{
+        font-size: 16px;
+        font-weight: bold;
+        color:@primaryColor;
+    }
+    .group_action{
+        i{
+            position: relative;
+            top: 42px;
+            left: 62px;
+        }
+    }
 }
