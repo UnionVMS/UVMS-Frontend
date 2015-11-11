@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scope, $stateParams, $resource){
+angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scope, $stateParams, $resource, alertService){
 	$scope.isAudit = false;
 	$scope.activeTab = $stateParams.module || "systemMonitor";
 
@@ -52,9 +52,41 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 		}
 	};
 
+	$scope.setEditing = function(setting, editing) {
+		if (editing) {
+			setting.previousValue = setting.value;
+			setting.previousDescription = setting.description;
+		}
+		else {
+			delete setting.previousValue;
+			delete setting.previousDescription;
+		}
+
+		setting.editing = editing;
+	};
+
+	$scope.cancelEditing = function(setting) {
+		setting.value = setting.previousValue;
+		setting.description = setting.previousDescription;
+		$scope.setEditing(setting, false);
+	};
+
 	$scope.updateSetting = function(setting) {
-		SingleSetting.update({ id: setting.id }, setting);
-		setting.editing = false;
+		var s = {
+			value: setting.value,
+			global: setting.global,
+			description: setting.description,
+			key: setting.key,
+			module: setting.module,
+			id: setting.id
+		};
+
+		SingleSetting.update({ id: setting.id }, s, function(response) {
+			$scope.setEditing(setting, false);
+		}, function(error) {
+			alertService.showErrorMessage(error);
+		});
+
 	};
 
 	$scope.setTab = function(tab) {
