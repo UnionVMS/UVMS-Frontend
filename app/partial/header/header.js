@@ -1,6 +1,26 @@
-angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $state, $rootScope, $location, $localStorage, userService, renewloginpanel, infoModal, configurationService, selectContextPanel, startPageService){
+angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $state, $rootScope, $location, $localStorage, userService, renewloginpanel, infoModal, configurationService, selectContextPanel, startPageService, tmhDynamicLocale, locale, $cookieStore, localeSupported){
     $scope.randomNumber = 5;
     $scope.user = {};
+    $scope.languages = localeSupported;
+    $scope.selectedLanguage = tmhDynamicLocale.get();
+
+    $scope.userFlagIconClass = function() {
+        if ($scope.selectedLanguage) {
+            var parts = $scope.selectedLanguage.split("-");
+            if (parts.length >= 2) {
+                return "flag-icon-" + parts[1].toLowerCase();
+            }
+        }
+    };
+
+    $scope.setLanguage = function(lang) {
+        tmhDynamicLocale.set(lang).then(function(success) {
+            $cookieStore.put('tmhDynamicLocale.locale', lang);
+        });
+
+        locale.setLocale(lang);
+        $state.go($state.$current, null, {reload: true});
+    };
 
     var init = function(){
         $scope.userName = userService.getUserName();

@@ -15,7 +15,8 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'usm',
     'googlechart',
     'ngWebSocket',
-    'checklist-model'
+    'checklist-model',
+    'ngCookies'
 ]);
 
 var currentUserContextPromise = function(userService, $q) {
@@ -520,16 +521,19 @@ unionvmsWebApp.value('localeConf', {
     cookieName: 'COOKIE_LOCALE_LANG',
     observableAttrs: new RegExp('^data-(?!ng-|i18n)'),
     delimiter: '::'
-});
+}).value('localeSupported', [
+    "en-US"
+]);
 
 //Configure locale in momentjs (used to determine start of week)
 //TODO: get locale from config or browser
 moment.locale('en');
 
 //Service used for bootstrapping the application
-unionvmsWebApp.factory('initService',function(configurationService, locale, tmhDynamicLocale, $window) {
+unionvmsWebApp.factory('initService',function(configurationService, locale, tmhDynamicLocale, $window, $cookieStore) {
 
-    tmhDynamicLocale.set($window.navigator.userLanguage || $window.navigator.language);
+    var storedLocale = $cookieStore.get('tmhDynamicLocale.locale');
+    tmhDynamicLocale.set(storedLocale || $window.navigator.userLanguage || $window.navigator.language);
 
     var initService = {
         //Load the configurations

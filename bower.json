@@ -51,7 +51,8 @@
     "OpenLayers": "~3.7.0",
     "turf": "https://github.com/Turfjs/turf.git#~2.0.2",
     "underscore": "~1.5",
-    "checklist-model": "latest"
+    "checklist-model": "latest",
+    "flag-icon-css": "latest"
   },
   "resolutions": {
     "angular": "~1.3",

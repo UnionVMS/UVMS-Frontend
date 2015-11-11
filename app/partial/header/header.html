@@ -38,6 +38,21 @@
     								</ul>
     							</div>
     						</div>
+                            <div class="language-select">
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle" id="language-select-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        <div class="flag"><span class="flag-icon" ng-class="userFlagIconClass()"></span></div>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="language-select-menu">
+                                        <li ng-repeat="language in languages" ng-class="{'disabled': language === selectedLanguage}">
+                                            <a ng-click="language !== selectedLanguage && setLanguage(language)">
+                                                {{ "header." + language | i18n }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                             <div class="sign-in" ng-if="!isAuthenticated">
                                 <span ng-click="signIn()"><i class="fa fa-lg fa-user"></i><span ng-bind="'header.sign_in' | i18n"></span></a>
                             </div>
