@@ -27,7 +27,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     };
     
     $scope.vesselTable = {};
-//    $scope.vesselsByPage = 10;
+    $scope.vesselsByPage = 10;
     
 
     $scope.toggleAllVessels = function(){
