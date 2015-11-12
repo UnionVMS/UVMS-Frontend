@@ -23,17 +23,21 @@
                                     </th>
 
                                     <th colspan="2">
-                                        <datepicker-input model="advancedSearchObject.START_DATE" max-date="advancedSearchObject.END_DATE" placeholder="{{'polling.polling_logs_search_date_from_placeholder' | i18n}}" time="true"></datepicker-input>
+                                        <datepicker-input model="advancedSearchObject.FROM_DATE" max-date="advancedSearchObject.TO_DATE" placeholder="{{'polling.polling_logs_search_date_from_placeholder' | i18n}}" time="true"></datepicker-input>
                                     </th>
 
                                     <th colspan="2">
-                                        <datepicker-input model="advancedSearchObject.END_DATE" min-date="advancedSearchObject.STAR_DATE"  placeholder="{{'polling.polling_logs_search_date_to_placeholder' | i18n}}" time="true"></datepicker-input>
+                                        <datepicker-input model="advancedSearchObject.TO_DATE" min-date="advancedSearchObject.FROM_DATE"  placeholder="{{'polling.polling_logs_search_date_to_placeholder' | i18n}}" time="true"></datepicker-input>
                                     </th>
 
-                                    <th>&nbsp;</th>
                                     <th class="textAlignCenter">
                                         <button type="submit" class="btn btn-primary inputHeigth searchButton" ng-click="searchPolls()">
                                              {{'common.search' | i18n}}
+                                        </button>
+                                    </th>
+                                    <th>
+                                        <button type="button" class="btn btn-default inputHeigth searchButton" ng-click="resetSearch()">
+                                            {{'common.reset' | i18n}}
                                         </button>
                                     </th>
                                     <th class="printAndExport">
@@ -70,10 +74,10 @@
                                         <dropdown ng-model="advancedSearchObject.STATUS" items="statusTypes"  initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>
                                     </th>
 
-                                    <th>&nbsp;</th>
                                     <th>
                                         <input type="text" placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.USER" >
                                     </th>
+                                    <th>&nbsp;</th>
                                      <th>
                                     </th>
 

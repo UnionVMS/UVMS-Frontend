@@ -135,13 +135,13 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     /*SEARCH POLLING LOGS*/
 
     //Watch for changes to the START DATE input
-    $scope.$watch(function () { return $scope.advancedSearchObject.START_DATE;}, function (newVal, oldVal) {
+    $scope.$watch(function () { return $scope.advancedSearchObject.FROM_DATE;}, function (newVal, oldVal) {
         if (typeof newVal !== 'undefined') {
             $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_CUSTOM;
         }
     });
     //Watch for changes to the END DATE input
-    $scope.$watch(function () { return $scope.advancedSearchObject.END_DATE;}, function (newVal, oldVal) {
+    $scope.$watch(function () { return $scope.advancedSearchObject.TO_DATE;}, function (newVal, oldVal) {
         if (typeof newVal !== 'undefined') {
             $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_CUSTOM;
         }
@@ -150,8 +150,8 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     $scope.$watch(function () { return $scope.advancedSearchObject.TIME_SPAN;}, function (newVal, oldVal) {
         if (typeof newVal !== 'undefined' && newVal !== $scope.DATE_CUSTOM) {
             //Reset start date and end date when changing to something else than custom
-            $scope.advancedSearchObject.START_DATE = undefined;
-            $scope.advancedSearchObject.END_DATE = undefined;
+            $scope.advancedSearchObject.FROM_DATE = undefined;
+            $scope.advancedSearchObject.TO_DATE = undefined;
         }
     });
 
