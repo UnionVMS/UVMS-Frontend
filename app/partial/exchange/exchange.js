@@ -257,11 +257,6 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         return label;
     };
 
-    //Print the exchange logs
-    $scope.print = function(){
-        alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
-    };
-
     //Edit selection
     $scope.editSelectionDropdownItems =[
         {'text':locale.getString('common.export_selection'),'code':'EXPORT'}

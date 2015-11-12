@@ -85,11 +85,6 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
         }
     };
 
-    $scope.print = function(){
-        console.log("Print...");
-        window.print();
-    };
-
     //Export data as CSV file
     $scope.exportLogsAsCSVFile = function(){
         var filename = 'pollingLogs.csv';

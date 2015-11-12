@@ -236,11 +236,6 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
         });
     };
 
-    //Print the exchange logs
-    $scope.print = function(){
-        alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
-    };
-
     //Get status label
     $scope.getStatusLabelForRule = function(rule){
         if(rule.active){

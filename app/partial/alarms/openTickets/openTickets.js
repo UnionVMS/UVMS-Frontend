@@ -176,11 +176,6 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         PositionReportModal.show(copy, options);
     };
 
-    //Print the exchange logs
-    $scope.print = function(){
-        alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
-    };
-
     //Export data as CSV file
     $scope.exportItemsAsCSVFile = function(onlySelectedItems){
         var filename = 'holdingTable.csv';

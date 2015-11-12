@@ -136,12 +136,6 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         }
     };
 
-    $scope.print = function(){
-        console.log("Print...");
-        window.print();
-    };
-
-
     //View item details
     $scope.viewItemDetails = function(item){
         ManualPositionReportModal.show(movement2ManualPosition(item), {readOnly: true});

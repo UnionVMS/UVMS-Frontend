@@ -160,11 +160,6 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         });
     };
 
-    //Print the exchange logs
-    $scope.print = function(){
-        alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
-    };
-
     //Export data as CSV file
     $scope.exportItemsAsCSVFile = function(onlySelectedItems){
         var filename = 'holdingTable.csv';
