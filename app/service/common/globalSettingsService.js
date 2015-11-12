@@ -18,6 +18,52 @@ angular.module('unionvmsWeb').factory('globalSettingsService',function($resource
         });
     };
 
+    //Create a new global setting
+    var createNewGlobalSetting = function(key, value){
+        var deferred = $q.defer();
+        var dto = {
+            "setting": {
+                "module": "",
+                "description": key,
+                "global": true,
+                "value": value,
+                "key": key
+            },
+            "moduleName": ""
+        };
+
+        GlobalSetting.save(dto, function(response) {
+            if(String(response.code) !== '200'){
+                return deferred.reject("Invalid response status");
+            }
+            getSettingFromServer();
+            deferred.resolve();
+        },
+        function(err){
+            getSettingFromServer();
+            deferred.reject("Error creating setting.");
+        });
+        return deferred.promise;
+    };
+
+    //Update an existing setting
+    var updateGlobalSetting = function(key, value){
+        var deferred = $q.defer();
+        var setting = settings[key];
+        setting.value = value;
+        GlobalSetting.put({id: setting.id}, setting, function(response) {
+            if(String(response.code) !== '200'){
+                return deferred.reject("Invalid response status");
+            }
+            deferred.resolve();
+        },
+        function(err){
+            getSettingFromServer();
+            deferred.reject("Error updating setting.");
+        });
+        return deferred.promise;
+    };
+
     var init = function(){
         getSettingFromServer();
     };
@@ -28,26 +74,15 @@ angular.module('unionvmsWeb').factory('globalSettingsService',function($resource
         },
 
         set : function(key, value, isArray) {
-            if (settings[key] === undefined) {
-                return;
-            }
+            //Update value if it's an array
+            value = isArray ? value.join() : value;
 
-            var deferred = $q.defer();
-            var setting = settings[key];
-            setting.value = isArray ? value.join() : value;
-            GlobalSetting.put({id: setting.id}, setting, function(response) {
-                if(String(response.code) !== '200'){
-                    deferred.reject("Invalid response status");
-                    return;
-                }
-                deferred.resolve();
-            },
-            function(err){
-                $log.error("Error saving setting.", err);
-                getSettingFromServer();
-                deferred.reject(err);
-            });
-            return deferred.promise;
+            //Create new setting or update existing
+            if (settings[key] === undefined) {
+                return createNewGlobalSetting(key, value);
+            } else{
+                return updateGlobalSetting(key, value);
+            }
         },
 
         get : function(key, isArray) {
