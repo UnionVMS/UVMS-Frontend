@@ -1,4 +1,4 @@
-    angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $rootScope, $location, userService, locale){
+    angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $rootScope, $location, $state, userService, startPageService, locale){
 
     var checkAccess = function(module, feature) {
         return userService.isAllowed(feature,module,true);
@@ -153,6 +153,8 @@
     });
     $rootScope.$on('ContextSwitch', function () {
         init();
+        var homeState = startPageService.getStartPageStateName();
+        $state.go(homeState, {});
     });
 
     init();
