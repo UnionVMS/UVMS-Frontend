@@ -39,8 +39,8 @@
                         </td>
                         <td>{{item.mobileTerminal.channels[0].ids.DNID}}</td>
                         <td>{{item.mobileTerminal.channels[0].ids.MEMBER_NUMBER}}</td> 
-                        <td>{{item.mobileTerminal.attributes.INSTALLED_ON}}</td>
-                        <td>{{item.mobileTerminal.attributes.UNINSTALLED_ON}}</td>
+                        <td>{{item.mobileTerminal.attributes.INSTALLED_ON | confDateFormat}}</td>
+                        <td>{{item.mobileTerminal.attributes.UNINSTALLED_ON | confDateFormat}}</td>
                         <td>{{item.mobileTerminal.attributes.SATELLITE_NUMBER}}</td>
                         <td>{{item.changeDate | confDateFormat}}</td>
                         <td>{{item.comment}}</td>
