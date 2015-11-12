@@ -1,25 +1,27 @@
-angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $state, $rootScope, $location, $localStorage, userService, renewloginpanel, infoModal, configurationService, selectContextPanel, startPageService, tmhDynamicLocale, locale, $cookieStore, localeSupported){
+angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $state, $rootScope, $location, $localStorage, userService, renewloginpanel, infoModal, configurationService, selectContextPanel, startPageService, tmhDynamicLocale, locale, $cookieStore, localeSupported, languageNames){
     $scope.randomNumber = 5;
     $scope.user = {};
     $scope.languages = localeSupported;
     $scope.selectedLanguage = tmhDynamicLocale.get();
+    $scope.languageNames = languageNames;
+
+    $scope.setLanguage = function(lang) {
+        tmhDynamicLocale.set(lang);
+        locale.setLocale(lang);
+        moment.locale(lang);
+        $state.go($state.$current, null, {reload: true});
+    };
 
     $scope.userFlagIconClass = function() {
         if ($scope.selectedLanguage) {
             var parts = $scope.selectedLanguage.split("-");
-            if (parts.length >= 2) {
+            if (parts.length > 1) {
                 return "flag-icon-" + parts[1].toLowerCase();
             }
+            else if (parts.length > 0) {
+                return "flag-icon-" + parts[0].toLowerCase();
+            }
         }
-    };
-
-    $scope.setLanguage = function(lang) {
-        tmhDynamicLocale.set(lang).then(function(success) {
-            $cookieStore.put('tmhDynamicLocale.locale', lang);
-        });
-
-        locale.setLocale(lang);
-        $state.go($state.$current, null, {reload: true});
     };
 
     var init = function(){

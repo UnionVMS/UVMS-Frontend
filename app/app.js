@@ -514,7 +514,7 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
 //Configure for i18n
 unionvmsWebApp.value('localeConf', {
     basePath: 'i18n',
-    defaultLocale: 'en-US',
+    defaultLocale: 'en-us',
     sharedDictionary: 'common',
     fileExtension: '.lang.json?ts=' +(new Date()).getTime(),
     persistSelection: true,
@@ -522,18 +522,19 @@ unionvmsWebApp.value('localeConf', {
     observableAttrs: new RegExp('^data-(?!ng-|i18n)'),
     delimiter: '::'
 }).value('localeSupported', [
-    "en-US"
-]);
-
-//Configure locale in momentjs (used to determine start of week)
-//TODO: get locale from config or browser
-moment.locale('en');
+    "en-us",
+    "sv"
+]).constant('languageNames', {
+    "en-us": "English (US)",
+    "sv": "Svenska"
+});
 
 //Service used for bootstrapping the application
 unionvmsWebApp.factory('initService',function(configurationService, locale, tmhDynamicLocale, $window, $cookieStore) {
 
-    var storedLocale = $cookieStore.get('tmhDynamicLocale.locale');
-    tmhDynamicLocale.set(storedLocale || $window.navigator.userLanguage || $window.navigator.language);
+    var userLocale = $cookieStore.get('COOKIE_LOCALE_LANG') || $window.navigator.userLanguage || $window.navigator.language;
+    tmhDynamicLocale.set(userLocale);
+    moment.locale(userLocale);
 
     var initService = {
         //Load the configurations

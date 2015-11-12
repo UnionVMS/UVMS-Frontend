@@ -47,7 +47,7 @@
                                     <ul class="dropdown-menu" aria-labelledby="language-select-menu">
                                         <li ng-repeat="language in languages" ng-class="{'disabled': language === selectedLanguage}">
                                             <a ng-click="language !== selectedLanguage && setLanguage(language)">
-                                                {{ "header." + language | i18n }}
+                                                {{ languageNames[language] }}
                                             </a>
                                         </li>
                                     </ul>

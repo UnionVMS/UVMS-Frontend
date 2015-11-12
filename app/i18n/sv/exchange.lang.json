@@ -1,0 +1,63 @@
+{
+    "search_zero_results_error" : "No exchange logs matching your search criteria were found.",
+	"search_forward_rule": "Forward rule",
+	"search_from": "From",
+	"search_message_contains": "Message contains",
+	"search_range": "Range",
+	"search_recipient": "Recipient",
+	"search_ircs_cfr_name": "IRCS, CFR, Name",
+	"search_to": "To",
+
+    "message_details_modal_title" : "Message details",
+
+	"table_header_actions": "Actions",
+	"table_header_date_fwd": "Date forwarded",
+	"table_header_date_received": "Date received",
+	"table_header_fwd_rule": "Forward rule",
+	"table_header_recipient": "Recipient",
+	"table_header_sent_by": "From",
+    "table_header_status": "Status",
+    "table_header_source": "Source",
+	"table_header_type": "Type",
+
+	"sending_queue_table_header_date_received": "Date received",
+	"sending_queue_table_header_from": "From",
+	"table_header_sender_reciever" : "Sender/Reciever",
+	"sending_queue_table_header_recipient": "Recipient",
+	"sending_queue_table_pauseall": "Paus all",
+	"sending_queue_table_pause": "Pause",
+	"sending_queue_table_resendall": "Resend all",
+	"sending_queue_table_resendgroup": "Resend group",
+	"sending_queue_table_resend": "Resend",
+	"sending_queue_table_number_of_reports" : "message(s)",
+	"sending_queue_table_allmessages_in_group": "Group",
+
+
+	"sending_queue_header" : "Sending queue",
+	"sending_queue_warning" : "There are currently many messages in queue. This might take a while.",
+	"sending_queue_all_ok" : "Status ok, there are no messages in queue.",
+	"sending_queue_expandgroup" : "Expand group",
+	"sending_queue_collapsegroup" : "Collapse group",
+	"sending_queue_resend": "Resend",
+
+	"transmission_status_header" : "Transmission status",
+	"transmission_status_online" : "Online",
+    "transmission_status_offline" : "Stopped",
+	"transmission_status_stopped" : "Stopped",
+
+    "transmission_action_start" : "Start",
+    "transmission_action_stop" : "Stop",
+    "transmission_start_transmission_error" : "Error. Could not start plugin. Please try again later.",
+    "transmission_start_transmission_successfull" : "Plugin started.",
+    "transmission_stop_transmission_error" : "Error. Could not stop plugin. Please try again later.",
+    "transmission_stop_transmission_successfull" : "Plugin stopped.",
+
+	"title_all": "All",
+    "title_details": "Show details",
+	"title_incoming": "Incoming",
+	"title_outgoing": "Outgoing",
+	"title_forward": "Forward",
+	"title_resend": "Resend"
+
+
+}
