@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, mapService, spatialHelperService){
+angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, mapService, spatialHelperService, $window){
     $scope.activeControl = '';
     $scope.showMeasureConfigWin = false;
     $scope.measureConfigs = spatialHelperService.measure;
@@ -80,6 +80,49 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, mapS
         }
     });
     
+    var resizeMap = function(evt) {
+    	
+        var w = angular.element(window);
+        var map = $('#map')[0];
+        
+        if(evt && (angular.element('.mapPanelContainer.fullscreen').length > 0 ||
+        		(angular.element('.mapPanelContainer.fullscreen').length === 0 && evt.type.toUpperCase().indexOf("FULLSCREENCHANGE") !== -1))){
+        	
+        	setTimeout(function() {
+        		$('.map-container').css('height', w.height() - 30 + 'px');
+        		$('[ng-controller="LayerpanelCtrl"]').css('height', w.height() - 30 + 'px');
+                $('#map').css('height', w.height() - 62 + 'px');
+                mapService.updateMapSize();
+        	}, 200);
+      	  return;
+        }
+        
+        setTimeout(function() {
+	        var offset = 100;
+	        var minHeight = 340;
+	        var footerHeight = angular.element('footer')[0].offsetHeight;
+	        var headerHeight = angular.element('header')[0].offsetHeight;
+	        var newHeight = w.height() - headerHeight - footerHeight - offset;
+	        
+	        if (newHeight < minHeight) {
+	            newHeight = minHeight;
+	        }
+	        
+	        $('.map-container').css('height', newHeight);
+	        $('[ng-controller="LayerpanelCtrl"]').css('height', newHeight);
+	        $('#map').css('height', newHeight - 32 + 'px');
+	        
+	        mapService.updateMapSize();
+        }, 200);
+  	}
+    
+    $(window).resize(resizeMap);
+    $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', resizeMap);
+    
+    angular.element(document).ready(function () {
+    	resizeMap();
+    });
+    
     //Other controls
 //    $scope.otherEnable = function(){
 //        console.log('enable other');
@@ -106,9 +149,9 @@ angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale,
             }, {
                 type: 'scale',
                 units: 'nautical' //Possible values: metric, degrees, nautical, us, imperial
-            }, {
+            }, /*{
                 type: 'fullscreen'
-            },{
+            },*/{
                 type: 'mousecoords',
                 epsgCode: 4326,
                 format: 'dd' //Possible values: dd, dms, ddm, m

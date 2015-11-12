@@ -1,3 +1,10 @@
+.mapPanelContainer{
+	&.fullscreen{
+		width: 100%;
+    	height: 100%;
+	}
+}
+
 .map-container{
 	width: 100%;
 	min-height: 30px;
@@ -21,7 +28,7 @@
 
 //Map top Toolbar
 #map-toolbar {
-	display: flex;
+	display: block;
 	height : 32px;
 	border: 1px solid #DDD;
 	background-color: #F5F5F5;
@@ -30,8 +37,19 @@
 		margin-left: 2px;
 		color: white;
 	}
+	>div {
+		left: .5em;
+		margin-left: 2px;
+	}
 	>div button:first-child {
-		margin-left: 10px;
+		//margin-left: 8px;
+		
+	}
+	> .btn-fullscreen {
+		float: right;
+    	right: .5em;
+    	left: initial;
+		margin-left: 0;
 	}
 }
 
@@ -61,6 +79,9 @@
 	margin-left: 3px;
 	border: 1px solid #DDD;
 	line-height: 25px;
+	> .row {
+		margin-left: 0;
+	}
 }
 
 //Scale line

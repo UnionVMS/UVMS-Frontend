@@ -16,8 +16,9 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'googlechart',
     'ngWebSocket',
     'checklist-model',
-    'ngCookies'
-]);
+    'angularScreenfull',
+	'ngCookies'
+	]);
 
 var currentUserContextPromise = function(userService) {
     return userService.findSelectedContext();
