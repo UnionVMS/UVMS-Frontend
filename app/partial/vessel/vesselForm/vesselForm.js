@@ -14,7 +14,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     $scope.$watch('getVesselObj()', function(newVal) {
         $scope.vesselObj = $scope.getVesselObj();
         $scope.vesselForm.$setPristine();
-        $scope.submitAttempted = false;        
+        $scope.submitAttempted = false;
         if (typeof newVal !== 'undefined') {
             if(!$scope.isCreateNewMode()){
                 getVesselHistory();
@@ -112,7 +112,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
 
     //Archive the vessel
     $scope.archiveVessel = function(){
-        
 
         var options = {
             textLabel : locale.getString("vessel.archive_confirm_text")
@@ -120,6 +119,10 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
         confirmationModal.open(function(){
             console.log("Confirmed!");
             $scope.vesselObj = $scope.getOriginalVessel();
+            //When you have just created a vessel the getOriginalVessel will return undefined
+            if(angular.isUndefined($scope.vesselObj)){
+                $scope.vesselObj = $scope.getVesselObj();
+            }
             //Set active to false, meaning archived
             $scope.vesselObj.active = false;
             vesselRestService.updateVessel($scope.vesselObj).then(
@@ -156,6 +159,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
         $scope.waitingForCreateResponse = false;
         alertService.showSuccessMessageWithTimeout(locale.getString('vessel.add_new_alert_message_on_success'));
         $scope.vesselObj = createdVessel;
+        $scope.setVesselObj(createdVessel.copy());
         $scope.setCreateMode(false);
         getVesselHistory();
     };
@@ -169,14 +173,14 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     //Clear the form
     $scope.clearForm = function(){
         $scope.vesselObj = new Vessel();
-    };    
+    };
 
     //Update the Vessel
     $scope.updateVessel = function(){
         $scope.submitAttempted = true;
         if($scope.vesselForm.$valid) {
             //MobileTerminals remove them cuz they do not exist in backend yet.
-            delete $scope.vesselObj.mobileTerminals; 
+            delete $scope.vesselObj.mobileTerminals;
 
             //Update Vessel and take care of the response(eg. the promise) when the update is done.
             $scope.waitingForCreateResponse = true;
@@ -231,7 +235,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
         if($scope.vesselHistory.length === vesselHistorySize){
             $scope.isVisible.showCompleteVesselHistoryLink = true;
         }
-        $scope.waitingForHistoryResponse = false;        
+        $scope.waitingForHistoryResponse = false;
     };
 
     //Success getting complete vessel history

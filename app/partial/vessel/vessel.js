@@ -147,6 +147,10 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         $scope.createNewMode = bool;
     };
 
+    $scope.setVesselObj = function(vessel){
+        $scope.vesselObj = vessel;
+    };
+
     $scope.getVesselObj = function(){
         return $scope.vesselObj;
     };

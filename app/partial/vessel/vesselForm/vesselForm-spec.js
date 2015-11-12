@@ -29,6 +29,10 @@ describe('VesselFormCtrl', function() {
 
         scope.getVesselObj = function(){
             return scope.vesselObj;
+        };        
+
+        scope.setVesselObj = function(vessel){
+            scope.vesselObj = vessel;
         };
 
         scope.onVesselHistoryListSuccess = function(){
@@ -39,7 +43,8 @@ describe('VesselFormCtrl', function() {
 
     it('create new vessel should update vesselObj with created vessel and get vessel history afterwards', inject(function(Vessel, $compile, $q, $httpBackend, vesselRestService, alertService, locale) {
         //Mock REST request
-        $httpBackend.expectPOST("").respond({ });
+        $httpBackend.whenGET("").respond({});
+        $httpBackend.whenPOST("").respond({});
 
         scope.setCreateMode(true);
 
@@ -83,7 +88,8 @@ describe('VesselFormCtrl', function() {
 
     it('update a vessel should update vesselObj with the updated vessel and merge into vessel list, and get vessel history afterwards', inject(function(Vessel, $compile, $q, $httpBackend, vesselRestService, alertService, locale) {
         //Mock REST request
-        $httpBackend.expectPOST("").respond({ });
+        $httpBackend.whenGET("").respond({});
+        $httpBackend.whenPOST("").respond({});
 
         scope.mergeCurrentVesselIntoSearchResults = function(){
             //Nothing
