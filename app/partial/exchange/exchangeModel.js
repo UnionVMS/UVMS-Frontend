@@ -11,7 +11,7 @@ angular.module('unionvmsWeb')
         this.dateFwd = undefined;
         this.status = undefined;
         this.logData = undefined;
-        this.forwardRue = undefined;
+        this.forwardRule = undefined;
         this.source = undefined;
         this.type = undefined;
 	}

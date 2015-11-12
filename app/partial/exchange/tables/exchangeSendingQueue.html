@@ -5,9 +5,8 @@
             <i ng-hide="sendingQueue.items.length <= 5" class="fa fa-exclamation-triangle fa-lg warning-icon"></i>
             <span ng-hide="sendingQueue.items.length <= 5" class="warning-text">{{'exchange.sending_queue_warning' | i18n}}</span>
         </div>
-        <div class="col-md-1 pushright">
-            <!--<i class="fa fa-repeat fa-lg" show-if-allowed="Exchange:manageExchangeSendingQueue" title="{{'exchange.sending_queue_table_resendall' | i18n}}" ng-click="resendAllQueued()"></i>-->
-            <i class="fa fa-refresh fa-lg refresh-icon" ng-click="refreshSendingQue()" title="{{'exchange.sending_table_queue_refreshqueue' | i18n}}"></i>
+        <div ng-hide="sendingQueue.items.length <= 0" class="col-md-1 pushright">
+            <i class="fa fa-repeat fa-lg" show-if-allowed="Exchange:manageExchangeSendingQueue" title="{{'exchange.sending_queue_table_resendall' | i18n}}" ng-click="resendAllQueued()"></i>
         </div>
     </div>
 	<div class="row scroller" loading-indicator="sendingQueue.loading" size="small" type="SPINNER">
