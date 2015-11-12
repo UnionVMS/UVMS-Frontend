@@ -19,10 +19,15 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'ngCookies'
 ]);
 
-var currentUserContextPromise = function(userService, $q) {
+var currentUserContextPromise = function(userService) {
     return userService.findSelectedContext();
 };
-currentUserContextPromise.$inject = ['userService', '$q'];
+currentUserContextPromise.$inject = ['userService'];
+
+var getGlobalSettingsPromise = function(globalSettingsService) {
+    return globalSettingsService.setup();
+};
+getGlobalSettingsPromise.$inject = ['globalSettingsService'];
 
 
 var loadLocales = function(initService) {
@@ -107,7 +112,8 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
             resolve: {
                 currentContext : currentUserContextPromise,
-                locales : loadLocales
+                globalSettings : getGlobalSettingsPromise,
+                locales : loadLocales,
             }
         })
         .state('uvmsheader', {
@@ -534,9 +540,12 @@ unionvmsWebApp.value('localeConf', {
 });
 
 //Service used for bootstrapping the application
-unionvmsWebApp.factory('initService',function(configurationService, locale, tmhDynamicLocale, $window, $cookieStore) {
+unionvmsWebApp.factory('initService',function(configurationService, locale, tmhDynamicLocale, $window, $cookieStore, localeConf, languageNames) {
 
     var userLocale = $cookieStore.get('COOKIE_LOCALE_LANG') || $window.navigator.userLanguage || $window.navigator.language;
+    if(!(userLocale in languageNames)){
+        userLocale = localeConf.defaultLocale;
+    }
     tmhDynamicLocale.set(userLocale);
     moment.locale(userLocale);
 

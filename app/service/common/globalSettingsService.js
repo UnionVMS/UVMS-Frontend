@@ -11,11 +11,17 @@ angular.module('unionvmsWeb').factory('globalSettingsService',function($resource
     var settings = {};
 
     var getSettingFromServer = function(){
+        var deferred = $q.defer();
         GlobalSettings.get(function(response) {
             $.each(response.data, function(index, setting) {
                 settings[setting.key] = setting;
             });
+            deferred.resolve();
+        }, function(err){
+            $log.error("Failed to get global settings.");
+            deferred.reject("Failed to load global settings.");
         });
+        return deferred.promise;
     };
 
     //Create a new global setting
@@ -106,6 +112,9 @@ angular.module('unionvmsWeb').factory('globalSettingsService',function($resource
         getDefaultHomePage : function(){
             return this.get('defaultHomePage', false);
         },
+        setup : function(){
+            return getSettingFromServer();
+        }
     };
 
     init();
