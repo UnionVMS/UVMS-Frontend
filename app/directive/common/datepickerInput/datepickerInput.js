@@ -294,7 +294,9 @@ angular.module('unionvmsWeb').directive('datePickerInputMinDate', function(dateT
             function updateValidity(date, minDate) {
                 var valid = true;
                 if(date !== undefined && minDate !== undefined && date.trim().length > 0 && minDate.trim().length > 0){
-                    valid = date > minDate;
+                    var dateMoment = moment.utc(date, scope.FORMATS.WITH_TIMEZONE.MOMENTJS);
+                    var minDateMoment = moment.utc(minDate, scope.FORMATS.WITH_TIMEZONE.MOMENTJS);
+                    valid = dateMoment.isAfter(minDateMoment);
                 }
                 ctrl.$setValidity('minDate', valid );
             }
@@ -323,7 +325,9 @@ angular.module('unionvmsWeb').directive('datePickerInputMaxDate', function(dateT
             function updateValidity(date, maxDate) {
                 var valid = true;
                 if(date !== undefined && maxDate !== undefined && date.trim().length > 0 && maxDate.trim().length > 0){
-                    valid = date < maxDate;
+                    var dateMoment = moment.utc(date, scope.FORMATS.WITH_TIMEZONE.MOMENTJS);
+                    var maxDateMoment = moment.utc(maxDate, scope.FORMATS.WITH_TIMEZONE.MOMENTJS);
+                    valid = dateMoment.isBefore(maxDateMoment);
                 }
                 ctrl.$setValidity('maxDate', valid );
             }
