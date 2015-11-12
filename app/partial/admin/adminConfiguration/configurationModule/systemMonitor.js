@@ -4,8 +4,4 @@ angular.module('unionvmsWeb').controller('SystemMonitorController', function($sc
 		$scope.pings = response.data;
 	});
 
-	$scope.isOnline = function(timestamp) {
-		return (new Date().getTime() - timestamp) < 6 * 60 * 1000;
-	};
-	
 });

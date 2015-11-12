@@ -12,18 +12,15 @@
 			</tr>
 		</thead>
 		<tbody>
-			<!-- <tr ng-repeat="c in settings[activeTab] | orderBy:sortBy:reverseSort"> -->
-			<tr ng-repeat="(system, timestamp) in pings">
+			<tr ng-repeat="(system, status) in pings">
 				<td style="width: 100px;">
-					<span class="label" ng-class="isOnline(timestamp) && 'label-success' || 'label-danger'">
-						{{ isOnline(timestamp) ? 'ONLINE' : 'OFFLINE'  }}
+					<span class="label" ng-class="status.online ? 'label-success' : 'label-danger'">
+						{{ "config." + (status.online ? 'online' : 'offline') | i18n | uppercase }}
 					</span>
 				</td>
 				<td>{{ "audit.system_status_module_" + system | i18n }}</td>
-				<td>{{ timestamp | date:'medium'}}
-				</td>
+				<td>{{ status.lastPing | confDateFormat }}</td>
 			</tr>
 		</tbody>
 	</table>
-
 </div>
