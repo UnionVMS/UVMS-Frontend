@@ -134,7 +134,9 @@
     "homePage_admin": "Admin",
  
     "coordinateFormat-degreesMinutesSeconds": "DD MM,SS'",
-    "coordinateFormat-decimalDegrees": "DD.MMM"
+    "coordinateFormat-decimalDegrees": "DD.MMM",
 
+    "online": "Online",
+    "offline": "Offline"
 
 }
