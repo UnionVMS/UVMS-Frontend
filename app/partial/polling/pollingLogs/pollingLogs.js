@@ -19,10 +19,10 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
 
 
     $scope.pollTypes = [];
-    $scope.pollTypes.push({"text":"Configuration", "code":"CONFIGURATION_POLL"});
-    $scope.pollTypes.push({"text":"Manual", "code":"MANUAL_POLL"});
-    $scope.pollTypes.push({"text":"Program", "code":"PROGRAM_POLL"});
-    $scope.pollTypes.push({"text":"Sample", "code":"SAMPLE_POLL"});
+    $scope.pollTypes.push({"text": locale.getString('config.MOBILETERMINAL_POLL_TYPE_CONFIGURATION_POLL'), "code":"CONFIGURATION_POLL"});
+    $scope.pollTypes.push({"text": locale.getString('config.MOBILETERMINAL_POLL_TYPE_MANUAL_POLL'), "code":"MANUAL_POLL"});
+    $scope.pollTypes.push({"text": locale.getString('config.MOBILETERMINAL_POLL_TYPE_PROGRAM_POLL'), "code":"PROGRAM_POLL"});
+    $scope.pollTypes.push({"text": locale.getString('config.MOBILETERMINAL_POLL_TYPE_SAMPLING_POLL'), "code":"SAMPLE_POLL"});
 
     $scope.statusTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('EXCHANGE', 'STATUS'),'STATUS','EXCHANGE', true);
 
