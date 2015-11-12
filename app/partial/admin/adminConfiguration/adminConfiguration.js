@@ -93,6 +93,10 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 		$scope.activeTab = tab;
 	};
 
+    $scope.$on("$destroy", function() {
+        alertService.hideMessage();
+    });
+
 	init();
 
 }).filter('replace', function () {
