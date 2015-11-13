@@ -29,27 +29,31 @@
 //Map top Toolbar
 #map-toolbar {
 	display: block;
-	height : 32px;
 	border: 1px solid #DDD;
 	background-color: #F5F5F5;
 	>div button {
 		margin-top: 3px;
 		margin-left: 2px;
 		color: white;
+		margin-bottom: 3px;
 	}
 	>div {
 		left: .5em;
 		margin-left: 2px;
 	}
-	>div button:first-child {
-		//margin-left: 8px;
-		
-	}
-	> .btn-fullscreen {
+
+	> .btn-group-right {
 		float: right;
     	right: .5em;
     	left: initial;
 		margin-left: 0;
+	}
+}
+
+.btn-fullscreen {
+	span {
+		font-size: 12px;
+		font-weight: 100;	
 	}
 }
 

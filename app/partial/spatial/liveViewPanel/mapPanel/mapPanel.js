@@ -114,7 +114,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, mapS
 	        
 	        mapService.updateMapSize();
         }, 200);
-  	}
+  	};
     
     $(window).resize(resizeMap);
     $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', resizeMap);
@@ -146,12 +146,10 @@ angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale,
                 type: 'zoom'
             },{
                 type: 'drag'
-            }, {
+            },{
                 type: 'scale',
                 units: 'nautical' //Possible values: metric, degrees, nautical, us, imperial
-            }, /*{
-                type: 'fullscreen'
-            },*/{
+            },{
                 type: 'mousecoords',
                 epsgCode: 4326,
                 format: 'dd' //Possible values: dd, dms, ddm, m
@@ -160,6 +158,8 @@ angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale,
             }],
             tbControls: [{
                 type: 'measure'
+            },{
+                type: 'fullscreen'
             }]
         }
     };

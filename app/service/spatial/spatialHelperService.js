@@ -2,7 +2,8 @@ angular.module('unionvmsWeb').factory('spatialHelperService',function() {
 
 	var spServ = {
 	    tbControls: {
-	        measure: false
+	        measure: false,
+	        fullscreen: false
 	    },
 	    measure: {
 	        units: 'm',
