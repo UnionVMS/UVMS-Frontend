@@ -17,16 +17,25 @@
 					<div class="form-group col-md-12" ng-show="isVmsMenuVisible('SIMPLE')">
 						<div class="row col-md-12 bottomPaddingCheckGroup">
 							<label>{{'spatial.reports_form_vms_components' | i18n}}</label> &nbsp; &nbsp;
-							<label class="checkbox-inline checkbox-options">
-								<input type="checkbox" ng-model="report.hasPositionsFilter" ng-checked="report.hasPositionsFilter"/>
+							<label class="radio-inline" >
+								<input name="vmsFilterRadio" type="radio" 
+								ng-model="report.hasPositionsFilter" 
+								ng-value="true" 
+								ng-change="toggleSelectedVmsFilter('hasPositionsFilter')"/>
 								{{'spatial.reports_form_vms_positions' | i18n }}
 							</label>
-							<label class="checkbox-inline checkbox-options">
-								<input type="checkbox" ng-model="report.hasSegmentsFilter" ng-checked="report.hasSegmentsFilter"/>
+							<label class="radio-inline" >
+								<input name="vmsFilterRadio" type="radio" 
+								ng-model="report.hasSegmentsFilter" 
+								ng-value="true" 
+								ng-change="toggleSelectedVmsFilter('hasSegmentsFilter')"/>
 								{{'spatial.reports_form_vms_segments' | i18n }}
 							</label>
-							<label class="checkbox-inline checkbox-options">
-								<input type="checkbox" ng-model="report.hasTracksFilter" ng-checked="report.hasTracksFilter"/>
+							<label class="radio-inline" >
+								<input name="vmsFilterRadio" type="radio" 
+								ng-model="report.hasTracksFilter" 
+								ng-value="true"  
+								ng-change="toggleSelectedVmsFilter('hasTracksFilter')"/>
 								{{'spatial.reports_form_vms_tracks' | i18n }}
 							</label>
 		  				</div>
