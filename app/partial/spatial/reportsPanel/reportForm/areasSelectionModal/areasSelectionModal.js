@@ -37,7 +37,7 @@ var resetLayerCqlFilter = function(opt_options){
     
 ol.inherits(resetLayerCqlFilter, ol.control.Control);
 
-angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($scope, $modalInstance, $timeout, locale, selectedAreas, datatablesService, DTOptionsBuilder, DTColumnDefBuilder, spatialRestService, Area){
+angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($scope, $modalInstance, $timeout, locale, selectedAreas, spatialRestService, Area){
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
     };

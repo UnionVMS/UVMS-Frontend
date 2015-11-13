@@ -7,9 +7,6 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'ngLocalize',
     'tmh.dynamicLocale',
     'leaflet-directive',
-    'datatables',
-    'datatables.bootstrap',
-    'datatables.columnfilter',
     'ngCsv',
     'ui.router',
     'usm',
@@ -571,7 +568,6 @@ unionvmsWebApp.factory('initService',function(configurationService, locale, tmhD
                 'movement',
                 'config',
                 'spatial',
-                'datatables',
                 'exchange',
                 'alarms'
             ]);

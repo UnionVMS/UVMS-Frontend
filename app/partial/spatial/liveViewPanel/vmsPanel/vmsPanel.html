@@ -1,167 +1,309 @@
-<div class="containerWrapper" ng-controller="VmspanelCtrl">
-	<div class="container vmspages">
+<div ng-controller="VmspanelCtrl">
+	<div class="containerWrapper vmspages">
 		<ul class="nav nav-pills" role="tablist">
 			<li ng-repeat="tab in vmsTabMenu" class="vmssourcetab" ng-click="selectVmsTab(tab.tab)" ng-class="{'active': selectedVmsTab === '{{tab.tab}}'}"><a>{{tab.title}}</a></li>
 		</ul>
 	</div>
-	<div class="container vmstables table-responsive">
-		<div class="vmstab-content" ng-show="isVmsTabSelected('MOVEMENTS')">
-			<div class="table-tools" ng-show="executedReport.positions.length > 0">
-				<i class="fa fa-lg fa-file" title="{{'spatial.tab_vms_export_csv' | i18n}}" ng-click="exportAsCSV('positions')"></i>
-			</div>
-			<table datatable="ng" dt-options="posTable.dtOptions" dt-column-defs="posTable.dtColumnDefs" class="table table-striped" style="width: 100%;">
-			    <thead>
+	<!-- POSITIONS TABLE -->
+	<div class="containerWrapper vmstables" ng-show="isVmsTabSelected('MOVEMENTS')">
+		<div class="table-responsive-force" st-table="displayedPositions" st-safe-src="executedReport.positions" st-set-filter="stFieldSearchGeoJson">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th colspan="16" class="table-tools">
+							<i ng-click="toggleFiltersRow('positions')">{{isPosFilterVisible === false ? 'spatial.table_filters_activate' : 'spatial.table_filters_deactivate' | i18n}}</i>
+							<div class="btnTools">
+								<i class="fa fa-lg fa-times-circle" title="{{'spatial.table_filters_reset' | i18n}}" st-reset-search ng-click="clearDateFilters()"></i>
+								<i class="fa fa-lg fa-file" title="{{'spatial.tab_vms_export_csv' | i18n}}" ng-click="exportAsCSV('positions')"></i>
+							</div>
+							
+						</th>
+					</tr>
 			        <tr>
-			            <th style="width: 100px;">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_pos_table_header_name' | i18n }}</th>
-			            <th style="width:160px;">{{'spatial.tab_vms_pos_table_header_date' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_pos_table_header_lat' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_pos_table_header_lon' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_pos_table_header_status' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_pos_table_header_measured_speed' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_pos_table_header_calculated_speed' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_pos_table_header_course' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_pos_table_header_msg_type' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_pos_table_header_activity_type' | i18n }}</th>
-			            <th style="width:80px;"></th>
+			            <th st-sort="properties.countryCode" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
+			            <th st-sort="properties.externalMarking" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}</th>
+			            <th st-sort="properties.ircs" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}</th>
+			            <th st-sort="properties.cfr" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}</th>
+			            <th st-sort="properties.name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_name' | i18n }}</th>
+			            <th st-sort="properties.positionTime" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_date' | i18n }}</th>
+			            <th st-sort="geometry.coordinates[0]" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_lat' | i18n }}</th>
+			            <th st-sort="geometry.coordinates[1]" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_lon' | i18n }}</th>
+			            <th st-sort="properties.status" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_status' | i18n }}</th>
+			            <th st-sort="properties.reportedSpeed" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_measured_speed' | i18n }}</th>
+			            <th st-sort="properties.calculatedSpeed" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_calculated_speed' | i18n }}</th>
+			            <th st-sort="properties.calculatedCourse" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_course' | i18n }}</th>
+			            <th st-sort="properties.movementType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_msg_type' | i18n }}</th>
+			            <th st-sort="properties.activityType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_activity_type' | i18n }}</th>
+			            <th st-sort="properties.source" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_source' | i18n }}</th>
+			            <th style="width:80px;" ng-hide="!executedReport.tabs.map"></th>
 			        </tr>
-			    </thead>
-			    <tfoot class="footerToTop">
-			        <tr>
-			            <th style="width: 100px;"></th>
-			            <th></th>
-			            <th></th>
-			            <th></th>
-			            <th style="width:160px;"></th>
-			            <th></th>
-			            <th></th>
-			            <th></th>
-			            <th></th>
-			            <th></th>
-			            <th></th>
-			            <th></th>
-			            <th></th>
-			            <th style="width:80px;"></th>
+			        <tr ng-show="isPosFilterVisible">
+			        	<th colspan="16">
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.countryCode" placeholder="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.externalMarking" placeholder="{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.ircs" placeholder="{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.cfr" placeholder="{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}" class="input-sm form-control" type="search">	
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<datepicker-input time="true" model="startDate" max-date="endDate" placeholder="{{'spatial.table_filter_start_date' | i18n }}" ng-change-callback="resetDateTimePicker"></datepicker-input>
+			        			<input id="stStartDateInput" ng-model="startDate" st-search="properties.positionTime|startDate" class="hidden-st-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<datepicker-input time="true" model="endDate" min-date="startDate" placeholder="{{'spatial.table_filter_end_date' | i18n }}" ng-change-callback="resetDateTimePicker"></datepicker-input>
+			        			<input id="stEndDateInput" ng-model="endDate" st-search="properties.positionTime|endDate" class="hidden-st-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.name" placeholder="{{'spatial.tab_vms_pos_table_header_name' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="geometry.coordinates[1]" placeholder="{{'spatial.tab_vms_pos_table_header_lat' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="geometry.coordinates[0]" placeholder="{{'spatial.tab_vms_pos_table_header_lon' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.status" placeholder="{{'spatial.tab_vms_pos_table_header_status' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.reportedSpeed" placeholder="{{'spatial.tab_vms_pos_table_header_measured_speed' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.calculatedSpeed" placeholder="{{'spatial.tab_vms_pos_table_header_calculated_speed' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.reportedCourse" placeholder="{{'spatial.tab_vms_pos_table_header_course' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.movementType" placeholder="{{'spatial.tab_vms_pos_table_header_msg_type' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.activityType" placeholder="{{'spatial.tab_vms_pos_table_header_activity_type' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.source" placeholder="{{'spatial.tab_vms_pos_table_header_source' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        	</th>
 			        </tr>
-		        </tfoot>
-			    <tbody>
-			        <tr ng-repeat="position in executedReport.positions">
-			        	<td style="width: 100px;">{{ position.properties.countryCode }}</td>
+		    	</thead>
+		    	<tbody>
+		    		<tr ng-if="!displayedPositions.length && !executedReport.isReportExecuting">
+						<td colspan="16">{{'spatial.table_no_data' | i18n}}</td>
+					</tr>
+			        <tr ng-repeat="position in displayedPositions">
+			        	<td>{{ position.properties.countryCode }}</td>
+			        	<td>{{ position.properties.externalMarking }}</td>
 			            <td>{{ position.properties.ircs }}</td>
 			            <td>{{ position.properties.cfr }}</td>
 			            <td>{{ position.properties.name }}</td>
-			            <td style="width:160px;">{{ position.properties.positionTime }}</td>
+			            <td>{{ position.properties.positionTime | dateUtc:config.target_format}}</td>
 			            <td>{{ position.geometry.coordinates[1] }}</td>
 			            <td>{{ position.geometry.coordinates[0] }}</td>
 			            <td>{{ position.properties.status }}</td>
 			            <td>{{ position.properties.reportedSpeed }}</td>
 			            <td>{{ position.properties.calculatedSpeed }}</td>
-			            <td>{{ position.properties.calculatedCourse }}</td>
+			            <td>{{ position.properties.reportedCourse }}</td>
 			            <td>{{ position.properties.movementType }}</td>
 			            <td>{{ position.properties.activityType }}</td>
-			            <td style="width:80px;">
-			            	<button ng-hide="!executedReport.tabs.map" type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'POSITION')"><span class="fa fa-search"></span></button>
-			            	<button ng-hide="!executedReport.tabs.map" type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'POSITION')"><span class="fa fa-hand-paper-o"></span></button>
+			            <td>{{ position.properties.source }}</td>
+			            <td style="width:80px;" ng-hide="!executedReport.tabs.map">
+			            	<button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'POSITION')"><span class="fa fa-search"></span></button>
+			            	<button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'POSITION')"><span class="fa fa-hand-paper-o"></span></button>
 			            </td>
 			        </tr>
-			    </tbody>
+		    	</tbody>
+		    	<tfoot class="stFooterPagination">
+					<tr>
+						<td colspan="16" class="text-right">
+							<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
+						</td>
+					</tr>
+				</tfoot>
 			</table>
 		</div>
-		<div class="vmstab-content" ng-show="isVmsTabSelected('SEGMENTS')">
-			<div class="table-tools" ng-show="executedReport.segments.length > 0">
-				<i class="fa fa-lg fa-file" title="{{'spatial.tab_vms_export_csv' | i18n}}" ng-click="exportAsCSV('segments')"></i>
-			</div>
-			<table datatable="ng" dt-options="segTable.dtOptions" dt-column-defs="segTable.dtColumnDefs" class="table table-striped" style="width: 100%;">
-			    <thead>
+	</div>
+	
+	<!-- SEGMENTS TABLE -->
+	<div class="containerWrapper vmstables" ng-show="isVmsTabSelected('SEGMENTS')">
+		<div class="table-responsive-force" st-table="displayedSegments" st-safe-src="executedReport.segments" st-set-filter="stFieldSearchGeoJson">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th colspan="11" class="table-tools">
+							<i ng-click="toggleFiltersRow('segments')">{{isSegFilterVisible === false ? 'spatial.table_filters_activate' : 'spatial.table_filters_deactivate' | i18n}}</i>
+							<div class="btnTools">
+								<i class="fa fa-lg fa-times-circle" title="{{'spatial.table_filters_reset' | i18n}}" st-reset-search></i>
+								<i class="fa fa-lg fa-file" title="{{'spatial.tab_vms_export_csv' | i18n}}" ng-click="exportAsCSV('segments')"></i>
+							</div>
+							
+						</th>
+					</tr>
 			        <tr>
-			            <th style="width: 100px;">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_pos_table_header_name' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_seg_table_header_distance' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_seg_table_header_duration' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_seg_table_header_speed_ground' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_seg_table_header_course_ground' | i18n }}</th>
-			            <th></th>
-			        </tr>
-			    </thead>
-			    <tfoot class="footerToTop">
-			    	<tr>
-			    		<th style="width: 100px;"></th>
-			    		<th></th>
-			    		<th></th>
-			    		<th></th>
-			    		<th></th>
-			    		<th></th>
-			    		<th></th>
-			    		<th></th>
-			    		<th></th>
+			            <th st-sort="properties.countryCode" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
+			            <th st-sort="properties.externalMarking" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}</th>
+			            <th st-sort="properties.ircs" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}</th>
+			            <th st-sort="properties.cfr" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}</th>
+			            <th st-sort="properties.name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_name' | i18n }}</th>
+			            <th st-sort="properties.distance" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_seg_table_header_distance' | i18n }}</th>
+			            <th st-sort="properties.duration" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_seg_table_header_duration' | i18n }}</th>
+			            <th st-sort="properties.speedOverGround" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_seg_table_header_speed_ground' | i18n }}</th>
+			            <th st-sort="properties.courseOverGround" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_seg_table_header_course_ground' | i18n }}</th>
+			            <th st-sort="properties.segmentCategory" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_seg_table_header_category' | i18n }}</th>
+			            <th style="width:80px;" ng-hide="!executedReport.tabs.map"></th>
+			       </tr>
+			       <tr ng-show="isSegFilterVisible">
+			        	<th colspan="11">
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.countryCode" placeholder="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.externalMarking" placeholder="{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.ircs" placeholder="{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.cfr" placeholder="{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}" class="input-sm form-control" type="search">	
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.name" placeholder="{{'spatial.tab_vms_pos_table_header_name' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.distance" placeholder="{{'spatial.tab_vms_seg_table_header_distance' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.duration" placeholder="{{'spatial.tab_vms_seg_table_header_duration' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.speedOverGround" placeholder="{{'spatial.tab_vms_seg_table_header_speed_ground' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.courseOverGround" placeholder="{{'spatial.tab_vms_seg_table_header_course_ground' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="properties.segmentCategory" placeholder="{{'spatial.tab_vms_seg_table_header_category' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        	</th>
 			    	</tr>
-			    </tfoot>
-			    <tbody>
-			    	<tr ng-repeat="segment in executedReport.segments">
-			    		<td style="width: 100px;">{{ segment.properties.countryCode }}</td>
-			    		<td>{{ segment.properties.ircs }}</td>
+				</thead>
+				<tbody>
+		    		<tr ng-if="!displayedSegments.length && !executedReport.isReportExecuting">
+						<td colspan="11">{{'spatial.table_no_data' | i18n}}</td>
+					</tr>
+			        <tr ng-repeat="segment in displayedSegments">
+			        	<td>{{ segment.properties.countryCode }}</td>
+			        	<td>{{ segment.properties.externalMarking }}</td>
+			            <td>{{ segment.properties.ircs }}</td>
 			            <td>{{ segment.properties.cfr }}</td>
-			    		<td>{{ segment.properties.name }}</td>
-			    		<td>{{ segment.properties.distance }}</td>
-			    		<td>{{ segment.properties.duration }}</td>
-			    		<td>{{ segment.properties.speedOverGround }}</td>
-			    		<td>{{ segment.properties.courseOverGround }}</td>
-			    		<td style="width:80px;">
-			            	<button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_seg_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'SEGMENT')"><span class="fa fa-search"></span></button>
-			            	<button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_seg_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'SEGMENT')"><span class="fa fa-hand-paper-o"></span></button>
+			            <td>{{ segment.properties.name }}</td>
+			            <td>{{ segment.properties.distance }}</td>
+			            <td>{{ segment.properties.duration }}</td>
+			            <td>{{ segment.properties.speedOverGround }}</td>
+			            <td>{{ segment.properties.courseOverGround }}</td>
+			            <td>{{ segment.properties.segmentCategory }}</td>
+			            <td style="width:80px;" ng-hide="!executedReport.tabs.map">
+			            	<button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'SEGMENT')"><span class="fa fa-search"></span></button>
+			            	<button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'SEGMENT')"><span class="fa fa-hand-paper-o"></span></button>
 			            </td>
-			    	</tr>
-			    </tbody>
+			        </tr>
+		    	</tbody>
+		    	<tfoot class="stFooterPagination">
+					<tr>
+						<td colspan="11" class="text-right">
+							<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
+						</td>
+					</tr>
+				</tfoot>
 			</table>
 		</div>
-		<div class="vmstab-content" ng-show="isVmsTabSelected('TRACKS')">
-			<div class="table-tools" ng-show="executedReport.tracks.length > 0">
-				<i class="fa fa-lg fa-file" title="{{'spatial.tab_vms_export_csv' | i18n}}" ng-click="exportAsCSV('tracks')"></i>
-			</div>
-			<table datatable="ng" dt-options="tracksTable.dtOptions" dt-column-defs="tracksTable.dtColumnDefs" class="table table-striped" style="width: 100%;">
-			    <thead>
+	</div>
+	
+	<!-- TRACKS TABLE -->
+	<div class="containerWrapper vmstables" ng-show="isVmsTabSelected('TRACKS')">
+		<div class="table-responsive-force" st-table="displayedTracks" st-safe-src="executedReport.tracks">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th colspan="9" class="table-tools">
+							<i ng-click="toggleFiltersRow('tracks')">{{isTrackFilterVisible === false ? 'spatial.table_filters_activate' : 'spatial.table_filters_deactivate' | i18n}}</i>
+							<div class="btnTools">
+								<i class="fa fa-lg fa-times-circle" title="{{'spatial.table_filters_reset' | i18n}}" st-reset-search></i>
+								<i class="fa fa-lg fa-file btnTools" title="{{'spatial.tab_vms_export_csv' | i18n}}" ng-click="exportAsCSV('tracks')"></i>
+							</div>
+						</th>
+					</tr>
 			        <tr>
-			            <th style="width: 100px;">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_pos_table_header_name' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_seg_table_header_distance' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_seg_table_header_duration' | i18n }}</th>
-			            <!-- <th>{{'spatial.tab_vms_tracks_table_header_dur_low' | i18n }}</th>
-			            <th>{{'spatial.tab_vms_tracks_table_header_dur_high' | i18n }}</th> -->
-			            <th></th>
+			            <th st-sort="properties.countryCode" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
+			            <th st-sort="properties.externalMarking" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}</th>
+			            <th st-sort="properties.ircs" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}</th>
+			            <th st-sort="properties.cfr" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}</th>
+			            <th st-sort="properties.name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_name' | i18n }}</th>
+			            <th st-sort="properties.distance" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_seg_table_header_distance' | i18n }}</th>
+			            <th st-sort="properties.duration" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_seg_table_header_duration' | i18n }}</th>
+			            <th st-sort="properties.totalTimeAtSea" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_tracks_table_header_time_at_sea' | i18n }}</th>
+			            <th style="width:80px;" ng-hide="!executedReport.tabs.map"></th>
 			        </tr>
+			        <tr ng-show="isTrackFilterVisible">
+			        	<th colspan="9">
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="countryCode" placeholder="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="externalMarking" placeholder="{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="ircs" placeholder="{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="cfr" placeholder="{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}" class="input-sm form-control" type="search">	
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="name" placeholder="{{'spatial.tab_vms_pos_table_header_name' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="distance" placeholder="{{'spatial.tab_vms_seg_table_header_distance' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="duration" placeholder="{{'spatial.tab_vms_seg_table_header_duration' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        		<div class="col-md-2 st-table-filters">
+			        			<input st-search="totalTimeAtSea" placeholder="{{'spatial.tab_vms_tracks_table_header_time_at_sea' | i18n }}" class="input-sm form-control" type="search">
+			        		</div>
+			        	</th>
+			    	</tr>
 			    </thead>
-			    <tfoot class="footerToTop">
-			    	<tr>
-			    		<th style="width: 100px;"></th>
-			    		<th></th>
-			    		<th></th>
-			    		<th></th>
-			    		<th></th>
-			    		<th></th>
-			    		<th></th>
-			    	</tr>
-			    </tfoot>
 			    <tbody>
-			    	<tr ng-repeat="track in executedReport.tracks">
-			    		<td style="width: 100px;">{{ track.asset.countryCode }}</td>
-			    		<td>{{ track.asset.ircs }}</td>
-			    		<td>{{ track.asset.cfr }}</td>
-			    		<td>{{ track.asset.name }}</td>
-			    		<td>{{ track.distance }}</td>
-			    		<td>{{ track.duration }}</td>
-			    		
-			    		<td style="width:80px;">
-			            	<button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_tracks_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'TRACK')"><span class="fa fa-search"></span></button>
-			            	<button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_tracks_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'TRACK')"><span class="fa fa-hand-paper-o"></span></button>
+		    		<tr ng-if="!displayedTracks.length && !executedReport.isReportExecuting">
+						<td colspan="9">{{'spatial.table_no_data' | i18n}}</td>
+					</tr>
+			        <tr ng-repeat="track in displayedTracks">
+			        	<td>{{ track.countryCode }}</td>
+			        	<td>{{ track.externalMarking }}</td>
+			            <td>{{ track.ircs }}</td>
+			            <td>{{ track.cfr }}</td>
+			            <td>{{ track.name }}</td>
+			            <td>{{ track.distance }}</td>
+			            <td>{{ track.duration }}</td>
+			            <td>{{ track.totalTimeAtSea }}</td>
+			            <td style="width:80px;" ng-hide="!executedReport.tabs.map">
+			            	<button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'TRACK')"><span class="fa fa-search"></span></button>
+			            	<button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'TRACK')"><span class="fa fa-hand-paper-o"></span></button>
 			            </td>
-			    	</tr>
-			    </tbody>
+			        </tr>
+		    	</tbody>
+		    	<tfoot class="stFooterPagination">
+					<tr>
+						<td colspan="9" class="text-right">
+							<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
+						</td>
+					</tr>
+				</tfoot>
 			</table>
 		</div>
 	</div>

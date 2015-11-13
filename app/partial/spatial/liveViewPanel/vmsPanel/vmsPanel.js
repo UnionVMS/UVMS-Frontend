@@ -1,6 +1,12 @@
-angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, reportService, mapService, csvWKTService, datatablesService, DTOptionsBuilder, DTColumnDefBuilder){
+angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, reportService, mapService, csvWKTService){
     $scope.selectedVmsTab = 'MOVEMENTS';
+    $scope.isPosFilterVisible = false;
+    $scope.isSegFilterVisible = false;
+    $scope.isTrackFilterVisible = false;
+    $scope.itemsByPage = 25;
     $scope.executedReport = reportService;
+    $scope.startDate = undefined;
+    $scope.endDate = undefined;
     
     //Mock config object
     $scope.config = {
@@ -39,213 +45,58 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        return $scope.selectedVmsTab === tab;
    };
    
+   $scope.toggleFiltersRow = function(type){
+       switch (type){
+           case 'positions':
+               $scope.isPosFilterVisible = !$scope.isPosFilterVisible;
+               break;
+           case 'segments':
+               $scope.isSegFilterVisible = !$scope.isSegFilterVisible;
+               break;
+           case 'tracks':
+               $scope.isTrackFilterVisible = !$scope.isTrackFilterVisible;
+               break;
+       }
+   };
+   
+   $scope.clearDateFilters = function(){
+       $scope.startDate = undefined;
+       $scope.endDate = undefined;
+   }
+   
+   $scope.$watch('startDate', function(newVal, oldVal){
+       if (angular.isDefined($scope.executedReport.positions) && $scope.executedReport.positions.length > 0){
+           var el = angular.element('#stStartDateInput');
+           el.trigger('input');
+       }
+   });
+   
+   $scope.$watch('endDate', function(newVal, oldVal){
+       if (angular.isDefined($scope.executedReport.positions) && $scope.executedReport.positions.length > 0){
+           var el = angular.element('#stEndDateInput');
+           el.trigger('input');
+       }
+   });
+   
    //Positions table config
-   $scope.posTable = {};
-   
-   $scope.posTable.dtOptions = DTOptionsBuilder.newOptions()
-                                   .withBootstrap()
-                                   .withPaginationType('simple_numbers')
-                                   .withDisplayLength(25)
-                                   .withLanguage(datatablesService)
-                                   .withDOM('trpi')
-                                   .withColumnFilter({
-                                       aoColumns: [{
-                                           type: 'text',
-                                           bRegex: true,
-                                           bSmart: true
-                                       },{
-                                           type: 'text',
-                                           bRegex: true,
-                                           bSmart: true
-                                       },{
-                                           type: 'text',
-                                           bRegex: true,
-                                           bSmart: true
-                                       },{
-                                           type: 'text',
-                                           bRegex: true,
-                                           bSmart: true
-                                       },{
-                                           type: 'text',
-                                           bRegex: true,
-                                           bSmart: true
-                                       },{
-                                           type: 'number'
-                                       },{
-                                           type: 'number'
-                                       }, {
-                                           type: 'text',
-                                           bRegex: true,
-                                           bSmart: true
-                                       },{
-                                           type: 'number'
-                                       },{
-                                           type: 'number'
-                                       },{
-                                           type: 'number'
-                                       },{
-                                           type: 'text',
-                                           bRegex: true,
-                                           bSmart: true
-                                       },{
-                                           type: 'text',
-                                           bRegex: true,
-                                           bSmart: true
-                                       }]
-                                   })
-                                   .withBootstrapOptions({
-                                       pagination: {
-                                           classes: {
-                                               ul: 'pagination pagination-sm'
-                                           }
-                                       }
-                                   });
-   
-   $scope.posTable.dtColumnDefs = [
-       DTColumnDefBuilder.newColumnDef(0),
-       DTColumnDefBuilder.newColumnDef(1),
-       DTColumnDefBuilder.newColumnDef(2),
-       DTColumnDefBuilder.newColumnDef(3),
-       DTColumnDefBuilder.newColumnDef(4).withOption('type', 'position-date').renderWith(function(data, type, full){
-           var displayDate = full[4];
-           if (moment.utc(displayDate).isValid()){
-               displayDate = moment.utc(displayDate).format($scope.config.target_format);
-           }
-           return displayDate;
-       }),
-       DTColumnDefBuilder.newColumnDef(5),
-       DTColumnDefBuilder.newColumnDef(6),
-       DTColumnDefBuilder.newColumnDef(7),
-       DTColumnDefBuilder.newColumnDef(8),
-       DTColumnDefBuilder.newColumnDef(9),
-       DTColumnDefBuilder.newColumnDef(10),
-       DTColumnDefBuilder.newColumnDef(11),
-       DTColumnDefBuilder.newColumnDef(12),
-       DTColumnDefBuilder.newColumnDef(13).notSortable()
-   ];
+   $scope.displayedPositions = [].concat($scope.executedReport.positions);
    
    //Segments table config
-   $scope.segTable = {};
-   
-   $scope.segTable.dtOptions = DTOptionsBuilder.newOptions()
-                                   .withBootstrap()
-                                   .withPaginationType('simple_numbers')
-                                   .withDisplayLength(25)
-                                   .withLanguage(datatablesService)
-                                   .withDOM('trpi')
-                                   .withOption('responsive', true)
-                                   .withColumnFilter({
-                                       aoColumns: [{
-                                           type: 'text',
-                                           bRegex: true,
-                                           bSmart: true
-                                       },{
-                                           type: 'text',
-                                           bRegex: true,
-                                           bSmart: true
-                                       },{
-                                           type: 'text',
-                                           bRegex: true,
-                                           bSmart: true
-                                       },{
-                                           type: 'text',
-                                           bRegex: true,
-                                           bSmart: true
-                                       },{
-                                           type: 'number'
-                                       },{
-                                           type: 'number'
-                                       }, {
-                                           type: 'number'
-                                       },{
-                                           type: 'number'
-                                       },{
-                                           type: 'null'
-                                       }]
-                                   })
-                                   .withBootstrapOptions({
-                                       pagination: {
-                                           classes: {
-                                               ul: 'pagination pagination-sm'
-                                           }
-                                       }
-                                   });
-   
-   $scope.segTable.dtColumnDefs = [
-       DTColumnDefBuilder.newColumnDef(0),
-       DTColumnDefBuilder.newColumnDef(1),
-       DTColumnDefBuilder.newColumnDef(2),
-       DTColumnDefBuilder.newColumnDef(3),
-       DTColumnDefBuilder.newColumnDef(4),
-       DTColumnDefBuilder.newColumnDef(5),
-       DTColumnDefBuilder.newColumnDef(6),
-       DTColumnDefBuilder.newColumnDef(7),
-       DTColumnDefBuilder.newColumnDef(9).notSortable()
-   ];
+   $scope.displayedSegments = [].concat($scope.executedReport.segments);
    
    //Tracks table config
-   $scope.tracksTable = {};
-   
-   $scope.tracksTable.dtOptions = DTOptionsBuilder.newOptions()
-                                   .withBootstrap()
-                                   .withPaginationType('simple_numbers')
-                                   .withDisplayLength(25)
-                                   .withLanguage(datatablesService)
-                                   .withDOM('trpi')
-                                   .withOption('responsive', true)
-                                   .withColumnFilter({
-                                       aoColumns: [{
-                                           type: 'text',
-                                           bRegex: true,
-                                           bSmart: true
-                                       },{
-                                           type: 'text',
-                                           bRegex: true,
-                                           bSmart: true
-                                       },{
-                                           type: 'text',
-                                           bRegex: true,
-                                           bSmart: true
-                                       },{
-                                           type: 'text',
-                                           bRegex: true,
-                                           bSmart: true
-                                       },{
-                                           type: 'number'
-                                       },{
-                                           type: 'number'
-                                       },{
-                                           type: 'null'
-                                       }]
-                                   })
-                                   .withBootstrapOptions({
-                                       pagination: {
-                                           classes: {
-                                               ul: 'pagination pagination-sm'
-                                           }
-                                       }
-                                   });
-   
-   $scope.segTable.dtColumnDefs = [
-       DTColumnDefBuilder.newColumnDef(0),
-       DTColumnDefBuilder.newColumnDef(1),
-       DTColumnDefBuilder.newColumnDef(2),
-       DTColumnDefBuilder.newColumnDef(3),
-       DTColumnDefBuilder.newColumnDef(4),
-       DTColumnDefBuilder.newColumnDef(5),
-       DTColumnDefBuilder.newColumnDef(6).notSortable()
-   ];
+   $scope.displayedTracks = [].concat($scope.executedReport.tracks);
    
    $scope.zoomTo = function(index, geomType){
        var geom;
        if (geomType === 'POSITION'){
-           geom = new ol.geom.Point($scope.executedReport.positions[index].geometry.coordinates);
+           geom = new ol.geom.Point($scope.displayedPositions[index].geometry.coordinates);
            geom.set('GeometryType', 'Point');
        } else if (geomType === 'SEGMENT'){
-           geom = new ol.geom.LineString($scope.executedReport.segments[index].geometry.coordinates);
+           geom = new ol.geom.LineString($scope.displayedSegments[index].geometry.coordinates);
            geom.set('GeometryType', 'LineString');
        } else {
-           geom = new ol.geom.Polygon.fromExtent($scope.executedReport.tracks[index].extent);
+           geom = new ol.geom.Polygon.fromExtent($scope.displayedTracks[index].extent);
            //TODO build linestring
            //geom.set('GeometryType', 'LineString');
        }
@@ -262,18 +113,18 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    $scope.panTo = function(index, geomType){
        var coords, geom;
        if (geomType === 'POSITION'){
-           coords = ol.proj.transform($scope.executedReport.positions[index].geometry.coordinates, 'EPSG:4326', mapService.getMapProjectionCode());
+           coords = ol.proj.transform($scope.displayedPositions[index].geometry.coordinates, 'EPSG:4326', mapService.getMapProjectionCode());
            geom = new ol.geom.Point(coords);
            geom.set('GeometryType', 'Point');
            mapService.highlightFeature(geom);
        } else if (geomType === 'SEGMENT'){
-           geom = new ol.geom.LineString($scope.executedReport.segments[index].geometry.coordinates);
+           geom = new ol.geom.LineString($scope.displayedSegments[index].geometry.coordinates);
            geom.transform('EPSG:4326', mapService.getMapProjectionCode());
            geom.set('GeometryType', 'LineString');
            coords = mapService.getMiddlePoint(geom);
            mapService.highlightFeature(geom);
        } else{
-           coords = ol.proj.transform($scope.executedReport.tracks[index].nearestPoint, 'EPSG:4326', mapService.getMapProjectionCode());
+           coords = ol.proj.transform($scope.displayedTracks[index].nearestPoint, 'EPSG:4326', mapService.getMapProjectionCode());
            //TODO build linestring
        }
        mapService.panTo(coords);
@@ -407,15 +258,15 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    };
    
    //Custom sort function for the specified date target format
-   $.extend($.fn.dataTableExt.oSort, {
-       "position-date-pre": function (date){
-           return parseInt(moment(date, $scope.config.target_format, true).format('X'));
-       },
-       "position-date-asc": function (a, b){
-           return a - b;
-       },
-       "position-date-desc": function (a, b){
-           return b - a;
-       }
-   });
+//   $.extend($.fn.dataTableExt.oSort, {
+//       "position-date-pre": function (date){
+//           return parseInt(moment(date, $scope.config.target_format, true).format('X'));
+//       },
+//       "position-date-asc": function (a, b){
+//           return a - b;
+//       },
+//       "position-date-desc": function (a, b){
+//           return b - a;
+//       }
+//   });
 });

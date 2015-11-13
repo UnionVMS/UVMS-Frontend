@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $modalInstance, $q, $timeout, itemForDetail, vesselRestFactory, vesselRestService, SavedSearchGroup, GetListRequest, datatablesService, DTOptionsBuilder, DTColumnDefBuilder, DTInstances){
+angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $modalInstance, $q, $timeout, itemForDetail, vesselRestFactory, vesselRestService, SavedSearchGroup, GetListRequest){
     $scope.item = itemForDetail;
     $scope.vesselGroupList = [];
     
