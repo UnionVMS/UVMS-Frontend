@@ -28,25 +28,32 @@
 
 //Map top Toolbar
 #map-toolbar {
-	display: block;
+	display: flex;
 	border: 1px solid #DDD;
 	background-color: #F5F5F5;
-	>div button {
-		margin-top: 3px;
-		margin-left: 2px;
-		color: white;
-		margin-bottom: 3px;
+	> div {
+		padding: 0 3px;
 	}
-	>div {
-		left: .5em;
-		margin-left: 2px;
+	.btn-group {
+		margin-left: 6px;
 	}
-
-	> .btn-group-right {
-		float: right;
-    	right: .5em;
-    	left: initial;
-		margin-left: 0;
+	.btn-group-left,
+	.btn-group-right {
+		padding: 0;
+		width: 50%;
+		padding-left: 4px;
+		>div button {
+			margin-top: 3px;
+			color: white;
+			margin-bottom: 3px;
+		}
+	}
+	.btn-group-left {
+		text-align: left;
+	}
+	.btn-group-right {
+		text-align: right;
+		padding-right: 4px;
 	}
 }
 

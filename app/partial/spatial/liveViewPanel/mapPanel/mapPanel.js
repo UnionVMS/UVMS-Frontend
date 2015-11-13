@@ -89,11 +89,11 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, mapS
         		(angular.element('.mapPanelContainer.fullscreen').length === 0 && evt.type.toUpperCase().indexOf("FULLSCREENCHANGE") !== -1))){
         	
         	setTimeout(function() {
-        		$('.map-container').css('height', w.height() - 30 + 'px');
-        		$('[ng-controller="LayerpanelCtrl"]').css('height', w.height() - 30 + 'px');
-                $('#map').css('height', w.height() - 62 + 'px');
+        		$('.map-container').css('height', w.height() - parseInt($('.map-bottom').css('height')) + 'px');
+        		$('[ng-controller="LayerpanelCtrl"]').css('height', w.height() - parseInt($('#map-toolbar').css('height')) + 'px');
+                $('#map').css('height', w.height() - parseInt($('#map-toolbar').css('height')) - parseInt($('.map-bottom').css('height')) + 'px');
                 mapService.updateMapSize();
-        	}, 200);
+        	}, 100);
       	  return;
         }
         
@@ -110,10 +110,16 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, mapS
 	        
 	        $('.map-container').css('height', newHeight);
 	        $('[ng-controller="LayerpanelCtrl"]').css('height', newHeight);
-	        $('#map').css('height', newHeight - 32 + 'px');
+	        
+	        var mapToolbarHeight = parseInt($('#map-toolbar').css('height'));
+	        if(mapToolbarHeight > 31){
+	        	$('#map').css('height', newHeight - (mapToolbarHeight - 31) - parseInt($('.map-bottom').css('height')) + 'px');
+	        }else{
+	        	$('#map').css('height', newHeight - parseInt($('.map-bottom').css('height')) + 'px');
+	        }
 	        
 	        mapService.updateMapSize();
-        }, 200);
+        }, 100);
   	};
     
     $(window).resize(resizeMap);
