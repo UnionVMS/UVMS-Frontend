@@ -52,7 +52,6 @@
     "turf": "https://github.com/Turfjs/turf.git#~2.0.2",
     "underscore": "~1.5",
     "checklist-model": "latest",
-    "flag-icon-css": "latest",
 	"angular-screenfull": "~0.1.0"
 	},
     "resolutions": {
