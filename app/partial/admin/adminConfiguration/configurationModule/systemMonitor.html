@@ -1,19 +1,19 @@
-<div ng-controller="SystemMonitorController">
+<div ng-controller="SystemMonitorController" class="system-monitor">
 	<table class="searchResults colorOdd">
 		<thead>
 			<tr>
 				<th></th>
-				<th sortable-table-header by="sortBy" reverse="reverseSort" order="'key'">
+				<th>
 					{{ "audit.system_status_name" | i18n }}
 				</th>
-				<th sortable-table-header by="sortBy" reverse="reverseSort" order="'value'">
+				<th>
 					{{ "audit.system_status_online_timestamp" | i18n }}
 				</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr ng-repeat="(system, status) in pings">
-				<td style="width: 100px;">
+				<td style="width: 100px;" class="system-status">
 					<span class="label" ng-class="status.online ? 'label-success' : 'label-danger'">
 						{{ "config." + (status.online ? 'online' : 'offline') | i18n | uppercase }}
 					</span>
