@@ -113,7 +113,16 @@ angular.module('unionvmsWeb').factory('globalSettingsService',function($resource
             return this.get('defaultHomePage', false);
         },
         setup : function(){
-            return getSettingFromServer();
+            //No setting loaded
+            if(Object.keys(settings).length === 0){
+                return getSettingFromServer();
+            }
+            //Settings already loaded
+            else{
+                var deferred = $q.defer();
+                deferred.resolve();
+                return deferred.promise;
+            }
         }
     };
 
