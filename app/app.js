@@ -606,7 +606,7 @@ unionvmsWebApp.factory('HttpRequestRESTCallInterceptor', function ($q, envConfig
             }
         });
         //Change request url
-        if(isRESTApiRequest){
+        if(isRESTApiRequest && angular.isDefined(envConfig.rest_api_base)){
             var restAPIBaseUrl = envConfig.rest_api_base;
             var newUrl = restAPIBaseUrl + request.url;
             $log.debug("Reroute request to " + request.url +" to " +newUrl);
