@@ -31,8 +31,6 @@ angular.module('unionvmsWeb')
     };
 })
 .factory('movementRestService',function($q, movementRestFactory, SearchResultListPage, Movement, SavedSearchGroup, GetListRequest , userService){
-    var user = {};
-    user.name = userService.getUserName();
 
     var getMovementList = function(getListRequest){
 
@@ -131,7 +129,8 @@ angular.module('unionvmsWeb')
 
     var getSavedSearches = function (){
         var deferred = $q.defer();
-        movementRestFactory.getSavedSearches().get({user: user.name},
+        var userName = userService.getUserName();
+        movementRestFactory.getSavedSearches().get({user: userName},
             function(response) {
 
                 if(response.code !== "200"){
