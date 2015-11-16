@@ -62,7 +62,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    $scope.clearDateFilters = function(){
        $scope.startDate = undefined;
        $scope.endDate = undefined;
-   }
+   };
    
    $scope.$watch('startDate', function(newVal, oldVal){
        if (angular.isDefined($scope.executedReport.positions) && $scope.executedReport.positions.length > 0){

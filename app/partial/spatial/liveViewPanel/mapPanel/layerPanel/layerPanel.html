@@ -1,5 +1,7 @@
 <div ng-controller="LayerpanelCtrl" ng-class="{'layer-panel': true, 'layer-expanded': expanded, 'layer-collapsed': !expanded}">
-  <div class="handle" ng-click="toggle()"></div>
+  <div class="handle" ng-click="toggle()">
+  	<i ng-class="{'fa fa-chevron-left': expanded, 'fa fa-chevron-right': !expanded}"></i>
+  </div>
   <div id="layer-panel-wrapper" class="tabbed-view" ng-show="expanded">
 
     <!-- mock content -->
