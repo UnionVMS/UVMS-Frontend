@@ -124,7 +124,9 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
         for(var i=0; i < this.alarmItems.length; i++){
             copy.alarmItems.push(_.clone(this.alarmItems[i]));
         }
-        copy.movement = this.movement.copy();
+        if(angular.isDefined(this.movement)){
+            copy.movement = this.movement.copy();
+        }
         copy.asset = _.clone(this.asset);
         copy.vesselGuid = this.vesselGuid;
         copy.recipient = this.recipient;

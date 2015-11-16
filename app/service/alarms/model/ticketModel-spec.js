@@ -87,4 +87,39 @@ describe('Ticket', function() {
         expect(dto.updatedBy).toEqual("TEST");
     }));
 
+    it('getResolvedDate should return updateDate when status isnt open or pending', inject(function(Ticket) {
+        var ticket = Ticket.fromDTO(ticketData);
+        var updated = '2015-01-01 12:00:00';
+        ticket.updated = updated;
+
+        ticket.status = "OPEN";
+        expect(ticket.getResolvedDate()).toBeUndefined();
+
+        ticket.status = "PENDING";
+        expect(ticket.getResolvedDate()).toBeUndefined();
+
+        ticket.status = "CLOSED";
+        expect(ticket.getResolvedDate()).toEqual(updated);
+
+        ticket.status = "REJECTED";
+        expect(ticket.getResolvedDate()).toEqual(updated);
+    }));
+
+    it('getResolvedBy should return updatedBy when status isnt open or pending', inject(function(Ticket) {
+        var ticket = Ticket.fromDTO(ticketData);
+        var updatedBy = 'TEST_USER';
+        ticket.updatedBy = updatedBy;
+
+        ticket.status = "OPEN";
+        expect(ticket.getResolvedBy()).toBeUndefined();
+
+        ticket.status = "PENDING";
+        expect(ticket.getResolvedBy()).toBeUndefined();
+
+        ticket.status = "CLOSED";
+        expect(ticket.getResolvedBy()).toEqual(updatedBy);
+
+        ticket.status = "REJECTED";
+        expect(ticket.getResolvedBy()).toEqual(updatedBy);
+    }));
 });

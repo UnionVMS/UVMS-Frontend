@@ -252,9 +252,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
                 item.updatedBy = updatedItem.updatedBy;
             }
         };
-        PositionReportModal.show(alarmItem, options).then(function(result) {
-            //Nothing
-        });
+        PositionReportModal.show(alarmItem, options);
     };
 
     //View item details

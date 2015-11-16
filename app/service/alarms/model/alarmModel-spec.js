@@ -167,4 +167,41 @@ describe('Alarm', function() {
         //expect(dto.linkedVesselGuid).toEqual(vessel.vesselId.guid);
         expect(dto.inactivatePosition).toEqual(true);
     }));
+
+    it('getResolvedDate should return updateDate when status isnt open or pending', inject(function(Alarm) {
+        var alarm = Alarm.fromDTO(alarmData);
+        var updated = '2015-01-01 12:00:00';
+        alarm.updated = updated;
+
+        alarm.status = "OPEN";
+        expect(alarm.getResolvedDate()).toBeUndefined();
+
+        alarm.status = "PENDING";
+        expect(alarm.getResolvedDate()).toBeUndefined();
+
+        alarm.status = "CLOSED";
+        expect(alarm.getResolvedDate()).toEqual(updated);
+
+        alarm.status = "REJECTED";
+        expect(alarm.getResolvedDate()).toEqual(updated);
+    }));
+
+    it('getResolvedBy should return updatedBy when status isnt open or pending', inject(function(Alarm) {
+        var alarm = Alarm.fromDTO(alarmData);
+        var updatedBy = 'TEST_USER';
+        alarm.updatedBy = updatedBy;
+
+        alarm.status = "OPEN";
+        expect(alarm.getResolvedBy()).toBeUndefined();
+
+        alarm.status = "PENDING";
+        expect(alarm.getResolvedBy()).toBeUndefined();
+
+        alarm.status = "CLOSED";
+        expect(alarm.getResolvedBy()).toEqual(updatedBy);
+
+        alarm.status = "REJECTED";
+        expect(alarm.getResolvedBy()).toEqual(updatedBy);
+    }));
+
 });
