@@ -20,7 +20,7 @@ angular.module('unionvmsWeb').controller('ExchangeSearchController', function($s
 
 	$scope.$watch("advancedSearchObject.DATE_RECEIVED_FROM", function(newValue) {
 		if (newValue) {
-			$scope.advancedSearchObject.EXCHANGE_EXCHANGE_TIME_SPAN = $scope.DATE_CUSTOM;
+			$scope.advancedSearchObject.EXCHANGE_TIME_SPAN = $scope.DATE_CUSTOM;
 		}
 	});
 
