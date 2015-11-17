@@ -4,4 +4,8 @@ angular.module('unionvmsWeb').controller('SystemMonitorController', function($sc
 		$scope.pings = response.data;
 	});
 
+	$scope.statusLabel = function(status) {
+		return status.online ? 'config.online' : 'config.offline';
+	};
+
 });

@@ -15,7 +15,7 @@
 			<tr ng-repeat="(system, status) in pings">
 				<td style="width: 100px;" class="system-status">
 					<span class="label" ng-class="status.online ? 'label-success' : 'label-danger'">
-						{{ "config." + (status.online ? 'online' : 'offline') | i18n | uppercase }}
+						{{ statusLabel(status) | i18n | uppercase }}
 					</span>
 				</td>
 				<td>{{ "audit.system_status_module_" + system | i18n }}</td>
