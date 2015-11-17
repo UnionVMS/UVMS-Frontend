@@ -283,7 +283,6 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     $scope.getVesselsByCFR = function(value){
         vesselsGetListRequest.resetCriterias();
         vesselsGetListRequest.addSearchCriteria("CFR", value +"*");
-        var vessels = getVessels();
         return getVessels();
     };
     //On select item in search suggestions
