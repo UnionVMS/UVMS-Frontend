@@ -30,7 +30,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
                 updateSearchResults(page);
             }
             else {
-                $scope.newTicketCount++;
+                $scope.newTicketsCount++;
             }
         });
     };
@@ -44,7 +44,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
     };
 
     $scope.searchTickets = function() {
-        $scope.newTicketCount = 0;
+        $scope.newTicketsCount = 0;
         $scope.clearSelection();
         $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.setLoading(true);
