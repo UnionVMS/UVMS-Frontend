@@ -11,26 +11,26 @@ describe('ExchangeCtrl', function() {
 
 	it('should allow all messages when filter all', inject(function() {
 		scope.exchangeLogsSearchResults.incomingOutgoing = "all";
-		expect(scope.filterIncomingOutgoing({outgoing: true})).toBeTruthy();
-		expect(scope.filterIncomingOutgoing({outgoing: false})).toBeTruthy();
+		expect(scope.filterIncomingOutgoing({incoming: true})).toBeTruthy();
+		expect(scope.filterIncomingOutgoing({incoming: false})).toBeTruthy();
 	}));
 
 	it('should only allow incoming', inject(function() {
 		scope.exchangeLogsSearchResults.incomingOutgoing = "incoming";
-		expect(scope.filterIncomingOutgoing({outgoing: true})).toBeFalsy();
-		expect(scope.filterIncomingOutgoing({outgoing: false})).toBeTruthy();
+		expect(scope.filterIncomingOutgoing({incoming: false})).toBeFalsy();
+		expect(scope.filterIncomingOutgoing({incoming: true})).toBeTruthy();
 	}));
 
 	it('should only allow outgoing', inject(function() {
 		scope.exchangeLogsSearchResults.incomingOutgoing = "outgoing";
-		expect(scope.filterIncomingOutgoing({outgoing: true})).toBeTruthy();
-		expect(scope.filterIncomingOutgoing({outgoing: false})).toBeFalsy();
+		expect(scope.filterIncomingOutgoing({incoming: false})).toBeTruthy();
+		expect(scope.filterIncomingOutgoing({incoming: true})).toBeFalsy();
 	}));
 
 	it('should not allow any', inject(function() {
 		scope.exchangeLogsSearchResults.incomingOutgoing = "banana";
-		expect(scope.filterIncomingOutgoing({outgoing: true})).toBeFalsy();
-		expect(scope.filterIncomingOutgoing({outgoing: false})).toBeFalsy();
+		expect(scope.filterIncomingOutgoing({incoming: true})).toBeFalsy();
+		expect(scope.filterIncomingOutgoing({incoming: false})).toBeFalsy();
 	}));
 
 });

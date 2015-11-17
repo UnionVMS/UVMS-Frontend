@@ -12,6 +12,8 @@ describe('ManualPositionReportModalCtrl', function() {
       $httpBackend.whenGET(/^usm\//).respond({});
       //Mock locale file
       $httpBackend.whenGET(/^i18n\//).respond({});
+      // Mock config
+      $httpBackend.whenGET(/config/).respond({});
 
       var vessels = [];
       var vessel1 = new Vessel();

@@ -50,10 +50,10 @@ describe('Movement', function() {
         expect(movement.movement.reportedSpeed).toEqual(move.reportedSpeed);
         expect(movement.movement.calculatedSpeed).toEqual(move.calculatedSpeed);
         expect(movement.movement.movementType).toEqual(move.movementType);
-        expect(movement.mobileTerminal.guid).toEqual(move.mobileTerminal.guid);
-        expect(movement.mobileTerminal.connectId).toEqual(move.mobileTerminal.connectId);
-        expect(movement.mobileTerminal.ids.length).toEqual(move.mobileTerminal.mobileTerminalIdList.length);
-        expect(movement.mobileTerminal.ids['DNID']).toEqual(move.mobileTerminal.mobileTerminalIdList['DNID']);
+        expect(movement.mobileTerminalData.guid).toEqual(move.mobileTerminal.guid);
+        expect(movement.mobileTerminalData.connectId).toEqual(move.mobileTerminal.connectId);
+        expect(Object.keys(movement.mobileTerminalData.ids).length).toEqual(move.mobileTerminal.mobileTerminalIdList.length);
+        expect(movement.mobileTerminalData.ids['DNID']).toBe("DNID_1");
     }
 
     it('Should parse JSON input correctly', inject(function(Movement) {

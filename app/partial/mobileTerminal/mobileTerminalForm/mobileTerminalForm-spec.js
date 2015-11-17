@@ -14,6 +14,8 @@ describe('mobileTerminalFormCtrl', function() {
          $httpBackend.whenGET(/^usm\//).respond({});
          //Mock locale file
          $httpBackend.whenGET(/^i18n\//).respond({});
+         // Mock config
+         $httpBackend.whenGET(/config/).respond({});
 
         //Dummy response for create
         createResponseTerminal = new MobileTerminal();

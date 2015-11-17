@@ -29,6 +29,8 @@ describe('AssignvesselCtrl', function() {
          $httpBackend.whenGET(/usm/).respond({});
          //Mock locale file
          $httpBackend.whenGET(/i18n/).respond({});
+         // Mock config
+         $httpBackend.whenGET(/config/).respond({});
     }));
 
 	it('should assign mobile terminal when assigning to selected vessel', inject(function($q, mobileTerminalRestService,
@@ -38,6 +40,7 @@ describe('AssignvesselCtrl', function() {
 		deferred.resolve({data: response});
 		// Skip alert message
 		spyOn(alertService, "showSuccessMessage").andReturn();
+		scope.mergeCurrentMobileTerminalIntoSearchResults = function() {};
 		scope.$apply();
 		scope.assignToSelectedVesselWithComment("my comment");
 		expect(mobileTerminalRestService.assignMobileTerminal).toHaveBeenCalled();
