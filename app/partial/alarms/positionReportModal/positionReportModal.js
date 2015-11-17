@@ -154,8 +154,7 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
     $scope.createPollForConnectId = function(){
         //Create a GetPollabeListRequest to get the pollable channels
         var getPollableListRequest = new GetPollableListRequest();
-        //var connectId = $scope.alarm.movement.connectId;
-        var connectId = "MOBTERM_CONN_VALUE";
+        var connectId = $scope.alarm.movement.connectId;
         getPollableListRequest.addConnectId(connectId);
         var deferred = $q.defer();
         pollingRestService.getPollablesMobileTerminal(getPollableListRequest).then(
