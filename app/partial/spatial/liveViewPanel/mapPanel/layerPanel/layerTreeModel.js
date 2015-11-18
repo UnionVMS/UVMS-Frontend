@@ -51,7 +51,8 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	            params: {
 	                'LAYERS': src.layerGeoName,
 	                'TILED': true,
-	                'STYLES': angular.isDefined(stylesForObject) === true ? stylesForObject[0] : '' 
+	                'STYLES': angular.isDefined(stylesForObject) === true ? stylesForObject[0] : '', 
+	                'cql_filter': src.title === 'Ports' ? "fishing_port = 'Y' OR landing_place = 'Y'" : null 
 	            }
 	        }
 	    };

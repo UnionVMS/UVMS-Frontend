@@ -10,6 +10,12 @@
 			<td class="col-md-6">{{properties.countryCode}}</td>
 		</tr>
 		{{/visibility.fs}}
+		{{#visibility.extMark}}
+		<tr>
+			<td class="col-md-6"><b>{{titles.extMark}}</b></td>
+			<td class="col-md-6">{{properties.externalMarking}}</td>
+		</tr>
+		{{/visibility.extMark}}
 		{{#visibility.ircs}}
 		<tr>
 			<td class="col-md-6"><b>{{titles.ircs}}</b></td>
@@ -22,12 +28,12 @@
 			<td class="col-md-6">{{properties.cfr}}</td>
 		</tr>
 		{{/visibility.cfr}}
-		<!-- {{#visibility.extMark}}
+		{{#visibility.posTime}}
 		<tr>
-			<td class="col-md-6">{{titles.extMark}}</td>
-			<td class="col-md-6">{{properties.externalmark}}</td>
+			<td class="col-md-6"><b>{{titles.posTime}}</b></td>
+			<td class="col-md-6">{{formatedDate}}</td>
 		</tr>
-		{{/visibility.extMark}} -->
+		{{/visibility.posTime}}
 		{{#visibility.lon}}
 		<tr>
 			<td class="col-md-6"><b>{{titles.lon}}</b></td>
@@ -40,12 +46,12 @@
 			<td class="col-md-6">{{coordinates.lat}}</td>
 		</tr>
 		{{/visibility.lat}}
-		{{#visibility.crs}}
+		{{#visibility.stat}}
 		<tr>
-			<td class="col-md-6"><b>{{titles.crs}}</b></td>
-			<td class="col-md-6">{{properties.calculatedCourse}}</td>
+			<td class="col-md-6"><b>{{titles.stat}}</b></td>
+			<td class="col-md-6">{{properties.status}}</td>
 		</tr>
-		{{/visibility.crs}}
+		{{/visibility.stat}}
 		{{#visibility.m_spd}}
 		<tr>
 			<td class="col-md-6"><b>{{titles.m_spd}}</b></td>
@@ -58,12 +64,12 @@
 			<td class="col-md-6">{{properties.calculatedSpeed}}</td>
 		</tr>
 		{{/visibility.c_spd}}
-		{{#visibility.stat}}
+		{{#visibility.crs}}
 		<tr>
-			<td class="col-md-6"><b>{{titles.stat}}</b></td>
-			<td class="col-md-6">{{properties.status}}</td>
+			<td class="col-md-6"><b>{{titles.crs}}</b></td>
+			<td class="col-md-6">{{properties.reportedCourse}}</td>
 		</tr>
-		{{/visibility.stat}}
+		{{/visibility.crs}}
 		{{#visibility.msg_tp}}
 		<tr>
 			<td class="col-md-6"><b>{{titles.msg_tp}}</b></td>
@@ -76,12 +82,11 @@
 			<td class="col-md-6">{{properties.activityType}}</td>
 		</tr>
 		{{/visibility.act_tp}}
-		
-		<!-- {{#visibility.}}
+		{{#visibility.src}}
 		<tr>
-			<td class="col-md-6">{{titles.}}</td>
-			<td class="col-md-6">{{properties.}}</td>
+			<td class="col-md-6"><b>{{titles.source}}</b></td>
+			<td class="col-md-6">{{properties.source}}</td>
 		</tr>
-		{{/visibility.}} -->
+		{{/visibility.src}}
 	</table>
 </div>

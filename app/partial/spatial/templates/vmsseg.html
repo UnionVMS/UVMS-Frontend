@@ -10,6 +10,12 @@
 			<td class="col-md-6">{{properties.countryCode}}</td>
 		</tr>
 		{{/visibility.fs}}
+		{{#visibility.extMark}}
+		<tr>
+			<td class="col-md-6"><b>{{titles.extMark}}</b></td>
+			<td class="col-md-6">{{properties.externalMarking}}</td>
+		</tr>
+		{{/visibility.extMark}}
 		{{#visibility.ircs}}
 		<tr>
 			<td class="col-md-6"><b>{{titles.ircs}}</b></td>
@@ -22,12 +28,6 @@
 			<td class="col-md-6">{{properties.cfr}}</td>
 		</tr>
 		{{/visibility.cfr}}
-		<!-- {{#visibility.extMark}}
-		<tr>
-			<td class="col-md-6">{{titles.extMark}}</td>
-			<td class="col-md-6">{{properties.asset.externalmark}}</td>
-		</tr>
-		{{/visibility.extMark}} -->
 		{{#visibility.dist}}
 		<tr>
 			<td class="col-md-6"><b>{{titles.dist}}</b></td>
@@ -52,12 +52,11 @@
 			<td class="col-md-6">{{properties.courseOverGround}}</td>
 		</tr>
 		{{/visibility.crs}}
-		
-		<!-- {{#visibility.}}
+		{{#visibility.cat}}
 		<tr>
-			<td class="col-md-6">{{titles.}}</td>
-			<td class="col-md-6">{{properties.}}</td>
+			<td class="col-md-6"><b>{{titles.cat}}</b></td>
+			<td class="col-md-6">{{properties.segmentCategory}}</td>
 		</tr>
-		{{/visibility.}} -->
+		{{/visibility.cat}}
 	</table>
 </div>

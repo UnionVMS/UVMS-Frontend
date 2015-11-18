@@ -400,7 +400,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                     })
                 })
             });
-        } else if (geomType === 'LineString'){
+        } else if (geomType === 'LineString' || geomType === 'MultiLineString'){
             style = new ol.style.Style({
                 stroke: new ol.style.Stroke({
                     color: color,
@@ -499,7 +499,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 font: 'normal 22px FontAwesome',
                 textBaseline: 'middle',
                 textAlign: 'center',
-                rotation: -0.78 + ms.degToRad(feature.get('calculatedCourse')), //FIXME
+                rotation: -0.78 + ms.degToRad(feature.get('reportedCourse')),
                 fill: new ol.style.Fill({
                     color: ms.getColorByFlagState(feature.get('countryCode'))
                 })
@@ -716,37 +716,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         });
         ms.controls.push(control);
     };
-
-	ms.addFullscreen = function(){
-	    var fullIcon = document.createElement('span');
-	    fullIcon.className = 'fa fa-arrows-alt';
-	    fullIcon.style.fontSize = '12px';
-	    fullIcon.style.fontWeight = '100';
-
-	    var control = new ol.control.FullScreen({
-            tipLabel: locale.getString('spatial.map_tip_fullscreen'),
-            label: fullIcon
-        });
-
-	    //We need to manually fix map height when map is toggled to fullscreen
-	    control.element.onclick = function(e){
-	        if (this.children[0].className.indexOf('false') !== -1){
-	            //Map is in fullscreen
-	            $timeout(function(){
-	                angular.element('#map')[0].style.height = $window.innerHeight + 'px';
-	                angular.element('#map')[0].style.width = $window.innerWidth + 'px';
-	                ms.updateMapSize();
-	            }, 150);
-	        } else {
-	            $timeout(function(){
-                    angular.element('#map')[0].style.width = '';
-                    ms.updateMapSize();
-                }, 150);
-	        }
-	    };
-
-	    ms.controls.push(control);
-	};
 
 	ms.addScale = function(ctrl){
 	    ms.controls.push(new ol.control.ScaleLine({
@@ -1033,40 +1002,45 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
 	//POPUP - Define the object that will be used in the popup for vms positions
     ms.setPositionsObjPopup = function(feature){
-        //TODO fetch visibility of attributes selected by user
+        //TODO fetch visibility of attributes selected by user, date format from config
         var coords = feature.geometry.getCoordinates();
         var repCoords = ol.proj.transform(coords, ms.getMapProjectionCode(), 'EPSG:4326');
         var data = {
             titles: {
                 vessel_tag: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
                 fs: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
+                extMark: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
                 ircs: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'),
                 cfr: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'),
-                extMark: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
+                posTime: locale.getString('spatial.tab_vms_pos_table_header_date'),
                 lon: locale.getString('spatial.tab_vms_pos_table_header_lon'),
                 lat: locale.getString('spatial.tab_vms_pos_table_header_lat'),
-                crs: locale.getString('spatial.tab_vms_pos_table_header_course'),
+                stat: locale.getString('spatial.tab_vms_pos_table_header_status'),
                 m_spd: locale.getString('spatial.tab_vms_pos_table_header_measured_speed'),
                 c_spd: locale.getString('spatial.tab_vms_pos_table_header_calculated_speed'),
-                stat: locale.getString('spatial.tab_vms_pos_table_header_status'),
+                crs: locale.getString('spatial.tab_vms_pos_table_header_course'),
                 msg_tp: locale.getString('spatial.tab_vms_pos_table_header_msg_type'),
-                act_tp: locale.getString('spatial.tab_vms_pos_table_header_activity_type')
+                act_tp: locale.getString('spatial.tab_vms_pos_table_header_activity_type'),
+                source: locale.getString('spatial.tab_vms_pos_table_header_source')
             },
             visibility: {
                 fs: true,
+                extMark: true,
                 ircs: true,
                 cfr: true,
-                extMark: false,
+                posTime: true,
                 lon: true,
                 lat: true,
-                crs: true,
+                stat: true,
                 m_spd: true,
                 c_spd: true,
-                stat: true,
+                crs: true,
                 msg_tp: true,
-                act_tp: true
+                act_tp: true,
+                src: true
             },
             properties: feature,
+            formatedDate: moment.utc(feature.positionTime).format('YYYY-MM-DD HH:mm:ss'),
             coordinates: {
                 lon: repCoords[0].toFixed(5).toString() + ' \u00b0',
                 lat: repCoords[1].toFixed(5).toString() + ' \u00b0'
@@ -1083,23 +1057,25 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             titles: {
                 vessel_tag: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
                 fs: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
+                extMark: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
                 ircs: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'),
                 cfr: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'),
-                extMark: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
                 dist: locale.getString('spatial.tab_vms_seg_table_header_distance'),
                 dur: locale.getString('spatial.tab_vms_seg_table_header_duration'),
                 spd: locale.getString('spatial.tab_vms_seg_table_header_speed_ground'),
-                crs: locale.getString('spatial.tab_vms_seg_table_header_course_ground')
+                crs: locale.getString('spatial.tab_vms_seg_table_header_course_ground'),
+                cat: locale.getString('spatial.tab_vms_seg_table_header_category')
             },
             visibility: {
                 fs: true,
+                extMark: true,
                 ircs: true,
                 cfr: true,
-                extMark: false,
                 dist: true,
                 dur: true,
                 spd: true,
-                crs: true
+                crs: true,
+                cat: true
             },
             properties: feature
         };

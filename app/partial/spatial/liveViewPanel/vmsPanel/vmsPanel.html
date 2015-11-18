@@ -14,7 +14,7 @@
 							<i ng-click="toggleFiltersRow('positions')">{{isPosFilterVisible === false ? 'spatial.table_filters_activate' : 'spatial.table_filters_deactivate' | i18n}}</i>
 							<div class="btnTools">
 								<i class="fa fa-lg fa-times-circle" title="{{'spatial.table_filters_reset' | i18n}}" st-reset-search ng-click="clearDateFilters()"></i>
-								<i class="fa fa-lg fa-file" title="{{'spatial.tab_vms_export_csv' | i18n}}" ng-click="exportAsCSV('positions')"></i>
+								<i class="fa fa-lg fa-file" title="{{'spatial.tab_vms_export_csv' | i18n}}" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="positions"></i>
 							</div>
 							
 						</th>
@@ -139,7 +139,7 @@
 							<i ng-click="toggleFiltersRow('segments')">{{isSegFilterVisible === false ? 'spatial.table_filters_activate' : 'spatial.table_filters_deactivate' | i18n}}</i>
 							<div class="btnTools">
 								<i class="fa fa-lg fa-times-circle" title="{{'spatial.table_filters_reset' | i18n}}" st-reset-search></i>
-								<i class="fa fa-lg fa-file" title="{{'spatial.tab_vms_export_csv' | i18n}}" ng-click="exportAsCSV('segments')"></i>
+								<i class="fa fa-lg fa-file" title="{{'spatial.tab_vms_export_csv' | i18n}}" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="segments"></i>
 							</div>
 							
 						</th>
@@ -234,7 +234,7 @@
 							<i ng-click="toggleFiltersRow('tracks')">{{isTrackFilterVisible === false ? 'spatial.table_filters_activate' : 'spatial.table_filters_deactivate' | i18n}}</i>
 							<div class="btnTools">
 								<i class="fa fa-lg fa-times-circle" title="{{'spatial.table_filters_reset' | i18n}}" st-reset-search></i>
-								<i class="fa fa-lg fa-file btnTools" title="{{'spatial.tab_vms_export_csv' | i18n}}" ng-click="exportAsCSV('tracks')"></i>
+								<i class="fa fa-lg fa-file" title="{{'spatial.tab_vms_export_csv' | i18n}}" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="tracks"></i>
 							</div>
 						</th>
 					</tr>

@@ -45,17 +45,14 @@ angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $t
        }
    });
    
-   $scope.$watch(function(){return reportService.tabs.map;}, function(newVal, oldVal){
-       $scope.tabMenu[0].visible = newVal;
-       if (newVal === true){
+   $scope.$watch(function(){return reportService.isReportExecuting;}, function(newVal, oldVal){
+       $scope.tabMenu[0].visible = reportService.tabs.map;
+       $scope.tabMenu[1].visible = reportService.tabs.vms;
+       if (reportService.tabs.map === true){
            $scope.selectTab('MAP');
        } else {
            $scope.selectTab('VMS');
        }
-    });
-   
-   $scope.$watch(function(){return reportService.tabs.vms;}, function(newVal, oldVal){
-      $scope.tabMenu[1].visible = newVal;
    });
    
    $scope.$on('mapAction', function(){
