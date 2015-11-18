@@ -34,7 +34,7 @@
     "karma-jasmine": "~0.1.5",
     "karma-junit-reporter": "^0.3.8",
     "karma-mocha-reporter": "^1.0",
-    "karma-phantomjs2-launcher": "^0.3.2",
+    "karma-phantomjs-launcher": "^0.2.1",
     "load-grunt-tasks": "~0.2",
     "time-grunt": "^1.1.0"
   }

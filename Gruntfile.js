@@ -39,6 +39,15 @@ module.exports = function (grunt) {
 
   var rewriteRulesSnippet = require('grunt-connect-rewrite/lib/utils').rewriteRequest;
 
+  //KARMA TEST FILES
+  var karmaFiles = [
+        {pattern: 'environment/*.json', watched: true, included: false, served: true},
+        {pattern: 'app/partial/**/*.html', watched: true, included: false, served: true},
+        '<%= dom_munger.data.appjs %>',
+        'bower_components/angular-mocks/angular-mocks.js',
+        'test/envConfigForTest.js',
+  ];
+
   // Project configuration.
   grunt.initConfig({
     connect: {
@@ -329,18 +338,9 @@ module.exports = function (grunt) {
     karma: {
       options: {
         frameworks: ['jasmine'],
+        //browsers: ['PhantomJS', 'Chrome'],
+        browsers: ['PhantomJS'],
         browserNoActivityTimeout: 100000,
-        files: [  //this files data is also updated in the watch handler, if updated change there too
-          {pattern: 'environment/*.json', watched: true, included: false, served: true},
-          {pattern: 'app/partial/**/*.html', watched: true, included: false, served: true},
-          '<%= dom_munger.data.appjs %>',
-          'bower_components/angular-mocks/angular-mocks.js',
-          'test/envConfigForTest.js',
-          //createFolderGlobs('*-spec.js'),
-          'app/partial/**/*-spec.js',
-          'app/service/**/*-spec.js',
-          'app/directive/**/*-spec.js',
-        ],
         proxies:  {
             '/config.json': 'http://localhost:9876/base/environment/local.json',
             '/partial/': 'http://localhost:9876/base/app/partial/',
@@ -354,10 +354,38 @@ module.exports = function (grunt) {
         autoWatch: false, //watching is handled by grunt-contrib-watch
         singleRun: true
       },
-      all_tests: {
-        //browsers: ['PhantomJS2','Chrome']
-        browsers: ['PhantomJS2']
-        //browsers: ['Chrome']
+      //THE FILES ARE SPLITTED IN TO MULTIPLE SUITES TO AVOID PHANTOMJS CRASHING BECAUSE OF MEMORY ISSUES
+      controllers: {
+        options: {
+            files: karmaFiles.concat(['app/partial/**/*-spec.js']),
+        }
+      },
+      directives: {
+        options: {
+            files: karmaFiles.concat(['app/directive/**/*-spec.js']),
+            junitReporter: {
+                outputDir: 'testResults',
+                outputFile: 'directives.xml'
+            },
+        }
+      },
+      services: {
+        options: {
+            files: karmaFiles.concat(['app/service/**/*-spec.js']),
+            junitReporter: {
+                outputDir: 'testResults',
+                outputFile: 'services.xml'
+            },
+        }
+      },
+      filters: {
+        options: {
+            files: karmaFiles.concat(['app/filter/**/*-spec.js']),
+            junitReporter: {
+                outputDir: 'testResults',
+                outputFile: 'filters.xml'
+            },
+        }
       },
       during_watch: {
         browsers: ['PhantomJS']
@@ -384,7 +412,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build-maven', ['test', 'clean:before', 'copy:configMaven', 'sub-build']);
   grunt.registerTask('build-dev', ['test', 'clean:before', 'copy:configDev','sub-build']);
   grunt.registerTask('build-test', ['test', 'clean:before', 'copy:configTest','sub-build']);
-  grunt.registerTask('test',['dom_munger:read', 'karma:all_tests', 'clean:after']);
+  grunt.registerTask('test',['dom_munger:read', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
   grunt.registerTask('serve', ['dom_munger:read','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development', 'watch']);
