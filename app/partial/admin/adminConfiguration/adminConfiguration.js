@@ -36,16 +36,17 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 				return $scope.settings[module] !== undefined && getNonGlobalSettings($scope.settings[module]).length > 0;
 			});
 
-			$scope.tabs = ["systemMonitor", "globalSettings"].concat(modules);
+			$scope.tabs = ["systemMonitor", "globalSettings", "reporting"].concat(modules);
 		});
 	};
 
 	$scope.configurationPageUrl = function() {
 		if ($scope.activeTab === "systemMonitor") {
 			return "partial/admin/adminConfiguration/configurationModule/systemMonitor.html";
-		}
-		else if ($scope.activeTab === "globalSettings") {
+		} else if ($scope.activeTab === "globalSettings") {
 			return "partial/admin/adminConfiguration/configurationGeneral/configurationGeneral.html";
+		} else if ($scope.activeTab === "reporting") {
+			return "partial/admin/adminConfiguration/configurationReporting/configurationReporting.html";
 		}
 		else {
 			return "partial/admin/adminConfiguration/configurationModule/configurationModule.html";
