@@ -332,6 +332,7 @@ module.exports = function (grunt) {
         browserNoActivityTimeout: 100000,
         files: [  //this files data is also updated in the watch handler, if updated change there too
           {pattern: 'environment/*.json', watched: true, included: false, served: true},
+          {pattern: 'app/partial/**/*.html', watched: true, included: false, served: true},
           '<%= dom_munger.data.appjs %>',
           'bower_components/angular-mocks/angular-mocks.js',
           'test/envConfigForTest.js',
@@ -341,7 +342,8 @@ module.exports = function (grunt) {
           'app/directive/**/*-spec.js',
         ],
         proxies:  {
-            '/config.json': 'http://localhost:9876/base/environment/local.json'
+            '/config.json': 'http://localhost:9876/base/environment/local.json',
+            '/partial/': 'http://localhost:9876/base/app/partial/',
         },
         logLevel:'INFO',
         reporters:['mocha', 'junit'],
@@ -353,7 +355,9 @@ module.exports = function (grunt) {
         singleRun: true
       },
       all_tests: {
-        browsers: ['PhantomJS','Chrome']
+        //browsers: ['PhantomJS','Chrome']
+        browsers: ['PhantomJS']
+        //browsers: ['Chrome']
       },
       during_watch: {
         browsers: ['PhantomJS']
@@ -375,11 +379,11 @@ module.exports = function (grunt) {
 
   grunt.registerTask('sub-build',['jshint', 'less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy:dist','htmlmin','compress:dist','clean:after']);//,'clean:after'
 
-  grunt.registerTask('build-local', ['clean:before', 'copy:configLocal', 'test', 'sub-build']);
-  grunt.registerTask('build-cygnus', ['clean:before', 'copy:configCygnus', 'sub-build']);
-  grunt.registerTask('build-maven', ['clean:before', 'copy:configMaven', 'sub-build']);
-  grunt.registerTask('build-dev', ['clean:before', 'copy:configDev','sub-build']);
-  grunt.registerTask('build-test', ['clean:before', 'copy:configTest','sub-build']);
+  grunt.registerTask('build-local', ['test', 'clean:before', 'copy:configLocal', 'test', 'sub-build']);
+  grunt.registerTask('build-cygnus', ['test', 'clean:before', 'copy:configCygnus', 'sub-build']);
+  grunt.registerTask('build-maven', ['test', 'clean:before', 'copy:configMaven', 'sub-build']);
+  grunt.registerTask('build-dev', ['test', 'clean:before', 'copy:configDev','sub-build']);
+  grunt.registerTask('build-test', ['test', 'clean:before', 'copy:configTest','sub-build']);
   grunt.registerTask('test',['dom_munger:read', 'karma:all_tests', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
