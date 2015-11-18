@@ -170,5 +170,23 @@ describe('HoldingtableCtrl', function() {
         expect(searchSpy).toHaveBeenCalled();
     }));
 
+    it('exportItemsAsCSVFile should call service for exporting to csv file', inject(function(Alarm, csvService) {
+        var controller = createController();
+
+        //Create fake result
+        var alarm = new Alarm();
+        scope.currentSearchResults.items.push(alarm);
+
+        var csvSpy = spyOn(csvService, "downloadCSVFile").andCallFake(function(data, header, filename){
+            expect(filename).toEqual('holdingTable.csv');
+            expect(data.length).toEqual(1);
+            expect(header.length).toBeGreaterThan(1, "Should be at least 1 column");
+            expect(header.length).toEqual(data[0].length, "Header and data should have equal number of columns");
+        });
+
+        scope.exportItemsAsCSVFile(false);
+
+        expect(csvSpy).toHaveBeenCalled();
+    }));
 });
 

@@ -190,13 +190,13 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
             };
             savedSearchService.openSaveSearchModal("VESSEL", options);
         }else if(selectedItem.code === 'EXPORT'){
-            $scope.exportTerminalsAsCSVFile(true);
+            $scope.exportVesselsAsCSVFile(true);
        }
        $scope.editSelection = "";
     };
 
     //Export data as CSV file
-    $scope.exportTerminalsAsCSVFile = function(onlySelectedItems){
+    $scope.exportVesselsAsCSVFile = function(onlySelectedItems){
         var filename = 'assets.csv';
 
         //Set the header columns
@@ -231,7 +231,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
                         item.ircs,
                         $filter('vesselGearTypeTranslation')(item.gearType),
                         $filter('vesselLicenseTypeTranslation')(item.licenseType),
-                        $filter('timeAgo')(item.lastMovement.time),
+                        angular.isDefined(item.lastMovement) ? $filter('timeAgo')(item.lastMovement.time) : '',
                     ];
                     csvObject.push(csvRow);
                     return csvObject;

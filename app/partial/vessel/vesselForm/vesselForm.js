@@ -46,11 +46,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
         return true;
     };
 
-    //MOCK FUNCTION
-    $scope.addNewMobileTerminalToVessel = function () {
-        alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
-    };
-
     var getMobileTerminals = function() {
         $scope.mobileTerminals = undefined;
         $scope.mobileTerminalsError = undefined;

@@ -1,6 +1,6 @@
 angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $filter, searchService, alertService, MobileTerminal, SystemTypeAndPlugin, mobileTerminalRestService, pollingService, GetPollableListRequest, pollingRestService, configurationService, $location, locale, $stateParams, csvService, SearchResults, userService){
 
-    var hideAlertsOnScopeDestroy = true;
+    $scope.hideAlertsOnScopeDestroy = true;
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
@@ -259,7 +259,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
                                 //Show alert message if not all selected mobile terminals could be added to polling
                                 if(searchResultListPage.getNumberOfItems() !== $scope.selectedMobileTerminals.length){
                                     alertService.showInfoMessage(locale.getString('mobileTerminal.add_mobile_terminal_to_polling_only_some_were_addded_message', {selected :$scope.selectedMobileTerminals.length, pollable : searchResultListPage.getNumberOfItems()}));
-                                    hideAlertsOnScopeDestroy = false;
+                                    $scope.hideAlertsOnScopeDestroy = false;
                                 }
 
                                 pollingService.setWizardStep(2);
@@ -326,9 +326,8 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         //Create and download the file
         csvService.downloadCSVFile(getData(), header, filename);
     };
-
     $scope.$on("$destroy", function() {
-        if(hideAlertsOnScopeDestroy){
+        if($scope.hideAlertsOnScopeDestroy){
             alertService.hideMessage();
         }
         searchService.reset();

@@ -178,7 +178,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
 
     //Export data as CSV file
     $scope.exportItemsAsCSVFile = function(onlySelectedItems){
-        var filename = 'holdingTable.csv';
+        var filename = 'notifications.csv';
 
         //Set the header columns
         var header = [
