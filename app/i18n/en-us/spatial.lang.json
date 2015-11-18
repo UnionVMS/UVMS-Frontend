@@ -1,6 +1,7 @@
 {
 	"header_live_view" : "Live view",
 	"header_reports" : "Reports",
+	"header_preferences" : "User Preferences",
 	"tab_map": "Map",
 	"tab_vms": "VMS",
 	"tab_movements": "Positions",
@@ -177,5 +178,6 @@
 	"layer_tree_context_menu_style_title": "Style options",
 	"layer_tree_context_menu_geom_style": "Geometry only",
 	"layer_tree_context_menu_geom_label_style": "Labels and Geometry",
-	"layer_tree_context_menu_label_style": "Labels only"
+	"layer_tree_context_menu_label_style": "Labels only",
+	"user_preferences": "User preferences"
 }

@@ -83,7 +83,6 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, mapS
     var resizeMap = function(evt) {
     	
         var w = angular.element(window);
-        var map = $('#map')[0];
         
         if(evt && (angular.element('.mapPanelContainer.fullscreen').length > 0 ||
         		(angular.element('.mapPanelContainer.fullscreen').length === 0 && evt.type.toUpperCase().indexOf("FULLSCREENCHANGE") !== -1))){

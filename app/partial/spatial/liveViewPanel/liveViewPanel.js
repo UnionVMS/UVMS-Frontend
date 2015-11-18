@@ -29,6 +29,32 @@ angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $t
        return $scope.tabMenu[tabIdx].visible;
    };
    
+ //Update map size
+   $scope.updateMapContainer = function(){
+	   var w = angular.element(window);
+	   var offset = 100;
+       var minHeight = 340;
+       var footerHeight = angular.element('footer')[0].offsetHeight;
+       var headerHeight = angular.element('header')[0].offsetHeight;
+       var newHeight = w.height() - headerHeight - footerHeight - offset;
+       
+       if (newHeight < minHeight) {
+           newHeight = minHeight;
+       }
+       
+       $('.map-container').css('height', newHeight);
+       $('[ng-controller="LayerpanelCtrl"]').css('height', newHeight);
+       
+       var mapToolbarHeight = parseInt($('#map-toolbar').css('height'));
+       if(mapToolbarHeight > 31){
+       	$('#map').css('height', newHeight - (mapToolbarHeight - 31) - parseInt($('.map-bottom').css('height')) + 'px');
+       }else{
+       	$('#map').css('height', newHeight - parseInt($('.map-bottom').css('height')) + 'px');
+       }
+       
+       mapService.updateMapSize();
+   };
+   
    //Focus map div
    $scope.focusMap = function(){
        var mapElement = $window.document.getElementById('map');
@@ -40,7 +66,7 @@ angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $t
    //Refresh map size on tab change
    $scope.$watch('selectedTab', function(newVal, oldVal){
        if (newVal === 'MAP'){
-           $timeout(mapService.updateMapSize, 100);
+           $timeout($scope.updateMapContainer, 100);
            $timeout($scope.focusMap, 50);
        }
    });

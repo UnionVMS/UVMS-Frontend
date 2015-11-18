@@ -8,10 +8,16 @@
 	</div>
 	<div class="container containerWithTopBottomPadding" ng-show="isMenuVisible">
 		<div class="row">
-			<div class="col-md-12 pageMenu">
+			<div class="col-md-6 pageMenu">
 				<ul class="horizontal pipeSeparator">
 					<li ng-repeat="menu in headerMenus" ng-click="selectMenu(menu.menu)" ng-class="{'active': selectedMenu === '{{menu.menu}}'}"><a>{{menu.title}}</a></li>
 				</ul>
+			</div>
+			<div class="col-md-6 preferencesButton">
+				<button type="button" class="btn btn-default" ng-click="selectMenu('PREFERENCES')" ng-class="{'active': selectedMenu === 'PREFERENCES'}">
+					<i class="fa fa-cog"></i>
+					<span style="">{{'spatial.user_preferences' | i18n}}</span>
+				</button>
 			</div>
 		</div>
 	</div>
@@ -35,4 +41,5 @@
 	
 	<div ng-include="'partial/spatial/liveViewPanel/liveViewPanel.html'" ng-show="isMenuSelected('LIVEVIEW')"></div>
 	<div ng-include="'partial/spatial/reportsPanel/reportsPanel.html'" ng-show="isMenuSelected('REPORTS')"></div>
+	<div ng-include="'partial/spatial/configPanel/userPreferencesPanel.html'" ng-show="isMenuSelected('PREFERENCES')"></div>
 </div>
