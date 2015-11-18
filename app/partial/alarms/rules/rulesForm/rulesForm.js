@@ -103,8 +103,12 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
     //Add a definition row
     $scope.addDefinitionRow = function(){
         var ruleDef = new RuleDefinition();
-        ruleDef.criteria = $scope.DROPDOWNS.CRITERIAS[0].code;
-        ruleDef.subCriteria = $scope.DROPDOWNS.SUBCRITERIAS[ruleDef.criteria][0].code;
+        if($scope.DROPDOWNS.CRITERIAS.length > 0){
+            ruleDef.criteria = $scope.DROPDOWNS.CRITERIAS[0].code;
+        }
+        if(Object.keys($scope.DROPDOWNS.SUBCRITERIAS).length > 0 && ruleDef.criteria in $scope.DROPDOWNS.SUBCRITERIAS){
+            ruleDef.subCriteria = $scope.DROPDOWNS.SUBCRITERIAS[ruleDef.criteria][0].code;
+        }
         ruleDef.order = $scope.currentRule.getNumberOfDefinitions();
         $scope.currentRule.addDefinition(ruleDef);
     };

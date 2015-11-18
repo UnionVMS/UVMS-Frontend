@@ -86,9 +86,9 @@ describe('Rule', function() {
         expect(rule.type).toEqual("GLOBAL");
         expect(rule.availability).toEqual("PUBLIC");
 
-        expect(rule.lastTriggered).toEqual("2015-02-05 08:00");
-        expect(rule.updatedBy).toEqual("antkar");
-        expect(rule.dateUpdated).toEqual("2015-08-31 09:00");
+        expect(rule.lastTriggered).toBeUndefined();
+        expect(rule.updatedBy).toBeUndefined();
+        expect(rule.dateUpdated).toBeUndefined();
 
         expect(rule.notifyByEMail).toBeUndefined();
         expect(rule.subscription).toBeUndefined();

@@ -10,9 +10,9 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
             this.definitions = [];
             this.actions = [];
             this.timeIntervals = [];
-            this.lastTriggered = "2015-02-05 08:00";
-            this.updatedBy = "antkar";
-            this.dateUpdated = "2015-08-31 09:00";
+            this.lastTriggered = undefined;
+            this.updatedBy = undefined;
+            this.dateUpdated = undefined;
 
 
             this.notifyByEMail = undefined;
