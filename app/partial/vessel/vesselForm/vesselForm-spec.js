@@ -4,13 +4,10 @@ describe('VesselFormCtrl', function() {
 
 	var scope,ctrl, createResponseVessel;
 
-    beforeEach(inject(function($rootScope, $httpBackend, $controller, Vessel) {
+    beforeEach(inject(function($rootScope, $controller, Vessel) {
         scope = $rootScope.$new();
         ctrl = $controller('VesselFormCtrl', {$scope: scope});
         scope.vesselObj = new Vessel();
-
-        //Mock translation files for usm
-        $httpBackend.whenGET(/^usm\//).respond({});
 
         //Dummy response for create
         createResponseVessel = new Vessel();
@@ -40,6 +37,13 @@ describe('VesselFormCtrl', function() {
         };   
 
     }));	
+
+    beforeEach(inject(function($httpBackend) {
+        //Mock
+        $httpBackend.whenGET(/usm/).respond();
+        $httpBackend.whenGET(/i18n/).respond();
+        $httpBackend.whenGET(/globals/).respond({data : []});
+    }));
 
     it('create new vessel should update vesselObj with created vessel and get vessel history afterwards', inject(function(Vessel, $compile, $q, $httpBackend, vesselRestService, alertService, locale) {
         //Mock REST request

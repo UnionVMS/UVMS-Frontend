@@ -7,14 +7,9 @@ describe('configurationService', function() {
     console.log = function() {};
     console.error = function() {};
 
-    beforeEach(module('unionvmsWeb'));  
+    beforeEach(module('unionvmsWeb'));
 
-    beforeEach(inject(function($rootScope, $q, $httpBackend, vesselRestService, movementRestService, mobileTerminalRestService) {
-
-        //Mock requests
-        $httpBackend.whenGET(/usm/).respond();
-        $httpBackend.whenGET(/i18n/).respond();
-        $httpBackend.whenGET(/globals/).respond();
+    beforeEach(inject(function($rootScope, $q, vesselRestService, movementRestService, mobileTerminalRestService) {
 
         var vesselDeffered = $q.defer();
         vesselDeffered.resolve({LETTER : 'A', COUNTRY : 'SWE'}); 
@@ -31,6 +26,12 @@ describe('configurationService', function() {
         spyOn(mobileTerminalRestService, 'getConfig').andReturn(deffered.promise);
     }));
 
+    beforeEach(inject(function($httpBackend) {
+        //Mock
+        $httpBackend.whenGET(/usm/).respond();
+        $httpBackend.whenGET(/i18n/).respond();
+        $httpBackend.whenGET(/globals/).respond({data : []});
+    }));
 
     it('should build configs dictionary and return correct values', inject(function($rootScope, configurationService) {
 
@@ -40,7 +41,7 @@ describe('configurationService', function() {
             buildingsFromConfig = configurationService.getValue('MOVEMENT', 'BUILDINGS');
         });
 
-        $rootScope.$apply();
+        $rootScope.$digest();
         expect(vesselLetter).toBe('A');
         expect(buildingsFromConfig).toEqual(buildings);
 
@@ -55,7 +56,7 @@ describe('configurationService', function() {
             buildingsFromConfig = configurationService.getValue('MOVEMENT', 'BUILDINGS');
         });
 
-        $rootScope.$apply();
+        $rootScope.$digest();
         expect(noModule).toBeUndefined();
         expect(noParam).toBeUndefined();
         expect(buildingsFromConfig).toEqual(buildings);

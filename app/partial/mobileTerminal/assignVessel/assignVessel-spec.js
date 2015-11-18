@@ -24,13 +24,13 @@ describe('AssignvesselCtrl', function() {
             type : "IRCS",
             value : "TESTIRCS1"
         };
+    }));
 
-         //Mock translation files for usm
-         $httpBackend.whenGET(/usm/).respond({});
-         //Mock locale file
-         $httpBackend.whenGET(/i18n/).respond({});
-         // Mock config
-         $httpBackend.whenGET(/config/).respond({});
+    beforeEach(inject(function($httpBackend) {
+        //Mock
+        $httpBackend.whenGET(/usm/).respond();
+        $httpBackend.whenGET(/i18n/).respond();
+        $httpBackend.whenGET(/globals/).respond({data : []});
     }));
 
 	it('should assign mobile terminal when assigning to selected vessel', inject(function($q, mobileTerminalRestService,
@@ -39,9 +39,9 @@ describe('AssignvesselCtrl', function() {
 		spyOn(mobileTerminalRestService, "assignMobileTerminal").andReturn(deferred.promise);
 		deferred.resolve({data: response});
 		// Skip alert message
-		spyOn(alertService, "showSuccessMessage").andReturn();
+		spyOn(alertService, "showSuccessMessage");
 		scope.mergeCurrentMobileTerminalIntoSearchResults = function() {};
-		scope.$apply();
+		scope.$digest();
 		scope.assignToSelectedVesselWithComment("my comment");
 		expect(mobileTerminalRestService.assignMobileTerminal).toHaveBeenCalled();
 	}));
