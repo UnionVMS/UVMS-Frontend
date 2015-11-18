@@ -45,7 +45,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
            }
            $scope.$broadcast('untoggleToolbarBtns');
        }else {
-    	   //////////////////////
+    	   $scope.$broadcast('loadUserPreferences', oldVal);
        }
    });
    
@@ -56,6 +56,10 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
        $scope.headerMenus[0].title = report.name;
        //Getting report data
        reportService.runReport(report);
+   });
+   
+   $scope.$on('closeUserPreferences', function(event, lastSelected){
+       $scope.selectMenu(lastSelected);
    });
    
 });
