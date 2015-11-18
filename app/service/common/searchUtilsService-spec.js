@@ -96,4 +96,51 @@ describe('searchUtilsService', function() {
         expect(name).toEqual('TEST');
   }));
 
+  it('getTimeSpanOptions should return list that includes CUSTOM and TODAY', inject(function(searchUtilsService) {
+    var options = searchUtilsService.getTimeSpanOptions();
+    var todayFound = false;
+    var customFound = false;
+
+    var today = searchUtilsService.getTimeSpanCodeForToday();
+    var custom = searchUtilsService.getTimeSpanCodeForCustom();
+
+    expect(options.length).toBeGreaterThan(1); //at least CUSTOM and TODAY
+    $.each(options, function(i, option){
+        if(option.code === today){
+            todayFound = true;
+        }
+        if(option.code === custom){
+            customFound = true;
+        }
+    });
+
+    expect(todayFound).toBeTruthy('TODAY option should exist in options');
+    expect(customFound).toBeTruthy('CUSTOM option should exist in options');
+  }));
+
+  it('getSearchCriteriaPartition should split criterias into multiple criteria objects', inject(function(searchUtilsService, SearchField) {
+
+        var criterias = [];
+        criterias.push(new SearchField('NAME', 'John Smith'));
+        criterias.push(new SearchField('VERSION', '2.9'));
+        criterias.push(new SearchField('YEAR', '1994'));
+        criterias.push(new SearchField('AGE', '34'));
+
+        var vesselSearchKeys = {
+            'NAME' : true,
+            'LENGTH' : true,
+        };
+
+        var monkeySearchKeys = {
+            'AGE' : true,
+        };
+
+        var partitions = searchUtilsService.getSearchCriteriaPartition(criterias, {vessel: vesselSearchKeys, monkey: monkeySearchKeys});
+        var defaultCriterias = partitions["default"];
+        var vesselCriteria = partitions["vessel"];
+        var monkeyCriterias = partitions["monkey"];
+        expect(defaultCriterias.length).toEqual(2);
+        expect(vesselCriteria.length).toEqual(1);
+        expect(monkeyCriterias.length).toEqual(1);
+  }));
 });
