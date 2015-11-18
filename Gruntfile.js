@@ -358,6 +358,10 @@ module.exports = function (grunt) {
       controllers: {
         options: {
             files: karmaFiles.concat(['app/partial/**/*-spec.js']),
+            junitReporter: {
+                outputDir: 'testResults',
+                outputFile: 'controllers.xml'
+            },
         }
       },
       directives: {
