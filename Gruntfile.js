@@ -344,7 +344,11 @@ module.exports = function (grunt) {
             '/config.json': 'http://localhost:9876/base/environment/local.json'
         },
         logLevel:'INFO',
-        reporters:['mocha'],
+        reporters:['mocha', 'junit'],
+        junitReporter: {
+            outputDir: 'testResults',
+            outputFile: 'test-results.xml'
+        },
         autoWatch: false, //watching is handled by grunt-contrib-watch
         singleRun: true
       },
