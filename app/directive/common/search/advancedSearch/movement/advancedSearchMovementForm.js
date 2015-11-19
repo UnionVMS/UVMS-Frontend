@@ -161,9 +161,9 @@ angular.module('unionvmsWeb')
         //Watch for changes to the DATE DROPDOWN
         $scope.$watch(function () { return $scope.advancedSearchObject.TIME_SPAN;}, function (newVal, oldVal) {
             if (typeof newVal !== 'undefined' && newVal !== $scope.DATE_CUSTOM) {
-                //Reset start date and end date when changing to something else than custom
-                $scope.advancedSearchObject.TO_DATE = undefined;
-                $scope.advancedSearchObject.FROM_DATE = undefined;
+                //Remove start date and end date when changing to something else than custom
+                delete $scope.advancedSearchObject.TO_DATE;
+                delete $scope.advancedSearchObject.FROM_DATE;
             }
         });
 

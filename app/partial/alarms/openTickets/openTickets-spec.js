@@ -4,7 +4,7 @@ describe('OpenticketsCtrl', function() {
 
     beforeEach(module('unionvmsWeb'));
 
-    beforeEach(inject(function($rootScope, $httpBackend, $controller, longPolling) {
+    beforeEach(inject(function($rootScope, $controller, longPolling) {
         scope = $rootScope.$new();
 
         longpollingSpy = spyOn(longPolling, 'poll');
