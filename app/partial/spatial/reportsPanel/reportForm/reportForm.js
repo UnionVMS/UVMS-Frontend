@@ -202,7 +202,8 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     
     var createReportError = function(error){
         $scope.formAlert.visible = true;
-        $scope.formAlert.msg = locale.getString('spatial.error_create_report');
+        var errorMsgCode = error.data.msg?'spatial.' + error.data.msg:'spatial.error_create_report';
+        $scope.formAlert.msg = locale.getString(errorMsgCode);
     };
     
     var updateReportSuccess = function(response){
@@ -213,6 +214,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     
     var updateReportError = function(error){
         $scope.formAlert.visible = true;
-        $scope.formAlert.msg = locale.getString('spatial.error_update_report');
+        var errorMsgCode = error.data.msg?'spatial.' + error.data.msg:'spatial.error_update_report';
+        $scope.formAlert.msg = locale.getString(errorMsgCode);
     };
 });
