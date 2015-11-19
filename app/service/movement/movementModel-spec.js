@@ -110,4 +110,10 @@ describe('Movement', function() {
         expect(copy.isEqualMovement(movement)).toBeTruthy();
 
     }));
+
+    it('should make an identical copy of a movement', inject(function(Movement) {
+        var movement = Movement.fromJson(move);
+        expect(movement.copy()).toEqual(movement);
+    }));
+
  });
