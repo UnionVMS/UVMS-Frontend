@@ -93,7 +93,7 @@ describe('MovementlistCtrl', function() {
     it('should remove from selection', function() {
         scope.selectedMovements = [m1, m2];
         scope.removeFromSelection(m1);
-        expect(scope.selectedMovements).toEqual[m2];
+        expect(scope.selectedMovements).toEqual([m2]);
     });
 
 });
