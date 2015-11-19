@@ -41,9 +41,6 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
             if($scope.possibleToStart(programPoll)){
                 pollingRestService.startProgramPoll(programPoll).then(
                     function(updatedProgramPoll){
-                        //TODO: remove next two lines when backend is working
-                        updatedProgramPoll.running = true;
-                        updatedProgramPoll.attributes["VESSEL_NAME"] = programPoll.attributes["VESSEL_NAME"];
                         updateProgramPollInResultsArray(programPoll, updatedProgramPoll);
                     },
                     function(error){
@@ -60,9 +57,6 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
             if($scope.possibleToStop(programPoll)){
                 pollingRestService.stopProgramPoll(programPoll).then(
                     function(updatedProgramPoll){
-                        //TODO: remove next two lines when backend is working
-                        updatedProgramPoll.running = false;
-                        updatedProgramPoll.attributes["VESSEL_NAME"] = programPoll.attributes["VESSEL_NAME"];
                         updateProgramPollInResultsArray(programPoll, updatedProgramPoll);
                     },
                     function(error){

@@ -94,7 +94,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
     $scope.gotoPage = function(page){
         if(angular.isDefined(page)){
             searchService.setPage(page);
-            $scope.searchPolls();
+            $scope.getPollableChannels();
         }
     };
 

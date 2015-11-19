@@ -161,7 +161,7 @@ describe('VesselCtrl', function() {
 
             var deferred = $q.defer();
             var searchSpy = spyOn(searchService, "searchVessels").andReturn(deferred.promise);
-            var searchSpy = spyOn(locale, "getString").andReturn("TRANSLATED_TEXT");
+            var localeSpy = spyOn(locale, "getString").andReturn("TRANSLATED_TEXT");
             deferred.reject();
 
             var controller = createController();

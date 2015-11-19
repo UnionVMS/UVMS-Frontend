@@ -104,7 +104,7 @@ describe('ExchangeCtrl', function() {
 
             var deferred = $q.defer();
             var searchSpy = spyOn(searchService, "searchExchange").andReturn(deferred.promise);
-            var searchSpy = spyOn(locale, "getString").andReturn("TRANSLATED_TEXT");
+            var localeSpy = spyOn(locale, "getString").andReturn("TRANSLATED_TEXT");
             deferred.reject();
 
 

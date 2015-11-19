@@ -114,13 +114,13 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
             return exportItems.reduce(
                 function(csvObject, item){
                     var csvRow = [
-                        item.vessel.name,
-                        item.vessel.externalMarking,
-                        $filter('pollTypeName')(item.poll.type),
-                        $filter('transponderName')(item.poll.attributes.TRANSPONDER),
-                        $filter('confDateFormat')(item.exchangePoll.history[0].time),
-                        $filter('exchangeStatusName')(item.exchangePoll.history[0].status),
-                        item.poll.attributes.USER
+                        angular.isDefined(item.vessel) ? item.vessel.name : '',
+                        angular.isDefined(item.vessel) ? item.vessel.externalMarking : '',
+                        angular.isDefined(item.poll) ? $filter('pollTypeName')(item.poll.type) : '',
+                        angular.isDefined(item.poll) ? $filter('transponderName')(item.poll.attributes.TRANSPONDER) : '',
+                        angular.isDefined(item.exchangePoll) ? $filter('confDateFormat')(item.exchangePoll.history[0].time) : '',
+                        angular.isDefined(item.exchangePoll) ? $filter('exchangeStatusName')(item.exchangePoll.history[0].status) : '',
+                        angular.isDefined(item.poll) ? item.poll.attributes.USER : ''
                     ];
                     csvObject.push(csvRow);
                     return csvObject;
@@ -149,9 +149,9 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     //Watch for changes to the DATE DROPDOWN
     $scope.$watch(function () { return $scope.advancedSearchObject.TIME_SPAN;}, function (newVal, oldVal) {
         if (typeof newVal !== 'undefined' && newVal !== $scope.DATE_CUSTOM) {
-            //Reset start date and end date when changing to something else than custom
-            $scope.advancedSearchObject.FROM_DATE = undefined;
-            $scope.advancedSearchObject.TO_DATE = undefined;
+            //Remove start date and end date when changing to something else than custom
+            delete $scope.advancedSearchObject.FROM_DATE;
+            delete $scope.advancedSearchObject.TO_DATE;
         }
     });
 

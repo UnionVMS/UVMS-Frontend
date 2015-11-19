@@ -18,10 +18,6 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
         resetPollingOptions(true);
     };
 
-    //DUMMY DATA FOR DROPDOWNS
-    $scope.requestChannels = [];
-    $scope.reponseChannels = [];
-
     $scope.setPollType = function(type){
         if (!$scope.isSingleMobileTerminalSelected() && type === "SAMPLING") {
             return;
