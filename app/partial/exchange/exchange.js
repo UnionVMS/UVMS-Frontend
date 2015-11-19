@@ -133,12 +133,12 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         exchangeRestService.startTransmission(encodeURI(model.serviceClassName)).then(
         function(data){
             console.log("Service successfully started.");
-            alertService.showInfoMessageWithTimeout(locale.getString('exchange.transmission_start_transmission_successfull'));
+            alertService.showSuccessMessageWithTimeout(locale.getString('exchange.transmission_start_transmission_successfull'));
             model.setAsStarted();
         },
         function(error){
             console.log("Error trying to start plugin.");
-             alertService.showInfoMessageWithTimeout(locale.getString('exchange.transmission_start_transmission_error'));
+             alertService.showErrorMessageWithTimeout(locale.getString('exchange.transmission_start_transmission_error'));
         });
     };
 
@@ -177,7 +177,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
                     break;
 
                 case 'ALARM':
-                    $location.path('alarms/holdingtable/' + model.logData.guid);
+                    $location.path('/alarms/holdingtable/' + model.logData.guid);
                     break;
 
                 default:

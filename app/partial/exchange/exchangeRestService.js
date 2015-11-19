@@ -34,12 +34,6 @@ angular.module('unionvmsWeb')
             getPollMessage : function(){
                 return $resource( '/exchange/rest/exchange/poll/:typeRefGuid');
             },
-            resendExchangeMessage : function(){
-                return $resource( '/exchange/rest/message/resend',{},
-                {
-                    list : { method : 'POST'}
-                });
-            },
             sendQueuedMessages : function(){
                 return $resource('/exchange/rest/sendingqueue/send', {},
                 {
@@ -54,59 +48,8 @@ angular.module('unionvmsWeb')
             }
         };
     })
-    .factory('exchangeRestService', function($q, exchangeRestFactory, GetListRequest, Exchange, ExchangePoll, ExchangeService, ExchangeSendingQueue,  SearchResultListPage, vesselRestService){
+    .factory('exchangeRestService', function($q, exchangeRestFactory, Exchange, ExchangePoll, ExchangeService, ExchangeSendingQueue, SearchResultListPage){
 
-        var getVesselNamesByGuid = function(vessels) {
-            var map = {};
-            for (var i = 0; i < vessels.length; i++) {
-                var vessel = vessels[i];
-                map[vessel.vesselId.guid] = vessel.name;
-            }
-
-            return map;
-        };
-
-        var getVesselIds = function(messages) {
-            var uniqueIds = {};
-            for (var i = 0; i < messages.length; i++) {
-                if (messages[i].sentBy) {
-                    uniqueIds[messages[i].sentBy] = messages[i].sentBy;
-                }
-            }
-
-            return Object.keys(uniqueIds);
-        };
-
-        var getVesselListRequest = function(vesselIds) {
-            var request = new GetListRequest(1, vesselIds.uniqueIds);
-            for (var i = 0; i < vesselIds.length; i++){
-                request.addSearchCriteria("GUID", vesselIds[i]);
-            }
-
-            return request;
-        };
-
-        var setVesselNames = function(messages, vesselNamesByGuid) {
-            for (var i = 0; i < messages.length; i++) {
-                var message = messages[i];
-                message.vesselGuid = message.sentBy;
-                message.sentBy = vesselNamesByGuid[message.vesselGuid];
-            }
-        };
-
-        var populateVesselNames = function(searchResultListPage) {
-            var deferred = $q.defer();
-            var messages = searchResultListPage.items;
-            vesselRestService.getVesselList(getVesselListRequest(getVesselIds(messages))).then(function(vesselListPage) {
-                setVesselNames(messages, getVesselNamesByGuid(vesselListPage.items));
-                deferred.resolve(searchResultListPage);
-            },
-            function(error) {
-                deferred.reject(error);
-            });
-
-            return deferred.promise;
-        };
 
         var sendQueue = function(messages){
             var def = $q.defer();
@@ -283,9 +226,7 @@ angular.module('unionvmsWeb')
                     }
                 }
 
-                var currentPage = response.data.currentPage;
-                var totalNumberOfPages = response.data.totalNumberOfPages;
-                var searchResultListPage = new SearchResultListPage(pollMessages, currentPage, totalNumberOfPages);
+                var searchResultListPage = new SearchResultListPage(pollMessages, 1, 1);
 
                 deferred.resolve(searchResultListPage);
 
@@ -329,11 +270,11 @@ angular.module('unionvmsWeb')
     var getExchangeMessage = function(guid) {
         var deferred = $q.defer();
         exchangeRestFactory.getExchangeMessage().get({guid: guid}, function(response) {
-            if (response.code !== "200") {
+            if (String(response.code) !== "200") {
                 deferred.reject("Invalid response");
             }
 
-            return Exchange.fromJson(response.data);
+            deferred.resolve(Exchange.fromJson(response.data));
         }, function(error) {
             deferred.reject("Failed to get Exchange message");
         });
@@ -365,7 +306,6 @@ angular.module('unionvmsWeb')
         getMessages : getMessages,
         getPollMessage : getPollMessage,
         getPollMessages : getPollMessages,
-        resendExchangeMessage : resendExchangeMessage,
         sendQueue: sendQueue,
         getSendingQueue : getSendingQueue,
         getExchangeMessage: getExchangeMessage,

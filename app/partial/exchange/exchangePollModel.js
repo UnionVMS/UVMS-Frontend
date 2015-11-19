@@ -13,8 +13,10 @@ angular.module('unionvmsWeb').factory('ExchangePoll', function(PollStatus) {
             exchangePoll.pollGuid = dto.typeRef.refGuid;
         }
 
-        for (var i = 0; i < dto.history.length; i++) {
-            exchangePoll.history.push(PollStatus.fromDTO(dto.history[i]));
+        if(angular.isDefined(dto.history)){
+            for (var i = 0; i < dto.history.length; i++) {
+                exchangePoll.history.push(PollStatus.fromDTO(dto.history[i]));
+            }
         }
 
         return exchangePoll;

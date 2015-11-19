@@ -45,14 +45,6 @@ angular.module('unionvmsWeb')
 		return exchange;
 	};
 
-    Exchange.prototype.getFormattedDateRecieved = function() {
-        return moment(this.dateRecieved).format("YYYY-MM-DD HH:mm");
-    };
-
-    Exchange.prototype.getFormattedDateForward = function() {
-        return moment(this.dateForward).format("YYYY-MM-DD HH:mm");
-    };
-
     Exchange.prototype.isEqualExchange = function(item) {
         return angular.isDefined(item) && item.id === this.id;
     };
