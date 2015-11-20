@@ -1,7 +1,9 @@
-angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, mapService, spatialHelperService, $window){
+angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, $timeout, $document, mapService, spatialHelperService, $window){
     $scope.activeControl = '';
     $scope.showMeasureConfigWin = false;
+    $scope.showPrintConfigWin = false;
     $scope.measureConfigs = spatialHelperService.measure;
+    $scope.print = spatialHelperService.print;
     $scope.tbControls = spatialHelperService.tbControls;
     
     //Close identify popup
@@ -13,6 +15,15 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, mapS
     $scope.measuringUnits.push({"text": locale.getString('spatial.map_measuring_units_meters'), "code": "m"});
     $scope.measuringUnits.push({"text": locale.getString('spatial.map_measuring_units_nautical_miles'), "code": "nm"});
     $scope.measuringUnits.push({"text": locale.getString('spatial.map_measuring_units_miles'), "code": "mi"});
+    
+    $scope.exportFormats = [];
+    $scope.exportFormats.push({"text": 'PNG', "code": "png"});
+    $scope.exportFormats.push({"text": 'JPEG', "code": "jpeg"});
+    $scope.exportFormats.push({"text": 'PDF', "code": "pdf"});
+    
+    $scope.printLayouts = [];
+    $scope.printLayouts.push({"text": 'Portrait', "code": "portrait"}); //TODO translations
+    $scope.printLayouts.push({"text": 'Landscape', "code": "landscape"});
     
     //Handle toggle on top toolbar
     $scope.toggleToolbarBtn = function(tool){
@@ -37,15 +48,8 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, mapS
         }
     };
     
-    //Measure control
-    $scope.measureEnable = function(){
-        $scope.openMeasureConfigWin();
-        mapService.startMeasureControl();
-    };
-    
-    $scope.openMeasureConfigWin = function(){
-        $scope.showMeasureConfigWin = true;
-        var win = angular.element('#measure-config');
+    //Setup draggable windows
+    $scope.setWinDraggable = function(win, marginRight){
         if (win.draggable('instance') === undefined){
             win.draggable({
                 handle: 'span',
@@ -57,7 +61,19 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, mapS
         var mapRect = mapEl.getBoundingClientRect();
         win[0].style.marginTop = '8px';
         win[0].style.top = 'auto';
-        win[0].style.left = mapRect.left + 40 + 'px';
+        win[0].style.left = mapRect.left + marginRight + 'px';
+    };
+    
+    //Measure control
+    $scope.measureEnable = function(){
+        $scope.openMeasureConfigWin();
+        mapService.startMeasureControl();
+    };
+    
+    $scope.openMeasureConfigWin = function(){
+        $scope.showMeasureConfigWin = true;
+        var win = angular.element('#measure-config');
+        $scope.setWinDraggable(win, 40);
     };
     
     $scope.measureDisable = function(){
@@ -68,6 +84,148 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, mapS
         $scope.measureConfigs.startDate = undefined;
     };
     
+    //Print control
+    $scope.printEnable = function(){
+        $scope.openPrintConfigWin();
+    };
+    
+    $scope.openPrintConfigWin = function(){
+        $scope.showPrintConfigWin = true;
+        var win = angular.element('#print-config');
+        $scope.setWinDraggable(win, 65);
+    };
+    
+    $scope.printMap = function(){
+      var exportType;
+      var fileName = locale.getString('spatial.map_export_filename');
+      switch ($scope.print.exportFormat) {
+          case 'png':
+              fileName += '.png';
+              exportType = 'image/png';
+              break;
+          case 'jpeg':
+              fileName += '.jpeg';
+              exportType = 'image/jpeg';
+              break;
+          case 'pdf':
+              fileName += '.pdf';
+              exportType = 'image/jpeg';
+              break;
+          default:
+              break;
+      }
+      
+      var downloadLink = angular.element('<a></a>');
+      downloadLink.attr('download', fileName);
+      downloadLink.attr('target', '_blank');
+      
+      mapService.map.once('postcompose', function(evt){
+         var canvas = evt.context.canvas;
+         if ($scope.print.exportFormat === 'pdf'){
+             var img = canvas.toDataURL(exportType);
+             var imgSize = {
+                width: canvas.width,
+                height: canvas.height
+             };
+             var doc = new jsPDF($scope.print.layout, 'mm', 'a4');
+             if ($scope.print.layout === 'portrait'){
+                 $scope.setPortraitPdf(doc, img, imgSize);
+             } else {
+                 $scope.setLandscapePdf(doc, img, imgSize);
+             }
+             downloadLink.attr('href', doc.output('datauristring'));
+         } else {
+             downloadLink.attr('href', canvas.toDataURL(exportType));
+         }
+         
+         $document.find('body').append(downloadLink);
+         $timeout(function () {
+             downloadLink[0].click();
+             downloadLink.remove();
+         }, null);
+      });
+      
+      mapService.map.renderSync();
+    };
+    
+    //Scale the map image to fit PDF page while keeping the aspect ratio
+    $scope.getFinalMapSize = function(originalSize, targetSize){
+        var scaleWidth = originalSize.width / targetSize.maxWidth;
+        var scaleHeight = originalSize.height / targetSize.maxHeight;
+        
+        var size = {};
+        if (scaleWidth > scaleHeight){
+            size.width = originalSize.width / scaleWidth;
+            size.height = originalSize.height / scaleWidth;
+        } else {
+            size.width = originalSize.width / scaleHeight;
+            size.height = originalSize.height / scaleHeight;
+        }
+        
+        return size;
+    };
+    
+    //Build portrait PDF layout
+    $scope.setPortraitPdf = function(doc, map, mapSize){
+        if (angular.isDefined($scope.print.title)){
+            doc.setTextColor(41, 128, 185);
+            doc.setFontSize(18);
+            $scope.centerText(doc, $scope.print.title, $scope.print.portrait.title.top);
+        }
+        
+        //Add map image
+        var size = $scope.getFinalMapSize(mapSize, $scope.print.portrait.mapSize);
+        var marginLeft = 10;
+        if (size.width < doc.internal.pageSize.width){
+            marginLeft = (doc.internal.pageSize.width - size.width) / 2;
+        }
+        doc.addImage(map, 'jpeg', marginLeft, 25, size.width, size.height);
+        
+        //Add footer
+        doc.setFontSize(10);
+        doc.setTextColor(120, 120, 120);
+        doc.text($scope.print.portrait.footer.left, $scope.print.portrait.footer.bottom, moment().utc().format('YYYY-MM-DD HH:mm Z') + ' UTC');
+        doc.text($scope.print.portrait.footer.right, $scope.print.portrait.footer.bottom, 'Generated by unionVMS');
+    };
+    
+    //Build landscape PDF layout
+    $scope.setLandscapePdf = function(doc, map, mapSize){
+        if (angular.isDefined($scope.print.title)){
+            doc.setTextColor(41, 128, 185);
+            doc.setFontSize(18);
+            $scope.centerText(doc, $scope.print.title, $scope.print.landscape.title.top);
+        }
+        
+        //Add map image
+        var size = $scope.getFinalMapSize(mapSize, $scope.print.landscape.mapSize);
+        var marginLeft = 10;
+        if (size.width < doc.internal.pageSize.width){
+            marginLeft = (doc.internal.pageSize.width - size.width) / 2;
+        }
+        doc.addImage(map, 'jpeg', marginLeft, 25, size.width, size.height);
+        
+        //Add footer
+        doc.setFontSize(10);
+        doc.setTextColor(120, 120, 120);
+        doc.text($scope.print.landscape.footer.left, $scope.print.landscape.footer.bottom, moment().utc().format('YYYY-MM-DD HH:mm Z') + ' UTC');
+        doc.text($scope.print.landscape.footer.right, $scope.print.landscape.footer.bottom, 'Generated by unionVMS');
+    };
+    
+    //Center text in PDF doc
+    $scope.centerText = function(doc, text, offsetY){
+        var textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+        var textOffset = (doc.internal.pageSize.width - textWidth) / 2;
+        doc.text(textOffset, offsetY, text);
+    };
+    
+    $scope.printDisable = function(){
+        $scope.showPrintConfigWin = false;
+        $scope.print.exportFormat = 'png';
+        $scope.print.layout = 'portrait';
+        $scope.print.title = undefined;
+    };
+    
+    //Clear highlight features control
     $scope.clearMapHighlights = function(){
         var layer = mapService.getLayerByType('highlight');
         layer.getSource().clear(true);
@@ -165,6 +323,8 @@ angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale,
                 type: 'measure'
             },{
                 type: 'fullscreen'
+            },{
+                type: 'print'
             }]
         }
     };

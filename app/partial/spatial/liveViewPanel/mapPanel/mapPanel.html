@@ -8,6 +8,7 @@
 				</div>
 				<div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
 					<button type="button" ng-class="{active: activeControl === 'measure'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_measure_distance' | i18n }}" ng-click="toggleToolbarBtn('measure')" ng-show="tbControls.measure"><span class="fa fa-arrows-h"></span></button>
+					<button type="button" id="export-map" ng-class="{active: activeControl === 'print'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_print' | i18n }}" ng-click="toggleToolbarBtn('print')" ng-show="tbControls.print"><span class="fa fa-print"></span></button>
 					<!-- <button type="button" ng-class="{active: activeControl === 'other'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_measure_distance' | i18n }}" ng-click="toggleToolbarBtn('other')">Another Control</button> -->
 				</div>
 			</div>
@@ -39,6 +40,35 @@
 		    		<div class="form-group col-md-12 measure-content">
 		    			<label>{{'spatial.map_start_date_label' | i18n }}</label>
 		    			<datepicker-input time="true" model="measureConfigs.startDate" name="selectedDate" ng-disabled="measureConfigs.disabled"></datepicker-input>
+		    		</div>
+		    	</div>
+		    </div>
+		    <div id="print-config" ng-show="showPrintConfigWin">
+		    	<div class="row">
+		    		<div class="col-md-12">
+		    			<span class="fa fa-bullseye drag-icon pull-right"></span>
+		    		</div>
+		    	</div>
+		    	<div class="row">
+		    		<div class="form-group col-md-12 measure-content">
+		    			<label>{{'spatial.map_export_format_label' | i18n }}</label>
+		    			<dropdown ng-model="print.exportFormat" items="exportFormats"></dropdown>
+		    		</div>
+		    		<div ng-show="print.exportFormat === 'pdf'">
+			    		<div class="form-group col-md-12 measure-content">
+			    			<label>{{'spatial.map_export_title_label' | i18n }}</label>
+			    			<input type="text" class="form-control" name="exportTitle" ng-model="print.title"/>
+			    		</div>
+			    		<div class="form-group col-md-12 measure-content">
+			    			<label>{{'spatial.map_export_format_label' | i18n }}</label>
+			    			<dropdown ng-model="print.layout" items="printLayouts"></dropdown>
+			    		</div>
+		    		</div>
+		    		<div class="form-group col-md-12 measure-content">
+		    			<button type="button" class="btn btn-primary" ng-click="printMap()" style="width: 100%;">
+		    				<span class="fa fa-download"></span>&nbsp;
+		    				{{'spatial.map_tip_print' | i18n }}
+		    			</button>
 		    		</div>
 		    	</div>
 		    </div>

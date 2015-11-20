@@ -289,7 +289,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             attributions: [ attribution ],
             url: config.url,
             serverType: config.serverType,
-            params: config.params
+            params: config.params,
+            crossOrigin: 'anonymous'
         });
 
         layer = new ol.layer.Tile({

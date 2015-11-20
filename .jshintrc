@@ -33,6 +33,7 @@
         "spyOn": true,
         "ol": true,
 		"Mustache": true,
-		"turf": true
+		"turf": true,
+		"jsPDF": true
     }
 }
