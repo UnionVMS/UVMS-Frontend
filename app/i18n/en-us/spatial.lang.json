@@ -163,6 +163,23 @@
 	"area_selection_modal_add_area_btn": "Add area to selection",
 	"area_selection_modal_current_selection": "Current area selection",
 	"area_selection_modal_area_is_selected_warning": "This area is already added to you current selection",
+
+    "map_configuration_modal_title": "Map configuration",
+    "map_configuration_map_projection": "Map projection",
+    "map_configuration_display_projection": "Display projection",
+    "map_configuration_scale_bar_units": "Scale bar units",
+
+    "map_configuration_coordinates_format": "Coordinates format",
+    "map_configuration_coordinates_format_dd": "Decimal degrees",
+    "map_configuration_coordinates_format_dms": "Degrees minutes seconds",
+    "map_configuration_coordinates_format_ddm": "Degrees decimal minutes",
+    "map_configuration_coordinates_format_m": "Meters",
+
+    "map_configuration_scale_bar_units_metric": "Meters",
+    "map_configuration_scale_bar_units_degrees": "Degrees",
+    "map_configuration_scale_bar_units_nautical": "Nautical miles",
+    "map_configuration_scale_bar_units_imperial": "Miles",
+
 	"layer_panel_layers": "LAYERS",
 	"layer_panel_legend": "LEGEND",
 	"layer_tree_vms": "VMS",

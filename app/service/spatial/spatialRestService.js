@@ -32,11 +32,18 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource) 
                     headers: {
                         'Content-Type': 'application/json'
                     }
-                } 
+                }
             });
         },
         getConfigsForReport: function(){
             return $resource('/spatial/rest/config/:id', {}, {
+                'get': {
+                    method: 'GET'
+                }
+            });
+        },
+        getSupportedProjections: function(){
+            return $resource('/spatial/rest/config/projections', {}, {
                 'get': {
                     method: 'GET'
                 }
@@ -84,7 +91,7 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource) 
                 console.log('Error getting area properties');
                 deferred.reject(error);
             });
-            
+
             return deferred.promise;
 	    },
 	    getConfigsForReport: function(id){
@@ -95,9 +102,20 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource) 
 	            console.log('Error get spatial configs for report');
 	            deferred.reject(error);
 	        });
-	        
+
 	        return deferred.promise;
-	    }
+	    },
+        getSupportedProjections: function(){
+            var deferred = $q.defer();
+            spatialRestFactory.getSupportedProjections().get(function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.log('Error get supported projections');
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        }
 	};
 
 	return spatialRestService;
