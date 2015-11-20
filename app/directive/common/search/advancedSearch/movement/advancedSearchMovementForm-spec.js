@@ -156,4 +156,26 @@ describe('advancedSearchMovementCtrl', function() {
 
     }));
 
+    it('should perform advanced movement search', inject(function(alertService, searchService) {
+        var controller = createController();
+        spyOn(alertService, 'hideMessage');
+        spyOn(scope, 'resetSavedSearchDropdown');
+        spyOn(searchService, 'resetPage');
+        spyOn(searchService, 'resetSearchCriterias');
+        spyOn(searchService, 'setDynamic');
+        spyOn(searchService, 'setSearchCriteriasToAdvancedSearch');
+        scope.searchfunc = jasmine.createSpy('searchfunc');
+
+        scope.$digest();
+        scope.performAdvancedMovementSearch();
+
+        expect(alertService.hideMessage).toHaveBeenCalled();
+        expect(searchService.resetPage).toHaveBeenCalled();
+        expect(searchService.resetSearchCriterias).toHaveBeenCalled();
+        expect(searchService.setDynamic).toHaveBeenCalledWith(true);
+        expect(scope.resetSavedSearchDropdown).toHaveBeenCalled();
+        expect(searchService.setSearchCriteriasToAdvancedSearch).toHaveBeenCalled();
+        expect(scope.searchfunc).toHaveBeenCalled();
+    }));
+
 });
