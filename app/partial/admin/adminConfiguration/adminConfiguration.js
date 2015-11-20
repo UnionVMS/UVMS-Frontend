@@ -36,7 +36,7 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 				return $scope.settings[module] !== undefined && getNonGlobalSettings($scope.settings[module]).length > 0;
 			});
 
-			$scope.tabs = ["systemMonitor", "globalSettings", "reporting"].concat(modules);
+			$scope.tabs = ["systemMonitor", "globalSettings"].concat(modules);
 		});
 	};
 

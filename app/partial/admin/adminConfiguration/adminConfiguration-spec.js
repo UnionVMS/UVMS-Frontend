@@ -34,7 +34,7 @@ describe('AuditconfigurationCtrl', function() {
 		};
 	}));
 
-	it('should only show tabs with at least one none-global setting', function() {
+	it('should only show tabs with at least one non-global setting', function() {
 		var controller = createController();
 		expect(scope.tabs).toEqual(["systemMonitor", "globalSettings", "mobileTerminal"]);
 	});
