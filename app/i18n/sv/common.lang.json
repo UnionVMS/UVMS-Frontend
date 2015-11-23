@@ -114,5 +114,7 @@
     "one_selected" : "One selected",
     "all_selected" : "All selected",
     "multiple_select_dropdown_default_text" : "Select",
-    "error_getting_data_from_server" : "Error getting data from server."
+    "error_getting_data_from_server" : "Error getting data from server.",
+    "help": "Hjälp",
+    "table_of_contents": "Innehåll"
 }

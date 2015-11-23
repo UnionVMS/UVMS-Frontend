@@ -427,6 +427,15 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                 access: 'viewAlarmsRules'
             },
         })
+        .state('app.help', {
+            url: '/help',
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/help/help.html',
+                    controller: 'help.controller as help'
+                }
+            }
+        })
         .state('error', {
             views: {
                 unionvmsError: {
@@ -531,10 +540,12 @@ unionvmsWebApp.value('localeConf', {
     delimiter: '::'
 }).value('localeSupported', [
     "en-us",
-    "sv"
+    "sv",
+    'en-gb'
 ]).constant('languageNames', {
     "en-us": "English (US)",
-    "sv": "Svenska"
+    "sv": "Svenska",
+    "en-gb": "English (GB)"
 });
 
 //Service used for bootstrapping the application

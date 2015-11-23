@@ -1,0 +1,17 @@
+<div id="help-page" class="container containerWithTopBottomPadding">
+	<div class="card">
+
+		<!-- Auto-generated table of contents. -->
+		<div class="card-header">
+			<h3>{{'common.table_of_contents' | i18n}}</h3>
+			<ul>
+				<li ng-repeat="section in help.sections track by $index">
+					<a ng-click="help.goTo(section)">{{help.titles[section]}}</a>
+				</li>
+			</ul>
+		</div>
+
+		<!-- Include help for current language -->
+		<ng-include src="help.localizedUrl"/>
+	</div>
+<div>
