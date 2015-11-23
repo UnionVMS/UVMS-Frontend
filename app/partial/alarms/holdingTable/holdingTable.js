@@ -166,13 +166,13 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
 
         //Set the header columns
         var header = [
-                locale.getString('alarms.alarms_table_status'),
                 locale.getString('alarms.alarms_table_date_openend'),
                 locale.getString('alarms.alarms_table_object_affected'),
                 locale.getString('alarms.alarms_table_rule'),
                 locale.getString('alarms.alarms_table_sender'),
                 locale.getString('alarms.alarms_table_date_resolved'),
                 locale.getString('alarms.alarms_table_resolved_by'),
+                locale.getString('alarms.alarms_table_status'),
             ];
 
         //Set the data columns
@@ -200,13 +200,13 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
                             return alarmItem.ruleName;
                             }).join(' & ');
                         var csvRow = [
-                            item.status,
                             $filter('confDateFormat')(item.openDate),
                             affectedObjectText,
                             ruleNames,
                             item.sender,
                             $filter('confDateFormat')(item.getResolvedDate()),
-                            item.getResolvedBy()
+                            item.getResolvedBy(),
+                            item.status
                         ];
                         csvObject.push(csvRow);
                     }

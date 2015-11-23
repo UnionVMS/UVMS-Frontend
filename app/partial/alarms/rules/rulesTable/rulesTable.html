@@ -39,7 +39,11 @@
                             <input type="text" ng-model="item.notifyByEmail" class="form-control" placeholder="{{'alarms.rules_table_notify_by_email_input_placeholder' | i18n}}">
                         </div>
                     </td>
-                    <td ng-class="item.active ? 'active' : 'inactive'">{{getStatusLabelForRule(item)}}</td>
+                    <td ng-class="item.active ? 'active' : 'inactive'">
+                        <span class="label" ng-class="item.active ? 'label-success' : 'label-danger'">
+                            {{getStatusLabelForRule(item)}}
+                        </span>
+                    </td>
                     <td class="availability textAlignCenter">
                         <i ng-show="item.availability === 'PUBLIC'" class="fa fa-lg fa-users" tooltip-placement="bottom" tooltip="{{'alarms.rules_availability_public' | i18n}}"></i>
                         <i ng-show="item.availability === 'PRIVATE'" class="fa fa-lg fa-user" tooltip-placement="bottom" tooltip="{{'alarms.rules_availability_private' | i18n}}"></i>

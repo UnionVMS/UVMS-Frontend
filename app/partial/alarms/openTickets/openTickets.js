@@ -182,12 +182,12 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
 
         //Set the header columns
         var header = [
-                locale.getString('alarms.alarms_table_status'),
                 locale.getString('alarms.alarms_table_date_openend'),
                 locale.getString('alarms.alarms_table_object_affected'),
                 locale.getString('alarms.alarms_table_rule'),
                 locale.getString('alarms.alarms_table_date_resolved'),
-                locale.getString('alarms.alarms_table_resolved_by'),
+                locale.getString('alarms.alarms_table_resolved_by'),,
+                locale.getString('alarms.alarms_table_status')
             ];
 
         //Set the data columns
@@ -211,12 +211,12 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
                             affectedObjectText = item.vesselGuid;
                         }
                         var csvRow = [
-                            item.status,
                             $filter('confDateFormat')(item.openDate),
                             affectedObjectText,
                             item.ruleName,
                             $filter('confDateFormat')(item.getResolvedDate()),
-                            item.getResolvedBy()
+                            item.getResolvedBy(),
+                            item.status
                         ];
                         csvObject.push(csvRow);
                     }
