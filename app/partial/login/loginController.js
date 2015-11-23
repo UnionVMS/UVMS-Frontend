@@ -38,6 +38,7 @@ angular.module('unionvmsWeb').controller('uvmsLoginController', function($scope,
 
         return $modal.open({
             templateUrl: 'service/common/auth/templates/resetPassword.html',
+            backdrop: 'static', //will not close when clicking outside the modal window
             controller: 'resetPasswordController'
         }).result.then(
 

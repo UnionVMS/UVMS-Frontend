@@ -326,6 +326,7 @@ angular.module('unionvmsWeb').factory('PositionReportModal', function($modal) {
                 templateUrl: 'partial/alarms/positionReportModal/positionReportModal.html',
                 controller: 'PositionReportModalCtrl',
                 windowClass : "positionReportModal",
+                backdrop: 'static', //will not close when clicking outside the modal window
                 size: 'md',
                 resolve:{
                     alarm : function (){

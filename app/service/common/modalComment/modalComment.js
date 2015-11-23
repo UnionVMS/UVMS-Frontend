@@ -25,6 +25,7 @@ app.factory('modalComment', function($modal) {
 			$modal.open({
 				templateUrl: "service/common/modalComment/modalComment.html",
 				controller: "modalCommentCtrl",
+                backdrop: 'static', //will not close when clicking outside the modal window
 				resolve: {
 					options: function() {
 						return options || {};

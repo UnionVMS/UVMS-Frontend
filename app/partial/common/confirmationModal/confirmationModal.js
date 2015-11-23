@@ -25,6 +25,7 @@ app.factory('confirmationModal',function($modal){
                 templateUrl: 'partial/common/confirmationModal/confirmationModal.html',
                 controller: 'confirmationModalCtrl',
                 windowClass : "confirmationModal",
+                backdrop: 'static', //will not close when clicking outside the modal window
                 size: "small",
                 resolve: {
                     options: function() {

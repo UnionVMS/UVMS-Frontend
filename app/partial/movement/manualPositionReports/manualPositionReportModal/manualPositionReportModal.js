@@ -351,7 +351,8 @@ angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($mod
 		show: function(positionReport, options) {
 			return $modal.open({
 				templateUrl: 'partial/movement/manualPositionReports/manualPositionReportModal/manualPositionReportModal.html',
-				controller: 'ManualPositionReportModalCtrl',
+                controller: 'ManualPositionReportModalCtrl',
+				backdrop: 'static', //will not close when clicking outside the modal window
 				size: 'md',
                 resolve:{
                     positionReport : function (){
