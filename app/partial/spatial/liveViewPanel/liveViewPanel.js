@@ -43,7 +43,7 @@ angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $t
        }
        
        $('.map-container').css('height', newHeight);
-       $('[ng-controller="LayerpanelCtrl"]').css('height', newHeight);
+       $('.layer-panel').css('height', newHeight);
        
        var mapToolbarHeight = parseInt($('#map-toolbar').css('height'));
        if(mapToolbarHeight > 31){

@@ -26,4 +26,8 @@ angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $time
 	        $( '.fancytree-container' ).css( 'height', wh-th+'px' );
     	}, 100);
     };
+    
+    angular.element(document).ready(function () {
+    	$scope.resizeMap();
+    });
 });

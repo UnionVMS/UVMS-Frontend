@@ -240,7 +240,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, $tim
         }
     });
     
-    var resizeMap = function(evt) {
+    $scope.resizeMap = function(evt) {
     	
         var w = angular.element(window);
         
@@ -249,7 +249,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, $tim
         	
         	setTimeout(function() {
         		$('.map-container').css('height', w.height() - parseInt($('.map-bottom').css('height')) + 'px');
-        		$('[ng-controller="LayerpanelCtrl"]').css('height', w.height() - parseInt($('#map-toolbar').css('height')) + 'px');
+        		$('.layer-panel').css('height', w.height() - parseInt($('#map-toolbar').css('height')) + 'px');
                 $('#map').css('height', w.height() - parseInt($('#map-toolbar').css('height')) - parseInt($('.map-bottom').css('height')) + 'px');
                 mapService.updateMapSize();
         	}, 100);
@@ -257,7 +257,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, $tim
         }
         
         setTimeout(function() {
-	        var offset = 100;
+	        var offset = 120;
 	        var minHeight = 340;
 	        var footerHeight = angular.element('footer')[0].offsetHeight;
 	        var headerHeight = angular.element('header')[0].offsetHeight;
@@ -268,8 +268,8 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, $tim
 	        }
 	        
 	        $('.map-container').css('height', newHeight);
-	        $('[ng-controller="LayerpanelCtrl"]').css('height', newHeight);
-	        
+	        $('.layer-panel').css('height', newHeight);
+
 	        var mapToolbarHeight = parseInt($('#map-toolbar').css('height'));
 	        if(mapToolbarHeight > 31){
 	        	$('#map').css('height', newHeight - (mapToolbarHeight - 31) - parseInt($('.map-bottom').css('height')) + 'px');
@@ -281,11 +281,11 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, $tim
         }, 100);
   	};
     
-    $(window).resize(resizeMap);
-    $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', resizeMap);
+    $(window).resize($scope.resizeMap);
+    $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', $scope.resizeMap);
     
     angular.element(document).ready(function () {
-    	resizeMap();
+    	$scope.resizeMap();
     });
     
     //Other controls
