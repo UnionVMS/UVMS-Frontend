@@ -121,7 +121,6 @@
     "history_modal_satelliteno" : "Satellite no",
     "history_modal_changeddate" : "Changed date",
     "history_modal_comments" : "Comments",
-    "history_modal_auditlogs" : "Audit logs",
     "history_modal_vesselname" : "Linked asset",
     "history_modal_sattelitenumber" : "Satellite number: ",
     "history_modal_transpondertype" : "Transponder type: ",
