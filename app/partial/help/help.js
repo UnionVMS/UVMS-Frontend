@@ -62,7 +62,7 @@ app.directive('localizedSrc', ['help.lang', function(lang) {
 	return {
 		restict: 'A',
 		compile: function(elem, attrs) {
-			elem.attr('src', 'partial/help/img/' + lang + '/' + attrs.localizedSrc);
+			elem.attr('src', 'assets/help/img/' + lang + '/' + attrs.localizedSrc);
 		}
 	};
 }]);
