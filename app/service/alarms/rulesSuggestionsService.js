@@ -3,13 +3,6 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
     var maxNumberOfSuggestions = 10;
     var autoSuggestionGetListRequest = new GetListRequest(1, maxNumberOfSuggestions, true, []);
 
-    //List of the subCriterias that supports auto suggestions
-    var subCriteriasWithSuggestions = [
-        //TODO: Enable mobilTerminal fields when it's possible to search with * in MobilTerminal module
-        //'MT_DNID', 'MT_MEMBER_ID', 'MT_SERIAL_NO',
-        'VESSEL_NAME', 'VESSEL_CFR', 'VESSEL_IRCS',
-    ];
-
     //Get suggestions from a searchResultPage
     var getSuggestionsFromPage = function(searchResultListPage, criteria, subCriteria){
         var suggestions = searchResultListPage.items.reduce(function(suggestions, resultItem){
@@ -23,6 +16,9 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
                     break;
                 case 'VESSEL_IRCS':
                     suggestions.push(resultItem.ircs);
+                    break;
+                case 'EXTERNAL_MARKING':
+                    suggestions.push(resultItem.externalMarking);
                     break;
                 case 'MT_DNID':
                     $.each(resultItem.channels, function(i, channel){
@@ -79,6 +75,9 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
             case 'VESSEL_IRCS':
                 searchKey = 'IRCS';
                 break;
+            case 'EXTERNAL_MARKING':
+                searchKey = 'EXTERNAL_MARKING';
+                break;
             default:
                 $log.warn("Unknown searchKey to use when searching for vessels.");
                 return;
@@ -113,7 +112,24 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
 
     //Is auto suggestions available for the ruleDefinition
     var isSuggestionsAvailable =  function(ruleDefinition){
-        return subCriteriasWithSuggestions.indexOf(ruleDefinition.subCriteria) >= 0;
+        return angular.isDefined(getSuggestionsSearchFunction(ruleDefinition));
+    };
+
+    //Get the auto suggestion search function
+    var getSuggestionsSearchFunction = function(ruleDefinition){
+        switch(ruleDefinition.subCriteria){
+            case 'VESSEL_NAME':
+            case 'VESSEL_CFR':
+            case 'VESSEL_IRCS':
+            case 'EXTERNAL_MARKING':
+                return getVessels;
+            case 'MT_DNID':
+            case 'MT_MEMBER_ID':
+            case 'MT_SERIAL_NO':
+                return getMobileTerminals;
+            default:
+                return;
+        }
     };
 
 	var rulesSuggestionsService = {
@@ -128,23 +144,9 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
                 //Reset serach criterias
                 autoSuggestionGetListRequest.resetCriterias();
 
-                var searchFunc;
                 $log.debug("Current criteria:" +ruleDefinition.criteria);
                 $log.debug("Current subCriteria:" +ruleDefinition.subCriteria);
-                switch(ruleDefinition.subCriteria){
-                    case 'VESSEL_NAME':
-                    case 'VESSEL_CFR':
-                    case 'VESSEL_IRCS':
-                        searchFunc = getVessels;
-                        break;
-                    case 'MT_DNID':
-                    case 'MT_MEMBER_ID':
-                    case 'MT_SERIAL_NO':
-                        searchFunc = getMobileTerminals;
-                        break;
-                    default:
-                        break;
-                }
+                var searchFunc = getSuggestionsSearchFunction(ruleDefinition);
 
                 //Is there a searchFunc defined?
                 if(angular.isDefined(searchFunc)){

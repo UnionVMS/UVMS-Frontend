@@ -220,7 +220,7 @@ describe('RuleDefinition', function() {
         expect(ruleDefinition.startOperator).toEqual('');
         expect(ruleDefinition.criteria).toBeUndefined();
         expect(ruleDefinition.subCriteria).toBeUndefined();
-        expect(ruleDefinition.condition).toEqual('EQ');
+        expect(ruleDefinition.condition).toBeUndefined();
         expect(ruleDefinition.value).toEqual('');
         expect(ruleDefinition.endOperator).toEqual('');
         expect(ruleDefinition.logicBoolOperator).toEqual('NONE');

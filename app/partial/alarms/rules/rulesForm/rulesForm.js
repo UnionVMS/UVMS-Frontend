@@ -22,7 +22,7 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
     //Watch for changes to the saved asset groups
     $scope.$watch(function () { return savedSearchService.getVesselGroupsForUser();}, function (newVal, oldVal) {
         //Update dropdown values for ruleDefinitions
-        rulesOptionsService.setupRuleDefinitionDropdowns();
+        rulesOptionsService.setupRuleDefinitionValueDropdowns();
     });
 
     //Init the page
@@ -61,7 +61,7 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         $scope.updateDisabledActions();
 
         //Reload dropdown values
-        rulesOptionsService.setupRuleDefinitionDropdowns();
+        rulesOptionsService.setupRuleDefinitionValueDropdowns();
         rulesOptionsService.setupActionDropdowns();
     };
 
@@ -109,6 +109,9 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         if(Object.keys($scope.DROPDOWNS.SUBCRITERIAS).length > 0 && ruleDef.criteria in $scope.DROPDOWNS.SUBCRITERIAS){
             ruleDef.subCriteria = $scope.DROPDOWNS.SUBCRITERIAS[ruleDef.criteria][0].code;
         }
+        if(Object.keys($scope.DROPDOWNS.CONDITIONS).length > 0 && ruleDef.criteria in $scope.DROPDOWNS.CONDITIONS){
+            ruleDef.condition = $scope.DROPDOWNS.CONDITIONS[ruleDef.criteria][ruleDef.subCriteria][0].code;
+        }
         ruleDef.order = $scope.currentRule.getNumberOfDefinitions();
         $scope.currentRule.addDefinition(ruleDef);
     };
@@ -138,7 +141,8 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         var selectedVal = selection.code;
         //Set value of critera explicit to make sure the value is updated before calling resetRuleDefinitionValue
         ruleDef.criteria = selectedVal;
-        ruleDef.subCriteria = $scope.DROPDOWNS.SUBCRITERIAS[selectedVal][0].code;
+        ruleDef.subCriteria = $scope.DROPDOWNS.SUBCRITERIAS[ruleDef.criteria][0].code;
+        ruleDef.condition = $scope.DROPDOWNS.CONDITIONS[ruleDef.criteria][ruleDef.subCriteria][0].code;
         //Reset value field
         $scope.resetRuleDefinitionValue(ruleDef);
     };
@@ -147,8 +151,10 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
     $scope.onSubCriteriaSelection = function(selection, ruleDef){
         //Set value of subCriteria explicit to make sure the value is updated before calling resetRuleDefinitionValue
         ruleDef.subCriteria = selection.code;
+        ruleDef.condition = $scope.DROPDOWNS.CONDITIONS[ruleDef.criteria][ruleDef.subCriteria][0].code;
         $scope.resetRuleDefinitionValue(ruleDef);
     };
+
 
     //Reset value field, either to undefined or to first dropdown value
     $scope.resetRuleDefinitionValue = function(ruleDef){
@@ -166,11 +172,6 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
     //Check if an action requires a value
     $scope.actionShouldHaveValue = function(action){
         return rulesOptionsService.actionShouldHaveValue(action);
-    };
-
-    //Check if a criteria requires a subcriteria
-    $scope.criteriaShouldHaveSubcriteria = function(criteria){
-        return rulesOptionsService.criteriaShouldHaveSubcriteria(criteria);
     };
 
     //Get first action in action dropdown that isn't disabled (already used if only single value is allowed)

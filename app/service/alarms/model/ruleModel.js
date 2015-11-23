@@ -138,7 +138,7 @@ angular.module('unionvmsWeb').factory('RuleDefinition', function() {
             this.startOperator = '';
             this.criteria = undefined;
             this.subCriteria = undefined;
-            this.condition = "EQ";
+            this.condition = undefined;
             this.value = '';
             this.endOperator = '';
             this.logicBoolOperator = 'NONE';

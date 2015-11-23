@@ -39,10 +39,10 @@ describe('ruleService', function() {
             },
             {
               "startOperator": "",
-              "criteria": "LONGITUDE",
-              "subCriteria": "",
+              "criteria": "POSITION",
+              "subCriteria": "LONGITUDE",
               "condition": "NEQ",
-              "value": "ABC99",
+              "value": "21.4",
               "endOperator": "",
               "logicBoolOperator": "NONE",
               "order": 2
@@ -98,14 +98,15 @@ describe('ruleService', function() {
     ];
 
     var mockCriterias = {
-        "REPORTED_COURSE": [],
-        "LONGITUDE": [],
-        "POSITION_REPORT_TIME": [],
-        "ASSET_ID": [
-            "ASSET_ID_ASSET_TYPE",
-            "ASSET_ID_TYPE",
-            "ASSET_ID_VALUE"
-        ]
+        "ASSET_ID": {
+            "ASSET_ID_ASSET_TYPE" : ['EQ', 'NEQ'],
+            "ASSET_ID_TYPE" : ['EQ', 'NEQ'],
+            "ASSET_ID_VALUE" : ['EQ', 'NEQ']
+        },
+        "MOBILE_TERMINAL": {
+            "DNID" : ['EQ', 'NEQ'],
+            "TYPE" : ['EQ', 'NEQ']
+        }
     };
 
     beforeEach(inject(function(locale, configurationService) {
@@ -122,7 +123,6 @@ describe('ruleService', function() {
             }
         });
 
-        var mockConfigurationService =
         spyOn(configurationService, "getValue").andCallFake(function(module, configName){
             if(configName === 'ACTIONS'){
                 return mockActions;
@@ -134,13 +134,16 @@ describe('ruleService', function() {
                 return mockCriterias;
             }
         });
+        spyOn(configurationService, "getConfig").andCallFake(function(module){
+            return ['A', 'B'];
+        });
 
-        configurationService.getValue('RULES', 'ACTIONS')
+        //configurationService.getValue('RULES', 'ACTIONS')
     }));
 
     it("getRuleAsText should return correct text for complete rule", inject(function(ruleService, Rule) {
         var rule = Rule.fromDTO(ruleDTO);
-        var expectedText = 'IF (ASSET_ID.ASSET_ID_TYPE EQ SWE111222 OR ASSET_ID.ASSET_ID_VALUE NE SWE111333) AND LONGITUDE NEQ ABC99 THEN [TRANSLATED_TEXT] ABC123 AND [TRANSLATED_TEXT]';
+        var expectedText = 'IF (ASSET_ID.ASSET_ID_TYPE EQ SWE111222 OR ASSET_ID.ASSET_ID_VALUE NE SWE111333) AND POSITION.LONGITUDE NEQ 21.4 THEN [TRANSLATED_TEXT] ABC123 AND [TRANSLATED_TEXT]';
         expect(ruleService.getRuleAsText(rule)).toEqual(expectedText);
     }));
 
@@ -153,7 +156,11 @@ describe('ruleService', function() {
 
     it("getRuleDefAsText should return correct text for empty ruleDefinition", inject(function(ruleService, RuleDefinition) {
         var ruleDefinition = new RuleDefinition();
-        var expectedText = 'AAAA EQ ???';
+        var expectedText = 'AAAA.BB UNKNOWN_COMPARE ???';
+        expect(ruleService.getRuleDefAsText(ruleDefinition)).toEqual(expectedText);
+
+        ruleDefinition.condition = 'EQ';
+        expectedText = 'AAAA.BB EQ ???';
         expect(ruleService.getRuleDefAsText(ruleDefinition)).toEqual(expectedText);
 
         ruleDefinition.criteria = 'ASSET_ID';
@@ -172,7 +179,7 @@ describe('ruleService', function() {
     it("getRuleDefAsText should return correct text for condition part", inject(function(ruleService, RuleDefinition) {
         var ruleDefinition = new RuleDefinition();
         ruleDefinition.condition = "NEQ";
-        var expectedText = 'AAAA NEQ ???';
+        var expectedText = 'AAAA.BB NEQ ???';
         expect(ruleService.getRuleDefAsText(ruleDefinition)).toEqual(expectedText);
     }));
 
@@ -270,7 +277,7 @@ describe('ruleService', function() {
         expect(testResult.problems.indexOf('INVALID_DEF_CRITERIA') >= 0).toBeTruthy("INVALID_DEF_CRITERIA should be in problems");
     }));
 
-    it("areRuleDefinitionsAndActionsValid should return false when a subCriteria is undefined or empty for a criteria that requires a subCriteria", inject(function(ruleService, Rule) {
+    it("areRuleDefinitionsAndActionsValid should return false when a subCriteria is undefined or empty ", inject(function(ruleService, Rule) {
         var rule = Rule.fromDTO(ruleDTO);
 
         rule.definitions[1].subCriteria = ' ';
@@ -282,13 +289,6 @@ describe('ruleService', function() {
         testResult = ruleService.areRuleDefinitionsAndActionsValid(rule);
         expect(testResult.success).toBeFalsy();
         expect(testResult.problems.indexOf('INVALID_DEF_SUBCRITERIA') >= 0).toBeTruthy("INVALID_DEF_SUBCRITERIA should be in problems");
-
-        rule = Rule.fromDTO(ruleDTO);
-        //This criteria (LONGTIDE) does not require a subcriteria
-        rule.definitions[2].subCriteria = undefined;
-        testResult = ruleService.areRuleDefinitionsAndActionsValid(rule);
-        expect(testResult.success).toBeTruthy();
-        expect(testResult.problems.indexOf('INVALID_DEF_SUBCRITERIA') >= 0).toBeFalsy("INVALID_DEF_SUBCRITERIA should not be in problems");
     }));
 
     it("areRuleDefinitionsAndActionsValid should return false when a value is undefined or empty", inject(function(ruleService, Rule) {

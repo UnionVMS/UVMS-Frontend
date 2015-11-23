@@ -388,11 +388,12 @@ describe('RulesformCtrl', function() {
         }));
     });
 
-    it('onCriteriaSelection should set subCriteria value to the first value in the subcriterias dropdown and call resetRuleDefinitionValue', inject(function($rootScope, RuleDefinition) {
+    it('onCriteriaSelection should set subCriteria value to the first value in the subcriterias dropdown and conditions dropdown and call resetRuleDefinitionValue', inject(function($rootScope, RuleDefinition) {
         var controller = createController();
 
         var resetRuleDefinitionValueSpy = spyOn(scope, "resetRuleDefinitionValue");
         scope.DROPDOWNS.SUBCRITERIAS = {ASSET: [{code:'FIRST'}, {code:'SECOND'}]};
+        scope.DROPDOWNS.CONDITIONS = {ASSET: {FIRST : [{code:'A'}, {code:'B'}] } };
 
         var ruleDef = new RuleDefinition();
         var selection = {code : 'ASSET', text:'Asset'};
@@ -400,6 +401,7 @@ describe('RulesformCtrl', function() {
         scope.onCriteriaSelection(selection, ruleDef);
         expect(ruleDef.criteria).toEqual('ASSET');
         expect(ruleDef.subCriteria).toEqual('FIRST');
+        expect(ruleDef.condition).toEqual('A');
         expect(resetRuleDefinitionValueSpy).toHaveBeenCalledWith(ruleDef);
     }));
 

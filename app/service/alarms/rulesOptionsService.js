@@ -1,7 +1,6 @@
 angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurationService, locale, savedSearchService) {
 
     var actionsThatRequireValue = [];
-    var criteriaThatRequireSubcriteria = [];
     var DROPDOWNS = {
         ACTIONS : [],
         RULE_TYPES : [],
@@ -11,11 +10,11 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         END_OPERATORS : [],
         LOGIC_OPERATORS : [],
         CRITERIAS : [],
-        SUBCRITERIAS : [],
-        CONDITIONS : [],
+        SUBCRITERIAS : {},
+        CONDITIONS : {},
     };
 
-    //Crieterias that should have value input fields of a certain type
+    //Sub criterias that should have value input fields of a certain type
     var longitudesCriterias = ['LONGITUDE'];
     var latitudeCriterias = ['LATITUDE'];
     var courseCriterias = ['REPORTED_COURSE', 'CALCULATED_COURSE'];
@@ -76,12 +75,6 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         });
         DROPDOWNS.ACTIONS = _.sortBy(DROPDOWNS.ACTIONS, function(obj){return obj.text;});
 
-        //Conditions
-        DROPDOWNS.CONDITIONS = [];
-        $.each(configurationService.getValue('RULES', 'CONDITIONS'), function(index, key){
-            DROPDOWNS.CONDITIONS.push(createDropdownValue('CONDITIONS', key));
-        });
-
         //LOGIC OPERATIONS
         DROPDOWNS.LOGIC_OPERATORS = [];
         $.each(configurationService.getValue('RULES', 'LOGIC_OPERATORS'), function(index, key){
@@ -90,35 +83,24 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
 
         //CRITERIAS
         DROPDOWNS.CRITERIAS = [];
-        DROPDOWNS.SUBCRITERIAS = [];
-        $.each(configurationService.getValue('RULES', 'CRITERIA'), function(key, subcriterias){
-            //Special ROOT element contains list of criterias without subcriterias
-            if(key === 'ROOT'){
-                if(Array.isArray(subcriterias) && subcriterias.length > 0){
-                    $.each(subcriterias, function(index, aSubCriteria){
-                        DROPDOWNS.CRITERIAS.push(createDropdownValue('CRITERIA', aSubCriteria));
-                        //Set code to NONE
-                        DROPDOWNS.SUBCRITERIAS[aSubCriteria] =[{'text': '-','code': 'NONE'}];
-                    });
-                }
-            }
-            //"Normal" critera with list of subcriterias
-            else{
-                DROPDOWNS.CRITERIAS.push(createDropdownValue('CRITERIA', key));
-                DROPDOWNS.SUBCRITERIAS[key] = [];
+        DROPDOWNS.SUBCRITERIAS = {};
+        DROPDOWNS.CONDITIONS = {};
+        $.each(configurationService.getValue('RULES', 'CRITERIA'), function(criteriaKey, subcriterias){
+            DROPDOWNS.CRITERIAS.push(createDropdownValue('CRITERIA', criteriaKey));
+            DROPDOWNS.SUBCRITERIAS[criteriaKey] = [];
+            DROPDOWNS.CONDITIONS[criteriaKey] = {};
 
-                //Create subcriterias
-                if(Array.isArray(subcriterias) && subcriterias.length > 0){
-                    criteriaThatRequireSubcriteria.push(key);
-                    $.each(subcriterias, function(index, aSubCriteria){
-                        DROPDOWNS.SUBCRITERIAS[key].push(createDropdownValue('CRITERIA_'+key, aSubCriteria));
-                    });
-                    DROPDOWNS.SUBCRITERIAS[key] = _.sortBy(DROPDOWNS.SUBCRITERIAS[key], function(obj){return obj.text;});
-                }else{
-                    //Set code to NONE
-                    DROPDOWNS.SUBCRITERIAS[key].push({'text': '-','code': 'NONE'});
-                }
-            }
+            //Create subcriterias
+            $.each(subcriterias, function(subCriteriaKey, subCriteriaConditions){
+                DROPDOWNS.SUBCRITERIAS[criteriaKey].push(createDropdownValue('CRITERIA_'+criteriaKey, subCriteriaKey));
+
+                //Create conditions
+                 DROPDOWNS.CONDITIONS[criteriaKey][subCriteriaKey] = [];
+                $.each(subCriteriaConditions, function(i, conditionKey){
+                    DROPDOWNS.CONDITIONS[criteriaKey][subCriteriaKey].push(createDropdownValue('CONDITIONS', conditionKey));
+                });
+            });
+            DROPDOWNS.SUBCRITERIAS[criteriaKey] = _.sortBy(DROPDOWNS.SUBCRITERIAS[criteriaKey], function(obj){return obj.text;});
         });
         DROPDOWNS.CRITERIAS = _.sortBy(DROPDOWNS.CRITERIAS, function(obj){return obj.text;});
     };
@@ -127,17 +109,32 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
     var ruleDefinitionDropdowns = {
         FLAG_STATE : [],
         ASSET_GROUP : [],
-        AREA_TYPE : [],
-        AREA_ID : [],
-        AREA_NAME: [],
-        AREA_CODE: [],
+        ASSET_ID_GEAR_TYPE : [],
+        //AREA_TYPE : [],
+        //AREA_ID : [],
+        //AREA_NAME: [],
+        //AREA_CODE: [],
+        MT_TYPE: [],
+        COMCHANNEL_TYPE: [],
+        MOVEMENT_TYPE: [],
+        SEGMENT_TYPE: [],
+        STATUS_CODE: [],
     };
-    var setupRuleDefinitionDropdowns = function(){
-        //TODO: Get options from configurations
-        ruleDefinitionDropdowns.FLAG_STATE = createDropdownItemsWithSameTextAsValue(['SWE', 'FIN', 'DEN']);
-        ruleDefinitionDropdowns.AREA_TYPE = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
+    var setupRuleDefinitionValueDropdowns = function(){
+        //Asset subcriterias
+        ruleDefinitionDropdowns.ASSET_ID_GEAR_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'GEAR_TYPE'), 'GEAR_TYPE','VESSEL', true);
+        ruleDefinitionDropdowns.FLAG_STATE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
 
-        //Asset groups
+        //Mobile terminal subcriterias
+        ruleDefinitionDropdowns.MT_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOBILETERMINAL', 'TRANSPONDERS'), 'TRANSPONDERS', 'MOBILETERMINAL', true);
+        ruleDefinitionDropdowns.COMCHANNEL_TYPE = createDropdownItemsWithSameTextAsValue(configurationService.getConfig('MOBILE_TERMINAL_CHANNELS'));
+
+        //Position subcriterias
+        ruleDefinitionDropdowns.MOVEMENT_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'MESSAGE_TYPE'), 'MESSAGE_TYPE', 'MOVEMENT', true);
+        ruleDefinitionDropdowns.SEGMENT_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'CATEGORY_TYPE'), 'CATEGORY_TYPE', 'MOVEMENT', true);
+        ruleDefinitionDropdowns.STATUS_CODE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'STATUS'), 'STATUS', 'MOVEMENT', true);
+
+        //Asset groups subcriterias
         var assetGroups = savedSearchService.getVesselGroupsForUser();
         ruleDefinitionDropdowns.ASSET_GROUP = [];
         $.each(assetGroups, function(i, assetGroup){
@@ -148,7 +145,12 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         });
         ruleDefinitionDropdowns.ASSET_GROUP = _.sortBy(ruleDefinitionDropdowns.ASSET_GROUP, function(assetGroup){return assetGroup.name;});
 
+        //Areas subcriteria
         //TODO: Add Areas
+        //ruleDefinitionDropdowns.AREA_TYPE = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
+        //ruleDefinitionDropdowns.AREA_ID = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
+        //ruleDefinitionDropdowns.AREA_NAME = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
+        //ruleDefinitionDropdowns.AREA_CODE = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
     };
 
     //Dropdown values for actions
@@ -175,11 +177,6 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
             return actionsThatRequireValue.indexOf(action) >= 0;
         },
 
-        //Check if a criteria requires a subcriteria
-        criteriaShouldHaveSubcriteria : function(criteria){
-            return criteriaThatRequireSubcriteria.indexOf(criteria) >= 0;
-        },
-
         //Get dropdown values for a ruleDefinition
         getDropdownValuesForRuleDefinition : function(ruleDefinition){
             if(ruleDefinition.criteria in ruleDefinitionDropdowns){
@@ -197,25 +194,25 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         },
         //Is the value a coordinate?
         isRuleDefinitionValueLongitudeCoordinate : function(ruleDefinition){
-            return longitudesCriterias.indexOf(ruleDefinition.criteria) >= 0;
+            return longitudesCriterias.indexOf(ruleDefinition.subCriteria) >= 0;
         },
         isRuleDefinitionValueLatitudeCoordinate : function(ruleDefinition){
-            return latitudeCriterias.indexOf(ruleDefinition.criteria) >= 0;
+            return latitudeCriterias.indexOf(ruleDefinition.subCriteria) >= 0;
         },
         isRuleDefinitionValueASpeed : function(ruleDefinition){
-            return speedCriterias.indexOf(ruleDefinition.criteria) >= 0;
+            return speedCriterias.indexOf(ruleDefinition.subCriteria) >= 0;
         },
         isRuleDefinitionValueACourse : function(ruleDefinition){
-            return courseCriterias.indexOf(ruleDefinition.criteria) >= 0;
+            return courseCriterias.indexOf(ruleDefinition.subCriteria) >= 0;
         },
         isRuleDefinitionValueADateTime : function(ruleDefinition){
-            return dateTimeCriterias.indexOf(ruleDefinition.criteria) >= 0;
+            return dateTimeCriterias.indexOf(ruleDefinition.subCriteria) >= 0;
         },
         setupDropdowns : function(){
             setupDropdowns();
         },
-        setupRuleDefinitionDropdowns : function(){
-            setupRuleDefinitionDropdowns();
+        setupRuleDefinitionValueDropdowns : function(){
+            setupRuleDefinitionValueDropdowns();
         },
         setupActionDropdowns : function(){
             setupActionDropdowns();
@@ -224,7 +221,7 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
 
     var init = function(){
         setupDropdowns();
-        setupRuleDefinitionDropdowns();
+        setupRuleDefinitionValueDropdowns();
         setupActionDropdowns();
     };
 

@@ -403,7 +403,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["RULES", "RULES_RESERVED_WORDS"]);
+                    return initService.loadConfigFor(["RULES", "RULES_RESERVED_WORDS", "VESSEL", "MOBILETERMINAL", "MOBILE_TERMINAL_CHANNELS", "MOVEMENT"]);
                 }
             },
             data: {

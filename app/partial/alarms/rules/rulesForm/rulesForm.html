@@ -140,12 +140,12 @@
                                     </td>
                                     <td class="subCriteria">
                                         <div class="form-group" ng-class="{'has-error': definitionForm.subCriteria.$invalid && (submitAttempted || definitionForm.subCriteria.$dirty)}">
-                                            <dropdown name="subCriteria" ng-model="item.subCriteria" no-placeholder-item items="DROPDOWNS.SUBCRITERIAS[item.criteria]" ng-disabled="!criteriaShouldHaveSubcriteria(item.criteria)" ng-required="criteriaShouldHaveSubcriteria(item.criteria)" callback="onSubCriteriaSelection" callback-params="item"></dropdown>
+                                            <dropdown name="subCriteria" ng-model="item.subCriteria" no-placeholder-item items="DROPDOWNS.SUBCRITERIAS[item.criteria]" ng-required="true" callback="onSubCriteriaSelection" callback-params="item"></dropdown>
                                         </div>
                                     </td>
                                     <td class="condition">
                                         <div class="form-group" ng-class="{'has-error': definitionForm.conditionTypes.$invalid && (submitAttempted || definitionForm.conditionTypes.$dirty)}">
-                                            <dropdown name="conditionTypes" ng-model="item.condition" no-placeholder-item items="DROPDOWNS.CONDITIONS" required></dropdown>
+                                            <dropdown name="conditionTypes" ng-model="item.condition" no-placeholder-item items="DROPDOWNS.CONDITIONS[item.criteria][item.subCriteria]" required></dropdown>
                                         </div>
                                     </td>
                                     <td class="value">

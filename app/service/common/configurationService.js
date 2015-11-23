@@ -53,6 +53,9 @@
 
             //Load all configs
             $.each(configsToLoad, function(index, configName){
+                if(angular.isUndefined(CONFIG_MODULES[configName])){
+                    return deferred.reject("TRIED TO LOAD NON EXISTING CONFIGURATION: " +configName);
+                }
                 promises.push(getConfigForModule(configName, CONFIG_MODULES[configName]));
             });
             $log.debug("Waiting for all configurations to finish...");

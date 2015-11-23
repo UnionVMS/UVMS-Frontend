@@ -34,16 +34,19 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log, rules
             }
 
             //subcriteria
-            if(rulesOptionsService.criteriaShouldHaveSubcriteria(def.criteria)){
-                text +='.';
-                if(typeof def.subCriteria === 'string' && def.subCriteria.trim().length > 0){
-                    text += def.subCriteria;
-                }else{
-                    text += 'BB';
-                }
+            text +='.';
+            if(typeof def.subCriteria === 'string' && def.subCriteria.trim().length > 0){
+                text += def.subCriteria;
+            }else{
+                text += 'BB';
             }
 
-            text +=' ' + def.condition + ' ' ;
+            //condition
+            if(typeof def.condition === 'string' && def.condition.trim().length > 0){
+                text +=' ' + def.condition + ' ' ;
+            }else{
+                text += ' UNKNOWN_COMPARE ';
+            }
 
             //value
             if((typeof def.value === 'string' || typeof def.value === 'number') && String(def.value).trim().length > 0){
@@ -84,7 +87,7 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log, rules
             //LogicBoolOperator is AND/OR for all but the last that is NONE
             //parentheses match
             //No empty criterias field for a definition
-            //No empty subcriterias field  for a definition that requires a value
+            //No empty subcriterias field for a definition
             //No empty values field for a definition
             //No empty condition field for a definition
             //No empty value field for an action that requires a value
@@ -110,10 +113,8 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log, rules
                         returnObject.problems.push('INVALID_DEF_CRITERIA');
                     }
                     //No empty subcriterias field  for a definition that requires a value
-                    if(rulesOptionsService.criteriaShouldHaveSubcriteria(definition.criteria)){
-                        if(typeof definition.subCriteria !== 'string' || definition.subCriteria.trim().length === 0){
-                            returnObject.problems.push('INVALID_DEF_SUBCRITERIA');
-                        }
+                    if(typeof definition.subCriteria !== 'string' || definition.subCriteria.trim().length === 0){
+                        returnObject.problems.push('INVALID_DEF_SUBCRITERIA');
                     }
                     //No empty values field for a definition
                     if(!(typeof definition.value === 'string' || typeof definition.value === 'number') || String(definition.value).trim().length === 0){
