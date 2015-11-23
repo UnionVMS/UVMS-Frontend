@@ -55,7 +55,6 @@
 	"advanced_search_placeholder_time_span_24":"Last 24h",
 	"advanced_search_group_dropdown": "Asset groups",
 	"editselection_see_on_map" : "See on map",
-	"editselection_edit_selection" : "Edit selection",
 	"editselection_export_selection" : "Export selection",
 	"editselection_inactivate" : "Inactivate",
 	"movement_speed_unit" : "kts",
