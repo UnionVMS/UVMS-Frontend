@@ -107,50 +107,68 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
 
     //Dropdown values for ruleDefintions
     var ruleDefinitionDropdowns = {
-        FLAG_STATE : [],
-        ASSET_GROUP : [],
-        ASSET_ID_GEAR_TYPE : [],
-        //AREA_TYPE : [],
-        //AREA_ID : [],
-        //AREA_NAME: [],
-        //AREA_CODE: [],
-        MT_TYPE: [],
-        COMCHANNEL_TYPE: [],
-        MOVEMENT_TYPE: [],
-        SEGMENT_TYPE: [],
-        STATUS_CODE: [],
+        ACTIVITY : {
+            ACTIVITY_MESSAGE_TYPE : [],
+        },
+        ASSET : {
+            FLAG_STATE : [],
+            ASSET_ID_GEAR_TYPE : [],
+        },
+        ASSET_GROUP : {
+            ASSET_GROUP : [],
+        },
+        MOBILE_TERMINAL : {
+            MT_TYPE: [],
+            COMCHANNEL_TYPE: [],
+        },
+        POSITION : {
+            MOVEMENT_TYPE: [],
+            SEGMENT_TYPE: [],
+            STATUS_CODE: [],
+            SOURCE: [],
+        },
+        AREA : {
+            //AREA_TYPE : [],
+            //AREA_ID : [],
+            //AREA_NAME: [],
+            //AREA_CODE: [],
+        }
     };
     var setupRuleDefinitionValueDropdowns = function(){
+        //Activity subcriterias
+        ruleDefinitionDropdowns.ACTIVITY.ACTIVITY_MESSAGE_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'ACTIVITY_TYPE'), 'ACTIVITY_TYPE', 'MOVEMENT', true);
+
         //Asset subcriterias
-        ruleDefinitionDropdowns.ASSET_ID_GEAR_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'GEAR_TYPE'), 'GEAR_TYPE','VESSEL', true);
-        ruleDefinitionDropdowns.FLAG_STATE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
+        ruleDefinitionDropdowns.ASSET.ASSET_ID_GEAR_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'GEAR_TYPE'), 'GEAR_TYPE','VESSEL', true);
+        ruleDefinitionDropdowns.ASSET.FLAG_STATE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
 
         //Mobile terminal subcriterias
-        ruleDefinitionDropdowns.MT_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOBILETERMINAL', 'TRANSPONDERS'), 'TRANSPONDERS', 'MOBILETERMINAL', true);
-        ruleDefinitionDropdowns.COMCHANNEL_TYPE = createDropdownItemsWithSameTextAsValue(configurationService.getConfig('MOBILE_TERMINAL_CHANNELS'));
+        ruleDefinitionDropdowns.MOBILE_TERMINAL.MT_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOBILETERMINAL', 'TRANSPONDERS'), 'TRANSPONDERS', 'MOBILETERMINAL', true);
+        ruleDefinitionDropdowns.MOBILE_TERMINAL.COMCHANNEL_TYPE = createDropdownItemsWithSameTextAsValue(configurationService.getConfig('MOBILE_TERMINAL_CHANNELS'));
 
         //Position subcriterias
-        ruleDefinitionDropdowns.MOVEMENT_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'MESSAGE_TYPE'), 'MESSAGE_TYPE', 'MOVEMENT', true);
-        ruleDefinitionDropdowns.SEGMENT_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'CATEGORY_TYPE'), 'CATEGORY_TYPE', 'MOVEMENT', true);
-        ruleDefinitionDropdowns.STATUS_CODE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'STATUS'), 'STATUS', 'MOVEMENT', true);
+        ruleDefinitionDropdowns.POSITION.MOVEMENT_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'MESSAGE_TYPE'), 'MESSAGE_TYPE', 'MOVEMENT', true);
+        ruleDefinitionDropdowns.POSITION.SEGMENT_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'CATEGORY_TYPE'), 'CATEGORY_TYPE', 'MOVEMENT', true);
+        ruleDefinitionDropdowns.POSITION.STATUS_CODE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'STATUS'), 'STATUS', 'MOVEMENT', true);
+        ruleDefinitionDropdowns.POSITION.SOURCE = configurationService.setTextAndCodeForDropDown(configurationService.getConfig('MOVEMENT_SOURCE_TYPES'), 'SOURCE', 'MOVEMENT', true);
 
         //Asset groups subcriterias
         var assetGroups = savedSearchService.getVesselGroupsForUser();
-        ruleDefinitionDropdowns.ASSET_GROUP = [];
+        ruleDefinitionDropdowns.ASSET_GROUP.ASSET_GROUP = [];
         $.each(assetGroups, function(i, assetGroup){
             //Only static groups should be listed
             if(!assetGroup.dynamic){
-                ruleDefinitionDropdowns.ASSET_GROUP.push({'text': assetGroup.name, 'code':assetGroup.id});
+                ruleDefinitionDropdowns.ASSET_GROUP.ASSET_GROUP.push({'text': assetGroup.name, 'code':assetGroup.id});
             }
         });
-        ruleDefinitionDropdowns.ASSET_GROUP = _.sortBy(ruleDefinitionDropdowns.ASSET_GROUP, function(assetGroup){return assetGroup.name;});
+        ruleDefinitionDropdowns.ASSET_GROUP.ASSET_GROUP = _.sortBy(ruleDefinitionDropdowns.ASSET_GROUP.ASSET_GROUP, function(assetGroup){return assetGroup.name;});
 
         //Areas subcriteria
         //TODO: Add Areas
-        //ruleDefinitionDropdowns.AREA_TYPE = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
-        //ruleDefinitionDropdowns.AREA_ID = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
-        //ruleDefinitionDropdowns.AREA_NAME = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
-        //ruleDefinitionDropdowns.AREA_CODE = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
+        //ruleDefinitionDropdowns.AREA.AREA_TYPE = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
+        //ruleDefinitionDropdowns.AREA.AREA_ID = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
+        //ruleDefinitionDropdowns.AREA.AREA_NAME = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
+        //ruleDefinitionDropdowns.AREA.AREA_CODE = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
     };
 
     //Dropdown values for actions
@@ -180,10 +198,9 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         //Get dropdown values for a ruleDefinition
         getDropdownValuesForRuleDefinition : function(ruleDefinition){
             if(ruleDefinition.criteria in ruleDefinitionDropdowns){
-                return ruleDefinitionDropdowns[ruleDefinition.criteria];
-            }
-            if(ruleDefinition.subCriteria in ruleDefinitionDropdowns){
-                return ruleDefinitionDropdowns[ruleDefinition.subCriteria];
+                if(ruleDefinition.subCriteria in ruleDefinitionDropdowns[ruleDefinition.criteria]){
+                    return ruleDefinitionDropdowns[ruleDefinition.criteria][ruleDefinition.subCriteria];
+                }
             }
         },
         //Get dropdown values for an action

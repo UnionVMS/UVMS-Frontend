@@ -119,7 +119,12 @@ describe('movementRestService', function() {
 				return {
 					get: getConfigSpy
 				};
-			}
+			},
+            getConfigForSourceTypes: function() {
+                return {
+                    get: getConfigSpy
+                };
+            }
 		});
 	}));
 
@@ -209,8 +214,15 @@ describe('movementRestService', function() {
 		expect(callback).toHaveBeenCalledWith(savedSearchGroup);
 	}));
 
-	it('should get configuration', inject(function($rootScope, movementRestService) {
-		movementRestService.getConfig().then(callback);
+    it('should get configuration', inject(function($rootScope, movementRestService) {
+        movementRestService.getConfig().then(callback);
+        expect(getConfigSpy).toHaveBeenCalled();
+        $rootScope.$digest();
+        expect(callback).toHaveBeenCalledWith({ configKey: 'configValue' });
+    }));
+
+	it('should get configuration for source types', inject(function($rootScope, movementRestService) {
+		movementRestService.getConfigForSourceTypes().then(callback);
 		expect(getConfigSpy).toHaveBeenCalled();
 		$rootScope.$digest();
 		expect(callback).toHaveBeenCalledWith({ configKey: 'configValue' });

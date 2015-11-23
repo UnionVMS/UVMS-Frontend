@@ -27,6 +27,9 @@ angular.module('unionvmsWeb')
         },
         getConfigForMovements : function(){
             return $resource('/movement/rest/config');
+        },
+        getConfigForSourceTypes : function(){
+            return $resource('/movement/rest/config/movementSourceTypes');
         }
     };
 })
@@ -201,22 +204,29 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
-    var getConfiguration = function(){
-    var deferred = $q.defer();
-    movementRestFactory.getConfigForMovements().get({},
-        function(response){
-            if(response.code !== "200"){
-                deferred.reject("Not valid movement configuration status.");
-                return;
-            }
-            deferred.resolve(response.data);
-        }, function(error){
-            console.error("Error geting configuration values for movement.");
-            deferred.reject(error);
-        });
-    return deferred.promise;
+    var getConfigFromResource = function(resource){
+        var deferred = $q.defer();
+        resource.get({},
+            function(response){
+                if(response.code !== "200"){
+                    deferred.reject("Not valid movement configuration status.");
+                    return;
+                }
+                deferred.resolve(response.data);
+            }, function(error){
+                console.error("Error geting configuration values for movement.");
+                deferred.reject(error);
+            });
+        return deferred.promise;
     };
 
+    var getConfiguration = function(){
+        return getConfigFromResource(movementRestFactory.getConfigForMovements());
+    };
+
+    var getConfigForSourceTypes = function(){
+        return getConfigFromResource(movementRestFactory.getConfigForSourceTypes());
+    };
     return {
         getMovementList : getMovementList,
         getLatestMovementsByConnectIds : getLatestMovementsByConnectIds,
@@ -226,7 +236,8 @@ angular.module('unionvmsWeb')
         createNewSavedSearch : createNewSavedSearch,
         updateSavedSearch : updateSavedSearch,
         deleteSavedSearch : deleteSavedSearch,
-        getConfig : getConfiguration
+        getConfig : getConfiguration,
+        getConfigForSourceTypes : getConfigForSourceTypes,
     };
 
 });
