@@ -145,8 +145,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	    ms.controls = [];
 	    ms.interactions = [];
 	    ms.overlay = ms.addPopupOverlay();
-      // enables popup on positions and segments
-      ms.activeLayerType = undefined;
+        
+	    // enables popup on positions and segments
+        ms.activeLayerType = undefined;
 
 	    var view = new ol.View({
 	        projection: ms.setProjection(config.map.projection.epsgCode, config.map.projection.units, config.map.projection.global),

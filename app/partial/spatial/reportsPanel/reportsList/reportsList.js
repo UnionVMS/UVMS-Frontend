@@ -24,11 +24,11 @@ angular.module('unionvmsWeb').factory('reportMsgService', function($timeout){
     return alert;
 });
 
-angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, reportMsgService, $anchorScroll, locale, reportRestService, confirmationModal){
-    //Mock config object
+angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, globalSettingsService, reportMsgService, $anchorScroll, locale, reportRestService, confirmationModal){
+    //config object
     $scope.config = {
         src_format: 'YYYY-MM-DDTHH:mm:ss',
-        target_format: 'DD-MM-YYYY HH:mm:ss'
+        target_format: globalSettingsService.getDateFormat()
     };
     
     $scope.isLoading = true;

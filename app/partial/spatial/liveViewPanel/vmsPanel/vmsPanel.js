@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, reportService, mapService, csvWKTService){
+angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, globalSettingsService, reportService, mapService, csvWKTService){
     $scope.selectedVmsTab = 'MOVEMENTS';
     $scope.isPosFilterVisible = false;
     $scope.isSegFilterVisible = false;
@@ -8,10 +8,10 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
     $scope.startDate = undefined;
     $scope.endDate = undefined;
     
-    //Mock config object
+    //config object
     $scope.config = {
         src_format: 'YYYY-MM-DDTHH:mm:ss',
-        target_format: 'DD-MM-YYYY HH:mm:ss'
+        target_format: globalSettingsService.getDateFormat()
     };
     
     //Define VMS tabs
@@ -159,7 +159,6 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    
    //Reduce positions for export
    $scope.reducePositions = function(data){
-       //TODO fetch date format from config service
        return data.reduce(
            function(csvObj, rec){
                var row = [
@@ -168,7 +167,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                    rec.properties.ircs,
                    rec.properties.cfr,
                    rec.properties.name,
-                   moment.utc(rec.properties.positionTime).format('YYYY-MM-DD HH:mm:ss'),
+                   moment.utc(rec.properties.positionTime).format($scope.config.target_format),
                    rec.geometry.coordinates[1],
                    rec.geometry.coordinates[0],
                    rec.properties.status,

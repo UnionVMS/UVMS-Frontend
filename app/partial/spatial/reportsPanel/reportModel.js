@@ -1,5 +1,4 @@
-angular.module('unionvmsWeb').factory('Report',function() {
-
+angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	function Report(){
 	    this.id = undefined;
 	    this.name = undefined;
@@ -31,18 +30,23 @@ angular.module('unionvmsWeb').factory('Report',function() {
 
         this.mapConfiguration = {};
 	}
+	
+	var getDateFormat = function(){
+	    return globalSettingsService.getDateFormat();
+	};
 
 	var convertDate = function(date, direction){
-	    //FIXME fetch configs from config service
+	    var displayFormat = getDateFormat();
+	    var src_format = 'YYYY-MM-DD HH:mm:ss Z';
 	    var server_format = 'YYYY-MM-DDTHH:mm:ss';
 
 	    if (direction === 'to_server'){
-	        if (moment.utc(date).isValid()){
-	            return moment.utc(date).format(server_format);
+	        if (moment.utc(date, src_format).isValid()){
+	            return moment(date, src_format).format(server_format);
 	        }
 	    } else if(direction === 'from_server') {
-	        if (moment.utc(date).isValid()){
-	            return moment.utc(date).format('YYYY-MM-DD HH:mm');
+	        if (moment.utc(date, server_format).isValid()){
+	            return moment(date, server_format).format(displayFormat);
 	        }
 	    }
 	};
