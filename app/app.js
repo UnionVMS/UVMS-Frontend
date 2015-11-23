@@ -14,7 +14,9 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'ngWebSocket',
     'checklist-model',
     'angularScreenfull',
-	'ngCookies'
+	'ngCookies',
+	'frapontillo.bootstrap-switch',
+	'colorpicker.module'
 	]);
 
 var currentUserContextPromise = function(userService) {

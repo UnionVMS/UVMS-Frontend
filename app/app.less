@@ -4,6 +4,8 @@
 @import "../bower_components/OpenLayers/css/ol.css";
 @import "../bower_components/fancytree/dist/skin-awesome/ui.fancytree.css";
 @import "../bower_components/jQuery-contextMenu/dist/jquery.contextMenu.min.css";
+@import "../bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css";
+@import "../bower_components/angular-bootstrap-colorpicker/css/colorpicker.min.css";
 @fa-font-path: "assets/font-awesome/fonts";
 
 @import "less/globalVariables.less";
@@ -114,9 +116,12 @@
 @import "directive/spatial/legendPanel/legendPanel.less";
 @import "partial/spatial/reportsPanel/reportForm/vesselFieldset/detailsModal/detailsModal.less";
 @import "partial/spatial/reportsPanel/reportForm/areasSelectionModal/areasSelectionModal.less";
-@import "partial/spatial/configurations/configurations.less";
 @import "partial/admin/adminConfiguration/configurationReporting/configurationReporting.less";
-@import "partial/spatial/configurations/userPreferencesPanel.less";
+@import "partial/spatial/configurations/userPreferencesPanel/userPreferencesPanel.less";
+@import "partial/spatial/configurations/userPreferencesPanel/userPreferencesCollapsiblePanel.less";
+@import "partial/spatial/configurations/userPreferencesPanel/userPreferencesPanelForm/userPreferencesPanelForm.less";
+@import "partial/spatial/configurations/mapSettingsPanel/mapSettingsPanel.less";
+@import "partial/spatial/configurations/configPanel.less";
 
 @import "partial/spatial/reportsPanel/reportForm/mapConfigurationModal/mapConfigurationModal.less";
 @import "partial/spatial/configurations/systemReportConfigPanel/systemReportConfigPanel.less";
@@ -124,8 +129,9 @@
 @import "partial/spatial/configurations/stylesReportConfigPanel/stylesReportConfigPanel.less";
 @import "partial/spatial/configurations/layersReportConfigPanel/layersReportConfigPanel.less";
 @import "partial/spatial/configurations/mapReportConfigPanel/projectionReportConfigPanel/projectionReportConfigPanel.less";
-@import "partial/spatial/configurations/mapReportConfigPanel/refreshReportConfigPanel/refreshReportConfigPanel.less";
-/* Add Component LESS Above */
+@import "partial/spatial/configurations/mapReportConfigPanel/refreshReportConfigPanel/refreshReportConfigPanel.less";@import "partial/spatial/configurations/mapSettingsPanel/mapSettingsPanelForm/mapSettingsPanelForm.less";
+@import "partial/spatial/configurations/mapSettingsPanel/mapSettingsCollapsiblePanel.less";
+@import "partial/spatial/configurations/vmsStyles/vmsStylesCollapsiblePanel.less";/* Add Component LESS Above */
 
 /* Required for Angular UI Bootstrap */
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

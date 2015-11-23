@@ -205,5 +205,11 @@
 	"layer_tree_context_menu_geom_style": "Geometry only",
 	"layer_tree_context_menu_geom_label_style": "Labels and Geometry",
 	"layer_tree_context_menu_label_style": "Labels only",
-	"user_preferences": "User preferences"
+	"user_preferences": "User preferences",
+	"preferences_scale_units": "Scale units",
+	"preferences_auto_refresh_rate": "Auto refresh rate",
+	"preferences_auto_refresh_status": "Auto refresh status",
+	"tab_config_table_header_vessel_color": "Vessel color",
+	"map_settings": "Map settings",
+	"style_settings": "Style settings"
 }

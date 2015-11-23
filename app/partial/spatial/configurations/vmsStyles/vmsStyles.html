@@ -1,0 +1,50 @@
+<div ng-controller="VmsstylesCtrl">
+	<div class="form-group col-md-12 table-responsive-force" st-table="displayedRecords" st-safe-src="positionStyles">
+		<div class="row col-md-6 searchField">
+			<input type="text" class="form-control" ng-model="searchString" st-search="code" placeholder="{{'spatial.reports_table_search_header' | i18n}}">
+		</div>
+		<table class="table table-striped">
+		    <thead>
+		        <tr>
+		            <th st-sort="code" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
+		            <th>{{'spatial.tab_config_table_header_vessel_color' | i18n }}</th>
+		        </tr>
+		        <tr ng-if="alert.visible">
+		        	<th colspan="2">
+					    <div class="alert alert-danger alert-container" role="alert" ng-if="alert.type === 'error'">
+	       					<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+	       					<span class="alert-message">
+	           					<span>{{ alert.msg }}</span>            
+	       					</span>
+					    </div>
+					    <div class="alert alert-success alert-container" role="alert" ng-if="alert.type === 'success'">
+	       					<span class="fa fa-check-circle" aria-hidden="true"></span>
+	       					<span class="alert-message">
+	           					<span>{{ alert.msg }}</span>            
+	       					</span>
+					    </div>
+		        	</th>
+		        </tr>
+		        <tr ng-if="isLoading">
+		        	<th colspan="2" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+		        </tr>
+		    </thead>
+		    <tbody>
+		        <tr ng-if="!displayedRecords.length && !isLoading">
+					<td colspan="2">{{'spatial.table_no_data' | i18n}}</td>
+				</tr>
+		        <tr ng-repeat="report in displayedRecords">
+		            <td>{{ report.code }}</td>
+		            <td><div ng-style="{'background-color': report.color && report.color.length > 3 && report.color.indexOf('#') != -1 ? report.color : '#fff'}" class="pickedcolor"></div></a><input colorpicker ng-model="report.color" type="text"></td>
+		        </tr>
+		    </tbody>
+		    <tfoot class="stFooterPagination">
+				<tr>
+					<td colspan="2" class="text-right">
+						<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+</div>

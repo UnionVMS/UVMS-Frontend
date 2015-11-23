@@ -13,9 +13,9 @@
 					<li ng-repeat="menu in headerMenus" ng-click="selectMenu(menu.menu)" ng-class="{'active': selectedMenu === '{{menu.menu}}'}"><a>{{menu.title}}</a></li>
 				</ul>
 			</div>
-			<div class="col-md-6 preferencesButton">
-				<button type="button" class="btn btn-default" ng-click="selectMenu('PREFERENCES')">
-					<i class="fa fa-cog"></i>
+			<div class="col-md-6 textAlignRight">
+				<button type="button" class="btn btn-primary btn-sm" ng-click="selectMenu('PREFERENCES')">
+					<i class="fa fa-cog"></i>&nbsp;
 					<span style="">{{'spatial.user_preferences' | i18n}}</span>
 				</button>
 			</div>
@@ -41,5 +41,6 @@
 	
 	<div ng-include="'partial/spatial/liveViewPanel/liveViewPanel.html'" ng-show="isMenuSelected('LIVEVIEW')"></div>
 	<div ng-include="'partial/spatial/reportsPanel/reportsPanel.html'" ng-show="isMenuSelected('REPORTS')"></div>
-	<div ng-include="'partial/spatial/configurations/userPreferencesPanel.html'" ng-show="isMenuSelected('PREFERENCES')"></div>
+<!-- 	<div ng-include="'partial/spatial/configurations/userPreferencesPanel/userPreferencesPanel.html'" ng-show="isMenuSelected('PREFERENCES')"></div> -->
+	<div ng-include="'partial/spatial/configurations/configPanel.html'" ng-show="isMenuSelected('PREFERENCES')"></div>
 </div>

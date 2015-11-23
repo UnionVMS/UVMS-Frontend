@@ -1,0 +1,17 @@
+<div class="spatialConfig" ng-controller="UserpreferencescollapsiblepanelCtrl">
+	<div class="containerWrapper" ng-controller="UserpreferencescollapsiblepanelCtrl">
+	    <div class="container containerWithTopBottomPadding">
+		  <accordion close-others="oneAtATime">
+		    <accordion-group is-open="status.userPreferencesOpen">
+		    	<accordion-heading>
+		    		<div class="panel-title-link" ng-click="toggleOpen()">
+			    		{{'spatial.user_preferences' | i18n }}
+			    		<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.userPreferencesOpen, 'glyphicon-chevron-right': !status.userPreferencesOpen}"></i>
+		    		</div>
+			    </accordion-heading>
+		      <div ng-include="'partial/spatial/configurations/userPreferencesPanel/userPreferencesPanelForm/userPreferencesPanelForm.html'"></div>
+		    </accordion-group>
+		   </accordion>
+		</div>
+	</div>
+</div>

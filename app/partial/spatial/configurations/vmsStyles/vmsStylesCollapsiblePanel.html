@@ -1,0 +1,13 @@
+<div class="col-md-12" ng-controller="VmsstylescollapsiblepanelCtrl">
+  <accordion close-others="oneAtATime">
+    <accordion-group is-open="status.userPreferencesOpen">
+    	<accordion-heading>
+    		<div class="panel-title-link" ng-click="toggleOpen()">
+	    		{{'spatial.style_settings' | i18n }}
+	    		<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.userPreferencesOpen, 'glyphicon-chevron-right': !status.userPreferencesOpen}"></i>
+    		</div>
+	    </accordion-heading>
+        <div ng-include="'partial/spatial/configurations/vmsStyles/vmsStyles.html'"></div>
+    </accordion-group>
+   </accordion>
+</div>
