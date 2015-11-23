@@ -1,4 +1,4 @@
-//Input fields for latitude and longitude 
+//Input fields for latitude and longitude
 angular.module('unionvmsWeb').directive('latInput', function($compile) {
 	return {
 		restrict: 'E',
@@ -73,27 +73,30 @@ angular.module('unionvmsWeb')
 
         $scope.coordPattern = formatConfigs[$scope.coordinateFormat].pattern;
 
+        //Update model value
+        var updateModelValue = function(){
+            watchModelChange = false;
+            //Input value exists?
+            if(angular.isDefined($scope.viewModel) && String($scope.viewModel).trim().length > 0){
+                if($scope.coordinateFormat === 'DECIMAL'){
+                    $scope.model = $scope.viewModel;
+                }
+                //DECIMAL_MINUTES
+                else{
+                    var decimalValue = coordinateFormatService.toDecimalDegrees($scope.viewModel, -1);
+                    $scope.model = decimalValue;
+                }
+            }else{
+                $scope.model = undefined;
+            }
+        };
+
         //Update model value on input change
         var watchModelChange = true;
         var onChangeTimeout;
         $scope.onChange = function(){
             $timeout.cancel(onChangeTimeout);
-            onChangeTimeout = $timeout(function(){
-                watchModelChange = false;
-                //Input value exists?
-                if(angular.isDefined($scope.viewModel) && String($scope.viewModel).trim().length > 0){
-                    if($scope.coordinateFormat === 'DECIMAL'){
-                        $scope.model = $scope.viewModel;
-                    }
-                    //DECIMAL_MINUTES
-                    else{
-                        var decimalValue = coordinateFormatService.toDecimalDegrees($scope.viewModel, -1);
-                        $scope.model = decimalValue;
-                    }
-                }else{
-                    $scope.model = undefined;
-                }
-            }, 300);
+            onChangeTimeout = $timeout(updateModelValue, 300);
         };
 
         //Format viewValue on blur
@@ -127,6 +130,8 @@ angular.module('unionvmsWeb')
                     }
                 }else{
                     $scope.viewModel = formatConfigs[$scope.coordinateFormat].blankValue;
+                    //Update the model value
+                    updateModelValue();
                 }
             }
             watchModelChange = true;
