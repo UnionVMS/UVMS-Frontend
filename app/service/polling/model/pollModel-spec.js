@@ -96,6 +96,14 @@ describe('Poll', function() {
         expect(poll.attributes["FREQUENCY"]).toEqual(7200);               
     }));
 
+    it('setVessel should set vessel data', inject(function(Poll, Vessel) {
+        var poll = Poll.fromJson(responseData);
+        var vessel = new Vessel();
+        vessel.name = "TEST";
+        poll.setVessel(vessel);
+        expect(poll.vessel.name).toEqual("TEST");
+    }));
+
 });
 
 

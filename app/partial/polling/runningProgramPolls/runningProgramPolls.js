@@ -3,7 +3,7 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
     //Does the user have access to start/stop/delete program polls?
     $scope.accessToManagePolls = userService.isAllowed('managePolls', 'Union-VMS', true);
 
-    $scope.currentSearchResults = new SearchResults('attributes.VESSEL_NAME', false, locale.getString('polling.running_program_polls_zero_message'));
+    $scope.currentSearchResults = new SearchResults('vessel.name', false, locale.getString('polling.running_program_polls_zero_message'));
 
     //Init function when entering page
     var init = function(){
@@ -41,6 +41,7 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
             if($scope.possibleToStart(programPoll)){
                 pollingRestService.startProgramPoll(programPoll).then(
                     function(updatedProgramPoll){
+                        updatedProgramPoll.vessel = programPoll.vessel;
                         updateProgramPollInResultsArray(programPoll, updatedProgramPoll);
                     },
                     function(error){
@@ -57,6 +58,7 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
             if($scope.possibleToStop(programPoll)){
                 pollingRestService.stopProgramPoll(programPoll).then(
                     function(updatedProgramPoll){
+                        updatedProgramPoll.vessel = programPoll.vessel;
                         updateProgramPollInResultsArray(programPoll, updatedProgramPoll);
                     },
                     function(error){

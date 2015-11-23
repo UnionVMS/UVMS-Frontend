@@ -69,7 +69,7 @@ describe('RunningProgramPollsCtrl', function(Poll) {
 
     });
 
-    it('startProgramPoll should send request to server and update results', inject(function($q, Poll, pollingRestService, userService) {
+    it('startProgramPoll should send request to server and update results', inject(function($q, Poll, pollingRestService, userService, Vessel) {
         //Allow evertyhing
         spyOn(userService, 'isAllowed').andReturn(true);
 
@@ -87,6 +87,9 @@ describe('RunningProgramPollsCtrl', function(Poll) {
         //Mock poll and results
         var p = new Poll();
         p.attributes.PROGRAM_RUNNING = "FALSE";
+        var vessel = new Vessel();
+        vessel.name = "TEST";
+        p.setVessel(vessel);
         scope.currentSearchResults.items = [p];
 
         //Make poll startable
@@ -101,9 +104,10 @@ describe('RunningProgramPollsCtrl', function(Poll) {
         //The poll in the search result should have been updated with the one from the server
         expect(scope.currentSearchResults.items.length).toBe(1);
         expect(scope.currentSearchResults.items[0].attributes["PROGRAM_RUNNING"]).toEqual('TRUE');
+        expect(scope.currentSearchResults.items[0].vessel).toEqual(vessel);
     }));
 
-    it('stopProgramPoll should send request to server and update results', inject(function($q, Poll, pollingRestService, userService) {
+    it('stopProgramPoll should send request to server and update results', inject(function($q, Poll, pollingRestService, userService, Vessel) {
         //Allow evertyhing
         spyOn(userService, 'isAllowed').andReturn(true);
 
@@ -121,6 +125,9 @@ describe('RunningProgramPollsCtrl', function(Poll) {
         //Mock poll and results
         var p = new Poll();
         p.attributes.PROGRAM_RUNNING = "TRUE";
+        var vessel = new Vessel();
+        vessel.name = "TEST";
+        p.setVessel(vessel);
         scope.currentSearchResults.items = [p];
 
         //Make poll stoppable
@@ -135,6 +142,7 @@ describe('RunningProgramPollsCtrl', function(Poll) {
         //The poll in the search result should have been updated with the one from the server
         expect(scope.currentSearchResults.items.length).toBe(1);
         expect(scope.currentSearchResults.items[0].attributes["PROGRAM_RUNNING"]).toEqual('FALSE');
+        expect(scope.currentSearchResults.items[0].vessel).toEqual(vessel);
     }));
 
     it('deleteProgramPoll should send request to server and update results', inject(function($q, Poll, pollingRestService, userService) {

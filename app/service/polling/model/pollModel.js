@@ -46,8 +46,8 @@ angular.module('unionvmsWeb')
         return poll;
     };
 
-    Poll.prototype.setVesselName = function(name) {
-        this.attributes.VESSEL_NAME = name;
+    Poll.prototype.setVessel= function(vessel) {
+        this.vessel = vessel;
     };
 
     return Poll;

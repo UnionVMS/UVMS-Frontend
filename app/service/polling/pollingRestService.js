@@ -115,9 +115,7 @@ angular.module('unionvmsWeb')
                             if (programPoll.connectionId) {
                                 var vessel = page.getVesselByGuid(programPoll.connectionId);
                                 if (vessel) {
-                                    programPoll.setVesselName(vessel.name);
-                                } else {
-                                    programPoll.setVesselName = "";
+                                    programPoll.setVessel(vessel);
                                 }
                             }
                         }

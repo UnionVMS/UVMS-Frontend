@@ -11,7 +11,7 @@
                 <table class="searchResults" ng-if="currentSearchResults.items.length > 0">
                     <thead>
                         <tr>
-                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.VESSEL_NAME'">{{'polling.running_program_polls_table_header_name' | i18n}}</th>
+                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.name'">{{'polling.running_program_polls_table_header_name' | i18n}}</th>
 
                             <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.TRANSPONDER | transponderName'">{{'polling.running_program_polls_table_header_transponder' | i18n}}</th>
 
@@ -29,7 +29,7 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" class="runningPollItem">
-                            <td>{{item.attributes.VESSEL_NAME}}</td>
+                            <td>{{item.vessel.name}}</td>
                             <td>{{item.attributes.TRANSPONDER | transponderName}}</td>
                             <td>{{item.startDate | confDateFormat}}</td>
                             <td>{{item.endDate | confDateFormat}}</td>
