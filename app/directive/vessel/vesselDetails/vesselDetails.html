@@ -27,7 +27,7 @@
 
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.cfr.$dirty) && vesselForm.cfr.$invalid}">
                 <label>{{ 'vessel.vessel_details_CFR' | i18n }}</label>
-                <input type="text" name="cfr" class="form-control" ng-model="vessel.cfr"  ng-required ng-pattern="/^[a-zA-Z]{3}[0-9]{9}$/">
+                <input type="text" name="cfr" class="form-control" ng-model="vessel.cfr" ng-required ng-pattern="cfrRegExp">
                 <input-validation-message types="pattern,required" input="vesselForm.cfr" custom-messages="{{cfrValidationMessages}}"></input-validation-message >
             </div>
             <div class="col-md-2 form-group smallerpaddingleft" ng-class="{'has-error': (submitAttempted || vesselForm.imo.$dirty) && vesselForm.imo.$invalid}">
@@ -53,7 +53,7 @@
 
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.mmsi.$dirty) && vesselForm.mmsi.$invalid}">
                 <label>{{ 'vessel.vessel_details_MMSI_no' | i18n }}</label>
-                <input type="text" name="mmsi" class="form-control" ng-model="vessel.mmsiNo" ng-pattern="/^[0-9]{9}$/" >
+                <input type="text" name="mmsi" class="form-control" ng-model="vessel.mmsiNo" ng-pattern="mmsiRegExp">
                 <input-validation-message types="required, pattern" input="vesselForm.mmsi" custom-messages="{{mmsiValidationMessages}}"></input-validation-message >
             </div>
             <div class="col-md-4 smallerpaddingleft form-group">
@@ -67,7 +67,7 @@
                 <div class="col-md-8 nopaddingleft nopaddingright form-group" ng-class="{'has-error': (submitAttempted || vesselForm.lengthValue.$dirty) && vesselForm.lengthValue.$invalid}">
                     <label>{{ 'vessel.vessel_details_length' | i18n }}</label>
                     <div class="unit-input">
-                        <input name="lengthValue" class="form-control" ng-model="vessel.lengthValue" numeric ng-maxlength="7" ng-pattern="maxTwoDecimalsRegexp">
+                        <input name="lengthValue" class="form-control" ng-model="vessel.lengthValue" numeric ng-maxlength="7" ng-pattern="maxTwoDecimalsRegExp">
                         <div class="unit-box">{{"common.meters_short" | i18n}}</div>
                     </div>
                     <input-validation-message types="maxlength, numeric, pattern" input="vesselForm.lengthValue" custom-messages="{{maxTwoDecimalsValidationMessages}}"></input-validation-message>
@@ -83,7 +83,7 @@
                 <div class="col-md-8 nopaddingleft nopaddingright form-group grossTonage" ng-class="{'has-error': (submitAttempted || vesselForm.grossTonnage.$dirty) && vesselForm.grossTonnage.$invalid}">
                     <label>{{ 'vessel.vessel_details_tonnage' | i18n }}</label>
                     <div class="unit-input">
-                        <input name="grossTonnage" class="form-control" ng-model="vessel.grossTonnage" numeric ng-maxlength="7" ng-pattern="maxTwoDecimalsRegexp">
+                        <input name="grossTonnage" class="form-control" ng-model="vessel.grossTonnage" numeric ng-maxlength="7" ng-pattern="maxTwoDecimalsRegExp">
                         <div class="unit-box">{{"common.tons" | i18n}}</div>
                     </div>
                     <input-validation-message types="maxlength, numeric, pattern" input="vesselForm.grossTonnage" custom-messages="{{maxTwoDecimalsValidationMessages}}"></input-validation-message >
@@ -97,7 +97,7 @@
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.power.$dirty) && vesselForm.power.$invalid}">
                 <label>{{ 'vessel.vessel_details_main_power' | i18n }}</label>
                 <div class="unit-input">
-                    <input name="power" class="form-control" ng-model="vessel.powerMain" numeric ng-maxlength="8"  ng-pattern="maxTwoDecimalsRegexp">
+                    <input name="power" class="form-control" ng-model="vessel.powerMain" numeric ng-maxlength="8"  ng-pattern="maxTwoDecimalsRegExp">
                     <div class="unit-box">{{"common.kw" | i18n}}</div>
                 </div>
                 <input-validation-message types="maxlength, numeric, pattern" input="vesselForm.power" custom-messages="{{maxTwoDecimalsValidationMessages}}"></input-validation-message >

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, positionReport, ManualPosition, $timeout, movementRestService, coordinateFormatService, dateTimeService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, positionReport, ManualPosition, $timeout, movementRestService, coordinateFormatService, dateTimeService, vesselValidationService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly) {
 
     $scope.errorMessage ="";
     $scope.readOnly = readOnly;
@@ -10,7 +10,11 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     $scope.positionReport.status = "010";
 
     //CUSTOM VALIDATIONS
-    $scope.maxTwoDecimalsRegexp = new RegExp(/^[0-9]+(\.[0-9]{0,2}?)?$/);
+    $scope.cfrRegExp = vesselValidationService.getCFRPattern();
+    $scope.cfrValidationMessages = {
+        'pattern' : locale.getString('vessel.vessel_details_cfr_pattern_validation_message')
+    };
+    $scope.maxTwoDecimalsRegExp = vesselValidationService.getMaxTwoDecimalsPattern();
     $scope.maxTwoDecimalsValidationMessages = {
         'pattern' : locale.getString('common.validation_max_number_of_decimals', "2")
     };

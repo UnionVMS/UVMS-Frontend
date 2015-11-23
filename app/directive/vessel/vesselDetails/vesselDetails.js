@@ -19,7 +19,7 @@ angular.module('unionvmsWeb')
 });
 
 angular.module('unionvmsWeb')
-    .controller('vesselDetailsCtrl', function($scope, locale, configurationService){
+    .controller('vesselDetailsCtrl', function($scope, locale, configurationService, vesselValidationService){
 
         //Dropdown values
         $scope.vesselFlagState = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
@@ -29,13 +29,15 @@ angular.module('unionvmsWeb')
         $scope.vesselGrossTonnageUnits = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','UNIT_TONNAGE'), 'TONNAGE','VESSEL', true);
 
         //Validation
+        $scope.cfrRegExp = vesselValidationService.getCFRPattern();
         $scope.cfrValidationMessages = {
             'pattern' : locale.getString('vessel.vessel_details_cfr_pattern_validation_message')
         };
+        $scope.mmsiRegExp = vesselValidationService.getMMSIPattern();
         $scope.mmsiValidationMessages = {
             'pattern' : locale.getString('vessel.vessel_details_mmsi_pattern_validation_message')
         };
-        $scope.maxTwoDecimalsRegexp = new RegExp(/^[0-9]+(\.[0-9]{0,2}?)?$/);
+        $scope.maxTwoDecimalsRegExp = vesselValidationService.getMaxTwoDecimalsPattern();
         $scope.maxTwoDecimalsValidationMessages = {
             'pattern' : locale.getString('vessel.vessel_details_max_decimals_pattern_validation_message', "2")
         };
