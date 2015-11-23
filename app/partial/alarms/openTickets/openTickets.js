@@ -186,7 +186,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
                 locale.getString('alarms.alarms_table_object_affected'),
                 locale.getString('alarms.alarms_table_rule'),
                 locale.getString('alarms.alarms_table_date_resolved'),
-                locale.getString('alarms.alarms_table_resolved_by'),,
+                locale.getString('alarms.alarms_table_resolved_by'),
                 locale.getString('alarms.alarms_table_status')
             ];
 

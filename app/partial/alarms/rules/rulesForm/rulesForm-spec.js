@@ -12,6 +12,7 @@ describe('RulesformCtrl', function() {
         }
 
         spyOn(configurationService, "getValue").andReturn([]);
+        spyOn(configurationService, "getConfig").andReturn([]);
         createController = function(){
             return $controller('RulesformCtrl', {$scope: scope});
         };
