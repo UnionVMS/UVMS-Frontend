@@ -10,7 +10,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		$scope.toggleMenuVisibility();
 
 		if($scope.isConfigVisible === false){
-			$scope.$emit('closeUserPreferences', $scope.previousSelection)
+			$scope.$emit('closeUserPreferences', $scope.previousSelection);
 		}
 	};
 
