@@ -1,4 +1,4 @@
-describe('VmsstylesCtrl', function() {
+describe('RefreshsettingsformCtrl', function() {
 
 	beforeEach(module('unionvmsWeb'));
 
@@ -6,7 +6,7 @@ describe('VmsstylesCtrl', function() {
 
     beforeEach(inject(function($rootScope, $controller) {
       scope = $rootScope.$new();
-      ctrl = $controller('VmsstylesCtrl', {$scope: scope});
+      ctrl = $controller('RefreshsettingsformCtrl', {$scope: scope});
     }));	
 
 	it('should ...', inject(function() {

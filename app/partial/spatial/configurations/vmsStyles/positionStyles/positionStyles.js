@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VmsstylesCtrl',function($scope, reportConfigRestService){
+angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope, reportConfigRestService){
 
 	$scope.positionStyles = [];
 	$scope.itemsByPage = 25;

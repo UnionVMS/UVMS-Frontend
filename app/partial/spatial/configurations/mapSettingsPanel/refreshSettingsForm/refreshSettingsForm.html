@@ -1,0 +1,14 @@
+<div ng-controller="RefreshsettingsformCtrl">
+	<div class="row">
+		<div class="form-group col-md-4 switchDiv">
+			<label class="switchLabel">{{'spatial.preferences_auto_refresh_status' | i18n }}</label>
+			<input bs-switch type="checkbox" ng-model="autoRefreshStatus">
+		</div>
+		<div class="form-group col-md-4 noPadding">
+			<label>
+				{{'spatial.preferences_auto_refresh_rate' | i18n }}
+			</label>
+			<input class="form-control" ng-model="autorefreshRate" name="autorefreshRate" min="0" type="number">
+		</div>	
+	</div>
+</div>

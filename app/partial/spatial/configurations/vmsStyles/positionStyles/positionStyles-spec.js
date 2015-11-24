@@ -1,4 +1,4 @@
-describe('MapsettingspanelformCtrl', function() {
+describe('PositionstylesCtrl', function() {
 
 	beforeEach(module('unionvmsWeb'));
 
@@ -6,7 +6,7 @@ describe('MapsettingspanelformCtrl', function() {
 
     beforeEach(inject(function($rootScope, $controller) {
       scope = $rootScope.$new();
-      ctrl = $controller('MapsettingspanelformCtrl', {$scope: scope});
+      ctrl = $controller('PositionstylesCtrl', {$scope: scope});
     }));	
 
 	it('should ...', inject(function() {
