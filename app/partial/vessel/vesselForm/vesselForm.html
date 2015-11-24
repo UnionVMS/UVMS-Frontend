@@ -31,10 +31,10 @@
                             </button>
                         </div>
                         <div ng-hide="disableForm()">
-                            <button class="btn btn-primary" type="submit" ng-click="updateVessel()" ng-hide="isCreateNewMode()">
+                            <button class="btn btn-sm btn-primary" type="submit" ng-click="updateVessel()" ng-hide="isCreateNewMode()">
                                 {{'common.update' | i18n}}
                             </button>
-                            <button type="submit" class="btn btn-primary" ng-click="createNewVessel()" ng-show="isCreateNewMode()" ng-disabled="waitingForCreateResponse">
+                            <button type="submit" class="btn btn-sm btn-primary" ng-click="createNewVessel()" ng-show="isCreateNewMode()" ng-disabled="waitingForCreateResponse">
                                 {{'vessel.save_asset' | i18n}}
                             </button>
                         </div>
@@ -64,8 +64,8 @@
                                     <table class="fullWidth" ng-hide="waitingForHistoryResponse">
                                         <thead>
                                             <tr>
-                                                <th>{{'vessel.event_table_header_code' | i18n}}</th>
-                                                <th>{{'vessel.event_table_header_date' | i18n}}</th>
+                                                <th sortable-table-header by="eventHistory.eventDate">{{'vessel.event_table_header_code' | i18n}}</th>
+                                                <th sortable-table-header by="eventHistory.eventCode">{{'vessel.event_table_header_date' | i18n}}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
