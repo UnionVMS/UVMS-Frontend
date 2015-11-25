@@ -77,7 +77,6 @@ angular.module('unionvmsWeb').factory('dateTimeService',function($log, globalSet
                 var format = globalSettingsService.getDateFormat();
                 if(typeof format !== 'string' || format.trim().length < 6){
                     format = 'DD MMM YYYY HH:mm UTC';
-                    $log.warn("DateFormat from GlobalSettings is missing.");
                 }
                 var formatted = moment(dateTimeInput, "YYYY-MM-DD HH:mm:ss Z").format(format);
                 if(formatted !== INVALID_DATE){

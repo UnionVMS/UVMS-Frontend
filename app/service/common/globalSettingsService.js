@@ -16,6 +16,11 @@ angular.module('unionvmsWeb').factory('globalSettingsService',function($resource
             $.each(response.data, function(index, setting) {
                 settings[setting.key] = setting;
             });
+
+            //Verify that dateTimeFormat exists
+            if(!('dateTimeFormat' in settings)){
+                $log.warn("DateFormat from GlobalSettings is missing.");
+            }
             deferred.resolve();
         }, function(err){
             $log.error("Failed to get global settings.");
