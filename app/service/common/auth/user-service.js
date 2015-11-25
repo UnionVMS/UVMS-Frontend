@@ -97,53 +97,54 @@ angular.module('auth.user-service', ['auth.router'])
                 };
 
             var _logout = function (toState, toParams) {
-                var resource = $resource('/usm-administration/rest/sessions/:sessionId',
-                        {sessionId: $localStorage.sessionId});
-                    resource.delete().$promise.then(
-                    function (data) {
-
-                        },
-                    function (error) {
-
-                        }
-                    );
-
+                var continueLogout = function(){
                     _reset();
                     delete $localStorage.token;
-                //do not wait for the success or failure of the call to delete sessions
-                delete $localStorage.sessionId;
-                    _clearContexts();
-                if (toState) {
-                    $state.go(toState, toParams);
+                    //do not wait for the success or failure of the call to delete sessions
+                    delete $localStorage.sessionId;
+                        _clearContexts();
+                    if (toState) {
+                        $state.go(toState, toParams);
+                    }
+                    $rootScope.$broadcast('Logout');
+                };
+                var resource = $resource('/usm-administration/rest/sessions/:sessionId',
+                        {sessionId: $localStorage.sessionId});
+                resource.delete().$promise.then(
+                    function (data) {
+                        continueLogout();
+                    },
+                    function (error) {
+                        continueLogout();
+                    }
+                );
+            };
+
+            var _isLoggedIn = function () {
+                return loggedin;
+            };
+
+            var _storeContexts = function (contextsArray) {
+                if (_.isArray(contextsArray)) {
+                    contexts = contextsArray;
                 }
-                $rootScope.$broadcast('Logout');
-                };
+            };
 
-                var _isLoggedIn = function () {
-                    return loggedin;
-                };
+            var _getRoleName = function(){
+                var roleName = '';
+                if(currentContext && currentContext.role && currentContext.role.roleName){
+                    roleName = currentContext.role.roleName;
+                }
+                return roleName;
+            };
 
-                var _storeContexts = function (contextsArray) {
-                    if (_.isArray(contextsArray)) {
-                        contexts = contextsArray;
-                    }
-                };
-
-                var _getRoleName = function(){
-                    var roleName = '';
-                    if(currentContext && currentContext.role && currentContext.role.roleName){
-                        roleName = currentContext.role.roleName;
-                    }
-                    return roleName;
-                };
-
-                var _getScopeName = function(){
-                    var scopeName = '';
-                    if(currentContext && currentContext.scope && currentContext.scope.scopeName){
-                        scopeName = currentContext.scope.scopeName;
-                    }
-                    return scopeName;
-                };
+            var _getScopeName = function(){
+                var scopeName = '';
+                if(currentContext && currentContext.scope && currentContext.scope.scopeName){
+                    scopeName = currentContext.scope.scopeName;
+                }
+                return scopeName;
+            };
 
             var _storeCurrentContext = function (ctxt) {
                     currentContext = ctxt;
