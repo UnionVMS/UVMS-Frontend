@@ -1,5 +1,5 @@
 <div ng-controller="PositionstylesCtrl">
-	<div class="form-group col-md-12 table-responsive-force" st-table="displayedRecords" st-safe-src="positionStyles">
+	<div class="form-group col-md-12 table-responsive-force row" st-table="displayedRecords" st-safe-src="positionStyles">
 		<div class="row col-md-6 searchField">
 			<input type="text" class="form-control" ng-model="searchString" st-search="code" placeholder="{{'spatial.reports_table_search_header' | i18n}}">
 		</div>
@@ -35,7 +35,12 @@
 				</tr>
 		        <tr ng-repeat="report in displayedRecords">
 		            <td>{{ report.code }}</td>
-		            <td><div ng-style="{'background-color': report.color && report.color.length > 3 && report.color.indexOf('#') != -1 ? report.color : '#fff'}" class="pickedcolor"></div></a><input colorpicker ng-model="report.color" type="text"></td>
+		            <td>
+			            <div ng-style="{'background-color': report.color && report.color.length > 3 && report.color.indexOf('#') != -1 ? report.color : '#fff'}" class="pickedcolor">
+			            	<i class="fa fa-ban" ng-hide="report.color && report.color.length > 3 && report.color.indexOf('#') != -1"></i>
+			            </div>
+			            <input colorpicker ng-model="report.color" type="text">
+			        </td>
 		        </tr>
 		    </tbody>
 		    <tfoot class="stFooterPagination">

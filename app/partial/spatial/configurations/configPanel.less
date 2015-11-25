@@ -1,11 +1,25 @@
 .spatialConfig {
+	.containerCollapsible {
+		padding-top: 0;
+		.collapsiblePanel {
+			&:first-of-type .panel-default {
+				padding-top: 15px;
+			}
+			&:last-of-type .panel-default {
+				padding-bottom: 15px;
+			}
+			.panel-default {
+				padding: 0 15px 5px 15px;
+			}
+		}
+	}
 	.containerCollapsible,
 	.collapsibleRow {
 		padding-left: 0;
 		padding-right: 0;
 	}
 	.configHeader {
-		margin-bottom: 30px;
+		margin-bottom: 15px;
 	}
 	accordion {
 		.panel {
@@ -26,9 +40,6 @@
 		.panel-heading + .panel-collapse .panel-body {
 			border: 1px solid #dddddd;
 			border-top-width: 0;
-			.dropdown-menu {
-				position: static;
-			}
 		}
 	}
 	.userPreferencesFormContainer {
@@ -37,9 +48,6 @@
 		.userPreferencesForm {
 			border: 1px solid #ddd;
 			padding-top: 10px;
-			.dropdown-menu {
-				position: static;
-			}
 		}
 	}
 }

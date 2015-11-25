@@ -6,12 +6,19 @@
 		border-top-left-radius: 4px;
 		border-bottom-left-radius: 4px;
 		display: inline-block;
+		text-align: center;
+		line-height: 30px;
+		color: #ff0000;
 	}
-	
-	table td > * {
-		vertical-align: middle;
+	table > tbody td {
+		> * {
+			vertical-align: middle;
+		}
+		> [colorpicker],
+		.pickedcolor {
+			float: left
+		}
 	}
-	
 	.searchField {
 		margin-bottom: 10px;
 	}

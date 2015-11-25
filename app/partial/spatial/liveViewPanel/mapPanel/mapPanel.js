@@ -281,11 +281,11 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, $tim
         }, 100);
   	};
     
-    $(window).resize($scope.resizeMap);
-    $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', $scope.resizeMap);
+    $(window).resize(mapService.updateMapContainerSize);
+    $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', mapService.updateMapContainerSize);
     
     angular.element(document).ready(function () {
-    	$scope.resizeMap();
+    	mapService.updateMapContainerSize();
     });
     
     //Other controls
