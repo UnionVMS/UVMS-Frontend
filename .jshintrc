@@ -34,6 +34,7 @@
         "ol": true,
 		"Mustache": true,
 		"turf": true,
-		"jsPDF": true
+        "jsPDF": true,
+		"L": true
     }
 }

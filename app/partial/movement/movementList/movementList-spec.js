@@ -16,8 +16,8 @@ describe('MovementlistCtrl', function() {
 
     it('should check all if not all checked already', function(Movement) {
         spyOn(scope, 'isAllChecked').andReturn(false);
-        spyOn(scope, 'addToSelection');
-        spyOn(scope, 'clearSelection');
+        scope.clearSelection = jasmine.createSpy('clearSelection')
+        scope.addToSelection = jasmine.createSpy('addToSelection')
         scope.checkAll();
         expect(scope.isAllChecked).toHaveBeenCalled();
         expect(scope.clearSelection).toHaveBeenCalled();
@@ -27,8 +27,8 @@ describe('MovementlistCtrl', function() {
 
     it('should clear selection if all checked', function() {
         spyOn(scope, 'isAllChecked').andReturn(true);
-        spyOn(scope, 'addToSelection');
-        spyOn(scope, 'clearSelection');
+        scope.clearSelection = jasmine.createSpy('clearSelection')
+        scope.addToSelection = jasmine.createSpy('addToSelection')
         scope.checkAll();
         expect(scope.clearSelection).toHaveBeenCalled();
         expect(scope.isAllChecked).toHaveBeenCalled();
@@ -37,8 +37,8 @@ describe('MovementlistCtrl', function() {
 
     it('should check item', function() {
         spyOn(scope, 'isChecked').andReturn(false);
-        spyOn(scope, 'removeFromSelection');
-        spyOn(scope, 'addToSelection');
+        scope.removeFromSelection = jasmine.createSpy('removeFromSelection')
+        scope.addToSelection = jasmine.createSpy('addToSelection')
 
         m1.Selected = false;
         scope.checkItem(m1);
@@ -49,8 +49,8 @@ describe('MovementlistCtrl', function() {
 
     it('should uncheck item', function() {
         spyOn(scope, 'isChecked').andReturn(true);
-        spyOn(scope, 'removeFromSelection');
-        spyOn(scope, 'addToSelection');
+        scope.removeFromSelection = jasmine.createSpy('removeFromSelection')
+        scope.addToSelection = jasmine.createSpy('addToSelection')
 
         m1.Selected = true;
         scope.checkItem(m1);
@@ -77,23 +77,6 @@ describe('MovementlistCtrl', function() {
     it('should return false if not checked', function() {
         scope.selectedMovements = [m1];
         expect(scope.isChecked(m2)).toBe(false);
-    });
-
-    it('should clear selection', function() {
-        scope.selectedMovements = [m1, m2];
-        scope.clearSelection();
-        expect(scope.selectedMovements).toEqual([]);
-    });
-
-    it('should add to selection', function() {
-        scope.addToSelection(m1);
-        expect(scope.selectedMovements).toEqual([m1]);
-    });
-
-    it('should remove from selection', function() {
-        scope.selectedMovements = [m1, m2];
-        scope.removeFromSelection(m1);
-        expect(scope.selectedMovements).toEqual([m2]);
     });
 
 });

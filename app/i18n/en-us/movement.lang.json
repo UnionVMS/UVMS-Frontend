@@ -55,8 +55,6 @@
 	"advanced_search_placeholder_time_span_24":"Last 24h",
 	"advanced_search_group_dropdown": "Asset groups",
 	"editselection_see_on_map" : "See on map",
-	"editselection_export_selection" : "Export selection",
-	"editselection_inactivate" : "Inactivate",
 	"movement_speed_unit" : "kts",
 	"manual_add_new_manual_report" : "New manual report",
 	"external_marking_filter_external_marking" : "Ext. marking",
@@ -108,5 +106,8 @@
 	"validation_invalid_latitude": "Invalid latitude",
 	"validation_invalid_longitude": "Invalid longitude",
 
-	"new_positions_available": "{1} new position(s) available"
+	"new_positions_available": "{1} new position(s) available",
+
+    "positions_map_modal_header": "Positions",
+    "positions_map_modal_marker_popup": "{name}\nTime: {time}"
 }

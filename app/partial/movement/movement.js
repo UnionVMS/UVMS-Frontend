@@ -1,8 +1,8 @@
-angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, $filter, alertService, movementRestService, searchService, locale, $stateParams, ManualPositionReportModal, csvService, SearchResults, $resource, longPolling, dateTimeService){
+angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, $filter, alertService, movementRestService, searchService, locale, $stateParams, ManualPositionReportModal, PositionsMapModal, csvService, SearchResults, $resource, longPolling, dateTimeService){
 
     //Current filter and sorting for the results table
     $scope.sortFilter = '';
-    $scope.editSelectionDropdownItems = [{'text':locale.getString('movement.editselection_see_on_map'),'code':'MAP'}, {'text':locale.getString('movement.editselection_export_selection'),'code':'EXPORT'}, {'text':locale.getString('movement.editselection_inactivate'),'code':'INACTIVE'}];
+    $scope.editSelectionDropdownItems = [{'text':locale.getString('movement.editselection_see_on_map'),'code':'MAP'}, {'text':locale.getString('common.export_selection'),'code':'EXPORT'}];
     $scope.newMovementsCount = 0;
 
     //Search objects and results
@@ -121,19 +121,22 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         if($scope.selectedMovements.length){
             //SEE ON MAP
             if(selectedItem.code === 'MAP'){
-               alertService.showInfoMessageWithTimeout("See on map is not implemented yet. " +$scope.selectedMovements.length +" movements were selected");
+                if($scope.selectedMovements.length === 1){
+                    //If only selected one position report, then show detailed modal
+                    $scope.viewItemDetails($scope.selectedMovements[0]);
+                }else{
+                    //Multiple position report, then show simple map modal
+                    PositionsMapModal.show($scope.selectedMovements);
+                }
             }
             //EXPORT SELECTION
             else if(selectedItem.code === 'EXPORT'){
                 $scope.exportAsCSVFile(true);
             }
-            //INACTIVATE
-            else if(selectedItem.code === 'INACTIVATE'){
-                alertService.showInfoMessageWithTimeout(locale.getString('common.not_implemented'));
-            }
         }else{
             alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
         }
+        $scope.editSelection = "";
     };
 
     //View item details

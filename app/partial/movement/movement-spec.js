@@ -168,23 +168,19 @@ describe('MovementCtrl', function() {
         expect(scope.selectedMovements).toEqual([]);
     }));
 
-    it('should show on map', inject(function(alertService) {
-        spyOn(alertService, 'showInfoMessageWithTimeout');
+    it('should show on map', inject(function(Movement, PositionsMapModal) {
+        spyOn(PositionsMapModal, 'show');
         scope.editSelectionCallback({code: 'MAP'});
-        expect(alertService.showInfoMessageWithTimeout).toHaveBeenCalledWith("See on map is not implemented yet. 2 movements were selected");
+        var positionReport = new Movement();
+        scope.selectedMovements.push(positionReport);
+        expect(PositionsMapModal.show).toHaveBeenCalledWith(scope.selectedMovements);
     }));
 
-    it('should exprot as CSV', function() {
+    it('should export as CSV', function() {
         spyOn(scope, 'exportAsCSVFile');
         scope.editSelectionCallback({code: 'EXPORT'});
         expect(scope.exportAsCSVFile).toHaveBeenCalledWith(true);
     });
-
-    it('should inactivate', inject(function(alertService) {
-        spyOn(alertService, 'showInfoMessageWithTimeout');
-        scope.editSelectionCallback({code: 'INACTIVATE'});
-        expect(alertService.showInfoMessageWithTimeout).toHaveBeenCalledWith("not implemented");
-    }));
 
     it('should not do anything if no items selected', inject(function(alertService) {
         scope.selectedMovements = [];
