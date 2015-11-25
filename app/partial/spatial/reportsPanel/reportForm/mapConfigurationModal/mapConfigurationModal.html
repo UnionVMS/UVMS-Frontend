@@ -11,13 +11,13 @@
         <div class="row">
             <div class="form-group col-md-6 noPadding">
                 <label for="mapProjection">{{'spatial.map_configuration_map_projection' | i18n}}</label>
-                <dropdown id="mapProjection" ng-model="mapProjection" items="projectionItems" initialtext="{{'spatial.map_configuration_map_projection' | i18n}}"></dropdown>
+                <dropdown id="mapProjection" ng-model="mapProjectionId" items="projectionItems" initialtext="{{'spatial.map_configuration_map_projection' | i18n}}"></dropdown>
             </div>
         </div>
         <div class="row">
             <div class="form-group col-md-6 noPadding">
                 <label for="displayProjection">{{'spatial.map_configuration_display_projection' | i18n}}</label>
-                <dropdown id="displayProjection" ng-model="displayProjection" items="projectionItems" initialtext="{{'spatial.map_configuration_display_projection' | i18n}}"></dropdown>
+                <dropdown id="displayProjection" ng-model="displayProjectionId" items="projectionItems" initialtext="{{'spatial.map_configuration_display_projection' | i18n}}"></dropdown>
             </div>
             <div class="form-group col-md-6 noPadding" ng-show="projectionSelected">
                 <label for="coordinatesFormat">{{'spatial.map_configuration_coordinates_format' | i18n}}</label>

@@ -28,9 +28,9 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	    };
 	    this.areas = [];
 
-        this.mapConfiguration = {};
+        this.mapConfiguration = undefined;
 	}
-	
+
 	var getDateFormat = function(){
 	    return globalSettingsService.getDateFormat();
 	};

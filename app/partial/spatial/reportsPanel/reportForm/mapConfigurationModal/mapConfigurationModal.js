@@ -3,7 +3,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
         $modalInstance.dismiss('cancel');
     };
 
-    $scope.save = function(){
+    $scope.save = function () {
         $modalInstance.close($scope.exportMapConfiguration());
     };
 
@@ -16,7 +16,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
         spatialRestService.getSupportedProjections().then(function (response) {
             $scope.projections = response;
             for (var i = 0; i < $scope.projections.length; i++) {
-                $scope.projectionItems.push({"text": $scope.projections[i].name, "code": $scope.projections[i].epsgCode});
+                $scope.projectionItems.push({"text": $scope.projections[i].name, "code": $scope.projections[i].id});
             }
         }, function (error) {
             //TODO warn the user
@@ -35,7 +35,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 
     function setCoordinatesUnitItems(newVal) {
         for (var i = 0; i < $scope.projections.length; i++) {
-            if ($scope.projections[i].epsgCode === newVal) {
+            if ($scope.projections[i].id === newVal) {
                 $scope.projectionSelected = true;
                 var formats = $scope.projections[i].formats.split(';');
                 for (var j = 0; j < formats.length; j++) {
@@ -52,15 +52,17 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
         $scope.projectionSelected = false;
     }
 
-    $scope.$watch('displayProjection', function (newVal) {
-        clearCoordinatesUnitItems();
-        setCoordinatesUnitItems(newVal);
+    $scope.$watch('displayProjectionId', function (newVal, oldVal) {
+        if (newVal !== oldVal) {
+            clearCoordinatesUnitItems();
+            setCoordinatesUnitItems(newVal);
+        }
     });
 
-    $scope.exportMapConfiguration = function() {
+    $scope.exportMapConfiguration = function () {
         var exported = {
-            mapProjection: $scope.mapProjection,
-            displayProjection: $scope.displayProjection,
+            mapProjectionId: $scope.mapProjectionId,
+            displayProjectionId: $scope.displayProjectionId,
             coordinatesFormat: $scope.coordinatesFormat,
             scaleBarUnits: $scope.scaleBarUnits
         };
