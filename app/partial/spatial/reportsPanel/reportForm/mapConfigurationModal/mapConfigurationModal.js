@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, locale, $modalInstance, spatialRestService) {
+angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, locale, $modalInstance, SpatialConfig, spatialRestService) {
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
     };
@@ -7,76 +7,17 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
         $modalInstance.close($scope.exportMapConfiguration());
     };
 
-    $scope.projectionItems = [];
-    $scope.coordinatesFormatItems = [];
-    $scope.scaleBarUnitsItems = [];
-    $scope.projectionSelected = false;
-
-    function setProjectionItems() {
-        spatialRestService.getSupportedProjections().then(function (response) {
-            $scope.projections = response;
-            for (var i = 0; i < $scope.projections.length; i++) {
-                $scope.projectionItems.push({"text": $scope.projections[i].name, "code": $scope.projections[i].id});
-            }
-        }, function (error) {
-            //TODO warn the user
-        });
-    }
-
-    function setScaleBarUnits() {
-        var scaleBarUnitsMap = {
-            'metric': {'name': 'spatial.map_configuration_scale_bar_units_metric'}, 'degrees': {'name': 'spatial.map_configuration_scale_bar_units_degrees'},
-            'nautical': {'name': 'spatial.map_configuration_scale_bar_units_nautical'}, 'imperial': {'name': 'spatial.map_configuration_scale_bar_units_imperial'}
-        };
-        angular.forEach(scaleBarUnitsMap, function (key, value) {
-            $scope.scaleBarUnitsItems.push({"text": locale.getString(key.name), "code": value});
-        });
-    }
-
-    function setCoordinatesUnitItems(newVal) {
-        for (var i = 0; i < $scope.projections.length; i++) {
-            if ($scope.projections[i].id === newVal) {
-                $scope.projectionSelected = true;
-                var formats = $scope.projections[i].formats.split(';');
-                for (var j = 0; j < formats.length; j++) {
-                    var name = 'spatial.map_configuration_coordinates_format_' + formats[j];
-                    $scope.coordinatesFormatItems.push({"text": locale.getString(name), "code": formats[j]});
-                }
-            }
-        }
-    }
-
-    function clearCoordinatesUnitItems() {
-        $scope.coordinatesFormatItems = [];
-        $scope.coordinatesFormat = undefined;
-        $scope.projectionSelected = false;
-    }
-
-    $scope.$watch('displayProjectionId', function (newVal, oldVal) {
-        if (newVal !== oldVal) {
-            clearCoordinatesUnitItems();
-            setCoordinatesUnitItems(newVal);
-        }
-    });
-
     $scope.exportMapConfiguration = function () {
         var exported = {
-            mapProjectionId: $scope.mapProjectionId,
-            displayProjectionId: $scope.displayProjectionId,
-            coordinatesFormat: $scope.coordinatesFormat,
-            scaleBarUnits: $scope.scaleBarUnits
+            mapProjectionId: $scope.configModel.mapSettings.mapProjectionId,
+            displayProjectionId: $scope.configModel.mapSettings.displayProjectionId,
+            coordinatesFormat: $scope.configModel.mapSettings.coordinatesFormat,
+            scaleBarUnits: $scope.configModel.mapSettings.scaleBarUnits
         };
         return exported;
     };
 
-    //Initialization
-    $scope.init = function () {
-        setProjectionItems();
-        setScaleBarUnits();
-    };
-
     $modalInstance.rendered.then(function () {
-        $scope.init();
+        $scope.configModel = new SpatialConfig();
     });
-
 });

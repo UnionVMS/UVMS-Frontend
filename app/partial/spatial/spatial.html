@@ -4,16 +4,15 @@
 		<div class="executing-report-msg">
 			<span>{{'spatial.map_loading_report_message' | i18n}}</span>
 		</div>
-		
 	</div>
 	<div class="container containerWithTopBottomPadding" ng-show="isMenuVisible">
 		<div class="row">
-			<div class="col-md-6 pageMenu">
+			<div class="col-md-8 pageMenu">
 				<ul class="horizontal pipeSeparator">
 					<li ng-repeat="menu in headerMenus" ng-click="selectMenu(menu.menu)" ng-class="{'active': selectedMenu === '{{menu.menu}}'}"><a>{{menu.title}}</a></li>
 				</ul>
 			</div>
-			<div class="col-md-6 textAlignRight">
+			<div class="col-md-4 textAlignRight userPrefContainer">
 				<button type="button" class="btn btn-primary btn-sm" ng-click="selectMenu('PREFERENCES')">
 					<i class="fa fa-cog"></i>&nbsp;
 					<span style="">{{'spatial.user_preferences' | i18n}}</span>

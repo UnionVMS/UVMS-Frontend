@@ -27,7 +27,8 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	        tracks: undefined
 	    };
 	    this.areas = [];
-
+	    
+	    //Spatial configs
         this.mapConfiguration = undefined;
 	}
 
@@ -191,7 +192,7 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	    if (this.hasVesselFilter){
             filter.vessels = this.vesselsSelection;
         }
-
+	    
 	    var dto = {
 	        id: this.id,
 	        name: this.name,
@@ -199,8 +200,20 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	        visibility: angular.isDefined(this.visibility) ? this.visibility : 'PRIVATE',
 	        withMap: this.withMap,
 	        filterExpression: filter,
-            mapConfiguration: this.mapConfiguration
 	    };
+	    
+	    if (angular.isDefined(this.mapConfiguration)){
+	        var finalConfig = {};
+	        for (var property in this.mapConfiguration){
+	            if (angular.isDefined(this.mapConfiguration[property])){
+	                finalConfig[property] = this.mapConfiguration[property];
+	            }
+	        }
+	        
+	        if (!angular.equals({}, finalConfig)){
+	            dto.mapConfiguration = finalConfig;
+	        }
+	    }
 
 	    return dto;
 	};

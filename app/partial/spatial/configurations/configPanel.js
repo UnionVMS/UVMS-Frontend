@@ -1,7 +1,8 @@
-angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anchorScroll){
+angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anchorScroll, SpatialConfig){
 
 	$scope.isConfigVisible= false;
-
+	$scope.configModel = new SpatialConfig();
+	
 	$scope.toggleUserPreferences = function(){
 		$scope.isConfigVisible = !$scope.isConfigVisible;
 		$anchorScroll();
@@ -18,5 +19,4 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		$scope.toggleUserPreferences();
 		$scope.previousSelection = previousSelection;
 	});
-
 });

@@ -8,28 +8,7 @@
         </div>
     </div>
     <div class="modal-body row">
-        <div class="row">
-            <div class="form-group col-md-6 noPadding">
-                <label for="mapProjection">{{'spatial.map_configuration_map_projection' | i18n}}</label>
-                <dropdown id="mapProjection" ng-model="mapProjectionId" items="projectionItems" initialtext="{{'spatial.map_configuration_map_projection' | i18n}}"></dropdown>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6 noPadding">
-                <label for="displayProjection">{{'spatial.map_configuration_display_projection' | i18n}}</label>
-                <dropdown id="displayProjection" ng-model="displayProjectionId" items="projectionItems" initialtext="{{'spatial.map_configuration_display_projection' | i18n}}"></dropdown>
-            </div>
-            <div class="form-group col-md-6 noPadding" ng-show="projectionSelected">
-                <label for="coordinatesFormat">{{'spatial.map_configuration_coordinates_format' | i18n}}</label>
-                <dropdown id="coordinatesFormat" ng-model="coordinatesFormat" items="coordinatesFormatItems" initialtext="{{'spatial.map_configuration_coordinates_format' | i18n}}"></dropdown>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6 noPadding">
-                <label for="scaleBarUnits">{{'spatial.map_configuration_scale_bar_units' | i18n}}</label>
-                <dropdown id="scaleBarUnits" ng-model="scaleBarUnits" items="scaleBarUnitsItems" initialtext="{{'spatial.map_configuration_scale_bar_units' | i18n}}"></dropdown>
-            </div>
-        </div>
+    	<div class="container col-md-12" ng-include="'partial/spatial/configurations/mapSettingsPanel/mapProjectionSettings/mapProjectionSettings.html'"></div>
     </div>
     <!-- FOOTER -->
     <div class="modal-footer row">

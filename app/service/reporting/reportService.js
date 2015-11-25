@@ -7,7 +7,17 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
        tabs: {
            map: true,
            vms: true
-       }
+       },
+       positions: [],
+       segments: [],
+       tracks: []
+    };
+    
+    rep.clearVmsData = function(){
+        rep.id = undefined;
+        rep.positions = [];
+        rep.segments = [];
+        rep.tracks = [];
     };
     
 	rep.runReport = function(report){
@@ -29,8 +39,8 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    //TODO change map ol.View configurations
 	    
 	    //Set the styles for vector layers and legend
-	    mapService.setFlagStateStyles(data.vectorStyles.flagState);
-	    mapService.setSpeedStyles(data.vectorStyles.speed);
+	    mapService.setFlagStateStyles(data.vectorStyles.positions);
+	    mapService.setSpeedStyles(data.vectorStyles.segments);
 	    
 	    //Build tree object and update layer panel
 	    var treeSource = new TreeModel();

@@ -5,6 +5,9 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     $scope.executedReport = {};
     $scope.repServ = reportService;
     
+    //reset repServ
+    $scope.repServ.clearVmsData();
+    
     //Define header menus
     var setMenus = function(){
             return [
@@ -52,7 +55,6 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    
    //Change tab to liveview when a user has clicked in run report in the reports page
    $scope.$on('runReport', function(event, report){
-       console.log('running');
        $scope.selectMenu('LIVEVIEW');
        $scope.headerMenus[0].title = report.name;
        //Getting report data
