@@ -124,7 +124,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                 }
             }
         })
-        .state('app.today', {
+/*        .state('app.today', {
             url: '/today',
             views: {
                 modulepage: {
@@ -133,7 +133,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                 }
             },
             resolve: {}
-        })
+        })*/
         .state('app.home', {
             url: '/home',
             views: {

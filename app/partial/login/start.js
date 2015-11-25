@@ -15,7 +15,7 @@ angular.module('unionvmsWeb').factory('startPageService',function($log, globalSe
     var startPageService = {
         getStartPageStateName : function(){
             var defaultHomePage = globalSettingsService.get('defaultHomePage', false);
-            var homeState = 'app.today';
+            var homeState = 'app.exchange';
             switch(defaultHomePage){
                 case 'positions':
                     if(checkAccess('Movement', 'viewMovements')){
@@ -56,8 +56,8 @@ angular.module('unionvmsWeb').factory('startPageService',function($log, globalSe
                     }
                     break;
                 default:
-                    $log.info("Default home page is set to: " +defaultHomePage +" but not state is defined for that page. Redirecting to today.");
-                    homeState = 'app.today';
+                    $log.info("Default home page is set to: " +defaultHomePage +" but not state is defined for that page. Redirecting to exchange.");
+                    homeState = 'app.exchange';
                     break;
             }
             return homeState;
