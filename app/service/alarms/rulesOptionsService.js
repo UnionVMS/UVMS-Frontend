@@ -176,12 +176,8 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         SEND_TO_ENDPOINT : [],
     };
     var setupActionDropdowns = function(){
-        actionDropdowns.SEND_TO_ENDPOINT = createDropdownItemsWithSameTextAsValue(['SWE', 'FIN', 'DEN']);
-        //Add reserved word for sending to all countries to dropdown
-        var reservedWord = configurationService.getConfig('RULES_RESERVED_WORDS');
-        if(Array.isArray(reservedWord) && reservedWord.length > 0){
-            actionDropdowns.SEND_TO_ENDPOINT.push({'text': locale.getString('alarms.rules_form_definition_action_send_to_endpoint_closest_country'), 'code':reservedWord[0]});
-        }
+        //TODO: Get config from Rules?
+        actionDropdowns.SEND_TO_ENDPOINT = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
     };
 
 	var rulesOptionsService = {

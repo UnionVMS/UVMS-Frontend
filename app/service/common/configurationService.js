@@ -13,7 +13,6 @@
             "MOBILE_TERMINAL_CHANNELS" : mobileTerminalRestService.getChannelNames,
             "AUDIT" : auditLogRestService.getAuditConfiguration,
             "RULES" : ruleRestService.getConfig,
-            "RULES_RESERVED_WORDS" : ruleRestService.getReservedWordConfig,
             "EXCHANGE" : exchangeRestService.getExchangeConfig
         };
 
