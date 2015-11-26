@@ -35,7 +35,8 @@ describe('ManualPositionReportModalCtrl', function() {
             reloadFunction: reloadSpy,
             readOnly: false,
             sentReport: false,
-            locale: mockLocale
+            locale: mockLocale,
+            manualPositionSource: false,
         });
 
         //Mock translation files for usm
