@@ -156,30 +156,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                 config : function(initService){
                     return initService.loadConfigFor(["MOVEMENT","VESSEL"]);
                 }
-            }
-        })
-        .state('app.movement-manual', {
-            url: '/movement/manual',
-            views: {
-                modulepage: {
-                    templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html',
-                    controller: 'ManualPositionReportsCtrl'
-                }
             },
-            resolve: {},
-            data: {
-                access: 'viewMovements'
-            },
-        })
-        .state('app.movement-id', {
-            url: '/movement/:id',
-            views: {
-                modulepage: {
-                    templateUrl: 'partial/movement/movement.html',
-                    controller: 'MovementCtrl'
-                }
-            },
-            resolve: {},
             data: {
                 access: 'viewMovements'
             },
@@ -194,6 +171,23 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
             data: {
                 access: 'viewManualMovements'
+            },
+        })
+        .state('app.movement-id', {
+            url: '/movement/:id',
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/movement/movement.html',
+                    controller: 'MovementCtrl'
+                }
+            },
+            resolve: {
+                config : function(initService){
+                    return initService.loadConfigFor(["MOVEMENT","VESSEL"]);
+                }
+            },
+            data: {
+                access: 'viewMovements'
             },
         })
         .state('app.assets', {
@@ -551,10 +545,12 @@ unionvmsWebApp.value('localeConf', {
 });
 
 //Service used for bootstrapping the application
-unionvmsWebApp.factory('initService',function(configurationService, locale, tmhDynamicLocale, $window, $cookieStore, localeConf, languageNames) {
-
+unionvmsWebApp.factory('initService',function($log, configurationService, locale, tmhDynamicLocale, $window, $cookieStore, localeConf, languageNames) {
     var userLocale = $cookieStore.get('COOKIE_LOCALE_LANG') || $window.navigator.userLanguage || $window.navigator.language;
+    //Check that the locale is available
     if(!(userLocale in languageNames)){
+        $log.info("Locale " +userLocale +" is not available. Setting locale to " +localeConf.defaultLocale);
+        $cookieStore.put('COOKIE_LOCALE_LANG', localeConf.defaultLocale);
         userLocale = localeConf.defaultLocale;
     }
     tmhDynamicLocale.set(userLocale);
