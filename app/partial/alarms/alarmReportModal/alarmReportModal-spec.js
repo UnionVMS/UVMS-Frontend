@@ -1,4 +1,4 @@
-describe('PositionReportModalCtrl', function() {
+describe('AlarmReportModalCtrl', function() {
 
     beforeEach(module('unionvmsWeb'));
 
@@ -16,7 +16,7 @@ describe('PositionReportModalCtrl', function() {
         var alarm = new Alarm();
         var options = {};
         createController = function(){
-            return $controller('PositionReportModalCtrl', {$scope: scope, $modalInstance: modalInstance, alarm : alarm, options : options});
+            return $controller('AlarmReportModalCtrl', {$scope: scope, $modalInstance: modalInstance, alarm : alarm, options : options});
         };
     }));
 

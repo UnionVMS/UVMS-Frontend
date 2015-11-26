@@ -2,10 +2,11 @@ describe('MovementCtrl', function() {
 
     beforeEach(module('unionvmsWeb'));
 
-    var scope, ctrl, movementRestDeferred, movement;
+    var scope, createController, movementRestDeferred, movement;
 
-    var mockManualPositionReportModal = {
-        show: jasmine.createSpy('show')
+    var mockPositionReportModal = {
+        showReport: jasmine.createSpy('showReport'),
+        showReportWithGuid: jasmine.createSpy('showReportWithGuid'),
     };
 
     var mockMovementRestService = {
@@ -77,50 +78,35 @@ describe('MovementCtrl', function() {
         movementRestDeferred = $q.defer();
         spyOn(mockMovementRestService, 'getMovement').andReturn(movementRestDeferred.promise);
         spyOn(mockLongPolling, 'poll');
-        ctrl = $controller('MovementCtrl', {
-            $scope: scope,
-            ManualPositionReportModal: mockManualPositionReportModal,
-            $stateParams: {
-                id: '123'
-            },
-            movementRestService: mockMovementRestService,
-            longPolling: mockLongPolling,
-            locale: mockLocale
-        });
+        createController = function(stateparams){
+            if(angular.isUndefined(stateparams)){
+                stateparams = {};
+            }
+            return $controller('MovementCtrl', {
+                $scope: scope,
+                PositionReportModal: mockPositionReportModal,
+                $stateParams: stateparams,
+                movementRestService: mockMovementRestService,
+                longPolling: mockLongPolling,
+                locale: mockLocale
+            });
+        }
 
-        scope.selectedMovements = [m1, m2];
     }));
 
-    it('should convert movement to manual position', inject(function() {
-        movementRestDeferred.resolve(movement);
+    it('should open position report modal when id paramter is provided', inject(function() {
+        var ctrl = createController({id:'TEST'});
         scope.$digest();
-        expect(mockManualPositionReportModal.show).toHaveBeenCalledWith({
-            guid: 'guid123',
-            speed: 14,
-            course: 187,
-            time: '2009-02-13 23:31:30',
-            updatedTime: undefined,
-            status: '101',
-            archived: undefined,
-            carrier: {
-                cfr: 'cfr123',
-                name: 'name123',
-                externalMarking: 'ext123',
-                ircs: 'ircs123',
-                flagState: 'fs123'
-            },
-            position: {
-                longitude: 78,
-                latitude: 5
-            }
-        }, {readOnly: true});
+        expect(mockPositionReportModal.showReportWithGuid).toHaveBeenCalledWith('TEST');
     }));
 
     it('should start long-polling', inject(function(searchService) {
+        var ctrl = createController();
         expect(mockLongPolling.poll).toHaveBeenCalledWith("/movement/activity/movement", jasmine.any(Function), jasmine.any(Function));
     }));
 
     it('should search movements', inject(function(searchService, $q, SearchResultListPage) {
+        var ctrl = createController();
         var deferred = $q.defer();
         spyOn(searchService, 'searchMovements').andReturn(deferred.promise);
         spyOn(scope, 'clearSelection');
@@ -143,6 +129,7 @@ describe('MovementCtrl', function() {
     }));
 
     it('should go to page', inject(function(searchService) {
+        var ctrl = createController();
         spyOn(searchService, 'setPage');
         spyOn(scope, 'searchMovements');
         scope.gotoPage(76);
@@ -151,24 +138,31 @@ describe('MovementCtrl', function() {
     }));
 
     it('should clear selection', function() {
+        var ctrl = createController();
         scope.clearSelection();
         expect(scope.selectedMovements).toEqual([]);
     });
 
     it('should add to selection', inject(function(Movement) {
+        var ctrl = createController();
+        scope.selectedMovements = [m1, m2];
+        expect(scope.selectedMovements).toEqual([m1, m2]);
         var m3 = new Movement();
         scope.addToSelection(m3);
         expect(scope.selectedMovements).toEqual([m1, m2, m3]);
     }));
 
     it('should remove from selection', inject(function(Movement) {
+        var ctrl = createController();
         var m1 = new Movement();
         scope.selectedMovements = [m1];
         scope.removeFromSelection(m1);
         expect(scope.selectedMovements).toEqual([]);
     }));
 
-    it('should show on map', inject(function(Movement, PositionsMapModal) {
+    it('should show positions on map', inject(function(Movement, PositionsMapModal) {
+        var ctrl = createController();
+        scope.selectedMovements = [m1, m2];
         spyOn(PositionsMapModal, 'show');
         scope.editSelectionCallback({code: 'MAP'});
         var positionReport = new Movement();
@@ -177,22 +171,32 @@ describe('MovementCtrl', function() {
     }));
 
     it('should export as CSV', function() {
+        var ctrl = createController();
+        scope.selectedMovements = [m1, m2];
         spyOn(scope, 'exportAsCSVFile');
         scope.editSelectionCallback({code: 'EXPORT'});
         expect(scope.exportAsCSVFile).toHaveBeenCalledWith(true);
     });
 
     it('should not do anything if no items selected', inject(function(alertService) {
+        var ctrl = createController();
         scope.selectedMovements = [];
         spyOn(alertService, 'showInfoMessageWithTimeout')
         scope.editSelectionCallback();
         expect(alertService.showInfoMessageWithTimeout).toHaveBeenCalledWith('no items selected');
     }));
 
-    it('should export as CSV', inject(function(csvService) {
+    it('should export as CSV with correct data', inject(function(csvService, Vessel) {
+        var ctrl = createController();
+        scope.selectedMovements = [m1, m2];
 
         function createVessel(suffix) {
-            return { state: 'state' + suffix, externalMarking: 'ext' + suffix, ircs: 'ircs' + suffix, name: 'name' + suffix }
+            var vessel = new Vessel();
+            vessel.countryCode = 'state' + suffix;
+            vessel.externalMarking = 'ext' + suffix;
+            vessel.ircs = 'ircs' + suffix;
+            vessel.name = 'name' + suffix;
+            return vessel;
         };
 
         function createMovement(suffix) {
@@ -221,12 +225,16 @@ describe('MovementCtrl', function() {
 
         var expectedCsv = [
             ['state1', 'ext1', 'ircs1', 'name1', undefined, undefined, undefined, '101', '11 fakeString', 'undefined fakeString', 1, undefined, ''],
-            ['state2', 'ext2', 'ircs2', 'name2', undefined, undefined, undefined, '101', '12 fakeString', 'undefined fakeString', 2, undefined, ''] 
+            ['state2', 'ext2', 'ircs2', 'name2', undefined, undefined, undefined, '101', '12 fakeString', 'undefined fakeString', 2, undefined, '']
         ];
 
-        spyOn(csvService, 'downloadCSVFile');
+        spyOn(csvService, 'downloadCSVFile').andCallFake(function(data, header, name){
+            expect(data).toEqual(expectedCsv, "Incorrect data");
+            expect(header).toEqual(expectedHeader, "Incorrect header");
+            expect(name).toEqual('positionReports.csv');
+        });
         scope.exportAsCSVFile(true);
-        expect(csvService.downloadCSVFile).toHaveBeenCalledWith(expectedCsv, expectedHeader, 'positionReports.csv');
+        expect(csvService.downloadCSVFile).toHaveBeenCalled();
     }));
 
 });

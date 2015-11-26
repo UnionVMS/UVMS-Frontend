@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage, PositionReportModal, userService, alarmRestService, searchService, $resource, longPolling){
+angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage, AlarmReportModal, userService, alarmRestService, searchService, $resource, longPolling){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -252,7 +252,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
                 item.updatedBy = updatedItem.updatedBy;
             }
         };
-        PositionReportModal.show(alarmItem, options);
+        AlarmReportModal.show(alarmItem, options);
     };
 
     //View item details
@@ -261,7 +261,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         var options = {
             readOnly : true
         };
-        PositionReportModal.show(alarmItem, options);
+        AlarmReportModal.show(alarmItem, options);
     };
 
     $scope.$on("$destroy", function() {

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, $filter, alertService, movementRestService, searchService, locale, $stateParams, ManualPositionReportModal, PositionsMapModal, csvService, SearchResults, $resource, longPolling, dateTimeService){
+angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, $filter, alertService, searchService, locale, $stateParams, PositionReportModal, PositionsMapModal, csvService, SearchResults, $resource, longPolling, dateTimeService){
 
     //Current filter and sorting for the results table
     $scope.sortFilter = '';
@@ -11,30 +11,8 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     //Selected by checkboxes
     $scope.selectedMovements = [];
 
+    //Used for the submenu
     $scope.isManualMovement = false;
-
-    var movement2ManualPosition = function(movement) {
-        return {
-            guid: movement.guid,
-            speed: movement.movement.reportedSpeed,
-            course: movement.movement.reportedCourse,
-            time: dateTimeService.toUTC(movement.time),
-            updatedTime: undefined,
-            status: movement.movement.status,
-            archived: undefined,
-            carrier: {
-                cfr: movement.vessel.cfr,
-                name: movement.vessel.name,
-                externalMarking: movement.vessel.externalMarking,
-                ircs: movement.vessel.ircs,
-                flagState: movement.vessel.state
-            },
-            position: {
-                longitude: movement.movement.longitude,
-                latitude: movement.movement.latitude
-            }
-        };
-    };
 
     var updateSearchWithGuid = function(guid) {
         searchService.searchMovements().then(function(page) {
@@ -54,9 +32,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
 
     var init = function(){
          if ($stateParams.id) {
-            movementRestService.getMovement($stateParams.id).then(function(movement) {
-                ManualPositionReportModal.show(movement2ManualPosition(movement), {readOnly: true});
-            });
+            PositionReportModal.showReportWithGuid($stateParams.id);
          }
 
          longPolling.poll("/movement/activity/movement", function(response) {
@@ -141,7 +117,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
 
     //View item details
     $scope.viewItemDetails = function(item){
-        ManualPositionReportModal.show(movement2ManualPosition(item), {readOnly: true});
+        PositionReportModal.showReport(item);
     };
 
     //Export data as CSV file
@@ -179,7 +155,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
             return exportItems.reduce(
                 function(csvObject, item){
                     var csvRow = [
-                        item.vessel.state,
+                        item.vessel.countryCode,
                         item.vessel.externalMarking,
                         item.vessel.ircs,
                         item.vessel.name,

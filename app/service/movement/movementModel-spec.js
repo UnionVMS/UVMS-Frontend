@@ -69,18 +69,15 @@ describe('Movement', function() {
     }));
 
 
-    it('setVesselData should set correct data', inject(function(Movement, Vessel) {
+    it('setVessel should set correct data', inject(function(Movement, Vessel) {
         var movement = Movement.fromJson(move);
         var vessel = new Vessel();
         vessel.name = "TestName";
         vessel.ircs = "TestIRCS";
         vessel.countryCode = "TestContryCode";
         vessel.externalMarking = "TestExternalMarking";
-        movement.setVesselData(vessel);
-        expect(movement.vessel.name).toEqual(vessel.name);
-        expect(movement.vessel.ircs).toEqual(vessel.ircs);
-        expect(movement.vessel.state).toEqual(vessel.countryCode);
-        expect(movement.vessel.externalMarking).toEqual(vessel.externalMarking);
+        movement.setVessel(vessel);
+        expect(movement.vessel).toEqual(vessel);
     }));
 
     it('isEqualMovement should return true only when guid is the same', inject(function(Movement, Vessel) {

@@ -6,12 +6,7 @@ angular.module('unionvmsWeb')
 		this.guid = undefined;
 		this.time = undefined;
 		this.connectId = undefined;
-		this.vessel = {
-			state : undefined,
-			externalMarking : undefined,
-			ircs : undefined,
-			name : undefined
-		};
+		this.vessel = undefined;
         this.mobileTerminalData = {
             guid : undefined,
             connectId : undefined,
@@ -95,11 +90,8 @@ angular.module('unionvmsWeb')
         return item.guid === this.guid;
     };
 
-    Movement.prototype.setVesselData = function(vesselModel) {
-        this.vessel.name = vesselModel.name;
-        this.vessel.ircs = vesselModel.ircs;
-        this.vessel.state = vesselModel.countryCode;
-        this.vessel.externalMarking = vesselModel.externalMarking;
+    Movement.prototype.setVessel = function(vesselModel) {
+        this.vessel = vesselModel;
     };
 
     return Movement;

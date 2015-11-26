@@ -1,0 +1,92 @@
+<div class="positionReportModal">
+    <div class="modal-header" style="text-align:left">
+        <div class="pointer pull-right" ng-click="cancel()">
+            <i class="fa fa-times closeicon"></i>
+        </div>
+        <h4 class="modal-title">{{'movement.position_report_header' | i18n}}</h4>
+    </div>
+
+    <div class="modal-body" loading-indicator="waitingForResponse" message="waitingForResponseMessage">
+        <div class="row nomarginbottom nomargintop" ng-show="errorMessage">
+            <div class="col-md-12">
+                <search-result-error-alert>{{errorMessage}}</search-result-error-alert>
+            </div>
+        </div>
+        <form name="positionReportForm" novalidate ng-if="!waitingForResponse && positionReport">
+            <fieldset ng-disabled="true">
+                <div class="row">
+                    <div class="col-md-2 smallerpaddingright">
+                        <label>{{'movement.manual_position_field_label_flag_state' | i18n}}</label>
+                        <input class="form-control" ng-model="positionReport.vessel.countryCode">
+                    </div>
+                    <div class="col-md-2 smallerpadding">
+                        <label>{{'movement.manual_position_field_label_ircs' | i18n}}</label>
+                        <input class="form-control" ng-model="positionReport.vessel.ircs">
+                    </div>
+                    <div class="col-md-4 smallerpadding">
+                        <label>{{'movement.manual_position_field_label_cfr' | i18n}}</label>
+                        <input class="form-control" ng-model="positionReport.vessel.cfr">
+                    </div>
+                    <div class="col-md-4 smallerpaddingleft">
+                        <label>{{'movement.manual_position_field_label_external_marking' | i18n}}</label>
+                        <input class="form-control" ng-model="positionReport.vessel.externalMarking">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 smallerpaddingright">
+                        <label>{{'movement.manual_position_field_label_name' | i18n}}</label>
+                        <input class="form-control" ng-model="positionReport.vessel.name">
+                    </div>
+                    <div class="col-md-3 smallerpadding">
+                        <label>{{'movement.manual_position_field_label_status' | i18n}}</label>
+                        <input class="form-control" ng-model="positionReport.movement.status">
+                    </div>
+                    <div class="col-md-5 smallerpaddingleft">
+                        <label>{{'movement.manual_position_field_label_date_time' | i18n}}</label>
+                        <datepicker-input time="true" model="positionReport.time"></datepicker-input>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 smallerpaddingright">
+                        <label>{{'movement.manual_position_field_label_latitude' | i18n}}</label>
+                        <lat-input name="latitude" model="positionReport.movement.latitude"></lat-input>
+                    </div>
+                    <div class="col-md-3 smallerpadding">
+                        <label>{{'movement.manual_position_field_label_longitude' | i18n}}</label>
+                        <lng-input name="longitude" model="positionReport.movement.longitude"></lng-input>
+                    </div>
+                    <div class="col-md-3 smallerpadding">
+                        <label>{{'movement.manual_position_field_label_measured_speed' | i18n}}</label>
+                        <div class="unit-input">
+                            <input class="form-control" ng-model="positionReport.movement.reportedSpeed">
+                            <div class="unit-box">{{"movement.manual_position_field_unit_knots" | i18n}}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 smallerpaddingleft">
+                        <label style="width:100%;">{{'movement.manual_position_field_label_course' | i18n}}</label>
+                        <div class="unit-input">
+                            <input class="form-control" ng-model="positionReport.movement.reportedCourse">
+                            <div class="unit-box">{{"movement.manual_position_field_unit_degrees" | i18n}}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mapContainer">
+                          <leaflet center="center" markers="markers" height="200px" bounds="bounds" width="100%"></leaflet>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+        </form>
+
+    </div>
+
+    <div class="modal-footer">
+    </div>
+
+</div>

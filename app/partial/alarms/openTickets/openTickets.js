@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, PositionReportModal, movementRestService, $resource, longPolling){
+angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, AlarmReportModal, movementRestService, $resource, longPolling){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -173,7 +173,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         options.movementPromise = movementPromise;
 
         //Open modal
-        PositionReportModal.show(copy, options);
+        AlarmReportModal.show(copy, options);
     };
 
     //Export data as CSV file

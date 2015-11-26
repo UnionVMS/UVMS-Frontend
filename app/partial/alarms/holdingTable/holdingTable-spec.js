@@ -140,8 +140,8 @@ describe('HoldingtableCtrl', function() {
     }));
 
 
-    it('resolveItem should open modal for resolving alarm', inject(function($rootScope, Alarm, PositionReportModal) {
-        var modalSpy = spyOn(PositionReportModal, "show").andReturn();
+    it('resolveItem should open modal for resolving alarm', inject(function($rootScope, Alarm, AlarmReportModal) {
+        var modalSpy = spyOn(AlarmReportModal, "show").andReturn();
         var controller = createController();
 
         //Create an alarm
@@ -151,8 +151,8 @@ describe('HoldingtableCtrl', function() {
     }));
 
 
-    it('viewItemDetails should open modal for viewing closed alarm', inject(function($rootScope, Alarm, PositionReportModal) {
-        var modalSpy = spyOn(PositionReportModal, "show").andReturn();
+    it('viewItemDetails should open modal for viewing closed alarm', inject(function($rootScope, Alarm, AlarmReportModal) {
+        var modalSpy = spyOn(AlarmReportModal, "show").andReturn();
         var controller = createController();
 
         //Create an alarm

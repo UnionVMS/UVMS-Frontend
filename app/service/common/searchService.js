@@ -58,7 +58,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                 $.each(page.items, function(index, movement) {
                     var vessel = vesselPage.getVesselByGuid(movement.connectId);
                     if(angular.isDefined(vessel)){
-                        movement.setVesselData(vessel);
+                        movement.setVessel(vessel);
                     }
                 });
 
@@ -95,7 +95,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                 $.each(page.items, function(index, movement) {
                     var vessel = vesselsByGuid[movement.connectId];
                     if(angular.isDefined(vessel)){
-                        movement.setVesselData(vessel);
+                        movement.setVessel(vessel);
                     }
                 });
 

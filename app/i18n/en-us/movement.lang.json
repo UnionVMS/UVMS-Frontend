@@ -109,5 +109,10 @@
 	"new_positions_available": "{1} new position(s) available",
 
     "positions_map_modal_header": "Positions",
-    "positions_map_modal_marker_popup": "{name}\nTime: {time}"
+    "positions_map_modal_marker_popup": "{name}\nTime: {time}",
+    "positions_modal_loading_text": "Loading position report",
+    "positions_modal_loading_movement_error": "Failed to load position report.",
+    "positions_modal_loading_vessel_error": "Failed to load vessel information.",
+    "positions_modal_connectid_missing_error": "Position report is not connected to any asset.",
+    "positions_modal_latlng_missing": "Latitude and/or longitude is missing."
 }

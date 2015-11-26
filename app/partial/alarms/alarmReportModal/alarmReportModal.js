@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService, pollingService, pollingRestService, GetPollableListRequest) {
+angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService, pollingService, pollingRestService, GetPollableListRequest) {
 
     $scope.alarm = alarm;
     $scope.knownVessel = angular.isDefined(alarm.vessel);
@@ -319,13 +319,13 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
     $scope.init();
 });
 
-angular.module('unionvmsWeb').factory('PositionReportModal', function($modal) {
+angular.module('unionvmsWeb').factory('AlarmReportModal', function($modal) {
     return {
         show: function(alarm, options) {
             return $modal.open({
-                templateUrl: 'partial/alarms/positionReportModal/positionReportModal.html',
-                controller: 'PositionReportModalCtrl',
-                windowClass : "positionReportModal",
+                templateUrl: 'partial/alarms/alarmReportModal/alarmReportModal.html',
+                controller: 'AlarmReportModalCtrl',
+                windowClass : "alarmReportModal",
                 backdrop: 'static', //will not close when clicking outside the modal window
                 size: 'md',
                 resolve:{

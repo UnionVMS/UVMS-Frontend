@@ -32,7 +32,7 @@
                 <td>{{item.gearType | vesselGearTypeTranslation}}</td>
                 <td>{{item.licenseType | vesselLicenseTypeTranslation}}</td>
                 <td>
-                    <span ng-show="item.lastMovement">{{item.lastMovement.time | timeAgo}}</span>
+                    <span ng-show="item.lastMovement" class="link" ng-click="showReport(item.lastMovement.guid)">{{item.lastMovement.time | timeAgo}}</span>
                 </td>
                 <td>
                     <button class="btn btn-primary btn-sm" ng-click="toggleViewVessel(item)">

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, savedSearchService, Vessel, searchService, vesselRestService, alertService, $stateParams, csvService, SearchResults, userService, $filter) {
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, savedSearchService, Vessel, searchService, vesselRestService, alertService, $stateParams, csvService, SearchResults, userService, PositionReportModal, $filter) {
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
@@ -241,6 +241,11 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
 
         //Create and download the file
         csvService.downloadCSVFile(getData(), header, filename);
+    };
+
+    //Show a position report
+    $scope.showReport = function(reportGuid){
+        PositionReportModal.showReportWithGuid(reportGuid);
     };
 
 
