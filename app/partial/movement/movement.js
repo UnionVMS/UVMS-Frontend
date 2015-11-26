@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, $filter, alertService, searchService, locale, $stateParams, PositionReportModal, PositionsMapModal, csvService, SearchResults, $resource, longPolling, dateTimeService){
+angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, $filter, alertService, searchService, locale, $stateParams, PositionReportModal, PositionsMapModal, csvService, SearchResults, $resource, longPolling, dateTimeService, ManualPosition, ManualPositionReportModal ){
 
     //Current filter and sorting for the results table
     $scope.sortFilter = '';
@@ -103,7 +103,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
                 }else{
                     //Multiple position report, then show simple map modal
                     PositionsMapModal.show($scope.selectedMovements);
-                }
+            }
             }
             //EXPORT SELECTION
             else if(selectedItem.code === 'EXPORT'){
@@ -114,6 +114,15 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         }
         $scope.editSelection = "";
     };
+
+    $scope.newPosition = function() {
+        var modalOptions = {
+            manualPositionSource : true
+        };
+        var reportObj = new ManualPosition();
+        ManualPositionReportModal.show(reportObj, modalOptions);
+    };
+
 
     //View item details
     $scope.viewItemDetails = function(item){

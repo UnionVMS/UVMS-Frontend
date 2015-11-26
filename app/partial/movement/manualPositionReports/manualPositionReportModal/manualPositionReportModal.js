@@ -1,7 +1,8 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, positionReport, ManualPosition, $timeout, movementRestService, coordinateFormatService, dateTimeService, vesselValidationService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $location, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, positionReport, ManualPosition, $timeout, movementRestService, coordinateFormatService, dateTimeService, vesselValidationService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly, manualPositionSource) {
 
     $scope.errorMessage ="";
     $scope.readOnly = readOnly;
+    $scope.manualPositionSource = manualPositionSource;
     $scope.positionReport = positionReport;
 
     //Set flagState
@@ -152,7 +153,13 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
                     reloadFunction();
                 }
                 $scope.waitingForResponse = false;
+
                 $scope.setSuccessText(locale.getString("movement.manual_position_save_success"), $scope.closeModal);
+
+                if($scope.manualPositionSource){
+                     $location.path('movement/manual');
+                }
+
             }, function(errorMessage) {
                 $scope.waitingForResponse = false;
                 $scope.setErrorText(locale.getString("movement.manual_position_save_error"));
@@ -366,6 +373,9 @@ angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($mod
                     },
                     readOnly: function() {
                         return !!options.readOnly;
+                    },
+                    manualPositionSource: function(){
+                        return options.manualPositionSource || false;
                     }
                 }
 			}).result;
