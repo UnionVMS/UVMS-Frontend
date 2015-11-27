@@ -1,6 +1,9 @@
 angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     
     function SpatialConfig(){
+        this.generalSettings = {
+            geoserverURL: undefined
+        };
         this.mapSettings = {
             mapProjectionId: undefined,
             displayProjectionId: undefined,
@@ -9,8 +12,15 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
             autoRefreshStatus: false,
             autoRefreshRate: undefined
         };
-        this.generalSettings = {
-            geoserverURL: undefined
+        this.visibilitySettings = {
+            positions: {
+                popup: [],
+                labels: []
+            },
+            segments: {
+                popup: [],
+                labels: []
+            }
         };
     }
     
