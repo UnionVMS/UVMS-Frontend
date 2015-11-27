@@ -38,18 +38,18 @@
                             <td>{{item.attributes.FREQUENCY | secondsToTimeString}}</td>
                             <td>{{item.attributes.USER}}</td>
                             <td class="actionIcon" ng-class="{inactive:!possibleToStart(item)}">
-                                <div class="start" ng-click="startProgramPoll(item)" ng-class="{noAccess:!accessToManagePolls}">
+                                <div class="start" ng-click="startProgramPoll(item)" ng-class="{noAccess:!accessToManagePolls}" title="{{'polling.running_program_polls_start_title' | i18n}}">
                                     <i class="fa fa-play"></i>
                                 </div>
                             </td>
                             <td class="actionIcon" ng-class="{inactive:!possibleToStop(item)}">
-                                <div class="stop" ng-click="stopProgramPoll(item)" ng-class="{noAccess:!accessToManagePolls}">
+                                <div class="stop" ng-click="stopProgramPoll(item)" ng-class="{noAccess:!accessToManagePolls}" title="{{'polling.running_program_polls_stop_title' | i18n}}">
                                     <i class="fa fa-stop"></i>
                                 </td>
                             </td>
                             <td ng-if="accessToManagePolls" class="actionIcon">
-                                <div class="delete" ng-click="deleteProgramPoll(item);">
-                                    <i class="fa fa-trash-o"></i>
+                                <div class="delete" ng-click="deleteProgramPoll(item);" title="{{'polling.running_program_polls_remove_title' | i18n}}">
+                                    <i class="fa fa-times"></i>
                                 </div>
                             </td>
                         </tr>

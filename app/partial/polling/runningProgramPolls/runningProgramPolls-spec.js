@@ -145,9 +145,14 @@ describe('RunningProgramPollsCtrl', function(Poll) {
         expect(scope.currentSearchResults.items[0].vessel).toEqual(vessel);
     }));
 
-    it('deleteProgramPoll should send request to server and update results', inject(function($q, Poll, pollingRestService, userService) {
+    it('deleteProgramPoll should send request to server and update results', inject(function($q, Poll, pollingRestService, confirmationModal, userService) {
         //Allow evertyhing
         spyOn(userService, 'isAllowed').andReturn(true);
+
+        //Mock confirmation modal and click on confirm
+        var confirmationSpy = spyOn(confirmationModal, "open").andCallFake(function(callback, options){
+            callback();
+        });
 
         var searchDeferred = $q.defer();
         var searchSpy = spyOn(pollingRestService, "getRunningProgramPolls").andReturn(searchDeferred.promise);

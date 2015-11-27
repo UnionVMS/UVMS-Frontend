@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($scope, pollingRestService, alertService, locale, SearchResults, SearchResultListPage, userService){
+angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($scope, pollingRestService, alertService, locale, SearchResults, SearchResultListPage, userService, confirmationModal, infoModal){
 
     //Does the user have access to start/stop/delete program polls?
     $scope.accessToManagePolls = userService.isAllowed('managePolls', 'Union-VMS', true);
@@ -72,21 +72,28 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
     //Delete a program poll
     $scope.deleteProgramPoll = function(programPoll){
         if($scope.accessToManagePolls){
-            pollingRestService.inactivateProgramPoll(programPoll).then(
-                function(updatedProgramPoll){
-                    //Remove program poll from list
-                    var programPollIndex = $scope.currentSearchResults.items.indexOf(programPoll);
-                    $scope.currentSearchResults.items.splice(programPollIndex, 1);
+            //Show confirmation modal
+            var options = {
+                textLabel : locale.getString("polling.running_program_polls_remove_confirm_text")
+            };
+            confirmationModal.open(function(){
+                //Confirmed
+                pollingRestService.inactivateProgramPoll(programPoll).then(
+                    function(updatedProgramPoll){
+                        //Remove program poll from list
+                        var programPollIndex = $scope.currentSearchResults.items.indexOf(programPoll);
+                        $scope.currentSearchResults.items.splice(programPollIndex, 1);
 
-                    alertService.showSuccessMessageWithTimeout(locale.getString('polling.running_program_polls_delete_success'));
-                    if($scope.currentSearchResults.items.length === 0){
-                        $scope.currentSearchResults.errorMessage = locale.getString("polling.running_program_polls_zero_message");
+                        alertService.showSuccessMessageWithTimeout(locale.getString('polling.running_program_polls_delete_success'));
+                        if($scope.currentSearchResults.items.length === 0){
+                            $scope.currentSearchResults.errorMessage = locale.getString("polling.running_program_polls_zero_message");
+                        }
+                    },
+                    function(error){
+                        alertService.showErrorMessage(locale.getString('polling.running_program_polls_delete_error'));
                     }
-                },
-                function(error){
-                    alertService.showErrorMessage(locale.getString('polling.running_program_polls_delete_error'));
-                }
-            );
+                );
+            }, options);
         }
     };
 
