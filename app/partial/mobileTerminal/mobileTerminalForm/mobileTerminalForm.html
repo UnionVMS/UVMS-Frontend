@@ -78,6 +78,9 @@
                 <div class="col-md-6 textAlignRight">
                     <div class="actions">
                         <div class="setStatusContainer" show-if-allowed="manageMobileTerminals" ng-hide="isCreateNewMode()">
+                            <button type="button" class="btn btn-default" ng-click="archiveMobileTerminal()">
+                                {{'common.archive' | i18n}}
+                            </button>
                             <button type="button" class="btn btn-default" ng-show="currentMobileTerminal.active" ng-click="setStatusToInactive()">
                                 {{'mobileTerminal.inactivate_link' | i18n}}
                             </button>

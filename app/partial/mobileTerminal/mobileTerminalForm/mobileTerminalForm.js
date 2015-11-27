@@ -240,6 +240,31 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
             .then(onGetMobileTerminalHistorySuccess, onGetMobileTerminalHistoryError);
     };
 
+    //Archive mobile terminals
+    $scope.archiveMobileTerminal = function() {
+        modalComment.open($scope.archiveMobileTerminaWithComment, {
+            titleLabel: locale.getString("mobileTerminal.archive_modal_title", [$scope.currentMobileTerminal.getSerialNumber()]),
+            saveLabel: locale.getString('common.archive')
+        });
+    };
+
+    $scope.archiveMobileTerminaWithComment = function(comment){
+        mobileTerminalRestService.removeMobileTerminal($scope.currentMobileTerminal, comment).then(archiveMobileTerminalSuccess, archiveMobileTerminalError);
+    };
+
+    function archiveMobileTerminalSuccess(archivedMobileTerminal) {
+        alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.archive_message_on_success'));
+
+        //Remove mobile terminal from search results
+        $scope.removeCurrentMobileTerminalFromSearchResults();
+        $scope.toggleMobileTerminalDetails(undefined, true);
+    }
+
+    function archiveMobileTerminalError() {
+        alertService.showErrorMessage(locale.getString('mobileTerminal.archive_message_on_error'));
+    }
+
+
     //Success getting history
     var onGetMobileTerminalHistorySuccess = function(historyList) {
         $scope.currentMobileTerminalHistory = historyList;

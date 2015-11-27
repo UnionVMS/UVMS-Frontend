@@ -225,6 +225,27 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         });
     };
 
+    //Remove the current terminal from the search result
+    $scope.removeCurrentMobileTerminalFromSearchResults = function() {
+        var terminalsInList = $scope.currentSearchResults.items;
+        var index;
+        for (var i = 0; i < terminalsInList.length; i++) {
+            if (terminalsInList[i].isEqualTerminal($scope.currentMobileTerminal)) {
+                index = i;
+            }
+        }
+        //Remove vessel from list
+        if(angular.isDefined(index)){
+            $scope.currentSearchResults.items.splice(index, 1);
+            $scope.currentMobileTerminal = undefined;
+        }
+
+        //Removed last terminal from list?
+        if($scope.currentSearchResults.items.length === 0){
+            $scope.searchMobileTerminals();
+        }
+    };
+
     //Callback function for the "edit selection" dropdown
     $scope.editSelectionCallback = function(selectedItem){
         //Poll selected temrinals

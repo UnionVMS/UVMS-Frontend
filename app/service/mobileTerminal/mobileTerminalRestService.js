@@ -261,9 +261,9 @@ angular.module('unionvmsWeb')
                 });
                 return deferred.promise;
             },
-            removeMobileTerminal : function(mobileTerminal){
+            removeMobileTerminal : function(mobileTerminal, comment){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.removeMobileTerminal().save(mobileTerminal.toSetStatusJson(), function(response) {
+                mobileTerminalRestFactory.removeMobileTerminal().save({ comment:comment }, mobileTerminal.toSetStatusJson(), function(response) {
                     if(response.code !== 200){
                         deferred.reject("Invalid response status");
                         return;
