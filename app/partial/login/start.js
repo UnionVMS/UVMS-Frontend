@@ -49,7 +49,7 @@ angular.module('unionvmsWeb').factory('startPageService',function($log, globalSe
             case 'app.usm.users':
                 return checkAccess('USM', 'viewUsers');
             case 'app.usm.users':
-                return checkAccess('Reporting', 'LIST_REPORTS')
+                return checkAccess('Reporting', 'LIST_REPORTS');
             default:
                 $log.info("State: " +state +" is missing from list. Returning false.");
                 return false;
