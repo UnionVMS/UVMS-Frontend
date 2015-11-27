@@ -21,7 +21,7 @@ angular.module('unionvmsWeb').factory('Ticket', function() {
         ticket.openDate = dto.openDate;
 
         ticket.vesselGuid = dto.vesselGuid;
-        ticket.positionGuid = dto.positionGuid;
+        ticket.positionGuid = dto.movementGuid;
         ticket.ruleName = dto.ruleName;
         ticket.sender = dto.sender;
         ticket.updated = dto.updated;
