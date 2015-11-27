@@ -210,8 +210,14 @@
 	"preferences_auto_refresh_rate": "Auto refresh rate (minutes)",
 	"preferences_auto_refresh_status": "Auto refresh status",
 	"tab_config_table_header_vessel_color": "Vessel color",
+	
 	"map_settings": "Map settings",
 	"style_settings": "Style settings",
 	"general_settings": "General settings",
-	"general_configuration_geoserver_url": "Geoserver URL"
+	"general_configuration_geoserver_url": "Geoserver URL",
+	"segment_property": "Segment property",
+	"segment_property_from": "From",
+	"segment_property_to": "To",
+	"segment_property_add_rule": "Add new property rule",
+	"segment_property_rm_rule": "Remove property rule"
 }

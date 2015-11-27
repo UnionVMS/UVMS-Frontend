@@ -1,0 +1,26 @@
+.btn-circle {
+	border-radius: 20px;
+    padding: 4px 7px;
+    font-size: 9px;
+}
+.btn-add,
+.btn-rm {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	padding-top: 3px;
+	> a.disabled {
+		cursor: default;
+		color: #808080;
+		> .btn-circle {
+		    background-color: #e4e4e4;
+		    color: #808080;
+		    border-color: #808080;
+		    cursor: default;
+		    pointer-events: none;
+		}
+	}
+}
+.rulesList {
+	margin-top: 20px;
+}

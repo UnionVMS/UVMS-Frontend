@@ -1,0 +1,16 @@
+<div class="row col-md-12" ng-controller="SegmentstylesCtrl">
+	<div class="row">
+		<div class="form-group col-md-4">
+			<dropdown ng-model="segmentProperty" initialtext="{{'spatial.segment_property' | i18n }}" items="segmentProperties"></dropdown>
+		</div>
+		<div class="form-group col-md-4 btn-add">
+			<a ng-class='{ disabled: !segmentProperty}' ng-click="!segmentProperty || addNewRule()" title="{{'spatial.segment_property_add_rule' | i18n }}">
+				<span class="btn btn-primary btn-sm btn-circle"><i class="fa fa-plus"></i></span>
+				{{'spatial.segment_property_add_rule' | i18n }}
+			</a>
+		</div>
+	</div>
+	<div class="row rulesList">
+		<div ng-repeat="item in rulesList" ng-include="'partial/spatial/configurations/vmsStyles/segmentStyles/segmentStylesRuleRow/segmentStylesRuleRow.html'"></div>
+	</div>
+</div>

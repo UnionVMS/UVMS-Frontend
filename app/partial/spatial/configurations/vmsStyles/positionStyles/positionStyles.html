@@ -36,10 +36,14 @@
 		        <tr ng-repeat="report in displayedRecords">
 		            <td>{{ report.code }}</td>
 		            <td>
-			            <div ng-style="{'background-color': report.color && report.color.length > 3 && report.color.indexOf('#') != -1 ? report.color : '#fff'}" class="pickedcolor">
-			            	<i class="fa fa-ban" ng-hide="report.color && report.color.length > 3 && report.color.indexOf('#') != -1"></i>
+		            	<div class="form-group col-md-3">
+			            	<div class="colorPickerComponent">
+					            <div ng-style="{'background-color': report.color && report.color.length > 3 && report.color.indexOf('#') != -1 ? report.color : '#fff'}" class="form-control pickedcolor">
+					            	<i class="fa fa-ban" ng-hide="report.color && report.color.length > 3 && report.color.indexOf('#') != -1"></i>
+					            </div>
+					            <input class="form-control" colorpicker ng-model="report.color" type="text">
+				            </div>
 			            </div>
-			            <input colorpicker ng-model="report.color" type="text">
 			        </td>
 		        </tr>
 		    </tbody>
