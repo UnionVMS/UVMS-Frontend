@@ -43,11 +43,11 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 
 	    if (direction === 'to_server'){
 	        if (moment.utc(date, src_format).isValid()){
-	            return moment(date, src_format).format(server_format);
+	            return moment.utc(date, src_format).format(server_format);
 	        }
 	    } else if(direction === 'from_server') {
 	        if (moment.utc(date, server_format).isValid()){
-	            return moment(date, server_format).format(displayFormat);
+	            return moment.utc(date, server_format).format(displayFormat);
 	        }
 	    }
 	};
@@ -202,6 +202,7 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	        filterExpression: filter,
 	    };
 	    
+	    //Map configurations
 	    if (angular.isDefined(this.mapConfiguration)){
 	        var finalConfig = {};
 	        for (var property in this.mapConfiguration){

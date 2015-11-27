@@ -5,14 +5,9 @@ angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($s
     $scope.projectionSelected = false;
 
     function setProjectionItems() {
-        spatialRestService.getSupportedProjections().then(function (response) {
-            $scope.projections = response;
-            for (var i = 0; i < $scope.projections.length; i++) {
-                $scope.projectionItems.push({"text": $scope.projections[i].name, "code": $scope.projections[i].id});
-            }
-        }, function (error) {
-            //TODO warn the user
-        });
+        for (var i = 0; i < $scope.projections.length; i++) {
+            $scope.projectionItems.push({"text": $scope.projections[i].name, "code": $scope.projections[i].id});
+        }
     }
 
     function setScaleBarUnits() {
@@ -40,14 +35,18 @@ angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($s
 
     function clearCoordinatesUnitItems() {
         $scope.coordinatesFormatItems = [];
-        $scope.configModel.mapSettings.coordinatesFormat = undefined;
+        if ($scope.projectionSelected === true){
+            $scope.configModel.mapSettings.coordinatesFormat = undefined;
+        }
         $scope.projectionSelected = false;
     }
 
     $scope.$watch('configModel.mapSettings.displayProjectionId', function (newVal, oldVal) {
-        clearCoordinatesUnitItems();
-        if (angular.isDefined(newVal) && newVal !== oldVal){
-            setCoordinatesUnitItems(newVal);
+        if (angular.isDefined(newVal)){
+            clearCoordinatesUnitItems();
+            if (newVal !== oldVal){
+                setCoordinatesUnitItems(newVal);
+            }
         }
     });
 
@@ -55,9 +54,23 @@ angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($s
     $scope.init = function () {
         setProjectionItems();
         setScaleBarUnits();
+        //Read properties in the modal
+        if (angular.isDefined($scope.initialConfig)){
+            angular.copy($scope.initialConfig, $scope.configModel);
+        }
+    };
+    
+    //Get data from server
+    $scope.getSupportedProjections = function(){
+        spatialRestService.getSupportedProjections().then(function (response){
+            $scope.projections = response;
+            $scope.init();
+        }, function(error){
+            //TODO warn the user
+        });
     };
     
     locale.ready('spatial').then(function(){
-        $scope.init();
+        $scope.getSupportedProjections();
     });
 });

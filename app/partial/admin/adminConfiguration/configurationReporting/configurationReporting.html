@@ -1,9 +1,9 @@
-<div class="col-md-12" ng-controller="ConfigurationreportingCtrl">
-<div class="containerWrapper">
-	<div class="container">
-	<!--TODO GeoServer URL  -->
-		<div class="containerWithTopBottomPadding" ng-include="'partial/spatial/configurations/configurations.html'"></div>
+<div class="row spatialConfig" ng-controller="ConfigurationreportingCtrl">
+	<div class="containerWrapper">
+	    <div class="containerWithTopBottomPadding containerCollapsible">
+	    	<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/generalSettings/generalSettings.html'"></div>
+			<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/mapSettingsPanel/mapSettingsCollapsiblePanel.html'"></div>
+			<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/vmsStyles/vmsStylesCollapsiblePanel.html'"></div>
+		</div>
 	</div>
-</div>
-
 </div>

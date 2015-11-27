@@ -8,10 +8,40 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
             scaleBarUnits: undefined,
             autoRefreshStatus: false,
             autoRefreshRate: undefined
-        };            
+        };
+        this.generalSettings = {
+            geoserverURL: undefined
+        };
     }
     
-    //TODO remove properties from default object when needed
+    SpatialConfig.prototype.forReportConfig = function(){
+        var srcConfig = new SpatialConfig();
+        var finalConfig = {
+            mapSettings: {
+                mapProjectionId: srcConfig.mapSettings.mapProjectionId,
+                displayProjectionId: srcConfig.mapSettings.displayProjectionId,
+                coordinatesFormat: srcConfig.mapSettings.coordinatesFormat,
+                scaleBarUnits: srcConfig.mapSettings.scaleBarUnits
+            }
+        };
+        
+        return finalConfig;
+    };
+    
+    //Used in the report form map configuration modal
+    SpatialConfig.prototype.forReportConfigFromJson = function(data){
+        var srcConfig = new SpatialConfig();
+        var finalConfig = {
+            mapSettings: { 
+                mapProjectionId: data.mapProjectionId,
+                displayProjectionId: data.displayProjectionId,
+                coordinatesFormat: data.coordinatesFormat.toLowerCase(),
+                scaleBarUnits: data.scaleBarUnits.toLowerCase()
+            }
+        };
+        
+        return finalConfig;
+    };
     
 	return SpatialConfig;
 });

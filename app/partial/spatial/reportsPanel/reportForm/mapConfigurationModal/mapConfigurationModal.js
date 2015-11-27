@@ -1,10 +1,16 @@
-angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, locale, $modalInstance, SpatialConfig, spatialRestService) {
+angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, $timeout, locale, mapConfigs, $modalInstance, SpatialConfig, spatialRestService) {
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
+        $scope.initialConfig = undefined;
     };
 
     $scope.save = function () {
-        $modalInstance.close($scope.exportMapConfiguration());
+        if (angular.isDefined($scope.configModel.mapSettings.displayProjectionId) && !angular.isDefined($scope.configModel.mapSettings.coordinatesFormat)){
+            return false;
+        } else {
+            $modalInstance.close($scope.exportMapConfiguration());
+            $scope.initialConfig = undefined;
+        }
     };
 
     $scope.exportMapConfiguration = function () {
@@ -16,8 +22,14 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
         };
         return exported;
     };
+    
 
     $modalInstance.rendered.then(function () {
         $scope.configModel = new SpatialConfig();
+        if (angular.isDefined(mapConfigs)){
+            $scope.initialConfig = $scope.configModel.forReportConfigFromJson(mapConfigs);
+        } else {
+            $scope.configModel = $scope.configModel.forReportConfig();
+        } 
     });
 });

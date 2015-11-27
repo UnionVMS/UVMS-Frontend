@@ -1,4 +1,4 @@
-<div ng-controller="MapprojectionsettingsCtrl">
+<div class="mapProjSettings" ng-controller="MapprojectionsettingsCtrl">
 	<div class="row">
 	    <div class="form-group col-md-4 noPadding">
 	        <label for="mapProjection">{{'spatial.map_configuration_map_projection' | i18n}}</label>
@@ -6,11 +6,11 @@
 	    </div>
 	    <div class="form-group col-md-4 noPadding">
 	        <label for="displayProjection">{{'spatial.map_configuration_display_projection' | i18n}}</label>
-	        <dropdown id="displayProjection" ng-model="configModel.mapSettings.displayProjectionId" items="projectionItems" initialtext="{{'spatial.map_configuration_display_projection' | i18n}}"></dropdown>
+	        <dropdown ng-model="configModel.mapSettings.displayProjectionId" items="projectionItems" initialtext="{{'spatial.map_configuration_display_projection' | i18n}}"></dropdown>
 	    </div>
 	    <div class="form-group col-md-4 noPadding" ng-show="projectionSelected">
 	        <label for="coordinatesFormat">{{'spatial.map_configuration_coordinates_format' | i18n}}</label>
-	        <dropdown id="coordinatesFormat" ng-model="configModel.mapSettings.coordinatesFormat" items="coordinatesFormatItems" initialtext="{{'spatial.map_configuration_coordinates_format' | i18n}}"></dropdown>
+	        <dropdown id="coordinatesFormat" ng-model="configModel.mapSettings.coordinatesFormat" items="coordinatesFormatItems" initialtext="{{'spatial.map_configuration_coordinates_format' | i18n}}" ng-class="{'has-error': configModel.mapSettings.displayProjectionId !== undefined && configModel.mapSettings.coordinatesFormat === undefined}"></dropdown>
 	    </div>
 	</div>
 	<div class="row">

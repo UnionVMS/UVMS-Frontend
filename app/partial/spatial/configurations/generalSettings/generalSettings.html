@@ -1,0 +1,22 @@
+<div class="col-md-12 collapsibleRow generalSettings" ng-controller="GeneralsettingsCtrl">
+	<accordion close-others="oneAtATime">
+    <accordion-group is-open="status.isOpen">
+    	<accordion-heading>
+    		<div class="panel-title-link" ng-click="toggleOpen()">
+	    		{{'spatial.general_settings' | i18n }}
+	    		<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isOpen, 'glyphicon-chevron-right': !status.isOpen}"></i>
+    		</div>
+	    </accordion-heading>
+	    <div class="row">
+	    	<div class="form-group col-md-12 noPadding">
+	    		<div class="col-md-3">
+	    			<span class="formLabel">{{'spatial.general_configuration_geoserver_url' | i18n}}</span>
+	    		</div>
+	    		<div class="col-md-9">
+	    			<input type="text" class="form-control" ng-model="configModel.generalSettings.geoserverURL"/>
+	    		</div>
+	    	</div>
+	    </div>
+    </accordion-group>
+   </accordion>
+</div>

@@ -1,14 +1,15 @@
 <div class="col-md-12 collapsibleRow" ng-controller="MapsettingscollapsiblepanelCtrl">
   <accordion close-others="oneAtATime">
-    <accordion-group is-open="status.userPreferencesOpen">
+    <accordion-group is-open="status.isOpen">
     	<accordion-heading>
     		<div class="panel-title-link" ng-click="toggleOpen()">
 	    		{{'spatial.map_settings' | i18n }}
-	    		<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.userPreferencesOpen, 'glyphicon-chevron-right': !status.userPreferencesOpen}"></i>
+	    		<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isOpen, 'glyphicon-chevron-right': !status.isOpen}"></i>
     		</div>
 	    </accordion-heading>
         <div ng-include="'partial/spatial/configurations/mapSettingsPanel/refreshSettingsForm/refreshSettingsForm.html'"></div>
         <div ng-include="'partial/spatial/configurations/mapSettingsPanel/mapProjectionSettings/mapProjectionSettings.html'"></div>
+        <!-- <button class="btn btn-primary btn-sm" ng-click="test()">TEST</button> -->
     </accordion-group>
    </accordion>
 </div>

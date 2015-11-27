@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, reportMsgService, locale, Report, reportRestService, configurationService, movementRestService){
+angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService){
     //Report form mode
     $scope.formMode = 'CREATE';
 
@@ -169,12 +169,29 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             $scope.report.areas = data;
         });
     };
-
+    
     $scope.openMapConfigurationModal = function(){
+        if (angular.isDefined($scope.report.id)){
+            spatialRestService.getMapConfigurations($scope.report.id).then(function(response){
+                $scope.mapConfigurationModal(response);
+            }, function(error){
+                //TODO warn the user
+            });
+        } else {
+            $scope.mapConfigurationModal();
+        }
+    };
+
+    $scope.mapConfigurationModal = function(mapConfigurations){
         var modalInstance = $modal.open({
             templateUrl: 'partial/spatial/reportsPanel/reportForm/mapConfigurationModal/mapConfigurationModal.html',
             controller: 'MapconfigurationmodalCtrl',
-            size: 'lg'
+            size: 'lg',
+            resolve: {
+                mapConfigs: function(){
+                    return mapConfigurations;
+                }
+            }
         });
 
         modalInstance.result.then(function(data){
