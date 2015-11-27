@@ -29,7 +29,9 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" class="runningPollItem">
-                            <td>{{item.vessel.name}}</td>
+                            <td>
+                                <a href="#/assets/{{item.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}">{{item.vessel.name}}</a>
+                            </td>
                             <td>{{item.attributes.TRANSPONDER | transponderName}}</td>
                             <td>{{item.startDate | confDateFormat}}</td>
                             <td>{{item.endDate | confDateFormat}}</td>

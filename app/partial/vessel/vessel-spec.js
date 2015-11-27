@@ -41,13 +41,13 @@ describe('VesselCtrl', function() {
         var getVesselByIdSpy = spyOn(vesselRestService, "getVessel").andReturn(deferred2.promise);
 
         var controller = createController({id:'TEST'});
-        var toggleViewVesselSpy = spyOn(scope, "toggleViewVessel");
+        expect(scope.waitingForVesselDataResponse).toBeTruthy();
+        expect(scope.isVisible.vesselForm).toBeTruthy();
+        expect(scope.isVisible.search).toBeFalsy();
         scope.$digest();
 
         //getVessel should have been called
         expect(getVesselByIdSpy).toHaveBeenCalled();
-        //toggleViewVessel should have been called after getting the vessel
-        expect(toggleViewVesselSpy).toHaveBeenCalled();
     }));
 
     it('should get vessel by id on init if state param id is available should handle error', inject(function(Vessel, $q, searchService, vesselRestService, alertService) {

@@ -19,7 +19,7 @@
                     <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
                     <td>{{item.openDate | confDateFormat}}</td>
                     <td>
-                        <span class="link" ng-show="item.vessel">{{item.vessel.name}}</span>
+                        <a ng-show="item.vessel" href="#/assets/{{item.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}">{{item.vessel.name}}</a>
                         <span ng-show="!item.vessel" class="assetNotFound">{{'common.asset_not_found' | i18n}}</span>
                     </td>
                     <td>{{item.ruleName}}</td>
@@ -32,7 +32,7 @@
                     </td>
                     <td>
                         <button class="btn btn-sm btn-primary" ng-show="item.positionGuid" ng-click="showOnMap(item)" title="{{'common.show_on_map' | i18n}}">
-                            <span class="fa fa-globe"></span>
+                            <span class="fa fa-eye"></span>
                         </button>
                         <button show-if-allowed="Rules:manageAlarmsOpenTickets"  ng-if="item.isOpen()" type="button" class="btn btn-sm btn-primary" ng-click="closeTicket(item)" title="{{'alarms.notifications_table_close_title' | i18n}}">{{'alarms.alarms_table_close' | i18n | uppercase}}</button>
                     </td>

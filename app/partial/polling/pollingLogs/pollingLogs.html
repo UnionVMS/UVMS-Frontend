@@ -104,7 +104,7 @@
                             <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" ng-init="isExpanded = false">
                                 <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="check(item)"/></td>
                                 <td>
-                                    <span ng-show="item.vessel">{{item.vessel.name}}</span>
+                                    <span ng-show="item.vessel"><a href="#/assets/{{item.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}">{{item.vessel.name}}</a></span>
                                     <span ng-hide="item.vessel" class="assetNotFound">{{'common.asset_not_found' | i18n}}</span>
                                 </td>
                                 <td>{{item.vessel.externalMarking}}</td>

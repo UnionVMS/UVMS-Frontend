@@ -11,6 +11,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
     };
 
     $scope.currentSearchResults = new SearchResults('', false, locale.getString('vessel.search_zero_results_error'));
+    $scope.waitingForVesselDataResponse = false;
 
     //Selected by checkboxes
     $scope.selectedVessels = [];
@@ -32,13 +33,21 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         if(angular.isDefined(vesselGUID)){
             vesselRestService.getVessel(vesselGUID).then(
                 function(vessel) {
-                    $scope.toggleViewVessel(vessel);
+                    $scope.vesselObj = vessel.copy();
+                    $scope.waitingForVesselDataResponse = false;
                 },
                 function(error){
                     console.error("Error loading details for vessel with with GUID: " +vesselGUID);
+                    //Show alert and vessel list
+                    $scope.waitingForVesselDataResponse = false;
+                    toggleFormDetails();
                     alertService.showErrorMessage(locale.getString('vessel.view_vessel_on_failed_to_load_error'));
                 }
             );
+
+            //Show vessel form with loading indicator
+            $scope.waitingForVesselDataResponse = true;
+            toggleFormDetails();
         }
     };
 
@@ -177,6 +186,11 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         if (!noHideMessage) {
             alertService.hideMessage();
         }
+        toggleFormDetails();
+    };
+
+    //Toggle between vessel details and vessel list
+    var toggleFormDetails = function(){
         $scope.isVisible.vesselForm = !$scope.isVisible.vesselForm;
         $scope.isVisible.search = !$scope.isVisible.search;
     };

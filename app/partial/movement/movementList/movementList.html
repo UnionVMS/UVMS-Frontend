@@ -40,7 +40,7 @@
                     <td>{{movement.vessel.countryCode}}</td>
                     <td>{{movement.vessel.externalMarking}}</td>
                     <td>{{movement.vessel.ircs}}</td>
-                    <td class="movementvesselname">{{movement.vessel.name}}</td>
+                    <td><a href="#/assets/{{movement.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}" ng-show="movement.vessel">{{movement.vessel.name}}</a></td>
                     <td>{{movement.time | confDateFormat}}</td>
                     <td>{{movement.movement.latitude | confCoordinateFormat}}</td>
                     <td>{{movement.movement.longitude | confCoordinateFormat}}</td>
