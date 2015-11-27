@@ -456,7 +456,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
 
 unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, userService, locale, httpPendingRequestsService) {
     //Never cancel these request
-    httpPendingRequestsService.setSkipList(['/translate/locale-', '.lang.json']);
+    httpPendingRequestsService.setSkipList(['/translate/locale-', '.lang.json', '/rules/activity']);
 
     $rootScope.safeApply = function(fn) {
         var phase = $rootScope.$$phase;

@@ -4,11 +4,11 @@
             <ul class="horizontal pipeSeparator">
                 <li ng-class="{active: isActiveTab('HOLDING_TABLE')}" show-if-allowed='Rules:viewAlarmsHoldingTable'>
                     <a href="#/alarms/holdingtable">{{'alarms.pagemenu_holding_table' | i18n }}</a>
-                    <span ng-show="holdingTableNotifications > 0" class="badge notificationsBadge" ng-bind="holdingTableNotifications"></span>
+                    <span ng-show="numberOfOpenAlarmsAndTickets.alarms > 0" class="badge notificationsBadge" ng-bind="numberOfOpenAlarmsAndTickets.alarms"></span>
                 </li>
                 <li ng-class="{active: isActiveTab('OPEN_TICKETS')}" show-if-allowed='Rules:viewAlarmsOpenTickets'>
                     <a href="#/alarms/notifications">{{'alarms.pagemenu_open_tickets' | i18n }}</a>
-                    <span ng-show="openTicketsNotifications > 0" class="badge notificationsBadge" ng-bind="openTicketsNotifications"></span>
+                    <span ng-show="numberOfOpenAlarmsAndTickets.tickets > 0" class="badge notificationsBadge" ng-bind="numberOfOpenAlarmsAndTickets.tickets"></span>
                 </li>
                 <li ng-class="{active: isActiveTab('RULES')}" show-if-allowed='Rules:viewAlarmsRules'>
                     <a href="#/alarms/rules">{{'alarms.pagemenu_rules' | i18n }}</a>

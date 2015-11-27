@@ -1,5 +1,4 @@
-angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $state, $rootScope, $location, $localStorage, userService, renewloginpanel, infoModal, configurationService, selectContextPanel, startPageService, tmhDynamicLocale, locale, $cookieStore, localeSupported, languageNames){
-    $scope.randomNumber = 5;
+angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $state, $rootScope, $location, $localStorage, userService, renewloginpanel, infoModal, configurationService, selectContextPanel, startPageService, tmhDynamicLocale, locale, $cookieStore, localeSupported, languageNames, openAlarmsAndTicketsService){
     $scope.user = {};
     $scope.languages = localeSupported;
     $scope.selectedLanguage = tmhDynamicLocale.get();
@@ -29,6 +28,7 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
         $scope.isAuthenticated = userService.isLoggedIn();
         $scope.contexts = userService.getContexts();
         $scope.currentContext = userService.getCurrentContext();
+        $scope.numberOfOpenAlarmsAndTickets = openAlarmsAndTicketsService.getCount();
     };
     init();
     $rootScope.$on('AuthenticationSuccess', function () {
@@ -101,7 +101,12 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
     };
 
     $scope.viewNotifications = function(){
-        $state.go('app.openTickets');
+        //Go to alarms page if there are any open alarms
+        if($scope.numberOfOpenAlarmsAndTickets.alarms > 0){
+            $state.go('app.holdingTable');
+        }else if($scope.numberOfOpenAlarmsAndTickets.tickets > 0){
+            $state.go('app.openTickets');
+        }
     };
 
     //Go to the start page

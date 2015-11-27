@@ -15,8 +15,14 @@ angular.module('unionvmsWeb')
             getAlarm: function() {
                 return $resource('/rules/rest/alarms/:guid');
             },
+            getOpenAlarmsCount: function() {
+                return $resource('/rules/rest/alarms/countopen');
+            },
             getTicket: function() {
                 return $resource('/rules/rest/tickets/:guid');
+            },
+            getOpenTicketsCount: function() {
+                return $resource('/rules/rest/tickets/countopen');
             },
             getTickets : function(){
                 return $resource('/rules/rest/tickets/list/',{},{
@@ -169,7 +175,7 @@ angular.module('unionvmsWeb')
             deferred.resolve(alarmReport);
         },
         function(error) {
-            deferred.reject("Invalid response status");
+            deferred.reject("Invalid getting alarm");
         });
 
         return deferred.promise;
@@ -193,10 +199,34 @@ angular.module('unionvmsWeb')
             });
         },
         function(error) {
-            deferred.reject("Invalid response status");
+            deferred.reject("Error getting ticket");
         });
 
         return deferred.promise;
+    };
+
+    var getCountFromResource = function(resource) {
+        var deferred = $q.defer();
+        resource.get(function(response) {
+            if (response.code !== 200) {
+                deferred.reject("Invalid response status");
+                return;
+            }
+
+            deferred.resolve(response.data);
+        },
+        function(error) {
+            deferred.reject("Error getting alarm or ticket count.");
+        });
+        return deferred.promise;
+    };
+
+    var getOpenTicketsCount = function(){
+        return getCountFromResource(alarmRestFactory.getOpenTicketsCount());
+    };
+
+    var getOpenAlarmsCount = function(){
+        return getCountFromResource(alarmRestFactory.getOpenAlarmsCount());
     };
 
     return {
@@ -206,6 +236,8 @@ angular.module('unionvmsWeb')
         updateTicketStatus: updateTicketStatus,
         reprocessAlarms: reprocessAlarms,
         getAlarmReport: getAlarmReport,
-        getTicket: getTicket
+        getTicket: getTicket,
+        getOpenTicketsCount: getOpenTicketsCount,
+        getOpenAlarmsCount: getOpenAlarmsCount,
     };
 });

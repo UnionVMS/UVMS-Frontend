@@ -7,19 +7,16 @@ angular.module('unionvmsWeb').directive('alarmsPageHeader', function() {
 		},
         controller: 'alarmsPageHeaderCtrl',
 		templateUrl: 'partial/alarms/alarmsPageHeader/alarmsPageHeader.html',
-		link: function(scope, element, attrs, fn) {           
+		link: function(scope, element, attrs, fn) {
 		}
 	};
 });
 
 angular.module('unionvmsWeb')
-    .controller('alarmsPageHeaderCtrl', function($scope){
-        
-            $scope.isActiveTab = function(tabName){
-                return $scope.activeTab === tabName;
-            };
+    .controller('alarmsPageHeaderCtrl', function($scope, openAlarmsAndTicketsService){
 
-            //TODO: GET REAL DATA INSTEAD OF RANDOM MOCK NUMBERS
-            $scope.holdingTableNotifications = Math.round(Math.random()*15);
-            $scope.openTicketsNotifications = Math.round(Math.random()*3);
+        $scope.isActiveTab = function(tabName){
+            return $scope.activeTab === tabName;
+        };
+        $scope.numberOfOpenAlarmsAndTickets = openAlarmsAndTicketsService.getCount();
     });

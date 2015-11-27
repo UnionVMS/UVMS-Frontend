@@ -147,6 +147,26 @@ describe('alarmRestService', function() {
                     },
                 }
             },
+            getOpenTicketsCount: function() {
+                return {
+                    get: function(callback) {
+                        callback({
+                            code : 200,
+                            data: 2
+                        });
+                    },
+                }
+            },
+            getOpenAlarmsCount: function() {
+                return {
+                    get: function(callback) {
+                        callback({
+                            code : 200,
+                            data: 2
+                        });
+                    },
+                }
+            },
         };
 
         module(function ($provide) {
@@ -320,50 +340,28 @@ describe('alarmRestService', function() {
     });
 
 
-    describe('getTicket', function() {
-        it("getTicket should send request to backend and return received object with connected vessel data", inject(function($rootScope, $q, alarmRestService, Ticket, vesselRestService) {
-            var vesselDeffered = $q.defer();
-            vesselDeffered.resolve({vessel: {guid : 123}});
-            vesselRestSpy = spyOn(vesselRestService, 'getVessel').andReturn(vesselDeffered.promise);
-
-            var guid = "ABC123";
-
+    describe('getOpenTicketsCount', function() {
+        it("getOpenTicketsCount should send request to backend and return received object", inject(function($rootScope, alarmRestService) {
             var resolved = false;
-            alarmRestService.getTicket(guid).then(function(ticket){
+            alarmRestService.getOpenTicketsCount().then(function(numberOfOpenTickets){
                 resolved = true;
-                expect(ticket.guid).toEqual(guid);
-                expect(ticket.vessel).toBeDefined();
+                expect(numberOfOpenTickets).toEqual(2);
             });
             $rootScope.$digest();
             expect(resolved).toBe(true);
         }));
+    });
 
-        it("getTicket should reject promise in case of vessel not found", inject(function($rootScope, $q, alarmRestService, Ticket, vesselRestService) {
-            var vesselDeffered = $q.defer();
-            vesselDeffered.reject("NOT_FOUND");
-            vesselRestSpy = spyOn(vesselRestService, 'getVessel').andReturn(vesselDeffered.promise);
 
-            var guid = "ABC123";
-
-            var rejected = false;
-            alarmRestService.getTicket(guid).then(function(ticket){
-            },function(err){
-                rejected = true;
+    describe('getOpenAlarmsCount', function() {
+        it("getOpenAlarmsCount should send request to backend and return received object", inject(function($rootScope, alarmRestService) {
+            var resolved = false;
+            alarmRestService.getOpenAlarmsCount().then(function(numberOfOpenTickets){
+                resolved = true;
+                expect(numberOfOpenTickets).toEqual(2);
             });
             $rootScope.$digest();
-            expect(rejected).toBe(true);
-        }));
-
-        it("getTicket should reject promise in case of error", inject(function($rootScope, alarmRestService, Ticket) {
-            var guid = undefined;
-            var rejected = false;
-            alarmRestService.getTicket(guid).then(function(ticket){
-            },function(err){
-                rejected = true;
-            });
-            $rootScope.$digest();
-            expect(rejected).toBe(true);
-
+            expect(resolved).toBe(true);
         }));
     });
 
