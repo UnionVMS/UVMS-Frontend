@@ -377,14 +377,21 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                         else{
                             var vesselRequest = new GetListRequest(1, page.getNumberOfItems(), true);
                             $.each(page.items, function(i, pollinglog) {
-                                vesselRequest.addSearchCriteria("GUID", pollinglog.poll.connectionId);
+                                if(angular.isDefined(pollinglog.poll.connectionId) && pollinglog.poll.connectionId !== null){
+                                    vesselRequest.addSearchCriteria("GUID", pollinglog.poll.connectionId);
+                                }
                             });
-                            vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vessels){
-                                vesselList = vessels;
+                            if(vesselRequest.getNumberOfSearchCriterias() > 0){
+                                vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vessels){
+                                    vesselList = vessels;
+                                    vesselDeferred.resolve();
+                                }, function(err){
+                                    vesselDeferred.reject("Error getting vessels.");
+                                });
+                            }else{
+                                //No vessels to search for
                                 vesselDeferred.resolve();
-                            }, function(err){
-                                vesselDeferred.reject("Error getting vessels.");
-                            });
+                            }
                         }
 
                         //Now we get both vessels and exchangePolls so we can connect them to the polling logs
