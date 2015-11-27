@@ -23,8 +23,8 @@
                         <span ng-show="!item.vessel" class="assetNotFound">{{'common.asset_not_found' | i18n}}</span>
                     </td>
                     <td>{{item.ruleName}}</td>
-                    <td><span class="link">{{item.getResolvedDate() | confDateFormat}}</span></td>
-                    <td><span class="link">{{item.getResolvedBy()}}</span></td>
+                    <td>{{item.getResolvedDate() | confDateFormat}}</td>
+                    <td>{{item.getResolvedBy()}}</td>
                     <td class="status">
                         <span class="label" ng-class="{CLOSED:'label-success', PENDING:'label-warning', OPEN:'label-danger'}[item.status]">
                             {{item.status}}

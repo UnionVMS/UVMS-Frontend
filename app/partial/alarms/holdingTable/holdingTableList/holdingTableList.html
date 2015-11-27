@@ -28,8 +28,8 @@
                         <span ng-show="item.alarmItems.length > 1 "tooltip-placement="bottom" tooltip="{{getRuleNamesTooltip(item)}}">{{'alarms.alarms_table_number_of_rules' | i18n:item.alarmItems.length}}</span>
                     </td>
                     <td>{{item.sender}}</td>
-                    <td><span class="link">{{item.getResolvedDate() | confDateFormat}}</span></td>
-                    <td><span class="link">{{item.getResolvedBy()}}</span></td>
+                    <td>{{item.getResolvedDate() | confDateFormat}}</td>
+                    <td>{{item.getResolvedBy()}}</td>
                     <td class="status">
                         <span class="label" ng-class="{CLOSED:'label-success', OPEN:'label-danger', REJECTED:'label-warning'}[item.status]">
                             {{item.status}}
