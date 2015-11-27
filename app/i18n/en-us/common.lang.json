@@ -47,6 +47,7 @@
     "none" : "None",
     "not_implemented" : "This feature is not implemented yet." ,
     "not_available" : "Not available" ,
+    "short_not_available" : "N/A",
     "print_page" : "Print page",
     "previous_page": "Previous page",
     "remove" : "Remove",

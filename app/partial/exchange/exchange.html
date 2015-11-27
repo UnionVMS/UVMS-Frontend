@@ -68,7 +68,7 @@
     						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'sender_reciever'">{{'exchange.table_header_sender_reciever' | i18n}}</th>
     						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'forwardRule'">{{'exchange.table_header_fwd_rule' | i18n}}</th>
     						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'recipient'">{{'exchange.table_header_recipient' | i18n}}</th>
-    						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'dateForwarded'">{{'exchange.table_header_date_fwd' | i18n}}</th>
+    						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'dateFwd'">{{'exchange.table_header_date_fwd' | i18n}}</th>
     						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'status'">{{'exchange.table_header_status' | i18n}}</th>
     					</thead>
     					<tbody>
@@ -88,13 +88,13 @@
                                         <span class="fa fa-search-plus details"></span>
                                     </a>
                                 </td>
-    							<td>{{message.dateRecieved | confDateFormat}}</td>
-                                <td>{{message.source | transponderName}}</td>
-                                <td>{{message.type}}</td>
-    							<td>{{message.senderRecipient}}</td>
-    							<td>{{message.forwardRule}}</td>
-    							<td>{{message.recipient}}</td>
-    							<td>{{message.dateForward | confDateFormat}}</td>
+    							<td>{{message.dateRecieved | confDateFormat | dataNotAvailable}}</td>
+                                <td>{{message.source | transponderName | dataNotAvailable}}</td>
+                                <td>{{message.type | dataNotAvailable}}</td>
+    							<td>{{message.senderRecipient | dataNotAvailable}}</td>
+    							<td>{{message.forwardRule | dataNotAvailable}}</td>
+    							<td>{{message.recipient | dataNotAvailable}}</td>
+    							<td>{{message.dateFwd | confDateFormat | dataNotAvailable}}</td>
     							<td class="status">
                                     <span class="label" ng-class="getStatusLabelClass(message.status)">
                                         {{getStatusLabel(message.status) | uppercase}}
