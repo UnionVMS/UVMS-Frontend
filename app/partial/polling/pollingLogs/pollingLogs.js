@@ -17,20 +17,21 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     $scope.DATE_TODAY = searchUtilsService.getTimeSpanCodeForToday();
     $scope.timeSpanOptions = searchUtilsService.getTimeSpanOptions();
 
-
     $scope.pollTypes = [];
     $scope.pollTypes.push({"text": locale.getString('config.MOBILETERMINAL_POLL_TYPE_CONFIGURATION_POLL'), "code":"CONFIGURATION_POLL"});
     $scope.pollTypes.push({"text": locale.getString('config.MOBILETERMINAL_POLL_TYPE_MANUAL_POLL'), "code":"MANUAL_POLL"});
-    $scope.pollTypes.push({"text": locale.getString('config.MOBILETERMINAL_POLL_TYPE_PROGRAM_POLL'), "code":"PROGRAM_POLL"});
     $scope.pollTypes.push({"text": locale.getString('config.MOBILETERMINAL_POLL_TYPE_SAMPLING_POLL'), "code":"SAMPLE_POLL"});
+    $scope.pollTypes = _.sortBy($scope.pollTypes, function(obj){return obj.text;});
 
     $scope.statusTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('EXCHANGE', 'STATUS'),'STATUS','EXCHANGE', true);
+    $scope.statusTypes = _.sortBy($scope.statusTypes, function(obj){return obj.text;});
 
     var terminalConfigs = configurationService.getValue('MOBILE_TERMINAL_TRANSPONDERS', 'terminalConfigs');
     $scope.terminalTypes = [];
     $.each(terminalConfigs, function(index, terminalConfig){
         $scope.terminalTypes.push({"text":terminalConfig.viewName, "code": terminalConfig.systemType});
     });
+    $scope.terminalTypes = _.sortBy($scope.terminalTypes, function(obj){return obj.text;});
 
     $scope.newPollingLogCount = 0;
 
