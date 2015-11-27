@@ -1,5 +1,5 @@
 <div class="vesselForm" ng-controller="VesselFormCtrl">
-    <form name="vesselForm" method="post" novalidate>
+    <form name="vesselForm" method="post" novalidate >
         <div class="row">
             <div class="col-md-12">
                 <h3 ng-if="isCreateNewMode()">{{'vessel.create_new_vessel' | i18n}}</h3>
@@ -8,7 +8,7 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="card" loading-indicator="waitingForVesselDataResponse">
             <div class="row card-header">
                 <div class="col-md-6">
                     <div class="metadata">
@@ -60,7 +60,7 @@
                                 <div class="col-md-6 textAlignRight">
                                     <span ng-show="isVisible.showCompleteVesselHistoryLink"><a ng-click="viewCompleteVesselHistory()">{{'common.view_all' | i18n}}</a></span>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-md-12" loading-indicator="waitingForHistoryResponse" size="small" type="SPINNER">
                                     <table class="fullWidth" ng-hide="waitingForHistoryResponse">
                                         <thead>
                                             <tr>
@@ -75,7 +75,6 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <loading-icon ng-show="waitingForHistoryResponse"></loading-icon>
                                     <search-result-error-alert ng-show="vesselHistoryError">{{vesselHistoryError}}</search-result-error-alert>
                                 </div>
                             </div>
@@ -86,7 +85,7 @@
                                 <div class="col-md-12">
                                     <h5>{{'vessel.connected_mobile_terminals' | i18n}}</h5>
                                 </div>
-                                <div class="col-md-12" ng-hide="waitingForMobileTerminalsResponse">
+                                <div class="col-md-12" loading-indicator="waitingForMobileTerminalsResponse" size="small" type="SPINNER">
                                     <table class="fullWidth" ng-show="mobileTerminals.length > 0">
                                         <thead>
                                             <tr>
@@ -105,12 +104,11 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <span ng-hide="mobileTerminals.length > 0 || mobileTerminalsError">
+                                    <span ng-hide="waitingForMobileTerminalsResponse || mobileTerminals.length > 0 || mobileTerminalsError">
                                         {{'vessel.zero_connected_mobile_terminals' | i18n}}
                                     </span>
                                 </div>
                                 <div class="col-md-12">
-                                    <loading-icon ng-show="waitingForMobileTerminalsResponse"></loading-icon>
                                     <search-result-error-alert ng-show="mobileTerminalsError">{{mobileTerminalsError}}</search-result-error-alert>
                                 </div>
                             </div>
