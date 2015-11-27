@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',function($scope, $state, locale, alertService, pollingService) {
+angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',function($scope, $state, locale, alertService, pollingService, dateTimeService) {
 
     //Has form submit been atempted?
     $scope.submitAttempted = false;
@@ -10,12 +10,18 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
     //The polling options
     $scope.pollingOptions = pollingService.getPollingOptions();
 
+    //Set min date for program polls. Start date for a program must be in the future
+    var setProgramPollMinDate = function(){
+        $scope.programPollMinDate = dateTimeService.formatUTCDateWithTimezone(moment.utc());
+    };
+
     var resetPollingOptions = function(resetComment){
         pollingService.resetPollingOptions(resetComment);
     };
 
     var init = function(){
         resetPollingOptions(true);
+        setProgramPollMinDate();
     };
 
     $scope.setPollType = function(type){
@@ -140,8 +146,11 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
             $scope.submitAttempted = false;
             $scope.pollingOptionsForm.$setPristine();
 
+            //Update programPollMinDate
+            setProgramPollMinDate();
+
             // Change polling type if incompatible with current selection
-             if(!$scope.isSingleMobileTerminalSelected() && $scope.isSamplingPoll()){
+            if(!$scope.isSingleMobileTerminalSelected() && $scope.isSamplingPoll()){
                 $scope.pollingOptions.type = 'MANUAL';
             }
         }
