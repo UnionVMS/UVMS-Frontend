@@ -20,7 +20,7 @@
                     <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
                     <td>{{item.openDate | confDateFormat}}</td>
                     <td>
-                        <span class="link" ng-show="item.vessel">{{item.vessel.name}}</span>
+                        <a ng-show="item.vessel" href="#/assets/{{item.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}">{{item.vessel.name}}</a>
                         <span ng-show="!item.vessel">{{'alarms.alarms_affected_object_unknown' | i18n}}</span>
                     </td>
                     <td>
@@ -36,7 +36,7 @@
                         </span>
                     </td>
                     <td class="textAlignCenter">
-                        <button show-if-allowed="Rules:manageAlarmsHoldingTable" ng-if="item.isOpen()" type="button" class="btn btn-sm btn-primary" ng-click="resolveItem(item)" title="{{'alarms.alarms_table_resolve_title' | i18n}}">{{'alarms.alarms_table_resolve' | i18n | uppercase}}</button>
+                        <button show-if-allowed="Rules:manageAlarmsHoldingTable" ng-if="item.isOpen()" type="button" class="btn btn-sm btn-primary" ng-click="resolveItem(item)" title="{{'alarms.alarms_table_resolve_title' | i18n}}"><i class="fa fa-pencil"></i></button>
                         <button ng-if="!item.isOpen()" type="button" class="btn btn-sm btn-primary" ng-click="viewItemDetails(item)" title="{{'common.view_details' | i18n}}">
                             <i class="fa fa-eye"></i>
                         </button>
