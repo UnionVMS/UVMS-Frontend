@@ -92,7 +92,6 @@ describe('ManualPositionReportModalCtrl', function() {
         scope.clearMovement();
 
         expect(scope.positionReport.status).toBe("010");
-        expect(scope.positionReport.carrier.flagState).toBe("SWE");
         expect(scope.guid).not.toBeDefined();
     }));
 
@@ -262,7 +261,7 @@ describe('ManualPositionReportModalCtrl', function() {
         scope.sendSuccess = false;
         spyOn(manualPositionRestService, 'saveAndSendMovement').andReturn(deferred.promise);
         spyOn(scope, 'setSuccessText');
-        
+
         // Send position and wait for promise to resolve
         scope.sendPosition();
         expect(manualPositionRestService.saveAndSendMovement).toHaveBeenCalledWith(report);

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $modal, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService) {
+angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $modal, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService, configurationService) {
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
@@ -16,7 +16,10 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
         $scope.vesselForm.$setPristine();
         $scope.submitAttempted = false;
         if (typeof newVal !== 'undefined') {
-            if(!$scope.isCreateNewMode()){
+            if($scope.isCreateNewMode()){
+                //Set default country code when creating new vessel
+                $scope.setDefaultCountryCode();
+            }else{
                 getVesselHistory();
                 getMobileTerminals();
             }
@@ -28,6 +31,14 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     $scope.waitingForCreateResponse = false;
     $scope.waitingForHistoryResponse = false;
     $scope.waitingForMobileTerminalsResponse = false;
+
+    //Set default country code
+    $scope.setDefaultCountryCode = function(){
+        var countryCode  = configurationService.getValue('VESSEL_PARAMETERS', 'vessel.default.flagstate');
+        if(angular.isDefined(countryCode)){
+            $scope.vesselObj.countryCode = countryCode;
+        }
+    };
 
     //Disable form
     $scope.disableForm = function(){
@@ -168,6 +179,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     //Clear the form
     $scope.clearForm = function(){
         $scope.vesselObj = new Vessel();
+        $scope.setDefaultCountryCode();
     };
 
     //Update the Vessel

@@ -10,15 +10,15 @@
     	<form name="manualPositionReportForm" method="post" novalidate>
             <fieldset ng-disabled="confirmSend || readOnly">
                 <div>
-            		<div class="row">
+            		<div class="row" ng-show="errorMessage">
                         <div class="col-md-12">
-                            <search-result-error-alert ng-show="errorMessage">{{errorMessage}}</search-result-error-alert>
+                            <search-result-error-alert>{{errorMessage}}</search-result-error-alert>
                         </div>
                     </div>
                     <div class="row">
             			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.flagState.$dirty) && manualPositionReportForm.flagState.$invalid}" class="col-md-2 smallerpaddingright">
             				<label>{{'movement.manual_position_field_label_flag_state' | i18n}}</label>
-            				<input class="form-control" ng-model="positionReport.carrier.flagState" name="flagState" required ng-disabled="true"/>
+            				<input class="form-control" ng-model="positionReport.carrier.flagState" name="flagState" required/>
             			</div>
             			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.ircs.$dirty) && manualPositionReportForm.ircs.$invalid}" class="col-md-2 smallerpadding" ng-disabled="confirmSend">
                             <label>{{'movement.manual_position_field_label_ircs' | i18n}}</label>

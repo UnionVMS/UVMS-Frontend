@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService, pollingService, pollingRestService, GetPollableListRequest) {
+angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService, pollingService, pollingRestService, GetPollableListRequest, userService, configurationService) {
 
     $scope.alarm = alarm;
     $scope.knownVessel = angular.isDefined(alarm.vessel);
@@ -21,6 +21,10 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
     //Keep track of visibility statuses
     $scope.isVisible = {
         assignAsset : false
+    };
+
+    var checkAccessToFeature = function(feature) {
+        return userService.isAllowed(feature, 'Union-VMS', true);
     };
 
     $scope.init = function() {
@@ -57,7 +61,8 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
         if(angular.isDefined($scope.alarm.movement) && angular.isDefined($scope.alarm.movement.movement)){
             var lat = $scope.alarm.movement.movement.latitude;
             var lng = $scope.alarm.movement.movement.longitude;
-            if(angular.isDefined(lat) && angular.isDefined(lng)){
+            if(angular.isDefined(lat) && angular.isDefined(lng) && lat !== null && lng !== null){
+                //Add marker
                 var formattedTime =  dateTimeService.formatAccordingToUserSettings($scope.alarm.movement.time);
                 var marker = {
                     lng: lat,
@@ -77,12 +82,15 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
 
     //Is acceptAndPoll allowed?
     $scope.acceptAndPollIsAllowed = function() {
-        //TODO: Verify that user has access to polling
-        //Only allowed for national vessels
-        if(angular.isDefined($scope.alarm.vessel)){
-            //TODO: Get flagstate from config
-            var nationalFlagState = 'SWE';
-            return $scope.alarm.vessel.countryCode === nationalFlagState;
+        //Verify that user has access to polling
+        if(checkAccessToFeature('managePolls')){
+            //Polling is only allowed for national vessels
+            if(angular.isDefined($scope.alarm.vessel)){
+                var countryCode  = configurationService.getValue('VESSEL_PARAMETERS', 'vessel.default.flagstate');
+                if(angular.isDefined(countryCode)){
+                    return $scope.alarm.vessel.countryCode === countryCode;
+                }
+            }
         }
         return false;
     };

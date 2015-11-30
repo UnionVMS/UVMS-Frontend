@@ -28,6 +28,9 @@ angular.module('unionvmsWeb')
             },
             getConfigValues : function(){
                 return $resource('/vessel/rest/config');
+            },
+            getConfigParameters : function(){
+                return $resource('/vessel/rest/config/parameters');
             }
         };
     })
@@ -172,9 +175,9 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
-    var getConfiguration = function(){
+    var getConfigurationFromResource = function(resource){
         var deferred = $q.defer();
-        vesselRestFactory.getConfigValues().get({},
+        resource.get({},
             function(response){
                 if(response.code !== 200){
                     deferred.reject("Not valid vessel configuration status.");
@@ -182,10 +185,18 @@ angular.module('unionvmsWeb')
                 }
                 deferred.resolve(response.data);
             }, function(error){
-                console.error("Error geting configuration values for vessel.");
+                console.error("Error geting configuration for vessel.");
                 deferred.reject(error);
             });
         return deferred.promise;
+    };
+
+    var getConfiguration = function(){
+        return getConfigurationFromResource(vesselRestFactory.getConfigValues());
+    };
+
+    var getParameterConfiguration = function(){
+        return getConfigurationFromResource(vesselRestFactory.getConfigParameters());
     };
 
     var getVesselHistoryListByVesselId = function (vesselId, maxNbr){
@@ -310,6 +321,7 @@ angular.module('unionvmsWeb')
         createNewVesselGroup : createNewVesselGroup,
         updateVesselGroup : updateVesselGroup,
         deleteVesselGroup : deleteVesselGroup ,
-        getConfig : getConfiguration
+        getConfig : getConfiguration,
+        getParameterConfig : getParameterConfiguration
     };
 });

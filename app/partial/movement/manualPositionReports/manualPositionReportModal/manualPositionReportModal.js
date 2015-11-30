@@ -1,13 +1,11 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $location, $modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, positionReport, ManualPosition, $timeout, movementRestService, coordinateFormatService, dateTimeService, vesselValidationService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly, manualPositionSource) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $location,$modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, positionReport, ManualPosition, $timeout, movementRestService, coordinateFormatService, dateTimeService, vesselValidationService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly, manualPositionSource) {
 
     $scope.errorMessage ="";
     $scope.readOnly = readOnly;
     $scope.manualPositionSource = manualPositionSource;
     $scope.positionReport = positionReport;
 
-    //Set flagState
-    //TODO: Get flagstate from config
-    $scope.positionReport.carrier.flagState = "SWE";
+    //Set status
     $scope.positionReport.status = "010";
 
     //CUSTOM VALIDATIONS
@@ -24,7 +22,6 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         var oldGuid = positionReport.guid;
         $scope.positionReport = new ManualPosition();
         $scope.guid = oldGuid;
-        $scope.positionReport.carrier.flagState = "SWE";
         $scope.positionReport.status = "010";
     };
 
@@ -271,9 +268,6 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     //Get vessels matching search query
     var getVessels = function() {
         $scope.errorMessage = "";
-        //Add FLAG_STATE search criteria
-        //TODO: Get flag state from configuration
-        vesselsGetListRequest.addSearchCriteria("FLAG_STATE", "SWE");
         return vesselRestService.getVesselList(vesselsGetListRequest).then(
             function(vesselListPage){
                 return vesselListPage.items;
@@ -303,6 +297,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         $scope.positionReport.carrier.name = item.name;
         $scope.positionReport.carrier.externalMarking = item.externalMarking;
         $scope.positionReport.carrier.cfr = item.cfr;
+        $scope.positionReport.carrier.flagState = item.countryCode;
 
         $scope.showLastMovementByVessel(item);
     };

@@ -200,7 +200,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["VESSEL"]);
+                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS"]);
                 }
             },
             data: {
@@ -217,7 +217,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["VESSEL"]);
+                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS"]);
                 }
             },
             data: {
@@ -371,7 +371,11 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'HoldingtableCtrl'
                 }
             },
-            resolve: {},
+            resolve: {
+                config : function(initService){
+                    return initService.loadConfigFor(["VESSEL_PARAMETERS"]);
+                }
+            },
             data: {
                 access: 'viewAlarmsHoldingTable'
             },

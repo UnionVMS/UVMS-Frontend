@@ -42,9 +42,13 @@ describe('AlarmReportModalCtrl', function() {
     }));
 
 
-    it('acceptAndPollIsAllowed should only be allowed for national vessels', inject(function(Vessel) {
+    it('acceptAndPollIsAllowed should only be allowed for national vessels', inject(function(Vessel, userService, configurationService) {
+        //Allowe all
+        spyOn(userService, 'isAllowed').andReturn(true);
+
         var controller = createController();
         var allowedFlagState = 'SWE';
+        spyOn(configurationService, 'getValue').andReturn(allowedFlagState);
         scope.alarm.vessel = new Vessel();
 
         scope.alarm.vessel.countryCode = allowedFlagState;

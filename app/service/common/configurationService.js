@@ -6,6 +6,7 @@
         var configs = {};
         var CONFIG_MODULES = {
             "VESSEL" : vesselRestService.getConfig,
+            "VESSEL_PARAMETERS" : vesselRestService.getParameterConfig,
             "MOVEMENT" : movementRestService.getConfig,
             "MOVEMENT_SOURCE_TYPES" : movementRestService.getConfigForSourceTypes,
             "MOBILETERMINAL" : mobileTerminalRestService.getConfig,
@@ -69,7 +70,7 @@
                 },
                 function(error){
                     $log.error("Failed to load all configurations.");
-                    deferred.reject("FAILED TO LOAD CONFIGURATIONS.");
+                    deferred.reject("Failed to load configuration: " +error);
                 }
             );
 
@@ -87,7 +88,7 @@
                 },
                 function(error){
                     $log.error("Error loading config for " +moduleName);
-                    deferred.reject();
+                    deferred.reject(moduleName);
                 }
             );
             return deferred.promise;
