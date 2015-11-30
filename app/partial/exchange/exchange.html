@@ -88,13 +88,13 @@
                                         <span class="fa fa-search-plus details"></span>
                                     </a>
                                 </td>
-    							<td>{{message.dateRecieved | confDateFormat | dataNotAvailable}}</td>
-                                <td>{{message.source | transponderName | dataNotAvailable}}</td>
-                                <td>{{message.type | dataNotAvailable}}</td>
-    							<td>{{message.senderRecipient | dataNotAvailable}}</td>
-    							<td>{{message.forwardRule | dataNotAvailable}}</td>
-    							<td>{{message.recipient | dataNotAvailable}}</td>
-    							<td>{{message.dateFwd | confDateFormat | dataNotAvailable}}</td>
+    							<td ng-class="{'notAvailable' : !message.dateRecieved}">{{message.dateRecieved | confDateFormat | dataNotAvailable}}</td>
+                                <td ng-class="{'notAvailable' : !message.source}">{{message.source | transponderName | dataNotAvailable}}</td>
+                                <td ng-class="{'notAvailable' : !message.type}">{{message.type | dataNotAvailable}}</td>
+    							<td ng-class="{'notAvailable' : !message.senderRecipient}">{{message.senderRecipient | dataNotAvailable}}</td>
+    							<td ng-class="{'notAvailable' : !message.forwardRule}">{{message.forwardRule | dataNotAvailable}}</td>
+    							<td ng-class="{'notAvailable' : !message.recipient}">{{message.recipient | dataNotAvailable}}</td>
+    							<td ng-class="{'notAvailable' : !message.dateFwd}">{{message.dateFwd | confDateFormat | dataNotAvailable}}</td>
     							<td class="status">
                                     <span class="label" ng-class="getStatusLabelClass(message.status)">
                                         {{getStatusLabel(message.status) | uppercase}}
