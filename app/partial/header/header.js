@@ -103,9 +103,9 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
     $scope.viewNotifications = function(){
         //Go to alarms page if there are any open alarms
         if($scope.numberOfOpenAlarmsAndTickets.alarms > 0){
-            $state.go('app.holdingTable');
+            $state.go('app.holdingTable', {}, {reload: true});
         }else if($scope.numberOfOpenAlarmsAndTickets.tickets > 0){
-            $state.go('app.openTickets');
+            $state.go('app.openTickets', {}, {reload: true});
         }
     };
 

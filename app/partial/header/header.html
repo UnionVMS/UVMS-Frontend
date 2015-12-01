@@ -59,7 +59,7 @@
                             <div class="notifications" ng-if="isAuthenticated">
                                 <div class="fa fa-lg fa-bell-o" ng-click="viewNotifications()"><span class="badge" ng-bind="numberOfOpenAlarmsAndTickets.alarms + numberOfOpenAlarmsAndTickets.tickets" ng-show="numberOfOpenAlarmsAndTickets.alarms > 0 || numberOfOpenAlarmsAndTickets.tickets > 0"></span></div>
                             </div>
-                            <current-time class="currentTime"></current-time>
+                            <current-time class="currentTime" tooltip-placement="bottom" tooltip="{{'header.current_time_title' | i18n}}"></current-time>
                         </div>
 				    </div>
 				</div>
