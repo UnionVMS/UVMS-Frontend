@@ -31,12 +31,16 @@
                         <td class="form-group" ng-class="{'has-error': pollingOptionsForm.configurationNewDNID.$invalid && (submitAttempted || pollingOptionsForm.configurationNewDNID.$dirty)}">
                             <input name="configurationNewDNID" type="text" ng-model="pollingOptions.configurationPoll.newDNID" ng-disabled="!isConfigurationPoll() || !isSingleMobileTerminalSelected()" ng-required="isConfigurationPoll() && isSingleMobileTerminalSelected()"/>
                             <input-validation-message types="required" input="pollingOptionsForm.configurationNewDNID"></input-validation-message>
-                            <span ng-show="isConfigurationPoll() && !isSingleMobileTerminalSelected()" class="validation-warning">{{ "polling.wizard_second_step_configuration_poll_new_dnid_multiple_carrier_warning" | i18n }}</span>
                         </td>
 
                         <td class="form-group" ng-class="{'has-error': pollingOptionsForm.configurationNewMemberNo.$invalid && (submitAttempted || pollingOptionsForm.configurationNewMemberNo.$dirty)}">
                             <input name="configurationNewMemberNo" type="text" ng-model="pollingOptions.configurationPoll.newMemberNo" ng-disabled="!isConfigurationPoll()" ng-required="isConfigurationPoll()"/>
                             <input-validation-message types="required" input="pollingOptionsForm.configurationNewMemberNo"></input-validation-message>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            <span ng-show="isConfigurationPoll() && !isSingleMobileTerminalSelected()" class="validation-warning">{{ "polling.wizard_second_step_configuration_poll_new_dnid_multiple_carrier_warning" | i18n }}</span>
                         </td>
                     </tr>
                 </tbody>

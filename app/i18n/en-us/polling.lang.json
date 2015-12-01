@@ -66,7 +66,7 @@
     "wizard_second_step_configuration_poll_grace_period" :"Grace period",
     "wizard_second_step_configuration_poll_port_grace" :"In port grace",
     "wizard_second_step_configuration_poll_new_dnid" :"New DNID",
-    "wizard_second_step_configuration_poll_new_dnid_multiple_carrier_warning": "Can only be set for one mobile terminal at a time.",
+    "wizard_second_step_configuration_poll_new_dnid_multiple_carrier_warning": "DNID can only be set for one mobile terminal at a time.",
     "wizard_second_step_configuration_poll_new_member_no" :"New member no.",
     "wizard_second_step_configuration_poll_different_terminal_types": "(Obs. Confgiuration can only be applied to one terminal type at a time.)",
     "wizard_second_step_sampling_poll" :"Sampling poll",
