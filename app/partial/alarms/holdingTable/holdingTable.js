@@ -16,14 +16,6 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
     }
 
     $scope.currentSearchResults = new SearchResults('openDate', true);
-    $scope.statusFilter = 'all';
-    $scope.filterOnStatus = function(alarm) {
-        if ($scope.statusFilter === "all") {
-            return true;
-        }
-
-        return alarm.isOpen() ? $scope.statusFilter === "open" : $scope.statusFilter === "closed";
-    };
 
     $scope.resetSearch = function() {
         $scope.$broadcast("resetAlarmSearch");
@@ -86,6 +78,31 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
             ruleNames.push(rule.ruleName);
         });
         return ruleNames.join(', ');
+    };
+
+    //Get status label
+    $scope.getStatusLabel = function(status){
+        switch(status){
+            case 'OPEN':
+                return locale.getString('alarms.alarms_status_open');
+            case 'REJECTED':
+                return locale.getString('alarms.alarms_status_rejected');
+            case 'REPROCESSED':
+                return locale.getString('alarms.alarms_status_reprocessed');
+            default:
+                return status;
+        }
+    };
+
+    $scope.getStatusLabelClass = function(status){
+        switch(status){
+            case 'REPROCESSED':
+                return "label-success";
+            case 'OPEN':
+                return "label-danger";
+            default:
+                return "label-warning";
+        }
     };
 
     //Handle click on the top "check all" checkbox
@@ -169,7 +186,6 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
                 locale.getString('alarms.alarms_table_date_openend'),
                 locale.getString('alarms.alarms_table_object_affected'),
                 locale.getString('alarms.alarms_table_rule'),
-                locale.getString('alarms.alarms_table_sender'),
                 locale.getString('alarms.alarms_table_date_resolved'),
                 locale.getString('alarms.alarms_table_resolved_by'),
                 locale.getString('alarms.alarms_table_status'),
@@ -188,28 +204,25 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
             }
             return exportItems.reduce(
                 function(csvObject, item){
-                    if($scope.filterOnStatus(item)){
-                        var affectedObjectText;
-                        if(angular.isDefined(item.vessel)){
-                            affectedObjectText = item.vessel.name;
-                        }else{
-                            affectedObjectText = locale.getString('alarms.alarms_affected_object_unknown');
-                        }
-
-                        var ruleNames = item.alarmItems.map(function(alarmItem){
-                            return alarmItem.ruleName;
-                            }).join(' & ');
-                        var csvRow = [
-                            $filter('confDateFormat')(item.openDate),
-                            affectedObjectText,
-                            ruleNames,
-                            item.sender,
-                            $filter('confDateFormat')(item.getResolvedDate()),
-                            item.getResolvedBy(),
-                            item.status
-                        ];
-                        csvObject.push(csvRow);
+                    var affectedObjectText;
+                    if(angular.isDefined(item.vessel)){
+                        affectedObjectText = item.vessel.name;
+                    }else{
+                        affectedObjectText = locale.getString('alarms.alarms_affected_object_unknown');
                     }
+
+                    var ruleNames = item.alarmItems.map(function(alarmItem){
+                        return alarmItem.ruleName;
+                        }).join(' & ');
+                    var csvRow = [
+                        $filter('confDateFormat')(item.openDate),
+                        affectedObjectText,
+                        ruleNames,
+                        $filter('confDateFormat')(item.getResolvedDate()),
+                        item.getResolvedBy(),
+                        $scope.getStatusLabel(item.status)
+                    ];
+                    csvObject.push(csvRow);
                     return csvObject;
                 },[]
             );
@@ -229,14 +242,14 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
                     guids.push(alarm.guid);
                     return guids;
                 }, []);
-            if(alarmGuids.length === 0){
-                return;
+            if(alarmGuids.length > 0){
+                alertService.showInfoMessage(locale.getString('alarms.holding_table_reprocess_reports_waiting_for_response_message'));
+                alarmRestService.reprocessAlarms(alarmGuids).then(function(){
+                    alertService.showSuccessMessageWithTimeout(locale.getString('alarms.holding_table_reprocess_reports_success_message'));
+                }, function(err){
+                    alertService.showErrorMessage(locale.getString('alarms.holding_table_reprocess_reports_error_message'));
+                });
             }
-            alarmRestService.reprocessAlarms(alarmGuids).then(function(){
-                alertService.showSuccessMessageWithTimeout(locale.getString('alarms.holding_table_reprocess_reports_success_message'));
-            }, function(err){
-                alertService.showErrorMessage(locale.getString('alarms.holding_table_reprocess_reports_error_message'));
-            });
         }
         $scope.editSelection = "";
     };

@@ -41,162 +41,12 @@ describe('AlarmReportModalCtrl', function() {
         expect(modalInstance.dismiss).toHaveBeenCalled();
     }));
 
-
-    it('acceptAndPollIsAllowed should only be allowed for national vessels', inject(function(Vessel, userService, configurationService) {
-        //Allowe all
-        spyOn(userService, 'isAllowed').andReturn(true);
-
-        var controller = createController();
-        var allowedFlagState = 'SWE';
-        spyOn(configurationService, 'getValue').andReturn(allowedFlagState);
-        scope.alarm.vessel = new Vessel();
-
-        scope.alarm.vessel.countryCode = allowedFlagState;
-        expect(scope.acceptAndPollIsAllowed()).toBeTruthy();
-
-        scope.alarm.vessel.countryCode = "ABC";
-        expect(scope.acceptAndPollIsAllowed()).toBeFalsy();
-    }));
-
-    it('acceptAndPoll should first create a poll and then update status of alarm to closed', inject(function($q) {
-        var controller = createController();
-        var deferred = $q.defer();
-        var createPollSpy = spyOn(scope, "createPollForConnectId").andReturn(deferred.promise);
-        deferred.resolve();
-
-        var deferred2 = $q.defer();
-        var acceptSpy = spyOn(scope, "accept").andReturn(deferred2.promise);
-        deferred2.resolve();
-
-
-        scope.acceptAndPoll();
-        scope.$digest();
-
-        expect(createPollSpy).toHaveBeenCalled();
-        expect(acceptSpy).toHaveBeenCalled();
-    }));
-
-    it('acceptAndPoll should not call accept if it fails to create the poll', inject(function($q) {
-        var controller = createController();
-        var deferred = $q.defer();
-        var createPollSpy = spyOn(scope, "createPollForConnectId").andReturn(deferred.promise);
-        deferred.reject();
-
-        var acceptSpy = spyOn(scope, "accept");
-        var setErrorTextSpy = spyOn(scope, "setErrorText");
-
-
-        scope.acceptAndPoll();
-        scope.$digest();
-
-        expect(createPollSpy).toHaveBeenCalled();
-        expect(acceptSpy).not.toHaveBeenCalled();
-        expect(setErrorTextSpy).toHaveBeenCalled();
-    }));
-
-
-    describe('createPollForConnectId()', function() {
-        it('createPollForConnectId should create a manual poll if exactly one pollable channel is found', inject(function($q, Movement, pollingRestService, pollingService, SearchResultListPage) {
+    describe('reprocess()', function() {
+        it('reprocess() should set status to reproccessed, send request to server, view success text and call callback function', inject(function($q, Alarm, alarmRestService) {
             var deferred = $q.defer();
-            var getPollablesSpy = spyOn(pollingRestService, "getPollablesMobileTerminal").andReturn(deferred.promise);
-            items = [{id: 'mock'}];
-            var searchResultListPage = new SearchResultListPage(items, 1, 1);
-            deferred.resolve(searchResultListPage);
-
-            var deferred2 = $q.defer();
-            var createPollSpy = spyOn(pollingService, "createPolls").andReturn(deferred2.promise);
-            deferred2.resolve();
-
-            var controller = createController();
-            scope.alarm.movement = new Movement();
-            scope.alarm.movement.connectId = "TEST";
-
-            scope.createPollForConnectId();
-            scope.$digest();
-
-            expect(getPollablesSpy).toHaveBeenCalled();
-            expect(createPollSpy).toHaveBeenCalled();
-        }));
-
-        it('createPollForConnectId should not create a manual poll if zero pollable channels are found', inject(function($q, Movement, pollingRestService, pollingService, SearchResultListPage) {
-            var deferred = $q.defer();
-            var getPollablesSpy = spyOn(pollingRestService, "getPollablesMobileTerminal").andReturn(deferred.promise);
-            var searchResultListPage = new SearchResultListPage([], 1, 1);
-            deferred.resolve(searchResultListPage);
-
-            var createPollSpy = spyOn(pollingService, "createPolls");
-
-            var controller = createController();
-            scope.alarm.movement = new Movement();
-            scope.alarm.movement.connectId = "TEST";
-
-            scope.createPollForConnectId();
-            scope.$digest();
-
-            expect(getPollablesSpy).toHaveBeenCalled();
-            expect(createPollSpy).not.toHaveBeenCalled();
-        }));
-
-        it('createPollForConnectId should get pollables by searching for the connectId of the movement of the alarm', inject(function($q, Movement, pollingRestService, pollingService, SearchResultListPage) {
-
-            var connectId = 'TEST';
-            var getPollablesSpy = spyOn(pollingRestService, "getPollablesMobileTerminal").andCallFake(function(getPollableListRequest){
-                var deferred = $q.defer();
-                expect(getPollableListRequest.connectIds.length).toEqual(1);
-                expect(getPollableListRequest.connectIds[0]).toEqual(connectId);
-                expect(getPollableListRequest.page).toEqual(1);
-                deferred.reject();
-                return deferred.promise;
-            });
-
-            var controller = createController();
-            scope.alarm.movement = new Movement();
-            scope.alarm.movement.connectId = connectId;
-
-            expect(pollingService.getPollingOptions().comment).toBeUndefined();
-            scope.createPollForConnectId();
-            scope.$digest();
-
-            expect(getPollablesSpy).toHaveBeenCalled();
-        }));
-
-        it('createPollForConnectId should create a poll of the type MANUAL, with comment set and correct terminal selected', inject(function($q, Movement, pollingRestService, pollingService, SearchResultListPage) {
-            var deferred = $q.defer();
-            var getPollablesSpy = spyOn(pollingRestService, "getPollablesMobileTerminal").andReturn(deferred.promise);
-            items = [{id: 'mock'}];
-            var searchResultListPage = new SearchResultListPage(items, 1, 1);
-            deferred.resolve(searchResultListPage);
-
-            var createPollSpy = spyOn(pollingService, "createPolls").andCallFake(function(){
-                var deferred2 = $q.defer();
-                expect(pollingService.getPollingOptions().type).toEqual('MANUAL');
-                expect(pollingService.getPollingOptions().comment).toBeDefined();
-                expect(pollingService.getNumberOfSelectedTerminals()).toEqual(1);
-                expect(pollingService.getSelectedChannels()[0].id).toEqual('mock');
-                deferred2.resolve();
-                return deferred2.promise;
-            });
-
-            var controller = createController();
-            scope.alarm.movement = new Movement();
-            scope.alarm.movement.connectId = "TEST";
-
-            expect(pollingService.getPollingOptions().comment).toBeUndefined();
-            scope.createPollForConnectId();
-            scope.$digest();
-
-            expect(getPollablesSpy).toHaveBeenCalled();
-            expect(createPollSpy).toHaveBeenCalled();
-        }));
-
-    });
-
-    describe('accept()', function() {
-        it('accept() should set status to closed, send request to server, view success text and call callback function', inject(function($q, Alarm, alarmRestService) {
-            var deferred = $q.defer();
-            var updateStatusSpy = spyOn(alarmRestService, "updateAlarmStatus").andReturn(deferred.promise);
+            var updateStatusSpy = spyOn(alarmRestService, "reprocessAlarms").andReturn(deferred.promise);
             var updatedAlarm = new Alarm();
-            updatedAlarm.setStatusToClosed();
+            updatedAlarm.setStatusToReprocessed();
             deferred.resolve(updatedAlarm);
 
             var controller = createController();
@@ -206,7 +56,7 @@ describe('AlarmReportModalCtrl', function() {
             var callbackSpy = spyOn(scope, "callCallbackFunctionAfterStatusChange");
 
             scope.alarm.status = 'OPEN';
-            scope.accept(false);
+            scope.reprocess();
             scope.$digest();
 
             expect(updateStatusSpy).toHaveBeenCalled();
@@ -217,14 +67,12 @@ describe('AlarmReportModalCtrl', function() {
             expect(callbackSpy).toHaveBeenCalledWith(updatedAlarm);
 
             //The status of the scope alarm should be updated
-            console.log("scope.alarm.");
-            console.log(scope.alarm);
-            expect(scope.alarm.isClosed()).toBeTruthy('Alarm should be closed');
+            expect(scope.alarm.isReprocessed()).toBeTruthy('Alarm should be reprocessed');
         }));
 
-        it('accept() should not update the alarm object if the accept() fails', inject(function($q, Alarm, alarmRestService) {
+        it('reprocess() should not update the alarm object if the accept() fails', inject(function($q, Alarm, alarmRestService) {
             var deferred = $q.defer();
-            var updateStatusSpy = spyOn(alarmRestService, "updateAlarmStatus").andReturn(deferred.promise);
+            var updateStatusSpy = spyOn(alarmRestService, "reprocessAlarms").andReturn(deferred.promise);
             deferred.reject();
 
             var controller = createController();
@@ -234,7 +82,7 @@ describe('AlarmReportModalCtrl', function() {
             var callbackSpy = spyOn(scope, "callCallbackFunctionAfterStatusChange");
 
             scope.alarm.status = 'OPEN';
-            scope.accept(false);
+            scope.reprocess();
             scope.$digest();
 
             expect(updateStatusSpy).toHaveBeenCalled();

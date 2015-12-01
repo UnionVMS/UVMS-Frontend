@@ -8,7 +8,6 @@
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'openDate'">{{'alarms.alarms_table_date_openend' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.name'">{{'alarms.alarms_table_object_affected' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'alarmItems[0].ruleName'">{{'alarms.alarms_table_rule' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'sender'">{{'alarms.alarms_table_sender' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'getResolvedDate()'">{{'alarms.alarms_table_date_resolved' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'getResolvedBy()'">{{'alarms.alarms_table_resolved_by' | i18n}}</th>
                     <th></th>
@@ -16,7 +15,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:filterOnStatus">
+                <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
                     <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
                     <td>{{item.openDate | confDateFormat}}</td>
                     <td>
@@ -27,12 +26,11 @@
                         <span ng-show="item.alarmItems.length === 1" tooltip-placement="bottom" tooltip="{{getRuleNamesTooltip(item)}}">{{item.alarmItems[0].ruleName}}</span>
                         <span ng-show="item.alarmItems.length > 1 "tooltip-placement="bottom" tooltip="{{getRuleNamesTooltip(item)}}">{{'alarms.alarms_table_number_of_rules' | i18n:item.alarmItems.length}}</span>
                     </td>
-                    <td>{{item.sender}}</td>
                     <td>{{item.getResolvedDate() | confDateFormat}}</td>
                     <td>{{item.getResolvedBy()}}</td>
                     <td class="status">
-                        <span class="label" ng-class="{CLOSED:'label-success', OPEN:'label-danger', REJECTED:'label-warning'}[item.status]">
-                            {{item.status}}
+                        <span class="label" ng-class="getStatusLabelClass(item.status)">
+                            {{getStatusLabel(item.status) | uppercase}}
                         </span>
                     </td>
                     <td class="textAlignCenter">

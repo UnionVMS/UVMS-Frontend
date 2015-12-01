@@ -10,32 +10,18 @@
                 </div>
                 <div class="col-md-1 pull-right textAlignRight printAndExport">
                     <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportItemsAsCSVFile()"></i>
-                    <i class="fa fa-lg fa-print" title="{{'common.print_page' | i18n }}" ng-click="print()"></i>
                 </div>
             </div>
 
-            <!-- Toggle: ALL, OPEN, CLOSED -->
             <div class="row filterRow">
-                <div class="col-md-1 editSelection">
-                    <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
-                </div>
+                <div class="col-md-11">
+                    <div class="row">
+                        <div class="col-md-2 editSelection">
+                            <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+                        </div>
 
-                <div class="col-md-2 available-positions-refresh" ng-click="resetSearch()">
-                    <a ng-if="newAlarmsCount > 0"><i class="fa fa-refresh"></i> {{ "alarms.new_items_available" | i18n:[newAlarmsCount] }}</a>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="">
-                        <div class="btn-group">
-                            <label class="btn btn-default" ng-model="statusFilter" btn-radio="'all'">
-                                {{'alarms.alarms_filter_all' | i18n}}
-                            </label>
-                            <label class="btn btn-default" ng-model="statusFilter" btn-radio="'open'">
-                                {{'alarms.alarms_filter_open' | i18n}}
-                            </label>
-                            <label class="btn btn-default" ng-model="statusFilter" btn-radio="'closed'">
-                                {{'alarms.alarms_filter_closed' | i18n}}
-                            </label>
+                        <div class="col-md-2 available-positions-refresh" ng-click="resetSearch()">
+                            <a ng-if="newAlarmsCount > 0"><i class="fa fa-refresh"></i> {{ "alarms.new_items_available" | i18n:[newAlarmsCount] }}</a>
                         </div>
                     </div>
                 </div>

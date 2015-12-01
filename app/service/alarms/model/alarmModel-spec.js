@@ -8,7 +8,6 @@ describe('Alarm', function() {
         "updatedBy": "CLOSING USER",
         "vesselGuid": "ABCD1234",
         "recipient" : "FIN",
-        "sender" : "SWE",
         "alarmItem": [
           {
             "guid": "ALARM_ITEM_GUID_1",
@@ -71,7 +70,6 @@ describe('Alarm', function() {
         expect(alarm.updatedBy).toEqual(alarmData.updatedBy);
         expect(alarm.vesselGuid).toEqual(alarmData.vesselGuid);
         expect(alarm.recipient).toEqual(alarmData.recipient);
-        expect(alarm.sender).toEqual(alarmData.sender);
         expect(alarm.alarmItems.length).toEqual(alarmData.alarmItem.length);
 
         expect(alarm.asset.type).toEqual(alarmData.rawMovement.assetId.assetType);
@@ -99,34 +97,34 @@ describe('Alarm', function() {
         expect(alarm.isOpen()).toBeFalsy();
     }));
 
-    it("isClosed should return true only when status is CLOSED", inject(function(Alarm) {
+    it("isReprocessed should return true only when status is REPROCESSED", inject(function(Alarm) {
         var alarm = Alarm.fromDTO(alarmData);
-        alarm.status = "CLOSED";
-        expect(alarm.isClosed()).toBeTruthy();
+        alarm.status = "REPROCESSED";
+        expect(alarm.isReprocessed()).toBeTruthy();
 
-        alarm.status = "closed";
-        expect(alarm.isClosed()).toBeTruthy();
+        alarm.status = "reprocessed";
+        expect(alarm.isReprocessed()).toBeTruthy();
 
         alarm.status = "OPEN";
-        expect(alarm.isClosed()).toBeFalsy();
+        expect(alarm.isReprocessed()).toBeFalsy();
 
         alarm.status = "";
-        expect(alarm.isClosed()).toBeFalsy();
+        expect(alarm.isReprocessed()).toBeFalsy();
     }));
 
-    it("isPending should return true only when status is PENDING", inject(function(Alarm) {
+    it("isRejected should return true only when status is REJECTED", inject(function(Alarm) {
         var alarm = Alarm.fromDTO(alarmData);
-        alarm.status = "PENDING";
-        expect(alarm.isPending()).toBeTruthy();
+        alarm.status = "REJECTED";
+        expect(alarm.isRejected()).toBeTruthy();
 
-        alarm.status = "pending";
-        expect(alarm.isPending()).toBeTruthy();
+        alarm.status = "rejected";
+        expect(alarm.isRejected()).toBeTruthy();
 
         alarm.status = "OPEN";
-        expect(alarm.isPending()).toBeFalsy();
+        expect(alarm.isRejected()).toBeFalsy();
 
         alarm.status = "";
-        expect(alarm.isPending()).toBeFalsy();
+        expect(alarm.isRejected()).toBeFalsy();
     }));
 
 
@@ -154,21 +152,19 @@ describe('Alarm', function() {
         };
         alarm.placeholderVessel = vessel;
 
-        alarm.setStatusToClosed();
+        alarm.setStatusToReprocessed();
         alarm.setUpdatedBy("TEST");
-        alarm.inactivatePosition   = true;
 
         var dto = alarm.DTO();
 
         expect(dto.guid).toEqual(alarm.guid);
-        expect(dto.status).toEqual("CLOSED");
+        expect(dto.status).toEqual("REPROCESSED");
         expect(dto.updatedBy).toEqual("TEST");
         //Skip linkedVesselGuid for now
         //expect(dto.linkedVesselGuid).toEqual(vessel.vesselId.guid);
-        expect(dto.inactivatePosition).toEqual(true);
     }));
 
-    it('getResolvedDate should return updateDate when status isnt open or pending', inject(function(Alarm) {
+    it('getResolvedDate should return updateDate when status isnt open', inject(function(Alarm) {
         var alarm = Alarm.fromDTO(alarmData);
         var updated = '2015-01-01 12:00:00';
         alarm.updated = updated;
@@ -176,17 +172,14 @@ describe('Alarm', function() {
         alarm.status = "OPEN";
         expect(alarm.getResolvedDate()).toBeUndefined();
 
-        alarm.status = "PENDING";
-        expect(alarm.getResolvedDate()).toBeUndefined();
-
-        alarm.status = "CLOSED";
+        alarm.status = "REPROCESSED";
         expect(alarm.getResolvedDate()).toEqual(updated);
 
         alarm.status = "REJECTED";
         expect(alarm.getResolvedDate()).toEqual(updated);
     }));
 
-    it('getResolvedBy should return updatedBy when status isnt open or pending', inject(function(Alarm) {
+    it('getResolvedBy should return updatedBy when status isnt open', inject(function(Alarm) {
         var alarm = Alarm.fromDTO(alarmData);
         var updatedBy = 'TEST_USER';
         alarm.updatedBy = updatedBy;
@@ -194,10 +187,7 @@ describe('Alarm', function() {
         alarm.status = "OPEN";
         expect(alarm.getResolvedBy()).toBeUndefined();
 
-        alarm.status = "PENDING";
-        expect(alarm.getResolvedBy()).toBeUndefined();
-
-        alarm.status = "CLOSED";
+        alarm.status = "REPROCESSED";
         expect(alarm.getResolvedBy()).toEqual(updatedBy);
 
         alarm.status = "REJECTED";

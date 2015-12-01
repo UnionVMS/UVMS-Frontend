@@ -30,25 +30,6 @@ describe('HoldingtableCtrl', function() {
         expect(longpollingSpy).toHaveBeenCalledWith("/rules/activity/alarm", jasmine.any(Function));
     }));
 
-
-    it('filterOnStatus should return true if status of alarm matches the filter', inject(function($rootScope, Alarm) {
-        var controller = createController();
-
-        //Create an alarm
-        var alarm = new Alarm();
-        alarm.status = "OPEN";
-
-        //Filter should be all from start
-        expect(scope.statusFilter).toEqual('all');
-        expect(scope.filterOnStatus(alarm)).toBeTruthy();
-
-        scope.statusFilter = 'open'
-        expect(scope.filterOnStatus(alarm)).toBeTruthy();
-
-        scope.statusFilter = 'closed'
-        expect(scope.filterOnStatus(alarm)).toBeFalsy();
-    }));
-
     describe('search alarms', function() {
         it('resetSearch should broadcast resetAlarmSearch event', inject(function($rootScope, longPolling, $q) {
             var broadcastSpy = spyOn($rootScope, '$broadcast');

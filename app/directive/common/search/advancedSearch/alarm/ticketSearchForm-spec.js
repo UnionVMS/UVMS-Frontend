@@ -1,4 +1,4 @@
-describe('AlarmSearchController', function() {
+describe('TicketSearchController', function() {
 
     var scope, createController;
 
@@ -13,7 +13,8 @@ describe('AlarmSearchController', function() {
             scope.advancedSearchObject = {};
             scope.DATE_CUSTOM = 'CUSTOM';
             scope.DATE_TODAY = 'TODAY';
-            return $controller('AlarmSearchController', {$scope: scope});
+            scope.timeSpanOptions = [];
+            return $controller('TicketSearchController', {$scope: scope});
         };
     }));
 

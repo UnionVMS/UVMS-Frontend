@@ -1,4 +1,4 @@
-<div class="alarmSearchContainer" ng-controller="AlarmSearchController">
+<div class="alarmSearchContainer" ng-controller="HoldingTableSearchController">
 	<div class="row">
 
 		<div class="col-md-2">
@@ -10,12 +10,12 @@
 		<div class="col-md-2">
 			<datepicker-input model="advancedSearchObject.TO_DATE" time="true" min-date="advancedSearchObject.FROM_DATE"  placeholder="{{'common.search_to' | i18n}}"></datepicker-input>
 		</div>
-		<div class="col-md-2">
-			<input type="text" ng-model="advancedSearchObject.NAME" placeholder="{{'alarms.alarms_search_affected_object_placeholder' | i18n}}"/>
-		</div>
-		<div class="col-md-2">
-            <input type="text" ng-model="advancedSearchObject.SENDER" placeholder="{{'alarms.alarms_search_sender' | i18n}}"/>
-		</div>
+        <div class="col-md-2">
+            <dropdown ng-model="advancedSearchObject.STATUS" initialtext="{{'alarms.alarms_search_status' | i18n}}" items="statusOptions"></dropdown>
+        </div>
+        <div class="col-md-2">
+            <input type="text" ng-model="advancedSearchObject.NAME" placeholder="{{'alarms.alarms_search_affected_object_placeholder' | i18n}}"/>
+        </div>
 		<div class="col-md-2 nopaddingright nopaddingleft">
 			<div class="col-md-6 smallerpadding">
 				<button type="submit" class="btn btn-primary btn-sm vmsbtn" ng-click="performAdvancedSearch()">{{'common.search' | i18n}}</button>

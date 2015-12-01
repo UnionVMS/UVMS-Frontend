@@ -31,7 +31,7 @@ describe('OpenticketsCtrl', function() {
     }));
 
 
-    it('filterOnStatus should return true if status of alarm matches the filter', inject(function($rootScope, Ticket) {
+/*    it('filterOnStatus should return true if status of alarm matches the filter', inject(function($rootScope, Ticket) {
         var controller = createController();
 
         //Create an ticket
@@ -47,7 +47,7 @@ describe('OpenticketsCtrl', function() {
 
         scope.statusFilter = 'closed'
         expect(scope.filterOnStatus(ticket)).toBeFalsy();
-    }));
+    }));*/
 
     describe('search alarms', function() {
         it('resetSearch should broadcast resetAlarmSearch event', inject(function($rootScope, longPolling, $q) {

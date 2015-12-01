@@ -10,9 +10,7 @@
     <div class="row">
         <div class="col-md-12">
             {{'common.status' | i18n}}
-            <span class="label" ng-class="{'label-success': alarm.isClosed(), 'label-danger': alarm.isOpen(), 'label-warning': !alarm.isClosed() && !alarm.isOpen()}">
-                {{getStatusLabel(alarm) | uppercase}}
-            </span>
+            <span class="label" ng-class="getStatusLabelClass(alarm.status)">{{getStatusLabel(alarm.status) | uppercase}}</span>
 
             {{'alarms.position_report_recipient' | i18n}}  <b>{{alarm.recipient}}</b>
         </div>
@@ -221,19 +219,6 @@
         </div>
     </div>
 
-    <div class="row" ng-if="!readOnly">
-        <div class="col-md-12">
-            <div class="sectionHeader">
-                {{'common.actions' | i18n}}
-            </div>
-        </div>
-        <div class="col-md-12">
-            <input type="checkbox" ng-model="alarm.inactivatePosition"/> <span ng-click="inactivatePosition  = !inactivatePosition ;">
-                {{'alarms.position_report_inactivate_position' | i18n}}
-            </span>
-        </div>
-    </div>
-
 </div>
 
 <div class="modal-footer">
@@ -243,23 +228,19 @@
                 <a class="button" ng-click="cancel()">{{"common.cancel" | i18n}}</a>
             </div>
             <div class="buttonGroup button-group-right" ng-hide="statusUpdatedSuccessfully">
-                <a ng-show="acceptAndPollIsAllowed()" class="button" ng-click="acceptAndPoll()">
-                    {{"alarms.position_report_accept_and_poll" | i18n}}
-                </a>
-
-                <button class="btn btn-danger button" type="submit" ng-click="reject()" ng-disabled="waitingForStatusUpdateResponse">
+                <button class="btn btn-sm btn-danger button" type="submit" ng-click="reject()" ng-disabled="waitingForStatusUpdateResponse">
                     <i class="fa fa-times"></i> {{"alarms.position_report_reject" | i18n}}
                 </button>
-                <button class="btn btn-success button" type="submit" ng-click="accept()" ng-disabled="waitingForStatusUpdateResponse">
-                    <i class="fa fa-check"></i> {{"alarms.position_report_accept" | i18n}}
+                <button class="btn btn-sm btn-success button" type="submit" ng-click="reprocess()" ng-disabled="waitingForStatusUpdateResponse">
+                    <i class="fa fa-check"></i> {{"alarms.position_report_reprocess" | i18n}}
                 </button>
             </div>
         </div>
     </div>
     <div class="row buttons" ng-if="readOnly">
         <div class="buttonGroup button-group-right">
-            <button class="btn btn-primary button" ng-click="cancel()">
-                {{"common.close" | i18n}}
+            <button class="btn btn-sm btn-success button" type="submit" ng-click="reopen()" ng-show="alarm.isRejected()" ng-disabled="waitingForStatusUpdateResponse">
+                <i class="fa fa-undo"></i> {{"alarms.position_report_reopen" | i18n}}
             </button>
         </div>
     </div>

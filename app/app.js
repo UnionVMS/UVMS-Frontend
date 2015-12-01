@@ -372,9 +372,6 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                 }
             },
             resolve: {
-                config : function(initService){
-                    return initService.loadConfigFor(["VESSEL_PARAMETERS"]);
-                }
             },
             data: {
                 access: 'viewAlarmsHoldingTable'
@@ -497,7 +494,7 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
                 else{
                     $rootScope.loadingPageIconHidden = false;
                 }
-                $rootScope.loadingPageMessage = locale.getString('common.loading_page');
+                    $rootScope.loadingPageMessage = locale.getString('common.loading_page');
                 $rootScope.loadingPage = true;
             }, showSpinnerAfterMilliSeconds);
         }

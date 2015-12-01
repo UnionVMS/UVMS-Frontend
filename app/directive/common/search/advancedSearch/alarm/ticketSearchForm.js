@@ -1,9 +1,12 @@
-angular.module('unionvmsWeb').controller('AlarmSearchController', function($scope, locale, ruleRestService) {
+angular.module('unionvmsWeb').controller('TicketSearchController', function($scope, locale, ruleRestService) {
 
     $scope.rules = [];
 
     var init = function(){
         $scope.resetSearch();
+
+        //Add ALL option to timeSpan dropdown
+        $scope.timeSpanOptions.unshift({text: locale.getString('common.time_span_all'), code:'ALL'});
 
         //Populate rules dropdown
         ruleRestService.getRulesList().then(function(rulesPage){
@@ -14,6 +17,13 @@ angular.module('unionvmsWeb').controller('AlarmSearchController', function($scop
             rulesOptions = _.sortBy(rulesOptions, function(obj){return obj.text;});
             $scope.rules = rulesOptions;
         });
+
+        //Status options
+        //TODO: GET STATUS FROM CONFIG
+        $scope.statusOptions = [];
+        $scope.statusOptions.push({text: locale.getString('alarms.alarms_status_closed'), code:'CLOSED'});
+        $scope.statusOptions.push({text: locale.getString('alarms.alarms_status_open'), code:'OPEN'});
+
     };
 
     $scope.$on("resetAlarmSearch", function() {
@@ -24,7 +34,10 @@ angular.module('unionvmsWeb').controller('AlarmSearchController', function($scop
     $scope.resetSearch = function(){
         //empty advancedSearchobject.
         $scope.resetAdvancedSearchForm(false);
-        $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_TODAY;
+        //Set TIME_SPAN to ALL
+        $scope.advancedSearchObject.TIME_SPAN = 'ALL';
+        //Set status to OPEN
+        $scope.advancedSearchObject.STATUS = 'OPEN';
         $scope.performAdvancedSearch();
     };
 

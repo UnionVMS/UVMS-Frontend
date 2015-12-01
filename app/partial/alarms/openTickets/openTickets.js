@@ -7,17 +7,6 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
     ];
 
     $scope.currentSearchResults = new SearchResults('openDate', true);
-    $scope.statusFilter = 'all';
-
-    $scope.newTicketsCount = 0;
-
-    $scope.filterOnStatus = function(alarm) {
-        if ($scope.statusFilter === "all") {
-            return true;
-        }
-
-        return alarm.isOpen() ? $scope.statusFilter === "open" : $scope.statusFilter === "closed";
-    };
 
     $scope.resetSearch = function() {
         $scope.$broadcast("resetAlarmSearch");
@@ -64,7 +53,6 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
     };
 
-
     //Goto page in the search results
     $scope.gotoPage = function(page){
         if(angular.isDefined(page)){
@@ -88,6 +76,30 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
                 alertService.showErrorMessageWithTimeout(locale.getString('alarms.notifications_close_error_message'));
             }
         );
+    };
+
+
+    //Get status label
+    $scope.getStatusLabel = function(status){
+        switch(status){
+            case 'OPEN':
+                return locale.getString('alarms.alarms_status_open');
+            case 'CLOSED':
+                return locale.getString('alarms.alarms_status_closed');
+            default:
+                return status;
+        }
+    };
+
+    $scope.getStatusLabelClass = function(status){
+        switch(status){
+            case 'CLOSED':
+                return "label-success";
+            case 'OPEN':
+                return "label-danger";
+            default:
+                return "label-warning";
+        }
     };
 
     //Handle click on the top "check all" checkbox
@@ -203,23 +215,21 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
             }
             return exportItems.reduce(
                 function(csvObject, item){
-                    if($scope.filterOnStatus(item)){
-                        var affectedObjectText;
-                        if(angular.isDefined(item.vessel)){
-                            affectedObjectText = item.vessel.name;
-                        }else if(angular.isDefined(item.vesselGuid)){
-                            affectedObjectText = item.vesselGuid;
-                        }
-                        var csvRow = [
-                            $filter('confDateFormat')(item.openDate),
-                            affectedObjectText,
-                            item.ruleName,
-                            $filter('confDateFormat')(item.getResolvedDate()),
-                            item.getResolvedBy(),
-                            item.status
-                        ];
-                        csvObject.push(csvRow);
+                    var affectedObjectText;
+                    if(angular.isDefined(item.vessel)){
+                        affectedObjectText = item.vessel.name;
+                    }else if(angular.isDefined(item.vesselGuid)){
+                        affectedObjectText = item.vesselGuid;
                     }
+                    var csvRow = [
+                        $filter('confDateFormat')(item.openDate),
+                        affectedObjectText,
+                        item.ruleName,
+                        $filter('confDateFormat')(item.getResolvedDate()),
+                        item.getResolvedBy(),
+                        item.status
+                    ];
+                    csvObject.push(csvRow);
                     return csvObject;
                 },[]
             );

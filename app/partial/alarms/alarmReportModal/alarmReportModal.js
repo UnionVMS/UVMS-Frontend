@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService, pollingService, pollingRestService, GetPollableListRequest, userService, configurationService) {
+angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService,  userService, configurationService) {
 
     $scope.alarm = alarm;
     $scope.knownVessel = angular.isDefined(alarm.vessel);
@@ -80,39 +80,32 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
         }
     };
 
-    //Is acceptAndPoll allowed?
-    $scope.acceptAndPollIsAllowed = function() {
-        //Verify that user has access to polling
-        if(checkAccessToFeature('managePolls')){
-            //Polling is only allowed for national vessels
-            if(angular.isDefined($scope.alarm.vessel)){
-                var countryCode  = configurationService.getValue('VESSEL_PARAMETERS', 'vessel.default.flagstate');
-                if(angular.isDefined(countryCode)){
-                    return $scope.alarm.vessel.countryCode === countryCode;
-                }
-            }
-        }
-        return false;
-    };
-
-
     //Get status label
-    $scope.getStatusLabel = function(alarm){
-        var label;
+    $scope.getStatusLabel = function(status){
         switch(status){
-            case alarm.isClosed():
-                label = locale.getString('common.status_closed');
-                break;
-            case alarm.isPending():
-                label = locale.getString('common.status_pending');
-                break;
-            case alarm.isOpen():
-                label = locale.getString('common.status_open');
-                break;
+            case 'OPEN':
+                return locale.getString('alarms.alarms_status_open');
+            case 'CLOSED':
+                return locale.getString('alarms.alarms_status_closed');
+            case 'REJECTED':
+                return locale.getString('alarms.alarms_status_rejected');
+            case 'REPROCESSED':
+                return locale.getString('alarms.alarms_status_reprocessed');
             default:
-                label = alarm.status;
+                return status;
         }
-        return label;
+    };
+    //Get CSS class for the status label
+    $scope.getStatusLabelClass = function(status){
+        switch(status){
+            case 'CLOSED':
+            case 'REPROCESSED':
+                return "label-success";
+            case 'OPEN':
+                return "label-danger";
+            default:
+                return "label-warning";
+        }
     };
 
     //Show/hide assign asset form
@@ -134,81 +127,21 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
         $scope.modalStatusClass = "alert-danger";
     };
 
-    //Update status in backend
-    var sendStatusUpdateToServer = function(){
-        alarmRestService.updateAlarmStatus($scope.alarm).then(function(){
-            $scope.setSuccessText(locale.getString("movement.manual_position_save_success"), $scope.closeModal);
-        },
-        function(error){
-            $scope.setErrorText(locale.getString("movement.manual_position_save_error"));
-        });
-    };
-
-    //Accept and poll alarm
-    $scope.acceptAndPoll = function(){
-        if(!$scope.waitingForStatusUpdateResponse){
-            $scope.waitingForStatusUpdateResponse = true;
-            $scope.createPollForConnectId().then(function(){
-                $scope.accept(true);
-            }, function(err){
-                $scope.waitingForStatusUpdateResponse = false;
-                console.error(err);
-                $scope.setErrorText(locale.getString("alarms.position_report_create_poll_error"));
-            });
-        }
-    };
-
-    //Create a poll for the selected alarm
-    $scope.createPollForConnectId = function(){
-        //Create a GetPollabeListRequest to get the pollable channels
-        var getPollableListRequest = new GetPollableListRequest();
-        var connectId = $scope.alarm.movement.connectId;
-        getPollableListRequest.addConnectId(connectId);
-        var deferred = $q.defer();
-        pollingRestService.getPollablesMobileTerminal(getPollableListRequest).then(
-            function(searchResultListPage){
-                if(searchResultListPage.getNumberOfItems() === 0){
-                    return deferred.reject("No pollable channel found.");
-                }else if(searchResultListPage.getNumberOfItems() > 1){
-                    return deferred.reject("More than one pollable channel found.");
-                }else{
-                    //Add termina to polling selection
-                    pollingService.addMobileTerminalToSelection(searchResultListPage.items[0]);
-                    pollingService.getPollingOptions().type = 'MANUAL';
-                    pollingService.getPollingOptions().comment = locale.getString('alarms.position_report_create_poll_comment');
-                    pollingService.createPolls().then(function(){
-                        //Poll created
-                        deferred.resolve("Poll created");
-                    }, function(err){
-                        deferred.reject("Error creating poll.", err);
-                    });
-                }
-            },
-            function(error){
-                deferred.reject("Error getting pollable channels.");
-            }
-        );
-        return deferred.promise;
-    };
-    //Accept the alarm
-    $scope.accept = function(pollCreated){
+    //Reprocess the alarm
+    $scope.reprocess = function(){
         $scope.waitingForStatusUpdateResponse = true;
         var copy = $scope.alarm.copy();
-        copy.setStatusToClosed();
-        alarmRestService.updateAlarmStatus(copy).then(function(updatedAlarm){
+
+        alarmRestService.reprocessAlarms([alarm.guid]).then(function(){
             $scope.waitingForStatusUpdateResponse = false;
-            $scope.alarm.status = updatedAlarm.status;
+            $scope.alarm.setStatusToReprocessed();
             $scope.statusUpdatedSuccessfully = true;
-            if(pollCreated){
-                $scope.setSuccessText(locale.getString("alarms.position_report_status_update_poll_accept_success"), $scope.closeModal);
-            }else{
-                $scope.setSuccessText(locale.getString("alarms.position_report_status_update_accept_success"), $scope.closeModal);
-            }
-            $scope.callCallbackFunctionAfterStatusChange(updatedAlarm);
+            $scope.setSuccessText(locale.getString("alarms.position_report_status_update_reprocess_success"), $scope.closeModal);
+            $scope.callCallbackFunctionAfterStatusChange($scope.alarm);
         },
         function(error){
             $scope.waitingForStatusUpdateResponse = false;
-            $scope.setErrorText(locale.getString("alarms.position_report_status_update_accept_error"));
+            $scope.setErrorText(locale.getString("alarms.position_report_status_update_reprocess_error"));
         });
     };
 
@@ -227,6 +160,24 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
         function(error){
             $scope.waitingForStatusUpdateResponse = false;
             $scope.setErrorText(locale.getString("alarms.position_report_status_update_reject_error"));
+        });
+    };
+
+    //Reopen the alarm
+    $scope.reopen = function(){
+        $scope.waitingForStatusUpdateResponse = true;
+        var copy = $scope.alarm.copy();
+        copy.setStatusToOpen();
+        alarmRestService.updateAlarmStatus(copy).then(function(updatedAlarm){
+            $scope.waitingForStatusUpdateResponse = false;
+            $scope.alarm.status = updatedAlarm.status;
+            $scope.readOnly = false;
+            $scope.setSuccessText(locale.getString("alarms.position_report_status_update_reopen_success"), function(){$scope.modalStatusText = ''});
+            $scope.callCallbackFunctionAfterStatusChange(updatedAlarm);
+        },
+        function(error){
+            $scope.waitingForStatusUpdateResponse = false;
+            $scope.setErrorText(locale.getString("alarms.position_report_status_update_reopen_error"));
         });
     };
 

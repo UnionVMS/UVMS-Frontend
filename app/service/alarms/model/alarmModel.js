@@ -14,10 +14,8 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
         };
         this.vesselGuid = undefined;
         this.recipient = undefined;
-        this.sender = undefined;
         this.vessel = undefined;
         this.placeholderVessel = undefined;
-        this.inactivatePosition = false;
     }
 
     Alarm.fromDTO = function(dto){
@@ -29,7 +27,6 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
         alarm.updatedBy = dto.updatedBy;
         alarm.vesselGuid = dto.vesselGuid;
         alarm.recipient = dto.recipient;
-        alarm.sender = dto.sender;
 
         //AlarmItem
         var i;
@@ -58,8 +55,12 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
         return alarm;
     };
 
-    Alarm.prototype.setStatusToClosed = function() {
-        this.status = "CLOSED";
+    Alarm.prototype.setStatusToOpen = function() {
+        this.status = "OPEN";
+    };
+
+    Alarm.prototype.setStatusToReprocessed = function() {
+        this.status = "REPROCESSED";
     };
 
     Alarm.prototype.setStatusToRejected = function() {
@@ -70,17 +71,17 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
         return typeof this.status === 'string' && this.status.toUpperCase() === "OPEN";
     };
 
-    Alarm.prototype.isPending = function() {
-        return typeof this.status === 'string' && this.status.toUpperCase() === "PENDING";
+    Alarm.prototype.isRejected = function() {
+        return typeof this.status === 'string' && this.status.toUpperCase() === "REJECTED";
     };
 
-    Alarm.prototype.isClosed = function() {
-        return typeof this.status === 'string' && this.status.toUpperCase() === "CLOSED";
+    Alarm.prototype.isReprocessed = function() {
+        return typeof this.status === 'string' && this.status.toUpperCase() === "REPROCESSED";
     };
 
     //Get resolved date. Return updated date if alarm is closed.
     Alarm.prototype.getResolvedDate = function() {
-        if(this.isOpen() || this.isPending()){
+        if(this.isOpen()){
             return;
         }
         return this.updated;
@@ -88,7 +89,7 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
 
     //Get resolvedBy user. Return updatedBy if alarm is closed.
     Alarm.prototype.getResolvedBy = function() {
-        if(this.isOpen() || this.isPending()){
+        if(this.isOpen()){
             return;
         }
         return this.updatedBy;
@@ -105,7 +106,6 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
             status: this.status,
         };
         dto.updatedBy = this.updatedBy;
-        dto.inactivatePosition = this.inactivatePosition;
 
         //Hide for now
         /*if(angular.isDefined(this.placeholderVessel)){
@@ -130,14 +130,12 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
         copy.asset = _.clone(this.asset);
         copy.vesselGuid = this.vesselGuid;
         copy.recipient = this.recipient;
-        copy.sender = this.sender;
         if(angular.isDefined(this.vessel)){
             copy.vessel = this.vessel.copy();
         }
         if(angular.isDefined(this.placeholderVessel)){
             copy.placeholderVessel = this.placeholderVessel.copy();
         }
-        copy.inactivatePosition = this.inactivatePosition;
         return copy;
     };
 

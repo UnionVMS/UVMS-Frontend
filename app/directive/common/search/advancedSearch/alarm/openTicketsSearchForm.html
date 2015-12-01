@@ -1,4 +1,4 @@
-<div class="alarmSearchContainer" ng-controller="AlarmSearchController">
+<div class="alarmSearchContainer" ng-controller="TicketSearchController">
     <div class="row">
 
         <div class="col-md-2">
@@ -11,9 +11,12 @@
             <datepicker-input model="advancedSearchObject.TO_DATE" time="true" min-date="advancedSearchObject.FROM_DATE" placeholder="{{'common.search_to' | i18n}}"></datepicker-input>
         </div>
         <div class="col-md-2">
+            <dropdown ng-model="advancedSearchObject.STATUS" initialtext="{{'alarms.alarms_search_status' | i18n}}" items="statusOptions"></dropdown>
+        </div>
+        <div class="col-md-1">
             <input type="text" ng-model="advancedSearchObject.NAME" placeholder="{{'alarms.alarms_search_affected_object_placeholder' | i18n}}"/>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
             <dropdown ng-model="advancedSearchObject.RULE_GUID" initialtext="{{'alarms.alarms_search_rule' | i18n}}" items="rules"></dropdown>
         </div>
         <div class="col-md-2 nopaddingright nopaddingleft">
