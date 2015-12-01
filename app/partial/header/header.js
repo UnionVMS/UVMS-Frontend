@@ -39,6 +39,7 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
     });
     $rootScope.$on('ContextSwitch', function () {
         init();
+        openAlarmsAndTicketsService.restart();
     });
 
     $scope.getUser = function(){

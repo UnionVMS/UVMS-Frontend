@@ -11,6 +11,10 @@ angular.module('unionvmsWeb').factory('openAlarmsAndTicketsService',function($lo
     };
 
     var init = function(){
+        //Reset the numbers
+        numberOfOpenTicketsAndAlarms.alarms = 0;
+        numberOfOpenTicketsAndAlarms.tickets = 0;
+
         //Check that user has access to view alarms
         if(checkAccess('viewAlarmsHoldingTable')){
             //Get start value
@@ -53,6 +57,9 @@ angular.module('unionvmsWeb').factory('openAlarmsAndTicketsService',function($lo
         getCount : function(){
             return numberOfOpenTicketsAndAlarms;
         },
+        restart : function(){
+            init();
+        }
     };
 
     init();
