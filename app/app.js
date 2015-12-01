@@ -476,6 +476,13 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
     var showPageNavigationSpinnerTimeout;
     var showSpinnerAfterMilliSeconds = 600;
 
+    //Handle authenticationNeeded
+    $rootScope.$on('authenticationNeeded', function() {
+        $log.info("on authenticationNeeded event in app .js:");
+        $log.info("Authentication needed. Logging out.");
+        userService.logout();
+    });
+    
     //Handle state change start
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, $modalStack) {
         //Cancel http requests on page navigation
