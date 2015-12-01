@@ -214,6 +214,24 @@ box-shadow: none;
     }
 }
 
+//Style tooltips
+@tooltip-arrow-color:@primaryColor;
+//#content and .header are needed to override tooltip styles defined in user.less
+#content div.tooltip .tooltip-inner, .header div.tooltip .tooltip-inner {
+    color: #fff;
+    background-color: @primaryColor;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
+
+/*Override variables*/
+//Prevent mobile mobile, min width is now 992px
 @screen-md: 1px;
 @screen-xs: 1px;
 @screen-sm: 1px;
+
+//Use colors from globalVariables.less
+@brand-danger:          @errorColor;
+@brand-primary:         @primaryColor;
+@brand-success:         @successColor;
+@brand-warning:         @warningColor;
