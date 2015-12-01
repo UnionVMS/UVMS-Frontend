@@ -1,6 +1,6 @@
 describe('newPollWizardCtrl', function() {
 
-    var scope,ctrl,longpollingSpy;
+    var scope,ctrl;
 
     beforeEach(module('unionvmsWeb'));
 

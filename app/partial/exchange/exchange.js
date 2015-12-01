@@ -9,6 +9,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     $scope.exchangeLogsSearchResults.incomingOutgoing = 'all';
 
     $scope.newExchangeLogCount = 0;
+    var longPollingIdPlugins, longPollingIdSendingQueue, longPollingIdExchangeList;
 
     var updatePluginStatuses = function(newStatuses) {
         $.each($scope.transmissionStatuses.items, function(index, plugin) {
@@ -42,17 +43,17 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         $scope.getSendingQueue();
         $scope.getTransmissionStatuses();
 
-        longPolling.poll("/exchange/activity/plugins", function(response) {
+        longPollingIdPlugins = longPolling.poll("/exchange/activity/plugins", function(response) {
             updatePluginStatuses(response);
         });
 
-        longPolling.poll("/exchange/activity/queue", function(response) {
+        longPollingIdSendingQueue = longPolling.poll("/exchange/activity/queue", function(response) {
             if (response.ids.length > 0) {
                 $scope.getSendingQueue();
             }
         });
 
-        longPolling.poll("/exchange/activity/exchange", function(response) {
+        longPollingIdExchangeList =  longPolling.poll("/exchange/activity/exchange", function(response) {
             if (response.ids.length > 0) {
                 updateExchangeLogs(response.ids[0]);
             }
@@ -397,6 +398,9 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
         searchService.reset();
+        longPolling.cancel(longPollingIdPlugins);
+        longPolling.cancel(longPollingIdSendingQueue);
+        longPolling.cancel(longPollingIdExchangeList);
     });
 
     $scope.resendAllQueueItemsInGroup = function(item){

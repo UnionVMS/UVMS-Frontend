@@ -34,6 +34,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     $scope.terminalTypes = _.sortBy($scope.terminalTypes, function(obj){return obj.text;});
 
     $scope.newPollingLogCount = 0;
+    var longPollingId;
 
     $scope.resetSearch = function() {
         searchService.resetAdvancedSearch();
@@ -67,8 +68,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
             $scope.searchPolls();
         }
 
-        // doLongPolling();
-        longPolling.poll("/exchange/activity/poll", function(response) {
+        longPollingId = longPolling.poll("/exchange/activity/poll", function(response) {
             if (response.ids.length > 0) {
                 updatePollingLogsWithGuid(response.ids[0]);
             }
@@ -294,6 +294,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
         searchService.reset();
+        longPolling.cancel(longPollingId);
     });
 
     init();

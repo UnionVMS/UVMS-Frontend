@@ -2,6 +2,9 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
+    $scope.newTicketsCount = 0;
+    var longPollingId;
+
     $scope.editSelectionDropdownItems = [
         {text:locale.getString('common.export_selection'), code : 'EXPORT'}
     ];
@@ -25,7 +28,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
     };
 
     var init = function(){
-        longPolling.poll("/rules/activity/ticket", function(response) {
+        longPollingId = longPolling.poll("/rules/activity/ticket", function(response) {
             if (response.ids.length > 0) {
                 updateSearchWithGuid(response.ids[0]);
             }
@@ -250,6 +253,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
         searchService.reset();
+        longPolling.cancel(longPollingId);
     });
 
     init();

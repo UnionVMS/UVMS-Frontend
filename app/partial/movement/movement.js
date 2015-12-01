@@ -4,6 +4,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     $scope.sortFilter = '';
     $scope.editSelectionDropdownItems = [{'text':locale.getString('movement.editselection_see_on_map'),'code':'MAP'}, {'text':locale.getString('common.export_selection'),'code':'EXPORT'}];
     $scope.newMovementsCount = 0;
+    var longPollingId;
 
     //Search objects and results
     $scope.currentSearchResults = new SearchResults('vessel.name', false, locale.getString('movement.movement_search_error_result_zero_pages'));
@@ -35,7 +36,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
             PositionReportModal.showReportWithGuid($stateParams.id);
          }
 
-         longPolling.poll("/movement/activity/movement", function(response) {
+         longPollingId = longPolling.poll("/movement/activity/movement", function(response) {
             if (response.ids.length > 0) {
                 updateSearchWithGuid(response.ids[0]);
             }
@@ -192,6 +193,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
         searchService.reset();
+        longPolling.cancel(longPollingId);
     });
 
 

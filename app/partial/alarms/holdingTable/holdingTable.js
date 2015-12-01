@@ -3,6 +3,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
     $scope.selectedItems = []; //Selected items by checkboxes
 
     $scope.newAlarmsCount = 0;
+    var longPollingId;
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Rules', true);
@@ -34,7 +35,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
     };
 
     var init = function(){
-        longPolling.poll("/rules/activity/alarm", function(response) {
+        longPollingId = longPolling.poll("/rules/activity/alarm", function(response) {
             if (response.ids.length > 0) {
                 updateSearchWithGuid(response.ids[0]);
             }
@@ -280,6 +281,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
         searchService.reset();
+        longPolling.cancel(longPollingId);
     });
 
     init();

@@ -14,11 +14,12 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
 
     //Search objects and results
     $scope.currentSearchResults = new SearchResults('carrier.name', false, locale.getString('movement.movement_search_error_result_zero_pages'), equalGuid);
+    var longPollingId;
 
     var init = function(){
         $scope.searchManualPositions();
 
-        longPolling.poll("/movement/activity/movement/manual", function(response) {
+        longPollingId = longPolling.poll("/movement/activity/movement/manual", function(response) {
             if (response.ids.length > 0) {
                 manualPositionRestService.getManualMovement(response.ids[0]).then(function(movement) {
                    $scope.currentSearchResults.updateWithSingleItem(movement);
@@ -222,6 +223,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
         searchService.reset();
+        longPolling.cancel(longPollingId);
     });
 
     init();
