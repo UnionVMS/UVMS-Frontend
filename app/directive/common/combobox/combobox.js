@@ -153,14 +153,14 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             	}else{
             		comboboxService.setActiveCombo(null);
             	}
-            }
+            };
             
             var init = function(){
             	
                 scope.selectFieldId = generateGUID();
                 scope.comboboxId = "combo-" + scope.selectFieldId;
                 
-                $('.comboList', element).attr('id', scope.comboboxId)
+                $('.comboList', element).attr('id', scope.comboboxId);
                 $('#' + scope.comboboxId).appendTo('body');
                 
             };

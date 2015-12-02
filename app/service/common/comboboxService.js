@@ -29,7 +29,7 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
     			}
     		}
     	}
-    }
+    };
 	
 	cb.setActiveCombo = function(comboScope){
 		if(activeCombo && activeCombo !== comboScope){
