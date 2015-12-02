@@ -10,6 +10,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
     auditOptionsService.setOptions($scope.selectedTab);
 
     $scope.currentSearchResults = new SearchResults('date', false);
+    var modalInstance;
 
 	//Sets tabs
 	var setTabs = function (){
@@ -29,10 +30,6 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
             {
                 'tab': 'GIS',
                 'title': locale.getString('audit.tab_gis')
-            },
-            {
-                'tab': 'CATCH_AND_SURVEILLANCE',
-                'title': locale.getString('audit.tab_catch_and_surveillance')
             },
             {
                 'tab': 'ALARMS',
@@ -161,7 +158,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
             titleLabel : locale.getString('common.comment'),
             textLabelPromise : deferred.promise,
         };
-        infoModal.open(options);
+        modalInstance = infoModal.open(options);
     };
 
     //Get the url to the affected object
@@ -216,6 +213,9 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
 
     $scope.$on("$destroy", function() {
         searchService.reset();
+        if(angular.isDefined(modalInstance)){
+            modalInstance.dismiss();
+        }
     });
 
     init();

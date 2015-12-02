@@ -7,9 +7,14 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
         ASSET_GROUP : 'Asset Group',
         MOBILE_TERMINAL : 'Mobile Terminal',
         POLL : 'Poll',
+        POLLING_PROGRAM : 'Polling program',
         AUTOMATIC_POSITION_REPORT : 'Automatic position report',
+        MANUAL_POSITION_REPORT : 'Manual position report',
         ALARM : 'Alarm',
         CUSTOM_RULE : 'Custom rule',
+        AREA : 'Area', //Mock value,
+        USER : 'User', //Mock value,
+        USER_ROLE : 'User role', //Mock value,
     };
 
     var currentOptions = {
@@ -25,18 +30,23 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
         };
     };
 
-    //All available TYPES
-    var auditLogTypes = {
+    //All available dropdown options for TYPE
+    var dropdownItems = {
         asset: createDropdownItem(TYPES.ASSET),
         assetGroup: createDropdownItem(TYPES.ASSET_GROUP),
         automaticPositionReport: createDropdownItem(TYPES.AUTOMATIC_POSITION_REPORT),
+        manualPositionReport: createDropdownItem(TYPES.MANUAL_POSITION_REPORT),
         mobileTerminal: createDropdownItem(TYPES.MOBILE_TERMINAL),
         poll: createDropdownItem(TYPES.POLL),
+        pollingProgram: createDropdownItem(TYPES.POLLING_PROGRAM),
         alarm: createDropdownItem(TYPES.ALARM),
         customRule: createDropdownItem(TYPES.CUSTOM_RULE),
+        area: createDropdownItem(TYPES.AREA),
+        user: createDropdownItem(TYPES.USER),
+        userRole: createDropdownItem(TYPES.USER_ROLE),
     };
 
-    //All available OPERATIONS
+    //All available dropdown options for OPERATION
     var auditLogOperations = {
         archive: createDropdownItem("Archive"),
         create: createDropdownItem("Create"),
@@ -70,32 +80,28 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
                 newOperations = [];
             switch(tab){
                 case 'ASSETS_AND_TERMINALS':
-                    newTypes = [auditLogTypes.asset, auditLogTypes.mobileTerminal, auditLogTypes.poll, auditLogTypes.assetGroup];
+                    newTypes = [dropdownItems.asset, dropdownItems.mobileTerminal, dropdownItems.poll, dropdownItems.pollingProgram, dropdownItems.assetGroup];
                     newOperations = [auditLogOperations.create, auditLogOperations.update, auditLogOperations.remove, auditLogOperations.link, auditLogOperations.unlink];
                     break;
                 case 'POSITION_REPORTS':
-                    newTypes = [auditLogTypes.automaticPositionReport];
+                    newTypes = [dropdownItems.automaticPositionReport, dropdownItems.manualPositionReport];
                     newOperations = [auditLogOperations.create];
                     break;
                 case 'GIS':
-                    newTypes = [];
-                    newOperations = [auditLogOperations.create, auditLogOperations.update, auditLogOperations.remove];
-                    break;
-                case 'CATCH_AND_SURVEILLANCE':
-                    newTypes = [];
+                    newTypes = [dropdownItems.area];
                     newOperations = [auditLogOperations.create, auditLogOperations.update, auditLogOperations.remove];
                     break;
                 case 'ALARMS':
-                    newTypes = [auditLogTypes.alarm, auditLogTypes.customRule];
+                    newTypes = [dropdownItems.alarm, dropdownItems.customRule];
                     newOperations = [auditLogOperations.create];
                     break;
                 case 'ACCESS_CONTROL':
-                    newTypes = [];
+                    newTypes = [dropdownItems.user,dropdownItems.userRole];
                     newOperations = [auditLogOperations.create, auditLogOperations.update, auditLogOperations.remove];
                     break;
                 case 'ALL':
-                    newTypes = Object.keys(auditLogTypes).map(function(key) {
-                        return auditLogTypes[key];
+                    newTypes = Object.keys(dropdownItems).map(function(key) {
+                        return dropdownItems[key];
                     });
                     newOperations = Object.keys(auditLogOperations).map(function(key) {
                         return auditLogOperations[key];
