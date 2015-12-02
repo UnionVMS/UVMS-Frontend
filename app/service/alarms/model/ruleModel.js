@@ -71,6 +71,8 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
                     rule.definitions.push(RuleDefinition.fromDTO(definition));
                 });
             }
+            //Sort them
+            rule.definitions = _.sortBy(rule.definitions, function(aDef){return aDef.order;});
 
             rule.timeIntervals = [];
             if(angular.isArray(dto.timeIntervals)){
@@ -85,11 +87,14 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
                     rule.actions.push(RuleAction.fromDTO(action));
                 });
             }
+            //Sort them by order
+            rule.actions = _.sortBy(rule.actions, function(aDef){return aDef.order;});
 
             return rule;
         };
 
         Rule.prototype.DTO = function(){
+            var aDTO, i = 0, j = 0;
             return {
                 guid : this.guid,
                 name : this.name,
@@ -103,11 +108,15 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
                     return intervals;
                 },[]),
                 definitions : this.definitions.reduce(function(defs, def){
-                    defs.push(def.DTO());
+                    aDTO = def.DTO();
+                    aDTO.order = i++; //Update order starting from 0
+                    defs.push(aDTO);
                     return defs;
                 },[]),
                 actions : this.actions.reduce(function(acts, action){
-                    acts.push(action.DTO());
+                    aDTO = action.DTO();
+                    aDTO.order = j++; //Update order starting from 0
+                    acts.push(aDTO);
                     return acts;
                 },[]),
             };

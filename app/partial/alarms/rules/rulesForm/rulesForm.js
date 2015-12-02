@@ -121,9 +121,15 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         $scope.currentRule.addTimeInterval(new RuleTimeInterval());
     };
 
-    //Disable availability dropdown when type is GLOBAL
+    //Disable availability dropdown when type is GLOBAL or in update mode
     $scope.disableAvailability = false;
     $scope.updateAvailabilityDropdown = function(selection){
+        //Update mode?
+        if(!$scope.isCreateNewMode()){
+            $scope.disableAvailability = true;
+            return;
+        }
+
         var selectedType = angular.isDefined(selection) ? selection.code : $scope.currentRule.type;
         if(selectedType === 'GLOBAL'){
             $scope.currentRule.availability = 'PUBLIC';

@@ -93,6 +93,7 @@ describe('RulesformCtrl', function() {
     describe('updateFormToMatchTheCurrentRule()', function() {
         it('should add a new definition and a new action to new Rules', inject(function($rootScope, Rule) {
             var controller = createController();
+            scope.isCreateNewMode = function(){return true;};
             var addDefinitionRowSpy = spyOn(scope, "addDefinitionRow");;
             var addActionRowSpy = spyOn(scope, "addActionRow");;
 
@@ -108,6 +109,7 @@ describe('RulesformCtrl', function() {
 
         it('should NOT add a new definition and a new action to existing Rules', inject(function($rootScope) {
             var controller = createController();
+            scope.isCreateNewMode = function(){return true;};
             var addDefinitionRowSpy = spyOn(scope, "addDefinitionRow");;
             var addActionRowSpy = spyOn(scope, "addActionRow");;
 
@@ -120,6 +122,7 @@ describe('RulesformCtrl', function() {
 
         it('should update list of disabled action', inject(function($rootScope, Rule) {
             var controller = createController();
+            scope.isCreateNewMode = function(){return true;};
             var updateDisabledActionsSpy = spyOn(scope, "updateDisabledActions");;
 
             scope.currentRule = new Rule();
@@ -142,6 +145,7 @@ describe('RulesformCtrl', function() {
 
         it('should reset test message', inject(function($rootScope, Rule) {
             var controller = createController();
+            scope.isCreateNewMode = function(){return true;};
 
             scope.ruleTest.message = "SOMETHING";
             scope.ruleTest.outdated = true;
@@ -154,6 +158,7 @@ describe('RulesformCtrl', function() {
 
         it('should reset form validation', inject(function($rootScope, Rule, $compile) {
             var controller = createController();
+            scope.isCreateNewMode = function(){return true;};
 
             //Create the form
             var element = angular.element('<form name="ruleForm"></form>');
@@ -366,6 +371,7 @@ describe('RulesformCtrl', function() {
     describe('updateAvailabilityDropdown()', function() {
         it('should disable availabilityType when Rule type is GLOBAL', inject(function($rootScope, Rule) {
             var controller = createController();
+            scope.isCreateNewMode = function(){return true;};
 
             scope.currentRule = new Rule();
             scope.currentRule.type = 'GLOBAL';
@@ -378,6 +384,7 @@ describe('RulesformCtrl', function() {
 
         it('should enable availabilityType when Rule type isn\'t GLOBAL', inject(function($rootScope, Rule) {
             var controller = createController();
+            scope.isCreateNewMode = function(){return true;};
 
             scope.currentRule = new Rule();
             scope.currentRule.type = 'EVENT';
@@ -386,6 +393,19 @@ describe('RulesformCtrl', function() {
             scope.updateAvailabilityDropdown();
             expect(scope.currentRule.availability).toEqual('PRIVATE'); //Should be unchanged
             expect(scope.disableAvailability).toBeFalsy();
+        }));
+
+        it('should disable availabilityType when not in create mode', inject(function($rootScope, Rule) {
+            var controller = createController();
+            scope.isCreateNewMode = function(){return false;};
+
+            scope.currentRule = new Rule();
+            scope.currentRule.type = 'EVENT';
+            scope.currentRule.availability = 'PRIVATE';
+
+            scope.updateAvailabilityDropdown();
+            expect(scope.currentRule.availability).toEqual('PRIVATE');
+            expect(scope.disableAvailability).toBeTruthy();
         }));
     });
 

@@ -28,7 +28,7 @@
     				<td>{{getTypeLabelForRule(item)}}</td>
     				<td>{{item.lastTriggered | confDateFormat}}</td>
                     <td>{{item.dateUpdated | confDateFormat}}</td>
-                    <td class="link">{{item.updatedBy}}</td>
+                    <td>{{item.updatedBy}}</td>
                     <td class="subscription">
                         <div ng-if="item.active && isSubscriptionPossible(item)">
                             <dropdown ng-model="item.subscription" initialtext="{{'common.none' | i18n}}" initialtext-selectable items="subscriptionsOptions"></dropdown>

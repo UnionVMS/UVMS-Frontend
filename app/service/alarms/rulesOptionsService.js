@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurationService, locale, savedSearchService) {
+angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurationService, locale, savedSearchService, spatialRestService) {
 
     var actionsThatRequireValue = [];
     var DROPDOWNS = {
@@ -23,9 +23,11 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
 
     var createDropdownItemsWithSameTextAsValue = function(codes){
         var options = [];
-        $.each(codes, function(index, code){
-            options.push({'text': code,'code':code});
-        });
+        if(Array.isArray(codes)){
+            $.each(codes, function(index, code){
+                options.push({'text': code,'code':code});
+            });
+        }
         return options;
     };
 
@@ -165,6 +167,12 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
 
         //Areas subcriteria
         //TODO: Add Areas
+/*        spatialRestService.getAreaLayers().then(function(areasResponse){
+            console.log("areasResponse");
+            console.log(areasResponse);
+        }, function(err){
+            console.error("Error getting areas");
+        });*/
         //ruleDefinitionDropdowns.AREA.AREA_TYPE = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
         //ruleDefinitionDropdowns.AREA.AREA_ID = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
         //ruleDefinitionDropdowns.AREA.AREA_NAME = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);

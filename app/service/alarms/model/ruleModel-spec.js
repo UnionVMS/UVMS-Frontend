@@ -38,7 +38,7 @@ describe('Rule', function() {
               "value": "SWE111333",
               "endOperator": ")",
               "logicBoolOperator": "AND",
-              "order": 1
+              "order": 2
             },
             {
               "startOperator": "",
@@ -48,19 +48,19 @@ describe('Rule', function() {
               "value": 1234567,
               "endOperator": "",
               "logicBoolOperator": "NONE",
-              "order": 2
+              "order": 1
             }
         ],
         "actions" : [
             {
                 "action": "SEND_TO_ENDPOINT",
                 "value": "ABC123",
-                "order": 0
+                "order": 1
             },
             {
                 "action": "HOLDING_TABLE",
                 "value": undefined,
-                "order": 1
+                "order": 0
             }
         ],
         "timeIntervals": [
@@ -113,6 +113,18 @@ describe('Rule', function() {
         expect(rule.dateUpdated).toEqual(ruleDTO.updated);
 
         expect(rule.definitions.length).toEqual(ruleDTO.definitions.length);
+        //Should be sorted
+        expect(rule.definitions[0].order).toEqual(0);
+        expect(rule.definitions[1].order).toEqual(1);
+        expect(rule.definitions[2].order).toEqual(2);
+        expect(rule.definitions[2].value).toEqual("SWE111333");
+
+        expect(rule.actions.length).toEqual(ruleDTO.actions.length);
+        //Should be sorted
+        expect(rule.actions[0].order).toEqual(0);
+        expect(rule.actions[0].action).toEqual("HOLDING_TABLE");
+        expect(rule.actions[1].order).toEqual(1);
+
         expect(rule.timeIntervals.length).toEqual(ruleDTO.timeIntervals.length);
 
         expect(rule.notifyByEMail).toBeUndefined();
