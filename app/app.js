@@ -14,10 +14,11 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'ngWebSocket',
     'checklist-model',
     'angularScreenfull',
-    'ngCookies',
-    'frapontillo.bootstrap-switch',
-    'colorpicker.module'
-    ]);
+	'ngCookies',
+	'frapontillo.bootstrap-switch',
+	'colorpicker.module',
+	'ui.select'
+	]);
 
 var currentUserContextPromise = function(userService) {
     return userService.findSelectedContext();
@@ -510,21 +511,21 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
 
         $timeout.cancel(showPageNavigationSpinnerTimeout);
         //Only show spinner if user is logged in or waiting for ping request response
-        showPageNavigationSpinnerTimeout = $timeout(function(){
-            //Hide spinner icon and text when no context selected
+            showPageNavigationSpinnerTimeout = $timeout(function(){
+                //Hide spinner icon and text when no context selected
             if(!userService.getCurrentContext() && !waitingForUserPingResponse){
-                $rootScope.loadingPageIconHidden = true;
-            }
-            else{
-                $rootScope.loadingPageIconHidden = false;
-            }
+                    $rootScope.loadingPageIconHidden = true;
+                }
+                else{
+                    $rootScope.loadingPageIconHidden = false;
+                }
             if(waitingForUserPingResponse){
                 $rootScope.loadingPageMessage = locale.getString('common.loading_page_logging_in');
             }else{
                 $rootScope.loadingPageMessage = locale.getString('common.loading_page');
             }
-            $rootScope.loadingPage = true;
-        }, showSpinnerAfterMilliSeconds);
+                $rootScope.loadingPage = true;
+            }, showSpinnerAfterMilliSeconds);
     });
 
     //Handle state change success
