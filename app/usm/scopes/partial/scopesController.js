@@ -362,6 +362,11 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
         }
 
         $scope.saveUpdateDelete = function (scope) {
+            //Format dates
+            scope.dataFrom = angular.isDefined(scope.dataFrom) ? moment.utc(scope.dataFrom).format('YYYY-MM-DD') : null;
+            scope.dataTo = angular.isDefined(scope.dataTo) ? moment.utc(scope.dataTo).format('YYYY-MM-DD') : null;
+            scope.activeFrom = angular.isDefined(scope.activeFrom) ? moment.utc(scope.activeFrom).format('YYYY-MM-DD') : null;
+            scope.activeTo = angular.isDefined(scope.activeTo) ? moment.utc(scope.activeTo).format('YYYY-MM-DD') : null;
             $log.log(scope);
             if (mode === 'new') {
                 scopeServices.createScope(scope).then(

@@ -125,11 +125,11 @@ accountServiceModule.factory('accountService', ['$q', '$resource', '$log', funct
             "userName": user.userName,
             "person": user.person,
             "organisation_parent": user.organisation_parent,
-            "lockoutTo": moment.utc(user.lockoutTo).format('YYYY-MM-DD'),
+            "lockoutTo": angular.isDefined(user.lockoutTo) ? moment.utc(user.lockoutTo).format('YYYY-MM-DD') : null,
             "lockoutReason": user.lockoutReason,
             "notes": user.notes,
-            "activeFrom": moment.utc(user.activeFrom).format('YYYY-MM-DD'),
-            "activeTo": moment.utc(user.activeTo).format('YYYY-MM-DD'),
+            "activeFrom": angular.isDefined(user.activeFrom) ? moment.utc(user.activeFrom).format('YYYY-MM-DD') : null,
+            "activeTo": angular.isDefined(user.activeTo) ? moment.utc(user.activeTo).format('YYYY-MM-DD') : null,
             "status": user.status,
             "organisation":user.organisation
         };
