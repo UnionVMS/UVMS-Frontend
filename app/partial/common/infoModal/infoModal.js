@@ -32,7 +32,7 @@ app.controller('infoModalCtrl', function($scope, $modalInstance, options, locale
 app.factory('infoModal',function($modal){
     return {
         open :function(options){
-            var modalInstance = $modal.open({
+            return $modal.open({
                 templateUrl: 'partial/common/infoModal/infoModal.html',
                 controller: 'infoModalCtrl',
                 windowClass : "infoModal",

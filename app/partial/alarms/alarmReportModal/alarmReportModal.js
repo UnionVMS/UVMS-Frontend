@@ -295,7 +295,7 @@ angular.module('unionvmsWeb').factory('AlarmReportModal', function($modal) {
                         return options;
                     },
                 }
-            }).result;
+            });
         }
     };
 });

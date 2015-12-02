@@ -4,6 +4,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
 
     $scope.newAlarmsCount = 0;
     var longPollingId;
+    var modalInstance;
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Rules', true);
@@ -266,7 +267,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
                 item.updatedBy = updatedItem.updatedBy;
             }
         };
-        AlarmReportModal.show(alarmItem, options);
+        modalInstance = AlarmReportModal.show(alarmItem, options);
     };
 
     //View item details
@@ -275,13 +276,16 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         var options = {
             readOnly : true
         };
-        AlarmReportModal.show(alarmItem, options);
+        modalInstance = AlarmReportModal.show(alarmItem, options);
     };
 
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
         searchService.reset();
         longPolling.cancel(longPollingId);
+        if(angular.isDefined(modalInstance)){
+            modalInstance.dismiss();
+        }
     });
 
     init();

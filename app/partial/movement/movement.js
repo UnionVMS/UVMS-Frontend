@@ -5,6 +5,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     $scope.editSelectionDropdownItems = [{'text':locale.getString('movement.editselection_see_on_map'),'code':'MAP'}, {'text':locale.getString('common.export_selection'),'code':'EXPORT'}];
     $scope.newMovementsCount = 0;
     var longPollingId;
+    var modalInstance;
 
     //Search objects and results
     $scope.currentSearchResults = new SearchResults('vessel.name', false, locale.getString('movement.movement_search_error_result_zero_pages'));
@@ -33,7 +34,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
 
     var init = function(){
          if ($stateParams.id) {
-            PositionReportModal.showReportWithGuid($stateParams.id);
+            modalInstance = PositionReportModal.showReportWithGuid($stateParams.id);
          }
 
          longPollingId = longPolling.poll("/movement/activity/movement", function(response) {
@@ -121,13 +122,13 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
             manualPositionSource : true
         };
         var reportObj = new ManualPosition();
-        ManualPositionReportModal.show(reportObj, modalOptions);
+        modalInstance = ManualPositionReportModal.show(reportObj, modalOptions);
     };
 
 
     //View item details
     $scope.viewItemDetails = function(item){
-        PositionReportModal.showReport(item);
+        modalInstance = PositionReportModal.showReport(item);
     };
 
     //Export data as CSV file
@@ -194,6 +195,9 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         alertService.hideMessage();
         searchService.reset();
         longPolling.cancel(longPollingId);
+        if(angular.isDefined(modalInstance)){
+            modalInstance.dismiss();
+        }
     });
 
 

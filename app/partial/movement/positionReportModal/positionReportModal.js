@@ -85,7 +85,7 @@ angular.module('unionvmsWeb').factory('PositionReportModal', function($modal) {
                     return positionReportGuid;
                 }
             }
-        }).result;
+        });
     };
 
     //Show position report with guid

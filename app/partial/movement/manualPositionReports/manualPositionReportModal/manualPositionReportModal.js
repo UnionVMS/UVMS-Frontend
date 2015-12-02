@@ -373,7 +373,7 @@ angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($mod
                         return options.manualPositionSource || false;
                     }
                 }
-			}).result;
+			});
 		}
 	};
 });

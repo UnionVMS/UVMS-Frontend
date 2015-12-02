@@ -4,6 +4,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
 
     $scope.newTicketsCount = 0;
     var longPollingId;
+    var modalInstance;
 
     $scope.editSelectionDropdownItems = [
         {text:locale.getString('common.export_selection'), code : 'EXPORT'}
@@ -188,7 +189,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         options.movementPromise = movementPromise;
 
         //Open modal
-        AlarmReportModal.show(copy, options);
+        modalInstance = AlarmReportModal.show(copy, options);
     };
 
     //Export data as CSV file
@@ -254,6 +255,9 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         alertService.hideMessage();
         searchService.reset();
         longPolling.cancel(longPollingId);
+        if(angular.isDefined(modalInstance)){
+            modalInstance.dismiss();
+        }
     });
 
     init();

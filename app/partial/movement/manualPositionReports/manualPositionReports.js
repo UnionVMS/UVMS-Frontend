@@ -7,6 +7,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     $scope.selectedMovements = [];
 
     $scope.isManualMovement = true;
+    var modalInstance;
 
     var equalGuid = function(a, b) {
         return a.guid !== undefined && b.guid !== undefined && a.guid === b.guid;
@@ -69,7 +70,8 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
             reportObj = new ManualPosition();
         }
 
-        ManualPositionReportModal.show(reportObj, modalOptions).then(function(result) {
+        modalInstance = ManualPositionReportModal.show(reportObj, modalOptions);
+        modalInstance.result.then(function(result) {
             if (result.addAnother) {
                 var p = new ManualPosition();
                 p.carrier.ircs = result.ircs;
@@ -224,6 +226,9 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
         alertService.hideMessage();
         searchService.reset();
         longPolling.cancel(longPollingId);
+        if(angular.isDefined(modalInstance)){
+            modalInstance.dismiss();
+        }
     });
 
     init();

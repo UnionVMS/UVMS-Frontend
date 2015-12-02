@@ -35,6 +35,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
 
     $scope.newPollingLogCount = 0;
     var longPollingId;
+    var modalInstance;
 
     $scope.resetSearch = function() {
         searchService.resetAdvancedSearch();
@@ -218,7 +219,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
             titleLabel : locale.getString('common.comment'),
             textLabel : item.poll.comment,
         };
-        infoModal.open(options);
+        modalInstance = infoModal.open(options);
     };
 
     //Handle click on the top "check all" checkbox
@@ -295,6 +296,9 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
         alertService.hideMessage();
         searchService.reset();
         longPolling.cancel(longPollingId);
+        if(angular.isDefined(modalInstance)){
+            modalInstance.dismiss();
+        }
     });
 
     init();
