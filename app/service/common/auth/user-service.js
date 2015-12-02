@@ -1,7 +1,7 @@
 angular.module('auth.user-service', ['auth.router'])
     //todo: remove $state dependency
-    .factory('userService', ['selectContextPanel', '$resource', '$q', '$log', '$localStorage', 'jwtHelper', '$rootScope', '$http', '$state',
-        function (selectContextPanel, $resource, $q, $log, $localStorage, jwtHelper, $rootScope, $http, $state) {
+    .factory('userService', ['selectContextPanel', '$resource', '$q', '$log', '$localStorage', 'jwtHelper', '$rootScope', '$http', '$state', '$timeout',
+        function (selectContextPanel, $resource, $q, $log, $localStorage, jwtHelper, $rootScope, $http, $state, $timeout) {
                 var userName,
                     token,
                     contexts,
@@ -364,8 +364,15 @@ angular.module('auth.user-service', ['auth.router'])
                 var _backendPing = function(retval) {
                     $log.debug('_backendPing - returning an $http promise to ping the backend');
                     var deferred = $q.defer();
+                    $rootScope.$broadcast('UserPingStart');
+                    //Timeout in 15 seconds
+                    var pingTimeout = $timeout(function(){
+                        $rootScope.$broadcast('UserPingError');
+                    }, 15000);
                     return $http(pingRequest)
 						.success(function(response, status, headers, config) {
+                            $timeout.cancel(pingTimeout);
+                            $rootScope.$broadcast('UserPingSuccess');
                             $log.debug('_backendPing Success response:', response," - extstatus: ",headers()['extstatus']);
 							//if(headers()['extstatus'] === '701') {
 								//$rootScope.$broadcast('NeedChangePassword');
@@ -374,6 +381,8 @@ angular.module('auth.user-service', ['auth.router'])
 							//} 
                         })
 						.error(function(error, status, headers, config) {
+                            $timeout.cancel(pingTimeout);
+                            $rootScope.$broadcast('UserPingError');
                             $log.debug('_backendPing error response (4): '+ error, pingRequest);
                             var message;
                             if (error && error.data && error.data.message) {

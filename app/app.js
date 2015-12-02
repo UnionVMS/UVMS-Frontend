@@ -14,10 +14,10 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'ngWebSocket',
     'checklist-model',
     'angularScreenfull',
-	'ngCookies',
-	'frapontillo.bootstrap-switch',
-	'colorpicker.module'
-	]);
+    'ngCookies',
+    'frapontillo.bootstrap-switch',
+    'colorpicker.module'
+    ]);
 
 var currentUserContextPromise = function(userService) {
     return userService.findSelectedContext();
@@ -457,7 +457,7 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
 
 unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, userService, locale, httpPendingRequestsService) {
     //Never cancel these request
-    httpPendingRequestsService.setSkipList(['/translate/locale-', '.lang.json', '/rules/activity']);
+    httpPendingRequestsService.setSkipList(['/translate/locale-', '.lang.json', '/rules/activity', '/ping']);
 
     $rootScope.safeApply = function(fn) {
         var phase = $rootScope.$$phase;
@@ -471,18 +471,36 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
     };
 
     //Show spinner after 600ms when loading page if page hasn't loaded
+    var loadingPageText = locale.getString('common.loading_page');
+    var loadingPageLoggingInText = locale.getString('common.loading_page_logging_in');
     $rootScope.loadingPage = false;
     $rootScope.loadingPageIconHidden = false;
+    $rootScope.loadingPageMessage = loadingPageText;
     var showPageNavigationSpinnerTimeout;
     var showSpinnerAfterMilliSeconds = 600;
+    var waitingForUserPingResponse = false;
 
     //Handle authenticationNeeded
     $rootScope.$on('authenticationNeeded', function() {
-        $log.info("on authenticationNeeded event in app .js:");
         $log.info("Authentication needed. Logging out.");
         userService.logout();
     });
-    
+    //Handle ping error
+    $rootScope.$on('UserPingStart', function() {
+        waitingForUserPingResponse = true;
+        $rootScope.loadingPageIconHidden = false;
+        $rootScope.loadingPageMessage = locale.getString('common.loading_page_logging_in');
+    });
+    $rootScope.$on('UserPingSuccess', function() {
+        waitingForUserPingResponse = false;
+        $rootScope.loadingPageMessage = loadingPageText;
+    });
+    $rootScope.$on('UserPingError', function() {
+        $log.error("UserPingError");
+        errorService.setErrorMessage(locale.getString('common.loading_page_error_logging_in'));
+        return $state.go('error');
+    });
+
     //Handle state change start
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, $modalStack) {
         //Cancel http requests on page navigation
@@ -491,20 +509,22 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
         }
 
         $timeout.cancel(showPageNavigationSpinnerTimeout);
-        //Only show spinner if user is logged in
-        if(userService.isLoggedIn()){
-            showPageNavigationSpinnerTimeout = $timeout(function(){
-                //Hide spinner icon and text when no context selected
-                if(!userService.getCurrentContext()){
-                    $rootScope.loadingPageIconHidden = true;
-                }
-                else{
-                    $rootScope.loadingPageIconHidden = false;
-                }
-                    $rootScope.loadingPageMessage = locale.getString('common.loading_page');
-                $rootScope.loadingPage = true;
-            }, showSpinnerAfterMilliSeconds);
-        }
+        //Only show spinner if user is logged in or waiting for ping request response
+        showPageNavigationSpinnerTimeout = $timeout(function(){
+            //Hide spinner icon and text when no context selected
+            if(!userService.getCurrentContext() && !waitingForUserPingResponse){
+                $rootScope.loadingPageIconHidden = true;
+            }
+            else{
+                $rootScope.loadingPageIconHidden = false;
+            }
+            if(waitingForUserPingResponse){
+                $rootScope.loadingPageMessage = locale.getString('common.loading_page_logging_in');
+            }else{
+                $rootScope.loadingPageMessage = locale.getString('common.loading_page');
+            }
+            $rootScope.loadingPage = true;
+        }, showSpinnerAfterMilliSeconds);
     });
 
     //Handle state change success
