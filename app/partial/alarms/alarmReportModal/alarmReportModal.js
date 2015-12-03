@@ -172,7 +172,9 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
             $scope.waitingForStatusUpdateResponse = false;
             $scope.alarm.status = updatedAlarm.status;
             $scope.readOnly = false;
-            $scope.setSuccessText(locale.getString("alarms.position_report_status_update_reopen_success"), function(){$scope.modalStatusText = ''});
+            $scope.setSuccessText(locale.getString("alarms.position_report_status_update_reopen_success"), function(){
+                $scope.modalStatusText = '';
+            });
             $scope.callCallbackFunctionAfterStatusChange(updatedAlarm);
         },
         function(error){
