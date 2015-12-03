@@ -271,6 +271,8 @@ angular.module('unionvmsWeb').directive('datePickerFormatter', function(dateTime
                 if(newValue === undefined){
                     $timeout(function(){
                         ctrl.$setValidity('parse', true);
+                        ctrl.$setValidity('minDate', true);
+                        ctrl.$setValidity('maxDate', true);
                     }, 10);
                 }
                 return newValue;
