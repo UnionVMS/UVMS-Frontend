@@ -4,7 +4,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, $tim
     $scope.showPrintConfigWin = false;
     $scope.measureConfigs = spatialHelperService.measure;
     $scope.print = spatialHelperService.print;
-    $scope.tbControls = spatialHelperService.tbControls;
+    $scope.tbControl = spatialHelperService.tbControl;
     
     //Close identify popup
     $scope.closePopup = function(){
@@ -230,7 +230,9 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, $tim
     //Clear highlight features control
     $scope.clearMapHighlights = function(){
         var layer = mapService.getLayerByType('highlight');
-        layer.getSource().clear(true);
+        if (angular.isDefined/(layer)){
+            layer.getSource().clear(true);
+        }
     };
     
     //Untoggle any toolbar btn when tab is changed
@@ -299,15 +301,17 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, $tim
 });
 
 angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale, mapService, spatialHelperService){
-    //Mock config object
+    //Initial mock config object
     $scope.config = {
         map: {
             projection: {
                 epsgCode: 3857, //So far we only support 3857 and 4326
                 units: 'm',
-                global: true
+                global: true,
+                axis: 'enu',
+                extent: '-20026376.39;-20048966.10;20026376.39;20048966.10'
             },
-            controls: [{
+            control: [{
                 type: 'zoom'
             },{
                 type: 'drag'
@@ -321,7 +325,7 @@ angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale,
             },{
                 type: 'history'
             }],
-            tbControls: [{
+            tbControl: [{
                 type: 'measure'
             },{
                 type: 'fullscreen'

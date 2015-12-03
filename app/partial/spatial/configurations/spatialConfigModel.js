@@ -40,17 +40,17 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     
     //Used in the report form map configuration modal
     SpatialConfig.prototype.forReportConfigFromJson = function(data){
-        var srcConfig = new SpatialConfig();
-        var finalConfig = {
-            mapSettings: { 
-                mapProjectionId: data.mapProjectionId,
-                displayProjectionId: data.displayProjectionId,
-                coordinatesFormat: data.coordinatesFormat.toLowerCase(),
-                scaleBarUnits: data.scaleBarUnits.toLowerCase()
+        var config = {
+            mapSettings: {
+                spatialConnectId: angular.isDefined(data.spatialConnectId) ? data.spatialConnectId : undefined,
+                mapProjectionId: angular.isDefined(data.mapProjectionId) ? data.mapProjectionId : undefined,
+                displayProjectionId: angular.isDefined(data.displayProjectionId) ? data.displayProjectionId : undefined,
+                coordinatesFormat: angular.isDefined(data.coordinatesFormat) ? data.coordinatesFormat.toLowerCase() : undefined,
+                scaleBarUnits: angular.isDefined(data.scaleBarUnits) ? data.scaleBarUnits.toLowerCase() : undefined
             }
         };
         
-        return finalConfig;
+        return config;
     };
     
 	return SpatialConfig;

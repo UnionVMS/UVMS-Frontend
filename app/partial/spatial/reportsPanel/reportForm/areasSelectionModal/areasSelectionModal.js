@@ -50,6 +50,8 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     $scope.sysSelection = "map";
     $scope.clickResults = 0;
     $scope.showWarning = false;
+    $scope.hasError = false;
+    $scope.errorMessage = undefined;
     
     //Define tabs
     var setTabs = function(){
@@ -87,9 +89,18 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
                 $scope.systemItems.push({"text": $scope.systemAreaTypes[i].typeName, "code": $scope.systemAreaTypes[i].typeName});
             }
         }, function(error){
-            //TODO warn the user
+            $scope.errorMessage = locale.getString('spatial.area_selection_modal_get_sys_layers_error');
+            $scope.hasError = true;
+            $scope.hideError();
         });
     }
+    
+    $scope.hideError = function(){
+        $timeout(function(){
+            $scope.hasError = false;
+            $scope.errorMessage = undefined;
+        }, 5000);
+    };
     
     $scope.getFullDefForItem = function(type){
         var item;
@@ -247,7 +258,9 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
             }
             $scope.mapLoading = false;
         }, function(error){
-            //TODO warn the user
+            $scope.errorMessage = locale.getString('spatial.area_selection_modal_get_sys_area_details_error');
+            $scope.hasError = true;
+            $scope.hideError();
             $scope.mapLoading = false;
         });
     };
@@ -256,8 +269,9 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
         spatialRestService.getAreaProperties(data).then(function(response){
             $scope.selectedAreas = $scope.buildSelectedAreasArray(response.data);
         }, function(error){
-            //TODO warn the user
-            console.log(error);
+            $scope.errorMessage = locale.getString('spatial.area_selection_modal_get_selected_sys_area_details_error');
+            $scope.hasError = true;
+            $scope.hideError();
         });
     };
     
@@ -300,7 +314,9 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
                 $scope.sysAreaSearch = $scope.convertSysAreasResponse(response.data);
                 $scope.searchLoading = false;
             }, function(error){
-               //TODO warn the user 
+                $scope.errorMessage = locale.getString('spatial.area_selection_modal_get_selected_sys_area_search_error');
+                $scope.hasError = true;
+                $scope.hideError();
                 $scope.searchLoading = false;
             });
         }
@@ -384,23 +400,32 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
         $scope.init();
     });
     
+    //Remove layer from the map by layerType
+    $scope.removeLayerByType = function(layerType){
+        if (angular.isDefined($scope.map)){
+            var mapLayers = $scope.map.getLayers();
+            if (mapLayers.getLength() > 1){
+                var layer = mapLayers.getArray().find(function(layer){
+                    return layer.get('type') === layerType;
+                });
+                $scope.map.removeLayer(layer);
+            }
+        }
+    };
+    
     //Events
     $scope.$watch('sysAreaType', function(newVal, oldVal){
         if (angular.isDefined(newVal) && newVal !== oldVal){
             $scope.clickResults = 0;
             var item = $scope.getFullDefForItem(newVal);
             if (angular.isDefined(item)){
-                var mapLayers = $scope.map.getLayers();
-                if (mapLayers.getLength() > 1){
-                    var layer = mapLayers.getArray().find(function(layer){
-                        return layer.get('type') === oldVal;
-                    });
-                    $scope.map.removeLayer(layer);
-                }
+                $scope.removeLayerByType(oldVal);
                 $scope.addWms(item);
                 $scope.searchSysString = undefined;
                 $scope.sysAreaSearch = [];
             }
+        } else {
+            $scope.removeLayerByType(oldVal);
         }
     });
     

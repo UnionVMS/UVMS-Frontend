@@ -55,6 +55,16 @@
 								<tr ng-if="vesselSearchLoading">
 						        	<th colspan="7" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
 						        </tr>
+						        <tr ng-if="hasError">
+						        	<th colspan="7">
+						        		<div class="alert alert-danger alert-container" role="alert">
+					       					<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+					       					<span class="alert-message">
+					           					<span>{{errorMessage}}</span>            
+					       					</span>
+									    </div>	
+						        	</th>
+						        </tr>
 							</thead>
 							<tbody>
 								<tr ng-if="!displayedRecords.length && !vesselSearchLoading">

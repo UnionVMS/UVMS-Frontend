@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, TreeModel, reportRestService, spatialRestService, mapService) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, TreeModel, reportRestService, spatialRestService, spatialHelperService, mapService) {
 
     var rep = {
        id: undefined,
@@ -27,6 +27,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.tracks = [];
         rep.tabs.map = report.withMap;
         rep.isReportExecuting = true;
+        mapService.clearVmsLayers();
         if (report.withMap === true){
             spatialRestService.getConfigsForReport(report.id).then(getConfigSuccess, getConfigError);
         } else {
@@ -36,11 +37,26 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	//Get Spatial config Success callback
 	var getConfigSuccess = function(data){
-	    //TODO change map ol.View configurations
+	    //Change map ol.View configuration
+	    if (mapService.getMapProjectionCode !== 'EPSG:' + data.map.projection.epsgCode){
+	        mapService.updateMapView(data.map.projection);
+	    }
+	    
+	    //Set map controls
+	    mapService.updateMapControls(data.map.control);
+	    
+	    //Set toolbar controls
+	    spatialHelperService.setToolbarControls(data);
 	    
 	    //Set the styles for vector layers and legend
-	    mapService.setFlagStateStyles(data.vectorStyles.positions);
-	    mapService.setSpeedStyles(data.vectorStyles.segments);
+	    mapService.setPositionStylesObj(data.vectorStyles.positions);
+	    mapService.setSegmentStylesObj(data.vectorStyles.segments);
+	    
+	    //Set popup visibility settings
+	    mapService.setPopupVisibility('positions', data.visibilitySettings.positions.popup);
+	    mapService.setPopupVisibility('segments', data.visibilitySettings.segments.popup);
+	    
+	    //TODO set label visibility
 	    
 	    //Build tree object and update layer panel
 	    var treeSource = new TreeModel();
@@ -53,7 +69,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	//Get Spatial config Error callback
 	var getConfigError = function(error){
-	    //TODO warn the user
 	    rep.isReportExecuting = false;
 	    rep.hasError = true;
         $timeout(function(){rep.hasError = false;}, 3000);
@@ -64,6 +79,14 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
+        
+        if (mapService.styles.positions.attribute === 'countryCode'){
+            mapService.setDisplayedFlagStateCodes('positions', rep.positions);
+        }
+        
+        if (mapService.styles.segments.attribute === 'countryCode'){
+            mapService.setDisplayedFlagStateCodes('segments', rep.segments);
+        }
         
         //Update map if the report contains the map tab
         if (rep.tabs.map === true){
@@ -81,7 +104,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
    
     //Get VMS data Failure callback
     var getVmsDataError = function(error){
-        //TODO warn the user
         console.log(error);
         rep.positions = [];
         rep.segments = [];

@@ -1,9 +1,10 @@
 angular.module('unionvmsWeb').factory('spatialHelperService',function() {
 
 	var spServ = {
-	    tbControls: {
+	    tbControl: {
 	        measure: false,
-	        fullscreen: false
+	        fullscreen: false,
+	        print: false
 	    },
 	    measure: {
 	        units: 'm',
@@ -48,8 +49,8 @@ angular.module('unionvmsWeb').factory('spatialHelperService',function() {
 	};
 	
 	spServ.setToolbarControls = function(config){
-	    for (var i = 0; i < config.map.tbControls.length; i++){
-	        spServ.tbControls[config.map.tbControls[i].type] = true;
+	    for (var i = 0; i < config.map.tbControl.length; i++){
+	        spServ.tbControl[config.map.tbControl[i].type] = true;
 	    }
 	};
 

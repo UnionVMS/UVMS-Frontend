@@ -136,7 +136,7 @@ ol.control.HistoryControl = function(opt_options){
 };
 ol.inherits(ol.control.HistoryControl, ol.control.Control);
 
-angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $timeout, $templateRequest, spatialHelperService) {
+angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $timeout, $templateRequest, spatialHelperService, globalSettingsService) {
 	var ms = {};
 	ms.sp = spatialHelperService;
 
@@ -148,19 +148,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         
 	    // enables popup on positions and segments
         ms.activeLayerType = undefined;
-
-	    var view = new ol.View({
-	        projection: ms.setProjection(config.map.projection.epsgCode, config.map.projection.units, config.map.projection.global),
-	        center: ol.proj.transform([-1.81185, 52.44314], 'EPSG:4326', 'EPSG:3857'),
-//            extent: [-2734750,3305132,1347335,5935055],
-	        zoom: 3,
-	        maxZoom: 19,
-//            minZoom: 3,
-	        enableRotation: false
-	    });
-
+        
 	    //Get all controls and interactions that will be added to the map
-	    var controlsToMap = ms.setControls(config.map.controls);
+	    var controlsToMap = ms.setControls(config.map.control);
 
 	    var map = new ol.Map({
 	        target: 'map',
@@ -187,7 +177,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	        var coordinate = evt.coordinate;
 	        var features = [];
 	        map.forEachFeatureAtPixel(evt.pixel, function(feature, layer){
-	            if (layer.get('type') === ms.activeLayerType){
+	            if (layer !== null && layer.get('type') === ms.activeLayerType){
 	                features.push(feature.getProperties());
 	            }
 	        });
@@ -214,13 +204,67 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	            });
 	        }
 	    });
-
+	    
+	    var view = ms.createView(config.map.projection);
 	    map.setView(view);
-
+	    
 	    ms.map = map;
+	    ms.addBlankLayer();
 	};
-
+	
+	//Create map view
+	ms.createView = function(config){
+	    var center = ol.proj.transform([-1.81185, 52.44314], 'EPSG:4326', 'EPSG:' + config.epsgCode);
+	    
+	    var view = new ol.View({
+            projection: ms.setProjection(config),
+            center: center,
+//            extent: [-2734750,3305132,1347335,5935055],
+//            loadTilesWhileInteracting: true,
+            zoom: 3,
+            maxZoom: 19,
+//            minZoom: 3,
+            enableRotation: false
+        });
+	    
+	    return view;
+	};
+	
+	//Change map view with new config
+	ms.updateMapView = function(config){
+	    var view = ms.createView(config);
+	    ms.map.setView(view);
+	};
+	
+	//Remove all layers
+	ms.removeAllLayers = function(){
+	    var layers = ms.map.getLayers();
+	    if (layers.getLength() > 0){
+	        layers.clear();
+	    }
+	    
+	    //Always add blank layer
+	    ms.addBlankLayer();
+	};
+	
 	//Add layers
+	//Create and add blank base layer
+	ms.addBlankLayer = function(){
+	    var proj = ms.map.getView().getProjection(); 
+	    var layer = new ol.layer.Image({
+	        type: 'mapbackground',
+	        opacity: 1,
+	        source: new ol.source.ImageStatic({
+	            url: 'assets/images/base-layer.png',
+	            proj: proj,
+	            imageExtent: proj.getExtent(),
+	            imageSize: [256,256]
+	        })
+	    });
+	    
+	    ms.map.addLayer(layer);
+	};
+	
     //create layer, returns ol.layer.* or undefined
     ms.createLayer = function( config ){
         var layer;
@@ -230,6 +274,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 break;
             case 'OSEA':
                 layer = ms.createOseam(config);
+                break;
+            case 'BING':
+                layer = ms.createBing(config);
                 break;
             case 'WMS':
                 layer = ms.createWms(config);
@@ -245,7 +292,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
         return ( layer );
     };
-
+    
     //Create OSM layer
     ms.createOsm = function( config ){
         var layer = new ol.layer.Tile({
@@ -276,6 +323,22 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             })
         });
 
+        return (layer);
+    };
+    
+    //Create Bing layers
+    ms.createBing = function(config){
+        var layer = new ol.layer.Tile({
+            type: config.type,
+            title: config.title,
+            isBaseLayer: config.isBaseLayer,
+            source: new ol.source.BingMaps({
+                key: config.apiKey, //TODO check setting the api key
+                imagerySet: config.layerGeoName,
+                maxZoom: 19
+            })
+        });
+        
         return (layer);
     };
 
@@ -344,9 +407,19 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             style: ms.setSegStyle
         });
         
-        ms.calculateJenkinsIntervals(config.geoJson);
+        //ms.calculateJenkinsIntervals(config.geoJson);
 
         return( layer );
+    };
+    
+    //Clear vms data from layers
+    ms.clearVmsLayers = function(){
+        var layers = [ms.getLayerByType('vmspos'), ms.getLayerByType('vmsseg')];
+        for (var i = 0; i < layers.length; i++){
+            if (angular.isDefined(layers[i])){
+                layers[i].getSource().clear();
+            }
+        }
     };
     
     //Add highlight layer
@@ -460,40 +533,92 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     //VMS styles
     ms.styles = {
         positions: undefined,
-        segments: undefined,
-        speedBreaks: []
+        segments: undefined
     };
     
-    ms.setFlagStateStyles = function(styles){
+    //Build breaks object for range classification on VMS data
+    ms.calculateBreaks = function(type, style){
+        var breaks = {
+            defaultColor: undefined,
+            intervals: []
+        };
+        
+        angular.forEach(style, function(value, key){
+            var gapNum = key.split('-');
+            var tempBreak = [];
+            for (var i = 0; i < gapNum.length; i++){
+                if (gapNum[i] === 'default'){
+                    breaks.defaultColor = value;
+                } else {
+                    tempBreak.push(parseFloat(gapNum[i]));
+                }
+            }
+            if (tempBreak.length > 0){
+                breaks.intervals.push(tempBreak);
+            }
+        });
+        
+        if (type === 'positions'){
+            ms.styles.positions.breaks = breaks;
+        } else {
+            ms.styles.segments.breaks = breaks;
+        }
+    };
+    
+    //COLORING BY ATTRIBUTES
+    //Colors by countryCode
+    ms.getColorByFlagState = function(src, fs){
+        return src.style[fs.toUpperCase()];
+    };
+    
+    ms.setDisplayedFlagStateCodes = function(type, data){
+        var src = ms.styles[type];
+        if (!angular.isDefined(src.displayedCodes)){
+            src.displayedCodes = [];
+        }
+        
+        angular.forEach(data, function(item){
+            if (src.displayedCodes.indexOf(item.properties.countryCode) === -1){
+                src.displayedCodes.push(item.properties.countryCode);
+            }
+        }, src);
+    };
+    
+    //Color by speed
+    ms.getColorBySpeed = function(src, speed){
+        var intervals = src.breaks.intervals;
+        var color;
+        for (var i = 0; i < intervals.length; i++){
+            if (speed >= intervals[i][0] && speed < intervals[i][1]){
+                color = src.style[intervals[i][0] + '-' + intervals[i][1]];
+                break;
+            }
+        }
+        
+        if (angular.isDefined(color)){
+            return color;
+        } else {
+            return src.breaks.defaultColor;
+        }
+    };
+    
+    //TODO other coloring schemes
+    
+    //Styles methods for positions
+    ms.setPositionStylesObj = function(styles){
         ms.styles.positions = styles;
     };
     
-    ms.setSpeedStyles = function(styles){
-        ms.styles.segments = styles;  
-    };
-    
-    ms.calculateJenkinsIntervals = function(geoJson){
-        var breaks = turf.jenks(geoJson, 'speedOverGround', 4);
-        if (breaks !== null){
-            ms.styles.speedBreaks = breaks;
-            ms.styles.speedBreaks[4] = ms.styles.speedBreaks[4] + 1;
+    ms.getColorForPosition = function(feature){
+        switch (ms.styles.positions.attribute) {
+            case 'countryCode':
+                return ms.getColorByFlagState(ms.styles.positions, feature.get('countryCode'));
+            default:
+                return '#0066FF'; //default color
         }
     };
     
-    ms.getColorByFlagState = function(fs){
-        return ms.styles.positions[fs.toLowerCase()];
-    };
-    
-    ms.getColorBySpeed = function(speed){
-        for (var i = 1; i < ms.styles.speedBreaks.length; i++){
-            if (speed >= ms.styles.speedBreaks[i-1] && speed < ms.styles.speedBreaks[i]){
-                var segStyleKey = Object.keys(ms.styles.segments)[i-1];
-                return ms.styles.segments[segStyleKey];
-            }
-        }
-    };
-    
-    //VMS positions style
+    //OL VMS positions style
     ms.setPosStyle = function(feature, resolution){
         var style = new ol.style.Style({
             text: new ol.style.Text({
@@ -503,7 +628,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 textAlign: 'center',
                 rotation: -0.78 + ms.degToRad(feature.get('reportedCourse')),
                 fill: new ol.style.Fill({
-                    color: ms.getColorByFlagState(feature.get('countryCode'))
+                    color: ms.getColorForPosition(feature)
                 })
             })
         });
@@ -511,11 +636,46 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         
         return [style];
     };
-
-    //VMS segments style
+    
+    //Styles methods for segments
+    ms.setSegmentStylesObj = function(styles){
+        ms.styles.segments = styles;
+        
+        if (ms.styles.segments.attribute === 'speedOverGround'){
+            ms.calculateBreaks('segments', ms.styles.segments.style);
+        }
+    };
+    
+    ms.getColorForSegment = function(feature){
+        switch (ms.styles.segments.attribute) {
+            case 'speedOverGround':
+                return ms.getColorBySpeed(ms.styles.segments, feature.get('speedOverGround'));
+            default:
+                return '#0066FF'; //default color
+        }
+    };
+    
+//    ms.calculateJenkinsIntervals = function(geoJson){
+//        var breaks = turf.jenks(geoJson, 'speedOverGround', 4);
+//        if (breaks !== null){
+//            ms.styles.speedBreaks = breaks;
+//            ms.styles.speedBreaks[4] = ms.styles.speedBreaks[4] + 1;
+//        }
+//    };
+//    
+//    ms.getColorBySpeed = function(speed){
+//        for (var i = 1; i < ms.styles.speedBreaks.length; i++){
+//            if (speed >= ms.styles.speedBreaks[i-1] && speed < ms.styles.speedBreaks[i]){
+//                var segStyleKey = Object.keys(ms.styles.segments)[i-1];
+//                return ms.styles.segments[segStyleKey];
+//            }
+//        }
+//    };
+    
+    //OL VMS segments style
     ms.setSegStyle = function(feature, resolution){
         var geometry = feature.getGeometry();
-        var color = ms.getColorBySpeed(feature.get('speedOverGround'));
+        var color = ms.getColorForSegment(feature);
 
         var style = [
             new ol.style.Style({
@@ -714,22 +874,27 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
     //SETTERS
 	//Set map projections
-	ms.setProjection = function(projCode, units, global){
+	ms.setProjection = function(proj){
+	    var ext = proj.extent.split(';');
         var projection = new ol.proj.Projection({
-            code: 'EPSG:' + projCode,
-            units: units,
-            global: global
+            code: 'EPSG:' + proj.epsgCode,
+            units: proj.units,
+            axisOrientation: proj.axis,
+            global: proj.global,
+            extent: [parseFloat(ext[0]), parseFloat(ext[1]), parseFloat(ext[2]), parseFloat(ext[3])]
         });
 
         return projection;
 	};
 
 	//Set map controls
+	ms.addedControls = []; //quick reference to added controls
 	ms.setControls = function(controls){
 	    for (var i = 0; i < controls.length; i++){
 	        var ctrl = controls[i];
+	        ms.addedControls.push(ctrl.type);
 	        var fnName = 'add' + ctrl.type.charAt(0).toUpperCase() + ctrl.type.slice(1);
-	        ms[fnName](ctrl);
+	        ms[fnName](ctrl, true);
 	    }
 
 	    //Always add attribution control
@@ -740,48 +905,207 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
 	    return [new ol.Collection(ms.controls), new ol.Collection(ms.interactions)];
 	};
+	
+	//Update map controls according to configuration from server
+	ms.updateMapControls = function(controls){
+	    var tempControls = [];
+	    var mousecoordsCtrl, scaleCtrl;
+	    
+	    angular.forEach(controls, function(ctrl){
+	        tempControls.push(ctrl.type);
+	        if (ctrl.type === 'mousecoords'){
+	            mousecoordsCtrl = ctrl;
+	        } else if (ctrl.type === 'scale'){
+	            scaleCtrl = ctrl;
+	        }
+	    });
+	    
+	    var ctrlsToRemove = _.difference(ms.addedControls, tempControls);
+	    var ctrlsToAdd = _.difference(tempControls, ms.addedControls);
+	    var ctrlsToUpdate = _.intersection(ms.addedControls, tempControls);
+	    
+	    //Remove controls and interactions
+	    if (ctrlsToRemove.length > 0){
+	        angular.forEach(ctrlsToRemove, function(ctrl){
+	            var fnName = 'remove' + ctrl.charAt(0).toUpperCase() + ctrl.slice(1);
+	            ms[fnName]();
+	        }, ms);
+	    }
+	    
+	    //Update controls
+	    if (ctrlsToUpdate.length > 0){
+	        angular.forEach(ctrlsToUpdate, function(ctrl){
+	            var config;
+	            if (ctrl === 'mousecoords'){
+	                config = mousecoordsCtrl;
+	            } else if (ctrl === 'scale'){
+	                config = scaleCtrl;
+	            }
+	            
+	            if (angular.isDefined(config)){
+	                var fnName = 'update' + ctrl.charAt(0).toUpperCase() + ctrl.slice(1);
+	                ms[fnName](config);
+	            }
+	        }, ms);
+	    }
+	    
+	    //Add controls
+	    if (ctrlsToAdd.length > 0){
+	        angular.forEach(ctrlsToAdd, function(ctrl){
+	            var config;
+                if (ctrl === 'mousecoords'){
+                    config = mousecoordsCtrl;
+                } else if (ctrl === 'scale'){
+                    config = scaleCtrl;
+                }
+                
+                var fnName = 'add' + ctrl.charAt(0).toUpperCase() + ctrl.slice(1);
+                ms[fnName](config, false);
+	        }, ms);
+	    }
+	    
+	    ms.addedControls = _.union(ctrlsToAdd, ctrlsToUpdate);
+	};
+	
+	//Get array of controls by type
+	ms.getControlsByType = function(type){
+	    var controls = ms.map.getControls().getArray();
+	    var ctrls = controls.filter(function(ctrl){
+	        return ctrl instanceof ol.control[type] === true;
+	    });
+	    
+	    return ctrls;
+	};
+	
+	//Get array of interactions by type
+    ms.getInteractionsByType = function(type){
+        var interactions = ms.map.getInteractions().getArray();
+        var ints = interactions.filter(function(int){
+            return int instanceof ol.interaction[type] === true;
+        });
+        
+        return ints;
+    };
 
 	//Add map controls
-	ms.addZoom = function(){
-	    ms.controls.push(new ol.control.Zoom({
-	        zoomInTipLabel: locale.getString('spatial.map_tip_zoomin'),
-	        zoomOutTipLabel: locale.getString('spatial.map_tip_zoomout')
-	    }));
-	    ms.interactions.push(new ol.interaction.MouseWheelZoom());
-	    ms.interactions.push(new ol.interaction.KeyboardZoom());
-	    ms.interactions.push(new ol.interaction.DoubleClickZoom());
+	ms.addZoom = function(ctrl, initial){
+        var olCtrl = new ol.control.Zoom({
+            zoomInTipLabel: locale.getString('spatial.map_tip_zoomin'),
+            zoomOutTipLabel: locale.getString('spatial.map_tip_zoomout')
+        });
+        
+        var mouseWheel =  new ol.interaction.MouseWheelZoom();
+        var keyboardZoom = new ol.interaction.KeyboardZoom();
+        var dblClickZoom = new ol.interaction.DoubleClickZoom();
+        var dragZoom = new ol.interaction.DragZoom();
+        
+        if (initial){
+            ms.controls.push(olCtrl);
+            ms.interactions.push(mouseWheel);
+            ms.interactions.push(keyboardZoom);
+            ms.interactions.push(dblClickZoom);
+            ms.interactions.push(dragZoom);
+        } else {
+            ms.map.addControl(olCtrl);
+            ms.map.addInteraction(mouseWheel);
+            ms.map.addInteraction(keyboardZoom);
+            ms.map.addInteraction(dblClickZoom);
+            ms.map.addInteraction(dragZoom);
+        }
+	};
+	
+	ms.removeZoom = function(){
+	    ms.map.removeControl(ms.getControlsByType('Zoom')[0]);
+	    ms.map.removeInteraction(ms.getInteractionsByType('MouseWheelZoom')[0]);
+	    ms.map.removeInteraction(ms.getInteractionsByType('KeyboardZoom')[0]);
+	    ms.map.removeInteraction(ms.getInteractionsByType('DoubleClickZoom')[0]);
+	    ms.map.removeInteraction(ms.getInteractionsByType('DragZoom')[0]);
 	};
 
-	ms.addHistory = function(){
-        var control = new ol.control.HistoryControl({
+	ms.addHistory = function(ctrl, initial){
+        var olCtrl = new ol.control.HistoryControl({
             backLabel: locale.getString('spatial.map_tip_go_back'),
             forwardLabel: locale.getString('spatial.map_tip_go_forward')
         });
-        ms.controls.push(control);
+        
+        if (initial){
+            ms.controls.push(olCtrl);
+        } else {
+            ms.map.addControl(olCtrl);
+        }
+    };
+    
+    ms.removeHistory = function(){
+        ms.map.removeControl(ms.getControlsByType('HistoryControl')[0]);
     };
 
-	ms.addScale = function(ctrl){
-	    ms.controls.push(new ol.control.ScaleLine({
-	        units: ctrl.units,
-	        target: angular.element('#map-scale')[0],
-	        className: 'ol-scale-line'
-	    }));
+	ms.addScale = function(ctrl, initial){
+	    var olCtrl = new ol.control.ScaleLine({
+            units: ctrl.units,
+            target: angular.element('#map-scale')[0],
+            className: 'ol-scale-line'
+        });
+	    
+	    if (initial){
+	        ms.controls.push(olCtrl);
+	    } else {
+	        ms.map.addControl(olCtrl);
+	    }
+	    
+	};
+	
+	ms.updateScale = function(config){
+	    ms.map.removeControl(ms.getControlsByType('ScaleLine')[0]);
+        ms.addScale(config, false);
+	};
+	
+	ms.removeScale = function(){
+	    ms.map.removeControl(ms.getControlsByType('ScaleLine')[0]);
 	};
 
-	ms.addDrag = function(){
-	    ms.interactions.push(new ol.interaction.DragPan());
-	    ms.interactions.push(new ol.interaction.KeyboardPan());
+	ms.addDrag = function(ctrl, initial){
+	    var dragPan = new ol.interaction.DragPan();
+	    var keyboardPan = new ol.interaction.KeyboardPan();
+	    if (initial){
+	        ms.interactions.push(dragPan);
+	        ms.interactions.push(keyboardPan);
+	    } else {
+	        ms.map.addInteraction(dragPan);
+	        ms.map.addInteraction(keyboardPan);
+	    }
+	    
+	};
+	
+	ms.removeDrag = function(){
+	    ms.map.removeInteraction(ms.getInteractionsByType('DragPan')[0]);
+	    ms.map.removeInteraction(ms.getInteractionsByType('KeyboardPan')[0]);
 	};
 
-	ms.addMousecoords = function(ctrl){
-        ms.controls.push(new ol.control.MousePosition({
+	ms.addMousecoords = function(ctrl, initial){
+	    var olCtrl =  new ol.control.MousePosition({
             projection: 'EPSG:' + ctrl.epsgCode,
             coordinateFormat: function(coord){
                 return ms.formatCoords(coord, ctrl);
             },
             target: angular.element('#map-coordinates')[0],
             className: 'mouse-position'
-        }));
+        });
+	    
+	    if (initial){
+	        ms.controls.push(olCtrl);
+	    } else {
+	        ms.map.addControl(olCtrl);
+	    }
+        
+    };
+    
+    ms.updateMousecoords = function (config){
+        ms.map.removeControl(ms.getControlsByType('MousePosition')[0]);
+        ms.addMousecoords(config, false);
+    };
+    
+    ms.removeMousecoords = function(){
+        ms.map.removeControl(ms.getControlsByType('MousePosition')[0]);
     };
 
 	//Zoom to geometry control
@@ -805,6 +1129,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         var draw = new ol.interaction.Draw({
             source: layer.getSource(),
             type: 'LineString',
+            condition: ol.events.condition.noModifierKeys,
+            freehandCondition: ol.events.condition.never,
             style: new ol.style.Style({
                 fill: new ol.style.Fill({
                     color: 'rgba(255, 255, 255, 0.2)'
@@ -940,7 +1266,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     	    };
     	    
     	    if (angular.isDefined(ms.measureETA)){
-    	        response.eta = ms.measureETA.format('YYYY-MM-DD HH:mm:ss');
+    	        response.eta = ms.measureETA.format(globalSettingsService.getDateFormat());
     	    }
     	    
     	    return response;
@@ -1042,6 +1368,47 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	    ms.overlay.setPosition(undefined);
 	    return false;
 	};
+	
+	//Popup visibility settings object
+	ms.popupVisibility = {
+	    positions: {
+	        fs: false,
+            extMark: false,
+            ircs: false,
+            cfr: false,
+            posTime: false,
+            lon: false,
+            lat: false,
+            stat: false,
+            m_spd: false,
+            c_spd: false,
+            crs: false,
+            msg_tp: false,
+            act_tp: false,
+            source: false
+	    },
+	    segments: {
+	        fs: false,
+            extMark: false,
+            ircs: false,
+            cfr: false,
+            dist: false,
+            dur: false,
+            spd: false,
+            crs: false,
+            cat: false
+	    }
+	};
+	
+	ms.setPopupVisibility = function(type, config){
+	    angular.forEach(ms.popupVisibility[type], function(value, key) {
+            if (config.indexOf(key)){
+                ms.popupVisibility[type][key] = true;
+            } else {
+                ms.popupVisibility[type][key] = false;
+            }
+        }, ms);
+	};
 
 	//POPUP - Define the object that will be used in the popup for vms positions
     ms.setPositionsObjPopup = function(feature){
@@ -1066,24 +1433,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 act_tp: locale.getString('spatial.tab_vms_pos_table_header_activity_type'),
                 source: locale.getString('spatial.tab_vms_pos_table_header_source')
             },
-            visibility: {
-                fs: true,
-                extMark: true,
-                ircs: true,
-                cfr: true,
-                posTime: true,
-                lon: true,
-                lat: true,
-                stat: true,
-                m_spd: true,
-                c_spd: true,
-                crs: true,
-                msg_tp: true,
-                act_tp: true,
-                src: true
-            },
+            visibility: ms.popupVisibility.positions,
             properties: feature,
-            formatedDate: moment.utc(feature.positionTime).format('YYYY-MM-DD HH:mm:ss'),
+            //formatedDate: moment.utc(feature.positionTime).format('YYYY-MM-DD HH:mm:ss'),
+            formatedDate: moment.utc(feature.positionTime).format(globalSettingsService.getDateFormat()),
             coordinates: {
                 lon: repCoords[0].toFixed(5).toString() + ' \u00b0',
                 lat: repCoords[1].toFixed(5).toString() + ' \u00b0'
@@ -1109,17 +1462,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 crs: locale.getString('spatial.tab_vms_seg_table_header_course_ground'),
                 cat: locale.getString('spatial.tab_vms_seg_table_header_category')
             },
-            visibility: {
-                fs: true,
-                extMark: true,
-                ircs: true,
-                cfr: true,
-                dist: true,
-                dur: true,
-                spd: true,
-                crs: true,
-                cat: true
-            },
+            visibility: ms.popupVisibility.segments,
             properties: feature
         };
 

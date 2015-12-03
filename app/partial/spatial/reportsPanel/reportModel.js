@@ -29,7 +29,7 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	    this.areas = [];
 	    
 	    //Spatial configs
-        this.mapConfiguration = undefined;
+        this.mapConfiguration = {};
 	}
 
 	var getDateFormat = function(){
@@ -83,7 +83,6 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	        report.name = data.name;
 	        report.desc = data.desc;
 	        report.withMap = data.withMap;
-            report.mapConfiguration = data.mapConfiguration;
 
 	        //Common filters
 			report.commonFilterId = filter.common.id;
@@ -125,6 +124,7 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	        }
 
 	        report.areas = filter.areas;
+	        report.mapConfiguration = data.mapConfiguration;
 	    }
 
 	    return report;
@@ -200,22 +200,9 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	        visibility: angular.isDefined(this.visibility) ? this.visibility : 'PRIVATE',
 	        withMap: this.withMap,
 	        filterExpression: filter,
+	        mapConfiguration: this.mapConfiguration
 	    };
 	    
-	    //Map configurations
-	    if (angular.isDefined(this.mapConfiguration)){
-	        var finalConfig = {};
-	        for (var property in this.mapConfiguration){
-	            if (angular.isDefined(this.mapConfiguration[property])){
-	                finalConfig[property] = this.mapConfiguration[property];
-	            }
-	        }
-	        
-	        if (!angular.equals({}, finalConfig)){
-	            dto.mapConfiguration = finalConfig;
-	        }
-	    }
-
 	    return dto;
 	};
 

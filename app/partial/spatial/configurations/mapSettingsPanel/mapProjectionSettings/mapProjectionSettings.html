@@ -1,4 +1,12 @@
 <div class="mapProjSettings" ng-controller="MapprojectionsettingsCtrl">
+	<div class="row alertContainer" ng-show="hasError">
+		<div class="alert alert-danger alert-container" role="alert">
+			<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+			<span class="alert-message">
+				<span>{{'spatial.map_configuration_error_loading_configs' | i18n }}</span>          
+			</span>
+	    </div>
+	</div>
 	<div class="row">
 	    <div class="form-group col-md-4 noPadding">
 	        <label for="mapProjection">{{'spatial.map_configuration_map_projection' | i18n}}</label>

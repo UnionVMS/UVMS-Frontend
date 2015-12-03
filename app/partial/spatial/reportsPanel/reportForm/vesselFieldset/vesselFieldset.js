@@ -1,6 +1,8 @@
 angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, locale, $timeout, $modal, vesselRestService, GetListRequest){
     $scope.selectedVesselMenu = 'SIMPLE';
     $scope.vesselSearchLoading = false;
+    $scope.hasError = false;
+    $scope.errorMessage = undefined;
     
     $scope.isVesselMenuVisible = function(type){
         return $scope.selectedVesselMenu === type;
@@ -8,6 +10,14 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     
     $scope.toggleVesselMenuType = function(type){
         $scope.selectedVesselMenu = type;
+    };
+    
+    //Hide error message
+    $scope.hideError = function(){
+        $timeout(function(){
+            $scope.hasError = false;
+            $scope.errorMessage = undefined;
+        }, 5000);
     };
     
     //CURRENT SELECTION TABLE
@@ -143,8 +153,6 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
             var getVesselListRequest = new GetListRequest(1, 100000, false, []);
             
             for (var i = 0; i < searchableFields.length; i++){
-                //FIXME when case insensitive search is implemented 
-//                getVesselListRequest.addSearchCriteria(searchableFields[i], $scope.shared.searchVesselString.toUpperCase() + '*');
                 getVesselListRequest.addSearchCriteria(searchableFields[i], $scope.shared.searchVesselString + '*');
             }
             
@@ -161,9 +169,10 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     };
     
     var getVesselsError = function(error){
-        //TODO warn the user
         $scope.vesselSearchLoading = false;
-        console.log(error);
+        $scope.hasError = true;
+        $scope.errorMessage = locale.getString('spatial.reports_form_vessel_get_vessel_list_error');
+        $scope.hideError();
     };
     
     $scope.$watch('shared.vesselSearchBy', function(newVal, oldVal){
@@ -202,9 +211,10 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     };
     
     var getVesselsGroupError = function(error){
-        //TODO warn the user
         $scope.vesselSearchLoading = false;
-        console.log(error);
+        $scope.hasError = true;
+        $scope.errorMessage = locale.getString('spatial.reports_form_vessel_get_vgroup_list_error');
+        $scope.hideError();
     };
     
     $scope.$watch('displayedRecords', function() {

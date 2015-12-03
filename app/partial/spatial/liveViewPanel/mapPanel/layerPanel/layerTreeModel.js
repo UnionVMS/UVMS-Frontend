@@ -31,22 +31,51 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	    return node;
 	};
 	
+	//Build tree node for Bing based layers
+	var buildBingBasedNodes = function(src){
+        baseLayerCounter += 1;
+        
+	    var node = {
+	        title: locale.getString('spatial.layer_tree_' + src.title),
+	        selected: baseLayerCounter === 1 ? true : false,
+	        extraClasses: 'layertree-basemap',
+	        data: {
+	            type: src.type,
+	            isBaseLayer: true,
+	            title: src.title,
+	            layerGeoName: src.layerGeoName,
+	            apiKey: src.apiKey //TODO check this setting
+	        }
+	    };
+	    
+	    return node;
+	};
+	
 	//Build a tree node for WMS layers
 	var buildWmsNode = function(src){
-	    var stylesForObject;
+	    var stylesForObject = [];
+	    var selected = false;
 	    if (angular.isDefined(src.styles)){
 	        stylesForObject = checkWmStylesAvailability(src.styles);
 	    }
 	    
+	    if (src.isBaseLayer === true){
+	        baseLayerCounter += 1;
+	        if (baseLayerCounter === 1){
+	            selected = true;
+	        }
+	    }
+	    
 	    var node = {
 	        title: src.title,
+	        selected: selected,
 	        extraClasses: src.isBaseLayer === true ? 'layertree-basemap' : undefined,
 	        data: {
 	            type: 'WMS',
 	            title: src.title,
 	            isBaseLayer: src.isBaseLayer,
-	            attribution: src.attribution,
-	            url: fixTempUrl(src.url),
+	            attribution: src.shortCopyright,
+	            url: src.url,
 	            serverType: src.serverType,
 	            params: {
 	                'LAYERS': src.layerGeoName,
@@ -137,21 +166,25 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	        var node;
 	        switch(def.type){
 	            case 'WMS':
-	                if (def.layerType === 'area' && def.isBaseLayer === false){
+	                if (def.groupType === 'sysarea' && def.isBaseLayer === false){
 	                    node = buildWmsNode(def);
 	                    areaNodes.push(node);
-	                } else if (def.layerType === 'port' && def.isBaseLayer === false){
+	                } else if (def.groupType === 'port' && def.isBaseLayer === false){
 	                    node = buildWmsNode(def);
 	                    portNodes.push(node);
 	                } else if (def.isBaseLayer === true){
 	                    baseLayerNodes.push(buildWmsNode(def));
 	                }
+	                //TODO add user defined areas
 	                break;
 	            case 'OSM':
 	                baseLayerNodes.push(buildOsmBasedNodes(def));
 	                break;
 	            case 'OSEA':
 	                additionalNodes.push(buildOsmBasedNodes(def));
+	                break;
+	            case 'BING':
+	                baseLayerNodes.push(buildBingBasedNodes(def));
 	                break;
 	        }
 	    }

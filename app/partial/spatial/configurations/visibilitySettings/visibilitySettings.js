@@ -30,8 +30,4 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
     $scope.isMenuSelected = function(menu){
        return $scope.selectedMenu === menu;
     };
-    
-    $scope.test = function(){
-        console.log($scope.configModel.visibilitySettings);
-    };
 });

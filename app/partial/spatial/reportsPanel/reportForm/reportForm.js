@@ -171,25 +171,13 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     };
     
     $scope.openMapConfigurationModal = function(){
-        if (angular.isDefined($scope.report.id)){
-            spatialRestService.getMapConfigurations($scope.report.id).then(function(response){
-                $scope.mapConfigurationModal(response);
-            }, function(error){
-                //TODO warn the user
-            });
-        } else {
-            $scope.mapConfigurationModal();
-        }
-    };
-
-    $scope.mapConfigurationModal = function(mapConfigurations){
         var modalInstance = $modal.open({
             templateUrl: 'partial/spatial/reportsPanel/reportForm/mapConfigurationModal/mapConfigurationModal.html',
             controller: 'MapconfigurationmodalCtrl',
             size: 'lg',
             resolve: {
                 mapConfigs: function(){
-                    return mapConfigurations;
+                    return $scope.report.mapConfiguration;
                 }
             }
         });
@@ -231,8 +219,8 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     var createReportError = function(error){
         $scope.formAlert.visible = true;
-        var errorMsgCode = error.data.msg?'spatial.' + error.data.msg:'spatial.error_create_report';
-        $scope.formAlert.msg = locale.getString(errorMsgCode);
+        //var errorMsgCode = error.data.msg?'spatial.' + error.data.msg:'spatial.error_create_report';
+        $scope.formAlert.msg = locale.getString('spatial.error_create_report');
     };
 
     var updateReportSuccess = function(response){
@@ -243,7 +231,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     var updateReportError = function(error){
         $scope.formAlert.visible = true;
-        var errorMsgCode = error.data.msg?'spatial.' + error.data.msg:'spatial.error_update_report';
-        $scope.formAlert.msg = locale.getString(errorMsgCode);
+        //var errorMsgCode = error.data.msg?'spatial.' + error.data.msg:'spatial.error_update_report';
+        $scope.formAlert.msg = locale.getString('spatial.error_update_report');
     };
 });

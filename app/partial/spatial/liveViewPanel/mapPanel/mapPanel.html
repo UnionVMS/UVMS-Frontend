@@ -7,14 +7,14 @@
 					<button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_clear_map' | i18n }}" ng-click="clearMapHighlights()"><span class="fa fa-eraser"></span></button>
 				</div>
 				<div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
-					<button type="button" ng-class="{active: activeControl === 'measure'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_measure_distance' | i18n }}" ng-click="toggleToolbarBtn('measure')" ng-show="tbControls.measure"><span class="fa fa-arrows-h"></span></button>
-					<button type="button" id="export-map" ng-class="{active: activeControl === 'print'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_print' | i18n }}" ng-click="toggleToolbarBtn('print')" ng-show="tbControls.print"><span class="fa fa-print"></span></button>
+					<button type="button" ng-class="{active: activeControl === 'measure'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_measure_distance' | i18n }}" ng-click="toggleToolbarBtn('measure')" ng-show="tbControl.measure"><span class="fa fa-arrows-h"></span></button>
+					<button type="button" id="export-map" ng-class="{active: activeControl === 'print'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_print' | i18n }}" ng-click="toggleToolbarBtn('print')" ng-show="tbControl.print"><span class="fa fa-print"></span></button>
 					<!-- <button type="button" ng-class="{active: activeControl === 'other'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_measure_distance' | i18n }}" ng-click="toggleToolbarBtn('other')">Another Control</button> -->
 				</div>
 			</div>
 			<div class="btn-group-right">
 				<div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
-					<button type="button" class="btn btn-default btn-toolbar btn-fullscreen" title="{{'spatial.map_tip_fullscreen' | i18n }}" ng-click="fullscreenCtrl.toggleFullscreen();" ng-show="tbControls.fullscreen"><span class="fa fa-arrows-alt"></span></button>
+					<button type="button" class="btn btn-default btn-toolbar btn-fullscreen" title="{{'spatial.map_tip_fullscreen' | i18n }}" ng-click="fullscreenCtrl.toggleFullscreen();" ng-show="tbControl.fullscreen"><span class="fa fa-arrows-alt"></span></button>
 				</div>
 			</div>
 		</div>

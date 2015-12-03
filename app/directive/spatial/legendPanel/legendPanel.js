@@ -1,8 +1,7 @@
-angular.module('unionvmsWeb').directive('legendPanel', function(mapService) {
+angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapService) {
 	return {
 		restrict: 'EA',
 		replace: true,
-//		transclude: true,
 		scope: false,
 		templateUrl: 'directive/spatial/legendPanel/legendPanel.html',
 		controller: function(){
@@ -30,24 +29,10 @@ angular.module('unionvmsWeb').directive('legendPanel', function(mapService) {
 		            title: layer.get('title'),
 		            type: 'vmspos',
 		            visibility: layer.get('visible'),
-		            styles: this.getPositionsStyles()
+		            styles: this.getStyles('positions')
 		        };
 		        
 		        return record;
-		    };
-		    
-		    this.getPositionsStyles = function(){
-		        var styles = mapService.styles.positions;
-		        var keys = Object.keys(styles);
-		        
-		        var finalStyles = [];
-		        for (var i = 0; i < keys.length; i++){
-		            finalStyles.push({
-		               title: keys[i].toUpperCase(),
-		               color: {"color" : styles[keys[i]]}
-		            });
-		        }
-		        return finalStyles;
 		    };
 		    
 		    //VMS segments
@@ -56,27 +41,45 @@ angular.module('unionvmsWeb').directive('legendPanel', function(mapService) {
 		            title: layer.get('title'),
 		            type: 'vmsseg',
 		            visibility: layer.get('visible'),
-		            styles: this.getSegmentsStyles()
+		            styles: this.getStyles('segments')
 		        };
 		        
 		        return record;
 		    };
 		    
-		    this.getSegmentsStyles = function(){
-		        var styles = mapService.styles.segments;
-		        var keys = Object.keys(styles);
-		        var breaks = mapService.styles.speedBreaks;
-		        
-		        var finalStyles = [];
-		        for (var i = 0; i < breaks.length - 1; i++){
-		            finalStyles.push({
-		                title: Math.round(breaks[i]*100)/100 + ' - ' + Math.round(breaks[i+1]*100)/100,
-		                color: {"color" : styles[keys[i]]}
-		            });
-		        }
-		        
-		        return finalStyles;
-		    };
+		    //Get styles definition for both positions and segments as type
+		    this.getStyles = function(type){
+                var styleDef = mapService.styles[type];
+                var keys = Object.keys(styleDef.style);
+                
+                var finalStyles = [];
+                var i;
+                if (styleDef.attribute === 'countryCode'){
+                    for (i = 0; i < keys.length; i++){
+                        if (styleDef.displayedCodes.indexOf(keys[i]) !== -1){
+                          finalStyles.push({
+                             title: keys[i].toUpperCase(),
+                             color: {"color" : styleDef.style[keys[i]]}
+                          }); 
+                      }
+                    }
+                } else {
+                    for (i = 0; i < styleDef.breaks.intervals.length; i++){
+                        finalStyles.push({
+                            title: styleDef.breaks.intervals[i][0] + ' - ' + styleDef.breaks.intervals[i][1],
+                            color: {"color" : styleDef.style[styleDef.breaks.intervals[i][0] + '-' + styleDef.breaks.intervals[i][1]]}
+                        });
+                    }
+                    
+                    //Finally, add default color for all other values
+                    finalStyles.push({
+                        title: locale.getString('spatial.legend_panel_all_other_values'),
+                        color: {"color" : styleDef.breaks.defaultColor}
+                    });
+                }
+                
+                return finalStyles;
+            };
 		    
 		    this.init = function(){
 		        var records = [];
@@ -91,10 +94,14 @@ angular.module('unionvmsWeb').directive('legendPanel', function(mapService) {
 	                    if (layer.getSource() instanceof ol.source.Vector){
 	                        switch (layer.get('type')){
 	                            case 'vmspos':
-	                                records.push(this.buildRecVmsPos(layer));
+	                                if (layer.getSource().getFeatures().length !== 0){
+	                                    records.push(this.buildRecVmsPos(layer));
+	                                }
 	                                break;
 	                            case 'vmsseg':
-                                    records.push(this.buildRecVmsSeg(layer));
+	                                if (layer.getSource().getFeatures().length !== 0){
+	                                    records.push(this.buildRecVmsSeg(layer));
+                                    }
                                     break;
 	                            default:
 	                                return;

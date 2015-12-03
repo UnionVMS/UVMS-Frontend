@@ -219,6 +219,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			};
 
 			var updateLayerTreeSource = function( event, source ) {
+			    mapService.removeAllLayers();
 				scope.$tree.reload( source );
 				updateMap();
 			};

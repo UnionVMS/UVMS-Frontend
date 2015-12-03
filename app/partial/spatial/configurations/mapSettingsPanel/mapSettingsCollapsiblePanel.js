@@ -4,8 +4,4 @@ angular.module('unionvmsWeb').controller('MapsettingscollapsiblepanelCtrl',funct
 		isOpen: false
 	};
 	
-	$scope.test = function(){
-	    console.log($scope.configModel);
-	};
-
 });

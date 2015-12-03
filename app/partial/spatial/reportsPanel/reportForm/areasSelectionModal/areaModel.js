@@ -19,9 +19,9 @@ angular.module('unionvmsWeb').factory('Area',function() {
         return area;
     };
     
-    Area.prototype.fromGeoJson = function(data){
-        //TODO
-    };
+//    Area.prototype.fromGeoJson = function(data){
+//        //TODO
+//    };
 
 	return Area;
 });

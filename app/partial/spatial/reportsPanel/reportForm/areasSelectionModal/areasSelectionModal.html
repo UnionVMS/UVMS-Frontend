@@ -7,6 +7,18 @@
         	<span class="modalTitle">{{'spatial.area_selection_modal_title' | i18n}}</span>
         </div>
     </div>
+    <!-- ERROR MESSAGE -->
+    <div class="modal-body row">
+    	<div class="col-md-12" ng-show="hasError">
+    		<div class="alert alert-danger" role="alert">
+				<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+				<span class="alert-message">
+					<span>{{errorMessage}}</span>          
+				</span>
+		    </div>
+    	</div>
+    </div>
+    <!-- TABS -->
     <div class="modal-body row">
     	<div class="col-md-12">
     		<ul class="nav nav-pills" role="tablist">

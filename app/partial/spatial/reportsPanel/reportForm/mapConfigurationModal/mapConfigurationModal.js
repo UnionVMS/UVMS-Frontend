@@ -15,6 +15,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 
     $scope.exportMapConfiguration = function () {
         var exported = {
+            spatialConnectId: angular.isDefined($scope.configModel.mapSettings.spatialConnectId) ? $scope.configModel.mapSettings.spatialConnectId : undefined,
             mapProjectionId: $scope.configModel.mapSettings.mapProjectionId,
             displayProjectionId: $scope.configModel.mapSettings.displayProjectionId,
             coordinatesFormat: $scope.configModel.mapSettings.coordinatesFormat,
@@ -26,7 +27,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 
     $modalInstance.rendered.then(function () {
         $scope.configModel = new SpatialConfig();
-        if (angular.isDefined(mapConfigs)){
+        if (!angular.equals({}, mapConfigs)){
             $scope.initialConfig = $scope.configModel.forReportConfigFromJson(mapConfigs);
         } else {
             $scope.configModel = $scope.configModel.forReportConfig();
