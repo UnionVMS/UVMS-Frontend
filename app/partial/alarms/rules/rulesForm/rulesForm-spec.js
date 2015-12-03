@@ -91,11 +91,11 @@ describe('RulesformCtrl', function() {
     }));
 
     describe('updateFormToMatchTheCurrentRule()', function() {
-        it('should add a new definition and a new action to new Event Rules', inject(function($rootScope, Rule) {
+        it('should add a new definition and a new Email action to new Event Rules', inject(function($rootScope, Rule) {
             var controller = createController();
             scope.isCreateNewMode = function(){return true;};
             var addDefinitionRowSpy = spyOn(scope, "addDefinitionRow");;
-            var addActionRowSpy = spyOn(scope, "addActionRow");;
+            var addEmailActionRowSpy = spyOn(scope, "addEmailActionRow");;
 
             scope.currentRule = new Rule();
             scope.currentRule.type = 'EVENT';
@@ -104,15 +104,15 @@ describe('RulesformCtrl', function() {
             expect(addDefinitionRowSpy).toHaveBeenCalled();
             expect(addDefinitionRowSpy.callCount).toBe(1);
 
-            expect(addActionRowSpy).toHaveBeenCalled();
-            expect(addActionRowSpy.callCount).toBe(1);
+            expect(addEmailActionRowSpy).toHaveBeenCalled();
+            expect(addEmailActionRowSpy.callCount).toBe(1);
         }));
 
-        it('should add a new definition and a new action to new Global Rules', inject(function($rootScope, Rule) {
+        it('should add a new definition and a new Email action to new Global Rules', inject(function($rootScope, Rule) {
             var controller = createController();
             scope.isCreateNewMode = function(){return true;};
             var addDefinitionRowSpy = spyOn(scope, "addDefinitionRow");;
-            var addActionRowSpy = spyOn(scope, "addActionRow");;
+            var addEmailActionRowSpy = spyOn(scope, "addEmailActionRow");;
 
             scope.currentRule = new Rule();
             scope.currentRule.type = 'GLOBAL';
@@ -121,20 +121,21 @@ describe('RulesformCtrl', function() {
             expect(addDefinitionRowSpy).toHaveBeenCalled();
             expect(addDefinitionRowSpy.callCount).toBe(1);
 
-            expect(addActionRowSpy).not.toHaveBeenCalled();
+            expect(addEmailActionRowSpy).toHaveBeenCalled();
+            expect(addDefinitionRowSpy.callCount).toBe(1);
         }));
 
-        it('should NOT add a new definition and a new action to existing Rules', inject(function($rootScope) {
+        it('should NOT add a new definition and a new Email  action to existing Rules', inject(function($rootScope) {
             var controller = createController();
             scope.isCreateNewMode = function(){return true;};
             var addDefinitionRowSpy = spyOn(scope, "addDefinitionRow");;
-            var addActionRowSpy = spyOn(scope, "addActionRow");;
+            var addEmailActionRowSpy = spyOn(scope, "addEmailActionRow");;
 
             scope.currentRule = createRuleWithData();
             scope.updateFormToMatchTheCurrentRule();
 
             expect(addDefinitionRowSpy).not.toHaveBeenCalled();
-            expect(addActionRowSpy).not.toHaveBeenCalled();
+            expect(addEmailActionRowSpy).not.toHaveBeenCalled();
         }));
 
         it('should update list of disabled action', inject(function($rootScope, Rule) {

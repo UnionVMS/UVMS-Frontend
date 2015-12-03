@@ -53,9 +53,9 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
             $scope.addDefinitionRow();
         }
 
-        //Add a new action row to new rules if not GLOBAL rule
-        if($scope.currentRule.getNumberOfActions() === 0 && !$scope.currentRule.isGlobal()){
-            $scope.addActionRow();
+        //Add a new action row with email as action to new rules
+        if($scope.currentRule.getNumberOfActions() === 0){
+            $scope.addEmailActionRow();
         }
 
         //Reset form validation
@@ -319,6 +319,28 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         $scope.currentRule.addAction(ruleAction);
         //Update list of disabled actions
         $scope.updateDisabledActions();
+    };
+
+    //Add an action row with actions set to EMAIL
+    $scope.addEmailActionRow = function(){
+        var ruleAction = new RuleAction();
+        //Check that EMAIL is an available action
+        var emailActionIsAvailable = false;
+        $.each($scope.DROPDOWNS.ACTIONS, function(index, dropdownItem){
+            if(dropdownItem.code === 'EMAIL'){
+                emailActionIsAvailable = true;
+            }
+        });
+        if(emailActionIsAvailable){
+            ruleAction.action = 'EMAIL';
+            ruleAction.order = $scope.currentRule.getNumberOfActions();
+            setDefaultValueToAction(ruleAction);
+            $scope.currentRule.addAction(ruleAction);
+            //Update list of disabled actions
+            $scope.updateDisabledActions();
+        }else{
+            $scope.addActionRow();
+        }
     };
 
     //Check if an action requires a value
