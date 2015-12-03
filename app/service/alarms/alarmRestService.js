@@ -39,6 +39,12 @@ angular.module('unionvmsWeb')
                     reprocess: {method: 'POST'}
                 });
             },
+            getAlarmStatusConfig : function(){
+                return $resource('/rules/rest/config/alarmstatus');
+            },
+            getTicketStatusConfig : function(){
+                return $resource('/rules/rest/config/ticketstatus');
+            },
         };
     })
 .factory('alarmRestService', function($q, $log, alarmRestFactory, Alarm, Ticket, SearchResultListPage, userService, vesselRestService){
@@ -111,8 +117,11 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
-    var getTicketsList = function(getListRequest){
+    var getTicketsListForCurrentUser = function(getListRequest){
         var deferred = $q.defer();
+
+        //Only get tickets belonging to the current user
+        getListRequest.addSearchCriteria('USER', userService.getUserName());
 
         //Get list of all tickets
         alarmRestFactory.getTickets().list(getListRequest.DTOForTickets(), function(response){
@@ -229,15 +238,41 @@ angular.module('unionvmsWeb')
         return getCountFromResource(alarmRestFactory.getOpenAlarmsCount());
     };
 
+    var getConfigurationFromResource = function(resource){
+        var deferred = $q.defer();
+        resource.get({},
+            function(response){
+                if(response.code !== 200){
+                    deferred.reject("Not valid alarm/ticket statuses configuration status.");
+                    return;
+                }
+                deferred.resolve(response.data);
+            }, function(error){
+                console.error("Error geting configuration for alarm/ticket statuses.");
+                deferred.reject(error);
+            });
+        return deferred.promise;
+    };
+
+    var getAlarmStatusConfig = function(){
+        return getConfigurationFromResource(alarmRestFactory.getAlarmStatusConfig());
+    };
+
+    var getTicketStatusConfig = function(){
+        return getConfigurationFromResource(alarmRestFactory.getTicketStatusConfig());
+    };
+
     return {
         updateAlarmStatus: updateAlarmStatus,
         getAlarmsList: getAlarmsList,
-        getTicketsList: getTicketsList,
+        getTicketsListForCurrentUser: getTicketsListForCurrentUser,
         updateTicketStatus: updateTicketStatus,
         reprocessAlarms: reprocessAlarms,
         getAlarmReport: getAlarmReport,
         getTicket: getTicket,
         getOpenTicketsCount: getOpenTicketsCount,
         getOpenAlarmsCount: getOpenAlarmsCount,
+        getAlarmStatusConfig: getAlarmStatusConfig,
+        getTicketStatusConfig: getTicketStatusConfig,
     };
 });

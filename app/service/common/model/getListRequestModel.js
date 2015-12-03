@@ -163,6 +163,13 @@ angular.module('unionvmsWeb')
         };
     };
 
+    GetListRequest.prototype.DTOForRules = function(){
+        return{
+            customRuleSearchCriteria : this.criterias,
+            pagination: {page: this.page, listSize: this.listSize}
+        };
+    };
+
     GetListRequest.prototype.setPage = function(newPage){
         this.page = newPage;
         return this.page;

@@ -172,7 +172,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             if(searchType === 'ALARMS'){
                 searchPromise = alarmRestService.getAlarmsList(searchGetListRequest);
             }else if (searchType === 'TICKETS'){
-                searchPromise = alarmRestService.getTicketsList(searchGetListRequest);
+                searchPromise = alarmRestService.getTicketsListForCurrentUser(searchGetListRequest);
             }
 
             searchPromise.then(function(page) {

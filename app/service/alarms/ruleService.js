@@ -13,6 +13,14 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log, rules
             });
 
             text += ' ' +locale.getString('alarms.rules_definition_then');
+            //Global rule? Add text "CREATE NOTIFICATION FOR ALL USERS AND"
+            if(rule.isGlobal()){
+                text += ' ' +locale.getString('alarms.rules_rule_as_text_action_TICKET_ALL_USERS');
+                if(rule.actions.length > 0){
+                    text += ' ' +locale.getString('alarms.rules_definition_and');
+                }
+            }
+
             $.each(rule.actions, function(index, action){
                 if(index === 0){
                     text += ' ';
@@ -83,7 +91,7 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log, rules
             var returnObject = {success: false, problems:[]};
             //Validation rules:
             //At least 1 definition
-            //At least 1 action
+            //At least 1 action if not GLOBAL rule
             //LogicBoolOperator is AND/OR for all but the last that is NONE
             //parentheses match
             //No empty criterias field for a definition
@@ -91,13 +99,14 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log, rules
             //No empty values field for a definition
             //No empty condition field for a definition
             //No empty value field for an action that requires a value
+            //No multiple actions with same action and value
             try{
-                //At least 1 definition and at least 1 action
+                //At least 1 definition and at least 1 action if not GLOBAL rule
                 if(rule.getNumberOfDefinitions() === 0){
                     returnObject.problems.push('NO_DEFINITIONS');
                 }
 
-                if(rule.getNumberOfActions() === 0 ){
+                if(!rule.isGlobal() && rule.getNumberOfActions() === 0 ){
                     returnObject.problems.push('NO_ACTIONS');
                 }
 
@@ -156,13 +165,35 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log, rules
                     returnObject.problems.push('PARANTHESES_DONT_MATCH');
                 }
 
+
                 //No empty value field for an action that requires a value
+                //No multiple actions with same action and value
                 var thenAction;
+                var j;
                 for (i = rule.actions.length-1; i >= 0; i--){
                     thenAction = rule.actions[i];
                     if(rulesOptionsService.actionShouldHaveValue(thenAction.action)){
                         if(typeof thenAction.value !== 'string' || thenAction.value.trim().length === 0){
                             returnObject.problems.push('INVALID_ACTION_VALUE');
+                        }
+                    }
+                    for (j = rule.actions.length-1; j >= 0; j--){
+                        //Don't compare an object with it self
+                        if(i !== j){
+                            //Same action?
+                            if(thenAction.action === rule.actions[j].action){
+                                //Action has a value?
+                                if(typeof thenAction.value === 'string' && thenAction.value.trim().length > 0){
+                                    //Same value?
+                                    if(typeof rule.actions[j].value === 'string' || rule.actions[j].value.trim().length > 0){
+                                        if(thenAction.value.trim() === rule.actions[j].value.trim()){
+                                            returnObject.problems.push('NON_UNIQUE_ACTION');
+                                        }
+                                    }
+                                }else{
+                                    returnObject.problems.push('NON_UNIQUE_ACTION');
+                                }
+                            }
                         }
                     }
                 }

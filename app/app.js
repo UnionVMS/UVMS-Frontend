@@ -373,6 +373,9 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                 }
             },
             resolve: {
+                 config : function(initService){
+                    return initService.loadConfigFor(["ALARM_STATUSES"]);
+                }
             },
             data: {
                 access: 'viewAlarmsHoldingTable'
@@ -386,7 +389,11 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                     controller: 'OpenticketsCtrl'
                 }
             },
-            resolve: {},
+            resolve: {
+                 config : function(initService){
+                    return initService.loadConfigFor(["TICKET_STATUSES"]);
+                }
+            },
             data: {
                 access: 'viewAlarmsOpenTickets'
             },

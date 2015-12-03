@@ -1,6 +1,6 @@
 <div class="row">
 	<div search-results-table search="currentSearchResults" class="col-md-12 rules-table">
-		<table class="searchResults">
+		<table class="searchResults colorOdd">
 			<thead>
 				<tr>
 					<th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
@@ -10,34 +10,28 @@
 					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'lastTriggered'">{{'alarms.rules_table_last_triggered' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'dateUpdated'">{{'alarms.rules_table_date_updated' | i18n}}</th>
 					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'updatedBy'">{{'alarms.rules_table_updated_by' | i18n}}</th>
-                    <th>{{'alarms.rules_table_subscription' | i18n}}</th>
-                    <th>{{'alarms.rules_table_notify_by_email' | i18n}}</th>
+                    <th class="notifyByTicket">{{'alarms.rules_table_subscription' | i18n}}</th>
+                    <th class="notifyByEmail">{{'alarms.rules_table_notify_by_email' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'active'">{{'alarms.rules_table_status' | i18n}}</th>
                     <th></th>
                     <th class="actions">{{'alarms.rules_table_actions' | i18n}}</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat-start="item in filteredItems = (currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:filterOnType)" ng-init="isExpanded = false" ng-class="isExpanded ? 'basicDataExpanded' : 'basicData'">
+				<tr ng-repeat="item in filteredItems = (currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:filterOnType)" ng-class="{'inactive':!item.active}">
     				<td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
- <!--    				<td ng-click="isExpanded = !isExpanded">
-                        <i ng-show="!isExpanded" class="fa fa-lg fa-plus-circle detailsIcon" title="{{'alarms.rules_table_details' | i18n}}"></i>
-                        <i ng-show="isExpanded" class="fa fa-lg fa-minus-circle detailsIcon" title="{{'alarms.rules_table_details' | i18n}}"></i>
-                    </td> -->
-    				<td>{{item.name}}</td>
-    				<td>{{getTypeLabelForRule(item)}}</td>
-    				<td>{{item.lastTriggered | confDateFormat}}</td>
-                    <td>{{item.dateUpdated | confDateFormat}}</td>
-                    <td>{{item.updatedBy}}</td>
-                    <td class="subscription">
-                        <div ng-if="item.active && isSubscriptionPossible(item)">
-                            <dropdown ng-model="item.subscription" initialtext="{{'common.none' | i18n}}" initialtext-selectable items="subscriptionsOptions"></dropdown>
-                        </div>
+    				<td class="statusColored">{{item.name}}</td>
+    				<td class="statusColored">{{getTypeLabelForRule(item)}}</td>
+    				<td class="statusColored">{{item.lastTriggered | confDateFormat}}</td>
+                    <td class="statusColored">{{item.dateUpdated | confDateFormat}}</td>
+                    <td class="statusColored">{{item.updatedBy}}</td>
+                    <td class="statusColored notifyByTicket">
+                        <i ng-show="userHasTicketNotificationForRule(item)" class="fa fa-check" tooltip-placement="bottom" tooltip="{{'alarms.private_ticket_notification_title' | i18n}}" tooltip-append-to-body="true"></i>
+
+                        <i ng-show="item.isGlobal()" class="fa fa-check" tooltip-placement="bottom" tooltip="{{'alarms.global_ticket_notification_title' | i18n}}" tooltip-append-to-body="true"></i>
                     </td>
-                    <td class="notifyByEmail">
-                        <div>
-                            <input type="text" ng-model="item.notifyByEmail" class="form-control" placeholder="{{'alarms.rules_table_notify_by_email_input_placeholder' | i18n}}">
-                        </div>
+                    <td class="statusColored notifyByEmail">
+                        <i ng-show="userHasEmailNotificationForRule(item)" class="fa fa-check" tooltip-placement="bottom" tooltip="{{'alarms.email_notification_title' | i18n}}" tooltip-append-to-body="true"></i>
                     </td>
                     <td ng-class="item.active ? 'active' : 'inactive'">
                         <span class="label" ng-class="item.active ? 'label-success' : 'label-danger'">
@@ -68,14 +62,7 @@
                         </span>
     				</td>
 				</tr>
-                <tr ng-repeat-end="" ng-show="isExpanded" class="detailData">
-                    <td colspan="2">&nbsp;</td>
-                    <td colspan="10" class="detailsContainer">
-                        <rules-table-details rule="item" ng-if="isExpanded"></rules-table-details>
-                    </td>
-                </tr>
 			</tbody>
 		</table>
-        <search-result-error-alert ng-show="currentSearchResults.items.length > 0 && filteredItems.length === 0">{{'common.filter_zero_results' | i18n}}</search-result-error-alert>
     </div>
 </div>

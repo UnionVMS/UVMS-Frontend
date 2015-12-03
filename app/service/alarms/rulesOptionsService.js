@@ -20,6 +20,8 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
     var courseCriterias = ['REPORTED_COURSE', 'CALCULATED_COURSE'];
     var speedCriterias = ['REPORTED_SPEED', 'CALCULATED_SPEED'];
     var dateTimeCriterias = ['POSITION_REPORT_TIME'];
+    //Actions that should have value input fields of a certain type
+    var emailActions = ['EMAIL'];
 
     var createDropdownItemsWithSameTextAsValue = function(codes){
         var options = [];
@@ -228,6 +230,9 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         },
         isRuleDefinitionValueADateTime : function(ruleDefinition){
             return dateTimeCriterias.indexOf(ruleDefinition.subCriteria) >= 0;
+        },
+        isRuleActionValueAnEmail : function(ruleAction){
+            return emailActions.indexOf(ruleAction.action) >= 0;
         },
         setupDropdowns : function(){
             setupDropdowns();

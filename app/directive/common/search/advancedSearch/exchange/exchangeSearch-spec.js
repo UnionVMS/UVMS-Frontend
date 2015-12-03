@@ -39,9 +39,8 @@ describe('ExchangeSearchController', function() {
 
     }));
 
-    it('should remove DATE_RECEIVED_FROM and DATE_RECEIVED_TO when EXCHANGE_TIME_SPAN changes to something other than CUSTOM', inject(function($q, ruleRestService) {
+    it('should remove DATE_RECEIVED_FROM and DATE_RECEIVED_TO when EXCHANGE_TIME_SPAN changes to something other than CUSTOM', inject(function($q) {
         var deferred = $q.defer();
-        spyOn(ruleRestService, "getRulesList").andReturn(deferred.promise);
         var controller = createController();
         scope.$digest();
 
@@ -58,9 +57,8 @@ describe('ExchangeSearchController', function() {
         expect('DATE_RECEIVED_TO' in scope.advancedSearchObject).toBeFalsy()
     }));
 
-    it('should not remove DATE_RECEIVED_FROM and DATE_RECEIVED_TO when EXCHANGE_TIME_SPAN changes to CUSTOM', inject(function($q, ruleRestService) {
+    it('should not remove DATE_RECEIVED_FROM and DATE_RECEIVED_TO when EXCHANGE_TIME_SPAN changes to CUSTOM', inject(function($q) {
         var deferred = $q.defer();
-        spyOn(ruleRestService, "getRulesList").andReturn(deferred.promise);
         var controller = createController();
         scope.$digest();
 
@@ -77,9 +75,8 @@ describe('ExchangeSearchController', function() {
         expect('DATE_RECEIVED_TO' in scope.advancedSearchObject).toBeTruthy()
     }));
 
-    it('should change EXCHANGE_TIME_SPAN to CUSTOM when DATE_RECEIVED_FROM or DATE_RECEIVED_TO changes', inject(function($q, ruleRestService) {
+    it('should change EXCHANGE_TIME_SPAN to CUSTOM when DATE_RECEIVED_FROM or DATE_RECEIVED_TO changes', inject(function($q) {
         var deferred = $q.defer();
-        spyOn(ruleRestService, "getRulesList").andReturn(deferred.promise);
         var controller = createController();
         scope.$digest();
 

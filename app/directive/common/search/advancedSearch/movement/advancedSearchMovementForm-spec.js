@@ -55,9 +55,8 @@ describe('advancedSearchMovementCtrl', function() {
 
     }));
 
-    it('should remove FROM_DATE and TO_DATE when TIME_SPAN changes to something other than CUSTOM', inject(function($q, ruleRestService) {
+    it('should remove FROM_DATE and TO_DATE when TIME_SPAN changes to something other than CUSTOM', inject(function($q) {
         var deferred = $q.defer();
-        spyOn(ruleRestService, "getRulesList").andReturn(deferred.promise);
         var controller = createController();
         scope.$digest();
 
@@ -74,9 +73,8 @@ describe('advancedSearchMovementCtrl', function() {
         expect('TO_DATE' in scope.advancedSearchObject).toBeFalsy()
     }));
 
-    it('should not remove FROM_DATE and TO_DATE when TIME_SPAN changes to CUSTOM', inject(function($q, ruleRestService) {
+    it('should not remove FROM_DATE and TO_DATE when TIME_SPAN changes to CUSTOM', inject(function($q) {
         var deferred = $q.defer();
-        spyOn(ruleRestService, "getRulesList").andReturn(deferred.promise);
         var controller = createController();
         scope.$digest();
 
@@ -93,9 +91,8 @@ describe('advancedSearchMovementCtrl', function() {
         expect('TO_DATE' in scope.advancedSearchObject).toBeTruthy()
     }));
 
-    it('should change TIME_SPAN to CUSTOM when FROM_DATE or TO_DATE changes', inject(function($q, ruleRestService) {
+    it('should change TIME_SPAN to CUSTOM when FROM_DATE or TO_DATE changes', inject(function($q) {
         var deferred = $q.defer();
-        spyOn(ruleRestService, "getRulesList").andReturn(deferred.promise);
         var controller = createController();
         scope.$digest();
 

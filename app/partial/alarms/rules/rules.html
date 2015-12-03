@@ -20,23 +20,9 @@
                     <dropdown class="" ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
                 </div>
 
-                <div class="col-md-10">
-                    <div class="">
-                        <div class="btn-group">
-                            <label class="btn btn-default" ng-model="currentSearchResults.typeFilter" btn-radio="'ALL'">
-                                {{'common.all' | i18n}}
-                            </label>
-                            <label class="btn btn-default" ng-model="currentSearchResults.typeFilter" btn-radio="'GLOBAL'">
-                                {{'alarms.rules_type_global' | i18n}}
-                            </label>
-                            <label class="btn btn-default" ng-model="currentSearchResults.typeFilter" btn-radio="'EVENT'">
-                                {{'alarms.rules_type_event' | i18n}}
-                            </label>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div static-include="partial/alarms/rules/rulesTable/rulesTable.html"></div>
+            <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination>
         </div>
 
 

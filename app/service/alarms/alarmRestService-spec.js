@@ -248,12 +248,12 @@ describe('alarmRestService', function() {
     });
 
 
-    describe('getTicketsList', function() {
-        it("getTicketsList should return list of tickets", inject(function($rootScope, alarmRestService, GetListRequest, Ticket) {
+    describe('getTicketsListForCurrentUser', function() {
+        it("getTicketsListForCurrentUser should return list of tickets", inject(function($rootScope, alarmRestService, GetListRequest, Ticket) {
             var getListRequest = new GetListRequest();
 
             var resolved = false;
-            alarmRestService.getTicketsList(getListRequest).then(function(page){
+            alarmRestService.getTicketsListForCurrentUser(getListRequest).then(function(page){
                 resolved = true;
                 expect(page.currentPage).toEqual(12);
                 expect(page.totalNumberOfPages).toEqual(23);
@@ -265,12 +265,12 @@ describe('alarmRestService', function() {
 
         }));
 
-        it("getTicketsList should reject promise in case of error", inject(function($rootScope, alarmRestService, GetListRequest, Alarm) {
+        it("getTicketsListForCurrentUser should reject promise in case of error", inject(function($rootScope, alarmRestService, GetListRequest, Alarm) {
             var getListRequest = new GetListRequest();
             getListRequest.page = 0;
 
             var rejected = false;
-            alarmRestService.getTicketsList(getListRequest).then(function(page){
+            alarmRestService.getTicketsListForCurrentUser(getListRequest).then(function(page){
             },function(err){
                 rejected = true;
             });

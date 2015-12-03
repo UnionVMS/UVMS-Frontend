@@ -91,13 +91,14 @@ describe('RulesformCtrl', function() {
     }));
 
     describe('updateFormToMatchTheCurrentRule()', function() {
-        it('should add a new definition and a new action to new Rules', inject(function($rootScope, Rule) {
+        it('should add a new definition and a new action to new Event Rules', inject(function($rootScope, Rule) {
             var controller = createController();
             scope.isCreateNewMode = function(){return true;};
             var addDefinitionRowSpy = spyOn(scope, "addDefinitionRow");;
             var addActionRowSpy = spyOn(scope, "addActionRow");;
 
             scope.currentRule = new Rule();
+            scope.currentRule.type = 'EVENT';
             scope.updateFormToMatchTheCurrentRule();
 
             expect(addDefinitionRowSpy).toHaveBeenCalled();
@@ -105,6 +106,22 @@ describe('RulesformCtrl', function() {
 
             expect(addActionRowSpy).toHaveBeenCalled();
             expect(addActionRowSpy.callCount).toBe(1);
+        }));
+
+        it('should add a new definition and a new action to new Global Rules', inject(function($rootScope, Rule) {
+            var controller = createController();
+            scope.isCreateNewMode = function(){return true;};
+            var addDefinitionRowSpy = spyOn(scope, "addDefinitionRow");;
+            var addActionRowSpy = spyOn(scope, "addActionRow");;
+
+            scope.currentRule = new Rule();
+            scope.currentRule.type = 'GLOBAL';
+            scope.updateFormToMatchTheCurrentRule();
+
+            expect(addDefinitionRowSpy).toHaveBeenCalled();
+            expect(addDefinitionRowSpy.callCount).toBe(1);
+
+            expect(addActionRowSpy).not.toHaveBeenCalled();
         }));
 
         it('should NOT add a new definition and a new action to existing Rules', inject(function($rootScope) {
@@ -395,24 +412,12 @@ describe('RulesformCtrl', function() {
             expect(scope.disableAvailability).toBeFalsy();
         }));
 
-        it('should disable availabilityType when not in create mode', inject(function($rootScope, Rule) {
-            var controller = createController();
-            scope.isCreateNewMode = function(){return false;};
-
-            scope.currentRule = new Rule();
-            scope.currentRule.type = 'EVENT';
-            scope.currentRule.availability = 'PRIVATE';
-
-            scope.updateAvailabilityDropdown();
-            expect(scope.currentRule.availability).toEqual('PRIVATE');
-            expect(scope.disableAvailability).toBeTruthy();
-        }));
     });
 
-    it('onCriteriaSelection should set subCriteria value to the first value in the subcriterias dropdown and conditions dropdown and call resetRuleDefinitionValue', inject(function($rootScope, RuleDefinition) {
+    it('onCriteriaSelection should set subCriteria value to the first value in the subcriterias dropdown and conditions dropdown and call setDefaultValueToDefinition', inject(function($rootScope, RuleDefinition) {
         var controller = createController();
 
-        var resetRuleDefinitionValueSpy = spyOn(scope, "resetRuleDefinitionValue");
+        var setDefaultValueToDefinitionSpy = spyOn(scope, "setDefaultValueToDefinition");
         scope.DROPDOWNS.SUBCRITERIAS = {ASSET: [{code:'FIRST'}, {code:'SECOND'}]};
         scope.DROPDOWNS.CONDITIONS = {ASSET: {FIRST : [{code:'A'}, {code:'B'}] } };
 
@@ -423,10 +428,10 @@ describe('RulesformCtrl', function() {
         expect(ruleDef.criteria).toEqual('ASSET');
         expect(ruleDef.subCriteria).toEqual('FIRST');
         expect(ruleDef.condition).toEqual('A');
-        expect(resetRuleDefinitionValueSpy).toHaveBeenCalledWith(ruleDef);
+        expect(setDefaultValueToDefinitionSpy).toHaveBeenCalledWith(ruleDef);
     }));
 
-    describe('resetRuleDefinitionValue()', function() {
+    describe('setDefaultValueToDefinition()', function() {
         it('should set ruleDef value to undefined if valueType is other than DROPDOWN', inject(function($rootScope, RuleDefinition) {
             var controller = createController();
 
@@ -435,7 +440,7 @@ describe('RulesformCtrl', function() {
             var ruleDef = new RuleDefinition();
             ruleDef.value = 'Old value'
 
-            scope.resetRuleDefinitionValue(ruleDef);
+            scope.setDefaultValueToDefinition(ruleDef);
             expect(ruleDef.value).toEqual(undefined);
         }));
 
@@ -443,13 +448,14 @@ describe('RulesformCtrl', function() {
             var controller = createController();
 
             spyOn(scope, "getRuleDefinitionValueInputType").andReturn("DROPDOWN");
+            spyOn(rulesOptionsService, "isRuleActionValueAnEmail").andReturn(false);
             var valueDropdownOptions = [{code: 'A'}, {code:'B'}];
             spyOn(rulesOptionsService, "getDropdownValuesForRuleDefinition").andReturn(valueDropdownOptions);
 
             var ruleDef = new RuleDefinition();
             ruleDef.value = 'Old value'
 
-            scope.resetRuleDefinitionValue(ruleDef);
+            scope.setDefaultValueToDefinition(ruleDef);
             expect(ruleDef.value).toEqual('A');
         }));
     });
@@ -479,6 +485,7 @@ describe('RulesformCtrl', function() {
 
         });
         scope.currentRule = new Rule();
+        scope.currentRule.type = "EVENT";
 
         scope.updateDisabledActions();
         expect(scope.disabledActions).toEqual([]);
@@ -498,6 +505,39 @@ describe('RulesformCtrl', function() {
 
         scope.updateDisabledActions();
         expect(scope.disabledActions).toEqual(['TEST']);
+    }));
+
+    it('updateDisabledActions should include TICKET for all GLOBAL rules', inject(function($rootScope, Rule, RuleAction) {
+        var controller = createController();
+
+        spyOn(scope, "actionShouldHaveValue").andCallFake(function(action){
+            if(action === 'VESSEL' || action === 'MOBILE_TERMINAL'){
+                return true;
+            }
+            return false;
+
+        });
+        scope.currentRule = new Rule();
+        scope.currentRule.type = "GLOBAL";
+
+        scope.updateDisabledActions();
+        expect(scope.disabledActions).toEqual(['TICKET']);
+
+        //Add an action
+        var action2 = new RuleAction();
+        action2.action = 'VESSEL';
+        scope.currentRule.addAction(action2)
+
+        scope.updateDisabledActions();
+        expect(scope.disabledActions).toEqual(['TICKET']);
+
+        //Add an action
+        var action1 = new RuleAction();
+        action1.action = 'TEST';
+        scope.currentRule.addAction(action1)
+
+        scope.updateDisabledActions();
+        expect(scope.disabledActions).toEqual(['TEST', 'TICKET']);
     }));
 
     describe('createNewRule()', function() {

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $stateParams, locale, csvService, alertService, $filter, Rule,  RuleDefinition, ruleRestService, SearchResults, SearchResultListPage, userService, confirmationModal){
+angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $stateParams, locale, csvService, alertService, $filter, Rule,  RuleDefinition, ruleRestService, SearchResults, SearchResultListPage, userService, personsService, confirmationModal, GetListRequest){
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Rules', true);
@@ -18,17 +18,15 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
         {text:locale.getString('common.export_selection'), code : 'EXPORT'}
     ];
 
+    //Email adddress of the current user
+    $scope.currentUserEmailAddress = undefined;
+    personsService.getContactDetails(userService.getUserName()).then(function(response){
+        $scope.currentUserEmailAddress = response.email;
+    }, function(err){
+        $log.error("Failed to get email address for current user");
+    });
+
     $scope.currentSearchResults = new SearchResults('name', false, locale.getString('alarms.rules_zero_results_error'));
-
-    //Filter search results on rule type
-    $scope.currentSearchResults.typeFilter = 'ALL';
-    $scope.filterOnType = function(rule) {
-        if ($scope.currentSearchResults.typeFilter === "ALL") {
-            return true;
-        }
-
-        return rule.type === $scope.currentSearchResults.typeFilter;
-    };
 
     var init = function(){
         $scope.ruleGuid = $stateParams.id;
@@ -38,10 +36,22 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
     };
 
     //Get list of rules
+    var getListRequest = new GetListRequest();
     $scope.searchRules = function() {
         $scope.clearSelection();
         $scope.currentSearchResults.setLoading(true);
-        ruleRestService.getRulesList().then(updateSearchResults, onGetSearchResultsError);
+        //Get rules
+        getListRequest.addSearchCriteria('RULE_USER', userService.getUserName());
+        getListRequest.addSearchCriteria('AVAILABILITY', 'PUBLIC');
+        ruleRestService.getRulesByQuery(getListRequest).then(updateSearchResults, onGetSearchResultsError);
+    };
+
+    //Goto page in the search results
+    $scope.gotoPage = function(page){
+        if(angular.isDefined(page)){
+            getListRequest.setPage(page);
+            ruleRestService.getRulesByQuery(getListRequest).then(updateSearchResults, onGetSearchResultsError);
+        }
     };
 
     //Callback when a new Rule has been creatad
@@ -128,6 +138,26 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
                 }
             );
         }, options);
+    };
+
+    /*SUBSCRIPTIONS*/
+    $scope.userHasTicketNotificationForRule = function(rule){
+        var userName = userService.getUserName();
+        for (var i = rule.actions.length-1; i >= 0; i--){
+            if(rule.actions[i].action === 'TICKET' && rule.actions[i].value === userName){
+                return true;
+            }
+        }
+    };
+
+    $scope.userHasEmailNotificationForRule = function(rule){
+        if(angular.isDefined($scope.currentUserEmailAddress)){
+            for (var i = rule.actions.length-1; i >= 0; i--){
+                if(rule.actions[i].action === 'EMAIL' && rule.actions[i].value === $scope.currentUserEmailAddress){
+                    return true;
+                }
+            }
+        }
     };
 
     //User is allowed to manage global rules?
@@ -295,19 +325,17 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
             }
             return exportItems.reduce(
                 function(csvObject, item){
-                    if($scope.filterOnType(item)){
-                        var csvRow = [
-                                item.name,
-                                $scope.getTypeLabelForRule(item),
-                                $filter('confDateFormat')(item.lastTriggered),
-                                $filter('confDateFormat')(item.dateUpdated),
-                                item.updatedBy,
-                                item.subscription,
-                                $scope.getStatusLabelForRule(item),
-                                item.availability
-                        ];
-                        csvObject.push(csvRow);
-                    }
+                    var csvRow = [
+                            item.name,
+                            $scope.getTypeLabelForRule(item),
+                            $filter('confDateFormat')(item.lastTriggered),
+                            $filter('confDateFormat')(item.dateUpdated),
+                            item.updatedBy,
+                            item.subscription,
+                            $scope.getStatusLabelForRule(item),
+                            item.availability
+                    ];
+                    csvObject.push(csvRow);
                     return csvObject;
                 },[]
             );

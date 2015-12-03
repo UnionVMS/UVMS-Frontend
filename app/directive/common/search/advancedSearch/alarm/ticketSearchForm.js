@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('TicketSearchController', function($scope, locale, ruleRestService) {
+angular.module('unionvmsWeb').controller('TicketSearchController', function($scope, locale, ruleRestService, configurationService, GetListRequest, userService) {
 
     $scope.rules = [];
 
@@ -9,7 +9,10 @@ angular.module('unionvmsWeb').controller('TicketSearchController', function($sco
         $scope.timeSpanOptions.unshift({text: locale.getString('common.time_span_all'), code:'ALL'});
 
         //Populate rules dropdown
-        ruleRestService.getRulesList().then(function(rulesPage){
+        var getListRequest = new GetListRequest();
+        getListRequest.addSearchCriteria('RULE_USER', userService.getUserName());
+        getListRequest.addSearchCriteria('AVAILABILITY', 'PUBLIC');
+        ruleRestService.getRulesByQuery(getListRequest).then(function(rulesPage){
             var rulesOptions = [];
             $.each(rulesPage.items, function(i, rule){
                 rulesOptions.push({text: rule.name, code: rule.guid});
@@ -19,10 +22,7 @@ angular.module('unionvmsWeb').controller('TicketSearchController', function($sco
         });
 
         //Status options
-        //TODO: GET STATUS FROM CONFIG
-        $scope.statusOptions = [];
-        $scope.statusOptions.push({text: locale.getString('alarms.alarms_status_closed'), code:'CLOSED'});
-        $scope.statusOptions.push({text: locale.getString('alarms.alarms_status_open'), code:'OPEN'});
+        $scope.statusOptions = configurationService.setTextAndCodeForDropDown(configurationService.getConfig('TICKET_STATUSES'), 'STATUS', 'TICKET', true);
 
     };
 
@@ -37,7 +37,10 @@ angular.module('unionvmsWeb').controller('TicketSearchController', function($sco
         //Set TIME_SPAN to ALL
         $scope.advancedSearchObject.TIME_SPAN = 'ALL';
         //Set status to OPEN
-        $scope.advancedSearchObject.STATUS = 'OPEN';
+        var statuses = configurationService.getConfig('TICKET_STATUSES');
+        if(Array.isArray(statuses) && statuses.indexOf('OPEN') >= 0){
+            $scope.advancedSearchObject.STATUS = 'OPEN';
+        }
         $scope.performAdvancedSearch();
     };
 

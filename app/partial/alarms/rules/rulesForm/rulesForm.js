@@ -1,15 +1,22 @@
-angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeout, $log, locale, alertService, ruleRestService, Rule, RuleDefinition, RuleTimeInterval, RuleAction, ruleService, confirmationModal, configurationService, rulesOptionsService, rulesSuggestionsService, savedSearchService){
+angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeout, $log, locale, alertService, ruleRestService, Rule, RuleDefinition, RuleTimeInterval, RuleAction, ruleService, confirmationModal, configurationService, rulesOptionsService, rulesSuggestionsService, savedSearchService, userService){
 
     $scope.submitAttempted = false;
 
+    //Holds rule test information
     $scope.ruleTest = {
         success : false,
         message : undefined,
         outdated : false
     };
 
-    //List of actions thare are disabled (already selected in another dropdown)
+    //Should rule type dropwdown be disabled?
+    $scope.disableTypeDropdown = false;
+
+    //List of actions thare are disabled
     $scope.disabledActions = [];
+
+    //Action that creates ticket/notification
+    var TICKET_ACTION = 'TICKET';
 
     //Watch changes to the getCurrentRule model (set in the parent scope)
     $scope.$watch('getCurrentRule()', function(newValue) {
@@ -19,7 +26,7 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         }
     });
 
-    //Watch for changes to the saved asset groups
+    //Watch for changes to the saved asset groups and update dropdown options when it happens
     $scope.$watch(function () { return savedSearchService.getVesselGroupsForUser();}, function (newVal, oldVal) {
         //Update dropdown values for ruleDefinitions
         rulesOptionsService.setupRuleDefinitionValueDropdowns();
@@ -30,6 +37,15 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         $scope.DROPDOWNS = rulesOptionsService.getDropdownValues();
     };
 
+
+    /**********BASIC FORM DATA**********/
+    //Clear the form
+    $scope.clearForm = function(){
+        $log.debug("Clear form!");
+        $scope.currentRule = new Rule();
+        $scope.updateFormToMatchTheCurrentRule();
+    };
+
     //Update form to match the current rule
     $scope.updateFormToMatchTheCurrentRule = function(){
         //Add a new definition row to new rules
@@ -37,8 +53,8 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
             $scope.addDefinitionRow();
         }
 
-        //Add a new action row to new rules
-        if($scope.currentRule.getNumberOfActions() === 0){
+        //Add a new action row to new rules if not GLOBAL rule
+        if($scope.currentRule.getNumberOfActions() === 0 && !$scope.currentRule.isGlobal()){
             $scope.addActionRow();
         }
 
@@ -86,8 +102,7 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         return true;
     };
 
-    //Should rule type dropwdown be disabled?
-    $scope.disableTypeDropdown = false;
+    //Should the Type dropdown be disabled?
     $scope.updateDisableTypeDropdown = function(){
         if($scope.allowedToManageGlobalRules()){
             $scope.disableTypeDropdown = false;
@@ -100,6 +115,86 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         }
     };
 
+    //Callback when selecting value in Type dropdown
+    $scope.onTypeSelection = function(selection){
+        var selectedType = selection.code;
+        $scope.currentRule.type = selectedType;
+
+        //Global rule
+        if($scope.currentRule.isGlobal()){
+            //Remove all old TICKET actions
+            var i = $scope.currentRule.actions.length;
+            while (i--) {
+                if($scope.currentRule.actions[i].action === TICKET_ACTION){
+                    $scope.currentRule.actions.splice(i, 1);
+                }
+            }
+            //Set new order for actions
+            $.each($scope.currentRule.actions, function(i, def){
+                def.order = i;
+            });
+        }
+        //Event rule
+        else{
+            //Add a new action if no actions exist
+            if($scope.currentRule.getNumberOfActions() === 0){
+                $scope.addActionRow();
+            }
+        }
+
+        $scope.updateAvailabilityDropdown();
+    };
+
+    //Disable availability dropdown and set value to PUBLIC when type is GLOBAL
+    $scope.disableAvailability = false;
+    $scope.updateAvailabilityDropdown = function(){
+        //Global rule
+        if($scope.currentRule.isGlobal()){
+            $scope.currentRule.availability = 'PUBLIC';
+            $scope.disableAvailability = true;
+        }
+        //Event rule
+        else{
+            //Disable if TICKET actions exists for other users
+            if(existsTicketActionsForOtherUsers()){
+                $scope.disableAvailability = true;
+            }
+            else{
+                $scope.disableAvailability = false;
+            }
+            if(angular.isUndefined($scope.currentRule.availability)){
+                $scope.currentRule.availability = $scope.DROPDOWNS.AVAILABILITY_TYPES[0].code;
+            }
+        }
+    };
+
+
+
+    /**********RULE TIME INTERVALS**********/
+    //Add a time interval row
+    $scope.addTimeIntervalItem = function(){
+        $scope.currentRule.addTimeInterval(new RuleTimeInterval());
+    };
+
+    //Remove a time interval row
+    $scope.removeTimeIntervalItem = function(intervalToBeRemoved){
+        var indexToRemove = -1;
+        $.each($scope.currentRule.timeIntervals, function(i, interval){
+            if(intervalToBeRemoved === interval){
+                indexToRemove = i;
+                return false;
+            }
+
+        });
+        if(indexToRemove >= 0){
+            $scope.currentRule.timeIntervals.splice(indexToRemove, 1);
+        }
+    };
+
+
+
+
+    /**********RULE DEFINITIONS**********/
     //Add a definition row
     $scope.addDefinitionRow = function(){
         var ruleDef = new RuleDefinition();
@@ -116,54 +211,40 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         $scope.currentRule.addDefinition(ruleDef);
     };
 
-    //Add a time interval row
-    $scope.addTimeIntervalItem = function(){
-        $scope.currentRule.addTimeInterval(new RuleTimeInterval());
-    };
-
-    //Disable availability dropdown when type is GLOBAL or in update mode
-    $scope.disableAvailability = false;
-    $scope.updateAvailabilityDropdown = function(selection){
-        //Update mode?
-        if(!$scope.isCreateNewMode()){
-            $scope.disableAvailability = true;
-            return;
+    //Remove a rule definition row
+    $scope.removeRuleDefinition = function(definitionToBeRemoved){
+        var indexToRemove = $scope.currentRule.definitions.indexOf(definitionToBeRemoved);
+        if(indexToRemove >= 0){
+            $scope.currentRule.definitions.splice(indexToRemove, 1);
         }
 
-        var selectedType = angular.isDefined(selection) ? selection.code : $scope.currentRule.type;
-        if(selectedType === 'GLOBAL'){
-            $scope.currentRule.availability = 'PUBLIC';
-            $scope.disableAvailability = true;
-        }else{
-            $scope.disableAvailability = false;
-            if(angular.isUndefined($scope.currentRule.availability)){
-                $scope.currentRule.availability = $scope.DROPDOWNS.AVAILABILITY_TYPES[0].code;
-            }
-        }
+        //Set new order for definitions
+        $.each($scope.currentRule.definitions, function(i, def){
+            def.order = i;
+        });
     };
 
     //Callback when selecting criteria in dropdown
     $scope.onCriteriaSelection = function(selection, ruleDef){
         var selectedVal = selection.code;
-        //Set value of critera explicit to make sure the value is updated before calling resetRuleDefinitionValue
+        //Set value of critera explicit to make sure the value is updated before calling setDefaultValueToDefinition
         ruleDef.criteria = selectedVal;
         ruleDef.subCriteria = $scope.DROPDOWNS.SUBCRITERIAS[ruleDef.criteria][0].code;
         ruleDef.condition = $scope.DROPDOWNS.CONDITIONS[ruleDef.criteria][ruleDef.subCriteria][0].code;
         //Reset value field
-        $scope.resetRuleDefinitionValue(ruleDef);
+        $scope.setDefaultValueToDefinition(ruleDef);
     };
 
     //Callback when selecting subcriteria in dropdown
     $scope.onSubCriteriaSelection = function(selection, ruleDef){
-        //Set value of subCriteria explicit to make sure the value is updated before calling resetRuleDefinitionValue
+        //Set value of subCriteria explicit to make sure the value is updated before calling setDefaultValueToDefinition
         ruleDef.subCriteria = selection.code;
         ruleDef.condition = $scope.DROPDOWNS.CONDITIONS[ruleDef.criteria][ruleDef.subCriteria][0].code;
-        $scope.resetRuleDefinitionValue(ruleDef);
+        $scope.setDefaultValueToDefinition(ruleDef);
     };
 
-
     //Reset value field, either to undefined or to first dropdown value
-    $scope.resetRuleDefinitionValue = function(ruleDef){
+    $scope.setDefaultValueToDefinition = function(ruleDef){
         ruleDef.value = undefined;
         //Value type is dropdown? Then select first value in it.
         var valueType = $scope.getRuleDefinitionValueInputType(ruleDef);
@@ -173,6 +254,71 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
                 ruleDef.value = valueDropdownOptions[0].code;
             }
         }
+    };
+
+    //Get the type of input for the ruleDefinition value
+    $scope.getRuleDefinitionValueInputType = function(ruleDefinition){
+        //Dropdown?
+        var dropdownValues = rulesOptionsService.getDropdownValuesForRuleDefinition(ruleDefinition);
+        if(Array.isArray(dropdownValues)){
+            if(dropdownValues.length === 0){
+                return "DROPDOWN_EMPTY";
+            }
+            return "DROPDOWN";
+
+        }
+
+        //Text input with auto suggestion?
+        if(rulesSuggestionsService.isSuggestionsAvailable(ruleDefinition)){
+            return "TEXT_WITH_SUGGESTIONS";
+        }
+
+        //Speed input?
+        if(rulesOptionsService.isRuleDefinitionValueASpeed(ruleDefinition)){
+            return "SPEED";
+        }
+
+        //Course input?
+        if(rulesOptionsService.isRuleDefinitionValueACourse(ruleDefinition)){
+            return "COURSE";
+        }
+
+        //Longitude input
+        if(rulesOptionsService.isRuleDefinitionValueLongitudeCoordinate(ruleDefinition)){
+            return "LONGITUDE";
+        }
+        //Latitude input
+        if(rulesOptionsService.isRuleDefinitionValueLatitudeCoordinate(ruleDefinition)){
+            return "LATITUDE";
+        }
+
+        //DateTime input?
+        if(rulesOptionsService.isRuleDefinitionValueADateTime(ruleDefinition)){
+            return "DATETIME";
+        }
+
+        //Default text input
+        return "TEXT";
+    };
+
+    //Get dropdown values for the ruleDefinition value
+    $scope.getDropdownValuesForRuleDefinition = function(ruleDefinition){
+        return rulesOptionsService.getDropdownValuesForRuleDefinition(ruleDefinition);
+    };
+
+
+
+    /**********RULE ACTIONS**********/
+    //Add an action row
+    $scope.addActionRow = function(){
+        var ruleAction = new RuleAction();
+        ruleAction.action = $scope.getFirstActionThatIsEnabled();
+        ruleAction.order = $scope.currentRule.getNumberOfActions();
+        setDefaultValueToAction(ruleAction);
+
+        $scope.currentRule.addAction(ruleAction);
+        //Update list of disabled actions
+        $scope.updateDisabledActions();
     };
 
     //Check if an action requires a value
@@ -192,14 +338,32 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         return actionVal;
     };
 
-    //Add an action row
-    $scope.addActionRow = function(){
-        var ruleAction = new RuleAction();
-        ruleAction.action = $scope.getFirstActionThatIsEnabled();
-        ruleAction.order = $scope.currentRule.getNumberOfActions();
-        $scope.currentRule.addAction(ruleAction);
-        //Update list of disabled actions
-        $scope.updateDisabledActions();
+    //Set defaul value to action
+    var setDefaultValueToAction = function(ruleAction){
+        ruleAction.value = undefined;
+
+        switch(ruleAction.action){
+            case 'TICKET':
+                //Add username to value if action is TICKET
+                ruleAction.value = userService.getUserName();
+                break;
+            case 'EMAIL':
+                //Add email to value if action is TICKET
+                //$scope.currentUserEmailAddress exists in parent scope (rule.js)
+                ruleAction.value = $scope.currentUserEmailAddress;
+                break;
+            default:
+                break;
+        }
+
+        //Dropdown list of values?
+        var valueType = $scope.getActionValueInputType(ruleAction);
+        if(valueType === 'DROPDOWN'){
+            var valueDropdownOptions = rulesOptionsService.getDropdownValuesForAction(ruleAction);
+            if(valueDropdownOptions && valueDropdownOptions.length > 0){
+                ruleAction.value = valueDropdownOptions[0].code;
+            }
+        }
     };
 
     //Update list of disabled actions
@@ -210,28 +374,61 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
                 $scope.disabledActions.push(ruleAction.action);
             }
         });
+
+        //If global, disable "create notification for user"
+        if($scope.currentRule.isGlobal()){
+            $scope.disabledActions.push(TICKET_ACTION);
+        }
+        //Event rule, the one TICKET with username is allowed
+        else{
+            var ticketIndex = $scope.disabledActions.indexOf(TICKET_ACTION);
+            var removeTicket = true;
+            //Check if Ticket action exists for current user
+            for(var i=0; i<$scope.currentRule.actions.length; i++){
+                var ruleAction = $scope.currentRule.actions[i];
+                if(ruleAction.action === TICKET_ACTION && ruleAction.value === userService.getUserName()){
+                    removeTicket = false;
+                    if(ticketIndex < 0){
+                        $scope.disabledActions.push(TICKET_ACTION);
+                    }
+                }
+            }
+            //Remove TICKET from disabledActions?
+            if(removeTicket && ticketIndex >= 0){
+                $scope.disabledActionssplice(ticketIndex, 1);
+            }
+        }
+    };
+
+    //Is the user allowed to edit the action?
+    $scope.isAllowedToEditAction = function(ruleAction){
+        //If TICKET action for other user, then user is not allowed to edit it
+        if(ruleAction.action === TICKET_ACTION && ruleAction.value !== userService.getUserName()){
+            return false;
+        }
+        return true;
+    };
+
+    //Check if it exists TICKET actions for other user on the rule
+    var existsTicketActionsForOtherUsers = function(){
+        for(var i=0; i<$scope.currentRule.actions.length; i++){
+            var ruleAction = $scope.currentRule.actions[i];
+            if(ruleAction.action === TICKET_ACTION && ruleAction.value !== userService.getUserName()){
+                return true;
+            }
+        }
+        return false;
     };
 
     //Callback when selecting action in dropdown
     $scope.actionSelected = function(selection, ruleAction){
-        var selectedVal = selection.code;
-        if(!$scope.actionShouldHaveValue(selectedVal.action)){
+        var selectedAction = selection.code;
+        ruleAction.action = selectedAction;
+        if(!$scope.actionShouldHaveValue(ruleAction)){
             ruleAction.value = undefined;
         }
+        setDefaultValueToAction(ruleAction);
         $timeout($scope.updateDisabledActions, 10);
-    };
-
-    //Remove a rule definition row
-    $scope.removeRuleDefinition = function(definitionToBeRemoved){
-        var indexToRemove = $scope.currentRule.definitions.indexOf(definitionToBeRemoved);
-        if(indexToRemove >= 0){
-            $scope.currentRule.definitions.splice(indexToRemove, 1);
-        }
-
-        //Set new order for definitions
-        $.each($scope.currentRule.definitions, function(i, def){
-            def.order = i;
-        });
     };
 
     //Remove a rule action row
@@ -250,21 +447,39 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         $scope.updateDisabledActions();
     };
 
-    //Remove a time interval row
-    $scope.removeTimeIntervalItem = function(intervalToBeRemoved){
-        var indexToRemove = -1;
-        $.each($scope.currentRule.timeIntervals, function(i, interval){
-            if(intervalToBeRemoved === interval){
-                indexToRemove = i;
-                return false;
+    //Get the type of input for the action value
+    $scope.getActionValueInputType = function(action){
+        //Dropdown?
+        var dropdownValues = rulesOptionsService.getDropdownValuesForAction(action);
+        if(Array.isArray(dropdownValues)){
+            if(dropdownValues.length === 0){
+                return "DROPDOWN_EMPTY";
             }
-
-        });
-        if(indexToRemove >= 0){
-            $scope.currentRule.timeIntervals.splice(indexToRemove, 1);
+            return "DROPDOWN";
         }
+
+        //Text disabled
+        if(action.action === TICKET_ACTION){
+            return "TEXT_DISABLED";
+        }
+
+        //Email input?
+        if(rulesOptionsService.isRuleActionValueAnEmail(action)){
+            return "EMAIL";
+        }
+
+        //Text input
+        return "TEXT";
     };
 
+    //Get dropdown values for the action  value
+    $scope.getDropdownValuesForAction = function(action){
+        return rulesOptionsService.getDropdownValuesForAction(action);
+    };
+
+
+
+    /**********CREATE/UPDATE RULE**********/
     //Check if form is valid and show error message if not
     var isValidForm = function(){
         if(!$scope.ruleForm.$valid){
@@ -351,6 +566,24 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         alertService.showErrorMessage(locale.getString('alarms.rules_update_alert_message_on_error'));
     };
 
+
+
+    /**********RULE TEXT AND TEST**********/
+    //Update the rule as text text
+    var updateRuleAsText = function(){
+        var text = ruleService.getRuleAsText($scope.currentRule);
+        $scope.ruleAsText = text;
+        $scope.ruleTest.outdated = true;
+    };
+
+    //Watch changes to the definitions and actions of the rule
+    $scope.$watch('currentRule.definitions', function (newVal, oldVal){
+        updateRuleAsText();
+    }, true);
+    $scope.$watch('currentRule.actions', function (newVal, oldVal){
+        updateRuleAsText();
+    }, true);
+
     //Test rule
     $scope.testRule = function(){
         $scope.ruleTest.outdated = false;
@@ -369,92 +602,8 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         return testResult.success;
     };
 
-    //Update the rule as text text
-    var updateRuleAsText = function(){
-        var text = ruleService.getRuleAsText($scope.currentRule);
-        $scope.ruleAsText = text;
-        $scope.ruleTest.outdated = true;
-    };
 
-    //Watch changes to the definitions and actions of the rule
-    $scope.$watch('currentRule.definitions', function (newVal, oldVal){
-        updateRuleAsText();
-    }, true);
-    $scope.$watch('currentRule.actions', function (newVal, oldVal){
-        updateRuleAsText();
-    }, true);
-
-    //Get the type of input for the ruleDefinition value
-    $scope.getRuleDefinitionValueInputType = function(ruleDefinition){
-        //Dropdown?
-        var dropdownValues = rulesOptionsService.getDropdownValuesForRuleDefinition(ruleDefinition);
-        if(Array.isArray(dropdownValues)){
-            if(dropdownValues.length === 0){
-                return "DROPDOWN_EMPTY";
-            }
-            return "DROPDOWN";
-
-        }
-
-        //Text input with auto suggestion?
-        if(rulesSuggestionsService.isSuggestionsAvailable(ruleDefinition)){
-            return "TEXT_WITH_SUGGESTIONS";
-        }
-
-        //Speed input?
-        if(rulesOptionsService.isRuleDefinitionValueASpeed(ruleDefinition)){
-            return "SPEED";
-        }
-
-        //Course input?
-        if(rulesOptionsService.isRuleDefinitionValueACourse(ruleDefinition)){
-            return "COURSE";
-        }
-
-        //Longitude input
-        if(rulesOptionsService.isRuleDefinitionValueLongitudeCoordinate(ruleDefinition)){
-            return "LONGITUDE";
-        }
-        //Latitude input
-        if(rulesOptionsService.isRuleDefinitionValueLatitudeCoordinate(ruleDefinition)){
-            return "LATITUDE";
-        }
-
-        //DateTime input?
-        if(rulesOptionsService.isRuleDefinitionValueADateTime(ruleDefinition)){
-            return "DATETIME";
-        }
-        
-        //Default text input
-        return "TEXT";
-    };
-
-    //Get the type of input for the action value
-    $scope.getActionValueInputType = function(action){
-        //Dropdown?
-        var dropdownValues = rulesOptionsService.getDropdownValuesForAction(action);
-        if(Array.isArray(dropdownValues)){
-            if(dropdownValues.length === 0){
-                return "DROPDOWN_EMPTY";
-            }
-            return "DROPDOWN";
-
-        }
-        //Autosuggestion?
-        //Text input
-        return "TEXT";
-    };
-
-    //Get dropdown values for the ruleDefinition value
-    $scope.getDropdownValuesForRuleDefinition = function(ruleDefinition){
-        return rulesOptionsService.getDropdownValuesForRuleDefinition(ruleDefinition);
-    };
-
-    //Get dropdown values for the action  value
-    $scope.getDropdownValuesForAction = function(action){
-        return rulesOptionsService.getDropdownValuesForAction(action);
-    };
-    //AUTO SUGGESTIONS
+    /**********AUTO SUGGESTIONS**********/
     var lastAutoSuggestionRequestTimestamp;
     //Handle auto suggest error
     var autoSuggestError = function(error){
@@ -477,13 +626,6 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
     $scope.onValueSuggestionSelect = function(selectedItem, selectedLabel, ruleDefinition){
         //Update value based on selection
         ruleDefinition.value = selectedLabel;
-    };
-
-    //Clear the form
-    $scope.clearForm = function(){
-        $log.debug("Clear form!");
-        $scope.currentRule = new Rule();
-        $scope.updateFormToMatchTheCurrentRule();
     };
 
     init();

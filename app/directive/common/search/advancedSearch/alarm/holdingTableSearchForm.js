@@ -1,17 +1,11 @@
-angular.module('unionvmsWeb').controller('HoldingTableSearchController', function($scope, locale) {
+angular.module('unionvmsWeb').controller('HoldingTableSearchController', function($scope, locale, configurationService) {
 
     var init = function(){
         //Add ALL option to timeSpan dropdown
         $scope.timeSpanOptions.unshift({text: locale.getString('common.time_span_all'), code:'ALL'});
 
-
         //Status options
-        //TODO: GET STATUS FROM CONFIG
-        $scope.statusOptions = [];
-        $scope.statusOptions.push({text: locale.getString('alarms.alarms_status_reprocessed'), code:'REPROCESSED'});
-        $scope.statusOptions.push({text: locale.getString('alarms.alarms_status_rejected'), code:'REJECTED'});
-        $scope.statusOptions.push({text: locale.getString('alarms.alarms_status_open'), code:'OPEN'});
-
+        $scope.statusOptions = configurationService.setTextAndCodeForDropDown(configurationService.getConfig('ALARM_STATUSES'), 'STATUS', 'ALARM', true);
         $scope.resetSearch();
     };
 
@@ -27,7 +21,10 @@ angular.module('unionvmsWeb').controller('HoldingTableSearchController', functio
         $scope.advancedSearchObject.TIME_SPAN = $scope.ALL;
 
         //Set status to OPEN
-        $scope.advancedSearchObject.STATUS = 'OPEN';
+        var statuses = configurationService.getConfig('ALARM_STATUSES');
+        if(Array.isArray(statuses) && statuses.indexOf('OPEN') >= 0){
+            $scope.advancedSearchObject.STATUS = 'OPEN';
+        }
 
         //Do the search
         $scope.performAdvancedSearch();

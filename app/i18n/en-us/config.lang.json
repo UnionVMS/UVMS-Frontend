@@ -1,5 +1,12 @@
 {
     "ALARMS_TIME_SPAN_custom": "Custom",
+    "ALARM_STATUS_OPEN" :"Open",
+    "ALARM_STATUS_REJECTED" :"Rejected",
+    "ALARM_STATUS_REPROCESSED" :"Reprocessed",
+    "TICKET_STATUS_OPEN" :"Open",
+    "TICKET_STATUS_CLOSED" :"Closed",
+    "TICKET_STATUS_NONE" :"None",
+    "TICKET_STATUS_PENDING" :"Pending",
 
     "EXCHANGE_TIME_SPAN_custom": "Custom",
     "EXCHANGE_STATUS_ISSUED": "Issued",
@@ -86,11 +93,8 @@
 
     "RULES_ACTIONS_EMAIL" : "Send email to",
     "RULES_ACTIONS_MANUAL_POLL" : "Manual poll (one time/immediate)",
-    "RULES_ACTIONS_ON_HOLD" : "Send to holding table",
     "RULES_ACTIONS_SEND_TO_ENDPOINT" : "Send to Endpoint (connected to FLUX or NAF)",
-    "RULES_ACTIONS_SMS" : "Send SMS to",
-    "RULES_ACTIONS_TICKET" : "Create ticket",
-    "RULES_ACTIONS_TOP_BAR_NOTIFICATION" : "Create notification",
+    "RULES_ACTIONS_TICKET" : "Create notification for user",
     "RULES_ACTIVE_STATUSES_ACTIVE" : "Active",
     "RULES_ACTIVE_STATUSES_INACTIVE" : "Inactive",
     "RULES_AVAILABILITIES_PRIVATE" : "Private",

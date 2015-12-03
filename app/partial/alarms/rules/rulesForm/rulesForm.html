@@ -8,7 +8,7 @@
             </div>
             <div class="col-md-6 textAlignRight">
                 <div class="actions">
-                    <div ng-hide="disableForm()">
+                    <div>
                         <button ng-show="isCreateNewMode()" type="submit" class="btn btn-primary" ng-click="createNewRule()" ng-disabled="waitingForCreateResponse">{{'common.create' | i18n}}</button>
                         <button ng-hide="isCreateNewMode()" type="submit" class="btn btn-primary" ng-click="updateRule()">{{'common.update' | i18n}}</button>
                     </div>
@@ -35,7 +35,7 @@
                            <div class="col-md-4">
                                 <div class="form-group" ng-class="{'has-error': ruleForm.type.$invalid && (submitAttempted || ruleForm.type.$dirty)}">
                                     <label>{{'alarms.rules_form_type_label' | i18n}}</label>
-                                    <dropdown name="type" ng-model="currentRule.type" no-placeholder-item items="DROPDOWNS.RULE_TYPES" callback="updateAvailabilityDropdown" required ng-disabled="disableTypeDropdown"></dropdown>
+                                    <dropdown name="type" ng-model="currentRule.type" no-placeholder-item items="DROPDOWNS.RULE_TYPES" callback="onTypeSelection" required ng-disabled="disableTypeDropdown"></dropdown>
                                     <input-validation-message types="required" input="ruleForm.type"></input-validation-message>
                                 </div>
                             </div>
@@ -214,8 +214,11 @@
                     <div class="col-md-12" ng-hide="disableForm()">
                         <div class="addMoreLink" ng-click="addDefinitionRow()">{{'alarms.rules_form_definition_add_another' | i18n}}</div>
                     </div>
+                </div>
+            </fieldset>
 
-
+            <fieldset>
+                <div class="row">
 
                     <div class="col-md-12 thenHeader">
                         <label>{{'alarms.rules_form_definition_then_label' | i18n}}</label>
@@ -231,36 +234,57 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <tr ng-show="currentRule.isGlobal()">
+                                    <td class="action">
+                                        <input type="text" class="form-control allUsersNotificationAction" disabled value="{{'alarms.rules_definition_then_action_notification_all_users' | i18n}}">
+                                    </td>
+                                    <td class="value">
+                                    </td>
+                                    <td class="endOperator">
+                                        <div class="form-group">
+                                            <span ng-bind="'alarms.rules_definition_and' | i18n | uppercase" ng-show="currentRule.getNumberOfActions() > 0"></span>
+                                        </div>
+                                    </td>
+                                    <td class="remove">
+                                    </td>
+                                </tr>
                                 <tr ng-repeat="item in currentRule.actions" ng-form="actionForm">
                                     <td class="action">
                                         <div class="form-group" ng-class="{'has-error': actionForm.action.$invalid && (submitAttempted || actionForm.action.$dirty)}">
-                                            <dropdown name="action" ng-model="item.action" no-placeholder-item items="DROPDOWNS.ACTIONS" disabled-items="disabledActions" callback="actionSelected" callback-params="item" required></dropdown>
+                                            <dropdown name="action" ng-model="item.action" no-placeholder-item items="DROPDOWNS.ACTIONS" disabled-items="disabledActions" callback="actionSelected" callback-params="item" required ng-disabled="!isAllowedToEditAction(item)"></dropdown>
                                         </div>
                                     </td>
                                     <td class="value">
                                         <div class="form-group" ng-class="{'has-error': actionForm.value.$invalid && (submitAttempted || actionForm.value.$dirty)}" ng-if="getActionValueInputType(item) ==='TEXT'">
-                                            <input name="value" type="text" class="form-control" ng-model="item.value" name="value" ng-disabled="!actionShouldHaveValue(item.action)" ng-required="actionShouldHaveValue(item.action)">
+                                            <input name="value" type="text" class="form-control" ng-model="item.value" name="value" ng-disabled="!actionShouldHaveValue(item.action) || !isAllowedToEditAction(item)" ng-required="actionShouldHaveValue(item.action)">
+                                        </div>
+                                        <div class="form-group" ng-class="{'has-error': actionForm.value.$invalid && (submitAttempted || actionForm.value.$dirty)}" ng-if="getActionValueInputType(item) ==='TEXT_DISABLED'">
+                                            <input name="value" type="text" class="form-control" ng-model="item.value" name="value" ng-disabled="true" ng-required="actionShouldHaveValue(item.action)">
+                                        </div>
+                                       <div class="form-group" ng-class="{'has-error': actionForm.value.$invalid && (submitAttempted || actionForm.value.$dirty)}" ng-if="getActionValueInputType(item) ==='EMAIL'">
+                                            <input name="value" type="email" class="form-control" ng-model="item.value" name="value" ng-disabled="!actionShouldHaveValue(item.action) || !isAllowedToEditAction(item)" ng-required="actionShouldHaveValue(item.action)">
+                                            <input-validation-message types="email" input="actionForm.value"></input-validation-message>
                                         </div>
                                         <div class="form-group" ng-class="{'has-error': actionForm.value.$invalid && (submitAttempted || actionForm.value.$dirty)}" ng-if="getActionValueInputType(item) ==='DROPDOWN'">
-                                            <dropdown name="value" ng-model="item.value" items="getDropdownValuesForAction(item)" no-placeholder-item class="floatLeft"></dropdown>
+                                            <dropdown name="value" ng-model="item.value" items="getDropdownValuesForAction(item)" ng-disabled="!actionShouldHaveValue(item.action) || !isAllowedToEditAction(item)" no-placeholder-item class="floatLeft"></dropdown>
                                         </div>
                                          <div class="form-group" ng-class="{'has-error': actionForm.value.$invalid && (submitAttempted || actionForm.value.$dirty)}" ng-if="getActionValueInputType(item) ==='DROPDOWN_EMPTY'">
-                                            <dropdown name="value" ng-model="item.value" items="getDropdownValuesForAction(item)" initialtext="{{'alarms.rules_form_definition_value_dropdown_empty_text' | i18n}}" class="floatLeft"></dropdown>
+                                            <dropdown name="value" ng-model="item.value" items="getDropdownValuesForAction(item)" initialtext="{{'alarms.rules_form_definition_value_dropdown_empty_text' | i18n}}" ng-disabled="!actionShouldHaveValue(item.action) || !isAllowedToEditAction(item)" class="floatLeft"></dropdown>
                                         </div>
                                     </td>
                                     <td class="endOperator">
                                         <div class="form-group">
-                                            <span ng-bind="'alarms.rules_definition_and' | i18n | uppercase" ng-show="$index < currentRule.getNumberOfActions()-1"></span>
+                                            <span ng-bind="'alarms.rules_definition_and' | i18n | uppercase" ng-show="item.isGlobal() || $index < currentRule.getNumberOfActions()-1"></span>
                                         </div>
                                     </td>
                                     <td class="remove">
-                                        <i class="fa fa-lg fa-times" ng-click="removeRuleAction(item)" ng-show="$index > 0 && !disableForm()" title="{{'alarms.rules_form_definition_remove' | i18n}}"></i>
+                                        <i class="fa fa-lg fa-times" ng-click="removeRuleAction(item)" ng-show="isAllowedToEditAction(item)" title="{{'alarms.rules_form_definition_remove' | i18n}}"></i>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-md-12" ng-hide="disableForm()">
+                    <div class="col-md-12">
                         <div class="addMoreLink" ng-click="addActionRow()" ng-show="getFirstActionThatIsEnabled()">{{'alarms.rules_form_definition_add' | i18n}}</div>
                     </div>
                 </div>

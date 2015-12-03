@@ -8,8 +8,13 @@ angular.module('unionvmsWeb')
                     update: {method: 'PUT'}
                 });
             },
-            getRules : function(){
-                return $resource('/rules/rest/customrules/list');
+            getAllRules : function(){
+                return $resource('/rules/rest/customrules/listAll');
+            },
+            getRulesByQuery : function(){
+                return $resource('/rules/rest/customrules/listByQuery',{},{
+                    list : { method: 'POST'}
+                });
             },
             getConfig : function(){
                 return $resource('/rules/rest/config');
@@ -39,11 +44,11 @@ angular.module('unionvmsWeb')
     };
 
 
-    var getRulesList = function(){
+    var getAllRules = function(){
         var deferred = $q.defer();
 
         //Get list of all rules
-        ruleRestFactory.getRules().get({}, function(response){
+        ruleRestFactory.getAllRules().get({}, function(response){
                 if(parseInt(response.code) !== 200){
                     deferred.reject("Invalid response status");
                     return;
@@ -64,11 +69,38 @@ angular.module('unionvmsWeb')
                 }
 
                 searchResultListPage = new SearchResultListPage(rules, currentPage, totalNumberOfPages);
-
                 deferred.resolve(searchResultListPage);
             },
             function(error) {
                 $log.error("Error getting list of rules", error);
+                deferred.reject(error);
+            }
+        );
+        return deferred.promise;
+    };
+
+    var getRulesByQuery = function(getListRequest){
+        var deferred = $q.defer();
+        ruleRestFactory.getRulesByQuery().list(getListRequest.DTOForRules(), function(response){
+                if(parseInt(response.code) !== 200){
+                    deferred.reject("Invalid response status");
+                    return;
+                }
+                var rules = [],
+                    searchResultListPage;
+
+                if(angular.isArray(response.data.customRules)) {
+                    for (var i = 0; i < response.data.customRules.length; i++) {
+                        rules.push(Rule.fromDTO(response.data.customRules[i]));
+                    }
+                }
+                var currentPage = response.data.currentPage;
+                var totalNumberOfPages = response.data.totalNumberOfPages;
+                searchResultListPage = new SearchResultListPage(rules, currentPage, totalNumberOfPages);
+                deferred.resolve(searchResultListPage);
+            },
+            function(error) {
+                $log.error("Error getting list of rules by query", error);
                 deferred.reject(error);
             }
         );
@@ -118,7 +150,7 @@ angular.module('unionvmsWeb')
         $log.debug("About to delete rule:");
         $log.debug(rule);
         var deferred = $q.defer();
-        ruleRestFactory.rule().delete({id: rule.id}, function(response) {
+        ruleRestFactory.rule().delete({guid: rule.guid}, function(response) {
             if (response.code !== 200) {
                 deferred.reject("Invalid response status");
                 return;
@@ -137,7 +169,8 @@ angular.module('unionvmsWeb')
 
     return {
         getConfig: getConfig,
-        getRulesList: getRulesList,
+        getAllRules: getAllRules,
+        getRulesByQuery: getRulesByQuery,
         updateRule: updateRule,
         createNewRule: createNewRule,
         deleteRule: deleteRule

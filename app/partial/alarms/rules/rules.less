@@ -12,6 +12,11 @@
     }
 
     .rules-table{
+        tr.inactive{
+            td.statusColored{
+                .inactiveTableCell;
+            }
+        }
         td.active{
             color:@successColor;
         }
@@ -23,9 +28,10 @@
                 cursor: default;
             }
         }
-        td.notifyByEmail, td.subscription{
-            input, .dropdown{
-                width: 95%;
+        td.notifyByEmail, td.notifyByTicket, th.notifyByEmail, th.notifyByTicket{
+            text-align: center;
+            i{
+                cursor: default;
             }
         }
         td.actions, th.actions{
@@ -35,23 +41,6 @@
 
         i{
             cursor: pointer;
-        }
-
-        table{
-            tbody{
-                tr{background: @searchResultsTableRowColor;}
-                tr:nth-child(4n+1) {background: @searchResultsTableOddRowColor !important;}
-                tr:nth-child(4n+2) {background: @searchResultsTableOddRowColor !important;}
-                tr.basicDataExpanded{
-                    border-bottom: none;
-                }
-
-                tr.detailData{
-                    td.detailsContainer{
-                        border-top:1px solid @searchResultsTableRowBorderColor;
-                    }
-                }
-            }
         }
     }
 }

@@ -141,8 +141,16 @@ describe('ruleService', function() {
         //configurationService.getValue('RULES', 'ACTIONS')
     }));
 
-    it("getRuleAsText should return correct text for complete rule", inject(function(ruleService, Rule) {
+    it("getRuleAsText should return correct text for complete Global rule", inject(function(ruleService, Rule) {
         var rule = Rule.fromDTO(ruleDTO);
+        rule.type = 'GLOBAL';
+        var expectedText = 'IF (ASSET_ID.ASSET_ID_TYPE EQ SWE111222 OR ASSET_ID.ASSET_ID_VALUE NE SWE111333) AND POSITION.LONGITUDE NEQ 21.4 THEN [TRANSLATED_TEXT] AND [TRANSLATED_TEXT] ABC123 AND [TRANSLATED_TEXT]';
+        expect(ruleService.getRuleAsText(rule)).toEqual(expectedText);
+    }));
+
+    it("getRuleAsText should return correct text for complete EVent rule", inject(function(ruleService, Rule) {
+        var rule = Rule.fromDTO(ruleDTO);
+        rule.type = 'EVENT';
         var expectedText = 'IF (ASSET_ID.ASSET_ID_TYPE EQ SWE111222 OR ASSET_ID.ASSET_ID_VALUE NE SWE111333) AND POSITION.LONGITUDE NEQ 21.4 THEN [TRANSLATED_TEXT] ABC123 AND [TRANSLATED_TEXT]';
         expect(ruleService.getRuleAsText(rule)).toEqual(expectedText);
     }));
@@ -214,8 +222,9 @@ describe('ruleService', function() {
         expect(testResult.problems.indexOf('NO_DEFINITIONS') >= 0).toBeTruthy("NO_DEFINITIONS should be in problems");
     }));
 
-    it("areRuleDefinitionsAndActionsValid should return false when no actions exists", inject(function(ruleService, Rule) {
+    it("areRuleDefinitionsAndActionsValid should return false when no actions exists and rule is of type EVENT", inject(function(ruleService, Rule) {
         var rule = Rule.fromDTO(ruleDTO);
+        rule.type = 'EVENT;'
         rule.actions = [];
         var testResult = ruleService.areRuleDefinitionsAndActionsValid(rule);
         expect(testResult.success).toBeFalsy();
@@ -341,6 +350,25 @@ describe('ruleService', function() {
         testResult = ruleService.areRuleDefinitionsAndActionsValid(rule);
         expect(testResult.success).toBeFalsy();
         expect(testResult.problems.indexOf('INVALID_ACTION_VALUE') >= 0).toBeTruthy("INVALID_ACTION_VALUE should be in problems");
+    }));
+
+
+    it("areRuleDefinitionsAndActionsValid should return false when two actions have the same action and value", inject(function(ruleService, Rule) {
+        var rule = Rule.fromDTO(ruleDTO);
+
+        rule.actions[0].action = 'SEND_TO_ENDPOINT';
+        rule.actions[0].value = 'ABC';
+        rule.actions[1].action = 'SEND_TO_ENDPOINT';
+        rule.actions[1].value = 'ABC';
+        var testResult = ruleService.areRuleDefinitionsAndActionsValid(rule);
+        expect(testResult.success).toBeFalsy();
+        expect(testResult.problems.indexOf('NON_UNIQUE_ACTION') >= 0).toBeTruthy("NON_UNIQUE_ACTION should be in problems");
+
+        //Should still be the same
+        rule.actions[1].value = 'ABC     ';
+        var testResult = ruleService.areRuleDefinitionsAndActionsValid(rule);
+        expect(testResult.success).toBeFalsy();
+        expect(testResult.problems.indexOf('NON_UNIQUE_ACTION') >= 0).toBeTruthy("NON_UNIQUE_ACTION should be in problems");
     }));
 
     it("areRuleDefinitionsAndActionsValid should return list of problems", inject(function(ruleService, Rule) {
