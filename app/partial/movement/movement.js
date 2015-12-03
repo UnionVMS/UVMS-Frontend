@@ -8,7 +8,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     var modalInstance;
 
     //Search objects and results
-    $scope.currentSearchResults = new SearchResults('vessel.name', false, locale.getString('movement.movement_search_error_result_zero_pages'));
+    $scope.currentSearchResults = new SearchResults('time', true, locale.getString('movement.movement_search_error_result_zero_pages'));
 
     //Selected by checkboxes
     $scope.selectedMovements = [];
