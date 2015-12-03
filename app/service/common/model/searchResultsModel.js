@@ -10,6 +10,7 @@ angular.module('unionvmsWeb')
         this.sortBy = angular.isDefined(sortyBy) ? sortyBy : '';
         this.sortReverse = angular.isDefined(sortReverse) ? sortReverse : false;
         this.zeroResultsErrorMessage = angular.isDefined(zeroResultsErrorMessage) ? zeroResultsErrorMessage : locale.getString('common.search_zero_results_error');
+        this.showZeroResultsMessage = false;
         this.equals = equals;
     }
 
@@ -68,9 +69,10 @@ angular.module('unionvmsWeb')
 
         //Update with new data
         if(searchResultsListPage.totalNumberOfPages === 0 ){
-            this.errorMessage = this.zeroResultsErrorMessage;
+            this.showZeroResultsMessage = true;
         } else {
             this.errorMessage = "";
+            this.showZeroResultsMessage = false;
             if(!this.items){
                 this.items = searchResultsListPage.items;
             }
