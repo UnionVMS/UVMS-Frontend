@@ -13,8 +13,13 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
         ALARM : 'Alarm',
         CUSTOM_RULE : 'Custom rule',
         AREA : 'Area', //Mock value,
-        USER : 'User', //Mock value,
-        USER_ROLE : 'User role', //Mock value,
+        USER : 'User',
+        USER_CONTEXT : 'Context',
+        USER_PASSWORD : 'Password',
+        USER_ROLE : 'Role',
+        USER_ORGANISATION : 'Organisation',
+        USER_POLICY : 'Policy',
+        USER_APPLICATION : 'Application',
     };
 
     var currentOptions = {
@@ -43,7 +48,12 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
         customRule: createDropdownItem(TYPES.CUSTOM_RULE),
         area: createDropdownItem(TYPES.AREA),
         user: createDropdownItem(TYPES.USER),
+        userContext: createDropdownItem(TYPES.USER_CONTEXT),
+        userPassword: createDropdownItem(TYPES.USER_PASSWORD),
         userRole: createDropdownItem(TYPES.USER_ROLE),
+        userOrganisation: createDropdownItem(TYPES.USER_ORGANISATION),
+        userPolicy: createDropdownItem(TYPES.USER_POLICY),
+        userApplication: createDropdownItem(TYPES.USER_APPLICATION),
     };
 
     //All available dropdown options for OPERATION
@@ -54,6 +64,7 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
         remove: createDropdownItem("Remove"),
         link: createDropdownItem("Linked"),
         unlink: createDropdownItem("Unlinked"),
+        delete: createDropdownItem("Delete"), //Used instead of Remove in the user module
     };
 
     return{
@@ -96,8 +107,8 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
                     newOperations = [auditLogOperations.create];
                     break;
                 case 'ACCESS_CONTROL':
-                    newTypes = [dropdownItems.user,dropdownItems.userRole];
-                    newOperations = [auditLogOperations.create, auditLogOperations.update, auditLogOperations.remove];
+                    newTypes = [dropdownItems.user, dropdownItems.userContext, dropdownItems.userPassword, dropdownItems.userRole, dropdownItems.userOrganisation, dropdownItems.userPolicy, dropdownItems.userApplication];
+                    newOperations = [auditLogOperations.create, auditLogOperations.update, auditLogOperations.delete];
                     break;
                 case 'ALL':
                     newTypes = Object.keys(dropdownItems).map(function(key) {

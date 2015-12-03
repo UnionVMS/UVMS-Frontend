@@ -161,30 +161,40 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
         modalInstance = infoModal.open(options);
     };
 
+    //Get the link text to the affected object
+    $scope.affectedObjectLinkText = function(audit) {
+        if(audit.affectedObject){
+            switch(audit.objectType){
+                case TYPES.USER:
+                case TYPES.USER_PASSWORD:
+                    return audit.affectedObject;
+                default:
+                    return locale.getString('audit.show_object');
+            }
+        }
+    };
+
     //Get the url to the affected object
     $scope.affectedObjectPath = function(audit) {
-        var path;
         if(audit.affectedObject){
             switch(audit.objectType){
                 case TYPES.MOBILE_TERMINAL:
-                    path = "/communication/" + audit.affectedObject;
-                    break;
+                    return "/communication/" + audit.affectedObject;
                 case TYPES.ASSET:
-                    path = "/assets/" + audit.affectedObject;
-                    break;
+                    return "/assets/" + audit.affectedObject;
                 case TYPES.POLL:
-                    path = "/polling/logs/" + audit.affectedObject;
-                    break;
+                    return "/polling/logs/" + audit.affectedObject;
                 case TYPES.CUSTOM_RULE:
-                    path = "/alarms/rules/" + audit.affectedObject;
-                    break;
+                    return "/alarms/rules/" + audit.affectedObject;
                 case TYPES.AUTOMATIC_POSITION_REPORT:
-                    path = "/movement/" + audit.affectedObject;
-                    break;
+                    return "/movement/" + audit.affectedObject;
+                case TYPES.USER:
+                case TYPES.USER_PASSWORD:
+                    return "/usm/users/" + audit.affectedObject;
+                default:
+                    return;
             }
-
         }
-        return path;
     };
 
 
