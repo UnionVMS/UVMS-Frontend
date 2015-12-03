@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scope, $route, $modal, locale, MobileTerminal, alertService, userService, mobileTerminalRestService, modalComment){
+angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scope, locale, MobileTerminal, alertService, userService, mobileTerminalRestService, modalComment, MobileTerminalHistoryModal){
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
@@ -234,11 +234,6 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         alertService.showErrorMessage(locale.getString('mobileTerminal.activate_message_on_error'));
     }
 
-    //Get the history list for the mobile terminal
-    var getMobileTerminalHistoryForCurrentMobileTerminal = function() {
-        var response = mobileTerminalRestService.getHistoryWithAssociatedVesselForMobileTerminal($scope.currentMobileTerminal)
-            .then(onGetMobileTerminalHistorySuccess, onGetMobileTerminalHistoryError);
-    };
 
     //Archive mobile terminals
     $scope.archiveMobileTerminal = function() {
@@ -264,45 +259,9 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         alertService.showErrorMessage(locale.getString('mobileTerminal.archive_message_on_error'));
     }
 
-
-    //Success getting history
-    var onGetMobileTerminalHistorySuccess = function(historyList) {
-        $scope.currentMobileTerminalHistory = historyList;
-         openMobileTerminalHistoryModal($scope.currentMobileTerminalHistory, $scope.currentMobileTerminal);
-
-    };
-
-    //Error getting history
-    var onGetMobileTerminalHistoryError = function(error) {
-        alertService.showErrorMessage(locale.getString('mobileTerminal.history_alert_message_on_failed_to_load_error'));
-    };
-
-    //Historymodal
+    //Open history modal
     $scope.onMobileTerminalHistoryClick = function(){
-        //TODO: add carriername...
-         getMobileTerminalHistoryForCurrentMobileTerminal();
-    };
-
-    var openMobileTerminalHistoryModal = function(currentMobileTerminalHistory, mobileTerminal) {
-
-        var modalInstance = $modal.open({
-          templateUrl: 'partial/mobileTerminal/mobileTerminalHistoryModal/mobileTerminalHistoryModal.html',
-          controller: 'mobileTerminalHistoryModalCtrl',
-          size: "lg",
-          resolve: {
-            currentMobileTerminalHistory: function() {
-                return currentMobileTerminalHistory;
-            },
-            mobileTerminal: function(){
-                return mobileTerminal;
-            }
-          }
-        });
-
-        modalInstance.result.then(function () {
-        }, function () {
-          //Nothing on cancel
-        });
+        MobileTerminalHistoryModal.show($scope.currentMobileTerminal);
     };
 
     //Is multipel channels allowed for the terminal?

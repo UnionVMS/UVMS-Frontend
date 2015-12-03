@@ -1,56 +1,57 @@
 <div class="mobileTerminalHistoryModal">
-    <div class="modal-header row">
-        <div class="closeIconContainer" ng-click="cancel()">
-            <i class="fa fa-times closeicon" title="{{'common.close' | i18n}}"></i>
-        </div>    
-        <div class="col-md-12">
-            <div class="headerWithBottomBorder">{{ 'mobileTerminal.history_modal_header' | i18n | uppercase}}</div>
+    <div class="modal-header" style="text-align:left">
+        <div class="pointer pull-right" ng-click="cancel()">
+            <i class="fa fa-times closeicon"></i>
         </div>
+        <h4 class="modal-title">{{ 'mobileTerminal.history_modal_header' | i18n}}</h4>
     </div>
-    <div class="modal-body row">
-        <div class="col-md-12">
-            <div class="modalhistoryheader">
-                <p>{{'mobileTerminal.history_modal_serialnumber' | i18n | uppercase }}</p><p>&nbsp;{{ mobileTerminal.attributes.SERIAL_NUMBER | uppercase}}</p>
+
+    <div class="modal-body">
+        <div class="row">
+           <div class="col-md-12">
+                {{'mobileTerminal.history_modal_serialnumber' | i18n }}: <b>{{mobileTerminal.attributes.SERIAL_NUMBER}}</b>
+                <span class="transponderType">{{'mobileTerminal.history_modal_transpondertype' | i18n }}: <b>{{ mobileTerminal.type | transponderName}}</b></span>
             </div>
-            <div class="modalhistoryheader">
-                <p>{{'mobileTerminal.history_modal_transpondertype' | i18n | uppercase}}</p><p>&nbsp;{{ mobileTerminal.type | transponderName}}</p>
+        </div>
+        <div class="row">
+            <div search-results-table search="currentSearchResults" class="col-md-12">
+                <table class="searchResults colorOdd">
+                    <thead>
+                        <tr>
+                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'eventCode'">{{'mobileTerminal.history_modal_eventcode' | i18n }}</th>
+                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminal.associatedVessel.name'">{{'mobileTerminal.history_modal_vesselname' | i18n }}</th>
+                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminal.channels[0].ids.DNID'">{{'mobileTerminal.history_modal_dnid' | i18n }}</th>
+                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminal.channels[0].ids.MEMBER_NUMBER'">{{'mobileTerminal.history_modal_memberno' | i18n }}</th>
+                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminal.attributes.INSTALLED_ON'">{{'mobileTerminal.history_modal_installed' | i18n }}</th>
+                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminal.attributes.UNINSTALLED_ON'">{{'mobileTerminal.history_modal_uninstalled' | i18n }}</th>
+                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminal.attributes.SATELLITE_NUMBER'">{{'mobileTerminal.history_modal_satelliteno' | i18n }}</th>
+                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'changeDate'">{{'mobileTerminal.history_modal_changeddate' | i18n }}</th>
+                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'comment'">{{'mobileTerminal.history_modal_comments' | i18n }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
+                            <td>{{item.eventCode}}</td>
+                            <td>
+                                <span ng-show="item.mobileTerminal.associatedVessel"><a href="#/assets/{{item.mobileTerminal.associatedVessel.getGuid()}}" title="{{'common.view_details' | i18n}}" ng-click="cancel()">{{item.mobileTerminal.associatedVessel.name}}</a></span>
+                                <span ng-show="item.mobileTerminal.connectId && !item.mobileTerminal.associatedVessel">ConnectId: {{item.mobileTerminal.connectId}}</span>
+                            </td>
+                            <td>{{item.mobileTerminal.channels[0].ids.DNID}}</td>
+                            <td>{{item.mobileTerminal.channels[0].ids.MEMBER_NUMBER}}</td>
+                            <td>{{item.mobileTerminal.attributes.INSTALLED_ON | confDateFormat}}</td>
+                            <td>{{item.mobileTerminal.attributes.UNINSTALLED_ON | confDateFormat}}</td>
+                            <td>{{item.mobileTerminal.attributes.SATELLITE_NUMBER}}</td>
+                            <td>{{item.changeDate | confDateFormat}}</td>
+                            <td>{{item.comment}}</td>
+                        </tr>
+                     </tbody>
+                </table>
             </div>
-            <table class="col-md-12 searchResults">
-                <thead>
-                    <tr>
-                        <th sortable-table-header by="sortType" reverse="sortReverse" order="'eventCode'">{{'mobileTerminal.history_modal_eventcode' | i18n }}</th>
-                        <th sortable-table-header by="sortType" reverse="sortReverse" order="'mobileTerminal.associatedVessel.name'">{{'mobileTerminal.history_modal_vesselname' | i18n }}</th>
-                        <th sortable-table-header by="sortType" reverse="sortReverse" order="'mobileTerminal.channels[0].ids.DNID'">{{'mobileTerminal.history_modal_dnid' | i18n }}</th>
-                        <th sortable-table-header by="sortType" reverse="sortReverse" order="'mobileTerminal.channels[0].ids.MEMBER_NUMBER'">{{'mobileTerminal.history_modal_memberno' | i18n }}</th>
-                        <th sortable-table-header by="sortType" reverse="sortReverse" order="'mobileTerminal.attributes.INSTALLED_ON'">{{'mobileTerminal.history_modal_installed' | i18n }}</th>
-                        <th sortable-table-header by="sortType" reverse="sortReverse" order="'mobileTerminal.attributes.UNINSTALLED_ON'">{{'mobileTerminal.history_modal_uninstalled' | i18n }}</th>
-                        <th sortable-table-header by="sortType" reverse="sortReverse" order="'mobileTerminal.attributes.SATELLITE_NUMBER'">{{'mobileTerminal.history_modal_satelliteno' | i18n }}</th>
-                        <th sortable-table-header by="sortType" reverse="sortReverse" order="'changeDate'">{{'mobileTerminal.history_modal_changeddate' | i18n }}</th>
-                        <th sortable-table-header by="sortType" reverse="sortReverse" order="'comment'">{{'mobileTerminal.history_modal_comments' | i18n }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="item in currentMobileTerminalHistory | orderBy:sortType:sortReverse">
-                        <td>{{item.eventCode}}</td>
-                        <td>
-                            <span ng-show="item.mobileTerminal.associatedVessel">{{item.mobileTerminal.associatedVessel.name}}</span>
-                            <span ng-show="item.mobileTerminal.connectId && !item.mobileTerminal.associatedVessel">ConnectId: {{item.mobileTerminal.connectId}}</span>
-                        </td>
-                        <td>{{item.mobileTerminal.channels[0].ids.DNID}}</td>
-                        <td>{{item.mobileTerminal.channels[0].ids.MEMBER_NUMBER}}</td> 
-                        <td>{{item.mobileTerminal.attributes.INSTALLED_ON | confDateFormat}}</td>
-                        <td>{{item.mobileTerminal.attributes.UNINSTALLED_ON | confDateFormat}}</td>
-                        <td>{{item.mobileTerminal.attributes.SATELLITE_NUMBER}}</td>
-                        <td>{{item.changeDate | confDateFormat}}</td>
-                        <td>{{item.comment}}</td>
-                    </tr>
-                 </tbody>
-            </table>
         </div>
     </div>
     <div class="modal-footer row">
         <div class="col-md-12">
-            <button type="button" class="btn btn-primary" ng-click="cancel()">{{ 'mobileTerminal.history_modal_closebutton' | i18n | uppercase}}</button>
+            <button type="button" class="btn btn-primary" ng-click="cancel()">{{ 'common.close' | i18n | uppercase}}</button>
         </div>
     </div>
 </div>
