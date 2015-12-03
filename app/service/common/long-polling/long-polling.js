@@ -26,7 +26,7 @@ angular.module('unionvmsWeb').factory('longPolling', ['$resource', function($res
     var cancel = function(id){
         if(angular.isDefined(id)){
             var index = runningLongPollingIds.indexOf(id);
-            if(index in runningLongPollingIds){
+            if(index >= 0){
                 runningLongPollingIds.splice(index, 1);
             }
         }
