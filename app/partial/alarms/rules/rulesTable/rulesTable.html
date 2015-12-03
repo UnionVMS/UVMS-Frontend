@@ -49,17 +49,18 @@
                             </button>
                         </span>
 
+                        <span show-if-allowed="Rules:manageAlarmsRules">
+                            <button type="button" class="btn btn-sm btn-primary" ng-click="copyRule(item)" title="{{'alarms.copy_rule_button_title'| i18n}}">
+                                <i class="fa fa-copy"></i>
+                            </button>
+                        </span>
+
                         <span show-if-allowed="Rules:manageAlarmsRules" ng-if="allowedToDeleteOrUpdateRule(item)">
                             <button type="button" class="btn btn-sm btn-danger" ng-click="deleteRule(item)" title="{{'common.delete'| i18n}}">
                                 <i class="fa fa-times"></i>
                             </button>
                         </span>
 
-                        <span show-if-allowed="Rules:manageAlarmsRules">
-                            <button type="button" class="btn btn-sm btn-primary" ng-click="copyRule(item)" title="{{'alarms.copy_rule_button_title'| i18n}}">
-                                <i class="fa fa-copy"></i>
-                            </button>
-                        </span>
     				</td>
 				</tr>
 			</tbody>
