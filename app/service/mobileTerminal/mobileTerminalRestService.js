@@ -54,6 +54,45 @@ angular.module('unionvmsWeb')
     })
     .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, VesselListPage, MobileTerminal, SearchResultListPage, TranspondersConfig, GetListRequest, MobileTerminalHistory, mobileTerminalVesselService){
 
+        function getExistingMobileTerminalAttributes(data) {
+            var mobileTerminal = {
+                code: 2806,
+                existingChannels: []
+            };
+
+            // Get serial number attribute
+            if (data.attributes) {
+                $.each(data.attributes, function(index, attribute) {
+                    if (attribute.type === "SERIAL_NUMBER") {
+                        mobileTerminal.serialNumber = attribute.value;
+                    }
+                });
+            }
+
+            if (data.channels) {
+                $.each(data.channels, function(index, channel) {
+                    if (channel.attributes) {
+                        var dnid, memberNumber;
+                        $.each(channel.attributes, function(index, attribute) {
+                            if (attribute.type === 'DNID') {
+                                 dnid = attribute.value;
+                            }
+                            else if (attribute.type === 'MEMBER_NUMBER') {
+                                memberNumber = attribute.value;
+                            }
+                        });
+
+                        if (dnid && memberNumber) {
+                            var existingChannel = {dnid: dnid, memberNumber: memberNumber};
+                            mobileTerminal.existingChannels.push(existingChannel);
+                        }
+                    }
+                });
+            }
+
+            return mobileTerminal;
+        }
+
         var mobileTerminalRestService = {
 
             getTranspondersConfig : function(){
@@ -174,8 +213,13 @@ angular.module('unionvmsWeb')
             createNewMobileTerminal : function(mobileTerminal){
                 var deferred = $q.defer();
                 mobileTerminalRestFactory.mobileTerminal().save(mobileTerminal.toJson(), function(response) {
-                    if(response.code !== 200){
-                        deferred.reject("Invalid response status");
+                    if (response.code === 2806) {
+                        // This mobile terminal or one of its channel already exist
+                        deferred.reject(getExistingMobileTerminalAttributes(response.data));
+                        return;
+                    }
+                    else if(response.code !== 200) {
+                        deferred.reject(response);
                         return;
                     }
                     deferred.resolve(MobileTerminal.fromJson(response.data));
@@ -190,7 +234,12 @@ angular.module('unionvmsWeb')
             updateMobileTerminal : function(mobileTerminal, comment){
                 var deferred = $q.defer();
                 mobileTerminalRestFactory.mobileTerminal().update({ comment:comment }, mobileTerminal.toJson(), function(response) {
-                    if(response.code !== 200){
+                    if (response.code === 2806) {
+                        // This mobile terminal or one of its channel already exist
+                        deferred.reject(getExistingMobileTerminalAttributes(response.data));
+                        return;
+                    }
+                    else if(response.code !== 200){
                         deferred.reject("Invalid response status");
                         return;
                     }

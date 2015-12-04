@@ -124,6 +124,8 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     //Success creating the new mobile terminal
     var createNewMobileTerminalSuccess = function(mobileTerminal) {
         $scope.waitingForCreateResponse = false;
+        $scope.existingChannels = [];
+        $scope.existingSerialNumber = undefined;
         $scope.currentMobileTerminal = mobileTerminal;
         alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
 
@@ -131,9 +133,18 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     };
 
     //Error creating the new mobile terminal
-    var createNewMobileTerminalError = function(){
+    var createNewMobileTerminalError = function(error) {
         $scope.waitingForCreateResponse = false;
-        alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_error'));
+
+        if (error.code !== 2806) {
+            alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_error'));
+        }
+        else {
+            $scope.existingSerialNumber = error.serialNumber;
+            $scope.mobileTerminalForm.serialNumber.$setValidity('unique', error.serialNumber === undefined);
+            $scope.existingChannels = error.existingChannels;
+            alertService.showErrorMessage(locale.getString('mobileTerminal.mobile_terminal_already_exists'));
+        }
     };
 
     //Update
@@ -171,6 +182,9 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         $scope.waitingForCreateResponse = false;
         alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.update_alert_message_on_success'));
 
+        $scope.existingChannels = [];
+        $scope.existingSerialNumber = undefined;
+
         //Update values in the currentMobileTerminal object
         $scope.currentMobileTerminal.setAttributes(updatedMobileTerminal.attributes);
         $scope.currentMobileTerminal.setChannels(updatedMobileTerminal.channels);
@@ -179,9 +193,18 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     };
 
     //Error creating the new mobile terminal
-    var updateMobileTerminalError = function(){
+    var updateMobileTerminalError = function(error){
         $scope.waitingForCreateResponse = false;
-        alertService.showErrorMessage(locale.getString('mobileTerminal.update_alert_message_on_error'));
+
+        if (error.code !== 2806) {
+            alertService.showErrorMessage(locale.getString('mobileTerminal.update_alert_message_on_error'));
+        }
+        else {
+            $scope.existingSerialNumber = error.serialNumber;
+            $scope.mobileTerminalForm.serialNumber.$setValidity('unique', error.serialNumber === undefined);
+            $scope.existingChannels = error.existingChannels;
+            alertService.showErrorMessage(locale.getString('mobileTerminal.mobile_terminal_already_exists'));
+        }
     };
 
     //Handle click event on inactive link

@@ -21,7 +21,7 @@
                     <div class="row">
                         <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.SERIAL_NUMBER" ng-class="{'has-error': mobileTerminalForm.serialNumber.$invalid && (submitAttempted || mobileTerminalForm.serialNumber.$dirty)}">
                             <label>{{'mobileTerminal.form_inmarsatc_serial_no_label' | i18n}}</label>
-                            <input type="text" name="serialNumber" class="form-control" ng-model="currentMobileTerminal.attributes.SERIAL_NUMBER" ng-required="getTerminalConfig().terminalFields.SERIAL_NUMBER" ng-disabled="!isCreateNewMode()"/>
+                            <input type="text" name="serialNumber" class="form-control" ng-model="currentMobileTerminal.attributes.SERIAL_NUMBER" ng-required="getTerminalConfig().terminalFields.SERIAL_NUMBER" ng-disabled="!isCreateNewMode()" existing="existingSerialNumber"/>
                             <input-validation-message types="required" input="mobileTerminalForm.serialNumber"></input-validation-message>
                         </div>
                         <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.TRANSCEIVER_TYPE">
@@ -88,7 +88,7 @@
                             <label></label>
                         </div>
                     </div>
-                    <div class="row" ng-repeat="communicationChannel in currentMobileTerminal.channels" >
+                    <div class="row" ng-repeat="communicationChannel in currentMobileTerminal.channels" ng-controller="mobileTerminal.channelController">
                         <div ng-form="channelForm" ng-class="{comchannelrow: $index== 0}">
                             <div class="col-md-2 form-group">
                             <!-- Channel-->

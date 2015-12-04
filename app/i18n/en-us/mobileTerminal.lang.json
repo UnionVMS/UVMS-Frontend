@@ -35,6 +35,7 @@
     "add_new_alert_message_on_channels_missing_validation_error" : "There must at least exist one communication channel. Please add one and try to save again.",
     "add_new_alert_message_on_success" : "The Mobile Terminal has been created successfully.",
     "add_new_alert_message_on_error" : "The mobile terminal could not be created.",
+    "mobile_terminal_already_exists": "A mobile terminal with these values already exists.",
     "add_new_alert_message_on_load_transponders_error" : "You cannot create a mobile terminal at the moment. Error information: Failed to load terminal systems from the server.",
     "add_new_alert_message_on_load_channel_names_error" : "You cannot create a mobile terminal at the moment. Error information: Failed to load channel names from the server.",
     "assign_vessel_message_on_success" : "The mobile terminal was successfully linked to the asset.",

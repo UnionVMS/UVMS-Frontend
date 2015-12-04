@@ -151,3 +151,23 @@ angular.module('unionvmsWeb').directive('latitude', function(coordinateFormatSer
         }
     };
 });
+
+angular.module('unionvmsWeb').directive('existing', function() {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        scope: {
+            existing: '='
+        },
+        link: function(scope, element, attrs, ctrl) {
+            function validateFn(value) {
+                ctrl.$setValidity('unique', value !== scope.existing);
+                return value;
+            }
+
+            ctrl.$parsers.push(validateFn);
+            ctrl.$formatters.push(validateFn);
+        }
+    };
+});
+
