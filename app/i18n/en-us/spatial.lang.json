@@ -124,6 +124,7 @@
 	"table_filter_start_date": "Start date",
 	"table_filter_end_date": "End date",
 	"tab_vms_pos_table_header_fs": "F.S",
+	"tab_vms_pos_table_header_country_name": "Country name",
 	"tab_vms_pos_table_header_ext_mark": "Ext. marking",
 	"tab_vms_pos_table_header_ircs": "IRCS",
 	"tab_vms_pos_table_header_cfr": "CFR",

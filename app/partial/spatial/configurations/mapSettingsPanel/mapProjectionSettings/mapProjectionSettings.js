@@ -6,32 +6,38 @@ angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($s
     $scope.hasError = false;
 
     function setProjectionItems() {
+        var tempProj = [];
         for (var i = 0; i < $scope.projections.length; i++) {
-            $scope.projectionItems.push({"text": $scope.projections[i].name, "code": $scope.projections[i].id});
+            tempProj.push({"text": $scope.projections[i].name, "code": $scope.projections[i].id});
         }
+        $scope.projectionItems = tempProj;
     }
 
     function setScaleBarUnits() {
+        var tempScale = [];
         var scaleBarUnitsMap = {
             'metric': {'name': 'spatial.map_configuration_scale_bar_units_metric'}, 'degrees': {'name': 'spatial.map_configuration_scale_bar_units_degrees'},
             'nautical': {'name': 'spatial.map_configuration_scale_bar_units_nautical'}, 'imperial': {'name': 'spatial.map_configuration_scale_bar_units_imperial'}
         };
         angular.forEach(scaleBarUnitsMap, function (key, value) {
-            $scope.scaleBarUnitsItems.push({"text": locale.getString(key.name), "code": value});
+            tempScale.push({"text": locale.getString(key.name), "code": value});
         });
+        $scope.scaleBarUnitsItems = tempScale;
     }
 
     function setCoordinatesUnitItems(newVal) {
+        var tempCoords = [];
         for (var i = 0; i < $scope.projections.length; i++) {
             if ($scope.projections[i].id === newVal) {
                 $scope.projectionSelected = true;
                 var formats = $scope.projections[i].formats.split(';');
                 for (var j = 0; j < formats.length; j++) {
                     var name = 'spatial.map_configuration_coordinates_format_' + formats[j];
-                    $scope.coordinatesFormatItems.push({"text": locale.getString(name), "code": formats[j]});
+                    tempCoords.push({"text": locale.getString(name), "code": formats[j]});
                 }
             }
         }
+        $scope.coordinatesFormatItems = tempCoords;
     }
 
     function clearCoordinatesUnitItems() {

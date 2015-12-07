@@ -46,6 +46,15 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                     return item.code;
                 }
             };
+            
+            //Find initial value
+            var getItemObjectByCode = function(code){
+                for (var i = 0; i < scope.items.length; i++){
+                    if (scope.items[i].code === code){
+                        return scope.items[i];
+                    }
+                }
+            };
 
             //Set the label of the dropdown based on the current value of ngMode
             scope.setLabel = function() {
@@ -63,6 +72,18 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                     }
                 } else {
                     if(scope.items !== undefined){
+                        if (scope.items.length === 0){
+                            var tempFn = scope.$watch('items', function(newVal, oldVal){
+                                if (newVal.length > 0){
+                                    var item = getItemObjectByCode(scope.ngModel);
+                                    if (angular.isDefined(item)){
+                                        scope.currentItemLabel = scope.getItemLabel(item);
+                                    }
+                                    tempFn();
+                                }
+                            });
+                        }
+                        
                         for (var i = 0; i < scope.items.length; i++){
                             if(getItemCode(scope.items[i]) === scope.ngModel){
                                 scope.currentItemLabel = scope.getItemLabel(scope.items[i]);

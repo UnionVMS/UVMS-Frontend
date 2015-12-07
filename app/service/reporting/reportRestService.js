@@ -49,13 +49,6 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
 	           } 
 	        });
 	    }
-//	    getVmsData: function(){
-//	        return $resource('/reporting/rest/vms/mock/:id', {}, {
-//	            'get': {
-//	                method: 'GET'
-//	             }
-//	        });
-//	    }
 	};
 })
 .service('reportRestService', function($q, reportRestFactory){
@@ -118,15 +111,6 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
             
             return deferred.promise;
         }
-//        getVmsData: function(reportId){
-//            var deferred = $q.defer();
-//            reportRestFactory.getVmsData().get({id: reportId}, function(response){
-//                deferred.resolve(response.data);
-//            }, function(error){
-//                deferred.reject(error);
-//            });
-//            return deferred.promise;
-//        }
     };
     
     return reportRestService;
