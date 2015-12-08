@@ -7,6 +7,7 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
             this.type = "GLOBAL";
             this.availability = "PUBLIC";
             this.active = true;
+            this.archived = false;
             this.definitions = [];
             this.actions = [];
             this.timeIntervals = [];
@@ -60,6 +61,7 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
             rule.type = dto.type;
             rule.availability = dto.availability;
             rule.active = dto.active;
+            rule.archived = dto.archived;
             rule.description = dto.description;
             rule.lastTriggered = dto.lastTriggered;
             rule.updatedBy = dto.updatedBy;
@@ -101,6 +103,7 @@ angular.module('unionvmsWeb').factory('Rule', function(RuleDefinition, RuleTimeI
                 type : this.type,
                 availability : this.availability,
                 active : this.active,
+                archived : this.archived,
                 description : this.description,
                 updatedBy : this.updatedBy,
                 timeIntervals : this.timeIntervals.reduce(function(intervals, timeInterval){

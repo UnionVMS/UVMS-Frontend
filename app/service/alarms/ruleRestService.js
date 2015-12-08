@@ -150,7 +150,7 @@ angular.module('unionvmsWeb')
         $log.debug("About to delete rule:");
         $log.debug(rule);
         var deferred = $q.defer();
-        ruleRestFactory.rule().delete({guid: rule.guid}, function(response) {
+        ruleRestFactory.rule().delete({id: rule.guid}, function(response) {
             if (response.code !== 200) {
                 deferred.reject("Invalid response status");
                 return;

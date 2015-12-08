@@ -16,6 +16,7 @@ describe('Rule', function() {
         "type": "GLOBAL",
         "availability": "PUBLIC",
         "active": false,
+        "archived": false,
         "lastTriggered": "2015-08-01 12:43:02",
         "updatedBy": "Test user",
         "updated": "2015-06-01 12:44:00",
@@ -83,6 +84,7 @@ describe('Rule', function() {
         expect(rule.name).toBeUndefined();
         expect(rule.description).toBeUndefined();
         expect(rule.active).toEqual(true);
+        expect(rule.archived).toEqual(false);
         expect(rule.type).toEqual("GLOBAL");
         expect(rule.availability).toEqual("PUBLIC");
 
@@ -106,6 +108,7 @@ describe('Rule', function() {
         expect(rule.type).toEqual(ruleDTO.type);
         expect(rule.availability).toEqual(ruleDTO.availability);
         expect(rule.active).toEqual(ruleDTO.active);
+        expect(rule.archived).toEqual(ruleDTO.archived);
 
         expect(rule.recipient).toEqual(ruleDTO.recipient);
         expect(rule.lastTriggered).toEqual(ruleDTO.lastTriggered);

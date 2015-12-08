@@ -109,6 +109,10 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
         }
 
         rules.splice(index, 1);
+        //Get rules again?
+        if($scope.currentSearchResults.items.length === 0){
+            $scope.searchRules();
+        }
     };
 
     //Open create form with copy
