@@ -182,10 +182,8 @@ describe('RunningProgramPollsCtrl', function(Poll) {
         var controller = createController();
         var p = new Poll();
         p.attributes.PROGRAM_RUNNING = "FALSE";
-        p.attributes.START_DATE = "2015-05-01";
-        p.attributes.END_DATE = "2015-05-15";
-
-        spyOn(Date, "now").andReturn(new Date("2015-05-12"));
+        p.attributes.START_DATE = "2015-01-01";
+        p.attributes.END_DATE = "2045-05-15";
         expect(scope.possibleToStart(p)).toBe(true);
     }));
 
@@ -193,10 +191,9 @@ describe('RunningProgramPollsCtrl', function(Poll) {
         var controller = createController();
         var p = new Poll();
         p.attributes.PROGRAM_RUNNING = "FALSE";
-        p.attributes.START_DATE = "2015-03-01";
+        p.attributes.START_DATE = "2015-01-01";
         p.attributes.END_DATE = "2015-03-15";
 
-        spyOn(Date, "now").andReturn(new Date("2015-05-12"));
         expect(scope.possibleToStart(p)).toBe(false);
     }));
 
@@ -204,10 +201,9 @@ describe('RunningProgramPollsCtrl', function(Poll) {
         var controller = createController();
         var p = new Poll();
         p.attributes.PROGRAM_RUNNING = "FALSE";
-        p.attributes.START_DATE = "2015-03-01";
-        p.attributes.END_DATE = "2015-03-15";
+        p.attributes.START_DATE = "2045-03-01";
+        p.attributes.END_DATE = "2045-03-15";
 
-        spyOn(Date, "now").andReturn(new Date("2015-06-01"));
         expect(scope.possibleToStart(p)).toBe(false);
     }));
 
@@ -221,7 +217,7 @@ describe('RunningProgramPollsCtrl', function(Poll) {
     it('should be possible to stop a started poll', inject(function(Poll) {
         var controller = createController();
         var p = new Poll();
-        p.attributes.START_DATE = "2015-03-01";
+        p.attributes.START_DATE = "2015-01-01";
         p.attributes.END_DATE = "2045-03-15";
         p.attributes.PROGRAM_RUNNING = "TRUE";
         expect(scope.possibleToStop(p)).toBe(true);

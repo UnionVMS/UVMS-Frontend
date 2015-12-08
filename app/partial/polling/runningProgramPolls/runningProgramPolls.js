@@ -104,14 +104,17 @@ angular.module('unionvmsWeb').controller('RunningProgramPollsCtrl',function($sco
         }
 
         //Is the current date and time between the startDate and endDate of the program
-        var now = Date.now();
-        return new Date(programPoll.attributes.START_DATE) <= now && now <= new Date(programPoll.attributes.END_DATE);
+        var nowMoment = moment.utc();
+        var startDateMoment = moment.utc(programPoll.attributes.START_DATE, 'YYYY-MM-DD HH:mm:ss Z');
+        var endDateMoment = moment.utc(programPoll.attributes.END_DATE, 'YYYY-MM-DD HH:mm:ss Z');
+        return nowMoment.isAfter(startDateMoment) && nowMoment.isBefore(endDateMoment);
     };
 
     //Is it possible to stop this program?
     $scope.possibleToStop = function(programPoll){
-        var now = Date.now();
-        return programPoll.attributes.PROGRAM_RUNNING === "TRUE" && now >= new Date(programPoll.attributes.START_DATE);
+        var nowMoment = moment.utc();
+        var startDateMoment = moment.utc(programPoll.attributes.START_DATE, 'YYYY-MM-DD HH:mm:ss Z');
+        return programPoll.attributes.PROGRAM_RUNNING === "TRUE" && nowMoment.isAfter(startDateMoment);
     };
 
     init();
