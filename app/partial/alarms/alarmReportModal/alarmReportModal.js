@@ -228,7 +228,7 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
 
         //Set search criterias
         //TODO: Search for national vessel only???
-        var searchValue = $scope.assignAssetSearchText +"*";
+        var searchValue = $scope.assignAssetSearchText;
         if($scope.assignAssetSearchType === "ALL"){
             getListRequest.addSearchCriteria("NAME", searchValue);
             getListRequest.addSearchCriteria("CFR", searchValue);

@@ -281,13 +281,13 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
     $scope.getVesselsByIrcs = function(value){
         vesselsGetListRequest.resetCriterias();
-        vesselsGetListRequest.addSearchCriteria("IRCS", value +"*");
+        vesselsGetListRequest.addSearchCriteria("IRCS", value);
         return getVessels();
     };
 
     $scope.getVesselsByCFR = function(value){
         vesselsGetListRequest.resetCriterias();
-        vesselsGetListRequest.addSearchCriteria("CFR", value +"*");
+        vesselsGetListRequest.addSearchCriteria("CFR", value);
         return getVessels();
     };
     //On select item in search suggestions

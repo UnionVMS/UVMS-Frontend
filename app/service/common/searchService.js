@@ -231,6 +231,10 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             var deferred = $q.defer();
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
 			vesselRestService.getVesselList(getListRequest).then(function(vesselPage){
+                //Zero matches?
+                if(vesselPage.getNumberOfItems() === 0){
+                    return deferred.resolve(vesselPage);
+                }
                 //Get last report for the vessels
                 if(checkAccessToFeature('Movement', 'viewMovements')){
                     var connectIds = [];

@@ -16,9 +16,27 @@ angular.module('unionvmsWeb')
     };
 
     GetListRequest.prototype.DTOForVessel = function(){
+        //Add * to all text searches for vessel
+        var wildcardSearchKeys = ['NAME', 'IRCS', 'CFR', 'EXTERNAL_MARKING', 'MMSI', 'HOME_PORT', 'IMO', 'PRODUCER_NAME', 'PRODUCER_CODE', 'CONTACT_NAME', 'CONTACT_NUMBER', 'CONTACT_EMAIL'];
+        var updatedCriterias = [],
+            searchFieldKey, searchFieldValue;
+
+        $.each(this.criterias, function(index, searchField){
+            searchFieldKey = searchField.key;
+            searchFieldValue = searchField.value;
+            //Add * to the end of the search value?
+            if(wildcardSearchKeys.indexOf(searchFieldKey) >= 0){
+                if(typeof searchFieldValue === 'string' && searchFieldValue.charAt(searchFieldValue.length -1)){
+                    searchFieldValue = searchFieldValue +'*';
+                }
+
+            }
+            updatedCriterias.push(new SearchField(searchFieldKey, searchFieldValue));
+        });
+
         return {
             pagination : {page: this.page, listSize: this.listSize},
-            vesselSearchCriteria : { isDynamic : this.isDynamic, criterias : this.criterias }
+            vesselSearchCriteria : { isDynamic : this.isDynamic, criterias : updatedCriterias }
         };
     };
 

@@ -52,7 +52,7 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
         $scope.currentSearchResults.setLoading(true);
 
         //Set search criterias
-        var searchValue = $scope.assignVesselFreeText +"*";
+        var searchValue = $scope.assignVesselFreeText;
         if($scope.assignVesselSearchType === "ALL"){
             getListRequest.addSearchCriteria("NAME", searchValue);
             getListRequest.addSearchCriteria("CFR", searchValue);

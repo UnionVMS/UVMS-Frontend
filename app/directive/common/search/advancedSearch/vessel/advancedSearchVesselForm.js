@@ -56,7 +56,7 @@ angular.module('unionvmsWeb')
             searchService.setDynamic(false);
             //Add search criterias
             if(typeof $scope.freeText === 'string' && $scope.freeText.trim().length > 0){
-                var searchValue = $scope.freeText +"*";
+                var searchValue = $scope.freeText;
                 searchService.addSearchCriteria("NAME", searchValue);
                 searchService.addSearchCriteria("CFR", searchValue);
                 searchService.addSearchCriteria("IRCS", searchValue);
