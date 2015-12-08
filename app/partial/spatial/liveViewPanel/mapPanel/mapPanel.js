@@ -230,7 +230,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, $tim
     //Clear highlight features control
     $scope.clearMapHighlights = function(){
         var layer = mapService.getLayerByType('highlight');
-        if (angular.isDefined/(layer)){
+        if (angular.isDefined(layer)){
             layer.getSource().clear(true);
         }
     };

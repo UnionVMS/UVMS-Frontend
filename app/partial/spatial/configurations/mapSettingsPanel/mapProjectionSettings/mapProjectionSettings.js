@@ -65,6 +65,12 @@ angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($s
         if (angular.isDefined($scope.initialConfig)){
             angular.copy($scope.initialConfig, $scope.configModel);
         }
+        
+        //Setting up coordinates format in admin and user preferences
+        if (angular.isDefined($scope.configModel.mapSettings.coordinatesFormat)){
+            $scope.projectionSelected = true;
+            setCoordinatesUnitItems($scope.configModel.mapSettings.displayProjectionId);
+        }
     };
     
     //Get data from server

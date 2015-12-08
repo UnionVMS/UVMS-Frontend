@@ -15,7 +15,7 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'checklist-model',
     'angularScreenfull',
 	'ngCookies',
-	'frapontillo.bootstrap-switch',
+	'toggle-switch',
 	'colorpicker.module',
 	'ui.select'
 	]);

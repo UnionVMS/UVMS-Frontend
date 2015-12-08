@@ -124,7 +124,11 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	        }
 
 	        report.areas = filter.areas;
-	        report.mapConfiguration = data.mapConfiguration;
+	        
+	        if (angular.isDefined(data.mapConfiguration)){
+	            report.mapConfiguration = data.mapConfiguration;
+	        }
+	        
 	    }
 
 	    return report;
@@ -199,9 +203,12 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	        desc: this.desc !== '' ? this.desc : undefined,
 	        visibility: angular.isDefined(this.visibility) ? this.visibility : 'PRIVATE',
 	        withMap: this.withMap,
-	        filterExpression: filter,
-	        mapConfiguration: this.mapConfiguration
+	        filterExpression: filter
 	    };
+	    
+	    if (this.withMap === true){
+	        dto.mapConfiguration = this.mapConfiguration;
+	    }
 	    
 	    return dto;
 	};

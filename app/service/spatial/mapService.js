@@ -1402,7 +1402,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	
 	ms.setPopupVisibility = function(type, config){
 	    angular.forEach(ms.popupVisibility[type], function(value, key) {
-            if (config.indexOf(key)){
+            if (config.indexOf(key) !== -1){
                 ms.popupVisibility[type][key] = true;
             } else {
                 ms.popupVisibility[type][key] = false;
@@ -1412,7 +1412,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
 	//POPUP - Define the object that will be used in the popup for vms positions
     ms.setPositionsObjPopup = function(feature){
-        //TODO fetch visibility of attributes selected by user, date format from config
+        var featData = ms.roundFeatureDecimals(feature, ['calculatedSpeed', 'reportedSpeed'], 5); 
         var coords = feature.geometry.getCoordinates();
         var repCoords = ol.proj.transform(coords, ms.getMapProjectionCode(), 'EPSG:4326');
         var data = {
@@ -1435,20 +1435,29 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             },
             visibility: ms.popupVisibility.positions,
             properties: feature,
-            //formatedDate: moment.utc(feature.positionTime).format('YYYY-MM-DD HH:mm:ss'),
             formatedDate: moment.utc(feature.positionTime).format(globalSettingsService.getDateFormat()),
             coordinates: {
                 lon: repCoords[0].toFixed(5).toString() + ' \u00b0',
                 lat: repCoords[1].toFixed(5).toString() + ' \u00b0'
             }
         };
-
+        
+        return data;
+    };
+    
+    //Round numercial fileds for popup display
+    ms.roundFeatureDecimals = function(data, fields, decimalPlaces){
+        var scale = Math.pow(10, decimalPlaces);
+        for (var i = 0; i < fields.length; i++){
+            data[fields[i]] = Math.round(data[fields[i]] * scale) / scale; 
+        }
+        
         return data;
     };
 
     //POPUP - Define the object that will be used in the popup for vms positions
     ms.setSegmentsObjPopup = function(feature){
-        //TODO fetch visibility of attributes selected by user
+        var featData = ms.roundFeatureDecimals(feature, ['distance', 'duration', 'speedOverGround'], 5); 
         var data = {
             titles: {
                 vessel_tag: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
@@ -1463,9 +1472,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 cat: locale.getString('spatial.tab_vms_seg_table_header_category')
             },
             visibility: ms.popupVisibility.segments,
-            properties: feature
+            properties: featData
         };
-
+        
         return data;
     };
 

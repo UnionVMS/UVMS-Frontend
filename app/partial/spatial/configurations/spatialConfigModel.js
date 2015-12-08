@@ -1,16 +1,9 @@
 angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     
     function SpatialConfig(){
-        this.systemSettings = {
-            geoserverUrl: undefined
-        };
-        this.mapSettings = {
-            mapProjectionId: undefined,
-            displayProjectionId: undefined,
-            coordinatesFormat: undefined,
-            scaleBarUnits: undefined,
-            refreshStatus: false,
-            refreshRate: undefined
+        this.toolSettings = {
+            control: [],
+            tbControl: []
         };
         this.stylesSettings = {
             positions: {
@@ -22,6 +15,22 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
                 style: {}
             }
         };
+        this.systemSettings = {
+            geoserverUrl: undefined
+        };
+        this.layerSettings = {
+            overlayLayers: [],
+            baseLayers: []
+        };
+        this.mapSettings = {
+            mapProjectionId: undefined,
+            displayProjectionId: undefined,
+            coordinatesFormat: undefined,
+            scaleBarUnits: undefined,
+            refreshStatus: false,
+            refreshRate: undefined
+        };
+        
         this.visibilitySettings = {
             positions: {
                 popup: [],
@@ -32,25 +41,35 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
                 labels: []
             }
         };
+        
     }
     
     //Admin level configs
     SpatialConfig.prototype.forAdminConfigFromJson = function(data){
         var config = new SpatialConfig();
         
-        config.systemSettings.geoserverUrl = data.systemSettings.geoserverUrl;
-        config.mapSettings = {
-            mapProjectionId: data.mapSettings.mapProjectionId,
-            displayProjectionId: data.mapSettings.displayProjectionId,
-            coordinatesFormat: data.mapSettings.coordinatesFormat,
-            scaleBarUnits: data.mapSettings.scaleBarUnits,
-            refreshStatus: data.mapSettings.refreshStatus,
-            refreshRate: data.mapSettings.refreshRate
-        };
+        config.systemSettings = data.systemSettings;
+        config.mapSettings = data.mapSettings;
         config.visibilitySettings = data.visibilitySettings;
         config.stylesSettings = data.stylesSettings;
+        config.toolSettings = data.toolSettings;
+        config.layerSettings = data.layerSettings;
         
         return config;
+    };
+    
+    SpatialConfig.prototype.forAdminConfigToJson = function(config){        
+        if (angular.isDefined(config.posFsStyle)){
+            var style = {};
+            for (var i = 0; i < config.posFsStyle.length; i++){
+                style[config.posFsStyle[i].code] = config.posFsStyle[i].color;
+            }
+            
+            config.stylesSettings.positions.style = style;
+            config.posFsStyle = undefined;
+        }
+      
+        return angular.toJson(config);  
     };
     
     //Report level configs
