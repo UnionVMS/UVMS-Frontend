@@ -52,7 +52,7 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 		return {
 			text: locale.getString("config.distance_unit_" + unit),
 			code: unit
-		}
+		};
 	});
 
 	$scope.speedUnits = [
@@ -63,7 +63,7 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 		return {
 			text: locale.getString("config.speed_unit_" + unit),
 			code: unit
-		}
+		};
 	});
 
 	$scope.timezones = (function() {
