@@ -76,6 +76,7 @@ describe('globalSettingsService', function() {
 
 		spyOn(mockGlobalSettingsResource, 'get').andCallFake(function(callback) {
 			callback({
+                code: '200',
 				data: [{
 					key: key,
 					value: isArray ? value.join() : value

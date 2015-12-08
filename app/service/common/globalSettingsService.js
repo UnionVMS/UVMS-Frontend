@@ -13,6 +13,10 @@ angular.module('unionvmsWeb').factory('globalSettingsService',function($resource
     var getSettingFromServer = function(){
         var deferred = $q.defer();
         GlobalSettings.get(function(response) {
+            if(String(response.code) !== '200'){
+                return deferred.reject("Failed to load global settings.");
+            }
+
             $.each(response.data, function(index, setting) {
                 settings[setting.key] = setting;
             });
