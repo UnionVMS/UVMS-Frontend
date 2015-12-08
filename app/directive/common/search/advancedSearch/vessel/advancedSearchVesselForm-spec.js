@@ -59,9 +59,9 @@ describe('AdvancedSearchVesselFormCtrl', function() {
         scope.advancedSearch = false;
         scope.performSearch();
 
-        expect(addSearchCriteriaSpy).toHaveBeenCalledWith('NAME', 'TEST*');
-        expect(addSearchCriteriaSpy).toHaveBeenCalledWith('CFR', 'TEST*');
-        expect(addSearchCriteriaSpy).toHaveBeenCalledWith('IRCS', 'TEST*');
+        expect(addSearchCriteriaSpy).toHaveBeenCalledWith('NAME', 'TEST');
+        expect(addSearchCriteriaSpy).toHaveBeenCalledWith('CFR', 'TEST');
+        expect(addSearchCriteriaSpy).toHaveBeenCalledWith('IRCS', 'TEST');
         expect(doSearchSpy).toHaveBeenCalled();
     }));
 
