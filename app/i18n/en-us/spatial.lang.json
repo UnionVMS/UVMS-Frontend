@@ -235,5 +235,7 @@
 	"segment_property_from": "From",
 	"segment_property_to": "To",
 	"segment_property_add_rule": "Add new property rule",
-	"segment_property_rm_rule": "Remove property rule"
+	"segment_property_rm_rule": "Remove property rule",
+	"default_color": "Default color",
+	"segment_styles_save_btn": "Save styles"
 }

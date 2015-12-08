@@ -87,7 +87,12 @@ label.section{
 
 .has-error{
     .form-control, input, textarea, .periodInput{
-        border:1px solid red;
+    	&,
+    	&:focus,
+    	&:hover {
+        	border:1px solid red;
+        	box-shadow: none !important;
+        }
     }
     box-shadow:none;
 }

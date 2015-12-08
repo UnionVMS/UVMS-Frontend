@@ -9,12 +9,12 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope, s
         if ($scope.countryList.length === 0){
             $scope.getCountriesList();
         }
-    }
+    };
 	
     //Get list of countries
     $scope.getCountriesList = function(){
         spatialConfigRestService.getCountriesList().then(function(response){
-            countryList = response;
+        	$scope.countryList = response;
             $scope.setFsStyleArray();
         });
     };
@@ -27,7 +27,7 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope, s
         angular.forEach(keys, function(key){
             style.push({
                code: key,
-               name: countryList[key],
+               name: $scope.countryList[key],
                color: $scope.configModel.stylesSettings.positions.style[key]
             });
         });

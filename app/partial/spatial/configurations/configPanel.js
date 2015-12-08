@@ -19,4 +19,5 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		$scope.toggleUserPreferences();
 		$scope.previousSelection = previousSelection;
 	});
+	
 });

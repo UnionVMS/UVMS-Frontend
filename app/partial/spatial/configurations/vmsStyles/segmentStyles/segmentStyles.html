@@ -1,16 +1,40 @@
 <div class="row col-md-12" ng-controller="SegmentstylesCtrl">
-	<div class="row">
-		<div class="form-group col-md-4">
-			<combobox ng-model="segmentProperty" initialtext="{{'spatial.segment_property' | i18n }}" items="segmentProperties"></combobox>
+	<form name="segmentsForm" novalidate>
+		<div class="row">
+			<div class="form-group col-md-4">
+				<combobox ng-model="segmentProperty" initialtext="{{'spatial.segment_property' | i18n }}" items="segmentProperties"></combobox>
+			</div>
+			<div class="form-group col-md-4 btn-add">
+				<a ng-class='{ disabled: !segmentProperty || !isAddNewRuleActive}' ng-click="!segmentProperty || !isAddNewRuleActive || addNewRule()" title="{{'spatial.segment_property_add_rule' | i18n }}">
+					<span class="btn btn-primary btn-sm btn-circle"><i class="fa fa-plus"></i></span>
+					{{'spatial.segment_property_add_rule' | i18n }}
+				</a>
+			</div>
 		</div>
-		<div class="form-group col-md-4 btn-add">
-			<a ng-class='{ disabled: !segmentProperty}' ng-click="!segmentProperty || addNewRule()" title="{{'spatial.segment_property_add_rule' | i18n }}">
-				<span class="btn btn-primary btn-sm btn-circle"><i class="fa fa-plus"></i></span>
-				{{'spatial.segment_property_add_rule' | i18n }}
-			</a>
+		<div class="row rulesList">
+			<div ng-repeat="item in rulesList" ng-include="'partial/spatial/configurations/vmsStyles/segmentStyles/segmentStylesRuleRow/segmentStylesRuleRow.html'"></div>
 		</div>
-	</div>
-	<div class="row rulesList">
-		<div ng-repeat="item in rulesList" ng-include="'partial/spatial/configurations/vmsStyles/segmentStyles/segmentStylesRuleRow/segmentStylesRuleRow.html'"></div>
-	</div>
+		<div class="row defaultItem" ng-show="segmentProperty">
+			<ng-form name="segmentDefaultForm" novalidate>
+				<div class="row col-md-12">
+					<div class="form-group col-md-3" ng-class="{'has-error': segmentDefaultForm.$error.segDefColor || segmentDefaultForm.$error.required}">
+						<label>{{'spatial.default_color' | i18n}}</label>
+						<div class="colorPickerComponent">
+							<div ng-style="{'background-color': defaultColor && defaultColor.length > 3 && defaultColor.indexOf('#') != -1 ? defaultColor : '#fff'}" class="form-control pickedcolor">
+					       		<i class="fa fa-ban" ng-hide="defaultColor && defaultColor.length > 3 && defaultColor.indexOf('#') != -1"></i>
+					        </div>
+					        <input class="form-control" colorpicker ng-model="defaultColor" type="text" ng-change="validateDefaultColor();" ng-required="true"/>
+						</div>
+					</div>
+				</div>
+			</ng-form>	
+		</div>
+		<div class="form-group row">
+			<div class="row">
+				<div class="formSubmitBtn">
+					<button class="btn btn-primary button" type="submit" ng-click="saveSegmentStyles()">{{"spatial.segment_styles_save_btn" | i18n }}</button>
+				</div>
+			</div>
+		</div>
+	</form>
 </div>

@@ -1,23 +1,25 @@
 <div ng-controller="SegmentstylesrulerowCtrl">
-	<div class="row col-md-12">
-		<div class="form-group col-md-2">
-			<input class="form-control" placeholder="{{'spatial.segment_property_from' | i18n }}" ng-model="item.propertyFrom" name="propertyFrom" min="0" type="number"/>
-		</div>
-		<div class="form-group col-md-2">
-			<input class="form-control" placeholder="{{'spatial.segment_property_to' | i18n }}" ng-model="item.propertyTo" name="propertyTo" min="0" type="number"/>
-		</div>
-		<div class="form-group col-md-3">
-			<div class="colorPickerComponent">
-				<div ng-style="{'background-color': item.color && item.color.length > 3 && item.color.indexOf('#') != -1 ? item.color : '#fff'}" class="form-control pickedcolor">
-		       		<i class="fa fa-ban" ng-hide="item.color && item.color.length > 3 && item.color.indexOf('#') != -1"></i>
-		        </div>
-		        <input class="form-control" colorpicker ng-model="item.color" type="text"/>
+	<ng-form name="segmentstylesForm" novalidate>
+		<div class="row col-md-12">
+			<div class="form-group col-md-2" ng-class="{'has-error': segmentstylesForm.$error.required && $first && item.propertyFrom === undefined}">
+				<input class="form-control" placeholder="{{'spatial.segment_property_from' | i18n }}" ng-model="item.propertyFrom" name="propertyFrom" min="0" type="number" ng-change="validatePropertyTo();" ng-disabled="!$first" ng-required="true"/>
+			</div>
+			<div class="form-group col-md-2" ng-class="{'has-error': segmentstylesForm.$error.segPropTo || (segmentstylesForm.$error.required && item.propertyTo === undefined)}">
+				<input class="form-control" placeholder="{{'spatial.segment_property_to' | i18n }}" ng-model="item.propertyTo" name="propertyTo" min="0" type="number" ng-change="validatePropertyTo();updateNextRule();" ng-required="true"/>
+			</div>
+			<div class="form-group col-md-3" ng-class="{'has-error': segmentstylesForm.$error.segPropColor || (segmentstylesForm.$error.required && item.color === undefined)}">
+				<div class="colorPickerComponent">
+					<div ng-style="{'background-color': item.color && item.color.length > 3 && item.color.indexOf('#') != -1 ? item.color : '#fff'}" class="form-control pickedcolor">
+			       		<i class="fa fa-ban" ng-hide="item.color && item.color.length > 3 && item.color.indexOf('#') != -1"></i>
+			        </div>
+			        <input class="form-control" colorpicker ng-model="item.color" type="text" ng-change="validatePropertyColor();" ng-required="true"/>
+				</div>
+			</div>
+			<div class="form-group col-md-1 btn-rm">
+				<a ng-click="removeRule($index)" title="{{'spatial.segment_property_rm_rule' | i18n }}">
+					<span class="btn btn-primary btn-sm btn-circle"><i class="fa fa-minus"></i></span>
+				</a>
 			</div>
 		</div>
-		<div class="form-group col-md-1 btn-rm">
-			<a ng-click="removeRule($index)" title="{{'spatial.segment_property_rm_rule' | i18n }}">
-				<span class="btn btn-primary btn-sm btn-circle"><i class="fa fa-minus"></i></span>
-			</a>
-		</div>
-	</div>
+	</ng-form>	
 </div>
