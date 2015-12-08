@@ -121,6 +121,18 @@ angular.module('unionvmsWeb').factory('globalSettingsService',function($resource
         getDefaultHomePage : function(){
             return this.get('defaultHomePage', false);
         },
+        getTimezone: function() {
+            return this.get('timezone', false);
+        },
+        getSpeedUnit: function() {
+            return this.get('speedUnit', false);
+        },
+        getDistanceUnit: function() {
+            return this.get('distanceUnit', false);
+        },
+        getMaxSpeed : function(){
+            return this.get('maxSpeed', false);
+        },
         setup : function(){
             //No setting loaded
             if(Object.keys(settings).length === 0){

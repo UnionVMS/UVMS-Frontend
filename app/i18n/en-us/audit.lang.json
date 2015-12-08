@@ -64,6 +64,10 @@
     "configuration_general_time_format" : "Time format",
     "configuration_general_coordinates_format" : "Coordinates format",
     "configuration_general_default_homepage" : "Default home page",
+    "configuration_general_unit_distance" : "Distance unit",
+    "configuration_general_unit_speed" : "Speed unit",
+    "configuration_general_max_speed" : "Maximum speed",
+    "configuration_general_timezone" : "Timezone",
 
     "language_sv_SE": "Svenska",
     "language_en_UK": "English",

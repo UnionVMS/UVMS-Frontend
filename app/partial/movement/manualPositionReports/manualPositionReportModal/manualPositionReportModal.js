@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $location,$modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, positionReport, ManualPosition, $timeout, movementRestService, coordinateFormatService, dateTimeService, vesselValidationService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly, manualPositionSource) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $location,$modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, positionReport, ManualPosition, $timeout, movementRestService, coordinateFormatService, dateTimeService, vesselValidationService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly, manualPositionSource, globalSettingsService) {
 
     $scope.errorMessage ="";
     $scope.readOnly = readOnly;
@@ -26,7 +26,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     };
 
     //Max speed - warning is shown is speed is higher
-	$scope.measuredSpeedWarningThreshold = 15;
+	$scope.measuredSpeedWarningThreshold = globalSettingsService.getMaxSpeed();
     $scope.maxDateTime = dateTimeService.formatUTCDateWithTimezone(moment.utc());
     $scope.submitAttempted = false;
     $scope.confirmSend = false;

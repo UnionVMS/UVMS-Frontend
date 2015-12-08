@@ -188,6 +188,19 @@
     "coordinateFormat-degreesMinutesSeconds": "DD MM,SS'",
     "coordinateFormat-decimalDegrees": "DD.MMM",
 
+
+    "distance_unit_km": "kilometers",
+    "distance_unit_nm": "nautical miles",
+    "distance_unit_mi": "miles",
+
+    "speed_unit_kts": "knots",
+    "speed_unit_kph": "kilometers per hour",
+    "speed_unit_mph": "miles per hour",
+
+    "short_speed_unit_kts": "kts",
+    "short_speed_unit_kph": "km/h",
+    "short_speed_unit_mph": "mph",
+
     "online": "Online",
     "offline": "Offline"
 

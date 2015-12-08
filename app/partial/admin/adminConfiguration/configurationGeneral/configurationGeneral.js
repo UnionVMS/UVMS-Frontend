@@ -4,6 +4,7 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 
     var init = function(){
         $scope.settings = globalSettingsService.getSettings();
+        $scope.speedUnit = globalSettingsService.getSpeedUnit();
     };
 
     //Options
@@ -42,6 +43,60 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 			code: page
 		};
 	});
+
+	$scope.distanceUnits = [
+		"km",
+		"nm",
+		"mi"
+	].map(function(unit) {
+		return {
+			text: locale.getString("config.distance_unit_" + unit),
+			code: unit
+		}
+	});
+
+	$scope.speedUnits = [
+		"kts",
+		"kph",
+		"mph"
+	].map(function(unit) {
+		return {
+			text: locale.getString("config.speed_unit_" + unit),
+			code: unit
+		}
+	});
+
+	$scope.timezones = (function() {
+		var minZone = -12;
+		var maxZone = 12;
+		var zones = [];
+
+		function toTimezone(offset) {
+			var hours = Math.abs(offset / 60);
+			var mins = offset % 60;
+
+			if (hours < 10) {
+				hours = '0' + hours;
+			}
+
+			if (mins < 10) {
+				mins = '0' + mins;
+			}
+
+			return (offset < 0 ? '-' : '+') + hours + ':' + mins;
+		}
+
+		for (var i = minZone; i <= maxZone; i++) {
+			var utcOffset = 60 * i;
+			zones.push({
+				text: toTimezone(utcOffset),
+				code: String(utcOffset)
+			});
+		}
+
+		return zones;
+	})();
+
     $scope.homePages = _.sortBy($scope.homePages, function(opt){return opt.text;});
 
     var saveSettingSuccess = function(){
@@ -58,6 +113,15 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 		}
 		else {
 			return globalSettingsService.get("coordinateFormat");
+		}
+	};
+
+	$scope.maxSpeed = function(value) {
+		if (value !== undefined) {
+			globalSettingsService.set("maxSpeed", value).then(saveSettingSuccess, saveSettingError);
+		}
+		else {
+			return globalSettingsService.get("maxSpeed");
 		}
 	};
 
@@ -103,6 +167,21 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 		}
 
 		globalSettingsService.set("availableLanguages", languages, true).then(saveSettingSuccess, saveSettingError);
+	};
+
+	$scope.setDistanceUnit = function(selection) {
+		globalSettingsService.set("distanceUnit", selection.code).then(saveSettingSuccess, saveSettingError);
+
+	};
+
+	$scope.setSpeedUnit = function(selection) {
+		globalSettingsService.set("speedUnit", selection.code).then(saveSettingSuccess, saveSettingError);
+
+	};
+
+	$scope.setTimezone = function(selection) {
+		globalSettingsService.set("timezone", selection.code).then(saveSettingSuccess, saveSettingError);
+
 	};
 
     init();

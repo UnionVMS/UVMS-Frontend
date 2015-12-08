@@ -29,6 +29,9 @@
 					</ul>
 				</div>
 
+			</div>
+			<div class="row">
+
 				<!-- Date format -->
 				<div class="col-md-6">
 					<h5 class="section-text">{{'audit.configuration_general_time_format' | i18n}}</h5>
@@ -45,6 +48,36 @@
 				<div class="col-md-6">
 					<h5 class="section-text">{{'audit.configuration_general_default_homepage' | i18n}}</h5>
 					<dropdown ng-model="settings.defaultHomePage.value" items="homePages" no-placeholder-item callback="setDefaultHomePage"></dropdown>
+				</div>
+
+			</div>
+			<div class="row">
+
+				<!-- Distance unit -->
+				<div class="col-md-6">
+					<h5 class="section-text">{{'audit.configuration_general_unit_distance' | i18n}}</h5>
+					<dropdown ng-model="settings.distanceUnit.value" items="distanceUnits" no-placeholder-item callback="setDistanceUnit"></dropdown>
+				</div>
+
+				<!-- Speed unit -->
+				<div class="col-md-6">
+					<h5 class="section-text">{{'audit.configuration_general_unit_speed' | i18n}}</h5>
+					<dropdown ng-model="settings.speedUnit.value" items="speedUnits" no-placeholder-item callback="setSpeedUnit"></dropdown>
+				</div>
+
+			</div>
+			<div class="row">
+
+				<!-- Maximum speed -->
+				<div class="col-md-6">
+					<h5 class="section-text">{{'audit.configuration_general_max_speed' | i18n}} ({{'config.short_speed_unit_' + speedUnit | i18n}})</h5>
+					<input ng-model="maxSpeed" ng-model-options="{ getterSetter: true }" transform-speed></dropdown>
+				</div>
+
+				<!-- Timezone -->
+				<div class="col-md-6">
+					<h5 class="section-text">{{'audit.configuration_general_timezone' | i18n}}</h5>
+					<dropdown ng-model="settings.timezone.value" items="timezones" no-placeholder-item callback="setTimezone"></dropdown>
 				</div>
 
 			</div>
