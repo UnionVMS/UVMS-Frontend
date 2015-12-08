@@ -184,7 +184,6 @@ angular.module('unionvmsWeb')
             $scope.mapArea = [{'text':'Area 1','code':'Area 1'},{'text':'Area 2','code':'Area 2'}];
 
             $scope.resetSearch();
-            $scope.performAdvancedSearch();
         };
 
         init();
