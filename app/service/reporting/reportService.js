@@ -80,16 +80,16 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
         
-        if (mapService.styles.positions.attribute === 'countryCode'){
-            mapService.setDisplayedFlagStateCodes('positions', rep.positions);
-        }
-        
-        if (mapService.styles.segments.attribute === 'countryCode'){
-            mapService.setDisplayedFlagStateCodes('segments', rep.segments);
-        }
-        
         //Update map if the report contains the map tab
         if (rep.tabs.map === true){
+            if (mapService.styles.positions.attribute === 'countryCode'){
+                mapService.setDisplayedFlagStateCodes('positions', rep.positions);
+            }
+            
+            if (mapService.styles.segments.attribute === 'countryCode'){
+                mapService.setDisplayedFlagStateCodes('segments', rep.segments);
+            }
+            
             //First clear vector layers
             mapService.clearVectorLayers();
             
