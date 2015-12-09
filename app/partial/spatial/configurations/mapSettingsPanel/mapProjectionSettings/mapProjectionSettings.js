@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($scope, $timeout, locale, spatialRestService){
+angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($scope, $timeout, $interval, locale, spatialRestService){
     $scope.projectionItems = [];
     $scope.coordinatesFormatItems = [];
     $scope.scaleBarUnitsItems = [];
@@ -51,13 +51,14 @@ angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($s
     $scope.$watch('configModel.mapSettings.displayProjectionId', function (newVal, oldVal) {
         clearCoordinatesUnitItems();
         if (angular.isDefined(newVal)){
-            if (newVal !== oldVal){
+            if (newVal !== oldVal && angular.isDefined($scope.projections)){
                 setCoordinatesUnitItems(newVal);
             }
         }
     });
 
     //Initialization
+    $scope.interValPromise = undefined;
     $scope.init = function () {
         setProjectionItems();
         setScaleBarUnits();
@@ -67,10 +68,21 @@ angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($s
         }
         
         //Setting up coordinates format in admin and user preferences
-        if (angular.isDefined($scope.configModel.mapSettings.coordinatesFormat)){
+        if (!angular.isDefined($scope.initialConfig) && angular.isDefined($scope.configModel) && angular.isDefined($scope.configModel.mapSettings.coordinatesFormat)){
             $scope.projectionSelected = true;
-            setCoordinatesUnitItems($scope.configModel.mapSettings.displayProjectionId);
+            $scope.interValPromise = $interval(function(){
+                console.log('interval');
+                if (angular.isDefined($scope.projections)){
+                    setCoordinatesUnitItems($scope.configModel.mapSettings.displayProjectionId);
+                    $scope.stopInterval();
+                }
+            }, 1);
         }
+    };
+    
+    $scope.stopInterval = function(){
+        $interval.cancel($scope.interValPromise);
+        $scope.interValPromise = undefined;
     };
     
     //Get data from server
