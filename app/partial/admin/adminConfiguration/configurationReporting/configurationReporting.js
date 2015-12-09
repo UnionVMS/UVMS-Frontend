@@ -5,10 +5,10 @@ angular.module('unionvmsWeb').controller('ConfigurationreportingCtrl',function($
 	        spatialConfigRestService.saveAdminConfigs(finalConfig).then(function(response){
 	            alertService.showSuccessMessageWithTimeout(locale.getString('common.global_setting_save_success_message'));
 	        }, function(error){
-	            alertService.showErrorMessage(locale.getString('common.global_setting_save_error_message'));
+	            alertService.showErrorMessageWithTimeout(locale.getString('common.global_setting_save_error_message'));
 	        });
     	}else{
-    		alertService.showErrorMessage(locale.getString('spatial.invalid_data_saving'));
+    		alertService.showErrorMessageWithTimeout(locale.getString('spatial.invalid_data_saving'));
     	}
     };    
 });

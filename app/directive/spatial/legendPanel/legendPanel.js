@@ -11,9 +11,8 @@ angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapServi
                 var src = layer.getSource();
                 var params  = src.getParams();
                 
-                //TODO add layer name from layer definition
                 record.url = src.getUrls()[0] + '?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=25&HEIGHT=25&LAYER=' + params.LAYERS;
-                if (params.STYLES !== ''){
+                if (params.STYLES !== '' && angular.isDefined(params.STYLES)){
                     record.url += '&STYLE=' + params.STYLES;
                 }
                 record.title = layer.get('title');

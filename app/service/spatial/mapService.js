@@ -554,7 +554,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 }
             }
             if (tempBreak.length > 0){
-                breaks.intervals.push(tempBreak);
+                var targetIdx = _.sortedIndex(breaks.intervals, tempBreak);
+                breaks.intervals.splice(targetIdx, 0, tempBreak);
             }
         });
         

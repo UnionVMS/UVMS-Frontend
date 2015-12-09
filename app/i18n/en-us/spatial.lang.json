@@ -243,6 +243,6 @@
 	"user_preferences_error_saving": "There was an error while saving your preferences. Please try again.",
 	"user_preferences_success_saving": "Your preferences were successfuly saved.",
 	"user_preferences_error_getting_configs": "There was an error while getting your preferences. Please try again.",
-	
-	"invalid_data_saving": "There are invalid fields"
+	"user_preferences_warning_saving": "You have not made any changes to your preferences.",
+	"invalid_data_saving": "There are invalid fields in your configurations. Please check them and try again."
 }

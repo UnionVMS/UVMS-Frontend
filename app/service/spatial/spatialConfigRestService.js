@@ -79,7 +79,7 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
         saveUserConfigs: function(configs){
            var deferred = $q.defer();
            spatialConfigRestFactory.saveUserConfigs().save(configs, function(response){
-               deferred.resolve(response);
+               deferred.resolve([response, configs]);
            }, function(error){
                console.error('Error saving user configurations');
                deferred.reject(error);

@@ -4,6 +4,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	$scope.hasError = false;
 	$scope.errorMessage = undefined;
 	$scope.hasSuccess = false;
+	$scope.hasWarning = false;
 	
 	$scope.toggleUserPreferences = function(){
 		$scope.isConfigVisible = !$scope.isConfigVisible;
@@ -34,6 +35,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	        $scope.hasError = false;
 	        $scope.errorMessage = undefined;
 	        $scope.hasSuccess = false;
+	        $scope.hasWarning = false;
 	    }, 3000);
 	};
 	
@@ -48,8 +50,12 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		    
 		    newConfig = angular.toJson(newConfig);
 		    
-		    if (!angular.equals({}, newConfig)){
+		    if (!angular.equals('{}', newConfig)){
 		        spatialConfigRestService.saveUserConfigs(newConfig).then(saveSuccess, saveFailure);  
+		    } else {
+		        $anchorScroll();
+		        $scope.hasWarning = true;
+		        $scope.hideAlerts();
 		    }
 		}else{
 			$scope.hasError = true;
@@ -87,6 +93,25 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    if (!_.isEqual($scope.configCopy.stylesSettings.segments, $scope.configModel.stylesSettings.segments)){
 	        include = true;
 	    }
+	    
+	    if(angular.isDefined($scope.configModel.segmentStyle)){
+            var segmentProperties = {};
+            segmentProperties.attribute = $scope.configModel.segmentStyle.attribute;
+            segmentProperties.style = {};
+            
+            if(segmentProperties.attribute === "speedOverGround"){
+                angular.forEach($scope.configModel.segmentStyle.style, function(item){
+                    segmentProperties.style[item.propertyFrom + "-" + item.propertyTo] = item.color;
+                });
+                
+                segmentProperties.style["default"] = $scope.configModel.segmentStyle.defaultColor;
+            }
+            
+            if (!_.isEqual(segmentProperties, $scope.configCopy.stylesSettings.segments)){
+                include = true;
+                config.stylesSettings.segments = segmentProperties;
+            }
+        }
 	    
 	    if (include === false){
 	        config.stylesSettings = undefined;
@@ -134,13 +159,26 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
         
         return temp;
     };
+    
+    //Update config copy after saving new preferences
+    $scope.updateConfigCopy = function(src){
+        var changes = angular.fromJson(src);
+        var keys = _.keys(changes);
+        
+        for (var i = 0; i < keys.length; i++){
+            $scope.configCopy[keys[i]] = changes[keys[i]];
+        }
+    };
 	
 	var saveSuccess = function(response){
+	    $anchorScroll();
 	    $scope.hasSuccess = true;
 	    $scope.hideAlerts();
+	    $scope.updateConfigCopy(response[1]);
 	};
 	
 	var saveFailure = function(error){
+	    $anchorScroll();
 	    $scope.hasError = true;
 	    $scope.errorMessage = locale.getString('spatial.user_preferences_error_saving');
 	    $scope.hideAlerts();
@@ -155,6 +193,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	};
 	
 	var getConfigsFailure = function(error){
+	    $anchorScroll();
 	    $scope.hasError = true;
 	    $scope.errorMessage = locale.getString('spatial.user_preferences_error_getting_configs');
 	    $scope.hideAlerts();

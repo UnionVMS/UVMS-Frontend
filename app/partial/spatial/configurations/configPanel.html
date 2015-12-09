@@ -26,7 +26,14 @@
 				</span>
 		    </div>
 		</div>
-
+		<div class="container containerWithTopBottomPadding spatial-error" ng-show="hasWarning">
+			<div class="alert alert-warning alert-container" role="alert">
+				<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+				<span class="alert-message">
+					<span>{{'spatial.user_preferences_warning_saving' | i18n }}</span>          
+				</span>
+		    </div>
+		</div>
 	    <div class="container containerWithTopBottomPadding containerCollapsible">
 	    	<form name="configPanelForm">
 				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/mapSettingsPanel/mapSettingsCollapsiblePanel.html'"></div>
