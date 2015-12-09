@@ -1,7 +1,7 @@
 var app = angular.module('unionvmsWeb');
 
 app.controller('modalCommentCtrl', function($scope, $modalInstance, options, locale) {
-
+    $scope.submitAttempted = false;
 	$scope.comment = "";
 	$scope.labels = {
 		title: options.titleLabel || locale.getString("common.comment"),
@@ -11,7 +11,10 @@ app.controller('modalCommentCtrl', function($scope, $modalInstance, options, loc
 	};
 
 	$scope.save = function() {
-		$modalInstance.close($scope.comment);
+        $scope.submitAttempted = true;
+        if($scope.commentForm.$valid) {
+            $modalInstance.close($scope.comment);
+        }
 	};
 
 	$scope.cancel = function() {
