@@ -45,7 +45,7 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="language-select-menu">
-                                        <li ng-repeat="language in languages" ng-class="{'disabled': language === selectedLanguage}">
+                                        <li ng-repeat="language in languages" ng-show="languageIsAvailable(language)" ng-class="{'disabled': language === selectedLanguage}">
                                             <a ng-click="language !== selectedLanguage && setLanguage(language)">
                                                 {{ languageNames[language] }}
                                             </a>

@@ -598,13 +598,13 @@ unionvmsWebApp.value('localeConf', {
     observableAttrs: new RegExp('^data-(?!ng-|i18n)'),
     delimiter: '::'
 }).value('localeSupported', [
+    'en-gb',
     "en-us",
     "sv",
-    'en-gb'
 ]).constant('languageNames', {
+    "en-gb": "English (GB)",
     "en-us": "English (US)",
     "sv": "Svenska",
-    "en-gb": "English (GB)"
 });
 
 //Service used for bootstrapping the application

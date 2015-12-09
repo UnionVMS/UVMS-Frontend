@@ -1,8 +1,14 @@
-angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $state, $rootScope, $location, $localStorage, userService, renewloginpanel, infoModal, configurationService, selectContextPanel, startPageService, tmhDynamicLocale, locale, $cookieStore, localeSupported, languageNames, openAlarmsAndTicketsService){
+angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $state, $rootScope, $location, $localStorage, userService, renewloginpanel, infoModal, configurationService, selectContextPanel, startPageService, tmhDynamicLocale, locale, $cookieStore, localeSupported, languageNames, localeConf,openAlarmsAndTicketsService, globalSettingsService){
     $scope.user = {};
     $scope.languages = localeSupported;
     $scope.selectedLanguage = tmhDynamicLocale.get();
     $scope.languageNames = languageNames;
+    var availableLanguages = globalSettingsService.getAvailableLanguages();
+
+    //Language is available according to the global settings?
+    $scope.languageIsAvailable = function(lang){
+        return angular.isDefined(availableLanguages) && availableLanguages.indexOf(lang) >= 0;
+    };
 
     $scope.setLanguage = function(lang) {
         tmhDynamicLocale.set(lang);
@@ -29,6 +35,12 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
         $scope.contexts = userService.getContexts();
         $scope.currentContext = userService.getCurrentContext();
         $scope.numberOfOpenAlarmsAndTickets = openAlarmsAndTicketsService.getCount();
+
+        //Check that current language is available
+        if(!$scope.languageIsAvailable($scope.selectedLanguage)){
+            //Change to default lang
+            $scope.setLanguage(localeConf.defaultLocale);
+        }
     };
     init();
     $rootScope.$on('AuthenticationSuccess', function () {

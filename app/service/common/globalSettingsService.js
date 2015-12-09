@@ -133,6 +133,9 @@ angular.module('unionvmsWeb').factory('globalSettingsService',function($resource
         getMaxSpeed : function(){
             return this.get('maxSpeed', false);
         },
+        getAvailableLanguages : function(){
+            return this.get('availableLanguages', true);
+        },
         setup : function(){
             //No setting loaded
             if(Object.keys(settings).length === 0){

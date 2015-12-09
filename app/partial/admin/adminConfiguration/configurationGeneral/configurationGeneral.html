@@ -89,7 +89,7 @@
 			<ul>
 				<li ng-repeat="l in languages">
 					<label>
-						<input type="checkbox" checklist-model="getSelectedLanguages()" checklist-value="l" ng-change="setLanguageSelected(l, checked)"> {{ "audit.language_" + l | i18n}}
+						<input type="checkbox" checklist-model="getSelectedLanguages()" checklist-value="l.code" ng-change="setLanguageSelected(l.code, checked)"> {{l.text}}
 					</label>
 				</li>
 			</ul>

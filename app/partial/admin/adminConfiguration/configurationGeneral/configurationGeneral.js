@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($scope, $resource, locale, alertService, globalSettingsService){
+angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($scope, $resource, $state, $timeout, locale, alertService, globalSettingsService, languageNames){
 
 	$scope.settings = {};
 
@@ -23,11 +23,10 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 		"imperial"
 	];
 
-	$scope.languages = [
-		"sv_SE",
-		"en_UK",
-		"ro_RO"
-	];
+    //Get languages from constant languageNames, defined in app.js
+    $scope.languages = Object.keys(languageNames).map(function(key) {
+        return {text: languageNames[key], code: key};
+    });
 
 	$scope.homePages = [
 		"positions",
@@ -103,6 +102,17 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
         alertService.showSuccessMessageWithTimeout(locale.getString('common.global_setting_save_success_message'));
     };
 
+    //Reload the current state
+    var reloadTimeout;
+    var saveSettingSuccessWithPageReload = function(){
+        saveSettingSuccess();
+        //Reload page after 2 seconds
+        $timeout.cancel(reloadTimeout);
+        reloadTimeout = $timeout(function(){
+            $state.go($state.$current, null, {reload: true});
+        }, 2000);
+    };
+
     var saveSettingError = function(){
         alertService.showErrorMessage(locale.getString('common.global_setting_save_error_message'));
     };
@@ -166,7 +176,7 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 			return;
 		}
 
-		globalSettingsService.set("availableLanguages", languages, true).then(saveSettingSuccess, saveSettingError);
+		globalSettingsService.set("availableLanguages", languages, true).then(saveSettingSuccessWithPageReload, saveSettingError);
 	};
 
 	$scope.setDistanceUnit = function(selection) {
