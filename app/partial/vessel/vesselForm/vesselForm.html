@@ -31,7 +31,7 @@
                             </button>
                         </div>
                         <div ng-hide="disableForm()">
-                            <button class="btn btn-sm btn-primary" type="submit" ng-click="updateVessel()" ng-hide="isCreateNewMode()">
+                            <button class="btn btn-primary" type="submit" ng-click="updateVessel()" ng-hide="isCreateNewMode()">
                                 {{'common.update' | i18n}}
                             </button>
                             <button type="submit" class="btn btn-primary" ng-click="createNewVessel()" ng-show="isCreateNewMode()" ng-disabled="waitingForCreateResponse">
@@ -64,8 +64,8 @@
                                     <table class="fullWidth" ng-hide="waitingForHistoryResponse">
                                         <thead>
                                             <tr>
-                                                <th sortable-table-header by="eventHistory.eventDate">{{'vessel.event_table_header_code' | i18n}}</th>
-                                                <th sortable-table-header by="eventHistory.eventCode">{{'vessel.event_table_header_date' | i18n}}</th>
+                                                <th>{{'vessel.event_table_header_code' | i18n}}</th>
+                                                <th>{{'vessel.event_table_header_date' | i18n}}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -99,8 +99,8 @@
                                             <tr ng-repeat="mt in mobileTerminals | orderBy :'[-active, -started]'" ng-class="{inactive : !mt.active}">
                                                 <td>{{mt.attributes.SERIAL_NUMBER}}</td>
                                                 <td>{{mt.type | transponderName}}</td>
-                                                <td>{{mt.attributes.STARTED_ON || "-"}}</td>
-                                                <td>{{mt.attributes.UNINSTALLED_ON || "-"}}</td>
+                                                <td>{{mt.attributes.STARTED_ON || "-" | confDateFormat }}</td>
+                                                <td>{{mt.attributes.UNINSTALLED_ON || "-" | confDateFormat }}</td>
                                             </tr>
                                         </tbody>
                                     </table>

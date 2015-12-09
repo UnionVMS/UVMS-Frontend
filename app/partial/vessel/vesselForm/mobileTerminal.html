@@ -91,7 +91,7 @@
             <div class="col-md-1 smallerpadding">
                 <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_member_no_label' | i18n}}</label>
             </div>
-            <div class="col-md-1 smallerpadding">
+            <div class="col-md-2 smallerpadding">
                 <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_land_station_label' | i18n}}</label>
             </div>
             <div class="col-md-2 smallerpadding">
@@ -120,9 +120,9 @@
 
                 <div class="col-md-1 smallerpadding">{{communicationChannel.ids.DNID || "-"}}</div>
                 <div class="col-md-1 smallerpadding">{{communicationChannel.ids.MEMBER_NUMBER || "-"}}</div>
-                <div class="col-md-1 smallerpadding">{{communicationChannel.ids.LES_DESCRIPTION || "-"}}</div>
-                <div class="col-md-2 smallerpadding">{{communicationChannel.ids.START_DATE || "-"}}</div>
-                <div class="col-md-2 smallerpadding">{{communicationChannel.ids.END_DATE || "-"}}</div>
+                <div class="col-md-2 smallerpadding">{{communicationChannel.ids.LES_DESCRIPTION || "-"}}</div>
+                <div class="col-md-2 smallerpadding">{{communicationChannel.ids.START_DATE || "-" | confDateFormat}}</div>
+                <div class="col-md-2 smallerpadding">{{communicationChannel.ids.END_DATE || "-" | confDateFormat}}</div>
             </div>
         </div>
     </div>
@@ -137,19 +137,19 @@
         <div class="col-md-2 form-group mobile-terminal-attribute">
             <label>
                 {{"mobileTerminal.form_inmarsatc_installed_on_label" | i18n}}
-                <p>{{mt.attributes.INSTALLED_ON || "-"}}</p>
+                <p>{{mt.attributes.INSTALLED_ON || "-" | confDateFormat}}</p>
             </label>
         </div>
         <div class="col-md-2 form-group mobile-terminal-attribute">
             <label>
                 {{"mobileTerminal.form_inmarsatc_started_on_label" | i18n}}
-                <p>{{mt.attributes.STARTED_ON || "-"}}</p>
+                <p>{{mt.attributes.STARTED_ON || "-" | confDateFormat}}</p>
             </label>
         </div>
         <div class="col-md-2 form-group mobile-terminal-attribute">
             <label>
                 {{"mobileTerminal.form_inmarsatc_uninstalled_on_label" | i18n}}
-                <p>{{mt.attributes.UNINSTALLED_ON || "-"}}</p>
+                <p>{{mt.attributes.UNINSTALLED_ON || "-" | confDateFormat}}</p>
             </label>
         </div>
     </div>
