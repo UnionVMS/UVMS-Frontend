@@ -4,13 +4,6 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	
 	var baseLayerCounter = 0;
 	
-	//FIXME - remove this later on
-	var fixTempUrl = function(url){
-	    var urlComp = url.split(':');
-	    var fixedUrl = 'http://' + location.hostname + ':' + urlComp[2];
-	    return fixedUrl;
-	};
-	
 	//Build tree node for OSM based layers
 	var buildOsmBasedNodes = function(src){
 	    if (src.isBaseLayer === true){

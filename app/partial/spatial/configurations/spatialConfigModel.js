@@ -58,7 +58,9 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         return config;
     };
     
-    SpatialConfig.prototype.forAdminConfigToJson = function(config){        
+    SpatialConfig.prototype.forAdminConfigToJson = function(srcConfig){
+        var config = {};
+        angular.copy(srcConfig, config);
         if (angular.isDefined(config.posFsStyle)){
             var style = {};
             for (var i = 0; i < config.posFsStyle.length; i++){
@@ -70,6 +72,37 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         }
       
         return angular.toJson(config);  
+    };
+    
+    //User level configs
+    SpatialConfig.prototype.forUserPrefFromJson = function(data){
+        var config = new SpatialConfig();
+        config.toolSettings = undefined;
+        config.systemSettings = undefined;
+        config.layerSettings = undefined;
+        
+        if (angular.isDefined(data.stylesSettings)){
+            config.stylesSettings = data.stylesSettings;
+        }
+        
+        if (angular.isDefined(data.mapSettings)){
+            config.mapSettings = data.mapSettings;
+        }
+        
+        if (angular.isDefined(data.visibilitySettings)){
+            config.stylesSettings = data.visibilitySettings;
+        }
+        
+        return config;
+    };
+    
+    SpatialConfig.prototype.forUserPrefToServer = function(){
+        var config = new SpatialConfig();
+        config.toolSettings = undefined;
+        config.systemSettings = undefined;
+        config.layerSettings = undefined;
+        
+        return config;
     };
     
     //Report level configs

@@ -176,6 +176,7 @@
 	"area_selection_modal_area_is_selected_warning": "This area is already added to you current selection",
 	"area_selection_modal_get_sys_layers_error": "There was an error while getting the list of available system areas. Please try again.",
 	"area_selection_modal_get_sys_area_details_error": "There was an error while getting the details for the selected area. Please try again.",
+	"area_selection_modal_get_sys_area_details_empty_result": "There is no selectable area on the specified location.", 
 	"area_selection_modal_get_selected_sys_area_details_error": "There was an error while getting the details of previously selected areas. Please try again.",
 	"area_selection_modal_get_selected_sys_area_search_error": "There was an error while searching for areas. Please try again.",
 
@@ -237,5 +238,9 @@
 	"segment_property_add_rule": "Add new property rule",
 	"segment_property_rm_rule": "Remove property rule",
 	"default_color": "Default color",
-	"segment_styles_save_btn": "Save styles"
+	"segment_styles_save_btn": "Save styles",
+	
+	"user_preferences_error_saving": "There was an error while saving your preferences. Please try again.",
+	"user_preferences_success_saving": "Your preferences were successfuly saved.",
+	"user_preferences_error_getting_configs": "There was an error while getting your preferences. Please try again."
 }

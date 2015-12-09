@@ -17,6 +17,23 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
                 }
             });
         },
+        getUserConfigs: function(){
+            return $resource('/spatial/rest/config/user', {}, {
+                'get': {
+                    method: 'GET'
+                }
+            });
+        },
+        saveUserConfigs: function(){
+            return $resource('/spatial/rest/config/user', {}, {
+                'save': {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            });
+        },
         getCountriesList: function(){
             return $resource('/spatial/rest/countries', {}, {
                 'get': {
@@ -44,10 +61,31 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
 	       spatialConfigRestFactory.saveAdminConfigs().save(configs, function(response){
 	           deferred.resolve(response);
 	       }, function(error){
+	           console.error('Error saving admin configurations');
 	           deferred.reject(error);
 	       });
 	       return deferred.promise;
 	    },
+	    getUserConfigs: function(){
+            var deferred = $q.defer();
+            spatialConfigRestFactory.getUserConfigs().get(function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.error('Error getting user configurations');
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+        saveUserConfigs: function(configs){
+           var deferred = $q.defer();
+           spatialConfigRestFactory.saveUserConfigs().save(configs, function(response){
+               deferred.resolve(response);
+           }, function(error){
+               console.error('Error saving user configurations');
+               deferred.reject(error);
+           });
+           return deferred.promise;
+        },
 	    getCountriesList: function(){
             var deferred = $q.defer();
             spatialConfigRestFactory.getCountriesList().get(function(response){
