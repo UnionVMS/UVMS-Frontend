@@ -1,8 +1,8 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $location,$modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, positionReport, ManualPosition, $timeout, movementRestService, coordinateFormatService, dateTimeService, vesselValidationService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly, manualPositionSource, globalSettingsService) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $location,$modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, positionReport, ManualPosition, $timeout, movementRestService, coordinateFormatService, dateTimeService, vesselValidationService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly, openedFromMovementPage, globalSettingsService) {
 
     $scope.errorMessage ="";
     $scope.readOnly = readOnly;
-    $scope.manualPositionSource = manualPositionSource;
+    $scope.openedFromMovementPage = openedFromMovementPage;
     $scope.positionReport = positionReport;
 
     //Set status
@@ -154,7 +154,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
                 $scope.setSuccessText(locale.getString("movement.manual_position_save_success"), $scope.closeModal);
 
-                if($scope.manualPositionSource){
+                if($scope.openedFromMovementPage){
                      $location.path('movement/manual');
                 }
 
@@ -182,6 +182,13 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
                 $scope.waitingForResponse = false;
                 $scope.sendSuccess = false;
                 $scope.setErrorText(locale.getString("movement.manual_position_send_error"));
+
+                //Go to manual movement page if not already there
+                if($scope.openedFromMovementPage){
+                    $timeout(function(){
+                        $location.path('movement/manual');
+                    }, 2000);
+                }
             });
         }
         else if ($scope.manualPositionReportForm.$valid) {
@@ -370,8 +377,8 @@ angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($mod
                     readOnly: function() {
                         return !!options.readOnly;
                     },
-                    manualPositionSource: function(){
-                        return options.manualPositionSource || false;
+                    openedFromMovementPage: function(){
+                        return options.openedFromMovementPage || false;
                     }
                 }
 			});

@@ -119,7 +119,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
 
     $scope.newPosition = function() {
         var modalOptions = {
-            manualPositionSource : true
+            openedFromMovementPage : true
         };
         var reportObj = new ManualPosition();
         modalInstance = ManualPositionReportModal.show(reportObj, modalOptions);
