@@ -1,4 +1,4 @@
-<div>
+<div class="auditLogContainer">
 	<div static-include="partial/admin/adminPageHeader/adminPageHeader.html"></div>
 	<!-- Nav tabs -->
     <div class="containerWrapper pollingTabs">
@@ -12,9 +12,15 @@
     </div>
 	<div class="container containerWithTopBottomPadding nopaddingtop">
 		<div class="card nomargintop">
-			<div class="auditsearchform">
-				<advanced-search searchfunc="searchAuditLogs" modeltype="'AUDIT'" advancedsearchvisible="true"></advanced-search>
-			</div>
+            <div class="row card-header auditsearchform">
+                <div class="col-md-11">
+                    <advanced-search searchfunc="searchAuditLogs" modeltype="'AUDIT'" advancedsearchvisible="true"></advanced-search>
+                </div>
+                <div class="col-md-1 pull-right textAlignRight printAndExport">
+                    <i class="fa fa-lg fa-file" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
+                </div>
+            </div>
+
             <div search-results-table search="currentSearchResults">
     			<table class="searchResults colorOdd">
     				<thead>
@@ -47,7 +53,10 @@
     						<td>{{audit.operation}}</td>
     						<td>{{audit.objectType}}</td>
     						<td>{{audit.date | confDateFormat}}</td>
-    						<td><a ng-href="#{{affectedObjectPath(audit)}}" ng-show="affectedObjectPath(audit)" title="{{'common.view_details' | i18n}}">{{affectedObjectLinkText(audit)}}</a></td>
+    						<td>
+                                <a ng-href="#{{affectedObjectPath(audit)}}" ng-show="affectedObjectPath(audit)" title="{{'common.view_details' | i18n}}">{{affectedObjectLinkText(audit)}}</a>
+                                <span ng-show="!affectedObjectPath(audit) && affectedObjectText(audit)">{{affectedObjectText(audit)}}</span>
+                            </td>
                             <td class="textAlignCenter"><a ng-show="itemHasComment(audit)" href ng-click="showComment(audit)" title="{{'common.view_comment' | i18n}}"><i class="fa fa-commenting-o fa-lg"></i></a></td>
     					</tr>
     				</tbody>

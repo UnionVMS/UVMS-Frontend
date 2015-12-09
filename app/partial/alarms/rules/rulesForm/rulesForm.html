@@ -10,7 +10,7 @@
                 <div class="actions">
                     <div>
                         <button ng-show="isCreateNewMode()" type="submit" class="btn btn-primary" ng-click="createNewRule()" ng-disabled="waitingForCreateResponse">{{'common.create' | i18n}}</button>
-                        <button ng-hide="isCreateNewMode()" type="submit" class="btn btn-primary" ng-click="updateRule()">{{'common.update' | i18n}}</button>
+                        <button ng-hide="isCreateNewMode() || isRuleArchived()" type="submit" class="btn btn-primary" ng-click="updateRule()">{{'common.update' | i18n}}</button>
                     </div>
                     <div class="closeIcon" ng-click="toggleAddNewRule()">
                         <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
@@ -217,7 +217,7 @@
                 </div>
             </fieldset>
 
-            <fieldset>
+            <fieldset ng-disabled="isRuleArchived()">
                 <div class="row">
 
                     <div class="col-md-12 thenHeader">
@@ -278,14 +278,14 @@
                                         </div>
                                     </td>
                                     <td class="remove">
-                                        <i class="fa fa-lg fa-times" ng-click="removeRuleAction(item)" ng-show="isAllowedToEditAction(item)" title="{{'alarms.rules_form_definition_remove' | i18n}}"></i>
+                                        <i class="fa fa-lg fa-times" ng-click="removeRuleAction(item)" ng-show="isAllowedToEditAction(item) && !isRuleArchived()" title="{{'alarms.rules_form_definition_remove' | i18n}}"></i>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <div class="col-md-12">
-                        <div class="addMoreLink" ng-click="addActionRow()" ng-show="getFirstActionThatIsEnabled()">{{'alarms.rules_form_definition_add' | i18n}}</div>
+                        <div class="addMoreLink" ng-click="addActionRow()" ng-show="getFirstActionThatIsEnabled() && !isRuleArchived()">{{'alarms.rules_form_definition_add' | i18n}}</div>
                     </div>
                 </div>
 

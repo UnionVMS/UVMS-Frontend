@@ -83,9 +83,13 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         rulesOptionsService.setupActionDropdowns();
     };
 
-
     //Should form be disabled?
     $scope.disableForm = function(){
+        //Rule is archived?
+        if($scope.isRuleArchived()){
+            return true;
+        }
+
         //Create new rule
         if($scope.isCreateNewMode()){
             if($scope.allowedToManageRules()){
@@ -102,6 +106,11 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
             }
         }
         return true;
+    };
+
+    //Is the rule archived?
+    $scope.isRuleArchived = function(){
+        return angular.isDefined($scope.currentRule) && $scope.currentRule.archived;
     };
 
     //Should the Type dropdown be disabled?

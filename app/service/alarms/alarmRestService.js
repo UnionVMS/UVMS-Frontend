@@ -200,7 +200,12 @@ angular.module('unionvmsWeb')
 
             var ticket = Ticket.fromDTO(response.data);
 
-            vesselRestService.getVessel(response.vesselGuid).then(function(vessel) {
+            if(angular.isUndefined(ticket) || angular.isUndefined(ticket.vesselGuid)){
+                return deferred.resolve(ticket);
+            }
+
+            //Get vessel
+            vesselRestService.getVessel(ticket.vesselGuid).then(function(vessel) {
                 ticket.vessel = vessel;
                 deferred.resolve(ticket);
             }, function(error) {

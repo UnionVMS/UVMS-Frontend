@@ -17,14 +17,16 @@
             <input type="text" ng-model="advancedSearchObject.NAME" placeholder="{{'alarms.alarms_search_affected_object_placeholder' | i18n}}"/>
         </div>
 		<div class="col-md-2 nopaddingright nopaddingleft">
-			<div class="col-md-6 smallerpadding">
-				<button type="submit" class="btn btn-primary btn-sm vmsbtn" ng-click="performAdvancedSearch()">{{'common.search' | i18n}}</button>
-			</div>
-			<div class="col-md-6 smallerpadding">
-				<button type="button" class="btn btn-default btn-sm fullWidth vmsbtn" ng-click="resetSearch(true)">
-					{{'common.reset' | i18n}}
-		        </button>
-			</div>
+            <div class="row nomargin">
+    			<div class="col-md-6 smallerpadding">
+    				<button type="submit" class="btn btn-primary btn-sm vmsbtn" ng-click="performAdvancedSearch()">{{'common.search' | i18n}}</button>
+    			</div>
+    			<div class="col-md-6 smallerpadding">
+    				<button type="button" class="btn btn-default btn-sm fullWidth vmsbtn" ng-click="resetSearch(true)">
+    					{{'common.reset' | i18n}}
+    		        </button>
+    			</div>
+            </div>
 		</div>
 	</div>
 </div>

@@ -43,6 +43,23 @@ angular.module('unionvmsWeb')
         return getConfigFromResource(ruleRestFactory.getConfig());
     };
 
+    var getRuleByGuid = function(guid){
+        var deferred = $q.defer();
+        ruleRestFactory.rule().get({id: guid}, function(response){
+                if(parseInt(response.code) !== 200){
+                    deferred.reject("Invalid response status");
+                    return;
+                }
+
+                deferred.resolve(Rule.fromDTO(response.data));
+            },
+            function(error) {
+                $log.error("Error getting Rule with guid: " +guid, error);
+                deferred.reject(error);
+            }
+        );
+        return deferred.promise;
+    };
 
     var getAllRules = function(){
         var deferred = $q.defer();
@@ -169,6 +186,7 @@ angular.module('unionvmsWeb')
 
     return {
         getConfig: getConfig,
+        getRuleByGuid: getRuleByGuid,
         getAllRules: getAllRules,
         getRulesByQuery: getRulesByQuery,
         updateRule: updateRule,

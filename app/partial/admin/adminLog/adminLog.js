@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, locale, Audit, auditLogRestService, searchService, auditOptionsService, SearchResults, GetListRequest, infoModal, dateTimeService, pollingRestService, mobileTerminalRestService) {
+angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $filter, locale, Audit, auditLogRestService, searchService, auditOptionsService, SearchResults, GetListRequest, infoModal, dateTimeService, pollingRestService, mobileTerminalRestService, csvService) {
 
     //Names used in the backend
     var TYPES = auditOptionsService.getTypes();
@@ -92,7 +92,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
 
     //Does the audit log item has a comment?
     $scope.itemHasComment = function(audit){
-        return audit.objectType === TYPES.MOBILE_TERMINAL || audit.objectType ===  TYPES.POLL;
+        return audit.objectType === TYPES.ASSETS_AND_TERMINALS.MOBILE_TERMINAL || audit.objectType ===  TYPES.ASSETS_AND_TERMINALS.POLL;
     };
 
     //Show comment in info modal
@@ -104,7 +104,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
         var getListRequest = new GetListRequest(1, 1,true, []);
 
         //POLL
-        if(audit.objectType === TYPES.POLL){
+        if(audit.objectType === TYPES.ASSETS_AND_TERMINALS.POLL){
             getListRequest.addSearchCriteria('POLL_ID', id);
             pollingRestService.getPollList(getListRequest).then(
                 function(searchResultsListPage){
@@ -120,7 +120,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
         }
 
         //Mobile terminal
-        if(audit.objectType === TYPES.MOBILE_TERMINAL){
+        if(audit.objectType === TYPES.ASSETS_AND_TERMINALS.MOBILE_TERMINAL){
             mobileTerminalRestService.getHistoryForMobileTerminalByGUID(id).then(
                 function(historyList){
                     if(historyList.length > 0){
@@ -161,12 +161,26 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
         modalInstance = infoModal.open(options);
     };
 
+    //Get simple text to show as affected object
+    $scope.affectedObjectText = function(audit) {
+        if(audit.affectedObject){
+            switch(audit.objectType){
+                case TYPES.ALARMS.CUSTOM_RULE_ACTION_TRIGGERED:
+                case TYPES.OTHER.SETTING:
+                    return audit.affectedObject;
+                default:
+                    return;
+            }
+        }
+    };
+
     //Get the link text to the affected object
+    //Will only be shown if affectedObjectPath is set for the item
     $scope.affectedObjectLinkText = function(audit) {
         if(audit.affectedObject){
             switch(audit.objectType){
-                case TYPES.USER:
-                case TYPES.USER_PASSWORD:
+                case TYPES.ACCESS_CONTROL.USER:
+                case TYPES.ACCESS_CONTROL.USER_PASSWORD:
                     return audit.affectedObject;
                 default:
                     return locale.getString('audit.show_object');
@@ -178,18 +192,22 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
     $scope.affectedObjectPath = function(audit) {
         if(audit.affectedObject){
             switch(audit.objectType){
-                case TYPES.MOBILE_TERMINAL:
+                case TYPES.ASSETS_AND_TERMINALS.MOBILE_TERMINAL:
                     return "/communication/" + audit.affectedObject;
-                case TYPES.ASSET:
+                case TYPES.ASSETS_AND_TERMINALS.ASSET:
                     return "/assets/" + audit.affectedObject;
-                case TYPES.POLL:
+                case TYPES.ASSETS_AND_TERMINALS.POLL:
                     return "/polling/logs/" + audit.affectedObject;
-                case TYPES.CUSTOM_RULE:
+                case TYPES.ALARMS.ALARM:
+                    return "/alarms/holdingtable/" + audit.affectedObject;
+                case TYPES.ALARMS.TICKET:
+                    return "/alarms/notifications/" + audit.affectedObject;
+                case TYPES.ALARMS.CUSTOM_RULE:
                     return "/alarms/rules/" + audit.affectedObject;
-                case TYPES.AUTOMATIC_POSITION_REPORT:
+                case TYPES.POSITION_REPORTS.AUTOMATIC_POSITION_REPORT:
                     return "/movement/" + audit.affectedObject;
-                case TYPES.USER:
-                case TYPES.USER_PASSWORD:
+                case TYPES.ACCESS_CONTROL.USER:
+                case TYPES.ACCESS_CONTROL.USER_PASSWORD:
                     return "/usm/users/" + audit.affectedObject;
                 default:
                     return;
@@ -197,6 +215,49 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
         }
     };
 
+    //Export data as CSV file
+    $scope.exportLogsAsCSVFile = function(){
+        var filename = 'auditLogs.csv';
+
+        //Set the header columns
+        var header = [
+            locale.getString('audit.column_username'),
+            locale.getString('audit.column_operation'),
+            locale.getString('audit.column_object_type'),
+            locale.getString('audit.column_date'),
+            locale.getString('audit.column_object_affected'),
+        ];
+
+        //Set the data columns
+        var getData = function() {
+            var exportItems;
+            //Export only selected items
+            var selectedItems = $scope.getSelectedItems();
+            if(selectedItems.length > 0){
+                exportItems = selectedItems;
+            }
+            //Export all logs in the table
+            else{
+                exportItems = $scope.currentSearchResults.items;
+            }
+            return exportItems.reduce(
+                function(csvObject, item){
+                    var csvRow = [
+                        item.username,
+                        item.operation,
+                        item.objectType,
+                        $filter('confDateFormat')(item.date),
+                        item.affectedObject
+                    ];
+                    csvObject.push(csvRow);
+                    return csvObject;
+                },[]
+            );
+        };
+
+        //Create and download the file
+        csvService.downloadCSVFile(getData(), header, filename);
+    };
 
     //Check all/none
     $scope.toggleCheckAll = function() {
@@ -219,6 +280,17 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, lo
         }
 
         return true;
+    };
+
+    //Get the selected items
+    $scope.getSelectedItems = function(){
+        var selectedItems = [];
+        for (var i = 0; i < $scope.currentSearchResults.items.length; i++) {
+            if ($scope.currentSearchResults.items[i].checked) {
+                selectedItems.push($scope.currentSearchResults.items[i]);
+            }
+        }
+        return selectedItems;
     };
 
     $scope.$on("$destroy", function() {

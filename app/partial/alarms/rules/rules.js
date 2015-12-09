@@ -29,7 +29,15 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
     $scope.currentSearchResults = new SearchResults('name', false, locale.getString('alarms.rules_zero_results_error'));
 
     var init = function(){
-        $scope.ruleGuid = $stateParams.id;
+        var ruleGuid = $stateParams.id;
+        //Check if ruleId is set, the open that rule if found
+        if(angular.isDefined(ruleGuid)){
+            ruleRestService.getRuleByGuid(ruleGuid).then(function(rule){
+                $scope.toggleRuleDetails(rule);
+            }, function(err){
+                alertService.showErrorMessage(locale.getString('alarms.rules_by_id_search_zero_results_error'));
+            });
+        }
 
         //Load all rules
         $scope.searchRules();
@@ -75,23 +83,6 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
     //Update the search results
     var updateSearchResults = function(searchResultsListPage){
         $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
-
-        //Check if ruleId is set, the open that rule if found
-        if(angular.isDefined($scope.ruleGuid)){
-            //Look for the rule with the right ruleGuid
-            var theRule;
-            $.each(searchResultsListPage.items, function(i, rule){
-                if(rule.guid === $scope.ruleGuid){
-                    theRule = rule;
-                    $scope.toggleRuleDetails(rule);
-                    return false;
-                }
-            });
-
-            if(!theRule){
-                alertService.showErrorMessage(locale.getString('alarms.rules_by_id_search_zero_results_error'));
-            }
-        }
     };
 
     //Error during search
@@ -389,8 +380,12 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
 
     //Callback function for the "edit selection" dropdown
     $scope.editSelectionCallback = function(selectedItem){
-        if(selectedItem.code === 'EXPORT'){
-            $scope.exportRulesAsCSVFile(true);
+        if($scope.selectedRules.length){
+            if(selectedItem.code === 'EXPORT'){
+                $scope.exportRulesAsCSVFile(true);
+            }
+        }else{
+            alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
         }
         $scope.editSelection = "";
     };

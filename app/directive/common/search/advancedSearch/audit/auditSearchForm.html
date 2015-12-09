@@ -1,6 +1,6 @@
 <div class="auditSearchForm" ng-controller="AuditsearchformCtrl">
 	<div class="row">
-		<div class="col-md-10">
+		<div class="col-md-10 nopaddingleft">
 			<div class="col-md-2">
 				<input type="text" placeholder="{{'audit.search_name_placeholder' | i18n}}" class="form-control" tabindex="1" ng-model="advancedSearchObject.USER">
 			</div>
@@ -14,20 +14,22 @@
 		    	<datepicker-input model="advancedSearchObject.FROM_DATE" name="fromDate" time="true" max-date="advancedSearchObject.TO_DATE" placeholder="{{'audit.search_dateFrom_placeholder' | i18n}}" ng-required="true"></datepicker-input>
 		    	<input-validation-message types="required" input="advancedSearchForm.fromDate" ng-show="submitAttempted"></input-validation-message>
 			</div>
-		    <div class="col-md-3" ng-class="{'has-error': submitAttempted && advancedSearchForm.toDate.$invalid}">
+		    <div class="col-md-3 nopaddingright" ng-class="{'has-error': submitAttempted && advancedSearchForm.toDate.$invalid}">
 		    	<datepicker-input model="advancedSearchObject.TO_DATE" name="toDate" time="true" min-date="advancedSearchObject.FROM_DATE" placeholder="{{'audit.search_dateTo_placeholder' | i18n}}" ng-required="true"></datepicker-input>
 		    	<input-validation-message types="required" input="advancedSearchForm.toDate" ng-show="submitAttempted"></input-validation-message>
 			</div>
 		</div>
-		<div class="col-md-2">
-			<div class="col-md-6 nopaddingleft">
-				<button type="submit" class="btn btn-primary btn-sm fullWidth vmsbtn" ng-click="performAdvancedSearch()">{{'audit.search_search_button' | i18n}}</button>
-			</div>
-			<div class="col-md-6 nopaddingleft">
-				<button type="button" class="btn btn-default btn-sm fullWidth vmsbtn" ng-click="resetSearch()">
-					{{'common.reset' | i18n}}
-	            </button>
-			</div>
+		<div class="col-md-2 nopaddingright nopaddingleft">
+            <div class="row nomargin">
+    			<div class="col-md-6 smallerpadding">
+    				<button type="submit" class="btn btn-primary btn-sm fullWidth vmsbtn" ng-click="performAdvancedSearch()">{{'audit.search_search_button' | i18n}}</button>
+    			</div>
+    			<div class="col-md-6 smallerpadding">
+    				<button type="button" class="btn btn-default btn-sm fullWidth vmsbtn" ng-click="resetSearch()">
+    					{{'common.reset' | i18n}}
+    	            </button>
+    			</div>
+            </div>
 		</div>
 	<div>
 </div>

@@ -1,27 +1,6 @@
 //Service for storing the current options (dropdown values) for the audit search
 angular.module('unionvmsWeb').factory("auditOptionsService", function(searchService, dateTimeService) {
 
-    //Names used in the backend
-    var TYPES = {
-        ASSET : 'Asset',
-        ASSET_GROUP : 'Asset Group',
-        MOBILE_TERMINAL : 'Mobile Terminal',
-        POLL : 'Poll',
-        POLLING_PROGRAM : 'Polling program',
-        AUTOMATIC_POSITION_REPORT : 'Automatic position report',
-        MANUAL_POSITION_REPORT : 'Manual position report',
-        ALARM : 'Alarm',
-        CUSTOM_RULE : 'Custom rule',
-        AREA : 'Area', //Mock value,
-        USER : 'User',
-        USER_CONTEXT : 'Context',
-        USER_PASSWORD : 'Password',
-        USER_ROLE : 'Role',
-        USER_ORGANISATION : 'Organisation',
-        USER_POLICY : 'Policy',
-        USER_APPLICATION : 'Application',
-    };
-
     var currentOptions = {
         types: [],
         operations : []
@@ -35,29 +14,53 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
         };
     };
 
-    //All available dropdown options for TYPE
-    var dropdownItems = {
-        asset: createDropdownItem(TYPES.ASSET),
-        assetGroup: createDropdownItem(TYPES.ASSET_GROUP),
-        automaticPositionReport: createDropdownItem(TYPES.AUTOMATIC_POSITION_REPORT),
-        manualPositionReport: createDropdownItem(TYPES.MANUAL_POSITION_REPORT),
-        mobileTerminal: createDropdownItem(TYPES.MOBILE_TERMINAL),
-        poll: createDropdownItem(TYPES.POLL),
-        pollingProgram: createDropdownItem(TYPES.POLLING_PROGRAM),
-        alarm: createDropdownItem(TYPES.ALARM),
-        customRule: createDropdownItem(TYPES.CUSTOM_RULE),
-        area: createDropdownItem(TYPES.AREA),
-        user: createDropdownItem(TYPES.USER),
-        userContext: createDropdownItem(TYPES.USER_CONTEXT),
-        userPassword: createDropdownItem(TYPES.USER_PASSWORD),
-        userRole: createDropdownItem(TYPES.USER_ROLE),
-        userOrganisation: createDropdownItem(TYPES.USER_ORGANISATION),
-        userPolicy: createDropdownItem(TYPES.USER_POLICY),
-        userApplication: createDropdownItem(TYPES.USER_APPLICATION),
+    //Type dropdowns with the Names used in the backend
+    var TYPES = {
+        ASSETS_AND_TERMINALS : {
+            ASSET : 'Asset',
+            ASSET_GROUP : 'Asset Group',
+            MOBILE_TERMINAL : 'Mobile Terminal',
+            POLL : 'Poll',
+            POLLING_PROGRAM : 'Polling program',
+        },
+        POSITION_REPORTS : {
+            AUTOMATIC_POSITION_REPORT : 'Automatic position report',
+            MANUAL_POSITION_REPORT : 'Manual position report',
+        },
+        GIS : {
+            AREA : 'Area', //Mock value
+        },
+        ALARMS : {
+            ALARM : 'Alarm',
+            TICKET : 'Ticket',
+            CUSTOM_RULE : 'Custom Rule',
+            CUSTOM_RULE_ACTION_TRIGGERED : 'Custom Rule Action Triggered',
+        },
+        ACCESS_CONTROL : {
+            USER : 'User',
+            USER_CONTEXT : 'Context',
+            USER_PASSWORD : 'Password',
+            USER_ROLE : 'Role',
+            USER_ORGANISATION : 'Organisation',
+            USER_POLICY : 'Policy',
+            USER_APPLICATION : 'Application',
+        },
+        OTHER : {
+            SETTING : 'Setting',
+        },
     };
 
+    //All available dropdown options for TYPE
+    var dropdownTypes = {};
+    $.each(TYPES, function(categoryKey, categoryTypes){
+        dropdownTypes[categoryKey] = [];
+        $.each(categoryTypes, function(key, value){
+            dropdownTypes[categoryKey].push(createDropdownItem(value));
+        });
+    });
+
     //All available dropdown options for OPERATION
-    var auditLogOperations = {
+    var dropdownOperations = {
         archive: createDropdownItem("Archive"),
         create: createDropdownItem("Create"),
         update: createDropdownItem("Update"),
@@ -65,6 +68,8 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
         link: createDropdownItem("Linked"),
         unlink: createDropdownItem("Unlinked"),
         delete: createDropdownItem("Delete"), //Used instead of Remove in the user module
+        ruleActionSendToEndpoint: createDropdownItem("Send To Endpoint"),
+        ruleActionSendEmail: createDropdownItem("Send Email"),
     };
 
     return{
@@ -91,31 +96,32 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
                 newOperations = [];
             switch(tab){
                 case 'ASSETS_AND_TERMINALS':
-                    newTypes = [dropdownItems.asset, dropdownItems.mobileTerminal, dropdownItems.poll, dropdownItems.pollingProgram, dropdownItems.assetGroup];
-                    newOperations = [auditLogOperations.create, auditLogOperations.update, auditLogOperations.remove, auditLogOperations.link, auditLogOperations.unlink];
+                    newTypes = dropdownTypes.ASSETS_AND_TERMINALS;
+                    newOperations = [dropdownOperations.create, dropdownOperations.update, dropdownOperations.remove, dropdownOperations.link, dropdownOperations.unlink];
                     break;
                 case 'POSITION_REPORTS':
-                    newTypes = [dropdownItems.automaticPositionReport, dropdownItems.manualPositionReport];
-                    newOperations = [auditLogOperations.create];
+                    newTypes = dropdownTypes.POSITION_REPORTS;
+                    newOperations = [dropdownOperations.create];
                     break;
                 case 'GIS':
-                    newTypes = [dropdownItems.area];
-                    newOperations = [auditLogOperations.create, auditLogOperations.update, auditLogOperations.remove];
+                    newTypes = dropdownTypes.GIS;
+                    newOperations = [dropdownOperations.create, dropdownOperations.update, dropdownOperations.remove];
                     break;
                 case 'ALARMS':
-                    newTypes = [dropdownItems.alarm, dropdownItems.customRule];
-                    newOperations = [auditLogOperations.create];
+                    newTypes = dropdownTypes.ALARMS;
+                    newOperations = [dropdownOperations.create, dropdownOperations.update, dropdownOperations.delete, dropdownOperations.ruleActionSendToEndpoint, dropdownOperations.ruleActionSendEmail];
                     break;
                 case 'ACCESS_CONTROL':
-                    newTypes = [dropdownItems.user, dropdownItems.userContext, dropdownItems.userPassword, dropdownItems.userRole, dropdownItems.userOrganisation, dropdownItems.userPolicy, dropdownItems.userApplication];
-                    newOperations = [auditLogOperations.create, auditLogOperations.update, auditLogOperations.delete];
+                    newTypes = dropdownTypes.ACCESS_CONTROL;
+                    newOperations = [dropdownOperations.create, dropdownOperations.update, dropdownOperations.delete];
                     break;
                 case 'ALL':
-                    newTypes = Object.keys(dropdownItems).map(function(key) {
-                        return dropdownItems[key];
+                    newTypes = [];
+                    $.each(dropdownTypes, function(key, value){
+                        newTypes = newTypes.concat(value);
                     });
-                    newOperations = Object.keys(auditLogOperations).map(function(key) {
-                        return auditLogOperations[key];
+                    newOperations = Object.keys(dropdownOperations).map(function(key) {
+                        return dropdownOperations[key];
                     });
                     break;
                 default:

@@ -381,8 +381,42 @@ unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $inject
                 access: 'viewAlarmsHoldingTable'
             },
         })
+        .state('app.holdingTable-id', {
+            url: '/alarms/holdingtable/:id',
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/alarms/holdingTable/holdingTable.html',
+                    controller: 'HoldingtableCtrl'
+                }
+            },
+            resolve: {
+                 config : function(initService){
+                    return initService.loadConfigFor(["ALARM_STATUSES"]);
+                }
+            },
+            data: {
+                access: 'viewAlarmsHoldingTable'
+            },
+        })
         .state('app.openTickets', {
             url: '/alarms/notifications',
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/alarms/openTickets/openTickets.html',
+                    controller: 'OpenticketsCtrl'
+                }
+            },
+            resolve: {
+                 config : function(initService){
+                    return initService.loadConfigFor(["TICKET_STATUSES"]);
+                }
+            },
+            data: {
+                access: 'viewAlarmsOpenTickets'
+            },
+        })
+        .state('app.openTickets-id', {
+            url: '/alarms/notifications/:id',
             views: {
                 modulepage: {
                     templateUrl: 'partial/alarms/openTickets/openTickets.html',
@@ -545,13 +579,6 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
     $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error){
         $timeout.cancel(showPageNavigationSpinnerTimeout);
         $rootScope.loadingPage = false;
-
-        var message = locale.getString('common.loading_page_error'),
-            errorMessage = locale.getString('common.loading_page_error_message');
-
-        if(angular.isDefined(error)){
-            message += '. ' + errorMessage +': ' +error;
-        }
 
         errorService.setErrorMessage(error);
         event.preventDefault();

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, AlarmReportModal, movementRestService, $resource, longPolling){
+angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, $stateParams, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, AlarmReportModal, movementRestService, $resource, longPolling){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -29,6 +29,16 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
     };
 
     var init = function(){
+        var ticketGuid = $stateParams.id;
+        //Check if ticketGuid is set, the open that ticket if found
+        if(angular.isDefined(ticketGuid)){
+            alarmRestService.getTicket(ticketGuid).then(function(ticket){
+                $scope.showOnMap(ticket);
+            }, function(err){
+                alertService.showErrorMessage(locale.getString('alarms.ticket_by_id_search_zero_results_error'));
+            });
+        }
+
         longPollingId = longPolling.poll("/rules/activity/ticket", function(response) {
             if (response.ids.length > 0) {
                 updateSearchWithGuid(response.ids[0]);
@@ -245,8 +255,12 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
 
     //Callback function for the "edit selection" dropdown
     $scope.editSelectionCallback = function(selectedItem){
-        if(selectedItem.code === 'EXPORT'){
-            $scope.exportItemsAsCSVFile(true);
+        if($scope.selectedItems.length){
+            if(selectedItem.code === 'EXPORT'){
+                $scope.exportItemsAsCSVFile(true);
+            }
+        }else{
+            alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
         }
         $scope.editSelection = "";
     };

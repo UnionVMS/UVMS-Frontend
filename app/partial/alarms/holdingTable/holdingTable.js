@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, $filter, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage, AlarmReportModal, userService, alarmRestService, searchService, $resource, longPolling){
+angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, $filter, $stateParams, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage, AlarmReportModal, userService, alarmRestService, searchService, $resource, longPolling){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -36,6 +36,16 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
     };
 
     var init = function(){
+        var alarmGuid = $stateParams.id;
+        //Check if alarmGuid is set, the open that ticket if found
+        if(angular.isDefined(alarmGuid)){
+            alarmRestService.getAlarmReport(alarmGuid).then(function(alarm){
+                $scope.viewItemDetails(alarm);
+            }, function(err){
+                alertService.showErrorMessage(locale.getString('alarms.alarm_by_id_search_zero_results_error'));
+            });
+        }
+
         longPollingId = longPolling.poll("/rules/activity/alarm", function(response) {
             if (response.ids.length > 0) {
                 updateSearchWithGuid(response.ids[0]);
@@ -236,22 +246,26 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
 
     //Callback function for the "edit selection" dropdown
     $scope.editSelectionCallback = function(selectedItem){
-        if(selectedItem.code === 'EXPORT'){
-            $scope.exportItemsAsCSVFile(true);
-        }
-        else if(selectedItem.code === 'REPROCESS_REPORTS'){
-            var alarmGuids = $scope.selectedItems.reduce(function(guids, alarm){
-                    guids.push(alarm.guid);
-                    return guids;
-                }, []);
-            if(alarmGuids.length > 0){
-                alertService.showInfoMessage(locale.getString('alarms.holding_table_reprocess_reports_waiting_for_response_message'));
-                alarmRestService.reprocessAlarms(alarmGuids).then(function(){
-                    alertService.showSuccessMessageWithTimeout(locale.getString('alarms.holding_table_reprocess_reports_success_message'));
-                }, function(err){
-                    alertService.showErrorMessage(locale.getString('alarms.holding_table_reprocess_reports_error_message'));
-                });
+        if($scope.selectedItems.length){
+            if(selectedItem.code === 'EXPORT'){
+                $scope.exportItemsAsCSVFile(true);
             }
+            else if(selectedItem.code === 'REPROCESS_REPORTS'){
+                var alarmGuids = $scope.selectedItems.reduce(function(guids, alarm){
+                        guids.push(alarm.guid);
+                        return guids;
+                    }, []);
+                if(alarmGuids.length > 0){
+                    alertService.showInfoMessage(locale.getString('alarms.holding_table_reprocess_reports_waiting_for_response_message'));
+                    alarmRestService.reprocessAlarms(alarmGuids).then(function(){
+                        alertService.showSuccessMessageWithTimeout(locale.getString('alarms.holding_table_reprocess_reports_success_message'));
+                    }, function(err){
+                        alertService.showErrorMessage(locale.getString('alarms.holding_table_reprocess_reports_error_message'));
+                    });
+                }
+            }
+        }else{
+            alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
         }
         $scope.editSelection = "";
     };
