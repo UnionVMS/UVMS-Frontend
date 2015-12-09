@@ -45,9 +45,11 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    newConfig = $scope.checkStylesSttings(newConfig);
 	    newConfig = $scope.checkVisibilitySttings(newConfig);
 	    
-	    console.log(angular.toJson(newConfig));
+	    newConfig = angular.toJson(newConfig);
 	    
-	    //spatialConfigRestService.saveUserConfigs(angular.toJson(newConfig)).save().then(saveSuccess, saveFailure);
+	    if (!angular.equals({}, newConfig)){
+	        spatialConfigRestService.saveUserConfigs(newConfig).then(saveSuccess, saveFailure);  
+	    }
 	};
 	
 	$scope.checkMapSettings = function(config){
@@ -61,19 +63,70 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	};
 	
 	$scope.checkStylesSttings = function(config){
-	    //FIXME
-	    config.stylesSettings = undefined;
+	    var include = false;
+	    //Rebuild colors from fs
+	    config.stylesSettings = $scope.configModel.stylesSettings;
+	    if (angular.isDefined($scope.configModel.posFsStyle)){
+	        var posStyle = {};
+	        for (var i = 0; i < $scope.configModel.posFsStyle.length; i++){
+	            posStyle[$scope.configModel.posFsStyle[i].code] = $scope.configModel.posFsStyle[i].color; 
+	        }
+	        
+	        if (!_.isEqual($scope.configCopy.stylesSettings.positions.style, posStyle)){
+	            config.stylesSettings.positions.style = posStyle;
+	            include = true;
+	        }
+	    }
+	    
+	    if (!_.isEqual($scope.configCopy.stylesSettings.segments, $scope.configModel.stylesSettings.segments)){
+	        include = true;
+	    }
+	    
+	    if (include === false){
+	        config.stylesSettings = undefined;
+	    }
+	    
 	    return config;
 	};
 	
 	$scope.checkVisibilitySttings = function(config){
-	    if (!_.isEqual($scope.configModel.visibilitySettings, $scope.configCopy.visibilitySettings)){
-            config.visibilitySettings = $scope.configModel.visibilitySettings;
-        } else {
-            config.visibilitySettings = undefined;
+	    var include = false;
+	    config.visibilitySettings = $scope.configModel.visibilitySettings;
+	    
+	    //Positions
+	    //Popups
+	    if (!_.isEqual($scope.sortArray($scope.configModel.visibilitySettings.positions.popup), $scope.sortArray($scope.configCopy.visibilitySettings.positions.popup))){
+	        include = true;
+	    }
+	    
+	    //Labels
+	    if (!_.isEqual($scope.sortArray($scope.configModel.visibilitySettings.positions.labels), $scope.sortArray($scope.configCopy.visibilitySettings.positions.labels))){
+            include = true;
+        }
+	    
+	    //Segments
+	    //Popups
+	    if (!_.isEqual($scope.sortArray($scope.configModel.visibilitySettings.segments.popup), $scope.sortArray($scope.configCopy.visibilitySettings.segments.popup))){
+            include = true;
         }
         
+	    //Labels
+        if (!_.isEqual($scope.sortArray($scope.configModel.visibilitySettings.segments.labels), $scope.sortArray($scope.configCopy.visibilitySettings.segments.labels))){
+            include = true;
+        }
+        
+	    if (include === false){
+	        config.visibilitySettings = undefined;
+	    }
+        
         return config;
+    };
+    
+    $scope.sortArray = function(data){
+        var temp = _.clone(data);
+        temp.sort();
+        
+        return temp;
     };
 	
 	var saveSuccess = function(response){

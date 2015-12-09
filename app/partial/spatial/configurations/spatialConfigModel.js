@@ -90,7 +90,7 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         }
         
         if (angular.isDefined(data.visibilitySettings)){
-            config.stylesSettings = data.visibilitySettings;
+            config.visibilitySettings = data.visibilitySettings;
         }
         
         return config;

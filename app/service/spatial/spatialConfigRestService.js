@@ -25,7 +25,7 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
             });
         },
         saveUserConfigs: function(){
-            return $resource('/spatial/rest/config/user', {}, {
+            return $resource('/spatial/rest/config/user/save', {}, {
                 'save': {
                     method: 'POST',
                     headers: {
