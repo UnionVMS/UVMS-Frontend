@@ -135,11 +135,12 @@ describe('ExchangeCtrl', function() {
         }));
     });
 
-    it('selecteding export in edit selection dropdown should export as csv', inject(function() {
+    it('selecteding export in edit selection dropdown should export as csv', inject(function(Exchange) {
         var exportSpy = spyOn(scope, "exportLogsAsCSVFile").andCallFake(function(onlySelectedItems){
             expect(onlySelectedItems).toEqual(true);
         });
 
+        scope.selectedItems = [new Exchange()];
         var selection = {code:'EXPORT'};
         scope.editSelectionCallback(selection);
 

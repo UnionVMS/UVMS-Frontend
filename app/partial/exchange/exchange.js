@@ -316,8 +316,12 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
 
     //Callback function for the "edit selection" dropdown
     $scope.editSelectionCallback = function(selectedItem){
-        if(selectedItem.code === 'EXPORT'){
-            $scope.exportLogsAsCSVFile(true);
+        if($scope.selectedItems.length){
+            if(selectedItem.code === 'EXPORT'){
+                $scope.exportLogsAsCSVFile(true);
+            }
+        }else{
+            alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
         }
         $scope.editSelection = "";
     };

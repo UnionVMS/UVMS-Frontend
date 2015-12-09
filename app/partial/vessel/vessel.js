@@ -197,15 +197,19 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
 
     //Callback function for the "edit selection" dropdown
     $scope.editSelectionCallback = function(selectedItem){
-        if(selectedItem.code === 'SAVE'){
-            var options = {
-                dynamicSearch : false,
-                selectedItems : $scope.selectedVessels
-            };
-            savedSearchService.openSaveSearchModal("VESSEL", options);
-        }else if(selectedItem.code === 'EXPORT'){
-            $scope.exportVesselsAsCSVFile(true);
-       }
+        if($scope.selectedVessels.length){
+            if(selectedItem.code === 'SAVE'){
+                var options = {
+                    dynamicSearch : false,
+                    selectedItems : $scope.selectedVessels
+                };
+                savedSearchService.openSaveSearchModal("VESSEL", options);
+            }else if(selectedItem.code === 'EXPORT'){
+                $scope.exportVesselsAsCSVFile(true);
+           }
+        }else{
+            alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
+        }
        $scope.editSelection = "";
     };
 

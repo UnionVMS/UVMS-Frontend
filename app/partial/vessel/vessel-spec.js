@@ -86,14 +86,15 @@ describe('VesselCtrl', function() {
         expect(userAllowedSpy).toHaveBeenCalledWith('manageVessels', 'Union-VMS', true);
     }));
 
-    it('selecteding save search in edit selection dropdown should open save modal', inject(function(Vessel, savedSearchService) {
+    it('selecting save search in edit selection dropdown should open save modal', inject(function(Vessel, savedSearchService) {
         var saveModalSpy = spyOn(savedSearchService, "openSaveSearchModal").andCallFake(function(type, options){
             expect(type).toEqual("VESSEL");
             expect(options.dynamicSearch).toEqual(false);
-            expect(options.selectedItems.length).toEqual(0);
+            expect(options.selectedItems.length).toEqual(1);
         });
         var controller = createController();
 
+        scope.selectedVessels = [new Vessel()];
         var selection = {code:'SAVE'};
         scope.editSelectionCallback(selection);
 
@@ -101,12 +102,13 @@ describe('VesselCtrl', function() {
     }));
 
 
-    it('selecteding export in edit selection dropdown should export as csv', inject(function(Vessel) {
+    it('selecting export in edit selection dropdown should export as csv', inject(function(Vessel) {
         var controller = createController();
         var exportSpy = spyOn(scope, "exportVesselsAsCSVFile").andCallFake(function(onlySelectedItems){
             expect(onlySelectedItems).toEqual(true);
         });
 
+        scope.selectedVessels = [new Vessel()];
         var selection = {code:'EXPORT'};
         scope.editSelectionCallback(selection);
 

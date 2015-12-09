@@ -248,53 +248,57 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
 
     //Callback function for the "edit selection" dropdown
     $scope.editSelectionCallback = function(selectedItem){
-        //Poll selected temrinals
-        if(selectedItem.code === 'POLL'){
-            alertService.hideMessage();
-            //Add selected terminals to poll selection and go to polling page
-            if($scope.selectedMobileTerminals.length > 0){
-                pollingService.clearSelection();
+        if($scope.selectedMobileTerminals.length){
+            //Poll selected temrinals
+            if(selectedItem.code === 'POLL'){
+                alertService.hideMessage();
+                //Add selected terminals to poll selection and go to polling page
+                if($scope.selectedMobileTerminals.length > 0){
+                    pollingService.clearSelection();
 
-                //Create a GetPollabeListRequest to get the pollable channels
-                var getPollableListRequest = new GetPollableListRequest();
-                getPollableListRequest.listSize = $scope.selectedMobileTerminals.length;
+                    //Create a GetPollabeListRequest to get the pollable channels
+                    var getPollableListRequest = new GetPollableListRequest();
+                    getPollableListRequest.listSize = $scope.selectedMobileTerminals.length;
 
-                $.each($scope.selectedMobileTerminals, function(index, item){
-                    //Only add mobile terminals that are assigned to a carrier
-                    if(angular.isDefined(item.connectId)){
-                        getPollableListRequest.addConnectId(item.connectId);
-                    }
-                });
-
-                if(getPollableListRequest.connectIds.length > 0){
-                    pollingRestService.getPollablesMobileTerminal(getPollableListRequest).then(
-                        function(searchResultListPage){
-                            if(searchResultListPage.getNumberOfItems() === 0){
-                                alertService.showInfoMessage(locale.getString('mobileTerminal.add_mobile_terminal_to_polling_zero_items_added_error', {selected :$scope.selectedMobileTerminals.length}));
-                            }else{
-                                //Add each pollChannel to the selection
-                                $.each(searchResultListPage.items, function(index, item){
-                                    pollingService.addMobileTerminalToSelection(item);
-                                });
-
-                                //Show alert message if not all selected mobile terminals could be added to polling
-                                if(searchResultListPage.getNumberOfItems() !== $scope.selectedMobileTerminals.length){
-                                    alertService.showInfoMessage(locale.getString('mobileTerminal.add_mobile_terminal_to_polling_only_some_were_addded_message', {selected :$scope.selectedMobileTerminals.length, pollable : searchResultListPage.getNumberOfItems()}));
-                                    $scope.hideAlertsOnScopeDestroy = false;
-                                }
-
-                                pollingService.setWizardStep(2);
-                                $location.path('polling');
-                            }
-                        },
-                        function(error){
-                            console.error("Error getting pollable channels.");
+                    $.each($scope.selectedMobileTerminals, function(index, item){
+                        //Only add mobile terminals that are assigned to a carrier
+                        if(angular.isDefined(item.connectId)){
+                            getPollableListRequest.addConnectId(item.connectId);
                         }
-                    );
+                    });
+
+                    if(getPollableListRequest.connectIds.length > 0){
+                        pollingRestService.getPollablesMobileTerminal(getPollableListRequest).then(
+                            function(searchResultListPage){
+                                if(searchResultListPage.getNumberOfItems() === 0){
+                                    alertService.showInfoMessage(locale.getString('mobileTerminal.add_mobile_terminal_to_polling_zero_items_added_error', {selected :$scope.selectedMobileTerminals.length}));
+                                }else{
+                                    //Add each pollChannel to the selection
+                                    $.each(searchResultListPage.items, function(index, item){
+                                        pollingService.addMobileTerminalToSelection(item);
+                                    });
+
+                                    //Show alert message if not all selected mobile terminals could be added to polling
+                                    if(searchResultListPage.getNumberOfItems() !== $scope.selectedMobileTerminals.length){
+                                        alertService.showInfoMessage(locale.getString('mobileTerminal.add_mobile_terminal_to_polling_only_some_were_addded_message', {selected :$scope.selectedMobileTerminals.length, pollable : searchResultListPage.getNumberOfItems()}));
+                                        $scope.hideAlertsOnScopeDestroy = false;
+                                    }
+
+                                    pollingService.setWizardStep(2);
+                                    $location.path('polling');
+                                }
+                            },
+                            function(error){
+                                console.error("Error getting pollable channels.");
+                            }
+                        );
+                    }
                 }
+            }else if(selectedItem.code === 'EXPORT'){
+                $scope.exportTerminalsAsCSVFile(true);
             }
-        }else if(selectedItem.code === 'EXPORT'){
-            $scope.exportTerminalsAsCSVFile(true);
+        }else{
+            alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
         }
         $scope.editSelection = "";
     };

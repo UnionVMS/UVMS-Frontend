@@ -236,12 +236,13 @@ describe('MobileTerminalCtrl', function() {
             expect(searchSpy).toHaveBeenCalled();
         }));
 
-        it('selecting Export in edit selection dropdown should export as csv', inject(function() {
+        it('selecting Export in edit selection dropdown should export as csv', inject(function(MobileTerminal) {
             var controller = createController();
             var exportSpy = spyOn(scope, "exportTerminalsAsCSVFile").andCallFake(function(onlySelectedItems){
                 expect(onlySelectedItems).toEqual(true);
             });
 
+            scope.selectedMobileTerminals = [new MobileTerminal()];
             var selection = {code:'EXPORT'};
             scope.editSelectionCallback(selection);
 
