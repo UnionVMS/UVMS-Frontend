@@ -38,18 +38,24 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	};
 	
 	$scope.save = function(){
-	    var newConfig = new SpatialConfig();
-	    newConfig = newConfig.forUserPrefToServer();
-	    
-	    newConfig = $scope.checkMapSettings(newConfig);
-	    newConfig = $scope.checkStylesSttings(newConfig);
-	    newConfig = $scope.checkVisibilitySttings(newConfig);
-	    
-	    newConfig = angular.toJson(newConfig);
-	    
-	    if (!angular.equals({}, newConfig)){
-	        spatialConfigRestService.saveUserConfigs(newConfig).then(saveSuccess, saveFailure);  
-	    }
+		if(_.keys($scope.configPanelForm.$error).length === 0){
+		    var newConfig = new SpatialConfig();
+		    newConfig = newConfig.forUserPrefToServer();
+		    
+		    newConfig = $scope.checkMapSettings(newConfig);
+		    newConfig = $scope.checkStylesSttings(newConfig);
+		    newConfig = $scope.checkVisibilitySttings(newConfig);
+		    
+		    newConfig = angular.toJson(newConfig);
+		    
+		    if (!angular.equals({}, newConfig)){
+		        spatialConfigRestService.saveUserConfigs(newConfig).then(saveSuccess, saveFailure);  
+		    }
+		}else{
+			$scope.hasError = true;
+		    $scope.errorMessage = locale.getString('spatial.invalid_data_saving');
+		    $scope.hideAlerts();
+		}
 	};
 	
 	$scope.checkMapSettings = function(config){

@@ -26,20 +26,23 @@
 				</span>
 		    </div>
 		</div>
+
 	    <div class="container containerWithTopBottomPadding containerCollapsible">
-			<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/mapSettingsPanel/mapSettingsCollapsiblePanel.html'"></div>
-			<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/vmsStyles/vmsStylesCollapsiblePanel.html'"></div>
-			<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/visibilitySettings/visibilitySettings.html'"></div>
-			<div class="collapsiblePanel">
-				<div class="col-md-12 collapsibleRow">
-					<div class="buttonGroup">
-						<div>
-							<button class="btn btn-primary" ng-click="save()">{{'common.save' | i18n}}</button>
-							<button class="btn btn-dedault" ng-click="cancel()">{{'common.cancel' | i18n}}</button>
+	    	<form name="configPanelForm">
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/mapSettingsPanel/mapSettingsCollapsiblePanel.html'"></div>
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/vmsStyles/vmsStylesCollapsiblePanel.html'"></div>
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/visibilitySettings/visibilitySettings.html'"></div>
+				<div class="collapsiblePanel">
+					<div class="col-md-12 collapsibleRow">
+						<div class="buttonGroup">
+							<div>
+								<button class="btn btn-primary" ng-click="save()">{{'common.save' | i18n}}</button>
+								<button class="btn btn-dedault" ng-click="cancel()">{{'common.cancel' | i18n}}</button>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 	</div>
 </div>

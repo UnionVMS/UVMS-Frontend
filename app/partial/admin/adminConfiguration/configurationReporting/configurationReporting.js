@@ -7,6 +7,8 @@ angular.module('unionvmsWeb').controller('ConfigurationreportingCtrl',function($
 	        }, function(error){
 	            alertService.showErrorMessage(locale.getString('common.global_setting_save_error_message'));
 	        });
+    	}else{
+    		alertService.showErrorMessage(locale.getString('spatial.invalid_data_saving'));
     	}
     };    
 });
