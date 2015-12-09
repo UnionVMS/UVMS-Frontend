@@ -1,23 +1,20 @@
 angular.module('unionvmsWeb').controller('SegmentstylesrulerowCtrl',function($scope){
-	$scope.validatePropertyTo = function(index){
+	$scope.validatePropertyTo = function(){
 		if($scope.item.propertyFrom >= $scope.item.propertyTo){
 			$scope.segmentstylesForm.$setValidity('segPropTo', false);
-			$scope.checkIfAddNewRuleActive();
-			return;
+		}else{
+			$scope.segmentstylesForm.$setValidity('segPropTo', true);
 		}
-		$scope.segmentstylesForm.$setValidity('segPropTo', true);
 		
 		$scope.checkIfAddNewRuleActive();
 	};
 	
-	$scope.validatePropertyColor = function(index){
+	$scope.validatePropertyColor = function(){
 		if($scope.item.color && ($scope.item.color.length <= 3 || $scope.item.color.indexOf('#') === -1)){
 			$scope.segmentstylesForm.$setValidity('segPropColor', false);
-			$scope.checkIfAddNewRuleActive();
-			return;
+		}else{
+			$scope.segmentstylesForm.$setValidity('segPropColor', true);
 		}
-		$scope.segmentstylesForm.$setValidity('segPropColor', true);
-		
 		$scope.checkIfAddNewRuleActive();
 	};
 	

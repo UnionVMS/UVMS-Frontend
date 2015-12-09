@@ -68,9 +68,26 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
             }
             
             config.stylesSettings.positions.style = style;
+            srcConfig.stylesSettings.positions.style = style;
             config.posFsStyle = undefined;
         }
-      
+        if(angular.isDefined(config.segmentStyle)){
+    		var segmentProperties = {};
+    		segmentProperties.attribute = config.segmentStyle.attribute;
+    		segmentProperties.style = {};
+    		
+    		if(segmentProperties.attribute === "speedOverGround"){
+    			angular.forEach(config.segmentStyle.style, function(item){
+    				segmentProperties.style[item.propertyFrom + "-" + item.propertyTo] = item.color;
+    			});
+    			
+    			segmentProperties.style["default"] = config.segmentStyle.defaultColor;
+    		}
+    		config.stylesSettings.segments = segmentProperties;
+    		srcConfig.stylesSettings.segments = segmentProperties;
+    		config.segmentStyle = undefined;
+		}
+
         return angular.toJson(config);  
     };
     

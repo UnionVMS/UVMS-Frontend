@@ -1,11 +1,13 @@
 <div class="row spatialConfig" ng-controller="ConfigurationreportingCtrl">
 	<div class="containerWrapper">
 	    <div class="containerWithTopBottomPadding containerCollapsible">
-	    	<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/generalSettings/generalSettings.html'"></div>
-			<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/mapSettingsPanel/mapSettingsCollapsiblePanel.html'"></div>
-			<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/vmsStyles/vmsStylesCollapsiblePanel.html'"></div>
-			<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/visibilitySettings/visibilitySettings.html'"></div>
-			<button class="btn btn-primary pull-right saveBtn" ng-click="save()">{{'common.save' | i18n}}</button>
+	    	<form name="configurationReportForm">
+		    	<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/generalSettings/generalSettings.html'"></div>
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/mapSettingsPanel/mapSettingsCollapsiblePanel.html'"></div>
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/vmsStyles/vmsStylesCollapsiblePanel.html'"></div>
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/visibilitySettings/visibilitySettings.html'"></div>
+				<button class="btn btn-primary pull-right saveBtn" ng-click="save()">{{'common.save' | i18n}}</button>
+			</form>
 		</div>
 	</div>
 </div>
