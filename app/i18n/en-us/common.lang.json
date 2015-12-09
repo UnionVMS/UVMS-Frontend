@@ -121,5 +121,8 @@
     "multiple_select_dropdown_default_text" : "Select",
     "error_getting_data_from_server" : "Error getting data from server.",
     "help": "Help",
-    "table_of_contents": "Table of contents"
+    "table_of_contents": "Table of contents",
+    "speed_unit_kts": "kts",
+    "speed_unit_kph": "km/h",
+    "speed_unit_mph": "mph"
 }

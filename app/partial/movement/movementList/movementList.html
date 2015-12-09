@@ -45,8 +45,8 @@
                     <td>{{movement.movement.latitude | confCoordinateFormat}}</td>
                     <td>{{movement.movement.longitude | confCoordinateFormat}}</td>
                     <td>{{movement.movement.status}}</td>
-                    <td>{{movement.movement.reportedSpeed | number:2}} {{'movement.movement_speed_unit' | i18n}}</td>
-                    <td>{{movement.movement.calculatedSpeed | number:2}} {{'movement.movement_speed_unit' | i18n}}</td>
+                    <td>{{movement.movement.reportedSpeed | speed | number:2}} {{ "common.speed_unit_" + speedUnit | i18n }}</td>
+                    <td>{{movement.movement.calculatedSpeed | speed | number:2}} {{ "common.speed_unit_" + speedUnit | i18n }}</td>
                     <td>{{movement.movement.reportedCourse}}&deg;</td>
                     <td>{{movement.movement.movementType}}</td>
                     <td>{{movement.movement.source | transponderName}}</td>

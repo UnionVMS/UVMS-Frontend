@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeout, $log, locale, alertService, ruleRestService, Rule, RuleDefinition, RuleTimeInterval, RuleAction, ruleService, confirmationModal, configurationService, rulesOptionsService, rulesSuggestionsService, savedSearchService, userService){
+angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeout, $log, locale, alertService, ruleRestService, Rule, RuleDefinition, RuleTimeInterval, RuleAction, ruleService, confirmationModal, configurationService, rulesOptionsService, rulesSuggestionsService, savedSearchService, userService, globalSettingsService){
 
     $scope.submitAttempted = false;
 
@@ -31,6 +31,8 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         //Update dropdown values for ruleDefinitions
         rulesOptionsService.setupRuleDefinitionValueDropdowns();
     });
+
+    $scope.speedUnit = globalSettingsService.getSpeedUnit();
 
     //Init the page
     var init = function(){

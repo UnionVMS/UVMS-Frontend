@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MovementlistCtrl',function($scope){
+angular.module('unionvmsWeb').controller('MovementlistCtrl',function($scope, globalSettingsService){
 
     //Handle click on the top "check all" checkbox
     $scope.checkAll = function(){
@@ -49,5 +49,7 @@ angular.module('unionvmsWeb').controller('MovementlistCtrl',function($scope){
         });
         return checked;
     };
+
+    $scope.speedUnit = globalSettingsService.getSpeedUnit();
 
 });

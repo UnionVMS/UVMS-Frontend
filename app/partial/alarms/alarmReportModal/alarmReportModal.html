@@ -191,7 +191,7 @@
                 </div>
                 <div class="col-md-3">
                     <label>{{'movement.manual_position_field_label_measured_speed' | i18n}}</label>
-                    <div class="value" ng-show="alarm.movement.movement.reportedSpeed">{{alarm.movement.movement.reportedSpeed}} {{"movement.manual_position_field_unit_knots" | i18n}}</div>
+                    <div class="value" ng-show="alarm.movement.movement.reportedSpeed">{{alarm.movement.movement.reportedSpeed | speed}} {{"common.speed_unit_" + speedUnit | i18n}}</div>
                     <div class="value missing" ng-hide="alarm.movement.movement.reportedSpeed">{{'alarms.position_report_information_value_missing' | i18n}}</div>
                 </div>
                 <div class="col-md-3">

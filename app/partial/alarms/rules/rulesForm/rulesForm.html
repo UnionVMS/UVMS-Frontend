@@ -153,9 +153,9 @@
                                             <input type="text" class="form-control" ng-model="item.value" name="value" required>
                                         </div>
                                         <div class="form-group" ng-class="{'has-error': definitionForm.value.$invalid && (submitAttempted || definitionForm.value.$dirty)}" ng-if="getRuleDefinitionValueInputType(item) === 'SPEED'">
-                                            <div class="unit-input">
-                                                <input type="number" class="form-control" ng-model="item.value" name="value" min="0" required/>
-                                                <div class="unit-box">{{"movement.manual_position_field_unit_knots" | i18n}}</div>
+                                            <div class="unit-input unit-input-speed">
+                                                <input type="number" class="form-control" ng-model="item.value" name="value" min="0" required transform-speed/>
+                                                <div class="unit-box">{{"common.speed_unit_" + speedUnit | i18n}}</div>
                                             </div>
                                         </div>
                                         <div class="form-group" ng-class="{'has-error': definitionForm.value.$invalid && (submitAttempted || definitionForm.value.$dirty)}" ng-if="getRuleDefinitionValueInputType(item) === 'COURSE'">

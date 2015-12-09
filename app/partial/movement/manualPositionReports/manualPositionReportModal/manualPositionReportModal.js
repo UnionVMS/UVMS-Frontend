@@ -27,6 +27,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
     //Max speed - warning is shown is speed is higher
 	$scope.measuredSpeedWarningThreshold = globalSettingsService.getMaxSpeed();
+    $scope.speedUnit = globalSettingsService.getSpeedUnit();
     $scope.maxDateTime = dateTimeService.formatUTCDateWithTimezone(moment.utc());
     $scope.submitAttempted = false;
     $scope.confirmSend = false;

@@ -13,62 +13,73 @@ app.constant('scaleFactors', {
     }
 });
 
-app.factory('distanceScaleFactor', ['globalSettingsService', 'scaleFactors', function(globalSettingsService, scaleFactors) {
-    var unit = globalSettingsService.getDistanceUnit();
-    return scaleFactors['distance'][unit];
+app.service('unitScaleFactors', ['globalSettingsService', 'scaleFactors', function(globalSettingsService, scaleFactors) {
+    return {
+        getSpeedScaleFactor: getScaleFactor('speed'),
+        getDistanceScaleFactor: getScaleFactor('distance')
+    };
+
+    function getScaleFactor(type) {
+        return function() {
+            return scaleFactors[type][getUnit(type)];
+        };
+    }
+
+    function getUnit(type) {
+        if (type === 'speed') {
+            return globalSettingsService.getSpeedUnit();
+        }
+        else if (type === 'distance') {
+            return globalSettingsService.getDistanceUnit();
+        }
+    }
 }]);
 
-app.factory('speedScaleFactor', ['globalSettingsService', 'scaleFactors', function(globalSettingsService, scaleFactors) {
-    var unit = globalSettingsService.getSpeedUnit();
-    return scaleFactors['speed'][unit];
-}]);
-
-app.directive('transformDistance', ['distanceScaleFactor', function(distanceScaleFactor) {
+app.directive('transformDistance', ['unitScaleFactors', function(unitScaleFactors) {
     return {
         restrict: 'A',
         require: 'ngModel',
         link: function(scope, element, attrs, model) {
             model.$parsers.push(function(newValue) {
-            	return newValue / distanceScaleFactor;
+                return newValue / unitScaleFactors.getDistanceScaleFactor();
             });
 
             model.$formatters.push(function(newValue) {
-            	return newValue * distanceScaleFactor;
+                return threeDecimals(newValue * unitScaleFactors.getDistanceScaleFactor());
             });
-
         }
     };
 }]);
 
-app.directive('transformSpeed', ['speedScaleFactor', function(speedScaleFactor) {
+app.directive('transformSpeed', ['unitScaleFactors', function(unitScaleFactors) {
     return {
         restrict: 'A',
         require: 'ngModel',
         link: function(scope, element, attrs, model) {
             model.$parsers.push(function(newValue) {
-                return threeDecimals(newValue / speedScaleFactor);
+                return newValue / unitScaleFactors.getSpeedScaleFactor();
             });
 
             model.$formatters.push(function(newValue) {
-                return threeDecimals(newValue * speedScaleFactor);
+                return threeDecimals(newValue * unitScaleFactors.getSpeedScaleFactor());
             });
-
         }
     };
 }]);
 
-app.filter('distance', ['distanceScaleFactor', function(distanceScaleFactor) {
+app.filter('distance', ['unitScaleFactors', function(unitScaleFactors) {
     return function(value) {
-        return threeDecimals(value * distanceScaleFactor);
+        return threeDecimals(value * unitScaleFactors.getDistanceScaleFactor());
     };
 }]);
 
-app.filter('speed', ['speedScaleFactor', function(speedScaleFactor) {
+app.filter('speed', ['unitScaleFactors', function(unitScaleFactors) {
     return function(value) {
-        return threeDecimals(value * speedScaleFactor);
+        return threeDecimals(value * unitScaleFactors.getSpeedScaleFactor());
     };
 }]);
 
 function threeDecimals(value) {
+    // Truncate to three decimal places by rounding appropriately.
     return Math.floor(value * 1000 + 0.5) / 1000;
 }

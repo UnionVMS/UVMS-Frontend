@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService,  userService, configurationService) {
+angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService,  userService, configurationService, globalSettingsService) {
 
     $scope.alarm = alarm;
     $scope.knownVessel = angular.isDefined(alarm.vessel);
@@ -22,6 +22,8 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
     $scope.isVisible = {
         assignAsset : false
     };
+
+    $scope.speedUnit = globalSettingsService.getSpeedUnit();
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);

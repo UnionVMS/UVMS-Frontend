@@ -87,9 +87,9 @@
             			</div>
             			<div class="col-md-3 smallerpadding" ng-class="{'has-error': (submitAttempted || manualPositionReportForm.measuredSpeed.$dirty) &&  manualPositionReportForm.measuredSpeed.$invalid}">
             				<label>{{'movement.manual_position_field_label_measured_speed' | i18n}}</label>
-        					<div class="unit-input">
-        						<input class="form-control" ng-model="positionReport.speed" name="measuredSpeed" min="0" numeric ng-pattern="maxTwoDecimalsRegexp"/>
-        						<div class="unit-box">{{"movement.manual_position_field_unit_knots" | i18n}}</div>
+        					<div class="unit-input unit-input-speed">
+        						<input class="form-control" ng-model="positionReport.speed" name="measuredSpeed" min="0" numeric ng-pattern="maxTwoDecimalsRegexp" transform-speed/>
+        						<div class="unit-box">{{"common.speed_unit_" + speedUnit | i18n}}</div>
         					</div>
                             <input-validation-message types="numeric, pattern" input="manualPositionReportForm.measuredSpeed" custom-messages="{{maxTwoDecimalsValidationMessages}}"></input-validation-message>
             			</div>
