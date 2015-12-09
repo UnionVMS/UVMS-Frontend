@@ -1,33 +1,34 @@
-.auditLogContainer{
-	.audittab{
-        padding: 10px 15px;
-        background: #fff !important;
-        text-transform: uppercase;
-        font-weight: bold;
-        border-left: 1px solid #DDD;
-        border-top: 1px solid #DDD;
-        border-top: 1px solid #DDD;
-        color: #428bca;
-    }
-    .audittab:last-child
+.audittab{
+    padding: 10px 15px;
+    background: #fff !important;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-left: 1px solid #DDD;
+    border-top: 1px solid #DDD;
+    border-top: 1px solid #DDD;
+    color: #428bca;
+}
+.audittab:last-child
+{
+    border-right: 1px solid #DDD;
+}
+.audittab.active{
+    background-color: @primaryColor !important;
+    color: #fff !important;
+}
+.pollingTabs{
+    .nav-tabs > li
     {
-        border-right: 1px solid #DDD;
+        margin-bottom: 0px;
     }
-    .audittab.active{
-        background-color: @primaryColor !important;
-        color: #fff !important;
-    }
-    .pollingTabs{
-        .nav-tabs > li
-        {
-            margin-bottom: 0px;
-        }
-    }
+}
+
+
+.auditLogContainer{
 
     .card-header{
         padding-bottom: 0px;
     }
-
     .auditsearchform{
         margin-bottom:20px;
     }
