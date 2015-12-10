@@ -35,17 +35,41 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     $scope.addAnother = addAnother;
     $scope.waitingForResponse = false;
 
+    //Start location for the map
+    //TODO:Get values from config
+    var mapStartLocation = {
+        lat: 57.2,
+        lng: 14.2,
+        zoom: 5
+    };
+
     //MARKERS
     $scope.markers = {};
+
+    if(!$scope.positionReport.position.latitude){
+        $scope.positionReport.position.latitude = mapStartLocation.lat;
+    }
+
+    if(!$scope.positionReport.position.longitude){
+        $scope.positionReport.position.longitude = mapStartLocation.lng;
+    }
 
     $scope.newPosition = {
         lat: $scope.positionReport.position.latitude,
         lng: $scope.positionReport.position.longitude,
         message: locale.getString("movement.manual_position_label_new_position"),
-        focus: true
+        focus: true,
+        draggable : true,
     };
     $scope.lastPosition = undefined;
 
+    //Update lat and lng when marker is dragged
+    $scope.$on('leafletDirectiveMarker.dragend', function(event, args) {
+        if(args.modelName === 'newPosition'){
+            $scope.positionReport.position.longitude = String(args.model.lng);
+            $scope.positionReport.position.latitude = String(args.model.lat);
+        }
+    });
 
     $scope.modalStatusClass = undefined;
     $scope.modalStatusText = undefined;
@@ -62,18 +86,13 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         if($scope.newPosition.lat && $scope.newPosition.lng){
             $scope.center.lat = $scope.newPosition.lat;
             $scope.center.lng = $scope.newPosition.lng;
-            $scope.center.zoom = 10;
+            $scope.center.zoom = 5;
         }
     };
 
     //Reset map to start position
-    //TODO:Get values from config
     $scope.resetMap = function(){
-        $scope.center = {
-            lat: 57.2,
-            lng: 14.2,
-            zoom: 5
-        };
+        $scope.center = mapStartLocation;
     };
 
     //Get last position for the vessel
@@ -236,11 +255,8 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         var numberOfMarkers = Object.keys($scope.markers).length;
         if(numberOfMarkers === 1){
             var tmpMarker = _.values($scope.markers)[0];
-            $scope.center = {
-                lat: tmpMarker.lat,
-                lng: tmpMarker.lng,
-                zoom: 5
-            };
+            $scope.center.lat = tmpMarker.lat;
+            $scope.center.lng = tmpMarker.lng;
         }
         else if(numberOfMarkers > 1){
             var bounds = $scope.getMarkerBounds();

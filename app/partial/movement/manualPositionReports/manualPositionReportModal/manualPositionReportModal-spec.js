@@ -113,7 +113,7 @@ describe('ManualPositionReportModalCtrl', function() {
         expect(scope.center).toEqual({
             lat: 57.343,
             lng: 11.563,
-            zoom: 10
+            zoom: 5
         });
     });
 
