@@ -67,8 +67,8 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
                 //Add marker
                 var formattedTime =  dateTimeService.formatAccordingToUserSettings($scope.alarm.movement.time);
                 var marker = {
-                    lng: lat,
-                    lat: lng,
+                    lat: lat,
+                    lng: lng,
                     message: formattedTime,
                     focus: true,
                 };
