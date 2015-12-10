@@ -46,7 +46,7 @@ angular.module('unionvmsWeb')
             },
             YMDHM : {
                 MOMENTJS : 'YYYY-MM-DD HH:mm',
-                PICKER : 'Y-m-d G:i',
+                PICKER : 'Y-m-d H:i',
             }
         };
         $scope.FORMATS = FORMATS; //make them accessible by the formatters/parsers
