@@ -31,7 +31,7 @@
 			            <th st-sort="properties.status" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_status' | i18n }}</th>
 			            <th st-sort="properties.reportedSpeed" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_measured_speed' | i18n }}</th>
 			            <th st-sort="properties.calculatedSpeed" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_calculated_speed' | i18n }}</th>
-			            <th st-sort="properties.calculatedCourse" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_course' | i18n }}</th>
+			            <th st-sort="properties.reportedCourse" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_course' | i18n }}</th>
 			            <th st-sort="properties.movementType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_msg_type' | i18n }}</th>
 			            <th st-sort="properties.activityType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_activity_type' | i18n }}</th>
 			            <th st-sort="properties.source" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_source' | i18n }}</th>
@@ -102,12 +102,12 @@
 			            <td>{{ position.properties.ircs }}</td>
 			            <td>{{ position.properties.cfr }}</td>
 			            <td>{{ position.properties.name }}</td>
-			            <td>{{ position.properties.positionTime | dateUtc:config.target_format}}</td>
+			            <td>{{ position.properties.positionTime | stDateUtc}}</td>
 			            <td>{{ position.geometry.coordinates[1] }}</td>
 			            <td>{{ position.geometry.coordinates[0] }}</td>
 			            <td>{{ position.properties.status }}</td>
-			            <td>{{ position.properties.reportedSpeed }}</td>
-			            <td>{{ position.properties.calculatedSpeed }}</td>
+			            <td>{{ position.properties.reportedSpeed | roundDecimals : 5}}</td>
+			            <td>{{ position.properties.calculatedSpeed | roundDecimals : 5}}</td>
 			            <td>{{ position.properties.reportedCourse }}</td>
 			            <td>{{ position.properties.movementType }}</td>
 			            <td>{{ position.properties.activityType }}</td>
@@ -202,9 +202,9 @@
 			            <td>{{ segment.properties.ircs }}</td>
 			            <td>{{ segment.properties.cfr }}</td>
 			            <td>{{ segment.properties.name }}</td>
-			            <td>{{ segment.properties.distance }}</td>
-			            <td>{{ segment.properties.duration }}</td>
-			            <td>{{ segment.properties.speedOverGround }}</td>
+			            <td>{{ segment.properties.distance | roundDecimals : 5 }}</td>
+			            <td>{{ segment.properties.duration | roundDecimals : 5 }}</td>
+			            <td>{{ segment.properties.speedOverGround | roundDecimals : 5 }}</td>
 			            <td>{{ segment.properties.courseOverGround }}</td>
 			            <td>{{ segment.properties.segmentCategory }}</td>
 			            <td style="width:80px;" ng-hide="!executedReport.tabs.map">
@@ -239,14 +239,14 @@
 						</th>
 					</tr>
 			        <tr>
-			            <th st-sort="properties.countryCode" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
-			            <th st-sort="properties.externalMarking" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}</th>
-			            <th st-sort="properties.ircs" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}</th>
-			            <th st-sort="properties.cfr" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}</th>
-			            <th st-sort="properties.name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_name' | i18n }}</th>
-			            <th st-sort="properties.distance" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_seg_table_header_distance' | i18n }}</th>
-			            <th st-sort="properties.duration" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_seg_table_header_duration' | i18n }}</th>
-			            <th st-sort="properties.totalTimeAtSea" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_tracks_table_header_time_at_sea' | i18n }}</th>
+			            <th st-sort="countryCode" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
+			            <th st-sort="externalMarking" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}</th>
+			            <th st-sort="ircs" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}</th>
+			            <th st-sort="cfr" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}</th>
+			            <th st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_name' | i18n }}</th>
+			            <th st-sort="distance" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_seg_table_header_distance' | i18n }}</th>
+			            <th st-sort="duration" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_seg_table_header_duration' | i18n }}</th>
+			            <th st-sort="totalTimeAtSea" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_tracks_table_header_time_at_sea' | i18n }}</th>
 			            <th style="width:80px;" ng-hide="!executedReport.tabs.map"></th>
 			        </tr>
 			        <tr ng-show="isTrackFilterVisible">
@@ -288,9 +288,9 @@
 			            <td>{{ track.ircs }}</td>
 			            <td>{{ track.cfr }}</td>
 			            <td>{{ track.name }}</td>
-			            <td>{{ track.distance }}</td>
-			            <td>{{ track.duration }}</td>
-			            <td>{{ track.totalTimeAtSea }}</td>
+			            <td>{{ track.distance | roundDecimals : 5 }}</td>
+			            <td>{{ track.duration | roundDecimals : 5 }}</td>
+			            <td>{{ track.totalTimeAtSea | roundDecimals : 5 }}</td>
 			            <td style="width:80px;" ng-hide="!executedReport.tabs.map">
 			            	<button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'TRACK')"><span class="fa fa-search"></span></button>
 			            	<button type="button" class="btn btn-info btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'TRACK')"><span class="fa fa-hand-paper-o"></span></button>

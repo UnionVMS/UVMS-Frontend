@@ -222,7 +222,11 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                var trackGeom = $scope.buildTrackGeomFromId(rec.id, extentPolygon.getExtent());
                trackGeom.transform(mapService.getMapProjectionCode(), 'EPSG:4326');
                
-               var geom = wkt.writeGeometry(trackGeom);
+               var geom = null;
+               if (trackGeom.getLineString().getLength() !== 0){
+                   geom = wkt.writeGeometry(trackGeom);
+               }
+               
                var row = [
                    rec.countryCode,
                    rec.externalMarking,

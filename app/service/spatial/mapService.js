@@ -1436,7 +1436,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             },
             visibility: ms.popupVisibility.positions,
             properties: feature,
-            formatedDate: moment.utc(feature.positionTime).format(globalSettingsService.getDateFormat()),
+            formatedDate: moment.utc(feature.positionTime).utcOffset(parseInt(globalSettingsService.getTimezone())).format(globalSettingsService.getDateFormat()),
             coordinates: {
                 lon: repCoords[0].toFixed(5).toString() + ' \u00b0',
                 lat: repCoords[1].toFixed(5).toString() + ' \u00b0'

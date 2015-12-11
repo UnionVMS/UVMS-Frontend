@@ -58,7 +58,7 @@ angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($s
     });
 
     //Initialization
-    $scope.interValPromise = undefined;
+    $scope.intervalPromise = undefined;
     $scope.init = function () {
         setProjectionItems();
         setScaleBarUnits();
@@ -68,10 +68,9 @@ angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($s
         }
         
         //Setting up coordinates format in admin and user preferences
-        if (!angular.isDefined($scope.initialConfig) && angular.isDefined($scope.configModel) && angular.isDefined($scope.configModel.mapSettings.coordinatesFormat)){
+        if (!angular.isDefined($scope.initialConfig) && angular.isDefined($scope.configModel) && angular.isDefined($scope.configModel.mapSettings) && angular.isDefined($scope.configModel.mapSettings.coordinatesFormat)){
             $scope.projectionSelected = true;
-            $scope.interValPromise = $interval(function(){
-                console.log('interval');
+            $scope.intervalPromise = $interval(function(){
                 if (angular.isDefined($scope.projections)){
                     setCoordinatesUnitItems($scope.configModel.mapSettings.displayProjectionId);
                     $scope.stopInterval();
@@ -81,8 +80,8 @@ angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($s
     };
     
     $scope.stopInterval = function(){
-        $interval.cancel($scope.interValPromise);
-        $scope.interValPromise = undefined;
+        $interval.cancel($scope.intervalPromise);
+        $scope.intervalPromise = undefined;
     };
     
     //Get data from server
