@@ -86,15 +86,18 @@ angular.module('unionvmsWeb')
     .controller('savedSearchDropdownCtrl', function($scope, locale, savedSearchService, alertService, confirmationModal){
 
             //Get/set items and functions depending on type
+            var deleteSuccessText, deleteErrorText;
             switch($scope.type) {
                 case "VESSEL":
                     $scope.items = savedSearchService.getVesselGroupsForUser();
                     $scope.emptyPlaceholder = locale.getString('vessel.select_a_group_empty_placeholder');
 
-                    //Delete a saved search
+                    //Delete a vessel group
                     $scope.removeSavedSearch = function(item){
                         savedSearchService.deleteVesselGroup(item).then(onDeleteSuccess, onDeleteError);
                     };
+                    deleteSuccessText = locale.getString('vessel.save_group_delete_success');
+                    deleteErrorText = locale.getString('vessel.save_group_delete_error');
 
                     //Watch for changes to the ngModel and update the dropdown label
                     $scope.$watch(function () { return savedSearchService.getVesselGroupsForUser();}, function (newVal, oldVal) {
@@ -111,6 +114,8 @@ angular.module('unionvmsWeb')
                     $scope.removeSavedSearch = function(item){
                         savedSearchService.deleteMovementSearch(item).then(onDeleteSuccess, onDeleteError);
                     };
+                    deleteSuccessText = locale.getString('common.saved_search_delete_success');
+                    deleteErrorText = locale.getString('common.saved_search_delete_error');
 
                     //Watch for changes to the ngModel and update the dropdown label
                     $scope.$watch(function () { return savedSearchService.getMovementSearches();}, function (newVal, oldVal) {
@@ -123,9 +128,16 @@ angular.module('unionvmsWeb')
                     console.error("Type is missing for saved search dropdown.");
             }
 
+            //Delete a saved search
             $scope.deleteSavedSearch = function(item){
+                var textLabel;
+                if($scope.type === 'VESSEL'){
+                    textLabel = locale.getString("vessel.save_group_delete_confirm_text", {name: item.name});
+                }else if($scope.type === 'MOVEMENT'){
+                    textLabel = locale.getString("common.saved_search_delete_confirm_text", {name: item.name});
+                }
                 var options = {
-                    textLabel : locale.getString("common.saved_search_delete_confirm_text")
+                    textLabel : textLabel
                 };
                 confirmationModal.open(function(){
                     $scope.removeSavedSearch(item);
@@ -134,11 +146,11 @@ angular.module('unionvmsWeb')
 
             //Success removing saved search
             var onDeleteSuccess = function(){
-                alertService.showSuccessMessageWithTimeout(locale.getString('common.saved_search_delete_success'));
+                alertService.showSuccessMessageWithTimeout(deleteSuccessText);
             };
 
             //Error removing saved search
             var onDeleteError = function(){
-                alertService.showErrorMessage(locale.getString('common.saved_search_delete_error'));
+                alertService.showErrorMessage(deleteErrorText);
             };
     });

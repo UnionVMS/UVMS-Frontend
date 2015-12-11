@@ -13,25 +13,30 @@
     </alert>
 
     <div ng-show="allowSaving">
-        <input type="text" placeholder="{{inputPlaceholder}}" ng-model="saveData.name" ng-change="unsetExistingGroupAsSaveTarget()">
-        <div ng-show="existingGroups.length > 0">
-            <span class="dropdownMessage">{{dropdownHeader}}:</span>
-
-            <div class="dropdown">
-                <button class="btn btn-lg dropdown-toggle" type="button" id="saveGroupDropdown"  data-toggle="dropdown" aria-expanded="true">
-                    <div class="dropdowntext">
-                        <span ng-show="saveData.existingGroup">{{saveData.existingGroup.name}}</span>
-                        <span ng-show="!saveData.existingGroup">{{dropdownLabel}}</span>
-                    </div>
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="groupDropdown">
-                    <li ng-repeat="group in existingGroups | orderBy:'name'">
-                       <a ng-click="setExistingGroupAsSaveTarget(group)">{{group.name}}</a>
-                    </li>
-                </ul>
+        <form name="saveForm" novalidate>
+            <div class="form-group" ng-class="{'has-error': saveForm.name.$dirty && saveForm.name.$invalid}">
+                <input type="text" class="form-control" name="name" placeholder="{{inputPlaceholder}}" ng-model="saveData.name" ng-maxlength="80" ng-change="unsetExistingGroupAsSaveTarget()">
+                <input-validation-message types="maxlength" input="saveForm.name"></input-validation-message>
             </div>
-        </div>
+            <div ng-show="existingGroups.length > 0">
+                <span class="dropdownMessage">{{dropdownHeader}}:</span>
+
+                <div class="dropdown">
+                    <button class="btn btn-lg btn-default dropdown-toggle" type="button" id="saveGroupDropdown"  data-toggle="dropdown" aria-expanded="true">
+                        <div class="dropdowntext">
+                            <span ng-show="saveData.existingGroup">{{saveData.existingGroup.name}}</span>
+                            <span class="noselection" ng-show="!saveData.existingGroup">{{dropdownLabel}}</span>
+                        </div>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="groupDropdown">
+                        <li ng-repeat="group in existingGroups | orderBy:'name'">
+                           <a ng-click="setExistingGroupAsSaveTarget(group)">{{group.name}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 <div class="modal-footer">

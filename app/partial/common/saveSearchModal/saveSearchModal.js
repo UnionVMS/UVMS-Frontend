@@ -31,6 +31,9 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
                 $scope.dropdownHeader = locale.getString('vessel.save_as_the_following_group');
                 $scope.dropdownLabel = locale.getString('vessel.select_a_group');
                 $scope.errorMessage = locale.getString('vessel.save_group_error');
+                $scope.saveSuccessMessage = locale.getString('vessel.save_group_create_success');
+                $scope.updateSuccessMessage = locale.getString('vessel.save_group_updated_success');
+                $scope.savedSearchNameAlreadyExistsMessage = locale.getString('vessel.save_group_name_exists');
                 skipSearchCriteriaKeys = [];
                 break;
             case "MOVEMENT":
@@ -42,6 +45,9 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
                 $scope.dropdownHeader = locale.getString('movement.save_search_modal_dropdown_header');
                 $scope.dropdownLabel = locale.getString('movement.save_search_modal_dropdown_label');
                 $scope.errorMessage = locale.getString('movement.save_search_modal_error');
+                $scope.saveSuccessMessage = locale.getString('common.saved_search_create_success');
+                $scope.updateSuccessMessage = locale.getString('common.saved_search_updated_success');
+                $scope.savedSearchNameAlreadyExistsMessage = locale.getString('common.saved_search_group_exists');
                 skipSearchCriteriaKeys = ['ASSET_GROUP'];
                 break;
             default:
@@ -81,7 +87,7 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
 
     $scope.contains = function(a, obj) {
         for (var i = 0; i < a.length; i++) {
-            if (a[i].name === obj) {
+            if (a[i].name.toLowerCase() === obj.toLowerCase()) {
                 return true;
             }
         }
@@ -108,13 +114,13 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
 
     var onSaveSuccess = function(response){
         $scope.waitingForCreateResponse = false;
-        alertService.showSuccessMessageWithTimeout(locale.getString('common.saved_search_create_success'));
+        alertService.showSuccessMessageWithTimeout($scope.saveSuccessMessage);
         $modalInstance.close();
     };
 
     var onUpdateSuccess = function(response){
         $scope.waitingForCreateResponse = false;
-        alertService.showSuccessMessageWithTimeout(locale.getString('common.saved_search_updated_success'));
+        alertService.showSuccessMessageWithTimeout($scope.updateSuccessMessage);
         $modalInstance.close();
     };
 
@@ -126,6 +132,7 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
 
     //Save or update a search
     $scope.saveSearch = function () {
+        $scope.error = false;
         //Update existing group
         if(angular.isDefined($scope.saveData.existingGroup)){
             $scope.saveData.existingGroup.dynamic = isDynamic;
@@ -145,7 +152,7 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
                 $scope.waitingForCreateResponse = true;
                 saveSearchFunction(newSavedGroup).then(onSaveSuccess, onSaveError);
             } else {
-                $scope.errorMessage = locale.getString('common.saved_search_group_exists');
+                $scope.errorMessage = $scope.savedSearchNameAlreadyExistsMessage;
                 $scope.error = true;
             }
         }
