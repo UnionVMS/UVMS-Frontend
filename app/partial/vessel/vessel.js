@@ -62,6 +62,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
     $scope.searchVessels = function(){
         $scope.clearSelection();
         $scope.currentSearchResults.clearErrorMessage();
+        $scope.currentSearchResults.filter = '';
         $scope.currentSearchResults.setLoading(true);
         searchService.searchVessels()
             .then(updateSearchResults, onGetSearchResultsError);
@@ -197,11 +198,11 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
 
     //Callback function for the "edit selection" dropdown
     $scope.editSelectionCallback = function(selectedItem){
-        if($scope.selectedVessels.length){
+        if($scope.getSelectedItemsInFilter().length){
             if(selectedItem.code === 'SAVE'){
                 var options = {
                     dynamicSearch : false,
-                    selectedItems : $scope.selectedVessels
+                    selectedItems : $scope.getSelectedItemsInFilter()
                 };
                 savedSearchService.openSaveSearchModal("VESSEL", options);
             }else if(selectedItem.code === 'EXPORT'){
@@ -211,6 +212,11 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
             alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
         }
        $scope.editSelection = "";
+    };
+
+    //Get the selected items that are shown by the filter
+    $scope.getSelectedItemsInFilter = function(){
+        return $filter('filter')($scope.selectedVessels, $scope.currentSearchResults.filter);
     };
 
     //Export data as CSV file
@@ -234,12 +240,13 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
             var exportItems;
             //Export only selected items
             if(onlySelectedItems){
-                exportItems = $scope.selectedVessels;
+                exportItems = $scope.getSelectedItemsInFilter();
             }
             //Export items in the table
             else{
                 exportItems = $scope.currentSearchResults.items;
             }
+            //Only select those shown by filter
             return exportItems.reduce(
                 function(csvObject, item){
                     var csvRow = [
