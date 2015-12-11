@@ -43,6 +43,8 @@
     "loading_page_error_details" : "Error details:",
     "minutes" : "Minutes",
     "meters_short" : "m",
+    "short_length_unit_m" : "m",
+    "short_length_unit_ft" : "ft",
     "next" : "Next" ,
     "next_page": "Next page",
     "no" : "No" ,

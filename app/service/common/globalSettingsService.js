@@ -141,6 +141,9 @@ angular.module('unionvmsWeb').factory('globalSettingsService',function($resource
         getAvailableLanguages : function(){
             return this.get('availableLanguages', true);
         },
+        getLengthUnit: function() {
+            return this.get('measurementSystem', false) === 'imperial' ? 'ft' : 'm';
+        },
         setup : function(){
             //No setting loaded
             if(Object.keys(settings).length === 0){

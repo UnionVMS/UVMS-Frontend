@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb')
-    .controller('AdvancedSearchVesselFormCtrl', function($scope, $modal, searchService, savedSearchService, configurationService, vesselValidationService, locale){
+    .controller('AdvancedSearchVesselFormCtrl', function($scope, $modal, searchService, savedSearchService, configurationService, vesselValidationService, locale, unitTransformer){
 
         $scope.advancedSearch = false;
         $scope.selectedVesselGroup = undefined;
@@ -16,10 +16,18 @@ angular.module('unionvmsWeb')
             $scope.gearTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'GEAR_TYPE'), 'GEAR_TYPE','VESSEL', true);
             $scope.assetTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'ASSET_TYPE'),'ASSET_TYPE','VESSEL', true);
             $scope.powerSpans = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'SPAN_POWER_MAIN'));
-            $scope.lengthSpans = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'SPAN_LENGTH_LOA'));
+            $scope.lengthSpans = toLengthUnitView(configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'SPAN_LENGTH_LOA')));
 
             //TODO: Need this from backend?
             $scope.activeTypes = [{'text':'Yes','code':'true'},{'text':'No','code':'false'}];
+        };
+
+        var toLengthUnitView = function(spans) {
+            $.each(spans, function(index, span) {
+                span.text = unitTransformer.length.toLengthUnitRangeString(span.text);
+            });
+
+            return spans;
         };
 
         //Reset all search fields

@@ -19,7 +19,7 @@ angular.module('unionvmsWeb')
 });
 
 angular.module('unionvmsWeb')
-    .controller('vesselDetailsCtrl', function($scope, locale, configurationService, vesselValidationService){
+    .controller('vesselDetailsCtrl', function($scope, locale, configurationService, vesselValidationService, globalSettingsService){
 
         //Dropdown values
         $scope.vesselFlagState = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
@@ -41,5 +41,7 @@ angular.module('unionvmsWeb')
         $scope.maxTwoDecimalsValidationMessages = {
             'pattern' : locale.getString('vessel.vessel_details_max_decimals_pattern_validation_message', "2")
         };
+
+        $scope.lengthUnit = globalSettingsService.getLengthUnit();
     }
 );
