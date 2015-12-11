@@ -3,7 +3,7 @@
         <table class="searchResults colorOdd movementtable">
             <thead>
                 <tr>
-                    <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
+                    <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length"/></th>
 
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.countryCode'">{{'movement.table_header_flag_state' | i18n}}</th>
 

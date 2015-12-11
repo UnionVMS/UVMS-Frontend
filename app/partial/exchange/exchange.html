@@ -59,7 +59,7 @@
     				<!-- Exchange log table -->
     				<table class="searchResults exchangeLog colorOdd">
     					<thead>
-                            <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
+                            <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!exchangeLogsSearchResults.items.length"/></th>
                             <th></th>
     						<th></th>
     						<th	sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'dateReceived'">{{'exchange.table_header_date_received' | i18n}}</th>

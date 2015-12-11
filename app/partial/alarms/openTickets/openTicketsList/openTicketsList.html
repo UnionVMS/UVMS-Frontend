@@ -4,7 +4,7 @@
         <table class="searchResults colorOdd">
             <thead>
                 <tr>
-                    <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
+                    <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length"/></th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'openDate'">{{'alarms.alarms_table_date_openend' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.name'">{{'alarms.alarms_table_object_affected' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'ruleName'">{{'alarms.alarms_table_rule' | i18n}}</th>

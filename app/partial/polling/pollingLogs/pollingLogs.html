@@ -83,7 +83,7 @@
 
                                 </tr>
                                 <tr>
-                                    <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
+                                    <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length"/></th>
                                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.name'">{{'polling.polling_logs_table_header_name' | i18n}}</th>
 
                                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.externalMarking'">{{'polling.polling_logs_table_header_ext_no' | i18n}}</th>

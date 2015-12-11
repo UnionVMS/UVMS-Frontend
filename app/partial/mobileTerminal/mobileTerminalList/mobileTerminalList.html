@@ -3,7 +3,7 @@
         <table class="searchResults colorOdd mobileTerminalsTable">
             <thead>
             <tr>
-                <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()"/></th>
+                <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length"/></th>
                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.name'">{{'mobileTerminal.table_header_vessel_name' | i18n}}</th>
 
                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.SERIAL_NUMBER'">{{'mobileTerminal.table_header_serial_no' | i18n}}</th>

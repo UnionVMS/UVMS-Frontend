@@ -26,7 +26,7 @@
     				<thead>
     					<tr>
     						<th class="checkboxContainer">
-    							<input type="checkbox" ng-click="toggleCheckAll()" ng-checked="isAllChecked()"/>
+    							<input type="checkbox" ng-click="toggleCheckAll()" ng-checked="isAllChecked()" ng-disabled="!currentSearchResults.items.length"/>
     						</th>
     						<th sortable-table-header by="sortBy" reverse="reverseSort" order="'username'">
     							{{"audit.column_username" | i18n}}
