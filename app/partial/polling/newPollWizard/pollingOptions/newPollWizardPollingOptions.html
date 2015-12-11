@@ -87,12 +87,12 @@
                                 <tbody>
                                     <tr>
                                         <td class="form-group" ng-class="{'has-error': pollingOptionsForm.samplingStartDate.$invalid && (submitAttempted || pollingOptionsForm.samplingStartDate.$dirty)}">
-                                            <datepicker-input name="samplingStartDate" model="pollingOptions.samplingPoll.startDate" max-date="pollingOptions.samplingPoll.endDate" ng-disabled="!isSamplingPoll()" ng-required="isSamplingPoll()"></datepicker-input>
+                                            <datepicker-input name="samplingStartDate" model="pollingOptions.samplingPoll.startDate" max-date="pollingOptions.samplingPoll.endDate" ng-disabled="!isSamplingPoll()" ng-required="isSamplingPoll()" time="true"></datepicker-input>
                                             <input-validation-message types="required, date, maxDate" input="pollingOptionsForm.samplingStartDate"></input-validation-message>
                                         </td>
 
                                         <td class="form-group" ng-class="{'has-error': pollingOptionsForm.samplingEndDate.$invalid && (submitAttempted || pollingOptionsForm.samplingEndDate.$dirty)}">
-                                            <datepicker-input name="samplingEndDate" model="pollingOptions.samplingPoll.endDate" min-date="pollingOptions.samplingPoll.startDate" ng-disabled="!isSamplingPoll()" ng-required="isSamplingPoll()"></datepicker-input>
+                                            <datepicker-input name="samplingEndDate" model="pollingOptions.samplingPoll.endDate" min-date="pollingOptions.samplingPoll.startDate" ng-disabled="!isSamplingPoll()" ng-required="isSamplingPoll()" time="true"></datepicker-input>
                                             <input-validation-message types="required, date, minDate" input="pollingOptionsForm.samplingEndDate"></input-validation-message>
                                         </td>
                                     </tr>

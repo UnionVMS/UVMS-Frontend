@@ -85,8 +85,8 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
         //Reset default options
         resetDefaults : function() {
             //Reset date fields
-            searchService.getAdvancedSearchObject()["TO_DATE"] = dateTimeService.formatUTCDateWithTimezone(moment.utc());
-            searchService.getAdvancedSearchObject()["FROM_DATE"] = dateTimeService.formatUTCDateWithTimezone(moment.utc().startOf('day'));
+            searchService.getAdvancedSearchObject()["TO_DATE"] = dateTimeService.formatUTCDateWithTimezone(moment.utc().format());
+            searchService.getAdvancedSearchObject()["FROM_DATE"] = dateTimeService.formatUTCDateWithTimezone(moment().startOf('day').format("YYYY-MM-DD HH:mm"));
             searchService.setSearchCriteriasToAdvancedSearch();
         },
 

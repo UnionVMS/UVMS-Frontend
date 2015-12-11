@@ -122,7 +122,12 @@ angular.module('unionvmsWeb').factory('globalSettingsService',function($resource
             return this.get('defaultHomePage', false);
         },
         getTimezone: function() {
-            return this.get('timezone', false);
+            var tz = this.get('timezone', false);
+            if (tz === undefined) {
+                return -(new Date().getTimezoneOffset());
+            }
+
+            return Number(tz);
         },
         getSpeedUnit: function() {
             return this.get('speedUnit', false);

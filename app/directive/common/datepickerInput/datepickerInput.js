@@ -33,7 +33,7 @@ angular.module('unionvmsWeb').directive('datepickerInput', function($compile) {
 });
 
 angular.module('unionvmsWeb')
-    .controller('datepickerInputCtrl', function($scope, dateTimeService){
+    .controller('datepickerInputCtrl', function($scope, dateTimeService, globalSettingsService){
 
         //Formats used by momentjs and the picker
         var FORMATS = {
@@ -99,7 +99,10 @@ angular.module('unionvmsWeb')
             };
 
             //Set default date to current date/time in UTC
-            $scope.options.defaultDate = moment.utc().format(FORMATS.YMD.MOMENTJS);
+            var userTime = dateTimeService.formatAccordingToUserSettings(moment.utc());
+            $scope.userTime = moment(userTime, "YYYY-MM-DD HH:mm").format(FORMATS.YMDHM.MOMENTJS);
+
+            $scope.options.defaultDate = moment(userTime, "YYYY-MM-DD HH:mm").format(FORMATS.YMD.MOMENTJS);
 
             if($scope.useTime){
                 $scope.options.timepicker = true;
@@ -107,7 +110,7 @@ angular.module('unionvmsWeb')
                 $scope.options.step = 5;
                 $scope.options.roundTime = 'ceil';
                 //Set default date with time also
-                $scope.options.defaultDate = moment.utc().format(FORMATS.YMDHM.MOMENTJS);
+                $scope.options.defaultDate = userTime;
                 $scope.options.closeOnDateSelect = false;
             }
         }
@@ -153,7 +156,7 @@ angular.module('unionvmsWeb')
                 }
 
                 //MaxDate before today?
-                var nowMoment = moment.utc();
+                var nowMoment = moment().utcOffset(globalSettingsService.getTimezone());
                 if(maxDateMoment.isBefore(nowMoment)){
                     newDefaultDate = maxDateMoment.format(defaultDateFormat.MOMENTJS);
                 }else{
@@ -162,6 +165,9 @@ angular.module('unionvmsWeb')
             }else{
                 newDefaultDate = moment.utc().format(defaultDateFormat.MOMENTJS);
             }
+
+            var userTime = dateTimeService.formatAccordingToUserSettings(newDefaultDate);
+            newDefaultDate = moment(userTime, "YYYY-MM-DD HH:mm").format(defaultDateFormat.MOMENTJS);
 
             //Update max date and default date
             var newOptions = {
@@ -193,6 +199,9 @@ angular.module('unionvmsWeb')
             }else{
                 newDefaultDate = moment.utc().format(defaultDateFormat.MOMENTJS);
             }
+
+            var userTime = dateTimeService.formatAccordingToUserSettings(newDefaultDate);
+            newDefaultDate = moment(userTime, "YYYY-MM-DD HH:mm").format(defaultDateFormat.MOMENTJS);
 
             //Update min date and default date
             var newOptions = {
@@ -245,10 +254,9 @@ angular.module('unionvmsWeb').directive('datePickerFormatter', function(dateTime
                 else{
                     ctrl.$setDirty(true);
                     //Parse UTC date to viewValue
-                    if(useTime){
-                        newValue = moment.utc(newValue,TIMEZONE_FORMAT).format(YMDHM_FORMAT);
-                    }else{
-                        newValue = moment.utc(newValue,TIMEZONE_FORMAT).format(YMD_FORMAT);
+                    newValue = dateTimeService.utcToUserTimezone(newValue);
+                    if(!useTime){
+                        newValue = moment(newValue, YMDHM_FORMAT).format(YMD_FORMAT);
                     }
                 }
                 return newValue;

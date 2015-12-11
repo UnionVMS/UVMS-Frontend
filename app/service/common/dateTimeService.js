@@ -44,7 +44,7 @@ angular.module('unionvmsWeb').factory('dateTimeService',function($log, globalSet
         formatUTCDateWithTimezone : function(dateTimeInput) {
             var outputFormat = 'YYYY-MM-DD HH:mm:ss +00:00';
             if(angular.isDefined(dateTimeInput)){
-                dateTimeInput = this.toUTC(dateTimeInput);
+                dateTimeInput = this.userTimezoneToUtc(dateTimeInput);
                 return moment(dateTimeInput, "YYYY-MM-DD HH:mm:ss").format(outputFormat);
             }
         },
@@ -78,12 +78,31 @@ angular.module('unionvmsWeb').factory('dateTimeService',function($log, globalSet
                 if(typeof format !== 'string' || format.trim().length < 6){
                     format = 'DD MMM YYYY HH:mm UTC';
                 }
-                var formatted = moment(dateTimeInput, "YYYY-MM-DD HH:mm:ss Z").format(format);
+                var formatted = moment.utc(dateTimeInput, "YYYY-MM-DD HH:mm:ss");
+                formatted.utcOffset(Number(globalSettingsService.getTimezone()));
+                formatted = formatted.format(format);
                 if(formatted !== INVALID_DATE){
                     output = formatted;
                 }
                 return output;
             }
+        },
+        userTimezoneToUtc: function(dateTime) { // moment?
+            if (!this.isFormattedWithTimeZone(dateTime) && (typeof dateTime === 'string')) {
+                var userTimezone = globalSettingsService.getTimezone();
+                var hh = Math.floor(userTimezone / 60);
+                var mm = userTimezone % 60;
+                dateTime += (userTimezone < 0 ? '-' : '+') + (hh < 10 ? '0' + hh : hh) + ':' + (mm < 10 ? '0' + mm : mm);
+            }
+
+            var m = moment(dateTime, "YYYY-MM-DD HH:mmZ");
+            m.utc();
+            return m.format("YYYY-MM-DD HH:mm");
+        },
+        utcToUserTimezone: function(utcDateTime) {
+            var m = moment.utc(utcDateTime, "YYYY-MM-DD HH:mm Z");
+            m.utcOffset(globalSettingsService.getTimezone());
+            return m.format("YYYY-MM-DD HH:mm");
         }
     };
 

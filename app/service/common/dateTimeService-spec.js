@@ -1,6 +1,19 @@
-describe('dateTimeService', function() {
+describe('dateTimeService', function($provide) {
 
   beforeEach(module('unionvmsWeb'));
+
+    beforeEach(module(function ($provide) {
+        $provide.service('globalSettingsService', function() {
+            return {
+                getTimezone: function() {
+                    return 60;
+                },
+                getDateFormat: function() {
+                    return '';
+                }
+            };
+        });
+  }));
 
   it('isFormattedAsUnixSecondsTimstamp() should return true only for unix timstamps consisting of 9-10 digits', inject(function(dateTimeService) {
     var d;
@@ -167,7 +180,7 @@ describe('dateTimeService', function() {
 
     //String date
     d = '2015-09-18 11:49:00';
-    expect(dateTimeService.formatUTCDateWithTimezone(d)).toEqual('2015-09-18 11:49:00 +00:00');
+    expect(dateTimeService.formatUTCDateWithTimezone(d)).toEqual('2015-09-18 10:49:00 +00:00');
 
     //Strange format
     d = 'STRANGE DATE FORMAT';

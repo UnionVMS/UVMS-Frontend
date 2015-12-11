@@ -42,16 +42,16 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
                 var toDateKey = timeSpans[searchCriteriaKey].to;
                 switch(searchCriterias[i].value){
                     case 'TODAY':
-                        searchCriterias.push(new SearchField(fromDateKey, moment.utc().startOf('day')));
-                        searchCriterias.push(new SearchField(toDateKey, moment.utc()));
+                        searchCriterias.push(new SearchField(fromDateKey, dateTimeService.formatUTCDateWithTimezone(moment().startOf('day').format("YYYY-MM-DD HH:mm"))));
+                        searchCriterias.push(new SearchField(toDateKey, dateTimeService.formatUTCDateWithTimezone(moment.utc().format())));
                         break;
                     case 'THIS_WEEK':
-                        searchCriterias.push(new SearchField(fromDateKey, moment.utc().startOf('week')));
-                        searchCriterias.push(new SearchField(toDateKey, moment.utc()));
+                        searchCriterias.push(new SearchField(fromDateKey, dateTimeService.formatUTCDateWithTimezone(moment().startOf('week').format("YYYY-MM-DD HH:mm"))));
+                        searchCriterias.push(new SearchField(toDateKey, dateTimeService.formatUTCDateWithTimezone(moment.utc().format())));
                         break;
                     case 'LAST_MONTH':
-                        searchCriterias.push(new SearchField(fromDateKey, moment.utc().startOf('month')));
-                        searchCriterias.push(new SearchField(toDateKey, moment.utc()));
+                        searchCriterias.push(new SearchField(fromDateKey, dateTimeService.formatUTCDateWithTimezone(moment().startOf('month').format("YYYY-MM-DD HH:mm"))));
+                        searchCriterias.push(new SearchField(toDateKey, dateTimeService.formatUTCDateWithTimezone(moment.utc().format())));
                         break;
                     default:
                         break;

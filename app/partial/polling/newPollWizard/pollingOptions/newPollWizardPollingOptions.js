@@ -12,7 +12,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
 
     //Set min date for program polls. Start date for a program must be in the future
     var setProgramPollMinDate = function(){
-        $scope.programPollMinDate = dateTimeService.formatUTCDateWithTimezone(moment.utc());
+        $scope.programPollMinDate = dateTimeService.formatUTCDateWithTimezone(moment.utc().format());
     };
 
     var resetPollingOptions = function(resetComment){
