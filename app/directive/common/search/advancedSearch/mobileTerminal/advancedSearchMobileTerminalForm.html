@@ -20,8 +20,9 @@
 
             </div>
             <div class="row">
-                <div class="col-md-2">
-                    <input type="text" placeholder="{{'mobileTerminal.search_mmsi_placeholder' | i18n}}"  class="form-control" tabindex="6" ng-model="advancedSearchObject.MMSI" ng-change="onSearchInputChange()">
+               <div class="col-md-2" ng-class="{'has-error':advancedSearchForm.searchmmsi.$dirty && advancedSearchForm.searchmmsi.$invalid}">
+                    <input type="text" name="searchmmsi" id="searchmmsi" placeholder="{{'mobileTerminal.search_mmsi_placeholder' | i18n}}" class="form-control" tabindex="6" ng-model="advancedSearchObject.MMSI" ng-model-options="{allowInvalid: true}" ng-change="onSearchInputChange()" ng-pattern="mmsiRegExp">
+                    <input-validation-message types="pattern" input="advancedSearchForm.searchmmsi" custom-messages="{{mmsiValidationMessages}}"></input-validation-message >
                 </div>
                 <div class="col-md-2">
                     <input type="text" placeholder="{{'mobileTerminal.search_serialNumber_placeholder' | i18n}}"  class="form-control" tabindex="7" ng-model="advancedSearchObject.SERIAL_NUMBER"ng-change="onSearchInputChange()">
@@ -46,7 +47,7 @@
             <div class="row resetAndSearchContainer">
                <!-- Reset button -->
                 <div class="col-md-6">
-                    <button type="submit" class="btn btn-primary btn-sm vmsbtn" ng-click="performAdvancedSearch()">
+                    <button type="submit" class="btn btn-primary btn-sm vmsbtn" ng-disabled="advancedSearchForm.$invalid"  ng-click="performAdvancedSearch()">
                         {{'common.search' | i18n}}
                     </button>
                 </div>

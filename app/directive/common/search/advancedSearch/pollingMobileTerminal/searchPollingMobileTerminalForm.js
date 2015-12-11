@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb')
-    .controller('AdvancedSearchMobileTerminalFormCtrl', function($scope){
+    .controller('AdvancedSearchPollingMobileTerminalFormCtrl', function($scope){
 
         $scope.vesselGroupDropdownItems = [];
         $scope.selectedVesselGroup = "";

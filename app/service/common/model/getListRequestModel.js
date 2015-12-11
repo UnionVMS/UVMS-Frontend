@@ -17,7 +17,7 @@ angular.module('unionvmsWeb')
 
     GetListRequest.prototype.DTOForVessel = function(){
         //Add * to all text searches for vessel
-        var wildcardSearchKeys = ['NAME', 'IRCS', 'CFR', 'EXTERNAL_MARKING', 'MMSI', 'HOMEPORT', 'IMO', 'PRODUCER_NAME', 'PRODUCER_CODE', 'CONTACT_NAME', 'CONTACT_NUMBER', 'CONTACT_EMAIL'];
+        var wildcardSearchKeys = ['NAME', 'IRCS', 'CFR', 'EXTERNAL_MARKING', 'HOMEPORT', 'IMO', 'PRODUCER_NAME', 'PRODUCER_CODE', 'CONTACT_NAME', 'CONTACT_NUMBER', 'CONTACT_EMAIL'];
         var updatedCriterias = [],
             searchFieldKey, searchFieldValue;
 

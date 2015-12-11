@@ -1,8 +1,14 @@
 angular.module('unionvmsWeb')
-    .controller('AdvancedSearchVesselFormCtrl', function($scope, $modal, searchService, savedSearchService, configurationService, locale){
+    .controller('AdvancedSearchVesselFormCtrl', function($scope, $modal, searchService, savedSearchService, configurationService, vesselValidationService, locale){
 
         $scope.advancedSearch = false;
         $scope.selectedVesselGroup = undefined;
+
+        //Validation
+        $scope.mmsiRegExp = vesselValidationService.getMMSIPattern();
+        $scope.mmsiValidationMessages = {
+            'pattern' : locale.getString('vessel.vessel_details_mmsi_pattern_validation_message')
+        };
 
         var init = function(){
             //Setup dropdowns
