@@ -1,4 +1,4 @@
-describe('ManualPositionReportModalCtrl', function() {
+describe('ManualPositionReportCtrl', function() {
 
 	var scope, ctrl;
 
@@ -30,7 +30,9 @@ describe('ManualPositionReportModalCtrl', function() {
 
 	var mockSearchService;
 
-    beforeEach(inject(function($rootScope, $controller, ManualPosition, $httpBackend, $q) {
+    beforeEach(inject(function($rootScope, $controller, ManualPosition, $httpBackend, $q, globalSettingsService) {
+
+        spyOn(globalSettingsService, 'getTimezone').andReturn(0);//UTC time
 
         getPositions = function(suffixes) {
             return suffixes.map(function(suffix) {

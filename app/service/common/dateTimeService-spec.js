@@ -201,29 +201,29 @@ describe('dateTimeService', function($provide) {
 
     //Timezone format
     d = '2015-11-18 13:49:00 +01:00';
-    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('18 Nov 2015 12:49 UTC');
+    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('18 Nov 2015 13:49 UTC');
 
     //Without timezone
     d = '2018-02-03 04:05:00';
-    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('03 Feb 2018 04:05 UTC');
+    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('03 Feb 2018 05:05 UTC');
 
     //Unix milliseconds and seconds
     d = '1444116559472';
     var d2 = '1444116559';
-    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('06 Oct 2015 07:29 UTC');
+    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('06 Oct 2015 08:29 UTC');
     expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual(dateTimeService.formatAccordingToUserSettings(d));
 
     //Unix milliseconds as number
     d = 1444116604804;
-    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('06 Oct 2015 07:30 UTC');
+    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('06 Oct 2015 08:30 UTC');
 
     //Unix seconds
     d = '196416552';
-    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('23 Mar 1976 08:09 UTC');
+    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('23 Mar 1976 09:09 UTC');
 
     //Unix seconds as number
     d = 196416552;
-    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('23 Mar 1976 08:09 UTC');
+    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('23 Mar 1976 09:09 UTC');
 
     //Strange format
     d = 'STRANGE DATE FORMAT';
@@ -242,17 +242,30 @@ describe('confDateFormat filter', function() {
 
     beforeEach(module('unionvmsWeb'));
 
+    beforeEach(module(function ($provide) {
+        $provide.service('globalSettingsService', function() {
+            return {
+                getTimezone: function() {
+                    return 240; //4 hours
+                },
+                getDateFormat: function() {
+                    return '';
+                }
+            };
+        });
+    }));
+
     it('should format date according to configuration', inject(function($filter) {
 
         var filter = $filter('confDateFormat');
         var d;
         //Valid date
         d = '2018-02-03 04:05:00';
-        expect(filter(d)).toEqual('03 Feb 2018 04:05 UTC');
+        expect(filter(d)).toEqual('03 Feb 2018 08:05 UTC');
 
         //Date object
         d = 196416552;
-        expect(filter(d)).toEqual('23 Mar 1976 08:09 UTC');
+        expect(filter(d)).toEqual('23 Mar 1976 12:09 UTC');
 
         //Undefined
         expect(filter(undefined)).toBeUndefined();
