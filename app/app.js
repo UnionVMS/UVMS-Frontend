@@ -17,7 +17,8 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
 	'ngCookies',
 	'toggle-switch',
 	'colorpicker.module',
-	'ui.select'
+	'ui.select',
+	'ngMessages'
 	]);
 
 var currentUserContextPromise = function(userService) {

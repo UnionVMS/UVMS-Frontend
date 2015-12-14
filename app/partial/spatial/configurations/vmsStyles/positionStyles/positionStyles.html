@@ -38,13 +38,17 @@
 			        <tr ng-repeat="report in displayedRecords">
 			        	<td>{{ report.name }}</td>
 			            <td>{{ report.code }}</td>
-			            <td class="col-md-4 ">
-			            	<div class="form-group noBottomPadding" ng-class="{'has-error': !report.color || report.color.length <= 3 || report.color.indexOf('#') === -1}">
+			            <td class="col-md-4">
+			            	<div class="form-group noBottomPadding" ng-class="{'has-error': countryListForm.$error.required{{$index}} || countryListForm.$error.posColor{{$index}}}">
 				            	<div class="colorPickerComponent">
 						            <div ng-style="{'background-color': report.color && report.color.length > 3 && report.color.indexOf('#') != -1 ? report.color : '#fff'}" class="form-control pickedcolor">
 						            	<i class="fa fa-ban" ng-hide="report.color && report.color.length > 3 && report.color.indexOf('#') != -1"></i>
 						            </div>
-						            <input class="form-control" colorpicker ng-model="report.color" type="text" ng-change="validateColor($index);" ng-required="true">
+						            <input class="form-control" colorpicker ng-model="report.color" type="text" ng-change="validateColor($index);">
+						            <div class="countryColorMessages" ng-messages="countryListForm.$error">
+										<div ng-message="required{{$index}}">{{'spatial.required_error_message' | i18n }}</div>
+										<div ng-message="posColor{{$index}}">{{'spatial.invalid_color_error_message' | i18n }}</div>
+									</div>
 					            </div>
 				            </div>
 				        </td>

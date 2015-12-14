@@ -39,10 +39,16 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope, s
     
     //validate the color field of the country
     $scope.validateColor = function(index){
-		if($scope.displayedRecords[index].color && ($scope.displayedRecords[index].color.length <= 3 || $scope.displayedRecords[index].color.indexOf('#') === -1)){
-			$scope.countryListForm.$setValidity('PosColor' + $scope.configModel.posFsStyle.indexOf($scope.displayedRecords[index]), false);
+    	var indexOnModel = $scope.configModel.posFsStyle.indexOf($scope.displayedRecords[index]);
+    	if($scope.displayedRecords[index].color && ($scope.displayedRecords[index].color.length <= 3 || $scope.displayedRecords[index].color.indexOf('#') === -1)){
+			$scope.countryListForm.$setValidity('posColor' + indexOnModel, false);
 		}else{
-			$scope.countryListForm.$setValidity('PosColor' + $scope.configModel.posFsStyle.indexOf($scope.displayedRecords[index]), true);
+			$scope.countryListForm.$setValidity('posColor' + indexOnModel, true);
+		}
+		if($scope.displayedRecords[index].color !== ''){
+			$scope.countryListForm.$setValidity('required' + indexOnModel, true);
+		}else{
+			$scope.countryListForm.$setValidity('required' + indexOnModel, false);
 		}
 	};
     

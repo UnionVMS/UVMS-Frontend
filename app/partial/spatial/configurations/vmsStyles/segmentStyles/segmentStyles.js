@@ -1,6 +1,7 @@
 angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope){
 	$scope.segmentProperties = [];
 	$scope.segmentProperties.push({"text": "Measured speed", "code": "speedOverGround"});
+	$scope.segmentRuleId = 0;
 	
 	$scope.isAddNewRuleActive = true;
 	
@@ -10,12 +11,13 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope){
 			if($scope.configModel.segmentStyle.style && $scope.configModel.segmentStyle.style.length > 0){
 				nextFrom = _.last($scope.configModel.segmentStyle.style).propertyTo;
 			}
-			$scope.configModel.segmentStyle.style.push({"propertyFrom": nextFrom, "propertyTo": undefined, "color": undefined});
+			$scope.configModel.segmentStyle.style.push({"id": $scope.segmentRuleId, "propertyFrom": nextFrom, "propertyTo": undefined, "color": undefined});
+			$scope.segmentRuleId++;
 			$scope.isAddNewRuleActive = false;
 		}
 	};
 	
-	$scope.removeRuleByIndex = function(index, nrErrors){
+	$scope.removeRuleByIndex = function(index, ruleId){
 		$scope.configModel.segmentStyle.style.splice(index, 1);
 		
 		if($scope.configModel.segmentStyle.style.length > index + 1){
@@ -27,11 +29,11 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope){
 			}
 			$scope.updateNextRule($scope.configModel.segmentStyle.style[index]);
 		}
-		$scope.isAddNewRuleActive = _.allKeys($scope.segmentsForm.$error).length === nrErrors || (_.allKeys($scope.segmentsForm.$error).length === 1 + nrErrors && $scope.segmentsForm.$error.segDefColor);
+		$scope.isAddNewRuleActive = $scope.getNrErrors() === 0;
 	};
 	
 	$scope.changeProperty = function(){
-		if($scope.configModel && $scope.configModel.segmentStyle && $scope.configModel.segmentStyle.attribute){
+		if($scope.configModel && $scope.configModel.segmentStyle && $scope.configModel.segmentStyle.attribute && $scope.loadedSegmentProperties){
 			$scope.configModel.segmentStyle.style = $scope.loadedSegmentProperties.style || [];
 		}else{
 			$scope.configModel.segmentStyle.style = [];
@@ -58,13 +60,19 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope){
 		}else{
 			$scope.segmentDefaultForm.$setValidity('segDefColor', true);
 		}
+		if(!$scope.configModel.segmentStyle.defaultColor && $scope.configModel.segmentStyle.defaultColor !== 0){
+			$scope.segmentDefaultForm.$setValidity('requiredField', false);
+		}else{
+			$scope.segmentDefaultForm.$setValidity('requiredField', true);
+		}
 	};
 	
 	$scope.loadSegmentProperties = function(){
-		$scope.loadedSegmentProperties = {};
-		angular.copy($scope.configModel.stylesSettings.segments,$scope.loadedSegmentProperties);
-		$scope.configModel.segmentStyle = {};
-		
+		if(angular.isDefined($scope.configModel) && angular.isDefined($scope.configModel.stylesSettings) && angular.isDefined($scope.configModel.stylesSettings.segments)){
+			$scope.loadedSegmentProperties = {};
+			angular.copy($scope.configModel.stylesSettings.segments,$scope.loadedSegmentProperties);
+			$scope.configModel.segmentStyle = {};
+			
 			if($scope.loadedSegmentProperties.attribute === "speedOverGround"){
 				var speedOverList = [];
 				angular.forEach($scope.loadedSegmentProperties.style, function(value,key){
@@ -72,24 +80,54 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope){
 						$scope.configModel.segmentStyle.defaultColor = value;
 					}else{
 						var rangeData = key.split("-");
-						speedOverList.push({"propertyFrom": parseInt(rangeData[0]), "propertyTo": rangeData[1] ? parseInt(rangeData[1]) : undefined, "color": value});
+						speedOverList.push({"id": $scope.segmentRuleId, "propertyFrom": parseInt(rangeData[0]), "propertyTo": rangeData[1] ? parseInt(rangeData[1]) : undefined, "color": value});
+						$scope.segmentRuleId++;
 					}
 				});
 				speedOverList = _.sortBy(speedOverList, 'propertyFrom');
 				$scope.configModel.segmentStyle.attribute = $scope.loadedSegmentProperties.attribute;
 				$scope.configModel.segmentStyle.style = speedOverList;
 				$scope.loadedSegmentProperties.style = speedOverList;
+			}else{
+				$scope.configModel.segmentStyle = {};
+				$scope.configModel.segmentStyle.style = {};
+				$scope.segmentRuleId = _.keys($scope.configModel.segmentStyle.style).length;
 			}
+		}else{
+			$scope.configModel = {};
+			$scope.configModel.segmentStyle = {};
+			$scope.configModel.segmentStyle.style = {};
+			$scope.segmentRuleId = _.keys($scope.configModel.segmentStyle.style).length;
+		}
+	};
+	
+	$scope.getNrErrors = function() {
+		var nrErrors = 0;
+		if(angular.isDefined($scope.segmentsForm)){
+			angular.forEach($scope.configModel.segmentStyle.style, function(item){
+				if(angular.isDefined($scope.segmentsForm["segmentstylesForm" + item.id])){
+					angular.forEach($scope.segmentsForm["segmentstylesForm" + item.id].$error, function(item){
+						nrErrors += item.length;
+					});
+				}
+			});
+		}
+		return nrErrors;
 	};
 	
 	$scope.$watch('configModel.stylesSettings.segments.attribute', function(newVal, oldVal){
-		if (newVal === 'speedOverGround'){
-    	   $scope.loadSegmentProperties();
-    	   $scope.changeProperty();
-		}
+		$scope.loadSegmentProperties();
     });
-	
-	$scope.$on('updateAddNewRuleActive', function(event) { $scope.isAddNewRuleActive = _.isEmpty($scope.segmentsForm.$error) || (_.allKeys($scope.segmentsForm.$error).length === 1 && $scope.segmentsForm.$error.segDefColor) ? true : false; });
-	$scope.$on('updateNextRule', function(event, item) { $scope.updateNextRule(item); });
-	$scope.$on('removeRule', function(event, index, nrErrors) { $scope.removeRuleByIndex(index, nrErrors); });
+	$scope.$watch('configModel.segmentStyle.attribute', function(newVal, oldVal){
+		$scope.changeProperty();
+    });
+	$scope.$on('updateAddNewRuleActive', function(event) {
+		$scope.isAddNewRuleActive = $scope.getNrErrors() === 0 ? true : false;
+	});
+	$scope.$on('updateNextRule', function(event, item) {
+		$scope.updateNextRule(item);
+	});
+	$scope.$on('removeRule', function(event, index, ruleId) {
+		$scope.removeRuleByIndex(index, ruleId);
+	});
 });
