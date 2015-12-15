@@ -20,10 +20,15 @@
     "table_header_source": "Source",
 	"table_header_type": "Type",
 
+	"sending_queue_table_header_recipient" : "Recipient",
+	"sending_queue_table_header_message_type" : "Msg.type",
+	"sending_queue_table_header_unsent_reports" : "Unsent rep.",
+	"sending_queue_table_header_Last_recieved" : "Last recieved.",
+
+
 	"sending_queue_table_header_date_received": "Date received",
 	"sending_queue_table_header_from": "From",
 	"table_header_sender_reciever" : "Sender/Reciever",
-	"sending_queue_table_header_recipient": "Recipient",
 	"sending_queue_table_pauseall": "Paus all",
 	"sending_queue_table_pause": "Pause",
 	"sending_queue_table_resendall": "Resend all",
@@ -32,6 +37,14 @@
 	"sending_queue_table_number_of_reports" : "message(s)",
 	"sending_queue_table_allmessages_in_group": "Group",
 
+	"sending_queue_detail_table_header_potision_time" : "Position time",
+	"sending_queue_detail_table_header_sender_recipient":"Sender/recipient",
+	"sending_queue_detail_table_header_date_recieved":"Recieved",
+	"sending_queue_detail_table_header_asset_name":"Asset name",
+	"sending_queue_detail_table_header_longitude":"Longitude",
+	"sending_queue_detail_table_header_latitude":"Latidude",
+
+	"sending_queue_table_resend_all": "Resend all",
 
 	"sending_queue_header" : "Sending queue",
 	"sending_queue_warning" : "There are currently many messages in queue. This might take a while.",
@@ -58,6 +71,5 @@
 	"title_outgoing": "Outgoing",
 	"title_forward": "Forward",
 	"title_resend": "Resend"
-
 
 }

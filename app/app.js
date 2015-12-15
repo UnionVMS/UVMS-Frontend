@@ -13,7 +13,6 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'googlechart',
     'ngWebSocket',
     'checklist-model',
-    'angularScreenfull',
 	'ngCookies',
 	'toggle-switch',
 	'colorpicker.module',
@@ -37,7 +36,10 @@ var loadLocales = function(initService) {
 };
 
 
-unionvmsWebApp.config(function($stateProvider, tmhDynamicLocaleProvider, $injector, $urlRouterProvider, ACCESS) {
+unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocaleProvider, $injector, $urlRouterProvider, ACCESS) {
+
+    //Stops angular flooding console with debug info.
+    //$compileProvider.debugInfoEnabled(false);
 
     tmhDynamicLocaleProvider.localeLocationPattern("assets/locales/angular-locale_{{locale}}.js");
 

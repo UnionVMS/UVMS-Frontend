@@ -2,7 +2,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
 
     $scope.transmissionStatuses = new SearchResults();
     $scope.sendingQueue = new SearchResults();
-
+    $scope.notifications = 0;
     $scope.pausedQueueItems = {};
 
     $scope.exchangeLogsSearchResults = new SearchResults('dateReceived', true);
@@ -80,14 +80,18 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         });
     };
 
+
     $scope.getSendingQueue = function(){
         $scope.sendingQueue.setLoading(true);
         $scope.sendingQueue.clearErrorMessage();
+
+        $scope.grouped_data = [];
 
         exchangeRestService.getSendingQueue().then(
             function(data) {
                 $scope.sendingQueue.setLoading(false);
                 $scope.sendingQueue.items = data;
+                 $scope.notifications = $scope.getAmountOfNotifications($scope.sendingQueue.items);
         },
         function(error) {
             $scope.sendingQueue.setLoading(false);
@@ -96,6 +100,16 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
             $scope.sendingQueue.setErrorMessage(locale.getString('common.error_getting_data_from_server'));
 
         });
+    };
+
+    $scope.getAmountOfNotifications = function(items){
+        var quantity = 0;
+
+        for (var i = items.length - 1; i >= 0; i--) {
+            quantity = quantity + items[i].pluginList.sendingLogList.length;
+        };
+
+        return quantity;
     };
 
     $scope.getTransmissionStatuses = function() {
@@ -410,8 +424,8 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     $scope.resendAllQueueItemsInGroup = function(item){
         //All ids in group.
         var sendingQueuesIds = [];
-        for (var i = item.sendingLogList.length - 1; i >= 0; i--) {
-            sendingQueuesIds.push(item.sendingLogList[i].messageId);
+        for (var i = item.length - 1; i >= 0; i--) {
+            sendingQueuesIds.push(item[i].messageId);
         }
         $scope.sendQueuedMessages(sendingQueuesIds);
     };
@@ -425,9 +439,10 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
 
     $scope.resendAllQueued = function(){
         var sendingQueuesIds = [];
+        //$scope.sendingQueue.items[i].pluginList.sendingLogList
         for (var i = $scope.sendingQueue.items.length - 1; i >= 0; i--){
-           for (var o = $scope.sendingQueue.items[i].sendingLogList.length - 1; o >= 0; o--) {
-               sendingQueuesIds.push($scope.sendingQueue.items[i].sendingLogList[o].id);
+           for (var o = $scope.sendingQueue.items[i].pluginList.sendingLogList.length - 1; o >= 0; o--) {
+               sendingQueuesIds.push($scope.sendingQueue.items[i].pluginList.sendingLogList[o].messageId);
            }
            //sendingQueuesIds.push($scope.sendingQueue.items[i]);
         }

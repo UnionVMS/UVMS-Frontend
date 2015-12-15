@@ -10,6 +10,26 @@
 
     "message_details_modal_title" : "Message details",
 
+
+	"sending_queue_table_header_date_received": "Date received",
+	"sending_queue_table_header_from": "From",
+	"sending_queue_table_header_recipient": "Recipient",
+	"sending_queue_table_pauseall": "Paus all",
+	"sending_queue_table_pause": "Pause",
+	"sending_queue_table_resendall": "Resend all",
+	"sending_queue_table_resendgroup": "Resend group",
+	"sending_queue_table_resend": "Resend",
+	"sending_queue_table_number_of_reports_start" : "Total ",
+	"sending_queue_table_number_of_reports_end" : " messages in queue",
+	"sending_queue_table_allmessages_in_group": "Group",
+	"sending_queue_date_recieved" : "Date recieved",
+
+	"sending_queue_table_header_recipient" : "Recipient",
+	"sending_queue_table_header_message_type" : "Msg.type",
+	"sending_queue_table_header_unsent_reports" : "Unsent rep.",
+	"sending_queue_table_header_Last_recieved" : "Last recieved.",
+
+
 	"table_header_actions": "Actions",
 	"table_header_date_fwd": "Date forwarded",
 	"table_header_date_received": "Date received",
@@ -19,26 +39,30 @@
     "table_header_status": "Status",
     "table_header_source": "Source",
 	"table_header_type": "Type",
-
-	"sending_queue_table_header_date_received": "Date received",
-	"sending_queue_table_header_from": "From",
 	"table_header_sender_reciever" : "Sender/Reciever",
-	"sending_queue_table_header_recipient": "Recipient",
-	"sending_queue_table_pauseall": "Paus all",
-	"sending_queue_table_pause": "Pause",
-	"sending_queue_table_resendall": "Resend all",
-	"sending_queue_table_resendgroup": "Resend group",
-	"sending_queue_table_resend": "Resend",
-	"sending_queue_table_number_of_reports" : "Total messages in queue",
-	"sending_queue_table_allmessages_in_group": "Group",
 
+	"sending_queue_detail_table_header_potision_time" : "Position time",
+	"sending_queue_detail_table_header_sender_recipient":"Sender/recipient",
+	"sending_queue_detail_table_header_date_recieved":"Recieved",
+	"sending_queue_detail_table_header_asset_name":"Asset name",
+	"sending_queue_detail_table_header_longitude":"Longitude",
+	"sending_queue_detail_table_header_latitude":"Latidude",
+	"sending_queue_detail_table_header_ircs" : "IRCS",
+	"sending_queue_detail_table_header_email" : "Email",
 
-	"sending_queue_header" : "Sending queue",
-	"sending_queue_warning" : "There are currently many messages in queue. This might take a while.",
-	"sending_queue_all_ok" : "Status ok, there are no messages in queue.",
 	"sending_queue_expandgroup" : "Expand group",
 	"sending_queue_collapsegroup" : "Collapse group",
 	"sending_queue_resend": "Resend",
+	"sending_queue_resend_title": "Resends this message",
+	"sending_queue_table_resend_all": "Resend all",
+	"sending_queue_table_resend_all_title": "Resends all messages in queue",
+	"sending_queue_resend_all_in_group":"Resend group",
+	"sending_queue_resend_all_in_group_title":"Resends all messages in this group",
+
+	"sending_queue_header" : "Sending queue",
+	"sending_queue_warning_part_one" : "There are currently ",
+	"sending_queue_warning_part_two" : "  messages in queue. This might take a while.",
+	"sending_queue_all_ok" : "Status ok, there are no messages in queue.",
 
 	"transmission_status_header" : "Transmission status",
 	"transmission_status_online" : "Online",
@@ -58,6 +82,5 @@
 	"title_outgoing": "Outgoing",
 	"title_forward": "Forward",
 	"title_resend": "Resend"
-
 
 }

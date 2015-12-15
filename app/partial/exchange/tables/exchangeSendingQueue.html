@@ -1,49 +1,43 @@
+
 <div class="sending-queue-container card">
     <div class="row card-header">
         <div class="col-md-11">
             <h5>{{'exchange.sending_queue_header' | i18n}}</h5>
-            <i ng-hide="sendingQueue.items.length <= 5" class="fa fa-exclamation-triangle fa-lg warning-icon"></i>
-            <span ng-hide="sendingQueue.items.length <= 5" class="warning-text">{{'exchange.sending_queue_warning' | i18n}}</span>
-        </div>
-        <div ng-hide="sendingQueue.items.length <= 0" class="col-md-1 pushright">
-            <!--<i class="fa fa-repeat fa-lg" show-if-allowed="Exchange:manageExchangeSendingQueue" title="{{'exchange.sending_queue_table_resendall' | i18n}}" ng-click="resendAllQueued()"></i>
-        -->
+            <i ng-hide="notifications <= 10" class="fa fa-exclamation-triangle fa-lg warning-icon"></i>
+            <span ng-hide="notifications <= 10" class="warning-text">{{'exchange.sending_queue_warning_part_one' | i18n}}{{notifications}}{{'exchange.sending_queue_warning_part_two' | i18n}}</span>
         </div>
     </div>
-	<div class="row scroller" loading-indicator="sendingQueue.loading" size="small" type="SPINNER">
+    <div class="row scroller" loading-indicator="sendingQueue.loading" size="small" type="SPINNER">
         <div class="col-md-12 nopaddingright">
-            <h3 ng-show="sendingQueue.items.length <= 0 && !sendingQueue.errorMessage && !sendingQueue.loading">{{'exchange.sending_queue_all_ok' | i18n}}</h3>
-            <div ng-hide="sendingQueue.items.length <= 0" class="sendingQueue searchResults">
-                <div class="panel_title">
-                </div>
-                <div class="panel_list" ng-repeat="item in sendingQueue.items | filter:query as results">
-                    <div class="list_item">
-                        <div class="list_item_header">
-                            <h3>{{item.sendingLogList.length}}</h3>
-                            <i class="fa fa-plus fa-md" title="{{'exchange.sending_queue_expandgroup' | i18n}}" ng-click="messageVisible = messageVisible ? false:true" ng-show="!messageVisible"></i>
-                            <i class="fa fa-minus fa-md" title="{{'exchange.sending_queue_collapsegroup' | i18n}}" ng-click="messageVisible = !messageVisible ? true:false" ng-show="messageVisible"></i>
-                            <small>{{'exchange.sending_queue_table_number_of_reports' | i18n}}</small>
-                        </div>
-                        <div class="list_item_header">
-                            <small class="pull-right message_group">{{item.recipient}}</small>
-                            <div class="group_action pull-right">
-                                <i show-if-allowed="Exchange:manageExchangeSendingQueue" class="fa fa-repeat fa-lg" title="{{'exchange.sending_queue_table_resendgroup'| i18n}}" ng-click="resendAllQueueItemsInGroup(item)" ng-show="!messageVisible"></i>
-                            </div>
-                        </div>
-                        <div class="list_item_container" ng-show="messageVisible">
-                            <ul>
-                                <li class="list_item_details" ng-repeat="sendingLog in item.sendingLogList" ng-class-odd="'odd'" ng-class-even="'even'">
-                                    <div class="details">{{sendingLog.dateRecieved | confDateFormat}}</div>
-                                    <div class="details">{{sendingLog.senderRecipient}}</div>
-                                    <div class="details"></div>
-                                    <div class="details action"><i show-if-allowed="Exchange:manageExchangeSendingQueue" class="fa fa-repeat fa-sm" title="{{'exchange.sending_queue_table_resend'| i18n}}" ng-click="resendQueuedItemInGroup(sendingLog.messageId)"></i></div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <table class="sendingQueue searchResults">
+                <thead>
+                    <th></th>
+                    <th sortable-table-header by="sendingQueue.sortBy" reverse="sendingQueue.sortReverse" order="'pluginList.messageType'" class="">{{'exchange.sending_queue_table_header_recipient' | i18n}}</th>
+                    <th sortable-table-header by="sendingQueue.sortBy" reverse="sendingQueue.sortReverse" order="'pluginList.recipient'" class="">{{'exchange.sending_queue_table_header_message_type' | i18n}}</th>
+                    <th sortable-table-header by="sendingQueue.sortBy" reverse="sendingQueue.sortReverse" order="'pluginList.sendingLogList.length'" class="">{{'exchange.sending_queue_table_header_unsent_reports' | i18n}}</th>
+                    <th sortable-table-header by="sendingQueue.sortBy" reverse="sendingQueue.sortReverse" order="'pluginList.lastRecieved'" class="">{{'exchange.sending_queue_table_header_Last_recieved' | i18n}}</th>
+                    <th class="action"><a href="#" title="{{'exchange.sending_queue_table_resend_all_title' | i18n}}" ng-click="resendAllQueued(sendingQueue.items)">{{'exchange.sending_queue_table_resend_all' | i18n}}</a></th>
+                </thead>
+                <tbody ng-repeat="plugIn in sendingQueue.items | orderBy:sendingQueue.sortBy:sendingQueue.sortReverse" class="delimiter">
+                    <tr class="sending-queue-group"><!-- ng-class-odd="'even'" ng-class-even="'odd'"-->
+                        <th>
+                            <i class="fa fa-plus fa-md" ng-hide="messageVisible" title="{{'exchange.sending_queue_expandgroup' | i18n}}" ng-click="messageVisible = messageVisible ? false:true"></i>
+                            <i class="fa fa-minus fa-md" ng-show="messageVisible" title="{{'exchange.sending_queue_collapsegroup' | i18n}}" ng-click="messageVisible = !messageVisible ? true:false"></i>
+                        </th>
+                        <th>{{plugIn.pluginList.messageType}}</th>
+                        <th>{{plugIn.pluginList.recipient}}</th>
+                        <th>{{plugIn.pluginList.sendingLogList.length}}</th>
+                        <th>{{plugIn.pluginList.lastRecieved | confDateFormat}}</th>
+                        <th><a href="#" ng-click="resendAllQueueItemsInGroup(plugIn.pluginList.sendingLogList)" title="{{'exchange.sending_queue_resend_all_in_group_title' | i18n}}">{{'exchange.sending_queue_resend_all_in_group' | i18n}}</a></th>
+                    </tr>
+                    <tr ng-show="messageVisible" >
+                        <td colspan="6" class="table-detail-container">
+                            <exchange-sending-queue-details items="plugIn.pluginList.sendingLogList"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
             <search-result-error-alert ng-show="sendingQueue.errorMessage">{{sendingQueue.errorMessage}}</search-result-error-alert>
         </div>
-	</div>
+    </div>
 </div>

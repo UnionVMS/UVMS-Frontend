@@ -1,0 +1,30 @@
+
+<table class="searchResults">
+			<thead>
+				<tr>
+					<th class="date-recieved" ng-show="showDateRecieved">{{'exchange.sending_queue_detail_table_header_date_recieved' | i18n}}</th>
+					<th class="" ng-show="showEmail">{{'exchange.sending_queue_detail_table_header_email' | i18n}}</th>
+					<th class="sender" ng-show="showSenderRecipient">{{'exchange.sending_queue_detail_table_header_sender_recipient' | i18n}}</th>
+					<th class="" ng-show="showAssetName">{{'exchange.sending_queue_detail_table_header_asset_name' | i18n}}</th>
+					<th class="" ng-show="showIRCS">{{'exchange.sending_queue_detail_table_header_ircs' | i18n}}</th>
+					<th class="long" ng-show="showLongitude">{{'exchange.sending_queue_detail_table_header_longitude' | i18n}}</th>
+					<th class="lang" ng-show="showLatitude">{{'exchange.sending_queue_detail_table_header_latitude' | i18n}}</th>
+					<th class="" ng-show="showPositionTime">{{'exchange.sending_queue_detail_table_header_potision_time' | i18n}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in items" ng-class-odd="'even'" ng-class-even="'odd'">
+					<td ng-show="showDateRecieved" class="date-recieved sending-queue-detail-table-cell">{{item.dateRecieved | confDateFormat}}</td>
+					<td ng-show="showEmail" class="">{{item.EMAIL}}</td>
+    				<td ng-show="showSenderRecipient" class="sender sending-queue-detail-table-cell">{{item.senderRecipient | confDateFormat}}</td>
+    				<td ng-show="showAssetName" class="sending-queue-detail-table-cell">{{item.ASSET_NAME}}</td>
+    				<td ng-show="showIRCS" class="sending-queue-detail-table-cell">{{item.IRCS}}</td>
+    				<td ng-show="showLongitude" class="long sending-queue-detail-table-cell">{{item.LONGITUDE}}</td>
+    				<td ng-show="showLatitude" class="lang sending-queue-detail-table-cell">{{item.LATITUDE}}</td>
+    				<td ng-show="showPositionTime" class="sending-queue-detail-table-cell">{{item.POSITION_TIME | confDateFormat}}</td>
+    				<td class="">
+    					<a href="#" title="{{'exchange.sending_queue_resend_title' | i18n}}" ng-click="resendQueuedItemInGroup(item.messageId)">{{'exchange.sending_queue_resend' | i18n}}</a>
+    				</td>
+				</tr>
+			</tbody>
+		</table>
