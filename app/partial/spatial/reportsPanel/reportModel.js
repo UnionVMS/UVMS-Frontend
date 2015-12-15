@@ -42,17 +42,16 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 
 	var convertDate = function(date, direction){
 	    var displayFormat = getDateFormat();
-	    var tz = getTimeZone();
-	    //var src_format = 'YYYY-MM-DD HH:mm:ss Z';
+	    var src_format = 'YYYY-MM-DD HH:mm:ss Z';
 	    var server_format = 'YYYY-MM-DDTHH:mm:ss';
 
 	    if (direction === 'to_server'){
-	        if (moment.utc(date).isValid()){
-	            return moment.utc(date).format(server_format);
+	        if (moment.utc(date, src_format).isValid()){
+	            return moment.utc(date, src_format).format(server_format);
 	        }
 	    } else if(direction === 'from_server') {
-	        if (moment.utc(date).isValid()){
-	            return moment.utc(date).utcOffset(tz).format(displayFormat);
+	        if (moment.utc(date, server_format).isValid()){
+	            return moment.utc(date, server_format).format(displayFormat);
 	        }
 	    }
 	};

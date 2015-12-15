@@ -13,6 +13,7 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'googlechart',
     'ngWebSocket',
     'checklist-model',
+    'angularScreenfull',
 	'ngCookies',
 	'toggle-switch',
 	'colorpicker.module',

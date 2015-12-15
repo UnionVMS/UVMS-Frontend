@@ -1,9 +1,5 @@
-angular.module('unionvmsWeb').filter('stDateUtc', function(globalSettingsService) {
+angular.module('unionvmsWeb').filter('stDateUtc', function(unitConversionService) {
 	return function(date) {
-	    if (date !== null && angular.isDefined(date)){
-	        var displayFormat = globalSettingsService.getDateFormat();
-	        var tz = parseInt(globalSettingsService.getTimezone());
-	        return moment.utc(date).utcOffset(tz).format(displayFormat);
-	    }
+	    return unitConversionService.date.convertToUserFormat(date);
 	};
 });

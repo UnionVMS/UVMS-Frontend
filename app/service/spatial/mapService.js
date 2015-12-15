@@ -136,7 +136,7 @@ ol.control.HistoryControl = function(opt_options){
 };
 ol.inherits(ol.control.HistoryControl, ol.control.Control);
 
-angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $timeout, $templateRequest, spatialHelperService, globalSettingsService) {
+angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $timeout, $templateRequest, $filter, spatialHelperService, globalSettingsService, unitConversionService, coordinateFormatService) {
 	var ms = {};
 	ms.sp = spatialHelperService;
 
@@ -1413,9 +1413,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
 	//POPUP - Define the object that will be used in the popup for vms positions
     ms.setPositionsObjPopup = function(feature){
-        var featData = ms.roundFeatureDecimals(feature, ['calculatedSpeed', 'reportedSpeed'], 5); 
-        var coords = feature.geometry.getCoordinates();
-        var repCoords = ol.proj.transform(coords, ms.getMapProjectionCode(), 'EPSG:4326');
         var data = {
             titles: {
                 vessel_tag: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
@@ -1435,30 +1432,36 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 source: locale.getString('spatial.tab_vms_pos_table_header_source')
             },
             visibility: ms.popupVisibility.positions,
-            properties: feature,
-            formatedDate: moment.utc(feature.positionTime).utcOffset(parseInt(globalSettingsService.getTimezone())).format(globalSettingsService.getDateFormat()),
-            coordinates: {
-                lon: repCoords[0].toFixed(5).toString() + ' \u00b0',
-                lat: repCoords[1].toFixed(5).toString() + ' \u00b0'
-            }
+            properties: ms.formatPositionDataForPopup(feature)
         };
         
         return data;
     };
     
-    //Round numercial fileds for popup display
-    ms.roundFeatureDecimals = function(data, fields, decimalPlaces){
-        var scale = Math.pow(10, decimalPlaces);
-        for (var i = 0; i < fields.length; i++){
-            data[fields[i]] = Math.round(data[fields[i]] * scale) / scale; 
-        }
+    ms.formatPositionDataForPopup = function(data){
+        var coords = data.geometry.getCoordinates();
+        var repCoords = ol.proj.transform(coords, ms.getMapProjectionCode(), 'EPSG:4326');
         
-        return data;
+        return {
+            countryCode: data.countryCode,
+            externalMarking: data.externalMarking,
+            ircs: data.ircs,
+            cfr: data.cfr,
+            posTime: unitConversionService.date.convertToUserFormat(data.positionTime),
+            lon: coordinateFormatService.formatAccordingToUserSettings(repCoords[0]),
+            lat: coordinateFormatService.formatAccordingToUserSettings(repCoords[1]),
+            stat: data.status,
+            m_spd: unitConversionService.speed.checkSpeed(data.reportedSpeed, 5),
+            c_spd: unitConversionService.speed.checkSpeed(data.calculatedSpeed, 5),
+            crs: data.reportedCourse + '\u00b0',
+            msg_tp: data.movementType,
+            act_tp: data.activityType,
+            source: data.source
+        };
     };
-
+    
     //POPUP - Define the object that will be used in the popup for vms positions
     ms.setSegmentsObjPopup = function(feature){
-        var featData = ms.roundFeatureDecimals(feature, ['distance', 'duration', 'speedOverGround'], 5); 
         var data = {
             titles: {
                 vessel_tag: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
@@ -1473,10 +1476,24 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 cat: locale.getString('spatial.tab_vms_seg_table_header_category')
             },
             visibility: ms.popupVisibility.segments,
-            properties: featData
+            properties: ms.formatSegmentDataForPopup(feature)
         };
         
         return data;
+    };
+    
+    ms.formatSegmentDataForPopup = function(data){
+        return {
+            countryCode: data.countryCode,
+            externalMarking: data.externalMarking,
+            ircs: data.ircs,
+            cfr: data.cfr,
+            dist: unitConversionService.distance.checkDistance(data.distance, 5),
+            dur: unitConversionService.duration.timeToHuman('ms', data.duration),
+            spd: unitConversionService.speed.checkSpeed(data.speedOverGround, 5),
+            crs: data.courseOverGround + '\u00b0',
+            cat: data.segmentCategory
+        };
     };
 
 	return ms;

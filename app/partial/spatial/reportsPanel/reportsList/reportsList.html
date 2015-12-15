@@ -54,9 +54,9 @@
 		        <tr ng-repeat="report in displayedRecords">
 		            <td>{{ report.name }}</td>
 		            <td>{{ report.desc }}</td>
-		            <td>{{ report.createdOn | dateUtc:config.target_format }}</td>
+		            <td>{{ report.createdOn | stDateUtc }}</td>
 		            <td>{{ report.createdBy }}</td>
-		            <td>{{ report.executedOn | dateUtc:config.target_format }}</td>
+		            <td>{{ report.executedOn | stDateUtc }}</td>
 		            <td class="dt-center"><span class="label label-default label-visibility">{{report.visibility | capitalize}}</span></td>
 		            <td>
 	                    <button type="button" class="btn btn-success btn-xs btn-bottom-mg" ng-click="runReport($index)"><span class="run-report">{{'spatial.reports_table_run_label' | i18n }}</span></button>
