@@ -4,6 +4,7 @@ angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($s
     $scope.scaleBarUnitsItems = [];
     $scope.projectionSelected = false;
     $scope.hasError = false;
+    $scope.isMapConfigurationModal = $('.mapConfigurationModal').length ? true : false;
 
     function setProjectionItems() {
         var tempProj = [];

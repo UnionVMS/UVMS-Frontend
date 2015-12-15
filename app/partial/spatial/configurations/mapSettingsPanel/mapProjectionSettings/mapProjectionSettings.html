@@ -7,24 +7,26 @@
 			</span>
 	    </div>
 	</div>
-	<div class="row">
-	    <div class="form-group col-md-4 noPadding">
-	        <label for="mapProjection">{{'spatial.map_configuration_map_projection' | i18n}}</label>
-	        <combobox ng-model="configModel.mapSettings.mapProjectionId" items="projectionItems" initialtext="{{'spatial.map_configuration_map_projection' | i18n}}"></combobox>
-	    </div>
-	    <div class="form-group col-md-4 noPadding">
-	        <label for="displayProjection">{{'spatial.map_configuration_display_projection' | i18n}}</label>
-	        <combobox ng-model="configModel.mapSettings.displayProjectionId" items="projectionItems" initialtext="{{'spatial.map_configuration_display_projection' | i18n}}"></combobox>
-	    </div>
-	    <div class="form-group col-md-4 noPadding" ng-show="projectionSelected">
-	        <label for="coordinatesFormat">{{'spatial.map_configuration_coordinates_format' | i18n}}</label>
-	        <combobox id="coordinatesFormat" ng-model="configModel.mapSettings.coordinatesFormat" items="coordinatesFormatItems" initialtext="{{'spatial.map_configuration_coordinates_format' | i18n}}" ng-class="{'has-error': configModel.mapSettings.displayProjectionId !== undefined && configModel.mapSettings.coordinatesFormat === undefined}"></combobox>
-	    </div>
-	</div>
-	<div class="row">
-	    <div class="form-group col-md-4 noPadding">
-	        <label for="scaleBarUnits">{{'spatial.map_configuration_scale_bar_units' | i18n}}</label>
-	        <combobox ng-model="configModel.mapSettings.scaleBarUnits" items="scaleBarUnitsItems" initialtext="{{'spatial.map_configuration_scale_bar_units' | i18n}}"></combobox>
-	    </div>
-	</div>
+	<ng-form name="mapProjSettingsForm">
+		<div class="row">
+		    <div class="form-group col-md-4 noPadding" ng-class="{'has-error': mapProjSettingsForm.mapProjection.$error.required && !isMapConfigurationModal && mapProjSettingsForm.mapProjection.$dirty}">
+		        <label for="mapProjection">{{'spatial.map_configuration_map_projection' | i18n}}</label>
+		        <combobox ng-model="configModel.mapSettings.mapProjectionId" items="projectionItems" initialtext="{{'spatial.map_configuration_map_projection' | i18n}}" ng-required="!isMapConfigurationModal" name="mapProjection"></combobox>
+		    </div>
+		    <div class="form-group col-md-4 noPadding" ng-class="{'has-error': mapProjSettingsForm.displayProjection.$error.required && !isMapConfigurationModal && mapProjSettingsForm.displayProjection.$dirty}">
+		        <label for="displayProjection">{{'spatial.map_configuration_display_projection' | i18n}}</label>
+		        <combobox ng-model="configModel.mapSettings.displayProjectionId" items="projectionItems" initialtext="{{'spatial.map_configuration_display_projection' | i18n}}" ng-required="!isMapConfigurationModal" name="displayProjection"></combobox>
+		    </div>
+		    <div class="form-group col-md-4 noPadding" ng-show="projectionSelected" ng-class="{'has-error': mapProjSettingsForm.coordinatesFormat.$error.required && mapProjSettingsForm.coordinatesFormat.$dirty}">
+		        <label for="coordinatesFormat">{{'spatial.map_configuration_coordinates_format' | i18n}}</label>
+		        <combobox id="coordinatesFormat" ng-model="configModel.mapSettings.coordinatesFormat" items="coordinatesFormatItems" initialtext="{{'spatial.map_configuration_coordinates_format' | i18n}}" ng-required="configModel.mapSettings.displayProjectionId" name="coordinatesFormat"></combobox>
+		    </div>
+		</div>
+		<div class="row">
+		    <div class="form-group col-md-4 noPadding" ng-class="{'has-error': mapProjSettingsForm.scaleBarUnits.$error.required && !isMapConfigurationModal && mapProjSettingsForm.scaleBarUnits.$dirty}">
+		        <label for="scaleBarUnits">{{'spatial.map_configuration_scale_bar_units' | i18n}}</label>
+		        <combobox ng-model="configModel.mapSettings.scaleBarUnits" items="scaleBarUnitsItems" initialtext="{{'spatial.map_configuration_scale_bar_units' | i18n}}" ng-required="!isMapConfigurationModal" name="scaleBarUnits"></combobox>
+		    </div>
+		</div>
+	</ng-form>
 </div>
