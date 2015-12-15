@@ -107,8 +107,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
 
         for (var i = items.length - 1; i >= 0; i--) {
             quantity = quantity + items[i].pluginList.sendingLogList.length;
-        };
-
+        }
         return quantity;
     };
 
