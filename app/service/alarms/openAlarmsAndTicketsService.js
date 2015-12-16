@@ -4,10 +4,30 @@ angular.module('unionvmsWeb').factory('openAlarmsAndTicketsService',function($lo
         return userService.isAllowed(feature, 'Rules' ,true);
     };
 
+    var alarmsLongPolling, ticketsLongPolling;
+
     //Keep count of the number of open alarms and tickets
     var numberOfOpenTicketsAndAlarms = {
         alarms  : 0,
         tickets : 0
+    };
+
+    //Get number of opened alarms and update numberOfOpenTicketsAndAlarms
+    var updateAlarmsCount = function(){
+        alarmRestService.getOpenAlarmsCount().then(function(count){
+            numberOfOpenTicketsAndAlarms.alarms = count;
+        }, function(err){
+            $log.error("Error getting number of open alarms");
+        });
+    };
+
+    //Get number of opened tickets and update numberOfOpenTicketsAndAlarms
+    var updateTicketsCount = function(){
+        alarmRestService.getOpenTicketsCount().then(function(count){
+            numberOfOpenTicketsAndAlarms.tickets = count;
+        }, function(err){
+            $log.error("Error getting number of open tickets.");
+        });
     };
 
     var init = function(){
@@ -18,16 +38,13 @@ angular.module('unionvmsWeb').factory('openAlarmsAndTicketsService',function($lo
         //Check that user has access to view alarms
         if(checkAccess('viewAlarmsHoldingTable')){
             //Get start value
-            alarmRestService.getOpenAlarmsCount().then(function(count){
-                numberOfOpenTicketsAndAlarms.alarms = count;
-            }, function(err){
-                $log.error("Error getting number of open alarms");
-            });
+            updateAlarmsCount();
 
             //Setup long polling
-            longPolling.poll("/rules/activity/alarmcount", function(response) {
-                if(angular.isDefined(response.count)){
-                    numberOfOpenTicketsAndAlarms.alarms = response.count;
+            alarmsLongPolling = longPolling.poll("/rules/activity/alarmcount", function(response) {
+                if(response.updated){
+                    //Get new value from REST service
+                    updateAlarmsCount();
                 }
             }, function(error){
                 $log.error("Error in long polling for alarms count.");
@@ -37,15 +54,12 @@ angular.module('unionvmsWeb').factory('openAlarmsAndTicketsService',function($lo
         //Check that user has access to view tickets
         if(checkAccess('manageAlarmsOpenTickets')){
             //Get start value
-            alarmRestService.getOpenTicketsCount().then(function(count){
-                numberOfOpenTicketsAndAlarms.tickets = count;
-            }, function(err){
-                $log.error("Error getting number of open tickets.");
-            });
+            updateTicketsCount();
 
-            longPolling.poll("/rules/activity/ticketcount", function(response) {
-                if(angular.isDefined(response.count)){
-                    numberOfOpenTicketsAndAlarms.tickets = response.count;
+            ticketsLongPolling = longPolling.poll("/rules/activity/ticketcount", function(response) {
+                if(response.updated){
+                    //Get new value from REST service
+                    updateTicketsCount();
                 }
             }, function(error){
                 $log.error("Error in long polling for tickets count.");
@@ -58,7 +72,13 @@ angular.module('unionvmsWeb').factory('openAlarmsAndTicketsService',function($lo
             return numberOfOpenTicketsAndAlarms;
         },
         restart : function(){
+            longPolling.cancel(ticketsLongPolling);
+            longPolling.cancel(alarmsLongPolling);
             init();
+        },
+        getUpdatedCounts : function(){
+            updateAlarmsCount();
+            updateTicketsCount();
         }
     };
 
