@@ -45,7 +45,7 @@ angular.module('unionvmsWeb')
             }
         };
 
-        $scope.getPlaceholder = function(){                
+        $scope.getPlaceholder = function(){
             if(angular.isUndefined($scope.ngPlaceholder)){
                 return locale.getString('common.choose');
             }
@@ -99,7 +99,7 @@ angular.module('unionvmsWeb')
         //Watch for changes to the ngModel and update the selectedItems
         var watchModelChanges = true;
         $scope.$watch('ngModel', function (newVal, oldVal) {
-            if(newVal !== oldVal && watchModelChanges){
+            if(watchModelChanges){
                 if(newVal instanceof Array){
                     $scope.selectedItems.length = 0;
                     $.each(newVal, function(index, selectedItem){
