@@ -11,7 +11,9 @@ angular.module('unionvmsWeb').factory('longPolling', ['$resource', function($res
             callback(response);
 
             //Keep the longPolling running unless it has been cancelled
-            if(runningLongPollingIds.indexOf(runningLongPollingIds) >= 0){
+            var index = runningLongPollingIds.indexOf(longPollingId);
+            if(index >= 0){
+                runningLongPollingIds.splice(index, 1);
                 poll(path, callback, error);
             }
         }, function(error) {
