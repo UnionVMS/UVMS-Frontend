@@ -5,7 +5,8 @@ angular.module('unionvmsWeb').factory('Audit', function() {
 		this.operation = undefined;
 		this.objectType = undefined;
 		this.date = undefined;
-		this.affectedObject = undefined;
+        this.affectedObject = undefined;
+		this.comment = undefined;
 	}
 
 	Audit.fromJson = function(data) {
@@ -14,7 +15,8 @@ angular.module('unionvmsWeb').factory('Audit', function() {
 		audit.operation = data.operation;
 		audit.objectType = data.objectType;
 		audit.date = data.timestamp;
-		audit.affectedObject = data.affectedObject;
+        audit.affectedObject = data.affectedObject;
+		audit.comment = data.comment;
 
 		return audit;
 	};

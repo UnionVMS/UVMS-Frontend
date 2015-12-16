@@ -6,7 +6,8 @@ describe('Audit', function() {
         username: "niclas",
         operation: "Create",
         objectType: "User",
-        timestamp: "2015-06-24T15:53:59Z"
+        timestamp: "2015-06-24T15:53:59Z",
+        comment: "Test comment",
     };
 
     it('should parse transfer object', inject(function(Audit) {
@@ -15,6 +16,7 @@ describe('Audit', function() {
         expect(audit.operation).toEqual("Create");
         expect(audit.objectType).toEqual("User");
         expect(audit.date).toEqual("2015-06-24T15:53:59Z");
+        expect(audit.comment).toEqual("Test comment");
     }));
 
  });

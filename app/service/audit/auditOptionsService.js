@@ -30,11 +30,16 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
         GIS : {
             AREA : 'Area', //Mock value
         },
+        EXCHANGE : {
+            EXCHANGE_LOG : 'Exchange log',
+            EXCHANGE_UNSENT_MESSAGE : 'Exchange unsent message',
+        },
         ALARMS : {
             ALARM : 'Alarm',
             TICKET : 'Ticket',
             CUSTOM_RULE : 'Custom Rule',
             CUSTOM_RULE_ACTION_TRIGGERED : 'Custom Rule Action Triggered',
+            CUSTOM_RULE_SUBSCRIPTION : 'Custom Rule Subscription',
         },
         ACCESS_CONTROL : {
             USER : 'User',
@@ -102,6 +107,10 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
                 case 'POSITION_REPORTS':
                     newTypes = dropdownTypes.POSITION_REPORTS;
                     newOperations = [dropdownOperations.create];
+                    break;
+                case 'EXCHANGE':
+                    newTypes = dropdownTypes.EXCHANGE;
+                    newOperations = [dropdownOperations.create, dropdownOperations.update, dropdownOperations.remove];
                     break;
                 case 'GIS':
                     newTypes = dropdownTypes.GIS;
