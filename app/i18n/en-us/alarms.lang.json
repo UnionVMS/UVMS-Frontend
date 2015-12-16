@@ -143,8 +143,8 @@
     "rules_test_error_NON_UNIQUE_ACTION" : "One or more actions are not uniqie.",
     "rules_test_error_UNKOWN" : "Uknown problem",
 
-    "rule_subscription_update_success" : "The subscription was succefully updated.",
-    "rule_subscription_update_errror" : "The subscription failed to updated.",
+    "rule_subscription_update_success" : "The subscription was successfully updated.",
+    "rule_subscription_update_errror" : "The subscription failed to update.",
 
 
     "position_report_header" : "Position report",
