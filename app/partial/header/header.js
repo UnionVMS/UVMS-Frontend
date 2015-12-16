@@ -114,12 +114,20 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
     };
 
     $scope.viewNotifications = function(){
+        var notificationState;
         //Go to alarms page if there are any open alarms
         if($scope.numberOfOpenAlarmsAndTickets.alarms > 0){
-            $state.go('app.holdingTable', {}, {reload: true});
+            notificationState = 'app.holdingTable';
         }else if($scope.numberOfOpenAlarmsAndTickets.tickets > 0){
-            $state.go('app.openTickets', {}, {reload: true});
+            notificationState = 'app.openTickets';
         }
+        //Reload state? Necessary when loading the same page we already are viewing
+        var reload = false;
+        var currentState = $state.$current;
+        if(currentState.name === notificationState){
+            reload = true;
+        }
+        $state.go(notificationState, {}, {reload: reload});
     };
 
     //Go to the start page
