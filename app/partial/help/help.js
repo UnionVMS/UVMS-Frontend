@@ -10,10 +10,33 @@ function HelpController(lang, toc, $anchorScroll, $location) {
 	this.titles = toc.titles;
 	this.goTo = goTo;
 	this.localizedUrl = 'partial/help/help-' + lang + '.html';
+	this.localizedSrc = localizedUrl;
+	this.localize = function(url) {
+		return 'partial/help/' + lang + '/' + url;
+	};
+
+	this.pages = [
+		'00-welcome.html',
+		'01-login.html',
+		'02-overview.html',
+		'03-assets.html',
+		'04-mobileTerminals.html',
+		'05-positions.html',
+		'06-polling.html',
+		'07-alarms.html',
+		'08-exchange.html',
+		'09-reports.html',
+		'10-user.html',
+		'11-glossary.html'
+	];
 
 	function goTo(index) {
 		$location.hash(index);
 		$anchorScroll(index);
+	}
+
+	function localizedUrl(url) {
+		return 'assets/help/img/' + lang + '/' + url;
 	}
 }
 
@@ -33,11 +56,28 @@ app.factory('help.lang', ['locale', 'help.langReplacements', function(locale, re
 }]);
 
 app.factory('help.toc', [function() {
+
 	var toc = {};
 	toc.sections = [];
 	toc.titles = {};
-	toc.add = function(section, title) {
-		toc.sections.push(section);
+
+	var sectionIndexes = {};
+	function getInsertionIndex(sectionIndex) {
+		var i = toc.sections.length;
+		if (sectionIndex === undefined) {
+			return i;
+		}
+
+		while (i > 0 && sectionIndexes[toc.sections[i-1]] > sectionIndex) {
+			i--;
+		}
+
+		return i;
+	}
+
+	toc.add = function(section, title, index) {
+		sectionIndexes[section] = Number(index);
+		toc.sections.splice(getInsertionIndex(index), 0, section);
 		toc.titles[section] = title;
 	};
 	toc.reset = function() {
@@ -52,7 +92,7 @@ app.directive('helpSection', ['help.toc', function(toc) {
 	return {
 		restict: 'A',
 		compile: function(elem, attrs) {
-			toc.add(attrs.helpSection, elem.html());
+			toc.add(attrs.helpSection, elem.html(), attrs.index);
 			elem.attr('id', attrs.helpSection);
 		}
 	};
@@ -63,6 +103,21 @@ app.directive('localizedSrc', ['help.lang', function(lang) {
 		restict: 'A',
 		compile: function(elem, attrs) {
 			elem.attr('src', 'assets/help/img/' + lang + '/' + attrs.localizedSrc);
+		}
+	};
+}]);
+
+app.directive('wrapped', ['$compile', 'help.lang', function($compile, lang) {
+	return {
+		restrict: 'A',
+		replace: true,
+		link: function(scope, element, attrs) {
+			var url = 'assets/help/img/' + lang + '/' + attrs.url;
+			var clazz = attrs.class;
+			var html = '<div class="img-wrapper"><img src="' + url +  '" class="' + clazz + '"></div>';
+			element.replaceWith(html);
+			
+			
 		}
 	};
 }]);

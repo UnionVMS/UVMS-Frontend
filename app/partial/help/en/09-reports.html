@@ -1,0 +1,101 @@
+<div>
+    <h2 help-section="reports" index="9">Section 9 Reports</h2>
+    <i>The “Reports” in the main menu shows a live view over were reporting assets are located. This page displays all the accessible reports for the user. The “Reports” page is divided into “Line view” and “Reports”.</i>
+
+    <h4>Line view</h4>
+    <b>Map</b>
+
+    <img wrapped url="09-reports1.png" class="lg">
+
+    <div class="row legend">
+        <div class="col-md-4"><span class="badge">1</span> Eraser- Clear map highlights</div>
+        <div class="col-md-4"><span class="badge">2</span> Measure distance</div>
+        <div class="col-md-4"><span class="badge">3</span> Export map</div>
+        <div class="col-md-4"><span class="badge">4</span> Zoom in/ Zoom out</div>
+        <div class="col-md-4"><span class="badge">5</span> Previous extent/ Next extent</div>
+        <div class="col-md-4"><span class="badge">6</span> Full-screen view</div>
+    </div>
+
+    <h4>Measure distance</h4>
+    <p>Allows calculation of estimated time of arrival based on the criteria selection of measure config panel (supported units are meters, nautical miles and miles):</p>
+    <img wrapped url="09-reports2.jpg">
+
+    <h4>Export Map</h4>
+    <p>Export the current map view to an image format (supported formats are PNG, JPEG and PDF):</p>
+    <img wrapped url="09-reports3.jpg">
+    <h4>Zoom in/out</h4>
+    <p>Zoom in/out the map (also works with “+”and “-” keys and mouse wheel)</p>
+    <h4>History</h4>
+    <p>Go back/forward between map navigations (keeps track of the latest 50 steps)</p>
+    <h4>Eraser</h4>
+    <p>Clear map highlights (related to the zoomTo and panTo functionality)</p>
+    <h4>Full-screen</h4>
+    <p>Activates full-screen mode</p>
+    <h4>Layer tree handle</h4>
+    <p>Opens the layers tree and legend panels:</p>
+    <img wrapped url="09-reports4.jpg">
+    <p>On the layers panel you can specify which layers are visible. Here you can also order the layers (drag and drop) to control the order of the layers over the map.</p>
+    <img wrapped url="09-reports5.jpg">
+    <p>To get the position details you select the information icon on the positions node and then you can select the position on the map.</p>
+    <p>For the segments, you can do the same but instead you have to select it on the segments node:</p>
+    <img wrapped url="09-reports6.jpg">
+
+    <p>You can also watch the same information in a table on VMS tab:</p>
+    <img wrapped url="09-reports7.jpg">
+    <img wrapped url="09-reports8.jpg">
+    <p>It’s also possible to export this data if you click on the export button on the right side of table toolbar in csv format with wkt.</p>
+    <p>On this specific table there’s a filter panel where you can define a parameter for each column. The filtered result will consider all the filters applied.</p>
+    <p>For every row, you can zoom to or pan to the map to see the presented information:</p>
+    <img wrapped url="09-reports9.jpg">
+    <h4>Report List</h4>
+    <p>This page displays all the accessible reports of the current user to search, update, run and delete existing reports and create new ones.</p>
+    <img wrapped url="09-reports10.jpg">
+    <ul>
+        <li>Refresh – refreshes the report list</li>
+        <li>Edit report – edits settings on report</li>
+        <li>Delete report – removes the report</li>
+        <li>New report – allow to create a new report</li>
+        <li>Run report – runs the selected report and open it on live view like in the following picture:</li>
+    </ul>
+    <img wrapped url="09-reports11.jpg">
+
+    <b>Creating a new report</b>
+    <p>On this page the user can create a report and configure different filters. These filters will be applied to the result when the user runs the report.</p>
+    <img wrapped url="09-reports12.jpg">
+
+    <b>Positions filter</b>
+    <p>There are 2 available options; the user can select “Last” or “All”.</p>
+
+    <p>In case of “All”, the user has to type the start and end dates. All positions between these periods will be returned:</p>
+    <img wrapped url="09-reports13.jpg">
+    <p>If the user selects “Last”, he can choose to filter by hours or by positions. When he chooses to filter by hours he will get all positions in the last specified hours:</p>
+    <img wrapped url="09-reports14.jpg">
+    <p>Otherwise, if he chooses to filter by positions, optionally, he can specify a date range:</p>
+    <img wrapped url="09-reports15.jpg">
+    <p>There’s also the “Include Map” option. With this, the user can activate the map in live view.</p>
+    <img wrapped url="09-reports16.jpg">
+    <p>The user may also search and add vessels to his search criteria.</p>
+    <img wrapped url="09-reports17.jpg">
+    <p>It’s possible to see the details of each vessel or vessel group:</p>
+    <img wrapped url="09-reports18.jpg"><img wrapped url="09-reports19.jpg">
+    <p>All the current selected vessels are shown under the table and it’s possible to delete them.</p>
+    <p>On the VMS panel, the user can configure all the data related to positions, segments and tracks:</p>
+    <img wrapped url="09-reports20.jpg">
+    <img wrapped url="09-reports21.jpg">
+    <img wrapped url="09-reports22.jpg">
+
+    <b>Area Selection filter</b>
+    <p>On this section is possible to select areas and add them as filters from the report:</p>
+    <img wrapped url="09-reports23.jpg">
+    <p>On the first field you can choose the layer type and then on the map you can select the area to add in your selection:</p>
+    <img wrapped url="09-reports24.jpg">
+
+    <p>On this example, “EEZ” layer type was selected and the areas appeared on the map. Now it’s possible to select any area and add it to you current selection. You can also delete previous selected areas.</p>
+    <p>Another way to select areas is by area properties:</p>
+    <img wrapped url="09-reports25.jpg">
+
+
+    <p>After receiving the filtered results, it’s possible to show each area on the map and add it to the area selection with the following buttons:</p>
+    <img wrapped url="09-reports26.jpg">
+</div>
+<hr>

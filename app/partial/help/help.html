@@ -5,13 +5,14 @@
 		<div class="card-header">
 			<h3>{{'common.table_of_contents' | i18n}}</h3>
 			<ul>
-				<li ng-repeat="section in help.sections track by $index">
-					<a ng-click="help.goTo(section)">{{help.titles[section]}}</a>
-				</li>
+				 <li ng-repeat="section in help.sections track by $index">
+					<a ng-click="help.goTo(section)"><span ng-bind-html="help.titles[section]"></span></a>
+				 </li>
 			</ul>
 		</div>
 
 		<!-- Include help for current language -->
-		<ng-include src="help.localizedUrl"/>
+		<ng-include ng-repeat="page in help.pages" src="help.localize(page)"/>
+
 	</div>
 <div>
