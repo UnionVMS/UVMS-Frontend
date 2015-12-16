@@ -98,6 +98,7 @@
     "time_span_all" : "No time limit",
     "tons" : "EUtons",
     "update" : "Update",
+    "update_waiting_for_reponse_text" : "Updating...",
     "validation_digits_only" : "Only digits",
     "validation_invalid_numeric" : "Must be numeric",
     "validation_invalid_date" : "Invalid date",

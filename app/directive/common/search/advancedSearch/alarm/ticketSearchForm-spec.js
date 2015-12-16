@@ -29,7 +29,7 @@ describe('TicketSearchController', function() {
 
     it('should listen for resetAlarmSearch event and reset search form when it happens', inject(function($q, ruleRestService) {
         var deferred = $q.defer();
-        spyOn(ruleRestService, "getRulesByQuery").andReturn(deferred.promise);
+        spyOn(ruleRestService, "getAllRulesForUser").andReturn(deferred.promise);
         var controller = createController();
 
         var resetSpySearch = spyOn(scope, 'resetSearch');
@@ -51,7 +51,7 @@ describe('TicketSearchController', function() {
         var items = [rule1, rule2];
         var rulesPage = new SearchResultListPage(items, 1, 1);
         deferred.resolve(rulesPage);
-        var getRulesSpy = spyOn(ruleRestService, "getRulesByQuery").andReturn(deferred.promise);
+        var getRulesSpy = spyOn(ruleRestService, "getAllRulesForUser").andReturn(deferred.promise);
 
         var controller = createController();
 
@@ -64,7 +64,7 @@ describe('TicketSearchController', function() {
 
     it('should remove FROM_DATE and TO_DATE when TIME_SPAN changes to something other than CUSTOM', inject(function($q, ruleRestService) {
         var deferred = $q.defer();
-        spyOn(ruleRestService, "getRulesByQuery").andReturn(deferred.promise);
+        spyOn(ruleRestService, "getAllRulesForUser").andReturn(deferred.promise);
         var controller = createController();
         scope.$digest();
 
@@ -83,7 +83,7 @@ describe('TicketSearchController', function() {
 
     it('should not remove FROM_DATE and TO_DATE when TIME_SPAN changes to CUSTOM', inject(function($q, ruleRestService) {
         var deferred = $q.defer();
-        spyOn(ruleRestService, "getRulesByQuery").andReturn(deferred.promise);
+        spyOn(ruleRestService, "getAllRulesForUser").andReturn(deferred.promise);
         var controller = createController();
         scope.$digest();
 
@@ -102,7 +102,7 @@ describe('TicketSearchController', function() {
 
     it('should change TIME_SPAN to CUSTOM when FROM_DATE or TO_DATE changes', inject(function($q, ruleRestService) {
         var deferred = $q.defer();
-        spyOn(ruleRestService, "getRulesByQuery").andReturn(deferred.promise);
+        spyOn(ruleRestService, "getAllRulesForUser").andReturn(deferred.promise);
         var controller = createController();
         scope.$digest();
 

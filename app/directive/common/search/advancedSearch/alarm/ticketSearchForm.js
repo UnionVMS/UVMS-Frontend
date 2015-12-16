@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('TicketSearchController', function($scope, locale, ruleRestService, configurationService, GetListRequest, userService) {
+angular.module('unionvmsWeb').controller('TicketSearchController', function($scope, locale, ruleRestService, configurationService, userService) {
 
     $scope.rules = [];
 
@@ -9,10 +9,7 @@ angular.module('unionvmsWeb').controller('TicketSearchController', function($sco
         $scope.timeSpanOptions.unshift({text: locale.getString('common.time_span_all'), code:'ALL'});
 
         //Populate rules dropdown
-        var getListRequest = new GetListRequest();
-        getListRequest.addSearchCriteria('RULE_USER', userService.getUserName());
-        getListRequest.addSearchCriteria('AVAILABILITY', 'PUBLIC');
-        ruleRestService.getRulesByQuery(getListRequest).then(function(rulesPage){
+        ruleRestService.getAllRulesForUser().then(function(rulesPage){
             var rulesOptions = [];
             $.each(rulesPage.items, function(i, rule){
                 rulesOptions.push({text: rule.name, code: rule.guid});

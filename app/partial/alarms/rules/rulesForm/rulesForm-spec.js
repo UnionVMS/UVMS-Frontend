@@ -91,51 +91,33 @@ describe('RulesformCtrl', function() {
     }));
 
     describe('updateFormToMatchTheCurrentRule()', function() {
-        it('should add a new definition and a new Email action to new Event Rules', inject(function($rootScope, Rule) {
+        it('should add a new definition to new rules ', inject(function($rootScope, Rule) {
             var controller = createController();
             scope.isCreateNewMode = function(){return true;};
             var addDefinitionRowSpy = spyOn(scope, "addDefinitionRow");;
-            var addEmailActionRowSpy = spyOn(scope, "addEmailActionRow");;
+            var addActionRowSpy = spyOn(scope, "addActionRow");;
 
             scope.currentRule = new Rule();
-            scope.currentRule.type = 'EVENT';
+            scope.currentRule.availability = 'PUBLIC';
             scope.updateFormToMatchTheCurrentRule();
 
             expect(addDefinitionRowSpy).toHaveBeenCalled();
             expect(addDefinitionRowSpy.callCount).toBe(1);
 
-            expect(addEmailActionRowSpy).toHaveBeenCalled();
-            expect(addEmailActionRowSpy.callCount).toBe(1);
+            expect(addActionRowSpy).not.toHaveBeenCalled();
         }));
 
-        it('should add a new definition and a new Email action to new Global Rules', inject(function($rootScope, Rule) {
+        it('should NOT add a new definition or action to existing Rules', inject(function($rootScope) {
             var controller = createController();
             scope.isCreateNewMode = function(){return true;};
             var addDefinitionRowSpy = spyOn(scope, "addDefinitionRow");;
-            var addEmailActionRowSpy = spyOn(scope, "addEmailActionRow");;
-
-            scope.currentRule = new Rule();
-            scope.currentRule.type = 'GLOBAL';
-            scope.updateFormToMatchTheCurrentRule();
-
-            expect(addDefinitionRowSpy).toHaveBeenCalled();
-            expect(addDefinitionRowSpy.callCount).toBe(1);
-
-            expect(addEmailActionRowSpy).toHaveBeenCalled();
-            expect(addDefinitionRowSpy.callCount).toBe(1);
-        }));
-
-        it('should NOT add a new definition and a new Email  action to existing Rules', inject(function($rootScope) {
-            var controller = createController();
-            scope.isCreateNewMode = function(){return true;};
-            var addDefinitionRowSpy = spyOn(scope, "addDefinitionRow");;
-            var addEmailActionRowSpy = spyOn(scope, "addEmailActionRow");;
+            var addActionRowSpy = spyOn(scope, "addActionRow");;
 
             scope.currentRule = createRuleWithData();
             scope.updateFormToMatchTheCurrentRule();
 
             expect(addDefinitionRowSpy).not.toHaveBeenCalled();
-            expect(addEmailActionRowSpy).not.toHaveBeenCalled();
+            expect(addActionRowSpy).not.toHaveBeenCalled();
         }));
 
         it('should update list of disabled action', inject(function($rootScope, Rule) {
@@ -152,13 +134,11 @@ describe('RulesformCtrl', function() {
         it('should enable or disable the dropdowns for availability and type', inject(function($rootScope, Rule) {
             var controller = createController();
             var updateAvailabilityDropdownSpy = spyOn(scope, "updateAvailabilityDropdown");;
-            var updateDisableTypeDropdownSpy = spyOn(scope, "updateDisableTypeDropdown");;
 
             scope.currentRule = new Rule();
             scope.updateFormToMatchTheCurrentRule();
 
             expect(updateAvailabilityDropdownSpy).toHaveBeenCalled();
-            expect(updateDisableTypeDropdownSpy).toHaveBeenCalled();
         }));
 
         it('should reset test message', inject(function($rootScope, Rule) {
@@ -236,35 +216,6 @@ describe('RulesformCtrl', function() {
             scope.currentRule = new Rule();
             expect(scope.disableForm()).toBeFalsy();
         }));
-    });
-
-    describe('updateDisableTypeDropdown()', function() {
-        it('should set disableTypeDropdown variable to false if user is allowed to manage global rules', inject(function($rootScope, Rule) {
-            var controller = createController();
-
-            scope.allowedToManageGlobalRules = function(){return true;};
-
-            scope.disableTypeDropdown = true;
-            scope.currentRule = new Rule();
-
-            scope.updateDisableTypeDropdown();
-            expect(scope.disableTypeDropdown).toBeFalsy();
-        }));
-
-        it('should set currentRule type to EVENT if user is NOT allowed to manage global rules but allowed to manage event rules', inject(function($rootScope, Rule) {
-            var controller = createController();
-
-            scope.allowedToManageGlobalRules = function(){return false;};
-            spyOn(scope, "disableForm").andReturn(false);
-
-            scope.disableTypeDropdown = true;
-            scope.currentRule = new Rule();
-            scope.currentRule.type = undefined;
-
-            scope.updateDisableTypeDropdown();
-            expect(scope.currentRule.type).toEqual('EVENT');
-        }));
-
     });
 
     describe('addDefinitionRow()', function() {
@@ -387,29 +338,70 @@ describe('RulesformCtrl', function() {
 
 
     describe('updateAvailabilityDropdown()', function() {
-        it('should disable availabilityType when Rule type is GLOBAL', inject(function($rootScope, Rule) {
+
+        it('should disable Global option when user dont have permission to manage global rules', inject(function($rootScope, Rule) {
+            var controller = createController();
+            scope.isCreateNewMode = function(){return true;};
+            scope.allowedToManageGlobalRules = function(){
+                return false;
+            }
+
+            scope.currentRule = new Rule();
+            scope.currentRule.availability = 'PUBLIC';
+
+            scope.updateAvailabilityDropdown();
+            expect(scope.disabledAvailabilityTypes[0]).toEqual('GLOBAL');
+            expect(scope.disableAvailability).toBeFalsy();
+        }));
+
+        it('should enable Global option when user have permission to manage global rules', inject(function($rootScope, Rule) {
+            var controller = createController();
+            scope.isCreateNewMode = function(){return true;};
+            scope.allowedToManageGlobalRules = function(){
+                return true;
+            }
+
+            scope.currentRule = new Rule();
+            scope.currentRule.availability = 'PUBLIC';
+
+            scope.updateAvailabilityDropdown();
+            expect(scope.disabledAvailabilityTypes.length).toEqual(0); //No options should be disabled
+            expect(scope.disableAvailability).toBeFalsy();
+        }));
+
+        it('should disable availabilityType when Ticket actions exists for other users', inject(function($rootScope, userService, Rule, RuleAction) {
+            spyOn(userService, 'getUserName').andReturn('TEST_USER');
             var controller = createController();
             scope.isCreateNewMode = function(){return true;};
 
             scope.currentRule = new Rule();
-            scope.currentRule.type = 'GLOBAL';
-            scope.currentRule.availability = 'PRIVATE';
+            scope.currentRule.availability = 'PUBLIC';
+            var action = new RuleAction();
+            action.action = 'TICKET';
+            action.value = 'OTHER_USER';
+            var action2 = new RuleAction();
+            action2.action = 'TICKET';
+            action2.value = 'TEST_USER';
+            scope.currentRule.actions = [action, action2];
 
             scope.updateAvailabilityDropdown();
             expect(scope.currentRule.availability).toEqual('PUBLIC');
             expect(scope.disableAvailability).toBeTruthy();
         }));
 
-        it('should enable availabilityType when Rule type isn\'t GLOBAL', inject(function($rootScope, Rule) {
+        it('should enable availabilityType when Ticket actions only exists for the current users', inject(function($rootScope, userService, Rule, RuleAction) {
+            spyOn(userService, 'getUserName').andReturn('TEST_USER');
             var controller = createController();
             scope.isCreateNewMode = function(){return true;};
-
             scope.currentRule = new Rule();
-            scope.currentRule.type = 'EVENT';
-            scope.currentRule.availability = 'PRIVATE';
+            scope.currentRule.availability = 'PUBLIC';
+            var action = new RuleAction();
+            action.action = 'TICKET';
+            action.value = 'TEST_USER';
+            scope.currentRule.actions = [action];
 
             scope.updateAvailabilityDropdown();
-            expect(scope.currentRule.availability).toEqual('PRIVATE'); //Should be unchanged
+            expect(scope.currentRule.availability).toEqual('PUBLIC');
             expect(scope.disableAvailability).toBeFalsy();
         }));
 
@@ -486,7 +478,7 @@ describe('RulesformCtrl', function() {
 
         });
         scope.currentRule = new Rule();
-        scope.currentRule.type = "EVENT";
+        scope.currentRule.availability = "PUBLIC";
 
         scope.updateDisabledActions();
         expect(scope.disabledActions).toEqual([]);
@@ -519,7 +511,7 @@ describe('RulesformCtrl', function() {
 
         });
         scope.currentRule = new Rule();
-        scope.currentRule.type = "GLOBAL";
+        scope.currentRule.availability = "GLOBAL";
 
         scope.updateDisabledActions();
         expect(scope.disabledActions).toEqual(['TICKET']);

@@ -12,7 +12,7 @@ describe('RulesCtrl', function() {
       spyOn(userService, "getUserName").andReturn(testUser);
     }));
 
-	it('should be possible to delete or edit Event rules if user has access to feature manageAlarmsRules', inject(function(Rule, userService) {
+	it('should be possible to delete or edit Public rules if user has access to feature manageAlarmsRules', inject(function(Rule, userService) {
 
         spyOn(userService, "isAllowed").andCallFake(function(feature, module, allContexts){
             if(feature === 'manageAlarmsRules'){
@@ -22,7 +22,7 @@ describe('RulesCtrl', function() {
         });
 
         var rule = new Rule();
-        rule.type = 'EVENT';
+        rule.availability = 'PUBLIC';
         rule.createdBy = testUser;
 		expect(scope.allowedToDeleteOrUpdateRule(rule)).toBeTruthy();
         expect(userService.isAllowed.mostRecentCall.args[0]).toEqual('manageAlarmsRules');
@@ -30,7 +30,7 @@ describe('RulesCtrl', function() {
 
 	}));
 
-    it('should NOT be possible to delete or edit Event rules if user has access to feature manageAlarmsRules', inject(function(Rule, userService) {
+    it('should NOT be possible to delete or edit Public rules if user has access to feature manageAlarmsRules', inject(function(Rule, userService) {
 
         spyOn(userService, "isAllowed").andCallFake(function(feature, module, allContexts){
             if(feature === 'manageAlarmsRules'){
@@ -40,7 +40,7 @@ describe('RulesCtrl', function() {
         });
 
         var rule = new Rule();
-        rule.type = 'EVENT';
+        rule.availability = 'PUBLIC';
         rule.createdBy = testUser;
         expect(scope.allowedToDeleteOrUpdateRule(rule)).toBeFalsy();
         expect(userService.isAllowed.mostRecentCall.args[0]).toEqual('manageAlarmsRules');
@@ -58,7 +58,7 @@ describe('RulesCtrl', function() {
         });
 
         var rule = new Rule();
-        rule.type = 'GLOBAL';
+        rule.availability = 'GLOBAL';
         rule.createdBy = testUser;
         expect(scope.allowedToDeleteOrUpdateRule(rule)).toBeTruthy();
         expect(userService.isAllowed.mostRecentCall.args[0]).toEqual('manageGlobalAlarmsRules');
@@ -76,7 +76,7 @@ describe('RulesCtrl', function() {
         });
 
         var rule = new Rule();
-        rule.type = 'GLOBAL';
+        rule.availability = 'GLOBAL';
         rule.createdBy = testUser;
         expect(scope.allowedToDeleteOrUpdateRule(rule)).toBeFalsy();
         expect(userService.isAllowed.mostRecentCall.args[0]).toEqual('manageGlobalAlarmsRules');
@@ -84,15 +84,4 @@ describe('RulesCtrl', function() {
 
     }));
 
-
-    it("isSubscriptionPossible should return correctly", inject(function(Rule) {
-        var rule = new Rule();
-
-        //Subscription is only possible when type is other than 'GLOBAL'
-        rule.type = 'GLOBAL';
-        expect(scope.isSubscriptionPossible(rule)).toBeFalsy();
-
-        rule.type = 'EVENT';
-        expect(scope.isSubscriptionPossible(rule)).toBeTruthy();
-    }));
 });

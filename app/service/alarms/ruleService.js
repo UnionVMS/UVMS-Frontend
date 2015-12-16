@@ -16,17 +16,12 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log, rules
             //Global rule? Add text "CREATE NOTIFICATION FOR ALL USERS AND"
             if(rule.isGlobal()){
                 text += ' ' +locale.getString('alarms.rules_rule_as_text_action_TICKET_ALL_USERS');
-                if(rule.actions.length > 0){
-                    text += ' ' +locale.getString('alarms.rules_definition_and');
-                }
+            }else{
+                text += ' ' +locale.getString('alarms.rules_rule_as_text_action_TICKET');
             }
 
             $.each(rule.actions, function(index, action){
-                if(index === 0){
-                    text += ' ';
-                }else{
-                    text += ' ' +locale.getString('alarms.rules_definition_and') +' ';
-                }
+                text += ' ' +locale.getString('alarms.rules_definition_and') +' ';
                 text += ruleService.getRuleActionAsText(action);
             });
             return text;
@@ -91,7 +86,6 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log, rules
             var returnObject = {success: false, problems:[]};
             //Validation rules:
             //At least 1 definition
-            //At least 1 action if not GLOBAL rule
             //LogicBoolOperator is AND/OR for all but the last that is NONE
             //parentheses match
             //No empty criterias field for a definition
@@ -101,13 +95,9 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log, rules
             //No empty value field for an action that requires a value
             //No multiple actions with same action and value
             try{
-                //At least 1 definition and at least 1 action if not GLOBAL rule
+                //At least 1 definition
                 if(rule.getNumberOfDefinitions() === 0){
                     returnObject.problems.push('NO_DEFINITIONS');
-                }
-
-                if(!rule.isGlobal() && rule.getNumberOfActions() === 0 ){
-                    returnObject.problems.push('NO_ACTIONS');
                 }
 
                 var i,

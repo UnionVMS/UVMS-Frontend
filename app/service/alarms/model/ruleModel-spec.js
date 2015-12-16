@@ -13,13 +13,22 @@ describe('Rule', function() {
         "guid": "dummyGuid1",
         "name": "My new rule1",
         "description": "Rule to test the frontend.",
-        "type": "GLOBAL",
-        "availability": "PUBLIC",
+        "availability": "GLOBAL",
         "active": false,
         "archived": false,
         "lastTriggered": "2015-08-01 12:43:02",
         "updatedBy": "Test user",
         "updated": "2015-06-01 12:44:00",
+        "subscriptions": [
+            {
+                "owner" : "Test1",
+                "type" : "TICKET",
+            },
+            {
+                "owner" : "Test2",
+                "type" : "EMAIL",
+            }
+        ],
         "definitions": [
             {
               "startOperator": "(",
@@ -85,7 +94,6 @@ describe('Rule', function() {
         expect(rule.description).toBeUndefined();
         expect(rule.active).toEqual(true);
         expect(rule.archived).toEqual(false);
-        expect(rule.type).toEqual("GLOBAL");
         expect(rule.availability).toEqual("PUBLIC");
 
         expect(rule.lastTriggered).toBeUndefined();
@@ -93,7 +101,7 @@ describe('Rule', function() {
         expect(rule.dateUpdated).toBeUndefined();
 
         expect(rule.notifyByEMail).toBeUndefined();
-        expect(rule.subscription).toBeUndefined();
+        expect(rule.subscriptions.length).toEqual(0);
 
         expect(rule.timeIntervals.length).toEqual(0);
         expect(rule.definitions.length).toEqual(0);
@@ -105,7 +113,6 @@ describe('Rule', function() {
 
         expect(rule.guid).toEqual(ruleDTO.guid);
         expect(rule.name).toEqual(ruleDTO.name);
-        expect(rule.type).toEqual(ruleDTO.type);
         expect(rule.availability).toEqual(ruleDTO.availability);
         expect(rule.active).toEqual(ruleDTO.active);
         expect(rule.archived).toEqual(ruleDTO.archived);
@@ -131,7 +138,9 @@ describe('Rule', function() {
         expect(rule.timeIntervals.length).toEqual(ruleDTO.timeIntervals.length);
 
         expect(rule.notifyByEMail).toBeUndefined();
-        expect(rule.subscription).toBeUndefined();
+        expect(rule.subscriptions.length).toEqual(ruleDTO.subscriptions.length);
+        expect(rule.subscriptions[0].owner).toEqual(ruleDTO.subscriptions[0].owner);
+        expect(rule.subscriptions[1].type).toEqual(ruleDTO.subscriptions[1].type);
 
     }));
 
@@ -199,6 +208,27 @@ describe('Rule', function() {
         var numIntervalsAfter = rule.getNumberOfTimeIntervals();
         expect(numIntervalsAfter).toEqual(numIntervalsBefore+1);
         expect(rule.timeIntervals[numIntervalsBefore]).toEqual(inteval);
+    }));
+
+
+    it("isGlobal() should return true when availability is GLOBAL", inject(function(Rule, RuleTimeInterval) {
+        var rule = new Rule();
+        rule.availability = 'GLOBAL'
+        expect(rule.isGlobal()).toBeTruthy();
+        rule.availability = 'global'
+        expect(rule.isGlobal()).toBeTruthy();
+        rule.availability = 'private'
+        expect(rule.isGlobal()).toBeFalsy();
+    }));
+
+    it("isPrivate() should return true when availability is PRIVATE", inject(function(Rule, RuleTimeInterval) {
+        var rule = new Rule();
+        rule.availability = 'PRIVATE'
+        expect(rule.isPrivate()).toBeTruthy();
+        rule.availability = 'private'
+        expect(rule.isPrivate()).toBeTruthy();
+        rule.availability = 'GLOBAL'
+        expect(rule.isPrivate()).toBeFalsy();
     }));
 });
 

@@ -1,6 +1,9 @@
 <div class="alarmSearchContainer" ng-controller="HoldingTableSearchController">
 	<div class="row">
 
+        <div class="col-md-2">
+            <dropdown ng-model="advancedSearchObject.STATUS" initialtext="{{'alarms.alarms_search_status' | i18n}}" items="statusOptions"></dropdown>
+        </div>
 		<div class="col-md-2">
 			<dropdown ng-model="advancedSearchObject.TIME_SPAN" no-placeholder-item items="timeSpanOptions"></dropdown>
 		</div>
@@ -10,9 +13,6 @@
 		<div class="col-md-2">
 			<datepicker-input model="advancedSearchObject.TO_DATE" time="true" min-date="advancedSearchObject.FROM_DATE"  placeholder="{{'common.search_to' | i18n}}"></datepicker-input>
 		</div>
-        <div class="col-md-2">
-            <dropdown ng-model="advancedSearchObject.STATUS" initialtext="{{'alarms.alarms_search_status' | i18n}}" items="statusOptions"></dropdown>
-        </div>
         <div class="col-md-2">
             <input type="text" ng-model="advancedSearchObject.NAME" placeholder="{{'alarms.alarms_search_affected_object_placeholder' | i18n}}"/>
         </div>

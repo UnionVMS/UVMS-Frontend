@@ -9,6 +9,7 @@ describe('Ticket', function() {
         updatedBy: "close user",
         ruleName: "Da Rule",
         sender: "SWE",
+        recipient: "DEN",
         status: "CLOSED",
     };
     beforeEach(module('unionvmsWeb'));
@@ -23,6 +24,7 @@ describe('Ticket', function() {
         expect(ticket.positionGuid).toEqual(ticketData.movementGuid);
         expect(ticket.ruleName).toEqual(ticketData.ruleName);
         expect(ticket.sender).toEqual(ticketData.sender);
+        expect(ticket.recipient).toEqual(ticketData.recipient);
         expect(ticket.updated).toEqual(ticketData.updated);
         expect(ticket.updatedBy).toEqual(ticketData.updatedBy);
         expect(ticket.status).toEqual(ticketData.status);

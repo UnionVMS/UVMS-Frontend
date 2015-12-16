@@ -9,11 +9,11 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         outdated : false
     };
 
-    //Should rule type dropwdown be disabled?
-    $scope.disableTypeDropdown = false;
-
     //List of actions thare are disabled
     $scope.disabledActions = [];
+
+    //List of availability types thare are disabled
+    $scope.disabledAvailabilityTypes = [];
 
     //Action that creates ticket/notification
     var TICKET_ACTION = 'TICKET';
@@ -55,11 +55,6 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
             $scope.addDefinitionRow();
         }
 
-        //Add a new action row with email as action to new rules
-        if($scope.currentRule.getNumberOfActions() === 0){
-            $scope.addEmailActionRow();
-        }
-
         //Reset form validation
         if(angular.isDefined($scope.ruleForm)){
             $scope.ruleForm.$setPristine();
@@ -68,9 +63,6 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         //Reset test message
         $scope.ruleTest.message = undefined;
         $scope.ruleTest.outdated = false;
-
-        //Enable/disable type dropdown
-        $scope.updateDisableTypeDropdown();
 
         //Enable/disable availability dropdown
         $scope.updateAvailabilityDropdown();
@@ -113,69 +105,30 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         return angular.isDefined($scope.currentRule) && $scope.currentRule.archived;
     };
 
-    //Should the Type dropdown be disabled?
-    $scope.updateDisableTypeDropdown = function(){
-        if($scope.allowedToManageGlobalRules()){
-            $scope.disableTypeDropdown = false;
-        }else{
-            $scope.disableTypeDropdown = true;
-            //Edit mode? then set type to EVENT
-            if(!$scope.disableForm()){
-                $scope.currentRule.type = 'EVENT';
-            }
-        }
-    };
-
-    //Callback when selecting value in Type dropdown
-    $scope.onTypeSelection = function(selection){
-        var selectedType = selection.code;
-        $scope.currentRule.type = selectedType;
-
-        //Global rule
-        if($scope.currentRule.isGlobal()){
-            //Remove all old TICKET actions
-            var i = $scope.currentRule.actions.length;
-            while (i--) {
-                if($scope.currentRule.actions[i].action === TICKET_ACTION){
-                    $scope.currentRule.actions.splice(i, 1);
-                }
-            }
-            //Set new order for actions
-            $.each($scope.currentRule.actions, function(i, def){
-                def.order = i;
-            });
-        }
-        //Event rule
-        else{
-            //Add a new action if no actions exist
-            if($scope.currentRule.getNumberOfActions() === 0){
-                $scope.addActionRow();
-            }
-        }
-
+    //Callback when selecting value in Availability dropdown
+    $scope.onAvailabilitySelection = function(selection){
         $scope.updateAvailabilityDropdown();
     };
 
-    //Disable availability dropdown and set value to PUBLIC when type is GLOBAL
+    //Disable availability dropdown or options in the dropdown
     $scope.disableAvailability = false;
     $scope.updateAvailabilityDropdown = function(){
-        //Global rule
-        if($scope.currentRule.isGlobal()){
-            $scope.currentRule.availability = 'PUBLIC';
+        //Disable entire dropdown if TICKET actions exists for other users
+        if(existsTicketActionsForOtherUsers()){
             $scope.disableAvailability = true;
         }
-        //Event rule
         else{
-            //Disable if TICKET actions exists for other users
-            if(existsTicketActionsForOtherUsers()){
-                $scope.disableAvailability = true;
-            }
-            else{
-                $scope.disableAvailability = false;
-            }
-            if(angular.isUndefined($scope.currentRule.availability)){
-                $scope.currentRule.availability = $scope.DROPDOWNS.AVAILABILITY_TYPES[0].code;
-            }
+            $scope.disableAvailability = false;
+        }
+        if(angular.isUndefined($scope.currentRule.availability)){
+            $scope.currentRule.availability = $scope.DROPDOWNS.AVAILABILITY_TYPES[0].code;
+        }
+
+        //Disable Global option if user doesn't have permission to manage global rules
+        if(!$scope.allowedToManageGlobalRules()){
+            $scope.disabledAvailabilityTypes.push('GLOBAL');
+        }else if($scope.disabledAvailabilityTypes.length > 0){
+            $scope.disabledAvailabilityTypes.length = 0;
         }
     };
 
@@ -325,34 +278,12 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         var ruleAction = new RuleAction();
         ruleAction.action = $scope.getFirstActionThatIsEnabled();
         ruleAction.order = $scope.currentRule.getNumberOfActions();
-        setDefaultValueToAction(ruleAction);
 
         $scope.currentRule.addAction(ruleAction);
         //Update list of disabled actions
         $scope.updateDisabledActions();
     };
 
-    //Add an action row with actions set to EMAIL
-    $scope.addEmailActionRow = function(){
-        var ruleAction = new RuleAction();
-        //Check that EMAIL is an available action
-        var emailActionIsAvailable = false;
-        $.each($scope.DROPDOWNS.ACTIONS, function(index, dropdownItem){
-            if(dropdownItem.code === 'EMAIL'){
-                emailActionIsAvailable = true;
-            }
-        });
-        if(emailActionIsAvailable){
-            ruleAction.action = 'EMAIL';
-            ruleAction.order = $scope.currentRule.getNumberOfActions();
-            setDefaultValueToAction(ruleAction);
-            $scope.currentRule.addAction(ruleAction);
-            //Update list of disabled actions
-            $scope.updateDisabledActions();
-        }else{
-            $scope.addActionRow();
-        }
-    };
 
     //Check if an action requires a value
     $scope.actionShouldHaveValue = function(action){
@@ -371,33 +302,6 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         return actionVal;
     };
 
-    //Set defaul value to action
-    var setDefaultValueToAction = function(ruleAction){
-        ruleAction.value = undefined;
-
-        switch(ruleAction.action){
-            case 'TICKET':
-                //Add username to value if action is TICKET
-                ruleAction.value = userService.getUserName();
-                break;
-            case 'EMAIL':
-                //Add email to value if action is TICKET
-                //$scope.currentUserEmailAddress exists in parent scope (rule.js)
-                ruleAction.value = $scope.currentUserEmailAddress;
-                break;
-            default:
-                break;
-        }
-
-        //Dropdown list of values?
-        var valueType = $scope.getActionValueInputType(ruleAction);
-        if(valueType === 'DROPDOWN'){
-            var valueDropdownOptions = rulesOptionsService.getDropdownValuesForAction(ruleAction);
-            if(valueDropdownOptions && valueDropdownOptions.length > 0){
-                ruleAction.value = valueDropdownOptions[0].code;
-            }
-        }
-    };
 
     //Update list of disabled actions
     $scope.updateDisabledActions = function(){
@@ -433,15 +337,6 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         }
     };
 
-    //Is the user allowed to edit the action?
-    $scope.isAllowedToEditAction = function(ruleAction){
-        //If TICKET action for other user, then user is not allowed to edit it
-        if(ruleAction.action === TICKET_ACTION && ruleAction.value !== userService.getUserName()){
-            return false;
-        }
-        return true;
-    };
-
     //Check if it exists TICKET actions for other user on the rule
     var existsTicketActionsForOtherUsers = function(){
         for(var i=0; i<$scope.currentRule.actions.length; i++){
@@ -460,7 +355,6 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         if(!$scope.actionShouldHaveValue(ruleAction)){
             ruleAction.value = undefined;
         }
-        setDefaultValueToAction(ruleAction);
         $timeout($scope.updateDisabledActions, 10);
     };
 
@@ -491,11 +385,6 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
             return "DROPDOWN";
         }
 
-        //Text disabled
-        if(action.action === TICKET_ACTION){
-            return "TEXT_DISABLED";
-        }
-
         //Email input?
         if(rulesOptionsService.isRuleActionValueAnEmail(action)){
             return "EMAIL";
@@ -517,6 +406,8 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
     var isValidForm = function(){
         if(!$scope.ruleForm.$valid){
             alertService.showErrorMessage(locale.getString('common.form_validation_error_message'));
+            //Test rule as well to get an updated test text
+            $scope.testRule();
             return false;
         }
 

@@ -9,6 +9,7 @@ angular.module('unionvmsWeb').factory('Ticket', function() {
         this.positionGuid = undefined;
         this.ruleName = undefined;
         this.sender = undefined;
+        this.recipient = undefined;
         this.updated = undefined;
         this.updatedBy = undefined;
         this.status = undefined;
@@ -24,6 +25,7 @@ angular.module('unionvmsWeb').factory('Ticket', function() {
         ticket.positionGuid = dto.movementGuid;
         ticket.ruleName = dto.ruleName;
         ticket.sender = dto.sender;
+        ticket.recipient = dto.recipient;
         ticket.updated = dto.updated;
         ticket.updatedBy = dto.updatedBy;
         ticket.status = dto.status;
@@ -75,6 +77,7 @@ angular.module('unionvmsWeb').factory('Ticket', function() {
         copy.positionGuid = this.positionGuid;
         copy.ruleName = this.ruleName;
         copy.sender = this.sender;
+        copy.recipient = this.recipient;
         copy.updated = this.updated;
         copy.updatedBy = this.updatedBy;
         copy.status = this.status;

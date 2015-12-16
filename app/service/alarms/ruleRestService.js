@@ -8,12 +8,17 @@ angular.module('unionvmsWeb')
                     update: {method: 'PUT'}
                 });
             },
-            getAllRules : function(){
-                return $resource('/rules/rest/customrules/listAll');
+            getAllRulesForUser : function(){
+                return $resource('/rules/rest/customrules/listAll/:userName');
             },
             getRulesByQuery : function(){
                 return $resource('/rules/rest/customrules/listByQuery',{},{
                     list : { method: 'POST'}
+                });
+            },
+            subscription : function(){
+                return $resource('/rules/rest/customrules/subscription',{},{
+                    update : { method: 'POST'}
                 });
             },
             getConfig : function(){
@@ -61,11 +66,11 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
-    var getAllRules = function(){
+    var getAllRulesForUser = function(){
         var deferred = $q.defer();
 
         //Get list of all rules
-        ruleRestFactory.getAllRules().get({}, function(response){
+        ruleRestFactory.getAllRulesForUser().get({userName: userService.getUserName()}, function(response){
                 if(parseInt(response.code) !== 200){
                     deferred.reject("Invalid response status");
                     return;
@@ -89,7 +94,7 @@ angular.module('unionvmsWeb')
                 deferred.resolve(searchResultListPage);
             },
             function(error) {
-                $log.error("Error getting list of rules", error);
+                $log.error("Error getting list of rules for user", error);
                 deferred.reject(error);
             }
         );
@@ -118,6 +123,25 @@ angular.module('unionvmsWeb')
             },
             function(error) {
                 $log.error("Error getting list of rules by query", error);
+                deferred.reject(error);
+            }
+        );
+        return deferred.promise;
+    };
+
+    var updateSubscription = function(ruleSubscriptionUpdate){
+        var deferred = $q.defer();
+        //Set subscriber name to the current user
+        ruleSubscriptionUpdate.setOwner(userService.getUserName());
+        ruleRestFactory.subscription().update(ruleSubscriptionUpdate.DTO(), function(response){
+                if(parseInt(response.code) !== 200){
+                    deferred.reject("Invalid response status");
+                    return;
+                }
+                deferred.resolve(Rule.fromDTO(response.data));
+            },
+            function(error) {
+                $log.error("Error updating subscription for rule", error);
                 deferred.reject(error);
             }
         );
@@ -187,10 +211,11 @@ angular.module('unionvmsWeb')
     return {
         getConfig: getConfig,
         getRuleByGuid: getRuleByGuid,
-        getAllRules: getAllRules,
+        getAllRulesForUser: getAllRulesForUser,
         getRulesByQuery: getRulesByQuery,
         updateRule: updateRule,
         createNewRule: createNewRule,
-        deleteRule: deleteRule
+        deleteRule: deleteRule,
+        updateSubscription: updateSubscription
     };
 });

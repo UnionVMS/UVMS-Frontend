@@ -78,7 +78,7 @@ describe('alarmRestService', function() {
             //List of tickets
             getTickets: function() {
                 return {
-                    list: function(getListRequest, callback) {
+                    list: function(userName, getListRequest, callback) {
                         //Success if page = 1, otherwize return 500
                         if(getListRequest.pagination.page === 1){
                             callback({
@@ -149,20 +149,20 @@ describe('alarmRestService', function() {
             },
             getOpenTicketsCount: function() {
                 return {
-                    get: function(callback) {
+                    get: function(idObject, callback) {
                         callback({
                             code : 200,
-                            data: 2
+                            data: 5
                         });
                     },
                 }
             },
             getOpenAlarmsCount: function() {
                 return {
-                    get: function(callback) {
+                    get: function(idObject, callback) {
                         callback({
                             code : 200,
-                            data: 2
+                            data: 3
                         });
                     },
                 }
@@ -343,9 +343,9 @@ describe('alarmRestService', function() {
     describe('getOpenTicketsCount', function() {
         it("getOpenTicketsCount should send request to backend and return received object", inject(function($rootScope, alarmRestService) {
             var resolved = false;
-            alarmRestService.getOpenTicketsCount().then(function(numberOfOpenTickets){
+            alarmRestService.getOpenTicketsCount().then(function(count){
                 resolved = true;
-                expect(numberOfOpenTickets).toEqual(2);
+                expect(count).toBe(5);
             });
             $rootScope.$digest();
             expect(resolved).toBe(true);
@@ -356,9 +356,9 @@ describe('alarmRestService', function() {
     describe('getOpenAlarmsCount', function() {
         it("getOpenAlarmsCount should send request to backend and return received object", inject(function($rootScope, alarmRestService) {
             var resolved = false;
-            alarmRestService.getOpenAlarmsCount().then(function(numberOfOpenTickets){
+            alarmRestService.getOpenAlarmsCount().then(function(count){
                 resolved = true;
-                expect(numberOfOpenTickets).toEqual(2);
+                expect(count).toBe(3);
             });
             $rootScope.$digest();
             expect(resolved).toBe(true);

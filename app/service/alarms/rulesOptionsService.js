@@ -3,7 +3,6 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
     var actionsThatRequireValue = [];
     var DROPDOWNS = {
         ACTIONS : [],
-        RULE_TYPES : [],
         AVAILABILITY_TYPES : [],
         ACTIVE_STATUSES : [],
         START_OPERATORS : [],
@@ -45,17 +44,14 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
 
     var setupDropdowns = function(){
         /*HARD CODED BELOW*/
-        //Rule types
-        DROPDOWNS.RULE_TYPES =[
-            createDropdownValue('TYPES', 'GLOBAL'),
-            createDropdownValue('TYPES', 'EVENT')
-        ];
 
         //Availability types
         DROPDOWNS.AVAILABILITY_TYPES =[
-            createDropdownValue('AVAILABILITIES', 'PUBLIC'),
-            createDropdownValue('AVAILABILITIES', 'PRIVATE')
+            {'text': locale.getString('config.RULES_AVAILABILITY_PUBLIC'),'code': 'PUBLIC'},
+            {'text': locale.getString('config.RULES_AVAILABILITY_PRIVATE'),'code': 'PRIVATE'},
+            {'text': locale.getString('config.RULES_AVAILABILITY_GLOBAL'),'code': 'GLOBAL'},
         ];
+        DROPDOWNS.AVAILABILITY_TYPES = _.sortBy(DROPDOWNS.AVAILABILITY_TYPES, function(obj){return obj.text;});
 
         //Statuses
         DROPDOWNS.ACTIVE_STATUSES =[
@@ -117,6 +113,7 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         ASSET : {
             FLAG_STATE : [],
             ASSET_ID_GEAR_TYPE : [],
+            VESSEL_STATUS: [],
         },
         ASSET_GROUP : {
             ASSET_GROUP : [],
@@ -124,6 +121,7 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         MOBILE_TERMINAL : {
             MT_TYPE: [],
             COMCHANNEL_TYPE: [],
+            MT_STATUS: [],
         },
         POSITION : {
             MOVEMENT_TYPE: [],
@@ -145,10 +143,12 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         //Asset subcriterias
         ruleDefinitionDropdowns.ASSET.ASSET_ID_GEAR_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'GEAR_TYPE'), 'GEAR_TYPE','VESSEL', true);
         ruleDefinitionDropdowns.ASSET.FLAG_STATE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
+        ruleDefinitionDropdowns.ASSET.VESSEL_STATUS = configurationService.setTextAndCodeForDropDown(configurationService.getValue('RULES', 'ASSET_STATUSES'), 'ASSET_STATUSES', 'RULES', true);
 
         //Mobile terminal subcriterias
         ruleDefinitionDropdowns.MOBILE_TERMINAL.MT_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOBILETERMINAL', 'TRANSPONDERS'), 'TRANSPONDERS', 'MOBILETERMINAL', true);
         ruleDefinitionDropdowns.MOBILE_TERMINAL.COMCHANNEL_TYPE = createDropdownItemsWithSameTextAsValue(configurationService.getConfig('MOBILE_TERMINAL_CHANNELS'));
+        ruleDefinitionDropdowns.MOBILE_TERMINAL.MT_STATUS = configurationService.setTextAndCodeForDropDown(configurationService.getValue('RULES', 'MOBILETERMINAL_STATUSES'), 'MOBILETERMINAL_STATUSES', 'RULES', true);
 
         //Position subcriterias
         ruleDefinitionDropdowns.POSITION.MOVEMENT_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'MESSAGE_TYPE'), 'MESSAGE_TYPE', 'MOVEMENT', true);

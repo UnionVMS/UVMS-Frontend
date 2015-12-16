@@ -45,16 +45,14 @@
     "ticket_by_id_search_zero_results_error" : "The ticket could not be found.",
     "rules_by_id_search_zero_results_error" : "The rule could not be found.",
 
-    "rules_type_global" : "Global",
-    "rules_type_event" : "Event",
     "rules_availability_public" : "Public",
     "rules_availability_private" : "Private",
+    "rules_availability_global" : "Global",
 
     "add_new_rule" : "Create new rule",
     "edit_rule" : "Edit rule",
     "rules_zero_results_error" : "There are no rules.",
     "rules_table_name" : "Rule name",
-    "rules_table_type" : "Rule type",
     "rules_table_last_triggered" : "Last triggered",
     "rules_table_date_updated" : "Date updated",
     "rules_table_updated_by" : "Updated by",
@@ -122,11 +120,12 @@
     "rules_definition_and" : "AND",
 
     "rules_definition_then_action_notification_all_users" : "Create notification for all users",
+    "rules_definition_then_action_notification" : "Create notification",
 
     "rules_rule_as_text_action_SEND_TO_ENDPOINT" : "SEND TO ENDPOINT",
     "rules_rule_as_text_action_EMAIL" : "SEND EMAIL TO",
-    "rules_rule_as_text_action_TICKET" : "CREATE NOTIFICATION FOR USER ",
-    "rules_rule_as_text_action_TICKET_ALL_USERS" : "CREATE NOTIFICATION FOR ALL USERS ",
+    "rules_rule_as_text_action_TICKET" : "CREATE NOTIFICATION",
+    "rules_rule_as_text_action_TICKET_ALL_USERS" : "CREATE NOTIFICATION FOR ALL USERS",
     "rules_rule_as_text_action_MANUAL_POLL" : "CREATE A MANUAL POLL",
 
     "rules_test_success" : "Rule definition is valid.",
@@ -143,6 +142,10 @@
     "rules_test_error_INVALID_ACTION_VALUE" : "One or more values are missing for actions.",
     "rules_test_error_NON_UNIQUE_ACTION" : "One or more actions are not uniqie.",
     "rules_test_error_UNKOWN" : "Uknown problem",
+
+    "rule_subscription_update_success" : "The subscription was succefully updated.",
+    "rule_subscription_update_errror" : "The subscription failed to updated.",
+
 
     "position_report_header" : "Position report",
     "position_report_reprocess" : "Reprocess",

@@ -6,7 +6,6 @@ describe('ruleService', function() {
         "id": "ABC123456789",
         "name": "My new rule1",
         "description": "Rule to test the frontend.",
-        "type": "GLOBAL",
         "availability": "PUBLIC",
         "active": false,
         "lastTriggered": "2015-08-01 12:43:02",
@@ -143,15 +142,15 @@ describe('ruleService', function() {
 
     it("getRuleAsText should return correct text for complete Global rule", inject(function(ruleService, Rule) {
         var rule = Rule.fromDTO(ruleDTO);
-        rule.type = 'GLOBAL';
+        rule.availability = 'GLOBAL';
         var expectedText = 'IF (ASSET_ID.ASSET_ID_TYPE EQ SWE111222 OR ASSET_ID.ASSET_ID_VALUE NE SWE111333) AND POSITION.LONGITUDE NEQ 21.4 THEN [TRANSLATED_TEXT] AND [TRANSLATED_TEXT] ABC123 AND [TRANSLATED_TEXT]';
         expect(ruleService.getRuleAsText(rule)).toEqual(expectedText);
     }));
 
-    it("getRuleAsText should return correct text for complete EVent rule", inject(function(ruleService, Rule) {
+    it("getRuleAsText should return correct text for complete Public rule", inject(function(ruleService, Rule) {
         var rule = Rule.fromDTO(ruleDTO);
-        rule.type = 'EVENT';
-        var expectedText = 'IF (ASSET_ID.ASSET_ID_TYPE EQ SWE111222 OR ASSET_ID.ASSET_ID_VALUE NE SWE111333) AND POSITION.LONGITUDE NEQ 21.4 THEN [TRANSLATED_TEXT] ABC123 AND [TRANSLATED_TEXT]';
+        rule.availability = 'PUBLIC';
+        var expectedText = 'IF (ASSET_ID.ASSET_ID_TYPE EQ SWE111222 OR ASSET_ID.ASSET_ID_VALUE NE SWE111333) AND POSITION.LONGITUDE NEQ 21.4 THEN [TRANSLATED_TEXT] AND [TRANSLATED_TEXT] ABC123 AND [TRANSLATED_TEXT]';
         expect(ruleService.getRuleAsText(rule)).toEqual(expectedText);
     }));
 
@@ -220,15 +219,6 @@ describe('ruleService', function() {
         var testResult = ruleService.areRuleDefinitionsAndActionsValid(rule);
         expect(testResult.success).toBeFalsy();
         expect(testResult.problems.indexOf('NO_DEFINITIONS') >= 0).toBeTruthy("NO_DEFINITIONS should be in problems");
-    }));
-
-    it("areRuleDefinitionsAndActionsValid should return false when no actions exists and rule is of type EVENT", inject(function(ruleService, Rule) {
-        var rule = Rule.fromDTO(ruleDTO);
-        rule.type = 'EVENT;'
-        rule.actions = [];
-        var testResult = ruleService.areRuleDefinitionsAndActionsValid(rule);
-        expect(testResult.success).toBeFalsy();
-        expect(testResult.problems.indexOf('NO_ACTIONS') >= 0).toBeTruthy("NO_ACTIONS should be in problems");
     }));
 
     it("areRuleDefinitionsAndActionsValid should return false when logicBoolOperator is NONE for non last definition", inject(function(ruleService, Rule) {

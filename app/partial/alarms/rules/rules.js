@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $stateParams, locale, csvService, alertService, $filter, Rule,  RuleDefinition, ruleRestService, SearchResults, SearchResultListPage, userService, personsService, confirmationModal, GetListRequest){
+angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $stateParams, locale, csvService, alertService, $filter, Rule,  RuleDefinition, ruleRestService, SearchResults, SearchResultListPage, userService, personsService, confirmationModal, GetListRequest, RuleSubscriptionUpdate, openAlarmsAndTicketsService){
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Rules', true);
@@ -17,6 +17,16 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
     $scope.editSelectionDropdownItems = [
         {text:locale.getString('common.export_selection'), code : 'EXPORT'}
     ];
+
+    //Holds information about the current user's subscriptions of the rules in the table
+    $scope.mySubscriptions = {};
+
+    //Dropdown options for subscription
+    $scope.subscriptionDropdownOptions =[
+        {'text': locale.getString('common.yes'),'code': true},
+        {'text': locale.getString('common.no'),'code': false},
+    ];
+    $scope.subscriptionDropdownOptions = _.sortBy($scope.subscriptionDropdownOptions, function(obj){return obj.text;});
 
     //Email adddress of the current user
     $scope.currentUserEmailAddress = undefined;
@@ -44,21 +54,17 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
     };
 
     //Get list of rules
-    var getListRequest = new GetListRequest();
     $scope.searchRules = function() {
         $scope.clearSelection();
         $scope.currentSearchResults.setLoading(true);
         //Get rules
-        getListRequest.addSearchCriteria('RULE_USER', userService.getUserName());
-        getListRequest.addSearchCriteria('AVAILABILITY', 'PUBLIC');
-        ruleRestService.getRulesByQuery(getListRequest).then(updateSearchResults, onGetSearchResultsError);
+        ruleRestService.getAllRulesForUser().then(updateSearchResults, onGetSearchResultsError);
     };
 
     //Goto page in the search results
     $scope.gotoPage = function(page){
         if(angular.isDefined(page)){
-            getListRequest.setPage(page);
-            ruleRestService.getRulesByQuery(getListRequest).then(updateSearchResults, onGetSearchResultsError);
+            //TODO: Implement. Currently there are no pagination in the result.
         }
     };
 
@@ -66,6 +72,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
     $scope.createdNewRuleCallback = function(newRule){
         //Add new rule to searchResult
         $scope.currentSearchResults.updateWithSingleItem(newRule);
+        $scope.setUserSubscribeValues();
 
         //Show search results
         $scope.isVisible.rulesForm = false;
@@ -83,6 +90,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
     //Update the search results
     var updateSearchResults = function(searchResultsListPage){
         $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
+        $scope.setUserSubscribeValues();
     };
 
     //Error during search
@@ -106,10 +114,11 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
         }
     };
 
-    //Open create form with copy
+    //Open create form with copy of another Rule
     $scope.copyRule = function(rule){
         $scope.createNewMode = true;
         rule = rule.copy();
+        //Unset some values
         rule.lastTriggered = undefined;
         rule.updatedBy = undefined;
         rule.dateUpdated = undefined;
@@ -136,23 +145,75 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
     };
 
     /*SUBSCRIPTIONS*/
-    $scope.userHasTicketNotificationForRule = function(rule){
-        var userName = userService.getUserName();
-        for (var i = rule.actions.length-1; i >= 0; i--){
-            if(rule.actions[i].action === 'TICKET' && rule.actions[i].value === userName){
-                return true;
-            }
-        }
+    //Update subscribe values for the rules
+    $scope.setUserSubscribeValues = function(){
+        $scope.mySubscriptions = {};
+        $.each($scope.currentSearchResults.items, function(i, rule){
+            $scope.mySubscriptions[rule.guid] = {
+                TICKET : rule.isGlobal() || $scope.userIsSubscribing(rule, 'TICKET'),
+                EMAIL : $scope.userIsSubscribing(rule, 'EMAIL')
+            };
+        });
     };
 
-    $scope.userHasEmailNotificationForRule = function(rule){
-        if(angular.isDefined($scope.currentUserEmailAddress)){
-            for (var i = rule.actions.length-1; i >= 0; i--){
-                if(rule.actions[i].action === 'EMAIL' && rule.actions[i].value === $scope.currentUserEmailAddress){
+    //Does the current user subscribe to this rule with with the specified subscription type
+    $scope.userIsSubscribing = function(rule, subscriptionType){
+        var userName = userService.getUserName();
+        if(Array.isArray(rule.subscriptions)){
+            for (var i = rule.subscriptions.length-1; i >= 0; i--){
+                if(rule.subscriptions[i].type === subscriptionType && rule.subscriptions[i].owner === userName){
                     return true;
                 }
             }
         }
+        return false;
+    };
+
+    //Callback when selecting a value in the ticket subscription dropdown
+    $scope.onTicketSubscriptionSelect = function(selection, item){
+        //Update subscription
+        updateSubscription(item, 'TICKET', selection.code);
+    };
+
+    //Callback when selecting a value in the email subscription dropdown
+    $scope.onEmailSubscriptionSelect = function(selection, item){
+        //Update subscription
+        updateSubscription(item, 'EMAIL', selection.code);
+    };
+
+    //Send request to update subscription for rule
+    var updateSubscription = function(rule, type, addOperation){
+        //Create ruleSubscriptionUpdate object
+        var ruleSubscriptionUpdate = new RuleSubscriptionUpdate(type, rule.guid);
+        var newSubscriptionValue;
+        if(addOperation){
+            ruleSubscriptionUpdate.setOperationToAdd();
+            newSubscriptionValue = true;
+        }else{
+            ruleSubscriptionUpdate.setOperationToRemove();
+            newSubscriptionValue = false;
+        }
+
+        //Don't send request if no changes has been done
+        var userWasSubscribing = $scope.userIsSubscribing(rule, type);
+        if(userWasSubscribing === newSubscriptionValue){
+            return;
+        }
+
+        //Send request
+        alertService.showInfoMessage(locale.getString('common.update_waiting_for_reponse_text'));
+        ruleRestService.updateSubscription(ruleSubscriptionUpdate).then(function(updatedRule){
+            alertService.showSuccessMessageWithTimeout(locale.getString('alarms.rule_subscription_update_success'));
+            //Update subscription values
+            rule.subscriptions = updatedRule.subscriptions;
+            $scope.mySubscriptions[rule.guid][type] = newSubscriptionValue;
+            //Update number of open alarms and tickets in header and menu
+            openAlarmsAndTicketsService.getUpdatedCounts();
+        }, function(err){
+            alertService.showErrorMessage(locale.getString('alarms.rule_subscription_update_errror'));
+            //Reset subscribtion model value
+            $scope.mySubscriptions[rule.guid][type] = !newSubscriptionValue;
+        });
     };
 
     //User is allowed to manage global rules?
@@ -167,7 +228,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
 
     //Is the user allowed to delete or update the rule?
     $scope.allowedToDeleteOrUpdateRule = function(rule){
-        if(rule.type === 'GLOBAL'){
+        if(rule.availability === 'GLOBAL'){
             //Allowed to manage global rules?
             if($scope.allowedToManageGlobalRules()){
                 return true;
@@ -183,11 +244,6 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
         return false;
     };
 
-
-    //Is it possible to subscripe to the rule?
-    $scope.isSubscriptionPossible = function(rule){
-        return rule.type !== 'GLOBAL';
-    };
 
     //Handle click on the top "check all" checkbox
     $scope.checkAll = function(){
@@ -270,26 +326,23 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
         }
     };
 
-    //Get type label
-    $scope.getTypeLabelForRule = function(rule){
-        var label;
-        switch(rule.type){
-            case 'GLOBAL':
-                label = locale.getString('alarms.rules_type_global');
-                break;
-            case 'EVENT':
-                label = locale.getString('alarms.rules_type_event');
-                break;
-            default:
-                label = rule.type;
-                break;
-        }
-        return label;
-    };
-
     //Subscription dropdown options
     var openticketsOpt = {'text': locale.getString('alarms.open_ticket'), 'code':'OPEN_TICKET'};
     $scope.subscriptionsOptions = [openticketsOpt];
+
+    //Get label for availability
+    $scope.getAvailabilityLabel = function(rule){
+        switch(rule.availability){
+            case 'GLOBAL':
+                return locale.getString('alarms.rules_availability_global');
+            case 'PUBLIC':
+                return locale.getString('alarms.rules_availability_public');
+            case 'PRIVATE':
+                return locale.getString('alarms.rules_availability_private');
+            default:
+                return rule.availability;
+        }
+    };
 
     //Export data as CSV file
     $scope.exportRulesAsCSVFile = function(onlySelectedItems){
@@ -298,11 +351,11 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
         //Set the header columns
         var header = [
                 locale.getString('alarms.rules_table_name'),
-                locale.getString('alarms.rules_table_type'),
                 locale.getString('alarms.rules_table_last_triggered'),
                 locale.getString('alarms.rules_table_date_updated'),
                 locale.getString('alarms.rules_table_updated_by'),
                 locale.getString('alarms.rules_table_subscription'),
+                locale.getString('alarms.rules_table_notify_by_email'),
                 locale.getString('alarms.rules_table_status'),
                 locale.getString('alarms.rules_table_availability'),
             ];
@@ -318,17 +371,19 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
             else{
                 exportItems = $scope.currentSearchResults.items;
             }
+            var yes = locale.getString('common.yes');
+            var no = locale.getString('common.no');
             return exportItems.reduce(
                 function(csvObject, item){
                     var csvRow = [
                             item.name,
-                            $scope.getTypeLabelForRule(item),
                             $filter('confDateFormat')(item.lastTriggered),
                             $filter('confDateFormat')(item.dateUpdated),
                             item.updatedBy,
-                            item.subscription,
+                            $scope.mySubscriptions[item.guid].TICKET ? yes : no,
+                            $scope.mySubscriptions[item.guid].EMAIL ? yes : no,
                             $scope.getStatusLabelForRule(item),
-                            item.availability
+                            $scope.getAvailabilityLabel(item)
                     ];
                     csvObject.push(csvRow);
                     return csvObject;

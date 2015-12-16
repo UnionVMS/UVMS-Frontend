@@ -22,10 +22,10 @@ angular.module('unionvmsWeb')
                 return $resource('/rules/rest/tickets/:guid');
             },
             getOpenTicketsCount: function() {
-                return $resource('/rules/rest/tickets/countopen');
+                return $resource('/rules/rest/tickets/countopen/:userName');
             },
             getTickets : function(){
-                return $resource('/rules/rest/tickets/list/',{},{
+                return $resource('/rules/rest/tickets/list/:userName',null,{
                     list : { method: 'POST'}
                 });
             },
@@ -119,12 +119,9 @@ angular.module('unionvmsWeb')
 
     var getTicketsListForCurrentUser = function(getListRequest){
         var deferred = $q.defer();
-
-        //Only get tickets belonging to the current user
-        getListRequest.addSearchCriteria('USER', userService.getUserName());
-
+        var dto = getListRequest.DTOForTickets();
         //Get list of all tickets
-        alarmRestFactory.getTickets().list(getListRequest.DTOForTickets(), function(response){
+        alarmRestFactory.getTickets().list({userName : userService.getUserName()}, dto, function(response){
                 if(parseInt(response.code) !== 200){
                     deferred.reject("Invalid response status");
                     return;
@@ -219,9 +216,9 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
-    var getCountFromResource = function(resource) {
+    var getCountFromResource = function(resource, queryData) {
         var deferred = $q.defer();
-        resource.get(function(response) {
+        resource.get(queryData, function(response) {
             if (response.code !== 200) {
                 deferred.reject("Invalid response status");
                 return;
@@ -236,11 +233,11 @@ angular.module('unionvmsWeb')
     };
 
     var getOpenTicketsCount = function(){
-        return getCountFromResource(alarmRestFactory.getOpenTicketsCount());
+        return getCountFromResource(alarmRestFactory.getOpenTicketsCount(), {userName: userService.getUserName()});
     };
 
     var getOpenAlarmsCount = function(){
-        return getCountFromResource(alarmRestFactory.getOpenAlarmsCount());
+        return getCountFromResource(alarmRestFactory.getOpenAlarmsCount(), {});
     };
 
     var getConfigurationFromResource = function(resource){
