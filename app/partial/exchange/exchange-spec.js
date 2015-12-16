@@ -230,7 +230,7 @@ describe('ExchangeCtrl', function() {
         });
 
         //Resend one group
-        scope.resendAllQueueItemsInGroup(group);
+        scope.resendAllQueueItemsInGroup(group.sendingLogList);
         expect(sendQueuedMessagesSpy).toHaveBeenCalled();
     }));
 
@@ -241,13 +241,13 @@ describe('ExchangeCtrl', function() {
         var a = {messageId:'a'};
         var b = {messageId:'b'};
         var c = {messageId:'c'};
-        group1.sendingLogList = [a, b, c];
+        group1.pluginList.sendingLogList = [a, b, c];
 
         var group2 = new ExchangeSendingQueue();
         group2.recipient ="Another country";
         var d = {messageId:'d'};
         var e = {messageId:'e'};
-        group2.sendingLogList = [d, e];
+        group2.pluginList.sendingLogList = [d, e];
 
         scope.sendingQueue.items = [group1, group2];
 
