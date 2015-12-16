@@ -19,8 +19,8 @@
     				<td ng-show="showSenderRecipient" class="sender sending-queue-detail-table-cell">{{item.senderRecipient | confDateFormat}}</td>
     				<td ng-show="showAssetName" class="sending-queue-detail-table-cell">{{item.ASSET_NAME}}</td>
     				<td ng-show="showIRCS" class="sending-queue-detail-table-cell">{{item.IRCS}}</td>
-    				<td ng-show="showLongitude" class="long sending-queue-detail-table-cell">{{item.LONGITUDE}}</td>
-    				<td ng-show="showLatitude" class="lang sending-queue-detail-table-cell">{{item.LATITUDE}}</td>
+    				<td ng-show="showLongitude" class="long sending-queue-detail-table-cell">{{item.LONGITUDE | confCoordinateFormat}}</td>
+    				<td ng-show="showLatitude" class="lang sending-queue-detail-table-cell">{{item.LATITUDE | confCoordinateFormat}}</td>
     				<td ng-show="showPositionTime" class="sending-queue-detail-table-cell">{{item.POSITION_TIME | confDateFormat}}</td>
     				<td class="">
     					<a href="#" title="{{'exchange.sending_queue_resend_title' | i18n}}" ng-click="resendQueuedItemInGroup(item.messageId)">{{'exchange.sending_queue_resend' | i18n}}</a>
