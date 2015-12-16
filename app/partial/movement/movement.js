@@ -166,10 +166,10 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
             return exportItems.reduce(
                 function(csvObject, item){
                     var csvRow = [
-                        item.vessel.countryCode,
-                        item.vessel.externalMarking,
-                        item.vessel.ircs,
-                        item.vessel.name,
+                        item.vessel? item.vessel.countryCode : '',
+                        item.vessel? item.vessel.externalMarking : '',
+                        item.vessel? item.vessel.ircs : '',
+                        item.vessel? item.vessel.name : '',
                         $filter('confDateFormat')(item.time),
                         $filter('confCoordinateFormat')(item.movement.latitude),
                         $filter('confCoordinateFormat')(item.movement.longitude),
