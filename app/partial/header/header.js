@@ -3,11 +3,23 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
     $scope.languages = localeSupported;
     $scope.selectedLanguage = tmhDynamicLocale.get();
     $scope.languageNames = languageNames;
+    //AvailableLanguages holds list of languages that are selected in settings and exists in localeSupported
     var availableLanguages = globalSettingsService.getAvailableLanguages();
+    //Remove langs from availableLanguages if they don't exists in localeSupported
+    for (var i = availableLanguages.length - 1; i >= 0; i--) {
+        if($scope.languages.indexOf(availableLanguages[i]) < 0){
+            availableLanguages.splice(i, 1);
+        }
+    }
 
-    //Language is available according to the global settings?
+    //Language is available according to the global settings or default lang in app js?
     $scope.languageIsAvailable = function(lang){
-        return angular.isDefined(availableLanguages) && availableLanguages.indexOf(lang) >= 0;
+        if(Array.isArray(availableLanguages) && availableLanguages.length > 0){
+            return angular.isDefined(availableLanguages) && availableLanguages.indexOf(lang) >= 0;
+        }else{
+            return lang === localeConf.defaultLocale;
+        }
+
     };
 
     $scope.setLanguage = function(lang) {
@@ -38,8 +50,12 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
 
         //Check that current language is available
         if(!$scope.languageIsAvailable($scope.selectedLanguage)){
-            //Change to default lang
-            $scope.setLanguage(localeConf.defaultLocale);
+            //Change to first available lang
+            if(Array.isArray(availableLanguages) && availableLanguages.length > 0){
+                $scope.setLanguage(availableLanguages[0]);
+            }else{
+                $scope.setLanguage(localeConf.defaultLocale);
+            }
         }
     };
     init();

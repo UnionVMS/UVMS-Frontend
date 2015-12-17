@@ -329,12 +329,13 @@ angular.module('auth.router', ['ui.bootstrap', 'auth.controllers', 'ui.router', 
                         //check if user is logged in:
 
                         var error;
-						var authenticatedScope  = angular.element($("header")).scope();
-		
-						
-                        if (toState.name !== logoutState ) {
+                        if (toState.name !== logoutState) {
+                            userService.findCurrentUser().then(
+                                function (userName) {
+                                    $log.debug('User resolution returned "' + userName + '"');
 
-                                    if (authenticatedScope != null && !authenticatedScope.isAuthenticated) {
+
+                                    if (userName === "") {
                                         $log.debug('We are NOT logged in.');
                                         //is this a public route
                                         if (!('data' in toState) || !('access' in toState.data) || !toState.data.access || toState.data.access === ACCESS.PUBLIC) {
@@ -392,13 +393,7 @@ angular.module('auth.router', ['ui.bootstrap', 'auth.controllers', 'ui.router', 
                                              });
                                              }*/
                                         }
-										event.preventDefault();
                                     } else {
-										        var currentState = $state.$current;
-										        if(currentState.name === toState.name){
-													event.preventDefault();
-												}
-
                                         $log.debug('We ARE logged in!!!! Username: ' + userService.getUserName());
                                         $log.debug(toState);
                                         if (!('data' in toState) || !('access' in toState.data) || !toState.data.access || toState.data.access === ACCESS.PUBLIC || toState.data.access === ACCESS.AUTH) {
@@ -468,8 +463,11 @@ angular.module('auth.router', ['ui.bootstrap', 'auth.controllers', 'ui.router', 
                                             );
                                         }
                                     }
-                                
- 
+                                },
+                                function (error) {
+                                    $log.error('user Resolution failed');
+                                }
+                            );
                         }
                     }); // stateChangeStart
                 }]); // $injector.invoke(['$state'...
