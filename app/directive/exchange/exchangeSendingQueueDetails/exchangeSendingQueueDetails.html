@@ -1,5 +1,5 @@
 
-<table class="searchResults">
+<table class="searchResults exchangedetails">
 			<thead>
 				<tr>
 					<th class="date-recieved" ng-show="showDateRecieved">{{'exchange.sending_queue_detail_table_header_date_recieved' | i18n}}</th>
@@ -23,7 +23,7 @@
     				<td ng-show="showLatitude" class="lang sending-queue-detail-table-cell">{{item.LATITUDE | confCoordinateFormat}}</td>
     				<td ng-show="showPositionTime" class="sending-queue-detail-table-cell">{{item.POSITION_TIME | confDateFormat}}</td>
     				<td class="">
-    					<a href="#" title="{{'exchange.sending_queue_resend_title' | i18n}}" ng-click="resendQueuedItemInGroup(item.messageId)">{{'exchange.sending_queue_resend' | i18n}}</a>
+    					<a title="{{'exchange.sending_queue_resend_title' | i18n}}" ng-click="resendQueuedItemInGroup(item.messageId)">{{'exchange.sending_queue_resend' | i18n}}</a>
     				</td>
 				</tr>
 			</tbody>
