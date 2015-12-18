@@ -608,12 +608,10 @@ unionvmsWebApp.value('localeConf', {
     observableAttrs: new RegExp('^data-(?!ng-|i18n)'),
     delimiter: '::'
 }).value('localeSupported', [
-    'en-gb',
-    "en-us",
+    "en-gb",
     "sv",
 ]).constant('languageNames', {
     "en-gb": "English (GB)",
-    "en-us": "English (US)",
     "sv": "Svenska",
 });
 
