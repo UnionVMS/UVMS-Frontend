@@ -600,7 +600,7 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
 //Configure for i18n
 unionvmsWebApp.value('localeConf', {
     basePath: 'i18n',
-    defaultLocale: 'en-us',
+    defaultLocale: 'en-gb',
     sharedDictionary: 'common',
     fileExtension: '.lang.json?ts=' +(new Date()).getTime(),
     persistSelection: true,
