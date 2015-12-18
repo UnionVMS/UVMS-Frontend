@@ -1,14 +1,20 @@
 <div ng-controller="RefreshsettingsformCtrl">
 	<div class="row">
-		<div class="form-group col-md-4 switchDiv">
-			<label class="switchLabel">{{'spatial.preferences_auto_refresh_status' | i18n }}</label>
-			<toggle-switch ng-model="configModel.mapSettings.refreshStatus"></toggle-switch>
-		</div>
-		<div class="form-group col-md-4 noPadding">
-			<label>
-				{{'spatial.preferences_auto_refresh_rate' | i18n }}
-			</label>
-			<input class="form-control" ng-model="configModel.mapSettings.refreshRate" name="refreshRate" min="0" type="number">
-		</div>	
+		<ng-form name="refreshSettingsForm" novalidate>
+			<div class="form-group col-md-4 switchDiv">
+				<label class="switchLabel">{{'spatial.preferences_auto_refresh_status' | i18n }}</label>
+				<toggle-switch ng-model="configModel.mapSettings.refreshStatus"></toggle-switch>
+			</div>
+			<div class="form-group col-md-4 noPadding" ng-class="{'has-error': (refreshSettingsForm.refreshRate.$error.required || refreshSettingsForm.refreshRate.$error.min) && refreshSettingsForm.refreshRate.$dirty}">
+				<label>
+					{{'spatial.preferences_auto_refresh_rate' | i18n }}
+				</label>
+				<input class="form-control" ng-model="configModel.mapSettings.refreshRate" name="refreshRate" min="1" type="number" ng-required="configModel.mapSettings.refreshStatus">
+				<div class="innerErrorMessagesLabelTimer" ng-messages="refreshSettingsForm.refreshRate.$error" ng-show="refreshSettingsForm.refreshRate.$dirty">
+					<div ng-message="required">{{'spatial.required_error_message' | i18n }}</div>
+					<div ng-message="min">{{'spatial.min_value_1_error_message' | i18n }}</div>
+				</div>
+			</div>
+		</ng-form>	
 	</div>
 </div>

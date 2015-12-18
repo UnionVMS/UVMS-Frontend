@@ -9,11 +9,11 @@
 	</div>
 	<ng-form name="mapProjSettingsForm">
 		<div class="row">
-		    <div class="form-group col-md-4 noPadding" ng-class="{'has-error': mapProjSettingsForm.mapProjection.$error.required && !isMapConfigurationModal && mapProjSettingsForm.mapProjection.$dirty}">
+		    <div class="form-group col-md-4 noPadding" ng-class="{'has-error': mapProjSettingsForm.mapProjection.$error.required && mapProjSettingsForm.mapProjection.$dirty}">
 		        <label for="mapProjection">{{'spatial.map_configuration_map_projection' | i18n}}</label>
 		        <combobox ng-model="configModel.mapSettings.mapProjectionId" items="projectionItems" initialtext="{{'spatial.map_configuration_map_projection' | i18n}}" ng-required="!isMapConfigurationModal" name="mapProjection"></combobox>
 		    </div>
-		    <div class="form-group col-md-4 noPadding" ng-class="{'has-error': mapProjSettingsForm.displayProjection.$error.required && !isMapConfigurationModal && mapProjSettingsForm.displayProjection.$dirty}">
+		    <div class="form-group col-md-4 noPadding" ng-class="{'has-error': mapProjSettingsForm.displayProjection.$error.required && mapProjSettingsForm.displayProjection.$dirty}">
 		        <label for="displayProjection">{{'spatial.map_configuration_display_projection' | i18n}}</label>
 		        <combobox ng-model="configModel.mapSettings.displayProjectionId" items="projectionItems" initialtext="{{'spatial.map_configuration_display_projection' | i18n}}" ng-required="!isMapConfigurationModal" name="displayProjection"></combobox>
 		    </div>
@@ -23,7 +23,7 @@
 		    </div>
 		</div>
 		<div class="row">
-		    <div class="form-group col-md-4 noPadding" ng-class="{'has-error': mapProjSettingsForm.scaleBarUnits.$error.required && !isMapConfigurationModal && mapProjSettingsForm.scaleBarUnits.$dirty}">
+		    <div class="form-group col-md-4 noPadding" ng-class="{'has-error': mapProjSettingsForm.scaleBarUnits.$error.required && mapProjSettingsForm.scaleBarUnits.$dirty}">
 		        <label for="scaleBarUnits">{{'spatial.map_configuration_scale_bar_units' | i18n}}</label>
 		        <combobox ng-model="configModel.mapSettings.scaleBarUnits" items="scaleBarUnitsItems" initialtext="{{'spatial.map_configuration_scale_bar_units' | i18n}}" ng-required="!isMapConfigurationModal" name="scaleBarUnits"></combobox>
 		    </div>

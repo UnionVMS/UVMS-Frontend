@@ -83,6 +83,108 @@
 	}
 }
 
+div.tableSmart:extend(table all) {}
+div.thead:extend(thead all) {}
+div.tbody:extend(tbody all) {}
+div.tfoot:extend(tfoot all) {}
+div.tr:extend(tr all) {}
+div.th:extend(th all) {}
+div.td:extend(td all) {}
+
+[st-table] {
+	div.tableSmart:extend([st-table] table.table all) {}
+	div.thead:extend([st-table] table.table thead all) {}
+	div.tbody:extend([st-table] table.table tbody all) {}
+	div.tfoot:extend([st-table] table.table tfoot all) {}
+	div.tableSmart.table {
+		> div.thead {
+			div.th:extend([st-table] table.table thead > tr > th all) {
+				&:last-child {
+					border-right: 0;
+				}
+			}
+		}
+		> div.tbody {
+			> div.tr:extend([st-table] table.table tbody > tr all) {}
+			> div.tr {
+				&:first-child {
+					div.td {
+						border-top: 0;
+					}
+				}
+				div.td:extend([st-table] table.table tbody > tr > td all) {}
+				div.td:last-child {
+					border-right: 0;
+				}
+			}
+		}
+		> .tfoot {
+			padding: 0;
+			> div.tr:extend([st-table] table.table tfoot > tr all) {}
+			> div.tr {
+				div.td {
+					div.td:extend([st-table] table.table tfoot > tr > td all) {}
+				}
+			}
+		}
+	}
+}
+
+.table-striped > .tbody > .tr:nth-child(odd) {
+	div.th:extend(.table-striped > tbody > tr:nth-child(odd) > th all) {}
+	div.td:extend(.table-striped > tbody > tr:nth-child(odd) > td all) {}
+}
+
+.table-condensed > .tbody > .tr {
+	div.td:extend(.table-condensed > tbody > tr > td all) {}
+}
+
+.table {
+	&div.tableSmart:extend(table.table all) {}
+	> div.thead:extend(.table > thead all) {}
+	> div.tbody:extend(.table > tbody all) {}
+	> div.tfoot:extend(.table > tfoot all) {}
+	> div.tbody + .tbody:extend(.table > tbody + tbody) {}
+	> .thead {
+		> div.tr:extend(.table > thead > tr all) {}
+		> .tr {
+			div.th:extend(.table > thead > tr > th all) {
+				display: table-cell;
+			}
+		}
+	}
+	> .tbody {
+		display: block;
+		div.tr:extend(.table > tbody > tr all) {}
+		> .tr {
+			div.td:extend(.table > tbody > tr > td all) {
+				display: table-cell;
+			}
+		}
+	}
+	> .tfoot {
+		> div.tr:extend(.table > tfoot > tr all) {}
+		> .tr {
+			div.td:extend(.table > tfoot > tr > td all) {
+				display: table-cell;
+				width: 100%;
+				float: right;
+				padding: 0;
+				[st-pagination] {
+					float: right;
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
 .sectionMenu {
     font-size: 14px;
     font-weight: bold;
@@ -104,9 +206,21 @@
 	.defaultColorMessages {
 		margin-top: 20px;
 	}
-	.countryColorMessages {
+	.innerErrorMessages,
+	.innerErrorMessagesLabelTimer,
+	.geoServerUrlInnerErrorMessages {
 		position: absolute;
-	    right: 3px;
-	    top: 0;
     }
+    .innerErrorMessages {
+    	right: 3px;
+	    top: 0;
+	}
+    .innerErrorMessagesLabelTimer {
+    	right: 50px;
+    	top: 20px;
+    }
+    .geoServerUrlInnerErrorMessages {
+    	right: 25px;
+    	top: 0;
+    }	
 }

@@ -12,7 +12,7 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             ngDisabled : '='
 		},
         templateUrl: 'directive/common/combobox/combobox.html',
-		link: function(scope, element, attrs, fn) {
+		link: function(scope, element, attrs, ctrl) {
 
 			scope.initialitem = true;
             if('noPlaceholderItem' in attrs){
@@ -115,7 +115,7 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                     }
                 }
             });
-
+            
             //Select item in dropdown
             scope.selectVal = function(item){
                 //Disabled item
@@ -126,6 +126,7 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                 scope.ngModel = getItemCode(item);
                 scope.currentItemLabel = scope.getItemLabel(item);
                 scope.toggleCombo();
+                ctrl.$setViewValue(scope.ngModel);
                 if(angular.isDefined(scope.callback)){
                     var extraParams;
                     if(angular.isDefined(scope.callbackParams)){
@@ -177,13 +178,12 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             };
             
             var init = function(){
-            	
                 scope.selectFieldId = generateGUID();
                 scope.comboboxId = "combo-" + scope.selectFieldId;
                 
                 $('.comboList', element).attr('id', scope.comboboxId);
                 $('#' + scope.comboboxId).appendTo('body');
-                
+                ctrl.$setPristine();
             };
             
             init();

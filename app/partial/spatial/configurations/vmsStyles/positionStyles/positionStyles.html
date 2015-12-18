@@ -1,18 +1,18 @@
 <div ng-controller="PositionstylesCtrl">
-	<div class="form-group col-md-12 table-responsive-force row" st-table="displayedRecords" st-safe-src="configModel.posFsStyle">
+	<div class="form-group table-responsive-force" st-table="displayedRecords" st-safe-src="configModel.posFsStyle">
 		<div class="row col-md-6 searchField">
 			<input type="text" class="form-control" ng-model="searchString" st-search="" placeholder="{{'spatial.reports_table_search_header' | i18n}}">
 		</div>
 		<ng-form name="countryListForm" novalidate>
-			<table class="table table-striped table-condensed">
-			    <thead>
-			        <tr>
-			        	<th st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_country_name' | i18n }}</th>
-			            <th st-sort="code" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</th>
-			            <th>{{'spatial.tab_config_table_header_vessel_color' | i18n }}</th>
-			        </tr>
-			        <tr ng-if="alert.visible">
-			        	<th colspan="3">
+			<div class="table table-striped table-condensed tableSmart col-md-12 row">
+			    <div class="thead container-fluid">
+			        <div class="tr row">
+				    	<div class="th col-md-6" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_country_name' | i18n }}</div>
+				        <div class="th col-md-2" st-sort="code" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</div>
+				        <div class="th col-md-4">{{'spatial.tab_config_table_header_vessel_color' | i18n }}</div>
+			        </div>
+			        <div ng-if="alert.visible" class="tr row">
+				       	<div class="th col-md-12">
 						    <div class="alert alert-danger alert-container" role="alert" ng-if="alert.type === 'error'">
 		       					<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
 		       					<span class="alert-message">
@@ -25,43 +25,45 @@
 		           					<span>{{ alert.msg }}</span>            
 		       					</span>
 						    </div>
-			        	</th>
-			        </tr>
-			        <tr ng-if="isLoading">
-			        	<th colspan="3" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
-			        </tr>
-			    </thead>
-			    <tbody>
-			        <tr ng-if="!displayedRecords.length && !isLoading">
-						<td colspan="3">{{'spatial.table_no_data' | i18n}}</td>
-					</tr>
-			        <tr ng-repeat="report in displayedRecords">
-			        	<td>{{ report.name }}</td>
-			            <td>{{ report.code }}</td>
-			            <td class="col-md-4">
-			            	<div class="form-group noBottomPadding" ng-class="{'has-error': countryListForm.$error.required{{$index}} || countryListForm.$error.posColor{{$index}}}">
-				            	<div class="colorPickerComponent">
-						            <div ng-style="{'background-color': report.color && report.color.length > 3 && report.color.indexOf('#') != -1 ? report.color : '#fff'}" class="form-control pickedcolor">
-						            	<i class="fa fa-ban" ng-hide="report.color && report.color.length > 3 && report.color.indexOf('#') != -1"></i>
+			        	</div>
+			        </div>
+				    <div ng-if="isLoading" class="tr row">
+				       	<div class="loading-spinner-cl th col-md-12"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
+			        </div>
+			    </div>
+			    <div class="tbody container-fluid">
+			        <div ng-if="!displayedRecords.length && !isLoading" class="tr row">
+						<div class="td col-md-12">{{'spatial.table_no_data' | i18n}}</div>
+					</div>
+			        <div ng-repeat="report in displayedRecords" class="tr row">
+						<ng-form name="countryForm{{$index}}" novalidate>
+				        	<div class="td col-md-6">{{ report.name }}</div>
+				            <div class="td col-md-2">{{ report.code }}</div>
+				            <div class="td col-md-4">
+				            	<div class="form-group noBottomPadding" ng-class="{'has-error': (countryForm{{$index}}.countryColor.$error.required{{$index}} || countryForm{{$index}}.countryColor.$error.posColor{{$index}}) && countryForm{{$index}}.countryColor.$dirty}">
+					            	<div class="colorPickerComponent">
+							            <div ng-style="{'background-color': report.color && report.color.length > 3 && report.color.indexOf('#') != -1 ? report.color : '#fff'}" class="form-control pickedcolor">
+							            	<i class="fa fa-ban" ng-hide="report.color && report.color.length > 3 && report.color.indexOf('#') != -1"></i>
+							            </div>
+							            <input class="form-control" colorpicker ng-model="report.color" type="text" ng-change="validateColor($index);" name ="countryColor">
+							            <div class="innerErrorMessages" ng-messages="countryForm{{$index}}.countryColor.$error" ng-show="countryForm{{$index}}.countryColor.$dirty">
+											<div ng-message="required{{$index}}">{{'spatial.required_error_message' | i18n }}</div>
+											<div ng-message="posColor{{$index}}">{{'spatial.invalid_color_error_message' | i18n }}</div>
+										</div>
 						            </div>
-						            <input class="form-control" colorpicker ng-model="report.color" type="text" ng-change="validateColor($index);">
-						            <div class="countryColorMessages" ng-messages="countryListForm.$error">
-										<div ng-message="required{{$index}}">{{'spatial.required_error_message' | i18n }}</div>
-										<div ng-message="posColor{{$index}}">{{'spatial.invalid_color_error_message' | i18n }}</div>
-									</div>
 					            </div>
-				            </div>
-				        </td>
-			        </tr>
-			    </tbody>
-			    <tfoot class="stFooterPagination">
-					<tr>
-						<td colspan="3" class="text-right">
+					        </div>
+				        </ng-form>
+			        </div>
+			    </div>
+				<div class="stFooterPagination tfoot container-fluid">
+					<div class="tr">
+						<div class="td col-md-12">
 							<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
-						</td>
-					</tr>
-				</tfoot>
-			</table>
+						</div>
+					</div>
+				</div>
+			</div>
 		</ng-form>
 	</div>
 </div>

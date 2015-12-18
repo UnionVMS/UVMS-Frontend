@@ -248,5 +248,6 @@
 	
 	"required_error_message": "There are empty required fields",
 	"invalid_color_error_message": "Invalid color",
-	"seg_prop_to_error_message": "'To' must be higher than 'From'"
+	"seg_prop_to_error_message": "'To' must be higher than 'From'",
+	"min_value_1_error_message": "Must be higher than 0"
 }

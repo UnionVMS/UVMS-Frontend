@@ -29,18 +29,22 @@ div.dataTables_filter {
 
 
 table.table thead .sorting_asc:after,
-table.table thead .sorting_desc:after {
+table.table thead .sorting_desc:after,
+.tableSmart.table .thead .sorting_asc:after,
+.tableSmart.table .thead .sorting_desc:after {
 	color: @primaryColor;
 	font-family: 'FontAwesome';
 	margin-left: 5px;
 	position: absolute;
 }
 
-table.table thead .sorting_asc:after {
+table.table thead .sorting_asc:after,
+.tableSmart.table .thead .sorting_asc:after {
 	content: '\f0d8';
 }
 
-table.table thead .sorting_desc:after {
+table.table thead .sorting_desc:after,
+.tableSmart.table .thead .sorting_desc:after {
 	content: '\f0d7';
 }
 

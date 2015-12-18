@@ -130,4 +130,8 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope){
 	$scope.$on('removeRule', function(event, index, ruleId) {
 		$scope.removeRuleByIndex(index, ruleId);
 	});
+	
+	setTimeout(function () {
+		$scope.validateDefaultColor();
+	},200);
 });

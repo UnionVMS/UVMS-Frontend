@@ -20,22 +20,16 @@
 					<span class="btn btn-primary btn-sm btn-circle"><i class="fa fa-minus"></i></span>
 				</a>
 			</div>
-			<div class="form-group col-md-4" ng-messages="segmentstylesForm{{item.id}}.propertyFrom.$error">
-				<div ng-show="segmentstylesForm{{item.id}}.propertyFrom.$dirty">
-					<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
-				</div>
-				<div ng-messages="segmentstylesForm{{item.id}}.propertyTo.$error" ng-show="!segmentstylesForm{{item.id}}.propertyFrom.$error.requiredField">
-					<div ng-show="segmentstylesForm{{item.id}}.propertyTo.$dirty">
-						<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
-						<div ng-message="segPropTo">{{'spatial.seg_prop_to_error_message' | i18n }}</div>
-					</div>
-					<div ng-messages="segmentstylesForm{{item.id}}.propertyColor.$error" ng-show="!segmentstylesForm{{item.id}}.propertyFrom.$error.requiredField && !segmentstylesForm{{item.id}}.propertyTo.$error.requiredField && !segmentstylesForm{{item.id}}.propertyTo.$error.segPropTo">
-						<div ng-show="segmentstylesForm{{item.id}}.propertyColor.$dirty">
-							<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
-							<div ng-message="segPropColor">{{'spatial.invalid_color_error_message' | i18n }}</div>
-						</div>
-					</div>
-				</div>
+			<div class="form-group col-md-4" ng-messages="segmentstylesForm{{item.id}}.propertyFrom.$error" ng-show="segmentstylesForm{{item.id}}.propertyFrom.$dirty && segmentstylesForm{{item.id}}.propertyFrom.$error.requiredField">
+				<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
+			</div>
+			<div ng-messages="segmentstylesForm{{item.id}}.propertyTo.$error" ng-show="(segmentstylesForm{{item.id}}.propertyTo.$error.requiredField || segmentstylesForm{{item.id}}.propertyTo.$error.segPropTo) && segmentstylesForm{{item.id}}.propertyTo.$dirty && (!segmentstylesForm{{item.id}}.propertyFrom.$error.requiredField || !segmentstylesForm{{item.id}}.propertyFrom.$dirty)">
+				<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
+				<div ng-message="segPropTo">{{'spatial.seg_prop_to_error_message' | i18n }}</div>
+			</div>
+			<div ng-messages="segmentstylesForm{{item.id}}.propertyColor.$error" ng-show="(segmentstylesForm{{item.id}}.propertyColor.$error.requiredField || segmentstylesForm{{item.id}}.propertyColor.$error.segPropColor) && segmentstylesForm{{item.id}}.propertyColor.$dirty && (!segmentstylesForm{{item.id}}.propertyFrom.$error.requiredField || !segmentstylesForm{{item.id}}.propertyFrom.$dirty) && (!segmentstylesForm{{item.id}}.propertyTo.$error.requiredField || !segmentstylesForm{{item.id}}.propertyTo.$dirty) && (!segmentstylesForm{{item.id}}.propertyTo.$error.segPropTo || !segmentstylesForm{{item.id}}.propertyTo.$dirty)">
+				<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
+				<div ng-message="segPropColor">{{'spatial.invalid_color_error_message' | i18n }}</div>
 			</div>
 	</ng-form>	
 </div>

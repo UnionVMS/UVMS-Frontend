@@ -35,20 +35,26 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope, s
         $scope.configModel.posFsStyle = style;
         
         $scope.displayedRecords = [].concat($scope.configModel.posFsStyle);
+        
+        setTimeout(function () {
+        	angular.forEach($scope.displayedRecords, function(value, key) {
+        		$scope.validateColor(key);
+        	});
+    	},200);
     };
     
     //validate the color field of the country
     $scope.validateColor = function(index){
     	var indexOnModel = $scope.configModel.posFsStyle.indexOf($scope.displayedRecords[index]);
     	if($scope.displayedRecords[index].color && ($scope.displayedRecords[index].color.length <= 3 || $scope.displayedRecords[index].color.indexOf('#') === -1)){
-			$scope.countryListForm.$setValidity('posColor' + indexOnModel, false);
+			$scope.countryListForm['countryForm' + index].countryColor.$setValidity('posColor' + indexOnModel, false);
 		}else{
-			$scope.countryListForm.$setValidity('posColor' + indexOnModel, true);
+			$scope.countryListForm['countryForm' + index].countryColor.$setValidity('posColor' + indexOnModel, true);
 		}
 		if($scope.displayedRecords[index].color !== ''){
-			$scope.countryListForm.$setValidity('required' + indexOnModel, true);
+			$scope.countryListForm['countryForm' + index].countryColor.$setValidity('required' + indexOnModel, true);
 		}else{
-			$scope.countryListForm.$setValidity('required' + indexOnModel, false);
+			$scope.countryListForm['countryForm' + index].countryColor.$setValidity('required' + indexOnModel, false);
 		}
 	};
     

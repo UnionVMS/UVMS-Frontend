@@ -1,18 +1,18 @@
-<div class="combobox">
-        <div class="dropdown fullWidthDropdown">
-	        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled" ng-click="toggleCombo()">
-	            <div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-bind="currentItemLabel"></div>
-	            <span class="caret"></span>
-	        </button>
-        </div>
-        <div class="comboList fullWidthDropdown" ng-class="isOpen ? 'open' : ''">
-	        <ul class="dropdown-menu" role="menu">
-	            <li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue" ng-click="selectVal(initialValue)">
-	                <a role="menuitem" tabindex="-1" ng-bind="initialValue.text"></a>
-	            </li>
-	            <li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in items" role="presentation" ng-click="selectVal(item,$index)">
-	                <a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>
-	            </li>
-	        </ul>
-	    </div>
+<div class="combobox" ng-model-options="{allowInvalid: true}">
+	<div class="dropdown fullWidthDropdown">
+		<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled" ng-click="toggleCombo()">
+			<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-bind="currentItemLabel"></div>
+			<span class="caret"></span>
+		</button>
+	</div>
+	<div class="comboList fullWidthDropdown" ng-class="isOpen ? 'open' : ''">
+		<ul class="dropdown-menu" role="menu">
+			<li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue" ng-click="selectVal(initialValue)">
+				<a role="menuitem" tabindex="-1" ng-bind="initialValue.text"></a>
+			</li>
+			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in items" role="presentation" ng-click="selectVal(item,$index)">
+				<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>
+			</li>
+		</ul>
+	</div>
 </div>

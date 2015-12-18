@@ -26,7 +26,7 @@
 					        <input class="form-control" name="defaultColor" colorpicker ng-model="configModel.segmentStyle.defaultColor" type="text" ng-change="validateDefaultColor();"/>
 						</div>
 					</div>
-					<div class="defaultColorMessages form-group col-md-4" ng-messages="segmentDefaultForm.$error">
+					<div class="defaultColorMessages form-group col-md-4" ng-messages="segmentDefaultForm.$error" ng-show="segmentDefaultForm.$dirty">
 						<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
 						<div ng-message="segDefColor">{{'spatial.invalid_color_error_message' | i18n }}</div>
 					</div>

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anchorScroll, $timeout, locale, SpatialConfig, spatialConfigRestService){
+angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anchorScroll, $timeout, locale, SpatialConfig, spatialConfigRestService, formService){
 
 	$scope.isConfigVisible= false;
 	$scope.hasError = false;
@@ -61,6 +61,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 			$scope.hasError = true;
 		    $scope.errorMessage = locale.getString('spatial.invalid_data_saving');
 		    $scope.hideAlerts();
+		    formService.setAllDirty(["configPanelForm"], $scope);
 		}
 	};
 	
@@ -169,7 +170,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
             $scope.configCopy[keys[i]] = changes[keys[i]];
         }
     };
-	
+    
 	var saveSuccess = function(response){
 	    $anchorScroll();
 	    $scope.hasSuccess = true;
