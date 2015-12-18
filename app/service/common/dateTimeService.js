@@ -76,7 +76,7 @@ angular.module('unionvmsWeb').factory('dateTimeService',function($log, globalSet
                 //Get format from global settings
                 var format = globalSettingsService.getDateFormat();
                 if(typeof format !== 'string' || format.trim().length < 6){
-                    format = 'DD MMM YYYY HH:mm UTC';
+                    format = 'YYYY-MM-DD HH:mm';
                 }
                 var formatted = moment.utc(dateTimeInput, "YYYY-MM-DD HH:mm:ss");
                 formatted.utcOffset(Number(globalSettingsService.getTimezone()));
