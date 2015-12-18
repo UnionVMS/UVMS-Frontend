@@ -1,6 +1,14 @@
 angular.module('unionvmsWeb').factory('comboboxService', function($window) {
 	var cb = {};
 	var activeCombo;
+	var clickedInSameCombo = function() {
+		var isClickedElementChildOfPopup = activeCombo.element.find(event.target).length > 0 ||
+		angular.element('#' + activeCombo.comboboxId).find(event.target).length > 0;
+
+	    if (isClickedElementChildOfPopup){
+	        return true;
+	    }
+	}
 
 	var positionComboList = function() {
     	if(activeCombo.isOpen){
@@ -36,30 +44,42 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
 			activeCombo.isOpen = false;
 		}
 		
-		if(comboScope === null){
-			activeCombo = comboScope;
-			$('body').unbind('click');
-    		$($window).unbind('resize');
-			return;
-		}
-		
 		if(!activeCombo){
-			$('body').bind('click', function(event){
+			$('[modal-window]').bind('click', function(event){
             	if(activeCombo.isOpen) {
-	                var isClickedElementChildOfPopup = activeCombo.element
-	                    .find(event.target)
-	                    .length > 0;
-	
-	                if (isClickedElementChildOfPopup){
+	                if (clickedInSameCombo()){
 	                    return;
 	                }
 	
 	                activeCombo.$apply(function(){
 	                	activeCombo.isOpen = false;
 	                });
+	                activeCombo = undefined;
+	    			$($window).unbind('click');
+	    			$('[modal-window]').unbind('click');
+	        		$($window).unbind('resize');
+            	}
+            });
+			$($window).bind('click', function(event){
+            	if(activeCombo.isOpen) {
+	                if (clickedInSameCombo()){
+	                    return;
+	                }
+	
+	                activeCombo.$apply(function(){
+	                	activeCombo.isOpen = false;
+	                });
+	                activeCombo = undefined;
+	    			$($window).unbind('click');
+	    			$('[modal-window]').unbind('click');
+	        		$($window).unbind('resize');
             	}
             });
     		$($window).bind('resize', positionComboList);
+		}else{
+	        if (clickedInSameCombo()){
+	            return;
+	        }
 		}
 		
 		activeCombo = comboScope;
