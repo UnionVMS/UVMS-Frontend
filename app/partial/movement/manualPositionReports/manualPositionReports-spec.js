@@ -329,9 +329,9 @@ describe('ManualPositionReportCtrl', function() {
 			expect(header).toEqual(['fakeMarking', 'fakeIrcs', 'fakeCfr', 'fakeName', 'fakeTime', 'fakeLatitude', 'fakeLongitude', 'fakeSpeed', 'fakeCourse']);
 			expect(filename).toEqual('manualPositionReports.csv');
 			expect(data).toEqual([
-				['ext1', 'ircs1', 'cfr1', 'name1', '13 Feb 2009 23:31 UTC', '1.000', '1.000', 1, 1],
-				['ext2', 'ircs2', 'cfr2', 'name2', '13 Feb 2009 23:31 UTC', '2.000', '2.000', 2, 2],
-				['ext3', 'ircs3', 'cfr3', 'name3', '13 Feb 2009 23:31 UTC', '3.000', '3.000', 3, 3]
+				['ext1', 'ircs1', 'cfr1', 'name1', '2009-02-13 23:31', '1.000', '1.000', 1, 1],
+				['ext2', 'ircs2', 'cfr2', 'name2', '2009-02-13 23:31', '2.000', '2.000', 2, 2],
+				['ext3', 'ircs3', 'cfr3', 'name3', '2009-02-13 23:31', '3.000', '3.000', 3, 3]
 			]);
 		});
 
@@ -345,9 +345,9 @@ describe('ManualPositionReportCtrl', function() {
 			expect(header).toEqual(['fakeMarking', 'fakeIrcs', 'fakeCfr', 'fakeName', 'fakeTime', 'fakeLatitude', 'fakeLongitude', 'fakeSpeed', 'fakeCourse']);
 			expect(filename).toEqual('manualPositionReports.csv');
 			expect(data).toEqual([
-				['ext1', 'ircs1', 'cfr1', 'name1', '13 Feb 2009 23:31 UTC', '1.000', '1.000', 1, 1],
-				['ext2', 'ircs2', 'cfr2', 'name2', '13 Feb 2009 23:31 UTC', '2.000', '2.000', 2, 2],
-				['ext3', 'ircs3', 'cfr3', 'name3', '13 Feb 2009 23:31 UTC', '3.000', '3.000', 3, 3]
+				['ext1', 'ircs1', 'cfr1', 'name1', '2009-02-13 23:31', '1.000', '1.000', 1, 1],
+				['ext2', 'ircs2', 'cfr2', 'name2', '2009-02-13 23:31', '2.000', '2.000', 2, 2],
+				['ext3', 'ircs3', 'cfr3', 'name3', '2009-02-13 23:31', '3.000', '3.000', 3, 3]
 			]);
 		});
 
