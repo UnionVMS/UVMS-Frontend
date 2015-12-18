@@ -5,6 +5,7 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
     var init = function(){
         $scope.settings = globalSettingsService.getSettings();
         $scope.speedUnit = globalSettingsService.getSpeedUnit();
+        $scope.selectedLanguages = globalSettingsService.getAvailableLanguages();
     };
 
     //Options
@@ -153,30 +154,23 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 		}
 	};
 
-	$scope.getSelectedLanguages = function() {
-		return globalSettingsService.get("availableLanguages", true);
-	};
-
     //Callback from the dropdown
     $scope.setDefaultHomePage = function(selection){
         globalSettingsService.set("defaultHomePage", selection.code).then(saveSettingSuccess, saveSettingError);
     };
 
-	$scope.setLanguageSelected = function(language, selected) {
-		var languages = globalSettingsService.get("availableLanguages", true);
-		var index = languages.indexOf(language);
+	$scope.addLanguage = function() {
+		$scope.selectedLanguages.push(undefined);
+	};
 
-		if (selected && index < 0) {
-			languages.push(language);
-		}
-		else if (!selected && index >= 0) {
-			languages.splice(index, 1);
-		}
-		else {
-			return;
-		}
+	$scope.removeLanguage = function(index) {
+		$scope.selectedLanguages.splice(index, 1);
+		globalSettingsService.set("availableLanguages", $scope.selectedLanguages, true).then(saveSettingSuccessWithPageReload, saveSettingError);		
+	};
 
-		globalSettingsService.set("availableLanguages", languages, true).then(saveSettingSuccessWithPageReload, saveSettingError);
+	$scope.selectLanguage = function(language, index) {
+		$scope.selectedLanguages[index] = language.code;
+		globalSettingsService.set("availableLanguages", $scope.selectedLanguages, true).then(saveSettingSuccessWithPageReload, saveSettingError);
 	};
 
 	$scope.setDistanceUnit = function(selection) {

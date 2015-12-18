@@ -5,7 +5,7 @@
 			<div class="row">
 
 				<!-- Units -->
-				<div class="col-md-6">
+				<div class="col-md-4 setting">
 					<h5 class="section-text">{{'audit.configuration_general_numeric_system' | i18n}}</h5>
 					<ul class="radio-buttons">
 						<li ng-repeat="u in measurementSystems">
@@ -17,7 +17,7 @@
 				</div>
 
 				<!-- Coordinate format -->
-				<div class="col-md-6">
+				<div class="col-md-4 col-md-offset-2 setting">
 					<h5 class="section-text">{{'audit.configuration_general_coordinates_format' | i18n}}</h5>
 					<ul class="radio-buttons">
 						<li ng-repeat="cf in coordinateFormats">
@@ -33,7 +33,7 @@
 			<div class="row">
 
 				<!-- Date format -->
-				<div class="col-md-6">
+				<div class="col-md-4 setting">
 					<h5 class="section-text">{{'audit.configuration_general_time_format' | i18n}}</h5>
 					<ul class="radio-buttons">
 						<li ng-repeat="df in dateFormats">
@@ -45,7 +45,7 @@
 				</div>
 
 				<!-- Default homepage -->
-				<div class="col-md-6">
+				<div class="col-md-4 col-md-offset-2 setting">
 					<h5 class="section-text">{{'audit.configuration_general_default_homepage' | i18n}}</h5>
 					<dropdown ng-model="settings.defaultHomePage.value" items="homePages" no-placeholder-item callback="setDefaultHomePage"></dropdown>
 				</div>
@@ -54,13 +54,13 @@
 			<div class="row">
 
 				<!-- Distance unit -->
-				<div class="col-md-6">
+				<div class="col-md-4 setting">
 					<h5 class="section-text">{{'audit.configuration_general_unit_distance' | i18n}}</h5>
 					<dropdown ng-model="settings.distanceUnit.value" items="distanceUnits" no-placeholder-item callback="setDistanceUnit"></dropdown>
 				</div>
 
 				<!-- Speed unit -->
-				<div class="col-md-6">
+				<div class="col-md-4 col-md-offset-2 setting">
 					<h5 class="section-text">{{'audit.configuration_general_unit_speed' | i18n}}</h5>
 					<dropdown ng-model="settings.speedUnit.value" items="speedUnits" no-placeholder-item callback="setSpeedUnit"></dropdown>
 				</div>
@@ -69,13 +69,13 @@
 			<div class="row">
 
 				<!-- Maximum speed -->
-				<div class="col-md-6">
+				<div class="col-md-4 setting">
 					<h5 class="section-text">{{'audit.configuration_general_max_speed' | i18n}} ({{'config.short_speed_unit_' + speedUnit | i18n}})</h5>
 					<input ng-model="maxSpeed" ng-model-options="{ getterSetter: true }" transform-speed></dropdown>
 				</div>
 
 				<!-- Timezone -->
-				<div class="col-md-6">
+				<div class="col-md-4 col-md-offset-2 setting">
 					<h5 class="section-text">{{'audit.configuration_general_timezone' | i18n}}</h5>
 					<dropdown ng-model="settings.timezone.value" items="timezones" no-placeholder-item callback="setTimezone"></dropdown>
 				</div>
@@ -83,18 +83,23 @@
 			</div>
 		</div>
 		<div class="col-md-4 column">
-
 			<!-- Languages -->
 			<h5 class="section-text">{{'audit.configuration_general_languages' | i18n}}</h5>
-			<ul>
-				<li ng-repeat="l in languages">
-					<label>
-						<input type="checkbox" checklist-model="getSelectedLanguages()" checklist-value="l.code" ng-change="setLanguageSelected(l.code, checked)"> {{l.text}}
-					</label>
-				</li>
-			</ul>
+				<div class="row" ng-repeat="l in selectedLanguages track by $index" style="display: flex; align-items: center;">
+					<div class="col-md-8">
+						<dropdown items="languages" disabled-items="selectedLanguages" ng-model="selectedLanguages[$index]" callback="selectLanguage" callback-params="$index" initialtext="{{'config.select_language' | i18n}}"></dropdown>
+					</div>
+					<div class="col-md-4">
+						<a ng-click="removeLanguage($index)" ng-if="$index > 0">{{'common.remove' | i18n}}</a>
+						<span ng-if="$index === 0" class="defaultLanguage">({{'common.default' | i18n}})</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<a ng-click="addLanguage()">{{'config.add_more_languages' | i18n}}</a>
+					</div>
+				</div>
 		</div>
-
 	</div>
 
 	<!--div class="row section-footer">

@@ -36,30 +36,34 @@ describe('ConfigurationgeneralCtrl', function() {
 		});
 	});
 
-	it('should select language', function() {
+	it('should add undefined language to end of list', function() {
 		createController();
-		spyOn(globalSettingsService, 'set').andCallFake(mockReturnPromise);
-		scope.setLanguageSelected('sv_SE', true);
-		expect(globalSettingsService.set).toHaveBeenCalledWith('availableLanguages', ["en_US", "ro_RO", "sv_SE"], true);
+		scope.selectedLanguages = ['sv', 'en_gb'];
+		scope.addLanguage();
+		expect(scope.selectedLanguages).toEqual(['sv', 'en_gb', undefined]);
 	});
 
-	it('should deselect language', function() {
+	it('should remove a language from the list', function() {
 		createController();
-		spyOn(globalSettingsService, 'set').andCallFake(mockReturnPromise);
-		scope.setLanguageSelected('ro_RO', false);
-		expect(globalSettingsService.set).toHaveBeenCalledWith('availableLanguages', ["en_US"], true);
+		scope.selectedLanguages = ['sv', 'en_gb', 'en_us'];
+		scope.removeLanguage(1);
+		expect(scope.selectedLanguages).toEqual(['sv', 'en_us']);
 	});
 
-	it('should not add a language twice', function() {
+	it('set language', function() {
 		createController();
-		spyOn(globalSettingsService, 'set').andCallFake(mockReturnPromise);
-		scope.setLanguageSelected('en_US', true);
-		expect(globalSettingsService.set).not.toHaveBeenCalled();
 	});
 
 	it('should return a date time format', function() {
+		var en_gb = {
+			code: 'en_gb',
+			text: 'English (British)'
+		};
+
 		createController();
-		expect(scope.dateFormat()).toBe("YY/MM/DD");
+		scope.selectedLanguages = ['sv', undefined, 'en_us'];
+		scope.selectLanguage(en_gb, 1);
+		expect(scope.selectedLanguages).toEqual(['sv', 'en_gb', 'en_us']);
 	});
 
 	it('should set date time format', function() {

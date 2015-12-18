@@ -23,6 +23,7 @@
     "create" : "Create",
     "date_to" : "To",
     "date_from" : "From",
+    "default": "Default",
     "delete" : "Delete",
     "edit": "Edit",
     "export_as_csv" : "Export data in CSV format",

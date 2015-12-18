@@ -210,6 +210,9 @@
     "short_speed_unit_mph": "mph",
 
     "online": "Online",
-    "offline": "Offline"
+    "offline": "Offline",
+
+    "add_more_languages": "Add more languages",
+    "select_language": "Select language"
 
 }
