@@ -5,11 +5,13 @@
             <div class="row card-header">
                 <div class="col-md-3">
                     <button type="submit" class="btn btn-primary btn-sm newmanualreport" ng-click="showModal()" show-if-allowed='Movement:manageManualMovements'>
-                        {{'movement.manual_add_new_manual_report' | i18n }}
+                        <i class="fa fa-plus"></i> {{'movement.manual_add_new_manual_report' | i18n }}
                     </button>
                 </div>
                 <div class="col-md-1 pull-right textAlignRight printAndExport">
-                    <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportAsCSVFile()"></i>
+                    <button class="btn btn-sm btn-default exportButton">
+                        <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportAsCSVFile()"></i>
+                    </button>
                 </div>
             </div>
         	<div ng-include="'partial/movement/manualPositionReports/manualMovementList/manualMovementList.html'"></div>

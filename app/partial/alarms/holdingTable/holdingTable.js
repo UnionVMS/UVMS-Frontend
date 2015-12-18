@@ -108,8 +108,6 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
 
     $scope.getStatusLabelClass = function(status){
         switch(status){
-            case 'REPROCESSED':
-                return "label-success";
             case 'OPEN':
                 return "label-danger";
             default:
@@ -267,7 +265,6 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         }else{
             alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
         }
-        $scope.editSelection = "";
     };
 
     $scope.resolveItem = function(item){

@@ -29,15 +29,15 @@
 
                         <!-- Search button -->
                         <div class="col-md-2 mtsearchbuttoncontainer">
-                            <button type="submit" class="btn btn-primary btn-sm searchButton" ng-click="assignVesselSearch()" ng-disabled="!assignVesselFreeText">
-                                <span class="fa fa-search" aria-hidden="true"></span>
+                            <button type="submit" class="btn btn-primary btn-sm vmsbtn"  ng-click="assignVesselSearch()" ng-disabled="!assignVesselFreeText">
+                                {{'common.search' | i18n}}
                             </button>
                         </div>
                     </form>
                 </div>
                 <div class="row">
                     <div search-results-table search="currentSearchResults" class="col-md-12" ng-hide="assignVesselSearchInProgress">
-                        <table class="searchResults">
+                        <table class="searchResults colorOdd">
                             <thead>
                                 <tr>
                                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'ircs'">{{"vessel.ircs" | i18n}}</th>
@@ -53,7 +53,7 @@
                                 <td>{{vessel.cfr}}</td>
                                 <td>{{vessel.externalMarking}}</td>
                                 <td class="textAlignRight">
-                                    <button type="button" class="btn btn-primary" ng-click="selectVessel(vessel)" ng-disabled="!vessel.ircs" title="{{ vessel.ircs ? '' : 'mobileTerminal.assign_vessel_ircs_required' | i18n }}" style="pointer-events: auto;">{{"vessel.select" | i18n | uppercase}}</button>
+                                    <button type="button" class="btn btn-primary" ng-click="selectVessel(vessel)" ng-disabled="!vessel.ircs" title="{{ vessel.ircs ? '' : 'mobileTerminal.assign_vessel_ircs_required' | i18n }}" style="pointer-events: auto;"><i class="fa fa-check"></i></button>
                                 </td>
                             </tr>
                         </table>

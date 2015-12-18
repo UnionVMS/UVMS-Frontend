@@ -1,20 +1,22 @@
 <div class="mapConfigurationModal">
-	<div class="modal-header row">
-        <div class="closeIconContainer" ng-click="cancel()">
-            <i class="fa fa-times closeicon" title="{{'common.close' | i18n}}"></i>
+    <div class="modal-header">
+        <div class="pointer pull-right" ng-click="cancel()">
+             <i class="fa fa-times closeicon"></i>
         </div>
-        <div class="col-md-12 header">
-        	<span class="modalTitle">{{'spatial.map_configuration_modal_title' | i18n}}</span>
-        </div>
+        <h4 class="modal-title">{{'spatial.map_configuration_modal_title' | i18n}}</h4>
     </div>
-    <div class="modal-body row">
-    	<div class="row col-md-12 fixMargin" ng-include="'partial/spatial/configurations/mapSettingsPanel/mapProjectionSettings/mapProjectionSettings.html'"></div>
+    <div class="modal-body">
+        <div class="row">
+    	   <div class="col-md-12 fixMargin" ng-include="'partial/spatial/configurations/mapSettingsPanel/mapProjectionSettings/mapProjectionSettings.html'"></div>
+        </div>
     </div>
     <!-- FOOTER -->
-    <div class="modal-footer row">
-    	<div class="col-md-12">
-    		<button class="btn btn-primary" type="button" ng-click="save()">{{'common.save' | i18n}}</button>
-    		<button class="btn btn-default" type="button" ng-click="cancel()">{{'common.cancel' | i18n}}</button>
-    	</div>
+    <div class="modal-footer">
+        <div class="row">
+        	<div class="col-md-12">
+        		<button class="btn btn-primary" type="button" ng-click="save()">{{'common.save' | i18n}}</button>
+        		<button class="btn btn-default" type="button" ng-click="cancel()">{{'common.cancel' | i18n}}</button>
+        	</div>
+        </div>
     </div>
 </div>

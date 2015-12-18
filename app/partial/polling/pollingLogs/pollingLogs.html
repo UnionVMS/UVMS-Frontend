@@ -13,7 +13,9 @@
                                 <tr class="searchInputRow dateSearch" ng-if="showPollByID">
                                     <th colspan="9">&nbsp;</th>
                                     <th class="printAndExport">
-                                        <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
+                                        <button class="btn btn-sm btn-default exportButton">
+                                            <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
+                                        </button>
                                     </th>
                                 </tr>
                                 <tr class="searchInputRow dateSearch"  ng-if="!showPollByID">
@@ -31,17 +33,19 @@
                                     </th>
 
                                     <th class="textAlignCenter">
-                                        <button type="submit" class="btn btn-primary inputHeigth searchButton" ng-click="searchPolls()">
+                                        <button type="submit" class="btn btn-primary inputHeigth searchButton vmsbtn" ng-click="searchPolls()">
                                              {{'common.search' | i18n}}
                                         </button>
                                     </th>
                                     <th>
-                                        <button type="button" class="btn btn-default inputHeigth searchButton" ng-click="resetSearch()">
+                                        <button type="button" class="btn btn-default inputHeigth searchButton vmsbtn" ng-click="resetSearch()">
                                             {{'common.reset' | i18n}}
                                         </button>
                                     </th>
                                     <th class="printAndExport">
-                                        <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
+                                        <button class="btn btn-sm btn-default exportButton">
+                                            <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
+                                        </button>
                                     </th>
                                 </tr>
                                 <tr class="searchInputRow" ng-if="!showPollByID">
@@ -129,7 +133,11 @@
                                     </div>
                                 </td>
                                 <td colspan="2">{{item.poll.attributes.USER}}</td>
-                                <td class="textAlignCenter"><a href ng-click="showComment(item)" title="{{'common.view_comment' | i18n}}"><i class="fa fa-commenting-o fa-lg"></i></a></td>
+                                <td class="textAlignCenter">
+                                    <button class="btn btn-sm btn-default" ng-click="showComment(item)" title="{{'common.view_comment' | i18n}}">
+                                        <i class="fa fa-commenting"></i>
+                                    </button>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -138,9 +146,9 @@
                 </div>
 
             </div>
+            <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
         </div>
 
-        <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
 
     </div>
 

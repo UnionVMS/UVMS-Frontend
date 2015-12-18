@@ -211,7 +211,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
         }else{
             alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
         }
-       $scope.editSelection = "";
     };
 
     //Get the selected items that are shown by the filter

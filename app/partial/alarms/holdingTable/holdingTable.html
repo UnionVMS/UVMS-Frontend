@@ -9,7 +9,9 @@
                     <advanced-search modeltype="'ALARMS_HOLDING_TABLE'" searchfunc="searchAlarms" advancedsearchvisible="true"></advanced-search>
                 </div>
                 <div class="col-md-1 pull-right textAlignRight printAndExport">
-                    <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportItemsAsCSVFile()"></i>
+                    <button class="btn btn-sm btn-default exportButton">
+                        <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportItemsAsCSVFile()"></i>
+                    </button>
                 </div>
             </div>
 
@@ -17,7 +19,7 @@
                 <div class="col-md-11">
                     <div class="row">
                         <div class="col-md-2 editSelection">
-                            <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+                            <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback"></dropdown>
                         </div>
 
                         <div class="col-md-2 available-positions-refresh" ng-click="resetSearch()">
@@ -28,9 +30,9 @@
             </div>
 
             <div static-include="partial/alarms/holdingTable/holdingTableList/holdingTableList.html"></div>
+            <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
         </div>
 
-        <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
 
 
     </div>

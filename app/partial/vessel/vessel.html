@@ -10,10 +10,10 @@
                 <div class="vesselcontainerwrapper">
                     <div class="vesselsearchboxfooter row">
                         <div class="col-md-2 nopaddingleft">
-                            <dropdown class="" ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+                            <dropdown class="" ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback"></dropdown>
                         </div>
                         <div class="col-md-2">
-                            <button class="btn btn-primary btn-sm addnewassetbtn" ng-click="toggleCreateNewVessel()" type="button" show-if-allowed="manageVessels">{{'vessel.new_asset' | i18n}}
+                            <button class="btn btn-primary btn-sm addnewassetbtn" ng-click="toggleCreateNewVessel()" type="button" show-if-allowed="manageVessels"><i class="fa fa-plus"></i>  {{'vessel.new_asset' | i18n}}
                             </button>
                         </div>
                         <div class="col-md-2 col-md-offset-6 nopaddingright">

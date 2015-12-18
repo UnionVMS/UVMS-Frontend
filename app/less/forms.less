@@ -5,7 +5,7 @@
 
 input[type="text"], input[type="time"], input[type="number"], input[type="email"], input[type="search"]
 {
-    border-radius: 0px;
+    border-radius: @inputBorderRadius;
     height: 30px;
     border:1px solid @inputBorderColor;
     padding-left: 5px;
@@ -44,16 +44,6 @@ button.inputHeigth{
     -moz-box-sizing: border-box;
 }
 
-.form-control{
-    border-radius: none;
-}
-
-.form-control:hover{
-    border-radius: 0px;
-}
-.form-control{
-    border-radius: 0px;
-}
 .form-control:focus {
     border-color: @formInputActiveBorderColor;
     outline: 0;
@@ -126,6 +116,13 @@ select{
     position: relative;
     text-transform: none;
     padding-right: @unitWidth;
+    input{
+        border-radius: 0px;
+        &:first-child{
+            border-top-left-radius: @inputBorderRadius;
+            border-bottom-left-radius: @inputBorderRadius;
+        }
+    }
 
     .unit-box {
         position: absolute;
@@ -137,5 +134,10 @@ select{
         background-color: lightgray;
         border: 1px solid #cccccc;
         text-align: center;
+
+        &:last-child{
+            border-top-right-radius: @inputBorderRadius;
+            border-bottom-right-radius: @inputBorderRadius;
+        }
     }
 }

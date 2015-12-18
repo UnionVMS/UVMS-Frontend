@@ -41,20 +41,20 @@
                     </td>
     				<td class="actions">
                         <span>
-                            <button type="button" class="btn btn-sm btn-primary" ng-click="toggleRuleDetails(item)" title="{{'common.view_details'| i18n}}">
-                                <i class="fa fa-eye"></i>
+                            <button type="button" class="btn btn-sm btn-default" ng-click="toggleRuleDetails(item)" title="{{'common.view_details'| i18n}}">
+                                <i class="fa fa-pencil"></i>
                             </button>
                         </span>
 
                         <span show-if-allowed="Rules:manageAlarmsRules">
-                            <button type="button" class="btn btn-sm btn-primary" ng-click="copyRule(item)" title="{{'alarms.copy_rule_button_title'| i18n}}">
+                            <button type="button" class="btn btn-sm btn-default" ng-click="copyRule(item)" title="{{'alarms.copy_rule_button_title'| i18n}}">
                                 <i class="fa fa-copy"></i>
                             </button>
                         </span>
 
                         <span show-if-allowed="Rules:manageAlarmsRules" ng-if="allowedToDeleteOrUpdateRule(item)">
-                            <button type="button" class="btn btn-sm btn-danger" ng-click="deleteRule(item)" title="{{'common.delete'| i18n}}">
-                                <i class="fa fa-times"></i>
+                            <button type="button" class="btn btn-sm btn-default remove" ng-click="deleteRule(item)" title="{{'common.delete'| i18n}}">
+                                <i class="fa fa-trash"></i>
                             </button>
                         </span>
 

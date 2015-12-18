@@ -57,14 +57,18 @@
                                 <span ng-click="signIn()"><i class="fa fa-lg fa-user"></i><span ng-bind="'header.sign_in' | i18n"></span></a>
                             </div>
                             <div class="notifications" ng-if="isAuthenticated">
-                                <div class="fa fa-lg fa-bell-o" ng-click="viewNotifications()"><span class="badge" ng-bind="numberOfOpenAlarmsAndTickets.alarms + numberOfOpenAlarmsAndTickets.tickets" ng-show="numberOfOpenAlarmsAndTickets.alarms > 0 || numberOfOpenAlarmsAndTickets.tickets > 0"></span></div>
+                                <button class="btn btn-sm btn-default" ng-click="viewNotifications()">
+                                    <div class="fa fa-bell"><span class="badge" ng-bind="numberOfOpenAlarmsAndTickets.alarms + numberOfOpenAlarmsAndTickets.tickets" ng-show="numberOfOpenAlarmsAndTickets.alarms > 0 || numberOfOpenAlarmsAndTickets.tickets > 0"></span></div>
+                                </button>
                             </div>
                             <current-time class="currentTime" tooltip-placement="bottom" tooltip="{{'header.current_time_title' | i18n}}"></current-time>
                         </div>
 				    </div>
 				</div>
 			</div>
-			<div ng-if="isAuthenticated" ng-include="'partial/header/headerMenu/headerMenu.html'"></div>
+            <div class="headerMenuWrapper">
+			     <div ng-if="isAuthenticated" ng-include="'partial/header/headerMenu/headerMenu.html'"></div>
+            </div>
 		</div>
 	</div>
 </header>

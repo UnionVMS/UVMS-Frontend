@@ -147,12 +147,10 @@ html {
   min-height: 100%;
 }
 
-@pageBackgroundColor:#ecf0f1;
-@headerHeight:82px;
 body{
     width: 100%;
     background-color: @pageBackgroundColor;
-    font-family: Lato, Arial;
+    font-family: Roboto, Arial;
 }
 
 //Loading indicator shown when app starts
@@ -180,7 +178,7 @@ body{
 
         //Loading indicator shown when a page loads
         &>.loadingIndicator{
-            top:82px;
+            top:@headerHeight;
             .spinner{
                 top:calc(~"50% - 80px");
             }
@@ -215,7 +213,7 @@ body{
 
 //TODO: What is this used for?
 .glyphicon {
-    color: @buttoncolor;
+    color: @primaryColor;
     top: -1px;
 }
 

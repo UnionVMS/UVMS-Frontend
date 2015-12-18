@@ -3,9 +3,15 @@
     padding: 0px !important;
     .unit-input{
         float: left;
-    }
-    input{
-        width: @inputWidth;
-        text-align: center;
+        input{
+            width: @inputWidth;
+            text-align: center;
+            &.minutes{
+                border-radius: 0px !important;
+            }
+        }
+        .unit-box.unit-box-hours {
+            border-radius: 0px !important;
+        }
     }
 }

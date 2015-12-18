@@ -29,7 +29,7 @@
 		<!-- Toggle: ALL, INCOMING, OUTGOING -->
         <div class="row incoming-outgoing-toggle">
             <div class="col-md-1 editSelection">
-                <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+                <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback"></dropdown>
             </div>
 
             <div class="col-md-10">
@@ -50,7 +50,9 @@
                 </div>
             </div>
             <div class="col-md-1 textAlignRight printAndExport">
-                <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
+                <button class="btn btn-sm btn-default exportButton">
+                    <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
+                </button>
             </div>
         </div>
         <div class="row">
@@ -108,8 +110,8 @@
 
             </div>
         </div>
-	</div>
+        <search-results-pagination page='exchangeLogsSearchResults.page' total='exchangeLogsSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
+    </div>
 
-    <search-results-pagination page='exchangeLogsSearchResults.page' total='exchangeLogsSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
 
 </div>

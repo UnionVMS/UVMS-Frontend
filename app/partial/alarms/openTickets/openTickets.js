@@ -262,7 +262,6 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         }else{
             alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
         }
-        $scope.editSelection = "";
     };
 
     $scope.$on("$destroy", function() {

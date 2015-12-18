@@ -21,6 +21,7 @@
         background-color: @headerbackgroundcolor;
         color:#FFFFFF;
         padding: 16px 0px 0px 0px;
+        height: @headerHeight - @bottomHeaderHeight;
     }
 
     .currentTime, .notifications, .signed-in, .sign-in, .language-select {
@@ -40,11 +41,22 @@
 
     .notifications {
         cursor: pointer;
-        .badge {
-            background-color: red;
-            bottom: 8px;
-            right: 6px;
+        .btn-sm{
+            width: 25px;
+            height: 25px;
+            padding: 3px;
             position: relative;
+        }
+        .badge {
+            position: absolute;
+            top: -11px;
+            left: 11px;
+            min-width: 20px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            padding:0 3px;
+            background-color: @errorColor;
         }
     }
 
@@ -52,6 +64,7 @@
         background-color: @headerbackgroundcolor;
         color:white;
         border:none;
+        box-shadow: none !important;
         .caret{
             position: relative;
             top: 9px;

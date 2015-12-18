@@ -33,6 +33,12 @@ angular.module('unionvmsWeb')
                 scope.initialtextSelectable = true;
             }
 
+            //Should dropdown be treated like a menu?
+            scope.menuStyle = false;
+            if('menuStyle' in attrs){
+                scope.menuStyle = true;
+            }
+
             //Get the label for an item
             //Default item variable "text" is used if no title attr is set
             scope.getItemLabel = function(item){
@@ -89,7 +95,11 @@ angular.module('unionvmsWeb')
                 if(newVal === null || newVal === undefined || newVal === ""){
                     if(attrs.initialtext){
                         scope.currentItemLabel = attrs.initialtext;
-                         scope.setplaceholdercolor = true; //sets css class on first element. (placeholder)
+                        if(scope.menuStyle){
+                            scope.setplaceholdercolor = false;
+                        }else{
+                            scope.setplaceholdercolor = true; //sets css class on first element. (placeholder)
+                        }
                     }
                 }else{
                     scope.setplaceholdercolor = false;
@@ -110,8 +120,11 @@ angular.module('unionvmsWeb')
                     return;
                 }
 
-                scope.ngModel = getItemCode(item);
-                scope.currentItemLabel = scope.getItemLabel(item);
+                //Change ngModel and label value if not menu style
+                if(!scope.menuStyle){
+                    scope.ngModel = getItemCode(item);
+                    scope.currentItemLabel = scope.getItemLabel(item);
+                }
                 if(angular.isDefined(scope.callback)){
                     var extraParams;
                     if(angular.isDefined(scope.callbackParams)){
@@ -144,7 +157,7 @@ angular.module('unionvmsWeb')
 
             scope.setLabel();
             //Create a list item with the initaltext?
-            if(scope.initialitem){
+            if(scope.initialitem && !scope.menuStyle){
                 scope.addDefaultValueToDropDown();
             }
 		}

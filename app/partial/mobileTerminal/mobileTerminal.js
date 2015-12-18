@@ -300,7 +300,6 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         }else{
             alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
         }
-        $scope.editSelection = "";
     };
 
     //Export data as CSV file

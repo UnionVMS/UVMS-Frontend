@@ -101,7 +101,6 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
     $scope.getStatusLabelClass = function(status){
         switch(status){
             case 'CLOSED':
-            case 'REPROCESSED':
                 return "label-success";
             case 'OPEN':
                 return "label-danger";

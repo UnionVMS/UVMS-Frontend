@@ -148,14 +148,14 @@
                         {{"movement.manual_position_label_add_another" | i18n}}
                     </label>
                     <a class="button" ng-click="savePosition()">{{"common.save" | i18n}}</a>
-                    <button class="btn btn-primary button" style="margin-left:10px; min-width:60px;" type="submit" ng-click="sendPosition()" ng-disabled="waitingForResponse">
+                    <button class="btn button" ng-class="!confirmSend ? 'btn-primary' : 'btn-success'" style="margin-left:10px; min-width:60px;" type="submit" ng-click="sendPosition()" ng-disabled="waitingForResponse">
                         <span ng-if="!confirmSend && !sendSuccess">
-                            {{"movement.manual_position_button_send" | i18n}}
+                            <i class="fa fa-arrow-circle-right"></i> {{"movement.manual_position_button_send" | i18n}}
                         </span>
                         <span ng-if="confirmSend && !sendSuccess">
-                            {{"movement.manual_position_button_confirm" | i18n}}
+                            <i class="fa fa-check-square"></i> {{"movement.manual_position_button_confirm" | i18n}}
                         </span>
-                        <i ng-if="sendSuccess" class="fa fa-check"></i>
+                        <i ng-if="sendSuccess" class="fa fa-check-square"></i>
                     </button>
                 </div>
             </div>

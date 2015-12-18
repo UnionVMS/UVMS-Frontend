@@ -14,10 +14,10 @@
                             <div class="col-md-10">
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+                                        <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" menu-style items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
                                     </div>
                                     <div class="col-md-2">
-                                        <button show-if-allowed="manageMobileTerminals" type="button" class="btn btn-sm btn-primary vmsbtn" ng-click="toggleAddNewMobileTerminal()">{{'mobileTerminal.new_terminal' | i18n}}</button>
+                                        <button show-if-allowed="manageMobileTerminals" type="button" class="btn btn-sm btn-primary" ng-click="toggleAddNewMobileTerminal()"><i class="fa fa-plus"></i> {{'mobileTerminal.new_terminal' | i18n}}</button>
                                     </div>
                                 </div>
                             </div>
@@ -25,8 +25,8 @@
                         </div>
                     </div>
                 <div ng-include="'partial/mobileTerminal/mobileTerminalList/mobileTerminalList.html'"></div>
+                <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination>
             </div>
-            <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination>
         </div>
     </div>
 </div>

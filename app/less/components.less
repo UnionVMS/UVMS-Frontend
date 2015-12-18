@@ -30,15 +30,14 @@
     .btn.btn-default.dropdown-toggle{
         background-color: white;
         height: 30px;
-        border-radius: 0px;
         border: solid 1px @inputBorderColor;
         color:black;
         padding: 3px 12px;
         .caret{
-            color:@btnPrimaryColor;
+            color:@primaryColor;
         }
         &:focus, &:hover{
-            border-color: @btnPrimaryColor;
+            border-color: @primaryColor;
         }
     }
 }
@@ -55,38 +54,65 @@
     overflow-y: auto;
 }
 
-//PRINT AND EXPORT
-.printAndExport{
-    i{
-        color:@link-color;
-        cursor: pointer;
-        &:first-child{
-            padding-right: 5px;
-        }
-    }
-}
-
-
 //Submenu, used on pages "Mobile terminals", "Polling", Alarms...
 .pageMenu{
     text-transform: uppercase;
     font-size: 16px;
     font-weight: bold;
-    li.active{
+    li{
+        padding: 0px;
+        background:#fff;
+        background:rgba(255,255,255, 0.8);
+        border-radius: 15px;
+        border:1px solid #DDD;
+        cursor: pointer;
         a{
-            color:#000 !important;
-            cursor: default;
-            border-bottom: 2px solid #000;
+            float:left;
+            display: block;
+            text-decoration: none !important;
+            padding: 4px 10px;
+        }
+        &.active{
+            background:rgba(255,255,255, 1);
+            a{
+                color:#000 !important;
+                cursor: default;
+            }
+            &:hover, &:active, &:focus{
+                background:#fff;
+            }
+        }
+        &:hover, &:active, &:focus{
+            background:rgba(255,255,255, 1);
+            a{
+                color:#000 !important;
+                text-decoration: none !important;
+            }
+        }
+    }
+
+    ul.horizontal{
+        li{
+            margin:0 5px;
+        }
+    }
+    ul.pipeSeparator{
+        li + li::before {
+            content: none;
+            margin-right: 10px;
+            font-weight: normal;
         }
     }
 
     .notificationsBadge{
+        float:right;
         position: relative;
-        bottom: 8px;
-        left: 0px;
-        background-color: red;
+        top: 5px;
+        right: 5px;
+        background-color: @errorColor;
         color:#fff;
     }
+
 }
 
 /*Lists*/
@@ -104,6 +130,7 @@ ul.horizontal{
 
     }
 }
+
 
 ul.pipeSeparator{
     li + li::before {

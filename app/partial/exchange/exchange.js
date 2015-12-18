@@ -336,7 +336,6 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
         }else{
             alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
         }
-        $scope.editSelection = "";
     };
 
     //Selected by checkboxes

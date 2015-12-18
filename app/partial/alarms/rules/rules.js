@@ -442,7 +442,6 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
         }else{
             alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
         }
-        $scope.editSelection = "";
     };
 
     $scope.$on("$destroy", function() {
