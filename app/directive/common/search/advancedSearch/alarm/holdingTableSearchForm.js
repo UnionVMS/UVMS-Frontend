@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('HoldingTableSearchController', function($scope, locale, configurationService) {
+angular.module('unionvmsWeb').controller('HoldingTableSearchController', function($scope, locale, configurationService, ruleRestService) {
 
     var init = function(){
         //Add ALL option to timeSpan dropdown
@@ -6,6 +6,17 @@ angular.module('unionvmsWeb').controller('HoldingTableSearchController', functio
 
         //Status options
         $scope.statusOptions = configurationService.setTextAndCodeForDropDown(configurationService.getConfig('ALARM_STATUSES'), 'STATUS', 'ALARM', true);
+
+        //Populate rules dropdown
+        ruleRestService.getAllSanityRules().then(function(rulesPage){
+            var rulesOptions = [];
+            $.each(rulesPage.items, function(i, rule){
+                rulesOptions.push({text: rule.name, code: rule.guid});
+            });
+            rulesOptions = _.sortBy(rulesOptions, function(obj){return obj.text;});
+            $scope.rules = rulesOptions;
+        });
+
         $scope.resetSearch();
     };
 

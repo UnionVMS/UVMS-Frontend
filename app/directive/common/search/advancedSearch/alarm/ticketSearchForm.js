@@ -3,8 +3,6 @@ angular.module('unionvmsWeb').controller('TicketSearchController', function($sco
     $scope.rules = [];
 
     var init = function(){
-        $scope.resetSearch();
-
         //Add ALL option to timeSpan dropdown
         $scope.timeSpanOptions.unshift({text: locale.getString('common.time_span_all'), code:'ALL'});
 
@@ -21,6 +19,7 @@ angular.module('unionvmsWeb').controller('TicketSearchController', function($sco
         //Status options
         $scope.statusOptions = configurationService.setTextAndCodeForDropDown(configurationService.getConfig('TICKET_STATUSES'), 'STATUS', 'TICKET', true);
 
+        $scope.resetSearch();
     };
 
     $scope.$on("resetAlarmSearch", function() {

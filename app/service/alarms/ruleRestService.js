@@ -8,6 +8,9 @@ angular.module('unionvmsWeb')
                     update: {method: 'PUT'}
                 });
             },
+            getAllSanityRules : function(){
+                return $resource('/rules/rest/sanityrules/listAll/');
+            },
             getAllRulesForUser : function(){
                 return $resource('/rules/rest/customrules/listAll/:userName');
             },
@@ -26,7 +29,7 @@ angular.module('unionvmsWeb')
             },
         };
     })
-.factory('ruleRestService', function($q, $log, ruleRestFactory, Rule, SearchResultListPage, userService){
+.factory('ruleRestService', function($q, $log, ruleRestFactory, Rule, SanityRule, SearchResultListPage, userService){
 
     var getConfigFromResource = function(configResource){
         var deferred = $q.defer();
@@ -95,6 +98,41 @@ angular.module('unionvmsWeb')
             },
             function(error) {
                 $log.error("Error getting list of rules for user", error);
+                deferred.reject(error);
+            }
+        );
+        return deferred.promise;
+    };
+
+    var getAllSanityRules = function(){
+        var deferred = $q.defer();
+
+        //Get list of all sanity rules
+        ruleRestFactory.getAllSanityRules().get({}, function(response){
+                if(parseInt(response.code) !== 200){
+                    deferred.reject("Invalid response status");
+                    return;
+                }
+                var rules = [],
+                    searchResultListPage;
+
+                if(angular.isArray(response.data)) {
+                    for (var i = 0; i < response.data.length; i++) {
+                        rules.push(SanityRule.fromDTO(response.data[i]));
+                    }
+                }
+                var currentPage = 0,
+                    totalNumberOfPages = 0;
+
+                if(rules.length > 0){
+                    currentPage = totalNumberOfPages = 1;
+                }
+
+                searchResultListPage = new SearchResultListPage(rules, currentPage, totalNumberOfPages);
+                deferred.resolve(searchResultListPage);
+            },
+            function(error) {
+                $log.error("Error getting list of sanity rules", error);
                 deferred.reject(error);
             }
         );
@@ -212,6 +250,7 @@ angular.module('unionvmsWeb')
         getConfig: getConfig,
         getRuleByGuid: getRuleByGuid,
         getAllRulesForUser: getAllRulesForUser,
+        getAllSanityRules: getAllSanityRules,
         getRulesByQuery: getRulesByQuery,
         updateRule: updateRule,
         createNewRule: createNewRule,
