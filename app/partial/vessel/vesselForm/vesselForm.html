@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <h3 ng-if="isCreateNewMode()">{{'vessel.create_new_vessel' | i18n}}</h3>
                 <h3 ng-if="!isCreateNewMode() && isVesselNameSet()">{{vesselObj.name}}</h3>
-                <h3 ng-if="!isCreateNewMode() && !isVesselNameSet()">{{'vessel.update_vessel' | i18n}}</h3>
+                <h3 ng-if="!isCreateNewMode() && !isVesselNameSet() && vesselObj.active">{{'vessel.update_vessel' | i18n}}</h3>
             </div>
         </div>
 

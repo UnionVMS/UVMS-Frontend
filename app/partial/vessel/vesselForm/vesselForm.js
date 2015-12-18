@@ -43,6 +43,10 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
     //Disable form
     $scope.disableForm = function(){
         if(angular.isDefined($scope.vesselObj)){
+            //Vessel is archived?
+            if(!$scope.vesselObj.active){
+                return true;
+            }
             //User is allowed to edit/create?
             if(!checkAccessToFeature('manageVessels')){
                 return true;
