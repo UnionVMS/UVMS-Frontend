@@ -1234,7 +1234,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 var timeSpent = distanceForETA / avgSpeed; //in hours
                 
                 if (!angular.isDefined(ms.measureETA)){
-                    ms.measureETA = moment.utc(ms.sp.measure.startDate);
+                    ms.measureETA = moment.utc(ms.sp.measure.startDate, 'YYYY-MM-DD HH:mm:ss Z');
                 }
                 ms.measureETA.add(timeSpent, 'hours');
             }
