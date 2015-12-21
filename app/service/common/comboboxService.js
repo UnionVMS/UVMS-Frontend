@@ -8,7 +8,7 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
 	    if (isClickedElementChildOfPopup){
 	        return true;
 	    }
-	}
+	};
 
 	var positionComboList = function() {
     	if(activeCombo.isOpen){

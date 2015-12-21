@@ -46,6 +46,51 @@
 	}
 }
 
+.twin-controls {
+	input {
+		border-color: #089fd7;
+	}
+}
+
+.coord-label {
+	padding: 0;
+	color: #999999;
+	line-height: 30px;
+}
+
+.coord-deg {
+	padding: 0;
+	> input, >input:focus {
+		border-right: 0;
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+	&:after {
+		content: '\00b0';
+		position: absolute;
+		top: 0;
+		right: 0;
+		color: #999999;	
+	}
+}
+
+.coord-min{
+	padding: 0;
+	> input, >input:focus {
+		border-left: 0;
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
+	
+	&:after {
+		content: '\2019';
+		position: absolute;
+		top: 0;
+		right: 3px;
+		color: #999999;
+	}
+}
+
 .table-tools {
 	cursor: auto !important;	
 	i {

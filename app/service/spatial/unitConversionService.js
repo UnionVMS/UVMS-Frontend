@@ -17,18 +17,14 @@ angular.module('unionvmsWeb').factory('unitConversionService',function($filter, 
 	        mphToKnots: function(speed){
 	            return speed / 1.15077945;
 	        },
-	        checkSpeed: function(speed, decimalPlaces){
+	        formatSpeed: function(speed, decimalPlaces){
 	            var unit = this.getUnit();
 	            var finalUnit = locale.getString('common.speed_unit_' + unit);
-	            var value = $filter('number')(speed, decimalPlaces);
-	            
-	            if (unit === 'kph'){
-	                value = $filter('number')(this.knotsToKph(speed), decimalPlaces);
+	            var value = speed;
+	            if (value !== 0){
+	                value = $filter('number')(speed, decimalPlaces);
 	            }
 	            
-	            if (unit === 'mph'){
-	                value = $filter('number')(this.knotsToMph(speed), decimalPlaces);
-	            }
 	            return value + ' ' + finalUnit;
 	        }
 	    },
@@ -48,38 +44,76 @@ angular.module('unionvmsWeb').factory('unitConversionService',function($filter, 
 	        miToNm: function(dist){
                 return dist / 1.15077945;
             },
-            checkDistance: function(distance, decimalPlaces){
+            formatDistance: function(distance, decimalPlaces){
                 var unit = this.getUnit();
-                var value = $filter('number')(distance, decimalPlaces);
-                
-                if (unit === 'km'){
-                    value = $filter('number')(this.nmToKm(distance), decimalPlaces);
-                }
-                
-                if (unit === 'mi'){
-                    value = $filter('number')(this.nmToMi(distance), decimalPlaces);
+                var value = distance;
+                if (value !== 0){
+                    value = $filter('number')(distance, decimalPlaces);
                 }
                 
                 return value + ' ' + unit;
             }
 	    },
 	    duration: {
-	        timeToHuman: function(units, time){
-	            // units can be: http://momentjs.com/docs/#/manipulating/add/
-	            var duration = moment().startOf('day').add(units, time);
-	            var format = "";
+	        timeToHuman: function(time){
+	            var days = Math.floor(time / (24 * 3600));
+	            
+	            var divisor_for_hours = time % (24 * 3600);
+	            var hours = Math.floor(divisor_for_hours / 3600);
 
-	            if(duration.hour() > 0){
-	                format += "H[h] ";
+	            var divisor_for_minutes = time % 3600;
+	            var minutes = Math.floor(divisor_for_minutes / 60);
+
+	            var divisor_for_seconds = divisor_for_minutes % 60;
+	            var seconds = Math.ceil(divisor_for_seconds);
+	            
+	            var value = '';
+	            if (days){
+	                value += days + 'd ';
 	            }
-
-	            if(duration.minute() > 0){
-	                format += "m[m] ";
+	            if (hours){
+	                value += hours + 'h ';
 	            }
-
-	            format += " s[s]";
-
-	            return duration.format(format);
+	            if (minutes){
+	                value += minutes + 'm ';
+	            }
+	            
+	            if (seconds){
+	                value += seconds + 's';
+	            }
+	            
+	            if (value === ''){
+	                value = '0s';
+	            }
+	            
+	            return value;
+	        },
+	        humanToTime: function(duration){
+	            var parsedDuration = duration.match(/([0-9]+[dhms]{1})/ig);
+	            
+	            var finalDuration = 0;
+	            if (parsedDuration){
+	                for (var i = 0; i < parsedDuration.length; i++){
+	                    if (parsedDuration[i].toUpperCase().indexOf('D') !== -1){
+	                        finalDuration += (parseInt(parsedDuration[i]) * 24 * 3600);
+                        }
+	                    if (parsedDuration[i].toUpperCase().indexOf('H') !== -1){
+	                        finalDuration += (parseInt(parsedDuration[i]) * 3600);
+	                    }
+	                    
+	                    if (parsedDuration[i].toUpperCase().indexOf('M') !== -1){
+	                        finalDuration += (parseInt(parsedDuration[i]) * 60);
+	                    }
+	                    
+	                    if (parsedDuration[i].toUpperCase().indexOf('S') !== -1){
+	                        finalDuration += parseInt(parsedDuration[i]);
+	                    }
+	                }
+	                
+	                return finalDuration;
+	            }
+	            
+	            return undefined;
 	        }
 	    },
 	    date: {

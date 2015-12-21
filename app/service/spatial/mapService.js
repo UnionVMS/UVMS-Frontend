@@ -1451,8 +1451,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             lon: coordinateFormatService.formatAccordingToUserSettings(repCoords[0]),
             lat: coordinateFormatService.formatAccordingToUserSettings(repCoords[1]),
             stat: data.status,
-            m_spd: unitConversionService.speed.checkSpeed(data.reportedSpeed, 5),
-            c_spd: unitConversionService.speed.checkSpeed(data.calculatedSpeed, 5),
+            m_spd: unitConversionService.speed.formatSpeed(data.reportedSpeed, 5),
+            c_spd: unitConversionService.speed.formatSpeed(data.calculatedSpeed, 5),
             crs: data.reportedCourse + '\u00b0',
             msg_tp: data.movementType,
             act_tp: data.activityType,
@@ -1488,9 +1488,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             externalMarking: data.externalMarking,
             ircs: data.ircs,
             cfr: data.cfr,
-            dist: unitConversionService.distance.checkDistance(data.distance, 5),
-            dur: unitConversionService.duration.timeToHuman('ms', data.duration),
-            spd: unitConversionService.speed.checkSpeed(data.speedOverGround, 5),
+            dist: unitConversionService.distance.formatDistance(data.distance, 5),
+            dur: unitConversionService.duration.timeToHuman(data.duration),
+            spd: unitConversionService.speed.formatSpeed(data.speedOverGround, 5),
             crs: data.courseOverGround + '\u00b0',
             cat: data.segmentCategory
         };

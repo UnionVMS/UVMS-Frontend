@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, TreeModel, reportRestService, spatialRestService, spatialHelperService, mapService) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, TreeModel, reportRestService, spatialRestService, spatialHelperService, mapService, unitConversionService) {
 
     var rep = {
        id: undefined,
@@ -31,8 +31,16 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         if (report.withMap === true){
             spatialRestService.getConfigsForReport(report.id).then(getConfigSuccess, getConfigError);
         } else {
-            reportRestService.executeReport(rep.id).then(getVmsDataSuccess, getVmsDataError);
+            var repConfig = getUnitSettings();
+            reportRestService.executeReport(rep.id, repConfig).then(getVmsDataSuccess, getVmsDataError);
         }
+	};
+	
+	var getUnitSettings = function(){
+	    return {
+	        speedUnit: unitConversionService.speed.getUnit(),
+	        distanceUnit: unitConversionService.distance.getUnit()
+	    };
 	};
 	
 	//Get Spatial config Success callback
@@ -64,7 +72,8 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    $rootScope.$broadcast('updateLayerTreeSource', treeSource);
 	    
 	    //Finally load VMS positions and segments
-	    reportRestService.executeReport(rep.id).then(getVmsDataSuccess, getVmsDataError);
+	    var repConfig = getUnitSettings();
+	    reportRestService.executeReport(rep.id, repConfig).then(getVmsDataSuccess, getVmsDataError);
 	};
 	
 	//Get Spatial config Error callback

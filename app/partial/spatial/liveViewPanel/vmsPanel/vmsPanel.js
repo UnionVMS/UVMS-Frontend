@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, globalSettingsService, reportService, mapService, csvWKTService){
+angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, globalSettingsService, reportService, mapService, csvWKTService, unitConversionService){
     $scope.selectedVmsTab = 'MOVEMENTS';
     $scope.isPosFilterVisible = false;
     $scope.isSegFilterVisible = false;
@@ -7,6 +7,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
     $scope.executedReport = reportService;
     $scope.startDate = undefined;
     $scope.endDate = undefined;
+    $scope.decimalDegrees = true;
     
     //config object
     $scope.config = {
@@ -49,6 +50,13 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        switch (type){
            case 'positions':
                $scope.isPosFilterVisible = !$scope.isPosFilterVisible;
+               if ($scope.isPosFilterVisible === true){
+                   if (globalSettingsService.getCoordinateFormat() === 'decimalDegrees'){
+                       $scope.decimalDegrees = true;
+                   } else {
+                       $scope.decimalDegrees = false;
+                   }
+               }
                break;
            case 'segments':
                $scope.isSegFilterVisible = !$scope.isSegFilterVisible;
@@ -89,23 +97,25 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    
    $scope.buildTrackGeomFromId = function(id, extent){
        var segLayer = mapService.getLayerByType('vmsseg');
-       var coords = [];
-       var counter = 0;
-       var layer = mapService.getLayerByType('highlight').getSource();
-       layer.clear(true);
-       segLayer.getSource().forEachFeatureInExtent(extent, function(feature){
-           if (feature.get('trackId') === id){
-               if (feature.getGeometry().getLength() !== 0){
-                       coords.push(feature.getGeometry().getCoordinates());
+       if (angular.isDefined(segLayer)){
+           var coords = [];
+           var counter = 0;
+           var layer = mapService.getLayerByType('highlight').getSource();
+           layer.clear(true);
+           segLayer.getSource().forEachFeatureInExtent(extent, function(feature){
+               if (feature.get('trackId') === id){
+                   if (feature.getGeometry().getLength() !== 0){
+                           coords.push(feature.getGeometry().getCoordinates());
+                   }
+                   
                }
-               
-           }
-       });
-       
-       var geom = new ol.geom.MultiLineString(coords, 'XY');
-       geom.set('GeometryType', 'MultiLineString');
-       
-       return geom;
+           });
+           
+           var geom = new ol.geom.MultiLineString(coords, 'XY');
+           geom.set('GeometryType', 'MultiLineString');
+           
+           return geom;
+       }
    };
    
    $scope.zoomTo = function(index, geomType){
@@ -199,7 +209,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                    rec.properties.cfr,
                    rec.properties.name,
                    rec.properties.distance,
-                   rec.properties.duration,
+                   unitConversionService.duration.timeToHuman(rec.properties.duration),
                    rec.properties.speedOverGround,
                    rec.properties.courseOverGround,
                    rec.properties.segmentCategory,
@@ -217,16 +227,6 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        var wkt = new ol.format.WKT();
        return data.reduce(
            function(csvObj, rec){
-               var extentPolygon = new ol.geom.Polygon.fromExtent(rec.extent);
-               extentPolygon.transform('EPSG:4326', mapService.getMapProjectionCode());
-               var trackGeom = $scope.buildTrackGeomFromId(rec.id, extentPolygon.getExtent());
-               trackGeom.transform(mapService.getMapProjectionCode(), 'EPSG:4326');
-               
-               var geom = null;
-               if (trackGeom.getLineString().getLength() !== 0){
-                   geom = wkt.writeGeometry(trackGeom);
-               }
-               
                var row = [
                    rec.countryCode,
                    rec.externalMarking,
@@ -234,10 +234,23 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                    rec.cfr,
                    rec.name,
                    rec.distance,
-                   rec.duration,
-                   rec.totalTimeAtSea,
-                   geom
+                   unitConversionService.duration.timeToHuman(rec.duration),
+                   unitConversionService.duration.timeToHuman(rec.totalTimeAtSea)
                ];
+               
+               if ($scope.executedReport.tabs.map === true){
+                   var extentPolygon = new ol.geom.Polygon.fromExtent(rec.extent);
+                   extentPolygon.transform('EPSG:4326', mapService.getMapProjectionCode());
+                   var trackGeom = $scope.buildTrackGeomFromId(rec.id, extentPolygon.getExtent());
+                   trackGeom.transform(mapService.getMapProjectionCode(), 'EPSG:4326');
+                   
+                   var geom = null;
+                   if (trackGeom.getLineString().getLength() !== 0){
+                       geom = wkt.writeGeometry(trackGeom);
+                   }
+                   
+                   row.push(geom);
+               }                   
                
                csvObj.push(row);
                return csvObj;
@@ -247,6 +260,8 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    
    $scope.exportAsCSV = function(type, data){
        var filename, header, exportData;
+       var speedUnit = unitConversionService.speed.getUnit();
+       var distanceUnit = unitConversionService.distance.getUnit();
        if (type === 'positions'){
            filename = locale.getString('spatial.tab_vms_export_csv_positions_filename');
            header = [
@@ -259,9 +274,9 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                locale.getString('spatial.tab_vms_pos_table_header_lat'),
                locale.getString('spatial.tab_vms_pos_table_header_lon'),
                locale.getString('spatial.tab_vms_pos_table_header_status'),
-               locale.getString('spatial.tab_vms_pos_table_header_measured_speed'),
-               locale.getString('spatial.tab_vms_pos_table_header_calculated_speed'),
-               locale.getString('spatial.tab_vms_pos_table_header_course'),
+               locale.getString('spatial.tab_vms_pos_table_header_measured_speed') + '(' + speedUnit + ')',
+               locale.getString('spatial.tab_vms_pos_table_header_calculated_speed') + '(' + speedUnit + ')',
+               locale.getString('spatial.tab_vms_pos_table_header_course') + '(\u00B0)',
                locale.getString('spatial.tab_vms_pos_table_header_msg_type'),
                locale.getString('spatial.tab_vms_pos_table_header_activity_type'),
                locale.getString('spatial.tab_vms_pos_table_header_source')
@@ -276,10 +291,10 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                locale.getString('spatial.tab_vms_pos_table_header_ircs'),
                locale.getString('spatial.tab_vms_pos_table_header_cfr'),
                locale.getString('spatial.tab_vms_pos_table_header_name'),
-               locale.getString('spatial.tab_vms_seg_table_header_distance'),
+               locale.getString('spatial.tab_vms_seg_table_header_distance') + '(' + distanceUnit + ')',
                locale.getString('spatial.tab_vms_seg_table_header_duration'),
-               locale.getString('spatial.tab_vms_seg_table_header_speed_ground'),
-               locale.getString('spatial.tab_vms_seg_table_header_course_ground'),
+               locale.getString('spatial.tab_vms_seg_table_header_speed_ground') + '(' + speedUnit + ')',
+               locale.getString('spatial.tab_vms_seg_table_header_course_ground') + '(\u00B0)',
                locale.getString('spatial.tab_vms_seg_table_header_category'),
                locale.getString('spatial.tab_vms_seg_table_header_geometry')
            ];
@@ -293,11 +308,14 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                  locale.getString('spatial.tab_vms_pos_table_header_ircs'),
                  locale.getString('spatial.tab_vms_pos_table_header_cfr'),
                  locale.getString('spatial.tab_vms_pos_table_header_name'),
-                 locale.getString('spatial.tab_vms_seg_table_header_distance'),
+                 locale.getString('spatial.tab_vms_seg_table_header_distance') + '(' + distanceUnit + ')',
                  locale.getString('spatial.tab_vms_seg_table_header_duration'),
-                 locale.getString('spatial.tab_vms_tracks_table_header_time_at_sea'),
-                 locale.getString('spatial.tab_vms_seg_table_header_geometry')
-             ];
+                 locale.getString('spatial.tab_vms_tracks_table_header_time_at_sea')
+           ];
+           
+           if ($scope.executedReport.tabs.map === true){
+               header.push(locale.getString('spatial.tab_vms_seg_table_header_geometry'));
+           }
              
            exportData = $scope.reduceTracks(data);
        }

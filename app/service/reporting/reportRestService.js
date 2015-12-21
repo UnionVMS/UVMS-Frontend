@@ -45,7 +45,10 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
 	    executeReport: function(){
 	        return $resource('/reporting/rest/report/execute/:id', {}, {
 	           'get': {
-	               method: 'GET'
+	               method: 'POST',
+	               headers: {
+	                   'Content-Type': 'application/json'
+	               }
 	           } 
 	        });
 	    }
@@ -101,9 +104,9 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
             });
             return deferred.promise;
         },
-        executeReport: function(id){
+        executeReport: function(id, config){
             var deferred = $q.defer();
-            reportRestFactory.executeReport().get({id: id}, function(response){
+            reportRestFactory.executeReport().get({id: id}, angular.toJson(config), function(response){
                 deferred.resolve(response.data);
             }, function(error){
                 deferred.reject(error);
