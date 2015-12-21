@@ -356,10 +356,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             params: config.params,
             crossOrigin: 'anonymous'
         });
+        
 
         layer = new ol.layer.Tile({
             title: config.title,
             type: 'WMS',
+            longAttribution: config.longAttribution,
             isBaseLayer: config.isBaseLayer,
             source: source
         });
@@ -369,31 +371,33 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
     //Add VMS positions layer
     ms.createPositionsLayer = function( config ) {
-      var layer = new ol.layer.Vector({
-          title: config.title,
-          type: config.type,
-          isBaseLayer: false,
-          source: new ol.source.Vector({
-              features: (new ol.format.GeoJSON()).readFeatures(config.geoJson, {
-                  dataProjection: 'EPSG:4326',
-                  featureProjection: ms.getMapProjectionCode()
-              })
-          }),
-          style: ms.setPosStyle
-      });
+        //TODO attributions
+        var layer = new ol.layer.Vector({
+            title: config.title,
+            type: config.type,
+            isBaseLayer: false,
+            source: new ol.source.Vector({
+                features: (new ol.format.GeoJSON()).readFeatures(config.geoJson, {
+                    dataProjection: 'EPSG:4326',
+                    featureProjection: ms.getMapProjectionCode()
+                })
+            }),
+            style: ms.setPosStyle
+        });
       
-      //Update map extent
-      var src = layer.getSource();
-      if (src.getFeatures().length > 0){
-          var geom = new ol.geom.Polygon.fromExtent(src.getExtent());
-          ms.zoomTo(geom);
-      }
+        //Update map extent
+        var src = layer.getSource();
+        if (src.getFeatures().length > 0){
+            var geom = new ol.geom.Polygon.fromExtent(src.getExtent());
+            ms.zoomTo(geom);
+        }
       
-      return( layer );
+        return( layer );
     };
 
     //Add VMS segments layer
     ms.createSegmentsLayer = function( config ) {
+        //TODO attributions
         var layer = new ol.layer.Vector({
             title: config.title,
             type: config.type,

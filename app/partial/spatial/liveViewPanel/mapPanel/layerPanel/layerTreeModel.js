@@ -68,6 +68,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	            title: src.title,
 	            isBaseLayer: src.isBaseLayer,
 	            attribution: src.shortCopyright,
+	            longAttribution: angular.isDefined(src.longCopyright) ? src.longCopyright : undefined,
 	            url: src.url,
 	            serverType: src.serverType,
 	            params: {
