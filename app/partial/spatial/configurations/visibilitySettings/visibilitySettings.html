@@ -18,6 +18,10 @@
 		</div>
         <div ng-show="isMenuSelected('POSITIONS')" ng-include="'partial/spatial/configurations/visibilitySettings/positionsVisibility/positionsVisibility.html'"></div>
         <div ng-show="isMenuSelected('SEGMENTS')" ng-include="'partial/spatial/configurations/visibilitySettings/segmentsVisibility/segmentsVisibility.html'"></div>
+        <div ng-show="isMenuSelected('TRACKS')" ng-include="'partial/spatial/configurations/visibilitySettings/tracksVisibility/tracksVisibility.html'"></div>
+        <div class="col-md-12 col-btn-no-padding" ng-show="isUserPreference">
+        	<button class="btn btn-default pull-right" ng-click="reset()">{{'spatial.settings_reset_btn' | i18n}}</button>
+        </div>
     </accordion-group>
    </accordion>
 </div>

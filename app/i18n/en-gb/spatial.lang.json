@@ -226,11 +226,13 @@
 	"preferences_auto_refresh_status": "Auto refresh status",
 	"tab_config_table_header_vessel_color": "Vessel color",
 	
+	"settings_reset_btn": "Reset to defaults",
 	"map_settings": "Map settings",
 	"style_settings": "Style settings",
 	"visibility_settings": "Visibility settings",
 	"visibility_configuration_popup": "Popup contents",
 	"visibility_configuration_label": "Label contents",
+	"visibility_configuration_table": "Table contents",
 	"general_settings": "General settings",
 	"general_configuration_geoserver_url": "Geoserver URL",
 	"segment_property": "Segment property",
@@ -245,6 +247,8 @@
 	"user_preferences_success_saving": "Your preferences were successfuly saved.",
 	"user_preferences_error_getting_configs": "There was an error while getting your preferences. Please try again.",
 	"user_preferences_warning_saving": "You have not made any changes to your preferences.",
+	"user_preferences_reset_success": "Your configurations were successfuly reset.",
+	"user_preferences_reset_failure": "There was an error while reseting your preferences. Please try again.",
 	"invalid_data_saving": "There are invalid fields in your configurations. Please check them and try again.",
 	
 	"required_error_message": "There are empty required fields",

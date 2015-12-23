@@ -1,27 +1,30 @@
 <div class="positionsVisiblity" ng-controller="PositionsvisibilityCtrl">
 	<div class="row">
-    	<div class="form-group col-md-12">
-    		<div class="col-md-5">
-    			<div class="row formLabel">
-    				<span>{{'spatial.visibility_configuration_popup' | i18n}}</span>
-    			</div>
-    			<div class="row">
-    				<label ng-repeat="attr in positionAttrs" class="checkboxLabel">
-						<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.popup" checklist-value="attr.value"> {{attr.title}}
-					</label>
-    			</div>
-    		</div>
-    		<div class="col-md-2"></div>
-    		<div class="col-md-5">
-    			<div class="row formLabel">
-    				<span>{{'spatial.visibility_configuration_label' | i18n}}</span>
-    			</div>
-    			<div class="row">
-    				<label ng-repeat="attr in positionAttrs" class="checkboxLabel">
-						<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.labels" checklist-value="attr.value"> {{attr.title}}
-					</label>
-    			</div>
-    		</div>
-    	</div>
+		<div class="form-group col-md-12">
+			<table class="table table-striped table-condensed table-no-border">
+				<thead>
+					<tr>
+						<th></th>
+						<th>{{'spatial.visibility_configuration_table' | i18n}}</th>
+						<th>{{'spatial.visibility_configuration_popup' | i18n}}</th>
+						<th>{{'spatial.visibility_configuration_label' | i18n}}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="attr in positionAttrs">
+						<td>{{attr.title}}</td>
+						<td>
+							<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.table" checklist-value="attr.value">
+						</td>
+						<td>
+							<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.popup" checklist-value="attr.value">
+						</td>
+						<td>
+							<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.labels" checklist-value="attr.value">
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
     </div>
 </div>

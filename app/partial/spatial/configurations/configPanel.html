@@ -10,27 +10,13 @@
 	            </div>
 	        </div>
 	    </div>
-	    <div class="container containerWithTopBottomPadding spatial-error" ng-show="hasError">
-			<div class="alert alert-danger alert-container" role="alert">
-				<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+	    <div class="container containerWithTopBottomPadding spatial-error" ng-show="alert.hasAlert">
+			<div class="alert alert-container" role="alert" ng-class="{'alert-danger': alert.hasError, 'alert-success': alert.hasSuccess, 'alert-warning': alert.hasWarning}">
+				<span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasError"></span>
+				<span class="fa fa-check-circle" aria-hidden="true" ng-show="alert.hasSuccess"></span>
+				<span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasWarning"></span>
 				<span class="alert-message">
-					<span>{{errorMessage}}</span>          
-				</span>
-		    </div>
-		</div>
-		<div class="container containerWithTopBottomPadding spatial-error" ng-show="hasSuccess">
-			<div class="alert alert-success alert-container" role="alert">
-				<span class="fa fa-check-circle" aria-hidden="true"></span>
-				<span class="alert-message">
-					<span>{{'spatial.user_preferences_success_saving' | i18n }}</span>          
-				</span>
-		    </div>
-		</div>
-		<div class="container containerWithTopBottomPadding spatial-error" ng-show="hasWarning">
-			<div class="alert alert-warning alert-container" role="alert">
-				<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
-				<span class="alert-message">
-					<span>{{'spatial.user_preferences_warning_saving' | i18n }}</span>          
+					<span>{{alert.alertMessage}}</span>          
 				</span>
 		    </div>
 		</div>
@@ -44,7 +30,7 @@
 						<div class="buttonGroup">
 							<div>
 								<button class="btn btn-primary" ng-click="save()">{{'common.save' | i18n}}</button>
-								<button class="btn btn-dedault" ng-click="cancel()">{{'common.cancel' | i18n}}</button>
+								<button class="btn btn-default" ng-click="cancel()">{{'common.cancel' | i18n}}</button>
 							</div>
 						</div>
 					</div>

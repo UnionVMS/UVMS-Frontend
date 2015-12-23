@@ -9,6 +9,9 @@
 	    </accordion-heading>
         <div ng-include="'partial/spatial/configurations/mapSettingsPanel/refreshSettingsForm/refreshSettingsForm.html'"></div>
         <div ng-include="'partial/spatial/configurations/mapSettingsPanel/mapProjectionSettings/mapProjectionSettings.html'"></div>
+        <div class="col-md-12 col-btn-no-padding" ng-show="isUserPreference">
+        	<button class="btn btn-default pull-right" ng-click="reset()">{{'spatial.settings_reset_btn' | i18n}}</button>
+        </div>
     </accordion-group>
    </accordion>
 </div>

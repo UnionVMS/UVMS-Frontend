@@ -1,5 +1,5 @@
-angular.module('unionvmsWeb').controller('SegmentsvisibilityCtrl',function($scope, locale){
-    $scope.segmentAttrs = [{
+angular.module('unionvmsWeb').controller('TracksvisibilityCtrl',function($scope, locale){
+    $scope.trackAttrs = [{
         title: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
         value: 'fs'
     },{
@@ -21,13 +21,8 @@ angular.module('unionvmsWeb').controller('SegmentsvisibilityCtrl',function($scop
         title: locale.getString('spatial.tab_vms_seg_table_header_duration'), 
         value: 'dur'
     },{
-        title: locale.getString('spatial.tab_vms_seg_table_header_speed_ground'), 
-        value: 'spd'
-    },{
-        title: locale.getString('spatial.tab_vms_seg_table_header_course_ground'), 
-        value: 'crs'
-    },{
-        title: locale.getString('spatial.tab_vms_seg_table_header_category'),
-        value: 'cat'
+        title: locale.getString('spatial.reports_form_vms_tracks_time_at_sea'), 
+        value: 'timeSea'
     }];
+
 });

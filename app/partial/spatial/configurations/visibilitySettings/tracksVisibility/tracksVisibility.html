@@ -1,0 +1,22 @@
+<div class="tracksVisiblity" ng-controller="TracksvisibilityCtrl">
+	<div class="row">
+    	<div class="form-group col-md-12">
+    		<table class="table table-striped table-condensed table-no-border">
+				<thead>
+					<tr>
+						<th></th>
+						<th>{{'spatial.visibility_configuration_table' | i18n}}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="attr in trackAttrs">
+						<td>{{attr.title}}</td>
+						<td>
+							<input type="checkbox" checklist-model="configModel.visibilitySettings.tracks.table" checklist-value="attr.value">
+						</td>
+					</tr>
+				</tbody>
+			</table>
+    	</div>
+    </div>
+</div>

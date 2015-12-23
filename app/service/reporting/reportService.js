@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, TreeModel, reportRestService, spatialRestService, spatialHelperService, mapService, unitConversionService) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, TreeModel, reportRestService, spatialRestService, spatialHelperService, mapService, unitConversionService, vmsVisibilityService) {
 
     var rep = {
        id: undefined,
@@ -32,6 +32,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             spatialRestService.getConfigsForReport(report.id).then(getConfigSuccess, getConfigError);
         } else {
             var repConfig = getUnitSettings();
+            //TODO also need to set vms table attribute visibility
             reportRestService.executeReport(rep.id, repConfig).then(getVmsDataSuccess, getVmsDataError);
         }
 	};
@@ -59,6 +60,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    //Set the styles for vector layers and legend
 	    mapService.setPositionStylesObj(data.vectorStyles.positions);
 	    mapService.setSegmentStylesObj(data.vectorStyles.segments);
+	    
+	    //Set vms table attribute visibility
+	    vmsVisibilityService.setVisibility(data.visibilitySettings);
 	    
 	    //Set popup visibility settings
 	    mapService.setPopupVisibility('positions', data.visibilitySettings.positions.popup);

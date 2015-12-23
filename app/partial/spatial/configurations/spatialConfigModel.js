@@ -33,12 +33,17 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         
         this.visibilitySettings = {
             positions: {
+                table: [],
                 popup: [],
                 labels: []
             },
             segments: {
+                table: [],
                 popup: [],
                 labels: []
+            },
+            tracks: {
+                table: []
             }
         };
         

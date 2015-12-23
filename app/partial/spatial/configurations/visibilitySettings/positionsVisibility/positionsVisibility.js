@@ -12,6 +12,9 @@ angular.module('unionvmsWeb').controller('PositionsvisibilityCtrl',function($sco
         title: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'), 
         value: 'cfr'
     },{
+        title: locale.getString('spatial.reports_form_vessel_search_table_header_name'), 
+        value: 'name'
+    },{
         title: locale.getString('spatial.tab_vms_pos_table_header_date'),
         value: 'posTime'
     },{

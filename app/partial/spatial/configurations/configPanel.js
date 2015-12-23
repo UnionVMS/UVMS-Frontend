@@ -1,10 +1,7 @@
-angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anchorScroll, $timeout, locale, SpatialConfig, spatialConfigRestService, formService){
-
+angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anchorScroll, locale, SpatialConfig, spatialConfigRestService, spatialConfigAlertService, formService){
+    $scope.isUserPreference = true;
 	$scope.isConfigVisible= false;
-	$scope.hasError = false;
-	$scope.errorMessage = undefined;
-	$scope.hasSuccess = false;
-	$scope.hasWarning = false;
+	$scope.alert = spatialConfigAlertService;
 	
 	$scope.toggleUserPreferences = function(){
 		$scope.isConfigVisible = !$scope.isConfigVisible;
@@ -30,14 +27,6 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    $scope.toggleUserPreferences();
 	};
 	
-	$scope.hideAlerts = function(){
-	    $timeout(function(){
-	        $scope.hasError = false;
-	        $scope.errorMessage = undefined;
-	        $scope.hasSuccess = false;
-	        $scope.hasWarning = false;
-	    }, 3000);
-	};
 	
 	$scope.save = function(){
 		if(_.keys($scope.configPanelForm.$error).length === 0){
@@ -48,19 +37,25 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		    newConfig = $scope.checkStylesSttings(newConfig);
 		    newConfig = $scope.checkVisibilitySttings(newConfig);
 		    
+		    console.log(newConfig);
+		    
 		    newConfig = angular.toJson(newConfig);
 		    
 		    if (!angular.equals('{}', newConfig)){
 		        spatialConfigRestService.saveUserConfigs(newConfig).then(saveSuccess, saveFailure);  
 		    } else {
 		        $anchorScroll();
-		        $scope.hasWarning = true;
-		        $scope.hideAlerts();
+		        $scope.alert.hasAlert = true;
+		        $scope.alert.hasWarning = true;
+		        $scope.alert.alertMessage = locale.getString('spatial.user_preferences_warning_saving');
+		        $scope.alert.hideAlert();
 		    }
 		}else{
-			$scope.hasError = true;
-		    $scope.errorMessage = locale.getString('spatial.invalid_data_saving');
-		    $scope.hideAlerts();
+		    $anchorScroll();
+		    $scope.alert.hasAlert = true;
+		    $scope.alert.hasError = true;
+		    $scope.alert.alertMessage = locale.getString('spatial.invalid_data_saving');
+		    $scope.alert.hideAlert();
 		    formService.setAllDirty(["configPanelForm"], $scope);
 		}
 	};
@@ -126,6 +121,11 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    config.visibilitySettings = $scope.configModel.visibilitySettings;
 	    
 	    //Positions
+	    //Table
+	    if (!_.isEqual($scope.sortArray($scope.configModel.visibilitySettings.positions.table), $scope.sortArray($scope.configCopy.visibilitySettings.positions.table))){
+            include = true;
+        }
+	    
 	    //Popups
 	    if (!_.isEqual($scope.sortArray($scope.configModel.visibilitySettings.positions.popup), $scope.sortArray($scope.configCopy.visibilitySettings.positions.popup))){
 	        include = true;
@@ -137,6 +137,11 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
         }
 	    
 	    //Segments
+	    //Table
+	    if (!_.isEqual($scope.sortArray($scope.configModel.visibilitySettings.segments.table), $scope.sortArray($scope.configCopy.visibilitySettings.segments.table))){
+            include = true;
+        }
+	    
 	    //Popups
 	    if (!_.isEqual($scope.sortArray($scope.configModel.visibilitySettings.segments.popup), $scope.sortArray($scope.configCopy.visibilitySettings.segments.popup))){
             include = true;
@@ -146,6 +151,13 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
         if (!_.isEqual($scope.sortArray($scope.configModel.visibilitySettings.segments.labels), $scope.sortArray($scope.configCopy.visibilitySettings.segments.labels))){
             include = true;
         }
+        
+        //Tracks
+        //Table
+        if (!_.isEqual($scope.sortArray($scope.configModel.visibilitySettings.tracks.table), $scope.sortArray($scope.configCopy.visibilitySettings.tracks.table))){
+            include = true;
+        }
+        
         
 	    if (include === false){
 	        config.visibilitySettings = undefined;
@@ -173,16 +185,19 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
     
 	var saveSuccess = function(response){
 	    $anchorScroll();
-	    $scope.hasSuccess = true;
-	    $scope.hideAlerts();
+	    $scope.alert.hasAlert = true;
+	    $scope.alert.hasSuccess = true;
+	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_success_saving');
+	    $scope.alert.hideAlert();
 	    $scope.updateConfigCopy(response[1]);
 	};
 	
 	var saveFailure = function(error){
 	    $anchorScroll();
-	    $scope.hasError = true;
-	    $scope.errorMessage = locale.getString('spatial.user_preferences_error_saving');
-	    $scope.hideAlerts();
+	    $scope.alert.hasAlert = true;
+	    $scope.alert.hasError = true;
+	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_error_saving');
+	    $scope.alert.hideAlert();
 	};
 	
 	var getConfigsSuccess = function(response){
@@ -195,9 +210,10 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	
 	var getConfigsFailure = function(error){
 	    $anchorScroll();
-	    $scope.hasError = true;
-	    $scope.errorMessage = locale.getString('spatial.user_preferences_error_getting_configs');
-	    $scope.hideAlerts();
+	    $scope.alert.hasAlert = true;
+	    $scope.alert.hasError = true;
+	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_error_getting_configs');
+	    $scope.alert.hideAlert();
 	};
 	
 });

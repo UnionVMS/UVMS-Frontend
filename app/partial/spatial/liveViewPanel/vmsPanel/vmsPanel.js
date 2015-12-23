@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, globalSettingsService, reportService, mapService, csvWKTService, unitConversionService){
+angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, globalSettingsService, reportService, mapService, csvWKTService, unitConversionService, vmsVisibilityService){
     $scope.selectedVmsTab = 'MOVEMENTS';
     $scope.isPosFilterVisible = false;
     $scope.isSegFilterVisible = false;
@@ -8,6 +8,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
     $scope.startDate = undefined;
     $scope.endDate = undefined;
     $scope.decimalDegrees = true;
+    $scope.attrVisibility = vmsVisibilityService;
     
     //config object
     $scope.config = {

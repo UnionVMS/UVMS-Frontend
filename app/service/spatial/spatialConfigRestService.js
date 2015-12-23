@@ -40,6 +40,16 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
                     method: 'GET'
                  }
             });
+        },
+        resetSettings: function(){
+            return $resource('/spatial/rest/config/user/reset', {}, {
+                'reset': {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            });
         }
     };
 })
@@ -92,6 +102,16 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
                 deferred.resolve(response.data);
             }, function(error){
                 console.error('Error getting list of countries');
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+        resetSettings: function(settingsSection){
+            var deferred = $q.defer();
+            spatialConfigRestFactory.resetSettings().reset(angular.toJson(settingsSection), function(response){
+               deferred.resolve(response.data); 
+            }, function(error){
+                console.error('Error reseting settings to defaults');
                 deferred.reject(error);
             });
             return deferred.promise;
