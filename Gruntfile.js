@@ -73,8 +73,8 @@ module.exports = function (grunt) {
                   '/spatial/rest/',
                   '/config/rest',
                   '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'],
-              host: 'localhost',
-              port: 8080
+                host: 'livm73u',
+              port: 28080
         },
 
       development: {
