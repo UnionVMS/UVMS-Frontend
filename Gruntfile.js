@@ -45,14 +45,14 @@ module.exports = function (grunt) {
         {pattern: 'app/partial/**/*.html', watched: true, included: false, served: true},
         '<%= dom_munger.data.appjs %>',
         'bower_components/angular-mocks/angular-mocks.js',
-        'test/envConfigForTest.js',
+        'test/envConfigForTest.js'
   ];
 
   // Project configuration.
   grunt.initConfig({
     connect: {
       options: {
-        port: 9001,
+        port: 9001
       },
       rules: [
           // Internal rewrite
@@ -73,8 +73,8 @@ module.exports = function (grunt) {
                   '/spatial/rest/',
                   '/config/rest',
                   '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'],
-              host: 'livm73u',
-              port: 28080
+              host: 'localhost',
+              port: 8080
         },
 
       development: {
@@ -203,7 +203,7 @@ module.exports = function (grunt) {
             },
             {
                 src: ['temp/config.json'],
-                dest: 'dist/config.json',
+                dest: 'dist/config.json'
             }
         ]
       },
@@ -211,7 +211,7 @@ module.exports = function (grunt) {
         files: [
             {
                 src: 'environment/local.json',
-                dest: 'temp/config.json',
+                dest: 'temp/config.json'
             }
         ]
       },
@@ -219,7 +219,7 @@ module.exports = function (grunt) {
         files: [
             {
                 src: 'environment/dev.json',
-                dest: 'temp/config.json',
+                dest: 'temp/config.json'
             }
         ]
       },
@@ -227,7 +227,7 @@ module.exports = function (grunt) {
         files: [
             {
                 src: 'environment/test.json',
-                dest: 'temp/config.json',
+                dest: 'temp/config.json'
             }
         ]
       },
@@ -235,7 +235,7 @@ module.exports = function (grunt) {
         files: [
             {
                 src: 'environment/cygnus.json',
-                dest: 'temp/config.json',
+                dest: 'temp/config.json'
             }
         ]
       },
@@ -243,7 +243,7 @@ module.exports = function (grunt) {
         files: [
             {
                 src: 'environment/maven.json',
-                dest: 'temp/config.json',
+                dest: 'temp/config.json'
             }
         ]
       },
@@ -312,7 +312,7 @@ module.exports = function (grunt) {
           mangle: false,
           beautify: true,
           banner: '/*Version: <%= grunt.template.today("yyyy-mm-dd HH:MM") %> */',
-          sourceMap: true,
+          sourceMap: true
         },
         src: 'dist/app.full.js',
         dest:'dist/app.full.min.js'
@@ -343,7 +343,7 @@ module.exports = function (grunt) {
         browserNoActivityTimeout: 100000,
         proxies:  {
             '/config.json': 'http://localhost:9876/base/environment/local.json',
-            '/partial/': 'http://localhost:9876/base/app/partial/',
+            '/partial/': 'http://localhost:9876/base/app/partial/'
         },
         logLevel:'INFO',
         reporters:['mocha', 'junit'],
@@ -361,7 +361,7 @@ module.exports = function (grunt) {
             junitReporter: {
                 outputDir: 'testResults',
                 outputFile: 'controllers.xml'
-            },
+            }
         }
       },
       directives: {
@@ -370,7 +370,7 @@ module.exports = function (grunt) {
             junitReporter: {
                 outputDir: 'testResults',
                 outputFile: 'directives.xml'
-            },
+            }
         }
       },
       services: {
@@ -379,7 +379,7 @@ module.exports = function (grunt) {
             junitReporter: {
                 outputDir: 'testResults',
                 outputFile: 'services.xml'
-            },
+            }
         }
       },
       filters: {
@@ -388,7 +388,7 @@ module.exports = function (grunt) {
             junitReporter: {
                 outputDir: 'testResults',
                 outputFile: 'filters.xml'
-            },
+            }
         }
       },
       during_watch: {

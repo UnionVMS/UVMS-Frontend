@@ -1,11 +1,179 @@
-describe('reportService', function() {
+describe('reportService', function () {
 
-  beforeEach(module('unionvmsWeb'));
+    var mockMapService, mockSpatialRestService, mockSpatialHelperService, mockVmsVisibilityService,
+        mockReportRestService;
 
-  it('should ...', inject(function(reportService) {
+    beforeEach(module('unionvmsWeb'));
 
-	//expect(reportService.doSomething()).toEqual('something');
+    beforeEach(function () {
 
-  }));
+        mockReportRestService = jasmine.createSpyObj("reportRestService", [ 'executeReport' ]);
+        mockVmsVisibilityService = jasmine.createSpyObj("vmsVisibilityService", [ 'setVisibility']);
+        mockSpatialHelperService = jasmine.createSpyObj("spatialHelperService", [ 'setToolbarControls']);
+        //mockSpatialHelperService.setToolbarControls.andCallFake(function() {});
+        mockMapService = jasmine.createSpyObj("mapService", [ 'clearVmsLayers', 'getLayerByType', 'updateMapView',
+            'updateMapControls', 'setPositionStylesObj', 'setSegmentStylesObj', 'setPopupVisibility', 'clearVectorLayers', 'getMapProjectionCode']);
+        mockSpatialRestService = jasmine.createSpyObj("spatialRestService", [ 'getConfigsForReport']);
+
+        module(function ($provide) {
+            $provide.value('vmsVisibilityService', mockVmsVisibilityService);
+            $provide.value('mapService', mockMapService);
+            $provide.value('spatialRestService', mockSpatialRestService);
+            $provide.value('spatialHelperService', mockSpatialHelperService);
+            $provide.value('reportRestService', mockReportRestService);
+        });
+
+    });
+
+    it("testing definition of mocks", inject(function () {
+
+        expect(mockReportRestService.executeReport).toBeDefined();
+        expect(mockVmsVisibilityService.setVisibility).toBeDefined();
+        expect(mockSpatialHelperService.setToolbarControls).toBeDefined();
+        expect(mockMapService.clearVmsLayers).toBeDefined();
+        expect(mockMapService.getLayerByType).toBeDefined();
+        expect(mockMapService.updateMapContainerSize).toBeUndefined();
+
+    }));
+
+    it("testing initialisation of variables from reporting service", inject(function (reportService) {
+
+        expect(reportService.isReportExecuting).toBeFalsy();
+        expect(reportService.hasError).toBeFalsy();
+        expect(reportService.positions).toEqual([]);
+        expect(reportService.segments).toEqual([]);
+        expect(reportService.tracks).toEqual([]);
+        expect(reportService.tabs.map).toBeTruthy();
+        expect(reportService.tabs.vms).toBeTruthy();
+
+    }));
+
+    it("runReport with map with error in spatial rest service call", inject(function (reportService, Report) {
+
+        var report = new Report();
+        report.id = 1;
+        report.withMap = true;
+
+        mockSpatialRestService.getConfigsForReport.andCallFake(function () {
+            return {
+                then: function(successFn, errorFn) {
+                },
+                error: function(fn) {
+                }
+            };
+        });
+
+        reportService.runReport(report);
+
+        expect(mockSpatialRestService.getConfigsForReport).toHaveBeenCalledWith(report.id);
+        expect(mockMapService.clearVmsLayers).toHaveBeenCalled();
+        expect(mockMapService.updateMapView.callCount).toBe(0);
+        expect(mockMapService.updateMapControls.callCount).toBe(0);
+        expect(mockVmsVisibilityService.setVisibility.callCount).toBe(0);
+        expect(mockMapService.setPopupVisibility.callCount).toBe(0);
+        expect(mockSpatialHelperService.setToolbarControls.callCount).toBe(0);
+        expect(mockReportRestService.executeReport.callCount).toBe(0);
+    }));
+
+    it("runReport with map without errors", inject(function (reportService, Report) {
+
+        var report = new Report();
+        report.id = 1;
+        report.withMap = true;
+
+        mockMapService.styles = {
+
+            positions: 'countryCode',
+            segments: 'countryCode'
+        };
+
+        mockReportRestService.executeReport.andCallFake(function () {
+            return {
+                then: function (callback) {
+                    return callback({
+                        'movements': { 'features': [] },
+                        'segments': { 'features': [] }
+                    });
+                }
+            };
+        });
+
+        mockSpatialRestService.getConfigsForReport.andCallFake(function () {
+            return {
+                then: function (callback) {
+                    return callback({
+                        'map': {
+                            'projection': {
+                                'epsgCode': 11
+                            },
+                            'layers': [
+
+                            ]
+                        },
+                        'vectorStyles': {
+                            'positions': {
+                                'epsgCode': 11
+                            }
+                        },
+                        'visibilitySettings': {
+                            'positions': {
+                                'popup': true
+                            },
+                            'segments': {
+                                'popup': true
+                            }
+                        }
+                    });
+                }
+            };
+        });
+
+        reportService.runReport(report);
+
+        expect(report.hasError).toBeFalsy();
+        expect(mockSpatialRestService.getConfigsForReport).toHaveBeenCalledWith(report.id);
+        expect(mockMapService.clearVmsLayers).toHaveBeenCalled();
+        expect(mockMapService.updateMapView).toHaveBeenCalled();
+        expect(mockMapService.updateMapControls).toHaveBeenCalled();
+        expect(mockVmsVisibilityService.setVisibility).toHaveBeenCalled();
+        expect(mockMapService.setPopupVisibility.callCount).toBe(2);
+        expect(mockSpatialHelperService.setToolbarControls).toHaveBeenCalled();
+        expect(mockReportRestService.executeReport).toHaveBeenCalled();
+    }));
+
+    it("runReport without map should only call report rest service", inject(function (reportService, Report) {
+
+        var report = new Report();
+        report.id = 1;
+        report.withMap = false;
+
+        mockMapService.styles = {
+
+            positions: 'countryCode',
+            segments: 'countryCode'
+        };
+
+        mockReportRestService.executeReport.andCallFake(function () {
+            return {
+                then: function (callback) {
+                    return callback({
+                        'movements': { 'features': [] },
+                        'segments': { 'features': [] }
+                    });
+                }
+            };
+        });
+
+        reportService.runReport(report);
+
+        expect(mockSpatialRestService.getConfigsForReport.callCount).toBe(0);
+        expect(mockMapService.clearVmsLayers).toHaveBeenCalled();
+        expect(mockMapService.updateMapView.callCount).toBe(0);
+        expect(mockMapService.updateMapControls.callCount).toBe(0);
+        expect(mockVmsVisibilityService.setVisibility.callCount).toBe(0);
+        expect(mockMapService.setPopupVisibility.callCount).toBe(0);
+        expect(mockSpatialHelperService.setToolbarControls.callCount).toBe(0);
+        expect(mockReportRestService.executeReport).toHaveBeenCalled();
+    }));
 
 });
