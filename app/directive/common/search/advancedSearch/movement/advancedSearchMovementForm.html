@@ -1,4 +1,4 @@
-<div ng-controller="advancedSearchMovementCtrl"> 
+<div ng-controller="advancedSearchMovementCtrl">
     <div class="row movementsearch">
         <div class="movementsimplesearchcontent" ng-hide="advancedSearch">
             <div static-include="directive/common/search/advancedSearch/movement/staticSimpleSearch.html"></div>
@@ -6,11 +6,11 @@
         <div class="movementadvancedsearchcontent" ng-show="advancedSearch">
             <div static-include="directive/common/search/advancedSearch/movement/staticAdvancedSearch.html"></div>
         </div>
-        <div class="col-md-8 searchFooter">
+        <div class="col-md-12 searchFooter">
             <a ng-click="toggleAdvancedSearch()">
                 <span ng-hide="advancedSearch">{{'movement.toggle_advanced_search_adv' | i18n}}</span>
                 <span ng-show="advancedSearch">{{'movement.toggle_advanced_search_simple' | i18n}}</span>
-            </a>    
+            </a>
             <a ng-click="openSaveSearchModal()">
                 <span>{{'movement.save_search' | i18n}}</span>
             </a>

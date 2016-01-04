@@ -1,10 +1,11 @@
 <div class="col-md-3 nopaddingright" style="padding-left: 8px;">
     <div class="row nomargin">
     	<div class="col-md-6 smallerpadding searchcriteria">
-            <input type="text" placeholder="{{'movement.advanced_search_placeholder_by_ircs' | i18n}}"  class="form-control" ng-model="advancedSearchObject.IRCS" ng-change="resetSavedSearchDropdown()">
+            <input type="text" placeholder="{{'movement.advanced_search_placeholder_by_name' | i18n}}"  class="form-control" ng-model="advancedSearchObject.NAME" ng-change="resetSavedSearchDropdown()">
         </div>
         <div class="col-md-6 smallerpadding searchcriteria">
-            <dropdown ng-model="advancedSearchObject.FLAG_STATE" initialtext="{{'movement.advanced_search_placeholder_flag_state' | i18n}}" items="flagStates" callback="resetSavedSearchDropdown"></dropdown>
+
+            <input type="text" placeholder="{{'movement.advanced_search_placeholder_by_ircs' | i18n}}"  class="form-control" ng-model="advancedSearchObject.IRCS" ng-change="resetSavedSearchDropdown()">
         </div>
          <div class="col-md-6 smallerpadding searchcriteria">
             <dropdown ng-model="advancedSearchObject.GEAR_TYPE" initialtext="{{'movement.advanced_search_placeholder_gear_type' | i18n}}" items="gearType" callback="resetSavedSearchDropdown"></dropdown>
@@ -37,7 +38,7 @@
             <dropdown ng-model="advancedSearchObject.SPEED_SPAN" initialtext="{{'movement.advanced_search_placeholder_measured_speed' | i18n}}" items="meassuredSpeed" callback="resetSavedSearchDropdown"></dropdown>
         </div>
         <div class="col-md-12 smallerpadding searchcriteria">
-             <datepicker-input model="advancedSearchObject.FROM_DATE" time="true" max-date="advancedSearchObject.TO_DATE"placeholder="{{'movement.advanced_search_placeholder_date_time_from' | i18n}}" ng-change-callback="resetSavedSearchDropdown"></datepicker-input>
+             <datepicker-input model="advancedSearchObject.FROM_DATE" time="true" max-date="advancedSearchObject.TO_DATE"placeholder="{{'movement.search_movementStartDate_placeholder' | i18n}}" ng-change-callback="resetSavedSearchDropdown"></datepicker-input>
         </div>
     </div>
 </div>
@@ -45,7 +46,8 @@
 <div class="col-md-3 nopaddingleft">
     <div class="row nomargin">
         <div class="col-md-12 smallerpadding searchcriteria">
-            <input type="text" placeholder="{{'movement.advanced_search_placeholder_by_name' | i18n}}"  class="form-control" ng-model="advancedSearchObject.NAME" ng-change="resetSavedSearchDropdown()">
+            <dropdown ng-model="advancedSearchObject.FLAG_STATE" initialtext="{{'movement.advanced_search_placeholder_flag_state' | i18n}}" items="flagStates" callback="resetSavedSearchDropdown"></dropdown>
+
         </div>
         <div class="col-md-6 smallerpadding searchcriteria">
             <dropdown ng-model="advancedSearchObject.MOVEMENT_TYPE" initialtext="{{'movement.advanced_search_placeholder_msg_type' | i18n}}" items="movementType" callback="resetSavedSearchDropdown"></dropdown>
@@ -54,7 +56,7 @@
             <dropdown ng-model="advancedSearchObject.STATUS" initialtext="{{'movement.advanced_search_placeholder_status' | i18n}}" items="status" callback="resetSavedSearchDropdown"></dropdown>
         </div>
         <div class="col-md-12 smallerpadding searchcriteria">
-             <datepicker-input model="advancedSearchObject.TO_DATE" time="true" min-date="advancedSearchObject.FROM_DATE" placeholder="{{'movement.advanced_search_placeholder_date_time_to' | i18n}}" ng-change-callback="resetSavedSearchDropdown"></datepicker-input>
+             <datepicker-input model="advancedSearchObject.TO_DATE" time="true" min-date="advancedSearchObject.FROM_DATE" placeholder="{{'movement.search_movementEndDate_placeholder' | i18n}}" ng-change-callback="resetSavedSearchDropdown"></datepicker-input>
         </div>
     </div>
 </div>
