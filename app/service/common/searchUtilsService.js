@@ -84,6 +84,15 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
         return searchCriterias;
     };
 
+    var replaceCommasWithPoint = function(searchCriterias){
+        for (var i = searchCriterias.length - 1; i >= 0; i--) {
+            if(searchCriterias[i].key === "MAX_LENGTH" || searchCriterias[i].key === "MIN_LENGTH")
+            {
+               searchCriterias[i].value = searchCriterias[i].value.replace(",", ".");
+            }
+        }
+    };
+
     //Replace min and max criterias with span criterias
     var replaceMinMaxValuesWithSpans = function(searchCriterias){
         var i, searchCriteriaKey, searchCriteriaValue, idxToRemove = [];
@@ -171,10 +180,11 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
         modifySpanAndTimeZones : modifySpanAndTimeZones,
         replaceSpansWithMinMaxValues : replaceSpansWithMinMaxValues,
         replaceMinMaxValuesWithSpans : replaceMinMaxValuesWithSpans,
+        replaceCommasWithPoint : replaceCommasWithPoint,
         getSearchCriteriaPartition : getSearchCriteriaPartition,
         getTimeSpanOptions : getTimeSpanOptions,
         getTimeSpanCodeForToday : getTimeSpanCodeForToday,
-        getTimeSpanCodeForCustom : getTimeSpanCodeForCustom,
+        getTimeSpanCodeForCustom : getTimeSpanCodeForCustom
     };
 
 	return searchUtilsService;

@@ -230,6 +230,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 		searchVessels : function(){
             var deferred = $q.defer();
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
+            searchUtilsService.replaceCommasWithPoint(getListRequest.criterias);
 			vesselRestService.getVesselList(getListRequest).then(function(vesselPage){
                 //Zero matches?
                 if(vesselPage.getNumberOfItems() === 0){
@@ -441,6 +442,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         searchMovements : function(){
             //intercept request and set utc timezone on dates.
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
+            searchUtilsService.replaceCommasWithPoint(getListRequest.criterias);
 
             // Split search criteria into vessel and movement
             var allSearchCriteria = this.getSearchCriterias();

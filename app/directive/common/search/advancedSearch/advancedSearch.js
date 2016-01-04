@@ -106,7 +106,7 @@ angular.module('unionvmsWeb')
         }
     };
 
-    //Reset the advacned search form inputs and do a search if sendSearchRequest is set to true
+    //Reset the advanced search form inputs and do a search if sendSearchRequest is set to true
     $scope.resetAdvancedSearchForm = function(sendSearchRequest){
         searchService.resetAdvancedSearch();
         $scope.advancedSearchObject = searchService.getAdvancedSearchObject();
