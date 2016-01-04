@@ -20,7 +20,7 @@ angular.module('unionvmsWeb').controller('CountrystylesCtrl',function($scope, sp
     
     //Set proper array for styles based on countryCodes
     $scope.setFsStyleArray = function(type){
-    	if(type === 'segments' && (!$scope.configModel.stylesSettings || !$scope.configModel.stylesSettings[type] || !$scope.configModel.stylesSettings[type].style || !$scope.configModel.stylesSettings[type].attribute !== 'countryCode')){
+    	if(type === 'segments' && (!$scope.configModel.stylesSettings || !$scope.configModel.stylesSettings[type] || !$scope.configModel.stylesSettings[type].style) && $scope.configModel.stylesSettings[type].attribute === 'countryCode'){
     		type = 'positions';
     	}
         var keys = _.keys($scope.countryList);
@@ -78,7 +78,7 @@ angular.module('unionvmsWeb').controller('CountrystylesCtrl',function($scope, sp
 	        color += possible.charAt(Math.floor(Math.random() * possible.length));
 	    }
 	    return color;
-	}
+	};
 	
    $scope.prepareRecordsForCountryCode();
 });

@@ -8,11 +8,12 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,co
 	$scope.isAddNewRuleActive = true;
 	
 	var setLoadedRule = function(value,key) {
+		var rangeData;
 		if($scope.loadedPositionProperties.attribute === "speedOverGround"){
-			var rangeData = key.split("-");
+			rangeData = key.split("-");
 			$scope.positionPropertyList.push({"id": $scope.positionRuleId, "propertyFrom": parseInt(rangeData[0]), "propertyTo": rangeData[1] ? parseInt(rangeData[1]) : undefined, "color": value});
 		}else if($scope.loadedPositionProperties.attribute === "calculatedSpeed") {
-			var rangeData = key.split("-");
+			rangeData = key.split("-");
 			$scope.positionPropertyList.push({"id": $scope.positionRuleId, "propertyFrom": parseInt(rangeData[0]), "propertyTo": rangeData[1] ? parseInt(rangeData[1]) : undefined, "color": value});
 		}else if($scope.loadedPositionProperties.attribute === "type") {
 			$scope.positionPropertyList.push({"id": $scope.positionRuleId, "code": key, "color": value});
@@ -188,7 +189,7 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,co
 	        color += possible.charAt(Math.floor(Math.random() * possible.length));
 	    }
 	    return color;
-	}
+	};
 	
 	$scope.$on('updateAddNewRuleActive', function(event) {
 		$scope.isAddNewRuleActive = $scope.getNrErrors() === 0 ? true : false;
