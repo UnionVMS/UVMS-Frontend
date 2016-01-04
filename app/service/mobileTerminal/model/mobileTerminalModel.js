@@ -10,6 +10,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             this.associatedVessel = undefined;
             this.guid = undefined;
             this.type = undefined;
+            this.archived = undefined;
             this.plugin = {
                 labelName : undefined,
                 serviceName : undefined,
@@ -35,6 +36,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             mobileTerminal.source = data.source;
             mobileTerminal.type = data.type;
             mobileTerminal.connectId = data.connectId;
+            mobileTerminal.archived = data.archived;
 
             if(angular.isDefined(data.plugin)){
                 mobileTerminal.plugin = {
@@ -136,6 +138,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             copy.plugin = this.plugin;
             copy.guid = this.guid;
             copy.connectId = this.connectId;
+            copy.archived = this.archived;
             copy.channels = this.channels.map(function(ch) {
                 return ch.copy();
             });
@@ -275,9 +278,6 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
 
             return true;
         };
-
-
-
 
         return MobileTerminal;
     });
