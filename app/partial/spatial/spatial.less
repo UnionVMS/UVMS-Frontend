@@ -223,5 +223,25 @@ div.td:extend(td all) {}
     .geoServerUrlInnerErrorMessages {
     	right: 25px;
     	top: 0;
-    }	
+    }
+    .degree-input:after {
+		content: '\00b0';
+		position: absolute;
+		top: 0;
+		right: 20px;
+		color: #999999;	
+		font-size: 22px;
+	}
+	.accordionError {
+		display: inline-block;
+		margin-left: 30px;
+		color: red;
+		font-size: 14px;
+		.fa.fa-exclamation-circle {
+		    text-align: center;
+		    color: red;
+		    font-weight: bold;
+		    cursor: default;
+    	}
+	}
 }

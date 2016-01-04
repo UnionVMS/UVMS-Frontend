@@ -1,4 +1,4 @@
-describe('SegmentstylesrulerowCtrl', function() {
+describe('RulerowCtrl', function() {
 
 	beforeEach(module('unionvmsWeb'));
 
@@ -6,7 +6,7 @@ describe('SegmentstylesrulerowCtrl', function() {
 
     beforeEach(inject(function($rootScope, $controller) {
       scope = $rootScope.$new();
-      ctrl = $controller('SegmentstylesrulerowCtrl', {$scope: scope});
+      ctrl = $controller('RulerowCtrl', {$scope: scope});
     }));	
 
 	it('should ...', inject(function() {

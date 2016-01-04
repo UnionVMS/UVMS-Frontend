@@ -2,22 +2,23 @@
 	<ng-form name="segmentsForm" novalidate>
 		<div class="row">
 			<div class="form-group col-md-4">
-				<combobox ng-model="configModel.segmentStyle.attribute" initialtext="{{'spatial.segment_property' | i18n }}" items="segmentProperties"></combobox>
+				<combobox ng-model="configModel.segmentStyle.attribute" initialtext="{{'spatial.segment_property' | i18n }}" items="segmentProperties" ng-change="changeProperty()"></combobox>
 			</div>
-			<div class="form-group col-md-4 btn-add">
-				<a ng-class='{ disabled: !configModel.segmentStyle.attribute || !isAddNewRuleActive}' ng-click="!configModel.segmentStyle.attribute || !isAddNewRuleActive || addNewRule()" title="{{'spatial.segment_property_add_rule' | i18n }}">
+			<div class="form-group col-md-4 btn-add" ng-show="configModel.segmentStyle.attribute && ['countryCode','segmentCategory'].indexOf(configModel.segmentStyle.attribute) === -1">
+				<a ng-class='{ disabled: !configModel.segmentStyle.attribute || !isAddNewRuleActive}' ng-click="!configModel.segmentStyle.attribute || !isAddNewRuleActive || addNewRule()" title="{{'spatial.property_add_rule' | i18n }}">
 					<span class="btn btn-primary btn-sm btn-circle"><i class="fa fa-plus"></i></span>
-					{{'spatial.segment_property_add_rule' | i18n }}
+					{{'spatial.property_add_rule' | i18n }}
 				</a>
 			</div>
 		</div>
 		<div class="row rulesList">
-			<div ng-repeat="item in configModel.segmentStyle.style" ng-include="'partial/spatial/configurations/vmsStyles/segmentStyles/segmentStylesRuleRow/segmentStylesRuleRow.html'"></div>
+			<div ng-if="configModel.segmentStyle.attribute === 'countryCode'" ng-include="'partial/spatial/configurations/vmsStyles/generalStyles/countryStyles/countryStyles.html'" ng-init="lastComponentStyle = 'segments'" class="col-md-12"></div>
+			<div ng-repeat="item in configModel.segmentStyle.style" ng-include="'partial/spatial/configurations/vmsStyles/generalStyles/ruleRow/ruleRow.html'" ng-if="configModel.segmentStyle.attribute !== 'countryCode'" ng-init="lastComponentStyle = 'segment'"></div>
 		</div>
-		<div class="row defaultItem" ng-show="configModel.segmentStyle.attribute">
-			<ng-form name="segmentDefaultForm" novalidate>
+		<div class="row defaultItem" ng-if="configModel.segmentStyle.attribute && ['countryCode','segmentCategory'].indexOf(configModel.segmentStyle.attribute) === -1">
+			<ng-form name="defaultForm" ng-if="configModel.segmentStyle.attribute && configModel.segmentStyle.attribute !== 'countryCode'" novalidate>
 				<div class="row col-md-12">
-					<div class="form-group col-md-3" ng-class="{'has-error': (segmentDefaultForm.$error.segDefColor || segmentDefaultForm.$error.requiredField) && segmentDefaultForm.$dirty}">
+					<div class="form-group col-md-3" ng-class="{'has-error': (defaultForm.$error.segDefColor || defaultForm.$error.requiredField) && defaultForm.$dirty}">
 						<label>{{'spatial.default_color' | i18n}}</label>
 						<div class="colorPickerComponent">
 							<div ng-style="{'background-color': configModel.segmentStyle.defaultColor && configModel.segmentStyle.defaultColor.length > 3 && configModel.segmentStyle.defaultColor.indexOf('#') != -1 ? configModel.segmentStyle.defaultColor : '#fff'}" class="form-control pickedcolor">
@@ -26,7 +27,7 @@
 					        <input class="form-control" name="defaultColor" colorpicker ng-model="configModel.segmentStyle.defaultColor" type="text" ng-change="validateDefaultColor();"/>
 						</div>
 					</div>
-					<div class="defaultColorMessages form-group col-md-4" ng-messages="segmentDefaultForm.$error" ng-show="segmentDefaultForm.$dirty">
+					<div class="defaultColorMessages form-group col-md-4" ng-messages="defaultForm.$error" ng-show="defaultForm.$dirty">
 						<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
 						<div ng-message="segDefColor">{{'spatial.invalid_color_error_message' | i18n }}</div>
 					</div>

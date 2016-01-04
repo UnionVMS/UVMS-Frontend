@@ -66,15 +66,15 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     SpatialConfig.prototype.forAdminConfigToJson = function(srcConfig){
         var config = {};
         angular.copy(srcConfig, config);
-        if (angular.isDefined(config.posFsStyle)){
+        if (angular.isDefined(config.positionStyle)){
             var style = {};
-            for (var i = 0; i < config.posFsStyle.length; i++){
-                style[config.posFsStyle[i].code] = config.posFsStyle[i].color;
+            for (var i = 0; i < config.positionStyle.length; i++){
+                style[config.positionStyle[i].code] = config.positionStyle[i].color;
             }
             
             config.stylesSettings.positions.style = style;
             srcConfig.stylesSettings.positions.style = style;
-            config.posFsStyle = undefined;
+            config.positionStyle = undefined;
         }
         if(angular.isDefined(config.segmentStyle)){
     		var segmentProperties = {};

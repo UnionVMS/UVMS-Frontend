@@ -2,6 +2,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
     $scope.isUserPreference = true;
 	$scope.isConfigVisible= false;
 	$scope.alert = spatialConfigAlertService;
+	$scope.loadedAllSettings = false;
 	
 	$scope.toggleUserPreferences = function(){
 		$scope.isConfigVisible = !$scope.isConfigVisible;
@@ -34,8 +35,8 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		    newConfig = newConfig.forUserPrefToServer();
 		    
 		    newConfig = $scope.checkMapSettings(newConfig);
-		    newConfig = $scope.checkStylesSttings(newConfig);
-		    newConfig = $scope.checkVisibilitySttings(newConfig);
+		    newConfig = $scope.checkStylesSettings(newConfig);
+		    newConfig = $scope.checkVisibilitySettings(newConfig);
 		    
 		    console.log(newConfig);
 		    
@@ -57,6 +58,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		    $scope.alert.alertMessage = locale.getString('spatial.invalid_data_saving');
 		    $scope.alert.hideAlert();
 		    formService.setAllDirty(["configPanelForm"], $scope);
+		    $scope.submitedWithErrors = true;
 		}
 	};
 	
@@ -70,24 +72,37 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    return config;
 	};
 	
-	$scope.checkStylesSttings = function(config){
+	$scope.checkStylesSettings = function(config){
 	    var include = false;
 	    //Rebuild colors from fs
 	    config.stylesSettings = $scope.configModel.stylesSettings;
-	    if (angular.isDefined($scope.configModel.posFsStyle)){
-	        var posStyle = {};
-	        for (var i = 0; i < $scope.configModel.posFsStyle.length; i++){
-	            posStyle[$scope.configModel.posFsStyle[i].code] = $scope.configModel.posFsStyle[i].color; 
-	        }
-	        
-	        if (!_.isEqual($scope.configCopy.stylesSettings.positions.style, posStyle)){
-	            config.stylesSettings.positions.style = posStyle;
-	            include = true;
-	        }
-	    }
-	    
-	    if (!_.isEqual($scope.configCopy.stylesSettings.segments, $scope.configModel.stylesSettings.segments)){
-	        include = true;
+	    if (angular.isDefined($scope.configModel.positionStyle)){
+	    	var positionProperties = {};
+	    	positionProperties.attribute = $scope.configModel.positionStyle.attribute;
+	    	positionProperties.style = {};
+            
+            if($scope.configPanelForm && $scope.configPanelForm.vmsstylesForm.positionsForm && $scope.configPanelForm.vmsstylesForm.positionsForm.$dirty){
+	            switch (positionProperties.attribute) {
+					case "speedOverGround":
+					case "calculatedSpeed":
+						angular.forEach($scope.configModel.positionStyle.style, function(item){
+							positionProperties.style[item.propertyFrom + "-" + item.propertyTo] = item.color;
+		                });
+						positionProperties.style["default"] = $scope.configModel.positionStyle.defaultColor;
+						break;
+					case "countryCode":
+					case "activity":
+					case "type":
+						angular.forEach($scope.configModel.positionStyle.style, function(item){
+							positionProperties.style[item.code] = item.color;
+		                });
+						break;
+					default:
+						break;
+				}
+                include = true;
+                config.stylesSettings.positions = positionProperties;
+            }
 	    }
 	    
 	    if(angular.isDefined($scope.configModel.segmentStyle)){
@@ -95,15 +110,26 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
             segmentProperties.attribute = $scope.configModel.segmentStyle.attribute;
             segmentProperties.style = {};
             
-            if(segmentProperties.attribute === "speedOverGround"){
-                angular.forEach($scope.configModel.segmentStyle.style, function(item){
-                    segmentProperties.style[item.propertyFrom + "-" + item.propertyTo] = item.color;
-                });
-                
-                segmentProperties.style["default"] = $scope.configModel.segmentStyle.defaultColor;
-            }
-            
-            if (!_.isEqual(segmentProperties, $scope.configCopy.stylesSettings.segments)){
+            if($scope.configPanelForm && $scope.configPanelForm.vmsstylesForm.segmentsForm && $scope.configPanelForm.vmsstylesForm.segmentsForm.$dirty){
+	            switch (segmentProperties.attribute) {
+					case "speedOverGround":
+					case "distance":
+					case "duration":
+					case "courseOverGround":
+						angular.forEach($scope.configModel.segmentStyle.style, function(item){
+		                    segmentProperties.style[item.propertyFrom + "-" + item.propertyTo] = item.color;
+		                });
+		                segmentProperties.style["default"] = $scope.configModel.segmentStyle.defaultColor;
+						break;
+					case "countryCode":
+					case "segmentCategory":
+						angular.forEach($scope.configModel.segmentStyle.style, function(item){
+		                    segmentProperties.style[item.code] = item.color;
+		                });
+						break;
+					default:
+						break;
+				}
                 include = true;
                 config.stylesSettings.segments = segmentProperties;
             }
@@ -116,45 +142,45 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    return config;
 	};
 	
-	$scope.checkVisibilitySttings = function(config){
+	$scope.checkVisibilitySettings = function(config){
 	    var include = false;
 	    config.visibilitySettings = $scope.configModel.visibilitySettings;
 	    
 	    //Positions
 	    //Table
-	    if (!_.isEqual($scope.sortArray($scope.configModel.visibilitySettings.positions.table), $scope.sortArray($scope.configCopy.visibilitySettings.positions.table))){
+	    if (!_.isEqual($scope.configModel.visibilitySettings.positions && $scope.configModel.visibilitySettings.positions.table ? $scope.sortArray($scope.configModel.visibilitySettings.positions.table) : undefined, $scope.configCopy.visibilitySettings.positions && $scope.configCopy.visibilitySettings.positions.table ? $scope.sortArray($scope.configCopy.visibilitySettings.positions.table) : undefined)){
             include = true;
         }
 	    
 	    //Popups
-	    if (!_.isEqual($scope.sortArray($scope.configModel.visibilitySettings.positions.popup), $scope.sortArray($scope.configCopy.visibilitySettings.positions.popup))){
+	    if (!_.isEqual($scope.configModel.visibilitySettings.positions && $scope.configModel.visibilitySettings.positions.popup ? $scope.sortArray($scope.configModel.visibilitySettings.positions.popup) : undefined, $scope.configCopy.visibilitySettings.positions && $scope.configCopy.visibilitySettings.positions.popup ? $scope.sortArray($scope.configCopy.visibilitySettings.positions.popup) : undefined)){
 	        include = true;
 	    }
 	    
 	    //Labels
-	    if (!_.isEqual($scope.sortArray($scope.configModel.visibilitySettings.positions.labels), $scope.sortArray($scope.configCopy.visibilitySettings.positions.labels))){
+	    if (!_.isEqual($scope.configModel.visibilitySettings.positions && $scope.configModel.visibilitySettings.positions.labels ? $scope.sortArray($scope.configModel.visibilitySettings.positions.labels) : undefined, $scope.configCopy.visibilitySettings.positions && $scope.configCopy.visibilitySettings.positions.labels ? $scope.sortArray($scope.configCopy.visibilitySettings.positions.labels) : undefined)){
             include = true;
         }
 	    
 	    //Segments
 	    //Table
-	    if (!_.isEqual($scope.sortArray($scope.configModel.visibilitySettings.segments.table), $scope.sortArray($scope.configCopy.visibilitySettings.segments.table))){
+	    if (!_.isEqual($scope.configModel.visibilitySettings.segments && $scope.configModel.visibilitySettings.segments.table ? $scope.sortArray($scope.configModel.visibilitySettings.segments.table) : undefined, $scope.configCopy.visibilitySettings.segments && $scope.configCopy.visibilitySettings.segments.table ? $scope.sortArray($scope.configCopy.visibilitySettings.segments.table) : undefined)){
             include = true;
         }
 	    
 	    //Popups
-	    if (!_.isEqual($scope.sortArray($scope.configModel.visibilitySettings.segments.popup), $scope.sortArray($scope.configCopy.visibilitySettings.segments.popup))){
+	    if (!_.isEqual($scope.configModel.visibilitySettings.segments && $scope.configModel.visibilitySettings.segments.popup ? $scope.sortArray($scope.configModel.visibilitySettings.segments.popup) : undefined, $scope.configCopy.visibilitySettings.segments && $scope.configCopy.visibilitySettings.segments.popup ? $scope.sortArray($scope.configCopy.visibilitySettings.segments.popup) : undefined)){
             include = true;
         }
         
 	    //Labels
-        if (!_.isEqual($scope.sortArray($scope.configModel.visibilitySettings.segments.labels), $scope.sortArray($scope.configCopy.visibilitySettings.segments.labels))){
+        if (!_.isEqual($scope.configModel.visibilitySettings.segments && $scope.configModel.visibilitySettings.segments.labels ? $scope.sortArray($scope.configModel.visibilitySettings.segments.labels) : undefined, $scope.configCopy.visibilitySettings.segments && $scope.configCopy.visibilitySettings.segments.labels ? $scope.sortArray($scope.configCopy.visibilitySettings.segments.labels) : undefined)){
             include = true;
         }
         
         //Tracks
         //Table
-        if (!_.isEqual($scope.sortArray($scope.configModel.visibilitySettings.tracks.table), $scope.sortArray($scope.configCopy.visibilitySettings.tracks.table))){
+        if (!_.isEqual($scope.configModel.visibilitySettings.tracks && $scope.configModel.visibilitySettings.tracks.table ? $scope.sortArray($scope.configModel.visibilitySettings.tracks.table) : undefined, $scope.configCopy.visibilitySettings.tracks && $scope.configCopy.visibilitySettings.tracks.table ? $scope.sortArray($scope.configCopy.visibilitySettings.tracks.table) : undefined)){
             include = true;
         }
         
@@ -206,6 +232,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
         $scope.configModel = model.forUserPrefFromJson(response);
         $scope.configCopy = {};
         angular.copy($scope.configModel, $scope.configCopy);
+        $scope.loadedAllSettings = true;
 	};
 	
 	var getConfigsFailure = function(error){

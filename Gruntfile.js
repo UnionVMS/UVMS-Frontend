@@ -73,7 +73,7 @@ module.exports = function (grunt) {
                   '/spatial/rest/',
                   '/config/rest',
                   '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'],
-                host: 'livm73u',
+              host: 'livm73u',
               port: 28080
         },
 
@@ -361,7 +361,7 @@ module.exports = function (grunt) {
             junitReporter: {
                 outputDir: 'testResults',
                 outputFile: 'controllers.xml'
-            }
+        }
         }
       },
       directives: {
@@ -370,7 +370,7 @@ module.exports = function (grunt) {
             junitReporter: {
                 outputDir: 'testResults',
                 outputFile: 'directives.xml'
-            }
+        }
         }
       },
       services: {
@@ -379,7 +379,7 @@ module.exports = function (grunt) {
             junitReporter: {
                 outputDir: 'testResults',
                 outputFile: 'services.xml'
-            }
+        }
         }
       },
       filters: {
@@ -388,7 +388,7 @@ module.exports = function (grunt) {
             junitReporter: {
                 outputDir: 'testResults',
                 outputFile: 'filters.xml'
-            }
+        }
         }
       },
       during_watch: {

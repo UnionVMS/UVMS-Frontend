@@ -23,7 +23,9 @@ angular.module('unionvmsWeb').factory('formService',function() {
 					}
 				}
 				elem = elem[item.attributes.name.nodeValue];
-				elem.$setDirty();
+				if(elem){
+					elem.$setDirty();
+				}
 			});
 		}
 	};
