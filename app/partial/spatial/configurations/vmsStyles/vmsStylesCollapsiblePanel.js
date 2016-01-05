@@ -32,6 +32,7 @@ angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',functio
 	};
 	
 	$scope.reset = function(){
+		$scope.loadedAllSettings = false;
         var item = {
             stylesSettings: {}
         };
@@ -42,7 +43,9 @@ angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',functio
         //TODO check if this is working properly
         $scope.configModel.stylesSettings = response.stylesSettings;
         if (angular.isDefined($scope.configCopy)){
-            angular.copy(response.stylesSettings, $scope.configCopy.stylesSettings);
+            angular.copy($scope.configModel.stylesSettings, $scope.configCopy.stylesSettings);
+	        $scope.loadedAllSettings = true;
+	        $scope.$broadcast('loadCountries');
         }
         $anchorScroll();
         spatialConfigAlertService.hasAlert = true;

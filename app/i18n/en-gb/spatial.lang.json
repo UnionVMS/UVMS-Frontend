@@ -258,6 +258,7 @@
 	"invalid_color_error_message": "Invalid color",
 	"prop_min_from_error_message": "Property 'From' cannot be negative",
 	"prop_to_error_message": "'To' must be higher than 'From'",
+	"prop_to_max_error_message": "Course degree cannot exceed value 360",
 	"min_value_1_error_message": "Must be higher than 0",
 	"section_errors": "This section contains errors"
 }

@@ -67,14 +67,25 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     SpatialConfig.prototype.forAdminConfigToJson = function(srcConfig){
         var config = {};
         angular.copy(srcConfig, config);
+        var i = 0;
         if (angular.isDefined(config.positionStyle)){
-            var style = {};
-            for (var i = 0; i < config.positionStyle.length; i++){
-                style[config.positionStyle[i].code] = config.positionStyle[i].color;
-            }
+        	var positionProperties = {};
+        	positionProperties.attribute = config.positionStyle.attribute;
+        	positionProperties.style = {};
+            if(["reportedSpeed","calculatedSpeed","reportedCourse"].indexOf(positionProperties.attribute) !== -1){
+    			angular.forEach(config.positionStyle.style, function(item){
+    				positionProperties.style[item.propertyFrom + "-" + item.propertyTo] = item.color;
+    			});
+    			
+    			positionProperties.style["default"] = config.positionStyle.defaultColor;
+    		}else{
+	            for (i = 0; i < config.positionStyle.style.length; i++){
+	            	positionProperties.style[config.positionStyle.style[i].code] = config.positionStyle.style[i].color;
+	            }
+    		}
             
-            config.stylesSettings.positions.style = style;
-            srcConfig.stylesSettings.positions.style = style;
+            config.stylesSettings.positions = positionProperties;
+            srcConfig.stylesSettings.positions = positionProperties;
             config.positionStyle = undefined;
         }
         if(angular.isDefined(config.segmentStyle)){
@@ -82,12 +93,16 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     		segmentProperties.attribute = config.segmentStyle.attribute;
     		segmentProperties.style = {};
     		
-    		if(segmentProperties.attribute === "speedOverGround"){
+    		if(["speedOverGround","distance","duration","courseOverGround"].indexOf(segmentProperties.attribute) !== -1){
     			angular.forEach(config.segmentStyle.style, function(item){
     				segmentProperties.style[item.propertyFrom + "-" + item.propertyTo] = item.color;
     			});
     			
     			segmentProperties.style["default"] = config.segmentStyle.defaultColor;
+    		}else{
+    			for (i = 0; i < config.segmentStyle.style.length; i++){
+    				segmentProperties.style[config.segmentStyle.style[i].code] = config.segmentStyle.style[i].color;
+                }
     		}
     		config.stylesSettings.segments = segmentProperties;
     		srcConfig.stylesSettings.segments = segmentProperties;

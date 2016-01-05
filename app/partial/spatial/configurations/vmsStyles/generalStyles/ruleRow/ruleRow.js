@@ -18,11 +18,16 @@ angular.module('unionvmsWeb').controller('RulerowCtrl',function($scope){
 					}else{
 						$scope["rowstylesForm" + $scope.item.id].propertyTo.$setValidity('segPropTo', true);
 					}
+					if($scope["rowstylesForm" + $scope.item.id].propertyTo.$valid || _.allKeys($scope["rowstylesForm" + $scope.item.id].propertyTo.$error).length === 1 && $scope["rowstylesForm" + $scope.item.id].propertyTo.$error.hasError){
+						$scope["rowstylesForm" + $scope.item.id].propertyTo.$setValidity('hasError', true);
+					}else{
+						$scope["rowstylesForm" + $scope.item.id].propertyTo.$setValidity('hasError', false);
+					}
 				}
-				if($scope["rowstylesForm" + $scope.item.id].$valid || $scope.getNrErrors() === 1 && $scope["rowstylesForm" + $scope.item.id].$error.hasError){
-					$scope["rowstylesForm" + $scope.item.id].$setValidity('hasError', true);
+				if($scope["rowstylesForm" + $scope.item.id].propertyFrom.$valid || _.allKeys($scope["rowstylesForm" + $scope.item.id].propertyFrom.$error).length === 1 && $scope["rowstylesForm" + $scope.item.id].propertyFrom.$error.hasError){
+					$scope["rowstylesForm" + $scope.item.id].propertyFrom.$setValidity('hasError', true);
 				}else{
-					$scope["rowstylesForm" + $scope.item.id].$setValidity('hasError', false);
+					$scope["rowstylesForm" + $scope.item.id].propertyFrom.$setValidity('hasError', false);
 				}
 			}
 			$scope.checkIfAddNewRuleActive();
@@ -40,10 +45,19 @@ angular.module('unionvmsWeb').controller('RulerowCtrl',function($scope){
 			}else{
 				$scope["rowstylesForm" + $scope.item.id].propertyTo.$setValidity('requiredField', true);
 			}
-			if($scope["rowstylesForm" + $scope.item.id].$valid || $scope.getNrErrors() === 1 && $scope["rowstylesForm" + $scope.item.id].$error.hasError){
-				$scope["rowstylesForm" + $scope.item.id].$setValidity('hasError', true);
+			
+			if($scope.componentStyle === 'segment' && $scope.configModel.segmentStyle.attribute === 'courseOverGround' || $scope.componentStyle === 'positions' && $scope.configModel.positionStyle.attribute === 'reportedCourse' ){
+				if($scope.item.propertyTo && $scope.item.propertyTo > 360){
+					$scope["rowstylesForm" + $scope.item.id].propertyTo.$setValidity('segPropToMax', false);
+				}else{
+					$scope["rowstylesForm" + $scope.item.id].propertyTo.$setValidity('segPropToMax', true);
+				}
+			}
+			
+			if($scope["rowstylesForm" + $scope.item.id].propertyTo.$valid || _.allKeys($scope["rowstylesForm" + $scope.item.id].propertyTo.$error).length === 1 && $scope["rowstylesForm" + $scope.item.id].propertyTo.$error.hasError){
+				$scope["rowstylesForm" + $scope.item.id].propertyTo.$setValidity('hasError', true);
 			}else{
-				$scope["rowstylesForm" + $scope.item.id].$setValidity('hasError', false);
+				$scope["rowstylesForm" + $scope.item.id].propertyTo.$setValidity('hasError', false);
 			}
 			$scope.checkIfAddNewRuleActive();
 		}
@@ -61,10 +75,10 @@ angular.module('unionvmsWeb').controller('RulerowCtrl',function($scope){
 			}else{
 				$scope["rowstylesForm" + $scope.item.id].propertyColor.$setValidity('requiredField', true);
 			}
-			if($scope["rowstylesForm" + $scope.item.id].$valid || $scope.getNrErrors() === 1 && $scope["rowstylesForm" + $scope.item.id].$error.hasError){
-				$scope["rowstylesForm" + $scope.item.id].$setValidity('hasError', true);
+			if($scope["rowstylesForm" + $scope.item.id].propertyColor.$valid || _.allKeys($scope["rowstylesForm" + $scope.item.id].propertyColor.$error).length === 1 && $scope["rowstylesForm" + $scope.item.id].propertyColor.$error.hasError){
+				$scope["rowstylesForm" + $scope.item.id].propertyColor.$setValidity('hasError', true);
 			}else{
-				$scope["rowstylesForm" + $scope.item.id].$setValidity('hasError', false);
+				$scope["rowstylesForm" + $scope.item.id].propertyColor.$setValidity('hasError', false);
 			}
 			$scope.checkIfAddNewRuleActive();
 		}
@@ -93,7 +107,7 @@ angular.module('unionvmsWeb').controller('RulerowCtrl',function($scope){
 	};
 	
 	setTimeout(function () {
-		if($scope.componentStyle === 'segment' && ['distance','duration','speedOverGround','courseOverGround'].indexOf($scope.configModel.segmentStyle.attribute) !== -1 || $scope.componentStyle === 'positions' && ['speedOverGround','calculatedSpeed'].indexOf($scope.configModel.positionStyle.attribute) !== -1 ){
+		if($scope.componentStyle === 'segment' && ['distance','duration','speedOverGround','courseOverGround'].indexOf($scope.configModel.segmentStyle.attribute) !== -1 || $scope.componentStyle === 'positions' && ['reportedSpeed','calculatedSpeed','reportedCourse'].indexOf($scope.configModel.positionStyle.attribute) !== -1 ){
 			$scope.validatePropertyFrom(true);
 			$scope.validatePropertyTo();
 		}

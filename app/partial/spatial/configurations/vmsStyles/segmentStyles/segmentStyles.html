@@ -18,16 +18,16 @@
 		<div class="row defaultItem" ng-if="configModel.segmentStyle.attribute && ['countryCode','segmentCategory'].indexOf(configModel.segmentStyle.attribute) === -1">
 			<ng-form name="defaultForm" ng-if="configModel.segmentStyle.attribute && configModel.segmentStyle.attribute !== 'countryCode'" novalidate>
 				<div class="row col-md-12">
-					<div class="form-group col-md-3" ng-class="{'has-error': (defaultForm.$error.segDefColor || defaultForm.$error.requiredField) && defaultForm.$dirty}">
+					<div class="form-group col-md-3" ng-class="{'has-error': defaultForm.$error.hasError && defaultForm.defaultColor.$dirty}">
 						<label>{{'spatial.default_color' | i18n}}</label>
 						<div class="colorPickerComponent">
-							<div ng-style="{'background-color': configModel.segmentStyle.defaultColor && configModel.segmentStyle.defaultColor.length > 3 && configModel.segmentStyle.defaultColor.indexOf('#') != -1 ? configModel.segmentStyle.defaultColor : '#fff'}" class="form-control pickedcolor">
-					       		<i class="fa fa-ban" ng-hide="configModel.segmentStyle.defaultColor && configModel.segmentStyle.defaultColor.length > 3 && configModel.segmentStyle.defaultColor.indexOf('#') != -1"></i>
+							<div ng-style="{'background-color': configModel.segmentStyle.defaultColor && configModel.segmentStyle.defaultColor.length > 3 && configModel.segmentStyle.defaultColor.length <= 7 && configModel.segmentStyle.defaultColor.indexOf('#') != -1 ? configModel.segmentStyle.defaultColor : '#fff'}" class="form-control pickedcolor">
+					       		<i class="fa fa-ban" ng-hide="configModel.segmentStyle.defaultColor && configModel.segmentStyle.defaultColor.length > 3 && configModel.segmentStyle.defaultColor.length <= 7 && configModel.segmentStyle.defaultColor.indexOf('#') != -1"></i>
 					        </div>
 					        <input class="form-control" name="defaultColor" colorpicker ng-model="configModel.segmentStyle.defaultColor" type="text" ng-change="validateDefaultColor();"/>
 						</div>
 					</div>
-					<div class="defaultColorMessages form-group col-md-4" ng-messages="defaultForm.$error" ng-show="defaultForm.$dirty">
+					<div class="defaultColorMessages form-group col-md-4" ng-messages="defaultForm.defaultColor.$error" ng-show="defaultForm.defaultColor.$dirty">
 						<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
 						<div ng-message="segDefColor">{{'spatial.invalid_color_error_message' | i18n }}</div>
 					</div>

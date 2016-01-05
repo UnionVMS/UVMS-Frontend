@@ -53,9 +53,14 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope,con
 	};
 	
 	$scope.changeProperty = function(){
+		if($scope.configModel.segmentStyle.attribute !== 'countryCode' && $scope.configModel.segmentStyle.attribute === $scope.configModel.stylesSettings.segments.attribute){
+			$scope.loadSegmentProperties();
+			return;
+		}
+		
 		$scope.configModel.segmentStyle.style = [];
 		$scope.isAddNewRuleActive = true;
-		$scope.validateDefaultColor();
+		$scope.configModel.segmentStyle.defaultColor = undefined;
 		
 		if($scope.configModel.segmentStyle.attribute === 'segmentCategory'){
 			angular.forEach($scope.categoryTypes, function(item){
@@ -67,7 +72,12 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope,con
 				$scope.segmentRuleId++;
 			});
 		}
-		$scope.validateDefaultColor();
+		$scope.$watch('segmentsForm.defaultForm', function() {
+			if(angular.isDefined($scope.segmentsForm) && angular.isDefined($scope.segmentsForm.defaultForm) && angular.isDefined($scope.segmentsForm.defaultForm.defaultColor)){
+				$scope.segmentsForm.defaultForm.defaultColor.$setPristine();
+				$scope.validateDefaultColor();
+			}
+		});
 	};
 	
 	$scope.updateNextRule = function(item){
@@ -86,7 +96,7 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope,con
 	
 	$scope.validateDefaultColor = function(){
 		if(angular.isDefined($scope.segmentsForm) && angular.isDefined($scope.segmentsForm.defaultForm) && angular.isDefined($scope.segmentsForm.defaultForm.defaultColor)){
-			if($scope.configModel.segmentStyle.defaultColor && ($scope.configModel.segmentStyle.defaultColor.length <= 3 || $scope.configModel.segmentStyle.defaultColor.indexOf('#') === -1)){
+			if($scope.configModel.segmentStyle.defaultColor && ($scope.configModel.segmentStyle.defaultColor.length <= 3 || $scope.configModel.segmentStyle.defaultColor.length > 7 || $scope.configModel.segmentStyle.defaultColor.indexOf('#') === -1)){
 				$scope.segmentsForm.defaultForm.defaultColor.$setValidity('segDefColor', false);
 			}else{
 				$scope.segmentsForm.defaultForm.defaultColor.$setValidity('segDefColor', true);
@@ -96,10 +106,10 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope,con
 			}else{
 				$scope.segmentsForm.defaultForm.defaultColor.$setValidity('requiredField', true);
 			}
-			if($scope.segmentsForm.defaultForm.defaultColor.$valid || $scope.getNrErrors() === 0 && $scope.segmentsForm.defaultForm.defaultColor.$error.hasError){
-				$scope.segmentsForm.defaultForm.defaultColor.$setValidity('hasError', true);
+			if($scope.segmentsForm.defaultForm.defaultColor.$valid){
+				$scope.segmentsForm.defaultForm.$setValidity('hasError', true);
 			}else{
-				$scope.segmentsForm.defaultForm.defaultColor.$setValidity('hasError', false);
+				$scope.segmentsForm.defaultForm.$setValidity('hasError', false);
 			}
 		}
 	};
@@ -189,10 +199,9 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope,con
 		$scope.removeRuleByIndex(index, ruleId);
 	});
 	
-	var unregister = $scope.$watch('loadedAllSettings', function() {
+	$scope.$watch('loadedAllSettings', function() {
 		if($scope.loadedAllSettings && $scope.configModel && $scope.configModel.stylesSettings && $scope.configModel.stylesSettings.segments && $scope.configModel.stylesSettings.segments.style){
 			$scope.loadSegmentProperties();
-			unregister();
 		}
 	});
 	

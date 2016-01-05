@@ -5,7 +5,7 @@
 				<accordion-heading>
 					<div class="panel-title-link" ng-click="toggleOpen()">
 						{{'spatial.map_settings' | i18n }}
-						<div class="accordionError" ng-show="submitedWithErrors && (mapsettingsForm.$error.required || mapsettingsForm.$error.min)">
+						<div class="accordionError" ng-show="submitedWithErrors && (mapsettingsForm.$error.required || mapsettingsForm.$error.minField)">
 							<div class="fa fa-exclamation-circle"></div>
 							{{'spatial.section_errors' | i18n }}
 						</div>

@@ -335,7 +335,11 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                     controller: 'AuditconfigurationCtrl'
                 }
             },
-            resolve: {}
+            resolve: {
+            	config : function(initService){
+	               return initService.loadConfigFor(["MOVEMENT"]);
+	            }
+            }
         })
         .state('app.reporting', {
             url: '/reporting',

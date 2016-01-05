@@ -2,7 +2,7 @@ angular.module('unionvmsWeb').controller('CountrystylesCtrl',function($scope, sp
 	$scope.itemsByPage = 25;
 	$scope.searchString = '';
 	$scope.countryList = [];
-    
+	
 	//Setup data for display
     $scope.prepareRecordsForCountryCode = function(){
         if ($scope.countryList.length === 0){
@@ -21,8 +21,11 @@ angular.module('unionvmsWeb').controller('CountrystylesCtrl',function($scope, sp
     //Set proper array for styles based on countryCodes
     $scope.setFsStyleArray = function(type){
     	if(type === 'segments' && (!$scope.configModel.stylesSettings || !$scope.configModel.stylesSettings[type] || !$scope.configModel.stylesSettings[type].style) && $scope.configModel.stylesSettings[type].attribute === 'countryCode'){
-    		type = 'positions';
+    		type = 'position';
+    	}else{
+    		type = 'segment';
     	}
+    	
         var keys = _.keys($scope.countryList);
         var style = [];
         
@@ -36,9 +39,11 @@ angular.module('unionvmsWeb').controller('CountrystylesCtrl',function($scope, sp
         
         if($scope.componentStyle === 'positions'){
         	$scope.configModel.positionStyle.style = style;
+        	$scope.loadedStyles = $scope.configModel.positionStyle.style;
         	$scope.displayedRecords = [].concat($scope.configModel.positionStyle.style);
         }else if($scope.componentStyle === 'segments'){
         	$scope.configModel.segmentStyle.style = style;
+        	$scope.loadedStyles = $scope.configModel.segmentStyle.style;
         	$scope.displayedRecords = [].concat($scope.configModel.segmentStyle.style);
         }
         
@@ -48,9 +53,9 @@ angular.module('unionvmsWeb').controller('CountrystylesCtrl',function($scope, sp
     $scope.validateColor = function(index){
     	var indexOnModel;
     	if($scope.componentStyle === 'positions'){
-    		indexOnModel = $scope.configModel.positionStyle.style.indexOf($scope.displayedRecords[index]);
+    		indexOnModel = $scope.loadedStyles.indexOf($scope.displayedRecords[index]);
     	}else if($scope.componentStyle === 'segments'){
-    		indexOnModel = $scope.configModel.segmentStyle.style.indexOf($scope.displayedRecords[index]);
+    		indexOnModel = $scope.loadedStyles.indexOf($scope.displayedRecords[index]);
     	}else{
     		return;
     	}
@@ -80,5 +85,19 @@ angular.module('unionvmsWeb').controller('CountrystylesCtrl',function($scope, sp
 	    return color;
 	};
 	
-   $scope.prepareRecordsForCountryCode();
+	$scope.getNrErrors = function() {
+		var nrErrors = 0;
+		if (angular.isDefined($scope.countryListForm)){
+			angular.forEach(_.allKeys($scope.countryListForm.$error), function(item){
+				nrErrors += $scope.countryListForm.$error[item].length;
+			});
+		}
+		return nrErrors;
+	};
+	
+	$scope.prepareRecordsForCountryCode();
+	
+   $scope.$on('loadCountries', function(event){
+	   $scope.setFsStyleArray($scope.componentStyle);
+   });
 });

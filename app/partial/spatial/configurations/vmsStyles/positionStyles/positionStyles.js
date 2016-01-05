@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,configurationService){
-	$scope.positionProperties = [{"text": "F.S.", "code": "countryCode"}, {"text": "Measured speed", "code": "speedOverGround"}, {"text": "Calculated speed", "code": "calculatedSpeed"}, {"text": "Type", "code": "type"}, {"text": "Activity", "code": "activity"}];
+	$scope.positionProperties = [{"text": "F.S.", "code": "countryCode"}, {"text": "Measured speed", "code": "reportedSpeed"}, {"text": "Calculated speed", "code": "calculatedSpeed"}, {"text": "Course", "code": "reportedCourse"}, {"text": "Type", "code": "type"}, {"text": "Activity", "code": "activity"}];
 	$scope.positionRuleId = 0;
 	$scope.movementTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'MESSAGE_TYPE'),'MESSAGE_TYPE','MOVEMENT');
     $scope.activityTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'ACTIVITY_TYPE'), 'ACTIVITY_TYPE', 'MOVEMENT');
@@ -9,10 +9,13 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,co
 	
 	var setLoadedRule = function(value,key) {
 		var rangeData;
-		if($scope.loadedPositionProperties.attribute === "speedOverGround"){
+		if($scope.loadedPositionProperties.attribute === "reportedSpeed"){
 			rangeData = key.split("-");
 			$scope.positionPropertyList.push({"id": $scope.positionRuleId, "propertyFrom": parseInt(rangeData[0]), "propertyTo": rangeData[1] ? parseInt(rangeData[1]) : undefined, "color": value});
 		}else if($scope.loadedPositionProperties.attribute === "calculatedSpeed") {
+			rangeData = key.split("-");
+			$scope.positionPropertyList.push({"id": $scope.positionRuleId, "propertyFrom": parseInt(rangeData[0]), "propertyTo": rangeData[1] ? parseInt(rangeData[1]) : undefined, "color": value});
+		}else if($scope.loadedPositionProperties.attribute === "reportedCourse") {
 			rangeData = key.split("-");
 			$scope.positionPropertyList.push({"id": $scope.positionRuleId, "propertyFrom": parseInt(rangeData[0]), "propertyTo": rangeData[1] ? parseInt(rangeData[1]) : undefined, "color": value});
 		}else if($scope.loadedPositionProperties.attribute === "type") {
@@ -51,8 +54,14 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,co
 	};
 	
 	$scope.changeProperty = function(){
+		if($scope.configModel.positionStyle.attribute !== 'countryCode' && $scope.configModel.positionStyle.attribute === $scope.configModel.stylesSettings.positions.attribute){
+			$scope.loadPositionProperties();
+			return;
+		}
+		
 		$scope.configModel.positionStyle.style = [];
 		$scope.isAddNewRuleActive = true;
+		$scope.configModel.positionStyle.defaultColor = undefined;
 		
 		if($scope.configModel.positionStyle.attribute === 'activity'){
 			angular.forEach($scope.activityTypes, function(item){
@@ -77,10 +86,12 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,co
 			$scope.configModel.positionStyle.defaultColor = undefined;
 		}
 		
-		if(angular.isDefined($scope.positionsForm) && angular.isDefined($scope.positionsForm.defaultForm) && angular.isDefined($scope.positionsForm.defaultForm.defaultColor)){
-			$scope.positionsForm.defaultForm.defaultColor.$setPristine();
-			$scope.validateDefaultColor();
-		}
+		$scope.$watch('positionsForm.defaultForm', function() {
+			if(angular.isDefined($scope.positionsForm) && angular.isDefined($scope.positionsForm.defaultForm) && angular.isDefined($scope.positionsForm.defaultForm.defaultColor)){
+				$scope.positionsForm.defaultForm.defaultColor.$setPristine();
+				$scope.validateDefaultColor();
+			}
+		});
 	};
 	
 	$scope.updateNextRule = function(item){
@@ -99,7 +110,7 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,co
 	
 	$scope.validateDefaultColor = function(){
 		if(angular.isDefined($scope.positionsForm) && angular.isDefined($scope.positionsForm.defaultForm) && angular.isDefined($scope.positionsForm.defaultForm.defaultColor)){
-			if($scope.configModel.positionStyle.defaultColor && ($scope.configModel.positionStyle.defaultColor.length <= 3 || $scope.configModel.positionStyle.defaultColor.indexOf('#') === -1)){
+			if($scope.configModel.positionStyle.defaultColor && ($scope.configModel.positionStyle.defaultColor.length <= 3 || $scope.configModel.positionStyle.defaultColor.length > 7 || $scope.configModel.positionStyle.defaultColor.indexOf('#') === -1)){
 				$scope.positionsForm.defaultForm.defaultColor.$setValidity('segDefColor', false);
 			}else{
 				$scope.positionsForm.defaultForm.defaultColor.$setValidity('segDefColor', true);
@@ -109,10 +120,10 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,co
 			}else{
 				$scope.positionsForm.defaultForm.defaultColor.$setValidity('requiredField', true);
 			}
-			if($scope.positionsForm.defaultForm.defaultColor.$valid || $scope.getNrErrors() === 0 && $scope.positionsForm.defaultForm.defaultColor.$error.hasError){
-				$scope.positionsForm.defaultForm.defaultColor.$setValidity('hasError', true);
+			if($scope.positionsForm.defaultForm.defaultColor.$valid){
+				$scope.positionsForm.defaultForm.$setValidity('hasError', true);
 			}else{
-				$scope.positionsForm.defaultForm.defaultColor.$setValidity('hasError', false);
+				$scope.positionsForm.defaultForm.$setValidity('hasError', false);
 			}
 		}
 	};
@@ -124,8 +135,9 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,co
 			$scope.configModel.positionStyle = {};
 			
 			switch ($scope.loadedPositionProperties.attribute) {
-				case "speedOverGround":
+				case "reportedSpeed":
 				case "calculatedSpeed":
+				case "reportedCourse":
 					$scope.positionPropertyList = [];
 					angular.forEach($scope.loadedPositionProperties.style, function(value,key){
 						if(key === "default"){
@@ -201,10 +213,9 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,co
 		$scope.removeRuleByIndex(index, ruleId);
 	});
 	
-	var unregister = $scope.$watch('loadedAllSettings', function() {
+	$scope.$watch('loadedAllSettings', function() {
 		if($scope.loadedAllSettings && $scope.configModel && $scope.configModel.stylesSettings && $scope.configModel.stylesSettings.positions && $scope.configModel.stylesSettings.positions.style){
 			$scope.loadPositionProperties();
-			unregister();
 		}
 	});
 });

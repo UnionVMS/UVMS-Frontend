@@ -83,8 +83,9 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
             
             if($scope.configPanelForm && $scope.configPanelForm.vmsstylesForm.positionsForm && $scope.configPanelForm.vmsstylesForm.positionsForm.$dirty){
 	            switch (positionProperties.attribute) {
-					case "speedOverGround":
+					case "reportedSpeed":
 					case "calculatedSpeed":
+					case "reportedCourse":
 						angular.forEach($scope.configModel.positionStyle.style, function(item){
 							positionProperties.style[item.propertyFrom + "-" + item.propertyTo] = item.color;
 		                });
