@@ -42,6 +42,13 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource) 
                 }
             });
         },
+        getConfigsForReportWithoutMap: function(){
+            return $resource('/spatial/rest/config/report', {}, {
+                'get': {
+                    method: 'GET'
+                }
+            });
+        },
         getSupportedProjections: function(){
             return $resource('/spatial/rest/config/projections', {}, {
                 'get': {
@@ -112,6 +119,17 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource) 
 
 	        return deferred.promise;
 	    },
+	    getConfigsForReportWithoutMap: function(){
+            var deferred = $q.defer();
+            spatialRestFactory.getConfigsForReportWithoutMap().get(function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.log('Error getting spatial configs for report without map');
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        },
         getSupportedProjections: function(){
             var deferred = $q.defer();
             spatialRestFactory.getSupportedProjections().get(function(response){

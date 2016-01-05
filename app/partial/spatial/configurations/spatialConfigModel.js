@@ -16,7 +16,8 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
             }
         };
         this.systemSettings = {
-            geoserverUrl: undefined
+            geoserverUrl: undefined,
+            bingApiKey: undefined
         };
         this.layerSettings = {
             overlayLayers: [],

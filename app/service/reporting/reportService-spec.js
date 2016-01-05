@@ -13,7 +13,7 @@ describe('reportService', function () {
         //mockSpatialHelperService.setToolbarControls.andCallFake(function() {});
         mockMapService = jasmine.createSpyObj("mapService", [ 'clearVmsLayers', 'getLayerByType', 'updateMapView',
             'updateMapControls', 'setPositionStylesObj', 'setSegmentStylesObj', 'setPopupVisibility', 'clearVectorLayers', 'getMapProjectionCode']);
-        mockSpatialRestService = jasmine.createSpyObj("spatialRestService", [ 'getConfigsForReport']);
+        mockSpatialRestService = jasmine.createSpyObj("spatialRestService", [ 'getConfigsForReport', 'getConfigsForReportWithoutMap']);
 
         module(function ($provide) {
             $provide.value('vmsVisibilityService', mockVmsVisibilityService);
@@ -141,17 +141,33 @@ describe('reportService', function () {
         expect(mockReportRestService.executeReport).toHaveBeenCalled();
     }));
 
-    it("runReport without map should only call report rest service", inject(function (reportService, Report) {
+    it("runReport without map", inject(function (reportService, Report) {
 
         var report = new Report();
         report.id = 1;
         report.withMap = false;
 
         mockMapService.styles = {
-
             positions: 'countryCode',
             segments: 'countryCode'
         };
+        
+        mockSpatialRestService.getConfigsForReportWithoutMap.andCallFake(function () {
+            return {
+                then: function (callback) {
+                    return callback({
+                        'visibilitySettings': {
+                            'positions': {
+                                'popup': true
+                            },
+                            'segments': {
+                                'popup': true
+                            }
+                        }
+                    });
+                }
+            };
+        });
 
         mockReportRestService.executeReport.andCallFake(function () {
             return {
@@ -163,14 +179,15 @@ describe('reportService', function () {
                 }
             };
         });
+        
 
         reportService.runReport(report);
 
-        expect(mockSpatialRestService.getConfigsForReport.callCount).toBe(0);
+        expect(mockSpatialRestService.getConfigsForReportWithoutMap).toHaveBeenCalled();
         expect(mockMapService.clearVmsLayers).toHaveBeenCalled();
         expect(mockMapService.updateMapView.callCount).toBe(0);
         expect(mockMapService.updateMapControls.callCount).toBe(0);
-        expect(mockVmsVisibilityService.setVisibility.callCount).toBe(0);
+        expect(mockVmsVisibilityService.setVisibility.callCount).toBe(1);
         expect(mockMapService.setPopupVisibility.callCount).toBe(0);
         expect(mockSpatialHelperService.setToolbarControls.callCount).toBe(0);
         expect(mockReportRestService.executeReport).toHaveBeenCalled();

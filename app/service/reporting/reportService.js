@@ -31,10 +31,16 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         if (report.withMap === true){
             spatialRestService.getConfigsForReport(report.id).then(getConfigSuccess, getConfigError);
         } else {
-            var repConfig = getUnitSettings();
-            //TODO also need to set vms table attribute visibility
-            reportRestService.executeReport(rep.id, repConfig).then(getVmsDataSuccess, getVmsDataError);
+            spatialRestService.getConfigsForReportWithoutMap().then(getConfigWithouMapSuccess, getConfigWithouMapError); 
         }
+	};
+	
+	rep.refreshReport = function(){
+	    if (angular.isDefined(rep.id) && rep.tabs.map === true){
+	        rep.isReportExecuting = true;
+	        var repConfig = getUnitSettings();
+	        reportRestService.executeReport(rep.id, repConfig).then(updateVmsDataSuccess, updateVmsDataError);
+	    }
 	};
 	
 	var getUnitSettings = function(){
@@ -87,6 +93,22 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         $timeout(function(){rep.hasError = false;}, 3000);
 	};
 	
+	//Get config without map Success callback
+    var getConfigWithouMapSuccess = function(data){
+        //Set vms table attribute visibility
+        vmsVisibilityService.setVisibility(data.visibilitySettings);
+        
+        var repConfig = getUnitSettings();
+        reportRestService.executeReport(rep.id, repConfig).then(getVmsDataSuccess, getVmsDataError);
+    };
+    
+    //Get config without map Success callback
+    var getConfigWithouMapError = function(error){
+        rep.isReportExecuting = false;
+        rep.hasError = true;
+        $timeout(function(){rep.hasError = false;}, 3000);
+    };
+	
 	//Get VMS data Success callback
 	var getVmsDataSuccess = function(data){
         rep.positions = data.movements.features;
@@ -114,14 +136,37 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         }
         rep.isReportExecuting = false;
     };
-   
+    
     //Get VMS data Failure callback
     var getVmsDataError = function(error){
-        console.log(error);
         rep.positions = [];
         rep.segments = [];
         rep.tracks = [];
         rep.tabs.map = true;
+        rep.isReportExecuting = false;
+        rep.hasError = true;
+        $timeout(function(){rep.hasError = false;}, 3000);
+    };
+    
+    //Refresh report success callback
+    var updateVmsDataSuccess = function(data){
+        rep.positions = data.movements.features;
+        rep.segments = data.segments.features;
+        rep.tracks = data.tracks;
+        
+        //First clear vector layers
+        mapService.clearVectorLayers();
+        
+        //Add nodes to the tree and layers to the map
+        var vectorNodeSource = new TreeModel();
+        vectorNodeSource = vectorNodeSource.nodeFromData(data);
+        
+        $rootScope.$broadcast('addLayerTreeNode', vectorNodeSource);
+        rep.isReportExecuting = false;
+    };
+    
+    //Refresh report failure callback
+    var updateVmsDataError = function(error){
         rep.isReportExecuting = false;
         rep.hasError = true;
         $timeout(function(){rep.hasError = false;}, 3000);

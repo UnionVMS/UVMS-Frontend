@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, $timeout, $document, mapService, spatialHelperService, $window){
+angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, $timeout, $document, mapService, spatialHelperService, reportService, $window){
     $scope.activeControl = '';
     $scope.showMeasureConfigWin = false;
     $scope.showPrintConfigWin = false;
@@ -225,6 +225,11 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, $tim
         $scope.print.exportFormat = 'png';
         $scope.print.layout = 'portrait';
         $scope.print.title = undefined;
+    };
+    
+    //Refresh report control
+    $scope.refreshReport = function(){
+        reportService.refreshReport();
     };
     
     //Clear highlight features control

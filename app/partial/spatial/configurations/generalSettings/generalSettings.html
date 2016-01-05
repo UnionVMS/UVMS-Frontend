@@ -25,6 +25,17 @@
 						</div>
 					</div>
 				</div>
+				<div class="row">
+					<div class="form-group col-md-12 noPadding">
+						<div class="col-md-3">
+							<span class="formLabel">{{'spatial.general_configuration_bing_api_key' | i18n}}</span> &nbsp;
+							<a href="https://www.bingmapsportal.com/" target="_blank" title="{{'spatial.general_configuration_bing_key_tooltip' | i18n}}"><span class="fa fa-external-link"></span></a>
+						</div>
+						<div class="col-md-9">
+							<input type="text" class="form-control" ng-model="configModel.systemSettings.bingApiKey" name="bingApiKey"/>
+						</div>
+					</div>
+				</div>
 			</accordion-group>
 		</accordion>
 	</ng-form>
