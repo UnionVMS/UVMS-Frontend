@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter,$location, locale, searchService, exchangeRestService, infoModal, ManualPosition, alertService, csvService, ExchangeService, SearchResults, $resource, longPolling){
+angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $filter,$location, locale, searchService, exchangeRestService, infoModal, ManualPosition, alertService, csvService, ExchangeService, SearchResults, $resource, longPolling){
 
     $scope.transmissionStatuses = new SearchResults();
     $scope.sendingQueue = new SearchResults();
@@ -39,6 +39,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     };
 
     var init = function(){
+
         //$scope.searchExchange();
         $scope.getSendingQueue();
         $scope.getTransmissionStatuses();
@@ -71,12 +72,12 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     $scope.sendQueuedMessages = function(messageIds){
         exchangeRestService.sendQueue(messageIds).then(
         function(data){
-            console.log("Message(s) successfully sent.");
+            $log.debug("Message(s) successfully sent.");
             //get que again
              $scope.getSendingQueue();
         },
         function(error){
-            console.log("Error trying to send messagequeue.");
+            $log.error("Error trying to send messagequeue.");
         });
     };
 
@@ -132,12 +133,12 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     $scope.stopTransmissionService = function(model){
         exchangeRestService.stopTransmission(encodeURI(model.serviceClassName)).then(
         function(data){
-            console.log("Service successfully stopped.");
+            $log.debug("Service successfully stopped.");
             alertService.showSuccessMessageWithTimeout(locale.getString('exchange.transmission_stop_transmission_successfull'));
             model.setAsStopped();
         },
         function(error){
-            console.log("Error trying to send messagequeue.");
+            $log.error("Error trying to send messagequeue.");
             alertService.showErrorMessageWithTimeout(locale.getString('exchange.transmission_stop_transmission_error'));
         });
     };
@@ -146,12 +147,12 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     $scope.startTransmissionService = function(model){
         exchangeRestService.startTransmission(encodeURI(model.serviceClassName)).then(
         function(data){
-            console.log("Service successfully started.");
+            $log.debug("Service successfully started.");
             alertService.showSuccessMessageWithTimeout(locale.getString('exchange.transmission_start_transmission_successfull'));
             model.setAsStarted();
         },
         function(error){
-            console.log("Error trying to start plugin.");
+            $log.error("Error trying to start plugin.");
              alertService.showErrorMessageWithTimeout(locale.getString('exchange.transmission_start_transmission_error'));
         });
     };
@@ -195,7 +196,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
                     break;
 
                 default:
-                    console.log("No matching type in model");
+                    $log.info("No matching type in model");
                     break;
             }
         }
@@ -211,7 +212,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     };
 
     $scope.openPosition = function(model){
-        console.log("open a page....");
+        $log.info("open a page... feature not implementet yet.");
     };
 
     //Get status label for the exchange log items
@@ -356,7 +357,6 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
     };
 
     $scope.check = function(item){
-        console.log(item);
         if($scope.isChecked(item)){
             //Remove
             $scope.removeFromSelection(item);
@@ -430,7 +430,6 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $filter
 
     $scope.resendQueuedItemInGroup = function(id){
         var sendingQueuesIds = [];
-        console.log("sending item with id: " + id);
         sendingQueuesIds.push(id);
         $scope.sendQueuedMessages(sendingQueuesIds);
     };

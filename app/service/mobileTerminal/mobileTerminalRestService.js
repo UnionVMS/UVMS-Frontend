@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb')
-    .factory('mobileTerminalRestFactory',function($resource){
+    .factory('mobileTerminalRestFactory',function($resource, $log){
         return {
             getTranspondersConfig : function(){
                 return $resource('/mobileterminal/rest/config/transponders');
@@ -9,7 +9,7 @@ angular.module('unionvmsWeb')
             },
             getMobileTerminalByGuid : function(){
                 return $resource('/mobileterminal/rest/mobileterminal/:id');
-            },            
+            },
             mobileTerminal : function(){
                 return $resource('/mobileterminal/rest/mobileterminal/', {}, {
                     update: {method: 'PUT'}
@@ -105,7 +105,7 @@ angular.module('unionvmsWeb')
                     }
                     deferred.resolve(TranspondersConfig.fromJson(response.data));
                 }, function(error) {
-                    console.error("Error getting transponders config");
+                    $log.error("Error getting transponders config");
                     deferred.reject(error);
                 });
                 return deferred.promise;
@@ -123,7 +123,7 @@ angular.module('unionvmsWeb')
                     //Return array of names
                     deferred.resolve(response.data);
                 }, function(error) {
-                    console.error("Error getting channel names from config");
+                    $log.error("Error getting channel names from config");
                     deferred.reject(error);
                 });
                 return deferred.promise;
@@ -171,8 +171,7 @@ angular.module('unionvmsWeb')
                         }
                     },
                 function(error) {
-                    console.error("Error getting mobile terminals");
-                    console.error(error);
+                    $log.error("Error getting mobile terminals");
                     deferred.reject(error);
                 });
                 return deferred.promise;
@@ -202,8 +201,7 @@ angular.module('unionvmsWeb')
                         }
                     },
                 function(error) {
-                    console.error("Error getting mobile terminal by GUID: " +guid);
-                    console.error(error);
+                    $log.error("Error getting mobile terminal by GUID: " +guid);
                     deferred.reject(error);
                 });
                 return deferred.promise;
@@ -224,8 +222,7 @@ angular.module('unionvmsWeb')
                     }
                     deferred.resolve(MobileTerminal.fromJson(response.data));
                 }, function(error) {
-                    console.error("Error creating mobile terminal.");
-                    console.error(error);
+                    $log.error("Error creating mobile terminal.");
                     deferred.reject(error);
                 });
                 return deferred.promise;
@@ -245,8 +242,7 @@ angular.module('unionvmsWeb')
                     }
                     deferred.resolve(MobileTerminal.fromJson(response.data));
                 }, function(error) {
-                    console.error("Error updating mobile terminal.");
-                    console.error(error);
+                    $log.error("Error updating mobile terminal.");
                     deferred.reject(error);
                 });
                 return deferred.promise;
@@ -261,8 +257,7 @@ angular.module('unionvmsWeb')
                     }
                     deferred.resolve(MobileTerminal.fromJson(response.data));
                 }, function(error) {
-                    console.error("Error assigning mobile terminal.");
-                    console.error(error);
+                    $log.error("Error assigning mobile terminal.");
                     deferred.reject(error);
                 });
                 return deferred.promise;
@@ -277,7 +272,7 @@ angular.module('unionvmsWeb')
                     }
                     deferred.resolve(MobileTerminal.fromJson(response.data));
                 }, function(error) {
-                    console.error("Error unassigning mobile terminal.");
+                    $log.error("Error unassigning mobile terminal.");
                     deferred.reject(error);
                 });
                 return deferred.promise;
@@ -291,7 +286,7 @@ angular.module('unionvmsWeb')
                     }
                     deferred.resolve(MobileTerminal.fromJson(response.data));
                 }, function(error) {
-                    console.error("Error activating mobile terminal.");
+                    $log.error("Error activating mobile terminal.");
                     deferred.reject(error);
                 });
                 return deferred.promise;
@@ -305,7 +300,7 @@ angular.module('unionvmsWeb')
                     }
                     deferred.resolve(MobileTerminal.fromJson(response.data));
                 }, function(error) {
-                    console.error("Error inactivating mobile terminal.");
+                    $log.error("Error inactivating mobile terminal.");
                     deferred.reject(error);
                 });
                 return deferred.promise;
@@ -319,11 +314,11 @@ angular.module('unionvmsWeb')
                     }
                     deferred.resolve(MobileTerminal.fromJson(response.data));
                 }, function(error) {
-                    console.error("Error removing mobile terminal.");
+                    $log.error("Error removing mobile terminal.");
                     deferred.reject(error);
                 });
                 return deferred.promise;
-            }, 
+            },
             getConfig : function(){
                 var deferred = $q.defer();
                 mobileTerminalRestFactory.getConfigValues().get({},
@@ -334,7 +329,7 @@ angular.module('unionvmsWeb')
                         }
                         deferred.resolve(response.data);
                     }, function(error){
-                        console.error("Error getting configuration values for mobileterminal.");
+                        $log.error("Error getting configuration values for mobileterminal.");
                         deferred.reject(error);
                     });
                 return deferred.promise;
@@ -356,7 +351,7 @@ angular.module('unionvmsWeb')
 
                     deferred.resolve(history);
                 }, function(error) {
-                    console.error("Error getting mobile terminal history.");
+                    $log.error("Error getting mobile terminal history.");
                     deferred.reject(error);
                 });
                 return deferred.promise;
@@ -390,7 +385,7 @@ angular.module('unionvmsWeb')
                             deferred.reject(history);
                         });
                 }, function(error) {
-                    console.error("Error getting mobile terminal history.");
+                    $log.error("Error getting mobile terminal history.");
                     deferred.reject(error);
                 });
                 return deferred.promise;

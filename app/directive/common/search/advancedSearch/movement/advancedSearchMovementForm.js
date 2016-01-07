@@ -13,7 +13,7 @@ angular.module('unionvmsWeb').directive('advancedSearchMovementForm', function()
 });
 
 angular.module('unionvmsWeb')
-    .controller('advancedSearchMovementCtrl', function($scope, locale, searchService, savedSearchService, alertService, configurationService, SearchField){
+    .controller('advancedSearchMovementCtrl', function($log, $scope, locale, searchService, savedSearchService, alertService, configurationService, SearchField){
 
         $scope.$on("searchMovements", function(event, pingCount) {
             $scope.resetSearch();
@@ -167,6 +167,11 @@ angular.module('unionvmsWeb')
             }
         });
 
+        var getMapAreaValuesForDropdown = function(){
+            var areas = [{"text":"Area-1","code":"Code-1"},{"text":"Area-2","code":"Code-2"}];
+            return areas;
+        };
+
 
         var init = function(){
             //Setup dropdowns
@@ -177,11 +182,8 @@ angular.module('unionvmsWeb')
             $scope.meassuredSpeed = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'SPEED_SPAN'), 'SPEED_SPAN', 'MOVEMENT');
             $scope.status = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'STATUS'),'STATUS','MOVEMENT');
             $scope.movementType = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'MESSAGE_TYPE'),'MESSAGE_TYPE','MOVEMENT');
-
             $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_TODAY;
-
-            //TODO: Get from config
-            $scope.mapArea = [{'text':'Area 1','code':'Area 1'},{'text':'Area 2','code':'Area 2'}];
+            $scope.mapArea = getMapAreaValuesForDropdown();
 
             $scope.resetSearch();
         };

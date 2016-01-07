@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, savedSearchService, Vessel, searchService, vesselRestService, alertService, $stateParams, csvService, SearchResults, userService, PositionReportModal, $filter) {
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, locale, savedSearchService, Vessel, searchService, vesselRestService, alertService, $stateParams, csvService, SearchResults, userService, PositionReportModal, $filter) {
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
@@ -37,7 +37,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, locale, 
                     $scope.waitingForVesselDataResponse = false;
                 },
                 function(error){
-                    console.error("Error loading details for vessel with with GUID: " +vesselGUID);
+                    $log.error("Error loading details for vessel with with GUID: " +vesselGUID);
                     //Show alert and vessel list
                     $scope.waitingForVesselDataResponse = false;
                     toggleFormDetails();

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $modal, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService, configurationService) {
+angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log, $modal, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService, configurationService) {
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
@@ -127,7 +127,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
             textLabel : locale.getString("vessel.archive_confirm_text")
         };
         confirmationModal.open(function(){
-            console.log("Confirmed!");
             $scope.vesselObj = $scope.getOriginalVessel();
             //When you have just created a vessel the getOriginalVessel will return undefined
             if(angular.isUndefined($scope.vesselObj)){
@@ -257,7 +256,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $moda
 
     //Error getting vessel history
     var onVesselHistoryListError = function(error) {
-        console.error("Error getting vessel history");
+        $log.error("Error getting vessel history");
         $scope.waitingForHistoryResponse = false;
         $scope.vesselHistoryError = locale.getString('vessel.event_history_error');
     };

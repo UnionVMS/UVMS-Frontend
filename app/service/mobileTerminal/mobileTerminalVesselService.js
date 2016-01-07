@@ -1,10 +1,10 @@
-var app = angular.module('unionvmsWeb').factory('mobileTerminalVesselService', function(vesselRestService, $q, GetListRequest, VesselListPage) {
+var app = angular.module('unionvmsWeb').factory('mobileTerminalVesselService', function(vesselRestService, $q, $log, GetListRequest, VesselListPage) {
 
 
     var getVesselsForListOfMobileTerminals = function(mobileTerminals){
         var deferred = $q.defer();
 
-        try{            
+        try{
             //Check if any object has a connectId set
             var oneOrMoreConnectIdIsSet = false;
             $.each(mobileTerminals, function(index, mobileTerminal){
@@ -30,7 +30,7 @@ var app = angular.module('unionvmsWeb').factory('mobileTerminalVesselService', f
                         deferred.resolve(vesselListPage);
                     },
                     function(error){
-                        console.error("Error getting Vessels for the objects");
+                        $log.error("Error getting Vessels for the objects");
                         deferred.resolve(new VesselListPage());
                     }
                 );
@@ -78,7 +78,7 @@ var app = angular.module('unionvmsWeb').factory('mobileTerminalVesselService', f
                 }
             },
             function(error){
-                console.error("Error getting Vessels for the objects");
+                $log.error("Error getting Vessels for the objects");
                 if(mobileTerminalsIsAnArray){
                     deferred.resolve(mobileTerminals);
                 }else{
