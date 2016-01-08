@@ -1,5 +1,7 @@
 angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $location,$modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, positionReport, ManualPosition, $timeout, movementRestService, coordinateFormatService, dateTimeService, vesselValidationService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly, openedFromMovementPage, globalSettingsService) {
 
+    var vm = this;
+
     $scope.errorMessage ="";
     $scope.readOnly = readOnly;
     $scope.openedFromMovementPage = openedFromMovementPage;
@@ -32,7 +34,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     $scope.submitAttempted = false;
     $scope.confirmSend = false;
     $scope.sendSuccess = false;
-    $scope.addAnother = addAnother;
+    vm.addAnother = addAnother;
     $scope.waitingForResponse = false;
 
     //Start location for the map
@@ -124,7 +126,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
     $scope.closeModal = function() {
         var result = {
-            addAnother: $scope.addAnother
+            addAnother: vm.addAnother
         };
 
         if (result.addAnother) {
@@ -377,7 +379,7 @@ angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($mod
 		show: function(positionReport, options) {
 			return $modal.open({
 				templateUrl: 'partial/movement/manualPositionReports/manualPositionReportModal/manualPositionReportModal.html',
-                controller: 'ManualPositionReportModalCtrl',
+                controller: 'ManualPositionReportModalCtrl as modalCtrl',
 				backdrop: 'static', //will not close when clicking outside the modal window
 				size: 'md',
                 resolve:{

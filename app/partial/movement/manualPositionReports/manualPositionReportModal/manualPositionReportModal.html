@@ -1,4 +1,5 @@
 <div class="manualPositionReportModal">
+
     <div class="modal-header" style="text-align:left">
         <div class="pointer pull-right" ng-click="cancel()">
             <i class="fa fa-times closeicon"></i>
@@ -144,7 +145,7 @@
                 </div>
                 <div class="buttonGroup button-group-right">
                     <label class="button" ng-show="positionReport.guid === undefined">
-                        <input type="checkbox" ng-model="addAnother"/>
+                        <input type="checkbox" ng-model="modalCtrl.addAnother"/>
                         {{"movement.manual_position_label_add_another" | i18n}}
                     </label>
                     <a class="button" ng-click="savePosition()">{{"common.save" | i18n}}</a>

@@ -164,7 +164,7 @@ describe('ManualPositionReportModalCtrl', function() {
         scope.positionReport.carrier.cfr = 'cfr123';
         scope.positionReport.carrier.externalMarking = 'ext123';
         scope.positionReport.carrier.name = 'name123';
-        scope.addAnother = true;
+        ctrl.addAnother = true;
 
         spyOn(mockModalInstance, 'close');
         scope.closeModal();
