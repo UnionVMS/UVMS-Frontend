@@ -62,6 +62,13 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource) 
                     method: 'GET'
                 }
             });
+        },
+        getUserDefinedAreas: function(){
+          return $resource('/spatial/rest/userareaslist', {}, {
+                'get': {
+                    method: 'GET'
+                }
+            });  
         }
     };
 })
@@ -149,6 +156,17 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource) 
                 console.log('Error getting map configurations for report');
                 deferred.reject(error);
             });
+
+            return deferred.promise;
+        },
+        getUserDefinedAreas: function(){
+            var deferred = $q.defer();
+            spatialRestFactory.getUserDefinedAreas().get(function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.log('Error getting user defined areas');
+                deferred.reject(error);
+            }); 
 
             return deferred.promise;
         }

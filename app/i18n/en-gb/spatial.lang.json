@@ -171,6 +171,7 @@
 	"area_selection_modal_table_area_type_header": "Area type",
 	"area_selection_modal_table_name_header" : "Name",
 	"area_selection_modal_table_code_header": "Code",
+	"area_selection_modal_table_desc_header": "Description",
 	"area_selection_modal_see_on_map_btn": "Show area on map",
 	"area_selection_modal_add_area_btn": "Add area to selection",
 	"area_selection_modal_current_selection": "Current area selection",
@@ -179,7 +180,7 @@
 	"area_selection_modal_get_sys_area_details_error": "There was an error while getting the details for the selected area. Please try again.",
 	"area_selection_modal_get_sys_area_details_empty_result": "There is no selectable area on the specified location.", 
 	"area_selection_modal_get_selected_sys_area_details_error": "There was an error while getting the details of previously selected areas. Please try again.",
-	"area_selection_modal_get_selected_sys_area_search_error": "There was an error while searching for areas. Please try again.",
+	"area_selection_modal_get_selected_area_search_error": "There was an error while searching for areas. Please try again.",
 
     "map_configuration_modal_title": "Map configuration",
     "map_configuration_map_projection": "Map projection",

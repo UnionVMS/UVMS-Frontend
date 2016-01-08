@@ -4,6 +4,7 @@ angular.module('unionvmsWeb').factory('Area',function() {
         this.gid = undefined;
         this.areaType = undefined;
         this.name = undefined;
+        this.desc = undefined;
         this.code = undefined;
         this.extent = undefined;
     }
@@ -14,6 +15,7 @@ angular.module('unionvmsWeb').factory('Area',function() {
         area.gid = parseInt(data.gid);
         area.areaType = data.areaType;
         area.name = data.name;
+        area.desc = data.desc;
         area.code = data.code;
         area.extent = data.extent;
         return area;

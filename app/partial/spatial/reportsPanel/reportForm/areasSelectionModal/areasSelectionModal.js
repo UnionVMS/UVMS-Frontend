@@ -122,6 +122,10 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     $scope.displayedRecordsArea = [].concat($scope.sysAreaSearch);
     $scope.searchLoading = false;
 
+    //User defined areas table
+    $scope.userAreasList = [];
+    $scope.displayedUserAreas = [].concat($scope.userAreasList);
+
     //Selected areas table
     $scope.areaSelectionTable = {};
     $scope.selectedAreas = [];
@@ -243,7 +247,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
             var area;
             $scope.clickResults = response.data.length;
             if (response.data.length > 1){
-                $scope.sysAreaSearch = $scope.convertSysAreasResponse(response.data);
+                $scope.sysAreaSearch = $scope.convertAreasResponse(response.data);
             } else {
                 if (response.data.length === 0){
                     $scope.showWarning = true;
@@ -292,7 +296,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     };
     
     //Add system areas by search
-    $scope.convertSysAreasResponse = function(data){
+    $scope.convertAreasResponse = function(data){
         var areas = [];
         for (var i = 0; i < data.length; i++){
             var area = new Area();
@@ -312,10 +316,10 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
                 filter: $scope.searchSysString
             };
             spatialRestService.getAreasByFilter(requestData).then(function(response){
-                $scope.sysAreaSearch = $scope.convertSysAreasResponse(response.data);
+                $scope.sysAreaSearch = $scope.convertAreasResponse(response.data);
                 $scope.searchLoading = false;
             }, function(error){
-                $scope.errorMessage = locale.getString('spatial.area_selection_modal_get_selected_sys_area_search_error');
+                $scope.errorMessage = locale.getString('spatial.area_selection_modal_get_selected_area_search_error');
                 $scope.hasError = true;
                 $scope.hideAlerts();
                 $scope.searchLoading = false;
@@ -323,29 +327,31 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
         }
     };
     
-    $scope.mergeParamsWms = function(index){
-    	index = $scope.sysAreaSearch.indexOf($scope.displayedRecordsArea[index]);
+    $scope.mergeParamsWms = function(index, displayedAreasList, areaList){
+    	index = areaList.indexOf(displayedAreasList[index]);
+        var area = areaList[index];
         var format = new ol.format.WKT();
-        var geom = format.readFeature($scope.sysAreaSearch[index].extent).getGeometry();
+        var geom = format.readFeature(area.extent).getGeometry();
         geom.transform('EPSG:4326', 'EPSG:3857');
         $scope.map.getView().fit(geom, $scope.map.getSize(), {nearest: false});
         
         var layers = $scope.map.getLayers();
         if (layers.getLength() > 1){
             var layer = layers.getArray().find(function(layer){
-               return layer.get('type') === $scope.sysAreaSearch[index].areaType; 
+               return layer.get('type') === area.areaType; 
             });
             
             layer.getSource().updateParams({
-                'cql_filter': "gid = " + parseInt($scope.sysAreaSearch[index].gid)
+                'cql_filter': "gid = " + parseInt(area.gid)
             });
         }
     };
     
-    $scope.addAreaToSelection = function(index){
-    	index = $scope.sysAreaSearch.indexOf($scope.displayedRecordsArea[index]);
-        if ($scope.checkAreaIsSelected($scope.sysAreaSearch[index]) === false){
-            $scope.selectedAreas.unshift($scope.sysAreaSearch[index]);
+    $scope.addAreaToSelection = function(index, displayedAreasList, areaList){
+    	index = areaList.indexOf(displayedAreasList[index]);
+        var area = areaList[index];
+        if ($scope.checkAreaIsSelected(area) === false){
+            $scope.selectedAreas.unshift(area);
         }
     };
     
@@ -384,6 +390,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
         if (angular.isDefined(selectedAreas) && selectedAreas.length > 0){
             $scope.getAreaProperties($scope.buildAreaPropArray());
         }
+        initUserAreasList();
     };
     
     $scope.buildAreaPropArray = function(){
@@ -412,6 +419,23 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
                 $scope.map.removeLayer(layer);
             }
         }
+    };
+
+    function initUserAreasList() {
+        if(angular.isDefined($scope.userAreasList) && $scope.userAreasList.length == 0) {
+            $scope.searchLoading = true;
+            $scope.userAreasList = [];
+            
+            spatialRestService.getUserDefinedAreas().then(function(response){
+                $scope.userAreasList = $scope.convertAreasResponse(response);
+                $scope.searchLoading = false;
+            }, function(error){
+                $scope.errorMessage = locale.getString('spatial.area_selection_modal_get_selected_area_search_error');
+                $scope.hasError = true;
+                $scope.hideAlerts();
+                $scope.searchLoading = false;
+            });
+        }   
     };
     
     //Events
