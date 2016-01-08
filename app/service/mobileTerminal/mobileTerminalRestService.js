@@ -52,7 +52,7 @@ angular.module('unionvmsWeb')
 
         };
     })
-    .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, VesselListPage, MobileTerminal, SearchResultListPage, TranspondersConfig, GetListRequest, MobileTerminalHistory, mobileTerminalVesselService){
+    .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, VesselListPage, MobileTerminal, SearchResultListPage, TranspondersConfig, GetListRequest, MobileTerminalHistory, mobileTerminalVesselService, $log){
 
         function getExistingMobileTerminalAttributes(data) {
             var mobileTerminal = {
