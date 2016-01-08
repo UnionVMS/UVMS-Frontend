@@ -174,6 +174,10 @@ angular.module('unionvmsWeb')
                 newMaxDate = newMaxDate.split(" ")[0];
             }
 
+            if (newDefaultDate && !$scope.useTime) {
+                newDefaultDate = newDefaultDate.split(" ")[0];
+            }            
+
             //Update max date and default date
             var newOptions = {
                 maxDate: newMaxDate,
@@ -209,6 +213,10 @@ angular.module('unionvmsWeb')
             newMinDate = dateTimeService.formatAccordingToUserSettings(minDate);
             if (newMinDate !== undefined) {
                 newMinDate = newMinDate.split(" ")[0];
+            }
+
+            if (newDefaultDate && !$scope.useTime) {
+                newDefaultDate = newDefaultDate.split(" ")[0];
             }
 
             //Update min date and default date
