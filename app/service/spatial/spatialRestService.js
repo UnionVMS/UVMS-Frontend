@@ -5,6 +5,11 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource) 
                 'get': {method: 'GET'}
             });
         },
+        getUserAreaLayer: function(){
+            return $resource('/spatial/rest/userarealayers', {}, {
+                'get': {method: 'GET'}
+            });
+        },
         getAreaDetails: function(){
             return $resource('/spatial/rest/areadetails', {}, {
                 'get': {
@@ -84,6 +89,16 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource) 
             });
             return deferred.promise;
 	    },
+     getUserAreaLayer: function(){
+            var deferred = $q.defer();
+            spatialRestFactory.getUserAreaLayer().get({}, function(response){
+                deferred.resolve(response);
+            }, function(error){
+                console.error('Error getting list of area layers');
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
 	    getAreaDetails: function(data){
 	        var deferred = $q.defer();
             spatialRestFactory.getAreaDetails().get(angular.toJson(data), function(response){

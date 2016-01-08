@@ -69,6 +69,14 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     };
     
     $scope.selectAreaTab = function(tab){
+        if (tab === 'USER') {
+            $scope.sysAreaType = undefined;
+            $scope.sysSelection = 'map';
+            initUserAreasList();
+        } else {
+            $scope.removeLayerByType($scope.userAreaType.typeName);
+            $scope.userAreaType = undefined;
+        }
         $scope.selectedTab = tab;
     };
     
@@ -95,6 +103,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
             $scope.hideAlerts();
         });
     }
+
     
     $scope.hideAlerts = function(){
         $timeout(function(){
@@ -123,8 +132,10 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     $scope.searchLoading = false;
 
     //User defined areas table
+    $scope.userAreaType = undefined;
     $scope.userAreasList = [];
     $scope.displayedUserAreas = [].concat($scope.userAreasList);
+
 
     //Selected areas table
     $scope.areaSelectionTable = {};
@@ -189,17 +200,20 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
         $scope.map = map;
         
         map.on('singleclick', function(evt){
-            if ($scope.selectedTab === 'SYSTEM' && $scope.sysSelection === 'map' && map.getLayers().getLength() > 1){
+            var areaType = angular.isDefined($scope.sysAreaType)?$scope.sysAreaType:$scope.userAreaType.typeName;
+
+            if ($scope.sysSelection === 'map' && map.getLayers().getLength() > 1){
                 $scope.clickResults = 0;
                 var projection = map.getView().getProjection().getCode();
+
                 var requestData = {
-                   areaType: $scope.sysAreaType,
+                   areaType: areaType,
                    isGeom: false,
                    longitude: evt.coordinate[0],
                    latitude: evt.coordinate[1],
                    crs: projection.split(':')[1]
                 };
-                $scope.getAreaDetails(requestData);
+                $scope.selectAreaFromMap(requestData);
             }
         });
     }
@@ -241,7 +255,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     
     //Add system areas by click on map
     $scope.mapLoading = false;
-    $scope.getAreaDetails = function(data){
+    $scope.selectAreaFromMap = function(data){
         $scope.mapLoading = true;
         spatialRestService.getAreaDetails(data).then(function(response){
             var area;
@@ -390,7 +404,6 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
         if (angular.isDefined(selectedAreas) && selectedAreas.length > 0){
             $scope.getAreaProperties($scope.buildAreaPropArray());
         }
-        initUserAreasList();
     };
     
     $scope.buildAreaPropArray = function(){
@@ -421,8 +434,22 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
         }
     };
 
+    function setUserAreaType() {
+        if(!angular.isDefined($scope.userAreaType)) {
+            spatialRestService.getUserAreaLayer().then(function(response){
+                $scope.userAreaType = response.data;
+            }, function(error){
+                $scope.errorMessage = locale.getString('spatial.area_selection_modal_get_sys_layers_error');
+                $scope.hasError = true;
+                $scope.hideAlerts();
+            });
+        } 
+    }
+
     function initUserAreasList() {
-        if(angular.isDefined($scope.userAreasList) && $scope.userAreasList.length == 0) {
+        setUserAreaType();
+
+        if(!angular.isDefined($scope.userAreasList) || $scope.userAreasList.length == 0) {
             $scope.searchLoading = true;
             $scope.userAreasList = [];
             
@@ -437,9 +464,17 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
             });
         }   
     };
-    
+   
+
     //Events
-    $scope.$watch('sysAreaType', function(newVal, oldVal){
+    $scope.$watch('userAreaType', function(){
+        if (angular.isDefined($scope.userAreaType)){
+           $scope.addWms($scope.userAreaType);
+        } //TODO maybe instead of removing the USER layer from the MAP on tab switch, we can do it here as else clause
+    });
+
+    
+  	$scope.$watch('sysAreaType', function(newVal, oldVal){
         if (angular.isDefined(newVal) && newVal !== oldVal){
             $scope.clickResults = 0;
             var item = $scope.getFullDefForItem(newVal);
