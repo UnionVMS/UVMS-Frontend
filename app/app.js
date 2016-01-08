@@ -11,7 +11,6 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'ui.router',
     'usm',
     'googlechart',
-    'ngWebSocket',
     'checklist-model',
     'angularScreenfull',
 	'ngCookies',
