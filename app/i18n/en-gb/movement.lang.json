@@ -64,6 +64,9 @@
 	"external_marking_filter_cfr" : "CFR",
 	"external_marking_filter_name" : "Name",
 
+	"manual_position_status_draft": "Draft",
+	"manual_position_status_sent": "Sent",
+
 	"manual_position_header_new": "New manual position report",
 	"manual_position_header_confirm": "Please confirm sending the position report",
 	"manual_position_header_sent": "Manual position report sent",
