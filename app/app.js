@@ -721,7 +721,7 @@ unionvmsWebApp.factory('initService',function($log, configurationService, locale
 
 //URLs that should go the REST apis
 var restApiURLS = [
-    '/vessel/rest',
+    '/asset/rest',
     '/mobileterminal/rest/',
     '/exchange/rest/',
     '/exchange/activity/',
