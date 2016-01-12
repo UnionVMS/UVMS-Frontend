@@ -29,13 +29,13 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
         baseLayerCounter += 1;
         
 	    var node = {
-	        title: locale.getString('spatial.layer_tree_' + src.title),
+	        title: locale.getString('spatial.layer_tree_' + src.title), //FIXME to adapt to new changes
 	        selected: baseLayerCounter === 1 ? true : false,
 	        extraClasses: 'layertree-basemap',
 	        data: {
 	            type: src.type,
 	            isBaseLayer: true,
-	            title: src.title,
+	            title: src.title, //FIXME to adapt to new changes
 	            layerGeoName: src.layerGeoName,
 	            apiKey: src.apiKey //TODO check this setting
 	        }

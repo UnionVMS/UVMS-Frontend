@@ -1,0 +1,62 @@
+.areaManagement {
+	.areaCard {
+		background-color: white;
+    border: 1px solid #dddddd;
+    border-top: 5px solid #dddddd;
+    border-right: 0;
+    margin-top: 10px;
+    border-radius: 0px;
+    display: table;
+    width: 100%;
+	}
+	.alertContainer {
+		width: 100%;
+	}
+	.area-loading {
+		background-color: rgba(221, 221, 221, 0.4);
+		position: fixed;
+		z-index: 100;
+		display: table;
+		height: calc(~'100% - 220px');
+		text-align: center;
+		.area-loading-msg {
+			position: absolute;
+			top: calc(~'50% - 42px');
+			left: calc(~'50% - 34px');
+			div {
+				i {
+					font-size: 45px;
+					color: rgba(40, 40, 40, 0.7);
+					margin-bottom: 20px;
+				}
+				span {
+					border-radius: 5px;
+					padding: 5px;
+					text-transform: uppercase;
+					color: white;
+					background-color: rgba(80, 80, 80, 0.7);
+				}
+			}
+		}
+	}
+	.withoutPadding {
+		padding: 0;
+	}
+	.customPadding {
+		padding: 0px 10px;
+	}
+	.tabMenu {
+		padding: 10px 0px;
+	}
+
+	.areaTb {
+		border-left: 1px solid #dddddd;
+		border-right: 1px solid #dddddd;
+		border-bottom: 1px solid #dddddd;
+		height: 30px;
+	}
+	.areaMap {
+		border-left: 1px solid #dddddd;
+		border-right: 1px solid #dddddd;
+	}
+}

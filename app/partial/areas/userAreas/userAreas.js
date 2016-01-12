@@ -1,0 +1,291 @@
+angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale, UserArea, areaMapService, areaRestService, areaAlertService, spatialRestService){
+    $scope.selectedProj = undefined;
+    
+    $scope.init = function(){
+        $scope.editingType = 'create';
+        $scope.activeTool = undefined;
+        $scope.coordVisible = false;
+        $scope.userAreaSubmitted = false;
+        
+        $scope.userArea = UserArea;
+        $scope.userArea.reset();
+        $scope.displayedCoords = [].concat($scope.userArea.coordsArray);
+    };
+    
+    //EDITING TOOLBAR
+    $scope.toggleTool = function(type){
+        var fn;
+        if (angular.isDefined($scope.activeTool)){
+            fn = 'deactivate' + $scope.activeTool.charAt(0).toUpperCase() + $scope.activeTool.substr(1);
+            $scope[fn]();
+        }
+        
+        if (type !== $scope.activeTool){
+            $scope.activeTool = type;
+            fn = 'activate' + type.charAt(0).toUpperCase() + type.substr(1);
+            $scope[fn]();
+        } else {
+            $scope.activeTool = undefined;
+        }
+    };
+    
+    $scope.activateDraw = function(){
+        areaMapService.addDrawControl();
+    };
+    
+    $scope.deactivateDraw = function(){
+        areaMapService.removeDrawControl();
+    };
+    
+    $scope.activateEdit = function(){
+        areaMapService.addEditControl();
+    };
+    
+    $scope.deactivateEdit = function(){
+        areaMapService.removeEditControl();
+    };
+    
+    $scope.activateCoord = function(){
+        $scope.coordVisible = true;
+    };
+    
+    $scope.deactivateCoord = function(){
+        $scope.coordVisible = false;
+    };
+    
+    locale.ready('areas').then(function(){
+        $scope.init();
+        $scope.getProjections();
+    });
+    
+    //COMBOBOX
+    $scope.getProjections = function(){
+        spatialRestService.getSupportedProjections().then(function(response){
+            $scope.srcProjections = response;
+            $scope.projections = [];
+            for (var i = 0; i < $scope.srcProjections.length; i++){
+                $scope.projections.push({
+                    "text": $scope.srcProjections[i].name,
+                    "code": $scope.srcProjections[i].id
+                });
+            }
+
+            $scope.setMapProjectionOnCombo();
+            
+        }, function(error){
+            $scope.alert.setError();
+            $scope.alert.alertMessage = locale.getString('areas.error_getting_projections');
+            $scope.alert.hideAlert();
+        });
+    };
+    
+    //Set map projection as default item on the combobox
+    $scope.setMapProjectionOnCombo = function(){
+        var mapProj = areaMapService.getMapProjectionCode();
+        for (var i = 0; i < $scope.srcProjections.length; i++){
+            var projCode = 'EPSG:' + $scope.srcProjections[i].epsgCode;
+            if (projCode === mapProj){
+                $scope.selectedProj = $scope.srcProjections[i].id;
+            }
+        }
+    };
+    
+    //Get EPSG code by the id of the selected projection
+    $scope.getProjectionEpsgById = function(id){
+        if (angular.isDefined($scope.srcProjections)){
+            for (var i = 0; i < $scope.srcProjections.length; i++){
+                if ($scope.srcProjections[i].id === id){
+                    return $scope.srcProjections[i].epsgCode; 
+                }
+            }
+        }
+    };
+    
+    //PROJECTION LISTENER
+    $scope.$watch('selectedProj', function(newVal, oldVal){
+        var selProj = 'EPSG:' + $scope.getProjectionEpsgById(newVal);
+        if (newVal !== oldVal && selProj !== $scope.userArea.coordsProj && oldVal !== undefined){
+            $scope.warpCoords(selProj);
+        }
+    });
+    
+    $scope.$watch('coordVisible', function(newVal, oldVal){
+        var proj =  'EPSG:' + $scope.getProjectionEpsgById($scope.selectedProj);
+        if (newVal && proj !== $scope.userArea.coordsProj){
+            $scope.warpCoords(proj);
+        } 
+    });
+    
+    //FORM FUNCTIONS
+    $scope.buildGeoJSON = function(){
+        var geojson = new ol.format.GeoJSON();
+        var geom = new ol.geom.MultiPolygon();
+        geom.appendPolygon($scope.userArea.geometry);
+        
+        var feature = new ol.Feature({
+            geometry: geom
+        });
+        
+        feature.set('name', $scope.userArea.name);
+        feature.set('description', $scope.userArea.desc);
+        
+        //TODO add other properties
+        
+        var featObj = geojson.writeFeatureObject(feature, {
+            dataProjection: 'EPSG:4326',
+            featureProjection: areaMapService.getMapProjectionCode()
+        });
+        
+        return featObj;
+    };
+    
+    //Coordinates add coords button
+    $scope.addCoordRow = function(){
+        $scope.userArea.coordsArray.push([0,0]);
+    };
+    
+    //Coordinates delete coords button
+    $scope.deleteCoordRow = function(idx){
+        if ($scope.userArea.coordsArray.length > 3){
+            $scope.userArea.coordsArray.splice(idx, 1);
+        } else {
+            $scope.alert.hasAlert = true;
+            $scope.alert.hasWarning = true;
+            $scope.alert.alertMessage = locale.getString('areas.polygon_min_number_points');
+            $scope.alert.hideAlert();
+        }
+        
+    };
+    
+    //Coordinates reset button
+    $scope.resetGeometry = function(){
+        $scope.userArea.resetGeometry();
+        areaMapService.removeVectorFeatures();
+    };
+    
+    //Coordinates apply button
+    $scope.buildGeometry = function(){
+        if ($scope.coordsForm.$valid){
+            if ($scope.userArea.coordsArray.length >= 3){
+                var coords = [].concat($scope.userArea.coordsArray);
+                coords.push($scope.userArea.coordsArray[0]);
+                areaMapService.addVectorFeatureFromCoords(coords, $scope.userArea.coordsProj, true);
+            }
+        } else {
+            $scope.alert.setError();
+            $scope.alert.alertMessage = locale.getString('areas.error_coords_form');
+            $scope.alert.hideAlert();
+            angular.element('.area-form-container')[0].scrollTop = 0;
+        }
+    };
+    
+    //Convert coordinates from
+    $scope.warpCoords = function(to){
+        var newCoords = [];
+        if (to !== $scope.userArea.coordsProj){
+            if (to !== areaMapService.getMapProjectionCode()){
+                for (var i = 0; i < $scope.userArea.coordsArray.length; i++){
+                    var tempCoord = ol.proj.transform($scope.userArea.coordsArray[i], $scope.userArea.coordsProj, to);
+                    newCoords.push(tempCoord);
+                }
+            } else {
+                if (angular.isDefined(UserArea.geometry)){
+                    newCoords = UserArea.geometry.getCoordinates()[0];
+                    newCoords.pop();
+                }
+            }
+        }
+        $scope.userArea.coordsArray = [].concat(newCoords);
+        $scope.userArea.coordsProj = to;
+    };
+    
+    //Global reset button
+    $scope.resetFeature = function(){
+        $scope.init();
+        $scope.userAreaForm.$setPristine();
+        areaMapService.removeVectorFeatures();
+    };
+    
+    //Validate if geometry exists and is equal to coords array
+    $scope.validateGeometry = function(){
+        var withError = true;
+        $scope.userAreaForm.$setValidity('geomError', false);
+        if ($scope.userArea.coordsArray.length === 0 && !angular.isDefined($scope.userArea.geometry)){
+            $scope.alert.setError();
+            $scope.alert.alertMessage = locale.getString('areas.null_geom');
+        } else if ($scope.userArea.coordsArray.length >= 3 && angular.isDefined($scope.userArea.geometry)){
+            var geomArray = $scope.userArea.geometry.getCoordinates();
+            if (geomArray[0].length === 0){
+                $scope.alert.alertMessage = locale.getString('areas.error_empty_geom');
+            } else {
+                geomArray[0].pop();
+                
+                //Build geom from coords array and back for warping purposes
+                var newCoords = [].concat($scope.userArea.coordsArray);
+                newCoords.push($scope.userArea.coordsArray[0]);
+                var coordsGeom = new ol.geom.Polygon();
+                coordsGeom.setCoordinates([newCoords]);
+                
+                if ($scope.userArea.coordsProj !== areaMapService.getMapProjectionCode()){
+                    coordsGeom.transform($scope.userArea.coordsProj, areaMapService.getMapProjectionCode());
+                }
+                
+                var finalCoords = coordsGeom.getCoordinates();
+                finalCoords[0].pop();
+                
+                //Now let's compare the arrays with coordinates
+                var diff = _.difference(_.flatten(geomArray[0]), _.flatten(finalCoords[0]));
+                if (diff.length > 0){
+                    $scope.alert.alertMessage = locale.getString('areas.error_geom_coords_mismatch');
+                    //TODO show modal
+                } else {
+                    $scope.userAreaForm.$setValidity('geomError', true);
+                    withError = false;
+                }
+            }
+        } else {
+            $scope.userAreaForm.$setValidity('geomError', true);
+            withError = false;
+        }
+        
+        if (withError){
+            $scope.alert.setError();
+        }
+    };
+    
+    //Global save button
+    $scope.saveFeature = function(){
+        $scope.userAreaSubmitted = true;
+        $scope.validateGeometry();
+        if ($scope.userAreaForm.$valid){
+            var feature = $scope.buildGeoJSON(); 
+            areaRestService.createArea(angular.toJson(feature)).then(createSuccess, createError);
+        } else {
+            if (!_.has($scope.userAreaForm.$error, 'geomError')){
+                $scope.alert.setError();
+                $scope.alert.alertMessage = locale.getString('areas.user_area_form_errors');
+            }
+            $scope.alert.hideAlert();
+        }
+    };
+    
+    //CALLBACK FUNCTIONS
+    var createSuccess = function(response){
+        $scope.alert.setSuccess();
+        $scope.alert.alertMessage = locale.getString('areas.create_user_area_success');
+        $scope.alert.hideAlert();
+        
+        $scope.resetFeature();
+    };
+    
+    var createError = function(error){
+        console.log(error);
+        $scope.alert.setError();
+        $scope.alert.alertMessage = locale.getString('areas.crud_user_area_error');
+        $scope.alert.hideAlert();
+        
+        $scope.userAreaSubmitted = false;
+    };
+    
+    
+});

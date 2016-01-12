@@ -354,6 +354,15 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             }
         })
+        .state('app.areas', {
+            url: '/areas',
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/areas/areas.html',
+                    controller: 'AreasCtrl'
+                }
+            }
+        })
         .state('app.exchange', {
             url: '/exchange',
             views: {
@@ -711,7 +720,8 @@ unionvmsWebApp.factory('initService',function($log, configurationService, locale
                 'config',
                 'spatial',
                 'exchange',
-                'alarms'
+                'alarms',
+                'areas'
             ]);
         },
     };

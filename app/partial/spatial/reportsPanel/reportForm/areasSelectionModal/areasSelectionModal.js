@@ -127,7 +127,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     //System areas search table
     $scope.sysAreaSearch = [];
     $scope.sysTable = {};
-    $scope.itemsByPage = 25;
+    $scope.itemsByPage = 5;
     $scope.displayedRecordsArea = [].concat($scope.sysAreaSearch);
     $scope.searchLoading = false;
 
@@ -449,7 +449,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     function initUserAreasList() {
         setUserAreaType();
 
-        if(!angular.isDefined($scope.userAreasList) || $scope.userAreasList.length == 0) {
+        if(!angular.isDefined($scope.userAreasList) || $scope.userAreasList.length === 0) {
             $scope.searchLoading = true;
             $scope.userAreasList = [];
             
@@ -463,7 +463,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
                 $scope.searchLoading = false;
             });
         }   
-    };
+    }
    
 
     //Events

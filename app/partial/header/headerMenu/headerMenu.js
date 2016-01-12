@@ -65,8 +65,9 @@
         //REPORTING
         if(checkAccess('Reporting', 'LIST_REPORTS')){
             addMenuItem(locale.getString('header.menu_reporting'), '/reporting');
+            addMenuItem(locale.getString('header.menu_areas'), '/areas');
         }
-
+        
         //MOVEMENT
         var movementLink = false;
         if(checkAccess('Movement', 'viewMovements')){
