@@ -3,7 +3,7 @@ describe('VesselModel', function() {
   beforeEach(module('unionvmsWeb'));
 
     var vesselData = {
-        "vesselId": {
+        "assetId": {
             "guid" : "50c884e8-f03d-4222-841b-6ad1f2263694",
             "type": "GUID",
             "value": "584f9a8e-d53a-448a-8b21-866f2a492987"
@@ -60,9 +60,9 @@ describe('VesselModel', function() {
         expect(vessel.eventHistory).toBeDefined();
         expect(vessel.notes).toEqual(vesselData.notes);
 
-        expect(vessel.vesselId.guid).toEqual(vesselData.vesselId.guid);
-        expect(vessel.vesselId.value).toEqual(vesselData.vesselId.value);
-        expect(vessel.vesselId.type).toEqual(vesselData.vesselId.type);
+        expect(vessel.vesselId.guid).toEqual(vesselData.assetId.guid);
+        expect(vessel.vesselId.value).toEqual(vesselData.assetId.value);
+        expect(vessel.vesselId.type).toEqual(vesselData.assetId.type);
 
         expect(vessel.source).toEqual(vesselData.source);
         expect(vessel.active).toEqual(vesselData.active);
@@ -140,7 +140,7 @@ describe('VesselModel', function() {
 
     it("getGuid should return the vessel guid", inject(function(Vessel) {
         var vessel = Vessel.fromJson(vesselData);
-        expect(vessel.getGuid()).toEqual(vesselData.vesselId.guid);
+        expect(vessel.getGuid()).toEqual(vesselData.assetId.guid);
 
         var newVessel = new Vessel();
         expect(newVessel.getGuid()).toBeUndefined();

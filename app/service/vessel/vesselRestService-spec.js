@@ -127,7 +127,7 @@ describe('vesselRestService', function() {
                             callback({
                                 code : 200,
                                 data: {
-                                    vessel: [
+                                    asset: [
                                         {
                                             name: "1",
                                         },

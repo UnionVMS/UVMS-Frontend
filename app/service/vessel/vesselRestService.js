@@ -3,34 +3,34 @@ angular.module('unionvmsWeb')
 
         return {
             getSearchableFields : function(){
-                return $resource('/vessel/rest/vessel/config/searchfields/');
+                return $resource('/asset/rest/config/searchfields/');
             },
             vessel : function(){
-                return $resource('/vessel/rest/vessel/:id', {}, {
+                return $resource('/asset/rest/asset/:id', {}, {
                     update: {method: 'PUT'}
                 });
             },
             getVesselList : function(){
-                return $resource('/vessel/rest/vessel/list/',{},{
+                return $resource('/asset/rest/asset/list/',{},{
                     list : { method: 'POST'}
                 });
             },
             vesselGroup : function(){
-                return $resource( '/vessel/rest/group/:id', {}, {
+                return $resource( '/asset/rest/group/:id', {}, {
                     update: {method: 'PUT'}
                 });
             },
             getVesselGroupsForUser : function(){
-                return $resource('/vessel/rest/group/list');
+                return $resource('/asset/rest/group/list');
             },
             vesselHistory : function(){
-                return $resource('/vessel/rest/history/vessel');
+                return $resource('/asset/rest/history/asset');
             },
             getConfigValues : function(){
-                return $resource('/vessel/rest/config');
+                return $resource('/asset/rest/config');
             },
             getConfigParameters : function(){
-                return $resource('/vessel/rest/config/parameters');
+                return $resource('/asset/rest/config/parameters');
             }
         };
     })
@@ -48,9 +48,9 @@ angular.module('unionvmsWeb')
                 }
 
                 var vessels = [];
-                if(angular.isArray(response.data.vessel)){
-                    for (var i = 0; i < response.data.vessel.length; i ++) {
-                        vessels.push(Vessel.fromJson(response.data.vessel[i]));
+                if(angular.isArray(response.data.asset)){
+                    for (var i = 0; i < response.data.asset.length; i ++) {
+                        vessels.push(Vessel.fromJson(response.data.asset[i]));
                     }
                 }
                 var currentPage = response.data.currentPage;
@@ -203,7 +203,7 @@ angular.module('unionvmsWeb')
         var deferred = $q.defer();
         //Query object
         var queryObject = {
-            vesselId : vesselId
+            assetId : vesselId
         };
         if(maxNbr){
             queryObject['maxNbr'] = maxNbr;

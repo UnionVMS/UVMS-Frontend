@@ -24,11 +24,11 @@ angular.module('unionvmsWeb')
     Vessel.fromJson = function(data){
         var vessel = new Vessel();
 
-        if(angular.isDefined(data.vesselId)){
+        if(angular.isDefined(data.assetId)){
             vessel.vesselId = {
-                guid : data.vesselId.guid,
-                type : data.vesselId.type,
-                value : data.vesselId.value
+                guid : data.assetId.guid,
+                type : data.assetId.type,
+                value : data.assetId.value
             };
         }
         vessel.source = data.source;
@@ -118,7 +118,7 @@ angular.module('unionvmsWeb')
         };
 
         if(angular.isDefined(this.vesselId)){
-            dto['vesselId'] = {
+            dto['assetId'] = {
                 type : this.vesselId.type,
                 value : this.vesselId.value,
             };

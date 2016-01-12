@@ -36,7 +36,7 @@ angular.module('unionvmsWeb')
 
         return {
             pagination : {page: this.page, listSize: this.listSize},
-            vesselSearchCriteria : { isDynamic : this.isDynamic, criterias : updatedCriterias }
+            assetSearchCriteria : { isDynamic : this.isDynamic, criterias : updatedCriterias }
         };
     };
 
