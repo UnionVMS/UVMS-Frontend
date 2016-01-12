@@ -60,7 +60,7 @@ module.exports = function (grunt) {
       ],
        proxies:grunt.file.exists('proxies.yaml')?grunt.file.readYAML('proxies.yaml'):{
                 context: [
-                  '/vessel/rest',
+                  '/asset/rest',
                   '/mobileterminal/rest/',
                   '/exchange/rest/',
                   '/movement/rest/',
