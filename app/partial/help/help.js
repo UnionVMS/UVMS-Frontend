@@ -114,7 +114,7 @@ app.directive('wrapped', ['$compile', 'help.lang', function($compile, lang) {
 		link: function(scope, element, attrs) {
 			var url = 'assets/help/img/' + lang + '/' + attrs.url;
 			var clazz = attrs.class;
-			var html = '<div class="img-wrapper"><img src="' + url +  '" class="' + clazz + '"></div>';
+			var html = '<div class="img-wrapper"><a href="' + url + '" target="_blank"><img src="' + url +  '" class="' + clazz + '"></a></div>';
 			element.replaceWith(html);
 			
 			
