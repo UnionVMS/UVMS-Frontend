@@ -17,5 +17,32 @@
     "change_security_answer": "Change security answer",
     "sign_in": "Sign in",
     "sign_out": "Sign out",
-	"current_time_title": "Current time"
+	"current_time_title": "Current time",
+
+	"pageTitle": {
+		"default": "UnionVMS",
+		"reports": "Reports",
+		"areas": "Area management",
+		"movement": {
+			"reports": "Position reports",
+			"manual": "Manual position reports"
+		},
+		"exchange": "Exchange",
+		"polling" : {
+			"new": "New poll",
+			"logs": "Polling logs"
+		},
+		"mobileTerminals": "Mobile terminals",
+		"assets": "Assets",
+		"alarms": {
+			"holdingTable": "Holding table",
+			"notifications": "Notifications",
+			"rules": "Rules"
+		},
+		"admin": {
+			"auditLogs": "Audit logs",
+			"configuration": "Configuration"
+		},
+		"help": "Help"
+	}
 }

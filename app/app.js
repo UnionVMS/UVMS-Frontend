@@ -162,7 +162,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
-                access: 'viewMovements'
+                access: 'viewMovements',
+                pageTitle: 'movement.reports'
             },
         })
         .state('app.manualMovements', {
@@ -174,7 +175,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
-                access: 'viewManualMovements'
+                access: 'viewManualMovements',
+                pageTitle: 'movement.manual'
             },
         })
         .state('app.movement-id', {
@@ -191,7 +193,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
-                access: 'viewMovements'
+                access: 'viewMovements',
+                pageTitle: 'movement.manual'
             },
         })
         .state('app.assets', {
@@ -208,7 +211,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
-                access: 'viewVesselsAndMobileTerminals'
+                access: 'viewVesselsAndMobileTerminals',
+                pageTitle: 'assets'
             }
         })
         .state('app.assets-id', {
@@ -225,7 +229,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
-                access: 'viewVesselsAndMobileTerminals'
+                access: 'viewVesselsAndMobileTerminals',
+                pageTitle: 'assets'
             }
         })
         .state('app.communication', {
@@ -242,7 +247,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
-                access: 'viewVesselsAndMobileTerminals'
+                access: 'viewVesselsAndMobileTerminals',
+                pageTitle: 'mobileTerminals'
             },
         })
         .state('app.communication-id', {
@@ -259,7 +265,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
-                access: 'viewVesselsAndMobileTerminals'
+                access: 'viewVesselsAndMobileTerminals',
+                pageTitle: 'mobileTerminals'
             },
         })
         .state('app.polling', {
@@ -272,7 +279,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {},
             data: {
-                access: 'managePolls'
+                access: 'managePolls',
+                pageTitle: 'polling.new'
             },
         })
         .state('app.pollingLogs', {
@@ -289,7 +297,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
-                access: 'viewMobileTerminalPolls'
+                access: 'viewMobileTerminalPolls',
+                pageTitle: 'polling.logs'
             },
         })
         .state('app.pollingLogs-id', {
@@ -306,7 +315,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
-                access: 'viewMobileTerminalPolls'
+                access: 'viewMobileTerminalPolls',
+                pageTitle: 'polling.logs'
             },
         })
         .state('app.auditLog', {
@@ -323,7 +333,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }*/
             },
             data: {
-                access: 'viewAudit'
+                access: 'viewAudit',
+                pageTitle: 'admin.auditLogs'
             },
         })
         .state('app.configuration', {
@@ -338,6 +349,9 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             	config : function(initService){
 	               return initService.loadConfigFor(["MOVEMENT"]);
 	            }
+            },
+            data: {
+                pageTitle: 'admin.configuration'
             }
         })
         .state('app.reporting', {
@@ -352,6 +366,9 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 config : function(initService){
                     return initService.loadConfigFor(["MOVEMENT"]);
                 }
+            },
+            data: {
+                pageTitle: 'reports'
             }
         })
         .state('app.areas', {
@@ -361,6 +378,9 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                     templateUrl: 'partial/areas/areas.html',
                     controller: 'AreasCtrl'
                 }
+            },
+            data: {
+                pageTitle: 'areas'
             }
         })
         .state('app.exchange', {
@@ -377,7 +397,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
-                access: 'viewExchange'
+                access: 'viewExchange',
+                pageTitle: 'exchange'
             },
         })
         .state('app.holdingTable', {
@@ -394,7 +415,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
-                access: 'viewAlarmsHoldingTable'
+                access: 'viewAlarmsHoldingTable',
+                pageTitle: 'alarms.holdingTable'
             },
         })
         .state('app.holdingTable-id', {
@@ -411,7 +433,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
-                access: 'viewAlarmsHoldingTable'
+                access: 'viewAlarmsHoldingTable',
+                pageTitle: 'alarms.holdingTable'
             },
         })
         .state('app.openTickets', {
@@ -428,7 +451,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
-                access: 'viewAlarmsOpenTickets'
+                access: 'viewAlarmsOpenTickets',
+                pageTitle: 'alarms.notifications'
             },
         })
         .state('app.openTickets-id', {
@@ -445,7 +469,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
-                access: 'viewAlarmsOpenTickets'
+                access: 'viewAlarmsOpenTickets',
+                pageTitle: 'alarms.notifications'
             },
         })
         .state('app.rules', {
@@ -462,7 +487,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
-                access: 'viewAlarmsRules'
+                access: 'viewAlarmsRules',
+                pageTitle: 'alarms.rules'
             },
         })
         .state('app.rules-id', {
@@ -479,7 +505,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
-                access: 'viewAlarmsRules'
+                access: 'viewAlarmsRules',
+                pageTitle: 'alarms.rules'
             },
         })
         .state('app.help', {
@@ -489,6 +516,9 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                     templateUrl: 'partial/help/help.html',
                     controller: 'help.controller as help'
                 }
+            },
+            data: {
+                pageTitle: 'help'
             }
         })
         .state('error', {
@@ -606,7 +636,6 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
         event.preventDefault();
         return $state.go('error');
     });
-
 });
 
 //Configure for i18n
