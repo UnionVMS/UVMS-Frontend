@@ -41,10 +41,19 @@ angular.module('unionvmsWeb')
     };
 
     GetListRequest.prototype.DTOForMobileTerminal = function(){
+        var wildcardKeys = ['NAME', 'IRCS', 'EXTERNAL_MARKING', 'CFR', 'HOMEPORT', 'MMSI', 'SERIAL_NUMBER', 'DNID'];
+        var criteria = this.criterias.map(function(criteria) {
+            if (wildcardKeys.indexOf(criteria.key) >= 0) {
+                return new SearchField(criteria.key, criteria.value + '*');
+            }
+            else {
+                return criteria;
+            }
+        });
 
         return {
             pagination : {page: this.page, listSize: this.listSize},
-            mobileTerminalSearchCriteria : {isDynamic: this.isDynamic, criterias: this.criterias}
+            mobileTerminalSearchCriteria : {isDynamic: this.isDynamic, criterias: criteria}
         };
     };
 
