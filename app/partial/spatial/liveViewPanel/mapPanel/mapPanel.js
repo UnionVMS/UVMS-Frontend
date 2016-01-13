@@ -5,6 +5,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, $tim
     $scope.measureConfigs = spatialHelperService.measure;
     $scope.print = spatialHelperService.print;
     $scope.tbControl = spatialHelperService.tbControl;
+    $scope.refresh = reportService.refresh;
     
     //Close identify popup
     $scope.closePopup = function(){
@@ -255,13 +256,13 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($scope, locale, $tim
     });
     
     //Other controls
-//    $scope.otherEnable = function(){
-//        console.log('enable other');
-//    };
-//    
-//    $scope.otherDisable = function(){
-//        console.log('disable other');
-//    };
+    //    $scope.otherEnable = function(){
+    //        console.log('enable other');
+    //    };
+    //    
+    //    $scope.otherDisable = function(){
+    //        console.log('disable other');
+    //    };
 });
 
 angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale, mapService, spatialHelperService){

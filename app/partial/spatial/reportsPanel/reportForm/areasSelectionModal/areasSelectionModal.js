@@ -74,8 +74,10 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
             $scope.sysSelection = 'map';
             initUserAreasList();
         } else {
-            $scope.removeLayerByType($scope.userAreaType.typeName);
-            $scope.userAreaType = undefined;
+           if (angular.isDefined($scope.userAreaType)) {
+                $scope.removeLayerByType($scope.userAreaType.typeName);
+                $scope.userAreaType = undefined;
+            }
         }
         $scope.selectedTab = tab;
     };
@@ -457,7 +459,13 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
                 $scope.userAreasList = $scope.convertAreasResponse(response);
                 $scope.searchLoading = false;
             }, function(error){
-                $scope.errorMessage = locale.getString('spatial.area_selection_modal_get_selected_area_search_error');
+                if (error.status == 403) {
+                    $scope.errorMessage = locale.getString('spatial.error_user_not_authorized');
+                } else {
+                    $scope.errorMessage = locale.getString('spatial.area_selection_modal_get_selected_area_search_error');
+                   
+                }
+                
                 $scope.hasError = true;
                 $scope.hideAlerts();
                 $scope.searchLoading = false;

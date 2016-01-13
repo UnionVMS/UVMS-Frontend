@@ -42,14 +42,17 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    $scope.$watch('selectedMenu', function(newVal, oldVal){
        if (newVal === 'LIVEVIEW'){
            $timeout(mapService.updateMapSize, 100);
-           mapService.updateMapContainerSize();
+           mapService.updateMapContainerSize();  
+           reportService.isLiveViewActive = true;   
        } else if  (newVal === 'REPORTS'){
            if ($scope.reports.length === 0){
                $scope.$broadcast('loadReportsList');
            }
            $scope.$broadcast('untoggleToolbarBtns');
+           reportService.isLiveViewActive = false;
        }else {
     	   $scope.$broadcast('loadUserPreferences', oldVal);
+         reportService.isLiveViewActive = false;
        }
    });
    

@@ -10,7 +10,12 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
        },
        positions: [],
        segments: [],
-       tracks: []
+       tracks: [],
+       refresh: {
+            status: false,
+            rate: undefined
+       },
+       isLiveViewActive: false
     };
     
     rep.clearVmsData = function(){
@@ -36,12 +41,26 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	};
 	
 	rep.refreshReport = function(){
-	    if (angular.isDefined(rep.id) && rep.tabs.map === true){
+	    if (angular.isDefined(rep.id) && rep.tabs.map === true ){
 	        rep.isReportExecuting = true;
 	        var repConfig = getUnitSettings();
 	        reportRestService.executeReport(rep.id, repConfig).then(updateVmsDataSuccess, updateVmsDataError);
 	    }
 	};
+
+    
+    rep.setAutoRefresh = function() {
+    
+       $timeout(function() {
+          if (rep.isReportExecuting === false 
+                && rep.isLiveViewActive == true 
+                && rep.refresh.status === true) {
+            rep.refreshReport();
+          }
+           rep.setAutoRefresh();
+        }, rep.refresh.rate*60*1000);
+
+    }
 	
 	var getUnitSettings = function(){
 	    return {
@@ -64,7 +83,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    spatialHelperService.setToolbarControls(data);
 	    
 	    //Set the styles for vector layers and legend
-	    mapService.setPositionStylesObj(data.vectorStyles.positions);
+	    mapService.setPositionStylesObj(data.vectorStyles.positions); 
 	    mapService.setSegmentStylesObj(data.vectorStyles.segments);
 	    
 	    //Set vms table attribute visibility
@@ -81,15 +100,26 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    treeSource = treeSource.fromConfig(data.map.layers);
 	    $rootScope.$broadcast('updateLayerTreeSource', treeSource);
 	    
+        //map refresh configs
+        if (rep.tabs.map === true && angular.isDefined(data.map.refresh)){
+            rep.refresh.status = data.map.refresh.status;
+            rep.refresh.rate = data.map.refresh.rate;   
+        }
+
 	    //Finally load VMS positions and segments
 	    var repConfig = getUnitSettings();
 	    reportRestService.executeReport(rep.id, repConfig).then(getVmsDataSuccess, getVmsDataError);
+
+        if (rep.refresh.status === true) {
+            rep.setAutoRefresh();
+        }
 	};
 	
 	//Get Spatial config Error callback
 	var getConfigError = function(error){
 	    rep.isReportExecuting = false;
 	    rep.hasError = true;
+        rep.refresh.status = false;
         $timeout(function(){rep.hasError = false;}, 3000);
 	};
 	

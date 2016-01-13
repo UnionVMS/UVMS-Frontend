@@ -200,14 +200,12 @@
           </execution>
 
           <execution>
-            <id>grunt build</id>
+            <id>grunt</id>
             <goals>
               <goal>grunt</goal>
             </goals>
             <phase>generate-resources</phase>
             <configuration>
-              <arguments>build-maven --maven.version=${project.version}
-                --maven.buildts=${maven.build.timestamp}</arguments>
               <outputdir>${basedir}/dist</outputdir>
             </configuration>
           </execution>
