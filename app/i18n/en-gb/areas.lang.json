@@ -1,0 +1,53 @@
+{
+	"map_tip_zoomin": "Zoom in",
+	"map_tip_zoomout": "Zoom out",
+	
+	"my_areas": "My Areas",
+	"sys_areas": "System Areas",
+	"area_groups": "Area Groups",
+	
+	"create_area": "Create new area",
+	"edit_area": "Edit existing area",
+	
+	"draw_tool": "Draw",
+	"edit_tool": "Edit",
+	"import_tool": "Import",
+	"coord_tool": "Coordinates",
+	
+	"editing_projection_label": "Projection",
+	"coord_x": "X",
+	"coord_y": "Y",
+	"add_coords_row": "Add new point coordinates",
+	"delete_coords_row": "Delete point coordinates",
+	"reset_btn": "Reset",
+	"apply_btn": "Apply",
+	"save_btn": "Save",
+	
+	"area_details_title": "Area details",
+	"user_area_name": "Name",
+	"user_area_description": "Description",
+	"user_area_validity_range": "Active",
+	"user_area_valid_from": "From",
+	"user_area_valid_to": "To",
+	"user_area_type": "Type",
+	
+	"modal_geom_mismatch": "The area geometry in the map does not match with the geometry in the coordinates form. Please decide which geometry to use or fix the issue manually.",
+	"modal_save_map_geom": "Use geometry from map",
+	"modal_save_coord_geom": "Use geometry from coordinates",
+	
+	"area_upload_modal_title": "Upload an area",
+	"area_upload_select_file_btn": "Select file",
+	"area_upload_modal_upload_btn": "Upload",
+	
+	"polygon_min_number_points": "A polygon cannot be build with less than 3 geographical coordinates.",
+	"null_geom": "There is no geometry defined. Please use the drawing tools to create a new area.",
+	"user_area_form_errors": "There are errors in the area form. Please check your inputs again.",
+	
+	"saving_new_area": "Saving new data...",
+	"create_user_area_success": "Your new area was successfully created.",
+	"crud_user_area_error": "There was an error while saving your data. Please try again.",
+	
+	"error_getting_projections": "There was an error while getting projections from the server. You will only be able to use the current map projection to edit your areas.",
+	"error_coords_form": "There are errors in your coordinate definitions. Please check your data.",
+	"error_empty_geom": "There is no geometry in the map. You must press the apply button in the coordinates form."
+}
