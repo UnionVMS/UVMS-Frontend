@@ -59,7 +59,11 @@ describe('GetListRequest', function() {
         expect(DTO.pagination.listSize).toEqual(listSize);
         expect(DTO.pagination.page).toEqual(page);
         expect(DTO.mobileTerminalSearchCriteria.isDynamic).toEqual(dynamic);
-        expect(angular.equals(DTO.mobileTerminalSearchCriteria.criterias, criterias)).toBeTruthy();
+        expect(DTO.mobileTerminalSearchCriteria.criterias.length).toBe(2);
+        expect(DTO.mobileTerminalSearchCriteria.criterias[0].key).toBe("NAME");
+        expect(DTO.mobileTerminalSearchCriteria.criterias[0].value).toBe("TEST*");
+        expect(DTO.mobileTerminalSearchCriteria.criterias[1].key).toBe("COUNTRY");
+        expect(DTO.mobileTerminalSearchCriteria.criterias[1].value).toBe("Swe");
     }));
 
 
