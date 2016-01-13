@@ -57,9 +57,10 @@
                 <input type="text" name="mmsi" class="form-control" ng-model="vessel.mmsiNo" ng-pattern="mmsiRegExp">
                 <input-validation-message types="required, pattern" input="vesselForm.mmsi" custom-messages="{{mmsiValidationMessages}}"></input-validation-message >
             </div>
-            <div class="col-md-4 smallerpaddingleft form-group">
+            <div class="col-md-4 smallerpaddingleft form-group" ng-class="{'has-error': (submitAttempted || vesselForm.licenseType.$dirty) && vesselForm.licenseType.$invalid}">
                 <label>{{ 'vessel.vessel_details_license_type' | i18n }}</label>
-                <dropdown ng-model="vessel.licenseType" initialtext="{{ 'vessel.vessel_details_license_type' | i18n }}" items="vesselLicensTypes"></dropdown>
+                <dropdown ng-model="vessel.licenseType" initialtext="{{ 'vessel.vessel_details_license_type' | i18n }}" items="vesselLicensTypes" required></dropdown>
+                <input-validation-message types="required" input="vesselForm.licenseType"></input-validation-message>
             </div>
         </div>
         <div class="row">
