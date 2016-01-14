@@ -6,7 +6,7 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 	$scope.tabs = [];
 
 	var uvmsModules = [
-		"vessel",
+		"asset",
 		"mobileTerminal",
 		"reporting",
 		"positions",
