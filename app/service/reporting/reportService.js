@@ -53,14 +53,14 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     
        $timeout(function() {
           if (rep.isReportExecuting === false 
-                && rep.isLiveViewActive == true 
+                && rep.isLiveViewActive === true 
                 && rep.refresh.status === true) {
             rep.refreshReport();
           }
            rep.setAutoRefresh();
         }, rep.refresh.rate*60*1000);
 
-    }
+    };
 	
 	var getUnitSettings = function(){
 	    return {
