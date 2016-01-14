@@ -88,10 +88,10 @@ angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, 
         deleteVesselGroup : function(savedSearchGroup){
             var defer = $q.defer();
             vesselRestService.deleteVesselGroup(savedSearchGroup)
-            .then(function() {
+            .then(function(deletedGroup) {
                 console.log("Vesselgroup removed from list!");
                 getVesselGroupsForUser();
-                defer.resolve();
+                defer.resolve(deletedGroup);
             }, function(){
                 console.log("Vesselgroup not removed from list!");
                 defer.reject();

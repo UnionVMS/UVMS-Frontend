@@ -145,8 +145,11 @@ angular.module('unionvmsWeb')
             };
 
             //Success removing saved search
-            var onDeleteSuccess = function(){
+            var onDeleteSuccess = function(deletedGroup){
                 alertService.showSuccessMessageWithTimeout(deleteSuccessText);
+                if ($scope.ngModel === deletedGroup.id) {
+                    $scope.ngModel = undefined;
+                }
             };
 
             //Error removing saved search
