@@ -97,8 +97,8 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	        report.xValue = angular.isDefined(filter.common.xValue) ? filter.common.xValue : undefined;
 
 	        //Vessel filters
-	        report.vesselsSelection = filter.vessels;
-	        if (filter.vessels.length > 0){
+	        report.vesselsSelection = filter.assets;
+	        if (filter.assets.length > 0){
 	            report.hasVesselFilter = true;
 	        }
 
