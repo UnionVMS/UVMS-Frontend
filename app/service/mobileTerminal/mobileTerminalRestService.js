@@ -305,6 +305,29 @@ angular.module('unionvmsWeb')
                 });
                 return deferred.promise;
             },
+            inactivateMobileTerminalsWithConnectId: function(connectId) {
+                var deferred = $q.defer();
+                function inactivatePage(page) {
+                    var request = new GetListRequest(page, 10);
+                    request.addSearchCriteria("CONNECT_ID", connectId);
+                    mobileTerminalRestService.getMobileTerminalList(request).then(function(resultPage) {
+                        $q.all(resultPage.items.map(function(mobileTerminal) {
+                            return mobileTerminalRestService.inactivateMobileTerminal(mobileTerminal, "Inactivated because asset was archived");
+                        })).then(function() {
+                            if (resultPage.totalNumberOfPages > page) {
+                                inactivatePage(page + 1);
+                            }
+                            else {
+                                deferred.resolve();
+                            }
+                        });
+                    });
+                }
+
+                // Initial recursive call for page 1
+                return inactivatePage(1);
+                return deferred.promise;
+            },
             removeMobileTerminal : function(mobileTerminal, comment){
                 var deferred = $q.defer();
                 mobileTerminalRestFactory.removeMobileTerminal().save({ comment:comment }, mobileTerminal.toSetStatusJson(), function(response) {

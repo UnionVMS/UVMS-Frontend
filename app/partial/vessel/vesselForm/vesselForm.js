@@ -134,16 +134,18 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             }
             //Set active to false, meaning archived
             $scope.vesselObj.active = false;
-            vesselRestService.updateVessel($scope.vesselObj).then(
-                function(inactivatedVessel){
-                    alertService.showSuccessMessageWithTimeout(locale.getString('vessel.archive_message_on_success'));
-                    $scope.removeCurrentVesselFromSearchResults();
-                    $scope.toggleViewVessel(undefined, true);
-                },
-                function(error){
-                    alertService.showErrorMessage(locale.getString('vessel.archive_message_on_error'));
-                }
-            );
+            vesselRestService.updateVessel($scope.vesselObj).then(function(inactivatedVessel) {
+                // Inactivate mobile terminals too
+                return mobileTerminalRestService.inactivateMobileTerminalsWithConnectId(inactivatedVessel.vesselId.guid);
+            }).then(function() {
+                // Success
+                alertService.showSuccessMessageWithTimeout(locale.getString('vessel.archive_message_on_success'));
+                $scope.removeCurrentVesselFromSearchResults();
+                $scope.toggleViewVessel(undefined, true);
+            }, function(error) {
+                // Some error
+                alertService.showErrorMessage(locale.getString('vessel.archive_message_on_error'));
+            });
 
         }, options);
 
