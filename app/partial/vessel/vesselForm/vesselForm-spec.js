@@ -157,7 +157,8 @@ describe('VesselFormCtrl', function() {
         mockVessel.active = true;
         mockVessel.vesselId = {
             type : "GUID",
-            value : "345345345-rf54235f-242f-4rads"
+            value : "345345345-rf54235f-242f-4rads",
+            guid: "345345345-rf54235f-242f-4rads"
         };
         scope.vesselObj = mockVessel;
 
@@ -185,6 +186,10 @@ describe('VesselFormCtrl', function() {
         var updateVesselSpy = spyOn(vesselRestService, "updateVessel").andReturn(deferred.promise);
         deferred.resolve(archivedVessel);
 
+        var deferred3 = $q.defer();
+        spyOn(mobileTerminalRestService, 'inactivateMobileTerminalsWithConnectId').andReturn(deferred3.promise);
+        deferred3.resolve();
+
         // Archive the vessel
         scope.archiveVessel();
         scope.$digest();
@@ -206,6 +211,9 @@ describe('VesselFormCtrl', function() {
 
         //Check that toggleViewVessel was called afterwards to close the form and view the list
         expect(viewListSpy).toHaveBeenCalled();
+
+        // Should have inactivated all mobile terminals belonging to this vessel
+        expect(mobileTerminalRestService.inactivateMobileTerminalsWithConnectId).toHaveBeenCalledWith("345345345-rf54235f-242f-4rads");
     }));
 
     it('isVesselNameSet should return correctly', inject(function(Vessel) {
