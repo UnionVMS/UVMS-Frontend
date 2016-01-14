@@ -152,6 +152,23 @@ angular.module('unionvmsWeb').directive('latitude', function(coordinateFormatSer
     };
 });
 
+angular.module('unionvmsWeb').directive('course', function() {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, elem, attrs, model) {
+            model.$validators.course = function(modelValue, viewValue) {
+                var value = (modelValue || viewValue);
+                if (typeof value === String) {
+                    value = value.replace(/,/g, ".");
+                }
+
+                return value >= 0 && value <= 360;
+            }
+        }
+    };
+});
+
 angular.module('unionvmsWeb').directive('existing', function() {
     return {
         restrict: 'A',
