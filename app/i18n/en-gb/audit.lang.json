@@ -35,7 +35,7 @@
 
     "configuration_header_systemMonitor": "System monitor",
     "configuration_header_globalSettings": "Global settings",
-    "configuration_header_vessel": "Assets",
+    "configuration_header_asset": "Assets",
     "configuration_header_mobileTerminal": "Mobile terminals",
     "configuration_header_reporting": "Reporting",
     "configuration_header_movement": "Movement",
