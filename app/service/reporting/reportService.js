@@ -52,13 +52,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     rep.setAutoRefresh = function() {
     
        $timeout(function() {
-          if (rep.isReportExecuting === false 
-                && rep.isLiveViewActive === true 
-                && rep.refresh.status === true) {
+          if (rep.isReportExecuting === false && rep.isLiveViewActive === true && rep.refresh.status === true) {
             rep.refreshReport();
           }
            rep.setAutoRefresh();
-        }, rep.refresh.rate*60*1000);
+        }, rep.refresh.rate*60*1000); //timeout in minutes
 
     };
 	
