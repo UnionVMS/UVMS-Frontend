@@ -21,7 +21,7 @@ describe('ReportformCtrl', function(){
         expect(scope.vesselsSelectionIsValid).toEqual(true);
         expect(scope.report.vesselsSelection).toEqual([]);
         expect(scope.shared).toEqual(scope.shared = {
-            vesselSearchBy: 'vessel',
+            vesselSearchBy: 'asset',
             searchVesselString: '',
             selectAll: false,
             selectedVessels: 0,

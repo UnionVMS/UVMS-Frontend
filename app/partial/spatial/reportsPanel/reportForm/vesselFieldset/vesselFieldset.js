@@ -56,7 +56,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     $scope.checkVesselIsSelected = function(vesselSrc){
         var response = false;
         for (var i = 0; i < $scope.report.vesselsSelection.length; i++){
-            if (angular.isDefined(vesselSrc.vesselId) && $scope.report.vesselsSelection[i].type === 'vessel' && vesselSrc.vesselId.guid === $scope.report.vesselsSelection[i].guid){
+            if (angular.isDefined(vesselSrc.vesselId) && $scope.report.vesselsSelection[i].type === 'asset' && vesselSrc.vesselId.guid === $scope.report.vesselsSelection[i].guid){
                 response = true;
             } else if (angular.isDefined(vesselSrc.guid) && $scope.report.vesselsSelection[i].type === 'vgroup' && vesselSrc.guid === $scope.report.vesselsSelection[i].guid){
                 response = true;
@@ -103,7 +103,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
                     	idx = $scope.shared.vessels.indexOf($scope.displayedRecords[idx]);
                         var item = $scope.shared.vessels[idx];
                         item.type = $scope.shared.vesselSearchBy;
-                        if (item.type === 'vessel'){
+                        if (item.type === 'asset'){
                             item.guid = $scope.shared.vessels[idx].vesselId.guid;
                         }
                         
@@ -131,9 +131,9 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
                     name: vesselSrc.name
                 };
                 
-                if ($scope.shared.vesselSearchBy === 'vessel'){
+                if ($scope.shared.vesselSearchBy === 'asset'){
                     record.guid = vesselSrc.vesselId.guid;
-                    record.type = 'vessel';
+                    record.type = 'asset';
                 } else {
                     record.guid = vesselSrc.guid;
                     record.user = vesselSrc.user;

@@ -18,7 +18,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     //Set vessel search type dropdown options
     $scope.vesselSearchItems = [];
-    $scope.vesselSearchItems.push({"text": locale.getString('spatial.reports_form_vessels_search_by_vessel'), "code": "vessel"});
+    $scope.vesselSearchItems.push({"text": locale.getString('spatial.reports_form_vessels_search_by_vessel'), "code": "asset"});
     $scope.vesselSearchItems.push({"text": locale.getString('spatial.reports_form_vessels_search_by_group'), "code": "vgroup"});
 
     //Set movement type dropdown options
@@ -43,7 +43,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         $scope.report.vesselsSelection = [];
 
         $scope.shared = {
-            vesselSearchBy: 'vessel',
+            vesselSearchBy: 'asset',
             searchVesselString: '',
             selectAll: false,
             selectedVessels: 0,

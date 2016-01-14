@@ -192,13 +192,13 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	            positionTypeSelector: this.positionSelector !== 'all' ? this.positionTypeSelector: undefined,
 	            xValue: this.xValue
 	        },
-            vessels: [],
+            assets: [],
             vms: vmsFilters,
             areas: this.areas
 	    };
 
 	    if (this.hasVesselFilter){
-            filter.vessels = this.vesselsSelection;
+            filter.assets = this.vesselsSelection;
         }
 	    
 	    var dto = {

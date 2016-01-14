@@ -88,7 +88,7 @@
 	"reports_form_vessel_search_table_header_cfr": "CFR",
 	"reports_form_vessel_search_table_header_external_marking": "Ext. Mark.",
 	"reports_form_vessel_add_vessel_records_btn": "Add selection to report",
-	"reports_form_vessel_selection_type_vessel": "Vessel",
+	"reports_form_vessel_selection_type_asset": "Vessel",
 	"reports_form_vessel_selection_type_vgroup": "Vessel group",
 	"reports_form_vessel_selection_invalid": "There are no vessels or vessel groups currently selected.",
 	"reports_form_vessel_get_vessel_list_error": "There was an error while searching for vessels. Please try again.",

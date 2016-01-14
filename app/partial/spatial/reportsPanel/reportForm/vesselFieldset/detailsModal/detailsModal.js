@@ -44,7 +44,7 @@ angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $mo
     };
     
     var init = function(){
-        if ($scope.item.type === 'vessel'){
+        if ($scope.item.type === 'asset'){
             vesselRestService.getVessel($scope.item.guid).then(
                 function(response){
                     $scope.detailedItem = response;
