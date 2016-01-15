@@ -213,4 +213,8 @@
     "online": "Online",
     "offline": "Offline",
     "add_more_languages": "Add more languages",
-    "select_language": "Select language"}
+    "select_language": "Select language",
+
+    "no_pings_message": "No pings have been received from any system."
+
+}
