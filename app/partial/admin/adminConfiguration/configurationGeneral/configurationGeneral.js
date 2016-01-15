@@ -36,7 +36,8 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 		"mobileTerminals",
 		"assets",
 		"alarms",
-		"admin"
+		"admin",
+		"reporting"
 	].map(function(page) {
 		return {
 			text: locale.getString("config.homePage_" + page),
