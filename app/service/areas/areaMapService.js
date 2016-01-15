@@ -79,7 +79,11 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
             geom.transform(srcProj, areaMs.getMapProjectionCode());
         }
         
-        var feature = new ol.Feature({
+        areaMs.addVectorFeature(geom, doZoom);
+	};
+	
+	areaMs.addVectorFeature = function(geom, doZoom){
+	    var feature = new ol.Feature({
             geometry: geom
         });
         

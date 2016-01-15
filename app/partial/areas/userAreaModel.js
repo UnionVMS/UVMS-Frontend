@@ -4,9 +4,9 @@ angular.module('unionvmsWeb').factory('UserArea',function() {
         id: undefined,
         name: undefined,
         desc: undefined,
-        type: undefined,
-        validFrom: undefined,
-        validTo: undefined,
+        subType: undefined,
+        startDate: undefined,
+        endDate: undefined,
         geometry: undefined,
         coordsArray: [],
         coordsProj: undefined,
@@ -25,9 +25,9 @@ angular.module('unionvmsWeb').factory('UserArea',function() {
         UserArea.id = undefined;
         UserArea.name = undefined;
         UserArea.desc = undefined;
-        UserArea.type = undefined;
-        UserArea.validFrom = undefined;
-        UserArea.validTo = undefined;
+        UserArea.subType = undefined;
+        UserArea.startDate = undefined;
+        UserArea.endDate = undefined;
         UserArea.resetGeometry();
     };
     

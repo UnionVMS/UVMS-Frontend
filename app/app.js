@@ -17,7 +17,8 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
 	'toggle-switch',
 	'colorpicker.module',
 	'ui.select',
-	'ngMessages'
+	'ngMessages',
+	'angularFileUpload'
 	]);
 
 var currentUserContextPromise = function(userService) {

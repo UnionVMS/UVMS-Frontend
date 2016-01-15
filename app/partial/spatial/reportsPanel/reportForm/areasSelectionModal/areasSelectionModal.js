@@ -459,7 +459,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
                 $scope.userAreasList = $scope.convertAreasResponse(response);
                 $scope.searchLoading = false;
             }, function(error){
-                if (error.status == 403) {
+                if (error.status === 403) {
                     $scope.errorMessage = locale.getString('spatial.error_user_not_authorized');
                 } else {
                     $scope.errorMessage = locale.getString('spatial.area_selection_modal_get_selected_area_search_error');

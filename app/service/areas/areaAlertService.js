@@ -29,6 +29,14 @@ angular.module('unionvmsWeb').factory('areaAlertService',function($timeout) {
 	    setSuccess: function(){
 	        this.hasAlert = true;
             this.hasSuccess = true;
+	    },
+	    setLoading: function(msg){
+	        this.isLoading = true;
+	        this.loadingMessage = msg;
+	    },
+	    removeLoading: function(){
+	        this.isLoading = false;
+            this.loadingMessage = undefined;
 	    }
 	};
 

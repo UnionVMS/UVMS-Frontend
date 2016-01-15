@@ -117,6 +117,27 @@ angular.module('unionvmsWeb').factory('unitConversionService',function($filter, 
 	        }
 	    },
 	    date: {
+	        getDateFormat: function(){
+	            return globalSettingsService.getDateFormat();
+	        },
+	        getTimeZone: function(){
+	            return parseInt(globalSettingsService.getTimezone());
+	        },
+	        convertDate: function(date, direction){
+	            var displayFormat = this.getDateFormat();
+                var src_format = 'YYYY-MM-DD HH:mm:ss Z';
+                var server_format = 'YYYY-MM-DDTHH:mm:ss';
+                
+                if (direction === 'to_server'){
+                    if (moment.utc(date, src_format).isValid()){
+                        return moment.utc(date, src_format).format(server_format);
+                    }
+                } else if(direction === 'from_server') {
+                    if (moment.utc(date, server_format).isValid()){
+                        return moment.utc(date, server_format).format(displayFormat);
+                    }
+                }
+	        },
 	        convertToUserFormat: function(date){
 	            if (date !== null && angular.isDefined(date)){
 	                var displayFormat = globalSettingsService.getDateFormat();

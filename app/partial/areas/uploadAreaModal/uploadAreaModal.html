@@ -1,0 +1,105 @@
+<div class="uploadAreaModal">
+    <div class="modal-header">
+        <div class="pointer pull-right" ng-click="cancel()">
+             <i class="fa fa-times closeicon"></i>
+        </div>
+        <h4 class="modal-title">{{'areas.area_upload_modal_title' | i18n}}</h4>
+    </div>
+    <div class="modal-body">
+    	<ng-form name="uploadAreaForm" novalidate>
+    		<div class="row" ng-show="hasError">
+    			<div class="alert" ng-class="{'alert-danger': !hasWarning, 'alert-warning': hasWarning}">
+    				<span class="fa fa-exclamation-circle" aria-hidden="true" ng-hide="hasWarning"></span> 
+    				<span class="fa fa-exclamation-triangle" aria-hidden="true" ng-show="hasWarning"></span>
+    				<span>{{errorMessage}}</span>
+    			</div>
+    		</div>
+	    	<div class="row form-horizontal">
+	    		<div class="col-md-5">
+		    		<div class="form-group">
+		    			<label class="col-md-5 control-label area-modal-label">{{'areas.area_upload_modal_src_format' | i18n}}</label>
+		    			<div class="col-md-7 no-padding">
+		    				<combobox ng-model="format" items="formatItems"></combobox>
+		    			</div>
+		    		</div>
+		    	</div>
+		    	<div class="col-md-2"></div>
+	    		<div class="col-md-5">
+		    		<div class="form-group" ng-show="projections.length > 0">
+		    			<label class="col-md-5 control-label area-modal-label">{{'areas.editing_projection_label' | i18n}}</label>
+		    			<div class="col-md-7 no-padding">
+		    				<combobox ng-model="selProjection" items="projections"></combobox>
+		    			</div>
+		    		</div>
+		    	</div>
+	    	</div>
+	    	<div class="row form-horizontal" ng-show="format === 'csv'">
+		    	<div class="col-md-5">
+		    		<div class="form-group">
+		    			<label class="col-md-5 control-label area-modal-label">{{'areas.area_upload_modal_delimiter' | i18n}}</label>
+		    			<div class="col-md-7 no-padding">
+		    				<combobox ng-model="delimiter" items="delimiterItems"></combobox>
+		    			</div>
+		    		</div>
+		    	</div>
+		    	<div class="col-md-2"></div>
+	    		<div class="col-md-5">
+		    		<div class="form-group">
+			    		<div class="checkbox">
+						 	<label>
+						    	<input type="checkbox" ng-model="containsFirstRow">
+						    	{{'areas.area_upload_modal_first_row_checkbox' | i18n}}
+						  	</label>
+						</div>
+		    		</div>
+		    	</div>
+	    	</div>
+	    	<div class="row form-horizontal" ng-show="format === 'csv' && containsFirstRow">
+	    		<div class="col-md-5">
+		    		<div class="form-group">
+		    			<label class="col-md-5 control-label area-modal-label">{{'areas.area_upload_modal_x_field' | i18n}}</label>
+		    			<div class="col-md-7 no-padding" ng-class="{'has-error': (uploadAreaForm.xField.$dirty || uploadAreaForm.xField.$touched || uploaded) && uploadAreaForm.xField.$error.required}">
+		    				<input type="text" class="form-control" ng-model="xField" name="xField" ng-required="format === 'csv' && containsFirstRow">
+		    			</div>
+		    		</div>
+		    	</div>
+		    	<div class="col-md-2"></div>
+	    		<div class="col-md-5">
+		    		<div class="form-group">
+		    			<label class="col-md-5 control-label area-modal-label">{{'areas.area_upload_modal_y_field' | i18n}}</label>
+		    			<div class="col-md-7 no-padding" ng-class="{'has-error': (uploadAreaForm.yField.$dirty || uploadAreaForm.yField.$touched || uploaded) && uploadAreaForm.yField.$error.required}">
+		    				<input type="text" class="form-control" ng-model="yField" name="yField" ng-required="format === 'csv' && containsFirstRow">
+		    			</div>
+		    		</div>
+		    	</div>
+	    	</div>
+	        <div class="row">
+	        	<div class="col-md-12 input-group">
+	        		<span class="btn btn-primary btn-file input-group-addon">
+	    				{{'areas.area_upload_select_file_btn' | i18n}}
+	    				<input type="file" nv-file-select uploader="uploader" ng-click="setStatus()" multiple/>
+					</span>
+					<input type="text" class="form-control" ng-model="uploader.queue[0].file.name" readonly>
+					<span class="input-group-addon alert-loading" ng-show="isFileLoading && !fileCommitted">
+						<i class="fa fa-spinner fa-spin alert-loading"></i>
+					</span>				
+					<span class="input-group-addon alert-success" ng-show="!isFileLoading && fileReadingSuccess && fileCommitted">
+						<i class="fa fa-check alert-success"></i>
+					</span>
+					<span class="input-group-addon alert-danger" ng-show="!isFileLoading && !fileReadingSuccess && fileCommitted">
+						<i class="fa fa-times alert-danger"></i>
+					</span>
+	        	</div>
+	        </div>
+        </ng-form>
+    </div>
+    <!-- FOOTER -->
+    <div class="modal-footer">
+        <div class="row">
+        	<div class="col-md-12">
+        		<button class="btn btn-primary" type="button" ng-click="upload()" ng-class="{'disabled': !fileCommitted && fileReadingSuccess}">{{'areas.area_upload_modal_upload_btn' | i18n}}</button>
+        		<button class="btn btn-default" type="button" ng-click="cancel()">{{'common.cancel' | i18n}}</button>
+        	</div>
+        </div>
+    </div>
+</div>

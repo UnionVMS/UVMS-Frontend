@@ -24,11 +24,11 @@
 				<span class="fa fa-pencil-square-o"></span> &nbsp;
 				<span>{{'areas.edit_tool' | i18n}}</span>
 			</button>
-			<button type="button" class="btn btn-default" ng-click="toggleTool('coord')">
+			<button type="button" class="btn btn-default" ng-click="toggleTool('coord')" ng-class="{active: activeTool === 'coord'}">
 				<span class="fa fa-map-pin"></span> &nbsp;
 				<span>{{'areas.coord_tool' | i18n}}</span>
 			</button>
-			<button type="button" class="btn btn-default" ng-class="{active: activeTool === 'import'}" ng-click="toggleTool('import')">
+			<button type="button" class="btn btn-default" ng-click="activateImport()">
 				<span class="fa fa-upload"></span> &nbsp;
 				<span>{{'areas.import_tool' | i18n}}</span>
 			</button>
@@ -40,7 +40,7 @@
 			<div class="form-group text-center">
 				<span class="section-title">{{'areas.coord_tool' | i18n}}</span>
 				
-				<div class="proj-container form-inline">
+				<div class="proj-container form-inline" ng-show="srcProjections.length > 0">
 					<div class="col-md-3 proj-label">
 						<label for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
 					</div>
@@ -61,10 +61,10 @@
 				        <div class="tbody container-fluid">
 				        	<div class="tr row" ng-repeat="coord in displayedCoords">
 				        		<div class="td col-md-1 coord-idx">{{$index}}</div>
-					        	<div class="td col-md-4 coord-right-margin" ng-class="{'has-error': coordsForm.x_{{$index}}.$error.required && coordsForm.x_{{$index}}.$dirty}">
+					        	<div class="td col-md-4 coord-right-margin" ng-class="{'has-error': (coordsForm.x_{{$index}}.$error.required || coordsForm.x_{{$index}}.$invalid) && coordsForm.x_{{$index}}.$dirty}">
 					        		<input type="number" name="x_{{$index}}" class="form-control" ng-required="true" ng-model="coord[0]" />
 					        	</div>
-					        	<div class="td col-md-4" ng-class="{'has-error': coordsForm.y_{{$index}}.$error.required && coordsForm.y_{{$index}}.$dirty}">
+					        	<div class="td col-md-4" ng-class="{'has-error': (coordsForm.y_{{$index}}.$error.required || coordsForm.y_{{$index}}.$invalid) && coordsForm.y_{{$index}}.$dirty}">
 					        		<input type="number" name="y_{{$index}}" class="form-control" ng-required="true" ng-model="coord[1]" />
 					        	</div>
 					        	<div class="td col-md-2 delete-coord">
@@ -103,23 +103,23 @@
 				</div>
 				<div class="form-group" ng-class="{'has-error': (userAreaForm.userAreaDesc.$dirty || userAreaSubmitted) && userAreaForm.userAreaDesc.$error.required}">
 					<label for="userAreaDesc">{{'areas.user_area_description' | i18n }}</label>
-					<textarea class="form-control" rows="3" name="userAreaDesc" ng-required="true" ng-model="userArea.desc"></textarea>
+					<textarea class="form-control" rows="3" name="userAreaDesc" ng-model="userArea.desc"></textarea>
 				</div>
-				<!-- <div class="form-group datesGroup">
+				<div class="form-group datesGroup">
 					<label class="col-md-12 withoutPadding">{{'areas.user_area_validity_range' | i18n }}</label>
 					<div class="col-md-6 withoutPadding rightPadding">
 						<label for="userAreaFrom">{{'areas.user_area_valid_from' | i18n }}</label>
-						<datepicker-input time="true" model="userArea.validFrom" name="userAreaFrom" max-date="userArea.validTo" ng-change-callback="resetDateTimePicker" />
+						<datepicker-input time="true" model="userArea.startDate" name="userAreaFrom" max-date="userArea.endDate" ng-change-callback="resetDateTimePicker" />
 					</div>
 					<div class="col-md-6 withoutPadding leftPadding">
 						<label for="userAreaTo">{{'areas.user_area_valid_to' | i18n }}</label>
-						<datepicker-input time="true" model="userArea.validTo" name="userAreaTo" min-date="userArea.validFrom" ng-change-callback="resetDateTimePicker" />
+						<datepicker-input time="true" model="userArea.endDate" name="userAreaTo" min-date="userArea.startDate" ng-change-callback="resetDateTimePicker" />
 					</div>
 				</div>
 				<div>
 					<label for="userAreaType">{{'areas.user_area_type' | i18n }}</label>
-					<input type="text" class="form-control" name="userAreaType" ng-required="true" ng-model="userArea.type"/>
-				</div> -->
+					<input type="text" class="form-control" name="userAreaType" ng-model="userArea.subType"/>
+				</div>
 			</ng-form>
 		</div>
 	</div>
