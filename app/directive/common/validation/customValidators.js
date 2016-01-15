@@ -163,7 +163,7 @@ angular.module('unionvmsWeb').directive('course', function() {
                     value = value.replace(/,/g, ".");
                 }
 
-                return value >= 0 && value <= 360;
+                return value === undefined || value === '' || (value >= 0 && value <= 360);
             }
         }
     };
