@@ -47,6 +47,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
     var homeUrl = 'home';
 
     $urlRouterProvider.when('', homeUrl);
+    $urlRouterProvider.otherwise('/home');
 
     $stateProvider
         .state('uvmsLogin', {
