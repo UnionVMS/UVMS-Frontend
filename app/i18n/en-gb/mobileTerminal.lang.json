@@ -102,7 +102,7 @@
     "search_dnid_placeholder" : "DNID",
     "search_reportingStartDate_placeholder" : "Reporting start date",
     "search_reportingEndDate_placeholder" : "Reporting end date",
-    "search_selectVesselGroup_placeholder" : "Select vessel groups",
+    "search_selectVesselGroup_placeholder" : "Select asset groups",
     "search_zero_results_error" : "No mobile terminals matching your search criteria was found.",
     "set_active" : "Set {1} as active",
     "set_inactive" : "Set {1} as inactive",
