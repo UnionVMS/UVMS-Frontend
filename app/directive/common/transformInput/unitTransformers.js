@@ -105,7 +105,7 @@ app.filter('speed', ['unitScaleFactors', function(unitScaleFactors) {
 
 app.filter('length', ['unitScaleFactors', function(unitScaleFactors) {
     return function(value) {
-        return threeDecimals(value * unitScaleFactors.getDistanceUnit());
+        return threeDecimals(value * unitScaleFactors.getDistanceScaleFactor());
     };
 }]);
 

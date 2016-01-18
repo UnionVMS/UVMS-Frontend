@@ -25,6 +25,11 @@
                 </div>
                 <div class="col-md-6 textAlignRight">
                     <div class="actions">
+                        <div class="setStatusContainer">
+                            <button type="button" class="btn btn-default" ng-click="exportAssetToCsv()">
+                                {{'common.export_csv' | i18n}}
+                            </button>
+                        </div>
                         <div class="setStatusContainer" ng-hide="isCreateNewMode() || disableForm()">
                             <button type="button" class="btn btn-default" ng-show="vesselObj.active" ng-click="archiveVessel()">
                                 {{'common.archive' | i18n}}

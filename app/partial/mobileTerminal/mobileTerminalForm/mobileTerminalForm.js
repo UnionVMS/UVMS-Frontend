@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scope, locale, MobileTerminal, alertService, userService, mobileTerminalRestService, modalComment, MobileTerminalHistoryModal){
+angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scope, locale, MobileTerminal, alertService, userService, mobileTerminalRestService, modalComment, MobileTerminalHistoryModal, mobileTerminalCsvService){
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
@@ -281,6 +281,10 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     function archiveMobileTerminalError() {
         alertService.showErrorMessage(locale.getString('mobileTerminal.archive_message_on_error'));
     }
+
+    $scope.exportTerminalCSV = function() {
+        mobileTerminalCsvService.download($scope.currentMobileTerminal);
+    };
 
     //Open history modal
     $scope.onMobileTerminalHistoryClick = function(){
