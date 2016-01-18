@@ -164,7 +164,7 @@ angular.module('unionvmsWeb').directive('course', function() {
                 }
 
                 return value === undefined || value === '' || (value >= 0 && value <= 360);
-            }
+            };
         }
     };
 });

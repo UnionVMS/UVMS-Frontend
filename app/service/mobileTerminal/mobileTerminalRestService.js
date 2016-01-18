@@ -325,7 +325,7 @@ angular.module('unionvmsWeb')
                 }
 
                 // Initial recursive call for page 1
-                return inactivatePage(1);
+                inactivatePage(1);
                 return deferred.promise;
             },
             removeMobileTerminal : function(mobileTerminal, comment){
