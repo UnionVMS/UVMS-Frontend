@@ -51,7 +51,7 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     }
     
     //Admin level configs
-    SpatialConfig.prototype.forAdminConfigFromJson = function(data){
+    SpatialConfig.prototype.forAdminConfigFromJson = function(data, ports){
         var config = new SpatialConfig();
         
         config.systemSettings = data.systemSettings;
@@ -109,6 +109,61 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     		config.segmentStyle = undefined;
 		}
 
+        if(angular.isDefined(config.layerSettings)){
+	        var layerData = {};
+			if(angular.isDefined(config.layerSettings.portLayers) && !_.isEmpty(config.layerSettings.portLayers)){
+	    		var ports = [];
+	    		angular.forEach(config.layerSettings.portLayers, function(item) {
+	    			var port = {'serviceLayerId': item.serviceLayerId};
+		    		ports.push(port);
+		    	});
+	    		config.layerSettings.portLayers = [];
+	    		angular.copy(ports,config.layerSettings.portLayers);
+	    	}else{
+	    		config.layerSettings.portLayers = undefined;
+	    	}
+    	
+	    	if(angular.isDefined(config.layerSettings.areaLayers)){
+	    		
+	    		if(angular.isDefined(config.layerSettings.areaLayers.sysAreas) && !_.isEmpty(config.layerSettings.areaLayers.sysAreas)){
+		    		var sysareas = [];
+		    		angular.forEach(config.layerSettings.areaLayers.sysAreas, function(item) {
+		    			var area = {'serviceLayerId': item.serviceLayerId};
+		    			sysareas.push(area);
+			    	});
+		    		config.layerSettings.areaLayers.sysAreas = [];
+		    		angular.copy(sysareas,config.layerSettings.areaLayers.sysAreas);
+	    		}else{
+	    			config.layerSettings.areaLayers.sysAreas = undefined;
+	    		}
+	    	}
+	    	config.layerSettings.areaLayers.userAreas = undefined;
+	    	
+	    	if(angular.isDefined(config.layerSettings.additionalLayers) && !_.isEmpty(config.layerSettings.additionalLayers)){
+	    		var additionals = [];
+	    		angular.forEach(config.layerSettings.additionalLayers, function(item) {
+	    			var additional = {'serviceLayerId': item.serviceLayerId};
+	    			additionals.push(additional);
+		    	});
+	    		config.layerSettings.additionalLayers = [];
+	    		angular.copy(additionals,config.layerSettings.additionalLayers);
+	    	}else{
+    			config.layerSettings.additionalLayers = undefined;
+    		}
+	    	
+	    	if(angular.isDefined(config.layerSettings.baseLayers) && !_.isEmpty(config.layerSettings.baseLayers)){
+	    		var bases = [];
+	    		angular.forEach(config.layerSettings.baseLayers, function(item) {
+	    			var base = {'serviceLayerId': item.serviceLayerId};
+	    			bases.push(base);
+		    	});
+	    		config.layerSettings.baseLayers = [];
+	    		angular.copy(bases,config.layerSettings.baseLayers);
+	    	}else{
+    			config.layerSettings.baseLayers = undefined;
+    		}
+		}
+        
         return angular.toJson(config);  
     };
     
@@ -129,6 +184,10 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         
         if (angular.isDefined(data.visibilitySettings)){
             config.visibilitySettings = data.visibilitySettings;
+        }
+        
+        if (angular.isDefined(data.layerSettings)){
+            config.layerSettings = data.layerSettings;
         }
         
         return config;

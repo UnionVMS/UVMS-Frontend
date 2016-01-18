@@ -3,6 +3,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	$scope.isConfigVisible= false;
 	$scope.alert = spatialConfigAlertService;
 	$scope.loadedAllSettings = false;
+	$scope.isAdminConfig = false;
 	
 	$scope.toggleUserPreferences = function(){
 		$scope.isConfigVisible = !$scope.isConfigVisible;
@@ -37,9 +38,9 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		    newConfig = $scope.checkMapSettings(newConfig);
 		    newConfig = $scope.checkStylesSettings(newConfig);
 		    newConfig = $scope.checkVisibilitySettings(newConfig);
+		    newConfig = $scope.checkLayerSettings(newConfig);
 		    
 		    console.log(newConfig);
-		    
 		    newConfig = angular.toJson(newConfig);
 		    
 		    if (!angular.equals('{}', newConfig)){
@@ -192,6 +193,85 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
         
         return config;
     };
+    
+    $scope.checkLayerSettings = function(config){
+    	if (!_.isEqual($scope.configModel.layerSettings, $scope.configCopy.layerSettings)){
+    		config.layerSettings = {};
+    		if(angular.isDefined($scope.configModel.layerSettings.portLayers) && !_.isEmpty($scope.configModel.layerSettings.portLayers)){
+        		var ports = [];
+        		angular.forEach($scope.configModel.layerSettings.portLayers, function(item) {
+        			var port = {'serviceLayerId': item.serviceLayerId};
+    	    		ports.push(port);
+    	    	});
+        		config.layerSettings.portLayers = [];
+        		angular.copy(ports,config.layerSettings.portLayers);
+        	}else{
+    			config.layerSettings.portLayers = undefined;
+    		}
+        	
+        	if(angular.isDefined($scope.configModel.layerSettings.areaLayers)){
+        		config.layerSettings.areaLayers = {};
+        		if(angular.isDefined($scope.configModel.layerSettings.areaLayers.sysAreas) && !_.isEmpty($scope.configModel.layerSettings.areaLayers.sysAreas)){
+        			config.layerSettings.areaLayers.sysAreas = {};
+    	    		var sysareas = [];
+    	    		angular.forEach($scope.configModel.layerSettings.areaLayers.sysAreas, function(item) {
+    	    			var area = {'serviceLayerId': item.serviceLayerId};
+    	    			sysareas.push(area);
+    		    	});
+    	    		config.layerSettings.areaLayers.sysAreas = [];
+    	    		angular.copy(sysareas,config.layerSettings.areaLayers.sysAreas);
+        		}else{
+        			config.layerSettings.areaLayers.sysAreas = undefined;
+        		}
+        		
+        		if(angular.isDefined($scope.configModel.layerSettings.areaLayers.userAreas)){
+        			config.layerSettings.areaLayers.userAreas = {};
+        			if(!angular.isDefined($scope.configModel.layerSettings.areaLayers.userAreas.areas) || _.isEmpty($scope.configModel.layerSettings.areaLayers.userAreas.areas)){
+	    				config.layerSettings.areaLayers.userAreas = undefined;
+	    			}else{
+    		    		var areas = [];
+    		    		angular.forEach($scope.configModel.layerSettings.areaLayers.userAreas.areas, function(item) {
+    		    			var area = {'gid': item.serviceLayerId};
+    		    			areas.push(area);
+    			    	});
+    		    		config.layerSettings.areaLayers.userAreas.areas = [];
+    		    		angular.copy(areas,config.layerSettings.areaLayers.userAreas.areas);
+        			}
+        			if(angular.isDefined(config.layerSettings.areaLayers.userAreas)){
+        				config.layerSettings.areaLayers.userAreas.serviceLayerId = $scope.configModel.layerSettings.areaLayers.userAreas.serviceLayerId;
+        			}
+        		}
+        	}
+        	
+        	if(angular.isDefined($scope.configModel.layerSettings.additionalLayers) && !_.isEmpty($scope.configModel.layerSettings.additionalLayers)){
+        		var additionals = [];
+        		angular.forEach($scope.configModel.layerSettings.additionalLayers, function(item) {
+        			var additional = {'serviceLayerId': item.serviceLayerId};
+        			additionals.push(additional);
+    	    	});
+        		config.layerSettings.additionalLayers = [];
+        		angular.copy(additionals,config.layerSettings.additionalLayers);
+        	}else{
+    			config.layerSettings.additionalLayers = undefined;
+    		}
+        	
+        	if(angular.isDefined($scope.configModel.layerSettings.baseLayers) && !_.isEmpty($scope.configModel.layerSettings.baseLayers)){
+        		var bases = [];
+        		angular.forEach($scope.configModel.layerSettings.baseLayers, function(item) {
+        			var base = {'serviceLayerId': item.serviceLayerId};
+        			bases.push(base);
+    	    	});
+        		config.layerSettings.baseLayers = [];
+        		angular.copy(bases,config.layerSettings.baseLayers);
+        	}else{
+    			config.layerSettings.baseLayers = undefined;
+    		}
+        	
+        } else {
+            config.layerSettings = undefined;
+        }
+	    return config;
+	};
     
     $scope.sortArray = function(data){
         var temp = _.clone(data);

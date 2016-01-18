@@ -1,0 +1,22 @@
+<div class="row" ng-controller="AdditionalcartographyCtrl">
+<div ng-repeat="container in additionals.containers">
+		<div class="col-md-6 col-md-offset-3 container-element">
+	        <div class="column" ng-repeat="list in container.lists">
+	        	<h5>{{list.name}}</h5>
+	        	<div ng-if="!list.items || list.items.length === 0" class="noLayersMessage">
+					<span>There are no additional layers</span>
+				</div>
+			    <ul ng-if="list.items && list.items.length > 0" dnd-list="list.items" dnd-disable-if="true">
+			        <li ng-repeat="item in list.items"
+			            dnd-draggable="item"
+			            dnd-type="item.subType"
+			            dnd-effect-allowed="copy">
+			            <div class="handle">:::</div>
+						<div class="item">{{item.name}}</div>
+			        </li>
+			    </ul>
+	        </div>
+	        <div class="clearfix"></div>
+	    </div>
+	</div>
+</div>

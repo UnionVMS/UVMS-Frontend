@@ -50,6 +50,41 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
                     }
                 }
             });
+        },
+        getSysArea: function(){
+            return $resource('/spatial/rest/servicelayers/sysarea', {}, {
+                'get': {
+                    method: 'GET'
+                }
+            });
+        },
+        getUserArea: function(){
+            return $resource('/spatial/rest/servicelayers/userarea', {}, {
+                'get': {
+                    method: 'GET'
+                }
+            });
+        },
+        getBackground: function(){
+            return $resource('/spatial/rest/servicelayers/background', {}, {
+                'get': {
+                    method: 'GET'
+                }
+            });
+        },
+        getAdditionalCartography: function(){
+            return $resource('/spatial/rest/servicelayers/additional', {}, {
+                'get': {
+                    method: 'GET'
+                }
+            });
+        },
+        getPorts: function(){
+            return $resource('/spatial/rest/servicelayers/port', {}, {
+                'get': {
+                    method: 'GET'
+                }
+            });
         }
     };
 })
@@ -114,6 +149,61 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
                 console.error('Error reseting settings to defaults');
                 deferred.reject(error);
             });
+            return deferred.promise;
+        },
+        getSysArea: function(){
+        	var deferred = $q.defer();
+        	spatialConfigRestFactory.getSysArea().get(function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.log('Error getting system areas');
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        },
+        getUserArea: function(){
+        	var deferred = $q.defer();
+        	spatialConfigRestFactory.getUserArea().get(function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.log('Error getting user areas');
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        },
+        getBackground: function(){
+        	var deferred = $q.defer();
+        	spatialConfigRestFactory.getBackground().get(function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.log('Error getting background');
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        },
+        getAdditionalCartography: function(){
+        	var deferred = $q.defer();
+        	spatialConfigRestFactory.getAdditionalCartography().get(function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.log('Error getting additional cartography');
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        },
+        getPorts: function(){
+        	var deferred = $q.defer();
+        	spatialConfigRestFactory.getPorts().get(function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.log('Error getting ports');
+                deferred.reject(error);
+            });
+
             return deferred.promise;
         }
 	};

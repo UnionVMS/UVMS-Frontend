@@ -1,0 +1,122 @@
+<div class="col-md-12 collapsibleRow" ng-controller="LayersettingsCtrl">
+	<ng-form name="layersettingsForm">
+		<accordion close-others="oneAtATime">
+			<accordion-group is-open="status.isOpen">
+				<accordion-heading>
+					<div class="panel-title-link" ng-click="toggleOpen()">
+						{{'spatial.layer_settings' | i18n }}
+						<div class="accordionError" ng-show="submitedWithErrors && layersettingsForm.$error.hasError">
+							<div class="fa fa-exclamation-circle"></div>
+							{{'spatial.section_errors' | i18n }}
+						</div>
+						<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isOpen, 'glyphicon-chevron-right': !status.isOpen}"></i>
+					</div>
+				</accordion-heading>
+				<div class="row">
+					<div class="col-md-8 layerSettingChoices">
+						<div class="containerWithBottomPadding">
+							<div>
+								<div class="sectionMenu">
+									<ul class="horizontal pipeSeparator">
+										<li ng-repeat="menu in headerMenus" ng-click="selectMenu(menu.menu)" ng-class="{'active': selectedMenu === '{{menu.menu}}'}"><a>{{menu.title}}</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div ng-if="isMenuSelected('PORTS')" ng-include="'partial/spatial/configurations/layerSettings/ports/ports.html'"></div>
+						<div ng-if="isMenuSelected('AREAS')" ng-include="'partial/spatial/configurations/layerSettings/areas/areas.html'"></div>
+						<div ng-if="isMenuSelected('ADDITIONALCARTOGRAPHY')" ng-include="'partial/spatial/configurations/layerSettings/additionalcartography/additionalcartography.html'"></div>
+						<div ng-if="isMenuSelected('BACKGROUND')" ng-include="'partial/spatial/configurations/layerSettings/background/background.html'"></div>
+					</div>
+					<div class="col-md-4">
+						<div class="container-element layerSelection">
+					        <h3>Layer Tree</h3>
+					        <div class="column">
+					        	<h5>Ports</h5>
+								    <ul dnd-list="selectedPorts" dnd-allowed-types="['port']" dnd-drop="checkIfExists(item,selectedPorts,event)">
+								        <li ng-repeat="item in selectedPorts"
+								            dnd-draggable="item"
+								            dnd-type="item.subType"
+								            dnd-effect-allowed="move"
+								            dnd-dragstart="selectedPorts.splice($index, 1);"
+								            dnd-canceled="selectedPorts.splice($index, 1);">
+								            <div class="handle">:::</div>
+    										<div class="item">{{item.name}}</div>
+								        </li>
+								    </ul>
+					        </div>
+					        <div class="column">
+					        	<h5>Areas</h5>
+								    <ul dnd-list="selectedSysAreas"
+								     dnd-allowed-types="['sysarea','userarea']" 
+								     dnd-drop="checkIfExists(item,selectedSysAreas,'sysarea')"
+									 dnd-dragover="dragOverArea(type,'sysarea')">								        
+									 	<li ng-repeat="item in selectedSysAreas"
+								            dnd-draggable="item"
+								            dnd-type="item.subType"
+								            dnd-effect-allowed="move"
+								            dnd-dragstart="selectedSysAreas.splice($index, 1);"
+								            dnd-canceled="selectedSysAreas.splice($index, 1);"
+								            dnd-dragend="clearPlaceHolders()">
+								            <div class="handle">:::</div>
+    										<div class="item">{{item.name}}</div>
+								        </li>
+								        <li ng-if="!isAdminConfig" ng-show="isSysItemOverUser" class="dndPlaceholderAlternative"></li>
+								    </ul>
+								    <ul dnd-list="selectedUserAreas.areas"
+	 							     dnd-allowed-types="['sysarea','userarea']" 
+								     dnd-drop="checkIfExists(item,selectedUserAreas.areas,'userarea')"
+								     dnd-dragover="dragOverArea(type,'userarea')"
+								     ng-hide="isAdminConfig">
+								    	<li ng-show="isUserItemOverSys" class="dndPlaceholderAlternative"></li>
+								        <li ng-repeat="item in selectedUserAreas.areas"
+								            dnd-draggable="item"
+								            dnd-type="item.subType"
+								            dnd-effect-allowed="move"
+								            dnd-dragstart="selectedUserAreas.areas.splice($index, 1);"
+								            dnd-canceled="selectedUserAreas.areas.splice($index, 1);"
+								            dnd-dragend="clearPlaceHolders()">
+								            <div class="handle">:::</div>
+    										<div class="item">{{item.name}}</div>
+								        </li>
+								    </ul>
+					        </div>
+					        <div class="column">
+					        	<h5>Additional Cartographies</h5>
+								    <ul dnd-list="selectedAdditionals" dnd-allowed-types="['additional','others']" dnd-drop="checkIfExists(item,selectedAdditionals,event)">
+								        <li ng-repeat="item in selectedAdditionals"
+								            dnd-draggable="item"
+								            dnd-type="item.subType"
+								            dnd-effect-allowed="move"
+								            dnd-dragstart="selectedAdditionals.splice($index, 1);"
+								            dnd-canceled="selectedAdditionals.splice($index, 1);">
+								            <div class="handle">:::</div>
+    										<div class="item">{{item.name}}</div>
+								        </li>
+								    </ul>
+					        </div>
+					        <div class="column">
+					        	<h5>Backgrounds</h5>
+								    <ul dnd-list="selectedBases" dnd-allowed-types="['background','others']" dnd-drop="checkIfExists(item,selectedBases,event)">
+								        <li ng-repeat="item in selectedBases"
+								            dnd-draggable="item"
+								            dnd-type="item.subType"
+								            dnd-effect-allowed="move"
+								            dnd-dragstart="selectedBases.splice($index, 1);"
+								            dnd-canceled="selectedBases.splice($index, 1);">
+								            <div class="handle">:::</div>
+    										<div class="item">{{item.name}}</div>
+								        </li>
+								    </ul>
+					        </div>
+					        <div class="clearfix"></div>
+					    </div>
+					</div>
+				</div>
+				<div class="col-md-12 col-btn-no-padding" ng-show="isUserPreference">
+					<button class="btn btn-default pull-right" ng-click="reset()">{{'spatial.settings_reset_btn' | i18n}}</button>
+				</div>
+			</accordion-group>
+		</accordion>
+	</ng-form>
+</div>

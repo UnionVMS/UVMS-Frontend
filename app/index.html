@@ -67,7 +67,8 @@
     <script src="../bower_components/angular-google-chart/ng-google-chart.js"></script>
     <script src="../bower_components/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
     <script src="../bower_components/angular-messages/angular-messages.min.js"></script>
-    <!-- Add New Bower Component JS Above -->
+    <script src="../bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
+    <script src="assets/jspdf.min.js"></script>    <!-- Add New Bower Component JS Above -->
 
 
     <!-- Main App JS -->
@@ -366,10 +367,14 @@
 	<script src="partial/areas/areaManagementModal/areaManagementModal.js"></script>
 	<script src="partial/areas/uploadAreaModal/uploadAreaModal.js"></script>
     <script src="service/common/mobileTerminalCsvService.js"></script>
-    <script src="service/common/assetCsvService.js"></script>
-
-	<!-- Add New Component JS Above -->
-    <div ui-view name="unionvmsHeader"></div>
+    <script src="service/common/assetCsvService.js"></script>	<script src="partial/spatial/configurations/layerSettings/layerSettings.js"></script>
+	<script src="partial/spatial/configurations/layerSettings/ports/ports.js"></script>
+	<script src="partial/spatial/configurations/layerSettings/areas/areas.js"></script>
+	<script src="partial/spatial/configurations/layerSettings/additionalcartography/additionalcartography.js"></script>
+	<script src="partial/spatial/configurations/layerSettings/background/background.js"></script>
+	<!-- Add New Component JS Above --> 
+	
+	<div ui-view name="unionvmsHeader"></div>
 
     <div id="contentWrapper">
         <div id="content" loading-indicator="loadingPage" message="loadingPageMessage" ng-class="{'hiddenLoadingIndicator' : loadingPageIconHidden}">
