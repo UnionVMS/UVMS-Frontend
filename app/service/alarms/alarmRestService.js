@@ -29,9 +29,9 @@ angular.module('unionvmsWeb')
                     list : { method: 'POST'}
                 });
             },
-            ticket : function(){
-                return $resource('/rules/rest/tickets', {}, {
-                    update: {method: 'PUT'}
+            ticketStatus : function() {
+                return $resource('/rules/rest/tickets/status', {}, {
+                    update: { method: 'PUT' }
                 });
             },
             reprocessAlarms : function(){
@@ -155,7 +155,7 @@ angular.module('unionvmsWeb')
         ticket.setUpdatedBy(userService.getUserName());
 
         var deferred = $q.defer();
-        alarmRestFactory.ticket().update(ticket.DTO(), function(response) {
+        alarmRestFactory.ticketStatus().update(ticket.DTO(), function(response) {
             if(response.code !== 200){
                 deferred.reject("Invalid response status");
                 return;
