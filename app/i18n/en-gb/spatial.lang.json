@@ -163,6 +163,7 @@
 	"error_update_report": "It was not possible to update the report at this time. Please check your configurations and try again.",
 	"error_entry_not_found": "Report not found.",
 	"error_user_not_authorized": "User is unauthorized to perform this action. Contact your user administrator for more details.",
+	"USER_SCOPE_MISSING": "User profile has no scope configured, which is required for this operation.",
 	"area_selection_modal_title": "Area selection",
 	"area_selection_modal_system_tab": "System areas",
 	"area_selection_modal_user_tab": "User areas",
