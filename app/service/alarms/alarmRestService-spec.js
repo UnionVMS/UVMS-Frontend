@@ -24,7 +24,7 @@ describe('alarmRestService', function() {
                     },
                 }
             },
-            ticket: function() {
+            ticketStatus: function() {
                 return {
                     update: function(alarmDTO, callback) {
                         //Success if status is defined, 500 otherwize
