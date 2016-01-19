@@ -26,9 +26,8 @@
         </div>
 
         <div class="row nomargin">
-            <div class="col-md-2 smallerpadding searchcriteria" ng-class="{'has-error':advancedSearchForm.searchmmsi.$dirty && advancedSearchForm.searchmmsi.$invalid}">
-                <input type="text" name="searchmmsi" id="searchmmsi" placeholder="{{'vessel.advanced_search_placeholder_mmsi' | i18n}}" class="form-control" tabindex="6" ng-model="advancedSearchObject.MMSI" ng-model-options="{allowInvalid: true}" ng-change="resetSelectedVesselGroup()" ng-pattern="mmsiRegExp">
-                <input-validation-message types="pattern" input="advancedSearchForm.searchmmsi" custom-messages="{{mmsiValidationMessages}}"></input-validation-message >
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <input type="text" name="searchmmsi" id="searchmmsi" placeholder="{{'vessel.advanced_search_placeholder_mmsi' | i18n}}" class="form-control" tabindex="6" ng-model="advancedSearchObject.MMSI" ng-change="resetSelectedVesselGroup()">
             </div>
             <div class="col-md-2 smallerpadding searchcriteria">
                 <input type="text" id="searchhomeport" placeholder="{{'vessel.advanced_search_placeholder_homeport_name' | i18n}}" class="form-control" tabindex="7" ng-model="advancedSearchObject.HOMEPORT" ng-change="resetSelectedVesselGroup()">

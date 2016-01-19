@@ -20,15 +20,14 @@
 
             </div>
             <div class="row">
-               <div class="col-md-2" ng-class="{'has-error':advancedSearchForm.searchmmsi.$dirty && advancedSearchForm.searchmmsi.$invalid}">
-                    <input type="text" name="searchmmsi" id="searchmmsi" placeholder="{{'mobileTerminal.search_mmsi_placeholder' | i18n}}" class="form-control" tabindex="6" ng-model="advancedSearchObject.MMSI" ng-model-options="{allowInvalid: true}" ng-change="onSearchInputChange()" ng-pattern="mmsiRegExp">
-                    <input-validation-message types="pattern" input="advancedSearchForm.searchmmsi" custom-messages="{{mmsiValidationMessages}}"></input-validation-message >
+               <div class="col-md-2">
+                    <input type="text" name="searchmmsi" id="searchmmsi" placeholder="{{'mobileTerminal.search_mmsi_placeholder' | i18n}}" class="form-control" tabindex="6" ng-model="advancedSearchObject.MMSI" ng-change="onSearchInputChange()">
                 </div>
                 <div class="col-md-2">
-                    <input type="text" placeholder="{{'mobileTerminal.search_serialNumber_placeholder' | i18n}}"  class="form-control" tabindex="7" ng-model="advancedSearchObject.SERIAL_NUMBER"ng-change="onSearchInputChange()">
+                    <input type="text" placeholder="{{'mobileTerminal.search_serialNumber_placeholder' | i18n}}"  class="form-control" tabindex="7" ng-model="advancedSearchObject.SERIAL_NUMBER" ng-change="onSearchInputChange()">
                 </div>
                 <div class="col-md-2">
-                    <input type="text" placeholder="{{'mobileTerminal.search_dnid_placeholder' | i18n}}"  class="form-control" tabindex="8" ng-model="advancedSearchObject.DNID" ng-change="onSearchInputChange()">
+                    <input type="text" placeholder="{{'mobileTerminal.search_dnid_placeholder' | i18n}}" class="form-control" tabindex="8" ng-model="advancedSearchObject.DNID" ng-change="onSearchInputChange()">
                 </div>
                <div class="col-md-3">
                     <datepicker-input model="advancedSearchObject.REPORTING_START_DATE" placeholder="{{'mobileTerminal.search_reportingStartDate_placeholder' | i18n}}" ng-disabled="true" ></datepicker-input>
