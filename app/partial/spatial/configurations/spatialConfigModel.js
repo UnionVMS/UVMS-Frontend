@@ -76,8 +76,12 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     			angular.forEach(config.positionStyle.style, function(item){
     				positionProperties.style[item.propertyFrom + "-" + item.propertyTo] = item.color;
     			});
-    			
     			positionProperties.style["default"] = config.positionStyle.defaultColor;
+            }else if(["activity","type"].indexOf(positionProperties.attribute) !== -1){
+				for (i = 0; i < config.positionStyle.style.length; i++){
+					positionProperties.style[config.positionStyle.style[i].code] = config.positionStyle.style[i].color;
+                }
+				positionProperties.style["default"] = config.positionStyle.defaultColor;
     		}else{
 	            for (i = 0; i < config.positionStyle.style.length; i++){
 	            	positionProperties.style[config.positionStyle.style[i].code] = config.positionStyle.style[i].color;
@@ -97,8 +101,12 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     			angular.forEach(config.segmentStyle.style, function(item){
     				segmentProperties.style[item.propertyFrom + "-" + item.propertyTo] = item.color;
     			});
-    			
     			segmentProperties.style["default"] = config.segmentStyle.defaultColor;
+    		}else if(["segmentCategory"].indexOf(segmentProperties.attribute) !== -1){
+				for (i = 0; i < config.segmentStyle.style.length; i++){
+    				segmentProperties.style[config.segmentStyle.style[i].code] = config.segmentStyle.style[i].color;
+                }
+				segmentProperties.style["default"] = config.segmentStyle.defaultColor;
     		}else{
     			for (i = 0; i < config.segmentStyle.style.length; i++){
     				segmentProperties.style[config.segmentStyle.style[i].code] = config.segmentStyle.style[i].color;

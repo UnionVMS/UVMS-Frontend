@@ -157,7 +157,11 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,co
 				case "type":
 					$scope.positionPropertyList = [];
 					angular.forEach($scope.loadedPositionProperties.style, function(value,key){
-						setLoadedRule(value,key);
+						if(key === "default"){
+							$scope.configModel.positionStyle.defaultColor = value;
+						}else{
+							setLoadedRule(value,key);
+						}
 					});
 					$scope.configModel.positionStyle.attribute = $scope.loadedPositionProperties.attribute;
 					$scope.configModel.positionStyle.style = $scope.positionPropertyList;

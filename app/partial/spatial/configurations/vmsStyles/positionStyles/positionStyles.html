@@ -15,7 +15,7 @@
 			<div ng-if="configModel.positionStyle.attribute === 'countryCode'" ng-include="'partial/spatial/configurations/vmsStyles/generalStyles/countryStyles/countryStyles.html'" ng-init="lastComponentStyle = 'positions'" class="col-md-12"></div>
 			<div ng-repeat="item in configModel.positionStyle.style" ng-include="'partial/spatial/configurations/vmsStyles/generalStyles/ruleRow/ruleRow.html'" ng-if="configModel.positionStyle.attribute !== 'countryCode'" ng-init="lastComponentStyle = 'positions'"></div>
 		</div>
-		<div class="row defaultItem" ng-if="configModel.positionStyle.attribute && ['reportedSpeed','calculatedSpeed','reportedCourse'].indexOf(configModel.positionStyle.attribute) !== -1">
+		<div class="row defaultItem" ng-if="configModel.positionStyle.attribute && ['reportedSpeed','calculatedSpeed','reportedCourse','type','activity'].indexOf(configModel.positionStyle.attribute) !== -1">
 			<ng-form name="defaultForm" novalidate>
 				<div class="row col-md-12">
 					<div class="form-group col-md-3" ng-class="{'has-error': defaultForm.$error.hasError && defaultForm.defaultColor.$dirty}">

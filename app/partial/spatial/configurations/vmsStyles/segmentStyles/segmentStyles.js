@@ -143,7 +143,11 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope,con
 				case "segmentCategory":
 					$scope.segmentPropertyList = [];
 					angular.forEach($scope.loadedSegmentProperties.style, function(value,key){
-						setLoadedRule(value,key);
+						if(key === "default"){
+							$scope.configModel.segmentStyle.defaultColor = value;
+						}else{
+							setLoadedRule(value,key);
+						}
 					});
 					$scope.configModel.segmentStyle.attribute = $scope.loadedSegmentProperties.attribute;
 					$scope.configModel.segmentStyle.style = $scope.segmentPropertyList;

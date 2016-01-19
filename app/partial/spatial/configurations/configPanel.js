@@ -93,11 +93,16 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 						positionProperties.style["default"] = $scope.configModel.positionStyle.defaultColor;
 						break;
 					case "countryCode":
+						angular.forEach($scope.configModel.positionStyle.style, function(item){
+							positionProperties.style[item.code] = item.color;
+		                });
+						break;
 					case "activity":
 					case "type":
 						angular.forEach($scope.configModel.positionStyle.style, function(item){
 							positionProperties.style[item.code] = item.color;
 		                });
+						positionProperties.style["default"] = $scope.configModel.positionStyle.defaultColor;
 						break;
 					default:
 						break;
@@ -124,10 +129,15 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		                segmentProperties.style["default"] = $scope.configModel.segmentStyle.defaultColor;
 						break;
 					case "countryCode":
+						angular.forEach($scope.configModel.segmentStyle.style, function(item){
+		                    segmentProperties.style[item.code] = item.color;
+		                });
+						break;
 					case "segmentCategory":
 						angular.forEach($scope.configModel.segmentStyle.style, function(item){
 		                    segmentProperties.style[item.code] = item.color;
 		                });
+						segmentProperties.style["default"] = $scope.configModel.segmentStyle.defaultColor;
 						break;
 					default:
 						break;
