@@ -107,7 +107,6 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 					default:
 						break;
 				}
-                include = true;
                 config.stylesSettings.positions = positionProperties;
             }
 	    }
@@ -142,11 +141,13 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 					default:
 						break;
 				}
-                include = true;
                 config.stylesSettings.segments = segmentProperties;
             }
         }
 	    
+	    if(!_.isEqual(config.stylesSettings.positions,$scope.configCopy.stylesSettings.positions) || !_.isEqual(config.stylesSettings.segments,$scope.configCopy.stylesSettings.segments)){
+	    	include = true;
+	    }
 	    if (include === false){
 	        config.stylesSettings = undefined;
 	    }
@@ -205,7 +206,16 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
     };
     
     $scope.checkLayerSettings = function(config){
+    	
+    	$scope.removeHashKeys($scope.configModel.layerSettings.portLayers);
+    	$scope.removeHashKeys($scope.configModel.layerSettings.areaLayers.sysAreas);
+    	$scope.removeHashKeys($scope.configModel.layerSettings.areaLayers.userAreas);
+    	$scope.removeHashKeys($scope.configModel.layerSettings.additionalLayers);
+    	$scope.removeHashKeys($scope.configModel.layerSettings.baseLayers);
+    	
     	if (!_.isEqual($scope.configModel.layerSettings, $scope.configCopy.layerSettings)){
+    		$scope.configCopy.layerSettingsToSave = {};
+    		angular.copy($scope.configModel.layerSettings, $scope.configCopy.layerSettingsToSave);
     		config.layerSettings = {};
     		if(angular.isDefined($scope.configModel.layerSettings.portLayers) && !_.isEmpty($scope.configModel.layerSettings.portLayers)){
         		var ports = [];
@@ -296,8 +306,20 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
         var keys = _.keys(changes);
         
         for (var i = 0; i < keys.length; i++){
-            $scope.configCopy[keys[i]] = changes[keys[i]];
+        	if(keys[i] === 'layerSettings'){
+        		$scope.configCopy.layerSettings = {};
+        		angular.copy($scope.configCopy.layerSettingsToSave,$scope.configCopy.layerSettings);
+        		$scope.configCopy.layerSettingsToSave = undefined;
+        	}else{
+        		$scope.configCopy[keys[i]] = changes[keys[i]];
+        	}
         }
+    };
+    
+    $scope.removeHashKeys = function(arr){
+    	angular.forEach(arr, function(item) {
+    		delete item.$$hashKey;
+    	});
     };
     
 	var saveSuccess = function(response){
