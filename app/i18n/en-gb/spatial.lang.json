@@ -242,10 +242,12 @@
 	"general_configuration_bing_api_key": "Bing Maps Api Key",
 	"general_configuration_bing_key_tooltip": "Request Bing Maps Api key here",
 	"layer_settings": "Layer settings",
-	"tab_ports": "Ports",
-	"tab_areas": "Areas",
-	"tab_additionalcartography": "Additional cartography",
-	"tab_background": "Background",
+	"layer_settings_additional": "Additional Cartographies",
+	"layer_settings_base": "Backgrounds",
+	"layer_settings_area": "Areas",
+	"layer_settings_system_areas": "System areas",
+	"layer_settings_user_areas": "User areas",
+	"layer_settings_port": "Ports",
 	"segment_property": "Segment property",
 	"position_property": "Position property",
 	"property_from": "From",
@@ -269,4 +271,5 @@
 	"prop_to_max_error_message": "Course degree cannot exceed value 360",
 	"min_value_1_error_message": "Must be higher than 0",
 	"section_errors": "This section contains errors"
+	
 }

@@ -6,7 +6,7 @@ angular.module('unionvmsWeb').controller('AreaslayersCtrl',function($scope,spati
 				    "lists": [
 		              		{
 		                        "type": "sysarea",
-		                        "name": "System Areas",
+		                        "name": "spatial.layer_settings_system_areas",
 		                        "allowedTypes": [
 		                                         "sysarea"
 		                                       ],
@@ -19,7 +19,7 @@ angular.module('unionvmsWeb').controller('AreaslayersCtrl',function($scope,spati
 	 			    "lists": [
 	 	              		{
 	 	                        "type": "userarea",
-	 	                        "name": "User Areas",
+	 	                        "name": "spatial.layer_settings_user_areas",
 	 	                        "allowedTypes": [
 	 	                                         "userarea"
 	 	                                       ],

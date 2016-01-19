@@ -10,19 +10,19 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	        return [
 	            {
 	                'menu': 'PORTS',
-	                'title': locale.getString('spatial.tab_ports')
+	                'title': locale.getString('spatial.layer_settings_port')
 	            },
 	            {
 	                'menu': 'AREAS',
-	                'title': locale.getString('spatial.tab_areas')
+	                'title': locale.getString('spatial.layer_settings_area')
 	            },
 	            {
 	                'menu': 'ADDITIONALCARTOGRAPHY',
-	                'title': locale.getString('spatial.tab_additionalcartography')
+	                'title': locale.getString('spatial.layer_settings_additional')
 	            },
 	            {
 	                'menu': 'BACKGROUND',
-	                'title': locale.getString('spatial.tab_background')
+	                'title': locale.getString('spatial.layer_settings_base')
 	            }
 	        ];
 	    };

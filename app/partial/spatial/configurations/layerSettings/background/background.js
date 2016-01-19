@@ -6,7 +6,7 @@ angular.module('unionvmsWeb').controller('BackgroundCtrl',function($scope,spatia
 			    "lists": [
 	              		{
 	                        "type": "list",
-	                        "name": "Background",
+	                        "name": "spatial.layer_settings_base",
 	                        "allowedTypes": [
 	                                         "background",
 	                                         "others"

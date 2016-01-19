@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AdditionalcartographyCtrl',function($scope,spatialConfigRestService){
+angular.module('unionvmsWeb').controller('AdditionalcartographyCtrl',function($scope,spatialConfigRestService,locale){
 	$scope.additionals = {
             containers: [
 			{
@@ -6,7 +6,7 @@ angular.module('unionvmsWeb').controller('AdditionalcartographyCtrl',function($s
 			    "lists": [
 	              		{
 	                        "type": "list",
-	                        "name": "Additional cartography",
+	                        "name": "spatial.layer_settings_additional",
 	                        "allowedTypes": [
 	                                         "additional",
 	                                         "others"

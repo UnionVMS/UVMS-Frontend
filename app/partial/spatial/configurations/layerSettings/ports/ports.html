@@ -2,7 +2,7 @@
 	<div ng-repeat="container in ports.containers">
 		<div class="col-md-6 col-md-offset-3 container-element">
 	        <div class="column" ng-repeat="list in container.lists">
-	        	<h5>{{list.name}}</h5>
+	        	<h5>{{list.name | i18n}}</h5>
         		<div ng-if="!list.items || list.items.length === 0" class="noLayersMessage">
 					<span>There are no ports</span>
 				</div>

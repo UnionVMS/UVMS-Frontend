@@ -6,7 +6,7 @@ angular.module('unionvmsWeb').controller('PortsCtrl',function($scope,spatialConf
 			    "lists": [
 	              		{
 	                        "type": "list",
-	                        "name": "Ports",
+	                        "name": "spatial.layer_settings_port",
 	                        "allowedTypes": [
 	                                         "port"
 	                                       ],

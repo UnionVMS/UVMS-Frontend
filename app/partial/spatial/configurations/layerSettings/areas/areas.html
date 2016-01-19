@@ -3,7 +3,7 @@
 		<div class="col-md-4" ng-repeat="container in areas.containers">
 			<div class="container-element" ng-repeat="list in container.lists" ng-if="!(isAdminConfig && list.type==='userarea')">
 		        <div class="column" ng-class="{'sysAreaList': list.type==='sysarea','userAreaList': list.type==='userarea'}">
-		        	<h5>{{list.name}}</h5>
+		        	<h5>{{list.name | i18n}}</h5>
 		        	<div ng-if="!list.items || list.items.length === 0" class="noLayersMessage">
 						<span>There are no areas</span>
 					</div>

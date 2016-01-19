@@ -1,7 +1,7 @@
 angular.module('unionvmsWeb').factory('comboboxService', function($window) {
 	var cb = {};
 	var activeCombo;
-	var clickedInSameCombo = function() {
+	var clickedInSameCombo = function(event) {
 		var isClickedElementChildOfPopup = activeCombo.element.find(event.target).length > 0 ||
 		angular.element('#' + activeCombo.comboboxId).find(event.target).length > 0;
 
@@ -11,15 +11,14 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
 	};
 
 	var positionComboList = function() {
-    	if(activeCombo.isOpen){
-    		var buttonPosition = $(activeCombo.element).offset();
-    		buttonPosition.top += $(activeCombo.element).height();
-    		activeCombo.comboContainer = $('#' + activeCombo.comboboxId);
-    		$(activeCombo.comboContainer).css('top', buttonPosition.top);
-    		$(activeCombo.comboContainer).css('left', buttonPosition.left);
-    		setTimeout(function() {
-    				$(activeCombo.comboContainer).width($(activeCombo.element).width());
-    		}, 25);
+    	if(activeCombo && activeCombo.isOpen){
+	    		var buttonPosition = $(activeCombo.element).offset();
+	    		buttonPosition.top += $(activeCombo.element).height();
+	    		activeCombo.comboContainer = $('#' + activeCombo.comboboxId);
+	    		$(activeCombo.comboContainer).css('top', buttonPosition.top);
+	    		$(activeCombo.comboContainer).css('left', buttonPosition.left);
+    		
+				$(activeCombo.comboContainer).width($(activeCombo.element).width());
     		
     		var comboMenu = $('#' + activeCombo.comboboxId + '>.dropdown-menu');
     		var footerTop = $(window).height() - angular.element('footer')[0].offsetHeight;
@@ -38,6 +37,16 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
     		}
     	}
     };
+    
+    var closeCombo = function() {
+    	activeCombo.$apply(function(){
+        	activeCombo.isOpen = false;
+        });
+        activeCombo = undefined;
+		$($window).unbind('mousedown');
+		$('[uib-modal-window]').unbind('mousedown');
+		$($window).unbind('resize');
+    }
 	
 	cb.setActiveCombo = function(comboScope){
 		if(activeCombo && activeCombo !== comboScope){
@@ -45,45 +54,30 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
 		}
 		
 		if(!activeCombo){
-			$('[modal-window]').bind('click', function(event){
-            	if(activeCombo.isOpen) {
-	                if (clickedInSameCombo()){
+			$('[uib-modal-window]').bind('mousedown', function(event){
+            	if(activeCombo && activeCombo.isOpen) {
+	                if (clickedInSameCombo(event)){
 	                    return;
 	                }
-	
-	                activeCombo.$apply(function(){
-	                	activeCombo.isOpen = false;
-	                });
-	                activeCombo = undefined;
-	    			$($window).unbind('click');
-	    			$('[modal-window]').unbind('click');
-	        		$($window).unbind('resize');
+	                closeCombo();
             	}
             });
-			$($window).bind('click', function(event){
-            	if(activeCombo.isOpen) {
-	                if (clickedInSameCombo()){
+			$($window).bind('mousedown', function(event){
+            	if(activeCombo && activeCombo.isOpen) {
+	                if (clickedInSameCombo(event)){
 	                    return;
 	                }
-	
-	                activeCombo.$apply(function(){
-	                	activeCombo.isOpen = false;
-	                });
-	                activeCombo = undefined;
-	    			$($window).unbind('click');
-	    			$('[modal-window]').unbind('click');
-	        		$($window).unbind('resize');
+	                closeCombo();
             	}
             });
-    		$($window).bind('resize', positionComboList);
+    		$($window).bind('resize', closeCombo);
 		}else{
-	        if (clickedInSameCombo()){
+	        if (clickedInSameCombo(event)){
 	            return;
 	        }
 		}
 		
 		activeCombo = comboScope;
-		
 		positionComboList();
     };
 
