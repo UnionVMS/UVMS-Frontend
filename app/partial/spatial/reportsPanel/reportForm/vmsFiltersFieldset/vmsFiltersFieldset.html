@@ -40,17 +40,17 @@
 								<div class="form-group col-md-2">
 									<label class="vms-labels">
 										{{'spatial.reports_form_vms_min_speed' | i18n }}
-										<div class="unit-input">
-											<input class="form-control" ng-model="report.vmsFilters.positions.movMinSpeed" name="movMinSpeed" min="0" type="number">
+										<div class="unit-input" ng-class="{'has-error': reportForm.movMinSpeed.$error.minError}">
+											<input class="form-control" ng-model="report.vmsFilters.positions.movMinSpeed" name="movMinSpeed" type="number">
 											<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
 										</div>
 									</label>
 								</div>
-								<div class="form-group col-md-2" ng-class="{'has-error': reportForm.$error.movMxSpError}">
+								<div class="form-group col-md-2">
 									<label class="vms-labels">
 										{{'spatial.reports_form_vms_max_speed' | i18n }}
-										<div class="unit-input">
-											<input class="form-control" ng-model="report.vmsFilters.positions.movMaxSpeed" name="movMaxSpeed" min="0" type="number">
+										<div class="unit-input" ng-class="{'has-error': reportForm.movMaxSpeed.$error.minError || reportForm.movMaxSpeed.$error.maxError}">
+											<input class="form-control" ng-model="report.vmsFilters.positions.movMaxSpeed" name="movMaxSpeed" type="number">
 											<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
 										</div>
 									</label>
@@ -74,17 +74,17 @@
 								<div class="form-group col-md-2">
 									<label class="vms-labels">
 										{{'spatial.reports_form_vms_min_speed' | i18n }}
-										<div class="unit-input">
-											<input class="form-control" ng-model="report.vmsFilters.segments.segMinSpeed" name="segMinSpeed" min="0" type="number">
+										<div class="unit-input" ng-class="{'has-error': reportForm.segMinSpeed.$error.minError}">
+											<input class="form-control" ng-model="report.vmsFilters.segments.segMinSpeed" name="segMinSpeed" type="number">
 											<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
 										</div>
 									</label>
 								</div>
-								<div class="form-group col-md-2" ng-class="{'has-error': reportForm.$error.segMxSpError}">
+								<div class="form-group col-md-2">
 									<label class="vms-labels">
 										{{'spatial.reports_form_vms_max_speed' | i18n }}
-										<div class="unit-input">
-											<input class="form-control" ng-model="report.vmsFilters.segments.segMaxSpeed" name="segMaxSpeed" min="0" type="number">
+										<div class="unit-input" ng-class="{'has-error': reportForm.segMaxSpeed.$error.minError || reportForm.segMaxSpeed.$error.maxError}">
+											<input class="form-control" ng-model="report.vmsFilters.segments.segMaxSpeed" name="segMaxSpeed" type="number">
 											<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
 										</div>
 									</label>
@@ -98,17 +98,17 @@
 								<div class="form-group col-md-2">
 									<label class="vms-labels">
 										{{'spatial.reports_form_vms_min_duration' | i18n }}
-										<div class="unit-input">
-											<input class="form-control" ng-model="report.vmsFilters.segments.segMinDuration" name="segMinDuration" min="0" type="number">
+										<div class="unit-input" ng-class="{'has-error': reportForm.segMinDuration.$error.minError}">
+											<input class="form-control" ng-model="report.vmsFilters.segments.segMinDuration" name="segMinDuration" type="number">
 											<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
 										</div>
 									</label>
 								</div>
-								<div class="form-group col-md-2" ng-class="{'has-error': reportForm.$error.segMxDurError}">
+								<div class="form-group col-md-2">
 									<label class="vms-labels">
 										{{'spatial.reports_form_vms_max_duration' | i18n }}
-										<div class="unit-input">
-											<input class="form-control" ng-model="report.vmsFilters.segments.segMaxDuration" name="segMaxDuration" min="0" type="number">
+										<div class="unit-input" ng-class="{'has-error': reportForm.segMaxDuration.$error.minError || reportForm.segMaxDuration.$error.maxError}">
+											<input class="form-control" ng-model="report.vmsFilters.segments.segMaxDuration" name="segMaxDuration" type="number">
 											<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
 										</div>
 									</label>
@@ -126,17 +126,17 @@
 								<div class="form-group col-md-2">
 									<label class="vms-labels">
 										{{'spatial.reports_form_vms_min_duration' | i18n }}
-										<div class="unit-input">
-											<input class="form-control" ng-model="report.vmsFilters.tracks.trkMinTime" name="trkMinTime" min="0" type="number">
+										<div class="unit-input" ng-class="{'has-error': reportForm.trkMinTime.$error.minError}">
+											<input class="form-control" ng-model="report.vmsFilters.tracks.trkMinTime" name="trkMinTime" type="number">
 											<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
 										</div>
 									</label>
 								</div>
-								<div class="form-group col-md-2" ng-class="{'has-error': reportForm.$error.trkMxTimeError}">
+								<div class="form-group col-md-2">
 									<label class="vms-labels">
 										{{'spatial.reports_form_vms_max_duration' | i18n }}
-										<div class="unit-input">
-											<input class="form-control" ng-model="report.vmsFilters.tracks.trkMaxTime" name="trkMaxTime" min="0" type="number">
+										<div class="unit-input" ng-class="{'has-error': reportForm.trkMaxTime.$error.minError || reportForm.trkMaxTime.$error.maxError}">
+											<input class="form-control" ng-model="report.vmsFilters.tracks.trkMaxTime" name="trkMaxTime" type="number">
 											<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
 										</div>
 									</label>
@@ -147,17 +147,17 @@
 								<div class="form-group col-md-2">
 									<label class="vms-labels">
 										{{'spatial.reports_form_vms_min_duration' | i18n }}
-										<div class="unit-input">
-											<input class="form-control" ng-model="report.vmsFilters.tracks.trkMinDuration" name="trkMinDuration" min="0" type="number">
+										<div class="unit-input" ng-class="{'has-error': reportForm.trkMinDuration.$error.minError}">
+											<input class="form-control" ng-model="report.vmsFilters.tracks.trkMinDuration" name="trkMinDuration" type="number">
 											<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
 										</div>
 									</label>
 								</div>
-								<div class="form-group col-md-2" ng-class="{'has-error': reportForm.$error.trkMxDurError}">
+								<div class="form-group col-md-2">
 									<label class="vms-labels">
 										{{'spatial.reports_form_vms_max_duration' | i18n }}
-										<div class="unit-input">
-											<input class="form-control" ng-model="report.vmsFilters.tracks.trkMaxDuration" name="trkMaxDuration" min="0" type="number">
+										<div class="unit-input" ng-class="{'has-error': reportForm.trkMaxDuration.$error.minError || reportForm.trkMaxDuration.$error.maxError}">
+											<input class="form-control" ng-model="report.vmsFilters.tracks.trkMaxDuration" name="trkMaxDuration" type="number">
 											<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
 										</div>
 									</label>

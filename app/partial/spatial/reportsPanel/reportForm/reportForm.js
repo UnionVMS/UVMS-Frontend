@@ -72,53 +72,58 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         if ($scope.report.hasVmsFilter === true && $scope.report.hasPositionsFilter === true && angular.isDefined($scope.report.vmsFilters.positions)){
             min = $scope.report.vmsFilters.positions.movMinSpeed;
             max = $scope.report.vmsFilters.positions.movMaxSpeed;
-            if (angular.isDefined(min) && angular.isDefined(max) && min !== null && max != null && min >= max){
-                $scope.reportForm.$setValidity('movMxSpError', false);
-            } else {
-                $scope.reportForm.$setValidity('movMxSpError', true);
-            }
+            
+            validateRangeFieldGroup(min,max,'movMinSpeed','movMaxSpeed');
         }
 
         //Validate segments speed and duration ranges
         if ($scope.report.hasVmsFilter === true && $scope.report.hasSegmentsFilter === true && angular.isDefined($scope.report.vmsFilters.segments)){
             min = $scope.report.vmsFilters.segments.segMinSpeed;
             max = $scope.report.vmsFilters.segments.segMaxSpeed;
+            
+            validateRangeFieldGroup(min,max,'segMinSpeed','segMaxSpeed');
 
             minD = $scope.report.vmsFilters.segments.segMinDuration;
             maxD = $scope.report.vmsFilters.segments.segMaxDuration;
 
-            if (angular.isDefined(min) && angular.isDefined(max) && min !== null && max != null && min >= max){
-                $scope.reportForm.$setValidity('segMxSpError', false);
-            } else {
-                $scope.reportForm.$setValidity('segMxSpError', true);
-            }
-
-            if (angular.isDefined(minD) && angular.isDefined(maxD) && minD !== null && maxD != null && minD >= maxD){
-                $scope.reportForm.$setValidity('segMxDurError', false);
-            } else {
-                $scope.reportForm.$setValidity('segMxDurError', true);
-            }
+            validateRangeFieldGroup(minD,maxD,'segMinDuration','segMaxDuration');
         }
 
         //Validate tracks time at sea and duration ranges
         if ($scope.report.hasVmsFilter === true && $scope.report.hasTracksFilter === true && angular.isDefined($scope.report.vmsFilters.tracks)){
             min = $scope.report.vmsFilters.tracks.trkMinTime;
             max = $scope.report.vmsFilters.tracks.trkMaxTime;
+            
+            validateRangeFieldGroup(min,max,'trkMinTime','trkMaxTime');
 
             minD = $scope.report.vmsFilters.tracks.trkMinDuration;
             maxD = $scope.report.vmsFilters.tracks.trkMaxDuration;
-
-            if (angular.isDefined(min) && angular.isDefined(max) && min !== null && max != null && min >= max){
-                $scope.reportForm.$setValidity('trkMxTimeError', false);
-            } else {
-                $scope.reportForm.$setValidity('trkMxTimeError', true);
+            
+            validateRangeFieldGroup(minD,maxD,'trkMinDuration','trkMaxDuration');
+        }
+    };
+    
+    var validateRangeFieldGroup = function(min,max,fieldMin,fieldMax){
+        if (angular.isDefined(min) && angular.isDefined(max)){
+        	if(min<0){
+        		$scope.reportForm[fieldMin].$setValidity('minError', false);
+            }else{
+                $scope.reportForm[fieldMin].$setValidity('minError', true);
+        	}
+        	if(max<0){
+        		$scope.reportForm[fieldMax].$setValidity('minError', false);
+            }else{
+                $scope.reportForm[fieldMax].$setValidity('minError', true);
+        	}
+            if(angular.isDefined(min) && angular.isDefined(max) && min !== null && max != null && min > max){
+                $scope.reportForm[fieldMax].$setValidity('maxError', false);
+            }else{
+                $scope.reportForm[fieldMax].$setValidity('maxError', true);
             }
-
-            if (angular.isDefined(minD) && angular.isDefined(maxD) && minD !== null && maxD != null && minD >= maxD){
-                $scope.reportForm.$setValidity('trkMxDurError', false);
-            } else {
-                $scope.reportForm.$setValidity('trkMxDurError', true);
-            }
+        }else{
+        	$scope.reportForm[fieldMin].$setValidity('minError', true);
+        	$scope.reportForm[fieldMax].$setValidity('minError', true);
+        	$scope.reportForm[fieldMax].$setValidity('maxError', true);
         }
     };
 
