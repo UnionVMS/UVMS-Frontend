@@ -12,7 +12,7 @@
 						<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isOpen, 'glyphicon-chevron-right': !status.isOpen}"></i>
 					</div>
 				</accordion-heading>
-				<div class="row">
+				<div class="row" ng-class="{'layerUserConfig': !isAdminConfig}">
 					<div class="col-md-8 layerSettingChoices">
 						<div class="containerWithBottomPadding">
 							<div>
@@ -49,7 +49,7 @@
 					        	<h5>Areas</h5>
 								    <ul dnd-list="selectedSysAreas"
 								     dnd-allowed-types="['sysarea','userarea']" 
-								     dnd-drop="checkIfExists(item,selectedSysAreas,'sysarea')"
+								     dnd-drop="clearPlaceHolders();checkIfExists(item,selectedSysAreas,'sysarea');"
 									 dnd-dragover="dragOverArea(type,'sysarea')">								        
 									 	<li ng-repeat="item in selectedSysAreas"
 								            dnd-draggable="item"
@@ -61,14 +61,14 @@
 								            <div class="handle">:::</div>
     										<div class="item">{{item.name}}</div>
 								        </li>
-								        <li ng-if="!isAdminConfig" ng-show="isSysItemOverUser" class="dndPlaceholderAlternative"></li>
+								        <li ng-if="!isAdminConfig && isSysItemOverUser" ng-show="isSysItemOverUser" class="dndPlaceholderAlternative"></li>
 								    </ul>
 								    <ul dnd-list="selectedUserAreas.areas"
 	 							     dnd-allowed-types="['sysarea','userarea']" 
-								     dnd-drop="checkIfExists(item,selectedUserAreas.areas,'userarea')"
+								     dnd-drop="clearPlaceHolders();checkIfExists(item,selectedUserAreas.areas,'userarea');"
 								     dnd-dragover="dragOverArea(type,'userarea')"
 								     ng-hide="isAdminConfig">
-								    	<li ng-show="isUserItemOverSys" class="dndPlaceholderAlternative"></li>
+								    	<li ng-if="isUserItemOverSys" class="dndPlaceholderAlternative"></li>
 								        <li ng-repeat="item in selectedUserAreas.areas"
 								            dnd-draggable="item"
 								            dnd-type="item.subType"

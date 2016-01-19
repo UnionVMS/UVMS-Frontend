@@ -36,6 +36,7 @@
     		position: relative;
     		padding: 2px 8px;
     		border-bottom: 1px solid #ddd;
+    		background-color: #fff;
     		&:last-child {
     			border-bottom: 0;
     			border-radius: 0 0 4px 4px;
@@ -64,26 +65,21 @@
     }
     &.layerSelection {
 	    ul[dnd-list="selectedSysAreas"] {
+	    	padding-right: 10px;
 		    margin-bottom: 0;
-		    border-radius: 0;
+		    background-color: #87BDF3;
 		    > li {
-		    	background-color: #5FC0F7;
 		    	&:empty {
 	    			background-color: #ddd;
-	    		}
-	    		&:hover {
-	    			background-color: #fff;
 	    		}
 		    }
 	    }
 	    ul[dnd-list="selectedUserAreas.areas"] {
+	    	padding-right: 10px;
+	    	background-color: #6FC474;
 	    	> li {
-		    	background-color: #6C94D4;
 		    	&:empty {
 	    			background-color: #ddd;
-	    		}
-	    		&:hover {
-	    			background-color: #fff;
 	    		}
 	    	}
 	    }
@@ -116,21 +112,21 @@
     
     .sysAreaList {
     	h5 {
-    		background-color: #5FC0F7;
+    		background-color: #66ACF1;
     	}
     	h5,
     	ul {
-    		border-color: #5FC0F7;
+    		border-color: #66ACF1;
     	}
     }
     
     .userAreaList {
     	h5 {
-    		background-color: #6C94D4;
+    		background-color: #6FC474;
     	}
     	h5,
     	ul {
-    		border-color: #6C94D4;
+    		border-color: #6FC474;
     		&:empty {
 	    		border: 0;
 	    	}
@@ -138,11 +134,11 @@
     }
 }
 
-[ng-controller="ConfigurationreportingCtrl"] {
+.layerUserConfig {
 	.container-element.layerSelection ul[dnd-list="selectedSysAreas"] {
 		&,
-		li:last-child {
-	    	border-radius: 0 0 4px 4px;
+		> li:last-child {
+	    	border-radius: 0;
 	    }
 	}
 }

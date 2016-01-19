@@ -91,7 +91,18 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 		        	return undefined;
 		        }
 	        }
-    		currentList.push(item);
+    		
+    		if(item.subType === 'userarea'){
+    			var newList = [];
+    			newList.push(item);
+    			for(i = 0; i < currentList.length; i++) {
+    				newList.push(currentList[i]);
+    	        }
+    			angular.copy(newList,currentList);
+    		}else if(item.subType === 'sysarea'){
+    			currentList.push(item);
+    		}
+    		
     		return undefined;
     	}
     	return item;
