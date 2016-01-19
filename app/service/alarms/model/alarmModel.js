@@ -25,7 +25,7 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
         alarm.openDate = dto.openDate;
         alarm.updated = dto.updated;
         alarm.updatedBy = dto.updatedBy;
-        alarm.vesselGuid = dto.vesselGuid;
+        alarm.vesselGuid = dto.assetGuid;
         alarm.recipient = dto.recipient;
 
         //AlarmItem

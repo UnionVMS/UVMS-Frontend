@@ -6,7 +6,7 @@ describe('Alarm', function() {
         "openDate": "2015-10-23 08:40:56 +0200",
         "updated": "2015-10-23 08:40:56 +0200",
         "updatedBy": "CLOSING USER",
-        "vesselGuid": "ABCD1234",
+        "assetGuid": "ABCD1234",
         "recipient" : "FIN",
         "alarmItem": [
           {
@@ -68,7 +68,7 @@ describe('Alarm', function() {
         expect(alarm.openDate).toEqual(alarmData.openDate);
         expect(alarm.updated).toEqual(alarmData.updated);
         expect(alarm.updatedBy).toEqual(alarmData.updatedBy);
-        expect(alarm.vesselGuid).toEqual(alarmData.vesselGuid);
+        expect(alarm.vesselGuid).toEqual(alarmData.assetGuid);
         expect(alarm.recipient).toEqual(alarmData.recipient);
         expect(alarm.alarmItems.length).toEqual(alarmData.alarmItem.length);
 
