@@ -11,13 +11,13 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,co
 		var rangeData;
 		if($scope.loadedPositionProperties.attribute === "reportedSpeed"){
 			rangeData = key.split("-");
-			$scope.positionPropertyList.push({"id": $scope.positionRuleId, "propertyFrom": parseInt(rangeData[0]), "propertyTo": rangeData[1] ? parseInt(rangeData[1]) : undefined, "color": value});
+			$scope.positionPropertyList.push({"id": $scope.positionRuleId, "propertyFrom": parseFloat(rangeData[0]), "propertyTo": rangeData[1] ? parseFloat(rangeData[1]) : undefined, "color": value});
 		}else if($scope.loadedPositionProperties.attribute === "calculatedSpeed") {
 			rangeData = key.split("-");
-			$scope.positionPropertyList.push({"id": $scope.positionRuleId, "propertyFrom": parseInt(rangeData[0]), "propertyTo": rangeData[1] ? parseInt(rangeData[1]) : undefined, "color": value});
+			$scope.positionPropertyList.push({"id": $scope.positionRuleId, "propertyFrom": parseFloat(rangeData[0]), "propertyTo": rangeData[1] ? parseFloat(rangeData[1]) : undefined, "color": value});
 		}else if($scope.loadedPositionProperties.attribute === "reportedCourse") {
 			rangeData = key.split("-");
-			$scope.positionPropertyList.push({"id": $scope.positionRuleId, "propertyFrom": parseInt(rangeData[0]), "propertyTo": rangeData[1] ? parseInt(rangeData[1]) : undefined, "color": value});
+			$scope.positionPropertyList.push({"id": $scope.positionRuleId, "propertyFrom": parseFloat(rangeData[0]), "propertyTo": rangeData[1] ? parseFloat(rangeData[1]) : undefined, "color": value});
 		}else if($scope.loadedPositionProperties.attribute === "type") {
 			$scope.positionPropertyList.push({"id": $scope.positionRuleId, "code": key, "color": value});
 		}else if($scope.loadedPositionProperties.attribute === "activity") {

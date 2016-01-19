@@ -28,16 +28,17 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	var buildBingBasedNodes = function(src){
         baseLayerCounter += 1;
         
+        var layerTitle = locale.getString('spatial.layer_tree_' + src.title);
 	    var node = {
-	        title: locale.getString('spatial.layer_tree_' + src.title), //FIXME to adapt to new changes
+	        title: layerTitle,
 	        selected: baseLayerCounter === 1 ? true : false,
 	        extraClasses: 'layertree-basemap',
 	        data: {
 	            type: src.type,
 	            isBaseLayer: true,
-	            title: src.title, //FIXME to adapt to new changes
+	            title: layerTitle,
 	            layerGeoName: src.layerGeoName,
-	            apiKey: src.apiKey //TODO check this setting
+	            apiKey: src.apiKey
 	        }
 	    };
 	    
@@ -59,6 +60,16 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	        }
 	    }
 	    
+	    //CQL FILTERS
+	    if (src.title === 'Ports'){
+	        src.cql = "fishing_port = 'Y' OR landing_place = 'Y'";
+	    }
+	    
+	    if (!angular.isDefined(src.cql)){
+	        src.cql = null;
+	    }
+	    
+	    //Final node
 	    var node = {
 	        title: src.title,
 	        selected: selected,
@@ -75,7 +86,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	                'LAYERS': src.layerGeoName,
 	                'TILED': true,
 	                'STYLES': angular.isDefined(stylesForObject) === true ? stylesForObject[0] : '', 
-	                'cql_filter': src.title === 'Ports' ? "fishing_port = 'Y' OR landing_place = 'Y'" : null 
+	                'cql_filter': src.cql
 	            }
 	        }
 	    };
@@ -86,6 +97,29 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	    }
 	    
 	    return node;
+	};
+	
+	//User areas specific node
+	var buildUserAreasNode = function(src){
+	    var nodes = [];
+	    for (var i = 0; i < src.areas.length; i++){
+	        var newDef = {
+	                isBaseLayer: src.isBaseLayer,
+	                layerGeoName: src.layerGeoName,
+	                longCopyright: src.longCopyright,
+	                shortCopyright: src.shortCopyright,
+	                serverType: src.serverType,
+	                styles: src.styles,
+	                type: src.url,
+	                url: src.url,
+	                title: src.areas[i].name,
+	                cql: 'gid = ' + src.areas[i].gid
+	        };
+	        
+	        nodes.push(buildWmsNode(newDef));
+	    }
+	    
+	    return nodes;
 	};
 	
 	
@@ -147,99 +181,107 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	    return styleContext;
 	};
 	
+	var loopAndBuildNode = function(nodeFromServer){
+	    var nodeArray = [];
+	    for (var i = 0; i < nodeFromServer.length; i++){
+	        var def = nodeFromServer[i];
+	        switch(def.type){
+                case 'WMS':
+                    if (angular.isDefined(def.areas)){
+                        nodeArray = buildUserAreasNode(def);
+                    } else {
+                        nodeArray.push(buildWmsNode(def));
+                    }
+                    break;
+                case 'OSM':
+                    nodeArray.push(buildOsmBasedNodes(def));
+                    break;
+                case 'OSEA':
+                    nodeArray.push(buildOsmBasedNodes(def));
+                    break;
+                case 'BING':
+                    nodeArray.push(buildBingBasedNodes(def));
+                    break;
+            }
+	    }
+	    
+	    return nodeArray;
+	};
+	
 	TreeModel.prototype.fromConfig = function(config){
 	    var tree = [];
-	    
-	    var portNodes = [];
-	    var areaNodes = [];
-	    var userAreaNodes = [];
-	    var baseLayerNodes = [];
-	    var additionalNodes = [];
-	    for (var i = 0; i < config.length; i++){
-	        var def = config[i];
-	        var node;
-	        switch(def.type){
-	            case 'WMS':
-	                if (def.groupType === 'sysarea' && def.isBaseLayer === false){
-	                    node = buildWmsNode(def);
-	                    areaNodes.push(node);
-	                } else if (def.groupType === 'port' && def.isBaseLayer === false){
-	                    node = buildWmsNode(def);
-	                    portNodes.push(node);
-	                } else if (def.isBaseLayer === true){
-	                    baseLayerNodes.push(buildWmsNode(def));
-	                }
-	                //TODO add user defined areas
-	                break;
-	            case 'OSM':
-	                baseLayerNodes.push(buildOsmBasedNodes(def));
-	                break;
-	            case 'OSEA':
-	                additionalNodes.push(buildOsmBasedNodes(def));
-	                break;
-	            case 'BING':
-	                baseLayerNodes.push(buildBingBasedNodes(def));
-	                break;
-	        }
+
+	    //Ports
+	    if (angular.isDefined(config.port)){
+	        var portNodes = loopAndBuildNode(config.port);
+	        tree.push({
+              title: locale.getString('spatial.layer_tree_ports'),
+              folder: true,
+              expanded: false,
+              children: portNodes
+	        });
 	    }
 	    
-	    //Building port nodes
-	    if (portNodes.length > 0){
-	        var portFolder = {
-                title: locale.getString('spatial.layer_tree_ports'),
-                folder: true,
-                expanded: false,
-                children: portNodes
-	        };
-	        tree.push(portFolder);
-	    }
-	    
-	    //Building area nodes
-	    if (areaNodes.length > 0 || userAreaNodes.length > 0){
+	    //Areas
+	    if (angular.isDefined(config.systemAreas) || angular.isDefined(config.userAreas)){
 	        var areaFolder = {
                 title: locale.getString('spatial.layer_tree_areas'),
                 folder: true,
                 expanded: false,
                 children: []
-            };
+	        };
 	        
-	        if (areaNodes.length > 0){
+	        //User areas
+	        if (angular.isDefined(config.userAreas)){
+	            var userNodes = loopAndBuildNode([config.userAreas]);
+	            areaFolder.children.push({
+	                title: locale.getString('spatial.layer_tree_user_areas'),
+                    folder: true,
+                    expanded: false,
+                    children: userNodes
+	            });
+	        }
+	        
+	        //System areas
+	        if (angular.isDefined(config.systemAreas)){
+	            var sysNodes = loopAndBuildNode(config.systemAreas);
 	            areaFolder.children.push({
 	                title: locale.getString('spatial.layer_tree_system_areas'),
 	                folder: true,
 	                expanded: false,
-	                children: areaNodes
+	                children: sysNodes
 	            });
 	        }
 	        
-	        //TODO user defined areas
 	        tree.push(areaFolder);
 	    }
 	    
-	    //Building additional cartography nodes
-	    if (additionalNodes.length > 0){
-	        tree.push({
-	            title: locale.getString('spatial.layer_tree_additional_cartography'),
-	            folder: true,
-	            expanded: true,
-	            children: additionalNodes
-	        });
-	    }
+	    //Additional cartography
+	    if (angular.isDefined(config.additional)){
+	        var additionalNodes =  loopAndBuildNode(config.additional);
+            tree.push({
+                title: locale.getString('spatial.layer_tree_additional_cartography'),
+                folder: true,
+                expanded: true,
+                children: additionalNodes
+            });
+        }
 	    
-	    //Building baselayer nodes
-	    if (baseLayerNodes.length > 0){
-	        tree.push({
-	            title: locale.getString('spatial.layer_tree_background_layers'),
+   	    //Baselayers
+        if (angular.isDefined(config.baseLayers)){
+            var baseNodes = loopAndBuildNode(config.baseLayers);
+            tree.push({
+                title: locale.getString('spatial.layer_tree_background_layers'),
                 folder: true,
                 expanded: true,
                 unselectable: true,
                 hideCheckbox: true,
                 extraClasses: 'layertree-baselayer-node',
                 key: 'basemap',
-                children: baseLayerNodes
-	        });
-	    }
-	    
+                children: baseNodes
+            });
+        }
+
 	    baseLayerCounter = 0; 
 	    return tree;
 	};
@@ -265,16 +307,24 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	//Build parent folder node for vms layers
 	TreeModel.prototype.nodeFromData = function(data){
 	    var vectorNodes = [];
-	    vectorNodes.push(buildVectorNodes('positions', data.movements));
-	    vectorNodes.push(buildVectorNodes('segments', data.segments));
-	    var node = {
-	        title: locale.getString('spatial.layer_tree_vms'),
-	        folder: true,
-	        expanded: true,
-	        children: vectorNodes
-	    };
+
+	    if (data.movements.features.length > 0){
+	        vectorNodes.push(buildVectorNodes('positions', data.movements));
+	    }
+	    if (data.segments.features.length > 0){
+	        vectorNodes.push(buildVectorNodes('segments', data.segments));
+	    }
 	    
-	    return node;
+	    if (vectorNodes.length > 0){
+	        var node = {
+                title: locale.getString('spatial.layer_tree_vms'),
+                folder: true,
+                expanded: true,
+                children: vectorNodes
+            };
+            
+            return node;
+	    }
 	};
 	
 	return TreeModel;

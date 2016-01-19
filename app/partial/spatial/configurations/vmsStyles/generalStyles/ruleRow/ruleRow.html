@@ -2,10 +2,10 @@
 	<ng-form name="rowstylesForm{{item.id}}" novalidate>
 		<div class="row col-md-12" ng-if="componentStyle === 'segment' && ['distance','duration','speedOverGround','courseOverGround'].indexOf(configModel.segmentStyle.attribute) !== -1 || componentStyle === 'positions' && ['reportedSpeed','calculatedSpeed','reportedCourse'].indexOf(configModel.positionStyle.attribute) !== -1">
 			<div class="form-group col-md-2" ng-class="{'has-error': rowstylesForm{{item.id}}.propertyFrom.$error.hasError && $first && rowstylesForm{{item.id}}.propertyFrom.$dirty, 'degree-input' : componentStyle === 'segment' && configModel.segmentStyle.attribute === 'courseOverGround' || componentStyle === 'positions' && configModel.positionStyle.attribute === 'reportedCourse'}">
-				<input class="form-control" placeholder="{{'spatial.property_from' | i18n }}" ng-model="item.propertyFrom" name="propertyFrom" type="number" ng-change="validatePropertyFrom($first);" ng-disabled="!$first"/>
+				<input class="form-control cancel" placeholder="{{'spatial.property_from' | i18n }}" ng-model="item.propertyFrom" name="propertyFrom" type="number" step="0.00001" ng-change="validatePropertyFrom($first);" ng-disabled="!$first"/>
 			</div>
 			<div class="form-group col-md-2" ng-class="{'has-error': rowstylesForm{{item.id}}.propertyTo.$error.hasError && rowstylesForm{{item.id}}.propertyTo.$dirty, 'degree-input' : componentStyle === 'segment' && configModel.segmentStyle.attribute === 'courseOverGround' || componentStyle === 'positions' && configModel.positionStyle.attribute === 'reportedCourse'}">
-				<input class="form-control" placeholder="{{'spatial.property_to' | i18n }}" ng-model="item.propertyTo" name="propertyTo" type="number" ng-change="validatePropertyTo();updateNextRule();"/>
+				<input class="form-control cancel" placeholder="{{'spatial.property_to' | i18n }}" ng-model="item.propertyTo" name="propertyTo" type="number" step="0.00001" ng-change="validatePropertyTo();updateNextRule();"/>
 			</div>
 			<div class="form-group col-md-3" ng-class="{'has-error': rowstylesForm{{item.id}}.propertyColor.$error.hasError && rowstylesForm{{item.id}}.propertyColor.$dirty}">
 				<div class="colorPickerComponent">

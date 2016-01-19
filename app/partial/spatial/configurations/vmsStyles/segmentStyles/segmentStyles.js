@@ -9,16 +9,16 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope,con
 		var rangeData;
 		if($scope.loadedSegmentProperties.attribute === "distance") {
 			rangeData = key.split("-");
-			$scope.segmentPropertyList.push({"id": $scope.segmentRuleId, "propertyFrom": parseInt(rangeData[0]), "propertyTo": rangeData[1] ? parseInt(rangeData[1]) : undefined, "color": value});
+			$scope.segmentPropertyList.push({"id": $scope.segmentRuleId, "propertyFrom": parseFloat(rangeData[0]), "propertyTo": rangeData[1] ? parseFloat(rangeData[1]) : undefined, "color": value});
 		}else if($scope.loadedSegmentProperties.attribute === "duration") {
 			rangeData = key.split("-");
-			$scope.segmentPropertyList.push({"id": $scope.segmentRuleId, "propertyFrom": parseInt(rangeData[0]), "propertyTo": rangeData[1] ? parseInt(rangeData[1]) : undefined, "color": value});
+			$scope.segmentPropertyList.push({"id": $scope.segmentRuleId, "propertyFrom": parseFloat(rangeData[0]), "propertyTo": rangeData[1] ? parseFloat(rangeData[1]) : undefined, "color": value});
 		}else if($scope.loadedSegmentProperties.attribute === "speedOverGround"){
 			rangeData = key.split("-");
-			$scope.segmentPropertyList.push({"id": $scope.segmentRuleId, "propertyFrom": parseInt(rangeData[0]), "propertyTo": rangeData[1] ? parseInt(rangeData[1]) : undefined, "color": value});
+			$scope.segmentPropertyList.push({"id": $scope.segmentRuleId, "propertyFrom": parseFloat(rangeData[0]), "propertyTo": rangeData[1] ? parseFloat(rangeData[1]) : undefined, "color": value});
 		}else if($scope.loadedSegmentProperties.attribute === "courseOverGround") {
 			rangeData = key.split("-");
-			$scope.segmentPropertyList.push({"id": $scope.segmentRuleId, "propertyFrom": parseInt(rangeData[0]), "propertyTo": rangeData[1] ? parseInt(rangeData[1]) : undefined, "color": value});
+			$scope.segmentPropertyList.push({"id": $scope.segmentRuleId, "propertyFrom": parseFloat(rangeData[0]), "propertyTo": rangeData[1] ? parseFloat(rangeData[1]) : undefined, "color": value});
 		}else if($scope.loadedSegmentProperties.attribute === "segmentCategory") {
 			$scope.segmentPropertyList.push({"id": $scope.segmentRuleId, "code": key, "color": value});
 		}

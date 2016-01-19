@@ -4,6 +4,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
        id: undefined,
        isReportExecuting: false,
        hasError: false,
+       hasWarning: false,
        tabs: {
            map: true,
            vms: true
@@ -70,7 +71,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	//Get Spatial config Success callback
 	var getConfigSuccess = function(data){
 	    //Change map ol.View configuration
-	    if (mapService.getMapProjectionCode !== 'EPSG:' + data.map.projection.epsgCode){
+	    if (mapService.getMapProjectionCode() !== 'EPSG:' + data.map.projection.epsgCode){
 	        mapService.updateMapView(data.map.projection);
 	    }
 	    
@@ -157,10 +158,15 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             mapService.clearVectorLayers();
             
             //Add nodes to the tree and layers to the map
-            var vectorNodeSource = new TreeModel();
-            vectorNodeSource = vectorNodeSource.nodeFromData(data);
-            
-            $rootScope.$broadcast('addLayerTreeNode', vectorNodeSource);
+            if (rep.positions.length > 0 || rep.segments.length > 0){
+                var vectorNodeSource = new TreeModel();
+                vectorNodeSource = vectorNodeSource.nodeFromData(data);
+                
+                $rootScope.$broadcast('addLayerTreeNode', vectorNodeSource);
+            } else if (rep.positions.length === 0 && rep.segments.length === 0){
+                rep.hasWarning = true;
+                $timeout(function(){rep.hasWarning = false;}, 3000);
+            }
         }
         rep.isReportExecuting = false;
     };

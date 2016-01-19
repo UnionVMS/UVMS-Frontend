@@ -53,28 +53,56 @@ angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapServi
                 
                 var finalStyles = [];
                 var i;
-                if (styleDef.attribute === 'countryCode'){
-                    for (i = 0; i < keys.length; i++){
-                        if (styleDef.displayedCodes.indexOf(keys[i]) !== -1){
-                          finalStyles.push({
-                             title: keys[i].toUpperCase(),
-                             color: {"color" : styleDef.style[keys[i]]}
-                          }); 
-                      }
-                    }
-                } else {
-                    for (i = 0; i < styleDef.breaks.intervals.length; i++){
+                switch (styleDef.attribute) {
+                    case 'activity':
+                    case 'type':
+                        var defaultObj = {};
+                        for (i = 0; i < keys.length; i++){
+                            if (_.has(styleDef.style, keys[i])){
+                                var styleObj = {
+                                    title: keys[i] === 'default' ? locale.getString('spatial.legend_panel_all_other_values') : keys[i].toUpperCase(),
+                                    color: {"color" : styleDef.style[keys[i]]}
+                                };
+                                if (keys[i] === 'default'){
+                                    angular.copy(styleObj, defaultObj);
+                                } else {
+                                    finalStyles.push(styleObj);
+                                }
+                            }
+                        }
+                        //Add default color for all other values
+                        if (_.keys(defaultObj).length !== 0){
+                            finalStyles.push(defaultObj);
+                        }
+                        break;
+                    case 'countryCode':
+                        for (i = 0; i < keys.length; i++){
+                            if (styleDef.displayedCodes.indexOf(keys[i]) !== -1){
+                                finalStyles.push({
+                                    title: keys[i].toUpperCase(),
+                                    color: {"color" : styleDef.style[keys[i]]}
+                                }); 
+                            }
+                        }
+                        break;
+                    case 'reportedCourse':
+                    case 'calculatedSpeed':
+                    case 'reportedSpeed':
+                    case 'speedOverGround':
+                        for (i = 0; i < styleDef.breaks.intervals.length; i++){
+                            finalStyles.push({
+                                title: styleDef.breaks.intervals[i][0] + ' - ' + styleDef.breaks.intervals[i][1],
+                                color: {"color" : styleDef.style[styleDef.breaks.intervals[i][0] + '-' + styleDef.breaks.intervals[i][1]]}
+                            });
+                        }
+                        //Finally, add default color for all other values
                         finalStyles.push({
-                            title: styleDef.breaks.intervals[i][0] + ' - ' + styleDef.breaks.intervals[i][1],
-                            color: {"color" : styleDef.style[styleDef.breaks.intervals[i][0] + '-' + styleDef.breaks.intervals[i][1]]}
+                            title: locale.getString('spatial.legend_panel_all_other_values'),
+                            color: {"color" : styleDef.breaks.defaultColor}
                         });
-                    }
-                    
-                    //Finally, add default color for all other values
-                    finalStyles.push({
-                        title: locale.getString('spatial.legend_panel_all_other_values'),
-                        color: {"color" : styleDef.breaks.defaultColor}
-                    });
+                        break;
+                    default:
+                        break;
                 }
                 
                 return finalStyles;

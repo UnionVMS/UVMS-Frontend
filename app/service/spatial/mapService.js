@@ -332,8 +332,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             type: config.type,
             title: config.title,
             isBaseLayer: config.isBaseLayer,
+            //preload: Infinity,
             source: new ol.source.BingMaps({
-                key: config.apiKey, //TODO check setting the api key
+                key: config.apiKey,
                 imagerySet: config.layerGeoName,
                 maxZoom: 19
             })
@@ -540,6 +541,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         segments: undefined
     };
     
+    
+    var sortIntervals = function(a,b){
+        return (a[0] < b[0]) ? -1 : 1;
+    };
+    
     //Build breaks object for range classification on VMS data
     ms.calculateBreaks = function(type, style){
         var breaks = {
@@ -558,10 +564,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 }
             }
             if (tempBreak.length > 0){
-                var targetIdx = _.sortedIndex(breaks.intervals, tempBreak);
-                breaks.intervals.splice(targetIdx, 0, tempBreak);
+                breaks.intervals.push(tempBreak);
             }
         });
+        
+        //Sort intervals
+        if (breaks.intervals.length > 0){
+            breaks.intervals.sort(function(a,b){
+                return (a[0] < b[0]) ? -1 : 1;
+            });
+        }
         
         if (type === 'positions'){
             ms.styles.positions.breaks = breaks;
@@ -589,12 +601,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         }, src);
     };
     
-    //Color by speed
-    ms.getColorBySpeed = function(src, speed){
+    //Color by range field
+    ms.getColorByRange = function(src, value){
         var intervals = src.breaks.intervals;
         var color;
         for (var i = 0; i < intervals.length; i++){
-            if (speed >= intervals[i][0] && speed < intervals[i][1]){
+            if (value >= intervals[i][0] && value < intervals[i][1]){
                 color = src.style[intervals[i][0] + '-' + intervals[i][1]];
                 break;
             }
@@ -607,17 +619,39 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         }
     };
     
-    //TODO other coloring schemes
+    //Color by MovementType, ActivityType, SegmentCategory
+    ms.getColorByStaticFields = function(src, type){
+        if (type === ''){
+            return src.style['default'];
+        } else {
+            return src.style[type];
+        }
+    };
     
     //Styles methods for positions
     ms.setPositionStylesObj = function(styles){
         ms.styles.positions = styles;
+        
+        var rangeFields = ['reportedSpeed', 'reportedCourse', 'calculatedSpeed'];
+        if (_.indexOf(rangeFields, ms.styles.positions.attribute) !== -1){
+            ms.calculateBreaks('positions', ms.styles.positions.style);
+        }
     };
     
     ms.getColorForPosition = function(feature){
         switch (ms.styles.positions.attribute) {
             case 'countryCode':
                 return ms.getColorByFlagState(ms.styles.positions, feature.get('countryCode'));
+            case 'type':
+                return ms.getColorByStaticFields(ms.styles.positions, feature.get('movementType'));
+            case 'activity':
+                return ms.getColorByStaticFields(ms.styles.positions, feature.get('activityType'));
+            case 'reportedSpeed':
+                return ms.getColorByRange(ms.styles.positions, feature.get('reportedSpeed'));
+            case 'reportedCourse':
+                return ms.getColorByRange(ms.styles.positions, feature.get('reportedCourse'));
+            case 'calculatedSpeed':
+                return ms.getColorByRange(ms.styles.positions, feature.get('calculatedSpeed'));
             default:
                 return '#0066FF'; //default color
         }
@@ -646,18 +680,37 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     ms.setSegmentStylesObj = function(styles){
         ms.styles.segments = styles;
         
-        if (ms.styles.segments.attribute === 'speedOverGround'){
+        var rangeFields = ['speedOverGround', 'distance'];
+        if (_.indexOf(rangeFields, ms.styles.segments.attribute) !== -1){
             ms.calculateBreaks('segments', ms.styles.segments.style);
         }
     };
     
     ms.getColorForSegment = function(feature){
         switch (ms.styles.segments.attribute) {
+            case 'countryCode':
+                return ms.getColorByFlagState(ms.styles.segments, feature.get('countryCode'));
+//            case 'type':
+//                return ms.getColorByStaticFields(ms.styles.segments, feature.get('movementType'));
+//            case 'activity':
+//                return ms.getColorByStaticFields(ms.styles.segments, feature.get('activityType'));
             case 'speedOverGround':
-                return ms.getColorBySpeed(ms.styles.segments, feature.get('speedOverGround'));
+                return ms.getColorByRange(ms.styles.segments, feature.get('speedOverGround'));
+            case 'distance':
+                return ms.getColorByRange(ms.styles.segments, feature.get('distance'));
+//            case 'calculatedSpeed':
+//                return ms.getColorByRange(ms.styles.segments, feature.get('calculatedSpeed'));
             default:
                 return '#0066FF'; //default color
         }
+//        switch (ms.styles.segments.attribute) {
+//            case 'countryCode':
+//                return ms.getColorByFlagState(ms.styles.segments, feature.get('countryCode'));
+//            case 'speedOverGround':
+//                return ms.getColorBySpeed(ms.styles.segments, feature.get('speedOverGround'));
+//            default:
+//                return '#0066FF'; //default color
+//        }
     };
     
 //    ms.calculateJenkinsIntervals = function(geoJson){

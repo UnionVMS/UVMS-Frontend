@@ -7,13 +7,12 @@
 			</legend>
 			
 			<div ng-show="report.hasVesselFilter">
-				<div class="row">
+				<!-- <div class="row">
 					<div class="form-group col-md-12 fieldsetMenu">
-						<!-- <a ng-class="{'menuActive': selectedVesselMenu === 'SELECTION'}" ng-click="toggleVesselMenuType('SELECTION')">{{'spatial.reports_form_current_selection' | i18n }}</a> &nbsp; -->
 						<a ng-class="{'menuActive': selectedVesselMenu === 'SIMPLE'}" ng-click="toggleVesselMenuType('SIMPLE')">{{'spatial.reports_form_simple_search' | i18n }}</a> &nbsp; 
 						<a ng-class="{'menuActive': selectedVesselMenu === 'ADVANCED'}" ng-click="toggleVesselMenuType('ADVANCED')">{{'spatial.reports_form_advanced_search' | i18n }}</a> 
 					</div>
-				</div>
+				</div> -->
 				
 				<div class="row fieldesetGroupMargin" ng-show="isVesselMenuVisible('SIMPLE')">
 					<div class="col-md-12 search-section">
@@ -148,11 +147,11 @@
 						</div>
 					</div>
 				</div>
-				<div class="row fieldesetGroupMargin" ng-show="isVesselMenuVisible('ADVANCED')">
+				<!-- <div class="row fieldesetGroupMargin" ng-show="isVesselMenuVisible('ADVANCED')">
 					<div class="form-group col-md-12">
 						<span>Advanced search will come here</span>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</fieldset>
 	</div>

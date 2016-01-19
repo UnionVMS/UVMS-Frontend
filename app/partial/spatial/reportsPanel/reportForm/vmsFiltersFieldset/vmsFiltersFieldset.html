@@ -6,12 +6,12 @@
 				<input class="checkbox-margin" type="checkbox" ng-model="report.hasVmsFilter" ng-checked="report.hasVmsFilter">
 			</legend>
 			<div ng-show="report.hasVmsFilter">
-				<div class="row">
+				<!-- <div class="row">
 					<div class="form-group col-md-12 fieldsetMenu">
 						<a ng-class="{'menuActive': selectedVmsMenu === 'SIMPLE'}" ng-click="toggleVmsMenuType('SIMPLE')">{{'spatial.reports_form_vms_filter_simple' | i18n }}</a> &nbsp; 
 						<a ng-class="{'menuActive': selectedVmsMenu === 'ADVANCED'}" ng-click="toggleVmsMenuType('ADVANCED')">{{'spatial.reports_form_vms_filter_advanced' | i18n }}</a> 
 					</div>
-				</div>
+				</div> -->
 			
 				<div class="row fieldesetGroupMargin">
 					<div class="form-group col-md-12" ng-show="isVmsMenuVisible('SIMPLE')">
@@ -166,9 +166,9 @@
 							</div>
 		  				</div>
 					</div>
-					<div class="form-group col-md-12" ng-show="isVmsMenuVisible('ADVANCED')">
+					<!-- <div class="form-group col-md-12" ng-show="isVmsMenuVisible('ADVANCED')">
 						<span>Advanced search will come here</span>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</fieldset>
