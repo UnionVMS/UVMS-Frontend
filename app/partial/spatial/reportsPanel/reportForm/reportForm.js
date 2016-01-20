@@ -73,7 +73,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             min = $scope.report.vmsFilters.positions.movMinSpeed;
             max = $scope.report.vmsFilters.positions.movMaxSpeed;
             
-            validateRangeFieldGroup(min,max,'movMinSpeed','movMaxSpeed');
+            validateRangeFieldGroup(min,max,'movMinSpeed','movMaxSpeed','positionSecForm');
         }
 
         //Validate segments speed and duration ranges
@@ -81,12 +81,12 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             min = $scope.report.vmsFilters.segments.segMinSpeed;
             max = $scope.report.vmsFilters.segments.segMaxSpeed;
             
-            validateRangeFieldGroup(min,max,'segMinSpeed','segMaxSpeed');
+            validateRangeFieldGroup(min,max,'segMinSpeed','segMaxSpeed','segmentSecForm');
 
             minD = $scope.report.vmsFilters.segments.segMinDuration;
             maxD = $scope.report.vmsFilters.segments.segMaxDuration;
 
-            validateRangeFieldGroup(minD,maxD,'segMinDuration','segMaxDuration');
+            validateRangeFieldGroup(minD,maxD,'segMinDuration','segMaxDuration','segmentSecForm');
         }
 
         //Validate tracks time at sea and duration ranges
@@ -94,30 +94,30 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             min = $scope.report.vmsFilters.tracks.trkMinTime;
             max = $scope.report.vmsFilters.tracks.trkMaxTime;
             
-            validateRangeFieldGroup(min,max,'trkMinTime','trkMaxTime');
+            validateRangeFieldGroup(min,max,'trkMinTime','trkMaxTime','trackSecForm');
 
             minD = $scope.report.vmsFilters.tracks.trkMinDuration;
             maxD = $scope.report.vmsFilters.tracks.trkMaxDuration;
             
-            validateRangeFieldGroup(minD,maxD,'trkMinDuration','trkMaxDuration');
+            validateRangeFieldGroup(minD,maxD,'trkMinDuration','trkMaxDuration','trackSecForm');
         }
     };
     
-    var validateRangeFieldGroup = function(min,max,fieldMin,fieldMax){
+    var validateRangeFieldGroup = function(min,max,fieldMin,fieldMax,subForm){
     	if(angular.isDefined(min) && min<0){
-    		$scope.reportForm[fieldMin].$setValidity('minError', false);
+    		$scope.reportForm[subForm][fieldMin].$setValidity('minError', false);
         }else{
-            $scope.reportForm[fieldMin].$setValidity('minError', true);
+            $scope.reportForm[subForm][fieldMin].$setValidity('minError', true);
     	}
     	if(angular.isDefined(max) && max<0){
-    		$scope.reportForm[fieldMax].$setValidity('minError', false);
+    		$scope.reportForm[subForm][fieldMax].$setValidity('minError', false);
         }else{
-            $scope.reportForm[fieldMax].$setValidity('minError', true);
+            $scope.reportForm[subForm][fieldMax].$setValidity('minError', true);
     	}
         if(angular.isDefined(min) && angular.isDefined(max) && min !== null && max != null && min > max){
-            $scope.reportForm[fieldMax].$setValidity('maxError', false);
+            $scope.reportForm[subForm][fieldMax].$setValidity('maxError', false);
         }else{
-            $scope.reportForm[fieldMax].$setValidity('maxError', true);
+            $scope.reportForm[subForm][fieldMax].$setValidity('maxError', true);
         }
     };
 

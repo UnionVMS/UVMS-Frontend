@@ -31,187 +31,202 @@
 							</label>
 		  				</div>
 		  				<!-- Section Positions -->
-		  				<div class="row" ng-show="report.hasPositionsFilter || !report">
-		  					<div class="noFormMargin">
-			  					<div class="col-md-12 reportFormSection">
-			  						<span class="col-md-6">{{'spatial.reports_form_vms_positions' | i18n }}</span>
-			  						<div class="col-md-6">
-										<div ng-messages="reportForm.movMinSpeed.$error" ng-show="reportForm.movMinSpeed.$invalid && submitingReport === true">
-											<div ng-message="minError">{{'spatial.reports_form_vms_mov_speed_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
-										</div>
-										<div ng-messages="reportForm.movMaxSpeed.$error" ng-show="reportForm.movMinSpeed.$valid && reportForm.movMaxSpeed.$invalid && submitingReport === true">
-											<div ng-message="minError">{{'spatial.reports_form_vms_mov_speed_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
-											<div ng-message="maxError">{{'spatial.reports_form_vms_mov_speed_range' | i18n | uppercase }} {{'spatial.max_error_message' | i18n }}</div>
-										</div>
-					  				</div>
-			  					</div>
-			  					<div class="form-group col-md-2">
-									<label class="centerLabel">{{'spatial.reports_form_vms_mov_speed_range' | i18n }}</label>
+		  				<ng-form name="positionSecForm">
+			  				<div class="row reportSubform" ng-show="report.hasPositionsFilter || !report">
+			  					<div class="noFormMargin">
+				  					<div class="col-md-12 reportFormSection">
+				  						<span class="col-md-6">{{'spatial.reports_form_vms_positions' | i18n }}</span>
+				  						<div class="col-md-6">
+				  							<div class="col-md-1 accordionError" ng-show="positionSecForm.$invalid && submitingReport === true">
+												<div class="fa fa-exclamation-circle"></div>
+											</div>
+											<div ng-messages="positionSecForm.movMinSpeed.$error" ng-show="positionSecForm.movMinSpeed.$invalid && submitingReport === true">
+												<div ng-message="minError">{{'spatial.reports_form_vms_mov_speed_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
+											</div>
+											<div ng-messages="positionSecForm.movMaxSpeed.$error" ng-show="positionSecForm.movMinSpeed.$valid && positionSecForm.movMaxSpeed.$invalid && submitingReport === true">
+												<div ng-message="minError">{{'spatial.reports_form_vms_mov_speed_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
+												<div ng-message="maxError">{{'spatial.reports_form_vms_mov_speed_range' | i18n | uppercase }} {{'spatial.max_error_message' | i18n }}</div>
+											</div>
+						  				</div>
+				  					</div>
+				  					<div class="form-group col-md-2">
+										<label class="centerLabel">{{'spatial.reports_form_vms_mov_speed_range' | i18n }}</label>
+									</div>
+									<div class="form-group col-md-2">
+										<label class="vms-labels">
+											{{'spatial.reports_form_vms_min_speed' | i18n }}
+											<div class="unit-input" ng-class="{'has-error': positionSecForm.movMinSpeed.$error.minError && submitingReport === true}">
+												<input class="form-control" ng-model="report.vmsFilters.positions.movMinSpeed" name="movMinSpeed" type="number">
+												<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
+											</div>
+										</label>
+									</div>
+									<div class="form-group col-md-2">
+										<label class="vms-labels">
+											{{'spatial.reports_form_vms_max_speed' | i18n }}
+											<div class="unit-input" ng-class="{'has-error': (positionSecForm.movMaxSpeed.$error.minError || positionSecForm.movMaxSpeed.$error.maxError) && submitingReport === true}">
+												<input class="form-control" ng-model="report.vmsFilters.positions.movMaxSpeed" name="movMaxSpeed" type="number">
+												<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
+											</div>
+										</label>
+									</div>
+									<div class="form-group col-md-3 field-noLabel">
+										<combobox ng-model="report.vmsFilters.positions.movType" initialtext="{{'spatial.reports_form_vms_mov_type' | i18n }}" items="movementTypes"></combobox>
+									</div>
+									<div class="form-group col-md-3 field-noLabel">
+										<combobox ng-model="report.vmsFilters.positions.movActivity" initialtext="{{'spatial.reports_form_vms_mov_activity' | i18n }}" items="activityTypes"></combobox>
+									</div>
+									<!-- <div class="col-md-12"><span class="vmsBottomSection"></span></div> -->
 								</div>
-								<div class="form-group col-md-2">
-									<label class="vms-labels">
-										{{'spatial.reports_form_vms_min_speed' | i18n }}
-										<div class="unit-input" ng-class="{'has-error': reportForm.movMinSpeed.$error.minError && submitingReport === true}">
-											<input class="form-control" ng-model="report.vmsFilters.positions.movMinSpeed" name="movMinSpeed" type="number">
-											<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
-										</div>
-									</label>
-								</div>
-								<div class="form-group col-md-2">
-									<label class="vms-labels">
-										{{'spatial.reports_form_vms_max_speed' | i18n }}
-										<div class="unit-input" ng-class="{'has-error': (reportForm.movMaxSpeed.$error.minError || reportForm.movMaxSpeed.$error.maxError) && submitingReport === true}">
-											<input class="form-control" ng-model="report.vmsFilters.positions.movMaxSpeed" name="movMaxSpeed" type="number">
-											<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
-										</div>
-									</label>
-								</div>
-								<div class="form-group col-md-3 field-noLabel">
-									<combobox ng-model="report.vmsFilters.positions.movType" initialtext="{{'spatial.reports_form_vms_mov_type' | i18n }}" items="movementTypes"></combobox>
-								</div>
-								<div class="form-group col-md-3 field-noLabel">
-									<combobox ng-model="report.vmsFilters.positions.movActivity" initialtext="{{'spatial.reports_form_vms_mov_activity' | i18n }}" items="activityTypes"></combobox>
-								</div>
-								<!-- <div class="col-md-12"><span class="vmsBottomSection"></span></div> -->
-							</div>
-		  				</div>
+			  				</div>
+		  				</ng-form>
 		  				<!-- Section Segments -->
-		  				<div class="row" ng-show="report.hasSegmentsFilter || !report">
-		  					<div class="noFormMargin">
-			  					<div class="col-md-12 reportFormSection">
-			  						<span class="col-md-6">{{'spatial.reports_form_vms_segments' | i18n }}</span>
-			  						<div class="col-md-6">
-										<div ng-messages="reportForm.segMinSpeed.$error" ng-show="reportForm.segMinSpeed.$invalid && submitingReport === true">
-											<div ng-message="minError">{{'spatial.reports_form_vms_seg_speed_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
-										</div>
-										<div ng-messages="reportForm.segMaxSpeed.$error" ng-show="reportForm.segMinSpeed.$valid && reportForm.segMaxSpeed.$invalid && submitingReport === true">
-											<div ng-message="minError">{{'spatial.reports_form_vms_seg_speed_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
-											<div ng-message="maxError">{{'spatial.reports_form_vms_seg_speed_range' | i18n | uppercase }} {{'spatial.max_error_message' | i18n }}</div>
-										</div>
-										<div ng-messages="reportForm.segMinDuration.$error" ng-show="reportForm.segMinSpeed.$valid && reportForm.segMaxSpeed.$valid && reportForm.segMinDuration.$invalid && submitingReport === true">
-											<div ng-message="minError">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
-										</div>
-										<div ng-messages="reportForm.segMaxDuration.$error" ng-show="reportForm.segMinSpeed.$valid && reportForm.segMaxSpeed.$valid && reportForm.segMinDuration.$valid && reportForm.segMaxDuration.$invalid && submitingReport === true">
-											<div ng-message="minError">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
-											<div ng-message="maxError">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.max_error_message' | i18n }}</div>
-										</div>
-					  				</div>
-			  					</div>
-			  					<div class="form-group col-md-2">
-									<label class="centerLabel">{{'spatial.reports_form_vms_seg_speed_range' | i18n }}</label>
+		  				<ng-form name="segmentSecForm">
+			  				<div class="row reportSubform" ng-show="report.hasSegmentsFilter || !report">
+			  					<div class="noFormMargin">
+				  					<div class="col-md-12 reportFormSection">
+				  						<span class="col-md-6">{{'spatial.reports_form_vms_segments' | i18n }}</span>
+				  						<div class="col-md-6">
+				  							<div class="col-md-1 accordionError" ng-show="segmentSecForm.$invalid && submitingReport === true">
+												<div class="fa fa-exclamation-circle"></div>
+											</div>
+											<div ng-messages="segmentSecForm.segMinSpeed.$error" ng-show="segmentSecForm.segMinSpeed.$invalid && submitingReport === true">
+												<div ng-message="minError">{{'spatial.reports_form_vms_seg_speed_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
+											</div>
+											<div ng-messages="segmentSecForm.segMaxSpeed.$error" ng-show="segmentSecForm.segMinSpeed.$valid && segmentSecForm.segMaxSpeed.$invalid && submitingReport === true">
+												<div ng-message="minError">{{'spatial.reports_form_vms_seg_speed_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
+												<div ng-message="maxError">{{'spatial.reports_form_vms_seg_speed_range' | i18n | uppercase }} {{'spatial.max_error_message' | i18n }}</div>
+											</div>
+											<div ng-messages="segmentSecForm.segMinDuration.$error" ng-show="segmentSecForm.segMinSpeed.$valid && segmentSecForm.segMaxSpeed.$valid && segmentSecForm.segMinDuration.$invalid && submitingReport === true">
+												<div ng-message="minError">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
+											</div>
+											<div ng-messages="segmentSecForm.segMaxDuration.$error" ng-show="segmentSecForm.segMinSpeed.$valid && segmentSecForm.segMaxSpeed.$valid && segmentSecForm.segMinDuration.$valid && segmentSecForm.segMaxDuration.$invalid && submitingReport === true">
+												<div ng-message="minError">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
+												<div ng-message="maxError">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.max_error_message' | i18n }}</div>
+											</div>
+						  				</div>
+				  					</div>
+				  					<div class="form-group col-md-2">
+										<label class="centerLabel">{{'spatial.reports_form_vms_seg_speed_range' | i18n }}</label>
+									</div>
+									<div class="form-group col-md-2">
+										<label class="vms-labels">
+											{{'spatial.reports_form_vms_min_speed' | i18n }}
+											<div class="unit-input" ng-class="{'has-error': segmentSecForm.segMinSpeed.$error.minError && submitingReport === true}">
+												<input class="form-control" ng-model="report.vmsFilters.segments.segMinSpeed" name="segMinSpeed" type="number">
+												<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
+											</div>
+										</label>
+									</div>
+									<div class="form-group col-md-2">
+										<label class="vms-labels">
+											{{'spatial.reports_form_vms_max_speed' | i18n }}
+											<div class="unit-input" ng-class="{'has-error': (segmentSecForm.segMaxSpeed.$error.minError || segmentSecForm.segMaxSpeed.$error.maxError) && submitingReport === true}">
+												<input class="form-control" ng-model="report.vmsFilters.segments.segMaxSpeed" name="segMaxSpeed" type="number">
+												<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
+											</div>
+										</label>
+									</div>
+									<div class="form-group col-md-6 field-noLabel">
+										<combobox ng-model="report.vmsFilters.segments.segCategory" initialtext="{{'spatial.reports_form_vms_category' | i18n }}" items="categoryTypes"></combobox>
+									</div>
+									<div class="form-group col-md-2">
+										<label class="centerLabel">{{'spatial.reports_form_vms_seg_duration_range' | i18n }}</label>
+									</div>
+									<div class="form-group col-md-2">
+										<label class="vms-labels">
+											{{'spatial.reports_form_vms_min_duration' | i18n }}
+											<div class="unit-input" ng-class="{'has-error': segmentSecForm.segMinDuration.$error.minError && submitingReport === true}">
+												<input class="form-control" ng-model="report.vmsFilters.segments.segMinDuration" name="segMinDuration" type="number">
+												<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
+											</div>
+										</label>
+									</div>
+									<div class="form-group col-md-2">
+										<label class="vms-labels">
+											{{'spatial.reports_form_vms_max_duration' | i18n }}
+											<div class="unit-input" ng-class="{'has-error': (segmentSecForm.segMaxDuration.$error.minError || segmentSecForm.segMaxDuration.$error.maxError) && submitingReport === true}">
+												<input class="form-control" ng-model="report.vmsFilters.segments.segMaxDuration" name="segMaxDuration" type="number">
+												<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
+											</div>
+										</label>
+									</div>
+									<!-- <div class="col-md-12"><span class="vmsBottomSection"></span></div> -->
 								</div>
-								<div class="form-group col-md-2">
-									<label class="vms-labels">
-										{{'spatial.reports_form_vms_min_speed' | i18n }}
-										<div class="unit-input" ng-class="{'has-error': reportForm.segMinSpeed.$error.minError && submitingReport === true}">
-											<input class="form-control" ng-model="report.vmsFilters.segments.segMinSpeed" name="segMinSpeed" type="number">
-											<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
-										</div>
-									</label>
-								</div>
-								<div class="form-group col-md-2">
-									<label class="vms-labels">
-										{{'spatial.reports_form_vms_max_speed' | i18n }}
-										<div class="unit-input" ng-class="{'has-error': (reportForm.segMaxSpeed.$error.minError || reportForm.segMaxSpeed.$error.maxError) && submitingReport === true}">
-											<input class="form-control" ng-model="report.vmsFilters.segments.segMaxSpeed" name="segMaxSpeed" type="number">
-											<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
-										</div>
-									</label>
-								</div>
-								<div class="form-group col-md-6 field-noLabel">
-									<combobox ng-model="report.vmsFilters.segments.segCategory" initialtext="{{'spatial.reports_form_vms_category' | i18n }}" items="categoryTypes"></combobox>
-								</div>
-								<div class="form-group col-md-2">
-									<label class="centerLabel">{{'spatial.reports_form_vms_seg_duration_range' | i18n }}</label>
-								</div>
-								<div class="form-group col-md-2">
-									<label class="vms-labels">
-										{{'spatial.reports_form_vms_min_duration' | i18n }}
-										<div class="unit-input" ng-class="{'has-error': reportForm.segMinDuration.$error.minError && submitingReport === true}">
-											<input class="form-control" ng-model="report.vmsFilters.segments.segMinDuration" name="segMinDuration" type="number">
-											<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
-										</div>
-									</label>
-								</div>
-								<div class="form-group col-md-2">
-									<label class="vms-labels">
-										{{'spatial.reports_form_vms_max_duration' | i18n }}
-										<div class="unit-input" ng-class="{'has-error': (reportForm.segMaxDuration.$error.minError || reportForm.segMaxDuration.$error.maxError) && submitingReport === true}">
-											<input class="form-control" ng-model="report.vmsFilters.segments.segMaxDuration" name="segMaxDuration" type="number">
-											<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
-										</div>
-									</label>
-								</div>
-								<!-- <div class="col-md-12"><span class="vmsBottomSection"></span></div> -->
-							</div>
-		  				</div>
+			  				</div>
+			  			</ng-form>
 		  				<!-- Section Tracks  -->
-		  				<div class="row" ng-show="report.hasTracksFilter || !report">
-		  					<div class="noFormMargin">
-			  					<div class="col-md-12 reportFormSection">
-			  						<span class="col-md-6">{{'spatial.reports_form_vms_tracks' | i18n }}</span>
-			  						<div class="col-md-6">
-										<div ng-messages="reportForm.trkMinTime.$error" ng-show="reportForm.trkMinTime.$invalid && submitingReport === true">
-											<div ng-message="minError">{{'spatial.reports_form_vms_tracks_time_at_sea' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
-										</div>
-										<div ng-messages="reportForm.trkMaxTime.$error" ng-show="reportForm.trkMinTime.$valid && reportForm.trkMaxTime.$invalid && submitingReport === true">
-											<div ng-message="minError">{{'spatial.reports_form_vms_tracks_time_at_sea' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
-											<div ng-message="maxError">{{'spatial.reports_form_vms_tracks_time_at_sea' | i18n | uppercase }} {{'spatial.max_error_message' | i18n }}</div>
-										</div>
-										<div ng-messages="reportForm.trkMinDuration.$error" ng-show="reportForm.trkMinTime.$valid && reportForm.trkMaxTime.$valid && reportForm.trkMinDuration.$invalid && submitingReport === true">
-											<div ng-message="minError">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
-										</div>
-										<div ng-messages="reportForm.trkMaxDuration.$error" ng-show="reportForm.trkMinTime.$valid && reportForm.trkMaxTime.$valid && reportForm.trkMinDuration.$valid && reportForm.trkMaxDuration.$invalid && submitingReport === true">
-											<div ng-message="minError">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
-											<div ng-message="maxError">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.max_error_message' | i18n }}</div>
-										</div>
-					  				</div>
-			  					</div>
-			  					<div class="form-group col-md-2">
-									<label class="centerLabel">{{'spatial.reports_form_vms_tracks_time_at_sea' | i18n }}</label>
+		  				<ng-form name="trackSecForm">
+			  				<div class="row reportSubform" ng-show="report.hasTracksFilter || !report">
+			  					<div class="noFormMargin">
+				  					<div class="col-md-12 reportFormSection">
+				  						<span class="col-md-6">{{'spatial.reports_form_vms_tracks' | i18n }}</span>
+				  						<div class="col-md-6">
+				  							<div class="col-md-1 accordionError" ng-show="trackSecForm.$invalid && submitingReport === true">
+												<div class="fa fa-exclamation-circle"></div>
+											</div>
+											<div ng-messages="trackSecForm.trkMinTime.$error" ng-show="trackSecForm.trkMinTime.$invalid && submitingReport === true">
+												<div ng-message="minError">{{'spatial.reports_form_vms_tracks_time_at_sea' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
+											</div>
+											<div ng-messages="trackSecForm.trkMaxTime.$error" ng-show="trackSecForm.trkMinTime.$valid && trackSecForm.trkMaxTime.$invalid && submitingReport === true">
+												<div ng-message="minError">{{'spatial.reports_form_vms_tracks_time_at_sea' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
+												<div ng-message="maxError">{{'spatial.reports_form_vms_tracks_time_at_sea' | i18n | uppercase }} {{'spatial.max_error_message' | i18n }}</div>
+											</div>
+											<div ng-messages="trackSecForm.trkMinDuration.$error" ng-show="trackSecForm.trkMinTime.$valid && trackSecForm.trkMaxTime.$valid && trackSecForm.trkMinDuration.$invalid && submitingReport === true">
+												<div ng-message="minError">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
+											</div>
+											<div ng-messages="trackSecForm.trkMaxDuration.$error" ng-show="trackSecForm.trkMinTime.$valid && trackSecForm.trkMaxTime.$valid && trackSecForm.trkMinDuration.$valid && trackSecForm.trkMaxDuration.$invalid && submitingReport === true">
+												<div ng-message="minError">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
+												<div ng-message="maxError">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.max_error_message' | i18n }}</div>
+											</div>
+						  				</div>
+				  					</div>
+				  					<div class="form-group col-md-2">
+										<label class="centerLabel">{{'spatial.reports_form_vms_tracks_time_at_sea' | i18n }}</label>
+									</div>
+									<div class="form-group col-md-2">
+										<label class="vms-labels">
+											{{'spatial.reports_form_vms_min_duration' | i18n }}
+											<div class="unit-input" ng-class="{'has-error': trackSecForm.trkMinTime.$error.minError && submitingReport === true}">
+												<input class="form-control" ng-model="report.vmsFilters.tracks.trkMinTime" name="trkMinTime" type="number">
+												<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
+											</div>
+										</label>
+									</div>
+									<div class="form-group col-md-2">
+										<label class="vms-labels">
+											{{'spatial.reports_form_vms_max_duration' | i18n }}
+											<div class="unit-input" ng-class="{'has-error': (trackSecForm.trkMaxTime.$error.minError || trackSecForm.trkMaxTime.$error.maxError) && submitingReport === true}">
+												<input class="form-control" ng-model="report.vmsFilters.tracks.trkMaxTime" name="trkMaxTime" type="number">
+												<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
+											</div>
+										</label>
+									</div>
+									<div class="form-group col-md-2">
+										<label class="centerLabel">{{'spatial.reports_form_vms_seg_duration_range' | i18n }}</label>
+									</div>
+									<div class="form-group col-md-2">
+										<label class="vms-labels">
+											{{'spatial.reports_form_vms_min_duration' | i18n }}
+											<div class="unit-input" ng-class="{'has-error': trackSecForm.trkMinDuration.$error.minError && submitingReport === true}">
+												<input class="form-control" ng-model="report.vmsFilters.tracks.trkMinDuration" name="trkMinDuration" type="number">
+												<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
+											</div>
+										</label>
+									</div>
+									<div class="form-group col-md-2">
+										<label class="vms-labels">
+											{{'spatial.reports_form_vms_max_duration' | i18n }}
+											<div class="unit-input" ng-class="{'has-error': (trackSecForm.trkMaxDuration.$error.minError || trackSecForm.trkMaxDuration.$error.maxError) && submitingReport === true}">
+												<input class="form-control" ng-model="report.vmsFilters.tracks.trkMaxDuration" name="trkMaxDuration" type="number">
+												<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
+											</div>
+										</label>
+									</div>
+									<!-- <div class="col-md-12"><span class="vmsBottomSection"></span></div> -->
 								</div>
-								<div class="form-group col-md-2">
-									<label class="vms-labels">
-										{{'spatial.reports_form_vms_min_duration' | i18n }}
-										<div class="unit-input" ng-class="{'has-error': reportForm.trkMinTime.$error.minError && submitingReport === true}">
-											<input class="form-control" ng-model="report.vmsFilters.tracks.trkMinTime" name="trkMinTime" type="number">
-											<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
-										</div>
-									</label>
-								</div>
-								<div class="form-group col-md-2">
-									<label class="vms-labels">
-										{{'spatial.reports_form_vms_max_duration' | i18n }}
-										<div class="unit-input" ng-class="{'has-error': (reportForm.trkMaxTime.$error.minError || reportForm.trkMaxTime.$error.maxError) && submitingReport === true}">
-											<input class="form-control" ng-model="report.vmsFilters.tracks.trkMaxTime" name="trkMaxTime" type="number">
-											<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
-										</div>
-									</label>
-								</div>
-								<div class="form-group col-md-2">
-									<label class="centerLabel">{{'spatial.reports_form_vms_seg_duration_range' | i18n }}</label>
-								</div>
-								<div class="form-group col-md-2">
-									<label class="vms-labels">
-										{{'spatial.reports_form_vms_min_duration' | i18n }}
-										<div class="unit-input" ng-class="{'has-error': reportForm.trkMinDuration.$error.minError && submitingReport === true}">
-											<input class="form-control" ng-model="report.vmsFilters.tracks.trkMinDuration" name="trkMinDuration" type="number">
-											<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
-										</div>
-									</label>
-								</div>
-								<div class="form-group col-md-2">
-									<label class="vms-labels">
-										{{'spatial.reports_form_vms_max_duration' | i18n }}
-										<div class="unit-input" ng-class="{'has-error': (reportForm.trkMaxDuration.$error.minError || reportForm.trkMaxDuration.$error.maxError) && submitingReport === true}">
-											<input class="form-control" ng-model="report.vmsFilters.tracks.trkMaxDuration" name="trkMaxDuration" type="number">
-											<div class="unit-box">{{'spatial.reports_form_vms_field_label_unit_hours' | i18n }}</div>
-										</div>
-									</label>
-								</div>
-								<!-- <div class="col-md-12"><span class="vmsBottomSection"></span></div> -->
-							</div>
-		  				</div>
+			  				</div>
+			  			</ng-form>
 					</div>
 					<!-- <div class="form-group col-md-12" ng-show="isVmsMenuVisible('ADVANCED')">
 						<span>Advanced search will come here</span>

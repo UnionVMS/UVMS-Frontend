@@ -12,23 +12,23 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
 
 	var positionComboList = function() {
     	if(activeCombo && activeCombo.isOpen){
-	    		var buttonPosition = $(activeCombo.element).offset();
-	    		buttonPosition.top += $(activeCombo.element).height();
-	    		activeCombo.comboContainer = $('#' + activeCombo.comboboxId);
-	    		$(activeCombo.comboContainer).css('top', buttonPosition.top);
-	    		$(activeCombo.comboContainer).css('left', buttonPosition.left);
-    		
-				$(activeCombo.comboContainer).width($(activeCombo.element).width());
+    		var buttonPosition = $(activeCombo.element).offset();
+    		buttonPosition.top += $(activeCombo.element).height();
+    		activeCombo.comboContainer = $('#' + activeCombo.comboboxId);
+    		$(activeCombo.comboContainer).css('top', buttonPosition.top);
+    		$(activeCombo.comboContainer).css('left', buttonPosition.left);
+		
+			$(activeCombo.comboContainer).width($(activeCombo.element).width());
     		
     		var comboMenu = $('#' + activeCombo.comboboxId + '>.dropdown-menu');
     		var footerTop = $(window).height() - angular.element('footer')[0].offsetHeight;
     		var bottomSpace = footerTop - buttonPosition.top;
     		var topSpace = $(activeCombo.element).offset().top;
     		
-    		if(parseInt(comboMenu.css('max-height')) > bottomSpace){
+    		if($(activeCombo.element).height() > bottomSpace){
     			if(topSpace > bottomSpace){
     				activeCombo.comboContainer.css('top', topSpace - comboMenu.height() - 15);
-    				if(topSpace < comboMenu.css('max-height')){
+    				if(topSpace < $(activeCombo.element).height()){
     					activeCombo.comboContainer.css('height', topSpace);
         			}
     			}else{
