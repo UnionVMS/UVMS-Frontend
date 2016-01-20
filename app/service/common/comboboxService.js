@@ -71,10 +71,6 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
             	}
             });
     		$($window).bind('resize', closeCombo);
-		}else{
-	        if (clickedInSameCombo(event)){
-	            return;
-	        }
 		}
 		
 		activeCombo = comboScope;
