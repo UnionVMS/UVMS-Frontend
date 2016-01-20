@@ -33,7 +33,7 @@
 					        <h3>Layer Tree</h3>
 					        <div class="column">
 					        	<h5>Ports</h5>
-								    <ul dnd-list="selectedPorts" dnd-allowed-types="['port']" dnd-drop="checkIfExists(item,selectedPorts,event)">
+								    <ul dnd-list="selectedPorts" dnd-allowed-types="['port', 'portarea']" dnd-drop="checkIfExists(item,selectedPorts,event)">
 								        <li ng-repeat="item in selectedPorts"
 								            dnd-draggable="item"
 								            dnd-type="item.subType"

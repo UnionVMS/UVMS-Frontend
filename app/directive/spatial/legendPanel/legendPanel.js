@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapService) {
+angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapService, unitConversionService) {
 	return {
 		restrict: 'EA',
 		replace: true,
@@ -26,6 +26,7 @@ angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapServi
 		    this.buildRecVmsPos = function(layer){
 		        var record = {
 		            title: layer.get('title'),
+		            subtitle: this.getSubtitle('positions'),
 		            type: 'vmspos',
 		            visibility: layer.get('visible'),
 		            styles: this.getStyles('positions')
@@ -38,12 +39,35 @@ angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapServi
 		    this.buildRecVmsSeg = function(layer){
 		        var record = {
 		            title: layer.get('title'),
+		            subtitle: this.getSubtitle('segments'),
 		            type: 'vmsseg',
 		            visibility: layer.get('visible'),
 		            styles: this.getStyles('segments')
 		        };
 		        
 		        return record;
+		    };
+		    
+		    this.getSubtitle = function(type){
+		        var srcDef = mapService.styles[type];
+		        var withSpeed = ['reportedSpeed', 'calculatedSpeed', 'speedOverGround'];
+		        var withCourse = ['reportedCourse', 'courseOverGround'];
+		        
+		        var subTitle = locale.getString('spatial.styles_attr_' + srcDef.attribute);
+		        if (_.indexOf(withSpeed, srcDef.attribute) !== -1){
+		            var srcUnit = unitConversionService.speed.getUnit();
+		            subTitle += ' (' + locale.getString('common.speed_unit_' + srcUnit) + ')';
+		        }
+		        
+		        if (_.indexOf(withCourse, srcDef.attribute) !== -1){
+                    subTitle += ' (' + String.fromCharCode(parseInt('00B0', 16)) + ')';
+                }
+		        
+		        if (srcDef.attribute === 'distance'){
+		            subTitle += ' (' + unitConversionService.distance.getUnit() + ')';
+		        }
+		        
+		        return subTitle;
 		    };
 		    
 		    //Get styles definition for both positions and segments as type
@@ -54,8 +78,9 @@ angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapServi
                 var finalStyles = [];
                 var i;
                 switch (styleDef.attribute) {
-                    case 'activity':
+                    case 'activity': //Positions
                     case 'type':
+                    case 'segmentCategory': //Segments
                         var defaultObj = {};
                         for (i = 0; i < keys.length; i++){
                             if (_.has(styleDef.style, keys[i])){
@@ -85,10 +110,12 @@ angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapServi
                             }
                         }
                         break;
-                    case 'reportedCourse':
+                    case 'reportedCourse': //Positions
                     case 'calculatedSpeed':
                     case 'reportedSpeed':
-                    case 'speedOverGround':
+                    case 'speedOverGround':  //Segments
+                    case 'distance':
+                    case 'courseOverGround':
                         for (i = 0; i < styleDef.breaks.intervals.length; i++){
                             finalStyles.push({
                                 title: styleDef.breaks.intervals[i][0] + ' - ' + styleDef.breaks.intervals[i][1],

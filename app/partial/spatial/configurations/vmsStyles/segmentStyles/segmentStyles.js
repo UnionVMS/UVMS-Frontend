@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope,configurationService){
-	$scope.segmentProperties = [{"text": "F.S.", "code": "countryCode"}, {"text": "Distance", "code": "distance"}, {"text": "Duration", "code": "duration"}, {"text": "Measured speed", "code": "speedOverGround"}, {"text": "Course", "code": "courseOverGround"}, {"text": "Category", "code": "segmentCategory"}];
+	$scope.segmentProperties = [{"text": "F.S.", "code": "countryCode"}, {"text": "Distance", "code": "distance"}, /*{"text": "Duration", "code": "duration"},*/ {"text": "Measured speed", "code": "speedOverGround"}, {"text": "Course", "code": "courseOverGround"}, {"text": "Category", "code": "segmentCategory"}];
 	$scope.segmentRuleId = 0;
 	$scope.categoryTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'CATEGORY_TYPE'), 'CATEGORY_TYPE', 'MOVEMENT');
 	

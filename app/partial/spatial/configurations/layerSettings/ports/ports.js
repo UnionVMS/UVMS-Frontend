@@ -8,7 +8,7 @@ angular.module('unionvmsWeb').controller('PortsCtrl',function($scope,spatialConf
 	                        "type": "list",
 	                        "name": "spatial.layer_settings_port",
 	                        "allowedTypes": [
-	                                         "port"
+	                                         "port", "portarea"
 	                                       ],
 	                        "items": undefined
 	                    }

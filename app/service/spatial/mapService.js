@@ -680,7 +680,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     ms.setSegmentStylesObj = function(styles){
         ms.styles.segments = styles;
         
-        var rangeFields = ['speedOverGround', 'distance'];
+        var rangeFields = ['speedOverGround', 'distance', 'courseOverGround'];
         if (_.indexOf(rangeFields, ms.styles.segments.attribute) !== -1){
             ms.calculateBreaks('segments', ms.styles.segments.style);
         }
@@ -690,27 +690,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         switch (ms.styles.segments.attribute) {
             case 'countryCode':
                 return ms.getColorByFlagState(ms.styles.segments, feature.get('countryCode'));
-//            case 'type':
-//                return ms.getColorByStaticFields(ms.styles.segments, feature.get('movementType'));
-//            case 'activity':
-//                return ms.getColorByStaticFields(ms.styles.segments, feature.get('activityType'));
+            case 'segmentCategory':
+                return ms.getColorByStaticFields(ms.styles.segments, feature.get('segmentCategory'));
             case 'speedOverGround':
                 return ms.getColorByRange(ms.styles.segments, feature.get('speedOverGround'));
             case 'distance':
                 return ms.getColorByRange(ms.styles.segments, feature.get('distance'));
-//            case 'calculatedSpeed':
-//                return ms.getColorByRange(ms.styles.segments, feature.get('calculatedSpeed'));
+            case 'courseOverGround':
+                return ms.getColorByRange(ms.styles.segments, feature.get('courseOverGround'));
             default:
                 return '#0066FF'; //default color
         }
-//        switch (ms.styles.segments.attribute) {
-//            case 'countryCode':
-//                return ms.getColorByFlagState(ms.styles.segments, feature.get('countryCode'));
-//            case 'speedOverGround':
-//                return ms.getColorBySpeed(ms.styles.segments, feature.get('speedOverGround'));
-//            default:
-//                return '#0066FF'; //default color
-//        }
     };
     
 //    ms.calculateJenkinsIntervals = function(geoJson){
