@@ -104,26 +104,20 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     };
     
     var validateRangeFieldGroup = function(min,max,fieldMin,fieldMax){
-        if (angular.isDefined(min) && angular.isDefined(max)){
-        	if(min<0){
-        		$scope.reportForm[fieldMin].$setValidity('minError', false);
-            }else{
-                $scope.reportForm[fieldMin].$setValidity('minError', true);
-        	}
-        	if(max<0){
-        		$scope.reportForm[fieldMax].$setValidity('minError', false);
-            }else{
-                $scope.reportForm[fieldMax].$setValidity('minError', true);
-        	}
-            if(angular.isDefined(min) && angular.isDefined(max) && min !== null && max != null && min > max){
-                $scope.reportForm[fieldMax].$setValidity('maxError', false);
-            }else{
-                $scope.reportForm[fieldMax].$setValidity('maxError', true);
-            }
+    	if(angular.isDefined(min) && min<0){
+    		$scope.reportForm[fieldMin].$setValidity('minError', false);
         }else{
-        	$scope.reportForm[fieldMin].$setValidity('minError', true);
-        	$scope.reportForm[fieldMax].$setValidity('minError', true);
-        	$scope.reportForm[fieldMax].$setValidity('maxError', true);
+            $scope.reportForm[fieldMin].$setValidity('minError', true);
+    	}
+    	if(angular.isDefined(max) && max<0){
+    		$scope.reportForm[fieldMax].$setValidity('minError', false);
+        }else{
+            $scope.reportForm[fieldMax].$setValidity('minError', true);
+    	}
+        if(angular.isDefined(min) && angular.isDefined(max) && min !== null && max != null && min > max){
+            $scope.reportForm[fieldMax].$setValidity('maxError', false);
+        }else{
+            $scope.reportForm[fieldMax].$setValidity('maxError', true);
         }
     };
 

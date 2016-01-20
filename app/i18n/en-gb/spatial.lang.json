@@ -266,12 +266,15 @@
 	"invalid_data_saving": "There are invalid fields in your configurations. Please check them and try again.",
 	
 	"required_error_message": "There are empty required fields",
+	"required_field_error_message": "This field is required",
 	"invalid_color_error_message": "Invalid color",
 	"prop_min_from_error_message": "Property 'From' cannot be negative",
 	"prop_to_error_message": "'To' must be higher than 'From'",
 	"prop_to_max_error_message": "Course degree cannot exceed value 360",
 	"min_value_1_error_message": "Must be higher than 0",
 	"section_errors": "This section contains errors",
+	"min_value_0_error_message": "Value must be higher than 1",
+	"max_error_message": "'Max' cannot be lower than 'Min'",	
 	
 	"styles_attr_countryCode": "F.S",
 	"styles_attr_type": "Msg. Type",

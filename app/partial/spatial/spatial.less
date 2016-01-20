@@ -199,7 +199,7 @@ div.td:extend(td all) {}
     }
 }
 
-.spatialConfig {
+.spatialModule {
 	div[ng-messages] {
 		line-height: 30px;
     	color: red;
@@ -243,5 +243,22 @@ div.td:extend(td all) {}
 		    font-weight: bold;
 		    cursor: default;
     	}
+	}
+	.innerErrorMessagesInputWithUpLabel,
+	.innerErrorMessagesDateWithUpLabel {
+		top: 0;
+	    position: absolute;
+	    line-height: 30px;
+	    color: red;
+	    margin-top: 20px;
+	    z-index: 2;
+	}
+	
+	.innerErrorMessagesInputWithUpLabel {
+		right: 25px;
+	}
+	
+	.innerErrorMessagesDateWithUpLabel {
+	    right: 55px;
 	}
 }
