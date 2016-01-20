@@ -1490,6 +1490,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         var repCoords = ol.proj.transform(coords, ms.getMapProjectionCode(), 'EPSG:4326');
         
         return {
+            name: data.name,
             countryCode: data.countryCode,
             externalMarking: data.externalMarking,
             ircs: data.ircs,
@@ -1511,6 +1512,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     ms.setSegmentsObjPopup = function(feature){
         var data = {
             titles: {
+                name: data.name,
                 vessel_tag: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
                 fs: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
                 extMark: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
