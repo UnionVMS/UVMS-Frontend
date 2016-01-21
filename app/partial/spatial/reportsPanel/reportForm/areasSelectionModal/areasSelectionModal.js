@@ -17,8 +17,15 @@ var resetLayerCqlFilter = function(opt_options){
                 return layer.get('type') !== 'osm';
             });
             
+            var cql = null;
+            if (layer.get('type') === 'USERAREA'){
+                var currentPams = layer.getSource().getParams();
+                var cqlComps = currentPams.cql_filter.split(' and');
+                cql = cqlComps[0];
+            }
+            
             layer.getSource().updateParams({
-                'cql_filter': null
+                'cql_filter': cql
             });
         }
     };
@@ -37,7 +44,7 @@ var resetLayerCqlFilter = function(opt_options){
     
 ol.inherits(resetLayerCqlFilter, ol.control.Control);
 
-angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($scope, $modalInstance, $timeout, locale, selectedAreas, spatialRestService, Area){
+angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($scope, $modalInstance, $timeout, locale, selectedAreas, spatialRestService, Area, userService){
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
     };
@@ -247,7 +254,8 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
                 params: {
                     'LAYERS': item.geoName,
                     'TILED': true,
-                    'STYLES': item.style
+                    'STYLES': item.style,
+                    'cql_filter': angular.isDefined(item.cql) ? item.cql : null 
                 }
             })
         });
@@ -357,8 +365,17 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
                return layer.get('type') === area.areaType; 
             });
             
-            layer.getSource().updateParams({
-                'cql_filter': "gid = " + parseInt(area.gid)
+            var cql = '';
+            var src = layer.getSource();
+            if (area.areaType === 'USERAREA'){
+                var currentParams = src.getParams();
+                var cqlComps = currentParams.cql_filter.split(' and')
+                cql = cqlComps[0] + ' and ';
+            }
+            cql += "gid = " + parseInt(area.gid);
+            
+            src.updateParams({
+                'cql_filter': cql
             });
         }
     };
@@ -477,6 +494,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     //Events
     $scope.$watch('userAreaType', function(){
         if (angular.isDefined($scope.userAreaType)){
+           $scope.userAreaType.cql = "user_name = '" + userService.getUserName() + "'";  
            $scope.addWms($scope.userAreaType);
         } //TODO maybe instead of removing the USER layer from the MAP on tab switch, we can do it here as else clause
     });
