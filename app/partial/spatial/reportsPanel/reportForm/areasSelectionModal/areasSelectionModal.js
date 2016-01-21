@@ -369,7 +369,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
             var src = layer.getSource();
             if (area.areaType === 'USERAREA'){
                 var currentParams = src.getParams();
-                var cqlComps = currentParams.cql_filter.split(' and')
+                var cqlComps = currentParams.cql_filter.split(' and');
                 cql = cqlComps[0] + ' and ';
             }
             cql += "gid = " + parseInt(area.gid);
