@@ -1511,8 +1511,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     //POPUP - Define the object that will be used in the popup for vms positions
     ms.setSegmentsObjPopup = function(feature){
         var data = {
-            titles: {
-                name: data.name,
+            titles: {             
                 vessel_tag: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
                 fs: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
                 extMark: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
@@ -1533,6 +1532,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     
     ms.formatSegmentDataForPopup = function(data){
         return {
+            name: data.name,
             countryCode: data.countryCode,
             externalMarking: data.externalMarking,
             ircs: data.ircs,
