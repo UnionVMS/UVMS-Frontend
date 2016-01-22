@@ -10,6 +10,11 @@ angular.module('unionvmsWeb')
                     update: {method: 'PUT'}
                 });
             },
+            archiveVessel: function() {
+                return $resource('/asset/rest/asset/archive', {}, {
+                    update: {method: 'PUT'}
+                });
+            },
             getVesselList : function(){
                 return $resource('/asset/rest/asset/list/',{},{
                     list : { method: 'POST'}
@@ -145,6 +150,22 @@ angular.module('unionvmsWeb')
         console.log(vessel);
         var deferred = $q.defer();
         vesselRestFactory.vessel().update(vessel.DTO(), function(response) {
+            if(response.code !== 200){
+                deferred.reject("Invalid response status");
+                return;
+            }
+            deferred.resolve(Vessel.fromJson(response.data));
+        }, function(error) {
+            console.error("Error updating vessel");
+            console.error(error);
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    };
+
+    var archiveVessel = function(vessel, comment){
+        var deferred = $q.defer();
+        vesselRestFactory.archiveVessel().update({ comment: comment }, vessel.DTO(), function(response) {
             if(response.code !== 200){
                 deferred.reject("Invalid response status");
                 return;
@@ -313,6 +334,7 @@ angular.module('unionvmsWeb')
         getVesselList: getVesselList,
         getAllMatchingVessels: getAllMatchingVessels,
         updateVessel: updateVessel,
+        archiveVessel: archiveVessel,
         createNewVessel: createNewVessel,
         getVessel: getVessel,
         getSearchableFields : getSearchableFields,

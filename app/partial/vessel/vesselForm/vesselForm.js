@@ -124,9 +124,10 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.archiveVessel = function(){
 
         var options = {
-            textLabel : locale.getString("vessel.archive_confirm_text")
+            textLabel : locale.getString("vessel.archive_confirm_text"),
+            commentsEnabled: true
         };
-        confirmationModal.open(function(){
+        confirmationModal.open(function(comment) {
             $scope.vesselObj = $scope.getOriginalVessel();
             //When you have just created a vessel the getOriginalVessel will return undefined
             if(angular.isUndefined($scope.vesselObj)){
@@ -134,7 +135,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             }
             //Set active to false, meaning archived
             $scope.vesselObj.active = false;
-            vesselRestService.updateVessel($scope.vesselObj).then(function(inactivatedVessel) {
+            vesselRestService.archiveVessel($scope.vesselObj, comment).then(function(inactivatedVessel) {
                 // Inactivate mobile terminals too
                 return mobileTerminalRestService.inactivateMobileTerminalsWithConnectId(inactivatedVessel.vesselId.guid);
             }).then(function() {
