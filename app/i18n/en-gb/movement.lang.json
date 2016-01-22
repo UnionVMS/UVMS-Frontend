@@ -75,7 +75,9 @@
 
 	"manual_position_field_label_flag_state": "F.S.",
 	"manual_position_field_label_ircs": "IRCS",
+	"manual_position_field_label_ircs_placeholder": "Search",
 	"manual_position_field_label_cfr": "CFR",
+	"manual_position_field_label_cfr_placeholder": "Search by CFR",
 	"manual_position_field_label_external_marking": "Ext. Marking",
 	"manual_position_field_label_name": "Name",
 	"manual_position_field_label_status": "Status",
