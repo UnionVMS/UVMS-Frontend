@@ -81,7 +81,7 @@
                             <button type="button" class="btn btn-default" ng-click="exportTerminalCSV()">
                                 {{'common.export_csv' | i18n}}
                             </button>
-                            <button type="button" class="btn btn-default" ng-click="archiveMobileTerminal()">
+                            <button ng-if="!currentMobileTerminal.archived" type="button" class="btn btn-default" ng-click="archiveMobileTerminal()">
                                 {{'common.archive' | i18n}}
                             </button>
                             <button type="button" class="btn btn-default" ng-show="currentMobileTerminal.active" ng-click="setStatusToInactive()">
