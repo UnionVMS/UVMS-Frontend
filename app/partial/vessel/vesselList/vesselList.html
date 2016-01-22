@@ -13,6 +13,8 @@
 
                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'ircs'">{{'vessel.table_header_signal' | i18n}}</th>
 
+                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'cfr'">{{'vessel.table_header_cfr' | i18n}}</th>
+
                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'gearType'">{{'vessel.table_header_gear_type' | i18n}}</th>
 
                 <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'licenseType'">{{'vessel.table_header_license_type' | i18n}}</th>
@@ -29,6 +31,7 @@
                 <td>{{item.externalMarking}}</td>
                 <td>{{item.name}}</td>
                 <td>{{item.ircs}}</td>
+                <td>{{item.cfr}}</td>
                 <td>{{item.gearType | vesselGearTypeTranslation}}</td>
                 <td>{{item.licenseType | vesselLicenseTypeTranslation}}</td>
                 <td>
