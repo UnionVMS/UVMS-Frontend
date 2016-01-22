@@ -11,6 +11,9 @@ angular.module('unionvmsWeb').factory('vesselValidationService',function() {
         },
         getMaxTwoDecimalsPattern : function(){
             return new RegExp(/^[0-9]+([,.][0-9]{0,2}?)?$/);
+        },
+        getIMOPattern: function() {
+            return new RegExp(/^[0-9]{7}$/);
         }
     };
 

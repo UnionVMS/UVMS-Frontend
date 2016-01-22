@@ -29,6 +29,7 @@ angular.module('unionvmsWeb')
         $scope.vesselGrossTonnageUnits = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','UNIT_TONNAGE'), 'TONNAGE','VESSEL', true);
 
         //Validation
+        $scope.imoReqExp = vesselValidationService.getIMOPattern();
         $scope.cfrRegExp = vesselValidationService.getCFRPattern();
         $scope.cfrValidationMessages = {
             'pattern' : locale.getString('vessel.vessel_details_cfr_pattern_validation_message')
