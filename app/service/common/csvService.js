@@ -9,7 +9,8 @@ angular.module('unionvmsWeb').factory('csvService',function($timeout, $document,
             var options = {
                 header : csvHeader,
                 fieldSep : FIELD_SEPERATOR, //field separator
-                decimalSep : 'locale' //format decimal according to locale settings
+                decimalSep : 'locale', //format decimal according to locale settings
+                addByteOrderMarker: true
             };
 
             CSV.stringify(csvData, options).then(function(csv){

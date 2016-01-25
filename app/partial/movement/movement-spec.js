@@ -186,9 +186,11 @@ describe('MovementCtrl', function() {
         expect(alertService.showInfoMessageWithTimeout).toHaveBeenCalledWith('no items selected');
     }));
 
-    it('should export as CSV with correct data', inject(function(csvService, Vessel) {
+    it('should export as CSV with correct data', inject(function(csvService, Vessel, unitScaleFactors) {
         var ctrl = createController();
         scope.selectedMovements = [m1, m2];
+
+        spyOn(unitScaleFactors, 'getSpeedScaleFactor').andReturn(1);
 
         function createVessel(suffix) {
             var vessel = new Vessel();
@@ -200,7 +202,7 @@ describe('MovementCtrl', function() {
         };
 
         function createMovement(suffix) {
-            return { status: '101', reportedSpeed: 10 + suffix, reportedCourse: 100 + suffix, reportedSpeedCourse: suffix, movemenType: suffix, source: suffix };
+            return { status: '101', reportedSpeed: 10 + suffix, reportedCourse: 100 + suffix, calculatedSpeed: suffix, movemenType: suffix, source: suffix, longitude: 11, latitude: 58 };
         };
 
         scope.selectedMovements = [1,2].map(function(suff) {
@@ -224,8 +226,8 @@ describe('MovementCtrl', function() {
         ];
 
         var expectedCsv = [
-            ['state1', 'ext1', 'ircs1', 'name1', undefined, undefined, undefined, '101', '11 fakeString', 'undefined fakeString', 1, undefined, ''],
-            ['state2', 'ext2', 'ircs2', 'name2', undefined, undefined, undefined, '101', '12 fakeString', 'undefined fakeString', 2, undefined, '']
+            ['state1', 'ext1', 'ircs1', 'name1', undefined, '58.000', '11.000', '101', '11.00 fakeString', '1.00 fakeString', '101°', undefined, ''],
+            ['state2', 'ext2', 'ircs2', 'name2', undefined, '58.000', '11.000', '101', '12.00 fakeString', '2.00 fakeString', '102°', undefined, '']
         ];
 
         spyOn(csvService, 'downloadCSVFile').andCallFake(function(data, header, name){

@@ -152,6 +152,11 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
             locale.getString('movement.table_header_source')
         ];
 
+        function getSpeed(speed) {
+            // Convert unit and truncate to 2 decimal places
+            return $filter('number')($filter('speed')(speed), 2) + ' ' + locale.getString('movement.movement_speed_unit');
+        }
+
         //Set the data columns
         var getData = function() {
             var exportItems;
@@ -171,12 +176,12 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
                         item.vessel? item.vessel.ircs : '',
                         item.vessel? item.vessel.name : '',
                         $filter('confDateFormat')(item.time),
-                        $filter('confCoordinateFormat')(item.movement.latitude),
-                        $filter('confCoordinateFormat')(item.movement.longitude),
+                        $filter('confCoordinateFormat')(item.movement.latitude).replace(/,/g, '.'), // Replace commas, or ngCsv will try to wrap coordinates in string delimiters
+                        $filter('confCoordinateFormat')(item.movement.longitude).replace(/,/g, '.'),
                         item.movement.status,
-                        item.movement.reportedSpeed +' ' +locale.getString('movement.movement_speed_unit'),
-                        item.movement.calculatedSpeed +' ' +locale.getString('movement.movement_speed_unit'),
-                        item.movement.reportedSpeedCourse,
+                        getSpeed(item.movement.reportedSpeed),
+                        getSpeed(item.movement.calculatedSpeed),
+                        item.movement.reportedCourse + '\u00b0',
                         item.movement.movementType,
                         $filter('transponderName')(item.movement.source)
                     ];
