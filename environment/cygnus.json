@@ -1,8 +1,8 @@
 {
     "env_name": "cygnus",
-    "rest_api_base" : "https://cygnus-dev.athens.intrasoft-intl.private:28443"
+    "rest_api_base" : "http://cygnus-dev.athens.intrasoft-intl.private:28080",
     "ws": {
     	"host": "cygnus-dev.athens.intrasoft-intl.private",
-    	"port": "28443"
+    	"port": "28080"
     }
 }
