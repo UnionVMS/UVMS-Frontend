@@ -380,7 +380,10 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
 						templateUrl: 'usm/users/partial/changeMyPassword.html',
 						controller: 'setMyPasswordModalInstanceCtrl',
 						backdrop : 'static',
-						keyboard: false
+						keyboard: false,
+                        resolve: {
+                            expiredPwd : function(){return true;}
+                        }
 					}).result;
                 };
             }
@@ -425,7 +428,8 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
                                     } else if(data.statusCode === 701) {
                                         message = "Error: Password expired";
                                     } else if(data.statusCode === 775) {
-                                        message = "Error: Account locked - " + data.errorDescription;
+                                        var desc = (data.errorDescription && data.errorDescription !== "null")?" - "+data.errorDescription:"";
+                                        message = "Error: Account locked" + desc;
                                     } else if(data.statusCode === 773) {
                                         message = "Error: Password must be changed";
                                     } else if(data.statusCode === 774) {

@@ -122,6 +122,10 @@ userManagementApp.config(['$urlRouterProvider', '$stateProvider','$urlMatcherFac
             return userService.findCurrentUser();
         };
         identifiedUser.$inject =    ['userService'];
+        var logOutUser = function(userService){
+            return userService.logout();
+        };
+        logOutUser.$inject =    ['userService'];
         var currentContextPromise = function(userService,$state,$stateParams){
             return userService.findSelectedContext();
         };
@@ -192,8 +196,8 @@ userManagementApp.config(['$urlRouterProvider', '$stateProvider','$urlMatcherFac
 
                 "page@app.usm": {
                     templateUrl: 'usm/home/logout.html',
-                    controller:['$stateParams','$scope','authRouter','userService',
-                        function($stateParams,$scope,authRouter,userService){
+                    controller:['$stateParams','$scope','authRouter','userService','logOutUser',
+                        function($stateParams,$scope,authRouter,userService,logOutUser){
                             $scope.logoutMessage = $stateParams.logoutMessage;
                             $scope.loginState = authRouter.getLogin();
                             userService.logout();
@@ -206,6 +210,9 @@ userManagementApp.config(['$urlRouterProvider', '$stateProvider','$urlMatcherFac
             },
             data: {
                 access: null
+            },
+            resolve:{
+                logOutUser: logOutUser
             }
         });
 

@@ -185,6 +185,7 @@ angular.module('auth.router', ['ui.bootstrap', 'auth.controllers', 'ui.router', 
             var $get = function ($state, $modal, $rootScope, $injector, $timeout, $location, userService, $log, renewloginpanel, ACCESS, $urlRouter) {
                 var preventedState = null;
                 var allowedState = null;
+                var expiredPasswordPanel = null;
                 var anonRoute;
 
 
@@ -251,12 +252,16 @@ angular.module('auth.router', ['ui.bootstrap', 'auth.controllers', 'ui.router', 
 
 					$rootScope.$on('NeedChangePassword', function () {
 						$log.log("injecting changepasswordpanel");
-						var ChangePwd = $injector.get('changepasswordpanel');
-						userService.hasToChangePwd = true;
-						ChangePwd.show().then(function () {
+                        if(!expiredPasswordPanel){
+                            expiredPasswordPanel = $injector.get('changepasswordpanel');
+                            expiredPasswordPanel.show().finally(function () {
 							$log.log("changepasswordpanel Closed");
+                                expiredPasswordPanel = null;
 							//init();
 						});
+                        }
+
+
 					});
 					$rootScope.$on('WarningChangePassword', function () {
 						$log.log("injecting warningpasswordpanel");

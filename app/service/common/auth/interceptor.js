@@ -91,7 +91,7 @@ angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
          *
          */
 		this.responseErrFilter = ['config','$log', function(config,$log) {
-			var skipPattern = /usm-administration\/rest\/ping/i;
+			var skipPattern = /usm-administration\/rest\/(ping|sessions)/i;
 			return skipPattern.test(config.url);
 		}];
 
@@ -210,6 +210,18 @@ angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
 								$localStorage.token = response.headers()["authorization"];
                                 unauth = false;
 							}
+                            //TODO: handle expired password status
+                            if (!_.isUndefined(response.headers()["extstatus"])) {
+                                _log.debug("extstatus header",response.headers()["extstatus"]);
+                                if (response.headers()["extstatus"] === "701") {
+                                    $log.debug("User authenticated but password expired (701). User should change password NOW!");
+                                    $rootScope.$broadcast('NeedChangePassword');
+                                } else if (response.headers()["extstatus"] === "773") {
+                                    $log.debug("User authenticated but password is about to expire (773). Should suggest to change password.");
+                                    $rootScope.$broadcast('WarningChangePassword');
+                                }
+                            }
+
 						}
 					);
 					return response;
@@ -227,14 +239,18 @@ angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
                     var userService = $injector.get('userService');
 
                     if (rejection.status === 403 && config.injectPanel && !unauth) {
-                        _log.log("Request rejected with status 403 and paenl injection true");
+                        _log.log("Request rejected with status 403 and panel injection true");
 						unauth = true;
 						// Inject services
-                        _log.log("injecting renewLoginPanel");
-						var Retry = $injector.get('renewloginpanel');
+                        var $state = $injector.get('$state');
+                        var authRouter = $injector.get('authRouter');
+                        _log.debug("Current State",$state.current);
+                        if($state.current && $state.current.name !== authRouter.getLogin()){
 
+                        _log.log("injecting renewLoginPanel");
+
+						var Retry = $injector.get('renewloginpanel');
 						var $http = $injector.get('$http');
-						var $state = $injector.get('$state');
 						var $modalStack = $injector.get('$modalStack');
 
 						return $timeout(angular.noop, 200).then(function () {
@@ -249,17 +265,7 @@ angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
                             if (rejection.config.headers[config.authHeader]) {
                                 rejection.config.headers[config.authHeader] = null;
                             }
-							var userservice = $injector.get('userService');
-							if(userservice.hasToChangePwd === true) {
-								$log.log("injecting changeMyPassword (2)");
-								var ChangePwd = $injector.get('changepasswordpanel');
-								return ChangePwd.show().then(function () {
-									$log.log("changepasswordpanel Closed");
-									//init();
-								});
-							} else {
-								return $http(rejection.config);	
-							}							
+								return $http(rejection.config);
 						}, function () {
 							$log.log("retry request failed?");
                             unauth = true;
@@ -267,6 +273,7 @@ angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
 							$rootScope.$broadcast('authenticationNeeded');
 							return $q.reject(rejection);
 						});
+                        }
                     } else if (rejection.status === 403 && !unauth) {
                         _log.log("Request rejected with status 403");
                         unauth = true;

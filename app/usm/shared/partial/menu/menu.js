@@ -93,9 +93,9 @@ sharedModule.controller('userMenuController', ['$log','selectContextPanel','auth
 
 }]);
 
-sharedModule.controller('setMyPasswordModalInstanceCtrl', ['$state', '$log', '$timeout', '$location', '$scope', '$modalInstance', '$localStorage', '$stateParams',
-    'accountService', 'userService',
-    function ($state, $log, $timeout, $location, $scope, $modalInstance, $localStorage, $stateParams, accountService, userService) {
+sharedModule.controller('setMyPasswordModalInstanceCtrl', ['$state', '$log', '$timeout', '$scope', '$modalInstance', '$localStorage', '$stateParams',
+    'accountService', 'userService','expiredPwd',
+    function ($state, $log, $timeout, $scope, $modalInstance, $localStorage, $stateParams, accountService, userService,expiredPwd) {
 
         $scope.formDisabled = true;
         $scope.editForm = true;
@@ -105,15 +105,16 @@ sharedModule.controller('setMyPasswordModalInstanceCtrl', ['$state', '$log', '$t
         //panel
         $scope.userPasswordUpdated = false;
         $scope.showConfirmation = false;
-		$scope.mustChangePassword = false; //userService.hasToChangePwd;
+        if(expiredPwd){
+            $scope.actionMessage = "Your password has expired and must be changed.";
+        }
 
         $scope.cancel = function () {
 			$log.log("changepasswordpanel Closed in controller");
-			if(userService.hasToChangePwd) {
+			if(expiredPwd) {
 				$log.log("Password HAS to be changed and cannot be deferred, go back to login");	
-				$state.go("app.usm.logout");				
+                userService.logout();
 			}
-			userService.hasToChangePwd = false;
             $modalInstance.dismiss();
         };
 

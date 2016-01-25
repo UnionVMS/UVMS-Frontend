@@ -574,7 +574,7 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
     //Handle authenticationNeeded
     $rootScope.$on('authenticationNeeded', function() {
         $log.info("Authentication needed. Logging out.");
-        userService.logout();
+        $state.go('uvmsLogout');
     });
     //Handle ping error
     $rootScope.$on('UserPingStart', function() {
