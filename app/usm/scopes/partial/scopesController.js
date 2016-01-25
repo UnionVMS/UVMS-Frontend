@@ -228,8 +228,8 @@ scopesModule.controller('scopeDetailsCtrl', ['$log', '$scope', '$stateParams', '
         };
     }]);
 
-scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$modal', '$stateParams', 'userService',
-    function ($log, $scope, $modal, $stateParams, userService) {
+scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$modal', '$stateParams', 'userService','scopeServices',
+    function ($log, $scope, $modal, $stateParams, userService, scopeServices) {
 
 	    $scope.checkAccess = function(feature) {
 	    	return userService.isAllowed(feature,"USM",true);
@@ -247,7 +247,11 @@ scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$modal', '$stateP
                         return mode;
                     },
                     scopeItem: function () {
-                        return angular.copy(scope);
+                        return scopeServices.getScopeDetails(scope.scopeId).then(
+                            function(response) {
+                                return response.scopeDetails;
+                            }
+                        );
                     }
                 }
             });
@@ -363,10 +367,10 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
 
         $scope.saveUpdateDelete = function (scope) {
             //Format dates
-            scope.dataFrom = scope.dataFrom ? moment.utc(scope.dataFrom).format("YYYY-MM-DD'T'HH:mm:ss.SSSZ") : null;
-            scope.dataTo = scope.dataTo ? moment.utc(scope.dataTo).format("YYYY-MM-DD'T'HH:mm:ss.SSSZ") : null;
-            scope.activeFrom = scope.activeFrom ? moment.utc(scope.activeFrom).format("YYYY-MM-DD'T'HH:mm:ss.SSSZ") : null;
-            scope.activeTo = scope.activeTo ? moment.utc(scope.activeTo).format("YYYY-MM-DD'T'HH:mm:ss.SSSZ") : null;
+            scope.dataFrom = scope.dataFrom ? moment.utc(scope.dataFrom).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null;
+            scope.dataTo = scope.dataTo ? moment.utc(scope.dataTo).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null;
+            scope.activeFrom = scope.activeFrom ? moment.utc(scope.activeFrom).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null;
+            scope.activeTo = scope.activeTo ? moment.utc(scope.activeTo).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null;
             $log.log(scope);
             if (mode === 'new') {
                 scopeServices.createScope(scope).then(
@@ -435,7 +439,7 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
                 } else {
                     $scope.showConfirmation = true;
                     $scope.messageDivClass = "alert alert-warning";
-                    $scope.actionMessage = "<strong>Warning: </strong>This scope is assigned to " + scope.activeUsers + " active user(s). Saving this change may have important impact!";
+                    $scope.actionMessage = "<strong>Warning: </strong>This scope is assigned to " + scope.activeUsers + " active user(s). Saving this change may have important impact! The user contexts with that scope will be deleted";
                 }
             }
         };
