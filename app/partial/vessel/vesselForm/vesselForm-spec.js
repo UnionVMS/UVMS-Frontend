@@ -183,7 +183,7 @@ describe('VesselFormCtrl', function() {
 
         var archivedVessel = mockVessel.copy();
         archivedVessel.active = false;
-        var updateVesselSpy = spyOn(vesselRestService, "updateVessel").andReturn(deferred.promise);
+        var archiveVesselSpy = spyOn(vesselRestService, "archiveVessel").andReturn(deferred.promise);
         deferred.resolve(archivedVessel);
 
         var deferred3 = $q.defer();
@@ -204,7 +204,7 @@ describe('VesselFormCtrl', function() {
         expect(scope.vesselObj.active).toBeFalsy();
 
         //Check that updateVessel in vesselRestService has been called
-        expect(updateVesselSpy).toHaveBeenCalled();
+        expect(archiveVesselSpy).toHaveBeenCalled();
 
         //Check that removeCurrentVesselFromSearchResults was called afterwards to remove the vessel from the list
         expect(removeFromListSpy).toHaveBeenCalled();
