@@ -132,7 +132,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     };
 
     //Export data as CSV file
-    $scope.exportAsCSVFile = function(onlySelectedItems){
+    $scope.exportAsCSVFile = function(){
         var filename = 'positionReports.csv';
 
         //Set the header columns
@@ -161,7 +161,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         var getData = function() {
             var exportItems;
             //Export only selected items
-            if(onlySelectedItems){
+            if($scope.selectedMovements.length > 0){
                 exportItems = $scope.selectedMovements;
             }
             //Export all logs in the table
