@@ -18,7 +18,7 @@
             </th>
         </tr>
         </thead>
-        <tbody ng-if="!emptyFeaturesResult && checkAccess('viewApplications')">
+        <tbody ng-if="!emptyFeaturesResult && (checkAccess('manageApplications')||checkAccess('viewApplications'))">
         <tr ng-repeat="feature in displayedFeatures">
             <td ng-bind="feature.name"></td>
             <td ng-bind="feature.description"></td>

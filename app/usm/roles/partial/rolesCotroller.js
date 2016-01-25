@@ -364,7 +364,7 @@ rolesModule.controller('rolesModalInstanceCtrl', ['$scope', '$modalInstance', '$
                 } else {
                     $scope.showConfirmation = true;
                     $scope.messageDivClass = "alert alert-warning";
-                    $scope.actionMessage = "<strong>Warning: </strong>This role is assigned to " + role.activeUsers + " active user(s). Saving this change may have important impact!";
+                    $scope.actionMessage = "<strong>Warning: </strong>This role is assigned to " + role.activeUsers + " active user(s). Saving this change may have important impact! The user contexts with that role will be deleted";
                 }
             }
         };
