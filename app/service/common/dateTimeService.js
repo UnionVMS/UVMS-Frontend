@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('dateTimeService',function($log, globalSettingsService) {
+angular.module('unionvmsWeb').factory('dateTimeService',['$log', 'globalSettingsService', function($log, globalSettingsService) {
 
     var dateWithTimeZoneWithColonRegexp = new RegExp(/^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\s\-?\+?\d{2}:\d{2}/);
     var dateWithTimeZoneWithoutColonRegexp = new RegExp(/^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\s\-?\+?\d{4}/);
@@ -107,12 +107,12 @@ angular.module('unionvmsWeb').factory('dateTimeService',function($log, globalSet
     };
 
     return dateTimeService;
-});
+}]);
 
 
 /*FILTERS*/
 //Format date according to user settings from configuration
-angular.module('unionvmsWeb').filter('confDateFormat', function($log, dateTimeService) {
+angular.module('unionvmsWeb').filter('confDateFormat', ['$log', 'dateTimeService', function($log, dateTimeService) {
     return function(input) {
         try{
             if(angular.isDefined(input)){
@@ -123,10 +123,10 @@ angular.module('unionvmsWeb').filter('confDateFormat', function($log, dateTimeSe
             return input;
         }
     };
-});
+}]);
 
 //Format date as relative string from now, eg. 2 weeks (works both back in time and in the future)
-angular.module('unionvmsWeb').filter('timeAgo', function($log, dateTimeService) {
+angular.module('unionvmsWeb').filter('timeAgo', ['$log', 'dateTimeService', function($log, dateTimeService) {
     return function(input) {
         try{
             if(angular.isDefined(input)){
@@ -137,4 +137,4 @@ angular.module('unionvmsWeb').filter('timeAgo', function($log, dateTimeService) 
             return input;
         }
     };
-});
+}]);

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('globalSettingsService',function($resource, $q, $log) {
+angular.module('unionvmsWeb').factory('globalSettingsService',['$resource', '$q', '$log',function($resource, $q, $log) {
 
     var GlobalSettings = $resource("/config/rest/globals");
 
@@ -161,4 +161,4 @@ angular.module('unionvmsWeb').factory('globalSettingsService',function($resource
     init();
 
 	return globalSettingsService;
-});
+}]);

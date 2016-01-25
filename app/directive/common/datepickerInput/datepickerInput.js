@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').directive('datepickerInput', function($compile) {
+angular.module('unionvmsWeb').directive('datepickerInput', ['$compile',function($compile) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -30,10 +30,10 @@ angular.module('unionvmsWeb').directive('datepickerInput', function($compile) {
             scope.dateTimePicker = jQuery("#" +scope.inputFieldId).datetimepicker(scope.options);
         }
 	};
-});
+}]);
 
 angular.module('unionvmsWeb')
-    .controller('datepickerInputCtrl', function($scope, dateTimeService, globalSettingsService){
+    .controller('datepickerInputCtrl',['$scope', 'dateTimeService','globalSettingsService', function($scope, dateTimeService, globalSettingsService){
 
         var iso8601Dates = globalSettingsService.getDateFormat() === 'YYYY-MM-DD HH:mm';
 
@@ -176,7 +176,7 @@ angular.module('unionvmsWeb')
 
             if (newDefaultDate && !$scope.useTime) {
                 newDefaultDate = newDefaultDate.split(" ")[0];
-            }            
+            }
 
             //Update max date and default date
             var newOptions = {
@@ -242,12 +242,12 @@ angular.module('unionvmsWeb')
         });
 
         init();
-});
+}]);
 
 
 //Format the model and view values
 //The model is updated on the format 'YYYY-MM-DD HH:mm:ss Z' and the view on the format 'YYYY-MM-DD HH:mm' or 'YYYY-MM-DD'
-angular.module('unionvmsWeb').directive('datePickerFormatter', function(dateTimeService, $timeout) {
+angular.module('unionvmsWeb').directive('datePickerFormatter',['dateTimeService','$timeout', function(dateTimeService, $timeout) {
     return {
         restrict: 'A',
         require: 'ngModel',
@@ -306,12 +306,12 @@ angular.module('unionvmsWeb').directive('datePickerFormatter', function(dateTime
             ctrl.$parsers.unshift(toModel);
         }
     };
-});
+}]);
 
 /*VALIDATORS*/
 //Date must be after minDate
 //Validator with name min-date already exists in Bootstrap so use other name here
-angular.module('unionvmsWeb').directive('datePickerInputMinDate', function(dateTimeService) {
+angular.module('unionvmsWeb').directive('datePickerInputMinDate', ['dateTimeService',function(dateTimeService) {
     return {
         restrict: 'A',
         require: 'ngModel',
@@ -338,11 +338,11 @@ angular.module('unionvmsWeb').directive('datePickerInputMinDate', function(dateT
             ctrl.$formatters.push(checkDate);
         }
     };
-});
+}]);
 
 //Date must be before maxDate
 //Validator with name max-date already exists in Bootstrap so use other name here
-angular.module('unionvmsWeb').directive('datePickerInputMaxDate', function(dateTimeService) {
+angular.module('unionvmsWeb').directive('datePickerInputMaxDate',['dateTimeService', function(dateTimeService) {
     return {
         restrict: 'A',
         require: 'ngModel',
@@ -370,4 +370,4 @@ angular.module('unionvmsWeb').directive('datePickerInputMaxDate', function(dateT
             ctrl.$formatters.push(checkDate);
         }
     };
-});
+}]);
