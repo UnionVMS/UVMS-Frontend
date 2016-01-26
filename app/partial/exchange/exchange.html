@@ -90,13 +90,13 @@
                                         <span class="fa fa-search-plus details"></span>
                                     </a>
                                 </td>
-    							<td ng-class="{'notAvailable' : !message.dateRecieved}">{{message.dateRecieved | confDateFormat | dataNotAvailable}}</td>
-                                <td ng-class="{'notAvailable' : !message.source}">{{message.source | transponderName | dataNotAvailable}}</td>
-                                <td ng-class="{'notAvailable' : !message.type}">{{message.type | dataNotAvailable | removeUnderscore}}</td>
-    							<td ng-class="{'notAvailable' : !message.senderRecipient}">{{message.senderRecipient | dataNotAvailable}}</td>
-    							<td ng-class="{'notAvailable' : !message.forwardRule}">{{message.forwardRule | dataNotAvailable}}</td>
-    							<td ng-class="{'notAvailable' : !message.recipient}">{{message.recipient | dataNotAvailable}}</td>
-    							<td ng-class="{'notAvailable' : !message.dateFwd}">{{message.dateFwd | confDateFormat | dataNotAvailable}}</td>
+    							<td ng-class="{'notAvailable' : !message.dateRecieved}" ng-attr-title="{{message.dateRecieved | confDateFormat | dataNotAvailable}}">{{message.dateRecieved | confDateFormat | dataNotAvailable}}</td>
+                                <td ng-class="{'notAvailable' : !message.source}" ng-attr-title="{{message.source | transponderName | dataNotAvailable}}">{{message.source | transponderName | dataNotAvailable}}</td>
+                                <td ng-class="{'notAvailable' : !message.type}" ng-attr-title="{{message.type | dataNotAvailable | removeUnderscore}}">{{message.type | dataNotAvailable | removeUnderscore}}</td>
+    							<td ng-class="{'notAvailable' : !message.senderRecipient}" ng-attr-title="{{message.senderRecipient | dataNotAvailable}}">{{message.senderRecipient | dataNotAvailable}}</td>
+    							<td ng-class="{'notAvailable' : !message.forwardRule}" ng-attr-title="{{message.forwardRule | dataNotAvailable}}">{{message.forwardRule | dataNotAvailable}}</td>
+    							<td ng-class="{'notAvailable' : !message.recipient}" ng-attr-title="{{message.recipient | dataNotAvailable}}">{{message.recipient | dataNotAvailable}}</td>
+    							<td ng-class="{'notAvailable' : !message.dateFwd}" ng-attr-title="{{message.dateFwd | confDateFormat | dataNotAvailable}}">{{message.dateFwd | confDateFormat | dataNotAvailable}}</td>
     							<td class="status">
                                     <span class="label" ng-class="getStatusLabelClass(message.status)">
                                         {{getStatusLabel(message.status) | uppercase}}

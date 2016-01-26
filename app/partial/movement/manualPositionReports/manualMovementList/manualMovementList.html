@@ -41,17 +41,17 @@
             <tbody>
                 <tr ng-repeat="item in filtered = (currentSearchResults.items | orderBy:currentSearchResults.sortBy : currentSearchResults.sortReverse | filter:search)">
                 	<td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)"/></td>
-                    <td>{{item.carrier.externalMarking}}</td>
-                    <td>{{item.carrier.ircs}}</td>
-                    <td>{{item.carrier.cfr}}</td>
-                    <td>{{item.carrier.name}}</td>
-                    <td>{{item.time | confDateFormat}}</td>
-                    <td>{{item.position.latitude | confCoordinateFormat}}</td>
-                    <td>{{item.position.longitude | confCoordinateFormat}}</td>
-                    <td>{{item.speed | speed | number:2}} {{ "common.speed_unit_" + speedUnit | i18n }}</td>
-                    <td>{{item.course}}&deg;</td>
+                    <td ng-attr-title="{{item.carrier.externalMarking}}">{{item.carrier.externalMarking}}</td>
+                    <td ng-attr-title="{{item.carrier.ircs}}">{{item.carrier.ircs}}</td>
+                    <td ng-attr-title="{{item.carrier.cfr}}">{{item.carrier.cfr}}</td>
+                    <td ng-attr-title="{{item.carrier.name}}">{{item.carrier.name}}</td>
+                    <td ng-attr-title="{{item.time | confDateFormat}}">{{item.time | confDateFormat}}</td>
+                    <td ng-attr-title="{{item.position.latitude | confCoordinateFormat}}">{{item.position.latitude | confCoordinateFormat}}</td>
+                    <td ng-attr-title="{{item.position.longitude | confCoordinateFormat}}">{{item.position.longitude | confCoordinateFormat}}</td>
+                    <td ng-attr-title="{{item.speed | speed | number:2}} {{ 'common.speed_unit_' + speedUnit | i18n }}">{{item.speed | speed | number:2}} {{ "common.speed_unit_" + speedUnit | i18n }}</td>
+                    <td ng-attr-title="{{item.course}}&deg;">{{item.course}}&deg;</td>
                     <td>
-                        <span class="label" ng-class="item.archived ? 'label-success' : 'label-warning'">
+                        <span class="label" ng-class="item.archived ? 'label-success' : 'label-warning'" ng-attr-title="{{item.archived ? 'movement.manual_position_status_sent' : 'movement.manual_position_status_draft' | i18n}}">
                             {{item.archived ? 'movement.manual_position_status_sent' : 'movement.manual_position_status_draft' | i18n}}
                         </span>
                     </td>

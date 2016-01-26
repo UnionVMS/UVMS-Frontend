@@ -21,11 +21,11 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
-                                <td>{{item.vesselName}}</td>
-                                <td>{{item.vesselIrcs}}</td>
-                                <td>{{item.mobileTerminalAttributes.DNID}}</td>
-                                <td>{{item.mobileTerminalAttributes.MEMBER_NUMBER}}</td>
-                                <td>{{item.mobileTerminalType | transponderName}}</td>
+                                <td ng-attr-title="{{item.vesselName}}">{{item.vesselName}}</td>
+                                <td ng-attr-title="{{item.vesselIrcs}}">{{item.vesselIrcs}}</td>
+                                <td ng-attr-title="{{item.mobileTerminalAttributes.DNID}}">{{item.mobileTerminalAttributes.DNID}}</td>
+                                <td ng-attr-title="{{item.mobileTerminalAttributes.MEMBER_NUMBER}}">{{item.mobileTerminalAttributes.MEMBER_NUMBER}}</td>
+                                <td ng-attr-title="{{item.mobileTerminalType | transponderName}}">{{item.mobileTerminalType | transponderName}}</td>
                                 <td>
                                     <button class="btn btn-primary btn-sm polltablebutton" ng-hide="isTerminalSelected(item)" ng-click="selectChannel(item, $index)">
                                         {{'polling.poll_table_button_add_selected' | i18n | uppercase}}

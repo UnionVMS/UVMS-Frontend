@@ -19,10 +19,10 @@
 			<tbody>
 				<tr ng-repeat="item in filteredItems = (currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:filterOnType)" ng-class="{'inactive':!item.active}">
     				<td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
-    				<td class="statusColored">{{item.name}}</td>
-    				<td class="statusColored">{{item.lastTriggered | confDateFormat}}</td>
-                    <td class="statusColored">{{item.dateUpdated | confDateFormat}}</td>
-                    <td class="statusColored">{{item.updatedBy}}</td>
+    				<td class="statusColored" ng-attr-title="{{item.name}}">{{item.name}}</td>
+    				<td class="statusColored" ng-attr-title="{{item.lastTriggered | confDateFormat}}">{{item.lastTriggered | confDateFormat}}</td>
+                    <td class="statusColored" ng-attr-title="{{item.dateUpdated | confDateFormat}}">{{item.dateUpdated | confDateFormat}}</td>
+                    <td class="statusColored" ng-attr-title="{{item.updatedBy}}">{{item.updatedBy}}</td>
                     <td class="statusColored notifyByTicket">
                         <dropdown ng-show="mySubscriptions[item.guid]" ng-model="mySubscriptions[item.guid].TICKET" no-placeholder-item items="subscriptionDropdownOptions" callback="onTicketSubscriptionSelect" callback-params="item" ng-disabled="item.isGlobal()"></dropdown>
                     </td>
@@ -30,7 +30,7 @@
                         <dropdown ng-show="mySubscriptions[item.guid]" ng-model="mySubscriptions[item.guid].EMAIL" no-placeholder-item items="subscriptionDropdownOptions" callback="onEmailSubscriptionSelect" callback-params="item"></dropdown>
                     </td>
                     <td ng-class="item.active ? 'active' : 'inactive'">
-                        <span class="label" ng-class="item.active ? 'label-success' : 'label-danger'">
+                        <span class="label" ng-class="item.active ? 'label-success' : 'label-danger'" ng-attr-title="{{getStatusLabelForRule(item)}}">
                             {{getStatusLabelForRule(item)}}
                         </span>
                     </td>

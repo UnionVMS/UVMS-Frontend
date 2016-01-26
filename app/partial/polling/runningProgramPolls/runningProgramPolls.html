@@ -32,11 +32,11 @@
                             <td>
                                 <a href="#/assets/{{item.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}">{{item.vessel.name}}</a>
                             </td>
-                            <td>{{item.attributes.TRANSPONDER | transponderName}}</td>
-                            <td>{{item.startDate | confDateFormat}}</td>
-                            <td>{{item.endDate | confDateFormat}}</td>
-                            <td>{{item.attributes.FREQUENCY | secondsToTimeString}}</td>
-                            <td>{{item.attributes.USER}}</td>
+                            <td ng-attr-title="{{item.attributes.TRANSPONDER | transponderName}}">{{item.attributes.TRANSPONDER | transponderName}}</td>
+                            <td ng-attr-title="{{item.startDate | confDateFormat}}">{{item.startDate | confDateFormat}}</td>
+                            <td ng-attr-title="{{item.endDate | confDateFormat}}">{{item.endDate | confDateFormat}}</td>
+                            <td ng-attr-title="{{item.attributes.FREQUENCY | secondsToTimeString}}">{{item.attributes.FREQUENCY | secondsToTimeString}}</td>
+                            <td ng-attr-title="{{item.attributes.USER}}">{{item.attributes.USER}}</td>
                             <td class="actionIcon" ng-class="{inactive:!possibleToStart(item)}">
                                 <div class="start" ng-click="startProgramPoll(item)" ng-class="{noAccess:!accessToManagePolls}" title="{{'polling.running_program_polls_start_title' | i18n}}">
                                     <i class="fa fa-play"></i>

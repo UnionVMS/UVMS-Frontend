@@ -37,19 +37,19 @@
             <tbody>
                 <tr ng-repeat="movement in currentSearchResults.items | orderBy:currentSearchResults.sortBy : currentSearchResults.sortReverse | filter:searchFilter">
                     <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(movement)" ng-click="checkItem(movement)"/></td>
-                    <td>{{movement.vessel.countryCode}}</td>
-                    <td>{{movement.vessel.externalMarking}}</td>
-                    <td>{{movement.vessel.ircs}}</td>
+                    <td ng-attr-title="{{movement.vessel.countryCode}}">{{movement.vessel.countryCode}}</td>
+                    <td ng-attr-title="{{movement.vessel.externalMarking}}">{{movement.vessel.externalMarking}}</td>
+                    <td ng-attr-title="{{movement.vessel.ircs}}">{{movement.vessel.ircs}}</td>
                     <td><a href="#/assets/{{movement.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}" ng-show="movement.vessel">{{movement.vessel.name}}</a></td>
-                    <td>{{movement.time | confDateFormat}}</td>
-                    <td>{{movement.movement.latitude | confCoordinateFormat}}</td>
-                    <td>{{movement.movement.longitude | confCoordinateFormat}}</td>
-                    <td>{{movement.movement.status}}</td>
-                    <td>{{movement.movement.reportedSpeed | speed | number:2}} {{ "common.speed_unit_" + speedUnit | i18n }}</td>
-                    <td>{{movement.movement.calculatedSpeed | speed | number:2}} {{ "common.speed_unit_" + speedUnit | i18n }}</td>
-                    <td>{{movement.movement.reportedCourse}}&deg;</td>
-                    <td>{{movement.movement.movementType}}</td>
-                    <td>{{movement.movement.source | transponderName}}</td>
+                    <td ng-attr-title="{{movement.time | confDateFormat}}">{{movement.time | confDateFormat}}</td>
+                    <td ng-attr-title="{{movement.movement.latitude | confCoordinateFormat}}">{{movement.movement.latitude | confCoordinateFormat}}</td>
+                    <td ng-attr-title="{{movement.movement.longitude | confCoordinateFormat}}">{{movement.movement.longitude | confCoordinateFormat}}</td>
+                    <td ng-attr-title="{{movement.movement.status}}">{{movement.movement.status}}</td>
+                    <td ng-attr-title="{{movement.movement.reportedSpeed | speed | number:2}} {{ 'common.speed_unit_' + speedUnit | i18n }}">{{movement.movement.reportedSpeed | speed | number:2}} {{ "common.speed_unit_" + speedUnit | i18n }}</td>
+                    <td ng-attr-title="{{movement.movement.calculatedSpeed | speed | number:2}} {{ 'common.speed_unit_' + speedUnit | i18n }}">{{movement.movement.calculatedSpeed | speed | number:2}} {{ "common.speed_unit_" + speedUnit | i18n }}</td>
+                    <td ng-attr-title="{{movement.movement.reportedCourse}}&deg;">{{movement.movement.reportedCourse}}&deg;</td>
+                    <td ng-attr-title="{{movement.movement.movementType}}">{{movement.movement.movementType}}</td>
+                    <td ng-attr-title="{{movement.movement.source | transponderName}}">{{movement.movement.source | transponderName}}</td>
                     <td>
                         <button type="button" class="btn btn-sm btn-primary" ng-click="viewItemDetails(movement)" title="{{'common.view_details' | i18n}}">
                             <i class="fa fa-eye"></i>

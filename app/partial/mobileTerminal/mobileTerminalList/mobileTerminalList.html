@@ -39,11 +39,11 @@
                     <span ng-show="item.connectId && !item.associatedVessel" class="assetNotFound">{{'common.asset_not_found' | i18n}}</span>
                     <span ng-show="!item.connectId && !item.associatedVessel">{{'mobileTerminal.table_vessel_name_not_assigned' | i18n}}</span>
                 </td>
-                <td class="statusColored">{{item.attributes.SERIAL_NUMBER}}</td>
-                <td class="statusColored">{{item.channels[0].ids.MEMBER_NUMBER}}</td>
-                <td class="statusColored">{{item.channels[0].ids.DNID}}</td>
-                <td class="statusColored">{{item.type | transponderName}}</td>
-                <td class="statusColored">{{item.attributes.SATELLITE_NUMBER}}</td>
+                <td class="statusColored" ng-attr-title="{{item.attributes.SERIAL_NUMBER}}">{{item.attributes.SERIAL_NUMBER}}</td>
+                <td class="statusColored" ng-attr-title="{{item.channels[0].ids.MEMBER_NUMBER}}">{{item.channels[0].ids.MEMBER_NUMBER}}</td>
+                <td class="statusColored" ng-attr-title="{{item.channels[0].ids.DNID}}">{{item.channels[0].ids.DNID}}</td>
+                <td class="statusColored" ng-attr-title="{{item.type | transponderName}}">{{item.type | transponderName}}</td>
+                <td class="statusColored" ng-attr-title="{{item.attributes.SATELLITE_NUMBER}}">{{item.attributes.SATELLITE_NUMBER}}</td>
                 <td>
                     <span ng-show="item.associatedVessel">{{item.associatedVessel.mmsiNo}}</span>
                     <span ng-show="item.associatedVessel && !item.associatedVessel.mmsiNo"> - </span>

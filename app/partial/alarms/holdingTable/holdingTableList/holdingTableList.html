@@ -17,7 +17,7 @@
             <tbody>
                 <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
                     <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
-                    <td>{{item.openDate | confDateFormat}}</td>
+                    <td ng-attr-title="{{item.openDate | confDateFormat}}">{{item.openDate | confDateFormat}}</td>
                     <td>
                         <a ng-show="item.vessel" href="#/assets/{{item.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}">{{item.vessel.name}}</a>
                         <span ng-show="!item.vessel">{{'alarms.alarms_affected_object_unknown' | i18n}}</span>
@@ -26,10 +26,10 @@
                         <span ng-show="item.alarmItems.length === 1" tooltip-placement="bottom" tooltip="{{getRuleNamesTooltip(item)}}">{{item.alarmItems[0].ruleName}}</span>
                         <span ng-show="item.alarmItems.length > 1 "tooltip-placement="bottom" tooltip="{{getRuleNamesTooltip(item)}}">{{'alarms.alarms_table_number_of_rules' | i18n:item.alarmItems.length}}</span>
                     </td>
-                    <td>{{item.getResolvedDate() | confDateFormat}}</td>
-                    <td>{{item.getResolvedBy()}}</td>
+                    <td ng-attr-title="{{item.getResolvedDate() | confDateFormat}}">{{item.getResolvedDate() | confDateFormat}}</td>
+                    <td ng-attr-title="{{item.getResolvedBy()}}">{{item.getResolvedBy()}}</td>
                     <td class="status">
-                        <span class="label" ng-class="getStatusLabelClass(item.status)">
+                        <span class="label" ng-class="getStatusLabelClass(item.status)" ng-attr-title="{{getStatusLabel(item.status) | uppercase}}">
                             {{getStatusLabel(item.status) | uppercase}}
                         </span>
                     </td>

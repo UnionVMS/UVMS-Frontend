@@ -48,10 +48,10 @@
                                 </tr>
                             </thead>
                             <tr ng-repeat="vessel in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
-                                <td>{{vessel.ircs}}</td>
-                                <td>{{vessel.name}}</td>
-                                <td>{{vessel.cfr}}</td>
-                                <td>{{vessel.externalMarking}}</td>
+                                <td ng-attr-title="{{vessel.ircs}}">{{vessel.ircs}}</td>
+                                <td ng-attr-title="{{vessel.name}}">{{vessel.name}}</td>
+                                <td ng-attr-title="{{vessel.cfr}}">{{vessel.cfr}}</td>
+                                <td ng-attr-title="{{vessel.externalMarking}}">{{vessel.externalMarking}}</td>
                                 <td class="textAlignRight">
                                     <button type="button" class="btn btn-primary" ng-click="selectVessel(vessel)" ng-disabled="!vessel.ircs" title="{{ vessel.ircs ? '' : 'mobileTerminal.assign_vessel_ircs_required' | i18n }}" style="pointer-events: auto;"><i class="fa fa-check"></i></button>
                                 </td>

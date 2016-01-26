@@ -27,15 +27,15 @@
             <tbody>
             <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:currentSearchResults.filter">
                 <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)"/></td>
-                <td>{{item.countryCode}}</td>
-                <td>{{item.externalMarking}}</td>
-                <td>{{item.name}}</td>
-                <td>{{item.ircs}}</td>
-                <td>{{item.cfr}}</td>
-                <td>{{item.gearType | vesselGearTypeTranslation}}</td>
-                <td>{{item.licenseType | vesselLicenseTypeTranslation}}</td>
+                <td ng-attr-title="{{item.countryCode}}">{{item.countryCode}}</td>
+                <td ng-attr-title="{{item.externalMarking}}">{{item.externalMarking}}</td>
+                <td ng-attr-title="{{item.name}}">{{item.name}}</td>
+                <td ng-attr-title="{{item.ircs}}">{{item.ircs}}</td>
+                <td ng-attr-title="{{item.cfr}}">{{item.cfr}}</td>
+                <td ng-attr-title="{{item.gearType | vesselGearTypeTranslation}}">{{item.gearType | vesselGearTypeTranslation}}</td>
+                <td ng-attr-title="{{item.licenseType | vesselLicenseTypeTranslation}}">{{item.licenseType | vesselLicenseTypeTranslation}}</td>
                 <td>
-                    <span ng-show="item.lastMovement" class="link" ng-click="showReport(item.lastMovement.guid)">{{item.lastMovement.time | timeAgo}}</span>
+                    <span ng-show="item.lastMovement" class="link" ng-click="showReport(item.lastMovement.guid)" ng-attr-title="{{item.lastMovement.time | timeAgo}}">{{item.lastMovement.time | timeAgo}}</span>
                 </td>
                 <td>
                     <button class="btn btn-default btn-sm" ng-click="toggleViewVessel(item)">

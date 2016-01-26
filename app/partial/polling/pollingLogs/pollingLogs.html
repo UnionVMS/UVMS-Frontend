@@ -111,28 +111,28 @@
                                     <span ng-show="item.vessel"><a href="#/assets/{{item.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}">{{item.vessel.name}}</a></span>
                                     <span ng-hide="item.vessel" class="assetNotFound">{{'common.asset_not_found' | i18n}}</span>
                                 </td>
-                                <td>{{item.vessel.externalMarking}}</td>
-                                <td>{{item.poll.type | pollTypeName}}</td>
-                                <td>{{item.poll.attributes.TRANSPONDER | transponderName}}</td>
+                                <td ng-attr-title="{{item.vessel.externalMarking}}">{{item.vessel.externalMarking}}</td>
+                                <td ng-attr-title="{{item.poll.type | pollTypeName}}">{{item.poll.type | pollTypeName}}</td>
+                                <td ng-attr-title="{{item.poll.attributes.TRANSPONDER | transponderName}}">{{item.poll.attributes.TRANSPONDER | transponderName}}</td>
                                 <td class="statusTime">
                                     <div class="expandIcon" ng-show="item.exchangePoll.history.length > 1" ng-click="isExpanded = !isExpanded">
                                         <i class="fa fa-plus-square" ng-show="!isExpanded"></i>
                                         <i class="fa fa-minus-square" ng-show="isExpanded"></i>
                                     </div>
                                     <div class="times">
-                                        <span ng-repeat="status in item.exchangePoll.history" ng-show="isExpanded || $index === 0">
+                                        <span ng-repeat="status in item.exchangePoll.history" ng-show="isExpanded || $index === 0" ng-attr-title="{{status.time | confDateFormat}}">
                                             {{ status.time | confDateFormat}}<br>
                                         </span>
                                     </div>
                                 </td>
                                 <td class="statusText">
                                     <div ng-repeat="status in item.exchangePoll.history | orderBy:'status.time'" ng-show="isExpanded || $index === 0">
-                                        <span class="label" ng-class="getStatusLabelClass(status.status)">
+                                        <span class="label" ng-class="getStatusLabelClass(status.status)" ng-attr-title="{{status.status | exchangeStatusName | uppercase}}">
                                             {{status.status | exchangeStatusName | uppercase}}
                                         </span><br>
                                     </div>
                                 </td>
-                                <td colspan="2">{{item.poll.attributes.USER}}</td>
+                                <td colspan="2" ng-attr-title="{{item.poll.attributes.USER}}">{{item.poll.attributes.USER}}</td>
                                 <td class="textAlignCenter">
                                     <button class="btn btn-sm btn-default" ng-click="showComment(item)" title="{{'common.view_comment' | i18n}}">
                                         <i class="fa fa-commenting"></i>

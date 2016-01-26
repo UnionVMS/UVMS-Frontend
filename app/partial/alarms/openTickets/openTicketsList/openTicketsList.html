@@ -17,16 +17,16 @@
             <tbody>
                 <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
                     <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
-                    <td>{{item.openDate | confDateFormat}}</td>
+                    <td ng-attr-title="{{item.openDate | confDateFormat}}">{{item.openDate | confDateFormat}}</td>
                     <td>
                         <a ng-show="item.vessel" href="#/assets/{{item.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}">{{item.vessel.name}}</a>
                         <span ng-show="!item.vessel" class="assetNotFound">{{'common.asset_not_found' | i18n}}</span>
                     </td>
-                    <td>{{item.ruleName}}</td>
-                    <td>{{item.getResolvedDate() | confDateFormat}}</td>
-                    <td>{{item.getResolvedBy()}}</td>
+                    <td ng-attr-title="{{item.ruleName}}">{{item.ruleName}}</td>
+                    <td ng-attr-title="{{item.getResolvedDate() | confDateFormat}}">{{item.getResolvedDate() | confDateFormat}}</td>
+                    <td ng-attr-title="{{item.getResolvedBy()}}">{{item.getResolvedBy()}}</td>
                     <td class="status">
-                        <span class="label" ng-class="{CLOSED:'label-success', PENDING:'label-warning', OPEN:'label-danger'}[item.status]">
+                        <span class="label" ng-class="{CLOSED:'label-success', PENDING:'label-warning', OPEN:'label-danger'}[item.status]" ng-attr-title="{{item.status}}">
                             {{item.status}}
                         </span>
                     </td>
