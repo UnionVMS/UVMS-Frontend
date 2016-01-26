@@ -8,13 +8,13 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
         var suggestions = searchResultListPage.items.reduce(function(suggestions, resultItem){
             //Get the correct suggestion value
             switch (subCriteria){
-                case 'VESSEL_NAME':
+                case 'ASSET_NAME':
                     suggestions.push(resultItem.name);
                     break;
-                case 'VESSEL_CFR':
+                case 'ASSET_CFR':
                     suggestions.push(resultItem.cfr);
                     break;
-                case 'VESSEL_IRCS':
+                case 'ASSET_IRCS':
                     suggestions.push(resultItem.ircs);
                     break;
                 case 'EXTERNAL_MARKING':
@@ -66,13 +66,13 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
         //Add search critiera
         var searchKey;
         switch(subCriteria){
-            case 'VESSEL_NAME':
+            case 'ASSET_NAME':
                 searchKey = 'NAME';
                 break;
-            case 'VESSEL_CFR':
+            case 'ASSET_CFR':
                 searchKey = 'CFR';
                 break;
-            case 'VESSEL_IRCS':
+            case 'ASSET_IRCS':
                 searchKey = 'IRCS';
                 break;
             case 'EXTERNAL_MARKING':
@@ -118,9 +118,9 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
     //Get the auto suggestion search function
     var getSuggestionsSearchFunction = function(ruleDefinition){
         switch(ruleDefinition.subCriteria){
-            case 'VESSEL_NAME':
-            case 'VESSEL_CFR':
-            case 'VESSEL_IRCS':
+            case 'ASSET_NAME':
+            case 'ASSET_CFR':
+            case 'ASSET_IRCS':
             case 'EXTERNAL_MARKING':
                 return getVessels;
             case 'MT_DNID':
