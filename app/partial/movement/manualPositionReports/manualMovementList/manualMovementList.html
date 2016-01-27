@@ -56,10 +56,10 @@
                         </span>
                     </td>
                     <td>
-                        <button class="btn btn-primary" ng-click="editPosition(item)" title="{{'common.edit'| i18n}}" ng-if="item.guid && !item.archived" show-if-allowed='Movement:manageManualMovements'>
+                        <button class="btn btn-default" ng-click="editPosition(item)" title="{{'common.edit'| i18n}}" ng-if="item.guid && !item.archived" show-if-allowed='Movement:manageManualMovements'>
                             <i class="fa fa-pencil"></i>
                         </button>
-                        <button type="button" class="btn btn-sm btn-danger" ng-click="deletePosition(item)" title="{{'common.delete'| i18n}}" show-if-allowed='Movement:manageManualMovements' ng-if="!item.archived">
+                        <button type="button" class="btn btn-sm btn-default remove" ng-click="deletePosition(item)" title="{{'common.delete'| i18n}}" show-if-allowed='Movement:manageManualMovements' ng-if="!item.archived">
                             <i class="fa fa-times"></i>
                         </button>
                     </td>
