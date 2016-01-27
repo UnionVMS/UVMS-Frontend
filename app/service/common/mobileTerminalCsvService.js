@@ -145,7 +145,7 @@
             var oceans = terminalCapabilities.SUPPORT_MULTIPLE_OCEAN;
             return oceans.filter(function(ocean) {
                 // Filter selected oceans only
-                return selectedOceans.indexOf(ocean.code) >= 0;
+                return selectedOceans.indexOf(String(ocean.code)) >= 0;
             }).map(function(ocean) {
                 // Get each ocean's text value
                 return ocean.text;
