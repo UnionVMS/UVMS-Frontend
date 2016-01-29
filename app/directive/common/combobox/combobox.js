@@ -190,7 +190,7 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                 $('.comboList', element).attr('id', scope.comboboxId);
                 var dest = 'body';
                 if(scope.destComboList){
-                	dest = destComboList;
+                	dest = scope.destComboList;
                 }
                 $('#' + scope.comboboxId).appendTo(dest);
                 ctrl.$setPristine();
