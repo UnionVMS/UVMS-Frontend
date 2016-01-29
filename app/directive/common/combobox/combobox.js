@@ -6,10 +6,12 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
 		scope: {
             items : '=',
             disabledItems : '=',
-            ngModel:'=',
+            ngModel : '=',
             callback : '=',
             callbackParams : '=',
-            ngDisabled : '='
+            ngDisabled : '=',
+            lineStyle : '=',
+            destComboList : '='
 		},
         templateUrl: 'directive/common/combobox/combobox.html',
 		link: function(scope, element, attrs, ctrl) {
@@ -49,9 +51,9 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             
             //Find initial value
             var getItemObjectByCode = function(code){
-                for (var i = 0; i < scope.items.length; i++){
-                    if (scope.items[i].code === code){
-                        return scope.items[i];
+                for (var i = 0; i < scope.loadedItems.length; i++){
+                    if (scope.loadedItems[i].code === code){
+                        return scope.loadedItems[i];
                     }
                 }
             };
@@ -65,14 +67,14 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                         if (scope.ngModel){
                             scope.currentItemLabel = scope.getItemLabel(scope.ngModel);
                         }else{
-                            if (scope.items){
-                                scope.currentItemLabel = scope.getItemLabel(scope.items[0]);
+                            if (scope.loadedItems){
+                                scope.currentItemLabel = scope.getItemLabel(scope.loadedItems[0]);
                             }
                         }
                     }
                 } else {
-                    if(scope.items !== undefined){
-                        if (scope.items.length === 0){
+                    if(scope.loadedItems !== undefined){
+                        if (scope.loadedItems.length === 0){
                             var tempFn = scope.$watch('items', function(newVal, oldVal){
                                 if (newVal.length > 0){
                                     var item = getItemObjectByCode(scope.ngModel);
@@ -84,9 +86,9 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                             });
                         }
                         
-                        for (var i = 0; i < scope.items.length; i++){
-                            if(getItemCode(scope.items[i]) === scope.ngModel){
-                                scope.currentItemLabel = scope.getItemLabel(scope.items[i]);
+                        for (var i = 0; i < scope.loadedItems.length; i++){
+                            if(getItemCode(scope.loadedItems[i]) === scope.ngModel){
+                                scope.currentItemLabel = scope.getItemLabel(scope.loadedItems[i]);
                             }
                         }
                     }
@@ -106,10 +108,10 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                     }
                 }else{
                     scope.setplaceholdercolor = false;
-                    if(Array.isArray(scope.items)){
-                        for(var i = 0; i < scope.items.length; i++){
-                            if(angular.equals(newVal, getItemCode(scope.items[i])) ) {
-                                scope.currentItemLabel = scope.getItemLabel(scope.items[i]);
+                    if(Array.isArray(scope.loadedItems)){
+                        for(var i = 0; i < scope.loadedItems.length; i++){
+                            if(angular.equals(newVal, getItemCode(scope.loadedItems[i])) ) {
+                                scope.currentItemLabel = scope.getItemLabel(scope.loadedItems[i]);
                             }
                         }
                     }
@@ -138,7 +140,7 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
 
             //Add a default value as first item in the dropdown
             scope.addDefaultValueToDropDown = function(){
-                if (scope.items !== undefined && attrs.initialtext !== ""){
+                if (scope.loadedItems !== undefined && attrs.initialtext !== ""){
                     var initialValue = {};
                     initialValue.code = undefined;
                     initialValue.text = attrs.initialtext;
@@ -177,22 +179,36 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             	}
             };
             
+            function loadLineStyleItems() {
+            	scope.loadedItems = [{'code': 'solid', 'text': '5,0'},{'code': 'dashed', 'text': "10,5"},{'code': 'dotted', 'text': "5,5"},{'code': 'dotdashed', 'text': "5,5,10,5"}];
+            }
+            
             var init = function(){
                 scope.selectFieldId = generateGUID();
                 scope.comboboxId = "combo-" + scope.selectFieldId;
                 
                 $('.comboList', element).attr('id', scope.comboboxId);
-                $('#' + scope.comboboxId).appendTo('body');
+                var dest = 'body';
+                if(scope.destComboList){
+                	dest = destComboList;
+                }
+                $('#' + scope.comboboxId).appendTo(dest);
                 ctrl.$setPristine();
+                
+                if(scope.lineStyle !== undefined && scope.lineStyle === true){
+                	loadLineStyleItems();
+                }else{
+                	scope.loadedItems = scope.items;
+                }
+                scope.setLabel();
+                
+                //Create a list item with the initaltext?
+                if(scope.initialitem){
+                    scope.addDefaultValueToDropDown();
+                }
             };
             
             init();
-            
-            scope.setLabel();
-            //Create a list item with the initaltext?
-            if(scope.initialitem){
-                scope.addDefaultValueToDropDown();
-            }
 		}
 	};
 });

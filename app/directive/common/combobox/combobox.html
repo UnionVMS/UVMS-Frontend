@@ -1,17 +1,30 @@
-<div class="combobox" ng-model-options="{allowInvalid: true}">
+<div class="combobox" ng-class="lineStyle === true ? 'comboLineStyle' : ''" ng-model-options="{allowInvalid: true}">
 	<div class="dropdown fullWidthDropdown">
 		<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled" ng-click="toggleCombo()">
-			<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-bind="currentItemLabel"></div>
+			<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-bind="currentItemLabel" ng-if="lineStyle !== true"></div>
+			<svg height="20px" width="100%" ng-if="lineStyle === true">
+				<g fill="none" stroke="#262626" stroke-width="4">
+					<path stroke-dasharray="{{currentItemLabel}}" d="M0 10 l999 0" />
+				</g>
+			</svg>
 			<span class="caret"></span>
 		</button>
 	</div>
-	<div class="comboList fullWidthDropdown" ng-class="isOpen ? 'open' : ''">
+	<div class="comboList fullWidthDropdown" ng-class="{'open': isOpen, 'comboLineStyle': lineStyle === true}">
 		<ul class="dropdown-menu" role="menu">
 			<li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue" ng-click="selectVal(initialValue)">
 				<a role="menuitem" tabindex="-1" ng-bind="initialValue.text"></a>
 			</li>
-			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in items" role="presentation" ng-click="selectVal(item,$index)">
+			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" role="presentation" ng-click="selectVal(item,$index)" ng-if="lineStyle !== true">
 				<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>
+			</li>
+			
+			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" role="presentation" ng-click="selectVal(item,$index)" ng-if="lineStyle === true">
+				<svg height="26px" width="100%">
+					<g fill="none" stroke="#262626" stroke-width="4">
+						<path stroke-dasharray="{{getItemLabel(item)}}" d="M0 13 l999 0" />
+					</g>
+				</svg>
 			</li>
 		</ul>
 	</div>
