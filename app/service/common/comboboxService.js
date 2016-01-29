@@ -23,7 +23,11 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
     		var comboMenu = $('#' + activeCombo.comboboxId + '>.dropdown-menu');
     		var footerTop = $(window).height() - angular.element('footer')[0].offsetHeight;
     		var bottomSpace = footerTop - buttonPosition.top;
-    		var topSpace = $(activeCombo.element).offset().top;
+    		var relativePos = 0;
+    		if(activeCombo.destComboList){
+    			relativePos = $(activeCombo.destComboList).offset().top;
+    		}
+    		var topSpace = $(activeCombo.element).offset().top - relativePos;
     		
     		if($(activeCombo.element).height() > bottomSpace){
     			if(topSpace > bottomSpace){
