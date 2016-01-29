@@ -99,11 +99,10 @@ div.td:extend(td all) {}
 	div.tfoot:extend([st-table] table.table tfoot all) {}
 	div.tableSmart.table {
 		> div.thead {
-			div.th:extend([st-table] table.table thead > tr > th all) {
-				&:last-child {
+			div.th:extend([st-table] table.table thead > tr > th all) {}
+			div.th:last-child {
 					border-right: 0;
 				}
-			}
 		}
 		> div.tbody {
 			> div.tr:extend([st-table] table.table tbody > tr all) {}
@@ -136,6 +135,10 @@ div.td:extend(td all) {}
 	div.td:extend(.table-striped > tbody > tr:nth-child(odd) > td all) {}
 }
 
+.table-condensed > .thead > .tr {
+	div.th:extend(.table-condensed > thead > tr > th all) {}
+}
+
 .table-condensed > .tbody > .tr {
 	div.td:extend(.table-condensed > tbody > tr > td all) {}
 }
@@ -149,17 +152,22 @@ div.td:extend(td all) {}
 	> .thead {
 		> div.tr:extend(.table > thead > tr all) {}
 		> .tr {
+			border-top: 1px solid #dddddd; 
 			div.th:extend(.table > thead > tr > th all) {
 				display: table-cell;
 			}
 		}
 	}
+	> .thead:first-child > .tr:first-child > .th:extend(.table > thead:first-child > tr:first-child > th all) {}
 	> .tbody {
 		display: block;
 		div.tr:extend(.table > tbody > tr all) {}
 		> .tr {
 			div.td:extend(.table > tbody > tr > td all) {
 				display: table-cell;
+			}
+			div.td:last-child {
+				border-right-width: 0;
 			}
 		}
 	}
@@ -205,8 +213,10 @@ div.td:extend(td all) {}
 		line-height: 30px;
     	color: red;
 	}
-	.defaultColorMessages {
-		margin-top: 20px;
+	.belowErrorMessages {
+		position: absolute;
+	    right: 15px;
+    	text-align: right;
 	}
 	.innerErrorMessages,
 	.innerErrorMessagesLabelTimer,

@@ -9,6 +9,9 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
     $scope.endDate = undefined;
     $scope.decimalDegrees = true;
     $scope.attrVisibility = vmsVisibilityService;
+    $scope.posColumns = ['countryCode','externalMarking','ircs','cfr','posTime','name','lat','lon','status','reportedSpeed','calculatedSpeed','reportedCourse','movementType','activityType','source'];
+    $scope.segColumns = ['countryCode','externalMarking','ircs','cfr','name','distance','duration','speedOverGround','courseOverGround','segmentCategory'];
+    $scope.trackColumns = ['countryCode','externalMarking','ircs','cfr','name','distance','duration','totalTimeAtSea'];
     
     //config object
     $scope.config = {
@@ -326,4 +329,5 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            csvWKTService.downloadCSVFile(exportData, header, filename);
        }
    };
+   
 });

@@ -47,7 +47,7 @@
 							            </div>
 							            <input class="form-control" colorpicker ng-model="report.color" type="text" ng-change="validateColor($index);" name="countryColor">
 							            <div class="innerErrorMessages" ng-messages="countryForm{{$index}}.countryColor.$error" ng-show="countryForm{{$index}}.countryColor.$dirty">
-											<div ng-message="required{{$index}}">{{'spatial.required_error_message' | i18n }}</div>
+											<div ng-message="required{{$index}}">{{'spatial.required_field_error_message' | i18n }}</div>
 											<div ng-message="posColor{{$index}}">{{'spatial.invalid_color_error_message' | i18n }}</div>
 										</div>
 						            </div>

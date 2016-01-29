@@ -274,7 +274,8 @@
 	"min_value_1_error_message": "Must be higher than 0",
 	"section_errors": "This section contains errors",
 	"min_value_0_error_message": "Value must be higher than 1",
-	"max_error_message": "'Max' cannot be lower than 'Min'",	
+	"max_error_message": "'Max' cannot be lower than 'Min'",
+	"invalid_range_error_message": "Must be between 1 and 10 including",
 	
 	"styles_attr_countryCode": "F.S",
 	"styles_attr_type": "Msg. Type",
@@ -285,5 +286,8 @@
 	"styles_attr_segmentCategory": "Category",
 	"styles_attr_distance": "Distance",
 	"styles_attr_speedOverGround": "Speed",
-	"styles_attr_courseOverGround": "Course"
+	"styles_attr_courseOverGround": "Course",
+	
+	"line_style": "Line style",
+	"line_width": "Line width"
 }

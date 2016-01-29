@@ -1,5 +1,5 @@
-angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,configurationService){
-	$scope.positionProperties = [{"text": "F.S.", "code": "countryCode"}, {"text": "Measured speed", "code": "reportedSpeed"}, {"text": "Calculated speed", "code": "calculatedSpeed"}, {"text": "Course", "code": "reportedCourse"}, {"text": "Type", "code": "type"}, {"text": "Activity", "code": "activity"}];
+angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,configurationService,locale){
+	$scope.positionProperties = [{"text": locale.getString('spatial.styles_attr_countryCode'), "code": "countryCode"}, {"text": locale.getString('spatial.styles_attr_reportedSpeed'), "code": "reportedSpeed"}, {"text": locale.getString('spatial.styles_attr_calculatedSpeed'), "code": "calculatedSpeed"}, {"text": locale.getString('spatial.styles_attr_reportedCourse'), "code": "reportedCourse"}, {"text": locale.getString('spatial.styles_attr_type'), "code": "type"}, {"text": locale.getString('spatial.styles_attr_activity'), "code": "activity"}];
 	$scope.positionRuleId = 0;
 	$scope.movementTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'MESSAGE_TYPE'),'MESSAGE_TYPE','MOVEMENT');
     $scope.activityTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'ACTIVITY_TYPE'), 'ACTIVITY_TYPE', 'MOVEMENT');
@@ -120,10 +120,10 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,co
 			}else{
 				$scope.positionsForm.defaultForm.defaultColor.$setValidity('requiredField', true);
 			}
-			if($scope.positionsForm.defaultForm.defaultColor.$valid){
-				$scope.positionsForm.defaultForm.$setValidity('hasError', true);
+			if($scope.positionsForm.defaultForm.defaultColor.$valid || _.allKeys($scope.positionsForm.defaultForm.defaultColor.$error).length === 1 && $scope.positionsForm.defaultForm.defaultColor.$error.hasError){
+				$scope.positionsForm.defaultForm.defaultColor.$setValidity('hasError', true);
 			}else{
-				$scope.positionsForm.defaultForm.$setValidity('hasError', false);
+				$scope.positionsForm.defaultForm.defaultColor.$setValidity('hasError', false);
 			}
 		}
 	};
@@ -171,7 +171,8 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,co
 					$scope.configModel.positionStyle.style = [];
 					$scope.positionRuleId = _.keys($scope.configModel.positionStyle.style).length;
 					break;
-				}
+			}
+			$scope.validateDefaultColor();
 		}else{
 			$scope.configModel = {};
 			$scope.configModel.positionStyle = {};

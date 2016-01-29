@@ -1,7 +1,8 @@
-angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope,configurationService){
-	$scope.segmentProperties = [{"text": "F.S.", "code": "countryCode"}, {"text": "Distance", "code": "distance"}, /*{"text": "Duration", "code": "duration"},*/ {"text": "Measured speed", "code": "speedOverGround"}, {"text": "Course", "code": "courseOverGround"}, {"text": "Category", "code": "segmentCategory"}];
+angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope,configurationService,locale){
+	$scope.segmentProperties = [{"text": locale.getString('spatial.styles_attr_countryCode'), "code": "countryCode"}, {"text": locale.getString('spatial.styles_attr_distance'), "code": "distance"}, /*{"text": "Duration", "code": "duration"},*/ {"text": locale.getString('spatial.styles_attr_speedOverGround'), "code": "speedOverGround"}, {"text": locale.getString('spatial.styles_attr_courseOverGround'), "code": "courseOverGround"}, {"text": locale.getString('spatial.styles_attr_segmentCategory'), "code": "segmentCategory"}];
 	$scope.segmentRuleId = 0;
 	$scope.categoryTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'CATEGORY_TYPE'), 'CATEGORY_TYPE', 'MOVEMENT');
+	$scope.modelTest = "";
 	
 	$scope.isAddNewRuleActive = true;
 	
@@ -106,10 +107,30 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope,con
 			}else{
 				$scope.segmentsForm.defaultForm.defaultColor.$setValidity('requiredField', true);
 			}
-			if($scope.segmentsForm.defaultForm.defaultColor.$valid){
-				$scope.segmentsForm.defaultForm.$setValidity('hasError', true);
+			if($scope.segmentsForm.defaultForm.defaultColor.$valid || _.allKeys($scope.segmentsForm.defaultForm.defaultColor.$error).length === 1 && $scope.segmentsForm.defaultForm.defaultColor.$error.hasError){
+				$scope.segmentsForm.defaultForm.defaultColor.$setValidity('hasError', true);
 			}else{
-				$scope.segmentsForm.defaultForm.$setValidity('hasError', false);
+				$scope.segmentsForm.defaultForm.defaultColor.$setValidity('hasError', false);
+			}
+		}
+	};
+	
+	$scope.validateLineWidth = function(){
+		if(angular.isDefined($scope.segmentsForm) && angular.isDefined($scope.segmentsForm.defaultForm) && angular.isDefined($scope.segmentsForm.defaultForm.lineWidth)){
+			if(!$scope.configModel.segmentStyle.lineWidth && $scope.configModel.segmentStyle.lineWidth !== 0){
+				$scope.segmentsForm.defaultForm.lineWidth.$setValidity('requiredField', false);
+			}else{
+				$scope.segmentsForm.defaultForm.lineWidth.$setValidity('requiredField', true);
+				if($scope.configModel.segmentStyle.lineWidth < 1 || $scope.configModel.segmentStyle.lineWidth > 10){
+					$scope.segmentsForm.defaultForm.lineWidth.$setValidity('rangeError', false);
+				}else{
+					$scope.segmentsForm.defaultForm.lineWidth.$setValidity('rangeError', true);
+				}
+			}
+			if($scope.segmentsForm.defaultForm.lineWidth.$valid || _.allKeys($scope.segmentsForm.defaultForm.lineWidth.$error).length === 1 && $scope.segmentsForm.defaultForm.lineWidth.$error.hasError){
+				$scope.segmentsForm.defaultForm.lineWidth.$setValidity('hasError', true);
+			}else{
+				$scope.segmentsForm.defaultForm.lineWidth.$setValidity('hasError', false);
 			}
 		}
 	};
@@ -119,6 +140,15 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope,con
 			$scope.loadedSegmentProperties = {};
 			angular.copy($scope.configModel.stylesSettings.segments, $scope.loadedSegmentProperties);
 			$scope.configModel.segmentStyle = {};
+			
+			if($scope.loadedSegmentProperties.style.lineStyle !== undefined){
+				$scope.configModel.segmentStyle.lineStyle = $scope.loadedSegmentProperties.style.lineStyle.toString();
+				delete $scope.loadedSegmentProperties.style.lineStyle;
+			}
+			if($scope.loadedSegmentProperties.style.lineWidth !== undefined){
+				$scope.configModel.segmentStyle.lineWidth = parseInt($scope.loadedSegmentProperties.style.lineWidth);
+				delete $scope.loadedSegmentProperties.style.lineWidth;
+			}
 			
 			switch ($scope.loadedSegmentProperties.attribute) {
 				case "speedOverGround":
@@ -157,7 +187,9 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope,con
 					$scope.configModel.segmentStyle.style = [];
 					$scope.segmentRuleId = _.keys($scope.configModel.segmentStyle.style).length;
 					break;
-				}
+			}
+			$scope.validateDefaultColor();
+			$scope.validateLineWidth();
 		}else{
 			$scope.configModel = {};
 			$scope.configModel.segmentStyle = {};

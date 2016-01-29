@@ -67,7 +67,7 @@
     	   					</thead>
     	   					<tbody>
     	   						<tr ng-if="!displayedRecordsArea.length && !searchLoading">
-    								<td colspan="3">{{'spatial."table_no_data"' | i18n}}</td>
+    								<td colspan="3">{{'spatial.table_no_data' | i18n}}</td>
     							</tr>
     	   						<tr ng-repeat="sysArea in displayedRecordsArea">
     	   							<td>{{sysArea.name}}</td>
@@ -111,7 +111,7 @@
                         </thead>
                         <tbody>
                             <tr ng-if="!displayedUserAreas.length && !searchLoading">
-                                <td colspan="3">{{'spatial."table_no_data"' | i18n}}</td>
+                                <td colspan="3">{{'spatial.table_no_data' | i18n}}</td>
                             </tr>
                             <tr ng-repeat="userArea in displayedUserAreas">
                                 <td>{{userArea.name}}</td>
@@ -166,7 +166,7 @@
     				</thead>
     				<tbody>
     					<tr ng-if="!displayedRecordsSelection.length">
-    						<td colspan="4">{{'spatial."table_no_data"' | i18n}}</td>
+    						<td colspan="4">{{'spatial.table_no_data' | i18n}}</td>
     					</tr>
     					<tr ng-repeat="area in displayedRecordsSelection">
     						<td style="min-width: 100px;">{{area.areaType}}</td>

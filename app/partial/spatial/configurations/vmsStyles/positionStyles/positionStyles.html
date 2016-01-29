@@ -18,7 +18,7 @@
 		<div class="row defaultItem" ng-if="configModel.positionStyle.attribute && ['reportedSpeed','calculatedSpeed','reportedCourse','type','activity'].indexOf(configModel.positionStyle.attribute) !== -1">
 			<ng-form name="defaultForm" novalidate>
 				<div class="row col-md-12">
-					<div class="form-group col-md-3" ng-class="{'has-error': defaultForm.$error.hasError && defaultForm.defaultColor.$dirty}">
+					<div class="form-group col-md-3" ng-class="{'has-error': defaultForm.defaultColor.$error.hasError && defaultForm.defaultColor.$dirty}">
 						<label>{{'spatial.default_color' | i18n}}</label>
 						<div class="colorPickerComponent">
 							<div ng-style="{'background-color': configModel.positionStyle.defaultColor && configModel.positionStyle.defaultColor.length > 3 && configModel.positionStyle.defaultColor.length <= 7 && configModel.positionStyle.defaultColor.indexOf('#') != -1 ? configModel.positionStyle.defaultColor : '#fff'}" class="form-control pickedcolor">
@@ -26,10 +26,10 @@
 					        </div>
 					        <input class="form-control" name="defaultColor" colorpicker ng-model="configModel.positionStyle.defaultColor" type="text" ng-change="validateDefaultColor();"/>
 						</div>
-					</div>
-					<div class="defaultColorMessages form-group col-md-4" ng-messages="defaultForm.defaultColor.$error" ng-show="defaultForm.defaultColor.$dirty">
+						<div class="belowErrorMessages" ng-messages="defaultForm.defaultColor.$error" ng-show="defaultForm.defaultColor.$dirty">
 						<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
 						<div ng-message="segDefColor">{{'spatial.invalid_color_error_message' | i18n }}</div>
+					</div>
 					</div>
 				</div>
 			</ng-form>	

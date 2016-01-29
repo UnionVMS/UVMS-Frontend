@@ -96,7 +96,8 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     		var segmentProperties = {};
     		segmentProperties.attribute = config.segmentStyle.attribute;
     		segmentProperties.style = {};
-    		
+    		segmentProperties.style.lineStyle = config.segmentStyle.lineStyle;
+        	segmentProperties.style.lineWidth = "" + config.segmentStyle.lineWidth;
     		if(["speedOverGround","distance","duration","courseOverGround"].indexOf(segmentProperties.attribute) !== -1){
     			angular.forEach(config.segmentStyle.style, function(item){
     				segmentProperties.style[item.propertyFrom + "-" + item.propertyTo] = item.color;
@@ -116,6 +117,28 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     		srcConfig.stylesSettings.segments = segmentProperties;
     		config.segmentStyle = undefined;
 		}
+        
+        if(angular.isDefined(config.visibilitySettings)){
+    	    var visibilityTypes = ['position','segment','track'];
+    	    var contentTypes = ['Table','Popup','Label'];
+    	    
+    	    angular.forEach(visibilityTypes, function(visibType) {
+    	    	angular.forEach(contentTypes, function(contentType) {
+    	    		if(visibType !== 'track' || visibType === 'track' && contentType === 'Table'){
+    		    		var visibilities = {};
+    		    		visibilities.values = [];
+    		    		visibilities.order = [];
+    		    		var content;
+    		    		for(var i = 0; i < config.visibilitySettings[visibType + contentType + 'Attrs'].length; i++){
+    	    	    		visibilities.order.push(config.visibilitySettings[visibType + contentType + 'Attrs'][i].value);
+    		    		}
+    		    		angular.copy(config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()].values,visibilities.values);
+    		    		angular.copy(visibilities,config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()]);
+    	    		}
+    	    		delete config.visibilitySettings[visibType + contentType + 'Attrs'];
+    		    });
+    	    });
+        }
 
         if(angular.isDefined(config.layerSettings)){
 	        var layerData = {};

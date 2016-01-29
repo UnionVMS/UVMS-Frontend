@@ -19,7 +19,8 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
 	'ui.select',
 	'ngMessages',
 	'angularFileUpload',
-	'dndLists'
+	'dndLists',
+	'lrDragNDrop'
 ]);
 
 var currentUserContextPromise = function(userService) {
