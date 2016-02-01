@@ -181,52 +181,22 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		    });
 	    });
 	    
-//	    if(config.visibilitySettings){
-//	    	if(config.visibilitySettings.positions){
-//	    		angular.forEach(visibilityTypes, function(visibType) {
-//	    			if(config.visibilitySettings[visibType + 's'])
-//	    		}
-//	    	}
-//	    }
-	    
-	    //Positions
-	    //Table
-	    if (!_.isEqual(config.visibilitySettings.positions && config.visibilitySettings.positions.table && config.visibilitySettings.positions.table.values ? $scope.sortArray(config.visibilitySettings.positions.table) : undefined, $scope.configCopy.visibilitySettings.positions && $scope.configCopy.visibilitySettings.positions.table ? $scope.sortArray($scope.configCopy.visibilitySettings.positions.table) : undefined)){
-            include = true;
-        }
-	    
-	    //Popups
-	    if (!_.isEqual(config.visibilitySettings.positions && config.visibilitySettings.positions.popup ? $scope.sortArray(config.visibilitySettings.positions.popup) : undefined, $scope.configCopy.visibilitySettings.positions && $scope.configCopy.visibilitySettings.positions.popup ? $scope.sortArray($scope.configCopy.visibilitySettings.positions.popup) : undefined)){
-	        include = true;
+	    //check if it is equals
+	    if(config.visibilitySettings){
+    		angular.forEach(visibilityTypes, function(visibType) {
+    			if(config.visibilitySettings[visibType + 's']){
+    				for(var i = 0;i<contentTypes.length;i++){
+    					if(config.visibilitySettings[visibType + 's'][contentTypes[i].toLowerCase() === 'label' ? contentTypes[i].toLowerCase() + 's' : contentTypes[i].toLowerCase()] &&
+    					((config.visibilitySettings[visibType + 's'][contentTypes[i].toLowerCase() === 'label' ? contentTypes[i].toLowerCase() + 's' : contentTypes[i].toLowerCase()].values &&
+    					!_.isEqual($scope.sortArray(config.visibilitySettings[visibType + 's'][contentTypes[i].toLowerCase() === 'label' ? contentTypes[i].toLowerCase() + 's' : contentTypes[i].toLowerCase()].values), $scope.configCopy.visibilitySettings[visibType + 's'][contentTypes[i].toLowerCase() === 'label' ? contentTypes[i].toLowerCase() + 's' : contentTypes[i].toLowerCase()].values)) ||
+    					(config.visibilitySettings[visibType + 's'][contentTypes[i].toLowerCase() === 'label' ? contentTypes[i].toLowerCase() + 's' : contentTypes[i].toLowerCase()].order &&
+    					!_.isEqual($scope.sortArray(config.visibilitySettings[visibType + 's'][contentTypes[i].toLowerCase() === 'label' ? contentTypes[i].toLowerCase() + 's' : contentTypes[i].toLowerCase()].values), $scope.configCopy.visibilitySettings[visibType + 's'][contentTypes[i].toLowerCase() === 'label' ? contentTypes[i].toLowerCase() + 's' : contentTypes[i].toLowerCase()].order)))){
+    						include = true;
+    					}
+    				}
+    			}
+    		});
 	    }
-	    
-	    //Labels
-	    if (!_.isEqual(config.visibilitySettings.positions && config.visibilitySettings.positions.labels ? $scope.sortArray(config.visibilitySettings.positions.labels) : undefined, $scope.configCopy.visibilitySettings.positions && $scope.configCopy.visibilitySettings.positions.labels ? $scope.sortArray($scope.configCopy.visibilitySettings.positions.labels) : undefined)){
-            include = true;
-        }
-	    
-	    //Segments
-	    //Table
-	    if (!_.isEqual(config.visibilitySettings.segments && config.visibilitySettings.segments.table ? $scope.sortArray(config.visibilitySettings.segments.table) : undefined, $scope.configCopy.visibilitySettings.segments && $scope.configCopy.visibilitySettings.segments.table ? $scope.sortArray($scope.configCopy.visibilitySettings.segments.table) : undefined)){
-            include = true;
-        }
-	    
-	    //Popups
-	    if (!_.isEqual(config.visibilitySettings.segments && config.visibilitySettings.segments.popup ? $scope.sortArray(config.visibilitySettings.segments.popup) : undefined, $scope.configCopy.visibilitySettings.segments && $scope.configCopy.visibilitySettings.segments.popup ? $scope.sortArray($scope.configCopy.visibilitySettings.segments.popup) : undefined)){
-            include = true;
-        }
-        
-	    //Labels
-        if (!_.isEqual(config.visibilitySettings.segments && config.visibilitySettings.segments.labels ? $scope.sortArray(config.visibilitySettings.segments.labels) : undefined, $scope.configCopy.visibilitySettings.segments && $scope.configCopy.visibilitySettings.segments.labels ? $scope.sortArray($scope.configCopy.visibilitySettings.segments.labels) : undefined)){
-            include = true;
-        }
-        
-        //Tracks
-        //Table
-        if (!_.isEqual(config.visibilitySettings.tracks && config.visibilitySettings.tracks.table ? $scope.sortArray(config.visibilitySettings.tracks.table) : undefined, $scope.configCopy.visibilitySettings.tracks && $scope.configCopy.visibilitySettings.tracks.table ? $scope.sortArray($scope.configCopy.visibilitySettings.tracks.table) : undefined)){
-            include = true;
-        }
-        
         
 	    if (include === false){
 	        config.visibilitySettings = undefined;

@@ -6,4 +6,55 @@
 		margin-right: 15px;
 		margin-bottom: 10px;
 	}
+	
+	table {
+		border: 0;
+    	th {
+		    border-bottom: 0;
+		    text-align: center;
+		    text-transform: uppercase;
+		    color: #777;
+    	}
+	    tbody {
+	    	border: 1px solid #ddd;
+	    	> tr > td {
+		    	padding: 0;
+		    	border-right: 2px solid #ddd;
+		    	&:last-child {
+		    		border-right: 0;
+		    	}
+			    [dnd-list] {
+			    	margin: 0;
+				    li {
+					    line-height: 35px;
+					    background-color: #fff;
+					    padding: 2px 8px;
+		    			border-bottom: 1px solid #ddd;
+		    			text-align: left;
+			    		&:empty {
+			    			background-color: #ddd;
+			    			height: 40px;
+			    		}
+			    		&.dndDraggingSource {
+			    			display: none;
+			    		}
+			    		&:nth-child(odd) {
+			    			background: #f7f7f7;
+			    		}
+			    		> input {
+			    			float: right;
+			    			margin-top: 12px;
+			    		}
+			    		.handle {
+			    			cursor: move;
+			    			display: inline-block;
+			    		}
+			    		&:last-child {
+			    			border-bottom: 0;
+			    		}
+				    }
+			    }
+		    }
+		}
+	}
 }

@@ -7,21 +7,21 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
     $scope.selectedMenu = 'POSITIONS';
 
     var setMenus = function(){
-            return [
-                {
-                    'menu': 'POSITIONS',
-                    'title': locale.getString('spatial.tab_movements')
-                },
-                {
-                    'menu': 'SEGMENTS',
-                    'title': locale.getString('spatial.tab_segments')
-                },
-                {
-                    'menu': 'TRACKS',
-                    'title': locale.getString('spatial.tab_tracks')
-                }
-            ];
-        };
+        return [
+            {
+                'menu': 'POSITIONS',
+                'title': locale.getString('spatial.tab_movements')
+            },
+            {
+                'menu': 'SEGMENTS',
+                'title': locale.getString('spatial.tab_segments')
+            },
+            {
+                'menu': 'TRACKS',
+                'title': locale.getString('spatial.tab_tracks')
+            }
+        ];
+    };
         
     locale.ready('spatial').then(function(){
        $scope.headerMenus = setMenus();
@@ -60,5 +60,13 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
         spatialConfigAlertService.hasError = true;
         spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_failure');
         spatialConfigAlertService.hideAlert();
+    };
+    
+    $scope.dropItem = function(item, list){
+ 	   var itemIndex = list.indexOf(item);
+ 	   if(itemIndex !== 1){
+ 		   list.splice(itemIndex, 1);
+ 	   }
+ 	   return item;
     };
 });

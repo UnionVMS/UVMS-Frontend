@@ -4,23 +4,51 @@
     		<table class="table table-striped table-condensed table-no-border">
 				<thead>
 					<tr>
-						<th></th>
 						<th>{{'spatial.visibility_configuration_table' | i18n}}</th>
 						<th>{{'spatial.visibility_configuration_popup' | i18n}}</th>
 						<th>{{'spatial.visibility_configuration_label' | i18n}}</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="attr in segmentAttrs">
-						<td>{{attr.title}}</td>
+					<tr>
 						<td>
-							<input type="checkbox" checklist-model="configModel.visibilitySettings.segments.table" checklist-value="attr.value">
+							<ul dnd-list="configModel.visibilitySettings.segmentTableAttrs" dnd-allowed-types="['Table']">
+								<li ng-repeat="attr in configModel.visibilitySettings.segmentTableAttrs"
+								dnd-draggable="attr"
+								dnd-type="attr.type"
+								dnd-effect-allowed="move"
+								dnd-moved="configModel.visibilitySettings.segmentTableAttrs.splice($index, 1);">
+									<div class="handle">:::</div>
+									<span>{{attr.title}}</span>
+									<input type="checkbox" checklist-model="configModel.visibilitySettings.segments.table.values" checklist-value="attr.value">
+								</li>
+							</ul>
 						</td>
 						<td>
-							<input type="checkbox" checklist-model="configModel.visibilitySettings.segments.popup" checklist-value="attr.value">
+							<ul dnd-list="configModel.visibilitySettings.segmentPopupAttrs" dnd-allowed-types="['Popup']">
+								<li ng-repeat="attr in configModel.visibilitySettings.segmentPopupAttrs"
+								dnd-draggable="attr"
+								dnd-type="attr.type"
+								dnd-effect-allowed="move"
+								dnd-moved="configModel.visibilitySettings.segmentPopupAttrs.splice($index, 1);">
+									<div class="handle">:::</div>
+									<span>{{attr.title}}</span>
+									<input type="checkbox" checklist-model="configModel.visibilitySettings.segments.popup.values" checklist-value="attr.value">
+								</li>
+							</ul>
 						</td>
 						<td>
-							<input type="checkbox" checklist-model="configModel.visibilitySettings.segments.labels" checklist-value="attr.value">
+							<ul dnd-list="configModel.visibilitySettings.segmentLabelAttrs" dnd-allowed-types="['Label']">
+								<li ng-repeat="attr in configModel.visibilitySettings.segmentLabelAttrs"
+								dnd-draggable="attr"
+								dnd-type="attr.type"
+								dnd-effect-allowed="move"
+								dnd-moved="configModel.visibilitySettings.segmentLabelAttrs.splice($index, 1);">
+									<div class="handle">:::</div>
+									<span>{{attr.title}}</span>
+									<input type="checkbox" checklist-model="configModel.visibilitySettings.segments.labels.values" checklist-value="attr.value">
+								</li>
+							</ul>
 						</td>
 					</tr>
 				</tbody>

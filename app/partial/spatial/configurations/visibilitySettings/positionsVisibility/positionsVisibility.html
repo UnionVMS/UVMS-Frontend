@@ -1,26 +1,54 @@
 <div class="positionsVisiblity" ng-controller="PositionsvisibilityCtrl">
 	<div class="row">
-		<div class="form-group col-md-12">
-			<table class="table table-striped table-condensed table-no-border">
+		<div class="col-md-12">
+			<table class="table">
 				<thead>
 					<tr>
-						<th></th>
 						<th>{{'spatial.visibility_configuration_table' | i18n}}</th>
 						<th>{{'spatial.visibility_configuration_popup' | i18n}}</th>
 						<th>{{'spatial.visibility_configuration_label' | i18n}}</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="attr in positionAttrs">
-						<td>{{attr.title}}</td>
+					<tr>
 						<td>
-							<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.table" checklist-value="attr.value">
+							<ul dnd-list="configModel.visibilitySettings.positionTableAttrs" dnd-allowed-types="['Table']">
+								<li ng-repeat="attr in configModel.visibilitySettings.positionTableAttrs"
+								dnd-draggable="attr"
+								dnd-type="attr.type"
+								dnd-effect-allowed="move"
+								dnd-moved="configModel.visibilitySettings.positionTableAttrs.splice($index, 1);">
+									<div class="handle">:::</div>
+									<span>{{attr.title}}</span>
+									<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.table.values" checklist-value="attr.value">
+								</li>
+							</ul>
 						</td>
 						<td>
-							<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.popup" checklist-value="attr.value">
+							<ul dnd-list="configModel.visibilitySettings.positionPopupAttrs" dnd-allowed-types="['Popup']">
+								<li ng-repeat="attr in configModel.visibilitySettings.positionPopupAttrs"
+								dnd-draggable="attr"
+								dnd-type="attr.type"
+								dnd-effect-allowed="move"
+								dnd-moved="configModel.visibilitySettings.positionPopupAttrs.splice($index, 1);">
+									<div class="handle">:::</div>
+									<span>{{attr.title}}</span>
+									<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.popup.values" checklist-value="attr.value">
+								</li>
+							</ul>
 						</td>
 						<td>
-							<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.labels" checklist-value="attr.value">
+							<ul dnd-list="configModel.visibilitySettings.positionLabelAttrs" dnd-allowed-types="['Label']">
+								<li ng-repeat="attr in configModel.visibilitySettings.positionLabelAttrs"
+								dnd-draggable="attr"
+								dnd-type="attr.type"
+								dnd-effect-allowed="move"
+								dnd-moved="configModel.visibilitySettings.positionLabelAttrs.splice($index, 1);">
+									<div class="handle">:::</div>
+									<span>{{attr.title}}</span>
+									<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.labels.values" checklist-value="attr.value">
+								</li>
+							</ul>
 						</td>
 					</tr>
 				</tbody>
@@ -28,3 +56,20 @@
 		</div>
     </div>
 </div>
+
+
+<!-- <div class="thead"> -->
+<!-- 					<div class="tr"> -->
+<!-- 						<div class="th col-md-3"></div> -->
+<!-- 						<div class="th col-md-3">{{'spatial.visibility_configuration_table' | i18n}}</div> -->
+<!-- 						<div class="th col-md-3">{{'spatial.visibility_configuration_popup' | i18n}}</div> -->
+<!-- 						<div class="th col-md-3">{{'spatial.visibility_configuration_label' | i18n}}</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+
+<!-- <div class="td col-md-3"> -->
+<!-- 								<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.popup" checklist-value="attr.value"> -->
+<!-- 							</div> -->
+<!-- 							<div class="td col-md-3"> -->
+<!-- 								<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.labels" checklist-value="attr.value"> -->
+<!-- 							</div> -->
