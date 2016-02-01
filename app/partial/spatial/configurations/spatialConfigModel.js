@@ -132,7 +132,11 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     		    		for(var i = 0; i < config.visibilitySettings[visibType + contentType + 'Attrs'].length; i++){
     	    	    		visibilities.order.push(config.visibilitySettings[visibType + contentType + 'Attrs'][i].value);
     		    		}
-    		    		angular.copy(config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()].values,visibilities.values);
+    		    		for(var i = 0; i < visibilities.order.length; i++){
+    	    				if(config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()].values.indexOf(visibilities.order[i]) !== -1){
+    	    					visibilities.values.push(visibilities.order[i]);
+    	    				}
+    		    		}
     		    		angular.copy(visibilities,config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()]);
     	    		}
     	    		delete config.visibilitySettings[visibType + contentType + 'Attrs'];
