@@ -56,10 +56,21 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, glob
         reportRestService.getReport($scope.displayedRecords[index].id).then(getReportSuccess, getReportError);
     };
     
+
+    //decides whether share button is needed
+    $scope.isReportShareable = function (shareable) {
+        if (angular.isDefined(shareable) && shareable.length >0) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     //Share report
-    $scope.shareReport = function(index){ 
+    $scope.shareReport = function(index, visibility){ 
         var record = $scope.displayedRecords[index];
         record.is_shared = !record.is_shared;
+        //TODO modify the two states approach with 3 states (instead of is/not shared to private/scope/public)
         //TODO call rest api
     };
     
