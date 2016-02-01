@@ -8,6 +8,7 @@ angular.module('unionvmsWeb').factory('UserArea',function() {
         startDate: undefined,
         endDate: undefined,
         geometry: undefined,
+        isShared: false,
         coordsArray: [],
         coordsProj: undefined,
         reset: function(){
@@ -18,7 +19,17 @@ angular.module('unionvmsWeb').factory('UserArea',function() {
         },
         setCoordsFromGeom: function(){
             setCoordsFromGeom();
+        },
+        setPropertiesFromJson: function(data){
+            this.id = parseInt(data.id);
+            this.name = data.name;
+            this.desc = data.areaDesc;
+            this.subType = data.subType;
+            this.startDate = data.startDate !== '' ? data.startDate : undefined;
+            this.endDate = data.endDate !== '' ? data.endDate : undefined;
+            this.isShared = data.isShared;
         }
+        
     };
     
     var reset = function(){

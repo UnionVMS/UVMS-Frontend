@@ -40,9 +40,13 @@ angular.module('unionvmsWeb').factory('vmsVisibilityService',function() {
             dur: true,
             timeSea: true
         },
+        positionsColumns: ['fs','extMark','ircs','cfr','name','posTime','lat','lon','stat','m_spd','c_spd','crs','msg_tp','act_tp','source'],
+        segmentsColumns: ['fs','extMark','ircs','cfr','name','dist','dur','spd','crs','cat'],
+        tracksColumns: ['fs','extMark','ircs','cfr','name','dist','dur','timeSea'],
         setVisibility: function(data){
              for (var key in data){
-                 this[key] = setItems(this[key], data[key].table);
+                 this[key] = setItems(this[key], data[key].table.values);
+                 this[key + 'Columns'] = data[key].table.order;
              }
         }
 	};

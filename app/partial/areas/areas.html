@@ -24,7 +24,7 @@
         		</div>
         	</div>
         	<!-- LEFT SIDE -->
-        	<div class="col-md-5 customPadding">
+        	<div class="col-md-6 customPadding">
         		<!-- TAB MENU -->
         		<ul class="nav nav-pills tabMenu">
 	        		<li ng-repeat="tab in tabs" ng-click="selectTab(tab.tabId)" ng-class="{'active': selectedTab === '{{tab.tabId}}'}">
@@ -35,7 +35,7 @@
         		<div class="base-area-container" ng-show="selectedTab === 'USERAREAS'" ng-include="'partial/areas/userAreas/userAreas.html'"></div>
         	</div>
         	<!-- RIGHT SIDE WITH MAP -->
-        	<div class="col-md-7 withoutPadding">
+        	<div class="col-md-6 withoutPadding">
         		<!-- <div class="areaTb"></div> -->
         		<div class="areaMap" id="areaMap"></div>
         	</div>

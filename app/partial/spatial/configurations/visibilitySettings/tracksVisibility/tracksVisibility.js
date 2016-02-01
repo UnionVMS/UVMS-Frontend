@@ -83,7 +83,7 @@ angular.module('unionvmsWeb').controller('TracksvisibilityCtrl',function($scope,
 		    var contentTypes = ['Table'];
 			angular.forEach(contentTypes, function(contentType) {
 				var tracks = [];
-				angular.forEach($scope.configModel.visibilitySettings.positions[contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()].order, function(item) {
+				angular.forEach($scope.configModel.visibilitySettings.tracks[contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()].order, function(item) {
 					for(var i=0;i<$scope.configModel.visibilitySettings['track' + contentType + 'Attrs'].length;i++){
 						if(item === $scope.configModel.visibilitySettings['track' + contentType + 'Attrs'][i].value){
 							tracks.push($scope.configModel.visibilitySettings['track' + contentType + 'Attrs'][i]);

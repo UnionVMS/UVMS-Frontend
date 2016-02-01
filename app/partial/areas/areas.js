@@ -40,7 +40,12 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, locale, ar
             
             $('.areaCard').css('height', newHeight);
             $('.base-area-container').css('height', newHeight - $('.tabMenu').height() - 30);
-            $('.area-form-container').css('height', newHeight - $('.tabMenu').height() -$('.area-radio-group').height() - $('.editingTools').height() - $('.user-area-btns').height() - 100);
+            
+            //div with table list of user areas
+            $('.user-areas-table .tbody').css('max-height', newHeight - $('.tabMenu').height() - 65 - 36 - 108); // .user-areas-table .thead'
+            
+            //User areas form
+            $('.area-form-container').css('height', $('.base-area-container').height() - 40 - 50 - 45); //.editingTools and .user-area-btns and slider
             
             $('.area-loading').css('width', $('.areaCard').width());
             $('.areaMap').css('height', newHeight);

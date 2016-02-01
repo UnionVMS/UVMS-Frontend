@@ -1,92 +1,13 @@
 <div class="col-md-12">
-	<span class="header">{{titles.vessel_tag}}</span>
-	<span class="name">{{properties.name}}</span>
+	<span class="header">{{windowTitle}}</span>
 </div>
 <div class="col-md-12 info-content">
 	<table class="table table-striped table-condensed table-bordered">
-		{{#visibility.fs}}
+		{{#position}}
 		<tr>
-			<td class="col-md-6"><b>{{titles.fs}}</b></td>
-			<td class="col-md-6">{{properties.countryCode}}</td>
+			<td class="col-md-6"><b>{{getTitle}}</b></td>
+			<td class="col-md-6">{{getValue}}</td>
 		</tr>
-		{{/visibility.fs}}
-		{{#visibility.extMark}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.extMark}}</b></td>
-			<td class="col-md-6">{{properties.externalMarking}}</td>
-		</tr>
-		{{/visibility.extMark}}
-		{{#visibility.ircs}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.ircs}}</b></td>
-			<td class="col-md-6">{{properties.ircs}}</td>
-		</tr>
-		{{/visibility.ircs}}
-		{{#visibility.cfr}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.cfr}}</b></td>
-			<td class="col-md-6">{{properties.cfr}}</td>
-		</tr>
-		{{/visibility.cfr}}
-		{{#visibility.posTime}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.posTime}}</b></td>
-			<td class="col-md-6">{{properties.posTime}}</td>
-		</tr>
-		{{/visibility.posTime}}
-		{{#visibility.lon}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.lon}}</b></td>
-			<td class="col-md-6">{{properties.lon}}</td>
-		</tr>
-		{{/visibility.lon}}
-		{{#visibility.lat}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.lat}}</b></td>
-			<td class="col-md-6">{{properties.lat}}</td>
-		</tr>
-		{{/visibility.lat}}
-		{{#visibility.stat}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.stat}}</b></td>
-			<td class="col-md-6">{{properties.stat}}</td>
-		</tr>
-		{{/visibility.stat}}
-		{{#visibility.m_spd}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.m_spd}}</b></td>
-			<td class="col-md-6">{{properties.m_spd}}</td>
-		</tr>
-		{{/visibility.m_spd}}
-		{{#visibility.c_spd}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.c_spd}}</b></td>
-			<td class="col-md-6">{{properties.c_spd}}</td>
-		</tr>
-		{{/visibility.c_spd}}
-		{{#visibility.crs}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.crs}}</b></td>
-			<td class="col-md-6">{{properties.crs}}</td>
-		</tr>
-		{{/visibility.crs}}
-		{{#visibility.msg_tp}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.msg_tp}}</b></td>
-			<td class="col-md-6">{{properties.msg_tp}}</td>
-		</tr>
-		{{/visibility.msg_tp}}
-		{{#visibility.act_tp}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.act_tp}}</b></td>
-			<td class="col-md-6">{{properties.act_tp}}</td>
-		</tr>
-		{{/visibility.act_tp}}
-		{{#visibility.source}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.source}}</b></td>
-			<td class="col-md-6">{{properties.source}}</td>
-		</tr>
-		{{/visibility.source}}
+		{{/position}}
 	</table>
 </div>

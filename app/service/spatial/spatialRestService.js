@@ -89,7 +89,7 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource) 
             });
             return deferred.promise;
 	    },
-     getUserAreaLayer: function(){
+        getUserAreaLayer: function(){
             var deferred = $q.defer();
             spatialRestFactory.getUserAreaLayer().get({}, function(response){
                 deferred.resolve(response);

@@ -1,127 +1,178 @@
-.editingTools {
-	margin-bottom: 20px;
-	margin-top: 20px;
-	.btn.active {
-		color: #000;
-		&:focus,
-		&:hover
-		 {
-			-webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-		  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-			color: #000;
-		}
-		&:focus{
-			background-color: #ebebeb;
-		}
+.userAreasContainer {
+	max-height: 100%;
+	.newAreaBtn {
+		padding-bottom: 10px;
 	}
-}
-
-.area-form-container {
-	overflow-y: auto;
-}
-
-.area-coord-form {
-	margin-bottom: 10px;
-}
-
-.user-area-btns {
-	margin-top: 20px;
-}
-
-.area-coord-form,
-.user-area-form {
-	border: 1px solid #dddddd;
-	padding: 10px;
-	//height: 800px;
-	label {
-		font-weight: 200;
+	.tableBtnMargin {
+		margin-right: 5px;
 	}
-	.section-title {
-		font-weight: bold;
-		text-transform: uppercase;
+	.search-field {
+		margin-bottom: 5px;
 	}
-}
-
-.area-coord-form {
-	.coord-table {
-		margin-top: 10px;
-		.thead,
-		.tbody {
-			border: 0px;
-		}
-		.thead {
-			border-bottom: 1px solid #dddddd;
-			.th {
-				text-align: center;
-				font-weight: bold;
-			}
-		}
-		.tbody {
-			margin-top: 10px;
-			.btn-circle {
-				border-radius: 50%;
-				padding: 1px 4px;
-				font-size: 9px;
-			}
-		}
-		.coord-idx {
-			line-height: 34px;
-		}
-		.coord-right-margin {
-			margin-right: 3px;
-		}
-		.delete-coord {
-			line-height: 34px;
-		}
-	}
-	.coord-btns {
-		margin-top: 15px;
+	.editingTools {
 		margin-bottom: 10px;
-	}
-	.proj-container {
-			text-align: justify;
-			.proj-label {
-				line-height: 60px;
-				vertical-align: baseline;
-				padding-left: 0px;
+		//margin-top: 20px;
+		.btn.active {
+			color: #000;
+			&:focus,
+			&:hover
+			 {
+				-webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+			  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+				color: #000;
 			}
-			.proj-combo {
-				padding-right: 0px;
-				margin-bottom: 15px;
-				margin-top: 15px;
+			&:focus{
+				background-color: #ebebeb;
 			}
-	}
-}
-
-textarea[name=userAreaDesc]{
-	resize: none;
-}
-
-.datesGroup {
-	display: inline-block;
-	>label {
-		font-weight: bold;
-	}
-}
-
-.user-area-btns {
-	.pull-right {
-		button {
-			width: 100px;
 		}
 	}
-}
+	.user-areas-table {
+		.thead {
+			border-bottom: 1px solid #ddd;
 
-.leftPadding {
-	&,
-	&.withoutPadding {
-			padding-left: 15px;
+			.tr .th {
+				border: 0;
+				font-weight: bold;
+				&:last-child{
+					border: 0 !important;
+				}
+			}
+		}
+		.tbody{
+			.tr:nth-child(odd) {
+				background: #f7f7f7;
+			}
+			.loading-spinner-cl {
+				text-align: center;
+				padding: 10px;
+			}
+			overflow-y: auto;
+		}
+		.tfoot {
+			padding: 0 15px !important;
+		}
 	}
-}
+	.area-form-container {
+		overflow-y: auto;
+	}
 
-.rightPadding {
-	&,
-	&.withoutPadding {
-		padding-right: 15px;
+	.transparency-slider{
+		margin-top: 10px;
+	}
+
+	.area-coord-form {
+		margin-bottom: 20px;
+	}
+
+	.user-area-btns {
+		margin-top: 20px;
+	}
+
+	.noBorder{
+		border: 0;
+		webkit-box-shadow: none;
+    box-shadow: none;
+	}
+
+	.slider-label{
+		line-height: 30px;
+	}
+
+	.area-coord-form,
+	.user-area-form {
+		border: 1px solid #dddddd;
+		padding: 10px;
+		//height: 800px;
+		label {
+			font-weight: 200;
+		}
+		.section-title {
+			font-weight: bold;
+			text-transform: uppercase;
+		}
+	}
+
+	.area-coord-form {
+		.coord-table {
+			margin-top: 10px;
+			.thead,
+			.tbody {
+				border: 0px;
+			}
+			.thead {
+				border-bottom: 1px solid #dddddd;
+				.th {
+					text-align: center;
+					font-weight: bold;
+				}
+			}
+			.tbody {
+				margin-top: 10px;
+				.btn-circle {
+					border-radius: 50%;
+					padding: 1px 4px;
+					font-size: 9px;
+				}
+			}
+			.coord-idx {
+				line-height: 34px;
+			}
+			.coord-right-margin {
+				margin-right: 3px;
+			}
+			.delete-coord {
+				line-height: 34px;
+			}
+		}
+		.coord-btns {
+			margin-top: 15px;
+			margin-bottom: 10px;
+		}
+		.proj-container {
+				text-align: justify;
+				.proj-label {
+					line-height: 60px;
+					vertical-align: baseline;
+					padding-left: 0px;
+				}
+				.proj-combo {
+					padding-right: 0px;
+					margin-bottom: 15px;
+					margin-top: 15px;
+				}
+		}
+	}
+
+	textarea[name=userAreaDesc]{
+		resize: none;
+	}
+
+	.datesGroup {
+		display: inline-block;
+		>label {
+			font-weight: bold;
+		}
+	}
+
+	.user-area-btns {
+		.pull-right {
+			button {
+				width: 100px;
+			}
+		}
+	}
+
+	.leftPadding {
+		&,
+		&.withoutPadding {
+				padding-left: 15px;
+		}
+	}
+
+	.rightPadding {
+		&,
+		&.withoutPadding {
+			padding-right: 15px;
+		}
 	}
 }

@@ -1,9 +1,17 @@
 angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale, $modal, UserArea, areaMapService, areaRestService, areaAlertService, spatialRestService, unitConversionService){
+    $scope.activeTool = undefined;
     $scope.selectedProj = undefined;
+    $scope.userAreasList = [];
+    $scope.displayedUserAreas = [].concat($scope.userAreasList);
+    $scope.itemsByPage = 5;
+    $scope.tableLoading = false;
+    //$scope.editingType = 'list';
+    $scope.editingType = 'edit';
+    $scope.isUpdate = false;
+    $scope.searchString = '';
+    $scope.userAreaTransp = 0;
     
     $scope.init = function(){
-        $scope.editingType = 'create';
-        $scope.activeTool = undefined;
         $scope.coordVisible = false;
         $scope.userAreaSubmitted = false;
         
@@ -11,6 +19,16 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.userArea.reset();
         $scope.displayedCoords = [].concat($scope.userArea.coordsArray);
     };
+    
+    //Switch editing type
+    $scope.setEditingType = function(type){
+        if ($scope.editingType === 'edit' && angular.isDefined($scope.activeTool)){
+            var fn = 'deactivate' + $scope.activeTool.charAt(0).toUpperCase() + $scope.activeTool.substr(1);
+            $scope[fn]();
+        }
+        $scope.editingType = type;
+    };
+    
     
     //EDITING TOOLBAR
     $scope.toggleTool = function(type){
@@ -60,9 +78,130 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     locale.ready('areas').then(function(){
         $scope.init();
         $scope.getProjections();
+        $scope.getUserAreaLayer();
+        //$scope.getAreaTypes();
+        if ($scope.userAreasList.length === 0){
+            $scope.getUserAreasList();
+        }
     });
     
-    //COMBOBOX
+    //USER AREA LAYER
+    $scope.getUserAreaLayer = function(){
+        spatialRestService.getUserAreaLayer().then(function(response){
+            if (!angular.isDefined(areaMapService.getLayerByType('USERAREA'))){
+                areaMapService.addUserAreasWMS(response.data);
+            }
+        }, function(error){
+            $scope.alert.setError();
+            $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_layer');
+            $scope.alert.hideAlert();
+        });
+    };
+    
+    //USER AREAS LIST
+    $scope.getUserAreasList = function(){
+        $scope.tableLoading = true;
+        spatialRestService.getUserDefinedAreas().then(function(response){
+            $scope.userAreasList = response;
+            $scope.displayedUserAreas = [].concat($scope.userAreasList);
+            $scope.tableLoading = false;
+        }, function(error){
+            $scope.tableLoading = false;
+            $scope.alert.setError();
+            $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_list');
+            $scope.alert.hideAlert();
+        });
+    };
+    
+    //USER AREAS TRANSPARENCY
+    $scope.formatTooltip = function (value) {
+        return value + '%';
+    };
+    
+    $scope.setTransparency = function(value, event){
+        areaMapService.setLayerOpacity('USERAREA', (100 - value) / 100);
+    };
+    
+    //Table buttons
+    //Zoom
+    $scope.zoomToArea = function(idx){
+        //Zoom to area
+        var wkt = new ol.format.WKT();
+        var geom = wkt.readGeometry($scope.displayedUserAreas[idx].extent, {
+            dataProjection: 'EPSG:4326',
+            featureProjection: areaMapService.getMapProjectionCode()
+        });
+        areaMapService.zoomToGeom(geom);
+        
+        //Filter wms layer
+        areaMapService.mergeParamsGid($scope.displayedUserAreas[idx].gid, $scope.displayedUserAreas[idx].areaType, true);
+    };
+    
+    //Delete
+    $scope.deleteUserArea = function(idx){
+        $scope.alert.setLoading(locale.getString('areas.deleting_area'));
+        areaRestService.deleteUserArea($scope.displayedUserAreas[idx].gid, idx).then(function(response){
+            var targetIdx = $scope.userAreasList.indexOf($scope.displayedUserAreas[idx]);
+            $scope.userAreasList.splice(targetIdx, 1);
+            areaMapService.refreshWMSLayer('USERAREA');
+            $scope.alert.removeLoading();
+            $scope.alert.setSuccess();
+            $scope.alert.alertMessage = locale.getString('areas.delete_user_area_success');
+            $scope.alert.hideAlert();
+        }, function(error){
+            console.log(error);
+            $scope.alert.removeLoading();
+            $scope.alert.setError();
+            $scope.alert.alertMessage = locale.getString('areas.delete_user_area_error');
+            $scope.alert.hideAlert();
+        });
+    };
+    
+    //Edit user area
+    $scope.editUserArea = function(idx){
+        $scope.alert.setLoading(locale.getString('areas.getting_area'));
+        areaRestService.getUserAreaAsGeoJSON($scope.displayedUserAreas[idx].gid).then(function(response){
+            $scope.alert.removeLoading();
+            $scope.setEditingType('edit');
+            $scope.loadGeoJSONFeature(response[0]);
+            areaMapService.mergeParamsGid($scope.displayedUserAreas[idx].gid, $scope.displayedUserAreas[idx].areaType, false);
+            $scope.isUpdate = true;
+        }, function(error){
+            $scope.alert.setError();
+            $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_geojson');
+            $scope.alert.hideAlert();
+        });
+    };
+    
+    //Convert geojson area to our user area model
+    $scope.loadGeoJSONFeature = function(data){
+        $scope.userArea.setPropertiesFromJson(data.properties);
+        
+        var format = new ol.format.GeoJSON();
+        var multiGeom = format.readGeometry(data.geometry, {
+            dataProjection: 'EPSG:4326',
+            featureProjection: areaMapService.getMapProjectionCode()
+        });
+        
+        var geom = multiGeom.getPolygon(0);
+        $scope.userArea.geometry = geom;
+        $scope.userArea.setCoordsFromGeom();
+        $scope.userArea.coordsProj = areaMapService.getMapProjectionCode();
+        
+        areaMapService.zoomToGeom(geom);
+        areaMapService.raiseLayer('drawlayer');
+        areaMapService.addVectorFeature(geom);
+    };
+    
+    //CREATE NEW AREA
+    $scope.createNewArea = function(){
+        $scope.isUpdate = false;
+        $scope.setEditingType('edit');
+        areaMapService.raiseLayer('drawlayer');
+        areaMapService.clearParams('USERAREA');
+    }; 
+    
+    //COMBOBOX PROJECTION
     $scope.getProjections = function(){
         spatialRestService.getSupportedProjections().then(function(response){
             $scope.srcProjections = response;
@@ -136,6 +275,35 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         } 
     });
     
+    //COMBOBOX PROJECTION
+    $scope.getAreaTypes = function(){
+        areaRestService.getUserAreaTypes().then(function(response){
+            $scope.areaTypes = [];
+            for (var i = 0; i < response.length; i++){
+                //TODO
+//                $scope,areaTypes.push({
+//                   "text":  
+//                });
+            }
+            
+            //$scope.srcProjections = response;
+//            $scope.projections = [];
+//            for (var i = 0; i < $scope.srcProjections.length; i++){
+//                $scope.projections.push({
+//                    "text": $scope.srcProjections[i].name,
+//                    "code": $scope.srcProjections[i].id
+//                });
+//            }
+//
+//            $scope.setMapProjectionOnCombo();
+            
+        }, function(error){
+//            $scope.alert.setError();
+//            $scope.alert.alertMessage = locale.getString('areas.error_getting_projections');
+//            $scope.alert.hideAlert();
+        });
+    };
+    
     //FORM FUNCTIONS
     $scope.buildGeoJSON = function(){
         var geojson = new ol.format.GeoJSON();
@@ -152,7 +320,11 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         
         feature.set('startDate', unitConversionService.date.convertDate($scope.userArea.startDate, 'to_server'));
         feature.set('endDate', unitConversionService.date.convertDate($scope.userArea.endDate, 'to_server'));
+        feature.set('isShared', $scope.userArea.isShared);
         
+        if (angular.isDefined($scope.userArea.id)){
+            feature.set('id', $scope.userArea.id.toString());
+        }
         
         var featObj = geojson.writeFeatureObject(feature, {
             dataProjection: 'EPSG:4326',
@@ -323,13 +495,37 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     };
     
     //Global save button
-    $scope.saveFeature = function(){
+    $scope.saveFeature = function(mode){
         $scope.userAreaSubmitted = true;
         $scope.validateGeometry();
         if ($scope.userAreaForm.$valid && $scope.coordsForm.$valid){
-            $scope.alert.setLoading(locale.getString('areas.saving_new_area'));
-            var feature = $scope.buildGeoJSON(); 
-            areaRestService.createArea(angular.toJson(feature)).then(createSuccess, createError);
+            var feature = $scope.buildGeoJSON();
+            if (mode === 'create'){
+                $scope.alert.setLoading(locale.getString('areas.saving_new_area'));
+                areaRestService.createUserArea(angular.toJson(feature)).then(createSuccess, createError);
+            } else {
+                $scope.alert.setLoading(locale.getString('areas.updating_area'));
+                areaRestService.updateUserArea(angular.toJson(feature)).then(function(response){
+                    $scope.alert.removeLoading();
+                    $scope.alert.setSuccess();
+                    $scope.alert.alertMessage = locale.getString('areas.update_user_area_success');
+                    $scope.alert.hideAlert();
+                    
+                    //clear vector data
+                    $scope.resetFeature();
+                    
+                    //reload wms and table
+                    areaMapService.clearParams('USERAREA');
+                    $scope.getUserAreasList();
+                    $scope.setEditingType('list');
+                    $scope.activeTool = undefined;
+                }, function(error){
+                    $scope.alert.setError();
+                    $scope.alert.alertMessage = locale.getString('areas.error_saving_user_area');
+                    $scope.alert.hideAlert();
+                });
+            }
+            
         } else {
             if (!_.has($scope.userAreaForm.$error, 'geomError')){
                 $scope.alert.setError();
@@ -339,6 +535,23 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         }
     };
     
+    //Global cancel button
+    $scope.cancelEditing = function(){
+        if (angular.isDefined($scope.activeTool)){
+            var fn = 'deactivate' + $scope.activeTool.charAt(0).toUpperCase() + $scope.activeTool.substr(1);
+            $scope[fn]();
+            $scope.activeTool = undefined;
+        }
+        
+        $scope.setEditingType('list');
+        $scope.resetFeature();
+        if ($scope.isUpdate === true){
+            areaMapService.clearParams('USERAREA');
+        }
+        areaMapService.setLayerOpacity('USERAREA');
+        $scope.userAreaTransp = 0;
+    };
+    
     //CALLBACK FUNCTIONS
     var createSuccess = function(response){
         $scope.alert.removeLoading();
@@ -346,7 +559,14 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.alert.alertMessage = locale.getString('areas.create_user_area_success');
         $scope.alert.hideAlert();
         
+        //clear vector data
         $scope.resetFeature();
+        
+        //reload wms and table
+        areaMapService.refreshWMSLayer('USERAREA');
+        $scope.getUserAreasList();
+        $scope.setEditingType('list');
+        $scope.activeTool = undefined;
     };
     
     var createError = function(error){

@@ -101,7 +101,7 @@ angular.module('unionvmsWeb').controller('SegmentsvisibilityCtrl',function($scop
 		    var contentTypes = ['Table','Popup','Label'];
 			angular.forEach(contentTypes, function(contentType) {
 				var segments = [];
-				angular.forEach($scope.configModel.visibilitySettings.positions[contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()].order, function(item) {
+				angular.forEach($scope.configModel.visibilitySettings.segments[contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()].order, function(item) {
 					for(var i=0;i<$scope.configModel.visibilitySettings['segment' + contentType + 'Attrs'].length;i++){
 						if(item === $scope.configModel.visibilitySettings['segment' + contentType + 'Attrs'][i].value){
 							segments.push($scope.configModel.visibilitySettings['segment' + contentType + 'Attrs'][i]);

@@ -1,62 +1,13 @@
 <div class="col-md-12">
-	<span class="header">{{titles.vessel_tag}}</span>
-	<span class="name">{{properties.name}}</span>
+	<span class="header">{{windowTitle}}</span>
 </div>
 <div class="col-md-12 info-content">
 	<table class="table table-striped table-condensed table-bordered">
-		{{#visibility.fs}}
+		{{#segment}}
 		<tr>
-			<td class="col-md-6"><b>{{titles.fs}}</b></td>
-			<td class="col-md-6">{{properties.countryCode}}</td>
+			<td class="col-md-6"><b>{{getTitle}}</b></td>
+			<td class="col-md-6">{{getValue}}</td>
 		</tr>
-		{{/visibility.fs}}
-		{{#visibility.extMark}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.extMark}}</b></td>
-			<td class="col-md-6">{{properties.externalMarking}}</td>
-		</tr>
-		{{/visibility.extMark}}
-		{{#visibility.ircs}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.ircs}}</b></td>
-			<td class="col-md-6">{{properties.ircs}}</td>
-		</tr>
-		{{/visibility.ircs}}
-		{{#visibility.cfr}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.cfr}}</b></td>
-			<td class="col-md-6">{{properties.cfr}}</td>
-		</tr>
-		{{/visibility.cfr}}
-		{{#visibility.dist}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.dist}}</b></td>
-			<td class="col-md-6">{{properties.dist}}</td>
-		</tr>
-		{{/visibility.dist}}
-		{{#visibility.dur}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.dur}}</b></td>
-			<td class="col-md-6">{{properties.dur}}</td>
-		</tr>
-		{{/visibility.dur}}
-		{{#visibility.spd}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.spd}}</b></td>
-			<td class="col-md-6">{{properties.spd}}</td>
-		</tr>
-		{{/visibility.spd}}
-		{{#visibility.crs}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.crs}}</b></td>
-			<td class="col-md-6">{{properties.crs}}</td>
-		</tr>
-		{{/visibility.crs}}
-		{{#visibility.cat}}
-		<tr>
-			<td class="col-md-6"><b>{{titles.cat}}</b></td>
-			<td class="col-md-6">{{properties.cat}}</td>
-		</tr>
-		{{/visibility.cat}}
+		{{/segment}}
 	</table>
 </div>

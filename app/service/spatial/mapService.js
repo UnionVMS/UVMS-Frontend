@@ -559,6 +559,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             for (var i = 0; i < gapNum.length; i++){
                 if (gapNum[i] === 'default'){
                     breaks.defaultColor = value;
+                } else if (gapNum[i] === 'lineStyle' || gapNum[i] === 'lineWidth'){
+                    return;
                 } else {
                     tempBreak.push(parseFloat(gapNum[i]));
                 }
@@ -1419,80 +1421,69 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	
 	//Popup visibility settings object
 	ms.popupVisibility = {
-	    positions: {
-	        fs: false,
-            extMark: false,
-            ircs: false,
-            cfr: false,
-            posTime: false,
-            lon: false,
-            lat: false,
-            stat: false,
-            m_spd: false,
-            c_spd: false,
-            crs: false,
-            msg_tp: false,
-            act_tp: false,
-            source: false
-	    },
-	    segments: {
-	        fs: false,
-            extMark: false,
-            ircs: false,
-            cfr: false,
-            dist: false,
-            dur: false,
-            spd: false,
-            crs: false,
-            cat: false
-	    }
+	    positions: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'posTime', 'lat', 'lon', 'stat', 'm_spd', 'c_spd', 'crs', 'msg_tp', 'act_tp', 'source'],
+	    segments: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'dist', 'dur', 'spd', 'crs', 'cat']
 	};
 	
 	ms.setPopupVisibility = function(type, config){
-	    angular.forEach(ms.popupVisibility[type], function(value, key) {
-            if (config.indexOf(key) !== -1){
-                ms.popupVisibility[type][key] = true;
-            } else {
-                ms.popupVisibility[type][key] = false;
-            }
-        }, ms);
+	    ms.popupVisibility[type] = config.values; 
 	};
 
 	//POPUP - Define the object that will be used in the popup for vms positions
     ms.setPositionsObjPopup = function(feature){
-        var data = {
-            titles: {
-                vessel_tag: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
-                fs: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
-                extMark: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
-                ircs: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'),
-                cfr: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'),
-                posTime: locale.getString('spatial.tab_vms_pos_table_header_date'),
-                lon: locale.getString('spatial.tab_vms_pos_table_header_lon'),
-                lat: locale.getString('spatial.tab_vms_pos_table_header_lat'),
-                stat: locale.getString('spatial.tab_vms_pos_table_header_status'),
-                m_spd: locale.getString('spatial.tab_vms_pos_table_header_measured_speed'),
-                c_spd: locale.getString('spatial.tab_vms_pos_table_header_calculated_speed'),
-                crs: locale.getString('spatial.tab_vms_pos_table_header_course'),
-                msg_tp: locale.getString('spatial.tab_vms_pos_table_header_msg_type'),
-                act_tp: locale.getString('spatial.tab_vms_pos_table_header_activity_type'),
-                source: locale.getString('spatial.tab_vms_pos_table_header_source')
-            },
-            visibility: ms.popupVisibility.positions,
-            properties: ms.formatPositionDataForPopup(feature)
-        };
+        var titles = ms.getPositionTitles();
+        var srcData = ms.formatPositionDataForPopup(feature);
         
-        return data;
+        var data = [];
+        for (var i = 0; i < ms.popupVisibility.positions.length; i++){
+            data.push({
+                title: titles[ms.popupVisibility.positions[i]],
+                value: srcData[ms.popupVisibility.positions[i]]
+            });
+        }
+        
+        return {
+            windowTitle: locale.getString('spatial.popup_positions_title'),
+            position: data,
+            getTitle: function(){
+                return this.title;
+            },
+            getValue: function(){
+                return this.value;
+            }
+        };
     };
     
+    //Popup attribute names for positions
+    ms.getPositionTitles = function(){
+        return {
+            name: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
+            fs: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
+            extMark: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
+            ircs: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'),
+            cfr: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'),
+            posTime: locale.getString('spatial.tab_vms_pos_table_header_date'),
+            lon: locale.getString('spatial.tab_vms_pos_table_header_lon'),
+            lat: locale.getString('spatial.tab_vms_pos_table_header_lat'),
+            stat: locale.getString('spatial.tab_vms_pos_table_header_status'),
+            m_spd: locale.getString('spatial.tab_vms_pos_table_header_measured_speed'),
+            c_spd: locale.getString('spatial.tab_vms_pos_table_header_calculated_speed'),
+            crs: locale.getString('spatial.tab_vms_pos_table_header_course'),
+            msg_tp: locale.getString('spatial.tab_vms_pos_table_header_msg_type'),
+            act_tp: locale.getString('spatial.tab_vms_pos_table_header_activity_type'),
+            source: locale.getString('spatial.tab_vms_pos_table_header_source')
+        };
+    };
+    
+    //Popup data values for positions
     ms.formatPositionDataForPopup = function(data){
         var coords = data.geometry.getCoordinates();
         var repCoords = ol.proj.transform(coords, ms.getMapProjectionCode(), 'EPSG:4326');
         
         return {
             name: data.name,
-            countryCode: data.countryCode,
-            externalMarking: data.externalMarking,
+            fs: data.countryCode,
+            extMark: data.externalMarking,
             ircs: data.ircs,
             cfr: data.cfr,
             posTime: unitConversionService.date.convertToUserFormat(data.positionTime),
@@ -1510,31 +1501,51 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     
     //POPUP - Define the object that will be used in the popup for vms positions
     ms.setSegmentsObjPopup = function(feature){
-        var data = {
-            titles: {             
-                vessel_tag: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
-                fs: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
-                extMark: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
-                ircs: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'),
-                cfr: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'),
-                dist: locale.getString('spatial.tab_vms_seg_table_header_distance'),
-                dur: locale.getString('spatial.tab_vms_seg_table_header_duration'),
-                spd: locale.getString('spatial.tab_vms_seg_table_header_speed_ground'),
-                crs: locale.getString('spatial.tab_vms_seg_table_header_course_ground'),
-                cat: locale.getString('spatial.tab_vms_seg_table_header_category')
-            },
-            visibility: ms.popupVisibility.segments,
-            properties: ms.formatSegmentDataForPopup(feature)
-        };
+        var titles = ms.getSegmentTitles();
+        var srcData = ms.formatSegmentDataForPopup(feature);
         
-        return data;
+        var data = [];
+        for (var i = 0; i < ms.popupVisibility.segments.length; i++){
+            data.push({
+                title: titles[ms.popupVisibility.segments[i]],
+                value: srcData[ms.popupVisibility.segments[i]]
+            });
+        }
+        
+        return {
+            windowTitle: locale.getString('spatial.popup_segments_title'),
+            segment: data,
+            getTitle: function(){
+                return this.title;
+            },
+            getValue: function(){
+                return this.value;
+            }
+        };
     };
     
+    //Popup attribute names for segments
+    ms.getSegmentTitles = function(){
+        return {
+            name: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
+            fs: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
+            extMark: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
+            ircs: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'),
+            cfr: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'),
+            dist: locale.getString('spatial.tab_vms_seg_table_header_distance'),
+            dur: locale.getString('spatial.tab_vms_seg_table_header_duration'),
+            spd: locale.getString('spatial.tab_vms_seg_table_header_speed_ground'),
+            crs: locale.getString('spatial.tab_vms_seg_table_header_course_ground'),
+            cat: locale.getString('spatial.tab_vms_seg_table_header_category')
+        };
+    };
+    
+    //Popup data values for segments
     ms.formatSegmentDataForPopup = function(data){
         return {
             name: data.name,
-            countryCode: data.countryCode,
-            externalMarking: data.externalMarking,
+            fs: data.countryCode,
+            extMark: data.externalMarking,
             ircs: data.ircs,
             cfr: data.cfr,
             dist: unitConversionService.distance.formatDistance(data.distance, 5),
