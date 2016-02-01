@@ -98,8 +98,35 @@
 	> .row {
 		margin-left: 0;
 	}
-	.refresh-container{
+	.refresh-container {
 		padding-left: 0px;
+		.toggle-switch {
+			border-radius: 20px;
+			min-width: 42px;
+			width: 20px;
+			background-color: #fff;
+			border-color: #c6c6c6;
+			.toggle-switch-animate {
+				width: 150%;
+				> span {
+					font-size: 12px;
+				    padding: 0 10px 0 2px;
+				    line-height: 22px;
+				}
+				.switch-left,
+				.switch-right {
+					border-radius: 15px;
+				}
+				.switch-left {
+					background-color: #3498db;
+					color: #fff;
+				}
+				.switch-right {
+					background-color: #eee;
+					color: #000;
+				}
+			}
+		}
 	}
 }
 
