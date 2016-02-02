@@ -41,11 +41,11 @@ module.exports = function (grunt) {
 
   //KARMA TEST FILES
   var karmaFiles = [
-        {pattern: 'environment/*.json', watched: true, included: false, served: true},
-        {pattern: 'app/partial/**/*.html', watched: true, included: false, served: true},
-        '<%= dom_munger.data.appjs %>',
-        'bower_components/angular-mocks/angular-mocks.js',
-        'test/envConfigForTest.js'
+      'bower_components/angular-mocks/angular-mocks.js',
+      '<%= dom_munger.data.appjs %>',
+      'test/envConfigForTest.js',
+      {pattern: 'environment/*.json', watched: true, included: false, served: true},
+      {pattern: 'app/partial/**/*.html', watched: true, included: false, served: true}
   ];
 
   // Project configuration.
@@ -72,9 +72,10 @@ module.exports = function (grunt) {
                   '/reporting/rest/',
                   '/spatial/rest/',
                   '/config/rest',
+                  '/mapfish',
                   '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'],
-              host: 'livm73u',
-              port: 28080
+              host: 'localhost',
+              port: 8080
         },
 
       development: {

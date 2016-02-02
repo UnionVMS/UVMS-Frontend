@@ -28,17 +28,17 @@ angular.module('unionvmsWeb')
             },
             activateMobileTerminal : function(){
                 return $resource('/mobileterminal/rest/mobileterminal/status/activate', {}, {
-                    save: {method: 'PUT'},
+                    save: {method: 'PUT'}
                 });
             },
             inactivateMobileTerminal : function(){
                 return $resource('/mobileterminal/rest/mobileterminal/status/inactivate', {}, {
-                    save: {method: 'PUT'},
+                    save: {method: 'PUT'}
                 });
             },
             removeMobileTerminal : function(){
                 return $resource('/mobileterminal/rest/mobileterminal/status/remove', {}, {
-                    save: {method: 'PUT'},
+                    save: {method: 'PUT'}
                 });
             },
             mobileTerminalHistory : function(){
@@ -326,7 +326,7 @@ angular.module('unionvmsWeb')
 
                 // Initial recursive call for page 1
                 inactivatePage(1);
-                return deferred.promise;
+               return deferred.promise;
             },
             removeMobileTerminal : function(mobileTerminal, comment){
                 var deferred = $q.defer();

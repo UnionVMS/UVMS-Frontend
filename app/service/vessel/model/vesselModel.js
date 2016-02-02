@@ -11,11 +11,11 @@ angular.module('unionvmsWeb')
         this.contact = {
             name : undefined,
             number : undefined,
-            email : undefined,
+            email : undefined
         };
         this.producer = {
             code : undefined,
-            name : undefined,
+            name : undefined
         };
         this.notes = '';
         this.lastMovement = undefined;
@@ -114,13 +114,13 @@ angular.module('unionvmsWeb')
             grossTonnageUnit : this.grossTonnageUnit,
             contact : this.contact,
             producer : this.producer,
-            notes : this.notes,
+            notes : this.notes
         };
 
         if(angular.isDefined(this.vesselId)){
             dto['assetId'] = {
                 type : this.vesselId.type,
-                value : this.vesselId.value,
+                value : this.vesselId.value
             };
         }
 

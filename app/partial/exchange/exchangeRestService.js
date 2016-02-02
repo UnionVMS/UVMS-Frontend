@@ -283,7 +283,7 @@ angular.module('unionvmsWeb')
     };
 
     var getExchangeConfig = function(){
-        var deferred = $q.defer();
+        /*var deferred = $q.defer();
         exchangeRestFactory.getExchangeConfig().get(
             function(response){
                 if (response.code !== 200) {
@@ -295,7 +295,7 @@ angular.module('unionvmsWeb')
                 deferred.reject("Failed to get Exchange config");
             }
         );
-        return deferred.promise;
+        return deferred.promise;*/
     };
 
 
