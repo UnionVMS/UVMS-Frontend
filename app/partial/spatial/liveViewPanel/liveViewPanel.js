@@ -66,7 +66,7 @@ angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $t
    //Refresh map size on tab change
    $scope.$watch('selectedTab', function(newVal, oldVal){
        if (newVal === 'MAP'){
-           $timeout($scope.updateMapContainer, 100);
+           $timeout($scope.updateMapContainerSize, 100);
            $timeout($scope.focusMap, 50);
        }
    });

@@ -1,8 +1,8 @@
-<div ng-controller="LayerpanelCtrl" ng-class="{'layer-panel': true, 'layer-expanded': expanded, 'layer-collapsed': !expanded}">
+<div ng-controller="LayerpanelCtrl" class="layer-panel" ng-class="{'layer-expanded': expanded, 'layer-collapsed': !expanded}">
   <div class="handle" ng-click="toggle()">
   	<i ng-class="{'fa fa-chevron-left': expanded, 'fa fa-chevron-right': !expanded}"></i>
   </div>
-  <div id="layer-panel-wrapper" class="tabbed-view" ng-show="expanded">
+  <div id="layer-panel-wrapper" class="tabbed-view">
 
     <!-- mock content -->
     <ul id="layer-tabs-container" class="nav nav-tabs" data-tabs="tabs">
@@ -16,7 +16,7 @@
         <a ng-click="tabClick('COPYRIGHT')">{{ 'spatial.layer_panel_copyright' | i18n }}</a>
       </li>
     </ul>
-      <div ng-show="tab==='LAYERTREE'">
+      <div ng-show="tab==='LAYERTREE'" class="legend-panel">
           <div layer-menu></div>
           <div id="layer-tree" layer-tree></div>
 

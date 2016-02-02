@@ -6,7 +6,10 @@ angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $time
     $scope.toggle = function() {
         $scope.expanded = !$scope.expanded;
         if ($scope.expanded) {
+        	$( '#layer-panel-wrapper' ).addClass('expanded');
             $timeout($scope.setHeight, 150);
+        }else{
+        	$( '#layer-panel-wrapper' ).removeClass('expanded');
         }
         $timeout(mapService.updateMapSize, 50);
     };
@@ -26,6 +29,10 @@ angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $time
 	        $( '.fancytree-container' ).css( 'height', wh-th+'px' );
     	}, 100);
     };
+    
+	$('.layer-panel').on('transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd', function(e) {
+		mapService.updateMapSize();
+    });
     
     angular.element(document).ready(function () {
     	mapService.updateMapContainerSize();

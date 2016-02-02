@@ -1,13 +1,25 @@
 .layer-panel {
   float: left;
+  -webkit-transition: width 0.3s;
+  transition: width 0.3s;
 }
 
-.layer-collapsed {
+.layer-panel.layer-collapsed {
   width: 10px;
+  overflow: hidden;
+  .ui-fancytree {
+  	overflow: hidden;
+  }
 }
 
-.layer-expanded {
+.layer-panel.layer-expanded {
   width: 250px;
+  &.ng-animate {
+	  overflow: hidden;
+	  .ui-fancytree {
+	  	overflow: hidden;
+	  }
+  }
 }
 
 .layer-panel .tabbed-view {
@@ -72,4 +84,24 @@
 
 #layer-tabs-container {
 	background-color: @pageBackgroundColor;
+    overflow: hidden;
+	height: 42px;
+}
+
+.layer-panel {
+	#layer-panel-wrapper {
+		display: none;
+		&.expanded {
+			display:block;
+		}
+	}
+	&.ng-animate {
+		#layer-panel-wrapper {
+			display:block;
+		}
+	}
+}
+
+ul.fancytree-container {
+	border-color: transparent;
 }
