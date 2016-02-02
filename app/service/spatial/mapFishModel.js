@@ -66,11 +66,11 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
             this.classes = [];
         },
 
-        Payload : function(layoutAttributes, layout){
+        Payload : function(attributes, layout){
             this.layout = layout;
-            this.layoutAttributes = layoutAttributes;
-            this.addMap = function(Map) { this.layoutAttributes["map"] = Map;};
-            this.addLegend = function(Legend) { this.layoutAttributes["legend"] = Legend;};
+            this.attributes = attributes;
+            this.addMap = function(Map) { this.attributes["map"] = Map;};
+            this.addLegend = function(Legend) { this.attributes["legend"] = Legend;};
         },
 
         WmsLayer : function(baseURL, layer) {
@@ -126,7 +126,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
             capabilities.layouts.filter(
                 function(layout){
                     if (layout.name === _layout){
-                        layout.layoutAttributes.filter(function(attribute){
+                        layout.attributes.filter(function(attribute){
                             if (attribute.type === 'String' && ((attribute.default !== undefined && attribute.default.length < 1) || attribute.default === undefined)){
                                 model.layoutAttributes.push(attribute);
                             }
