@@ -192,10 +192,15 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         mapService.clearVectorLayers();
         
         //Add nodes to the tree and layers to the map
-        var vectorNodeSource = new TreeModel();
-        vectorNodeSource = vectorNodeSource.nodeFromData(data);
-        
-        $rootScope.$broadcast('addLayerTreeNode', vectorNodeSource);
+        if (rep.positions.length > 0 || rep.segments.length > 0){
+            var vectorNodeSource = new TreeModel();
+            vectorNodeSource = vectorNodeSource.nodeFromData(data);
+            
+            $rootScope.$broadcast('addLayerTreeNode', vectorNodeSource);
+        } else if (rep.positions.length === 0 && rep.segments.length === 0){
+            rep.hasWarning = true;
+            $timeout(function(){rep.hasWarning = false;}, 3000);
+        }
         rep.isReportExecuting = false;
     };
     

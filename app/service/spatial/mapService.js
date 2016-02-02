@@ -726,38 +726,55 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     ms.setSegStyle = function(feature, resolution){
         var geometry = feature.getGeometry();
         var color = ms.getColorForSegment(feature);
+        
+        var width = 2;
+        if (angular.isDefined(ms.styles.segments.style.lineWidth)){
+            width = ms.styles.segments.style.lineWidth;
+        }
+        
+        var lineDash = null;
+        if (angular.isDefined(ms.styles.segments.style.lineStyle)){
+            switch (ms.styles.segments.style.lineStyle) {
+                case 'dashed':
+                    lineDash = [width * 2, width * 2];
+                    break;
+                case 'dotted':
+                    lineDash = [0.1, width * 2];
+                    break;
+                case 'dotdashed':
+                    lineDash = [width * 2, 0.1, width * 2];
+                    break;
+                default:
+                    lineDash = null;
+                    break;
+            }
+        }
+        
+        var fontSize = 10;
+        if (width > 2){
+            fontSize = Math.round((width - 2) * 2.5 + 10);
+        }
 
         var style = [
             new ol.style.Style({
                 stroke: new ol.style.Stroke({
                     color: 'white',
-                    width: 4
+                    width: 2 * width,
+                    lineDash: lineDash
                 })
             }),
             new ol.style.Style({
                 stroke: new ol.style.Stroke({
                     color: color,
-                    width: 2
+                    width: width,
+                    lineDash: lineDash
                 })
             }),
             new ol.style.Style({
                 geometry: new ol.geom.Point(ms.getMiddlePoint(geometry)),
                 text: new ol.style.Text({
-                    text: '\uf105',
-                    font: 'bold 20px FontAwesome',
-                    //textBaseline: 'middle',
-                    //textAlign: 'center',
-                    rotation: ms.getRotationForArrow(geometry),
-                    fill: new ol.style.Fill({
-                        color: 'white'
-                    })
-                })
-            }),
-            new ol.style.Style({
-                geometry: new ol.geom.Point(ms.getMiddlePoint(geometry)),
-                text: new ol.style.Text({
-                    text: '\uf105',
-                    font: 'bold 16px FontAwesome',
+                    text: '\uf054',
+                    font: 'bold ' + fontSize + 'px FontAwesome',
                     //textBaseline: 'middle',
                     //textAlign: 'center',
                     rotation: ms.getRotationForArrow(geometry),

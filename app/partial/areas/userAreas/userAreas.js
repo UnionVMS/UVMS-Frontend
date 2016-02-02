@@ -5,8 +5,8 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     $scope.displayedUserAreas = [].concat($scope.userAreasList);
     $scope.itemsByPage = 5;
     $scope.tableLoading = false;
-    //$scope.editingType = 'list';
-    $scope.editingType = 'edit';
+    $scope.editingType = 'list';
+//    $scope.editingType = 'edit';
     $scope.isUpdate = false;
     $scope.searchString = '';
     $scope.userAreaTransp = 0;
