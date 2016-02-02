@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="tableContainer" search-results-table search="currentSearchResults">
-                <table class="searchResults" ng-if="currentSearchResults.items.length > 0">
+                <table class="searchResults truncate-text" ng-if="currentSearchResults.items.length > 0">
                     <thead>
                         <tr>
                             <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.name'">{{'polling.running_program_polls_table_header_name' | i18n}}</th>

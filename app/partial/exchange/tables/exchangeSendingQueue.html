@@ -9,7 +9,7 @@
     </div>
     <div class="row scroller" loading-indicator="sendingQueue.loading" size="small" type="SPINNER">
         <div class="col-md-12 nopaddingright">
-            <table class="sendingQueue searchResults">
+            <table class="sendingQueue searchResults truncate-text">
                 <thead>
                     <th></th>
                     <th sortable-table-header by="sendingQueue.sortBy" reverse="sendingQueue.sortReverse" order="'pluginList.messageType'" class="">{{'exchange.sending_queue_table_header_recipient' | i18n}}</th>
@@ -19,16 +19,16 @@
                     <th class="action"><a title="{{'exchange.sending_queue_table_resend_all_title' | i18n}}" ng-click="resendAllQueued(sendingQueue.items)">{{'exchange.sending_queue_table_resend_all' | i18n}}</a></th>
                 </thead>
                 <tbody ng-repeat="plugIn in sendingQueue.items | orderBy:sendingQueue.sortBy:sendingQueue.sortReverse" class="delimiter">
-                    <tr class="sending-queue-group"><!-- ng-class-odd="'even'" ng-class-even="'odd'"-->
-                        <th>
+                    <td class="sending-queue-group"><!-- ng-class-odd="'even'" ng-class-even="'odd'"-->
+                        <td>
                             <i class="fa fa-plus fa-md" ng-hide="messageVisible" title="{{'exchange.sending_queue_expandgroup' | i18n}}" ng-click="messageVisible = messageVisible ? false:true"></i>
                             <i class="fa fa-minus fa-md" ng-show="messageVisible" title="{{'exchange.sending_queue_collapsegroup' | i18n}}" ng-click="messageVisible = !messageVisible ? true:false"></i>
-                        </th>
-                        <th>{{plugIn.pluginList.messageType}}</th>
-                        <th>{{plugIn.pluginList.recipient}}</th>
-                        <th>{{plugIn.pluginList.sendingLogList.length}}</th>
-                        <th>{{plugIn.pluginList.lastRecieved | confDateFormat}}</th>
-                        <th><a ng-click="resendAllQueueItemsInGroup(plugIn.pluginList.sendingLogList)" title="{{'exchange.sending_queue_resend_all_in_group_title' | i18n}}">{{'exchange.sending_queue_resend_all_in_group' | i18n}}</a></th>
+                        </td>
+                        <td>{{plugIn.pluginList.messageType}}</td>
+                        <td>{{plugIn.pluginList.recipient}}</td>
+                        <td>{{plugIn.pluginList.sendingLogList.length}}</td>
+                        <td>{{plugIn.pluginList.lastRecieved | confDateFormat}}</td>
+                        <td><a ng-click="resendAllQueueItemsInGroup(plugIn.pluginList.sendingLogList)" title="{{'exchange.sending_queue_resend_all_in_group_title' | i18n}}">{{'exchange.sending_queue_resend_all_in_group' | i18n}}</a></td>
                     </tr>
                     <tr ng-show="messageVisible" >
                         <td colspan="6" class="table-detail-container">
