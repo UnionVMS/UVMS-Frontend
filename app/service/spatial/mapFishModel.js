@@ -85,6 +85,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         },
 
         reset: function(){
+            model.templates = [];
             model.layouts = [];
             model.formats = [];
             model.layoutAttributes = [];
