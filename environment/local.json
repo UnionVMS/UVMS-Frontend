@@ -1,10 +1,4 @@
 {
     "env_name": "Local",
-    "rest_api_base_NOT_USED" : "http://localhost:8080",
-    "rest_api_base" : "http://localhost:9001",
-    "ws": {
-    	"protocol": "ws",
-    	"host": "localhost",
-    	"port": "9001"
-    }
+    "rest_api_base" : "http://localhost:9001"
 }
