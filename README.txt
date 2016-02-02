@@ -117,3 +117,27 @@ yo cg-angular:module my-module
 yo cg-angular:modal my-modal
 
 
+App client configuration
+=====================================
+The config.json file is loaded when the application loads, and contains the base
+URL for all REST requests ('rest_api_base'). It should be set to the full URL
+of the server running the backend components.
+
+Templates for different environments can be found in the environment directory.
+
+The 'env_name' property does not do anything, but only displays the name of the
+environment in the application footer.
+
+
+Contents of this application
+=====================================
+app.full.js - unminified JS
+app.full.min.css - minified CSS styles
+app.full.min.js - minified JS (~ 6 MB)
+app.full.min.js.map - names used for debugging
+assets - fonts, pictures, locales, ...
+config.json = environmetn/*.json
+fonts
+i18n - translations
+index.html - minified HTML
+usm - some USM assets

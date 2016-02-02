@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>eu.europa.ec.fisheries.uvms</groupId>
   <artifactId>unionvms-web</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.12-SNAPSHOT</version>
   <name>unionvms-web</name>
   <packaging>war</packaging>
   <properties>
@@ -34,10 +34,10 @@
           <name>!bowerproxy</name>
         </property>
       </activation>
-  <properties>
+      <properties>
         <bower.args>update</bower.args>
         <npm.args>update</npm.args>
-  </properties>
+      </properties>
     </profile>
     <profile>
       <id>nokarma</id>
@@ -216,7 +216,7 @@
 			  </goals>
             <phase>${karma.phase}</phase>
             <configuration>
-              <arguments>karma</arguments>
+              <arguments>test</arguments>
             </configuration>
 			</execution>
 		  </executions>
@@ -225,19 +225,19 @@
 			<artifactId>maven-war-plugin</artifactId>
 			<version>2.6</version>
 			<configuration>
-          <warName>${project.artifactId}</warName>
+          <warName>${project.artifactId}-${project.version}</warName>
           <warSourceDirectory>${basedir}/dist</warSourceDirectory>
           <packagingExcludes>unionvms-web.zip,app.full.js,app.full.js,app.full.min.js.map,config.js</packagingExcludes>
 				<webResources>
 					<resource>
-              <directory>/dist</directory>
+              <directory>${basedir}/dist</directory>
 					  <filtering>true</filtering>
 					  <includes>
                 <include>**/config.js*</include>
 					  </includes>
 					</resource>				
 					<resource>
-              <directory>/WebContent</directory>
+              <directory>${basedir}/WebContent</directory>
 					</resource>				
 				</webResources>
 			</configuration>
@@ -260,7 +260,7 @@
 	</plugins>
   </build>
   <scm>
-    <developerConnection>scm:svn:https://webgate.ec.europa.eu/CITnet/svn/UNIONVMS/branches/dev/unionvms-web</developerConnection>
+    <developerConnection>scm:svn:https://webgate.ec.europa.eu/CITnet/svn/UNIONVMS/branches/releases/uvms-1.0.0/unionvms-web</developerConnection>
    </scm>
   <distributionManagement>
     <repository>

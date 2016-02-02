@@ -10,3 +10,24 @@ TODO: In environment/dev.json I have paramterized the host and port like the fol
     "port":"${dev.srv.http.port}"
 }
 ...but I haven't committed it since I would break your tests.
+
+
+
+
+
+
+
+--
+
+To Generate a WAR file:
+
+$ mvn clean install
+
+-- 
+
+To make a new release:
+
+(update package.json version manually)
+$ mvn release:prepare
+(set release versions and such)
+$ mvn release:perform

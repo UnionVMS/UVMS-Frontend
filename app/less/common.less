@@ -222,8 +222,6 @@ table.searchResults{
 
 
             >td{
-                overflow-x: hidden;
-                text-overflow: ellipsis;
                 button{
                     height: 25px;
                     min-width: 25px;
@@ -266,6 +264,12 @@ table.searchResults{
         tbody{
             tr:nth-child(odd) {background: @searchResultsTableOddRowColor}
         }
+    }
+
+    &.truncate-text tbody tr td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     span.label {
