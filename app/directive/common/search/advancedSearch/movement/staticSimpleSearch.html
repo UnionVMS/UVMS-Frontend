@@ -1,26 +1,15 @@
-<div class="col-md-3 nopaddingright" style="padding-left: 8px;">
+<div class="col-md-9 nopaddingright" style="padding-left: 8px;">
     <div class="row nomargin">
-        <div class="col-md-6 smallerpadding searchcriteria">
-            <input type="text" placeholder="{{'movement.advanced_search_placeholder_by_name' | i18n}}"  class="form-control" tabindex="5" ng-model="advancedSearchObject.NAME">
+        <div class="col-md-2 smallerpadding searchcriteria">
+            <input type="text" placeholder="{{'movement.advanced_search_placeholder_by_cfr_ircs_name' | i18n}}"  class="form-control" tabindex="5" ng-model="cfrIrcsName" ng-model-options="{getterSetter: true}">
         </div>
-        <div class="col-md-6 smallerpadding searchcriteria">
+        <div class="col-md-2 smallerpadding searchcriteria">
             <dropdown ng-model="advancedSearchObject.TIME_SPAN" no-placeholder-item items="timeSpanOptions"></dropdown>
         </div>
-        <div class="col-md-6 smallerpadding searchcriteria">
-            <dropdown ng-model="advancedSearchObject.FLAG_STATE" initialtext="{{'movement.advanced_search_placeholder_flag_state' | i18n}}" items="flagStates"></dropdown>
-        </div>
-    </div>
-</div>
-<div class="col-md-3 nopaddingright nopaddingleft">
-    <div class="row nomargin">
-        <div class="col-md-12 smallerpadding searchcriteria">
+        <div class="col-md-4 smallerpadding searchcriteria">
             <datepicker-input model="advancedSearchObject.FROM_DATE" time="true" placeholder="{{'movement.search_movementStartDate_placeholder' | i18n}}" max-date="advancedSearchObject.TO_DATE"></datepicker-input>
         </div>
-    </div>
-</div>
-<div class="col-md-3 nopaddingright nopaddingleft">
-    <div class="row nomargin">
-        <div class="col-md-12 smallerpadding searchcriteria">
+        <div class="col-md-4 smallerpadding searchcriteria">
             <datepicker-input model="advancedSearchObject.TO_DATE" time="true" placeholder="{{'movement.search_movementEndDate_placeholder' | i18n}}" min-date="advancedSearchObject.FROM_DATE"></datepicker-input>
         </div>
     </div>
@@ -31,11 +20,11 @@
         <div class="col-md-8 col-md-offset-4 smallerpadding searchcriteriadropdown">
             <saved-search-dropdown type="MOVEMENT" ng-model="selectedSavedSearch" initialtext="{{'movement.advanced_search_placeholder_saved_searches' | i18n}}" callback="performSavedSearch" enable-delete="true"></saved-search-dropdown>
         </div>
-        <div class="col-md-4 col-md-offset-4 smallerpadding">
+        <div class="col-md-4 col-md-offset-4 smallerpadding search-button">
             <button type="submit" class="btn btn-primary btn-sm vmsbtn" ng-click="performAdvancedMovementSearch()">{{'common.search' | i18n}}
             </button>
         </div>
-        <div class="col-md-4 smallerpadding">
+        <div class="col-md-4 smallerpadding search-button">
             <button type="button" class="btn btn-default btn-sm vmsbtn" ng-click="resetSearch()">
                 {{'common.reset' | i18n}}
             </button>

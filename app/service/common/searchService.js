@@ -450,7 +450,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             var movementCritieria = partition["default"];
             var vesselCriteria = partition["vessel"];
 
-            var vesselRequest = new GetListRequest(1, 10000, true, vesselCriteria);
+            var vesselRequest = new GetListRequest(1, 10000, getListRequest.isDynamic, vesselCriteria);
             var movementRequest = new GetListRequest(getListRequest.page, getListRequest.listSize, getListRequest.isDynamic, movementCritieria);
 
             //Get vessels first?

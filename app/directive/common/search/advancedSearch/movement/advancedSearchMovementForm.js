@@ -38,9 +38,28 @@ angular.module('unionvmsWeb')
             $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_TODAY;
         };
 
+        function backupSearchObjectValues(keys) {
+            var values = {};
+            $.each(keys, function(index, key) {
+                if (angular.isDefined($scope.advancedSearchObject[key])) {
+                    values[key] = $scope.advancedSearchObject[key];
+                }
+            });
+
+            return values;
+        }
+
+        function restoreSearchObjectValues(values) {
+            $.each(values, function(key, value) {
+                $scope.advancedSearchObject[key] = value;
+            });
+        }
+
         $scope.toggleAdvancedSearch = function(){
+            var timeSpanBackup = backupSearchObjectValues(["TIME_SPAN", "FROM_DATE", "TO_DATE"]);
             $scope.advancedSearch = !$scope.advancedSearch;
             resetSearchForm();
+            restoreSearchObjectValues(timeSpanBackup);
         };
 
         $scope.resetSearch = function(){
@@ -75,6 +94,17 @@ angular.module('unionvmsWeb')
             $scope.selectedSavedSearch = undefined;
         };
 
+        $scope.cfrIrcsName = function(value) {
+            if (value === undefined) {
+                return $scope.advancedSearchObject.NAME;
+            }
+            else {
+                $scope.advancedSearchObject.CFR = value;
+                $scope.advancedSearchObject.IRCS = value;
+                $scope.advancedSearchObject.NAME = value;
+            }
+        };
+
         //Search by the advanced search form inputs
         $scope.performAdvancedMovementSearch = function(){
             alertService.hideMessage();
@@ -84,7 +114,7 @@ angular.module('unionvmsWeb')
             //Create criterias
             searchService.resetPage();
             searchService.resetSearchCriterias();
-            searchService.setDynamic(true);
+            searchService.setDynamic($scope.advancedSearch);
             //Asset group selected?
             if(angular.isDefined($scope.selectedVesselGroup)){
                 var savedAssetGroup = savedSearchService.getVesselGroupForUserById($scope.selectedVesselGroup);
@@ -182,6 +212,7 @@ angular.module('unionvmsWeb')
             $scope.meassuredSpeed = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'SPEED_SPAN'), 'SPEED_SPAN', 'MOVEMENT');
             $scope.status = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'STATUS'),'STATUS','MOVEMENT');
             $scope.movementType = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'MESSAGE_TYPE'),'MESSAGE_TYPE','MOVEMENT');
+            $scope.movementSourceTypes = configurationService.setTextAndCodeForDropDown(configurationService.getConfig('MOVEMENT_SOURCE_TYPES'),'MOVEMENT_SOURCE_TYPES','MOVEMENT');
             $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_TODAY;
             $scope.mapArea = getMapAreaValuesForDropdown();
 
