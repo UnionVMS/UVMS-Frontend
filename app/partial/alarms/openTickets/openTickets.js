@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, $stateParams, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, AlarmReportModal, movementRestService, $resource, longPolling){
+angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, $stateParams, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, AlarmReportModal, movementRestService, $resource, longPolling, mobileTerminalRestService){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -192,11 +192,10 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         //Work on a copy of the alarm item so you can cancel the editing
         var copy = item.copy();
         var options = {
+            movementPromise: movementRestService.getMovement(copy.positionGuid),
+            mobileTerminalPromise: mobileTerminalRestService.getMobileTerminalByGuid(item.mobileTerminalGuid),
             readOnly : true
         };
-        //Get movement
-        var movementPromise = movementRestService.getMovement(copy.positionGuid);
-        options.movementPromise = movementPromise;
 
         //Open modal
         modalInstance = AlarmReportModal.show(copy, options);

@@ -30,6 +30,19 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
     };
 
     $scope.init = function() {
+        // MobileTerminal -> DNID + MEMBER_NUMBER
+        if (angular.isDefined(options.mobileTerminalPromise)) {
+            options.mobileTerminalPromise.then(function(mt) {
+                for (var i = 0; i < mt.channels.length; i++) {
+                    if (mt.channels[i].guid === $scope.alarm.channelGuid) {
+                        $scope.channelDnid = mt.channels[i].ids.DNID;
+                        $scope.channelMemberNumber = mt.channels[i].ids.MEMBER_NUMBER;
+                        break;
+                    }
+                }
+            });
+        }
+
         //MovementPromise in options?
         if(angular.isDefined(options.movementPromise)){
             $scope.loadingMovement = true;

@@ -66,13 +66,13 @@
             </div>
             <div class="col-md-3">
                 <label>{{'mobileTerminal.table_header_dnid' | i18n}}</label>
-                <div class="value" ng-show="alarm.movement.mobileTerminalData.ids.DNID">{{alarm.movement.mobileTerminalData.ids.DNID}}</div>
-                <div class="value missing" ng-hide="alarm.movement.mobileTerminalData.ids.DNID">-</div>
+                <div class="value" ng-show="channelDnid">{{channelDnid}}</div>
+                <div class="value missing" ng-hide="channelDnid">-</div>
             </div>
             <div class="col-md-3">
                 <label>{{'mobileTerminal.table_header_member_no' | i18n}}</label>
-                <div class="value" ng-show="alarm.movement.mobileTerminalData.ids.MEMBER_NUMBER">{{alarm.movement.mobileTerminalData.ids.MEMBER_NUMBER}}</div>
-                <div class="value missing" ng-hide="alarm.movement.mobileTerminalData.ids.MEMBER_NUMBER">-</div>
+                <div class="value" ng-show="channelMemberNumber">{{channelMemberNumber}}</div>
+                <div class="value missing" ng-hide="channelMemberNumber">-</div>
             </div>
         </div>
 
