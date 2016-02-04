@@ -147,8 +147,9 @@
     <div class="container map-bottom">
         <div class="row">
             <div class="col-md-2 col-xs-5 refresh-container">
-                <b>{{'spatial.map_label_auto_refresh_status' | i18n }} </b> {{refresh.status?'ON':'OFF'}}
-            </div>
+				<b>{{'spatial.map_label_auto_refresh_status' | i18n }} </b>
+				<toggle-switch ng-model="refresh.status"></toggle-switch>
+			</div>
             <div class="col-md-3 col-xs-5">
                 <div id="map-scale" class="scale-line"></div>
             </div>
