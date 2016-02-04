@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService){
+angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService, reportService){
     //Report form mode
     $scope.formMode = 'CREATE';
 
@@ -105,19 +105,19 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     
     var validateRangeFieldGroup = function(min,max,fieldMin,fieldMax,subForm){
     	if(angular.isDefined(min) && min<0){
-    		$scope.reportForm[subForm][fieldMin].$setValidity('minError', false);
+    		$scope.reportForm.reportBodyForm[subForm][fieldMin].$setValidity('minError', false);
         }else{
-            $scope.reportForm[subForm][fieldMin].$setValidity('minError', true);
+            $scope.reportForm.reportBodyForm[subForm][fieldMin].$setValidity('minError', true);
     	}
     	if(angular.isDefined(max) && max<0){
-    		$scope.reportForm[subForm][fieldMax].$setValidity('minError', false);
+    		$scope.reportForm.reportBodyForm[subForm][fieldMax].$setValidity('minError', false);
         }else{
-            $scope.reportForm[subForm][fieldMax].$setValidity('minError', true);
+            $scope.reportForm.reportBodyForm[subForm][fieldMax].$setValidity('minError', true);
     	}
         if(angular.isDefined(min) && angular.isDefined(max) && min !== null && max != null && min > max){
-            $scope.reportForm[subForm][fieldMax].$setValidity('maxError', false);
+            $scope.reportForm.reportBodyForm[subForm][fieldMax].$setValidity('maxError', false);
         }else{
-            $scope.reportForm[subForm][fieldMax].$setValidity('maxError', true);
+            $scope.reportForm.reportBodyForm[subForm][fieldMax].$setValidity('maxError', true);
         }
     };
 
@@ -184,6 +184,42 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         modalInstance.result.then(function(data){
             $scope.report.mapConfiguration = data;
         });
+    };
+    
+    $scope.runReport = function() {
+    	reportService.outOfDate = true;
+    	$scope.$emit('goToLiveView');
+    	$scope.toggleReportForm();
+    };
+    
+    $scope.saveAsReport = function() {
+    	$scope.submitingReport = true;
+        $scope.validateRanges();
+        if ($scope.reportForm.reportBodyForm.$valid && $scope.vesselsSelectionIsValid){
+        	var modalInstance = $modal.open({
+                templateUrl: 'partial/spatial/reportsPanel/reportForm/saveAsModal/saveAsModal.html',
+                controller: 'SaveasmodalCtrl',
+                size: 'md',
+                resolve: {
+                    reportData: function(){
+                        return $scope.report;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function(data){
+            	reportRestService.createReport(data).then(createReportSuccess, createReportError);
+            });
+        } else {
+            var invalidElm = angular.element('#reportForm')[0].querySelector('.ng-invalid');
+            var errorElm = angular.element('#reportForm')[0].querySelector('.has-error');
+            if (invalidElm){
+                invalidElm.scrollIntoView();
+            } else if (invalidElm === null && errorElm){
+                errorElm.scrollIntoView();
+            }
+        }
+    	
     };
 
     $scope.$on('openReportForm', function(e, args){

@@ -24,7 +24,7 @@ angular.module('unionvmsWeb').factory('reportMsgService', function($timeout){
     return alert;
 });
 
-angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, globalSettingsService, reportMsgService, $anchorScroll, locale, reportRestService, confirmationModal){
+angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, globalSettingsService, reportMsgService, $anchorScroll, locale, reportRestService, confirmationModal, reportService){
     //config object
     $scope.config = {
         src_format: 'YYYY-MM-DDTHH:mm:ss',
@@ -48,6 +48,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, glob
     $scope.runReport = function(index){
         var record = $scope.displayedRecords[index];
         $scope.$emit('runReport', record);
+        reportService.outOfDate = false;
     };
     
     //Report filter definitions

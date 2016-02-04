@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, reportRestService, reportService){
+angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, reportRestService, reportService, $anchorScroll){
     $scope.isMenuVisible = true;
     $scope.selectedMenu = 'LIVEVIEW';
     $scope.reports = [];
@@ -38,6 +38,30 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
        $scope.isMenuVisible = !$scope.isMenuVisible;
    };
    
+   //Report filter definitions
+   $scope.editReport = function(){
+	   $scope.selectMenu('REPORTS');
+	   if(!$scope.repServ.outOfDate){
+		   $scope.repServ.isReportExecuting = true;
+	       reportRestService.getReport($scope.repServ.id).then(getReportSuccess, getReportError);
+	   }else{
+		   $scope.$broadcast('goToReportForm','EDIT-FROM-LIVEVIEW');
+	   }
+   };
+   
+   //Get Report Configs Success callback
+   var getReportSuccess = function(response){
+	   $scope.repServ.isReportExecuting = false;
+       $scope.$broadcast('goToReportForm','EDIT-FROM-LIVEVIEW', response);
+   };
+	   
+   //Get Report Configs Failure callback
+   var getReportError = function(error){
+	   $scope.repServ.isReportExecuting = false;
+       $anchorScroll();
+       $scope.alert.show(locale.getString('spatial.error_entry_not_found'), 'error');
+   };
+   
    //Refresh map size on menu change
    $scope.$watch('selectedMenu', function(newVal, oldVal){
        if (newVal === 'LIVEVIEW'){
@@ -66,6 +90,10 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    
    $scope.$on('closeUserPreferences', function(event, lastSelected){
        $scope.selectMenu(lastSelected);
+   });
+   
+   $scope.$on('goToLiveView', function(event, lastSelected){
+	   $scope.selectMenu('LIVEVIEW');
    });
    
 });

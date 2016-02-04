@@ -16,7 +16,8 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             status: false,
             rate: undefined
        },
-       isLiveViewActive: false
+       isLiveViewActive: false,
+       outOfDate: undefined
     };
     
     rep.clearVmsData = function(){
@@ -34,6 +35,14 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.tabs.map = report.withMap;
         rep.isReportExecuting = true;
         mapService.clearVmsLayers();
+        if (report.withMap === true){
+            spatialRestService.getConfigsForReport(report.id).then(getConfigSuccess, getConfigError);
+        } else {
+            spatialRestService.getConfigsForReportWithoutMap().then(getConfigWithouMapSuccess, getConfigWithouMapError); 
+        }
+	};
+	
+	rep.runReportWithoutSaving = function(report){
         if (report.withMap === true){
             spatialRestService.getConfigsForReport(report.id).then(getConfigSuccess, getConfigError);
         } else {

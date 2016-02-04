@@ -97,7 +97,13 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
         },
         createReport: function(report){
             var deferred = $q.defer();
-            reportRestFactory.createReport().create(report.toJson(), function(response){
+            var args;
+            if(report.copy){
+            	args = report.toJsonCopy();
+            }else{
+            	args = report.toJson();
+            }
+            reportRestFactory.createReport().create(args, function(response){
                 deferred.resolve(response);
             }, function(error){
                 deferred.reject(error);

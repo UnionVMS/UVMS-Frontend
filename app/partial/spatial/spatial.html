@@ -12,10 +12,14 @@
 					<li ng-repeat="menu in headerMenus" ng-click="selectMenu(menu.menu)" ng-class="{'active': selectedMenu === '{{menu.menu}}'}"><a>{{menu.title}}</a></li>
 				</ul>
 			</div>
-			<div class="col-md-4 textAlignRight userPrefContainer">
+			<div class="col-md-4 textAlignRight buttonContainer">
+				<button type="button" class="btn btn-primary btn-sm btn-edit-report" ng-show="isMenuSelected('LIVEVIEW') && repServ.id !== undefined" ng-click="editReport()">
+					<i class="fa fa-pencil"></i>&nbsp;
+					<span>{{'spatial.reports_edit_report' | i18n}}</span>
+				</button>
 				<button type="button" class="btn btn-primary btn-sm" ng-click="selectMenu('PREFERENCES')">
 					<i class="fa fa-cog"></i>&nbsp;
-					<span style="">{{'spatial.user_preferences' | i18n}}</span>
+					<span>{{'spatial.user_preferences' | i18n}}</span>
 				</button>
 			</div>
 		</div>

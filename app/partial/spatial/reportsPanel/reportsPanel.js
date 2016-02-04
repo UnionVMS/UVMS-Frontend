@@ -8,7 +8,7 @@ angular.module('unionvmsWeb').controller('ReportspanelCtrl',function($scope, $an
     $scope.editMode = 'CREATE';
     
     $scope.toggleReportForm = function(mode, report){
-        $scope.editMode = mode;
+    	
         $scope.isVisible.reportsList = !$scope.isVisible.reportsList;
         $scope.isVisible.reportForm = !$scope.isVisible.reportForm;
         $anchorScroll();
@@ -16,6 +16,14 @@ angular.module('unionvmsWeb').controller('ReportspanelCtrl',function($scope, $an
         //Call function from parent to toggle menu visibility
         $scope.toggleMenuVisibility();
         
+        if($scope.editMode === 'EDIT-FROM-LIVEVIEW' && mode === 'CLOSE'){
+            $scope.$emit('goToLiveView');
+            return;
+        }else if($scope.editMode !== 'EDIT-FROM-LIVEVIEW' && mode === 'CLOSE'){
+        	mode = undefined;
+        }
+        
+        $scope.editMode = mode;
         if ($scope.editMode === 'CREATE'){
             $scope.$broadcast('openReportForm');
         } else if ($scope.editMode === 'EDIT') {
@@ -30,4 +38,21 @@ angular.module('unionvmsWeb').controller('ReportspanelCtrl',function($scope, $an
     $scope.$on('reloadReportsList', function(){
         $scope.reloadReportsList();
     });
+    
+    $scope.$on('goToReportForm', function(evt, mode, report){
+    	$scope.editMode = mode;
+        $scope.isVisible.reportsList = false;
+        $scope.isVisible.reportForm = true;
+
+        //Call function from parent to toggle menu visibility
+        $scope.toggleMenuVisibility();
+        
+        if(report){
+        	$anchorScroll();
+	        if($scope.editMode === 'EDIT-FROM-LIVEVIEW') {
+	            $scope.$broadcast('openReportForm', {report: report});
+	        }
+        }
+    });
+    
 });

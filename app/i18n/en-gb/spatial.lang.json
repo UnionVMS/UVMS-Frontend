@@ -88,6 +88,7 @@
 	"reports_form_vms_fieldset_label": "VMS",
 	"reports_form_clear_btn": "Clear",
 	"reports_form_save_btn": "Save report",
+	"reports_form_save_as_btn": "Save report as...",
 	"reports_form_vessel_selection_table_header_name": "Name",
 	"reports_form_vessel_selection_table_header_type": "Type",
 	"reports_form_vessel_selection_table_delete_btn_title": "Delete",
@@ -130,6 +131,7 @@
 	"reports_form_vms_max_duration": "Max.",
 	"reports_form_vms_field_label_unit_hours": "h",
 	"reports_form_vms_tracks_time_at_sea": "Time at sea:",
+	"reports_edit_report": "Edit report",
 	"tab_vms_export_csv": "Export data in CSV format",
 	"tab_vms_export_csv_positions_filename": "positions.csv",
 	"tab_vms_export_csv_segments_filename": "segments.csv",
@@ -200,6 +202,7 @@
 	"area_selection_modal_get_selected_area_search_error": "There was an error while searching for areas. Please try again.",
 
     "map_configuration_modal_title": "Map configuration",
+    "save_as_modal_title": "Save report as...",
     "map_configuration_map_projection": "Map projection",
     "map_configuration_display_projection": "Display projection",
     "map_configuration_scale_bar_units": "Scale bar units",

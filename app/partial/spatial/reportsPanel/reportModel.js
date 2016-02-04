@@ -216,6 +216,93 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	    
 	    return dto;
 	};
+	
+	Report.prototype.toJsonCopy = function(){
+	    return angular.toJson(this.DTOCopy());
+	};
+	
+	Report.prototype.DTOCopy = function(){
+		var report = {};
+		
+        report.name = this.name;
+        report.desc = this.desc !== '' ? this.desc : undefined;
+        report.withMap = this.withMap;
+        report.visibility = angular.isDefined(this.visibility) ? this.visibility : 'PRIVATE';
+        
+        report.filterExpression = {};
+        report.filterExpression.common = {};
+        report.filterExpression.common.startDateTime = this.startDateTime === undefined ? undefined : convertDate(this.startDateTime, 'to_server');
+        report.filterExpression.common.endDateTime = this.endDateTime === undefined ? undefined : convertDate(this.endDateTime, 'to_server');
+    	report.filterExpression.common.positionTypeSelector = this.positionTypeSelector;
+    	report.filterExpression.common.positionSelector = this.positionSelector;
+    	report.filterExpression.common.xValue = this.xValue;
+        
+        report.filterExpression.areas = [];
+        if(angular.isDefined(this.areas) && this.areas.length > 0){
+		    angular.forEach(this.areas, function(item) {
+		    	report.filterExpression.areas.push({
+		    		'gid': item.gid,
+		    		'areaType': item.areaType
+		    	});
+		    });
+        }
+        
+        if (this.hasVesselFilter === true){
+        	report.filterExpression.assets = [];
+            angular.forEach(this.vesselsSelection, function(item) {
+            	report.filterExpression.assets.push({
+            		'guid': item.guid,
+            		'name': item.name,
+            		'type': item.type
+            	});
+            });
+        }
+        
+        if(angular.isDefined(this.vmsFilters)){
+        	report.filterExpression.vms = {
+        		vmsposition: undefined,
+        		vmssegment: undefined,
+        		vmstrack: undefined
+        	};
+        	if(angular.isDefined(this.vmsFilters.positions)){
+            	report.filterExpression.vms.vmsposition = {
+        			movActivity: this.vmsFilters.positions.movActivity,
+    				movMaxSpeed: this.vmsFilters.positions.movMaxSpeed,
+    				movMinSpeed: this.vmsFilters.positions.movMinSpeed,
+    				movType: this.vmsFilters.positions.movType,
+    				type: "vmspos"
+            	};
+            }
+        	if(angular.isDefined(this.vmsFilters.segments)){
+            	report.filterExpression.vms.vmssegment = {
+        			segCategory: this.vmsFilters.segments.segCategory,
+    				segMaxDuration: this.vmsFilters.segments.segMaxDuration,
+    				segMaxSpeed: this.vmsFilters.segments.segMaxSpeed,
+    				segMinDuration: this.vmsFilters.segments.segMinDuration,
+    				segMinSpeed: this.vmsFilters.segments.segMinSpeed,
+    				type: "vmsseg"
+            	};
+            }
+        	if(angular.isDefined(this.vmsFilters.tracks)){
+            	report.filterExpression.vms.vmstrack = {
+        			trkMaxDuration: this.vmsFilters.tracks.trkMaxDuration,
+        			trkMaxTime: this.vmsFilters.tracks.trkMaxTime,
+        			trkMinDuration: this.vmsFilters.tracks.trkMinDuration,
+        			trkMinTime: this.vmsFilters.tracks.trkMinTime,
+        			type: "vmstrack"
+            	};
+            }
+        }
+        
+        report.mapConfiguration = {
+    		coordinatesFormat: this.mapConfiguration.coordinatesFormat,
+        	displayProjectionId: this.mapConfiguration.displayProjectionId,
+        	mapProjectionId: this.mapConfiguration.mapProjectionId,
+        	scaleBarUnits: this.mapConfiguration.scaleBarUnits
+        };
+	    
+	    return report;
+	};
 
 	return Report;
 });
