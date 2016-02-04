@@ -102,7 +102,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     };
 
     //Setup draggable windows
-    $scope.setWinDraggable = function(win, marginRight){
+    $scope.setWinDraggable = function(win, buttonPosition){
         if (win.draggable('instance') === undefined){
             win.draggable({
                 handle: 'span',
@@ -114,7 +114,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         var mapRect = mapEl.getBoundingClientRect();
         win[0].style.marginTop = '8px';
         win[0].style.top = 'auto';
-        win[0].style.left = mapRect.left + marginRight + 'px';
+        win[0].style.left = buttonPosition.left + 'px';
     };
 
     //Measure control
@@ -126,7 +126,8 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.openMeasureConfigWin = function(){
         $scope.showMeasureConfigWin = true;
         var win = angular.element('#measure-config');
-        $scope.setWinDraggable(win, 40);
+        var btnPos = angular.element('#measure-config-btn').offset();
+        $scope.setWinDraggable(win, btnPos);
     };
 
     $scope.mapFishPrintDisable = function(){
@@ -153,13 +154,15 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.openPrintConfigWin = function(){
         $scope.showPrintConfigWin = true;
         var win = angular.element('#print-config');
-        $scope.setWinDraggable(win, 65);
+        var btnPos = angular.element('#export-map').offset();
+        $scope.setWinDraggable(win, btnPos);
     };
 
     $scope.openMapFishConfigWin = function(){
         $scope.showMapFishConfigWin = true;
         var win = angular.element('#map-fish-print-config');
-        $scope.setWinDraggable(win, 65);
+        var btnPos = angular.element('#map-fish-print-config-btn').offset();
+        $scope.setWinDraggable(win, btnPos);
     };
 
     $scope.cancelPrint = function (ref){
@@ -429,7 +432,19 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     };
 
     $(window).resize(mapService.updateMapContainerSize);
-    $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', mapService.updateMapContainerSize);
+    $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', function() {
+    	setTimeout(function() {
+    		if($scope.showMeasureConfigWin){
+        		$scope.openMeasureConfigWin();
+        	}
+    		if($scope.showPrintConfigWin){
+    			$scope.openPrintConfigWin();
+        	}
+    		if($scope.showMapFishConfigWin){
+    			$scope.openMapFishConfigWin();
+    		}
+    	}, 100)
+	});
 
     angular.element(document).ready(function () {
         mapService.updateMapContainerSize();
