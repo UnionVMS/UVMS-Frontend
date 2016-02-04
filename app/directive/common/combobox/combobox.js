@@ -72,30 +72,30 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                             }
                         }
                     }
-                } else {
-                    if(scope.loadedItems !== undefined){
-                        if (scope.loadedItems.length === 0){
-                            var tempFn = scope.$watch('items', function(newVal, oldVal){
-                                if (newVal.length > 0){
-                                    var item = getItemObjectByCode(scope.ngModel);
-                                    if (angular.isDefined(item)){
-                                        scope.currentItemLabel = scope.getItemLabel(item);
-                                    }
-                                    tempFn();
+                }
+                if(scope.loadedItems !== undefined){
+                    if (scope.loadedItems.length === 0){
+                        var tempFn = scope.$watch('items', function(newVal, oldVal){
+                            if (newVal.length > 0){
+                            	scope.loadedItems = newVal;
+                                var item = getItemObjectByCode(scope.ngModel);
+                                if (angular.isDefined(item)){
+                                    scope.currentItemLabel = scope.getItemLabel(item);
                                 }
-                            });
-                        }
-                        
-                        for (var i = 0; i < scope.loadedItems.length; i++){
-                            if(getItemCode(scope.loadedItems[i]) === scope.ngModel){
-                                scope.currentItemLabel = scope.getItemLabel(scope.loadedItems[i]);
+                                tempFn();
                             }
+                        });
+                    }
+                    
+                    for (var i = 0; i < scope.loadedItems.length; i++){
+                        if(getItemCode(scope.loadedItems[i]) === scope.ngModel){
+                            scope.currentItemLabel = scope.getItemLabel(scope.loadedItems[i]);
                         }
                     }
-                    //If no label found, show value of ngModel
-                    if(angular.isUndefined(scope.currentItemLabel)){
-                        scope.currentItemLabel = scope.ngModel;
-                    }
+                }
+                //If no label found, show value of ngModel
+                if(angular.isUndefined(scope.currentItemLabel)){
+                    scope.currentItemLabel = scope.ngModel;
                 }
             };
 
@@ -198,7 +198,7 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                 if(scope.lineStyle !== undefined && scope.lineStyle === true){
                 	loadLineStyleItems();
                 }else{
-                	scope.loadedItems = scope.items;
+                	scope.loadedItems = scope.items ? scope.items : [];
                 }
                 scope.setLabel();
                 
