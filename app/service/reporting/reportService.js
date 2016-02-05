@@ -43,11 +43,10 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	};
 	
 	rep.runReportWithoutSaving = function(report){
-        if (report.withMap === true){
-            spatialRestService.getConfigsForReport(report.id).then(getConfigSuccess, getConfigError);
-        } else {
-            spatialRestService.getConfigsForReportWithoutMap().then(getConfigWithouMapSuccess, getConfigWithouMapError); 
-        }
+        rep.tabs.map = report.withMap;
+		rep.isReportExecuting = true;
+        mapService.clearVmsLayers();
+        reportRestService.executeWithoutSaving(report).then(getVmsDataSuccess, getVmsDataError);
 	};
 	
 	rep.refreshReport = function(){

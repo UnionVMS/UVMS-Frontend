@@ -39,20 +39,13 @@ angular.module('unionvmsWeb').controller('ReportspanelCtrl',function($scope, $an
         $scope.reloadReportsList();
     });
     
-    $scope.$on('goToReportForm', function(evt, mode, report){
+    $scope.$on('goToReportForm', function(evt, mode){
     	$scope.editMode = mode;
         $scope.isVisible.reportsList = false;
         $scope.isVisible.reportForm = true;
 
         //Call function from parent to toggle menu visibility
         $scope.toggleMenuVisibility();
-        
-        if(report){
-        	$anchorScroll();
-	        if($scope.editMode === 'EDIT-FROM-LIVEVIEW') {
-	            $scope.$broadcast('openReportForm', {report: report});
-	        }
-        }
     });
     
 });

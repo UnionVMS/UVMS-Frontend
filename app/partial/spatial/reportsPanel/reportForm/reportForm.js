@@ -188,6 +188,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     
     $scope.runReport = function() {
     	reportService.outOfDate = true;
+    	reportService.runReportWithoutSaving($scope.report);
     	$scope.$emit('goToLiveView');
     	$scope.toggleReportForm();
     };

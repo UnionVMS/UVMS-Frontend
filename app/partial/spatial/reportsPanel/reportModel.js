@@ -231,8 +231,8 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
         
         report.filterExpression = {};
         report.filterExpression.common = {};
-        report.filterExpression.common.startDateTime = this.startDateTime === undefined ? undefined : convertDate(this.startDateTime, 'to_server');
-        report.filterExpression.common.endDateTime = this.endDateTime === undefined ? undefined : convertDate(this.endDateTime, 'to_server');
+        report.filterExpression.common.startDate = this.startDateTime === undefined ? undefined : convertDate(this.startDateTime, 'to_server');
+        report.filterExpression.common.endDate = this.endDateTime === undefined ? undefined : convertDate(this.endDateTime, 'to_server');
     	report.filterExpression.common.positionTypeSelector = this.positionTypeSelector;
     	report.filterExpression.common.positionSelector = this.positionSelector;
     	report.filterExpression.common.xValue = this.xValue;

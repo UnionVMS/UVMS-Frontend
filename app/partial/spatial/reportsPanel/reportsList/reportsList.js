@@ -49,6 +49,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, glob
         var record = $scope.displayedRecords[index];
         $scope.$emit('runReport', record);
         reportService.outOfDate = false;
+        reportService.id = $scope.displayedRecords[index].id;
     };
     
     //Report filter definitions

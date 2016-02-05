@@ -443,7 +443,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     		if($scope.showMapFishConfigWin){
     			$scope.openMapFishConfigWin();
     		}
-    	}, 100)
+    	}, 100);
 	});
 
     angular.element(document).ready(function () {

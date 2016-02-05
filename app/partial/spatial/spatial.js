@@ -40,19 +40,21 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    
    //Report filter definitions
    $scope.editReport = function(){
-	   $scope.selectMenu('REPORTS');
 	   if(!$scope.repServ.outOfDate){
 		   $scope.repServ.isReportExecuting = true;
 	       reportRestService.getReport($scope.repServ.id).then(getReportSuccess, getReportError);
 	   }else{
 		   $scope.$broadcast('goToReportForm','EDIT-FROM-LIVEVIEW');
+		   $scope.selectMenu('REPORTS');
 	   }
    };
    
    //Get Report Configs Success callback
    var getReportSuccess = function(response){
 	   $scope.repServ.isReportExecuting = false;
-       $scope.$broadcast('goToReportForm','EDIT-FROM-LIVEVIEW', response);
+	   $scope.$broadcast('openReportForm', {'report': response});
+       $scope.$broadcast('goToReportForm','EDIT-FROM-LIVEVIEW');
+       $scope.selectMenu('REPORTS');
    };
 	   
    //Get Report Configs Failure callback

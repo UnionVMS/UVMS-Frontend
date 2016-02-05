@@ -51,6 +51,16 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
 	               }
 	           } 
 	        });
+	    },
+	    executeWithoutSaving: function(){
+	        return $resource('/reporting/rest/report/execute/', {}, {
+	           'get': {
+	               method: 'POST',
+	               headers: {
+	                   'Content-Type': 'application/json'
+	               }
+	           } 
+	        });
 	    }
 	};
 })
@@ -113,6 +123,16 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
         executeReport: function(id, config){
             var deferred = $q.defer();
             reportRestFactory.executeReport().get({id: id}, angular.toJson(config), function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                deferred.reject(error);
+            });
+            
+            return deferred.promise;
+        },
+        executeWithoutSaving: function(config){
+            var deferred = $q.defer();
+            reportRestFactory.executeWithoutSaving().get(config.toJsonCopy(), function(response){
                 deferred.resolve(response.data);
             }, function(error){
                 deferred.reject(error);
