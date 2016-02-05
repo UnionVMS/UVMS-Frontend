@@ -98,8 +98,8 @@
 
                                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'exchangePoll.history[0].time'" class="times">{{'polling.polling_logs_table_header_time' | i18n}}</th>
 
-                                    <th>{{'polling.polling_logs_table_header_status' | i18n}}</th>
                                     <th>{{'polling.polling_logs_table_header_user' | i18n}}</th>
+                                    <th>{{'polling.polling_logs_table_header_status_short' | i18n}}</th>
                                     <th></th>
                                     <th>&nbsp;</th>
                                 </tr>
@@ -125,6 +125,7 @@
                                         </span>
                                     </div>
                                 </td>
+                                <td colspan="2" ng-attr-title="{{item.poll.attributes.USER}}">{{item.poll.attributes.USER}}</td>
                                 <td class="statusText">
                                     <div ng-repeat="status in item.exchangePoll.history | orderBy:'status.time'" ng-show="isExpanded || $index === 0">
                                         <span class="label" ng-class="getStatusLabelClass(status.status)" ng-attr-title="{{status.status | exchangeStatusName | uppercase}}">
@@ -132,7 +133,6 @@
                                         </span><br>
                                     </div>
                                 </td>
-                                <td colspan="2" ng-attr-title="{{item.poll.attributes.USER}}">{{item.poll.attributes.USER}}</td>
                                 <td class="textAlignCenter">
                                     <button class="btn btn-sm btn-default" ng-click="showComment(item)" title="{{'common.view_comment' | i18n}}">
                                         <i class="fa fa-commenting"></i>
