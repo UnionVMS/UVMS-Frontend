@@ -155,7 +155,15 @@
     $rootScope.$on('ContextSwitch', function () {
         init();
         var homeState = startPageService.getStartPageStateName();
-        $state.go(homeState, {});
+        if($state.current.name === homeState){
+        	//This timeout is required when the homeState is the sane as the current tab
+        	$timeout(function() {
+        		$state.go(homeState, {});
+    		},1);
+        }else{
+        	$state.go(homeState, {});
+        }
+        
     });
 
     init();
