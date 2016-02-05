@@ -22,12 +22,12 @@
 	"sending_queue_table_number_of_reports_start" : "Total ",
 	"sending_queue_table_number_of_reports_end" : " messages in queue",
 	"sending_queue_table_allmessages_in_group": "Group",
-	"sending_queue_date_recieved" : "Date recieved",
+	"sending_queue_date_recieved" : "Date received",
 
 	"sending_queue_table_header_recipient" : "Recipient",
 	"sending_queue_table_header_message_type" : "Msg.type",
 	"sending_queue_table_header_unsent_reports" : "Unsent rep.",
-	"sending_queue_table_header_Last_recieved" : "Last recieved.",
+	"sending_queue_table_header_Last_recieved" : "Last received.",
 
 
 	"table_header_actions": "Actions",
@@ -39,11 +39,11 @@
     "table_header_status": "Status",
     "table_header_source": "Source",
 	"table_header_type": "Type",
-	"table_header_sender_reciever" : "Sender/Reciever",
+	"table_header_sender_reciever" : "Sender/Receiver",
 
 	"sending_queue_detail_table_header_potision_time" : "Position time",
 	"sending_queue_detail_table_header_sender_recipient":"Sender/recipient",
-	"sending_queue_detail_table_header_date_recieved":"Recieved",
+	"sending_queue_detail_table_header_date_recieved":"Received",
 	"sending_queue_detail_table_header_asset_name":"Asset name",
 	"sending_queue_detail_table_header_longitude":"Longitude",
 	"sending_queue_detail_table_header_latitude":"Latidude",
