@@ -172,6 +172,10 @@ sharedModule.controller('ModifyPassword', ['$log', '$scope', '$modal', '$statePa
                 resolve: {
                     passwordData: function () {
                         return $scope.passwordData;
+                    },
+                    expiredPwd : function() {
+                        // Assuming the password not expired.
+                        return false;
                     }
                 }
             });
@@ -498,6 +502,10 @@ sharedModule.controller('changeMyPasswordCtlr', ['$log', '$scope', '$modal', '$s
                 resolve: {
                     user: function () {
                         return angular.copy(user);
+                    },
+                    expiredPwd : function() {
+                        // Assuming the password not expired.
+                        return false;
                     }
                 }
             });
