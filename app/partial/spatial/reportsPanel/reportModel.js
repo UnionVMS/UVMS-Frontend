@@ -3,6 +3,7 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	    this.id = undefined;
 	    this.name = undefined;
 	    this.desc = undefined;
+	    this.visibility = 'private';
 	    this.startDateTime = undefined;
 	    this.endDateTime = undefined;
 	    this.positionSelector = 'all';
@@ -87,6 +88,7 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	        report.name = data.name;
 	        report.desc = data.desc;
 	        report.withMap = data.withMap;
+	        report.visibility = data.visibility;
 
 	        //Common filters
 			report.commonFilterId = filter.common.id;
@@ -205,7 +207,7 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	        id: this.id,
 	        name: this.name,
 	        desc: this.desc !== '' ? this.desc : undefined,
-	        visibility: angular.isDefined(this.visibility) ? this.visibility : 'PRIVATE',
+	        visibility: angular.isDefined(this.visibility) ? this.visibility : 'private',
 	        withMap: this.withMap,
 	        filterExpression: filter
 	    };
@@ -227,7 +229,7 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
         report.name = this.name;
         report.desc = this.desc !== '' ? this.desc : undefined;
         report.withMap = this.withMap;
-        report.visibility = angular.isDefined(this.visibility) ? this.visibility : 'PRIVATE';
+        report.visibility = angular.isDefined(this.visibility) ? this.visibility : 'private';
         
         report.filterExpression = {};
         report.filterExpression.common = {};

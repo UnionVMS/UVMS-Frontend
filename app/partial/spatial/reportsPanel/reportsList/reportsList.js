@@ -70,12 +70,27 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, glob
 
     //Share report
     $scope.shareReport = function(index, visibility){ 
-        var record = $scope.displayedRecords[index];
-        record.is_shared = !record.is_shared;
-        //TODO modify the two states approach with 3 states (instead of is/not shared to private/scope/public)
-        //TODO call rest api
+        var options = {
+            textLabel : locale.getString("spatial.reports_share_report_confirmation_text") + $scope.displayedRecords[index].name.toUpperCase() 
+        };
+        confirmationModal.open(function(){
+            var record = $scope.displayedRecords[index];      
+            reportRestService.shareReport(record.id, visibility, index).then(refreshSharedReport, getReportsListError);
+        }, options);    
     };
-    
+
+    var refreshSharedReport = function(response){
+        var index = $scope.reports.indexOf($scope.displayedRecords[response.reportIdx]);
+       
+        if (index !== -1) {
+            $scope.reports[index].shareable = response.data;
+            $scope.reports[index].visibility = response.visibility;      
+        }
+
+        $scope.isLoading = false;
+        $anchorScroll();
+    };
+
     //Delete report
     $scope.deleteReport = function(index){
         var options = {

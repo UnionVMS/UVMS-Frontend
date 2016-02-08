@@ -58,7 +58,7 @@
 		            <td>{{ report.createdBy }}</td>
 		            <td>{{ report.executedOn | stDateUtc }}</td>
 		            <td class="dt-center">
-		            	<report-visibility visibility="{{report.visibility}}"/>
+		            	<report-visibility ng-model="report.visibility"/>
 		            	</td>
 		            <td>
 	                    <button type="button" class="btn btn-success btn-xs btn-bottom-mg" ng-click="runReport($index)"><span class="run-report">{{'spatial.reports_table_run_label' | i18n }}</span></button>
@@ -68,12 +68,9 @@
 						<div class="btn-group" ng-show="{{report.shareable && report.shareable.length > 0}}">
 						  <!--<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >-->
 						  <button type="button" class="btn btn-primary btn-xs btn-bottom-mg" title="{{'spatial.reports_table_share_label' | i18n }}"   data-toggle="dropdown" aria-haspopup="true" ><span class="fa fa-share-alt"></span></button>
-						  </button>
 						  <div class="dropdown-menu">
-						    <a class="dropdown-item" href="#" ng-show="" ng-click="shareReport($index, 'private')"><report-visibility visibility="private"/></a>
-						    <a class="dropdown-item" href="#" ng-click="shareReport($index, 'scope')"><report-visibility visibility="scope"/></a>
-						    <a class="dropdown-item" href="#" ng-click="shareReport($index, 'public')"><report-visibility visibility="public"/></a>
-						    
+						    <a class="dropdown-item" ng-repeat="visibilityLevel in report.shareable" href="#" ng-click="shareReport($parent.$index, visibilityLevel)">
+						    	<report-visibility visibility="visibilityLevel"/></a>					    
 						  </div>
 						</div>
 	                    <button type="button" class="btn btn-danger btn-xs btn-bottom-mg" title="{{'spatial.reports_table_delete_label' | i18n }}" ng-click="deleteReport($index)" ng-show="{{ report.deletable }}"> <span class="fa fa-trash-o"></span></button>
