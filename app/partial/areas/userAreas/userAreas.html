@@ -92,7 +92,7 @@
 							<label for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
 						</div>
 						<div class="col-md-9 proj-combo">
-							<combobox ng-model="selectedProj" items="projections" name="editingProjection"></combobox>
+							<combobox ng-model="selectedProj" items="projections" name="editingProjection" ng-change="changeProjection(selectedProj)" ng-init="changeProjection(selectedProj)" ng-if="selectedProj"></combobox>
 						</div>
 					</div>
 					<div class="table-responsive-force coord-table" st-table="displayedCoords" st-safe-src="userArea.coordsArray" ng-show="coordVisible">

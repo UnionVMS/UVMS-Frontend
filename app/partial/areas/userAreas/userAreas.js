@@ -261,12 +261,13 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     };
     
     //PROJECTION LISTENER
-    $scope.$watch('selectedProj', function(newVal, oldVal){
+    $scope.changeProjection = function(newVal){
         var selProj = 'EPSG:' + $scope.getProjectionEpsgById(newVal);
-        if (newVal !== oldVal && selProj !== $scope.userArea.coordsProj && oldVal !== undefined){
+        if (newVal !== $scope.lastSelectedProj && selProj !== $scope.userArea.coordsProj && $scope.lastSelectedProj !== undefined){
             $scope.warpCoords(selProj);
         }
-    });
+        $scope.lastSelectedProj = angular.copy(newVal);
+    };
     
     $scope.$watch('coordVisible', function(newVal, oldVal){
         var proj =  'EPSG:' + $scope.getProjectionEpsgById($scope.selectedProj);
