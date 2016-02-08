@@ -11,7 +11,7 @@ describe('reportService', function () {
         mockVmsVisibilityService = jasmine.createSpyObj("vmsVisibilityService", [ 'setVisibility']);
         mockSpatialHelperService = jasmine.createSpyObj("spatialHelperService", [ 'setToolbarControls']);
         //mockSpatialHelperService.setToolbarControls.andCallFake(function() {});
-        mockMapService = jasmine.createSpyObj("mapService", [ 'clearVmsLayers', 'getLayerByType', 'updateMapView',
+        mockMapService = jasmine.createSpyObj("mapService", [ 'getLayerByType', 'updateMapView',
             'updateMapControls', 'setPositionStylesObj', 'setSegmentStylesObj', 'setPopupVisibility', 'clearVectorLayers', 'getMapProjectionCode']);
         mockSpatialRestService = jasmine.createSpyObj("spatialRestService", [ 'getConfigsForReport', 'getConfigsForReportWithoutMap']);
 
@@ -30,7 +30,7 @@ describe('reportService', function () {
         expect(mockReportRestService.executeReport).toBeDefined();
         expect(mockVmsVisibilityService.setVisibility).toBeDefined();
         expect(mockSpatialHelperService.setToolbarControls).toBeDefined();
-        expect(mockMapService.clearVmsLayers).toBeDefined();
+        expect(mockMapService.clearVectorLayers).toBeDefined();
         expect(mockMapService.getLayerByType).toBeDefined();
         expect(mockMapService.updateMapContainerSize).toBeUndefined();
 
@@ -66,7 +66,7 @@ describe('reportService', function () {
         reportService.runReport(report);
 
         expect(mockSpatialRestService.getConfigsForReport).toHaveBeenCalledWith(report.id);
-        expect(mockMapService.clearVmsLayers).toHaveBeenCalled();
+        expect(mockMapService.clearVectorLayers).toHaveBeenCalled();
         expect(mockMapService.updateMapView.callCount).toBe(0);
         expect(mockMapService.updateMapControls.callCount).toBe(0);
         expect(mockVmsVisibilityService.setVisibility.callCount).toBe(0);
@@ -132,7 +132,7 @@ describe('reportService', function () {
 
         expect(report.hasError).toBeFalsy();
         expect(mockSpatialRestService.getConfigsForReport).toHaveBeenCalledWith(report.id);
-        expect(mockMapService.clearVmsLayers).toHaveBeenCalled();
+        expect(mockMapService.clearVectorLayers).toHaveBeenCalled();
         expect(mockMapService.updateMapView).toHaveBeenCalled();
         expect(mockMapService.updateMapControls).toHaveBeenCalled();
         expect(mockVmsVisibilityService.setVisibility).toHaveBeenCalled();
@@ -184,7 +184,7 @@ describe('reportService', function () {
         reportService.runReport(report);
 
         expect(mockSpatialRestService.getConfigsForReportWithoutMap).toHaveBeenCalled();
-        expect(mockMapService.clearVmsLayers).toHaveBeenCalled();
+        expect(mockMapService.clearVectorLayers).toHaveBeenCalled();
         expect(mockMapService.updateMapView.callCount).toBe(0);
         expect(mockMapService.updateMapControls.callCount).toBe(0);
         expect(mockVmsVisibilityService.setVisibility.callCount).toBe(1);

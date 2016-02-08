@@ -9,6 +9,8 @@
 	"tab_tracks": "Tracks",
 	"popup_positions_title": "Position details",
 	"popup_segments_title": "Segment details",
+	"popup_item": "Item",
+	"popup_out_of": "out of",
 	"map_tip_zoomin": "Zoom in",
 	"map_tip_zoomout": "Zoom out",
 	"map_tip_fullscreen": "Toggle full-screen",

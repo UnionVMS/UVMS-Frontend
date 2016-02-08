@@ -34,7 +34,13 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.tracks = [];
         rep.tabs.map = report.withMap;
         rep.isReportExecuting = true;
-        mapService.clearVmsLayers();
+        
+        mapService.clearVectorLayers();
+        
+        if (angular.isDefined(mapService.overlay)){
+            mapService.closePopup();
+        }
+
         if (report.withMap === true){
             spatialRestService.getConfigsForReport(report.id).then(getConfigSuccess, getConfigError);
         } else {
@@ -162,9 +168,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
                 mapService.setDisplayedFlagStateCodes('segments', rep.segments);
             }
             
-            //First clear vector layers
-            mapService.clearVectorLayers();
-            
             //Add nodes to the tree and layers to the map
             if (rep.positions.length > 0 || rep.segments.length > 0){
                 var vectorNodeSource = new TreeModel();
@@ -195,9 +198,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
-        
-        //First clear vector layers
-        mapService.clearVectorLayers();
         
         //Add nodes to the tree and layers to the map
         if (rep.positions.length > 0 || rep.segments.length > 0){

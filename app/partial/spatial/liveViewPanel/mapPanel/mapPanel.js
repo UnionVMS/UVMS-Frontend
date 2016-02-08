@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, mapService, spatialHelperService, reportService, mapFishPrintRestService, MapFish){
+angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, mapService, spatialHelperService, reportService, mapFishPrintRestService, MapFish){
     $scope.activeControl = '';
     $scope.showMeasureConfigWin = false;
     $scope.showPrintConfigWin = false;
@@ -9,11 +9,31 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.tbControl = spatialHelperService.tbControl;
     $scope.refresh = reportService.refresh;
     $scope.newObject = {}; // TODO change name
+    $scope.popupSegments = mapService.popupSegRecContainer;
+    
     //Close identify popup
     $scope.closePopup = function(){
         mapService.closePopup();
     };
-
+    
+    //Change displayed record on popup - vms segments only
+    $scope.changeDisplayedRecord = function(direction){        
+        if (direction === 'next' && $scope.popupSegments.currentIdx < $scope.popupSegments.records.length - 1){
+            $scope.popupSegments.currentIdx += 1;
+            $scope.updatePopup();
+        } else if (direction === 'previous' && $scope.popupSegments.currentIdx > 0){
+            $scope.popupSegments.currentIdx -= 1;
+            $scope.updatePopup();
+        }
+    };
+    
+    $scope.updatePopup = function(){
+        var record = mapService.popupSegRecContainer.records[mapService.popupSegRecContainer.currentIdx];
+        var data = mapService.setSegmentsObjPopup(record.data);
+        mapService.requestPopupTemplate(data, record.coord, record.fromCluster, true);
+    };
+    
+    //Comboboxes
     $scope.measuringUnits = [];
     $scope.measuringUnits.push({"text": locale.getString('spatial.map_measuring_units_meters'), "code": "m"});
     $scope.measuringUnits.push({"text": locale.getString('spatial.map_measuring_units_nautical_miles'), "code": "nm"});

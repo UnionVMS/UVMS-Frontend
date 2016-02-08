@@ -148,7 +148,7 @@ angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapServi
 	                    if (layer.getSource() instanceof ol.source.Vector){
 	                        switch (layer.get('type')){
 	                            case 'vmspos':
-	                                if (layer.getSource().getFeatures().length !== 0){
+	                                if (layer.getSource().getSource().getFeatures().length !== 0){
 	                                    records.push(this.buildRecVmsPos(layer));
 	                                }
 	                                break;

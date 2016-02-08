@@ -174,42 +174,113 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	    });
 
 	    map.on('singleclick', function(evt){
+	        var pixel = evt.pixel;
 	        var coordinate = evt.coordinate;
-	        var features = [];
-	        map.forEachFeatureAtPixel(evt.pixel, function(feature, layer){
-	            if (layer !== null && layer.get('type') === ms.activeLayerType){
-	                features.push(feature.getProperties());
+	        var selInteraction = ms.getInteractionsByType('Select')[0];
+	        
+	        var record;
+	        ms.popupSegRecContainer.reset();
+	        var records = [];
+	        map.forEachFeatureAtPixel(pixel, function(feature, layer){
+	            if (angular.isDefined(ms.activeLayerType)){
+	                if (layer !== null && layer.get('type') === ms.activeLayerType){
+	                    if (ms.activeLayerType === 'vmspos'){
+	                        var positions = feature.get('features');
+	                        if (positions.length === 1){
+	                            record = {
+	                                data: positions[0].getProperties(),
+	                                coord: positions[0].getGeometry().getCoordinates(),
+	                                fromCluster: false
+	                            };
+	                        }
+	                    } else{
+	                        records.push({
+                                data: feature.getProperties(),
+                                coord: feature.getGeometry().getClosestPoint(coordinate),
+                                fromCluster: false
+                            });
+	                    }
+	                }
 	            }
 	        });
-
-	        if (angular.isDefined(ms.activeLayerType) && features.length > 0 && angular.equals({}, ms.measureInteraction)){
-	            var templateURL = 'partial/spatial/templates/' + ms.activeLayerType + '.html';
-
-	            $templateRequest(templateURL).then(function(template){
-	                var data;
-	                if (ms.activeLayerType === 'vmspos'){
-	                    data = ms.setPositionsObjPopup(features[0]);
-	                } else if (ms.activeLayerType === 'vmsseg'){
-	                    data = ms.setSegmentsObjPopup(features[0]);
+	        
+	        if (!angular.isDefined(record) && ms.activeLayerType === 'vmspos' && selInteraction.getFeatures().getLength() > 0){
+	            var positions = selInteraction.getFeatures().getArray()[0].get('features');
+	            var minDist;
+	            positions.forEach(function(position){
+	                var distance = new ol.geom.LineString([coordinate, position.get('spiderCoords')]).getLength();
+	                if (!angular.isDefined(minDist) || distance < minDist){
+	                    minDist = distance;
+	                    record = {
+                            data: position.getProperties(),
+                            coord: position.get('spiderCoords'),
+                            fromCluster: true
+                        };
 	                }
-
-	                var rendered = Mustache.render(template, data);
-	                var content = document.getElementById('popup-content');
-	                content.innerHTML = rendered;
-	                ms.overlay.setPosition(coordinate);
-
-	            }, function(){
-	                console.log('error was here');
-	                //error fetching template
 	            });
+	        }
+	        
+	        if (angular.isDefined(ms.activeLayerType) && (angular.isDefined(record) || records.length > 0) && angular.equals({}, ms.measureInteraction)){
+	            if (records.length > 0){
+	                record = records[0];
+	            }
+	            
+	            var data;
+	            if (ms.activeLayerType === 'vmspos'){
+                    data = ms.setPositionsObjPopup(record.data);
+                } else if (ms.activeLayerType === 'vmsseg'){
+                    data = ms.setSegmentsObjPopup(record.data);
+                    ms.popupSegRecContainer.records = records;
+                    ms.popupSegRecContainer.currentIdx = 0;
+                }
+	            ms.requestPopupTemplate(data, record.coord, record.fromCluster);
 	        }
 	    });
 	    
 	    var view = ms.createView(config.map.projection);
-	    map.setView(view);
+	    view.on('change:resolution', function(evt){
+	        //Clear features on expanded clusters when zooming
+	        var select = ms.getInteractionsByType('Select')[0];
+	        if (angular.isDefined(select)){
+	            select.getFeatures().clear();
+	            if (angular.isDefined(ms.overlay) && ms.overlay.get('fromCluster') === true){
+	                ms.closePopup();
+	            }
+	        }
+	    });
 	    
+	    map.setView(view);
 	    ms.map = map;
 	    ms.addBlankLayer();
+	    
+	    ms.map.getViewport().addEventListener('contextmenu', function(e){
+            e.preventDefault();
+            var select = ms.getInteractionsByType('Select')[0];
+            var selFeatures = select.getFeatures();
+            if (angular.isDefined(ms.overlay) && ms.overlay.get('fromCluster') === true){
+                ms.closePopup();
+            }
+            if (e.shiftKey === true){
+                selFeatures.clear();
+            } else {
+                var foundedFeatures = false;
+                map.forEachFeatureAtPixel(map.getEventPixel(e), function(feature, layer){
+                    if (layer !== null && layer.get('type') === 'vmspos'){
+                        if (selFeatures.getLength() > 0){
+                            selFeatures.clear();
+                        }
+                        selFeatures.push(feature);
+                        foundedFeatures = true;
+                    }
+                });
+                
+                if (foundedFeatures === false){
+                    selFeatures.clear();
+                } else if (foundedFeatures === true && angular.isDefined(ms.overlay) && ms.overlay.get('fromCluster') === true){
+                    ms.closePopup();
+                }
+            }
+        });
 	};
 	
 	//Create map view
@@ -372,30 +443,51 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
     //Add VMS positions layer
     ms.createPositionsLayer = function( config ) {
+        var source = new ol.source.Vector({
+            features: (new ol.format.GeoJSON()).readFeatures(config.geoJson, {
+                dataProjection: 'EPSG:4326',
+                featureProjection: ms.getMapProjectionCode()
+            })
+        });
+        
+        var cluster = new ol.source.Cluster({
+            distance: 20,
+            source: source
+        });
+        
         //TODO attributions
         var layer = new ol.layer.Vector({
             title: config.title,
             type: config.type,
             isBaseLayer: false,
-            source: new ol.source.Vector({
-                features: (new ol.format.GeoJSON()).readFeatures(config.geoJson, {
-                    dataProjection: 'EPSG:4326',
-                    featureProjection: ms.getMapProjectionCode()
-                })
-            }),
-            style: ms.setPosStyle
+            source: cluster,
+            style: ms.setClusterStyle
         });
-      
+        
+        ms.addClusterExploder(layer);
+        
         //Update map extent
-        var src = layer.getSource();
-        if (src.getFeatures().length > 0){
-            var geom = new ol.geom.Polygon.fromExtent(src.getExtent());
+        if (source.getFeatures().length > 0){
+            var geom = new ol.geom.Polygon.fromExtent(source.getExtent());
             ms.zoomTo(geom);
         }
       
         return( layer );
     };
+    
+    //Interaction to open cluster on click
+    ms.addClusterExploder = function(layer){
+        var exploder = new ol.interaction.Select({
+            layers: [layer],
+            style: ms.setUnclusteredStyle,
+            condition: function(mapBrowserEvent) {
+                return false;
+            }
+        });
 
+        ms.map.addInteraction(exploder);
+    };
+    
     //Add VMS segments layer
     ms.createSegmentsLayer = function( config ) {
         //TODO attributions
@@ -481,10 +573,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 })
             });
         } else if (geomType === 'LineString' || geomType === 'MultiLineString'){
+            var width = 6;
+            if (angular.isDefined(ms.styles.segments.style.lineWidth)){
+                width = parseInt(ms.styles.segments.style.lineWidth) + 6;
+            }
+            
             style = new ol.style.Style({
                 stroke: new ol.style.Stroke({
                     color: color,
-                    width: 8
+                    width: width
                 })
             });
         }
@@ -659,8 +756,173 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         }
     };
     
+    //OL VMS positions cluster style
+    ms.clusterStyles = {};
+    ms.currentResolution = undefined;
+    ms.clusterMaxFeatureCount = 1;
+    ms.clusterMinFeatureCount = 100000;
+    
+    //Calculate necessary max and min amount of features of the available map clusters at each resolution
+    ms.calculateClusterInfo = function(){
+        var layer = ms.getLayerByType('vmspos');
+        var features = layer.getSource().getFeatures();
+        
+        var feature;
+        for (var i = 0; i < features.length; i++){
+            feature = features[i];
+            var includedPositions = feature.get('features');
+            
+            feature.set('featNumber', includedPositions.length);
+            ms.clusterMaxFeatureCount = Math.max(ms.clusterMaxFeatureCount, includedPositions.length);
+            ms.clusterMinFeatureCount = Math.min(ms.clusterMinFeatureCount, includedPositions.length);
+        }
+    };
+    
+    //Apply the default style to the cluster
+    ms.setClusterStyle = function(feature, resolution){
+        if (resolution !== ms.currentResolution || !angular.isDefined(ms.currentResolution)) {
+            ms.calculateClusterInfo();
+            ms.currentResolution = resolution;
+        }
+        
+        var size = feature.get('features').length;
+        var style = ms.clusterStyles[size];
+        
+        if (size > 1 && !style){
+            //Normalize radius to scale between 40 and 10
+            var maxRadius = 35;
+            var minRadius = 10;
+            if (ms.clusterMaxFeatureCount <= 50){
+                maxRadius = 15;
+                minRadius = 7;
+            } else if (ms.clusterMaxFeatureCount > 50 && ms.clusterMaxFeatureCount <= 100){
+                maxRadius = 20;
+            }
+            
+            //Normalize radius to scale between maxRadius and minRadius
+            var radius = Math.round((maxRadius - minRadius) * (feature.get('featNumber') - ms.clusterMinFeatureCount) / (ms.clusterMaxFeatureCount - ms.clusterMinFeatureCount) + minRadius);
+            
+            //Apply cluster style
+            style = new ol.style.Style({
+                
+                image: new ol.style.Circle({
+                    radius: radius,
+                    stroke: new ol.style.Stroke({
+                        color: '#F7580D',
+                        width: 2    
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'rgba(255, 255, 255, 0.7)',
+                    })
+                }),
+                text: new ol.style.Text({
+                    text: size.toString(),
+                    fill: new ol.style.Fill({
+                        color: 'rgb(80, 80, 80)'
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: 'rgb(80, 80, 80)'
+                    })
+                })
+            });
+            ms.clusterStyles[size] = style;
+        } else if (size === 1){
+            var orignalFeature = feature.get('features')[0];
+            style = ms.setPosStyle(orignalFeature);
+        }
+        
+        return [style];
+    };
+    
+    //Set style for positons when cluster is expanded
+    ms.setUnclusteredStyle = function(feature){
+        var positions = feature.get('features');
+        if (positions.length > 1){
+            var centerCoords = feature.getGeometry().getCoordinates();
+            
+            var mapExtent = ms.map.getView().calculateExtent(ms.map.getSize());
+            var mapSize = Math.min(ol.extent.getWidth(mapExtent), ol.extent.getHeight(mapExtent));
+            
+            var radius = mapSize / 10;
+            if (positions.length > 20){
+                radius = positions.length * radius / 20;
+                if (radius > mapSize / 2.5){
+                    radius = mapSize / 2.5;
+                }
+            }
+            
+            var circle = new ol.geom.Circle(centerCoords, radius);
+            var circlePoly = ol.geom.Polygon.fromCircle(circle);
+            circlePoly.transform(ms.getMapProjectionCode(), 'EPSG:4326');
+            
+            var line = turf.linestring(circlePoly.getCoordinates()[0]);
+            var length = turf.lineDistance(line, 'radians') / positions.length;
+            
+            var styles = [];
+            for (var i = 0; i < positions.length; i++){
+                var pointCoords = ms.pointCoordsToTurf(ol.proj.transform(positions[i].getGeometry().getCoordinates(), ms.getMapProjectionCode(), 'EPSG:4326'));
+                var targetPoint = ms.turfToOlGeom(turf.along(line, length * i, 'radians'));
+                positions[i].set('spiderCoords', targetPoint.getCoordinates(), true);
+                styles.push(ms.setSpiderStyle(positions[i], targetPoint.getCoordinates()));
+            }
+            
+            return _.flatten(styles);
+        } else {
+            return [ms.setPosStyle(positions[0])];
+        }
+        
+    };
+    
+    //Build spider style for expanded clusters
+    ms.setSpiderStyle = function(feature, pointCoords){
+        var pointStyle = new ol.style.Style({
+            text: new ol.style.Text({
+                text: '\uf124',
+                font: 'normal 22px FontAwesome',
+                  textBaseline: 'middle',
+                  textAlign: 'center',
+                  rotation: -0.78 + ms.degToRad(feature.get('reportedCourse')),
+                  fill: new ol.style.Fill({
+                      color: ms.getColorForPosition(feature)
+                  })
+            }),
+            geometry: function(){
+                return new ol.geom.Point(pointCoords);
+            }
+        });
+        
+        var lineStyle = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: 'rgba(120, 120, 120, 0.7)',
+                width: 1
+            }),
+            geometry: function(feature){
+                return new ol.geom.LineString([pointCoords, feature.getGeometry().getCoordinates()]);
+            }
+        });
+        
+        var centerStyle = new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: 5,
+                fill: new ol.style.Fill({
+                    color: 'rgba(255, 255, 255, 0.7)',
+                    
+                }),
+                stroke: new ol.style.Stroke({
+                    color: '#F7580D',
+                    width: 1
+                }),
+                geometry: function(feature){
+                    return feature.getGeometry();
+                }
+            })
+        });
+        
+        return [pointStyle, lineStyle, centerStyle];
+    };
+    
     //OL VMS positions style
-    ms.setPosStyle = function(feature, resolution){
+    ms.setPosStyle = function(feature){
         var style = new ol.style.Style({
             text: new ol.style.Text({
                 text: '\uf124',
@@ -674,8 +936,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             })
         });
         
-        
-        return [style];
+        return style;
     };
     
     //Styles methods for segments
@@ -729,7 +990,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         
         var width = 2;
         if (angular.isDefined(ms.styles.segments.style.lineWidth)){
-            width = ms.styles.segments.style.lineWidth;
+            width = parseInt(ms.styles.segments.style.lineWidth);
         }
         
         var lineDash = null;
@@ -759,7 +1020,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             new ol.style.Style({
                 stroke: new ol.style.Stroke({
                     color: 'white',
-                    width: 2 * width,
+                    width: width + 2,
                     lineDash: lineDash
                 })
             }),
@@ -792,9 +1053,22 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     //MAP FUNCTIONS
 	//Clear map before running a new report
 	ms.clearVectorLayers = function(config){
-	    ms.map.removeLayer(ms.getLayerByType('highlight'));
-	    ms.map.removeLayer(ms.getLayerByType('vmspos'));
-	    ms.map.removeLayer(ms.getLayerByType('vmsseg'));
+	    var layers = [ms.getLayerByType('highlight'), ms.getLayerByType('vmspos'), ms.getLayerByType('vmsseg')];
+        for (var i = 0; i < layers.length; i++){
+            if (angular.isDefined(layers[i])){
+                ms.map.removeLayer(layers[i]);
+            }
+        }
+	    
+	    //Clear the cluster styles applied to vms positions
+	    ms.clusterStyles = {};
+	    ms.currentResolution = undefined;
+	    ms.clusterMaxFeatureCount = 1;
+	    ms.clusterMinFeatureCount = 100000;
+	    var selectInteraction = ms.getInteractionsByType('Select')[0];
+	    if (angular.isDefined(selectInteraction)){
+	        ms.map.removeInteraction(selectInteraction);
+	    }
 	};
 
 	//Find layers by title
@@ -1283,7 +1557,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     	    var bearing = turf.bearing(c1, c2);
     	    
     	    //Calculate ETA
-            if(angular.isDefined(ms.sp.measure.speed) && angular.isDefined(ms.sp.measure.startDate) && ms.sp.measure.speed != null && ms.sp.measure.speed > 0){
+            if(angular.isDefined(ms.sp.measure.speed) && angular.isDefined(ms.sp.measure.startDate) && ms.sp.measure.speed !== null && ms.sp.measure.speed > 0){
                 //Convert knots to kmh
                 var avgSpeed = ms.sp.measure.speed * 1.852;
                 
@@ -1417,7 +1691,21 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         return format.readFeature(feature).getGeometry().transform('EPSG:4326', ms.getMapProjectionCode());
     };
 	
-	//Popup to display vector info
+	//Render popup info using mustache
+    ms.requestPopupTemplate = function(data, coords, fromCluster){
+        var templateURL = 'partial/spatial/templates/' + ms.activeLayerType + '.html';
+        $templateRequest(templateURL).then(function(template){
+            var rendered = Mustache.render(template, data);
+            var content = document.getElementById('popup-content');
+            content.innerHTML = rendered;
+            ms.overlay.setPosition(coords);
+            ms.overlay.set('fromCluster', fromCluster, true);
+        }, function(){
+            console.log('error getting template');
+        });
+    };
+    
+    //Popup to display vector info
 	ms.addPopupOverlay = function(){
 	    var overlay = new ol.Overlay({
 	        element: document.getElementById('popup'),
@@ -1515,7 +1803,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         };
     };
     
-    //POPUP - Define the object that will be used in the popup for vms positions
+    //POPUP - vms segments
+    ms.popupSegRecContainer = {
+        records: [],
+        currentIdx: undefined,
+        reset: function(){
+            this.records = [];
+            this.currentidx = undefined;
+        }
+    };
+    
+    //Define the object that will be used in the popup for vms segments
     ms.setSegmentsObjPopup = function(feature){
         var titles = ms.getSegmentTitles();
         var srcData = ms.formatSegmentDataForPopup(feature);

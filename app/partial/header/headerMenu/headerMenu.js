@@ -1,4 +1,4 @@
-    angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $rootScope, $location, $state, userService, startPageService, locale){
+    angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $rootScope, $location, $state, $timeout, userService, startPageService, locale){
 
     var checkAccess = function(module, feature) {
         return userService.isAllowed(feature,module,true);

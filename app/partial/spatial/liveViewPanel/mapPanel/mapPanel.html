@@ -141,6 +141,13 @@
         <div id="popup" class="ol-popup">
             <a href ng-click="closePopup()" id="popup-closer" class="ol-popup-closer"><span class="fa fa-times"></span></a>
             <div id="popup-content"></div>
+            <div class="col-md-12 popup-paginator" ng-show="popupSegments.records.length > 1">
+            	<span>{{'spatial.popup_item' | i18n}} {{popupSegments.currentIdx + 1}} {{'spatial.popup_out_of' | i18n}} {{popupSegments.records.length}}</span>
+            	<ul class="pagination pull-right">
+				    <li class="fa fa-chevron-left" ng-click="changeDisplayedRecord('previous')" ng-class="{disabled: popupSegments.currentIdx === 0}"></li>
+				    <li class="fa fa-chevron-right" ng-click="changeDisplayedRecord('next')" ng-class="{disabled: popupSegments.currentIdx === popupSegments.records.length - 1}"></li>
+			  	</ul>
+            </div>
         </div>
 
     </div>
