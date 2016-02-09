@@ -10,6 +10,8 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     $scope.isUpdate = false;
     $scope.searchString = '';
     $scope.userAreaTransp = 0;
+    $scope.userAreaType = "";
+    $scope.btnAddArea = true;
     
     $scope.init = function(){
         $scope.coordVisible = false;
@@ -79,7 +81,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.init();
         $scope.getProjections();
         $scope.getUserAreaLayer();
-        //$scope.getAreaTypes();
+        $scope.getAreaTypes();
         if ($scope.userAreasList.length === 0){
             $scope.getUserAreasList();
         }
@@ -281,27 +283,16 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         areaRestService.getUserAreaTypes().then(function(response){
             $scope.areaTypes = [];
             for (var i = 0; i < response.length; i++){
-                //TODO
-//                $scope,areaTypes.push({
-//                   "text":  
-//                });
+                $scope.areaTypes.push({
+                	"code": i,
+                    "text": response[i]
+                });
             }
             
-            //$scope.srcProjections = response;
-//            $scope.projections = [];
-//            for (var i = 0; i < $scope.srcProjections.length; i++){
-//                $scope.projections.push({
-//                    "text": $scope.srcProjections[i].name,
-//                    "code": $scope.srcProjections[i].id
-//                });
-//            }
-//
-//            $scope.setMapProjectionOnCombo();
-            
         }, function(error){
-//            $scope.alert.setError();
-//            $scope.alert.alertMessage = locale.getString('areas.error_getting_projections');
-//            $scope.alert.hideAlert();
+            $scope.alert.setError();
+            $scope.alert.alertMessage = locale.getString('areas.error_getting_userarea_types');
+            $scope.alert.hideAlert();
         });
     };
     
@@ -579,6 +570,5 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         
         $scope.userAreaSubmitted = false;
     };
-    
     
 });

@@ -2,7 +2,7 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
 	var cb = {};
 	var activeCombo;
 	var clickedInSameCombo = function(event) {
-		var isClickedElementChildOfPopup = activeCombo.element.find(event.target).length > 0 ||
+		var isClickedElementChildOfPopup = activeCombo.element.find('button.dropdown-toggle').find(event.target).length > 0 ||
 		angular.element('#' + activeCombo.comboboxId).find(event.target).length > 0;
 
 	    if (isClickedElementChildOfPopup){
@@ -25,7 +25,7 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
     		$(activeCombo.comboContainer).css('top', buttonPosition.top);
     		$(activeCombo.comboContainer).css('left', buttonPosition.left);
 		
-			$(activeCombo.comboContainer).width($(activeCombo.element).width());
+			$(activeCombo.comboContainer).width($(activeCombo.element).find('.dropdown-toggle').outerWidth());
     		
     		var comboMenu = $('#' + activeCombo.comboboxId + '>.dropdown-menu');
     		var footerTop = $(window).height() - angular.element('footer')[0].offsetHeight;

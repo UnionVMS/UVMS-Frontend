@@ -144,9 +144,12 @@
 					<span class="section-title">{{'areas.area_details_title' | i18n}}</span>
 				</div>
 				<ng-form name="userAreaForm" novalidate>
-					<div class="form-group" ng-class="{'has-error': (userAreaForm.userAreaName.$dirty || userAreaSubmitted) && userAreaForm.userAreaName.$error.required}">
+					<div class="form-group userAreaNameField" ng-class="{'has-error': (userAreaForm.userAreaName.$dirty || userAreaSubmitted) && userAreaForm.userAreaName.$error.required}">
 						<label for="userAreaName">{{'areas.user_area_name' | i18n }}</label>
 						<input type="text" class="form-control" name="userAreaName" ng-required="true" ng-model="userArea.name"/>
+						<div class="innerErrorMessagesInputWithUpLabel" ng-messages="userAreaForm.userAreaName.$error" ng-show="(userAreaForm.userAreaName.$dirty || submitingReport === true) && userAreaForm.userAreaName.$invalid">
+							<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
+						</div>
 					</div>
 					<div class="form-group" ng-class="{'has-error': (userAreaForm.userAreaDesc.$dirty || userAreaSubmitted) && userAreaForm.userAreaDesc.$error.required}">
 						<label for="userAreaDesc">{{'areas.user_area_description' | i18n }}</label>
@@ -163,9 +166,18 @@
 							<datepicker-input time="true" model="userArea.endDate" name="userAreaTo" min-date="userArea.startDate" ng-change-callback="resetDateTimePicker" />
 						</div>
 					</div>
-					<div>
-						<label for="userAreaType">{{'areas.user_area_type' | i18n }}</label>
-						<input type="text" class="form-control" name="userAreaType" ng-model="userArea.subType"/>
+					<div class="form-group userAreaTypeGroup">
+						<label class="col-md-12 withoutPadding" for="userAreaType">{{'areas.user_area_type' | i18n }}</label>
+						<div class="col-md-12 withoutPadding" ng-class="{'has-error': (userAreaForm.userAreaType.$dirty || userAreaSubmitted) && userAreaForm.userAreaType.$error.required}">
+							<div class="col-md-6 withoutPadding rightPadding">
+								<combobox ng-model="userAreaType" items="areaTypes" editable="true" name="userAreaType" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n}}" ng-required="true"></combobox>
+							</div>
+							<div class="col-md-6 withoutPadding leftPadding">
+								<div ng-messages="userAreaForm.userAreaType.$error" ng-show="userAreaForm.userAreaType.$dirty">
+									<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</ng-form>
 			</div>
