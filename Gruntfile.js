@@ -41,8 +41,8 @@ module.exports = function (grunt) {
 
   //KARMA TEST FILES
   var karmaFiles = [
-      'bower_components/angular-mocks/angular-mocks.js',
       '<%= dom_munger.data.appjs %>',
+      'bower_components/angular-mocks/angular-mocks.js',
       'test/envConfigForTest.js',
       {pattern: 'environment/*.json', watched: true, included: false, served: true},
       {pattern: 'app/partial/**/*.html', watched: true, included: false, served: true}
