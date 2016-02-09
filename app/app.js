@@ -22,7 +22,8 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
 	'dndLists',
 	'lrDragNDrop',
 	'dndLists',
-	'ui.bootstrap-slider'
+	'ui.bootstrap-slider',
+	'activeFluxAssets'
 ]);
 
 var currentUserContextPromise = function(userService) {
@@ -134,7 +135,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             }
         })
-/*        .state('app.today', {
+        .state('app.today', {
             url: '/today',
             views: {
                 modulepage: {
@@ -143,7 +144,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             resolve: {}
-        })*/
+        })
         .state('app.home', {
             url: '/home',
             views: {
@@ -804,6 +805,10 @@ unionvmsWebApp.factory('HttpRequestRESTCallInterceptor', function ($q, envConfig
       }
     };
 });
+
+unionvmsWebApp.config(['activeFluxAssetsServiceProvider', function(activeFluxAssetsServiceProvider) {
+    activeFluxAssetsServiceProvider.setUseDummyData(true);
+}]);
 
 //Add HTTP request interceptors
 unionvmsWebApp.config(function ($httpProvider) {

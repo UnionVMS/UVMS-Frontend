@@ -60,7 +60,7 @@
         var unionVMSApplication = 'Union-VMS';
 
         //TODAY
-        //addMenuItem(locale.getString('header.menu_today'), '/today');
+        addMenuItem(locale.getString('header.menu_today'), '/today');
 
         //REPORTING
         if(checkAccess('Reporting', 'LIST_REPORTS')){
