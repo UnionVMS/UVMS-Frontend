@@ -230,6 +230,14 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				updateMap();
 			};
 			
+			var removeVmsNodes = function(event){
+				var root = scope.$tree.getRootNode();
+				var firstChild = root.getFirstChild();
+				if (firstChild.data.type === 'vmsdata'){
+					root.removeChild(firstChild);
+				}
+			};
+			
 			//Get layer index in the ol layers collection
 			var getLayerIdxByTitle = function(title){
                 var layers = mapService.map.getLayers();
@@ -394,6 +402,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 
 			scope.$on( 'updateLayerTreeSource', updateLayerTreeSource );
 			scope.$on( 'addLayerTreeNode', addLayerTreeNode );
+			scope.$on( 'removeVmsNodes', removeVmsNodes);
 		}
 	};
 });

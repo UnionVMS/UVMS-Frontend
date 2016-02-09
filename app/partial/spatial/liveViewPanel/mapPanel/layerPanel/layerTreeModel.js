@@ -318,6 +318,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	    if (vectorNodes.length > 0){
 	        var node = {
                 title: locale.getString('spatial.layer_tree_vms'),
+                type: 'vmsdata',
                 folder: true,
                 expanded: true,
                 children: vectorNodes

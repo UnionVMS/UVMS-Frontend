@@ -51,7 +51,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	rep.runReportWithoutSaving = function(report){
         rep.tabs.map = report.withMap;
 		rep.isReportExecuting = true;
-        mapService.clearVmsLayers();
+        mapService.clearVectorLayers();
+        $rootScope.$broadcast('removeVmsNodes');
+        //TODO get the report congurations from the backend 
         reportRestService.executeWithoutSaving(report).then(getVmsDataSuccess, getVmsDataError);
 	};
 	
