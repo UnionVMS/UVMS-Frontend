@@ -1,0 +1,11 @@
+<div style="background-color: white;" class="vessels-in-zone">
+	<div class="widget-header">
+		<h1>{{ctrl.i18n('header')}}</h1>
+		<p>{{ctrl.i18n('subheader')}}</p>
+	</div>
+	<div class="scroll-table">
+		<div class="row" ng-repeat="item in ctrl.items | orderBy:'count':true">
+			<span class="flag-icon" ng-class="'flag-' + item.nation"></span> {{ctrl.nationName(item.nation)}} <span class="count">{{item.count}}</span>
+		</div>
+	</div>
+</div>
