@@ -169,7 +169,7 @@ describe('advancedSearchMovementCtrl', function() {
         expect(alertService.hideMessage).toHaveBeenCalled();
         expect(searchService.resetPage).toHaveBeenCalled();
         expect(searchService.resetSearchCriterias).toHaveBeenCalled();
-        expect(searchService.setDynamic).toHaveBeenCalledWith(true);
+        expect(searchService.setDynamic).toHaveBeenCalledWith(false);
         expect(scope.resetSavedSearchDropdown).toHaveBeenCalled();
         expect(searchService.setSearchCriteriasToAdvancedSearch).toHaveBeenCalled();
         expect(scope.searchfunc).toHaveBeenCalled();

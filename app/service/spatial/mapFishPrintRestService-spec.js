@@ -9,7 +9,7 @@ describe('mapFishPrintRestServiceTest', function() {
     beforeEach(inject(function ($injector) {
         $httpBackend = $injector.get('$httpBackend');
         printRestService = $injector.get('mapFishPrintRestService');
-        $httpBackend.whenGET('usm/assets/translate/locale-en.json').respond({});
+        $httpBackend.whenGET(/usm\/assets\/translate\/locale-.*\.json/).respond({});
         $httpBackend.whenGET(/^i18n\/\.*/).respond({});
         $httpBackend.whenGET('/usm-administration/rest/ping').respond({});
         $httpBackend.whenGET('/config/rest/globals').respond({});
