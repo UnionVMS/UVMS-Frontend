@@ -112,7 +112,8 @@
                             <datepicker-input name="activeFrom"
                                               model="user.activeFrom"
                                               ng-required="true"
-                                              ng-disabled="formDisabled">
+                                              ng-disabled="formDisabled"
+                                              input-field-id="edit-user-active-from-date-picker">
                             </datepicker-input>
                             <div class="error" ng-show="editUserForm.activeFrom.$dirty">
                                 <span class="text-danger small" ng-show="editUserForm.activeFrom.$error.required">
@@ -147,7 +148,8 @@
                             <datepicker-input name="activeTo"
                                               model="user.activeTo"
                                               ng-required="true"
-                                              ng-disabled="formDisabled">
+                                              ng-disabled="formDisabled"
+                                              input-field-id="edit-user-active-to-date-picker">
                             </datepicker-input>
                             <div class="error" ng-show="editUserForm.activeTo.$dirty">
                             <span class="text-danger small" ng-show="editUserForm.activeTo.$error.required">
@@ -172,7 +174,7 @@
                         <label class="col-md-2 ">Lockout To</label>
 
                         <div class="col-md-3">
-                            <datepicker-input model="user.lockoutTo" ng-disabled="formDisabled"></datepicker-input>
+                            <datepicker-input model="user.lockoutTo" ng-disabled="formDisabled" input-field-id="edit-user-lockout-to-date"></datepicker-input>
                         </div>
                     </div>
                 </div>

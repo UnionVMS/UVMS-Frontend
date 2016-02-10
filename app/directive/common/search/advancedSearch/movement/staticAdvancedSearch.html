@@ -7,10 +7,10 @@
             <dropdown ng-model="advancedSearchObject.TIME_SPAN" no-placeholder-item items="timeSpanOptions" callback="resetSavedSearchDropdown"></dropdown>
         </div>
         <div class="col-md-4 smallerpadding searchcriteria">
-             <datepicker-input model="advancedSearchObject.FROM_DATE" time="true" max-date="advancedSearchObject.TO_DATE"placeholder="{{'movement.search_movementStartDate_placeholder' | i18n}}" ng-change-callback="resetSavedSearchDropdown"></datepicker-input>
+             <datepicker-input model="advancedSearchObject.FROM_DATE" time="true" max-date="advancedSearchObject.TO_DATE"placeholder="{{'movement.search_movementStartDate_placeholder' | i18n}}" ng-change-callback="resetSavedSearchDropdown" input-field-id="advanced-movement-search-from-date-picker"></datepicker-input>
         </div>
         <div class="col-md-4 smallerpadding searchcriteria">
-             <datepicker-input model="advancedSearchObject.TO_DATE" time="true" min-date="advancedSearchObject.FROM_DATE" placeholder="{{'movement.search_movementEndDate_placeholder' | i18n}}" ng-change-callback="resetSavedSearchDropdown"></datepicker-input>
+             <datepicker-input model="advancedSearchObject.TO_DATE" time="true" min-date="advancedSearchObject.FROM_DATE" placeholder="{{'movement.search_movementEndDate_placeholder' | i18n}}" ng-change-callback="resetSavedSearchDropdown" input-field-id="advanced-movement-search-to-date-picker"></datepicker-input>
         </div>
         <div class="col-md-2 smallerpadding searchcriteria">
             <input type="text" placeholder="{{'movement.advanced_search_placeholder_by_ircs' | i18n}}"  class="form-control" ng-model="advancedSearchObject.IRCS" ng-change="resetSavedSearchDropdown()">

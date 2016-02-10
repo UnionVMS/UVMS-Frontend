@@ -7,10 +7,10 @@
             <dropdown ng-model="advancedSearchObject.TIME_SPAN" no-placeholder-item items="timeSpanOptions"></dropdown>
         </div>
         <div class="col-md-4 smallerpadding searchcriteria">
-            <datepicker-input model="advancedSearchObject.FROM_DATE" time="true" placeholder="{{'movement.search_movementStartDate_placeholder' | i18n}}" max-date="advancedSearchObject.TO_DATE"></datepicker-input>
+            <datepicker-input model="advancedSearchObject.FROM_DATE" time="true" placeholder="{{'movement.search_movementStartDate_placeholder' | i18n}}" max-date="advancedSearchObject.TO_DATE" input-field-id="simple-movement-search-from-date-picker"></datepicker-input>
         </div>
         <div class="col-md-4 smallerpadding searchcriteria">
-            <datepicker-input model="advancedSearchObject.TO_DATE" time="true" placeholder="{{'movement.search_movementEndDate_placeholder' | i18n}}" min-date="advancedSearchObject.FROM_DATE"></datepicker-input>
+            <datepicker-input model="advancedSearchObject.TO_DATE" time="true" placeholder="{{'movement.search_movementEndDate_placeholder' | i18n}}" min-date="advancedSearchObject.FROM_DATE" input-field-id="simple-movement-search-to-date-picker"></datepicker-input>
         </div>
     </div>
 </div>

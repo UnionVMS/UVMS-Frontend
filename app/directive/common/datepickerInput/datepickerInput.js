@@ -12,6 +12,7 @@ angular.module('unionvmsWeb').directive('datepickerInput', ['$compile',function(
             time: '@', //use timepicker?
             minDate : '=', //should be on format "YYYY-MM-DD HH:mm:ss Z"
             maxDate : '=', //should be on format "YYYY-MM-DD HH:mm:ss Z"
+            inputFieldId: '@'
 		},
 		templateUrl: 'directive/common/datepickerInput/datepickerInput.html',
 		link: function(scope, element, attrs, ngModel) {
@@ -64,8 +65,11 @@ angular.module('unionvmsWeb')
                 defaultDateFormat = FORMATS.YMDHM;
             }
 
-            //Create a unique id for the input and the datepicker element
-            $scope.inputFieldId = generateGUID();
+            if (angular.isUndefined($scope.inputFieldId)) {
+                // Create a unique id for the input and the datepicker element.
+                $scope.inputFieldId = generateGUID();
+            }
+
             $scope.datepickerId = "picker-" +$scope.inputFieldId;
 
             //Set options

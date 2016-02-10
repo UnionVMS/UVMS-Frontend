@@ -34,11 +34,11 @@
 									<input st-search="properties.cfr" placeholder="{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}" class="input-sm form-control" type="search">	
 								</div>
 								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.posTime">
-									<datepicker-input time="true" model="startDate" max-date="endDate" placeholder="{{'spatial.table_filter_start_date' | i18n }}" ng-change-callback="resetDateTimePicker"></datepicker-input>
+									<datepicker-input time="true" model="startDate" max-date="endDate" placeholder="{{'spatial.table_filter_start_date' | i18n }}" ng-change-callback="resetDateTimePicker" input-field-id="vms-panel-filter-start-date-picker"></datepicker-input>
 									<input id="stStartDateInput" ng-model="startDate" st-search="properties.positionTime|startDate" class="hidden-st-control" type="search">
 								</div>
 								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.posTime">
-									<datepicker-input time="true" model="endDate" min-date="startDate" placeholder="{{'spatial.table_filter_end_date' | i18n }}" ng-change-callback="resetDateTimePicker"></datepicker-input>
+									<datepicker-input time="true" model="endDate" min-date="startDate" placeholder="{{'spatial.table_filter_end_date' | i18n }}" ng-change-callback="resetDateTimePicker" input-field-id="vms-panel-filter-end-date-picker"></datepicker-input>
 									<input id="stEndDateInput" ng-model="endDate" st-search="properties.positionTime|endDate" class="hidden-st-control" type="search">
 								</div>
 								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.name">

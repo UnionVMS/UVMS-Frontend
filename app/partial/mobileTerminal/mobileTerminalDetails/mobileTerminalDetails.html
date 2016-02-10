@@ -124,11 +124,11 @@
                             </div>
                                 <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': channelForm.started.$invalid && (submitAttempted || channelForm.started.$dirty)}" ng-show="getTerminalConfig().channelFields.START_DATE">
                                 <!-- Started -->
-                                    <datepicker-input name="started" model="communicationChannel.ids.START_DATE" time="true" max-date="communicationChannel.ids.END_DATE"></datepicker-input>
+                                    <datepicker-input name="started" model="communicationChannel.ids.START_DATE" time="true" max-date="communicationChannel.ids.END_DATE" input-field-id="mobile-terminal-channel-start-date-picker-{{$index}}"></datepicker-input>
                                 </div>
                                 <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': channelForm.stopped.$invalid && (submitAttempted || channelForm.stopped.$dirty)}" ng-show="getTerminalConfig().channelFields.END_DATE">
                                 <!-- Stopped -->
-                                    <datepicker-input name="stopped" time="true" model="communicationChannel.ids.END_DATE" min-date="communicationChannel.ids.START_DATE"></datepicker-input>
+                                    <datepicker-input name="stopped" time="true" model="communicationChannel.ids.END_DATE" min-date="communicationChannel.ids.START_DATE" input-field-id="mobile-terminal-channel-end-date-picker-{{$index}}"></datepicker-input>
                                 </div>
 
                             <div class="col-md-1 remove" ng-show="!disableForm() && $index > 0">
@@ -149,15 +149,15 @@
                         </div>
                         <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.INSTALLED_ON">
                             <label>{{'mobileTerminal.form_inmarsatc_installed_on_label' | i18n}}</label>
-                            <datepicker-input model="currentMobileTerminal.attributes.INSTALLED_ON" time="true"></datepicker-input>
+                            <datepicker-input model="currentMobileTerminal.attributes.INSTALLED_ON" time="true" input-field-id="mobile-terminal-installed-on-date-picker"></datepicker-input>
                         </div>
                         <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.STARTED_ON" ng-class="{'has-error': mobileTerminalForm.started.$invalid && (submitAttempted || mobileTerminalForm.started.$dirty)}">
                             <label>{{'mobileTerminal.form_inmarsatc_started_on_label' | i18n}}</label>
-                            <datepicker-input name="started"model="currentMobileTerminal.attributes.STARTED_ON" time="true" min-date="currentMobileTerminal.attributes.INSTALLED_ON"></datepicker-input>
+                            <datepicker-input name="started"model="currentMobileTerminal.attributes.STARTED_ON" time="true" min-date="currentMobileTerminal.attributes.INSTALLED_ON" input-field-id="mobile-terminal-started-on-date-picker"></datepicker-input>
                         </div>
                         <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.UNINSTALLED_ON" ng-class="{'has-error': mobileTerminalForm.uninstalled.$invalid && (submitAttempted || mobileTerminalForm.uninstalled.$dirty)}">
                             <label>{{'mobileTerminal.form_inmarsatc_uninstalled_on_label' | i18n}}</label>
-                            <datepicker-input name="uninstalled" model="currentMobileTerminal.attributes.UNINSTALLED_ON" time="true" min-date="currentMobileTerminal.attributes.INSTALLED_ON"></datepicker-input>
+                            <datepicker-input name="uninstalled" model="currentMobileTerminal.attributes.UNINSTALLED_ON" time="true" min-date="currentMobileTerminal.attributes.INSTALLED_ON" input-field-id="mobile-terminal-uninstalled-on-date-picker"></datepicker-input>
                         </div>
                     </div>
                     <div class="row">

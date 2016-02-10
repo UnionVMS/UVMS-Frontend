@@ -9,10 +9,10 @@
                             <dropdown ng-model="searchObject.TIME_SPAN" no-placeholder-item items="timeSpanOptions" ></dropdown>
                         </th>
                         <th>
-                            <datepicker-input model="searchObject.FROM_DATE" time="true"  max-date="searchObject.TO_DATE" placeholder="{{'common.search_from' | i18n}}"></datepicker-input>
+                            <datepicker-input model="searchObject.FROM_DATE" time="true"  max-date="searchObject.TO_DATE" placeholder="{{'common.search_from' | i18n}}" input-field-id="rules-search-from-date-picker"></datepicker-input>
                         </th>
                         <th>
-                            <datepicker-input model="searchObject.TO_DATE" time="true" mix-date="searchObject.FROM_DATE" placeholder="{{'common.search_to' | i18n}}"></datepicker-input>
+                            <datepicker-input model="searchObject.TO_DATE" time="true" mix-date="searchObject.FROM_DATE" placeholder="{{'common.search_to' | i18n}}" input-field-id="rules-search-to-date-picker"></datepicker-input>
                         </th>
                         <th class="searchButton">
                             <button type="submit" class="btn btn-primary" ng-click="searchAlarms()" ng-disabled="currentSearchResults.loading">{{'common.search' | i18n}}</button>
