@@ -136,7 +136,7 @@ ol.control.HistoryControl = function(opt_options){
 };
 ol.inherits(ol.control.HistoryControl, ol.control.Control);
 
-angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $timeout, $templateRequest, $filter, spatialHelperService, globalSettingsService, unitConversionService, coordinateFormatService) {
+angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $timeout, $templateRequest, $filter, spatialHelperService, globalSettingsService, unitConversionService, coordinateFormatService, MapFish) {
 	var ms = {};
 	ms.sp = spatialHelperService;
 
@@ -166,11 +166,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
 	    map.on('moveend', function(e){
 	        var controls = e.map.getControls();
-	            controls.forEach(function(control){
-	                if (control instanceof ol.control.HistoryControl){
-	                    control.updateHistory();
-	                }
-	            }, controls);
+            controls.forEach(function(control){
+                if (control instanceof ol.control.HistoryControl){
+                    control.updateHistory();
+                }
+            }, controls);
+            
+            //Adjust print extent to the new map scale
+            var printLayer = ms.getLayerByType('print');
+            if (angular.isDefined(printLayer) && ms.map.getView().getResolution() !== ms.mapPrintResolution){
+                ms.addPrintExtent();
+            }
 	    });
 
 	    map.on('singleclick', function(evt){
@@ -519,6 +525,47 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         }
     };
     
+    //MAPFISH PRINT
+    //Add printing extent layer
+    ms.addPrintLayer = function(){
+        var layer = new ol.layer.Vector({
+            type: 'print',
+            isBaseLayer: false,
+            source: new ol.source.Vector({
+                features: []
+            }),
+            style: ms.setPrintStyle
+        });
+
+        ms.map.addLayer(layer);
+    };
+    
+    ms.mapPrintResolution = undefined;
+    ms.addPrintExtent = function(){
+        ms.mapPrintResolution = ms.map.getView().getResolution();
+        
+        var mapSize = ms.map.getSize();
+        var currentMapRatio = mapSize[0] / mapSize[1];
+        var scaleFactor = 0.9;
+        var desiredPrintRatio = MapFish.printMapSize[0] / MapFish.printMapSize[1];
+        
+        var targetWidth, targetHeight;
+        if (desiredPrintRatio >= currentMapRatio){
+            targetWidth = mapSize[0] * scaleFactor;
+            targetHeight = targetWidth / desiredPrintRatio;
+        } else {
+            targetHeight = mapSize[1] * scaleFactor;
+            targetWidth = targetHeight * desiredPrintRatio;
+        }
+        
+        var geomExtent = ms.map.getView().calculateExtent([targetWidth, targetHeight]);
+        var printFeature = new ol.Feature(ol.geom.Polygon.fromExtent(geomExtent)); //FIXME - probably it is a good idea to store the feature in the model
+        
+        var layer = ms.getLayerByType('print').getSource();
+        layer.clear(true);
+        layer.addFeature(printFeature);
+    };
+    
     //Add highlight layer
     ms.addFeatureOverlay = function(){
         var layer = new ol.layer.Vector({
@@ -557,6 +604,21 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     };
     
     //STYLES
+    //Print style
+    ms.setPrintStyle = function(feature){
+        var style = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                width: 2,
+                color: 'rgba(136, 136, 136, 1)'
+            }),
+            fill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.3)'
+            })
+        });
+        
+        return [style];
+    };
+    
     //Highlight styles
     ms.setHighlightStyle = function(feature, resolution){
         var style;
@@ -615,8 +677,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             image: new ol.style.Circle({
                 radius: 5,
                 fill: new ol.style.Fill({
-                    color: 'rgba(120, 120, 120, 1)',
-                    
+                    color: 'rgba(120, 120, 120, 1)'
                 }),
                 stroke: new ol.style.Stroke({
                     color: 'rgba(255, 255, 255, 0.8)',
@@ -1326,6 +1387,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         
         return ints;
     };
+    
+    //Get custom interactions by type
+    ms.getCustomInteraction = function(olType, type){
+        var interactions = ms.map.getInteractions().getArray();
+        var ints = interactions.filter(function(int){
+            return int instanceof ol.interaction[olType] === true && int instanceof ms[type];
+        });
+        
+        return ints;
+    };
 
 	//Add map controls
 	ms.addZoom = function(ctrl, initial){
@@ -1436,7 +1507,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	    } else {
 	        ms.map.addControl(olCtrl);
 	    }
-        
     };
     
     ms.updateMousecoords = function (config){
@@ -1456,6 +1526,82 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	//Pan to coordinates control
 	ms.panTo = function(coords){
 	    ms.map.getView().setCenter(coords);
+	};
+	
+	//Add Print drag interaction
+	ms.addDragPrintExtent = function(){
+	    var ctrl = new ms.dragExtent();
+	    ms.map.addInteraction(ctrl);
+	};
+	
+	//Custum drag interaction for print extent
+	ms.dragExtent = function(){
+	    ol.interaction.Pointer.call(this, {
+	        handleDownEvent: ms.dragExtent.prototype.handleDownEvent,
+	        handleDragEvent: ms.dragExtent.prototype.handleDragEvent,
+	        handleMoveEvent: ms.dragExtent.prototype.handleMoveEvent,
+	        handleUpEvent: ms.dragExtent.prototype.handleUpEvent
+	    });
+	    
+	    this._coordinate = null;
+	    this._feature = null;
+	    this._cursor = 'pointer';
+	    this._previousCursor = undefined;
+	};
+	ol.inherits(ms.dragExtent, ol.interaction.Pointer);
+	
+	ms.dragExtent.prototype.handleDownEvent = function(evt){
+	    var map = evt.map;
+	    var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature){
+	        return feature;
+	    }, this, function(layer){
+	        return layer.get('type') === 'print';
+	    });
+	    
+	    if (feature){
+	        this._coordinate = evt.coordinate;
+	        this._feature = feature;
+	    }
+	    
+	    return !!feature;
+	};
+	
+	ms.dragExtent.prototype.handleDragEvent = function(evt){
+	    var deltaX = evt.coordinate[0] - this._coordinate[0];
+        var deltaY = evt.coordinate[1] - this._coordinate[1];
+
+        var geometry = (this._feature.getGeometry());
+        geometry.translate(deltaX, deltaY);
+
+        this._coordinate[0] = evt.coordinate[0];
+        this._coordinate[1] = evt.coordinate[1];
+	};
+	
+	ms.dragExtent.prototype.handleMoveEvent = function(evt){
+	    if (this._cursor) {
+	        var map = evt.map;
+	        var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature){
+	            return feature;
+	        }, this, function(layer){
+	            return layer.get('type') === 'print';
+	        });
+            var element = evt.map.getTargetElement();
+            if (feature) {
+                if (element.style.cursor !== this._cursor) {
+                    this._previousCursor = element.style.cursor;
+                    element.style.cursor = this._cursor;
+                }
+            } else if (this._previousCursor !== undefined) {
+                element.style.cursor = this._previousCursor;
+                this._previousCursor = undefined;
+            }
+        }
+	};
+	
+	ms.dragExtent.prototype.handleUpEvent = function(evt){
+	    this._coordinate = null;
+        this._feature = null;
+        return false;
 	};
 	
 	//Measuring interaction

@@ -1,15 +1,31 @@
-angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, mapService, spatialHelperService, reportService, mapFishPrintRestService, MapFish){
+angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, mapService, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload){
     $scope.activeControl = '';
     $scope.showMeasureConfigWin = false;
     $scope.showPrintConfigWin = false;
     $scope.showMapFishConfigWin = false;
+    $scope.winExpanded = true;
     $scope.measureConfigs = spatialHelperService.measure;
     $scope.print = spatialHelperService.print;
     $scope.mapFish = MapFish;
     $scope.tbControl = spatialHelperService.tbControl;
     $scope.refresh = reportService.refresh;
-    $scope.newObject = {}; // TODO change name
+    $scope.mapFishLocalConfig = {}; // TODO change name
     $scope.popupSegments = mapService.popupSegRecContainer;
+    
+    //Comboboxes
+    $scope.measuringUnits = [];
+    $scope.measuringUnits.push({"text": locale.getString('spatial.map_measuring_units_meters'), "code": "m"});
+    $scope.measuringUnits.push({"text": locale.getString('spatial.map_measuring_units_nautical_miles'), "code": "nm"});
+    $scope.measuringUnits.push({"text": locale.getString('spatial.map_measuring_units_miles'), "code": "mi"});
+
+    $scope.exportFormats = [];
+    $scope.exportFormats.push({"text": 'PNG', "code": "png"});
+    $scope.exportFormats.push({"text": 'JPEG', "code": "jpeg"});
+    $scope.exportFormats.push({"text": 'PDF', "code": "pdf"});
+
+    $scope.printLayouts = [];
+    $scope.printLayouts.push({"text": locale.getString('spatial.map_export_layout_portrait'), "code": "portrait"});
+    $scope.printLayouts.push({"text": locale.getString('spatial.map_export_layout_landscape'), "code": "landscape"});
     
     //Close identify popup
     $scope.closePopup = function(){
@@ -27,27 +43,15 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         }
     };
     
+    //Update popup content
     $scope.updatePopup = function(){
         var record = mapService.popupSegRecContainer.records[mapService.popupSegRecContainer.currentIdx];
         var data = mapService.setSegmentsObjPopup(record.data);
         mapService.requestPopupTemplate(data, record.coord, record.fromCluster, true);
     };
     
-    //Comboboxes
-    $scope.measuringUnits = [];
-    $scope.measuringUnits.push({"text": locale.getString('spatial.map_measuring_units_meters'), "code": "m"});
-    $scope.measuringUnits.push({"text": locale.getString('spatial.map_measuring_units_nautical_miles'), "code": "nm"});
-    $scope.measuringUnits.push({"text": locale.getString('spatial.map_measuring_units_miles'), "code": "mi"});
-
-    $scope.exportFormats = [];
-    $scope.exportFormats.push({"text": 'PNG', "code": "png"});
-    $scope.exportFormats.push({"text": 'JPEG', "code": "jpeg"});
-    $scope.exportFormats.push({"text": 'PDF', "code": "pdf"});
-
-    $scope.printLayouts = [];
-    $scope.printLayouts.push({"text": locale.getString('spatial.map_export_layout_portrait'), "code": "portrait"});
-    $scope.printLayouts.push({"text": locale.getString('spatial.map_export_layout_landscape'), "code": "landscape"});
-
+    //MAPFISH STUFF
+    //Initialization
     (function () {
         $log.debug("Init MapCtrl");
         MapFish.reset();
@@ -63,7 +67,8 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
             }
         );
     })();
-
+    
+    //Get printing templates
     $scope.getTemplates = function(){
         $log.debug("Fetching mapfish templates from server");
         MapFish.reset();
@@ -76,7 +81,13 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
             }
         );
     };
+    
+    $scope.changeTemplate = function (selected_template) {
+        $log.debug("Changing template to " + selected_template);
+        $scope.getCapabilities(selected_template);
+    };
 
+    //Get capabilities from print server
     $scope.getCapabilities = function(appId){
         $log.debug("Getting capabilities of " + appId);
         MapFish.reset();
@@ -86,17 +97,124 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
                 MapFish.initFormatsCmbx(data);
                 MapFish.initLayoutCmbx(data);
                 MapFish.initLayoutAttributes(data, MapFish.layouts[0].text);
+                if ($scope.showMapFishConfigWin === true){
+                    mapService.addPrintExtent();
+                }
             }, function(error) {
                 $log.error(error);
             }
         );
     };
-
+    
+    //Toggle MapFish layouts
     $scope.toggleLayout = function(selectedLayout) {
         $log.debug("Layout changed to " + selectedLayout);
+        MapFish.resetOnLayoutChange();
+        $scope.mapFishLocalConfig = {};
         MapFish.initLayoutAttributes(MapFish.capabilitiesData, selectedLayout);
+        mapService.addPrintExtent();
+    };
+    
+    //Activate Mapfish
+    $scope.mapFishPrintEnable = function(){
+        mapService.addPrintLayer();
+        mapService.addDragPrintExtent();
+        $scope.openMapFishConfigWin();
+    };
+    
+    $scope.openMapFishConfigWin = function(){
+        $scope.showMapFishConfigWin = true;
+        var win = angular.element('#map-fish-print-config');
+        var btnPos = angular.element('#map-fish-print-config-btn').offset();
+        $scope.setWinDraggable(win, btnPos);
+        mapService.addPrintExtent();
+    };
+    
+    //Deactivate Mapfish
+    $scope.mapFishPrintDisable = function(){
+        $scope.showMapFishConfigWin = false;
+        $scope.winExpanded = true;
+        var layer = mapService.getLayerByType('print');
+        if (angular.isDefined(layer)){
+            mapService.map.removeLayer(layer);
+            mapService.map.removeInteraction(mapService.getCustomInteraction('Pointer', 'dragExtent')[0]);
+        }
+    };
+    
+    $scope.cancelPrint = function (ref){
+        if (ref === undefined) {
+            return;
+        }
+        mapFishPrintRestService.cancelPrintJob(ref).then(
+            function(data){
+                $log.debug(data);
+            },function(error){
+                $log.error(error);
+            }
+        );
     };
 
+    //Do the actual print
+    $scope.printMapWithMapFish = function() {
+        $log.debug("Requesting print job");
+        
+        var payload = new MapFishPayload();
+        payload.createPayloadObj($scope.mapFishLocalConfig);
+        
+        var a;
+
+//        var payload = new MapFish.Payload($scope.newObject, MapFish.selected_layout);
+//        payload.addLegend(new MapFish.Legend('legendus'));
+//
+//        var map = new MapFish.Map();
+//        map.center = [-655898, 5795404]; //TODO get from map
+//        map.dpi = MapFish.selected_dpi;
+//        map.addLayer(new MapFish.GridLayer()); //TODO get from map
+//        var layer = new MapFish.WmsLayer('http://localhost:8080/geoserver/wms','uvms:eez');
+//        layer.addLayer('uvms:countries');
+//        map.addLayer(layer);
+//        map.addLayer(new MapFish.WmsLayer('http://localhost:8080/geoserver/wms','uvms:rfmo'));
+//        payload.addMap(map);
+//
+//        mapFishPrintRestService.createPrintJob(MapFish.selected_template, MapFish.selected_format, payload).then(
+//            function(data) {
+//                $log.debug(data);
+//                MapFish.printJobData = data;
+//
+//                var poller = function() {
+//                    if(MapFish.printJobData !== undefined){
+//                        mapFishPrintRestService.getPrintJobStatus(MapFish.printJobData.ref).then(
+//                            function(data){
+//                                $log.debug(data);
+//                                MapFish.jobStatusData = data;
+//                                if (MapFish.jobStatusData.status === 'running'){
+//                                    $timeout(poller, 500);
+//                                }
+//                                else if(MapFish.jobStatusData.status === 'finished'){
+//                                   $scope.download("http://localhost:8080/" + MapFish.jobStatusData.downloadURL);
+//                                }
+//                            },function (error) {
+//                                $log.error(error);
+//                            }
+//                        );
+//                    }
+//                };
+//                poller();
+//            },function (error) {
+//                $log.error(error);
+//            }
+//        );
+    };
+
+    //Download printed map
+    $scope.download = function(downloadURL){
+        var downloadLink = angular.element('<a></a>');
+        downloadLink.attr('target', '_blank');
+        downloadLink.attr('href', downloadURL);
+        $document.find('body').append(downloadLink);
+        downloadLink[0].click();
+        downloadLink.remove();
+    };
 
     //Handle toggle on top toolbar
     $scope.toggleToolbarBtn = function(tool){
@@ -125,7 +243,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.setWinDraggable = function(win, buttonPosition){
         if (win.draggable('instance') === undefined){
             win.draggable({
-                handle: 'span',
+                handle: 'span.fa-bullseye',
                 containment: '.map-container',
                 scroll: false
             });
@@ -135,6 +253,11 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         win[0].style.marginTop = '8px';
         win[0].style.top = 'auto';
         win[0].style.left = buttonPosition.left + 'px';
+    };
+    
+    //Expand or collapse draggable windows
+    $scope.toggleWinStatus = function(){
+        $scope.winExpanded = !$scope.winExpanded; 
     };
 
     //Measure control
@@ -150,10 +273,6 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         $scope.setWinDraggable(win, btnPos);
     };
 
-    $scope.mapFishPrintDisable = function(){
-        $scope.showMapFishConfigWin = false;
-    };
-
     $scope.measureDisable = function(){
         $scope.showMeasureConfigWin = false;
         mapService.clearMeasureControl();
@@ -167,95 +286,11 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         $scope.openPrintConfigWin();
     };
 
-    $scope.mapFishPrintEnable = function(){
-        $scope.openMapFishConfigWin();
-    };
-
     $scope.openPrintConfigWin = function(){
         $scope.showPrintConfigWin = true;
         var win = angular.element('#print-config');
         var btnPos = angular.element('#export-map').offset();
         $scope.setWinDraggable(win, btnPos);
-    };
-
-    $scope.openMapFishConfigWin = function(){
-        $scope.showMapFishConfigWin = true;
-        var win = angular.element('#map-fish-print-config');
-        var btnPos = angular.element('#map-fish-print-config-btn').offset();
-        $scope.setWinDraggable(win, btnPos);
-    };
-
-    $scope.cancelPrint = function (ref){
-        if (ref === undefined) {
-            return;
-        }
-        mapFishPrintRestService.cancelPrintJob(ref).then(
-            function(data){
-                $log.debug(data);
-            },function(error){
-                $log.error(error);
-            }
-        );
-    };
-
-    $scope.printMapWithMapFish = function() {
-        $log.debug("Requesting print job");
-
-        var payload = new MapFish.Payload($scope.newObject, MapFish.selected_layout);
-        payload.addLegend(new MapFish.Legend('legendus'));
-
-        var map = new MapFish.Map();
-        map.center = [-655898, 5795404]; //TODO get from map
-        map.dpi = MapFish.selected_dpi;
-        map.addLayer(new MapFish.GridLayer()); //TODO get from map
-        var layer = new MapFish.WmsLayer('http://localhost:8080/geoserver/wms','uvms:eez');
-        layer.addLayer('uvms:countries');
-        map.addLayer(layer);
-        map.addLayer(new MapFish.WmsLayer('http://localhost:8080/geoserver/wms','uvms:rfmo'));
-        payload.addMap(map);
-
-        mapFishPrintRestService.createPrintJob(MapFish.selected_template, MapFish.selected_format, payload).then(
-            function(data) {
-                $log.debug(data);
-                MapFish.printJobData = data;
-
-                var poller = function() {
-                    if(MapFish.printJobData !== undefined){
-                        mapFishPrintRestService.getPrintJobStatus(MapFish.printJobData.ref).then(
-                            function(data){
-                                $log.debug(data);
-                                MapFish.jobStatusData = data;
-                                if (MapFish.jobStatusData.status === 'running'){
-                                    $timeout(poller, 500);
-                                }
-                                else if(MapFish.jobStatusData.status === 'finished'){
-                                   $scope.download("http://localhost:8080/" + MapFish.jobStatusData.downloadURL);
-                                }
-                            },function (error) {
-                                $log.error(error);
-                            }
-                        );
-                    }
-                };
-                poller();
-            },function (error) {
-                $log.error(error);
-            }
-        );
-    };
-
-    $scope.download = function(downloadURL){
-        var downloadLink = angular.element('<a></a>');
-        downloadLink.attr('target', '_blank');
-        downloadLink.attr('href', downloadURL);
-        $document.find('body').append(downloadLink);
-        downloadLink[0].click();
-        downloadLink.remove();
-    };
-
-    $scope.changeTemplate = function (selected_template) {
-        $log.debug("Changing template to " + selected_template);
-        $scope.getCapabilities(selected_template);
     };
 
     $scope.printMap = function () {

@@ -4,7 +4,8 @@ angular.module('unionvmsWeb').factory('spatialHelperService',function() {
 	    tbControl: {
 	        measure: false,
 	        fullscreen: false,
-	        print: false
+	        print: false,
+	        mapFishPrint: false
 	    },
 	    measure: {
 	        units: 'm',

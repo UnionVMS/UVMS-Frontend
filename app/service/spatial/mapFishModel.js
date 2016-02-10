@@ -34,6 +34,8 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
             statusURL: undefined,
             downloadURL: undefined
         },
+        
+        printMapSize: [],
 
         GridLayer : function(){
 
@@ -49,16 +51,6 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
                     style: "BOLD"
                 }
             };
-        },
-
-        Map : function(){
-            this.projection = "EPSG:3857"; // TODO
-            this.rotation = 0;
-            this.scale = 99900000; // TODO
-            this.center = []; // TODO
-            this.dpi = undefined;
-            this.layers = [];
-            this.addLayer = function(layer) { this.layers.push(layer);};
         },
 
         Legend : function(name){
@@ -93,6 +85,14 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
             model.selected_format = undefined;
             model.selected_layout = undefined;
             model.selected_dpi = undefined;
+            model.printMapSize = [];
+        },
+        
+        resetOnLayoutChange: function(){
+            model.layoutAttributes = [];
+            model.suggestedDpi = [];
+            model.selected_dpi = undefined;
+            model.printMapSize = [];
         },
 
         initTemplateCmbx : function(templates){
@@ -138,6 +138,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
                                     model.suggestedDpi.push({"text": dpiValue, "code": dpiValue});
                                     model.selected_dpi = model.suggestedDpi[0].code;
                                 }
+                                model.printMapSize = [attribute.clientInfo.width, attribute.clientInfo.height];
                             }
                         });
                     }
@@ -148,4 +149,50 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
 
     return model;
 
+})
+.factory('MapFishPayload',function(MapFish, mapService){
+    function mapFishPayload(){
+        this.layout = undefined;
+        this.attributes = {};
+    }
+    
+    mapFishPayload.prototype.createPayloadObj = function(data){
+        this.layout = MapFish.selected_layout;
+        this.attributes = buildAttributes(data);
+    };
+    
+    var buildAttributes = function(data){
+        var attr = {};
+        
+        //Setting attributes defined through the printing widget like title, description, etc
+        angular.forEach(data, function(value, key) {
+        	attr[key] = value;
+        }, attr);
+        
+        attr.map = buildMapAttributes();
+        
+        return attr;
+    };
+    
+    var buildMapAttributes = function(){
+        var map = {};
+        var layerSrc = mapService.getLayerByType('print').getSource();
+        
+        map.projection = mapService.getMapProjectionCode();
+        map.bbox = layerSrc.getExtent();
+        map.dpi = MapFish.selected_dpi;
+        map.rotation = 0;
+        
+        map.layers = getLayersConfigArray();
+//        this.addLayer = function(layer) { this.layers.push(layer);};
+        
+        return map;
+    };
+    
+    var getLayersConfigArray = function(){
+        var layers = [];
+        return layers;
+    };
+    
+    return mapFishPayload;
 });
