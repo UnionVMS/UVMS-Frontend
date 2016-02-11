@@ -41,7 +41,7 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,co
 	$scope.removeRuleByIndex = function(index, ruleId){
 		$scope.configModel.positionStyle.style.splice(index, 1);
 		
-		if($scope.configModel.positionStyle.style.length > index + 1){
+		if($scope.configModel.positionStyle.style.length > index){
 			if(index > 0){
 				$scope.configModel.positionStyle.style[index].propertyFrom = $scope.configModel.positionStyle.style[index-1].propertyTo;
 			}

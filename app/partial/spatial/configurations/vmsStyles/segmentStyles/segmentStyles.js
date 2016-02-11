@@ -41,7 +41,7 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope,con
 	$scope.removeRuleByIndex = function(index, ruleId){
 		$scope.configModel.segmentStyle.style.splice(index, 1);
 		
-		if($scope.configModel.segmentStyle.style.length > index + 1){
+		if($scope.configModel.segmentStyle.style.length > index){
 			if(index > 0){
 				$scope.configModel.segmentStyle.style[index].propertyFrom = $scope.configModel.segmentStyle.style[index-1].propertyTo;
 			}
