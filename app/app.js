@@ -779,6 +779,7 @@ var restApiURLS = [
     '/rules/activity/',
     '/reporting/rest/',
     '/spatial/rest/',
+    '/mapfish',
     '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'
 ];
 
