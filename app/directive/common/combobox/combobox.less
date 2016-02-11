@@ -48,17 +48,19 @@
 
 .combobox[editable="true"] {
 	.fullWidthDropdown {
-		.dropdown-toggle,
-		.combo-editable-input {
-			width: 85%;
-			display: inline-block;
-		}
-		.combo-editable-input {
-		    height: 30px;
-		    border: solid 1px #c2c9cc;
-		    color: black;
-		    padding: 3px 12px;
-		    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.09);
+		.comboButtonContainer {
+			padding-right: 29px;
+			.dropdown-toggle,
+			.combo-editable-input {
+				display: inline-block;
+			}
+			.combo-editable-input {
+			    height: 30px;
+			    border: solid 1px #c2c9cc;
+			    color: black;
+			    padding: 3px 12px;
+			    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.09);
+			}
 		}
 		.btn-add-item {
 			width: 24px;
@@ -66,7 +68,9 @@
 		    line-height: 30px;
 		    text-align: center;
 		    display: inline-block;
-		    margin-left: 5px;
+		    position: absolute;
+		    right: 0;
+		    top: 0;
 		}
 	}
 }

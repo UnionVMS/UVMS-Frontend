@@ -1,14 +1,16 @@
 <div class="combobox" ng-class="lineStyle === true ? 'comboLineStyle' : ''" ng-model-options="{allowInvalid: true}">
 	<div class="dropdown fullWidthDropdown">
-		<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled" ng-click="toggleCombo()" ng-hide="editableMode">
-			<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-bind="currentItemLabel" ng-if="lineStyle !== true"></div>
-			<svg height="20px" width="100%" ng-if="lineStyle === true">
-				<g fill="none" stroke="#262626" stroke-width="4">
-					<path stroke-dasharray="{{currentItemLabel}}" d="M0 10 l999 0" />
-				</g>
-			</svg>
-			<span class="caret"></span>
-		</button>
+		<div class="comboButtonContainer">
+			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled" ng-click="toggleCombo()" ng-hide="editableMode">
+				<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-bind="currentItemLabel" ng-if="lineStyle !== true"></div>
+				<svg height="20px" width="100%" ng-if="lineStyle === true">
+					<g fill="none" stroke="#262626" stroke-width="4">
+						<path stroke-dasharray="{{currentItemLabel}}" d="M0 10 l999 0" />
+					</g>
+				</svg>
+				<span class="caret"></span>
+			</button>
+		</div>
 		<input class="combo-editable-input" ng-model="newItem.name" ng-if="editable" ng-show="editableMode">
 		<div class="btn-add-item" ng-if="editable">
 			<a ng-click="addNewItem()" title="{{'common.add_new' | i18n}}">
