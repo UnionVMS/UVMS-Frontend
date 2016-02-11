@@ -6,6 +6,13 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         return mode === $scope.formMode;
     };
 
+    //set visibility types in dropdown option
+    $scope.visibilities = [
+                           {"text": locale.getString('spatial.reports_table_share_label_private'), "code": "private"},
+                           {"text": locale.getString('spatial.reports_table_share_label_scope'), "code": "scope"},
+                           {"text": locale.getString('spatial.reports_table_share_label_public'), "code": "public"}
+                           ];
+    
     //Set positions selector dropdown options
     $scope.positionItems = [];
     $scope.positionItems.push({"text": locale.getString('spatial.reports_form_positions_selector_option_all'), "code": "all"});

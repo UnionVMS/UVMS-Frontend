@@ -21,6 +21,12 @@
 	"map_tip_clear_map": "Clear map highlights",
 	"map_tip_print": "Export map",
 	"map_tip_refresh_report": "Refresh report",
+	"map_tip_bookmarks": "Bookmarks",
+	"map_bookmarks_table_name_header": "Name",
+	"map_bookmarks_remove": "Remove bookmark",
+	"map_bookmarks_add_input_placeholder": "New bookmark name",
+	"map_bookmarks_add": "Add bookmark",
+	"map_bookmarks_zoom_to": "Show on map",
     "mapfish_tip_print": "Export map",
     "mapfish_tip_printing": "Cancel job",
     "mapfish_template_label": "Templates",
@@ -310,5 +316,9 @@
 	"styles_attr_courseOverGround": "Course",
 	
 	"line_style": "Line style",
-	"line_width": "Line width"
+	"line_width": "Line width",
+	
+	"previous": "Previous",
+	"next": "Next",
+	"more_details": "More..."
 }

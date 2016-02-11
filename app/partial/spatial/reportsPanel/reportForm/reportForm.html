@@ -14,29 +14,28 @@
 		<div class="reportForm col-md-12">
 			<form name="reportForm" id="reportForm" novalidate>
 				<div class="row">
+					<div class="col-md-4">
+						<label for="reportName">{{'spatial.reports_form_report_name' | i18n }}</label>
+					</div>
+					<div class="col-md-8">
+						<label for="reportDesc">{{'spatial.reports_form_report_description' | i18n}}</label>
+					</div>
+				</div>
+				<div class="row general-form">
 					<div class="form-group col-md-4" ng-class="{'has-error': (reportForm.reportName.$dirty || submitingReport === true) && reportForm.reportName.$invalid}">
-						<div>
-							<label for="reportName">{{'spatial.reports_form_report_name' | i18n }}</label>
+						<div class="form-group">
 							<input id="reportName" type="text" class="form-control" name="reportName" ng-required="true" ng-model="report.name"/>
 							<div class="innerErrorMessagesInputWithUpLabel" ng-messages="reportForm.reportName.$error" ng-show="(reportForm.reportName.$dirty || submitingReport === true) && reportForm.reportName.$invalid">
 								<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 							</div>
 						</div>		
-						<div>
+						<div class="form-group">
 							<label for="reportVisibility">{{'spatial.reports_form_report_visibility' | i18n }}</label>
-							<select id="reportVisibility" 
-								name="reportVisibility"
-								class="form-control" 
-							  	ng-model="report.visibility" >
-								<option ng-value="private" default="default" ng-selected="report.visibility === 'private'">Private</option>
-								<option ng-value="scope" ng-selected="report.visibility === 'scope'">Scope</option>
-								<option ng-value="public" ng-selected="report.visibility === 'public'">Public</option>
-							</select>
+							<combobox id="reportVisibility" name="reportVisibility" ng-model="report.visibility" items="visibilities" />
 						</div>
 					</div>
-					<div class="form-group col-md-8">
-						<label for="reportDesc">{{'spatial.reports_form_report_description' | i18n}}</label>
-						<textarea class="form-control reportDesc" rows="2" name="reportDesc" ng-model="report.desc"></textarea>
+					<div class="col-md-8 reportDescContainer">
+						<textarea class="form-control reportDesc" name="reportDesc" ng-model="report.desc"></textarea>
 					</div>
 				</div>
 				<ng-form name="reportBodyForm">

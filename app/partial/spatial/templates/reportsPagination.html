@@ -1,12 +1,12 @@
 <!-- <div>Showing {{currentPage}} to {{pages.length}} of {{displayedReports.length}} entries</div> -->
 <ul class="pagination pagination-sm">
    <li ng-class="{disabled: currentPage==1}">
-   	<a ng-click="selectPage(currentPage-1)" class="previous">Previous</a>
+   	<a ng-click="selectPage(currentPage-1)" class="previous">{{'spatial.previous' | i18n }}</a>
    </li>
    <li ng-repeat="page in pages" ng-class="{active: page==currentPage}" ng-if="numPages > 0">
 	<a ng-click="selectPage(page)" class="ng-binding">{{ page }}</a>
    </li>
    <li ng-class="{disabled: currentPage==numPages}">
-   	<a ng-click="selectPage(currentPage+1)" class="next">Next</a>
+   	<a ng-click="selectPage(currentPage+1)" class="next">{{'spatial.next' | i18n }}</a>
    </li>
 </ul>

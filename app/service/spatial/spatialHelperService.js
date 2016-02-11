@@ -5,7 +5,8 @@ angular.module('unionvmsWeb').factory('spatialHelperService',function() {
 	        measure: false,
 	        fullscreen: false,
 	        print: false,
-	        mapFishPrint: false
+	        mapFishPrint: false,
+	        bookmarks: false
 	    },
 	    measure: {
 	        units: 'm',

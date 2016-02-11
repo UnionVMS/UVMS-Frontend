@@ -1,0 +1,9 @@
+<!-- <div>Showing {{currentPage}} to {{pages.length}} of {{displayedReports.length}} entries</div> -->
+<ul class="pagination pagination-simple">
+   <li ng-class="{disabled: currentPage==1}">
+   	<a ng-click="selectPage(currentPage-1)" class="fa fa-chevron-left"></a>
+   </li>
+   <li ng-class="{disabled: currentPage==numPages}">
+   	<a ng-click="selectPage(currentPage+1)" class="fa fa-chevron-right"></a>
+   </li>
+</ul>

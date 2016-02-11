@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, mapService, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload){
+angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, mapService, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window){
     $scope.activeControl = '';
     $scope.showMeasureConfigWin = false;
     $scope.showPrintConfigWin = false;
@@ -11,6 +11,10 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.refresh = reportService.refresh;
     $scope.mapFishLocalConfig = {}; // TODO change name
     $scope.popupSegments = mapService.popupSegRecContainer;
+    $scope.bookmarksByPage = 3;
+    $scope.bookmarkNew = {};
+    $scope.submitingBookmark = false;
+    $scope.isAddBookVisible = false;
     
     //Comboboxes
     $scope.measuringUnits = [];
@@ -345,7 +349,87 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 
         mapService.map.renderSync();
     };
+    
+    //Bookmarks control
+    $scope.bookmarksEnable = function(){
+    	spatialRestService.getBookmarkList().then(bookmarkListSuccess,bookmarkListError);
+    	$scope.openBookmarksWin();
+    };
 
+    $scope.openBookmarksWin = function(){
+    	$scope.searchBookmark = undefined;
+        $scope.showBookmarksWin = true;
+        var win = angular.element('#bookmarks');
+        var btnPos = angular.element('#bookmarks-btn').offset();
+        $scope.setWinDraggable(win, btnPos);
+    };
+
+    $scope.bookmarksDisable = function(){
+        $scope.showBookmarksWin = false;
+    };
+    
+    var bookmarkListSuccess = function(data){
+    	$scope.bookmarks = data;
+    	$scope.displayedBookmarks = [].concat($scope.bookmarks);
+    };
+    
+    var bookmarkListError = function(error){
+        $log.error(error);
+    };
+    
+    $scope.removeBookmark = function(id){
+    	spatialRestService.deleteBookmark(id).then(deleteBookmarkSuccess,deleteBookmarkError);
+    };
+
+    var deleteBookmarkSuccess = function(data){
+    	for(var i = 0;i<$scope.bookmarks.length;i++){
+    		if($scope.bookmarks[i].id === data.id){
+    			$scope.bookmarks.splice(i, 1);
+    		}
+    	}
+    };
+    
+    var deleteBookmarkError = function(error){
+        $log.error(error);
+    };
+    
+    $scope.showBookmarkOnMap = function(bookmark) {
+    	var srs = 'EPSG:' + bookmark.srs;
+    	var extent = bookmark.extent.split(';');
+    	var finalExtent = [];
+    	
+    	for (var i = 0; i < extent.length; i++){
+    		finalExtent.push(parseFloat(extent[i]));
+    	}
+    	
+    	var geom = new ol.geom.Polygon.fromExtent(finalExtent);
+    	if(srs !== mapService.getMapProjectionCode()){
+    		geom.transform(srs, mapService.getMapProjectionCode());
+    	}
+        mapService.zoomTo(geom);
+    };
+    
+    $scope.createBookmark = function(){
+    	$scope.submitingBookmark = true;
+    	if($scope.mapForm.bookmarksForm.bookmarkName.$valid){
+    		var projectionCode = mapService.getMapProjectionCode();
+	    	$scope.bookmarkNew.srs = projectionCode.substr(projectionCode.indexOf(':')+1, projectionCode.length-1);
+	    	$scope.bookmarkNew.extent = mapService.map.getView().calculateExtent(mapService.map.getSize()).join().replace(/\,/g,';');
+	    	spatialRestService.createBookmark($scope.bookmarkNew).then(createBookmarkSuccess,createBookmarkError);
+    	}
+    };
+    
+    var createBookmarkSuccess = function(response){
+    	$scope.bookmarks.push(response.data);
+    	$scope.submitingBookmark = false;
+    	$scope.bookmarkNew.name = undefined;
+    	$scope.mapForm.bookmarksForm.$setPristine();
+    };
+    
+    var createBookmarkError = function(error){
+        $log.error(error);
+    };
+    
     //Scale the map image to fit PDF page while keeping the aspect ratio
     $scope.getFinalMapSize = function (originalSize, targetSize) {
         var scaleWidth = originalSize.width / targetSize.maxWidth;
@@ -445,48 +529,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         }
     });
 
-    $scope.resizeMap = function (evt) {
-
-        var w = angular.element(window);
-
-        if (evt && (angular.element('.mapPanelContainer.fullscreen').length > 0 ||
-            (angular.element('.mapPanelContainer.fullscreen').length === 0 && evt.type.toUpperCase().indexOf("FULLSCREENCHANGE") !== -1))) {
-
-            setTimeout(function () {
-                $('.map-container').css('height', w.height() - parseInt($('.map-bottom').css('height')) + 'px');
-                $('.layer-panel').css('height', w.height() - parseInt($('#map-toolbar').css('height')) + 'px');
-                $('#map').css('height', w.height() - parseInt($('#map-toolbar').css('height')) - parseInt($('.map-bottom').css('height')) + 'px');
-                mapService.updateMapSize();
-            }, 100);
-            return;
-        }
-
-        setTimeout(function () {
-            var offset = 120;
-            var minHeight = 340;
-            var footerHeight = angular.element('footer')[0].offsetHeight;
-            var headerHeight = angular.element('header')[0].offsetHeight;
-            var newHeight = w.height() - headerHeight - footerHeight - offset;
-
-            if (newHeight < minHeight) {
-                newHeight = minHeight;
-            }
-
-            $('.map-container').css('height', newHeight);
-            $('.layer-panel').css('height', newHeight);
-
-            var mapToolbarHeight = parseInt($('#map-toolbar').css('height'));
-            if (mapToolbarHeight > 31) {
-                $('#map').css('height', newHeight - (mapToolbarHeight - 31) - parseInt($('.map-bottom').css('height')) + 'px');
-            } else {
-                $('#map').css('height', newHeight - parseInt($('.map-bottom').css('height')) + 'px');
-            }
-
-            mapService.updateMapSize();
-        }, 100);
-    };
-
-    $(window).resize(mapService.updateMapContainerSize);
+    $($window).resize(mapService.updateMapContainerSize);
     $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', function() {
     	setTimeout(function() {
     		if($scope.showMeasureConfigWin){
@@ -548,6 +591,8 @@ angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale,
                 type: 'print'
             },{
                 type: 'mapFishPrint'
+            },{
+                type: 'bookmarks'
             }]
         }
     };

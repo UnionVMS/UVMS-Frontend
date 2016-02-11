@@ -308,10 +308,7 @@
 }
 
 //Measure config window
-#print-config,
-#map-fish-print-config,
-#measure-config,
-#map-fish-print-config {
+.map-toolbar-control-panel {
 	width: 190px;
 	position: fixed;
 	background-color: white;
@@ -319,6 +316,70 @@
 	border: 1px solid #DDD;
 	border-radius: 6px;
 	box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+#bookmarks {
+	width: 285px;
+	background-color: #089fd7;
+	.book-panel-body {
+		background-color: #fff;
+		overflow-y: hidden;
+		.table-responsive-force {
+		    padding: 10px 0 0 0;
+			tbody {
+				td {
+					padding: 2px;
+				}
+			}
+			.btn-xs {
+				height: 20px;
+			    padding: 1px 4px;
+				font-size: 12px;
+			}
+			.pagination-simple {
+				margin: 2px 0;
+				li a {
+					font-size: 10px;
+				    padding: 4px 7px;
+				}
+			}
+			tfoot {
+				td {
+					padding: 3px 0 0 0;
+				}
+			}
+		}
+		.btn-bookmark-add {
+			max-height: 0;
+			margin-bottom: 10px;
+			-moz-transition: max-height 0.3s;
+		    -webkit-transition: max-height 0.3s;
+		    -o-transition: max-height 0.3s;
+		    -ms-transition: max-height 0.3s;
+		    transition: max-height 0.3s;
+			&.add-bookmark-visible {
+				max-height: 500px;
+			}
+			button {
+			    margin-top: 10px;
+			}
+		}
+	}
+	.btn-more-details {
+		color: #fff;
+		font-size: 15px;
+    	line-height: 10px;
+    	cursor: pointer;
+    	.details-text {
+    		position: absolute;
+		    top: -100%;
+		    color: #000;
+		    font-size: 13px;
+	        left: 0;
+    		bottom: 100%;
+    		background-color: #fff;
+    	}
+	}
 }
 
 .mapfish-spinner {

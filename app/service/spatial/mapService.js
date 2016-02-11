@@ -1792,7 +1792,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	    } else if (data.bearing > 180 && data.bearing <= 270){
 	        offset = [2, 8];
 	    } else {
-	        offset = [-135, 6];
 	        if (angular.isDefined(data.eta)){
                 offset = [-163, 6];
             }

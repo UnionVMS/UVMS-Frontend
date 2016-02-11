@@ -74,6 +74,33 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource) 
                     method: 'GET'
                 }
             });  
+        },
+        getBookmarkList: function(){
+            return $resource('/spatial/rest/bookmark/', {}, {
+	              'get': {
+	                  method: 'GET'
+	              }
+	          });  
+        },
+        createBookmark: function(){
+        	return $resource('/spatial/rest/bookmark/', {}, {
+        		  'create': {
+                      method: 'POST'
+                  },
+                  headers: {
+	                   'Content-Type': 'application/json'
+	               }
+              });  
+        },
+        deleteBookmark: function(){
+        	return $resource('/spatial/rest/bookmark/:id', {}, {
+        		  'delete': {
+                      method: 'DELETE'
+                  },
+                  headers: {
+	                   'Content-Type': 'application/json'
+	               }
+              });  
         }
     };
 })
@@ -183,6 +210,36 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource) 
                 deferred.reject(error);
             }); 
 
+            return deferred.promise;
+        },
+        getBookmarkList: function(){
+        	var deferred = $q.defer();
+            spatialRestFactory.getBookmarkList().get(function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.log('Error getting user defined areas');
+                deferred.reject(error);
+            }); 
+
+            return deferred.promise;
+        },
+        createBookmark: function(bookmark){
+        	var deferred = $q.defer();
+        	spatialRestFactory.createBookmark().create(bookmark, function(response){
+                deferred.resolve(response);
+            }, function(error){
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+        deleteBookmark: function(bookmarkId){
+        	var deferred = $q.defer();
+        	spatialRestFactory.deleteBookmark().delete({id: bookmarkId}, function(response){
+                response.id = bookmarkId;
+                deferred.resolve(response);
+            }, function(error){
+                deferred.reject(error.data);
+            });
             return deferred.promise;
         }
 	};
