@@ -1,6 +1,6 @@
 <div class="row">
 	<div search-results-table search="currentSearchResults" class="col-md-12 rules-table">
-		<table class="searchResults colorOdd truncate-text">
+		<table class="searchResults colorOdd">
 			<thead>
 				<tr>
 					<th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length"/></th>
@@ -19,10 +19,10 @@
 			<tbody>
 				<tr ng-repeat="item in filteredItems = (currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:filterOnType)" ng-class="{'inactive':!item.active}">
     				<td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
-    				<td class="statusColored" ng-attr-title="{{item.name}}">{{item.name}}</td>
-    				<td class="statusColored" ng-attr-title="{{item.lastTriggered | confDateFormat}}">{{item.lastTriggered | confDateFormat}}</td>
-                    <td class="statusColored" ng-attr-title="{{item.dateUpdated | confDateFormat}}">{{item.dateUpdated | confDateFormat}}</td>
-                    <td class="statusColored" ng-attr-title="{{item.updatedBy}}">{{item.updatedBy}}</td>
+    				<td class="statusColored truncate-text" ng-attr-title="{{item.name}}">{{item.name}}</td>
+    				<td class="statusColored truncate-text" ng-attr-title="{{item.lastTriggered | confDateFormat}}">{{item.lastTriggered | confDateFormat}}</td>
+                    <td class="statusColored truncate-text" ng-attr-title="{{item.dateUpdated | confDateFormat}}">{{item.dateUpdated | confDateFormat}}</td>
+                    <td class="statusColored truncate-text" ng-attr-title="{{item.updatedBy}}">{{item.updatedBy}}</td>
                     <td class="statusColored notifyByTicket">
                         <dropdown ng-show="mySubscriptions[item.guid]" ng-model="mySubscriptions[item.guid].TICKET" no-placeholder-item items="subscriptionDropdownOptions" callback="onTicketSubscriptionSelect" callback-params="item" ng-disabled="item.isGlobal()"></dropdown>
                     </td>
