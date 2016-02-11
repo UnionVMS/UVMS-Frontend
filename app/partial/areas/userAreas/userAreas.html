@@ -179,6 +179,14 @@
 							</div>
 						</div>
 					</div>
+					<div class="form-group scopeSelection"  >
+						<label for="scopeSelection">{{'areas.user_area_scope_selection' | i18n }}</label>
+						
+							<select  name="scopeSelection" class="js-share-scopes-selection form-control"	ng-model="userArea.scopeSelection" multiple="multiple" style="width: 100%; 1px solid #c2c9cc; height: 30px;" >
+								<!--option ng-repeat="item in userScopes" ng-selected="isScopeSelected(item.id, userArea.scopeSelection)" >{{item.text}}</option-->
+	  						</select>
+	  					
+					</div>
 				</ng-form>
 			</div>
 		</div>

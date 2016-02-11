@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale, $modal, UserArea, areaMapService, areaRestService, areaAlertService, spatialRestService, unitConversionService){
+angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale, $modal, UserArea, areaMapService, areaRestService, areaAlertService, spatialRestService, unitConversionService, userService){
     $scope.activeTool = undefined;
     $scope.selectedProj = undefined;
     $scope.userAreasList = [];
@@ -20,6 +20,25 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.userArea = UserArea;
         $scope.userArea.reset();
         $scope.displayedCoords = [].concat($scope.userArea.coordsArray);
+       
+        var availableUserContexts = userService.getContexts();
+        $scope.userScopes = [];
+        for (var index in availableUserContexts){
+            if (angular.isDefined(availableUserContexts[index].scope)) {
+                $scope.userScopes.push({
+                    "id": availableUserContexts[index].scope.scopeName,
+                    "text": availableUserContexts[index].scope.scopeName
+                });
+            }
+            
+        }
+
+        $(".js-share-scopes-selection").select2({
+          tags: true,
+          data: $scope.userScopes,
+          placeholder: "Select a scope",
+          allowClear: true
+        });
     };
     
     //Switch editing type
@@ -31,7 +50,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.editingType = type;
     };
     
-    
+        
     //EDITING TOOLBAR
     $scope.toggleTool = function(type){
         var fn;
@@ -159,14 +178,31 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         });
     };
     
+    
+
     //Edit user area
     $scope.editUserArea = function(idx){
         $scope.alert.setLoading(locale.getString('areas.getting_area'));
         areaRestService.getUserAreaAsGeoJSON($scope.displayedUserAreas[idx].gid).then(function(response){
+
             $scope.alert.removeLoading();
             $scope.setEditingType('edit');
             $scope.loadGeoJSONFeature(response[0]);
             areaMapService.mergeParamsGid($scope.displayedUserAreas[idx].gid, $scope.displayedUserAreas[idx].areaType, false);
+           /* 
+            TODO
+           var scopeSelection = response[0].properties.scopeSelection;
+            var selectDataArray = $(".js-share-scopes-selection").data();
+            if (angular.isDefined(scopeSelection)) {
+                for (var selectedScope in scopeSelection) {
+                    for (var option in selectDataArray) {
+                        if (selectedScope === option.text) {
+                            option.selected = true;
+                            break;
+                        }
+                    }
+                }
+            }*/
             $scope.isUpdate = true;
         }, function(error){
             $scope.alert.setError();
@@ -283,13 +319,16 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         areaRestService.getUserAreaTypes().then(function(response){
             $scope.areaTypes = [];
             for (var i = 0; i < response.length; i++){
+
                 $scope.areaTypes.push({
                 	"code": i,
                     "text": response[i]
                 });
             }
             
+
         }, function(error){
+
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.error_getting_userarea_types');
             $scope.alert.hideAlert();
@@ -312,7 +351,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         
         feature.set('startDate', unitConversionService.date.convertDate($scope.userArea.startDate, 'to_server'));
         feature.set('endDate', unitConversionService.date.convertDate($scope.userArea.endDate, 'to_server'));
-        feature.set('isShared', $scope.userArea.isShared);
+        feature.set('scopeSelection', $scope.userArea.scopeSelection);
         
         if (angular.isDefined($scope.userArea.id)){
             feature.set('id', $scope.userArea.id.toString());
