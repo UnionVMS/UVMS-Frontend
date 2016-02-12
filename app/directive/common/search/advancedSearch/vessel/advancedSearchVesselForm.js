@@ -14,7 +14,6 @@ angular.module('unionvmsWeb')
             //Setup dropdowns
             $scope.flagStates = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
             $scope.gearTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'GEAR_TYPE'), 'GEAR_TYPE','VESSEL', true);
-            $scope.assetTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'ASSET_TYPE'),'ASSET_TYPE','VESSEL', true);
             $scope.powerSpans = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'SPAN_POWER_MAIN'));
             $scope.lengthSpans = toLengthUnitView(configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'SPAN_LENGTH_LOA')));
 
@@ -74,9 +73,6 @@ angular.module('unionvmsWeb')
                 searchService.addSearchCriteria("NAME", searchValue);
                 searchService.addSearchCriteria("CFR", searchValue);
                 searchService.addSearchCriteria("IRCS", searchValue);
-            }
-            if(typeof $scope.ASSET_TYPE === 'string' && $scope.ASSET_TYPE.trim().length > 0){
-                searchService.addSearchCriteria("ASSET_TYPE", $scope.ASSET_TYPE);
             }
 
             //Do the search
