@@ -37,7 +37,10 @@
 
 		function getTranspondersNoTx() {
 			var deferred = $q.defer();
-			deferred.resolve(999);
+			$resource("/rules/rest/tickets/countAssetsNotSending").get(function(response) {
+				deferred.resolve(response.data);
+			});
+
 			return deferred.promise;
 		}
 	}
