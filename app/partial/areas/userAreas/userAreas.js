@@ -26,19 +26,12 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         for (var index in availableUserContexts){
             if (angular.isDefined(availableUserContexts[index].scope)) {
                 $scope.userScopes.push({
-                    "id": availableUserContexts[index].scope.scopeName,
+                    "code": availableUserContexts[index].scope.scopeName,
                     "text": availableUserContexts[index].scope.scopeName
                 });
             }
             
         }
-
-        $(".js-share-scopes-selection").select2({
-          tags: true,
-          data: $scope.userScopes,
-          placeholder: "Select a scope",
-          allowClear: true
-        });
     };
     
     //Switch editing type

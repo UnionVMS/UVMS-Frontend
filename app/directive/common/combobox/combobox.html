@@ -1,17 +1,25 @@
-<div class="combobox" ng-class="lineStyle === true ? 'comboLineStyle' : ''" ng-model-options="{allowInvalid: true}">
+<div class="combobox" ng-class="{'combo-multiple': multiple, 'comboLineStyle': lineStyle === true}" ng-model-options="{allowInvalid: true}">
 	<div class="dropdown fullWidthDropdown">
 		<div class="comboButtonContainer">
 			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled" ng-click="toggleCombo()" ng-hide="editableMode">
-				<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-bind="currentItemLabel" ng-if="lineStyle !== true"></div>
+				<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-if="lineStyle !== true">
+					{{currentItemLabel}}
+					<ul class="selected-options" ng-if="multiple">
+						<li ng-repeat="item in selectedItems">
+							<span class="fa fa-times" ng-click="removeSelectedItem(item.code)"></span>
+							{{item.text}}
+						</li>
+					</ul>
+				</div>
 				<svg height="20px" width="100%" ng-if="lineStyle === true">
 					<g fill="none" stroke="#262626" stroke-width="4">
 						<path stroke-dasharray="{{currentItemLabel}}" d="M0 10 l999 0" />
 					</g>
 				</svg>
-				<span class="caret"></span>
+				<span ng-class="{'caret': !multiple,'clear-all fa fa-times': multiple}" ng-click="removeAllSelected()"></span>
 			</button>
+			<input class="form-control combo-editable-input" ng-model="newItem.name" ng-if="editable" ng-show="editableMode">
 		</div>
-		<input class="combo-editable-input" ng-model="newItem.name" ng-if="editable" ng-show="editableMode">
 		<div class="btn-add-item" ng-if="editable">
 			<a ng-click="addNewItem()" title="{{'common.add_new' | i18n}}">
 				<span class="btn btn-sm btn-success btn-circle">
@@ -22,7 +30,7 @@
 	</div>
 	<div class="comboList fullWidthDropdown" ng-class="{'open': isOpen, 'comboLineStyle': lineStyle === true}">
 		<ul class="dropdown-menu" role="menu">
-			<li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue" ng-click="selectVal(initialValue)">
+			<li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue && !multiple" ng-click="selectVal(initialValue)">
 				<a role="menuitem" tabindex="-1" ng-bind="initialValue.text"></a>
 			</li>
 			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" role="presentation" ng-click="selectVal(item,$index)" ng-if="lineStyle !== true">
