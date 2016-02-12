@@ -13,7 +13,7 @@
 			restrict: 'E',
 			templateUrl: 'widgets/recentFluxAssets/recentFluxAssets.html', // temporary location
 		};
-	};
+	}
 
 	function ActiveFluxAssetsController(activeFluxAssetsService) {
 		this.items = activeFluxAssetsService.getAssets();
@@ -64,7 +64,7 @@
 	}
 
 	function ActiveFluxAssetsServiceProvider() {
-		var remoteBaseUrl = undefined;
+		var remoteBaseUrl;
 		var useDummyData = false;
 		this.setRemoteBaseUrl = function(url) {
 			remoteBaseUrl = url;
