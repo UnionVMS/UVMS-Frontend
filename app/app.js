@@ -23,7 +23,8 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
 	'lrDragNDrop',
 	'dndLists',
 	'ui.bootstrap-slider',
-	'activeFluxAssets'
+	'activeFluxAssets',
+    'transpondersNoTx'
 ]);
 
 var currentUserContextPromise = function(userService) {
