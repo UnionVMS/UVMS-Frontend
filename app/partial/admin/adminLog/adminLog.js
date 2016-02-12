@@ -233,7 +233,10 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
                 case TYPES.ALARMS.CUSTOM_RULE_ACTION_TRIGGERED:
                     return "/alarms/rules/" + audit.affectedObject;
                 case TYPES.POSITION_REPORTS.AUTOMATIC_POSITION_REPORT:
+                case TYPES.POSITION_REPORTS.MANUAL_POSITION_REPORT:
                     return "/movement/" + audit.affectedObject;
+                case TYPES.POSITION_REPORTS.TEMPORARY_POSITION_REPORT:
+                    return "/movement/manual/" + audit.affectedObject;
                 case TYPES.ACCESS_CONTROL.USER:
                 case TYPES.ACCESS_CONTROL.USER_PASSWORD:
                     return "/usm/users/" + audit.affectedObject;

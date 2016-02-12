@@ -205,6 +205,19 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 pageTitle: 'movement.manual'
             },
         })
+        .state('app.manualMovement-id', {
+            url: '/movement/manual/:id',
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/movement/manualPositionReports/manualPositionReports.html',
+                    controller: 'ManualPositionReportsCtrl'
+                }
+            },
+            data: {
+                access: 'viewManualMovements',
+                pageTitle: 'movement.manual'
+            },
+        })
         .state('app.assets', {
             url: '/assets',
             views: {

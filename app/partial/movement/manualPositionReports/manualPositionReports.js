@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, $filter, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal, csvService, SearchResults, envConfig, $resource, $log, longPolling) {
+angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, $filter, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal, csvService, SearchResults, envConfig, $resource, $log, longPolling, $stateParams) {
 
     $scope.showModal = function() {
         $scope.editPosition();
@@ -19,6 +19,12 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
 
     var init = function(){
         $scope.searchManualPositions();
+
+        if ($stateParams.id) {
+            manualPositionRestService.getManualMovement($stateParams.id).then(function(manualMovement) {
+                ManualPositionReportModal.show(manualMovement, { readOnly: true });
+            });
+         }
 
         longPollingId = longPolling.poll("/movement/activity/movement/manual", function(response) {
             if (response.ids.length > 0) {

@@ -26,6 +26,7 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
         POSITION_REPORTS : {
             AUTOMATIC_POSITION_REPORT : 'Automatic position report',
             MANUAL_POSITION_REPORT : 'Manual position report',
+            TEMPORARY_POSITION_REPORT : 'Temporary position report'
         },
         GIS : {
             AREA : 'Area', //Mock value
