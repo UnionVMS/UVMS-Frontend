@@ -24,7 +24,8 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
 	'dndLists',
 	'ui.bootstrap-slider',
 	'activeFluxAssets',
-    'transpondersNoTx'
+    'transpondersNoTx',
+    'unionvmsWeb.longPolling'
 ]);
 
 var currentUserContextPromise = function(userService) {
