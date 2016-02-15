@@ -236,6 +236,7 @@ angular.module('unionvmsWeb').controller('TodayCtrl',function($scope){
             });
         }
 
+
 }).directive('widgetPlaceholder', function() {
     return {
         restrict: 'E',
