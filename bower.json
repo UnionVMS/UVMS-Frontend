@@ -37,7 +37,7 @@
     "angular-ui-utils": "~0.1",
     "bootstrap": "~3.1",
     "checklist-model": "latest",
-    "datetimepicker": "~2.4.5",
+    "datetimepicker": "2.4.5",
     "fancytree": "~2.9.0",
     "font-awesome": "~4.4.0",
     "jquery": "~2.0",
