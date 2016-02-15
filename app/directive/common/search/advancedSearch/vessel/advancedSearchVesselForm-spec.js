@@ -24,7 +24,6 @@ describe('AdvancedSearchVesselFormCtrl', function() {
         //Dropdown values should have been created
         expect(scope.flagStates).toBeDefined('flagStates should be defined');
         expect(scope.gearTypes).toBeDefined('gearTypes should be defined');
-        expect(scope.assetTypes).toBeDefined('assetTypes should be defined');
         expect(scope.powerSpans).toBeDefined('powerSpans should be defined');
         expect(scope.lengthSpans).toBeDefined('lengthSpans should be defined');
         expect(scope.activeTypes).toBeDefined('activeTypes should be defined');
