@@ -39,7 +39,7 @@
 				"CYP": "Cyprus",
 				"CZE": "Czech Republic",
 				"DEU": "Germany",
-				"DEN": "Denmark",
+				"DNK": "Denmark",
 				"ESP": "Spain",
 				"EST": "Estonia",
 				"FIN": "Finland",
