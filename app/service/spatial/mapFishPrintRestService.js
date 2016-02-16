@@ -49,6 +49,16 @@ angular.module('unionvmsWeb').factory('mapFishPrintRestFactory', function($resou
                     method: 'DELETE'
                 }
             });
+        },
+        getIconAndLegends: function(){
+            return $resource('/spatial/rest/image', {}, {
+                'get': {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            });
         }
     };
 })
@@ -113,6 +123,17 @@ angular.module('unionvmsWeb').factory('mapFishPrintRestFactory', function($resou
                 $log.log('Error getting print job status ' + referenceId);
                 deferred.reject(error);
             });
+            return deferred.promise;
+        },
+        getIconAndLegends: function(data){
+            var deferred = $q.defer();
+            mapFishPrintRestFactory.getIconAndLegends().get(angular.toJson(data), function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.log('Error getting icons and legends ids.');
+                deferred.reject(error);
+            }); 
+
             return deferred.promise;
         }
     };

@@ -10,8 +10,8 @@
                 <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
                 	<button type="button" id="bookmarks-btn" ng-class="{active: activeControl === 'bookmarks'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_bookmarks' | i18n }}" ng-click="toggleToolbarBtn('bookmarks')" ng-show="tbControl.bookmarks"><span class="fa fa-bookmark"></span></button>
                     <button type="button" id="measure-config-btn" ng-class="{active: activeControl === 'measure'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_measure_distance' | i18n }}" ng-click="toggleToolbarBtn('measure')" ng-show="tbControl.measure"><span class="fa fa-arrows-h"></span></button>
-                    <button type="button" id="export-map" ng-class="{active: activeControl === 'print'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_print' | i18n }}" ng-click="toggleToolbarBtn('print')" ng-show="tbControl.print"><span class="fa fa-print"></span></button>
-                    <button type="button" id="map-fish-print-config-btn" ng-class="{active: activeControl === 'mapFishPrint'}" class="btn btn-default btn-toolbar" title="{{'spatial.mapfish_tip_print' | i18n }}" ng-click="toggleToolbarBtn('mapFishPrint')" ng-show="mapFish.isDeployed && tbControl.mapFishPrint"><span class="fa fa-map"></span></button>
+                    <!-- <button type="button" id="export-map" ng-class="{active: activeControl === 'print'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_print' | i18n }}" ng-click="toggleToolbarBtn('print')" ng-show="tbControl.print"><span class="fa fa-print"></span></button> -->
+                    <button type="button" id="map-fish-print-config-btn" ng-class="{active: activeControl === 'mapFishPrint'}" class="btn btn-default btn-toolbar" title="{{'spatial.mapfish_tip_print' | i18n }}" ng-click="toggleToolbarBtn('mapFishPrint')" ng-show="mapFish.isDeployed && tbControl.mapFishPrint"><span class="fa fa-print"></span></button>
                     <!-- <button type="button" ng-class="{active: activeControl === 'other'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_measure_distance' | i18n }}" ng-click="toggleToolbarBtn('other')">Another Control</button> -->
                 </div>
             </div>
@@ -138,23 +138,24 @@
 	            <div id="map-fish-print-config" class="map-toolbar-control-panel" ng-show="showMapFishConfigWin">
 	                <div class="row">
 	                    <div class="col-md-12 withBottomPadding">
+	                    	<span class="fa fa-times drag-icon pull-right" ng-click="toggleToolbarBtn('mapFishPrint')"></span>
 	                        <span class="fa fa-bullseye drag-icon pull-right"></span>
 	                        <span class="fa drag-icon pull-right" ng-class="{'fa-chevron-up': winExpanded, 'fa-chevron-down': !winExpanded}" ng-click="toggleWinStatus()"></span>
 	                    </div>
 	                </div>
 	                <div ng-show="winExpanded">
 	                	<div class="row print-row">
-		                    <div class="form-group col-md-6 print-content">
+		                    <!-- <div class="form-group col-md-6 print-content">
 		                        <label>{{'spatial.mapfish_template_label' | i18n }}</label>
 		                        <combobox ng-if="mapFish.selected_template !== undefined" dest-combo-list="'.mapPanelContainer'" ng-change="changeTemplate(mapFish.selected_template)" ng-model="mapFish.selected_template" items="mapFish.templates"></combobox>
+		                    </div> -->
+		                    <div class="form-group col-md-6 print-content">
+		                        <label>{{'spatial.mapfish_layouts_label' | i18n }}</label>
+		                        <combobox ng-if="mapFish.selected_layout !== undefined" dest-combo-list="'.mapPanelContainer'" ng-change="toggleLayout(mapFish.selected_layout)" ng-model="mapFish.selected_layout" items="mapFish.layouts"></combobox>
 		                    </div>
 		                    <div class="form-group col-md-6 print-content">
 		                        <label>{{'spatial.mapfish_formats_label' | i18n }}</label>
 		                        <combobox ng-if="mapFish.selected_format !== undefined" dest-combo-list="'.mapPanelContainer'" ng-model="mapFish.selected_format" items="mapFish.formats"></combobox>
-		                    </div>
-		                    <div class="form-group col-md-6 print-content">
-		                        <label>{{'spatial.mapfish_layouts_label' | i18n }}</label>
-		                        <combobox ng-if="mapFish.selected_layout !== undefined" dest-combo-list="'.mapPanelContainer'" ng-change="toggleLayout(mapFish.selected_layout)" ng-model="mapFish.selected_layout" items="mapFish.layouts"></combobox>
 		                    </div>
 		                    <div class="form-group col-md-6 print-content">
 		                        <label>{{'spatial.mapfish_suggestedDpi_label' | i18n }}</label>
@@ -171,14 +172,18 @@
 		                    </div>
 		                    <div class="form-group col-md-6 measure-content pull-right">
 		                        <label><span></span></label>
-		                        <button type="button" class="btn btn-primary" ng-click="printMapWithMapFish()" style="width: 100%;" ng-disabled="!mapFish.jobStatusData.done" ng-show="mapFish.jobStatusData.done">
+		                        <button type="button" class="btn btn-primary" ng-click="printMapWithMapFish()" style="width: 100%;">
+		                            <span class="fa fa-download"></span>&nbsp;
+		                            {{'spatial.mapfish_tip_print' | i18n }}
+		                        </button>
+		                        <!-- <button type="button" class="btn btn-primary" ng-click="printMapWithMapFish()" style="width: 100%;" ng-disabled="!mapFish.jobStatusData.done" ng-show="mapFish.jobStatusData.done">
 		                            <span ng-show="mapFish.jobStatusData.done" class="fa fa-download"></span>&nbsp;
 		                            {{'spatial.mapfish_tip_print' | i18n }}
 		                        </button>
 		                        <button type="button" class="btn btn-warning" ng-click="cancelPrint(mapFish.printJobData.ref)" style="width: 100%;" ng-disabled="mapFish.jobStatusData.status !== 'running'" ng-show="mapFish.jobStatusData.status === 'running'">
 		                            <span class="fa fa-refresh fa-spin"></span>&nbsp;
 		                            {{'spatial.mapfish_tip_printing' | i18n }}
-		                        </button>
+		                        </button> -->
 		                    </div>
 		                </div>
 		                <!-- MESSAGES -->
@@ -201,7 +206,7 @@
 	                </div>
 	            </div>
 	        </div>
-        </ng-form>
+	    </ng-form>    
         <div id="popup" class="ol-popup">
             <a href ng-click="closePopup()" id="popup-closer" class="ol-popup-closer"><span class="fa fa-times"></span></a>
             <div id="popup-content"></div>

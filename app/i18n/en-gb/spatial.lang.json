@@ -56,6 +56,7 @@
     "mapfish_error": "There was an error while printing the map. Please try again.",
     "mapfish_cancelled": "Successfully cancelled printing job",
     "map_no_vms_data": "No VMS data was retrieved with you current report configuration.",
+    "print_legend_title": "Legend",
 	"reports_table_search_header": "Search",
 	"reports_table_header_name": "Name",
 	"reports_table_header_description": "Description",

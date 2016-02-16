@@ -83,7 +83,7 @@ angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapServi
                     case 'segmentCategory': //Segments
                         var defaultObj = {};
                         for (i = 0; i < keys.length; i++){
-                            if (_.has(styleDef.style, keys[i])){
+                            if (_.indexOf(['lineWidth', 'lineStyle'], keys[i]) === -1){
                                 var styleObj = {
                                     title: keys[i] === 'default' ? locale.getString('spatial.legend_panel_all_other_values') : keys[i].toUpperCase(),
                                     color: {"color" : styleDef.style[keys[i]]}

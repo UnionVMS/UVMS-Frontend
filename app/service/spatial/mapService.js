@@ -178,6 +178,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 ms.addPrintExtent();
             }
 	    });
+	    
+	    map.on('change:size', function(e){
+	        //Adjust print extent to the new map scale
+            var printLayer = ms.getLayerByType('print');
+            if (angular.isDefined(printLayer)){
+                ms.addPrintExtent();
+            }
+	    });
 
 	    map.on('singleclick', function(evt){
 	        var pixel = evt.pixel;
@@ -443,6 +451,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             isBaseLayer: config.isBaseLayer,
             source: source
         });
+        
+        layer.set('serverType', config.serverType); 
 
         return ( layer );
     };
@@ -862,6 +872,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             
             //Normalize radius to scale between maxRadius and minRadius
             var radius = Math.round((maxRadius - minRadius) * (feature.get('featNumber') - ms.clusterMinFeatureCount) / (ms.clusterMaxFeatureCount - ms.clusterMinFeatureCount) + minRadius);
+            feature.set('radius', radius);
             
             //Apply cluster style
             style = new ol.style.Style({

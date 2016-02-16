@@ -71,6 +71,7 @@ module.exports = function (grunt) {
                   '/rules/rest/',
                   '/reporting/rest/',
                   '/spatial/rest/',
+                  '/spatial/image/',
                   '/config/rest',
                   '/mapfish',
                   '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'],

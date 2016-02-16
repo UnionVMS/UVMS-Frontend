@@ -158,68 +158,80 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         );
     };
 
-    //Do the actual print
+    //Prepare print reuqest
     $scope.printMapWithMapFish = function() {
         $log.debug("Requesting print job");
         
         var payload = new MapFishPayload();
-        payload.createPayloadObj($scope.mapFishLocalConfig);
         
-        var a;
+        var positions = payload.getIconPayload('positions');
+        var segments = payload.getIconPayload('segments');
+        
+        //prepare the payload to get icons and legends from our web service
+        if (angular.isDefined(positions) && angular.isDefined(segments)){
+            var iconPayload = {
+                positions: positions,
+                segments:  segments
+            };
+            
+            //call icon and legends rest api and only go on if we receive a correct payload
+            mapFishPrintRestService.getIconAndLegends(iconPayload).then(function(response){
+                payload.createPayloadObj($scope.mapFishLocalConfig, response);
+                $scope.doPrintRequest(payload);
+            }, function(error){
+                return undefined;
+            });
+        } else {
+            payload.createPayloadObj($scope.mapFishLocalConfig);
+            $scope.doPrintRequest(payload);
+        }
+    };
+    
+    //Do the actual print
+    $scope.doPrintRequest = function(payload){
+        mapFishPrintRestService.createPrintJob(MapFish.selected_template, MapFish.selected_format, payload).then(
+            function(data) {
+                $log.debug(data);
+                MapFish.printJobData = data;
 
-//        var payload = new MapFish.Payload($scope.newObject, MapFish.selected_layout);
-//        payload.addLegend(new MapFish.Legend('legendus'));
-//
-//        var map = new MapFish.Map();
-//        map.center = [-655898, 5795404]; //TODO get from map
-//        map.dpi = MapFish.selected_dpi;
-//        map.addLayer(new MapFish.GridLayer()); //TODO get from map
-//        var layer = new MapFish.WmsLayer('http://localhost:8080/geoserver/wms','uvms:eez');
-//        layer.addLayer('uvms:countries');
-//        map.addLayer(layer);
-//        map.addLayer(new MapFish.WmsLayer('http://localhost:8080/geoserver/wms','uvms:rfmo'));
-//        payload.addMap(map);
-//
-//        mapFishPrintRestService.createPrintJob(MapFish.selected_template, MapFish.selected_format, payload).then(
-//            function(data) {
-//                $log.debug(data);
-//                MapFish.printJobData = data;
-//
-//                var poller = function() {
-//                    if(MapFish.printJobData !== undefined){
-//                        mapFishPrintRestService.getPrintJobStatus(MapFish.printJobData.ref).then(
-//                            function(data){
-//                                $log.debug(data);
-//                                MapFish.jobStatusData = data;
-//                                if (MapFish.jobStatusData.status === 'running'){
-//                                    $timeout(poller, 500);
-//                                }
-//                                else if(MapFish.jobStatusData.status === 'finished'){
-//                                   $scope.download("http://localhost:8080/" + MapFish.jobStatusData.downloadURL);
-//                                }
-//                            },function (error) {
-//                                $log.error(error);
-//                            }
-//                        );
-//                    }
-//                };
-//                poller();
-//            },function (error) {
-//                $log.error(error);
-//            }
-//        );
+                var poller = function() {
+                    if(MapFish.printJobData !== undefined){
+                        mapFishPrintRestService.getPrintJobStatus(MapFish.printJobData.ref).then(
+                            function(data){
+                                $log.debug(data);
+                                MapFish.jobStatusData = data;
+                                if (MapFish.jobStatusData.status === 'running' || MapFish.jobStatusData.status === 'waiting'){
+                                    $timeout(poller, 1000);
+                                }
+                                else if(MapFish.jobStatusData.status === 'finished'){
+                                   $scope.download(MapFish.jobStatusData.downloadURL); //TODO - test this when we have the admin configurations
+                                }
+                            },function (error) {
+                                $log.error(error);
+                            }
+                        );
+                    }
+                };
+                poller();
+            },function (error) {
+                $log.error(error);
+            }
+        );
     };
 
     //Download printed map
     $scope.download = function(downloadURL){
         var downloadLink = angular.element('<a></a>');
         downloadLink.attr('target', '_blank');
+        downloadLink.attr('download', 'uvms');
         downloadLink.attr('href', downloadURL);
         $document.find('body').append(downloadLink);
-        downloadLink[0].click();
-        downloadLink.remove();
+        $timeout(function () {
+            downloadLink[0].click();
+            downloadLink.remove();
+        }, null);
     };
-
+    
     //Handle toggle on top toolbar
     $scope.toggleToolbarBtn = function(tool){
         var fn;
