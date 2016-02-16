@@ -4,8 +4,9 @@
 		<p>{{ctrl.i18n('subheader')}}</p>
 	</div>
 	<div class="scroll-table">
-		<div class="row" ng-repeat="item in ctrl.items | orderBy:'count':true">
-			<span class="flag-icon" ng-class="'flag-' + item.nation"></span> {{ctrl.nationName(item.nation)}} <span class="count">{{item.count}}</span>
+		<div class="alert alert-danger" ng-if="ctrl.error">{{ctrl.error}}</div>
+		<div class="row" ng-repeat="item in ctrl.items | orderBy:'numberOfAssets':true">
+			<span class="flag-icon" ng-class="'flag-' + item.flagState"></span> {{ctrl.nationName(item.flagState)}} <span class="count">{{item.numberOfAssets}}</span>
 		</div>
 	</div>
 </div>

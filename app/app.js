@@ -822,10 +822,6 @@ unionvmsWebApp.factory('HttpRequestRESTCallInterceptor', function ($q, envConfig
     };
 });
 
-unionvmsWebApp.config(['activeFluxAssetsServiceProvider', function(activeFluxAssetsServiceProvider) {
-    activeFluxAssetsServiceProvider.setUseDummyData(true);
-}]);
-
 //Add HTTP request interceptors
 unionvmsWebApp.config(function ($httpProvider) {
     //Authenticated?
