@@ -168,163 +168,158 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        $scope.$emit('mapAction');
    };
    
-   //Reduce positions for export
-   $scope.reducePositions = function(data){
-       return data.reduce(
-           function(csvObj, rec){
-               var row = [
-                   rec.properties.countryCode,
-                   rec.properties.externalMarking,
-                   rec.properties.ircs,
-                   rec.properties.cfr,
-                   rec.properties.name,
-                   moment.utc(rec.properties.positionTime).format($scope.config.target_format),
-                   rec.geometry.coordinates[1],
-                   rec.geometry.coordinates[0],
-                   rec.properties.status,
-                   rec.properties.reportedSpeed,
-                   rec.properties.calculatedSpeed,
-                   rec.properties.reportedCourse,
-                   rec.properties.movementType,
-                   rec.properties.activityType,
-                   rec.properties.source
-               ];
-               
-               csvObj.push(row);
-               return csvObj;
-           }, []
-       );
-   };
-   
-   //Reduce segments for export
-   $scope.reduceSegments = function(data){
-       var wkt = new ol.format.WKT();
-       var geoJson = new ol.format.GeoJSON();
-       return data.reduce(
-           function(csvObj, rec){
-               var geom = wkt.writeGeometry(geoJson.readGeometry(rec.geometry));
-               var row = [
-                   rec.properties.countryCode,
-                   rec.properties.externalMarking,
-                   rec.properties.ircs,
-                   rec.properties.cfr,
-                   rec.properties.name,
-                   rec.properties.distance,
-                   unitConversionService.duration.timeToHuman(rec.properties.duration),
-                   rec.properties.speedOverGround,
-                   rec.properties.courseOverGround,
-                   rec.properties.segmentCategory,
-                   geom
-               ];
-               
-               csvObj.push(row);
-               return csvObj;
-           }, []
-       );
-   };
-   
-   //Reduce tracks for export
-   $scope.reduceTracks = function(data){
-       var wkt = new ol.format.WKT();
-       return data.reduce(
-           function(csvObj, rec){
-               var row = [
-                   rec.countryCode,
-                   rec.externalMarking,
-                   rec.ircs,
-                   rec.cfr,
-                   rec.name,
-                   rec.distance,
-                   unitConversionService.duration.timeToHuman(rec.duration),
-                   unitConversionService.duration.timeToHuman(rec.totalTimeAtSea)
-               ];
-               
-               if ($scope.executedReport.tabs.map === true){
-                   var extentPolygon = new ol.geom.Polygon.fromExtent(rec.extent);
-                   extentPolygon.transform('EPSG:4326', mapService.getMapProjectionCode());
-                   var trackGeom = $scope.buildTrackGeomFromId(rec.id, extentPolygon.getExtent());
-                   trackGeom.transform(mapService.getMapProjectionCode(), 'EPSG:4326');
-                   
-                   var geom = null;
-                   if (trackGeom.getLineString().getLength() !== 0){
-                       geom = wkt.writeGeometry(trackGeom);
-                   }
-                   
-                   row.push(geom);
-               }                   
-               
-               csvObj.push(row);
-               return csvObj;
-           }, []
-       );
-   };
-   
    $scope.exportAsCSV = function(type, data){
-       var filename, header, exportData;
-       var speedUnit = unitConversionService.speed.getUnit();
-       var distanceUnit = unitConversionService.distance.getUnit();
-       if (type === 'positions'){
-           filename = locale.getString('spatial.tab_vms_export_csv_positions_filename');
-           header = [
-               locale.getString('spatial.tab_vms_pos_table_header_fs'),
-               locale.getString('spatial.tab_vms_pos_table_header_ext_mark'),
-               locale.getString('spatial.tab_vms_pos_table_header_ircs'),
-               locale.getString('spatial.tab_vms_pos_table_header_cfr'),
-               locale.getString('spatial.tab_vms_pos_table_header_name'),
-               locale.getString('spatial.tab_vms_pos_table_header_date'),
-               locale.getString('spatial.tab_vms_pos_table_header_lat'),
-               locale.getString('spatial.tab_vms_pos_table_header_lon'),
-               locale.getString('spatial.tab_vms_pos_table_header_status'),
-               locale.getString('spatial.tab_vms_pos_table_header_measured_speed') + '(' + speedUnit + ')',
-               locale.getString('spatial.tab_vms_pos_table_header_calculated_speed') + '(' + speedUnit + ')',
-               locale.getString('spatial.tab_vms_pos_table_header_course') + '(\u00B0)',
-               locale.getString('spatial.tab_vms_pos_table_header_msg_type'),
-               locale.getString('spatial.tab_vms_pos_table_header_activity_type'),
-               locale.getString('spatial.tab_vms_pos_table_header_source')
-           ];
-           
-           exportData = $scope.reducePositions(data);
-       } else if (type === 'segments'){
-           filename = locale.getString('spatial.tab_vms_export_csv_segments_filename');
-           header = [
-               locale.getString('spatial.tab_vms_pos_table_header_fs'),
-               locale.getString('spatial.tab_vms_pos_table_header_ext_mark'),
-               locale.getString('spatial.tab_vms_pos_table_header_ircs'),
-               locale.getString('spatial.tab_vms_pos_table_header_cfr'),
-               locale.getString('spatial.tab_vms_pos_table_header_name'),
-               locale.getString('spatial.tab_vms_seg_table_header_distance') + '(' + distanceUnit + ')',
-               locale.getString('spatial.tab_vms_seg_table_header_duration'),
-               locale.getString('spatial.tab_vms_seg_table_header_speed_ground') + '(' + speedUnit + ')',
-               locale.getString('spatial.tab_vms_seg_table_header_course_ground') + '(\u00B0)',
-               locale.getString('spatial.tab_vms_seg_table_header_category'),
-               locale.getString('spatial.tab_vms_seg_table_header_geometry')
-           ];
-           
-           exportData = $scope.reduceSegments(data);
-       } else if (type === 'tracks'){
-           filename = locale.getString('spatial.tab_vms_export_csv_tracks_filename');
-           header = [
-                 locale.getString('spatial.tab_vms_pos_table_header_fs'),
-                 locale.getString('spatial.tab_vms_pos_table_header_ext_mark'),
-                 locale.getString('spatial.tab_vms_pos_table_header_ircs'),
-                 locale.getString('spatial.tab_vms_pos_table_header_cfr'),
-                 locale.getString('spatial.tab_vms_pos_table_header_name'),
-                 locale.getString('spatial.tab_vms_seg_table_header_distance') + '(' + distanceUnit + ')',
-                 locale.getString('spatial.tab_vms_seg_table_header_duration'),
-                 locale.getString('spatial.tab_vms_tracks_table_header_time_at_sea')
-           ];
-           
-           if ($scope.executedReport.tabs.map === true){
-               header.push(locale.getString('spatial.tab_vms_seg_table_header_geometry'));
-           }
-             
-           exportData = $scope.reduceTracks(data);
-       }
+       var filename, row;
+       
+       var tableData = getOrderedDataToExport(type,data);
+       filename = locale.getString('spatial.tab_vms_export_csv_' + type + '_filename');
        
        //Create and download the file
-       if (angular.isDefined(exportData)){
-           csvWKTService.downloadCSVFile(exportData, header, filename);
+       if (angular.isDefined(tableData.exportData)){
+           csvWKTService.downloadCSVFile(tableData.exportData, tableData.header, filename);
        }
+   };
+   
+   var getOrderedDataToExport = function(type, data){
+	   var header = [];
+	   var wkt;
+	   var speedUnit = unitConversionService.speed.getUnit();
+       var distanceUnit = unitConversionService.distance.getUnit();
+       var geoJson;
+	   
+	   if(['segments','tracks'].indexOf(type) !== -1){
+		   wkt = new ol.format.WKT();
+	   }
+	   if(type === 'segments'){
+		   geoJson = new ol.format.GeoJSON();
+	   }
+	   
+	   var gotHeaders = false;
+       return {'exportData': data.reduce(
+           function(csvObj, rec){
+        	   var row = [];
+			   angular.forEach($scope.attrVisibility[type + 'Columns'], function(item) {
+		    	   if($scope.attrVisibility[type][item] === true){
+		    		   var itemProperty;
+			    	   switch(item){
+			    	   		case 'fs': 
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_fs'));
+			    	   			itemProperty = type === 'tracks'? rec.countryCode : rec.properties.countryCode;
+			    	   			row.push(itemProperty);
+			    	   			break;
+			    	   		case 'extMark':
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_ext_mark'));
+			    	   			itemProperty = type === 'tracks'? rec.externalMarking : rec.properties.externalMarking;
+			    	   			row.push(itemProperty);
+			    	   			break;
+			    	   		case 'ircs':
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_ircs'));
+			    	   			itemProperty = type === 'tracks'? rec.ircs : rec.properties.ircs;
+			    	   			row.push(itemProperty);
+			    	   			break;
+			    	   		case 'cfr':
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_cfr'));
+			    	   			itemProperty = type === 'tracks'? rec.cfr : rec.properties.cfr;
+			    	   			row.push(itemProperty);
+			    	   			break;
+			    	   		case 'name':
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_name'));
+			    	   			itemProperty = type === 'tracks'? rec.name : rec.properties.name;
+			    	   			row.push(itemProperty);
+			    	   			break;
+			    	   		case 'posTime':
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_date'));
+			    	   			itemProperty = type === 'tracks'? rec.positionTime : rec.properties.positionTime;
+			    	   			row.push(itemProperty);
+			    	   			break;
+			    	   		case 'lat':
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_lat'));
+			    	   			row.push(rec.geometry.coordinates[1]);
+			    	   			break;
+			    	   		case 'lon':
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_lon'));
+			    	   			row.push(rec.geometry.coordinates[0]);
+			    	   			break;
+			    	   		case 'stat':
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_status'));
+			    	   			row.push(rec.properties.status);
+			    	   			break;
+			    	   		case 'm_spd':
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_measured_speed') + '(' + speedUnit + ')');
+			    	   			row.push(rec.properties.reportedSpeed);
+			    	   			break;
+			    	   		case 'c_spd':
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_calculated_speed') + '(' + speedUnit + ')');
+			    	   			row.push(rec.properties.calculatedSpeed);
+			    	   			break;
+			    	   		case 'crs':
+			    	   			if(type === 'positions'){
+			    	   				gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_course') + '(\u00B0)');
+			    	   				row.push(rec.properties.reportedCourse);
+			    	   			}else if(type === 'segments'){
+			    	   				gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_seg_table_header_course_ground') + '(\u00B0)');
+			    	   				row.push(rec.properties.courseOverGround);
+			    	   			}
+			    	   			break;
+			    	   		case 'msg_tp':
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_msg_type'));
+			    	   			row.push(rec.properties.movementType);
+			    	   			break;
+			    	   		case 'act_tp':
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_activity_type'));
+			    	   			row.push(rec.properties.activityType);
+			    	   			break;
+			    	   		case 'source':
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_source'));
+			    	   			row.push(rec.properties.source);
+			    	   			break;
+			    	   		case 'spd':
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_seg_table_header_speed_ground') + '(' + speedUnit + ')');
+			    	   			row.push(rec.properties.speedOverGround);
+			    	   			break;
+			    	   		case 'cat':
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_seg_table_header_category'));
+			    	   			row.push(rec.properties.segmentCategory);
+			    	   			break;
+			    	   		case 'dist':
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_seg_table_header_distance') + '(' + distanceUnit + ')');
+			    	   			itemProperty = type === 'tracks'? rec.distance : rec.properties.distance;
+			    	   			row.push(itemProperty);
+			    	   			break;
+			    	   		case 'dur':
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_seg_table_header_duration'));
+			    	   			itemProperty = type === 'tracks'? rec.duration : rec.properties.duration;
+			    	   			row.push(itemProperty);
+			    	   			break;
+			    	   		case 'timeSea':
+			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_tracks_table_header_time_at_sea'));
+			    	   			row.push(unitConversionService.duration.timeToHuman(rec.totalTimeAtSea));
+			    	   			break;
+			    	   }
+		    	   }
+		       });
+			   if((type === 'segments' || (type === 'tracks' && $scope.executedReport.tabs.map === true)) && !gotHeaders){
+	        	   header.push(locale.getString('spatial.tab_vms_seg_table_header_geometry'));
+	           }
+	           
+	           if (type === 'tracks' && $scope.executedReport.tabs.map === true){
+	               var extentPolygon = new ol.geom.Polygon.fromExtent(rec.extent);
+	               extentPolygon.transform('EPSG:4326', mapService.getMapProjectionCode());
+	               var trackGeom = $scope.buildTrackGeomFromId(rec.id, extentPolygon.getExtent());
+	               trackGeom.transform(mapService.getMapProjectionCode(), 'EPSG:4326');
+	               
+	               var geom = null;
+	               if (trackGeom.getLineString().getLength() !== 0){
+	                   geom = wkt.writeGeometry(trackGeom);
+	               }
+	               
+	               row.push(geom);
+	           }   
+		   gotHeaders = true;
+		   csvObj.push(row);
+	       return csvObj;
+           }, []
+       ), 'header': header};
    };
    
 });

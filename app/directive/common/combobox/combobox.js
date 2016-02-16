@@ -32,7 +32,7 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             
             if(scope.editable){
             	scope.editableMode = false;
-            	scope.newItem = {name : ""};
+            	scope.newItem = {text : ""};
             }
             
             if(scope.multiple){
@@ -135,9 +135,9 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                     			scope.currentItemLabel = "";
                     		}
                     	}else{
-                    		for(var i = 0; i < scope.loadedItems.length; i++){
-	                            if(angular.equals(newVal, getItemCode(scope.loadedItems[i]))) {
-	                        		scope.currentItemLabel = scope.getItemLabel(scope.loadedItems[i]);
+                    		for(var k = 0; k < scope.loadedItems.length; k++){
+	                            if(angular.equals(newVal, getItemCode(scope.loadedItems[k]))) {
+	                        		scope.currentItemLabel = scope.getItemLabel(scope.loadedItems[k]);
 	                                break;
 	                            }
                         	}
@@ -229,7 +229,20 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
   	            s4() + '-' + s4() + s4() + s4();
   	        }
             
-            scope.toggleCombo = function(){
+            scope.toggleCombo = function(evt){
+            	if(scope.multiple && evt && evt.target && evt.target.className.indexOf('item-remover') !== -1){
+            		return;
+            	}
+            	
+            	if(scope.editable && scope.editableMode && evt){
+            		setTimeout(function() {
+            			scope.element.find('.combo-editable-input')[0].focus();
+            		});
+            		scope.isOpen = true;
+            		comboboxService.setActiveCombo(scope);
+            		return;
+            	}
+            	
             	scope.isOpen = !scope.isOpen;
             	if(scope.isOpen){
             		comboboxService.setActiveCombo(scope);
@@ -243,27 +256,22 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             }
             
             scope.addNewItem = function(){
-            	if(scope.editableMode && scope.newItem.name){
+            	if(scope.editableMode && scope.newItem.text){
             		var itemExists = false;
 	            	for(var i = 0; i < scope.loadedItems.length; i++) {
-	            		if(scope.loadedItems[i].text === scope.newItem.name){
+	            		if(scope.loadedItems[i].text === scope.newItem.text){
 	            			itemExists = true;
 	            			break;
 	            		}
 	            	}
 	            	
 	            	if(!itemExists){
-	            		scope.loadedItems.push({'code': scope.newItem.name, 'text': scope.newItem.name});
+	            		scope.loadedItems.push({'code': scope.newItem.text, 'text': scope.newItem.text});
 	            	}
             	}
             	
-            	scope.newItem.name = "";
+            	scope.newItem.text = "";
             	scope.editableMode = !scope.editableMode;
-            	if(scope.editableMode){
-            		setTimeout(function() {
-            			scope.element.find('.combo-editable-input')[0].focus();
-            		});
-            	}
             };
             
             scope.removeSelectedItem = function(code){
@@ -275,6 +283,15 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             
             scope.removeAllSelected = function(){
             	scope.ngModel = [];
+            };
+            
+            scope.setEditableMode = function(bool,evt){
+            	if(scope.editable){
+            		if(evt && evt.target && evt.target.className.indexOf('btn-add-item') !== -1){
+                		return;
+                	}
+            		scope.editableMode = bool;
+            	}
             };
             
             var init = function(){
