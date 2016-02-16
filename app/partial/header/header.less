@@ -52,10 +52,10 @@
             top: -11px;
             left: 11px;
             min-width: 20px;
-            height: 20px;
             line-height: 20px;
             text-align: center;
-            padding:0 3px;
+            padding-top: 0px;
+            padding-bottom: 0px;
             background-color: @errorColor;
         }
     }
@@ -71,6 +71,9 @@
             color:white;
             float: left;
             margin-left: 4px;
+        }
+        &:hover {
+            background-color: #303030;
         }
     }
 
@@ -211,7 +214,7 @@
             ul{
                 padding:10px 0;
             }
-
+    
             .btn.btn-default.dropdown-toggle:focus {
                 border:none;
             }
@@ -223,6 +226,7 @@
                     color:@primaryColor;
                 }
             }
+
         }
     }
 

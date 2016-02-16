@@ -63,8 +63,7 @@
 				"SVN": "Slovenia",
 				"SWE": "Sweden"
 			},
-			"header": "Active FLUX assets",
-			"subheader": "With positions received in the last 24h."
+			"header": "Vessels in your zone"
 		};
 
 		this.i18n = function(key) {
