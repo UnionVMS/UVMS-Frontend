@@ -3,7 +3,7 @@
         <table class="searchResults colorOdd movementtable truncate-text">
             <thead>
                 <tr>
-                    <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length"/></th>
+                    <th class="checkboxContainer"><input type="checkbox" ng-if="selectedMovements" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length"/></th>
 
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.countryCode'">{{'movement.table_header_flag_state' | i18n}}</th>
 
@@ -36,7 +36,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="movement in currentSearchResults.items | orderBy:currentSearchResults.sortBy : currentSearchResults.sortReverse | filter:searchFilter">
-                    <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(movement)" ng-click="checkItem(movement)"/></td>
+                    <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(movement)" ng-click="checkItem(movement)" ng-if="selectedMovements"/></td>
                     <td ng-attr-title="{{movement.vessel.countryCode}}">{{movement.vessel.countryCode}}</td>
                     <td ng-attr-title="{{movement.vessel.externalMarking}}">{{movement.vessel.externalMarking}}</td>
                     <td ng-attr-title="{{movement.vessel.ircs}}">{{movement.vessel.ircs}}</td>
@@ -51,7 +51,7 @@
                     <td ng-attr-title="{{movement.movement.movementType}}">{{movement.movement.movementType}}</td>
                     <td ng-attr-title="{{movement.movement.source | transponderName}}">{{movement.movement.source | transponderName}}</td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-primary" ng-click="viewItemDetails(movement)" title="{{'common.view_details' | i18n}}">
+                        <button type="button" class="btn btn-sm btn-primary" ng-click="viewItemDetails(movement)" ng-if="viewItemDetails" title="{{'common.view_details' | i18n}}">
                             <i class="fa fa-eye"></i>
                         </button>
                     </td>
