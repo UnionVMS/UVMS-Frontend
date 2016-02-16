@@ -8,7 +8,9 @@
             controller: 'incomingMovementsController',
             controllerAs: 'ctrl',
             restrict: 'E',
-	     	scope: true,
+	     	scope: {
+	     		refreshInterval: '='
+	     	},
             templateUrl: 'widgets/incomingMovements/incomingMovements.html', // temporary location
         };
     }
