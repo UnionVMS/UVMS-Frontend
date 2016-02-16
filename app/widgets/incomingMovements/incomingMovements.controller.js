@@ -14,6 +14,7 @@
 		$scope.$on('$destroy', function() {
 			$interval.cancel(vm.refreshTimer);
 			vm.refreshTimer = undefined;
+			searchService.reset();
 		});
 
 		function reloadList() {
