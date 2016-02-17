@@ -320,9 +320,6 @@
 
 #bookmarks {
 	width: 285px;
-	.panel-with-hidden-details {
-		background-color: #089fd7;
-	}
 	.map-control-subpanel {
 		background-color: #fff;
 	    border-radius: 6px;
@@ -377,6 +374,9 @@
 		font-size: 15px;
     	line-height: 10px;
     	cursor: pointer;
+    	background-color: #089fd7;
+    	border-bottom-right-radius: 6px;
+    	border-bottom-left-radius: 6px;
     	.details-text {
     		position: absolute;
 		    top: -100%;
@@ -413,9 +413,21 @@
 	padding: 0px 15px;
 }
 
+.print-checkbox-content {
+	margin-top: 20px;
+	line-height: 30px;
+	input {
+		vertical-align: middle;
+		margin: 0;
+	}
+}
+
 .measure-content {
 	padding: 0px 22px;
 	margin-bottom: 8px;
+	&.btn-measure-group {
+		padding: 0px 15px;
+	}
 }
 
 .drag-icon {

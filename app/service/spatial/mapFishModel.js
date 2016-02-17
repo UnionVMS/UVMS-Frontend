@@ -240,7 +240,18 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         var spatialAttr = buildMapAndLegendAttributes(iconLeg); 
         attr.map = spatialAttr.map;
         attr.legend = spatialAttr.legend;
-        
+        //TODO datasources
+        attr.datasource = [{
+        	displayName: 'Copyright',
+        	table: {
+        		columns: ['layer', 'copyright'],
+        		data: [
+        		    ['eez', 'eez stuff'],
+        		    ['rfmo', 'rfmo stuff'],
+        		    ['bla', 'bla stuff']
+        		]
+        	}
+        }];
         return attr;
     };
     

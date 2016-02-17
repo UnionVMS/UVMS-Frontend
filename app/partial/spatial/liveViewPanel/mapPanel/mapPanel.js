@@ -15,6 +15,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.bookmarkNew = {};
     $scope.submitingBookmark = false;
     $scope.isAddBookVisible = false;
+    $scope.submittedMapFishPrint = false;
     
     //Comboboxes
     $scope.measuringUnits = [];
@@ -128,6 +129,8 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     
     $scope.openMapFishConfigWin = function(){
         $scope.showMapFishConfigWin = true;
+        $scope.submittedMapFishPrint = false;
+        $scope.mapForm.printForm.$setPristine();
         var win = angular.element('#map-fish-print-config');
         var btnPos = angular.element('#map-fish-print-config-btn').offset();
         $scope.setWinDraggable(win, btnPos);
@@ -158,32 +161,48 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     };
 
     //Prepare print reuqest
-    $scope.printMapWithMapFish = function() {
-        $log.debug("Requesting print job");
-        
-        var payload = new MapFishPayload();
-        
-        var positions = payload.getIconPayload('positions');
-        var segments = payload.getIconPayload('segments');
-        
-        //prepare the payload to get icons and legends from our web service
-        if (angular.isDefined(positions) && angular.isDefined(segments)){
-            var iconPayload = {
-                positions: positions,
-                segments:  segments
-            };
-            
-            //call icon and legends rest api and only go on if we receive a correct payload
-            mapFishPrintRestService.getIconAndLegends(iconPayload).then(function(response){
-                payload.createPayloadObj($scope.mapFishLocalConfig, response);
-                $scope.doPrintRequest(payload);
-            }, function(error){
-                return undefined;
-            });
-        } else {
-            payload.createPayloadObj($scope.mapFishLocalConfig);
-            $scope.doPrintRequest(payload);
-        }
+    $scope.printMapWithMapFish = function(ref) {
+    	$scope.submittedMapFishPrint = true;
+    	if($scope.mapForm.printForm.$valid){
+	    	if($scope.mapFish.jobStatusData.status === 'running'){
+	    		if (ref === undefined) {
+	                return;
+	            }
+	            mapFishPrintRestService.cancelPrintJob(ref).then(
+	                function(data){
+	                    $log.debug(data);
+	                },function(error){
+	                    $log.error(error);
+	                }
+	            );
+	    	}else{
+		        $log.debug("Requesting print job");
+		        
+		        var payload = new MapFishPayload();
+		        
+		        var positions = payload.getIconPayload('positions');
+		        var segments = payload.getIconPayload('segments');
+		        
+		        //prepare the payload to get icons and legends from our web service
+		        if (angular.isDefined(positions) && angular.isDefined(segments)){
+		            var iconPayload = {
+		                positions: positions,
+		                segments:  segments
+		            };
+		            
+		            //call icon and legends rest api and only go on if we receive a correct payload
+		            mapFishPrintRestService.getIconAndLegends(iconPayload).then(function(response){
+		                payload.createPayloadObj($scope.mapFishLocalConfig, response);
+		                $scope.doPrintRequest(payload);
+		            }, function(error){
+		                return undefined;
+		            });
+		        } else {
+		            payload.createPayloadObj($scope.mapFishLocalConfig);
+		            $scope.doPrintRequest(payload);
+		        }
+	    	}
+    	}
     };
     
     //Do the actual print
@@ -192,7 +211,6 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
             function(data) {
                 $log.debug(data);
                 MapFish.printJobData = data;
-
                 var poller = function() {
                     if(MapFish.printJobData !== undefined){
                         mapFishPrintRestService.getPrintJobStatus(MapFish.printJobData.ref).then(

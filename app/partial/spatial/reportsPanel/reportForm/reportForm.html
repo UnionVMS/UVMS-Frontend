@@ -22,10 +22,10 @@
 					</div>
 				</div>
 				<div class="row general-form">
-					<div class="form-group col-md-4" ng-class="{'has-error': (reportForm.reportName.$dirty || submitingReport === true) && reportForm.reportName.$invalid}">
-						<div class="form-group">
+					<div class="form-group col-md-4">
+						<div class="form-group report-name-group" ng-class="{'has-error': (reportForm.reportName.$dirty || submitingReport === true) && reportForm.reportName.$invalid}">
 							<input id="reportName" type="text" class="form-control" name="reportName" ng-required="true" ng-model="report.name"/>
-							<div class="innerErrorMessagesInputWithUpLabel" ng-messages="reportForm.reportName.$error" ng-show="(reportForm.reportName.$dirty || submitingReport === true) && reportForm.reportName.$invalid">
+							<div class="innerErrorMessages" ng-messages="reportForm.reportName.$error" ng-show="(reportForm.reportName.$dirty || submitingReport === true) && reportForm.reportName.$invalid">
 								<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 							</div>
 						</div>		

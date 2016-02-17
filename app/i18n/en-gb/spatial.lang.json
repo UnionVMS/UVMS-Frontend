@@ -34,6 +34,7 @@
     "mapfish_layouts_label": "Layouts",
     "mapfish_attributes_label": "Attributes",
     "mapfish_suggestedDpi_label": "Dpi",
+    "mapfish_include_coords_grid_label": "Include coordinates grid",
 	"map_measure_distance_title": "Distance",
 	"map_measure_bearing_title": "Bearing",
 	"map_measure_eta_title": "ETA",
