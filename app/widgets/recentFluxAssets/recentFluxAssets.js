@@ -77,15 +77,11 @@
 
 	function ActiveFluxAssetsServiceProvider() {
 		var remoteBaseUrl = '';
-		var useDummyData = false;
 		this.setRemoteBaseUrl = function(url) {
 			remoteBaseUrl = url;
 		};
-		this.setUseDummyData = function(bool) {
-			useDummyData = bool;
-		};
-		this.$get = ['$resource', 'recentFluxAssetsDummyData', '$q', function($resource, dummyData, $q) {
-			return new ActiveFluxAssetsService($resource, remoteBaseUrl, useDummyData ? dummyData : undefined, $q);
+		this.$get = ['$resource', '$q', function($resource, $q) {
+			return new ActiveFluxAssetsService($resource, remoteBaseUrl, $q);
 		}];
 	}
 
@@ -118,16 +114,12 @@
 		return uniqueConnectIds;
 	}
 
-	function ActiveFluxAssetsService($resource, remoteBaseUrl, dummyData, $q) {
+	function ActiveFluxAssetsService($resource, remoteBaseUrl, $q) {
 		return {
 			getAssets: getAssets
 		};
 
 		function getAssets(flagState) {
-			if (dummyData) {
-				return $q.when(dummyData);
-			}
-
 			var deferred = $q.defer();
 			$resource(remoteBaseUrl + '/movement/rest/movement/listByAreaAndTimeInterval').save(getQuery(flagState), function(response) {
 				if (response.code !== "200") {
