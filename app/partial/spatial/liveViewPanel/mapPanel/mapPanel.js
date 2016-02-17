@@ -137,7 +137,6 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     //Deactivate Mapfish
     $scope.mapFishPrintDisable = function(){
         $scope.showMapFishConfigWin = false;
-        $scope.winExpanded = true;
         var layer = mapService.getLayerByType('print');
         if (angular.isDefined(layer)){
             mapService.map.removeLayer(layer);
@@ -237,6 +236,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         var fn;
         var previousControl = $scope.activeControl;
 
+        $scope.winExpanded = true;
         if (tool !== previousControl && previousControl !== ''){
             fn = previousControl + 'Disable';
             $scope.activeControl = tool;

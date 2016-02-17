@@ -24,71 +24,77 @@
         <ng-form name="mapForm">
 	        <div id="map" class="map" ng-controller="MappanelCtrl" tabIndex="0">
 	        	<div id="bookmarks" class="map-toolbar-control-panel" ng-show="showBookmarksWin">
-	        		<div class="col-md-12 book-panel-body">
-		        		<ng-form name="bookmarksForm">
-			                <div class="row">
-		                        <span class="fa fa-bullseye drag-icon pull-right"></span>
-			                </div>
-			                <div>
-			                    <div class="table-responsive-force form-group" st-table="displayedBookmarks" st-safe-src="bookmarks">
-			                    	<div class="form-group">
-										<input type="text" class="form-control" ng-model="searchBookmark" st-search="name" placeholder="{{'spatial.reports_table_search_header' | i18n}}">
-									</div>
-			    	   				<table class="table table-striped">
-			    	   					<thead>
-			    	   						<tr class="stColumnHeaders">
-			    	   							<th st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.map_bookmarks_table_name_header' | i18n}}</th>
-			    	   							<th style="min-width: 80px;"></th>
-			    	   						</tr>
-			    	   						<tr ng-if="isLoading">
-			    					        	<th colspan="3" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
-			    					        </tr>
-			    	   					</thead>
-			    	   					<tbody>
-			    	   						<tr ng-if="!displayedBookmarks.length && !isLoading">
-			    								<td colspan="3">{{'spatial.table_no_data' | i18n}}</td>
-			    							</tr>
-			    	   						<tr ng-repeat="bookmark in displayedBookmarks">
-			    	   							<td>{{bookmark.name}}</td>
-			    	   							<td class="text-right" style="min-width: 80px;">
-			    	   								<button type="button" class="btn btn-primary btn-xs" title="{{'spatial.map_bookmarks_zoom_to' | i18n }}" ng-click="showBookmarkOnMap(bookmark)"><span class="fa fa-globe"></span></button>
-			    	   								<button type="button" class="btn btn-danger btn-xs btnMargin" title="{{'spatial.map_bookmarks_remove' | i18n }}" ng-click="removeBookmark(bookmark.id)"> <span class="fa fa-trash-o"></span></button>
-			    	   							</td>
-			    	   						</tr>
-			    	   					</tbody>
-			    	   					<tfoot class="stFooterPagination">
-			    							<tr>
-			    								<td colspan="3" class="text-right">
-			    									<div st-pagination st-items-by-page="bookmarksByPage" st-displayed-pages="3" st-template="partial/spatial/templates/simplePagination.html"></div>
-			    								</td>
-			    							</tr>
-			    						</tfoot>
-			    	   				</table>
-			    	   			</div>
-			                </div>
-			                <div class="btn-bookmark-add text-right" ng-class="{'has-error': (bookmarksForm.bookmarkName.$dirty || submitingBookmark === true) && bookmarksForm.bookmarkName.$invalid, 'add-bookmark-visible': isAddBookVisible}" ng-show="isAddBookVisible">
-			                	<input type="text" class="form-control" placeholder="{{'spatial.map_bookmarks_add_input_placeholder' | i18n }}" ng-model="bookmarkNew.name" name="bookmarkName" ng-required="true"/>
-			                	<button type="button" class="btn btn-primary btn-sm" ng-click="createBookmark()">
-									<i class="fa fa-plus-square"></i>&nbsp;
-									<span>{{'spatial.map_bookmarks_add' | i18n}}</span>
-								</button>
-			                </div>
-			        	</ng-form>
-		        	</div>
-		        	<div class="col-md-12 text-center btn-more-details" ng-click="isAddBookVisible = !isAddBookVisible">
-		        		<div class="col-md-12 details-text" ng-hide="isAddBookVisible">
-		        			<span>{{'spatial.more_details' | i18n}}</span>
-		        		</div>
-		        		<span class="fa" ng-class="{'fa-angle-double-down': !isAddBookVisible, 'fa-angle-double-up': isAddBookVisible}"></span>
+	        		<div class="panel-with-hidden-details">
+	        			<div class="col-md-12 map-control-subpanel">
+		                	<span class="fa fa-times drag-icon pull-right" ng-click="toggleToolbarBtn('bookmarks')"></span>
+	                        <span class="fa fa-bullseye drag-icon pull-right"></span>
+	                        <span class="fa drag-icon pull-right" ng-class="{'fa-chevron-up': winExpanded, 'fa-chevron-down': !winExpanded}" ng-click="toggleWinStatus()"></span>
+	                       </div>
+		        		<div class="col-md-12 book-panel-body" ng-show="winExpanded">
+			        		<ng-form name="bookmarksForm">
+				                <div>
+				                    <div class="table-responsive-force form-group" st-table="displayedBookmarks" st-safe-src="bookmarks">
+				                    	<div class="form-group">
+											<input type="text" class="form-control" ng-model="searchBookmark" st-search="name" placeholder="{{'spatial.reports_table_search_header' | i18n}}">
+										</div>
+				    	   				<table class="table table-striped">
+				    	   					<thead>
+				    	   						<tr class="stColumnHeaders">
+				    	   							<th st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.map_bookmarks_table_name_header' | i18n}}</th>
+				    	   							<th style="min-width: 80px;"></th>
+				    	   						</tr>
+				    	   						<tr ng-if="isLoading">
+				    					        	<th colspan="3" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+				    					        </tr>
+				    	   					</thead>
+				    	   					<tbody>
+				    	   						<tr ng-if="!displayedBookmarks.length && !isLoading">
+				    								<td colspan="3">{{'spatial.table_no_data' | i18n}}</td>
+				    							</tr>
+				    	   						<tr ng-repeat="bookmark in displayedBookmarks">
+				    	   							<td>{{bookmark.name}}</td>
+				    	   							<td class="text-right" style="min-width: 80px;">
+				    	   								<button type="button" class="btn btn-primary btn-xs" title="{{'spatial.map_bookmarks_zoom_to' | i18n }}" ng-click="showBookmarkOnMap(bookmark)"><span class="fa fa-globe"></span></button>
+				    	   								<button type="button" class="btn btn-danger btn-xs btnMargin" title="{{'spatial.map_bookmarks_remove' | i18n }}" ng-click="removeBookmark(bookmark.id)"> <span class="fa fa-trash-o"></span></button>
+				    	   							</td>
+				    	   						</tr>
+				    	   					</tbody>
+				    	   					<tfoot class="stFooterPagination">
+				    							<tr>
+				    								<td colspan="3" class="text-right">
+				    									<div st-pagination st-items-by-page="bookmarksByPage" st-displayed-pages="3" st-template="partial/spatial/templates/simplePagination.html"></div>
+				    								</td>
+				    							</tr>
+				    						</tfoot>
+				    	   				</table>
+				    	   			</div>
+				                </div>
+				                <div class="btn-bookmark-add text-right" ng-show="winExpanded" ng-class="{'has-error': (bookmarksForm.bookmarkName.$dirty || submitingBookmark === true) && bookmarksForm.bookmarkName.$invalid, 'add-bookmark-visible': isAddBookVisible}" ng-show="isAddBookVisible">
+				                	<input type="text" class="form-control" placeholder="{{'spatial.map_bookmarks_add_input_placeholder' | i18n }}" ng-model="bookmarkNew.name" name="bookmarkName" ng-required="true"/>
+				                	<button type="button" class="btn btn-primary btn-sm" ng-click="createBookmark()">
+										<i class="fa fa-plus-square"></i>&nbsp;
+										<span>{{'spatial.map_bookmarks_add' | i18n}}</span>
+									</button>
+				                </div>
+				        	</ng-form>
+			        	</div>
+			        	<div class="col-md-12 text-center btn-more-details" ng-show="winExpanded" ng-click="isAddBookVisible = !isAddBookVisible">
+			        		<div class="col-md-12 details-text" ng-hide="isAddBookVisible">
+			        			<span>{{'spatial.more_details' | i18n}}</span>
+			        		</div>
+			        		<span class="fa" ng-class="{'fa-angle-double-down': !isAddBookVisible, 'fa-angle-double-up': isAddBookVisible}"></span>
+			        	</div>
 		        	</div>
 	            </div>
 	            <div id="measure-config" class="map-toolbar-control-panel" ng-show="showMeasureConfigWin">
 	                <div class="row">
 	                    <div class="col-md-12">
+	                    	<span class="fa fa-times drag-icon pull-right" ng-click="toggleToolbarBtn('measure')"></span>
 	                        <span class="fa fa-bullseye drag-icon pull-right"></span>
+	                        <span class="fa drag-icon pull-right" ng-class="{'fa-chevron-up': winExpanded, 'fa-chevron-down': !winExpanded}" ng-click="toggleWinStatus()"></span>
 	                    </div>
 	                </div>
-	                <div class="row">
+	                <div class="row" ng-show="winExpanded">
 	                    <div class="form-group col-md-12 measure-content">
 	                        <label>{{'spatial.map_measuring_units_label' | i18n }}</label>
 	                        <combobox dest-combo-list="'.mapPanelContainer'" ng-model="measureConfigs.units" items="measuringUnits" ng-disabled="measureConfigs.disabled"></combobox>
@@ -109,10 +115,12 @@
 	            <div id="print-config" class="map-toolbar-control-panel" ng-show="showPrintConfigWin">
 	                <div class="row">
 	                    <div class="col-md-12">
+	                    	<span class="fa fa-times drag-icon pull-right" ng-click="toggleToolbarBtn('print')"></span>
 	                        <span class="fa fa-bullseye drag-icon pull-right"></span>
+	                        <span class="fa drag-icon pull-right" ng-class="{'fa-chevron-up': winExpanded, 'fa-chevron-down': !winExpanded}" ng-click="toggleWinStatus()"></span>
 	                    </div>
 	                </div>
-	                <div class="row">
+	                <div class="row" ng-show="winExpanded">
 	                    <div class="form-group col-md-12 measure-content">
 	                        <label>{{'spatial.map_export_format_label' | i18n }}</label>
 	                        <combobox dest-combo-list="'.mapPanelContainer'" ng-model="print.exportFormat" items="exportFormats"></combobox>
