@@ -1,6 +1,7 @@
 angular.module('unionvmsWeb').controller('TodayCtrl',function($scope){
     // Flag state will be SWE, for now.
     $scope.flagState = 'SWE';
+    $scope.refreshInterval = 60;
 	 var chart1 = {};
         chart1.type = "ColumnChart";
         chart1.displayed = false;
