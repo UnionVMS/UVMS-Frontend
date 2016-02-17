@@ -7,6 +7,7 @@ module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
 
   grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
     clean: {
       before:{
         src:['dist','temp']
@@ -23,35 +24,35 @@ module.exports = function (grunt) {
     less: {
       dist: {
         files: {
-          'temp/recentFluxAssets.css': 'recentFluxAssets.less'
+          'temp/<%=pkg.name%>.css': '<%=pkg.name%>.less'
         }
       }
     },
     ngtemplates: {
       main: {
         options: {
-            module: 'recentFluxAssets'
+            module: '<%=pkg.name%>'
         },
-        src: ['recentFluxAssets.html'],
+        src: ['<%=pkg.name%>.html'],
         dest: 'temp/templates.js'
       }
     },
     cssmin: {
       main: {
-        src:['temp/recentFluxAssets.css'],
-        dest:'dist/recentFluxAssets.full.min.css'
+        src:['temp/<%=pkg.name%>.css'],
+        dest:'dist/<%=pkg.name%>.full.min.css'
       }
     },
     concat: {
       main: {
-        src: ['recentFluxAssets.js','temp/templates.js'],
-        dest: 'temp/recentFluxAssets.full.js'
+        src: ['<%=pkg.name%>.js','temp/templates.js'],
+        dest: 'temp/<%=pkg.name%>.full.js'
       }
     },
     ngAnnotate: {
       main: {
-        src:'temp/recentFluxAssets.full.js',
-        dest: 'dist/recentFluxAssets.full.js'
+        src:'temp/<%=pkg.name%>.full.js',
+        dest: 'dist/<%=pkg.name%>.full.js'
       }
     },
     uglify: {
@@ -61,8 +62,8 @@ module.exports = function (grunt) {
           banner: '/*Version: <%= grunt.template.today("yyyy-mm-dd HH:MM") %> */',
           sourceMap: true
         },
-        src: 'dist/recentFluxAssets.full.js',
-        dest:'dist/recentFluxAssets.full.min.js'
+        src: 'dist/<%=pkg.name%>.full.js',
+        dest:'dist/<%=pkg.name%>.full.min.js'
       }
     },
   });

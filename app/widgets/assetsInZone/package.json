@@ -1,9 +1,9 @@
 {
-  "name": "recentFluxAssets",
+  "name": "assetsInZone",
   "version": "1.0.0",
   "repository": {
     "type": "svn",
-    "url": "https://webgate.ec.europa.eu/CITnet/svn/UNIONVMS/branches/dev/unionvms-web/app/widgets/recentFluxAssets"
+    "url": "https://webgate.ec.europa.eu/CITnet/svn/UNIONVMS/branches/dev/unionvms-web/app/widgets/assetsInZone"
   },
   "dependencies": {
     "angular-resource": "~1.3"
