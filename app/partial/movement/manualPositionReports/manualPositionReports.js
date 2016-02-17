@@ -18,6 +18,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     var longPollingId;
 
     var init = function(){
+        searchService.reset();
         $scope.searchManualPositions();
 
         if ($stateParams.id) {

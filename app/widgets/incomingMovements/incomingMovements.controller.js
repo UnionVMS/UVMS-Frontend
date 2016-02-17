@@ -18,7 +18,7 @@
 		});
 
 		function reloadList() {
-			searchService.resetSearchCriterias();
+			searchService.reset();
 			searchService.searchMovements().then(function(page) {
 				$scope.currentSearchResults = page;
 			});
