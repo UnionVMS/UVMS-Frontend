@@ -1,6 +1,6 @@
 ------------------
 UVMS widget:
-  recentFluxAssets
+  assetsInZone
 ------------------
 
 This widget displays a sorted list of the number of vessels in the domestic zone.
@@ -17,7 +17,7 @@ To re-use this module:
  * include the scripts (*.js files)
  * include the .less file
  * add activeFluxAssets as a dependency to one of your Angular modules
- * feel free to use the <recentFluxAssets/> directive anywhere
+ * feel free to use the <assetsInZone/> directive anywhere
 
 
  Note #1:
@@ -39,7 +39,7 @@ Build distribution: (requires: nmp, grunt-cli)
  $ npm install && grunt dist
 
 Then include these files in your app:
- * recentFluxAssets.full.min.js
- * recentFluxAssets.full.min.css
+ * assetsInZone.full.min.js
+ * assetsInZone.full.min.css
 
 Done!

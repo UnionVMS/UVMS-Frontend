@@ -1,27 +1,27 @@
 (function() {
 
-	var app = angular.module('activeFluxAssets', ['ngResource']);
-	app.directive('activeFluxAssets', ActiveFluxAssetsDirective);
-	app.controller('activeFluxAssetsController', ActiveFluxAssetsController);
-	app.factory('activeFluxAssetsService', ActiveFluxAssetsService);
+	var app = angular.module('widget.assetsInZone', ['ngResource']);
+	app.directive('assetsInZone', AssetsInZoneDirective);
+	app.controller('assetsInZoneController', AssetsInZoneController);
+	app.factory('assetsInZoneService', AssetsInZoneService);
 
-	function ActiveFluxAssetsDirective(){
+	function AssetsInZoneDirective(){
 		return {
-			controller: 'activeFluxAssetsController',
+			controller: 'assetsInZoneController',
 			controllerAs: 'ctrl',
 			restrict: 'E',
 			scope: {
 				flagState: '=',
 				refreshInterval: '='
 			},
-			templateUrl: 'widgets/recentFluxAssets/recentFluxAssets.html', // temporary location
+			templateUrl: 'widgets/assetsInZone/assetsInZone.html'
 		};
 	}
 
-	function ActiveFluxAssetsController(activeFluxAssetsService, $scope, $interval) {
+	function AssetsInZoneController(assetsInZoneService, $scope, $interval) {
 		var vm = this;
 		function updateList() {
-			activeFluxAssetsService.getAssets($scope.flagState).then(function(assets) {
+			assetsInZoneService.getAssets($scope.flagState).then(function(assets) {
 				vm.items = assets;
 				vm.error = undefined;
 			}, function(error) {
@@ -114,7 +114,7 @@
 		return uniqueConnectIds;
 	}
 
-	function ActiveFluxAssetsService($resource, $q) {
+	function AssetsInZoneService($resource, $q) {
 		return {
 			getAssets: getAssets
 		};

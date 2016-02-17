@@ -23,7 +23,7 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
 	'lrDragNDrop',
 	'dndLists',
 	'ui.bootstrap-slider',
-	'activeFluxAssets',
+	'widget.assetsInZone',
     'transpondersNoTx',
     'unionvmsWeb.longPolling'
 ]);
