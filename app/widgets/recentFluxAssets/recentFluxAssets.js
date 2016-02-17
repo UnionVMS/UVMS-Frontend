@@ -11,13 +11,14 @@
 			controllerAs: 'ctrl',
 			restrict: 'E',
 			scope: {
-				flagState: '='
+				flagState: '=',
+				refreshInterval: '='
 			},
 			templateUrl: 'widgets/recentFluxAssets/recentFluxAssets.html', // temporary location
 		};
 	}
 
-	function ActiveFluxAssetsController(activeFluxAssetsService, $scope) {
+	function ActiveFluxAssetsController(activeFluxAssetsService, $scope, $interval) {
 		var vm = this;
 		function updateList() {
 			activeFluxAssetsService.getAssets($scope.flagState).then(function(assets) {
@@ -30,6 +31,14 @@
 		}
 
 		updateList();
+
+		var refreshInterval = $scope.refreshInterval || 10;
+		vm.refreshTimer = $interval(updateList, refreshInterval * 1000);
+
+		$scope.$on('$destroy', function() {
+			$interval.cancel(vm.refreshTimer);
+			vm.refreshTimer = undefined;
+		});
 
 		var i18n = {
 			nations: {

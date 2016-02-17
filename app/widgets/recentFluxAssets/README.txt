@@ -8,6 +8,10 @@ This widget displays a sorted list of the number of vessels in the domestic zone
 It is mostly separate from Union-VMS, so it can be re-used in other applications.
 For example, it is its own module and does not have dependencies to Union-VMS.
 
+Uses two backend endpoints:
+ /movement/rest/movement/listByAreaAndTimeInterval - lists movements in an area, for the requested time interval
+ /asset/rest/asset/listGroupByFlagState - takes a list of asset GUIDs, and returns a list of objects (flagState, numberOfAssets)
+
 To re-use this module:
  * copy this folder to your project
  * include the scripts (*.js files)
