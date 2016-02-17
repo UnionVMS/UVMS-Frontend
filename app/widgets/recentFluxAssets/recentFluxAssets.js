@@ -3,7 +3,7 @@
 	var app = angular.module('activeFluxAssets', ['ngResource']);
 	app.directive('activeFluxAssets', ActiveFluxAssetsDirective);
 	app.controller('activeFluxAssetsController', ActiveFluxAssetsController);
-	app.provider('activeFluxAssetsService', ActiveFluxAssetsServiceProvider);
+	app.factory('activeFluxAssetsService', ActiveFluxAssetsService);
 
 	function ActiveFluxAssetsDirective(){
 		return {
@@ -75,16 +75,6 @@
 		};
 	}
 
-	function ActiveFluxAssetsServiceProvider() {
-		var remoteBaseUrl = '';
-		this.setRemoteBaseUrl = function(url) {
-			remoteBaseUrl = url;
-		};
-		this.$get = ['$resource', '$q', function($resource, $q) {
-			return new ActiveFluxAssetsService($resource, remoteBaseUrl, $q);
-		}];
-	}
-
 	function formatDate(moment) {
 		return moment.format('YYYY-MM-DD HH:mm:ss Z');
 	}
@@ -114,14 +104,14 @@
 		return uniqueConnectIds;
 	}
 
-	function ActiveFluxAssetsService($resource, remoteBaseUrl, $q) {
+	function ActiveFluxAssetsService($resource, $q) {
 		return {
 			getAssets: getAssets
 		};
 
 		function getAssets(flagState) {
 			var deferred = $q.defer();
-			$resource(remoteBaseUrl + '/movement/rest/movement/listByAreaAndTimeInterval').save(getQuery(flagState), function(response) {
+			$resource('/movement/rest/movement/listByAreaAndTimeInterval').save(getQuery(flagState), function(response) {
 				if (response.code !== "200") {
 					// Could not get movements.
 					deferred.reject(response.data || "Invalid data.");
@@ -132,7 +122,7 @@
 				}
 				else {
 					var connectIds = getUniqueConnectIds(response.data.movement);
-					return $resource(remoteBaseUrl + '/asset/rest/asset/listGroupByFlagState').save(connectIds, function(response) {
+					return $resource('/asset/rest/asset/listGroupByFlagState').save(connectIds, function(response) {
 						if (response.code !== 200) {
 							// Could not get assets.
 							deferred.reject(response.data || "Invalid data.");
