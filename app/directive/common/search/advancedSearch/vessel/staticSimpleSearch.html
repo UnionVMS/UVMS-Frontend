@@ -5,7 +5,7 @@
             <input type="text" class="form-control searchText" ng-disabled="advancedSearchVisible" placeholder="{{'vessel.search_input_placeholder' | i18n}}" ng-model="freeText" ng-change="resetSelectedVesselGroup()">
         </div>
 
-        <div class="col-md-2 col-md-offset-4 smallerpadding">
+        <div class="col-md-2 col-md-offset-6 smallerpadding">
             <div class="row nomargin">
                 <div class="col-md-12 colNoPadding searchcriteria">
                     <saved-search-dropdown type="VESSEL" class="dropdown simpleSearch" ng-model="selectedVesselGroup" initialtext="{{'common.search_group_dropdown' | i18n}}" callback="performSavedSearch" enable-delete="true"></saved-search-dropdown>
