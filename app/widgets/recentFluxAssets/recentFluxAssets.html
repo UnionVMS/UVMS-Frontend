@@ -7,5 +7,9 @@
 		<div class="row" ng-repeat="item in ctrl.items | orderBy:'numberOfAssets':true">
 			<span class="flag-icon" ng-class="'flag-' + item.flagState"></span> {{ctrl.nationName(item.flagState)}} <span class="count">{{item.numberOfAssets}}</span>
 		</div>
+		<alert type="info" ng-if="ctrl.items.length === 0">
+			<span class="fa fa-info-circle"></span> {{ctrl.i18n('noAssets')}}
+		</alert>
+
 	</div>
 </div>

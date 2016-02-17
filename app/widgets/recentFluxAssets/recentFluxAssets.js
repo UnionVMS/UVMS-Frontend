@@ -63,7 +63,8 @@
 				"SVN": "Slovenia",
 				"SWE": "Sweden"
 			},
-			"header": "Vessels in your zone"
+			"header": "Assets in your zone",
+			"noAssets": "No assets in zone in last 24 hours."
 		};
 
 		this.i18n = function(key) {
