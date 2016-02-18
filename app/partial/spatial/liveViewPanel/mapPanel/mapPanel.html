@@ -29,7 +29,7 @@
                         <span class="fa fa-bullseye drag-icon pull-right"></span>
                         <span class="fa drag-icon pull-right" ng-class="{'fa-chevron-up': winExpanded, 'fa-chevron-down': !winExpanded}" ng-click="toggleWinStatus()"></span>
                     </div>
-	        		<div class="col-md-12 book-panel-body" ng-show="winExpanded">
+	        		<div class="col-md-12 book-panel-body panel-collapsible-body" ng-class="{'panel-body-visible': winExpanded}">
 		        		<ng-form name="bookmarksForm">
 			                <div>
 			                    <div class="table-responsive-force form-group" st-table="displayedBookmarks" st-safe-src="bookmarks">
@@ -92,7 +92,7 @@
 	                        <span class="fa drag-icon pull-right" ng-class="{'fa-chevron-up': winExpanded, 'fa-chevron-down': !winExpanded}" ng-click="toggleWinStatus()"></span>
 	                    </div>
 	                </div>
-	                <div class="row" ng-show="winExpanded">
+	                <div class="row panel-collapsible-body" ng-class="{'panel-body-visible': winExpanded}">
 	                    <div class="form-group col-md-12 measure-content">
 	                        <label>{{'spatial.map_measuring_units_label' | i18n }}</label>
 	                        <combobox dest-combo-list="'.mapPanelContainer'" ng-model="measureConfigs.units" items="measuringUnits" ng-disabled="measureConfigs.disabled"></combobox>
@@ -118,7 +118,7 @@
 	                        <span class="fa drag-icon pull-right" ng-class="{'fa-chevron-up': winExpanded, 'fa-chevron-down': !winExpanded}" ng-click="toggleWinStatus()"></span>
 	                    </div>
 	                </div>
-	                <div class="row" ng-show="winExpanded">
+	                <div class="row panel-collapsible-body" ng-class="{'panel-body-visible': winExpanded}">
 	                    <div class="form-group col-md-12 measure-content">
 	                        <label>{{'spatial.map_export_format_label' | i18n }}</label>
 	                        <combobox dest-combo-list="'.mapPanelContainer'" ng-model="print.exportFormat" items="exportFormats"></combobox>
@@ -149,7 +149,7 @@
 	                        <span class="fa drag-icon pull-right" ng-class="{'fa-chevron-up': winExpanded, 'fa-chevron-down': !winExpanded}" ng-click="toggleWinStatus()"></span>
 	                    </div>
 	                </div>
-	                <div ng-show="winExpanded">
+	                <div class="panel-collapsible-body" ng-class="{'panel-body-visible': winExpanded}">
 	                	<ng-form name="printForm">
 		                	<div class="row print-row">
 			                    <!-- <div class="form-group col-md-6 print-content">

@@ -316,6 +316,20 @@
 	border: 1px solid #DDD;
 	border-radius: 6px;
 	box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+	
+	.panel-collapsible-body {
+		max-height: 0;
+		min-height: 0;
+		overflow: hidden;
+		-moz-transition: max-height 0.3s;
+	    -webkit-transition: max-height 0.3s;
+	    -o-transition: max-height 0.3s;
+	    -ms-transition: max-height 0.3s;
+	    transition: max-height 0.3s;
+		&.panel-body-visible {
+			max-height: 500px;
+		}
+	}
 }
 
 #bookmarks {
@@ -355,7 +369,6 @@
 		}
 		.btn-bookmark-add {
 			max-height: 0;
-			margin-bottom: 10px;
 			-moz-transition: max-height 0.3s;
 		    -webkit-transition: max-height 0.3s;
 		    -o-transition: max-height 0.3s;
@@ -365,7 +378,7 @@
 				max-height: 500px;
 			}
 			button {
-			    margin-top: 10px;
+			    margin: 10px 0;
 			}
 		}
 	}
