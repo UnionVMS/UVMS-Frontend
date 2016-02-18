@@ -1,0 +1,14 @@
+<div>
+	<table>
+		{{#data}}
+		<tr>
+			{{#includeTitles}}
+			<td><b>{{getTitle}}:</b></td>
+			{{/includeTitles}}
+			<td>
+				<div><span title="{{getValue}}">{{getValue}}</span></div>
+			</td>
+		</tr>
+		{{/data}}
+	</table>
+</div>
