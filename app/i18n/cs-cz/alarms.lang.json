@@ -122,7 +122,8 @@
     "rules_definition_then_action_notification_all_users" : "Create notification for all users",
     "rules_definition_then_action_notification" : "Create notification",
 
-    "rules_rule_as_text_action_SEND_TO_ENDPOINT" : "SEND TO ENDPOINT",
+    "rules_rule_as_text_action_SEND_TO_FLUX" : "SEND TO FLUX",
+    "rules_rule_as_text_action_SEND_TO_NAF" : "SEND TO NAF",
     "rules_rule_as_text_action_EMAIL" : "SEND EMAIL TO",
     "rules_rule_as_text_action_TICKET" : "CREATE NOTIFICATION",
     "rules_rule_as_text_action_TICKET_ALL_USERS" : "CREATE NOTIFICATION FOR ALL USERS",

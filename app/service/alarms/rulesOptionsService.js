@@ -183,11 +183,13 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
 
     //Dropdown values for actions
     var actionDropdowns = {
-        SEND_TO_ENDPOINT : [],
+        SEND_TO_FLUX : [],
+        SEND_TO_NAF : [],
     };
     var setupActionDropdowns = function(){
         //TODO: Get config from Rules?
-        actionDropdowns.SEND_TO_ENDPOINT = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
+        actionDropdowns.SEND_TO_FLUX = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
+        actionDropdowns.SEND_TO_NAF = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
     };
 
 	var rulesOptionsService = {
