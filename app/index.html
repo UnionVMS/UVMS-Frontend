@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
     <link href="app.less" type="text/css" rel="stylesheet/less">
+    <link rel="stylesheet" href="../node_modules/n3-charts/build/LineChart.css">
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css' data-concat="false" data-remove="false">
 </head>
 <body>
@@ -16,6 +17,9 @@
 
     <!-- Livereload script for development only (stripped during dist build) -->
     <script src="http://localhost:35729/livereload.js" data-concat="false"></script>
+
+    <script src="../node_modules/n3-charts/build/LineChart.js"></script>
+    <script src="../node_modules/d3/d3.min.js"></script>
 
     <!-- JS from Bower Components -->
     <script src="../bower_components/less.js/dist/less.js" data-concat="false"></script>
@@ -226,6 +230,8 @@
     <script src="widgets/incomingMovements/incomingMovements.controller.js"></script>
     <script src="widgets/incomingMovements/incomingMovements.directive.js"></script>
 
+    <script src="widgets/holdingTableCount.js"></script>
+    
     <!-- USM COMPONENTS -->
     <script src="usm/usm.js"></script>
     <script src="usm/users/users.js"></script>
