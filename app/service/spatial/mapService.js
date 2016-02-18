@@ -177,6 +177,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             if (angular.isDefined(printLayer) && ms.map.getView().getResolution() !== ms.mapPrintResolution){
                 ms.addPrintExtent();
             }
+            
+            ms.checkLabelStatus();
 	    });
 	    
 	    map.on('change:size', function(e){
@@ -261,6 +263,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	                ms.closePopup();
 	            }
 	        }
+	        
+	        ms.checkLabelStatus();
 	    });
 	    
 	    map.setView(view);
@@ -1846,7 +1850,252 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         var format = new ol.format.GeoJSON();
         return format.readFeature(feature).getGeometry().transform('EPSG:4326', ms.getMapProjectionCode());
     };
+    
+    //VECTOR LABELS
+    //label visibility settings object
+    ms.labelVisibility = {
+        positions: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'posTime', 'lat', 'lon', 'stat', 'm_spd', 'c_spd', 'crs', 'msg_tp', 'act_tp', 'source'],
+        segments: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'dist', 'dur', 'spd', 'crs', 'cat']
+    };
+    
+    ms.setLabelVisibility = function(type, config){
+        ms.labelVisibility[type] = config.values; 
+    };
+    
+    //Container for displayed label overlays
+    ms.vmsposLabels = {
+       active: false,
+       displayedIds: []
+    };
+    
+    ms.vmssegLabels = {
+       active: false
+    };
+    
+    //Function called on map moveend and change:resolution to check for new labels
+    ms.checkLabelStatus = function(){
+        if (ms.vmsposLabels.active === true){
+            ms.activateVectorLabels('vmspos');
+        }
+        
+        if (ms.vmssegLabels.active === true){
+            ms.activateVectorLabels('vmsseg');
+        }
+    };
+    
+    //Activate Vector Label Overlays
+    ms.activateVectorLabels = function(type){
+        var containerName = type + 'Labels'; 
+        ms[containerName].active = true;
+        ms[containerName].displayedIds = [];
+        
+        var layer = ms.getLayerByType(type);
+        
+        var extent = ms.map.getView().calculateExtent(ms.map.getSize());
+        var size = Math.min.apply(Math, ol.extent.getSize(extent));
+        //var resolution = ms.map.getView().getResolution();
+        
+        var src = layer.getSource();
+        var overlayId;
+        src.forEachFeatureInExtent(extent, function(feature){
+            if (type === 'vmspos'){
+                var containedFeatures = feature.get('features');
+                
+                if (containedFeatures.length === 1 ){
+                    var feat = containedFeatures[0];
+                    overlayId = feat.get('overlayId');
+                    if (!angular.isDefined(overlayId)){
+                        overlayId = ms.generateOverlayId(ms[containerName]);
+                    }
+                    ms[containerName].displayedIds.push(overlayId);
+                    if (!angular.isDefined(feat.get('overlayHidden'))){
+                        ms.addLabelsOverlay(feat, type, overlayId);
+                    }
+                }
+            } else {
+                var geom = feature.getGeometry();
+                if (geom.getLength() > 0){
+                    var featSize = geom.getLength();
+                    var ratio = featSize * 100 / size;
+                    if (ratio >= 10){
+                        overlayId = feature.get('overlayId');
+                        if (!angular.isDefined(overlayId)){
+                            overlayId = ms.generateOverlayId(ms[containerName]);
+                        }
+                        ms[containerName].displayedIds.push(overlayId);
+                        if (!angular.isDefined(feature.get('overlayHidden'))){
+                            ms.addLabelsOverlay(feature, type, overlayId);
+                        }
+                    }
+                }
+            }
+        });
+        
+        //Finally we remove overlays that are no longer visible
+        ms.removeLabelsByMapChange(type);
+    };
+    
+    //Remove labels when zooming and panning (mainly to deal with clusters)
+    ms.removeLabelsByMapChange = function(type){
+        var containerName = type + 'Labels';
+        var existingKeys = _.keys(ms[containerName]);
+        existingKeys = _.without(existingKeys, 'active', 'displayedIds');
+        
+        var diff = _.difference(existingKeys, ms[containerName].displayedIds);
+        angular.forEach(diff, function(key){
+            var hidden = this[key].feature.get('overlayHidden');
+            if (angular.isDefined(hidden) && hidden === false){
+                ms.map.removeOverlay(this[key].overlay);
+                this[key].feature.set('overlayId', undefined);
+                this[key].feature.set('overlayHidden', undefined);
+                delete this[key];
+            }
+        }, ms[containerName]);
+    };
+    
+    //Remove all labels when the tool is deactivated
+    ms.deactivateVectorLabels = function(type){
+        var containerName = type + 'Labels';
+        var keys = _.keys(ms[containerName]);
+        keys = _.without(keys, 'active', 'displayedIds');        
+        
+        angular.forEach(keys, function(key) {
+            ms.map.removeOverlay(this[key].overlay);
+            this[key].feature.set('overlayId', undefined);
+            this[key].feature.set('overlayHidden', undefined);
+            delete this[key];
+        }, ms[containerName]);
+        
+        ms[containerName].active = false;
+    };
+    
+    ms.addLabelsOverlay = function(feature, type, overlayId){
+        var coords;
+        if (type === 'vmspos'){
+            coords = feature.getGeometry().getCoordinates();    
+        } else {
+            coords = ms.getMiddlePoint(feature.getGeometry());
+        }
+        
+        var containerName = type + 'Labels';
+            
+        //HTML DOM
+        var labelEl = document.createElement('div');
+        labelEl.className = 'col-md-12 vector-label vector-label-' + type;
+        
+        var toolsEl = document.createElement('div');
+        
+        var closeBtn = document.createElement('span');
+        closeBtn.className = 'fa fa-times close-icon pull-right';
+        closeBtn.addEventListener('click', closeLabelOverlay(containerName, overlayId), false);
+        
+        toolsEl.appendChild(closeBtn);
+        labelEl.appendChild(toolsEl);
+        
+        var contentEl = document.createElement('div');
+        contentEl.className = 'col-md-12 label-content';
+        labelEl.appendChild(contentEl);
+        
+        //Mustache
+        var data = ms.setLabelObj(feature, type);
+        ms.requestLabelTemplate(type, data, contentEl);
+        
+        var overlay = new ol.Overlay({
+            element: labelEl,
+            autoPan: false,
+            position: coords,
+            positioning: 'top-left'
+        });
+        
+        ms.map.addOverlay(overlay);
+        ms[containerName][overlayId] = {
+            feature: feature,
+            overlay: overlay
+        };
+        feature.set('overlayId', overlayId);
+        feature.set('overlayHidden', false);
+    };
+    
+    ms.setLabelObj = function(feature, type, id){
+        var titles, srcData, i;
+        var data = [];
+        if (type === 'vmspos'){
+            titles = ms.getPositionTitles();
+            srcData = ms.formatPositionDataForPopup(feature.getProperties());
+            
+            for (i = 0; i < ms.labelVisibility.positions.length; i++){
+                data.push({
+                    title: titles[ms.labelVisibility.positions[i]],
+                    value: srcData[ms.labelVisibility.positions[i]]
+                });
+            }
+        } else {
+            titles = ms.getSegmentTitles();
+            srcData = ms.formatSegmentDataForPopup(feature.getProperties());
+            
+            for (i = 0; i < ms.labelVisibility.segments.length; i++){
+                data.push({
+                    title: titles[ms.labelVisibility.segments[i]],
+                    value: srcData[ms.labelVisibility.segments[i]]
+                });
+            }
+        }
+        
+        if (data.length > 0){
+            return {
+                id: id,
+                data: data,
+                includeTitles: true,
+                getTitle: function(){
+                    return this.title;
+                },
+                getValue: function(){
+                    return this.value;
+                }
+            };
+        }
+    };
+    
+    //Request template and render with Mustache
+    ms.requestLabelTemplate = function(type, data, el){
+        var templateURL = 'partial/spatial/templates/label.html';
+        $templateRequest(templateURL).then(function(template){
+            var rendered = Mustache.render(template, data);
+            el.innerHTML = rendered;
+        }, function(){
+            console.log('error getting template');
+        });
+    };
+    
+    //Close single label overlay on close btn click evvt
+    var closeLabelOverlay = function(container, id){
+        return function(e){
+            ms.map.removeOverlay(ms[container][id].overlay);
+            ms[container][id].feature.set('overlayId', undefined);
+            ms[container][id].feature.set('overlayHidden', true);
+        };
+    };
+    
+    ms.generateOverlayId = function(container){
+        var id = generateGUID();
+        
+        if (_.has(container, id) === true){
+            ms.generateOverlayId(container);
+        } else {
+            return id;
+        }
+    };
+    
+    var generateGUID = function(){
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+              .toString(16)
+              .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+    };
 	
+    //POPUPS
 	//Render popup info using mustache
     ms.requestPopupTemplate = function(data, coords, fromCluster){
         var templateURL = 'partial/spatial/templates/' + ms.activeLayerType + '.html';

@@ -12,7 +12,8 @@ describe('reportService', function () {
         mockSpatialHelperService = jasmine.createSpyObj("spatialHelperService", [ 'setToolbarControls']);
         //mockSpatialHelperService.setToolbarControls.andCallFake(function() {});
         mockMapService = jasmine.createSpyObj("mapService", [ 'getLayerByType', 'updateMapView',
-            'updateMapControls', 'setPositionStylesObj', 'setSegmentStylesObj', 'setPopupVisibility', 'clearVectorLayers', 'getMapProjectionCode']);
+            'updateMapControls', 'setPositionStylesObj', 'setSegmentStylesObj', 'setPopupVisibility', 'clearVectorLayers', 'getMapProjectionCode',
+            'deactivateVectorLabels', 'setLabelVisibility']);
         mockSpatialRestService = jasmine.createSpyObj("spatialRestService", [ 'getConfigsForReport', 'getConfigsForReportWithoutMap']);
 
         module(function ($provide) {
@@ -32,7 +33,7 @@ describe('reportService', function () {
         expect(mockSpatialHelperService.setToolbarControls).toBeDefined();
         expect(mockMapService.clearVectorLayers).toBeDefined();
         expect(mockMapService.getLayerByType).toBeDefined();
-        expect(mockMapService.updateMapContainerSize).toBeUndefined();
+        expect(mockMapService.updateMapContainerSize).toBeUndefined(); 
 
     }));
 
@@ -48,11 +49,14 @@ describe('reportService', function () {
 
     }));
 
-    it("runReport with map with error in spatial rest service call", inject(function (reportService, Report) {
+    it("runReport with map with error in spatial rest service call", inject(function (reportService, Report, mapService) {
 
         var report = new Report();
         report.id = 1;
         report.withMap = true;
+        
+        mapService.vmsposLabels = {active: true};
+        mapService.vmssegLabels = {active: true};
 
         mockSpatialRestService.getConfigsForReport.andCallFake(function () {
             return {
@@ -75,11 +79,14 @@ describe('reportService', function () {
         expect(mockReportRestService.executeReport.callCount).toBe(0);
     }));
 
-    it("runReport with map without errors", inject(function (reportService, Report) {
+    it("runReport with map without errors", inject(function (reportService, Report, mapService) {
 
         var report = new Report();
         report.id = 1;
         report.withMap = true;
+        
+        mapService.vmsposLabels = {active: true};
+        mapService.vmssegLabels = {active: true};
 
         mockMapService.styles = {
 
@@ -141,11 +148,14 @@ describe('reportService', function () {
         expect(mockReportRestService.executeReport).toHaveBeenCalled();
     }));
 
-    it("runReport without map", inject(function (reportService, Report) {
+    it("runReport without map", inject(function (reportService, Report, mapService) {
 
         var report = new Report();
         report.id = 1;
         report.withMap = false;
+        
+        mapService.vmsposLabels = {active: true};
+        mapService.vmssegLabels = {active: true};
 
         mockMapService.styles = {
             positions: 'countryCode',

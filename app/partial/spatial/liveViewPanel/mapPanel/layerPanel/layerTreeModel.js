@@ -297,6 +297,8 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	            type: type === 'positions' ? 'vmspos' : 'vmsseg',
 	            popupEnabled: true,
 	            popupTip: 'spatial.layer_tree_tip_popup',
+	            labelEnabled: true,
+	            labelTip: 'spatial.layer_tree_tip_label_vector',
 	            geoJson: data
 	        }
 	    };

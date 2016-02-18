@@ -194,6 +194,52 @@
 	background-color: rgba(0,60,136,0.5) !important;
 }
 
+.ol-history-back:hover,
+.ol-history-forward:hover {
+	background-color: rgba(0,60,136,0.7) !important;
+}
+
+
+//Vector labels
+.vector-label {
+//	position: absolute;
+	background-color: white;
+	-webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+	filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+	border-radius: 5px;
+	padding: 3px 3px 1px 3px;
+	font-size: 12px;
+	table{
+		tr {
+			line-height: 13px;
+			td {
+				white-space: nowrap;
+				div {
+					overflow: hidden;
+					max-width: 200px;
+					text-overflow: ellipsis;
+				}
+			}
+		}
+	}
+	.close-icon {
+		color: #e21e27;
+		cursor: pointer;
+	}
+	.label-content {
+		padding-left: 0px;
+		padding-right: 0px;
+	}
+}
+
+.vector-label-vmspos {
+	border-left: 8px solid #2876C7;
+}
+
+.vector-label-vmsseg {
+	border-left: 8px solid #4A7D2B;
+}
+
 //Info popup
 .ol-popup {
 	position: absolute;
@@ -260,7 +306,7 @@
 
 	.info-content{
 		margin-top: 10px;
-		font-size: 13px;
+		font-size: 12px;
 	}
 
 	.table-condensed > tbody > tr > td {
@@ -269,6 +315,12 @@
 
 	.table {
 		margin-bottom: 0px !important;
+		// tr {
+		// 	td {
+		// 		white-space: nowrap;
+		// 		word-wrap: break-word;
+		// 	}
+		// }
 	}
 }
 
@@ -316,7 +368,7 @@
 	border: 1px solid #DDD;
 	border-radius: 6px;
 	box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
-	
+
 	.panel-collapsible-body {
 		max-height: 0;
 		min-height: 0;

@@ -245,6 +245,7 @@
 	"layer_tree_segments": "Segments",
 	"layer_tree_additional_cartography": "Additional cartography",
 	"layer_tree_tip_popup": "Toggle info popup",
+	"layer_tree_tip_label_vector": "Toggle labels",
 	"layer_tree_tip_context_menu": "Options",
 	"layer_tree_context_menu_style_title": "Style options",
 	"layer_tree_context_menu_geom_style": "Geometry only",

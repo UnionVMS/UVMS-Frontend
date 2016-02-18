@@ -37,8 +37,18 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         
         mapService.clearVectorLayers();
         
+        //Close overlays
         if (angular.isDefined(mapService.overlay)){
             mapService.closePopup();
+            mapService.activeLayerType = undefined;
+        }
+        
+        if (mapService.vmsposLabels.active === true){
+            mapService.deactivateVectorLabels('vmspos');
+        }
+        
+        if (mapService.vmssegLabels.active === true){
+            mapService.deactivateVectorLabels('vmsseg'); 
         }
 
         if (report.withMap === true){
@@ -108,7 +118,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    mapService.setPopupVisibility('positions', data.visibilitySettings.positions.popup);
 	    mapService.setPopupVisibility('segments', data.visibilitySettings.segments.popup);
 	    
-	    //TODO set label visibility
+	    //Set label visibility
+	    mapService.setLabelVisibility('positions', data.visibilitySettings.positions.labels);
+	    mapService.setLabelVisibility('segments', data.visibilitySettings.segments.labels);
 	    
 	    //Build tree object and update layer panel
 	    var treeSource = new TreeModel();
