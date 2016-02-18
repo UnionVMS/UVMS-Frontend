@@ -203,96 +203,138 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
 		    		   var itemProperty;
 			    	   switch(item){
 			    	   		case 'fs': 
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_fs'));
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_fs'));
+			    	   			}
 			    	   			itemProperty = type === 'tracks'? rec.countryCode : rec.properties.countryCode;
 			    	   			row.push(itemProperty);
 			    	   			break;
 			    	   		case 'extMark':
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_ext_mark'));
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_ext_mark'));
+			    	   			}
 			    	   			itemProperty = type === 'tracks'? rec.externalMarking : rec.properties.externalMarking;
 			    	   			row.push(itemProperty);
 			    	   			break;
 			    	   		case 'ircs':
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_ircs'));
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_ircs'));
+			    	   			}
 			    	   			itemProperty = type === 'tracks'? rec.ircs : rec.properties.ircs;
 			    	   			row.push(itemProperty);
 			    	   			break;
 			    	   		case 'cfr':
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_cfr'));
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_cfr'));
+			    	   			}
 			    	   			itemProperty = type === 'tracks'? rec.cfr : rec.properties.cfr;
 			    	   			row.push(itemProperty);
 			    	   			break;
 			    	   		case 'name':
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_name'));
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_name'));
+			    	   			}
 			    	   			itemProperty = type === 'tracks'? rec.name : rec.properties.name;
 			    	   			row.push(itemProperty);
 			    	   			break;
 			    	   		case 'posTime':
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_date'));
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_date'));
+			    	   			}
 			    	   			itemProperty = type === 'tracks'? rec.positionTime : rec.properties.positionTime;
 			    	   			row.push(itemProperty);
 			    	   			break;
 			    	   		case 'lat':
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_lat'));
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_lat'));
+			    	   			}
 			    	   			row.push(rec.geometry.coordinates[1]);
 			    	   			break;
 			    	   		case 'lon':
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_lon'));
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_lon'));
+			    	   			}
 			    	   			row.push(rec.geometry.coordinates[0]);
 			    	   			break;
 			    	   		case 'stat':
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_status'));
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_status'));
+			    	   			}
 			    	   			row.push(rec.properties.status);
 			    	   			break;
 			    	   		case 'm_spd':
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_measured_speed') + '(' + speedUnit + ')');
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_measured_speed') + '(' + speedUnit + ')');
+			    	   			}
 			    	   			row.push(rec.properties.reportedSpeed);
 			    	   			break;
 			    	   		case 'c_spd':
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_calculated_speed') + '(' + speedUnit + ')');
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_calculated_speed') + '(' + speedUnit + ')');
+			    	   			}
 			    	   			row.push(rec.properties.calculatedSpeed);
 			    	   			break;
 			    	   		case 'crs':
 			    	   			if(type === 'positions'){
-			    	   				gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_course') + '(\u00B0)');
+			    	   				if(!gotHeaders){
+			    	   					header.push(locale.getString('spatial.tab_vms_pos_table_header_course') + '(\u00B0)');
+			    	   				}
 			    	   				row.push(rec.properties.reportedCourse);
 			    	   			}else if(type === 'segments'){
-			    	   				gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_seg_table_header_course_ground') + '(\u00B0)');
+			    	   				if(!gotHeaders){
+			    	   					header.push(locale.getString('spatial.tab_vms_seg_table_header_course_ground') + '(\u00B0)');
+			    	   				}
 			    	   				row.push(rec.properties.courseOverGround);
 			    	   			}
 			    	   			break;
 			    	   		case 'msg_tp':
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_msg_type'));
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_msg_type'));
+			    	   			}
 			    	   			row.push(rec.properties.movementType);
 			    	   			break;
 			    	   		case 'act_tp':
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_activity_type'));
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_activity_type'));
+			    	   			}
 			    	   			row.push(rec.properties.activityType);
 			    	   			break;
 			    	   		case 'source':
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_pos_table_header_source'));
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_source'));
+			    	   			}
 			    	   			row.push(rec.properties.source);
 			    	   			break;
 			    	   		case 'spd':
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_seg_table_header_speed_ground') + '(' + speedUnit + ')');
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_seg_table_header_speed_ground') + '(' + speedUnit + ')');
+			    	   			}
 			    	   			row.push(rec.properties.speedOverGround);
 			    	   			break;
 			    	   		case 'cat':
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_seg_table_header_category'));
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_seg_table_header_category'));
+			    	   			}
 			    	   			row.push(rec.properties.segmentCategory);
 			    	   			break;
 			    	   		case 'dist':
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_seg_table_header_distance') + '(' + distanceUnit + ')');
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_seg_table_header_distance') + '(' + distanceUnit + ')');
+			    	   			}
 			    	   			itemProperty = type === 'tracks'? rec.distance : rec.properties.distance;
 			    	   			row.push(itemProperty);
 			    	   			break;
 			    	   		case 'dur':
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_seg_table_header_duration'));
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_seg_table_header_duration'));
+			    	   			}
 			    	   			itemProperty = type === 'tracks'? rec.duration : rec.properties.duration;
 			    	   			row.push(itemProperty);
 			    	   			break;
 			    	   		case 'timeSea':
-			    	   			gotHeaders ? undefined : header.push(locale.getString('spatial.tab_vms_tracks_table_header_time_at_sea'));
+			    	   			if(!gotHeaders){
+			    	   				header.push(locale.getString('spatial.tab_vms_tracks_table_header_time_at_sea'));
+			    	   			}
 			    	   			row.push(unitConversionService.duration.timeToHuman(rec.totalTimeAtSea));
 			    	   			break;
 			    	   }
