@@ -404,8 +404,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 attributions:[
                     new ol.Attribution({
                         html: '&copy; <a href="http://www.openseamap.org/">OpenSeaMap</a> contributors.'
-                    }),
-                    ol.source.OSM.ATTRIBUTION
+                    })
                 ],
                 url: 'http://tiles.openseamap.org/seamark/{z}/{x}/{y}.png',
                 crossOrigin: null
@@ -470,15 +469,20 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             })
         });
         
+        var attribution = new ol.Attribution({
+            html: locale.getString('spatial.vms_positions_copyright')
+        });
+        
         var cluster = new ol.source.Cluster({
+            attributions: [attribution],
             distance: 20,
             source: source
         });
         
-        //TODO attributions
         var layer = new ol.layer.Vector({
             title: config.title,
             type: config.type,
+            longAttribution: config.longAttribution,
             isBaseLayer: false,
             source: cluster,
             style: ms.setClusterStyle
@@ -510,12 +514,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     
     //Add VMS segments layer
     ms.createSegmentsLayer = function( config ) {
-        //TODO attributions
+        var attribution = new ol.Attribution({
+            html: locale.getString('spatial.vms_segments_copyright')
+        });
+        
         var layer = new ol.layer.Vector({
             title: config.title,
             type: config.type,
+            longAttribution: config.longAttribution,
             isBaseLayer: false,
             source: new ol.source.Vector({
+                attributions: [attribution],
                 features: (new ol.format.GeoJSON()).readFeatures(config.geoJson, {
                     dataProjection: 'EPSG:4326',
                     featureProjection: ms.getMapProjectionCode()

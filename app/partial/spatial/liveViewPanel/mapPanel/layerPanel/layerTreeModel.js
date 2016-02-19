@@ -288,6 +288,13 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	
 	//Build vector nodes for positions and segments
 	var buildVectorNodes = function(type, data){
+	    var longCopyright;
+	    if (type === 'positions'){
+	        longCopyright = locale.getString('spatial.vms_positions_long_copyright'); 
+	    } else {
+	        longCopyright = locale.getString('spatial.vms_segments_long_copyright');
+	    }
+	    
 	    var node = {
 	        title: type === 'positions' ? locale.getString('spatial.layer_tree_positions') : locale.getString('spatial.layer_tree_segments'),
 	        selected: true,
@@ -299,6 +306,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	            popupTip: 'spatial.layer_tree_tip_popup',
 	            labelEnabled: true,
 	            labelTip: 'spatial.layer_tree_tip_label_vector',
+	            longAttribution: longCopyright.length > 0 ? longCopyright : undefined,
 	            geoJson: data
 	        }
 	    };

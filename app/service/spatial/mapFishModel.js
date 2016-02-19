@@ -36,6 +36,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         },
         
         includeCoordGrid: true,
+        includeLongCopyright: false,
         
         printMapSize: [],
 
@@ -240,18 +241,18 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         var spatialAttr = buildMapAndLegendAttributes(iconLeg); 
         attr.map = spatialAttr.map;
         attr.legend = spatialAttr.legend;
-        //TODO datasources
-        attr.datasource = [{
-        	displayName: 'Copyright',
-        	table: {
-        		columns: ['layer', 'copyright'],
-        		data: [
-        		    ['eez', 'eez stuff'],
-        		    ['rfmo', 'rfmo stuff'],
-        		    ['bla', 'bla stuff']
-        		]
-        	}
-        }];
+        attr.datasource = [];
+        
+        if (spatialAttr.copyright.length > 0){
+            attr.datasource.push({
+                displayName: locale.getString('spatial.print_copyright_title').toUpperCase(),
+                table: {
+                    columns: ['layer', 'copyright'] 
+                },
+                data: spatialAttr.copyright
+            });
+        }
+        
         return attr;
     };
     
@@ -273,18 +274,20 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         map.layers = configs.layers;
         legend.classes = configs.legend;
         
-        
-        return {
+        var finalObj = {
             map: map,
-            legend: legend
+            legend: legend,
+            copyright: configs.copyright
         };
+        
+        return finalObj;
     };
     
     var getUrl = function(){
         var url = $location.protocol() + '://' + $location.host();
         if ($location.port() !== 80){
-            //url += ':' + $location.port(); //FIXME - this needs kind of a proxy
-            url += ':8080'; //Working locally
+            url += ':' + $location.port();
+            //url += ':8080'; //Working locally
         }
         
         return url;
@@ -763,9 +766,35 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         return geojson;
     };
     
+    var getAttribution = function(layer){
+        var attribution = layer.getSource().getAttributions();
+        
+        var attrArray = [];
+        if (attribution !== null && attribution.length > 0){
+            attrArray.push(layer.get('title'));
+            var text = '';
+            for (var i = 0; i < attribution.length; i++){
+                text += $('<p>').html(attribution[i].getHTML()).text();
+                if (i < attribution.length - 1){
+                    text += ' | ';
+                }
+            }
+            if (MapFish.includeLongCopyright === true){
+                if (text.length > 0){
+                    text += ' | ';
+                }
+                text += layer.get('longAttribution');
+            }
+            attrArray.push(text);
+        }
+        
+        return attrArray;
+    };
+    
     var getLayersAndLegendConfigsArray = function(iconLeg){
         var layers = [];
         var legClasses = [];
+        var copyright = [];
         var mapLayers = mapService.map.getLayers();
         
         mapLayers.forEach(function(lyr, idx, lyrs){
@@ -780,8 +809,8 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
                 } else {
                     layerObj = layerFuncs[fn](lyr);
                 }
+                
                 var legObj;
-
                 if (_.indexOf(supportedLegTypes, type) !== -1 && (type === 'vmspos' || type === 'vmsseg')){
                     legObj = legendFuncs[fn](lyr, iconLeg);
                 } else if (_.indexOf(supportedLegTypes, type) !== -1){
@@ -800,8 +829,15 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
                         layers.push(layerObj);
                     }
                 }
+                
                 if (angular.isDefined(legObj)){
                     legClasses.push(legObj);
+                }
+                
+                //copyright stuff
+                var copyArray = getAttribution(lyr);
+                if (angular.isDefined(copyArray) && copyArray.length > 0){
+                    copyright.push(copyArray);
                 }
             }
         });
@@ -811,10 +847,12 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         }
         layers.reverse();
         legClasses.reverse();
+        copyright.reverse();
         
         return {
             layers: layers,
-            legend: legClasses
+            legend: legClasses,
+            copyright: copyright
         };
     };
     
