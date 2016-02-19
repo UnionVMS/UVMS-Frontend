@@ -6,10 +6,11 @@
 
     $scope.menu = [];
 
-    var addMenuItem = function(text, url){
+    var addMenuItem = function(text, url, elemId){
         $scope.menu.push({
             'title':text,
-            'url':url
+            'url':url,
+            'elemId':elemId
         });
     };
 
@@ -60,67 +61,74 @@
         var unionVMSApplication = 'Union-VMS';
 
         //TODAY
-        addMenuItem(locale.getString('header.menu_today'), '/today');
+        addMenuItem(locale.getString('header.menu_today'), '/today', 'today');
 
         //REPORTING
         if(checkAccess('Reporting', 'LIST_REPORTS')){
-            addMenuItem(locale.getString('header.menu_reporting'), '/reporting');
-            addMenuItem(locale.getString('header.menu_areas'), '/areas');
+            addMenuItem(locale.getString('header.menu_reporting'), '/reporting', 'reporting');
+            addMenuItem(locale.getString('header.menu_areas'), '/areas', 'areas');
         }
         
         //MOVEMENT
         var movementLink = false;
         if(checkAccess('Movement', 'viewMovements')){
             movementLink = '/movement';
+            movementElemId = 'movement';
         }else if(checkAccess('Movement', 'viewManualMovements')){
             movementLink = '/movement/manual';
+            movementElemId = 'manual-movement';
         }
         if(movementLink){
-            addMenuItem(locale.getString('header.menu_movement'), movementLink);
+            addMenuItem(locale.getString('header.menu_movement'), movementLink, movementElemId);
         }
 
         //EXCHANGE
         if(checkAccess('Exchange', 'viewExchange')){
-            addMenuItem(locale.getString('header.menu_exchange'), '/exchange');
+            addMenuItem(locale.getString('header.menu_exchange'), '/exchange', 'exchange');
         }
 
         //POLLING
         if(checkAccess(unionVMSApplication, 'viewMobileTerminalPolls')){
-            addMenuItem(locale.getString('header.menu_polling'), '/polling/logs');
+            addMenuItem(locale.getString('header.menu_polling'), '/polling/logs', 'polling-logs');
         }
         //COMMUNICATION, ASSETS
         if(checkAccess(unionVMSApplication, 'viewVesselsAndMobileTerminals')){
-            addMenuItem(locale.getString('header.menu_communication'), '/communication');
-            addMenuItem(locale.getString('header.menu_assets'), '/assets');
+            addMenuItem(locale.getString('header.menu_communication'), '/communication', 'communication');
+            addMenuItem(locale.getString('header.menu_assets'), '/assets', 'assets');
         }
 
         //ALARMS
         var alarmsLink = false;
         if(checkAccess('Rules', 'viewAlarmsHoldingTable')){
             alarmsLink = '/alarms/holdingtable';
+            alarmsElemId = 'holding-table';
         }else if(checkAccess('Rules', 'viewAlarmsOpenTickets')){
             alarmsLink = '/alarms/notifications';
+            alarmsElemId = 'alarms-notifications';
         }else if(checkAccess('Rules', 'viewAlarmsRules')){
             alarmsLink = '/alarms/rules';
+            alarmsElemId = 'alarms-rules';
         }
         if(alarmsLink){
-            addMenuItem(locale.getString('header.menu_alarmconditions'), alarmsLink);
+            addMenuItem(locale.getString('header.menu_alarmconditions'), alarmsLink, alarmsElemId);
         }
 
         //USERS
         if(accessToAnyFeatureInList('USM', userFeatures)){
-            addMenuItem(locale.getString('header.menu_user'), '/usm/users');
+            addMenuItem(locale.getString('header.menu_user'), '/usm/users', 'users');
         }
 
         //ADMIN
         var adminLink = false;
         if(checkAccess('Audit', 'viewAudit')){
             adminLink = '/admin/auditlog';
+            adminElemId = 'audit-log';
         }else if(checkAccess('Configuration', 'viewConfiguration')){
             adminLink = '/admin/configuration';
+            adminElemId = 'admin-configuration';
         }
         if(adminLink){
-            addMenuItem(locale.getString('header.menu_admin'), adminLink);
+            addMenuItem(locale.getString('header.menu_admin'), adminLink, adminElemId);
         }
     };
 

@@ -1,10 +1,10 @@
-<div class="headermenu container" ng-controller="HeaderMenuCtrl">
+<div class="headermenu container" ng-controller="HeaderMenuCtrl" id="uvms-header-menu">
     <div class="row">
         <div class="headercontainer col-md-12">
             <ul>
                  <li class="cell" ng-repeat="page in menu">
                     <a ng-href="#{{page.url}}">
-                        <div ng-class="{active: isActive(page.url)}">{{page.title}}</div>
+                        <div ng-class="{active: isActive(page.url)}" ng-attr-id="{{'uvms-header-menu-item-' + page.elemId}}">{{page.title}}</div>
                     </a>
                 </li>
             </ul>
