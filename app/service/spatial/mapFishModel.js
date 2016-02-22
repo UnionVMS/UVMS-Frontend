@@ -36,6 +36,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         },
         
         includeCoordGrid: true,
+        projectionId: undefined,
         includeLongCopyright: false,
         
         printMapSize: [],
@@ -114,7 +115,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
     return model;
 
 })
-.factory('MapFishPayload',function(locale, $location, MapFish, mapService, mapFishPrintRestService, unitConversionService){
+.factory('MapFishPayload',function(locale, $location, MapFish, mapService, mapFishPrintRestService, unitConversionService, projectionService){
     function mapFishPayload(){
         this.layout = undefined;
         this.attributes = {};
@@ -243,13 +244,16 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         attr.legend = spatialAttr.legend;
         attr.datasource = [];
         
+        attr.copyrightTitle = locale.getString('spatial.print_copyright_title').toUpperCase();
+        attr.legendTitle = locale.getString('spatial.print_legend_title').toUpperCase();
+        
         if (spatialAttr.copyright.length > 0){
             attr.datasource.push({
-                displayName: locale.getString('spatial.print_copyright_title').toUpperCase(),
+                displayName: '',
                 table: {
-                    columns: ['layer', 'copyright'] 
-                },
-                data: spatialAttr.copyright
+                    columns: ['layer', 'copyright'],
+                    data: spatialAttr.copyright
+                }
             });
         }
         
@@ -259,7 +263,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
     var buildMapAndLegendAttributes = function(iconLeg){
         var map = {};
         var legend = {
-            name: locale.getString('spatial.print_legend_title').toUpperCase(),
+            name: '',
             classes: []
         };
         
@@ -396,7 +400,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
             
             var style = {
                 version: 2,
-                strokeWidth: parseInt(styleDef.style.lineWidth),
+                strokeWidth: angular.isDefined(styleDef.style.lineWidth) ? parseInt(styleDef.style.lineWidth) : 2,
                 strokeDashstyle: 'solid',
                 strokeLinecap: 'round',
                 type: 'line'
@@ -734,13 +738,14 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
             return output;
         },
         buildGrid: function(){
+            var proj = projectionService.getProjectionEpsgById(MapFish.projectionId);
             var obj = {
                 type: 'grid',
                 gridType: 'points',
                 numberOfLines: [5,5],
                 opacity: 1,
                 renderAsSvg: true,
-                labelProjection: 'EPSG:4326',
+                labelProjection: angular.isDefined(proj) ? 'EPSG:' + proj : 'EPSG:4326',
                 font: {
                     name: ['Arial'],
                     size: 8,
@@ -771,7 +776,9 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         
         var attrArray = [];
         if (attribution !== null && attribution.length > 0){
-            attrArray.push(layer.get('title'));
+            var title = layer.get('title');
+            attrArray.push(title.charAt(0).toUpperCase() + title.slice(1));
+            
             var text = '';
             for (var i = 0; i < attribution.length; i++){
                 text += $('<p>').html(attribution[i].getHTML()).text();
@@ -819,11 +826,15 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
 
                 if (angular.isDefined(layerObj)){
                     if (type === 'vmspos'){
-                        if (angular.isDefined(layerObj.clusters)){
+                        if (angular.isDefined(layerObj.clusters) && layerObj.clusters.geojson.features.length > 0){
                             layers.push(layerObj.clusters);
                         }
-                        if (angular.isDefined(layerObj.singleFeatures)){
+                        if (angular.isDefined(layerObj.singleFeatures) && layerObj.singleFeatures.geojson.features.length > 0){
                             layers.push(layerObj.singleFeatures);
+                        }
+                    } else if(type === 'vmsseg'){
+                        if (layerObj.geojson.features.length > 0){
+                            layers.push(layerObj);
                         }
                     } else {
                         layers.push(layerObj);

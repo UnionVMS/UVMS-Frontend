@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, mapService, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window){
+angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, mapService, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window, projectionService){
     $scope.activeControl = '';
     $scope.showMeasureConfigWin = false;
     $scope.showPrintConfigWin = false;
@@ -16,6 +16,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.submitingBookmark = false;
     $scope.isAddBookVisible = false;
     $scope.submittedMapFishPrint = false;
+    $scope.projections = projectionService;
     
     //Comboboxes
     $scope.measuringUnits = [];
@@ -55,6 +56,12 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         mapService.requestPopupTemplate(data, record.coord, record.fromCluster, true);
     };
     
+    //Projections
+    $scope.setDefaultPrintProjection = function(){
+        var mapProj = mapService.getMapProjectionCode();
+        $scope.mapFish.projectionId = $scope.projections.getProjectionIdByEpsg(mapProj);
+    };
+    
     //MAPFISH STUFF
     //Initialization
     (function () {
@@ -64,6 +71,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
             function (data) {
                 $log.debug(data);
                 MapFish.isDeployed = true;
+                $scope.projections.getProjections();
                 $scope.getTemplates();
                 $scope.getCapabilities('default');
             }, function(error) {
@@ -125,6 +133,9 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         mapService.addPrintLayer();
         mapService.addDragPrintExtent();
         $scope.openMapFishConfigWin();
+        if (!angular.isDefined($scope.mapFish.projectionId)){
+            $scope.setDefaultPrintProjection();
+        }
     };
     
     $scope.openMapFishConfigWin = function(){
@@ -147,6 +158,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         }
     };
     
+    //Cancel print job
     $scope.cancelPrint = function (ref){
         if (ref === undefined) {
             return;
@@ -160,7 +172,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         );
     };
 
-    //Prepare print reuqest
+    //Prepare print request
     $scope.printMapWithMapFish = function(ref) {
     	$scope.submittedMapFishPrint = true;
     	if($scope.mapForm.printForm.$valid){
