@@ -131,6 +131,8 @@
     "vessel_details_type": "Main gear type",
     "vessel_details_cfr_pattern_validation_message": "Must be 3 letters followed by 9 digits and/or letters.",
     "vessel_details_mmsi_pattern_validation_message": "Must be 9 digits.",
+    "vessel_details_imo_pattern_validation_message": "Must be 7 digits.",
+    "vessel_details_producer_code_pattern_validation_message": "Must be 3 characters.",
     "vessel_details_max_decimals_pattern_validation_message": "There can be max {1} decimals.",
     "vessel_details_email": "Email",
     "vessel_details_contact_name": "Contact name",

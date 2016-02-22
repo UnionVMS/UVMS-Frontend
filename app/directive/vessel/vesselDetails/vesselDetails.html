@@ -21,7 +21,7 @@
 
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.externalMarking.$dirty) && vesselForm.externalMarking.$invalid}">
                 <label>{{ 'vessel.vessel_details_ext_marking' | i18n }}</label>
-                <input type="text" name="externalMarking" class="form-control" ng-model="vessel.externalMarking" ng-maxlength="14" required >
+                <input type="text" name="externalMarking" class="form-control" ng-model="vessel.externalMarking" ng-maxlength="14" required>
                 <input-validation-message types="required,maxlength" input="vesselForm.externalMarking"></input-validation-message>
             </div>
 
@@ -33,7 +33,7 @@
             <div class="col-md-2 form-group smallerpaddingleft" ng-class="{'has-error': (submitAttempted || vesselForm.imo.$dirty) && vesselForm.imo.$invalid}">
                 <label>{{ 'vessel.vessel_details_IMO' | i18n }}</label>
                 <input type="text" name="imo" class="form-control" ng-model="vessel.imo" only-digits ng-pattern="imoRegExp" existing="existingValues.imo">
-                <input-validation-message types="onlyDigits, required, pattern, unique" input="vesselForm.imo"></input-validation-message >
+                <input-validation-message types="onlyDigits, required, pattern, unique" input="vesselForm.imo" custom-messages="{{imoValidationMessages}}"></input-validation-message>
             </div>
 
         </div>
@@ -109,9 +109,11 @@
                 <label>{{ 'vessel.po_name' | i18n }}</label>
                 <input type="text" name="producername" class="form-control " ng-model="vessel.producer.name">
             </div>
-            <div class="col-md-2 form-group smallerpaddingleft">
+
+            <div class="col-md-2 form-group smallerpaddingleft" ng-class="{'has-error': (submitAttempted || vesselForm.producercode.$dirty) && vesselForm.producercode.$invalid}">
                 <label>{{ 'vessel.po_code' | i18n }}</label>
-                <input type="text" name="producercode" class="form-control" ng-model="vessel.producer.code">
+                <input type="text" name="producercode" class="form-control" ng-model="vessel.producer.code" ng-pattern="producerCodePattern">
+                <input-validation-message types="pattern" input="vesselForm.producercode" custom-messages="{{producerCodeValidationMessages}}"></input-validation-message>
             </div>
         </div>
 

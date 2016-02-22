@@ -39,9 +39,17 @@ angular.module('unionvmsWeb')
         $scope.mmsiValidationMessages = {
             'pattern' : locale.getString('vessel.vessel_details_mmsi_pattern_validation_message')
         };
+        $scope.imoValidationMessages = {
+            'pattern' : locale.getString('vessel.vessel_details_imo_pattern_validation_message')
+        };
         $scope.maxTwoDecimalsRegExp = vesselValidationService.getMaxTwoDecimalsPattern();
         $scope.maxTwoDecimalsValidationMessages = {
             'pattern' : locale.getString('vessel.vessel_details_max_decimals_pattern_validation_message', "2")
+        };
+
+        $scope.producerCodePattern = vesselValidationService.getProducerCodePattern();
+        $scope.producerCodeValidationMessages = {
+            'pattern' : locale.getString('vessel.vessel_details_producer_code_pattern_validation_message')
         };
 
         $scope.lengthUnit = globalSettingsService.getLengthUnit();
