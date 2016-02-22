@@ -16,6 +16,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             status: false,
             rate: undefined
        },
+       selectedTab: 'MAP',
        isLiveViewActive: false,
        outOfDate: undefined
     };
@@ -69,6 +70,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	rep.refreshReport = function(){
 	    if (angular.isDefined(rep.id) && rep.tabs.map === true ){
+	        $rootScope.$broadcast('removeVmsNodes'); 
 	        rep.isReportExecuting = true;
 	        var repConfig = getUnitSettings();
 	        reportRestService.executeReport(rep.id, repConfig).then(updateVmsDataSuccess, updateVmsDataError);
@@ -188,6 +190,10 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
                 vectorNodeSource = vectorNodeSource.nodeFromData(data);
                 
                 $rootScope.$broadcast('addLayerTreeNode', vectorNodeSource);
+                
+                if (rep.selectedTab === 'MAP'){
+                    mapService.zoomToPositionsLayer();
+                }
             } else if (rep.positions.length === 0 && rep.segments.length === 0){
                 rep.hasWarning = true;
                 $timeout(function(){rep.hasWarning = false;}, 3000);
@@ -217,7 +223,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         if (rep.positions.length > 0 || rep.segments.length > 0){
             var vectorNodeSource = new TreeModel();
             vectorNodeSource = vectorNodeSource.nodeFromData(data);
-            
             $rootScope.$broadcast('addLayerTreeNode', vectorNodeSource);
         } else if (rep.positions.length === 0 && rep.segments.length === 0){
             rep.hasWarning = true;

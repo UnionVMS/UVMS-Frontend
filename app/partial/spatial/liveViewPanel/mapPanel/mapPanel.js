@@ -16,6 +16,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.submitingBookmark = false;
     $scope.isAddBookVisible = false;
     $scope.submittedMapFishPrint = false;
+    $scope.isRequestingImage = false;
     $scope.projections = projectionService;
     
     //Comboboxes
@@ -183,8 +184,10 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 	            mapFishPrintRestService.cancelPrintJob(ref).then(
 	                function(data){
 	                    $log.debug(data);
+	                    $scope.isRequestingImage = false;
 	                },function(error){
 	                    $log.error(error);
+	                    $scope.isRequestingImage = false;
 	                }
 	            );
 	    	}else{
@@ -194,6 +197,8 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 		        
 		        var positions = payload.getIconPayload('positions');
 		        var segments = payload.getIconPayload('segments');
+		        
+		        $scope.isRequestingImage = true;
 		        
 		        //prepare the payload to get icons and legends from our web service
 		        if (angular.isDefined(positions) && angular.isDefined(segments)){
@@ -233,7 +238,8 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
                                     $timeout(poller, 1000);
                                 }
                                 else if(MapFish.jobStatusData.status === 'finished'){
-                                   $scope.download(MapFish.jobStatusData.downloadURL); //TODO - test this when we have the admin configurations
+                                   $scope.download(MapFish.jobStatusData.downloadURL);
+                                   $scope.isRequestingImage = false;
                                 }
                             },function (error) {
                                 $log.error(error);

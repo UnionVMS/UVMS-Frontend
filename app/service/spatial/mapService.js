@@ -136,7 +136,7 @@ ol.control.HistoryControl = function(opt_options){
 };
 ol.inherits(ol.control.HistoryControl, ol.control.Control);
 
-angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $timeout, $templateRequest, $filter, spatialHelperService, globalSettingsService, unitConversionService, coordinateFormatService, MapFish) {
+angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $timeout, $interval, $templateRequest, $filter, spatialHelperService, globalSettingsService, unitConversionService, coordinateFormatService, MapFish) {
 	var ms = {};
 	ms.sp = spatialHelperService;
 
@@ -197,59 +197,62 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	        var record;
 	        ms.popupSegRecContainer.reset();
 	        var records = [];
-	        map.forEachFeatureAtPixel(pixel, function(feature, layer){
-	            if (angular.isDefined(ms.activeLayerType)){
-	                if (layer !== null && layer.get('type') === ms.activeLayerType){
-	                    if (ms.activeLayerType === 'vmspos'){
-	                        var positions = feature.get('features');
-	                        if (positions.length === 1){
-	                            record = {
-	                                data: positions[0].getProperties(),
-	                                coord: positions[0].getGeometry().getCoordinates(),
+	        
+	        if (angular.isDefined(ms.activeLayerType) && ((ms.activeLayerType === 'vmspos' && ms.popupVisibility.positions.length > 0) || (ms.activeLayerType === 'vmsseg' && ms.popupVisibility.segments.length > 0))){
+	            map.forEachFeatureAtPixel(pixel, function(feature, layer){
+	                if (angular.isDefined(ms.activeLayerType)){
+	                    if (layer !== null && layer.get('type') === ms.activeLayerType){
+	                        if (ms.activeLayerType === 'vmspos'){
+	                            var positions = feature.get('features');
+	                            if (positions.length === 1){
+	                                record = {
+	                                    data: positions[0].getProperties(),
+	                                    coord: positions[0].getGeometry().getCoordinates(),
+	                                    fromCluster: false
+	                                };
+	                            }
+	                        } else{
+	                            records.push({
+	                                data: feature.getProperties(),
+	                                coord: feature.getGeometry().getClosestPoint(coordinate),
 	                                fromCluster: false
-	                            };
+	                            });
 	                        }
-	                    } else{
-	                        records.push({
-                                data: feature.getProperties(),
-                                coord: feature.getGeometry().getClosestPoint(coordinate),
-                                fromCluster: false
-                            });
 	                    }
 	                }
-	            }
-	        });
-	        
-	        if (!angular.isDefined(record) && ms.activeLayerType === 'vmspos' && selInteraction.getFeatures().getLength() > 0){
-	            var positions = selInteraction.getFeatures().getArray()[0].get('features');
-	            var minDist;
-	            positions.forEach(function(position){
-	                var distance = new ol.geom.LineString([coordinate, position.get('spiderCoords')]).getLength();
-	                if (!angular.isDefined(minDist) || distance < minDist){
-	                    minDist = distance;
-	                    record = {
-                            data: position.getProperties(),
-                            coord: position.get('spiderCoords'),
-                            fromCluster: true
-                        };
-	                }
 	            });
-	        }
-	        
-	        if (angular.isDefined(ms.activeLayerType) && (angular.isDefined(record) || records.length > 0) && angular.equals({}, ms.measureInteraction)){
-	            if (records.length > 0){
-	                record = records[0];
+	            
+	            if (!angular.isDefined(record) && ms.activeLayerType === 'vmspos' && selInteraction.getFeatures().getLength() > 0){
+	                var positions = selInteraction.getFeatures().getArray()[0].get('features');
+	                var minDist;
+	                positions.forEach(function(position){
+	                    var distance = new ol.geom.LineString([coordinate, position.get('spiderCoords')]).getLength();
+	                    if (!angular.isDefined(minDist) || distance < minDist){
+	                        minDist = distance;
+	                        record = {
+	                            data: position.getProperties(),
+	                            coord: position.get('spiderCoords'),
+	                            fromCluster: true
+	                        };
+	                    }
+	                });
 	            }
 	            
-	            var data;
-	            if (ms.activeLayerType === 'vmspos'){
-                    data = ms.setPositionsObjPopup(record.data);
-                } else if (ms.activeLayerType === 'vmsseg'){
-                    data = ms.setSegmentsObjPopup(record.data);
-                    ms.popupSegRecContainer.records = records;
-                    ms.popupSegRecContainer.currentIdx = 0;
-                }
-	            ms.requestPopupTemplate(data, record.coord, record.fromCluster);
+	            if (angular.isDefined(ms.activeLayerType) && (angular.isDefined(record) || records.length > 0) && angular.equals({}, ms.measureInteraction)){
+	                if (records.length > 0){
+	                    record = records[0];
+	                }
+	                
+	                var data;
+	                if (ms.activeLayerType === 'vmspos'){
+	                    data = ms.setPositionsObjPopup(record.data);
+	                } else if (ms.activeLayerType === 'vmsseg'){
+	                    data = ms.setSegmentsObjPopup(record.data);
+	                    ms.popupSegRecContainer.records = records;
+	                    ms.popupSegRecContainer.currentIdx = 0;
+	                }
+	                ms.requestPopupTemplate(data, record.coord, record.fromCluster);
+	            }
 	        }
 	    });
 	    
@@ -489,14 +492,26 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         });
         
         ms.addClusterExploder(layer);
-        
-        //Update map extent
-        if (source.getFeatures().length > 0){
-            var geom = new ol.geom.Polygon.fromExtent(source.getExtent());
-            ms.zoomTo(geom);
-        }
       
         return( layer );
+    };
+    
+    //Update map extent after loading vector layers if the map tab is active
+    ms.zoomPromise = undefined;
+    ms.zoomToPositionsLayer = function(){
+        var layerSrc = ms.getLayerByType('vmspos').getSource();
+        ms.zoomPromise = $interval(function(){
+            if (angular.isDefined(layerSrc) && layerSrc.getFeatures().length > 0){
+                var geom = new ol.geom.Polygon.fromExtent(layerSrc.getExtent());
+                ms.zoomTo(geom);
+                ms.cancelZoomPromise();
+            }
+        }, 1);
+    };
+    
+    ms.cancelZoomPromise = function(){
+        $interval.cancel(ms.zoomPromise);
+        ms.zoomPromise = undefined;
     };
     
     //Interaction to open cluster on click
@@ -1868,7 +1883,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     };
     
     ms.setLabelVisibility = function(type, config){
-        ms.labelVisibility[type] = config.values; 
+        ms.labelVisibility[type] = config.values;
+        if (!angular.isDefined(ms.labelVisibility[type])){
+            ms.labelVisibility[type] = [];
+        }
     };
     
     //Container for displayed label overlays
@@ -1894,54 +1912,56 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     
     //Activate Vector Label Overlays
     ms.activateVectorLabels = function(type){
-        var containerName = type + 'Labels'; 
-        ms[containerName].active = true;
-        ms[containerName].displayedIds = [];
-        
-        var layer = ms.getLayerByType(type);
-        
-        var extent = ms.map.getView().calculateExtent(ms.map.getSize());
-        var size = Math.min.apply(Math, ol.extent.getSize(extent));
-        //var resolution = ms.map.getView().getResolution();
-        
-        var src = layer.getSource();
-        var overlayId;
-        src.forEachFeatureInExtent(extent, function(feature){
-            if (type === 'vmspos'){
-                var containedFeatures = feature.get('features');
-                
-                if (containedFeatures.length === 1 ){
-                    var feat = containedFeatures[0];
-                    overlayId = feat.get('overlayId');
-                    if (!angular.isDefined(overlayId)){
-                        overlayId = ms.generateOverlayId(ms[containerName]);
-                    }
-                    ms[containerName].displayedIds.push(overlayId);
-                    if (!angular.isDefined(feat.get('overlayHidden'))){
-                        ms.addLabelsOverlay(feat, type, overlayId);
-                    }
-                }
-            } else {
-                var geom = feature.getGeometry();
-                if (geom.getLength() > 0){
-                    var featSize = geom.getLength();
-                    var ratio = featSize * 100 / size;
-                    if (ratio >= 10){
-                        overlayId = feature.get('overlayId');
+        if ((type === 'vmspos' && ms.labelVisibility.positions.length > 0) || (type === 'vmsseg' && ms.labelVisibility.segments.length > 0)){
+            var containerName = type + 'Labels'; 
+            ms[containerName].active = true;
+            ms[containerName].displayedIds = [];
+            
+            var layer = ms.getLayerByType(type);
+            
+            var extent = ms.map.getView().calculateExtent(ms.map.getSize());
+            var size = Math.min.apply(Math, ol.extent.getSize(extent));
+            //var resolution = ms.map.getView().getResolution();
+            
+            var src = layer.getSource();
+            var overlayId;
+            src.forEachFeatureInExtent(extent, function(feature){
+                if (type === 'vmspos'){
+                    var containedFeatures = feature.get('features');
+                    
+                    if (containedFeatures.length === 1 ){
+                        var feat = containedFeatures[0];
+                        overlayId = feat.get('overlayId');
                         if (!angular.isDefined(overlayId)){
                             overlayId = ms.generateOverlayId(ms[containerName]);
                         }
                         ms[containerName].displayedIds.push(overlayId);
-                        if (!angular.isDefined(feature.get('overlayHidden'))){
-                            ms.addLabelsOverlay(feature, type, overlayId);
+                        if (!angular.isDefined(feat.get('overlayHidden'))){
+                            ms.addLabelsOverlay(feat, type, overlayId);
+                        }
+                    }
+                } else {
+                    var geom = feature.getGeometry();
+                    if (geom.getLength() > 0){
+                        var featSize = geom.getLength();
+                        var ratio = featSize * 100 / size;
+                        if (ratio >= 10){
+                            overlayId = feature.get('overlayId');
+                            if (!angular.isDefined(overlayId)){
+                                overlayId = ms.generateOverlayId(ms[containerName]);
+                            }
+                            ms[containerName].displayedIds.push(overlayId);
+                            if (!angular.isDefined(feature.get('overlayHidden'))){
+                                ms.addLabelsOverlay(feature, type, overlayId);
+                            }
                         }
                     }
                 }
-            }
-        });
-        
-        //Finally we remove overlays that are no longer visible
-        ms.removeLabelsByMapChange(type);
+            });
+            
+            //Finally we remove overlays that are no longer visible
+            ms.removeLabelsByMapChange(type);
+        }
     };
     
     //Remove labels when zooming and panning (mainly to deal with clusters)
@@ -2144,7 +2164,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	};
 	
 	ms.setPopupVisibility = function(type, config){
-	    ms.popupVisibility[type] = config.values; 
+	    ms.popupVisibility[type] = config.values;
+	    if (!angular.isDefined(ms.popupVisibility[type])){
+	        ms.popupVisibility[type] = [];
+	    }
 	};
 
 	//POPUP - Define the object that will be used in the popup for vms positions

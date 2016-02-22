@@ -19,6 +19,7 @@ angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $t
         
    $scope.selectTab = function(tab){
        $scope.selectedTab = tab;
+       reportService.selectedTab = tab;
    };
    
    $scope.isTabSelected = function(tab){
@@ -48,11 +49,19 @@ angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $t
    $scope.$watch(function(){return reportService.isReportExecuting;}, function(newVal, oldVal){
        $scope.tabMenu[0].visible = reportService.tabs.map;
        $scope.tabMenu[1].visible = reportService.tabs.vms;
-       if (reportService.tabs.map === true){
-           $scope.selectTab('MAP');
-       } else {
-           $scope.selectTab('VMS');
+       if (reportService.tabs[$scope.selectedTab.toLowerCase()] === false ){
+           var newTab = 'MAP';
+           if ($scope.selectedTab === 'MAP'){
+               newTab = 'VMS';
+           }
+           $scope.selectedTab(newTab);
        }
+       
+//       if (reportService.tabs.map === true){
+//           $scope.selectTab('MAP');
+//       } else {
+//           $scope.selectTab('VMS');
+//       }
    });
    
    $scope.$on('mapAction', function(){

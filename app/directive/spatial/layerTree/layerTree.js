@@ -115,21 +115,32 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			    }
 			    
 			    tip = locale.getString(data.node.data.labelTip);
-			    $('<span class="fa fa-tag fancytree-clickable" title="'+tip+'"></span>' )
+			    var cls = 'fa fa-tag fancytree-clickable';
+			    
+			    var empty = false;
+			    if ((data.node.data.type === 'vmspos' && mapService.labelVisibility.positions.length === 0) || (data.node.data.type === 'vmsseg' && mapService.labelVisibility.segments.length === 0)){
+			        tip = locale.getString('spatial.layer_tree_empty_popup_label_visibility_settings');
+			        empty = true;
+			        cls += ' label-disabled';
+			    }
+			    
+			    $('<span class="' + cls + '" title="'+tip+'"></span>')
 			        .appendTo($title)
 			        .on('click', function(event){
 			            var layer = data.node.data.mapLayer;
 			            var node = $.ui.fancytree.getNode( event.target ),
-			                $target = $(event.target),
-			                active = $target.hasClass('label-selected-' + data.node.data.type);
-			            
-			            if (layer.get('visible') === true){
-			                if (!active){
-	                            $target.addClass( 'label-selected-' + data.node.data.type);
-	                            mapService.activateVectorLabels(node.data.type);
-	                        } else {
-	                            $target.removeClass( 'label-selected-'  + data.node.data.type );
-	                            mapService.deactivateVectorLabels(node.data.type);
+			                $target = $(event.target);
+			                
+			            if (!empty){
+			                var active = $target.hasClass('label-selected-' + data.node.data.type);
+			                if (layer.get('visible') === true){
+	                            if (!active){
+	                                $target.addClass( 'label-selected-' + data.node.data.type);
+	                                mapService.activateVectorLabels(node.data.type);
+	                            } else {
+	                                $target.removeClass( 'label-selected-'  + data.node.data.type );
+	                                mapService.deactivateVectorLabels(node.data.type);
+	                            }
 	                        }
 			            }
 			        });
@@ -146,23 +157,33 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				}
 
 				tip = locale.getString(data.node.data.popupTip);
-				$( '<span class="fa fa-info fancytree-clickable" title="'+tip+'"></span>' )
+				var cls = 'fa fa-info fancytree-clickable';
+                
+                var empty = false;
+                if ((data.node.data.type === 'vmspos' && mapService.popupVisibility.positions.length === 0) || (data.node.data.type === 'vmsseg' && mapService.popupVisibility.segments.length === 0)){
+                    tip = locale.getString('spatial.layer_tree_empty_popup_label_visibility_settings');
+                    empty = true;
+                    cls += ' info-disabled';
+                }
+                
+				$( '<span class="' + cls + '" title="'+tip+'"></span>' )
 					.appendTo( $title )
 					.on( 'click', function(event){
-						var node,
-								$target = $( event.target ),
-								active = $target.hasClass( 'info-selected' );
+						var node, $target = $( event.target );
+								
+						if (!empty){
+						    var active = $target.hasClass( 'info-selected' );
+						    if (data.node.isSelected() === true){
+	                            $('.info-selected').removeClass( 'info-selected' );
 
-						if (data.node.isSelected() === true){
-						    $('.info-selected').removeClass( 'info-selected' );
-
-	                        if ( !active ) {
-	                            node = $.ui.fancytree.getNode( event.target );
-	                            $target.addClass( 'info-selected' );
-	                            mapService.activeLayerType = node.data.type;
-	                        } else {
-	                            mapService.closePopup();
-	                            mapService.activeLayerType = undefined;
+	                            if ( !active ) {
+	                                node = $.ui.fancytree.getNode( event.target );
+	                                $target.addClass( 'info-selected' );
+	                                mapService.activeLayerType = node.data.type;
+	                            } else {
+	                                mapService.closePopup();
+	                                mapService.activeLayerType = undefined;
+	                            }
 	                        }
 						}
 					});

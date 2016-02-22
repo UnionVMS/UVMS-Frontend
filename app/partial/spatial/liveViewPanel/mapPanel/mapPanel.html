@@ -191,9 +191,9 @@
 			                        </div>
 			                    </div>
 			                    <div class="form-group col-md-6 measure-content btn-measure-group pull-right">
-			                        <button type="button" class="pull-right btn" ng-class="{'btn-primary': mapFish.jobStatusData.status !== 'running', 'btn-warning': mapFish.jobStatusData.status === 'running'}" ng-click="printMapWithMapFish(mapFish.printJobData.ref)" ng-switch="mapFish.jobStatusData.status">
-			                            <span class="fa" ng-class="{'fa-download': mapFish.jobStatusData.status !== 'running', 'fa-refresh fa-spin': mapFish.jobStatusData.status === 'running'}"></span>&nbsp;
-			                            <span ng-switch-when="running">
+			                        <button type="button" class="pull-right btn" ng-class="{'btn-primary': !isRequestingImage, 'btn-warning': isRequestingImage}" ng-click="printMapWithMapFish(mapFish.printJobData.ref)" ng-switch="isRequestingImage">
+			                            <span class="fa" ng-class="{'fa-download': !isRequestingImage, 'fa-refresh fa-spin': isRequestingImage}"></span>&nbsp;
+			                            <span ng-switch-when="true">
 			                            	{{'spatial.mapfish_tip_printing' | i18n }}
 			                            </span>
 			                            <span ng-switch-default>
@@ -209,14 +209,6 @@
 					        <span ng-show="mapFish.jobStatusData.status === 'error'" class="alert-message">
 		                        <span>{{'spatial.mapfish_error' | i18n }}
 		                           {{mapFish.jobStatusData.error}}
-		                        </span>
-					        </span>
-		                </div>
-		                <div class="mapfish-error alert alert-success" role="alert" ng-show="mapFish.jobStatusData.status === 'cancelled'">
-		                    <span class="fa fa-exclamation-circle" aria-hidden="true"/>
-					        <span ng-show="mapFish.jobStatusData.status === 'cancelled'" class="alert-message">
-		                        <span>{{'spatial.mapfish_cancelled' | i18n }}
-		                         {{mapFish.printJobData.ref}}
 		                        </span>
 					        </span>
 		                </div>
