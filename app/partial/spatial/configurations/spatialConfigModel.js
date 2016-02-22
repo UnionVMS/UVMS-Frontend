@@ -128,16 +128,22 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     		    		var visibilities = {};
     		    		visibilities.values = [];
     		    		visibilities.order = [];
+    		    		var visibilityCurrentSettings = config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
+    		    		var visibilityCurrentAttrs = config.visibilitySettings[visibType + contentType + 'Attrs'];
     		    		var content;
-    		    		for(var i = 0; i < config.visibilitySettings[visibType + contentType + 'Attrs'].length; i++){
-    	    	    		visibilities.order.push(config.visibilitySettings[visibType + contentType + 'Attrs'][i].value);
+    		    		
+    		    		for(var i = 0; i < visibilityCurrentAttrs.length; i++){
+    	    	    		visibilities.order.push(visibilityCurrentAttrs[i].value);
     		    		}
-    		    		for(var j = 0; i < visibilities.order.length; j++){
-    	    				if(config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()].values.indexOf(visibilities.order[j]) !== -1){
-    	    					visibilities.values.push(visibilities.order[j]);
-    	    				}
+    		    		
+    		    		if(angular.isDefined(visibilityCurrentSettings.values)){
+	    		    		for(var j = 0; j < visibilities.order.length; j++){
+	    	    				if(visibilityCurrentSettings.values.indexOf(visibilities.order[j]) !== -1){
+	    	    					visibilities.values.push(visibilities.order[j]);
+	    	    				}
+	    		    		}
+	    		    		angular.copy(visibilities,visibilityCurrentSettings);
     		    		}
-    		    		angular.copy(visibilities,config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()]);
     	    		}
     	    		delete config.visibilitySettings[visibType + contentType + 'Attrs'];
     		    });

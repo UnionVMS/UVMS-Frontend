@@ -170,17 +170,22 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		    		var visibilities = {};
 		    		visibilities.values = [];
 		    		visibilities.order = [];
+		    		var visibilityCurrentSettings = config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
+		    		var visibilityCurrentAttrs = config.visibilitySettings[visibType + contentType + 'Attrs'];
 		    		var content;
-		    		for(var i = 0; i < config.visibilitySettings[visibType + contentType + 'Attrs'].length; i++){
-	    	    		visibilities.order.push(config.visibilitySettings[visibType + contentType + 'Attrs'][i].value);
+		    		for(var i = 0; i < visibilityCurrentAttrs.length; i++){
+	    	    		visibilities.order.push(visibilityCurrentAttrs[i].value);
 	    	    		
 		    		}
-		    		for(var j = 0; j < visibilities.order.length; j++){
-	    				if(config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()].values.indexOf(visibilities.order[j]) !== -1){
-	    					visibilities.values.push(visibilities.order[j]);
-	    				}
+		    		
+		    		if(angular.isDefined(visibilityCurrentSettings.values)){
+			    		for(var j = 0; j < visibilities.order.length; j++){
+		    				if(visibilityCurrentSettings.values.indexOf(visibilities.order[j]) !== -1){
+		    					visibilities.values.push(visibilities.order[j]);
+		    				}
+			    		}
+			    		angular.copy(visibilities,visibilityCurrentSettings);
 		    		}
-		    		angular.copy(visibilities,config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()]);
 	    		}
 	    		delete config.visibilitySettings[visibType + contentType + 'Attrs'];
 		    });
@@ -191,11 +196,14 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
     		angular.forEach(visibilityTypes, function(visibType) {
     			if(config.visibilitySettings[visibType + 's']){
     				for(var i = 0;i<contentTypes.length;i++){
-    					if(config.visibilitySettings[visibType + 's'][contentTypes[i].toLowerCase() === 'label' ? contentTypes[i].toLowerCase() + 's' : contentTypes[i].toLowerCase()] &&
-    					((config.visibilitySettings[visibType + 's'][contentTypes[i].toLowerCase() === 'label' ? contentTypes[i].toLowerCase() + 's' : contentTypes[i].toLowerCase()].values &&
-    					!_.isEqual($scope.sortArray(config.visibilitySettings[visibType + 's'][contentTypes[i].toLowerCase() === 'label' ? contentTypes[i].toLowerCase() + 's' : contentTypes[i].toLowerCase()].values), $scope.configCopy.visibilitySettings[visibType + 's'][contentTypes[i].toLowerCase() === 'label' ? contentTypes[i].toLowerCase() + 's' : contentTypes[i].toLowerCase()].values)) ||
-    					(config.visibilitySettings[visibType + 's'][contentTypes[i].toLowerCase() === 'label' ? contentTypes[i].toLowerCase() + 's' : contentTypes[i].toLowerCase()].order &&
-    					!_.isEqual($scope.sortArray(config.visibilitySettings[visibType + 's'][contentTypes[i].toLowerCase() === 'label' ? contentTypes[i].toLowerCase() + 's' : contentTypes[i].toLowerCase()].values), $scope.configCopy.visibilitySettings[visibType + 's'][contentTypes[i].toLowerCase() === 'label' ? contentTypes[i].toLowerCase() + 's' : contentTypes[i].toLowerCase()].order)))){
+    					var visibilityCurrentSettings = config.visibilitySettings[visibType + 's'][contentTypes[i].toLowerCase() === 'label' ? contentTypes[i].toLowerCase() + 's' : contentTypes[i].toLowerCase()];
+    					var visibilityCopySettings = $scope.configCopy.visibilitySettings[visibType + 's'][contentTypes[i].toLowerCase() === 'label' ? contentTypes[i].toLowerCase() + 's' : contentTypes[i].toLowerCase()];
+    					
+    					if(visibilityCurrentSettings &&
+    					((visibilityCurrentSettings.values &&
+    					!_.isEqual(visibilityCurrentSettings.values ? $scope.sortArray(visibilityCurrentSettings.values) : undefined, visibilityCopySettings.values)) ||
+    					(visibilityCurrentSettings.order &&
+    					!_.isEqual(visibilityCurrentSettings.values ? $scope.sortArray(visibilityCurrentSettings.values) : undefined, visibilityCopySettings.order)))){
     						include = true;
     					}
     				}
