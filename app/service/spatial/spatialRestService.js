@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource) {
+angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$http) {
     return {
         getAreaLayers: function(){
             return $resource('/spatial/rest/arealayers', {}, {
@@ -85,22 +85,43 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource) 
         createBookmark: function(){
         	return $resource('/spatial/rest/bookmark/', {}, {
         		  'create': {
-                      method: 'POST'
-                  },
-                  headers: {
-	                   'Content-Type': 'application/json'
-	               }
+                      method: 'POST',
+                      headers: {
+	   	                   'Content-Type': 'application/json'
+	   	              }
+                  }
               });  
         },
         deleteBookmark: function(){
         	return $resource('/spatial/rest/bookmark/:id', {}, {
         		  'delete': {
-                      method: 'DELETE'
-                  },
-                  headers: {
-	                   'Content-Type': 'application/json'
-	               }
+                      method: 'DELETE',
+                      headers: {
+	   	                   'Content-Type': 'application/json'
+	   	              }  
+                  }
               });  
+        },
+        uploadFile: function(){
+        	return $resource('/spatial/rest/files/upload', {}, {
+        		  'create': {
+                      method: 'POST',
+                      transformRequest: function formDataObject(data) {
+                    	  var fd = new FormData();
+                    	  fd.append('uploadedFile', data.uploadedFile);
+                    	  fd.append('crs', data.crs);
+                    	  fd.append('areaType', data.areaType);
+                    	   
+                    	  return fd;
+                    	   
+                	  },
+                	  headers: {
+			        	 enctype: "multipart/form-data",
+			        	 'Content-Type': undefined,
+			          }
+                  }
+              });  
+        	
         }
     };
 })
@@ -241,8 +262,17 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource) 
                 deferred.reject(error.data);
             });
             return deferred.promise;
+        },
+        uploadFile: function(file){
+        	var deferred = $q.defer();
+        	spatialRestFactory.uploadFile().create(file, function(response){
+                deferred.resolve(response);
+            }, function(error){
+                deferred.reject(error);
+            });
+            return deferred.promise;
         }
 	};
-
+	
 	return spatialRestService;
 });

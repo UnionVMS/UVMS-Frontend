@@ -563,7 +563,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 access: ACCESS.PUBLIC
             }
         });
-
+    
 });
 
 unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, userService, locale, httpPendingRequestsService) {

@@ -231,8 +231,11 @@ div.td:extend(td all) {}
 	}
 	.innerErrorMessages,
 	.innerErrorMessagesLabelTimer,
+	.innerErrorMessagesCombobox,
+	.innerErrorMessagesFileUpload,
 	.geoServerUrlInnerErrorMessages {
 		position: absolute;
+		z-index: 10;
     }
     .innerErrorMessages {
     	right: 3px;
@@ -242,6 +245,14 @@ div.td:extend(td all) {}
     	right: 50px;
     	top: 20px;
     }
+    .innerErrorMessagesCombobox {
+    	right: 40px;
+	    top: 0;
+	}
+	.innerErrorMessagesFileUpload {
+		right: 55px;
+	    top: 0;
+	}
     .geoServerUrlInnerErrorMessages {
     	right: 25px;
     	top: 0;
