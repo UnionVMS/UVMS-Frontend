@@ -4,6 +4,8 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         return userService.isAllowed(feature, 'Union-VMS', true);
     };
 
+    $scope.existingValues = {};
+
     //Keep track of visibility statuses
     $scope.isVisible = {
         showCompleteVesselHistoryLink : false,
@@ -160,7 +162,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             $scope.waitingForCreateResponse = true;
             alertService.hideMessage();
             vesselRestService.createNewVessel($scope.vesselObj)
-                .then(createVesselSuccess, createVesselError);
+                .then(createVesselSuccess, createVesselError($scope.vesselObj));
         }else{
             alertService.showErrorMessage(locale.getString('vessel.add_new_alert_message_on_form_validation_error'));
         }
@@ -168,6 +170,11 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
     //Success creating the new vessel
     var createVesselSuccess = function(createdVessel){
+        // Reset existing values
+        $scope.existingValues.cfr = undefined;
+        $scope.existingValues.imo = undefined;
+        $scope.existingValues.mmsi = undefined;
+
         $scope.waitingForCreateResponse = false;
         alertService.showSuccessMessageWithTimeout(locale.getString('vessel.add_new_alert_message_on_success'));
         $scope.vesselObj = createdVessel;
@@ -177,9 +184,28 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     };
 
     //Error creating the new vessel
-    var createVesselError = function(error){
-        $scope.waitingForCreateResponse = false;
-        alertService.showErrorMessage(locale.getString('vessel.add_new_alert_message_on_error'));
+    var createVesselError = function(vesselObj) {
+        // Attempted to create values
+        if (vesselObj !== undefined) {
+            var cfr = vesselObj.cfr;
+            var imo = vesselObj.imo;
+            var mmsi = vesselObj.mmsiNo;
+        }
+
+        return function(error) {
+            $scope.waitingForCreateResponse = false;
+            alertService.showErrorMessage(locale.getString('vessel.add_new_alert_message_on_error'));
+
+            // Set existing values on scope
+            $scope.existingValues.cfr = error.match(/An asset with this CFR value already exists\./) ? cfr : undefined;
+            $scope.existingValues.imo = error.match(/An asset with this IMO value already exists\./) ? imo : undefined;
+            $scope.existingValues.mmsi = error.match(/An asset with this MMSI value already exists\./) ? mmsi : undefined;
+
+            // Update validity, because model did not change here.
+            $scope.vesselForm.cfr.$setValidity('unique', $scope.existingValues.cfr === undefined);
+            $scope.vesselForm.imo.$setValidity('unique', $scope.existingValues.imo === undefined);
+            $scope.vesselForm.mmsi.$setValidity('unique', $scope.existingValues.mmsi === undefined);
+        }
     };
 
     //Clear the form

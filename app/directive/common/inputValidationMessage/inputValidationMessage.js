@@ -41,7 +41,8 @@ angular.module('unionvmsWeb').controller('inputValidationMessageCtrl',function($
         'numeric' : locale.getString('common.validation_invalid_numeric'),
         'latitude': locale.getString('movement.validation_invalid_latitude'),
         'longitude': locale.getString('movement.validation_invalid_longitude'),
-        'email': locale.getString('common.validation_invalid_email')
+        'email': locale.getString('common.validation_invalid_email'),
+        'unique': locale.getString('common.validation_not_unique')
     };
 
     //Get validation error message

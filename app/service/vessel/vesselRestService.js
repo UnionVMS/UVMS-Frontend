@@ -116,7 +116,7 @@ angular.module('unionvmsWeb')
         var deferred = $q.defer();
         vesselRestFactory.vessel().save(vessel.DTO(), function(response) {
             if(response.code !== 200){
-                deferred.reject("Invalid response status");
+                deferred.reject(response.data);
                 return;
             }
             deferred.resolve(Vessel.fromJson(response.data));
