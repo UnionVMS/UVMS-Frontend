@@ -11,6 +11,7 @@ angular.module('unionvmsWeb').factory('UserArea',function() {
         geometry: undefined,
         coordsArray: [],
         coordsProj: undefined,
+        datasetName: undefined,
         reset: function(){
             reset();
         },
@@ -28,6 +29,7 @@ angular.module('unionvmsWeb').factory('UserArea',function() {
             this.subType = data.subType;
             this.startDate = data.startDate !== '' ? data.startDate : undefined;
             this.endDate = data.endDate !== '' ? data.endDate : undefined;
+            this.datasetName = data.datasetName;
         }
         
     };
@@ -41,6 +43,7 @@ angular.module('unionvmsWeb').factory('UserArea',function() {
         UserArea.endDate = undefined;
         UserArea.scopeSelection = [];
         UserArea.resetGeometry();
+        UserArea.datasetName = undefined;
     };
     
     var resetGeometry = function(){

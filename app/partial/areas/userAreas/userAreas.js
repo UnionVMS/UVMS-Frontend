@@ -12,6 +12,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     $scope.userAreaTransp = 0;
     $scope.userAreaType = "";
     $scope.btnAddArea = true;
+    $scope.currentContext = undefined;
     
     $scope.init = function(){
         $scope.coordVisible = false;
@@ -20,6 +21,8 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.userArea = UserArea;
         $scope.userArea.reset();
         $scope.displayedCoords = [].concat($scope.userArea.coordsArray);
+
+        $scope.currentContext = userService.getCurrentContext();
        
         var availableUserContexts = userService.getContexts();
         $scope.userScopes = [];
@@ -198,6 +201,8 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
             }*/
             $scope.isUpdate = true;
         }, function(error){
+            console.log(error);
+            $scope.alert.removeLoading();
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_geojson');
             $scope.alert.hideAlert();
@@ -345,6 +350,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         feature.set('startDate', unitConversionService.date.convertDate($scope.userArea.startDate, 'to_server'));
         feature.set('endDate', unitConversionService.date.convertDate($scope.userArea.endDate, 'to_server'));
         feature.set('scopeSelection', $scope.userArea.scopeSelection);
+        feature.set('datasetName', $scope.userArea.datasetName);
         
         if (angular.isDefined($scope.userArea.id)){
             feature.set('id', $scope.userArea.id.toString());
@@ -526,27 +532,17 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
             var feature = $scope.buildGeoJSON();
             if (mode === 'create'){
                 $scope.alert.setLoading(locale.getString('areas.saving_new_area'));
-                areaRestService.createUserArea(angular.toJson(feature)).then(createSuccess, createError);
+                areaRestService.createUserArea(angular.toJson(feature)).then(function(response) {
+                    createSuccess(response, 'areas.create_user_area_success');
+                }, function(error) {
+                    createError(error, 'areas.crud_user_area_error');
+                });
             } else {
                 $scope.alert.setLoading(locale.getString('areas.updating_area'));
-                areaRestService.updateUserArea(angular.toJson(feature)).then(function(response){
-                    $scope.alert.removeLoading();
-                    $scope.alert.setSuccess();
-                    $scope.alert.alertMessage = locale.getString('areas.update_user_area_success');
-                    $scope.alert.hideAlert();
-                    
-                    //clear vector data
-                    $scope.resetFeature();
-                    
-                    //reload wms and table
-                    areaMapService.clearParams('USERAREA');
-                    $scope.getUserAreasList();
-                    $scope.setEditingType('list');
-                    $scope.activeTool = undefined;
-                }, function(error){
-                    $scope.alert.setError();
-                    $scope.alert.alertMessage = locale.getString('areas.error_saving_user_area');
-                    $scope.alert.hideAlert();
+                areaRestService.updateUserArea(angular.toJson(feature)).then(function(response) {
+                    createSuccess(response, 'areas.update_user_area_success');
+                }, createSuccess, function(error) {
+                    createError(error, 'areas.error_saving_user_area');
                 });
             }
             
@@ -577,10 +573,10 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     };
     
     //CALLBACK FUNCTIONS
-    var createSuccess = function(response){
+    var createSuccess = function(response, successMsg){      
         $scope.alert.removeLoading();
         $scope.alert.setSuccess();
-        $scope.alert.alertMessage = locale.getString('areas.create_user_area_success');
+        $scope.alert.alertMessage = locale.getString(successMsg);
         $scope.alert.hideAlert();
         
         //clear vector data
@@ -593,14 +589,40 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.activeTool = undefined;
     };
     
-    var createError = function(error){
+    var createError = function(error, defaultMsg){
         console.log(error);
         $scope.alert.removeLoading();
         $scope.alert.setError();
-        $scope.alert.alertMessage = locale.getString('areas.crud_user_area_error');
+
+        if (angular.isDefined(error.data.msg)) {
+            $scope.alert.alertMessage = locale.getString('areas.' + error.data.msg);    
+        } else {
+            $scope.alert.alertMessage = locale.getString(defaultMsg);
+        }
+        
         $scope.alert.hideAlert();
         
         $scope.userAreaSubmitted = false;
+    };
+
+    $scope.isUserAllowed = function(requiredFeature) {
+        var isAllowed = false;
+
+        if (angular.isDefined($scope.currentContext.role.features)) {
+            features = $scope.currentContext.role.features.slice(0);
+            var discoveredFeature = features.find(function(feature){return feature.featureName === requiredFeature});
+
+           if (angular.isDefined(discoveredFeature)) {
+               isAllowed = true;
+           }
+          //  var discoveredFeature = features.find(function(feature){return feature === requiredFeature});
+
+           // if (angular.isDefined(discoveredFeature) {
+            //    isAllowed = true;
+           // }
+        }
+
+        return isAllowed;
     };
     
 });

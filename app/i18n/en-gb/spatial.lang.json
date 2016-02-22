@@ -301,7 +301,7 @@
 	"user_preferences_error_getting_configs": "There was an error while getting your preferences. Please try again.",
 	"user_preferences_warning_saving": "You have not made any changes to your preferences.",
 	"invalid_data_saving": "There are invalid fields in your configurations. Please check them and try again.",
-	
+
 	"required_error_message": "There are empty required fields",
 	"required_field_error_message": "This field is required",
 	"invalid_color_error_message": "Invalid color",

@@ -37,6 +37,7 @@
 	"user_area_valid_to": "To",
 	"user_area_type": "Type",
 	"user_area_scope_selection": "Scope selection",
+	"user_area_dataset_name": "Dataset name",
 	
 	"modal_geom_mismatch": "The area geometry in the map does not match with the geometry in the coordinates form. Please decide which geometry to use or fix the issue manually.",
 	"modal_save_map_geom": "Use geometry from map",
@@ -85,9 +86,10 @@
 	"error_getting_userarea_types": "There was an error while getting your user areas types list.",
 	"error_coords_form": "There are errors in your coordinate definitions. Please check your data.",
 	"error_empty_geom": "There is no geometry in the map. You must press the apply button in the coordinates form.",
+	"user_area_dataset_creation_not_allowed": "Dataset creation is not allowed for your user profile",
 	
 	"table_no_data": "No data available",
 	"table_delete_area_btn": "Delete area",
 	"table_edit_area_btn": "Edit area",
-	"table_zoom_to_area_btn": "Zoom to area" 
+	"table_zoom_to_area_btn": "Zoom to area"
 }
