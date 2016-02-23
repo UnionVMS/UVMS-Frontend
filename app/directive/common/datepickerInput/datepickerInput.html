@@ -1,6 +1,6 @@
 <div>
 <p class="input-group nomargin datepicker">
-    <input type="text" class="form-control datetimeinput" ng-model="model" ng-model-options="{allowInvalid: true, updateOn: blur}" placeholder="{{placeholder}}" ng-disabled="ngDisabled" ng-required="ngRequired" date-picker-formatter date-picker-input-min-date date-picker-input-max-date ng-change="onChange()"/>
+    <input type="text" class="form-control datetimeinput" ng-model="model" ng-model-options="{allowInvalid: true, updateOn: 'blur'}" placeholder="{{placeholder}}" ng-disabled="ngDisabled" ng-required="ngRequired" date-picker-formatter date-picker-input-min-date date-picker-input-max-date ng-change="onChange()"/>
 
     <span class="input-group-btn">
         <button type="button" class="btn btn-default btn-cal" ng-click="open()" ng-disabled="ngDisabled">
