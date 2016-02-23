@@ -17,7 +17,7 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
 		},
         templateUrl: 'directive/common/combobox/combobox.html',
 		link: function(scope, element, attrs, ctrl) {
-
+			scope.comboboxServ = comboboxService;
 			scope.element = element;
 			scope.initialitem = true;
             if('noPlaceholderItem' in attrs){
@@ -31,7 +31,7 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             }
             
             if(scope.editable){
-            	scope.editableMode = false;
+            	scope.placeholder = attrs.initialtext;
             	scope.newItem = {text : ""};
             }
             
@@ -182,6 +182,14 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                 		arr.push(getItemCode(item));
                 		scope.ngModel = arr;
                 	}
+                }else if(scope.editable){
+                	if(angular.isDefined(item.code)){
+                		scope.newItem.text = item.text;
+                	}else{
+                		scope.newItem.text = '';
+                	}
+                	scope.ngModel = scope.newItem.text;
+                	ctrl.$setViewValue(scope.ngModel);
             	}else{
 	                scope.ngModel = getItemCode(item);
 	                scope.currentItemLabel = scope.getItemLabel(item);
@@ -234,15 +242,6 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             		return;
             	}
             	
-            	if(scope.editable && scope.editableMode && evt){
-            		setTimeout(function() {
-            			scope.element.find('.combo-editable-input')[0].focus();
-            		});
-            		scope.isOpen = true;
-            		comboboxService.setActiveCombo(scope);
-            		return;
-            	}
-            	
             	scope.isOpen = !scope.isOpen;
             	if(scope.isOpen){
             		comboboxService.setActiveCombo(scope);
@@ -255,25 +254,6 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             	scope.loadedItems = [{'code': 'solid', 'text': '5,0'},{'code': 'dashed', 'text': "10,5"},{'code': 'dotted', 'text': "5,5"},{'code': 'dotdashed', 'text': "5,5,10,5"}];
             }
             
-            scope.addNewItem = function(){
-            	if(scope.editableMode && scope.newItem.text){
-            		var itemExists = false;
-	            	for(var i = 0; i < scope.loadedItems.length; i++) {
-	            		if(scope.loadedItems[i].text === scope.newItem.text){
-	            			itemExists = true;
-	            			break;
-	            		}
-	            	}
-	            	
-	            	if(!itemExists){
-	            		scope.loadedItems.push({'code': scope.newItem.text, 'text': scope.newItem.text});
-	            	}
-            	}
-            	
-            	scope.newItem.text = "";
-            	scope.editableMode = !scope.editableMode;
-            };
-            
             scope.removeSelectedItem = function(code){
             	scope.ngModel.splice(scope.ngModel.indexOf(code),1);
             	var arr = [];
@@ -285,13 +265,11 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             	scope.ngModel = [];
             };
             
-            scope.setEditableMode = function(bool,evt){
-            	if(scope.editable){
-            		if(evt && evt.target && evt.target.className.indexOf('btn-add-item') !== -1){
-                		return;
-                	}
-            		scope.editableMode = bool;
-            	}
+            scope.onComboChange = function(){
+            	scope.isOpen = true;
+        		comboboxService.setActiveCombo(scope);
+            	scope.ngModel = scope.newItem.text;
+            	ctrl.$setViewValue(scope.ngModel);
             };
             
             var init = function(){

@@ -317,16 +317,12 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         areaRestService.getUserAreaTypes().then(function(response){
             $scope.areaTypes = [];
             for (var i = 0; i < response.length; i++){
-
                 $scope.areaTypes.push({
                 	"code": i,
                     "text": response[i]
                 });
             }
-            
-
         }, function(error){
-
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.error_getting_userarea_types');
             $scope.alert.hideAlert();
