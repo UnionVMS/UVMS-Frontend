@@ -242,7 +242,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 					if ( !value.data ) { return ( true ); }
 
 					layersByTitle = mapLayers.filter( function( layer ){
-					    return layer.get( 'title' ) === value.data.title;
+					    return layer.get( 'title' ) === value.data.title && layer.get('isBaseLayer') === value.data.isBaseLayer;
 					});
 
 					layer = layersByTitle[ 0 ];

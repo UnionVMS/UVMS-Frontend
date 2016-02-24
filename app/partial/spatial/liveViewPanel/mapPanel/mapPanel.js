@@ -331,6 +331,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         $scope.measureConfigs.units = 'm';
         $scope.measureConfigs.speed = undefined;
         $scope.measureConfigs.startDate = undefined;
+        $scope.measureConfigs.disabled = false;
     };
 
     //Print control
