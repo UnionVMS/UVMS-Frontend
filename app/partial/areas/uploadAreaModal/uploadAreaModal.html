@@ -25,10 +25,10 @@
 		    	</div>
 		    	<div class="col-md-2"></div>
 	    		<div class="col-md-5">
-		    		<div class="form-group" ng-show="projections.length > 0">
+		    		<div class="form-group" ng-show="projections.items.length > 0">
 		    			<label class="col-md-5 control-label area-modal-label">{{'areas.editing_projection_label' | i18n}}</label>
 		    			<div class="col-md-7 no-padding">
-		    				<combobox ng-model="selProjection" items="projections"></combobox>
+		    				<combobox ng-model="selProjection" items="projections.items"></combobox>
 		    			</div>
 		    		</div>
 		    	</div>
@@ -97,8 +97,8 @@
     <div class="modal-footer">
         <div class="row">
         	<div class="col-md-12">
-        		<button class="btn btn-primary" type="button" ng-click="upload()" ng-class="{'disabled': !fileCommitted && fileReadingSuccess}">{{'areas.area_upload_modal_upload_btn' | i18n}}</button>
-        		<button class="btn btn-default" type="button" ng-click="cancel()">{{'common.cancel' | i18n}}</button>
+        		<button class="btn btn-primary" type="button" ng-click="upload()" ng-class="{'disabled': (!fileCommitted && fileReadingSuccess) || isMulti}">{{'areas.area_upload_modal_upload_btn' | i18n}}</button>
+        		<button class="btn btn-default" type="button" ng-click="cancel()" ng-class="{'disabled': isMulti}">{{'common.cancel' | i18n}}</button>
         	</div>
         </div>
     </div>

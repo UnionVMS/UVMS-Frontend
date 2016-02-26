@@ -18,13 +18,13 @@
 				</div>
 			</div>
 			
-			<div class="proj-container col-md-12 form-group form-inline" ng-show="srcProjections.length > 0">
+			<div class="proj-container col-md-12 form-group form-inline" ng-show="projections.items.length > 0">
 				<div class="row">
 					<div class="col-md-3 proj-label">
 						<label for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
 					</div>
 					<div class="col-md-9 proj-combo" ng-class="{'has-error': (SysareasForm.editingProjection.$dirty || saved) && SysareasForm.editingProjection.$invalid}">
-						<combobox ng-model="selectedProj" items="projections" name="editingProjection" initialtext="{{'areas.editing_projection_label' | i18n}}" ng-required="true"></combobox>
+						<combobox ng-model="selectedProj" items="projections.items" name="editingProjection" initialtext="{{'areas.editing_projection_label' | i18n}}" ng-required="true"></combobox>
 					</div>
 					<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.editingProjection.$error" ng-show="(SysareasForm.editingProjection.$dirty || saved) && SysareasForm.editingProjection.$invalid">
 						<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>

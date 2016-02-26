@@ -61,9 +61,9 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale) {
 	    }
 	    
 	    //CQL FILTERS
-	    if (src.title === 'Ports'){
-	        src.cql = "fishing_port = 'Y' OR landing_place = 'Y'";
-	    }
+//	    if (src.title === 'Ports'){
+//	        src.cql = "fishing_port = 'Y' OR landing_place = 'Y'";
+//	    }
 	    
 	    if (!angular.isDefined(src.cql)){
 	        src.cql = null;

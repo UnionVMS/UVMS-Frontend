@@ -1,10 +1,11 @@
-angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,spatialRestService,areaMapService,locale){
+angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,projectionService,spatialRestService,areaMapService,locale){
 
 	$scope.map = areaMapService.map;
 	$scope.systemItems = [];
 	$scope.sysAreaType = "";
 	$scope.selectedProj = "";
 	$scope.isSaving = false;
+	$scope.projections = projectionService;
     
 	$scope.fileNameChanged = function(elem){
 		$scope.filepath = elem.value;
@@ -28,12 +29,14 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,spati
         $scope.saved = true;
         $scope.isSaving = true;
         if ($scope.SysareasForm.$valid && $scope.validFile){
-        	var projCode;
-        	angular.forEach($scope.srcProjections, function(item) {
-        		if(item.id === $scope.selectedProj){
-        			projCode = item.epsgCode;
-        		}
-        	});
+//        	var projCode;
+//        	angular.forEach($scope.srcProjections, function(item) {
+//        		if(item.id === $scope.selectedProj){
+//        			projCode = item.epsgCode;
+//        		}
+//        	});
+        	
+            var projCode = $scope.projections.getProjectionEpsgById($scope.selectedProj);
         	if(angular.isDefined(projCode) && $scope.sysAreaType){
         		var objTest = {
         				"uploadedFile": $scope.files[0],
@@ -120,28 +123,11 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,spati
         });
     }
     
-    //COMBOBOX PROJECTION
-    var getProjections = function(){
-        spatialRestService.getSupportedProjections().then(function(response){
-            $scope.srcProjections = response;
-            $scope.projections = [];
-            for (var i = 0; i < $scope.srcProjections.length; i++){
-                $scope.projections.push({
-                    "text": $scope.srcProjections[i].name,
-                    "code": $scope.srcProjections[i].id
-                });
-            }
-
-        }, function(error){
-            $scope.alert.setError();
-            $scope.alert.alertMessage = locale.getString('areas.error_getting_projections');
-            $scope.alert.hideAlert();
-        });
-    };
-    
     $scope.init = function(){
         setSystemItems();
-        getProjections();
+        if ($scope.projections.items.length === 0){
+            $scope.projections.getProjections();
+        }
     };
     
     

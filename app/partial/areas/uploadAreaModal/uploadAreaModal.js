@@ -1,15 +1,16 @@
-angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, $modalInstance, locale, FileUploader, projections, srcProjections, defaultProjection, $timeout){
+angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, $modalInstance, locale, FileUploader, projectionService, srcProjections, defaultProjection, $timeout){
     $scope.hasError = false;
     $scope.hasWarning = false;
     $scope.errorMessage = undefined;
+    $scope.isMulti = false;
     
     $scope.uploader = new FileUploader();
     $scope.reader = new FileReader();
     $scope.srcProjections = srcProjections;
-    $scope.projections = projections;
+    $scope.projections = projectionService;
     $scope.defaultProjection = defaultProjection; //This is an array like [1, 'EPSG:4326']
     
-    if ($scope.projections.length > 0){
+    if ($scope.projections.items.length > 0){
         $scope.selProjection = defaultProjection[0];
     }
     
@@ -154,7 +155,7 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
     
     //WKT Parser
     $scope.parseWKT = function(){
-        var isMulti = false;
+        $scope.isMulti = false;
         if ($scope.fileContent.indexOf('POLYGON') === -1){
             $scope.errorMessage = locale.getString('areas.area_upload_modal_wkt_no_polygon');
             $scope.setError();
@@ -164,21 +165,21 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
         if ($scope.fileContent.indexOf('MULTIPOLYGON') !== -1){
             $scope.errorMessage = locale.getString('areas.area_upload_modal_wkt_no_multipolygon'); 
             $scope.setWarning();
-            isMulti = true;
+            $scope.isMulti = true;
         }
         
-        if (isMulti){
+        if ($scope.isMulti){
             $timeout(function(){
-                return $scope.buildGeometryFromWKT(isMulti);
+                return $scope.buildGeometryFromWKT();
             }, 3000);
         } else {
-            return $scope.buildGeometryFromWKT(isMulti);
+            return $scope.buildGeometryFromWKT();
         }
     };
     
-    $scope.buildGeometryFromWKT = function(isMulti){
+    $scope.buildGeometryFromWKT = function(){
         var geomFormat = new ol.format.WKT();
-        var srcProj = $scope.getEpsgById($scope.selProjection);
+        var srcProj = 'EPSG:' + $scope.projections.getProjectionEpsgById($scope.selProjection);
         
         try {
             var geom = geomFormat.readGeometry($scope.fileContent, {
@@ -186,7 +187,7 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
                 featureProjection: $scope.defaultProjection[1]
             });
             
-            if (isMulti){
+            if ($scope.isMulti){
                 geom = geom.getPolygon(0);
                 $modalInstance.close(geom);
             }
@@ -201,20 +202,11 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
     
     //Check if selected projection differs from that of the map and, if so, warp it
     $scope.checkAndWarpGeometry = function(geom){
-        var sourceProj = $scope.getEpsgById($scope.selProjection);
+        var sourceProj = 'EPSG:' + $scope.projections.getProjectionEpsgById($scope.selProjection);
         if (sourceProj !== $scope.defaultProjection[1]){
             geom.transform(sourceProj, $scope.defaultProjection[1]);
         }
         return geom;
-    };
-    
-    //Geometry and projection functions
-    $scope.getEpsgById = function(id){
-        for (var i = 0; i < $scope.srcProjections.length; i++){
-            if ($scope.srcProjections[i].id === id){
-                return 'EPSG:' + $scope.srcProjections[i].epsgCode; 
-            }
-        }
     };
     
     $scope.cancel = function () {

@@ -87,12 +87,12 @@
 				<div class="form-group text-center">
 					<span class="section-title">{{'areas.coord_tool' | i18n}}</span>
 					
-					<div class="proj-container form-inline" ng-show="srcProjections.length > 0">
+					<div class="proj-container form-inline" ng-show="projections.items.length > 0">
 						<div class="col-md-3 proj-label">
 							<label for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
 						</div>
 						<div class="col-md-9 proj-combo">
-							<combobox ng-model="selectedProj" items="projections" name="editingProjection" ng-change="changeProjection(selectedProj)" ng-init="changeProjection(selectedProj)" ng-if="selectedProj"></combobox>
+							<combobox ng-model="selectedProj" items="projections.items" name="editingProjection" ng-change="changeProjection(selectedProj)" ng-init="changeProjection(selectedProj)" ng-if="selectedProj"></combobox>
 						</div>
 					</div>
 					<div class="table-responsive-force coord-table" st-table="displayedCoords" st-safe-src="userArea.coordsArray" ng-show="coordVisible">

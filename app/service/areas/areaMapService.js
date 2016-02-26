@@ -151,18 +151,55 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
 	            wrapX: false
 	        }),
 	        wrapX: false,
-	        style: new ol.style.Style({
-	            fill: new ol.style.Fill({
-	                color: 'rgba(255, 255, 255, 0.2)'
-	            }),
-	            stroke: new ol.style.Stroke({
-	                color: '#F7580D',
-	                width: 2
-	            })
-	        }) 
+	        style: areaMs.setVectorStyle
 	    });
 	    
 	    areaMs.map.addLayer(layer);
+	};
+	
+	areaMs.setVectorStyle = function(feature, resolution){
+	    var styles = [];
+	    var coords = feature.getGeometry().getCoordinates()[0];
+	    coords.pop();
+	    
+	    var polygonStyle = new ol.style.Style({
+	        fill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.2)'
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#F7580D',
+                width: 2
+            })
+	    });
+	    styles.push(polygonStyle);
+	    
+	    for (var i = 0; i < coords.length; i++){
+	        var pointStyle = new ol.style.Style({
+	            image: new ol.style.Circle({
+	                radius: 8,
+	                fill: new ol.style.Fill({
+	                    color: 'rgba(255, 255, 255, 1)'
+	                }),
+	                stroke: new ol.style.Stroke({
+	                    color: '#F7580D',
+	                    width: 1
+	                })
+	            }),
+	            text: new ol.style.Text({
+	                text: i.toString(),
+	                fill: new ol.style.Fill({
+	                    color: 'rgb(80, 80, 80)'
+	                }),
+	                stroke: new ol.style.Stroke({
+	                    color: 'rgb(80, 80, 80)'
+	                })
+	            }),
+	            geometry: new ol.geom.Point(coords[i])
+	        });
+	        styles.push(pointStyle);
+	    }
+	    
+	    return styles;
 	};
 	
 	areaMs.removeVectorFeatures = function(){

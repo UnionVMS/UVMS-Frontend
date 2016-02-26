@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale, $modal, UserArea, areaMapService, areaRestService, areaAlertService, spatialRestService, unitConversionService, userService){
+angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale, $modal, projectionService, UserArea, areaMapService, areaRestService, areaAlertService, spatialRestService, unitConversionService, userService){
     $scope.activeTool = undefined;
     $scope.selectedProj = undefined;
     $scope.userAreasList = [];
@@ -13,6 +13,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     $scope.userAreaType = "";
     $scope.btnAddArea = true;
     $scope.currentContext = undefined;
+    $scope.projections = projectionService;
     
     $scope.init = function(){
         $scope.coordVisible = false;
@@ -235,70 +236,28 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.setEditingType('edit');
         areaMapService.raiseLayer('drawlayer');
         areaMapService.clearParams('USERAREA');
+        if (!angular.isDefined($scope.selectedProj)){
+            $scope.setMapProjectionOnCombo();
+        }
     }; 
     
     //COMBOBOX PROJECTION
     $scope.getProjections = function(){
-        spatialRestService.getSupportedProjections().then(function(response){
-            $scope.srcProjections = response;
-            $scope.projections = [];
-            for (var i = 0; i < $scope.srcProjections.length; i++){
-                $scope.projections.push({
-                    "text": $scope.srcProjections[i].name,
-                    "code": $scope.srcProjections[i].id
-                });
-            }
-
-            $scope.setMapProjectionOnCombo();
-            
-        }, function(error){
-            $scope.alert.setError();
-            $scope.alert.alertMessage = locale.getString('areas.error_getting_projections');
-            $scope.alert.hideAlert();
-        });
+        if ($scope.projections.items.length === 0){
+            $scope.projections.getProjections();
+        }
     };
     
     //Set map projection as default item on the combobox
     $scope.setMapProjectionOnCombo = function(){
         var mapProj = areaMapService.getMapProjectionCode();
-        for (var i = 0; i < $scope.srcProjections.length; i++){
-            var projCode = 'EPSG:' + $scope.srcProjections[i].epsgCode;
-            if (projCode === mapProj){
-                $scope.selectedProj = $scope.srcProjections[i].id;
-            }
-        }
-    };
-    
-    //Get projection id by EPSG code
-    $scope.getProjectionIdByEpsg = function(epsg){
-        var epsgCode = epsg;
-        if (epsg.indexOf(':') !== -1){
-            epsgCode = epsg.split(':')[1];
-        }
-        
-        if (angular.isDefined($scope.srcProjections)){
-            for (var i = 0; i < $scope.srcProjections.length; i++){
-                if ($scope.srcProjections[i].epsgCode === parseInt(epsgCode)){
-                    return $scope.srcProjections[i].id; 
-                }
-            }
-        }
-    };
-    
-    //Get EPSG code by the id of the selected projection
-    $scope.getProjectionEpsgById = function(id){
-        if (angular.isDefined($scope.srcProjections)){
-            for (var i = 0; i < $scope.srcProjections.length; i++){
-                if ($scope.srcProjections[i].id === id){
-                    return $scope.srcProjections[i].epsgCode; 
-                }
-            }
-        }
+        $scope.selectedProj = $scope.projections.getProjectionIdByEpsg(mapProj); 
     };
     
     //PROJECTION LISTENER
     $scope.changeProjection = function(newVal){
-        var selProj = 'EPSG:' + $scope.getProjectionEpsgById(newVal);
+        $scope.selectedProj = newVal;
+        var selProj = 'EPSG:' + $scope.projections.getProjectionEpsgById(newVal);
         if (newVal !== $scope.lastSelectedProj && selProj !== $scope.userArea.coordsProj && $scope.lastSelectedProj !== undefined){
             $scope.warpCoords(selProj);
         }
@@ -306,7 +265,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     };
     
     $scope.$watch('coordVisible', function(newVal, oldVal){
-        var proj =  'EPSG:' + $scope.getProjectionEpsgById($scope.selectedProj);
+        var proj =  'EPSG:' + $scope.projections.getProjectionEpsgById($scope.selectedProj);
         if (newVal && proj !== $scope.userArea.coordsProj){
             $scope.warpCoords(proj);
         } 
@@ -500,15 +459,12 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
             controller: 'UploadareamodalCtrl',
             size: 'md',
             resolve: {
-                projections: function(){
-                    return $scope.projections;
-                },
                 srcProjections: function(){
                     return $scope.srcProjections;
                 },
                 defaultProjection: function(){
                     var epsg = areaMapService.getMapProjectionCode();
-                    return [$scope.getProjectionIdByEpsg(epsg), epsg];
+                    return [$scope.projections.getProjectionIdByEpsg(epsg), epsg];
                 }
             }
         });
@@ -605,17 +561,12 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         var isAllowed = false;
 
         if (angular.isDefined($scope.currentContext.role.features)) {
-            features = $scope.currentContext.role.features.slice(0);
-            var discoveredFeature = features.find(function(feature){return feature.featureName === requiredFeature});
+            var features = $scope.currentContext.role.features.slice(0);
+            var discoveredFeature = features.find(function(feature){return feature.featureName === requiredFeature;});
 
            if (angular.isDefined(discoveredFeature)) {
                isAllowed = true;
            }
-          //  var discoveredFeature = features.find(function(feature){return feature === requiredFeature});
-
-           // if (angular.isDefined(discoveredFeature) {
-            //    isAllowed = true;
-           // }
         }
 
         return isAllowed;

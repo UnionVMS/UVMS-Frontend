@@ -198,6 +198,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	        ms.popupSegRecContainer.reset();
 	        var records = [];
 	        
+	        //get feature info
 	        if (angular.isDefined(ms.activeLayerType) && ((ms.activeLayerType === 'vmspos' && ms.popupVisibility.positions.length > 0) || (ms.activeLayerType === 'vmsseg' && ms.popupVisibility.segments.length > 0))){
 	            map.forEachFeatureAtPixel(pixel, function(feature, layer){
 	                if (angular.isDefined(ms.activeLayerType)){
