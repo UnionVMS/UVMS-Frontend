@@ -29,13 +29,6 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         $scope.saved = true;
         $scope.isSaving = true;
         if ($scope.SysareasForm.$valid && $scope.validFile){
-//        	var projCode;
-//        	angular.forEach($scope.srcProjections, function(item) {
-//        		if(item.id === $scope.selectedProj){
-//        			projCode = item.epsgCode;
-//        		}
-//        	});
-        	
             var projCode = $scope.projections.getProjectionEpsgById($scope.selectedProj);
         	if(angular.isDefined(projCode) && $scope.sysAreaType){
         		var objTest = {
