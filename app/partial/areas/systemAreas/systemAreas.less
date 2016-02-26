@@ -8,7 +8,7 @@
     	}
 		.input-group[class*="col-"] {
 		    padding-left: 15px;
-		    padding-right: 15px;
+		    padding-right: 35px;
 		}
 		.row {
 			line-height: 30px;
@@ -18,4 +18,26 @@
 	    margin-top: 15px;
 	    padding-right: 0;
 	}
+	.info-qtip {
+	    position: absolute;
+	    top: 0;
+	    right: 15px;
+	    background-color: transparent;
+	    color: #089fd7;
+	    font-size: 16px;
+	    line-height: 30px;
+	    &:hover {
+    		color: #078dbe;
+    	}
+	    &:focus {
+	    	color: #089fd7;
+	    }
+	}
+}
+
+.qtip.info-qtip {
+	font-size: 12.5px;
+	line-height: 12.5px;
+	color: #ffffff;
+    background-color: #089fd7;
 }

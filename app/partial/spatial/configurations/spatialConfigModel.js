@@ -31,20 +31,19 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
             refreshStatus: false,
             refreshRate: undefined
         };
-        
         this.visibilitySettings = {
             positions: {
-                table: [],
-                popup: [],
-                labels: []
+                table: {},
+                popup: {},
+                labels: {}
             },
             segments: {
-                table: [],
-                popup: [],
-                labels: []
+                table: {},
+                popup: {},
+                labels: {}
             },
             tracks: {
-                table: []
+                table: {}
             }
         };
         
@@ -252,7 +251,10 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
                 displayProjectionId: srcConfig.mapSettings.displayProjectionId,
                 coordinatesFormat: srcConfig.mapSettings.coordinatesFormat,
                 scaleBarUnits: srcConfig.mapSettings.scaleBarUnits
-            }
+            },
+            stylesSettings: srcConfig.stylesSettings,
+            visibilitySettings: srcConfig.visibilitySettings,
+            layerSettings: srcConfig.layerSettings
         };
         
         return finalConfig;
@@ -262,12 +264,15 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     SpatialConfig.prototype.forReportConfigFromJson = function(data){
         var config = {
             mapSettings: {
-                spatialConnectId: angular.isDefined(data.spatialConnectId) ? data.spatialConnectId : undefined,
-                mapProjectionId: angular.isDefined(data.mapProjectionId) ? data.mapProjectionId : undefined,
-                displayProjectionId: angular.isDefined(data.displayProjectionId) ? data.displayProjectionId : undefined,
-                coordinatesFormat: angular.isDefined(data.coordinatesFormat) ? data.coordinatesFormat.toLowerCase() : undefined,
-                scaleBarUnits: angular.isDefined(data.scaleBarUnits) ? data.scaleBarUnits.toLowerCase() : undefined
-            }
+                spatialConnectId: angular.isDefined(data.mapConfiguration.spatialConnectId) ? data.mapConfiguration.spatialConnectId : undefined,
+                mapProjectionId: angular.isDefined(data.mapConfiguration.mapProjectionId) ? data.mapConfiguration.mapProjectionId : undefined,
+                displayProjectionId: angular.isDefined(data.mapConfiguration.displayProjectionId) ? data.mapConfiguration.displayProjectionId : undefined,
+                coordinatesFormat: angular.isDefined(data.mapConfiguration.coordinatesFormat) ? data.mapConfiguration.coordinatesFormat.toLowerCase() : undefined,
+                scaleBarUnits: angular.isDefined(data.mapConfiguration.scaleBarUnits) ? data.mapConfiguration.scaleBarUnits.toLowerCase() : undefined
+            },
+            stylesSettings: angular.isDefined(data.stylesSettings) ? data.stylesSettings : undefined,
+            visibilitySettings: angular.isDefined(data.visibilitySettings) ? data.visibilitySettings : undefined,
+            layerSettings: angular.isDefined(data.layerSettings) ? data.layerSettings : undefined
         };
         
         return config;

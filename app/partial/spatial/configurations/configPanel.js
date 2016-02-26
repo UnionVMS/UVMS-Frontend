@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anchorScroll, locale, SpatialConfig, spatialConfigRestService, spatialConfigAlertService, formService){
+angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anchorScroll, locale, SpatialConfig, spatialConfigRestService, spatialConfigAlertService){
     $scope.isUserPreference = true;
 	$scope.isConfigVisible= false;
 	$scope.alert = spatialConfigAlertService;
@@ -58,7 +58,6 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		    $scope.alert.hasError = true;
 		    $scope.alert.alertMessage = locale.getString('spatial.invalid_data_saving');
 		    $scope.alert.hideAlert();
-		    formService.setAllDirty(["configPanelForm"], $scope);
 		    $scope.submitedWithErrors = true;
 		}
 	};

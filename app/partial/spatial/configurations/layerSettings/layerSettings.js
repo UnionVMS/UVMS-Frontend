@@ -191,9 +191,6 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	    		item.serviceLayerId = "" + item.serviceLayerId;
 	    	});
 	    	
-	    	$scope.configCopy.layerSettings = {};
-	        angular.copy($scope.configModel.layerSettings, $scope.configCopy.layerSettings);
-	    	
 	    	$('[dnd-list="selectedSysAreas"]').on('dragleave', function(event) {
 	        	$scope.isUserItemOverSys = false;
 	        });

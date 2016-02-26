@@ -40,13 +40,13 @@
 				        	<div class="td col-md-6">{{ report.name }}</div>
 				            <div class="td col-md-2">{{ report.code }}</div>
 				            <div class="td col-md-4">
-				            	<div class="form-group noBottomPadding" ng-class="{'has-error': (countryForm{{$index}}.countryColor.$error.required{{$index}} || countryForm{{$index}}.countryColor.$error.posColor{{$index}}) && countryForm{{$index}}.countryColor.$dirty}">
+				            	<div class="form-group noBottomPadding" ng-class="{'has-error': (countryForm{{$index}}.countryColor.$error.required{{$index}} || countryForm{{$index}}.countryColor.$error.posColor{{$index}}) && (countryForm{{$index}}.countryColor.$dirty || submitedWithErrors)}">
 					            	<div class="colorPickerComponent">
 							            <div ng-style="{'background-color': report.color && report.color.length > 3  && report.color.length <= 7 && report.color.indexOf('#') != -1 ? report.color : '#fff'}" class="form-control pickedcolor">
 							            	<i class="fa fa-ban" ng-hide="report.color && report.color.length > 3 && report.color.length <= 7 && report.color.indexOf('#') != -1"></i>
 							            </div>
 							            <input class="form-control" colorpicker ng-model="report.color" type="text" ng-change="validateColor($index);" name="countryColor">
-							            <div class="innerErrorMessages" ng-messages="countryForm{{$index}}.countryColor.$error" ng-show="countryForm{{$index}}.countryColor.$dirty">
+							            <div class="innerErrorMessages" ng-messages="countryForm{{$index}}.countryColor.$error" ng-show="countryForm{{$index}}.countryColor.$dirty || submitedWithErrors">
 											<div ng-message="required{{$index}}">{{'spatial.required_field_error_message' | i18n }}</div>
 											<div ng-message="posColor{{$index}}">{{'spatial.invalid_color_error_message' | i18n }}</div>
 										</div>

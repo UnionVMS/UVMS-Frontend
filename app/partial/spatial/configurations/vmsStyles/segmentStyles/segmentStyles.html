@@ -15,10 +15,10 @@
 			<div ng-if="configModel.segmentStyle.attribute === 'countryCode'" ng-include="'partial/spatial/configurations/vmsStyles/generalStyles/countryStyles/countryStyles.html'" ng-init="lastComponentStyle = 'segments'" class="col-md-12"></div>
 			<div ng-repeat="item in configModel.segmentStyle.style" ng-include="'partial/spatial/configurations/vmsStyles/generalStyles/ruleRow/ruleRow.html'" ng-if="configModel.segmentStyle.attribute !== 'countryCode'" ng-init="lastComponentStyle = 'segment'"></div>
 		</div>
-		<div class="row defaultItem">
+		<div class="row defaultItem" ng-if="configModel.segmentStyle.attribute">
 			<ng-form name="defaultForm" novalidate>
 				<div class="row col-md-12">
-					<div class="form-group col-md-3" ng-class="{'has-error': defaultForm.defaultColor.$error.hasError && defaultForm.defaultColor.$dirty}" ng-if="configModel.segmentStyle.attribute && configModel.segmentStyle.attribute !== 'countryCode'">
+					<div class="form-group col-md-3" ng-class="{'has-error': defaultForm.defaultColor.$error.hasError && (defaultForm.defaultColor.$dirty || submitedWithErrors)}" ng-if="configModel.segmentStyle.attribute && configModel.segmentStyle.attribute !== 'countryCode'">
 						<label>{{'spatial.default_color' | i18n}}</label>
 						<div class="colorPickerComponent">
 							<div ng-style="{'background-color': configModel.segmentStyle.defaultColor && configModel.segmentStyle.defaultColor.length > 3 && configModel.segmentStyle.defaultColor.length <= 7 && configModel.segmentStyle.defaultColor.indexOf('#') != -1 ? configModel.segmentStyle.defaultColor : '#fff'}" class="form-control pickedcolor">
@@ -26,7 +26,7 @@
 					        </div>
 					        <input class="form-control" name="defaultColor" colorpicker ng-model="configModel.segmentStyle.defaultColor" type="text" ng-change="validateDefaultColor();"/>
 						</div>
-						<div class="belowErrorMessages form-group" ng-messages="defaultForm.defaultColor.$error" ng-show="defaultForm.defaultColor.$dirty">
+						<div class="belowErrorMessages form-group" ng-messages="defaultForm.defaultColor.$error" ng-show="defaultForm.defaultColor.$dirty || submitedWithErrors">
 							<div ng-message="requiredField">{{'spatial.required_field_error_message' | i18n }}</div>
 							<div ng-message="segDefColor">{{'spatial.invalid_color_error_message' | i18n }}</div>
 						</div>
@@ -35,10 +35,10 @@
 						<label>{{'spatial.line_style' | i18n}}</label>
 						<combobox ng-model="configModel.segmentStyle.lineStyle" line-style="true"></combobox>
 					</div>
-					<div class="form-group col-md-2" ng-class="{'has-error': defaultForm.lineWidth.$error.hasError && defaultForm.lineWidth.$dirty}">
+					<div class="form-group col-md-2" ng-class="{'has-error': defaultForm.lineWidth.$error.hasError && (defaultForm.lineWidth.$dirty || submitedWithErrors)}">
 						<label>{{'spatial.line_width' | i18n}}</label>
 						<input class="form-control" ng-model="configModel.segmentStyle.lineWidth" name="lineWidth" type="number" ng-change="validateLineWidth();"/>
-						<div class="belowErrorMessages" ng-messages="defaultForm.lineWidth.$error" ng-show="defaultForm.lineWidth.$dirty">
+						<div class="belowErrorMessages" ng-messages="defaultForm.lineWidth.$error" ng-show="defaultForm.lineWidth.$dirty || submitedWithErrors">
 							<div ng-message="requiredField">{{'spatial.required_field_error_message' | i18n }}</div>
 							<div ng-message="rangeError">{{'spatial.invalid_range_error_message' | i18n }}</div>
 						</div>

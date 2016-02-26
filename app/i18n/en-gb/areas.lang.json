@@ -53,6 +53,8 @@
 	"area_upload_modal_semicolon": "Semicolon",
 	"area_upload_modal_delimiter": "Delimiter", 
 	"area_upload_select_file_btn": "Select file",
+	"area_upload_select_zip_file_btn": "Select .zip file",
+	"area_upload_select_zip_file_info_btn": "You must submit a zip file containing a valid area shape file(.shp, .shx, .dbf)",
 	"area_upload_modal_upload_btn": "Upload",
 	"area_upload_modal_uploading_btn": "Uploading",
 	"area_upload_modal_first_row_checkbox": "First row contains headers",

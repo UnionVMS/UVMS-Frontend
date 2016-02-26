@@ -129,8 +129,8 @@
 	   						<a class="button" ng-click="resetForm()" ng-show="getFormMode('CREATE')">{{"spatial.reports_form_clear_btn" | i18n }}</a>
 	   					</div>
 	   					<div class="formSubmitBtn">
-	   						<button class="btn btn-primary button" type="submit" ng-show="getFormMode('EDIT') || getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="runReport()">{{"spatial.reports_table_run_label" | i18n }}</button>
-	   						<button class="btn btn-primary button" type="submit" ng-show="getFormMode('EDIT') || getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="saveAsReport()">{{"spatial.reports_form_save_as_btn" | i18n }}</button>
+	   						<button class="btn btn-primary button" type="submit" ng-show="getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="runReport()">{{"spatial.reports_table_run_label" | i18n }}</button>
+	   						<button class="btn btn-primary button" type="submit" ng-show="getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="saveAsReport()">{{"spatial.reports_form_save_as_btn" | i18n }}</button>
 	   						<button class="btn btn-primary button" type="submit" ng-click="saveReport()">{{"spatial.reports_form_save_btn" | i18n }}</button>
 	   					</div>
 	   				</div>

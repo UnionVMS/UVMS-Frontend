@@ -34,22 +34,21 @@
 			
 			<div class="col-md-12 form-group input-group" ng-class="{'has-error': (SysareasForm.areaFile.$dirty || saved) && SysareasForm.areaFile.$invalid}">
 		 		<span class="btn btn-primary btn-file input-group-addon">
-					{{'areas.area_upload_select_file_btn' | i18n}}
-					<input type="file" onchange="angular.element(this).scope().fileNameChanged(this)"/>
+					{{'areas.area_upload_select_zip_file_btn' | i18n}}
+					<input type="file" accept="application/zip" onchange="angular.element(this).scope().fileNameChanged(this)"/>
 				</span>
 				<input type="text" class="form-control" ng-model="sysAreafile" name="areaFile" ng-required="true" readonly>
-				<span class="input-group-addon alert-success" ng-show="validFile === true">
+				<span class="input-group-addon alert-success" ng-show="validFile.isValid === true">
 					<i class="fa fa-check alert-success"></i>
 				</span>
-				<span class="input-group-addon alert-danger" ng-show="validFile === false">
+				<span class="input-group-addon alert-danger" ng-show="validFile.isValid === false">
 					<i class="fa fa-times alert-danger"></i>
 				</span>
-				<div class="innerErrorMessagesFileUpload" ng-messages="SysareasForm.areaFile.$error" ng-show="(SysareasForm.areaFile.$dirty || saved) && SysareasForm.areaFile.$invalid">
+				<a href="" qtip content="{{'areas.area_upload_select_zip_file_info_btn' | i18n}}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+				<div class="innerErrorMessagesFileUpload" ng-messages="SysareasForm.areaFile.$error" ng-show="(SysareasForm.areaFile.$touched && validFile.isValid === false || saved) && SysareasForm.areaFile.$invalid">
 					<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
-					<div ng-message="invalidExtension">{{'areas.invalid_extension_field_error_message' | i18n }}</div>
 				</div>
 		   	</div>
-		   	
 		</ng-form>
 	</div>
 

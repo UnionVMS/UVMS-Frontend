@@ -36,6 +36,8 @@ angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($s
                 $scope.projections.setCoordinatesUnitItems(newVal);
                 $scope.projectionSelected = true;
             }
+        }else if(!newVal){
+        	$scope.projectionSelected = false;
         }
     });
 
@@ -46,8 +48,7 @@ angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($s
         setScaleBarUnits();
         //Read properties in the modal
         if (angular.isDefined($scope.initialConfig)){
-            angular.copy($scope.initialConfig, $scope.configModel);
-            if (angular.isDefined($scope.configModel.mapSettings.displayProjectionId)){
+            if (angular.isDefined($scope.configModel) && angular.isDefined($scope.configModel.mapSettings) && angular.isDefined($scope.configModel.mapSettings.displayProjectionId)){
                 $scope.projections.setLazyProjectionAndCoordinates($scope.configModel.mapSettings.displayProjectionId);
                 $scope.projectionSelected = true;
             }

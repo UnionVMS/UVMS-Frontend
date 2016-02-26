@@ -1,5 +1,7 @@
 angular.module('unionvmsWeb').controller('PositionsvisibilityCtrl',function($scope, locale){
     
+	
+	
 	$scope.$watch('configModel.visibilitySettings.positions', function(newVal) {
 		if(newVal){
 			
@@ -147,15 +149,26 @@ angular.module('unionvmsWeb').controller('PositionsvisibilityCtrl',function($sco
 		    var contentTypes = ['Table','Popup','Label'];
 			angular.forEach(contentTypes, function(contentType) {
 				var positions = [];
-				angular.forEach($scope.configModel.visibilitySettings.positions[contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()].order, function(item) {
-					for(var i=0;i<$scope.configModel.visibilitySettings['position' + contentType + 'Attrs'].length;i++){
-						if(item === $scope.configModel.visibilitySettings['position' + contentType + 'Attrs'][i].value){
-							positions.push($scope.configModel.visibilitySettings['position' + contentType + 'Attrs'][i]);
+				var positionVisibilitySettings = $scope.configModel.visibilitySettings.positions[contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
+				var positionVisibilityAttrs = $scope.configModel.visibilitySettings['position' + contentType + 'Attrs'];
+				
+				if(positionVisibilitySettings.order && positionVisibilitySettings.order.length > 0){
+					angular.forEach(positionVisibilitySettings.order, function(item) {
+						for(var i=0;i<positionVisibilityAttrs.length;i++){
+							if(item === positionVisibilityAttrs[i].value){
+								positions.push(positionVisibilityAttrs[i]);
+							}
 						}
+					});
+					angular.copy(positions,positionVisibilityAttrs);
+				}else{
+					positionVisibilitySettings.order = [];
+					for(var i=0;i<positionVisibilityAttrs.length;i++){
+						positionVisibilitySettings.order.push(positionVisibilityAttrs[i].value);
 					}
-				});
-				angular.copy(positions,$scope.configModel.visibilitySettings['position' + contentType + 'Attrs']);
-				angular.forEach($scope.configModel.visibilitySettings['position' + contentType + 'Attrs'], function(item) {
+				}
+				
+				angular.forEach(positionVisibilityAttrs, function(item) {
 					item.type = contentType;
 				});
 			});

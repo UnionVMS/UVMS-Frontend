@@ -31,6 +31,35 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	    
 	    //Spatial configs
         this.mapConfiguration = {};
+        this.stylesSettings = {
+            positions: {
+                attribute: undefined,
+                style: {}
+            },
+            segments: {
+                attribute: undefined,
+                style: {}
+            }
+        };
+        this.layerSettings = {
+            overlayLayers: [],
+            baseLayers: []
+        };
+        this.visibilitySettings = {
+            positions: {
+                table: {},
+                popup: {},
+                labels: {}
+            },
+            segments: {
+                table: {},
+                popup: {},
+                labels: {}
+            },
+            tracks: {
+                table: {}
+            }
+        };
 	}
 
 	var getDateFormat = function(){
@@ -303,6 +332,10 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
         	scaleBarUnits: this.mapConfiguration.scaleBarUnits
         };
 	    
+        report.stylesSettings = this.stylesSettings;
+        report.visibilitySettings = this.visibilitySettings;
+        report.layerSettings = this.layerSettings;
+        
 	    return report;
 	};
 

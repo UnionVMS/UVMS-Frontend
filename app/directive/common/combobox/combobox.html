@@ -1,7 +1,7 @@
 <div class="combobox" ng-class="{'combo-multiple': multiple, 'comboLineStyle': lineStyle === true, 'combo-editable': editable}" ng-model-options="{allowInvalid: true}">
 	<div class="dropdown fullWidthDropdown">
-		<div class="comboButtonContainer">
-			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled" ng-click="toggleCombo($event)" ng-if="!editable">
+		<div class="comboButtonContainer" ng-click="toggleCombo($event)">
+			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled" ng-if="!editable">
 				<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-if="lineStyle !== true">
 					{{currentItemLabel}}
 					<ul class="selected-options" ng-if="multiple">
@@ -18,16 +18,9 @@
 				</svg>
 				<span ng-class="{'caret': !multiple || selectedItems && selectedItems.length === 0,'clear-all item-remover fa fa-times': multiple && selectedItems.length > 0}" ng-click="removeAllSelected()"></span>
 			</button>
-			<input class="form-control combo-editable-input" ng-model="newItem.text" ng-if="editable" ng-change="onComboChange()" ng-click="toggleCombo($event)" placeholder="{{placeholder}}">
+			<input class="form-control combo-editable-input" ng-model="newItem.text" ng-if="editable" ng-change="onComboChange()" placeholder="{{placeholder}}">
 			<span ng-class="{'caret': !multiple || selectedItems && selectedItems.length === 0,'clear-all item-remover fa fa-times': multiple && selectedItems.length > 0}" ng-click="removeAllSelected()"  ng-if="editable"></span>
 		</div>
-<!-- 		<div class="btn-add-item" ng-if="editable"> -->
-<!-- 			<a ng-click="addNewItem()" title="{{'common.add_new' | i18n}}"> -->
-<!-- 				<span class="btn btn-sm btn-success btn-circle"> -->
-<!-- 					<i class="fa fa-plus"></i> -->
-<!-- 				</span> -->
-<!-- 			</a> -->
-<!-- 		</div> -->
 	</div>
 	<div class="comboList fullWidthDropdown" ng-class="{'open': isOpen, 'comboLineStyle': lineStyle === true}">
 		<ul class="dropdown-menu" role="menu">

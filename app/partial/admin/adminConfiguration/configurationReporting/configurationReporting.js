@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ConfigurationreportingCtrl',function($scope, locale, SpatialConfig, spatialConfigRestService, alertService, formService, $anchorScroll){
+angular.module('unionvmsWeb').controller('ConfigurationreportingCtrl',function($scope, locale, SpatialConfig, spatialConfigRestService, alertService, $anchorScroll){
 	$scope.isAdminConfig = true;
 	$scope.save = function(){
     	if(_.keys($scope.configurationReportForm.$error).length === 0){
@@ -11,7 +11,6 @@ angular.module('unionvmsWeb').controller('ConfigurationreportingCtrl',function($
     	}else{
     		$anchorScroll();
     		alertService.showErrorMessageWithTimeout(locale.getString('spatial.invalid_data_saving'));
-		    formService.setAllDirty(["configurationReportForm"], $scope);
 		    $scope.submitedWithErrors = true;
     	}
     };

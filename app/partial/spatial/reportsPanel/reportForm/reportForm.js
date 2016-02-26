@@ -182,14 +182,17 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             controller: 'MapconfigurationmodalCtrl',
             size: 'lg',
             resolve: {
-                mapConfigs: function(){
-                    return $scope.report.mapConfiguration;
+                reportConfigs: function(){
+                    return $scope.reportNewConfig;
                 }
             }
         });
 
         modalInstance.result.then(function(data){
-            $scope.report.mapConfiguration = data;
+            $scope.reportNewConfig.mapConfiguration = data.mapSettings;
+            $scope.reportNewConfig.stylesSettings = data.stylesSettings;
+            $scope.reportNewConfig.visibilitySettings = data.visibilitySettings;
+            $scope.reportNewConfig.layerSettings = data.layerSettings;
         });
     };
     
@@ -235,9 +238,15 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         $scope.formMode = 'CREATE';
         $scope.reportForm.$setPristine();
         if (args){
-            $scope.formMode = 'EDIT';
+        	if(args.report.isFromLiveView){
+        		$scope.formMode = 'EDIT-FROM-LIVEVIEW';
+        	}else{
+        		$scope.formMode = 'EDIT';
+        	}
             $scope.report = $scope.report.fromJson(args.report);
         }
+        $scope.reportNewConfig = {};
+        angular.copy($scope.report,$scope.reportNewConfig);
     });
 
     $scope.$watch('report.positionSelector', function(newVal, oldVal){

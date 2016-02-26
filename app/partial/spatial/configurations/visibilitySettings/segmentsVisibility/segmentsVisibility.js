@@ -101,15 +101,26 @@ angular.module('unionvmsWeb').controller('SegmentsvisibilityCtrl',function($scop
 		    var contentTypes = ['Table','Popup','Label'];
 			angular.forEach(contentTypes, function(contentType) {
 				var segments = [];
-				angular.forEach($scope.configModel.visibilitySettings.segments[contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()].order, function(item) {
-					for(var i=0;i<$scope.configModel.visibilitySettings['segment' + contentType + 'Attrs'].length;i++){
-						if(item === $scope.configModel.visibilitySettings['segment' + contentType + 'Attrs'][i].value){
-							segments.push($scope.configModel.visibilitySettings['segment' + contentType + 'Attrs'][i]);
+				var segmentVisibilitySettings = $scope.configModel.visibilitySettings.segments[contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()]; 
+				var segmentVisibilityAttrs = $scope.configModel.visibilitySettings['segment' + contentType + 'Attrs'];
+				
+				if(segmentVisibilitySettings.order && segmentVisibilitySettings.order.length > 0){
+					angular.forEach(segmentVisibilitySettings.order, function(item) {
+						for(var i=0;i<segmentVisibilityAttrs.length;i++){
+							if(item === segmentVisibilityAttrs[i].value){
+								segments.push(segmentVisibilityAttrs[i]);
+							}
 						}
+					});
+					angular.copy(segments,segmentVisibilityAttrs);
+				}else{
+					segmentVisibilitySettings.order = [];
+					for(var i=0;i<segmentVisibilityAttrs.length;i++){
+						segmentVisibilitySettings.order.push(segmentVisibilityAttrs[i].value);
 					}
-				});
-				angular.copy(segments,$scope.configModel.visibilitySettings['segment' + contentType + 'Attrs']);
-				angular.forEach($scope.configModel.visibilitySettings['segment' + contentType + 'Attrs'], function(item) {
+				}
+				
+				angular.forEach(segmentVisibilityAttrs, function(item) {
 					item.type = contentType;
 				});
 			});

@@ -83,15 +83,26 @@ angular.module('unionvmsWeb').controller('TracksvisibilityCtrl',function($scope,
 		    var contentTypes = ['Table'];
 			angular.forEach(contentTypes, function(contentType) {
 				var tracks = [];
-				angular.forEach($scope.configModel.visibilitySettings.tracks[contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()].order, function(item) {
-					for(var i=0;i<$scope.configModel.visibilitySettings['track' + contentType + 'Attrs'].length;i++){
-						if(item === $scope.configModel.visibilitySettings['track' + contentType + 'Attrs'][i].value){
-							tracks.push($scope.configModel.visibilitySettings['track' + contentType + 'Attrs'][i]);
+				var trackVisibilitySettings = $scope.configModel.visibilitySettings.tracks[contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
+				var trackVisibilityAttrs = $scope.configModel.visibilitySettings['track' + contentType + 'Attrs'];
+				
+				if(trackVisibilitySettings.order && trackVisibilitySettings.order.length > 0){
+					angular.forEach(trackVisibilitySettings.order, function(item) {
+						for(var i=0;i<trackVisibilityAttrs.length;i++){
+							if(item === trackVisibilityAttrs[i].value){
+								tracks.push(trackVisibilityAttrs[i]);
+							}
 						}
+					});
+					angular.copy(tracks,trackVisibilityAttrs);
+				}else{
+					trackVisibilitySettings.order = [];
+					for(var i=0;i<trackVisibilityAttrs.length;i++){
+						trackVisibilitySettings.order.push(trackVisibilityAttrs[i].value);
 					}
-				});
-				angular.copy(tracks,$scope.configModel.visibilitySettings['track' + contentType + 'Attrs']);
-				angular.forEach($scope.configModel.visibilitySettings['track' + contentType + 'Attrs'], function(item) {
+				}
+				
+				angular.forEach(trackVisibilityAttrs, function(item) {
 					item.type = contentType;
 				});
 			});

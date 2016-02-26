@@ -5,30 +5,30 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
 	$scope.sysAreaType = "";
 	$scope.selectedProj = "";
 	$scope.isSaving = false;
+	$scope.validFile = {isValid: undefined};
 	$scope.projections = projectionService;
     
 	$scope.fileNameChanged = function(elem){
-		$scope.filepath = elem.value;
-		var filename = $scope.filepath.replace(/^.*[\\\/]/, '');
-		var extension = filename.split('.');
-		extension = extension[extension.length-1];
-		$scope.sysAreafile = filename;
-		if(extension === 'zip'){
-			$scope.validFile = true;
-			$scope.SysareasForm.areaFile.$setValidity('invalidExtension', true);
+		if(elem.value){
+			$scope.filepath = elem.value;
+			var filename = $scope.filepath.replace(/^.*[\\\/]/, '');
+			$scope.$apply(function($scope) {
+				$scope.sysAreafile = filename;
+				$scope.validFile.isValid = true;
+				$scope.files = elem.files;         
+			 });
 		}else{
-			$scope.validFile = false;
-			$scope.SysareasForm.areaFile.$setValidity('invalidExtension', false);
+			$scope.$apply(function($scope) {
+				$scope.sysAreafile = undefined;
+				$scope.validFile.isValid = false;
+			});
 		}
-		$scope.$apply(function($scope) {
-		   $scope.files = elem.files;         
-		 });
 	};
 	
     $scope.save = function(){
         $scope.saved = true;
         $scope.isSaving = true;
-        if ($scope.SysareasForm.$valid && $scope.validFile){
+        if ($scope.SysareasForm.$valid && $scope.validFile.isValid){
             var projCode = $scope.projections.getProjectionEpsgById($scope.selectedProj);
         	if(angular.isDefined(projCode) && $scope.sysAreaType){
         		var objTest = {

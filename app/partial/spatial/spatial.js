@@ -52,6 +52,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    //Get Report Configs Success callback
    var getReportSuccess = function(response){
 	   $scope.repServ.isReportExecuting = false;
+	   response.isFromLiveView = true;
 	   $scope.$broadcast('openReportForm', {'report': response});
        $scope.$broadcast('goToReportForm','EDIT-FROM-LIVEVIEW');
        $scope.selectMenu('REPORTS');
