@@ -10,7 +10,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     $scope.isUpdate = false;
     $scope.searchString = '';
     $scope.userAreaTransp = 0;
-    $scope.userAreaType = "";
+//    $scope.userAreaType = "";
     $scope.btnAddArea = true;
     $scope.currentContext = undefined;
     $scope.projections = projectionService;
@@ -155,6 +155,20 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         areaMapService.mergeParamsGid($scope.displayedUserAreas[idx].gid, $scope.displayedUserAreas[idx].areaType, true);
     };
     
+    //Get area details
+    $scope.getAreaDetails = function(idx){
+        $scope.alert.setLoading(locale.getString('areas.getting_area'));
+        areaRestService.getUserAreaAsJSON($scope.displayedUserAreas[idx].gid).then(function(response){
+            $scope.alert.removeLoading();
+            $scope.openAreaDetailsModal(response);
+        }, function(error){
+            $scope.alert.removeLoading();
+            $scope.alert.setError();
+            $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_geojson');
+            $scope.alert.hideAlert();
+        });
+    };
+    
     //Delete
     $scope.deleteUserArea = function(idx){
         $scope.alert.setLoading(locale.getString('areas.deleting_area'));
@@ -181,25 +195,10 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     $scope.editUserArea = function(idx){
         $scope.alert.setLoading(locale.getString('areas.getting_area'));
         areaRestService.getUserAreaAsGeoJSON($scope.displayedUserAreas[idx].gid).then(function(response){
-
             $scope.alert.removeLoading();
             $scope.setEditingType('edit');
             $scope.loadGeoJSONFeature(response[0]);
             areaMapService.mergeParamsGid($scope.displayedUserAreas[idx].gid, $scope.displayedUserAreas[idx].areaType, false);
-           /* 
-            TODO
-           var scopeSelection = response[0].properties.scopeSelection;
-            var selectDataArray = $(".js-share-scopes-selection").data();
-            if (angular.isDefined(scopeSelection)) {
-                for (var selectedScope in scopeSelection) {
-                    for (var option in selectDataArray) {
-                        if (selectedScope === option.text) {
-                            option.selected = true;
-                            break;
-                        }
-                    }
-                }
-            }*/
             $scope.isUpdate = true;
         }, function(error){
             console.log(error);
@@ -232,6 +231,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     
     //CREATE NEW AREA
     $scope.createNewArea = function(){
+        $scope.userArea.reset();
         $scope.isUpdate = false;
         $scope.setEditingType('edit');
         areaMapService.raiseLayer('drawlayer');
@@ -271,7 +271,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         } 
     });
     
-    //COMBOBOX PROJECTION
+    //COMBOBOX AREA TYPES
     $scope.getAreaTypes = function(){
         areaRestService.getUserAreaTypes().then(function(response){
             $scope.areaTypes = [];
@@ -473,6 +473,20 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
             areaMapService.addVectorFeature(geom, true); 
             $scope.userArea.setCoordsFromGeom();
             $scope.userArea.coordsProj = areaMapService.getMapProjectionCode();
+        });
+    };
+    
+    //Area details modal
+    $scope.openAreaDetailsModal = function(data){
+        var modalInstance = $modal.open({
+           templateUrl: 'partial/areas/areaDetails/areaDetails.html',
+           controller: 'AreadetailsCtrl',
+           size: 'md',
+           resolve: {
+               areaData: function(){
+                   return data;
+               }
+           }
         });
     };
     

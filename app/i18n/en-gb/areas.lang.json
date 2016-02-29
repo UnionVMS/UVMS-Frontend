@@ -99,5 +99,6 @@
 	"table_no_data": "No data available",
 	"table_delete_area_btn": "Delete area",
 	"table_edit_area_btn": "Edit area",
-	"table_zoom_to_area_btn": "Zoom to area"
+	"table_zoom_to_area_btn": "Zoom to area",
+	"table_area__details_btn": "Area details"
 }

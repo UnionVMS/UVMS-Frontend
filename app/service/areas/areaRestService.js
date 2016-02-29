@@ -17,6 +17,16 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
                 }
             });
         },
+        getUserAreaAsJSON: function(){
+            return $resource('/spatial/rest/userareadetails', {}, {
+                'get': {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            });
+        },
         createUserArea: function(){
             return $resource('/spatial/rest/userarea', {}, {
                 'save': {
@@ -64,6 +74,20 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
 	            id: gid,
 	            isGeom: true
 	        };
+            areaRestFactory.getUserAreaAsGeoJSON().get(angular.toJson(payload), function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.error('Error getting user area details.');
+                deferred.reject(error);
+            });
+            return deferred.promise;
+	    },
+	    getUserAreaAsJSON: function(gid){
+	        var deferred = $q.defer();
+            var payload = {
+                id: gid,
+                isGeom: false
+            };
             areaRestFactory.getUserAreaAsGeoJSON().get(angular.toJson(payload), function(response){
                 deferred.resolve(response.data);
             }, function(error){

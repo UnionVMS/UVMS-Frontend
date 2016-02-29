@@ -1,0 +1,68 @@
+<div class="areaDetailsModal">
+    <div class="modal-header">
+        <div class="pointer pull-right" ng-click="cancel()">
+             <i class="fa fa-times closeicon"></i>
+        </div>
+        <h4 class="modal-title">{{'areas.area_details_title' | i18n}}</h4>
+    </div>
+    <div class="modal-body">
+    	<div class="form-horizontal">
+    		<div class="form-group">
+    			<label class="col-md-3">{{'areas.user_area_name' | i18n}}</label>
+    			<div class="col-md-9">
+    				<div>{{area.name}}</div>
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<label class="col-md-3">{{'areas.user_area_description' | i18n}}</label>
+    			<div class="col-md-9">
+    				<div>{{area.areaDesc}}</div>
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<label class="col-md-3 special-label">{{'areas.user_area_validity_range' | i18n}}</label>
+    			<div class="col-md-9">
+    				<div class="form-inline col-md-6" ng-show="area.startDate">
+    					<div class="form-group">
+	    					<label>{{'areas.user_area_valid_from' | i18n}}</label>
+	    					<div class="form-control">{{area.startDate | stDateUtc}}</div>
+    					</div>
+    				</div>
+    				<div class="form-inline col-md-6" ng-show="area.endDate">
+    					<div class="form-group">
+    						<label>{{'areas.user_area_valid_to' | i18n}}</label>
+    						<div class="form-control">{{area.endDate | stDateUtc}}</div>
+    					</div>
+    				</div>
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<label class="col-md-3">{{'areas.user_area_type' | i18n}}</label>
+    			<div class="col-md-9">
+    				<div>{{area.subType}}</div>
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<label class="col-md-3">{{'areas.user_area_scope_selection' | i18n }}</label>
+    			<div class="col-md-9">
+    				SCOPES
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<label class="col-md-3">{{'areas.user_area_dataset_name' | i18n }}</label>
+    			<div class="col-md-9">
+    				DATASET
+    			</div>
+    		</div>
+    		<!-- <div class="form-group scopeSelection"  ng-show="isUserAllowed('SHARE_USER_DEFINED_AREAS')">
+				<label for="scopeSelection">{{'areas.user_area_scope_selection' | i18n }}</label>
+				<combobox name="scopeSelection" ng-model="userArea.scopeSelection" multiple="true" items="userScopes" initialtext="Select a scope"></combobox>
+			</div>
+			<div class="form-group" ng-show="isUserAllowed('CREATE_USER_AREA_DATASET')">
+					<label for="datasetName" class="userAreaNameField">{{'areas.user_area_dataset_name' | i18n }}
+					</label>
+					<input type="text" class="form-control" ng-model="userArea.datasetName"/>
+			</div>	 -->
+    	</div>
+    </div>
+</div>

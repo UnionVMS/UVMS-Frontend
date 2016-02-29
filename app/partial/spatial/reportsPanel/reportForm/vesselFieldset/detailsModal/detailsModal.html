@@ -47,7 +47,7 @@
         	</div>
         </div>
         <div class="row" ng-show="isLoading === false && hasError === false">
-        	<div class="col-md-12 grayBorderTop">
+        	<div class="col-md-12 grayBorderTop" ng-show="item.type === 'vgroup'">
                  <h5>{{'vessel.event_history_administrative_information' | i18n}}</h5>
              </div>
         	<div class="col-md-6" ng-show="item.type === 'vgroup'">
