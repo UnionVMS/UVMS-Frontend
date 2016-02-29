@@ -100,5 +100,8 @@
 	"table_delete_area_btn": "Delete area",
 	"table_edit_area_btn": "Edit area",
 	"table_zoom_to_area_btn": "Zoom to area",
-	"table_area__details_btn": "Area details"
+	"table_area__details_btn": "Area details",
+
+	"error_getting_user_area_groups_list" : "There was an error while getting your user areas groups list.",
+	"area_group_list_table_name_header": "Group Name"
 }
