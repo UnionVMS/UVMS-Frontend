@@ -24,7 +24,7 @@
 							<div ng-style="{'background-color': configModel.positionStyle.defaultColor && configModel.positionStyle.defaultColor.length > 3 && configModel.positionStyle.defaultColor.length <= 7 && configModel.positionStyle.defaultColor.indexOf('#') != -1 ? configModel.positionStyle.defaultColor : '#fff'}" class="form-control pickedcolor">
 					       		<i class="fa fa-ban" ng-hide="configModel.positionStyle.defaultColor && configModel.positionStyle.defaultColor.length > 3 && configModel.positionStyle.defaultColor.length <= 7 && configModel.positionStyle.defaultColor.indexOf('#') != -1"></i>
 					        </div>
-					        <input class="form-control" name="defaultColor" colorpicker ng-model="configModel.positionStyle.defaultColor" type="text" ng-change="validateDefaultColor();"/>
+					        <input class="form-control" name="defaultColor" colorpicker ng-model="configModel.positionStyle.defaultColor" type="text" ng-change="validateDefaultColor();" autocomplete="off"/>
 						</div>
 						<div class="belowErrorMessages" ng-messages="defaultForm.defaultColor.$error" ng-show="defaultForm.defaultColor.$dirty || submitedWithErrors">
 						<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>

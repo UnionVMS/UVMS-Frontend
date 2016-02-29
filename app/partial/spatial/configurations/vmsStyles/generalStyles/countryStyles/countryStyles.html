@@ -45,7 +45,7 @@
 							            <div ng-style="{'background-color': report.color && report.color.length > 3  && report.color.length <= 7 && report.color.indexOf('#') != -1 ? report.color : '#fff'}" class="form-control pickedcolor">
 							            	<i class="fa fa-ban" ng-hide="report.color && report.color.length > 3 && report.color.length <= 7 && report.color.indexOf('#') != -1"></i>
 							            </div>
-							            <input class="form-control" colorpicker ng-model="report.color" type="text" ng-change="validateColor($index);" name="countryColor">
+							            <input class="form-control" colorpicker ng-model="report.color" type="text" ng-change="validateColor($index);" name="countryColor" autocomplete="off">
 							            <div class="innerErrorMessages" ng-messages="countryForm{{$index}}.countryColor.$error" ng-show="countryForm{{$index}}.countryColor.$dirty || submitedWithErrors">
 											<div ng-message="required{{$index}}">{{'spatial.required_field_error_message' | i18n }}</div>
 											<div ng-message="posColor{{$index}}">{{'spatial.invalid_color_error_message' | i18n }}</div>
