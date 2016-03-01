@@ -55,11 +55,18 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
 	    	activeCombo.$apply(function(){
 	        	activeCombo.isOpen = false;
 	        });
+	    	if(activeCombo.componentsWithScroll){
+	    		var scrollableElements = activeCombo.componentsWithScroll.split(',');
+    			angular.forEach(scrollableElements, function(item) {
+					$(item).off('scroll',closeCombo);
+    			});
+    		}
 	        activeCombo = undefined;
     	}
 		$($window).unbind('mousedown');
 		$('[uib-modal-window]').unbind('mousedown');
 		$($window).unbind('resize');
+		$(window).off("scroll", closeCombo);
     };
 	
 	cb.setActiveCombo = function(comboScope){
@@ -85,6 +92,14 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
             	}
             });
     		$($window).bind('resize', closeCombo);
+    		
+    		$(window).scroll(closeCombo);
+    		if(comboScope.componentsWithScroll){
+    			var scrollableElements = comboScope.componentsWithScroll.split(',');
+    			angular.forEach(scrollableElements, function(item) {
+					$(item).scroll(closeCombo);
+    			});
+    		}
 		}
 		
 		activeCombo = comboScope;

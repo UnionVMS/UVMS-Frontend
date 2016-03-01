@@ -276,6 +276,8 @@
 	"visibility_configuration_popup": "Popup contents",
 	"visibility_configuration_label": "Label contents",
 	"visibility_configuration_table": "Table contents",
+	"visibility_show_popup_attrs": "Show Popup contents",
+	"visibility_show_labels_attrs": "Show Label contents",
 	"general_settings": "General settings",
 	"general_configuration_geoserver_url": "Geoserver URL",
 	"general_configuration_bing_api_key": "Bing Maps Api Key",

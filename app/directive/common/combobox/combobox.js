@@ -13,7 +13,8 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             lineStyle : '=',
             destComboList : '=',
             editable : '=',
-            multiple : '='
+            multiple : '=',
+            componentsWithScroll : '='
 		},
         templateUrl: 'directive/common/combobox/combobox.html',
 		link: function(scope, element, attrs, ctrl) {
@@ -116,6 +117,9 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                         scope.currentItemLabel = attrs.initialtext;
                          scope.setplaceholdercolor = true; //sets css class on first element. (placeholder)
                     }
+                    if(scope.editable){
+                    	scope.newItem = {};
+                    }
                 }else{
                     scope.setplaceholdercolor = false;
                     if(Array.isArray(scope.loadedItems)){
@@ -136,10 +140,17 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                     		}
                     	}else{
                     		for(var k = 0; k < scope.loadedItems.length; k++){
-	                            if(angular.equals(newVal, getItemCode(scope.loadedItems[k]))) {
-	                        		scope.currentItemLabel = scope.getItemLabel(scope.loadedItems[k]);
-	                                break;
-	                            }
+                    			if(scope.editable){
+                    				if(angular.equals(newVal, scope.getItemLabel(scope.loadedItems[k]))) {
+		                        		scope.newItem = scope.loadedItems[k];
+		                                break;
+		                            }
+                    			}else{
+		                            if(angular.equals(newVal, getItemCode(scope.loadedItems[k]))) {
+		                        		scope.currentItemLabel = scope.getItemLabel(scope.loadedItems[k]);
+		                                break;
+		                            }
+                    			}
                         	}
                     	}
                     }
