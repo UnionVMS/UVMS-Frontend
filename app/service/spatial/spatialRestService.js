@@ -5,6 +5,11 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
                 'get': {method: 'GET'}
             });
         },
+        getAreaLocationLayers: function(){
+            return $resource('/spatial/rest/arealocationlayers', {}, {
+                'get': {method: 'GET'}
+            });
+        },
         getUserAreaLayer: function(){
             return $resource('/spatial/rest/userarealayers', {}, {
                 'get': {method: 'GET'}
@@ -137,6 +142,16 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
             });
             return deferred.promise;
 	    },
+	    getAreaLocationLayers: function(){
+            var deferred = $q.defer();
+            spatialRestFactory.getAreaLocationLayers().get({}, function(response){
+                deferred.resolve(response);
+            }, function(error){
+                console.error('Error getting list of area and location layers');
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
         getUserAreaLayer: function(){
             var deferred = $q.defer();
             spatialRestFactory.getUserAreaLayer().get({}, function(response){

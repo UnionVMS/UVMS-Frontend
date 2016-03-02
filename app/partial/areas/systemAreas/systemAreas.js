@@ -1,12 +1,13 @@
-angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,projectionService,spatialRestService,areaMapService,locale){
+angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,projectionService,spatialRestService,areaMapService,areaHelperService,locale){
 
 	$scope.map = areaMapService.map;
-	$scope.systemItems = [];
 	$scope.sysAreaType = "";
 	$scope.selectedProj = "";
 	$scope.isSaving = false;
 	$scope.validFile = {isValid: undefined};
 	$scope.projections = projectionService;
+	$scope.helper = areaHelperService;
+	$scope.editingType = 'upload';
     
 	$scope.fileNameChanged = function(elem){
 		if(elem.value){
@@ -63,16 +64,18 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         }
     };
     
+    //Get full definition for data types, so that we can add the layer to the map
     $scope.getFullDefForItem = function(type){
         var item;
-        for (var i = 0; i < $scope.systemAreaTypes.length; i++){
-            if ($scope.systemAreaTypes[i].typeName === type){
-                 item = $scope.systemAreaTypes[i];
+        for (var i = 0; i < $scope.helper.systemAreaTypes.length; i++){
+            if ($scope.helper.systemAreaTypes[i].typeName === type){
+                 item = $scope.helper.systemAreaTypes[i];
             }
         }
         return item;
     };
     
+    //TODO  remove this stuff, use areamapservice instead
     $scope.removeLayerByType = function(layerType){
         if (angular.isDefined($scope.map)){
             var mapLayers = $scope.map.getLayers();
@@ -85,39 +88,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         }
     };
     
-    $scope.addWms = function(item){
-        var layer = new ol.layer.Tile({
-            type: item.typeName,
-            source: new ol.source.TileWMS({
-                url: item.serviceUrl,
-                serverType: 'geoserver',
-                params: {
-                    'LAYERS': item.geoName,
-                    'TILED': true,
-                    'STYLES': item.style,
-                    'cql_filter': angular.isDefined(item.cql) ? item.cql : null 
-                }
-            })
-        });
-        
-        $scope.map.addLayer(layer);
-    };
-    
-    function setSystemItems(){
-        spatialRestService.getAreaLayers().then(function(response){
-            $scope.systemAreaTypes = response.data;
-            for (var i = 0; i < $scope.systemAreaTypes.length; i++){
-                $scope.systemItems.push({"text": $scope.systemAreaTypes[i].typeName, "code": $scope.systemAreaTypes[i].typeName});
-            }
-        }, function(error){
-            $scope.errorMessage = locale.getString('spatial.area_selection_modal_get_sys_layers_error');
-            $scope.hasError = true;
-            $scope.hideAlerts();
-        });
-    }
-    
     $scope.init = function(){
-        setSystemItems();
         if ($scope.projections.items.length === 0){
             $scope.projections.getProjections();
         }
@@ -126,14 +97,15 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
     
     $scope.$watch('sysAreaType', function(newVal, oldVal){
         if (angular.isDefined(newVal) && newVal !== oldVal){
-            $scope.clickResults = 0;
             var item = $scope.getFullDefForItem(newVal);
+            
             if (angular.isDefined(item)){
-                $scope.removeLayerByType(oldVal);
-                $scope.addWms(item);
+                if (angular.isDefined($scope.helper.displayedLayerType)){
+                    areaMapService.removeLayerByType($scope.helper.displayedLayerType);
+                }
+                areaMapService.addWMS(item);
+                $scope.helper.displayedLayerType = item.typeName;
             }
-        } else {
-            $scope.removeLayerByType(oldVal);
         }
     });
     

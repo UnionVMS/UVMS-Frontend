@@ -1,6 +1,7 @@
-angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, locale, areaMapService, areaAlertService){
+angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, locale, areaMapService, areaAlertService, areaHelperService){
     $scope.selectedTab = 'USERAREAS';
     $scope.alert = areaAlertService;
+    $scope.helper = areaHelperService;
     
     var setTabs = function(){
         return [{
@@ -16,7 +17,10 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, locale, ar
     };
     
     $scope.selectTab = function(tabId){
-        $scope.selectedTab = tabId;
+        if (tabId !== $scope.selectedTab){
+            $scope.helper.tabChange(tabId);
+            $scope.selectedTab = tabId;
+        }
     };
     
     locale.ready('areas').then(function(){

@@ -4,7 +4,7 @@
 	"map_tip_reset_layer_filter": "Reset layer filters",
 	
 	"my_areas": "My Areas",
-	"sys_areas": "System Areas",
+	"sys_areas": "Reference Data",
 	"area_groups": "Area Groups",
 	
 	"add_new_userarea": "New area",
@@ -43,6 +43,10 @@
 	"modal_save_map_geom": "Use geometry from map",
 	"modal_save_coord_geom": "Use geometry from coordinates",
 	
+	"sys_areas_data_type_label": "Data type",
+	"upload_radio_title": "Upload new area data",
+	"metadata_radio_title": "Update metadata",
+	
 	"area_upload_modal_title": "Upload an area",
 	"area_upload_modal_src_format": "File format",
 	"area_upload_modal_csv": "CSV",
@@ -54,7 +58,7 @@
 	"area_upload_modal_delimiter": "Delimiter", 
 	"area_upload_select_file_btn": "Select file",
 	"area_upload_select_zip_file_btn": "Select .zip file",
-	"area_upload_select_zip_file_info_btn": "You must submit a zip file containing a valid area shape file(.shp, .shx, .dbf)",
+	"area_upload_select_zip_file_info_btn": "You must submit a zip file containing a valid area shapefile (.shp, .shx, .dbf)",
 	"area_upload_modal_upload_btn": "Upload",
 	"area_upload_modal_uploading_btn": "Uploading",
 	"area_upload_modal_first_row_checkbox": "First row contains headers",
@@ -66,6 +70,10 @@
 	"area_upload_modal_wkt_no_polygon": "Only POLYGON geometries are supported.",
 	"area_upload_modal_wkt_no_multipolygon": "You have provided a MULTIPOLYGON geometry. Parsing this is possible but it will only extract the first POLYGON geometry.",
 	"area_upload_modal_form_errors": "There are errors in your settings. Please fix them and try again.",
+	
+	"metadata_area_description_title": "Area description",
+	"metadata_short_copyright_title": "Short copyright notice",
+	"metadata_long_copyright_title": "Long copyright notice",
 	
 	"polygon_min_number_points": "A polygon cannot be build with less than 3 geographical coordinates.",
 	"null_geom": "There is no geometry defined. Please use the drawing tools to create a new area.",

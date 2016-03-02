@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale, $modal, projectionService, UserArea, areaMapService, areaRestService, areaAlertService, spatialRestService, unitConversionService, userService){
+angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale, $modal, projectionService, UserArea, areaHelperService, areaMapService, areaRestService, areaAlertService, spatialRestService, unitConversionService, userService){
     $scope.activeTool = undefined;
     $scope.selectedProj = undefined;
     $scope.userAreasList = [];
@@ -14,6 +14,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     $scope.btnAddArea = true;
     $scope.currentContext = undefined;
     $scope.projections = projectionService;
+    $scope.helper = areaHelperService;
     
     $scope.init = function(){
         $scope.coordVisible = false;
@@ -45,6 +46,11 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
             $scope[fn]();
         }
         $scope.editingType = type;
+        if (type === 'edit'){
+            $scope.helper.isEditing = true;
+        } else {
+            $scope.helper.isEditing = false;
+        }
     };
     
         
@@ -96,25 +102,12 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     locale.ready('areas').then(function(){
         $scope.init();
         $scope.getProjections();
-        $scope.getUserAreaLayer();
+        $scope.helper.tabChange('USERAREAS');
         $scope.getAreaTypes();
         if ($scope.userAreasList.length === 0){
             $scope.getUserAreasList();
         }
     });
-    
-    //USER AREA LAYER
-    $scope.getUserAreaLayer = function(){
-        spatialRestService.getUserAreaLayer().then(function(response){
-            if (!angular.isDefined(areaMapService.getLayerByType('USERAREA'))){
-                areaMapService.addUserAreasWMS(response.data);
-            }
-        }, function(error){
-            $scope.alert.setError();
-            $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_layer');
-            $scope.alert.hideAlert();
-        });
-    };
     
     //USER AREAS LIST
     $scope.getUserAreasList = function(){

@@ -20,13 +20,16 @@ var resetLayerFilter = function(opt_options){
             for (var i = 0; i < layers.length; i++){
                 var cql = null;
                 var currentPams = layers[i].getSource().getParams();
-                var cqlComps = currentPams.cql_filter.split(' and');
-                if (cqlComps.length > 1){
-                    cql = cqlComps[0];
-                    layers[i].getSource().updateParams({
-                        'cql_filter': cql,
-                        time_: (new Date()).getTime()
-                    });
+                var currentCql = currentPams.cql_filter;
+                if (currentCql !== null){
+                    var cqlComps = currentCql.split(' and');
+                    if (cqlComps.length > 1){
+                        cql = cqlComps[0];
+                        layers[i].getSource().updateParams({
+                            'cql_filter': cql,
+                            time_: (new Date()).getTime()
+                        });
+                    }
                 }
             }
         }
@@ -97,6 +100,25 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
                     'STYLES': def.style,
                     'cql_filter': "user_name = '" + userService.getUserName() + "'"
                 }
+	        })
+	    });
+	    
+	    areaMs.map.addLayer(layer);
+	};
+	
+	//Add generic WMS
+	areaMs.addWMS = function(def){
+	    var layer = new ol.layer.Tile({
+	        type: def.typeName,
+	        source: new ol.source.TileWMS({
+	            url: def.serviceUrl,
+	            serverType: 'geoserver',
+	            params: {
+	                'LAYERS': def.geoName,
+	                'TILED': true,
+	                'STYLES': def.style,
+	                'cql_filter': angular.isDefined(def.cql) ? def.cql : null
+	            }
 	        })
 	    });
 	    
@@ -345,9 +367,6 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
 	areaMs.setLayerOpacity = function(type, value){
 	    var layer = areaMs.getLayerByType(type);
 	    if (angular.isDefined(layer)){
-	        if (!value){
-	            value = 1;
-	        }
 	        layer.setOpacity(value);
 	    }
 	};
@@ -375,6 +394,12 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
         });
 
         return layer[0];
+    };
+    
+    //Remove layer by type
+    areaMs.removeLayerByType = function(type){
+        var layer = areaMs.getLayerByType(type);
+        areaMs.map.removeLayer(layer);
     };
     
     //Bring layer to the top of the map

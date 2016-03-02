@@ -27,7 +27,7 @@
         	<div class="col-md-6 customPadding">
         		<!-- TAB MENU -->
         		<ul class="nav nav-pills tabMenu">
-	        		<li ng-repeat="tab in tabs" ng-click="selectTab(tab.tabId)" ng-class="{'active': selectedTab === '{{tab.tabId}}'}">
+	        		<li ng-repeat="tab in tabs" ng-click="(helper.isEditing && selectedTab !== '{{tab.tabId}}') || selectTab(tab.tabId)" ng-class="{'active': selectedTab === '{{tab.tabId}}', disabled: helper.isEditing && selectedTab !== '{{tab.tabId}}'}">
 	        			<a>{{tab.title}}</a>
 	        		</li>
         		</ul>
