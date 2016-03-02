@@ -1,4 +1,4 @@
-<div class="userAreasContainer" ng-controller="UserareasCtrl">
+<div class="areasTableContainer" ng-controller="UserareasCtrl">
 	<div ng-show="editingType === 'list'">
 		<!-- NEW AREA BTN -->
 		<div class="row newAreaBtn">
@@ -15,7 +15,7 @@
 			<div class="search-field">
 				<input st-search="" class="form-control" placeholder="{{'areas.search_table_placeholder' | i18n}}" type="text"/>
 			</div>
-			<div class="table table-striped tableSmart user-areas-table">
+			<div class="table table-striped tableSmart areas-table">
 				<div class="thead col-md-12">
                      <div class="tr row stColumnHeaders">
                          <div class="th col-md-3" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_name_header' | i18n}}</div>
@@ -171,7 +171,7 @@
 						<label class="col-md-12 withoutPadding" for="userAreaType">{{'areas.user_area_type' | i18n }}</label>
 						<div class="col-md-12 withoutPadding" ng-class="{'has-error': (userAreaForm.userAreaType.$dirty || userAreaSubmitted) && userAreaForm.userAreaType.$invalid}">
 							<div class="col-md-6 withoutPadding rightPadding">
-								<combobox ng-model="userArea.subType" items="areaTypes" editable="true" name="userAreaType" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n}}" ng-required="true"></combobox>
+								<combobox ng-model="userArea.subType" items="areaTypes" editable="true" components-with-scroll="'div.user-area-form'" name="userAreaType" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n}}" ng-required="true"></combobox>
 							</div>
 							<div class="col-md-6 withoutPadding leftPadding">
 								<div ng-messages="userAreaForm.userAreaType.$error" ng-show="userAreaForm.userAreaType.$dirty">
@@ -180,14 +180,13 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group scopeSelection"  ng-show="isUserAllowed('SHARE_USER_DEFINED_AREAS')">
+ 					<div class="form-group scopeSelection" ng-show="true" > <!--ng-show="isUserAllowed('SHARE_USER_DEFINED_AREAS')"> -->
 						<label for="scopeSelection">{{'areas.user_area_scope_selection' | i18n }}</label>
 						<combobox name="scopeSelection" ng-model="userArea.scopeSelection" multiple="true" items="userScopes" initialtext="Select a scope"></combobox>
 					</div>
 					<div class="form-group" ng-show="isUserAllowed('CREATE_USER_AREA_DATASET')">
-							<label for="datasetName" class="userAreaNameField">{{'areas.user_area_dataset_name' | i18n }}
-							</label>
-							<input type="text" class="form-control" ng-model="userArea.datasetName"/>
+						<label for="datasetName" class="userAreaNameField">{{'areas.user_area_dataset_name' | i18n }}</label>
+						<input type="text" class="form-control" ng-model="userArea.datasetName"/>
 					</div>		
 				</ng-form>
 			</div>

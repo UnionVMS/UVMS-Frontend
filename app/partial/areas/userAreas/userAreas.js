@@ -103,7 +103,6 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.init();
         $scope.getProjections();
         $scope.helper.tabChange('USERAREAS');
-        $scope.getAreaTypes();
         if ($scope.userAreasList.length === 0){
             $scope.getUserAreasList();
         }
@@ -224,6 +223,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     
     //CREATE NEW AREA
     $scope.createNewArea = function(){
+    	$scope.getAreaTypes();
         $scope.userArea.reset();
         $scope.isUpdate = false;
         $scope.setEditingType('edit');
@@ -362,8 +362,8 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
                     newCoords.push(tempCoord);
                 }
             } else {
-                if (angular.isDefined(UserArea.geometry)){
-                    newCoords = UserArea.geometry.getCoordinates()[0];
+                if (angular.isDefined($scope.userArea.geometry)){
+                    newCoords = $scope.userArea.geometry.getCoordinates()[0];
                     newCoords.pop();
                 }
             }

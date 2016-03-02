@@ -27,7 +27,25 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, locale, ar
         $scope.tabs = setTabs();
         areaMapService.setMap();
         $scope.map = areaMapService.map;
+        $scope.getUserAreasGroupsList();
     });
+
+    //USER AREAS GROUPS LIST
+    $scope.getUserAreasGroupsList = function(){
+        areaRestService.getUserAreaTypes().then(function(response){
+        	if (angular.isDefined(response)) {
+        		var areaGroups = [];
+        		for(var i=0;i<response.length;i++){
+        			areaGroups.push({code: i,text: response[i]});
+        		}
+        		$scope.userAreasGroups = areaGroups;
+        	}
+        }, function(error){
+            $scope.alert.setError();
+            $scope.alert.alertMessage = locale.getString('areas.error_getting_userarea_types');
+            $scope.alert.hideAlert();
+        });
+    };
     
     $scope.updateContainerSize = function(){
         var w = angular.element(window);
