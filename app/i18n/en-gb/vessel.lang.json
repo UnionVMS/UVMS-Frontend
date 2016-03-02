@@ -139,5 +139,6 @@
     "vessel_details_contact_number": "Contact number",
     "warning_multiple_terminals": "There is more than one active terminal of the same type for this vessel.",
     "zero_connected_mobile_terminals" : "The are no mobile terminals connected to this vessel.",
-    "view_vessel_on_failed_to_load_error" : "Failed to load the vessel  details."
+    "view_vessel_on_failed_to_load_error" : "Failed to load the vessel  details.",
+    "warn_max_length": "Must be {1} characters or less"
 }

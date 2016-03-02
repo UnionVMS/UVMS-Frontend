@@ -9,26 +9,26 @@
             </div>
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.ircs.$dirty) && vesselForm.ircs.$invalid}">
                 <label>{{ 'vessel.vessel_details_IRCS_code' | i18n }}</label>
-                <input type="text" name="ircs" class="form-control" ng-model="vessel.ircs" ng-maxlength="7">
-                <input-validation-message types="maxlength" input="vesselForm.ircs"></input-validation-message >
+                <input type="text" name="ircs" class="form-control" ng-model="vessel.ircs" ng-maxlength="8">
+                <input-validation-message types="maxlength" input="vesselForm.ircs" custom-messages="{{getMaxLengthMessage(8)}}"></input-validation-message>
             </div>
 
             <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.name.$dirty) && vesselForm.name.$invalid}">
                 <label>{{ 'vessel.vessel_details_name' | i18n }}</label>
-                <input type="text" name="name" class="form-control" ng-model="vessel.name" ng-maxlength="40" required >
-                <input-validation-message types="required,maxlength" input="vesselForm.name"></input-validation-message>
+                <input type="text" name="name" class="form-control" ng-model="vessel.name" ng-maxlength="40" required>
+                <input-validation-message types="required,maxlength" input="vesselForm.name" custom-messages="{{getMaxLengthMessage(40)}}"></input-validation-message>
             </div>
 
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.externalMarking.$dirty) && vesselForm.externalMarking.$invalid}">
                 <label>{{ 'vessel.vessel_details_ext_marking' | i18n }}</label>
                 <input type="text" name="externalMarking" class="form-control" ng-model="vessel.externalMarking" ng-maxlength="14" required>
-                <input-validation-message types="required,maxlength" input="vesselForm.externalMarking"></input-validation-message>
+                <input-validation-message types="required,maxlength" input="vesselForm.externalMarking" custom-messages="{{getMaxLengthMessage(14)}}"></input-validation-message>
             </div>
 
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.cfr.$dirty) && vesselForm.cfr.$invalid}">
                 <label>{{ 'vessel.vessel_details_CFR' | i18n }}</label>
                 <input type="text" name="cfr" class="form-control" ng-model="vessel.cfr" ng-required ng-pattern="cfrRegExp" existing="existingValues.cfr">
-                <input-validation-message types="pattern,required,unique" input="vesselForm.cfr" custom-messages="{{cfrValidationMessages}}"></input-validation-message >
+                <input-validation-message types="pattern,required,unique" input="vesselForm.cfr" custom-messages="{{cfrValidationMessages}}"></input-validation-message>
             </div>
             <div class="col-md-2 form-group smallerpaddingleft" ng-class="{'has-error': (submitAttempted || vesselForm.imo.$dirty) && vesselForm.imo.$invalid}">
                 <label>{{ 'vessel.vessel_details_IMO' | i18n }}</label>
@@ -42,7 +42,7 @@
             <div class="col-md-3 form-group smallerpaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.homeport.$dirty) && vesselForm.homeport.$invalid}">
                 <label>{{ 'vessel.vessel_details_home_port' | i18n }}</label>
                 <input type="text" name="homeport" class="form-control" ng-model="vessel.homePort" ng-maxlength="5"/>
-                <input-validation-message types="maxlength" input="vesselForm.homeport"></input-validation-message>
+                <input-validation-message types="maxlength" input="vesselForm.homeport" custom-messages="{{getMaxLengthMessage(5)}}"></input-validation-message>
             </div>
 
             <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.gearType.$dirty) && vesselForm.gearType.$invalid}">
