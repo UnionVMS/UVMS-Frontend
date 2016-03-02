@@ -1,4 +1,4 @@
-<div class="combobox" ng-class="{'combo-multiple': multiple, 'comboLineStyle': lineStyle === true, 'combo-editable': editable}" ng-model-options="{allowInvalid: true}">
+<div class="combobox" ng-class="{'combo-multiple': multiple, 'comboLineStyle': lineStyle === true, 'combo-editable': editable}" ng-model-options="{allowInvalid: true}" combolist-id="{{comboboxId}}">
 	<div class="dropdown fullWidthDropdown">
 		<div class="comboButtonContainer" ng-click="toggleCombo($event)">
 			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled" ng-if="!editable">
