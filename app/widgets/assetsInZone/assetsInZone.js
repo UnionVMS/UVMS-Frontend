@@ -11,7 +11,6 @@
 			controllerAs: 'ctrl',
 			restrict: 'E',
 			scope: {
-				flagState: '=',
 				refreshInterval: '='
 			},
 			templateUrl: 'widgets/assetsInZone/assetsInZone.html'
@@ -21,7 +20,7 @@
 	function AssetsInZoneController(assetsInZoneService, $scope, $interval) {
 		var vm = this;
 		function updateList() {
-			assetsInZoneService.getAssets($scope.flagState).then(function(assets) {
+			assetsInZoneService.getAssets().then(function(assets) {
 				vm.items = assets;
 				vm.error = undefined;
 			}, function(error) {
@@ -89,12 +88,11 @@
 		return moment.format('YYYY-MM-DD HH:mm:ss Z');
 	}
 
-	function getQuery(flagState) {
+	function getQuery() {
 		var toDate = moment.utc();
 		var fromDate = toDate.clone().subtract('hours', 24);
 
 		var query = {
-			areaCode: flagState,
 			fromDate: formatDate(fromDate),
 			toDate: formatDate(toDate)
 		};
@@ -119,9 +117,9 @@
 			getAssets: getAssets
 		};
 
-		function getAssets(flagState) {
+		function getAssets() {
 			var deferred = $q.defer();
-			$resource('/movement/rest/movement/listByAreaAndTimeInterval').save(getQuery(flagState), function(response) {
+			$resource('/movement/rest/movement/listByAreaAndTimeInterval').save(getQuery(), function(response) {
 				if (response.code !== "200") {
 					// Could not get movements.
 					deferred.reject(response.data || "Invalid data.");

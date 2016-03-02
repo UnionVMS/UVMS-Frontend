@@ -1,6 +1,4 @@
 angular.module('unionvmsWeb').controller('TodayCtrl',function($scope, holdingTable){
-    // Flag state will be SWE, for now.
-    $scope.flagState = 'SWE';
     $scope.refreshInterval = 60;
 
         $scope.data = {
