@@ -129,7 +129,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         $scope.currentMobileTerminal = mobileTerminal;
         alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
 
-        $scope.setCreateMode(false);
+        $scope.setCreateMode(false, true);
     };
 
     //Error creating the new mobile terminal
