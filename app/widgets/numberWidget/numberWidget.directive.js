@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('transpondersNoTx')
+		.module('numberWidget')
 		.directive('numberWidget', NumberWidget);
 
 	function NumberWidget() {
@@ -18,7 +18,7 @@
 			},
 			scope: true,
 			controllerAs: 'ctrl',
-			templateUrl: 'widgets/transpondersNoTx/transpondersNoTx.html'
+			templateUrl: 'widgets/numberWidget/numberWidget.html'
 		};
 	}
 })();

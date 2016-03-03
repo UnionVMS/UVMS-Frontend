@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('transpondersNoTx')
+		.module('numberWidget')
 		.directive('nonTransmittingTransponders', NonTransmittingTransponders);
 
 	/* @ngInject */

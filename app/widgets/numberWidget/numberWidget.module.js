@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module('transpondersNoTx', [
+	angular.module('numberWidget', [
 		'ngResource'
 	]);
 })();

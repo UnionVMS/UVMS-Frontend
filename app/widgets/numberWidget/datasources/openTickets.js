@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('transpondersNoTx')
+		.module('numberWidget')
 		.directive('openTickets', OpenTickets);
 
 	/* @ngInject */
