@@ -61,35 +61,37 @@
 			   	</div>
 			</ng-form>
 			<div class="col-md-12 btn-container">
-		   		<button class="btn btn-primary pull-right" type="button" ng-click="save()" ng-disabled="isSaving" ng-switch="isSaving">
+		   		<button class="btn btn-primary pull-right" type="button" ng-click="save()" ng-disabled="isSaving">
 			   		<span class="fa" ng-class="{'fa-refresh fa-spin': isSaving === true, 'fa-upload': isSaving === false}"></span>
-			   		<span ng-switch-when="true">
-		               	{{'areas.area_upload_modal_uploading_btn' | i18n}}
-		               </span>
-		               <span ng-switch-when="false">
-		               	{{'areas.area_upload_modal_upload_btn' | i18n}}
-		               </span>
+		               	<span>
+		               		{{'areas.area_upload_modal_upload_btn' | i18n}}
+		               	</span>
 		   		</button>
 		   	</div>
 		</div>
 		<!-- UPDATE METADATA -->
-		<div ng-show="editingType === 'metadata'">
+		<div class="updateMetadata" ng-show="editingType === 'metadata'">
 			<ng-form name="meatadataForm">
 				<div class="row">
 					<div class="form-group col-md-12 metadata-group">
 						<label for="areaDesc">{{'areas.metadata_area_description_title' | i18n}}</label>
-						<textarea class="form-control" name="areaDesc" ng-model="areaDesc"></textarea>
+						<textarea class="form-control" name="areaDesc" ng-model="helper.metadata.areaDesc"></textarea>
 					</div>
 					<div class="form-group col-md-12 metadata-group">
 						<label for="shortCopy">{{'areas.metadata_short_copyright_title' | i18n}}</label>
-						<textarea class="form-control" name="shortCopy" ng-model="shortCopy"></textarea>
+						<textarea class="form-control" name="shortCopy" ng-model="helper.metadata.shortCopy"></textarea>
 					</div>
 					<div class="form-group col-md-12 metadata-group">
 						<label for="longCopy">{{'areas.metadata_long_copyright_title' | i18n}}</label>
-						<textarea class="form-control" name="longCopy" ng-model="longCopy"></textarea>
+						<textarea class="form-control" name="longCopy" ng-model="helper.metadata.longCopy"></textarea>
 					</div>
 				</div>
 			</ng-form>
+			<div class="col-md-12 btn-container">
+		   		<button class="btn btn-primary pull-right" type="button" ng-click="saveMetadata()" ng-class="{disabled: !metadataAvailable}">
+			   		<span>{{'areas.update_metadata_btn' | i18n}}</span>
+		   		</button>
+		   	</div>
 		</div>
 	</div>
 	</div>

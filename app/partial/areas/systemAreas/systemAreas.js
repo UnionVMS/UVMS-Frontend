@@ -1,6 +1,6 @@
-angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,projectionService,spatialRestService,areaMapService,areaHelperService,locale){
-
-	$scope.map = areaMapService.map;
+angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,projectionService,areaAlertService,areaRestService,spatialRestService,areaMapService,areaHelperService,locale){
+    $scope.alert = areaAlertService;
+    $scope.map = areaMapService.map;
 	$scope.sysAreaType = "";
 	$scope.selectedProj = "";
 	$scope.isSaving = false;
@@ -8,6 +8,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
 	$scope.projections = projectionService;
 	$scope.helper = areaHelperService;
 	$scope.editingType = 'upload';
+	$scope.metadataAvailable = false;
     
 	$scope.fileNameChanged = function(elem){
 		if(elem.value){
@@ -30,6 +31,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         $scope.saved = true;
         $scope.isSaving = true;
         if ($scope.SysareasForm.$valid && $scope.validFile.isValid){
+            $scope.alert.setLoading(locale.getString('areas.uploading_message'));
             var projCode = $scope.projections.getProjectionEpsgById($scope.selectedProj);
         	if(angular.isDefined(projCode) && $scope.sysAreaType){
         		var objTest = {
@@ -39,13 +41,15 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         		};
         		spatialRestService.uploadFile(objTest).then(
 				    function (data) {
+				        $scope.alert.removeLoading();
 				    	$scope.alert.setSuccess();
 				        $scope.alert.alertMessage = locale.getString('areas.upload_system_area_success');
 				        $scope.alert.hideAlert();
 				    	$scope.isSaving = false;
 				    }, function(error) {
+				        $scope.alert.removeLoading();
 				    	$scope.alert.setError();
-				        $scope.alert.alertMessage = locale.getString('areas.upload_system_area_error');
+				        $scope.alert.alertMessage = locale.getString('areas.upload_system_area_error') + error.data.msg;
 				        $scope.alert.hideAlert();
 				    	$scope.isSaving = false;
 				    }
@@ -75,19 +79,6 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         return item;
     };
     
-    //TODO  remove this stuff, use areamapservice instead
-    $scope.removeLayerByType = function(layerType){
-        if (angular.isDefined($scope.map)){
-            var mapLayers = $scope.map.getLayers();
-            if (mapLayers.getLength() > 1){
-                var layer = mapLayers.getArray().find(function(layer){
-                    return layer.get('type') === layerType;
-                });
-                $scope.map.removeLayer(layer);
-            }
-        }
-    };
-    
     $scope.init = function(){
         if ($scope.projections.items.length === 0){
             $scope.projections.getProjections();
@@ -97,6 +88,8 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
     
     $scope.$watch('sysAreaType', function(newVal, oldVal){
         if (angular.isDefined(newVal) && newVal !== oldVal){
+            $scope.helper.resetMetadata();
+            $scope.helper.displayedSystemAreaLayer = newVal;
             var item = $scope.getFullDefForItem(newVal);
             
             if (angular.isDefined(item)){
@@ -105,9 +98,38 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
                 }
                 areaMapService.addWMS(item);
                 $scope.helper.displayedLayerType = item.typeName;
+                
+                if ($scope.editingType === 'metadata'){
+                    areaRestService.getLayerMetadata(item.typeName).then(getMetadataSuccess, getMetadataFailure);
+                }
             }
         }
     });
+    
+    $scope.$watch('editingType', function(newVal, oldVal){
+        $scope.helper.resetMetadata();
+        if (angular.isDefined(newVal) && newVal !== oldVal && newVal === 'metadata'){
+            $scope.alert.setLoading(locale.getString('areas.getting_area_metadata'));
+            var item = $scope.getFullDefForItem($scope.sysAreaType);
+            areaRestService.getLayerMetadata(item.typeName).then(getMetadataSuccess, getMetadataFailure);
+        }
+    });
+    
+    
+    
+    var getMetadataSuccess = function(response){
+        $scope.metadataAvailable = true;
+        $scope.helper.setMetadata(response);
+        $scope.alert.removeLoading();
+    };
+    
+    var getMetadataFailure = function(error){
+        $scope.metadataAvailable = false;
+        $scope.alert.removeLoading();
+        $scope.alert.setError();
+        $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_layer');
+        $scope.alert.hideAlert();
+    };
     
     locale.ready('areas').then(function(){
         $scope.init();

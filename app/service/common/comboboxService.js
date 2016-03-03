@@ -63,9 +63,9 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
     		}
 	        activeCombo = undefined;
     	}
-		$($window).unbind('mousedown');
-		$('[uib-modal-window]').unbind('mousedown');
-		$($window).unbind('resize');
+		$($window).unbind('mousedown', closeCombo);
+		$('[uib-modal-window]').unbind('mousedown', closeCombo);
+		$($window).unbind('resize', closeCombo);
 		$(window).off("scroll", closeCombo);
     };
 	

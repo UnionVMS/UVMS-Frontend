@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, locale, areaMapService, areaAlertService, areaHelperService){
+angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, locale, areaMapService, areaAlertService, areaHelperService,areaRestService){
     $scope.selectedTab = 'USERAREAS';
     $scope.alert = areaAlertService;
     $scope.helper = areaHelperService;
@@ -26,7 +26,7 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, locale, ar
     locale.ready('areas').then(function(){
         $scope.tabs = setTabs();
         areaMapService.setMap();
-        $scope.map = areaMapService.map;
+        areaHelperService.clearHelperService();
         $scope.getUserAreasGroupsList();
     });
 
@@ -48,8 +48,8 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, locale, ar
     };
     
     $scope.updateContainerSize = function(){
-        var w = angular.element(window);
         setTimeout(function() {
+            var w = angular.element(window);
             var offset = 50;
             var minHeight = 340;
             var footerHeight = angular.element('footer')[0].offsetHeight;
@@ -66,19 +66,26 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, locale, ar
             	$(item).css('height', newHeight - $('.tabMenu').height() - 30);
             });
             
+            
+            if ($scope.selectedTab === 'USERAREAS'){
+                
+            }
             //div with table list of user areas
-            $('.user-areas-table .tbody').css('max-height', newHeight - $('.tabMenu').height() - 65 - 36 - 108); // .user-areas-table .thead'
+            $('#user-areas-table .tbody').css('max-height', newHeight - $('.tabMenu').height() - 65 - 36 - 108); // .user-areas-table .thead'
             
             //User areas form
             $('.area-form-container').css('height', $($('.base-area-container')[0]).height() - 40 - 50 - 45); //.editingTools and .user-area-btns and slider
             
             $('.area-loading').css('width', $('.areaCard').width());
             $('.areaMap').css('height', newHeight);
+            
+            //Update
+            
             areaMapService.updateMapSize();
         }, 100);
     };
     
-    $(window).resize($scope.updateContainerSize);
+    $($window).resize($scope.updateContainerSize);
     angular.element(document).ready(function () {
         $scope.updateContainerSize();
     });

@@ -53,6 +53,13 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
                     method: 'DELETE'
                 }
             });
+        },
+        getLayerMetadata: function(){
+            return $resource('/spatial/rest/servicelayer/:layer', {}, {
+                'get': {
+                    method: 'GET'
+                }
+            });
         }
     };
 })
@@ -127,6 +134,16 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
                 deferred.reject(error);
 	        });
 	        return deferred.promise;
+	    },
+	    getLayerMetadata: function(layerName){
+	        var deferred = $q.defer();
+            areaRestFactory.getLayerMetadata().get({layer: layerName.toUpperCase()}, function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.error('Error getting area metadata.');
+                deferred.reject(error);
+            });
+            return deferred.promise;
 	    }
 	};
 

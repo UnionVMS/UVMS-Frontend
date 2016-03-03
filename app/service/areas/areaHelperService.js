@@ -3,8 +3,34 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	var areaHelperService = {
 	    isEditing: false,
 	    displayedLayerType: undefined,
+	    displayedSystemAreaLayer: undefined,
 	    systemAreaTypes: undefined,
 	    systemAreaItems: [],
+	    metadata: {
+	        areaDesc: undefined,
+	        shortCopy: undefined,
+	        longCopy: undefined
+	    },
+	    setMetadata: function(data){
+	        this.metadata.areaDesc = data.layerDesc;
+	        this.metadata.shortCopy = data.shortCopyright;
+	        this.metadata.longCopy = data.longCopyright;
+	    },
+	    resetMetadata: function(){
+	        var keys = _.keys(this.metadata);
+	        for (var i = 0; i < keys.length; i++){
+	            this.metadata[keys[i]] = undefined;
+	        }
+	    },
+	    clearHelperService: function(){
+	        if (angular.isDefined(this.displayedSystemAreaLayer)){
+	            areaMapService.removeLayerByType(this.displayedSystemAreaLayer);
+	            this.displayedSystemAreaLayer = undefined;
+	        }
+	        this.isEditing = false;
+	        this.displayedLayerType = undefined;
+	        this.resetMetadata();
+	    },
 	    tabChange: function(destTab){
 	        if (angular.isDefined(this.displayedLayerType)){
 	            areaMapService.removeLayerByType(this.displayedLayerType);
@@ -16,8 +42,23 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	                getUserAreaLayer(this);
 	            } else if (destTab ===  'SYSAREAS'){
 	                getAreaLocationLayers(this);
+	                if (angular.isDefined(this.displayedSystemAreaLayer)){
+	                    this.displayedLayerType = this.displayedSystemAreaLayer;
+	                    var item = getAreaLocationLayerDef(this);
+	                    areaMapService.addWMS(item);
+	                    
+	                }
 	            }
 	            
+	        }
+	    }
+	};
+	
+	//Get AreaLocationLayer by type
+	var getAreaLocationLayerDef = function(obj){
+	    for (var i = 0; i < obj.systemAreaTypes.length; i++){
+	        if (obj.systemAreaTypes[i].typeName === obj.displayedSystemAreaLayer){
+	            return obj.systemAreaTypes[i];
 	        }
 	    }
 	};
@@ -50,7 +91,7 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
                 areaAlertService.hideAlerts();
             });
         }
-    }
+    };
 
 	return areaHelperService;
 });
