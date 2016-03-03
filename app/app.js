@@ -10,7 +10,6 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'ngCsv',
     'ui.router',
     'usm',
-    'googlechart',
     'checklist-model',
     'angularScreenfull',
 	'ngCookies',
@@ -24,7 +23,7 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
 	'dndLists',
 	'ui.bootstrap-slider',
 	'widget.assetsInZone',
-    'transpondersNoTx',
+    'numberWidget',
     'unionvmsWeb.longPolling',
     'n3-line-chart',
     'qtip2'
