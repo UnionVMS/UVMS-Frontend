@@ -171,7 +171,7 @@
 						<label class="col-md-12 withoutPadding" for="userAreaType">{{'areas.user_area_type' | i18n }}</label>
 						<div class="col-md-12 withoutPadding" ng-class="{'has-error': (userAreaForm.userAreaType.$dirty || userAreaSubmitted) && userAreaForm.userAreaType.$invalid}">
 							<div class="col-md-6 withoutPadding rightPadding">
-								<combobox ng-model="userArea.subType" items="areaTypes" editable="true" components-with-scroll="'div.user-area-form'" name="userAreaType" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n}}" ng-required="true"></combobox>
+								<combobox ng-model="userArea.subType" items="areaTypes" editable="true" components-with-scroll="'div.user-area-form'" uppercase="true" name="userAreaType" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n | uppercase}}" ng-required="true"></combobox>
 							</div>
 							<div class="col-md-6 withoutPadding leftPadding">
 								<div ng-messages="userAreaForm.userAreaType.$error" ng-show="userAreaForm.userAreaType.$dirty">
