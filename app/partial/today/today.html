@@ -8,16 +8,16 @@
 			</div>
 			<div class="row">
 				<div class="col-md-3" style="height: 50px;">
-					<number-widget title="Reports in holding" value="holdingTableOpenCount"/>
+					<number-widget holding-reports></number-widget>
 				</div>
 				<div class="col-md-3" style="height: 50px;">
-					<number-widget title="Transponder alarms" value="alarmCount"/>
+					<number-widget open-tickets></number-widget>
 				</div>
 				<div class="col-md-3" style="height: 50px;">
-					<transponders-no-tx/>
+					<number-widget non-transmitting-transponders></number-widget>
 				</div>
 				<div class="col-md-3" style="height: 50px;">
-					<number-widget title="Manual reports outbox" value="drafts"/>
+					<number-widget draft-movements></number-widget>
 				</div>
 			</div>
 		</div>

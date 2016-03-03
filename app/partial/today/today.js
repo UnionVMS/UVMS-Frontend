@@ -1,5 +1,9 @@
-angular.module('unionvmsWeb').controller('TodayCtrl',function($scope, holdingTable){
+angular.module('unionvmsWeb').controller('TodayCtrl',function($scope, $interval){
     $scope.refreshInterval = 60;
+
+    $interval(function() {
+        $scope.$broadcast("dashboard.refresh");
+    }, $scope.refreshInterval * 1000);
 
         $scope.data = {
             dataset0: [
@@ -30,17 +34,6 @@ angular.module('unionvmsWeb').controller('TodayCtrl',function($scope, holdingTab
     axes: {x: {key: "x"}}
     };
     
-    holdingTable.countOpen().then(function(count) {
-        $scope.holdingTableOpenCount = count;
-    });
-
-    holdingTable.countAlarms().then(function(count) {
-        $scope.alarmCount = count;
-    });
-
-    holdingTable.countDraftMovements().then(function(drafts) {
-        $scope.drafts = drafts;
-    });
 	 var chart1 = {};
         chart1.type = "ColumnChart";
         chart1.displayed = false;

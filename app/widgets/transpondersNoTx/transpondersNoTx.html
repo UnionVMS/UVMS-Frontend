@@ -1,4 +1,9 @@
-<div class="transponders-no-tx">
-	<div class="description">{{ctrl.i18n('description')}}</div>
-	<div class="value">{{ctrl.transponderCount}}</div>
+<div class="number-widget">
+	<div class="value">
+		<span ng-bind="ctrl.value"></span>
+		<span class="placeholder" ng-if="ctrl.value === undefined">--</span>
+	</div>
+	<div class="title">
+		<div class="content" ng-bind="ctrl.title"></div>
+	</div>
 </div>
