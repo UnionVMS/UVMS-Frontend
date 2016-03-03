@@ -91,7 +91,9 @@ accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '
 		            $log.log(response);
 		            $scope.ldapUser = response.ldapUser;
 		            // Fill Data in the form...
-		            $scope.user = {};
+		            //$scope.user = {};
+                    user.userName = response.ldapUser.userName;
+                    user.person = {};
 		            user.person.firstName = $scope.ldapUser.firstName;
 		            user.person.lastName = $scope.ldapUser.lastName;
 		            user.person.email = $scope.ldapUser.email;
