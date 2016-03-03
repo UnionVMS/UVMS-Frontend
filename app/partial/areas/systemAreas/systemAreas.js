@@ -27,6 +27,8 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
 		}
 	};
 	
+	
+	//Uploading new file
     $scope.save = function(){
         $scope.saved = true;
         $scope.isSaving = true;
@@ -55,6 +57,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
 				    }
 			    );
         	}else{
+        	    $scope.alert.removeLoading();
         		$scope.alert.setError();
         	    $scope.alert.alertMessage = locale.getString('areas.upload_system_area_invalid_field_error');
         	    $scope.alert.hideAlert();
@@ -67,6 +70,25 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
             $scope.alert.hideAlert();
         }
     };
+    
+    //Updating metadata
+    $scope.saveMetadata = function(){
+        if ($scope.metadataForm.$valid){
+            $scope.alert.setLoading(locale.getString('areas.updating_metadata'));
+            areaRestService.updateLayerMetadata($scope.helper.metadata).then(function(response){
+                $scope.alert.removeLoading();
+                $scope.alert.setSuccess();
+                $scope.alert.alertMessage = locale.getString('areas.updating_metadata_success');
+                $scope.alert.hideAlert();
+            }, function(error){
+                $scope.alert.removeLoading();
+                $scope.alert.setError();
+                $scope.alert.alertMessage = locale.getString('areas.updating_metadata_error');
+                $scope.alert.hideAlert();
+            });
+        }
+    };
+    
     
     //Get full definition for data types, so that we can add the layer to the map
     $scope.getFullDefForItem = function(type){
@@ -85,7 +107,6 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         }
     };
     
-    
     $scope.$watch('sysAreaType', function(newVal, oldVal){
         if (angular.isDefined(newVal) && newVal !== oldVal){
             $scope.helper.resetMetadata();
@@ -100,6 +121,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
                 $scope.helper.displayedLayerType = item.typeName;
                 
                 if ($scope.editingType === 'metadata'){
+                    $scope.alert.setLoading(locale.getString('areas.getting_area_metadata'));
                     areaRestService.getLayerMetadata(item.typeName).then(getMetadataSuccess, getMetadataFailure);
                 }
             }
@@ -114,8 +136,6 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
             areaRestService.getLayerMetadata(item.typeName).then(getMetadataSuccess, getMetadataFailure);
         }
     });
-    
-    
     
     var getMetadataSuccess = function(response){
         $scope.metadataAvailable = true;

@@ -67,20 +67,26 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, l
             });
             
             
-            if ($scope.selectedTab === 'USERAREAS'){
-                
-            }
+            //USERAREAS
             //div with table list of user areas
             $('#user-areas-table .tbody').css('max-height', newHeight - $('.tabMenu').height() - 65 - 36 - 108); // .user-areas-table .thead'
             
             //User areas form
             $('.area-form-container').css('height', $($('.base-area-container')[0]).height() - 40 - 50 - 45); //.editingTools and .user-area-btns and slider
             
+            //SYSAREAS
+            if ($('.sysareas-radio-btns').height() === 0){
+                var base = $($('.base-area-container')[0]).height();
+                $('.updateMetadata').css('height', base - (Math.abs(base - newHeight)) - 15);
+            } else {
+                $('.updateMetadata').css('height', newHeight - $('.tabMenu').height() - 65 - $('.sysareas-radio-btns').height());
+            }
+            
+            $('.metadata-container').css('height', $('.updateMetadata').height() - 45);
+            
+            //GENERIC CONTAINERS
             $('.area-loading').css('width', $('.areaCard').width());
             $('.areaMap').css('height', newHeight);
-            
-            //Update
-            
             areaMapService.updateMapSize();
         }, 100);
     };

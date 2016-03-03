@@ -7,11 +7,15 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	    systemAreaTypes: undefined,
 	    systemAreaItems: [],
 	    metadata: {
+	        id: undefined,
+	        areaName: undefined,
 	        areaDesc: undefined,
 	        shortCopy: undefined,
 	        longCopy: undefined
 	    },
 	    setMetadata: function(data){
+	        this.metadata.id = data.id;
+	        this.metadata.areaName = data.name;
 	        this.metadata.areaDesc = data.layerDesc;
 	        this.metadata.shortCopy = data.shortCopyright;
 	        this.metadata.longCopy = data.longCopyright;

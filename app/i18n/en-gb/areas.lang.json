@@ -77,6 +77,9 @@
 	"update_metadata_btn": "Save metadata",
 	"getting_area_metadata": "Loading area metadata...",
 	"error_getting_area_metadata": "There was an error while getting area metadata. Please try again.",
+	"updating_metadata": "Updating metadata...",
+	"updating_metadata_success": "Area metadata was successfully updated",
+	"updating_metadata_error": "There was an error while updating area metadata. Please try again.",
 	
 	"polygon_min_number_points": "A polygon cannot be build with less than 3 geographical coordinates.",
 	"null_geom": "There is no geometry defined. Please use the drawing tools to create a new area.",
@@ -107,6 +110,7 @@
 	"error_coords_form": "There are errors in your coordinate definitions. Please check your data.",
 	"error_empty_geom": "There is no geometry in the map. You must press the apply button in the coordinates form.",
 	"user_area_dataset_creation_not_allowed": "Dataset creation is not allowed for your user profile",
+	"user_area_sharing_not_allowed": "Sharing areas is not allowed for your user profile",
 	
 	"table_no_data": "No data available",
 	"table_delete_area_btn": "Delete area",

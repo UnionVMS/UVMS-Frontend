@@ -42,27 +42,20 @@
     				<div>{{area.subType}}</div>
     			</div>
     		</div>
-    		<div class="form-group">
+    		<div class="form-group scopes" ng-show="scopes">
     			<label class="col-md-3">{{'areas.user_area_scope_selection' | i18n }}</label>
     			<div class="col-md-9">
-    				SCOPES
+    				<ul>
+    					<li ng-repeat="item in area.scopeSelection">{{item}}</li>
+    				</ul>
     			</div>
     		</div>
-    		<div class="form-group">
+    		<div class="form-group" ng-show="dataset">
     			<label class="col-md-3">{{'areas.user_area_dataset_name' | i18n }}</label>
     			<div class="col-md-9">
-    				DATASET
+    				{{area.datasetName}}
     			</div>
     		</div>
-    		<!-- <div class="form-group scopeSelection"  ng-show="isUserAllowed('SHARE_USER_DEFINED_AREAS')">
-				<label for="scopeSelection">{{'areas.user_area_scope_selection' | i18n }}</label>
-				<combobox name="scopeSelection" ng-model="userArea.scopeSelection" multiple="true" items="userScopes" initialtext="Select a scope"></combobox>
-			</div>
-			<div class="form-group" ng-show="isUserAllowed('CREATE_USER_AREA_DATASET')">
-					<label for="datasetName" class="userAreaNameField">{{'areas.user_area_dataset_name' | i18n }}
-					</label>
-					<input type="text" class="form-control" ng-model="userArea.datasetName"/>
-			</div>	 -->
     	</div>
     </div>
 </div>

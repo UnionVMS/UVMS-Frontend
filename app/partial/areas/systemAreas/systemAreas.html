@@ -10,7 +10,7 @@
 		</div>
 	</div>
 	
-	<div ng-show="sysAreaType !== ''">
+	<div class="sysareas-radio-btns" ng-show="sysAreaType">
 		<div class="row">
 		<div class="col-md-12 form-group radioButtons">
 			<label class="radio-inline">
@@ -28,37 +28,39 @@
 		<div ng-show="editingType === 'upload'">
 			<!-- UPLOAD AREA -->
 			<ng-form name="SysareasForm">
-				<div class="proj-container col-md-12 form-group form-inline" ng-show="projections.items.length > 0">
-					<div class="row">
-						<div class="col-md-3 proj-label">
-							<label for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
+				<div class="form-container">
+					<div class="proj-container col-md-12 form-group form-inline" ng-show="projections.items.length > 0">
+						<div class="row">
+							<div class="col-md-3 proj-label">
+								<label for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
+							</div>
+							<div class="col-md-9 proj-combo" ng-class="{'has-error': (SysareasForm.editingProjection.$dirty || saved) && SysareasForm.editingProjection.$invalid}">
+								<combobox ng-model="selectedProj" items="projections.items" name="editingProjection" initialtext="{{'areas.editing_projection_label' | i18n}}" ng-required="true"></combobox>
+							</div>
+							<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.editingProjection.$error" ng-show="(SysareasForm.editingProjection.$dirty || saved) && SysareasForm.editingProjection.$invalid">
+								<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
+							</div>
 						</div>
-						<div class="col-md-9 proj-combo" ng-class="{'has-error': (SysareasForm.editingProjection.$dirty || saved) && SysareasForm.editingProjection.$invalid}">
-							<combobox ng-model="selectedProj" items="projections.items" name="editingProjection" initialtext="{{'areas.editing_projection_label' | i18n}}" ng-required="true"></combobox>
-						</div>
-						<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.editingProjection.$error" ng-show="(SysareasForm.editingProjection.$dirty || saved) && SysareasForm.editingProjection.$invalid">
+					</div>
+					
+					<div class="col-md-12 form-group input-group" ng-class="{'has-error': (SysareasForm.areaFile.$dirty || saved) && SysareasForm.areaFile.$invalid}">
+				 		<span class="btn btn-primary btn-file input-group-addon">
+							{{'areas.area_upload_select_zip_file_btn' | i18n}}
+							<input type="file" accept="application/zip" onchange="angular.element(this).scope().fileNameChanged(this)"/>
+						</span>
+						<input type="text" class="form-control" ng-model="sysAreafile" name="areaFile" ng-required="true" readonly>
+						<span class="input-group-addon alert-success" ng-show="validFile.isValid === true">
+							<i class="fa fa-check alert-success"></i>
+						</span>
+						<span class="input-group-addon alert-danger" ng-show="validFile.isValid === false">
+							<i class="fa fa-times alert-danger"></i>
+						</span>
+						<a href="" qtip content="{{'areas.area_upload_select_zip_file_info_btn' | i18n}}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+						<div class="innerErrorMessagesFileUpload" ng-messages="SysareasForm.areaFile.$error" ng-show="(SysareasForm.areaFile.$touched && validFile.isValid === false || saved) && SysareasForm.areaFile.$invalid">
 							<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 						</div>
-					</div>
+				   	</div>
 				</div>
-				
-				<div class="col-md-12 form-group input-group" ng-class="{'has-error': (SysareasForm.areaFile.$dirty || saved) && SysareasForm.areaFile.$invalid}">
-			 		<span class="btn btn-primary btn-file input-group-addon">
-						{{'areas.area_upload_select_zip_file_btn' | i18n}}
-						<input type="file" accept="application/zip" onchange="angular.element(this).scope().fileNameChanged(this)"/>
-					</span>
-					<input type="text" class="form-control" ng-model="sysAreafile" name="areaFile" ng-required="true" readonly>
-					<span class="input-group-addon alert-success" ng-show="validFile.isValid === true">
-						<i class="fa fa-check alert-success"></i>
-					</span>
-					<span class="input-group-addon alert-danger" ng-show="validFile.isValid === false">
-						<i class="fa fa-times alert-danger"></i>
-					</span>
-					<a href="" qtip content="{{'areas.area_upload_select_zip_file_info_btn' | i18n}}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-					<div class="innerErrorMessagesFileUpload" ng-messages="SysareasForm.areaFile.$error" ng-show="(SysareasForm.areaFile.$touched && validFile.isValid === false || saved) && SysareasForm.areaFile.$invalid">
-						<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
-					</div>
-			   	</div>
 			</ng-form>
 			<div class="col-md-12 btn-container">
 		   		<button class="btn btn-primary pull-right" type="button" ng-click="save()" ng-disabled="isSaving">
@@ -70,9 +72,16 @@
 		   	</div>
 		</div>
 		<!-- UPDATE METADATA -->
-		<div class="updateMetadata" ng-show="editingType === 'metadata'">
-			<ng-form name="meatadataForm">
-				<div class="row">
+		<div class="updateMetadata col-md-12" ng-show="editingType === 'metadata'">
+			<ng-form name="metadataForm">
+				<div class="row form-container metadata-container">
+					<div class="form-group col-md-12 metadata-group" ng-class="{'has-error': metadataForm.areaName.$dirty && metadataForm.areaName.$invalid}">
+						<label for="areaName">{{'areas.metadata_area_description_title' | i18n}}</label>
+						<input type="text" class="form-control" name="areaName" ng-model="helper.metadata.areaName" ng-required="true">
+						<div class="innerErrorMessagesInputWithUpLabel" ng-messages="metadataForm.areaName.$error" ng-show="metadataForm.areaName.$dirty && metadataForm.areaName.$invalid">
+							<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
+						</div>
+					</div>
 					<div class="form-group col-md-12 metadata-group">
 						<label for="areaDesc">{{'areas.metadata_area_description_title' | i18n}}</label>
 						<textarea class="form-control" name="areaDesc" ng-model="helper.metadata.areaDesc"></textarea>

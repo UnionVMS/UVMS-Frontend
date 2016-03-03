@@ -12,8 +12,10 @@
     }
   }
   .system-area-body {
-    padding-top: 15px;
-    border: 1px solid #dddddd;
+    .form-container {
+      padding-top: 15px;
+      border: 1px solid #dddddd;
+    }
     .section-title {
 		  font-weight: bold;
     	text-transform: uppercase;
@@ -22,14 +24,10 @@
 		  padding-left: 15px;
 		  padding-right: 35px;
 		}
-		.row {
-			line-height: 30px;
-		}
     .metadata-group {
-      padding-left: 30px;
-      padding-right: 30px;
       textarea {
         max-width: 100%;
+        min-width: 100%;
       }
     }
 	}
@@ -52,6 +50,15 @@
 	    	color: #089fd7;
 	    }
 	}
+  .updateMetadata{
+    .btn {
+      margin-right: -15px;
+    }
+  }
+  .metadata-container{
+    overflow-y: auto;
+    height: 100%;
+  }
 }
 
 .qtip.info-qtip {

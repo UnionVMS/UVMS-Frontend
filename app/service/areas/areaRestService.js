@@ -60,6 +60,16 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
                     method: 'GET'
                 }
             });
+        },
+        updateLayerMetadata: function(){
+            return $resource('/spatial/rest/servicelayer/:id', {}, {
+                'update': {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            });
         }
     };
 })
@@ -141,6 +151,24 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
                 deferred.resolve(response.data);
             }, function(error){
                 console.error('Error getting area metadata.');
+                deferred.reject(error);
+            });
+            return deferred.promise;
+	    },
+	    updateLayerMetadata: function(data){
+	        var id = data.id;
+	        var payload = {
+	            name: data.areaName,
+	            layerDesc: data.areaDesc,
+	            shortCopyright: data.shortCopy,
+	            longCopyright: data.longCopy
+	        };
+	        
+	        var deferred = $q.defer();
+            areaRestFactory.updateLayerMetadata().update({id: id}, angular.toJson(payload), function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.error('Error updating area metadata.');
                 deferred.reject(error);
             });
             return deferred.promise;

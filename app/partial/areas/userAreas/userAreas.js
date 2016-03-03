@@ -478,6 +478,12 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
            resolve: {
                areaData: function(){
                    return data;
+               },
+               scopesAllowed: function(){
+                   return $scope.isUserAllowed('SHARE_USER_DEFINED_AREAS');
+               },
+               datasetAllowed: function(){
+                   return $scope.isUserAllowed('CREATE_USER_AREA_DATASET');
                }
            }
         });
@@ -500,7 +506,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
                 $scope.alert.setLoading(locale.getString('areas.updating_area'));
                 areaRestService.updateUserArea(angular.toJson(feature)).then(function(response) {
                     createSuccess(response, 'areas.update_user_area_success');
-                }, createSuccess, function(error) {
+                }, function(error) {
                     createError(error, 'areas.error_saving_user_area');
                 });
             }
@@ -542,7 +548,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.resetFeature();
         
         //reload wms and table
-        areaMapService.refreshWMSLayer('USERAREA');
+        areaMapService.refreshWMSLayer('USERAREA'); //TODO check this
         $scope.getUserAreasList();
         $scope.setEditingType('list');
         $scope.activeTool = undefined;
