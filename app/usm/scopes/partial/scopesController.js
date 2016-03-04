@@ -373,6 +373,9 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
             scope.activeTo = scope.activeTo ? moment.utc(scope.activeTo).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null;
             $log.log(scope);
             if (mode === 'new') {
+                // remove unnecessary attributes total, result when creating a scope
+                delete scope.total;
+                delete scope.results;
                 scopeServices.createScope(scope).then(
                     function (response) {
                         $scope.newScope = response.newScope;
