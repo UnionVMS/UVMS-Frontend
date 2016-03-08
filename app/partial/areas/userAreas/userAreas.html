@@ -55,18 +55,60 @@
 		<!-- TOOL BUTTONS -->
 		<div class="editingTools text-center">
 			<div class="btn-group" role="group" aria-label="editing buttons">
-				<button type="button" class="btn btn-default" ng-class="{active: activeTool === 'draw'}" ng-click="toggleTool('draw')">
-					<span class="fa fa-plus-square-o"></span> &nbsp;
-					<span>{{'areas.draw_tool' | i18n}}</span>
-				</button>
-				<button type="button" class="btn btn-default" ng-class="{active: activeTool === 'edit', disabled: !userArea.geometry}" ng-click="toggleTool('edit')">
-					<span class="fa fa-pencil-square-o"></span> &nbsp;
-					<span>{{'areas.edit_tool' | i18n}}</span>
-				</button>
+				<!-- CREATE -->
+				<div class="btn-group">
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" 
+						ng-class="{active: activeTool === 'draw' || activeTool === 'circular'}" title="{{createBtnTitle}}">
+						<span class="fa" ng-class="{'fa-plus-square-o': activeTool !== 'draw' && activeTool !== 'circular', 'fa-pencil': activeTool === 'draw', 'fa-dot-circle-o': activeTool === 'circular'}"></span> &nbsp;
+						<span>{{'areas.create_tool' | i18n}}</span>
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li>
+							<a ng-click="toggleTool('draw')">
+								<span class="fa fa-pencil"></span> &nbsp;
+								<span>{{'areas.draw_tool' | i18n}}</span>
+							</a>
+						</li>
+						<li>
+							<a ng-click="toggleTool('circular')">
+								<span class="fa fa-dot-circle-o"></span> &nbsp;
+								<span>{{'areas.circular_area_tool' | i18n}}</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<!-- EDIT -->
+				<div class="btn-group" ng-show="userArea.geometry">
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+						ng-class="{active: activeTool === 'edit' || activeTool === 'drag'}" title="{{editBtnTitle}}">
+						<span class="fa" ng-class="{'fa-pencil-square-o': activeTool !== 'edit' && activeTool !== 'drag', 'fa-link': activeTool === 'edit', 'fa-arrows': activeTool === 'drag'}"></span> &nbsp;
+						<span>{{'areas.edit_tool' | i18n}}</span>
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li>
+							<a ng-click="toggleTool('edit')">
+								<span class="fa fa-link"></span> &nbsp;
+								<span>{{'areas.modify_tool' | i18n}}</span>
+							</a>
+						</li>
+						<li>
+							<a ng-click="toggleTool('drag')">
+								<span class="fa fa-arrows"></span> &nbsp;
+								<span>{{'areas.drag_tool' | i18n}}</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+				
+				<!-- COORDS -->
 				<button type="button" class="btn btn-default" ng-click="toggleTool('coord')" ng-class="{active: activeTool === 'coord'}">
 					<span class="fa fa-map-pin"></span> &nbsp;
 					<span>{{'areas.coord_tool' | i18n}}</span>
 				</button>
+				
+				<!-- IMPORT -->
 				<button type="button" class="btn btn-default" ng-click="activateImport()">
 					<span class="fa fa-upload"></span> &nbsp;
 					<span>{{'areas.import_tool' | i18n}}</span>
@@ -83,19 +125,73 @@
 			</div>
 		</div>
 		<div class="area-form-container">
+			<!-- CIRCULAR AREAS -->
+			<div class="circular-areas-form" ng-show="activeTool === 'circular'">
+				<div class="form-group text-center">
+					<div ng-show="projections.items.length > 0">
+						<span class="section-title">{{'areas.circular_area_tool' | i18n}}</span>
+						<div class="proj-container form-inline">
+							<div class="col-md-3 proj-label">
+								<label for="circularProjection">{{'areas.editing_projection_label' | i18n}}</label>
+							</div>
+							<div class="col-md-9 proj-combo">
+								<combobox ng-model="selectedCircularProj" items="projections.items" name="circularProjection" ng-change="changeCircularProj(selectedCircularProj)" ng-init="setMapProjectionOnCombo()" ng-if="selectedCircularProj"></combobox>
+							</div>
+						</div>
+					</div>
+					<ng-form name="circularForm" class="row form-inline proj-container" novalidate>
+						<!-- COORDINATE X -->
+						<div class="form-group col-md-12 no-padding">
+							<div class="col-md-3 control-label">
+								<label for="pointx">{{'areas.long_coord_x' | i18n}}</label>
+							</div>
+							<div class="col-md-9 control-input">
+							    <input ng-model="userArea.centroidCoords[0]" name="pointx" type="number" class="form-control" step="any" ng-required="true">
+							</div>
+						</div>
+						<!-- COORDINATE Y -->
+						<div class="form-group col-md-12 no-padding">
+							<div class="col-md-3 control-label">
+								<label for="pointy">{{'areas.long_coord_y' | i18n}}</label>
+							</div>
+							<div class="col-md-9 control-input">
+							    <input ng-model="userArea.centroidCoords[1]" name="pointy" type="number" class="form-control" step="any" ng-required="true">
+							</div>
+						</div>
+						<!-- DISTANCE -->
+						<div class="form-group col-md-12 no-padding">
+							<div class="col-md-3 control-label">
+								<label for="radius">{{'areas.buffer_radius' | i18n}}</label>
+							</div>
+							<div class="col-md-4 control-input">
+							    <input ng-model="bufferRadius" name="radius" type="number" class="form-control" step="any" min="1" ng-required="true">
+							</div>
+							<div class="col-md-5 control-input">
+							    <combobox name="distUnit" ng-model="selectedUnit" items="distUnits">
+							</div>
+						</div>
+					</ng-form>
+				</div>
+				<div class="circular-btns">
+					<button class="btn btn-default btn-sm" ng-click="resetCentroid()">{{'areas.reset_btn' | i18n}}</button>
+					<button class="btn btn-default btn-sm" ng-click="calculateBuffer()" ng-class="{disabled: userArea.centroidCoords.length !== 2 || !bufferRadius}">{{'areas.apply_btn' | i18n}}</button>
+				</div>
+			</div>
 			<!-- COORDINATES -->
 			<div class="area-coord-form" ng-show="coordVisible">
 				<div class="form-group text-center">
-					<span class="section-title">{{'areas.coord_tool' | i18n}}</span>
-					
-					<div class="proj-container form-inline" ng-show="projections.items.length > 0">
-						<div class="col-md-3 proj-label">
-							<label for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
-						</div>
-						<div class="col-md-9 proj-combo">
-							<combobox ng-model="selectedProj" items="projections.items" name="editingProjection" ng-change="changeProjection(selectedProj)" ng-init="changeProjection(selectedProj)" ng-if="selectedProj"></combobox>
+					<div ng-show="projections.items.length > 0">
+						<span class="section-title">{{'areas.coord_tool' | i18n}}</span>
+						<div class="proj-container form-inline">
+							<div class="col-md-3 proj-label">
+								<label for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
+							</div>
+							<div class="col-md-9 proj-combo">
+								<combobox ng-model="selectedProj" items="projections.items" name="editingProjection" ng-change="changeProjection(selectedProj)" ng-init="changeProjection(selectedProj)" ng-if="selectedProj"></combobox>
+							</div>
 						</div>
 					</div>
+					
 					<div class="table-responsive-force coord-table" st-table="displayedCoords" st-safe-src="userArea.coordsArray" ng-show="coordVisible">
 						<div class="thead container-fluid">
 				        	<div class="tr row">
@@ -110,10 +206,10 @@
 					        	<div class="tr row" ng-repeat="coord in displayedCoords">
 					        		<div class="td col-md-1 coord-idx">{{$index}}</div>
 						        	<div class="td col-md-4 coord-right-margin" ng-class="{'has-error': (coordsForm.x_{{$index}}.$error.required || coordsForm.x_{{$index}}.$invalid) && coordsForm.x_{{$index}}.$dirty}">
-						        		<input type="number" name="x_{{$index}}" class="form-control" ng-required="true" ng-model="coord[0]" />
+						        		<input type="number" name="x_{{$index}}" class="form-control" ng-required="true" ng-model="coord[0]" step="any"/>
 						        	</div>
 						        	<div class="td col-md-4" ng-class="{'has-error': (coordsForm.y_{{$index}}.$error.required || coordsForm.y_{{$index}}.$invalid) && coordsForm.y_{{$index}}.$dirty}">
-						        		<input type="number" name="y_{{$index}}" class="form-control" ng-required="true" ng-model="coord[1]" />
+						        		<input type="number" name="y_{{$index}}" class="form-control" ng-required="true" ng-model="coord[1]" step="any"/>
 						        	</div>
 						        	<div class="td col-md-2 delete-coord">
 						        		<a ng-click="deleteCoordRow($index)" title="{{'areas.delete_coords_row' | i18n}}">

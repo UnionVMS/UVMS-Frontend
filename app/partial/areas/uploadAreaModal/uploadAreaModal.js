@@ -123,7 +123,7 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
                         }
                     }
                 }
-                if (x && y && !isNaN(x) && !isNaN(y)){
+                if (!isNaN(x) && !isNaN(y)){
                     coords.push([x,y]);
                 }
             }
@@ -143,9 +143,14 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
             var geom = new ol.geom.Polygon();
             geom.setCoordinates([coords]);
             
-            geom = $scope.checkAndWarpGeometry(geom);
-            
-            return geom;
+            if (geom.getArea() === 0){
+                $scope.errorMessage = locale.getString('areas.area_upload_modal_invalid_polygon');
+                $scope.setError();
+                return;
+            } else {
+                geom = $scope.checkAndWarpGeometry(geom);
+                return geom;
+            }
         } else {
             $scope.errorMessage = locale.getString('areas.area_upload_modal_parsing_error');
             $scope.setError();
@@ -192,7 +197,13 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
                 $modalInstance.close(geom);
             }
             
-            return geom;
+            if (geom.getArea() === 0){
+                $scope.errorMessage = locale.getString('areas.area_upload_modal_invalid_polygon');
+                $scope.setError();
+                return;
+            } else {
+                return geom;
+            }
         } catch (e) {
             $scope.errorMessage = locale.getString('areas.area_upload_modal_parsing_error_wkt');
             $scope.setError();

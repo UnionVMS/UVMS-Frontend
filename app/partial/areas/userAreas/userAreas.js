@@ -1,27 +1,35 @@
 angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale, $modal, projectionService, UserArea, areaHelperService, areaMapService, areaRestService, areaAlertService, spatialRestService, unitConversionService, userService){
-    $scope.activeTool = undefined;
+    $scope.createBtnTitle = undefined;
+    $scope.editBtnTitle = undefined;
     $scope.selectedProj = undefined;
     $scope.userAreasList = [];
     $scope.displayedUserAreas = [].concat($scope.userAreasList);
     $scope.itemsByPage = 5;
     $scope.tableLoading = false;
     $scope.editingType = 'list';
-//    $scope.editingType = 'edit';
     $scope.isUpdate = false;
     $scope.searchString = '';
     $scope.userAreaTransp = 0;
-//    $scope.userAreaType = "";
     $scope.btnAddArea = true;
     $scope.currentContext = undefined;
     $scope.projections = projectionService;
     $scope.helper = areaHelperService;
     
+    //Distance units
+    $scope.selectedUnit = 'm';
+    $scope.distUnits = [];
+    $scope.distUnits.push({"text": locale.getString('spatial.map_measuring_units_meters'), "code": "m"});
+    $scope.distUnits.push({"text": locale.getString('spatial.map_measuring_units_nautical_miles'), "code": "nm"});
+    $scope.distUnits.push({"text": locale.getString('spatial.map_measuring_units_miles'), "code": "mi"});
+    
     $scope.init = function(){
+        $scope.activeTool = undefined;
         $scope.coordVisible = false;
         $scope.userAreaSubmitted = false;
         
         $scope.userArea = UserArea;
         $scope.userArea.reset();
+        $scope.bufferRadius = undefined;
         $scope.displayedCoords = [].concat($scope.userArea.coordsArray);
 
         $scope.currentContext = userService.getCurrentContext();
@@ -72,19 +80,46 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     };
     
     $scope.activateDraw = function(){
+        $scope.createBtnTitle = locale.getString('areas.create_tool') + ' ' + locale.getString('areas.draw_tool').toLowerCase();
         areaMapService.addDrawControl();
     };
     
     $scope.deactivateDraw = function(){
+        $scope.createBtnTitle = locale.getString('areas.create_tool_default_title');
         areaMapService.removeDrawControl();
     };
     
+    $scope.activateCircular = function(){
+        $scope.createBtnTitle = locale.getString('areas.create_tool') + ' ' + locale.getString('areas.circular_area_tool').toLowerCase();
+        areaMapService.addCircularControl();
+    };
+    
+    $scope.deactivateCircular = function(){
+        $scope.createBtnTitle = locale.getString('areas.create_tool_default_title');
+        areaMapService.removeCircularControl();
+        areaMapService.removeVectorFeatures('pointdraw');
+        $scope.userArea.resetCentroid();
+        $scope.bufferRadius = undefined;
+    };
+    
     $scope.activateEdit = function(){
+        $scope.editBtnTitle = locale.getString('areas.edit_tool') + ': ' + locale.getString('areas.modify_tool').toLowerCase();
         areaMapService.addEditControl();
     };
     
     $scope.deactivateEdit = function(){
+        $scope.createBtnTitle = locale.getString('areas.edit_tool_default_title');
         areaMapService.removeEditControl();
+    };
+    
+    $scope.activateDrag = function(){
+        $scope.editBtnTitle = locale.getString('areas.edit_tool') + ': ' + locale.getString('areas.drag_tool').toLowerCase();
+        areaMapService.addDragControl();
+    };
+    
+    $scope.deactivateDrag = function(){
+        $scope.createBtnTitle = locale.getString('areas.edit_tool_default_title');
+        areaMapService.removeDragControl();
     };
     
     $scope.activateCoord = function(){
@@ -100,6 +135,8 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     };
     
     locale.ready('areas').then(function(){
+        $scope.createBtnTitle = locale.getString('areas.create_tool_default_title');
+        $scope.editBtnTitle = locale.getString('areas.edit_tool_default_title');
         $scope.init();
         $scope.getProjections();
         $scope.helper.tabChange('USERAREAS');
@@ -218,6 +255,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         
         areaMapService.zoomToGeom(geom);
         areaMapService.raiseLayer('drawlayer');
+        areaMapService.raiseLayer('pointdraw');
         areaMapService.addVectorFeature(geom);
     };
     
@@ -228,9 +266,13 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.isUpdate = false;
         $scope.setEditingType('edit');
         areaMapService.raiseLayer('drawlayer');
+        areaMapService.raiseLayer('pointdraw');
         areaMapService.clearParams('USERAREA');
         if (!angular.isDefined($scope.selectedProj)){
-            $scope.setMapProjectionOnCombo();
+            $scope.setMapProjectionOnCombo('selectedProj');
+        }
+        if (!angular.isDefined($scope.selectedCircularProj)){
+            $scope.setMapProjectionOnCombo('selectedCircularProj');
         }
     }; 
     
@@ -242,9 +284,9 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     };
     
     //Set map projection as default item on the combobox
-    $scope.setMapProjectionOnCombo = function(){
+    $scope.setMapProjectionOnCombo = function(projProp){
         var mapProj = areaMapService.getMapProjectionCode();
-        $scope.selectedProj = $scope.projections.getProjectionIdByEpsg(mapProj); 
+        $scope[projProp] = $scope.projections.getProjectionIdByEpsg(mapProj); 
     };
     
     //PROJECTION LISTENER
@@ -257,8 +299,29 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.lastSelectedProj = angular.copy(newVal);
     };
     
+    $scope.changeCircularProj = function(newVal){
+        if (!angular.isDefined($scope.lastSelectedCentroidProj)){
+            var proj = areaMapService.getMapProjectionCode();
+            $scope.lastSelectedCentroidProj = $scope.projections.getProjectionIdByEpsg(proj);
+            $scope.userArea.centroidProj = proj;
+        }
+        
+        $scope.selectedCircularProj = newVal;
+        var selProj = 'EPSG:' + $scope.projections.getProjectionEpsgById(newVal);
+        if (newVal !== $scope.lastSelectedCentroidProj && selProj !== $scope.userArea.centroidProj && $scope.lastSelectedCentroidProj !== undefined){
+            $scope.warpCentroid(selProj);
+        }
+        $scope.lastSelectedCentroidProj = angular.copy(newVal);
+    };
+    
     $scope.$watch('coordVisible', function(newVal, oldVal){
-        var proj =  'EPSG:' + $scope.projections.getProjectionEpsgById($scope.selectedProj);
+        var selProj = $scope.projections.getProjectionEpsgById($scope.selectedProj);
+        var proj;
+        if (!angular.isDefined(selProj)){
+            proj = areaMapService.getMapProjectionCode();
+        } else {
+            proj =  'EPSG:' + selProj;
+        }
         if (newVal && proj !== $scope.userArea.coordsProj){
             $scope.warpCoords(proj);
         } 
@@ -333,7 +396,16 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     //Coordinates reset button
     $scope.resetGeometry = function(){
         $scope.userArea.resetGeometry();
-        areaMapService.removeVectorFeatures();
+        areaMapService.removeVectorFeatures('drawlayer');
+    };
+    
+    //Circular polygon reset centroid
+    $scope.resetCentroid = function(){
+        $scope.resetGeometry();
+        $scope.userArea.resetCentroid();
+        areaMapService.removeVectorFeatures('pointdraw');
+        areaMapService.removeVectorFeatures('drawlayer');
+        $scope.bufferRadius = undefined;
     };
     
     //Coordinates apply button
@@ -342,7 +414,13 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
             if ($scope.userArea.coordsArray.length >= 3){
                 var coords = [].concat($scope.userArea.coordsArray);
                 coords.push($scope.userArea.coordsArray[0]);
-                areaMapService.addVectorFeatureFromCoords(coords, $scope.userArea.coordsProj, true);
+                var status = areaMapService.addVectorFeatureFromCoords(coords, $scope.userArea.coordsProj, true);
+                if (status === false){
+                    $scope.alert.setError();
+                    $scope.alert.alertMessage = locale.getString('areas.error_coords_form_invalid_polygon');
+                    $scope.alert.hideAlert();
+                    angular.element('.area-form-container')[0].scrollTop = 0;
+                }
             }
         } else {
             $scope.alert.setError();
@@ -372,11 +450,23 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.userArea.coordsProj = to;
     };
     
+    //Convert centroid coordinates
+    $scope.warpCentroid = function(to){
+        var newCoords;
+        if (to !== $scope.userArea.centroidProj){
+            newCoords = ol.proj.transform($scope.userArea.centroidCoords, $scope.userArea.centroidProj, to);
+        }
+        $scope.userArea.centroidCoords = newCoords;
+        $scope.userArea.centroidProj = to;
+    };
+    
     //Global reset button
     $scope.resetFeature = function(){
         $scope.init();
         $scope.userAreaForm.$setPristine();
-        areaMapService.removeVectorFeatures();
+        $scope.circularForm.$setPristine();
+        areaMapService.removeVectorFeatures('drawlayer');
+        areaMapService.removeVectorFeatures('pointdraw');
     };
     
     //Validate if geometry exists and is equal to coords array
@@ -463,9 +553,19 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         });
         
         modalInstance.result.then(function(geom){
-            areaMapService.addVectorFeature(geom, true); 
-            $scope.userArea.setCoordsFromGeom();
-            $scope.userArea.coordsProj = areaMapService.getMapProjectionCode();
+            areaMapService.addVectorFeature(geom, true);
+            
+            var mapProj = areaMapService.getMapProjectionCode();
+            var selProj = 'EPSG:' +  projectionService.getProjectionEpsgById($scope.selectedProj);
+            if ($scope.activeTool === 'coord' && selProj !== mapProj){
+                var clone = geom.clone(); 
+                clone.transform(mapProj, selProj);
+                $scope.userArea.setCoordsFromObj(clone);
+                $scope.userArea.coordsProj = selProj;
+            } else {
+                $scope.userArea.setCoordsFromGeom();
+                $scope.userArea.coordsProj = mapProj;
+            }
         });
     };
     
@@ -487,6 +587,64 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
                }
            }
         });
+    };
+    
+    //Get centroid coordinates in WGS and Map projection
+    $scope.getMultiProjCentroidCoords = function(){
+        var finalCoords = {
+            inMapProj: $scope.userArea.centroidCoords,
+            inWgs:  $scope.userArea.centroidCoords
+        };
+        
+        if ($scope.userArea.centroidProj !== 'EPSG:4326'){
+            finalCoords.inWgs = ol.proj.transform(finalCoords.inWgs, $scope.userArea.centroidProj, 'EPSG:4326');
+        }
+        
+        if ($scope.userArea.centroidProj !== areaMapService.getMapProjectionCode()){
+            finalCoords.inMapProj = ol.proj.transform(finalCoords.inMapProj, $scope.userArea.centroidProj, areaMapService.getMapProjectionCode());
+        }
+        
+        return finalCoords;
+    };
+    
+    //Compute the buffer
+    $scope.calculateBuffer = function(){
+        if ($scope.circularForm.$valid){
+            if (!angular.isDefined($scope.userArea.centroidProj)){
+                $scope.userArea.centroidProj = areaMapService.getMapProjectionCode();
+            }
+            
+            var coords = $scope.getMultiProjCentroidCoords();
+            
+            var src = areaMapService.getLayerByType('pointdraw').getSource();
+            var feature;
+            if (src.getFeatures().length === 0){
+                feature = new ol.Feature(
+                    new ol.geom.Point(coords.inMapProj)
+                );
+                src.addFeature(feature);
+            } else {
+                feature = src.getFeatures()[0];
+                feature.getGeometry().setCoordinates(coords.inMapProj);
+            }
+            
+            //Get the distance in meters
+            var dist = $scope.bufferRadius;
+            if ($scope.selectedUnit === 'nm'){
+                dist = unitConversionService.distance.nmToKm($scope.bufferRadius) * 1000;
+            } else if ($scope.selectedUnit === 'mi'){
+                dist = unitConversionService.distance.miToKm($scope.bufferRadius) * 1000;
+            }
+            
+            //Finally compute the buffer
+            var pt = areaMapService.pointCoordsToTurf(coords.inWgs);
+            var buffer = turf.buffer(pt, dist, 'meters');
+            
+            var bufferGeom = areaMapService.turfToOlGeom(buffer);
+            areaMapService.addVectorFeature(bufferGeom, true);
+            $scope.userArea.setCoordsFromGeom();
+            $scope.userArea.coordsProj = areaMapService.getMapProjectionCode();
+        }
     };
     
     //Global save button
@@ -548,7 +706,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.resetFeature();
         
         //reload wms and table
-        areaMapService.refreshWMSLayer('USERAREA'); //TODO check this
+        areaMapService.clearParams('USERAREA');
         $scope.getUserAreasList();
         $scope.setEditingType('list');
         $scope.activeTool = undefined;

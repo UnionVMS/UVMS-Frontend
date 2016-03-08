@@ -1,8 +1,8 @@
 .scopeSelection {
-	position:relative; 
-	
+	position:relative;
+
 	select {
-		width: 100% !important; 
+		width: 100% !important;
 		border: 1px solid #c2c9cc;
 	}
 
@@ -29,6 +29,12 @@
 	.editingTools {
 		margin-bottom: 10px;
 		//margin-top: 20px;
+		ul>li {
+			text-align: justify;
+			a {
+				padding: 0 0 0 12px;
+			}
+		}
 		.btn.active {
 			color: #000;
 			&:focus,
@@ -77,8 +83,20 @@
 		margin-top: 10px;
 	}
 
-	.area-coord-form {
+	.area-coord-form,
+	.circular-areas-form {
 		margin-bottom: 20px;
+		.no-margin {
+			margin-bottom: 0;
+		}
+		.no-padding {
+			padding: 0 0 15px 0;
+		}
+		.circular-btns {
+			margin-top: -34px;
+	    display: inline-block;
+	    float: right;
+		}
 	}
 
 	.user-area-btns {
@@ -96,10 +114,10 @@
 	}
 
 	.area-coord-form,
+	.circular-areas-form,
 	.user-area-form {
 		border: 1px solid #dddddd;
 		padding: 10px;
-		//height: 800px;
 		label {
 			font-weight: 200;
 		}
@@ -109,7 +127,8 @@
 		}
 	}
 
-	.area-coord-form {
+	.area-coord-form,
+	.circular-areas-form {
 		.coord-table {
 			margin-top: 10px;
 			.thead,
@@ -147,6 +166,19 @@
 		}
 		.proj-container {
 				text-align: justify;
+				.control-label {
+					padding-left: 0;
+					line-height: 30px;
+				}
+				.control-input {
+					padding-right: 0;
+					.form-control {
+						width: 100%;
+					}
+				}
+				label {
+					font-weight: bold;
+				}
 				.proj-label {
 					line-height: 60px;
 					vertical-align: baseline;
@@ -163,7 +195,7 @@
 	textarea[name=userAreaDesc]{
 		resize: none;
 	}
-	
+
 	.userAreaNameField {
 		position: relative;
 	}
@@ -174,12 +206,12 @@
 			font-weight: bold;
 		}
 	}
-	
+
 	.userAreaTypeGroup {
 		display: inline-block;
 	    width: 100%;
     }
-	
+
 	.user-area-btns {
 		.pull-right {
 			button {

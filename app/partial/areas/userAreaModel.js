@@ -11,6 +11,8 @@ angular.module('unionvmsWeb').factory('UserArea',function() {
         geometry: undefined,
         coordsArray: [],
         coordsProj: undefined,
+        centroidCoords: [],
+        centroidProj: undefined,
         datasetName: undefined,
         reset: function(){
             reset();
@@ -20,6 +22,15 @@ angular.module('unionvmsWeb').factory('UserArea',function() {
         },
         setCoordsFromGeom: function(){
             setCoordsFromGeom();
+        },
+        setCoordsFromObj: function(geomObj){
+            setCoordsFromObj(geomObj);
+        },
+        setCentroidCoords: function(coords){
+            this.centroidCoords = coords;
+        },
+        resetCentroid: function(){
+            resetCentroid();
         },
         setPropertiesFromJson: function(data){
             this.id = parseInt(data.id);
@@ -43,6 +54,7 @@ angular.module('unionvmsWeb').factory('UserArea',function() {
         UserArea.endDate = undefined;
         UserArea.scopeSelection = [];
         UserArea.resetGeometry();
+        UserArea.resetCentroid();
         UserArea.datasetName = undefined;
     };
     
@@ -56,6 +68,16 @@ angular.module('unionvmsWeb').factory('UserArea',function() {
         coords.pop();
         UserArea.coordsArray = coords; 
     };
+    
+    var setCoordsFromObj = function(geomObj){
+        var coords = geomObj.getCoordinates()[0];
+        coords.pop();
+        UserArea.coordsArray = coords;
+    };
+    
+    var resetCentroid = function(){
+        UserArea.centroidCoords = [];
+    }
 
 	return UserArea;
 });

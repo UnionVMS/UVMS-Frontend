@@ -177,6 +177,19 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
 	    });
 	    
 	    areaMs.map.addLayer(layer);
+	    
+	    var points = new ol.Collection();
+	    var pointLayer = new ol.layer.Vector({
+	        type: 'pointdraw',
+	        source: new ol.source.Vector({
+	            features: points,
+	            wrapX: false
+	        }),
+	        wrapX: false,
+	        style: areaMs.setPointStyle
+	    });
+	    
+	    areaMs.map.addLayer(pointLayer);
 	};
 	
 	areaMs.setVectorStyle = function(feature, resolution){
@@ -224,8 +237,25 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
 	    return styles;
 	};
 	
-	areaMs.removeVectorFeatures = function(){
-	    var layer = areaMs.getLayerByType('drawlayer');
+	areaMs.setPointStyle = function(feature, resolution){
+	    var style = new ol.style.Style({
+	        image: new ol.style.Circle({
+	            radius: 8,
+	            fill: new ol.style.Fill({
+	                color: '#A94442'
+	            }),
+	            stroke: new ol.style.Stroke({
+	                color: '#FFFFFF',
+                    width: 3
+	            })
+	        })
+	    });
+	    
+	    return [style];
+	};
+	
+	areaMs.removeVectorFeatures = function(type){
+	    var layer = areaMs.getLayerByType(type);
         if (angular.isDefined(layer)){
             layer.getSource().clear();
         }
@@ -235,11 +265,17 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
 	    var geom = new ol.geom.Polygon();
         geom.setCoordinates([coords]);
         
-        if (srcProj !== areaMs.getMapProjectionCode()){
-            geom.transform(srcProj, areaMs.getMapProjectionCode());
+        var status = true;
+        if (geom.getArea() === 0){
+            status = false;
+        } else {
+            if (srcProj !== areaMs.getMapProjectionCode()){
+                geom.transform(srcProj, areaMs.getMapProjectionCode());
+            }
+            
+            areaMs.addVectorFeature(geom, doZoom);
         }
-        
-        areaMs.addVectorFeature(geom, doZoom);
+        return status;
 	};
 	
 	areaMs.addVectorFeature = function(geom, doZoom){
@@ -294,6 +330,45 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
 	    areaMs.map.removeInteraction(areaMs.getInteractionsByType('Draw')[0]);
 	};
 	
+	areaMs.addCircularControl = function(){
+	    var layer = areaMs.getLayerByType('pointdraw');
+	    if (angular.isDefined(layer)){
+            var source = layer.getSource(); 
+            var draw = new ol.interaction.Draw({
+                source: source,
+                type: 'Point',
+                condition: ol.events.condition.noModifierKeys,
+                freehandCondition: ol.events.condition.never
+            });
+            
+            draw.on('drawstart', function(evt){
+                var features = source.getFeatures();
+                if (features.length !== 0){
+                    UserArea.centroidCoords = [];
+                    source.clear();
+                }
+            });
+            
+            draw.on('drawend', function(evt){
+                var coords = evt.feature.getGeometry().getCoordinates();
+                var mapProj = areaMs.getMapProjectionCode();
+                if (!angular.isDefined(UserArea.centroidProj)){
+                    UserArea.centroidProj = mapProj;
+                }
+                if (mapProj !== UserArea.centroidProj){
+                    coords = ol.proj.transform(coords, mapProj, UserArea.centroidProj);
+                }
+                UserArea.centroidCoords = coords;
+            });
+            
+            areaMs.map.addInteraction(draw);
+        }
+	};
+	
+	areaMs.removeCircularControl = function(){
+        areaMs.map.removeInteraction(areaMs.getInteractionsByType('Draw')[0]);
+    };
+	
 	areaMs.addEditControl = function(){
 	    var layer = areaMs.getLayerByType('drawlayer');
         if (angular.isDefined(layer)){
@@ -317,6 +392,27 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
 	
 	areaMs.removeEditControl = function(){
         areaMs.map.removeInteraction(areaMs.getInteractionsByType('Modify')[0]);
+    };
+    
+    areaMs.addDragControl = function(){
+        var layer = areaMs.getLayerByType('drawlayer');
+        if (angular.isDefined(layer)){
+            var translate = new ol.interaction.Translate({
+                features: layer.getSource().getFeaturesCollection()
+            });
+            
+            translate.on('translateend', function(evt){
+                UserArea.geometry = evt.features.item(0).getGeometry();
+                UserArea.setCoordsFromGeom();
+                UserArea.coordsProj = areaMs.getMapProjectionCode();
+            });
+            
+            areaMs.map.addInteraction(translate);
+        }
+    };
+    
+    areaMs.removeDragControl = function(){
+        areaMs.map.removeInteraction(areaMs.getInteractionsByType('Translate')[0]);
     };
 	
 	//Default controls
@@ -353,6 +449,21 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
 	    
 	    return new ol.Collection(interactions);
 	};
+	
+	//TURF
+	areaMs.pointCoordsToTurf = function(coords){
+        var format = new ol.format.GeoJSON();
+        var point = new ol.Feature(
+            new ol.geom.Point(coords)
+        );
+        
+        return format.writeFeatureObject(point);
+    };
+    
+    areaMs.turfToOlGeom = function(feature){
+        var format = new ol.format.GeoJSON();
+        return format.readFeatures(feature)[0].getGeometry().transform('EPSG:4326', areaMs.getMapProjectionCode());
+    };
 	
 	//GENERIC FUNCTIONS
 	//Refresh WMS layer

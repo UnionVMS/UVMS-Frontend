@@ -92,7 +92,7 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
             }, function(error){
                 areaAlertService.errorMessage = locale.getString('spatial.area_selection_modal_get_sys_layers_error');
                 areaAlertService.hasError = true;
-                areaAlertService.hideAlerts();
+                areaAlertService.hideAlert();
             });
         }
     };

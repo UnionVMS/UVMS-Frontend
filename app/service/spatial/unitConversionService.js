@@ -44,6 +44,9 @@ angular.module('unionvmsWeb').factory('unitConversionService',function($filter, 
 	        miToNm: function(dist){
                 return dist / 1.15077945;
             },
+            miToKm: function(dist){
+                return dist * 1.609344;
+            },
             formatDistance: function(distance, decimalPlaces){
                 var unit = this.getUnit();
                 var value = distance;

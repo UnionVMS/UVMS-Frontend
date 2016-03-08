@@ -48,12 +48,14 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
 				        $scope.alert.alertMessage = locale.getString('areas.upload_system_area_success');
 				        $scope.alert.hideAlert();
 				    	$scope.isSaving = false;
+				    	$scope.saved = false;
 				    }, function(error) {
 				        $scope.alert.removeLoading();
 				    	$scope.alert.setError();
 				        $scope.alert.alertMessage = locale.getString('areas.upload_system_area_error') + error.data.msg;
 				        $scope.alert.hideAlert();
 				    	$scope.isSaving = false;
+				    	$scope.saved = false;
 				    }
 			    );
         	}else{
@@ -62,9 +64,11 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         	    $scope.alert.alertMessage = locale.getString('areas.upload_system_area_invalid_field_error');
         	    $scope.alert.hideAlert();
         		$scope.isSaving = false;
+        		$scope.saved = false;
         	}
         } else {
         	$scope.isSaving = false;
+        	$scope.saved = false;
         	$scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.upload_system_area_required_fields_error');
             $scope.alert.hideAlert();
@@ -102,6 +106,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
     };
     
     $scope.init = function(){
+        $scope.saved = false;
         if ($scope.projections.items.length === 0){
             $scope.projections.getProjections();
         }
@@ -121,6 +126,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
                 $scope.helper.displayedLayerType = item.typeName;
                 
                 if ($scope.editingType === 'metadata'){
+                    $scope.metadataForm.$setPristine();
                     $scope.alert.setLoading(locale.getString('areas.getting_area_metadata'));
                     areaRestService.getLayerMetadata(item.typeName).then(getMetadataSuccess, getMetadataFailure);
                 }
