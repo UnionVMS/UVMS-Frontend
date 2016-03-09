@@ -45,7 +45,7 @@
 		    				<combobox ng-model="report.positionSelector" items="positionItems"></combobox>
 		    			</div>
 		    			<div class="col-md-4 col-no-padding">
-		    				<div ng-hide="report.positionSelector === 'all'" style="width: 100%;">
+		    				<div ng-show="report.positionSelector === 'last'" style="width: 100%;">
 			    				<div class="form-group col-md-6 field-noLabel" ng-class="{'has-error': (reportForm.reportBodyForm.xValue.$dirty || submitingReport === true) && reportForm.reportBodyForm.xValue.$invalid}">
 			    					<!-- <label for="positionsCounter">{{'spatial.reports_form_positions_x_value' | i18n}}</label> -->
 			    					<input id="positionsCounter" class="form-control" type="number" min="0" name="xValue" ng-required="report.positionSelector !== 'all' && report" ng-model="report.xValue" />
@@ -129,9 +129,9 @@
 	   						<a class="button" ng-click="resetForm()" ng-show="getFormMode('CREATE')">{{"spatial.reports_form_clear_btn" | i18n }}</a>
 	   					</div>
 	   					<div class="formSubmitBtn">
-	   						<button class="btn btn-primary button" type="submit" ng-show="getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="runReport()">{{"spatial.reports_table_run_label" | i18n }}</button>
-	   						<button class="btn btn-primary button" type="submit" ng-show="getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="saveAsReport()">{{"spatial.reports_form_save_as_btn" | i18n }}</button>
-	   						<button class="btn btn-primary button" type="submit" ng-click="saveReport()">{{"spatial.reports_form_save_btn" | i18n }}</button>
+	   						<button class="btn btn-primary button" type="button" ng-show="getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="runReport()">{{"spatial.reports_table_run_label" | i18n }}</button>
+	   						<button class="btn btn-primary button" type="button" ng-show="getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="saveAsReport()">{{"spatial.reports_form_save_as_btn" | i18n }}</button>
+	   						<button class="btn btn-primary button" type="button" ng-click="saveReport()">{{"spatial.reports_form_save_btn" | i18n }}</button>
 	   					</div>
 	   				</div>
    				</div>

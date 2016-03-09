@@ -18,8 +18,10 @@
 				</svg>
 				<span ng-class="{'caret': !multiple || selectedItems && selectedItems.length === 0,'clear-all item-remover fa fa-times': multiple && selectedItems.length > 0}" ng-click="removeAllSelected()"></span>
 			</button>
-			<input class="form-control combo-editable-input" ng-model="newItem.text" ng-if="editable" ng-change="onComboChange()" placeholder="{{placeholder}}">
-			<span ng-class="{'caret': !multiple || selectedItems && selectedItems.length === 0,'clear-all item-remover fa fa-times': multiple && selectedItems.length > 0}" ng-click="removeAllSelected()"  ng-if="editable"></span>
+			<ng-form name="comboForm">
+				<input class="form-control combo-editable-input" name="comboEditableInput" ng-model="newItem.text" ng-if="editable" ng-change="onComboChange()" placeholder="{{placeholder}}">
+				<span ng-class="{'caret': !multiple || selectedItems && selectedItems.length === 0,'clear-all item-remover fa fa-times': multiple && selectedItems.length > 0}" ng-click="removeAllSelected()"  ng-if="editable"></span>
+			</ng-form>
 		</div>
 	</div>
 	<div class="comboList fullWidthDropdown" ng-class="{'open': isOpen, 'comboLineStyle': lineStyle === true}">
@@ -27,11 +29,11 @@
 			<li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue && !multiple" ng-click="selectVal(initialValue)">
 				<a role="menuitem" tabindex="-1" ng-bind="initialValue.text"></a>
 			</li>
-			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" role="presentation" ng-click="selectVal(item,$index)" ng-if="lineStyle !== true && !editable">
+			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" role="presentation" ng-click="selectVal(item,$index)" ng-show="!isFilterActive">
 				<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>
 			</li>
 			
-			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems | filter:newItem" role="presentation" ng-click="selectVal(item,$index)" ng-if="lineStyle !== true && editable">
+			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems | filter:newItem" role="presentation" ng-click="selectVal(item,$index)" ng-show="isFilterActive">
 				<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>
 			</li>
 			

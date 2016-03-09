@@ -14,6 +14,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     $scope.currentContext = undefined;
     $scope.projections = projectionService;
     $scope.helper = areaHelperService;
+    $scope.areaTypes = [];
     
     //Distance units
     $scope.selectedUnit = 'm';
@@ -223,6 +224,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     //Edit user area
     $scope.editUserArea = function(idx){
         $scope.alert.setLoading(locale.getString('areas.getting_area'));
+        $scope.getAreaTypes();
         areaRestService.getUserAreaAsGeoJSON($scope.displayedUserAreas[idx].gid).then(function(response){
             $scope.alert.removeLoading();
             $scope.setEditingType('edit');
@@ -330,13 +332,14 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     //COMBOBOX AREA TYPES
     $scope.getAreaTypes = function(){
         areaRestService.getUserAreaTypes().then(function(response){
-            $scope.areaTypes = [];
+            var types = [];
             for (var i = 0; i < response.length; i++){
-                $scope.areaTypes.push({
+                types.push({
                 	"code": i,
                     "text": response[i]
                 });
             }
+            angular.copy(types,$scope.areaTypes);
         }, function(error){
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.error_getting_userarea_types');

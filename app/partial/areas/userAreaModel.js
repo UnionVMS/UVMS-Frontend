@@ -4,7 +4,7 @@ angular.module('unionvmsWeb').factory('UserArea',function() {
         id: undefined,
         name: undefined,
         desc: undefined,
-        subType: undefined,
+        subType: '',
         scopeSelection: [],
         startDate: undefined,
         endDate: undefined,

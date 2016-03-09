@@ -100,7 +100,7 @@
 							</th>
 						</tr>
 						<tr>
-							<th lr-drag-src="headers" lr-drop-target="headers" ng-repeat="column in attrVisibility.positionsColumns">
+							<th lr-drag-src="headers" lr-drop-target="headers" ng-repeat="column in attrVisibility.positionsColumns" ng-show="attrVisibility.positions[column]">
 								<div st-sort="properties.countryCode" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.fs" ng-if="column === 'fs'">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</div>
 								<div st-sort="properties.externalMarking" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.extMark" ng-if="column === 'extMark'">{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}</div>
 								<div st-sort="properties.ircs" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.ircs" ng-if="column === 'ircs'">{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}</div>
@@ -125,7 +125,7 @@
 							<td colspan="16">{{'spatial.table_no_data' | i18n}}</td>
 						</tr>
 						<tr ng-repeat="position in displayedPositions">
-							<td ng-repeat="column in attrVisibility.positionsColumns">
+							<td ng-repeat="column in attrVisibility.positionsColumns" ng-show="attrVisibility.positions[column]">
 								<div ng-show="attrVisibility.positions.fs" ng-if="column === 'fs'">{{ position.properties.countryCode }}</div>
 								<div ng-show="attrVisibility.positions.extMark" ng-if="column === 'extMark'">{{ position.properties.externalMarking }}</div>
 								<div ng-show="attrVisibility.positions.ircs" ng-if="column === 'ircs'">{{ position.properties.ircs }}</div>

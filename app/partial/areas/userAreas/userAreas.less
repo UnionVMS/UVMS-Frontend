@@ -1,20 +1,3 @@
-.scopeSelection {
-	position:relative;
-
-	select {
-		width: 100% !important;
-		border: 1px solid #c2c9cc;
-	}
-
-	.select2-container .select2-search--inline .select2-search__field  {
-		margin-top: 0;
-	}
-
-	.select2-selection.select2-selection--multiple {
-		height: 30px;
-	}
-}
-
 .areasTableContainer {
 	max-height: 100%;
 	.newAreaBtn {
@@ -41,7 +24,7 @@
 			&:hover
 			 {
 				-webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-			  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+			  	box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
 				color: #000;
 			}
 			&:focus{
@@ -64,6 +47,13 @@
 		.tbody{
 			.tr:nth-child(odd) {
 				background: #f7f7f7;
+			}
+			.tr > .td {
+				line-height: 30px;
+				.btn .fa {
+					height : 12px;
+					width : 12px;
+				}
 			}
 			.loading-spinner-cl {
 				text-align: center;

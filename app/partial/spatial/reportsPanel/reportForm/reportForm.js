@@ -135,6 +135,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             if ($scope.formMode === 'CREATE'){
                 reportRestService.createReport($scope.report).then(createReportSuccess, createReportError);
             } else if ($scope.formMode === 'EDIT'){
+            	checkMapConfigDifferences();
                 reportRestService.updateReport($scope.report).then(updateReportSuccess, updateReportError);
             }
         } else {
@@ -296,4 +297,47 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         
         $scope.formAlert.msg = errorMsg;
     };
+    
+    var checkMapConfigDifferences = function(){
+    	if(!angular.equals($scope.report, $scope.reportNewConfig)){
+    		if(!angular.equals($scope.report.mapConfiguration, $scope.reportNewConfig.mapConfiguration)){
+    			$scope.report.mapConfiguration = $scope.reportNewConfig.mapConfiguration;
+        	}
+    		if(!angular.equals($scope.report.stylesSettings, $scope.reportNewConfig.stylesSettings)){
+    			if(!angular.equals($scope.report.stylesSettings.positions, $scope.reportNewConfig.stylesSettings.positions)){
+    				$scope.report.stylesSettings.positions = $scope.reportNewConfig.stylesSettings.positions;
+    			}
+    			if(!angular.equals($scope.report.stylesSettings.segments, $scope.reportNewConfig.stylesSettings.segments)){
+    				$scope.report.stylesSettings.segments = $scope.reportNewConfig.stylesSettings.segments;
+    			}
+        	}
+    		if(!angular.equals($scope.report.visibilitySettings, $scope.reportNewConfig.visibilitySettings)){
+    			if(!angular.equals($scope.report.visibilitySettings.positions, $scope.reportNewConfig.visibilitySettings.positions)){
+    				$scope.report.visibilitySettings.positions = $scope.reportNewConfig.visibilitySettings.positions;
+    			}
+    			if(!angular.equals($scope.report.visibilitySettings.segments, $scope.reportNewConfig.visibilitySettings.segments)){
+    				$scope.report.visibilitySettings.segments = $scope.reportNewConfig.visibilitySettings.segments;
+    			}
+    			if(!angular.equals($scope.report.visibilitySettings.tracks, $scope.reportNewConfig.visibilitySettings.tracks)){
+    				$scope.report.visibilitySettings.tracks = $scope.reportNewConfig.visibilitySettings.tracks;
+    			}
+        	}
+    		if(!angular.equals($scope.report.layerSettings, $scope.reportNewConfig.layerSettings)){
+    			$scope.report.layerSettings = $scope.reportNewConfig.layerSettings;
+    			if(!angular.equals($scope.report.layerSettings.additionalLayers, $scope.reportNewConfig.layerSettings.additionalLayers)){
+    				$scope.report.layerSettings.additionalLayers = $scope.reportNewConfig.layerSettings.additionalLayers;
+    			}
+    			if(!angular.equals($scope.report.layerSettings.areaLayers, $scope.reportNewConfig.layerSettings.areaLayers)){
+    				$scope.report.layerSettings.areaLayers = $scope.reportNewConfig.layerSettings.areaLayers;
+    			}
+    			if(!angular.equals($scope.report.layerSettings.baseLayers, $scope.reportNewConfig.layerSettings.baseLayers)){
+    				$scope.report.layerSettings.baseLayers = $scope.reportNewConfig.layerSettings.baseLayers;
+    			}
+    			if(!angular.equals($scope.report.layerSettings.portLayers, $scope.reportNewConfig.layerSettings.portLayers)){
+    				$scope.report.layerSettings.portLayers = $scope.reportNewConfig.layerSettings.portLayers;
+    			}
+        	}
+    	}
+    };
+    
 });

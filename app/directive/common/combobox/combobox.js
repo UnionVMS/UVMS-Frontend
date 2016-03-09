@@ -147,8 +147,16 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                     		}
                     	}else{
                     		for(var k = 0; k < scope.loadedItems.length; k++){
-                    			if(!scope.editable){
-		                            if(angular.equals(newVal, getItemCode(scope.loadedItems[k]))) {
+                    			if(scope.editable){
+                    				if(scope.comboForm.comboEditableInput.$dirty){
+                						scope.isFilterActive = true;
+                    				}
+                    				if(angular.equals(newVal, scope.getItemLabel(scope.loadedItems[k]))) {
+		                        		scope.newItem.text = scope.getItemLabel(scope.loadedItems[k]);
+		                                break;
+		                            }
+                    			}else{
+                    				if(angular.equals(newVal, getItemCode(scope.loadedItems[k]))) {
 		                        		scope.currentItemLabel = scope.getItemLabel(scope.loadedItems[k]);
 		                                break;
 		                            }
@@ -159,7 +167,8 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                 }
             });
             
-            scope.$watch('items', function(newVal, oldVal){
+            scope.$watchCollection('items', function(newVal, oldVal){
+            	scope.isFilterActive = false;
                 if (newVal && newVal.length > 0){
                 	scope.loadedItems = newVal;
                 	

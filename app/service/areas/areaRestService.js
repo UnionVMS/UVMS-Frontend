@@ -70,6 +70,13 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
                     }
                 }
             });
+        },
+        getAreasByType: function(){
+            return $resource('/spatial/rest/userareaslist/:type', {}, {
+                'get': {
+                    method: 'GET'
+                }
+            });
         }
     };
 })
@@ -172,7 +179,17 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
                 deferred.reject(error);
             });
             return deferred.promise;
-	    }
+	    },
+	    getAreasByType: function(type){
+	    	var deferred = $q.defer();
+            areaRestFactory.getAreasByType().get({type: type.toUpperCase()}, function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.error('Error getting area metadata.');
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        }
 	};
 
 	return areaRestService;

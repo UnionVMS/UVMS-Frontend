@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaMapService, spatialRestService, areaAlertService) {
+angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaMapService, spatialRestService, areaAlertService, areaRestService) {
 
 	var areaHelperService = {
 	    isEditing: false,
@@ -6,6 +6,7 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	    displayedSystemAreaLayer: undefined,
 	    systemAreaTypes: undefined,
 	    systemAreaItems: [],
+	    userAreasGroups: [],
 	    metadata: {
 	        id: undefined,
 	        areaName: undefined,
@@ -50,10 +51,11 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	                    this.displayedLayerType = this.displayedSystemAreaLayer;
 	                    var item = getAreaLocationLayerDef(this);
 	                    areaMapService.addWMS(item);
-	                    
 	                }
+	            }else if(destTab ===  'AREAGROUPS'){
+	            	getUserAreasGroupsList(this);
+	            	getUserAreaLayer(this);
 	            }
-	            
 	        }
 	    }
 	};
@@ -95,6 +97,23 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
                 areaAlertService.hideAlert();
             });
         }
+    };
+    
+    //USER AREAS GROUPS LIST
+    var getUserAreasGroupsList = function(obj){
+        areaRestService.getUserAreaTypes().then(function(response){
+        	if (angular.isDefined(response)) {
+        		var areaGroups = [];
+        		for(var i=0;i<response.length;i++){
+        			areaGroups.push({code: i,text: response[i]});
+        		}
+        		obj.userAreasGroups = areaGroups;
+        	}
+        }, function(error){
+        	areaAlertService.setError();
+        	areaAlertService.alertMessage = locale.getString('areas.error_getting_userarea_types');
+        	areaAlertService.hideAlert();
+        });
     };
 
 	return areaHelperService;

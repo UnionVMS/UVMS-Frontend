@@ -7,7 +7,7 @@
 				<label class="label-combo-inline" for="editingProjection">{{'spatial.area_selection_modal_area_type_label' | i18n}}</label>
 			</div>
 			<div class="col-md-9">
-				<combobox ng-model="areaGroup" items="userAreasGroups" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n | uppercase}}" uppercase="true" ng-required="true"></combobox>
+				<combobox ng-model="areaGroup.type" items="areaHelper.userAreasGroups" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n | uppercase}}" uppercase="true" ng-required="true" ng-change="getAreasByType()"></combobox>
 			</div>
 		</div>
 	</div>
@@ -21,9 +21,9 @@
 		<div class="table table-striped tableSmart areas-table">
 			<div class="thead col-md-12">
                     <div class="tr row stColumnHeaders">
-                        <div class="th col-md-3" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_name_header' | i18n}}</div>
-                        <div class="th col-md-5"st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_desc_header' | i18n}}</div>
-                        <div class="th col-md-4"></div>
+                        <div class="th col-md-4" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_name_header' | i18n}}</div>
+                        <div class="th col-md-6"st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_desc_header' | i18n}}</div>
+                        <div class="th col-md-2"></div>
                     </div>
                 </div>
                 <div class="tbody col-md-12">
@@ -34,11 +34,9 @@
                         <div class="td col-md-12">{{'areas.table_no_data' | i18n}}</div>
                     </div>
                     <div ng-repeat="userArea in displayedUserAreas" class="tr row">
-                        <div class="td col-md-3">{{userArea.name}}</div>
-                        <div class="td col-md-5">{{userArea.desc}}</div>
-                        <div class="td col-md-4">
-	                      	<button type="button" class="btn btn-danger btn-xs pull-right" title="{{'areas.table_delete_area_btn' | i18n }}" ng-click="deleteUserArea($index,displayedUserAreas,userAreasList)"><span class="fa fa-trash-o"></span></button>
-	                        <button type="button" class="btn btn-primary btn-xs pull-right tableBtnMargin" title="{{'areas.table_edit_area_btn' | i18n }}" ng-click="editUserArea($index,displayedUserAreas)"><span class="fa fa fa-pencil"></span></button>
+                        <div class="td col-md-4">{{userArea.name}}</div>
+                        <div class="td col-md-6">{{userArea.desc}}</div>
+                        <div class="td col-md-2">
 	                        <button type="button" class="btn btn-primary btn-xs pull-right tableBtnMargin" title="{{'areas.table_area__details_btn' | i18n }}" ng-click="getAreaDetails($index,displayedUserAreas)"><span class="fa fa-eye"></span></button>
 	                        <button type="button" class="btn btn-primary btn-xs pull-right tableBtnMargin" title="{{'areas.table_zoom_to_area_btn' | i18n }}" ng-click="zoomToArea($index,displayedUserAreas)"><span class="fa fa-globe"></span></button>
                         </div>

@@ -54,7 +54,7 @@ angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $t
            if ($scope.selectedTab === 'MAP'){
                newTab = 'VMS';
            }
-           $scope.selectedTab(newTab);
+           $scope.selectTab(newTab);
        }
        
 //       if (reportService.tabs.map === true){

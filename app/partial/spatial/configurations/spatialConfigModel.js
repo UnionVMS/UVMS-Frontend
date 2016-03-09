@@ -20,8 +20,11 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
             bingApiKey: undefined
         };
         this.layerSettings = {
-            overlayLayers: [],
-            baseLayers: []
+    		additionalLayers: [],
+	        areaLayers: [],
+	        baseLayers: [],
+	        portLayers: []
+        		
         };
         this.mapSettings = {
             mapProjectionId: undefined,
