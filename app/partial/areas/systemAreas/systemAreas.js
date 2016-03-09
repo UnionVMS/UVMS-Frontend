@@ -11,6 +11,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
 	$scope.metadataAvailable = false;
     
 	$scope.fileNameChanged = function(elem){
+		$scope.SysareasForm.areaFile.$setDirty();
 		if(elem.value){
 			$scope.filepath = elem.value;
 			var filename = $scope.filepath.replace(/^.*[\\\/]/, '');
@@ -64,11 +65,9 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         	    $scope.alert.alertMessage = locale.getString('areas.upload_system_area_invalid_field_error');
         	    $scope.alert.hideAlert();
         		$scope.isSaving = false;
-        		$scope.saved = false;
         	}
         } else {
         	$scope.isSaving = false;
-        	$scope.saved = false;
         	$scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.upload_system_area_required_fields_error');
             $scope.alert.hideAlert();

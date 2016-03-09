@@ -52,11 +52,11 @@
 						<span class="input-group-addon alert-success" ng-show="validFile.isValid === true">
 							<i class="fa fa-check alert-success"></i>
 						</span>
-						<span class="input-group-addon alert-danger" ng-show="validFile.isValid === false">
+						<span class="input-group-addon alert-danger" ng-show="(SysareasForm.areaFile.$dirty || saved) && (SysareasForm.areaFile.$invalid || validFile.isValid === false)">
 							<i class="fa fa-times alert-danger"></i>
 						</span>
 						<a href="" qtip content="{{'areas.area_upload_select_zip_file_info_btn' | i18n}}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-						<div class="innerErrorMessagesFileUpload" ng-messages="SysareasForm.areaFile.$error" ng-show="(SysareasForm.areaFile.$touched && validFile.isValid === false || saved) && SysareasForm.areaFile.$invalid">
+						<div class="innerErrorMessagesFileUpload" ng-messages="SysareasForm.areaFile.$error" ng-show="(SysareasForm.areaFile.$dirty || saved) && (SysareasForm.areaFile.$invalid || validFile.isValid === false)">
 							<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 						</div>
 				   	</div>
