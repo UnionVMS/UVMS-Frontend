@@ -19,7 +19,7 @@
 						</div>
 						<div class="col-md-9" ng-class="{'has-error': generalsettingsForm.geoserverUrl.$error.required && (generalsettingsForm.geoserverUrl.$dirty || submitedWithErrors)}">
 							<input type="text" class="form-control" ng-model="configModel.systemSettings.geoserverUrl" name="geoserverUrl" ng-required="true"/>
-							<div class="geoServerUrlInnerErrorMessages" ng-messages="generalsettingsForm.geoserverUrl.$error" ng-show="generalsettingsForm.geoserverUrl.$dirty || submitedWithErrors">
+							<div class="innerErrorMessages" ng-messages="generalsettingsForm.geoserverUrl.$error" ng-show="generalsettingsForm.geoserverUrl.$dirty || submitedWithErrors">
 								<div ng-message="required">{{'spatial.required_error_message' | i18n }}</div>
 							</div>
 						</div>

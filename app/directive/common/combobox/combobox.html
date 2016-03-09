@@ -29,7 +29,7 @@
 			<li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue && !multiple" ng-click="selectVal(initialValue)">
 				<a role="menuitem" tabindex="-1" ng-bind="initialValue.text"></a>
 			</li>
-			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" role="presentation" ng-click="selectVal(item,$index)" ng-show="!isFilterActive">
+			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" role="presentation" ng-click="selectVal(item,$index)" ng-show="!lineStyle && !isFilterActive">
 				<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>
 			</li>
 			

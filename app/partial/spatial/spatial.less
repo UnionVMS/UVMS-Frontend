@@ -224,6 +224,7 @@ div.td:extend(td all) {}
 		line-height: 30px;
     	color: red;
     	pointer-events: none;
+    	padding-right: inherit;
 	}
 	.belowErrorMessages {
 		position: absolute;
@@ -231,10 +232,12 @@ div.td:extend(td all) {}
     	text-align: right;
 	}
 	.innerErrorMessages,
+	.innerErrorMessagesTimer,
 	.innerErrorMessagesLabelTimer,
 	.innerErrorMessagesCombobox,
 	.innerErrorMessagesFileUpload,
-	.geoServerUrlInnerErrorMessages {
+	.innerErrorMessagesInputWithUpLabel,
+	.innerErrorMessagesDateWithUpLabel {
 		position: absolute;
 		z-index: 10;
     }
@@ -242,22 +245,25 @@ div.td:extend(td all) {}
     	right: 3px;
 	    top: 0;
 	}
+	.innerErrorMessagesTimer,
     .innerErrorMessagesLabelTimer {
-    	right: 50px;
-    	top: 20px;
+    	right: 35px;
     }
+    .innerErrorMessagesTimer {
+    	top: 0;
+    	right: 30px;
+    }
+	.innerErrorMessagesLabelTimer {
+    	top: 20px;
+    }    
     .innerErrorMessagesCombobox {
     	right: 40px;
 	    top: 0;
 	}
 	.innerErrorMessagesFileUpload {
-		right: 55px;
+		right: 45px;
 	    top: 0;
 	}
-    .geoServerUrlInnerErrorMessages {
-    	right: 25px;
-    	top: 0;
-    }
     .degree-input:after {
 		content: '\00b0';
 		position: absolute;
@@ -281,18 +287,15 @@ div.td:extend(td all) {}
 	.innerErrorMessagesInputWithUpLabel,
 	.innerErrorMessagesDateWithUpLabel {
 		top: 0;
-	    position: absolute;
 	    line-height: 30px;
-	    color: red;
 	    margin-top: 20px;
-	    z-index: 2;
 	}
 	
 	.innerErrorMessagesInputWithUpLabel {
-		right: 25px;
+		right: 3px;
 	}
 	
 	.innerErrorMessagesDateWithUpLabel {
-	    right: 55px;
+	    right: 35px;
 	}
 }

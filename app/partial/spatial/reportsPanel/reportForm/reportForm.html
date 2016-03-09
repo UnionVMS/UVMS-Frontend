@@ -49,6 +49,9 @@
 			    				<div class="form-group col-md-6 field-noLabel" ng-class="{'has-error': (reportForm.reportBodyForm.xValue.$dirty || submitingReport === true) && reportForm.reportBodyForm.xValue.$invalid}">
 			    					<!-- <label for="positionsCounter">{{'spatial.reports_form_positions_x_value' | i18n}}</label> -->
 			    					<input id="positionsCounter" class="form-control" type="number" min="0" name="xValue" ng-required="report.positionSelector !== 'all' && report" ng-model="report.xValue" />
+			    					<div class="innerErrorMessagesTimer" ng-messages="reportForm.reportBodyForm.xValue.$error" ng-show="(reportForm.reportBodyForm.xValue.$dirty || submitingReport === true) && reportForm.reportBodyForm.xValue.$invalid">
+										<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
+									</div>
 				    			</div>
 				    			<div class="form-group col-md-6 field-noLabel">
 				    				<!-- <label>{{'spatial.reports_form_positions_selector_label' | i18n}}</label> -->
