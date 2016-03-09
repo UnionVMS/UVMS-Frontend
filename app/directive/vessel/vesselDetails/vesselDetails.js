@@ -57,7 +57,7 @@ angular.module('unionvmsWeb')
         $scope.getMaxLengthMessage = function(length) {
             return {
                 maxlength: locale.getString('vessel.warn_max_length', length)
-            }
+            };
         };
     }
 );

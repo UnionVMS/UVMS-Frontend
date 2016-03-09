@@ -77,7 +77,7 @@ angular.module('unionvmsWeb').factory('UserArea',function() {
     
     var resetCentroid = function(){
         UserArea.centroidCoords = [];
-    }
+    };
 
 	return UserArea;
 });

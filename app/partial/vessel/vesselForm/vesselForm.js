@@ -205,7 +205,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             $scope.vesselForm.cfr.$setValidity('unique', $scope.existingValues.cfr === undefined);
             $scope.vesselForm.imo.$setValidity('unique', $scope.existingValues.imo === undefined);
             $scope.vesselForm.mmsi.$setValidity('unique', $scope.existingValues.mmsi === undefined);
-        }
+        };
     };
 
     //Clear the form

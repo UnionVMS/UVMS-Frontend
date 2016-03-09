@@ -71,6 +71,7 @@
         
         //MOVEMENT
         var movementLink = false;
+        var movementElemId;
         if(checkAccess('Movement', 'viewMovements')){
             movementLink = '/movement';
             movementElemId = 'movement';
@@ -99,6 +100,7 @@
 
         //ALARMS
         var alarmsLink = false;
+        var alarmsElemId;
         if(checkAccess('Rules', 'viewAlarmsHoldingTable')){
             alarmsLink = '/alarms/holdingtable';
             alarmsElemId = 'holding-table';
@@ -120,6 +122,7 @@
 
         //ADMIN
         var adminLink = false;
+        var adminElemId;
         if(checkAccess('Audit', 'viewAudit')){
             adminLink = '/admin/auditlog';
             adminElemId = 'audit-log';
