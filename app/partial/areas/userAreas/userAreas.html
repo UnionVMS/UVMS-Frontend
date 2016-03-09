@@ -164,7 +164,7 @@
 								<label for="radius">{{'areas.buffer_radius' | i18n}}</label>
 							</div>
 							<div class="col-md-4 control-input">
-							    <input ng-model="bufferRadius" name="radius" type="number" class="form-control" step="any" min="1" ng-required="true">
+							    <input ng-model="bufferRadius" name="radius" type="number" class="form-control" step="any" min="0" ng-required="true">
 							</div>
 							<div class="col-md-5 control-input">
 							    <combobox name="distUnit" ng-model="selectedUnit" items="distUnits" components-with-scroll="'div.area-form-container'">
@@ -278,7 +278,7 @@
 					</div>
  					<div class="form-group scopeSelection" ng-show="isUserAllowed('SHARE_USER_DEFINED_AREAS')">
 						<label for="scopeSelection">{{'areas.user_area_scope_selection' | i18n }}</label>
-						<combobox name="scopeSelection" ng-model="userArea.scopeSelection" multiple="true" items="userScopes"  components-with-scroll="'div.area-form-container'" initialtext="Select a scope"></combobox>
+						<combobox name="scopeSelection" ng-model="userArea.scopeSelection" multiple="true" items="userScopes"  components-with-scroll="'div.area-form-container'" initialtext="{{'areas.select_scope' | i18n}}"></combobox>
 					</div>
 					<div class="form-group" ng-show="isUserAllowed('CREATE_USER_AREA_DATASET')">
 						<label for="datasetName" class="userAreaNameField">{{'areas.user_area_dataset_name' | i18n }}</label>

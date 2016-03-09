@@ -132,6 +132,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     };
     
     $scope.activateImport = function(){
+        $scope.toggleTool($scope.activeTool);
         $scope.importArea();
     };
     
@@ -581,12 +582,6 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
            resolve: {
                areaData: function(){
                    return data;
-               },
-               scopesAllowed: function(){
-                   return $scope.isUserAllowed('SHARE_USER_DEFINED_AREAS');
-               },
-               datasetAllowed: function(){
-                   return $scope.isUserAllowed('CREATE_USER_AREA_DATASET');
                }
            }
         });
@@ -705,6 +700,9 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.alert.alertMessage = locale.getString(successMsg);
         $scope.alert.hideAlert();
         
+        //Deactivate tools
+        $scope.toggleTool($scope.activeTool);
+        
         //clear vector data
         $scope.resetFeature();
         
@@ -712,7 +710,6 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         areaMapService.clearParams('USERAREA');
         $scope.getUserAreasList();
         $scope.setEditingType('list');
-        $scope.activeTool = undefined;
     };
     
     var createError = function(error, defaultMsg){

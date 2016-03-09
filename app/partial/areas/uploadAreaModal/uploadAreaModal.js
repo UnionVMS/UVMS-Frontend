@@ -197,11 +197,19 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
                 $modalInstance.close(geom);
             }
             
+            var firstCoord = geom.getFirstCoordinate();
+            var lastCoord = geom.getLastCoordinate();
+            
             if (geom.getArea() === 0){
                 $scope.errorMessage = locale.getString('areas.area_upload_modal_invalid_polygon');
                 $scope.setError();
                 return;
             } else {
+                if (!(firstCoord[0] === lastCoord[0] &&  firstCoord[1] === lastCoord[1])){
+                    var coords = geom.getCoordinates();
+                    coords[0].push(firstCoord);
+                    geom.setCoordinates(coords);
+                }
                 return geom;
             }
         } catch (e) {
