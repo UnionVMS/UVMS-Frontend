@@ -1,9 +1,10 @@
-angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, reportRestService, reportService, $anchorScroll){
+angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, reportRestService, reportService, $anchorScroll, userService){
     $scope.isMenuVisible = true;
     $scope.selectedMenu = 'LIVEVIEW';
     $scope.reports = [];
     $scope.executedReport = {};
     $scope.repServ = reportService;
+    $scope.currentContext = userService.getCurrentContext();
     
     //reset repServ
     $scope.repServ.clearVmsData();
@@ -98,5 +99,20 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    $scope.$on('goToLiveView', function(event, lastSelected){
 	   $scope.selectMenu('LIVEVIEW');
    });
+   
+   $scope.isUserAllowed = function(requiredFeature) {
+       var isAllowed = false;
+
+       if (angular.isDefined($scope.currentContext.role.features)) {
+           var features = $scope.currentContext.role.features.slice(0);
+           var discoveredFeature = features.find(function(feature){return feature.featureName === requiredFeature;});
+
+          if (angular.isDefined(discoveredFeature)) {
+              isAllowed = true;
+          }
+       }
+
+       return isAllowed;
+   };
    
 });
