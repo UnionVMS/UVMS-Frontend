@@ -197,11 +197,18 @@ angular.module('unionvmsWeb')
             }
         });
 
-        var getMapAreaValuesForDropdown = function(){
-            var areas = [{"text":"Area-1","code":"Code-1"},{"text":"Area-2","code":"Code-2"}];
-            return areas;
-        };
+        function getAreaDropdownItems(areas) {
+            if (angular.isUndefined(areas)) {
+                return [];
+            }
 
+            return areas.map(function(area) {
+                return {
+                    text: area.areaCode + " - " + area.areaName,
+                    code: area.areaCode
+                };
+            });
+        }
 
         var init = function(){
             //Setup dropdowns
@@ -214,7 +221,9 @@ angular.module('unionvmsWeb')
             $scope.movementType = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'MESSAGE_TYPE'),'MESSAGE_TYPE','MOVEMENT');
             $scope.movementSourceTypes = configurationService.setTextAndCodeForDropDown(configurationService.getConfig('MOVEMENT_SOURCE_TYPES'),'MOVEMENT_SOURCE_TYPES','MOVEMENT');
             $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_TODAY;
-            $scope.mapArea = getMapAreaValuesForDropdown();
+
+            var areas = configurationService.getConfig('MOVEMENT_AREAS');
+            $scope.mapArea = getAreaDropdownItems(areas);
 
             $scope.resetSearch();
         };

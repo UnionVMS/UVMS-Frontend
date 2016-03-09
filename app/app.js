@@ -168,7 +168,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["MOVEMENT","VESSEL","MOVEMENT_SOURCE_TYPES"]);
+                    return initService.loadConfigFor(["MOVEMENT","VESSEL","MOVEMENT_SOURCE_TYPES","MOVEMENT_AREAS"]);
                 }
             },
             data: {

@@ -16,7 +16,8 @@
             "RULES" : ruleRestService.getConfig,
             "ALARM_STATUSES" : alarmRestService.getAlarmStatusConfig,
             "TICKET_STATUSES" : alarmRestService.getTicketStatusConfig,
-            "EXCHANGE" : exchangeRestService.getExchangeConfig
+            "EXCHANGE" : exchangeRestService.getExchangeConfig,
+            "MOVEMENT_AREAS": movementRestService.getAreas
         };
 
         //Clear the loaded configs
