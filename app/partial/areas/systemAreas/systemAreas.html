@@ -5,7 +5,7 @@
 				<label>{{'areas.sys_areas_data_type_label' | i18n}}</label>
 			</div>
 			<div class="col-md-9">
-				<combobox ng-model="sysAreaType" items="helper.systemAreaItems" name="dataType" initialtext="{{'areas.sys_areas_data_type_label' | i18n}}" ng-required="true"></combobox>
+				<combobox ng-model="sysAreaType" items="helper.systemAreaItems" name="dataType" initialtext="{{'areas.sys_areas_data_type_label' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'"></combobox>
 			</div>
 		</div>
 	</div>
@@ -35,7 +35,7 @@
 								<label for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
 							</div>
 							<div class="col-md-9 proj-combo" ng-class="{'has-error': (SysareasForm.editingProjection.$dirty || saved) && SysareasForm.editingProjection.$invalid}">
-								<combobox ng-model="selectedProj" items="projections.items" name="editingProjection" initialtext="{{'areas.editing_projection_label' | i18n}}" ng-required="true"></combobox>
+								<combobox ng-model="selectedProj" items="projections.items" name="editingProjection" initialtext="{{'areas.editing_projection_label' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'"></combobox>
 							</div>
 							<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.editingProjection.$error" ng-show="(SysareasForm.editingProjection.$dirty || saved) && SysareasForm.editingProjection.$invalid">
 								<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>

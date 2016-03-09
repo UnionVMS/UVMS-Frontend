@@ -42,8 +42,10 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
             }
         };
         this.layerSettings = {
-            overlayLayers: [],
-            baseLayers: []
+    		additionalLayers: [],
+	        areaLayers: [],
+	        baseLayers: [],
+	        portLayers: []
         };
         this.visibilitySettings = {
             positions: {
