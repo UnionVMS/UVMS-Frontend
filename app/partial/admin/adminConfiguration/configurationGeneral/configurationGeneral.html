@@ -95,10 +95,17 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-12">
+					<div class="col-md-12 setting">
 						<a ng-click="addLanguage()">{{'config.add_more_languages' | i18n}}</a>
 					</div>
 				</div>
+			<h5 class="section-text">Long polling</h5>
+			<div class="row">
+				<div class="col-md-12 setting">
+				<label><input type="checkbox" ng-model="longPollingEnabled" ng-change="toggleLongPollingEnabled()"/> Enabled</label>
+				<p ng-if="reloadLongPolling && longPollingEnabled" class="text-muted"><small>Reload page to resume long-polling.</small></p>
+				</div>
+			</div>
 		</div>
 	</div>
 

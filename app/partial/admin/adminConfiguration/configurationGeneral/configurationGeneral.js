@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($scope, $resource, $state, $timeout, locale, alertService, globalSettingsService, languageNames){
+angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($scope, $resource, $state, $timeout, locale, alertService, globalSettingsService, languageNames, $log, longPolling){
 
 	$scope.settings = {};
 
@@ -6,6 +6,7 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
         $scope.settings = globalSettingsService.getSettings();
         $scope.speedUnit = globalSettingsService.getSpeedUnit();
         $scope.selectedLanguages = globalSettingsService.getAvailableLanguages();
+		$scope.longPollingEnabled = (globalSettingsService.get("longPollingEnabled") === 'true');
     };
 
     //Options
@@ -187,6 +188,17 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 	$scope.setTimezone = function(selection) {
 		globalSettingsService.set("timezone", selection.code).then(saveSettingSuccess, saveSettingError);
 
+	};
+
+	$scope.toggleLongPollingEnabled = function() {
+		$log.info($scope.longPollingEnabled ? 'Toggled long-polling on' : 'Toggled long-polling off');
+		globalSettingsService.set("longPollingEnabled", $scope.longPollingEnabled);
+		if ($scope.longPollingEnabled) {
+			$scope.reloadLongPolling = true;
+		}
+		else {
+			longPolling.cancelAll();
+		}
 	};
 
     init();
