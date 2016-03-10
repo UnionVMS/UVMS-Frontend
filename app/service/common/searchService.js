@@ -655,7 +655,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                 //Don't use the values in the skipList
                 if(angular.isUndefined(keysToSkipList) || keysToSkipList.indexOf(key) < 0){
                     //Skip empty values
-                    if (typeof value === 'string' && value.trim().length !== 0){
+                    if (typeof value === 'number' || (typeof value === 'string' && value.trim().length !== 0)) {
                         criterias.push(new SearchField(key, value));
                     }
                     else if (value instanceof Array) {

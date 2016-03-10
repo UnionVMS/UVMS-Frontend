@@ -204,8 +204,8 @@ angular.module('unionvmsWeb')
 
             return areas.map(function(area) {
                 return {
-                    text: area.areaCode + " - " + area.areaName,
-                    code: area.areaCode
+                    text: area.areaName,
+                    code: area.areaId
                 };
             });
         }
