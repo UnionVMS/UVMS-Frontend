@@ -1,7 +1,8 @@
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, TreeModel, reportRestService, spatialRestService, spatialHelperService, mapService, unitConversionService, vmsVisibilityService) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, mapService, unitConversionService, vmsVisibilityService) {
 
     var rep = {
        id: undefined,
+       name: locale.getString('spatial.header_live_view'),
        isReportExecuting: false,
        hasError: false,
        hasWarning: false,
@@ -28,8 +29,39 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.tracks = [];
     };
     
+    rep.resetReport = function(){
+        rep.name = locale.getString('spatial.header_live_view');
+        rep.tabs.map = true;
+        rep.refresh.status = false;
+        rep.refresh.rate = undefined;
+        
+        //Clear data used in tables
+        rep.clearVmsData();
+        
+        //Reset map projection
+        mapService.updateMapView({
+            epsgCode: 3857,
+            units: 'm',
+            global: true,
+            axis: 'enu',
+            extent: '-20026376.39;-20048966.10;20026376.39;20048966.10'
+        });
+        
+        //Reset layer to OSM
+        var treeSource = new TreeModel();
+        treeSource = treeSource.fromConfig({
+            baseLayers: [{
+                isBaseLayer: true,
+                title: 'OpenStreetMap',
+                type: 'OSM'
+            }]
+        });
+        $rootScope.$broadcast('updateLayerTreeSource', treeSource);
+    };
+    
 	rep.runReport = function(report){
 	    rep.id = report.id;
+	    rep.name = report.name;
         rep.positions = [];
         rep.segments = [];
         rep.tracks = [];

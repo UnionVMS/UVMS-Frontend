@@ -140,6 +140,13 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, glob
     //Delete report Success callback
     var deleteReportSuccess = function(resp){
     	var index = $scope.reports.indexOf($scope.displayedRecords[resp.index]);
+    	
+    	//Check if report is the current liveview report and if so remova data
+    	var rep = $scope.displayedRecords[resp.index];
+    	if (reportService.id === rep.id){
+    	    reportService.resetReport();
+    	}
+    	
         if (index !== -1) {
             $scope.reports.splice(index, 1);
         }

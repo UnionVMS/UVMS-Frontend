@@ -14,7 +14,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
             return [
                 {
                     'menu': 'LIVEVIEW',
-                    'title': locale.getString('spatial.header_live_view')
+                    'title': $scope.repServ.name
                 },
                 {
                     'menu': 'REPORTS',
@@ -71,25 +71,30 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
        if (newVal === 'LIVEVIEW'){
            $timeout(mapService.updateMapSize, 100);
            mapService.updateMapContainerSize();  
-           reportService.isLiveViewActive = true;   
+           $scope.repServ.isLiveViewActive = true;   
        } else if  (newVal === 'REPORTS'){
            if ($scope.reports.length === 0){
                $scope.$broadcast('loadReportsList');
            }
            $scope.$broadcast('untoggleToolbarBtns');
-           reportService.isLiveViewActive = false;
+           $scope.repServ.isLiveViewActive = false;
        }else {
     	   $scope.$broadcast('loadUserPreferences', oldVal);
-         reportService.isLiveViewActive = false;
+    	   $scope.repServ.isLiveViewActive = false;
        }
    });
    
    //Change tab to liveview when a user has clicked in run report in the reports page
    $scope.$on('runReport', function(event, report){
        $scope.selectMenu('LIVEVIEW');
-       $scope.headerMenus[0].title = report.name;
        //Getting report data
-       reportService.runReport(report);
+       $scope.repServ.runReport(report);
+   });
+   
+   $scope.$watch(function(){return $scope.repServ.name;}, function(newValue, oldValue){
+       if (newValue !== oldValue){
+           $scope.headerMenus[0].title = newValue;
+       }
    });
    
    $scope.$on('closeUserPreferences', function(event, lastSelected){
