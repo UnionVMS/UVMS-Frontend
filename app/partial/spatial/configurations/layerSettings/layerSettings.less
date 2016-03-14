@@ -1,9 +1,18 @@
+.layer-selector-container {
+	margin-top: 30px;
+	.container-element {
+		margin-left: auto;
+		margin-right: auto;
+		width: 40%;
+	}
+}
+
 .container-element {
 	border: 1px solid #ccc;
     border-radius: 4px;
-    margin-bottom: 20px;
-    margin-top: 60px;
     background-color: #f5f5f5;
+    margin-top: 60px;
+    margin-bottom: 20px;
     -webkit-box-shadow: 4px 3px 14px -3px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 4px 3px 14px -3px rgba(0, 0, 0, 0.75);
     box-shadow: 4px 3px 14px -3px rgba(0, 0, 0, 0.75);
@@ -51,10 +60,6 @@
     		&.dndDraggingSource {
     			display: none;
     		}
-    		.dndPlaceholderAlternative {
-    			background-color: #ddd;
-    			height: 24px;
-    		}
     		.handle {
     			cursor: move;
     		}
@@ -64,24 +69,36 @@
     	}
     }
     &.layerSelection {
-	    ul[dnd-list="selectedSysAreas"] {
-	    	padding-right: 10px;
+	    ul[dnd-list="selectedAreas"] {
 		    margin-bottom: 0;
 		    background-color: #87BDF3;
 		    > li {
 		    	&:empty {
 	    			background-color: #ddd;
 	    		}
-		    }
-	    }
-	    ul[dnd-list="selectedUserAreas.areas"] {
-	    	padding-right: 10px;
-	    	background-color: #6FC474;
-	    	> li {
-		    	&:empty {
-	    			background-color: #ddd;
+	    		&[type="userarea"],
+	    		&[type="sysarea"],
+	    		&[type="areagroup"] {
+	    			padding: 0 10px 0 0;
 	    		}
-	    	}
+	    		&[type="userarea"] {
+	    			background-color: #6fc474;
+	    		}
+	    		&[type="sysarea"] {
+	    			background-color: #87bdf3;
+	    		}
+	    		&[type="areagroup"] {
+	    			background-color: #e5a26a;
+	    		}
+	    		.area-item {
+	    			background-color: #fff;
+	    			width: 100%;
+	    			padding: 2px 0 2px 8px;
+	    			> * {
+	    				display: inline-block;
+	    			}
+    			}
+		    }
 	    }
     }
 }
@@ -132,13 +149,16 @@
 	    	}
     	}
     }
-}
-
-.layerUserConfig {
-	.container-element.layerSelection ul[dnd-list="selectedSysAreas"] {
-		&,
-		> li:last-child {
-	    	border-radius: 0;
-	    }
-	}
+    .areaGroupList {
+    	h5 {
+    		background-color: #e5a26a;
+    	}
+    	h5,
+    	ul {
+    		border-color: #e5a26a;
+    		&:empty {
+	    		border: 0;
+	    	}
+    	}
+    }
 }

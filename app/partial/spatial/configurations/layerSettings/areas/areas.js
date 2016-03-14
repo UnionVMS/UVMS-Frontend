@@ -26,30 +26,62 @@ angular.module('unionvmsWeb').controller('AreaslayersCtrl',function($scope,spati
 	 	                        "items": undefined
 	 	                    }
 	 	              	]
+	 			},
+	 			{
+	 			    "type": "container",
+	 			    "lists": [
+	 	              		{
+	 	                        "type": "areagroup",
+	 	                        "name": "spatial.layer_settings_group_areas",
+	 	                        "allowedTypes": [
+	 	                                         "areagroup"
+	 	                                       ],
+	 	                        "items": undefined
+	 	                    }
+	 	              	]
 	 			}
             ]
         };
 	
 	var loadAreas = function(){
 		$scope.areas.containers[0].lists[0].items = [];
-		$scope.areas.containers[1].lists[0].items = [];
+		$scope.isLoadingSysAreas = true;
+		
 		spatialConfigRestService.getSysArea().then(function(response){
 			angular.copy(response,$scope.areas.containers[0].lists[0].items);
 			angular.forEach($scope.areas.containers[0].lists[0].items, function(item) {
 	    		item.layerDesc = undefined;
 	    		item.serviceLayerId = "" + item.serviceLayerId;
+	    		item.areaType = 'sysarea';
 	    	});
+			$scope.isLoadingSysAreas = false;
 		});
-		spatialConfigRestService.getUserArea().then(function(response){
-			$scope.configModel.layerSettings.areaLayers.userAreas.serviceLayerId = response[0].serviceLayerId;
-			angular.copy(response[0].data,$scope.areas.containers[1].lists[0].items);
-			angular.forEach($scope.areas.containers[1].lists[0].items, function(item) {
-				item.subType = response[0].subType;
-	    		item.desc = undefined;
-	    		item.serviceLayerId = "" + item.gid;
-	    		item.gid = undefined;
-	    	});
-		});
+		
+		if(!$scope.isAdminConfig){
+			$scope.areas.containers[1].lists[0].items = [];
+			$scope.areas.containers[2].lists[0].items = [];
+			$scope.isLoadingUserAreas = true;
+			$scope.isLoadingAreaGroups = true;
+			spatialConfigRestService.getUserArea().then(function(response){
+				angular.copy(response[0].data,$scope.areas.containers[1].lists[0].items);
+				angular.forEach($scope.areas.containers[1].lists[0].items, function(item) {
+					item.subType = response[0].subType;
+		    		item.serviceLayerId = "" + response[0].serviceLayerId;
+		    		item.areaType = 'userarea';
+		    	});
+				$scope.isLoadingUserAreas = false;
+			});
+			spatialConfigRestService.getAreaGroup().then(function(response){
+				angular.copy(response[0].data,$scope.areas.containers[2].lists[0].items);
+				angular.forEach($scope.areas.containers[2].lists[0].items, function(item) {
+					item.subType = response[0].subType;
+		    		item.serviceLayerId = "" + response[0].serviceLayerId;
+		    		item.areaType = 'areagroup';
+		    	});
+				$scope.isLoadingAreaGroups = false;
+			});
+		}
+		$scope.selectedAreaType = {'name': 'sysarea'};
     };
     
     loadAreas();

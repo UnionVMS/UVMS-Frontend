@@ -278,7 +278,7 @@
 					</div>
  					<div class="form-group scopeSelection" ng-show="isUserAllowed('SHARE_USER_DEFINED_AREAS')">
 						<label for="scopeSelection">{{'areas.user_area_scope_selection' | i18n }}</label>
-						<combobox name="scopeSelection" ng-model="userArea.scopeSelection" multiple="true" items="userScopes"  components-with-scroll="'div.area-form-container'" initialtext="{{'areas.select_scope' | i18n}}"></combobox>
+						<combobox name="scopeSelection" ng-model="userArea.scopeSelection" multiple="true" items="userScopes"  components-with-scroll="'div.area-form-container'" initialtext="{{'areas.user_area_select_scope' | i18n}}"></combobox>
 					</div>
 					<div class="form-group" ng-show="isUserAllowed('CREATE_USER_AREA_DATASET')">
 						<label for="datasetName" class="userAreaNameField">{{'areas.user_area_dataset_name' | i18n }}</label>

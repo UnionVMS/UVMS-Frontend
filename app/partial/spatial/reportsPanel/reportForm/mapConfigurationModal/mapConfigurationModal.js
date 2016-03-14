@@ -35,11 +35,11 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 	            mapProjectionId: $scope.configModel.mapSettings.mapProjectionId,
 	            displayProjectionId: $scope.configModel.mapSettings.displayProjectionId,
 	            coordinatesFormat: $scope.configModel.mapSettings.coordinatesFormat,
-	            scaleBarUnits: $scope.configModel.mapSettings.scaleBarUnits
-        	},
-        	stylesSettings: $scope.checkStylesSettings(),
-            visibilitySettings: $scope.checkVisibilitySettings(),
-            layerSettings: $scope.configModel.layerSettings
+	            scaleBarUnits: $scope.configModel.mapSettings.scaleBarUnits,
+	            stylesSettings: $scope.checkStylesSettings(),
+	            visibilitySettings: $scope.checkVisibilitySettings(),
+	            layerSettings: $scope.configModel.layerSettings
+        	}
         };
         
         return exported;

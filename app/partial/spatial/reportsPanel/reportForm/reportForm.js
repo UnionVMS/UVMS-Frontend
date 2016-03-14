@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService, reportService){
+angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService, reportService, SpatialConfig){
     //Report form mode
     $scope.formMode = 'CREATE';
 
@@ -132,10 +132,14 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         $scope.submitingReport = true;
         $scope.validateRanges();
         if ($scope.reportForm.$valid && $scope.vesselsSelectionIsValid){
+        	$scope.configModel = new SpatialConfig();
             if ($scope.formMode === 'CREATE'){
+            	$scope.configModel = $scope.configModel.forReportConfigFromJson($scope.report.currentConfig);
+            	$scope.report = checkMapConfigDifferences($scope.report);
                 reportRestService.createReport($scope.report).then(createReportSuccess, createReportError);
             } else if ($scope.formMode === 'EDIT'){
-            	checkMapConfigDifferences();
+            	$scope.configModel = $scope.configModel.forReportConfigFromJson($scope.report.currentConfig);
+            	$scope.report = checkMapConfigDifferences($scope.report);
                 reportRestService.updateReport($scope.report).then(updateReportSuccess, updateReportError);
             }
         } else {
@@ -184,16 +188,13 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             size: 'lg',
             resolve: {
                 reportConfigs: function(){
-                    return $scope.reportNewConfig;
+                    return $scope.report.currentConfig;
                 }
             }
         });
 
         modalInstance.result.then(function(data){
-            $scope.reportNewConfig.mapConfiguration = data.mapSettings;
-            $scope.reportNewConfig.stylesSettings = data.stylesSettings;
-            $scope.reportNewConfig.visibilitySettings = data.visibilitySettings;
-            $scope.reportNewConfig.layerSettings = data.layerSettings;
+            $scope.report.currentConfig.mapConfiguration = data.mapSettings;
         });
     };
     
@@ -220,6 +221,9 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             });
 
             modalInstance.result.then(function(data){
+            	$scope.configModel = new SpatialConfig();
+            	$scope.configModel = $scope.configModel.forReportConfigFromJson(data.currentConfig);
+            	data = checkMapConfigDifferences(data);
             	reportRestService.createReport(data).then(createReportSuccess, createReportError);
             });
         } else {
@@ -246,8 +250,8 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         	}
             $scope.report = $scope.report.fromJson(args.report);
         }
-        $scope.reportNewConfig = {};
-        angular.copy($scope.report,$scope.reportNewConfig);
+        $scope.report.currentConfig = {mapConfiguration: {}};
+        angular.copy($scope.report.mapConfiguration,$scope.report.currentConfig.mapConfiguration);
     });
 
     $scope.$watch('report.positionSelector', function(newVal, oldVal){
@@ -298,46 +302,57 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         $scope.formAlert.msg = errorMsg;
     };
     
-    var checkMapConfigDifferences = function(){
-    	if(!angular.equals($scope.report, $scope.reportNewConfig)){
-    		if(!angular.equals($scope.report.mapConfiguration, $scope.reportNewConfig.mapConfiguration)){
-    			$scope.report.mapConfiguration = $scope.reportNewConfig.mapConfiguration;
+    var checkMapConfigDifferences = function(report){
+		if(!angular.equals(report.mapConfiguration, $scope.configModel.mapConfiguration)){
+			
+        	if(!angular.equals(report.mapConfiguration.coordinatesFormat, report.currentConfig.mapConfiguration.coordinatesFormat)){
+        		report.mapConfiguration.coordinatesFormat = report.currentConfig.mapConfiguration.coordinatesFormat;
         	}
-    		if(!angular.equals($scope.report.stylesSettings, $scope.reportNewConfig.stylesSettings)){
-    			if(!angular.equals($scope.report.stylesSettings.positions, $scope.reportNewConfig.stylesSettings.positions)){
-    				$scope.report.stylesSettings.positions = $scope.reportNewConfig.stylesSettings.positions;
-    			}
-    			if(!angular.equals($scope.report.stylesSettings.segments, $scope.reportNewConfig.stylesSettings.segments)){
-    				$scope.report.stylesSettings.segments = $scope.reportNewConfig.stylesSettings.segments;
-    			}
-        	}
-    		if(!angular.equals($scope.report.visibilitySettings, $scope.reportNewConfig.visibilitySettings)){
-    			if(!angular.equals($scope.report.visibilitySettings.positions, $scope.reportNewConfig.visibilitySettings.positions)){
-    				$scope.report.visibilitySettings.positions = $scope.reportNewConfig.visibilitySettings.positions;
-    			}
-    			if(!angular.equals($scope.report.visibilitySettings.segments, $scope.reportNewConfig.visibilitySettings.segments)){
-    				$scope.report.visibilitySettings.segments = $scope.reportNewConfig.visibilitySettings.segments;
-    			}
-    			if(!angular.equals($scope.report.visibilitySettings.tracks, $scope.reportNewConfig.visibilitySettings.tracks)){
-    				$scope.report.visibilitySettings.tracks = $scope.reportNewConfig.visibilitySettings.tracks;
-    			}
-        	}
-    		if(!angular.equals($scope.report.layerSettings, $scope.reportNewConfig.layerSettings)){
-    			$scope.report.layerSettings = $scope.reportNewConfig.layerSettings;
-    			if(!angular.equals($scope.report.layerSettings.additionalLayers, $scope.reportNewConfig.layerSettings.additionalLayers)){
-    				$scope.report.layerSettings.additionalLayers = $scope.reportNewConfig.layerSettings.additionalLayers;
-    			}
-    			if(!angular.equals($scope.report.layerSettings.areaLayers, $scope.reportNewConfig.layerSettings.areaLayers)){
-    				$scope.report.layerSettings.areaLayers = $scope.reportNewConfig.layerSettings.areaLayers;
-    			}
-    			if(!angular.equals($scope.report.layerSettings.baseLayers, $scope.reportNewConfig.layerSettings.baseLayers)){
-    				$scope.report.layerSettings.baseLayers = $scope.reportNewConfig.layerSettings.baseLayers;
-    			}
-    			if(!angular.equals($scope.report.layerSettings.portLayers, $scope.reportNewConfig.layerSettings.portLayers)){
-    				$scope.report.layerSettings.portLayers = $scope.reportNewConfig.layerSettings.portLayers;
-    			}
-        	}
+			if(!angular.equals(report.mapConfiguration.displayProjectionId, report.currentConfig.mapConfiguration.displayProjectionId)){
+	    		report.mapConfiguration.displayProjectionId = report.currentConfig.mapConfiguration.displayProjectionId;
+	    	}
+			if(!angular.equals(report.mapConfiguration.mapProjectionId, report.currentConfig.mapConfiguration.mapProjectionId)){
+	    		report.mapConfiguration.mapProjectionId = report.currentConfig.mapConfiguration.mapProjectionId;
+	    	}
+			if(!angular.equals(report.mapConfiguration.scaleBarUnits, report.currentConfig.mapConfiguration.scaleBarUnits)){
+	    		report.mapConfiguration.scaleBarUnits = report.currentConfig.mapConfiguration.scaleBarUnits;
+	    	}
+			
+			if(!angular.equals(report.mapConfiguration.stylesSettings, $scope.configModel.stylesSettings)){
+				if(!angular.equals(report.mapConfiguration.stylesSettings.positions, $scope.configModel.stylesSettings.positions)){
+					report.mapConfiguration.stylesSettings.positions = $scope.configModel.stylesSettings.positions;
+				}
+				if(!angular.equals(report.mapConfiguration.stylesSettings.segments,$scope.configModel.stylesSettings.segments)){
+					report.mapConfiguration.stylesSettings.segments = $scope.configModel.stylesSettings.segments;
+				}
+	    	}
+			if(!angular.equals(report.mapConfiguration.visibilitySettings, $scope.configModel.visibilitySettings)){
+				if(!angular.equals(report.mapConfiguration.visibilitySettings.positions, $scope.configModel.visibilitySettings.positions)){
+					report.mapConfiguration.visibilitySettings.positions = $scope.configModel.visibilitySettings.positions;
+				}
+				if(!angular.equals(report.mapConfiguration.visibilitySettings.segments, $scope.configModel.visibilitySettings.segments)){
+					report.mapConfiguration.visibilitySettings.segments = $scope.configModel.visibilitySettings.segments;
+				}
+				if(!angular.equals(report.mapConfiguration.visibilitySettings.tracks, $scope.configModel.visibilitySettings.tracks)){
+					report.mapConfiguration.visibilitySettings.tracks = $scope.configModel.visibilitySettings.tracks;
+				}
+	    	}
+			if(!angular.equals(report.mapConfiguration.layerSettings, $scope.configModel.layerSettings)){
+				if(!angular.equals(report.mapConfiguration.layerSettings.additionalLayers, $scope.configModel.layerSettings.additionalLayers)){
+					report.mapConfiguration.layerSettings.additionalLayers = $scope.configModel.layerSettings.additionalLayers;
+				}
+				if(!angular.equals(report.mapConfiguration.layerSettings.areaLayers, $scope.configModel.layerSettings.areaLayers)){
+					report.mapConfiguration.layerSettings.areaLayers = $scope.configModel.layerSettings.areaLayers;
+				}
+				if(!angular.equals(report.mapConfiguration.layerSettings.baseLayers, $scope.configModel.layerSettings.baseLayers)){
+					report.mapConfiguration.layerSettings.baseLayers = $scope.configModel.layerSettings.baseLayers;
+				}
+				if(!angular.equals(report.mapConfiguration.layerSettings.portLayers, $scope.configModel.layerSettings.portLayers)){
+					report.mapConfiguration.layerSettings.portLayers = $scope.configModel.layerSettings.portLayers;
+				}
+	    	}
     	}
+		return report;
     };
     
 });

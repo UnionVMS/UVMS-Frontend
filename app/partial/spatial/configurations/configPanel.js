@@ -166,15 +166,15 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    angular.forEach(visibilityTypes, function(visibType) {
 	    	angular.forEach(contentTypes, function(contentType) {
 	    		if(visibType !== 'track' || visibType === 'track' && contentType === 'Table'){
-		    		var visibilities = {};
+	    			var visibilityCurrentSettings = config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
+		    		var visibilityCurrentAttrs = config.visibilitySettings[visibType + contentType + 'Attrs'];
+	    			var visibilities = {};
 		    		visibilities.values = [];
 		    		visibilities.order = [];
-		    		var visibilityCurrentSettings = config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
-		    		var visibilityCurrentAttrs = config.visibilitySettings[visibType + contentType + 'Attrs'];
+		    		visibilities.isAttributeVisible = visibilityCurrentSettings.isAttributeVisible;
 		    		var content;
 		    		for(var i = 0; i < visibilityCurrentAttrs.length; i++){
 	    	    		visibilities.order.push(visibilityCurrentAttrs[i].value);
-	    	    		
 		    		}
 		    		
 		    		if(angular.isDefined(visibilityCurrentSettings.values)){
@@ -220,8 +220,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
     $scope.checkLayerSettings = function(config){
     	
     	$scope.removeHashKeys($scope.configModel.layerSettings.portLayers);
-    	$scope.removeHashKeys($scope.configModel.layerSettings.areaLayers.sysAreas);
-    	$scope.removeHashKeys($scope.configModel.layerSettings.areaLayers.userAreas);
+    	$scope.removeHashKeys($scope.configModel.layerSettings.areaLayers);
     	$scope.removeHashKeys($scope.configModel.layerSettings.additionalLayers);
     	$scope.removeHashKeys($scope.configModel.layerSettings.baseLayers);
     	
@@ -231,8 +230,8 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
     		config.layerSettings = {};
     		if(angular.isDefined($scope.configModel.layerSettings.portLayers) && !_.isEmpty($scope.configModel.layerSettings.portLayers)){
         		var ports = [];
-        		angular.forEach($scope.configModel.layerSettings.portLayers, function(item) {
-        			var port = {'serviceLayerId': item.serviceLayerId};
+        		angular.forEach($scope.configModel.layerSettings.portLayers, function(value,key) {
+        			var port = {'serviceLayerId': value.serviceLayerId, 'order': key};
     	    		ports.push(port);
     	    	});
         		config.layerSettings.portLayers = [];
@@ -241,44 +240,33 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
     			config.layerSettings.portLayers = undefined;
     		}
         	
-        	if(angular.isDefined($scope.configModel.layerSettings.areaLayers)){
-        		config.layerSettings.areaLayers = {};
-        		if(angular.isDefined($scope.configModel.layerSettings.areaLayers.sysAreas) && !_.isEmpty($scope.configModel.layerSettings.areaLayers.sysAreas)){
-        			config.layerSettings.areaLayers.sysAreas = {};
-    	    		var sysareas = [];
-    	    		angular.forEach($scope.configModel.layerSettings.areaLayers.sysAreas, function(item) {
-    	    			var area = {'serviceLayerId': item.serviceLayerId};
-    	    			sysareas.push(area);
-    		    	});
-    	    		config.layerSettings.areaLayers.sysAreas = [];
-    	    		angular.copy(sysareas,config.layerSettings.areaLayers.sysAreas);
-        		}else{
-        			config.layerSettings.areaLayers.sysAreas = undefined;
-        		}
-        		
-        		if(angular.isDefined($scope.configModel.layerSettings.areaLayers.userAreas)){
-        			config.layerSettings.areaLayers.userAreas = {};
-        			if(!angular.isDefined($scope.configModel.layerSettings.areaLayers.userAreas.areas) || _.isEmpty($scope.configModel.layerSettings.areaLayers.userAreas.areas)){
-	    				config.layerSettings.areaLayers.userAreas = undefined;
-	    			}else{
-    		    		var areas = [];
-    		    		angular.forEach($scope.configModel.layerSettings.areaLayers.userAreas.areas, function(item) {
-    		    			var area = {'gid': item.serviceLayerId};
-    		    			areas.push(area);
-    			    	});
-    		    		config.layerSettings.areaLayers.userAreas.areas = [];
-    		    		angular.copy(areas,config.layerSettings.areaLayers.userAreas.areas);
-        			}
-        			if(angular.isDefined(config.layerSettings.areaLayers.userAreas)){
-        				config.layerSettings.areaLayers.userAreas.serviceLayerId = $scope.configModel.layerSettings.areaLayers.userAreas.serviceLayerId;
-        			}
-        		}
-        	}
+        	if(angular.isDefined($scope.configModel.layerSettings.areaLayers) && !_.isEmpty($scope.configModel.layerSettings.areaLayers)){
+        		config.layerSettings.areaLayers = [];
+	    		var areas = [];
+	    		angular.forEach($scope.configModel.layerSettings.areaLayers, function(value,key) {
+	    			var area;
+	    			switch (value.areaType) {
+    	    			case 'sysarea':
+    	    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'order': key};
+    	    				break;
+    	    			case 'userarea':
+    	    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'gid': value.gid, 'order': key};
+    	    				break;
+    	    			case 'areagroup':
+    	    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'areaGroupName': value.name, 'order': key};
+    	    				break;
+    	    		}
+	    			areas.push(area);
+		    	});
+	    		angular.copy(areas,config.layerSettings.areaLayers);
+    		}else{
+    			config.layerSettings.areaLayers = undefined;
+    		}
         	
         	if(angular.isDefined($scope.configModel.layerSettings.additionalLayers) && !_.isEmpty($scope.configModel.layerSettings.additionalLayers)){
         		var additionals = [];
-        		angular.forEach($scope.configModel.layerSettings.additionalLayers, function(item) {
-        			var additional = {'serviceLayerId': item.serviceLayerId};
+        		angular.forEach($scope.configModel.layerSettings.additionalLayers, function(value,key) {
+        			var additional = {'serviceLayerId': value.serviceLayerId, 'order': key};
         			additionals.push(additional);
     	    	});
         		config.layerSettings.additionalLayers = [];
@@ -289,8 +277,8 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
         	
         	if(angular.isDefined($scope.configModel.layerSettings.baseLayers) && !_.isEmpty($scope.configModel.layerSettings.baseLayers)){
         		var bases = [];
-        		angular.forEach($scope.configModel.layerSettings.baseLayers, function(item) {
-        			var base = {'serviceLayerId': item.serviceLayerId};
+        		angular.forEach($scope.configModel.layerSettings.baseLayers, function(value,key) {
+        			var base = {'serviceLayerId': value.serviceLayerId, 'order': key};
         			bases.push(base);
     	    	});
         		config.layerSettings.baseLayers = [];

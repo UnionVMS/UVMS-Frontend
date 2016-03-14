@@ -127,11 +127,12 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     	    angular.forEach(visibilityTypes, function(visibType) {
     	    	angular.forEach(contentTypes, function(contentType) {
     	    		if(visibType !== 'track' || visibType === 'track' && contentType === 'Table'){
-    		    		var visibilities = {};
+    	    			var visibilityCurrentSettings = config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
+    		    		var visibilityCurrentAttrs = config.visibilitySettings[visibType + contentType + 'Attrs'];
+    	    			var visibilities = {};
     		    		visibilities.values = [];
     		    		visibilities.order = [];
-    		    		var visibilityCurrentSettings = config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
-    		    		var visibilityCurrentAttrs = config.visibilitySettings[visibType + contentType + 'Attrs'];
+    		    		visibilities.isAttributeVisible = visibilityCurrentSettings.isAttributeVisible;
     		    		var content;
     		    		
     		    		for(var i = 0; i < visibilityCurrentAttrs.length; i++){
@@ -151,62 +152,9 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     		    });
     	    });
         }
-
-        if(angular.isDefined(config.layerSettings)){
-	        var layerData = {};
-			if(angular.isDefined(config.layerSettings.portLayers) && !_.isEmpty(config.layerSettings.portLayers)){
-	    		var ports = [];
-	    		angular.forEach(config.layerSettings.portLayers, function(item) {
-	    			var port = {'serviceLayerId': item.serviceLayerId};
-		    		ports.push(port);
-		    	});
-	    		config.layerSettings.portLayers = [];
-	    		angular.copy(ports,config.layerSettings.portLayers);
-	    	}else{
-	    		config.layerSettings.portLayers = undefined;
-	    	}
-    	
-	    	if(angular.isDefined(config.layerSettings.areaLayers)){
-	    		
-	    		if(angular.isDefined(config.layerSettings.areaLayers.sysAreas) && !_.isEmpty(config.layerSettings.areaLayers.sysAreas)){
-		    		var sysareas = [];
-		    		angular.forEach(config.layerSettings.areaLayers.sysAreas, function(item) {
-		    			var area = {'serviceLayerId': item.serviceLayerId};
-		    			sysareas.push(area);
-			    	});
-		    		config.layerSettings.areaLayers.sysAreas = [];
-		    		angular.copy(sysareas,config.layerSettings.areaLayers.sysAreas);
-	    		}else{
-	    			config.layerSettings.areaLayers.sysAreas = undefined;
-	    		}
-	    	}
-	    	config.layerSettings.areaLayers.userAreas = undefined;
-	    	
-	    	if(angular.isDefined(config.layerSettings.additionalLayers) && !_.isEmpty(config.layerSettings.additionalLayers)){
-	    		var additionals = [];
-	    		angular.forEach(config.layerSettings.additionalLayers, function(item) {
-	    			var additional = {'serviceLayerId': item.serviceLayerId};
-	    			additionals.push(additional);
-		    	});
-	    		config.layerSettings.additionalLayers = [];
-	    		angular.copy(additionals,config.layerSettings.additionalLayers);
-	    	}else{
-    			config.layerSettings.additionalLayers = undefined;
-    		}
-	    	
-	    	if(angular.isDefined(config.layerSettings.baseLayers) && !_.isEmpty(config.layerSettings.baseLayers)){
-	    		var bases = [];
-	    		angular.forEach(config.layerSettings.baseLayers, function(item) {
-	    			var base = {'serviceLayerId': item.serviceLayerId};
-	    			bases.push(base);
-		    	});
-	    		config.layerSettings.baseLayers = [];
-	    		angular.copy(bases,config.layerSettings.baseLayers);
-	    	}else{
-    			config.layerSettings.baseLayers = undefined;
-    		}
-		}
         
+        config.layerSettings = checkLayerSettings(config.layerSettings);
+
         return angular.toJson(config);  
     };
     
@@ -273,12 +221,78 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
                 coordinatesFormat: angular.isDefined(data.mapConfiguration.coordinatesFormat) ? data.mapConfiguration.coordinatesFormat.toLowerCase() : undefined,
                 scaleBarUnits: angular.isDefined(data.mapConfiguration.scaleBarUnits) ? data.mapConfiguration.scaleBarUnits.toLowerCase() : undefined
             },
-            stylesSettings: angular.isDefined(data.stylesSettings) ? data.stylesSettings : undefined,
-            visibilitySettings: angular.isDefined(data.visibilitySettings) ? data.visibilitySettings : undefined,
-            layerSettings: angular.isDefined(data.layerSettings) ? data.layerSettings : undefined
+            stylesSettings: angular.isDefined(data.mapConfiguration.stylesSettings) ? data.mapConfiguration.stylesSettings : undefined,
+            visibilitySettings: angular.isDefined(data.mapConfiguration.visibilitySettings) ? data.mapConfiguration.visibilitySettings : undefined,
+            layerSettings: angular.isDefined(data.mapConfiguration.layerSettings) ? checkLayerSettings(data.mapConfiguration.layerSettings) : undefined
         };
         
         return config;
+    };
+    
+    var checkLayerSettings = function(layerSettings) {
+    
+	    if(angular.isDefined(layerSettings)){
+	        var layerData = {};
+			if(angular.isDefined(layerSettings.portLayers) && !_.isEmpty(layerSettings.portLayers)){
+	    		var ports = [];
+	    		angular.forEach(layerSettings.portLayers, function(value,key) {
+	    			var port = {'serviceLayerId': value.serviceLayerId, 'order': key};
+		    		ports.push(port);
+		    	});
+	    		layerSettings.portLayers = [];
+	    		angular.copy(ports,layerSettings.portLayers);
+	    	}else{
+	    		layerSettings.portLayers = undefined;
+	    	}
+		
+	    	if(angular.isDefined(layerSettings.areaLayers && !_.isEmpty(layerSettings.areaLayers))){
+	    		var areas = [];
+	    		angular.forEach(layerSettings.areaLayers, function(value,key) {
+	    			var area;
+	    			switch (value.areaType) {
+		    			case 'sysarea':
+		    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'order': key};
+		    				break;
+		    			case 'userarea':
+		    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'gid': value.gid, 'order': key};
+		    				break;
+		    			case 'areagroup':
+		    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'areaGroupName': value.name, 'order': key};
+		    				break;
+		    		}
+	    			areas.push(area);
+		    	});
+	    		layerSettings.areaLayers = [];
+	    		angular.copy(areas,layerSettings.areaLayers);
+			}else{
+				layerSettings.areaLayers = undefined;
+			}
+	    	
+	    	if(angular.isDefined(layerSettings.additionalLayers) && !_.isEmpty(layerSettings.additionalLayers)){
+	    		var additionals = [];
+	    		angular.forEach(layerSettings.additionalLayers, function(value,key) {
+	    			var additional = {'serviceLayerId': value.serviceLayerId, 'order': key};
+	    			additionals.push(additional);
+		    	});
+	    		layerSettings.additionalLayers = [];
+	    		angular.copy(additionals,layerSettings.additionalLayers);
+	    	}else{
+				layerSettings.additionalLayers = undefined;
+			}
+	    	
+	    	if(angular.isDefined(layerSettings.baseLayers) && !_.isEmpty(layerSettings.baseLayers)){
+	    		var bases = [];
+	    		angular.forEach(layerSettings.baseLayers, function(value,key) {
+	    			var base = {'serviceLayerId': value.serviceLayerId, 'order': key};
+	    			bases.push(base);
+		    	});
+	    		layerSettings.baseLayers = [];
+	    		angular.copy(bases,layerSettings.baseLayers);
+	    	}else{
+				layerSettings.baseLayers = undefined;
+			}
+		}
+	    return layerSettings;
     };
     
 	return SpatialConfig;

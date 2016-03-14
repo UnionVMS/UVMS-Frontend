@@ -114,6 +114,10 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
 
             //Watch for changes to the ngModel and update the dropdown label
             scope.$watch(function () { return scope.ngModel;}, function (newVal, oldVal) {
+            	if(scope.uppercase && newVal && !angular.equals(newVal, newVal.toUpperCase())){
+            		scope.ngModel = newVal.toUpperCase();
+            		return;
+            	}
             	if(scope.multiple){
             		scope.selectedItems = [];
             		scope.currentItemLabel = undefined;

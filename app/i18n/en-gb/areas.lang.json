@@ -46,7 +46,7 @@
 	"user_area_valid_to": "To",
 	"user_area_type": "Type",
 	"user_area_scope_selection": "Scope selection",
-	"user_area_select_ccope": "Select a scope",
+	"user_area_select_scope": "Select the scopes",
 	"user_area_dataset_name": "Dataset name",
 	
 	"modal_geom_mismatch": "The area geometry in the map does not match with the geometry in the coordinates form. Please decide which geometry to use or fix the issue manually.",

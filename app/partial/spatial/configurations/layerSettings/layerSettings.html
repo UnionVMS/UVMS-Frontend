@@ -33,7 +33,7 @@
 					        <h3>Layer Tree</h3>
 					        <div class="column">
 					        	<h5>Ports</h5>
-								    <ul dnd-list="selectedPorts" dnd-allowed-types="['port', 'portarea']" dnd-drop="checkIfExists(item,selectedPorts,event)">
+								    <ul dnd-list="selectedPorts" dnd-allowed-types="['port', 'portarea']" dnd-drop="checkIfExists(item,selectedPorts)">
 								        <li ng-repeat="item in selectedPorts"
 								            dnd-draggable="item"
 								            dnd-type="item.subType"
@@ -47,43 +47,27 @@
 					        </div>
 					        <div class="column">
 					        	<h5>Areas</h5>
-								    <ul dnd-list="selectedSysAreas"
-								     dnd-allowed-types="['sysarea','userarea']" 
-								     dnd-drop="clearPlaceHolders();checkIfExists(item,selectedSysAreas,'sysarea');"
-									 dnd-dragover="dragOverArea(type,'sysarea')">								        
-									 	<li ng-repeat="item in selectedSysAreas"
-								            dnd-draggable="item"
-								            dnd-type="item.subType"
-								            dnd-effect-allowed="move"
-								            dnd-dragstart="selectedSysAreas.splice($index, 1);"
-								            dnd-canceled="selectedSysAreas.splice($index, 1);"
-								            dnd-dragend="clearPlaceHolders()">
+							    <ul dnd-list="selectedAreas"
+							     dnd-allowed-types="['sysarea','userarea','areagroup']" 
+							     dnd-drop="checkIfExists(item,selectedAreas);">								        
+								 	<li ng-repeat="item in selectedAreas"
+							            dnd-draggable="item"
+							            dnd-type="item.areaType"
+							            dnd-effect-allowed="move"
+							            dnd-dragstart="selectedAreas.splice($index, 1);"
+							            dnd-canceled="selectedAreas.splice($index, 1);"
+							            type='{{item.areaType}}'>
+<!-- 							            ng-if="!(isAdminConfig && item.subType === userarea)"> -->
+							            <div class="area-item">
 								            <div class="handle">:::</div>
     										<div class="item">{{item.name}}</div>
-								        </li>
-								        <li ng-if="!isAdminConfig && isSysItemOverUser" ng-show="isSysItemOverUser" class="dndPlaceholderAlternative"></li>
-								    </ul>
-								    <ul dnd-list="selectedUserAreas.areas"
-	 							     dnd-allowed-types="['sysarea','userarea']" 
-								     dnd-drop="clearPlaceHolders();checkIfExists(item,selectedUserAreas.areas,'userarea');"
-								     dnd-dragover="dragOverArea(type,'userarea')"
-								     ng-hide="isAdminConfig">
-								    	<li ng-if="isUserItemOverSys" class="dndPlaceholderAlternative"></li>
-								        <li ng-repeat="item in selectedUserAreas.areas"
-								            dnd-draggable="item"
-								            dnd-type="item.subType"
-								            dnd-effect-allowed="move"
-								            dnd-dragstart="selectedUserAreas.areas.splice($index, 1);"
-								            dnd-canceled="selectedUserAreas.areas.splice($index, 1);"
-								            dnd-dragend="clearPlaceHolders()">
-								            <div class="handle">:::</div>
-    										<div class="item">{{item.name}}</div>
-								        </li>
-								    </ul>
+   										</div>
+							        </li>
+							    </ul>
 					        </div>
 					        <div class="column">
 					        	<h5>Additional Cartographies</h5>
-								    <ul dnd-list="selectedAdditionals" dnd-allowed-types="['additional','others']" dnd-drop="checkIfExists(item,selectedAdditionals,event)">
+								    <ul dnd-list="selectedAdditionals" dnd-allowed-types="['additional','others']" dnd-drop="checkIfExists(item,selectedAdditionals)">
 								        <li ng-repeat="item in selectedAdditionals"
 								            dnd-draggable="item"
 								            dnd-type="item.subType"
@@ -97,7 +81,7 @@
 					        </div>
 					        <div class="column">
 					        	<h5>Backgrounds</h5>
-								    <ul dnd-list="selectedBases" dnd-allowed-types="['background','others']" dnd-drop="checkIfExists(item,selectedBases,event)">
+								    <ul dnd-list="selectedBases" dnd-allowed-types="['background','others']" dnd-drop="checkIfExists(item,selectedBases)">
 								        <li ng-repeat="item in selectedBases"
 								            dnd-draggable="item"
 								            dnd-type="item.subType"

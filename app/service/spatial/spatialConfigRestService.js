@@ -65,6 +65,13 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
                 }
             });
         },
+        getAreaGroup: function(){
+            return $resource('/spatial/rest/servicelayers/AREAGROUP', {}, {
+                'get': {
+                    method: 'GET'
+                }
+            });
+        },
         getBackground: function(){
             return $resource('/spatial/rest/servicelayers/background', {}, {
                 'get': {
@@ -165,6 +172,17 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
         getUserArea: function(){
         	var deferred = $q.defer();
         	spatialConfigRestFactory.getUserArea().get(function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.log('Error getting user areas');
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        },
+        getAreaGroup: function(){
+        	var deferred = $q.defer();
+        	spatialConfigRestFactory.getAreaGroup().get(function(response){
                 deferred.resolve(response.data);
             }, function(error){
                 console.log('Error getting user areas');

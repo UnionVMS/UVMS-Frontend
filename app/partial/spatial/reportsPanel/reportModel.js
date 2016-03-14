@@ -30,37 +30,38 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	    this.areas = [];
 	    
 	    //Spatial configs
-        this.mapConfiguration = {};
-        this.stylesSettings = {
-            positions: {
-                attribute: undefined,
-                style: {}
-            },
-            segments: {
-                attribute: undefined,
-                style: {}
-            }
-        };
-        this.layerSettings = {
-    		additionalLayers: [],
-	        areaLayers: [],
-	        baseLayers: [],
-	        portLayers: []
-        };
-        this.visibilitySettings = {
-            positions: {
-                table: {},
-                popup: {},
-                labels: {}
-            },
-            segments: {
-                table: {},
-                popup: {},
-                labels: {}
-            },
-            tracks: {
-                table: {}
-            }
+        this.mapConfiguration = {
+    		stylesSettings: {
+	            positions: {
+	                attribute: undefined,
+	                style: {}
+	            },
+	            segments: {
+	                attribute: undefined,
+	                style: {}
+	            }
+	        },
+	        layerSettings: {
+	    		additionalLayers: [],
+		        areaLayers: [],
+		        baseLayers: [],
+		        portLayers: []
+	        },
+	        visibilitySettings: {
+	            positions: {
+	                table: {},
+	                popup: {},
+	                labels: {}
+	            },
+	            segments: {
+	                table: {},
+	                popup: {},
+	                labels: {}
+	            },
+	            tracks: {
+	                table: {}
+	            }
+	        }
         };
 	}
 
@@ -331,13 +332,12 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
     		coordinatesFormat: this.mapConfiguration.coordinatesFormat,
         	displayProjectionId: this.mapConfiguration.displayProjectionId,
         	mapProjectionId: this.mapConfiguration.mapProjectionId,
-        	scaleBarUnits: this.mapConfiguration.scaleBarUnits
+        	scaleBarUnits: this.mapConfiguration.scaleBarUnits,
+        	stylesSettings: this.mapConfiguration.stylesSettings,
+        	visibilitySettings: this.mapConfiguration.visibilitySettings,
+        	layerSettings: this.mapConfiguration.layerSettings
         };
 	    
-        report.stylesSettings = this.stylesSettings;
-        report.visibilitySettings = this.visibilitySettings;
-        report.layerSettings = this.layerSettings;
-        
 	    return report;
 	};
 

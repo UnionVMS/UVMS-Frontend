@@ -1,4 +1,15 @@
 <div ng-controller="ReportformCtrl">
+	<!-- Warnings -->
+	<div class="row">
+		<div class="form-group col-md-12" ng-if="formAlert.visible">
+			<div class="alert alert-danger alert-container" role="alert">
+				<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+				<span class="alert-message">
+					<span>{{formAlert.msg}}</span>            
+				</span>
+		    </div>
+		</div>
+	</div>
 	<div class="row">
 		<div class="col-md-11" ng-show="getFormMode('CREATE')">
 			<h3 class="pull-left">{{'spatial.reports_form_title_new_report' | i18n }}</h3>
@@ -62,7 +73,7 @@
 		    			<div class="form-group col-md-3" ng-hide="report.positionSelector === 'last' && report.positionTypeSelector === 'hours'"  ng-class="{'has-error': (reportForm.reportBodyForm.startDateTime.$dirty || submitingReport === true) && reportForm.reportBodyForm.startDateTime.$invalid}">
 		    				<label for="reportStartDate">{{'spatial.reports_form_start_date_label' | i18n}}</label>
 		    				<!-- <datepicker-input id="reportStartDate" time="true" model="report.startDateTime" name="startDateTime" ng-required="report.positionSelector === 'all'"></datepicker-input> -->
-		    				<datepicker-input id="reportStartDate" time="true" model="report.startDateTime" name="startDateTime" max-date="report.endDateTime"  ng-required="report.positionSelector === 'all'" ng-change-callback="resetDateTimePicker" input-field-id="report-start-date-picker"></datepicker-input>
+		    				<datepicker-input id="reportStartDate" time="true" model="report.startDateTime" name="startDateTime" max-date="report.endDateTime"  ng-required="report.positionSelector === 'all'" ng-change-callback="resetDateTimePicker" input-field-id="report-start-date-picker" update-when="default"></datepicker-input>
 		    				<div class="innerErrorMessagesDateWithUpLabel" ng-messages="reportForm.reportBodyForm.startDateTime.$error" ng-show="(reportForm.reportBodyForm.startDateTime.$dirty || submitingReport === true) && reportForm.reportBodyForm.startDateTime.$invalid">
 								<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 							</div>
@@ -113,16 +124,6 @@
 	   				<div class="form-group row fieldsetPadding vmsFiltersFieldset" ng-include="'partial/spatial/reportsPanel/reportForm/vmsFiltersFieldset/vmsFiltersFieldset.html'"></div>
    				
    				</ng-form>
-   				
-   				<!-- Warnings -->
-   				<div class="form-group col-md-12" ng-if="formAlert.visible">
-					<div class="alert alert-danger alert-container" role="alert">
-						<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
-						<span class="alert-message">
-							<span>{{formAlert.msg}}</span>            
-						</span>
-				    </div>
-				</div>
    				
    				<!-- Buttons -->
    				<div class="form-group row">

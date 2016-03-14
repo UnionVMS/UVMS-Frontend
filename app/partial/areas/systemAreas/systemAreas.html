@@ -1,12 +1,10 @@
 <div class="systemAreasContainer" ng-controller="SystemareasCtrl">
 	<div class="row">
-		<div class="col-md-12">
-			<div class="col-md-3 comboLabel">
-				<label>{{'areas.sys_areas_data_type_label' | i18n}}</label>
-			</div>
-			<div class="col-md-9">
-				<combobox ng-model="sysAreaType" items="helper.systemAreaItems" name="dataType" initialtext="{{'areas.sys_areas_data_type_label' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'"></combobox>
-			</div>
+		<div class="col-md-3 comboLabel">
+			<label>{{'areas.sys_areas_data_type_label' | i18n}}</label>
+		</div>
+		<div class="col-md-9">
+			<combobox ng-model="sysAreaType" items="helper.systemAreaItems" name="dataType" initialtext="{{'areas.sys_areas_data_type_label' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'"></combobox>
 		</div>
 	</div>
 	
@@ -31,7 +29,7 @@
 				<div class="form-container">
 					<div class="proj-container col-md-12 form-group form-inline" ng-show="projections.items.length > 0">
 						<div class="row">
-							<div class="col-md-3 proj-label">
+							<div class="col-md-3 proj-label comboLabel">
 								<label for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
 							</div>
 							<div class="col-md-9 proj-combo" ng-class="{'has-error': (SysareasForm.editingProjection.$dirty || saved) && SysareasForm.editingProjection.$invalid}">

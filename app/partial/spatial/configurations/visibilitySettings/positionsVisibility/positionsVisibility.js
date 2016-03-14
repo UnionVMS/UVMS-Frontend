@@ -1,8 +1,8 @@
 angular.module('unionvmsWeb').controller('PositionsvisibilityCtrl',function($scope, locale){
-    
-	
+	$scope.isPositionVisLoading = false;
 	
 	$scope.$watch('configModel.visibilitySettings.positions', function(newVal) {
+		$scope.isPositionVisLoading = false;
 		if(newVal){
 			
 			$scope.configModel.visibilitySettings.positionTableAttrs = [{
@@ -171,7 +171,9 @@ angular.module('unionvmsWeb').controller('PositionsvisibilityCtrl',function($sco
 				angular.forEach(positionVisibilityAttrs, function(item) {
 					item.type = contentType;
 				});
+				
 			});
+			$scope.isPositionVisLoading = false;
 		}
 	});
 });
