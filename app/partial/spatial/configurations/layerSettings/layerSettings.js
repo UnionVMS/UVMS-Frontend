@@ -120,6 +120,11 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	    	angular.forEach($scope.selectedAreas, function(item) {
 	    		item.serviceLayerId = "" + item.serviceLayerId;
 	            item.gid = "" + item.gid;
+	            if(item.areaType === "userarea"){
+	            	item.name = item.areaName;
+	            }else if(item.areaType === "areagroup"){
+	            	item.name = item.areaGroupName;
+	            }
 	    	});
 	    	
 	    	if(!angular.isDefined($scope.configModel.layerSettings.additionalLayers)){
