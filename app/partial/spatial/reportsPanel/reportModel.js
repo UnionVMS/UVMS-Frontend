@@ -244,8 +244,12 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	        filterExpression: filter
 	    };
 	    
-	    if (this.withMap === true){
+	    if(this.withMap === true){
 	        dto.mapConfiguration = this.mapConfiguration;
+	    }else{
+	    	if(angular.isDefined(this.mapConfiguration.spatialConnectId)){
+	    		dto.mapConfiguration = {'spatialConnectId': this.mapConfiguration.spatialConnectId};
+	    	}
 	    }
 	    
 	    return dto;
@@ -328,16 +332,22 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
             }
         }
         
-        report.mapConfiguration = {
-    		coordinatesFormat: this.mapConfiguration.coordinatesFormat,
-        	displayProjectionId: this.mapConfiguration.displayProjectionId,
-        	mapProjectionId: this.mapConfiguration.mapProjectionId,
-        	scaleBarUnits: this.mapConfiguration.scaleBarUnits,
-        	stylesSettings: this.mapConfiguration.stylesSettings,
-        	visibilitySettings: this.mapConfiguration.visibilitySettings,
-        	layerSettings: this.mapConfiguration.layerSettings
-        };
-	    
+        if(this.withMap === true){
+        	report.mapConfiguration = {
+        		coordinatesFormat: this.mapConfiguration.coordinatesFormat,
+            	displayProjectionId: this.mapConfiguration.displayProjectionId,
+            	mapProjectionId: this.mapConfiguration.mapProjectionId,
+            	scaleBarUnits: this.mapConfiguration.scaleBarUnits,
+            	stylesSettings: this.mapConfiguration.stylesSettings,
+            	visibilitySettings: this.mapConfiguration.visibilitySettings,
+            	layerSettings: this.mapConfiguration.layerSettings
+            };
+        }else{
+        	if(angular.isDefined(this.mapConfiguration.spatialConnectId)){
+        		report.mapConfiguration = {'spatialConnectId': this.mapConfiguration.spatialConnectId};
+        	}
+	    }
+        
 	    return report;
 	};
 
