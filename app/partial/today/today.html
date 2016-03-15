@@ -1,9 +1,9 @@
 <div class="container todayContainer containerWithTopBottomPadding">
 	<div class="row" style="padding-bottom: 15px;">
 		<div class="col-md-9">
-			<div class="row">
-				<div class="col-md-12 chart-wrapper" style="height: 285px; margin-bottom: 15px;">
-					<linechart data="data" options="options" width="300" height="100" ></linechart>
+			<div class="row" style="padding-bottom: 15px;">
+				<div class="col-md-12" style="height: 285px;">
+					<exchange-history></exchange-history>
 				</div>
 			</div>
 			<div class="row">
@@ -27,6 +27,7 @@
 	</div>
 	<incoming-movements refresh-interval="refreshInterval"/>
 </div>
+
 
 <div class="col-md-12" style="display:none;">
 	<div class="container todayContainer containerWithTopBottomPadding">
