@@ -233,7 +233,7 @@ angular.module('unionvmsWeb')
 
     var getAreas = function() {
         return getConfigFromResource(movementRestFactory.areas());
-    }
+    };
 
     return {
         getMovementList : getMovementList,
