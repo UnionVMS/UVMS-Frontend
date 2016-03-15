@@ -105,7 +105,7 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
         	if (angular.isDefined(response)) {
         		var areaGroups = [];
         		for(var i=0;i<response.length;i++){
-        			areaGroups.push({code: i,text: response[i]});
+        			areaGroups.push({code: response[i],text: response[i]});
         		}
         		obj.userAreasGroups = areaGroups;
         	}

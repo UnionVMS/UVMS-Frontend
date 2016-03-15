@@ -152,8 +152,65 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     		    });
     	    });
         }
-        
-        config.layerSettings = checkLayerSettings(config.layerSettings);
+
+        if(angular.isDefined(config.layerSettings)){
+        	if(angular.isDefined(config.layerSettings.portLayers) && !_.isEmpty(config.layerSettings.portLayers)){
+        		var ports = [];
+        		angular.forEach(config.layerSettings.portLayers, function(value,key) {
+        			var port = {'serviceLayerId': value.serviceLayerId, 'order': key};
+    	    		ports.push(port);
+    	    	});
+        		angular.copy(ports,config.layerSettings.portLayers);
+        	}else{
+    			config.layerSettings.portLayers = undefined;
+    		}
+        	
+        	if(angular.isDefined(config.layerSettings.areaLayers) && !_.isEmpty(config.layerSettings.areaLayers)){
+	    		var areas = [];
+	    		angular.forEach(config.layerSettings.areaLayers, function(value,key) {
+	    			var area;
+	    			switch (value.areaType) {
+    	    			case 'sysarea':
+    	    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'order': key};
+    	    				break;
+    	    			case 'userarea':
+    	    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'gid': value.gid, 'order': key};
+    	    				break;
+    	    			case 'areagroup':
+    	    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'areaGroupName': value.name, 'order': key};
+    	    				break;
+    	    		}
+	    			areas.push(area);
+		    	});
+	    		angular.copy(areas,config.layerSettings.areaLayers);
+    		}else{
+    			config.layerSettings.areaLayers = undefined;
+    		}
+        	
+        	if(angular.isDefined(config.layerSettings.additionalLayers) && !_.isEmpty(config.layerSettings.additionalLayers)){
+        		var additionals = [];
+        		angular.forEach(config.layerSettings.additionalLayers, function(value,key) {
+        			var additional = {'serviceLayerId': value.serviceLayerId, 'order': key};
+        			additionals.push(additional);
+    	    	});
+        		config.layerSettings.additionalLayers = [];
+        		angular.copy(additionals,config.layerSettings.additionalLayers);
+        	}else{
+    			config.layerSettings.additionalLayers = undefined;
+    		}
+        	
+        	if(angular.isDefined(config.layerSettings.baseLayers) && !_.isEmpty(config.layerSettings.baseLayers)){
+        		var bases = [];
+        		angular.forEach(config.layerSettings.baseLayers, function(value,key) {
+        			var base = {'serviceLayerId': value.serviceLayerId, 'order': key};
+        			bases.push(base);
+    	    	});
+        		config.layerSettings.baseLayers = [];
+        		angular.copy(bases,config.layerSettings.baseLayers);
+        	}else{
+    			config.layerSettings.baseLayers = undefined;
+    		}
+        }
 
         return angular.toJson(config);  
     };

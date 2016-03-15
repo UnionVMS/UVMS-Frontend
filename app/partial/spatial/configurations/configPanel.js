@@ -219,11 +219,6 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
     
     $scope.checkLayerSettings = function(config){
     	
-    	$scope.removeHashKeys($scope.configModel.layerSettings.portLayers);
-    	$scope.removeHashKeys($scope.configModel.layerSettings.areaLayers);
-    	$scope.removeHashKeys($scope.configModel.layerSettings.additionalLayers);
-    	$scope.removeHashKeys($scope.configModel.layerSettings.baseLayers);
-    	
     	if (!_.isEqual($scope.configModel.layerSettings, $scope.configCopy.layerSettings)){
     		$scope.configCopy.layerSettingsToSave = {};
     		angular.copy($scope.configModel.layerSettings, $scope.configCopy.layerSettingsToSave);
@@ -241,7 +236,6 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
     		}
         	
         	if(angular.isDefined($scope.configModel.layerSettings.areaLayers) && !_.isEmpty($scope.configModel.layerSettings.areaLayers)){
-        		config.layerSettings.areaLayers = [];
 	    		var areas = [];
 	    		angular.forEach($scope.configModel.layerSettings.areaLayers, function(value,key) {
 	    			var area;
@@ -258,6 +252,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
     	    		}
 	    			areas.push(area);
 		    	});
+	    		config.layerSettings.areaLayers = [];
 	    		angular.copy(areas,config.layerSettings.areaLayers);
     		}else{
     			config.layerSettings.areaLayers = undefined;
