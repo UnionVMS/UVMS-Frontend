@@ -8,6 +8,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     
     //reset repServ
     $scope.repServ.clearVmsData();
+    $scope.repServ.name = locale.getString('spatial.header_live_view');
     
     //Define header menus
     var setMenus = function(){

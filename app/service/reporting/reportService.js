@@ -2,7 +2,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 
     var rep = {
        id: undefined,
-       name: locale.getString('spatial.header_live_view'),
+       name: undefined,
        isReportExecuting: false,
        hasError: false,
        hasWarning: false,

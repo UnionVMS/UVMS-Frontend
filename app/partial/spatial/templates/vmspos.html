@@ -5,8 +5,15 @@
 	<table class="table table-striped table-condensed table-bordered">
 		{{#position}}
 		<tr>
+			{{#showTitles}}
 			<td class="col-md-6"><b>{{getTitle}}</b></td>
 			<td class="col-md-6">{{getValue}}</td>
+			{{/showTitles}}
+			{{^showTitles}}
+				{{#doDisplay}}
+				<td class="col-md-6">{{getValue}}</td>
+				{{/doDisplay}}
+			{{/showTitles}}
 		</tr>
 		{{/position}}
 	</table>

@@ -1592,8 +1592,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	
 	ms.dragExtent.prototype.handleDownEvent = function(evt){
 	    var map = evt.map;
-	    var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature){
-	        return feature;
+	    var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer){
+	        if (layer !== null){
+                return feature;
+            }
+            return false;
 	    }, this, function(layer){
 	        return layer.get('type') === 'print';
 	    });
@@ -1620,8 +1623,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	ms.dragExtent.prototype.handleMoveEvent = function(evt){
 	    if (this._cursor) {
 	        var map = evt.map;
-	        var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature){
-	            return feature;
+	        var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer){
+	            if (layer !== null){
+	                return feature;
+	            }
+	            return false;
 	        }, this, function(layer){
 	            return layer.get('type') === 'print';
 	        });
@@ -1881,11 +1887,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     //label visibility settings object
     ms.labelVisibility = {
         positions: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'posTime', 'lat', 'lon', 'stat', 'm_spd', 'c_spd', 'crs', 'msg_tp', 'act_tp', 'source'],
-        segments: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'dist', 'dur', 'spd', 'crs', 'cat']
+        positionsTitles: true,
+        segments: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'dist', 'dur', 'spd', 'crs', 'cat'],
+        segmentsTitles: true
     };
     
     ms.setLabelVisibility = function(type, config){
         ms.labelVisibility[type] = config.values;
+        ms.labelVisibility[type + 'Titles'] = angular.isDefined(config.isAttributeVisible) ? config.isAttributeVisible : false;
         if (!angular.isDefined(ms.labelVisibility[type])){
             ms.labelVisibility[type] = [];
         }
@@ -2048,9 +2057,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     };
     
     ms.setLabelObj = function(feature, type, id){
-        var titles, srcData, i;
+        var titles, srcData, showTitles, i;
         var data = [];
         if (type === 'vmspos'){
+            showTitles = ms.labelVisibility.positionsTitles;
             titles = ms.getPositionTitles();
             srcData = ms.formatPositionDataForPopup(feature.getProperties());
             
@@ -2061,6 +2071,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
                 });
             }
         } else {
+            showTitles = ms.labelVisibility.segmentsTitles;
             titles = ms.getSegmentTitles();
             srcData = ms.formatSegmentDataForPopup(feature.getProperties());
             
@@ -2076,7 +2087,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             return {
                 id: id,
                 data: data,
-                includeTitles: true,
+                includeTitles: showTitles,
                 getTitle: function(){
                     return this.title;
                 },
@@ -2162,11 +2173,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	//Popup visibility settings object
 	ms.popupVisibility = {
 	    positions: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'posTime', 'lat', 'lon', 'stat', 'm_spd', 'c_spd', 'crs', 'msg_tp', 'act_tp', 'source'],
-	    segments: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'dist', 'dur', 'spd', 'crs', 'cat']
+	    positionsTitles: true,
+	    segments: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'dist', 'dur', 'spd', 'crs', 'cat'],
+	    segmentsTitles: true
 	};
 	
 	ms.setPopupVisibility = function(type, config){
 	    ms.popupVisibility[type] = config.values;
+	    ms.popupVisibility[type + 'Titles'] = angular.isDefined(config.isAttributeVisible) ? config.isAttributeVisible: false;
 	    if (!angular.isDefined(ms.popupVisibility[type])){
 	        ms.popupVisibility[type] = [];
 	    }
@@ -2187,12 +2201,20 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         
         return {
             windowTitle: locale.getString('spatial.popup_positions_title'),
+            showTitles: ms.popupVisibility.positionsTitles,
             position: data,
             getTitle: function(){
                 return this.title;
             },
             getValue: function(){
                 return this.value;
+            },
+            doDisplay: function(){
+                if (!angular.isDefined(this.value) || this.value === ''){
+                    return false;
+                } else {
+                    return true;
+                }
             }
         };
     };
@@ -2267,12 +2289,20 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
         
         return {
             windowTitle: locale.getString('spatial.popup_segments_title'),
+            showTitles: ms.popupVisibility.segmentsTitles,
             segment: data,
             getTitle: function(){
                 return this.title;
             },
             getValue: function(){
                 return this.value;
+            },
+            doDisplay: function(){
+                if (!angular.isDefined(this.value) || this.value === ''){
+                    return false;
+                } else {
+                    return true;
+                }
             }
         };
     };

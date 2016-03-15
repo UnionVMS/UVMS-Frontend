@@ -242,7 +242,15 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 					if ( !value.data ) { return ( true ); }
 
 					layersByTitle = mapLayers.filter( function( layer ){
-					    return layer.get( 'title' ) === value.data.title && layer.get('isBaseLayer') === value.data.isBaseLayer;
+					    var found = true;
+					    
+					    if (layer.get('type') === 'WMS'){
+					        var params = layer.getSource().getParams();
+					        if (angular.isDefined(params) && angular.isDefined(value.data.params) && params.LAYERS !== value.data.params.LAYERS){
+					            found = false;
+					        }
+					    }
+					    return layer.get( 'title' ) === value.data.title && layer.get('isBaseLayer') === value.data.isBaseLayer && found;
 					});
 
 					layer = layersByTitle[ 0 ];
