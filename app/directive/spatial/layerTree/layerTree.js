@@ -341,11 +341,11 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			};
 			
 			//Get layer index in the ol layers collection
-			var getLayerIdxByTitle = function(title){
+			var getLayerIdx = function(mapLayer){
                 var layers = mapService.map.getLayers();
                 var lyrIdx;
                 layers.forEach(function(lyr, idx, mpLyrs){
-                    if (lyr.get('title') === title){
+                    if (_.isEqual(lyr, mapLayer)){
                         lyrIdx = idx;
                     }
                 });
@@ -357,16 +357,18 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
             var changeLayerOrder = function(node){
                 var layers = mapService.map.getLayers();
                 for (var i in scope.startState){
-                    layers.removeAt(scope.startState[i].idxMap);
+                    layers.remove(scope.startState[i].layer);
                 }
+                
+                var numLayersRemoved = _.keys(scope.startState).length;
                 
                 var startIdx;
                 var counter = 0;
                 for (i in scope.endState){
                     if (counter === 0){
-                        startIdx = scope.endState[i].idxMap - 1;
+                        startIdx = scope.endState[i].idxMap - numLayersRemoved + 1;
                     }
-                    layers.insertAt(startIdx, scope.startState[i].layer);
+                    layers.insertAt(startIdx,scope.startState[i].layer);
                     counter += 1;
                 }
                 
@@ -433,10 +435,10 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 							
 							var childNodes = node.parent.children;
 							for (var i = 0; i < childNodes.length; i++){
-							    scope.startState[childNodes[i].title] = {
+							    scope.startState[childNodes[i].title + childNodes[i].key] = {
 							       idxTree: i,
-							       idxMap: getLayerIdxByTitle(childNodes[i].title),
-							       layer: mapService.getLayerByTitle(childNodes[i].title)
+							       idxMap: getLayerIdx(childNodes[i].data.mapLayer),
+							       layer: childNodes[i].data.mapLayer
 							    };
 							}
 							
@@ -465,9 +467,9 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 							
 							var childNodes = node.parent.children;
 							for (var i = 0; i < childNodes.length; i++){
-                                scope.endState[childNodes[i].title] = {
+                                scope.endState[childNodes[i].title + childNodes[i].key] = {
                                    idxTree: i,
-                                   idxMap: scope.startState[childNodes[i].title].idxMap + (scope.startState[childNodes[i].title].idxTree - i) 
+                                   idxMap: scope.startState[childNodes[i].title + childNodes[i].key].idxMap + (scope.startState[childNodes[i].title + childNodes[i].key].idxTree - i) 
                                 };
                             }
 							changeLayerOrder();

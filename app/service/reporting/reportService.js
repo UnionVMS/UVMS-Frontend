@@ -38,6 +38,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         //Clear data used in tables
         rep.clearVmsData();
         
+        //Reset labels
+        mapService.resetLabelContainers();
+        
         //Reset map projection
         mapService.updateMapView({
             epsgCode: 3857,
@@ -69,6 +72,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.isReportExecuting = true;
         
         mapService.clearVectorLayers();
+        
+        //Reset history control
+        mapService.getControlsByType('HistoryControl')[0].resetHistory();
         
         //Close overlays
         if (angular.isDefined(mapService.overlay)){
@@ -250,6 +256,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
+        
+        //Remove existing vms vector layers from the map
+        mapService.clearVectorLayers();
         
         //Add nodes to the tree and layers to the map
         if (rep.positions.length > 0 || rep.segments.length > 0){

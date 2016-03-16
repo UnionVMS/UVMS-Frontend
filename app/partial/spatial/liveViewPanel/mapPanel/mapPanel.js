@@ -647,6 +647,7 @@ angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale,
     };
 
     locale.ready('spatial').then(function(){
+        mapService.resetLabelContainers();
         mapService.setMap($scope.config);
         $scope.map = mapService.map;
         spatialHelperService.setToolbarControls($scope.config);

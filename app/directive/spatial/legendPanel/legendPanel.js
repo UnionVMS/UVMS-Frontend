@@ -15,6 +15,8 @@ angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapServi
                 if (params.STYLES !== '' && angular.isDefined(params.STYLES)){
                     record.url += '&STYLE=' + params.STYLES;
                 }
+                
+                record.url += '&SCALE=' + mapService.getCurrentScale();
                 record.title = layer.get('title');
                 record.type = 'wms';
                 record.visibility = layer.get('visible');

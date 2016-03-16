@@ -136,7 +136,12 @@ ol.control.HistoryControl = function(opt_options){
 };
 ol.inherits(ol.control.HistoryControl, ol.control.Control);
 
-angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $timeout, $interval, $templateRequest, $filter, spatialHelperService, globalSettingsService, unitConversionService, coordinateFormatService, MapFish) {
+ol.control.HistoryControl.prototype.resetHistory = function(){
+    this.historyArray = [];
+    this.historyIndex = undefined;
+};
+
+angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope, $window, $timeout, $interval, $templateRequest, $filter, spatialHelperService, globalSettingsService, unitConversionService, coordinateFormatService, MapFish) {
 	var ms = {};
 	ms.sp = spatialHelperService;
 
@@ -258,19 +263,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 	    });
 	    
 	    var view = ms.createView(config.map.projection);
-	    view.on('change:resolution', function(evt){
-	        //Clear features on expanded clusters when zooming
-	        var select = ms.getInteractionsByType('Select')[0];
-	        if (angular.isDefined(select)){
-	            select.getFeatures().clear();
-	            if (angular.isDefined(ms.overlay) && ms.overlay.get('fromCluster') === true){
-	                ms.closePopup();
-	            }
-	        }
-	        
-	        ms.checkLabelStatus();
-	    });
-	    
 	    map.setView(view);
 	    ms.map = map;
 	    ms.addBlankLayer();
@@ -318,6 +310,19 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
             maxZoom: 19,
 //            minZoom: 3,
             enableRotation: false
+        });
+	    
+	    view.on('change:resolution', function(evt){
+            //Clear features on expanded clusters when zooming
+            var select = ms.getInteractionsByType('Select')[0];
+            if (angular.isDefined(select)){
+                select.getFeatures().clear();
+                if (angular.isDefined(ms.overlay) && ms.overlay.get('fromCluster') === true){
+                    ms.closePopup();
+                }
+            }
+            ms.checkLabelStatus();
+            $rootScope.$broadcast('reloadLegend');
         });
 	    
 	    return view;
@@ -1191,6 +1196,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
 
         return layer[0];
     };
+    
+    ms.getCurrentScale = function(){
+        var view = ms.map.getView();
+        var res = view.getResolution();
+        var units = view.getProjection().getUnits();
+        var dpi = 25.4 / 0.28;
+        var mpu = ol.proj.METERS_PER_UNIT[units];
+        
+        return res * mpu * 39.37 * dpi;
+    };
 
     //Get map projection
     ms.getMapProjectionCode = function(){
@@ -1907,7 +1922,21 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $window, $t
     };
     
     ms.vmssegLabels = {
-       active: false
+       active: false,
+       displayedIds: []
+    };
+    
+    //Reset labels containers
+    ms.resetLabelContainers = function(){
+        ms.vmsposLabels = {
+            active: false,
+            displayedIds: []
+        }
+        
+        ms.vmssegLabels = {
+            active: false,
+            displayedIds: []
+        }
     };
     
     //Function called on map moveend and change:resolution to check for new labels

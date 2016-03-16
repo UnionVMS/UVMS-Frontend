@@ -96,7 +96,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 					return undefined;
 				}
     		}
-    	};
+    	}
     	
     	return item;
     };
