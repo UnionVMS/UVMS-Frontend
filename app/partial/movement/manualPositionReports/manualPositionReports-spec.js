@@ -112,7 +112,8 @@ describe('ManualPositionReportCtrl', function() {
 
     	var deferred = $q.defer();
         var modalInstance = {
-            result : deferred.promise
+            result : deferred.promise,
+            dismiss: function() {}
         };
     	spyOn(ManualPositionReportModal, 'show').andReturn(modalInstance);
     	scope.editPosition(pos, false);
@@ -140,7 +141,8 @@ describe('ManualPositionReportCtrl', function() {
 
     it('should open modal with a new position', inject(function(ManualPosition, ManualPositionReportModal, $q) {
         var modalInstance = {
-            result : $q.defer().promise
+            result : $q.defer().promise,
+            dismiss: function() {}
         };
     	spyOn(ManualPositionReportModal, 'show').andReturn(modalInstance);
     	scope.editPosition(undefined, false);
