@@ -25,7 +25,8 @@ describe('ManualPositionReportCtrl', function() {
 	};
 
 	var mockLongPolling = {
-		poll: function() {}
+		poll: function() {},
+        cancel: function() {}
 	};
 
 	var mockSearchService;
