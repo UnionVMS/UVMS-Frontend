@@ -15,7 +15,8 @@ describe('MovementCtrl', function() {
     };
 
     var mockLongPolling = {
-        poll: function() {}
+        poll: function() {},
+        cancel: function() {}
     };
 
     var strings = {
