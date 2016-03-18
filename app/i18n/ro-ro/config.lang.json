@@ -89,6 +89,7 @@
     "MOVEMENT_SOURCE_IRIDIUM" : "Iridium",
     "MOVEMENT_SOURCE_MANUAL" : "Manual",
     "MOVEMENT_SOURCE_OTHER" : "Other",
+    "MOVEMENT_SOURCE_NAF" : "NAF",
 
 
     "RULES_ACTIONS_EMAIL" : "Send email to",
