@@ -66,6 +66,10 @@
         //REPORTING
         if(checkAccess('Reporting', 'LIST_REPORTS')){
             addMenuItem(locale.getString('header.menu_reporting'), '/reporting', 'reporting');
+        }
+        
+        //AREAS
+        if(checkAccess('Spatial', 'MANAGE_USER_DEFINED_AREAS') || checkAccess('Spatial', 'MANAGE_REFERENCE_DATA')){
             addMenuItem(locale.getString('header.menu_areas'), '/areas', 'areas');
         }
         

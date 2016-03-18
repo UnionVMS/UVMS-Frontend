@@ -158,6 +158,9 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
     
     locale.ready('areas').then(function(){
         $scope.init();
+        if ($scope.selectedTab === 'SYSAREAS'){
+            $scope.helper.tabChange('SYSAREAS');
+        }
     });
 
 });

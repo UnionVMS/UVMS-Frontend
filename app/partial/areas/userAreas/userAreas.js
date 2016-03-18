@@ -141,9 +141,11 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.editBtnTitle = locale.getString('areas.edit_tool_default_title');
         $scope.init();
         $scope.getProjections();
-        $scope.helper.tabChange('USERAREAS');
-        if ($scope.userAreasList.length === 0){
-            $scope.getUserAreasList();
+        if ($scope.selectedTab === 'USERAREAS'){
+            $scope.helper.tabChange('USERAREAS');
+            if ($scope.userAreasList.length === 0){
+                $scope.getUserAreasList();
+            }
         }
     });
     

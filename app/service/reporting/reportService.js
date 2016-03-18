@@ -91,7 +91,8 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         }
 
         if (report.withMap === true){
-            spatialRestService.getConfigsForReport(report.id).then(getConfigSuccess, getConfigError);
+            var currentTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+            spatialRestService.getConfigsForReport(report.id, currentTime).then(getConfigSuccess, getConfigError);
         } else {
             spatialRestService.getConfigsForReportWithoutMap().then(getConfigWithouMapSuccess, getConfigWithouMapError); 
         }

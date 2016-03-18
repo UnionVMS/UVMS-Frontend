@@ -403,6 +403,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
+                access: 'VIEW_AREA_MANAGEMENT_UI',
                 pageTitle: 'areas'
             }
         })

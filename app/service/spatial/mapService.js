@@ -1931,12 +1931,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         ms.vmsposLabels = {
             active: false,
             displayedIds: []
-        }
+        };
         
         ms.vmssegLabels = {
             active: false,
             displayedIds: []
-        }
+        };
     };
     
     //Function called on map moveend and change:resolution to check for new labels

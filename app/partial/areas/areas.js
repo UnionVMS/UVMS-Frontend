@@ -1,19 +1,34 @@
-angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, locale, areaMapService, areaAlertService, areaHelperService,areaRestService){
-    $scope.selectedTab = 'USERAREAS';
+angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, locale, areaMapService, areaAlertService, areaHelperService,areaRestService, userService){
+    $scope.selectedTab = undefined;
     $scope.alert = areaAlertService;
     $scope.helper = areaHelperService;
     
     var setTabs = function(){
-        return [{
-            'tabId': 'USERAREAS',
-            'title': locale.getString('areas.my_areas')
-        },{
-            'tabId': 'SYSAREAS',
-            'title': locale.getString('areas.sys_areas')
-        },{
-            'tabId': 'AREAGROUPS',
-            'title': locale.getString('areas.area_groups')
-        }];
+        var context = userService.getCurrentContext();
+        
+        var tabs = [];
+        angular.forEach(context.role.features, function(obj) {
+            if (obj.applicationName === 'Spatial'){
+                if (obj.featureName === 'MANAGE_USER_DEFINED_AREAS'){
+                    this.splice(0, 0, {
+                        'tabId': 'USERAREAS',
+                        'title': locale.getString('areas.my_areas')
+                    });                    
+                    
+                    this.splice(1, 0, {
+                        'tabId': 'AREAGROUPS',
+                        'title': locale.getString('areas.area_groups')
+                    });
+                } else if (obj.featureName === 'MANAGE_REFERENCE_DATA'){
+                    this.push({
+                        'tabId': 'SYSAREAS',
+                        'title': locale.getString('areas.sys_areas')
+                    });
+                }
+            }
+        }, tabs);
+        
+        return tabs;
     };
     
     $scope.selectTab = function(tabId){
@@ -25,6 +40,16 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, l
     
     locale.ready('areas').then(function(){
         $scope.tabs = setTabs();
+        if (!angular.isDefined($scope.selectedTab)){
+            var userAreas = _.findWhere($scope.tabs, {tabId: 'USERAREAS'});
+            var sysAreas = _.findWhere($scope.tabs, {tabId: 'SYSAREAS'});
+            
+            if (angular.isDefined(userAreas)){
+                $scope.selectedTab = 'USERAREAS';
+            } else if (angular.isDefined(sysAreas)){
+                $scope.selectedTab = 'SYSAREAS';
+            }
+        }
         areaMapService.setMap();
         areaHelperService.clearHelperService();
     });

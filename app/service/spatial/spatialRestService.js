@@ -48,7 +48,10 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
         getConfigsForReport: function(){
             return $resource('/spatial/rest/config/:id', {}, {
                 'get': {
-                    method: 'GET'
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 }
             });
         },
@@ -193,9 +196,12 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
 
             return deferred.promise;
 	    },
-	    getConfigsForReport: function(id){
+	    getConfigsForReport: function(id, time){
 	        var deferred = $q.defer();
-	        spatialRestFactory.getConfigsForReport().get({id: id}, function(response){
+	        var payload = {
+	            timeStamp: time
+	        };
+	        spatialRestFactory.getConfigsForReport().get({id: id}, angular.toJson(payload),function(response){
 	            deferred.resolve(response.data);
 	        }, function(error){
 	            console.log('Error getting spatial configs for report');
