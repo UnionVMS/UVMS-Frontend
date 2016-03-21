@@ -1,47 +1,57 @@
-var app = angular.module('unionvmsWeb');
+(function() {
+    'use strict';
 
-app.controller('confirmationModalCtrl', function($scope, $modalInstance, options, locale) {
+    angular
+        .module('unionvmsWeb')
+        .controller('confirmationModalCtrl', ConfirmationModalController);
 
-    var vm = this;
+    angular
+        .module('unionvmsWeb')
+        .factory('confirmationModal', ConfirmationModalFactory);
 
-    vm.labels = {
-        title: options.titleLabel || locale.getString("common.are_you_sure"),
-        text: options.textLabel || locale.getString("common.are_you_sure"),
-        confirm: options.confirmLabel || locale.getString("common.yes"),
-        cancel: options.cancelLabel || locale.getString("common.cancel"),
-    };
+    /* @ngAnnotate */
+    function ConfirmationModalController($modalInstance, options, locale) {
+        var vm = this;
+        vm.confirm = confirm;
+        vm.cancel = cancel;
+        vm.commentsEnabled = options.commentsEnabled;
+        vm.labels = {
+            title: options.titleLabel || locale.getString("common.are_you_sure"),
+            text: options.textLabel || locale.getString("common.are_you_sure"),
+            confirm: options.confirmLabel || locale.getString("common.yes"),
+            cancel: options.cancelLabel || locale.getString("common.cancel"),
+        };
 
-    this.commentsEnabled = options.commentsEnabled;
-
-    this.confirm = function() {
-        vm.submitAttempted = true;
-        if(!options.commentsEnabled || vm.commentForm.$valid) {
-            $modalInstance.close(vm.comment);
+        function confirm() {
+            vm.submitAttempted = true;
+            if (!options.commentsEnabled || vm.commentForm.$valid) {
+                $modalInstance.close(vm.comment);
+            }
         }
-    };
 
-    this.cancel = function() {
-        $modalInstance.dismiss();
-    };
-});
+        function cancel() {
+            $modalInstance.dismiss();
+        }
+    }
 
-app.factory('confirmationModal',function($modal){
-    return {
-        open :function(callback, options){
-            var modalInstance = $modal.open({
-                templateUrl: 'partial/common/confirmationModal/confirmationModal.html',
-                controller: 'confirmationModalCtrl as modal',
-                windowClass : "confirmationModal",
-                backdrop: 'static', //will not close when clicking outside the modal window
-                size: "small",
-                resolve: {
-                    options: function() {
-                        return options || {};
+    /* @ngAnnotate */
+    function ConfirmationModalFactory($modal) {
+        return {
+            open: function(callback, options) {
+                var modalInstance = $modal.open({
+                    templateUrl: 'partial/common/confirmationModal/confirmationModal.html',
+                    controller: 'confirmationModalCtrl',
+                    controllerAs: 'modal',
+                    windowClass : "confirmationModal",
+                    backdrop: 'static', //will not close when clicking outside the modal window
+                    size: "small",
+                    resolve: {
+                        options: function() {
+                            return options || {};
+                        }
                     }
-                }
-            }).result.then(callback);
-        }  
-    };
-
-});
-    
+                }).result.then(callback);
+            }  
+        };
+    }
+})();
