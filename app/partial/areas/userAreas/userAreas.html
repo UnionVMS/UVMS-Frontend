@@ -35,7 +35,7 @@
                          <div class="td col-md-5">{{userArea.desc}}</div>
                          <div class="td col-md-4">
                        	 	<button type="button" class="btn btn-danger btn-xs pull-right" title="{{'areas.table_delete_area_btn' | i18n }}" ng-click="deleteUserArea($index)"><span class="fa fa-trash-o"></span></button>
-                            <button type="button" class="btn btn-primary btn-xs pull-right tableBtnMargin" title="{{'areas.table_edit_area_btn' | i18n }}" ng-click="editUserArea($index)"><span class="fa fa fa-pencil"></span></button>
+                            <button type="button" class="btn btn-primary btn-xs pull-right tableBtnMargin" title="{{'areas.table_edit_area_btn' | i18n }}" ng-show="userArea.isEditable || checkAreaIsEditable($index)" ng-click="editUserArea($index)"><span class="fa fa fa-pencil"></span></button>
                             <button type="button" class="btn btn-primary btn-xs pull-right tableBtnMargin" title="{{'areas.table_area__details_btn' | i18n }}" ng-click="getAreaDetails($index)"><span class="fa fa-eye"></span></button>
                             <button type="button" class="btn btn-primary btn-xs pull-right tableBtnMargin" title="{{'areas.table_zoom_to_area_btn' | i18n }}" ng-click="zoomToArea($index)"><span class="fa fa-globe"></span></button>
                          </div>

@@ -4,6 +4,7 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	    isEditing: false,
 	    displayedLayerType: undefined,
 	    displayedSystemAreaLayer: undefined,
+	    displayedUserAreaGroup: undefined,
 	    systemAreaTypes: undefined,
 	    systemAreaItems: [],
 	    userAreasGroups: [],
@@ -28,12 +29,10 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	        }
 	    },
 	    clearHelperService: function(){
-	        if (angular.isDefined(this.displayedSystemAreaLayer)){
-	            areaMapService.removeLayerByType(this.displayedSystemAreaLayer);
-	            this.displayedSystemAreaLayer = undefined;
-	        }
 	        this.isEditing = false;
 	        this.displayedLayerType = undefined;
+	        this.displayedSystemAreaLayer = undefined;
+	        this.displayedUserAreaGroup = undefined;
 	        this.resetMetadata();
 	    },
 	    tabChange: function(destTab){
@@ -54,7 +53,10 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	                }
 	            }else if(destTab ===  'AREAGROUPS'){
 	            	getUserAreasGroupsList(this);
-	            	//getUserAreaLayer(this);
+	            	if (angular.isDefined(this.displayedUserAreaGroup)){
+	            	    this.displayedLayerType = 'AREAGROUPS';
+	            	    this.getUserAreaGroupLayer(this.displayedUserAreaGroup);
+	            	}
 	            }
 	        }
 	    },
@@ -100,7 +102,7 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	        });
 	    }
 	    
-	}
+	};
 	
 	//USER AREA LAYER
     var getUserAreaLayer = function(obj){

@@ -115,6 +115,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         if (!angular.isDefined(newVal)){
             areaMapService.removeLayerByType($scope.helper.displayedLayerType);
             $scope.helper.displayedLayerType = undefined;
+            $scope.helper.displayedSystemAreaLayer = undefined;
         }
         
         if (angular.isDefined(newVal) && newVal !== oldVal){

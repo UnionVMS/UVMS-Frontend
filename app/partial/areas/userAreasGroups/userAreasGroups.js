@@ -2,6 +2,7 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
 	$scope.areaHelper = areaHelperService;
 	$scope.areaGroup = {'type': ''};
 	$scope.currentContext = undefined;
+	$scope.tableLoading = false;
 	
 	var init = function(){
 		$scope.currentContext = userService.getCurrentContext();
@@ -11,12 +12,15 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
 	    if (!angular.isDefined($scope.areaGroup.type)){
 	        //let's remove the layer from the map
 	        areaMapService.removeLayerByType('AREAGROUPS');
+	        $scope.areaHelper.displayedUserAreaGroup = undefined;
 	    }
 	    
 		if(angular.isDefined($scope.areaGroup.type) && $scope.areaGroup.type !== ''){
+		    $scope.tableLoading = true;
 			angular.forEach($scope.areaHelper.userAreasGroups, function(item) {
 				if($scope.areaGroup.type === item.code){
 				    areaHelperService.getUserAreaGroupLayer($scope.areaGroup.type);
+				    $scope.areaHelper.displayedUserAreaGroup = $scope.areaGroup.type;
 					areaRestService.getAreasByType(item.text).then(function(response){
 			            $scope.userAreasList = response;
 			            $scope.displayedUserAreas = [].concat($scope.userAreasList);
@@ -74,12 +78,6 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
            resolve: {
                areaData: function(){
                    return data;
-               },
-               scopesAllowed: function(){
-                   return $scope.isUserAllowed('SHARE_USER_DEFINED_AREAS');
-               },
-               datasetAllowed: function(){
-                   return $scope.isUserAllowed('CREATE_USER_AREA_DATASET');
                }
            }
         });
