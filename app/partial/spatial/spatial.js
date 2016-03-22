@@ -1,6 +1,6 @@
 angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, reportRestService, reportService, $anchorScroll, userService){
     $scope.isMenuVisible = true;
-    $scope.selectedMenu = 'LIVEVIEW';
+    $scope.selectedMenu = 'LIVEVIEW'; //FIXME
     $scope.reports = [];
     $scope.executedReport = {};
     $scope.repServ = reportService;
@@ -9,17 +9,21 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     //reset repServ
     $scope.repServ.clearVmsData();
     $scope.repServ.name = locale.getString('spatial.header_live_view');
+    $scope.repServ.liveviewEnabled = false;
     
     //Define header menus
     var setMenus = function(){
             return [
                 {
                     'menu': 'LIVEVIEW',
-                    'title': $scope.repServ.name
+                    'title': $scope.repServ.name,
+                    //'visible': $scope.repServ.liveviewEnabled //FIXME
+                    'visible': true
                 },
                 {
                     'menu': 'REPORTS',
-                    'title': locale.getString('spatial.header_reports')
+                    'title': locale.getString('spatial.header_reports'),
+                    'visible': true
                 }
             ];
         };
@@ -95,6 +99,12 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    $scope.$watch(function(){return $scope.repServ.name;}, function(newValue, oldValue){
        if (newValue !== oldValue){
            $scope.headerMenus[0].title = newValue;
+       }
+   });
+   
+   $scope.$watch(function(){return $scope.repServ.liveviewEnabled;}, function(newValue, oldValue){
+       if (newValue !== oldValue){
+           $scope.headerMenus[0].visible = newValue;
        }
    });
    

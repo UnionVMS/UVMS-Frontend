@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, locale, areaMapService, areaAlertService, areaHelperService,areaRestService, userService){
+angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, locale, areaMapService, areaAlertService, areaHelperService, areaRestService, userService){
     $scope.selectedTab = undefined;
     $scope.alert = areaAlertService;
     $scope.helper = areaHelperService;

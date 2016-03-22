@@ -158,6 +158,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    var controlsToMap = ms.setControls(config.map.control);
 
 	    var map = new ol.Map({
+	        renderer: 'canvas',
 	        target: 'map',
 	        controls: controlsToMap[0],
 	        interactions: controlsToMap[1],
@@ -467,6 +468,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         layer.set('serverType', config.serverType); 
 
         return ( layer );
+    };
+    
+    //Map graticule
+    ms.mapGraticule = new ol.Graticule({});
+    ms.setGraticule = function(status){
+        if (!status){
+            ms.mapGraticule.setMap(null);
+        } else {
+            ms.mapGraticule.setMap(ms.map);
+        }
     };
 
     //Add VMS positions layer
@@ -1337,7 +1348,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             units: proj.units,
             axisOrientation: proj.axis,
             global: proj.global,
-            extent: [parseFloat(ext[0]), parseFloat(ext[1]), parseFloat(ext[2]), parseFloat(ext[3])]
+            extent: [parseFloat(ext[0]), parseFloat(ext[1]), parseFloat(ext[2]), parseFloat(ext[3])],
+            worldExtent: [-180, -89.99, 180, 89.99]
         });
 
         return projection;

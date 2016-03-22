@@ -54,9 +54,12 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	                }
 	            }else if(destTab ===  'AREAGROUPS'){
 	            	getUserAreasGroupsList(this);
-	            	getUserAreaLayer(this);
+	            	//getUserAreaLayer(this);
 	            }
 	        }
+	    },
+	    getUserAreaGroupLayer: function(type){
+	        getUserAreaGroupLayer(this, type);
 	    }
 	};
 	
@@ -68,6 +71,36 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	        }
 	    }
 	};
+	
+	//USER AREA GROUP LAYER
+	var getUserAreaGroupLayer = function(obj, type){
+	    var layer = areaMapService.getLayerByType('AREAGROUPS');
+	    if (angular.isDefined(layer)){
+	        var layerSrc = layer.getSource();
+	        var groupCql = " and type = '" + type + "'";
+	        var cql = layer.get('baseCql') + groupCql;
+	        layerSrc.updateParams({
+                time_: (new Date()).getTime(),
+                'cql_filter': cql
+            });
+	        layer.set('groupCql', groupCql);
+	    } else {
+	        spatialRestService.getUserAreaLayer().then(function(response){
+	            if (!angular.isDefined(areaMapService.getLayerByType('AREAGROUPS'))){
+	                //override typename for area groups instead
+	                response.data.typeName = 'AREAGROUPS';
+	                response.data.groupCql = " and type = '" + type + "'";
+	                areaMapService.addUserAreasWMS(response.data);
+	                obj.displayedLayerType = response.data.typeName;
+	            }
+	        }, function(error){
+	            areaAlertService.setError();
+	            areaAlertService.alertMessage = locale.getString('areas.error_getting_user_area_layer');
+	            areaAlertService.hideAlert();
+	        });
+	    }
+	    
+	}
 	
 	//USER AREA LAYER
     var getUserAreaLayer = function(obj){

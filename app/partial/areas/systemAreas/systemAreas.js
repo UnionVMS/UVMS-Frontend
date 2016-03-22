@@ -112,6 +112,11 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
     };
     
     $scope.$watch('sysAreaType', function(newVal, oldVal){
+        if (!angular.isDefined(newVal)){
+            areaMapService.removeLayerByType($scope.helper.displayedLayerType);
+            $scope.helper.displayedLayerType = undefined;
+        }
+        
         if (angular.isDefined(newVal) && newVal !== oldVal){
             $scope.helper.resetMetadata();
             $scope.helper.displayedSystemAreaLayer = newVal;
@@ -120,6 +125,8 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
             if (angular.isDefined(item)){
                 if (angular.isDefined($scope.helper.displayedLayerType)){
                     areaMapService.removeLayerByType($scope.helper.displayedLayerType);
+                    $scope.helper.displayedLayerType = undefined;
+                    
                 }
                 areaMapService.addWMS(item);
                 $scope.helper.displayedLayerType = item.typeName;

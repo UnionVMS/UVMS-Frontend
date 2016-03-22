@@ -18,6 +18,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             rate: undefined
        },
        selectedTab: 'MAP',
+       liveviewEnabled: false,
        isLiveViewActive: false,
        outOfDate: undefined
     };
@@ -63,6 +64,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     };
     
 	rep.runReport = function(report){
+	    rep.liveviewEnabled = true;
 	    rep.id = report.id;
 	    rep.name = report.name;
         rep.positions = [];
@@ -176,7 +178,8 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 
 	    //Finally load VMS positions and segments
 	    var repConfig = getUnitSettings();
-	    reportRestService.executeReport(rep.id, repConfig).then(getVmsDataSuccess, getVmsDataError);
+	    //reportRestService.executeReport(rep.id, repConfig).then(getVmsDataSuccess, getVmsDataError); FIXME uncomment when we have a proper DB data dump for movemments
+	    rep.isReportExecuting = false; //FIXME to remove
 
         if (rep.refresh.status === true) {
             rep.setAutoRefresh();

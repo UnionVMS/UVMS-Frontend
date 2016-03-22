@@ -9,7 +9,7 @@
 		<div class="row">
 			<div class="col-md-8 pageMenu">
 				<ul class="horizontal pipeSeparator">
-					<li ng-repeat="menu in headerMenus" ng-click="selectMenu(menu.menu)" ng-class="{'active': selectedMenu === '{{menu.menu}}'}"><a>{{menu.title}}</a></li>
+					<li ng-repeat="menu in headerMenus" ng-show="menu.visible" ng-click="selectMenu(menu.menu)" ng-class="{'active': selectedMenu === '{{menu.menu}}'}"><a>{{menu.title}}</a></li>
 				</ul>
 			</div>
 			<div class="col-md-4 textAlignRight buttonContainer">

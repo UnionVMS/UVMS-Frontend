@@ -103,10 +103,14 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, glob
     
     //Listening for loading reports list events
     $scope.$on('loadReportsList', function(){
-//        $scope.reports = [];
+        $scope.loadReportList();
+    });
+    
+    $scope.loadReportList = function(){
+//      $scope.reports = [];
         $scope.isLoading = true;
         reportRestService.getReportsList().then(getReportsListSuccess, getReportsListError);
-    });
+    };
     
     //SUCESS AND FAILURES CALLBACKS
     
@@ -130,7 +134,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, glob
         $scope.toggleReportForm('EDIT', response);
     };
     
-  //Get Report Configs Failure callback
+    //Get Report Configs Failure callback
     var getReportError = function(error){
         $scope.isLoading = false;
         $anchorScroll();
@@ -164,5 +168,10 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, glob
         var msg = locale.getString(searchString);
         $scope.alert.show(msg, 'error');
     };
+    
+    //Finally we check if we should automatically load reports
+    if (reportService.liveviewEnabled === false && $scope.reports.length === 0){
+        $scope.loadReportList();
+    }
 
 });

@@ -18,18 +18,18 @@ var resetLayerFilter = function(opt_options){
             });
             
             for (var i = 0; i < layers.length; i++){
-                var cql = null;
-                var currentPams = layers[i].getSource().getParams();
-                var currentCql = currentPams.cql_filter;
-                if (currentCql !== null){
-                    var cqlComps = currentCql.split(' and');
-                    if (cqlComps.length > 1){
-                        cql = cqlComps[0];
-                        layers[i].getSource().updateParams({
-                            'cql_filter': cql,
-                            time_: (new Date()).getTime()
-                        });
+                var baseCql = layers[i].get('baseCql');
+                if (angular.isDefined(baseCql)){
+                    var cql = baseCql;
+                    var groupCql = layers[i].get('groupCql');
+                    if (angular.isDefined(groupCql)){
+                        cql += groupCql;
                     }
+                    
+                    layers[i].getSource().updateParams({
+                        time_: (new Date()).getTime(),
+                        'cql_filter': cql
+                    });
                 }
             }
         }
@@ -88,17 +88,25 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
 	
 	//User areas wms
 	areaMs.addUserAreasWMS = function(def){
+	    var cql = "(user_name = '" + userService.getUserName() + "' or scopes ilike '%#" + userService.getCurrentContext().scope.scopeName +"#%')";
+	    var finalCql = cql;
+	    if (angular.isDefined(def.groupCql)){
+	        finalCql += def.groupCql;
+	    }
 	    var layer = new ol.layer.Tile({
 	        type: def.typeName,
+	        baseCql: cql,
+	        groupCql: angular.isDefined(def.groupCql) ? def.groupCql : undefined,
 	        source: new ol.source.TileWMS({
 	            url: def.serviceUrl,
 	            serverType: 'geoserver',
 	            crossOrigin: 'anonymous',
 	            params: {
+	                time_: (new Date()).getTime(),
                     'LAYERS': def.geoName,
                     'TILED': true,
                     'STYLES': def.style,
-                    'cql_filter': "user_name = '" + userService.getUserName() + "'"
+                    'cql_filter': finalCql
                 }
 	        })
 	    });
@@ -114,6 +122,7 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
 	            url: def.serviceUrl,
 	            serverType: 'geoserver',
 	            params: {
+	                time_: (new Date()).getTime(),
 	                'LAYERS': def.geoName,
 	                'TILED': true,
 	                'STYLES': def.style,
@@ -128,24 +137,20 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
 	//Add new cql param to wms using gid
 	areaMs.mergeParamsGid = function(gid, type, isEqual){
 	    var layer = areaMs.getLayerByType(type);
-        if (angular.isDefined(layer)){
-    	    var layerSrc = layer.getSource();
-    	    var currentParams = layerSrc.getParams();
-    	    var cqlComps = currentParams.cql_filter.split(' and');
-    	    
-    	    var cql = cqlComps[0] + ' and ';
-    	    if (isEqual === true){
-    	        cql += "gid = " + parseInt(gid);
-    	    } else {
-    	        cql += "gid <> " + parseInt(gid);
-    	    }
-    	    
-    	    
-    	    layerSrc.updateParams({
-    	        'cql_filter': cql,
-    	        time_: (new Date()).getTime()
-    	    });
-        }
+	    if (angular.isDefined(layer)){
+	        var layerSrc = layer.getSource();
+	        var cql = layer.get('baseCql');
+	        if (isEqual){
+	            cql += " and gid = " + parseInt(gid);
+	        } else {
+	            cql += " and gid <> " + parseInt(gid);
+	        }
+	        
+	        layerSrc.updateParams({
+	            time_: (new Date()).getTime(),
+	            'cql_filter': cql
+	        });
+	    }
 	};
 	
 	//Clear WMS params
@@ -153,11 +158,10 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
 	    var layer = areaMs.getLayerByType(type);
 	    if (angular.isDefined(layer)){
 	        var layerSrc = layer.getSource();
-	        var currentParams = layerSrc.getParams();
-	        var cqlComps = currentParams.cql_filter.split(' and');
-	        
+	        var cql = layer.get('baseCql');
+	         
 	        layerSrc.updateParams({
-	            'cql_filter': cqlComps[0],
+	            'cql_filter': cql,
 	            time_: (new Date()).getTime()
 	        });
 	    }
@@ -510,7 +514,9 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
     //Remove layer by type
     areaMs.removeLayerByType = function(type){
         var layer = areaMs.getLayerByType(type);
-        areaMs.map.removeLayer(layer);
+        if (angular.isDefined(layer)){
+            areaMs.map.removeLayer(layer);
+        }
     };
     
     //Bring layer to the top of the map

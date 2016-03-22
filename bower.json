@@ -39,7 +39,7 @@
     "checklist-model": "latest",
     "datetimepicker": "2.4.5",
     "fancytree": "~2.9.0",
-    "font-awesome": "~4.4.0",
+    "font-awesome": "~4.5.0",
     "jquery": "~2.0",
     "jQuery-contextMenu": "~1.8.1",
     "jquery-ui": "~1.11.4",
@@ -48,7 +48,7 @@
     "mustache.js": "mustache#~2.1.3",
     "ng-csv": "~0.3.4",
     "ngstorage": "~0.3.0",
-    "OpenLayers": "~3.11.2",
+    "OpenLayers": "~3.14.2",
     "turf": "https://github.com/Turfjs/turf.git#~2.0.2",
     "underscore": "~1.8",
     "angular-messages": "~1.3",
@@ -62,7 +62,6 @@
   },
   "resolutions": {
     "angular": "~1.5",
-    "font-awesome": "~4.4.0",
     "angular-bootstrap": "~0.14"
   },
   "devDependencies": {
