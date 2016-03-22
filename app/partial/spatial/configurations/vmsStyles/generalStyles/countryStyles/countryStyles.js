@@ -76,15 +76,6 @@ angular.module('unionvmsWeb').controller('CountrystylesCtrl',function($scope, sp
 		}
 	};
 	
-	$scope.generateRandomColor = function(){
-		var color = "#";
-	    var possible = "0123456789";
-	    for( var i=0; i < 6; i++ ){
-	        color += possible.charAt(Math.floor(Math.random() * possible.length));
-	    }
-	    return color;
-	};
-	
 	$scope.getNrErrors = function() {
 		var nrErrors = 0;
 		if (angular.isDefined($scope.countryListForm)){

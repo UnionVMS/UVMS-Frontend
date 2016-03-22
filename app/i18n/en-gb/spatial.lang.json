@@ -7,6 +7,7 @@
 	"tab_movements": "Positions",
 	"tab_segments": "Segments",
 	"tab_tracks": "Tracks",
+	"tab_alarms": "Alarms",
 	"popup_positions_title": "Position details",
 	"popup_segments_title": "Segment details",
 	"popup_item": "Item",
@@ -307,7 +308,7 @@
 	"invalid_data_saving": "There are invalid fields in your configurations. Please check them and try again.",
 
 	"required_error_message": "There are empty required fields",
-	"required_field_error_message": "This field is required",
+	"required_field_error_message": "required",
 	"invalid_color_error_message": "Invalid color",
 	"prop_min_from_error_message": "Property 'From' cannot be negative",
 	"prop_to_error_message": "'To' must be higher than 'From'",

@@ -199,15 +199,6 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,co
 		return nrErrors;
 	};
 	
-	$scope.generateRandomColor = function(){
-		var color = "#";
-	    var possible = "0123456789";
-	    for( var i=0; i < 6; i++ ){
-	        color += possible.charAt(Math.floor(Math.random() * possible.length));
-	    }
-	    return color;
-	};
-	
 	$scope.$on('updateAddNewRuleActive', function(event) {
 		$scope.isAddNewRuleActive = $scope.getNrErrors() === 0 ? true : false;
 	});

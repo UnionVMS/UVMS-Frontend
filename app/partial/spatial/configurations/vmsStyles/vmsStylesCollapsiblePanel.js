@@ -15,6 +15,10 @@ angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',functio
 	            {
 	                'menu': 'SEGMENTS',
 	                'title': locale.getString('spatial.tab_segments')
+	            },
+	            {
+	            	'menu': 'ALARMS',
+	                'title': locale.getString('spatial.tab_alarms')
 	            }
 	        ];
 	    };
@@ -61,5 +65,14 @@ angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',functio
         spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_failure');
         spatialConfigAlertService.hideAlert();
     };
+    
+    $scope.generateRandomColor = function(){
+		var color = "#";
+	    var possible = "0123456789";
+	    for( var i=0; i < 6; i++ ){
+	        color += possible.charAt(Math.floor(Math.random() * possible.length));
+	    }
+	    return color;
+	};
 
 });

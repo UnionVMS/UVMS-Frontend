@@ -179,7 +179,7 @@
 			                        <div class="col-md-12">
 			                            <div class="form-group col-md-6 print-content" ng-repeat="attribute in mapFish.layoutAttributes">
 			                            	<ng-form name="mapfishDetailForm{{$index}}">
-			                            		<div ng-class="{'has-error': (printForm.mapfishDetailForm{{$index}}.$dirty || submittedMapFishPrint === true) && printForm.mapfishDetailForm{{$index}}.$invalid}">
+			                            		<div class="print-content-control" ng-class="{'has-error': (printForm.mapfishDetailForm{{$index}}.$dirty || submittedMapFishPrint === true) && printForm.mapfishDetailForm{{$index}}.$invalid}">
 					                                <label>{{attribute.name | capitalize}}</label>
 					                                <input type="text" class="form-control" name="attribute.name" ng-model="mapFishLocalConfig[attribute.name]" ng-init="mapFishLocalConfig[attribute.name] = attribute.default" ng-required="true"/>
 					                                <div class="innerErrorMessagesInputWithUpLabel" ng-messages="printForm.mapfishDetailForm{{$index}}.$error" ng-show="(printForm.mapfishDetailForm{{$index}}.$dirty || submittedMapFishPrint === true) && printForm.mapfishDetailForm{{$index}}.$invalid">
