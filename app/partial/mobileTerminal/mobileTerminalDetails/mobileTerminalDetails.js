@@ -1,6 +1,4 @@
-var app = angular.module('unionvmsWeb');
-
-app.controller('mobileTerminal.channelController', ['$scope', function($scope) {
+angular.module('unionvmsWeb').controller('mobileTerminal.channelController', ['$scope', function($scope) {
 
     $scope.$parent.$parent.$watchCollection('existingChannels', function(existingChannels) {
         validateChannel(existingChannels);
