@@ -1,4 +1,4 @@
-var app = angular.module('unionvmsWeb').factory('mobileTerminalVesselService', function(vesselRestService, $q, $log, GetListRequest, VesselListPage) {
+angular.module('unionvmsWeb').factory('mobileTerminalVesselService', function(vesselRestService, $q, $log, GetListRequest, VesselListPage) {
 
 
     var getVesselsForListOfMobileTerminals = function(mobileTerminals){
