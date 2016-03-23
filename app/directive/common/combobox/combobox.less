@@ -73,6 +73,7 @@
 	    		display: inline-block;
 	    		padding: 3px 20px 3px 0;
 	    		height: 26px;
+	    		border-radius: 0;
 	    	}
 	    	.caret {
 	    		color: #089fd7;
@@ -92,9 +93,13 @@
 }
 
 .combobox .dropdown {
-	button.btn.btn-default.dropdown-toggle {
+	div.btn.btn-default.dropdown-toggle {
 		padding: 3px 20px 3px 12px;
 		position: relative;
+		border-radius: 0;
+		.dropdowntext {
+			text-align: left;
+		}
 	}
 	.caret {
 		position: absolute;
@@ -107,10 +112,13 @@
 }
 
 .combobox.combo-multiple {
-	button.btn.btn-default.dropdown-toggle {
+	div.btn.btn-default.dropdown-toggle {
 		min-height: 41px;
 		height: auto;
 		padding: 3px 20px 3px 12px;
+		.dropdowntext {
+			line-height: 30px;
+		}
 		.selected-options {
 		    box-sizing: border-box;
 		    list-style: none;
@@ -130,6 +138,7 @@
 			    margin-right: 5px;
 			    margin-top: 5px;
 			    padding: 0 5px;
+			    line-height: 20px;
 			    > span {
 			    	color: #999;
 				    cursor: pointer;

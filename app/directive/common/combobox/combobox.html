@@ -1,7 +1,7 @@
 <div class="combobox" ng-class="{'combo-multiple': multiple, 'comboLineStyle': lineStyle === true, 'combo-editable': editable}" ng-model-options="{allowInvalid: true}" combolist-id="{{comboboxId}}">
 	<div class="dropdown fullWidthDropdown">
 		<div class="comboButtonContainer" ng-click="toggleCombo($event)">
-			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled" ng-if="!editable">
+			<div class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled" ng-if="!editable">
 				<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-if="lineStyle !== true">
 					{{currentItemLabel}}
 					<ul class="selected-options" ng-if="multiple">
@@ -17,7 +17,7 @@
 					</g>
 				</svg>
 				<span ng-class="{'caret': !multiple || selectedItems && selectedItems.length === 0,'clear-all item-remover fa fa-times': multiple && selectedItems.length > 0}" ng-click="removeAllSelected()"></span>
-			</button>
+			</div>
 			<ng-form name="comboForm">
 				<input class="form-control combo-editable-input" name="comboEditableInput" ng-model="newItem.text" ng-if="editable" ng-change="onComboChange()" placeholder="{{placeholder}}">
 				<span ng-class="{'caret': !multiple || selectedItems && selectedItems.length === 0,'clear-all item-remover fa fa-times': multiple && selectedItems.length > 0}" ng-click="removeAllSelected()"  ng-if="editable"></span>
