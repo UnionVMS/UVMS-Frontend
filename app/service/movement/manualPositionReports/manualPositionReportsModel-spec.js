@@ -8,7 +8,7 @@ describe('ManualPosition', function() {
             time : "2013-02-08 09:30",
             updatedTime : "",
             status : "",
-            archived : false,
+            state: "DRAFT",
 
             asset : {
                 extMarking : "EXTM",
@@ -32,7 +32,7 @@ describe('ManualPosition', function() {
         expect(position.time).toEqual("2013-02-08 09:30");
         expect(position.updatedTime).toEqual("");
         expect(position.status).toEqual("");
-        expect(position.archived).toEqual(false);
+        expect(position.state).toEqual("DRAFT");
 
         expect(position.carrier.externalMarking).toEqual("EXTM");
         expect(position.carrier.cfr).toEqual("1111");
@@ -59,7 +59,7 @@ describe('ManualPosition', function() {
         expect(dto.time).toEqual(data.time);
         expect(dto.updatedTime).toEqual(data.updatedTime);
         expect(dto.status).toEqual(data.status);
-        expect(dto.archived).toEqual(data.archived);
+        expect(dto.state).toEqual(data.state);
 
         expect(dto.asset.extMarking).toEqual(data.asset.extMarking);
         expect(dto.asset.cfr).toEqual(data.asset.cfr);
@@ -82,7 +82,7 @@ describe('ManualPosition', function() {
         expect(copy.time).toEqual(position.time);
         expect(copy.updatedTime).toEqual(position.updatedTime);
         expect(copy.status).toEqual(position.status);
-        expect(copy.archived).toEqual(position.archived);
+        expect(copy.state).toEqual(position.state);
 
         expect(copy.carrier.externalMarking).toEqual(position.carrier.externalMarking);
         expect(copy.carrier.cfr).toEqual(position.carrier.cfr);

@@ -107,15 +107,15 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 
 	ManualPosition.prototype.draft = function() {
 		this.state = 'DRAFT';
-	}
+	};
 
 	ManualPosition.prototype.isDraft = function() {
 		return this.state === 'DRAFT';
-	}
+	};
 
 	ManualPosition.prototype.isSent = function() {
 		return this.state === 'SENT';
-	}
+	};
 
 	return ManualPosition;
 
