@@ -44,17 +44,14 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
                     "text": availableUserContexts[index].scope.scopeName
                 });
             }
-            
         }
     };
     
     //Check if area is editable by the current user
     $scope.checkAreaIsEditable = function(idx){
         var areaRec = $scope.displayedUserAreas[idx];
-        var anyArea = userService.isAllowed('Spatial', 'MANAGE_ANY_USER_AREA', true);
+        var anyArea = userService.isAllowed('MANAGE_ANY_USER_AREA', 'Spatial', true);
         var user = userService.getUserName();
-        
-        areaRec.owner = 'rep_power'; //FIXME remove when backend ready
         
         if (user !== areaRec.owner && !anyArea){
             return false;
