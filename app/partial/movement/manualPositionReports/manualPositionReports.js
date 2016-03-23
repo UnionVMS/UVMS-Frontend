@@ -66,7 +66,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
 
     $scope.editPosition = function(item, addAnother) {
         var modalOptions = {
-            addAnother: addAnother,
+            addAnother: addAnother || false,
             reloadFunction: $scope.searchManualPositions
         };
         

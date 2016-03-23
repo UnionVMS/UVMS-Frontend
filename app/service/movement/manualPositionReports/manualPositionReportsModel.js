@@ -7,7 +7,7 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 		this.time = undefined; // string, time of the position report
 		this.updatedTime = undefined; // string
 		this.status = undefined; // string
-		this.archived = undefined; // boolean, true if archived
+		this.state = undefined; // string
 
 		this.carrier = {
 			cfr: undefined,
@@ -31,7 +31,7 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 		manualPosition.time = data.time;
 		manualPosition.updatedTime = data.updatedTime;
 		manualPosition.status = data.status;
-		manualPosition.archived = data.archived;
+		manualPosition.state = data.state;
 
 		if (data.asset) {
 			manualPosition.carrier.externalMarking = data.asset.extMarking;
@@ -55,9 +55,9 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 		data.speed = this.speed;
 		data.course = this.course;
 		data.time = this.time;
-		data.archived = this.archived;
 		data.status = this.status;
 		data.updatedTime = this.updatedTime;
+		data.state = this.state;
 
 		data.asset = {
 			cfr: this.carrier.cfr,
@@ -81,9 +81,9 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
         copy.speed = this.speed;
         copy.course = this.course;
         copy.time = this.time;
-        copy.archived = this.archived;
         copy.status = this.status;
         copy.updatedTime = this.updatedTime;
+        copy.state = this.state;
 
         copy.carrier = {
             cfr: this.carrier.cfr,
@@ -104,6 +104,18 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 	ManualPosition.prototype.isEqualMovement = function(item) {
 		return item.guid === this.guid;
 	};
+
+	ManualPosition.prototype.draft = function() {
+		this.state = 'DRAFT';
+	}
+
+	ManualPosition.prototype.isDraft = function() {
+		return this.state === 'DRAFT';
+	}
+
+	ManualPosition.prototype.isSent = function() {
+		return this.state === 'SENT';
+	}
 
 	return ManualPosition;
 

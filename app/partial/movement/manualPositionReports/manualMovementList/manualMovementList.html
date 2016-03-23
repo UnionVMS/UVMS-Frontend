@@ -34,7 +34,7 @@
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'position.longitude'">{{'movement.table_header_longitude' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'speed'">{{'movement.table_header_measured_speed' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'course'">{{'movement.table_header_course' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'archived'">{{'movement.table_header_status' | i18n}}</td>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'state'">{{'movement.table_header_status' | i18n}}</td>
                     <th></th>
                 </tr>
             </thead>
@@ -51,15 +51,18 @@
                     <td ng-attr-title="{{item.speed | speed | number:2}} {{ 'common.speed_unit_' + speedUnit | i18n }}">{{item.speed | speed | number:2}} {{ "common.speed_unit_" + speedUnit | i18n }}</td>
                     <td ng-attr-title="{{item.course}}&deg;">{{item.course}}&deg;</td>
                     <td>
-                        <span class="label" ng-class="item.archived ? 'label-success' : 'label-warning'" ng-attr-title="{{item.archived ? 'movement.manual_position_status_sent' : 'movement.manual_position_status_draft' | i18n}}">
-                            {{item.archived ? 'movement.manual_position_status_sent' : 'movement.manual_position_status_draft' | i18n}}
+                        <span ng-if="item.isDraft()" class="label label-warning" ng-attr-title="{{ 'movement.manual_position_status_draft' | i18n }}">
+                            {{ 'movement.manual_position_status_draft' | i18n }}
+                        </span>
+                        <span ng-if="item.isSent()" class="label label-success" ng-attr-title="{{ 'movement.manual_position_status_sent' | i18n }}">
+                            {{ 'movement.manual_position_status_sent' | i18n }}
                         </span>
                     </td>
                     <td>
-                        <button class="btn btn-default" ng-click="editPosition(item)" title="{{'common.edit'| i18n}}" ng-if="item.guid && !item.archived" show-if-allowed='Movement:manageManualMovements'>
+                        <button class="btn btn-default" ng-click="editPosition(item)" title="{{'common.edit'| i18n}}" ng-if="item.guid && item.isDraft()" show-if-allowed='Movement:manageManualMovements'>
                             <i class="fa fa-pencil"></i>
                         </button>
-                        <button type="button" class="btn btn-sm btn-default remove" ng-click="deletePosition(item)" title="{{'common.delete'| i18n}}" show-if-allowed='Movement:manageManualMovements' ng-if="!item.archived">
+                        <button type="button" class="btn btn-sm btn-default remove" ng-click="deletePosition(item)" title="{{'common.delete'| i18n}}" show-if-allowed='Movement:manageManualMovements' ng-if="item.isDraft()">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>

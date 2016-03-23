@@ -122,6 +122,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
             openedFromMovementPage : true
         };
         var reportObj = new ManualPosition();
+        reportObj.draft();
         modalInstance = ManualPositionReportModal.show(reportObj, modalOptions);
     };
 
