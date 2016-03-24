@@ -1,4 +1,5 @@
 <div class="col-md-12 vesselDetailsContainer" loading-indicator="spin">
+    {{existingValues}}
     <fieldset ng-disabled="disableForm">
         <div class="row">
 
@@ -32,8 +33,8 @@
             </div>
             <div class="col-md-2 form-group smallerpaddingleft" ng-class="{'has-error': (submitAttempted || vesselForm.imo.$dirty) && vesselForm.imo.$invalid}">
                 <label>{{ 'vessel.vessel_details_IMO' | i18n }}</label>
-                <input type="text" name="imo" class="form-control" ng-model="vessel.imo" only-digits ng-pattern="imoRegExp" existing="existingValues.imo">
-                <input-validation-message types="onlyDigits, required, pattern, unique" input="vesselForm.imo" custom-messages="{{imoValidationMessages}}"></input-validation-message>
+                <input type="text" name="imo" class="form-control" ng-model="vessel.imo" ng-pattern="imoRegExp" existing="existingValues.imo">
+                <input-validation-message types="pattern, unique" input="vesselForm.imo" custom-messages="{{imoValidationMessages}}"></input-validation-message>
             </div>
 
         </div>
@@ -55,7 +56,7 @@
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.mmsi.$dirty) && vesselForm.mmsi.$invalid}">
                 <label>{{ 'vessel.vessel_details_MMSI_no' | i18n }}</label>
                 <input type="text" name="mmsi" class="form-control" ng-model="vessel.mmsiNo" ng-pattern="mmsiRegExp" existing="existingValues.mmsi">
-                <input-validation-message types="required, pattern, unique" input="vesselForm.mmsi" custom-messages="{{mmsiValidationMessages}}"></input-validation-message >
+                <input-validation-message types="pattern, unique" input="vesselForm.mmsi" custom-messages="{{mmsiValidationMessages}}"></input-validation-message >
             </div>
             <div class="col-md-4 smallerpaddingleft form-group" ng-class="{'has-error': (submitAttempted || vesselForm.licenseType.$dirty) && vesselForm.licenseType.$invalid}">
                 <label>{{ 'vessel.vessel_details_license_type' | i18n }}</label>
