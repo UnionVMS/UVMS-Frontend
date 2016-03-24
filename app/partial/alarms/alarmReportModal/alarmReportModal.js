@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService,  userService, configurationService, globalSettingsService) {
+angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService,  userService, configurationService, globalSettingsService, $filter) {
 
     $scope.alarm = alarm;
     $scope.knownVessel = angular.isDefined(alarm.vessel);
@@ -32,6 +32,8 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
     $scope.init = function() {
         // MobileTerminal -> DNID + MEMBER_NUMBER
         if (angular.isDefined(options.mobileTerminalPromise)) {
+            $scope.showDnid = true;
+            $scope.showMemberNumber = true;
             options.mobileTerminalPromise.then(function(mt) {
                 for (var i = 0; i < mt.channels.length; i++) {
                     if (mt.channels[i].guid === $scope.alarm.channelGuid) {
@@ -41,6 +43,10 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
                     }
                 }
             });
+        }
+        else {
+            $scope.showDnid = false;
+            $scope.showMemberNumber = false;
         }
 
         //MovementPromise in options?
@@ -290,6 +296,17 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
         $scope.alarm.placeholderVessel = undefined;
     };
 
+    $scope.toSpeedString = function(speedValue) {
+        if (angular.isDefined(speedValue)) {
+            return $filter('speed')(alarm.movement.movement.reportedSpeed) + " " + locale.getString("common.speed_unit_" + $scope.speedUnit);
+        }
+    };
+
+    $scope.toCourseString = function(courseValue) {
+        if (angular.isDefined(courseValue)) {
+            return alarm.movement.movement.reportedCourse + " " + locale.getString("movement.manual_position_field_unit_degrees");
+        }
+    };
 
     $scope.init();
 });

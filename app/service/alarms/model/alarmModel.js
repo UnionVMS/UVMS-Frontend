@@ -40,6 +40,9 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
         var rawMovement = dto.rawMovement;
         if(angular.isDefined(rawMovement)){
             alarm.movement = Movement.fromJson(rawMovement);
+            alarm.movement.externalMarking = rawMovement.externalMarking;
+            alarm.movement.flagState = rawMovement.flagState;
+            alarm.movement.assetName = rawMovement.assetName;
 
             //AssetID
             var assetId = rawMovement.assetId;
@@ -126,6 +129,9 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
         }
         if(angular.isDefined(this.movement)){
             copy.movement = this.movement.copy();
+            copy.movement.flagState = this.movement.flagState;
+            copy.movement.externalMarking = this.movement.externalMarking;
+            copy.movement.assetName = this.movement.assetName;
         }
         copy.asset = _.clone(this.asset);
         copy.vesselGuid = this.vesselGuid;

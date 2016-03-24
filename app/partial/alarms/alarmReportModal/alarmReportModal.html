@@ -30,9 +30,9 @@
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_flag_state' | i18n}}</label>
                 <div class="value" ng-show="alarm.placeholderVessel">{{alarm.placeholderVessel.countryCode}}</div>
-                <div class="value" ng-show="!alarm.placeholderVessel && alarm.vessel">{{alarm.vessel.countryCode}}</div>
-                <div class="value" ng-show="!alarm.placeholderVessel && !alarm.vessel && alarm.asset.ids.FLAG_STATE">{{alarm.asset.ids.FLAG_STATE}}</div>
-                <div class="value missing" ng-show="!alarm.placeholderVessel && !alarm.vessel && !alarm.asset.ids.FLAG_STATE">{{'alarms.position_report_information_value_missing' | i18n}}</div>
+                <div class="value" ng-show="!alarm.placeholderVessel && alarm.movement">{{alarm.movement.flagState}}</div>
+                <div class="value" ng-show="!alarm.placeholderVessel && !alarm.movement && alarm.asset.ids.FLAG_STATE">{{alarm.asset.ids.FLAG_STATE}}</div>
+                <div class="value missing" ng-show="!alarm.placeholderVessel && !alarm.movement && !alarm.asset.ids.FLAG_STATE">{{'alarms.position_report_information_value_missing' | i18n}}</div>
             </div>
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_ircs' | i18n}}</label>
@@ -51,25 +51,25 @@
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_external_marking' | i18n}}</label>
                 <div class="value" ng-show="alarm.placeholderVessel">{{alarm.placeholderVessel.externalMarking}}</div>
-                <div class="value" ng-show="!alarm.placeholderVessel && alarm.vessel">{{alarm.vessel.externalMarking}}</div>
-                <div class="value" ng-show="!alarm.placeholderVessel && !alarm.vessel && alarm.asset.ids.EXTERNAL_MARKING">{{alarm.asset.ids.EXTERNAL_MARKING}}</div>
-                <div class="value missing" ng-show="!alarm.placeholderVessel && !alarm.vessel && !alarm.asset.ids.EXTERNAL_MARKING">{{'alarms.position_report_information_value_missing' | i18n}}</div>
+                <div class="value" ng-show="!alarm.placeholderVessel && alarm.movement">{{alarm.movement.externalMarking}}</div>
+                <div class="value" ng-show="!alarm.placeholderVessel && !alarm.movement && alarm.asset.ids.EXTERNAL_MARKING">{{alarm.asset.ids.EXTERNAL_MARKING}}</div>
+                <div class="value missing" ng-show="!alarm.placeholderVessel && !alarm.movement && !alarm.asset.ids.EXTERNAL_MARKING">{{'alarms.position_report_information_value_missing' | i18n}}</div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-3">
                 <label>{{'movement.manual_position_field_label_name' | i18n}}</label>
                 <div class="value" ng-show="alarm.placeholderVessel">{{alarm.placeholderVessel.name}}</div>
-                <div class="value" ng-show="!alarm.placeholderVessel && alarm.vessel">{{alarm.vessel.name}}</div>
-                <div class="value" ng-show="!alarm.placeholderVessel && !alarm.vessel && alarm.asset.ids.NAME">{{alarm.asset.ids.NAME}}</div>
-                <div class="value missing" ng-show="!alarm.placeholderVessel && !alarm.vessel && !alarm.asset.ids.NAME">{{'alarms.position_report_information_value_missing' | i18n}}</div>
+                <div class="value" ng-show="!alarm.placeholderVessel && alarm.movement">{{alarm.movement.assetName}}</div>
+                <div class="value" ng-show="!alarm.placeholderVessel && !alarm.movement && alarm.asset.ids.NAME">{{alarm.asset.ids.NAME}}</div>
+                <div class="value missing" ng-show="!alarm.placeholderVessel && !alarm.movement && !alarm.asset.ids.NAME">{{'alarms.position_report_information_value_missing' | i18n}}</div>
             </div>
-            <div class="col-md-3">
+            <div ng-if="showDnid"class="col-md-3">
                 <label>{{'mobileTerminal.table_header_dnid' | i18n}}</label>
                 <div class="value" ng-show="channelDnid">{{channelDnid}}</div>
                 <div class="value missing" ng-hide="channelDnid">-</div>
             </div>
-            <div class="col-md-3">
+            <div ng-if="showMemberNumber" class="col-md-3">
                 <label>{{'mobileTerminal.table_header_member_no' | i18n}}</label>
                 <div class="value" ng-show="channelMemberNumber">{{channelMemberNumber}}</div>
                 <div class="value missing" ng-hide="channelMemberNumber">-</div>
@@ -166,38 +166,38 @@
         </div>
 
         <div ng-hide="loadingMovement || loadingMovementError">
-            <div class="row" >
-                <div class="col-md-3">
-                    <label>{{'movement.manual_position_field_label_status' | i18n}}</label>
-                    <div class="value" ng-show="alarm.movement.movement.status">{{alarm.movement.movement.status}}</div>
-                    <div class="value missing" ng-hide="alarm.movement.movement.status">{{'alarms.position_report_information_value_missing' | i18n}}</div>
+            <div class="row">
+                <!-- Status -->
+                <div alarm-report-field="'movement.manual_position_field_label_status'"
+                     field-value="alarm.movement.movement.status"
+                     class="col-md-3">
                 </div>
-                <div class="col-md-9">
-                    <label>{{'movement.manual_position_field_label_date_time' | i18n}}</label>
-                    <div class="value" ng-show="alarm.movement.time">{{alarm.movement.time | confDateFormat}}</div>
-                    <div class="value missing" ng-hide="alarm.movement.time">{{'alarms.position_report_information_value_missing' | i18n}}</div>
+                <!-- Time -->
+                <div alarm-report-field="'movement.manual_position_field_label_date_time'"
+                     field-value="alarm.movement.time | confDateFormat"
+                     class="col-md-3">
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3">
-                    <label>{{'movement.manual_position_field_label_latitude' | i18n}}</label>
-                    <div class="value" ng-show="alarm.movement.movement.latitude">{{alarm.movement.movement.latitude | confCoordinateFormat}}</div>
-                    <div class="value missing" ng-hide="alarm.movement.movement.latitude">{{'alarms.position_report_information_value_missing' | i18n}}</div>
+                <!-- Latitude -->
+                <div alarm-report-field="'movement.manual_position_field_label_latitude'"
+                     field-value="alarm.movement.movement.latitude | confCoordinateFormat"
+                     class="col-md-3">
                 </div>
-                <div class="col-md-3">
-                    <label>{{'movement.manual_position_field_label_longitude' | i18n}}</label>
-                    <div class="value" ng-show="alarm.movement.movement.longitude">{{alarm.movement.movement.longitude | confCoordinateFormat}}</div>
-                    <div class="value missing" ng-hide="alarm.movement.movement.longitude">{{'alarms.position_report_information_value_missing' | i18n}}</div>
+                <!-- Longitude -->
+                <div alarm-report-field="'movement.manual_position_field_label_longitude'"
+                     field-value="alarm.movement.movement.longitude | confCoordinateFormat"
+                     class="col-md-3">
                 </div>
-                <div class="col-md-3">
-                    <label>{{'movement.manual_position_field_label_measured_speed' | i18n}}</label>
-                    <div class="value" ng-show="alarm.movement.movement.reportedSpeed">{{alarm.movement.movement.reportedSpeed | speed}} {{"common.speed_unit_" + speedUnit | i18n}}</div>
-                    <div class="value missing" ng-hide="alarm.movement.movement.reportedSpeed">{{'alarms.position_report_information_value_missing' | i18n}}</div>
+                <!-- Speed -->
+                <div alarm-report-field="'movement.manual_position_field_label_measured_speed'"
+                     field-value="toSpeedString(alarm.movement.movement.reportedSpeed)"
+                     class="col-md-3">
                 </div>
-                <div class="col-md-3">
-                    <label>{{'movement.manual_position_field_label_course' | i18n}}</label>
-                    <div class="value" ng-show="alarm.movement.movement.reportedCourse">{{alarm.movement.movement.reportedCourse}} {{"movement.manual_position_field_unit_degrees" | i18n}}</div>
-                    <div class="value missing" ng-hide="alarm.movement.movement.reportedCourse">{{'alarms.position_report_information_value_missing' | i18n}}</div>
+                <!-- Course -->
+                <div alarm-report-field="'movement.manual_position_field_label_course'"
+                     field-value="toCourseString(alarm.movement.movement.reportedCourse)"
+                     class="col-md-3">
                 </div>
             </div>
         </div>
