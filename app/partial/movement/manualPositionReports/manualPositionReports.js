@@ -75,6 +75,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
             reportObj = item.copy();
         }else{
             reportObj = new ManualPosition();
+            reportObj.draft();
         }
 
         modalInstance = ManualPositionReportModal.show(reportObj, modalOptions);
