@@ -178,7 +178,13 @@ angular.module('unionvmsWeb').directive('existing', function() {
         },
         link: function(scope, element, attrs, ctrl) {
             function validateFn(value) {
-                ctrl.$setValidity('unique', value !== scope.existing);
+                var valid = true;
+                if (value !== undefined && scope.existing !== undefined) {
+                    // If both defined, value must be different from the existing value.
+                    valid = value !== scope.existing;
+                }
+
+                ctrl.$setValidity('unique', valid);
                 return value;
             }
 
