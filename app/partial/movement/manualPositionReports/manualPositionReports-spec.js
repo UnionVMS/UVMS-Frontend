@@ -146,7 +146,9 @@ describe('ManualPositionReportCtrl', function() {
         };
     	spyOn(ManualPositionReportModal, 'show').andReturn(modalInstance);
     	scope.editPosition(undefined, false);
-    	expect(ManualPositionReportModal.show).toHaveBeenCalledWith(new ManualPosition(), {
+        var draftPosition = new ManualPosition();
+        draftPosition.draft();
+    	expect(ManualPositionReportModal.show).toHaveBeenCalledWith(draftPosition, {
     		addAnother: false,
     		reloadFunction: scope.searchManualPositions
     	});
