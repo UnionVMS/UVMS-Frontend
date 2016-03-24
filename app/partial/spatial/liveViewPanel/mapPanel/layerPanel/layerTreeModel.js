@@ -53,6 +53,11 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	        stylesForObject = checkWmStylesAvailability(src.styles);
 	    }
 	    
+	    var filtersForObject;
+	    if (angular.isDefined(src.filters)){
+	        filtersForObject = buildCqlContext(src.filters);
+        }
+	    
 	    if (src.isBaseLayer === true){
 	        baseLayerCounter += 1;
 	        if (baseLayerCounter === 1){
@@ -88,9 +93,43 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	        }
 	    };
 	    
+	    
+	    if (angular.isDefined(filtersForObject)){
+            node.data.contextItems =  filtersForObject;
+        }
+	    
+	    
+	    var menuSep = {
+	        className: 'context-menu-item context-menu-separator context-menu-not-selectable'
+	    };
+	    
 	    if (stylesForObject.length > 1){
+	        if (angular.isDefined(node.data.contextItems)){
+	            _.extend(node.data.contextItems, {sep1: menuSep});
+	            _.extend(node.data.contextItems, stylesForObject[1]); 
+	        } else {
+	            node.data.contextItems = stylesForObject[1];
+	        }
+	    }
+	    
+	    if (angular.isDefined(node.data.contextItems)){
 	        node.data.contextTip = locale.getString('spatial.layer_tree_tip_context_menu');
-	        node.data.contextItems = stylesForObject[1]; 
+	        _.extend(node.data.contextItems, {sep2: menuSep});
+	        var quit = {
+	            quitMenu: {
+	                name: 'Quit',
+	                icon: function(opt, $itemElement, itemKey, item){
+	                    $itemElement.html('<span class="fa fa-times" aria-hidden="true"></span>' + item.name);
+	                    return 'context-menu-icon-quit';
+	                },
+	                callback: function(key, options) {
+	                    var m = "edit was clicked";
+	                    alert(m); 
+	                }
+	            }
+	        };
+	        _.extend(node.data.contextItems, quit);
+	        
 	    }
 	    
 	    return node;
@@ -101,11 +140,38 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	    var node;
 	    if (src.areaType === 'SYSAREA'){
 	        node = buildWmsNode(src);
+	    } else if (src.areaType === 'AREAGROUP'){
+	        node = buildUserAreaGroupNode(src);
 	    } else {
 	        node = buildUserAreaNode(src);
 	    }
 	    
 	    return node;
+	};
+	
+	//User area group specific node
+	var buildUserAreaGroupNode = function(src){
+	    var cql = "(user_name = '" + userService.getUserName() + "' OR scopes ilike '%#" + userService.getCurrentContext().scope.scopeName +"#%')";
+	    
+	    var newDef = {
+            isBaseLayer: src.isBaseLayer,
+            layerGeoName: src.layerGeoName,
+            longCopyright: src.longCopyright,
+            shortCopyright: src.shortCopyright,
+            serverType: src.serverType,
+            styles: src.styles,
+            type: src.url,
+            url: src.url,
+            title: src.title,
+            cql: cql + ' AND ' + src.cql_all + ' AND ' +src.cql_active,
+            filters: {
+                baseCql: cql,
+                allCql: src.cql_all,
+                activeCql: src.cql_active
+            }
+        };
+        
+        return buildWmsNode(newDef);
 	};
 	
 	//User area specific node
@@ -148,10 +214,42 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	    return finalStyles;
 	};
 	
+	
+	//Cql options, mainly for user area group layers
+	var buildCqlContext = function(filters){
+	    var cqlContext = {
+            cqlHeader: {
+                name: locale.getString('spatial.layer_tree_context_menu_show_title'),
+                disabled: true,
+                className: 'layer-menu-header'
+            }
+	    };
+	    
+	    cqlContext.activeAreas = {
+            name: locale.getString('spatial.layer_tree_context_menu_active_areas_title'),
+            type: 'radio',
+            radio: 'filter',
+            value: 'activeAreas',
+            cql: filters.baseCql + ' AND ' + filters.allCql + ' AND ' + filters.activeCql,
+            selected: true
+        };
+	    
+	    cqlContext.allAreas = {
+	        name: locale.getString('spatial.layer_tree_context_menu_all_areas_title'),
+	        type: 'radio',
+	        radio: 'filter',
+	        value: 'allAreas',
+	        cql: filters.baseCql + ' AND ' + filters.allCql,
+	        selected: false
+	    };
+	
+	    return cqlContext;
+	};
+	
 	//Build style contextmenu object
 	var buildStyleContext = function(styles, defaultStyle){
 	    var styleContext = {
-	        header: {
+	        styleHeader: {
 	            name: locale.getString('spatial.layer_tree_context_menu_style_title'),
 	            disabled: true,
 	            className: 'layer-menu-header'
@@ -198,10 +296,6 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	        switch(def.type){
                 case 'WMS':
                     if (angular.isDefined(def.areaType)){
-//                        var node = buildAreaNode(def);
-//                        if (angular.isDefined(node)){
-//                            nodeArray.push(node);
-//                        }
                         nodeArray.push(buildAreaNode(def));
                     } else {
                         nodeArray.push(buildWmsNode(def));
@@ -245,28 +339,6 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                 expanded: false,
                 children: areaNodes
 	        };
-	        
-	        //User areas
-//	        if (angular.isDefined(config.userAreas)){
-//	            var userNodes = loopAndBuildNode([config.userAreas]);
-//	            areaFolder.children.push({
-//	                title: locale.getString('spatial.layer_tree_user_areas'),
-//                    folder: true,
-//                    expanded: false,
-//                    children: userNodes
-//	            });
-//	        }
-//	        
-//	        //System areas
-//	        if (angular.isDefined(config.systemAreas)){
-//	            var sysNodes = loopAndBuildNode(config.systemAreas);
-//	            areaFolder.children.push({
-//	                title: locale.getString('spatial.layer_tree_system_areas'),
-//	                folder: true,
-//	                expanded: false,
-//	                children: sysNodes
-//	            });
-//	        }
 	        
 	        tree.push(areaFolder);
 	    }

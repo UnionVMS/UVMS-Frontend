@@ -91,10 +91,52 @@
         	</div>
         	<!-- USER DEFINED AREAS -->
         	<div class="col-md-6 section" ng-show="isAreaTabSelected('USER')" >
-                <div class="table-responsive-force form-group col-md-12 noPadding" st-table="displayedUserAreas" st-safe-src="userAreasList">
+        		<div class="form-group col-md-12 noPadding">
+       				<label class="radio-inline radioselector">
+       					<input type="radio" name="userSelect" value="map" ng-model="userSelection">
+       					{{'spatial.area_selection_modal_select_on_map_radio' | i18n}}
+       				</label>
+       				<label class="radio-inline radioselector">
+       					<input type="radio" name="userSelect" value="search" ng-model="userSelection">
+       					{{'spatial.area_selection_modal_search_area' | i18n}}
+       				</label>
+       			</div>
+       			
+       			<!-- MULTIPLE AREAS BY CLICK TABLE -->
+                <div class="table-responsive-force form-group col-md-12 noPadding" ng-show="userSelection === 'map' && userAreasSearch.length > 0 && clickResults > 1" st-table="displayedUserAreasSearch" st-safe-src="userAreasSearch">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="stColumnHeaders">
+                                <th st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_name_header' | i18n}}</th>
+                                <th st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_desc_header' | i18n}}</th>
+                                <th style="min-width: 80px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="userArea in displayedUserAreasSearch">
+                                <td>{{userArea.name}}</td>
+                                <td>{{userArea.desc}}</td>
+                                <td style="min-width: 80px;">
+                                    <button type="button" class="btn btn-primary btn-xs pull-right" title="{{'spatial.area_selection_modal_add_area_btn' | i18n }}" ng-click="addAreaToSelection($index, displayedUserAreasSearch, userAreasSearch)"> <span class="fa fa-plus-square"></span></button>
+                                    <button type="button" class="btn btn-primary btn-xs pull-right btnMargin" title="{{'spatial.area_selection_modal_see_on_map_btn' | i18n }}" ng-click="mergeParamsWms($index, displayedUserAreasSearch, userAreasSearch)"> <span class="fa fa-globe"></span></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="stFooterPagination">
+                            <tr>
+                                <td colspan="3" class="text-right">
+                                    <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                
+                <!-- ALL USER AREAS -->
+                <div class="table-responsive-force form-group col-md-12 noPadding" ng-show="userSelection === 'search'" st-table="displayedUserAreas" st-safe-src="userAreasList">
                     <!-- Search field-->
                     <div class="form-group col-md-12 noPadding">
-                        <input st-search placeholder="{{'spatial.reports_table_search_header' | i18n}}" class="input-sm form-control" type="search"/>
+                        <input st-search ng-model="userAreaSearchItem" placeholder="{{'spatial.reports_table_search_header' | i18n}}" class="input-sm form-control" type="search"/>
                     </div>
 
                     <!-- list of user areas-->

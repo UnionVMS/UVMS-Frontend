@@ -1,28 +1,43 @@
-.context-menu-input > label > input[type="checkbox"], .context-menu-input > label > input[type="radio"] {
-  vertical-align: middle;
-  margin: 5px 2px 5px -17px;
-}
-
-.context-menu-input > label > span {
-  vertical-align: middle;
-}
-
-.context-menu-item {
-  padding: 0px 0px 0px 24px;
-}
-
-.context-menu-item > label {
-  font-weight: normal;
-  cursor: pointer;
-}
-
-.context-menu-item.layer-menu-header {
-  padding: 5px 0px 5px 8px;
-  font-weight: bold;
-  color: #000;
-  cursor: default;
-}
-
-.layertree-baselayer-node > .fancytree-title {
-	padding-left: 20px !important;
+.context-menu-item{
+  &.layer-menu-header {
+    //padding: 0px 0px 0px 8px;
+    padding-left: 8px;
+    font-weight: bold;
+    color: #3498db;
+    cursor: default;
+  }
+  &.context-menu-input {
+    padding: 0px 5px;
+    span{
+        cursor: pointer !important;
+        font-weight: normal;
+    }
+    label > input[type="checkbox"],
+    label > input[type="radio"] {
+      cursor: pointer !important;
+      vertical-align: middle;
+      top: 0;
+      margin: 0;
+      margin-right: 5px;
+      margin-left: 2px;
+    }
+    &.context-menu-hover {
+      background-color: #DDDDDD;
+      color: #2f2f2f;
+    }
+  }
+  &.context-menu-icon-quit {
+    &::before {
+      content: none;
+    }
+    &.context-menu-hover {
+      background-color: #DDDDDD;
+      color: #2f2f2f;
+    }
+    span.fa {
+        color: #3498db;
+        margin-right: 5px;
+    }
+    padding: 0 0 0 8px;
+  }
 }

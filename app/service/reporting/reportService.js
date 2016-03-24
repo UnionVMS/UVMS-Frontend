@@ -200,7 +200,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         };
         
 	    reportRestService.executeReport(rep.id,repConfig).then(getVmsDataSuccess, getVmsDataError);
-	    rep.isReportExecuting = false; //FIXME to remove
 
         if (rep.refresh.status === true) {
             rep.setAutoRefresh();

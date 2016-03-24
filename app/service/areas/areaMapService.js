@@ -88,7 +88,7 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
 	
 	//User areas wms
 	areaMs.addUserAreasWMS = function(def){
-	    var cql = "(user_name = '" + userService.getUserName() + "' or scopes ilike '%#" + userService.getCurrentContext().scope.scopeName +"#%')";
+	    var cql = "(user_name = '" + userService.getUserName() + "' OR scopes ilike '%#" + userService.getCurrentContext().scope.scopeName +"#%')";
 	    var finalCql = cql;
 	    if (angular.isDefined(def.groupCql)){
 	        finalCql += def.groupCql;
@@ -522,23 +522,19 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
     //Bring layer to the top of the map
     areaMs.raiseLayer = function(type){
         var layer = areaMs.getLayerByType(type);
-        var currentIdx = layer.get('currentIdx');
         
         var layers = areaMs.map.getLayers();
         var lyrLength = layers.getLength();
         
-        if (!angular.isDefined(currentIdx) && currentIdx !== lyrLength - 1){
-            var idx;
-            layers.forEach(function(lyr, lyrIdx){
-                if (lyr.get('type') === type){
-                    idx = lyrIdx;
-                }
-            });
-            
-            layers.removeAt(idx);
-            layer.set('currentIdx', lyrLength - 1);
-            layers.insertAt(lyrLength - 1, layer);
-        }
+        var idx;
+        layers.forEach(function(lyr, lyrIdx){
+            if (lyr.get('type') === type){
+                idx = lyrIdx;
+            }
+        });
+        
+        layers.removeAt(idx);
+        layers.insertAt(lyrLength - 1, layer);
     };
 	
 	//Get map projection

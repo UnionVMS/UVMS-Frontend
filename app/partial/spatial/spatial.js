@@ -1,6 +1,6 @@
 angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, reportRestService, reportService, $anchorScroll, userService){
     $scope.isMenuVisible = true;
-    $scope.selectedMenu = 'LIVEVIEW'; //FIXME
+    $scope.selectedMenu = 'REPORTS';
     $scope.reports = [];
     $scope.executedReport = {};
     $scope.repServ = reportService;
@@ -17,8 +17,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
                 {
                     'menu': 'LIVEVIEW',
                     'title': $scope.repServ.name,
-                    //'visible': $scope.repServ.liveviewEnabled //FIXME
-                    'visible': true
+                    'visible': $scope.repServ.liveviewEnabled
                 },
                 {
                     'menu': 'REPORTS',

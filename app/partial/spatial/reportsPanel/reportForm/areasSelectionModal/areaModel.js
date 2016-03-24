@@ -12,7 +12,12 @@ angular.module('unionvmsWeb').factory('Area',function() {
     Area.prototype.fromJson = function(data){
         var area = new Area();
         
-        area.gid = parseInt(data.gid);
+        var gid = data.gid;
+        if (!angular.isDefined(data.gid)){
+            gid = data.id;
+        }
+        
+        area.gid = parseInt(gid);
         area.areaType = data.areaType;
         area.name = data.name;
         area.desc = data.desc;
@@ -20,10 +25,6 @@ angular.module('unionvmsWeb').factory('Area',function() {
         area.extent = data.extent;
         return area;
     };
-    
-//    Area.prototype.fromGeoJson = function(data){
-//        //TODO
-//    };
 
 	return Area;
 });

@@ -271,28 +271,30 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ms.map.getViewport().addEventListener('contextmenu', function(e){
             e.preventDefault();
             var select = ms.getInteractionsByType('Select')[0];
-            var selFeatures = select.getFeatures();
-            if (angular.isDefined(ms.overlay) && ms.overlay.get('fromCluster') === true){
-                ms.closePopup();
-            }
-            if (e.shiftKey === true){
-                selFeatures.clear();
-            } else {
-                var foundedFeatures = false;
-                map.forEachFeatureAtPixel(map.getEventPixel(e), function(feature, layer){
-                    if (layer !== null && layer.get('type') === 'vmspos'){
-                        if (selFeatures.getLength() > 0){
-                            selFeatures.clear();
-                        }
-                        selFeatures.push(feature);
-                        foundedFeatures = true;
-                    }
-                });
-                
-                if (foundedFeatures === false){
-                    selFeatures.clear();
-                } else if (foundedFeatures === true && angular.isDefined(ms.overlay) && ms.overlay.get('fromCluster') === true){
+            if (angular.isDefined(select)){
+                var selFeatures = select.getFeatures();
+                if (angular.isDefined(ms.overlay) && ms.overlay.get('fromCluster') === true){
                     ms.closePopup();
+                }
+                if (e.shiftKey === true){
+                    selFeatures.clear();
+                } else {
+                    var foundedFeatures = false;
+                    map.forEachFeatureAtPixel(map.getEventPixel(e), function(feature, layer){
+                        if (layer !== null && layer.get('type') === 'vmspos'){
+                            if (selFeatures.getLength() > 0){
+                                selFeatures.clear();
+                            }
+                            selFeatures.push(feature);
+                            foundedFeatures = true;
+                        }
+                    });
+                    
+                    if (foundedFeatures === false){
+                        selFeatures.clear();
+                    } else if (foundedFeatures === true && angular.isDefined(ms.overlay) && ms.overlay.get('fromCluster') === true){
+                        ms.closePopup();
+                    }
                 }
             }
         });

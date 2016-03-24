@@ -41,7 +41,7 @@
     "fancytree": "~2.9.0",
     "font-awesome": "~4.5.0",
     "jquery": "~2.0",
-    "jQuery-contextMenu": "~1.8.1",
+    "jQuery-contextMenu": "~2.1.1",
     "jquery-ui": "~1.11.4",
     "less.js": "~2.3",
     "moment": "~2.10",

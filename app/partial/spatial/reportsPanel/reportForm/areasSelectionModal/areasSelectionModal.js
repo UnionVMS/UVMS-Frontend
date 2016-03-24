@@ -53,13 +53,16 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
         $modalInstance.close($scope.exportSelectedAreas());
     };
     
-    $scope.selectedTab = 'SYSTEM';
-    $scope.sysSelection = "map";
-    $scope.clickResults = 0;
-    $scope.showWarning = false;
-    $scope.warningMessage = undefined;
-    $scope.hasError = false;
-    $scope.errorMessage = undefined;
+    $modalInstance.opened.then(function(){
+        $scope.selectedTab = 'SYSTEM';
+        $scope.sysSelection = "map";
+        $scope.userSelection = "map";
+        $scope.clickResults = 0;
+        $scope.showWarning = false;
+        $scope.warningMessage = undefined;
+        $scope.hasError = false;
+        $scope.errorMessage = undefined;
+    });
     
     //Define tabs
     var setTabs = function(){
@@ -79,8 +82,9 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
         if (tab === 'USER') {
             $scope.sysAreaType = undefined;
             $scope.sysSelection = 'map';
-            initUserAreasList();
+            setUserAreaType();
         } else {
+           $scope.userSelection = 'map';
            if (angular.isDefined($scope.userAreaType)) {
                 $scope.removeLayerByType($scope.userAreaType.typeName);
                 $scope.userAreaType = undefined;
@@ -144,6 +148,10 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     $scope.userAreaType = undefined;
     $scope.userAreasList = [];
     $scope.displayedUserAreas = [].concat($scope.userAreasList);
+    
+    //User defined areas table by map click
+    $scope.userAreasSearch = [];
+    $scope.displayedUserAreasSearch = [].concat($scope.userAreasSearch);
 
 
     //Selected areas table
@@ -209,9 +217,8 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
         $scope.map = map;
         
         map.on('singleclick', function(evt){
-            var areaType = angular.isDefined($scope.sysAreaType)?$scope.sysAreaType:$scope.userAreaType.typeName;
-
-            if ($scope.sysSelection === 'map' && map.getLayers().getLength() > 1){
+            if ((($scope.sysSelection === 'map' && $scope.selectedTab === 'SYSTEM') || ($scope.userSelection === 'map' && $scope.selectedTab === 'USER')) && map.getLayers().getLength() > 1){
+                var areaType = angular.isDefined($scope.sysAreaType)? $scope.sysAreaType : $scope.userAreaType.typeName;
                 $scope.clickResults = 0;
                 var projection = map.getView().getProjection().getCode();
 
@@ -252,6 +259,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
                 url: item.serviceUrl,
                 serverType: 'geoserver',
                 params: {
+                    time_: (new Date()).getTime(),
                     'LAYERS': item.geoName,
                     'TILED': true,
                     'STYLES': item.style,
@@ -271,7 +279,11 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
             var area;
             $scope.clickResults = response.data.length;
             if (response.data.length > 1){
-                $scope.sysAreaSearch = $scope.convertAreasResponse(response.data);
+                if (angular.isDefined($scope.sysAreaType)){
+                    $scope.sysAreaSearch = $scope.convertAreasResponse(response.data);
+                } else {
+                    $scope.userAreasSearch = $scope.convertAreasResponse(response.data);
+                }
             } else {
                 if (response.data.length === 0){
                     $scope.showWarning = true;
@@ -375,6 +387,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
             cql += "gid = " + parseInt(area.gid);
             
             src.updateParams({
+                time_: (new Date()).getTime(),
                 'cql_filter': cql
             });
         }
@@ -401,15 +414,6 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
                 gid: parseInt($scope.selectedAreas[i].gid),
                 areaType: $scope.selectedAreas[i].areaType    
             };
-            
-            if (angular.isDefined($scope.selectedAreas[i].id)){
-                area.id = $scope.selectedAreas[i].id;
-            }
-            
-//            if (angular.isDefined($scope.selectedAreas[i].type)){
-//                area.type = $scope.selectedAreas[i].type;
-//            }
-            
             exported.push(area);
         }
         
@@ -423,6 +427,10 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
         if (angular.isDefined(selectedAreas) && selectedAreas.length > 0){
             $scope.getAreaProperties($scope.buildAreaPropArray());
         }
+        $timeout(function(){
+            $scope.map.updateSize();
+        }, 100);
+        
     };
     
     $scope.buildAreaPropArray = function(){
@@ -466,8 +474,6 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     }
 
     function initUserAreasList() {
-        setUserAreaType();
-
         if(!angular.isDefined($scope.userAreasList) || $scope.userAreasList.length === 0) {
             $scope.searchLoading = true;
             $scope.userAreasList = [];
@@ -494,9 +500,26 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     //Events
     $scope.$watch('userAreaType', function(){
         if (angular.isDefined($scope.userAreaType)){
-           $scope.userAreaType.cql = "user_name = '" + userService.getUserName() + "'";  
+           $scope.userAreaType.cql = "(user_name = '" + userService.getUserName() + "' OR scopes ilike '%#" + userService.getCurrentContext().scope.scopeName +"#%')";
            $scope.addWms($scope.userAreaType);
-        } //TODO maybe instead of removing the USER layer from the MAP on tab switch, we can do it here as else clause
+        }
+    });
+    
+    $scope.$watch('userSelection', function(newVal, oldVal){
+        $scope.clickResults = 0;
+        if (newVal === 'map'){
+            $scope.userAreasSearch = [];
+        }
+        if (newVal === 'search'){
+            if (angular.isDefined($scope.userAreaSearchItem)){
+                $scope.userAreaSearchItem = undefined;
+                $scope.displayedUserAreas = [].concat($scope.userAreasList);
+            }
+            
+            if ($scope.userAreasSearch.length === 0){
+                initUserAreasList();
+            }
+        }
     });
 
     
