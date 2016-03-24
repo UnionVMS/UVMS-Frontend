@@ -137,7 +137,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             	$scope.report.currentConfig.mapConfiguration.layerSettings = checkLayerSettings($scope.report.currentConfig.mapConfiguration.layerSettings);
             	$scope.report = checkMapConfigDifferences($scope.report);
                 reportRestService.createReport($scope.report).then(createReportSuccess, createReportError);
-            } else if ($scope.formMode === 'EDIT'){
+            } else if ($scope.formMode === 'EDIT' || $scope.formMode === 'EDIT-FROM-LIVEVIEW'){
             	$scope.report.currentConfig.mapConfiguration.layerSettings = checkLayerSettings($scope.report.currentConfig.mapConfiguration.layerSettings);
             	$scope.report = checkMapConfigDifferences($scope.report);
                 reportRestService.updateReport($scope.report).then(updateReportSuccess, updateReportError);

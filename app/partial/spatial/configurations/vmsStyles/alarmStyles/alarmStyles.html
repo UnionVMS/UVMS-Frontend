@@ -1,0 +1,42 @@
+<div ng-controller="AlarmstylesCtrl">
+	<ng-form name="alarmsForm" novalidate>
+		<div class="row rulesList">
+			<div class="row col-md-12" ng-repeat="item in configModel.alarmStyle.style">
+				<div class="form-group col-md-2">
+					{{item.code}}
+				</div>
+				<div class="form-group col-md-3" ng-class="{'has-error': (alarmsForm.propertyColor{{item.id}}.$error.requiredField || alarmsForm.propertyColor{{item.id}}.$error.segPropColor) && (alarmsForm.propertyColor{{item.id}}.$dirty || submitedWithErrors)}">
+					<div class="colorPickerComponent">
+						<div ng-style="{'background-color': item.color && item.color.length > 3 && item.color.length <= 7 && item.color.indexOf('#') != -1 ? item.color : '#fff'}" class="form-control pickedcolor">
+				       		<i class="fa fa-ban" ng-hide="item.color && item.color.length > 3 && item.color.length <= 7 && item.color.indexOf('#') != -1"></i>
+				        </div>
+				        <input class="form-control" colorpicker ng-model="item.color" type="text" ng-change="validatePropertyColor();" name="propertyColor{{item.id}}" autocomplete="off"/>
+					</div>
+				</div>
+				<div ng-messages="alarmsForm.propertyColor{{item.id}}.$error" ng-show="alarmsForm.propertyColor{{item.id}}.$error.hasError && (alarmsForm.propertyColor{{item.id}}.$dirty || submitedWithErrors)">
+					<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
+					<div ng-message="segPropColor">{{'spatial.invalid_color_error_message' | i18n }}</div>
+				</div>
+			</div>
+		</div>
+		<div class="row defaultItem">
+			<ng-form name="defaultForm" novalidate>
+				<div class="row col-md-12">
+					<div class="form-group col-md-3" ng-class="{'has-error': defaultForm.defaultColor.$error.hasError && (defaultForm.defaultColor.$dirty || submitedWithErrors)}">
+						<label>{{'spatial.default_color' | i18n}}</label>
+						<div class="colorPickerComponent">
+							<div ng-style="{'background-color': configModel.alarmStyle.defaultColor && configModel.alarmStyle.defaultColor.length > 3 && configModel.alarmStyle.defaultColor.length <= 7 && configModel.alarmStyle.defaultColor.indexOf('#') != -1 ? configModel.alarmStyle.defaultColor : '#fff'}" class="form-control pickedcolor">
+					       		<i class="fa fa-ban" ng-hide="configModel.alarmStyle.defaultColor && configModel.alarmStyle.defaultColor.length > 3 && configModel.alarmStyle.defaultColor.length <= 7 && configModel.alarmStyle.defaultColor.indexOf('#') != -1"></i>
+					        </div>
+					        <input class="form-control" name="defaultColor" colorpicker ng-model="configModel.alarmStyle.defaultColor" type="text" ng-change="validateDefaultColor();" autocomplete="off"/>
+						</div>
+						<div class="belowErrorMessages" ng-messages="defaultForm.defaultColor.$error" ng-show="defaultForm.defaultColor.$dirty || submitedWithErrors">
+						<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
+						<div ng-message="segDefColor">{{'spatial.invalid_color_error_message' | i18n }}</div>
+					</div>
+					</div>
+				</div>
+			</ng-form>	
+		</div>
+	</ng-form>
+</div>

@@ -20,7 +20,10 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
        selectedTab: 'MAP',
        liveviewEnabled: false,
        isLiveViewActive: false,
-       outOfDate: undefined
+       outOfDate: undefined,
+       getConfigsTime: undefined,
+       getReportTime: undefined,
+       mapConfigs: undefined
     };
     
     rep.clearVmsData = function(){
@@ -35,6 +38,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.tabs.map = true;
         rep.refresh.status = false;
         rep.refresh.rate = undefined;
+        rep.getConfigsTime = undefined;
+        rep.getReportTime = undefined;
+        rep.mapConfigs = undefined;
         
         //Clear data used in tables
         rep.clearVmsData();
@@ -92,11 +98,12 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             mapService.deactivateVectorLabels('vmsseg'); 
         }
 
+        rep.getConfigsTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
         if (report.withMap === true){
-            var currentTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
-            spatialRestService.getConfigsForReport(report.id, currentTime).then(getConfigSuccess, getConfigError);
+            spatialRestService.getConfigsForReport(report.id, rep.getConfigsTime).then(getConfigSuccess, getConfigError);
         } else {
-            spatialRestService.getConfigsForReportWithoutMap().then(getConfigWithouMapSuccess, getConfigWithouMapError); 
+//        	spatialRestService.getConfigsForReportWithoutMap().then(getConfigWithouMapSuccess, getConfigWithouMapError);
+            spatialRestService.getConfigsForReportWithoutMap(rep.getConfigsTime).then(getConfigWithouMapSuccess, getConfigWithouMapError); 
         }
 	};
 	
@@ -105,7 +112,12 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 		rep.isReportExecuting = true;
         mapService.clearVectorLayers();
         $rootScope.$broadcast('removeVmsNodes');
-        //TODO get the report congurations from the backend 
+        
+        rep.getReportTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+        report.additionalProperties = getUnitSettings();
+	    
+        //TODO get the report congurations from the backend
+//	    reportRestService.executeWithoutSaving(report).then(getVmsDataSuccess, getVmsDataError);
         reportRestService.executeWithoutSaving(report).then(getVmsDataSuccess, getVmsDataError);
 	};
 	
@@ -132,8 +144,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	var getUnitSettings = function(){
 	    return {
-	        speedUnit: unitConversionService.speed.getUnit(),
-	        distanceUnit: unitConversionService.distance.getUnit()
+    		speedUnit: unitConversionService.speed.getUnit(),
+	        distanceUnit: unitConversionService.distance.getUnit(),
+	        timestamp: rep.getReportTime
 	    };
 	};
 	
@@ -177,8 +190,16 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         }
 
 	    //Finally load VMS positions and segments
-	    var repConfig = getUnitSettings();
-	    //reportRestService.executeReport(rep.id, repConfig).then(getVmsDataSuccess, getVmsDataError); FIXME uncomment when we have a proper DB data dump for movemments
+        rep.getReportTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+        var unitSettings = getUnitSettings();
+        var repConfig = {'speedUnit': unitSettings.speedUnit,
+        		'distanceUnit': unitSettings.distanceUnit,
+        		'additionalProperties': {
+		        	'timestamp': unitSettings.timestamp
+		        }
+        };
+        
+	    reportRestService.executeReport(rep.id,repConfig).then(getVmsDataSuccess, getVmsDataError);
 	    rep.isReportExecuting = false; //FIXME to remove
 
         if (rep.refresh.status === true) {
@@ -199,8 +220,15 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         //Set vms table attribute visibility
         vmsVisibilityService.setVisibility(data.visibilitySettings);
         
-        var repConfig = getUnitSettings();
-        reportRestService.executeReport(rep.id, repConfig).then(getVmsDataSuccess, getVmsDataError);
+        rep.getReportTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+        var unitSettings = getUnitSettings();
+        var repConfig = {'speedUnit': unitSettings.speedUnit,
+        		'distanceUnit': unitSettings.distanceUnit,
+        		'additionalProperties': {
+		        	'timestamp': unitSettings.timestamp
+		        }
+        };
+        reportRestService.executeReport(rep.id,repConfig).then(getVmsDataSuccess, getVmsDataError);
     };
     
     //Get config without map Success callback
@@ -212,9 +240,23 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	//Get VMS data Success callback
 	var getVmsDataSuccess = function(data){
-        rep.positions = data.movements.features;
+		rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
+		
+		if(angular.isDefined(rep.mapConfigs)){
+			if(angular.isDefined(rep.mapConfigs.stylesSettings)){
+				if(angular.isDefined(rep.mapConfigs.styleSettings.positions)){
+					rep.positions = rep.mapConfigs.styleSettings.positions.style;
+				}
+				if(angular.isDefined(rep.mapConfigs.stylesSettings.segments)){
+					rep.segments = rep.mapConfigs.stylesSettings.segments.style;
+				}
+				if(angular.isDefined(rep.mapConfigs.stylesSettings.tracks)){
+					rep.tracks = rep.mapConfigs.stylesSettings.tracks.style;
+				}
+			}
+		}
         
         //Update map if the report contains the map tab
         if (rep.tabs.map === true){

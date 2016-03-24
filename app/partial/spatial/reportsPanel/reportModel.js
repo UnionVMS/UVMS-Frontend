@@ -252,6 +252,10 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	    	}
 	    }
 	    
+	    if(angular.isDefined(this.additionalProperties)){
+        	dto.additionalProperties = this.additionalProperties;
+        }
+	    
 	    return dto;
 	};
 	
@@ -347,6 +351,10 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
         		report.mapConfiguration = {'spatialConnectId': this.mapConfiguration.spatialConnectId};
         	}
 	    }
+        
+        if(angular.isDefined(this.additionalProperties)){
+        	report.additionalProperties = this.additionalProperties;
+        }
         
 	    return report;
 	};
