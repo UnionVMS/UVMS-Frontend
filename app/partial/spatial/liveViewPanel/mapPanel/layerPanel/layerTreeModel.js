@@ -115,21 +115,6 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	    if (angular.isDefined(node.data.contextItems)){
 	        node.data.contextTip = locale.getString('spatial.layer_tree_tip_context_menu');
 	        _.extend(node.data.contextItems, {sep2: menuSep});
-	        var quit = {
-	            quitMenu: {
-	                name: 'Quit',
-	                icon: function(opt, $itemElement, itemKey, item){
-	                    $itemElement.html('<span class="fa fa-times" aria-hidden="true"></span>' + item.name);
-	                    return 'context-menu-icon-quit';
-	                },
-	                callback: function(key, options) {
-	                    var m = "edit was clicked";
-	                    alert(m); 
-	                }
-	            }
-	        };
-	        _.extend(node.data.contextItems, quit);
-	        
 	    }
 	    
 	    return node;

@@ -38,6 +38,10 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, l
         }
     };
     
+    $scope.isAllowed = function(module, feature){
+        return userService.isAllowed(feature, module, true);
+    };
+    
     locale.ready('areas').then(function(){
         $scope.tabs = setTabs();
         if (!angular.isDefined($scope.selectedTab)){

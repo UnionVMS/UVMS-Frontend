@@ -117,7 +117,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         report.additionalProperties = getUnitSettings();
 	    
         //TODO get the report congurations from the backend
-//	    reportRestService.executeWithoutSaving(report).then(getVmsDataSuccess, getVmsDataError);
         reportRestService.executeWithoutSaving(report).then(getVmsDataSuccess, getVmsDataError);
 	};
 	
@@ -188,6 +187,8 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             rep.refresh.status = data.map.refresh.status;
             rep.refresh.rate = data.map.refresh.rate;   
         }
+        
+        mapService.updateMapSize();
 
 	    //Finally load VMS positions and segments
         rep.getReportTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');

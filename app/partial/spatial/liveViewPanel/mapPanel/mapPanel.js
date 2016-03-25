@@ -50,6 +50,17 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         }
     };
     
+    //Check for permissions
+    $scope.checkSpatialConfigPermission = function(){
+        var userPref = $scope.isAllowed('Spatial', 'ALLOW_USER_SPATIAL_CONFIGURATIONS');
+        var repPref = $scope.isAllowed('Spatial', 'ALLOW_USER_SPATIAL_REPORT_CONFIGURATIONS');
+        
+        if (userPref || repPref){
+            return true;
+        }
+        return false;
+    };
+    
     //Update popup content
     $scope.updatePopup = function(){
         var record = mapService.popupSegRecContainer.records[mapService.popupSegRecContainer.currentIdx];

@@ -82,21 +82,6 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
            }
         });
     };
-    
-    $scope.isUserAllowed = function(requiredFeature) {
-        var isAllowed = false;
-
-        if (angular.isDefined($scope.currentContext.role.features)) {
-            var features = $scope.currentContext.role.features.slice(0);
-            var discoveredFeature = features.find(function(feature){return feature.featureName === requiredFeature;});
-
-           if (angular.isDefined(discoveredFeature)) {
-               isAllowed = true;
-           }
-        }
-
-        return isAllowed;
-    };
 	
     init();
 });

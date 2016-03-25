@@ -13,19 +13,19 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     
     //Define header menus
     var setMenus = function(){
-            return [
-                {
-                    'menu': 'LIVEVIEW',
-                    'title': $scope.repServ.name,
-                    'visible': $scope.repServ.liveviewEnabled
-                },
-                {
-                    'menu': 'REPORTS',
-                    'title': locale.getString('spatial.header_reports'),
-                    'visible': true
-                }
-            ];
-        };
+        return [
+            {
+                'menu': 'LIVEVIEW',
+                'title': $scope.repServ.name,
+                'visible': $scope.repServ.liveviewEnabled
+            },
+            {
+                'menu': 'REPORTS',
+                'title': locale.getString('spatial.header_reports'),
+                'visible': true
+            }
+        ];
+    };
         
    locale.ready('spatial').then(function(){
        $scope.headerMenus = setMenus();
@@ -41,6 +41,10 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    
    $scope.toggleMenuVisibility = function(){
        $scope.isMenuVisible = !$scope.isMenuVisible;
+   };
+   
+   $scope.isAllowed = function(module, feature){
+       return userService.isAllowed(feature, module, true);
    };
    
    //Report filter definitions
@@ -114,20 +118,4 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    $scope.$on('goToLiveView', function(event, lastSelected){
 	   $scope.selectMenu('LIVEVIEW');
    });
-   
-   $scope.isUserAllowed = function(requiredFeature) {
-       var isAllowed = false;
-
-       if (angular.isDefined($scope.currentContext.role.features)) {
-           var features = $scope.currentContext.role.features.slice(0);
-           var discoveredFeature = features.find(function(feature){return feature.featureName === requiredFeature;});
-
-          if (angular.isDefined(discoveredFeature)) {
-              isAllowed = true;
-          }
-       }
-
-       return isAllowed;
-   };
-   
 });

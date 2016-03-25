@@ -100,6 +100,26 @@
 	}
 	.refresh-container {
 		padding-left: 0px;
+		&.disabled {
+			cursor: default;
+			.toggle-switch {
+				background-color: #aaa;
+				cursor: default;
+				pointer-events: none;
+				div {
+					pointer-events: none;
+					cursor: default;
+				}
+				span {
+					pointer-events: none;
+					cursor: default;
+				}
+				> div > span.knob {
+					pointer-events: none;
+					background-color: inherit;
+				}
+			}
+		}
 		.toggle-switch {
 			border-radius: 20px;
 			min-width: 42px;

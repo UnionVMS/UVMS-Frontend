@@ -11,7 +11,7 @@
                 <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
                 	<button type="button" id="bookmarks-btn" ng-class="{active: activeControl === 'bookmarks'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_bookmarks' | i18n }}" ng-click="toggleToolbarBtn('bookmarks')" ng-show="tbControl.bookmarks"><span class="fa fa-bookmark"></span></button>
                     <button type="button" id="measure-config-btn" ng-class="{active: activeControl === 'measure'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_measure_distance' | i18n }}" ng-click="toggleToolbarBtn('measure')" ng-show="tbControl.measure"><span class="fa fa-arrows-h"></span></button>
-                    <button type="button" id="map-fish-print-config-btn" ng-class="{active: activeControl === 'mapFishPrint'}" class="btn btn-default btn-toolbar" title="{{'spatial.mapfish_tip_print' | i18n }}" ng-click="toggleToolbarBtn('mapFishPrint')" ng-show="mapFish.isDeployed && tbControl.mapFishPrint"><span class="fa fa-print"></span></button>
+                    <button type="button" id="map-fish-print-config-btn" ng-class="{active: activeControl === 'mapFishPrint'}" class="btn btn-default btn-toolbar" title="{{'spatial.mapfish_tip_print' | i18n }}" ng-click="toggleToolbarBtn('mapFishPrint')" ng-show="mapFish.isDeployed && tbControl.mapFishPrint && isAllowed('Reporting', 'PRINT_REPORT')"><span class="fa fa-print"></span></button>
                     <!-- <button type="button" ng-class="{active: activeControl === 'other'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_measure_distance' | i18n }}" ng-click="toggleToolbarBtn('other')">Another Control</button> -->
                 </div>
             </div>
@@ -68,7 +68,7 @@
 			    	   				</table>
 			    	   			</div>
 			                </div>
-			                <div class="btn-bookmark-add text-right" ng-show="winExpanded" ng-class="{'has-error': (bookmarksForm.bookmarkName.$dirty || submitingBookmark === true) && bookmarksForm.bookmarkName.$invalid, 'add-bookmark-visible': isAddBookVisible}" ng-show="isAddBookVisible && isUserAllowed('MANAGE_BOOKMARKS')">
+			                <div class="btn-bookmark-add text-right" ng-show="winExpanded" ng-class="{'has-error': (bookmarksForm.bookmarkName.$dirty || submitingBookmark === true) && bookmarksForm.bookmarkName.$invalid, 'add-bookmark-visible': isAddBookVisible}" ng-show="isAddBookVisible">
 			                	<input type="text" class="form-control" placeholder="{{'spatial.map_bookmarks_add_input_placeholder' | i18n }}" ng-model="bookmarkNew.name" name="bookmarkName" ng-required="true"/>
 			                	<button type="button" class="btn btn-primary btn-sm" ng-click="createBookmark()">
 									<i class="fa fa-plus-square"></i>&nbsp;
@@ -77,7 +77,7 @@
 			                </div>
 			        	</ng-form>
 		        	</div>
-		        	<div class="col-md-12 text-center btn-more-details" ng-show="winExpanded && isUserAllowed('MANAGE_BOOKMARKS')" ng-click="isAddBookVisible = !isAddBookVisible">
+		        	<div class="col-md-12 text-center btn-more-details" ng-show="winExpanded" ng-click="isAddBookVisible = !isAddBookVisible">
 		        		<div class="col-md-12 details-text" ng-hide="isAddBookVisible">
 		        			<span>{{'spatial.more_details' | i18n}}</span>
 		        		</div>
@@ -200,7 +200,7 @@
     </div>
     <div class="container map-bottom">
         <div class="row">
-            <div class="col-md-2 col-xs-5 refresh-container">
+            <div class="col-md-2 col-xs-5 refresh-container" ng-class="{disabled: !checkSpatialConfigPermission()}">
 				<b>{{'spatial.map_label_auto_refresh_status' | i18n }} </b>
 				<toggle-switch ng-model="refresh.status"></toggle-switch>
 			</div>

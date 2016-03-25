@@ -13,11 +13,11 @@
 				</ul>
 			</div>
 			<div class="col-md-4 textAlignRight buttonContainer">
-				<button type="button" class="btn btn-primary btn-sm btn-edit-report" ng-show="isMenuSelected('LIVEVIEW') && repServ.id !== undefined" ng-click="editReport()">
+				<button type="button" class="btn btn-primary btn-sm" ng-show="isMenuSelected('LIVEVIEW') && repServ.id !== undefined" ng-click="editReport()">
 					<i class="fa fa-pencil"></i>&nbsp;
 					<span>{{'spatial.reports_edit_report' | i18n}}</span>
 				</button>
-				<button type="button" class="btn btn-primary btn-sm" ng-click="selectMenu('PREFERENCES')">
+				<button type="button" class="btn btn-primary btn-sm btn-preferences" ng-click="selectMenu('PREFERENCES')" ng-show="isAllowed('Spatial', 'ALLOW_USER_SPATIAL_CONFIGURATIONS')">
 					<i class="fa fa-cog"></i>&nbsp;
 					<span>{{'spatial.user_preferences' | i18n}}</span>
 				</button>
@@ -40,15 +40,6 @@
 			</span>
 	    </div>
 	</div>
-	
-	
-	<!-- <div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<a href="#/gis">+ Filter criteria</a> 
-			</div>
-		</div>
-	</div> -->
 	
 	<div ng-include="'partial/spatial/liveViewPanel/liveViewPanel.html'" ng-show="isMenuSelected('LIVEVIEW')"></div>
 	<div ng-include="'partial/spatial/reportsPanel/reportsPanel.html'" ng-show="isMenuSelected('REPORTS')"></div>

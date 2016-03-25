@@ -109,7 +109,7 @@
 			                </button>
 		   				</div>
 		   				<!-- Map configuration -->
-		   				<div class="form-group col-md-3">
+		   				<div class="form-group col-md-3" ng-show="isAllowed('ALLOW_USER_SPATIAL_REPORT_CONFIGURATIONS')">
 		   					<button type="button" class="btn btn-primary btn-sm" style="width:100%;" ng-show="report.withMap || !report " ng-click="openMapConfigurationModal()">
 			                    <span class="fa fa-map-o" aria-hidden="true"></span> &nbsp;
 			                    <span>{{'spatial.reports_form_map_configuration' | i18n }}</span>
