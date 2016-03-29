@@ -71,11 +71,10 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, glob
     //Share report
     $scope.shareReport = function(index, visibility){ 
         var options = {
-            textLabel : locale.getString("spatial.reports_share_report_confirmation_text") + $scope.displayedRecords[index].name.toUpperCase() 
+            textLabel : locale.getString("spatial.reports_share_report_confirmation_text") + $scope.displayedRecords[index].name.toUpperCase()  + '?'
         };
         confirmationModal.open(function(){
-            var record = $scope.displayedRecords[index];      
-            reportRestService.shareReport(record.id, visibility, index).then(refreshSharedReport, getReportsListError);
+            reportRestService.shareReport($scope.displayedRecords[index].id, visibility, index).then(refreshSharedReport, getReportsListError);
         }, options);    
     };
 
