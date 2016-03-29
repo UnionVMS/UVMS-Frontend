@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService, reportService, SpatialConfig){
+angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService, reportService, SpatialConfig, spatialConfigRestService){
     //Report form mode
     $scope.formMode = 'CREATE';
 
@@ -200,9 +200,9 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     
     $scope.runReport = function() {
     	reportService.outOfDate = true;
-    	reportService.runReportWithoutSaving($scope.report);
-    	$scope.$emit('goToLiveView');
-    	$scope.toggleReportForm();
+    	if($scope.report.withMap){
+        	spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
+        }
     };
     
     $scope.saveAsReport = function() {
@@ -395,5 +395,53 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 		}
 	    return layerSettings;
     };
+    
+    var mergeSettings = function(){
+    	var mergedReport = new Report();
+    	angular.copy($scope.report, mergedReport);
+    	
+    	if(!angular.isDefined(mergedReport.mapConfiguration.spatialConnectId) && !angular.isDefined(mergedReport.mapConfiguration.mapProjectionId) && 
+    			!angular.isDefined(mergedReport.mapConfiguration.displayProjectionId) && !angular.isDefined(mergedReport.mapConfiguration.coordinatesFormat) && 
+    			!angular.isDefined(mergedReport.mapConfiguration.scaleBarUnits)){
+    		
+    		mergedReport.mapConfiguration.spatialConnectId = $scope.userConfig.mapSettings.spatialConnectId;
+    		mergedReport.mapConfiguration.mapProjectionId = $scope.userConfig.mapSettings.mapProjectionId;
+    		mergedReport.mapConfiguration.displayProjectionId = $scope.userConfig.mapSettings.displayProjectionId;
+    		mergedReport.mapConfiguration.coordinatesFormat = $scope.userConfig.mapSettings.coordinatesFormat;
+    		mergedReport.mapConfiguration.scaleBarUnits = $scope.userConfig.mapSettings.scaleBarUnits;
+    	}
+    	
+    	if(!angular.isDefined(mergedReport.mapConfiguration.stylesSettings)){
+    		mergedReport.mapConfiguration.stylesSettings = $scope.userConfig.stylesSettings;
+    	}
+    	
+    	if(!angular.isDefined(mergedReport.mapConfiguration.layerSettings)){
+    		mergedReport.mapConfiguration.layerSettings = $scope.userConfig.layerSettings;
+    	}
+    	
+    	if(!angular.isDefined(mergedReport.mapConfiguration.visibilitySettings)){
+    		mergedReport.mapConfiguration.visibilitySettings = $scope.userConfig.visibilitySettings;
+    	}
+    	
+    	return mergedReport;
+    };
+    
+    var getConfigsSuccess = function(response){
+	    $scope.srcConfigObj = response;
+	    var model = new SpatialConfig();
+        $scope.userConfig = model.forUserPrefFromJson(response);
+        var mergedReport = mergeSettings();
+        reportService.runReportWithoutSaving(mergedReport);
+    	$scope.$emit('goToLiveView');
+    	$scope.toggleReportForm();
+	};
+	
+	var getConfigsFailure = function(error){
+	    $anchorScroll();
+	    $scope.alert.hasAlert = true;
+	    $scope.alert.hasError = true;
+	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_error_getting_configs');
+	    $scope.alert.hideAlert();
+	};
     
 });

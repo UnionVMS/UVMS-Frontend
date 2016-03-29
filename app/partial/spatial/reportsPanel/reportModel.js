@@ -31,37 +31,9 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	    
 	    //Spatial configs
         this.mapConfiguration = {
-    		stylesSettings: {
-	            positions: {
-	                attribute: undefined,
-	                style: {}
-	            },
-	            segments: {
-	                attribute: undefined,
-	                style: {}
-	            }
-	        },
-	        layerSettings: {
-	    		additionalLayers: [],
-		        areaLayers: [],
-		        baseLayers: [],
-		        portLayers: []
-	        },
-	        visibilitySettings: {
-	            positions: {
-	                table: {},
-	                popup: {},
-	                labels: {}
-	            },
-	            segments: {
-	                table: {},
-	                popup: {},
-	                labels: {}
-	            },
-	            tracks: {
-	                table: {}
-	            }
-	        }
+    		stylesSettings: undefined,
+	        layerSettings: undefined,
+	        visibilitySettings: undefined
         };
 	}
 

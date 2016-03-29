@@ -38,7 +38,7 @@
 								            dnd-draggable="item"
 								            dnd-type="item.subType"
 								            dnd-effect-allowed="move"
-								            dnd-dragstart="selectedPorts.splice($index, 1);"
+								            dnd-dragstart="layersettingsForm.$setDirty();selectedPorts.splice($index, 1);"
 								            dnd-canceled="selectedPorts.splice($index, 1);">
 								            <div class="handle">:::</div>
     										<div class="item">{{item.name}}</div>
@@ -54,7 +54,7 @@
 							            dnd-draggable="item"
 							            dnd-type="item.areaType"
 							            dnd-effect-allowed="move"
-							            dnd-dragstart="selectedAreas.splice($index, 1);"
+							            dnd-dragstart="layersettingsForm.$setDirty();selectedAreas.splice($index, 1);"
 							            dnd-canceled="selectedAreas.splice($index, 1);"
 							            type='{{item.areaType}}'>
 <!-- 							            ng-if="!(isAdminConfig && item.subType === userarea)"> -->
@@ -72,7 +72,7 @@
 								            dnd-draggable="item"
 								            dnd-type="item.subType"
 								            dnd-effect-allowed="move"
-								            dnd-dragstart="selectedAdditionals.splice($index, 1);"
+								            dnd-dragstart="layersettingsForm.$setDirty();selectedAdditionals.splice($index, 1);"
 								            dnd-canceled="selectedAdditionals.splice($index, 1);">
 								            <div class="handle">:::</div>
     										<div class="item">{{item.name}}</div>
@@ -86,7 +86,7 @@
 								            dnd-draggable="item"
 								            dnd-type="item.subType"
 								            dnd-effect-allowed="move"
-								            dnd-dragstart="selectedBases.splice($index, 1);"
+								            dnd-dragstart="layersettingsForm.$setDirty();selectedBases.splice($index, 1);"
 								            dnd-canceled="selectedBases.splice($index, 1);">
 								            <div class="handle">:::</div>
     										<div class="item">{{item.name}}</div>
@@ -97,8 +97,11 @@
 					    </div>
 					</div>
 				</div>
-				<div class="col-md-12 col-btn-no-padding" ng-show="isUserPreference">
+				<div class="col-md-12 col-btn-no-padding" ng-if="isUserPreference">
 					<button class="btn btn-default pull-right" ng-click="reset()">{{'spatial.settings_reset_btn' | i18n}}</button>
+				</div>
+				<div class="col-md-12 col-btn-no-padding" ng-if="isReportConfig">
+					<button class="btn btn-default pull-right" ng-click="reset()">{{'spatial.settings_clear_btn' | i18n}}</button>
 				</div>
 			</accordion-group>
 		</accordion>

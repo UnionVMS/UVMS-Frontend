@@ -1,6 +1,10 @@
-angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, $timeout, locale, reportConfigs, $modalInstance, SpatialConfig, spatialRestService, spatialConfigAlertService, $anchorScroll, $location) {
+angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, $timeout, locale, reportConfigs, $modalInstance, SpatialConfig, spatialRestService, spatialConfigAlertService, $anchorScroll, $location, spatialConfigRestService) {
 	$scope.isReportConfig = true;
 	$scope.alert = spatialConfigAlertService;
+	$scope.alert.hasAlert = false;
+	$scope.alert.hasError = false;
+	$scope.alert.hasSuccess = false;
+	$scope.alert.hasWarning = false;
 	$scope.loadedAllSettings = false;
 	
     $scope.cancel = function () {
@@ -29,19 +33,45 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     };
 
     $scope.exportMapConfiguration = function () {
-        var exported = {
-        	mapSettings: {
-	            spatialConnectId: angular.isDefined($scope.configModel.mapSettings.spatialConnectId) ? $scope.configModel.mapSettings.spatialConnectId : undefined,
-	            mapProjectionId: $scope.configModel.mapSettings.mapProjectionId,
-	            displayProjectionId: $scope.configModel.mapSettings.displayProjectionId,
-	            coordinatesFormat: $scope.configModel.mapSettings.coordinatesFormat,
-	            scaleBarUnits: $scope.configModel.mapSettings.scaleBarUnits,
-	            stylesSettings: $scope.checkStylesSettings(),
-	            visibilitySettings: $scope.checkVisibilitySettings(),
-	            layerSettings: $scope.configModel.layerSettings
-        	}
-        };
-        
+    	var exported = {};
+    	if($scope.mapConfigurationForm.$dirty){
+    		exported.mapSettings = {};
+    		if($scope.mapConfigurationForm.mapsettingsForm.$dirty){
+    			exported.mapSettings.spatialConnectId = $scope.configModel.mapSettings.spatialConnectId;
+    			exported.mapSettings.mapProjectionId = $scope.configModel.mapSettings.mapProjectionId;
+    			exported.mapSettings.displayProjectionId = $scope.configModel.mapSettings.displayProjectionId;
+    			exported.mapSettings.coordinatesFormat = $scope.configModel.mapSettings.coordinatesFormat;
+    			exported.mapSettings.scaleBarUnits = $scope.configModel.mapSettings.scaleBarUnits;
+    		}else{
+    			exported.mapSettings.spatialConnectId = reportConfigs.mapConfiguration.spatialConnectId;
+    			exported.mapSettings.mapProjectionId = reportConfigs.mapConfiguration.mapProjectionId;
+    			exported.mapSettings.displayProjectionId = reportConfigs.mapConfiguration.displayProjectionId;
+    			exported.mapSettings.coordinatesFormat = reportConfigs.mapConfiguration.coordinatesFormat;
+    			exported.mapSettings.scaleBarUnits = reportConfigs.mapConfiguration.scaleBarUnits;
+    		}
+    		
+    		if($scope.mapConfigurationForm.vmsstylesForm.$dirty){
+    			exported.mapSettings.stylesSettings = $scope.checkStylesSettings();
+    		}else{
+    			exported.mapSettings.stylesSettings = reportConfigs.mapConfiguration.stylesSettings;
+    		}
+    		
+    		if($scope.mapConfigurationForm.layersettingsForm.$dirty){
+    			exported.mapSettings.layerSettings = $scope.configModel.layerSettings;
+    		}else{
+    			exported.mapSettings.layerSettings = reportConfigs.mapConfiguration.layerSettings;
+    		}
+    		
+    		if($scope.mapConfigurationForm.visibilitysettingsForm.$dirty){
+    			exported.mapSettings.visibilitySettings = $scope.checkVisibilitySettings();
+    		}else{
+    			exported.mapSettings.visibilitySettings = reportConfigs.mapConfiguration.visibilitySettings;
+    		}
+    		
+    	}else{
+    		exported.mapSettings = reportConfigs.mapConfiguration;
+    	}
+    	
         return exported;
     };
     
@@ -136,12 +166,17 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 	    	    		visibilities.order.push(visibilityCurrentAttrs[i].value);
 		    		}
 		    		
+		    		if(visibilityCurrentSettings.values){
+		    			$scope.sortArray(visibilityCurrentSettings.values);
+		    		}
+		    		
 		    		if(angular.isDefined(visibilityCurrentSettings.values)){
 			    		for(var j = 0; j < visibilities.order.length; j++){
 		    				if(visibilityCurrentSettings.values.indexOf(visibilities.order[j]) !== -1){
 		    					visibilities.values.push(visibilities.order[j]);
 		    				}
 			    		}
+			    		visibilities.isAttributeVisible = visibilityCurrentSettings.isAttributeVisible;
 			    		angular.copy(visibilities,visibilityCurrentSettings);
 		    		}
 	    		}
@@ -152,14 +187,80 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
         return $scope.configModel.visibilitySettings;
     };
     
-    $modalInstance.rendered.then(function () {
-        $scope.configModel = new SpatialConfig();
-        if (!angular.equals({}, reportConfigs)){
-            $scope.initialConfig = $scope.configModel.forReportConfigFromJson(reportConfigs);
-            angular.copy($scope.initialConfig, $scope.configModel);
+//    $modalInstance.rendered.then(function () {
+//        
+//    });
+    
+    var mergePreferences = function(){
+    	if(!angular.isDefined($scope.initialConfig) || _.isEmpty($scope.initialConfig)){
+    		$scope.configModel = {};
+    		angular.copy($scope.userConfig, $scope.configModel);
+    	}
+    	if(!angular.isDefined($scope.initialConfig.stylesSettings) || _.isEmpty($scope.initialConfig.stylesSettings) || 
+    		!angular.isDefined($scope.initialConfig.stylesSettings.positions) || _.isEmpty($scope.initialConfig.stylesSettings.positions) ||
+    		!angular.isDefined($scope.initialConfig.stylesSettings.segments)){
+    		$scope.configModel.stylesSettings = {};
+    		angular.copy($scope.userConfig.stylesSettings, $scope.configModel.stylesSettings);
+    	}
+    	if(!angular.isDefined($scope.initialConfig.layerSettings) || _.isEmpty($scope.initialConfig.layerSettings)){
+    		$scope.configModel.layerSettings = {};
+    		angular.copy($scope.userConfig.layerSettings, $scope.configModel.layerSettings);
+    	}
+    	if(!angular.isDefined($scope.initialConfig.spatialConnectId) && !angular.isDefined($scope.initialConfig.mapProjectionId) && 
+    			!angular.isDefined($scope.initialConfig.displayProjectionId) && !angular.isDefined($scope.initialConfig.coordinatesFormat) && 
+    			!angular.isDefined($scope.initialConfig.scaleBarUnits)){
+    		$scope.configModel.mapSettings = {};
+    		angular.copy($scope.userConfig.mapSettings, $scope.configModel.mapSettings);
+    	}
+    	if(!angular.isDefined($scope.initialConfig.visibilitySettings) || _.isEmpty($scope.initialConfig.visibilitySettings)){
+    		$scope.configModel.visibilitySettings = {};
+    		angular.copy($scope.userConfig.visibilitySettings, $scope.configModel.visibilitySettings);
+    	}
+    };
+    
+    var getConfigsSuccess = function(response){
+	    $scope.srcConfigObj = response;
+	    var model = new SpatialConfig();
+        $scope.userConfig = model.forUserPrefFromJson(response);
+        mergePreferences();
+        $scope.loadedAllSettings = true;
+	};
+	
+	var getConfigsFailure = function(error){
+	    $anchorScroll();
+	    $scope.alert.hasAlert = true;
+	    $scope.alert.hasError = true;
+	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_error_getting_configs');
+	    $scope.alert.hideAlert();
+	};
+	
+	$scope.sortArray = function(data){
+        var temp = _.clone(data);
+        temp.sort();
+        
+        return temp;
+    };
+    
+    var init = function(){
+    	
+    	$scope.configModel = new SpatialConfig();
+    	$scope.initialConfig = reportConfigs.mapConfiguration;
+        if (!angular.equals({}, reportConfigs.mapConfiguration)){
+        	$scope.configModel = $scope.configModel.forReportConfigFromJson(reportConfigs);
         } else {
             $scope.configModel = $scope.configModel.forReportConfig();
         } 
-        $scope.loadedAllSettings = true;
-    });
+    	
+    	if(!angular.isDefined($scope.initialConfig) || !angular.isDefined($scope.initialConfig.stylesSettings) || !angular.isDefined($scope.initialConfig.layerSettings) ||
+    		!angular.isDefined($scope.initialConfig.visibilitySettings) || !angular.isDefined($scope.initialConfig.spatialConnectId) ||
+    		!angular.isDefined($scope.initialConfig.mapProjectionId) || !angular.isDefined($scope.initialConfig.displayProjectionId) ||
+    		!angular.isDefined($scope.initialConfig.coordinatesFormat) || !angular.isDefined($scope.initialConfig.scaleBarUnits)){
+    		spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
+    	}else{
+    		$scope.loadedAllSettings = true;
+    	}
+    	
+    };
+    
+    init();
 });

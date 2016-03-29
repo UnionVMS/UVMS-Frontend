@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, locale, $anchorScroll, spatialConfigRestService, spatialConfigAlertService){
+angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, locale, $anchorScroll, spatialConfigRestService, spatialConfigAlertService, SpatialConfig, $location){
 
 	$scope.status = {
 		isOpen: false
@@ -44,11 +44,16 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
         var item = {
             layerSettings: {}
         };
-        spatialConfigRestService.resetSettings(item).then(resetSuccess, resetFailure);
+        
+        if($scope.isUserPreference){
+	        spatialConfigRestService.resetSettings(item).then(resetSuccess, resetFailure);
+		}else if($scope.isReportConfig){
+	    	spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
+	    }
     };
     
     var resetSuccess = function(response){
-        //TODO check if this is working properly
+    	$scope.layersettingsForm.$setPristine();
         $scope.configModel.layerSettings = response.layerSettings;
         if (angular.isDefined($scope.configCopy)){
             angular.copy($scope.configModel.layerSettings, $scope.configCopy.layerSettings);
@@ -57,7 +62,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
         $anchorScroll();
         spatialConfigAlertService.hasAlert = true;
         spatialConfigAlertService.hasSuccess = true;
-        spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_success');
+        spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_layers_success');
         spatialConfigAlertService.hideAlert();
     };
     
@@ -65,7 +70,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
         $anchorScroll();
         spatialConfigAlertService.hasAlert = true;
         spatialConfigAlertService.hasError = true;
-        spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_failure');
+        spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_layers_failure');
         spatialConfigAlertService.hideAlert();
     };
     
@@ -145,5 +150,35 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	    	
     	}
     });
+    
+    var getConfigsSuccess = function(response){
+	    $scope.srcConfigObj = response;
+	    var model = new SpatialConfig();
+	    $scope.userConfig = model.forUserPrefFromJson(response);
+	    $scope.configModel.layerSettings = {};
+        if(angular.isDefined($scope.configModel.layerSettings)){
+        	angular.copy($scope.userConfig.layerSettings, $scope.configModel.layerSettings);
+        }
+
+        if($scope.isReportConfig){
+		    $location.hash('mapConfigurationModal');
+			$anchorScroll();
+			$location.hash('');
+        }
+        
+        $anchorScroll();
+	    spatialConfigAlertService.hasAlert = true;
+	    spatialConfigAlertService.hasSuccess = true;
+	    spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_layers_success');
+        spatialConfigAlertService.hideAlert();
+	};
+	
+	var getConfigsFailure = function(error){
+	    $anchorScroll();
+	    $scope.alert.hasAlert = true;
+	    $scope.alert.hasError = true;
+	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_reset_layers_failure');
+	    $scope.alert.hideAlert();
+	};
     
 });
