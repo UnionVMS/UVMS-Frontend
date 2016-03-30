@@ -8,10 +8,10 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     //set visibility types in dropdown option
     $scope.visibilities = [
-           {"text": locale.getString('spatial.reports_table_share_label_private'), "code": "private"},
-           {"text": locale.getString('spatial.reports_table_share_label_scope'), "code": "scope"},
-           {"text": locale.getString('spatial.reports_table_share_label_public'), "code": "public"}
-   ];
+                           {"text": locale.getString('spatial.reports_table_share_label_private'), "code": "private"},
+                           {"text": locale.getString('spatial.reports_table_share_label_scope'), "code": "scope"},
+                           {"text": locale.getString('spatial.reports_table_share_label_public'), "code": "public"}
+                           ];
     
     //Set positions selector dropdown options
     $scope.positionItems = [];
@@ -212,10 +212,20 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     };
     
     $scope.runReport = function() {
-    	reportService.outOfDate = true;
-    	if($scope.report.withMap){
-        	spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
-        }
+    	$scope.submitingReport = true;
+    	$scope.validateRanges();
+    	if($scope.reportForm.reportBodyForm.$valid && $scope.vesselsSelectionIsValid){
+	    	reportService.outOfDate = true;
+	    	spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
+    	}else{
+    		var invalidElm = angular.element('#reportForm')[0].querySelector('.ng-invalid');
+            var errorElm = angular.element('#reportForm')[0].querySelector('.has-error');
+            if (invalidElm){
+                invalidElm.scrollIntoView();
+            } else if (invalidElm === null && errorElm){
+                errorElm.scrollIntoView();
+            }
+    	}
     };
     
     $scope.saveAsReport = function() {

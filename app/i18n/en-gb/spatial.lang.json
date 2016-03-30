@@ -341,6 +341,7 @@
 	"min_value_0_error_message": "Value must be higher than 1",
 	"max_error_message": "'Max' cannot be lower than 'Min'",
 	"invalid_range_error_message": "Must be between 1 and 10 including",
+	"not_numeric_error_message": "Value shall be numeric",
 	
 	"styles_attr_countryCode": "F.S",
 	"styles_attr_type": "Msg. Type",
