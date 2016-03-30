@@ -297,14 +297,14 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
     };
 
     $scope.toSpeedString = function(speedValue) {
-        if (angular.isDefined(speedValue)) {
-            return $filter('speed')(alarm.movement.movement.reportedSpeed) + " " + locale.getString("common.speed_unit_" + $scope.speedUnit);
+        if (angular.isDefined(speedValue) && speedValue !== null) {
+            return $filter('speed')(speedValue) + " " + locale.getString("common.speed_unit_" + $scope.speedUnit);
         }
     };
 
     $scope.toCourseString = function(courseValue) {
-        if (angular.isDefined(courseValue)) {
-            return alarm.movement.movement.reportedCourse + " " + locale.getString("movement.manual_position_field_unit_degrees");
+        if (angular.isDefined(courseValue) && courseValue !== null) {
+            return courseValue + " " + locale.getString("movement.manual_position_field_unit_degrees");
         }
     };
 
