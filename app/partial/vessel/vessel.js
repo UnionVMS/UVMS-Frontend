@@ -26,6 +26,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
     //Init function when entering page
     var init = function(){
         //Load list with vessels
+        searchService.reset();
         $scope.searchVessels();
 
         //Load vessel details
