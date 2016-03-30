@@ -487,47 +487,13 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 //    };
 });
 
-angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale, mapService, spatialHelperService){
-    //Initial mock config object
-    $scope.config = {
-        map: {
-            projection: {
-                epsgCode: 3857, //So far we only support 3857 and 4326
-                units: 'm',
-                global: true,
-                axis: 'enu',
-                extent: '-20026376.39;-20048966.10;20026376.39;20048966.10'
-            },
-            control: [{
-                type: 'zoom'
-            },{
-                type: 'drag'
-            },{
-                type: 'scale',
-                units: 'nautical' //Possible values: metric, degrees, nautical, us, imperial
-            },{
-                type: 'mousecoords',
-                epsgCode: 4326,
-                format: 'dd' //Possible values: dd, dms, ddm, m
-            },{
-                type: 'history'
-            }],
-            tbControl: [{
-                type: 'measure'
-            },{
-                type: 'fullscreen'
-            },{
-                type: 'mapFishPrint'
-            },{
-                type: 'bookmarks'
-            }]
-        }
-    };
-
+angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale, mapService, spatialHelperService, defaultMapConfigs){
     locale.ready('spatial').then(function(){
-        mapService.resetLabelContainers();
-        mapService.setMap($scope.config);
-        $scope.map = mapService.map;
-        spatialHelperService.setToolbarControls($scope.config);
+        if (!angular.isDefined(mapService.map)){
+            mapService.resetLabelContainers();
+            mapService.setMap(defaultMapConfigs);
+            $scope.map = mapService.map;
+            spatialHelperService.setToolbarControls(defaultMapConfigs);
+        }
     });
 });

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, mapService, unitConversionService, vmsVisibilityService) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService) {
 
     var rep = {
        id: undefined,
@@ -81,23 +81,25 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.tabs.map = report.withMap;
         rep.isReportExecuting = true;
         
-        mapService.clearVectorLayers();
-        
-        //Reset history control
-        mapService.getControlsByType('HistoryControl')[0].resetHistory();
-        
-        //Close overlays
-        if (angular.isDefined(mapService.overlay)){
-            mapService.closePopup();
-            mapService.activeLayerType = undefined;
-        }
-        
-        if (mapService.vmsposLabels.active === true){
-            mapService.deactivateVectorLabels('vmspos');
-        }
-        
-        if (mapService.vmssegLabels.active === true){
-            mapService.deactivateVectorLabels('vmsseg'); 
+        if (angular.isDefined(mapService.map)){
+            mapService.clearVectorLayers();
+            
+            //Reset history control
+            mapService.getControlsByType('HistoryControl')[0].resetHistory();
+            
+            //Close overlays
+            if (angular.isDefined(mapService.overlay)){
+                mapService.closePopup();
+                mapService.activeLayerType = undefined;
+            }
+            
+            if (mapService.vmsposLabels.active === true){
+                mapService.deactivateVectorLabels('vmspos');
+            }
+            
+            if (mapService.vmssegLabels.active === true){
+                mapService.deactivateVectorLabels('vmsseg'); 
+            }
         }
 
         rep.getConfigsTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
@@ -152,6 +154,12 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	//Get Spatial config Success callback
 	var getConfigSuccess = function(data){
+	    //This gets executed on initial loading when we have a default report
+	    if (!angular.isDefined(mapService.map)){
+	        mapService.resetLabelContainers();
+	        mapService.setMap(defaultMapConfigs);
+	    }
+	    
 	    //Change map ol.View configuration
 	    if (mapService.getMapProjectionCode() !== 'EPSG:' + data.map.projection.epsgCode){
 	        mapService.updateMapView(data.map.projection);
