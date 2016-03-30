@@ -5,64 +5,60 @@
         .module('unionvmsWeb.longPolling', ['ngResource'])
         .factory('longPolling', LongPolling);
 
-    LongPolling.$inject = ['$resource', '$log', '$filter', 'globalSettingsService'];
-
+    /* @ngInject */
     function LongPolling($resource, $log, $filter, globalSettingsService) {
         var runningLongPollingIds = [];
         var nextLongPollingId = 0;
 
-        var service = {
+        return {
             cancel: cancel,
             poll: poll,
             cancelAll: cancelAll
         };
 
-        return service;
-
-        function isEnabled() {
-            return globalSettingsService.get("longPollingEnabled") === 'true';
-        }
-
-        //Start a long polling request and keep polling until cancelled
-        function poll(path, callback, error) {
-            if (!isEnabled()) {
+        /* Start a long polling request and keep polling until cancelled */
+        function poll(path, callback, error, sessionId) {
+            if (!isLongPollingEnabled()) {
                 return;
             }
 
-            var longPollingId = nextLongPollingId++;
-            runningLongPollingIds.push(longPollingId);
+            if (angular.isUndefined(sessionId)) {
+                sessionId = nextLongPollingId++;
+                runningLongPollingIds.push(sessionId);
+            }
+
             $resource(path).get(function(response) {
-                log('Long-polling completed with path ' + path + ', id = ' + longPollingId);
-                callback(response);
+                log('Long-polling completed with path ' + path + ', sessionId = ' + sessionId);
+                if (angular.isFunction(callback)) {
+                    callback(response);
+                }
 
                 //Keep the longPolling running unless it has been cancelled
-                var index = runningLongPollingIds.indexOf(longPollingId);
-                if(index >= 0){
-                    runningLongPollingIds.splice(index, 1);
-                    poll(path, callback, error);
+                if(runningLongPollingIds.indexOf(sessionId) >= 0){
+                    poll(path, callback, error, sessionId);
                 }
 
-                logSessions();
-            }, function(error) {
-                log('Long-polling failed with path ' + path + ', id = ' + longPollingId);
+            }, function(errorResponse) {
+                log('Long-polling failed with path ' + path + ', sessionId = ' + sessionId);
                 if (angular.isFunction(error)) {
-                    error(error);
+                    error(errorResponse);
                 }
 
+                cancel(sessionId);
                 logSessions();
             });
 
-            log('Long-polling request sent with path ' + path + ', id = ' + longPollingId);
+            log('Long-polling request sent with path ' + path + ', sessionId = ' + sessionId);
             logSessions();
-            return longPollingId;
+            return sessionId;
         }
 
         //Cancel a long polling (meaning no more requests will be sent when the current one is finished)
-        function cancel(id){
-            if(angular.isDefined(id)){
-                var index = runningLongPollingIds.indexOf(id);
+        function cancel(sessionId){
+            if(angular.isDefined(sessionId)){
+                var index = runningLongPollingIds.indexOf(sessionId);
                 if(index >= 0){
-                    log('Long-polling canceled with id = ' + id);
+                    log('Long-polling canceled with sessionId = ' + sessionId);
                     runningLongPollingIds.splice(index, 1);
                     logSessions();
                 }
@@ -73,6 +69,11 @@
             while (runningLongPollingIds.length > 0) {
                 cancel(runningLongPollingIds[0]);
             }
+        }
+
+        /* True iff property longPollingEnabled has string-value 'true' */
+        function isLongPollingEnabled() {
+            return globalSettingsService.get("longPollingEnabled") === 'true';
         }
 
         function logSessions() {
