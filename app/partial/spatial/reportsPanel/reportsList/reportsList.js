@@ -105,13 +105,15 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     
     var setDefaultSuccess = function(response){
         $scope.isLoading = false;
-        $scope.setDefaultRepLocally(reportService.defaultReportId, false);
+        if (reportService.defaultReportId !== 0){
+            $scope.setDefaultRepLocally(reportService.defaultReportId, false);
+        }
         var infoText = locale.getString('spatial.reports_remove_default_report_success');
         if (response.defaultId !== 0){
             $scope.setDefaultRepLocally(response.defaultId, true);
             infoText = locale.getString('spatial.reports_set_default_report_success');
         }
-        reportService.defaultReportId = response.defaultId === 0 ? undefined: response.defaultId;
+        reportService.defaultReportId = response.defaultId;
         $scope.alert.show(infoText, 'success');
     }; 
     

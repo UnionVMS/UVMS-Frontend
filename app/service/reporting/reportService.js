@@ -81,7 +81,12 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.tabs.map = report.withMap;
         rep.isReportExecuting = true;
         
-        if (angular.isDefined(mapService.map)){
+        
+        //This gets executed on initial loading when we have a default report
+        if (!angular.isDefined(mapService.map)){
+            mapService.resetLabelContainers();
+            mapService.setMap(defaultMapConfigs);
+        } else {
             mapService.clearVectorLayers();
             
             //Reset history control
@@ -154,12 +159,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	//Get Spatial config Success callback
 	var getConfigSuccess = function(data){
-	    //This gets executed on initial loading when we have a default report
-	    if (!angular.isDefined(mapService.map)){
-	        mapService.resetLabelContainers();
-	        mapService.setMap(defaultMapConfigs);
-	    }
-	    
 	    //Change map ol.View configuration
 	    if (mapService.getMapProjectionCode() !== 'EPSG:' + data.map.projection.epsgCode){
 	        mapService.updateMapView(data.map.projection);
@@ -189,7 +188,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    //Build tree object and update layer panel
 	    var treeSource = new TreeModel();
 	    treeSource = treeSource.fromConfig(data.map.layers);
-	    $rootScope.$broadcast('updateLayerTreeSource', treeSource);
+	    $timeout(function() {
+	        $rootScope.$broadcast('updateLayerTreeSource', treeSource);
+	    });
 	    
         //map refresh configs
         if (rep.tabs.map === true && angular.isDefined(data.map.refresh)){
@@ -198,7 +199,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         }
         
         mapService.updateMapSize();
-
+        
 	    //Finally load VMS positions and segments
         rep.getReportTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
         var unitSettings = getUnitSettings();

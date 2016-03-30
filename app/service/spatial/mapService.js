@@ -515,17 +515,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         return( layer );
     };
     
-    //Update map extent after loading vector layers if the map tab is active
-    ms.zoomPromise = undefined;
     ms.zoomToPositionsLayer = function(){
         var layerSrc = ms.getLayerByType('vmspos').getSource();
-        ms.zoomPromise = $interval(function(){
-            if (angular.isDefined(layerSrc) && layerSrc.getFeatures().length > 0){
+        var changeListenerKey = layerSrc.on('change', function(e){
+            if (layerSrc.getState() === 'ready' && layerSrc.getFeatures().length > 0){
                 var geom = new ol.geom.Polygon.fromExtent(layerSrc.getExtent());
                 ms.zoomTo(geom);
-                ms.cancelZoomPromise();
+                
+                //Unregister the listener
+                ol.Observable.unByKey(changeListenerKey);
             }
-        }, 1);
+        });
     };
     
     ms.cancelZoomPromise = function(){

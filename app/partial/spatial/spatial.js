@@ -28,15 +28,28 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     };
         
    locale.ready('spatial').then(function(){
+       //reset the map and remove references to it
+       if (angular.isDefined(mapService.map)){
+           mapService.map.setTarget(null);
+           mapService.map = undefined;
+       }
+       
        //let's check for the existence of default reports
        var defaultReportId = $scope.findDefaultReport();
        if (angular.isDefined(defaultReportId)){
-           if (defaultReportId !== 0){
-               $scope.repServ.defaultReportId = defaultReportId;
+           var useId;
+           if (defaultReportId !== 0 && !angular.isDefined($scope.repServ.defaultReportId)){
+               useId = defaultReportId;
+           } else if ($scope.repServ.defaultReportId !== 0){
+               useId = $scope.repServ.defaultReportId;
+           }
+           
+           if (angular.isDefined(useId)){
+               $scope.repServ.defaultReportId = useId;
                $scope.selectedMenu = 'LIVEVIEW';
                $scope.repServ.liveviewEnabled = true;
                $scope.repServ.isReportExecuting = true;
-               reportRestService.getReport(defaultReportId).then(function(response){
+               reportRestService.getReport(useId).then(function(response){
                    $scope.repServ.runReport(response);
                }, function(error){
                    $scope.selectedMenu = 'REPORTS';
