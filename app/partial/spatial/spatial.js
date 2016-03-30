@@ -28,8 +28,47 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     };
         
    locale.ready('spatial').then(function(){
+       //let's check for the existence of default reports
+       var defaultReportId = $scope.findDefaultReport();
+       if (angular.isDefined(defaultReportId)){
+           if (defaultReportId !== 0){
+               $scope.repServ.defaultReportId = defaultReportId;
+               $scope.selectedMenu = 'LIVEVIEW';
+               $scope.repServ.liveviewEnabled = true;
+               $scope.repServ.isReportExecuting = true;
+               reportRestService.getReport(defaultReportId).then(function(response){
+                   $scope.repServ.runReport(response);
+               }, function(error){
+                   $scope.selectedMenu = 'REPORTS';
+                   $scope.repServ.liveviewEnabled = false;
+                   $scope.repServ.isReportExecuting = false;
+                   $scope.repServ.hasError = true;
+                   $scope.repServ.errorLoadingDefault = true;
+                   $timeout(function(){
+                       $scope.repServ.hasError = false;
+                       $scope.repServ.errorLoadingDefault = false;
+                   }, 8000);
+               });
+           }
+       }
        $scope.headerMenus = setMenus();
    });
+   
+   $scope.findDefaultReport = function(){
+       var context = userService.getCurrentContext();
+       var userPref = context.preferences;
+       
+       var defaultId;
+       if (angular.isDefined(userPref)){
+           angular.forEach(userPref.preferences, function(obj) {
+               if (obj.applicationName === 'Reporting' && obj.optionName === 'DEFAULT_REPORT_ID'){
+                   defaultId = parseInt(obj.optionValue); 
+               }
+           });
+       }
+
+       return defaultId;
+   };
    
    $scope.selectMenu = function(menu){
        $scope.selectedMenu = menu;

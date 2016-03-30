@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService, reportService, SpatialConfig, spatialConfigRestService){
+angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, $anchorScroll, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService, reportService, SpatialConfig, spatialConfigRestService, userService){
     //Report form mode
     $scope.formMode = 'CREATE';
 
@@ -8,10 +8,10 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     //set visibility types in dropdown option
     $scope.visibilities = [
-                           {"text": locale.getString('spatial.reports_table_share_label_private'), "code": "private"},
-                           {"text": locale.getString('spatial.reports_table_share_label_scope'), "code": "scope"},
-                           {"text": locale.getString('spatial.reports_table_share_label_public'), "code": "public"}
-                           ];
+           {"text": locale.getString('spatial.reports_table_share_label_private'), "code": "private"},
+           {"text": locale.getString('spatial.reports_table_share_label_scope'), "code": "scope"},
+           {"text": locale.getString('spatial.reports_table_share_label_public'), "code": "public"}
+   ];
     
     //Set positions selector dropdown options
     $scope.positionItems = [];
@@ -39,12 +39,25 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     $scope.submitingReport = false;
 
+    $scope.showSaveBtn = function(){
+        var result = false;
+        if ($scope.getFormMode('CREATE')){
+            result = true;
+        } else {
+            if ((angular.isDefined($scope.reportOwner) && $scope.reportOwner === userService.getUserName()) || $scope.isAllowed('Reporting', 'MANAGA_ALL_REPORTS')){
+                result = true;
+            }
+        }
+        return result;
+    };
+    
     $scope.init = function(){
         $scope.report = new Report();
         $scope.formAlert = {
             visible: false,
             msg: ''
         };
+        $scope.reportOwner = undefined;
         $scope.submitingReport = false;
         $scope.vesselsSelectionIsValid = true;
         $scope.report.vesselsSelection = [];
@@ -239,6 +252,11 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     $scope.$on('openReportForm', function(e, args){
         $scope.init();
+        
+        if (angular.isDefined(args)){
+            $scope.reportOwner = args.report.createdBy;
+        }
+        
         $scope.formMode = 'CREATE';
         $scope.reportForm.$setPristine();
         if (args){

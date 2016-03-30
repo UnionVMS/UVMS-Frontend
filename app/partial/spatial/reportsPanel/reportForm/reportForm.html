@@ -109,7 +109,7 @@
 			                </button>
 		   				</div>
 		   				<!-- Map configuration -->
-		   				<div class="form-group col-md-3" ng-show="isAllowed('ALLOW_USER_SPATIAL_REPORT_CONFIGURATIONS')">
+		   				<div class="form-group col-md-3" ng-show="isAllowed('Spatial', 'ALLOW_USER_SPATIAL_REPORT_CONFIGURATIONS')">
 		   					<button type="button" class="btn btn-primary btn-sm" style="width:100%;" ng-show="report.withMap || !report " ng-click="openMapConfigurationModal()">
 			                    <span class="fa fa-map-o" aria-hidden="true"></span> &nbsp;
 			                    <span>{{'spatial.reports_form_map_configuration' | i18n }}</span>
@@ -135,7 +135,7 @@
 	   					<div class="formSubmitBtn">
 	   						<button class="btn btn-primary button" type="button" ng-show="getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="runReport()">{{"spatial.reports_table_run_label" | i18n }}</button>
 	   						<button class="btn btn-primary button" type="button" ng-show="getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="saveAsReport()">{{"spatial.reports_form_save_as_btn" | i18n }}</button>
-	   						<button class="btn btn-primary button" type="button" ng-click="saveReport()">{{"spatial.reports_form_save_btn" | i18n }}</button>
+	   						<button class="btn btn-primary button" type="button" ng-click="saveReport()" ng-show="showSaveBtn()">{{"spatial.reports_form_save_btn" | i18n }}</button>
 	   					</div>
 	   				</div>
    				</div>

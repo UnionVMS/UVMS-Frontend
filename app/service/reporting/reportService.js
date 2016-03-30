@@ -18,6 +18,8 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             rate: undefined
        },
        selectedTab: 'MAP',
+       defaultReportId: undefined,
+       errorLoadingDefault: false,
        liveviewEnabled: false,
        isLiveViewActive: false,
        outOfDate: undefined,
@@ -102,7 +104,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         if (report.withMap === true){
             spatialRestService.getConfigsForReport(report.id, rep.getConfigsTime).then(getConfigSuccess, getConfigError);
         } else {
-//        	spatialRestService.getConfigsForReportWithoutMap().then(getConfigWithouMapSuccess, getConfigWithouMapError);
             spatialRestService.getConfigsForReportWithoutMap(rep.getConfigsTime).then(getConfigWithouMapSuccess, getConfigWithouMapError); 
         }
 	};

@@ -28,7 +28,8 @@
 		<div class="alert alert-danger alert-container" role="alert">
 			<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
 			<span class="alert-message">
-				<span>{{'spatial.map_error_loading_report' | i18n }}</span>          
+				<span ng-hide="repServ.errorLoadingDefault">{{'spatial.map_error_loading_report' | i18n }}</span>
+				<span ng-show="repServ.errorLoadingDefault">{{'spatial.map_error_loading_default_report' | i18n }}</span>          
 			</span>
 	    </div>
 	</div>

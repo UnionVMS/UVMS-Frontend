@@ -71,6 +71,16 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
 	               }
 	           } 
 	        });
+	    },
+	    setDefaultReport: function(){
+	        return $resource('/reporting/rest/report/default/:id', {}, {
+	            'set': {
+	                method: 'POST',
+	                headers: {
+	                    'Content-Type': 'application/json'
+	                }
+	            }
+	        });
 	    }
 	};
 })
@@ -159,7 +169,21 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
                 deferred.reject(error);
             });
             
-            return deferred.promise;        }
+            return deferred.promise;
+        },
+        setDefaultReport: function(id, override){
+            var deferred = $q.defer();
+            var payload = {
+                override: override
+            };
+            reportRestFactory.setDefaultReport().set({id: id}, angular.toJson(payload), function(response){
+                response.defaultId = id;
+                deferred.resolve(response);
+            }, function(error){
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        }
     };
     
     return reportRestService;

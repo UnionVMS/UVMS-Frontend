@@ -24,7 +24,7 @@ angular.module('unionvmsWeb').factory('reportMsgService', function($timeout){
     return alert;
 });
 
-angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, globalSettingsService, reportMsgService, $anchorScroll, locale, reportRestService, confirmationModal, reportService){
+angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $filter, globalSettingsService, reportMsgService, $anchorScroll, locale, reportRestService, confirmationModal, reportService){
     //config object
     $scope.config = {
         src_format: 'YYYY-MM-DDTHH:mm:ss',
@@ -37,6 +37,9 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, glob
     $scope.reports = [];
     $scope.reportTableInstance = {};
     $scope.searchString = '';
+    
+    $scope.removeDefaultTooltip = locale.getString('spatial.reports_table_remove_default_label');
+    $scope.makeDefaultTooltip = locale.getString('spatial.reports_table_make_default_label');
     
     //General table configuration
     
@@ -66,6 +69,55 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, glob
         } else {
             return false;
         }
+    };
+    
+    //Set default report
+    $scope.makeDefault = function(index){
+        var repId = $scope.displayedRecords[index].id;
+        if (angular.isDefined(reportService.defaultReportId)){
+            var options;
+            var finalRepId;
+            if (reportService.defaultReportId !== repId){
+                options = {
+                    textLabel : locale.getString("spatial.reports_set_default_report_confirmation_text_1") + $scope.displayedRecords[index].name.toUpperCase()  + locale.getString("spatial.reports_set_default_report_confirmation_text_2")
+                };
+                finalRepId = repId;
+            } else {
+                options = {
+                    textLabel : locale.getString("spatial.reports_set_default_report_confirmation_text_3") + $scope.displayedRecords[index].name.toUpperCase()  + locale.getString("spatial.reports_set_default_report_confirmation_text_4")
+                };
+                finalRepId = 0;
+            }
+            confirmationModal.open(function(){
+                $scope.isLoading = true;
+                reportRestService.setDefaultReport(finalRepId, true).then(setDefaultSuccess, setDefaultError);
+            }, options);
+        } else {
+            $scope.isLoading = true;
+            reportRestService.setDefaultReport(repId, true).then(setDefaultSuccess, setDefaultError);
+        }
+    };
+    
+    $scope.setDefaultRepLocally = function(id, status){
+        var rec = $filter('filter')($scope.reports, {id: id})[0];
+        rec.isDefault = status;
+    };
+    
+    var setDefaultSuccess = function(response){
+        $scope.isLoading = false;
+        $scope.setDefaultRepLocally(reportService.defaultReportId, false);
+        var infoText = locale.getString('spatial.reports_remove_default_report_success');
+        if (response.defaultId !== 0){
+            $scope.setDefaultRepLocally(response.defaultId, true);
+            infoText = locale.getString('spatial.reports_set_default_report_success');
+        }
+        reportService.defaultReportId = response.defaultId === 0 ? undefined: response.defaultId;
+        $scope.alert.show(infoText, 'success');
+    }; 
+    
+    var setDefaultError = function(error){
+        $scope.isLoading = false;
+        $scope.alert.show(locale.getString('spatial.reports_set_default_report_error'), 'error');
     };
 
     //Share report
@@ -106,7 +158,6 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, glob
     });
     
     $scope.loadReportList = function(){
-//      $scope.reports = [];
         $scope.isLoading = true;
         reportRestService.getReportsList().then(getReportsListSuccess, getReportsListError);
     };

@@ -62,9 +62,10 @@
 	            	</td>
 		            <td class="no-wrap-white-space">
 	                    <button type="button" class="btn btn-success btn-xs btn-bottom-mg" ng-click="runReport($index)"><span class="run-report">{{'spatial.reports_table_run_label' | i18n }}</span></button>
-	                    <button type="button" class="btn btn-primary btn-xs btn-bottom-mg" title="{{'spatial.reports_table_config_label' | i18n }}" ng-click="showFilters($index)" ng-show="{{ report.editable }}"><span class="fa fa-cog"></span></button>
-	                   <!-- <button type="button" class="btn btn-primary btn-xs btn-bottom-mg" title="{{'spatial.reports_table_share_label' | i18n }}" ng-click="shareReport($index)" ng-show="{{ report.shareable }}"><span class="fa fa-share-alt"></span></button>
-	                     Single button -->
+	                    <button type="button" class="btn btn-primary btn-xs btn-bottom-mg" title="{{'spatial.reports_table_config_label' | i18n }}" ng-click="showFilters($index)"><span class="fa fa-cog"></span></button>
+	                    <button type="button" class="btn btn-xs btn-bottom-mg" ng-class="{'btn-primary': !report.isDefault, 'btn-warning': report.isDefault}" ng-attr-title="{{report.isDefault ? removeDefaultTooltip : makeDefaultTooltip}}" ng-click="makeDefault($index)">
+	                    	<span class="fa fa-star"></span>
+	                    </button>
 						<div class="btn-group" ng-show="{{report.shareable && report.shareable.length > 0}}">
 						  <!--<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >-->
 						  <button type="button" class="btn btn-primary btn-xs btn-bottom-mg" title="{{'spatial.reports_table_share_label' | i18n }}" data-toggle="dropdown" aria-haspopup="true" ><span class="fa fa-share-alt"></span></button>
