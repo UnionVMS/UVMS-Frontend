@@ -30,9 +30,6 @@ angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($s
     $scope.$watch('configModel.mapSettings.displayProjectionId', function (newVal, oldVal) {
         if (angular.isDefined(newVal)){
             if (newVal !== oldVal && angular.isDefined($scope.projections.items)){
-                if ($scope.projectionSelected === true){
-                    $scope.configModel.mapSettings.coordinatesFormat = undefined;
-                }
                 $scope.projections.setCoordinatesUnitItems(newVal);
                 $scope.projectionSelected = true;
             }
