@@ -1,0 +1,43 @@
+<div class="modal-header" style="text-align:left">
+    <div class="pointer pull-right" ng-click="cancel()">
+        <i class="fa fa-times closeicon"></i>
+    </div>
+    <h4 class="modal-title">{{ 'alarms.position_report_header' | i18n }}</h4>
+</div>
+
+<div class="modal-body">
+
+    <!-- Status -->
+    {{'common.status' | i18n}} <span class="label" ng-class="getStatusLabelClass(alarm.status)">{{getStatusLabel(alarm.status) | uppercase}}</span>
+
+    <!-- Asset section -->
+    <div class="sectionHeader">{{'alarms.position_report_asset_information' | i18n}}</div>
+    <div class="row">
+        <div alarm-report-field="'movement.manual_position_field_label_flag_state'" field-value="alarm.vessel.countryCode" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_ircs'" field-value="alarm.vessel.ircs" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_cfr'" field-value="alarm.vessel.cfr" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_external_marking'" field-value="alarm.vessel.externalMarking" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_name'" field-value="alarm.vessel.name" class="col-md-3"></div>
+    </div>
+
+    <!-- Movement section -->
+    <div class="sectionHeader">{{'alarms.position_report_position_information' | i18n}}</div>
+    <div class="row loadingMovementContainer" ng-show="loadingMovement">
+        <div class="col-md-12" loading-indicator="loadingMovement" type="SPINNER" size="small"></div>
+    </div>
+    <div class="row" ng-hide="loadingMovement || loadingMovementError">
+        <div alarm-report-field="'movement.manual_position_field_label_status'" field-value="alarm.movement.movement.status" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_date_time'" field-value="alarm.movement.time.getResolvedDate() | confDateFormat" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_latitude'" field-value="alarm.movement.movement.latitude" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_longitude'" field-value="alarm.movement.movement.longitude" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_measured_speed'" field-value="toSpeedString(alarm.movement.movement.reportedSpeed)" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_course'" field-value="toCourseString(alarm.movement.movement.reportedCourse)" class="col-md-3"></div>
+    </div>
+
+    <!-- Map -->
+    <div class="mapContainer" ng-if="!loadingMovement && !loadingMovementError">
+        <leaflet center="center" markers="markers" height="200px" width="100%"></leaflet>
+    </div>
+</div>
+
+<div class="modal-footer"></div>
