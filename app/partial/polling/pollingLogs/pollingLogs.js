@@ -56,6 +56,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     };
 
     var init = function(){
+        searchService.reset();
         $scope.pollId = $stateParams.id;
         //Load poll details by searching for a poll by GUID
         if(angular.isDefined($scope.pollId)){

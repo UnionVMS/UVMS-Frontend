@@ -110,6 +110,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
 
     //Init function when entering page
     var init = function(){
+        searchService.reset();
 
         //GET mobileterminal GUID from URL and load details for that MobileTerminal
         var mobileTerminalGUID = $stateParams.id;
