@@ -4,9 +4,9 @@ angular.module('unionvmsWeb').directive('currentTime', function(dateTimeService,
 		link: function(scope, element, attrs, fn) {
             //Update time string
             function updateText(){
-                //Create new UTC date and format the output
-                var time = dateTimeService.formatAccordingToUserSettings(moment.utc());
-                element.text(time);
+                //Create new UTC date and format the output.
+                var time = dateTimeService.format(moment.utc());
+                element.text(time + " (UTC)");
             }
 
             //Update every second

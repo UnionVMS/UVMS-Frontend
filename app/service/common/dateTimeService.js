@@ -7,6 +7,16 @@ angular.module('unionvmsWeb').factory('dateTimeService',['$log', 'globalSettings
 
     //Value when moment.js fails to format a date
     var INVALID_DATE = 'Invalid date';
+    var DEFAULT_FORMAT = 'YYYY-MM-DD HH:mm';
+
+    function getFormat() {
+        var format = globalSettingsService.getDateFormat();
+        if (!angular.isString(format) || format.trim().length < 6) {
+            return DEFAULT_FORMAT;
+        }
+
+        return format;
+    }
 
     var dateTimeService = {
         //Convert dateTime (with timezone) to dateTime in UTC without timezone
@@ -73,14 +83,9 @@ angular.module('unionvmsWeb').factory('dateTimeService',['$log', 'globalSettings
                 //Format in UTC
                 dateTimeInput = this.toUTC(dateTimeInput);
 
-                //Get format from global settings
-                var format = globalSettingsService.getDateFormat();
-                if(typeof format !== 'string' || format.trim().length < 6){
-                    format = 'YYYY-MM-DD HH:mm';
-                }
                 var formatted = moment.utc(dateTimeInput, "YYYY-MM-DD HH:mm:ss");
                 formatted.utcOffset(Number(globalSettingsService.getTimezone()));
-                formatted = formatted.format(format);
+                formatted = formatted.format(getFormat());
                 if(formatted !== INVALID_DATE){
                     output = formatted;
                 }
@@ -103,6 +108,9 @@ angular.module('unionvmsWeb').factory('dateTimeService',['$log', 'globalSettings
             var m = moment.utc(utcDateTime, "YYYY-MM-DD HH:mm Z");
             m.utcOffset(globalSettingsService.getTimezone());
             return m.format("YYYY-MM-DD HH:mm");
+        },
+        format: function(date) {
+            return moment(date).format(getFormat());
         }
     };
 
