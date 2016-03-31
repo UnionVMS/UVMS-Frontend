@@ -834,24 +834,6 @@ unionvmsWebApp.config(function ($httpProvider) {
     $httpProvider.interceptors.push('HttpRequestRESTCallInterceptor');
 });
 
-
-//Config authInterceptor
-unionvmsWebApp.config(['$httpProvider', 'authInterceptorProvider', function Config($httpProvider, authInterceptorProvider, $log) {
-    // Please note we're annotating the function so that the $injector works when the file is minified
-    //Dont show renew panel
-    authInterceptorProvider.injectPanel = false;
-
-/*    authInterceptorProvider.authFilter = ['config', '$log', function (config, $log) {
-        //myService.doSomething();
-
-        var skipURL = /^(template|usm|assets|common).*?\.(html|json)$/i.test(config.url);
-        var logmsg = skipURL?'SKIPPING':'setting auth';
-        $log.debug('authFilter '+ logmsg +' on url :' + config.url);
-        return skipURL;
-    }];*/
-
-}]);
-
 //Config login/logout
 unionvmsWebApp.config(['authRouterProvider',function(authRouterProvider){
     //authRouterProvider.anonRoute = "/anon";
