@@ -125,8 +125,8 @@ describe('OpenticketsCtrl', function() {
         }));
     });
 
-    it('showOnMap should open modal for viewing the ticket', inject(function($rootScope, Ticket, AlarmReportModal) {
-        var modalSpy = spyOn(AlarmReportModal, "show").andReturn();
+    it('showOnMap should open modal for viewing the ticket', inject(function($rootScope, Ticket, TicketModal) {
+        var modalSpy = spyOn(TicketModal, "show").andReturn();
         var controller = createController();
 
         //Create a ticket
