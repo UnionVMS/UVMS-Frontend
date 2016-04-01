@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anchorScroll, locale, SpatialConfig, spatialConfigRestService, spatialConfigAlertService){
+angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anchorScroll, locale, SpatialConfig, spatialConfigRestService, spatialConfigAlertService, loadingStatus){
     $scope.isUserPreference = true;
 	$scope.isConfigVisible= false;
 	$scope.alert = spatialConfigAlertService;
@@ -21,6 +21,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		$scope.toggleUserPreferences();
 		$scope.previousSelection = previousSelection;
 		if (!angular.isDefined($scope.configModel)){
+			loadingStatus.isLoading('Preferences',true);
 		    spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
 		}
 	});
@@ -341,6 +342,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
         $scope.configCopy = {};
         angular.copy($scope.configModel, $scope.configCopy);
         $scope.loadedAllSettings = true;
+        loadingStatus.isLoading('Preferences',false);
 	};
 	
 	var getConfigsFailure = function(error){
@@ -349,6 +351,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    $scope.alert.hasError = true;
 	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_error_getting_configs');
 	    $scope.alert.hideAlert();
+	    loadingStatus.isLoading('Preferences',false);
 	};
 	
 });

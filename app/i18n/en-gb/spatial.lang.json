@@ -369,11 +369,12 @@
 	"previous": "Previous",
 	"next": "Next",
 	"more_details": "More...",
-	
+
 	"popup_alarms_title": "Alarm details",
 	"rule_name": "Name",
 	"rule_definition": "Rule",
 	"rule_open_date": "Opened on",
 	"rule_update_date": "Updated on",
-	"rule_updated_by": "Updated by"
+	"rule_updated_by": "Updated by",
+	"loading_preferences": "Loading preferences"
 }

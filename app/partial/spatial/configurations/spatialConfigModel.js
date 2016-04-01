@@ -120,6 +120,11 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     		config.segmentStyle = undefined;
 		}
         
+        //TODO save alarmStyles 
+        if(angular.isDefined(config.alarmStyle)){
+    		delete config.alarmStyle;
+		}
+        
         if(angular.isDefined(config.visibilitySettings)){
     	    var visibilityTypes = ['position','segment','track'];
     	    var contentTypes = ['Table','Popup','Label'];

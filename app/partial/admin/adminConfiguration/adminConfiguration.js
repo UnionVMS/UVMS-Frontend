@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scope, $stateParams, $resource, alertService, spatialConfigRestService, SpatialConfig){
+angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scope, $stateParams, $resource, alertService, spatialConfigRestService, SpatialConfig, loadingStatus){
 	$scope.isAudit = false;
 	$scope.activeTab = $stateParams.module || "systemMonitor";
 	$scope.loadedAllSettings = false;
@@ -40,12 +40,14 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 			$scope.tabs = ["systemMonitor", "globalSettings", "reporting"].concat(modules);
 		});
 		
+		loadingStatus.isLoading('Preferences',true);
 		spatialConfigRestService.getAdminConfigs().then(function(response){
 		    var model = new SpatialConfig();
 		    $scope.configModel = model.forAdminConfigFromJson(response);
 		    $scope.configCopy = {};
 	        angular.copy($scope.configModel, $scope.configCopy);
 		    $scope.loadedAllSettings = true;
+		    loadingStatus.isLoading('Preferences',false);
 		});
 	};
 
