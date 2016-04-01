@@ -26,6 +26,7 @@
 	"map_tip_enable": "Enable",
 	"map_tip_disable": "Disable",
 	"map_tip_graticule": "map graticule",
+	"map_tip_get_alarms": "Fetch alarms for the current map extent",
 	"map_bookmarks_table_name_header": "Name",
 	"map_bookmarks_remove": "Remove bookmark",
 	"map_bookmarks_add_input_placeholder": "New bookmark name",
@@ -66,6 +67,8 @@
     "map_no_vms_data": "No VMS data was retrieved with you current report configuration.",
     "print_legend_title": "Legend",
     "print_copyright_title": "Copyright",
+    "alarms_copyright": "Alarms from UnionVMS",
+    "alarms_long_copyright": "Alarms from UnionVMS",
     "vms_positions_copyright": "VMS Positions from UnionVMS",
     "vms_positions_long_copyright": "VMS Positions from UnionVMS",
     "vms_segments_copyright": "VMS Segments from UnionVMS",
@@ -257,6 +260,7 @@
 	"layer_panel_legend": "LEGEND",
 	"layer_panel_copyright": "\u00A9",
 	"layer_tree_vms": "VMS",
+	"layer_tree_alarms": "Alarms",
 	"layer_tree_areas": "Areas",
 	"layer_tree_system_areas": "System areas",
 	"layer_tree_user_areas": "User areas",
@@ -281,6 +285,10 @@
 	"layer_tree_bing_aerial": "Bing Aerial",
 	"layer_tree_bing_aerial_labels": "Bing Aerial with labels",
 	"legend_panel_all_other_values": "All other values",
+	"legend_panel_alarms_open": "Open",
+	"legend_panel_alarms_closed": "Closed",
+	"legend_panel_alarms_pending": "Pending",
+	"legend_panel_alarms_none": "None",
 	"user_preferences": "User preferences",
 	"preferences_scale_units": "Scale units",
 	"preferences_auto_refresh_rate": "Auto refresh rate (minutes)",
@@ -353,11 +361,18 @@
 	"styles_attr_distance": "Distance",
 	"styles_attr_speedOverGround": "Speed",
 	"styles_attr_courseOverGround": "Course",
+	"styles_attr_status": "Status",
 	
 	"line_style": "Line style",
 	"line_width": "Line width",
 	
 	"previous": "Previous",
 	"next": "Next",
-	"more_details": "More..."
+	"more_details": "More...",
+	
+	"popup_alarms_title": "Alarms",
+	"rule_definition": "Rules definition",
+	"rule_open_date": "Opened on",
+	"rule_update_date": "Updated on",
+	"rule_updated_by": "Updated by"
 }

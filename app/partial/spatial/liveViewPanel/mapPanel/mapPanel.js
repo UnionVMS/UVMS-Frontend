@@ -361,6 +361,11 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         $scope.graticuleTip = [firstTitle, locale.getString('spatial.map_tip_graticule')].join(' ');
     };
     
+    //Fetch alarms
+    $scope.getAlarms = function(){
+        reportService.getAlarms();
+    };
+    
     //Bookmarks control
     $scope.bookmarksEnable = function(){
     	spatialRestService.getBookmarkList().then(bookmarkListSuccess,bookmarkListError);

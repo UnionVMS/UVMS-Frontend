@@ -205,7 +205,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	        var records = [];
 	        
 	        //get feature info
-	        if (angular.isDefined(ms.activeLayerType) && ((ms.activeLayerType === 'vmspos' && ms.popupVisibility.positions.length > 0) || (ms.activeLayerType === 'vmsseg' && ms.popupVisibility.segments.length > 0))){
+	        if (angular.isDefined(ms.activeLayerType) && ((ms.activeLayerType === 'vmspos' && ms.popupVisibility.positions.length > 0) || (ms.activeLayerType === 'vmsseg' && ms.popupVisibility.segments.length > 0) || ms.activeLayerType === 'alarms')){
 	            map.forEachFeatureAtPixel(pixel, function(feature, layer){
 	                if (angular.isDefined(ms.activeLayerType)){
 	                    if (layer !== null && layer.get('type') === ms.activeLayerType){
@@ -221,7 +221,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	                        } else{
 	                            records.push({
 	                                data: feature.getProperties(),
-	                                coord: feature.getGeometry().getClosestPoint(coordinate),
+	                                coord: ms.activeLayerType === 'vmsseg' ? feature.getGeometry().getClosestPoint(coordinate) : feature.getGeometry().getCoordinates(),
 	                                fromCluster: false
 	                            });
 	                        }
@@ -257,6 +257,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	                    data = ms.setSegmentsObjPopup(record.data);
 	                    ms.popupSegRecContainer.records = records;
 	                    ms.popupSegRecContainer.currentIdx = 0;
+	                } else if (ms.activeLayerType === 'alarms'){
+	                    data = ms.setAlarmsObjPopup(record.data);
+	                    ms.popupAlarmRecContainer.records = records;
+                        ms.popupAlarmRecContainer.currentIdx = 0;
 	                }
 	                ms.requestPopupTemplate(data, record.coord, record.fromCluster);
 	            }
@@ -388,6 +392,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             case 'vmspos'://'POSITIONS':
                 layer = ms.createPositionsLayer( config );
                 break;
+            case 'alarms':
+                layer = ms.createAlarmsLayer( config );
+                break;
             default:
         }
 
@@ -481,6 +488,28 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             ms.mapGraticule.setMap(ms.map);
         }
     };
+    
+    //Add alarms layer
+    ms.createAlarmsLayer = function(config){
+        var source = new ol.source.Vector({
+            features: (new ol.format.GeoJSON()).readFeatures(config.geoJson)
+        });
+        
+        var attribution = new ol.Attribution({
+            html: locale.getString('spatial.alarms_copyright')
+        });
+        
+        var layer = new ol.layer.Vector({
+            title: config.title,
+            type: config.type,
+            longAttribution: config.longAttribution,
+            isBaseLayer: false,
+            source: source,
+            style: ms.setAlarmsStyle 
+        });
+        
+        return( layer );
+    };
 
     //Add VMS positions layer
     ms.createPositionsLayer = function( config ) {
@@ -505,7 +534,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             title: config.title,
             type: config.type,
             longAttribution: config.longAttribution,
-            isBaseLayer: false,
+            isBaseLayer: config.isBaseLayer,
             source: cluster,
             style: ms.setClusterStyle
         });
@@ -556,7 +585,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             title: config.title,
             type: config.type,
             longAttribution: config.longAttribution,
-            isBaseLayer: false,
+            isBaseLayer: config.isBaseLayer,
             source: new ol.source.Vector({
                 attributions: [attribution],
                 features: (new ol.format.GeoJSON()).readFeatures(config.geoJson, {
@@ -753,7 +782,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     //VMS styles
     ms.styles = {
         positions: undefined,
-        segments: undefined
+        segments: undefined,
+        alarms: {
+            size: 4,
+            open: '#FF0000',
+            closed: '#008000',
+            pending: '#FFA500',
+            none: '#198BAF'
+        }
     };
     
     
@@ -1167,6 +1203,33 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         
 
         return style;
+    };
+    
+    //Styles methods for alarms
+    ms.setAlarmsStylesObj = function(styles){
+        ms.styles.alarms = styles;
+    };
+    
+    ms.getColorByStatus = function(src, status){
+        return src[status.toLowerCase()];
+    };
+    
+    ms.setAlarmsStyle = function(feature, resolution){
+        var color = ms.getColorByStatus(ms.styles.alarms, feature.get('ticketStatus'));
+        var style = new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: 2 * ms.styles.alarms.size,
+                fill: new ol.style.Fill({
+                    color: color
+                }),
+                stroke: new ol.style.Stroke({
+                    color: 'white',
+                    width: 2
+                })
+            })
+        });
+        
+        return [style];
     };
 
     //MAP FUNCTIONS
@@ -2379,6 +2442,63 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             spd: unitConversionService.speed.formatSpeed(data.speedOverGround, 5),
             crs: data.courseOverGround + '\u00b0',
             cat: data.segmentCategory
+        };
+    };
+    
+    //POPUP - alarms
+    ms.popupAlarmRecContainer = {
+        records: [],
+        currentIdx: undefined,
+        reset: function(){
+            this.records = [];
+            this.currentidx = undefined;
+        }
+    };
+    
+    //Define the object that will be used in the popup for alarms
+    ms.setAlarmsObjPopup = function(feature){
+        var titles = ms.getAlarmTitles();
+        var srcData = ms.formatAlarmDataForPopup(feature);
+        
+        return {
+            windowTitle: locale.getString('spatial.popup_alarms_title'),
+            titles: titles,
+            alarm: srcData
+        };
+    };
+    
+    //Popup attribute names for alarms
+    ms.getAlarmTitles = function(){
+        return {
+            name: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
+            fs: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
+            extMark: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
+            ircs: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'),
+            cfr: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'),
+            ruleDef: locale.getString('spatial.rule_definition'),
+            ruleDesc: locale.getString('spatial.reports_table_header_description'),
+            ruleName: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
+            openDate: locale.getString('spatial.rule_open_date'),
+            status: locale.getString('spatial.styles_attr_status'),
+            updateDate: locale.getString('spatial.rule_update_date'),
+            updatedBy: locale.getString('spatial.rule__updated_by')
+        };
+    };
+    
+    ms.formatAlarmDataForPopup = function(data){
+        return {
+            name: data.name,
+            fs: data.fs,
+            extMark: data.extMark,
+            ircs: data.ircs,
+            cfr: data.cfr,
+            ruleDef: data.ruleDefinitions,
+            ruleDesc: data.ruleDesc,
+            ruleName: data.ruleName,
+            openDate: data.ticketOpenDate,
+            status: data.ticketStatus,
+            updateDate: data.ticketUpdateDate,
+            updatedBy: data.ticketUpdatedBy
         };
     };
 

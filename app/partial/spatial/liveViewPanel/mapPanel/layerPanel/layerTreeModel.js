@@ -374,6 +374,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	            excludeDnd: true,
 	            title: type,
 	            type: type === 'positions' ? 'vmspos' : 'vmsseg',
+	            isBaseLayer: false,
 	            popupEnabled: true,
 	            popupTip: 'spatial.layer_tree_tip_popup',
 	            labelEnabled: true,
@@ -408,6 +409,30 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
             
             return node;
 	    }
+	};
+	
+	//Build node for alarms
+	TreeModel.prototype.nodeForAlarms = function(data){
+	    var longCopyright = locale.getString('spatial.alarms_long_copyright');
+	    var title = locale.getString('spatial.layer_tree_alarms'); 
+	    var node = {
+	        title: title,
+	        type: 'alarms',
+	        folder: false,
+	        selected: true,
+	        extraClasses: 'layertree-alarms',
+	        data: {
+	            excludeDnd: true,
+                title: title,
+                type: 'alarms',
+                popupEnabled: true,
+                popupTip: 'spatial.layer_tree_tip_popup',
+                longAttribution: longCopyright.length > 0 ? longCopyright : undefined,
+                geoJson: data
+	        }
+	    };
+	    
+	    return node;
 	};
 	
 	return TreeModel;

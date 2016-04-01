@@ -36,7 +36,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
        
        //let's check for the existence of default reports
        var defaultReportId = $scope.findDefaultReport();
-       if (angular.isDefined(defaultReportId)){
+       if (!_.isNaN(defaultReportId)){
            var useId;
            if (defaultReportId !== 0 && !angular.isDefined($scope.repServ.defaultReportId)){
                useId = defaultReportId;

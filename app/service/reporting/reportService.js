@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService) {
 
     var rep = {
        id: undefined,
@@ -129,10 +129,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	};
 	
 	rep.refreshReport = function(){
+	    //TODO extend this to support local changes
 	    if (angular.isDefined(rep.id) && rep.tabs.map === true ){
 	        $rootScope.$broadcast('removeVmsNodes'); 
 	        rep.isReportExecuting = true;
-	        var repConfig = getUnitSettings();
+	        var repConfig = getRepConfig();
 	        reportRestService.executeReport(rep.id, repConfig).then(updateVmsDataSuccess, updateVmsDataError);
 	    }
 	};
@@ -147,6 +148,15 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
            rep.setAutoRefresh();
         }, rep.refresh.rate*60*1000); //timeout in minutes
 
+    };
+    
+    rep.getAlarms = function(){
+        //TODO loading and check if we have paylod
+        var payload = mapAlarmsService.prepareDataForRequest();
+        mapAlarmsService.getAlarms(payload).then(getAlarmsSuccess, function(error){
+            console.log(error);
+            //TODO
+        });
     };
 	
 	var getUnitSettings = function(){
@@ -173,6 +183,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    //Set the styles for vector layers and legend
 	    mapService.setPositionStylesObj(data.vectorStyles.positions); 
 	    mapService.setSegmentStylesObj(data.vectorStyles.segments);
+	    //mapService.setAlarmsStylesObj(data.vectorStyles.alarms); FIXME
 	    
 	    //Set vms table attribute visibility
 	    vmsVisibilityService.setVisibility(data.visibilitySettings);
@@ -202,13 +213,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         
 	    //Finally load VMS positions and segments
         rep.getReportTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
-        var unitSettings = getUnitSettings();
-        var repConfig = {'speedUnit': unitSettings.speedUnit,
-        		'distanceUnit': unitSettings.distanceUnit,
-        		'additionalProperties': {
-		        	'timestamp': unitSettings.timestamp
-		        }
-        };
+        var repConfig = getRepConfig();
         
 	    reportRestService.executeReport(rep.id,repConfig).then(getVmsDataSuccess, getVmsDataError);
 
@@ -225,19 +230,24 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         $timeout(function(){rep.hasError = false;}, 3000);
 	};
 	
+	var getRepConfig = function(){
+	    var unitSettings = getUnitSettings();
+	    return {
+	        'speedUnit': unitSettings.speedUnit,
+            'distanceUnit': unitSettings.distanceUnit,
+            'additionalProperties': {
+                'timestamp': unitSettings.timestamp
+            }
+	    };
+	};
+	
 	//Get config without map Success callback
     var getConfigWithouMapSuccess = function(data){
         //Set vms table attribute visibility
         vmsVisibilityService.setVisibility(data.visibilitySettings);
         
         rep.getReportTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
-        var unitSettings = getUnitSettings();
-        var repConfig = {'speedUnit': unitSettings.speedUnit,
-        		'distanceUnit': unitSettings.distanceUnit,
-        		'additionalProperties': {
-		        	'timestamp': unitSettings.timestamp
-		        }
-        };
+        var repConfig = getRepConfig();
         reportRestService.executeReport(rep.id,repConfig).then(getVmsDataSuccess, getVmsDataError);
     };
     
@@ -246,6 +256,28 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.isReportExecuting = false;
         rep.hasError = true;
         $timeout(function(){rep.hasError = false;}, 3000);
+    };
+    
+    //Get Alarms data Success callback
+    var getAlarmsSuccess = function(response){
+        var featureCollection = response.data.alarms;
+        
+        if (featureCollection.features.length > 0){
+            //Check if alarms layer is already added to the map
+            var layer = mapService.getLayerByType('alarms');
+            if (angular.isDefined(layer)){ //if so we clear all features and add new ones
+                var src = layer.getSource();
+                src.clear();
+                var features = (new ol.format.GeoJSON()).readFeatures(featureCollection);
+                src.addFeatures(features);
+            } else { //if not we create the layer and add the node to the tree
+                var alarmsNode = new TreeModel();
+                alarmsNode = alarmsNode.nodeForAlarms(featureCollection);
+                $rootScope.$broadcast('addLayerTreeNode', alarmsNode);
+            }
+        } else {
+            //TODO display message no alarms founded
+        }
     };
 	
 	//Get VMS data Success callback

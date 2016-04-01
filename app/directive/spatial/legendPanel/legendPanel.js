@@ -50,6 +50,19 @@ angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapServi
 		        return record;
 		    };
 		    
+		    //Alarms
+		    this.buildRecAlarms = function(layer){
+		        var record = {
+                    title: layer.get('title'),
+                    subtitle: locale.getString('spatial.styles_attr_status'),
+                    type: 'alarms',
+                    visibility: layer.get('visible'),
+                    styles: this.getAlarmStyles()
+                };
+                
+                return record;
+		    };
+		    
 		    this.getSubtitle = function(type){
 		        var srcDef = mapService.styles[type];
 		        var withSpeed = ['reportedSpeed', 'calculatedSpeed', 'speedOverGround'];
@@ -70,6 +83,24 @@ angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapServi
 		        }
 		        
 		        return subTitle;
+		    };
+		    
+		    //Get styles for alarms
+		    this.getAlarmStyles = function(){
+		        var srcDef = mapService.styles.alarms;
+		        var keys = Object.keys(srcDef);
+		        
+		        var finalStyles = [];
+		        for (var i = 0; i < keys.length; i++){
+		            if (keys[i] !== 'size'){
+		                finalStyles.push({
+		                   title: locale.getString('spatial.legend_panel_alarms_' + keys[i]),
+		                   color: {"color": srcDef[keys[i]]}
+		                });
+		            }
+		        }
+		        
+		        return finalStyles;
 		    };
 		    
 		    //Get styles definition for both positions and segments as type
@@ -157,6 +188,11 @@ angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapServi
 	                            case 'vmsseg':
 	                                if (layer.getSource().getFeatures().length !== 0){
 	                                    records.push(this.buildRecVmsSeg(layer));
+                                    }
+                                    break;
+	                            case 'alarms':
+	                                if (layer.getSource().getFeatures().length !== 0){
+                                        records.push(this.buildRecAlarms(layer));
                                     }
                                     break;
 	                            default:
