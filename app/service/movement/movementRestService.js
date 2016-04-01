@@ -217,7 +217,7 @@ angular.module('unionvmsWeb')
                 }
                 deferred.resolve(response.data);
             }, function(error){
-                console.error("Error geting configuration values for movement.");
+                console.error("Error getting configuration values for movement.");
                 deferred.reject(error);
             });
         return deferred.promise;

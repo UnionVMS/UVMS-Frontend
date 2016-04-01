@@ -250,7 +250,7 @@ angular.module('unionvmsWeb')
                 }
                 deferred.resolve(response.data);
             }, function(error){
-                console.error("Error geting configuration for alarm/ticket statuses.");
+                console.error("Error getting configuration for alarm/ticket statuses.");
                 deferred.reject(error);
             });
         return deferred.promise;

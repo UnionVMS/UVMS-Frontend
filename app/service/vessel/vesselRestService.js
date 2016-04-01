@@ -206,7 +206,7 @@ angular.module('unionvmsWeb')
                 }
                 deferred.resolve(response.data);
             }, function(error){
-                console.error("Error geting configuration for vessel.");
+                console.error("Error getting configuration for vessel.");
                 deferred.reject(error);
             });
         return deferred.promise;

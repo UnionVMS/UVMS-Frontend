@@ -48,7 +48,7 @@ angular.module('unionvmsWeb').factory('auditLogRestFactory', function($resource)
                     def.resolve(response.data);
                 },
                 function(error){
-                    console.error("Error geting configuration values for audit.");
+                    console.error("Error getting configuration values for audit.");
                     def.reject(error);
                 }
             );
