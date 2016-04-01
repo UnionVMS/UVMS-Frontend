@@ -153,6 +153,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     rep.getAlarms = function(){
         //TODO loading and check if we have paylod
         var payload = mapAlarmsService.prepareDataForRequest();
+        //TODO check paylaod is not empty
         mapAlarmsService.getAlarms(payload).then(getAlarmsSuccess, function(error){
             console.log(error);
             //TODO
@@ -260,20 +261,21 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     
     //Get Alarms data Success callback
     var getAlarmsSuccess = function(response){
-        var featureCollection = response.data.alarms;
-        
-        if (featureCollection.features.length > 0){
-            //Check if alarms layer is already added to the map
-            var layer = mapService.getLayerByType('alarms');
-            if (angular.isDefined(layer)){ //if so we clear all features and add new ones
-                var src = layer.getSource();
-                src.clear();
-                var features = (new ol.format.GeoJSON()).readFeatures(featureCollection);
-                src.addFeatures(features);
-            } else { //if not we create the layer and add the node to the tree
-                var alarmsNode = new TreeModel();
-                alarmsNode = alarmsNode.nodeForAlarms(featureCollection);
-                $rootScope.$broadcast('addLayerTreeNode', alarmsNode);
+        if (angular.isDefined(response.data)){
+            var featureCollection = response.data.alarms;
+            if (featureCollection.features.length > 0){
+                //Check if alarms layer is already added to the map
+                var layer = mapService.getLayerByType('alarms');
+                if (angular.isDefined(layer)){ //if so we clear all features and add new ones
+                    var src = layer.getSource();
+                    src.clear();
+                    var features = (new ol.format.GeoJSON()).readFeatures(featureCollection);
+                    src.addFeatures(features);
+                } else { //if not we create the layer and add the node to the tree
+                    var alarmsNode = new TreeModel();
+                    alarmsNode = alarmsNode.nodeForAlarms(featureCollection);
+                    $rootScope.$broadcast('addLayerTreeNode', alarmsNode);
+                }
             }
         } else {
             //TODO display message no alarms founded

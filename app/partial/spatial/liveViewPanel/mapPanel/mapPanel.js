@@ -8,7 +8,8 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.tbControl = spatialHelperService.tbControl;
     $scope.refresh = reportService.refresh;
     $scope.mapFishLocalConfig = {};
-    $scope.popupSegments = mapService.popupSegRecContainer;
+    //$scope.popupSegments = mapService.popupSegRecContainer;
+    $scope.popupRecContainer = {};
     $scope.bookmarksByPage = 3;
     $scope.bookmarkNew = {};
     $scope.submitingBookmark = false;
@@ -40,15 +41,26 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     };
     
     //Change displayed record on popup - vms segments only
-    $scope.changeDisplayedRecord = function(direction){        
-        if (direction === 'next' && $scope.popupSegments.currentIdx < $scope.popupSegments.records.length - 1){
-            $scope.popupSegments.currentIdx += 1;
+    $scope.changeDisplayedRecord = function(direction){
+        if (direction === 'next' && $scope.popupRecContainer.currentIdx < $scope.popupRecContainer.records.length - 1){
+            $scope.popupRecContainer.currentIdx += 1;
             $scope.updatePopup();
-        } else if (direction === 'previous' && $scope.popupSegments.currentIdx > 0){
-            $scope.popupSegments.currentIdx -= 1;
+        } else if (direction === 'previous' && $scope.popupRecContainer.currentIdx > 0){
+            $scope.popupRecContainer.currentIdx -= 1;
             $scope.updatePopup();
         }
     };
+    
+    //Watch to change the source for the popup paginator
+    $scope.$watch(function(){return mapService.activeLayerType;}, function(newVal, oldVal){
+        if (angular.isDefined(newVal) && newVal !== oldVal){
+            if (newVal === 'vmsseg'){
+                $scope.popupRecContainer = mapService.popupSegRecContainer;
+            } else if (newVal === 'alarms'){
+                $scope.popupRecContainer = mapService.popupAlarmRecContainer;
+            }
+        }
+    });
     
     //Check for permissions
     $scope.checkSpatialConfigPermission = function(){
@@ -63,8 +75,14 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     
     //Update popup content
     $scope.updatePopup = function(){
-        var record = mapService.popupSegRecContainer.records[mapService.popupSegRecContainer.currentIdx];
-        var data = mapService.setSegmentsObjPopup(record.data);
+        var record, data;
+        if (mapService.activeLayerType === 'vmsseg'){
+            record = mapService.popupSegRecContainer.records[mapService.popupSegRecContainer.currentIdx];
+            data = mapService.setSegmentsObjPopup(record.data);
+        } else if (mapService.activeLayerType === 'alarms'){
+            record = mapService.popupAlarmRecContainer.records[mapService.popupAlarmRecContainer.currentIdx];
+            data = mapService.setAlarmsObjPopup(record.data);
+        }
         mapService.requestPopupTemplate(data, record.coord, record.fromCluster, true);
     };
     

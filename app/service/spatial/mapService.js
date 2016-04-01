@@ -2461,7 +2461,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var srcData = ms.formatAlarmDataForPopup(feature);
         
         return {
-            windowTitle: locale.getString('spatial.popup_alarms_title'),
+            positionTitle: locale.getString('spatial.popup_positions_title'),
+            alarmTitle: locale.getString('spatial.popup_alarms_title'),
             titles: titles,
             alarm: srcData
         };
@@ -2477,15 +2478,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             cfr: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'),
             ruleDef: locale.getString('spatial.rule_definition'),
             ruleDesc: locale.getString('spatial.reports_table_header_description'),
-            ruleName: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
+            ruleName: locale.getString('spatial.rule_name'),
             openDate: locale.getString('spatial.rule_open_date'),
-            status: locale.getString('spatial.styles_attr_status'),
             updateDate: locale.getString('spatial.rule_update_date'),
-            updatedBy: locale.getString('spatial.rule__updated_by')
+            updatedBy: locale.getString('spatial.rule_updated_by')
         };
     };
     
-    ms.formatAlarmDataForPopup = function(data){
+    ms.formatAlarmDataForPopup = function(data){        
         return {
             name: data.name,
             fs: data.fs,
@@ -2495,10 +2495,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             ruleDef: data.ruleDefinitions,
             ruleDesc: data.ruleDesc,
             ruleName: data.ruleName,
-            openDate: data.ticketOpenDate,
+            openDate: unitConversionService.date.convertToUserFormat(data.ticketOpenDate),
             status: data.ticketStatus,
-            updateDate: data.ticketUpdateDate,
-            updatedBy: data.ticketUpdatedBy
+            updateDate: unitConversionService.date.convertToUserFormat(data.ticketUpdateDate),
+            updatedBy: data.ticketUpdatedBy,
+            color: ms.getColorByStatus(ms.styles.alarms, data.ticketStatus)
         };
     };
 

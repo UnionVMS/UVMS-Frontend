@@ -324,11 +324,41 @@
 		text-transform: uppercase;
 	}
 
+	.alarm-status {
+		display: inline-block;
+		float: right;
+		border-radius: 4px;
+		padding: 2px 5px;
+		font-weight: bold;
+		text-transform: capitalize;
+		color: #fff;
+		font-size: 12px;
+	}
+
 	.info-content{
 		margin-top: 10px;
 		font-size: 12px;
 		span.title {
 			font-weight: bold;
+		}
+		&.alarm {
+			margin-top: 0px;
+		}
+		.form-separator {
+			border-top: 1px solid #ddd;
+			margin-bottom: 5px;
+			margin-top: -5px;
+		}
+		.rule-definition {
+			width: 100%;
+			display: inline-block;
+			background-color: #e4e4e4;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      padding: 3px;
+			text-align: center;
+			max-height: 125px;
+  		overflow-y: auto;
 		}
 	}
 
