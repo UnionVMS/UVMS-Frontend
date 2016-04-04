@@ -33,7 +33,7 @@
 					        <h3>Layer Tree</h3>
 					        <div class="column">
 					        	<h5>Ports</h5>
-								    <ul dnd-list="selectedPorts" dnd-allowed-types="['port', 'portarea']" dnd-drop="checkIfExists(item,selectedPorts)">
+								    <ul dnd-list="selectedPorts" dnd-allowed-types="['port', 'portarea']" dnd-drop="checkIfExists(item,selectedPorts,layersettingsForm)">
 								        <li ng-repeat="item in selectedPorts"
 								            dnd-draggable="item"
 								            dnd-type="item.subType"
@@ -49,7 +49,7 @@
 					        	<h5>Areas</h5>
 							    <ul dnd-list="selectedAreas"
 							     dnd-allowed-types="['sysarea','userarea','areagroup']" 
-							     dnd-drop="checkIfExists(item,selectedAreas);">								        
+							     dnd-drop="checkIfExists(item,selectedAreas,layersettingsForm);">								        
 								 	<li ng-repeat="item in selectedAreas"
 							            dnd-draggable="item"
 							            dnd-type="item.areaType"
@@ -57,7 +57,6 @@
 							            dnd-dragstart="layersettingsForm.$setDirty();selectedAreas.splice($index, 1);"
 							            dnd-canceled="selectedAreas.splice($index, 1);"
 							            type='{{item.areaType}}'>
-<!-- 							            ng-if="!(isAdminConfig && item.subType === userarea)"> -->
 							            <div class="area-item">
 								            <div class="handle">:::</div>
     										<div class="item">{{item.name}}</div>
@@ -67,7 +66,7 @@
 					        </div>
 					        <div class="column">
 					        	<h5>Additional Cartographies</h5>
-								    <ul dnd-list="selectedAdditionals" dnd-allowed-types="['additional','others']" dnd-drop="checkIfExists(item,selectedAdditionals)">
+								    <ul dnd-list="selectedAdditionals" dnd-allowed-types="['additional','others']" dnd-drop="checkIfExists(item,selectedAdditionals,layersettingsForm)">
 								        <li ng-repeat="item in selectedAdditionals"
 								            dnd-draggable="item"
 								            dnd-type="item.subType"
@@ -81,7 +80,7 @@
 					        </div>
 					        <div class="column">
 					        	<h5>Backgrounds</h5>
-								    <ul dnd-list="selectedBases" dnd-allowed-types="['background','others']" dnd-drop="checkIfExists(item,selectedBases)">
+								    <ul dnd-list="selectedBases" dnd-allowed-types="['background','others']" dnd-drop="checkIfExists(item,selectedBases,layersettingsForm)">
 								        <li ng-repeat="item in selectedBases"
 								            dnd-draggable="item"
 								            dnd-type="item.subType"

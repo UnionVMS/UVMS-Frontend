@@ -74,40 +74,8 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     };
     
 	rep.runReport = function(report){
-	    rep.liveviewEnabled = true;
-	    rep.id = report.id;
-	    rep.name = report.name;
-        rep.positions = [];
-        rep.segments = [];
-        rep.tracks = [];
-        rep.tabs.map = report.withMap;
-        rep.isReportExecuting = true;
-        
-        
-        //This gets executed on initial loading when we have a default report
-        if (!angular.isDefined(mapService.map)){
-            mapService.resetLabelContainers();
-            mapService.setMap(defaultMapConfigs);
-        } else {
-            mapService.clearVectorLayers();
-            
-            //Reset history control
-            mapService.getControlsByType('HistoryControl')[0].resetHistory();
-            
-            //Close overlays
-            if (angular.isDefined(mapService.overlay)){
-                mapService.closePopup();
-                mapService.activeLayerType = undefined;
-            }
-            
-            if (mapService.vmsposLabels.active === true){
-                mapService.deactivateVectorLabels('vmspos');
-            }
-            
-            if (mapService.vmssegLabels.active === true){
-                mapService.deactivateVectorLabels('vmsseg'); 
-            }
-        }
+		rep.isReportExecuting = true;
+		prepareReportToRun(report);
 
         rep.getConfigsTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
         if (report.withMap === true){
@@ -117,12 +85,12 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         }
 	};
 	
-	rep.runReportWithoutSaving = function(report){
-        rep.tabs.map = report.withMap;
+	rep.runReportWithoutSaving = function(report,mapData){
 		rep.isReportExecuting = true;
-        mapService.clearVectorLayers();
-        $rootScope.$broadcast('removeVmsNodes');
-        
+		prepareReportToRun(report);
+		configureMap(mapData[0]);
+//        $rootScope.$broadcast('removeVmsNodes');
+		
         rep.getReportTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
         report.additionalProperties = getUnitSettings();
 	    
@@ -178,50 +146,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	//Get Spatial config Success callback
 	var getConfigSuccess = function(data){
-	    //Change map ol.View configuration
-	    if (mapService.getMapProjectionCode() !== 'EPSG:' + data.map.projection.epsgCode){
-	        mapService.updateMapView(data.map.projection);
-	    }
-	    
-	    //Set map controls
-	    mapService.updateMapControls(data.map.control);
-	    
-	    //Set toolbar controls
-	    spatialHelperService.setToolbarControls(data);
-	    
-	    //Set the styles for vector layers and legend
-	    mapService.setPositionStylesObj(data.vectorStyles.positions); 
-	    mapService.setSegmentStylesObj(data.vectorStyles.segments);
-	    //mapService.setAlarmsStylesObj(data.vectorStyles.alarms); FIXME
-	    
-	    //Set vms table attribute visibility
-	    vmsVisibilityService.setVisibility(data.visibilitySettings);
-	    
-	    //Set popup visibility settings
-	    mapService.setPopupVisibility('positions', data.visibilitySettings.positions.popup);
-	    mapService.setPopupVisibility('segments', data.visibilitySettings.segments.popup);
-	    
-	    //Set label visibility
-	    mapService.setLabelVisibility('positions', data.visibilitySettings.positions.labels);
-	    mapService.setLabelVisibility('segments', data.visibilitySettings.segments.labels);
-	    
-	    //Build tree object and update layer panel
-	    var treeSource = new TreeModel();
-	    treeSource = treeSource.fromConfig(data.map.layers);
-	    $timeout(function() {
-	        $rootScope.$broadcast('updateLayerTreeSource', treeSource);
-	    });
-	    
-        //map refresh configs
-        if (rep.tabs.map === true && angular.isDefined(data.map.refresh)){
-            rep.refresh.status = data.map.refresh.status;
-            rep.refresh.rate = data.map.refresh.rate;   
-        }
-        
-        mapService.updateMapSize();
-        
-	    //Finally load VMS positions and segments
-        rep.getReportTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+		configureMap(data);
         var repConfig = getRepConfig();
         
 	    reportRestService.executeReport(rep.id,repConfig).then(getVmsDataSuccess, getVmsDataError);
@@ -413,6 +338,88 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             rep.message = undefined;
         }, 3000);
     };
+    
+    var prepareReportToRun = function(report){
+	    rep.liveviewEnabled = true;
+	    rep.id = report.id;
+	    rep.name = report.name;
+        rep.positions = [];
+        rep.segments = [];
+        rep.tracks = [];
+        rep.tabs.map = report.withMap;
+    
+        //This gets executed on initial loading when we have a default report
+        if (!angular.isDefined(mapService.map)){
+            mapService.resetLabelContainers();
+            mapService.setMap(defaultMapConfigs);
+        } else {
+            mapService.clearVectorLayers();
+            
+            //Reset history control
+            mapService.getControlsByType('HistoryControl')[0].resetHistory();
+            
+            //Close overlays
+            if (angular.isDefined(mapService.overlay)){
+                mapService.closePopup();
+                mapService.activeLayerType = undefined;
+            }
+            
+            if (mapService.vmsposLabels.active === true){
+                mapService.deactivateVectorLabels('vmspos');
+            }
+            
+            if (mapService.vmssegLabels.active === true){
+                mapService.deactivateVectorLabels('vmsseg'); 
+            }
+        }
+	};
+	
+	var configureMap = function(data){
+	    //Change map ol.View configuration
+	    if (mapService.getMapProjectionCode() !== 'EPSG:' + data.map.projection.epsgCode){
+	        mapService.updateMapView(data.map.projection);
+	    }
+	    
+	    //Set map controls
+	    mapService.updateMapControls(data.map.control);
+	    
+	    //Set toolbar controls
+	    spatialHelperService.setToolbarControls(data);
+	    
+	    //Set the styles for vector layers and legend
+	    mapService.setPositionStylesObj(data.vectorStyles.positions); 
+	    mapService.setSegmentStylesObj(data.vectorStyles.segments);
+	    //mapService.setAlarmsStylesObj(data.vectorStyles.alarms); FIXME
+	    
+	    //Set vms table attribute visibility
+	    vmsVisibilityService.setVisibility(data.visibilitySettings);
+	    
+	    //Set popup visibility settings
+	    mapService.setPopupVisibility('positions', data.visibilitySettings.positions.popup);
+	    mapService.setPopupVisibility('segments', data.visibilitySettings.segments.popup);
+	    
+	    //Set label visibility
+	    mapService.setLabelVisibility('positions', data.visibilitySettings.positions.labels);
+	    mapService.setLabelVisibility('segments', data.visibilitySettings.segments.labels);
+	    
+	    //Build tree object and update layer panel
+	    var treeSource = new TreeModel();
+	    treeSource = treeSource.fromConfig(data.map.layers);
+	    $timeout(function() {
+	        $rootScope.$broadcast('updateLayerTreeSource', treeSource);
+	    });
+	    
+        //map refresh configs
+        if (rep.tabs.map === true && angular.isDefined(data.map.refresh)){
+            rep.refresh.status = data.map.refresh.status;
+            rep.refresh.rate = data.map.refresh.rate;   
+        }
+        
+        mapService.updateMapSize();
+        
+	    //Finally load VMS positions and segments
+        rep.getReportTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+	};
 
 	return rep;
 });

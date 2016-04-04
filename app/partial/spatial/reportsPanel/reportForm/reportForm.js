@@ -213,10 +213,11 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     
     $scope.runReport = function() {
     	$scope.submitingReport = true;
+    	$scope.mergedReport = undefined;
     	$scope.validateRanges();
     	if($scope.reportForm.reportBodyForm.$valid && $scope.vesselsSelectionIsValid){
 	    	reportService.outOfDate = true;
-	    	spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
+	    	spatialConfigRestService.getUserConfigs().then(getUserConfigsSuccess, getUserConfigsFailure);
     	}else{
     		var invalidElm = angular.element('#reportForm')[0].querySelector('.ng-invalid');
             var errorElm = angular.element('#reportForm')[0].querySelector('.has-error');
@@ -370,7 +371,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 		    	});
 	    		layerSettings.portLayers = [];
 	    		angular.copy(ports,layerSettings.portLayers);
-	    	}else{
+	    	}else if(!angular.isDefined(layerSettings.portLayers)){
 	    		layerSettings.portLayers = undefined;
 	    	}
 		
@@ -428,7 +429,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     	var mergedReport = new Report();
     	angular.copy($scope.report, mergedReport);
     	
-    	if(!angular.isDefined(mergedReport.mapConfiguration.spatialConnectId) && !angular.isDefined(mergedReport.mapConfiguration.mapProjectionId) && 
+    	if(!angular.isDefined(mergedReport.mapConfiguration.mapProjectionId) && 
     			!angular.isDefined(mergedReport.mapConfiguration.displayProjectionId) && !angular.isDefined(mergedReport.mapConfiguration.coordinatesFormat) && 
     			!angular.isDefined(mergedReport.mapConfiguration.scaleBarUnits)){
     		
@@ -438,6 +439,8 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     		mergedReport.mapConfiguration.coordinatesFormat = $scope.userConfig.mapSettings.coordinatesFormat;
     		mergedReport.mapConfiguration.scaleBarUnits = $scope.userConfig.mapSettings.scaleBarUnits;
     	}
+//    	mergedReport.mapConfiguration.refreshRate = $scope.userConfig.mapSettings.refreshRate;
+//    	mergedReport.mapConfiguration.refreshStatus = $scope.userConfig.mapSettings.refreshStatus
     	
     	if(!angular.isDefined(mergedReport.mapConfiguration.stylesSettings)){
     		mergedReport.mapConfiguration.stylesSettings = $scope.userConfig.stylesSettings;
@@ -446,6 +449,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     	if(!angular.isDefined(mergedReport.mapConfiguration.layerSettings)){
     		mergedReport.mapConfiguration.layerSettings = $scope.userConfig.layerSettings;
     	}
+    	mergedReport.mapConfiguration.layerSettings = checkLayerSettings(mergedReport.mapConfiguration.layerSettings);
     	
     	if(!angular.isDefined(mergedReport.mapConfiguration.visibilitySettings)){
     		mergedReport.mapConfiguration.visibilitySettings = $scope.userConfig.visibilitySettings;
@@ -454,22 +458,80 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     	return mergedReport;
     };
     
-    var getConfigsSuccess = function(response){
+    var getUserConfigsSuccess = function(response){
 	    $scope.srcConfigObj = response;
 	    var model = new SpatialConfig();
         $scope.userConfig = model.forUserPrefFromJson(response);
-        var mergedReport = mergeSettings();
-        reportService.runReportWithoutSaving(mergedReport);
+        $scope.mergedReport = mergeSettings();
+        
+        spatialConfigRestService.getMapConfigsFromReport(getMapConfigs()).then(getMapConfigsFromReportSuccess, getMapConfigsFromReportFailure);
+	};
+	
+	var getUserConfigsFailure = function(error){
+	    $anchorScroll();
+	    $scope.formAlert.visible = true;
+//	    $scope.alert.hasError = true;
+	    $scope.formAlert.msg = locale.getString('spatial.user_preferences_error_getting_configs');
+	    $scope.formAlert.visible = false;
+	};
+	
+	var getMapConfigsFromReportSuccess = function(data){
+		reportService.runReportWithoutSaving($scope.mergedReport,data);
     	$scope.$emit('goToLiveView');
     	$scope.toggleReportForm();
 	};
 	
-	var getConfigsFailure = function(error){
+	var getMapConfigsFromReportFailure = function(error){
 	    $anchorScroll();
-	    $scope.alert.hasAlert = true;
-	    $scope.alert.hasError = true;
-	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_error_getting_configs');
-	    $scope.alert.hideAlert();
+	    $scope.formAlert.visible = true;
+//	    $scope.alert.hasError = true;
+	    $scope.formAlert.msg = locale.getString('spatial.user_preferences_error_getting_configs');
+	    $scope.formAlert.visible = false;
 	};
     
+	var getMapConfigs = function(){
+		return {
+			toolSettings: {
+			       "control": [
+			                   {
+			                       "type": "zoom"
+			                   },
+			                   {
+			                       "type": "drag"
+			                   },
+			                   {
+			                       "type": "scale"
+			                   },
+			                   {
+			                       "type": "mousecoords"
+			                   },
+			                   {
+			                       "type": "history"
+			                   }
+			               ],
+			               "tbControl": [
+			                   {
+			                       "type": "measure"
+			                   },
+			                   {
+			                       "type": "fullscreen"
+			                   }
+			               ]
+			           },
+			mapSettings: {
+				mapProjectionId: $scope.mergedReport.mapConfiguration.mapProjectionId,
+				displayProjectionId: $scope.mergedReport.mapConfiguration.displayProjectionId,
+				coordinatesFormat: $scope.mergedReport.mapConfiguration.coordinatesFormat,
+				scaleBarUnits: $scope.mergedReport.mapConfiguration.scaleBarUnits
+			},
+			stylesSettings: $scope.mergedReport.mapConfiguration.stylesSettings,
+			layerSettings: $scope.mergedReport.mapConfiguration.layerSettings,
+			visibilitySettings: $scope.mergedReport.mapConfiguration.visibilitySettings,
+			reportProperties: {
+		        startDate : $scope.mergedReport.startDateTime,
+		        endDate : $scope.mergedReport.endDateTime
+			}
+		};
+	};
+	
 });

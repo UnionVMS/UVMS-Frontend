@@ -74,7 +74,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
         spatialConfigAlertService.hideAlert();
     };
     
-    $scope.checkIfExists = function(item,list) {
+    $scope.checkIfExists = function(item,list,layersettingsForm) {
     	for(var i=0;i<list.length;i++){
     		if(angular.isDefined(item.areaType)){
 	    		if(angular.equals(item.areaType,list[i].areaType)){
@@ -102,7 +102,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 				}
     		}
     	}
-    	
+    	layersettingsForm.$setDirty();
     	return item;
     };
     

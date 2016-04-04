@@ -92,6 +92,16 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
                     method: 'GET'
                 }
             });
+        },
+        getMapConfigsFromReport: function(){
+            return $resource('/spatial/rest/config/fromreport', {}, {
+                'get': {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            });
         }
     };
 })
@@ -222,6 +232,16 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
                 deferred.reject(error);
             });
 
+            return deferred.promise;
+        },
+        getMapConfigsFromReport: function(configs){
+            var deferred = $q.defer();
+            spatialConfigRestFactory.getMapConfigsFromReport().get(configs, function(response){
+                deferred.resolve([response.data, configs]);
+            }, function(error){
+                console.error('Error getting user configurations');
+                deferred.reject(error);
+            });
             return deferred.promise;
         }
 	};

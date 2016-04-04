@@ -4,6 +4,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     $scope.reports = [];
     $scope.executedReport = {};
     $scope.repServ = reportService;
+    $scope.loadingStatus = loadingStatus;
     $scope.currentContext = userService.getCurrentContext();
     
     //reset repServ

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, $timeout, locale, reportConfigs, $modalInstance, SpatialConfig, spatialRestService, spatialConfigAlertService, $anchorScroll, $location, spatialConfigRestService) {
+angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, $timeout, locale, reportConfigs, $modalInstance, SpatialConfig, spatialRestService, spatialConfigAlertService, $anchorScroll, $location, spatialConfigRestService, loadingStatus) {
 	$scope.isReportConfig = true;
 	$scope.alert = spatialConfigAlertService;
 	$scope.alert.hasAlert = false;
@@ -187,26 +187,33 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
         return $scope.configModel.visibilitySettings;
     };
     
-//    $modalInstance.rendered.then(function () {
-//        
-//    });
-    
     var mergePreferences = function(){
     	if(!angular.isDefined($scope.initialConfig) || _.isEmpty($scope.initialConfig)){
     		$scope.configModel = {};
     		angular.copy($scope.userConfig, $scope.configModel);
     	}
-    	if(!angular.isDefined($scope.initialConfig.stylesSettings) || _.isEmpty($scope.initialConfig.stylesSettings) || 
-    		!angular.isDefined($scope.initialConfig.stylesSettings.positions) || _.isEmpty($scope.initialConfig.stylesSettings.positions) ||
-    		!angular.isDefined($scope.initialConfig.stylesSettings.segments)){
+    	if(!angular.isDefined($scope.initialConfig.stylesSettings) || _.isEmpty($scope.initialConfig.stylesSettings)){
     		$scope.configModel.stylesSettings = {};
     		angular.copy($scope.userConfig.stylesSettings, $scope.configModel.stylesSettings);
+    	}else{
+    		if(!angular.isDefined($scope.initialConfig.stylesSettings.positions) || _.isEmpty($scope.initialConfig.stylesSettings.positions) || !angular.isDefined($scope.initialConfig.stylesSettings.positions.attribute)){
+    			$scope.configModel.stylesSettings.positions = {};
+        		angular.copy($scope.userConfig.stylesSettings.positions, $scope.configModel.stylesSettings.positions);
+    		}
+    		if(!angular.isDefined($scope.initialConfig.stylesSettings.segments) || _.isEmpty($scope.initialConfig.stylesSettings.segments) || !angular.isDefined($scope.initialConfig.stylesSettings.segments.attribute)){
+    			$scope.configModel.stylesSettings.segments = {};
+        		angular.copy($scope.userConfig.stylesSettings.segments, $scope.configModel.stylesSettings.segments);
+    		}
     	}
-    	if(!angular.isDefined($scope.initialConfig.layerSettings) || _.isEmpty($scope.initialConfig.layerSettings)){
+    	
+    	if(!angular.isDefined($scope.initialConfig.layerSettings) || _.isEmpty($scope.initialConfig.layerSettings) || ((!angular.isDefined($scope.initialConfig.layerSettings.portLayers) || _.isEmpty($scope.initialConfig.layerSettings.portLayers)) &&
+    			(!angular.isDefined($scope.initialConfig.layerSettings.areaLayers) || _.isEmpty($scope.initialConfig.layerSettings.areaLayers)) &&
+    			(!angular.isDefined($scope.initialConfig.layerSettings.baseLayers) || _.isEmpty($scope.initialConfig.layerSettings.baseLayers)) &&
+    			(!angular.isDefined($scope.initialConfig.layerSettings.additionalLayers) || _.isEmpty($scope.initialConfig.layerSettings.additionalLayers)))){
     		$scope.configModel.layerSettings = {};
     		angular.copy($scope.userConfig.layerSettings, $scope.configModel.layerSettings);
     	}
-    	if(!angular.isDefined($scope.initialConfig.spatialConnectId) && !angular.isDefined($scope.initialConfig.mapProjectionId) && 
+    	if(!angular.isDefined($scope.initialConfig.mapProjectionId) && 
     			!angular.isDefined($scope.initialConfig.displayProjectionId) && !angular.isDefined($scope.initialConfig.coordinatesFormat) && 
     			!angular.isDefined($scope.initialConfig.scaleBarUnits)){
     		$scope.configModel.mapSettings = {};
@@ -224,6 +231,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
         $scope.userConfig = model.forUserPrefFromJson(response);
         mergePreferences();
         $scope.loadedAllSettings = true;
+        loadingStatus.isLoading('Preferences',false);
 	};
 	
 	var getConfigsFailure = function(error){
@@ -232,6 +240,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 	    $scope.alert.hasError = true;
 	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_error_getting_configs');
 	    $scope.alert.hideAlert();
+	    loadingStatus.isLoading('Preferences',false);
 	};
 	
 	$scope.sortArray = function(data){
@@ -242,7 +251,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     };
     
     var init = function(){
-    	
+    	loadingStatus.isLoading('Preferences',true);
     	$scope.configModel = new SpatialConfig();
     	$scope.initialConfig = reportConfigs.mapConfiguration;
         if (!angular.equals({}, reportConfigs.mapConfiguration)){
@@ -258,6 +267,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     		spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
     	}else{
     		$scope.loadedAllSettings = true;
+    		loadingStatus.isLoading('Preferences',false);
     	}
     	
     };
