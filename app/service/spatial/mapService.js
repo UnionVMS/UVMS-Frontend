@@ -491,12 +491,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     
     //Add alarms layer
     ms.createAlarmsLayer = function(config){
-        var source = new ol.source.Vector({
-            features: (new ol.format.GeoJSON()).readFeatures(config.geoJson)
-        });
-        
         var attribution = new ol.Attribution({
             html: locale.getString('spatial.alarms_copyright')
+        });
+        
+        var source = new ol.source.Vector({
+            attributions: [attribution],
+            features: (new ol.format.GeoJSON()).readFeatures(config.geoJson)
         });
         
         var layer = new ol.layer.Vector({

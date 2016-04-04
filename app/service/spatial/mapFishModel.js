@@ -126,86 +126,109 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         this.attributes = buildAttributes(data, iconLeg);
     };
     
+    
     mapFishPayload.prototype.getIconPayload = function(type){
         var forbidenKeys = ['lineStyle', 'default', 'lineWidth'];
         var styles = mapService.styles[type];
         
         if (angular.isDefined(styles)){
-            var obj = {
-                title: getSubtitle(styles)
-            };
-            
-            if (type === 'segments'){
-                switch (styles.style.lineStyle) {
-                    case 'dotted':
-                        obj.lineStyle = '1,1';
+            var obj, i, keys;
+            var classes = [];
+            if (type === 'alarms'){
+                obj = {
+                    title: locale.getString('spatial.styles_attr_status')
+                };
+                
+                keys = _.keys(styles);
+                for (i = 0; i < keys.length; i++){
+                    if (keys[i] !== 'size'){
+                        classes.push({
+                            text: locale.getString('spatial.legend_panel_alarms_' + keys[i]),
+                            color: styles[keys[i]]
+                        });
+                    }
+                }
+            } else {
+                obj = {
+                    title: getSubtitle(styles)
+                };
+                    
+                if (type === 'segments'){
+                    switch (styles.style.lineStyle) {
+                        case 'dotted':
+                            obj.lineStyle = '1,1';
+                            break;
+                        case 'dashed':
+                            obj.lineStyle = '5,5';
+                            break;
+                        case 'dotdashed':
+                            obj.lineStyle = '5,2,1,2';
+                            break;
+                        default:
+                            obj.lineStyle = '0,0';
+                            break;
+                    }
+                } else {
+                    obj.cluster = {
+                        text: locale.getString('spatial.print_cluster_legend_title'),
+                        bgcolor: '#FFFFFF',
+                        bordercolor: '#F7580D' 
+                    };
+                }
+                
+                switch (styles.attribute) {
+                    case 'countryCode':
+                        for (i = 0; i < styles.displayedCodes.length; i++){
+                            classes.push({
+                                text: styles.displayedCodes[i],
+                                color: styles.style[styles.displayedCodes[i]]
+                            });
+                        }
                         break;
-                    case 'dashed':
-                        obj.lineStyle = '5,5';
+                    case 'activity': //Positions
+                    case 'type':
+                    case 'segmentCategory': //Segments
+                        keys = _.keys(styles.style);
+                        for (i = 0; i < keys.length; i++){
+                            if (_.indexOf(forbidenKeys, keys[i]) === -1){
+                                classes.push({
+                                    text: keys[i],
+                                    color: styles.style[keys[i]]
+                                });
+                            }
+                        }
+                        
+                        //Finally add the default rule
+                        classes.push({
+                            text: locale.getString('spatial.legend_panel_all_other_values'),
+                            color:  styles.style.default
+                        });
+                        
                         break;
-                    case 'dotdashed':
-                        obj.lineStyle = '5,2,1,2';
-                        break;
-                    default:
-                        obj.lineStyle = '0,0';
+                    case 'reportedCourse': //Positions
+                    case 'calculatedSpeed':
+                    case 'reportedSpeed':
+                    case 'speedOverGround':  //Segments
+                    case 'distance':
+                    case 'courseOverGround':
+                        for (i = 0; i < styles.breaks.intervals.length; i++){
+                            classes.push({
+                                text: styles.breaks.intervals[i][0] + ' - ' + styles.breaks.intervals[i][1], 
+                                color: styles.style[styles.breaks.intervals[i][0] + '-' + styles.breaks.intervals[i][1]]
+                            });
+                        }
+                        
+                        //Finally add the default rule
+                        classes.push({
+                            text: locale.getString('spatial.legend_panel_all_other_values'),
+                            color:  styles.style.default
+                        });
+                        
                         break;
                 }
             }
             
-            var classes = [];
-            var i;
-            switch (styles.attribute) {
-                case 'countryCode':
-                    for (i = 0; i < styles.displayedCodes.length; i++){
-                        classes.push({
-                            text: styles.displayedCodes[i],
-                            color: styles.style[styles.displayedCodes[i]]
-                        });
-                    }
-                    break;
-                case 'activity': //Positions
-                case 'type':
-                case 'segmentCategory': //Segments
-                    var keys = _.keys(styles.style);
-                    for (i = 0; i < keys.length; i++){
-                        if (_.indexOf(forbidenKeys, keys[i]) === -1){
-                            classes.push({
-                                text: keys[i],
-                                color: styles.style[keys[i]]
-                            });
-                        }
-                    }
-                    
-                    //Finally add the default rule
-                    classes.push({
-                        text: locale.getString('spatial.legend_panel_all_other_values'),
-                        color:  styles.style.default
-                    });
-                    
-                    break;
-                case 'reportedCourse': //Positions
-                case 'calculatedSpeed':
-                case 'reportedSpeed':
-                case 'speedOverGround':  //Segments
-                case 'distance':
-                case 'courseOverGround':
-                    for (i = 0; i < styles.breaks.intervals.length; i++){
-                        classes.push({
-                            text: styles.breaks.intervals[i][0] + ' - ' + styles.breaks.intervals[i][1], 
-                            color: styles.style[styles.breaks.intervals[i][0] + '-' + styles.breaks.intervals[i][1]]
-                        });
-                    }
-                    
-                    //Finally add the default rule
-                    classes.push({
-                        text: locale.getString('spatial.legend_panel_all_other_values'),
-                        color:  styles.style.default
-                    });
-                    
-                    break;
-            }
             obj.classes = classes;
-            
             return obj;
         }
     };
@@ -290,8 +313,8 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
     var getUrl = function(){
         var url = $location.protocol() + '://' + $location.host();
         if ($location.port() !== 80){
-            url += ':' + $location.port();
-            //url += ':8080'; //Working locally
+            //url += ':' + $location.port();
+            url += ':8080'; //Working locally
         }
         
         return url;
@@ -322,14 +345,25 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         buildVMSSEG: function(layer, iconLeg){
             return this.buildVectorLegend(layer, iconLeg, 'vmsseg');
         },
+        buildALARMS: function(layer, iconLeg){
+            return this.buildVectorLegend(layer, iconLeg, 'alarms');
+        },
         buildVectorLegend: function(layer, iconLeg, type){
             var url = getUrl();
             url += iconLeg.legend.base;
             
-            if (type === 'vmspos'){
-                url += iconLeg.legend.positions;
-            } else {
-                url += iconLeg.legend.segments;
+            switch (type) {
+                case 'vmspos':
+                    url += iconLeg.legend.positions;
+                    break;
+                case 'vmsseg':
+                    url += iconLeg.legend.segments;
+                    break;
+                case 'alarms':
+                    url += iconLeg.legend.alarms;
+                    break;
+                default:
+                    break;
             }
             
             var name = layer.get('title'); 
@@ -381,8 +415,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         },
         buildVMSPOS: function(features, iconLeg){
             var styleDef = mapService.styles.positions;
-            var keys = _.keys(styleDef.style);
-            
+
             var style = {
                 version: 2,
                 graphicWidth: 18,
@@ -392,6 +425,21 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
             };
             
             this.buildVectorStyle(style, styleDef, 'vmspos', iconLeg);
+            
+            return style;
+        },
+        buildALARMS: function(layer){
+            var styleDef = mapService.styles.alarms;
+            
+            var style = {
+                version: 2,
+                strokeColor: '#FFFFFF',
+                strokeWidth: 2,
+                pointRadius: styleDef.size * 2,
+                type: 'point',
+            };
+            
+            this.buildAlarmsStyle(style, styleDef, 'alarms');
             
             return style;
         },
@@ -433,6 +481,22 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
             
             
             return style;
+        },
+        buildAlarmsStyle: function(style, styleDef){
+            var keys = _.keys(styleDef);
+            
+            for (var i = 0; i < keys.length; i++){
+                if (keys[i] !== 'size'){
+                    var name = "[ticketStatus = '" + keys[i].toUpperCase() + "']";
+                    style[name] = {
+                        symbolizers: [{
+                            fillColor: styleDef[keys[i]],
+                            fillOpacity: 1.0,
+                        }]
+                    };
+                }
+            }
+            
         },
         buildVectorStyle: function(style, styleDef, type, iconLeg){
             var keys = _.keys(styleDef.style);
@@ -674,11 +738,20 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
             
             return obj;
         },
+        buildALARMS: function(layer){
+            var obj = {
+                type: 'geojson',
+                style: styleFuncs.buildALARMS(layer),
+                geojson: getGeoJSON(layer)
+            };
+            
+            return obj;
+        },
         buildVMSSEG: function(layer){
             var obj = {
                 type: 'geojson',
                 style: styleFuncs.buildVMSSEG(layer),
-                geojson: getSegJSON(layer)
+                geojson: getGeoJSON(layer)
             };
             
             return obj;
@@ -761,7 +834,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         }
     };
     
-    var getSegJSON = function(layer){
+    var getGeoJSON = function(layer){
         var format = new ol.format.GeoJSON();
         var printLayerSrc = mapService.getLayerByType('print').getSource();
         var src = layer.getSource();
@@ -807,8 +880,8 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         
         mapLayers.forEach(function(lyr, idx, lyrs){
             var type = lyr.get('type');
-            var supportedTypes = ['OSM', 'vmspos', 'vmsseg', 'WMS', 'OSEA'];
-            var supportedLegTypes = ['WMS', 'vmspos', 'vmsseg'];
+            var supportedTypes = ['OSM', 'vmspos', 'vmsseg', 'alarms', 'WMS', 'OSEA'];
+            var supportedLegTypes = ['WMS', 'vmspos', 'vmsseg', 'alarms'];
             if (angular.isDefined(type) && _.indexOf(supportedTypes, type) !== -1 && lyr.get('visible') === true){
                 var fn = 'build' + type.toUpperCase();
                 var layerObj;
@@ -819,7 +892,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
                 }
                 
                 var legObj;
-                if (_.indexOf(supportedLegTypes, type) !== -1 && (type === 'vmspos' || type === 'vmsseg')){
+                if (_.indexOf(supportedLegTypes, type) !== -1 && (type === 'vmspos' || type === 'vmsseg' || type === 'alarms')){
                     legObj = legendFuncs[fn](lyr, iconLeg);
                 } else if (_.indexOf(supportedLegTypes, type) !== -1){
                     legObj = legendFuncs[fn](lyr);

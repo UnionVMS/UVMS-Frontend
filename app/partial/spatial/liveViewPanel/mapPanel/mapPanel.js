@@ -226,16 +226,25 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 		        
 		        var positions = payload.getIconPayload('positions');
 		        var segments = payload.getIconPayload('segments');
+		        var alarms = payload.getIconPayload('alarms');
 		        
 		        $scope.isRequestingImage = true;
 		        
+		        var iconPayload = {};
+		        if (angular.isDefined(positions) && mapService.getLayerByType('vmspos').get('visible')){
+		            iconPayload.positions = positions;
+		        }
+		        
+		        if (angular.isDefined(segments) && mapService.getLayerByType('vmsseg').get('visible')){
+                    iconPayload.segments = segments;
+                }
+		        
+		        if (angular.isDefined(alarms) && mapService.getLayerByType('alarms').get('visible')){
+                    iconPayload.alarms = alarms;
+                }
+		        
 		        //prepare the payload to get icons and legends from our web service
-		        if (angular.isDefined(positions) && angular.isDefined(segments)){
-		            var iconPayload = {
-		                positions: positions,
-		                segments:  segments
-		            };
-		            
+		        if (!_.isEqual({}, iconPayload)){
 		            //call icon and legends rest api and only go on if we receive a correct payload
 		            mapFishPrintRestService.getIconAndLegends(iconPayload).then(function(response){
 		                payload.createPayloadObj($scope.mapFishLocalConfig, response);
