@@ -1,10 +1,5 @@
 <div class="spatialModule">
-	<div class="container executing-report" ng-show="repServ.isReportExecuting">
-		<i class="fa fa-spinner fa-spin"></i>
-		<div class="executing-report-msg">
-			<span>{{'spatial.map_loading_report_message' | i18n}}</span>
-		</div>
-	</div>
+	<loading-panel type="LiveviewMap" ng-model="repServ.isReportExecuting" class="liveview-loading"></loading-panel>
 	<div class="container containerWithTopBottomPadding" ng-show="isMenuVisible">
 		<div class="row">
 			<div class="col-md-8 pageMenu">
@@ -28,7 +23,7 @@
 		<div class="alert alert-danger alert-container" role="alert">
 			<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
 			<span class="alert-message">
-				<span ng-hide="repServ.errorLoadingDefault">{{'spatial.map_error_loading_report' | i18n }}</span>
+				<span ng-hide="repServ.errorLoadingDefault">{{repServ.message}}</span>
 				<span ng-show="repServ.errorLoadingDefault">{{'spatial.map_error_loading_default_report' | i18n }}</span>          
 			</span>
 	    </div>
@@ -37,7 +32,7 @@
 		<div class="alert alert-warning alert-container" role="alert">
 			<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
 			<span class="alert-message">
-				<span>{{'spatial.map_no_vms_data' | i18n }}</span>          
+				<span>{{repServ.message}}</span>
 			</span>
 	    </div>
 	</div>

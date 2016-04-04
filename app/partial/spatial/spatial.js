@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, reportRestService, reportService, $anchorScroll, userService){
+angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, reportRestService, reportService, $anchorScroll, userService, loadingStatus){
     $scope.isMenuVisible = true;
     $scope.selectedMenu = 'REPORTS';
     $scope.reports = [];
@@ -49,6 +49,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
                $scope.selectedMenu = 'LIVEVIEW';
                $scope.repServ.liveviewEnabled = true;
                $scope.repServ.isReportExecuting = true;
+               loadingStatus.isLoading('LiveviewMap',true);
                reportRestService.getReport(useId).then(function(response){
                    $scope.repServ.runReport(response);
                }, function(error){

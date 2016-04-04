@@ -1,21 +1,40 @@
 angular.module('unionvmsWeb').factory('loadingStatus',function() {
 	var loadings = {
-			isLoadingPreferences: {
-					message: 'spatial.loading_preferences',
-					value: false
-			}
+		isLoadingPreferences: {
+			message: 'spatial.loading_preferences',
+			value: false
+		},
+		isLoadingLiveviewMap: {
+		    message: ['spatial.map_loading_report_message', 'spatial.map_loading_alarms_message'],
+		    messageIdx: undefined,
+            value: false
+		}
 	};
 	
 	var loadingStatus = {
-			isLoading : function(type, newVal) {
-				if(angular.isDefined(newVal)){
-					loadings['isLoading' + type ].value = newVal;
-				}
-				return loadings['isLoading' + type ].value;
-			},
-			message : function(type) {
-				return loadings['isLoading' + type ].message;
+		isLoading : function(type, newVal, messageIdx) {
+			if(angular.isDefined(newVal)){
+				loadings['isLoading' + type ].value = newVal;
 			}
+			if (angular.isDefined(messageIdx)){
+			    loadings['isLoading' + type ].messageIdx = messageIdx;
+			}
+			if (newVal === false && _.isArray(loadings['isLoading' + type ].message)){
+                loadings['isLoading' + type ].messageIdx = undefined;
+            }
+			
+			return loadings['isLoading' + type ].value;
+		},
+		message : function(type) {
+		    if (_.isArray(loadings['isLoading' + type ].message)){
+		        var idx = 0;
+		        if (angular.isDefined(loadings['isLoading' + type ].messageIdx)){
+		            idx = loadings['isLoading' + type ].messageIdx;
+		        }
+		        return loadings['isLoading' + type ].message[idx];
+		    } 
+			return loadings['isLoading' + type ].message;
+		}
 	};
 
 	return loadingStatus;

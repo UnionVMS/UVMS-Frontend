@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus) {
 
     var rep = {
        id: undefined,
@@ -6,6 +6,8 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
        isReportExecuting: false,
        hasError: false,
        hasWarning: false,
+       message: undefined,
+       //isAlarms: false,
        tabs: {
            map: true,
            vms: true
@@ -151,13 +153,19 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     };
     
     rep.getAlarms = function(){
-        //TODO loading and check if we have paylod
+        loadingStatus.isLoading('LiveviewMap',true,1);
         var payload = mapAlarmsService.prepareDataForRequest();
-        //TODO check paylaod is not empty
-        mapAlarmsService.getAlarms(payload).then(getAlarmsSuccess, function(error){
-            console.log(error);
-            //TODO
-        });
+        if (payload.length > 0){
+            mapAlarmsService.getAlarms(payload).then(getAlarmsSuccess, getAlarmsError);
+        } else {
+            rep.hasWarning = true;
+            rep.message = locale.getString('spatial.map_no_positions_for_alarms_data');
+            $timeout(function(){
+                rep.hasWarning = false;
+                rep.message = undefined;
+            }, 3000);
+            loadingStatus.isLoading('LiveviewMap', false);
+        }
     };
 	
 	var getUnitSettings = function(){
@@ -228,7 +236,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    rep.isReportExecuting = false;
 	    rep.hasError = true;
         rep.refresh.status = false;
-        $timeout(function(){rep.hasError = false;}, 3000);
+        rep.message = locale.getString('spatial.map_error_loading_report');
+        $timeout(function(){
+            rep.hasError = false;
+            rep.message = undefined;
+        }, 3000);
 	};
 	
 	var getRepConfig = function(){
@@ -255,8 +267,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     //Get config without map Success callback
     var getConfigWithouMapError = function(error){
         rep.isReportExecuting = false;
-        rep.hasError = true;
-        $timeout(function(){rep.hasError = false;}, 3000);
+        rep.message = locale.getString('spatial.map_error_loading_report');
+        $timeout(function(){
+            rep.hasError = false;
+            rep.message = undefined;
+        }, 3000);
     };
     
     //Get Alarms data Success callback
@@ -278,8 +293,22 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
                 }
             }
         } else {
-            //TODO display message no alarms founded
+            rep.hasWarning = true;
+            rep.message = locale.getString('spatial.map_no_alarms_data');
+            $timeout(function(){
+                rep.hasWarning = false;
+                rep.message = undefined;
+            }, 3000);
         }
+        loadingStatus.isLoading('LiveviewMap', false);
+    };
+    
+    var getAlarmsError = function(error){
+        rep.message = locale.getString('spatial.map_error_alarms_data');
+        $timeout(function(){
+            rep.hasError = false;
+        }, 3000);
+        loadingStatus.isLoading('LiveviewMap', false);
     };
 	
 	//Get VMS data Success callback
@@ -324,7 +353,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
                 }
             } else if (rep.positions.length === 0 && rep.segments.length === 0){
                 rep.hasWarning = true;
-                $timeout(function(){rep.hasWarning = false;}, 3000);
+                rep.message = locale.getString('spatial.map_no_vms_data');
+                $timeout(function(){
+                    rep.hasWarning = false;
+                    rep.message = undefined;
+                }, 3000);
             }
         }
         rep.isReportExecuting = false;
@@ -338,7 +371,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.tabs.map = true;
         rep.isReportExecuting = false;
         rep.hasError = true;
-        $timeout(function(){rep.hasError = false;}, 3000);
+        rep.message = locale.getString('spatial.map_error_loading_report');
+        $timeout(function(){
+            rep.hasError = false;
+            rep.message = undefined;
+        }, 3000);
     };
     
     //Refresh report success callback
@@ -357,7 +394,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             $rootScope.$broadcast('addLayerTreeNode', vectorNodeSource);
         } else if (rep.positions.length === 0 && rep.segments.length === 0){
             rep.hasWarning = true;
-            $timeout(function(){rep.hasWarning = false;}, 3000);
+            rep.message = locale.getString('spatial.map_no_vms_data');
+            $timeout(function(){
+                rep.hasWarning = false;
+                rep.message = undefined;
+            }, 3000);
         }
         rep.isReportExecuting = false;
     };
@@ -366,7 +407,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     var updateVmsDataError = function(error){
         rep.isReportExecuting = false;
         rep.hasError = true;
-        $timeout(function(){rep.hasError = false;}, 3000);
+        rep.message = locale.getString('spatial.map_error_loading_report');
+        $timeout(function(){
+            rep.hasError = false;
+            rep.message = undefined;
+        }, 3000);
     };
 
 	return rep;

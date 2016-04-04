@@ -780,6 +780,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
 
     //VMS styles
+    //FIXME when backend ready
     ms.styles = {
         positions: undefined,
         segments: undefined,
