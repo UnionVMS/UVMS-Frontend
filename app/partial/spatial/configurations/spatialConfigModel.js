@@ -13,6 +13,13 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
             segments: {
                 attribute: undefined,
                 style: {}
+            },
+            alarms: {
+                size: undefined,
+                open: undefined,
+                closed: undefined,
+                pending: undefined,
+                none: undefined
             }
         };
         this.systemSettings = {

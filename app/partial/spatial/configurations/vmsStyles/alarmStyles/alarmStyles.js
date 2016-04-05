@@ -38,22 +38,29 @@ angular.module('unionvmsWeb').controller('AlarmstylesCtrl',function($scope,local
 		return nrErrors;
 	};
 	
-	
-//	alarmRestService.getTicketStatusConfig().then(function(value) {
-//		
-//	}, function(err) {
-//		console.log.error(err);
-//	};
+	$scope.loadAlarmProperties = function(){
+	    var alarmDef = $scope.configModel.stylesSettings.alarms;
+	    var keys = _.keys(alarmDef);
+	    
+	    $scope.configModel.alarmStyle = {};
+	    var rules = [];
+	    for (var i = 0; i < keys.length; i++){
+	        if (keys[i] !== 'size'){
+	            rules.push({
+                    "code": locale.getString('spatial.legend_panel_alarms_' + keys[i]),
+                    "color": alarmDef[keys[i]], 
+                    "id": keys[i]
+                });
+	        } else {
+	            $scope.configModel.alarmStyle.size = alarmDef[keys[i]];
+	        }
+	    }
+	    $scope.configModel.alarmStyle.style = rules;
+	};
 	
 	$scope.$watch('loadedAllSettings', function() {
-		if($scope.loadedAllSettings && $scope.configModel && $scope.configModel.stylesSettings){// && $scope.configModel.stylesSettings.alarms && $scope.configModel.stylesSettings.alarms.style){
-//			$scope.loadAlarmProperties();
-			$scope.configModel.alarmStyle = {};
-			$scope.configModel.alarmStyle.style = [
-			                                       {"code": "TEST1", "color": "#ddd", "id": "0"},
-			                                       {"code": "TEST2", "color": "#fff", "id": "1"}
-			                                       ];
-			
+		if($scope.loadedAllSettings && $scope.configModel && $scope.configModel.stylesSettings && $scope.configModel.stylesSettings.alarms){
+			$scope.loadAlarmProperties();
 		}
 	});
 });

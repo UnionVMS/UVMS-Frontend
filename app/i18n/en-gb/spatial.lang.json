@@ -298,6 +298,7 @@
 	"preferences_scale_units": "Scale units",
 	"preferences_auto_refresh_rate": "Auto refresh rate (minutes)",
 	"preferences_auto_refresh_status": "Auto refresh status",
+	"preferences_alarm_status_category_title": "Alarm status",
 	"tab_config_table_header_vessel_color": "Asset color",
 	
 	"settings_reset_btn": "Reset to defaults",
@@ -353,7 +354,8 @@
 	"section_errors": "This section contains errors",
 	"min_value_0_error_message": "Value must be higher than 1",
 	"max_error_message": "'Max' cannot be lower than 'Min'",
-	"invalid_range_error_message": "Must be between 1 and 10 including",
+	"invalid_range_error_message": "Must be between 1 and 10",
+	"invalid_range_error_message_2": "Must be between 1 and 6",
 	"not_numeric_error_message": "Value shall be numeric",
 	
 	"styles_attr_countryCode": "F.S",
@@ -370,6 +372,7 @@
 	
 	"line_style": "Line style",
 	"line_width": "Line width",
+	"size": "Size",
 	
 	"previous": "Previous",
 	"next": "Next",

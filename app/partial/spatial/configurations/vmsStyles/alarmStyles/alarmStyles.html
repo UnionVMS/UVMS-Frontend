@@ -1,5 +1,8 @@
 <div ng-controller="AlarmstylesCtrl">
 	<ng-form name="alarmsForm" novalidate>
+		<div class="row">
+			<div class="col-md-12">{{'spatial.preferences_alarm_status_category_title' | i18n | uppercase}}</div>
+		</div>
 		<div class="row rulesList">
 			<div class="row col-md-12" ng-repeat="item in configModel.alarmStyle.style">
 				<div class="form-group col-md-2">
@@ -22,18 +25,13 @@
 		<div class="row defaultItem">
 			<ng-form name="defaultForm" novalidate>
 				<div class="row col-md-12">
-					<div class="form-group col-md-3" ng-class="{'has-error': defaultForm.defaultColor.$error.hasError && (defaultForm.defaultColor.$dirty || submitedWithErrors)}">
-						<label>{{'spatial.default_color' | i18n}}</label>
-						<div class="colorPickerComponent">
-							<div ng-style="{'background-color': configModel.alarmStyle.defaultColor && configModel.alarmStyle.defaultColor.length > 3 && configModel.alarmStyle.defaultColor.length <= 7 && configModel.alarmStyle.defaultColor.indexOf('#') != -1 ? configModel.alarmStyle.defaultColor : '#fff'}" class="form-control pickedcolor">
-					       		<i class="fa fa-ban" ng-hide="configModel.alarmStyle.defaultColor && configModel.alarmStyle.defaultColor.length > 3 && configModel.alarmStyle.defaultColor.length <= 7 && configModel.alarmStyle.defaultColor.indexOf('#') != -1"></i>
-					        </div>
-					        <input class="form-control" name="defaultColor" colorpicker ng-model="configModel.alarmStyle.defaultColor" type="text" ng-change="validateDefaultColor();" autocomplete="off"/>
+					<div class="form-group col-md-2" ng-class="{'has-error': defaultForm.alarmSize.$error.hasError && (defaultForm.alarmSize.$dirty || submitedWithErrors)}">
+						<label>{{'spatial.size' | i18n}}</label>
+						<input class="form-control" ng-model="configModel.alarmStyle.size" ng-required="true" name="alarmSize" type="number" min="1" max="6" /> <!-- ng-change="validateLineWidth();" -->
+						<div class="belowErrorMessages" ng-messages="defaultForm.alarmSize.$error" ng-show="defaultForm.alarmSize.$dirty || submitedWithErrors">
+							<div ng-message="requiredField">{{'spatial.required_field_error_message' | i18n }}</div>
+							<div ng-message="rangeError">{{'spatial.invalid_range_error_message_2' | i18n }}</div>
 						</div>
-						<div class="belowErrorMessages" ng-messages="defaultForm.defaultColor.$error" ng-show="defaultForm.defaultColor.$dirty || submitedWithErrors">
-						<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
-						<div ng-message="segDefColor">{{'spatial.invalid_color_error_message' | i18n }}</div>
-					</div>
 					</div>
 				</div>
 			</ng-form>	
