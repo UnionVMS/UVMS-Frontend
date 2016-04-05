@@ -126,10 +126,17 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     		srcConfig.stylesSettings.segments = segmentProperties;
     		config.segmentStyle = undefined;
 		}
-        
-        //TODO save alarmStyles 
         if(angular.isDefined(config.alarmStyle)){
-    		delete config.alarmStyle;
+    		var alarmProperties = {};
+    		alarmProperties = {};
+    		alarmProperties.size = config.alarmStyle.size;
+			for (i = 0; i < config.alarmStyle.style.length; i++){
+				alarmProperties[config.alarmStyle.style[i].id] = config.alarmStyle.style[i].color;
+            }
+
+			config.stylesSettings.alarms = alarmProperties;
+    		srcConfig.stylesSettings.alarms = alarmProperties;
+    		config.alarmStyle = undefined;
 		}
         
         if(angular.isDefined(config.visibilitySettings)){

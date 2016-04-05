@@ -5,9 +5,9 @@
 				<accordion-heading>
 					<div class="panel-title-link" ng-click="toggleOpen()">
 						{{'spatial.layer_settings' | i18n }}
-						<div class="accordionError" ng-show="submitedWithErrors && layersettingsForm.$error.hasError">
+						<div class="accordionError" ng-show="submitedWithErrors && layersettingsForm.$invalid">
 							<div class="fa fa-exclamation-circle"></div>
-							{{'spatial.section_errors' | i18n }}
+							{{'spatial.section_errors' | i18n }} - {{'spatial.base_list_error' | i18n }}
 						</div>
 						<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isOpen, 'glyphicon-chevron-right': !status.isOpen}"></i>
 					</div>
@@ -38,7 +38,7 @@
 								            dnd-draggable="item"
 								            dnd-type="item.subType"
 								            dnd-effect-allowed="move"
-								            dnd-dragstart="layersettingsForm.$setDirty();selectedPorts.splice($index, 1);"
+								            dnd-dragstart="layersettingsForm.$setDirty();selectedPorts.splice($index, 1);validateBackGroundLayers();"
 								            dnd-canceled="selectedPorts.splice($index, 1);">
 								            <div class="handle">:::</div>
     										<div class="item">{{item.name}}</div>
@@ -54,7 +54,7 @@
 							            dnd-draggable="item"
 							            dnd-type="item.areaType"
 							            dnd-effect-allowed="move"
-							            dnd-dragstart="layersettingsForm.$setDirty();selectedAreas.splice($index, 1);"
+							            dnd-dragstart="layersettingsForm.$setDirty();selectedAreas.splice($index, 1);validateBackGroundLayers();"
 							            dnd-canceled="selectedAreas.splice($index, 1);"
 							            type='{{item.areaType}}'>
 							            <div class="area-item">
@@ -71,27 +71,29 @@
 								            dnd-draggable="item"
 								            dnd-type="item.subType"
 								            dnd-effect-allowed="move"
-								            dnd-dragstart="layersettingsForm.$setDirty();selectedAdditionals.splice($index, 1);"
+								            dnd-dragstart="layersettingsForm.$setDirty();selectedAdditionals.splice($index, 1);validateBackGroundLayers();"
 								            dnd-canceled="selectedAdditionals.splice($index, 1);">
 								            <div class="handle">:::</div>
     										<div class="item">{{item.name}}</div>
 								        </li>
 								    </ul>
 					        </div>
-					        <div class="column">
-					        	<h5>Backgrounds</h5>
-								    <ul dnd-list="selectedBases" dnd-allowed-types="['background','others']" dnd-drop="checkIfExists(item,selectedBases,layersettingsForm)">
-								        <li ng-repeat="item in selectedBases"
-								            dnd-draggable="item"
-								            dnd-type="item.subType"
-								            dnd-effect-allowed="move"
-								            dnd-dragstart="layersettingsForm.$setDirty();selectedBases.splice($index, 1);"
-								            dnd-canceled="selectedBases.splice($index, 1);">
-								            <div class="handle">:::</div>
-    										<div class="item">{{item.name}}</div>
-								        </li>
-								    </ul>
-					        </div>
+					        <ng-form name="baseLayers">
+						        <div class="column">
+						        	<h5>Backgrounds</h5>
+									    <ul dnd-list="selectedBases" dnd-allowed-types="['background','others']" dnd-drop="checkIfExists(item,selectedBases,layersettingsForm,true);">
+									        <li ng-repeat="item in selectedBases"
+									            dnd-draggable="item"
+									            dnd-type="item.subType"
+									            dnd-effect-allowed="move"
+									            dnd-dragstart="layersettingsForm.$setDirty();selectedBases.splice($index, 1);validateBackGroundLayers();"
+									            dnd-canceled="selectedBases.splice($index, 1);">
+									            <div class="handle">:::</div>
+	    										<div class="item">{{item.name}}</div>
+									        </li>
+									    </ul>
+						        </div>
+					        </ng-form>
 					        <div class="clearfix"></div>
 					    </div>
 					</div>

@@ -40,6 +40,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	};
 	
 	$scope.reset = function(){
+		$scope.layersettingsForm.$setDirty();
 		$scope.loadedAllSettings = false;
         var item = {
             layerSettings: {}
@@ -74,7 +75,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
         spatialConfigAlertService.hideAlert();
     };
     
-    $scope.checkIfExists = function(item,list,layersettingsForm) {
+    $scope.checkIfExists = function(item,list,layersettingsForm,isBaseList) {
     	for(var i=0;i<list.length;i++){
     		if(angular.isDefined(item.areaType)){
 	    		if(angular.equals(item.areaType,list[i].areaType)){
@@ -103,6 +104,12 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
     		}
     	}
     	layersettingsForm.$setDirty();
+    	if(isBaseList || (!isBaseList && !_.isEmpty($scope.selectedBases))){
+    		$scope.layersettingsForm.baseLayers.$setValidity('empty',true);
+    	}else{
+    		$scope.layersettingsForm.baseLayers.$setValidity('empty',false);
+    	}
+    	
     	return item;
     };
     
@@ -147,6 +154,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	    	angular.forEach($scope.selectedBases, function(item) {
 	    		item.serviceLayerId = "" + item.serviceLayerId;
 	    	});
+	    	$scope.validateBackGroundLayers();
 	    	
     	}
     });
@@ -179,6 +187,14 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	    $scope.alert.hasError = true;
 	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_reset_layers_failure');
 	    $scope.alert.hideAlert();
+	};
+	
+	$scope.validateBackGroundLayers = function(){
+		if((_.isEmpty($scope.selectedBases) && !$scope.isReportConfig) || ($scope.isReportConfig && _.isEmpty($scope.selectedBases) && (!_.isEmpty($scope.selectedPorts) || !_.isEmpty($scope.selectedAreas) || !_.isEmpty($scope.selectedAdditionals)))){
+			$scope.layersettingsForm.baseLayers.$setValidity('empty',false);
+		}else{
+			$scope.layersettingsForm.baseLayers.$setValidity('empty',true);
+		}
 	};
     
 });

@@ -36,6 +36,7 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
     };
     
     $scope.reset = function(){
+    	$scope.visibilitysettingsForm.$setDirty();
         var item = {
            visibilitySettings: {}
         };

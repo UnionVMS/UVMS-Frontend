@@ -147,7 +147,18 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
             }
         }
 	    
-	    if(!_.isEqual(config.stylesSettings.positions,$scope.configCopy.stylesSettings.positions) || !_.isEqual(config.stylesSettings.segments,$scope.configCopy.stylesSettings.segments)){
+	    if(angular.isDefined($scope.configModel.alarmStyle)){
+            var alarmProperties = {};
+            if($scope.configPanelForm && $scope.configPanelForm.vmsstylesForm.alarmsForm && $scope.configPanelForm.vmsstylesForm.alarmsForm.$dirty){
+            	alarmProperties.size = $scope.configModel.alarmStyle.size;
+    			for (i = 0; i < $scope.configModel.alarmStyle.style.length; i++){
+    				alarmProperties[$scope.configModel.alarmStyle.style[i].id] = $scope.configModel.alarmStyle.style[i].color;
+                }
+                config.stylesSettings.alarms = alarmProperties;
+            }
+        }
+	    
+	    if(!_.isEqual(config.stylesSettings.positions,$scope.configCopy.stylesSettings.positions) || !_.isEqual(config.stylesSettings.segments,$scope.configCopy.stylesSettings.segments) || !_.isEqual(config.stylesSettings.alarms,$scope.configCopy.stylesSettings.alarms)){
 	    	include = true;
 	    }
 	    if (include === false){

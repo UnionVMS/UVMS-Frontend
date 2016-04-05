@@ -145,6 +145,17 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 	            $scope.configModel.stylesSettings.segments = segmentProperties;
             }
         }
+	    
+	    if(angular.isDefined($scope.configModel.alarmStyle)){
+            var alarmProperties = {};
+            if($scope.mapConfigurationForm && $scope.mapConfigurationForm.vmsstylesForm.alarmsForm && $scope.mapConfigurationForm.vmsstylesForm.alarmsForm.$dirty){
+            	alarmProperties.size = $scope.configModel.alarmStyle.size;
+    			for (i = 0; i < $scope.configModel.alarmStyle.style.length; i++){
+    				alarmProperties[$scope.configModel.alarmStyle.style[i].id] = $scope.configModel.alarmStyle.style[i].color;
+                }
+	            $scope.configModel.stylesSettings.alarms = alarmProperties;
+            }
+        }
 	    return $scope.configModel.stylesSettings;
     };
     
@@ -203,6 +214,10 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     		if(!angular.isDefined($scope.initialConfig.stylesSettings.segments) || _.isEmpty($scope.initialConfig.stylesSettings.segments) || !angular.isDefined($scope.initialConfig.stylesSettings.segments.attribute)){
     			$scope.configModel.stylesSettings.segments = {};
         		angular.copy($scope.userConfig.stylesSettings.segments, $scope.configModel.stylesSettings.segments);
+    		}
+    		if(!angular.isDefined($scope.initialConfig.stylesSettings.alarms) || _.isEmpty($scope.initialConfig.stylesSettings.alarms)){
+    			$scope.configModel.stylesSettings.alarms = {};
+        		angular.copy($scope.userConfig.stylesSettings.alarms, $scope.configModel.stylesSettings.alarms);
     		}
     	}
     	

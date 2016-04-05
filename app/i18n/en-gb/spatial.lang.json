@@ -357,6 +357,7 @@
 	"invalid_range_error_message": "Must be between 1 and 10",
 	"invalid_range_error_message_2": "Must be between 1 and 6",
 	"not_numeric_error_message": "Value shall be numeric",
+	"base_list_error": "There should be at least one selected background layer",
 	
 	"styles_attr_countryCode": "F.S",
 	"styles_attr_type": "Msg. Type",

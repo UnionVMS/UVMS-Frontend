@@ -5,6 +5,7 @@ angular.module('unionvmsWeb').controller('MapsettingscollapsiblepanelCtrl',funct
 	};
 	
 	$scope.reset = function(){
+		$scope.mapsettingsForm.$setDirty();
 	    var item = {
 	       mapSettings: {}
 	    };

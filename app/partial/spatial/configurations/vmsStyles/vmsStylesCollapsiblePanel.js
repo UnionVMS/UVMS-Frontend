@@ -36,6 +36,7 @@ angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',functio
 	};
 	
 	$scope.reset = function(){
+		$scope.vmsstylesForm.$setDirty();
 		$scope.loadedAllSettings = false;
         var item = {
             stylesSettings: {}
