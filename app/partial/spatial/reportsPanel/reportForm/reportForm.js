@@ -429,30 +429,30 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     	var mergedReport = new Report();
     	angular.copy($scope.report, mergedReport);
     	
-    	if(!angular.isDefined(mergedReport.mapConfiguration.mapProjectionId) && 
-    			!angular.isDefined(mergedReport.mapConfiguration.displayProjectionId) && !angular.isDefined(mergedReport.mapConfiguration.coordinatesFormat) && 
-    			!angular.isDefined(mergedReport.mapConfiguration.scaleBarUnits)){
+    	if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.mapProjectionId) && 
+    			!angular.isDefined(mergedReport.currentConfig.mapConfiguration.displayProjectionId) && !angular.isDefined(mergedReport.currentConfig.mapConfiguration.coordinatesFormat) && 
+    			!angular.isDefined(mergedReport.currentConfig.mapConfiguration.scaleBarUnits)){
     		
-    		mergedReport.mapConfiguration.spatialConnectId = $scope.userConfig.mapSettings.spatialConnectId;
-    		mergedReport.mapConfiguration.mapProjectionId = $scope.userConfig.mapSettings.mapProjectionId;
-    		mergedReport.mapConfiguration.displayProjectionId = $scope.userConfig.mapSettings.displayProjectionId;
-    		mergedReport.mapConfiguration.coordinatesFormat = $scope.userConfig.mapSettings.coordinatesFormat;
-    		mergedReport.mapConfiguration.scaleBarUnits = $scope.userConfig.mapSettings.scaleBarUnits;
+    		mergedReport.currentConfig.mapConfiguration.spatialConnectId = $scope.userConfig.mapSettings.spatialConnectId;
+    		mergedReport.currentConfig.mapConfiguration.mapProjectionId = $scope.userConfig.mapSettings.mapProjectionId;
+    		mergedReport.currentConfig.mapConfiguration.displayProjectionId = $scope.userConfig.mapSettings.displayProjectionId;
+    		mergedReport.currentConfig.mapConfiguration.coordinatesFormat = $scope.userConfig.mapSettings.coordinatesFormat;
+    		mergedReport.currentConfig.mapConfiguration.scaleBarUnits = $scope.userConfig.mapSettings.scaleBarUnits;
     	}
 //    	mergedReport.mapConfiguration.refreshRate = $scope.userConfig.mapSettings.refreshRate;
 //    	mergedReport.mapConfiguration.refreshStatus = $scope.userConfig.mapSettings.refreshStatus
     	
-    	if(!angular.isDefined(mergedReport.mapConfiguration.stylesSettings)){
-    		mergedReport.mapConfiguration.stylesSettings = $scope.userConfig.stylesSettings;
+    	if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.stylesSettings)){
+    		mergedReport.currentConfig.mapConfiguration.stylesSettings = $scope.userConfig.stylesSettings;
     	}
     	
-    	if(!angular.isDefined(mergedReport.mapConfiguration.layerSettings)){
-    		mergedReport.mapConfiguration.layerSettings = $scope.userConfig.layerSettings;
+    	if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.layerSettings)){
+    		mergedReport.currentConfig.mapConfiguration.layerSettings = $scope.userConfig.layerSettings;
     	}
-    	mergedReport.mapConfiguration.layerSettings = checkLayerSettings(mergedReport.mapConfiguration.layerSettings);
+    	mergedReport.currentConfig.mapConfiguration.layerSettings = checkLayerSettings(mergedReport.currentConfig.mapConfiguration.layerSettings);
     	
-    	if(!angular.isDefined(mergedReport.mapConfiguration.visibilitySettings)){
-    		mergedReport.mapConfiguration.visibilitySettings = $scope.userConfig.visibilitySettings;
+    	if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.visibilitySettings)){
+    		mergedReport.currentConfig.mapConfiguration.visibilitySettings = $scope.userConfig.visibilitySettings;
     	}
     	
     	return mergedReport;
@@ -476,6 +476,8 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 	};
 	
 	var getMapConfigsFromReportSuccess = function(data){
+		angular.copy($scope.mergedReport.currentConfig.mapConfiguration,$scope.mergedReport.mapConfiguration);
+		delete $scope.mergedReport.currentConfig;
 		reportService.runReportWithoutSaving($scope.mergedReport,data);
     	$scope.$emit('goToLiveView');
     	$scope.toggleReportForm();
@@ -519,14 +521,14 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 			               ]
 			           },
 			mapSettings: {
-				mapProjectionId: $scope.mergedReport.mapConfiguration.mapProjectionId,
-				displayProjectionId: $scope.mergedReport.mapConfiguration.displayProjectionId,
-				coordinatesFormat: $scope.mergedReport.mapConfiguration.coordinatesFormat,
-				scaleBarUnits: $scope.mergedReport.mapConfiguration.scaleBarUnits
+				mapProjectionId: $scope.mergedReport.currentConfig.mapConfiguration.mapProjectionId,
+				displayProjectionId: $scope.mergedReport.currentConfig.mapConfiguration.displayProjectionId,
+				coordinatesFormat: $scope.mergedReport.currentConfig.mapConfiguration.coordinatesFormat,
+				scaleBarUnits: $scope.mergedReport.currentConfig.mapConfiguration.scaleBarUnits
 			},
-			stylesSettings: $scope.mergedReport.mapConfiguration.stylesSettings,
-			layerSettings: $scope.mergedReport.mapConfiguration.layerSettings,
-			visibilitySettings: $scope.mergedReport.mapConfiguration.visibilitySettings,
+			stylesSettings: $scope.mergedReport.currentConfig.mapConfiguration.stylesSettings,
+			layerSettings: $scope.mergedReport.currentConfig.mapConfiguration.layerSettings,
+			visibilitySettings: $scope.mergedReport.currentConfig.mapConfiguration.visibilitySettings,
 			reportProperties: {
 		        startDate : $scope.mergedReport.startDateTime,
 		        endDate : $scope.mergedReport.endDateTime
