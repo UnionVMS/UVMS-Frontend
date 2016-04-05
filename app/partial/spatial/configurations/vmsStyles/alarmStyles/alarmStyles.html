@@ -13,7 +13,7 @@
 						<div ng-style="{'background-color': item.color && item.color.length > 3 && item.color.length <= 7 && item.color.indexOf('#') != -1 ? item.color : '#fff'}" class="form-control pickedcolor">
 				       		<i class="fa fa-ban" ng-hide="item.color && item.color.length > 3 && item.color.length <= 7 && item.color.indexOf('#') != -1"></i>
 				        </div>
-				        <input class="form-control" colorpicker ng-model="item.color" type="text" ng-change="validatePropertyColor();" name="propertyColor{{item.id}}" autocomplete="off"/>
+				        <input class="form-control" colorpicker ng-model="item.color" type="text" ng-change="validatePropertyColor(item);" name="propertyColor{{item.id}}" autocomplete="off"/>
 					</div>
 				</div>
 				<div ng-messages="alarmsForm.propertyColor{{item.id}}.$error" ng-show="alarmsForm.propertyColor{{item.id}}.$error.hasError && (alarmsForm.propertyColor{{item.id}}.$dirty || submitedWithErrors)">
@@ -25,12 +25,12 @@
 		<div class="row defaultItem">
 			<ng-form name="defaultForm" novalidate>
 				<div class="row col-md-12">
-					<div class="form-group col-md-2" ng-class="{'has-error': defaultForm.alarmSize.$error.hasError && (defaultForm.alarmSize.$dirty || submitedWithErrors)}">
+					<div class="form-group col-md-2" ng-class="{'has-error': defaultForm.alarmSize.$invalid && (defaultForm.alarmSize.$dirty || submitedWithErrors)}">
 						<label>{{'spatial.size' | i18n}}</label>
 						<input class="form-control" ng-model="configModel.alarmStyle.size" ng-required="true" name="alarmSize" type="number" min="1" max="6" /> <!-- ng-change="validateLineWidth();" -->
 						<div class="belowErrorMessages" ng-messages="defaultForm.alarmSize.$error" ng-show="defaultForm.alarmSize.$dirty || submitedWithErrors">
-							<div ng-message="requiredField">{{'spatial.required_field_error_message' | i18n }}</div>
-							<div ng-message="rangeError">{{'spatial.invalid_range_error_message_2' | i18n }}</div>
+							<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
+							<div ng-message="number">{{'spatial.not_numeric_error_message' | i18n }}</div>
 						</div>
 					</div>
 				</div>

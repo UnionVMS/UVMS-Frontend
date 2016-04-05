@@ -1,25 +1,5 @@
 angular.module('unionvmsWeb').controller('AlarmstylesCtrl',function($scope,locale,alarmRestService){
 	
-	$scope.validateDefaultColor = function(){
-		if(angular.isDefined($scope.alarmsForm) && angular.isDefined($scope.alarmsForm.defaultForm) && angular.isDefined($scope.alarmsForm.defaultForm.defaultColor)){
-			if($scope.configModel.alarmStyle.defaultColor && ($scope.configModel.alarmStyle.defaultColor.length <= 3 || $scope.configModel.alarmStyle.defaultColor.length > 7 || $scope.configModel.alarmStyle.defaultColor.indexOf('#') === -1)){
-				$scope.alarmsForm.defaultForm.defaultColor.$setValidity('segDefColor', false);
-			}else{
-				$scope.alarmsForm.defaultForm.defaultColor.$setValidity('segDefColor', true);
-			}
-			if(!$scope.configModel.alarmStyle.defaultColor && $scope.configModel.alarmStyle.defaultColor !== 0){
-				$scope.alarmsForm.defaultForm.defaultColor.$setValidity('requiredField', false);
-			}else{
-				$scope.alarmsForm.defaultForm.defaultColor.$setValidity('requiredField', true);
-			}
-			if($scope.alarmsForm.defaultForm.defaultColor.$valid || _.allKeys($scope.alarmsForm.defaultForm.defaultColor.$error).length === 1 && $scope.alarmsForm.defaultForm.defaultColor.$error.hasError){
-				$scope.alarmsForm.defaultForm.defaultColor.$setValidity('hasError', true);
-			}else{
-				$scope.alarmsForm.defaultForm.defaultColor.$setValidity('hasError', false);
-			}
-		}
-	};
-	
 	$scope.getNrErrors = function() {
 		var nrErrors = 0;
 		if(angular.isDefined($scope.alarmsForm)){
@@ -36,6 +16,26 @@ angular.module('unionvmsWeb').controller('AlarmstylesCtrl',function($scope,local
 			});
 		}
 		return nrErrors;
+	};
+	
+	$scope.validatePropertyColor = function(item){
+		if (angular.isDefined(item) && angular.isDefined($scope.alarmsForm["propertyColor" + item.id])){
+			if(item.color && (item.color.length <= 3 || item.color.length > 7 || item.color.indexOf('#') === -1)){
+				$scope.alarmsForm["propertyColor" + item.id].$setValidity('segPropColor', false);
+			}else{
+				$scope.alarmsForm["propertyColor" + item.id].$setValidity('segPropColor', true);
+			}
+			if(!item.color && item.color !== 0){
+				$scope.alarmsForm["propertyColor" + item.id].$setValidity('requiredField', false);
+			}else{
+				$scope.alarmsForm["propertyColor" + item.id].$setValidity('requiredField', true);
+			}
+			if($scope.alarmsForm["propertyColor" + item.id].$valid || _.allKeys($scope.alarmsForm["propertyColor" + item.id].$error).length === 1 && $scope.alarmsForm["propertyColor" + item.id].$error.hasError){
+				$scope.alarmsForm["propertyColor" + item.id].$setValidity('hasError', true);
+			}else{
+				$scope.alarmsForm["propertyColor" + item.id].$setValidity('hasError', false);
+			}
+		}
 	};
 	
 	$scope.loadAlarmProperties = function(){
