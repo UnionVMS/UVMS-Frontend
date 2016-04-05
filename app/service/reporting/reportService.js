@@ -389,7 +389,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    //Set the styles for vector layers and legend
 	    mapService.setPositionStylesObj(data.vectorStyles.positions); 
 	    mapService.setSegmentStylesObj(data.vectorStyles.segments);
-	    //mapService.setAlarmsStylesObj(data.vectorStyles.alarms); FIXME
+	    mapService.setAlarmsStylesObj(data.vectorStyles.alarms);
 	    
 	    //Set vms table attribute visibility
 	    vmsVisibilityService.setVisibility(data.visibilitySettings);

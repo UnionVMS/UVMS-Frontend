@@ -679,7 +679,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
         
         var geomExtent = ms.map.getView().calculateExtent([targetWidth, targetHeight]);
-        var printFeature = new ol.Feature(ol.geom.Polygon.fromExtent(geomExtent)); //FIXME - probably it is a good idea to store the feature in the model
+        var printFeature = new ol.Feature(ol.geom.Polygon.fromExtent(geomExtent));
         
         var layer = ms.getLayerByType('print').getSource();
         layer.clear(true);
@@ -814,17 +814,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
 
     //VMS styles
-    //FIXME when backend ready
     ms.styles = {
         positions: undefined,
         segments: undefined,
-        alarms: {
-            size: 4,
-            open: '#FF0000',
-            closed: '#008000',
-            pending: '#FFA500',
-            none: '#198BAF'
-        }
+        alarms: undefined
     };
     
     
@@ -1788,7 +1781,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var draw = new ol.interaction.Draw({
             source: layer.getSource(),
             type: 'LineString',
-            condition: ol.events.condition.noModifierKeys,
+            condition: function(evt){
+                return ol.events.condition.noModifierKeys && evt.originalEvent.button === 0;
+            },
             freehandCondition: ol.events.condition.never,
             style: new ol.style.Style({
                 fill: new ol.style.Fill({

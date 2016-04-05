@@ -1,19 +1,10 @@
 angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($scope, $timeout, $interval, locale, spatialRestService, projectionService){
-    $scope.projectionItems = [];
     $scope.coordinatesFormatItems = [];
     $scope.scaleBarUnitsItems = [];
     $scope.projectionSelected = false;
     $scope.hasError = false;
     $scope.isMapConfigurationModal = $('.mapConfigurationModal').length ? true : false;
     $scope.projections = projectionService;
-
-    function setProjectionItems() {
-        var tempProj = [];
-        for (var i = 0; i < $scope.projections.length; i++) {
-            tempProj.push({"text": $scope.projections[i].name, "code": $scope.projections[i].id});
-        }
-        $scope.projectionItems = tempProj;
-    }
 
     function setScaleBarUnits() {
         var tempScale = [];
