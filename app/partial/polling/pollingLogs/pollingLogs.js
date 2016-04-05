@@ -296,6 +296,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
         searchService.reset();
+        $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_TODAY;
         longPolling.cancel(longPollingId);
         if(angular.isDefined(modalInstance)){
             modalInstance.dismiss();
