@@ -215,15 +215,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	                                record = {
 	                                    data: positions[0].getProperties(),
 	                                    coord: positions[0].getGeometry().getCoordinates(),
+	                                    id: positions[0].getId(),
 	                                    fromCluster: false
 	                                };
 	                            }
 	                        } else{
 	                            records.push({
-	                                data: feature.getProperties(),
-	                                coord: ms.activeLayerType === 'vmsseg' ? feature.getGeometry().getClosestPoint(coordinate) : feature.getGeometry().getCoordinates(),
-	                                fromCluster: false
-	                            });
+                                    data: feature.getProperties(),
+                                    coord: ms.activeLayerType === 'vmsseg' ? feature.getGeometry().getClosestPoint(coordinate) : feature.getGeometry().getCoordinates(),
+                                    fromCluster: false
+                                });
 	                        }
 	                    }
 	                }
@@ -239,6 +240,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	                        record = {
 	                            data: position.getProperties(),
 	                            coord: position.get('spiderCoords'),
+	                            id: position.getId(),
 	                            fromCluster: true
 	                        };
 	                    }
@@ -252,7 +254,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	                
 	                var data;
 	                if (ms.activeLayerType === 'vmspos'){
-	                    data = ms.setPositionsObjPopup(record.data);
+	                    data = ms.setPositionsObjPopup(record.data, record.id);
 	                } else if (ms.activeLayerType === 'vmsseg'){
 	                    data = ms.setSegmentsObjPopup(record.data);
 	                    ms.popupSegRecContainer.records = records;
@@ -328,6 +330,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                     ms.closePopup();
                 }
             }
+            
             ms.checkLabelStatus();
             $rootScope.$broadcast('reloadLegend');
         });
@@ -514,11 +517,19 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
     //Add VMS positions layer
     ms.createPositionsLayer = function( config ) {
+        var features = (new ol.format.GeoJSON()).readFeatures(config.geoJson, {
+            dataProjection: 'EPSG:4326',
+            featureProjection: ms.getMapProjectionCode()
+        });
+        
+        var count = 0;
+        angular.forEach(features, function(feature) {
+            count += 1;
+        	feature.setId(count);
+        });
+        
         var source = new ol.source.Vector({
-            features: (new ol.format.GeoJSON()).readFeatures(config.geoJson, {
-                dataProjection: 'EPSG:4326',
-                featureProjection: ms.getMapProjectionCode()
-            })
+            features: features 
         });
         
         var attribution = new ol.Attribution({
@@ -529,6 +540,28 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             attributions: [attribution],
             distance: 20,
             source: source
+        });
+        
+        cluster.on('change', function(e){
+            //hide popup if position is clustered
+            if (angular.isDefined(ms.overlay) && ms.activeLayerType === 'vmspos'){
+                var id = ms.overlay.get('featureId');
+                var layerSrc = ms.getLayerByType('vmspos').getSource();
+                var features = layerSrc.getFeaturesInExtent(ms.map.getView().calculateExtent(ms.map.getSize()));
+                if (features.length > 0){
+                    var visible = false;
+                    angular.forEach(features, function(feature) {
+                        var inFeatures = feature.get('features');
+                        if (inFeatures.length === 1 && inFeatures[0].getId() === id){
+                            visible = true;
+                        }
+                    });
+                        
+                    if (!visible){
+                        ms.closePopup();
+                    }
+                }
+            }
         });
         
         var layer = new ol.layer.Vector({
@@ -2255,6 +2288,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             content.innerHTML = rendered;
             ms.overlay.setPosition(coords);
             ms.overlay.set('fromCluster', fromCluster, true);
+            if (ms.activeLayerType === 'vmspos'){
+                ms.overlay.set('featureId', data.id, true);
+            } else {
+                ms.overlay.set('featureId', undefined, true);
+            }
         }, function(){
             console.log('error getting template');
         });
@@ -2274,6 +2312,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	};
 
 	ms.closePopup = function(){
+	    ms.overlay.set('featureId', undefined, true);
 	    ms.overlay.setPosition(undefined);
 	    return false;
 	};
@@ -2295,7 +2334,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	};
 
 	//POPUP - Define the object that will be used in the popup for vms positions
-    ms.setPositionsObjPopup = function(feature){
+    ms.setPositionsObjPopup = function(feature, id){
         var titles = ms.getPositionTitles();
         var srcData = ms.formatPositionDataForPopup(feature);
         
@@ -2311,6 +2350,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             windowTitle: locale.getString('spatial.popup_positions_title'),
             showTitles: ms.popupVisibility.positionsTitles,
             position: data,
+            id: id,
             getTitle: function(){
                 return this.title;
             },
@@ -2330,7 +2370,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     //Popup attribute names for positions
     ms.getPositionTitles = function(){
         return {
-            name: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
+            name: locale.getString('spatial.reports_form_vessel_search_table_header_name'),
             fs: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
             extMark: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
             ircs: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'),
@@ -2418,7 +2458,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     //Popup attribute names for segments
     ms.getSegmentTitles = function(){
         return {
-            name: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
+            name: locale.getString('spatial.reports_form_vessel_search_table_header_name'),
             fs: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
             extMark: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
             ircs: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'),

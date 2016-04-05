@@ -48,7 +48,7 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
         getConfigsForReport: function(){
             return $resource('/spatial/rest/config/:id', {}, {
                 'get': {
-                    method: 'GET',
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     }

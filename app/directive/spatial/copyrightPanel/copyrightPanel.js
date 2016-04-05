@@ -10,7 +10,8 @@ angular.module('unionvmsWeb').directive('copyrightPanel', function(mapService) {
                 var layers = mapService.map.getLayers();
                 
                 layers.forEach(function(layer, idx){
-                    if (layer.get('visible') && angular.isDefined(layer.get('longAttribution'))){
+                    var attribution = layer.get('longAttribution')
+                    if (layer.get('visible') && angular.isDefined(attribution) && attribution !== ''){
                         records.push({
                             title: layer.get('title'),
                             copyright: layer.get('longAttribution')

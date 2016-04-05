@@ -61,6 +61,13 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 	                    target = $(node.span).children('.fancytree-title').children('.fa.fa-tag');
 	                    className = 'label-selected-' + node.data.type;
 			        }
+			        
+			        //Opened clusters should be closed automatically
+			        var select = mapService.getInteractionsByType('Select')[0];
+			        if (angular.isDefined(select)){
+		                var selFeatures = select.getFeatures();
+		                selFeatures.clear();
+			        }
                 }
                 
                 if (node.data.type === 'vmsseg' && mapService.vmssegLabels.active === true && node.isSelected() === false){
