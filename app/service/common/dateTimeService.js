@@ -7,7 +7,7 @@ angular.module('unionvmsWeb').factory('dateTimeService',['$log', 'globalSettings
 
     //Value when moment.js fails to format a date
     var INVALID_DATE = 'Invalid date';
-    var DEFAULT_FORMAT = 'YYYY-MM-DD HH:mm';
+    var DEFAULT_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
     function getFormat() {
         var format = globalSettingsService.getDateFormat();
@@ -97,17 +97,17 @@ angular.module('unionvmsWeb').factory('dateTimeService',['$log', 'globalSettings
                 var userTimezone = globalSettingsService.getTimezone();
                 var hh = Math.floor(userTimezone / 60);
                 var mm = userTimezone % 60;
-                dateTime += (userTimezone < 0 ? '-' : '+') + (hh < 10 ? '0' + hh : hh) + ':' + (mm < 10 ? '0' + mm : mm);
+                dateTime += (userTimezone < 0 ? '-' : '+') + (hh < 10 ? '0' + hh : hh) + ':' + (mm < 10 ? '0' + mm : mm) + ':00';
             }
 
-            var m = moment(dateTime, "YYYY-MM-DD HH:mmZ");
+            var m = moment(dateTime, "YYYY-MM-DD HH:mm:ssZ");
             m.utc();
-            return m.format("YYYY-MM-DD HH:mm");
+            return m.format("YYYY-MM-DD HH:mm:ss");
         },
         utcToUserTimezone: function(utcDateTime) {
-            var m = moment.utc(utcDateTime, "YYYY-MM-DD HH:mm Z");
+            var m = moment.utc(utcDateTime, "YYYY-MM-DD HH:mm:ss Z");
             m.utcOffset(globalSettingsService.getTimezone());
-            return m.format("YYYY-MM-DD HH:mm");
+            return m.format("YYYY-MM-DD HH:mm:ss");
         },
         format: function(date) {
             return moment(date).format(getFormat());

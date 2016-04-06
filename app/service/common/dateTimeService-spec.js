@@ -201,29 +201,28 @@ describe('dateTimeService', function($provide) {
 
     //Timezone format
     d = '2015-11-18 13:49:00 +01:00';
-    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('2015-11-18 13:49');
+    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('2015-11-18 13:49:00');
 
     //Without timezone
     d = '2018-02-03 04:05:00';
-    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('2018-02-03 05:05');
+    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('2018-02-03 05:05:00');
 
     //Unix milliseconds and seconds
     d = '1444116559472';
-    var d2 = '1444116559';
-    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('2015-10-06 08:29');
+    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('2015-10-06 08:29:19');
     expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual(dateTimeService.formatAccordingToUserSettings(d));
 
     //Unix milliseconds as number
     d = 1444116604804;
-    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('2015-10-06 08:30');
+    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('2015-10-06 08:30:05');
 
     //Unix seconds
     d = '196416552'
-    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('1976-03-23 09:09');
+    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('1976-03-23 09:09:12');
 
     //Unix seconds as number
     d = 196416552;
-    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('1976-03-23 09:09');
+    expect(dateTimeService.formatAccordingToUserSettings(d)).toEqual('1976-03-23 09:09:12');
 
     //Strange format
     d = 'STRANGE DATE FORMAT';
@@ -261,11 +260,11 @@ describe('confDateFormat filter', function() {
         var d;
         //Valid date
         d = '2018-02-03 04:05:00';
-        expect(filter(d)).toEqual('2018-02-03 08:05');
+        expect(filter(d)).toEqual('2018-02-03 08:05:00');
 
         //Date object
         d = 196416552;
-        expect(filter(d)).toEqual('1976-03-23 12:09');
+        expect(filter(d)).toEqual('1976-03-23 12:09:12');
 
         //Undefined
         expect(filter(undefined)).toBeUndefined();

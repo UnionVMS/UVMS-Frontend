@@ -16,8 +16,8 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 	];
 
 	$scope.dateFormats = [
-		"YYYY-MM-DD HH:mm",
-		"YY/MM/DD HH:mm"
+		"YYYY-MM-DD HH:mm:ss",
+		"YY/MM/DD HH:mm:ss"
 	];
 
 	$scope.measurementSystems = [
