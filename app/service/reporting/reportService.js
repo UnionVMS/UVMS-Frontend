@@ -97,6 +97,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	};
 	
 	rep.clearMapOverlaysOnRefresh = function(){
+	    //Check for measuring overlays
+	    $rootScope.$broadcast('untoggleToolbarBtns');
+	    
 	    //Deactivate labels
         if (mapService .vmsposLabels.active === true){
             mapService.deactivateVectorLabels('vmspos');
@@ -109,8 +112,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         //Deactivate popups
         if (angular.isDefined(mapService.activeLayerType)){
             mapService.closePopup();
+            mapService.activeLayerType = undefined;
         }
-	}
+	};
 	
 	rep.refreshReport = function(){
 	    //TODO extend this to support local changes
