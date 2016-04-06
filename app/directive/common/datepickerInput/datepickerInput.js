@@ -278,6 +278,7 @@ angular.module('unionvmsWeb').directive('datePickerFormatter',['dateTimeService'
                     if(!useTime){
                         newValue = moment(newValue, YMDHM_FORMAT).format(YMD_FORMAT);
                     }
+                    newValue = dateTimeService.formatAccordingToUserSettings(newValue);
                 }
                 return newValue;
             };

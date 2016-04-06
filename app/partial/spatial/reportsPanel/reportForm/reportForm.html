@@ -73,7 +73,7 @@
 		    			<div class="form-group col-md-3" ng-hide="report.positionSelector === 'last' && report.positionTypeSelector === 'hours'"  ng-class="{'has-error': (reportForm.reportBodyForm.startDateTime.$dirty || submitingReport === true) && reportForm.reportBodyForm.startDateTime.$invalid}">
 		    				<label for="reportStartDate">{{'spatial.reports_form_start_date_label' | i18n}}</label>
 		    				<!-- <datepicker-input id="reportStartDate" time="true" model="report.startDateTime" name="startDateTime" ng-required="report.positionSelector === 'all'"></datepicker-input> -->
-		    				<datepicker-input id="reportStartDate" time="true" model="report.startDateTime" name="startDateTime" max-date="report.endDateTime"  ng-required="report.positionSelector === 'all'" ng-change-callback="resetDateTimePicker" input-field-id="report-start-date-picker" update-when="default"></datepicker-input>
+		    				<datepicker-input id="reportStartDate" time="true" model="report.startDateTime" name="startDateTime" max-date="report.endDateTime"  ng-required="report.positionSelector === 'all'" input-field-id="report-start-date-picker" update-when="default"></datepicker-input>
 		    				<div class="innerErrorMessagesDateWithUpLabel" ng-messages="reportForm.reportBodyForm.startDateTime.$error" ng-show="(reportForm.reportBodyForm.startDateTime.$dirty || submitingReport === true) && reportForm.reportBodyForm.startDateTime.$invalid">
 								<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 							</div>
@@ -81,7 +81,7 @@
 		    			<div class="form-group col-md-3" ng-hide="report.positionSelector === 'last' && report.positionTypeSelector === 'hours'" ng-class="{'has-error': (reportForm.reportBodyForm.endDateTime.$dirty || submitingReport === true) && reportForm.reportBodyForm.endDateTime.$invalid}">
 		    				<label for="reportEndDate">{{'spatial.reports_form_end_date_label' | i18n}}</label>
 		    				<!-- <datepicker-input id="reportEndDate" time="true" model="report.endDateTime" name="endDateTime" ng-required="report.positionSelector === 'all'"></datepicker-input> -->
-		    				<datepicker-input id="reportEndDate" time="true" model="report.endDateTime" name="endDateTime" min-date="report.startDateTime" ng-required="report.positionSelector === 'all'" ng-change-callback="resetDateTimePicker" input-field-id="report-end-date-picker"></datepicker-input>
+		    				<datepicker-input id="reportEndDate" time="true" model="report.endDateTime" name="endDateTime" min-date="report.startDateTime" ng-required="report.positionSelector === 'all'" input-field-id="report-end-date-picker"></datepicker-input>
 		    				<div class="innerErrorMessagesDateWithUpLabel" ng-messages="reportForm.reportBodyForm.endDateTime.$error" ng-show="(reportForm.reportBodyForm.endDateTime.$dirty || submitingReport === true) && reportForm.reportBodyForm.endDateTime.$invalid">
 								<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 							</div>

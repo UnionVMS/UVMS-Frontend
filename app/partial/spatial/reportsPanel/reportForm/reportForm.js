@@ -260,7 +260,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         }
     	
     };
-
+    
     $scope.$on('openReportForm', function(e, args){
         $scope.init();
         

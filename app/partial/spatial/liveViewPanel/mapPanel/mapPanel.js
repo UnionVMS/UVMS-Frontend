@@ -449,7 +449,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     	if(srs !== mapService.getMapProjectionCode()){
     		geom.transform(srs, mapService.getMapProjectionCode());
     	}
-        mapService.zoomTo(geom);
+        mapService.zoomTo(geom, true);
     };
     
     $scope.createBookmark = function(){

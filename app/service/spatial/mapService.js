@@ -1678,8 +1678,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
 
 	//Zoom to geometry control
-	ms.zoomTo = function(geom){
-	    ms.map.getView().fit(geom, ms.map.getSize(), {maxZoom: 19});
+	ms.zoomTo = function(geom, nearest){
+	    var opt = {
+	        maxZoom: 19,
+	        nearest: false
+	    };
+	    if (angular.isDefined(nearest)){
+	        opt.nearest = nearest;
+	    }
+	    ms.map.getView().fit(geom, ms.map.getSize(), opt);
 	};
 
 	//Pan to coordinates control
