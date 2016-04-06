@@ -150,7 +150,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
             var alarmProperties = {};
             if($scope.mapConfigurationForm && $scope.mapConfigurationForm.vmsstylesForm.alarmsForm && $scope.mapConfigurationForm.vmsstylesForm.alarmsForm.$dirty){
             	alarmProperties.size = $scope.configModel.alarmStyle.size;
-    			for (i = 0; i < $scope.configModel.alarmStyle.style.length; i++){
+    			for (var i = 0; i < $scope.configModel.alarmStyle.style.length; i++){
     				alarmProperties[$scope.configModel.alarmStyle.style[i].id] = $scope.configModel.alarmStyle.style[i].color;
                 }
 	            $scope.configModel.stylesSettings.alarms = alarmProperties;

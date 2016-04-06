@@ -89,19 +89,16 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 		rep.isReportExecuting = true;
 		prepareReportToRun(report);
 		configureMap(mapData[0]);
-//        $rootScope.$broadcast('removeVmsNodes');
 		
         rep.getReportTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
         report.additionalProperties = getUnitSettings();
 	    
-        //TODO get the report congurations from the backend
         reportRestService.executeWithoutSaving(report).then(getVmsDataSuccess, getVmsDataError);
 	};
 	
 	rep.refreshReport = function(){
 	    //TODO extend this to support local changes
 	    if (angular.isDefined(rep.id) && rep.tabs.map === true ){
-	        $rootScope.$broadcast('removeVmsNodes'); 
 	        rep.isReportExecuting = true;
 	        var repConfig = getRepConfig();
 	        reportRestService.executeReport(rep.id, repConfig).then(updateVmsDataSuccess, updateVmsDataError);
@@ -305,6 +302,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     
     //Refresh report success callback
     var updateVmsDataSuccess = function(data){
+        $rootScope.$broadcast('removeVmsNodes');
         rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;

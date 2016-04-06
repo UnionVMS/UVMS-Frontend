@@ -75,6 +75,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	
 	$scope.checkStylesSettings = function(config){
 	    var include = false;
+	    
 	    //Rebuild colors from fs
 	    config.stylesSettings = $scope.configModel.stylesSettings;
 	    if (angular.isDefined($scope.configModel.positionStyle)){
@@ -151,7 +152,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
             var alarmProperties = {};
             if($scope.configPanelForm && $scope.configPanelForm.vmsstylesForm.alarmsForm && $scope.configPanelForm.vmsstylesForm.alarmsForm.$dirty){
             	alarmProperties.size = $scope.configModel.alarmStyle.size;
-    			for (i = 0; i < $scope.configModel.alarmStyle.style.length; i++){
+    			for (var i = 0; i < $scope.configModel.alarmStyle.style.length; i++){
     				alarmProperties[$scope.configModel.alarmStyle.style[i].id] = $scope.configModel.alarmStyle.style[i].color;
                 }
                 config.stylesSettings.alarms = alarmProperties;

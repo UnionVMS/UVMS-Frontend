@@ -71,7 +71,7 @@
 						  <button type="button" class="btn btn-primary btn-xs btn-bottom-mg" title="{{'spatial.reports_table_share_label' | i18n }}" data-toggle="dropdown" aria-haspopup="true" ><span class="fa fa-share-alt"></span></button>
 						  <div class="dropdown-menu">
 						  	<div class="dropdown-body">
-						      <a class="dropdown-item" ng-repeat="visibilityLevel in report.shareable" ng-click="shareReport($parent.$index, visibilityLevel)" ng-hide="!isUserAllowed(SHARE_REPORT_{{visibilityLevel}}) && visibilityLevel !== 'PRIVATE'">
+						      <a class="dropdown-item" ng-repeat="visibilityLevel in report.shareable" ng-click="shareReport($parent.$index, visibilityLevel)" ng-hide="!isAllowed('Reporting', 'SHARE_REPORT_{{visibilityLevel}}') && visibilityLevel !== 'PRIVATE'">
 						    	  <report-visibility visibility="visibilityLevel"/></a>					    
 						    </div>
 						  </div>
