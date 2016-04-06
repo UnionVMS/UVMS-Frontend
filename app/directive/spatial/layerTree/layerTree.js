@@ -341,10 +341,18 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			
 			var removeVmsNodes = function(event){
 				var root = scope.$tree.getRootNode();
-				var firstChild = root.getFirstChild();
-				if (firstChild.data.type === 'vmsdata'){
-					root.removeChild(firstChild);
-				}
+				var nodesOfInterest = ['vmsdata', 'alarms'];
+				
+				angular.forEach(nodesOfInterest, function(item) {
+					var target = root.findAll(function(node){
+					    return node.data.type === item;
+					});
+					
+					for (var i = 0; i < target.length; i++){
+					    root.removeChild(target[i]);
+					}
+				});
+				
 			};
 			
 			//Get layer index in the ol layers collection

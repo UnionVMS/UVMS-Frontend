@@ -1263,7 +1263,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     //MAP FUNCTIONS
 	//Clear map before running a new report
 	ms.clearVectorLayers = function(config){
-	    var layers = [ms.getLayerByType('highlight'), ms.getLayerByType('vmspos'), ms.getLayerByType('vmsseg')];
+	    var layers = [ms.getLayerByType('highlight'), ms.getLayerByType('vmspos'), ms.getLayerByType('vmsseg'), ms.getLayerByType('alarms')];
         for (var i = 0; i < layers.length; i++){
             if (angular.isDefined(layers[i])){
                 ms.map.removeLayer(layers[i]);
@@ -1622,7 +1622,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    } else {
 	        ms.map.addControl(olCtrl);
 	    }
-	    
 	};
 	
 	ms.updateScale = function(config){

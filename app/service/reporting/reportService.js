@@ -96,9 +96,26 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         reportRestService.executeWithoutSaving(report).then(getVmsDataSuccess, getVmsDataError);
 	};
 	
+	rep.clearMapOverlaysOnRefresh = function(){
+	    //Deactivate labels
+        if (mapService .vmsposLabels.active === true){
+            mapService.deactivateVectorLabels('vmspos');
+        }
+        if (mapService.vmssegLabels.active === true){
+            mapService.deactivateVectorLabels('vmsseg');
+        }
+        mapService.resetLabelContainers();
+        
+        //Deactivate popups
+        if (angular.isDefined(mapService.activeLayerType)){
+            mapService.closePopup();
+        }
+	}
+	
 	rep.refreshReport = function(){
 	    //TODO extend this to support local changes
 	    if (angular.isDefined(rep.id) && rep.tabs.map === true ){
+	        rep.clearMapOverlaysOnRefresh();
 	        rep.isReportExecuting = true;
 	        var repConfig = getRepConfig();
 	        reportRestService.executeReport(rep.id, repConfig).then(updateVmsDataSuccess, updateVmsDataError);
@@ -106,8 +123,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	};
 
     
-    rep.setAutoRefresh = function() {
-    
+    rep.setAutoRefresh = function() {    
        $timeout(function() {
           if (rep.isReportExecuting === false && rep.isLiveViewActive === true && rep.refresh.status === true) {
             rep.refreshReport();
