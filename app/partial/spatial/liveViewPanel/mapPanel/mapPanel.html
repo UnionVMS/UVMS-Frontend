@@ -202,7 +202,7 @@
         <div class="row">
             <div class="col-md-2 col-xs-5 refresh-container" ng-class="{disabled: !checkSpatialConfigPermission()}">
 				<b>{{'spatial.map_label_auto_refresh_status' | i18n }} </b>
-				<toggle-switch ng-model="refresh.status"></toggle-switch>
+				<toggle-switch ng-model="refresh.status" ng-change="changeRefreshStatus()"></toggle-switch>
 			</div>
             <div class="col-md-3 col-xs-5">
                 <div id="map-scale" class="scale-line"></div>
