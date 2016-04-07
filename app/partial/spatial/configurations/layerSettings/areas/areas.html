@@ -18,13 +18,13 @@
 			<div class="container-element" ng-repeat="list in container.lists" ng-show="selectedAreaType.name===list.type">
 		        <div class="column" ng-class="{'sysAreaList': list.type==='sysarea','userAreaList': list.type==='userarea','areaGroupList': list.type==='areagroup'}">
 		        	<h5>{{list.name | i18n}}</h5>
-		        	<div ng-if="!list.items || list.items.length === 0" class="noLayersMessage">
+		        	<div ng-if="(!list.items || list.items.length === 0) && !isLoadingSysAreas && !isLoadingUserAreas && !isLoadingAreaGroups" class="noLayersMessage">
 						<span>There are no areas</span>
 					</div>
-				    <ul ng-if="list.items && list.items.length > 0" dnd-list="list.items" dnd-disable-if="true">
-				    	<li ng-if="isLoadingSysAreas || isLoadingUserAreas || isLoadingAreaGroups" class="loading-spinner-cl">
-				        	<i class="fa fa-spinner fa-spin loading-spinner"></i>
-				        </li>
+					<div ng-if="isLoadingSysAreas || isLoadingUserAreas || isLoadingAreaGroups" class="loading-spinner-cl">
+			        	<i class="fa fa-spinner fa-spin loading-spinner"></i>
+			        </div>
+				    <ul ng-if="list.items && list.items.length > 0  && !isLoadingSysAreas && !isLoadingUserAreas && !isLoadingAreaGroups" dnd-list="list.items" dnd-disable-if="true">
 				        <li ng-if="!isLoadingSysAreas && !isLoadingUserAreas && !isLoadingAreaGroups"
 				        	ng-repeat="item in list.items"
 				            dnd-draggable="item"

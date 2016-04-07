@@ -19,12 +19,14 @@ angular.module('unionvmsWeb').controller('PortsCtrl',function($scope,spatialConf
         };
 	
 	var loadPorts = function(){
+		$scope.isLoadingPorts = true;
 		$scope.ports.containers[0].lists[0].items = [];
 		spatialConfigRestService.getPorts().then(function(response){
 			 angular.copy(response,$scope.ports.containers[0].lists[0].items);
 			 angular.forEach($scope.ports.containers[0].lists[0].items, function(item) {
 		    		item.serviceLayerId = "" + item.serviceLayerId;
 		    	});
+			 $scope.isLoadingPorts = false;
 		});
     };
     loadPorts();

@@ -20,12 +20,14 @@ angular.module('unionvmsWeb').controller('AdditionalcartographyCtrl',function($s
         };
 	
 	var loadAdditional = function(){
+		$scope.isLoadingAdditionals = true;
 		$scope.additionals.containers[0].lists[0].items = [];
 		spatialConfigRestService.getAdditionalCartography().then(function(response){
 			angular.copy(response,$scope.additionals.containers[0].lists[0].items);
 			angular.forEach($scope.additionals.containers[0].lists[0].items, function(item) {
 	    		item.serviceLayerId = "" + item.serviceLayerId;
 	    	});
+			$scope.isLoadingAdditionals = false;
 		});
     };
     

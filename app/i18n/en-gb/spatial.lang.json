@@ -385,5 +385,7 @@
 	"rule_open_date": "Opened on",
 	"rule_update_date": "Updated on",
 	"rule_updated_by": "Updated by",
-	"loading_preferences": "Loading preferences"
+	"loading_preferences": "Loading preferences",
+	
+	"reset": "Reset"
 }

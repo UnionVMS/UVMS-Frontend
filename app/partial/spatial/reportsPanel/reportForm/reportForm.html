@@ -11,14 +11,19 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-11" ng-show="getFormMode('CREATE')">
+		<div class="col-md-6" ng-show="getFormMode('CREATE')">
 			<h3 class="pull-left">{{'spatial.reports_form_title_new_report' | i18n }}</h3>
 		</div>
-		<div class="col-md-11" ng-show="getFormMode('EDIT') || getFormMode('EDIT-FROM-LIVEVIEW')">
+		<div class="col-md-6" ng-show="getFormMode('EDIT') || getFormMode('EDIT-FROM-LIVEVIEW')">
 			<h3 class="pull-left">{{'spatial.reports_form_title_edit_report' | i18n }}</h3>
 		</div>
-		<div class="col-md-1 textAlignRight" ng-click="toggleReportForm('CLOSE')"> 
-            <i class="fa fa-sign-out signouticon signouticon-extented" title="{{'common.close' | i18n}}"></i>
+		<div class="col-md-6">
+			<div class="col-md-2 pull-right textAlignRight" ng-click="toggleReportForm('CLOSE')"> 
+	            <i class="fa fa-sign-out signouticon signouticon-extented" title="{{'common.close' | i18n}}"></i>
+	        </div>
+			<div class="col-md-3 pull-right" ng-show="getFormMode('EDIT') || getFormMode('EDIT-FROM-LIVEVIEW')"> 
+				<button class="btn btn-primary button" type="button" ng-click="resetReport()" ng-disabled="reportForm.$pristine" ng-class="{'disabled': reportForm.$pristine}">{{"spatial.reset" | i18n }}</button>
+			</div>
         </div>
 	</div>
 	<div class="row reportFormContainer table-responsive-force">

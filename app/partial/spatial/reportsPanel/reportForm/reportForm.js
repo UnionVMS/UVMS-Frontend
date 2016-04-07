@@ -190,7 +190,10 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         });
 
         modalInstance.result.then(function(data){
-            $scope.report.areas = data;
+        	if(!angular.equals($scope.report.areas,data)){
+        		$scope.reportForm.$setDirty();
+            	$scope.report.areas = data;
+        	}
         });
     };
     
@@ -207,7 +210,10 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         });
 
         modalInstance.result.then(function(data){
-            $scope.report.currentConfig.mapConfiguration = data.mapSettings;
+        	if(!angular.equals($scope.report.currentConfig.mapConfiguration,data.mapSettings)){
+        		$scope.reportForm.$setDirty();
+        		$scope.report.currentConfig.mapConfiguration = data.mapSettings;
+        	}
         });
     };
     
@@ -270,7 +276,6 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         }
         
         $scope.formMode = 'CREATE';
-        $scope.reportForm.$setPristine();
         if (args){
         	if(args.report.isFromLiveView){
         		$scope.formMode = 'EDIT-FROM-LIVEVIEW';
@@ -281,6 +286,9 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         }
         $scope.report.currentConfig = {mapConfiguration: {}};
         angular.copy($scope.report.mapConfiguration,$scope.report.currentConfig.mapConfiguration);
+        setTimeout(function() {
+        	$scope.reportForm.$setPristine();
+        }, 100);
     });
 
     $scope.$watch('report.positionSelector', function(newVal, oldVal){
@@ -358,6 +366,23 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 	    	}
     	}
 		return report;
+    };
+    
+    $scope.resetReport = function(){
+    	if($scope.reportForm.$dirty){
+	    	$scope.reportForm.$setPristine();
+	    	reportRestService.getReport($scope.report.id).then(function(response){
+	    		$scope.init();
+	    	    $scope.report = $scope.report.fromJson(response);
+	    	    $scope.report.currentConfig = {mapConfiguration: {}};
+	    	    angular.copy($scope.report.mapConfiguration,$scope.report.currentConfig.mapConfiguration);
+	    	    $scope.reportOwner = response.createdBy;
+	    	}, function(error){
+	    		$anchorScroll();
+	    		$scope.formAlert.msg = locale.getString('spatial.error_entry_not_found');
+	    		$scope.formAlert.visible = true;
+	    	});
+    	}
     };
     
 });

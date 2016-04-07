@@ -5,6 +5,7 @@ angular.module('unionvmsWeb').controller('CountrystylesCtrl',function($scope, sp
 	
 	//Setup data for display
     $scope.prepareRecordsForCountryCode = function(){
+    	$scope.isLoading = true;
         if ($scope.countryList.length === 0){
             $scope.getCountriesList();
         }
@@ -47,6 +48,7 @@ angular.module('unionvmsWeb').controller('CountrystylesCtrl',function($scope, sp
         	$scope.displayedRecords = [].concat($scope.configModel.segmentStyle.style);
         }
         
+        $scope.isLoading = false;
     };
     
     //validate the color field of the country

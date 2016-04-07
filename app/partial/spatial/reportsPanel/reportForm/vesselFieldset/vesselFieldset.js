@@ -28,11 +28,13 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     
     //Delete one selected item (vessel or group)
     $scope.deleteSelection = function(index){
+    	$scope.reportBodyForm.$setDirty();
         $scope.report.vesselsSelection.splice($scope.report.vesselsSelection.indexOf($scope.displayedRecordsSelection[index]), 1);
     };
     
     //Delete all selected items
     $scope.deleteSelectionAll = function(){
+    	$scope.reportBodyForm.$setDirty();
         $scope.report.vesselsSelection.splice(0,$scope.report.vesselsSelection.length);
     };
     
@@ -124,6 +126,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     };
     
     $scope.addVesselSelection = function(){
+    	$scope.reportBodyForm.$setDirty();
         for (var i = 0; i < $scope.displayedRecords.length; i++){
             var vesselSrc = $scope.displayedRecords[i];
             if (vesselSrc.selected === true && $scope.checkVesselIsSelected(vesselSrc) === false){

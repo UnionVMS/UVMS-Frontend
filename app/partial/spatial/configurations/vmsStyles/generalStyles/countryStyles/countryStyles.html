@@ -27,15 +27,15 @@
 						    </div>
 			        	</div>
 			        </div>
-				    <div ng-if="isLoading" class="tr row">
-				       	<div class="loading-spinner-cl th col-md-12"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
-			        </div>
 			    </div>
 			    <div class="tbody container-fluid">
+			    	<div ng-if="isLoading" class="tr row">
+				       	<div class="loading-spinner-cl th col-md-12"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
+			        </div>
 			        <div ng-if="!displayedRecords.length && !isLoading" class="tr row">
 						<div class="td col-md-12">{{'spatial.table_no_data' | i18n}}</div>
 					</div>
-			        <div ng-repeat="report in displayedRecords" class="tr row">
+			        <div ng-repeat="report in displayedRecords" ng-show="displayedRecords && displayedRecords.length > 0 && !isLoading" class="tr row">
 						<ng-form name="countryForm{{$index}}" novalidate>
 				        	<div class="td col-md-6">{{ report.name }}</div>
 				            <div class="td col-md-2">{{ report.code }}</div>

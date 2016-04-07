@@ -20,12 +20,14 @@ angular.module('unionvmsWeb').controller('BackgroundCtrl',function($scope,spatia
         };
 	
 	var loadBackground = function(){
+		$scope.isLoadingBackgrounds = true;
 		$scope.backgrounds.containers[0].lists[0].items = [];
 		spatialConfigRestService.getBackground().then(function(response){
 			angular.copy(response,$scope.backgrounds.containers[0].lists[0].items);
 			angular.forEach($scope.backgrounds.containers[0].lists[0].items, function(item) {
 	    		item.serviceLayerId = "" + item.serviceLayerId;
 	    	});
+			$scope.isLoadingBackgrounds = false;
 		});
     };
     
