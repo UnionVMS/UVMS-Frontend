@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report) {
 
     var rep = {
        id: undefined,
@@ -73,27 +73,23 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         $rootScope.$broadcast('updateLayerTreeSource', treeSource);
     };
     
-	rep.runReport = function(report){
+	rep.runReport = function(report, isSameReport){
 		rep.isReportExecuting = true;
-		prepareReportToRun(report);
+		prepareReportToRun(report, isSameReport);
 
         rep.getConfigsTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
-        if (report.withMap === true){
-            spatialRestService.getConfigsForReport(report.id, rep.getConfigsTime).then(getConfigSuccess, getConfigError);
+        if (rep.tabs.map === true){
+            spatialRestService.getConfigsForReport(rep.id, rep.getConfigsTime).then(getConfigSuccess, getConfigError);
         } else {
             spatialRestService.getConfigsForReportWithoutMap(rep.getConfigsTime).then(getConfigWithouMapSuccess, getConfigWithouMapError); 
         }
 	};
 	
-	rep.runReportWithoutSaving = function(report,mapData){
+	rep.runReportWithoutSaving = function(report){
+		rep.outOfDate = true;
 		rep.isReportExecuting = true;
-		prepareReportToRun(report);
-		configureMap(mapData[0]);
-		
-        rep.getReportTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
-        report.additionalProperties = getUnitSettings();
-	    
-        reportRestService.executeWithoutSaving(report).then(getVmsDataSuccess, getVmsDataError);
+		rep.reportToRun = report;
+    	spatialConfigRestService.getUserConfigs().then(getUserConfigsSuccess, getUserConfigsFailure);
 	};
 	
 	rep.clearMapOverlaysOnRefresh = function(){
@@ -117,12 +113,16 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	};
 	
 	rep.refreshReport = function(){
-	    //TODO extend this to support local changes
 	    if (angular.isDefined(rep.id) && rep.tabs.map === true ){
 	        rep.clearMapOverlaysOnRefresh();
 	        rep.isReportExecuting = true;
 	        var repConfig = getRepConfig();
-	        reportRestService.executeReport(rep.id, repConfig).then(updateVmsDataSuccess, updateVmsDataError);
+	        if(rep.outOfDate){
+	        	rep.runReportWithoutSaving(rep.reportToRun);
+	        }else{
+	        	rep.runReport(undefined, true);
+//	        	reportRestService.executeReport(rep.id, repConfig).then(updateVmsDataSuccess, updateVmsDataError);
+	        }
 	    }
 	};
 
@@ -163,7 +163,10 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	//Get Spatial config Success callback
 	var getConfigSuccess = function(data){
-		configureMap(data);
+		if(!angular.equals(rep.lastConfig,data)){
+			rep.lastConfig = data;
+			configureMap(data);
+		}
         var repConfig = getRepConfig();
         
 	    reportRestService.executeReport(rep.id,repConfig).then(getVmsDataSuccess, getVmsDataError);
@@ -357,14 +360,14 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         }, 3000);
     };
     
-    var prepareReportToRun = function(report){
+    var prepareReportToRun = function(report,isSameReport){
 	    rep.liveviewEnabled = true;
-	    rep.id = report.id;
-	    rep.name = report.name;
+	    rep.id = isSameReport ? rep.id : report.id;
+	    rep.name = isSameReport ? rep.name :  report.name;
         rep.positions = [];
         rep.segments = [];
         rep.tracks = [];
-        rep.tabs.map = report.withMap;
+        rep.tabs.map = isSameReport ? rep.tabs.map : report.withMap;
     
         //This gets executed on initial loading when we have a default report
         if (!angular.isDefined(mapService.map)){
@@ -438,6 +441,188 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    //Finally load VMS positions and segments
         rep.getReportTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
 	};
+	
+	var getUserConfigsSuccess = function(response){
+	    var model = new SpatialConfig();
+	    if(!angular.equals(rep.lastConfig,response)){
+			rep.lastConfig = response;
+			var userConfig = model.forUserPrefFromJson(response);
+	        rep.mergedReport = mergeSettings(userConfig);
+		}
+        
+        spatialConfigRestService.getMapConfigsFromReport(getMapConfigs()).then(getMapConfigsFromReportSuccess, getMapConfigsFromReportFailure);
+	};
+	
+	var getUserConfigsFailure = function(error){
+	    $anchorScroll();
+	    $scope.formAlert.visible = true;
+//	    $scope.alert.hasError = true;
+	    $scope.formAlert.msg = locale.getString('spatial.user_preferences_error_getting_configs');
+	    $scope.formAlert.visible = false;
+	};
+	
+	var mergeSettings = function(userConfig){
+    	var mergedReport = new Report();
+    	angular.copy(rep.reportToRun, mergedReport);
+    	
+    	if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.mapProjectionId) && 
+    			!angular.isDefined(mergedReport.currentConfig.mapConfiguration.displayProjectionId) && !angular.isDefined(mergedReport.currentConfig.mapConfiguration.coordinatesFormat) && 
+    			!angular.isDefined(mergedReport.currentConfig.mapConfiguration.scaleBarUnits)){
+    		
+    		mergedReport.currentConfig.mapConfiguration.spatialConnectId = userConfig.mapSettings.spatialConnectId;
+    		mergedReport.currentConfig.mapConfiguration.mapProjectionId = userConfig.mapSettings.mapProjectionId;
+    		mergedReport.currentConfig.mapConfiguration.displayProjectionId = userConfig.mapSettings.displayProjectionId;
+    		mergedReport.currentConfig.mapConfiguration.coordinatesFormat = userConfig.mapSettings.coordinatesFormat;
+    		mergedReport.currentConfig.mapConfiguration.scaleBarUnits = userConfig.mapSettings.scaleBarUnits;
+    	}
+//    	mergedReport.mapConfiguration.refreshRate = userConfig.mapSettings.refreshRate;
+//    	mergedReport.mapConfiguration.refreshStatus = userConfig.mapSettings.refreshStatus
+    	
+    	if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.stylesSettings)){
+    		mergedReport.currentConfig.mapConfiguration.stylesSettings = userConfig.stylesSettings;
+    	}
+    	
+    	if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.layerSettings)){
+    		mergedReport.currentConfig.mapConfiguration.layerSettings = userConfig.layerSettings;
+    	}
+    	mergedReport.currentConfig.mapConfiguration.layerSettings = rep.checkLayerSettings(mergedReport.currentConfig.mapConfiguration.layerSettings);
+    	
+    	if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.visibilitySettings)){
+    		mergedReport.currentConfig.mapConfiguration.visibilitySettings = userConfig.visibilitySettings;
+    	}
+    	
+    	return mergedReport;
+    };
+    
+    var getMapConfigs = function(){
+		return {
+			toolSettings: {
+			       "control": [
+			                   {
+			                       "type": "zoom"
+			                   },
+			                   {
+			                       "type": "drag"
+			                   },
+			                   {
+			                       "type": "scale"
+			                   },
+			                   {
+			                       "type": "mousecoords"
+			                   },
+			                   {
+			                       "type": "history"
+			                   }
+			               ],
+			               "tbControl": [
+			                   {
+			                       "type": "measure"
+			                   },
+			                   {
+			                       "type": "fullscreen"
+			                   }
+			               ]
+			           },
+			mapSettings: {
+				mapProjectionId: rep.mergedReport.currentConfig.mapConfiguration.mapProjectionId,
+				displayProjectionId: rep.mergedReport.currentConfig.mapConfiguration.displayProjectionId,
+				coordinatesFormat: rep.mergedReport.currentConfig.mapConfiguration.coordinatesFormat,
+				scaleBarUnits: rep.mergedReport.currentConfig.mapConfiguration.scaleBarUnits
+			},
+			stylesSettings: rep.mergedReport.currentConfig.mapConfiguration.stylesSettings,
+			layerSettings: rep.mergedReport.currentConfig.mapConfiguration.layerSettings,
+			visibilitySettings: rep.mergedReport.currentConfig.mapConfiguration.visibilitySettings,
+			reportProperties: {
+		        startDate : rep.mergedReport.startDateTime,
+		        endDate : rep.mergedReport.endDateTime
+			}
+		};
+	};
+	
+	var getMapConfigsFromReportSuccess = function(data){
+		angular.copy(rep.mergedReport.currentConfig.mapConfiguration,rep.mergedReport.mapConfiguration);
+		prepareReportToRun(rep.mergedReport);
+		configureMap(data[0]);
+		
+        rep.getReportTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+        rep.mergedReport.additionalProperties = getUnitSettings();
+	    
+        reportRestService.executeWithoutSaving(rep.mergedReport).then(getVmsDataSuccess, getVmsDataError);
+	};
+	
+	var getMapConfigsFromReportFailure = function(error){
+	    $anchorScroll();
+	    $scope.formAlert.visible = true;
+//	    $scope.alert.hasError = true;
+	    $scope.formAlert.msg = locale.getString('spatial.user_preferences_error_getting_configs');
+	    $scope.formAlert.visible = false;
+	};
+	
+	rep.checkLayerSettings = function(layerSettings) {
+        
+	    if(angular.isDefined(layerSettings)){
+	        var layerData = {};
+			if(angular.isDefined(layerSettings.portLayers) && !_.isEmpty(layerSettings.portLayers)){
+	    		var ports = [];
+	    		angular.forEach(layerSettings.portLayers, function(value,key) {
+	    			var port = {'serviceLayerId': value.serviceLayerId, 'order': key};
+		    		ports.push(port);
+		    	});
+	    		layerSettings.portLayers = [];
+	    		angular.copy(ports,layerSettings.portLayers);
+	    	}else if(!angular.isDefined(layerSettings.portLayers)){
+	    		layerSettings.portLayers = undefined;
+	    	}
+		
+	    	if(angular.isDefined(layerSettings.areaLayers && !_.isEmpty(layerSettings.areaLayers))){
+	    		var areas = [];
+	    		angular.forEach(layerSettings.areaLayers, function(value,key) {
+	    			var area;
+	    			switch (value.areaType) {
+		    			case 'sysarea':
+		    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'order': key};
+		    				break;
+		    			case 'userarea':
+		    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'gid': value.gid, 'order': key};
+		    				break;
+		    			case 'areagroup':
+		    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'areaGroupName': value.name, 'order': key};
+		    				break;
+		    		}
+	    			areas.push(area);
+		    	});
+	    		layerSettings.areaLayers = [];
+	    		angular.copy(areas,layerSettings.areaLayers);
+			}else{
+				layerSettings.areaLayers = undefined;
+			}
+	    	
+	    	if(angular.isDefined(layerSettings.additionalLayers) && !_.isEmpty(layerSettings.additionalLayers)){
+	    		var additionals = [];
+	    		angular.forEach(layerSettings.additionalLayers, function(value,key) {
+	    			var additional = {'serviceLayerId': value.serviceLayerId, 'order': key};
+	    			additionals.push(additional);
+		    	});
+	    		layerSettings.additionalLayers = [];
+	    		angular.copy(additionals,layerSettings.additionalLayers);
+	    	}else{
+				layerSettings.additionalLayers = undefined;
+			}
+	    	
+	    	if(angular.isDefined(layerSettings.baseLayers) && !_.isEmpty(layerSettings.baseLayers)){
+	    		var bases = [];
+	    		angular.forEach(layerSettings.baseLayers, function(value,key) {
+	    			var base = {'serviceLayerId': value.serviceLayerId, 'order': key};
+	    			bases.push(base);
+		    	});
+	    		layerSettings.baseLayers = [];
+	    		angular.copy(bases,layerSettings.baseLayers);
+	    	}else{
+				layerSettings.baseLayers = undefined;
+			}
+		}
+	    return layerSettings;
+    };
 
 	return rep;
 });

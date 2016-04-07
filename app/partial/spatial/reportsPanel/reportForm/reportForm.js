@@ -147,11 +147,11 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         if ($scope.reportForm.$valid && $scope.vesselsSelectionIsValid){
         	$scope.configModel = new SpatialConfig();
             if ($scope.formMode === 'CREATE'){
-            	$scope.report.currentConfig.mapConfiguration.layerSettings = checkLayerSettings($scope.report.currentConfig.mapConfiguration.layerSettings);
+            	$scope.report.currentConfig.mapConfiguration.layerSettings = reportService.checkLayerSettings($scope.report.currentConfig.mapConfiguration.layerSettings);
             	$scope.report = checkMapConfigDifferences($scope.report);
                 reportRestService.createReport($scope.report).then(createReportSuccess, createReportError);
             } else if ($scope.formMode === 'EDIT' || $scope.formMode === 'EDIT-FROM-LIVEVIEW'){
-            	$scope.report.currentConfig.mapConfiguration.layerSettings = checkLayerSettings($scope.report.currentConfig.mapConfiguration.layerSettings);
+            	$scope.report.currentConfig.mapConfiguration.layerSettings = reportService.checkLayerSettings($scope.report.currentConfig.mapConfiguration.layerSettings);
             	$scope.report = checkMapConfigDifferences($scope.report);
                 reportRestService.updateReport($scope.report).then(updateReportSuccess, updateReportError);
             }
@@ -216,8 +216,9 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     	$scope.mergedReport = undefined;
     	$scope.validateRanges();
     	if($scope.reportForm.reportBodyForm.$valid && $scope.vesselsSelectionIsValid){
-	    	reportService.outOfDate = true;
-	    	spatialConfigRestService.getUserConfigs().then(getUserConfigsSuccess, getUserConfigsFailure);
+    		reportService.runReportWithoutSaving($scope.report);
+    		$scope.$emit('goToLiveView');
+        	$scope.toggleReportForm();
     	}else{
     		var invalidElm = angular.element('#reportForm')[0].querySelector('.ng-invalid');
             var errorElm = angular.element('#reportForm')[0].querySelector('.has-error');
@@ -245,7 +246,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             });
 
             modalInstance.result.then(function(data){
-            	data.currentConfig.mapConfiguration.layerSettings = checkLayerSettings(data.currentConfig.mapConfiguration.layerSettings);
+            	data.currentConfig.mapConfiguration.layerSettings = reportService.checkLayerSettings(data.currentConfig.mapConfiguration.layerSettings);
             	data = checkMapConfigDifferences(data);
             	reportRestService.createReport(data).then(createReportSuccess, createReportError);
             });
@@ -359,181 +360,4 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 		return report;
     };
     
-    var checkLayerSettings = function(layerSettings) {
-        
-	    if(angular.isDefined(layerSettings)){
-	        var layerData = {};
-			if(angular.isDefined(layerSettings.portLayers) && !_.isEmpty(layerSettings.portLayers)){
-	    		var ports = [];
-	    		angular.forEach(layerSettings.portLayers, function(value,key) {
-	    			var port = {'serviceLayerId': value.serviceLayerId, 'order': key};
-		    		ports.push(port);
-		    	});
-	    		layerSettings.portLayers = [];
-	    		angular.copy(ports,layerSettings.portLayers);
-	    	}else if(!angular.isDefined(layerSettings.portLayers)){
-	    		layerSettings.portLayers = undefined;
-	    	}
-		
-	    	if(angular.isDefined(layerSettings.areaLayers && !_.isEmpty(layerSettings.areaLayers))){
-	    		var areas = [];
-	    		angular.forEach(layerSettings.areaLayers, function(value,key) {
-	    			var area;
-	    			switch (value.areaType) {
-		    			case 'sysarea':
-		    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'order': key};
-		    				break;
-		    			case 'userarea':
-		    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'gid': value.gid, 'order': key};
-		    				break;
-		    			case 'areagroup':
-		    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'areaGroupName': value.name, 'order': key};
-		    				break;
-		    		}
-	    			areas.push(area);
-		    	});
-	    		layerSettings.areaLayers = [];
-	    		angular.copy(areas,layerSettings.areaLayers);
-			}else{
-				layerSettings.areaLayers = undefined;
-			}
-	    	
-	    	if(angular.isDefined(layerSettings.additionalLayers) && !_.isEmpty(layerSettings.additionalLayers)){
-	    		var additionals = [];
-	    		angular.forEach(layerSettings.additionalLayers, function(value,key) {
-	    			var additional = {'serviceLayerId': value.serviceLayerId, 'order': key};
-	    			additionals.push(additional);
-		    	});
-	    		layerSettings.additionalLayers = [];
-	    		angular.copy(additionals,layerSettings.additionalLayers);
-	    	}else{
-				layerSettings.additionalLayers = undefined;
-			}
-	    	
-	    	if(angular.isDefined(layerSettings.baseLayers) && !_.isEmpty(layerSettings.baseLayers)){
-	    		var bases = [];
-	    		angular.forEach(layerSettings.baseLayers, function(value,key) {
-	    			var base = {'serviceLayerId': value.serviceLayerId, 'order': key};
-	    			bases.push(base);
-		    	});
-	    		layerSettings.baseLayers = [];
-	    		angular.copy(bases,layerSettings.baseLayers);
-	    	}else{
-				layerSettings.baseLayers = undefined;
-			}
-		}
-	    return layerSettings;
-    };
-    
-    var mergeSettings = function(){
-    	var mergedReport = new Report();
-    	angular.copy($scope.report, mergedReport);
-    	
-    	if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.mapProjectionId) && 
-    			!angular.isDefined(mergedReport.currentConfig.mapConfiguration.displayProjectionId) && !angular.isDefined(mergedReport.currentConfig.mapConfiguration.coordinatesFormat) && 
-    			!angular.isDefined(mergedReport.currentConfig.mapConfiguration.scaleBarUnits)){
-    		
-    		mergedReport.currentConfig.mapConfiguration.spatialConnectId = $scope.userConfig.mapSettings.spatialConnectId;
-    		mergedReport.currentConfig.mapConfiguration.mapProjectionId = $scope.userConfig.mapSettings.mapProjectionId;
-    		mergedReport.currentConfig.mapConfiguration.displayProjectionId = $scope.userConfig.mapSettings.displayProjectionId;
-    		mergedReport.currentConfig.mapConfiguration.coordinatesFormat = $scope.userConfig.mapSettings.coordinatesFormat;
-    		mergedReport.currentConfig.mapConfiguration.scaleBarUnits = $scope.userConfig.mapSettings.scaleBarUnits;
-    	}
-//    	mergedReport.mapConfiguration.refreshRate = $scope.userConfig.mapSettings.refreshRate;
-//    	mergedReport.mapConfiguration.refreshStatus = $scope.userConfig.mapSettings.refreshStatus
-    	
-    	if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.stylesSettings)){
-    		mergedReport.currentConfig.mapConfiguration.stylesSettings = $scope.userConfig.stylesSettings;
-    	}
-    	
-    	if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.layerSettings)){
-    		mergedReport.currentConfig.mapConfiguration.layerSettings = $scope.userConfig.layerSettings;
-    	}
-    	mergedReport.currentConfig.mapConfiguration.layerSettings = checkLayerSettings(mergedReport.currentConfig.mapConfiguration.layerSettings);
-    	
-    	if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.visibilitySettings)){
-    		mergedReport.currentConfig.mapConfiguration.visibilitySettings = $scope.userConfig.visibilitySettings;
-    	}
-    	
-    	return mergedReport;
-    };
-    
-    var getUserConfigsSuccess = function(response){
-	    $scope.srcConfigObj = response;
-	    var model = new SpatialConfig();
-        $scope.userConfig = model.forUserPrefFromJson(response);
-        $scope.mergedReport = mergeSettings();
-        
-        spatialConfigRestService.getMapConfigsFromReport(getMapConfigs()).then(getMapConfigsFromReportSuccess, getMapConfigsFromReportFailure);
-	};
-	
-	var getUserConfigsFailure = function(error){
-	    $anchorScroll();
-	    $scope.formAlert.visible = true;
-//	    $scope.alert.hasError = true;
-	    $scope.formAlert.msg = locale.getString('spatial.user_preferences_error_getting_configs');
-	    $scope.formAlert.visible = false;
-	};
-	
-	var getMapConfigsFromReportSuccess = function(data){
-		angular.copy($scope.mergedReport.currentConfig.mapConfiguration,$scope.mergedReport.mapConfiguration);
-		delete $scope.mergedReport.currentConfig;
-		reportService.runReportWithoutSaving($scope.mergedReport,data);
-    	$scope.$emit('goToLiveView');
-    	$scope.toggleReportForm();
-	};
-	
-	var getMapConfigsFromReportFailure = function(error){
-	    $anchorScroll();
-	    $scope.formAlert.visible = true;
-//	    $scope.alert.hasError = true;
-	    $scope.formAlert.msg = locale.getString('spatial.user_preferences_error_getting_configs');
-	    $scope.formAlert.visible = false;
-	};
-    
-	var getMapConfigs = function(){
-		return {
-			toolSettings: {
-			       "control": [
-			                   {
-			                       "type": "zoom"
-			                   },
-			                   {
-			                       "type": "drag"
-			                   },
-			                   {
-			                       "type": "scale"
-			                   },
-			                   {
-			                       "type": "mousecoords"
-			                   },
-			                   {
-			                       "type": "history"
-			                   }
-			               ],
-			               "tbControl": [
-			                   {
-			                       "type": "measure"
-			                   },
-			                   {
-			                       "type": "fullscreen"
-			                   }
-			               ]
-			           },
-			mapSettings: {
-				mapProjectionId: $scope.mergedReport.currentConfig.mapConfiguration.mapProjectionId,
-				displayProjectionId: $scope.mergedReport.currentConfig.mapConfiguration.displayProjectionId,
-				coordinatesFormat: $scope.mergedReport.currentConfig.mapConfiguration.coordinatesFormat,
-				scaleBarUnits: $scope.mergedReport.currentConfig.mapConfiguration.scaleBarUnits
-			},
-			stylesSettings: $scope.mergedReport.currentConfig.mapConfiguration.stylesSettings,
-			layerSettings: $scope.mergedReport.currentConfig.mapConfiguration.layerSettings,
-			visibilitySettings: $scope.mergedReport.currentConfig.mapConfiguration.visibilitySettings,
-			reportProperties: {
-		        startDate : $scope.mergedReport.startDateTime,
-		        endDate : $scope.mergedReport.endDateTime
-			}
-		};
-	};
-	
 });
