@@ -66,6 +66,7 @@
         <hostname>${wf.host}</hostname>
         <port>${wf.https.port}</port>
         <endpoint-url>https://${wf.host}:${wf.https.port}/${webroot}/</endpoint-url>
+        <grunt-arguments></grunt-arguments>
       </properties>
       <build>
         <plugins>
@@ -206,6 +207,7 @@
             </goals>
             <phase>generate-resources</phase>
             <configuration>
+              <arguments>${grunt-arguments}</arguments>
               <outputdir>${basedir}/dist</outputdir>
             </configuration>
           </execution>
