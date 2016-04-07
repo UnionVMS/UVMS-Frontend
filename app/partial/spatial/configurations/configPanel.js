@@ -335,7 +335,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    $scope.alert.hasAlert = true;
 	    $scope.alert.hasSuccess = true;
 	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_success_saving');
-	    $scope.alert.hideAlert();
+	    $scope.alert.hideAlert(6000);
 	    $scope.updateConfigCopy(response[1]);
 	};
 	

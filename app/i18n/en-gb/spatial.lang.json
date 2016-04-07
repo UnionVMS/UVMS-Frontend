@@ -331,7 +331,7 @@
 	"default_color": "Default color",
 	
 	"user_preferences_error_saving": "There was an error while saving your preferences. Please try again.",
-	"user_preferences_success_saving": "Your preferences were successfuly saved.",
+	"user_preferences_success_saving": "Your preferences were successfuly saved. Please re-run your report, in order to reflect the changes onto the report result. Be aware that some of the settings might be overridden by report level preferences.",
 	"user_preferences_reset_map_settings_success": "Your map settings were successfuly reset.",
 	"user_preferences_reset_map_settings_failure": "There was an error while reseting your map settings. Please try again.",
 	"user_preferences_reset_vms_styles_success": "Your styles settings were successfuly reset.",

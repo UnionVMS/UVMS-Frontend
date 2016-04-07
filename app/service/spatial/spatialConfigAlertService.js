@@ -6,15 +6,18 @@ angular.module('unionvmsWeb').factory('spatialConfigAlertService',function($time
 	    hasSuccess: false,
 	    hasWarning: false,
 	    alertMessage: undefined,
-	    hideAlert: function(){
+	    hideAlert: function(timeoutInMilliSeconds){
 	        var alertObj = this;
+	        if (angular.isUndefined(timeoutInMilliSeconds)) {
+	        	timeoutInMilliSeconds = 3000;
+	        }
 	        $timeout(function(){
 	            alertObj.hasAlert = false;
 	            alertObj.hasError = false;
 	            alertObj.hasSuccess = false;
 	            alertObj.hasWarning = false;
 	            alertObj.alertMessage = undefined;
-	        }, 3000, true, alertObj);
+	        }, timeoutInMilliSeconds, true, alertObj);
 	    }
 	};
 	
