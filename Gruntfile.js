@@ -209,6 +209,12 @@ module.exports = function (grunt) {
             }
         ]
       },
+      config: {
+        files: [{
+            src: 'environment/general.json',
+            dest: 'temp/config.json'
+        }]
+      },
       configLocal:{
         files: [
             {
@@ -413,6 +419,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('sub-build',['jshint', 'less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy:dist','htmlmin','compress:dist','clean:after']);//,'clean:after'
 
+  grunt.registerTask('build', ['test', 'clean:before', 'copy:config', 'test', 'sub-build']);
   grunt.registerTask('build-local', ['test', 'clean:before', 'copy:configLocal', 'test', 'sub-build']);
   grunt.registerTask('build-cygnus', ['test', 'clean:before', 'copy:configCygnus', 'sub-build']);
   grunt.registerTask('build-maven', ['test', 'clean:before', 'copy:configMaven', 'sub-build']);
