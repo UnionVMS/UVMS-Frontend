@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, $filter, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal, csvService, SearchResults, envConfig, $resource, $log, longPolling, $stateParams) {
+angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, $filter, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal, csvService, SearchResults, envConfig, $resource, $log, longPolling, $stateParams, PositionReportModal) {
 
     $scope.showModal = function() {
         $scope.editPosition();
@@ -62,6 +62,12 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
                 }
             );
         }, options);
+    };
+
+    $scope.viewItemDetails = function(item){
+        modalInstance = ManualPositionReportModal.show(item, {
+            readOnly: true
+        });
     };
 
     $scope.editPosition = function(item, addAnother) {

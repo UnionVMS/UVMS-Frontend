@@ -65,6 +65,9 @@
                         <button type="button" class="btn btn-sm btn-default remove" ng-click="deletePosition(item)" title="{{'common.delete'| i18n}}" show-if-allowed='Movement:manageManualMovements' ng-if="item.isDraft()">
                             <i class="fa fa-trash"></i>
                         </button>
+                        <button class="btn btn-default" ng-click="viewItemDetails(item)" title="{{'common.view_details'| i18n}}" ng-if="item.guid && !item.isDraft()" show-if-allowed='Movement:manageManualMovements'>
+                            <i class="fa fa-eye"></i>
+                        </button>
                     </td>
                 </tr>
             </tbody>
