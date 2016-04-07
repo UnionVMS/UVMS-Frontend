@@ -52,7 +52,7 @@
 					<td colspan="7">{{'spatial.table_no_data' | i18n}}</td>
 				</tr>
 		        <tr ng-repeat="report in displayedRecords" ng-if="displayedRecords.length && !isLoading">
-		            <td class="no-wrap-white-space">{{ report.name }}</td>
+		            <td class="break-word-column">{{ report.name }}</td>
 		            <td class="break-word-column">{{ report.desc }}</td>
 		            <td class="no-wrap-white-space">{{ report.createdOn | stDateUtc }}</td>
 		            <td class="no-wrap-white-space">{{ report.createdBy }}</td>
