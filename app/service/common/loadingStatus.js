@@ -8,6 +8,10 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 		    message: ['spatial.map_loading_report_message', 'spatial.map_loading_alarms_message'],
 		    messageIdx: undefined,
             value: false
+		},
+		isLoadingSaveReport: {
+			message: 'spatial.map_loading_report_message',
+            value: false
 		}
 	};
 	

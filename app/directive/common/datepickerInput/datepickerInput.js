@@ -12,18 +12,20 @@ angular.module('unionvmsWeb').directive('datepickerInput', ['$compile',function(
             time: '@', //use timepicker?
             minDate : '=', //should be on format "YYYY-MM-DD HH:mm:ss Z"
             maxDate : '=', //should be on format "YYYY-MM-DD HH:mm:ss Z"
-            inputFieldId: '@'
+            inputFieldId: '@',
+            updateWhen: '@'
 		},
 		templateUrl: 'directive/common/datepickerInput/datepickerInput.html',
 		link: function(scope, element, attrs, ngModel) {
             //Add input name if name attribute exists
             var name = attrs.name;
+            
             if(name) {
                 element.find('input').attr('name', name);
                 element.removeAttr("name");
                 $compile(element)(scope);
             }
-
+            
             //Add a random id to the input element
             element.find('input').attr('id', scope.inputFieldId);
 
@@ -103,6 +105,8 @@ angular.module('unionvmsWeb')
                 closeOnDateSelect: true,
                 dayOfWeekStart:1, //monday
             };
+            
+    		$scope.updateWhen = angular.isDefined($scope.updateWhen) ? $scope.updateWhen : 'blur';
 
             //Set default date to current date/time in UTC
             var userTime = dateTimeService.formatAccordingToUserSettings(moment.utc());
@@ -128,7 +132,7 @@ angular.module('unionvmsWeb')
                     $scope.options[key] = val;
                 });
             }
-            $scope.dateTimePicker.datetimepicker($scope.options);
+        	$scope.dateTimePicker.datetimepicker($scope.options);
         };
 
         //Open on button click
@@ -232,7 +236,7 @@ angular.module('unionvmsWeb')
             };
             updateOptions(newOptions);
         });
-
+        
         var cleanup = function(){
             //Remove the datepicker from the DOM
             jQuery("#" +$scope.datepickerId).remove();

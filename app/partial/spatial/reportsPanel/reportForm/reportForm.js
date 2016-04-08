@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, $anchorScroll, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService, reportService, SpatialConfig, spatialConfigRestService, userService){
+angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, $anchorScroll, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService, reportService, SpatialConfig, spatialConfigRestService, userService, loadingStatus){
     //Report form mode
     $scope.formMode = 'CREATE';
 
@@ -142,6 +142,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     };
 
     $scope.saveReport = function(){
+    	loadingStatus.isLoading('SaveReport',true);
         $scope.submitingReport = true;
         $scope.validateRanges();
         if ($scope.reportForm.$valid && $scope.vesselsSelectionIsValid){
@@ -156,6 +157,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
                 reportRestService.updateReport($scope.report).then(updateReportSuccess, updateReportError);
             }
         } else {
+        	loadingStatus.isLoading('SaveReport',false);
             var invalidElm = angular.element('#reportForm')[0].querySelector('.ng-invalid');
             var errorElm = angular.element('#reportForm')[0].querySelector('.has-error');
             if (invalidElm){
@@ -309,20 +311,24 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         $scope.toggleReportForm();
         reportMsgService.show(locale.getString('spatial.success_create_report'), 'success');
         $scope.$emit('reloadReportsList');
+        loadingStatus.isLoading('SaveReport',false);
     };
 
     var createReportError = function(error){
         reportError(error,'spatial.error_create_report');
+        loadingStatus.isLoading('SaveReport',false);
     };
 
     var updateReportSuccess = function(response){
         $scope.toggleReportForm();
         reportMsgService.show(locale.getString('spatial.success_update_report'), 'success');
         $scope.$emit('reloadReportsList');
+        loadingStatus.isLoading('SaveReport',false);
     };
 
     var updateReportError = function(error){
         reportError(error,'spatial.error_update_report');
+        loadingStatus.isLoading('SaveReport',false);
     };
 
     var reportError = function(error, defaultMsg) {
