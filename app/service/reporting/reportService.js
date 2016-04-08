@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $anchorScroll, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report) {
 
     var rep = {
        id: undefined,

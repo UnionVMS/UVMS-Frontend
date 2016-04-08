@@ -13,7 +13,6 @@
 						<th colspan="16" class="table-tools">
 							<i ng-click="toggleFiltersRow('positions')">{{isPosFilterVisible === false ? 'spatial.table_filters_activate' : 'spatial.table_filters_deactivate' | i18n}}</i>
 							<div class="btnTools">
-								<i class="fa fa-lg fa-times-circle" title="{{'spatial.table_filters_reset' | i18n}}" st-reset-search ng-click="clearDateFilters()"></i>
 								<i class="fa fa-lg fa-download" title="{{'spatial.tab_vms_export_csv' | i18n}}" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="positions" ng-show="isAllowed('Reporting', 'EXPORT_VMS_REPORT_DATA')"></i>
 							</div>
 							
@@ -21,100 +20,108 @@
 					</tr>
 						<tr ng-show="isPosFilterVisible">
 							<th colspan="16">
-								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.fs">
-									<input st-search="properties.countryCode" placeholder="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="input-sm form-control" type="search">
-									<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-								</div>
-								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.extMark">
-									<input st-search="properties.externalMarking" placeholder="{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}" class="input-sm form-control" type="search">
-									<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-								</div>
-								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.ircs">
-									<input st-search="properties.ircs" placeholder="{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}" class="input-sm form-control" type="search">
-									<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-								</div>
-								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.cfr">
-									<input st-search="properties.cfr" placeholder="{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}" class="input-sm form-control" type="search">
-									<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-								</div>
-								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.posTime">
-									<datepicker-input time="true" model="startDate" max-date="endDate" placeholder="{{'spatial.table_filter_start_date' | i18n }}" ng-change-callback="resetDateTimePicker" input-field-id="vms-panel-filter-start-date-picker"></datepicker-input>
-									<input id="stStartDateInput" ng-model="startDate" st-search="properties.positionTime|startDate" class="hidden-st-control" type="search">
-									<a href="" qtip at="top left" my="bottom right" content="{{'spatial.table_filter_start_date' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-								</div>
-								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.posTime">
-									<datepicker-input time="true" model="endDate" min-date="startDate" placeholder="{{'spatial.table_filter_end_date' | i18n }}" ng-change-callback="resetDateTimePicker" input-field-id="vms-panel-filter-end-date-picker"></datepicker-input>
-									<input id="stEndDateInput" ng-model="endDate" st-search="properties.positionTime|endDate" class="hidden-st-control" type="search">
-									<a href="" qtip at="top left" my="bottom right" content="{{'spatial.table_filter_end_date' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-								</div>
-								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.name">
-									<input st-search="properties.name" placeholder="{{'spatial.tab_vms_pos_table_header_name' | i18n }}" class="input-sm form-control" type="search">
-									<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_name' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-								</div>
-								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.lat && decimalDegrees">
-									<input st-search="geometry.lat|dd" placeholder="{{'spatial.tab_vms_pos_table_header_lat' | i18n }}" class="input-sm form-control" type="search">
-									<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_lat' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-								</div>
-								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.lon && decimalDegrees">
-									<input st-search="geometry.lon|dd" placeholder="{{'spatial.tab_vms_pos_table_header_lon' | i18n }}" class="input-sm form-control" type="search">
-									<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_lon' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-								</div>
-								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.lat && !decimalDegrees">
-									<div class="row">
-										<div class="col-md-12" ng-class="{'twin-controls': focusedLat}">
-											<div class="col-md-3 coord-label">{{'spatial.tab_vms_pos_table_header_lat' | i18n }}</div>
-											<div class="col-md-4 coord-deg">
-												<input st-search="geometry.lat|deg" class="input-sm form-control" type="search" ng-focus="focusedLat = true" ng-blur="focusedLat = false">
-											</div>
-											<div class="col-md-5 coord-min">
-												<input st-search="geometry.lat|min" class="input-sm form-control coord-min" type="search" ng-focus="focusedLat = true" ng-blur="focusedLat = false">
-											</div>
-										</div>
+								<div id="posFiltersForm">
+									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.fs">
+										<input name="countryCode" placeholder="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="input-sm form-control" type="search">
+										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+									</div>
+									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.extMark">
+										<input name="externalMarking" placeholder="{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}" class="input-sm form-control" type="search">
+										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+									</div>
+									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.ircs">
+										<input name="ircs" placeholder="{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}" class="input-sm form-control" type="search">
+										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+									</div>
+									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.cfr">
+										<input name="cfr" placeholder="{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}" class="input-sm form-control" type="search">
+										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+									</div>
+									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.posTime">
+										<datepicker-input time="true" model="startDate" max-date="endDate" placeholder="{{'spatial.table_filter_start_date' | i18n }}" ng-change-callback="resetDateTimePicker" input-field-id="vms-panel-filter-start-date-picker"></datepicker-input>
+										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.table_filter_start_date' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+									</div>
+									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.posTime">
+										<datepicker-input time="true" model="endDate" min-date="startDate" placeholder="{{'spatial.table_filter_end_date' | i18n }}" ng-change-callback="resetDateTimePicker" input-field-id="vms-panel-filter-end-date-picker"></datepicker-input>
+										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.table_filter_end_date' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+									</div>
+									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.name">
+										<input name="name" placeholder="{{'spatial.tab_vms_pos_table_header_name' | i18n }}" class="input-sm form-control" type="search">
+										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_name' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+									</div>
+									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.lat && decimalDegrees">
+										<input name="lat|dd" placeholder="{{'spatial.tab_vms_pos_table_header_lat' | i18n }}" class="input-sm form-control" type="search">
 										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_lat' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
 									</div>
-								</div>
-								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.lon && !decimalDegrees">
-									<div class="row">
-										<div class="col-md-12" ng-class="{'twin-controls': focusedLon}">
-											<div class="col-md-3 coord-label">{{'spatial.tab_vms_pos_table_header_lon' | i18n }}</div>
-											<div class="col-md-4 coord-deg">
-												<input st-search="geometry.lon|deg" class="input-sm form-control" type="search" ng-focus="focusedLon = true" ng-blur="focusedLon = false">
-											</div>
-											<div class="col-md-5 coord-min">
-												<input st-search="geometry.lon|min" class="input-sm form-control coord-min" type="search" ng-focus="focusedLon = true" ng-blur="focusedLon = false">
-											</div>
-										</div>
+									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.lon && decimalDegrees">
+										<input name="lon|dd" placeholder="{{'spatial.tab_vms_pos_table_header_lon' | i18n }}" class="input-sm form-control" type="search">
 										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_lon' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
 									</div>
-								</div>
-								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.stat">
-									<input st-search="properties.status" placeholder="{{'spatial.tab_vms_pos_table_header_status' | i18n }}" class="input-sm form-control" type="search">
-									<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_status' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-								</div>
-								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.m_spd">
-									<input st-search="properties.reportedSpeed" placeholder="{{'spatial.tab_vms_pos_table_header_measured_speed' | i18n }}" class="input-sm form-control" type="search">
-									<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_measured_speed' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-								</div>
-								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.c_spd">
-									<input st-search="properties.calculatedSpeed" placeholder="{{'spatial.tab_vms_pos_table_header_calculated_speed' | i18n }}" class="input-sm form-control" type="search">
-									<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_calculated_speed' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-								</div>
-								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.crs">
-									<input st-search="properties.reportedCourse" placeholder="{{'spatial.tab_vms_pos_table_header_course' | i18n }}" class="input-sm form-control" type="search">
-									<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_course' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-								</div>
-								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.msg_tp">
-									<input st-search="properties.movementType" placeholder="{{'spatial.tab_vms_pos_table_header_msg_type' | i18n }}" class="input-sm form-control" type="search">
-									<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_msg_type' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-								</div>
-								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.act_tp">
-									<input st-search="properties.activityType" placeholder="{{'spatial.tab_vms_pos_table_header_activity_type' | i18n }}" class="input-sm form-control" type="search">
-									<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_activity_type' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-								</div>
-								<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.source">
-									<input st-search="properties.source" placeholder="{{'spatial.tab_vms_pos_table_header_source' | i18n }}" class="input-sm form-control" type="search">
-									<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_source' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-								</div>
+									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.lat && !decimalDegrees">
+										<div class="row">
+											<div class="col-md-12" ng-class="{'twin-controls': focusedLat}">
+												<div class="col-md-3 coord-label">{{'spatial.tab_vms_pos_table_header_lat' | i18n }}</div>
+												<div class="col-md-4 coord-deg">
+													<input name="lat|deg" class="input-sm form-control" type="search" ng-focus="focusedLat = true" ng-blur="focusedLat = false">
+												</div>
+												<div class="col-md-5 coord-min">
+													<input name="lat|min" class="input-sm form-control coord-min" type="search" ng-focus="focusedLat = true" ng-blur="focusedLat = false">
+												</div>
+											</div>
+											<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_lat' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+										</div>
+									</div>
+									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.lon && !decimalDegrees">
+										<div class="row">
+											<div class="col-md-12" ng-class="{'twin-controls': focusedLon}">
+												<div class="col-md-3 coord-label">{{'spatial.tab_vms_pos_table_header_lon' | i18n }}</div>
+												<div class="col-md-4 coord-deg">
+													<input name="lon|deg" class="input-sm form-control" type="search" ng-focus="focusedLon = true" ng-blur="focusedLon = false">
+												</div>
+												<div class="col-md-5 coord-min">
+													<input name="lon|min" class="input-sm form-control coord-min" type="search" ng-focus="focusedLon = true" ng-blur="focusedLon = false">
+												</div>
+											</div>
+											<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_lon' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+										</div>
+									</div>
+									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.stat">
+										<input name="status" placeholder="{{'spatial.tab_vms_pos_table_header_status' | i18n }}" class="input-sm form-control" type="search">
+										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_status' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+									</div>
+									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.m_spd">
+										<input name="reportedSpeed" placeholder="{{'spatial.tab_vms_pos_table_header_measured_speed' | i18n }}" class="input-sm form-control" type="search">
+										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_measured_speed' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+									</div>
+									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.c_spd">
+										<input name="calculatedSpeed" placeholder="{{'spatial.tab_vms_pos_table_header_calculated_speed' | i18n }}" class="input-sm form-control" type="search">
+										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_calculated_speed' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+									</div>
+									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.crs">
+										<input name="reportedCourse" placeholder="{{'spatial.tab_vms_pos_table_header_course' | i18n }}" class="input-sm form-control" type="search">
+										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_course' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+									</div>
+									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.msg_tp">
+										<input name="movementType" placeholder="{{'spatial.tab_vms_pos_table_header_msg_type' | i18n }}" class="input-sm form-control" type="search">
+										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_msg_type' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+									</div>
+									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.act_tp">
+										<input name="activityType" placeholder="{{'spatial.tab_vms_pos_table_header_activity_type' | i18n }}" class="input-sm form-control" type="search">
+										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_activity_type' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+									</div>
+									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.source">
+										<input name="source" placeholder="{{'spatial.tab_vms_pos_table_header_source' | i18n }}" class="input-sm form-control" type="search">
+										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_source' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+									</div>
+									<div class="col-md-12 vms-search-btns">
+										<button type="button" class="btn btn-default" ng-click="getFilters('positions')">
+											<span class="fa fa-search"></span>&nbsp;
+											<span>{{'spatial.reports_table_search_header' | i18n}}</span>
+										</button>
+										<input id="positionsFilters" st-search="positions" class="hidden-st-control" type="search">
+										<st-reset-search form-id="posFiltersForm" clear-dates="clearDateFilters()"></st-reset-search>
+				        			</div>
+			        			</div>
 							</th>
 						</tr>
 						<tr>
@@ -125,8 +132,8 @@
 								<div st-sort="properties.cfr" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.cfr" ng-if="column === 'cfr'">{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}</div>
 								<div st-sort="properties.name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.name" ng-if="column === 'name'">{{'spatial.tab_vms_pos_table_header_name' | i18n }}</div>
 								<div st-sort="properties.positionTime" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.posTime" ng-if="column === 'posTime'">{{'spatial.tab_vms_pos_table_header_date' | i18n }}</div>
-								<div st-sort="geometry.coordinates[0]" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.lat" ng-if="column === 'lat'">{{'spatial.tab_vms_pos_table_header_lat' | i18n }}</div>
-								<div st-sort="geometry.coordinates[1]" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.lon" ng-if="column === 'lon'">{{'spatial.tab_vms_pos_table_header_lon' | i18n }}</div>
+								<div st-sort="geometry.coordinates[1]" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.lat" ng-if="column === 'lat'">{{'spatial.tab_vms_pos_table_header_lat' | i18n }}</div>
+								<div st-sort="geometry.coordinates[0]" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.lon" ng-if="column === 'lon'">{{'spatial.tab_vms_pos_table_header_lon' | i18n }}</div>
 								<div st-sort="properties.status" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.stat" ng-if="column === 'stat'">{{'spatial.tab_vms_pos_table_header_status' | i18n }}</div>
 								<div st-sort="properties.reportedSpeed" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.m_spd" ng-if="column === 'm_spd'">{{'spatial.tab_vms_pos_table_header_measured_speed' | i18n }}</div>
 								<div st-sort="properties.calculatedSpeed" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.c_spd" ng-if="column === 'c_spd'">{{'spatial.tab_vms_pos_table_header_calculated_speed' | i18n }}</div>
@@ -186,7 +193,6 @@
 						<th colspan="11" class="table-tools">
 							<i ng-click="toggleFiltersRow('segments')">{{isSegFilterVisible === false ? 'spatial.table_filters_activate' : 'spatial.table_filters_deactivate' | i18n}}</i>
 							<div class="btnTools">
-								<i class="fa fa-lg fa-times-circle" title="{{'spatial.table_filters_reset' | i18n}}" st-reset-search></i>
 								<i class="fa fa-lg fa-download" title="{{'spatial.tab_vms_export_csv' | i18n}}" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="segments" ng-show="isAllowed('Reporting', 'EXPORT_VMS_REPORT_DATA')"></i>
 							</div>
 							
@@ -194,35 +200,55 @@
 					</tr>
 					<tr ng-show="isSegFilterVisible">
 			        	<th colspan="11">
-			        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.fs">
-			        			<input st-search="properties.countryCode" placeholder="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="input-sm form-control" type="search">
-			        		</div>
-			        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.extMark">
-			        			<input st-search="properties.externalMarking" placeholder="{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}" class="input-sm form-control" type="search">
-			        		</div>
-			        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.ircs">
-			        			<input st-search="properties.ircs" placeholder="{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}" class="input-sm form-control" type="search">
-			        		</div>
-			        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.cfr">
-			        			<input st-search="properties.cfr" placeholder="{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}" class="input-sm form-control" type="search">	
-			        		</div>
-			        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.name">
-			        			<input st-search="properties.name" placeholder="{{'spatial.tab_vms_pos_table_header_name' | i18n }}" class="input-sm form-control" type="search">
-			        		</div>
-			        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.dist">
-			        			<input st-search="properties.distance" placeholder="{{'spatial.tab_vms_seg_table_header_distance' | i18n }}" class="input-sm form-control" type="search">
-			        		</div>
-			        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.dur">
-			        			<input st-search="properties.duration" placeholder="{{'spatial.tab_vms_seg_table_header_duration' | i18n }}" class="input-sm form-control" type="search">
-			        		</div>
-			        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.spd">
-			        			<input st-search="properties.speedOverGround" placeholder="{{'spatial.tab_vms_seg_table_header_speed_ground' | i18n }}" class="input-sm form-control" type="search">
-			        		</div>
-			        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.crs">
-			        			<input st-search="properties.courseOverGround" placeholder="{{'spatial.tab_vms_seg_table_header_course_ground' | i18n }}" class="input-sm form-control" type="search">
-			        		</div>
-			        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.cat">
-			        			<input st-search="properties.segmentCategory" placeholder="{{'spatial.tab_vms_seg_table_header_category' | i18n }}" class="input-sm form-control" type="search">
+			        		<div id="segFiltersForm">
+			        			<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.fs">
+				        			<input name="countryCode" placeholder="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="input-sm form-control" type="search">
+				        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+				        		</div>
+				        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.extMark">
+				        			<input name="externalMarking" placeholder="{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}" class="input-sm form-control" type="search">
+				        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+				        		</div>
+				        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.ircs">
+				        			<input name="ircs" placeholder="{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}" class="input-sm form-control" type="search">
+				        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+				        		</div>
+				        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.cfr">
+				        			<input name="cfr" placeholder="{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}" class="input-sm form-control" type="search">
+				        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>	
+				        		</div>
+				        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.name">
+				        			<input name="name" placeholder="{{'spatial.tab_vms_pos_table_header_name' | i18n }}" class="input-sm form-control" type="search">
+				        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_name' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+				        		</div>
+				        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.dist">
+				        			<input name="distance" placeholder="{{'spatial.tab_vms_seg_table_header_distance' | i18n }}" class="input-sm form-control" type="search">
+				        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_seg_table_header_distance' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+				        		</div>
+				        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.dur">
+				        			<input name="duration" placeholder="{{'spatial.tab_vms_seg_table_header_duration' | i18n }}" class="input-sm form-control" type="search">
+				        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_seg_table_header_duration' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+				        		</div>
+				        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.spd">
+				        			<input name="speedOverGround" placeholder="{{'spatial.tab_vms_seg_table_header_speed_ground' | i18n }}" class="input-sm form-control" type="search">
+				        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_seg_table_header_speed_ground' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+				        		</div>
+				        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.crs">
+				        			<input name="courseOverGround" placeholder="{{'spatial.tab_vms_seg_table_header_course_ground' | i18n }}" class="input-sm form-control" type="search">
+				        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_seg_table_header_course_ground' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+				        		</div>
+				        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.cat">
+				        			<input name="segmentCategory" placeholder="{{'spatial.tab_vms_seg_table_header_category' | i18n }}" class="input-sm form-control" type="search">
+				        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_seg_table_header_category' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+				        		</div>
+				        		<div class="col-md-12 vms-search-btns">
+									<button type="button" class="btn btn-default" ng-click="getFilters('segments')">
+										<span class="fa fa-search"></span>&nbsp;
+										<span>{{'spatial.reports_table_search_header' | i18n}}</span>
+									</button>
+									<input id="segmentsFilters" st-search="segments" class="hidden-st-control" type="search">
+									<st-reset-search form-id="segFiltersForm"></st-reset-search>
+			        			</div>
 			        		</div>
 			        	</th>
 			    	</tr>
@@ -285,37 +311,54 @@
 						<th colspan="9" class="table-tools">
 							<i ng-click="toggleFiltersRow('tracks')">{{isTrackFilterVisible === false ? 'spatial.table_filters_activate' : 'spatial.table_filters_deactivate' | i18n}}</i>
 							<div class="btnTools">
-								<i class="fa fa-lg fa-times-circle" title="{{'spatial.table_filters_reset' | i18n}}" st-reset-search></i>
 								<i class="fa fa-lg fa-download" title="{{'spatial.tab_vms_export_csv' | i18n}}" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="tracks" ng-show="isAllowed('Reporting', 'EXPORT_VMS_REPORT_DATA')"></i>
 							</div>
 						</th>
 					</tr>
 					<tr ng-show="isTrackFilterVisible">
 			        	<th colspan="9">
-			        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.tracks.fs">
-			        			<input st-search="countryCode" placeholder="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="input-sm form-control" type="search">
-			        		</div>
-			        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.tracks.extMark">
-			        			<input st-search="externalMarking" placeholder="{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}" class="input-sm form-control" type="search">
-			        		</div>
-			        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.tracks.ircs">
-			        			<input st-search="ircs" placeholder="{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}" class="input-sm form-control" type="search">
-			        		</div>
-			        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.tracks.cfr">
-			        			<input st-search="cfr" placeholder="{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}" class="input-sm form-control" type="search">	
-			        		</div>
-			        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.tracks.name">
-			        			<input st-search="name" placeholder="{{'spatial.tab_vms_pos_table_header_name' | i18n }}" class="input-sm form-control" type="search">
-			        		</div>
-			        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.tracks.dist">
-			        			<input st-search="distance" placeholder="{{'spatial.tab_vms_seg_table_header_distance' | i18n }}" class="input-sm form-control" type="search">
-			        		</div>
-			        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.tracks.dur">
-			        			<input st-search="duration" placeholder="{{'spatial.tab_vms_seg_table_header_duration' | i18n }}" class="input-sm form-control" type="search">
-			        		</div>
-			        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.tracks.timeSea">
-			        			<input st-search="totalTimeAtSea" placeholder="{{'spatial.tab_vms_tracks_table_header_time_at_sea' | i18n }}" class="input-sm form-control" type="search">
-			        		</div>
+			        		<div id="trackFiltersForm">
+				        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.tracks.fs">
+				        			<input name="countryCode" placeholder="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="input-sm form-control" type="search">
+				        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+				        		</div>
+				        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.tracks.extMark">
+				        			<input name="externalMarking" placeholder="{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}" class="input-sm form-control" type="search">
+				        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+				        		</div>
+				        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.tracks.ircs">
+				        			<input name="ircs" placeholder="{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}" class="input-sm form-control" type="search">
+				        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+				        		</div>
+				        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.tracks.cfr">
+				        			<input name="cfr" placeholder="{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}" class="input-sm form-control" type="search">	
+				        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+				        		</div>
+				        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.tracks.name">
+				        			<input name="name" placeholder="{{'spatial.tab_vms_pos_table_header_name' | i18n }}" class="input-sm form-control" type="search">
+				        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_name' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+				        		</div>
+				        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.tracks.dist">
+				        			<input name="distance" placeholder="{{'spatial.tab_vms_seg_table_header_distance' | i18n }}" class="input-sm form-control" type="search">
+				        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_seg_table_header_distance' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+				        		</div>
+				        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.tracks.dur">
+				        			<input name="duration" placeholder="{{'spatial.tab_vms_seg_table_header_duration' | i18n }}" class="input-sm form-control" type="search">
+				        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_seg_table_header_duration' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+				        		</div>
+				        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.tracks.timeSea">
+				        			<input name="totalTimeAtSea" placeholder="{{'spatial.tab_vms_tracks_table_header_time_at_sea' | i18n }}" class="input-sm form-control" type="search">
+				        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_tracks_table_header_time_at_sea' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+				        		</div>
+				        		<div class="col-md-12 vms-search-btns">
+									<button type="button" class="btn btn-default" ng-click="getFilters('tracks')">
+										<span class="fa fa-search"></span>&nbsp;
+										<span>{{'spatial.reports_table_search_header' | i18n}}</span>
+									</button>
+									<input id="tracksFilters" st-search="tracks" class="hidden-st-control" type="search">
+									<st-reset-search form-id="trackFiltersForm"></st-reset-search>
+			        			</div>
+				        	</div>
 			        	</th>
 			    	</tr>
 			        <tr>

@@ -490,7 +490,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 	    if ($scope.refresh.status === true) {
 	    	reportService.setAutoRefresh();
 	    }
-    }
+    };
 
     //Untoggle any toolbar btn when tab is changed
     $scope.$on('untoggleToolbarBtns', function (evt) {

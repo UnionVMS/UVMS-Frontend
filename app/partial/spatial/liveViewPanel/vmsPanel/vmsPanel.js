@@ -10,10 +10,57 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
     $scope.decimalDegrees = true;
     $scope.attrVisibility = vmsVisibilityService;
     
-    //config object
-    $scope.config = {
-        src_format: 'YYYY-MM-DDTHH:mm:ss',
-        target_format: globalSettingsService.getDateFormat()
+    $scope.getFilters = function(type){
+        //TODO validate DDM coords
+        var el = angular.element('#' + type + 'Filters');
+        var data;
+        switch (type) {
+            case 'positions':
+                data = $scope.getFilterData('posFiltersForm');
+                break;
+            case 'segments':
+                data = $scope.getFilterData('segFiltersForm');
+                break;
+            case 'tracks':
+                data = $scope.getFilterData('trackFiltersForm');
+                break;
+        }
+        
+        if (!_.isEqual({}, data)){
+            el.val(JSON.stringify(data));
+            el.trigger('input');
+        } //TODO else clear search like reset filters
+        
+    };
+    
+    $scope.getFilterData = function(selector){
+        var obj = {};
+        $('#' + selector + ' [name]').each(
+            function(index){  
+                var input = $(this);
+                var value = input.val();
+                if (value !== ''){
+                    obj[input.attr('name')] = value;
+                }
+            }
+        );
+        
+        //Get the dates
+        if (angular.isDefined($scope.startDate)){
+            obj.startDate = $scope.startDate;
+        }
+        
+        if (angular.isDefined($scope.endDate)){
+            obj.endDate = $scope.endDate;
+        }
+        
+        return obj;
+    };
+    
+    $scope.validateDDMCoords = function(){
+        //TODO
+//        $('input[name="lon|dd"]:visible')
+//        $('input[name="lon|deg"]').addClass('coordError')
     };
     
     //Define VMS tabs
@@ -73,20 +120,6 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        $scope.endDate = undefined;
    };
    
-   $scope.$watch('startDate', function(newVal, oldVal){
-       if (angular.isDefined($scope.executedReport.positions) && $scope.executedReport.positions.length > 0){
-           var el = angular.element('#stStartDateInput');
-           el.trigger('input');
-       }
-   });
-   
-   $scope.$watch('endDate', function(newVal, oldVal){
-       if (angular.isDefined($scope.executedReport.positions) && $scope.executedReport.positions.length > 0){
-           var el = angular.element('#stEndDateInput');
-           el.trigger('input');
-       }
-   });
-   
    //Positions table config
    $scope.displayedPositions = [].concat($scope.executedReport.positions);
    
@@ -106,9 +139,8 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            segLayer.getSource().forEachFeatureInExtent(extent, function(feature){
                if (feature.get('trackId') === id){
                    if (feature.getGeometry().getLength() !== 0){
-                           coords.push(feature.getGeometry().getCoordinates());
+                       coords.push(feature.getGeometry().getCoordinates());
                    }
-                   
                }
            });
            
