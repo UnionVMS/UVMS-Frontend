@@ -232,6 +232,30 @@ describe('dateTimeService', function($provide) {
     expect(dateTimeService.formatAccordingToUserSettings(undefined)).toBeUndefined();
   }));
 
+  describe('getTimezoneString', function() {
+
+    it('should format time zone strings', inject(function(dateTimeService) {
+        expect(dateTimeService.getTimezoneString(0)).toEqual('+00:00');
+        expect(dateTimeService.getTimezoneString(120)).toEqual('+02:00');
+    }));
+
+    it('should support partial zones', inject(function(dateTimeService) {
+        expect(dateTimeService.getTimezoneString(690)).toEqual('+11:30');
+        expect(dateTimeService.getTimezoneString(215)).toEqual('+03:35');
+    }));
+
+    it('should support negative values', inject(function(dateTimeService) {
+        expect(dateTimeService.getTimezoneString(-720)).toEqual('-12:00');
+        expect(dateTimeService.getTimezoneString(-133)).toEqual('-02:13');
+    }));
+
+  });
+
+    describe('userTimeZoneToUtc', function() {
+        it('should convert user time zone to UTC', inject(function(dateTimeService) {
+            expect(dateTimeService.userTimezoneToUtc('2016-04-08 12:00:00')).toEqual('2016-04-08 11:00:00');
+        }));
+    });
 
 });
 

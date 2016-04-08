@@ -18,6 +18,22 @@ angular.module('unionvmsWeb').factory('dateTimeService',['$log', 'globalSettings
         return format;
     }
 
+    function zeropadleft(str, len) {
+        len -= String(str).length;
+        while (len-- > 0) {
+            str = '0' + str;
+        }
+
+        return str;
+    }
+
+    function getTimezoneString(utcOffsetMinutes) {
+        var sign = utcOffsetMinutes < 0 ? '-' : '+';
+        var hours = Math.floor(Math.abs(utcOffsetMinutes / 60));
+        var minutes = Math.abs(utcOffsetMinutes % 60);
+        return sign + zeropadleft(hours, 2) + ':' + zeropadleft(minutes, 2);
+    }
+
     var dateTimeService = {
         //Convert dateTime (with timezone) to dateTime in UTC without timezone
         toUTC : function(dateTimeInput) {
@@ -94,13 +110,10 @@ angular.module('unionvmsWeb').factory('dateTimeService',['$log', 'globalSettings
         },
         userTimezoneToUtc: function(dateTime) { // moment?
             if (!this.isFormattedWithTimeZone(dateTime) && (typeof dateTime === 'string')) {
-                var userTimezone = globalSettingsService.getTimezone();
-                var hh = Math.floor(userTimezone / 60);
-                var mm = userTimezone % 60;
-                dateTime += (userTimezone < 0 ? '-' : '+') + (hh < 10 ? '0' + hh : hh) + ':' + (mm < 10 ? '0' + mm : mm) + ':00';
+                dateTime += getTimezoneString(globalSettingsService.getTimezone()); // (userTimezone < 0 ? '-' : '+') + (hh < 10 ? '0' + hh : hh) + ':' + (mm < 10 ? '0' + mm : mm) + ':00';
             }
 
-            var m = moment(dateTime, "YYYY-MM-DD HH:mm:ssZ");
+            var m = moment(dateTime, "YYYY-MM-DD HH:mmZ");
             m.utc();
             return m.format("YYYY-MM-DD HH:mm:ss");
         },
@@ -111,7 +124,8 @@ angular.module('unionvmsWeb').factory('dateTimeService',['$log', 'globalSettings
         },
         format: function(date) {
             return moment(date).format(getFormat());
-        }
+        },
+        getTimezoneString: getTimezoneString
     };
 
     return dateTimeService;
