@@ -94,7 +94,7 @@
 
 			var bins = {};
 			angular.forEach(messages, function(message) {
-				var timestamp = parseDateTimeString(message.dateRecieved); // sic
+				var timestamp = parseDateTimeString(message.dateReceived);
 				var index = getIndex(timestamp);
 				bins[index] = (bins[index] || 0) + 1;
 			});

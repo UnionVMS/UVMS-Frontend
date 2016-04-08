@@ -13,7 +13,7 @@ angular.module('unionvmsWeb').directive('exchangeSendingQueueDetails', function(
 			};
 
 			//Hide elements in table if not defined.
-			scope.showDateRecieved = showElement(scope.items[0].dateRecieved);
+			scope.showDateReceived = showElement(scope.items[0].dateReceived);
 			scope.showSenderRecipient = showElement(scope.items[0].senderRecipient);
 			scope.showAssetName = showElement(scope.items[0].ASSET_NAME);
 			scope.showLongitude = showElement(scope.items[0].LONGITUDE);

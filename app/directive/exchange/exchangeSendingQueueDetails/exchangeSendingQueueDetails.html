@@ -2,7 +2,7 @@
 <table class="searchResults exchangedetails">
 			<thead>
 				<tr>
-					<th class="date-recieved" ng-show="showDateRecieved">{{'exchange.sending_queue_detail_table_header_date_recieved' | i18n}}</th>
+					<th class="date-recieved" ng-show="showDateReceived">{{'exchange.sending_queue_detail_table_header_date_recieved' | i18n}}</th>
 					<th class="" ng-show="showEmail">{{'exchange.sending_queue_detail_table_header_email' | i18n}}</th>
 					<th class="sender" ng-show="showSenderRecipient">{{'exchange.sending_queue_detail_table_header_sender_recipient' | i18n}}</th>
 					<th class="" ng-show="showAssetName">{{'exchange.sending_queue_detail_table_header_asset_name' | i18n}}</th>
@@ -14,7 +14,7 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="item in items" ng-class-odd="'even'" ng-class-even="'odd'">
-					<td ng-show="showDateRecieved" class="date-recieved sending-queue-detail-table-cell">{{item.dateRecieved | confDateFormat}}</td>
+					<td ng-show="showDateReceived" class="date-recieved sending-queue-detail-table-cell">{{item.dateReceived | confDateFormat}}</td>
 					<td ng-show="showEmail" class="">{{item.EMAIL}}</td>
     				<td ng-show="showSenderRecipient" class="sender sending-queue-detail-table-cell">{{item.senderRecipient | confDateFormat}}</td>
     				<td ng-show="showAssetName" class="sending-queue-detail-table-cell">{{item.ASSET_NAME}}</td>

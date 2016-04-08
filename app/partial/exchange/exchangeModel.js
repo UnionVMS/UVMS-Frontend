@@ -5,7 +5,7 @@ angular.module('unionvmsWeb')
 
  		this.id = undefined;
         this.incoming = undefined;
-        this.dateRecieved = undefined;
+        this.dateReceived = undefined;
         this.senderRecipient = undefined;
         this.recipient = undefined;
         this.dateFwd = undefined;
@@ -22,7 +22,7 @@ angular.module('unionvmsWeb')
 		if(data){
 			exchange.id = data.id;
 	        exchange.incoming = data.incoming || false;
-	        exchange.dateRecieved = data.dateRecieved;
+	        exchange.dateReceived = data.dateRecieved;
 	        exchange.senderRecipient = data.senderRecipient;
 	        exchange.recipient = data.recipient;
 	        exchange.dateFwd = data.dateFwd;

@@ -25,7 +25,7 @@ describe('Exchange', function() {
 
         expect(exchange.id).toEqual(exchangeDTO.id);
         expect(exchange.incoming).toEqual(exchangeDTO.incoming);
-        expect(exchange.dateRecieved).toEqual(exchangeDTO.dateRecieved);
+        expect(exchange.dateReceived).toEqual(exchangeDTO.dateRecieved);
         expect(exchange.senderRecipient).toEqual(exchangeDTO.senderRecipient);
         expect(exchange.recipient).toEqual(exchangeDTO.recipient);
         expect(exchange.dateFwd).toEqual(exchangeDTO.dateFwd);
