@@ -667,16 +667,16 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
             if (mode === 'create'){
                 $scope.alert.setLoading(locale.getString('areas.saving_new_area'));
                 areaRestService.createUserArea(angular.toJson(feature)).then(function(response) {
-                    createSuccess(response, 'areas.create_user_area_success');
+                    createSuccess(response, 'create_user_area_success');
                 }, function(error) {
-                    createError(error, 'areas.crud_user_area_error');
+                    createError(error, 'crud_user_area_error');
                 });
             } else {
                 $scope.alert.setLoading(locale.getString('areas.updating_area'));
                 areaRestService.updateUserArea(angular.toJson(feature)).then(function(response) {
-                    createSuccess(response, 'areas.update_user_area_success');
+                    createSuccess(response, 'update_user_area_success');
                 }, function(error) {
-                    createError(error, 'areas.error_saving_user_area');
+                    createError(error, 'error_saving_user_area');
                 });
             }
             
@@ -710,7 +710,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     var createSuccess = function(response, successMsg){      
         $scope.alert.removeLoading();
         $scope.alert.setSuccess();
-        $scope.alert.alertMessage = locale.getString(successMsg);
+        $scope.alert.alertMessage = locale.getString('areas.' + successMsg);
         $scope.alert.hideAlert();
         
         //Deactivate tools
@@ -733,7 +733,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         if (angular.isDefined(error.data.msg)) {
             $scope.alert.alertMessage = locale.getString('areas.' + error.data.msg);    
         } else {
-            $scope.alert.alertMessage = locale.getString(defaultMsg);
+            $scope.alert.alertMessage = locale.getString('areas.' + defaultMsg);
         }
         
         $scope.alert.hideAlert();

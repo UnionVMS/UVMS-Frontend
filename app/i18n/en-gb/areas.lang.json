@@ -131,5 +131,7 @@
 	"table_area__details_btn": "Area details",
 
 	"error_getting_user_area_groups_list" : "There was an error while getting your user areas groups list.",
-	"area_group_list_table_name_header": "Group Name"
+	"area_group_list_table_name_header": "Group Name",
+	
+	"USER_AREA_ALREADY_EXISTING": "There is already an area with the same name. Please rename your new area and try again."
 }

@@ -231,15 +231,15 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 		        $scope.isRequestingImage = true;
 		        
 		        var iconPayload = {};
-		        if (angular.isDefined(positions) && mapService.getLayerByType('vmspos').get('visible')){
+		        if (angular.isDefined(positions) && angular.isDefined(mapService.getLayerByType('vmspos')) && mapService.getLayerByType('vmspos').get('visible')){
 		            iconPayload.positions = positions;
 		        }
 		        
-		        if (angular.isDefined(segments) && mapService.getLayerByType('vmsseg').get('visible')){
+		        if (angular.isDefined(segments) && angular.isDefined(mapService.getLayerByType('vmsseg')) && mapService.getLayerByType('vmsseg').get('visible')){
                     iconPayload.segments = segments;
                 }
 		        
-		        if (angular.isDefined(alarms) && mapService.getLayerByType('alarms').get('visible')){
+		        if (angular.isDefined(alarms) && angular.isDefined(mapService.getLayerByType('alarms')) && mapService.getLayerByType('alarms').get('visible')){
                     iconPayload.alarms = alarms;
                 }
 		        
