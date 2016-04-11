@@ -322,6 +322,7 @@
 	"layer_settings_user_areas": "User areas",
 	"layer_settings_group_areas": "Area groups",
 	"layer_settings_port": "Ports",
+	"base_layers_error": "There must be at least one background layer",
 	"segment_property": "Segment property",
 	"position_property": "Position property",
 	"property_from": "From",

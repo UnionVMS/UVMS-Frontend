@@ -13,6 +13,10 @@
 					</div>
 				</accordion-heading>
 				<div class="row" ng-class="{'layerUserConfig': !isAdminConfig}">
+					<div class="accordionError baseLayersError" ng-show="(submitedWithErrors || layersettingsForm.$dirty) && layersettingsForm.baseLayers.$invalid">
+						<div class="fa fa-exclamation-circle"></div>
+						{{'spatial.base_layers_error' | i18n }}
+					</div>
 					<div class="col-md-8 layerSettingChoices">
 						<div class="containerWithBottomPadding">
 							<div>

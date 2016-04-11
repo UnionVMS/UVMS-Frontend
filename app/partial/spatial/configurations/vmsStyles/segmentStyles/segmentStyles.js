@@ -28,6 +28,7 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope,con
 	
 	$scope.addNewRule = function(){
 		if($scope.isAddNewRuleActive){
+			$scope.vmsstylesForm.$setDirty();
 			var nextFrom;
 			if($scope.configModel.segmentStyle.style && $scope.configModel.segmentStyle.style.length > 0){
 				nextFrom = _.last($scope.configModel.segmentStyle.style).propertyTo;
@@ -39,6 +40,7 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope,con
 	};
 	
 	$scope.removeRuleByIndex = function(index, ruleId){
+		$scope.vmsstylesForm.$setDirty();
 		$scope.configModel.segmentStyle.style.splice(index, 1);
 		
 		if($scope.configModel.segmentStyle.style.length > index){

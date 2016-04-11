@@ -190,7 +190,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	};
 	
 	$scope.validateBackGroundLayers = function(){
-		if((_.isEmpty($scope.selectedBases) && !$scope.isReportConfig) || ($scope.isReportConfig && _.isEmpty($scope.selectedBases) && (!_.isEmpty($scope.selectedPorts) || !_.isEmpty($scope.selectedAreas) || !_.isEmpty($scope.selectedAdditionals)))){
+		if(_.isEmpty($scope.selectedBases)){
 			$scope.layersettingsForm.baseLayers.$setValidity('empty',false);
 		}else{
 			$scope.layersettingsForm.baseLayers.$setValidity('empty',true);

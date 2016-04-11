@@ -1,8 +1,8 @@
 <div ng-controller="SegmentstylesCtrl">
 	<ng-form name="segmentsForm" novalidate>
 		<div class="row">
-			<div class="form-group col-md-4">
-				<combobox ng-model="configModel.segmentStyle.attribute" initialtext="{{'spatial.segment_property' | i18n }}" items="segmentProperties" ng-change="changeProperty()"></combobox>
+			<div class="form-group col-md-4" ng-class="{'has-error': segmentsForm.segmentProperty.$invalid}">
+				<combobox ng-model="configModel.segmentStyle.attribute" initialtext="{{'spatial.segment_property' | i18n }}" items="segmentProperties" ng-change="changeProperty()" name="segmentProperty" ng-required="true"></combobox>
 			</div>
 			<div class="form-group col-md-4 btn-add" ng-show="configModel.segmentStyle.attribute && ['countryCode','segmentCategory'].indexOf(configModel.segmentStyle.attribute) === -1">
 				<a ng-class='{ disabled: !configModel.segmentStyle.attribute || !isAddNewRuleActive}' ng-click="!configModel.segmentStyle.attribute || !isAddNewRuleActive || addNewRule()" title="{{'spatial.property_add_rule' | i18n }}">

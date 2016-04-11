@@ -461,10 +461,12 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	var getUserConfigsFailure = function(error){
 	    $anchorScroll();
-	    $scope.formAlert.visible = true;
-//	    $scope.alert.hasError = true;
-	    $scope.formAlert.msg = locale.getString('spatial.user_preferences_error_getting_configs');
-	    $scope.formAlert.visible = false;
+	    rep.hasError = true;
+        rep.message = locale.getString('spatial.user_preferences_error_getting_configs');
+        $timeout(function(){
+            rep.hasError = false;
+            rep.message = undefined;
+        }, 3000);
 	    rep.isReportRefreshing = false;
 	};
 	
@@ -559,10 +561,12 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	var getMapConfigsFromReportFailure = function(error){
 	    $anchorScroll();
-	    $scope.formAlert.visible = true;
-//	    $scope.alert.hasError = true;
-	    $scope.formAlert.msg = locale.getString('spatial.user_preferences_error_getting_configs');
-	    $scope.formAlert.visible = false;
+	    rep.hasError = true;
+        rep.message = locale.getString('spatial.user_preferences_error_getting_configs');
+        $timeout(function(){
+            rep.hasError = false;
+            rep.message = undefined;
+        }, 3000);
 	    rep.isReportRefreshing = false;
 	};
 	

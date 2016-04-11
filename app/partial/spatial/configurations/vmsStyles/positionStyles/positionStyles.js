@@ -28,6 +28,7 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,co
 	
 	$scope.addNewRule = function(){
 		if($scope.isAddNewRuleActive){
+			$scope.vmsstylesForm.$setDirty();
 			var nextFrom;
 			if($scope.configModel.positionStyle.style && $scope.configModel.positionStyle.style.length > 0){
 				nextFrom = _.last($scope.configModel.positionStyle.style).propertyTo;
@@ -39,6 +40,7 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,co
 	};
 	
 	$scope.removeRuleByIndex = function(index, ruleId){
+		$scope.vmsstylesForm.$setDirty();
 		$scope.configModel.positionStyle.style.splice(index, 1);
 		
 		if($scope.configModel.positionStyle.style.length > index){

@@ -291,15 +291,15 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     SpatialConfig.prototype.forReportConfigFromJson = function(data){
         var config = {
             mapSettings: {
-                spatialConnectId: angular.isDefined(data.mapConfiguration.spatialConnectId) ? data.mapConfiguration.spatialConnectId : undefined,
-                mapProjectionId: angular.isDefined(data.mapConfiguration.mapProjectionId) ? data.mapConfiguration.mapProjectionId : undefined,
-                displayProjectionId: angular.isDefined(data.mapConfiguration.displayProjectionId) ? data.mapConfiguration.displayProjectionId : undefined,
-                coordinatesFormat: angular.isDefined(data.mapConfiguration.coordinatesFormat) ? data.mapConfiguration.coordinatesFormat.toLowerCase() : undefined,
-                scaleBarUnits: angular.isDefined(data.mapConfiguration.scaleBarUnits) ? data.mapConfiguration.scaleBarUnits.toLowerCase() : undefined
+                spatialConnectId: angular.isDefined(data.mapConfiguration.spatialConnectId) ? angular.copy(data.mapConfiguration.spatialConnectId) : undefined,
+                mapProjectionId: angular.isDefined(data.mapConfiguration.mapProjectionId) ? angular.copy(data.mapConfiguration.mapProjectionId) : undefined,
+                displayProjectionId: angular.isDefined(data.mapConfiguration.displayProjectionId) ? angular.copy(data.mapConfiguration.displayProjectionId) : undefined,
+                coordinatesFormat: angular.isDefined(data.mapConfiguration.coordinatesFormat) ? angular.copy(data.mapConfiguration.coordinatesFormat.toLowerCase()) : undefined,
+                scaleBarUnits: angular.isDefined(data.mapConfiguration.scaleBarUnits) ? angular.copy(data.mapConfiguration.scaleBarUnits.toLowerCase()) : undefined
             },
-            stylesSettings: angular.isDefined(data.mapConfiguration.stylesSettings) ? data.mapConfiguration.stylesSettings : this.stylesSettings,
-            visibilitySettings: angular.isDefined(data.mapConfiguration.visibilitySettings) ? data.mapConfiguration.visibilitySettings : this.visibilitySettings,
-            layerSettings: angular.isDefined(data.mapConfiguration.layerSettings) ? data.mapConfiguration.layerSettings : this.layerSettings
+            stylesSettings: angular.isDefined(data.mapConfiguration.stylesSettings) ? angular.copy(data.mapConfiguration.stylesSettings) : this.stylesSettings,
+            visibilitySettings: angular.isDefined(data.mapConfiguration.visibilitySettings) ? angular.copy(data.mapConfiguration.visibilitySettings) : this.visibilitySettings,
+            layerSettings: angular.isDefined(data.mapConfiguration.layerSettings) ? angular.copy(data.mapConfiguration.layerSettings) : this.layerSettings
         };
         
         return config;
