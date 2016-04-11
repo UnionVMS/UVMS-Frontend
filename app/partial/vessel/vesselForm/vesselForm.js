@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log, $modal, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService, configurationService, assetCsvService) {
+angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log, $modal, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService, configurationService, assetCsvService, MobileTerminalHistoryModal) {
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
@@ -308,6 +308,10 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             }
           }
         });
+    };
+
+    $scope.viewMobileTerminalHistory = function(mobileTerminal) {
+        MobileTerminalHistoryModal.show(mobileTerminal);
     };
 
     $scope.exportAssetToCsv = function() {

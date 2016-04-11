@@ -19,7 +19,10 @@
         </div>
         <div class="col-md-3 textAlignRight">
             <div class="actions">
-                <a show-if-allowed="manageMobileTerminals" href="#/communication/{{mt.guid}}" title="{{'mobileTerminal.edit_mobile_terminal' | i18n}}">
+                <button class="btn btn-default" ng-click="viewMobileTerminalHistory(mt)" ng-attr-id="view-mobile-terminal-history-{{$index}}">
+                    {{ 'vessel.view_mobile_terminal_history' | i18n }}
+                </button>
+                <a class="btn btn-link" show-if-allowed="manageMobileTerminals" href="#/communication/{{mt.guid}}" title="{{'mobileTerminal.edit_mobile_terminal' | i18n}}"ng-attr-id="edit-mobile-terminal-{{$index}}">
                     <i class="fa fa-pencil-square-o fa-lg editMobileTerminal"></i>
                 </a>
             </div>
