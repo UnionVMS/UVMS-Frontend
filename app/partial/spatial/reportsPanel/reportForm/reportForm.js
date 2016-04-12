@@ -44,7 +44,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         if ($scope.getFormMode('CREATE')){
             result = true;
         } else {
-            if ((angular.isDefined($scope.reportOwner) && $scope.reportOwner === userService.getUserName()) || $scope.isAllowed('Reporting', 'MANAGA_ALL_REPORTS')){
+            if ((angular.isDefined($scope.reportOwner) && $scope.reportOwner === userService.getUserName()) || $scope.isAllowed('Reporting', 'MANAGE_ALL_REPORTS')){
                 result = true;
             }
         }
