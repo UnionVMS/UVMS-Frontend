@@ -10,59 +10,6 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
     $scope.decimalDegrees = true;
     $scope.attrVisibility = vmsVisibilityService;
     
-    $scope.getFilters = function(type){
-        //TODO validate DDM coords
-        var el = angular.element('#' + type + 'Filters');
-        var data;
-        switch (type) {
-            case 'positions':
-                data = $scope.getFilterData('posFiltersForm');
-                break;
-            case 'segments':
-                data = $scope.getFilterData('segFiltersForm');
-                break;
-            case 'tracks':
-                data = $scope.getFilterData('trackFiltersForm');
-                break;
-        }
-        
-        if (!_.isEqual({}, data)){
-            el.val(JSON.stringify(data));
-            el.trigger('input');
-        } //TODO else clear search like reset filters
-        
-    };
-    
-    $scope.getFilterData = function(selector){
-        var obj = {};
-        $('#' + selector + ' [name]').each(
-            function(index){  
-                var input = $(this);
-                var value = input.val();
-                if (value !== ''){
-                    obj[input.attr('name')] = value;
-                }
-            }
-        );
-        
-        //Get the dates
-        if (angular.isDefined($scope.startDate)){
-            obj.startDate = $scope.startDate;
-        }
-        
-        if (angular.isDefined($scope.endDate)){
-            obj.endDate = $scope.endDate;
-        }
-        
-        return obj;
-    };
-    
-    $scope.validateDDMCoords = function(){
-        //TODO
-//        $('input[name="lon|dd"]:visible')
-//        $('input[name="lon|deg"]').addClass('coordError')
-    };
-    
     //Define VMS tabs
     var setVmsTabs = function(){
         return [
@@ -198,6 +145,115 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        }
        mapService.panTo(coords);
        $scope.$emit('mapAction');
+   };
+   
+   $scope.getFilters = function(type){
+       var el = angular.element('#' + type + 'Filters');
+       var formId;
+       var valid = true;
+       switch (type) {
+           case 'positions':
+               formId = 'posFiltersForm';
+               
+               break;
+           case 'segments':
+               formId = 'segFiltersForm';
+               break;
+           case 'tracks':
+               formId = 'trackFiltersForm';
+               break;
+       }
+       
+       
+       var data = $scope.getFilterData(formId);
+       
+       valid = $scope.validateDDMCoords(data);
+       
+       if (valid){
+           el.val(JSON.stringify(data));
+           el.trigger('input');
+       }
+   };
+   
+   $scope.getFilterData = function(selector){
+       var obj = {};
+       $('#' + selector + ' [name]').each(
+           function(index){  
+               var input = $(this);
+               var value = input.val();
+               obj[input.attr('name')] = value;
+           }
+       );
+       
+       //Get the dates
+       if (angular.isDefined($scope.startDate)){
+           obj.startDate = $scope.startDate;
+       }
+       
+       if (angular.isDefined($scope.endDate)){
+           obj.endDate = $scope.endDate;
+       }
+       
+       obj = _.pick(obj, function(value, key, obj){
+           return value !== '';
+       });
+       
+       return obj;
+   };
+   
+   $scope.validateDDMCoords = function(data){
+       var keys = _.keys(data);
+       var valid = true;
+       var i, value, keysToSearch, comps, qtipEl, qtipContent;
+       if ($scope.decimalDegrees){
+           keysToSearch = ['lon|dd', 'lat|dd'];
+           for (i = 0; i < keysToSearch.length; i++){
+               $('input[name="' + keysToSearch[i] + '"]:visible').removeClass('coordError');
+               qtipEl = '#qtip-' + keysToSearch[i].replace('|', '-') + ' i';
+               $(qtipEl).removeClass('hasError');
+               if (_.indexOf(keys, keysToSearch[i]) !== -1){
+                   value = data[keysToSearch[i]].replace(',', '.');  
+                   if (isNaN(value) || (keysToSearch[i] === 'lon|dd' && (value > 180 || value < -180)) || (keysToSearch[i] === 'lat|dd' && (value > 90 || value < -90))){
+                       $('input[name="' + keysToSearch[i] + '"]:visible').addClass('coordError');
+                       $(qtipEl).addClass('hasError');
+                       valid = false;
+                   }
+               } 
+           }
+       } else {
+           keysToSearch = ['lon|deg', 'lon|min', 'lat|deg', 'lat|min'];
+           for (i = 0; i < keysToSearch.length; i++){
+               $('input[name="' + keysToSearch[i] + '"]:visible').removeClass('coordError');
+               qtipEl = '#qtip-' + keysToSearch[i].split('|')[0] + '-ddm i';
+               $(qtipEl).removeClass('hasError');
+               if (_.indexOf(keys, keysToSearch[i]) !== -1){
+                   comps = keysToSearch[i].split('|');
+                   value = data[keysToSearch[i]].replace(',', '.');
+                   if (comps[1] === 'deg'){
+                       if ( (isNaN(value) || value.indexOf('.') !== -1 || (keysToSearch[i] === 'lon|deg' && (value > 180 || value < -180)) || (keysToSearch[i] === 'lat|deg' && (value > 90 || value < -90))) ){
+                           $('input[name="' + keysToSearch[i] + '"]:visible').addClass('coordError');
+                           $(qtipEl).addClass('hasError');
+                           valid = false;
+                       } 
+                   } else {
+                       if ( isNaN(value) || (value >= 60 || value < 0)){
+                           $('input[name="' + keysToSearch[i] + '"]:visible').addClass('coordError');
+                           $(qtipEl).addClass('hasError');
+                           valid = false;
+                       } else {
+                           var degKey = keysToSearch[i].replace('min', 'deg');
+                           if (!angular.isDefined(data[degKey])){
+                               $('input[name="' + degKey + '"]:visible').addClass('coordError');
+                               $(qtipEl).addClass('hasError');
+                               valid = false;
+                           }
+                       }
+                   }
+               }
+           }
+       }
+       
+       return valid;
    };
    
    $scope.exportAsCSV = function(type, data){

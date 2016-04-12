@@ -280,12 +280,23 @@ div.td:extend(td all) {}
     color: #089fd7;
     font-size: 16px;
     line-height: 30px;
+		&.coordsTip {
+			max-width: 300px !important;
+			i.hasError {
+					color: red;
+			}
+		}
     &:hover {
-		color: #078dbe;
-	}
+			color: #078dbe;
+		}
     &:focus {
     	color: #089fd7;
     }
+}
+.qtip-content {
+	p {
+		font-weight: bold;
+	}
 }
 .qtip.info-qtip {
 	font-size: 12.5px;

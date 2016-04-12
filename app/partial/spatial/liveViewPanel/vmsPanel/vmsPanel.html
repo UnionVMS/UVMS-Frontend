@@ -49,13 +49,13 @@
 										<input name="name" placeholder="{{'spatial.tab_vms_pos_table_header_name' | i18n }}" class="input-sm form-control" type="search">
 										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_name' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
 									</div>
-									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.lat && decimalDegrees">
+									<div class="col-md-2 st-table-filters coord-dd" ng-show="attrVisibility.positions.lat && decimalDegrees">
 										<input name="lat|dd" placeholder="{{'spatial.tab_vms_pos_table_header_lat' | i18n }}" class="input-sm form-control" type="search">
-										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_lat' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+										<a href="" id="qtip-lat-dd" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_lat_dd_qtip' | i18n }}" class="info-qtip qtip-blue coordsTip"><i class="fa fa-question-circle"></i></a>
 									</div>
 									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.lon && decimalDegrees">
 										<input name="lon|dd" placeholder="{{'spatial.tab_vms_pos_table_header_lon' | i18n }}" class="input-sm form-control" type="search">
-										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_lon' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+										<a href="" id="qtip-lon-dd" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_lon_dd_qtip' | i18n }}" class="info-qtip qtip-blue coordsTip"><i class="fa fa-question-circle"></i></a>
 									</div>
 									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.lat && !decimalDegrees">
 										<div class="row">
@@ -68,7 +68,7 @@
 													<input name="lat|min" class="input-sm form-control coord-min" type="search" ng-focus="focusedLat = true" ng-blur="focusedLat = false">
 												</div>
 											</div>
-											<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_lat' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+											<a href="" id="qtip-lat-ddm" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_lat_ddm_qtip' | i18n }}" class="info-qtip qtip-blue coordsTip"><i class="fa fa-question-circle"></i></a>
 										</div>
 									</div>
 									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.lon && !decimalDegrees">
@@ -82,7 +82,7 @@
 													<input name="lon|min" class="input-sm form-control coord-min" type="search" ng-focus="focusedLon = true" ng-blur="focusedLon = false">
 												</div>
 											</div>
-											<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_lon' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+											<a href="" id="qtip-lon-ddm" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_lon_ddm_qtip' | i18n }}" class="info-qtip qtip-blue coordsTip"><i class="fa fa-question-circle"></i></a>
 										</div>
 									</div>
 									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.stat">
