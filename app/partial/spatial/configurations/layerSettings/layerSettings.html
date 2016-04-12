@@ -34,9 +34,9 @@
 					</div>
 					<div class="col-md-4">
 						<div class="container-element layerSelection">
-					        <h3>Layer Tree</h3>
+					        <h3>{{'spatial.layer_tree' | i18n }}</h3>
 					        <div class="column">
-					        	<h5>Ports</h5>
+					        	<h5>{{'spatial.layer_settings_port' | i18n }}</h5>
 								    <ul dnd-list="selectedPorts" dnd-allowed-types="['port', 'portarea']" dnd-drop="checkIfExists(item,selectedPorts,layersettingsForm)">
 								        <li ng-repeat="item in selectedPorts"
 								            dnd-draggable="item"
@@ -50,7 +50,7 @@
 								    </ul>
 					        </div>
 					        <div class="column">
-					        	<h5>Areas</h5>
+					        	<h5>{{'spatial.layer_settings_area' | i18n }}</h5>
 							    <ul dnd-list="selectedAreas"
 							     dnd-allowed-types="['sysarea','userarea','areagroup']" 
 							     dnd-drop="checkIfExists(item,selectedAreas,layersettingsForm);">								        
@@ -69,7 +69,7 @@
 							    </ul>
 					        </div>
 					        <div class="column">
-					        	<h5>Additional Cartographies</h5>
+					        	<h5>{{'spatial.layer_settings_additional' | i18n }}</h5>
 								    <ul dnd-list="selectedAdditionals" dnd-allowed-types="['additional','others']" dnd-drop="checkIfExists(item,selectedAdditionals,layersettingsForm)">
 								        <li ng-repeat="item in selectedAdditionals"
 								            dnd-draggable="item"
@@ -84,7 +84,7 @@
 					        </div>
 					        <ng-form name="baseLayers">
 						        <div class="column">
-						        	<h5>Backgrounds</h5>
+						        	<h5>{{'spatial.layer_settings_base' | i18n }}</h5>
 									    <ul dnd-list="selectedBases" dnd-allowed-types="['background','others']" dnd-drop="checkIfExists(item,selectedBases,layersettingsForm,true);">
 									        <li ng-repeat="item in selectedBases"
 									            dnd-draggable="item"
