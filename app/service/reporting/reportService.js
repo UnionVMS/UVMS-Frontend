@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $anchorScroll, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $anchorScroll, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService) {
 
     var rep = {
        id: undefined,
@@ -542,8 +542,8 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 			layerSettings: rep.mergedReport.currentConfig.mapConfiguration.layerSettings,
 			visibilitySettings: rep.mergedReport.currentConfig.mapConfiguration.visibilitySettings,
 			reportProperties: {
-		        startDate : rep.mergedReport.startDateTime,
-		        endDate : rep.mergedReport.endDateTime
+		        startDate : rep.mergedReport.startDateTime === undefined ? undefined : moment.utc(rep.mergedReport.startDateTime, globalSettingsService.getDateFormat()).format('YYYY-MM-DDTHH:mm:ss'),
+		        endDate : rep.mergedReport.endDateTime === undefined ? undefined : moment.utc(rep.mergedReport.endDateTime, globalSettingsService.getDateFormat()).format('YYYY-MM-DDTHH:mm:ss')
 			}
 		};
 	};
