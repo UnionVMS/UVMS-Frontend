@@ -1565,32 +1565,52 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             zoomOutTipLabel: locale.getString('spatial.map_tip_zoomout')
         });
         
+        var iconSpan = document.createElement('span');
+        iconSpan.className = 'fa fa-globe';
+        var fullExtent = new ol.control.ZoomToExtent({
+            label: iconSpan,
+            tipLabel: locale.getString('spatial.map_tip_full_extent') 
+        });
+        
         var mouseWheel =  new ol.interaction.MouseWheelZoom();
         var keyboardZoom = new ol.interaction.KeyboardZoom();
         var dblClickZoom = new ol.interaction.DoubleClickZoom();
-        var dragZoom = new ol.interaction.DragZoom();
+        var dragZoomIn = new ol.interaction.DragZoom();
+        var dragZoomOut = new ol.interaction.DragZoom({
+            out: true,
+            condition: ol.events.condition.altKeyOnly
+        });
+        
         
         if (initial){
             ms.controls.push(olCtrl);
+            ms.controls.push(fullExtent);
             ms.interactions.push(mouseWheel);
             ms.interactions.push(keyboardZoom);
             ms.interactions.push(dblClickZoom);
-            ms.interactions.push(dragZoom);
+            ms.interactions.push(dragZoomIn);
+            ms.interactions.push(dragZoomOut);
         } else {
             ms.map.addControl(olCtrl);
+            ms.map.addControl(fullExtent);
             ms.map.addInteraction(mouseWheel);
             ms.map.addInteraction(keyboardZoom);
             ms.map.addInteraction(dblClickZoom);
-            ms.map.addInteraction(dragZoom);
+            ms.map.addInteraction(dragZoomIn);
+            ms.map.addInteraction(dragZoomOut);
         }
 	};
 	
 	ms.removeZoom = function(){
 	    ms.map.removeControl(ms.getControlsByType('Zoom')[0]);
+	    ms.map.removeControl(ms.getControlsByType('ZoomToExtent')[0]);
 	    ms.map.removeInteraction(ms.getInteractionsByType('MouseWheelZoom')[0]);
 	    ms.map.removeInteraction(ms.getInteractionsByType('KeyboardZoom')[0]);
 	    ms.map.removeInteraction(ms.getInteractionsByType('DoubleClickZoom')[0]);
-	    ms.map.removeInteraction(ms.getInteractionsByType('DragZoom')[0]);
+	    var zoomInteractions =  ms.getInteractionsByType('DragZoom');
+	    for (var i = 0; i < zoomInteractions.length; i++){
+	        ms.map.removeInteraction(zoomInteractions[i]);
+	    }
 	};
 
 	ms.addHistory = function(ctrl, initial){
@@ -1712,7 +1732,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    this._coordinate = null;
 	    this._feature = null;
 	    this._cursor = 'pointer';
-	    this._previousCursor = undefined;
+	    this._previousCursor = 'default';
 	};
 	ol.inherits(ms.dragExtent, ol.interaction.Pointer);
 	
@@ -1760,12 +1780,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             var element = evt.map.getTargetElement();
             if (feature) {
                 if (element.style.cursor !== this._cursor) {
-                    this._previousCursor = element.style.cursor;
                     element.style.cursor = this._cursor;
                 }
-            } else if (this._previousCursor !== undefined) {
+            } else {
                 element.style.cursor = this._previousCursor;
-                this._previousCursor = undefined;
             }
         }
 	};

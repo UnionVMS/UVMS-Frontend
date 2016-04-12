@@ -186,6 +186,8 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
             mapService.map.removeLayer(layer);
             mapService.map.removeInteraction(mapService.getCustomInteraction('Pointer', 'dragExtent')[0]);
         }
+        var mapEl = mapService.map.getTargetElement();
+        mapEl.style.cursor = 'default';
     };
     
     //Cancel print job
