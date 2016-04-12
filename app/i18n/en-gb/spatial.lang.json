@@ -27,6 +27,7 @@
 	"map_tip_disable": "Disable",
 	"map_tip_graticule": "map graticule",
 	"map_tip_get_alarms": "Fetch alarms for the current map extent",
+	"map_tip_full_extent": "Zoom to full extent",
 	"map_bookmarks_table_name_header": "Name",
 	"map_bookmarks_remove": "Remove bookmark",
 	"map_bookmarks_add_input_placeholder": "New bookmark name",

@@ -100,7 +100,9 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     
     $scope.setDefaultRepLocally = function(id, status){
         var rec = $filter('filter')($scope.reports, {id: id})[0];
-        rec.isDefault = status;
+        if (angular.isDefined(rec)){
+            rec.isDefault = status;
+        }
     };
     
     var setDefaultSuccess = function(response){
