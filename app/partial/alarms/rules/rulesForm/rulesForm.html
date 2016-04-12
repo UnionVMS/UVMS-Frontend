@@ -9,11 +9,11 @@
             <div class="col-md-6 textAlignRight">
                 <div class="actions">
                     <div>
-                        <button ng-show="isCreateNewMode()" type="submit" class="btn btn-primary" ng-click="createNewRule()" ng-disabled="waitingForCreateResponse">{{'common.create' | i18n}}</button>
-                        <button ng-hide="isCreateNewMode() || isRuleArchived()" type="submit" class="btn btn-primary" ng-click="updateRule()">{{'common.update' | i18n}}</button>
+                        <button type="button" class="btn btn-default" ng-click="toggleAddNewRule()">{{'common.cancel' | i18n | uppercase}}</button>
                     </div>
-                    <div class="closeIcon" ng-click="toggleAddNewRule()">
-                        <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
+                    <div style="margin-left: 10px;">
+                        <button ng-show="isCreateNewMode()" type="submit" class="btn btn-primary" ng-click="createNewRule()" ng-disabled="waitingForCreateResponse">{{'common.save' | i18n | uppercase}}</button>
+                        <button ng-hide="isCreateNewMode() || isRuleArchived()" type="submit" class="btn btn-primary" ng-click="updateRule()">{{'common.update' | i18n | uppercase}}</button>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -308,13 +308,18 @@
                         <div class="ruleAsText" ng-bind="ruleAsText"></div>
                     </div>
                 </div>
+
+                <div class="row toolbar">
+                    <div class="col-md-6">
+                        <a class="btn btn-link" ng-show="isCreateNewMode()" ng-click="clearForm()">{{'common.clear_form' | i18n}}</a>
+                    </div>
+                    <div class="col-md-6 text-right toolbar-right">
+                        <button type="button" class="btn btn-default" ng-click="toggleAddNewRule()">{{'common.cancel' | i18n | uppercase}}</button>
+                        <button ng-show="isCreateNewMode()" type="submit" class="btn btn-primary" ng-click="createNewRule()" ng-disabled="waitingForCreateResponse">{{'common.save' | i18n | uppercase}}</button>
+                        <button ng-hide="isCreateNewMode() || isRuleArchived()" type="submit" class="btn btn-primary" ng-click="updateRule()">{{'common.update' | i18n | uppercase}}</button>
+                    </div>
+                </div>
             </fieldset>
         </form>
-    </div>
-
-    <div class="row" ng-show="isCreateNewMode()">
-        <div class="col-md-12">
-            <a ng-click="clearForm()">{{'common.clear_form' | i18n}}</a>
-        </div>
     </div>
 </div>

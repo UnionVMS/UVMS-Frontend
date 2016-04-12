@@ -34,6 +34,7 @@
     "advanced_search_placeholder_mmsi" : "MMSI No",
     "advanced_search_placeholder_homeport_name":"Homeport name",
     "advanced_search_placeholder_producer_name":"Producer name",
+    "advanced_search_placeholder_imo": "IMO",
     "assign": "Link",
     "assign_back_to_search_result": "Go back to search result",
     "cancel": "Cancel",
@@ -101,7 +102,7 @@
     "searchgroup_dropdown" : "Saved groups",
     "select": "Select",
     "select_a_group":"Select a group",
-    "select_a_group_empty_placeholder":"No vessel group was found",
+    "select_a_group_empty_placeholder":"No asset group was found",
     "set_as_active": "Set as active",
     "set_as_inactive": "Set as inactive",
     "source":"Source",
@@ -139,7 +140,7 @@
     "vessel_details_contact_number": "Contact number",
     "view_mobile_terminal_history": "History",
     "warning_multiple_terminals": "There is more than one active terminal of the same type for this vessel.",
-    "zero_connected_mobile_terminals" : "The are no mobile terminals connected to this vessel.",
+    "zero_connected_mobile_terminals" : "The are no mobile terminals connected to this asset.",
     "view_vessel_on_failed_to_load_error" : "Failed to load the vessel  details.",
     "warn_max_length": "Must be {1} characters or less"
 }

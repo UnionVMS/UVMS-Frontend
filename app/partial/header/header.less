@@ -10,6 +10,16 @@
     cursor: pointer;
 }
 
+.sign-out, .help {
+    margin-left: 15px;
+    .btn-sm {
+        width: 25px;
+        height: 25px;
+        padding: 3px;
+        position: relative;
+    }
+}
+
 .headercontainer{
     font-size: 16px;
     font-weight: bold;
@@ -24,7 +34,7 @@
         height: @headerHeight - @bottomHeaderHeight;
     }
 
-    .currentTime, .notifications, .signed-in, .sign-in, .language-select {
+    .currentTime, .notifications, .signed-in, .sign-in, .language-select, .sign-out, .help {
         float: right;
     }
 

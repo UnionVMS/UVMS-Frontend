@@ -82,8 +82,9 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
     };
 
     //Is user allowed to edit vessels?
-    $scope.allowedToEditVessel = function(){
-        return checkAccessToFeature('manageVessels');
+    $scope.allowedToEditVessel = function(vessel){
+        // Check permission, and vessel cannot be from source NATIONAL.
+        return checkAccessToFeature('manageVessels') && (!vessel || vessel.source !== 'NATIONAL');
     };
 
     //Get original vessel

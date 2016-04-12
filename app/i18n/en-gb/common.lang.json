@@ -97,7 +97,7 @@
     "time_span_this_week" : "This week",
     "time_span_last_month" : "Last month",
     "time_span_custom" : "Custom",
-    "time_span_all" : "No time limit",
+    "time_span_all" : "All",
     "tons" : "EUtons",
     "update" : "Update",
     "update_waiting_for_reponse_text" : "Updating...",

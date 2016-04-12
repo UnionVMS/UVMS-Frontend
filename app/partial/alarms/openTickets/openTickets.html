@@ -4,38 +4,33 @@
 
         <div class="card">
             <!-- Advanced search -->
-            <div class="row">
-                <div class="col-md-11">
-                    <advanced-search modeltype="'ALARMS_OPEN_TICKETS'" searchfunc="searchTickets" advancedsearchvisible="true"></advanced-search>
+            <advanced-search modeltype="'ALARMS_OPEN_TICKETS'" searchfunc="searchTickets" advancedsearchvisible="true"></advanced-search>
+
+            <!-- Toggle: ALL, OPEN, CLOSED -->
+            <div class="row filterRow">
+                <div class="col-md-1 editSelection">
+                    <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback"></dropdown>
                 </div>
-                <div class="col-md-1 pull-right textAlignRight printAndExport">
+
+                <div class="col-md-2 available-positions-refresh" ng-click="resetSearch()">
+                    <a ng-if="newTicketsCount > 0"><i class="fa fa-refresh"></i> {{ "alarms.new_items_available" | i18n:[newTicketsCount] }}</a>
+                </div>
+
+                <div class="col-md-1 col-md-offset-8 textAlignRight">
                     <button class="btn btn-sm btn-default exportButton">
-                        <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-
-                        click="exportItemsAsCSVFile()"></i>
+                        <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportItemsAsCSVFile()"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Toggle: ALL, OPEN, CLOSED -->
-            <div class="row filterRow">
-                <div class="col-md-11">
-                    <div class="row">
-                        <div class="col-md-2 editSelection">
-                            <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback"></dropdown>
-                        </div>
-
-                        <div class="col-md-2 available-positions-refresh" ng-click="resetSearch()">
-                            <a ng-if="newTicketsCount > 0"><i class="fa fa-refresh"></i> {{ "alarms.new_items_available" | i18n:[newTicketsCount] }}</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div static-include="partial/alarms/openTickets/openTicketsList/openTicketsList.html"></div>
-            <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
+
+            <search-results-pagination
+                page='currentSearchResults.page'
+                total='currentSearchResults.totalNumberOfPages'
+                callback='gotoPage'>
+            </search-results-pagination>
+
         </div>
-
-
     </div>
-
 </div>

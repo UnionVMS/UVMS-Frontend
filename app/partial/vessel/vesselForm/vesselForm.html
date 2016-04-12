@@ -1,13 +1,5 @@
 <div class="vesselForm" ng-controller="VesselFormCtrl">
     <form name="vesselForm" method="post" novalidate >
-        <div class="row">
-            <div class="col-md-12">
-                <h3 ng-if="isCreateNewMode()">{{'vessel.create_new_vessel' | i18n}}</h3>
-                <h3 ng-if="!isCreateNewMode() && isVesselNameSet()">{{vesselObj.name}}</h3>
-                <h3 ng-if="!isCreateNewMode() && !isVesselNameSet() && vesselObj.active">{{'vessel.update_vessel' | i18n}}</h3>
-            </div>
-        </div>
-
         <div class="card" loading-indicator="waitingForVesselDataResponse">
             <div class="row card-header">
                 <div class="col-md-6">

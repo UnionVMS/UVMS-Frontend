@@ -10,8 +10,8 @@
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'alarmItems[0].ruleName'">{{'alarms.alarms_table_rule' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'getResolvedDate()'">{{'alarms.alarms_table_date_resolved' | i18n}}</th>
                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'getResolvedBy()'">{{'alarms.alarms_table_resolved_by' | i18n}}</th>
-                    <th></th>
-                    <th class="actions" show-if-allowed="Rules:manageAlarmsHoldingTable"></th>
+                    <th>{{'common.status' | i18n}}</th>
+                    <th class="actions" show-if-allowed="Rules:manageAlarmsHoldingTable">{{'common.actions' | i18n}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,7 +33,7 @@
                             {{getStatusLabel(item.status) | uppercase}}
                         </span>
                     </td>
-                    <td class="textAlignCenter">
+                    <td>
                         <button show-if-allowed="Rules:manageAlarmsHoldingTable" ng-if="item.isOpen()" type="button" class="btn btn-sm btn-default" ng-click="resolveItem(item)" title="{{'alarms.alarms_table_resolve_title' | i18n}}"><i class="fa fa-pencil"></i></button>
                         <button ng-if="!item.isOpen()" type="button" class="btn btn-sm btn-default" ng-click="viewItemDetails(item)" title="{{'common.view_details' | i18n}}">
                             <i class="fa fa-eye"></i>

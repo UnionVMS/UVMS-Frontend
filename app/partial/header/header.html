@@ -8,6 +8,16 @@
 				            <img class="uvmslogo" src="assets/images/logo.png" ng-click="gotoStartPage()">
                         </div>
                         <div class="col-md-10">
+                            <div class="sign-out">
+                                <button class="btn btn-default btn-sm" ng-click="signOut()">
+                                    <i class="fa fa-lg fa-sign-out"></i>
+                                </button>
+                            </div>
+                            <div class="help">
+                                <a href="#/help" class="btn btn-default btn-sm">
+                                    <i class="fa fa-lg fa-question"></i>
+                                </a>
+                            </div>
     					    <div class="signed-in" ng-if="isAuthenticated">
     							<div class="dropdown fullWidthDropdown login-drop-down">
     								<button class="btn btn-default dropdown-toggle" type="button" id="user-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
