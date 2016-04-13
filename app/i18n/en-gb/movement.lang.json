@@ -30,6 +30,7 @@
     "save_search_modal_header":"Save search",
     "save_search_modal_input_placeholder": "Choose a title for your search",
     "save_search_modal_dropdown_header": "or save as the following search",
+    "update_search_modal_dropdown_header": "Add to the following group",
     "save_search_modal_dropdown_label":"Select a search",
     "save_search_modal_error":"The search couldn't be saved.",
     "saved_search_asset_group_deleted_message":"The saved search '{1}'' includes an asset group that has been deleted. Search is performed without the asset group.",

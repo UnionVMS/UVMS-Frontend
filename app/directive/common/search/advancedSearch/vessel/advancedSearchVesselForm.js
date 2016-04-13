@@ -100,6 +100,12 @@ angular.module('unionvmsWeb')
             $scope.performSavedGroupSearch(savedSearchGroup, true, true);
         };
 
+        $scope.$on('refreshSavedSearch', function(event, group) {
+            if (angular.isDefined(group) && angular.isDefined(group.searchFields)) {
+                $scope.performSavedSearch(group);
+            }
+        });
+
         $scope.openSaveGroupModal = function(){
             var options = {
                 dynamicSearch : true,

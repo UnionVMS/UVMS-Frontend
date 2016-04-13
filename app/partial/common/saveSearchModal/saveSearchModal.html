@@ -14,7 +14,7 @@
 
     <div ng-show="allowSaving">
         <form name="saveForm" novalidate>
-            <div class="form-group" ng-class="{'has-error': saveForm.name.$dirty && saveForm.name.$invalid}">
+            <div class="form-group" ng-class="{'has-error': saveForm.name.$dirty && saveForm.name.$invalid}" ng-if="!append">
                 <input type="text" class="form-control" name="name" placeholder="{{inputPlaceholder}}" ng-model="saveData.name" ng-maxlength="80" ng-change="unsetExistingGroupAsSaveTarget()" autofocus>
                 <input-validation-message types="maxlength" input="saveForm.name"></input-validation-message>
             </div>

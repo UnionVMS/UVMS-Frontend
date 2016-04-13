@@ -17,6 +17,14 @@ angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, 
         }
     };
 
+    function getVesselGroup(id) {
+        for (var i = 0; i < vesselGroups.length; i++) {
+            if (vesselGroups[i].id === id) {
+                return vesselGroups[i];
+            }
+        }        
+    }
+
     //Load list of VesselGroups
     var getVesselGroupsForUser = function(){
         vesselRestService.getVesselGroupsForUser().then(
@@ -76,11 +84,11 @@ angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, 
         updateVesselGroup : function(savedSearchGroup){
             var defer = $q.defer();
             vesselRestService.updateVesselGroup(savedSearchGroup)
-            .then(function() {
+            .then(function(group) {
                 getVesselGroupsForUser();
-                defer.resolve();
-            }, function(){
-                defer.reject();
+                defer.resolve(group);
+            }, function(error){
+                defer.reject(error);
             });
 
             return defer.promise;
@@ -99,8 +107,20 @@ angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, 
 
             return defer.promise;
         },
+        removeVesselsFromGroup: function(savedSearchGroupGuid, vesselGuids) {
+            var group = getVesselGroup(savedSearchGroupGuid);
+            if (angular.isUndefined(group)) {
+                return $q.reject('The selected group does not exist.');
+            }
 
+            group = group.copy();
+            group.searchFields = group.searchFields.filter(function(searchField) {
+                // Remove any search field with key = GUID and value in vesselGuids array.
+                return searchField.key !== 'GUID' || vesselGuids.indexOf(searchField.value) < 0;
+            });
 
+            return savedSearchService.updateVesselGroup(group);
+        },
         //Get all saved Movement searches
         getMovementSearches : function(){
             return movementSearches;

@@ -86,6 +86,7 @@
     "save":"Save",
     "save_asset": "Save asset",
     "save_as_the_following_group": "or save as the following group",
+    "update_the_following_group": "Add to the following group",
     "save_group":"Save Group",
     "save_group_delete_confirm_text": "Are you sure you want to remove \"{1}\"?",
     "save_group_delete_error": "The saved group couldn't be removed.",

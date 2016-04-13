@@ -18,6 +18,8 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
 
     $scope.editSelectionDropdownItems = [
         {text:locale.getString('common.save_as_group'), code : 'SAVE'},
+        {text:locale.getString('common.append_group'), code : 'ADD_TO_GROUP'},
+        {text:locale.getString('common.remove_from_group'), code : 'REMOVE_FROM_GROUP'},
         {text:locale.getString('common.view_on_map'), code : 'MAP'},
         {text:locale.getString('common.export_selection'), code : 'EXPORT'}
     ];
@@ -60,7 +62,9 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
         }
     };
 
-    $scope.searchVessels = function(){
+    $scope.searchVessels = function(options) {
+        $scope.selectedGroupGuid = angular.isDefined(options) && angular.isDefined(options.savedSearchGroup) ? options.savedSearchGroup.id : undefined;
+
         $scope.clearSelection();
         $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.filter = '';
@@ -198,22 +202,48 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
         $scope.isVisible.search = !$scope.isVisible.search;
     };
 
+    function getVesselGuids(vessels) {
+        return vessels.map(function(vessel) {
+            return vessel.vesselId.guid;
+        });
+    }
+
     //Callback function for the "edit selection" dropdown
     $scope.editSelectionCallback = function(selectedItem){
-        if($scope.getSelectedItemsInFilter().length){
-            if(selectedItem.code === 'SAVE'){
+        var selectedItems = $scope.getSelectedItemsInFilter();
+        if(selectedItems.length > 0){
+            if (selectedItem.code === 'SAVE' || selectedItem.code === 'ADD_TO_GROUP') {
                 var options = {
                     dynamicSearch : false,
-                    selectedItems : $scope.getSelectedItemsInFilter()
+                    selectedItems : selectedItems,
+                    append: selectedItem.code === 'ADD_TO_GROUP'
                 };
                 savedSearchService.openSaveSearchModal("VESSEL", options);
-            }else if(selectedItem.code === 'EXPORT'){
+            }
+            else if (selectedItem.code === 'REMOVE_FROM_GROUP') {
+                removeFromGroup($scope.selectedGroupGuid, getVesselGuids(selectedItems));
+            }
+            else if (selectedItem.code === 'EXPORT') {
                 $scope.exportVesselsAsCSVFile(true);
            }
         }else{
             alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
         }
     };
+
+    /* Removed the selected items from the current group, updates the group list and refreshed search if successful. */
+    function removeFromGroup(groupId, selectedItems) {
+        if (groupId === undefined) {
+            alertService.showInfoMessageWithTimeout(locale.getString('common.no_group_selected'));
+            return;
+        }
+
+        savedSearchService.removeVesselsFromGroup(groupId, selectedItems).then(function(group) {
+            $scope.$broadcast('refreshSavedSearch', group);
+        }, function(error) {
+            alertService.showErrorMessageWithTimeout(error);
+        });
+    }
 
     //Get the selected items that are shown by the filter
     $scope.getSelectedItemsInFilter = function(){

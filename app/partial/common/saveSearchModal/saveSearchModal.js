@@ -15,6 +15,7 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
     var init = function(){
         $scope.error = false;
         $scope.allowSaving = true;
+        $scope.append = options.append;
         $scope.saveData = {
             name : undefined,
             existingGroup : undefined
@@ -28,7 +29,7 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
                 updateSearchFunction = savedSearchService.updateVesselGroup;
                 $scope.modalHeader = locale.getString('vessel.save_group');
                 $scope.inputPlaceholder = locale.getString('vessel.save_group_input_placeholder');
-                $scope.dropdownHeader = locale.getString('vessel.save_as_the_following_group');
+                $scope.dropdownHeader = options.append ? locale.getString('vessel.update_the_following_group') : locale.getString('vessel.save_as_the_following_group');
                 $scope.dropdownLabel = locale.getString('vessel.select_a_group');
                 $scope.errorMessage = locale.getString('vessel.save_group_error');
                 $scope.saveSuccessMessage = locale.getString('vessel.save_group_create_success');
@@ -42,7 +43,7 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
                 updateSearchFunction = savedSearchService.updateMovementSearch;
                 $scope.modalHeader = locale.getString('movement.save_search_modal_header');
                 $scope.inputPlaceholder = locale.getString('movement.save_search_modal_input_placeholder');
-                $scope.dropdownHeader = locale.getString('movement.save_search_modal_dropdown_header');
+                $scope.dropdownHeader = options.append ? locale.getString('movement.update_search_modal_dropdown_header') : locale.getString('movement.save_search_modal_dropdown_header');
                 $scope.dropdownLabel = locale.getString('movement.save_search_modal_dropdown_label');
                 $scope.errorMessage = locale.getString('movement.save_search_modal_error');
                 $scope.saveSuccessMessage = locale.getString('common.saved_search_create_success');
@@ -98,11 +99,38 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
 
     //Ok to save?
     $scope.isValidSaveData = function(){
-        return (angular.isDefined($scope.saveData.name) && $scope.saveData.name.trim().length > 0) || angular.isDefined($scope.saveData.existingGroup);
+        if (options.append) {
+            return angular.isDefined($scope.saveData.existingGroup);
+        }
+        else {
+            return (angular.isDefined($scope.saveData.name) && $scope.saveData.name.trim().length > 0) || angular.isDefined($scope.saveData.existingGroup);
+        }
     };
+
+    function groupContains(group, searchField) {
+        for (var i = 0; i < group.searchFields.length; i++) {
+            if (group.searchFields[i].key === searchField.key && group.searchFields.value === searchField.value) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     //Save to existing group
     $scope.setExistingGroupAsSaveTarget = function(group){
+        group = group.copy();
+        group.dynamic = isDynamic;
+        if (options.append) {
+            $.each(searchFields, function(i, searchField) {
+                if (!groupContains(group, searchField)) {
+                    group.searchFields.push(searchField);
+                }
+            });
+        } else {
+            group.searchFields = searchFields;
+        }
+
         $scope.saveData.existingGroup = group;
         $scope.saveData.name = undefined;
     };
@@ -135,9 +163,6 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
         $scope.error = false;
         //Update existing group
         if(angular.isDefined($scope.saveData.existingGroup)){
-            $scope.saveData.existingGroup.dynamic = isDynamic;
-            $scope.saveData.existingGroup.searchFields = searchFields;
-
             $scope.waitingForCreateResponse = true;
             updateSearchFunction($scope.saveData.existingGroup)
                .then(onUpdateSuccess, onSaveError);
