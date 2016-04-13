@@ -136,6 +136,13 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	        report.areas = filter.areas;
 	        
 	        if (angular.isDefined(data.mapConfiguration)){
+	        	if(angular.isDefined(data.mapConfiguration.layerSettings) && angular.isDefined(data.mapConfiguration.layerSettings.areaLayers) && !_.isEmpty(data.mapConfiguration.layerSettings.areaLayers)){
+	        		angular.forEach(data.mapConfiguration.layerSettings.areaLayers, function(item) {
+	        			if(item.areaType === 'areagroup'){
+	        				item.name = item.areaGroupName;
+	        			}
+	        		});
+	        	}
 	            report.mapConfiguration = data.mapConfiguration;
 	        }
 	        

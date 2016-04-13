@@ -72,11 +72,14 @@ angular.module('unionvmsWeb').controller('AreaslayersCtrl',function($scope,spati
 				$scope.isLoadingUserAreas = false;
 			});
 			spatialConfigRestService.getAreaGroup().then(function(response){
-				angular.copy(response[0].data,$scope.areas.containers[2].lists[0].items);
+				angular.copy(response,$scope.areas.containers[2].lists[0].items);
 				angular.forEach($scope.areas.containers[2].lists[0].items, function(item) {
 					item.subType = response[0].subType;
 		    		item.serviceLayerId = "" + response[0].serviceLayerId;
 		    		item.areaType = 'areagroup';
+		    		item.areaGroupName = response[0].data[0].name;
+		    		item.name = response[0].data[0].name;
+		    		delete response[0].data;
 		    	});
 				$scope.isLoadingAreaGroups = false;
 			});
