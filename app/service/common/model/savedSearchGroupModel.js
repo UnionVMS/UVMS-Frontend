@@ -108,5 +108,11 @@ angular.module('unionvmsWeb')
         return copy;
     };
 
+    SavedSearchGroup.prototype.copy = function() {
+        var copy = new SavedSearchGroup(this.name, this.user, this.dynamic, this.getSearchFieldsCopy());
+        copy.id = this.id;
+        return copy;
+    };
+
     return SavedSearchGroup;
 });
