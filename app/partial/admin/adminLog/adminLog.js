@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $filter, locale, Audit, auditLogRestService, searchService, auditOptionsService, SearchResults, GetListRequest, infoModal, dateTimeService, pollingRestService, mobileTerminalRestService, csvService) {
+angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $filter, locale, Audit, auditLogRestService, searchService, auditOptionsService, SearchResults, GetListRequest, infoModal, pollingRestService, mobileTerminalRestService, csvService) {
 
     //Names used in the backend
     var TYPES = auditOptionsService.getTypes();

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, $filter, alertService, searchService, locale, $stateParams, PositionReportModal, PositionsMapModal, csvService, SearchResults, $resource, longPolling, dateTimeService, ManualPosition, ManualPositionReportModal ){
+angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, $filter, alertService, searchService, locale, $stateParams, PositionReportModal, PositionsMapModal, csvService, SearchResults, $resource, longPolling, ManualPosition, ManualPositionReportModal ){
 
     //Current filter and sorting for the results table
     $scope.sortFilter = '';
