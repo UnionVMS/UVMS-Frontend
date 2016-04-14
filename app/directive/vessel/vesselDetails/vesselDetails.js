@@ -7,6 +7,7 @@ angular.module('unionvmsWeb')
         scope: {
             vessel : '=',
             disableForm : '=',
+            createNewMode: '=',
             vesselForm : '=',
             submitAttempted : '=',
             spin: '=',
