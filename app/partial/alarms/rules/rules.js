@@ -223,7 +223,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
 
     //User is allowed to manage non global rules?
     $scope.allowedToManageRules = function(){
-        return checkAccessToFeature('manageAlarmsRules');
+        return checkAccessToFeature('manageAlarmRules');
     };
 
     //Is the user allowed to delete or update the rule?

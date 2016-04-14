@@ -111,7 +111,7 @@
         }else if(checkAccess('Rules', 'viewAlarmsOpenTickets')){
             alarmsLink = '/alarms/notifications';
             alarmsElemId = 'alarms-notifications';
-        }else if(checkAccess('Rules', 'viewAlarmsRules')){
+        }else if(checkAccess('Rules', 'viewAlarmRules')){
             alarmsLink = '/alarms/rules';
             alarmsElemId = 'alarms-rules';
         }

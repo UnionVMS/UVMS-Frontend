@@ -10,7 +10,7 @@
                     <a href="#/alarms/notifications">{{'alarms.pagemenu_open_tickets' | i18n }}</a>
                     <span ng-show="numberOfOpenAlarmsAndTickets.tickets > 0" class="badge notificationsBadge" ng-bind="numberOfOpenAlarmsAndTickets.tickets"></span>
                 </li>
-                <li ng-class="{active: isActiveTab('RULES')}" show-if-allowed='Rules:viewAlarmsRules'>
+                <li ng-class="{active: isActiveTab('RULES')}" show-if-allowed='Rules:viewAlarmRules'>
                     <a href="#/alarms/rules">{{'alarms.pagemenu_rules' | i18n }}</a>
                 </li>
             </ul>

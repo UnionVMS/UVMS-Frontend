@@ -511,7 +511,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
-                access: 'viewAlarmsRules',
+                access: 'viewAlarmRules',
                 pageTitle: 'alarms.rules'
             },
         })
@@ -529,7 +529,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 }
             },
             data: {
-                access: 'viewAlarmsRules',
+                access: 'viewAlarmRules',
                 pageTitle: 'alarms.rules'
             },
         })

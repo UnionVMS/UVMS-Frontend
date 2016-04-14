@@ -12,10 +12,10 @@ describe('RulesCtrl', function() {
       spyOn(userService, "getUserName").andReturn(testUser);
     }));
 
-	it('should be possible to delete or edit Public rules if user has access to feature manageAlarmsRules', inject(function(Rule, userService) {
+	it('should be possible to delete or edit Public rules if user has access to feature manageAlarmRules', inject(function(Rule, userService) {
 
         spyOn(userService, "isAllowed").andCallFake(function(feature, module, allContexts){
-            if(feature === 'manageAlarmsRules'){
+            if(feature === 'manageAlarmRules'){
                 return true;
             }
             return false;
@@ -25,15 +25,15 @@ describe('RulesCtrl', function() {
         rule.availability = 'PUBLIC';
         rule.createdBy = testUser;
 		expect(scope.allowedToDeleteOrUpdateRule(rule)).toBeTruthy();
-        expect(userService.isAllowed.mostRecentCall.args[0]).toEqual('manageAlarmsRules');
+        expect(userService.isAllowed.mostRecentCall.args[0]).toEqual('manageAlarmRules');
         expect(userService.isAllowed.mostRecentCall.args[1]).toEqual('Rules');
 
 	}));
 
-    it('should NOT be possible to delete or edit Public rules if user has access to feature manageAlarmsRules', inject(function(Rule, userService) {
+    it('should NOT be possible to delete or edit Public rules if user has access to feature manageAlarmRules', inject(function(Rule, userService) {
 
         spyOn(userService, "isAllowed").andCallFake(function(feature, module, allContexts){
-            if(feature === 'manageAlarmsRules'){
+            if(feature === 'manageAlarmRules'){
                 return false;
             }
             return true;
@@ -43,7 +43,7 @@ describe('RulesCtrl', function() {
         rule.availability = 'PUBLIC';
         rule.createdBy = testUser;
         expect(scope.allowedToDeleteOrUpdateRule(rule)).toBeFalsy();
-        expect(userService.isAllowed.mostRecentCall.args[0]).toEqual('manageAlarmsRules');
+        expect(userService.isAllowed.mostRecentCall.args[0]).toEqual('manageAlarmRules');
         expect(userService.isAllowed.mostRecentCall.args[1]).toEqual('Rules');
 
     }));
