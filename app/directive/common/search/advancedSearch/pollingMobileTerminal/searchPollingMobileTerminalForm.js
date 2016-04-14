@@ -18,7 +18,7 @@ angular.module('unionvmsWeb')
         //Select a vessel group to search mobile terminals for
         $scope.searchSelectedGroup = function(savedSearchGroup){
             $scope.resetAdvancedSearchForm(false);
-            $scope.performSavedGroupSearch(savedSearchGroup, true, true);
+            $scope.performSavedGroupSearch(savedSearchGroup, false, true);
         };
 
         $scope.displayVesselGroup = function(){
