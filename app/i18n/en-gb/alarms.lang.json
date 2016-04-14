@@ -142,8 +142,8 @@
     "rules_test_error_INVALID_DEF_BOOL" : "AND/OR is not allowed on last row, and NONE is only allowed on the last row",
     "rules_test_error_PARANTHESES_DONT_MATCH" : "Paranteheses don't match in the IF rules",
     "rules_test_error_INVALID_ACTION_VALUE" : "One or more values are missing for actions.",
-    "rules_test_error_NON_UNIQUE_ACTION" : "One or more actions are not uniqie.",
-    "rules_test_error_UNKOWN" : "Uknown problem",
+    "rules_test_error_NON_UNIQUE_ACTION" : "One or more actions are not unique.",
+    "rules_test_error_UNKNOWN" : "Uknown problem",
 
     "rule_subscription_update_success" : "The subscription was successfully updated.",
     "rule_subscription_update_errror" : "The subscription failed to update.",
