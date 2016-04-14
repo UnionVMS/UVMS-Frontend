@@ -67,10 +67,10 @@ angular.module('unionvmsWeb').factory('dateTimeService',['$log', 'globalSettings
             }
         },
         //Return date as string with timezone
-        formatUTCDateWithTimezone : function(dateTimeInput) {
+        formatUTCDateWithTimezone : function(dateTimeInput, inputFormat) {
             var outputFormat = 'YYYY-MM-DD HH:mm:ss +00:00';
             if(angular.isDefined(dateTimeInput)){
-                dateTimeInput = this.userTimezoneToUtc(dateTimeInput);
+                dateTimeInput = this.userTimezoneToUtc(dateTimeInput, inputFormat);
                 return moment(dateTimeInput, "YYYY-MM-DD HH:mm:ss").format(outputFormat);
             }
         },
@@ -108,19 +108,20 @@ angular.module('unionvmsWeb').factory('dateTimeService',['$log', 'globalSettings
                 return output;
             }
         },
-        userTimezoneToUtc: function(dateTime) { // moment?
+        userTimezoneToUtc: function(dateTime, inputFormat) { // moment?
             if (!this.isFormattedWithTimeZone(dateTime) && (typeof dateTime === 'string')) {
-                dateTime += getTimezoneString(globalSettingsService.getTimezone()); // (userTimezone < 0 ? '-' : '+') + (hh < 10 ? '0' + hh : hh) + ':' + (mm < 10 ? '0' + mm : mm) + ':00';
+                dateTime += getTimezoneString(globalSettingsService.getTimezone());
             }
 
-            var m = moment(dateTime, "YYYY-MM-DD HH:mmZ");
+            var format = (inputFormat || "YYYY-MM-DD HH:mm") + "Z";
+            var m = moment(dateTime, format);
             m.utc();
             return m.format("YYYY-MM-DD HH:mm:ss");
         },
-        utcToUserTimezone: function(utcDateTime) {
+        utcToUserTimezone: function(utcDateTime, userFormat) {
             var m = moment.utc(utcDateTime, "YYYY-MM-DD HH:mm:ss Z");
             m.utcOffset(globalSettingsService.getTimezone());
-            return m.format("YYYY-MM-DD HH:mm:ss");
+            return m.format(userFormat || "YYYY-MM-DD HH:mm:ss");
         },
         format: function(date) {
             return moment(date).format(getFormat());

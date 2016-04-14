@@ -255,7 +255,7 @@ angular.module('unionvmsWeb')
 
 //Format the model and view values
 //The model is updated on the format 'YYYY-MM-DD HH:mm:ss Z' and the view on the format 'YYYY-MM-DD HH:mm' or 'YYYY-MM-DD'
-angular.module('unionvmsWeb').directive('datePickerFormatter',['dateTimeService','$timeout', function(dateTimeService, $timeout) {
+angular.module('unionvmsWeb').directive('datePickerFormatter',['dateTimeService','$timeout', 'globalSettingsService', function(dateTimeService, $timeout, globalSettingsService) {
     return {
         restrict: 'A',
         require: 'ngModel',
@@ -271,27 +271,42 @@ angular.module('unionvmsWeb').directive('datePickerFormatter',['dateTimeService'
             var YMDHM_FORMAT = scope.FORMATS.YMDHM.MOMENTJS;
 
             var toView = function (newValue) {
-               //Undefined or empty string?
+                if (!moment(newValue, "YYYY-MM-DD HH:mm:ss Z", true).isValid()) {
+                    ctrl.$setValidity('format', false);
+                    return newValue;
+                }
+                else {
+                    ctrl.$setValidity('format', true);
+                }
+
+                //Undefined or empty string?
                 if(typeof newValue !== 'string' || newValue.trim().length === 0){
                     newValue = '';
                 }
                 else{
                     ctrl.$setDirty(true);
                     //Parse UTC date to viewValue
-                    newValue = dateTimeService.utcToUserTimezone(newValue);
+                    newValue = dateTimeService.utcToUserTimezone(newValue, globalSettingsService.getDateFormat());
                     if(!useTime){
                         newValue = moment(newValue, YMDHM_FORMAT).format(YMD_FORMAT);
                     }
-                    newValue = dateTimeService.formatAccordingToUserSettings(newValue);
                 }
                 return newValue;
             };
 
             var toModel = function (newValue) {
+                if (!moment(newValue, globalSettingsService.getDateFormat(), true).isValid()) {
+                    ctrl.$setValidity('format', false);
+                    return newValue;
+                }
+                else {
+                    ctrl.$setValidity('format', true);
+                }
+
                 ctrl.$setDirty(true);
                 if(angular.isDefined(newValue)){
                     //Add UTC timezone (+00:00)
-                    newValue = dateTimeService.formatUTCDateWithTimezone(newValue);
+                    newValue = dateTimeService.formatUTCDateWithTimezone(newValue, globalSettingsService.getDateFormat());
                     //Only set model and call callback if newValue is valid
                     if(newValue.indexOf("Invalid date") >= 0){
                         newValue = undefined;
