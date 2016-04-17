@@ -1,6 +1,6 @@
 {
   "name": "unionvms-web",
-  "version": "1.0.13",
+  "version": "1.0.15",
   "main": "index.html",
   "ignore": [
     "**/.*",
