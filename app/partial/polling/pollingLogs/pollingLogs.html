@@ -125,7 +125,7 @@
                                         </span>
                                     </div>
                                 </td>
-                                <td colspan="2" ng-attr-title="{{item.poll.attributes.USER}}">{{item.poll.attributes.USER}}</td>
+                                <td ng-attr-title="{{item.poll.attributes.USER}}">{{item.poll.attributes.USER}}</td>
                                 <td class="statusText">
                                     <div ng-repeat="status in item.exchangePoll.history | orderBy:'status.time'" ng-show="isExpanded || $index === 0">
                                         <span class="label" ng-class="getStatusLabelClass(status.status)" ng-attr-title="{{status.status | exchangeStatusName | uppercase}}">
@@ -138,6 +138,7 @@
                                         <i class="fa fa-commenting"></i>
                                     </button>
                                 </td>
+                                <td></td>
                             </tr>
                             </tbody>
                         </table>
