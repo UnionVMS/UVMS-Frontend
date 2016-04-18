@@ -37,20 +37,22 @@
 					        <h3>{{'spatial.layer_tree' | i18n }}</h3>
 					        <div class="column">
 					        	<h5>{{'spatial.layer_settings_port' | i18n }}</h5>
-								    <ul dnd-list="selectedPorts" dnd-allowed-types="['port', 'portarea']" dnd-drop="checkIfExists(item,selectedPorts,layersettingsForm)">
-								        <li ng-repeat="item in selectedPorts"
-								            dnd-draggable="item"
-								            dnd-type="item.subType"
-								            dnd-effect-allowed="move"
-								            dnd-dragstart="layersettingsForm.$setDirty();selectedPorts.splice($index, 1);validateBackGroundLayers();"
-								            dnd-canceled="selectedPorts.splice($index, 1);">
-								            <div class="handle">:::</div>
-    										<div class="item">{{item.name}}</div>
-								        </li>
-								    </ul>
+					        	<button class="btn btn-default btn-xs btn-clear-list" type="button" ng-click="layersettingsForm.$setDirty();selectedPorts.splice(0, selectedPorts.length);"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
+							    <ul dnd-list="selectedPorts" dnd-allowed-types="['port', 'portarea']" dnd-drop="checkIfExists(item,selectedPorts,layersettingsForm)">
+							        <li ng-repeat="item in selectedPorts"
+							            dnd-draggable="item"
+							            dnd-type="item.subType"
+							            dnd-effect-allowed="move"
+							            dnd-dragstart="layersettingsForm.$setDirty();selectedPorts.splice($index, 1);"
+							            dnd-canceled="selectedPorts.splice($index, 1);">
+							            <div class="handle">:::</div>
+   										<div class="item">{{item.name}}</div>
+							        </li>
+							    </ul>
 					        </div>
 					        <div class="column">
 					        	<h5>{{'spatial.layer_settings_area' | i18n }}</h5>
+					        	<button class="btn btn-default btn-xs btn-clear-list" type="button" ng-click="layersettingsForm.$setDirty();selectedAreas.splice(0, selectedAreas.length);"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
 							    <ul dnd-list="selectedAreas"
 							     dnd-allowed-types="['sysarea','userarea','areagroup']" 
 							     dnd-drop="checkIfExists(item,selectedAreas,layersettingsForm);">								        
@@ -58,7 +60,7 @@
 							            dnd-draggable="item"
 							            dnd-type="item.areaType"
 							            dnd-effect-allowed="move"
-							            dnd-dragstart="layersettingsForm.$setDirty();selectedAreas.splice($index, 1);validateBackGroundLayers();"
+							            dnd-dragstart="layersettingsForm.$setDirty();selectedAreas.splice($index, 1);"
 							            dnd-canceled="selectedAreas.splice($index, 1);"
 							            type='{{item.areaType}}'>
 							            <div class="area-item">
@@ -70,32 +72,34 @@
 					        </div>
 					        <div class="column">
 					        	<h5>{{'spatial.layer_settings_additional' | i18n }}</h5>
-								    <ul dnd-list="selectedAdditionals" dnd-allowed-types="['additional','others']" dnd-drop="checkIfExists(item,selectedAdditionals,layersettingsForm)">
-								        <li ng-repeat="item in selectedAdditionals"
-								            dnd-draggable="item"
-								            dnd-type="item.subType"
-								            dnd-effect-allowed="move"
-								            dnd-dragstart="layersettingsForm.$setDirty();selectedAdditionals.splice($index, 1);validateBackGroundLayers();"
-								            dnd-canceled="selectedAdditionals.splice($index, 1);">
-								            <div class="handle">:::</div>
-    										<div class="item">{{item.name}}</div>
-								        </li>
-								    </ul>
+					        	<button class="btn btn-default btn-xs btn-clear-list" type="button" ng-click="layersettingsForm.$setDirty();selectedAdditionals.splice(0, selectedAdditionals.length);"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
+							    <ul dnd-list="selectedAdditionals" dnd-allowed-types="['additional','others']" dnd-drop="checkIfExists(item,selectedAdditionals,layersettingsForm)">
+							        <li ng-repeat="item in selectedAdditionals"
+							            dnd-draggable="item"
+							            dnd-type="item.subType"
+							            dnd-effect-allowed="move"
+							            dnd-dragstart="layersettingsForm.$setDirty();selectedAdditionals.splice($index, 1);"
+							            dnd-canceled="selectedAdditionals.splice($index, 1);">
+							            <div class="handle">:::</div>
+   										<div class="item">{{item.name}}</div>
+							        </li>
+							    </ul>
 					        </div>
 					        <ng-form name="baseLayers">
 						        <div class="column">
 						        	<h5>{{'spatial.layer_settings_base' | i18n }}</h5>
-									    <ul dnd-list="selectedBases" dnd-allowed-types="['background','others']" dnd-drop="checkIfExists(item,selectedBases,layersettingsForm,true);">
-									        <li ng-repeat="item in selectedBases"
-									            dnd-draggable="item"
-									            dnd-type="item.subType"
-									            dnd-effect-allowed="move"
-									            dnd-dragstart="layersettingsForm.$setDirty();selectedBases.splice($index, 1);validateBackGroundLayers();"
-									            dnd-canceled="selectedBases.splice($index, 1);">
-									            <div class="handle">:::</div>
-	    										<div class="item">{{item.name}}</div>
-									        </li>
-									    </ul>
+						        	<button class="btn btn-default btn-xs btn-clear-list" type="button" ng-click="layersettingsForm.$setDirty();selectedBases.splice(0, selectedBases.length);validateBackGroundLayers();"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
+								    <ul dnd-list="selectedBases" dnd-allowed-types="['background','others']" dnd-drop="checkIfExists(item,selectedBases,layersettingsForm,true);">
+								        <li ng-repeat="item in selectedBases"
+								            dnd-draggable="item"
+								            dnd-type="item.subType"
+								            dnd-effect-allowed="move"
+								            dnd-dragstart="layersettingsForm.$setDirty();selectedBases.splice($index, 1);validateBackGroundLayers();"
+								            dnd-canceled="selectedBases.splice($index, 1);">
+								            <div class="handle">:::</div>
+    										<div class="item">{{item.name}}</div>
+								        </li>
+								    </ul>
 						        </div>
 					        </ng-form>
 					        <div class="clearfix"></div>

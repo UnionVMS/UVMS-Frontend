@@ -105,6 +105,10 @@ angular.module('unionvmsWeb').controller('TracksvisibilityCtrl',function($scope,
 				angular.forEach(trackVisibilityAttrs, function(item) {
 					item.type = contentType;
 				});
+				
+				if(trackVisibilitySettings.order.length !== trackVisibilitySettings.values.length){
+					$scope.selectAll.tracks[contentType.toLowerCase()] = false;
+				}
 			});
 		}
 	});

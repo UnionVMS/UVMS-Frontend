@@ -4,7 +4,10 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>{{'spatial.visibility_configuration_table' | i18n}}</th>
+						<th>
+							{{'spatial.visibility_configuration_table' | i18n}}
+							<input type="checkbox" ng-model="selectAll.tracks.table" ng-change="selectAllChange('tracks','table')">	
+						</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -18,7 +21,7 @@
 								dnd-moved="configModel.visibilitySettings.trackTableAttrs.splice($index, 1);">
 									<div class="handle">:::</div>
 									<span>{{attr.title}}</span>
-									<input type="checkbox" checklist-model="configModel.visibilitySettings.tracks.table.values" checklist-value="attr.value">
+									<input type="checkbox" checklist-model="configModel.visibilitySettings.tracks.table.values" checklist-value="attr.value" ng-change="selectAllChange('tracks','table',true)">
 								</li>
 							</ul>
 						</td>

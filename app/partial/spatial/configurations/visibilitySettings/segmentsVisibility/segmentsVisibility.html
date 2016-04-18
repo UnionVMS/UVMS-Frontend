@@ -4,9 +4,18 @@
     		<table class="table table-striped table-condensed table-no-border">
 				<thead>
 					<tr>
-						<th>{{'spatial.visibility_configuration_table' | i18n}}</th>
-						<th>{{'spatial.visibility_configuration_popup' | i18n}}</th>
-						<th>{{'spatial.visibility_configuration_label' | i18n}}</th>
+						<th>
+							{{'spatial.visibility_configuration_table' | i18n}}
+							<input type="checkbox" ng-model="selectAll.segments.table" ng-change="selectAllChange('segments','table')">
+						</th>
+						<th>
+							{{'spatial.visibility_configuration_popup' | i18n}}
+							<input type="checkbox" ng-model="selectAll.segments.popup" ng-change="selectAllChange('segments','popup')">
+						</th>
+						<th>
+							{{'spatial.visibility_configuration_label' | i18n}}
+							<input type="checkbox" ng-model="selectAll.segments.label" ng-change="selectAllChange('segments','label')">
+						</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -20,7 +29,7 @@
 								dnd-moved="configModel.visibilitySettings.segmentTableAttrs.splice($index, 1);">
 									<div class="handle">:::</div>
 									<span>{{attr.title}}</span>
-									<input type="checkbox" checklist-model="configModel.visibilitySettings.segments.table.values" checklist-value="attr.value">
+									<input type="checkbox" checklist-model="configModel.visibilitySettings.segments.table.values" checklist-value="attr.value" ng-change="selectAllChange('segments','table',true)">
 								</li>
 							</ul>
 						</td>
@@ -33,7 +42,7 @@
 								dnd-moved="configModel.visibilitySettings.segmentPopupAttrs.splice($index, 1);">
 									<div class="handle">:::</div>
 									<span>{{attr.title}}</span>
-									<input type="checkbox" checklist-model="configModel.visibilitySettings.segments.popup.values" checklist-value="attr.value">
+									<input type="checkbox" checklist-model="configModel.visibilitySettings.segments.popup.values" checklist-value="attr.value" ng-change="selectAllChange('segments','popup',true)">
 								</li>
 							</ul>
 						</td>
@@ -46,7 +55,7 @@
 								dnd-moved="configModel.visibilitySettings.segmentLabelAttrs.splice($index, 1);">
 									<div class="handle">:::</div>
 									<span>{{attr.title}}</span>
-									<input type="checkbox" checklist-model="configModel.visibilitySettings.segments.labels.values" checklist-value="attr.value">
+									<input type="checkbox" checklist-model="configModel.visibilitySettings.segments.labels.values" checklist-value="attr.value" ng-change="selectAllChange('segments','label',true)">
 								</li>
 							</ul>
 						</td>

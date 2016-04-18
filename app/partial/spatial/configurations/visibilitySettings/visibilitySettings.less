@@ -18,7 +18,7 @@
 	    }
 	    input[type="checkbox"] {
 	    	top: 10px;
-	    	right: 8px;
+	    	right: 10px;
 	    }
 	    span {
 		    left: 8px;
@@ -37,6 +37,11 @@
 		    text-align: center;
 		    text-transform: uppercase;
 		    color: #777;
+		    position: relative;
+		    input[type="checkbox"] {
+				position: absolute;
+				right: 10px;
+		    }
     	}
 	    tbody {
 	    	border: 1px solid #ddd;
@@ -54,6 +59,7 @@
 					    padding: 2px 8px;
 		    			border-bottom: 1px solid #ddd;
 		    			text-align: left;
+		    			position: relative;
 			    		&:empty {
 			    			background-color: #ddd;
 			    			height: 40px;
@@ -65,8 +71,9 @@
 			    			background: #f7f7f7;
 			    		}
 			    		> input {
-			    			float: right;
-			    			margin-top: 12px;
+			    			position: absolute;
+							right: 10px;
+							top: 10px;
 			    		}
 			    		.handle {
 			    			cursor: move;

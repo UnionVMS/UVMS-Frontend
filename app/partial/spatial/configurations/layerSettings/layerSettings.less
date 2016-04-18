@@ -109,11 +109,17 @@
 	    			background-color: #fff;
 	    			width: 100%;
 	    			padding: 2px 0 2px 8px;
+	    			&:hover {
+	    				background-color: #f5f5f5;
+	    			}
 	    			> * {
 	    				display: inline-block;
 	    			}
     			}
 		    }
+	    }
+	    .column {
+	    	position: relative;
 	    }
     }
 }
@@ -184,4 +190,13 @@
 	position: absolute;
     top: 20px;
     right: 20px;
+}
+
+.btn-clear-list {
+	position: absolute;
+    top: 6px;
+    right: 15px;
+    color: #000;
+    border-radius: 12px !important;
+    height: 25px;
 }

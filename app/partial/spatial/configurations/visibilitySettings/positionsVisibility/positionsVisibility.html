@@ -4,9 +4,18 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>{{'spatial.visibility_configuration_table' | i18n}}</th>
-						<th>{{'spatial.visibility_configuration_popup' | i18n}}</th>
-						<th>{{'spatial.visibility_configuration_label' | i18n}}</th>
+						<th>
+							{{'spatial.visibility_configuration_table' | i18n}}
+							<input type="checkbox" ng-model="selectAll.positions.table" ng-change="selectAllChange('positions','table')">
+						</th>
+						<th>
+							{{'spatial.visibility_configuration_popup' | i18n}}
+							<input type="checkbox" ng-model="selectAll.positions.popup" ng-change="selectAllChange('positions','popup')">
+						</th>
+						<th>
+							{{'spatial.visibility_configuration_label' | i18n}}
+							<input type="checkbox" ng-model="selectAll.positions.label" ng-change="selectAllChange('positions','label')">
+						</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -23,7 +32,7 @@
 								dnd-moved="configModel.visibilitySettings.positionTableAttrs.splice($index, 1);">
 									<div class="handle">:::</div>
 									<span>{{attr.title}}</span>
-									<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.table.values" checklist-value="attr.value">
+									<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.table.values" checklist-value="attr.value" ng-change="selectAllChange('positions','table',true)">
 								</li>
 							</ul>
 						</td>
@@ -36,7 +45,7 @@
 								dnd-moved="configModel.visibilitySettings.positionPopupAttrs.splice($index, 1);">
 									<div class="handle">:::</div>
 									<span>{{attr.title}}</span>
-									<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.popup.values" checklist-value="attr.value">
+									<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.popup.values" checklist-value="attr.value" ng-change="selectAllChange('positions','popup',true)">
 								</li>
 							</ul>
 						</td>
@@ -49,7 +58,7 @@
 								dnd-moved="configModel.visibilitySettings.positionLabelAttrs.splice($index, 1);">
 									<div class="handle">:::</div>
 									<span>{{attr.title}}</span>
-									<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.labels.values" checklist-value="attr.value">
+									<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.labels.values" checklist-value="attr.value" ng-change="selectAllChange('positions','label',true)">
 								</li>
 							</ul>
 						</td>

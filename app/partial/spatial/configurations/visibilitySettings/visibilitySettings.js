@@ -22,6 +22,22 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
             }
         ];
     };
+    
+    $scope.selectAll = {
+    	positions: {
+    		table: true,
+    		popup: true,
+    		label: true
+    	},
+    	segments: {
+    		table: true,
+    		popup: true,
+    		label: true
+    	},
+    	tracks: {
+    		table: true
+    	}
+    };
         
     locale.ready('spatial').then(function(){
        $scope.headerMenus = setMenus();
@@ -104,5 +120,25 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
 	    $scope.alert.hasError = true;
 	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_reset_visibilities_failure');
 	    $scope.alert.hideAlert();
+	};
+	
+	$scope.selectAllChange = function(visibilityType,contentType,isListItem,newVal){
+		var currentVisibilities = $scope.configModel.visibilitySettings[visibilityType][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
+		if(isListItem){
+			var checked = this.checked === true ? 1 : -1;
+			if(currentVisibilities.values.length + checked === currentVisibilities.order.length){
+				$scope.selectAll[visibilityType][contentType] = true;
+			}else{
+				$scope.selectAll[visibilityType][contentType] = false;
+			}
+		}else{
+			currentVisibilities.values.splice(0,currentVisibilities.values.length);
+			if($scope.selectAll[visibilityType][contentType]){
+				angular.forEach(currentVisibilities.order, function(item) {
+					currentVisibilities.values.push(item);
+				});
+			}
+			
+		}
 	};
 });

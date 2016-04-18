@@ -123,6 +123,10 @@ angular.module('unionvmsWeb').controller('SegmentsvisibilityCtrl',function($scop
 				angular.forEach(segmentVisibilityAttrs, function(item) {
 					item.type = contentType;
 				});
+				
+				if(segmentVisibilitySettings.order.length !== segmentVisibilitySettings.values.length){
+					$scope.selectAll.segments[contentType.toLowerCase()] = false;
+				}
 			});
 		}
 	});
