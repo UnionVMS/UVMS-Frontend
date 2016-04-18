@@ -27,7 +27,7 @@
 	"sending_queue_table_header_recipient" : "Recipient",
 	"sending_queue_table_header_message_type" : "Msg.type",
 	"sending_queue_table_header_unsent_reports" : "Unsent rep.",
-	"sending_queue_table_header_Last_recieved" : "Last recieved.",
+	"sending_queue_table_header_last_received" : "Last recieved.",
 
 
 	"table_header_actions": "Actions",

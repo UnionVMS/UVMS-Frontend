@@ -15,7 +15,7 @@
                     <th sortable-table-header by="sendingQueue.sortBy" reverse="sendingQueue.sortReverse" order="'pluginList.recipient'" class="">{{'exchange.sending_queue_table_header_recipient' | i18n}}</th>
                     <th sortable-table-header by="sendingQueue.sortBy" reverse="sendingQueue.sortReverse" order="'pluginList.messageType'" class="">{{'exchange.sending_queue_table_header_message_type' | i18n}}</th>
                     <th sortable-table-header by="sendingQueue.sortBy" reverse="sendingQueue.sortReverse" order="'pluginList.sendingLogList.length'" class="">{{'exchange.sending_queue_table_header_unsent_reports' | i18n}}</th>
-                    <th sortable-table-header by="sendingQueue.sortBy" reverse="sendingQueue.sortReverse" order="'pluginList.lastReceived'" class="">{{'exchange.sending_queue_table_header_Last_recieved' | i18n}}</th>
+                    <th sortable-table-header by="sendingQueue.sortBy" reverse="sendingQueue.sortReverse" order="'pluginList.lastReceived'" class="">{{'exchange.sending_queue_table_header_last_received' | i18n}}</th>
                     <th class="action"><a title="{{'exchange.sending_queue_table_resend_all_title' | i18n}}" ng-click="resendAllQueued(sendingQueue.items)">{{'exchange.sending_queue_table_resend_all' | i18n}}</a></th>
                 </thead>
                 <tbody ng-repeat="plugIn in sendingQueue.items | orderBy:sendingQueue.sortBy:sendingQueue.sortReverse" class="delimiter">
