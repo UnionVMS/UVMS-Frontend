@@ -22,7 +22,7 @@
                         <a ng-show="item.vessel" href="#/assets/{{item.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}">{{item.vessel.name}}</a>
                         <span ng-show="!item.vessel" class="assetNotFound">{{'common.asset_not_found' | i18n}}</span>
                     </td>
-                    <td ng-attr-title="{{item.ruleName}}">{{item.ruleName}}</td>
+                    <td ng-attr-title="{{item.ruleName}}">{{item.ruleName}}<sup ng-if="item.ticketCount > 1">{{item.ticketCount}}</sup></td>
                     <td ng-attr-title="{{item.getResolvedDate() | confDateFormat}}">{{item.getResolvedDate() | confDateFormat}}</td>
                     <td ng-attr-title="{{item.getResolvedBy()}}">{{item.getResolvedBy()}}</td>
                     <td class="status">

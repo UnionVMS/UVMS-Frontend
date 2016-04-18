@@ -13,7 +13,7 @@ angular.module('unionvmsWeb').factory('Ticket', function() {
         this.updated = undefined;
         this.updatedBy = undefined;
         this.status = undefined;
-
+        this.ticketCount = undefined;
     }
 
     Ticket.fromDTO = function(dto){
@@ -29,6 +29,7 @@ angular.module('unionvmsWeb').factory('Ticket', function() {
         ticket.updated = dto.updated;
         ticket.updatedBy = dto.updatedBy;
         ticket.status = dto.status;
+        ticket.ticketCount = dto.ticketCount;
         return ticket;
     };
 
