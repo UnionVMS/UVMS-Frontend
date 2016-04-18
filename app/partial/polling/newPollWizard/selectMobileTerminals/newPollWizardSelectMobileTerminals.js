@@ -6,6 +6,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
     $scope.currentSearchResults = new SearchResults('vesselName', false);
 
     var init = function(){
+        searchService.reset();
         $scope.getPollableChannels();
     };
 

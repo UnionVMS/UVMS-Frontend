@@ -32,7 +32,6 @@ angular.module('unionvmsWeb').controller('newPollWizardCtrl',function($scope, po
         if($scope.hideAlertsOnScopeDestroy){
             alertService.hideMessage();
         }
-        searchService.reset();
         pollingService.clearSelection();
         pollingService.resetPollingOptions(true);
     });
