@@ -270,8 +270,12 @@ angular.module('unionvmsWeb').directive('datePickerFormatter',['dateTimeService'
             var YMD_FORMAT = scope.FORMATS.YMD.MOMENTJS;
             var YMDHM_FORMAT = scope.FORMATS.YMDHM.MOMENTJS;
 
+            function isBlank(str) {
+                return !str || (typeof str === 'string' && str.trim().length === 0);
+            }
+
             var toView = function (newValue) {
-                if (!moment(newValue, "YYYY-MM-DD HH:mm:ss Z", true).isValid()) {
+                if (!isBlank(newValue) && !moment(newValue, "YYYY-MM-DD HH:mm:ss Z", true).isValid()) {
                     ctrl.$setValidity('format', false);
                     return newValue;
                 }
@@ -295,7 +299,7 @@ angular.module('unionvmsWeb').directive('datePickerFormatter',['dateTimeService'
             };
 
             var toModel = function (newValue) {
-                if (!moment(newValue, globalSettingsService.getDateFormat(), true).isValid()) {
+                if (!isBlank(newValue) && !moment(newValue, globalSettingsService.getDateFormat(), true).isValid()) {
                     ctrl.$setValidity('format', false);
                     return newValue;
                 }
