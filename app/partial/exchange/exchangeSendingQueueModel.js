@@ -44,7 +44,7 @@ angular.module('unionvmsWeb')
         }
 
         exchangeSendingQueue.pluginList.sendingLogList = _.sortBy(exchangeSendingQueue.pluginList.sendingLogList, function(dateReceived){return exchangeSendingQueue.pluginList.sendingLogList;});
-        exchangeSendingQueue.pluginList.lastRecieved = exchangeSendingQueue.pluginList.sendingLogList[0].dateReceived;
+        exchangeSendingQueue.pluginList.lastReceived = exchangeSendingQueue.pluginList.sendingLogList[0].dateReceived;
 
         return exchangeSendingQueue;
     };
