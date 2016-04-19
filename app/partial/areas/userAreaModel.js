@@ -33,7 +33,7 @@ angular.module('unionvmsWeb').factory('UserArea',function() {
             resetCentroid();
         },
         setPropertiesFromJson: function(data){
-            this.id = parseInt(data.id);
+            this.id = parseInt(data.gid);
             this.name = data.name;
             this.scopeSelection = data.scopeSelection;
             this.desc = data.areaDesc;

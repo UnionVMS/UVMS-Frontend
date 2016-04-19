@@ -132,7 +132,8 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
 				$scope.selectAll[visibilityType][contentType] = false;
 			}
 		}else{
-			currentVisibilities.values.splice(0,currentVisibilities.values.length);
+			currentVisibilities.values = [];
+//			currentVisibilities.values.splice(0,currentVisibilities.values.length);
 			if($scope.selectAll[visibilityType][contentType]){
 				angular.forEach(currentVisibilities.order, function(item) {
 					currentVisibilities.values.push(item);
