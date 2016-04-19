@@ -41,8 +41,8 @@
 
             <div class="col-md-3 form-group smallerpaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.homeport.$dirty) && vesselForm.homeport.$invalid}">
                 <label>{{ 'vessel.vessel_details_home_port' | i18n }}</label>
-                <input type="text" name="homeport" class="form-control" ng-model="vessel.homePort" ng-maxlength="5"/>
-                <input-validation-message types="maxlength" input="vesselForm.homeport" custom-messages="{{getMaxLengthMessage(5)}}"></input-validation-message>
+                <input type="text" name="homeport" class="form-control" ng-model="vessel.homePort" ng-maxlength="30"/>
+                <input-validation-message types="maxlength" input="vesselForm.homeport" custom-messages="{{getMaxLengthMessage(30)}}"></input-validation-message>
             </div>
 
             <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.gearType.$dirty) && vesselForm.gearType.$invalid}">
