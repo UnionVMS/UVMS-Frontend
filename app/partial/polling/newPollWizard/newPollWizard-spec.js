@@ -33,24 +33,20 @@ describe('newPollWizardCtrl', function() {
         expect(resetSpy).toHaveBeenCalled();
     }));
 
-    it('should clean up on scope destroy', inject(function($rootScope, alertService, searchService) {
+    it('should clean up on scope destroy', inject(function($rootScope, alertService) {
         var alertSpy = spyOn(alertService, "hideMessage");
-        var searchSpy = spyOn(searchService, "reset");
         scope.$destroy();
         expect(alertSpy).toHaveBeenCalled();
-        expect(searchSpy).toHaveBeenCalled();
     }));
 
-    it('should not clean up alerts on scope destroy if hideAlertsOnScopeDestroy is set to false', inject(function($rootScope, alertService, searchService) {
+    it('should not clean up alerts on scope destroy if hideAlertsOnScopeDestroy is set to false', inject(function($rootScope, alertService) {
         //Set scope.hideAlertsOnScopeDestroy to false
         scope.hideAlertsOnScopeDestroy = false;
 
         var alertSpy = spyOn(alertService, "hideMessage");
-        var searchSpy = spyOn(searchService, "reset");
 
         scope.$destroy();
         expect(alertSpy).not.toHaveBeenCalled();
-        expect(searchSpy).toHaveBeenCalled();
     }));
 });
 
