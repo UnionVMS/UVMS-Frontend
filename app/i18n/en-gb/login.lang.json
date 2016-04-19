@@ -5,6 +5,6 @@
     "password_placeholder" : "Password",
     "login_button_text" : "Login",
     "forgot_password_text" : "Forgot your password?",
-    "logout_message" : "Your are now logged out.",
+    "logout_message" : "You are now logged out.",
     "login_error_no_token_received" : "There was a problem logging you in. No token was received."
 }
