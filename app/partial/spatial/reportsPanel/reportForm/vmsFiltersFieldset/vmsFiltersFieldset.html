@@ -3,7 +3,7 @@
 		<fieldset class="fieldsetStyle col-md-12">
 			<legend class="fieldsetLegendStyle">
 				<a data-toggle="collapse">{{'spatial.reports_form_vms_fieldset_label' | i18n }}</a>
-				<input class="checkbox-margin" type="checkbox" ng-model="report.hasVmsFilter" ng-checked="report.hasVmsFilter">
+				<input class="checkbox-margin" type="checkbox" ng-model="report.hasVmsFilter" ng-checked="report.hasVmsFilter" ng-change="onActivateVmsFilter()">
 			</legend>
 			<div ng-show="report.hasVmsFilter">
 				<!-- <div class="row">
@@ -18,15 +18,15 @@
 						<div class="col-md-12 bottomPaddingCheckGroup">
 							<label>{{'spatial.reports_form_vms_components' | i18n}}</label> &nbsp; &nbsp;
 							<label class="checkbox-inline checkbox-options">
-								<input type="checkbox" ng-model="report.hasPositionsFilter" ng-checked="report.hasPositionsFilter"/>
+								<input type="checkbox" ng-model="report.hasPositionsFilter" ng-checked="report.hasPositionsFilter" ng-change="report.vmsFilters.positions = undefined"/>
 								{{'spatial.reports_form_vms_positions' | i18n }}
 							</label>
 							<label class="checkbox-inline checkbox-options">
-								<input type="checkbox" ng-model="report.hasSegmentsFilter" ng-checked="report.hasSegmentsFilter"/>
+								<input type="checkbox" ng-model="report.hasSegmentsFilter" ng-checked="report.hasSegmentsFilter" ng-change="report.vmsFilters.segments = undefined"/>
 								{{'spatial.reports_form_vms_segments' | i18n }}
 							</label>
 							<label class="checkbox-inline checkbox-options">
-								<input type="checkbox" ng-model="report.hasTracksFilter" ng-checked="report.hasTracksFilter"/>
+								<input type="checkbox" ng-model="report.hasTracksFilter" ng-checked="report.hasTracksFilter" ng-change="report.vmsFilters.tracks = undefined"/>
 								{{'spatial.reports_form_vms_tracks' | i18n }}
 							</label>
 		  				</div>

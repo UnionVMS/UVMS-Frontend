@@ -391,4 +391,15 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     	}
     };
     
+    $scope.onActivateVmsFilter = function(){
+    	$scope.report.hasPositionsFilter = false;
+    	$scope.report.hasSegmentsFilter = false;
+    	$scope.report.hasTracksFilter = false;
+    	$scope.report.vmsFilters = {
+	        positions: undefined,
+	        segments: undefined,
+	        tracks: undefined
+	    };
+    };
+    
 });
