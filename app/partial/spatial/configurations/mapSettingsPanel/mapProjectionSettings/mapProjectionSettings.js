@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($scope, $timeout, $interval, locale, spatialRestService, projectionService){
+angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($scope, locale, spatialRestService, projectionService){
     $scope.coordinatesFormatItems = [];
     $scope.scaleBarUnitsItems = [];
     $scope.projectionSelected = false;

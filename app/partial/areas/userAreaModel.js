@@ -33,7 +33,9 @@ angular.module('unionvmsWeb').factory('UserArea',function() {
             resetCentroid();
         },
         setPropertiesFromJson: function(data){
-            this.id = parseInt(data.gid);
+            var id = parseInt(data.id);
+            
+            this.id = isNaN(id) ? parseInt(data.gid) : id;  
             this.name = data.name;
             this.scopeSelection = data.scopeSelection;
             this.desc = data.areaDesc;

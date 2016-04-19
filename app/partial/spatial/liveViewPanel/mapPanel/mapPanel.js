@@ -527,13 +527,13 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 //    };
 });
 
-angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale, mapService, spatialHelperService, defaultMapConfigs){
-    locale.ready('spatial').then(function(){
-        if (!angular.isDefined(mapService.map)){
-            mapService.resetLabelContainers();
-            mapService.setMap(defaultMapConfigs);
-            $scope.map = mapService.map;
-            spatialHelperService.setToolbarControls(defaultMapConfigs);
-        }
-    });
-});
+//angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale, mapService, spatialHelperService, defaultMapConfigs){
+//    locale.ready('spatial').then(function(){
+//        if (!angular.isDefined(mapService.map)){
+//            mapService.resetLabelContainers();
+//            mapService.setMap(defaultMapConfigs);
+//            $scope.map = mapService.map;
+//            spatialHelperService.setToolbarControls(defaultMapConfigs);
+//        }
+//    });
+//});

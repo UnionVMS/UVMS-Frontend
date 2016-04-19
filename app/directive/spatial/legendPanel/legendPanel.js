@@ -169,6 +169,10 @@ angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapServi
             };
 		    
 		    this.init = function(){
+		        if (!angular.isDefined(mapService.map)){
+		            return;
+		        }
+		        
 		        var records = [];
 		        var layers = mapService.map.getLayers();
 		        

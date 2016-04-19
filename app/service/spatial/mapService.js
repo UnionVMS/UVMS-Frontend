@@ -274,6 +274,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ms.map = map;
 	    ms.addBlankLayer();
 	    
+	    //Remove display none of the popup on initial loading
+	    angular.element('#popup').css('display', 'block');
+	    
 	    ms.map.getViewport().addEventListener('contextmenu', function(e){
             e.preventDefault();
             var select = ms.getInteractionsByType('Select')[0];
@@ -582,7 +585,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var layerSrc = ms.getLayerByType('vmspos').getSource();
         var changeListenerKey = layerSrc.on('change', function(e){
             if (layerSrc.getState() === 'ready' && layerSrc.getFeatures().length > 0){
-                var geom = new ol.geom.Polygon.fromExtent(layerSrc.getExtent());
+                var extent = layerSrc.getExtent();
+                var geom = new ol.geom.Polygon.fromExtent(extent);
                 ms.zoomTo(geom);
                 
                 //Unregister the listener
@@ -1569,7 +1573,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         iconSpan.className = 'fa fa-globe';
         var fullExtent = new ol.control.ZoomToExtent({
             label: iconSpan,
-            tipLabel: locale.getString('spatial.map_tip_full_extent') 
+            tipLabel: locale.getString('spatial.map_tip_full_extent')
         });
         
         var mouseWheel =  new ol.interaction.MouseWheelZoom();

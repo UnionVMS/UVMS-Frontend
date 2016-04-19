@@ -6,6 +6,10 @@ angular.module('unionvmsWeb').directive('copyrightPanel', function(mapService) {
 		templateUrl: 'directive/spatial/copyrightPanel/copyrightPanel.html',
 		controller: function(){
 		    this.init = function(){
+		        if (!angular.isDefined(mapService.map)){
+		            return;
+		        }
+		        
                 var records = [];
                 var layers = mapService.map.getLayers();
                 

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $anchorScroll, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService) {
 
     var rep = {
        id: undefined,
@@ -74,16 +74,28 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         $rootScope.$broadcast('updateLayerTreeSource', treeSource);
     };
     
+    rep.stopRunInterval = function(){
+        $interval.cancel(rep.runInterval);
+        rep.runInterval = undefined;
+    };
+    
 	rep.runReport = function(report){
 		rep.isReportExecuting = true;
-		prepareReportToRun(report);
-
-        rep.getConfigsTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
-        if (rep.tabs.map === true){
-            spatialRestService.getConfigsForReport(rep.id, rep.getConfigsTime).then(getConfigSuccess, getConfigError);
-        } else {
-            spatialRestService.getConfigsForReportWithoutMap(rep.getConfigsTime).then(getConfigWithouMapSuccess, getConfigWithouMapError); 
-        }
+		
+		rep.runInterval = $interval(function(){
+		    var mapContainer = angular.element('#map');
+		    if (mapContainer.length > 0){
+		        rep.stopRunInterval();
+		        
+		        prepareReportToRun(report);
+		        rep.getConfigsTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+		        if (rep.tabs.map === true){
+		            spatialRestService.getConfigsForReport(rep.id, rep.getConfigsTime).then(getConfigSuccess, getConfigError);
+		        } else {
+		            spatialRestService.getConfigsForReportWithoutMap(rep.getConfigsTime).then(getConfigWithouMapSuccess, getConfigWithouMapError); 
+		        }
+		    }
+		}, 10);
 	};
 	
 	rep.runReportWithoutSaving = function(report){

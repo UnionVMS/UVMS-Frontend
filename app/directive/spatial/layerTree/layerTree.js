@@ -215,10 +215,10 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			var updateMap = function() {
 				var source;
 
-				if ( !scope.$tree ) {
+				if ( !scope.$tree || !angular.isDefined(mapService.map)) {
 					return;
 				}
-
+				
 				source = scope.$tree.toDict( true ).children;
 				reverseTreeSource( source );
 				mapLayers = mapService.map.getLayers().getArray();

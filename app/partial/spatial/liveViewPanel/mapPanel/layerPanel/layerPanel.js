@@ -35,6 +35,8 @@ angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $time
     });
     
     angular.element(document).ready(function () {
-    	mapService.updateMapContainerSize();
+        if (angular.isDefined(mapService.map)){
+            mapService.updateMapContainerSize();
+        }
     });
 });
