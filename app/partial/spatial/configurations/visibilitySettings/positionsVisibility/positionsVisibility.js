@@ -172,8 +172,10 @@ angular.module('unionvmsWeb').controller('PositionsvisibilityCtrl',function($sco
 					item.type = contentType;
 				});
 				
-				if(positionVisibilitySettings.order.length !== positionVisibilitySettings.values.length){
+				if(!angular.isDefined(positionVisibilitySettings.values) || positionVisibilitySettings.order.length !== positionVisibilitySettings.values.length){
 					$scope.selectAll.positions[contentType.toLowerCase()] = false;
+				}else{
+					$scope.selectAll.positions[contentType.toLowerCase()] = true;
 				}
 			});
 			$scope.isPositionVisLoading = false;

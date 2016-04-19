@@ -124,8 +124,10 @@ angular.module('unionvmsWeb').controller('SegmentsvisibilityCtrl',function($scop
 					item.type = contentType;
 				});
 				
-				if(segmentVisibilitySettings.order.length !== segmentVisibilitySettings.values.length){
+				if(!angular.isDefined(segmentVisibilitySettings.values) || segmentVisibilitySettings.order.length !== segmentVisibilitySettings.values.length){
 					$scope.selectAll.segments[contentType.toLowerCase()] = false;
+				}else{
+					$scope.selectAll.segments[contentType.toLowerCase()] = true;
 				}
 			});
 		}
