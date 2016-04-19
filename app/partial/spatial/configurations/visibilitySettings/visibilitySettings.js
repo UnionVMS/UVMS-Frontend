@@ -126,7 +126,7 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
 		var currentVisibilities = $scope.configModel.visibilitySettings[visibilityType][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
 		if(isListItem){
 			var checked = this.checked === true ? 1 : -1;
-			if(currentVisibilities.values.length + checked === currentVisibilities.order.length){
+			if(angular.isDefined(currentVisibilities.values) && currentVisibilities.values.length + checked === currentVisibilities.order.length){
 				$scope.selectAll[visibilityType][contentType] = true;
 			}else{
 				$scope.selectAll[visibilityType][contentType] = false;
