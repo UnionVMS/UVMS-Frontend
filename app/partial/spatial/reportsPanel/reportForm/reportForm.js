@@ -391,15 +391,22 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     	}
     };
     
-    $scope.onActivateVmsFilter = function(){
-    	$scope.report.hasPositionsFilter = false;
-    	$scope.report.hasSegmentsFilter = false;
-    	$scope.report.hasTracksFilter = false;
-    	$scope.report.vmsFilters = {
-	        positions: undefined,
-	        segments: undefined,
-	        tracks: undefined
-	    };
+    $scope.onActivateVmsFilter = function(type,value){
+    	if(value === false){
+	    	$scope.reportForm.$setDirty();
+	    	if(type === 'all' || type === 'positions'){
+	    		$scope.report.hasPositionsFilter = false;
+	    		$scope.report.vmsFilters.positions = undefined;
+	    	}
+	    	if(type === 'all' || type === 'segments'){
+	    		$scope.report.hasSegmentsFilter = false;
+	    		$scope.report.vmsFilters.segments = undefined;
+	    	}
+	    	if(type === 'all' || type === 'tracks'){
+	    		$scope.report.hasTracksFilter = false;
+	    		$scope.report.vmsFilters.tracks = undefined;
+	    	}
+    	}
     };
     
 });
