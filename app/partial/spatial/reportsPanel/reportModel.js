@@ -61,7 +61,7 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	    }
 	};
 
-	var validateFilterObject = function(filter){
+	var validateFilterObject = function(filter,isRunningReport){
 	    var valid = true;
 	    var existingFilter = false;
         var isDefined = false;
@@ -75,7 +75,7 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
             }
         }
 
-        if (existingFilter && isDefined === false){
+        if ((existingFilter || isRunningReport) && isDefined === false){
             valid = false;
         }
 
@@ -279,39 +279,44 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
             });
         }
         
-        if(angular.isDefined(this.vmsFilters)){
-        	report.filterExpression.vms = {
-        		vmsposition: undefined,
-        		vmssegment: undefined,
-        		vmstrack: undefined
-        	};
-        	if(angular.isDefined(this.vmsFilters.positions)){
+        report.filterExpression.vms = {};
+        if(this.hasVmsFilter === true){
+        	if(this.hasPositionsFilter === true && angular.isDefined(this.vmsFilters.positions)){
             	report.filterExpression.vms.vmsposition = {
-        			movActivity: this.vmsFilters.positions.movActivity,
-    				movMaxSpeed: this.vmsFilters.positions.movMaxSpeed,
-    				movMinSpeed: this.vmsFilters.positions.movMinSpeed,
-    				movType: this.vmsFilters.positions.movType,
+        			movActivity: this.vmsFilters.positions.movActivity === null ? undefined : this.vmsFilters.positions.movActivity,
+    				movMaxSpeed: this.vmsFilters.positions.movMaxSpeed === null ? undefined : this.vmsFilters.positions.movMaxSpeed,
+    				movMinSpeed: this.vmsFilters.positions.movMinSpeed === null ? undefined : this.vmsFilters.positions.movMinSpeed,
+    				movType: this.vmsFilters.positions.movType === null ? undefined : this.vmsFilters.positions.movType,
     				type: "vmspos"
             	};
+        		if (validateFilterObject(report.filterExpression.vms.vmsposition,true) === false){
+        			report.filterExpression.vms.vmsposition = undefined;
+	            }
             }
-        	if(angular.isDefined(this.vmsFilters.segments)){
+        	if(this.hasSegmentsFilter === true && angular.isDefined(this.vmsFilters.segments)){
             	report.filterExpression.vms.vmssegment = {
-        			segCategory: this.vmsFilters.segments.segCategory,
-    				segMaxDuration: this.vmsFilters.segments.segMaxDuration,
-    				segMaxSpeed: this.vmsFilters.segments.segMaxSpeed,
-    				segMinDuration: this.vmsFilters.segments.segMinDuration,
-    				segMinSpeed: this.vmsFilters.segments.segMinSpeed,
+        			segCategory: this.vmsFilters.segments.segCategory === null ? undefined : this.vmsFilters.segments.segCategory,
+    				segMaxDuration: this.vmsFilters.segments.segMaxDuration === null ? undefined : this.vmsFilters.segments.segMaxDuration,
+    				segMaxSpeed: this.vmsFilters.segments.segMaxSpeed === null ? undefined : this.vmsFilters.segments.segMaxSpeed,
+    				segMinDuration: this.vmsFilters.segments.segMinDuration === null ? undefined : this.vmsFilters.segments.segMinDuration,
+    				segMinSpeed: this.vmsFilters.segments.segMinSpeed === null ? undefined : this.vmsFilters.segments.segMinSpeed,
     				type: "vmsseg"
             	};
+            	if (validateFilterObject(report.filterExpression.vms.vmssegment,true) === false){
+        			report.filterExpression.vms.vmssegment = undefined;
+	            }
             }
-        	if(angular.isDefined(this.vmsFilters.tracks)){
+        	if(this.hasTracksFilter === true && angular.isDefined(this.vmsFilters.tracks)){
             	report.filterExpression.vms.vmstrack = {
-        			trkMaxDuration: this.vmsFilters.tracks.trkMaxDuration,
-        			trkMaxTime: this.vmsFilters.tracks.trkMaxTime,
-        			trkMinDuration: this.vmsFilters.tracks.trkMinDuration,
-        			trkMinTime: this.vmsFilters.tracks.trkMinTime,
+        			trkMaxDuration: this.vmsFilters.tracks.trkMaxDuration === null ? undefined : this.vmsFilters.tracks.trkMaxDuration,
+        			trkMaxTime: this.vmsFilters.tracks.trkMaxTime === null ? undefined : this.vmsFilters.tracks.trkMaxTime,
+        			trkMinDuration: this.vmsFilters.tracks.trkMinDuration === null ? undefined : this.vmsFilters.tracks.trkMinDuration,
+        			trkMinTime: this.vmsFilters.tracks.trkMinTime === null ? undefined : this.vmsFilters.tracks.trkMinTime,
         			type: "vmstrack"
             	};
+            }
+        	if (validateFilterObject(report.filterExpression.vms.vmstrack,true) === false){
+    			report.filterExpression.vms.vmstrack = undefined;
             }
         }
         
