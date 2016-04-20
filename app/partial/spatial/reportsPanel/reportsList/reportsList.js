@@ -24,7 +24,7 @@ angular.module('unionvmsWeb').factory('reportMsgService', function($timeout){
     return alert;
 });
 
-angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $filter, globalSettingsService, reportMsgService, $anchorScroll, locale, reportRestService, confirmationModal, reportService){
+angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $filter, globalSettingsService, reportMsgService, $anchorScroll, locale, reportRestService, confirmationModal, reportService, spatialHelperService){
     //config object
     $scope.config = {
         src_format: 'YYYY-MM-DDTHH:mm:ss',
@@ -74,10 +74,10 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     //Set default report
     $scope.makeDefault = function(index){
         var repId = $scope.displayedRecords[index].id;
-        if (angular.isDefined(reportService.defaultReportId)){
-            var options;
-            var finalRepId;
-            if (reportService.defaultReportId !== repId){
+        var scopeRepObj = spatialHelperService.getDefaultReport(false);
+        if (angular.isDefined(scopeRepObj) && scopeRepObj.id !== 0){
+            var options, finalRepId;
+            if (scopeRepObj.id !== repId){
                 options = {
                     textLabel : locale.getString("spatial.reports_set_default_report_confirmation_text_1") + $scope.displayedRecords[index].name.toUpperCase()  + locale.getString("spatial.reports_set_default_report_confirmation_text_2")
                 };
@@ -107,15 +107,20 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     
     var setDefaultSuccess = function(response){
         $scope.isLoading = false;
-        if (reportService.defaultReportId !== 0){
-            $scope.setDefaultRepLocally(reportService.defaultReportId, false);
+        
+        //first check if there was a default report and set isDefault to false
+        var defRep = spatialHelperService.getDefaultReport(false);
+        if (angular.isDefined(defRep) && defRep.id !== 0){
+            $scope.setDefaultRepLocally(defRep.id, false);
         }
+        
         var infoText = locale.getString('spatial.reports_remove_default_report_success');
         if (response.defaultId !== 0){
             $scope.setDefaultRepLocally(response.defaultId, true);
             infoText = locale.getString('spatial.reports_set_default_report_success');
         }
-        reportService.defaultReportId = response.defaultId;
+        
+        spatialHelperService.setDefaultRep(response.defaultId);
         $scope.alert.show(infoText, 'success');
     }; 
     

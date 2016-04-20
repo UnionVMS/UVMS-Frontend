@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, reportRestService, reportService, $anchorScroll, userService, loadingStatus){
+angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, spatialHelperService, reportRestService, reportService, $anchorScroll, userService, loadingStatus){
     $scope.isMenuVisible = true;
     $scope.selectedMenu = 'REPORTS';
     $scope.reports = [];
@@ -36,54 +36,28 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
        }
        
        //let's check for the existence of default reports
-       var defaultReportId = $scope.findDefaultReport();
-       if (angular.isDefined(defaultReportId) && !_.isNaN(defaultReportId)){
-           var useId;
-           if (defaultReportId !== 0 && !angular.isDefined($scope.repServ.defaultReportId)){
-               useId = defaultReportId;
-           } else if ($scope.repServ.defaultReportId !== 0){
-               useId = $scope.repServ.defaultReportId;
-           }
-           
-           if (angular.isDefined(useId)){
-               $scope.repServ.defaultReportId = useId;
-               $scope.selectedMenu = 'LIVEVIEW';
-               $scope.repServ.liveviewEnabled = true;
-               $scope.repServ.isReportExecuting = true;
-               loadingStatus.isLoading('LiveviewMap',true);
-               reportRestService.getReport(useId).then(function(response){
-                   $scope.repServ.runReport(response);
-               }, function(error){
-                   $scope.selectedMenu = 'REPORTS';
-                   $scope.repServ.liveviewEnabled = false;
-                   $scope.repServ.isReportExecuting = false;
-                   $scope.repServ.hasError = true;
-                   $scope.repServ.errorLoadingDefault = true;
-                   $timeout(function(){
-                       $scope.repServ.hasError = false;
-                       $scope.repServ.errorLoadingDefault = false;
-                   }, 8000);
-               });
-           }
+       var defaultRepObj = spatialHelperService.getDefaultReport(true);
+       if (angular.isDefined(defaultRepObj) && !_.isNaN(defaultRepObj.id) && defaultRepObj.id !== 0){
+           $scope.selectedMenu = 'LIVEVIEW';
+           $scope.repServ.liveviewEnabled = true;
+           $scope.repServ.isReportExecuting = true;
+           loadingStatus.isLoading('LiveviewMap',true);
+           reportRestService.getReport(defaultRepObj.id).then(function(response){
+               $scope.repServ.runReport(response);
+           }, function(error){
+               $scope.selectedMenu = 'REPORTS';
+               $scope.repServ.liveviewEnabled = false;
+               $scope.repServ.isReportExecuting = false;
+               $scope.repServ.hasError = true;
+               $scope.repServ.errorLoadingDefault = true;
+               $timeout(function(){
+                   $scope.repServ.hasError = false;
+                   $scope.repServ.errorLoadingDefault = false;
+               }, 8000);
+           });
        }
        $scope.headerMenus = setMenus();
    });
-   
-   $scope.findDefaultReport = function(){
-       var context = userService.getCurrentContext();
-       var userPref = context.preferences;
-       
-       var defaultId;
-       if (angular.isDefined(userPref)){
-           angular.forEach(userPref.preferences, function(obj) {
-               if (obj.applicationName === 'Reporting' && obj.optionName === 'DEFAULT_REPORT_ID'){
-                   defaultId = parseInt(obj.optionValue); 
-               }
-           });
-       }
-
-       return defaultId;
-   };
    
    $scope.selectMenu = function(menu){
        $scope.selectedMenu = menu;

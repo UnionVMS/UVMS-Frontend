@@ -21,7 +21,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             rate: undefined
        },
        selectedTab: 'MAP',
-       defaultReportId: undefined,
        errorLoadingDefault: false,
        liveviewEnabled: false,
        isLiveViewActive: false,
