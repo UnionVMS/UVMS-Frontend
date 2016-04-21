@@ -348,13 +348,19 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         return false;
     };
 
+    function getRuleActionDefaultValue(ruleAction) {
+        if (rulesOptionsService.actionShouldHaveValue(ruleAction.action)) {
+            var values = rulesOptionsService.getDropdownValuesForAction(ruleAction);
+            if (values && values.length > 0) {
+                return values[0].code;
+            }
+        }
+    }
+
     //Callback when selecting action in dropdown
     $scope.actionSelected = function(selection, ruleAction){
-        var selectedAction = selection.code;
-        ruleAction.action = selectedAction;
-        if(!$scope.actionShouldHaveValue(ruleAction)){
-            ruleAction.value = undefined;
-        }
+        ruleAction.action = selection.code;
+        ruleAction.value = getRuleActionDefaultValue(ruleAction);
         $timeout($scope.updateDisabledActions, 10);
     };
 
