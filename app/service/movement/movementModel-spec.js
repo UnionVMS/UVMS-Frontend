@@ -38,7 +38,7 @@ describe('Movement', function() {
 
      function verifyMovement(movement) {
         expect(movement.guid).toEqual(move.guid);
-        expect(movement.time).toEqual(move.positionTime);
+        expect(movement.time).toEqual('2015-05-08 17:38:00 +00:00');
 
         expect(movement.connectId).toEqual(move.connectId);
 

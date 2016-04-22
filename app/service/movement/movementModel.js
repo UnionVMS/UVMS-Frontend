@@ -39,7 +39,7 @@ angular.module('unionvmsWeb')
 
 			movement.connectId = data.connectId;
             if(data.positionTime){
-			    movement.time = data.positionTime;
+                movement.time = moment.utc(data.positionTime).format('YYYY-MM-DD HH:mm:ss Z');
             }
             //Used by last movement for vessel
             else if(data.time){
