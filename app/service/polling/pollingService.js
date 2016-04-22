@@ -116,6 +116,31 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
         return {"key": k, "value": v};
     }
 
+    /* Returns the type of the first selected mobile terminal. */
+    function getSelectedMobileTerminalType() {
+        var selectedChannels = getSelectedChannels();
+        if(selectedChannels.length > 0){
+            return selectedChannels[0].mobileTerminalType;
+        }
+    }
+
+    function isNonZero(value) {
+        return value > 0;
+    }
+
+    function isNonEmptyString(value) {
+        return typeof value === 'string' && value.length > 0
+    }
+
+    /* Pushes an attribute onto an array, checking validity. */
+    function pushAttribute(attrs, key, value, checkFn) {
+        if (typeof checkFn === 'function' && !checkFn(value)) {
+            return;
+        }
+
+        attrs.push(getAttr(key, value));
+    }
+
     function getPollAttributes(type) {
         if (type === "PROGRAM") {
             return [
@@ -125,28 +150,18 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
             ];
         }
         else if (type === "CONFIGURATION") {
-
-            var terminalType;
-            var selectedChannels = getSelectedChannels();
-            if(selectedChannels.length > 0){
-                terminalType = selectedChannels[0].mobileTerminalType;
-            }
-            switch(terminalType){
+            var attrs = [];
+            switch (getSelectedMobileTerminalType()) {
                 case 'INMARSAT_C':
-                    return [
-                        getAttr("REPORT_FREQUENCY", pollingOptions.configurationPoll.freq),
-                        getAttr("GRACE_PERIOD", pollingOptions.configurationPoll.gracePeriod),
-                        getAttr("IN_PORT_GRACE", pollingOptions.configurationPoll.inPortGrace),
-                        getAttr("DNID", pollingOptions.configurationPoll.newDNID),
-                        getAttr("MEMBER_NUMBER", pollingOptions.configurationPoll.newMemberNo)
-                    ];
+                pushAttribute(attrs, "GRACE_PERIOD", pollingOptions.configurationPoll.gracePeriod, isNonZero);
+                pushAttribute(attrs, "IN_PORT_GRACE", pollingOptions.configurationPoll.inPortGrace, isNonZero);
+                pushAttribute(attrs, "DNID", pollingOptions.configurationPoll.newDNID, isNonEmptyString);
+                pushAttribute(attrs, "MEMBER_NUMBER", pollingOptions.configurationPoll.newMemberNo, isNonEmptyString);
                 case 'IRIDIUM':
-                    return [
-                        getAttr("REPORT_FREQUENCY", pollingOptions.configurationPoll.freq),
-                    ];
-                default:
-                    break;
+                pushAttribute(attrs, "REPORT_FREQUENCY", pollingOptions.configurationPoll.freq, isNonZero);
             }
+
+            return attrs;
         }
         else if (type === "SAMPLING") {
             return [
@@ -262,6 +277,9 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
         getPollingOptions: function() {
             return pollingOptions;
         },
+        getSelectedConfigurationPollFields: function() {
+            return selectedConfigurationPollFields;
+        },
         getWizardStep : function(){
             return wizardStep;
         },
@@ -277,7 +295,8 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
         getResult: function() {
             return result;
         },
-        resetPollingOptions: resetPollingOptions
+        resetPollingOptions: resetPollingOptions,
+        getPollAttributes: getPollAttributes
     };
 
     init();

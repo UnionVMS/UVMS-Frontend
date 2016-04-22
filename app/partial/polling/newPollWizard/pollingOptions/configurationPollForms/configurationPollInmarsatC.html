@@ -13,29 +13,29 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="form-group" ng-class="{'has-error': pollingOptionsForm.configurationFreq.$invalid && (submitAttempted || pollingOptionsForm.configurationFreq.$dirty)}">
-                            <period-input name="configurationFreq" model="pollingOptions.configurationPoll.freq" ng-disabled="!isConfigurationPoll()" ng-required="isConfigurationPoll()"></period-input>
-                            <input-validation-message types="required, period" input="pollingOptionsForm.configurationFreq"></input-validation-message>
+                        <td class="form-group" ng-class="{'has-error': pollingOptionsForm.configurationFreq.$invalid && (submitAttempted || pollingOptionsForm.configurationFreq.$dirty), 'ignored': pollingOptions.configurationPoll.freq === 0}">
+                            <period-input name="configurationFreq" model="pollingOptions.configurationPoll.freq" ng-disabled="!isConfigurationPoll()"></period-input>
+                            <input-validation-message types="period" input="pollingOptionsForm.configurationFreq"></input-validation-message>
                         </td>
 
-                        <td class="form-group" ng-class="{'has-error': pollingOptionsForm.configurationGracePeriod.$invalid && (submitAttempted || pollingOptionsForm.configurationGracePeriod.$dirty)}">
-                            <period-input name="configurationGracePeriod" model="pollingOptions.configurationPoll.gracePeriod" ng-disabled="!isConfigurationPoll()" ng-required="isConfigurationPoll()"></period-input>
-                            <input-validation-message types="required, period" input="pollingOptionsForm.configurationGracePeriod"></input-validation-message>
+                        <td class="form-group" ng-class="{'has-error': pollingOptionsForm.configurationGracePeriod.$invalid && (submitAttempted || pollingOptionsForm.configurationGracePeriod.$dirty), 'ignored': pollingOptions.configurationPoll.gracePeriod === 0}">
+                            <period-input name="configurationGracePeriod" model="pollingOptions.configurationPoll.gracePeriod" ng-disabled="!isConfigurationPoll()"></period-input>
+                            <input-validation-message types="period" input="pollingOptionsForm.configurationGracePeriod"></input-validation-message>
                         </td>
 
-                        <td class="form-group" ng-class="{'has-error': pollingOptionsForm.configurationGracePeriodInPort.$invalid && (submitAttempted || pollingOptionsForm.configurationGracePeriodInPort.$dirty)}">
-                            <period-input name="configurationGracePeriodInPort" model="pollingOptions.configurationPoll.inPortGrace" ng-disabled="!isConfigurationPoll()" ng-required="isConfigurationPoll()"></period-input>
-                            <input-validation-message types="required, period" input="pollingOptionsForm.configurationGracePeriodInPort"></input-validation-message>
+                        <td class="form-group" ng-class="{'has-error': pollingOptionsForm.configurationGracePeriodInPort.$invalid && (submitAttempted || pollingOptionsForm.configurationGracePeriodInPort.$dirty), 'ignored': pollingOptions.configurationPoll.inPortGrace === 0}">
+                            <period-input name="configurationGracePeriodInPort" model="pollingOptions.configurationPoll.inPortGrace" ng-disabled="!isConfigurationPoll()"></period-input>
+                            <input-validation-message types="period" input="pollingOptionsForm.configurationGracePeriodInPort"></input-validation-message>
                         </td>
 
                         <td class="form-group" ng-class="{'has-error': pollingOptionsForm.configurationNewDNID.$invalid && (submitAttempted || pollingOptionsForm.configurationNewDNID.$dirty)}">
-                            <input name="configurationNewDNID" type="text" ng-model="pollingOptions.configurationPoll.newDNID" ng-disabled="!isConfigurationPoll() || !isSingleMobileTerminalSelected()" ng-required="isConfigurationPoll() && isSingleMobileTerminalSelected()"/>
-                            <input-validation-message types="required" input="pollingOptionsForm.configurationNewDNID"></input-validation-message>
+                            <input name="configurationNewDNID" type="text" ng-model="pollingOptions.configurationPoll.newDNID" ng-disabled="!isConfigurationPoll() || !isSingleMobileTerminalSelected()" only-digits/>
+                            <input-validation-message types="onlyDigits" input="pollingOptionsForm.configurationNewDNID"></input-validation-message>
                         </td>
 
                         <td class="form-group" ng-class="{'has-error': pollingOptionsForm.configurationNewMemberNo.$invalid && (submitAttempted || pollingOptionsForm.configurationNewMemberNo.$dirty)}">
-                            <input name="configurationNewMemberNo" type="text" ng-model="pollingOptions.configurationPoll.newMemberNo" ng-disabled="!isConfigurationPoll()" ng-required="isConfigurationPoll()"/>
-                            <input-validation-message types="required" input="pollingOptionsForm.configurationNewMemberNo"></input-validation-message>
+                            <input name="configurationNewMemberNo" type="text" ng-model="pollingOptions.configurationPoll.newMemberNo" ng-disabled="!isConfigurationPoll()" only-digits/>
+                            <input-validation-message types="onlyDigits" input="pollingOptionsForm.configurationNewMemberNo"></input-validation-message>
                         </td>
                     </tr>
                     <tr>

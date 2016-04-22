@@ -9,9 +9,9 @@
                 </thead>
                 <tbody>
                     <tr>
-                      <td class="form-group" ng-class="{'has-error': pollingOptionsForm.configurationFreq.$invalid && (submitAttempted || pollingOptionsForm.configurationFreq.$dirty)}">
-                            <period-input name="configurationFreq" model="pollingOptions.configurationPoll.freq" ng-disabled="!isConfigurationPoll()" ng-required="isConfigurationPoll()"></period-input>
-                            <input-validation-message types="required, period" input="pollingOptionsForm.configurationFreq"></input-validation-message>
+                      <td class="form-group" ng-class="{'has-error': pollingOptionsForm.configurationFreq.$invalid && (submitAttempted || pollingOptionsForm.configurationFreq.$dirty), 'ignored': pollingOptions.configurationPoll.freq === 0}">
+                            <period-input name="configurationFreq" model="pollingOptions.configurationPoll.freq" ng-disabled="!isConfigurationPoll()"></period-input>
+                            <input-validation-message types="period" input="pollingOptionsForm.configurationFreq"></input-validation-message>
                         </td>
                     </tr>
                 </tbody>
