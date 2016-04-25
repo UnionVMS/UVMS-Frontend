@@ -13,6 +13,10 @@ describe('long-polling', function() {
         $httpBackend.whenGET('/long/polling/path').respond({
             updated: ['a', 'b', '123']
         });
+        $httpBackend.whenGET('/long/polling/path/new').respond({
+            created: ['a', 'b', '123']
+        });
+
     }));
 
     it('should poll three times, then cancel', inject(function(longPolling, $httpBackend, globalSettingsService, $rootScope) {
@@ -41,11 +45,20 @@ describe('long-polling', function() {
         expect(completedPolls).toBe(0);
     }));
 
-    it('should call separate callback when updated', inject(function($httpBackend, longPolling, $rootScope) {
-        $httpBackend.whenGET('/long/polling/path').respond({
-            updated: ['a', 'b', '123']
-        });
+    it('should call separate callback when created', inject(function($httpBackend, longPolling, $rootScope) {
+        var callbacks = {
+            'onCreate': jasmine.createSpy('onCreate').andCallFake(function() {
+                longPolling.cancel(sessionId);
+            })
+        };
 
+        var sessionId = longPolling.poll('/long/polling/path/new', callbacks);
+        $rootScope.$digest();
+        $httpBackend.flush();
+        expect(callbacks.onCreate).toHaveBeenCalledWith(['a', 'b', '123']);
+    }));
+
+    it('should call separate callback when updated', inject(function($httpBackend, longPolling, $rootScope) {
         var callbacks = {
             'onUpdate': jasmine.createSpy('onUpdate').andCallFake(function() {
                 longPolling.cancel(sessionId);

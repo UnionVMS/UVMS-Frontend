@@ -16,13 +16,13 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         $scope.$broadcast("resetAlarmSearch");
     };
 
-    var updateSearchWithGuid = function(guid) {
+    var updateSearchWithGuid = function(guid, notifyUpdates) {
         searchService.searchTickets().then(function(page) {
             if (page.hasItemWithGuid(guid)) {
                 $scope.clearSelection();
                 updateSearchResults(page);
             }
-            else {
+            else if (notifyUpdates) {
                 $scope.newTicketsCount++;
             }
         });
@@ -40,9 +40,14 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         }
 
         longPollingId = longPolling.poll("/rules/activity/ticket", {
+            'onCreate': function(response) {
+                if (response.ids.length > 0) {
+                    updateSearchWithGuid(response.ids[0], true);
+                }
+            },
             'onUpdate': function(response) {
                 if (response.ids.length > 0) {
-                    updateSearchWithGuid(response.ids[0]);
+                    updateSearchWithGuid(response.ids[0], false);
                 }
             }
         });
