@@ -30,7 +30,15 @@
             $resource(path).get(function(response) {
                 log('Long-polling completed with path ' + path + ', sessionId = ' + sessionId);
                 if (angular.isFunction(callback)) {
+                    // Call back with entire response
                     callback(response);
+                }
+                else if (angular.isObject(callback)) {
+                    // Call back to individual functions
+                    if (angular.isFunction(callback.onUpdate) && angular.isDefined(response.updated)) {
+                        // Call onUpdate(...) with 'updated' part of response
+                        callback.onUpdate(response.updated);
+                    }
                 }
 
                 //Keep the longPolling running unless it has been cancelled

@@ -39,9 +39,11 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
             });
         }
 
-        longPollingId = longPolling.poll("/rules/activity/ticket", function(response) {
-            if (response.ids.length > 0) {
-                updateSearchWithGuid(response.ids[0]);
+        longPollingId = longPolling.poll("/rules/activity/ticket", {
+            'onUpdate': function(response) {
+                if (response.ids.length > 0) {
+                    updateSearchWithGuid(response.ids[0]);
+                }
             }
         });
     };
