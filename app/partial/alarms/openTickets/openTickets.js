@@ -16,17 +16,22 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         $scope.$broadcast("resetAlarmSearch");
     };
 
-    var updateSearchWithGuid = function(guid, notifyUpdates) {
+    var updateSearchWithGuid = function(guid, incrementNewTickets) {
         searchService.searchTickets().then(function(page) {
             if (page.hasItemWithGuid(guid)) {
                 $scope.clearSelection();
                 updateSearchResults(page);
             }
-            else if (notifyUpdates) {
+            else if (incrementNewTickets) {
                 $scope.newTicketsCount++;
             }
         });
     };
+
+    function isOpenTicketSearch() {
+        var searchStatus = searchService.getAdvancedSearchObject().STATUS;
+        return searchService === undefined || searchStatus === 'OPEN';
+    }
 
     var init = function(){
         var ticketGuid = $stateParams.id;
@@ -42,7 +47,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         longPollingId = longPolling.poll("/rules/activity/ticket", {
             'onCreate': function(response) {
                 if (response.ids.length > 0) {
-                    updateSearchWithGuid(response.ids[0], true);
+                    updateSearchWithGuid(response.ids[0], isOpenTicketSearch());
                 }
             },
             'onUpdate': function(response) {
