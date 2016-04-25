@@ -83,23 +83,103 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 		$scope.setEditing(setting, false);
 	};
 
-	$scope.updateSetting = function(setting) {
-		var s = {
-			value: setting.value,
-			global: setting.global,
-			description: setting.description,
-			key: setting.key,
-			module: setting.module,
-			id: setting.id
-		};
+	/* Gets setting by module+key from catalog. */
+	function getSetting(module, key) {
+		if ($scope.settings !== undefined) {
+			var settings = $scope.settings[module];
+			if (settings !== undefined) {
+				for (var i = 0; i < settings.length; i++) {
+					var setting = settings[i];
+					if (setting.module === module && setting.key === key) {
+						return setting;
+					}
+				}
+			}
+		}
+	}
 
-		SingleSetting.update({ id: setting.id }, s, function(response) {
-			$scope.setEditing(setting, false);
+	/* Creates an object for backend. */
+	function getSettingTO(sett) {
+		return {
+			value: sett.value,
+			global: sett.global,
+			description: sett.description,
+			key: sett.key,
+			module: sett.module,
+			id: sett.id
+		};
+	}
+
+	/* True or false if value can be parsed, otherwise undefined. */
+	function parseBoolean(value) {
+		if (typeof value === 'string') {
+			value = value.trim().toUpperCase();
+		}
+
+		if (value === 'TRUE') {
+			return true;
+		}
+		else if (value === 'FALSE') {
+			return false;
+		}
+	}
+
+	/* Formats truthy values as TRUE, otherwise FALSE. */
+	function formatBoolean(value) {
+		return value ? 'TRUE' : 'FALSE';
+	}
+
+	/* True iff value can be parsed as true. */
+	$scope.isTrue = isTrue;
+	function isTrue(value) {
+		return parseBoolean(value) === true;
+	}
+
+	/* True iff setting value can be parsed as either true or false. */
+	$scope.isLikelyBoolean = function(setting) {
+		return parseBoolean(setting.value) !== undefined;
+	};
+
+	/* Sends an update request to backend. */
+	function updateSetting(setting) {
+		SingleSetting.update({ id: setting.id }, getSettingTO(setting), function(response) {
 			setting.lastModified = response.data.lastModified;
 		}, function(error) {
 			alertService.showErrorMessage(error);
 		});
+	}
+
+	/* If setting value can be parsed as true or false, inverts value and sends update to backend. */
+	$scope.toggleSetting = function(setting) {
+		 var value = parseBoolean(setting.value);
+		 if (value !== undefined) {
+		 	setting.value = formatBoolean(!value);
+		 	$scope.updateSetting(setting);
+		 }
 	};
+
+	/* Sends setting update to backend. */
+	$scope.updateSetting = function(setting) {
+		$scope.setEditing(setting, false);
+		updateSetting(setting);
+
+		var setting2 = getMutuallyConstrainedSetting(setting);
+		if (setting2 !== undefined && isTrue(setting.value) && isTrue(setting2.value)) {
+			// Also update this other setting, cannot both be true.
+			setting2.value = formatBoolean(false);
+			updateSetting(setting2);
+		}
+	};
+
+	/* Returns a setting that relates to the original setting, or undefined if none exists. */
+	function getMutuallyConstrainedSetting(setting) {
+		if (setting.module === 'asset' && setting.key === 'asset.eu.use') {
+			return getSetting('asset', 'asset.national.use');
+		}
+		else if (setting.module === 'asset' && setting.key === 'asset.national.use') {
+			return getSetting('asset', 'asset.eu.use');
+		}
+	}
 
 	$scope.setTab = function(tab) {
 		$scope.activeTab = tab;

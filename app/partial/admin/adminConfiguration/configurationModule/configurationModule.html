@@ -24,7 +24,9 @@
 				<td class="key" ng-attr-title="{{c.key}}">{{ c.key }}</td>
 				<td ng-switch="!!c.editing" class="value" ng-class="{editing: c.editing}">
 					<!-- Value or input -->
-					<span ng-switch-when="false" ng-attr-title="{{c.value}}">{{c.value}}</span>
+					<span ng-switch-when="false" ng-attr-title="{{c.value}}">
+						<input type="checkbox" ng-if="isLikelyBoolean(c)" ng-checked="isTrue(c.value)" ng-click="toggleSetting(c)"/> {{c.value}}
+					</span>
 					<input ng-switch-when="true" type="text" ng-model="c.value"/>
 				</td>
 				<td ng-switch="!!c.editing" class="description" ng-class="{editing: c.editing}">
