@@ -29,7 +29,6 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
 			            $scope.tableLoading = false;
 			            $scope.alert.setError();
 			            $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_list');
-			            $scope.alert.hideAlert();
 			        });
 					
 					
@@ -65,7 +64,6 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
             $scope.alert.removeLoading();
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_geojson');
-            $scope.alert.hideAlert();
         });
     };
     

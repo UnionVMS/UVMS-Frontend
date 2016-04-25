@@ -19,23 +19,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="container containerWithTopBottomPadding spatial-error" ng-show="repServ.hasError">
-		<div class="alert alert-danger alert-container" role="alert">
-			<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
-			<span class="alert-message">
-				<span ng-hide="repServ.errorLoadingDefault">{{repServ.message}}</span>
-				<span ng-show="repServ.errorLoadingDefault">{{'spatial.map_error_loading_default_report' | i18n }}</span>          
-			</span>
-	    </div>
-	</div>
-	<div class="container containerWithTopBottomPadding spatial-error" ng-show="repServ.hasWarning">
-		<div class="alert alert-warning alert-container" role="alert">
-			<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
-			<span class="alert-message">
-				<span>{{repServ.message}}</span>
-			</span>
-	    </div>
-	</div>
+	<alert-modal ng-model="repServ.hasAlert" display-msg="repServ.message" target-el-id="liveview-panel" display-type="repServ.alertType"></alert-modal>
 	
 	<div ng-include="'partial/spatial/liveViewPanel/liveViewPanel.html'" ng-show="isMenuSelected('LIVEVIEW')"></div>
 	<div ng-include="'partial/spatial/reportsPanel/reportsPanel.html'" ng-show="isMenuSelected('REPORTS')"></div>

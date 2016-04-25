@@ -67,7 +67,7 @@
 	"map_error_alarms_data": "There was an error while fetching alarms data for your current map extent. Please try again.",
     "mapfish_error": "There was an error while printing the map. Please try again.",
     "mapfish_cancelled": "Successfully cancelled printing job",
-    "map_no_vms_data": "No VMS data was retrieved with you current report configuration.",
+    "map_no_vms_data": "No VMS data was retrieved with your current report configuration.",
     "map_no_alarms_data": "No alarms were retrieved for your current extent.",
     "map_no_positions_for_alarms_data": "There are no VMS positions to fetch alarms for in your current map extent.",
     "print_legend_title": "Legend",

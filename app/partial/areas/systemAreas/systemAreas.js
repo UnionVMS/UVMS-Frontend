@@ -47,14 +47,12 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
 				        $scope.alert.removeLoading();
 				    	$scope.alert.setSuccess();
 				        $scope.alert.alertMessage = locale.getString('areas.upload_system_area_success');
-				        $scope.alert.hideAlert();
 				    	$scope.isSaving = false;
 				    	$scope.saved = false;
 				    }, function(error) {
 				        $scope.alert.removeLoading();
 				    	$scope.alert.setError();
 				        $scope.alert.alertMessage = locale.getString('areas.upload_system_area_error') + error.data.msg;
-				        $scope.alert.hideAlert();
 				    	$scope.isSaving = false;
 				    	$scope.saved = false;
 				    }
@@ -63,14 +61,12 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         	    $scope.alert.removeLoading();
         		$scope.alert.setError();
         	    $scope.alert.alertMessage = locale.getString('areas.upload_system_area_invalid_field_error');
-        	    $scope.alert.hideAlert();
         		$scope.isSaving = false;
         	}
         } else {
         	$scope.isSaving = false;
         	$scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.upload_system_area_required_fields_error');
-            $scope.alert.hideAlert();
         }
     };
     
@@ -82,12 +78,10 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
                 $scope.alert.removeLoading();
                 $scope.alert.setSuccess();
                 $scope.alert.alertMessage = locale.getString('areas.updating_metadata_success');
-                $scope.alert.hideAlert();
             }, function(error){
                 $scope.alert.removeLoading();
                 $scope.alert.setError();
                 $scope.alert.alertMessage = locale.getString('areas.updating_metadata_error');
-                $scope.alert.hideAlert();
             });
         }
     };
@@ -161,7 +155,6 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         $scope.alert.removeLoading();
         $scope.alert.setError();
         $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_layer');
-        $scope.alert.hideAlert();
     };
     
     locale.ready('areas').then(function(){

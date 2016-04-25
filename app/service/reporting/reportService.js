@@ -5,10 +5,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
        name: undefined,
        isReportExecuting: false,
        isReportRefreshing: false,
-       hasError: false,
-       hasWarning: false,
+       hasAlert: false, 
        message: undefined,
-       //isAlarms: false,
+       alertType: undefined,
        tabs: {
            map: true,
            vms: true
@@ -155,12 +154,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         if (payload.length > 0){
             mapAlarmsService.getAlarms(payload).then(getAlarmsSuccess, getAlarmsError);
         } else {
-            rep.hasWarning = true;
+            rep.hasAlert = true;
+            rep.alertType = 'warning';
             rep.message = locale.getString('spatial.map_no_positions_for_alarms_data');
-            $timeout(function(){
-                rep.hasWarning = false;
-                rep.message = undefined;
-            }, 3000);
             loadingStatus.isLoading('LiveviewMap', false);
         }
     };
@@ -192,13 +188,10 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	var getConfigError = function(error){
 	    rep.isReportExecuting = false;
 	    rep.isReportRefreshing = false;
-	    rep.hasError = true;
-        rep.refresh.status = false;
+	    rep.hasAlert = true;
+	    rep.alertType = 'danger';
         rep.message = locale.getString('spatial.map_error_loading_report');
-        $timeout(function(){
-            rep.hasError = false;
-            rep.message = undefined;
-        }, 3000);
+        rep.refresh.status = false;
 	};
 	
 	var getRepConfig = function(){
@@ -225,11 +218,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     //Get config without map Success callback
     var getConfigWithouMapError = function(error){
         rep.isReportExecuting = false;
+        rep.hasAlert = true;
+        rep.alertType = 'danger';
         rep.message = locale.getString('spatial.map_error_loading_report');
-        $timeout(function(){
-            rep.hasError = false;
-            rep.message = undefined;
-        }, 3000);
     };
     
     //Get Alarms data Success callback
@@ -251,21 +242,17 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
                 }
             }
         } else {
-            rep.hasWarning = true;
+            rep.hasAlert = true;
+            rep.alertType = 'warning';
             rep.message = locale.getString('spatial.map_no_alarms_data');
-            $timeout(function(){
-                rep.hasWarning = false;
-                rep.message = undefined;
-            }, 3000);
         }
         loadingStatus.isLoading('LiveviewMap', false);
     };
     
     var getAlarmsError = function(error){
+        rep.hasAlert = true;
+        rep.alertType = 'danger';
         rep.message = locale.getString('spatial.map_error_alarms_data');
-        $timeout(function(){
-            rep.hasError = false;
-        }, 3000);
         loadingStatus.isLoading('LiveviewMap', false);
     };
 	
@@ -310,12 +297,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
                     mapService.zoomToPositionsLayer();
                 }
             } else if (rep.positions.length === 0 && rep.segments.length === 0){
-                rep.hasWarning = true;
+                rep.hasAlert = true;
+                rep.alertType = 'warning';
                 rep.message = locale.getString('spatial.map_no_vms_data');
-                $timeout(function(){
-                    rep.hasWarning = false;
-                    rep.message = undefined;
-                }, 3000);
             }
         }
         rep.isReportExecuting = false;
@@ -330,12 +314,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.tabs.map = true;
         rep.isReportExecuting = false;
         rep.isReportRefreshing = false;
-        rep.hasError = true;
+        rep.hasAlert = true;
+        rep.alertType = 'danger';
         rep.message = locale.getString('spatial.map_error_loading_report');
-        $timeout(function(){
-            rep.hasError = false;
-            rep.message = undefined;
-        }, 3000);
     };
     
     //Refresh report success callback
@@ -354,12 +335,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             vectorNodeSource = vectorNodeSource.nodeFromData(data);
             $rootScope.$broadcast('addLayerTreeNode', vectorNodeSource);
         } else if (rep.positions.length === 0 && rep.segments.length === 0){
-            rep.hasWarning = true;
+            rep.hasAlert = true;
+            rep.alertType = 'warning';
             rep.message = locale.getString('spatial.map_no_vms_data');
-            $timeout(function(){
-                rep.hasWarning = false;
-                rep.message = undefined;
-            }, 3000);
         }
         rep.isReportExecuting = false;
     };
@@ -367,12 +345,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     //Refresh report failure callback
     var updateVmsDataError = function(error){
         rep.isReportExecuting = false;
-        rep.hasError = true;
+        rep.hasAlert = true;
+        rep.alertType = 'danger';
         rep.message = locale.getString('spatial.map_error_loading_report');
-        $timeout(function(){
-            rep.hasError = false;
-            rep.message = undefined;
-        }, 3000);
     };
     
     var prepareReportToRun = function(report){
@@ -472,12 +447,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	var getUserConfigsFailure = function(error){
 	    $anchorScroll();
-	    rep.hasError = true;
+	    rep.hasAlert = true;
+	    rep.alertType = 'danger';
         rep.message = locale.getString('spatial.user_preferences_error_getting_configs');
-        $timeout(function(){
-            rep.hasError = false;
-            rep.message = undefined;
-        }, 3000);
 	    rep.isReportRefreshing = false;
 	};
 	
@@ -495,8 +467,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     		mergedReport.currentConfig.mapConfiguration.coordinatesFormat = userConfig.mapSettings.coordinatesFormat;
     		mergedReport.currentConfig.mapConfiguration.scaleBarUnits = userConfig.mapSettings.scaleBarUnits;
     	}
-//    	mergedReport.mapConfiguration.refreshRate = userConfig.mapSettings.refreshRate;
-//    	mergedReport.mapConfiguration.refreshStatus = userConfig.mapSettings.refreshStatus
     	
     	if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.stylesSettings)){
     		mergedReport.currentConfig.mapConfiguration.stylesSettings = userConfig.stylesSettings;
@@ -572,12 +542,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	var getMapConfigsFromReportFailure = function(error){
 	    $anchorScroll();
-	    rep.hasError = true;
+	    rep.hasAlert = true;
+	    rep.alertType = 'danger';
         rep.message = locale.getString('spatial.user_preferences_error_getting_configs');
-        $timeout(function(){
-            rep.hasError = false;
-            rep.message = undefined;
-        }, 3000);
 	    rep.isReportRefreshing = false;
 	};
 	

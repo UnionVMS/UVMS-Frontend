@@ -2,33 +2,21 @@ angular.module('unionvmsWeb').factory('areaAlertService',function($timeout) {
 
 	var areaAlertService = {
         hasAlert: false,
-        hasError: false,
-        hasSuccess: false,
-        hasWarning: false,
+        alertType: undefined,
         alertMessage: undefined,
         isLoading: undefined,
         loadingMessage: undefined,
-        hideAlert: function(){
-            var alertObj = this;
-            $timeout(function(){
-                alertObj.hasAlert = false;
-                alertObj.hasError = false;
-                alertObj.hasSuccess = false;
-                alertObj.hasWarning = false;
-                alertObj.alertMessage = undefined;
-            }, 3000, true, alertObj);
-        },
 	    setError: function(){
 	        this.hasAlert = true;
-	        this.hasError = true;
+	        this.alertType = 'danger';
 	    },
 	    setWarning: function(){
 	        this.hasAlert = true;
-            this.hasWarning = true;
+	        this.alertType = 'warning';
 	    },
 	    setSuccess: function(){
 	        this.hasAlert = true;
-            this.hasSuccess = true;
+	        this.alertType = 'success';
 	    },
 	    setLoading: function(msg){
 	        this.isLoading = true;

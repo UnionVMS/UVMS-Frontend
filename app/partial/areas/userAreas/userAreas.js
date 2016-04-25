@@ -171,7 +171,6 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
             $scope.tableLoading = false;
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_list');
-            $scope.alert.hideAlert();
         });
     };
     
@@ -209,7 +208,6 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
             $scope.alert.removeLoading();
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_geojson');
-            $scope.alert.hideAlert();
         });
     };
     
@@ -223,13 +221,11 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
             $scope.alert.removeLoading();
             $scope.alert.setSuccess();
             $scope.alert.alertMessage = locale.getString('areas.delete_user_area_success');
-            $scope.alert.hideAlert();
         }, function(error){
             console.log(error);
             $scope.alert.removeLoading();
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.delete_user_area_error');
-            $scope.alert.hideAlert();
         });
     };
     
@@ -250,7 +246,6 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
             $scope.alert.removeLoading();
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_geojson');
-            $scope.alert.hideAlert();
         });
     };
     
@@ -357,7 +352,6 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         }, function(error){
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.error_getting_userarea_types');
-            $scope.alert.hideAlert();
         });
     };
     
@@ -405,7 +399,6 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
             $scope.alert.hasAlert = true;
             $scope.alert.hasWarning = true;
             $scope.alert.alertMessage = locale.getString('areas.polygon_min_number_points');
-            $scope.alert.hideAlert();
         }
         
     };
@@ -435,14 +428,12 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
                 if (status === false){
                     $scope.alert.setError();
                     $scope.alert.alertMessage = locale.getString('areas.error_coords_form_invalid_polygon');
-                    $scope.alert.hideAlert();
                     angular.element('.area-form-container')[0].scrollTop = 0;
                 }
             }
         } else {
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.error_coords_form');
-            $scope.alert.hideAlert();
             angular.element('.area-form-container')[0].scrollTop = 0;
         }
     };
@@ -685,7 +676,6 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
                 $scope.alert.setError();
                 $scope.alert.alertMessage = locale.getString('areas.user_area_form_errors');
             }
-            $scope.alert.hideAlert();
         }
     };
     
@@ -711,7 +701,6 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.alert.removeLoading();
         $scope.alert.setSuccess();
         $scope.alert.alertMessage = locale.getString('areas.' + successMsg);
-        $scope.alert.hideAlert();
         
         //Deactivate tools
         $scope.toggleTool($scope.activeTool);
@@ -735,8 +724,6 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         } else {
             $scope.alert.alertMessage = locale.getString('areas.' + defaultMsg);
         }
-        
-        $scope.alert.hideAlert();
         
         $scope.userAreaSubmitted = false;
     };

@@ -5,14 +5,18 @@ angular.module('unionvmsWeb').factory('reportMsgService', function($timeout){
         msg: ''
     };
     
-    alert.show = function(msg, type){
+    alert.show = function(msg, type, time){
         var obj = this;
         this.msg = msg;
         this.visible = true;
         this.type = type;
+        var timeout = 3000;
+        if (angular.isDefined(time)){
+            timeout = time;
+        }
         $timeout(function(){
             obj.hide();
-        }, 3000, true, obj);
+        }, timeout, true, obj);
     };
     
     alert.hide = function(){
@@ -166,6 +170,13 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
         $scope.loadReportList();
     });
     
+    $scope.$watch(function(){return reportService.errorLoadingDefault;}, function(newVal, oldVal){
+        if (newVal){
+            var msg = locale.getString('spatial.map_error_loading_default_report');
+            $scope.alert.show(msg, 'error');
+        }
+    })
+    
     $scope.loadReportList = function(){
         $scope.isLoading = true;
         reportRestService.getReportsList().then(getReportsListSuccess, getReportsListError);
@@ -208,6 +219,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     	var rep = $scope.displayedRecords[resp.index];
     	if (reportService.id === rep.id){
     	    reportService.resetReport();
+    	    reportService.liveviewEnabled = false;
     	}
     	
         if (index !== -1) {
@@ -225,7 +237,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
         $anchorScroll();
         var searchString = 'spatial.' + error.msg;
         var msg = locale.getString(searchString);
-        $scope.alert.show(msg, 'error');
+        $scope.alert.show(msg, 'error', 8000);
     };
     
     //Finally we check if we should automatically load reports

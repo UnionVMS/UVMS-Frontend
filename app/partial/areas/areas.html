@@ -1,16 +1,7 @@
 <div class="areaManagement">
 	<div class="container containerWithTopBottomPadding">
-		<div class="alertContainer" ng-show="alert.hasAlert">
-			<div class="alert alert-container" role="alert" ng-class="{'alert-danger': alert.hasError, 'alert-success': alert.hasSuccess, 'alert-warning': alert.hasWarning}">
-				<span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasError"></span>
-				<span class="fa fa-check-circle" aria-hidden="true" ng-show="alert.hasSuccess"></span>
-				<span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasWarning"></span>
-				<span class="alert-message">
-					<span>{{alert.alertMessage}}</span>          
-				</span>
-		    </div>
-		</div>
-        <div class="areaCard">
+		<alert-modal ng-model="alert.hasAlert" display-msg="alert.alertMessage" target-el-id="area-management-container" display-type="alert.alertType" timeout="4000"></alert-modal>
+        <div class="areaCard" id="area-management-container">
         	<!-- LOADING OVERLAY -->
         	<div class="col-md-12 area-loading" ng-show="alert.isLoading">
         		<div class="area-loading-msg">

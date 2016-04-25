@@ -48,12 +48,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
                $scope.selectedMenu = 'REPORTS';
                $scope.repServ.liveviewEnabled = false;
                $scope.repServ.isReportExecuting = false;
-               $scope.repServ.hasError = true;
                $scope.repServ.errorLoadingDefault = true;
-               $timeout(function(){
-                   $scope.repServ.hasError = false;
-                   $scope.repServ.errorLoadingDefault = false;
-               }, 8000);
            });
        }
        $scope.headerMenus = setMenus();

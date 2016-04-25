@@ -1,0 +1,9 @@
+<div class="modal-body">
+	<div class="alert alert-{{data.type}}">
+		<span ng-show="data.type !== undefined" class="fa" ng-class="{'fa-exclamation-circle': data.type === 'danger' || data.type === 'warning', 'fa-check-circle': data.type === 'success'}" aria-hidden="true"></span>
+		<button type="button" class="close" ng-click="data.close()" >
+			<span class="glyphicon glyphicon-remove-circle"></span>
+		</button>
+   		<span class="alert-message">{{data.msg}}</span>
+	</div>
+</div>
