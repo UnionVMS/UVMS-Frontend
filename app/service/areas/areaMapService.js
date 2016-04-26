@@ -448,6 +448,10 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
 	    interactions.push(new ol.interaction.KeyboardZoom());
 	    interactions.push(new ol.interaction.DoubleClickZoom());
 	    interactions.push(new ol.interaction.DragZoom());
+	    interactions.push(new ol.interaction.DragZoom({
+	        out: true,
+            condition: ol.events.condition.altKeyOnly
+	    }));
 	    interactions.push(new ol.interaction.DragPan());
 	    interactions.push(new ol.interaction.KeyboardPan());
 	    

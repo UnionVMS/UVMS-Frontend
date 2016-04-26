@@ -175,7 +175,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
             var msg = locale.getString('spatial.map_error_loading_default_report');
             $scope.alert.show(msg, 'error');
         }
-    })
+    });
     
     $scope.loadReportList = function(){
         $scope.isLoading = true;

@@ -11,23 +11,21 @@ angular.module('unionvmsWeb').directive('alertModal', function($modal, $timeout)
 		},
 		require: 'ngModel',
 		link: function(scope, element, attrs, ngModel) {
+		    var resetModalStatus = function(){
+		        scope.ngModel = false;
+                scope.displayType = undefined;
+                scope.displayMsg = undefined;
+		    };
+		    
 		    var modalCtrl = function ($scope, $modalInstance){
 		        $scope.data = {
 		            msg: scope.displayMsg,
 		            type: scope.displayType,
 		            close: function(){
-		                scope.ngModel = false;
-		                scope.displayType = undefined;
-	                    scope.displayMsg = undefined;
+		                resetModalStatus();
 		                $modalInstance.close();
 		            }
 		        };
-		        
-		        if (angular.isDefined(scope.timeout)){
-		            $timeout(function(){
-		                $modalInstance.close();
-		            }, parseInt(scope.timeout), true, $modalInstance);
-		        }
 		    };
 		    
 		    scope.open = function(){
@@ -47,6 +45,13 @@ angular.module('unionvmsWeb').directive('alertModal', function($modal, $timeout)
 		        modalInstance.rendered.then(function(){
 		            angular.element('.alert-modal-content').appendTo('#' + scope.targetElId);
 		        });
+		        
+		        if (angular.isDefined(scope.timeout)){
+                    $timeout(function(){
+                        resetModalStatus();
+                        modalInstance.close();
+                    }, parseInt(scope.timeout), true, modalInstance);
+                }
 		    };
 		    
 		    scope.$watch('ngModel', function(newVal){
