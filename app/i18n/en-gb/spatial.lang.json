@@ -23,6 +23,7 @@
 	"map_tip_print": "Export map",
 	"map_tip_refresh_report": "Refresh report",
 	"map_tip_bookmarks": "Bookmarks",
+	"map_tip_gazetteer": "Search places",
 	"map_tip_enable": "Enable",
 	"map_tip_disable": "Disable",
 	"map_tip_graticule": "map graticule",

@@ -11,6 +11,7 @@
                 </div>
                 <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
                 	<button type="button" id="bookmarks-btn" ng-class="{active: activeControl === 'bookmarks'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_bookmarks' | i18n }}" ng-click="toggleToolbarBtn('bookmarks')"><span class="fa fa-bookmark"></span></button>
+                	<button type="button" id="gazetteer-btn" ng-class="{active: activeControl === 'gazetteer'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_gazetteer' | i18n }}" ng-click="toggleToolbarBtn('gazetteer')"><span class="fa fa-binoculars"></span></button>
                     <button type="button" id="measure-config-btn" ng-class="{active: activeControl === 'measure'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_measure_distance' | i18n }}" ng-click="toggleToolbarBtn('measure')" ng-show="tbControl.measure"><span class="fa fa-arrows-h"></span></button>
                     <button type="button" id="map-fish-print-config-btn" ng-class="{active: activeControl === 'mapFishPrint'}" class="btn btn-default btn-toolbar" title="{{'spatial.mapfish_tip_print' | i18n }}" ng-click="toggleToolbarBtn('mapFishPrint')" ng-show="mapFish.isDeployed && isAllowed('Reporting', 'PRINT_REPORT')"><span class="fa fa-print"></span></button>
                     <!-- <button type="button" ng-class="{active: activeControl === 'other'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_measure_distance' | i18n }}" ng-click="toggleToolbarBtn('other')">Another Control</button> -->
@@ -24,6 +25,7 @@
         </div>
         <ng-form name="mapForm">
 	        <div id="map" class="map" tabIndex="0">
+	        	<gazetteer-search ng-if="showGazetteer" placeholder="{{'spatial.map_tip_gazetteer' | i18n}}"></gazetteer-search>
 	        	<div id="bookmarks" class="map-toolbar-control-panel" ng-show="showBookmarksWin">
         			<div class="col-md-12 map-control-subpanel">
 	                	<span class="fa fa-times drag-icon pull-right" ng-click="toggleToolbarBtn('bookmarks')"></span>

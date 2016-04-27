@@ -2,6 +2,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.activeControl = '';
     $scope.showMeasureConfigWin = false;
     $scope.showMapFishConfigWin = false;
+    $scope.showGazetteer = false;
     $scope.winExpanded = true;
     $scope.measureConfigs = spatialHelperService.measure;
     $scope.mapFish = MapFish;
@@ -377,6 +378,22 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         $scope.measureConfigs.speed = undefined;
         $scope.measureConfigs.startDate = undefined;
         $scope.measureConfigs.disabled = false;
+    };
+    
+    //Gazetteer control
+    $scope.gazetteerEnable = function(){
+        $scope.showGazetteer = true;
+        $timeout(function(){
+            $('.gazetteer-container').find('input').focus();
+        });
+    };
+    
+    $scope.gazetteerDisable = function(){
+        $scope.showGazetteer = false;
+        var layer = mapService.getLayerByType('nominatim');
+        if (angular.isDefined(layer)){
+            mapService.map.removeLayer(layer);
+        }
     };
 
     //Map graticule

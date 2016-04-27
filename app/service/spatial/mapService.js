@@ -690,6 +690,22 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         layer.addFeature(printFeature);
     };
     
+    //Nominatim layer for gazetteer search results
+    ms.addNominatimLayer = function(){
+        var layer = new ol.layer.Vector({
+            type: 'nominatim',
+            isBaseLayer: false,
+            source: new ol.source.Vector({
+                features: []
+            }),
+            style: ms.setNominatimStyle
+        });
+        
+        ms.map.addLayer(layer);
+        
+        return layer;
+    };
+    
     //Add highlight layer
     ms.addFeatureOverlay = function(){
         var layer = new ol.layer.Vector({
@@ -815,6 +831,28 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         styles.push(pointStyle);
         
         return styles;
+    };
+    
+    //Nominatim styles
+    ms.setNominatimStyle = function(feature, resolution){
+        var style = new ol.style.Style({
+            text: new ol.style.Text({
+                text: '\uf041',
+                font: 'normal 40px FontAwesome',
+                offsetY: 4,
+                textBaseline: 'bottom',
+                textAlign: 'center',
+                fill: new ol.style.Fill({
+                    color: '#089FD7'
+                }),
+                stroke: new ol.style.Stroke({
+                    color: '#ffffff',
+                    width: 5
+                })
+            })
+        });
+
+        return [style];
     };
 
     //VMS styles

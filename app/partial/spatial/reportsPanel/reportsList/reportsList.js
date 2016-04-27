@@ -79,7 +79,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     $scope.makeDefault = function(index){
         var repId = $scope.displayedRecords[index].id;
         var scopeRepObj = spatialHelperService.getDefaultReport(false);
-        if (angular.isDefined(scopeRepObj) && scopeRepObj.id !== 0){
+        if (angular.isDefined(scopeRepObj) && !isNaN(scopeRepObj.id) && scopeRepObj.id !== 0){
             var options, finalRepId;
             if (scopeRepObj.id !== repId){
                 options = {

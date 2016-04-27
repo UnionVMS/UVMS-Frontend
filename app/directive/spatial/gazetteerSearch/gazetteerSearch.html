@@ -1,0 +1,31 @@
+<div class="gazetteer-container col-md-6">
+	<div>
+		<input type="text" class="form-control" ng-class="{'no-border-bottom': searchResults.length > 0}" placeholder="{{placeholder}}" ng-model="searchStr"/>
+		<span class="loading" ng-show="isLoading || searchResults.length > 0"><i ng-click="clearSearch()" class="fa" ng-class="{'fa-spinner fa-spin': isLoading, 'fa-times': searchResults.length > 0}"></i></span>
+	</div>
+	<div class="col-md-12 results-list" ng-show="searchResults.length > 0" ng-class="{'results-list-visible': isWinVisible}">
+		<table class="table">
+			<tr class="results-row" ng-repeat="item in searchResults" ng-click="zoomTo(item)" ng-init="item.expanded = false">
+				<td class="icon-container">
+					<i class="fa fa-map-marker"></i>
+				</td>
+				<td ng-class="{'results-content': !item.expanded}">
+					<span>{{item.display_name}}</span>
+					<div ng-show="item.expanded" class="detailed-content">
+						<span ng-show="item.address.country"><b>{{item.address.country}}</b></span>
+						<ul>
+							<li>{{item.class}}</li>
+							<li>{{item.type}}</li>
+						</ul>
+					</div>
+				</td>
+				<td class="info-container" ng-click="toggleRow(item, $event)">
+					<i class="fa" ng-class="{'fa-plus': !item.expanded, 'fa-minus': item.expanded}"></i>
+				</td>
+			</tr>	
+		</table>
+	</div>
+	<div class="col-md-12 text-center window-expander" ng-show="searchResults.length > 0" ng-click="isWinVisible = !isWinVisible">
+   		<span class="fa" ng-class="{'fa-angle-double-down': !isWinVisible, 'fa-angle-double-up': isWinVisible}"></span>
+   	</div>
+</div>
