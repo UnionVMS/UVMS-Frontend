@@ -28,8 +28,9 @@
 	        	<gazetteer-search ng-if="showGazetteer" placeholder="{{'spatial.map_tip_gazetteer' | i18n}}"></gazetteer-search>
 	        	<div id="bookmarks" class="map-toolbar-control-panel" ng-show="showBookmarksWin">
         			<div class="col-md-12 map-control-subpanel">
+        				<span class="title">{{'spatial.map_tip_bookmarks' | i18n}}</span>
 	                	<span class="fa fa-times drag-icon pull-right" ng-click="toggleToolbarBtn('bookmarks')"></span>
-                        <span class="fa fa-bullseye drag-icon pull-right"></span>
+                        <span class="fa fa-arrows drag-icon pull-right"></span>
                         <span class="fa drag-icon pull-right" ng-class="{'fa-chevron-up': winExpanded, 'fa-chevron-down': !winExpanded}" ng-click="toggleWinStatus()"></span>
                     </div>
 	        		<div class="col-md-12 book-panel-body panel-collapsible-body" ng-class="{'panel-body-visible': winExpanded}">
@@ -89,9 +90,10 @@
 	            </div>
 	            <div id="measure-config" class="map-toolbar-control-panel" ng-show="showMeasureConfigWin">
 	                <div class="row">
-	                    <div class="col-md-12">
+	                    <div class="col-md-12 window-top-tools">
+	                    	<span class="title">{{'spatial.map_measure_window_title' | i18n}}</span>
 	                    	<span class="fa fa-times drag-icon pull-right" ng-click="toggleToolbarBtn('measure')"></span>
-	                        <span class="fa fa-bullseye drag-icon pull-right"></span>
+	                        <span class="fa fa-arrows drag-icon pull-right"></span>
 	                        <span class="fa drag-icon pull-right" ng-class="{'fa-chevron-up': winExpanded, 'fa-chevron-down': !winExpanded}" ng-click="toggleWinStatus()"></span>
 	                    </div>
 	                </div>
@@ -115,9 +117,10 @@
 	            </div>
 	            <div id="map-fish-print-config" class="map-toolbar-control-panel" ng-show="showMapFishConfigWin">
 	                <div class="row">
-	                    <div class="col-md-12 withBottomPadding">
+	                    <div class="col-md-12 window-top-tools">
+	                    	<span class="title title-export">{{'spatial.map_print_window_title' | i18n}}</span>
 	                    	<span class="fa fa-times drag-icon pull-right" ng-click="toggleToolbarBtn('mapFishPrint')"></span>
-	                        <span class="fa fa-bullseye drag-icon pull-right"></span>
+	                        <span class="fa fa-arrows drag-icon pull-right"></span>
 	                        <span class="fa drag-icon pull-right" ng-class="{'fa-chevron-up': winExpanded, 'fa-chevron-down': !winExpanded}" ng-click="toggleWinStatus()"></span>
 	                    </div>
 	                </div>

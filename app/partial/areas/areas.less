@@ -11,6 +11,7 @@
 		}
 	}
 	.areaCard {
+		position: relative;
 		background-color: white;
     border: 1px solid #dddddd;
     border-top: 5px solid #dddddd;
@@ -24,11 +25,13 @@
 		width: 100%;
 	}
 	.area-loading {
+		position: absolute;;
 		background-color: rgba(221, 221, 221, 0.4);
-		position: fixed;
 		z-index: 100;
-		display: table;
-		height: calc(~'100% - 220px');
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
 		text-align: center;
 		.area-loading-msg {
 			position: absolute;

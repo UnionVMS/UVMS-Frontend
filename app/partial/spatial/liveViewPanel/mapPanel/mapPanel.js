@@ -341,7 +341,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.setWinDraggable = function(win, buttonPosition){
         if (win.draggable('instance') === undefined){
             win.draggable({
-                handle: 'span.fa-bullseye',
+                handle: 'span.fa-arrows',
                 containment: '.map-container',
                 scroll: false
             });

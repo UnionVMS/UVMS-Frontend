@@ -5,11 +5,13 @@ angular.module('unionvmsWeb').factory('mapAlarmsService',function(mapService, $r
     var getPositionsData = function(){
         var mapExtent = mapService.map.getView().calculateExtent(mapService.map.getSize());
         var layer = mapService.getLayerByType('vmspos');
-        var src = layer.getSource();
         
-        var features = src.getFeaturesInExtent(mapExtent);
         requestRecords = [];
-        loopClusterFeatures(features);
+        if (angular.isDefined(layer)){
+            var src = layer.getSource();
+            var features = src.getFeaturesInExtent(mapExtent);
+            loopClusterFeatures(features);
+        }
         
         return requestRecords;
     };
