@@ -37,7 +37,7 @@
 					</div>
 					<div class="form-group col-md-2" ng-class="{'has-error': defaultForm.lineWidth.$error.hasError && (defaultForm.lineWidth.$dirty || submitedWithErrors)}">
 						<label>{{'spatial.line_width' | i18n}}</label>
-						<input class="form-control" ng-model="configModel.segmentStyle.lineWidth" ng-required="true" name="lineWidth" type="number" ng-change="validateLineWidth();"/>
+						<numeric-input class="form-control" ng-model="configModel.segmentStyle.lineWidth" ng-required="true" name="lineWidth" ng-change="validateLineWidth();"></numeric-input>
 						<div class="belowErrorMessages" ng-messages="defaultForm.lineWidth.$error" ng-show="defaultForm.lineWidth.$dirty || submitedWithErrors">
 							<div ng-message="requiredField">{{'spatial.required_field_error_message' | i18n }}</div>
 							<div ng-message="rangeError">{{'spatial.invalid_range_error_message' | i18n }}</div>

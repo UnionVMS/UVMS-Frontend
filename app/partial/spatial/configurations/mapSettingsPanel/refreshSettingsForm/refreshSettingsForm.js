@@ -11,6 +11,11 @@ angular.module('unionvmsWeb').controller('RefreshsettingsformCtrl',function($sco
 	
 	$scope.validateRefreshRate = function(){
 		if($scope.configModel.mapSettings && $scope.configModel.mapSettings.refreshStatus === true){
+			if($scope.configModel.mapSettings && ($scope.configModel.mapSettings.refreshRate === null || $scope.configModel.mapSettings.refreshRate === undefined)){
+				$scope.refreshSettingsForm.refreshRate.$setValidity('requiredField', false);
+			}else{
+				$scope.refreshSettingsForm.refreshRate.$setValidity('requiredField', true);
+			}
 			if($scope.configModel.mapSettings && $scope.configModel.mapSettings.refreshRate !== null && $scope.configModel.mapSettings.refreshRate < 1){
 				$scope.refreshSettingsForm.refreshRate.$setValidity('minField', false);
 			}else{
@@ -23,6 +28,7 @@ angular.module('unionvmsWeb').controller('RefreshsettingsformCtrl',function($sco
 		if(newVal === true){
 			$scope.validateRefreshRate();
 		}else{
+			$scope.refreshSettingsForm.refreshRate.$setValidity('requiredField', true);
 			$scope.refreshSettingsForm.refreshRate.$setValidity('minField', true);
 		}
 	});

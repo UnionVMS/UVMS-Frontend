@@ -146,7 +146,7 @@
 								<label for="pointx">{{'areas.long_coord_x' | i18n}}</label>
 							</div>
 							<div class="col-md-9 control-input">
-							    <input ng-model="userArea.centroidCoords[0]" name="pointx" type="number" class="form-control" step="any" ng-required="true">
+							    <numeric-input ng-model="userArea.centroidCoords[0]" name="pointx" class="form-control" step="any" ng-required="true"></numeric-input>
 							</div>
 						</div>
 						<!-- COORDINATE Y -->
@@ -155,7 +155,7 @@
 								<label for="pointy">{{'areas.long_coord_y' | i18n}}</label>
 							</div>
 							<div class="col-md-9 control-input">
-							    <input ng-model="userArea.centroidCoords[1]" name="pointy" type="number" class="form-control" step="any" ng-required="true">
+							    <numeric-input ng-model="userArea.centroidCoords[1]" name="pointy" class="form-control" step="any" ng-required="true"></numeric-input>
 							</div>
 						</div>
 						<!-- DISTANCE -->
@@ -164,7 +164,7 @@
 								<label for="radius">{{'areas.buffer_radius' | i18n}}</label>
 							</div>
 							<div class="col-md-4 control-input">
-							    <input ng-model="bufferRadius" name="radius" type="number" class="form-control" step="any" min="0" ng-required="true">
+							    <numeric-input ng-model="bufferRadius" name="radius" class="form-control" step="any" min="0" ng-required="true"></numeric-input>
 							</div>
 							<div class="col-md-5 control-input">
 							    <combobox name="distUnit" ng-model="selectedUnit" items="distUnits" components-with-scroll="'div.area-form-container'">
@@ -206,10 +206,10 @@
 					        	<div class="tr row" ng-repeat="coord in displayedCoords">
 					        		<div class="td col-md-1 coord-idx">{{$index}}</div>
 						        	<div class="td col-md-4 coord-right-margin" ng-class="{'has-error': (coordsForm.x_{{$index}}.$error.required || coordsForm.x_{{$index}}.$invalid) && coordsForm.x_{{$index}}.$dirty}">
-						        		<input type="number" name="x_{{$index}}" class="form-control" ng-required="true" ng-model="coord[0]" step="any"/>
+						        		<numeric-input name="x_{{$index}}" class="form-control" ng-required="true" ng-model="coord[0]" step="any"></numeric-input>
 						        	</div>
 						        	<div class="td col-md-4" ng-class="{'has-error': (coordsForm.y_{{$index}}.$error.required || coordsForm.y_{{$index}}.$invalid) && coordsForm.y_{{$index}}.$dirty}">
-						        		<input type="number" name="y_{{$index}}" class="form-control" ng-required="true" ng-model="coord[1]" step="any"/>
+						        		<numeric-input name="y_{{$index}}" class="form-control" ng-required="true" ng-model="coord[1]" step="any"></numeric-input>
 						        	</div>
 						        	<div class="td col-md-2 delete-coord">
 						        		<a ng-click="deleteCoordRow($index)" title="{{'areas.delete_coords_row' | i18n}}">

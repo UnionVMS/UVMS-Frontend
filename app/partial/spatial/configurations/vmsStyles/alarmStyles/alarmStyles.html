@@ -27,7 +27,7 @@
 				<div class="row col-md-12">
 					<div class="form-group col-md-2" ng-class="{'has-error': defaultForm.alarmSize.$invalid && (defaultForm.alarmSize.$dirty || submitedWithErrors)}">
 						<label>{{'spatial.size' | i18n}}</label>
-						<input class="form-control" ng-model="configModel.alarmStyle.size" ng-required="true" name="alarmSize" type="number" min="1" max="6" /> <!-- ng-change="validateLineWidth();" -->
+						<numeric-input class="form-control" ng-model="configModel.alarmStyle.size" ng-required="true" name="alarmSize" min="1" max="6" ></numeric-input> <!-- ng-change="validateLineWidth();" -->
 						<div class="belowErrorMessages" ng-messages="defaultForm.alarmSize.$error" ng-show="defaultForm.alarmSize.$dirty || submitedWithErrors">
 							<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 							<div ng-message="number">{{'spatial.not_numeric_error_message' | i18n }}</div>

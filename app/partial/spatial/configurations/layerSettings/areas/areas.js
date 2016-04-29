@@ -10,7 +10,7 @@ angular.module('unionvmsWeb').controller('AreaslayersCtrl',function($scope,spati
 		                        "allowedTypes": [
 		                                         "sysarea"
 		                                       ],
-		                        "items": undefined
+		                        "items": []
 		                    }
 		              	]
 				},
@@ -23,7 +23,7 @@ angular.module('unionvmsWeb').controller('AreaslayersCtrl',function($scope,spati
 	 	                        "allowedTypes": [
 	 	                                         "userarea"
 	 	                                       ],
-	 	                        "items": undefined
+	 	                        "items": []
 	 	                    }
 	 	              	]
 	 			},
@@ -36,7 +36,7 @@ angular.module('unionvmsWeb').controller('AreaslayersCtrl',function($scope,spati
 	 	                        "allowedTypes": [
 	 	                                         "areagroup"
 	 	                                       ],
-	 	                        "items": undefined
+	 	                        "items": []
 	 	                    }
 	 	              	]
 	 			}
@@ -72,15 +72,16 @@ angular.module('unionvmsWeb').controller('AreaslayersCtrl',function($scope,spati
 				$scope.isLoadingUserAreas = false;
 			});
 			spatialConfigRestService.getAreaGroup().then(function(response){
-				angular.copy(response,$scope.areas.containers[2].lists[0].items);
-				angular.forEach($scope.areas.containers[2].lists[0].items, function(item) {
-					item.subType = response[0].subType;
-		    		item.serviceLayerId = "" + response[0].serviceLayerId;
-		    		item.areaType = 'areagroup';
-		    		item.areaGroupName = response[0].data[0].name;
-		    		item.name = response[0].data[0].name;
-		    		delete response[0].data;
-		    	});
+				if(angular.isDefined(response[0].data) && response[0].data.length){
+					angular.copy(response[0].data,$scope.areas.containers[2].lists[0].items);
+					for(var i=0;i<$scope.areas.containers[2].lists[0].items.length;i++){
+						$scope.areas.containers[2].lists[0].items[i].subType = response[0].subType;
+						$scope.areas.containers[2].lists[0].items[i].serviceLayerId = "" + response[0].serviceLayerId;
+						$scope.areas.containers[2].lists[0].items[i].areaType = 'areagroup';
+						$scope.areas.containers[2].lists[0].items[i].areaGroupName = response[0].data[i].name;
+						$scope.areas.containers[2].lists[0].items[i].name = response[0].data[i].name;
+					}
+				}
 				$scope.isLoadingAreaGroups = false;
 			});
 		}

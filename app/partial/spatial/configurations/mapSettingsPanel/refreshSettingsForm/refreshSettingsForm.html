@@ -5,13 +5,13 @@
 				<label class="switchLabel">{{'spatial.preferences_auto_refresh_status' | i18n }}</label>
 				<toggle-switch ng-model="configModel.mapSettings.refreshStatus"></toggle-switch>
 			</div>
-			<div class="form-group col-md-4 noPadding" ng-class="{'has-error': (refreshSettingsForm.refreshRate.$error.requiredField || refreshSettingsForm.refreshRate.$error.minField) && (refreshSettingsForm.refreshRate.$dirty || submitedWithErrors)}">
+			<div class="form-group col-md-4 noPadding" ng-class="{'has-error': refreshSettingsForm.refreshRate.$invalid && (refreshSettingsForm.refreshRate.$dirty || submitedWithErrors)}">
 				<label>
 					{{'spatial.preferences_auto_refresh_rate' | i18n }}
 				</label>
-				<input class="form-control" ng-model="configModel.mapSettings.refreshRate" name="refreshRate" type="number" step="0.1" ng-change="validateRefreshRate()">
+				<numeric-input class="form-control" ng-model="configModel.mapSettings.refreshRate" name="refreshRate" step="0.1" ng-change="validateRefreshRate()"></numeric-input>
 				<div class="innerErrorMessagesLabelTimer" ng-messages="refreshSettingsForm.refreshRate.$error" ng-show="refreshSettingsForm.refreshRate.$dirty || submitedWithErrors">
-					<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
+					<div ng-message="requiredField">{{'spatial.required_field_error_message' | i18n }}</div>
 					<div ng-message="minField">{{'spatial.min_value_1_error_message' | i18n }}</div>
 				</div>
 			</div>
