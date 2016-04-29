@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('spatialConfigAlertService',function($timeout) {
+angular.module('unionvmsWeb').factory('spatialConfigAlertService',function($timeout,comboboxService) {
 
 	var spatialConfigAlertService = {
 	    hasAlert: false,
@@ -12,6 +12,7 @@ angular.module('unionvmsWeb').factory('spatialConfigAlertService',function($time
 	        	timeoutInMilliSeconds = 3000;
 	        }
 	        $timeout(function(){
+	        	comboboxService.closeCurrentCombo();
 	            alertObj.hasAlert = false;
 	            alertObj.hasError = false;
 	            alertObj.hasSuccess = false;
