@@ -14,10 +14,17 @@ angular.module('unionvmsWeb').factory('spatialHelperService',function(userServic
 	        speed: undefined,
 	        startDate: undefined,
 	        disabled: false
+	    },
+	    buffer: {
+	        isSelecting: false,
+	        layer: 'vmspos',
+	        units: 'm',
+	        radius: undefined,
+	        features: []
 	    }
 	};
 	
-	
+	//Default reports
 	var getDefaultReportFromUserService = function(context){
 	    var finalObj;
         var userPref = context.preferences;
@@ -60,7 +67,8 @@ angular.module('unionvmsWeb').factory('spatialHelperService',function(userServic
             scopeObj.id = parseInt(id);
         }
     };
-	
+    
+    //Toolbar controls
 	spServ.setToolbarControls = function(config){
 	    for (var i = 0; i < config.map.tbControl.length; i++){
 	        spServ.tbControl[config.map.tbControl[i].type] = true;

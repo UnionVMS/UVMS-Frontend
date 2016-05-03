@@ -313,7 +313,11 @@
 	}
 }
 
-#popup-content {
+.ol-popup-details-btn {
+	//position: absolute;
+}
+
+.ol-popup-header {
 	.header {
 		font-size: 14px;
 		font-weight: bold;
@@ -321,8 +325,14 @@
 		color: #777;
 		background-color: white;
 		margin-right: 15px;
+		line-height: 30px;
 	}
+	.btn-container {
+		display: inline-block;
+	}
+}
 
+#popup-content {
 	.name {
 		font-size: 14px;
 		font-weight: bold;
@@ -449,6 +459,19 @@
 		font-weight: bold;
 		&.title-export {
 			margin-left: 10px;
+		}
+	}
+}
+
+#buffer-config {
+	width: 250px;
+	.noPadding {
+		padding: 0;
+		&.withLeftPadding{
+			padding-left: 15px;
+		}
+		&.withRightPadding {
+			padding-right: 10px;
 		}
 	}
 }

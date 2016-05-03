@@ -1301,6 +1301,20 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         
         return [style];
     };
+    
+    //Buffering vector data
+    /*ms.addVmsSelectCtrl = function(type){
+        //TODO Check if interaction is there
+        var layer = ms.getLayerByType('vmspos');
+        if (angular.isDefined(layer)){
+            var sel = new ol.interaction.Select({
+                layers: [layer],
+                condition: ol.events.condition.click
+            });
+            
+            ms.map.addInteraction(sel);
+        }
+    };*/
 
     //MAP FUNCTIONS
 	//Clear map before running a new report
@@ -2351,6 +2365,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             ms.overlay.set('fromCluster', fromCluster, true);
             if (ms.activeLayerType === 'vmspos'){
                 ms.overlay.set('featureId', data.id, true);
+                ms.overlay.set('vesselId', data.vesselId, true);
+                ms.overlay.set('vesselName', data.vesselName, true);
             } else {
                 ms.overlay.set('featureId', undefined, true);
             }
@@ -2408,10 +2424,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
         
         return {
-            windowTitle: locale.getString('spatial.popup_positions_title'),
             showTitles: ms.popupVisibility.positionsTitles,
             position: data,
             id: id,
+            vesselName: feature.name,
+            vesselId: feature.connectionId,
             getTitle: function(){
                 return this.title;
             },
@@ -2497,7 +2514,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
         
         return {
-            windowTitle: locale.getString('spatial.popup_segments_title'),
             showTitles: ms.popupVisibility.segmentsTitles,
             segment: data,
             getTitle: function(){
@@ -2564,7 +2580,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var srcData = ms.formatAlarmDataForPopup(feature);
         
         return {
-            positionTitle: locale.getString('spatial.popup_positions_title'),
+            //positionTitle: locale.getString('spatial.popup_positions_title'),
             alarmTitle: locale.getString('spatial.popup_alarms_title'),
             titles: titles,
             alarm: srcData

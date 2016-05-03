@@ -1,15 +1,16 @@
-angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, mapService, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window, projectionService){
+angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, $modal, mapService, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window, projectionService){
     $scope.activeControl = '';
     $scope.showMeasureConfigWin = false;
     $scope.showMapFishConfigWin = false;
+    $scope.showBufferConfigWin = false;
     $scope.showGazetteer = false;
     $scope.winExpanded = true;
     $scope.measureConfigs = spatialHelperService.measure;
+    //$scope.bufferConfigs = spatialHelperService.buffer;
     $scope.mapFish = MapFish;
     $scope.tbControl = spatialHelperService.tbControl;
     $scope.refresh = reportService.refresh;
     $scope.mapFishLocalConfig = {};
-    //$scope.popupSegments = mapService.popupSegRecContainer;
     $scope.popupRecContainer = {};
     $scope.bookmarksByPage = 3;
     $scope.bookmarkNew = {};
@@ -20,6 +21,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.projections = projectionService;
     $scope.graticuleActivated = false;
     $scope.graticuleTip = [locale.getString('spatial.map_tip_enable'), locale.getString('spatial.map_tip_graticule')].join(' ');
+    $scope.infoLayer = undefined;
     
     //Comboboxes
     $scope.measuringUnits = [];
@@ -35,6 +37,11 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.printLayouts = [];
     $scope.printLayouts.push({"text": locale.getString('spatial.map_export_layout_portrait'), "code": "portrait"});
     $scope.printLayouts.push({"text": locale.getString('spatial.map_export_layout_landscape'), "code": "landscape"});
+    
+    /*$scope.bufferLayers = [];
+    $scope.bufferLayers.push({"text": locale.getString('spatial.map_buffer_layers_vmspos'), "code": "vmspos"});
+    $scope.bufferLayers.push({"text": locale.getString('spatial.map_buffer_layers_vmsseg'), "code": "vmspos"});
+    $scope.bufferLayers.push({"text": locale.getString('spatial.map_buffer_layers_vmstrack'), "code": "vmstrack"});*/
     
     //Close identify popup
     $scope.closePopup = function(){
@@ -55,6 +62,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     //Watch to change the source for the popup paginator
     $scope.$watch(function(){return mapService.activeLayerType;}, function(newVal, oldVal){
         if (angular.isDefined(newVal) && newVal !== oldVal){
+            $scope.infoLayer = newVal;
             if (newVal === 'vmsseg'){
                 $scope.popupRecContainer = mapService.popupSegRecContainer;
             } else if (newVal === 'alarms'){
@@ -62,6 +70,54 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
             }
         }
     });
+    
+    //Get vessel details from within the positions popup
+    $scope.getVesselDetails = function(){
+        var assetId = mapService.overlay.get('vesselId');
+        if (angular.isDefined(assetId)){
+            var modalInstance = $modal.open({
+                templateUrl: 'partial/spatial/reportsPanel/reportForm/vesselFieldset/detailsModal/detailsModal.html',
+                controller: 'DetailsmodalCtrl',
+                size: '',
+                resolve: {
+                    itemForDetail: function(){
+                        var item = {
+                            type: 'asset',
+                            name: mapService.overlay.get('vesselName'),
+                            guid: assetId
+                        };
+                        return item;
+                    }
+                }
+            });
+        }
+        
+        
+        $scope.viewDetails = function(idx, source){
+            var modalInstance = $modal.open({
+                templateUrl: 'partial/spatial/reportsPanel/reportForm/vesselFieldset/detailsModal/detailsModal.html',
+                controller: 'DetailsmodalCtrl',
+                size: '',
+                resolve: {
+                    itemForDetail: function(){
+                        if (source === 'SEARCH'){
+                            idx = $scope.shared.vessels.indexOf($scope.displayedRecords[idx]);
+                            var item = $scope.shared.vessels[idx];
+                            item.type = $scope.shared.vesselSearchBy;
+                            if (item.type === 'asset'){
+                                item.guid = $scope.shared.vessels[idx].vesselId.guid;
+                            }
+                            
+                            return item;
+                        } else {
+                            idx = $scope.report.vesselsSelection.indexOf($scope.displayedRecordsSelection[idx]);
+                            return $scope.report.vesselsSelection[idx];
+                        }
+                    }
+                }
+            });
+        };
+    }; 
     
     //Check for permissions
     $scope.checkSpatialConfigPermission = function(){
@@ -357,6 +413,27 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.toggleWinStatus = function(){
         $scope.winExpanded = !$scope.winExpanded; 
     };
+    
+    //Buffer control
+    /*$scope.bufferEnable = function(){
+        $scope.openBufferConfigWin();
+    };
+    
+    $scope.openBufferConfigWin = function(){
+        $scope.showBufferConfigWin = true;
+        var win = angular.element('#buffer-config');
+        var btnPos = angular.element('#buffer-config-btn').offset();
+        $scope.setWinDraggable(win, btnPos);
+    };
+    
+    $scope.toggleSelectFeatures = function(){
+        $scope.bufferConfigs.isSelecting = true;
+        mapService.addVmsSelectCtrl();
+    };
+    
+    $scope.bufferDisable = function(){
+        $scope.showBufferConfigWin = false;
+    };*/
 
     //Measure control
     $scope.measureEnable = function(){
