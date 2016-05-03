@@ -41,11 +41,11 @@
 												<div class="fa fa-exclamation-circle"></div>
 											</div>
 											<div ng-messages="positionSecForm.movMinSpeed.$error" ng-show="positionSecForm.movMinSpeed.$invalid && submitingReport === true">
-												<div ng-message="number">{{'spatial.reports_form_vms_mov_speed_range' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
+												<div ng-message="invalidNumber">{{'spatial.reports_form_vms_mov_speed_range' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
 												<div ng-message="minError">{{'spatial.reports_form_vms_mov_speed_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
 											</div>
 											<div ng-messages="positionSecForm.movMaxSpeed.$error" ng-show="positionSecForm.movMinSpeed.$valid && positionSecForm.movMaxSpeed.$invalid && submitingReport === true">
-												<div ng-message="number">{{'spatial.reports_form_vms_mov_speed_range' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
+												<div ng-message="invalidNumber">{{'spatial.reports_form_vms_mov_speed_range' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
 												<div ng-message="minError">{{'spatial.reports_form_vms_mov_speed_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
 												<div ng-message="maxError">{{'spatial.reports_form_vms_mov_speed_range' | i18n | uppercase }} {{'spatial.max_error_message' | i18n }}</div>
 											</div>
@@ -93,20 +93,20 @@
 												<div class="fa fa-exclamation-circle"></div>
 											</div>
 											<div ng-messages="segmentSecForm.segMinSpeed.$error" ng-show="segmentSecForm.segMinSpeed.$invalid && submitingReport === true">
-												<div ng-message="number">{{'spatial.reports_form_vms_seg_speed_range' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
+												<div ng-message="invalidNumber">{{'spatial.reports_form_vms_seg_speed_range' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
 												<div ng-message="minError">{{'spatial.reports_form_vms_seg_speed_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
 											</div>
 											<div ng-messages="segmentSecForm.segMaxSpeed.$error" ng-show="segmentSecForm.segMinSpeed.$valid && segmentSecForm.segMaxSpeed.$invalid && submitingReport === true">
-												<div ng-message="number">{{'spatial.reports_form_vms_seg_speed_range' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
+												<div ng-message="invalidNumber">{{'spatial.reports_form_vms_seg_speed_range' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
 												<div ng-message="minError">{{'spatial.reports_form_vms_seg_speed_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
 												<div ng-message="maxError">{{'spatial.reports_form_vms_seg_speed_range' | i18n | uppercase }} {{'spatial.max_error_message' | i18n }}</div>
 											</div>
 											<div ng-messages="segmentSecForm.segMinDuration.$error" ng-show="segmentSecForm.segMinSpeed.$valid && segmentSecForm.segMaxSpeed.$valid && segmentSecForm.segMinDuration.$invalid && submitingReport === true">
-												<div ng-message="number">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
+												<div ng-message="invalidNumber">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
 												<div ng-message="minError">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
 											</div>
 											<div ng-messages="segmentSecForm.segMaxDuration.$error" ng-show="segmentSecForm.segMinSpeed.$valid && segmentSecForm.segMaxSpeed.$valid && segmentSecForm.segMinDuration.$valid && segmentSecForm.segMaxDuration.$invalid && submitingReport === true">
-												<div ng-message="number">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
+												<div ng-message="invalidNumber">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
 												<div ng-message="minError">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
 												<div ng-message="maxError">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.max_error_message' | i18n }}</div>
 											</div>
@@ -172,20 +172,20 @@
 												<div class="fa fa-exclamation-circle"></div>
 											</div>
 											<div ng-messages="trackSecForm.trkMinTime.$error" ng-show="trackSecForm.trkMinTime.$invalid && submitingReport === true">
-												<div ng-message="number">{{'spatial.reports_form_vms_tracks_time_at_sea' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
+												<div ng-message="invalidNumber">{{'spatial.reports_form_vms_tracks_time_at_sea' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
 												<div ng-message="minError">{{'spatial.reports_form_vms_tracks_time_at_sea' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
 											</div>
 											<div ng-messages="trackSecForm.trkMaxTime.$error" ng-show="trackSecForm.trkMinTime.$valid && trackSecForm.trkMaxTime.$invalid && submitingReport === true">
-												<div ng-message="number">{{'spatial.reports_form_vms_tracks_time_at_sea' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
+												<div ng-message="invalidNumber">{{'spatial.reports_form_vms_tracks_time_at_sea' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
 												<div ng-message="minError">{{'spatial.reports_form_vms_tracks_time_at_sea' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
 												<div ng-message="maxError">{{'spatial.reports_form_vms_tracks_time_at_sea' | i18n | uppercase }} {{'spatial.max_error_message' | i18n }}</div>
 											</div>
 											<div ng-messages="trackSecForm.trkMinDuration.$error" ng-show="trackSecForm.trkMinTime.$valid && trackSecForm.trkMaxTime.$valid && trackSecForm.trkMinDuration.$invalid && submitingReport === true">
-												<div ng-message="number">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
+												<div ng-message="invalidNumber">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
 												<div ng-message="minError">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
 											</div>
 											<div ng-messages="trackSecForm.trkMaxDuration.$error" ng-show="trackSecForm.trkMinTime.$valid && trackSecForm.trkMaxTime.$valid && trackSecForm.trkMinDuration.$valid && trackSecForm.trkMaxDuration.$invalid && submitingReport === true">
-												<div ng-message="number">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
+												<div ng-message="invalidNumber">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.not_numeric_error_message' | i18n }}</div>
 												<div ng-message="minError">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.min_value_0_error_message' | i18n }}</div>
 												<div ng-message="maxError">{{'spatial.reports_form_vms_seg_duration_range' | i18n | uppercase }} {{'spatial.max_error_message' | i18n }}</div>
 											</div>

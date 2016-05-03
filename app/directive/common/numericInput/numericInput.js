@@ -265,7 +265,7 @@ angular.module('unionvmsWeb').directive('textInputStatus',function() {
 
 	    	  var updateFieldStatus = function(value) {
 	    		  var re = /^[-]?\d+(\.?\d*)?$/g;
-	    		  if(re.test(value)){
+	    		  if(re.test(value) || !value){
 	    			  ctrl.$setValidity('invalidNumber',true);
 	    		  }else{
 	    			  ctrl.$setValidity('invalidNumber',false);

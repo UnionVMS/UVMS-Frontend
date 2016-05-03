@@ -67,6 +67,7 @@
 			    					<numeric-input id="positionsCounter" class="form-control" min="0" name="xValue" ng-required="report.positionSelector !== 'all' && report" ng-model="report.xValue"></numeric-input>
 			    					<div class="innerErrorMessagesTimer positions-counter-input-msg" ng-messages="reportForm.reportBodyForm.xValue.$error" ng-show="(reportForm.reportBodyForm.xValue.$dirty || submitingReport === true) && reportForm.reportBodyForm.xValue.$invalid">
 										<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
+										<div ng-message="invalidNumber">{{'spatial.not_numeric_error_message' | i18n }}</div>
 										<div ng-message="min">{{'spatial.min_value_1_error_message' | i18n }}</div>
 									</div>
 				    			</div>

@@ -30,7 +30,7 @@
 						<numeric-input class="form-control" ng-model="configModel.alarmStyle.size" ng-required="true" name="alarmSize" min="1" max="6" ></numeric-input> <!-- ng-change="validateLineWidth();" -->
 						<div class="belowErrorMessages" ng-messages="defaultForm.alarmSize.$error" ng-show="defaultForm.alarmSize.$dirty || submitedWithErrors">
 							<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
-							<div ng-message="number">{{'spatial.not_numeric_error_message' | i18n }}</div>
+							<div ng-message="invalidNumber">{{'spatial.not_numeric_error_message' | i18n }}</div>
 							<div ng-message="min">{{'spatial.invalid_range_error_message_2' | i18n }}</div>
 							<div ng-message="max">{{'spatial.invalid_range_error_message_2' | i18n }}</div>
 						</div>
