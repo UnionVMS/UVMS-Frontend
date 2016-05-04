@@ -3,7 +3,11 @@
 		<div ng-if="record.visibility">
 			<span class="legend-text">{{ record.title }}</span>
 			<span class="legend-text-subtitle" ng-if="record.subtitle">{{record.subtitle}}</span>
-			<img class="legend-bottom-space" ng-src="{{record.url}}" ng-if="record.type === 'wms'" />
+			<img class="legend-bottom-space" ng-src="{{record.url}}" ng-if="record.type === 'wms' && !record.isLabelOnly" />
+			<div ng-if="record.type === 'wms' && record.isLabelOnly" class="legend-bottom-space-vector">
+				<span class="fa fa-font fontMargin labelStyle"></span>
+				<span class="legend-labels">{{'spatial.legend_panel_labels_only' | i18n}}</span>
+			</div>
 			<div ng-if="record.type === 'vmspos'" ng-repeat="style in record.styles" ng-class="{'legend-bottom-space-vector': $last, 'legend-top-space-vector': $first}">
 				<span class="fa fa-location-arrow fontMargin" ng-style="style.color" ></span>
 				<span class="legend-labels">{{style.title}}</span>

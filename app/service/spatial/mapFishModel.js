@@ -313,8 +313,8 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
     var getUrl = function(){
         var url = $location.protocol() + '://' + $location.host();
         if ($location.port() !== 80){
-            //url += ':' + $location.port();
-            url += ':8080'; //Working locally
+            url += ':' + $location.port();
+            //url += ':8080'; //Working locally
         }
         
         return url;

@@ -7,16 +7,25 @@ angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapServi
 		controller: function(){
 		    //For WMS layers
 		    this.buildRecWMS = function(layer){
-		        var record = {};
+		        var record = {
+		            isLabelOnly: false,
+		        };
                 var src = layer.getSource();
                 var params  = src.getParams();
                 
                 record.url = src.getUrls()[0] + '?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=25&HEIGHT=25&LAYER=' + params.LAYERS;
                 if (params.STYLES !== '' && angular.isDefined(params.STYLES)){
-                    record.url += '&STYLE=' + params.STYLES;
+                    if (params.STYLES.indexOf('label') !== -1 && params.STYLES.indexOf('geom') === -1){
+                        record.url = undefined;
+                        record.isLabelOnly = true;
+                    } else {
+                        record.url += '&STYLE=' + params.STYLES;
+                    }
                 }
                 
-                record.url += '&SCALE=' + mapService.getCurrentScale();
+                if (angular.isDefined(record.url)){
+                    record.url += '&SCALE=' + mapService.getCurrentScale();
+                }
                 record.title = layer.get('title');
                 record.type = 'wms';
                 record.visibility = layer.get('visible');

@@ -1,11 +1,11 @@
 angular.module('unionvmsWeb').factory('mapFishPrintRestFactory', function($resource) {
 
-    var appName = "mapfish";
-    var mapFishUrl =  '/' + appName + '/print';
+    var appName = "/mapfish/";
+    var mapFishUrl =  appName + 'print';
 
     return {
         ping: function(){
-            return $resource('/' + appName + '/', {}, {
+            return $resource(appName + '/metrics/ping', {}, {
                 'get': {
                     method: 'GET'
                 }

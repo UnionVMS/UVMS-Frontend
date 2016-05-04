@@ -312,6 +312,7 @@
 	"legend_panel_alarms_closed": "Closed",
 	"legend_panel_alarms_pending": "Pending",
 	"legend_panel_alarms_none": "None",
+	"legend_panel_labels_only": "Labels only",
 	"user_preferences": "User preferences",
 	"preferences_scale_units": "Scale units",
 	"preferences_auto_refresh_rate": "Auto refresh rate (minutes)",

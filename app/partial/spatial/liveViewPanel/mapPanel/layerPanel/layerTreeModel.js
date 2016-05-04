@@ -84,6 +84,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	            url: src.url,
 	            serverType: src.serverType,
 	            params: {
+	                time_: (new Date()).getTime(),
 	                'LAYERS': src.layerGeoName,
 	                'TILED': true,
 	                'TILESORIGIN': mapExtent[0] + ',' + mapExtent[1],

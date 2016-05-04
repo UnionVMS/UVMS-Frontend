@@ -28,6 +28,8 @@ angular.module('unionvmsWeb').directive('layerMenu', function(locale) {
                         }
                         items[i].selected = status;
                     }
+                    
+                    scope.$parent.$broadcast('reloadLegend');
                 }
             };
 			
