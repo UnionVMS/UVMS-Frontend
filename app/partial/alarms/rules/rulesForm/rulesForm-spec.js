@@ -4,7 +4,7 @@ describe('RulesformCtrl', function() {
 
     beforeEach(module('unionvmsWeb'));
 
-    beforeEach(inject(function($rootScope, $httpBackend, $controller, configurationService, Rule, RuleAction, RuleDefinition) {
+    beforeEach(inject(function($rootScope, $httpBackend, $controller, configurationService, Rule, RuleAction, RuleDefinition, ruleRestService, $q) {
         scope = $rootScope.$new();
 
         scope.allowedToManageGlobalRules = function(){
@@ -13,6 +13,7 @@ describe('RulesformCtrl', function() {
 
         spyOn(configurationService, "getValue").andReturn([]);
         spyOn(configurationService, "getConfig").andReturn([]);
+        spyOn(ruleRestService, "getAreaTypes").andReturn($q.when([]));
         createController = function(){
             return $controller('RulesformCtrl', {$scope: scope});
         };

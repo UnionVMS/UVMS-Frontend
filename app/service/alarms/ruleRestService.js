@@ -27,6 +27,9 @@ angular.module('unionvmsWeb')
             getConfig : function(){
                 return $resource('/rules/rest/config');
             },
+            getAreaTypes: function() {
+                return $resource('/spatial/rest/areatypes');
+            }
         };
     })
 .factory('ruleRestService', function($q, $log, ruleRestFactory, Rule, SanityRule, SearchResultListPage, userService){
@@ -246,6 +249,16 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
+    var getAreaTypes = function() {
+        return $q(function(resolve) {
+            ruleRestFactory.getAreaTypes().get(function(response) {
+                if (response.code === 200 && angular.isArray(response.data)) {
+                    resolve(response.data);
+                }
+            });
+        });
+    };
+
     return {
         getConfig: getConfig,
         getRuleByGuid: getRuleByGuid,
@@ -255,6 +268,7 @@ angular.module('unionvmsWeb')
         updateRule: updateRule,
         createNewRule: createNewRule,
         deleteRule: deleteRule,
-        updateSubscription: updateSubscription
+        updateSubscription: updateSubscription,
+        getAreaTypes: getAreaTypes
     };
 });

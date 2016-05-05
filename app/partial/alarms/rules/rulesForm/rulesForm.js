@@ -337,6 +337,33 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         }
     };
 
+    function isAreaTypeDefinition(definition) {
+        return definition.criteria === 'AREA'
+            && (definition.subCriteria === 'AREA_TYPE' 
+                || definition.subCriteria === 'AREA_TYPE_ENT'
+                || definition.subCriteria === 'AREA_TYPE_EXT');
+    }
+
+    function isAreaCodeDefinition(definition) {
+        return definition.criteria === 'AREA'
+            && (definition.subCriteria === 'AREA_CODE' 
+                || definition.subCriteria === 'AREA_CODE_ENT'
+                || definition.subCriteria === 'AREA_CODE_EXT');
+    }
+
+    function getSelectedAreaTypes() {
+        var types = [];
+        if ($scope.currentRule != undefined && $scope.currentRule.definitions !== undefined) {
+            angular.forEach($scope.currentRule.definitions, function(definition) {
+                if (isAreaTypeDefinition(definition) && types.indexOf(definition.value) < 0) {
+                    types.push(definition.value);
+                }
+            });
+        }
+
+        return types;
+    }
+
     //Check if it exists TICKET actions for other user on the rule
     var existsTicketActionsForOtherUsers = function(){
         for(var i=0; i<$scope.currentRule.actions.length; i++){
@@ -546,10 +573,23 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
        return suggestions;
     };
 
+    function getAutoSuggestOptions(ruleDefinition) {
+        var options = {};
+        if (isAreaCodeDefinition(ruleDefinition)) {
+            var areaTypes = getSelectedAreaTypes();
+            options.countries = areaTypes.indexOf('COUNTRY') >= 0;
+            options.userAreas = areaTypes.indexOf('USERAREA') >= 0;;
+        }
+
+        return options;
+    }
+
     //Function for getting auto suggestions
     $scope.getAutoSuggestValues = function(value, ruleDefinition){
         lastAutoSuggestionRequestTimestamp = new Date().getTime();
-        return rulesSuggestionsService.getSuggestions(value, ruleDefinition).then(autoSuggestSuccess, autoSuggestError);
+        return rulesSuggestionsService
+            .getSuggestions(value, ruleDefinition, getAutoSuggestOptions(ruleDefinition))
+            .then(autoSuggestSuccess, autoSuggestError);
     };
 
     //On select in value auto suggestion input field

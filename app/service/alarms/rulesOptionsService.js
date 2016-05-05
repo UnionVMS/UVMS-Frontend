@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurationService, locale, savedSearchService, spatialRestService) {
+angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurationService, locale, savedSearchService, ruleRestService) {
 
     var actionsThatRequireValue = [];
     var DROPDOWNS = {
@@ -130,10 +130,9 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
             SOURCE: [],
         },
         AREA : {
-            //AREA_TYPE : [],
-            //AREA_ID : [],
-            //AREA_NAME: [],
-            //AREA_CODE: [],
+            AREA_TYPE: [],
+            AREA_TYPE_ENT: [],
+            AREA_TYPE_EXT: []
         }
     };
     var setupRuleDefinitionValueDropdowns = function(){
@@ -167,18 +166,17 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         });
         ruleDefinitionDropdowns.ASSET_GROUP.ASSET_GROUP = _.sortBy(ruleDefinitionDropdowns.ASSET_GROUP.ASSET_GROUP, function(assetGroup){return assetGroup.name;});
 
-        //Areas subcriteria
-        //TODO: Add Areas
-/*        spatialRestService.getAreaLayers().then(function(areasResponse){
-            console.log("areasResponse");
-            console.log(areasResponse);
-        }, function(err){
-            console.error("Error getting areas");
-        });*/
-        //ruleDefinitionDropdowns.AREA.AREA_TYPE = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
-        //ruleDefinitionDropdowns.AREA.AREA_ID = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
-        //ruleDefinitionDropdowns.AREA.AREA_NAME = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
-        //ruleDefinitionDropdowns.AREA.AREA_CODE = createDropdownItemsWithSameTextAsValue(['A1', 'A2', 'A3']);
+        ruleRestService.getAreaTypes().then(function(areaTypes) {
+            areaTypes = areaTypes.map(function(areaType) {
+                return {"text": areaType, "code": areaType};
+            });
+
+            ruleDefinitionDropdowns.AREA = {
+                AREA_TYPE: areaTypes,
+                AREA_TYPE_ENT: areaTypes,
+                AREA_TYPE_EXT: areaTypes
+            };
+        });
     };
 
     //Dropdown values for actions

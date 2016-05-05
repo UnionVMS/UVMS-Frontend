@@ -1,5 +1,5 @@
 //Service that handles the suggestions/dropdowns in the Rules form
-angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $q, locale, GetListRequest, vesselRestService, mobileTerminalRestService) {
+angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $q, locale, GetListRequest, vesselRestService, mobileTerminalRestService, spatialConfigRestService, spatialRestService, userService) {
     var maxNumberOfSuggestions = 10;
     var autoSuggestionGetListRequest = new GetListRequest(1, maxNumberOfSuggestions, true, []);
 
@@ -110,6 +110,58 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
         return getSearchResultPageAndExtractSuggestions(pagePromise, criteria, subCriteria);
     };
 
+    var countryCache = undefined;
+
+    function getCodesWithPrefix(codes, searchValue) {
+        var prefix = new RegExp('^' + searchValue, 'gi');
+        return codes.filter(function(code) {
+            return code.match(prefix) != null;
+        });
+    }
+
+    function getCountries(searchValue) {
+        return $q.when(countryCache || $q(function(resolve) {
+            // Reload if cached value is undefined
+            return spatialConfigRestService.getCountriesList().then(function(countries) {
+                countryCache = Object.keys(countries).sort();
+                resolve(countryCache);
+            });
+        })).then(function(countries) {
+            // Filter country codes by the current search value
+            return getCodesWithPrefix(countries, searchValue);
+        });
+    }
+
+    var userAreaCache = undefined;
+
+    function getUserAreas(searchValue) {
+        return $q.when(userAreaCache || $q(function(resolve) {
+            return spatialRestService.getUserDefinedAreas().then(function(areas) {
+                userAreaCache = areas.map(function(area) { return area.name; });
+                resolve(userAreaCache);
+            });
+        })).then(function(userAreas) {
+            return getCodesWithPrefix(userAreas, searchValue);
+        });
+    }
+
+    var getAreaCodes = function(criteria, subCriteria, searchValue, options) {
+        var promises = [];
+
+        if (options.countries) {
+            promises.push(getCountries(searchValue));
+        }
+
+        if (options.userAreas && userService.isAllowed('MANAGE_USER_DEFINED_AREAS', 'Spatial', true)) {
+            promises.push(getUserAreas(searchValue));
+        }
+
+        return $q.all(promises).then(function(areaCodes) {
+            // Join area codes from all sources.
+            return Array.prototype.concat.apply([], areaCodes);
+        });
+    };
+
     //Is auto suggestions available for the ruleDefinition
     var isSuggestionsAvailable =  function(ruleDefinition){
         return angular.isDefined(getSuggestionsSearchFunction(ruleDefinition));
@@ -127,6 +179,10 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
             case 'MT_MEMBER_ID':
             case 'MT_SERIAL_NO':
                 return getMobileTerminals;
+            case 'AREA_CODE':
+            case 'AREA_CODE_ENT':
+            case 'AREA_CODE_EXT':
+                return getAreaCodes;
             default:
                 return;
         }
@@ -136,7 +192,7 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
         //Is auto suggestions available for the ruleDefinition
         isSuggestionsAvailable : isSuggestionsAvailable,
         //Get suggestions
-        getSuggestions : function(searchValue, ruleDefinition){
+        getSuggestions : function(searchValue, ruleDefinition, options){
             var deferred = $q.defer();
             if(isSuggestionsAvailable(ruleDefinition)){
                 $log.debug("Get suggestions for:" +searchValue);
@@ -150,7 +206,7 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
 
                 //Is there a searchFunc defined?
                 if(angular.isDefined(searchFunc)){
-                    searchFunc(ruleDefinition.criteria, ruleDefinition.subCriteria, searchValue).then(
+                    searchFunc(ruleDefinition.criteria, ruleDefinition.subCriteria, searchValue, options).then(
                         function(suggestions){
                             deferred.resolve(suggestions);
                         }, function(err){
@@ -165,7 +221,7 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
                 }
             }
             return deferred.promise;
-        },
+        }
     };
 
 	return rulesSuggestionsService;
