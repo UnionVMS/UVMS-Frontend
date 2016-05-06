@@ -26,7 +26,8 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'numberWidget',
     'unionvmsWeb.longPolling',
     'qtip2',
-    'chart.js'
+    'chart.js',
+    'ngStorage'
 ]);
 
 var currentUserContextPromise = function(userService) {
@@ -394,6 +395,23 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 pageTitle: 'header.page_title_reports'
             }
         })
+        .state('app.reporting-id', {
+            url: '/reporting-id/:id/:guid',
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/spatial/spatial.html',
+                    controller: 'SpatialCtrl'
+                }
+            },
+            resolve: {
+                config : function(initService){
+                    return initService.loadConfigFor(["MOVEMENT"]);
+                }
+            },
+            data: {
+                pageTitle: 'header.page_title_reports'
+            }
+        })
         .state('app.areas', {
             url: '/areas',
             views: {
@@ -647,6 +665,7 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
 
     //Handle state change success
     $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+    	$rootScope.currentStateName = toState.name;
         $timeout.cancel(showPageNavigationSpinnerTimeout);
         $rootScope.loadingPage = false;
     });

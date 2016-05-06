@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, spatialHelperService, reportRestService, reportService, $anchorScroll, userService, loadingStatus){
+angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, spatialHelperService, reportRestService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage){
     $scope.isMenuVisible = true;
     $scope.selectedMenu = 'REPORTS';
     $scope.reports = [];
@@ -14,18 +14,28 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     
     //Define header menus
     var setMenus = function(){
-        return [
-            {
-                'menu': 'LIVEVIEW',
-                'title': $scope.repServ.name,
-                'visible': $scope.repServ.liveviewEnabled
-            },
-            {
-                'menu': 'REPORTS',
-                'title': locale.getString('spatial.header_reports'),
-                'visible': true
-            }
-        ];
+    	if($state.current.name === 'app.reporting-id'){
+    		return [
+    	            {
+    	                'menu': 'LIVEVIEW',
+    	                'title': $scope.repServ.name,
+    	                'visible': $scope.repServ.liveviewEnabled
+    	            }
+    	        ];
+    	}else{
+	    	return [
+	            {
+	                'menu': 'LIVEVIEW',
+	                'title': $scope.repServ.name,
+	                'visible': $scope.repServ.liveviewEnabled
+	            },
+	            {
+	                'menu': 'REPORTS',
+	                'title': locale.getString('spatial.header_reports'),
+	                'visible': true
+	            }
+	        ];
+    	}
     };
         
    locale.ready('spatial').then(function(){
@@ -35,21 +45,43 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
            mapService.map = undefined;
        }
        
-       //let's check for the existence of default reports
-       var defaultRepObj = spatialHelperService.getDefaultReport(true);
-       if (angular.isDefined(defaultRepObj) && !_.isNaN(defaultRepObj.id) && defaultRepObj.id !== 0){
-           $scope.selectedMenu = 'LIVEVIEW';
+       if($state.current.name === 'app.reporting-id'){
+    	   spatialHelperService.tbControl.newTab = false;
+    	   $scope.selectedMenu = 'LIVEVIEW';
            $scope.repServ.liveviewEnabled = true;
            $scope.repServ.isReportExecuting = true;
            loadingStatus.isLoading('LiveviewMap',true);
-           reportRestService.getReport(defaultRepObj.id).then(function(response){
-               $scope.repServ.runReport(response);
-           }, function(error){
-               $scope.selectedMenu = 'REPORTS';
-               $scope.repServ.liveviewEnabled = false;
-               $scope.repServ.isReportExecuting = false;
-               $scope.repServ.errorLoadingDefault = true;
-           });
+           
+           if(angular.isDefined($localStorage['report'+$state.params.id + '-' + $state.params.guid])){
+        	   reportService.runReportWithoutSaving($localStorage['report' + $state.params.id + '-' + $state.params.guid]);
+        	   delete $localStorage['report'+$state.params.id + '-' + $state.params.guid];
+           }else{
+	           reportRestService.getReport($state.params.id).then(function(response){
+	               $scope.repServ.runReport(response);
+	           }, function(error){
+	               $scope.selectedMenu = 'REPORTS';
+	               $scope.repServ.liveviewEnabled = false;
+	               $scope.repServ.isReportExecuting = false;
+	               $scope.repServ.errorLoadingDefault = true;
+	           });
+           }
+       }else{
+	       //let's check for the existence of default reports
+	       var defaultRepObj = spatialHelperService.getDefaultReport(true);
+	       if (angular.isDefined(defaultRepObj) && !_.isNaN(defaultRepObj.id) && defaultRepObj.id !== 0){
+	           $scope.selectedMenu = 'LIVEVIEW';
+	           $scope.repServ.liveviewEnabled = true;
+	           $scope.repServ.isReportExecuting = true;
+	           loadingStatus.isLoading('LiveviewMap',true);
+	           reportRestService.getReport(defaultRepObj.id).then(function(response){
+	               $scope.repServ.runReport(response);
+	           }, function(error){
+	               $scope.selectedMenu = 'REPORTS';
+	               $scope.repServ.liveviewEnabled = false;
+	               $scope.repServ.isReportExecuting = false;
+	               $scope.repServ.errorLoadingDefault = true;
+	           });
+	       }
        }
        $scope.headerMenus = setMenus();
    });
@@ -72,22 +104,19 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    
    //Report filter definitions
    $scope.editReport = function(){
+	   $scope.repServ.isReportExecuting = true;
 	   if(!$scope.repServ.outOfDate){
-		   $scope.repServ.isReportExecuting = true;
 	       reportRestService.getReport($scope.repServ.id).then(getReportSuccess, getReportError);
 	   }else{
 		   $scope.$broadcast('goToReportForm','EDIT-FROM-LIVEVIEW');
-		   $scope.selectMenu('REPORTS');
 	   }
    };
    
    //Get Report Configs Success callback
    var getReportSuccess = function(response){
-	   $scope.repServ.isReportExecuting = false;
 	   response.isFromLiveView = true;
 	   $scope.$broadcast('openReportForm', {'report': response});
        $scope.$broadcast('goToReportForm','EDIT-FROM-LIVEVIEW');
-       $scope.selectMenu('REPORTS');
    };
 	   
    //Get Report Configs Failure callback

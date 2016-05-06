@@ -1,11 +1,11 @@
 <header>
     <div class="headercontainer">
-		<div class="header">
+		<div class="header" ng-class="{'in-new-tab': appState === 'app.reporting-id'}">
 			<div class="pageinfo">
 				<div class="container">
 					<div class="row">
                         <div class="col-md-2">
-				            <img class="uvmslogo" src="assets/images/logo.png" ng-click="gotoStartPage()">
+				            <img class="uvmslogo" src="assets/images/logo.png" ng-click="appState === 'app.reporting-id' || gotoStartPage()">
                         </div>
                         <div class="col-md-10">
                             <div class="sign-out">
@@ -13,12 +13,12 @@
                                     <i class="fa fa-lg fa-sign-out"></i>
                                 </button>
                             </div>
-                            <div class="help">
+                            <div class="help" ng-if="appState !== 'app.reporting-id'">
                                 <a href="#/help" class="btn btn-default btn-sm" ng-attr-title="{{'common.help' | i18n}}">
                                     <i class="fa fa-lg fa-question"></i>
                                 </a>
                             </div>
-    					    <div class="signed-in" ng-if="isAuthenticated">
+    					    <div class="signed-in" ng-if="isAuthenticated && appState !== 'app.reporting-id'">
     							<div class="dropdown fullWidthDropdown login-drop-down">
     								<button class="btn btn-default dropdown-toggle" type="button" id="user-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
     									<div class="username"> <i class="fa fa-lg fa-user"></i>{{userName}}</div>
@@ -48,7 +48,7 @@
     								</ul>
     							</div>
     						</div>
-                            <div class="language-select">
+                            <div class="language-select" ng-if="appState !== 'app.reporting-id'">
                                 <div class="dropdown">
                                     <button class="btn btn-default dropdown-toggle" id="language-select-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                         <div class="flag"><span class="flag-icon" ng-class="userFlagIconClass()"></span></div>
@@ -66,7 +66,7 @@
                             <div class="sign-in" ng-if="!isAuthenticated">
                                 <span ng-click="signIn()"><i class="fa fa-lg fa-user"></i><span ng-bind="'header.sign_in' | i18n"></span></a>
                             </div>
-                            <div class="notifications" ng-if="isAuthenticated">
+                            <div class="notifications" ng-if="isAuthenticated && appState !== 'app.reporting-id'">
                                 <button class="btn btn-sm btn-default" ng-click="viewNotifications()">
                                     <div class="fa fa-bell"><span class="badge" ng-bind="numberOfOpenAlarmsAndTickets.alarms + numberOfOpenAlarmsAndTickets.tickets" ng-show="numberOfOpenAlarmsAndTickets.alarms > 0 || numberOfOpenAlarmsAndTickets.tickets > 0"></span></div>
                                 </button>
@@ -76,7 +76,7 @@
 				    </div>
 				</div>
 			</div>
-            <div class="headerMenuWrapper">
+            <div class="headerMenuWrapper" ng-if="appState !== 'app.reporting-id'">
 			     <div ng-if="isAuthenticated" ng-include="'partial/header/headerMenu/headerMenu.html'"></div>
             </div>
 		</div>

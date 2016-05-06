@@ -61,7 +61,16 @@
 		            	<report-visibility ng-model="report.visibility"/>
 	            	</td>
 		            <td class="no-wrap-white-space">
-	                    <button type="button" class="btn btn-success btn-xs btn-bottom-mg" ng-click="runReport($index)"><span class="run-report">{{'spatial.reports_table_run_label' | i18n }}</span></button>
+			            <div class="btn-group">
+		                    <button type="button" class="btn btn-success btn-xs btn-bottom-mg btn-run-default" ng-click="runReport($index)"><span class="run-report">{{'spatial.reports_table_run_label' | i18n }}</span></button>
+		                    <button type="button" class="btn btn-success dropdown-toggle btn-run-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu dropdown-run-options">
+								<li><a ng-click="runReport($index)">{{'spatial.reports_table_run_label' | i18n }}</a></li>
+								<li><a ng-click="openMapOnNewTab()">{{'spatial.reports_table_run_new_tab_label' | i18n }}</a></li>
+							</ul>
+						</div>
 	                    <button type="button" class="btn btn-primary btn-xs btn-bottom-mg" title="{{'spatial.reports_table_config_label' | i18n }}" ng-click="showFilters($index)"><span class="fa fa-cog"></span></button>
 	                    <button type="button" class="btn btn-xs btn-bottom-mg" ng-class="{'btn-primary': !report.isDefault, 'btn-warning': report.isDefault}" ng-attr-title="{{report.isDefault ? removeDefaultTooltip : makeDefaultTooltip}}" ng-click="makeDefault($index)">
 	                    	<span class="fa fa-star"></span>

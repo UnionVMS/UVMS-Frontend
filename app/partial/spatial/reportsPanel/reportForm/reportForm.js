@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, $anchorScroll, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService, reportService, SpatialConfig, spatialConfigRestService, userService, loadingStatus){
+angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, $anchorScroll, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService, reportService, SpatialConfig, spatialConfigRestService, userService, loadingStatus, reportFormService){
     //Report form mode
     $scope.formMode = 'CREATE';
 
@@ -52,7 +52,8 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     };
     
     $scope.init = function(){
-        $scope.report = new Report();
+    	reportFormService.report = new Report();
+        $scope.report = reportFormService.report;
         $scope.formAlert = {
             visible: false,
             msg: ''
@@ -284,7 +285,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         	}else{
         		$scope.formMode = 'EDIT';
         	}
-            $scope.report = $scope.report.fromJson(args.report);
+            angular.copy($scope.report.fromJson(args.report),$scope.report);
         }
         $scope.report.currentConfig = {mapConfiguration: {}};
         angular.copy($scope.report.mapConfiguration,$scope.report.currentConfig.mapConfiguration);

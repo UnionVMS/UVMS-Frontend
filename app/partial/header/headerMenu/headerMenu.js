@@ -140,7 +140,9 @@
     };
 
     var init = function(){
-        setMenu();
+    	if($state.current.name !== 'app.reporting-id'){
+    		setMenu();
+    	}
     };
 
     var getFirstPathSegment = function(path) {

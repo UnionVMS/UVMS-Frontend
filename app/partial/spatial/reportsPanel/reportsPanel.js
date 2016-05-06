@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ReportspanelCtrl',function($scope, $anchorScroll){
+angular.module('unionvmsWeb').controller('ReportspanelCtrl',function($scope, $anchorScroll, reportService){
     
     $scope.isVisible = {
             reportsList: true,
@@ -40,12 +40,16 @@ angular.module('unionvmsWeb').controller('ReportspanelCtrl',function($scope, $an
     });
     
     $scope.$on('goToReportForm', function(evt, mode){
-    	$scope.editMode = mode;
-        $scope.isVisible.reportsList = false;
+		$scope.editMode = mode;
+		$scope.isVisible.reportsList = false;
         $scope.isVisible.reportForm = true;
-
-        //Call function from parent to toggle menu visibility
-        $scope.toggleMenuVisibility();
+        
+        setTimeout(function() {
+        	$scope.selectMenu('REPORTS');
+        	//Call function from parent to toggle menu visibility
+            $scope.toggleMenuVisibility();
+            reportService.isReportExecuting = false;
+        });
     });
     
 });

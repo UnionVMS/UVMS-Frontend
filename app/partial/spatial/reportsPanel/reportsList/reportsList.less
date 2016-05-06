@@ -41,6 +41,29 @@
 				max-height: 100px !important;
 			}
 		}
+		.btn-run-default {
+			    border-top-right-radius: 0 !important;
+			    border-bottom-right-radius: 0 !important;
+		}
+		.btn-run-options {
+			    border-top-left-radius: 0 !important;
+			    border-bottom-left-radius: 0 !important;
+			    line-height: 18px;
+		}
+		.dropdown-run-options {
+		    left: 0;
+		    min-width: 0;
+		    li {
+		    	a {
+		    		padding: 3px 10px;
+		    	}
+		    }
+    	}
+		&.open {
+			.dropdown-run-options {
+			    border: 1px solid rgba(0, 0, 0, 0.15);
+	    	}
+    	}
 	}
 }
 

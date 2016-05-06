@@ -3,6 +3,7 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
     $scope.languages = localeSupported;
     $scope.selectedLanguage = tmhDynamicLocale.get();
     $scope.languageNames = languageNames;
+    $scope.appState = $state.current.name;
     //AvailableLanguages holds list of languages that are selected in settings and exists in localeSupported
     var availableLanguages = globalSettingsService.getAvailableLanguages();
     //Remove langs from availableLanguages if they don't exists in localeSupported

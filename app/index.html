@@ -413,12 +413,13 @@
 	<script src="directive/common/numericInput/numericInput.js"></script>
 	<script src="directive/common/alertModal/alertModal.js"></script>
 	<script src="directive/spatial/gazetteerSearch/gazetteerSearch.js"></script>
+	<script src="service/reporting/reportFormService.js"></script>
 	<!-- Add New Component JS Above --> 
 	
 	<div ui-view name="unionvmsHeader"></div>
 
     <div id="contentWrapper">
-        <div id="content" loading-indicator="loadingPage" message="loadingPageMessage" ng-class="{'hiddenLoadingIndicator' : loadingPageIconHidden}">
+        <div id="content" loading-indicator="loadingPage" message="loadingPageMessage" ng-class="{'hiddenLoadingIndicator' : loadingPageIconHidden, 'is-loading-new-tab': currentStateName === 'app.reporting-id'}">
             <div ng-hide="loadingPage">
                 <div ui-view name="unionvmsAlerts"></div>
                 <div ui-view name="unionvmsError"></div>

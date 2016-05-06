@@ -28,7 +28,7 @@ angular.module('unionvmsWeb').factory('reportMsgService', function($timeout){
     return alert;
 });
 
-angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $filter, globalSettingsService, reportMsgService, $anchorScroll, locale, reportRestService, confirmationModal, reportService, spatialHelperService){
+angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $filter, globalSettingsService, reportMsgService, $anchorScroll, locale, reportRestService, confirmationModal, reportService, spatialHelperService, $state, $window){
     //config object
     $scope.config = {
         src_format: 'YYYY-MM-DDTHH:mm:ss',
@@ -243,6 +243,22 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     //Finally we check if we should automatically load reports
     if (reportService.liveviewEnabled === false && $scope.reports.length === 0){
         $scope.loadReportList();
+    }
+    
+    $scope.openMapOnNewTab = function(){
+    	var guid = generateGUID();
+    	var url = $state.href('app.reporting-id', {id: reportService.id, guid: guid});
+    	$window.open(url,'_blank');
+    };
+    
+    function generateGUID() {
+      function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
+      }
+      return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
     }
 
 });

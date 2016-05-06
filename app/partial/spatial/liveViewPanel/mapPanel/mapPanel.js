@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, $modal, mapService, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window, projectionService){
+angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, $modal, mapService, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window, projectionService, $state, $localStorage, reportFormService){
     $scope.activeControl = '';
     $scope.showMeasureConfigWin = false;
     $scope.showMapFishConfigWin = false;
@@ -587,6 +587,25 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 	    	reportService.setAutoRefresh();
 	    }
     };
+    
+    $scope.openMapOnNewTab = function(){
+    	var guid = generateGUID();
+    	if(reportService.outOfDate){
+    		$localStorage['report' + reportService.id + '-' + guid] = angular.copy(reportFormService.report);
+    	}
+    	var url = $state.href('app.reporting-id', {id: reportService.id, guid: guid});
+    	$window.open(url,'_blank');
+    };
+    
+    function generateGUID() {
+        function s4() {
+          return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+          s4() + '-' + s4() + s4() + s4();
+      }
 
     //Untoggle any toolbar btn when tab is changed
     $scope.$on('untoggleToolbarBtns', function (evt) {

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('spatialHelperService',function(userService) {
+angular.module('unionvmsWeb').factory('spatialHelperService',function(userService, $state) {
 
 	var spServ = {
 	    defaultReports: [],
@@ -7,7 +7,8 @@ angular.module('unionvmsWeb').factory('spatialHelperService',function(userServic
 	        fullscreen: false,
 	        print: false,
 	        mapFishPrint: false,
-	        bookmarks: false
+	        bookmarks: false,
+	        newTab: true
 	    },
 	    measure: {
 	        units: 'm',
