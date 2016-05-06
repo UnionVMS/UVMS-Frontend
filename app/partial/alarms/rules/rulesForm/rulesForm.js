@@ -578,7 +578,7 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         if (isAreaCodeDefinition(ruleDefinition)) {
             var areaTypes = getSelectedAreaTypes();
             options.countries = areaTypes.indexOf('COUNTRY') >= 0;
-            options.userAreas = areaTypes.indexOf('USERAREA') >= 0;;
+            options.userAreas = areaTypes.indexOf('USERAREA') >= 0;
         }
 
         return options;
