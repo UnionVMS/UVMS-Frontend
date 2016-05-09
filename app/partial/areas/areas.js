@@ -95,6 +95,8 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, l
             
             $('.metadata-container').css('height', $('.updateMetadata').height() - 45);
             
+            $('.dataset-form-container').css('max-height', newHeight - 200);
+            
             //GENERIC CONTAINERS
             $('.area-loading').css('width', $('.areaCard').width());
             $('.areaMap').css('height', newHeight);

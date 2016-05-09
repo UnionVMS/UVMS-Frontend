@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,projectionService,areaAlertService,areaRestService,spatialRestService,areaMapService,areaHelperService,locale){
+angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,projectionService,areaAlertService,areaRestService,spatialRestService,areaMapService,areaHelperService,locale,Area){
     $scope.alert = areaAlertService;
     $scope.map = areaMapService.map;
 	$scope.sysAreaType = "";
@@ -9,6 +9,8 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
 	$scope.helper = areaHelperService;
 	$scope.editingType = 'upload';
 	$scope.metadataAvailable = false;
+	$scope.sysSelection = "map";
+	$scope.clickResults = 0;
     
 	$scope.fileNameChanged = function(elem){
 		$scope.SysareasForm.areaFile.$setDirty();
@@ -113,7 +115,8 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         }
         
         if (angular.isDefined(newVal) && newVal !== oldVal){
-            $scope.helper.resetMetadata();
+        	resetDatasetTab();
+        	$scope.helper.resetMetadata();
             $scope.helper.displayedSystemAreaLayer = newVal;
             var item = $scope.getFullDefForItem(newVal);
             
@@ -134,6 +137,38 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
             }
         }
     });
+    
+    //Add system areas by search
+    $scope.convertAreasResponse = function(data){
+        var areas = [];
+        for (var i = 0; i < data.length; i++){
+            var area = new Area();
+            area = area.fromJson(data[i]);
+            areas.push(area);
+        }
+        
+        return areas; 
+    };
+    
+    $scope.searchSysAreas = function(){
+        if (angular.isDefined($scope.searchSysString) && $scope.searchSysString !== ''){
+            $scope.searchLoading = true;
+            $scope.sysAreaSearch = [];
+            var requestData = {
+                areaType: $scope.sysAreaType,
+                filter: $scope.searchSysString
+            };
+            spatialRestService.getAreasByFilter(requestData).then(function(response){
+                $scope.sysAreaSearch = $scope.convertAreasResponse(response.data);
+                $scope.searchLoading = false;
+            }, function(error){
+                $scope.errorMessage = locale.getString('spatial.area_selection_modal_get_selected_area_search_error');
+                $scope.hasError = true;
+                $scope.hideAlerts();
+                $scope.searchLoading = false;
+            });
+        }
+    };
     
     $scope.$watch('editingType', function(newVal, oldVal){
         $scope.helper.resetMetadata();
@@ -163,5 +198,58 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
             $scope.helper.tabChange('SYSAREAS');
         }
     });
+    
+    $scope.selectArea = function(index){
+    	$scope.selectedAreaCode = $scope.displayedRecordsArea[index].code;
+    	$scope.selectedArea = $scope.displayedRecordsArea[index].name + ' | ' + $scope.displayedRecordsArea[index].code;
+    };
+    
+    $scope.createDataset = function() {
+    	$scope.submittedDataset = true;
+    	if($scope.datasetForm.$valid){
+    		
+    	}
+    };
+    
+    var resetDatasetTab = function(){
+    	$scope.selectedAreaCode = undefined;
+    	$scope.selectedArea = undefined;
+    	$scope.sysAreaSearch = [];
+    	$scope.searchSysString = undefined;
+    	$scope.datasetName = undefined;
+    	$scope.submittedDataset = false;
+    	$scope.sysSelection = 'map';
+    	$scope.datasetForm.$setPristine();
+    };
+    
+    $scope.mergeParamsWms = function(index, displayedAreasList, areaList){
+    	index = areaList.indexOf(displayedAreasList[index]);
+        var area = areaList[index];
+        var format = new ol.format.WKT();
+        var geom = format.readFeature(area.extent).getGeometry();
+        geom.transform('EPSG:4326', 'EPSG:3857');
+        $scope.map.getView().fit(geom, $scope.map.getSize(), {nearest: false});
+        
+        var layers = $scope.map.getLayers();
+        if (layers.getLength() > 1){
+            var layer = layers.getArray().find(function(layer){
+               return layer.get('type') === area.areaType; 
+            });
+            
+            var cql = '';
+            var src = layer.getSource();
+            if (area.areaType === 'USERAREA'){
+                var currentParams = src.getParams();
+                var cqlComps = currentParams.cql_filter.split(' and');
+                cql = cqlComps[0] + ' and ';
+            }
+            cql += "gid = " + parseInt(area.gid);
+            
+            src.updateParams({
+                time_: (new Date()).getTime(),
+                'cql_filter': cql
+            });
+        }
+    };
 
 });

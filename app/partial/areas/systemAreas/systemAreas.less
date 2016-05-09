@@ -1,45 +1,54 @@
-.systemAreasContainer {
-  .radioButtons {
-    margin: 15px 0px;
-    .radio-inline {
-      margin-left: 0px;
-      margin-right: 20px;
-    }
-  }
-  .system-area-body {
-    .form-container {
-      padding-top: 15px;
-      border: 1px solid #dddddd;
-    }
-    .section-title {
-		  font-weight: bold;
-    	text-transform: uppercase;
-    }
-		.input-group[class*="col-"] {
-		  padding-left: 15px;
-		  padding-right: 35px;
+.systemAreasContainer{
+	.radioButtons {
+		margin: 15px 0px;
+		.radio-inline {
+			margin-left: 0px;
+			margin-right: 20px;
 		}
-    .metadata-group {
-      textarea {
-        max-width: 100%;
-        min-width: 100%;
-      }
-    }
+	}
+	.system-area-body {
+		.form-container {
+			padding-top: 15px;
+			border: 1px solid #dddddd;
+			overflow: auto;
+			.form-group {
+				label {
+					margin-right: 5px;
+				}
+			}
+		}
+		.section-title {
+			font-weight: bold;
+			text-transform: uppercase;
+		}
+		.input-group[class*="col-"] {
+			padding-left: 15px;
+			padding-right: 35px;
+		}
+		.metadata-group {
+			textarea {
+				max-width: 100%;
+				min-width: 100%;
+			}
+		}
 	}
 	.btn-container {
-	    margin-top: 15px;
-	    padding-right: 0;
+		margin-top: 15px;
+		padding-right: 0;
 	}
-  .updateMetadata{
-    .btn {
-      margin-right: -15px;
-    }
-  }
-  .metadata-container{
-    overflow-y: auto;
-    height: 100%;
-  }
-  .info-qtip {
-    margin-right: 10px;
-  }
+	.updateMetadata{
+		.btn {
+			margin-right: -15px;
+		}
+	}
+	.metadata-container{
+		overflow-y: auto;
+		height: 100%;
+	}
+	.info-qtip {
+		margin-right: 10px;
+	}
+	.noPadding {
+		padding: 0;
+	}
 }
