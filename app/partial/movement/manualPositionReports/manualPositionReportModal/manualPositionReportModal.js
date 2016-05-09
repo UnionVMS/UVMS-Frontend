@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $location,$modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, positionReport, ManualPosition, $timeout, movementRestService, coordinateFormatService, dateTimeService, vesselValidationService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly, openedFromMovementPage, globalSettingsService) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $location,$modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, positionReport, ManualPosition, $timeout, movementRestService, coordinateFormatService, dateTimeService, vesselValidationService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly, openedFromMovementPage, globalSettingsService, configurationService) {
 
     var vm = this;
 
@@ -9,6 +9,9 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 
     //Set status
     $scope.positionReport.status = "010";
+
+    // Set default flagstate
+    $scope.positionReport.carrier.flagState = configurationService.getValue('VESSEL_PARAMETERS', 'asset.default.flagstate');
 
     //CUSTOM VALIDATIONS
     $scope.cfrRegExp = vesselValidationService.getCFRPattern();
@@ -25,6 +28,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         $scope.positionReport = new ManualPosition();
         $scope.guid = oldGuid;
         $scope.positionReport.status = "010";
+        $scope.positionReport.carrier.flagState = configurationService.getValue('VESSEL_PARAMETERS', 'asset.default.flagstate');
     };
 
     //Max speed - warning is shown is speed is higher

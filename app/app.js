@@ -169,7 +169,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["MOVEMENT","VESSEL","MOVEMENT_SOURCE_TYPES","MOVEMENT_AREAS"]);
+                    return initService.loadConfigFor(["MOVEMENT","VESSEL","VESSEL_PARAMETERS","MOVEMENT_SOURCE_TYPES","MOVEMENT_AREAS"]);
                 }
             },
             data: {
@@ -582,7 +582,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 access: ACCESS.PUBLIC
             }
         });
-    
+
 });
 
 unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, userService, locale, httpPendingRequestsService) {

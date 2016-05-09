@@ -36,9 +36,9 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
     //Set default country code
     $scope.setDefaultCountryCode = function(){
-        var countryCode  = configurationService.getValue('VESSEL_PARAMETERS', 'vessel.default.flagstate');
-        if(angular.isDefined(countryCode)){
-            $scope.vesselObj.countryCode = countryCode;
+        $scope.countryCode  = configurationService.getValue('VESSEL_PARAMETERS', 'asset.default.flagstate');
+        if(angular.isDefined($scope.countryCode)){
+            $scope.vesselObj.countryCode = $scope.countryCode;
         }
     };
 

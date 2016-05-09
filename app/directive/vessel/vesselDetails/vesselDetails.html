@@ -4,7 +4,8 @@
 
             <div class="col-md-1 form-group smallerpaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.countryCode.$dirty) && vesselForm.countryCode.$invalid}">
                 <label>{{ 'vessel.vessel_details_flagstate' | i18n }}</label>
-                <dropdown name="countryCode" ng-model="vessel.countryCode" initialtext="{{ 'vessel.vessel_details_flagstate' | i18n }}" items="vesselFlagState" required></dropdown>
+                <dropdown name="countryCode" ng-model="vessel.countryCode" initialtext="{{ 'vessel.vessel_details_flagstate' | i18n }}" items="vesselFlagState" required ng-if="!countryCode"></dropdown>
+                <dropdown name="countryCode" ng-model="vessel.countryCode" initialtext="{{countryCode}}" items="vesselFlagState" required ng-if="countryCode"></dropdown>
                 <input-validation-message types="required" input="vesselForm.countryCode"></input-validation-message>
             </div>
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.ircs.$dirty) && vesselForm.ircs.$invalid}">
