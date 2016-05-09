@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('unitConversionService',function($filter, globalSettingsService, locale) {
+angular.module('unionvmsWeb').factory('unitConversionService',function($filter, globalSettingsService, locale, dateTimeService) {
 
 	var unitConversionService = {
 	    speed: {
@@ -137,7 +137,7 @@ angular.module('unionvmsWeb').factory('unitConversionService',function($filter, 
                     }
                 } else if(direction === 'from_server') {
                     if (moment.utc(date, server_format).isValid()){
-                        return moment.utc(date, server_format).format(displayFormat);
+                        return dateTimeService.formatUTCDateWithTimezone(dateTimeService.utcToUserTimezone(moment.utc(date, server_format), displayFormat), displayFormat);
                     }
                 }
 	        },

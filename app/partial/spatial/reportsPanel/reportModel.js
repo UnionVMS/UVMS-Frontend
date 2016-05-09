@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
+angular.module('unionvmsWeb').factory('Report',function(unitConversionService) { //globalSettingsService,
 	function Report(){
 	    this.id = undefined;
 	    this.name = undefined;
@@ -37,29 +37,29 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
         };
 	}
 
-	var getDateFormat = function(){
-	    return globalSettingsService.getDateFormat();
-	};
-	
-	var getTimeZone = function(){
-	    return parseInt(globalSettingsService.getTimezone());
-	};
-
-	var convertDate = function(date, direction){
-	    var displayFormat = getDateFormat();
-	    var src_format = 'YYYY-MM-DD HH:mm:ss Z';
-	    var server_format = 'YYYY-MM-DDTHH:mm:ss';
-
-	    if (direction === 'to_server'){
-	        if (moment.utc(date, src_format).isValid()){
-	            return moment.utc(date, src_format).format(server_format);
-	        }
-	    } else if(direction === 'from_server') {
-	        if (moment.utc(date, server_format).isValid()){
-	            return moment.utc(date, server_format).format(displayFormat);
-	        }
-	    }
-	};
+//	var getDateFormat = function(){
+//	    return globalSettingsService.getDateFormat();
+//	};
+//	
+//	var getTimeZone = function(){
+//	    return parseInt(globalSettingsService.getTimezone());
+//	};
+//
+//	var convertDate = function(date, direction){
+//	    var displayFormat = getDateFormat();
+//	    var src_format = 'YYYY-MM-DD HH:mm:ss Z';
+//	    var server_format = 'YYYY-MM-DDTHH:mm:ss';
+//
+//	    if (direction === 'to_server'){
+//	        if (moment.utc(date, src_format).isValid()){
+//	            return moment.utc(date, src_format).format(server_format);
+//	        }
+//	    } else if(direction === 'from_server') {
+//	        if (moment.utc(date, server_format).isValid()){
+//	            return moment.utc(date, server_format).format(displayFormat);
+//	        }
+//	    }
+//	};
 
 	var validateFilterObject = function(filter,isRunningReport){
 	    var valid = true;
@@ -96,8 +96,8 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 
 	        //Common filters
 			report.commonFilterId = filter.common.id;
-	        report.startDateTime = angular.isDefined(filter.common.startDate) ? convertDate(filter.common.startDate, 'from_server') : undefined;
-	        report.endDateTime = angular.isDefined(filter.common.endDate) ? convertDate(filter.common.endDate, 'from_server') : undefined;
+	        report.startDateTime = angular.isDefined(filter.common.startDate) ? unitConversionService.date.convertDate(filter.common.startDate, 'from_server') : undefined;
+	        report.endDateTime = angular.isDefined(filter.common.endDate) ? unitConversionService.date.convertDate(filter.common.endDate, 'from_server') : undefined;
 	        report.positionSelector = angular.isDefined(filter.common.positionSelector) ? filter.common.positionSelector : 'all';
 	        report.positionTypeSelector = angular.isDefined(filter.common.positionTypeSelector) ? filter.common.positionTypeSelector : 'positions';
 	        report.xValue = angular.isDefined(filter.common.xValue) ? filter.common.xValue : undefined;
@@ -199,8 +199,8 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
 	    var filter = {
 	        common: {
 				id: this.commonFilterId,
-	            startDate: this.startDateTime === undefined ? undefined : convertDate(this.startDateTime, 'to_server'),
-	            endDate: this.endDateTime === undefined ? undefined : convertDate(this.endDateTime, 'to_server'),
+	            startDate: this.startDateTime === undefined ? undefined : unitConversionService.date.convertDate(this.startDateTime, 'to_server'),
+	            endDate: this.endDateTime === undefined ? undefined : unitConversionService.date.convertDate(this.endDateTime, 'to_server'),
 	            positionSelector: this.positionSelector,
 	            positionTypeSelector: this.positionSelector !== 'all' ? this.positionTypeSelector: undefined,
 	            xValue: this.xValue
@@ -252,8 +252,8 @@ angular.module('unionvmsWeb').factory('Report',function(globalSettingsService) {
         
         report.filterExpression = {};
         report.filterExpression.common = {};
-        report.filterExpression.common.startDate = this.startDateTime === undefined ? undefined : convertDate(this.startDateTime, 'to_server');
-        report.filterExpression.common.endDate = this.endDateTime === undefined ? undefined : convertDate(this.endDateTime, 'to_server');
+        report.filterExpression.common.startDate = this.startDateTime === undefined ? undefined : unitConversionService.date.convertDate(this.startDateTime, 'to_server');
+        report.filterExpression.common.endDate = this.endDateTime === undefined ? undefined : unitConversionService.date.convertDate(this.endDateTime, 'to_server');
     	report.filterExpression.common.positionTypeSelector = this.positionTypeSelector;
     	report.filterExpression.common.positionSelector = this.positionSelector;
     	report.filterExpression.common.xValue = this.xValue;

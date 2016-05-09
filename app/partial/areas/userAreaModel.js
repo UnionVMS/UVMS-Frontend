@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('UserArea',function() {
+angular.module('unionvmsWeb').factory('UserArea',function(unitConversionService) {
 
     var UserArea = {
         id: undefined,
@@ -40,11 +40,10 @@ angular.module('unionvmsWeb').factory('UserArea',function() {
             this.scopeSelection = data.scopeSelection;
             this.desc = data.areaDesc;
             this.subType = data.subType;
-            this.startDate = data.startDate !== '' ? data.startDate : undefined;
-            this.endDate = data.endDate !== '' ? data.endDate : undefined;
+            this.startDate = data.startDate !== '' ? unitConversionService.date.convertDate(data.startDate, 'from_server') : undefined;
+            this.endDate = data.endDate !== '' ? unitConversionService.date.convertDate(data.endDate, 'from_server') : undefined;
             this.datasetName = data.datasetName;
         }
-        
     };
     
     var reset = function(){
