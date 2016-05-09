@@ -1,7 +1,5 @@
 describe('MovementCtrl', function() {
 
-    beforeEach(module('unionvmsWeb'));
-
     var scope, createController, movementRestDeferred, movement;
 
     var mockPositionReportModal = {
@@ -42,6 +40,12 @@ describe('MovementCtrl', function() {
             return strings[code] || 'fakeString';
         }
     }
+
+    beforeEach(module('unionvmsWeb', function($provide) {
+        $provide.service('locale', function() {
+            return mockLocale;
+        });
+    }));
 
     var m1, m2;
 
@@ -227,8 +231,8 @@ describe('MovementCtrl', function() {
         ];
 
         var expectedCsv = [
-            ['state1', 'ext1', 'ircs1', 'name1', undefined, '58.000', '11.000', '101', '11.00 fakeString', '1.00 fakeString', '101°', undefined, ''],
-            ['state2', 'ext2', 'ircs2', 'name2', undefined, '58.000', '11.000', '101', '12.00 fakeString', '2.00 fakeString', '102°', undefined, '']
+            ['state1', 'ext1', 'ircs1', 'name1', undefined, '58.000', '11.000', '101', '11.00 fakeString', '1.00 fakeString', '101°', undefined, 'fakeString'],
+            ['state2', 'ext2', 'ircs2', 'name2', undefined, '58.000', '11.000', '101', '12.00 fakeString', '2.00 fakeString', '102°', undefined, 'fakeString']
         ];
 
         spyOn(csvService, 'downloadCSVFile').andCallFake(function(data, header, name){

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, $filter, alertService, searchService, locale, $stateParams, PositionReportModal, PositionsMapModal, csvService, SearchResults, $resource, longPolling, ManualPosition, ManualPositionReportModal ){
+angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeout, $filter, alertService, searchService, locale, $stateParams, PositionReportModal, PositionsMapModal, movementCsvService, SearchResults, $resource, longPolling, ManualPosition, ManualPositionReportModal){
 
     //Current filter and sorting for the results table
     $scope.sortFilter = '';
@@ -132,70 +132,18 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         modalInstance = PositionReportModal.showReport(item);
     };
 
-    //Export data as CSV file
-    $scope.exportAsCSVFile = function(){
-        var filename = 'positionReports.csv';
-
-        //Set the header columns
-        var header = [
-            locale.getString('movement.table_header_flag_state'),
-            locale.getString('movement.table_header_external_marking'),
-            locale.getString('movement.table_header_ircs'),
-            locale.getString('movement.table_header_name'),
-            locale.getString('movement.table_header_time'),
-            locale.getString('movement.table_header_latitude'),
-            locale.getString('movement.table_header_longitude'),
-            locale.getString('movement.table_header_status'),
-            locale.getString('movement.table_header_ms'),
-            locale.getString('movement.table_header_cs'),
-            locale.getString('movement.table_header_course'),
-            locale.getString('movement.table_header_movement_type'),
-            locale.getString('movement.table_header_source')
-        ];
-
-        function getSpeed(speed) {
-            // Convert unit and truncate to 2 decimal places
-            return $filter('number')($filter('speed')(speed), 2) + ' ' + locale.getString('movement.movement_speed_unit');
+    function getSelectedMovements() {
+        if ($scope.selectedMovements.length > 0) {
+            return $scope.selectedMovements;
         }
+        else {
+            return $scope.currentSearchResults.items;
+        }
+    }
 
-        //Set the data columns
-        var getData = function() {
-            var exportItems;
-            //Export only selected items
-            if($scope.selectedMovements.length > 0){
-                exportItems = $scope.selectedMovements;
-            }
-            //Export all logs in the table
-            else{
-                exportItems = $scope.currentSearchResults.items;
-            }
-            return exportItems.reduce(
-                function(csvObject, item){
-                    var csvRow = [
-                        item.vessel? item.vessel.countryCode : '',
-                        item.vessel? item.vessel.externalMarking : '',
-                        item.vessel? item.vessel.ircs : '',
-                        item.vessel? item.vessel.name : '',
-                        $filter('confDateFormat')(item.time),
-                        $filter('confCoordinateFormat')(item.movement.latitude).replace(/,/g, '.'), // Replace commas, or ngCsv will try to wrap coordinates in string delimiters
-                        $filter('confCoordinateFormat')(item.movement.longitude).replace(/,/g, '.'),
-                        item.movement.status,
-                        getSpeed(item.movement.reportedSpeed),
-                        getSpeed(item.movement.calculatedSpeed),
-                        item.movement.reportedCourse + '\u00b0',
-                        item.movement.movementType,
-                        $filter('transponderName')(item.movement.source)
-                    ];
-                    csvObject.push(csvRow);
-                    return csvObject;
-                },[]
-            );
-        };
-
-        //Create and download the file
-        csvService.downloadCSVFile(getData(), header, filename);
+    $scope.exportAsCSVFile = function() {
+        movementCsvService.exportMovements(getSelectedMovements());
     };
-
 
     $scope.$on("$destroy", function() {
         alertService.hideMessage();

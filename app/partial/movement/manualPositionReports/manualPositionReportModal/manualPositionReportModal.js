@@ -1,6 +1,25 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $location,$modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, positionReport, ManualPosition, $timeout, movementRestService, coordinateFormatService, dateTimeService, vesselValidationService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly, openedFromMovementPage, globalSettingsService, configurationService) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $location,$modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, positionReport, ManualPosition, $timeout, movementRestService, coordinateFormatService, dateTimeService, vesselValidationService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly, openedFromMovementPage, globalSettingsService, configurationService, flagStates, leafletData) {
+
+    /* Needed to invalidate map size after initial resize. */
+    if ($modalInstance.rendered) {
+        $modalInstance.rendered.then(function() {
+            return leafletData.getMap().then(function(map) {
+                $timeout(function() {
+                    map.invalidateSize();
+                }, 10);
+            });
+        });
+    }
 
     var vm = this;
+
+    /* Flag states for dropdown */
+    $scope.flagStates = flagStates.map(function(flagState) {
+        return {
+            code: flagState,
+            text: flagState
+        };
+    });
 
     $scope.errorMessage ="";
     $scope.readOnly = readOnly;
@@ -315,6 +334,12 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         return getVessels();
     };
 
+    $scope.getVesselsByExternalMarking = function(value){
+        vesselsGetListRequest.resetCriterias();
+        vesselsGetListRequest.addSearchCriteria("EXTERNAL_MARKING", value);
+        return getVessels();
+    };
+
     $scope.getVesselsByCFR = function(value){
         vesselsGetListRequest.resetCriterias();
         vesselsGetListRequest.addSearchCriteria("CFR", value);
@@ -385,7 +410,7 @@ angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($mod
 				templateUrl: 'partial/movement/manualPositionReports/manualPositionReportModal/manualPositionReportModal.html',
                 controller: 'ManualPositionReportModalCtrl as modalCtrl',
 				backdrop: 'static', //will not close when clicking outside the modal window
-				size: 'md',
+				size: 'lg',
                 resolve:{
                     positionReport : function (){
                         return positionReport;

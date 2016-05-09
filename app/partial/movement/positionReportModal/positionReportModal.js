@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($scope, $log, $modalInstance, locale, movementRestService, vesselRestService, dateTimeService, positionReport, positionReportGuid, globalSettingsService) {
+angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($scope, $log, $modalInstance, locale, movementRestService, vesselRestService, dateTimeService, positionReport, positionReportGuid, globalSettingsService, movementCsvService) {
 
     $scope.waitingForResponse = false;
     $scope.waitingForResponseMessage = locale.getString('movement.positions_modal_loading_text');
@@ -8,6 +8,10 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
     $scope.markers = {};
     $scope.errorMessage = undefined;
     $scope.speedUnit = globalSettingsService.getSpeedUnit();
+
+    $scope.exportCsv = function(movement) {
+        movementCsvService.exportMovements([movement]);
+    };
 
     //Create the marker
     var createMarker = function(){
@@ -77,7 +81,7 @@ angular.module('unionvmsWeb').factory('PositionReportModal', function($modal) {
         return $modal.open({
             templateUrl: 'partial/movement/positionReportModal/positionReportModal.html',
             controller: 'PositionReportModalCtrl',
-            size: 'md',
+            size: 'lg',
             resolve:{
                 positionReport : function (){
                     return positionReport;

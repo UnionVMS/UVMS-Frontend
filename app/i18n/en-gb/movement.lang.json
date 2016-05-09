@@ -1,4 +1,10 @@
 {
+
+	"asset": "Asset",
+	"position": "Position",
+	"poll": "Poll",
+	"csv": "CSV",
+
 	"header_position_reports" : "Position reports",
 	"header_manual_position_reports" : "Manual position reports",
 	"table_header_flag_state" : "F.S",
@@ -76,18 +82,23 @@
 	"position_report_header": "Position report",
     "sent_position_report_header": "Sent position report",
 
-	"manual_position_field_label_flag_state": "F.S.",
+	"manual_position_field_label_flag_state": "Flag state",
 	"manual_position_field_label_ircs": "IRCS",
-	"manual_position_field_label_ircs_placeholder": "Search",
+	"manual_position_field_label_ircs_placeholder": "Search by IRCS",
 	"manual_position_field_label_cfr": "CFR",
+	"manual_position_field_label_mmsi": "MMSI",
 	"manual_position_field_label_cfr_placeholder": "Search by CFR",
 	"manual_position_field_label_external_marking": "Ext. Marking",
+	"manual_position_field_label_external_marking_search": "Search by External Marking",
 	"manual_position_field_label_name": "Name",
-	"manual_position_field_label_status": "Status",
-	"manual_position_field_label_date_time": "Date/Time",
+	"manual_position_field_label_status": "Transceiver status",
+	"manual_position_field_label_type": "Type",
+	"manual_position_field_label_source": "Source",
+	"manual_position_field_label_date_time": "Date & time (UTC)",
 	"manual_position_field_label_latitude": "Lat.",
 	"manual_position_field_label_longitude": "Long.",
 	"manual_position_field_label_measured_speed": "Meas. Speed",
+	"manual_position_field_label_calculated_speed": "Calc. Speed",
 	"manual_position_field_label_course": "Course",
 
 	"manual_position_field_unit_degrees": "\u00b0",
