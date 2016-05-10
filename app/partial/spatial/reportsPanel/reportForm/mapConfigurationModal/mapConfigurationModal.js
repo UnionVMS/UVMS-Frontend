@@ -13,8 +13,8 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     };
 
     $scope.save = function () {
+    	loadingStatus.isLoading('SavePreferences',true);
     	if(_.keys($scope.mapConfigurationForm.$error).length > 0 || angular.isDefined($scope.configModel.mapSettings.displayProjectionId) && !angular.isDefined($scope.configModel.mapSettings.coordinatesFormat)){
-//        if (angular.isDefined($scope.configModel.mapSettings.displayProjectionId) && !angular.isDefined($scope.configModel.mapSettings.coordinatesFormat)){
     		$location.hash('mapConfigurationModal');
     		$anchorScroll();
     		$location.hash('');
@@ -24,12 +24,12 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 		    $scope.alert.alertMessage = locale.getString('spatial.invalid_data_saving');
 		    $scope.alert.hideAlert();
 		    $scope.submitedWithErrors = true;
-		    
             return false;
         } else {
             $modalInstance.close($scope.exportMapConfiguration());
             $scope.initialConfig = undefined;
         }
+    	loadingStatus.isLoading('SavePreferences',true);
     };
 
     $scope.exportMapConfiguration = function () {

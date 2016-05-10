@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, locale, $anchorScroll, spatialConfigRestService, spatialConfigAlertService, SpatialConfig, $location){
+angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, locale, $anchorScroll, spatialConfigRestService, spatialConfigAlertService, SpatialConfig, $location, loadingStatus){
 
 	$scope.status = {
 		isOpen: false
@@ -40,6 +40,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	};
 	
 	$scope.reset = function(){
+		loadingStatus.isLoading('ResetPreferences',true);
 		$scope.layersettingsForm.$setDirty();
 		$scope.loadedAllSettings = false;
         var item = {
@@ -65,6 +66,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
         spatialConfigAlertService.hasSuccess = true;
         spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_layers_success');
         spatialConfigAlertService.hideAlert();
+        loadingStatus.isLoading('ResetPreferences',false);
     };
     
     var resetFailure = function(error){
@@ -73,6 +75,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
         spatialConfigAlertService.hasError = true;
         spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_layers_failure');
         spatialConfigAlertService.hideAlert();
+        loadingStatus.isLoading('ResetPreferences',false);
     };
     
     $scope.checkIfExists = function(item,list,layersettingsForm,isBaseList) {
@@ -179,6 +182,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	    spatialConfigAlertService.hasSuccess = true;
 	    spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_layers_success');
         spatialConfigAlertService.hideAlert();
+        loadingStatus.isLoading('ResetPreferences',false);
 	};
 	
 	var getConfigsFailure = function(error){
@@ -187,6 +191,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	    $scope.alert.hasError = true;
 	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_reset_layers_failure');
 	    $scope.alert.hideAlert();
+	    loadingStatus.isLoading('ResetPreferences',false);
 	};
 	
 	$scope.validateBackGroundLayers = function(){

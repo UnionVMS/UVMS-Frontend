@@ -409,6 +409,8 @@
 	"rule_update_date": "Updated on",
 	"rule_updated_by": "Updated by",
 	"loading_preferences": "Loading preferences",
+	"saving_preferences": "Saving preferences",
+	"reseting_preferences": "Reseting preferences",
 	
 	"reset": "Reset"
 }

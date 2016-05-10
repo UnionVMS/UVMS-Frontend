@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',function($scope, locale, $anchorScroll, spatialConfigRestService, spatialConfigAlertService, SpatialConfig, $location){
+angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',function($scope, locale, $anchorScroll, spatialConfigRestService, spatialConfigAlertService, SpatialConfig, $location, loadingStatus){
 
 	$scope.status = {
 		isOpen: false
@@ -36,6 +36,7 @@ angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',functio
 	};
 	
 	$scope.reset = function(){
+		loadingStatus.isLoading('ResetPreferences',true);
 		$scope.vmsstylesForm.$setDirty();
 		$scope.loadedAllSettings = false;
         var item = {
@@ -62,6 +63,7 @@ angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',functio
         spatialConfigAlertService.hasSuccess = true;
         spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_vms_styles_success');
         spatialConfigAlertService.hideAlert();
+        loadingStatus.isLoading('ResetPreferences',false);
     };
     
     var resetFailure = function(error){
@@ -70,6 +72,7 @@ angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',functio
         spatialConfigAlertService.hasError = true;
         spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_vms_styles_failure');
         spatialConfigAlertService.hideAlert();
+        loadingStatus.isLoading('ResetPreferences',false);
     };
     
     $scope.generateRandomColor = function(){
@@ -104,6 +107,7 @@ angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',functio
 	    spatialConfigAlertService.hasSuccess = true;
 	    spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_vms_styles_success');
         spatialConfigAlertService.hideAlert();
+        loadingStatus.isLoading('ResetPreferences',false);
 	};
 	
 	var getConfigsFailure = function(error){
@@ -112,6 +116,7 @@ angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',functio
 	    $scope.alert.hasError = true;
 	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_reset_vms_styles_failure');
 	    $scope.alert.hideAlert();
+	    loadingStatus.isLoading('ResetPreferences',false);
 	};
 
 });

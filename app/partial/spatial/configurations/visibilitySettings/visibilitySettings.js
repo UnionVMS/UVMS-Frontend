@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scope, locale, $anchorScroll, spatialConfigRestService, spatialConfigAlertService, SpatialConfig, $location){
+angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scope, locale, $anchorScroll, spatialConfigRestService, spatialConfigAlertService, SpatialConfig, $location, loadingStatus){
     
     $scope.status = {
         isOpen: false
@@ -52,6 +52,7 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
     };
     
     $scope.reset = function(){
+    	loadingStatus.isLoading('ResetPreferences',true);
     	$scope.visibilitysettingsForm.$setDirty();
         var item = {
            visibilitySettings: {}
@@ -74,6 +75,7 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
         spatialConfigAlertService.hasSuccess = true;
         spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_visibilities_success');
         spatialConfigAlertService.hideAlert();
+        loadingStatus.isLoading('ResetPreferences',false);
     };
     
     var resetFailure = function(error){
@@ -82,6 +84,7 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
         spatialConfigAlertService.hasError = true;
         spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_visibilities_failure');
         spatialConfigAlertService.hideAlert();
+        loadingStatus.isLoading('ResetPreferences',false);
     };
     
     $scope.dropItem = function(item, list){
@@ -112,6 +115,7 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
 	    spatialConfigAlertService.hasSuccess = true;
 	    spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_visibilities_success');
         spatialConfigAlertService.hideAlert();
+        loadingStatus.isLoading('ResetPreferences',false);
 	};
 	
 	var getConfigsFailure = function(error){
@@ -120,6 +124,7 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
 	    $scope.alert.hasError = true;
 	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_reset_visibilities_failure');
 	    $scope.alert.hideAlert();
+	    loadingStatus.isLoading('ResetPreferences',false);
 	};
 	
 	$scope.selectAllChange = function(visibilityType,contentType,isListItem,newVal){

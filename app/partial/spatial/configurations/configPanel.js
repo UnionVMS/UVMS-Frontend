@@ -33,6 +33,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	
 	$scope.save = function(){
 		if(_.keys($scope.configPanelForm.$error).length === 0){
+			loadingStatus.isLoading('SavePreferences',true);
 		    var newConfig = new SpatialConfig();
 		    newConfig = newConfig.forUserPrefToServer();
 		    
@@ -52,6 +53,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		        $scope.alert.hasWarning = true;
 		        $scope.alert.alertMessage = locale.getString('spatial.user_preferences_warning_saving');
 		        $scope.alert.hideAlert();
+		        loadingStatus.isLoading('SavePreferences',false);
 		    }
 		}else{
 		    $anchorScroll();
@@ -337,6 +339,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_success_saving');
 	    $scope.alert.hideAlert(6000);
 	    $scope.updateConfigCopy(response[1]);
+	    loadingStatus.isLoading('SavePreferences',false);
 	};
 	
 	var saveFailure = function(error){
@@ -345,6 +348,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    $scope.alert.hasError = true;
 	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_error_saving');
 	    $scope.alert.hideAlert();
+	    loadingStatus.isLoading('SavePreferences',false);
 	};
 	
 	var getConfigsSuccess = function(response){

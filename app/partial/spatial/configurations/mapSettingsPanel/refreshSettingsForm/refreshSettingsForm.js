@@ -25,7 +25,7 @@ angular.module('unionvmsWeb').controller('RefreshsettingsformCtrl',function($sco
 	};
 	
 	$scope.$watch('configModel.mapSettings.refreshStatus', function(newVal){
-		if(newVal === true){
+		if(newVal === true && angular.isDefined($scope.refreshSettingsForm) && angular.isDefined($scope.refreshSettingsForm.refreshRate)){
 			$scope.validateRefreshRate();
 		}else if(angular.isDefined($scope.refreshSettingsForm) && angular.isDefined($scope.refreshSettingsForm.refreshRate)){
 			$scope.refreshSettingsForm.refreshRate.$setValidity('requiredField', true);

@@ -4,6 +4,14 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 			message: 'spatial.loading_preferences',
 			value: false
 		},
+		isLoadingSavePreferences: {
+			message: 'spatial.saving_preferences',
+			value: false
+		},
+		isLoadingResetPreferences: {
+			message: 'spatial.reseting_preferences',
+			value: false
+		},
 		isLoadingLiveviewMap: {
 		    message: ['spatial.map_loading_report_message', 'spatial.map_loading_alarms_message'],
 		    messageIdx: undefined,

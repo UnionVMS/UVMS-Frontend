@@ -1,10 +1,11 @@
-angular.module('unionvmsWeb').controller('MapsettingscollapsiblepanelCtrl',function($scope, locale, $anchorScroll, spatialConfigRestService, spatialConfigAlertService, SpatialConfig, $location){
+angular.module('unionvmsWeb').controller('MapsettingscollapsiblepanelCtrl',function($scope, locale, $anchorScroll, spatialConfigRestService, spatialConfigAlertService, SpatialConfig, $location, loadingStatus){
 
 	$scope.status = {
 		isOpen: false
 	};
 	
 	$scope.reset = function(){
+		loadingStatus.isLoading('ResetPreferences',true);
 		$scope.mapsettingsForm.$setDirty();
 	    var item = {
 	       mapSettings: {}
@@ -27,6 +28,7 @@ angular.module('unionvmsWeb').controller('MapsettingscollapsiblepanelCtrl',funct
 	    spatialConfigAlertService.hasSuccess = true;
 	    spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_map_settings_success');
         spatialConfigAlertService.hideAlert();
+        loadingStatus.isLoading('ResetPreferences',false);
 	};
 	
 	var resetFailure = function(error){
@@ -35,6 +37,7 @@ angular.module('unionvmsWeb').controller('MapsettingscollapsiblepanelCtrl',funct
         spatialConfigAlertService.hasError = true;
         spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_map_settings_failure');
         spatialConfigAlertService.hideAlert();
+        loadingStatus.isLoading('ResetPreferences',false);
 	};
 	
 	var getConfigsSuccess = function(response){
@@ -59,6 +62,7 @@ angular.module('unionvmsWeb').controller('MapsettingscollapsiblepanelCtrl',funct
 	    spatialConfigAlertService.hasSuccess = true;
 	    spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_map_settings_success');
         spatialConfigAlertService.hideAlert();
+        loadingStatus.isLoading('ResetPreferences',false);
 	};
 	
 	var getConfigsFailure = function(error){
@@ -67,5 +71,6 @@ angular.module('unionvmsWeb').controller('MapsettingscollapsiblepanelCtrl',funct
 	    $scope.alert.hasError = true;
 	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_reset_map_settings_failure');
 	    $scope.alert.hideAlert();
+	    loadingStatus.isLoading('ResetPreferences',false);
 	};
 });
