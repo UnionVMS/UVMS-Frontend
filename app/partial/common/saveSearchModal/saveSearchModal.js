@@ -55,20 +55,14 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
                 console.error("Search type is missing for save search modal.");
         }
 
-        //Create list of searchFields and set isDynamic flag
-        if(options.dynamicSearch) {
-            isDynamic = true;
+        isDynamic = !!options.dynamicSearch;
+        if (!isDynamic && searchType === 'VESSEL') {
+            // Non-dynamic (simple) vessel search only saves IDs
+            searchFields = getVesselIdSearchFields(options.selectedItems);
+        }
+        else {
+            // Dynamic search and non-dynamic, non-vessel search save set of criterias.
             searchFields = searchService.getAdvancedSearchCriterias(skipSearchCriteriaKeys);
-        }else{
-            searchFields = [];
-            //LIST OF CHECKED ITEMS
-            if(searchType === "VESSEL"){
-                if(angular.isDefined(options.selectedItems)){
-                    $.each(options.selectedItems, function(key, vessel){
-                        searchFields.push(new SearchField(vessel.vesselId.type, vessel.vesselId.value));
-                    });
-                }
-            }
         }
 
         //Any extra search fields to add?
@@ -85,6 +79,16 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
             $scope.error = true;
         }
     };
+
+    function getVesselIdSearchFields(vessels) {
+        if (!angular.isArray(vessels)) {
+            return [];
+        }
+
+        return vessels.map(function(vessel) {
+            return new SearchField(vessel.vesselId.type, vessel.vesselId.value);
+        });
+    }
 
     $scope.contains = function(a, obj) {
         for (var i = 0; i < a.length; i++) {

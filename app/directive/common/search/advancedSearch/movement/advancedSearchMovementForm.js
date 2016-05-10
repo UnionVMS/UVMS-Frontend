@@ -69,7 +69,7 @@ angular.module('unionvmsWeb')
 
         $scope.openSaveSearchModal = function(){
             var options = {
-                dynamicSearch : true,
+                dynamicSearch : $scope.advancedSearch
             };
             //Asset group selected?
             if(angular.isDefined($scope.selectedVesselGroup)){
@@ -94,17 +94,6 @@ angular.module('unionvmsWeb')
             $scope.selectedSavedSearch = undefined;
         };
 
-        $scope.cfrIrcsName = function(value) {
-            if (value === undefined) {
-                return $scope.advancedSearchObject.NAME;
-            }
-            else {
-                $scope.advancedSearchObject.CFR = value;
-                $scope.advancedSearchObject.IRCS = value;
-                $scope.advancedSearchObject.NAME = value;
-            }
-        };
-
         //Search by the advanced search form inputs
         $scope.performAdvancedMovementSearch = function(){
             alertService.hideMessage();
@@ -122,7 +111,7 @@ angular.module('unionvmsWeb')
                 delete $scope.advancedSearchObject[ASSET_GROUP_ID_SEARCH_KEY];
             }
 
-            searchService.setSearchCriteriasToAdvancedSearch();
+                searchService.setSearchCriteriasToAdvancedSearch();
 
             //Do the search
             $scope.searchfunc();
@@ -137,7 +126,8 @@ angular.module('unionvmsWeb')
             alertService.hideMessage();
             $scope.resetAdvancedSearchForm(false);
             $scope.performSavedGroupSearch(savedSearchGroup, true, false);
-            $scope.advancedSearch = true;
+
+            $scope.advancedSearch = savedSearchGroup.dynamic;
 
             //Saved search includes an asset group?
             var foundAssetGroup = false;

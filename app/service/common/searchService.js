@@ -445,7 +445,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             searchUtilsService.replaceCommasWithPoint(getListRequest.criterias);
 
             // Split search criteria into vessel and movement
-            var allSearchCriteria = this.getSearchCriterias();
+            var allSearchCriteria = explodeCriterias(this.getSearchCriterias(), {'CFR_IRCS_NAME': ['CFR', 'IRCS', 'NAME']});
             var partition = searchUtilsService.getSearchCriteriaPartition(allSearchCriteria, {vessel: vesselSearchKeys});
             var movementCritieria = partition["default"];
             var vesselCriteria = partition["vessel"];
@@ -649,25 +649,11 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         },
         //Get the advanced search criterias as a list of SearchFields
         //Skip criterias that are in keysToSkipList
-        getAdvancedSearchCriterias : function(keysToSkipList){
+        getAdvancedSearchCriterias : function(keysToSkipList) {
             var criterias = [];
-            $.each(advancedSearchObject, function(key, value){
-                //Don't use the values in the skipList
-                if(angular.isUndefined(keysToSkipList) || keysToSkipList.indexOf(key) < 0){
-                    //Skip empty values
-                    if (typeof value === 'number' || (typeof value === 'string' && value.trim().length !== 0)) {
-                        criterias.push(new SearchField(key, value));
-                    }
-                    else if (value instanceof Array) {
-                        for (var i = 0; i < value.length; i++) {
-                            if (typeof value[i] === 'string' && value[i].trim().length !== 0) {
-                                criterias.push(new SearchField(key, value[i]));
-                            }
-                            if ( typeof value[i] === "object") {
-                                criterias.push(value[i]);
-                            }
-                        }
-                    }
+            $.each(advancedSearchObject, function(key, value) {
+                if (!angular.isArray(keysToSkipList) || keysToSkipList.indexOf(key) < 0) {
+                    pushCriteria(criterias, key, value);
                 }
             });
             return criterias;
@@ -691,6 +677,46 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         },
 
 	};
+
+    /* Create search field for numbers, strings or return existing search field object */
+    function getSearchField(key, value) {
+        if (angular.isNumber(value) || (angular.isString(value) && value.trim().length > 0)) {
+            return new SearchField(key, value);
+        }
+        else if (angular.isObject(value)) {
+            return value;
+        }
+    }
+
+    function explodeCriterias(criterias, explodeMap) {
+        for (var i = 0; i < criterias.length; i++) {
+            if (explodeMap.hasOwnProperty(criterias[i].key)) {
+                var criteria = criterias.splice(i, 1)[0];
+                angular.forEach(explodeMap[criteria.key], function(k) {
+                    criterias.splice(i++, 0, new SearchField(k, criteria.value));
+                });
+            }
+        }
+
+        return criterias;
+    }
+
+    /* Push {key,value} pair, possibly called recursively. */
+    function pushCriteria(criterias, key, value) {
+        if (angular.isArray(value)) {
+            // Iterate over multiple values for this key
+            angular.forEach(value, function(v) {
+                pushCriteria(criterias, key, v);
+            });
+        }
+        else {
+            // Push the actual search field
+            var searchField = getSearchField(key, value);
+            if (angular.isDefined(searchField)) {
+                criterias.push(searchField);
+            }
+        }
+    }
 
 	return searchService;
 });
