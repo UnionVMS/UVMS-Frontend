@@ -299,8 +299,10 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             };
             
             scope.onComboChange = function(){
-            	scope.isOpen = true;
-        		comboboxService.setActiveCombo(scope);
+            	if(scope.focus){
+	            	scope.isOpen = true;
+	        		comboboxService.setActiveCombo(scope);
+            	}
         		scope.newItem.text = scope.newItem.text.toUpperCase();
             	scope.ngModel = scope.newItem.text;
             	ctrl.$setViewValue(scope.ngModel);

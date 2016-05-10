@@ -473,6 +473,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.init();
         $scope.userAreaForm.$setPristine();
         $scope.circularForm.$setPristine();
+        $scope.userAreaSubmitted = false;
         areaMapService.removeVectorFeatures('drawlayer');
         areaMapService.removeVectorFeatures('pointdraw');
     };
@@ -719,9 +720,9 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         $scope.alert.removeLoading();
         $scope.alert.setError();
 
-        if (angular.isDefined(error.data.msg)) {
-            $scope.alert.alertMessage = locale.getString('areas.' + error.data.msg);    
-        } else {
+        if(angular.isDefined(error) && angular.isDefined(error.data) && angular.isDefined(error.data.msg)){
+            $scope.alert.alertMessage = error.data.msg;    
+        }else{
             $scope.alert.alertMessage = locale.getString('areas.' + defaultMsg);
         }
         

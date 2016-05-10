@@ -19,7 +19,7 @@
 				<span ng-class="{'caret': !multiple || selectedItems && selectedItems.length === 0,'clear-all item-remover fa fa-times': multiple && selectedItems.length > 0}" ng-click="removeAllSelected()"></span>
 			</div>
 			<ng-form name="comboForm">
-				<input class="form-control combo-editable-input" name="comboEditableInput" ng-model="newItem.text" ng-if="editable" ng-change="onComboChange()" placeholder="{{placeholder}}">
+				<input class="form-control combo-editable-input" name="comboEditableInput" ng-model="newItem.text" ng-if="editable" ng-change="onComboChange()" ng-focus="focus=true" ng-blur="focus=false" placeholder="{{placeholder}}">
 				<span ng-class="{'caret': !multiple || selectedItems && selectedItems.length === 0,'clear-all item-remover fa fa-times': multiple && selectedItems.length > 0}" ng-click="removeAllSelected()"  ng-if="editable"></span>
 			</ng-form>
 		</div>
