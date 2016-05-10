@@ -126,7 +126,7 @@ describe('advancedSearchMovementCtrl', function() {
 
         var saveModalSpy = spyOn(savedSearchService, "openSaveSearchModal").andCallFake(function(type, options){
             expect(type).toEqual("MOVEMENT");
-            expect(options.dynamicSearch).toEqual(true);
+            expect(options.dynamicSearch).toEqual(false);
             expect(options.selectedItems).toBeUndefined();
         });
         var controller = createController();
