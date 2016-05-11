@@ -146,10 +146,7 @@ angular.module('unionvmsWeb').controller('numericInputCtrl',['$scope','$interval
     		value *= Math.pow(10,nrDecimalsStep-nrDecimalsValue);
     	}
     	
-    	step = step === 'any' ? 1 : step*Math.pow(10,nrDecimals);
-    	if(nrDecimalsValue > nrDecimalsStep){
-    		step *= Math.pow(10,nrDecimalsValue-nrDecimalsStep);
-    	}
+    	step = step === 'any' ? Math.pow(10,nrDecimalsValue-nrDecimalsStep) : step*Math.pow(10,nrDecimals);
 
     	if(type==='+'){
     		value += step;
