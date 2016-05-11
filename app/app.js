@@ -580,7 +580,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
 
 });
 
-unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, userService, locale, httpPendingRequestsService) {
+unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, userService, locale, httpPendingRequestsService, searchService) {
     //Never cancel these request
     httpPendingRequestsService.setSkipList(['/translate/locale-', '.lang.json', '/rules/activity', '/ping']);
 
@@ -638,6 +638,9 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
         if (toState.url !== fromState.url) {
             httpPendingRequestsService.cancelAll();
         }
+
+        // Reset search service for the new state.
+        searchService.reset();
 
         $timeout.cancel(showPageNavigationSpinnerTimeout);
         //Only show spinner if user is logged in or waiting for ping request response

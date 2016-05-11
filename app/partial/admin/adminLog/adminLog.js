@@ -325,7 +325,6 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
     };
 
     $scope.$on("$destroy", function() {
-        searchService.reset();
         if(angular.isDefined(modalInstance)){
             modalInstance.dismiss();
         }

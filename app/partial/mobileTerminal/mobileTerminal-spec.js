@@ -325,10 +325,8 @@ describe('MobileTerminalCtrl', function() {
         it('should clean up on scope destroy', inject(function($rootScope, alertService, searchService) {
             var controller = createController();
             var alertSpy = spyOn(alertService, "hideMessage");
-            var searchSpy = spyOn(searchService, "reset");
             scope.$destroy();
             expect(alertSpy).toHaveBeenCalled();
-            expect(searchSpy).toHaveBeenCalled();
         }));
 
         it('should not clean up alerts on scope destroy if hideAlertsOnScopeDestroy is set to false', inject(function($rootScope, alertService, searchService) {
@@ -337,11 +335,9 @@ describe('MobileTerminalCtrl', function() {
             scope.hideAlertsOnScopeDestroy = false;
 
             var alertSpy = spyOn(alertService, "hideMessage");
-            var searchSpy = spyOn(searchService, "reset");
 
             scope.$destroy();
             expect(alertSpy).not.toHaveBeenCalled();
-            expect(searchSpy).toHaveBeenCalled();
         }));
     });
 });

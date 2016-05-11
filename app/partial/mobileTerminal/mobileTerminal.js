@@ -358,7 +358,6 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         if($scope.hideAlertsOnScopeDestroy){
             alertService.hideMessage();
         }
-        searchService.reset();
     });
 
     init();

@@ -200,10 +200,8 @@ describe('ExchangeCtrl', function() {
 
     it('should clean up on scope destroy', inject(function($rootScope, alertService, searchService) {
         var alertSpy = spyOn(alertService, "hideMessage");
-        var searchSpy = spyOn(searchService, "reset");
         scope.$destroy();
         expect(alertSpy).toHaveBeenCalled();
-        expect(searchSpy).toHaveBeenCalled();
     }));
 
 

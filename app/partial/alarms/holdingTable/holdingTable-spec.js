@@ -145,10 +145,8 @@ describe('HoldingtableCtrl', function() {
     it('should clean up on scope destroy', inject(function($rootScope, alertService, searchService) {
         var controller = createController();
         var alertSpy = spyOn(alertService, "hideMessage");
-        var searchSpy = spyOn(searchService, "reset");
         scope.$destroy();
         expect(alertSpy).toHaveBeenCalled();
-        expect(searchSpy).toHaveBeenCalled();
     }));
 
     it('exportItemsAsCSVFile should call service for exporting to csv file', inject(function(Alarm, csvService) {

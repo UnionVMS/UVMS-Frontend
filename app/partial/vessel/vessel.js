@@ -307,7 +307,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
 
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
-        searchService.reset();
     });
 
     init();

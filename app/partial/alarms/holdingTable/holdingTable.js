@@ -292,7 +292,6 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
 
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
-        searchService.reset();
         longPolling.cancel(longPollingId);
         if(angular.isDefined(modalInstance)){
             modalInstance.dismiss();

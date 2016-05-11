@@ -147,7 +147,6 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
 
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
-        searchService.reset();
         longPolling.cancel(longPollingId);
         if(angular.isDefined(modalInstance)){
             modalInstance.dismiss();

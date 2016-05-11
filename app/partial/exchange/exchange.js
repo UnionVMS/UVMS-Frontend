@@ -413,7 +413,6 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
 
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
-        searchService.reset();
         longPolling.cancel(longPollingIdPlugins);
         longPolling.cancel(longPollingIdSendingQueue);
         longPolling.cancel(longPollingIdExchangeList);
