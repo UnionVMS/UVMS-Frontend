@@ -1,10 +1,12 @@
 span.fancytree-icon, span.fancytree-checkbox, span.fancytree-expander, span.fancytree-radio, span.fancytree-custom-icon {
   margin-top: 4px;
+  color: @primaryColor;
 }
 
 span.fancytree-title {
   padding: 0px;
   margin: 0px;
+  padding-right: 5px;
 }
 
 #fancytree-drop-marker.fancytree-drop-after, #fancytree-drop-marker.fancytree-drop-before {
@@ -17,9 +19,11 @@ span.fancytree-clickable {
   width: 15px;
   text-align: center;
   margin-left: 5px;
-  outline: 1px solid rgb(187, 187, 187);
-  background: rgb(255, 255, 255) none repeat scroll 0% 0%;
-  color: rgb(52, 152, 219);
+  color: @profileColor_darkgray;
+  &.fa-info,
+  &.fa-tags {
+  	float: right;
+  }
 }
 
 span.fancytree-clickable.info-disabled,
@@ -29,18 +33,15 @@ span.fancytree-clickable.label-disabled {
 }
 
 span.fancytree-clickable.info-selected {
-  background: #3498DB none repeat scroll 0% 0%;
-  color: #FFFFFF;
+  color: @primaryColor;
 }
 
 span.fancytree-clickable.label-selected-vmspos {
-  background: #2876C7 none repeat scroll 0% 0%;
-  color: #FFFFFF;
+  color: @profileColor_blue;
 }
 
 span.fancytree-clickable.label-selected-vmsseg {
-  background: #4A7D2B none repeat scroll 0% 0%;
-  color: #FFFFFF;
+  color: #0C9F15;
 }
 
 .layertree-baselayer-node > .fancytree-title {
@@ -57,4 +58,14 @@ span.fancytree-clickable.label-selected-vmsseg {
   span.fancytree-title {
     padding-left: 22px !important;
   }
+}
+
+span.fancytree-clickable.fancytree-context-menu-btn {
+	border: 1px solid @primaryColor;
+	color: @primaryColor;
+}
+
+ul.fancytree-container.ui-fancytree {
+	font-family: Roboto, Arial;
+	font-size: 15px;
 }
