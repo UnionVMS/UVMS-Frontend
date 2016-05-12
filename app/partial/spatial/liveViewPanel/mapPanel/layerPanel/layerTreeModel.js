@@ -335,7 +335,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
             tree.push({
                 title: locale.getString('spatial.layer_tree_additional_cartography'),
                 folder: true,
-                expanded: true,
+                expanded: false,
                 children: additionalNodes
             });
         }

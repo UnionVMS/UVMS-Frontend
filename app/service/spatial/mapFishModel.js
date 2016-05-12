@@ -115,7 +115,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
     return model;
 
 })
-.factory('MapFishPayload',function(locale, $location, MapFish, mapService, mapFishPrintRestService, unitConversionService, projectionService){
+.factory('MapFishPayload',function(locale, $location, Color, MapFish, mapService, mapFishPrintRestService, unitConversionService, projectionService, coordinateFormatService){
     function mapFishPayload(){
         this.layout = undefined;
         this.attributes = {};
@@ -678,6 +678,13 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         }   
     };
     
+    var rgbToHex = function(colorStr){
+        var pattern = /\d+/g;
+        var rgb = colorStr.match(pattern);
+        
+        return '#' + ((1 << 24) | (parseInt(rgb[0], 10) << 16) | (parseInt(rgb[1], 10) << 8) | parseInt(rgb[2], 10)).toString(16).substr(1);
+    };
+    
     var layerFuncs = {
         buildOSEA: function(layer){
             return this.buildOSM(layer);
@@ -754,6 +761,40 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
                 geojson: getGeoJSON(layer)
             };
             
+            if (mapService.vmssegLabels.active){
+                var dataFields = [];
+                var fields = mapService.labelVisibility.segments;
+                var mappings = mapService.getMappingTitlesProperties('vmsseg');
+                var titles = mapService.getSegmentTitles();
+                
+                if (fields.length > 0){
+                    angular.forEach(fields, function(item) {
+                        var def = {
+                            displayName: titles[item],
+                            propName: mappings[item]
+                        };
+                        
+                        if (!_.isEqual(def, {})){
+                            dataFields.push(def);
+                        }
+                    });
+                    
+                    var labelEl = $('.vector-label-vmsseg').first();
+                    obj.popupProperties = {
+                        showAttrNames: mapService.labelVisibility.segmentsTitles,
+                        dataFields: dataFields,
+                        popupStyle: {
+                            width: parseInt(labelEl.css('width')),
+                            radius: parseInt(labelEl.css('border-radius')),
+                            border: {
+                                color: rgbToHex(labelEl.css('border-left-color')), 
+                                width: parseInt(labelEl.css('border-left-width'))
+                            }
+                        }
+                    };
+                }
+            }
+            
             return obj;
         },
         buildVMSPOS: function(layer, iconLeg){
@@ -787,7 +828,28 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
             	    
             	    clusters.push(clusterToPrint);
             	} else {
-            	    singleFeatures.push(featuresInCluster[0]);
+            	    var feature = angular.copy(featuresInCluster[0]);
+            	    if (mapService.vmsposLabels.active){
+            	        if (feature.get('overlayHidden') === false){
+            	            var overCoords = mapService.vmsposLabels[feature.get('overlayId')].overlay.getPosition();
+                            feature.set('popupX', overCoords[0]);
+                            feature.set('popupY', overCoords[1]);
+            	            
+                            var srcCoords = feature.getGeometry().getCoordinates();
+                            var proj = mapService.getMapProjectionCode();
+            	            if (proj !== 'EPSG:4326'){
+                                srcCoords = ol.proj.toLonLat(srcCoords, proj);
+                            }
+            	            
+            	            feature.set('disp_lon', coordinateFormatService.formatAccordingToUserSettings(srcCoords[0]));
+            	            feature.set('disp_lat', coordinateFormatService.formatAccordingToUserSettings(srcCoords[1]));
+            	            feature.set('positionTime', unitConversionService.date.convertToUserFormat(feature.get('positionTime')));
+            	            feature.set('reportedSpeed', unitConversionService.speed.formatSpeed(feature.get('reportedSpeed'), 5));
+            	            feature.set('calculatedSpeed', unitConversionService.speed.formatSpeed(feature.get('calculatedSpeed'), 5));
+            	            feature.set('reportedCourse', feature.get('reportedCourse') + '\u00b0');
+            	        }
+            	    }
+            	    singleFeatures.push(feature);
             	}
             });
             
@@ -798,6 +860,47 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
                     style: styleFuncs.buildVMSPOS(singleFeatures, iconLeg),
                     geojson: format.writeFeaturesObject(singleFeatures)
                 };
+                
+                if (mapService.vmsposLabels.active){
+                    var dataFields = [];
+                    var fields = mapService.labelVisibility.positions;
+                    var mappings = mapService.getMappingTitlesProperties('vmspos');
+                    var titles = mapService.getPositionTitles();
+                    
+                    if (fields.length > 0){
+                        angular.forEach(fields, function(item) {
+                            var def = {
+                                displayName: titles[item]
+                            };
+                            
+                            if (item === 'lon'){
+                                def.propName = 'disp_lon';
+                            } else if (item === 'lat'){
+                                def.propName = 'disp_lat';
+                            } else {
+                                def.propName = mappings[item];
+                            }
+                            
+                            if (!_.isEqual(def, {})){
+                                dataFields.push(def);
+                            }
+                        });
+                        
+                        var labelEl = $('.vector-label-vmspos').first();
+                        output.singleFeatures.popupProperties = {
+                            showAttrNames: mapService.labelVisibility.positionsTitles,
+                            dataFields: dataFields,
+                            popupStyle: {
+                                width: parseInt(labelEl.css('width')),
+                                radius: parseInt(labelEl.css('border-radius')),
+                                border: {
+                                    color: rgbToHex(labelEl.css('border-left-color')), 
+                                    width: parseInt(labelEl.css('border-left-width'))
+                                }
+                            }
+                        };
+                    }
+                }
             }
             
             if (clusters.length > 0){
@@ -839,7 +942,21 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         var printLayerSrc = mapService.getLayerByType('print').getSource();
         var src = layer.getSource();
         
-        var features = src.getFeaturesInExtent(printLayerSrc.getExtent());
+        var features = angular.copy(src.getFeaturesInExtent(printLayerSrc.getExtent()));
+        if (layer.get('type') === 'vmsseg' && mapService.vmssegLabels.active){
+            angular.forEach(features, function(feature) {
+            	if (feature.get('overlayHidden') === false){
+            	    feature.set('distance', unitConversionService.distance.formatDistance(feature.get('distance'), 5));
+            	    feature.set('duration', unitConversionService.duration.timeToHuman(feature.get('duration')));
+            	    feature.set('speedOverGround', unitConversionService.speed.formatSpeed(feature.get('speedOverGround'), 5));
+            	    feature.set('courseOverGround', feature.get('courseOverGround') + '\u00b0');
+            	    
+            	    var overCoords = mapService.vmssegLabels[feature.get('overlayId')].overlay.getPosition();
+            	    feature.set('popupX', overCoords[0]);
+            	    feature.set('popupY', overCoords[1]);
+            	}
+            });
+        }
         var geojson = format.writeFeaturesObject(features);
         
         return geojson;

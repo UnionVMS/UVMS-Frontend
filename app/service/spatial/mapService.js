@@ -2490,6 +2490,41 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         };
     };
     
+    ms.getMappingTitlesProperties = function(type){
+        if (type === 'vmspos'){
+            return {
+                name: 'name',
+                fs: 'countryCode',
+                extMark: 'externalMarking',
+                ircs: 'ircs',
+                cfr: 'cfr',
+                posTime: 'positionTime',
+                stat: 'status',
+                m_spd: 'reportedSpeed',
+                c_spd: 'calculatedSpeed',
+                crs: 'reportedCourse',
+                msg_tp: 'movementType',
+                act_tp: 'activityType',
+                source: 'source'
+            };
+        }
+        
+        if (type === 'vmsseg'){
+            return {
+                name: 'name',
+                fs: 'countrycode',
+                extMark: 'externalMarking',
+                ircs: 'ircs',
+                cfr: 'cfr',
+                dist: 'distance',
+                dur: 'duration',
+                spd: 'speedOverGround',
+                crs: 'courseOverGround',
+                cat: 'segmentCategory'
+            };
+        }
+    };
+
     //POPUP - vms segments
     ms.popupSegRecContainer = {
         records: [],
