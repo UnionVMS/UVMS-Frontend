@@ -90,7 +90,7 @@ angular.module('unionvmsWeb').directive('multiselectDropDown', function(locale) 
                     case scope.options.length:
                         return locale.getString('common.all_selected');
                     case 1:
-                        return locale.getString('common.one_selected');
+                        return scope.model[0];
                     default:
                         return locale.getString('common.multiple_selected');
                 }
