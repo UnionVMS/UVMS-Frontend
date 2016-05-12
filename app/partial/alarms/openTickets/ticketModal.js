@@ -96,7 +96,7 @@ angular.module('unionvmsWeb').controller('TicketModalCtrl', function($scope, $lo
 
     $scope.toCourseString = function(courseValue) {
         if (angular.isDefined(courseValue) && courseValue !== null) {
-            return courseValue + " " + locale.getString("movement.manual_position_field_unit_degrees");
+            return courseValue + locale.getString("movement.manual_position_field_unit_degrees");
         }
     };
 

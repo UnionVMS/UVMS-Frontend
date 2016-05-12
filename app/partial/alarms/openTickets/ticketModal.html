@@ -27,9 +27,9 @@
     </div>
     <div class="row" ng-hide="loadingMovement || loadingMovementError">
         <div alarm-report-field="'movement.manual_position_field_label_status'" field-value="alarm.movement.movement.status" class="col-md-3"></div>
-        <div alarm-report-field="'movement.manual_position_field_label_date_time'" field-value="alarm.movement.time.getResolvedDate() | confDateFormat" class="col-md-3"></div>
-        <div alarm-report-field="'movement.manual_position_field_label_latitude'" field-value="alarm.movement.movement.latitude" class="col-md-3"></div>
-        <div alarm-report-field="'movement.manual_position_field_label_longitude'" field-value="alarm.movement.movement.longitude" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_date_time'" field-value="alarm.movement.time | confDateFormat" class="col-md-9"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_latitude'" field-value="alarm.movement.movement.latitude | confCoordinateFormat" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_longitude'" field-value="alarm.movement.movement.longitude | confCoordinateFormat" class="col-md-3"></div>
         <div alarm-report-field="'movement.manual_position_field_label_measured_speed'" field-value="toSpeedString(alarm.movement.movement.reportedSpeed)" class="col-md-3"></div>
         <div alarm-report-field="'movement.manual_position_field_label_course'" field-value="toCourseString(alarm.movement.movement.reportedCourse)" class="col-md-3"></div>
     </div>
