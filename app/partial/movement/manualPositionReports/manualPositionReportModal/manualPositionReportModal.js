@@ -14,12 +14,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     var vm = this;
 
     /* Flag states for dropdown */
-    $scope.flagStates = flagStates.map(function(flagState) {
-        return {
-            code: flagState,
-            text: flagState
-        };
-    });
+    $scope.flagStates = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
 
     $scope.errorMessage ="";
     $scope.readOnly = readOnly;
