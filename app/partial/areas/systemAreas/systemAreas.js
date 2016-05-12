@@ -11,6 +11,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
 	$scope.metadataAvailable = false;
 	$scope.sysSelection = "map";
 	$scope.clickResults = 0;
+	$scope.sysNotes = {};
     
 	$scope.fileNameChanged = function(elem){
 		$scope.SysareasForm.areaFile.$setDirty();
@@ -115,6 +116,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         }
         
         if (angular.isDefined(newVal) && newVal !== oldVal){
+        	changeNotes(newVal);
         	resetDatasetTab();
         	$scope.helper.resetMetadata();
             $scope.helper.displayedSystemAreaLayer = newVal;
@@ -251,5 +253,24 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
             });
         }
     };
-
+    
+    var changeNotes = function(type){
+    	switch(type){
+    	case 'PORT':
+    		$scope.sysNotes.msg = 'areas.upload_area_port_notes';
+    		break;
+    	case 'EEZ':
+    		$scope.sysNotes.msg = 'areas.upload_area_eez_notes';
+    		break;
+    	case 'RFMO':
+    		$scope.sysNotes.msg = 'areas.upload_area_rfmo_notes';
+    		break;
+	    case 'PORTAREA':
+			$scope.sysNotes.msg = 'areas.upload_area_portarea_notes';
+			break;
+		default:
+			$scope.sysNotes.msg = undefined;
+		}
+    };
+    
 });

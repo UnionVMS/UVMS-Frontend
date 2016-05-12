@@ -87,6 +87,7 @@
 	"metadata_short_copyright_title": "Short copyright notice",
 	"metadata_long_copyright_title": "Long copyright notice",
 	"update_metadata_btn": "Save metadata",
+	"create_dataset_btn": "Create dataset",
 	"getting_area_metadata": "Loading area metadata...",
 	"error_getting_area_metadata": "There was an error while getting area metadata. Please try again.",
 	"updating_metadata": "Updating metadata...",
@@ -138,5 +139,9 @@
 	
 	"area_selection_select_area_btn": "Select area",
 	"area_selection_selected_area": "Selected area:",
-	"area_selection_dataset_name": "Dataset name:"
+	"area_selection_dataset_name": "Dataset name:",
+	"upload_area_port_notes": "portportportportportportportportport portportportport portportportportportportportportportportportport portportport port portportportport",
+	"upload_area_eez_notes": "eezeezeezeezeezeez eezeez eez eezeezeezeezeez eezeezeezeezeezeezeezeezeezeezeezeezeez eez eezeezeezeezeezeez",
+	"upload_area_rfmo_notes": "rfmorfmorfmorfmorfmorfmorfmorfmo rfmorfmo rfmorfmorfmorfmo rfmo rfmorfmorfmorfmorfmorfmorfmo rfmorfmo rfmorfmo rfmo",
+	"upload_area_portarea_notes": "portareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportarea portarea portareaportarea"
 }

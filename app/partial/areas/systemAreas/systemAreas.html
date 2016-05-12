@@ -10,187 +10,197 @@
 	
 	<div class="sysareas-radio-btns" ng-show="sysAreaType">
 		<div class="row">
-		<div class="col-md-12 form-group radioButtons">
-			<label class="radio-inline">
-				<input type="radio" value="upload" ng-model="editingType">
-				{{'areas.upload_radio_title' | i18n}}
-			</label>
-			<label class="radio-inline">
-				<input type="radio" value="metadata" ng-model="editingType">
-				{{'areas.metadata_radio_title' | i18n}}
-			</label>
-			<label class="radio-inline">
-				<input type="radio" value="dataset" ng-model="editingType">
-				{{'areas.dataset_radio_title' | i18n}}
-			</label>
+			<div class="col-md-12 form-group radioButtons">
+				<label class="radio-inline">
+					<input type="radio" value="upload" ng-model="editingType">
+					{{'areas.upload_radio_title' | i18n}}
+				</label>
+				<label class="radio-inline">
+					<input type="radio" value="metadata" ng-model="editingType">
+					{{'areas.metadata_radio_title' | i18n}}
+				</label>
+				<label class="radio-inline">
+					<input type="radio" value="dataset" ng-model="editingType">
+					{{'areas.dataset_radio_title' | i18n}}
+				</label>
+			</div>
 		</div>
-	</div>
 	
-	<div class="system-area-body">
-		<div ng-show="editingType === 'upload'">
-			<!-- UPLOAD AREA -->
-			<ng-form name="SysareasForm">
-				<div class="form-container">
-					<div class="proj-container col-md-12 form-group form-inline" ng-show="projections.items.length > 0">
-						<div class="row">
-							<div class="col-md-3 proj-label comboLabel">
-								<label for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
+		<div class="system-area-body">
+			<div ng-show="editingType === 'upload'">
+				<!-- UPLOAD AREA -->
+				<ng-form name="SysareasForm">
+					<div class="form-container">
+						<div class="proj-container col-md-12 form-group form-inline" ng-show="projections.items.length > 0">
+							<div class="row">
+								<div class="col-md-3 proj-label comboLabel">
+									<label for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
+								</div>
+								<div class="col-md-9 proj-combo" ng-class="{'has-error': (SysareasForm.editingProjection.$dirty || saved) && SysareasForm.editingProjection.$invalid}">
+									<combobox ng-model="selectedProj" items="projections.items" name="editingProjection" initialtext="{{'areas.editing_projection_label' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'"></combobox>
+								</div>
+								<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.editingProjection.$error" ng-show="(SysareasForm.editingProjection.$dirty || saved) && SysareasForm.editingProjection.$invalid">
+									<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
+								</div>
 							</div>
-							<div class="col-md-9 proj-combo" ng-class="{'has-error': (SysareasForm.editingProjection.$dirty || saved) && SysareasForm.editingProjection.$invalid}">
-								<combobox ng-model="selectedProj" items="projections.items" name="editingProjection" initialtext="{{'areas.editing_projection_label' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'"></combobox>
-							</div>
-							<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.editingProjection.$error" ng-show="(SysareasForm.editingProjection.$dirty || saved) && SysareasForm.editingProjection.$invalid">
+						</div>
+						
+						<div class="col-md-12 form-group input-group" ng-class="{'has-error': (SysareasForm.areaFile.$dirty || saved) && SysareasForm.areaFile.$invalid}">
+					 		<span class="btn btn-primary btn-file input-group-addon">
+								{{'areas.area_upload_select_zip_file_btn' | i18n}}
+								<input type="file" accept="application/zip" onchange="angular.element(this).scope().fileNameChanged(this)"/>
+							</span>
+							<input type="text" class="form-control" ng-model="sysAreafile" name="areaFile" ng-required="true" readonly>
+							<span class="input-group-addon alert-success" ng-show="validFile.isValid === true">
+								<i class="fa fa-check alert-success"></i>
+							</span>
+							<span class="input-group-addon alert-danger" ng-show="(SysareasForm.areaFile.$dirty || saved) && (SysareasForm.areaFile.$invalid || validFile.isValid === false)">
+								<i class="fa fa-times alert-danger"></i>
+							</span>
+							<a href="" qtip content="{{'areas.area_upload_select_zip_file_info_btn' | i18n}}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+							<div class="innerErrorMessagesFileUpload" ng-messages="SysareasForm.areaFile.$error" ng-show="(SysareasForm.areaFile.$dirty || saved) && (SysareasForm.areaFile.$invalid || validFile.isValid === false)">
 								<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
+							</div>
+					   	</div>
+					   	<div class="col-md-12" ng-if="sysNotes.msg">
+						   	<div class="alert alert-warning sysarea-notes">
+								<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+								<span class="notes-title">Notes:</span>
+								<br/>
+								<span ng-bind="(sysNotes.msg | i18n)"></span>
 							</div>
 						</div>
 					</div>
-					
-					<div class="col-md-12 form-group input-group" ng-class="{'has-error': (SysareasForm.areaFile.$dirty || saved) && SysareasForm.areaFile.$invalid}">
-				 		<span class="btn btn-primary btn-file input-group-addon">
-							{{'areas.area_upload_select_zip_file_btn' | i18n}}
-							<input type="file" accept="application/zip" onchange="angular.element(this).scope().fileNameChanged(this)"/>
-						</span>
-						<input type="text" class="form-control" ng-model="sysAreafile" name="areaFile" ng-required="true" readonly>
-						<span class="input-group-addon alert-success" ng-show="validFile.isValid === true">
-							<i class="fa fa-check alert-success"></i>
-						</span>
-						<span class="input-group-addon alert-danger" ng-show="(SysareasForm.areaFile.$dirty || saved) && (SysareasForm.areaFile.$invalid || validFile.isValid === false)">
-							<i class="fa fa-times alert-danger"></i>
-						</span>
-						<a href="" qtip content="{{'areas.area_upload_select_zip_file_info_btn' | i18n}}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-						<div class="innerErrorMessagesFileUpload" ng-messages="SysareasForm.areaFile.$error" ng-show="(SysareasForm.areaFile.$dirty || saved) && (SysareasForm.areaFile.$invalid || validFile.isValid === false)">
-							<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
-						</div>
-				   	</div>
-				</div>
-			</ng-form>
-			<div class="col-md-12 btn-container">
-		   		<button class="btn btn-primary pull-right" type="button" ng-click="save()" ng-disabled="isSaving">
-			   		<span class="fa" ng-class="{'fa-refresh fa-spin': isSaving === true, 'fa-upload': isSaving === false}"></span>
-		               	<span>
-		               		{{'areas.area_upload_modal_upload_btn' | i18n}}
-		               	</span>
-		   		</button>
-		   	</div>
-		</div>
-		<!-- UPDATE METADATA -->
-		<div class="updateMetadata col-md-12" ng-show="editingType === 'metadata'">
-			<ng-form name="metadataForm">
-				<div class="row form-container metadata-container">
-					<div class="form-group col-md-12 metadata-group" ng-class="{'has-error': metadataForm.areaName.$dirty && metadataForm.areaName.$invalid}">
-						<label for="areaName">{{'areas.metadata_area_description_title' | i18n}}</label>
-						<input type="text" class="form-control" name="areaName" ng-model="helper.metadata.areaName" ng-required="true">
-						<div class="innerErrorMessagesInputWithUpLabel" ng-messages="metadataForm.areaName.$error" ng-show="metadataForm.areaName.$dirty && metadataForm.areaName.$invalid">
-							<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
-						</div>
-					</div>
-					<div class="form-group col-md-12 metadata-group">
-						<label for="areaDesc">{{'areas.metadata_area_description_title' | i18n}}</label>
-						<textarea class="form-control" name="areaDesc" ng-model="helper.metadata.areaDesc"></textarea>
-					</div>
-					<div class="form-group col-md-12 metadata-group">
-						<label for="shortCopy">{{'areas.metadata_short_copyright_title' | i18n}}</label>
-						<textarea class="form-control" name="shortCopy" ng-model="helper.metadata.shortCopy"></textarea>
-					</div>
-					<div class="form-group col-md-12 metadata-group">
-						<label for="longCopy">{{'areas.metadata_long_copyright_title' | i18n}}</label>
-						<textarea class="form-control" name="longCopy" ng-model="helper.metadata.longCopy"></textarea>
-					</div>
-				</div>
-			</ng-form>
-			<div class="col-md-12 btn-container">
-		   		<button class="btn btn-primary pull-right" type="button" ng-click="saveMetadata()" ng-class="{disabled: !metadataAvailable}">
-			   		<span>{{'areas.update_metadata_btn' | i18n}}</span>
-		   		</button>
-		   	</div>
-		</div>
-		<!-- CREATE DATASET -->
-		<div ng-show="editingType === 'dataset'">
-			<ng-form name="datasetForm">
-				<div class="col-md-12 dataset-form-container form-container">
-					<!-- SYSTEM WIDE AREAS -->
-		        	<div class="section">
-		       			<div class="form-group col-md-12 noPadding" ng-show="sysAreaType !== undefined">
-		       				<label class="radio-inline radioselector">
-		       					<input type="radio" name="sysSelect" value="map" ng-model="sysSelection">
-		       					{{'spatial.area_selection_modal_select_on_map_radio' | i18n}}
-		       				</label>
-		       				<label class="radio-inline radioselector">
-		       					<input type="radio" name="sysSelect" value="search" ng-model="sysSelection">
-		       					{{'spatial.area_selection_modal_search_area' | i18n}}
-		       				</label>
-		       			</div>
-		       			<div ng-show="sysSelection === 'search' || (sysSelection === 'map' && clickResults > 1)">
-		    	   			<div class="form-group col-md-12 noPadding" ng-hide="sysSelection === 'map'">
-		    	   				<div class="form-group col-md-8 noPadding">
-		    		   				<input type="text" ng-model="searchSysString" class="form-control" placeholder="{{'spatial.reports_form_vessels_search_text' | i18n }}">
-		    		   			</div>
-		    		   			<div class="form-group col-md-4 noPadding">
-		    		   				<button type="button" class="btn btn-primary btn-sm pull-right" style="min-width: 100px;" ng-click="searchSysAreas()">
-		    		   					<span>{{'spatial.reports_form_vessels_search_button' | i18n }}</span>
-		    		   				</button>
-		    		   			</div>
-		    	   			</div>
-		    	   			<!-- Search results table -->
-		    	   			<div class="table-responsive-force form-group" st-table="displayedRecordsArea" st-safe-src="sysAreaSearch">
-		    	   				<table class="table table-striped">
-		    	   					<thead>
-		    	   						<tr class="stColumnHeaders">
-		    	   							<th st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_name_header' | i18n}}</th>
-		    	   							<th st-sort="code" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_code_header' | i18n}}</th>
-		    	   							<th style="min-width: 80px;"></th>
-		    	   						</tr>
-		    	   						<tr ng-if="searchLoading">
-		    					        	<th colspan="3" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
-		    					        </tr>
-		    	   					</thead>
-		    	   					<tbody>
-		    	   						<tr ng-if="!displayedRecordsArea.length && !searchLoading">
-		    								<td colspan="3">{{'spatial.table_no_data' | i18n}}</td>
-		    							</tr>
-		    	   						<tr ng-repeat="sysArea in displayedRecordsArea">
-		    	   							<td>{{sysArea.name}}</td>
-		    	   							<td>{{sysArea.code}}</td>
-		    	   							<td style="min-width: 80px;">
-		    	   								<button type="button" class="btn btn-primary btn-xs btnMargin" title="{{'spatial.area_selection_modal_see_on_map_btn' | i18n }}" ng-click="mergeParamsWms($index, displayedRecordsArea, sysAreaSearch)"> <span class="fa fa-globe"></span></button>
-		    	   								<button type="button" class="btn btn-xs" ng-class="{'btn-success': selectedAreaCode === sysArea.code, 'btn-primary': selectedAreaCode !== sysArea.code}" title="{{'areas.area_selection_select_area_btn' | i18n }}" ng-click="selectArea($index)"><span class="fa fa-check"></span></button>
-		    	   							</td>
-		    	   						</tr>
-		    	   					</tbody>
-		    	   					<tfoot class="stFooterPagination">
-		    							<tr>
-		    								<td colspan="3" class="text-right">
-		    									<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
-		    								</td>
-		    							</tr>
-		    						</tfoot>
-		    	   				</table>
-		    	   			</div>
-		    	   		</div>
-		    	   		<div class="form-group col-md-12">
-		       				<label>{{'areas.area_selection_selected_area' | i18n}}</label>
-	       					<span ng-bind="selectedArea"></span>
-	       					<input type="text" name="areaCode" ng-model="selectedAreaCode" ng-show="false" required>
-	       					<div class="innerErrorMessages" ng-messages="datasetForm.areaCode.$error" ng-show="(datasetForm.areaCode.$dirty || submittedDataset) && datasetForm.areaCode.$invalid">
+				</ng-form>
+				<div class="col-md-12 btn-container">
+			   		<button class="btn btn-primary pull-right" type="button" ng-click="save()" ng-disabled="isSaving">
+				   		<span class="fa" ng-class="{'fa-refresh fa-spin': isSaving === true, 'fa-upload': isSaving === false}"></span>
+			               	<span>
+			               		{{'areas.area_upload_modal_upload_btn' | i18n}}
+			               	</span>
+			   		</button>
+			   	</div>
+			</div>
+			<!-- UPDATE METADATA -->
+			<div class="updateMetadata col-md-12" ng-show="editingType === 'metadata'">
+				<ng-form name="metadataForm">
+					<div class="row form-container metadata-container">
+						<div class="form-group col-md-12 metadata-group" ng-class="{'has-error': metadataForm.areaName.$dirty && metadataForm.areaName.$invalid}">
+							<label for="areaName">{{'areas.metadata_area_description_title' | i18n}}</label>
+							<input type="text" class="form-control" name="areaName" ng-model="helper.metadata.areaName" ng-required="true">
+							<div class="innerErrorMessagesInputWithUpLabel" ng-messages="metadataForm.areaName.$error" ng-show="metadataForm.areaName.$dirty && metadataForm.areaName.$invalid">
 								<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 							</div>
-		       			</div>
-		       			<div class="form-group col-md-12" ng-class="{'has-error': datasetForm.datasetName.$invalid && (datasetForm.datasetName.$dirty || submittedDataset)}">
-		       				<label>{{'areas.area_selection_dataset_name' | i18n}}</label>
-		       				<input type="text" name="datasetName" ng-model="datasetName" required>
-		       				<div class="innerErrorMessages" ng-messages="datasetForm.datasetName.$error" ng-show="(datasetForm.datasetName.$dirty || submittedDataset) && datasetForm.datasetName.$invalid">
-								<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
-							</div>
-		       			</div>
-		        	</div>
-				</div>
-			</ng-form>
-			<div class="col-md-12 btn-container">
-		   		<button class="btn btn-primary pull-right" type="button" ng-click="createDataset()">
-			   		<span>{{'areas.update_metadata_btn' | i18n}}</span>
-		   		</button>
-		   	</div>
+						</div>
+						<div class="form-group col-md-12 metadata-group">
+							<label for="areaDesc">{{'areas.metadata_area_description_title' | i18n}}</label>
+							<textarea class="form-control" name="areaDesc" ng-model="helper.metadata.areaDesc"></textarea>
+						</div>
+						<div class="form-group col-md-12 metadata-group">
+							<label for="shortCopy">{{'areas.metadata_short_copyright_title' | i18n}}</label>
+							<textarea class="form-control" name="shortCopy" ng-model="helper.metadata.shortCopy"></textarea>
+						</div>
+						<div class="form-group col-md-12 metadata-group">
+							<label for="longCopy">{{'areas.metadata_long_copyright_title' | i18n}}</label>
+							<textarea class="form-control" name="longCopy" ng-model="helper.metadata.longCopy"></textarea>
+						</div>
+					</div>
+				</ng-form>
+				<div class="col-md-12 btn-container">
+			   		<button class="btn btn-primary pull-right" type="button" ng-click="saveMetadata()" ng-class="{disabled: !metadataAvailable}">
+				   		<span>{{'areas.update_metadata_btn' | i18n}}</span>
+			   		</button>
+			   	</div>
+			</div>
+			<!-- CREATE DATASET -->
+			<div ng-show="editingType === 'dataset'">
+				<ng-form name="datasetForm">
+					<div class="col-md-12 dataset-form-container form-container">
+						<!-- SYSTEM WIDE AREAS -->
+			        	<div class="section">
+			       			<div class="form-group col-md-12 noPadding" ng-show="sysAreaType !== undefined">
+			       				<label class="radio-inline radioselector">
+			       					<input type="radio" name="sysSelect" value="map" ng-model="sysSelection">
+			       					{{'spatial.area_selection_modal_select_on_map_radio' | i18n}}
+			       				</label>
+			       				<label class="radio-inline radioselector">
+			       					<input type="radio" name="sysSelect" value="search" ng-model="sysSelection">
+			       					{{'spatial.area_selection_modal_search_area' | i18n}}
+			       				</label>
+			       			</div>
+			       			<div ng-show="sysSelection === 'search' || (sysSelection === 'map' && clickResults > 1)">
+			    	   			<div class="form-group col-md-12 noPadding" ng-hide="sysSelection === 'map'">
+			    	   				<div class="form-group col-md-8 noPadding">
+			    		   				<input type="text" ng-model="searchSysString" class="form-control" placeholder="{{'spatial.reports_form_vessels_search_text' | i18n }}">
+			    		   			</div>
+			    		   			<div class="form-group col-md-4 noPadding">
+			    		   				<button type="button" class="btn btn-primary btn-sm pull-right" style="min-width: 100px;" ng-click="searchSysAreas()">
+			    		   					<span>{{'spatial.reports_form_vessels_search_button' | i18n }}</span>
+			    		   				</button>
+			    		   			</div>
+			    	   			</div>
+			    	   			<!-- Search results table -->
+			    	   			<div class="table-responsive-force form-group" st-table="displayedRecordsArea" st-safe-src="sysAreaSearch">
+			    	   				<table class="table table-striped">
+			    	   					<thead>
+			    	   						<tr class="stColumnHeaders">
+			    	   							<th st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_name_header' | i18n}}</th>
+			    	   							<th st-sort="code" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_code_header' | i18n}}</th>
+			    	   							<th style="min-width: 80px;"></th>
+			    	   						</tr>
+			    	   						<tr ng-if="searchLoading">
+			    					        	<th colspan="3" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+			    					        </tr>
+			    	   					</thead>
+			    	   					<tbody>
+			    	   						<tr ng-if="!displayedRecordsArea.length && !searchLoading">
+			    								<td colspan="3">{{'spatial.table_no_data' | i18n}}</td>
+			    							</tr>
+			    	   						<tr ng-repeat="sysArea in displayedRecordsArea">
+			    	   							<td>{{sysArea.name}}</td>
+			    	   							<td>{{sysArea.code}}</td>
+			    	   							<td style="min-width: 80px;">
+			    	   								<button type="button" class="btn btn-primary btn-xs btnMargin" title="{{'spatial.area_selection_modal_see_on_map_btn' | i18n }}" ng-click="mergeParamsWms($index, displayedRecordsArea, sysAreaSearch)"> <span class="fa fa-globe"></span></button>
+			    	   								<button type="button" class="btn btn-xs" ng-class="{'btn-success': selectedAreaCode === sysArea.code, 'btn-primary': selectedAreaCode !== sysArea.code}" title="{{'areas.area_selection_select_area_btn' | i18n }}" ng-click="selectArea($index)"><span class="fa fa-check"></span></button>
+			    	   							</td>
+			    	   						</tr>
+			    	   					</tbody>
+			    	   					<tfoot class="stFooterPagination">
+			    							<tr>
+			    								<td colspan="3" class="text-right">
+			    									<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
+			    								</td>
+			    							</tr>
+			    						</tfoot>
+			    	   				</table>
+			    	   			</div>
+			    	   		</div>
+			    	   		<div class="row">
+				    	   		<div class="form-group col-md-12">
+				       				<label>{{'areas.area_selection_selected_area' | i18n}}</label>
+			       					<span ng-bind="selectedArea"></span>
+			       					<input type="text" name="areaCode" ng-model="selectedAreaCode" ng-show="false" required>
+			       					<div class="innerErrorMessages" ng-messages="datasetForm.areaCode.$error" ng-show="(datasetForm.areaCode.$dirty || submittedDataset) && datasetForm.areaCode.$invalid">
+										<div ng-message="required"><div class="fa fa-exclamation-circle"></div> {{'spatial.required_field_error_message' | i18n }}</div>
+									</div>
+				       			</div>
+				       			<div class="form-group col-md-12" ng-class="{'has-error': datasetForm.datasetName.$invalid && (datasetForm.datasetName.$dirty || submittedDataset)}">
+				       				<label>{{'areas.area_selection_dataset_name' | i18n}}</label>
+				       				<input type="text" name="datasetName" ng-model="datasetName" required>
+				       				<div class="innerErrorMessages" ng-messages="datasetForm.datasetName.$error" ng-show="(datasetForm.datasetName.$dirty || submittedDataset) && datasetForm.datasetName.$invalid">
+										<div ng-message="required"><div class="fa fa-exclamation-circle"></div> {{'spatial.required_field_error_message' | i18n }}</div>
+									</div>
+				       			</div>
+			       			</div>
+			        	</div>
+					</div>
+				</ng-form>
+				<div class="col-md-12 btn-container">
+			   		<button class="btn btn-primary pull-right" type="button" ng-click="createDataset()">
+				   		<span>{{'areas.create_dataset_btn' | i18n}}</span>
+			   		</button>
+			   	</div>
+			</div>
 		</div>
-	</div>
 	</div>
 </div>
