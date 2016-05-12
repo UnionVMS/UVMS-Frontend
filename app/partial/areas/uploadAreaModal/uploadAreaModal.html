@@ -15,17 +15,14 @@
     			</div>
     		</div>
 	    	<div class="row form-horizontal">
-	    		<div class="col-md-5">
-		    		<div class="form-group">
-		    			<label class="col-md-5 control-label area-modal-label">{{'areas.area_upload_modal_src_format' | i18n}}</label>
-		    			<div class="col-md-7 no-padding">
-		    				<combobox ng-model="format" items="formatItems"></combobox>
-		    			</div>
-		    		</div>
+	    		<div class="col-md-6">
+	    			<label class="col-md-5 control-label area-modal-label">{{'areas.area_upload_modal_src_format' | i18n}}</label>
+	    			<div class="col-md-7 no-padding">
+	    				<combobox ng-model="format" items="formatItems"></combobox>
+	    			</div>
 		    	</div>
-		    	<div class="col-md-2"></div>
-	    		<div class="col-md-5">
-		    		<div class="form-group" ng-show="projections.items.length > 0">
+	    		<div class="col-md-6">
+		    		<div ng-show="projections.items.length > 0">
 		    			<label class="col-md-5 control-label area-modal-label">{{'areas.editing_projection_label' | i18n}}</label>
 		    			<div class="col-md-7 no-padding">
 		    				<combobox ng-model="selProjection" items="projections.items"></combobox>
@@ -34,43 +31,33 @@
 		    	</div>
 	    	</div>
 	    	<div class="row form-horizontal" ng-show="format === 'csv'">
-		    	<div class="col-md-5">
-		    		<div class="form-group">
-		    			<label class="col-md-5 control-label area-modal-label">{{'areas.area_upload_modal_delimiter' | i18n}}</label>
-		    			<div class="col-md-7 no-padding">
-		    				<combobox ng-model="delimiter" items="delimiterItems"></combobox>
-		    			</div>
-		    		</div>
+		    	<div class="col-md-6">
+	    			<label class="col-md-5 control-label area-modal-label">{{'areas.area_upload_modal_delimiter' | i18n}}</label>
+	    			<div class="col-md-7 no-padding">
+	    				<combobox ng-model="delimiter" items="delimiterItems"></combobox>
+	    			</div>
 		    	</div>
-		    	<div class="col-md-2"></div>
-	    		<div class="col-md-5">
-		    		<div class="form-group">
-			    		<div class="checkbox">
-						 	<label>
-						    	<input type="checkbox" ng-model="containsFirstRow">
-						    	{{'areas.area_upload_modal_first_row_checkbox' | i18n}}
-						  	</label>
-						</div>
-		    		</div>
+	    		<div class="col-md-6">
+		    		<div class="checkbox">
+					 	<label>
+					    	<input type="checkbox" ng-model="containsFirstRow">
+					    	{{'areas.area_upload_modal_first_row_checkbox' | i18n}}
+					  	</label>
+					</div>
 		    	</div>
 	    	</div>
 	    	<div class="row form-horizontal" ng-show="format === 'csv' && containsFirstRow">
-	    		<div class="col-md-5">
-		    		<div class="form-group">
-		    			<label class="col-md-5 control-label area-modal-label">{{'areas.area_upload_modal_x_field' | i18n}}</label>
-		    			<div class="col-md-7 no-padding" ng-class="{'has-error': (uploadAreaForm.xField.$dirty || uploadAreaForm.xField.$touched || uploaded) && uploadAreaForm.xField.$error.required}">
-		    				<input type="text" class="form-control" ng-model="xField" name="xField" ng-required="format === 'csv' && containsFirstRow">
-		    			</div>
-		    		</div>
+	    		<div class="col-md-6">
+	    			<label class="col-md-5 control-label area-modal-label">{{'areas.area_upload_modal_x_field' | i18n}}</label>
+	    			<div class="col-md-7 no-padding" ng-class="{'has-error': (uploadAreaForm.xField.$dirty || uploadAreaForm.xField.$touched || uploaded) && uploadAreaForm.xField.$error.required}">
+	    				<input type="text" class="form-control" ng-model="xField" name="xField" ng-required="format === 'csv' && containsFirstRow">
+	    			</div>
 		    	</div>
-		    	<div class="col-md-2"></div>
-	    		<div class="col-md-5">
-		    		<div class="form-group">
-		    			<label class="col-md-5 control-label area-modal-label">{{'areas.area_upload_modal_y_field' | i18n}}</label>
-		    			<div class="col-md-7 no-padding" ng-class="{'has-error': (uploadAreaForm.yField.$dirty || uploadAreaForm.yField.$touched || uploaded) && uploadAreaForm.yField.$error.required}">
-		    				<input type="text" class="form-control" ng-model="yField" name="yField" ng-required="format === 'csv' && containsFirstRow">
-		    			</div>
-		    		</div>
+	    		<div class="col-md-6">
+	    			<label class="col-md-5 control-label area-modal-label">{{'areas.area_upload_modal_y_field' | i18n}}</label>
+	    			<div class="col-md-7 no-padding" ng-class="{'has-error': (uploadAreaForm.yField.$dirty || uploadAreaForm.yField.$touched || uploaded) && uploadAreaForm.yField.$error.required}">
+	    				<input type="text" class="form-control" ng-model="yField" name="yField" ng-required="format === 'csv' && containsFirstRow">
+	    			</div>
 		    	</div>
 	    	</div>
 	        <div class="row">
