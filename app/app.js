@@ -185,6 +185,11 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                     controller: 'ManualPositionReportsCtrl'
                 }
             },
+            resolve: {
+                config : function(initService){
+                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS"]);
+                }
+            },
             data: {
                 access: 'viewManualMovements',
                 pageTitle: 'header.page_title_manual_movements'
