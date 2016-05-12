@@ -123,7 +123,9 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    var getReportError = function(error){
 	   $scope.repServ.isReportExecuting = false;
        $anchorScroll();
-       $scope.alert.show(locale.getString('spatial.error_entry_not_found'), 'error');
+       $scope.repServ.alertType = 'danger';
+       $scope.repServ.hasAlert = true;
+       $scope.repServ.message = locale.getString('spatial.error_entry_not_found');
    };
    
    //Refresh map size on menu change
