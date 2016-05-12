@@ -37,7 +37,7 @@
 					        <h3>{{'spatial.layer_tree' | i18n }}</h3>
 					        <div class="column">
 					        	<h5>{{'spatial.layer_settings_port' | i18n }}</h5>
-					        	<button class="btn btn-default btn-xs btn-clear-list" type="button" ng-click="layersettingsForm.$setDirty();selectedPorts.splice(0, selectedPorts.length);"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
+					        	<button type="button" class="btn btn-default btn-xs btn-clear-list" type="button" ng-click="layersettingsForm.$setDirty();selectedPorts.splice(0, selectedPorts.length);"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
 							    <ul dnd-list="selectedPorts" dnd-allowed-types="['port', 'portarea']" dnd-drop="checkIfExists(item,selectedPorts,layersettingsForm)">
 							        <li ng-repeat="item in selectedPorts"
 							            dnd-draggable="item"
@@ -52,7 +52,7 @@
 					        </div>
 					        <div class="column">
 					        	<h5>{{'spatial.layer_settings_area' | i18n }}</h5>
-					        	<button class="btn btn-default btn-xs btn-clear-list" type="button" ng-click="layersettingsForm.$setDirty();selectedAreas.splice(0, selectedAreas.length);"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
+					        	<button type="button" class="btn btn-default btn-xs btn-clear-list" type="button" ng-click="layersettingsForm.$setDirty();selectedAreas.splice(0, selectedAreas.length);"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
 							    <ul dnd-list="selectedAreas"
 							     dnd-allowed-types="['sysarea','userarea','areagroup']" 
 							     dnd-drop="checkIfExists(item,selectedAreas,layersettingsForm);">								        
@@ -72,7 +72,7 @@
 					        </div>
 					        <div class="column">
 					        	<h5>{{'spatial.layer_settings_additional' | i18n }}</h5>
-					        	<button class="btn btn-default btn-xs btn-clear-list" type="button" ng-click="layersettingsForm.$setDirty();selectedAdditionals.splice(0, selectedAdditionals.length);"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
+					        	<button type="button" class="btn btn-default btn-xs btn-clear-list" type="button" ng-click="layersettingsForm.$setDirty();selectedAdditionals.splice(0, selectedAdditionals.length);"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
 							    <ul dnd-list="selectedAdditionals" dnd-allowed-types="['additional','others']" dnd-drop="checkIfExists(item,selectedAdditionals,layersettingsForm)">
 							        <li ng-repeat="item in selectedAdditionals"
 							            dnd-draggable="item"
@@ -88,7 +88,7 @@
 					        <ng-form name="baseLayers">
 						        <div class="column">
 						        	<h5>{{'spatial.layer_settings_base' | i18n }}</h5>
-						        	<button class="btn btn-default btn-xs btn-clear-list" type="button" ng-click="layersettingsForm.$setDirty();selectedBases.splice(0, selectedBases.length);validateBackGroundLayers();"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
+						        	<button type="button" class="btn btn-default btn-xs btn-clear-list" type="button" ng-click="layersettingsForm.$setDirty();selectedBases.splice(0, selectedBases.length);validateBackGroundLayers();"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
 								    <ul dnd-list="selectedBases" dnd-allowed-types="['background','others']" dnd-drop="checkIfExists(item,selectedBases,layersettingsForm,true);">
 								        <li ng-repeat="item in selectedBases"
 								            dnd-draggable="item"
@@ -107,10 +107,10 @@
 					</div>
 				</div>
 				<div class="col-md-12 col-btn-no-padding" ng-if="isUserPreference">
-					<button class="btn btn-default pull-right" ng-click="reset()">{{'spatial.settings_reset_btn' | i18n}}</button>
+					<button type="button" class="btn btn-default pull-right" ng-click="reset()">{{'spatial.settings_reset_btn' | i18n}}</button>
 				</div>
 				<div class="col-md-12 col-btn-no-padding" ng-if="isReportConfig">
-					<button class="btn btn-default pull-right" ng-click="reset()">{{'spatial.settings_clear_btn' | i18n}}</button>
+					<button type="button" class="btn btn-default pull-right" ng-click="reset()">{{'spatial.settings_clear_btn' | i18n}}</button>
 				</div>
 			</accordion-group>
 		</accordion>

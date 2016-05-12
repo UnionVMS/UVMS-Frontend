@@ -15,10 +15,10 @@
 				<div ng-include="'partial/spatial/configurations/mapSettingsPanel/refreshSettingsForm/refreshSettingsForm.html'" ng-if="!isReportConfig"></div>
 				<div ng-include="'partial/spatial/configurations/mapSettingsPanel/mapProjectionSettings/mapProjectionSettings.html'"></div>
 				<div class="col-md-12 col-btn-no-padding" ng-if="isUserPreference">
-					<button class="btn btn-default pull-right" ng-click="reset()">{{'spatial.settings_reset_btn' | i18n}}</button>
+					<button type="button" class="btn btn-default pull-right" ng-click="reset()">{{'spatial.settings_reset_btn' | i18n}}</button>
 				</div>
 				<div class="col-md-12 col-btn-no-padding" ng-if="isReportConfig">
-					<button class="btn btn-default pull-right" ng-click="reset()">{{'spatial.settings_clear_btn' | i18n}}</button>
+					<button type="button" class="btn btn-default pull-right" ng-click="reset()">{{'spatial.settings_clear_btn' | i18n}}</button>
 				</div>
 			</accordion-group>
 		</accordion>
