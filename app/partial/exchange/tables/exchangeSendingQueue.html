@@ -21,8 +21,11 @@
                 <tbody ng-repeat="plugIn in sendingQueue.items | orderBy:sendingQueue.sortBy:sendingQueue.sortReverse" class="delimiter">
                     <tr class="sending-queue-group"><!-- ng-class-odd="'even'" ng-class-even="'odd'"-->
                         <td>
-                            <i class="fa fa-plus fa-md" ng-hide="messageVisible" title="{{'exchange.sending_queue_expandgroup' | i18n}}" ng-click="messageVisible = messageVisible ? false:true"></i>
-                            <i class="fa fa-minus fa-md" ng-show="messageVisible" title="{{'exchange.sending_queue_collapsegroup' | i18n}}" ng-click="messageVisible = !messageVisible ? true:false"></i>
+                            <i class="fa fa-md" 
+                                ng-class="messageVisible ? 'fa-minus' : 'fa-plus'"
+                                ng-click="messageVisible = !messageVisible"
+                                title="{{ (messageVisible ? 'exchange.sending_queue_collapsegroup' : 'exchange.sending_queue_expandgroup') | i18n }}">
+                            </i>
                         </td>
                         <td>{{plugIn.pluginList.recipient}}</td>
                         <td title="{{plugIn.pluginList.messageType}}">{{plugIn.pluginList.messageType}}</td>
