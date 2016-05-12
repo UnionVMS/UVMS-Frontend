@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, locale, areaMapService, areaAlertService, areaHelperService, areaRestService, userService){
-    $scope.selectedTab = undefined;
+    $scope.selectedTab = 'SYSAREAS';
     $scope.alert = areaAlertService;
     $scope.helper = areaHelperService;
     
@@ -95,7 +95,12 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, l
             
             $('.metadata-container').css('height', $('.updateMetadata').height() - 45);
             
-            $('.dataset-form-container').css('max-height', newHeight - 200);
+            var datasetCont = $('.dataset-form-container').height();
+            if (datasetCont < 80){
+                datasetCont = 80;
+            }
+            
+            $('.dataset-table-container').css('max-height', newHeight - datasetCont - 240);
             
             //GENERIC CONTAINERS
             $('.area-loading').css('width', $('.areaCard').width());

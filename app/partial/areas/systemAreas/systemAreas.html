@@ -116,6 +116,31 @@
 			<div ng-show="editingType === 'dataset'">
 				<ng-form name="datasetForm">
 					<div class="col-md-12 dataset-form-container form-container">
+						<div class="section">
+			        		<div class="row">
+				    	   		<div class="form-group col-md-12">
+				       				<label>{{'areas.area_selection_selected_area' | i18n}}</label>
+			       					<span ng-bind="selectedArea"></span>
+			       					<input type="text" name="areaCode" ng-model="selectedAreaCode" ng-show="false" required>
+			       					<div class="innerErrorMessages dataset-errorMsg" ng-messages="datasetForm.areaCode.$error" ng-show="(datasetForm.areaCode.$dirty || submittedDataset) && datasetForm.areaCode.$invalid">
+										<div ng-message="required"><div class="fa fa-exclamation-circle"></div> {{'spatial.required_field_error_message' | i18n }}</div>
+									</div>
+				       			</div>
+				       			<div class="form-group col-md-12" ng-class="{'has-error': datasetForm.datasetName.$invalid && (datasetForm.datasetName.$dirty || submittedDataset)}">
+				       				<div class="col-md-3 datasetLabel">
+				       					<label>{{'areas.area_selection_dataset_name' | i18n}}</label>
+				       				</div>
+				       				<div class="col-md-9 datasetName">
+				       					<input type="text" name="datasetName" ng-model="datasetName" required>
+				       				</div>
+				       				<div class="innerErrorMessages dataset-errorMsg" ng-messages="datasetForm.datasetName.$error" ng-show="(datasetForm.datasetName.$dirty || submittedDataset) && datasetForm.datasetName.$invalid">
+										<div ng-message="required"><div class="fa fa-exclamation-circle"></div> {{'spatial.required_field_error_message' | i18n }}</div>
+									</div>
+				       			</div>
+			       			</div>
+			       		</div>
+			       	</div>
+					<div class="col-md-12 dataset-table-container form-container">
 						<!-- SYSTEM WIDE AREAS -->
 			        	<div class="section">
 			       			<div class="form-group col-md-12 noPadding" ng-show="sysAreaType !== undefined">
@@ -175,23 +200,6 @@
 			    	   				</table>
 			    	   			</div>
 			    	   		</div>
-			    	   		<div class="row">
-				    	   		<div class="form-group col-md-12">
-				       				<label>{{'areas.area_selection_selected_area' | i18n}}</label>
-			       					<span ng-bind="selectedArea"></span>
-			       					<input type="text" name="areaCode" ng-model="selectedAreaCode" ng-show="false" required>
-			       					<div class="innerErrorMessages" ng-messages="datasetForm.areaCode.$error" ng-show="(datasetForm.areaCode.$dirty || submittedDataset) && datasetForm.areaCode.$invalid">
-										<div ng-message="required"><div class="fa fa-exclamation-circle"></div> {{'spatial.required_field_error_message' | i18n }}</div>
-									</div>
-				       			</div>
-				       			<div class="form-group col-md-12" ng-class="{'has-error': datasetForm.datasetName.$invalid && (datasetForm.datasetName.$dirty || submittedDataset)}">
-				       				<label>{{'areas.area_selection_dataset_name' | i18n}}</label>
-				       				<input type="text" name="datasetName" ng-model="datasetName" required>
-				       				<div class="innerErrorMessages" ng-messages="datasetForm.datasetName.$error" ng-show="(datasetForm.datasetName.$dirty || submittedDataset) && datasetForm.datasetName.$invalid">
-										<div ng-message="required"><div class="fa fa-exclamation-circle"></div> {{'spatial.required_field_error_message' | i18n }}</div>
-									</div>
-				       			</div>
-			       			</div>
 			        	</div>
 					</div>
 				</ng-form>
