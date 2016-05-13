@@ -49,7 +49,7 @@ var resetLayerFilter = function(opt_options){
     
 ol.inherits(resetLayerFilter, ol.control.Control);
 
-angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea, userService) {
+angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea, userService, areaClickerService) {
 
 	var areaMs = {};
 	
@@ -69,12 +69,31 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
 	        logo: false 
 	    });
 	    
+	    map.on('singleclick', function(evt){
+	        var layerType = areaClickerService.layerType;
+	        if (areaClickerService.active && angular.isDefined(layerType) && layerType !== 'USERAREA' && layerType !== 'AREAGROUPS'){
+	            var proj = areaMs.getMapProjectionCode();
+	            
+	            var requestData = {
+                    areaType: layerType,
+                    isGeom: false,
+                    longitude: evt.coordinate[0],
+                    latitude: evt.coordinate[1],
+                    crs: proj.split(':')[1]
+                };
+	            
+	            areaClickerService.getDataFromMap(requestData);
+	        }
+	    });
+	    
 	    map.setView(view);
 	    areaMs.map = map;
 	    
 	    areaMs.addOSM();
 	    areaMs.addVector();
 	};
+	
+
 	
 	//LAYERS
 	areaMs.addOSM =  function(){

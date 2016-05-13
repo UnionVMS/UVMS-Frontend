@@ -12,22 +12,22 @@
 		<div class="row">
 			<div class="col-md-12 form-group radioButtons">
 				<label class="radio-inline">
-					<input type="radio" value="upload" ng-model="editingType">
+					<input type="radio" value="upload" ng-model="helper.sysAreasEditingType">
 					{{'areas.upload_radio_title' | i18n}}
 				</label>
 				<label class="radio-inline">
-					<input type="radio" value="metadata" ng-model="editingType">
+					<input type="radio" value="metadata" ng-model="helper.sysAreasEditingType">
 					{{'areas.metadata_radio_title' | i18n}}
 				</label>
 				<label class="radio-inline">
-					<input type="radio" value="dataset" ng-model="editingType">
+					<input type="radio" value="dataset" ng-model="helper.sysAreasEditingType">
 					{{'areas.dataset_radio_title' | i18n}}
 				</label>
 			</div>
 		</div>
 	
 		<div class="system-area-body">
-			<div ng-show="editingType === 'upload'">
+			<div ng-show="helper.sysAreasEditingType === 'upload'">
 				<!-- UPLOAD AREA -->
 				<ng-form name="SysareasForm">
 					<div class="form-container">
@@ -82,7 +82,7 @@
 			   	</div>
 			</div>
 			<!-- UPDATE METADATA -->
-			<div class="updateMetadata col-md-12" ng-show="editingType === 'metadata'">
+			<div class="updateMetadata col-md-12" ng-show="helper.sysAreasEditingType === 'metadata'">
 				<ng-form name="metadataForm">
 					<div class="row form-container metadata-container">
 						<div class="form-group col-md-12 metadata-group" ng-class="{'has-error': metadataForm.areaName.$dirty && metadataForm.areaName.$invalid}">
@@ -113,7 +113,7 @@
 			   	</div>
 			</div>
 			<!-- CREATE DATASET -->
-			<div ng-show="editingType === 'dataset'">
+			<div ng-show="helper.sysAreasEditingType === 'dataset'">
 				<ng-form name="datasetForm">
 					<div class="col-md-12 dataset-form-container form-container">
 						<div class="section">
@@ -162,7 +162,7 @@
 			       					{{'spatial.area_selection_modal_search_area' | i18n}}
 			       				</label>
 			       			</div>
-			       			<div ng-show="sysSelection === 'search' || (sysSelection === 'map' && clickResults > 1)">
+			       			<div ng-show="sysSelection === 'search' || (sysSelection === 'map' && clickerServ.clickResults > 1)">
 			    	   			<div class="form-group col-md-12 noPadding" ng-hide="sysSelection === 'map'">
 			    	   				<div class="form-group col-md-8 noPadding">
 			    		   				<input type="text" ng-model="searchSysString" class="form-control" placeholder="{{'spatial.reports_form_vessels_search_text' | i18n }}">

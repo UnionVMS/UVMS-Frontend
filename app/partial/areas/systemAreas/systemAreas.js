@@ -1,18 +1,16 @@
-angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,projectionService,areaAlertService,areaRestService,spatialRestService,areaMapService,areaHelperService,locale,Area){
+angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,projectionService,areaAlertService,areaRestService,spatialRestService,areaMapService,areaHelperService,areaClickerService,locale,Area){
     $scope.alert = areaAlertService;
-    $scope.map = areaMapService.map;
 	$scope.sysAreaType = "";
 	$scope.selectedProj = "";
 	$scope.isSaving = false;
 	$scope.validFile = {isValid: undefined};
 	$scope.projections = projectionService;
 	$scope.helper = areaHelperService;
-	$scope.editingType = 'upload';
 	$scope.metadataAvailable = false;
 	$scope.sysSelection = "map";
-	$scope.clickResults = 0;
 	$scope.sysNotes = {};
 	$scope.datasetNew = {};
+	$scope.clickerServ = areaClickerService;
     
 	$scope.fileNameChanged = function(elem){
 		$scope.SysareasForm.areaFile.$setDirty();
@@ -132,7 +130,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
                 areaMapService.addWMS(item);
                 $scope.helper.displayedLayerType = item.typeName;
                 
-                if ($scope.editingType === 'metadata'){
+                if ($scope.helper.sysAreasEditingType === 'metadata'){
                     $scope.metadataForm.$setPristine();
                     $scope.alert.setLoading(locale.getString('areas.getting_area_metadata'));
                     areaRestService.getLayerMetadata(item.typeName).then(getMetadataSuccess, getMetadataFailure);
@@ -173,12 +171,48 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         }
     };
     
-    $scope.$watch('editingType', function(newVal, oldVal){
+    $scope.$watch(function(){return $scope.helper.sysAreasEditingType;}, function(newVal, oldVal){
         $scope.helper.resetMetadata();
-        if (angular.isDefined(newVal) && newVal !== oldVal && newVal === 'metadata'){
-            $scope.alert.setLoading(locale.getString('areas.getting_area_metadata'));
-            var item = $scope.getFullDefForItem($scope.sysAreaType);
-            areaRestService.getLayerMetadata(item.typeName).then(getMetadataSuccess, getMetadataFailure);
+        if (angular.isDefined(newVal) && newVal !== oldVal){
+            $scope.clickerServ.deactivate();
+            if (newVal === 'metadata'){
+                $scope.alert.setLoading(locale.getString('areas.getting_area_metadata'));
+                var item = $scope.getFullDefForItem($scope.sysAreaType);
+                areaRestService.getLayerMetadata(item.typeName).then(getMetadataSuccess, getMetadataFailure);
+            } else if (newVal === 'dataset'){
+                if ($scope.sysSelection === 'map'){
+                    $scope.clickerServ.active = true;
+                }
+            }
+        }
+    });
+    
+    $scope.$watch('sysSelection', function(newVal, oldVal){
+        if (angular.isDefined(newVal) && newVal !== oldVal){
+            if (newVal === 'map' && $scope.helper.sysAreasEditingType === 'dataset'){
+                $scope.clickerServ.active = true;
+            } else {
+                $scope.clickerServ.deactivate();
+            }
+        }
+    });
+    
+    $scope.$watch(function(){return $scope.helper.displayedLayerType;}, function(newVal, oldVal){
+        $scope.clickerServ.layerType = newVal;
+    });
+    
+    $scope.$watch(function(){return $scope.clickerServ.data.length;}, function(newVal){
+        if ($scope.clickerServ.active){
+            if (newVal === 1){
+                var rec = $scope.clickerServ.data[0];
+                $scope.datasetNew.areaGid = rec.gid;
+                $scope.selectedArea = rec.name + ' | ' + rec.code;
+            } else {
+                $scope.datasetNew = {};
+                $scope.selectedArea = undefined;
+                $scope.sysAreaSearch = $scope.clickerServ.data; 
+            }
+            
         }
     });
     
@@ -251,9 +285,9 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         var format = new ol.format.WKT();
         var geom = format.readFeature(area.extent).getGeometry();
         geom.transform('EPSG:4326', 'EPSG:3857');
-        $scope.map.getView().fit(geom, $scope.map.getSize(), {nearest: false});
+        areaMapService.map.getView().fit(geom, areaMapService.map.getSize(), {nearest: false});
         
-        var layers = $scope.map.getLayers();
+        var layers = areaMapService.map.getLayers();
         if (layers.getLength() > 1){
             var layer = layers.getArray().find(function(layer){
                return layer.get('type') === area.areaType; 

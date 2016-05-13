@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, locale, areaMapService, areaAlertService, areaHelperService, areaRestService, userService){
-    $scope.selectedTab = 'SYSAREAS';
+    $scope.selectedTab = 'USERAREAS';
     $scope.alert = areaAlertService;
     $scope.helper = areaHelperService;
     

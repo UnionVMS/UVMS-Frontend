@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaMapService, spatialRestService, areaAlertService, areaRestService) {
+angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaMapService, spatialRestService, areaAlertService, areaRestService, areaClickerService) {
 
 	var areaHelperService = {
 	    isEditing: false,
@@ -6,6 +6,7 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	    displayedSystemAreaLayer: undefined,
 	    displayedUserAreaGroup: undefined,
 	    systemAreaTypes: undefined,
+	    sysAreasEditingType: 'upload', //Possible values are: upload, metadata, dataset
 	    systemAreaItems: [],
 	    userAreasGroups: [],
 	    metadata: {
@@ -36,6 +37,7 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	        this.resetMetadata();
 	    },
 	    tabChange: function(destTab){
+	        areaClickerService.deactivate();
 	        if (angular.isDefined(this.displayedLayerType)){
 	            areaMapService.removeLayerByType(this.displayedLayerType);
 	            this.displayedLayerType = undefined;
@@ -50,6 +52,9 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	                    this.displayedLayerType = this.displayedSystemAreaLayer;
 	                    var item = getAreaLocationLayerDef(this);
 	                    areaMapService.addWMS(item);
+	                }
+	                if (this.sysAreasEditingType === 'dataset'){
+	                    areaClickerService.active = true;
 	                }
 	            }else if(destTab ===  'AREAGROUPS'){
 	            	getUserAreasGroupsList(this);
