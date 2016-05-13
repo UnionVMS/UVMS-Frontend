@@ -1,10 +1,12 @@
-angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, $filter, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal, csvService, SearchResults, envConfig, $resource, $log, longPolling, $stateParams, PositionReportModal) {
+angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($scope, $filter, searchService, locale, manualPositionRestService, alertService, ManualPosition, ManualPositionReportModal, confirmationModal, movementCsvService, SearchResults, envConfig, $resource, $log, longPolling, $stateParams, PositionReportModal) {
 
     $scope.showModal = function() {
         $scope.editPosition();
     };
 
     $scope.selectedMovements = [];
+
+    $scope.search = {};
 
     $scope.isManualMovement = true;
     var modalInstance;
@@ -185,55 +187,11 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
         return checked;
     };
 
-    //Export data as CSV file
-    $scope.exportAsCSVFile = function(onlySelectedItems){
-        var filename = 'manualPositionReports.csv';
-
-        //Set the header columns
-        var header = [
-            locale.getString('movement.table_header_external_marking'),
-            locale.getString('movement.table_header_ircs'),
-            locale.getString('movement.table_header_cfr'),
-            locale.getString('movement.table_header_name'),
-            locale.getString('movement.table_header_time'),
-            locale.getString('movement.table_header_latitude'),
-            locale.getString('movement.table_header_longitude'),
-            locale.getString('movement.table_header_measured_speed'),
-            locale.getString('movement.table_header_course')
-        ];
-
-        //Set the data columns
-        var getData = function() {
-            var exportItems;
-            //Export only selected items
-            if(onlySelectedItems){
-                exportItems = $scope.selectedMovements;
-            }
-            //Export all logs in the table
-            else{
-                exportItems = $scope.currentSearchResults.items;
-            }
-            return exportItems.reduce(
-                function(csvObject, item){
-                    var csvRow = [
-                        item.carrier.externalMarking,
-                        item.carrier.ircs,
-                        item.carrier.cfr,
-                        item.carrier.name,
-                        $filter('confDateFormat')(item.time),
-                        $filter('confCoordinateFormat')(item.position.latitude),
-                        $filter('confCoordinateFormat')(item.position.longitude),
-                        item.speed,
-                        item.course
-                    ];
-                    csvObject.push(csvRow);
-                    return csvObject;
-                },[]
-            );
-        };
-
-        //Create and download the file
-        csvService.downloadCSVFile(getData(), header, filename);
+    $scope.exportAsCSVFile = function(){
+        var movements = $scope.currentSearchResults.items;
+        movements = $filter('orderBy')(movements, $scope.currentSearchResults.sortBy, $scope.currentSearchResults.sortReverse);
+        movements = $filter('filter')(movements, $scope.search);
+        movementCsvService.exportManualMovements(movements);
     };
 
     $scope.$on("$destroy", function() {
@@ -245,8 +203,5 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     });
 
     init();
-
-
-
 
 });

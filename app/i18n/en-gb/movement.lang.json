@@ -5,6 +5,11 @@
 	"poll": "Poll",
 	"csv": "CSV",
 
+	"file_movement_csv": "movement.csv",
+	"file_movements_csv": "movements.csv",
+	"file_manual_movement_csv": "manualPositionReport.csv",
+	"file_manual_movements_csv": "manualPositionReports.csv",
+
 	"header_position_reports" : "Position reports",
 	"header_manual_position_reports" : "Manual position reports",
 	"table_header_flag_state" : "F.S",
