@@ -2,12 +2,12 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>eu.europa.ec.fisheries.uvms</groupId>
   <artifactId>unionvms-web</artifactId>
-  <version>1.0.17-SNAPSHOT</version>
+  <version>1.0.18-SNAPSHOT</version>
   <name>unionvms-web</name>
   <packaging>war</packaging>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <release.branch.name>uvms-2.0.2-frodo</release.branch.name>
+    <release.branch.name>uvms-2.0.3-Galadriel</release.branch.name>
     <webroot>unionvms-web</webroot>
     <karma.phase>integration-test</karma.phase>
   </properties>
