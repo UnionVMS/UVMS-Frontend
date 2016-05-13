@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('DatasetlistmodalCtrl',function($scope,$modalInstance,area){
+angular.module('unionvmsWeb').controller('DatasetlistmodalCtrl',function($scope,$modalInstance,area,areaRestService){
 	$scope.cancel = function () {
         $modalInstance.dismiss('cancel');
     };
@@ -8,21 +8,11 @@ angular.module('unionvmsWeb').controller('DatasetlistmodalCtrl',function($scope,
     };
     
     $modalInstance.opened.then(function(){
-        $scope.selectedTab = 'SYSTEM';
-        $scope.sysSelection = "map";
-        $scope.userSelection = "map";
-        $scope.clickResults = 0;
-        $scope.showWarning = false;
-        $scope.warningMessage = undefined;
-        $scope.hasError = false;
-        $scope.errorMessage = undefined;
+    	areaRestService.getDatasets({areaGid: area.areaGid, areaType: area.areaType}).then(function(){
+    		
+    	}, function(error){
+    		
+    	});
     });
     
-    var
-    areaRestService.getDatasets({areaGid: area.areaGid, areaType: area.areaType}).then(function(){
-		
-	}, function(error){
-		
-	});
-
 });

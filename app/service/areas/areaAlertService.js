@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('areaAlertService',function($timeout) {
+angular.module('unionvmsWeb').factory('areaAlertService',function($timeout,comboboxService) {
 
 	var areaAlertService = {
         hasAlert: false,
@@ -25,6 +25,20 @@ angular.module('unionvmsWeb').factory('areaAlertService',function($timeout) {
 	    removeLoading: function(){
 	        this.isLoading = false;
             this.loadingMessage = undefined;
+	    },
+	    hideAlert: function(timeoutInMilliSeconds){
+	        var alertObj = this;
+	        if (angular.isUndefined(timeoutInMilliSeconds)) {
+	        	timeoutInMilliSeconds = 3000;
+	        }
+	        $timeout(function(){
+	        	comboboxService.closeCurrentCombo();
+	            alertObj.hasAlert = false;
+	            alertObj.hasError = false;
+	            alertObj.hasSuccess = false;
+	            alertObj.hasWarning = false;
+	            alertObj.alertMessage = undefined;
+	        }, timeoutInMilliSeconds, true, alertObj);
 	    }
 	};
 

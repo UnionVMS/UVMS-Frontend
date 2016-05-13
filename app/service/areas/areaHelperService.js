@@ -127,8 +127,8 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
                     obj.systemAreaItems.push({"text": obj.systemAreaTypes[i].typeName, "code": obj.systemAreaTypes[i].typeName});
                 }
             }, function(error){
+            	areaAlertService.setError();
                 areaAlertService.errorMessage = locale.getString('spatial.area_selection_modal_get_sys_layers_error');
-                areaAlertService.hasError = true;
                 areaAlertService.hideAlert();
             });
         }

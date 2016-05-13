@@ -79,16 +79,16 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
             });
         },
         createDataset: function(){
-            return $resource('/area/datasets/:areaType/:areaGid/:datasetName', {}, {
+            return $resource('/spatial/rest/area/datasets/:areaType/:areaGid/:datasetName', {}, {
                 'create': {
                     method: 'POST'
                 }
             });
         },
         getDatasets: function(){
-            return $resource('/area/datasets/:areaType/:areaGid', {}, {
+            return $resource('/spatial/rest/area/datasets/:areaType/:areaGid', {}, {
                 'get': {
-                    method: 'POST'
+                    method: 'GET'
                 }
             });
         }
@@ -207,7 +207,7 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
         createDataset: function(dataset){
 	        //So far we only suport saving features in WGS 84 so be sure to reproject features before calling this method
 	        var deferred = $q.defer();
-            areaRestFactory.createDataset().create(dataset, function(response){
+            areaRestFactory.createDataset().create(dataset, null, function(response){
                 deferred.resolve(response.data);
             }, function(error){
                 console.error('Error creating new dataset.');
