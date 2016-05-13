@@ -119,22 +119,31 @@
 						<div class="section">
 			        		<div class="row">
 				    	   		<div class="form-group col-md-12">
-				       				<label>{{'areas.area_selection_selected_area' | i18n}}</label>
-			       					<span ng-bind="selectedArea"></span>
-			       					<input type="text" name="areaCode" ng-model="selectedAreaCode" ng-show="false" required>
-			       					<div class="innerErrorMessages dataset-errorMsg" ng-messages="datasetForm.areaCode.$error" ng-show="(datasetForm.areaCode.$dirty || submittedDataset) && datasetForm.areaCode.$invalid">
-										<div ng-message="required"><div class="fa fa-exclamation-circle"></div> {{'spatial.required_field_error_message' | i18n }}</div>
+				    	   			<div class="row dataset-form-row">
+					    	   			<div class="col-md-3">
+					       					<label>{{'areas.area_selection_selected_area' | i18n}}</label>
+					       				</div>
+					       				<div class="col-md-9 selected-area">
+					       					<span ng-bind="selectedArea"></span>
+					       					<input type="text" name="areaCode" ng-model="datasetNew.areaGid" ng-show="false" required>
+					       					<button type="button" class="btn btn-primary btn-xs selected-area-datasets-btn" title="{{'areas.table_area__details_btn' | i18n }}" ng-click="showAreaDatasets(datasetNew.areaGid)" ng-show="datasetNew.areaGid"><span class="fa fa-eye"></span></button>
+					       					<div class="innerErrorMessages dataset-errorMsg" ng-messages="datasetForm.areaCode.$error" ng-show="(datasetForm.areaCode.$dirty || submittedDataset) && datasetForm.areaCode.$invalid">
+												<div ng-message="required"><div class="fa fa-exclamation-circle"></div> {{'spatial.required_field_error_message' | i18n }}</div>
+											</div>
+										</div>
 									</div>
 				       			</div>
 				       			<div class="form-group col-md-12" ng-class="{'has-error': datasetForm.datasetName.$invalid && (datasetForm.datasetName.$dirty || submittedDataset)}">
-				       				<div class="col-md-3 datasetLabel">
-				       					<label>{{'areas.area_selection_dataset_name' | i18n}}</label>
-				       				</div>
-				       				<div class="col-md-9 datasetName">
-				       					<input type="text" name="datasetName" ng-model="datasetName" required>
-				       				</div>
-				       				<div class="innerErrorMessages dataset-errorMsg" ng-messages="datasetForm.datasetName.$error" ng-show="(datasetForm.datasetName.$dirty || submittedDataset) && datasetForm.datasetName.$invalid">
-										<div ng-message="required"><div class="fa fa-exclamation-circle"></div> {{'spatial.required_field_error_message' | i18n }}</div>
+				       				<div class="row dataset-form-row">
+					       				<div class="col-md-3">
+					       					<label>{{'areas.area_selection_dataset_name' | i18n}}</label>
+					       				</div>
+					       				<div class="col-md-9">
+					       					<input class="form-control" type="text" name="datasetName" ng-model="datasetNew.datasetName" required>
+					       				</div>
+					       				<div class="innerErrorMessages dataset-errorMsg" ng-messages="datasetForm.datasetName.$error" ng-show="(datasetForm.datasetName.$dirty || submittedDataset) && datasetForm.datasetName.$invalid">
+											<div ng-message="required"><div class="fa fa-exclamation-circle"></div> {{'spatial.required_field_error_message' | i18n }}</div>
+										</div>
 									</div>
 				       			</div>
 			       			</div>
@@ -171,7 +180,7 @@
 			    	   						<tr class="stColumnHeaders">
 			    	   							<th st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_name_header' | i18n}}</th>
 			    	   							<th st-sort="code" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_code_header' | i18n}}</th>
-			    	   							<th style="min-width: 80px;"></th>
+			    	   							<th style="min-width: 95px;"></th>
 			    	   						</tr>
 			    	   						<tr ng-if="searchLoading">
 			    					        	<th colspan="3" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
@@ -184,9 +193,10 @@
 			    	   						<tr ng-repeat="sysArea in displayedRecordsArea">
 			    	   							<td>{{sysArea.name}}</td>
 			    	   							<td>{{sysArea.code}}</td>
-			    	   							<td style="min-width: 80px;">
-			    	   								<button type="button" class="btn btn-primary btn-xs btnMargin" title="{{'spatial.area_selection_modal_see_on_map_btn' | i18n }}" ng-click="mergeParamsWms($index, displayedRecordsArea, sysAreaSearch)"> <span class="fa fa-globe"></span></button>
-			    	   								<button type="button" class="btn btn-xs" ng-class="{'btn-success': selectedAreaCode === sysArea.code, 'btn-primary': selectedAreaCode !== sysArea.code}" title="{{'areas.area_selection_select_area_btn' | i18n }}" ng-click="selectArea($index)"><span class="fa fa-check"></span></button>
+			    	   							<td style="min-width: 95px;">
+			    	   								<button type="button" class="btn btn-primary btn-xs" title="{{'spatial.area_selection_modal_see_on_map_btn' | i18n }}" ng-click="mergeParamsWms($index, displayedRecordsArea, sysAreaSearch)"> <span class="fa fa-globe"></span></button>
+			    	   								<button type="button" class="btn btn-primary btn-xs" title="{{'areas.table_area__details_btn' | i18n }}" ng-click="showAreaDatasets(sysArea.gid)"><span class="fa fa-eye"></span></button>
+			    	   								<button type="button" class="btn btn-xs" ng-class="{'btn-success': datasetNew.areaGid === sysArea.gid, 'btn-primary': datasetNew.areaGid !== sysArea.gid}" title="{{'areas.area_selection_select_area_btn' | i18n }}" ng-click="selectArea($index)"><span class="fa fa-check"></span></button>
 			    	   							</td>
 			    	   						</tr>
 			    	   					</tbody>

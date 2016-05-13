@@ -12,6 +12,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
 	$scope.sysSelection = "map";
 	$scope.clickResults = 0;
 	$scope.sysNotes = {};
+	$scope.datasetNew = {};
     
 	$scope.fileNameChanged = function(elem){
 		$scope.SysareasForm.areaFile.$setDirty();
@@ -202,23 +203,43 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
     });
     
     $scope.selectArea = function(index){
-    	$scope.selectedAreaCode = $scope.displayedRecordsArea[index].code;
+    	$scope.datasetNew.areaGid = $scope.displayedRecordsArea[index].gid;
     	$scope.selectedArea = $scope.displayedRecordsArea[index].name + ' | ' + $scope.displayedRecordsArea[index].code;
     };
     
     $scope.createDataset = function() {
     	$scope.submittedDataset = true;
     	if($scope.datasetForm.$valid){
-    		
+    		$scope.datasetNew.areaType = $scope.sysAreaType;
+    		areaRestService.createDataset($scope.datasetNew).then(function(){
+    			
+    		}, function(error){
+    			
+    		});
     	}
     };
     
+    $scope.showAreaDatasets = function(gid){
+    	var modalInstance = $modal.open({
+            templateUrl: 'partial/areas/datasetListModal/datasetListModal.html',
+            controller: 'datasetListModalCtrl',
+            size: 'lg',
+            resolve: {
+                area: function(){
+                    return {
+                    	areaGid: gid,
+                    	areaType: $scope.sysAreaType
+                    };
+                }
+            }
+        });
+    };
+    
     var resetDatasetTab = function(){
-    	$scope.selectedAreaCode = undefined;
+    	$scope.datasetNew = {};
     	$scope.selectedArea = undefined;
     	$scope.sysAreaSearch = [];
     	$scope.searchSysString = undefined;
-    	$scope.datasetName = undefined;
     	$scope.submittedDataset = false;
     	$scope.sysSelection = 'map';
     	$scope.datasetForm.$setPristine();
