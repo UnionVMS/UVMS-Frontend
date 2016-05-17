@@ -161,11 +161,12 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
             };
             spatialRestService.getAreasByFilter(requestData).then(function(response){
                 $scope.sysAreaSearch = $scope.convertAreasResponse(response.data);
+                $scope.updateContainerSize();
                 $scope.searchLoading = false;
             }, function(error){
-                $scope.alert.errorMessage = locale.getString('spatial.area_selection_modal_get_selected_area_search_error');
+                $scope.alert.errorMessage = locale.getString('spatial.area_selection_modal_get<_selected_area_search_error');
                 $scope.alert.hasError = true;
-                $scope.alert.hideAlerts();
+                $scope.alert.hideAlert();
                 $scope.searchLoading = false;
             });
         }
@@ -245,7 +246,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         		$scope.hasDatasetCreated = true;
         		$scope.alert.setWarning();
                 $scope.alert.alertMessage = locale.getString('areas.warning_dataset_already_exists');
-                $scope.alert.hideAlerts();
+                $scope.alert.hideAlert();
         	}else{
         		$scope.hasDatasetCreated = false;
         	}
@@ -254,19 +255,28 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
     		$scope.alert.removeLoading();
     		$scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.error_checking_if_dataset_exists');
-            $scope.alert.hideAlerts();
+            $scope.alert.hideAlert();
     	});
     };
     
     $scope.createDataset = function() {
+    	$scope.alert.setLoading(locale.getString('areas.creating_dataset'));
     	$scope.submittedDataset = true;
     	if($scope.datasetForm.$valid){
     		$scope.datasetNew.areaType = $scope.sysAreaType;
     		areaRestService.createDataset($scope.datasetNew).then(function(){
-    			
+    			$scope.alert.removeLoading();
+        		$scope.alert.setSuccess();
+                $scope.alert.alertMessage = locale.getString('areas.create_dataset_success');
+                $scope.alert.hideAlert();
     		}, function(error){
-    			
+    			$scope.alert.removeLoading();
+        		$scope.alert.setError();
+                $scope.alert.alertMessage = locale.getString('areas.create_dataset_error');
+                $scope.alert.hideAlert();
     		});
+    	}else{
+    		$scope.alert.removeLoading();
     	}
     };
     

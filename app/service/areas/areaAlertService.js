@@ -26,7 +26,7 @@ angular.module('unionvmsWeb').factory('areaAlertService',function($timeout,combo
 	        this.isLoading = false;
             this.loadingMessage = undefined;
 	    },
-	    hideAlerts: function(timeoutInMilliSeconds){
+	    hideAlert: function(timeoutInMilliSeconds){
 	        var alertObj = this;
 	        if (angular.isUndefined(timeoutInMilliSeconds)) {
 	        	timeoutInMilliSeconds = 3000;
