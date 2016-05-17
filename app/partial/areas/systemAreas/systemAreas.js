@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,projectionService,areaAlertService,areaRestService,spatialRestService,areaMapService,areaHelperService,areaClickerService,locale,Area){
+angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,projectionService,areaAlertService,areaRestService,spatialRestService,areaMapService,areaHelperService,areaClickerService,locale,Area,$modal){
     $scope.alert = areaAlertService;
 	$scope.sysAreaType = "";
 	$scope.selectedProj = "";
@@ -163,9 +163,9 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
                 $scope.sysAreaSearch = $scope.convertAreasResponse(response.data);
                 $scope.searchLoading = false;
             }, function(error){
-                $scope.errorMessage = locale.getString('spatial.area_selection_modal_get_selected_area_search_error');
-                $scope.hasError = true;
-                $scope.hideAlerts();
+                $scope.alert.errorMessage = locale.getString('spatial.area_selection_modal_get_selected_area_search_error');
+                $scope.alert.hasError = true;
+                $scope.alert.hideAlerts();
                 $scope.searchLoading = false;
             });
         }
@@ -180,9 +180,8 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
                 var item = $scope.getFullDefForItem($scope.sysAreaType);
                 areaRestService.getLayerMetadata(item.typeName).then(getMetadataSuccess, getMetadataFailure);
             } else if (newVal === 'dataset'){
-                if ($scope.sysSelection === 'map'){
-                    $scope.clickerServ.active = true;
-                }
+                resetDatasetTab();
+                $scope.clickerServ.active = true;
             }
         }
     });
@@ -236,9 +235,27 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         }
     });
     
-    $scope.selectArea = function(index){
-    	$scope.datasetNew.areaGid = $scope.displayedRecordsArea[index].gid;
-    	$scope.selectedArea = $scope.displayedRecordsArea[index].name + ' | ' + $scope.displayedRecordsArea[index].code;
+    $scope.selectArea = function(index,gid){
+    	$scope.alert.setLoading(locale.getString('areas.checking_dataset'));
+    	areaRestService.getDatasets({areaGid: gid, areaType: $scope.sysAreaType}).then(function(response){
+    		$scope.datasetNew.areaGid = $scope.displayedRecordsArea[index].gid;
+        	$scope.selectedArea = $scope.displayedRecordsArea[index].name + ' | ' + $scope.displayedRecordsArea[index].code;
+        	if(response.length){
+        		$scope.savedDatasetName = response[0].name;
+        		$scope.hasDatasetCreated = true;
+        		$scope.alert.setWarning();
+                $scope.alert.alertMessage = locale.getString('areas.warning_dataset_already_exists');
+                $scope.alert.hideAlerts();
+        	}else{
+        		$scope.hasDatasetCreated = false;
+        	}
+        	$scope.alert.removeLoading();
+    	}, function(error){
+    		$scope.alert.removeLoading();
+    		$scope.alert.setError();
+            $scope.alert.alertMessage = locale.getString('areas.error_checking_if_dataset_exists');
+            $scope.alert.hideAlerts();
+    	});
     };
     
     $scope.createDataset = function() {
@@ -253,28 +270,13 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
     	}
     };
     
-    $scope.showAreaDatasets = function(gid){
-    	var modalInstance = $modal.open({
-            templateUrl: 'partial/areas/datasetListModal/datasetListModal.html',
-            controller: 'datasetListModalCtrl',
-            size: 'lg',
-            resolve: {
-                area: function(){
-                    return {
-                    	areaGid: gid,
-                    	areaType: $scope.sysAreaType
-                    };
-                }
-            }
-        });
-    };
-    
     var resetDatasetTab = function(){
     	$scope.datasetNew = {};
     	$scope.selectedArea = undefined;
     	$scope.sysAreaSearch = [];
     	$scope.searchSysString = undefined;
     	$scope.submittedDataset = false;
+    	$scope.hasDatasetCreated = false;
     	$scope.sysSelection = 'map';
     	$scope.datasetForm.$setPristine();
     };
