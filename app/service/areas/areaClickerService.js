@@ -29,7 +29,7 @@ angular.module('unionvmsWeb').factory('areaClickerService',function(areaAlertSer
                 areaAlertService.removeLoading();
             }, function(error){
                 areaAlertService.removeLoading();
-                areaAlertService.setError()
+                areaAlertService.setError();
                 areaAlertService.alertMessage = locale.getString('areas.error_searching_areas');
             });
         }
