@@ -305,15 +305,8 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
                return layer.get('type') === area.areaType; 
             });
             
-            var cql = '';
+            var cql = "gid = " + parseInt(area.gid);
             var src = layer.getSource();
-            if (area.areaType === 'USERAREA'){
-                var currentParams = src.getParams();
-                var cqlComps = currentParams.cql_filter.split(' and');
-                cql = cqlComps[0] + ' and ';
-            }
-            cql += "gid = " + parseInt(area.gid);
-            
             src.updateParams({
                 time_: (new Date()).getTime(),
                 'cql_filter': cql

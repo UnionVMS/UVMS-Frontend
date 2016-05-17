@@ -15,7 +15,6 @@ angular.module('unionvmsWeb').factory('areaClickerService',function(areaAlertSer
             this.clearData();
         },
         getDataFromMap: function(payload){
-            //deal with loading indicator
             areaAlertService.setLoading(locale.getString('areas.getting_area'));
             var self = this;
             self.clearData();
@@ -29,8 +28,9 @@ angular.module('unionvmsWeb').factory('areaClickerService',function(areaAlertSer
                 }
                 areaAlertService.removeLoading();
             }, function(error){
-                //TODO
-                //areaAlertService.removeLoading();
+                areaAlertService.removeLoading();
+                areaAlertService.setError()
+                areaAlertService.alertMessage = locale.getString('areas.error_searching_areas');
             });
         }
 	};

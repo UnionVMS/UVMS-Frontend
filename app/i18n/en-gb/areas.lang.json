@@ -102,6 +102,7 @@
 	"updating_area": "Updating area",
 	"deleting_area": "Deleting area",
 	"getting_area": "Loading area",
+	"error_searching_areas": "There was an error while searching for areas. Please try again.",
 	"checking_dataset": "Checking if has dataset",
 	"creating_dataset": "Creating dataset",
 	"create_dataset_success": "Your dataset was successfully created.",

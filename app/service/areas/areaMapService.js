@@ -18,14 +18,19 @@ var resetLayerFilter = function(opt_options){
             });
             
             for (var i = 0; i < layers.length; i++){
+                var cql;
                 var baseCql = layers[i].get('baseCql');
-                if (angular.isDefined(baseCql)){
-                    var cql = baseCql;
+                if (angular.isDefined(baseCql)){ //USER AREAS and USER AREAS GROUPS
+                    cql = baseCql;
                     var groupCql = layers[i].get('groupCql');
                     if (angular.isDefined(groupCql)){
                         cql += groupCql;
                     }
-                    
+                } else {
+                    cql = null;
+                }
+                
+                if (angular.isDefined(cql)){
                     layers[i].getSource().updateParams({
                         time_: (new Date()).getTime(),
                         'cql_filter': cql
