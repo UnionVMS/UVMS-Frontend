@@ -328,36 +328,21 @@ describe('ManualPositionReportCtrl', function() {
     	expect(scope.isChecked(p2)).toBe(false);
     }));
 
-	it('should export data for CSV', inject(function(csvService) {
-		scope.currentSearchResults.items = getPositions([1, 2, 3]);
-		spyOn(csvService, 'downloadCSVFile').andCallFake(function(data, header, filename) {
-			expect(header).toEqual(['fakeMarking', 'fakeIrcs', 'fakeCfr', 'fakeName', 'fakeTime', 'fakeLatitude', 'fakeLongitude', 'fakeSpeed', 'fakeCourse']);
-			expect(filename).toEqual('manualPositionReports.csv');
-			expect(data).toEqual([
-				['ext1', 'ircs1', 'cfr1', 'name1', '2009-02-13 23:31:30', '1.000', '1.000', 1, 1],
-				['ext2', 'ircs2', 'cfr2', 'name2', '2009-02-13 23:31:30', '2.000', '2.000', 2, 2],
-				['ext3', 'ircs3', 'cfr3', 'name3', '2009-02-13 23:31:30', '3.000', '3.000', 3, 3]
-			]);
-		});
-
-		scope.exportAsCSVFile(false);
-		expect(csvService.downloadCSVFile).toHaveBeenCalled();
+	it('should export data for CSV', inject(function(movementCsvService) {
+        var testMovements = getPositions([1, 2, 3]);
+		scope.currentSearchResults.items = testMovements;
+		spyOn(movementCsvService, 'exportManualMovements');
+		scope.exportAsCSVFile();
+		expect(movementCsvService.exportManualMovements).toHaveBeenCalledWith(testMovements);
 	}));
 
-	it('should export selected data for CSV', inject(function(csvService) {
-		scope.selectedMovements = getPositions([1, 2, 3]);
-		spyOn(csvService, 'downloadCSVFile').andCallFake(function(data, header, filename) {
-			expect(header).toEqual(['fakeMarking', 'fakeIrcs', 'fakeCfr', 'fakeName', 'fakeTime', 'fakeLatitude', 'fakeLongitude', 'fakeSpeed', 'fakeCourse']);
-			expect(filename).toEqual('manualPositionReports.csv');
-			expect(data).toEqual([
-				['ext1', 'ircs1', 'cfr1', 'name1', '2009-02-13 23:31:30', '1.000', '1.000', 1, 1],
-				['ext2', 'ircs2', 'cfr2', 'name2', '2009-02-13 23:31:30', '2.000', '2.000', 2, 2],
-				['ext3', 'ircs3', 'cfr3', 'name3', '2009-02-13 23:31:30', '3.000', '3.000', 3, 3]
-			]);
-		});
-
-		scope.exportAsCSVFile(true);
-		expect(csvService.downloadCSVFile).toHaveBeenCalled();
+	it('should export selected data for CSV', inject(function(movementCsvService) {
+		var testMovements = getPositions([1, 2, 3]);
+        scope.search = {carrier: {ircs: 'ircs2'}};
+        scope.currentSearchResults.items = testMovements;
+		spyOn(movementCsvService, 'exportManualMovements');
+		scope.exportAsCSVFile();
+		expect(movementCsvService.exportManualMovements).toHaveBeenCalledWith(getPositions([2]));
 	}));
 
 });
