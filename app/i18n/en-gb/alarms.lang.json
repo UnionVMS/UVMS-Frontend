@@ -170,6 +170,7 @@
     "position_report_loading_movement_error" : "Failed to load position.",
 
     "notifications_table_close_title" : "Close notification",
+    "close_notification_reason_placeholder": "Reason for closing this notification.",
     "notifications_close_error_message" : "Failed to close the notification. Please try again.",
 
     "new_items_available": "{1} new item(s)"

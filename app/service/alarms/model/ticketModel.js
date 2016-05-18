@@ -14,6 +14,7 @@ angular.module('unionvmsWeb').factory('Ticket', function() {
         this.updatedBy = undefined;
         this.status = undefined;
         this.ticketCount = undefined;
+        this.comment = undefined;
     }
 
     Ticket.fromDTO = function(dto){
@@ -30,6 +31,7 @@ angular.module('unionvmsWeb').factory('Ticket', function() {
         ticket.updatedBy = dto.updatedBy;
         ticket.status = dto.status;
         ticket.ticketCount = dto.ticketCount;
+        ticket.comment = dto.comment;
         return ticket;
     };
 
@@ -82,6 +84,7 @@ angular.module('unionvmsWeb').factory('Ticket', function() {
         copy.updated = this.updated;
         copy.updatedBy = this.updatedBy;
         copy.status = this.status;
+        copy.comment = this.comment;
 
         if(angular.isDefined(this.vessel)){
             copy.vessel = this.vessel.copy();
@@ -93,10 +96,11 @@ angular.module('unionvmsWeb').factory('Ticket', function() {
     Ticket.prototype.DTO = function(){
         var dto = {
             guid : this.guid,
-            status: this.status,
+            status: this.status
         };
         if(this.isClosed()){
             dto.updatedBy = this.updatedBy;
+            dto.comment = this.comment;
         }
         return dto;
     };

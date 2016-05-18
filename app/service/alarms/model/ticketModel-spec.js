@@ -11,6 +11,7 @@ describe('Ticket', function() {
         sender: "SWE",
         recipient: "DEN",
         status: "CLOSED",
+        commont: "My comment here."
     };
     beforeEach(module('unionvmsWeb'));
 
@@ -28,6 +29,7 @@ describe('Ticket', function() {
         expect(ticket.updated).toEqual(ticketData.updated);
         expect(ticket.updatedBy).toEqual(ticketData.updatedBy);
         expect(ticket.status).toEqual(ticketData.status);
+        expect(ticket.comment).toEqual(ticketData.comment);
 
     }));
 

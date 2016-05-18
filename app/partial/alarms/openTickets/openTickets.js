@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, $stateParams, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, TicketModal, movementRestService, $resource, longPolling, mobileTerminalRestService){
+angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, $stateParams, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, TicketModal, movementRestService, $resource, longPolling, mobileTerminalRestService, modalComment){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -89,19 +89,26 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
 
     //Close a ticket
     $scope.closeTicket = function(ticket){
-        var copy = ticket.copy();
-        copy.setStatusToClosed();
-        alarmRestService.updateTicketStatus(copy).then(
-            function(updatedTicket){
+        function completeFn(comment) {
+            var copy = ticket.copy();
+            copy.setStatusToClosed();
+            copy.comment = comment;
+            alarmRestService.updateTicketStatus(copy).then(function(updatedTicket) {
                 //Update ticket values
                 ticket.status = updatedTicket.status;
                 ticket.updated = updatedTicket.updated;
                 ticket.updatedBy = updatedTicket.updatedBy;
             },
-            function(error){
+            function(error) {
                 alertService.showErrorMessageWithTimeout(locale.getString('alarms.notifications_close_error_message'));
-            }
-        );
+            });
+        }
+
+        modalComment.open(completeFn, {
+            titleLabel: locale.getString("alarms.notifications_table_close_title"),
+            saveLabel: locale.getString("common.close"),
+            placeholderLabel: locale.getString('alarms.close_notification_reason_placeholder')
+        });
     };
 
 
