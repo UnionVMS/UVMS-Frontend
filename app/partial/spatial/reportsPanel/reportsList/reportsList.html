@@ -68,7 +68,7 @@
 							</button>
 							<ul class="dropdown-menu dropdown-run-options">
 								<li><a ng-click="runReport($index)">{{'spatial.reports_table_run_label' | i18n }}</a></li>
-								<li><a ng-click="openMapOnNewTab()">{{'spatial.reports_table_run_new_tab_label' | i18n }}</a></li>
+								<li><a ng-click="openMapOnNewTab(report.id)">{{'spatial.reports_table_run_new_tab_label' | i18n }}</a></li>
 							</ul>
 						</div>
 	                    <button type="button" class="btn btn-primary btn-xs btn-bottom-mg" title="{{'spatial.reports_table_config_label' | i18n }}" ng-click="showFilters($index)"><span class="fa fa-cog"></span></button>

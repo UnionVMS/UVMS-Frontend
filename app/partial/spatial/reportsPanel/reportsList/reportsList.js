@@ -245,9 +245,12 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
         $scope.loadReportList();
     }
     
-    $scope.openMapOnNewTab = function(){
+    $scope.openMapOnNewTab = function(repId){
+        if (!angular.isDefined(repId)){
+            repId = reportService.id;
+        }
     	var guid = generateGUID();
-    	var url = $state.href('app.reporting-id', {id: reportService.id, guid: guid});
+    	var url = $state.href('app.reporting-id', {id: repId, guid: guid});
     	$window.open(url,'_blank');
     };
     
