@@ -42,10 +42,8 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		    newConfig = $scope.checkVisibilitySettings(newConfig);
 		    newConfig = $scope.checkLayerSettings(newConfig);
 		    
-		    console.log(newConfig);
-		    newConfig = angular.toJson(newConfig);
-		    
-		    if (!angular.equals('{}', newConfig)){
+		    if ($scope.configPanelForm.$dirty){
+		    	newConfig = angular.toJson(newConfig);
 		        spatialConfigRestService.saveUserConfigs(newConfig).then(saveSuccess, saveFailure);  
 		    } else {
 		        $anchorScroll();
@@ -66,17 +64,20 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	};
 	
 	$scope.checkMapSettings = function(config){
-	    if (!_.isEqual($scope.configModel.mapSettings, $scope.configCopy.mapSettings)){
-	        config.mapSettings = $scope.configModel.mapSettings;
-        } else {
-            config.mapSettings = undefined;
+	    if($scope.configPanelForm.mapsettingsForm.$pristine && $scope.configModel.mapSettings && $scope.configModel.mapSettings.reseted){
+	    	config.mapSettings = undefined;
+        }else{
+            config.mapSettings = $scope.configModel.mapSettings;
+            if(angular.isDefined(config.mapSettings)){
+            	delete config.mapSettings.reseted;
+            }
         }
 	    
 	    return config;
 	};
 	
 	$scope.checkStylesSettings = function(config){
-	    var include = false;
+	    var include = true;
 	    
 	    //Rebuild colors from fs
 	    config.stylesSettings = $scope.configModel.stylesSettings;
@@ -161,18 +162,20 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
             }
         }
 	    
-	    if(!_.isEqual(config.stylesSettings.positions,$scope.configCopy.stylesSettings.positions) || !_.isEqual(config.stylesSettings.segments,$scope.configCopy.stylesSettings.segments) || !_.isEqual(config.stylesSettings.alarms,$scope.configCopy.stylesSettings.alarms)){
-	    	include = true;
+	    if($scope.configPanelForm && $scope.configModel.stylesSettings && $scope.configModel.stylesSettings.reseted && $scope.configPanelForm.vmsstylesForm.positionsForm.$pristine && $scope.configPanelForm.vmsstylesForm.segmentsForm.$pristine && $scope.configPanelForm.vmsstylesForm.alarmsForm.$pristine){
+	    	include = false;
 	    }
-	    if (include === false){
+	    if(include === false){
 	        config.stylesSettings = undefined;
+	    }else if(angular.isDefined(config.stylesSettings)){
+	    	delete config.stylesSettings.reseted;
 	    }
 	    
 	    return config;
 	};
 	
 	$scope.checkVisibilitySettings = function(config){
-	    var include = false;
+	    var include = true;
 	    config.visibilitySettings = {};
 	    angular.copy($scope.configModel.visibilitySettings,config.visibilitySettings);
 	    var visibilityTypes = ['position','segment','track'];
@@ -206,35 +209,24 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    });
 	    
 	    //check if it is equals
-	    if(config.visibilitySettings){
-    		angular.forEach(visibilityTypes, function(visibType) {
-    			if(config.visibilitySettings[visibType + 's']){
-    				for(var i = 0;i<contentTypes.length;i++){
-    					var visibilityCurrentSettings = config.visibilitySettings[visibType + 's'][contentTypes[i].toLowerCase() === 'label' ? contentTypes[i].toLowerCase() + 's' : contentTypes[i].toLowerCase()];
-    					var visibilityCopySettings = $scope.configCopy.visibilitySettings[visibType + 's'][contentTypes[i].toLowerCase() === 'label' ? contentTypes[i].toLowerCase() + 's' : contentTypes[i].toLowerCase()];
-    					
-    					if(visibilityCurrentSettings &&
-    					((visibilityCurrentSettings.values &&
-    					!_.isEqual(visibilityCurrentSettings.values ? $scope.sortArray(visibilityCurrentSettings.values) : undefined, visibilityCopySettings.values)) ||
-    					(visibilityCurrentSettings.order &&
-    					!_.isEqual(visibilityCurrentSettings.values ? $scope.sortArray(visibilityCurrentSettings.values) : undefined, visibilityCopySettings.order)))){
-    						include = true;
-    					}
-    				}
-    			}
-    		});
-	    }
+	    if($scope.configModel.visibilitySettings && $scope.configModel.visibilitySettings.reseted && $scope.configPanelForm.visibilitysettingsForm.$pristine){
+			include = false;
+		}
         
 	    if (include === false){
 	        config.visibilitySettings = undefined;
-	    }
+	    }else if(angular.isDefined(config.visibilitySettings)){
+        	delete config.visibilitySettings.reseted;
+        }
         
         return config;
     };
     
     $scope.checkLayerSettings = function(config){
     	
-    	if (!_.isEqual($scope.configModel.layerSettings, $scope.configCopy.layerSettings)){
+    	if($scope.configModel.layerSettings && $scope.configModel.layerSettings.reseted && $scope.configPanelForm.layersettingsForm.$pristine){
+    		config.layerSettings = undefined;
+    	}else{
     		$scope.configCopy.layerSettingsToSave = {};
     		angular.copy($scope.configModel.layerSettings, $scope.configCopy.layerSettingsToSave);
     		config.layerSettings = {};
@@ -297,8 +289,6 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
     			config.layerSettings.baseLayers = undefined;
     		}
         	
-        } else {
-            config.layerSettings = undefined;
         }
 	    return config;
 	};

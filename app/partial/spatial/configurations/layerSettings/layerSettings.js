@@ -41,7 +41,6 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	
 	$scope.reset = function(){
 		loadingStatus.isLoading('ResetPreferences',true);
-		$scope.layersettingsForm.$setDirty();
 		$scope.loadedAllSettings = false;
         var item = {
             layerSettings: {}
@@ -66,6 +65,8 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
         spatialConfigAlertService.hasSuccess = true;
         spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_layers_success');
         spatialConfigAlertService.hideAlert();
+        $scope.layersettingsForm.$setPristine();
+        $scope.configModel.layerSettings.reseted = true;
         loadingStatus.isLoading('ResetPreferences',false);
     };
     
@@ -182,6 +183,8 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	    spatialConfigAlertService.hasSuccess = true;
 	    spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_layers_success');
         spatialConfigAlertService.hideAlert();
+        $scope.layersettingsForm.$setPristine();
+        $scope.configModel.layerSettings.reseted = true;
         loadingStatus.isLoading('ResetPreferences',false);
 	};
 	

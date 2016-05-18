@@ -106,11 +106,8 @@
 					    </div>
 					</div>
 				</div>
-				<div class="col-md-12 col-btn-no-padding" ng-if="isUserPreference">
+				<div class="col-md-12 col-btn-no-padding" ng-if="isUserPreference || isReportConfig">
 					<button type="button" class="btn btn-default pull-right" ng-click="reset()">{{'spatial.settings_reset_btn' | i18n}}</button>
-				</div>
-				<div class="col-md-12 col-btn-no-padding" ng-if="isReportConfig">
-					<button type="button" class="btn btn-default pull-right" ng-click="reset()">{{'spatial.settings_clear_btn' | i18n}}</button>
 				</div>
 			</accordion-group>
 		</accordion>

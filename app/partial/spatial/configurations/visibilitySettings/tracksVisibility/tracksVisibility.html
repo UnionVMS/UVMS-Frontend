@@ -18,7 +18,7 @@
 								dnd-draggable="attr"
 								dnd-type="attr.type"
 								dnd-effect-allowed="move"
-								dnd-moved="configModel.visibilitySettings.trackTableAttrs.splice($index, 1);">
+								dnd-moved="configModel.visibilitySettings.trackTableAttrs.splice($index, 1);visibilitysettingsForm.$setDirty();">
 									<div class="handle">:::</div>
 									<span>{{attr.title}}</span>
 									<input type="checkbox" checklist-model="configModel.visibilitySettings.tracks.table.values" checklist-value="attr.value" ng-change="selectAllChange('tracks','table',true)">

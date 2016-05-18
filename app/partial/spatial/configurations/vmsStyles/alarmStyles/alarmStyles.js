@@ -61,6 +61,7 @@ angular.module('unionvmsWeb').controller('AlarmstylesCtrl',function($scope,local
 	$scope.$watch('loadedAllSettings', function() {
 		if($scope.loadedAllSettings && $scope.configModel && $scope.configModel.stylesSettings && $scope.configModel.stylesSettings.alarms){
 			$scope.loadAlarmProperties();
+			$scope.vmsstylesForm.$setPristine();
 		}
 	});
 });

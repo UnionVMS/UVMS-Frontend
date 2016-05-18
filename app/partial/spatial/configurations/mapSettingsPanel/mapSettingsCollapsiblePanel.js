@@ -6,7 +6,6 @@ angular.module('unionvmsWeb').controller('MapsettingscollapsiblepanelCtrl',funct
 	
 	$scope.reset = function(){
 		loadingStatus.isLoading('ResetPreferences',true);
-		$scope.mapsettingsForm.$setDirty();
 	    var item = {
 	       mapSettings: {}
 	    };
@@ -28,6 +27,8 @@ angular.module('unionvmsWeb').controller('MapsettingscollapsiblepanelCtrl',funct
 	    spatialConfigAlertService.hasSuccess = true;
 	    spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_map_settings_success');
         spatialConfigAlertService.hideAlert();
+        $scope.mapsettingsForm.$setPristine();
+        $scope.configModel.mapSettings.reseted = true;
         loadingStatus.isLoading('ResetPreferences',false);
 	};
 	
@@ -62,6 +63,8 @@ angular.module('unionvmsWeb').controller('MapsettingscollapsiblepanelCtrl',funct
 	    spatialConfigAlertService.hasSuccess = true;
 	    spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_map_settings_success');
         spatialConfigAlertService.hideAlert();
+        $scope.mapsettingsForm.$setPristine();
+        $scope.configModel.mapSettings.reseted = true;
         loadingStatus.isLoading('ResetPreferences',false);
 	};
 	

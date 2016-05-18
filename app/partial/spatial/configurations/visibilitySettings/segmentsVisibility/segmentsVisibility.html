@@ -26,7 +26,7 @@
 								dnd-draggable="attr"
 								dnd-type="attr.type"
 								dnd-effect-allowed="move"
-								dnd-moved="configModel.visibilitySettings.segmentTableAttrs.splice($index, 1);">
+								dnd-moved="configModel.visibilitySettings.segmentTableAttrs.splice($index, 1);visibilitysettingsForm.$setDirty();">
 									<div class="handle">:::</div>
 									<span>{{attr.title}}</span>
 									<input type="checkbox" checklist-model="configModel.visibilitySettings.segments.table.values" checklist-value="attr.value" ng-change="selectAllChange('segments','table',true)">
@@ -39,7 +39,7 @@
 								dnd-draggable="attr"
 								dnd-type="attr.type"
 								dnd-effect-allowed="move"
-								dnd-moved="configModel.visibilitySettings.segmentPopupAttrs.splice($index, 1);">
+								dnd-moved="configModel.visibilitySettings.segmentPopupAttrs.splice($index, 1);visibilitysettingsForm.$setDirty();">
 									<div class="handle">:::</div>
 									<span>{{attr.title}}</span>
 									<input type="checkbox" checklist-model="configModel.visibilitySettings.segments.popup.values" checklist-value="attr.value" ng-change="selectAllChange('segments','popup',true)">
@@ -52,7 +52,7 @@
 								dnd-draggable="attr"
 								dnd-type="attr.type"
 								dnd-effect-allowed="move"
-								dnd-moved="configModel.visibilitySettings.segmentLabelAttrs.splice($index, 1);">
+								dnd-moved="configModel.visibilitySettings.segmentLabelAttrs.splice($index, 1);visibilitysettingsForm.$setDirty();">
 									<div class="handle">:::</div>
 									<span>{{attr.title}}</span>
 									<input type="checkbox" checklist-model="configModel.visibilitySettings.segments.labels.values" checklist-value="attr.value" ng-change="selectAllChange('segments','label',true)">

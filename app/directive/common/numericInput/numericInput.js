@@ -261,7 +261,6 @@ angular.module('unionvmsWeb').directive('numericInputStatus',function() {
               return value;
           };
           ctrl.$parsers.push(updateFieldStatus);
-          ctrl.$formatters.push(updateFieldStatus);
       }
   };
 });

@@ -40,6 +40,12 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     			exported.mapSettings.displayProjectionId = $scope.configModel.mapSettings.displayProjectionId;
     			exported.mapSettings.coordinatesFormat = $scope.configModel.mapSettings.coordinatesFormat;
     			exported.mapSettings.scaleBarUnits = $scope.configModel.mapSettings.scaleBarUnits;
+    		}else if($scope.mapConfigurationForm.mapsettingsForm.$pristine && $scope.configModel.mapSettings.reseted){
+    			exported.mapSettings.spatialConnectId = undefined;
+    			exported.mapSettings.mapProjectionId = undefined;
+    			exported.mapSettings.displayProjectionId = undefined;
+    			exported.mapSettings.coordinatesFormat = undefined;
+    			exported.mapSettings.scaleBarUnits = undefined;
     		}else{
     			exported.mapSettings.spatialConnectId = reportConfigs.mapConfiguration.spatialConnectId;
     			exported.mapSettings.mapProjectionId = reportConfigs.mapConfiguration.mapProjectionId;
@@ -51,21 +57,35 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     		if($scope.mapConfigurationForm.vmsstylesForm.$dirty){
     			exported.mapSettings.stylesSettings = $scope.checkStylesSettings();
     		}else{
-    			exported.mapSettings.stylesSettings = reportConfigs.mapConfiguration.stylesSettings;
+    			exported.mapSettings.stylesSettings = $scope.configModel.stylesSettings.reseted ? undefined : reportConfigs.mapConfiguration.stylesSettings;
     		}
     		
     		if($scope.mapConfigurationForm.layersettingsForm.$dirty){
     			exported.mapSettings.layerSettings = $scope.configModel.layerSettings;
     		}else{
-    			exported.mapSettings.layerSettings = reportConfigs.mapConfiguration.layerSettings;
+    			exported.mapSettings.layerSettings = $scope.configModel.layerSettings.reseted ? undefined : reportConfigs.mapConfiguration.layerSettings;
     		}
     		
     		if($scope.mapConfigurationForm.visibilitysettingsForm.$dirty){
     			exported.mapSettings.visibilitySettings = $scope.checkVisibilitySettings();
     		}else{
-    			exported.mapSettings.visibilitySettings = reportConfigs.mapConfiguration.visibilitySettings;
+    			exported.mapSettings.visibilitySettings = $scope.configModel.visibilitySettings.reseted ? undefined : reportConfigs.mapConfiguration.visibilitySettings;
     		}
     		
+    	}else if($scope.configModel.mapSettings.reseted || $scope.configModel.stylesSettings.reseted || $scope.configModel.layerSettings.reseted || $scope.configModel.visibilitySettings.reseted){
+    		var exported = {};
+    		exported.mapSettings = {};
+    		angular.forEach(_.keys($scope.configModel.mapSettings), function(value, key) {
+    			if(value === 'reseted' && $scope.configModel.mapSettings[value] === true){
+    				exported.mapSettings.spatialConnectId = undefined;
+        			exported.mapSettings.mapProjectionId = undefined;
+        			exported.mapSettings.displayProjectionId = undefined;
+        			exported.mapSettings.coordinatesFormat = undefined;
+        			exported.mapSettings.scaleBarUnits = undefined;
+    			}else if(angular.isDefined($scope.configModel.mapSettings[value]) && $scope.configModel.mapSettings[value].reseted === true){
+    				exported.mapSettings[value] = undefined;
+    			}
+    		});
     	}else{
     		exported.mapSettings = reportConfigs.mapConfiguration;
     	}

@@ -37,7 +37,6 @@ angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',functio
 	
 	$scope.reset = function(){
 		loadingStatus.isLoading('ResetPreferences',true);
-		$scope.vmsstylesForm.$setDirty();
 		$scope.loadedAllSettings = false;
         var item = {
             stylesSettings: {}
@@ -61,8 +60,9 @@ angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',functio
         $anchorScroll();
         spatialConfigAlertService.hasAlert = true;
         spatialConfigAlertService.hasSuccess = true;
-        spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_vms_styles_success');
+        spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_vms_styles_success');
         spatialConfigAlertService.hideAlert();
+        $scope.configModel.stylesSettings.reseted = true;
         loadingStatus.isLoading('ResetPreferences',false);
     };
     
@@ -70,7 +70,7 @@ angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',functio
         $anchorScroll();
         spatialConfigAlertService.hasAlert = true;
         spatialConfigAlertService.hasError = true;
-        spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_vms_styles_failure');
+        spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_vms_styles_failure');
         spatialConfigAlertService.hideAlert();
         loadingStatus.isLoading('ResetPreferences',false);
     };
@@ -93,6 +93,7 @@ angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',functio
         
         if(angular.isDefined($scope.userConfig.stylesSettings)){
         	angular.copy($scope.userConfig.stylesSettings, $scope.configModel.stylesSettings);
+        	$scope.$broadcast('loadCountries');
         }
         $scope.loadedAllSettings = true;
         
@@ -107,6 +108,7 @@ angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',functio
 	    spatialConfigAlertService.hasSuccess = true;
 	    spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_vms_styles_success');
         spatialConfigAlertService.hideAlert();
+        $scope.configModel.stylesSettings.reseted = true;
         loadingStatus.isLoading('ResetPreferences',false);
 	};
 	
