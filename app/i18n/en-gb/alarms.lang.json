@@ -169,7 +169,7 @@
     "position_report_status_update_reopen_error" : "Failed to re-open the alarm.",
     "position_report_loading_movement_error" : "Failed to load position.",
 
-    "notifications_table_close_title" : "Close notificaton",
+    "notifications_table_close_title" : "Close notification",
     "notifications_close_error_message" : "Failed to close the notification. Please try again.",
 
     "new_items_available": "{1} new item(s)"
