@@ -45,6 +45,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
            mapService.map = undefined;
        }
        
+       $scope.curState = $state.current.name;
        if($state.current.name === 'app.reporting-id'){
     	   spatialHelperService.tbControl.newTab = false;
     	   $scope.selectedMenu = 'LIVEVIEW';
