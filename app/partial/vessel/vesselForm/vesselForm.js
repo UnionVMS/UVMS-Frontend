@@ -63,6 +63,10 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         return true;
     };
 
+    function isConnectedToAsset(mobileTerminal) {
+        return angular.isDefined(mobileTerminal.connectId) && mobileTerminal.connectId !== null;
+    }
+
     var getMobileTerminals = function() {
         $scope.mobileTerminals = undefined;
         $scope.mobileTerminalsError = undefined;
@@ -71,7 +75,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
         $scope.waitingForMobileTerminalsResponse = true;
         mobileTerminalRestService.getMobileTerminalList(request).then(function(page) {
-            $scope.mobileTerminals = page.items;
+            $scope.mobileTerminals = page.items.filter(isConnectedToAsset);
 
             $scope.nonUniqueActiveTerminalTypes = $scope.getNonUniqueActiveTerminalTypes($scope.mobileTerminals);
 			if ($scope.hasNonUniqueActiveTerminalTypes()) {

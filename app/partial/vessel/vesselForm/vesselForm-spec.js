@@ -4,6 +4,12 @@ describe('VesselFormCtrl', function() {
 
 	var scope,ctrl, createResponseVessel;
 
+    var MT_EMPTY_PAGE = {
+        items: [],
+        currentPage: 0,
+        totalNumberOfPages: 0
+    };
+
     beforeEach(inject(function($rootScope, $controller, Vessel) {
         scope = $rootScope.$new();
         ctrl = $controller('VesselFormCtrl', {$scope: scope});
@@ -174,9 +180,7 @@ describe('VesselFormCtrl', function() {
         var getVesselHistorySpy = spyOn(vesselRestService, "getVesselHistoryListByVesselId").andReturn(deferred.promise);
         deferred.resolve([]);
 
-        var deferred2 = $q.defer();
-        var getMobileTerminalsSpy = spyOn(mobileTerminalRestService, "getMobileTerminalList").andReturn(deferred2.promise);
-        deferred2.resolve([]);
+        var getMobileTerminalsSpy = spyOn(mobileTerminalRestService, "getMobileTerminalList").andReturn($q.when(MT_EMPTY_PAGE));
 
         // Return a mock response for updateVessel
         var deferred = $q.defer();
@@ -277,9 +281,7 @@ describe('VesselFormCtrl', function() {
         var getVesselHistorySpy = spyOn(vesselRestService, "getVesselHistoryListByVesselId").andReturn(deferred.promise);
         deferred.resolve([]);
 
-        var deferred2 = $q.defer();
-        var getMobileTerminalsSpy = spyOn(mobileTerminalRestService, "getMobileTerminalList").andReturn(deferred2.promise);
-        deferred2.resolve([]);
+        var getMobileTerminalsSpy = spyOn(mobileTerminalRestService, "getMobileTerminalList").andReturn($q.when(MT_EMPTY_PAGE));
 
         // Crate form
         var element = angular.element('<form name="vesselForm"></form>');
@@ -322,9 +324,7 @@ describe('VesselFormCtrl', function() {
         var historyResult = ['a', 'b', 'c'];
         deferred.resolve(historyResult);
 
-        var deferred2 = $q.defer();
-        var getMobileTerminalsSpy = spyOn(mobileTerminalRestService, "getMobileTerminalList").andReturn(deferred2.promise);
-        deferred2.resolve([]);
+        var getMobileTerminalsSpy = spyOn(mobileTerminalRestService, "getMobileTerminalList").andReturn($q.when(MT_EMPTY_PAGE));
 
 
         //Create mock vessel
