@@ -137,7 +137,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	    		item.serviceLayerId = "" + item.serviceLayerId;
 	            item.gid = "" + item.gid;
 	            if(item.areaType === "userarea"){
-	            	item.name = item.areaName;
+	            	item.name = angular.isDefined(item.areaName) ? item.areaName : item.name;
 	            }else if(item.areaType === "areagroup"){
 	            	item.name = item.areaGroupName;
 	            }

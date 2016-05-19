@@ -102,12 +102,12 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 					addContextMenu( data );
 				}
 
-				if (data.node.data.labelEnabled === true){
-				    addLabel( data );
-				}
-				
 				if ( data.node.data.popupEnabled === true ) {
 					addInfo( data );
+				}
+				
+				if (data.node.data.labelEnabled === true){
+				    addLabel( data );
 				}
 				
 			};

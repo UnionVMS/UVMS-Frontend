@@ -221,7 +221,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     		$scope.configModel = {};
     		angular.copy($scope.userConfig, $scope.configModel);
     	}
-    	if(!angular.isDefined($scope.initialConfig.stylesSettings) || _.isEmpty($scope.initialConfig.stylesSettings)){
+    	if(!angular.isDefined($scope.initialConfig) || !angular.isDefined($scope.initialConfig.stylesSettings) || _.isEmpty($scope.initialConfig.stylesSettings)){
     		$scope.configModel.stylesSettings = {};
     		angular.copy($scope.userConfig.stylesSettings, $scope.configModel.stylesSettings);
     	}else{
@@ -239,20 +239,20 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     		}
     	}
     	
-    	if(!angular.isDefined($scope.initialConfig.layerSettings) || _.isEmpty($scope.initialConfig.layerSettings) || ((!angular.isDefined($scope.initialConfig.layerSettings.portLayers) || _.isEmpty($scope.initialConfig.layerSettings.portLayers)) &&
+    	if(!angular.isDefined($scope.initialConfig) || !angular.isDefined($scope.initialConfig.layerSettings) || _.isEmpty($scope.initialConfig.layerSettings) || ((!angular.isDefined($scope.initialConfig.layerSettings.portLayers) || _.isEmpty($scope.initialConfig.layerSettings.portLayers)) &&
     			(!angular.isDefined($scope.initialConfig.layerSettings.areaLayers) || _.isEmpty($scope.initialConfig.layerSettings.areaLayers)) &&
     			(!angular.isDefined($scope.initialConfig.layerSettings.baseLayers) || _.isEmpty($scope.initialConfig.layerSettings.baseLayers)) &&
     			(!angular.isDefined($scope.initialConfig.layerSettings.additionalLayers) || _.isEmpty($scope.initialConfig.layerSettings.additionalLayers)))){
     		$scope.configModel.layerSettings = {};
     		angular.copy($scope.userConfig.layerSettings, $scope.configModel.layerSettings);
     	}
-    	if(!angular.isDefined($scope.initialConfig.mapProjectionId) && 
+    	if(!angular.isDefined($scope.initialConfig) || !angular.isDefined($scope.initialConfig.mapProjectionId) && 
     			!angular.isDefined($scope.initialConfig.displayProjectionId) && !angular.isDefined($scope.initialConfig.coordinatesFormat) && 
     			!angular.isDefined($scope.initialConfig.scaleBarUnits)){
     		$scope.configModel.mapSettings = {};
     		angular.copy($scope.userConfig.mapSettings, $scope.configModel.mapSettings);
     	}
-    	if(!angular.isDefined($scope.initialConfig.visibilitySettings) || _.isEmpty($scope.initialConfig.visibilitySettings)){
+    	if(!angular.isDefined($scope.initialConfig) || !angular.isDefined($scope.initialConfig.visibilitySettings) || _.isEmpty($scope.initialConfig.visibilitySettings)){
     		$scope.configModel.visibilitySettings = {};
     		angular.copy($scope.userConfig.visibilitySettings, $scope.configModel.visibilitySettings);
     	}
