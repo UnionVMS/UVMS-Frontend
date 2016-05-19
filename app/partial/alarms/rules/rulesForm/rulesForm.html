@@ -63,7 +63,7 @@
                             <div class="row" ng-form="intervalForm">
                                 <div class="col-md-5">
                                     <div class="form-group" ng-class="{'has-error': intervalForm.start.$invalid && (submitAttempted || intervalForm.start.$dirty)}">
-                                        <datepicker-input name="start" model="timeInterval.start" ng-required="true" time="true" max-date="timeInterval.end" input-field-id="rules-form-search-from-date-picker"></datepicker-input>
+                                        <datepicker-input name="start" model="timeInterval.start" ng-required="true" time="true" max-date="timeInterval.end" input-field-id="rules-form-search-from-date-picker-{{$index}}"></datepicker-input>
                                         <input-validation-message types="required,date,maxDate,minDate" input="intervalForm.start"></input-validation-message>
                                     </div>
                                 </div>
@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group" ng-class="{'has-error': intervalForm.end.$invalid && (submitAttempted || intervalForm.end.$dirty)}">
-                                        <datepicker-input name="end" model="timeInterval.end" ng-required="true" time="true" min-date="timeInterval.start" input-field-id="rules-form-search-to-date-picker"></datepicker-input>
+                                        <datepicker-input name="end" model="timeInterval.end" ng-required="true" time="true" min-date="timeInterval.start" input-field-id="rules-form-search-to-date-picker-{{$index}}"></datepicker-input>
                                         <input-validation-message types="required,date,maxDate,minDate" input="intervalForm.end"></input-validation-message>
                                     </div>
                                 </div>
