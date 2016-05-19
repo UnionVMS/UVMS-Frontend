@@ -129,7 +129,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	    	});
 	    	
 	    	if(!angular.isDefined($scope.configModel.layerSettings.areaLayers)){
-    			$scope.configModel.layerSettings.areaLayers = {};
+    			$scope.configModel.layerSettings.areaLayers = [];
     		}
 	    	
 	    	$scope.selectedAreas = $scope.configModel.layerSettings.areaLayers;

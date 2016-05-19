@@ -73,7 +73,6 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     		}
     		
     	}else if($scope.configModel.mapSettings.reseted || $scope.configModel.stylesSettings.reseted || $scope.configModel.layerSettings.reseted || $scope.configModel.visibilitySettings.reseted){
-    		var exported = {};
     		exported.mapSettings = {};
     		angular.forEach(_.keys($scope.configModel.mapSettings), function(value, key) {
     			if(value === 'reseted' && $scope.configModel.mapSettings[value] === true){

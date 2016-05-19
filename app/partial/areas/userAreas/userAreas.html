@@ -241,14 +241,14 @@
 					<span class="section-title">{{'areas.area_details_title' | i18n}}</span>
 				</div>
 				<ng-form name="userAreaForm" novalidate>
-					<div class="form-group userAreaNameField" ng-class="{'has-error': (userAreaForm.userAreaName.$dirty || userAreaSubmitted) && userAreaForm.userAreaName.$error.required}">
+					<div class="form-group userAreaNameField" ng-class="{'has-error': (userAreaForm.userAreaName.$dirty || userAreaSubmitted) && userAreaForm.userAreaName.$invalid}">
 						<label for="userAreaName">{{'areas.user_area_name' | i18n }}</label>
 						<input type="text" class="form-control" name="userAreaName" ng-required="true" ng-model="userArea.name"/>
-						<div class="innerErrorMessagesInputWithUpLabel" ng-messages="userAreaForm.userAreaName.$error" ng-show="(userAreaForm.userAreaName.$dirty || submitingReport === true) && userAreaForm.userAreaName.$invalid">
+						<div class="innerErrorMessagesInputWithUpLabel" ng-messages="userAreaForm.userAreaName.$error" ng-show="(userAreaForm.userAreaName.$dirty || userAreaSubmitted) && userAreaForm.userAreaName.$invalid">
 							<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 						</div>
 					</div>
-					<div class="form-group" ng-class="{'has-error': (userAreaForm.userAreaDesc.$dirty || userAreaSubmitted) && userAreaForm.userAreaDesc.$error.required}">
+					<div class="form-group" ng-class="{'has-error': (userAreaForm.userAreaDesc.$dirty || userAreaSubmitted) && userAreaForm.userAreaDesc.$invalid}">
 						<label for="userAreaDesc">{{'areas.user_area_description' | i18n }}</label>
 						<textarea class="form-control" rows="3" name="userAreaDesc" ng-model="userArea.desc"></textarea>
 					</div>
@@ -270,7 +270,7 @@
 								<combobox ng-model="userArea.subType" items="areaTypes" editable="true" components-with-scroll="'div.area-form-container'" uppercase="true" name="userAreaType" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n | uppercase}}" ng-required="true"></combobox>
 							</div>
 							<div class="col-md-6 withoutPadding leftPadding">
-								<div ng-messages="userAreaForm.userAreaType.$error" ng-show="userAreaForm.userAreaType.$dirty">
+								<div ng-messages="userAreaForm.userAreaType.$error" ng-show="(userAreaForm.userAreaType.$dirty || userAreaSubmitted) && userAreaForm.userAreaType.$invalid">
 									<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 								</div>
 							</div>
