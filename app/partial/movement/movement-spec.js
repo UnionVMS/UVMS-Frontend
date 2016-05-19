@@ -32,7 +32,8 @@ describe('MovementCtrl', function() {
         'movement.table_header_cs': 'calculated speed',
         'movement.table_header_course': 'course',
         'movement.table_header_movement_type': 'movement type',
-        'movement.table_header_source': 'source'
+        'movement.table_header_source': 'source',
+        'movement.file_movements_csv': 'positionReports.csv'
     };
 
     var mockLocale = {
@@ -231,8 +232,8 @@ describe('MovementCtrl', function() {
         ];
 
         var expectedCsv = [
-            ['state1', 'ext1', 'ircs1', 'name1', undefined, '58.000', '11.000', '101', '11.00 fakeString', '1.00 fakeString', '101°', undefined, 'fakeString'],
-            ['state2', 'ext2', 'ircs2', 'name2', undefined, '58.000', '11.000', '101', '12.00 fakeString', '2.00 fakeString', '102°', undefined, 'fakeString']
+            ['state1', 'ext1', 'ircs1', 'name1', '', '58.000', '11.000', '101', '11.00 fakeString', '1.00 fakeString', '101°', '', 'fakeString'],
+            ['state2', 'ext2', 'ircs2', 'name2', '', '58.000', '11.000', '101', '12.00 fakeString', '2.00 fakeString', '102°', '', 'fakeString']
         ];
 
         spyOn(csvService, 'downloadCSVFile').andCallFake(function(data, header, name){
