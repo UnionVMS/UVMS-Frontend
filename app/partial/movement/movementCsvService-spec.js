@@ -48,16 +48,19 @@ describe('movementCsvService', function() {
 
     var noFilter = function(x) { return x; }
 
+    var mockStrings = {
+        'movement.movement_speed_unit': 'kts',
+        'movement.file_movements_csv': 'positionReports.csv',
+        'movement.file_movement_csv': 'positionReport.csv'
+    };
+
     var mockLocale = {
         getString: function(key) {
             if (key.indexOf('movement.table_header_') >= 0) {
                 return key.substring(22, key.length);
             }
-            else if (key === 'movement.movement_speed_unit') {
-                return 'kts';
-            }
             else {
-                return key;
+                return mockStrings[key] || key;
             }
         }
     };
