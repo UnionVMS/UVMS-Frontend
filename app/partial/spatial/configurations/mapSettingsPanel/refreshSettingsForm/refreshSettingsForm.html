@@ -9,7 +9,7 @@
 				<label>
 					{{'spatial.preferences_auto_refresh_rate' | i18n }}
 				</label>
-				<numeric-input class="form-control" ng-model="configModel.mapSettings.refreshRate" name="refreshRate" ng-change="validateRefreshRate()"></numeric-input>
+				<numeric-input class="form-control" ng-model="configModel.mapSettings.refreshRate" min="1" name="refreshRate" ng-change="validateRefreshRate()"></numeric-input>
 				<div class="innerErrorMessagesLabelTimer" ng-messages="refreshSettingsForm.refreshRate.$error" ng-show="refreshSettingsForm.refreshRate.$dirty || submitedWithErrors">
 					<div ng-message="requiredField">{{'spatial.required_field_error_message' | i18n }}</div>
 					<div ng-message="minField">{{'spatial.min_value_1_error_message' | i18n }}</div>

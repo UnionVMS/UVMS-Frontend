@@ -91,11 +91,11 @@ angular.module('unionvmsWeb').controller('numericInputCtrl',['$scope','$interval
 	$scope.checkKeys = function(e) {
 	    if(e.which === 38){
 	    	$scope.spinnerAction('+');
-	    	event.preventDefault();
+	    	e.preventDefault();
 	        return false;
 	    }else if(e.which === 40){
 	    	$scope.spinnerAction('-');
-	    	event.preventDefault();
+	    	e.preventDefault();
 	        return false;
 	    }
 	};
