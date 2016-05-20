@@ -16,7 +16,8 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             multiple : '=',
             componentsWithScroll : '=',
             uppercase : '=',
-            initialtext : '@'
+            initialtext : '@',
+            isLoading : '='
 		},
         templateUrl: 'directive/common/combobox/combobox.html',
 		link: function(scope, element, attrs, ctrl) {

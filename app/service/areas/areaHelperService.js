@@ -9,6 +9,8 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	    sysAreasEditingType: 'upload', //Possible values are: upload, metadata, dataset
 	    systemAreaItems: [],
 	    userAreasGroups: [],
+	    isLoadingSysAreaTypes: false,
+	    isLoadingAreaTypes: false,
 	    metadata: {
 	        id: undefined,
 	        areaName: undefined,
@@ -126,21 +128,25 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
     //area location layers for combo in sysareas    
     var getAreaLocationLayers = function(obj){
         if (!angular.isDefined(obj.systemAreaTypes)){
+        	obj.isLoadingSysAreaTypes = true;
             spatialRestService.getAreaLocationLayers().then(function(response){
                 obj.systemAreaTypes = response.data;
                 for (var i = 0; i < obj.systemAreaTypes.length; i++){
                     obj.systemAreaItems.push({"text": obj.systemAreaTypes[i].typeName, "code": obj.systemAreaTypes[i].typeName});
                 }
+                obj.isLoadingSysAreaTypes = false;
             }, function(error){
             	areaAlertService.setError();
                 areaAlertService.errorMessage = locale.getString('spatial.area_selection_modal_get_sys_layers_error');
                 areaAlertService.hideAlert();
+                obj.isLoadingSysAreaTypes = false;
             });
         }
     };
     
     //USER AREAS GROUPS LIST
     var getUserAreasGroupsList = function(obj){
+    	obj.isLoadingAreaTypes = true;
         areaRestService.getUserAreaTypes().then(function(response){
         	if (angular.isDefined(response)) {
         		var areaGroups = [];
@@ -149,10 +155,12 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
         		}
         		obj.userAreasGroups = areaGroups;
         	}
+        	obj.isLoadingAreaTypes = false;
         }, function(error){
         	areaAlertService.setError();
         	areaAlertService.alertMessage = locale.getString('areas.error_getting_userarea_types');
         	areaAlertService.hideAlert();
+        	obj.isLoadingAreaTypes = false;
         });
     };
 

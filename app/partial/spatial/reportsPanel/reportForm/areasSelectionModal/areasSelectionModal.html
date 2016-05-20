@@ -29,7 +29,7 @@
         	<!-- SYSTEM WIDE AREAS -->
         	<div class="col-md-6 section" ng-show="isAreaTabSelected('SYSTEM')">
         		<div class="form-group col-md-12 noPadding">
-       				<combobox ng-model="sysAreaType" items="systemItems" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n}}"></combobox>
+       				<combobox ng-model="sysAreaType" items="systemItems" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n}}" is-loading="isLoadingAreaLayers"></combobox>
        			</div>
        			<div class="form-group col-md-12 noPadding" ng-show="sysAreaType !== undefined">
        				<label class="radio-inline radioselector">

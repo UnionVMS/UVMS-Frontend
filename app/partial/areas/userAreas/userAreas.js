@@ -340,6 +340,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     
     //COMBOBOX AREA TYPES
     $scope.getAreaTypes = function(){
+    	$scope.isLoadingAreaTypes = true;
         areaRestService.getUserAreaTypes().then(function(response){
             var types = [];
             for (var i = 0; i < response.length; i++){
@@ -349,9 +350,11 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
                 });
             }
             angular.copy(types,$scope.areaTypes);
+            $scope.isLoadingAreaTypes = false;
         }, function(error){
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.error_getting_userarea_types');
+            $scope.isLoadingAreaTypes = false;
         });
     };
     

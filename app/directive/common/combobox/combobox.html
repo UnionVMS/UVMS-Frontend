@@ -19,30 +19,33 @@
 				<span ng-class="{'caret': !multiple || selectedItems && selectedItems.length === 0,'clear-all item-remover fa fa-times': multiple && selectedItems.length > 0}" ng-click="removeAllSelected()"></span>
 			</div>
 			<ng-form name="comboForm">
-				<input class="form-control combo-editable-input" name="comboEditableInput" ng-model="newItem.text" ng-if="editable" ng-change="onComboChange()" ng-focus="focus=true" ng-blur="focus=false" placeholder="{{placeholder}}">
-				<span ng-class="{'caret': !multiple || selectedItems && selectedItems.length === 0,'clear-all item-remover fa fa-times': multiple && selectedItems.length > 0}" ng-click="removeAllSelected()"  ng-if="editable"></span>
+				<input class="form-control combo-editable-input" name="comboEditableInput" ng-model="newItem.text" ng-change="onComboChange()" ng-focus="focus=true" ng-blur="focus=false" placeholder="{{placeholder}}" ng-if="editable">
+				<span ng-class="{'caret': !multiple || selectedItems && selectedItems.length === 0,'clear-all item-remover fa fa-times': multiple && selectedItems.length > 0}" ng-click="removeAllSelected()" ng-show="editable"></span>
 			</ng-form>
 		</div>
 	</div>
 	<div class="comboList fullWidthDropdown" ng-class="{'open': isOpen, 'comboLineStyle': lineStyle === true}">
 		<ul class="dropdown-menu" role="menu">
-			<li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue && !multiple" ng-click="selectVal(initialValue)">
+			<li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue && !multiple && !isLoading" ng-click="selectVal(initialValue)">
 				<a role="menuitem" tabindex="-1" ng-bind="initialValue.text"></a>
 			</li>
-			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" role="presentation" ng-click="selectVal(item,$index)" ng-show="!lineStyle && !isFilterActive">
+			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" role="presentation" ng-click="selectVal(item,$index)" ng-show="!lineStyle && !isFilterActive && !isLoading">
 				<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>
 			</li>
 			
-			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems | filter:newItem" role="presentation" ng-click="selectVal(item,$index)" ng-show="isFilterActive">
+			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems | filter:newItem" role="presentation" ng-click="selectVal(item,$index)" ng-show="isFilterActive && !isLoading">
 				<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>
 			</li>
 			
-			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" role="presentation" ng-click="selectVal(item,$index)" ng-if="lineStyle === true">
+			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" role="presentation" ng-click="selectVal(item,$index)" ng-if="lineStyle === true" ng-show="!isLoading">
 				<svg height="21px" width="100%">
 					<g fill="none" stroke="#262626" stroke-width="4">
 						<path stroke-dasharray="{{getItemLabel(item)}}" d="M0 13 l999 0" />
 					</g>
 				</svg>
+			</li>
+			<li class="loading-msg" ng-if="isLoading">
+				<i class="fa fa-spinner fa-spin"></i>
 			</li>
 		</ul>
 	</div>

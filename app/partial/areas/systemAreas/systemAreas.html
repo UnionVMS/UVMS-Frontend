@@ -4,7 +4,7 @@
 			<label>{{'areas.sys_areas_data_type_label' | i18n}}</label>
 		</div>
 		<div class="col-md-9">
-			<combobox ng-model="sysAreaType" items="helper.systemAreaItems" name="dataType" initialtext="{{'areas.sys_areas_data_type_label' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'"></combobox>
+			<combobox ng-model="sysAreaType" items="helper.systemAreaItems" name="dataType" initialtext="{{'areas.sys_areas_data_type_label' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'" is-loading="helper.isLoadingSysAreaTypes"></combobox>
 		</div>
 	</div>
 	

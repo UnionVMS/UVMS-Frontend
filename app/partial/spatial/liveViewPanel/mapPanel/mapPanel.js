@@ -191,6 +191,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.getCapabilities = function(appId){
         $log.debug("Getting capabilities of " + appId);
         MapFish.reset();
+        $scope.isLoadingMapfishPopup = true;
         mapFishPrintRestService.getCapabilities(appId).then(
             function (data) {
                 $log.debug(data);
@@ -200,8 +201,10 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
                 if ($scope.showMapFishConfigWin === true){
                     mapService.addPrintExtent();
                 }
+                $scope.isLoadingMapfishPopup = false;
             }, function(error) {
                 $log.error(error);
+                $scope.isLoadingMapfishPopup = false;
             }
         );
     };

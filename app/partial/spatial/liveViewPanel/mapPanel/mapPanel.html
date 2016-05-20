@@ -186,22 +186,22 @@
 			                    </div> -->
 			                    <div class="form-group col-md-6 print-content">
 			                        <label>{{'spatial.mapfish_layouts_label' | i18n }}</label>
-			                        <combobox ng-if="mapFish.selected_layout !== undefined" dest-combo-list="'.mapPanelContainer'" ng-change="toggleLayout(mapFish.selected_layout)" ng-model="mapFish.selected_layout" items="mapFish.layouts"></combobox>
+			                        <combobox ng-if="mapFish.selected_layout !== undefined" dest-combo-list="'.mapPanelContainer'" ng-change="toggleLayout(mapFish.selected_layout)" ng-model="mapFish.selected_layout" items="mapFish.layouts" is-loading="isLoadingMapfishPopup"></combobox>
 			                    </div>
 			                    <div class="form-group col-md-6 print-content">
 			                        <label>{{'spatial.mapfish_formats_label' | i18n }}</label>
-			                        <combobox ng-if="mapFish.selected_format !== undefined" dest-combo-list="'.mapPanelContainer'" ng-model="mapFish.selected_format" items="mapFish.formats"></combobox>
+			                        <combobox ng-if="mapFish.selected_format !== undefined" dest-combo-list="'.mapPanelContainer'" ng-model="mapFish.selected_format" items="mapFish.formats" is-loading="isLoadingMapfishPopup"></combobox>
 			                    </div>
 			                    <div class="form-group col-md-6 print-content">
 			                        <label>{{'spatial.mapfish_suggestedDpi_label' | i18n }}</label>
-			                        <combobox ng-if="mapFish.selected_dpi !== undefined" dest-combo-list="'.mapPanelContainer'" ng-model="mapFish.selected_dpi" items="mapFish.suggestedDpi"></combobox>
+			                        <combobox ng-if="mapFish.selected_dpi !== undefined" dest-combo-list="'.mapPanelContainer'" ng-model="mapFish.selected_dpi" items="mapFish.suggestedDpi" is-loading="isLoadingMapfishPopup"></combobox>
 			                    </div>
 	                    		<div class="form-group col-md-6">
 			                        <label>
 			                        	<input type="checkbox" ng-if="mapFish.includeCoordGrid !== undefined" ng-model="mapFish.includeCoordGrid" ng-checked="mapFish.includeCoordGrid"/>
 			                        	{{'spatial.mapfish_include_coords_grid_label' | i18n }}
 			                        </label>
-			                        <combobox ng-if="mapFish.includeCoordGrid && projections.items.length > 0" dest-combo-list="'.mapPanelContainer'" ng-model="mapFish.projectionId" items="projections.items" name="gridProjection"></combobox>
+			                        <combobox ng-if="mapFish.includeCoordGrid && projections.items.length > 0" dest-combo-list="'.mapPanelContainer'" ng-model="mapFish.projectionId" items="projections.items" name="gridProjection" is-loading="isLoadingMapfishPopup"></combobox>
 			                    </div>
 			                    <div class="row">
 			                        <div class="col-md-12">

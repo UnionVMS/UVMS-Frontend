@@ -135,7 +135,7 @@
 								<label for="circularProjection">{{'areas.editing_projection_label' | i18n}}</label>
 							</div>
 							<div class="col-md-9 proj-combo">
-								<combobox ng-model="selectedCircularProj" items="projections.items" name="circularProjection" ng-change="changeCircularProj(selectedCircularProj)" ng-init="setMapProjectionOnCombo()" components-with-scroll="'div.area-form-container'" ng-if="selectedCircularProj"></combobox>
+								<combobox ng-model="selectedCircularProj" items="projections.items" name="circularProjection" ng-change="changeCircularProj(selectedCircularProj)" ng-init="setMapProjectionOnCombo()" components-with-scroll="'div.area-form-container'" ng-if="selectedCircularProj" is-loading="projections.isLoading"></combobox>
 							</div>
 						</div>
 					</div>
@@ -187,7 +187,7 @@
 								<label for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
 							</div>
 							<div class="col-md-9 proj-combo">
-								<combobox ng-model="selectedProj" items="projections.items" name="editingProjection" ng-change="changeProjection(selectedProj)" ng-init="changeProjection(selectedProj)" components-with-scroll="'div.area-form-container'" ng-if="selectedProj"></combobox>
+								<combobox ng-model="selectedProj" items="projections.items" name="editingProjection" ng-change="changeProjection(selectedProj)" ng-init="changeProjection(selectedProj)" components-with-scroll="'div.area-form-container'" ng-if="selectedProj" is-loading="projections.isLoading"></combobox>
 							</div>
 						</div>
 					</div>
@@ -267,7 +267,7 @@
 						<label class="col-md-12 withoutPadding" for="userAreaType">{{'areas.user_area_type' | i18n }}</label>
 						<div class="col-md-12 withoutPadding" ng-class="{'has-error': (userAreaForm.userAreaType.$dirty || userAreaSubmitted) && userAreaForm.userAreaType.$invalid}">
 							<div class="col-md-6 withoutPadding rightPadding">
-								<combobox ng-model="userArea.subType" items="areaTypes" editable="true" components-with-scroll="'div.area-form-container'" uppercase="true" name="userAreaType" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n | uppercase}}" ng-required="true"></combobox>
+								<combobox ng-model="userArea.subType" items="areaTypes" editable="true" components-with-scroll="'div.area-form-container'" uppercase="true" name="userAreaType" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n | uppercase}}" ng-required="true" is-loading="isLoadingAreaTypes"></combobox>
 							</div>
 							<div class="col-md-6 withoutPadding leftPadding">
 								<div ng-messages="userAreaForm.userAreaType.$error" ng-show="(userAreaForm.userAreaType.$dirty || userAreaSubmitted) && userAreaForm.userAreaType.$invalid">

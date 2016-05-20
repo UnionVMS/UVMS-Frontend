@@ -105,15 +105,18 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     $scope.systemItems = [];
     
     function setSystemItems(){
+    	$scope.isLoadingAreaLayers = true;
         spatialRestService.getAreaLayers().then(function(response){
             $scope.systemAreaTypes = response.data;
             for (var i = 0; i < $scope.systemAreaTypes.length; i++){
                 $scope.systemItems.push({"text": $scope.systemAreaTypes[i].typeName, "code": $scope.systemAreaTypes[i].typeName});
             }
+            $scope.isLoadingAreaLayers = false;
         }, function(error){
             $scope.errorMessage = locale.getString('spatial.area_selection_modal_get_sys_layers_error');
             $scope.hasError = true;
             $scope.hideAlert();
+            $scope.isLoadingAreaLayers = false;
         });
     }
 
