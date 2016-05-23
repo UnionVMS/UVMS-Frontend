@@ -100,6 +100,12 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
         $scope.submitAttempted = true;
         alertService.hideMessage();
         if($scope.pollingOptionsForm.$valid){
+            var options = pollingService.getPollingOptions();
+            var attributes = pollingService.getPollAttributes(options);
+            if (attributes.length === 0) {
+                alertService.showErrorMessage(locale.getString('polling.wizard_second_step_error_at_least_one_attribute_needed'));
+                return;
+            }
             $scope.loadingResult = true;
             pollingService.createPolls().then(
                 function() {
