@@ -85,6 +85,8 @@ describe('NewpollwizardpollingoptionsCtrl', function() {
         var locationChangeSpy = spyOn($state, 'go');
         var setHideAlertOnScopeDestroySpy = spyOn(scope, 'setHideAlertOnScopeDestroy');
 
+        spyOn(pollingService, 'getPollAttributes').andReturn(['dummyOption']);
+
         //Create form
         var element = angular.element('<form name="pollingOptionsForm"></form>');
         $compile(element)(scope);
@@ -122,6 +124,8 @@ describe('NewpollwizardpollingoptionsCtrl', function() {
         var successAlertSpy = spyOn(alertService, 'showSuccessMessageWithTimeout');
         var locationChangeSpy = spyOn($state, 'go');
         var setHideAlertOnScopeDestroySpy = spyOn(scope, 'setHideAlertOnScopeDestroy');
+
+        spyOn(pollingService, 'getPollAttributes').andReturn(['dummyOption']);
 
         //Create form
         var element = angular.element('<form name="pollingOptionsForm"></form>');
