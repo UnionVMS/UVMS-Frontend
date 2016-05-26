@@ -25,6 +25,25 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
 
     $scope.speedUnit = globalSettingsService.getSpeedUnit();
 
+    function getAlarmWarningActions(ruleNames) {
+        actions = [];
+        if (ruleNames.indexOf('Asset not found') >= 0 || ruleNames.indexOf('Terminal not found') >= 0) {
+            actions.push(locale.getString('alarms.add_tranceiver_asset_reprocess'));
+        }
+
+        if (ruleNames.indexOf('Latitude missing') >= 0 || ruleNames.indexOf('Longitude missing') >= 0) {
+            actions.push(locale.getString('alarms.report_not_added_to_database'));
+        }
+
+        return actions;
+    }
+
+    function getRuleNames(alarm) {
+        return alarm.alarmItems.map(function(alarmItem) {
+            return alarmItem.ruleName;
+        });
+    }
+
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
     };
@@ -67,6 +86,12 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
         else{
             $scope.addMarkerToMap();
         }
+
+        var ruleNames = getRuleNames(alarm);
+        var actions = getAlarmWarningActions(ruleNames);
+        $scope.warningMessage = ruleNames.map(function(ruleName) {
+            return ruleName + '.';
+        }).concat(actions).join(' ');
     };
 
     $scope.closeModal = function() {

@@ -2,7 +2,7 @@ describe('AlarmReportModalCtrl', function() {
 
     beforeEach(module('unionvmsWeb'));
 
-    var scope, ctrl, modalInstance;
+    var scope, ctrl, modalInstance, alarm;
 
     beforeEach(inject(function($rootScope, $controller, Alarm) {
         scope = $rootScope.$new();
@@ -13,7 +13,7 @@ describe('AlarmReportModalCtrl', function() {
                 then: jasmine.createSpy('modalInstance.result.then')
             }
         };
-        var alarm = new Alarm();
+        alarm = new Alarm();
         var options = {};
         createController = function(){
             return $controller('AlarmReportModalCtrl', {$scope: scope, $modalInstance: modalInstance, alarm : alarm, options : options});
@@ -39,6 +39,20 @@ describe('AlarmReportModalCtrl', function() {
         var controller = createController();
         scope.cancel();
         expect(modalInstance.dismiss).toHaveBeenCalled();
+    }));
+
+    it('should compose a warning messsage', inject(function(locale) {
+        alarm.alarmItems = [{ruleName: 'Latitude missing'}, {ruleName: 'Terminal not found'}];
+        spyOn(locale, 'getString').andCallFake(function(key) {
+            return {
+                'alarms.add_tranceiver_asset_reprocess': 'Add transceiver and reprocess asset.',
+                'alarms.report_not_added_to_database': 'Report not added in database.'
+            }[key];
+        });
+
+        createController();
+
+        expect(scope.warningMessage).toEqual('Latitude missing. Terminal not found. Add transceiver and reprocess asset. Report not added in database.');
     }));
 
     describe('reprocess()', function() {

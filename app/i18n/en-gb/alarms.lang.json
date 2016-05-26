@@ -173,6 +173,9 @@
     "close_notification_reason_placeholder": "Reason for closing this notification.",
     "notifications_close_error_message" : "Failed to close the notification. Please try again.",
 
-    "new_items_available": "{1} new item(s)"
+    "new_items_available": "{1} new item(s)",
+
+    "add_tranceiver_asset_reprocess": "Please add missing transceiver/asset and reprocess the report.",
+    "report_not_added_to_database": "This report will not be added to the database."
 
 }
