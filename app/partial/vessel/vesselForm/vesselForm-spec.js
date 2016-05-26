@@ -153,7 +153,7 @@ describe('VesselFormCtrl', function() {
         };
 
         //Mock confirmation modal and click on confirm
-        var confirmationSpy = spyOn(confirmationModal, "open").andReturn($q.when('some modal comment'));
+        var confirmationSpy = spyOn(confirmationModal, "openInstance").andReturn({result: $q.when('some modal comment')});
 
         scope.setCreateMode(false);
 
