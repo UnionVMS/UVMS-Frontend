@@ -141,7 +141,7 @@ describe('VesselFormCtrl', function() {
         expect(scope.mergeCurrentVesselIntoSearchResults).toHaveBeenCalledWith();
     }));
 
-    it('archive a vessel should open confirmation modal, and then update vesselObj with the archived vessel and remove it from the vessel list', inject(function(Vessel, $compile, $q, $httpBackend, vesselRestService, mobileTerminalRestService, alertService, confirmationModal, locale) {
+    it('archive a vessel should open confirmation modal, and then update vesselObj with the archived vessel and remove it from the vessel list', inject(function(Vessel, $compile, $q, $httpBackend, vesselRestService, mobileTerminalRestService, alertService, confirmationModal, locale, MobileTerminal) {
         scope.removeCurrentVesselFromSearchResults = function(){
             //Nothing
         };
@@ -153,9 +153,7 @@ describe('VesselFormCtrl', function() {
         };
 
         //Mock confirmation modal and click on confirm
-        var confirmationSpy = spyOn(confirmationModal, "open").andCallFake(function(callback, options){
-            callback();
-        });
+        var confirmationSpy = spyOn(confirmationModal, "open").andReturn($q.when('some modal comment'));
 
         scope.setCreateMode(false);
 
@@ -190,9 +188,16 @@ describe('VesselFormCtrl', function() {
         var archiveVesselSpy = spyOn(vesselRestService, "archiveVessel").andReturn(deferred.promise);
         deferred.resolve(archivedVessel);
 
-        var deferred3 = $q.defer();
-        spyOn(mobileTerminalRestService, 'inactivateMobileTerminalsWithConnectId').andReturn(deferred3.promise);
-        deferred3.resolve();
+        mt1 = new MobileTerminal();
+        mt1.guid = '1234';
+        mt2 = new MobileTerminal();
+        mt2.guid = '7689';
+
+        // Return list of mobile terminals
+        spyOn(mobileTerminalRestService, 'getAllMobileTerminalsWithConnectId').andReturn($q.when([mt1, mt2]));
+
+        spyOn(mobileTerminalRestService, 'inactivateMobileTerminal').andReturn($q.when());
+        spyOn(mobileTerminalRestService, 'unassignMobileTerminal').andReturn($q.when());
 
         // Archive the vessel
         scope.archiveVessel();
@@ -216,8 +221,12 @@ describe('VesselFormCtrl', function() {
         //Check that toggleViewVessel was called afterwards to close the form and view the list
         expect(viewListSpy).toHaveBeenCalled();
 
-        // Should have inactivated all mobile terminals belonging to this vessel
-        expect(mobileTerminalRestService.inactivateMobileTerminalsWithConnectId).toHaveBeenCalledWith("345345345-rf54235f-242f-4rads");
+        // Should have inactivated and unassigned all mobile terminals belonging to this vessel
+        expect(mobileTerminalRestService.getAllMobileTerminalsWithConnectId).toHaveBeenCalled();
+        expect(mobileTerminalRestService.inactivateMobileTerminal).toHaveBeenCalledWith(mt1, 'some modal comment');
+        expect(mobileTerminalRestService.inactivateMobileTerminal).toHaveBeenCalledWith(mt2, 'some modal comment');
+        expect(mobileTerminalRestService.unassignMobileTerminal).toHaveBeenCalledWith(mt1, 'some modal comment');
+        expect(mobileTerminalRestService.unassignMobileTerminal).toHaveBeenCalledWith(mt2, 'some modal comment');
     }));
 
     it('isVesselNameSet should return correctly', inject(function(Vessel) {

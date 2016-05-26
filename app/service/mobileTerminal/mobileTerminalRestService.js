@@ -412,6 +412,34 @@ angular.module('unionvmsWeb')
                     deferred.reject(error);
                 });
                 return deferred.promise;
+            },
+
+            /* Returns ALL mobile terminals by fetchingt page-by-page, recursively. */
+            getAllMobileTerminalsWithConnectId: function(connectId) {
+
+                function getTerminalsRecursive(connectId, page) {
+
+                    var mobileTerminalRequest = new GetListRequest();
+                    mobileTerminalRequest.page = page;
+                    mobileTerminalRequest.addSearchCriteria('CONNECT_ID', connectId);
+
+                    return mobileTerminalRestService.getMobileTerminalList(mobileTerminalRequest).then(function(result) {
+                        if (result.currentPage < result.totalNumberOfPages) {
+                            return $q(function(resolve, reject) {
+                                getTerminalsRecursive(connectId, page + 1).then(function(moreItems) {
+                                    resolve(result.items.concat(moreItems));
+                                }, function(error) {
+                                    reject(error);
+                                });
+                            });
+                        }
+                        else {
+                            return result.items;
+                        }
+                    });
+                }
+
+                return getTerminalsRecursive(connectId, 1);
             }
         };
         return mobileTerminalRestService;

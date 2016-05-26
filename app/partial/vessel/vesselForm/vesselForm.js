@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log, $modal, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService, configurationService, assetCsvService, MobileTerminalHistoryModal) {
+angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log, $modal, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService, configurationService, assetCsvService, MobileTerminalHistoryModal, $q) {
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
@@ -126,36 +126,54 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         return nonUniqueActiveTerminalTypes;
     };
 
-    //Archive the vessel
-    $scope.archiveVessel = function(){
+    function performArchiveVessel(comment) {
+        // When you have just created a vessel the getOriginalVessel will return undefined.
+        $scope.vesselObj = $scope.getOriginalVessel() || $scope.getVesselObj();
+        $scope.vesselObj.active = false;
+        
+        function getMobileTerminals(archivedVessel) {
+            // Fetch all mobile terminals connected to the archived vessel.
+            return mobileTerminalRestService.getAllMobileTerminalsWithConnectId(archivedVessel.vesselId.guid);
+        }
 
-        var options = {
-            textLabel : locale.getString("vessel.archive_confirm_text"),
+        function inactivateAndUnassignMobileTerminals(mobileTerminals) {
+            return $q.all(mobileTerminals.map(function(mobileTerminal) {
+                return $q.all([
+                    // Inactivate AND unassign from vessel.
+                   mobileTerminalRestService.inactivateMobileTerminal(mobileTerminal, comment),
+                   mobileTerminalRestService.unassignMobileTerminal(mobileTerminal, comment)
+                ]);
+            }));
+        }
+
+        return vesselRestService
+            .archiveVessel($scope.vesselObj, comment)
+            .then(getMobileTerminals)
+            .then(inactivateAndUnassignMobileTerminals);
+    }
+
+    //Archive the vessel
+    $scope.archiveVessel = function() {
+
+        function onSuccess() {
+            alertService.showSuccessMessageWithTimeout(locale.getString('vessel.archive_message_on_success'));
+            $scope.removeCurrentVesselFromSearchResults();
+            $scope.toggleViewVessel(undefined, true);
+        }
+
+        function onReject() {
+            alertService.showErrorMessage(locale.getString('vessel.archive_message_on_error'));
+        }
+
+        var modalOptions = {
+            textLabel: locale.getString("vessel.archive_confirm_text"),
             commentsEnabled: true
         };
-        confirmationModal.open(function(comment) {
-            $scope.vesselObj = $scope.getOriginalVessel();
-            //When you have just created a vessel the getOriginalVessel will return undefined
-            if(angular.isUndefined($scope.vesselObj)){
-                $scope.vesselObj = $scope.getVesselObj();
-            }
-            //Set active to false, meaning archived
-            $scope.vesselObj.active = false;
-            vesselRestService.archiveVessel($scope.vesselObj, comment).then(function(inactivatedVessel) {
-                // Inactivate mobile terminals too
-                return mobileTerminalRestService.inactivateMobileTerminalsWithConnectId(inactivatedVessel.vesselId.guid);
-            }).then(function() {
-                // Success
-                alertService.showSuccessMessageWithTimeout(locale.getString('vessel.archive_message_on_success'));
-                $scope.removeCurrentVesselFromSearchResults();
-                $scope.toggleViewVessel(undefined, true);
-            }, function(error) {
-                // Some error
-                alertService.showErrorMessage(locale.getString('vessel.archive_message_on_error'));
-            });
 
-        }, options);
-
+        confirmationModal
+            .openInstance(modalOptions).result
+            .then(performArchiveVessel)
+            .then(onSuccess, onReject);
     };
 
     //Create a new vessel

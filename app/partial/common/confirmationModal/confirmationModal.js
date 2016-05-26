@@ -36,22 +36,28 @@
 
     /* @ngAnnotate */
     function ConfirmationModalFactory($modal) {
-        return {
-            open: function(callback, options) {
-                var modalInstance = $modal.open({
-                    templateUrl: 'partial/common/confirmationModal/confirmationModal.html',
-                    controller: 'confirmationModalCtrl',
-                    controllerAs: 'modal',
-                    windowClass : "confirmationModal",
-                    backdrop: 'static', //will not close when clicking outside the modal window
-                    size: "small",
-                    resolve: {
-                        options: function() {
-                            return options || {};
-                        }
+
+        function openInstance(options) {
+            return $modal.open({
+                templateUrl: 'partial/common/confirmationModal/confirmationModal.html',
+                controller: 'confirmationModalCtrl',
+                controllerAs: 'modal',
+                windowClass : "confirmationModal",
+                backdrop: 'static', //will not close when clicking outside the modal window
+                size: "small",
+                resolve: {
+                    options: function() {
+                        return options || {};
                     }
-                }).result.then(callback);
-            }  
+                }
+            });
+        }
+
+        return {
+            openInstance: openInstance,
+            open: function(callback, options) {
+                openInstance(options).result.then(callback);
+            }
         };
     }
 })();
