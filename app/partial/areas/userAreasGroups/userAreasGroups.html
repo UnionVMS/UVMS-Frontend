@@ -2,19 +2,20 @@
 	<!-- USER AREAS GROUPS -->
 	
 	<div class="form-group noPadding">
-		<div class="row">
+		<div class="row area-group-type-selector">
 			<div class="col-md-3 comboLabel">
 				<label class="label-combo-inline" for="editingProjection">{{'spatial.area_selection_modal_area_type_label' | i18n}}</label>
 			</div>
 			<div class="col-md-9">
 				<combobox ng-model="areaGroup.type" items="areaHelper.userAreasGroups" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n | uppercase}}" uppercase="true" ng-required="true" ng-change="getAreasByType()" components-with-scroll="'#group-area-form-container'" is-loading="areaHelper.isLoadingAreaTypes"></combobox>
 			</div>
+            <button type="button" class="btn btn-primary btn-xs edit-areagroup-btn" ng-click="openAreaGroupEditorModal()" ng-disabled="!areaGroup.type" title="{{'areas.edit_area_group' | i18n}}"><i class="fa fa-pencil" aria-hidden="true"></i></button>
 		</div>
 	</div>
 	
 	
 	<!-- USER AREAS TABLE -->
-	<div st-table="displayedUserAreas" st-safe-src="userAreasList" st-set-filter="stAreas">
+	<div st-table="displayedUserAreas" st-safe-src="userAreasList" st-set-filter="stAreas" ng-show="areaGroup.type">
 		<div class="search-field">
 			<input st-search="" class="form-control" placeholder="{{'areas.search_table_placeholder' | i18n}}" type="text"/>
 		</div>
@@ -27,13 +28,13 @@
                     </div>
                 </div>
                 <div class="tbody col-md-12">
-                	 <div class="tr row" ng-if="tableLoading">
+                	 <div class="tr row" ng-show="tableLoading">
                         <div class="th col-md-12 loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
                     </div>
-                    <div class="tr row" ng-if="!tableLoading && !displayedUserAreas.length">
+                    <div class="tr row" ng-show="!tableLoading && !displayedUserAreas.length">
                         <div class="td col-md-12">{{'areas.table_no_data' | i18n}}</div>
                     </div>
-                    <div ng-repeat="userArea in displayedUserAreas" class="tr row">
+                    <div ng-repeat="userArea in displayedUserAreas" class="tr row" ng-show="!tableLoading">
                         <div class="td col-md-4">{{userArea.name}}</div>
                         <div class="td col-md-6">{{userArea.desc}}</div>
                         <div class="td col-md-2">

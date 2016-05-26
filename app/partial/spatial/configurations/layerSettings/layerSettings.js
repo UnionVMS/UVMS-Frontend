@@ -54,7 +54,6 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
     };
     
     var resetSuccess = function(response){
-    	$scope.layersettingsForm.$setPristine();
         $scope.configModel.layerSettings = response.layerSettings;
         if (angular.isDefined($scope.configCopy)){
             angular.copy($scope.configModel.layerSettings, $scope.configCopy.layerSettings);
@@ -65,7 +64,9 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
         spatialConfigAlertService.hasSuccess = true;
         spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_layers_success');
         spatialConfigAlertService.hideAlert();
-        $scope.layersettingsForm.$setPristine();
+		if(angular.isDefined($scope.layersettingsForm)){
+        	$scope.layersettingsForm.$setPristine();
+		}
         $scope.configModel.layerSettings.reseted = true;
         loadingStatus.isLoading('ResetPreferences',false);
     };
@@ -79,7 +80,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
         loadingStatus.isLoading('ResetPreferences',false);
     };
     
-    $scope.checkIfExists = function(item,list,layersettingsForm,isBaseList) {
+    $scope.checkIfExists = function(item,list,isBaseList) {
     	for(var i=0;i<list.length;i++){
     		if(angular.isDefined(item.areaType)){
 	    		if(angular.equals(item.areaType,list[i].areaType)){
@@ -107,12 +108,14 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 				}
     		}
     	}
-    	layersettingsForm.$setDirty();
-    	if(isBaseList || (!isBaseList && !_.isEmpty($scope.selectedBases))){
-    		$scope.layersettingsForm.baseLayers.$setValidity('empty',true);
-    	}else{
-    		$scope.layersettingsForm.baseLayers.$setValidity('empty',false);
-    	}
+		if(angular.isDefined($scope.layersettingsForm)){
+    		$scope.layersettingsForm.$setDirty();
+			if(isBaseList || (!isBaseList && !_.isEmpty($scope.selectedBases))){
+				$scope.layersettingsForm.baseLayers.$setValidity('empty',true);
+			}else{
+				$scope.layersettingsForm.baseLayers.$setValidity('empty',false);
+			}
+		}
     	
     	return item;
     };
@@ -183,7 +186,9 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	    spatialConfigAlertService.hasSuccess = true;
 	    spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_layers_success');
         spatialConfigAlertService.hideAlert();
-        $scope.layersettingsForm.$setPristine();
+        if(angular.isDefined($scope.layersettingsForm)){
+        	$scope.layersettingsForm.$setPristine();
+		}
         $scope.configModel.layerSettings.reseted = true;
         loadingStatus.isLoading('ResetPreferences',false);
 	};

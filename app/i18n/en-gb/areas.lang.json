@@ -41,9 +41,8 @@
 	"area_details_title": "Area details",
 	"user_area_name": "Name",
 	"user_area_description": "Description",
-	"user_area_validity_range": "Active",
-	"user_area_valid_from": "From",
-	"user_area_valid_to": "To",
+	"user_area_valid_from": "Active from",
+	"user_area_valid_to": "Active until",
 	"user_area_type": "Type",
 	"user_area_scope_selection": "Share with scope",
 	"user_area_select_scope": "Select the scopes",
@@ -150,5 +149,9 @@
 	"upload_area_port_notes": "portportportportportportportportport portportportport portportportportportportportportportportportport portportport port portportportport",
 	"upload_area_eez_notes": "eezeezeezeezeezeez eezeez eez eezeezeezeezeez eezeezeezeezeezeezeezeezeezeezeezeezeez eez eezeezeezeezeezeez",
 	"upload_area_rfmo_notes": "rfmorfmorfmorfmorfmorfmorfmorfmo rfmorfmo rfmorfmorfmorfmo rfmo rfmorfmorfmorfmorfmorfmorfmo rfmorfmo rfmorfmo rfmo",
-	"upload_area_portarea_notes": "portareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportarea portarea portareaportarea"
+	"upload_area_portarea_notes": "portareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportarea portarea portareaportarea",
+	
+	"area_group": "Area group",
+	"edit_area_group": "Edit area group",
+	"confirm_area_group_edit": "Do you really want to set this active range? This properties will be applied to all areas in this area group accessible by you."	
 }

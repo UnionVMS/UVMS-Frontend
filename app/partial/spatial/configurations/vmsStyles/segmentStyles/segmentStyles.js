@@ -231,7 +231,9 @@ angular.module('unionvmsWeb').controller('SegmentstylesCtrl',function($scope,con
 	$scope.$watch('loadedAllSettings', function() {
 		if($scope.loadedAllSettings && $scope.configModel && $scope.configModel.stylesSettings && $scope.configModel.stylesSettings.segments && $scope.configModel.stylesSettings.segments.style){
 			$scope.loadSegmentProperties();
-			$scope.vmsstylesForm.$setPristine();
+			if(angular.isDefined($scope.vmsstylesForm)){
+				$scope.vmsstylesForm.$setPristine();
+			}
 		}
 	});
 	

@@ -229,6 +229,13 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
 	    	if(angular.isDefined(this.mapConfiguration.spatialConnectId)){
 	    		dto.mapConfiguration = {'spatialConnectId': this.mapConfiguration.spatialConnectId};
 	    	}
+			if(angular.isDefined(this.mapConfiguration.visibilitySettings)){
+				if(angular.isDefined(dto.mapConfiguration)){
+					dto.mapConfiguration.visibilitySettings = this.mapConfiguration.visibilitySettings;
+				}else{
+	    			dto.mapConfiguration = {'visibilitySettings': this.mapConfiguration.visibilitySettings};
+				}
+	    	}
 	    }
 	    
 	    if(angular.isDefined(this.additionalProperties)){
@@ -334,6 +341,13 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
         	if(angular.isDefined(this.mapConfiguration.spatialConnectId)){
         		report.mapConfiguration = {'spatialConnectId': this.mapConfiguration.spatialConnectId};
         	}
+			if(angular.isDefined(this.mapConfiguration.visibilitySettings)){
+				if(angular.isDefined(report.mapConfiguration)){
+					report.mapConfiguration.visibilitySettings = this.mapConfiguration.visibilitySettings;
+				}else{
+	    			report.mapConfiguration = {'visibilitySettings': this.mapConfiguration.visibilitySettings};
+				}
+	    	}
 	    }
         
         if(angular.isDefined(this.additionalProperties)){

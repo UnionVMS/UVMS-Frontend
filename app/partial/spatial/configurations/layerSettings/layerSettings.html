@@ -38,7 +38,7 @@
 					        <div class="column">
 					        	<h5>{{'spatial.layer_settings_port' | i18n }}</h5>
 					        	<button type="button" class="btn btn-default btn-xs btn-clear-list" type="button" ng-click="layersettingsForm.$setDirty();selectedPorts.splice(0, selectedPorts.length);"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
-							    <ul dnd-list="selectedPorts" dnd-allowed-types="['port', 'portarea']" dnd-drop="checkIfExists(item,selectedPorts,layersettingsForm)">
+							    <ul dnd-list="selectedPorts" dnd-allowed-types="['port', 'portarea']" dnd-drop="checkIfExists(item,selectedPorts)">
 							        <li ng-repeat="item in selectedPorts"
 							            dnd-draggable="item"
 							            dnd-type="item.subType"
@@ -55,7 +55,7 @@
 					        	<button type="button" class="btn btn-default btn-xs btn-clear-list" type="button" ng-click="layersettingsForm.$setDirty();selectedAreas.splice(0, selectedAreas.length);"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
 							    <ul dnd-list="selectedAreas"
 							     dnd-allowed-types="['sysarea','userarea','areagroup']" 
-							     dnd-drop="checkIfExists(item,selectedAreas,layersettingsForm);">								        
+							     dnd-drop="checkIfExists(item,selectedAreas);">								        
 								 	<li ng-repeat="item in selectedAreas"
 							            dnd-draggable="item"
 							            dnd-type="item.areaType"
@@ -73,7 +73,7 @@
 					        <div class="column">
 					        	<h5>{{'spatial.layer_settings_additional' | i18n }}</h5>
 					        	<button type="button" class="btn btn-default btn-xs btn-clear-list" type="button" ng-click="layersettingsForm.$setDirty();selectedAdditionals.splice(0, selectedAdditionals.length);"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
-							    <ul dnd-list="selectedAdditionals" dnd-allowed-types="['additional','others']" dnd-drop="checkIfExists(item,selectedAdditionals,layersettingsForm)">
+							    <ul dnd-list="selectedAdditionals" dnd-allowed-types="['additional','others']" dnd-drop="checkIfExists(item,selectedAdditionals)">
 							        <li ng-repeat="item in selectedAdditionals"
 							            dnd-draggable="item"
 							            dnd-type="item.subType"
@@ -89,7 +89,7 @@
 						        <div class="column">
 						        	<h5>{{'spatial.layer_settings_base' | i18n }}</h5>
 						        	<button type="button" class="btn btn-default btn-xs btn-clear-list" type="button" ng-click="layersettingsForm.$setDirty();selectedBases.splice(0, selectedBases.length);validateBackGroundLayers();"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
-								    <ul dnd-list="selectedBases" dnd-allowed-types="['background','others']" dnd-drop="checkIfExists(item,selectedBases,layersettingsForm,true);">
+								    <ul dnd-list="selectedBases" dnd-allowed-types="['background','others']" dnd-drop="checkIfExists(item,selectedBases,true);">
 								        <li ng-repeat="item in selectedBases"
 								            dnd-draggable="item"
 								            dnd-type="item.subType"

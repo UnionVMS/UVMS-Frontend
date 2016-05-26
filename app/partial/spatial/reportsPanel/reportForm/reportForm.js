@@ -207,6 +207,9 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             size: 'lg',
             resolve: {
                 reportConfigs: function(){
+                    if(!angular.isDefined($scope.report.currentConfig)){
+                        $scope.report.currentConfig = {'mapConfiguration': {}};
+                    }
                     return $scope.report.currentConfig;
                 }
             }

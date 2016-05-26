@@ -214,7 +214,9 @@ angular.module('unionvmsWeb').controller('PositionstylesCtrl',function($scope,co
 	$scope.$watch('loadedAllSettings', function() {
 		if($scope.loadedAllSettings && $scope.configModel && $scope.configModel.stylesSettings && $scope.configModel.stylesSettings.positions && $scope.configModel.stylesSettings.positions.style){
 			$scope.loadPositionProperties();
-			$scope.vmsstylesForm.$setPristine();
+			if(angular.isDefined($scope.vmsstylesForm)){
+				$scope.vmsstylesForm.$setPristine();
+			}
 		}
 	});
 });

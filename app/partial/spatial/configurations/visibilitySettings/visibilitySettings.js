@@ -74,7 +74,9 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
         spatialConfigAlertService.hasSuccess = true;
         spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_visibilities_success');
         spatialConfigAlertService.hideAlert();
-        $scope.visibilitysettingsForm.$setPristine();
+        if(angular.isDefined($scope.visibilitysettingsForm)){
+            $scope.visibilitysettingsForm.$setPristine();
+        }
         $scope.configModel.visibilitySettings.reseted = true;
         loadingStatus.isLoading('ResetPreferences',false);
     };
@@ -116,7 +118,9 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
 	    spatialConfigAlertService.hasSuccess = true;
 	    spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_visibilities_success');
         spatialConfigAlertService.hideAlert();
-        $scope.visibilitysettingsForm.$setPristine();
+        if(angular.isDefined($scope.visibilitysettingsForm)){
+            $scope.visibilitysettingsForm.$setPristine();
+        }
         $scope.configModel.visibilitySettings.reseted = true;
         loadingStatus.isLoading('ResetPreferences',false);
 	};

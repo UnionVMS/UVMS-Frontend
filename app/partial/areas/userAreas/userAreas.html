@@ -24,13 +24,13 @@
                      </div>
                  </div>
                  <div class="tbody col-md-12">
-                 	 <div class="tr row" ng-if="tableLoading">
+                 	 <div class="tr row" ng-show="tableLoading">
                          <div class="th col-md-12 loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
                      </div>
-                     <div class="tr row" ng-if="!tableLoading && !displayedUserAreas.length">
+                     <div class="tr row" ng-show="!tableLoading && !displayedUserAreas.length">
                          <div class="td col-md-12">{{'areas.table_no_data' | i18n}}</div>
                      </div>
-                     <div ng-repeat="userArea in displayedUserAreas" class="tr row">
+                     <div ng-repeat="userArea in displayedUserAreas" class="tr row" ng-show="!tableLoading">
                          <div class="td col-md-3">{{userArea.name}}</div>
                          <div class="td col-md-5">{{userArea.desc}}</div>
                          <div class="td col-md-4">
@@ -253,7 +253,6 @@
 						<textarea class="form-control" rows="3" name="userAreaDesc" ng-model="userArea.desc"></textarea>
 					</div>
 					<div class="form-group datesGroup">
-						<label class="col-md-12 withoutPadding">{{'areas.user_area_validity_range' | i18n }}</label>
 						<div class="col-md-6 withoutPadding rightPadding">
 							<label for="userAreaFrom">{{'areas.user_area_valid_from' | i18n }}</label>
 							<datepicker-input time="true" model="userArea.startDate" name="userAreaFrom" max-date="userArea.endDate" ng-change-callback="resetDateTimePicker" input-field-id="user-area-start-date-picker"></datepicker-input>

@@ -80,6 +80,19 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
            }
         });
     };
+    
+    $scope.openAreaGroupEditorModal = function(){
+    	var modalInstance = $modal.open({
+            templateUrl: 'partial/areas/areaGroupEditorModal/areaGroupEditorModal.html',
+            controller: 'AreagroupeditormodalCtrl',
+            size: 'md',
+            resolve: {
+                areaGroupName: function(){
+                    return $scope.areaGroup.type;
+                }
+            }
+         });
+    };
 	
     init();
 });

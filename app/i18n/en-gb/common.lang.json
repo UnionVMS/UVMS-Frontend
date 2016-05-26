@@ -61,6 +61,7 @@
     "remove" : "Remove",
     "reset" : "Reset",
     "save" : "Save",
+    "confirm" : "Confirm",
     "save_as_group": "Save as Group",
     "append_group": "Add to Group",
     "remove_from_group": "Remove from Group",
