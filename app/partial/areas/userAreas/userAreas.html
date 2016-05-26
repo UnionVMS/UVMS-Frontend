@@ -24,7 +24,7 @@
                      </div>
                  </div>
                  <div class="tbody col-md-12">
-                 	 <div class="tr row" ng-show="tableLoading">
+                 	 <div class="tr row" ng-if="tableLoading">
                          <div class="th col-md-12 loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
                      </div>
                      <div class="tr row" ng-show="!tableLoading && !displayedUserAreas.length">
