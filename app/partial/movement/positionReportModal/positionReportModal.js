@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($scope, $log, $modalInstance, locale, movementRestService, vesselRestService, dateTimeService, positionReport, positionReportGuid, globalSettingsService, movementCsvService) {
+angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($scope, $log, $modalInstance, locale, movementRestService, vesselRestService, dateTimeService, positionReport, positionReportGuid, globalSettingsService, movementCsvService, leafletData, $timeout) {
 
     $scope.waitingForResponse = false;
     $scope.waitingForResponseMessage = locale.getString('movement.positions_modal_loading_text');
@@ -8,6 +8,17 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
     $scope.markers = {};
     $scope.errorMessage = undefined;
     $scope.speedUnit = globalSettingsService.getSpeedUnit();
+
+    /* Needed to invalidate map size after initial resize. */
+    if ($modalInstance.rendered) {
+        $modalInstance.rendered.then(function() {
+            return leafletData.getMap().then(function(map) {
+                $timeout(function() {
+                    map.invalidateSize();
+                }, 10);
+            });
+        });
+    }
 
     $scope.exportCsv = function(movement) {
         movementCsvService.exportMovements([movement]);
