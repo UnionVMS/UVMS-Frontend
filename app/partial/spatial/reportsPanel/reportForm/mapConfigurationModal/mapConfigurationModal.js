@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, $timeout, locale, reportConfigs, $modalInstance, SpatialConfig, spatialRestService, spatialConfigAlertService, $anchorScroll, $location, spatialConfigRestService, loadingStatus) {
+angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, $timeout, locale, reportConfigs, $modalInstance, SpatialConfig, spatialRestService, spatialConfigAlertService, $anchorScroll, $location, spatialConfigRestService, loadingStatus, hasMap) {
 	$scope.isReportConfig = true;
 	$scope.alert = spatialConfigAlertService;
 	$scope.alert.hasAlert = false;
@@ -6,6 +6,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 	$scope.alert.hasSuccess = false;
 	$scope.alert.hasWarning = false;
 	$scope.loadedAllSettings = false;
+	$scope.hasMap = hasMap;
 	
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
@@ -32,15 +33,15 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 
     $scope.exportMapConfiguration = function () {
     	var exported = {};
-    	if($scope.mapConfigurationForm.$dirty){
+    	if(angular.isDefined($scope.mapConfigurationForm) && $scope.mapConfigurationForm.$dirty){
     		exported.mapSettings = {};
-    		if($scope.mapConfigurationForm.mapsettingsForm.$dirty){
+    		if(angular.isDefined($scope.mapConfigurationForm.mapsettingsForm) && $scope.mapConfigurationForm.mapsettingsForm.$dirty){
     			exported.mapSettings.spatialConnectId = $scope.configModel.mapSettings.spatialConnectId;
     			exported.mapSettings.mapProjectionId = $scope.configModel.mapSettings.mapProjectionId;
     			exported.mapSettings.displayProjectionId = $scope.configModel.mapSettings.displayProjectionId;
     			exported.mapSettings.coordinatesFormat = $scope.configModel.mapSettings.coordinatesFormat;
     			exported.mapSettings.scaleBarUnits = $scope.configModel.mapSettings.scaleBarUnits;
-    		}else if($scope.mapConfigurationForm.mapsettingsForm.$pristine && $scope.configModel.mapSettings.reseted){
+    		}else if(!angular.isDefined($scope.mapConfigurationForm.mapsettingsForm) || (angular.isDefined($scope.mapConfigurationForm.mapsettingsForm) && $scope.mapConfigurationForm.mapsettingsForm.$pristine && $scope.configModel.mapSettings.reseted)){
     			exported.mapSettings.spatialConnectId = undefined;
     			exported.mapSettings.mapProjectionId = undefined;
     			exported.mapSettings.displayProjectionId = undefined;
@@ -54,22 +55,22 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     			exported.mapSettings.scaleBarUnits = reportConfigs.mapConfiguration.scaleBarUnits;
     		}
     		
-    		if($scope.mapConfigurationForm.vmsstylesForm.$dirty){
+    		if(angular.isDefined($scope.mapConfigurationForm.vmsstylesForm) && $scope.mapConfigurationForm.vmsstylesForm.$dirty){
     			exported.mapSettings.stylesSettings = $scope.checkStylesSettings();
     		}else{
-    			exported.mapSettings.stylesSettings = $scope.configModel.stylesSettings.reseted ? undefined : reportConfigs.mapConfiguration.stylesSettings;
+    			exported.mapSettings.stylesSettings = !angular.isDefined($scope.mapConfigurationForm.vmsstylesForm) || $scope.configModel.stylesSettings.reseted ? undefined : reportConfigs.mapConfiguration.stylesSettings;
     		}
     		
-    		if($scope.mapConfigurationForm.layersettingsForm.$dirty){
+    		if(angular.isDefined($scope.mapConfigurationForm.layersettingsForm) && $scope.mapConfigurationForm.layersettingsForm.$dirty){
     			exported.mapSettings.layerSettings = $scope.configModel.layerSettings;
     		}else{
-    			exported.mapSettings.layerSettings = $scope.configModel.layerSettings.reseted ? undefined : reportConfigs.mapConfiguration.layerSettings;
+    			exported.mapSettings.layerSettings = !angular.isDefined($scope.mapConfigurationForm.layersettingsForm) || $scope.configModel.layerSettings.reseted ? undefined : reportConfigs.mapConfiguration.layerSettings;
     		}
     		
-    		if($scope.mapConfigurationForm.visibilitysettingsForm.$dirty){
+    		if(angular.isDefined($scope.mapConfigurationForm.visibilitysettingsForm) && $scope.mapConfigurationForm.visibilitysettingsForm.$dirty){
     			exported.mapSettings.visibilitySettings = $scope.checkVisibilitySettings();
     		}else{
-    			exported.mapSettings.visibilitySettings = $scope.configModel.visibilitySettings.reseted ? undefined : reportConfigs.mapConfiguration.visibilitySettings;
+    			exported.mapSettings.visibilitySettings = !angular.isDefined($scope.mapConfigurationForm.visibilitysettingsForm) || $scope.configModel.visibilitySettings.reseted ? undefined : reportConfigs.mapConfiguration.visibilitySettings;
     		}
     		
     	}else if($scope.configModel.mapSettings.reseted || $scope.configModel.stylesSettings.reseted || $scope.configModel.layerSettings.reseted || $scope.configModel.visibilitySettings.reseted){

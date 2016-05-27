@@ -1,4 +1,4 @@
-<div class="col-md-12 collapsibleRow visibilitySettings" ng-controller="VisibilitysettingsCtrl">
+<div class="col-md-12 collapsibleRow visibilitySettings" ng-controller="VisibilitysettingsCtrl" ng-init="status.isOpen = isReportConfig && !hasMap">
 	<ng-form name="visibilitysettingsForm">
 		<accordion close-others="oneAtATime">
 			<accordion-group is-open="status.isOpen">

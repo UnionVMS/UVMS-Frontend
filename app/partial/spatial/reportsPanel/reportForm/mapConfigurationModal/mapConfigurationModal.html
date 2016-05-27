@@ -5,7 +5,7 @@
         <div class="pointer pull-right" ng-click="cancel()">
              <i class="fa fa-times closeicon"></i>
         </div>
-        <h4 class="modal-title">{{'spatial.map_configuration_modal_title' | i18n}}</h4>
+        <h4 class="modal-title">{{'spatial.report_configuration_modal_title' | i18n}}</h4>
     </div>
     <div class="modal-body">
     	<div class="col-md-12 containerWithTopBottomPadding spatial-error" ng-if="alert.hasAlert">
@@ -20,10 +20,10 @@
 		</div>
        	<div class="row containerCollapsible">
 	    	<form name="mapConfigurationForm" novalidate>
-	    	    <div class="collapsiblePanel" ng-include="'partial/spatial/configurations/mapSettingsPanel/mapSettingsCollapsiblePanel.html'"></div>
-				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/vmsStyles/vmsStylesCollapsiblePanel.html'"></div>
+	    	    <div class="collapsiblePanel" ng-include="'partial/spatial/configurations/mapSettingsPanel/mapSettingsCollapsiblePanel.html'" ng-if="hasMap"></div>
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/vmsStyles/vmsStylesCollapsiblePanel.html'" ng-if="hasMap"></div>
 				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/visibilitySettings/visibilitySettings.html'"></div>
-				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/layerSettings/layerSettings.html'"></div>
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/layerSettings/layerSettings.html'" ng-if="hasMap"></div>
 			</form>
 		</div>
     </div>

@@ -134,7 +134,7 @@
 	"reports_form_positions_selector_type_option_hours": "Hours",
 	"reports_form_positions_x_value": "X value",
 	"reports_form_select_areas": "Select areas",
-	"reports_form_map_configuration": "Configure map",
+	"reports_form_map_configuration": "Configuration",
 	"reports_form_report_components": "Report components:",
 	"reports_form_map_component_checkbox": "Include map",
 	"reports_form_vms_component_checkbox": "VMS table",
@@ -262,7 +262,7 @@
 	"area_selection_modal_get_selected_sys_area_details_error": "There was an error while getting the details of previously selected areas. Please try again.",
 	"area_selection_modal_get_selected_area_search_error": "There was an error while searching for areas. Please try again.",
 
-    "map_configuration_modal_title": "Map configuration",
+    "report_configuration_modal_title": "Report configuration",
     "save_as_modal_title": "Save report as...",
     "map_configuration_map_projection": "Map projection",
     "map_configuration_display_projection": "Display projection",
