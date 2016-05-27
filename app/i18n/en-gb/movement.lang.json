@@ -106,6 +106,7 @@
 	"manual_position_field_label_measured_speed": "Meas. Speed",
 	"manual_position_field_label_calculated_speed": "Calc. Speed",
 	"manual_position_field_label_course": "Course",
+	"manual_position_field_label_imo": "IMO",
 
 	"manual_position_field_unit_degrees": "\u00b0",
 	"manual_position_field_unit_knots": "kts",
