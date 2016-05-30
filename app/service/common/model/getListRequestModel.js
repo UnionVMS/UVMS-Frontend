@@ -41,7 +41,7 @@ angular.module('unionvmsWeb')
     };
 
     GetListRequest.prototype.DTOForMobileTerminal = function(){
-        var wildcardKeys = ['NAME', 'IRCS', 'EXTERNAL_MARKING', 'CFR', 'HOMEPORT', 'MMSI', 'SERIAL_NUMBER', 'DNID'];
+        var wildcardKeys = ['NAME', 'IRCS', 'EXTERNAL_MARKING', 'CFR', 'HOMEPORT', 'MMSI', 'SERIAL_NUMBER', 'DNID', 'SATELLITE_NUMBER', 'MEMBER_NUMBER'];
         var criteria = this.criterias.map(function(criteria) {
             if (wildcardKeys.indexOf(criteria.key) >= 0) {
                 return new SearchField(criteria.key, criteria.value + '*');

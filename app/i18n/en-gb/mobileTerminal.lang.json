@@ -100,6 +100,8 @@
     "search_mmsi_placeholder" : "MMSI",
     "search_serialNumber_placeholder" : "Serial number",
     "search_dnid_placeholder" : "DNID",
+    "search_member_number_placeholder" : "Member no.",
+    "search_satellite_number_placeholder" : "Satellite no.",
     "search_selectVesselGroup_placeholder" : "Select asset groups",
     "search_zero_results_error" : "No mobile terminals matching your search criteria was found.",
     "set_active" : "Set {1} as active",
