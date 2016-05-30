@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, $filter, $stateParams, locale, Alarm, csvService, alertService, SearchResults, SearchResultListPage, AlarmReportModal, userService, alarmRestService, searchService, $resource, longPolling){
+angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, $filter, $stateParams, locale, Alarm, alarmCsvService, alertService, SearchResults, SearchResultListPage, AlarmReportModal, userService, alarmRestService, searchService, $resource, longPolling){
 
     $scope.selectedItems = []; //Selected items by checkboxes
 
@@ -189,57 +189,8 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
 
     //Export data as CSV file
     $scope.exportItemsAsCSVFile = function(onlySelectedItems){
-        var filename = 'holdingTable.csv';
-
-        //Set the header columns
-        var header = [
-                locale.getString('alarms.alarms_table_date_openend'),
-                locale.getString('alarms.alarms_table_object_affected'),
-                locale.getString('alarms.alarms_table_rule'),
-                locale.getString('alarms.alarms_table_date_resolved'),
-                locale.getString('alarms.alarms_table_resolved_by'),
-                locale.getString('alarms.alarms_table_status'),
-            ];
-
-        //Set the data columns
-        var getData = function() {
-            var exportItems;
-            //Export only selected items
-            if(onlySelectedItems){
-                exportItems = $scope.selectedItems;
-            }
-            //Export all logs in the table
-            else{
-                exportItems = $scope.currentSearchResults.items;
-            }
-            return exportItems.reduce(
-                function(csvObject, item){
-                    var affectedObjectText;
-                    if(angular.isDefined(item.vessel)){
-                        affectedObjectText = item.vessel.name;
-                    }else{
-                        affectedObjectText = locale.getString('alarms.alarms_affected_object_unknown');
-                    }
-
-                    var ruleNames = item.alarmItems.map(function(alarmItem){
-                        return alarmItem.ruleName;
-                        }).join(' & ');
-                    var csvRow = [
-                        $filter('confDateFormat')(item.openDate),
-                        affectedObjectText,
-                        ruleNames,
-                        $filter('confDateFormat')(item.getResolvedDate()),
-                        item.getResolvedBy(),
-                        $scope.getStatusLabel(item.status)
-                    ];
-                    csvObject.push(csvRow);
-                    return csvObject;
-                },[]
-            );
-        };
-
-        //Create and download the file
-        csvService.downloadCSVFile(getData(), header, filename);
+        var itemsToExport = onlySelectedItems ? $scope.selectedItems : $scope.currentSearchResults.items;
+        alarmCsvService.exportAlarms(itemsToExport);
     };
 
     //Callback function for the "edit selection" dropdown
