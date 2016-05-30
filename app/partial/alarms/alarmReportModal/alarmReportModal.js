@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService,  userService, configurationService, globalSettingsService, $filter) {
+angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService,  userService, configurationService, globalSettingsService, $filter, leafletData, $timeout) {
 
     $scope.alarm = alarm;
     $scope.knownVessel = angular.isDefined(alarm.vessel);
@@ -24,6 +24,17 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
     };
 
     $scope.speedUnit = globalSettingsService.getSpeedUnit();
+
+    /* Needed to invalidate map size after initial resize. */
+    if ($modalInstance.rendered) {
+        $modalInstance.rendered.then(function() {
+            return leafletData.getMap().then(function(map) {
+                $timeout(function() {
+                    map.invalidateSize();
+                }, 10);
+            });
+        });
+    }
 
     function getAlarmWarningActions(ruleNames) {
         actions = [];
@@ -344,7 +355,7 @@ angular.module('unionvmsWeb').factory('AlarmReportModal', function($modal) {
                 controller: 'AlarmReportModalCtrl',
                 windowClass : "alarmReportModal",
                 backdrop: 'static', //will not close when clicking outside the modal window
-                size: 'md',
+                size: 'lg',
                 resolve:{
                     alarm : function (){
                         return alarm;
