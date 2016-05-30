@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService,  userService, configurationService, globalSettingsService, $filter, leafletData, $timeout) {
+angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService,  userService, configurationService, globalSettingsService, $filter, leafletData, $timeout, alarmCsvService) {
 
     $scope.alarm = alarm;
     $scope.knownVessel = angular.isDefined(alarm.vessel);
@@ -342,6 +342,10 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
         if (angular.isDefined(courseValue) && courseValue !== null) {
             return courseValue + " " + locale.getString("movement.manual_position_field_unit_degrees");
         }
+    };
+
+    $scope.exportCsv = function(alarm) {
+        alarmCsvService.exportAlarms([alarm]);
     };
 
     $scope.init();

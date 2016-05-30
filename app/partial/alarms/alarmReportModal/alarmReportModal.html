@@ -68,7 +68,7 @@
                 <div class="value" ng-show="!alarm.placeholderVessel && !alarm.movement && alarm.asset.ids.NAME">{{alarm.asset.ids.NAME}}</div>
                 <div class="value missing" ng-show="!alarm.placeholderVessel && !alarm.movement && !alarm.asset.ids.NAME">{{'alarms.position_report_information_value_missing' | i18n}}</div>
             </div>
-            <div ng-if="showDnid"class="col-md-3">
+            <div ng-if="showDnid" class="col-md-3">
                 <label>{{'mobileTerminal.table_header_dnid' | i18n}}</label>
                 <div class="value" ng-show="channelDnid">{{channelDnid}}</div>
                 <div class="value missing" ng-hide="channelDnid">-</div>
@@ -229,7 +229,13 @@
     <div class="row buttons" ng-if="!readOnly">
         <div class="buttonGroups">
             <div class="buttonGroup">
-                <a class="button" ng-click="cancel()">{{"common.cancel" | i18n}}</a>
+                <a class="button btn btn-link" ng-click="cancel()">{{"common.cancel" | i18n}}</a>
+                <button class="btn btn-default" ng-click="exportCsv(alarm)">
+                    <i class="fa fa-download"></i> {{'movement.csv' | i18n}}
+                </button>
+                <button class="btn btn-default" ui-sref="app.polling">
+                    <i class="fa fa-arrow-circle-right"></i> {{'movement.poll' | i18n}}
+                </button>
             </div>
             <div class="buttonGroup button-group-right" ng-hide="statusUpdatedSuccessfully">
                 <button class="btn btn-sm btn-danger button" type="submit" ng-click="reject()" ng-disabled="waitingForStatusUpdateResponse">
