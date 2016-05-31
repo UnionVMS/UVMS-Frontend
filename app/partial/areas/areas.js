@@ -93,7 +93,8 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, l
                 $('.updateMetadata').css('height', newHeight - $('.tabMenu').height() - 65 - $('.sysareas-radio-btns').height());
             }
             
-            $('.metadata-container').css('height', $('.updateMetadata').height() - 45);
+            $('.metadata-container').css('height', $('#system-area-form-container').height() - 125);
+            $('.sysarea-wizard').css('max-height', $('#system-area-form-container').height() - 80);
             
             var datasetCont = $('.dataset-form-container').height();
             if (datasetCont < 80){

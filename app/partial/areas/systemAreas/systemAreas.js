@@ -1,19 +1,24 @@
 angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,projectionService,areaAlertService,areaRestService,spatialRestService,areaMapService,areaHelperService,areaClickerService,locale,Area,$modal){
     $scope.alert = areaAlertService;
 	$scope.sysAreaType = "";
-	$scope.selectedProj = "";
+	$scope.dataConfig = {selectedProj: "", name: "", code: ""};
 	$scope.isSaving = false;
 	$scope.validFile = {isValid: undefined};
 	$scope.projections = projectionService;
 	$scope.helper = areaHelperService;
 	$scope.metadataAvailable = false;
 	$scope.sysSelection = "map";
-	$scope.sysNotes = {};
 	$scope.datasetNew = {};
 	$scope.clickerServ = areaClickerService;
+    $scope.wizardStep = 1;
+    $scope.names = [{code:'name1',text:'name1'},{code:'name2', text:'name2'},{code:'name3', text:'name3'},{code:'name4', text:'name4'}];
+    $scope.codes = [{code:'code1', text:'code1'},{code:'code2', text:'code2'},{code:'code3', text:'code3'},{code:'code4', text:'code4'}];
+    $scope.dbAttrs = [{code:'dbAttrs1', text:'dbAttrs1'},{code:'dbAttrs2', text:'dbAttrs2'},{code:'dbAttrs3', text:'dbAttrs3'},{code:'dbAttrs4', text:'dbAttrs4'}];
+    $scope.shpAttrs = [{code:'shpAttrs1', text:'shpAttrs1'},{code:'shpAttrs2', text:'shpAttrs2'},{code:'shpAttrs3', text:'shpAttrs3'},{code:'shpAttrs4', text:'shpAttrs4'}];
+    $scope.selectedAttrs = [];
     
 	$scope.fileNameChanged = function(elem){
-		$scope.SysareasForm.areaFile.$setDirty();
+		$scope.SysareasForm.selectFileForm.areaFile.$setDirty();
 		if(elem.value){
 			$scope.filepath = elem.value;
 			var filename = $scope.filepath.replace(/^.*[\\\/]/, '');
@@ -35,9 +40,9 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
     $scope.save = function(){
         $scope.saved = true;
         $scope.isSaving = true;
-        if ($scope.SysareasForm.$valid && $scope.validFile.isValid){
+        if ($scope.SysareasForm.selectFileForm.$valid && $scope.validFile.isValid){
             $scope.alert.setLoading(locale.getString('areas.uploading_message'));
-            var projCode = $scope.projections.getProjectionEpsgById($scope.selectedProj);
+            var projCode = $scope.projections.getProjectionEpsgById($scope.dataConfig.selectedProj);
         	if(angular.isDefined(projCode) && $scope.sysAreaType){
         		var objTest = {
         				"uploadedFile": $scope.files[0],
@@ -115,7 +120,6 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         }
         
         if (angular.isDefined(newVal) && newVal !== oldVal){
-        	changeNotes(newVal);
         	resetDatasetTab();
         	$scope.helper.resetMetadata();
             $scope.helper.displayedSystemAreaLayer = newVal;
@@ -183,6 +187,8 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
             } else if (newVal === 'dataset'){
                 resetDatasetTab();
                 $scope.clickerServ.active = true;
+            }else if (newVal === 'upload'){
+                resetUploadTab();
             }
         }
     });
@@ -291,6 +297,21 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
     	$scope.datasetForm.$setPristine();
     };
     
+    var resetUploadTab = function(){
+        $scope.wizardStep = 1;
+        $scope.names = [{code:'name1',text:'name1'},{code:'name2', text:'name2'},{code:'name3', text:'name3'},{code:'name4', text:'name4'}];
+        $scope.codes = [{code:'code1', text:'code1'},{code:'code2', text:'code2'},{code:'code3', text:'code3'},{code:'code4', text:'code4'}];
+        $scope.dbAttrs = [{code:'dbAttrs1', text:'dbAttrs1'},{code:'dbAttrs2', text:'dbAttrs2'},{code:'dbAttrs3', text:'dbAttrs3'},{code:'dbAttrs4', text:'dbAttrs4'}];
+        $scope.shpAttrs = [{code:'shpAttrs1', text:'shpAttrs1'},{code:'shpAttrs2', text:'shpAttrs2'},{code:'shpAttrs3', text:'shpAttrs3'},{code:'shpAttrs4', text:'shpAttrs4'}];
+        $scope.selectedAttrs = [];
+        $scope.dataConfig = {selectedProj: "", name: "", code: ""};
+        $scope.isSaving = false;
+	    $scope.validFile = {isValid: undefined};
+        $scope.sysAreafile = undefined;
+        angular.element(".btn-file > input[type='file']").val(null);
+        $scope.SysareasForm.$setPristine();
+    };
+    
     $scope.mergeParamsWms = function(index, displayedAreasList, areaList){
     	index = areaList.indexOf(displayedAreasList[index]);
         var area = areaList[index];
@@ -314,23 +335,31 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         }
     };
     
-    var changeNotes = function(type){
-    	switch(type){
-    	case 'PORT':
-    		$scope.sysNotes.msg = 'areas.upload_area_port_notes';
-    		break;
-    	case 'EEZ':
-    		$scope.sysNotes.msg = 'areas.upload_area_eez_notes';
-    		break;
-    	case 'RFMO':
-    		$scope.sysNotes.msg = 'areas.upload_area_rfmo_notes';
-    		break;
-	    case 'PORTAREA':
-			$scope.sysNotes.msg = 'areas.upload_area_portarea_notes';
-			break;
-		default:
-			$scope.sysNotes.msg = undefined;
-		}
+    $scope.nextStep = function(){
+        $scope.wizardStep = $scope.wizardStep+1;    
+    };
+    
+    $scope.previousStep = function(){
+        $scope.wizardStep = $scope.wizardStep-1;    
+    };
+    
+    $scope.validateForm = function(){
+        switch($scope.wizardStep){
+            case 1:
+                return $scope.SysareasForm.selectFileForm.$invalid;
+            case 2:
+                return $scope.SysareasForm.dataConfigForm.$invalid;
+            default:
+                return false;
+        }
+    };
+    
+    $scope.addNewAttr = function(){
+        $scope.selectedAttrs.push({'db': 'test' + $scope.selectedAttrs.length,'shp': 'test' + $scope.selectedAttrs.length});
+    };
+    
+    $scope.getProjectionNameById = function(){
+        return _.findWhere($scope.projections.items, {code: $scope.dataConfig.selectedProj}).text;
     };
     
 });

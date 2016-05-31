@@ -1,0 +1,30 @@
+<div class="col-md-12 upload-area-progress" ng-controller="UploadsysareaprogressCtrl">
+    <div class="step" ng-class="{activestep : wizardStep === 1, finishedstep: wizardStep > 1}">
+        <div class="stepIcon">
+            <span ng-show="wizardStep > 1"><i class="fa fa-check"></i></span>
+            <span ng-hide="wizardStep > 1">1</span>
+        </div>
+        <p>
+            {{'areas.select_data_upload' | i18n | uppercase}} 
+        </p>
+    </div>
+    <div class="step" ng-class="{activestep : wizardStep === 2, finishedstep: wizardStep > 2}">
+        <div class="stepIcon">
+            <span ng-show="wizardStep > 2"><i class="fa fa-check"></i></span>
+            <span ng-hide="wizardStep > 2">2</span>
+        </div>
+        <p>
+            {{'areas.data_configurations' | i18n | uppercase}} 
+        </p>
+    </div>
+    <div class="step" ng-class="{activestep : wizardStep === 3, finishedstep: wizardStep > 3}">
+        <div class="stepIcon">
+            <span ng-show="wizardStep > 3"><i class="fa fa-check"></i></span>
+            <span ng-hide="wizardStep > 3">3</span>
+        </div>
+        <p>
+            {{'areas.sysarea_upload_preview' | i18n | uppercase}} 
+        </p>
+    </div>
+    <div class="clearfix"></div>
+</div>

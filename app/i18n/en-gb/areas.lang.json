@@ -67,6 +67,7 @@
 	"area_upload_modal_semicolon": "Semicolon",
 	"area_upload_modal_delimiter": "Delimiter", 
 	"area_upload_select_file_btn": "Select file",
+	"area_upload_selected_file_btn": "Selected file",
 	"area_upload_select_zip_file_btn": "Select .zip file",
 	"area_upload_select_zip_file_info_btn": "You must submit a zip file containing a valid area shapefile (.shp, .shx, .dbf)",
 	"area_upload_modal_upload_btn": "Upload",
@@ -146,12 +147,20 @@
 	"area_selection_select_area_btn": "Select area",
 	"area_selection_selected_area": "Selected area:",
 	"area_selection_dataset_name": "Dataset name:",
-	"upload_area_port_notes": "portportportportportportportportport portportportport portportportportportportportportportportportport portportport port portportportport",
-	"upload_area_eez_notes": "eezeezeezeezeezeez eezeez eez eezeezeezeezeez eezeezeezeezeezeezeezeezeezeezeezeezeez eez eezeezeezeezeezeez",
-	"upload_area_rfmo_notes": "rfmorfmorfmorfmorfmorfmorfmorfmo rfmorfmo rfmorfmorfmorfmo rfmo rfmorfmorfmorfmorfmorfmorfmo rfmorfmo rfmorfmo rfmo",
-	"upload_area_portarea_notes": "portareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportareaportarea portarea portareaportarea",
 	
 	"area_group": "Area group",
 	"edit_area_group": "Edit area group",
-	"confirm_area_group_edit": "Do you really want to set this active range? This properties will be applied to all areas in this area group accessible by you."	
+	"confirm_area_group_edit": "Do you really want to set this active range? This properties will be applied to all areas in this area group accessible by you.",
+	
+	"select_data_upload": "Select data to upload",
+	"data_configurations": "Data configurations",
+	"data_configurations_name": "Name",
+	"data_configurations_code": "Code",
+	"data_configurations_attr_field_db": "In database...",
+	"data_configurations_attr_field_shp": "In shape file...",
+	"data_configurations_attr_fields_mapping": "Attributes mapping",
+	"add_new_attr": "Add new attribute",
+	"mapping_db_attr": "Database Attribute",
+	"mapping_shp_attr": "Shape file Attribute",
+	"sysarea_upload_preview": "Upload overview"
 }
