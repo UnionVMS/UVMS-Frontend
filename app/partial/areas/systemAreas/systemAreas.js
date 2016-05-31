@@ -344,11 +344,14 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
     };
     
     $scope.validateForm = function(){
+        if(!angular.isDefined($scope.SysareasForm)){
+            return true;
+        }
         switch($scope.wizardStep){
             case 1:
-                return $scope.SysareasForm.selectFileForm.$invalid;
+                return angular.isDefined($scope.SysareasForm.selectFileForm) ? $scope.SysareasForm.selectFileForm.$invalid : true;
             case 2:
-                return $scope.SysareasForm.dataConfigForm.$invalid;
+                return angular.isDefined($scope.SysareasForm.dataConfigForm) ? $scope.SysareasForm.dataConfigForm.$invalid : true;
             default:
                 return false;
         }
