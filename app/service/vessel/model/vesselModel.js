@@ -99,7 +99,6 @@ angular.module('unionvmsWeb')
             name : this.name,
             countryCode : this.countryCode,
             imo : this.imo,
-            mmsiNo : this.mmsiNo,
             externalMarking : this.externalMarking,
             hasIrcs : this.hasIrcs(),
             ircs : this.ircs,
@@ -116,6 +115,11 @@ angular.module('unionvmsWeb')
             producer : this.producer,
             notes : this.notes
         };
+
+        if (this.mmsiNo) {
+            // Do not send empty string, or other falsy values in general.
+            dto.mmsiNo = this.mmsiNo;
+        }
 
         if(angular.isDefined(this.vesselId)){
             dto['assetId'] = {
