@@ -12,7 +12,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         mobileTerminalForm : false
     };
 
-    $scope.currentSearchResults = new SearchResults('attributes.SERIAL_NUMBER', false, locale.getString('mobileTerminal.search_zero_results_error'));
+    $scope.currentSearchResults = new SearchResults('', false, locale.getString('mobileTerminal.search_zero_results_error'));
 
     //Selected by checkboxes
     $scope.selectedMobileTerminals = [];
@@ -71,6 +71,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
     $scope.setCreateMode = function(bool, reload){
         $scope.createNewMode = bool;
         if (reload) {
+            $scope.currentSearchResults.sortBy = '';
             $scope.searchMobileTerminals();
         }
     };
