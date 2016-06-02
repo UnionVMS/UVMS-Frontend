@@ -11,30 +11,17 @@
 				        <div class="th col-md-2" st-sort="code" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</div>
 				        <div class="th col-md-4">{{'spatial.tab_config_table_header_vessel_color' | i18n }}</div>
 			        </div>
-			        <div ng-if="alert.visible" class="tr row">
-				       	<div class="th col-md-12">
-						    <div class="alert alert-danger alert-container" role="alert" ng-if="alert.type === 'error'">
-		       					<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
-		       					<span class="alert-message">
-		           					<span>{{ alert.msg }}</span>            
-		       					</span>
-						    </div>
-						    <div class="alert alert-success alert-container" role="alert" ng-if="alert.type === 'success'">
-		       					<span class="fa fa-check-circle" aria-hidden="true"></span>
-		       					<span class="alert-message">
-		           					<span>{{ alert.msg }}</span>            
-		       					</span>
-						    </div>
-			        	</div>
+			        <div ng-if="alert.visible || !displayedRecords.length" class="tr row">
+						<div class="th col-md-12">
+							<table-alert type="alert.type" msg="alert.msg" visible="alert.visible"></table-alert>
+							<table-alert type="'info'" msg="'spatial.table_no_data'" visible="!alert.visible && !isLoading && !displayedRecords.length"></table-alert>
+						</div>
 			        </div>
 			    </div>
 			    <div class="tbody container-fluid row">
 			    	<div ng-if="isLoading" class="tr row">
 				       	<div class="loading-spinner-cl th col-md-12"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
 			        </div>
-			        <div ng-if="!displayedRecords.length && !isLoading" class="tr row">
-						<div class="td col-md-12">{{'spatial.table_no_data' | i18n}}</div>
-					</div>
 			        <div ng-repeat="report in displayedRecords" ng-show="displayedRecords && displayedRecords.length > 0 && !isLoading" class="tr row">
 						<ng-form name="countryForm{{$index}}" novalidate>
 				        	<div class="td col-md-6">{{ report.name }}</div>
@@ -56,7 +43,7 @@
 				        </ng-form>
 			        </div>
 			    </div>
-				<div class="stFooterPagination tfoot container-fluid row">
+				<div class="stFooterPagination tfoot container-fluid row" ng-if="!isLoading && displayedRecords.length">
 					<div class="tr">
 						<div class="td col-md-12">
 							<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>

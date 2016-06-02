@@ -51,24 +51,17 @@
 									<th st-skip-natural="true" st-sort="name" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_search_table_header_name' | i18n }}</th>
 									<th ></th>
 								</tr>
-								<tr ng-if="vesselSearchLoading">
-						        	<th colspan="7" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
-						        </tr>
-						        <tr ng-if="hasError">
+						        <tr ng-if="hasError || !displayedRecords.length">
 						        	<th colspan="7">
-						        		<div class="alert alert-danger alert-container" role="alert">
-					       					<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
-					       					<span class="alert-message">
-					           					<span>{{errorMessage}}</span>            
-					       					</span>
-									    </div>	
+										<table-alert type="'error'" msg="errorMessage" visible="hasError"></table-alert>
+										<table-alert type="'info'" msg="'spatial.table_no_data'" visible="!hasError && !displayedRecords.length && !vesselSearchLoading"></table-alert>
 						        	</th>
 						        </tr>
 							</thead>
 							<tbody>
-								<tr ng-if="!displayedRecords.length && !vesselSearchLoading">
-									<td colspan="7">{{'spatial.table_no_data' | i18n}}</td>
-								</tr>
+								<tr ng-if="vesselSearchLoading">
+						        	<td colspan="7" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></td>
+						        </tr>
 								<tr ng-repeat="vessel in displayedRecords">
  									<td style="width: 35px;"><input type="checkbox" ng-model="vessel.selected" ng-click="toggleOneVessel(vessel)"></td>
 									<td ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.countryCode }}</td>
@@ -81,7 +74,7 @@
 									</td>
 								</tr>
 							</tbody>
-							<tfoot class="stFooterPagination">
+							<tfoot class="stFooterPagination" ng-if="!vesselSearchLoading && displayedUserAreasSearch.length">
 								<tr>
 									<td colspan="7" class="text-right">
 										<div st-pagination st-items-by-page="vesselsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
@@ -122,9 +115,6 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr ng-if="!displayedRecordsSelection.length">
-										<td colspan="4">{{'spatial.table_no_data' | i18n}}</td>
-									</tr>
 									<tr ng-repeat="selection in displayedRecordsSelection">
 										<td>{{ selection.name }}</td>
 										<td>{{ translateSelectionType(selection.type) }}</td>
@@ -136,7 +126,7 @@
 										</td>
 									</tr>
 								</tbody>
-								<tfoot class="stFooterPagination">
+								<tfoot class="stFooterPagination" ng-if="displayedRecordsSelection.length">
 									<tr>
 										<td colspan="4" class="text-right">
 											<div st-pagination st-items-by-page="vesselsSelectionByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>

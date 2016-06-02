@@ -2,7 +2,6 @@
 .mapConfigurationModal {
 	.containerCollapsible {
 		position: relative;
-		padding-top: 0;
 		.collapsiblePanel {
 			&:first-of-type .panel-default {
 				padding-top: 15px;
@@ -16,11 +15,14 @@
     			box-shadow: none;
 			}
 		}
+		&.container {
+			border: 1px solid #dddddd;
+    		border-top: 5px solid #dddddd;
+		}
 	}
 	.containerCollapsible,
 	.collapsibleRow {
-		padding-left: 8px;
-    	padding-right: 8px;
+		padding: 0;
 	}
 	.configHeader {
 		margin-bottom: 0px;
@@ -89,9 +91,6 @@
 	}
 	.col-btn-no-padding{
 		padding: 0; 
-	}
-	.loading-panel {    
-	    margin: 0 15px 15px 15px;
 	}
 }
 

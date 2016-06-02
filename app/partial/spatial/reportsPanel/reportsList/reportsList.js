@@ -5,7 +5,7 @@ angular.module('unionvmsWeb').factory('reportMsgService', function($timeout){
         msg: ''
     };
     
-    alert.show = function(msg, type, time){
+    /*alert.show = function(msg, type, time){
         var obj = this;
         this.msg = msg;
         this.visible = true;
@@ -23,7 +23,7 @@ angular.module('unionvmsWeb').factory('reportMsgService', function($timeout){
         this.visible = false;
         this.type = '';
         this.msg = '';
-    };
+    };*/
     
     return alert;
 });
@@ -36,7 +36,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     };
     
     $scope.isLoading = true;
-    $scope.alert = reportMsgService;
+    $scope.tableAlert = reportMsgService;
     
     $scope.reports = [];
     $scope.reportTableInstance = {};
@@ -118,19 +118,25 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
             $scope.setDefaultRepLocally(defRep.id, false);
         }
         
-        var infoText = locale.getString('spatial.reports_remove_default_report_success');
+        var infoText = 'spatial.reports_remove_default_report_success';
         if (response.defaultId !== 0){
             $scope.setDefaultRepLocally(response.defaultId, true);
-            infoText = locale.getString('spatial.reports_set_default_report_success');
+            infoText = 'spatial.reports_set_default_report_success';
         }
         
         spatialHelperService.setDefaultRep(response.defaultId);
-        $scope.alert.show(infoText, 'success');
+        $scope.tableAlert.type = 'success';
+        $scope.tableAlert.msg = infoText;
+        $scope.tableAlert.visible = true;
+        //$scope.alert.show(infoText, 'success');
     }; 
     
     var setDefaultError = function(error){
         $scope.isLoading = false;
-        $scope.alert.show(locale.getString('spatial.reports_set_default_report_error'), 'error');
+        $scope.tableAlert.type = 'error';
+        $scope.tableAlert.msg = 'spatial.reports_set_default_report_error';
+        $scope.tableAlert.visible = true;
+        //$scope.alert.show(locale.getString('spatial.reports_set_default_report_error'), 'error');
     };
 
     //Share report
@@ -172,8 +178,11 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     
     $scope.$watch(function(){return reportService.errorLoadingDefault;}, function(newVal, oldVal){
         if (newVal){
-            var msg = locale.getString('spatial.map_error_loading_default_report');
-            $scope.alert.show(msg, 'error');
+            //var msg = locale.getString('spatial.map_error_loading_default_report');
+            //$scope.alert.show(msg, 'error');
+            $scope.tableAlert.type = 'error';
+            $scope.tableAlert.msg = 'spatial.map_error_loading_default_report';
+            $scope.tableAlert.visible = true;
         }
     });
     
@@ -188,13 +197,22 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     var getReportsListSuccess = function(reports){
         $scope.reports = reports.data;
         $scope.isLoading = false;
+        if(angular.isDefined($scope.reports) && $scope.reports.length === 0){
+            $scope.tableAlert.visible = true;
+            $scope.tableAlert.type = 'info';
+            $scope.tableAlert.msg = 'spatial.table_no_data';
+        }
     };
     
     //Get Report List Failure callback
     var getReportsListError = function(error){
         $scope.isLoading = false;
-        var msg = locale.getString('spatial.error_get_reports_list');
-        $scope.alert.show(msg, 'error');
+        $scope.tableAlert.visible = true;
+        $scope.tableAlert.type = 'error';
+        $scope.tableAlert.msg = 'spatial.error_get_reports_list';
+        
+        //var msg = locale.getString('spatial.error_get_reports_list');
+        //$scope.alert.show(msg, 'error');
         $scope.reports = [];
     };
     
@@ -208,7 +226,10 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     var getReportError = function(error){
         $scope.isLoading = false;
         $anchorScroll();
-        $scope.alert.show(locale.getString('spatial.error_entry_not_found'), 'error');
+        $scope.tableAlert.type = 'error';
+        $scope.tableAlert.msg = 'spatial.error_entry_not_found';
+        $scope.tableAlert.visible = true;
+        //$scope.alert.show(locale.getString('spatial.error_entry_not_found'), 'error');
     };
     
     //Delete report Success callback
@@ -227,8 +248,11 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
         }
         $scope.isLoading = false;
         $anchorScroll();
-        var msg = locale.getString('spatial.success_delete_report');
-        $scope.alert.show(msg, 'success');
+        $scope.tableAlert.type = 'success';
+        $scope.tableAlert.msg = 'spatial.success_delete_report';
+        $scope.tableAlert.visible = true;
+        /*var msg = locale.getString('spatial.success_delete_report');
+        $scope.alert.show(msg, 'success');*/
     };
     
     //Delete report Failure callback
@@ -236,8 +260,12 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
         $scope.isLoading = false;
         $anchorScroll();
         var searchString = 'spatial.' + error.msg;
-        var msg = locale.getString(searchString);
-        $scope.alert.show(msg, 'error', 8000);
+        /*var msg = locale.getString(searchString);
+        $scope.alert.show(msg, 'error', 8000);*/
+        $scope.tableAlert.type = 'error';
+        $scope.tableAlert.msg = searchString;
+        $scope.tableAlert.timeout = 8000;
+        $scope.tableAlert.visible = true;
     };
     
     //Finally we check if we should automatically load reports

@@ -64,11 +64,11 @@
     	   						<tr ng-if="searchLoading">
     					        	<th colspan="3" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
     					        </tr>
+								<tr ng-if="!displayedRecordsArea.length && !searchLoading">
+    								<th colspan="3"><table-alert type="'info'" msg="'spatial.table_no_data'" visible="!searchLoading && !displayedRecordsArea.length"></table-alert></th>
+    							</tr>
     	   					</thead>
     	   					<tbody>
-    	   						<tr ng-if="!displayedRecordsArea.length && !searchLoading">
-    								<td colspan="3">{{'spatial.table_no_data' | i18n}}</td>
-    							</tr>
     	   						<tr ng-repeat="sysArea in displayedRecordsArea">
     	   							<td>{{sysArea.name}}</td>
     	   							<td>{{sysArea.code}}</td>
@@ -78,7 +78,7 @@
     	   							</td>
     	   						</tr>
     	   					</tbody>
-    	   					<tfoot class="stFooterPagination">
+    	   					<tfoot class="stFooterPagination" ng-if="displayedRecordsArea.length && !searchLoading">
     							<tr>
     								<td colspan="3" class="text-right">
     									<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
@@ -122,7 +122,7 @@
                                 </td>
                             </tr>
                         </tbody>
-                        <tfoot class="stFooterPagination">
+                        <tfoot class="stFooterPagination" ng-if="displayedUserAreasSearch.length">
                             <tr>
                                 <td colspan="3" class="text-right">
                                     <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
@@ -147,13 +147,13 @@
                                 <th st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_desc_header' | i18n}}</th>
                                 <th style="min-width: 80px;"></th>
                             </tr>
-                            <tr ng-if="searchLoading">
-                                <th colspan="3" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+							<tr ng-if="!displayedUserAreas.length && !searchLoading">
+                                <th colspan="3"><table-alert type="'info'" msg="'spatial.table_no_data'" visible="!searchLoading && !displayedUserAreas.length"></table-alert></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-if="!displayedUserAreas.length && !searchLoading">
-                                <td colspan="3">{{'spatial.table_no_data' | i18n}}</td>
+							<tr ng-if="searchLoading">
+                                <td colspan="3" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></td>
                             </tr>
                             <tr ng-repeat="userArea in displayedUserAreas">
                                 <td>{{userArea.name}}</td>
@@ -164,7 +164,7 @@
                                 </td>
                             </tr>
                         </tbody>
-                        <tfoot class="stFooterPagination">
+                        <tfoot class="stFooterPagination" ng-if="!searchLoading && displayedUserAreas.length">
                             <tr>
                                 <td colspan="3" class="text-right">
                                     <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
@@ -207,9 +207,6 @@
     					</tr>
     				</thead>
     				<tbody>
-    					<tr ng-if="!displayedRecordsSelection.length">
-    						<td colspan="4">{{'spatial.table_no_data' | i18n}}</td>
-    					</tr>
     					<tr ng-repeat="area in displayedRecordsSelection">
     						<td style="min-width: 100px;">{{area.areaType}}</td>
     						<td>{{area.name}}</td>
@@ -219,7 +216,7 @@
     						</td>
     					</tr>
     				</tbody>
-    				<tfoot class="stFooterPagination">
+    				<tfoot class="stFooterPagination" ng-if="displayedRecordsSelection.length">
     					<tr>
     						<td colspan="4" class="text-right">
     							<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
