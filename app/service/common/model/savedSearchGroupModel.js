@@ -49,7 +49,10 @@ angular.module('unionvmsWeb')
             "EXTERNAL_MARKING",
             "NAME",
             "ASSET_TYPE",
-            "CFR_IRCS_NAME"
+            "CFR_IRCS_NAME",
+            "HOMEPORT",
+            "GEAR_TYPE",
+            "IMO"
         ];
 
         //List of properties that should have type OTHER
