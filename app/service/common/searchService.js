@@ -1,6 +1,6 @@
 angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchUtilsService, GetListRequest, VesselListPage, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage, auditLogRestService, exchangeRestService, alarmRestService, userService) {
 
-    var DEFAULT_ITEMS_PER_PAGE = 10;
+    var DEFAULT_ITEMS_PER_PAGE = 20;
 
 	var getListRequest = new GetListRequest(1, DEFAULT_ITEMS_PER_PAGE, true, []),
         advancedSearchObject  = {};
