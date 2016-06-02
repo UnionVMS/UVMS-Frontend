@@ -4,10 +4,10 @@
 			<dropdown ng-model="advancedSearchObject.EXCHANGE_TIME_SPAN" no-placeholder-item items="timeSpanOptions"></dropdown>
 		</div>
 		<div class="col-md-2">
-			<datepicker-input model="advancedSearchObject.DATE_RECEIVED_FROM" time="true" placeholder="{{'exchange.search_from' | i18n}}" input-field-id="exchange-log-search-from-date-picker"></datepicker-input>
+			<datepicker-input model="advancedSearchObject.DATE_RECEIVED_FROM" time="true" max-date="advancedSearchObject.DATE_RECEIVED_TO" placeholder="{{'exchange.search_from' | i18n}}" input-field-id="exchange-log-search-from-date-picker"></datepicker-input>
 		</div>
 		<div class="col-md-2">
-			<datepicker-input model="advancedSearchObject.DATE_RECEIVED_TO" time="true" placeholder="{{'exchange.search_to' | i18n}}" input-field-id="exchange-log-search-to-date-picker"></datepicker-input>
+			<datepicker-input model="advancedSearchObject.DATE_RECEIVED_TO" time="true" min-date="advancedSearchObject.DATE_RECEIVED_FROM" placeholder="{{'exchange.search_to' | i18n}}" input-field-id="exchange-log-search-to-date-picker"></datepicker-input>
 		</div>
 		<div class="col-md-2">
 			<input type="text" ng-model="advancedSearchObject.SENDER_RECEIVER" placeholder="{{'exchange.table_header_sender_reciever' | i18n}}" class="form-control"/>
