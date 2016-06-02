@@ -22,13 +22,13 @@
                          <div class="th col-md-5"st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_desc_header' | i18n}}</div>
                          <div class="th col-md-4"></div>
                      </div>
+                     <div class="tr row" ng-show="!tableLoading && !displayedUserAreas.length">
+                         <div class="th col-md-12"><table-alert type="'info'" msg="'areas.table_no_data'" visible="!displayedUserAreas.length && !tableLoading"></table-alert></div>
+                     </div>
                  </div>
                  <div class="tbody col-md-12">
-                 	 <div class="tr row" ng-if="tableLoading">
-                         <div class="th col-md-12 loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
-                     </div>
-                     <div class="tr row" ng-show="!tableLoading && !displayedUserAreas.length">
-                         <div class="td col-md-12">{{'areas.table_no_data' | i18n}}</div>
+					 <div class="tr row" ng-if="tableLoading">
+                         <div class="td col-md-12 loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
                      </div>
                      <div ng-repeat="userArea in displayedUserAreas" class="tr row" ng-show="!tableLoading">
                          <div class="td col-md-3">{{userArea.name}}</div>
@@ -41,7 +41,7 @@
                          </div>
                      </div>
                  </div>
-                 <div class="tfoot col-md-12 stFooterPagination">
+                 <div class="tfoot col-md-12 stFooterPagination" ng-if="displayedUserAreas.length && !tableLoading">
                      <div class="tr row">
                          <div class="td col-md-12 text-right">
                              <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>

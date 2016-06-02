@@ -1,6 +1,9 @@
 angular.module('unionvmsWeb').factory('comboboxService', function($window) {
 	var cb = {};
 	var activeCombo;
+	var selectedItemsGroup = {};
+	var comboList = {};
+	
 	var clickedInSameCombo = function(event) {
 		var isClickedElementChildOfPopup = activeCombo.element.find('.comboButtonContainer').find(event.target).length > 0 ||
 		angular.element('#' + activeCombo.comboboxId).find(event.target).length > 0;
@@ -109,6 +112,47 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
 		activeCombo = comboScope;
 		positionComboList();
     };
+	
+	cb.initializeGroup = function(groupName,combo){
+		if(!angular.isDefined(comboList[groupName])){
+			comboList[groupName] = [];
+		}
+		
+		comboList[groupName].push(combo);
+		
+		if(comboList[groupName].length<=1){
+			selectedItemsGroup[groupName] = [];
+		}
+	};
+	
+	cb.isAvailableItem = function(groupName, selectedItem, item){
+		if((angular.isDefined(selectedItemsGroup) && angular.isDefined(selectedItemsGroup[groupName]) && selectedItemsGroup[groupName].indexOf(item) === -1) || selectedItem === item){
+			return true;
+		}else{
+			return false;
+		}
+	};
+	
+	cb.updateComboListGroup = function(groupName, newVal, oldVal){
+		if(angular.isDefined(oldVal) && selectedItemsGroup[groupName].indexOf(oldVal) !== -1){
+			selectedItemsGroup[groupName].splice(selectedItemsGroup[groupName].indexOf(oldVal),1);
+		}
+		if(angular.isDefined(newVal)){
+			selectedItemsGroup[groupName].push(newVal);
+		}
+	};
+	
+	cb.removeCombo = function(groupName,scope){
+		if(selectedItemsGroup[groupName].indexOf(scope.ngModel) !== -1){
+			selectedItemsGroup[groupName].splice(selectedItemsGroup[groupName].indexOf(scope.ngModel),1);
+		}
+		
+		for(var i=0;i<comboList[groupName].length;i++){
+			if(comboList[groupName][i].comboboxId === scope.comboboxId){
+				comboList[groupName].splice(i,1);
+			}
+		}
+	};
 
 	return cb;
 });

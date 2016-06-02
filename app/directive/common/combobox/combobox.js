@@ -17,7 +17,8 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             componentsWithScroll : '=',
             uppercase : '=',
             initialtext : '@',
-            isLoading : '='
+            isLoading : '=',
+            group: '@'
 		},
         templateUrl: 'directive/common/combobox/combobox.html',
 		link: function(scope, element, attrs, ctrl) {
@@ -49,6 +50,13 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
         		if(angular.isUndefined(scope.ngModel)){
             		scope.ngModel = [];
             	}
+        	}
+            
+            if(scope.group){
+        		scope.comboboxServ.initializeGroup(scope.group,scope);
+                scope.$on('$destroy', function() {
+                    scope.comboboxServ.removeCombo(scope.group,scope);
+                });
         	}
             
             //Get the label for an item
@@ -115,6 +123,10 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
 
             //Watch for changes to the ngModel and update the dropdown label
             scope.$watch(function () { return scope.ngModel;}, function (newVal, oldVal) {
+                if(angular.isDefined(scope.group)){
+                    scope.comboboxServ.updateComboListGroup(scope.group, newVal, oldVal);
+                }
+                
             	if(scope.uppercase && newVal && !angular.equals(newVal, newVal.toUpperCase())){
             		scope.ngModel = newVal.toUpperCase();
             		return;

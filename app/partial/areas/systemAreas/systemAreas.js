@@ -11,8 +11,6 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
 	$scope.datasetNew = {};
 	$scope.clickerServ = areaClickerService;
     $scope.wizardStep = 1;
-    $scope.names = [{code:'name1',text:'name1'},{code:'name2', text:'name2'},{code:'name3', text:'name3'},{code:'name4', text:'name4'}];
-    $scope.codes = [{code:'code1', text:'code1'},{code:'code2', text:'code2'},{code:'code3', text:'code3'},{code:'code4', text:'code4'}];
     $scope.dbAttrs = [{code:'dbAttrs1', text:'dbAttrs1'},{code:'dbAttrs2', text:'dbAttrs2'},{code:'dbAttrs3', text:'dbAttrs3'},{code:'dbAttrs4', text:'dbAttrs4'}];
     $scope.shpAttrs = [{code:'shpAttrs1', text:'shpAttrs1'},{code:'shpAttrs2', text:'shpAttrs2'},{code:'shpAttrs3', text:'shpAttrs3'},{code:'shpAttrs4', text:'shpAttrs4'}];
     $scope.selectedAttrs = [];
@@ -138,6 +136,9 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
                     $scope.metadataForm.$setPristine();
                     $scope.alert.setLoading(locale.getString('areas.getting_area_metadata'));
                     areaRestService.getLayerMetadata(item.typeName).then(getMetadataSuccess, getMetadataFailure);
+                }
+                if($scope.helper.sysAreasEditingType === 'upload'){
+                    resetUploadTab();
                 }
             }
         }
@@ -299,8 +300,6 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
     
     var resetUploadTab = function(){
         $scope.wizardStep = 1;
-        $scope.names = [{code:'name1',text:'name1'},{code:'name2', text:'name2'},{code:'name3', text:'name3'},{code:'name4', text:'name4'}];
-        $scope.codes = [{code:'code1', text:'code1'},{code:'code2', text:'code2'},{code:'code3', text:'code3'},{code:'code4', text:'code4'}];
         $scope.dbAttrs = [{code:'dbAttrs1', text:'dbAttrs1'},{code:'dbAttrs2', text:'dbAttrs2'},{code:'dbAttrs3', text:'dbAttrs3'},{code:'dbAttrs4', text:'dbAttrs4'}];
         $scope.shpAttrs = [{code:'shpAttrs1', text:'shpAttrs1'},{code:'shpAttrs2', text:'shpAttrs2'},{code:'shpAttrs3', text:'shpAttrs3'},{code:'shpAttrs4', text:'shpAttrs4'}];
         $scope.selectedAttrs = [];
@@ -358,7 +357,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
     };
     
     $scope.addNewAttr = function(){
-        $scope.selectedAttrs.push({'db': 'test' + $scope.selectedAttrs.length,'shp': 'test' + $scope.selectedAttrs.length});
+        $scope.selectedAttrs.push({'db': undefined,'shp': undefined});
     };
     
     $scope.getProjectionNameById = function(){

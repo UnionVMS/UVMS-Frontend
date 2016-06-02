@@ -7,7 +7,7 @@
         <span class="static-text" ng-bind="selectedAttrs[$index].db" ng-if="wizardStep === 3"></span>
     </div>
     <div class="col-md-5" ng-class="{'has-error': wizardStep !== 3 && (attrRow{{$index}}.shpField.$dirty || saved) && attrRow{{$index}}.shpField.$invalid}">
-        <combobox ng-model="selectedAttrs[$index].shp" items="shpAttrs" name="shpField" initialtext="{{'areas.data_configurations_attr_field_shp' | i18n}}" components-with-scroll="'#system-area-form-container'" ng-required="true" ng-if="wizardStep !== 3"></combobox>
+        <combobox ng-model="selectedAttrs[$index].shp" items="shpAttrs" name="shpField" initialtext="{{'areas.data_configurations_attr_field_shp' | i18n}}" components-with-scroll="'#system-area-form-container'" ng-required="true" ng-if="wizardStep !== 3" group="shpAttrs"></combobox>
         <div class="innerErrorMessagesCombobox" ng-messages="attrRow{{$index}}.shpField.$error" ng-show="(attrRow{{$index}}.shpField.$dirty || saved) && attrRow{{$index}}.shpField.$invalid" ng-if="wizardStep !== 3">
             <div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
         </div>

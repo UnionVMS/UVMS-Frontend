@@ -71,7 +71,7 @@
 										<label class="static-text" for="name">{{'areas.data_configurations_name' | i18n}}</label>
 									</div>
 									<div class="col-md-9" ng-class="{'has-error': (SysareasForm.dataConfigForm.name.$dirty || saved) && SysareasForm.dataConfigForm.name.$invalid}">
-										<combobox ng-model="dataConfig.name" items="names" name="name" initialtext="{{'areas.data_configurations_name' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'"></combobox>
+										<combobox ng-model="dataConfig.name" items="shpAttrs" name="name" initialtext="{{'areas.data_configurations_name' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'" group="shpAttrs"></combobox>
 									</div>
 									<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.dataConfigForm.name.$error" ng-show="(SysareasForm.dataConfigForm.name.$dirty || saved) && SysareasForm.dataConfigForm.name.$invalid">
 										<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
@@ -84,7 +84,7 @@
 										<label class="static-text" for="code">{{'areas.data_configurations_code' | i18n}}</label>
 									</div>
 									<div class="col-md-9" ng-class="{'has-error': (SysareasForm.dataConfigForm.code.$dirty || saved) && SysareasForm.dataConfigForm.code.$invalid}">
-										<combobox ng-model="dataConfig.code" items="codes" name="code" initialtext="{{'areas.data_configurations_code' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'"></combobox>
+										<combobox ng-model="dataConfig.code" items="shpAttrs" name="code" initialtext="{{'areas.data_configurations_code' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'" group="shpAttrs"></combobox>
 									</div>
 									<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.dataConfigForm.code.$error" ng-show="(SysareasForm.dataConfigForm.code.$dirty || saved) && SysareasForm.dataConfigForm.code.$invalid">
 										<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>

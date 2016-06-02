@@ -21,35 +21,35 @@
 		</div>
 		<div class="table table-striped tableSmart areas-table">
 			<div class="thead col-md-12">
-                    <div class="tr row stColumnHeaders">
-                        <div class="th col-md-4" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_name_header' | i18n}}</div>
-                        <div class="th col-md-6"st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_desc_header' | i18n}}</div>
-                        <div class="th col-md-2"></div>
+                <div class="tr row stColumnHeaders">
+                    <div class="th col-md-4" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_name_header' | i18n}}</div>
+                    <div class="th col-md-6"st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_desc_header' | i18n}}</div>
+                    <div class="th col-md-2"></div>
+                </div>
+                <div class="tr row" ng-show="!tableLoading && !displayedUserAreas.length">
+                    <div class="th col-md-12"><table-alert type="'info'" msg="'areas.table_no_data'" visible="!displayedUserAreas.length && !tableLoading"></table-alert></div>
+                </div>
+            </div>
+            <div class="tbody col-md-12">
+                    <div class="tr row" ng-show="tableLoading">
+                    <div class="td col-md-12 loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
+                </div>
+                <div ng-repeat="userArea in displayedUserAreas" class="tr row" ng-show="!tableLoading">
+                    <div class="td col-md-4">{{userArea.name}}</div>
+                    <div class="td col-md-6">{{userArea.desc}}</div>
+                    <div class="td col-md-2">
+                        <button type="button" class="btn btn-primary btn-xs pull-right tableBtnMargin" title="{{'areas.table_area__details_btn' | i18n }}" ng-click="getAreaDetails($index,displayedUserAreas)"><span class="fa fa-eye"></span></button>
+                        <button type="button" class="btn btn-primary btn-xs pull-right tableBtnMargin" title="{{'areas.table_zoom_to_area_btn' | i18n }}" ng-click="zoomToArea($index,displayedUserAreas)"><span class="fa fa-globe"></span></button>
                     </div>
                 </div>
-                <div class="tbody col-md-12">
-                	 <div class="tr row" ng-show="tableLoading">
-                        <div class="th col-md-12 loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
-                    </div>
-                    <div class="tr row" ng-show="!tableLoading && !displayedUserAreas.length">
-                        <div class="td col-md-12">{{'areas.table_no_data' | i18n}}</div>
-                    </div>
-                    <div ng-repeat="userArea in displayedUserAreas" class="tr row" ng-show="!tableLoading">
-                        <div class="td col-md-4">{{userArea.name}}</div>
-                        <div class="td col-md-6">{{userArea.desc}}</div>
-                        <div class="td col-md-2">
-	                        <button type="button" class="btn btn-primary btn-xs pull-right tableBtnMargin" title="{{'areas.table_area__details_btn' | i18n }}" ng-click="getAreaDetails($index,displayedUserAreas)"><span class="fa fa-eye"></span></button>
-	                        <button type="button" class="btn btn-primary btn-xs pull-right tableBtnMargin" title="{{'areas.table_zoom_to_area_btn' | i18n }}" ng-click="zoomToArea($index,displayedUserAreas)"><span class="fa fa-globe"></span></button>
-                        </div>
+            </div>
+            <div class="tfoot col-md-12 stFooterPagination" ng-if="displayedUserAreas.length && !tableLoading">
+                <div class="tr row">
+                    <div class="td col-md-12 text-right">
+                        <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
                     </div>
                 </div>
-                <div class="tfoot col-md-12 stFooterPagination">
-                    <div class="tr row">
-                        <div class="td col-md-12 text-right">
-                            <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
-                        </div>
-                    </div>
-                </div>
+            </div>
 		</div>
 	</div>
 		
