@@ -162,5 +162,6 @@
 	"add_new_attr": "Add new attribute",
 	"mapping_db_attr": "Database Attribute",
 	"mapping_shp_attr": "Shape file Attribute",
-	"sysarea_upload_preview": "Upload overview"
+	"sysarea_upload_preview": "Upload overview",
+	"getting_attributes_to_map": "Getting attributes to map"
 }

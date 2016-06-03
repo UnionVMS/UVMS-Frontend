@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,projectionService,areaAlertService,areaRestService,spatialRestService,areaMapService,areaHelperService,areaClickerService,locale,Area,$modal){
+angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,projectionService,areaAlertService,areaRestService,spatialRestService,areaMapService,areaHelperService,areaClickerService,locale,Area,$modal,loadingStatus){
     $scope.alert = areaAlertService;
 	$scope.sysAreaType = "";
 	$scope.dataConfig = {selectedProj: "", name: "", code: ""};
@@ -11,8 +11,8 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
 	$scope.datasetNew = {};
 	$scope.clickerServ = areaClickerService;
     $scope.wizardStep = 1;
-    $scope.dbAttrs = [{code:'dbAttrs1', text:'dbAttrs1'},{code:'dbAttrs2', text:'dbAttrs2'},{code:'dbAttrs3', text:'dbAttrs3'},{code:'dbAttrs4', text:'dbAttrs4'}];
-    $scope.shpAttrs = [{code:'shpAttrs1', text:'shpAttrs1'},{code:'shpAttrs2', text:'shpAttrs2'},{code:'shpAttrs3', text:'shpAttrs3'},{code:'shpAttrs4', text:'shpAttrs4'}];
+    $scope.dbAttrs = [];
+    $scope.shpAttrs = [];
     $scope.selectedAttrs = [];
     
 	$scope.fileNameChanged = function(elem){
@@ -36,7 +36,6 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
 	
 	//Uploading new file
     $scope.save = function(){
-        $scope.saved = true;
         $scope.isSaving = true;
         if ($scope.SysareasForm.selectFileForm.$valid && $scope.validFile.isValid){
             $scope.alert.setLoading(locale.getString('areas.uploading_message'));
@@ -53,13 +52,11 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
 				    	$scope.alert.setSuccess();
 				        $scope.alert.alertMessage = locale.getString('areas.upload_system_area_success');
 				    	$scope.isSaving = false;
-				    	$scope.saved = false;
 				    }, function(error) {
 				        $scope.alert.removeLoading();
 				    	$scope.alert.setError();
 				        $scope.alert.alertMessage = locale.getString('areas.upload_system_area_error') + error.data.msg;
 				    	$scope.isSaving = false;
-				    	$scope.saved = false;
 				    }
 			    );
         	}else{
@@ -104,7 +101,6 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
     };
     
     $scope.init = function(){
-        $scope.saved = false;
         if ($scope.projections.items.length === 0){
             $scope.projections.getProjections();
         }
@@ -300,8 +296,8 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
     
     var resetUploadTab = function(){
         $scope.wizardStep = 1;
-        $scope.dbAttrs = [{code:'dbAttrs1', text:'dbAttrs1'},{code:'dbAttrs2', text:'dbAttrs2'},{code:'dbAttrs3', text:'dbAttrs3'},{code:'dbAttrs4', text:'dbAttrs4'}];
-        $scope.shpAttrs = [{code:'shpAttrs1', text:'shpAttrs1'},{code:'shpAttrs2', text:'shpAttrs2'},{code:'shpAttrs3', text:'shpAttrs3'},{code:'shpAttrs4', text:'shpAttrs4'}];
+        $scope.dbAttrs = [];
+        $scope.shpAttrs = [];
         $scope.selectedAttrs = [];
         $scope.dataConfig = {selectedProj: "", name: "", code: ""};
         $scope.isSaving = false;
@@ -335,7 +331,50 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
     };
     
     $scope.nextStep = function(){
-        $scope.wizardStep = $scope.wizardStep+1;    
+        if($scope.wizardStep === 1 && $scope.SysareasForm.selectFileForm.$valid){
+            loadingStatus.isLoading('GetAttrToMap',true);
+            var objTest = {
+                    "uploadedFile": $scope.files[0],
+                    "areaType": $scope.sysAreaType
+            };
+            areaRestService.getAttributesToMap(objTest).then(
+                function (data) {
+                    //$scope.alert.setSuccess();
+                    //$scope.alert.alertMessage = locale.getString('areas.upload_system_area_success');
+                    loadAttrsOnCombo(data.domain,'dbAttrs');
+                    loadAttrsOnCombo(data.file,'shpAttrs');
+                    
+                    $scope.fileRef = data.ref;
+                    
+                    $scope.wizardStep += 1;
+                    loadingStatus.isLoading('GetAttrToMap',false);
+                }, function(error) {
+                    //$scope.alert.setError();
+                    //$scope.alert.alertMessage = locale.getString('areas.upload_system_area_error') + error.data.msg;
+                    loadingStatus.isLoading('GetAttrToMap',false);
+                }
+            );
+        }else if($scope.wizardStep === 2 && $scope.SysareasForm.dataConfigForm.$valid){
+            $scope.wizardStep += 1;
+        }else if($scope.wizardStep === 3){
+            var sysAreaToUpload = {
+                'ref': $scope.fileRef,
+                'mapping': [
+                    {
+                        'source': 'name',
+                        'target': $scope.dataConfig.name
+                    },{
+                        'source': 'code',
+                        'target': $scope.dataConfig.code
+                    }
+                ]
+            };
+            
+            angular.forEach($scope.selectedAttrs,function(item){
+                var attr = {'source': item.db,'target': item.shp};
+                sysAreaToUpload.mapping.push(attr);
+            });
+        }
     };
     
     $scope.previousStep = function(){
@@ -364,4 +403,30 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         return _.findWhere($scope.projections.items, {code: $scope.dataConfig.selectedProj}).text;
     };
     
+    var loadAttrsOnCombo = function(arr,comboList){
+        $scope[comboList] = [];
+        angular.forEach(arr,function(item){
+            var comboItem = {code:item.name, text:item.name};
+            $scope[comboList].push(comboItem);
+        });
+        
+        
+        
+        angular.forEach(arr,function(item){
+            var comboItem = {code:item.name + 1, text:item.name + 1};
+            $scope[comboList].push(comboItem);
+        });
+        angular.forEach(arr,function(item){
+            var comboItem = {code:item.name+2, text:item.name+2};
+            $scope[comboList].push(comboItem);
+        });
+        angular.forEach(arr,function(item){
+            var comboItem = {code:item.name + 3, text:item.name + 3};
+            $scope[comboList].push(comboItem);
+        });
+        angular.forEach(arr,function(item){
+            var comboItem = {code:item.name+4, text:item.name+4};
+            $scope[comboList].push(comboItem);
+        });
+    };
 });

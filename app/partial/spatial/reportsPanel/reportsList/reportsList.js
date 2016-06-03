@@ -5,7 +5,7 @@ angular.module('unionvmsWeb').factory('reportMsgService', function($timeout){
         msg: ''
     };
     
-    /*alert.show = function(msg, type, time){
+    alert.show = function(msg, type, time){
         var obj = this;
         this.msg = msg;
         this.visible = true;
@@ -23,7 +23,7 @@ angular.module('unionvmsWeb').factory('reportMsgService', function($timeout){
         this.visible = false;
         this.type = '';
         this.msg = '';
-    };*/
+    };
     
     return alert;
 });

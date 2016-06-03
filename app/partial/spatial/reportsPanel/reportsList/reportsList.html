@@ -28,7 +28,7 @@
 						<th style="min-width: 135px;"></th>
 					</tr>
 					<tr>
-						<th colspan="7">
+						<th colspan="7" ng-if="tableAlert.visible || (!isLoading && !reports.length)">
 							<table-alert type="tableAlert.type" msg="tableAlert.msg" visible="tableAlert.visible" timeout="tableAlert.timeout"></table-alert>
 							<table-alert type="'info'" msg="'spatial.table_no_data'" visible="!tableAlert.visible && !isLoading && !reports.length"></table-alert>
 						</th>

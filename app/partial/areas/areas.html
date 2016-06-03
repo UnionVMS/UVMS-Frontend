@@ -16,6 +16,7 @@
         	</div>
         	<!-- LEFT SIDE -->
         	<div class="col-md-6 customPadding">
+				<loading-panel class="loading-getting-attrs" type="GetAttrToMap"></loading-panel>
         		<!-- TAB MENU -->
         		<ul class="nav nav-pills tabMenu">
 	        		<li ng-repeat="tab in tabs" ng-click="(helper.isEditing && selectedTab !== '{{tab.tabId}}') || selectTab(tab.tabId)" ng-class="{'active': selectedTab === '{{tab.tabId}}', disabled: helper.isEditing && selectedTab !== '{{tab.tabId}}'}">

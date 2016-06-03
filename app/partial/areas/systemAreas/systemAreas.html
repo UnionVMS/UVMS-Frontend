@@ -28,12 +28,13 @@
 	
 		<div class="system-area-body">
 			<div ng-show="helper.sysAreasEditingType === 'upload'">
+				
 				<!-- UPLOAD AREA -->
 				<ng-form name="SysareasForm">
 					<div class="form-container sysarea-wizard">
 						<div ng-include="'partial/areas/systemAreas/uploadSysAreaProgress/uploadSysAreaProgress.html'"></div>
 						<ng-form name="selectFileForm" class="step-panel" ng-show="wizardStep === 1">
-							<div class="col-md-12 form-group input-group" ng-class="{'has-error': (SysareasForm.areaFile.$dirty || saved) && SysareasForm.areaFile.$invalid}">
+							<div class="col-md-12 form-group input-group" ng-class="{'has-error': SysareasForm.areaFile.$dirty && SysareasForm.areaFile.$invalid}">
 								<span class="btn btn-primary btn-file input-group-addon">
 									{{'areas.area_upload_select_zip_file_btn' | i18n}}
 									<input type="file" accept="application/zip" onchange="angular.element(this).scope().fileNameChanged(this)"/>
@@ -42,11 +43,11 @@
 								<span class="input-group-addon alert-success" ng-show="validFile.isValid === true">
 									<i class="fa fa-check alert-success"></i>
 								</span>
-								<span class="input-group-addon alert-danger" ng-show="(SysareasForm.areaFile.$dirty || saved) && (SysareasForm.areaFile.$invalid || validFile.isValid === false)">
+								<span class="input-group-addon alert-danger" ng-show="SysareasForm.areaFile.$dirty && (SysareasForm.areaFile.$invalid || validFile.isValid === false)">
 									<i class="fa fa-times alert-danger"></i>
 								</span>
 								<a href="" qtip content="{{'areas.area_upload_select_zip_file_info_btn' | i18n}}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
-								<div class="innerErrorMessagesFileUpload" ng-messages="SysareasForm.areaFile.$error" ng-show="(SysareasForm.areaFile.$dirty || saved) && (SysareasForm.areaFile.$invalid || validFile.isValid === false)">
+								<div class="innerErrorMessagesFileUpload" ng-messages="SysareasForm.areaFile.$error" ng-show="SysareasForm.areaFile.$dirty && (SysareasForm.areaFile.$invalid || validFile.isValid === false)">
 									<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 								</div>
 							</div>
@@ -57,10 +58,10 @@
 									<div class="col-md-3 proj-label comboLabel">
 										<label class="static-text" for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
 									</div>
-									<div class="col-md-9 proj-combo" ng-class="{'has-error': (SysareasForm.dataConfigForm.editingProjection.$dirty || saved) && SysareasForm.dataConfigForm.editingProjection.$invalid}">
+									<div class="col-md-9 proj-combo" ng-class="{'has-error': SysareasForm.dataConfigForm.editingProjection.$dirty && SysareasForm.dataConfigForm.editingProjection.$invalid}">
 										<combobox ng-model="dataConfig.selectedProj" items="projections.items" name="editingProjection" initialtext="{{'areas.editing_projection_label' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'"></combobox>
 									</div>
-									<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.dataConfigForm.editingProjection.$error" ng-show="(SysareasForm.dataConfigForm.editingProjection.$dirty || saved) && SysareasForm.dataConfigForm.editingProjection.$invalid">
+									<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.dataConfigForm.editingProjection.$error" ng-show="SysareasForm.dataConfigForm.editingProjection.$dirty && SysareasForm.dataConfigForm.editingProjection.$invalid">
 										<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 									</div>
 								</div>
@@ -70,10 +71,10 @@
 									<div class="col-md-3">
 										<label class="static-text" for="name">{{'areas.data_configurations_name' | i18n}}</label>
 									</div>
-									<div class="col-md-9" ng-class="{'has-error': (SysareasForm.dataConfigForm.name.$dirty || saved) && SysareasForm.dataConfigForm.name.$invalid}">
-										<combobox ng-model="dataConfig.name" items="shpAttrs" name="name" initialtext="{{'areas.data_configurations_name' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'" group="shpAttrs"></combobox>
+									<div class="col-md-9" ng-class="{'has-error': SysareasForm.dataConfigForm.name.$dirty && SysareasForm.dataConfigForm.name.$invalid}">
+										<combobox ng-model="dataConfig.name" items="shpAttrs" name="name" initialtext="{{'areas.data_configurations_attr_field_shp' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'" group="shpAttrs"></combobox>
 									</div>
-									<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.dataConfigForm.name.$error" ng-show="(SysareasForm.dataConfigForm.name.$dirty || saved) && SysareasForm.dataConfigForm.name.$invalid">
+									<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.dataConfigForm.name.$error" ng-show="SysareasForm.dataConfigForm.name.$dirty && SysareasForm.dataConfigForm.name.$invalid">
 										<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 									</div>
 								</div>
@@ -83,10 +84,10 @@
 									<div class="col-md-3">
 										<label class="static-text" for="code">{{'areas.data_configurations_code' | i18n}}</label>
 									</div>
-									<div class="col-md-9" ng-class="{'has-error': (SysareasForm.dataConfigForm.code.$dirty || saved) && SysareasForm.dataConfigForm.code.$invalid}">
-										<combobox ng-model="dataConfig.code" items="shpAttrs" name="code" initialtext="{{'areas.data_configurations_code' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'" group="shpAttrs"></combobox>
+									<div class="col-md-9" ng-class="{'has-error': SysareasForm.dataConfigForm.code.$dirty && SysareasForm.dataConfigForm.code.$invalid}">
+										<combobox ng-model="dataConfig.code" items="shpAttrs" name="code" initialtext="{{'areas.data_configurations_attr_field_shp' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'" group="shpAttrs"></combobox>
 									</div>
-									<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.dataConfigForm.code.$error" ng-show="(SysareasForm.dataConfigForm.code.$dirty || saved) && SysareasForm.dataConfigForm.code.$invalid">
+									<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.dataConfigForm.code.$error" ng-show="SysareasForm.dataConfigForm.code.$dirty && SysareasForm.dataConfigForm.code.$invalid">
 										<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 									</div>
 								</div>
@@ -97,7 +98,7 @@
 							</div>
 							<div ng-include="'partial/areas/systemAreas/attrFieldMappingRule/attrFieldMappingRule.html'" ng-repeat="attr in selectedAttrs"></div>
 							<div class="form-group col-md-4 btn-add">
-								<a ng-click="selectedAttrs.length >= names.length || selectedAttrs.length >= codes.length || addNewAttr()" title="{{'areas.add_new_attr' | i18n }}"  class="btn btn-default btn-sm">
+								<a ng-click="selectedAttrs.length + 2 >= dbAttrs.length || selectedAttrs.length + 2 >= shpAttrs.length || addNewAttr()" title="{{'areas.add_new_attr' | i18n }}"  class="btn btn-default btn-sm">
 									<span><i class="fa fa-plus"></i></span>
 									{{'areas.add_new_attr' | i18n }}
 								</a>
@@ -140,7 +141,7 @@
 									<div class="col-md-3">
 										<label class="static-text">{{'areas.data_configurations_code' | i18n}}</label>
 									</div>
-									<div class="col-md-9" ng-class="{'has-error': (SysareasForm.dataConfigForm.code.$dirty || saved) && SysareasForm.dataConfigForm.code.$invalid}">
+									<div class="col-md-9">
 										<span class="static-text" ng-bind="dataConfig.code"></span>
 									</div>
 								</div>
@@ -177,14 +178,6 @@
 						</div>
 					</div>
 				</ng-form>
-				<!--<div class="col-md-12 btn-container">
-			   		<button class="btn btn-primary pull-right" type="button" ng-click="save()" ng-disabled="isSaving">
-				   		<span class="fa" ng-class="{'fa-refresh fa-spin': isSaving === true, 'fa-upload': isSaving === false}"></span>
-						<span>
-							{{'areas.area_upload_modal_upload_btn' | i18n}}
-						</span>
-			   		</button>
-			   	</div>-->
 			</div>
 			<!-- UPDATE METADATA -->
 			<div class="updateMetadata col-md-12" ng-show="helper.sysAreasEditingType === 'metadata'">

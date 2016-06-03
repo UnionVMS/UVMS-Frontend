@@ -91,6 +91,31 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
                     method: 'GET'
                 }
             });
+        },
+        getAttributesToMap: function(){
+            return $resource('/spatial/rest/files/metadata', {}, {
+                'get': {
+                    method: 'POST',
+                    transformRequest: function formDataObject(data) {
+                    	  var fd = new FormData();
+                    	  fd.append('uploadedFile', data.uploadedFile);
+                    	  fd.append('areaType', data.areaType);
+                    	   
+                    	  return fd;
+                	  },
+                	  headers: {
+			        	 enctype: "multipart/form-data",
+			        	 'Content-Type': undefined,
+			          }
+                }
+            });
+        },
+        uploadArea: function(){
+            return $resource('/spatial/rest/files/upload/:areaType/3216', {}, {
+                'create': {
+                    method: 'POST'
+                }
+            });
         }
     };
 })
@@ -225,7 +250,25 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
                 deferred.reject(error);
             });
             return deferred.promise;
-	    }
+	    },
+        getAttributesToMap: function(file){
+            var deferred = $q.defer();
+                areaRestFactory.getAttributesToMap().get(file, function(response){
+                    deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
+                });
+            return deferred.promise;
+        },
+        uploadArea: function(file){
+            var deferred = $q.defer();
+                areaRestFactory.uploadArea().create(file, function(response){
+                    deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
+                });
+            return deferred.promise;
+        }
 	};
 
 	return areaRestService;

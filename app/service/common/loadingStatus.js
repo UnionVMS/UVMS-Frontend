@@ -18,7 +18,11 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
             value: false
 		},
 		isLoadingSaveReport: {
-			message: 'spatial.map_loading_report_message',
+			message: 'spatial.saving_report_message',
+            value: false
+		},
+		isLoadingGetAttrToMap: {
+			message: 'areas.getting_attributes_to_map',
             value: false
 		}
 	};

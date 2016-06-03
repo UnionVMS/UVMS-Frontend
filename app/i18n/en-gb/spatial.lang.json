@@ -411,5 +411,7 @@
 	"saving_preferences": "Saving preferences",
 	"reseting_preferences": "Reseting preferences",
 	
-	"reset": "Reset"
+	"reset": "Reset",
+	
+	"saving_report_message": "Saving report"
 }
