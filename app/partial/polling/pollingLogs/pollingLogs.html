@@ -96,6 +96,8 @@
 
                                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'poll.attributes.TRANSPONDER | transponderName'">{{'polling.polling_logs_table_header_transponder' | i18n}}</th>
 
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'exchangePoll.identifier'">{{'polling.polling_logs_table_header_identifier' | i18n}}</th>
+
                                     <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'exchangePoll.history[0].time'" class="times">{{'polling.polling_logs_table_header_time' | i18n}}</th>
 
                                     <th>{{'polling.polling_logs_table_header_user' | i18n}}</th>
@@ -114,6 +116,7 @@
                                 <td ng-attr-title="{{item.vessel.externalMarking}}">{{item.vessel.externalMarking}}</td>
                                 <td ng-attr-title="{{item.poll.type | pollTypeName}}">{{item.poll.type | pollTypeName}}</td>
                                 <td ng-attr-title="{{item.poll.attributes.TRANSPONDER | transponderName}}">{{item.poll.attributes.TRANSPONDER | transponderName}}</td>
+                                <td ng-attr-title="{{item.exchangePoll.identifier}}">{{item.exchangePoll.identifier}}</td>
                                 <td class="statusTime">
                                     <div class="expandIcon" ng-show="item.exchangePoll.history.length > 1" ng-click="isExpanded = !isExpanded">
                                         <i class="fa fa-plus-square" ng-show="!isExpanded"></i>

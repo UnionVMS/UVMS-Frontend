@@ -3,12 +3,14 @@ angular.module('unionvmsWeb').factory('ExchangePoll', function(PollStatus) {
     function ExchangePoll(){
         this.guid = undefined;
         this.pollGuid = undefined;
+        this.identifier = undefined;
         this.history = [];
     }
 
     ExchangePoll.fromDTO = function(dto){
         var exchangePoll = new ExchangePoll();
         exchangePoll.guid = dto.guid;
+        exchangePoll.identifier = dto.identifier;
         if(angular.isDefined(dto.typeRef)){
             exchangePoll.pollGuid = dto.typeRef.refGuid;
         }

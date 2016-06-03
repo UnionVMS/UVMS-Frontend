@@ -35,6 +35,7 @@
     "polling_logs_table_header_ext_no" : "Ext. marking",
     "polling_logs_table_header_poll_type" : "Poll type",
     "polling_logs_table_header_transponder" : "Transponder",
+    "polling_logs_table_header_identifier" : "Identifier",
     "polling_logs_table_header_time" : "Time",
     "polling_logs_table_header_status" : "Polling status",
     "polling_logs_table_header_status_short" : "Status",
