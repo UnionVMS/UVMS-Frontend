@@ -101,7 +101,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
         alertService.hideMessage();
         if($scope.pollingOptionsForm.$valid){
             var options = pollingService.getPollingOptions();
-            var attributes = pollingService.getPollAttributes(options);
+            var attributes = pollingService.getPollAttributes(options.type);
             if (options.type !== 'MANUAL' && attributes.length === 0) {
                 alertService.showErrorMessage(locale.getString('polling.wizard_second_step_error_at_least_one_attribute_needed'));
                 return;

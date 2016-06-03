@@ -299,22 +299,22 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             }
 
             //Search in exchange
-            var doExchangePollSearch = false;
-            if(exchangePollCriteria.length > 0){
-                var exchangeDeferred = $q.defer();
-                promises.push(exchangeDeferred.promise);
-                doExchangePollSearch = true;
-                var exchangeRequest = new GetListRequest(1, 10000, true, exchangePollCriteria);
-                exchangeRestService.getPollMessages(exchangeRequest).then(
-                    function(page){
-                        exchangePollPage = page;
-                        exchangeDeferred.resolve();
-                    },
-                    function(err){
-                        exchangeDeferred.reject("Error getting exchange poll messages.");
-                    }
-                );
+            if (exchangePollCriteria.length === 0) {
+                // Since there is no way to get info from exchange for multiple pollGuid, get all from the beginning of time if nothing else is set
+                exchangeSearchCriteria = [{"key":"FROM_DATE", "value":"1970-01-01 00:00:00 +00:00"}];
             }
+            var exchangeDeferred = $q.defer();
+            promises.push(exchangeDeferred.promise);
+            var exchangeRequest = new GetListRequest(1, 10000, true, exchangePollCriteria);
+            exchangeRestService.getPollMessages(exchangeRequest).then(
+                function(page){
+                    exchangePollPage = page;
+                    exchangeDeferred.resolve();
+                },
+                function(err){
+                    exchangeDeferred.reject("Error getting exchange poll messages.");
+                }
+            );
 
             //When we got vessels and exchangePolls
             $q.all(promises).then(function(){
@@ -324,7 +324,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                     return deferred.resolve(new SearchResultListPage());
                 }
                 //No exchange logs found?
-                if(doExchangePollSearch && exchangePollPage.getNumberOfItems() === 0){
+                if(exchangePollPage.getNumberOfItems() === 0){
                     console.log("no exchange meessages...return empty page");
                     return deferred.resolve(new SearchResultListPage());
                 }
