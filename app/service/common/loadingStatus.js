@@ -24,6 +24,10 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 		isLoadingGetAttrToMap: {
 			message: 'areas.getting_attributes_to_map',
             value: false
+		},
+		isLoadingSavingSystemArea: {
+			message: 'areas.saving_system_area',
+            value: false
 		}
 	};
 	

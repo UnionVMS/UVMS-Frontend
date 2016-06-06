@@ -111,7 +111,7 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
             });
         },
         uploadArea: function(){
-            return $resource('/spatial/rest/files/upload/:areaType/3216', {}, {
+            return $resource('/spatial/rest/files/upload/:areaType/:projection', {}, {
                 'create': {
                     method: 'POST'
                 }
@@ -260,9 +260,9 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
                 });
             return deferred.promise;
         },
-        uploadArea: function(file){
+        uploadArea: function(file,areaType,projection){
             var deferred = $q.defer();
-                areaRestFactory.uploadArea().create(file, function(response){
+                areaRestFactory.uploadArea().create({'areaType': areaType, 'projection': projection},file, function(response){
                     deferred.resolve(response.data);
                 }, function(error){
                     deferred.reject(error);

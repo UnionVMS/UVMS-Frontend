@@ -98,7 +98,7 @@
 							</div>
 							<div ng-include="'partial/areas/systemAreas/attrFieldMappingRule/attrFieldMappingRule.html'" ng-repeat="attr in selectedAttrs"></div>
 							<div class="form-group col-md-4 btn-add">
-								<a ng-click="selectedAttrs.length + 2 >= dbAttrs.length || selectedAttrs.length + 2 >= shpAttrs.length || addNewAttr()" title="{{'areas.add_new_attr' | i18n }}"  class="btn btn-default btn-sm">
+								<a ng-click="selectedAttrs.length >= dbAttrs.length || selectedAttrs.length + 2 >= shpAttrs.length || addNewAttr()" title="{{'areas.add_new_attr' | i18n }}"  class="btn btn-default btn-sm">
 									<span><i class="fa fa-plus"></i></span>
 									{{'areas.add_new_attr' | i18n }}
 								</a>

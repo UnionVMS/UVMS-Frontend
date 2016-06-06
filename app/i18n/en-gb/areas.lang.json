@@ -163,5 +163,8 @@
 	"mapping_db_attr": "Database Attribute",
 	"mapping_shp_attr": "Shape file Attribute",
 	"sysarea_upload_preview": "Upload overview",
-	"getting_attributes_to_map": "Getting attributes to map"
+	"getting_attributes_to_map": "Getting attributes to map",
+	"saving_system_area": "Saving system area",
+	"saving_system_area_success": "The system area was successfully saved",
+	"saving_system_area_error": "Error trying to save system area"
 }

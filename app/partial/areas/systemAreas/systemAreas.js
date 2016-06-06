@@ -339,8 +339,6 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
             };
             areaRestService.getAttributesToMap(objTest).then(
                 function (data) {
-                    //$scope.alert.setSuccess();
-                    //$scope.alert.alertMessage = locale.getString('areas.upload_system_area_success');
                     loadAttrsOnCombo(data.domain,'dbAttrs');
                     loadAttrsOnCombo(data.file,'shpAttrs');
                     
@@ -349,31 +347,25 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
                     $scope.wizardStep += 1;
                     loadingStatus.isLoading('GetAttrToMap',false);
                 }, function(error) {
-                    //$scope.alert.setError();
-                    //$scope.alert.alertMessage = locale.getString('areas.upload_system_area_error') + error.data.msg;
                     loadingStatus.isLoading('GetAttrToMap',false);
                 }
             );
         }else if($scope.wizardStep === 2 && $scope.SysareasForm.dataConfigForm.$valid){
             $scope.wizardStep += 1;
         }else if($scope.wizardStep === 3){
-            var sysAreaToUpload = {
-                'ref': $scope.fileRef,
-                'mapping': [
-                    {
-                        'source': 'name',
-                        'target': $scope.dataConfig.name
-                    },{
-                        'source': 'code',
-                        'target': $scope.dataConfig.code
-                    }
-                ]
-            };
-            
-            angular.forEach($scope.selectedAttrs,function(item){
-                var attr = {'source': item.db,'target': item.shp};
-                sysAreaToUpload.mapping.push(attr);
-            });
+            loadingStatus.isLoading('SavingSystemArea',true);
+            areaRestService.uploadArea(buildDataConfiguration(),$scope.sysAreaType,$scope.projections.getProjectionEpsgById($scope.dataConfig.selectedProj)).then(
+                function (data) {
+                    resetUploadTab();
+                    $scope.alert.setSuccess();
+                    $scope.alert.alertMessage = locale.getString('areas.saving_system_area_success');
+                    loadingStatus.isLoading('SavingSystemArea',false);
+                }, function(error) {
+                    $scope.alert.setError();
+                    $scope.alert.alertMessage = locale.getString('areas.saving_system_area_error');
+                    loadingStatus.isLoading('SavingSystemArea',false);
+                }
+            );
         }
     };
     
@@ -409,24 +401,27 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
             var comboItem = {code:item.name, text:item.name};
             $scope[comboList].push(comboItem);
         });
+    };
+    
+    var buildDataConfiguration = function(){
+        var sysAreaToUpload = {
+            'ref': $scope.fileRef,
+            'mapping': [
+                {
+                    'source': 'name',
+                    'target': $scope.dataConfig.name
+                },{
+                    'source': 'code',
+                    'target': $scope.dataConfig.code
+                }
+            ]
+        };
         
+        angular.forEach($scope.selectedAttrs,function(item){
+            var attr = {'source': item.db,'target': item.shp};
+            sysAreaToUpload.mapping.push(attr);
+        });
         
-        
-        angular.forEach(arr,function(item){
-            var comboItem = {code:item.name + 1, text:item.name + 1};
-            $scope[comboList].push(comboItem);
-        });
-        angular.forEach(arr,function(item){
-            var comboItem = {code:item.name+2, text:item.name+2};
-            $scope[comboList].push(comboItem);
-        });
-        angular.forEach(arr,function(item){
-            var comboItem = {code:item.name + 3, text:item.name + 3};
-            $scope[comboList].push(comboItem);
-        });
-        angular.forEach(arr,function(item){
-            var comboItem = {code:item.name+4, text:item.name+4};
-            $scope[comboList].push(comboItem);
-        });
+        return sysAreaToUpload;
     };
 });
