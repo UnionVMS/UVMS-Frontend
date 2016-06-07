@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('TicketModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService,  userService, configurationService, globalSettingsService, $filter) {
+angular.module('unionvmsWeb').controller('TicketModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService,  userService, configurationService, globalSettingsService, $filter, $state) {
 
     $scope.alarm = alarm;
     $scope.options = options;
@@ -10,6 +10,11 @@ angular.module('unionvmsWeb').controller('TicketModalCtrl', function($scope, $lo
 
     $scope.cancel = function() {
         $modalInstance.dismiss();
+    };
+
+    $scope.closeTicket = function(ticket) {
+        ticket.setStatusToClosed();
+        $modalInstance.close(ticket);
     };
 
     $scope.init = function() {
@@ -98,6 +103,15 @@ angular.module('unionvmsWeb').controller('TicketModalCtrl', function($scope, $lo
         if (angular.isDefined(courseValue) && courseValue !== null) {
             return courseValue + locale.getString("movement.manual_position_field_unit_degrees");
         }
+    };
+
+    $scope.goToPoll = function(ticket) {
+        $state.go('app.polling', {
+            cfr: ticket.vessel.cfr,
+            externalMarking: ticket.vessel.externalMarking,
+            ircs: ticket.vessel.ircs,
+            name: ticket.vessel.name
+        });
     };
 
     $scope.init();

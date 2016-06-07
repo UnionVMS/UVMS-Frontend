@@ -40,4 +40,19 @@
     </div>
 </div>
 
-<div class="modal-footer"></div>
+<div class="modal-footer">
+    <div class="row buttons">
+        <div class="buttonGroups">
+            <div class="buttonGroup">
+                <button class="btn btn-default" ng-click="goToPoll(alarm)">
+                    <i class="fa fa-arrow-circle-right"></i> {{'movement.poll' | i18n}}
+                </button>
+            </div>
+            <div class="buttonGroup button-group-right">
+                <button show-if-allowed="Rules:manageAlarmsOpenTickets" type="button" class="btn btn-sm btn-success" ng-click="closeTicket(alarm)" title="{{'alarms.notifications_table_close_title' | i18n}}">
+                    <span class="fa fa-check"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

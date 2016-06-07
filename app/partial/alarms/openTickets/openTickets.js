@@ -207,15 +207,32 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         });
     };
 
+    function getMovementPromise(ticket) {
+        if (ticket.ruleName === 'Asset not sending') {
+            return movementRestService.getLastMovement(ticket.vesselGuid);
+        }
+        else {
+            return movementRestService.getMovement(ticket.positionGuid);
+        }
+    }
+
     $scope.showOnMap = function(item){
         //Work on a copy of the alarm item so you can cancel the editing
         var copy = item.copy();
+
         var options = {
-            movementPromise: movementRestService.getMovement(copy.positionGuid)
+            movementPromise: getMovementPromise(item)
         };
 
         //Open modal
         modalInstance = TicketModal.show(copy, options);
+
+        modalInstance.result.then(function(alarm) {
+            if (alarm !== undefined && !item.isClosed() && alarm.isClosed()) {
+                // The alarm item was closed in the modal.
+                $scope.closeTicket(item);
+            }
+        });
     };
 
     //Export data as CSV file
