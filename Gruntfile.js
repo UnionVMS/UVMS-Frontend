@@ -52,8 +52,7 @@ module.exports = function (grunt) {
   grunt.initConfig({
     connect: {
       options: {
-        port: 9001,
-        keepalive: true
+        port: 9001
       },
       rules: [
           // Internal rewrite
@@ -420,7 +419,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('sub-build',['jshint', 'less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy:dist','htmlmin','compress:dist','clean:after']);//,'clean:after'
 
-  grunt.registerTask('build', ['test', 'clean:before', 'copy:config', 'test', 'sub-build']);
+  grunt.registerTask('build', ['test', 'clean:before', 'copy:config', 'sub-build']);
   grunt.registerTask('build-local', ['test', 'clean:before', 'copy:configLocal', 'test', 'sub-build']);
   grunt.registerTask('build-cygnus', ['test', 'clean:before', 'copy:configCygnus', 'sub-build']);
   grunt.registerTask('build-maven', ['test', 'clean:before', 'copy:configMaven', 'sub-build']);
@@ -429,7 +428,7 @@ module.exports = function (grunt) {
   grunt.registerTask('test',['dom_munger:read', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
-  grunt.registerTask('serve', ['dom_munger:read','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development']);
+  grunt.registerTask('serve', ['dom_munger:read','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development', 'watch']);
   grunt.registerTask('serve-copy', ['copy:serve', 'serve']);
 
     grunt.event.on('watch', function(action, filepath) {
