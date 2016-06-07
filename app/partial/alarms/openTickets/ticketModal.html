@@ -22,6 +22,12 @@
 
     <!-- Movement section -->
     <div class="sectionHeader">{{'alarms.position_report_position_information' | i18n}}</div>
+
+    <!-- Possible error message. -->
+    <div class="alert alert-danger" ng-if="loadingMovementError && loadingMovementErrorText">
+        <i class="fa fa-warning"></i> {{loadingMovementErrorText}}
+    </div>
+
     <div class="row loadingMovementContainer" ng-show="loadingMovement">
         <div class="col-md-12" loading-indicator="loadingMovement" type="SPINNER" size="small"></div>
     </div>

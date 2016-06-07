@@ -35,7 +35,7 @@ angular.module('unionvmsWeb').controller('TicketModalCtrl', function($scope, $lo
             $scope.loadingMovement = false;
         }, function(err) {
             $scope.loadingMovementError = true;
-            $scope.setErrorText(locale.getString('alarms.position_report_loading_movement_error'));
+            $scope.loadingMovementErrorText = locale.getString('alarms.position_report_loading_movement_error');
             $scope.loadingMovement = false;
             $log.error("Error getting movement for ticket.", err);
         });
