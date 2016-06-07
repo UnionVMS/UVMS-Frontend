@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl',function($scope, searchService, pollingService, alertService, MobileTerminal, mobileTerminalRestService, locale, MobileTerminalGroup, pollingRestService, SearchResults){
+angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl',function($scope, searchService, pollingService, alertService, MobileTerminal, mobileTerminalRestService, locale, MobileTerminalGroup, pollingRestService, SearchResults, $stateParams){
 
 
     $scope.selectedGroup = {};
@@ -7,6 +7,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
 
     var init = function(){
         searchService.reset();
+        updateSearchWithStateParams();
         $scope.getPollableChannels();
     };
 
@@ -23,6 +24,31 @@ angular.module('unionvmsWeb').controller('NewpollwizardselectmobileterminalsCtrl
         searchService.searchForPollableTerminals()
                 .then(updateSearchResults, onGetSearchResultsError);
     };
+
+    /* Populate advanced search object with state param values. */
+    function updateSearchWithStateParams() {
+        var aso = searchService.getAdvancedSearchObject();
+
+        if ($stateParams.name !== undefined) {
+            aso.NAME = $stateParams.name;
+        }
+
+        if ($stateParams.ircs) {
+            aso.IRCS = $stateParams.ircs;
+        }
+
+        if ($stateParams.externalMarking) {
+            aso.EXTERNAL_MARKING = $stateParams.externalMarking;
+        }
+
+        if ($stateParams.cfr) {
+            aso.CFR = $stateParams.cfr;
+        }
+
+        if (Object.keys(aso).length > 0) {
+            searchService.setSearchCriteriasToAdvancedSearch();
+        }
+    }
 
     //Update the search results
     var updateSearchResults = function(searchResultListPage){

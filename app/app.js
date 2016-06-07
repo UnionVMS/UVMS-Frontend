@@ -300,6 +300,12 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
         })
         .state('app.polling', {
             url: '/polling',
+            params: {
+                cfr: null,
+                externalMarking: null,
+                ircs: null,
+                name: null
+            },
             views: {
                 modulepage: {
                     templateUrl: 'partial/polling/newPollWizard/newPollWizard.html',
