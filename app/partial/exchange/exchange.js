@@ -309,8 +309,8 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
                     if($scope.filterIncomingOutgoing(item)){
                         var csvRow = [
                             $filter('confDateFormat')(item.dateReceived),
-                            angular.isDefined(item.logData) ? item.type :'',
                             $filter('transponderName')(item.source),
+                            item.type,
                             item.senderRecipient,
                             item.forwardRule,
                             item.recipient,
