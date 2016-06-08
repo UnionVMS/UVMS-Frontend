@@ -20,7 +20,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
         {text:locale.getString('common.save_as_group'), code : 'SAVE'},
         {text:locale.getString('common.append_group'), code : 'ADD_TO_GROUP'},
         {text:locale.getString('common.remove_from_group'), code : 'REMOVE_FROM_GROUP'},
-        {text:locale.getString('common.view_on_map'), code : 'MAP'},
+        //{text:locale.getString('common.view_on_map'), code : 'MAP'},
         {text:locale.getString('common.export_selection'), code : 'EXPORT'}
     ];
 
