@@ -19,25 +19,25 @@
 				<div class="thead col-md-12">
                      <div class="tr row stColumnHeaders">
                          <div class="th col-md-3" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_name_header' | i18n}}</div>
-                         <div class="th col-md-5"st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_desc_header' | i18n}}</div>
+                         <div class="th col-md-5" st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_desc_header' | i18n}}</div>
                          <div class="th col-md-4"></div>
                      </div>
                      <div class="tr row" ng-show="!tableLoading && !displayedUserAreas.length">
                          <div class="th col-md-12"><table-alert type="'info'" msg="'areas.table_no_data'" visible="!displayedUserAreas.length && !tableLoading"></table-alert></div>
                      </div>
+					 <div class="tr row" ng-if="tableLoading">
+                         <div class="th col-md-12 loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
+                     </div>
                  </div>
                  <div class="tbody col-md-12">
-					 <div class="tr row" ng-if="tableLoading">
-                         <div class="td col-md-12 loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
-                     </div>
                      <div ng-repeat="userArea in displayedUserAreas" class="tr row" ng-show="!tableLoading">
                          <div class="td col-md-3">{{userArea.name}}</div>
                          <div class="td col-md-5">{{userArea.desc}}</div>
                          <div class="td col-md-4">
-                       	 	<button type="button" class="btn btn-danger btn-xs pull-right" title="{{'areas.table_delete_area_btn' | i18n }}" ng-show="checkAreaIsEditable($index)" ng-click="deleteUserArea($index)"><span class="fa fa-trash-o"></span></button>
-                            <button type="button" class="btn btn-primary btn-xs pull-right tableBtnMargin" title="{{'areas.table_edit_area_btn' | i18n }}" ng-show="checkAreaIsEditable($index)" ng-click="editUserArea($index)"><span class="fa fa fa-pencil"></span></button>
-                            <button type="button" class="btn btn-primary btn-xs pull-right tableBtnMargin" title="{{'areas.table_area__details_btn' | i18n }}" ng-click="getAreaDetails($index)"><span class="fa fa-eye"></span></button>
-                            <button type="button" class="btn btn-primary btn-xs pull-right tableBtnMargin" title="{{'areas.table_zoom_to_area_btn' | i18n }}" ng-click="zoomToArea($index)"><span class="fa fa-globe"></span></button>
+                       	 	<button type="button" class="btn btn-danger btn-xs pull-right" title="{{'areas.table_delete_area_btn' | i18n }}" ng-show="checkAreaIsEditable($index)" ng-click="deleteUserArea($index)"><span class="fa fa-trash"></span></button>
+                            <button type="button" class="btn btn-default btn-xs pull-right tableBtnMargin" title="{{'areas.table_edit_area_btn' | i18n }}" ng-show="checkAreaIsEditable($index)" ng-click="editUserArea($index)"><span class="fa fa fa-pencil"></span></button>
+                            <button type="button" class="btn btn-default btn-xs pull-right tableBtnMargin" title="{{'areas.table_area__details_btn' | i18n }}" ng-click="getAreaDetails($index)"><span class="fa fa-eye"></span></button>
+                            <button type="button" class="btn btn-default btn-xs pull-right tableBtnMargin" title="{{'areas.table_zoom_to_area_btn' | i18n }}" ng-click="zoomToArea($index)"><span class="fa fa-globe"></span></button>
                          </div>
                      </div>
                  </div>
@@ -173,8 +173,8 @@
 					</ng-form>
 				</div>
 				<div class="circular-btns">
-					<button class="btn btn-default btn-sm" ng-click="resetCentroid()">{{'areas.reset_btn' | i18n}}</button>
-					<button class="btn btn-default btn-sm" ng-click="calculateBuffer()" ng-class="{disabled: userArea.centroidCoords.length !== 2 || !bufferRadius}">{{'areas.apply_btn' | i18n}}</button>
+					<button class="btn btn-default btn-sm btn-action" ng-click="resetCentroid()">{{'areas.reset_btn' | i18n}}</button>
+					<button class="btn btn-default btn-sm btn-action" ng-click="calculateBuffer()" ng-class="{disabled: userArea.centroidCoords.length !== 2 || !bufferRadius}">{{'areas.apply_btn' | i18n}}</button>
 				</div>
 			</div>
 			<!-- COORDINATES -->
@@ -187,51 +187,48 @@
 								<label for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
 							</div>
 							<div class="col-md-9 proj-combo">
-								<combobox ng-model="selectedProj" items="projections.items" name="editingProjection" ng-change="changeProjection(selectedProj)" ng-init="changeProjection(selectedProj)" components-with-scroll="'div.area-form-container'" ng-if="selectedProj" is-loading="projections.isLoading"></combobox>
+								<combobox ng-model="selectedProj" items="projections.items" name="editingProjection" ng-change="changeProjection(selectedProj)" ng-init="changeProjection(selectedProj)" components-with-scroll="'div.area-form-container'"
+								is-loading="projections.isLoading"></combobox>
 							</div>
 						</div>
 					</div>
 					
-					<div class="table-responsive-force coord-table" st-table="displayedCoords" st-safe-src="userArea.coordsArray" ng-show="coordVisible">
-						<div class="thead container-fluid">
-				        	<div class="tr row">
-					    		<div class="th col-md-1">#</div>
-					        	<div class="th col-md-4">{{'areas.coord_x' | i18n }}</div>
-					        	<div class="th col-md-4">{{'areas.coord_y' | i18n }}</div>
-					        	<div class="th col-md-2"></div>
-					        </div>
-				        </div>
-				        <ng-form name="coordsForm" novalidate>
-					        <div class="tbody container-fluid">
-					        	<div class="tr row" ng-repeat="coord in displayedCoords">
-					        		<div class="td col-md-1 coord-idx">{{$index}}</div>
-						        	<div class="td col-md-4 coord-right-margin" ng-class="{'has-error': (coordsForm.x_{{$index}}.$error.required || coordsForm.x_{{$index}}.$invalid) && coordsForm.x_{{$index}}.$dirty}">
-						        		<numeric-input name="x_{{$index}}" class="form-control" ng-required="true" ng-model="coord[0]" step="any"></numeric-input>
-						        	</div>
-						        	<div class="td col-md-4" ng-class="{'has-error': (coordsForm.y_{{$index}}.$error.required || coordsForm.y_{{$index}}.$invalid) && coordsForm.y_{{$index}}.$dirty}">
-						        		<numeric-input name="y_{{$index}}" class="form-control" ng-required="true" ng-model="coord[1]" step="any"></numeric-input>
-						        	</div>
-						        	<div class="td col-md-2 delete-coord">
-						        		<a ng-click="deleteCoordRow($index)" title="{{'areas.delete_coords_row' | i18n}}">
-											<span class="btn btn-danger btn-sm btn-circle">
-												<i class="fa fa-minus"></i>
-											</span>
-										</a>
-						        	</div>
-					        	</div>
-					        </div>
-				        </ng-form>
-					</div>
+					<ng-form name="coordsForm" novalidate>
+						<div class="table-responsive-force coord-table table-striped" st-table="displayedCoords" st-safe-src="userArea.coordsArray" ng-show="coordVisible">
+							<div class="thead container-fluid">
+								<div class="tr row">
+									<div class="th col-md-2">#</div>
+									<div class="th col-md-4">{{'areas.coord_x' | i18n }}</div>
+									<div class="th col-md-4">{{'areas.coord_y' | i18n }}</div>
+									<div class="th col-md-2"></div>
+								</div>
+							</div>
+							<div class="tbody container-fluid">
+								<div class="tr row" ng-repeat="coord in displayedCoords">
+									<div class="td col-md-2 coord-idx">{{$index}}</div>
+									<div class="td col-md-4" ng-class="{'has-error': (coordsForm.x_{{$index}}.$error.required || coordsForm.x_{{$index}}.$invalid) && coordsForm.x_{{$index}}.$dirty}">
+										<numeric-input name="x_{{$index}}" class="form-control" ng-required="true" ng-model="coord[0]" step="any"></numeric-input>
+									</div>
+									<div class="td col-md-4" ng-class="{'has-error': (coordsForm.y_{{$index}}.$error.required || coordsForm.y_{{$index}}.$invalid) && coordsForm.y_{{$index}}.$dirty}">
+										<numeric-input name="y_{{$index}}" class="form-control" ng-required="true" ng-model="coord[1]" step="any"></numeric-input>
+									</div>
+									<div class="td col-md-2 delete-coord">
+										<button class="btn btn-danger" ng-click="deleteCoordRow($index)" title="{{'areas.delete_coords_row' | i18n}}">
+											<span class="fa fa-trash"></span>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</ng-form>
 				</div>
 				<div class="coord-btns">
-					<a ng-click="addCoordRow()" title="{{'areas.add_coords_row' | i18n}}">
-						<span class="btn btn-success btn-sm btn-circle">
-							<i class="fa fa-plus"></i>
-						</span>
-					</a>
+					<button ng-click="addCoordRow()" title="{{'areas.add_coords_row' | i18n}}" class="btn btn-default btn-add-coord">
+						<span class="fa fa-plus"></span>
+					</button>
 					<div class="pull-right">
-						<button class="btn btn-default btn-sm" ng-click="resetGeometry()" ng-hide="isUpdate">{{'areas.reset_btn' | i18n}}</button>
-						<button class="btn btn-default btn-sm" ng-click="buildGeometry()" ng-class="{disabled: userArea.coordsArray.length < 3}">{{'areas.apply_btn' | i18n}}</button>
+						<button class="btn btn-default btn-sm btn-action" ng-click="resetGeometry()" ng-hide="isUpdate">{{'areas.reset_btn' | i18n}}</button>
+						<button class="btn btn-default btn-sm btn-action" ng-click="buildGeometry()" ng-class="{disabled: userArea.coordsArray.length < 3}">{{'areas.apply_btn' | i18n}}</button>
 					</div>
 				</div>
 			</div>
@@ -288,11 +285,11 @@
 		</div>
 		<!-- FORM BUTTONS -->
 		<div class="user-area-btns">
-			<button class="btn btn-default" ng-click="cancelEditing()">{{'areas.cancel_btn' | i18n}}</button>
-			<button class="btn btn-default" ng-click="resetFeature()" ng-hide="isUpdate">{{'areas.reset_btn' | i18n}}</button>
+			<button class="btn btn-default btn-action" ng-click="cancelEditing()">{{'areas.cancel_btn' | i18n}}</button>
+			<button class="btn btn-default btn-action" ng-click="resetFeature()" ng-hide="isUpdate">{{'areas.reset_btn' | i18n}}</button>
 			<div class="pull-right">
-				<button class="btn btn-primary" ng-click="saveFeature('create')" ng-hide="isUpdate">{{'areas.save_btn' | i18n}}</button>
-				<button class="btn btn-primary" ng-click="saveFeature('update')" ng-show="isUpdate">{{'areas.update_btn' | i18n}}</button>
+				<button class="btn btn-primary btn-action" ng-click="saveFeature('create')" ng-hide="isUpdate">{{'areas.save_btn' | i18n}}</button>
+				<button class="btn btn-primary btn-action" ng-click="saveFeature('update')" ng-show="isUpdate">{{'areas.update_btn' | i18n}}</button>
 			</div>
 		</div>
 	</div>

@@ -18,7 +18,8 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             uppercase : '=',
             initialtext : '@',
             isLoading : '=',
-            group: '@'
+            group: '@',
+            name: '@'
 		},
         templateUrl: 'directive/common/combobox/combobox.html',
 		link: function(scope, element, attrs, ctrl) {
@@ -346,7 +347,7 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                     scope.addDefaultValueToDropDown();
                 }
             };
-            
+
             init();
 		}
 	};

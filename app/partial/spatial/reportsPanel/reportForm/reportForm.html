@@ -1,16 +1,6 @@
 <div ng-controller="ReportformCtrl">
 	<!-- Warnings -->
 	<div class="row">
-		<div class="form-group col-md-12" ng-if="formAlert.visible">
-			<div class="alert alert-danger alert-container" role="alert">
-				<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
-				<span class="alert-message">
-					<span>{{formAlert.msg}}</span>            
-				</span>
-		    </div>
-		</div>
-	</div>
-	<div class="row">
 		<div class="col-md-6" ng-show="getFormMode('CREATE')">
 			<h3 class="pull-left">{{'spatial.reports_form_title_new_report' | i18n }}</h3>
 		</div>
@@ -25,6 +15,16 @@
 				<button class="btn btn-primary button" type="button" ng-click="resetReport()" ng-disabled="reportForm.$pristine" ng-class="{'disabled': reportForm.$pristine}">{{"spatial.reset" | i18n }}</button>
 			</div>
         </div>
+	</div>
+	<div class="row">
+		<div class="form-group col-md-12" ng-if="formAlert.visible">
+			<div class="alert alert-danger alert-container" role="alert">
+				<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+				<span class="alert-message">
+					<span>{{formAlert.msg}}</span>            
+				</span>
+		    </div>
+		</div>
 	</div>
 	<div class="card reportFormContainer table-responsive-force">
 		<div class="reportForm col-md-12">
@@ -141,9 +141,9 @@
 	   						<a class="button" ng-click="resetForm()" ng-show="getFormMode('CREATE')">{{"spatial.reports_form_clear_btn" | i18n }}</a>
 	   					</div>
 	   					<div class="formSubmitBtn">
-	   						<button class="btn btn-primary button" type="button" ng-show="getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="runReport()">{{"spatial.reports_table_run_label" | i18n }}</button>
-	   						<button class="btn btn-primary button" type="button" ng-show="getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="saveAsReport()">{{"spatial.reports_form_save_as_btn" | i18n }}</button>
-	   						<button class="btn btn-primary button" type="button" ng-click="saveReport()" ng-show="showSaveBtn()">{{"spatial.reports_form_save_btn" | i18n }}</button>
+	   						<button class="btn btn-primary button btn-action" type="button" ng-show="getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="runReport()">{{"spatial.reports_table_run_label" | i18n }}</button>
+	   						<button class="btn btn-primary button btn-action" type="button" ng-show="getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="saveAsReport()">{{"spatial.reports_form_save_as_btn" | i18n }}</button>
+	   						<button class="btn btn-primary button btn-action" type="button" ng-click="saveReport()" ng-show="showSaveBtn()">{{"spatial.reports_form_save_btn" | i18n }}</button>
 	   					</div>
 	   				</div>
    				</div>

@@ -16,9 +16,9 @@
 				</div>
 			</div>
 			<div class="form-group col-md-1 btn-rm">
-				<a ng-click="removeRule($index)" title="{{'spatial.property_rm_rule' | i18n }}">
-					<span class="btn btn-primary btn-sm btn-circle"><i class="fa fa-minus"></i></span>
-				</a>
+				<button ng-click="removeRule($index)" title="{{'spatial.property_rm_rule' | i18n }}" class="btn btn-danger">
+					<span class="fa fa-trash"></span>
+				</button>
 			</div>
 			<div ng-messages="rowstylesForm{{item.id}}.propertyFrom.$error" ng-show="(rowstylesForm{{item.id}}.propertyFrom.$dirty || submitedWithErrors) && rowstylesForm{{item.id}}.propertyFrom.$error.hasError">
 				<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>

@@ -23,11 +23,13 @@ angular.module('unionvmsWeb').factory('projectionService',function(locale, $inte
                     });
                     
                     if (loadCoords === true){
-                        this.setCoordinatesUnitItems(selectedId);
+                        projectionService.setCoordinatesUnitItems(selectedId);
                     }
                 }
+				projectionService.isLoading = false;
             }, function(error){
                 console.log(error);
+				projectionService.isLoading = false;
             });
 	    },
 	    clearCoordinatesUnitItems: function(){

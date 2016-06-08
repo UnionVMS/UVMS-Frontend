@@ -11,6 +11,7 @@ angular.module('unionvmsWeb').directive('numericInput',['$compile', function($co
             max: '@',
             ngRequired: '=',
             step: '@',
+			ngDisabled: '='
 		},
 		templateUrl: 'directive/common/numericInput/numericInput.html',
 		link: function(scope, element, attrs, ctrl) {
@@ -23,7 +24,7 @@ angular.module('unionvmsWeb').directive('numericInput',['$compile', function($co
 			if(_.keys(attrs.$attr).length){
 				var inputNumber = element.find('input[type="number"]');
 				angular.forEach(attrs.$attr, function(value,key) {
-					if(value==='class' || value==='ng-class' || value==='ng-disabled'){
+					if(value==='class' || value==='ng-class'){
 						element.find('input[type="text"]').attr(value, attrs[key]);
 					}else if(value!=='ng-model' && value!=='ng-required'){
 						inputNumber.attr(value, attrs[key]);

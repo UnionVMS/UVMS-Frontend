@@ -292,19 +292,41 @@ div.td:extend(td all) {}
 	
 	table,
 	.table {
+		td,
+		.td {
+			vertical-align: middle;
+			button.btn-success,
+			button.btn-default,
+			button.btn-danger,
+			button.btn-warning {
+				width: 25px;
+				height: 25px;
+				font-size: 14px;
+				padding: 0;
+			}
+			button.btn-default {
+				color: @profileColor_blue;
+			}
+			button.btn-warning {
+				background-color: #fff;
+				border-color: #b4bdc0;
+				color: @profileColor_lightorange;
+			}
+			button.btn-danger {
+				background-color: #fff;
+				border-color: #b4bdc0;
+				color: @profileColor_red;
+			}
+		}
 		.loading-spinner-cl {
 			background: transparent !important;
 		}
-		button.btn-success,
-		button.btn-default {
-			width: 25px;
-			height: 25px;
-			font-size: 14px;
-			padding: 0;
-		}
-		button.btn-default {
-			color: @profileColor_blue;
-		}
+		
+	}
+
+	.btn-action {
+		text-transform: uppercase;
+    	font-weight: bold;
 	}
 }
 

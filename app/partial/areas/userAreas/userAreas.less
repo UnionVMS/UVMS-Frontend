@@ -85,8 +85,7 @@
 		}
 		.circular-btns {
 			margin-top: -34px;
-	    display: inline-block;
-	    float: right;
+			display: inline-block;
 		}
 	}
 
@@ -97,7 +96,7 @@
 	.noBorder{
 		border: 0;
 		webkit-box-shadow: none;
-    box-shadow: none;
+    	box-shadow: none;
 	}
 
 	.slider-label{
@@ -135,17 +134,21 @@
 			}
 			.tbody {
 				margin-top: 10px;
-				.btn-circle {
-					border-radius: 50%;
-					padding: 1px 4px;
-					font-size: 9px;
+				td {
+					padding: 5px;
+					line-height: 30px;
+					button.btn-danger {
+						background-color: #fff;
+						border-color: #b4bdc0;
+						color: @profileColor_red;
+						width: 30px;
+						font-size: 14px;
+						padding: 0;
+					}
 				}
 			}
 			.coord-idx {
 				line-height: 34px;
-			}
-			.coord-right-margin {
-				margin-right: 3px;
 			}
 			.delete-coord {
 				line-height: 34px;
@@ -154,6 +157,12 @@
 		.coord-btns {
 			margin-top: 15px;
 			margin-bottom: 10px;
+			.btn-add-coord {
+				width: 30px;
+				font-size: 14px;
+				padding: 0;
+				color: @profileColor_blue;
+			}
 		}
 		.proj-container {
 				text-align: justify;

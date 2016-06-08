@@ -53,13 +53,14 @@
 							</div>
 						</ng-form>
 						<ng-form name="dataConfigForm" class="step-panel" ng-show="wizardStep === 2">
-							<div class="proj-container col-md-12 form-group form-inline" ng-show="projections.items.length > 0">
+							<div class="proj-container col-md-12 form-group form-inline">
 								<div class="row">
 									<div class="col-md-3 proj-label comboLabel">
 										<label class="static-text" for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
 									</div>
 									<div class="col-md-9 proj-combo" ng-class="{'has-error': SysareasForm.dataConfigForm.editingProjection.$dirty && SysareasForm.dataConfigForm.editingProjection.$invalid}">
-										<combobox ng-model="dataConfig.selectedProj" items="projections.items" name="editingProjection" initialtext="{{'areas.editing_projection_label' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'"></combobox>
+										<combobox ng-model="dataConfig.selectedProj" items="projections.items" name="editingProjection" initialtext="{{'areas.editing_projection_label' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'"
+										is-loading="projections.isLoading"></combobox>
 									</div>
 									<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.dataConfigForm.editingProjection.$error" ng-show="SysareasForm.dataConfigForm.editingProjection.$dirty && SysareasForm.dataConfigForm.editingProjection.$invalid">
 										<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
@@ -161,7 +162,7 @@
 						</div>
 						
 						<div class="col-md-12 btn-container">
-							<button class="btn btn-primary pull-right" ng-class="{'disabled': validateForm()}" type="button" ng-click="nextStep();" ng-disabled="validateForm()">
+							<button class="btn btn-primary btn-action pull-right" ng-class="{'disabled': validateForm()}" type="button" ng-click="nextStep();" ng-disabled="validateForm()">
 								<span ng-if="wizardStep !== 3">
 									{{'common.next' | i18n}}
 								</span>
@@ -170,7 +171,7 @@
 									{{'areas.area_upload_modal_upload_btn' | i18n}}
 								</span>
 							</button>
-							<button class="btn btn-default btn-back pull-right" type="button" ng-click="previousStep();" ng-show="wizardStep > 1">
+							<button class="btn btn-default btn-back btn-action pull-right" type="button" ng-click="previousStep();" ng-show="wizardStep > 1">
 								<span>
 									{{'common.back' | i18n}}
 								</span>
@@ -205,7 +206,7 @@
 					</div>
 				</ng-form>
 				<div class="row btn-container">
-			   		<button class="btn btn-primary pull-right" type="button" ng-click="saveMetadata()" ng-class="{disabled: !metadataAvailable}">
+			   		<button class="btn btn-primary btn-action pull-right" type="button" ng-click="saveMetadata()" ng-class="{disabled: !metadataAvailable}">
 				   		<span>{{'areas.update_metadata_btn' | i18n}}</span>
 			   		</button>
 			   	</div>
@@ -266,7 +267,7 @@
 			    		   				<input type="text" ng-model="searchSysString" class="form-control" placeholder="{{'spatial.reports_form_vessels_search_text' | i18n }}">
 			    		   			</div>
 			    		   			<div class="form-group col-md-4 noPadding">
-			    		   				<button type="button" class="btn btn-primary btn-sm pull-right" style="min-width: 100px;" ng-click="searchSysAreas()">
+			    		   				<button type="button" class="btn btn-primary btn-sm btn-action pull-right" style="min-width: 100px;" ng-click="searchSysAreas()">
 			    		   					<span>{{'spatial.reports_form_vessels_search_button' | i18n }}</span>
 			    		   				</button>
 			    		   			</div>
@@ -292,8 +293,8 @@
 			    	   							<td>{{sysArea.name}}</td>
 			    	   							<td>{{sysArea.code}}</td>
 			    	   							<td style="min-width: 70px;">
-			    	   								<button type="button" class="btn btn-primary btn-xs" title="{{'spatial.area_selection_modal_see_on_map_btn' | i18n }}" ng-click="mergeParamsWms($index, displayedRecordsArea, sysAreaSearch)"> <span class="fa fa-globe"></span></button>
-			    	   								<button type="button" class="btn btn-xs" ng-class="{'btn-success': datasetNew.areaGid === sysArea.gid, 'btn-primary': datasetNew.areaGid !== sysArea.gid}" title="{{'areas.area_selection_select_area_btn' | i18n }}" ng-click="selectArea($index,sysArea.gid)"><span class="fa fa-check"></span></button>
+			    	   								<button type="button" class="btn btn-default btn-xs" title="{{'spatial.area_selection_modal_see_on_map_btn' | i18n }}" ng-click="mergeParamsWms($index, displayedRecordsArea, sysAreaSearch)"> <span class="fa fa-globe"></span></button>
+			    	   								<button type="button" class="btn btn-default btn-xs" ng-class="{'btn-success': datasetNew.areaGid === sysArea.gid, 'btn-primary': datasetNew.areaGid !== sysArea.gid}" title="{{'areas.area_selection_select_area_btn' | i18n }}" ng-click="selectArea($index,sysArea.gid)"><span class="fa fa-check"></span></button>
 			    	   							</td>
 			    	   						</tr>
 			    	   					</tbody>
@@ -311,7 +312,7 @@
 					</div>
 				</ng-form>
 				<div class="col-md-12 btn-container">
-			   		<button class="btn btn-primary row pull-right" type="button" ng-click="createDataset()" ng-disabled="hasDatasetCreated">
+			   		<button class="btn btn-primary btn-action row pull-right" type="button" ng-click="createDataset()" ng-disabled="hasDatasetCreated">
 				   		<span>{{'areas.create_dataset_btn' | i18n}}</span>
 			   		</button>
 			   	</div>

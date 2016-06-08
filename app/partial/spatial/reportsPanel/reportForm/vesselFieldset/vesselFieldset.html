@@ -25,7 +25,7 @@
 									<input type="text" ng-model="shared.searchVesselString" class="form-control searchText" placeholder="{{'spatial.reports_form_vessels_search_text' | i18n }}">
 								</div>
 								<div class="form-group col-md-6">
-									<button type="button" class="btn btn-primary btn-sm" style="min-width: 100px;" ng-click="searchVessels()">
+									<button type="button" class="btn btn-primary btn-sm btn-action" style="min-width: 100px;" ng-click="searchVessels()">
 										<span>{{'spatial.reports_form_vessels_search_button' | i18n }}</span>
 									</button>
 								</div>
@@ -40,7 +40,7 @@
 					</div>
 					
 					<div class="form-group col-md-12 search-table table-responsive-force" st-table="displayedRecords" st-safe-src="shared.vessels">
-						<table class="table table-striped">
+						<table class="table table-striped table-condensed">
 							<thead>
 								<tr>
  									<th style="width: 35px;"><input type="checkbox" ng-model="shared.selectAll" ng-click="toggleAllVessels()"></th>
@@ -100,7 +100,7 @@
 						</div>
 						
 						<div st-table="displayedRecordsSelection" st-safe-src="report.vesselsSelection">
-							<table class="table table-striped">
+							<table class="table table-striped table-condensed">
 								<thead>
 									<tr>
 										<th st-sort="name" st-skip-natural="true"  st-class-ascent="sorting_asc" st-sort-default="true" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_selection_table_header_name' | i18n }}</th>
@@ -122,7 +122,7 @@
 											<button type="button" class="btn btn-primary btn-xs pull-right" ng-click="viewDetails($index, 'SELECTION')">{{'spatial.reports_form_vessel_selection_table_details_btn' | i18n}}</button>
 										</td>
 										<td>
-											<button type="button" class="btn btn-danger btn-xs pull-right" title="{{'spatial.reports_form_vessel_selection_table_delete_btn_title' | i18n }}" ng-click="deleteSelection($index)"> <span class="fa fa-trash-o"></span></button>
+											<button type="button" class="btn btn-danger btn-xs pull-right" title="{{'spatial.reports_form_vessel_selection_table_delete_btn_title' | i18n }}" ng-click="deleteSelection($index)"> <span class="fa fa-trash"></span></button>
 										</td>
 									</tr>
 								</tbody>

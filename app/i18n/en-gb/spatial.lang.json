@@ -355,8 +355,8 @@
 	"position_property": "Position property",
 	"property_from": "From",
 	"property_to": "To",
-	"property_add_rule": "Add new property rule",
-	"property_rm_rule": "Remove property rule",
+	"property_add_rule": "Add rule",
+	"property_rm_rule": "Remove rule",
 	"default_color": "Default color",
 	
 	"user_preferences_error_saving": "There was an error while saving your preferences. Please try again.",
