@@ -335,7 +335,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
                                 $log.debug(data);
                                 MapFish.jobStatusData = data;
                                 if (MapFish.jobStatusData.status === 'running' || MapFish.jobStatusData.status === 'waiting'){
-                                    $timeout(poller, 1000);
+                                    $timeout(poller, 5000);
                                 }
                                 if(MapFish.jobStatusData.status === 'finished'){
                                    $scope.download(MapFish.jobStatusData.downloadURL);

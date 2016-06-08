@@ -261,6 +261,10 @@
 	"area_selection_modal_get_sys_area_details_empty_result": "There is no selectable area on the specified location.", 
 	"area_selection_modal_get_selected_sys_area_details_error": "There was an error while getting the details of previously selected areas. Please try again.",
 	"area_selection_modal_get_selected_area_search_error": "There was an error while searching for areas. Please try again.",
+	
+	"area_selection_type_label": "Selection",
+	"area_selection_type_all_areas": "All",
+	"area_selection_type_custom": "Custom",
 
     "report_configuration_modal_title": "Report configuration",
     "save_as_modal_title": "Save report as...",
@@ -301,6 +305,8 @@
 	"layer_tree_context_menu_show_title": "Show",
 	"layer_tree_context_menu_all_areas_title": "All areas",
 	"layer_tree_context_menu_active_areas_title": "Active areas",
+	"layer_tree_context_menu_all_groups_title": "All groups",
+	"layer_tree_context_menu_active_groups_title": "Selected groups",
 	"layer_tree_context_menu_style_title": "Style options",
 	"layer_tree_context_menu_geom_style": "Geometry only",
 	"layer_tree_context_menu_geom_label_style": "Labels and Geometry",
@@ -326,6 +332,7 @@
 	"map_settings": "Map settings",
 	"style_settings": "Style settings",
 	"visibility_settings": "Visibility settings",
+	"ref_data_settings": "Reference data settings",
 	"visibility_configuration_popup": "Popup contents",
 	"visibility_configuration_label": "Label contents",
 	"visibility_configuration_table": "Table contents",
@@ -397,6 +404,21 @@
 	"line_width": "Line width",
 	"size": "Size",
 	
+	"ref_data_label": "Reference data",
+	"ref_data_type_label": "Data type",
+	"ref_data_group_selection": "Group selection",
+	"ref_data_select_on_map_radio": "Select group on map",
+	"ref_data_select_by_prop_radio": "Search by group properties",
+	"ref_data_go_back_to_map": "Back to map",
+	"ref_data_group_tip": "features in group",
+	"ref_data_selection_group_tip": "groups selected",
+	"search_ref_data_loading_message": "Loading data",
+	"get_ref_data_type_error": "There was an error while fetching reference data types.",
+	"get_ref_data_details_error": "There was an error while fetching reference data details. Please try again.",
+	"ref_data_group_already_added_msg": "This group is already selected.",
+	"ref_data_empty_search_by_click_msg": "There is no data at the selected location.",
+	"ref_data_empty_search_by_prop_msg": "There is no data that matches your search criteria.",
+	
 	"previous": "Previous",
 	"next": "Next",
 	"more_details": "More...",
@@ -412,6 +434,9 @@
 	"reseting_preferences": "Reseting preferences",
 	
 	"reset": "Reset",
+	"clear_all_btn": "Clear all",
+	"add_all_btn": "Add all",
+	
 	
 	"saving_report_message": "Saving report"
 }

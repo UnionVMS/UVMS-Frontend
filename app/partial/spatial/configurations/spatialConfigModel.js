@@ -56,7 +56,7 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
                 table: {}
             }
         };
-        
+        this.referenceDataSettings = {};
     }
     
     //Admin level configs

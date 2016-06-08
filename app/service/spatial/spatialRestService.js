@@ -35,6 +35,16 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
                 }
             });
         },
+        getAreasByCode: function(){
+            return $resource('/spatial/rest/areabycode', {}, {
+                'get': {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            });
+        },
         getAreaProperties: function(){
             return $resource('/spatial/rest/areaproperties', {}, {
                 'get': {
@@ -185,6 +195,16 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
 	        });
 	        return deferred.promise;
 	    },
+	    getAreasByCode: function(data){
+            var deferred = $q.defer();
+            spatialRestFactory.getAreasByCode().get(angular.toJson(data), function(response){
+                deferred.resolve(response);
+            }, function(error){
+                console.log('Error getting areas by code');
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
 	    getAreaProperties: function(data){
 	        var deferred = $q.defer();
             spatialRestFactory.getAreaProperties().get(angular.toJson(data), function(response){

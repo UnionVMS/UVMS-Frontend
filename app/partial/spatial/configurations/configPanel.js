@@ -41,6 +41,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		    newConfig = $scope.checkStylesSettings(newConfig);
 		    newConfig = $scope.checkVisibilitySettings(newConfig);
 		    newConfig = $scope.checkLayerSettings(newConfig);
+		    newConfig.referenceDataSettings = $scope.configModel.referenceDataSettings; //FIXME
 		    
 		    if ($scope.configPanelForm.$dirty){
 		    	newConfig = angular.toJson(newConfig);

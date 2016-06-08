@@ -28,6 +28,10 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 		isLoadingSavingSystemArea: {
 			message: 'areas.saving_system_area',
             value: false
+		},
+		isLoadingSearchReferenceData: {
+		    message: 'spatial.search_ref_data_loading_message',
+            value: false
 		}
 	};
 	
