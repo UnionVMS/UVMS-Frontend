@@ -1,0 +1,160 @@
+<div class="col-md-12 collapsibleRow systemAreasSettings" ng-controller="SystemareassettingsCtrl">
+	<ng-form name="systemAreasSettingsForm">
+		<accordion close-others="oneAtATime">
+			<accordion-group is-open="status.isOpen">
+				<accordion-heading>
+					<div class="panel-title-link" ng-click="toggleOpen()">
+						{{'spatial.ref_data_settings' | i18n }}
+						<div class="accordionError" ng-show="submitedWithErrors && systemAreasSettingsForm.$invalid">
+							<div class="fa fa-exclamation-circle"></div>
+							{{'spatial.section_errors' | i18n }} - {{'spatial.base_list_error' | i18n }}
+						</div>
+						<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isOpen, 'glyphicon-chevron-right': !status.isOpen}"></i>
+					</div>
+				</accordion-heading>
+				<div class="row">
+					<loading-panel type="SearchReferenceData" ng-model="isLoading"></loading-panel>
+					<!-- ALERT -->
+					<div class="col-md-12" ng-show="alert.hasAlert">
+						<div class="alert" role="alert" ng-class="{'alert-danger': alert.hasError, 'alert-success': alert.hasSuccess, 'alert-warning': alert.hasWarning}">
+							<span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasError"></span>
+							<span class="fa fa-check-circle" aria-hidden="true" ng-show="alert.hasSuccess"></span>
+							<span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasWarning"></span>
+							<span class="alert-message">
+								<span>{{alert.alertMessage}}</span>          
+							</span>
+						</div>
+					</div>
+					<!-- COMBO SELECTION ROW -->
+					<div class="col-md-8">
+						<div class="form-group form-inline">
+							<div class="form-group">
+					    		<label>{{'spatial.ref_data_label' | i18n}}</label>
+					    		<combobox class="inline-combo with-right-margin" ng-change="changeSelectedArea()" ng-model="currentSelection.selectedAreaType" items="systemAreaItems" initialtext="{{'spatial.ref_data_type_label' | i18n}}" ng-required="true" is-loading="isLoadingAreaTypes"></combobox>
+					  		</div>
+					  		<div class="form-group" ng-show="isAreaSelectorComboVisible">
+					    		<label>{{'spatial.area_selection_type_label' | i18n}}</label>
+					    		<combobox class="inline-combo" ng-change="changeSelectionType()" ng-model="currentSelection.areaSelector" items="areaSelectorTypeItems" name="areaSelector" ng-required="true"></combobox>
+					  		</div>
+						</div>
+						<div ng-show="currentSelection.areaSelector === 'custom' && currentSelection.selectedAreaType">
+							<!-- RADIO SELECTION -->
+							<div class="form-group">
+								<label class="radio-inline">
+									<input type="radio" value="map" ng-model="currentSelection.selectionType">
+									{{'spatial.ref_data_select_on_map_radio' | i18n}}
+								</label>
+								<label class="radio-inline">
+									<input type="radio" value="search" ng-model="currentSelection.selectionType">
+									{{'spatial.ref_data_select_by_prop_radio' | i18n}}
+								</label>
+							</div>
+							<!-- MAP -->
+							<div id="sys-areas-map" class="areas-visualizer" ng-show="currentSelection.selectionType === 'map' && currentSelection.selectedAreaType && clickResultsMap"></div>
+							<!-- SEARCH TABLE -->
+							<div class="row">
+								<!-- SEARCH INPUT, SEARCH BUTTON, RESET BUTTON -->
+								<div class="col-md-12 searchRow form-group" ng-show="currentSelection.selectionType === 'search' && currentSelection.selectedAreaType">
+			    	   				<div class="col-md-6 noPadding">
+			    		   				<input type="text" ng-model="currentSelection.searchString" class="form-control" placeholder="{{'spatial.reports_form_vessels_search_text' | i18n }}">
+			    		   			</div>
+			    		   			<div class="col-md-3">
+			    		   				<button type="button" class="btn btn-primary btn-sm" style="min-width: 100px; width: 100%" ng-click="searchByProps()">
+			    		   					<span>{{'spatial.reports_form_vessels_search_button' | i18n }}</span>
+			    		   				</button>
+			    		   			</div>
+			    		   			<div class="col-md-3">
+			    		   				<button type="button" class="btn btn-default btn-sm" style="min-width: 100px; width: 100%" ng-click="clearSearchProps()">
+			    		   					<span>{{'spatial.reset' | i18n }}</span>
+			    		   				</button>
+			    		   			</div>
+			    	   			</div>
+			    	   			<!-- BACK TO MAP BUTTON -->
+								<div class="col-md-12 searchRow form-group" ng-show="currentSelection.selectionType === 'map' && currentSelection.selectedAreaType && clickResults > 1 && !clickResultsMap">
+									<button type="button" class="btn btn-primary btn-sm" style="min-width: 120px; width: 25%" ng-click="goBackToMap()">
+										<span class="fa fa-map" aria-hidden="true"></span>&nbsp;
+		    		   					<span>{{'spatial.ref_data_go_back_to_map' | i18n}}</span>
+		    		   				</button>
+								</div>
+								<!-- TABLE -->
+								<div class="col-md-12" ng-show="currentSelection.selectionType === 'search' || (currentSelection.selectionType === 'map' && clickResults > 1 && !clickResultsMap)">
+									<div st-table="displayedRefDataRecords" st-safe-src="refDataRecords">
+										<div class="table table-striped tableSmart table-condensed col-md-12">
+											<!-- THEAD -->
+											<div class="thead container-fluid row">
+												<div class="tr row">
+													<div class="th col-md-10" st-sort="code" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">Code</div>
+													<div class="th col-md-2">
+														<button type="button" class="btn btn-sm btn-success check-all-btn" ng-click="selectAllAreasFromTable()" ng-show="refDataRecords.length > 0">
+															<span class="fa fa-plus"></span>&nbsp;
+															{{'spatial.add_all_btn' | i18n}}
+														</button>
+													</div>
+										        </div>
+											</div>
+											<!-- TBODY -->
+											<div class="tbody container-fluid row ref-data-table">
+												<div ng-repeat="rec in displayedRefDataRecords" class="tr row">
+													<div class="td col-md-10">
+														<i class="fa row-expander" ng-class="{'fa-plus': !rec.isExpanded, 'fa-minus': rec.isExpanded}" aria-hidden="true" ng-click="toggleRowDetails(rec)"></i>
+														{{rec.code}}
+														<span class="badge" title="{{getGroupTip(rec)}}">{{rec.areaNames.length}}</span>
+													</div>
+													<div class="td col-md-2">
+														<button type="button" class="btn btn-sm check-btn" ng-click="selectAreaFromTable(rec)" ng-class="{'btn-default': !rec.isSelected, 'btn-success': rec.isSelected}"><span class="fa fa-check"></button>
+													</div>
+													<div class="td td-details col-md-12" ng-show="rec.isExpanded">
+														<ul>
+															<li ng-repeat="item in rec.areaNames track by $index">{{item}}</li>
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="stFooterPagination tfoot container-fluid row" ng-if="!isLoading && displayedRefDataRecords.length">
+											<div class="tr">
+												<div class="td col-md-12">
+													<div class="pull-right footer-with-no-bottom-margin" st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- SELECTION CARD -->
+					<div class="col-md-4" ng-show="currentSelection.areaSelector === 'custom'">
+						<div class="card with-small-card-header selectionContainer">
+							<div class="row card-header">
+								<div class="col-md-8">
+									<h5>
+										{{'spatial.ref_data_group_selection' | i18n}}
+										<span class="badge blue-badge" title="{{getSelectionTip(displayCodes.length)}}">{{displayCodes.length}}</span>
+									</h5>
+								</div>
+								<div class="col-md-4 textAlignRight textAlignMiddle">
+									<a ng-click="removeAllCodes()" >{{'spatial.clear_all_btn' | i18n}}</a>
+								</div>
+							</div>
+							<div class="scroller">
+								<ul class="group-list">
+									<li ng-repeat="code in displayCodes">
+										<div class="pointer pull-right" ng-click="removeCode(code, true)">
+						    		    	<i class="fa fa-times"></i>
+						    		   	</div>
+						    			<p>{{ code }}</p>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- RESET TO DEFAULTS -->
+				<div class="col-md-12 col-btn-no-padding reset-row" ng-if="isUserPreference || isReportConfig">
+					<button type="button" class="btn btn-default pull-right ng-binding" ng-click="reset()">{{'spatial.settings_reset_btn' | i18n}}</button>
+				</div>
+			</accordion-goup>
+		</accordion>
+	</ng-form>
+</div>
