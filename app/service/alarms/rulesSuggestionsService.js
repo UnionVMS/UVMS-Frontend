@@ -15,6 +15,7 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
                     suggestions.push(resultItem.cfr);
                     break;
                 case 'ASSET_IRCS':
+                case 'VICINITY_OF':
                     suggestions.push(resultItem.ircs);
                     break;
                 case 'EXTERNAL_MARKING':
@@ -73,6 +74,7 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
                 searchKey = 'CFR';
                 break;
             case 'ASSET_IRCS':
+            case 'VICINITY_OF':
                 searchKey = 'IRCS';
                 break;
             case 'EXTERNAL_MARKING':
@@ -174,6 +176,7 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
             case 'ASSET_CFR':
             case 'ASSET_IRCS':
             case 'EXTERNAL_MARKING':
+            case 'VICINITY_OF':
                 return getVessels;
             case 'MT_DNID':
             case 'MT_MEMBER_ID':

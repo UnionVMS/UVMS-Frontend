@@ -339,14 +339,14 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
 
     function isAreaTypeDefinition(definition) {
         return definition.criteria === 'AREA'
-            && (definition.subCriteria === 'AREA_TYPE' 
+            && (definition.subCriteria === 'AREA_TYPE'
                 || definition.subCriteria === 'AREA_TYPE_ENT'
                 || definition.subCriteria === 'AREA_TYPE_EXT');
     }
 
     function isAreaCodeDefinition(definition) {
         return definition.criteria === 'AREA'
-            && (definition.subCriteria === 'AREA_CODE' 
+            && (definition.subCriteria === 'AREA_CODE'
                 || definition.subCriteria === 'AREA_CODE_ENT'
                 || definition.subCriteria === 'AREA_CODE_EXT');
     }
