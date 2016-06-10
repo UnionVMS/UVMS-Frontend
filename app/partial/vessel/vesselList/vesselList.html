@@ -25,7 +25,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:currentSearchResults.filter">
+            <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:currentSearchResults.filter" ng-class="{archived: !item.active}">
                 <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)"/></td>
                 <td ng-attr-title="{{item.countryCode}}">{{item.countryCode}}</td>
                 <td ng-attr-title="{{item.externalMarking}}">{{item.externalMarking}}</td>
