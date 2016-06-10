@@ -1,6 +1,6 @@
 {
   "name": "unionvmsWeb",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "repository": {
     "type": "svn",
     "url": "https://webgate.ec.europa.eu/CITnet/svn/UNIONVMS/branches/dev/unionvms-web"
