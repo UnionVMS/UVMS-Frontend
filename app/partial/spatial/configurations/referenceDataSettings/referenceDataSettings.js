@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($scope, locale, $interval, $timeout, spatialRestService, Area, comboboxService){
+angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($scope, locale, $localStorage, $interval, $timeout, genericMapService, projectionService, spatialRestService, comboboxService){
     $scope.status = {
         isOpen: false
     };
@@ -334,41 +334,34 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
     $scope.addWMS = function(){
         var layerDef = _.findWhere($scope.srcSysAreas, {typeName: $scope.currentSelection.selectedAreaType});
         if (angular.isDefined(layerDef)){
-            var layer = new ol.layer.Tile({
-                areaType: layerDef.typeName,
-                type: 'WMS',
-                source: new ol.source.TileWMS({
-                    url: layerDef.serviceUrl,
-                    //crossOrigin: 'anonymous', FIXME
-                    serverType: 'geoserver',
-                    params: {
-                        time_: (new Date()).getTime(),
-                        'LAYERS': layerDef.geoName,
-                        'STYLES': angular.isDefined(layerDef.style) === true ? layerDef.style : '', 
-                    }
-                })
-            });
-            
+            var mapExtent = $scope.map.getView().getProjection().getExtent();
+            var config = {
+                url: layerDef.serviceUrl,
+                serverType: 'geoserver',
+                params: {
+                    time_: (new Date()).getTime(),
+                    'LAYERS': layerDef.geoName,
+                    'TILED': true,
+                    'TILESORIGIN': mapExtent[0] + ',' + mapExtent[1],
+                    'STYLES': angular.isDefined(layerDef.style) ? layerDef.style : ''
+                }
+            };
+            var layer = genericMapService.defineWms(config);
             $scope.map.addLayer(layer);
         }
     };
     
     
     function setMap(){
-        var osm = new ol.layer.Tile({
-            type: 'osm',
-            source: new ol.source.OSM()
-        });
+        var osm = genericMapService.defineOsm();
         
-        var projection = new ol.proj.Projection({
-            code: 'EPSG:3857',
-            units: 'm',
-            global: false
-        });
+        //FIXME fetch this through service
+        var projObj = projectionService.getFullProjByEpsg('3857');
+        var projection = genericMapService.setProjection(projObj);
         
         var view = new ol.View({
             projection: projection,
-            center: ol.proj.transform([10, 40], 'EPSG:4326', 'EPSG:3857'),
+            center: ol.proj.transform([10, 40], 'EPSG:4326', 'EPSG:3857'), //FIXME
             zoom: 1,
             maxZoom: 19,
             enableRotation: false
@@ -422,24 +415,4 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
             }
         });
     }
-    
-    
-//area location layers for combo in sysareas    
-//    var getAreaLocationLayers = function(obj){
-//        if (!angular.isDefined(obj.systemAreaTypes)){
-//            obj.isLoadingSysAreaTypes = true;
-//            spatialRestService.getAreaLocationLayers().then(function(response){
-//                obj.systemAreaTypes = response.data;
-//                for (var i = 0; i < obj.systemAreaTypes.length; i++){
-//                    obj.systemAreaItems.push({"text": obj.systemAreaTypes[i].typeName, "code": obj.systemAreaTypes[i].typeName});
-//                }
-//                obj.isLoadingSysAreaTypes = false;
-//            }, function(error){
-//                areaAlertService.setError();
-//                areaAlertService.errorMessage = locale.getString('spatial.area_selection_modal_get_sys_layers_error');
-//                areaAlertService.hideAlert();
-//                obj.isLoadingSysAreaTypes = false;
-//            });
-//        }
-//    };
 });
