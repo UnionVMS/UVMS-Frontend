@@ -2845,27 +2845,8 @@ ol.inherits =
  */
 ol.nullFunction = function() {};
 
-// FIXME factor out common code between usedTiles and wantedTiles
 
-goog.provide('ol.PostRenderFunction');
-goog.provide('ol.PreRenderFunction');
-
-
-/**
- * @typedef {function(ol.Map, ?olx.FrameState): boolean}
- */
-ol.PostRenderFunction;
-
-
-/**
- * Function to perform manipulations before rendering. This function is called
- * with the {@link ol.Map} as first and an optional {@link olx.FrameState} as
- * second argument. Return `true` to keep this function for the next frame,
- * `false` to remove it.
- * @typedef {function(ol.Map, ?olx.FrameState): boolean}
- * @api
- */
-ol.PreRenderFunction;
+ol.global = Function('return this')();
 
 // Copyright 2009 The Closure Library Authors. All Rights Reserved.
 //
@@ -5189,15 +5170,8 @@ ol.math.lerp = function(a, b, x) {
 };
 
 goog.provide('ol.CenterConstraint');
-goog.provide('ol.CenterConstraintType');
 
 goog.require('ol.math');
-
-
-/**
- * @typedef {function((ol.Coordinate|undefined)): (ol.Coordinate|undefined)}
- */
-ol.CenterConstraintType;
 
 
 /**
@@ -5231,478 +5205,7 @@ ol.CenterConstraint.none = function(center) {
   return center;
 };
 
-goog.provide('ol.array');
-
-goog.require('goog.asserts');
-
-
-/**
- * Performs a binary search on the provided sorted list and returns the index of the item if found. If it can't be found it'll return -1.
- * https://github.com/darkskyapp/binary-search
- *
- * @param {Array.<*>} haystack Items to search through.
- * @param {*} needle The item to look for.
- * @param {Function=} opt_comparator Comparator function.
- * @return {number} The index of the item if found, -1 if not.
- */
-ol.array.binarySearch = function(haystack, needle, opt_comparator) {
-  var mid, cmp;
-  var comparator = opt_comparator || ol.array.numberSafeCompareFunction;
-  var low = 0;
-  var high = haystack.length;
-  var found = false;
-
-  while (low < high) {
-    /* Note that "(low + high) >>> 1" may overflow, and results in a typecast
-     * to double (which gives the wrong results). */
-    mid = low + (high - low >> 1);
-    cmp = +comparator(haystack[mid], needle);
-
-    if (cmp < 0.0) { /* Too low. */
-      low  = mid + 1;
-
-    } else { /* Key found or too high */
-      high = mid;
-      found = !cmp;
-    }
-  }
-
-  /* Key not found. */
-  return found ? low : ~low;
-}
-
-/**
- * @param {Array.<number>} arr Array.
- * @param {number} target Target.
- * @return {number} Index.
- */
-ol.array.binaryFindNearest = function(arr, target) {
-  var index = ol.array.binarySearch(arr, target,
-      /**
-       * @param {number} a A.
-       * @param {number} b B.
-       * @return {number} b minus a.
-       */
-      function(a, b) {
-        return b - a;
-      });
-  if (index >= 0) {
-    return index;
-  } else if (index == -1) {
-    return 0;
-  } else if (index == -arr.length - 1) {
-    return arr.length - 1;
-  } else {
-    var left = -index - 2;
-    var right = -index - 1;
-    if (arr[left] - target < target - arr[right]) {
-      return left;
-    } else {
-      return right;
-    }
-  }
-};
-
-
-/**
- * Compare function for array sort that is safe for numbers.
- * @param {*} a The first object to be compared.
- * @param {*} b The second object to be compared.
- * @return {number} A negative number, zero, or a positive number as the first
- *     argument is less than, equal to, or greater than the second.
- */
-ol.array.numberSafeCompareFunction = function(a, b) {
-  return a > b ? 1 : a < b ? -1 : 0;
-};
-
-
-/**
- * Whether the array contains the given object.
- * @param {Array.<*>} arr The array to test for the presence of the element.
- * @param {*} obj The object for which to test.
- * @return {boolean} The object is in the array.
- */
-ol.array.includes = function(arr, obj) {
-  return arr.indexOf(obj) >= 0;
-};
-
-
-/**
- * @param {Array.<number>} arr Array.
- * @param {number} target Target.
- * @param {number} direction 0 means return the nearest, > 0
- *    means return the largest nearest, < 0 means return the
- *    smallest nearest.
- * @return {number} Index.
- */
-ol.array.linearFindNearest = function(arr, target, direction) {
-  var n = arr.length;
-  if (arr[0] <= target) {
-    return 0;
-  } else if (target <= arr[n - 1]) {
-    return n - 1;
-  } else {
-    var i;
-    if (direction > 0) {
-      for (i = 1; i < n; ++i) {
-        if (arr[i] < target) {
-          return i - 1;
-        }
-      }
-    } else if (direction < 0) {
-      for (i = 1; i < n; ++i) {
-        if (arr[i] <= target) {
-          return i;
-        }
-      }
-    } else {
-      for (i = 1; i < n; ++i) {
-        if (arr[i] == target) {
-          return i;
-        } else if (arr[i] < target) {
-          if (arr[i - 1] - target < target - arr[i]) {
-            return i - 1;
-          } else {
-            return i;
-          }
-        }
-      }
-    }
-    // We should never get here, but the compiler complains
-    // if it finds a path for which no number is returned.
-    goog.asserts.fail();
-    return n - 1;
-  }
-};
-
-
-/**
- * @param {Array.<*>} arr Array.
- * @param {number} begin Begin index.
- * @param {number} end End index.
- */
-ol.array.reverseSubArray = function(arr, begin, end) {
-  goog.asserts.assert(begin >= 0,
-      'Array begin index should be equal to or greater than 0');
-  goog.asserts.assert(end < arr.length,
-      'Array end index should be less than the array length');
-  while (begin < end) {
-    var tmp = arr[begin];
-    arr[begin] = arr[end];
-    arr[end] = tmp;
-    ++begin;
-    --end;
-  }
-};
-
-
-/**
- * @param {Array.<*>} arr Array.
- * @return {!Array.<?>} Flattened Array.
- */
-ol.array.flatten = function(arr) {
-  var data = arr.reduce(function(flattened, value) {
-    if (Array.isArray(value)) {
-      return flattened.concat(ol.array.flatten(value));
-    } else {
-      return flattened.concat(value);
-    }
-  }, []);
-  return data;
-};
-
-
-/**
- * @param {Array.<VALUE>} arr  The array to modify.
- * @param {Array.<VALUE>|VALUE} data The elements or arrays of elements
- *     to add to arr.
- * @template VALUE
- */
-ol.array.extend = function(arr, data) {
-  var i;
-  var extension = goog.isArrayLike(data) ? data : [data];
-  var length = extension.length
-  for (i = 0; i < length; i++) {
-    arr[arr.length] = extension[i];
-  }
-}
-
-
-/**
- * @param {Array.<VALUE>} arr  The array to modify.
- * @param {VALUE} obj The element to remove.
- * @template VALUE
- * @return {boolean} If the element was removed.
- */
-ol.array.remove = function(arr, obj) {
-  var i = arr.indexOf(obj);
-  var found = i > -1;
-  if (found) {
-    arr.splice(i, 1);
-  }
-  return found;
-}
-
-
-/**
- * @param {Array.<VALUE>} arr  The array to search in.
- * @param {function(VALUE, number, ?) : boolean} func The function to compare.
- * @template VALUE
- * @return {VALUE} The element found.
- */
-ol.array.find = function(arr, func) {
-  var length = arr.length >>> 0;
-  var value;
-
-  for (var i = 0; i < length; i++) {
-    value = arr[i];
-    if (func(value, i, arr)) {
-      return value;
-    }
-  }
-  return null;
-}
-
-
-/**
-* @param {Array|Uint8ClampedArray} arr1 The first array to compare.
-* @param {Array|Uint8ClampedArray} arr2 The second array to compare.
-* @return {boolean} Whether the two arrays are equal.
- */
-ol.array.equals = function(arr1, arr2) {
-  var len1 = arr1.length;
-  if (len1 !== arr2.length) {
-    return false;
-  }
-  for (var i = 0; i < len1; i++) {
-    if (arr1[i] !== arr2[i]) {
-      return false;
-    }
-  }
-  return true;
-}
-
-
-/**
-* @param {Array.<*>} arr The array to sort (modifies original).
-* @param {Function} compareFnc Comparison function.
- */
-ol.array.stableSort = function(arr, compareFnc) {
-  var length = arr.length;
-  var tmp = Array(arr.length);
-  var i;
-  for (i = 0; i < length; i++) {
-    tmp[i] = {index: i, value: arr[i]};
-  }
-  tmp.sort(function(a, b) {
-    return compareFnc(a.value, b.value) || a.index - b.index;
-  });
-  for (i = 0; i < arr.length; i++) {
-    arr[i] = tmp[i].value;
-  }
-}
-
-
-/**
-* @param {Array.<*>} arr The array to search in.
-* @param {Function} func Comparison function.
-* @return {number} Return index.
- */
-ol.array.findIndex = function(arr, func) {
-  var index;
-  var found = !arr.every(function(el, idx) {
-    index = idx;
-    return !func(el, idx, arr);
-  });
-  return found ? index : -1;
-}
-
-
-/**
-* @param {Array.<*>} arr The array to test.
-* @param {Function=} opt_func Comparison function.
-* @param {boolean=} opt_strict Strictly sorted (default false).
-* @return {boolean} Return index.
- */
-ol.array.isSorted = function(arr, opt_func, opt_strict) {
-  var compare = opt_func || ol.array.numberSafeCompareFunction;
-  return arr.every(function(currentVal, index) {
-    if (index === 0) {
-      return true;
-    }
-    var res = compare(arr[index - 1], currentVal);
-    return !(res > 0 || opt_strict && res === 0);
-  });
-}
-
-goog.provide('ol.ResolutionConstraint');
-goog.provide('ol.ResolutionConstraintType');
-
-goog.require('ol.array');
-goog.require('ol.math');
-
-
-/**
- * @typedef {function((number|undefined), number, number): (number|undefined)}
- */
-ol.ResolutionConstraintType;
-
-
-/**
- * @param {Array.<number>} resolutions Resolutions.
- * @return {ol.ResolutionConstraintType} Zoom function.
- */
-ol.ResolutionConstraint.createSnapToResolutions = function(resolutions) {
-  return (
-      /**
-       * @param {number|undefined} resolution Resolution.
-       * @param {number} delta Delta.
-       * @param {number} direction Direction.
-       * @return {number|undefined} Resolution.
-       */
-      function(resolution, delta, direction) {
-        if (resolution !== undefined) {
-          var z =
-              ol.array.linearFindNearest(resolutions, resolution, direction);
-          z = ol.math.clamp(z + delta, 0, resolutions.length - 1);
-          return resolutions[z];
-        } else {
-          return undefined;
-        }
-      });
-};
-
-
-/**
- * @param {number} power Power.
- * @param {number} maxResolution Maximum resolution.
- * @param {number=} opt_maxLevel Maximum level.
- * @return {ol.ResolutionConstraintType} Zoom function.
- */
-ol.ResolutionConstraint.createSnapToPower = function(power, maxResolution, opt_maxLevel) {
-  return (
-      /**
-       * @param {number|undefined} resolution Resolution.
-       * @param {number} delta Delta.
-       * @param {number} direction Direction.
-       * @return {number|undefined} Resolution.
-       */
-      function(resolution, delta, direction) {
-        if (resolution !== undefined) {
-          var offset;
-          if (direction > 0) {
-            offset = 0;
-          } else if (direction < 0) {
-            offset = 1;
-          } else {
-            offset = 0.5;
-          }
-          var oldLevel = Math.floor(
-              Math.log(maxResolution / resolution) / Math.log(power) + offset);
-          var newLevel = Math.max(oldLevel + delta, 0);
-          if (opt_maxLevel !== undefined) {
-            newLevel = Math.min(newLevel, opt_maxLevel);
-          }
-          return maxResolution / Math.pow(power, newLevel);
-        } else {
-          return undefined;
-        }
-      });
-};
-
-goog.provide('ol.RotationConstraint');
-goog.provide('ol.RotationConstraintType');
-
-goog.require('ol.math');
-
-
-/**
- * @typedef {function((number|undefined), number): (number|undefined)}
- */
-ol.RotationConstraintType;
-
-
-/**
- * @param {number|undefined} rotation Rotation.
- * @param {number} delta Delta.
- * @return {number|undefined} Rotation.
- */
-ol.RotationConstraint.disable = function(rotation, delta) {
-  if (rotation !== undefined) {
-    return 0;
-  } else {
-    return undefined;
-  }
-};
-
-
-/**
- * @param {number|undefined} rotation Rotation.
- * @param {number} delta Delta.
- * @return {number|undefined} Rotation.
- */
-ol.RotationConstraint.none = function(rotation, delta) {
-  if (rotation !== undefined) {
-    return rotation + delta;
-  } else {
-    return undefined;
-  }
-};
-
-
-/**
- * @param {number} n N.
- * @return {ol.RotationConstraintType} Rotation constraint.
- */
-ol.RotationConstraint.createSnapToN = function(n) {
-  var theta = 2 * Math.PI / n;
-  return (
-      /**
-       * @param {number|undefined} rotation Rotation.
-       * @param {number} delta Delta.
-       * @return {number|undefined} Rotation.
-       */
-      function(rotation, delta) {
-        if (rotation !== undefined) {
-          rotation = Math.floor((rotation + delta) / theta + 0.5) * theta;
-          return rotation;
-        } else {
-          return undefined;
-        }
-      });
-};
-
-
-/**
- * @param {number=} opt_tolerance Tolerance.
- * @return {ol.RotationConstraintType} Rotation constraint.
- */
-ol.RotationConstraint.createSnapToZero = function(opt_tolerance) {
-  var tolerance = opt_tolerance || ol.math.toRadians(5);
-  return (
-      /**
-       * @param {number|undefined} rotation Rotation.
-       * @param {number} delta Delta.
-       * @return {number|undefined} Rotation.
-       */
-      function(rotation, delta) {
-        if (rotation !== undefined) {
-          if (Math.abs(rotation + delta) <= tolerance) {
-            return 0;
-          } else {
-            return rotation + delta;
-          }
-        } else {
-          return undefined;
-        }
-      });
-};
-
 goog.provide('ol.Constraints');
-
-goog.require('ol.CenterConstraintType');
-goog.require('ol.ResolutionConstraintType');
-goog.require('ol.RotationConstraintType');
 
 
 /**
@@ -5803,11 +5306,757 @@ ol.object.isEmpty = function(object) {
   return !property;
 };
 
+/**
+ * File for all typedefs used by the compiler, and referenced by JSDoc.
+ *
+ * These look like vars (or var properties), but in fact are simply identifiers
+ * for the Closure compiler. Originally they were included in the appropriate
+ * namespace file, but with the move away from Closure namespaces and towards
+ * self-contained standard modules are now all in this file.
+ * Unlike the other type definitions - enums and constructor functions - they
+ * are not code and so are not imported or exported. They are only referred to
+ * in type-defining comments used by the Closure compiler, and so should not
+ * appear in module code.
+ *
+ * When the code is converted to ES6 modules, the namespace structure will
+ * disappear, and these typedefs will have to be renamed accordingly, but the
+ * namespace structure is maintained for the present for backwards compatibility.
+ *
+ * In principle, typedefs should not have a `goog.provide` nor should files which
+ * refer to a typedef in comments need a `goog.require`. However, goog.provides
+ * are needed for 2 cases, both to prevent compiler errors/warnings:
+ * - the 1st two for specific errors
+ * - each sub-namespace needs at least one so the namespace is created when not
+ *   used in the code, as when application code is compiled with the library.
+ */
+goog.provide('ol.Extent');
+goog.provide('ol.events.EventTargetLike');
+
+goog.provide('ol.interaction.DragBoxEndConditionType');
+goog.provide('ol.proj.ProjectionLike');
+goog.provide('ol.raster.Operation');
+goog.provide('ol.style.AtlasBlock');
+
+
+/**
+ * @typedef {string|Array.<string>|ol.Attribution|Array.<ol.Attribution>}
+ * @api
+ */
+ol.AttributionLike;
+
+
+/**
+ * @typedef {{fillStyle: ol.ColorLike}}
+ */
+ol.CanvasFillState;
+
+
+/**
+ * A function returning the canvas element (`{HTMLCanvasElement}`)
+ * used by the source as an image. The arguments passed to the function are:
+ * {@link ol.Extent} the image extent, `{number}` the image resolution,
+ * `{number}` the device pixel ratio, {@link ol.Size} the image size, and
+ * {@link ol.proj.Projection} the image projection. The canvas returned by
+ * this function is cached by the source. The this keyword inside the function
+ * references the {@link ol.source.ImageCanvas}.
+ *
+ * @typedef {function(this:ol.source.ImageCanvas, ol.Extent, number,
+ *     number, ol.Size, ol.proj.Projection): HTMLCanvasElement}
+ * @api
+ */
+ol.CanvasFunctionType;
+
+
+/**
+ * @typedef {{lineCap: string,
+ *            lineDash: Array.<number>,
+ *            lineJoin: string,
+ *            lineWidth: number,
+ *            miterLimit: number,
+ *            strokeStyle: string}}
+ */
+ol.CanvasStrokeState;
+
+
+/**
+ * @typedef {{font: string,
+ *            textAlign: string,
+ *            textBaseline: string}}
+ */
+ol.CanvasTextState;
+
+
+/**
+ * @typedef {function((ol.Coordinate|undefined)): (ol.Coordinate|undefined)}
+ */
+ol.CenterConstraintType;
+
+
+/**
+ * A color represented as a short array [red, green, blue, alpha].
+ * red, green, and blue should be integers in the range 0..255 inclusive.
+ * alpha should be a float in the range 0..1 inclusive. If no alpha value is
+ * given then `1` will be used.
+ * @typedef {Array.<number>}
+ * @api
+ */
+ol.Color;
+
+
+/**
+ * A type accepted by CanvasRenderingContext2D.fillStyle.
+ * Represents a color, pattern, or gradient.
+ *
+ * @typedef {string|CanvasPattern|CanvasGradient}
+ * @api
+ */
+ol.ColorLike;
+
+
+/**
+ * An array of numbers representing an xy coordinate. Example: `[16, 48]`.
+ * @typedef {Array.<number>} ol.Coordinate
+ * @api stable
+ */
+ol.Coordinate;
+
+
+/**
+ * A function that takes a {@link ol.Coordinate} and transforms it into a
+ * `{string}`.
+ *
+ * @typedef {function((ol.Coordinate|undefined)): string}
+ * @api stable
+ */
+ol.CoordinateFormatType;
+
+
+/**
+ * An array of numbers representing an extent: `[minx, miny, maxx, maxy]`.
+ * @typedef {Array.<number>}
+ * @api stable
+ */
+ol.Extent;
+
+
+/**
+ * {@link ol.source.Vector} sources use a function of this type to load
+ * features.
+ *
+ * This function takes an {@link ol.Extent} representing the area to be loaded,
+ * a `{number}` representing the resolution (map units per pixel) and an
+ * {@link ol.proj.Projection} for the projection  as arguments. `this` within
+ * the function is bound to the {@link ol.source.Vector} it's called from.
+ *
+ * The function is responsible for loading the features and adding them to the
+ * source.
+ * @api
+ * @typedef {function(this:ol.source.Vector, ol.Extent, number,
+ *                    ol.proj.Projection)}
+ */
+ol.FeatureLoader;
+
+
+/**
+ * A function that returns an array of {@link ol.style.Style styles} given a
+ * resolution. The `this` keyword inside the function references the
+ * {@link ol.Feature} to be styled.
+ *
+ * @typedef {function(this: ol.Feature, number):
+ *     (ol.style.Style|Array.<ol.style.Style>)}
+ * @api stable
+ */
+ol.FeatureStyleFunction;
+
+
+/**
+ * {@link ol.source.Vector} sources use a function of this type to get the url
+ * to load features from.
+ *
+ * This function takes an {@link ol.Extent} representing the area to be loaded,
+ * a `{number}` representing the resolution (map units per pixel) and an
+ * {@link ol.proj.Projection} for the projection  as arguments and returns a
+ * `{string}` representing the URL.
+ * @api
+ * @typedef {function(ol.Extent, number, ol.proj.Projection) : string}
+ */
+ol.FeatureUrlFunction;
+
+
+/**
+ * A function that is called to trigger asynchronous canvas drawing.  It is
+ * called with a "done" callback that should be called when drawing is done.
+ * If any error occurs during drawing, the "done" callback should be called with
+ * that error.
+ *
+ * @typedef {function(function(Error))}
+ */
+ol.ImageCanvasLoader;
+
+
+/**
+ * A function that takes an {@link ol.Image} for the image and a `{string}` for
+ * the src as arguments. It is supposed to make it so the underlying image
+ * {@link ol.Image#getImage} is assigned the content specified by the src. If
+ * not specified, the default is
+ *
+ *     function(image, src) {
+ *       image.getImage().src = src;
+ *     }
+ *
+ * Providing a custom `imageLoadFunction` can be useful to load images with
+ * post requests or - in general - through XHR requests, where the src of the
+ * image element would be set to a data URI when the content is loaded.
+ *
+ * @typedef {function(ol.Image, string)}
+ * @api
+ */
+ol.ImageLoadFunctionType;
+
+
+/**
+ * @typedef {{x: number, xunits: (ol.style.IconAnchorUnits|undefined),
+ *            y: number, yunits: (ol.style.IconAnchorUnits|undefined)}}
+ */
+ol.KMLVec2_;
+
+
+/**
+ * @typedef {{flatCoordinates: Array.<number>,
+ *            whens: Array.<number>}}
+ */
+ol.KMLGxTrackObject_;
+
+
+/**
+ * @typedef {{layer: ol.layer.Layer,
+ *            opacity: number,
+ *            sourceState: ol.source.State,
+ *            visible: boolean,
+ *            managed: boolean,
+ *            extent: (ol.Extent|undefined),
+ *            zIndex: number,
+ *            maxResolution: number,
+ *            minResolution: number}}
+ */
+ol.LayerState;
+
+
+/**
+ * One of `all`, `bbox`, `tile`.
+ *
+ * @typedef {function(ol.Extent, number): Array.<ol.Extent>}
+ * @api
+ */
+ol.LoadingStrategy;
+
+
+/**
+ * @typedef {{key_: string,
+ *            newer: ol.LRUCacheEntry,
+ *            older: ol.LRUCacheEntry,
+ *            value_: *}}
+ */
+ol.LRUCacheEntry;
+
+
+/**
+ * @typedef {{controls: ol.Collection.<ol.control.Control>,
+ *            interactions: ol.Collection.<ol.interaction.Interaction>,
+ *            keyboardEventTarget: (Element|Document),
+ *            logos: (Object.<string, (string|Element)>),
+ *            overlays: ol.Collection.<ol.Overlay>,
+ *            rendererConstructor:
+ *                function(new: ol.renderer.Map, Element, ol.Map),
+ *            values: Object.<string, *>}}
+ */
+ol.MapOptionsInternal;
+
+
+/**
+ * An array with two elements, representing a pixel. The first element is the
+ * x-coordinate, the second the y-coordinate of the pixel.
+ * @typedef {Array.<number>}
+ * @api stable
+ */
+ol.Pixel;
+
+
+/**
+ * @typedef {function(ol.Map, ?olx.FrameState): boolean}
+ */
+ol.PostRenderFunction;
+
+
+/**
+ * Function to perform manipulations before rendering. This function is called
+ * with the {@link ol.Map} as first and an optional {@link olx.FrameState} as
+ * second argument. Return `true` to keep this function for the next frame,
+ * `false` to remove it.
+ * @typedef {function(ol.Map, ?olx.FrameState): boolean}
+ * @api
+ */
+ol.PreRenderFunction;
+
+
+/**
+ * @typedef {function(ol.Extent, number, number) : ol.ImageBase}
+ */
+ol.ReprojImageFunctionType;
+
+
+/**
+ * @typedef {function(number, number, number, number) : ol.Tile}
+ */
+ol.ReprojTileFunctionType;
+
+
+/**
+ * Single triangle; consists of 3 source points and 3 target points.
+ *
+ * @typedef {{source: Array.<ol.Coordinate>,
+ *            target: Array.<ol.Coordinate>}}
+ */
+ol.ReprojTriangle;
+
+
+/**
+ * @typedef {function((number|undefined), number, number): (number|undefined)}
+ */
+ol.ResolutionConstraintType;
+
+
+/**
+ * @typedef {function((number|undefined), number): (number|undefined)}
+ */
+ol.RotationConstraintType;
+
+
+/**
+ * An array of numbers representing a size: `[width, height]`.
+ * @typedef {Array.<number>}
+ * @api stable
+ */
+ol.Size;
+
+
+/**
+ * @typedef {{attributions: (ol.AttributionLike|undefined),
+ *            extent: (null|ol.Extent|undefined),
+ *            logo: (string|olx.LogoOptions|undefined),
+ *            projection: ol.proj.ProjectionLike,
+ *            resolutions: (Array.<number>|undefined),
+ *            state: (ol.source.State|undefined)}}
+ */
+ol.SourceImageOptions;
+
+
+/**
+ * @typedef {{revision: number,
+ *            resolution: number,
+ *            extent: ol.Extent}}
+ */
+ol.SourceRasterRenderedState;
+
+
+/**
+ * @typedef {{attributions: (ol.AttributionLike|undefined),
+ *            logo: (string|olx.LogoOptions|undefined),
+ *            projection: ol.proj.ProjectionLike,
+ *            state: (ol.source.State|undefined),
+ *            wrapX: (boolean|undefined)}}
+ */
+ol.SourceSourceOptions;
+
+
+/**
+ * @typedef {{attributions: (ol.AttributionLike|undefined),
+ *            cacheSize: (number|undefined),
+ *            extent: (ol.Extent|undefined),
+ *            logo: (string|olx.LogoOptions|undefined),
+ *            opaque: (boolean|undefined),
+ *            tilePixelRatio: (number|undefined),
+ *            projection: ol.proj.ProjectionLike,
+ *            state: (ol.source.State|undefined),
+ *            tileGrid: (ol.tilegrid.TileGrid|undefined),
+ *            wrapX: (boolean|undefined)}}
+ */
+ol.SourceTileOptions;
+
+
+/**
+ * @typedef {{attributions: (ol.AttributionLike|undefined),
+ *            cacheSize: (number|undefined),
+ *            extent: (ol.Extent|undefined),
+ *            logo: (string|olx.LogoOptions|undefined),
+ *            opaque: (boolean|undefined),
+ *            projection: ol.proj.ProjectionLike,
+ *            state: (ol.source.State|undefined),
+ *            tileGrid: (ol.tilegrid.TileGrid|undefined),
+ *            tileLoadFunction: ol.TileLoadFunctionType,
+ *            tilePixelRatio: (number|undefined),
+ *            tileUrlFunction: (ol.TileUrlFunctionType|undefined),
+ *            url: (string|undefined),
+ *            urls: (Array.<string>|undefined),
+ *            wrapX: (boolean|undefined)}}
+ */
+ol.SourceUrlTileOptions;
+
+
+/**
+ * An array of three numbers representing the location of a tile in a tile
+ * grid. The order is `z`, `x`, and `y`. `z` is the zoom level.
+ * @typedef {Array.<number>} ol.TileCoord
+ * @api
+ */
+ol.TileCoord;
+
+
+/**
+ * A function that takes an {@link ol.Tile} for the tile and a `{string}` for
+ * the url as arguments.
+ *
+ * @typedef {function(ol.Tile, string)}
+ * @api
+ */
+ol.TileLoadFunctionType;
+
+
+/**
+ * @typedef {function(ol.Tile, string, ol.Coordinate, number): number}
+ */
+ol.TilePriorityFunction;
+
+
+/**
+ * @typedef {{
+ *     dirty: boolean,
+ *     renderedRenderOrder: (null|function(ol.Feature, ol.Feature):number),
+ *     renderedTileRevision: number,
+ *     renderedRevision: number,
+ *     replayGroup: ol.render.IReplayGroup,
+ *     skippedFeatures: Array.<string>}}
+ */
+ol.TileReplayState;
+
+
+/**
+ * {@link ol.source.Tile} sources use a function of this type to get the url
+ * that provides a tile for a given tile coordinate.
+ *
+ * This function takes an {@link ol.TileCoord} for the tile coordinate, a
+ * `{number}` representing the pixel ratio and an {@link ol.proj.Projection} for
+ * the projection  as arguments and returns a `{string}` representing the tile
+ * URL, or undefined if no tile should be requested for the passed tile
+ * coordinate.
+ *
+ * @typedef {function(ol.TileCoord, number,
+ *           ol.proj.Projection): (string|undefined)}
+ * @api
+ */
+ol.TileUrlFunctionType;
+
+
+/**
+ * A transform function accepts an array of input coordinate values, an optional
+ * output array, and an optional dimension (default should be 2).  The function
+ * transforms the input coordinate values, populates the output array, and
+ * returns the output array.
+ *
+ * @typedef {function(Array.<number>, Array.<number>=, number=): Array.<number>}
+ * @api stable
+ */
+ol.TransformFunction;
+
+
+/**
+ * @typedef {{buf: ol.webgl.Buffer,
+ *            buffer: WebGLBuffer}}
+ */
+ol.WebglBufferCacheEntry;
+
+
+/**
+ * @typedef {{magFilter: number, minFilter: number, texture: WebGLTexture}}
+ */
+ol.WebglTextureCacheEntry;
+
+
+/**
+ * Number of features; bounds/extent.
+ * @typedef {{numberOfFeatures: number,
+ *            bounds: ol.Extent}}
+ * @api stable
+ */
+ol.WFSFeatureCollectionMetadata;
+
+
+/**
+ * Total deleted; total inserted; total updated; array of insert ids.
+ * @typedef {{totalDeleted: number,
+ *            totalInserted: number,
+ *            totalUpdated: number,
+ *            insertIds: Array.<string>}}
+ * @api stable
+ */
+ol.WFSTransactionResponse;
+
+
+/**
+ * @typedef {{type: number, value: (number|string|undefined), position: number}}
+ */
+ol.WKTToken;
+
+
+/**
+ * When using {@link ol.xml.makeChildAppender} or
+ * {@link ol.xml.makeSimpleNodeFactory}, the top `objectStack` item needs to
+ * have this structure.
+ * @typedef {{node:Node}}
+ */
+ol.XmlNodeStackItem;
+
+
+/**
+ * @typedef {function(Node, Array.<*>)}
+ */
+ol.XmlParser;
+
+
+/**
+ * @typedef {function(Node, *, Array.<*>)}
+ */
+ol.XmlSerializer;
+
+
+/**
+ * A function that takes an {@link ol.MapBrowserEvent} and returns a
+ * `{boolean}`. If the condition is met, true should be returned.
+ *
+ * @typedef {function(ol.MapBrowserEvent): boolean}
+ * @api stable
+ */
+ol.events.ConditionType;
+
+
+/**
+ * @typedef {EventTarget|ol.events.EventTarget|
+ *     {addEventListener: function(string, Function, boolean=),
+ *     removeEventListener: function(string, Function, boolean=),
+ *     dispatchEvent: function(string)}}
+ */
+ol.events.EventTargetLike;
+
+
+/**
+ * Key to use with {@link ol.Observable#unByKey}.
+ *
+ * @typedef {{bindTo: (Object|undefined),
+ *     boundListener: (ol.events.ListenerFunctionType|undefined),
+ *     callOnce: boolean,
+ *     deleteIndex: (number|undefined),
+ *     listener: ol.events.ListenerFunctionType,
+ *     target: (EventTarget|ol.events.EventTarget),
+ *     type: string}}
+ * @api
+ */
+ol.events.Key;
+
+
+/**
+ * Listener function. This function is called with an event object as argument.
+ * When the function returns `false`, event propagation will stop.
+ *
+ * @typedef {function(ol.events.Event)|function(ol.events.Event): boolean}
+ * @api
+ */
+ol.events.ListenerFunctionType;
+
+
+/**
+ * A function that takes a {@link ol.MapBrowserEvent} and two
+ * {@link ol.Pixel}s and returns a `{boolean}`. If the condition is met,
+ * true should be returned.
+ * @typedef {function(ol.MapBrowserEvent, ol.Pixel, ol.Pixel):boolean}
+ * @api
+ */
+ol.interaction.DragBoxEndConditionType;
+
+
+/**
+ * Function that takes coordinates and an optional existing geometry as
+ * arguments, and returns a geometry. The optional existing geometry is the
+ * geometry that is returned when the function is called without a second
+ * argument.
+ * @typedef {function(!(ol.Coordinate|Array.<ol.Coordinate>|
+ *     Array.<Array.<ol.Coordinate>>), ol.geom.SimpleGeometry=):
+ *     ol.geom.SimpleGeometry}
+ * @api
+ */
+ol.interaction.DrawGeometryFunctionType;
+
+
+/**
+ * @typedef {{depth: (Array.<number>|undefined),
+ *            feature: ol.Feature,
+ *            geometry: ol.geom.SimpleGeometry,
+ *            index: (number|undefined),
+ *            segment: Array.<ol.Extent>}}
+ */
+ol.interaction.SegmentDataType;
+
+
+/**
+ * A function that takes an {@link ol.Feature} or {@link ol.render.Feature} and
+ * an {@link ol.layer.Layer} and returns `true` if the feature may be selected
+ * or `false` otherwise.
+ * @typedef {function((ol.Feature|ol.render.Feature), ol.layer.Layer):
+ *     boolean}
+ * @api
+ */
+ol.interaction.SelectFilterFunction;
+
+
+/**
+ * @typedef {{
+ *     snapped: {boolean},
+ *     vertex: (ol.Coordinate|null),
+ *     vertexPixel: (ol.Pixel|null)
+ * }}
+ */
+ol.interaction.SnapResultType;
+
+
+/**
+ * @typedef {{
+ *     feature: ol.Feature,
+ *     segment: Array.<ol.Coordinate>
+ * }}
+ */
+ol.interaction.SnapSegmentDataType;
+
+
+/**
+ * A projection as {@link ol.proj.Projection}, SRS identifier string or
+ * undefined.
+ * @typedef {ol.proj.Projection|string|undefined} ol.proj.ProjectionLike
+ * @api stable
+ */
+ol.proj.ProjectionLike;
+
+
+/**
+ * A function that takes an array of input data, performs some operation, and
+ * returns an array of ouput data.  For `'pixel'` type operations, functions
+ * will be called with an array of {@link ol.raster.Pixel} data and should
+ * return an array of the same.  For `'image'` type operations, functions will
+ * be called with an array of {@link ImageData
+ * https://developer.mozilla.org/en-US/docs/Web/API/ImageData} and should return
+ * an array of the same.  The operations are called with a second "data"
+ * argument, which can be used for storage.  The data object is accessible
+ * from raster events, where it can be initialized in "beforeoperations" and
+ * accessed again in "afteroperations".
+ *
+ * @typedef {function((Array.<ol.raster.Pixel>|Array.<ImageData>), Object):
+ *     (Array.<ol.raster.Pixel>|Array.<ImageData>)}
+ * @api
+ */
+ol.raster.Operation;
+
+
+/**
+ * An array of numbers representing pixel values.
+ * @typedef {Array.<number>} ol.raster.Pixel
+ * @api
+ */
+ol.raster.Pixel;
+
+
+/**
+ * @typedef {{x: number, y: number, width: number, height: number}}
+ */
+ol.style.AtlasBlock;
+
+
+/**
+ * Provides information for an image inside an atlas.
+ * `offsetX` and `offsetY` are the position of the image inside
+ * the atlas image `image`.
+ * @typedef {{offsetX: number, offsetY: number, image: HTMLCanvasElement}}
+ */
+ol.style.AtlasInfo;
+
+
+/**
+ * Provides information for an image inside an atlas manager.
+ * `offsetX` and `offsetY` is the position of the image inside
+ * the atlas image `image` and the position of the hit-detection image
+ * inside the hit-detection atlas image `hitImage`.
+ * @typedef {{offsetX: number, offsetY: number, image: HTMLCanvasElement,
+ *    hitImage: HTMLCanvasElement}}
+ */
+ol.style.AtlasManagerInfo;
+
+
+/**
+ * @typedef {{strokeStyle: (string|undefined), strokeWidth: number,
+ *   size: number, lineDash: Array.<number>}}
+ */
+ol.style.CircleRenderOptions;
+
+
+/**
+ * @typedef {{opacity: number,
+ *            rotateWithView: boolean,
+ *            rotation: number,
+ *            scale: number,
+ *            snapToPixel: boolean}}
+ */
+ol.style.ImageOptions;
+
+
+/**
+ * A function that takes an {@link ol.Feature} as argument and returns an
+ * {@link ol.geom.Geometry} that will be rendered and styled for the feature.
+ *
+ * @typedef {function((ol.Feature|ol.render.Feature)):
+ *     (ol.geom.Geometry|ol.render.Feature|undefined)}
+ * @api
+ */
+ol.style.GeometryFunction;
+
+
+/**
+ * @typedef {{
+ *   strokeStyle: (string|undefined),
+ *   strokeWidth: number,
+ *   size: number,
+ *   lineCap: string,
+ *   lineDash: Array.<number>,
+ *   lineJoin: string,
+ *   miterLimit: number
+ * }}
+ */
+ol.style.RegularShapeRenderOptions;
+
+
+/**
+ * A function that takes an {@link ol.Feature} and a `{number}` representing
+ * the view's resolution. The function should return a {@link ol.style.Style}
+ * or an array of them. This way e.g. a vector layer can be styled.
+ *
+ * @typedef {function((ol.Feature|ol.render.Feature), number):
+ *     (ol.style.Style|Array.<ol.style.Style>)}
+ * @api
+ */
+ol.style.StyleFunction;
+
 goog.provide('ol.events');
 goog.provide('ol.events.EventType');
 goog.provide('ol.events.KeyCode');
 
 goog.require('ol.object');
+goog.require('ol.events.EventTargetLike');
 
 
 /**
@@ -5864,40 +6113,6 @@ ol.events.KeyCode = {
  * @private
  */
 ol.events.LISTENER_MAP_PROP_ = 'olm_' + ((Math.random() * 1e4) | 0);
-
-
-/**
- * @typedef {EventTarget|ol.events.EventTarget|
- *     {addEventListener: function(string, Function, boolean=),
- *     removeEventListener: function(string, Function, boolean=),
- *     dispatchEvent: function(string)}}
- */
-ol.events.EventTargetLike;
-
-
-/**
- * Key to use with {@link ol.Observable#unByKey}.
- *
- * @typedef {{bindTo: (Object|undefined),
- *     boundListener: (ol.events.ListenerFunctionType|undefined),
- *     callOnce: boolean,
- *     deleteIndex: (number|undefined),
- *     listener: ol.events.ListenerFunctionType,
- *     target: (EventTarget|ol.events.EventTarget),
- *     type: string}}
- * @api
- */
-ol.events.Key;
-
-
-/**
- * Listener function. This function is called with an event object as argument.
- * When the function returns `false`, event propagation will stop.
- *
- * @typedef {function(ol.events.Event)|function(ol.events.Event): boolean}
- * @api
- */
-ol.events.ListenerFunctionType;
 
 
 /**
@@ -6280,6 +6495,12 @@ ol.events.EventTarget = function() {
 
   /**
    * @private
+   * @type {!Object.<string, number>}
+   */
+  this.dispatching_ = {};
+
+  /**
+   * @private
    * @type {!Object.<string, Array.<ol.events.ListenerFunctionType>>}
    */
   this.listeners_ = {};
@@ -6317,19 +6538,25 @@ ol.events.EventTarget.prototype.dispatchEvent = function(event) {
   var listeners = this.listeners_[type];
   var propagate;
   if (listeners) {
-    if (!(type in this.pendingRemovals_)) {
+    if (!(type in this.dispatching_)) {
+      this.dispatching_[type] = 0;
       this.pendingRemovals_[type] = 0;
     }
+    ++this.dispatching_[type];
     for (var i = 0, ii = listeners.length; i < ii; ++i) {
       if (listeners[i].call(this, evt) === false || evt.propagationStopped) {
         propagate = false;
         break;
       }
     }
-    var pendingRemovals = this.pendingRemovals_[type];
-    delete this.pendingRemovals_[type];
-    while (pendingRemovals--) {
-      this.removeEventListener(type, ol.nullFunction);
+    --this.dispatching_[type];
+    if (this.dispatching_[type] === 0) {
+      var pendingRemovals = this.pendingRemovals_[type];
+      delete this.pendingRemovals_[type];
+      while (pendingRemovals--) {
+        this.removeEventListener(type, ol.nullFunction);
+      }
+      delete this.dispatching_[type];
     }
     return propagate;
   }
@@ -6805,124 +7032,499 @@ ol.Object.prototype.unset = function(key, opt_silent) {
   }
 };
 
-goog.provide('ol.Size');
-goog.provide('ol.size');
-
+goog.provide('ol.array');
 
 goog.require('goog.asserts');
 
 
 /**
- * An array of numbers representing a size: `[width, height]`.
- * @typedef {Array.<number>}
- * @api stable
+ * Performs a binary search on the provided sorted list and returns the index of the item if found. If it can't be found it'll return -1.
+ * https://github.com/darkskyapp/binary-search
+ *
+ * @param {Array.<*>} haystack Items to search through.
+ * @param {*} needle The item to look for.
+ * @param {Function=} opt_comparator Comparator function.
+ * @return {number} The index of the item if found, -1 if not.
  */
-ol.Size;
+ol.array.binarySearch = function(haystack, needle, opt_comparator) {
+  var mid, cmp;
+  var comparator = opt_comparator || ol.array.numberSafeCompareFunction;
+  var low = 0;
+  var high = haystack.length;
+  var found = false;
 
+  while (low < high) {
+    /* Note that "(low + high) >>> 1" may overflow, and results in a typecast
+     * to double (which gives the wrong results). */
+    mid = low + (high - low >> 1);
+    cmp = +comparator(haystack[mid], needle);
 
-/**
- * Returns a buffered size.
- * @param {ol.Size} size Size.
- * @param {number} buffer Buffer.
- * @param {ol.Size=} opt_size Optional reusable size array.
- * @return {ol.Size} The buffered size.
- */
-ol.size.buffer = function(size, buffer, opt_size) {
-  if (opt_size === undefined) {
-    opt_size = [0, 0];
-  }
-  opt_size[0] = size[0] + 2 * buffer;
-  opt_size[1] = size[1] + 2 * buffer;
-  return opt_size;
-};
+    if (cmp < 0.0) { /* Too low. */
+      low  = mid + 1;
 
-
-/**
- * Compares sizes for equality.
- * @param {ol.Size} a Size.
- * @param {ol.Size} b Size.
- * @return {boolean} Equals.
- */
-ol.size.equals = function(a, b) {
-  return a[0] == b[0] && a[1] == b[1];
-};
-
-
-/**
- * Determines if a size has a positive area.
- * @param {ol.Size} size The size to test.
- * @return {boolean} The size has a positive area.
- */
-ol.size.hasArea = function(size) {
-  return size[0] > 0 && size[1] > 0;
-};
-
-
-/**
- * Returns a size scaled by a ratio. The result will be an array of integers.
- * @param {ol.Size} size Size.
- * @param {number} ratio Ratio.
- * @param {ol.Size=} opt_size Optional reusable size array.
- * @return {ol.Size} The scaled size.
- */
-ol.size.scale = function(size, ratio, opt_size) {
-  if (opt_size === undefined) {
-    opt_size = [0, 0];
-  }
-  opt_size[0] = (size[0] * ratio + 0.5) | 0;
-  opt_size[1] = (size[1] * ratio + 0.5) | 0;
-  return opt_size;
-};
-
-
-/**
- * Returns an `ol.Size` array for the passed in number (meaning: square) or
- * `ol.Size` array.
- * (meaning: non-square),
- * @param {number|ol.Size} size Width and height.
- * @param {ol.Size=} opt_size Optional reusable size array.
- * @return {ol.Size} Size.
- * @api stable
- */
-ol.size.toSize = function(size, opt_size) {
-  if (Array.isArray(size)) {
-    return size;
-  } else {
-    goog.asserts.assert(goog.isNumber(size));
-    if (opt_size === undefined) {
-      opt_size = [size, size];
-    } else {
-      opt_size[0] = size;
-      opt_size[1] = size;
+    } else { /* Key found or too high */
+      high = mid;
+      found = !cmp;
     }
-    return opt_size;
+  }
+
+  /* Key not found. */
+  return found ? low : ~low;
+}
+
+/**
+ * @param {Array.<number>} arr Array.
+ * @param {number} target Target.
+ * @return {number} Index.
+ */
+ol.array.binaryFindNearest = function(arr, target) {
+  var index = ol.array.binarySearch(arr, target,
+      /**
+       * @param {number} a A.
+       * @param {number} b B.
+       * @return {number} b minus a.
+       */
+      function(a, b) {
+        return b - a;
+      });
+  if (index >= 0) {
+    return index;
+  } else if (index == -1) {
+    return 0;
+  } else if (index == -arr.length - 1) {
+    return arr.length - 1;
+  } else {
+    var left = -index - 2;
+    var right = -index - 1;
+    if (arr[left] - target < target - arr[right]) {
+      return left;
+    } else {
+      return right;
+    }
   }
 };
 
-goog.provide('ol.Coordinate');
-goog.provide('ol.CoordinateFormatType');
-goog.provide('ol.coordinate');
 
-goog.require('goog.string');
+/**
+ * Compare function for array sort that is safe for numbers.
+ * @param {*} a The first object to be compared.
+ * @param {*} b The second object to be compared.
+ * @return {number} A negative number, zero, or a positive number as the first
+ *     argument is less than, equal to, or greater than the second.
+ */
+ol.array.numberSafeCompareFunction = function(a, b) {
+  return a > b ? 1 : a < b ? -1 : 0;
+};
+
+
+/**
+ * Whether the array contains the given object.
+ * @param {Array.<*>} arr The array to test for the presence of the element.
+ * @param {*} obj The object for which to test.
+ * @return {boolean} The object is in the array.
+ */
+ol.array.includes = function(arr, obj) {
+  return arr.indexOf(obj) >= 0;
+};
+
+
+/**
+ * @param {Array.<number>} arr Array.
+ * @param {number} target Target.
+ * @param {number} direction 0 means return the nearest, > 0
+ *    means return the largest nearest, < 0 means return the
+ *    smallest nearest.
+ * @return {number} Index.
+ */
+ol.array.linearFindNearest = function(arr, target, direction) {
+  var n = arr.length;
+  if (arr[0] <= target) {
+    return 0;
+  } else if (target <= arr[n - 1]) {
+    return n - 1;
+  } else {
+    var i;
+    if (direction > 0) {
+      for (i = 1; i < n; ++i) {
+        if (arr[i] < target) {
+          return i - 1;
+        }
+      }
+    } else if (direction < 0) {
+      for (i = 1; i < n; ++i) {
+        if (arr[i] <= target) {
+          return i;
+        }
+      }
+    } else {
+      for (i = 1; i < n; ++i) {
+        if (arr[i] == target) {
+          return i;
+        } else if (arr[i] < target) {
+          if (arr[i - 1] - target < target - arr[i]) {
+            return i - 1;
+          } else {
+            return i;
+          }
+        }
+      }
+    }
+    // We should never get here, but the compiler complains
+    // if it finds a path for which no number is returned.
+    goog.asserts.fail();
+    return n - 1;
+  }
+};
+
+
+/**
+ * @param {Array.<*>} arr Array.
+ * @param {number} begin Begin index.
+ * @param {number} end End index.
+ */
+ol.array.reverseSubArray = function(arr, begin, end) {
+  goog.asserts.assert(begin >= 0,
+      'Array begin index should be equal to or greater than 0');
+  goog.asserts.assert(end < arr.length,
+      'Array end index should be less than the array length');
+  while (begin < end) {
+    var tmp = arr[begin];
+    arr[begin] = arr[end];
+    arr[end] = tmp;
+    ++begin;
+    --end;
+  }
+};
+
+
+/**
+ * @param {Array.<*>} arr Array.
+ * @return {!Array.<?>} Flattened Array.
+ */
+ol.array.flatten = function(arr) {
+  var data = arr.reduce(function(flattened, value) {
+    if (Array.isArray(value)) {
+      return flattened.concat(ol.array.flatten(value));
+    } else {
+      return flattened.concat(value);
+    }
+  }, []);
+  return data;
+};
+
+
+/**
+ * @param {Array.<VALUE>} arr The array to modify.
+ * @param {Array.<VALUE>|VALUE} data The elements or arrays of elements
+ *     to add to arr.
+ * @template VALUE
+ */
+ol.array.extend = function(arr, data) {
+  var i;
+  var extension = goog.isArrayLike(data) ? data : [data];
+  var length = extension.length
+  for (i = 0; i < length; i++) {
+    arr[arr.length] = extension[i];
+  }
+}
+
+
+/**
+ * @param {Array.<VALUE>} arr The array to modify.
+ * @param {VALUE} obj The element to remove.
+ * @template VALUE
+ * @return {boolean} If the element was removed.
+ */
+ol.array.remove = function(arr, obj) {
+  var i = arr.indexOf(obj);
+  var found = i > -1;
+  if (found) {
+    arr.splice(i, 1);
+  }
+  return found;
+}
+
+
+/**
+ * @param {Array.<VALUE>} arr The array to search in.
+ * @param {function(VALUE, number, ?) : boolean} func The function to compare.
+ * @template VALUE
+ * @return {VALUE} The element found.
+ */
+ol.array.find = function(arr, func) {
+  var length = arr.length >>> 0;
+  var value;
+
+  for (var i = 0; i < length; i++) {
+    value = arr[i];
+    if (func(value, i, arr)) {
+      return value;
+    }
+  }
+  return null;
+}
+
+
+/**
+ * @param {Array|Uint8ClampedArray} arr1 The first array to compare.
+ * @param {Array|Uint8ClampedArray} arr2 The second array to compare.
+ * @return {boolean} Whether the two arrays are equal.
+ */
+ol.array.equals = function(arr1, arr2) {
+  var len1 = arr1.length;
+  if (len1 !== arr2.length) {
+    return false;
+  }
+  for (var i = 0; i < len1; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+
+/**
+ * @param {Array.<*>} arr The array to sort (modifies original).
+ * @param {Function} compareFnc Comparison function.
+ */
+ol.array.stableSort = function(arr, compareFnc) {
+  var length = arr.length;
+  var tmp = Array(arr.length);
+  var i;
+  for (i = 0; i < length; i++) {
+    tmp[i] = {index: i, value: arr[i]};
+  }
+  tmp.sort(function(a, b) {
+    return compareFnc(a.value, b.value) || a.index - b.index;
+  });
+  for (i = 0; i < arr.length; i++) {
+    arr[i] = tmp[i].value;
+  }
+}
+
+
+/**
+ * @param {Array.<*>} arr The array to search in.
+ * @param {Function} func Comparison function.
+ * @return {number} Return index.
+ */
+ol.array.findIndex = function(arr, func) {
+  var index;
+  var found = !arr.every(function(el, idx) {
+    index = idx;
+    return !func(el, idx, arr);
+  });
+  return found ? index : -1;
+}
+
+
+/**
+ * @param {Array.<*>} arr The array to test.
+ * @param {Function=} opt_func Comparison function.
+ * @param {boolean=} opt_strict Strictly sorted (default false).
+ * @return {boolean} Return index.
+ */
+ol.array.isSorted = function(arr, opt_func, opt_strict) {
+  var compare = opt_func || ol.array.numberSafeCompareFunction;
+  return arr.every(function(currentVal, index) {
+    if (index === 0) {
+      return true;
+    }
+    var res = compare(arr[index - 1], currentVal);
+    return !(res > 0 || opt_strict && res === 0);
+  });
+}
+
+goog.provide('ol.ResolutionConstraint');
+
+goog.require('ol.array');
 goog.require('ol.math');
 
 
 /**
- * A function that takes a {@link ol.Coordinate} and transforms it into a
- * `{string}`.
- *
- * @typedef {function((ol.Coordinate|undefined)): string}
- * @api stable
+ * @param {Array.<number>} resolutions Resolutions.
+ * @return {ol.ResolutionConstraintType} Zoom function.
  */
-ol.CoordinateFormatType;
+ol.ResolutionConstraint.createSnapToResolutions = function(resolutions) {
+  return (
+      /**
+       * @param {number|undefined} resolution Resolution.
+       * @param {number} delta Delta.
+       * @param {number} direction Direction.
+       * @return {number|undefined} Resolution.
+       */
+      function(resolution, delta, direction) {
+        if (resolution !== undefined) {
+          var z =
+              ol.array.linearFindNearest(resolutions, resolution, direction);
+          z = ol.math.clamp(z + delta, 0, resolutions.length - 1);
+          return resolutions[z];
+        } else {
+          return undefined;
+        }
+      });
+};
 
 
 /**
- * An array of numbers representing an xy coordinate. Example: `[16, 48]`.
- * @typedef {Array.<number>} ol.Coordinate
- * @api stable
+ * @param {number} power Power.
+ * @param {number} maxResolution Maximum resolution.
+ * @param {number=} opt_maxLevel Maximum level.
+ * @return {ol.ResolutionConstraintType} Zoom function.
  */
-ol.Coordinate;
+ol.ResolutionConstraint.createSnapToPower = function(power, maxResolution, opt_maxLevel) {
+  return (
+      /**
+       * @param {number|undefined} resolution Resolution.
+       * @param {number} delta Delta.
+       * @param {number} direction Direction.
+       * @return {number|undefined} Resolution.
+       */
+      function(resolution, delta, direction) {
+        if (resolution !== undefined) {
+          var offset;
+          if (direction > 0) {
+            offset = 0;
+          } else if (direction < 0) {
+            offset = 1;
+          } else {
+            offset = 0.5;
+          }
+          var oldLevel = Math.floor(
+              Math.log(maxResolution / resolution) / Math.log(power) + offset);
+          var newLevel = Math.max(oldLevel + delta, 0);
+          if (opt_maxLevel !== undefined) {
+            newLevel = Math.min(newLevel, opt_maxLevel);
+          }
+          return maxResolution / Math.pow(power, newLevel);
+        } else {
+          return undefined;
+        }
+      });
+};
+
+goog.provide('ol.RotationConstraint');
+
+goog.require('ol.math');
+
+
+/**
+ * @param {number|undefined} rotation Rotation.
+ * @param {number} delta Delta.
+ * @return {number|undefined} Rotation.
+ */
+ol.RotationConstraint.disable = function(rotation, delta) {
+  if (rotation !== undefined) {
+    return 0;
+  } else {
+    return undefined;
+  }
+};
+
+
+/**
+ * @param {number|undefined} rotation Rotation.
+ * @param {number} delta Delta.
+ * @return {number|undefined} Rotation.
+ */
+ol.RotationConstraint.none = function(rotation, delta) {
+  if (rotation !== undefined) {
+    return rotation + delta;
+  } else {
+    return undefined;
+  }
+};
+
+
+/**
+ * @param {number} n N.
+ * @return {ol.RotationConstraintType} Rotation constraint.
+ */
+ol.RotationConstraint.createSnapToN = function(n) {
+  var theta = 2 * Math.PI / n;
+  return (
+      /**
+       * @param {number|undefined} rotation Rotation.
+       * @param {number} delta Delta.
+       * @return {number|undefined} Rotation.
+       */
+      function(rotation, delta) {
+        if (rotation !== undefined) {
+          rotation = Math.floor((rotation + delta) / theta + 0.5) * theta;
+          return rotation;
+        } else {
+          return undefined;
+        }
+      });
+};
+
+
+/**
+ * @param {number=} opt_tolerance Tolerance.
+ * @return {ol.RotationConstraintType} Rotation constraint.
+ */
+ol.RotationConstraint.createSnapToZero = function(opt_tolerance) {
+  var tolerance = opt_tolerance || ol.math.toRadians(5);
+  return (
+      /**
+       * @param {number|undefined} rotation Rotation.
+       * @param {number} delta Delta.
+       * @return {number|undefined} Rotation.
+       */
+      function(rotation, delta) {
+        if (rotation !== undefined) {
+          if (Math.abs(rotation + delta) <= tolerance) {
+            return 0;
+          } else {
+            return rotation + delta;
+          }
+        } else {
+          return undefined;
+        }
+      });
+};
+
+goog.provide('ol.string');
+
+/**
+ * @param {number} number Number to be formatted
+ * @param {number} width The desired width
+ * @param {number=} opt_precision Precision of the output string (i.e. number of decimal places)
+ * @returns {string} Formatted string
+*/
+ol.string.padNumber = function(number, width, opt_precision) {
+  var numberString = opt_precision !== undefined ? number.toFixed(opt_precision) : '' + number;
+  var decimal = numberString.indexOf('.');
+  decimal = decimal === -1 ? numberString.length : decimal;
+  return decimal > width ? numberString : new Array(1 + width - decimal).join('0') + numberString;
+};
+
+/**
+ * Adapted from https://github.com/omichelsen/compare-versions/blob/master/index.js
+ * @param {string|number} v1 First version
+ * @param {string|number} v2 Second version
+ * @returns {number} Value
+ */
+ol.string.compareVersions = function(v1, v2) {
+  var s1 = ('' + v1).split('.');
+  var s2 = ('' + v2).split('.');
+
+  for (var i = 0; i < Math.max(s1.length, s2.length); i++) {
+    var n1 = parseInt(s1[i] || '0', 10);
+    var n2 = parseInt(s2[i] || '0', 10);
+
+    if (n1 > n2) return 1;
+    if (n2 > n1) return -1;
+  }
+
+  return 0;
+};
+
+goog.provide('ol.coordinate');
+
+goog.require('ol.math');
+goog.require('ol.string');
 
 
 /**
@@ -7034,8 +7636,8 @@ ol.coordinate.degreesToStringHDMS_ = function(degrees, hemispheres, opt_fraction
   var x = Math.abs(3600 * normalizedDegrees);
   var dflPrecision = opt_fractionDigits || 0;
   return Math.floor(x / 3600) + '\u00b0 ' +
-      goog.string.padNumber(Math.floor((x / 60) % 60), 2) + '\u2032 ' +
-      goog.string.padNumber((x % 60), 2, dflPrecision) + '\u2033 ' +
+      ol.string.padNumber(Math.floor((x / 60) % 60), 2) + '\u2032 ' +
+      ol.string.padNumber((x % 60), 2, dflPrecision) + '\u2033 ' +
       hemispheres.charAt(normalizedDegrees < 0 ? 1 : 0);
 };
 
@@ -7264,6 +7866,2132 @@ ol.coordinate.fromProjectedArray = function(array, axis) {
   } else {
     return array;
   }
+};
+
+goog.provide('ol.extent');
+goog.provide('ol.extent.Corner');
+goog.provide('ol.extent.Relationship');
+
+goog.require('goog.asserts');
+
+
+/**
+ * Extent corner.
+ * @enum {string}
+ */
+ol.extent.Corner = {
+  BOTTOM_LEFT: 'bottom-left',
+  BOTTOM_RIGHT: 'bottom-right',
+  TOP_LEFT: 'top-left',
+  TOP_RIGHT: 'top-right'
+};
+
+
+/**
+ * Relationship to an extent.
+ * @enum {number}
+ */
+ol.extent.Relationship = {
+  UNKNOWN: 0,
+  INTERSECTING: 1,
+  ABOVE: 2,
+  RIGHT: 4,
+  BELOW: 8,
+  LEFT: 16
+};
+
+
+/**
+ * Build an extent that includes all given coordinates.
+ *
+ * @param {Array.<ol.Coordinate>} coordinates Coordinates.
+ * @return {ol.Extent} Bounding extent.
+ * @api stable
+ */
+ol.extent.boundingExtent = function(coordinates) {
+  var extent = ol.extent.createEmpty();
+  for (var i = 0, ii = coordinates.length; i < ii; ++i) {
+    ol.extent.extendCoordinate(extent, coordinates[i]);
+  }
+  return extent;
+};
+
+
+/**
+ * @param {Array.<number>} xs Xs.
+ * @param {Array.<number>} ys Ys.
+ * @param {ol.Extent=} opt_extent Destination extent.
+ * @private
+ * @return {ol.Extent} Extent.
+ */
+ol.extent.boundingExtentXYs_ = function(xs, ys, opt_extent) {
+  goog.asserts.assert(xs.length > 0, 'xs length should be larger than 0');
+  goog.asserts.assert(ys.length > 0, 'ys length should be larger than 0');
+  var minX = Math.min.apply(null, xs);
+  var minY = Math.min.apply(null, ys);
+  var maxX = Math.max.apply(null, xs);
+  var maxY = Math.max.apply(null, ys);
+  return ol.extent.createOrUpdate(minX, minY, maxX, maxY, opt_extent);
+};
+
+
+/**
+ * Return extent increased by the provided value.
+ * @param {ol.Extent} extent Extent.
+ * @param {number} value The amount by which the extent should be buffered.
+ * @param {ol.Extent=} opt_extent Extent.
+ * @return {ol.Extent} Extent.
+ * @api stable
+ */
+ol.extent.buffer = function(extent, value, opt_extent) {
+  if (opt_extent) {
+    opt_extent[0] = extent[0] - value;
+    opt_extent[1] = extent[1] - value;
+    opt_extent[2] = extent[2] + value;
+    opt_extent[3] = extent[3] + value;
+    return opt_extent;
+  } else {
+    return [
+      extent[0] - value,
+      extent[1] - value,
+      extent[2] + value,
+      extent[3] + value
+    ];
+  }
+};
+
+
+/**
+ * Creates a clone of an extent.
+ *
+ * @param {ol.Extent} extent Extent to clone.
+ * @param {ol.Extent=} opt_extent Extent.
+ * @return {ol.Extent} The clone.
+ */
+ol.extent.clone = function(extent, opt_extent) {
+  if (opt_extent) {
+    opt_extent[0] = extent[0];
+    opt_extent[1] = extent[1];
+    opt_extent[2] = extent[2];
+    opt_extent[3] = extent[3];
+    return opt_extent;
+  } else {
+    return extent.slice();
+  }
+};
+
+
+/**
+ * @param {ol.Extent} extent Extent.
+ * @param {number} x X.
+ * @param {number} y Y.
+ * @return {number} Closest squared distance.
+ */
+ol.extent.closestSquaredDistanceXY = function(extent, x, y) {
+  var dx, dy;
+  if (x < extent[0]) {
+    dx = extent[0] - x;
+  } else if (extent[2] < x) {
+    dx = x - extent[2];
+  } else {
+    dx = 0;
+  }
+  if (y < extent[1]) {
+    dy = extent[1] - y;
+  } else if (extent[3] < y) {
+    dy = y - extent[3];
+  } else {
+    dy = 0;
+  }
+  return dx * dx + dy * dy;
+};
+
+
+/**
+ * Check if the passed coordinate is contained or on the edge of the extent.
+ *
+ * @param {ol.Extent} extent Extent.
+ * @param {ol.Coordinate} coordinate Coordinate.
+ * @return {boolean} The coordinate is contained in the extent.
+ * @api stable
+ */
+ol.extent.containsCoordinate = function(extent, coordinate) {
+  return ol.extent.containsXY(extent, coordinate[0], coordinate[1]);
+};
+
+
+/**
+ * Check if one extent contains another.
+ *
+ * An extent is deemed contained if it lies completely within the other extent,
+ * including if they share one or more edges.
+ *
+ * @param {ol.Extent} extent1 Extent 1.
+ * @param {ol.Extent} extent2 Extent 2.
+ * @return {boolean} The second extent is contained by or on the edge of the
+ *     first.
+ * @api stable
+ */
+ol.extent.containsExtent = function(extent1, extent2) {
+  return extent1[0] <= extent2[0] && extent2[2] <= extent1[2] &&
+      extent1[1] <= extent2[1] && extent2[3] <= extent1[3];
+};
+
+
+/**
+ * Check if the passed coordinate is contained or on the edge of the extent.
+ *
+ * @param {ol.Extent} extent Extent.
+ * @param {number} x X coordinate.
+ * @param {number} y Y coordinate.
+ * @return {boolean} The x, y values are contained in the extent.
+ * @api stable
+ */
+ol.extent.containsXY = function(extent, x, y) {
+  return extent[0] <= x && x <= extent[2] && extent[1] <= y && y <= extent[3];
+};
+
+
+/**
+ * Get the relationship between a coordinate and extent.
+ * @param {ol.Extent} extent The extent.
+ * @param {ol.Coordinate} coordinate The coordinate.
+ * @return {number} The relationship (bitwise compare with
+ *     ol.extent.Relationship).
+ */
+ol.extent.coordinateRelationship = function(extent, coordinate) {
+  var minX = extent[0];
+  var minY = extent[1];
+  var maxX = extent[2];
+  var maxY = extent[3];
+  var x = coordinate[0];
+  var y = coordinate[1];
+  var relationship = ol.extent.Relationship.UNKNOWN;
+  if (x < minX) {
+    relationship = relationship | ol.extent.Relationship.LEFT;
+  } else if (x > maxX) {
+    relationship = relationship | ol.extent.Relationship.RIGHT;
+  }
+  if (y < minY) {
+    relationship = relationship | ol.extent.Relationship.BELOW;
+  } else if (y > maxY) {
+    relationship = relationship | ol.extent.Relationship.ABOVE;
+  }
+  if (relationship === ol.extent.Relationship.UNKNOWN) {
+    relationship = ol.extent.Relationship.INTERSECTING;
+  }
+  return relationship;
+};
+
+
+/**
+ * Create an empty extent.
+ * @return {ol.Extent} Empty extent.
+ * @api stable
+ */
+ol.extent.createEmpty = function() {
+  return [Infinity, Infinity, -Infinity, -Infinity];
+};
+
+
+/**
+ * Create a new extent or update the provided extent.
+ * @param {number} minX Minimum X.
+ * @param {number} minY Minimum Y.
+ * @param {number} maxX Maximum X.
+ * @param {number} maxY Maximum Y.
+ * @param {ol.Extent=} opt_extent Destination extent.
+ * @return {ol.Extent} Extent.
+ */
+ol.extent.createOrUpdate = function(minX, minY, maxX, maxY, opt_extent) {
+  if (opt_extent) {
+    opt_extent[0] = minX;
+    opt_extent[1] = minY;
+    opt_extent[2] = maxX;
+    opt_extent[3] = maxY;
+    return opt_extent;
+  } else {
+    return [minX, minY, maxX, maxY];
+  }
+};
+
+
+/**
+ * Create a new empty extent or make the provided one empty.
+ * @param {ol.Extent=} opt_extent Extent.
+ * @return {ol.Extent} Extent.
+ */
+ol.extent.createOrUpdateEmpty = function(opt_extent) {
+  return ol.extent.createOrUpdate(
+      Infinity, Infinity, -Infinity, -Infinity, opt_extent);
+};
+
+
+/**
+ * @param {ol.Coordinate} coordinate Coordinate.
+ * @param {ol.Extent=} opt_extent Extent.
+ * @return {ol.Extent} Extent.
+ */
+ol.extent.createOrUpdateFromCoordinate = function(coordinate, opt_extent) {
+  var x = coordinate[0];
+  var y = coordinate[1];
+  return ol.extent.createOrUpdate(x, y, x, y, opt_extent);
+};
+
+
+/**
+ * @param {Array.<ol.Coordinate>} coordinates Coordinates.
+ * @param {ol.Extent=} opt_extent Extent.
+ * @return {ol.Extent} Extent.
+ */
+ol.extent.createOrUpdateFromCoordinates = function(coordinates, opt_extent) {
+  var extent = ol.extent.createOrUpdateEmpty(opt_extent);
+  return ol.extent.extendCoordinates(extent, coordinates);
+};
+
+
+/**
+ * @param {Array.<number>} flatCoordinates Flat coordinates.
+ * @param {number} offset Offset.
+ * @param {number} end End.
+ * @param {number} stride Stride.
+ * @param {ol.Extent=} opt_extent Extent.
+ * @return {ol.Extent} Extent.
+ */
+ol.extent.createOrUpdateFromFlatCoordinates = function(flatCoordinates, offset, end, stride, opt_extent) {
+  var extent = ol.extent.createOrUpdateEmpty(opt_extent);
+  return ol.extent.extendFlatCoordinates(
+      extent, flatCoordinates, offset, end, stride);
+};
+
+
+/**
+ * @param {Array.<Array.<ol.Coordinate>>} rings Rings.
+ * @param {ol.Extent=} opt_extent Extent.
+ * @return {ol.Extent} Extent.
+ */
+ol.extent.createOrUpdateFromRings = function(rings, opt_extent) {
+  var extent = ol.extent.createOrUpdateEmpty(opt_extent);
+  return ol.extent.extendRings(extent, rings);
+};
+
+
+/**
+ * Empty an extent in place.
+ * @param {ol.Extent} extent Extent.
+ * @return {ol.Extent} Extent.
+ */
+ol.extent.empty = function(extent) {
+  extent[0] = extent[1] = Infinity;
+  extent[2] = extent[3] = -Infinity;
+  return extent;
+};
+
+
+/**
+ * Determine if two extents are equivalent.
+ * @param {ol.Extent} extent1 Extent 1.
+ * @param {ol.Extent} extent2 Extent 2.
+ * @return {boolean} The two extents are equivalent.
+ * @api stable
+ */
+ol.extent.equals = function(extent1, extent2) {
+  return extent1[0] == extent2[0] && extent1[2] == extent2[2] &&
+      extent1[1] == extent2[1] && extent1[3] == extent2[3];
+};
+
+
+/**
+ * Modify an extent to include another extent.
+ * @param {ol.Extent} extent1 The extent to be modified.
+ * @param {ol.Extent} extent2 The extent that will be included in the first.
+ * @return {ol.Extent} A reference to the first (extended) extent.
+ * @api stable
+ */
+ol.extent.extend = function(extent1, extent2) {
+  if (extent2[0] < extent1[0]) {
+    extent1[0] = extent2[0];
+  }
+  if (extent2[2] > extent1[2]) {
+    extent1[2] = extent2[2];
+  }
+  if (extent2[1] < extent1[1]) {
+    extent1[1] = extent2[1];
+  }
+  if (extent2[3] > extent1[3]) {
+    extent1[3] = extent2[3];
+  }
+  return extent1;
+};
+
+
+/**
+ * @param {ol.Extent} extent Extent.
+ * @param {ol.Coordinate} coordinate Coordinate.
+ */
+ol.extent.extendCoordinate = function(extent, coordinate) {
+  if (coordinate[0] < extent[0]) {
+    extent[0] = coordinate[0];
+  }
+  if (coordinate[0] > extent[2]) {
+    extent[2] = coordinate[0];
+  }
+  if (coordinate[1] < extent[1]) {
+    extent[1] = coordinate[1];
+  }
+  if (coordinate[1] > extent[3]) {
+    extent[3] = coordinate[1];
+  }
+};
+
+
+/**
+ * @param {ol.Extent} extent Extent.
+ * @param {Array.<ol.Coordinate>} coordinates Coordinates.
+ * @return {ol.Extent} Extent.
+ */
+ol.extent.extendCoordinates = function(extent, coordinates) {
+  var i, ii;
+  for (i = 0, ii = coordinates.length; i < ii; ++i) {
+    ol.extent.extendCoordinate(extent, coordinates[i]);
+  }
+  return extent;
+};
+
+
+/**
+ * @param {ol.Extent} extent Extent.
+ * @param {Array.<number>} flatCoordinates Flat coordinates.
+ * @param {number} offset Offset.
+ * @param {number} end End.
+ * @param {number} stride Stride.
+ * @return {ol.Extent} Extent.
+ */
+ol.extent.extendFlatCoordinates = function(extent, flatCoordinates, offset, end, stride) {
+  for (; offset < end; offset += stride) {
+    ol.extent.extendXY(
+        extent, flatCoordinates[offset], flatCoordinates[offset + 1]);
+  }
+  return extent;
+};
+
+
+/**
+ * @param {ol.Extent} extent Extent.
+ * @param {Array.<Array.<ol.Coordinate>>} rings Rings.
+ * @return {ol.Extent} Extent.
+ */
+ol.extent.extendRings = function(extent, rings) {
+  var i, ii;
+  for (i = 0, ii = rings.length; i < ii; ++i) {
+    ol.extent.extendCoordinates(extent, rings[i]);
+  }
+  return extent;
+};
+
+
+/**
+ * @param {ol.Extent} extent Extent.
+ * @param {number} x X.
+ * @param {number} y Y.
+ */
+ol.extent.extendXY = function(extent, x, y) {
+  extent[0] = Math.min(extent[0], x);
+  extent[1] = Math.min(extent[1], y);
+  extent[2] = Math.max(extent[2], x);
+  extent[3] = Math.max(extent[3], y);
+};
+
+
+/**
+ * This function calls `callback` for each corner of the extent. If the
+ * callback returns a truthy value the function returns that value
+ * immediately. Otherwise the function returns `false`.
+ * @param {ol.Extent} extent Extent.
+ * @param {function(this:T, ol.Coordinate): S} callback Callback.
+ * @param {T=} opt_this Value to use as `this` when executing `callback`.
+ * @return {S|boolean} Value.
+ * @template S, T
+ */
+ol.extent.forEachCorner = function(extent, callback, opt_this) {
+  var val;
+  val = callback.call(opt_this, ol.extent.getBottomLeft(extent));
+  if (val) {
+    return val;
+  }
+  val = callback.call(opt_this, ol.extent.getBottomRight(extent));
+  if (val) {
+    return val;
+  }
+  val = callback.call(opt_this, ol.extent.getTopRight(extent));
+  if (val) {
+    return val;
+  }
+  val = callback.call(opt_this, ol.extent.getTopLeft(extent));
+  if (val) {
+    return val;
+  }
+  return false;
+};
+
+
+/**
+ * @param {ol.Extent} extent Extent.
+ * @return {number} Area.
+ */
+ol.extent.getArea = function(extent) {
+  var area = 0;
+  if (!ol.extent.isEmpty(extent)) {
+    area = ol.extent.getWidth(extent) * ol.extent.getHeight(extent);
+  }
+  return area;
+};
+
+
+/**
+ * Get the bottom left coordinate of an extent.
+ * @param {ol.Extent} extent Extent.
+ * @return {ol.Coordinate} Bottom left coordinate.
+ * @api stable
+ */
+ol.extent.getBottomLeft = function(extent) {
+  return [extent[0], extent[1]];
+};
+
+
+/**
+ * Get the bottom right coordinate of an extent.
+ * @param {ol.Extent} extent Extent.
+ * @return {ol.Coordinate} Bottom right coordinate.
+ * @api stable
+ */
+ol.extent.getBottomRight = function(extent) {
+  return [extent[2], extent[1]];
+};
+
+
+/**
+ * Get the center coordinate of an extent.
+ * @param {ol.Extent} extent Extent.
+ * @return {ol.Coordinate} Center.
+ * @api stable
+ */
+ol.extent.getCenter = function(extent) {
+  return [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
+};
+
+
+/**
+ * Get a corner coordinate of an extent.
+ * @param {ol.Extent} extent Extent.
+ * @param {ol.extent.Corner} corner Corner.
+ * @return {ol.Coordinate} Corner coordinate.
+ */
+ol.extent.getCorner = function(extent, corner) {
+  var coordinate;
+  if (corner === ol.extent.Corner.BOTTOM_LEFT) {
+    coordinate = ol.extent.getBottomLeft(extent);
+  } else if (corner === ol.extent.Corner.BOTTOM_RIGHT) {
+    coordinate = ol.extent.getBottomRight(extent);
+  } else if (corner === ol.extent.Corner.TOP_LEFT) {
+    coordinate = ol.extent.getTopLeft(extent);
+  } else if (corner === ol.extent.Corner.TOP_RIGHT) {
+    coordinate = ol.extent.getTopRight(extent);
+  } else {
+    goog.asserts.fail('Invalid corner: %s', corner);
+  }
+  goog.asserts.assert(coordinate, 'coordinate should be defined');
+  return coordinate;
+};
+
+
+/**
+ * @param {ol.Extent} extent1 Extent 1.
+ * @param {ol.Extent} extent2 Extent 2.
+ * @return {number} Enlarged area.
+ */
+ol.extent.getEnlargedArea = function(extent1, extent2) {
+  var minX = Math.min(extent1[0], extent2[0]);
+  var minY = Math.min(extent1[1], extent2[1]);
+  var maxX = Math.max(extent1[2], extent2[2]);
+  var maxY = Math.max(extent1[3], extent2[3]);
+  return (maxX - minX) * (maxY - minY);
+};
+
+
+/**
+ * @param {ol.Coordinate} center Center.
+ * @param {number} resolution Resolution.
+ * @param {number} rotation Rotation.
+ * @param {ol.Size} size Size.
+ * @param {ol.Extent=} opt_extent Destination extent.
+ * @return {ol.Extent} Extent.
+ */
+ol.extent.getForViewAndSize = function(center, resolution, rotation, size, opt_extent) {
+  var dx = resolution * size[0] / 2;
+  var dy = resolution * size[1] / 2;
+  var cosRotation = Math.cos(rotation);
+  var sinRotation = Math.sin(rotation);
+  var xCos = dx * cosRotation;
+  var xSin = dx * sinRotation;
+  var yCos = dy * cosRotation;
+  var ySin = dy * sinRotation;
+  var x = center[0];
+  var y = center[1];
+  var x0 = x - xCos + ySin;
+  var x1 = x - xCos - ySin;
+  var x2 = x + xCos - ySin;
+  var x3 = x + xCos + ySin;
+  var y0 = y - xSin - yCos;
+  var y1 = y - xSin + yCos;
+  var y2 = y + xSin + yCos;
+  var y3 = y + xSin - yCos;
+  return ol.extent.createOrUpdate(
+      Math.min(x0, x1, x2, x3), Math.min(y0, y1, y2, y3),
+      Math.max(x0, x1, x2, x3), Math.max(y0, y1, y2, y3),
+      opt_extent);
+};
+
+
+/**
+ * Get the height of an extent.
+ * @param {ol.Extent} extent Extent.
+ * @return {number} Height.
+ * @api stable
+ */
+ol.extent.getHeight = function(extent) {
+  return extent[3] - extent[1];
+};
+
+
+/**
+ * @param {ol.Extent} extent1 Extent 1.
+ * @param {ol.Extent} extent2 Extent 2.
+ * @return {number} Intersection area.
+ */
+ol.extent.getIntersectionArea = function(extent1, extent2) {
+  var intersection = ol.extent.getIntersection(extent1, extent2);
+  return ol.extent.getArea(intersection);
+};
+
+
+/**
+ * Get the intersection of two extents.
+ * @param {ol.Extent} extent1 Extent 1.
+ * @param {ol.Extent} extent2 Extent 2.
+ * @param {ol.Extent=} opt_extent Optional extent to populate with intersection.
+ * @return {ol.Extent} Intersecting extent.
+ * @api stable
+ */
+ol.extent.getIntersection = function(extent1, extent2, opt_extent) {
+  var intersection = opt_extent ? opt_extent : ol.extent.createEmpty();
+  if (ol.extent.intersects(extent1, extent2)) {
+    if (extent1[0] > extent2[0]) {
+      intersection[0] = extent1[0];
+    } else {
+      intersection[0] = extent2[0];
+    }
+    if (extent1[1] > extent2[1]) {
+      intersection[1] = extent1[1];
+    } else {
+      intersection[1] = extent2[1];
+    }
+    if (extent1[2] < extent2[2]) {
+      intersection[2] = extent1[2];
+    } else {
+      intersection[2] = extent2[2];
+    }
+    if (extent1[3] < extent2[3]) {
+      intersection[3] = extent1[3];
+    } else {
+      intersection[3] = extent2[3];
+    }
+  }
+  return intersection;
+};
+
+
+/**
+ * @param {ol.Extent} extent Extent.
+ * @return {number} Margin.
+ */
+ol.extent.getMargin = function(extent) {
+  return ol.extent.getWidth(extent) + ol.extent.getHeight(extent);
+};
+
+
+/**
+ * Get the size (width, height) of an extent.
+ * @param {ol.Extent} extent The extent.
+ * @return {ol.Size} The extent size.
+ * @api stable
+ */
+ol.extent.getSize = function(extent) {
+  return [extent[2] - extent[0], extent[3] - extent[1]];
+};
+
+
+/**
+ * Get the top left coordinate of an extent.
+ * @param {ol.Extent} extent Extent.
+ * @return {ol.Coordinate} Top left coordinate.
+ * @api stable
+ */
+ol.extent.getTopLeft = function(extent) {
+  return [extent[0], extent[3]];
+};
+
+
+/**
+ * Get the top right coordinate of an extent.
+ * @param {ol.Extent} extent Extent.
+ * @return {ol.Coordinate} Top right coordinate.
+ * @api stable
+ */
+ol.extent.getTopRight = function(extent) {
+  return [extent[2], extent[3]];
+};
+
+
+/**
+ * Get the width of an extent.
+ * @param {ol.Extent} extent Extent.
+ * @return {number} Width.
+ * @api stable
+ */
+ol.extent.getWidth = function(extent) {
+  return extent[2] - extent[0];
+};
+
+
+/**
+ * Determine if one extent intersects another.
+ * @param {ol.Extent} extent1 Extent 1.
+ * @param {ol.Extent} extent2 Extent.
+ * @return {boolean} The two extents intersect.
+ * @api stable
+ */
+ol.extent.intersects = function(extent1, extent2) {
+  return extent1[0] <= extent2[2] &&
+      extent1[2] >= extent2[0] &&
+      extent1[1] <= extent2[3] &&
+      extent1[3] >= extent2[1];
+};
+
+
+/**
+ * Determine if an extent is empty.
+ * @param {ol.Extent} extent Extent.
+ * @return {boolean} Is empty.
+ * @api stable
+ */
+ol.extent.isEmpty = function(extent) {
+  return extent[2] < extent[0] || extent[3] < extent[1];
+};
+
+
+/**
+ * @param {ol.Extent} extent Extent.
+ * @return {boolean} Is infinite.
+ */
+ol.extent.isInfinite = function(extent) {
+  return extent[0] == -Infinity || extent[1] == -Infinity ||
+      extent[2] == Infinity || extent[3] == Infinity;
+};
+
+
+/**
+ * @param {ol.Extent} extent Extent.
+ * @param {ol.Coordinate} coordinate Coordinate.
+ * @return {ol.Coordinate} Coordinate.
+ */
+ol.extent.normalize = function(extent, coordinate) {
+  return [
+    (coordinate[0] - extent[0]) / (extent[2] - extent[0]),
+    (coordinate[1] - extent[1]) / (extent[3] - extent[1])
+  ];
+};
+
+
+/**
+ * @param {ol.Extent} extent Extent.
+ * @param {ol.Extent=} opt_extent Extent.
+ * @return {ol.Extent} Extent.
+ */
+ol.extent.returnOrUpdate = function(extent, opt_extent) {
+  if (opt_extent) {
+    opt_extent[0] = extent[0];
+    opt_extent[1] = extent[1];
+    opt_extent[2] = extent[2];
+    opt_extent[3] = extent[3];
+    return opt_extent;
+  } else {
+    return extent;
+  }
+};
+
+
+/**
+ * @param {ol.Extent} extent Extent.
+ * @param {number} value Value.
+ */
+ol.extent.scaleFromCenter = function(extent, value) {
+  var deltaX = ((extent[2] - extent[0]) / 2) * (value - 1);
+  var deltaY = ((extent[3] - extent[1]) / 2) * (value - 1);
+  extent[0] -= deltaX;
+  extent[2] += deltaX;
+  extent[1] -= deltaY;
+  extent[3] += deltaY;
+};
+
+
+/**
+ * Determine if the segment between two coordinates intersects (crosses,
+ * touches, or is contained by) the provided extent.
+ * @param {ol.Extent} extent The extent.
+ * @param {ol.Coordinate} start Segment start coordinate.
+ * @param {ol.Coordinate} end Segment end coordinate.
+ * @return {boolean} The segment intersects the extent.
+ */
+ol.extent.intersectsSegment = function(extent, start, end) {
+  var intersects = false;
+  var startRel = ol.extent.coordinateRelationship(extent, start);
+  var endRel = ol.extent.coordinateRelationship(extent, end);
+  if (startRel === ol.extent.Relationship.INTERSECTING ||
+      endRel === ol.extent.Relationship.INTERSECTING) {
+    intersects = true;
+  } else {
+    var minX = extent[0];
+    var minY = extent[1];
+    var maxX = extent[2];
+    var maxY = extent[3];
+    var startX = start[0];
+    var startY = start[1];
+    var endX = end[0];
+    var endY = end[1];
+    var slope = (endY - startY) / (endX - startX);
+    var x, y;
+    if (!!(endRel & ol.extent.Relationship.ABOVE) &&
+        !(startRel & ol.extent.Relationship.ABOVE)) {
+      // potentially intersects top
+      x = endX - ((endY - maxY) / slope);
+      intersects = x >= minX && x <= maxX;
+    }
+    if (!intersects && !!(endRel & ol.extent.Relationship.RIGHT) &&
+        !(startRel & ol.extent.Relationship.RIGHT)) {
+      // potentially intersects right
+      y = endY - ((endX - maxX) * slope);
+      intersects = y >= minY && y <= maxY;
+    }
+    if (!intersects && !!(endRel & ol.extent.Relationship.BELOW) &&
+        !(startRel & ol.extent.Relationship.BELOW)) {
+      // potentially intersects bottom
+      x = endX - ((endY - minY) / slope);
+      intersects = x >= minX && x <= maxX;
+    }
+    if (!intersects && !!(endRel & ol.extent.Relationship.LEFT) &&
+        !(startRel & ol.extent.Relationship.LEFT)) {
+      // potentially intersects left
+      y = endY - ((endX - minX) * slope);
+      intersects = y >= minY && y <= maxY;
+    }
+
+  }
+  return intersects;
+};
+
+
+/**
+ * @param {ol.Extent} extent1 Extent 1.
+ * @param {ol.Extent} extent2 Extent 2.
+ * @return {boolean} Touches.
+ */
+ol.extent.touches = function(extent1, extent2) {
+  var intersects = ol.extent.intersects(extent1, extent2);
+  return intersects &&
+      (extent1[0] == extent2[2] || extent1[2] == extent2[0] ||
+       extent1[1] == extent2[3] || extent1[3] == extent2[1]);
+};
+
+
+/**
+ * Apply a transform function to the extent.
+ * @param {ol.Extent} extent Extent.
+ * @param {ol.TransformFunction} transformFn Transform function.  Called with
+ * [minX, minY, maxX, maxY] extent coordinates.
+ * @param {ol.Extent=} opt_extent Destination extent.
+ * @return {ol.Extent} Extent.
+ * @api stable
+ */
+ol.extent.applyTransform = function(extent, transformFn, opt_extent) {
+  var coordinates = [
+    extent[0], extent[1],
+    extent[0], extent[3],
+    extent[2], extent[1],
+    extent[2], extent[3]
+  ];
+  transformFn(coordinates, coordinates, 2);
+  var xs = [coordinates[0], coordinates[2], coordinates[4], coordinates[6]];
+  var ys = [coordinates[1], coordinates[3], coordinates[5], coordinates[7]];
+  return ol.extent.boundingExtentXYs_(xs, ys, opt_extent);
+};
+
+goog.provide('ol.functions');
+
+/**
+ * Always returns true.
+ * @returns {boolean} true.
+ */
+ol.functions.TRUE = function() {
+  return true;
+};
+
+/**
+ * Always returns false.
+ * @returns {boolean} false.
+ */
+ol.functions.FALSE = function() {
+  return false;
+};
+
+/**
+ * @license
+ * Latitude/longitude spherical geodesy formulae taken from
+ * http://www.movable-type.co.uk/scripts/latlong.html
+ * Licensed under CC-BY-3.0.
+ */
+
+goog.provide('ol.Sphere');
+
+goog.require('ol.math');
+
+
+/**
+ * @classdesc
+ * Class to create objects that can be used with {@link
+ * ol.geom.Polygon.circular}.
+ *
+ * For example to create a sphere whose radius is equal to the semi-major
+ * axis of the WGS84 ellipsoid:
+ *
+ * ```js
+ * var wgs84Sphere= new ol.Sphere(6378137);
+ * ```
+ *
+ * @constructor
+ * @param {number} radius Radius.
+ * @api
+ */
+ol.Sphere = function(radius) {
+
+  /**
+   * @type {number}
+   */
+  this.radius = radius;
+
+};
+
+
+/**
+ * Returns the geodesic area for a list of coordinates.
+ *
+ * [Reference](http://trs-new.jpl.nasa.gov/dspace/handle/2014/40409)
+ * Robert. G. Chamberlain and William H. Duquette, "Some Algorithms for
+ * Polygons on a Sphere", JPL Publication 07-03, Jet Propulsion
+ * Laboratory, Pasadena, CA, June 2007
+ *
+ * @param {Array.<ol.Coordinate>} coordinates List of coordinates of a linear
+ * ring. If the ring is oriented clockwise, the area will be positive,
+ * otherwise it will be negative.
+ * @return {number} Area.
+ * @api
+ */
+ol.Sphere.prototype.geodesicArea = function(coordinates) {
+  var area = 0, len = coordinates.length;
+  var x1 = coordinates[len - 1][0];
+  var y1 = coordinates[len - 1][1];
+  for (var i = 0; i < len; i++) {
+    var x2 = coordinates[i][0], y2 = coordinates[i][1];
+    area += ol.math.toRadians(x2 - x1) *
+        (2 + Math.sin(ol.math.toRadians(y1)) +
+        Math.sin(ol.math.toRadians(y2)));
+    x1 = x2;
+    y1 = y2;
+  }
+  return area * this.radius * this.radius / 2.0;
+};
+
+
+/**
+ * Returns the distance from c1 to c2 using the haversine formula.
+ *
+ * @param {ol.Coordinate} c1 Coordinate 1.
+ * @param {ol.Coordinate} c2 Coordinate 2.
+ * @return {number} Haversine distance.
+ * @api
+ */
+ol.Sphere.prototype.haversineDistance = function(c1, c2) {
+  var lat1 = ol.math.toRadians(c1[1]);
+  var lat2 = ol.math.toRadians(c2[1]);
+  var deltaLatBy2 = (lat2 - lat1) / 2;
+  var deltaLonBy2 = ol.math.toRadians(c2[0] - c1[0]) / 2;
+  var a = Math.sin(deltaLatBy2) * Math.sin(deltaLatBy2) +
+      Math.sin(deltaLonBy2) * Math.sin(deltaLonBy2) *
+      Math.cos(lat1) * Math.cos(lat2);
+  return 2 * this.radius * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+};
+
+
+/**
+ * Returns the coordinate at the given distance and bearing from `c1`.
+ *
+ * @param {ol.Coordinate} c1 The origin point (`[lon, lat]` in degrees).
+ * @param {number} distance The great-circle distance between the origin
+ *     point and the target point.
+ * @param {number} bearing The bearing (in radians).
+ * @return {ol.Coordinate} The target point.
+ */
+ol.Sphere.prototype.offset = function(c1, distance, bearing) {
+  var lat1 = ol.math.toRadians(c1[1]);
+  var lon1 = ol.math.toRadians(c1[0]);
+  var dByR = distance / this.radius;
+  var lat = Math.asin(
+      Math.sin(lat1) * Math.cos(dByR) +
+      Math.cos(lat1) * Math.sin(dByR) * Math.cos(bearing));
+  var lon = lon1 + Math.atan2(
+      Math.sin(bearing) * Math.sin(dByR) * Math.cos(lat1),
+      Math.cos(dByR) - Math.sin(lat1) * Math.sin(lat));
+  return [ol.math.toDegrees(lon), ol.math.toDegrees(lat)];
+};
+
+goog.provide('ol.sphere.NORMAL');
+
+goog.require('ol.Sphere');
+
+
+/**
+ * The normal sphere.
+ * @const
+ * @type {ol.Sphere}
+ */
+ol.sphere.NORMAL = new ol.Sphere(6370997);
+
+goog.provide('ol.proj');
+goog.provide('ol.proj.METERS_PER_UNIT');
+goog.provide('ol.proj.Projection');
+goog.provide('ol.proj.Units');
+
+goog.require('goog.asserts');
+goog.require('ol');
+goog.require('ol.extent');
+goog.require('ol.object');
+goog.require('ol.sphere.NORMAL');
+
+
+/**
+ * Projection units: `'degrees'`, `'ft'`, `'m'`, `'pixels'`, `'tile-pixels'` or
+ * `'us-ft'`.
+ * @enum {string}
+ * @api stable
+ */
+ol.proj.Units = {
+  DEGREES: 'degrees',
+  FEET: 'ft',
+  METERS: 'm',
+  PIXELS: 'pixels',
+  TILE_PIXELS: 'tile-pixels',
+  USFEET: 'us-ft'
+};
+
+
+/**
+ * Meters per unit lookup table.
+ * @const
+ * @type {Object.<ol.proj.Units, number>}
+ * @api stable
+ */
+ol.proj.METERS_PER_UNIT = {};
+ol.proj.METERS_PER_UNIT[ol.proj.Units.DEGREES] =
+    2 * Math.PI * ol.sphere.NORMAL.radius / 360;
+ol.proj.METERS_PER_UNIT[ol.proj.Units.FEET] = 0.3048;
+ol.proj.METERS_PER_UNIT[ol.proj.Units.METERS] = 1;
+ol.proj.METERS_PER_UNIT[ol.proj.Units.USFEET] = 1200 / 3937;
+
+
+/**
+ * @classdesc
+ * Projection definition class. One of these is created for each projection
+ * supported in the application and stored in the {@link ol.proj} namespace.
+ * You can use these in applications, but this is not required, as API params
+ * and options use {@link ol.proj.ProjectionLike} which means the simple string
+ * code will suffice.
+ *
+ * You can use {@link ol.proj.get} to retrieve the object for a particular
+ * projection.
+ *
+ * The library includes definitions for `EPSG:4326` and `EPSG:3857`, together
+ * with the following aliases:
+ * * `EPSG:4326`: CRS:84, urn:ogc:def:crs:EPSG:6.6:4326,
+ *     urn:ogc:def:crs:OGC:1.3:CRS84, urn:ogc:def:crs:OGC:2:84,
+ *     http://www.opengis.net/gml/srs/epsg.xml#4326,
+ *     urn:x-ogc:def:crs:EPSG:4326
+ * * `EPSG:3857`: EPSG:102100, EPSG:102113, EPSG:900913,
+ *     urn:ogc:def:crs:EPSG:6.18:3:3857,
+ *     http://www.opengis.net/gml/srs/epsg.xml#3857
+ *
+ * If you use proj4js, aliases can be added using `proj4.defs()`; see
+ * [documentation](https://github.com/proj4js/proj4js). To set an alternative
+ * namespace for proj4, use {@link ol.proj.setProj4}.
+ *
+ * @constructor
+ * @param {olx.ProjectionOptions} options Projection options.
+ * @struct
+ * @api stable
+ */
+ol.proj.Projection = function(options) {
+
+  /**
+   * @private
+   * @type {string}
+   */
+  this.code_ = options.code;
+
+  /**
+   * @private
+   * @type {ol.proj.Units}
+   */
+  this.units_ = /** @type {ol.proj.Units} */ (options.units);
+
+  /**
+   * @private
+   * @type {ol.Extent}
+   */
+  this.extent_ = options.extent !== undefined ? options.extent : null;
+
+  /**
+   * @private
+   * @type {ol.Extent}
+   */
+  this.worldExtent_ = options.worldExtent !== undefined ?
+      options.worldExtent : null;
+
+  /**
+   * @private
+   * @type {string}
+   */
+  this.axisOrientation_ = options.axisOrientation !== undefined ?
+      options.axisOrientation : 'enu';
+
+  /**
+   * @private
+   * @type {boolean}
+   */
+  this.global_ = options.global !== undefined ? options.global : false;
+
+
+  /**
+   * @private
+   * @type {boolean}
+   */
+  this.canWrapX_ = !!(this.global_ && this.extent_);
+
+  /**
+  * @private
+  * @type {function(number, ol.Coordinate):number}
+  */
+  this.getPointResolutionFunc_ = options.getPointResolution !== undefined ?
+      options.getPointResolution : this.getPointResolution_;
+
+  /**
+   * @private
+   * @type {ol.tilegrid.TileGrid}
+   */
+  this.defaultTileGrid_ = null;
+
+  /**
+   * @private
+   * @type {number|undefined}
+   */
+  this.metersPerUnit_ = options.metersPerUnit;
+
+  var projections = ol.proj.projections_;
+  var code = options.code;
+  goog.asserts.assert(code !== undefined,
+      'Option "code" is required for constructing instance');
+  if (ol.ENABLE_PROJ4JS) {
+    var proj4js = ol.proj.proj4_ || ol.global['proj4'];
+    if (typeof proj4js == 'function' && projections[code] === undefined) {
+      var def = proj4js.defs(code);
+      if (def !== undefined) {
+        if (def.axis !== undefined && options.axisOrientation === undefined) {
+          this.axisOrientation_ = def.axis;
+        }
+        if (options.metersPerUnit === undefined) {
+          this.metersPerUnit_ = def.to_meter;
+        }
+        if (options.units === undefined) {
+          this.units_ = def.units;
+        }
+        var currentCode, currentDef, currentProj, proj4Transform;
+        for (currentCode in projections) {
+          currentDef = proj4js.defs(currentCode);
+          if (currentDef !== undefined) {
+            currentProj = ol.proj.get(currentCode);
+            if (currentDef === def) {
+              ol.proj.addEquivalentProjections([currentProj, this]);
+            } else {
+              proj4Transform = proj4js(currentCode, code);
+              ol.proj.addCoordinateTransforms(currentProj, this,
+                  proj4Transform.forward, proj4Transform.inverse);
+            }
+          }
+        }
+      }
+    }
+  }
+
+};
+
+
+/**
+ * @return {boolean} The projection is suitable for wrapping the x-axis
+ */
+ol.proj.Projection.prototype.canWrapX = function() {
+  return this.canWrapX_;
+};
+
+
+/**
+ * Get the code for this projection, e.g. 'EPSG:4326'.
+ * @return {string} Code.
+ * @api stable
+ */
+ol.proj.Projection.prototype.getCode = function() {
+  return this.code_;
+};
+
+
+/**
+ * Get the validity extent for this projection.
+ * @return {ol.Extent} Extent.
+ * @api stable
+ */
+ol.proj.Projection.prototype.getExtent = function() {
+  return this.extent_;
+};
+
+
+/**
+ * Get the units of this projection.
+ * @return {ol.proj.Units} Units.
+ * @api stable
+ */
+ol.proj.Projection.prototype.getUnits = function() {
+  return this.units_;
+};
+
+
+/**
+ * Get the amount of meters per unit of this projection.  If the projection is
+ * not configured with `metersPerUnit` or a units identifier, the return is
+ * `undefined`.
+ * @return {number|undefined} Meters.
+ * @api stable
+ */
+ol.proj.Projection.prototype.getMetersPerUnit = function() {
+  return this.metersPerUnit_ || ol.proj.METERS_PER_UNIT[this.units_];
+};
+
+
+/**
+ * Get the world extent for this projection.
+ * @return {ol.Extent} Extent.
+ * @api
+ */
+ol.proj.Projection.prototype.getWorldExtent = function() {
+  return this.worldExtent_;
+};
+
+
+/**
+ * Get the axis orientation of this projection.
+ * Example values are:
+ * enu - the default easting, northing, elevation.
+ * neu - northing, easting, up - useful for "lat/long" geographic coordinates,
+ *     or south orientated transverse mercator.
+ * wnu - westing, northing, up - some planetary coordinate systems have
+ *     "west positive" coordinate systems
+ * @return {string} Axis orientation.
+ */
+ol.proj.Projection.prototype.getAxisOrientation = function() {
+  return this.axisOrientation_;
+};
+
+
+/**
+ * Is this projection a global projection which spans the whole world?
+ * @return {boolean} Whether the projection is global.
+ * @api stable
+ */
+ol.proj.Projection.prototype.isGlobal = function() {
+  return this.global_;
+};
+
+
+/**
+* Set if the projection is a global projection which spans the whole world
+* @param {boolean} global Whether the projection is global.
+* @api stable
+*/
+ol.proj.Projection.prototype.setGlobal = function(global) {
+  this.global_ = global;
+  this.canWrapX_ = !!(global && this.extent_);
+};
+
+
+/**
+ * @return {ol.tilegrid.TileGrid} The default tile grid.
+ */
+ol.proj.Projection.prototype.getDefaultTileGrid = function() {
+  return this.defaultTileGrid_;
+};
+
+
+/**
+ * @param {ol.tilegrid.TileGrid} tileGrid The default tile grid.
+ */
+ol.proj.Projection.prototype.setDefaultTileGrid = function(tileGrid) {
+  this.defaultTileGrid_ = tileGrid;
+};
+
+
+/**
+ * Set the validity extent for this projection.
+ * @param {ol.Extent} extent Extent.
+ * @api stable
+ */
+ol.proj.Projection.prototype.setExtent = function(extent) {
+  this.extent_ = extent;
+  this.canWrapX_ = !!(this.global_ && extent);
+};
+
+
+/**
+ * Set the world extent for this projection.
+ * @param {ol.Extent} worldExtent World extent
+ *     [minlon, minlat, maxlon, maxlat].
+ * @api
+ */
+ol.proj.Projection.prototype.setWorldExtent = function(worldExtent) {
+  this.worldExtent_ = worldExtent;
+};
+
+
+/**
+* Set the getPointResolution function for this projection.
+* @param {function(number, ol.Coordinate):number} func Function
+* @api
+*/
+ol.proj.Projection.prototype.setGetPointResolution = function(func) {
+  this.getPointResolutionFunc_ = func;
+};
+
+
+/**
+* Default version.
+* Get the resolution of the point in degrees or distance units.
+* For projections with degrees as the unit this will simply return the
+* provided resolution. For other projections the point resolution is
+* estimated by transforming the 'point' pixel to EPSG:4326,
+* measuring its width and height on the normal sphere,
+* and taking the average of the width and height.
+* @param {number} resolution Nominal resolution in projection units.
+* @param {ol.Coordinate} point Point to find adjusted resolution at.
+* @return {number} Point resolution at point in projection units.
+* @private
+*/
+ol.proj.Projection.prototype.getPointResolution_ = function(resolution, point) {
+  var units = this.getUnits();
+  if (units == ol.proj.Units.DEGREES) {
+    return resolution;
+  } else {
+    // Estimate point resolution by transforming the center pixel to EPSG:4326,
+    // measuring its width and height on the normal sphere, and taking the
+    // average of the width and height.
+    var toEPSG4326 = ol.proj.getTransformFromProjections(
+        this, ol.proj.get('EPSG:4326'));
+    var vertices = [
+      point[0] - resolution / 2, point[1],
+      point[0] + resolution / 2, point[1],
+      point[0], point[1] - resolution / 2,
+      point[0], point[1] + resolution / 2
+    ];
+    vertices = toEPSG4326(vertices, vertices, 2);
+    var width = ol.sphere.NORMAL.haversineDistance(
+        vertices.slice(0, 2), vertices.slice(2, 4));
+    var height = ol.sphere.NORMAL.haversineDistance(
+        vertices.slice(4, 6), vertices.slice(6, 8));
+    var pointResolution = (width + height) / 2;
+    var metersPerUnit = this.getMetersPerUnit();
+    if (metersPerUnit !== undefined) {
+      pointResolution /= metersPerUnit;
+    }
+    return pointResolution;
+  }
+};
+
+
+/**
+ * Get the resolution of the point in degrees or distance units.
+ * For projections with degrees as the unit this will simply return the
+ * provided resolution. The default for other projections is to estimate
+ * the point resolution by transforming the 'point' pixel to EPSG:4326,
+ * measuring its width and height on the normal sphere,
+ * and taking the average of the width and height.
+ * An alternative implementation may be given when constructing a
+ * projection. For many local projections,
+ * such a custom function will return the resolution unchanged.
+ * @param {number} resolution Resolution in projection units.
+ * @param {ol.Coordinate} point Point.
+ * @return {number} Point resolution in projection units.
+ * @api
+ */
+ol.proj.Projection.prototype.getPointResolution = function(resolution, point) {
+  return this.getPointResolutionFunc_(resolution, point);
+};
+
+
+/**
+ * @private
+ * @type {Object.<string, ol.proj.Projection>}
+ */
+ol.proj.projections_ = {};
+
+
+/**
+ * @private
+ * @type {Object.<string, Object.<string, ol.TransformFunction>>}
+ */
+ol.proj.transforms_ = {};
+
+
+/**
+ * @private
+ * @type {proj4}
+ */
+ol.proj.proj4_ = null;
+
+
+if (ol.ENABLE_PROJ4JS) {
+  /**
+   * Register proj4. If not explicitly registered, it will be assumed that
+   * proj4js will be loaded in the global namespace. For example in a
+   * browserify ES6 environment you could use:
+   *
+   *     import ol from 'openlayers';
+   *     import proj4 from 'proj4';
+   *     ol.proj.setProj4(proj4);
+   *
+   * @param {proj4} proj4 Proj4.
+   * @api
+   */
+  ol.proj.setProj4 = function(proj4) {
+    goog.asserts.assert(typeof proj4 == 'function',
+        'proj4 argument should be a function');
+    ol.proj.proj4_ = proj4;
+  };
+}
+
+
+/**
+ * Registers transformation functions that don't alter coordinates. Those allow
+ * to transform between projections with equal meaning.
+ *
+ * @param {Array.<ol.proj.Projection>} projections Projections.
+ * @api
+ */
+ol.proj.addEquivalentProjections = function(projections) {
+  ol.proj.addProjections(projections);
+  projections.forEach(function(source) {
+    projections.forEach(function(destination) {
+      if (source !== destination) {
+        ol.proj.addTransform(source, destination, ol.proj.cloneTransform);
+      }
+    });
+  });
+};
+
+
+/**
+ * Registers transformation functions to convert coordinates in any projection
+ * in projection1 to any projection in projection2.
+ *
+ * @param {Array.<ol.proj.Projection>} projections1 Projections with equal
+ *     meaning.
+ * @param {Array.<ol.proj.Projection>} projections2 Projections with equal
+ *     meaning.
+ * @param {ol.TransformFunction} forwardTransform Transformation from any
+ *   projection in projection1 to any projection in projection2.
+ * @param {ol.TransformFunction} inverseTransform Transform from any projection
+ *   in projection2 to any projection in projection1..
+ */
+ol.proj.addEquivalentTransforms = function(projections1, projections2, forwardTransform, inverseTransform) {
+  projections1.forEach(function(projection1) {
+    projections2.forEach(function(projection2) {
+      ol.proj.addTransform(projection1, projection2, forwardTransform);
+      ol.proj.addTransform(projection2, projection1, inverseTransform);
+    });
+  });
+};
+
+
+/**
+ * Add a Projection object to the list of supported projections that can be
+ * looked up by their code.
+ *
+ * @param {ol.proj.Projection} projection Projection instance.
+ * @api stable
+ */
+ol.proj.addProjection = function(projection) {
+  ol.proj.projections_[projection.getCode()] = projection;
+  ol.proj.addTransform(projection, projection, ol.proj.cloneTransform);
+};
+
+
+/**
+ * @param {Array.<ol.proj.Projection>} projections Projections.
+ */
+ol.proj.addProjections = function(projections) {
+  var addedProjections = [];
+  projections.forEach(function(projection) {
+    addedProjections.push(ol.proj.addProjection(projection));
+  });
+};
+
+
+/**
+ * FIXME empty description for jsdoc
+ */
+ol.proj.clearAllProjections = function() {
+  ol.proj.projections_ = {};
+  ol.proj.transforms_ = {};
+};
+
+
+/**
+ * @param {ol.proj.Projection|string|undefined} projection Projection.
+ * @param {string} defaultCode Default code.
+ * @return {ol.proj.Projection} Projection.
+ */
+ol.proj.createProjection = function(projection, defaultCode) {
+  if (!projection) {
+    return ol.proj.get(defaultCode);
+  } else if (typeof projection === 'string') {
+    return ol.proj.get(projection);
+  } else {
+    goog.asserts.assertInstanceof(projection, ol.proj.Projection,
+        'projection should be an ol.proj.Projection');
+    return projection;
+  }
+};
+
+
+/**
+ * Registers a conversion function to convert coordinates from the source
+ * projection to the destination projection.
+ *
+ * @param {ol.proj.Projection} source Source.
+ * @param {ol.proj.Projection} destination Destination.
+ * @param {ol.TransformFunction} transformFn Transform.
+ */
+ol.proj.addTransform = function(source, destination, transformFn) {
+  var sourceCode = source.getCode();
+  var destinationCode = destination.getCode();
+  var transforms = ol.proj.transforms_;
+  if (!(sourceCode in transforms)) {
+    transforms[sourceCode] = {};
+  }
+  transforms[sourceCode][destinationCode] = transformFn;
+};
+
+
+/**
+ * Registers coordinate transform functions to convert coordinates between the
+ * source projection and the destination projection.
+ * The forward and inverse functions convert coordinate pairs; this function
+ * converts these into the functions used internally which also handle
+ * extents and coordinate arrays.
+ *
+ * @param {ol.proj.ProjectionLike} source Source projection.
+ * @param {ol.proj.ProjectionLike} destination Destination projection.
+ * @param {function(ol.Coordinate): ol.Coordinate} forward The forward transform
+ *     function (that is, from the source projection to the destination
+ *     projection) that takes a {@link ol.Coordinate} as argument and returns
+ *     the transformed {@link ol.Coordinate}.
+ * @param {function(ol.Coordinate): ol.Coordinate} inverse The inverse transform
+ *     function (that is, from the destination projection to the source
+ *     projection) that takes a {@link ol.Coordinate} as argument and returns
+ *     the transformed {@link ol.Coordinate}.
+ * @api stable
+ */
+ol.proj.addCoordinateTransforms = function(source, destination, forward, inverse) {
+  var sourceProj = ol.proj.get(source);
+  var destProj = ol.proj.get(destination);
+  ol.proj.addTransform(sourceProj, destProj,
+      ol.proj.createTransformFromCoordinateTransform(forward));
+  ol.proj.addTransform(destProj, sourceProj,
+      ol.proj.createTransformFromCoordinateTransform(inverse));
+};
+
+
+/**
+ * Creates a {@link ol.TransformFunction} from a simple 2D coordinate transform
+ * function.
+ * @param {function(ol.Coordinate): ol.Coordinate} transform Coordinate
+ *     transform.
+ * @return {ol.TransformFunction} Transform function.
+ */
+ol.proj.createTransformFromCoordinateTransform = function(transform) {
+  return (
+      /**
+       * @param {Array.<number>} input Input.
+       * @param {Array.<number>=} opt_output Output.
+       * @param {number=} opt_dimension Dimension.
+       * @return {Array.<number>} Output.
+       */
+      function(input, opt_output, opt_dimension) {
+        var length = input.length;
+        var dimension = opt_dimension !== undefined ? opt_dimension : 2;
+        var output = opt_output !== undefined ? opt_output : new Array(length);
+        var point, i, j;
+        for (i = 0; i < length; i += dimension) {
+          point = transform([input[i], input[i + 1]]);
+          output[i] = point[0];
+          output[i + 1] = point[1];
+          for (j = dimension - 1; j >= 2; --j) {
+            output[i + j] = input[i + j];
+          }
+        }
+        return output;
+      });
+};
+
+
+/**
+ * Unregisters the conversion function to convert coordinates from the source
+ * projection to the destination projection.  This method is used to clean up
+ * cached transforms during testing.
+ *
+ * @param {ol.proj.Projection} source Source projection.
+ * @param {ol.proj.Projection} destination Destination projection.
+ * @return {ol.TransformFunction} transformFn The unregistered transform.
+ */
+ol.proj.removeTransform = function(source, destination) {
+  var sourceCode = source.getCode();
+  var destinationCode = destination.getCode();
+  var transforms = ol.proj.transforms_;
+  goog.asserts.assert(sourceCode in transforms,
+      'sourceCode should be in transforms');
+  goog.asserts.assert(destinationCode in transforms[sourceCode],
+      'destinationCode should be in transforms of sourceCode');
+  var transform = transforms[sourceCode][destinationCode];
+  delete transforms[sourceCode][destinationCode];
+  if (ol.object.isEmpty(transforms[sourceCode])) {
+    delete transforms[sourceCode];
+  }
+  return transform;
+};
+
+
+/**
+ * Transforms a coordinate from longitude/latitude to a different projection.
+ * @param {ol.Coordinate} coordinate Coordinate as longitude and latitude, i.e.
+ *     an array with longitude as 1st and latitude as 2nd element.
+ * @param {ol.proj.ProjectionLike=} opt_projection Target projection. The
+ *     default is Web Mercator, i.e. 'EPSG:3857'.
+ * @return {ol.Coordinate} Coordinate projected to the target projection.
+ * @api stable
+ */
+ol.proj.fromLonLat = function(coordinate, opt_projection) {
+  return ol.proj.transform(coordinate, 'EPSG:4326',
+      opt_projection !== undefined ? opt_projection : 'EPSG:3857');
+};
+
+
+/**
+ * Transforms a coordinate to longitude/latitude.
+ * @param {ol.Coordinate} coordinate Projected coordinate.
+ * @param {ol.proj.ProjectionLike=} opt_projection Projection of the coordinate.
+ *     The default is Web Mercator, i.e. 'EPSG:3857'.
+ * @return {ol.Coordinate} Coordinate as longitude and latitude, i.e. an array
+ *     with longitude as 1st and latitude as 2nd element.
+ * @api stable
+ */
+ol.proj.toLonLat = function(coordinate, opt_projection) {
+  return ol.proj.transform(coordinate,
+      opt_projection !== undefined ? opt_projection : 'EPSG:3857', 'EPSG:4326');
+};
+
+
+/**
+ * Fetches a Projection object for the code specified.
+ *
+ * @param {ol.proj.ProjectionLike} projectionLike Either a code string which is
+ *     a combination of authority and identifier such as "EPSG:4326", or an
+ *     existing projection object, or undefined.
+ * @return {ol.proj.Projection} Projection object, or null if not in list.
+ * @api stable
+ */
+ol.proj.get = function(projectionLike) {
+  var projection;
+  if (projectionLike instanceof ol.proj.Projection) {
+    projection = projectionLike;
+  } else if (typeof projectionLike === 'string') {
+    var code = projectionLike;
+    projection = ol.proj.projections_[code];
+    if (ol.ENABLE_PROJ4JS) {
+      var proj4js = ol.proj.proj4_ || ol.global['proj4'];
+      if (projection === undefined && typeof proj4js == 'function' &&
+          proj4js.defs(code) !== undefined) {
+        projection = new ol.proj.Projection({code: code});
+        ol.proj.addProjection(projection);
+      }
+    }
+  } else {
+    projection = null;
+  }
+  return projection;
+};
+
+
+/**
+ * Checks if two projections are the same, that is every coordinate in one
+ * projection does represent the same geographic point as the same coordinate in
+ * the other projection.
+ *
+ * @param {ol.proj.Projection} projection1 Projection 1.
+ * @param {ol.proj.Projection} projection2 Projection 2.
+ * @return {boolean} Equivalent.
+ * @api
+ */
+ol.proj.equivalent = function(projection1, projection2) {
+  if (projection1 === projection2) {
+    return true;
+  }
+  var equalUnits = projection1.getUnits() === projection2.getUnits();
+  if (projection1.getCode() === projection2.getCode()) {
+    return equalUnits;
+  } else {
+    var transformFn = ol.proj.getTransformFromProjections(
+        projection1, projection2);
+    return transformFn === ol.proj.cloneTransform && equalUnits;
+  }
+};
+
+
+/**
+ * Given the projection-like objects, searches for a transformation
+ * function to convert a coordinates array from the source projection to the
+ * destination projection.
+ *
+ * @param {ol.proj.ProjectionLike} source Source.
+ * @param {ol.proj.ProjectionLike} destination Destination.
+ * @return {ol.TransformFunction} Transform function.
+ * @api stable
+ */
+ol.proj.getTransform = function(source, destination) {
+  var sourceProjection = ol.proj.get(source);
+  var destinationProjection = ol.proj.get(destination);
+  return ol.proj.getTransformFromProjections(
+      sourceProjection, destinationProjection);
+};
+
+
+/**
+ * Searches in the list of transform functions for the function for converting
+ * coordinates from the source projection to the destination projection.
+ *
+ * @param {ol.proj.Projection} sourceProjection Source Projection object.
+ * @param {ol.proj.Projection} destinationProjection Destination Projection
+ *     object.
+ * @return {ol.TransformFunction} Transform function.
+ */
+ol.proj.getTransformFromProjections = function(sourceProjection, destinationProjection) {
+  var transforms = ol.proj.transforms_;
+  var sourceCode = sourceProjection.getCode();
+  var destinationCode = destinationProjection.getCode();
+  var transform;
+  if (sourceCode in transforms && destinationCode in transforms[sourceCode]) {
+    transform = transforms[sourceCode][destinationCode];
+  }
+  if (transform === undefined) {
+    goog.asserts.assert(transform !== undefined, 'transform should be defined');
+    transform = ol.proj.identityTransform;
+  }
+  return transform;
+};
+
+
+/**
+ * @param {Array.<number>} input Input coordinate array.
+ * @param {Array.<number>=} opt_output Output array of coordinate values.
+ * @param {number=} opt_dimension Dimension.
+ * @return {Array.<number>} Input coordinate array (same array as input).
+ */
+ol.proj.identityTransform = function(input, opt_output, opt_dimension) {
+  if (opt_output !== undefined && input !== opt_output) {
+    // TODO: consider making this a warning instead
+    goog.asserts.fail('This should not be used internally.');
+    for (var i = 0, ii = input.length; i < ii; ++i) {
+      opt_output[i] = input[i];
+    }
+    input = opt_output;
+  }
+  return input;
+};
+
+
+/**
+ * @param {Array.<number>} input Input coordinate array.
+ * @param {Array.<number>=} opt_output Output array of coordinate values.
+ * @param {number=} opt_dimension Dimension.
+ * @return {Array.<number>} Output coordinate array (new array, same coordinate
+ *     values).
+ */
+ol.proj.cloneTransform = function(input, opt_output, opt_dimension) {
+  var output;
+  if (opt_output !== undefined) {
+    for (var i = 0, ii = input.length; i < ii; ++i) {
+      opt_output[i] = input[i];
+    }
+    output = opt_output;
+  } else {
+    output = input.slice();
+  }
+  return output;
+};
+
+
+/**
+ * Transforms a coordinate from source projection to destination projection.
+ * This returns a new coordinate (and does not modify the original).
+ *
+ * See {@link ol.proj.transformExtent} for extent transformation.
+ * See the transform method of {@link ol.geom.Geometry} and its subclasses for
+ * geometry transforms.
+ *
+ * @param {ol.Coordinate} coordinate Coordinate.
+ * @param {ol.proj.ProjectionLike} source Source projection-like.
+ * @param {ol.proj.ProjectionLike} destination Destination projection-like.
+ * @return {ol.Coordinate} Coordinate.
+ * @api stable
+ */
+ol.proj.transform = function(coordinate, source, destination) {
+  var transformFn = ol.proj.getTransform(source, destination);
+  return transformFn(coordinate, undefined, coordinate.length);
+};
+
+
+/**
+ * Transforms an extent from source projection to destination projection.  This
+ * returns a new extent (and does not modify the original).
+ *
+ * @param {ol.Extent} extent The extent to transform.
+ * @param {ol.proj.ProjectionLike} source Source projection-like.
+ * @param {ol.proj.ProjectionLike} destination Destination projection-like.
+ * @return {ol.Extent} The transformed extent.
+ * @api stable
+ */
+ol.proj.transformExtent = function(extent, source, destination) {
+  var transformFn = ol.proj.getTransform(source, destination);
+  return ol.extent.applyTransform(extent, transformFn);
+};
+
+
+/**
+ * Transforms the given point to the destination projection.
+ *
+ * @param {ol.Coordinate} point Point.
+ * @param {ol.proj.Projection} sourceProjection Source projection.
+ * @param {ol.proj.Projection} destinationProjection Destination projection.
+ * @return {ol.Coordinate} Point.
+ */
+ol.proj.transformWithProjections = function(point, sourceProjection, destinationProjection) {
+  var transformFn = ol.proj.getTransformFromProjections(
+      sourceProjection, destinationProjection);
+  return transformFn(point);
+};
+
+goog.provide('ol.geom.Geometry');
+goog.provide('ol.geom.GeometryLayout');
+goog.provide('ol.geom.GeometryType');
+
+goog.require('goog.asserts');
+goog.require('ol.functions');
+goog.require('ol.Object');
+goog.require('ol.extent');
+goog.require('ol.proj');
+goog.require('ol.proj.Units');
+
+
+/**
+ * The geometry type. One of `'Point'`, `'LineString'`, `'LinearRing'`,
+ * `'Polygon'`, `'MultiPoint'`, `'MultiLineString'`, `'MultiPolygon'`,
+ * `'GeometryCollection'`, `'Circle'`.
+ * @enum {string}
+ * @api stable
+ */
+ol.geom.GeometryType = {
+  POINT: 'Point',
+  LINE_STRING: 'LineString',
+  LINEAR_RING: 'LinearRing',
+  POLYGON: 'Polygon',
+  MULTI_POINT: 'MultiPoint',
+  MULTI_LINE_STRING: 'MultiLineString',
+  MULTI_POLYGON: 'MultiPolygon',
+  GEOMETRY_COLLECTION: 'GeometryCollection',
+  CIRCLE: 'Circle'
+};
+
+
+/**
+ * The coordinate layout for geometries, indicating whether a 3rd or 4th z ('Z')
+ * or measure ('M') coordinate is available. Supported values are `'XY'`,
+ * `'XYZ'`, `'XYM'`, `'XYZM'`.
+ * @enum {string}
+ * @api stable
+ */
+ol.geom.GeometryLayout = {
+  XY: 'XY',
+  XYZ: 'XYZ',
+  XYM: 'XYM',
+  XYZM: 'XYZM'
+};
+
+
+/**
+ * @classdesc
+ * Abstract base class; normally only used for creating subclasses and not
+ * instantiated in apps.
+ * Base class for vector geometries.
+ *
+ * To get notified of changes to the geometry, register a listener for the
+ * generic `change` event on your geometry instance.
+ *
+ * @constructor
+ * @extends {ol.Object}
+ * @api stable
+ */
+ol.geom.Geometry = function() {
+
+  goog.base(this);
+
+  /**
+   * @private
+   * @type {ol.Extent}
+   */
+  this.extent_ = ol.extent.createEmpty();
+
+  /**
+   * @private
+   * @type {number}
+   */
+  this.extentRevision_ = -1;
+
+  /**
+   * @protected
+   * @type {Object.<string, ol.geom.Geometry>}
+   */
+  this.simplifiedGeometryCache = {};
+
+  /**
+   * @protected
+   * @type {number}
+   */
+  this.simplifiedGeometryMaxMinSquaredTolerance = 0;
+
+  /**
+   * @protected
+   * @type {number}
+   */
+  this.simplifiedGeometryRevision = 0;
+
+};
+goog.inherits(ol.geom.Geometry, ol.Object);
+
+
+/**
+ * Make a complete copy of the geometry.
+ * @function
+ * @return {!ol.geom.Geometry} Clone.
+ */
+ol.geom.Geometry.prototype.clone = goog.abstractMethod;
+
+
+/**
+ * @param {number} x X.
+ * @param {number} y Y.
+ * @param {ol.Coordinate} closestPoint Closest point.
+ * @param {number} minSquaredDistance Minimum squared distance.
+ * @return {number} Minimum squared distance.
+ */
+ol.geom.Geometry.prototype.closestPointXY = goog.abstractMethod;
+
+
+/**
+ * Return the closest point of the geometry to the passed point as
+ * {@link ol.Coordinate coordinate}.
+ * @param {ol.Coordinate} point Point.
+ * @param {ol.Coordinate=} opt_closestPoint Closest point.
+ * @return {ol.Coordinate} Closest point.
+ * @api stable
+ */
+ol.geom.Geometry.prototype.getClosestPoint = function(point, opt_closestPoint) {
+  var closestPoint = opt_closestPoint ? opt_closestPoint : [NaN, NaN];
+  this.closestPointXY(point[0], point[1], closestPoint, Infinity);
+  return closestPoint;
+};
+
+
+/**
+ * @param {ol.Coordinate} coordinate Coordinate.
+ * @return {boolean} Contains coordinate.
+ */
+ol.geom.Geometry.prototype.containsCoordinate = function(coordinate) {
+  return this.containsXY(coordinate[0], coordinate[1]);
+};
+
+
+/**
+ * @param {ol.Extent} extent Extent.
+ * @protected
+ * @return {ol.Extent} extent Extent.
+ */
+ol.geom.Geometry.prototype.computeExtent = goog.abstractMethod;
+
+
+/**
+ * @param {number} x X.
+ * @param {number} y Y.
+ * @return {boolean} Contains (x, y).
+ */
+ol.geom.Geometry.prototype.containsXY = ol.functions.FALSE;
+
+
+/**
+ * Get the extent of the geometry.
+ * @param {ol.Extent=} opt_extent Extent.
+ * @return {ol.Extent} extent Extent.
+ * @api stable
+ */
+ol.geom.Geometry.prototype.getExtent = function(opt_extent) {
+  if (this.extentRevision_ != this.getRevision()) {
+    this.extent_ = this.computeExtent(this.extent_);
+    this.extentRevision_ = this.getRevision();
+  }
+  return ol.extent.returnOrUpdate(this.extent_, opt_extent);
+};
+
+
+/**
+ * Rotate the geometry around a given coordinate. This modifies the geometry
+ * coordinates in place.
+ * @param {number} angle Rotation angle in radians.
+ * @param {ol.Coordinate} anchor The rotation center.
+ * @api
+ * @function
+ */
+ol.geom.Geometry.prototype.rotate = goog.abstractMethod;
+
+
+/**
+ * Create a simplified version of this geometry.  For linestrings, this uses
+ * the the {@link
+ * https://en.wikipedia.org/wiki/Ramer-Douglas-Peucker_algorithm
+ * Douglas Peucker} algorithm.  For polygons, a quantization-based
+ * simplification is used to preserve topology.
+ * @function
+ * @param {number} tolerance The tolerance distance for simplification.
+ * @return {ol.geom.Geometry} A new, simplified version of the original
+ *     geometry.
+ * @api
+ */
+ol.geom.Geometry.prototype.simplify = function(tolerance) {
+  return this.getSimplifiedGeometry(tolerance * tolerance);
+};
+
+
+/**
+ * Create a simplified version of this geometry using the Douglas Peucker
+ * algorithm.
+ * @see https://en.wikipedia.org/wiki/Ramer-Douglas-Peucker_algorithm
+ * @function
+ * @param {number} squaredTolerance Squared tolerance.
+ * @return {ol.geom.Geometry} Simplified geometry.
+ */
+ol.geom.Geometry.prototype.getSimplifiedGeometry = goog.abstractMethod;
+
+
+/**
+ * Get the type of this geometry.
+ * @function
+ * @return {ol.geom.GeometryType} Geometry type.
+ */
+ol.geom.Geometry.prototype.getType = goog.abstractMethod;
+
+
+/**
+ * Apply a transform function to each coordinate of the geometry.
+ * The geometry is modified in place.
+ * If you do not want the geometry modified in place, first `clone()` it and
+ * then use this function on the clone.
+ * @function
+ * @param {ol.TransformFunction} transformFn Transform.
+ */
+ol.geom.Geometry.prototype.applyTransform = goog.abstractMethod;
+
+
+/**
+ * Test if the geometry and the passed extent intersect.
+ * @param {ol.Extent} extent Extent.
+ * @return {boolean} `true` if the geometry and the extent intersect.
+ * @function
+ */
+ol.geom.Geometry.prototype.intersectsExtent = goog.abstractMethod;
+
+
+/**
+ * Translate the geometry.  This modifies the geometry coordinates in place.  If
+ * instead you want a new geometry, first `clone()` this geometry.
+ * @param {number} deltaX Delta X.
+ * @param {number} deltaY Delta Y.
+ * @function
+ */
+ol.geom.Geometry.prototype.translate = goog.abstractMethod;
+
+
+/**
+ * Transform each coordinate of the geometry from one coordinate reference
+ * system to another. The geometry is modified in place.
+ * For example, a line will be transformed to a line and a circle to a circle.
+ * If you do not want the geometry modified in place, first `clone()` it and
+ * then use this function on the clone.
+ *
+ * @param {ol.proj.ProjectionLike} source The current projection.  Can be a
+ *     string identifier or a {@link ol.proj.Projection} object.
+ * @param {ol.proj.ProjectionLike} destination The desired projection.  Can be a
+ *     string identifier or a {@link ol.proj.Projection} object.
+ * @return {ol.geom.Geometry} This geometry.  Note that original geometry is
+ *     modified in place.
+ * @api stable
+ */
+ol.geom.Geometry.prototype.transform = function(source, destination) {
+  goog.asserts.assert(
+      ol.proj.get(source).getUnits() !== ol.proj.Units.TILE_PIXELS &&
+      ol.proj.get(destination).getUnits() !== ol.proj.Units.TILE_PIXELS,
+      'cannot transform geometries with TILE_PIXELS units');
+  this.applyTransform(ol.proj.getTransform(source, destination));
+  return this;
 };
 
 // Copyright 2011 The Closure Library Authors. All Rights Reserved.
@@ -10368,2205 +13096,6 @@ goog.vec.Mat4.tmpVec4_ = [
  */
 goog.vec.Mat4.tmpMat4_ = [goog.vec.Mat4.createFloat64()];
 
-goog.provide('ol.TransformFunction');
-
-
-/**
- * A transform function accepts an array of input coordinate values, an optional
- * output array, and an optional dimension (default should be 2).  The function
- * transforms the input coordinate values, populates the output array, and
- * returns the output array.
- *
- * @typedef {function(Array.<number>, Array.<number>=, number=): Array.<number>}
- * @api stable
- */
-ol.TransformFunction;
-
-goog.provide('ol.Extent');
-goog.provide('ol.extent');
-goog.provide('ol.extent.Corner');
-goog.provide('ol.extent.Relationship');
-
-goog.require('goog.asserts');
-goog.require('goog.vec.Mat4');
-goog.require('ol.Coordinate');
-goog.require('ol.Size');
-goog.require('ol.TransformFunction');
-
-
-/**
- * An array of numbers representing an extent: `[minx, miny, maxx, maxy]`.
- * @typedef {Array.<number>}
- * @api stable
- */
-ol.Extent;
-
-
-/**
- * Extent corner.
- * @enum {string}
- */
-ol.extent.Corner = {
-  BOTTOM_LEFT: 'bottom-left',
-  BOTTOM_RIGHT: 'bottom-right',
-  TOP_LEFT: 'top-left',
-  TOP_RIGHT: 'top-right'
-};
-
-
-/**
- * Relationship to an extent.
- * @enum {number}
- */
-ol.extent.Relationship = {
-  UNKNOWN: 0,
-  INTERSECTING: 1,
-  ABOVE: 2,
-  RIGHT: 4,
-  BELOW: 8,
-  LEFT: 16
-};
-
-
-/**
- * Build an extent that includes all given coordinates.
- *
- * @param {Array.<ol.Coordinate>} coordinates Coordinates.
- * @return {ol.Extent} Bounding extent.
- * @api stable
- */
-ol.extent.boundingExtent = function(coordinates) {
-  var extent = ol.extent.createEmpty();
-  for (var i = 0, ii = coordinates.length; i < ii; ++i) {
-    ol.extent.extendCoordinate(extent, coordinates[i]);
-  }
-  return extent;
-};
-
-
-/**
- * @param {Array.<number>} xs Xs.
- * @param {Array.<number>} ys Ys.
- * @param {ol.Extent=} opt_extent Destination extent.
- * @private
- * @return {ol.Extent} Extent.
- */
-ol.extent.boundingExtentXYs_ = function(xs, ys, opt_extent) {
-  goog.asserts.assert(xs.length > 0, 'xs length should be larger than 0');
-  goog.asserts.assert(ys.length > 0, 'ys length should be larger than 0');
-  var minX = Math.min.apply(null, xs);
-  var minY = Math.min.apply(null, ys);
-  var maxX = Math.max.apply(null, xs);
-  var maxY = Math.max.apply(null, ys);
-  return ol.extent.createOrUpdate(minX, minY, maxX, maxY, opt_extent);
-};
-
-
-/**
- * Return extent increased by the provided value.
- * @param {ol.Extent} extent Extent.
- * @param {number} value The amount by which the extent should be buffered.
- * @param {ol.Extent=} opt_extent Extent.
- * @return {ol.Extent} Extent.
- * @api stable
- */
-ol.extent.buffer = function(extent, value, opt_extent) {
-  if (opt_extent) {
-    opt_extent[0] = extent[0] - value;
-    opt_extent[1] = extent[1] - value;
-    opt_extent[2] = extent[2] + value;
-    opt_extent[3] = extent[3] + value;
-    return opt_extent;
-  } else {
-    return [
-      extent[0] - value,
-      extent[1] - value,
-      extent[2] + value,
-      extent[3] + value
-    ];
-  }
-};
-
-
-/**
- * Creates a clone of an extent.
- *
- * @param {ol.Extent} extent Extent to clone.
- * @param {ol.Extent=} opt_extent Extent.
- * @return {ol.Extent} The clone.
- */
-ol.extent.clone = function(extent, opt_extent) {
-  if (opt_extent) {
-    opt_extent[0] = extent[0];
-    opt_extent[1] = extent[1];
-    opt_extent[2] = extent[2];
-    opt_extent[3] = extent[3];
-    return opt_extent;
-  } else {
-    return extent.slice();
-  }
-};
-
-
-/**
- * @param {ol.Extent} extent Extent.
- * @param {number} x X.
- * @param {number} y Y.
- * @return {number} Closest squared distance.
- */
-ol.extent.closestSquaredDistanceXY = function(extent, x, y) {
-  var dx, dy;
-  if (x < extent[0]) {
-    dx = extent[0] - x;
-  } else if (extent[2] < x) {
-    dx = x - extent[2];
-  } else {
-    dx = 0;
-  }
-  if (y < extent[1]) {
-    dy = extent[1] - y;
-  } else if (extent[3] < y) {
-    dy = y - extent[3];
-  } else {
-    dy = 0;
-  }
-  return dx * dx + dy * dy;
-};
-
-
-/**
- * Check if the passed coordinate is contained or on the edge of the extent.
- *
- * @param {ol.Extent} extent Extent.
- * @param {ol.Coordinate} coordinate Coordinate.
- * @return {boolean} The coordinate is contained in the extent.
- * @api stable
- */
-ol.extent.containsCoordinate = function(extent, coordinate) {
-  return ol.extent.containsXY(extent, coordinate[0], coordinate[1]);
-};
-
-
-/**
- * Check if one extent contains another.
- *
- * An extent is deemed contained if it lies completely within the other extent,
- * including if they share one or more edges.
- *
- * @param {ol.Extent} extent1 Extent 1.
- * @param {ol.Extent} extent2 Extent 2.
- * @return {boolean} The second extent is contained by or on the edge of the
- *     first.
- * @api stable
- */
-ol.extent.containsExtent = function(extent1, extent2) {
-  return extent1[0] <= extent2[0] && extent2[2] <= extent1[2] &&
-      extent1[1] <= extent2[1] && extent2[3] <= extent1[3];
-};
-
-
-/**
- * Check if the passed coordinate is contained or on the edge of the extent.
- *
- * @param {ol.Extent} extent Extent.
- * @param {number} x X coordinate.
- * @param {number} y Y coordinate.
- * @return {boolean} The x, y values are contained in the extent.
- * @api stable
- */
-ol.extent.containsXY = function(extent, x, y) {
-  return extent[0] <= x && x <= extent[2] && extent[1] <= y && y <= extent[3];
-};
-
-
-/**
- * Get the relationship between a coordinate and extent.
- * @param {ol.Extent} extent The extent.
- * @param {ol.Coordinate} coordinate The coordinate.
- * @return {number} The relationship (bitwise compare with
- *     ol.extent.Relationship).
- */
-ol.extent.coordinateRelationship = function(extent, coordinate) {
-  var minX = extent[0];
-  var minY = extent[1];
-  var maxX = extent[2];
-  var maxY = extent[3];
-  var x = coordinate[0];
-  var y = coordinate[1];
-  var relationship = ol.extent.Relationship.UNKNOWN;
-  if (x < minX) {
-    relationship = relationship | ol.extent.Relationship.LEFT;
-  } else if (x > maxX) {
-    relationship = relationship | ol.extent.Relationship.RIGHT;
-  }
-  if (y < minY) {
-    relationship = relationship | ol.extent.Relationship.BELOW;
-  } else if (y > maxY) {
-    relationship = relationship | ol.extent.Relationship.ABOVE;
-  }
-  if (relationship === ol.extent.Relationship.UNKNOWN) {
-    relationship = ol.extent.Relationship.INTERSECTING;
-  }
-  return relationship;
-};
-
-
-/**
- * Create an empty extent.
- * @return {ol.Extent} Empty extent.
- * @api stable
- */
-ol.extent.createEmpty = function() {
-  return [Infinity, Infinity, -Infinity, -Infinity];
-};
-
-
-/**
- * Create a new extent or update the provided extent.
- * @param {number} minX Minimum X.
- * @param {number} minY Minimum Y.
- * @param {number} maxX Maximum X.
- * @param {number} maxY Maximum Y.
- * @param {ol.Extent=} opt_extent Destination extent.
- * @return {ol.Extent} Extent.
- */
-ol.extent.createOrUpdate = function(minX, minY, maxX, maxY, opt_extent) {
-  if (opt_extent) {
-    opt_extent[0] = minX;
-    opt_extent[1] = minY;
-    opt_extent[2] = maxX;
-    opt_extent[3] = maxY;
-    return opt_extent;
-  } else {
-    return [minX, minY, maxX, maxY];
-  }
-};
-
-
-/**
- * Create a new empty extent or make the provided one empty.
- * @param {ol.Extent=} opt_extent Extent.
- * @return {ol.Extent} Extent.
- */
-ol.extent.createOrUpdateEmpty = function(opt_extent) {
-  return ol.extent.createOrUpdate(
-      Infinity, Infinity, -Infinity, -Infinity, opt_extent);
-};
-
-
-/**
- * @param {ol.Coordinate} coordinate Coordinate.
- * @param {ol.Extent=} opt_extent Extent.
- * @return {ol.Extent} Extent.
- */
-ol.extent.createOrUpdateFromCoordinate = function(coordinate, opt_extent) {
-  var x = coordinate[0];
-  var y = coordinate[1];
-  return ol.extent.createOrUpdate(x, y, x, y, opt_extent);
-};
-
-
-/**
- * @param {Array.<ol.Coordinate>} coordinates Coordinates.
- * @param {ol.Extent=} opt_extent Extent.
- * @return {ol.Extent} Extent.
- */
-ol.extent.createOrUpdateFromCoordinates = function(coordinates, opt_extent) {
-  var extent = ol.extent.createOrUpdateEmpty(opt_extent);
-  return ol.extent.extendCoordinates(extent, coordinates);
-};
-
-
-/**
- * @param {Array.<number>} flatCoordinates Flat coordinates.
- * @param {number} offset Offset.
- * @param {number} end End.
- * @param {number} stride Stride.
- * @param {ol.Extent=} opt_extent Extent.
- * @return {ol.Extent} Extent.
- */
-ol.extent.createOrUpdateFromFlatCoordinates = function(flatCoordinates, offset, end, stride, opt_extent) {
-  var extent = ol.extent.createOrUpdateEmpty(opt_extent);
-  return ol.extent.extendFlatCoordinates(
-      extent, flatCoordinates, offset, end, stride);
-};
-
-
-/**
- * @param {Array.<Array.<ol.Coordinate>>} rings Rings.
- * @param {ol.Extent=} opt_extent Extent.
- * @return {ol.Extent} Extent.
- */
-ol.extent.createOrUpdateFromRings = function(rings, opt_extent) {
-  var extent = ol.extent.createOrUpdateEmpty(opt_extent);
-  return ol.extent.extendRings(extent, rings);
-};
-
-
-/**
- * Empty an extent in place.
- * @param {ol.Extent} extent Extent.
- * @return {ol.Extent} Extent.
- */
-ol.extent.empty = function(extent) {
-  extent[0] = extent[1] = Infinity;
-  extent[2] = extent[3] = -Infinity;
-  return extent;
-};
-
-
-/**
- * Determine if two extents are equivalent.
- * @param {ol.Extent} extent1 Extent 1.
- * @param {ol.Extent} extent2 Extent 2.
- * @return {boolean} The two extents are equivalent.
- * @api stable
- */
-ol.extent.equals = function(extent1, extent2) {
-  return extent1[0] == extent2[0] && extent1[2] == extent2[2] &&
-      extent1[1] == extent2[1] && extent1[3] == extent2[3];
-};
-
-
-/**
- * Modify an extent to include another extent.
- * @param {ol.Extent} extent1 The extent to be modified.
- * @param {ol.Extent} extent2 The extent that will be included in the first.
- * @return {ol.Extent} A reference to the first (extended) extent.
- * @api stable
- */
-ol.extent.extend = function(extent1, extent2) {
-  if (extent2[0] < extent1[0]) {
-    extent1[0] = extent2[0];
-  }
-  if (extent2[2] > extent1[2]) {
-    extent1[2] = extent2[2];
-  }
-  if (extent2[1] < extent1[1]) {
-    extent1[1] = extent2[1];
-  }
-  if (extent2[3] > extent1[3]) {
-    extent1[3] = extent2[3];
-  }
-  return extent1;
-};
-
-
-/**
- * @param {ol.Extent} extent Extent.
- * @param {ol.Coordinate} coordinate Coordinate.
- */
-ol.extent.extendCoordinate = function(extent, coordinate) {
-  if (coordinate[0] < extent[0]) {
-    extent[0] = coordinate[0];
-  }
-  if (coordinate[0] > extent[2]) {
-    extent[2] = coordinate[0];
-  }
-  if (coordinate[1] < extent[1]) {
-    extent[1] = coordinate[1];
-  }
-  if (coordinate[1] > extent[3]) {
-    extent[3] = coordinate[1];
-  }
-};
-
-
-/**
- * @param {ol.Extent} extent Extent.
- * @param {Array.<ol.Coordinate>} coordinates Coordinates.
- * @return {ol.Extent} Extent.
- */
-ol.extent.extendCoordinates = function(extent, coordinates) {
-  var i, ii;
-  for (i = 0, ii = coordinates.length; i < ii; ++i) {
-    ol.extent.extendCoordinate(extent, coordinates[i]);
-  }
-  return extent;
-};
-
-
-/**
- * @param {ol.Extent} extent Extent.
- * @param {Array.<number>} flatCoordinates Flat coordinates.
- * @param {number} offset Offset.
- * @param {number} end End.
- * @param {number} stride Stride.
- * @return {ol.Extent} Extent.
- */
-ol.extent.extendFlatCoordinates = function(extent, flatCoordinates, offset, end, stride) {
-  for (; offset < end; offset += stride) {
-    ol.extent.extendXY(
-        extent, flatCoordinates[offset], flatCoordinates[offset + 1]);
-  }
-  return extent;
-};
-
-
-/**
- * @param {ol.Extent} extent Extent.
- * @param {Array.<Array.<ol.Coordinate>>} rings Rings.
- * @return {ol.Extent} Extent.
- */
-ol.extent.extendRings = function(extent, rings) {
-  var i, ii;
-  for (i = 0, ii = rings.length; i < ii; ++i) {
-    ol.extent.extendCoordinates(extent, rings[i]);
-  }
-  return extent;
-};
-
-
-/**
- * @param {ol.Extent} extent Extent.
- * @param {number} x X.
- * @param {number} y Y.
- */
-ol.extent.extendXY = function(extent, x, y) {
-  extent[0] = Math.min(extent[0], x);
-  extent[1] = Math.min(extent[1], y);
-  extent[2] = Math.max(extent[2], x);
-  extent[3] = Math.max(extent[3], y);
-};
-
-
-/**
- * This function calls `callback` for each corner of the extent. If the
- * callback returns a truthy value the function returns that value
- * immediately. Otherwise the function returns `false`.
- * @param {ol.Extent} extent Extent.
- * @param {function(this:T, ol.Coordinate): S} callback Callback.
- * @param {T=} opt_this Value to use as `this` when executing `callback`.
- * @return {S|boolean} Value.
- * @template S, T
- */
-ol.extent.forEachCorner = function(extent, callback, opt_this) {
-  var val;
-  val = callback.call(opt_this, ol.extent.getBottomLeft(extent));
-  if (val) {
-    return val;
-  }
-  val = callback.call(opt_this, ol.extent.getBottomRight(extent));
-  if (val) {
-    return val;
-  }
-  val = callback.call(opt_this, ol.extent.getTopRight(extent));
-  if (val) {
-    return val;
-  }
-  val = callback.call(opt_this, ol.extent.getTopLeft(extent));
-  if (val) {
-    return val;
-  }
-  return false;
-};
-
-
-/**
- * @param {ol.Extent} extent Extent.
- * @return {number} Area.
- */
-ol.extent.getArea = function(extent) {
-  var area = 0;
-  if (!ol.extent.isEmpty(extent)) {
-    area = ol.extent.getWidth(extent) * ol.extent.getHeight(extent);
-  }
-  return area;
-};
-
-
-/**
- * Get the bottom left coordinate of an extent.
- * @param {ol.Extent} extent Extent.
- * @return {ol.Coordinate} Bottom left coordinate.
- * @api stable
- */
-ol.extent.getBottomLeft = function(extent) {
-  return [extent[0], extent[1]];
-};
-
-
-/**
- * Get the bottom right coordinate of an extent.
- * @param {ol.Extent} extent Extent.
- * @return {ol.Coordinate} Bottom right coordinate.
- * @api stable
- */
-ol.extent.getBottomRight = function(extent) {
-  return [extent[2], extent[1]];
-};
-
-
-/**
- * Get the center coordinate of an extent.
- * @param {ol.Extent} extent Extent.
- * @return {ol.Coordinate} Center.
- * @api stable
- */
-ol.extent.getCenter = function(extent) {
-  return [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
-};
-
-
-/**
- * Get a corner coordinate of an extent.
- * @param {ol.Extent} extent Extent.
- * @param {ol.extent.Corner} corner Corner.
- * @return {ol.Coordinate} Corner coordinate.
- */
-ol.extent.getCorner = function(extent, corner) {
-  var coordinate;
-  if (corner === ol.extent.Corner.BOTTOM_LEFT) {
-    coordinate = ol.extent.getBottomLeft(extent);
-  } else if (corner === ol.extent.Corner.BOTTOM_RIGHT) {
-    coordinate = ol.extent.getBottomRight(extent);
-  } else if (corner === ol.extent.Corner.TOP_LEFT) {
-    coordinate = ol.extent.getTopLeft(extent);
-  } else if (corner === ol.extent.Corner.TOP_RIGHT) {
-    coordinate = ol.extent.getTopRight(extent);
-  } else {
-    goog.asserts.fail('Invalid corner: %s', corner);
-  }
-  goog.asserts.assert(coordinate, 'coordinate should be defined');
-  return coordinate;
-};
-
-
-/**
- * @param {ol.Extent} extent1 Extent 1.
- * @param {ol.Extent} extent2 Extent 2.
- * @return {number} Enlarged area.
- */
-ol.extent.getEnlargedArea = function(extent1, extent2) {
-  var minX = Math.min(extent1[0], extent2[0]);
-  var minY = Math.min(extent1[1], extent2[1]);
-  var maxX = Math.max(extent1[2], extent2[2]);
-  var maxY = Math.max(extent1[3], extent2[3]);
-  return (maxX - minX) * (maxY - minY);
-};
-
-
-/**
- * @param {ol.Coordinate} center Center.
- * @param {number} resolution Resolution.
- * @param {number} rotation Rotation.
- * @param {ol.Size} size Size.
- * @param {ol.Extent=} opt_extent Destination extent.
- * @return {ol.Extent} Extent.
- */
-ol.extent.getForViewAndSize = function(center, resolution, rotation, size, opt_extent) {
-  var dx = resolution * size[0] / 2;
-  var dy = resolution * size[1] / 2;
-  var cosRotation = Math.cos(rotation);
-  var sinRotation = Math.sin(rotation);
-  var xCos = dx * cosRotation;
-  var xSin = dx * sinRotation;
-  var yCos = dy * cosRotation;
-  var ySin = dy * sinRotation;
-  var x = center[0];
-  var y = center[1];
-  var x0 = x - xCos + ySin;
-  var x1 = x - xCos - ySin;
-  var x2 = x + xCos - ySin;
-  var x3 = x + xCos + ySin;
-  var y0 = y - xSin - yCos;
-  var y1 = y - xSin + yCos;
-  var y2 = y + xSin + yCos;
-  var y3 = y + xSin - yCos;
-  return ol.extent.createOrUpdate(
-      Math.min(x0, x1, x2, x3), Math.min(y0, y1, y2, y3),
-      Math.max(x0, x1, x2, x3), Math.max(y0, y1, y2, y3),
-      opt_extent);
-};
-
-
-/**
- * Get the height of an extent.
- * @param {ol.Extent} extent Extent.
- * @return {number} Height.
- * @api stable
- */
-ol.extent.getHeight = function(extent) {
-  return extent[3] - extent[1];
-};
-
-
-/**
- * @param {ol.Extent} extent1 Extent 1.
- * @param {ol.Extent} extent2 Extent 2.
- * @return {number} Intersection area.
- */
-ol.extent.getIntersectionArea = function(extent1, extent2) {
-  var intersection = ol.extent.getIntersection(extent1, extent2);
-  return ol.extent.getArea(intersection);
-};
-
-
-/**
- * Get the intersection of two extents.
- * @param {ol.Extent} extent1 Extent 1.
- * @param {ol.Extent} extent2 Extent 2.
- * @param {ol.Extent=} opt_extent Optional extent to populate with intersection.
- * @return {ol.Extent} Intersecting extent.
- * @api stable
- */
-ol.extent.getIntersection = function(extent1, extent2, opt_extent) {
-  var intersection = opt_extent ? opt_extent : ol.extent.createEmpty();
-  if (ol.extent.intersects(extent1, extent2)) {
-    if (extent1[0] > extent2[0]) {
-      intersection[0] = extent1[0];
-    } else {
-      intersection[0] = extent2[0];
-    }
-    if (extent1[1] > extent2[1]) {
-      intersection[1] = extent1[1];
-    } else {
-      intersection[1] = extent2[1];
-    }
-    if (extent1[2] < extent2[2]) {
-      intersection[2] = extent1[2];
-    } else {
-      intersection[2] = extent2[2];
-    }
-    if (extent1[3] < extent2[3]) {
-      intersection[3] = extent1[3];
-    } else {
-      intersection[3] = extent2[3];
-    }
-  }
-  return intersection;
-};
-
-
-/**
- * @param {ol.Extent} extent Extent.
- * @return {number} Margin.
- */
-ol.extent.getMargin = function(extent) {
-  return ol.extent.getWidth(extent) + ol.extent.getHeight(extent);
-};
-
-
-/**
- * Get the size (width, height) of an extent.
- * @param {ol.Extent} extent The extent.
- * @return {ol.Size} The extent size.
- * @api stable
- */
-ol.extent.getSize = function(extent) {
-  return [extent[2] - extent[0], extent[3] - extent[1]];
-};
-
-
-/**
- * Get the top left coordinate of an extent.
- * @param {ol.Extent} extent Extent.
- * @return {ol.Coordinate} Top left coordinate.
- * @api stable
- */
-ol.extent.getTopLeft = function(extent) {
-  return [extent[0], extent[3]];
-};
-
-
-/**
- * Get the top right coordinate of an extent.
- * @param {ol.Extent} extent Extent.
- * @return {ol.Coordinate} Top right coordinate.
- * @api stable
- */
-ol.extent.getTopRight = function(extent) {
-  return [extent[2], extent[3]];
-};
-
-
-/**
- * Get the width of an extent.
- * @param {ol.Extent} extent Extent.
- * @return {number} Width.
- * @api stable
- */
-ol.extent.getWidth = function(extent) {
-  return extent[2] - extent[0];
-};
-
-
-/**
- * Determine if one extent intersects another.
- * @param {ol.Extent} extent1 Extent 1.
- * @param {ol.Extent} extent2 Extent.
- * @return {boolean} The two extents intersect.
- * @api stable
- */
-ol.extent.intersects = function(extent1, extent2) {
-  return extent1[0] <= extent2[2] &&
-      extent1[2] >= extent2[0] &&
-      extent1[1] <= extent2[3] &&
-      extent1[3] >= extent2[1];
-};
-
-
-/**
- * Determine if an extent is empty.
- * @param {ol.Extent} extent Extent.
- * @return {boolean} Is empty.
- * @api stable
- */
-ol.extent.isEmpty = function(extent) {
-  return extent[2] < extent[0] || extent[3] < extent[1];
-};
-
-
-/**
- * @param {ol.Extent} extent Extent.
- * @return {boolean} Is infinite.
- */
-ol.extent.isInfinite = function(extent) {
-  return extent[0] == -Infinity || extent[1] == -Infinity ||
-      extent[2] == Infinity || extent[3] == Infinity;
-};
-
-
-/**
- * @param {ol.Extent} extent Extent.
- * @param {ol.Coordinate} coordinate Coordinate.
- * @return {ol.Coordinate} Coordinate.
- */
-ol.extent.normalize = function(extent, coordinate) {
-  return [
-    (coordinate[0] - extent[0]) / (extent[2] - extent[0]),
-    (coordinate[1] - extent[1]) / (extent[3] - extent[1])
-  ];
-};
-
-
-/**
- * @param {ol.Extent} extent Extent.
- * @param {ol.Extent=} opt_extent Extent.
- * @return {ol.Extent} Extent.
- */
-ol.extent.returnOrUpdate = function(extent, opt_extent) {
-  if (opt_extent) {
-    opt_extent[0] = extent[0];
-    opt_extent[1] = extent[1];
-    opt_extent[2] = extent[2];
-    opt_extent[3] = extent[3];
-    return opt_extent;
-  } else {
-    return extent;
-  }
-};
-
-
-/**
- * @param {ol.Extent} extent Extent.
- * @param {number} value Value.
- */
-ol.extent.scaleFromCenter = function(extent, value) {
-  var deltaX = ((extent[2] - extent[0]) / 2) * (value - 1);
-  var deltaY = ((extent[3] - extent[1]) / 2) * (value - 1);
-  extent[0] -= deltaX;
-  extent[2] += deltaX;
-  extent[1] -= deltaY;
-  extent[3] += deltaY;
-};
-
-
-/**
- * Determine if the segment between two coordinates intersects (crosses,
- * touches, or is contained by) the provided extent.
- * @param {ol.Extent} extent The extent.
- * @param {ol.Coordinate} start Segment start coordinate.
- * @param {ol.Coordinate} end Segment end coordinate.
- * @return {boolean} The segment intersects the extent.
- */
-ol.extent.intersectsSegment = function(extent, start, end) {
-  var intersects = false;
-  var startRel = ol.extent.coordinateRelationship(extent, start);
-  var endRel = ol.extent.coordinateRelationship(extent, end);
-  if (startRel === ol.extent.Relationship.INTERSECTING ||
-      endRel === ol.extent.Relationship.INTERSECTING) {
-    intersects = true;
-  } else {
-    var minX = extent[0];
-    var minY = extent[1];
-    var maxX = extent[2];
-    var maxY = extent[3];
-    var startX = start[0];
-    var startY = start[1];
-    var endX = end[0];
-    var endY = end[1];
-    var slope = (endY - startY) / (endX - startX);
-    var x, y;
-    if (!!(endRel & ol.extent.Relationship.ABOVE) &&
-        !(startRel & ol.extent.Relationship.ABOVE)) {
-      // potentially intersects top
-      x = endX - ((endY - maxY) / slope);
-      intersects = x >= minX && x <= maxX;
-    }
-    if (!intersects && !!(endRel & ol.extent.Relationship.RIGHT) &&
-        !(startRel & ol.extent.Relationship.RIGHT)) {
-      // potentially intersects right
-      y = endY - ((endX - maxX) * slope);
-      intersects = y >= minY && y <= maxY;
-    }
-    if (!intersects && !!(endRel & ol.extent.Relationship.BELOW) &&
-        !(startRel & ol.extent.Relationship.BELOW)) {
-      // potentially intersects bottom
-      x = endX - ((endY - minY) / slope);
-      intersects = x >= minX && x <= maxX;
-    }
-    if (!intersects && !!(endRel & ol.extent.Relationship.LEFT) &&
-        !(startRel & ol.extent.Relationship.LEFT)) {
-      // potentially intersects left
-      y = endY - ((endX - minX) * slope);
-      intersects = y >= minY && y <= maxY;
-    }
-
-  }
-  return intersects;
-};
-
-
-/**
- * @param {ol.Extent} extent1 Extent 1.
- * @param {ol.Extent} extent2 Extent 2.
- * @return {boolean} Touches.
- */
-ol.extent.touches = function(extent1, extent2) {
-  var intersects = ol.extent.intersects(extent1, extent2);
-  return intersects &&
-      (extent1[0] == extent2[2] || extent1[2] == extent2[0] ||
-       extent1[1] == extent2[3] || extent1[3] == extent2[1]);
-};
-
-
-/**
- * Apply a transform function to the extent.
- * @param {ol.Extent} extent Extent.
- * @param {ol.TransformFunction} transformFn Transform function.  Called with
- * [minX, minY, maxX, maxY] extent coordinates.
- * @param {ol.Extent=} opt_extent Destination extent.
- * @return {ol.Extent} Extent.
- * @api stable
- */
-ol.extent.applyTransform = function(extent, transformFn, opt_extent) {
-  var coordinates = [
-    extent[0], extent[1],
-    extent[0], extent[3],
-    extent[2], extent[1],
-    extent[2], extent[3]
-  ];
-  transformFn(coordinates, coordinates, 2);
-  var xs = [coordinates[0], coordinates[2], coordinates[4], coordinates[6]];
-  var ys = [coordinates[1], coordinates[3], coordinates[5], coordinates[7]];
-  return ol.extent.boundingExtentXYs_(xs, ys, opt_extent);
-};
-
-
-/**
- * Apply a 2d transform to an extent.
- * @param {ol.Extent} extent Input extent.
- * @param {goog.vec.Mat4.Number} transform The transform matrix.
- * @param {ol.Extent=} opt_extent Optional extent for return values.
- * @return {ol.Extent} The transformed extent.
- */
-ol.extent.transform2D = function(extent, transform, opt_extent) {
-  var dest = opt_extent ? opt_extent : [];
-  var m00 = goog.vec.Mat4.getElement(transform, 0, 0);
-  var m10 = goog.vec.Mat4.getElement(transform, 1, 0);
-  var m01 = goog.vec.Mat4.getElement(transform, 0, 1);
-  var m11 = goog.vec.Mat4.getElement(transform, 1, 1);
-  var m03 = goog.vec.Mat4.getElement(transform, 0, 3);
-  var m13 = goog.vec.Mat4.getElement(transform, 1, 3);
-  var xi = [0, 2, 0, 2];
-  var yi = [1, 1, 3, 3];
-  var xs = [];
-  var ys = [];
-  var i, x, y;
-  for (i = 0; i < 4; ++i) {
-    x = extent[xi[i]];
-    y = extent[yi[i]];
-    xs[i] = m00 * x + m01 * y + m03;
-    ys[i] = m10 * x + m11 * y + m13;
-  }
-  dest[0] = Math.min.apply(null, xs);
-  dest[1] = Math.min.apply(null, ys);
-  dest[2] = Math.max.apply(null, xs);
-  dest[3] = Math.max.apply(null, ys);
-  return dest;
-};
-
-goog.provide('ol.functions');
-
-/**
- * Always returns true.
- * @returns {boolean} true.
- */
-ol.functions.TRUE = function() {
-  return true;
-};
-
-/**
- * Always returns false.
- * @returns {boolean} false.
- */
-ol.functions.FALSE = function() {
-  return false;
-};
-
-/**
- * @license
- * Latitude/longitude spherical geodesy formulae taken from
- * http://www.movable-type.co.uk/scripts/latlong.html
- * Licensed under CC-BY-3.0.
- */
-
-goog.provide('ol.Sphere');
-
-goog.require('ol.math');
-
-
-/**
- * @classdesc
- * Class to create objects that can be used with {@link
- * ol.geom.Polygon.circular}.
- *
- * For example to create a sphere whose radius is equal to the semi-major
- * axis of the WGS84 ellipsoid:
- *
- * ```js
- * var wgs84Sphere= new ol.Sphere(6378137);
- * ```
- *
- * @constructor
- * @param {number} radius Radius.
- * @api
- */
-ol.Sphere = function(radius) {
-
-  /**
-   * @type {number}
-   */
-  this.radius = radius;
-
-};
-
-
-/**
- * Returns the geodesic area for a list of coordinates.
- *
- * [Reference](http://trs-new.jpl.nasa.gov/dspace/handle/2014/40409)
- * Robert. G. Chamberlain and William H. Duquette, "Some Algorithms for
- * Polygons on a Sphere", JPL Publication 07-03, Jet Propulsion
- * Laboratory, Pasadena, CA, June 2007
- *
- * @param {Array.<ol.Coordinate>} coordinates List of coordinates of a linear
- * ring. If the ring is oriented clockwise, the area will be positive,
- * otherwise it will be negative.
- * @return {number} Area.
- * @api
- */
-ol.Sphere.prototype.geodesicArea = function(coordinates) {
-  var area = 0, len = coordinates.length;
-  var x1 = coordinates[len - 1][0];
-  var y1 = coordinates[len - 1][1];
-  for (var i = 0; i < len; i++) {
-    var x2 = coordinates[i][0], y2 = coordinates[i][1];
-    area += ol.math.toRadians(x2 - x1) *
-        (2 + Math.sin(ol.math.toRadians(y1)) +
-        Math.sin(ol.math.toRadians(y2)));
-    x1 = x2;
-    y1 = y2;
-  }
-  return area * this.radius * this.radius / 2.0;
-};
-
-
-/**
- * Returns the distance from c1 to c2 using the haversine formula.
- *
- * @param {ol.Coordinate} c1 Coordinate 1.
- * @param {ol.Coordinate} c2 Coordinate 2.
- * @return {number} Haversine distance.
- * @api
- */
-ol.Sphere.prototype.haversineDistance = function(c1, c2) {
-  var lat1 = ol.math.toRadians(c1[1]);
-  var lat2 = ol.math.toRadians(c2[1]);
-  var deltaLatBy2 = (lat2 - lat1) / 2;
-  var deltaLonBy2 = ol.math.toRadians(c2[0] - c1[0]) / 2;
-  var a = Math.sin(deltaLatBy2) * Math.sin(deltaLatBy2) +
-      Math.sin(deltaLonBy2) * Math.sin(deltaLonBy2) *
-      Math.cos(lat1) * Math.cos(lat2);
-  return 2 * this.radius * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-};
-
-
-/**
- * Returns the coordinate at the given distance and bearing from `c1`.
- *
- * @param {ol.Coordinate} c1 The origin point (`[lon, lat]` in degrees).
- * @param {number} distance The great-circle distance between the origin
- *     point and the target point.
- * @param {number} bearing The bearing (in radians).
- * @return {ol.Coordinate} The target point.
- */
-ol.Sphere.prototype.offset = function(c1, distance, bearing) {
-  var lat1 = ol.math.toRadians(c1[1]);
-  var lon1 = ol.math.toRadians(c1[0]);
-  var dByR = distance / this.radius;
-  var lat = Math.asin(
-      Math.sin(lat1) * Math.cos(dByR) +
-      Math.cos(lat1) * Math.sin(dByR) * Math.cos(bearing));
-  var lon = lon1 + Math.atan2(
-      Math.sin(bearing) * Math.sin(dByR) * Math.cos(lat1),
-      Math.cos(dByR) - Math.sin(lat1) * Math.sin(lat));
-  return [ol.math.toDegrees(lon), ol.math.toDegrees(lat)];
-};
-
-goog.provide('ol.sphere.NORMAL');
-
-goog.require('ol.Sphere');
-
-
-/**
- * The normal sphere.
- * @const
- * @type {ol.Sphere}
- */
-ol.sphere.NORMAL = new ol.Sphere(6370997);
-
-goog.provide('ol.proj');
-goog.provide('ol.proj.METERS_PER_UNIT');
-goog.provide('ol.proj.Projection');
-goog.provide('ol.proj.ProjectionLike');
-goog.provide('ol.proj.Units');
-
-goog.require('goog.asserts');
-goog.require('ol');
-goog.require('ol.Extent');
-goog.require('ol.TransformFunction');
-goog.require('ol.extent');
-goog.require('ol.object');
-goog.require('ol.sphere.NORMAL');
-
-
-/**
- * A projection as {@link ol.proj.Projection}, SRS identifier string or
- * undefined.
- * @typedef {ol.proj.Projection|string|undefined} ol.proj.ProjectionLike
- * @api stable
- */
-ol.proj.ProjectionLike;
-
-
-/**
- * Projection units: `'degrees'`, `'ft'`, `'m'`, `'pixels'`, `'tile-pixels'` or
- * `'us-ft'`.
- * @enum {string}
- * @api stable
- */
-ol.proj.Units = {
-  DEGREES: 'degrees',
-  FEET: 'ft',
-  METERS: 'm',
-  PIXELS: 'pixels',
-  TILE_PIXELS: 'tile-pixels',
-  USFEET: 'us-ft'
-};
-
-
-/**
- * Meters per unit lookup table.
- * @const
- * @type {Object.<ol.proj.Units, number>}
- * @api stable
- */
-ol.proj.METERS_PER_UNIT = {};
-ol.proj.METERS_PER_UNIT[ol.proj.Units.DEGREES] =
-    2 * Math.PI * ol.sphere.NORMAL.radius / 360;
-ol.proj.METERS_PER_UNIT[ol.proj.Units.FEET] = 0.3048;
-ol.proj.METERS_PER_UNIT[ol.proj.Units.METERS] = 1;
-ol.proj.METERS_PER_UNIT[ol.proj.Units.USFEET] = 1200 / 3937;
-
-
-/**
- * @classdesc
- * Projection definition class. One of these is created for each projection
- * supported in the application and stored in the {@link ol.proj} namespace.
- * You can use these in applications, but this is not required, as API params
- * and options use {@link ol.proj.ProjectionLike} which means the simple string
- * code will suffice.
- *
- * You can use {@link ol.proj.get} to retrieve the object for a particular
- * projection.
- *
- * The library includes definitions for `EPSG:4326` and `EPSG:3857`, together
- * with the following aliases:
- * * `EPSG:4326`: CRS:84, urn:ogc:def:crs:EPSG:6.6:4326,
- *     urn:ogc:def:crs:OGC:1.3:CRS84, urn:ogc:def:crs:OGC:2:84,
- *     http://www.opengis.net/gml/srs/epsg.xml#4326,
- *     urn:x-ogc:def:crs:EPSG:4326
- * * `EPSG:3857`: EPSG:102100, EPSG:102113, EPSG:900913,
- *     urn:ogc:def:crs:EPSG:6.18:3:3857,
- *     http://www.opengis.net/gml/srs/epsg.xml#3857
- *
- * If you use proj4js, aliases can be added using `proj4.defs()`; see
- * [documentation](https://github.com/proj4js/proj4js). To set an alternative
- * namespace for proj4, use {@link ol.proj.setProj4}.
- *
- * @constructor
- * @param {olx.ProjectionOptions} options Projection options.
- * @struct
- * @api stable
- */
-ol.proj.Projection = function(options) {
-
-  /**
-   * @private
-   * @type {string}
-   */
-  this.code_ = options.code;
-
-  /**
-   * @private
-   * @type {ol.proj.Units}
-   */
-  this.units_ = /** @type {ol.proj.Units} */ (options.units);
-
-  /**
-   * @private
-   * @type {ol.Extent}
-   */
-  this.extent_ = options.extent !== undefined ? options.extent : null;
-
-  /**
-   * @private
-   * @type {ol.Extent}
-   */
-  this.worldExtent_ = options.worldExtent !== undefined ?
-      options.worldExtent : null;
-
-  /**
-   * @private
-   * @type {string}
-   */
-  this.axisOrientation_ = options.axisOrientation !== undefined ?
-      options.axisOrientation : 'enu';
-
-  /**
-   * @private
-   * @type {boolean}
-   */
-  this.global_ = options.global !== undefined ? options.global : false;
-
-
-  /**
-   * @private
-   * @type {boolean}
-   */
-  this.canWrapX_ = !!(this.global_ && this.extent_);
-
-  /**
-  * @private
-  * @type {function(number, ol.Coordinate):number}
-  */
-  this.getPointResolutionFunc_ = options.getPointResolution !== undefined ?
-      options.getPointResolution : this.getPointResolution_;
-
-  /**
-   * @private
-   * @type {ol.tilegrid.TileGrid}
-   */
-  this.defaultTileGrid_ = null;
-
-  /**
-   * @private
-   * @type {number|undefined}
-   */
-  this.metersPerUnit_ = options.metersPerUnit;
-
-  var projections = ol.proj.projections_;
-  var code = options.code;
-  goog.asserts.assert(code !== undefined,
-      'Option "code" is required for constructing instance');
-  if (ol.ENABLE_PROJ4JS) {
-    var proj4js = ol.proj.proj4_ || goog.global['proj4'];
-    if (typeof proj4js == 'function' && projections[code] === undefined) {
-      var def = proj4js.defs(code);
-      if (def !== undefined) {
-        if (def.axis !== undefined && options.axisOrientation === undefined) {
-          this.axisOrientation_ = def.axis;
-        }
-        if (options.metersPerUnit === undefined) {
-          this.metersPerUnit_ = def.to_meter;
-        }
-        if (options.units === undefined) {
-          this.units_ = def.units;
-        }
-        var currentCode, currentDef, currentProj, proj4Transform;
-        for (currentCode in projections) {
-          currentDef = proj4js.defs(currentCode);
-          if (currentDef !== undefined) {
-            currentProj = ol.proj.get(currentCode);
-            if (currentDef === def) {
-              ol.proj.addEquivalentProjections([currentProj, this]);
-            } else {
-              proj4Transform = proj4js(currentCode, code);
-              ol.proj.addCoordinateTransforms(currentProj, this,
-                  proj4Transform.forward, proj4Transform.inverse);
-            }
-          }
-        }
-      }
-    }
-  }
-
-};
-
-
-/**
- * @return {boolean} The projection is suitable for wrapping the x-axis
- */
-ol.proj.Projection.prototype.canWrapX = function() {
-  return this.canWrapX_;
-};
-
-
-/**
- * Get the code for this projection, e.g. 'EPSG:4326'.
- * @return {string} Code.
- * @api stable
- */
-ol.proj.Projection.prototype.getCode = function() {
-  return this.code_;
-};
-
-
-/**
- * Get the validity extent for this projection.
- * @return {ol.Extent} Extent.
- * @api stable
- */
-ol.proj.Projection.prototype.getExtent = function() {
-  return this.extent_;
-};
-
-
-/**
- * Get the units of this projection.
- * @return {ol.proj.Units} Units.
- * @api stable
- */
-ol.proj.Projection.prototype.getUnits = function() {
-  return this.units_;
-};
-
-
-/**
- * Get the amount of meters per unit of this projection.  If the projection is
- * not configured with `metersPerUnit` or a units identifier, the return is
- * `undefined`.
- * @return {number|undefined} Meters.
- * @api stable
- */
-ol.proj.Projection.prototype.getMetersPerUnit = function() {
-  return this.metersPerUnit_ || ol.proj.METERS_PER_UNIT[this.units_];
-};
-
-
-/**
- * Get the world extent for this projection.
- * @return {ol.Extent} Extent.
- * @api
- */
-ol.proj.Projection.prototype.getWorldExtent = function() {
-  return this.worldExtent_;
-};
-
-
-/**
- * Get the axis orientation of this projection.
- * Example values are:
- * enu - the default easting, northing, elevation.
- * neu - northing, easting, up - useful for "lat/long" geographic coordinates,
- *     or south orientated transverse mercator.
- * wnu - westing, northing, up - some planetary coordinate systems have
- *     "west positive" coordinate systems
- * @return {string} Axis orientation.
- */
-ol.proj.Projection.prototype.getAxisOrientation = function() {
-  return this.axisOrientation_;
-};
-
-
-/**
- * Is this projection a global projection which spans the whole world?
- * @return {boolean} Whether the projection is global.
- * @api stable
- */
-ol.proj.Projection.prototype.isGlobal = function() {
-  return this.global_;
-};
-
-
-/**
-* Set if the projection is a global projection which spans the whole world
-* @param {boolean} global Whether the projection is global.
-* @api stable
-*/
-ol.proj.Projection.prototype.setGlobal = function(global) {
-  this.global_ = global;
-  this.canWrapX_ = !!(global && this.extent_);
-};
-
-
-/**
- * @return {ol.tilegrid.TileGrid} The default tile grid.
- */
-ol.proj.Projection.prototype.getDefaultTileGrid = function() {
-  return this.defaultTileGrid_;
-};
-
-
-/**
- * @param {ol.tilegrid.TileGrid} tileGrid The default tile grid.
- */
-ol.proj.Projection.prototype.setDefaultTileGrid = function(tileGrid) {
-  this.defaultTileGrid_ = tileGrid;
-};
-
-
-/**
- * Set the validity extent for this projection.
- * @param {ol.Extent} extent Extent.
- * @api stable
- */
-ol.proj.Projection.prototype.setExtent = function(extent) {
-  this.extent_ = extent;
-  this.canWrapX_ = !!(this.global_ && extent);
-};
-
-
-/**
- * Set the world extent for this projection.
- * @param {ol.Extent} worldExtent World extent
- *     [minlon, minlat, maxlon, maxlat].
- * @api
- */
-ol.proj.Projection.prototype.setWorldExtent = function(worldExtent) {
-  this.worldExtent_ = worldExtent;
-};
-
-
-/**
-* Set the getPointResolution function for this projection.
-* @param {function(number, ol.Coordinate):number} func Function
-* @api
-*/
-ol.proj.Projection.prototype.setGetPointResolution = function(func) {
-  this.getPointResolutionFunc_ = func;
-};
-
-
-/**
-* Default version.
-* Get the resolution of the point in degrees or distance units.
-* For projections with degrees as the unit this will simply return the
-* provided resolution. For other projections the point resolution is
-* estimated by transforming the 'point' pixel to EPSG:4326,
-* measuring its width and height on the normal sphere,
-* and taking the average of the width and height.
-* @param {number} resolution Nominal resolution in projection units.
-* @param {ol.Coordinate} point Point to find adjusted resolution at.
-* @return {number} Point resolution at point in projection units.
-* @private
-*/
-ol.proj.Projection.prototype.getPointResolution_ = function(resolution, point) {
-  var units = this.getUnits();
-  if (units == ol.proj.Units.DEGREES) {
-    return resolution;
-  } else {
-    // Estimate point resolution by transforming the center pixel to EPSG:4326,
-    // measuring its width and height on the normal sphere, and taking the
-    // average of the width and height.
-    var toEPSG4326 = ol.proj.getTransformFromProjections(
-        this, ol.proj.get('EPSG:4326'));
-    var vertices = [
-      point[0] - resolution / 2, point[1],
-      point[0] + resolution / 2, point[1],
-      point[0], point[1] - resolution / 2,
-      point[0], point[1] + resolution / 2
-    ];
-    vertices = toEPSG4326(vertices, vertices, 2);
-    var width = ol.sphere.NORMAL.haversineDistance(
-        vertices.slice(0, 2), vertices.slice(2, 4));
-    var height = ol.sphere.NORMAL.haversineDistance(
-        vertices.slice(4, 6), vertices.slice(6, 8));
-    var pointResolution = (width + height) / 2;
-    var metersPerUnit = this.getMetersPerUnit();
-    if (metersPerUnit !== undefined) {
-      pointResolution /= metersPerUnit;
-    }
-    return pointResolution;
-  }
-};
-
-
-/**
- * Get the resolution of the point in degrees or distance units.
- * For projections with degrees as the unit this will simply return the
- * provided resolution. The default for other projections is to estimate
- * the point resolution by transforming the 'point' pixel to EPSG:4326,
- * measuring its width and height on the normal sphere,
- * and taking the average of the width and height.
- * An alternative implementation may be given when constructing a
- * projection. For many local projections,
- * such a custom function will return the resolution unchanged.
- * @param {number} resolution Resolution in projection units.
- * @param {ol.Coordinate} point Point.
- * @return {number} Point resolution in projection units.
- * @api
- */
-ol.proj.Projection.prototype.getPointResolution = function(resolution, point) {
-  return this.getPointResolutionFunc_(resolution, point);
-};
-
-
-/**
- * @private
- * @type {Object.<string, ol.proj.Projection>}
- */
-ol.proj.projections_ = {};
-
-
-/**
- * @private
- * @type {Object.<string, Object.<string, ol.TransformFunction>>}
- */
-ol.proj.transforms_ = {};
-
-
-/**
- * @private
- * @type {proj4}
- */
-ol.proj.proj4_ = null;
-
-
-if (ol.ENABLE_PROJ4JS) {
-  /**
-   * Register proj4. If not explicitly registered, it will be assumed that
-   * proj4js will be loaded in the global namespace. For example in a
-   * browserify ES6 environment you could use:
-   *
-   *     import ol from 'openlayers';
-   *     import proj4 from 'proj4';
-   *     ol.proj.setProj4(proj4);
-   *
-   * @param {proj4} proj4 Proj4.
-   * @api
-   */
-  ol.proj.setProj4 = function(proj4) {
-    goog.asserts.assert(typeof proj4 == 'function',
-        'proj4 argument should be a function');
-    ol.proj.proj4_ = proj4;
-  };
-}
-
-
-/**
- * Registers transformation functions that don't alter coordinates. Those allow
- * to transform between projections with equal meaning.
- *
- * @param {Array.<ol.proj.Projection>} projections Projections.
- * @api
- */
-ol.proj.addEquivalentProjections = function(projections) {
-  ol.proj.addProjections(projections);
-  projections.forEach(function(source) {
-    projections.forEach(function(destination) {
-      if (source !== destination) {
-        ol.proj.addTransform(source, destination, ol.proj.cloneTransform);
-      }
-    });
-  });
-};
-
-
-/**
- * Registers transformation functions to convert coordinates in any projection
- * in projection1 to any projection in projection2.
- *
- * @param {Array.<ol.proj.Projection>} projections1 Projections with equal
- *     meaning.
- * @param {Array.<ol.proj.Projection>} projections2 Projections with equal
- *     meaning.
- * @param {ol.TransformFunction} forwardTransform Transformation from any
- *   projection in projection1 to any projection in projection2.
- * @param {ol.TransformFunction} inverseTransform Transform from any projection
- *   in projection2 to any projection in projection1..
- */
-ol.proj.addEquivalentTransforms = function(projections1, projections2, forwardTransform, inverseTransform) {
-  projections1.forEach(function(projection1) {
-    projections2.forEach(function(projection2) {
-      ol.proj.addTransform(projection1, projection2, forwardTransform);
-      ol.proj.addTransform(projection2, projection1, inverseTransform);
-    });
-  });
-};
-
-
-/**
- * Add a Projection object to the list of supported projections that can be
- * looked up by their code.
- *
- * @param {ol.proj.Projection} projection Projection instance.
- * @api stable
- */
-ol.proj.addProjection = function(projection) {
-  ol.proj.projections_[projection.getCode()] = projection;
-  ol.proj.addTransform(projection, projection, ol.proj.cloneTransform);
-};
-
-
-/**
- * @param {Array.<ol.proj.Projection>} projections Projections.
- */
-ol.proj.addProjections = function(projections) {
-  var addedProjections = [];
-  projections.forEach(function(projection) {
-    addedProjections.push(ol.proj.addProjection(projection));
-  });
-};
-
-
-/**
- * FIXME empty description for jsdoc
- */
-ol.proj.clearAllProjections = function() {
-  ol.proj.projections_ = {};
-  ol.proj.transforms_ = {};
-};
-
-
-/**
- * @param {ol.proj.Projection|string|undefined} projection Projection.
- * @param {string} defaultCode Default code.
- * @return {ol.proj.Projection} Projection.
- */
-ol.proj.createProjection = function(projection, defaultCode) {
-  if (!projection) {
-    return ol.proj.get(defaultCode);
-  } else if (typeof projection === 'string') {
-    return ol.proj.get(projection);
-  } else {
-    goog.asserts.assertInstanceof(projection, ol.proj.Projection,
-        'projection should be an ol.proj.Projection');
-    return projection;
-  }
-};
-
-
-/**
- * Registers a conversion function to convert coordinates from the source
- * projection to the destination projection.
- *
- * @param {ol.proj.Projection} source Source.
- * @param {ol.proj.Projection} destination Destination.
- * @param {ol.TransformFunction} transformFn Transform.
- */
-ol.proj.addTransform = function(source, destination, transformFn) {
-  var sourceCode = source.getCode();
-  var destinationCode = destination.getCode();
-  var transforms = ol.proj.transforms_;
-  if (!(sourceCode in transforms)) {
-    transforms[sourceCode] = {};
-  }
-  transforms[sourceCode][destinationCode] = transformFn;
-};
-
-
-/**
- * Registers coordinate transform functions to convert coordinates between the
- * source projection and the destination projection.
- * The forward and inverse functions convert coordinate pairs; this function
- * converts these into the functions used internally which also handle
- * extents and coordinate arrays.
- *
- * @param {ol.proj.ProjectionLike} source Source projection.
- * @param {ol.proj.ProjectionLike} destination Destination projection.
- * @param {function(ol.Coordinate): ol.Coordinate} forward The forward transform
- *     function (that is, from the source projection to the destination
- *     projection) that takes a {@link ol.Coordinate} as argument and returns
- *     the transformed {@link ol.Coordinate}.
- * @param {function(ol.Coordinate): ol.Coordinate} inverse The inverse transform
- *     function (that is, from the destination projection to the source
- *     projection) that takes a {@link ol.Coordinate} as argument and returns
- *     the transformed {@link ol.Coordinate}.
- * @api stable
- */
-ol.proj.addCoordinateTransforms = function(source, destination, forward, inverse) {
-  var sourceProj = ol.proj.get(source);
-  var destProj = ol.proj.get(destination);
-  ol.proj.addTransform(sourceProj, destProj,
-      ol.proj.createTransformFromCoordinateTransform(forward));
-  ol.proj.addTransform(destProj, sourceProj,
-      ol.proj.createTransformFromCoordinateTransform(inverse));
-};
-
-
-/**
- * Creates a {@link ol.TransformFunction} from a simple 2D coordinate transform
- * function.
- * @param {function(ol.Coordinate): ol.Coordinate} transform Coordinate
- *     transform.
- * @return {ol.TransformFunction} Transform function.
- */
-ol.proj.createTransformFromCoordinateTransform = function(transform) {
-  return (
-      /**
-       * @param {Array.<number>} input Input.
-       * @param {Array.<number>=} opt_output Output.
-       * @param {number=} opt_dimension Dimension.
-       * @return {Array.<number>} Output.
-       */
-      function(input, opt_output, opt_dimension) {
-        var length = input.length;
-        var dimension = opt_dimension !== undefined ? opt_dimension : 2;
-        var output = opt_output !== undefined ? opt_output : new Array(length);
-        var point, i, j;
-        for (i = 0; i < length; i += dimension) {
-          point = transform([input[i], input[i + 1]]);
-          output[i] = point[0];
-          output[i + 1] = point[1];
-          for (j = dimension - 1; j >= 2; --j) {
-            output[i + j] = input[i + j];
-          }
-        }
-        return output;
-      });
-};
-
-
-/**
- * Unregisters the conversion function to convert coordinates from the source
- * projection to the destination projection.  This method is used to clean up
- * cached transforms during testing.
- *
- * @param {ol.proj.Projection} source Source projection.
- * @param {ol.proj.Projection} destination Destination projection.
- * @return {ol.TransformFunction} transformFn The unregistered transform.
- */
-ol.proj.removeTransform = function(source, destination) {
-  var sourceCode = source.getCode();
-  var destinationCode = destination.getCode();
-  var transforms = ol.proj.transforms_;
-  goog.asserts.assert(sourceCode in transforms,
-      'sourceCode should be in transforms');
-  goog.asserts.assert(destinationCode in transforms[sourceCode],
-      'destinationCode should be in transforms of sourceCode');
-  var transform = transforms[sourceCode][destinationCode];
-  delete transforms[sourceCode][destinationCode];
-  if (ol.object.isEmpty(transforms[sourceCode])) {
-    delete transforms[sourceCode];
-  }
-  return transform;
-};
-
-
-/**
- * Transforms a coordinate from longitude/latitude to a different projection.
- * @param {ol.Coordinate} coordinate Coordinate as longitude and latitude, i.e.
- *     an array with longitude as 1st and latitude as 2nd element.
- * @param {ol.proj.ProjectionLike=} opt_projection Target projection. The
- *     default is Web Mercator, i.e. 'EPSG:3857'.
- * @return {ol.Coordinate} Coordinate projected to the target projection.
- * @api stable
- */
-ol.proj.fromLonLat = function(coordinate, opt_projection) {
-  return ol.proj.transform(coordinate, 'EPSG:4326',
-      opt_projection !== undefined ? opt_projection : 'EPSG:3857');
-};
-
-
-/**
- * Transforms a coordinate to longitude/latitude.
- * @param {ol.Coordinate} coordinate Projected coordinate.
- * @param {ol.proj.ProjectionLike=} opt_projection Projection of the coordinate.
- *     The default is Web Mercator, i.e. 'EPSG:3857'.
- * @return {ol.Coordinate} Coordinate as longitude and latitude, i.e. an array
- *     with longitude as 1st and latitude as 2nd element.
- * @api stable
- */
-ol.proj.toLonLat = function(coordinate, opt_projection) {
-  return ol.proj.transform(coordinate,
-      opt_projection !== undefined ? opt_projection : 'EPSG:3857', 'EPSG:4326');
-};
-
-
-/**
- * Fetches a Projection object for the code specified.
- *
- * @param {ol.proj.ProjectionLike} projectionLike Either a code string which is
- *     a combination of authority and identifier such as "EPSG:4326", or an
- *     existing projection object, or undefined.
- * @return {ol.proj.Projection} Projection object, or null if not in list.
- * @api stable
- */
-ol.proj.get = function(projectionLike) {
-  var projection;
-  if (projectionLike instanceof ol.proj.Projection) {
-    projection = projectionLike;
-  } else if (typeof projectionLike === 'string') {
-    var code = projectionLike;
-    projection = ol.proj.projections_[code];
-    if (ol.ENABLE_PROJ4JS) {
-      var proj4js = ol.proj.proj4_ || goog.global['proj4'];
-      if (projection === undefined && typeof proj4js == 'function' &&
-          proj4js.defs(code) !== undefined) {
-        projection = new ol.proj.Projection({code: code});
-        ol.proj.addProjection(projection);
-      }
-    }
-  } else {
-    projection = null;
-  }
-  return projection;
-};
-
-
-/**
- * Checks if two projections are the same, that is every coordinate in one
- * projection does represent the same geographic point as the same coordinate in
- * the other projection.
- *
- * @param {ol.proj.Projection} projection1 Projection 1.
- * @param {ol.proj.Projection} projection2 Projection 2.
- * @return {boolean} Equivalent.
- * @api
- */
-ol.proj.equivalent = function(projection1, projection2) {
-  if (projection1 === projection2) {
-    return true;
-  }
-  var equalUnits = projection1.getUnits() === projection2.getUnits();
-  if (projection1.getCode() === projection2.getCode()) {
-    return equalUnits;
-  } else {
-    var transformFn = ol.proj.getTransformFromProjections(
-        projection1, projection2);
-    return transformFn === ol.proj.cloneTransform && equalUnits;
-  }
-};
-
-
-/**
- * Given the projection-like objects, searches for a transformation
- * function to convert a coordinates array from the source projection to the
- * destination projection.
- *
- * @param {ol.proj.ProjectionLike} source Source.
- * @param {ol.proj.ProjectionLike} destination Destination.
- * @return {ol.TransformFunction} Transform function.
- * @api stable
- */
-ol.proj.getTransform = function(source, destination) {
-  var sourceProjection = ol.proj.get(source);
-  var destinationProjection = ol.proj.get(destination);
-  return ol.proj.getTransformFromProjections(
-      sourceProjection, destinationProjection);
-};
-
-
-/**
- * Searches in the list of transform functions for the function for converting
- * coordinates from the source projection to the destination projection.
- *
- * @param {ol.proj.Projection} sourceProjection Source Projection object.
- * @param {ol.proj.Projection} destinationProjection Destination Projection
- *     object.
- * @return {ol.TransformFunction} Transform function.
- */
-ol.proj.getTransformFromProjections = function(sourceProjection, destinationProjection) {
-  var transforms = ol.proj.transforms_;
-  var sourceCode = sourceProjection.getCode();
-  var destinationCode = destinationProjection.getCode();
-  var transform;
-  if (sourceCode in transforms && destinationCode in transforms[sourceCode]) {
-    transform = transforms[sourceCode][destinationCode];
-  }
-  if (transform === undefined) {
-    goog.asserts.assert(transform !== undefined, 'transform should be defined');
-    transform = ol.proj.identityTransform;
-  }
-  return transform;
-};
-
-
-/**
- * @param {Array.<number>} input Input coordinate array.
- * @param {Array.<number>=} opt_output Output array of coordinate values.
- * @param {number=} opt_dimension Dimension.
- * @return {Array.<number>} Input coordinate array (same array as input).
- */
-ol.proj.identityTransform = function(input, opt_output, opt_dimension) {
-  if (opt_output !== undefined && input !== opt_output) {
-    // TODO: consider making this a warning instead
-    goog.asserts.fail('This should not be used internally.');
-    for (var i = 0, ii = input.length; i < ii; ++i) {
-      opt_output[i] = input[i];
-    }
-    input = opt_output;
-  }
-  return input;
-};
-
-
-/**
- * @param {Array.<number>} input Input coordinate array.
- * @param {Array.<number>=} opt_output Output array of coordinate values.
- * @param {number=} opt_dimension Dimension.
- * @return {Array.<number>} Output coordinate array (new array, same coordinate
- *     values).
- */
-ol.proj.cloneTransform = function(input, opt_output, opt_dimension) {
-  var output;
-  if (opt_output !== undefined) {
-    for (var i = 0, ii = input.length; i < ii; ++i) {
-      opt_output[i] = input[i];
-    }
-    output = opt_output;
-  } else {
-    output = input.slice();
-  }
-  return output;
-};
-
-
-/**
- * Transforms a coordinate from source projection to destination projection.
- * This returns a new coordinate (and does not modify the original).
- *
- * See {@link ol.proj.transformExtent} for extent transformation.
- * See the transform method of {@link ol.geom.Geometry} and its subclasses for
- * geometry transforms.
- *
- * @param {ol.Coordinate} coordinate Coordinate.
- * @param {ol.proj.ProjectionLike} source Source projection-like.
- * @param {ol.proj.ProjectionLike} destination Destination projection-like.
- * @return {ol.Coordinate} Coordinate.
- * @api stable
- */
-ol.proj.transform = function(coordinate, source, destination) {
-  var transformFn = ol.proj.getTransform(source, destination);
-  return transformFn(coordinate, undefined, coordinate.length);
-};
-
-
-/**
- * Transforms an extent from source projection to destination projection.  This
- * returns a new extent (and does not modify the original).
- *
- * @param {ol.Extent} extent The extent to transform.
- * @param {ol.proj.ProjectionLike} source Source projection-like.
- * @param {ol.proj.ProjectionLike} destination Destination projection-like.
- * @return {ol.Extent} The transformed extent.
- * @api stable
- */
-ol.proj.transformExtent = function(extent, source, destination) {
-  var transformFn = ol.proj.getTransform(source, destination);
-  return ol.extent.applyTransform(extent, transformFn);
-};
-
-
-/**
- * Transforms the given point to the destination projection.
- *
- * @param {ol.Coordinate} point Point.
- * @param {ol.proj.Projection} sourceProjection Source projection.
- * @param {ol.proj.Projection} destinationProjection Destination projection.
- * @return {ol.Coordinate} Point.
- */
-ol.proj.transformWithProjections = function(point, sourceProjection, destinationProjection) {
-  var transformFn = ol.proj.getTransformFromProjections(
-      sourceProjection, destinationProjection);
-  return transformFn(point);
-};
-
-goog.provide('ol.geom.Geometry');
-goog.provide('ol.geom.GeometryLayout');
-goog.provide('ol.geom.GeometryType');
-
-goog.require('goog.asserts');
-goog.require('ol.functions');
-goog.require('ol.Object');
-goog.require('ol.extent');
-goog.require('ol.proj');
-goog.require('ol.proj.Units');
-
-
-/**
- * The geometry type. One of `'Point'`, `'LineString'`, `'LinearRing'`,
- * `'Polygon'`, `'MultiPoint'`, `'MultiLineString'`, `'MultiPolygon'`,
- * `'GeometryCollection'`, `'Circle'`.
- * @enum {string}
- * @api stable
- */
-ol.geom.GeometryType = {
-  POINT: 'Point',
-  LINE_STRING: 'LineString',
-  LINEAR_RING: 'LinearRing',
-  POLYGON: 'Polygon',
-  MULTI_POINT: 'MultiPoint',
-  MULTI_LINE_STRING: 'MultiLineString',
-  MULTI_POLYGON: 'MultiPolygon',
-  GEOMETRY_COLLECTION: 'GeometryCollection',
-  CIRCLE: 'Circle'
-};
-
-
-/**
- * The coordinate layout for geometries, indicating whether a 3rd or 4th z ('Z')
- * or measure ('M') coordinate is available. Supported values are `'XY'`,
- * `'XYZ'`, `'XYM'`, `'XYZM'`.
- * @enum {string}
- * @api stable
- */
-ol.geom.GeometryLayout = {
-  XY: 'XY',
-  XYZ: 'XYZ',
-  XYM: 'XYM',
-  XYZM: 'XYZM'
-};
-
-
-/**
- * @classdesc
- * Abstract base class; normally only used for creating subclasses and not
- * instantiated in apps.
- * Base class for vector geometries.
- *
- * To get notified of changes to the geometry, register a listener for the
- * generic `change` event on your geometry instance.
- *
- * @constructor
- * @extends {ol.Object}
- * @api stable
- */
-ol.geom.Geometry = function() {
-
-  goog.base(this);
-
-  /**
-   * @private
-   * @type {ol.Extent}
-   */
-  this.extent_ = ol.extent.createEmpty();
-
-  /**
-   * @private
-   * @type {number}
-   */
-  this.extentRevision_ = -1;
-
-  /**
-   * @protected
-   * @type {Object.<string, ol.geom.Geometry>}
-   */
-  this.simplifiedGeometryCache = {};
-
-  /**
-   * @protected
-   * @type {number}
-   */
-  this.simplifiedGeometryMaxMinSquaredTolerance = 0;
-
-  /**
-   * @protected
-   * @type {number}
-   */
-  this.simplifiedGeometryRevision = 0;
-
-};
-goog.inherits(ol.geom.Geometry, ol.Object);
-
-
-/**
- * Make a complete copy of the geometry.
- * @function
- * @return {!ol.geom.Geometry} Clone.
- */
-ol.geom.Geometry.prototype.clone = goog.abstractMethod;
-
-
-/**
- * @param {number} x X.
- * @param {number} y Y.
- * @param {ol.Coordinate} closestPoint Closest point.
- * @param {number} minSquaredDistance Minimum squared distance.
- * @return {number} Minimum squared distance.
- */
-ol.geom.Geometry.prototype.closestPointXY = goog.abstractMethod;
-
-
-/**
- * Return the closest point of the geometry to the passed point as
- * {@link ol.Coordinate coordinate}.
- * @param {ol.Coordinate} point Point.
- * @param {ol.Coordinate=} opt_closestPoint Closest point.
- * @return {ol.Coordinate} Closest point.
- * @api stable
- */
-ol.geom.Geometry.prototype.getClosestPoint = function(point, opt_closestPoint) {
-  var closestPoint = opt_closestPoint ? opt_closestPoint : [NaN, NaN];
-  this.closestPointXY(point[0], point[1], closestPoint, Infinity);
-  return closestPoint;
-};
-
-
-/**
- * @param {ol.Coordinate} coordinate Coordinate.
- * @return {boolean} Contains coordinate.
- */
-ol.geom.Geometry.prototype.containsCoordinate = function(coordinate) {
-  return this.containsXY(coordinate[0], coordinate[1]);
-};
-
-
-/**
- * @param {ol.Extent} extent Extent.
- * @protected
- * @return {ol.Extent} extent Extent.
- */
-ol.geom.Geometry.prototype.computeExtent = goog.abstractMethod;
-
-
-/**
- * @param {number} x X.
- * @param {number} y Y.
- * @return {boolean} Contains (x, y).
- */
-ol.geom.Geometry.prototype.containsXY = ol.functions.FALSE;
-
-
-/**
- * Get the extent of the geometry.
- * @param {ol.Extent=} opt_extent Extent.
- * @return {ol.Extent} extent Extent.
- * @api stable
- */
-ol.geom.Geometry.prototype.getExtent = function(opt_extent) {
-  if (this.extentRevision_ != this.getRevision()) {
-    this.extent_ = this.computeExtent(this.extent_);
-    this.extentRevision_ = this.getRevision();
-  }
-  return ol.extent.returnOrUpdate(this.extent_, opt_extent);
-};
-
-
-/**
- * Rotate the geometry around a given coordinate. This modifies the geometry
- * coordinates in place.
- * @param {number} angle Rotation angle in radians.
- * @param {ol.Coordinate} anchor The rotation center.
- * @api
- * @function
- */
-ol.geom.Geometry.prototype.rotate = goog.abstractMethod;
-
-
-/**
- * Create a simplified version of this geometry.  For linestrings, this uses
- * the the {@link
- * https://en.wikipedia.org/wiki/Ramer-Douglas-Peucker_algorithm
- * Douglas Peucker} algorithm.  For polygons, a quantization-based
- * simplification is used to preserve topology.
- * @function
- * @param {number} tolerance The tolerance distance for simplification.
- * @return {ol.geom.Geometry} A new, simplified version of the original
- *     geometry.
- * @api
- */
-ol.geom.Geometry.prototype.simplify = function(tolerance) {
-  return this.getSimplifiedGeometry(tolerance * tolerance);
-};
-
-
-/**
- * Create a simplified version of this geometry using the Douglas Peucker
- * algorithm.
- * @see https://en.wikipedia.org/wiki/Ramer-Douglas-Peucker_algorithm
- * @function
- * @param {number} squaredTolerance Squared tolerance.
- * @return {ol.geom.Geometry} Simplified geometry.
- */
-ol.geom.Geometry.prototype.getSimplifiedGeometry = goog.abstractMethod;
-
-
-/**
- * Get the type of this geometry.
- * @function
- * @return {ol.geom.GeometryType} Geometry type.
- */
-ol.geom.Geometry.prototype.getType = goog.abstractMethod;
-
-
-/**
- * Apply a transform function to each coordinate of the geometry.
- * The geometry is modified in place.
- * If you do not want the geometry modified in place, first `clone()` it and
- * then use this function on the clone.
- * @function
- * @param {ol.TransformFunction} transformFn Transform.
- */
-ol.geom.Geometry.prototype.applyTransform = goog.abstractMethod;
-
-
-/**
- * Test if the geometry and the passed extent intersect.
- * @param {ol.Extent} extent Extent.
- * @return {boolean} `true` if the geometry and the extent intersect.
- * @function
- */
-ol.geom.Geometry.prototype.intersectsExtent = goog.abstractMethod;
-
-
-/**
- * Translate the geometry.  This modifies the geometry coordinates in place.  If
- * instead you want a new geometry, first `clone()` this geometry.
- * @param {number} deltaX Delta X.
- * @param {number} deltaY Delta Y.
- * @function
- */
-ol.geom.Geometry.prototype.translate = goog.abstractMethod;
-
-
-/**
- * Transform each coordinate of the geometry from one coordinate reference
- * system to another. The geometry is modified in place.
- * For example, a line will be transformed to a line and a circle to a circle.
- * If you do not want the geometry modified in place, first `clone()` it and
- * then use this function on the clone.
- *
- * @param {ol.proj.ProjectionLike} source The current projection.  Can be a
- *     string identifier or a {@link ol.proj.Projection} object.
- * @param {ol.proj.ProjectionLike} destination The desired projection.  Can be a
- *     string identifier or a {@link ol.proj.Projection} object.
- * @return {ol.geom.Geometry} This geometry.  Note that original geometry is
- *     modified in place.
- * @api stable
- */
-ol.geom.Geometry.prototype.transform = function(source, destination) {
-  goog.asserts.assert(
-      ol.proj.get(source).getUnits() !== ol.proj.Units.TILE_PIXELS &&
-      ol.proj.get(destination).getUnits() !== ol.proj.Units.TILE_PIXELS,
-      'cannot transform geometries with TILE_PIXELS units');
-  this.applyTransform(ol.proj.getTransform(source, destination));
-  return this;
-};
-
 goog.provide('ol.geom.flat.transform');
 
 goog.require('goog.vec.Mat4');
@@ -15179,8 +15708,6 @@ goog.require('ol.Constraints');
 goog.require('ol.Object');
 goog.require('ol.ResolutionConstraint');
 goog.require('ol.RotationConstraint');
-goog.require('ol.RotationConstraintType');
-goog.require('ol.Size');
 goog.require('ol.coordinate');
 goog.require('ol.extent');
 goog.require('ol.geom.Polygon');
@@ -15308,6 +15835,12 @@ ol.View = function(opt_options) {
 
   /**
    * @private
+   * @type {Array.<number>|undefined}
+   */
+  this.resolutions_ = options.resolutions;
+
+  /**
+   * @private
    * @type {number}
    */
   this.minZoom_ = resolutionConstraintInfo.minZoom;
@@ -15426,10 +15959,17 @@ ol.View.prototype.getCenter = function() {
 
 
 /**
+ * @param {Array.<number>=} opt_hints Destination array.
  * @return {Array.<number>} Hint.
  */
-ol.View.prototype.getHints = function() {
-  return this.hints_.slice();
+ol.View.prototype.getHints = function(opt_hints) {
+  if (opt_hints !== undefined) {
+    opt_hints[0] = this.hints_[0];
+    opt_hints[1] = this.hints_[1];
+    return opt_hints;
+  } else {
+    return this.hints_.slice();
+  }
 };
 
 
@@ -15475,6 +16015,17 @@ ol.View.prototype.getProjection = function() {
 ol.View.prototype.getResolution = function() {
   return /** @type {number|undefined} */ (
       this.get(ol.ViewProperty.RESOLUTION));
+};
+
+
+/**
+ * Get the resolutions for the view. This returns the array of resolutions
+ * passed to the constructor of the {ol.View}, or undefined if none were given.
+ * @return {Array.<number>|undefined} The resolutions of the view.
+ * @api stable
+ */
+ol.View.prototype.getResolutions = function() {
+  return this.resolutions_;
 };
 
 
@@ -15987,7 +16538,6 @@ ol.easing.upAndDown = function(t) {
 goog.provide('ol.animation');
 
 goog.require('ol');
-goog.require('ol.PreRenderFunction');
 goog.require('ol.ViewHint');
 goog.require('ol.coordinate');
 goog.require('ol.easing');
@@ -16156,164 +16706,9 @@ ol.animation.zoom = function(options) {
       });
 };
 
-goog.provide('ol.TileCoord');
-goog.provide('ol.tilecoord');
-
-goog.require('goog.asserts');
-goog.require('ol.extent');
-
-
-/**
- * An array of three numbers representing the location of a tile in a tile
- * grid. The order is `z`, `x`, and `y`. `z` is the zoom level.
- * @typedef {Array.<number>} ol.TileCoord
- * @api
- */
-ol.TileCoord;
-
-
-/**
- * @enum {number}
- */
-ol.QuadKeyCharCode = {
-  ZERO: '0'.charCodeAt(0),
-  ONE: '1'.charCodeAt(0),
-  TWO: '2'.charCodeAt(0),
-  THREE: '3'.charCodeAt(0)
-};
-
-
-/**
- * @param {string} str String that follows pattern “z/x/y” where x, y and z are
- *   numbers.
- * @return {ol.TileCoord} Tile coord.
- */
-ol.tilecoord.createFromString = function(str) {
-  var v = str.split('/');
-  goog.asserts.assert(v.length === 3,
-      'must provide a string in "z/x/y" format, got "%s"', str);
-  return v.map(function(e) {
-    return parseInt(e, 10);
-  });
-};
-
-
-/**
- * @param {number} z Z.
- * @param {number} x X.
- * @param {number} y Y.
- * @param {ol.TileCoord=} opt_tileCoord Tile coordinate.
- * @return {ol.TileCoord} Tile coordinate.
- */
-ol.tilecoord.createOrUpdate = function(z, x, y, opt_tileCoord) {
-  if (opt_tileCoord !== undefined) {
-    opt_tileCoord[0] = z;
-    opt_tileCoord[1] = x;
-    opt_tileCoord[2] = y;
-    return opt_tileCoord;
-  } else {
-    return [z, x, y];
-  }
-};
-
-
-/**
- * @param {number} z Z.
- * @param {number} x X.
- * @param {number} y Y.
- * @return {string} Key.
- */
-ol.tilecoord.getKeyZXY = function(z, x, y) {
-  return z + '/' + x + '/' + y;
-};
-
-
-/**
- * @param {ol.TileCoord} tileCoord Tile coord.
- * @return {number} Hash.
- */
-ol.tilecoord.hash = function(tileCoord) {
-  return (tileCoord[1] << tileCoord[0]) + tileCoord[2];
-};
-
-
-/**
- * @param {ol.TileCoord} tileCoord Tile coord.
- * @return {string} Quad key.
- */
-ol.tilecoord.quadKey = function(tileCoord) {
-  var z = tileCoord[0];
-  var digits = new Array(z);
-  var mask = 1 << (z - 1);
-  var i, charCode;
-  for (i = 0; i < z; ++i) {
-    charCode = ol.QuadKeyCharCode.ZERO;
-    if (tileCoord[1] & mask) {
-      charCode += 1;
-    }
-    if (tileCoord[2] & mask) {
-      charCode += 2;
-    }
-    digits[i] = String.fromCharCode(charCode);
-    mask >>= 1;
-  }
-  return digits.join('');
-};
-
-
-/**
- * @param {ol.TileCoord} tileCoord Tile coordinate.
- * @param {ol.tilegrid.TileGrid} tileGrid Tile grid.
- * @param {ol.proj.Projection} projection Projection.
- * @return {ol.TileCoord} Tile coordinate.
- */
-ol.tilecoord.wrapX = function(tileCoord, tileGrid, projection) {
-  var z = tileCoord[0];
-  var center = tileGrid.getTileCoordCenter(tileCoord);
-  var projectionExtent = ol.tilegrid.extentFromProjection(projection);
-  if (!ol.extent.containsCoordinate(projectionExtent, center)) {
-    var worldWidth = ol.extent.getWidth(projectionExtent);
-    var worldsAway = Math.ceil((projectionExtent[0] - center[0]) / worldWidth);
-    center[0] += worldWidth * worldsAway;
-    return tileGrid.getTileCoordForCoordAndZ(center, z);
-  } else {
-    return tileCoord;
-  }
-};
-
-
-/**
- * @param {ol.TileCoord} tileCoord Tile coordinate.
- * @param {!ol.tilegrid.TileGrid} tileGrid Tile grid.
- * @return {boolean} Tile coordinate is within extent and zoom level range.
- */
-ol.tilecoord.withinExtentAndZ = function(tileCoord, tileGrid) {
-  var z = tileCoord[0];
-  var x = tileCoord[1];
-  var y = tileCoord[2];
-
-  if (tileGrid.getMinZoom() > z || z > tileGrid.getMaxZoom()) {
-    return false;
-  }
-  var extent = tileGrid.getExtent();
-  var tileRange;
-  if (!extent) {
-    tileRange = tileGrid.getFullTileRange(z);
-  } else {
-    tileRange = tileGrid.getTileRangeForExtentAndZ(extent, z);
-  }
-  if (!tileRange) {
-    return true;
-  } else {
-    return tileRange.containsXY(x, y);
-  }
-};
-
 goog.provide('ol.TileRange');
 
 goog.require('goog.asserts');
-goog.require('ol.Size');
-goog.require('ol.TileCoord');
 
 
 /**
@@ -16590,24 +16985,6 @@ ol.Attribution.prototype.intersectsAnyTileRange = function(tileRanges, tileGrid,
   }
   return false;
 };
-
-goog.provide('ol.CanvasFunctionType');
-
-
-/**
- * A function returning the canvas element (`{HTMLCanvasElement}`)
- * used by the source as an image. The arguments passed to the function are:
- * {@link ol.Extent} the image extent, `{number}` the image resolution,
- * `{number}` the device pixel ratio, {@link ol.Size} the image size, and
- * {@link ol.proj.Projection} the image projection. The canvas returned by
- * this function is cached by the source. The this keyword inside the function
- * references the {@link ol.source.ImageCanvas}.
- *
- * @typedef {function(this:ol.source.ImageCanvas, ol.Extent, number,
- *     number, ol.Size, ol.proj.Projection): HTMLCanvasElement}
- * @api
- */
-ol.CanvasFunctionType;
 
 /**
  * An implementation of Google Maps' MVCArray.
@@ -19938,7 +20315,6 @@ goog.color.colorDiff_ = function(rgb1, rgb2) {
 // causes occasional loss of precision and rounding errors, especially in the
 // alpha channel.
 
-goog.provide('ol.Color');
 goog.provide('ol.color');
 
 goog.require('goog.asserts');
@@ -19946,17 +20322,6 @@ goog.require('goog.color');
 goog.require('goog.color.names');
 goog.require('ol');
 goog.require('ol.math');
-
-
-/**
- * A color represented as a short array [red, green, blue, alpha].
- * red, green, and blue should be integers in the range 0..255 inclusive.
- * alpha should be a float in the range 0..1 inclusive. If no alpha value is
- * given then `1` will be used.
- * @typedef {Array.<number>}
- * @api
- */
-ol.Color;
 
 
 /**
@@ -20178,20 +20543,9 @@ ol.color.toString = function(color) {
   return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
 };
 
-goog.provide('ol.ColorLike');
 goog.provide('ol.colorlike');
 
 goog.require('ol.color');
-
-
-/**
- * A type accepted by CanvasRenderingContext2D.fillStyle.
- * Represents a color, pattern, or gradient.
- *
- * @typedef {string|CanvasPattern|CanvasGradient}
- * @api
- */
-ol.ColorLike;
 
 
 /**
@@ -33579,19 +33933,19 @@ ol.structs.LRUCache = function() {
 
   /**
    * @private
-   * @type {!Object.<string, ol.structs.LRUCacheEntry>}
+   * @type {!Object.<string, ol.LRUCacheEntry>}
    */
   this.entries_ = {};
 
   /**
    * @private
-   * @type {?ol.structs.LRUCacheEntry}
+   * @type {?ol.LRUCacheEntry}
    */
   this.oldest_ = null;
 
   /**
    * @private
-   * @type {?ol.structs.LRUCacheEntry}
+   * @type {?ol.LRUCacheEntry}
    */
   this.newest_ = null;
 
@@ -33817,14 +34171,148 @@ ol.structs.LRUCache.prototype.set = function(key, value) {
   ++this.count_;
 };
 
+goog.provide('ol.tilecoord');
+
+goog.require('goog.asserts');
+goog.require('ol.extent');
+
 
 /**
- * @typedef {{key_: string,
- *            newer: ol.structs.LRUCacheEntry,
- *            older: ol.structs.LRUCacheEntry,
- *            value_: *}}
+ * @enum {number}
  */
-ol.structs.LRUCacheEntry;
+ol.QuadKeyCharCode = {
+  ZERO: '0'.charCodeAt(0),
+  ONE: '1'.charCodeAt(0),
+  TWO: '2'.charCodeAt(0),
+  THREE: '3'.charCodeAt(0)
+};
+
+
+/**
+ * @param {string} str String that follows pattern “z/x/y” where x, y and z are
+ *   numbers.
+ * @return {ol.TileCoord} Tile coord.
+ */
+ol.tilecoord.createFromString = function(str) {
+  var v = str.split('/');
+  goog.asserts.assert(v.length === 3,
+      'must provide a string in "z/x/y" format, got "%s"', str);
+  return v.map(function(e) {
+    return parseInt(e, 10);
+  });
+};
+
+
+/**
+ * @param {number} z Z.
+ * @param {number} x X.
+ * @param {number} y Y.
+ * @param {ol.TileCoord=} opt_tileCoord Tile coordinate.
+ * @return {ol.TileCoord} Tile coordinate.
+ */
+ol.tilecoord.createOrUpdate = function(z, x, y, opt_tileCoord) {
+  if (opt_tileCoord !== undefined) {
+    opt_tileCoord[0] = z;
+    opt_tileCoord[1] = x;
+    opt_tileCoord[2] = y;
+    return opt_tileCoord;
+  } else {
+    return [z, x, y];
+  }
+};
+
+
+/**
+ * @param {number} z Z.
+ * @param {number} x X.
+ * @param {number} y Y.
+ * @return {string} Key.
+ */
+ol.tilecoord.getKeyZXY = function(z, x, y) {
+  return z + '/' + x + '/' + y;
+};
+
+
+/**
+ * @param {ol.TileCoord} tileCoord Tile coord.
+ * @return {number} Hash.
+ */
+ol.tilecoord.hash = function(tileCoord) {
+  return (tileCoord[1] << tileCoord[0]) + tileCoord[2];
+};
+
+
+/**
+ * @param {ol.TileCoord} tileCoord Tile coord.
+ * @return {string} Quad key.
+ */
+ol.tilecoord.quadKey = function(tileCoord) {
+  var z = tileCoord[0];
+  var digits = new Array(z);
+  var mask = 1 << (z - 1);
+  var i, charCode;
+  for (i = 0; i < z; ++i) {
+    charCode = ol.QuadKeyCharCode.ZERO;
+    if (tileCoord[1] & mask) {
+      charCode += 1;
+    }
+    if (tileCoord[2] & mask) {
+      charCode += 2;
+    }
+    digits[i] = String.fromCharCode(charCode);
+    mask >>= 1;
+  }
+  return digits.join('');
+};
+
+
+/**
+ * @param {ol.TileCoord} tileCoord Tile coordinate.
+ * @param {ol.tilegrid.TileGrid} tileGrid Tile grid.
+ * @param {ol.proj.Projection} projection Projection.
+ * @return {ol.TileCoord} Tile coordinate.
+ */
+ol.tilecoord.wrapX = function(tileCoord, tileGrid, projection) {
+  var z = tileCoord[0];
+  var center = tileGrid.getTileCoordCenter(tileCoord);
+  var projectionExtent = ol.tilegrid.extentFromProjection(projection);
+  if (!ol.extent.containsCoordinate(projectionExtent, center)) {
+    var worldWidth = ol.extent.getWidth(projectionExtent);
+    var worldsAway = Math.ceil((projectionExtent[0] - center[0]) / worldWidth);
+    center[0] += worldWidth * worldsAway;
+    return tileGrid.getTileCoordForCoordAndZ(center, z);
+  } else {
+    return tileCoord;
+  }
+};
+
+
+/**
+ * @param {ol.TileCoord} tileCoord Tile coordinate.
+ * @param {!ol.tilegrid.TileGrid} tileGrid Tile grid.
+ * @return {boolean} Tile coordinate is within extent and zoom level range.
+ */
+ol.tilecoord.withinExtentAndZ = function(tileCoord, tileGrid) {
+  var z = tileCoord[0];
+  var x = tileCoord[1];
+  var y = tileCoord[2];
+
+  if (tileGrid.getMinZoom() > z || z > tileGrid.getMaxZoom()) {
+    return false;
+  }
+  var extent = tileGrid.getExtent();
+  var tileRange;
+  if (!extent) {
+    tileRange = tileGrid.getFullTileRange(z);
+  } else {
+    tileRange = tileGrid.getTileRangeForExtentAndZ(extent, z);
+  }
+  if (!tileRange) {
+    return true;
+  } else {
+    return tileRange.containsXY(x, y);
+  }
+};
 
 goog.provide('ol.TileCache');
 
@@ -33901,7 +34389,6 @@ goog.provide('ol.TileState');
 goog.require('ol.events');
 goog.require('ol.events.EventTarget');
 goog.require('ol.events.EventType');
-goog.require('ol.TileCoord');
 
 
 /**
@@ -34009,6 +34496,91 @@ ol.Tile.prototype.getState = function() {
  */
 ol.Tile.prototype.load = goog.abstractMethod;
 
+goog.provide('ol.size');
+
+
+goog.require('goog.asserts');
+
+
+/**
+ * Returns a buffered size.
+ * @param {ol.Size} size Size.
+ * @param {number} buffer Buffer.
+ * @param {ol.Size=} opt_size Optional reusable size array.
+ * @return {ol.Size} The buffered size.
+ */
+ol.size.buffer = function(size, buffer, opt_size) {
+  if (opt_size === undefined) {
+    opt_size = [0, 0];
+  }
+  opt_size[0] = size[0] + 2 * buffer;
+  opt_size[1] = size[1] + 2 * buffer;
+  return opt_size;
+};
+
+
+/**
+ * Compares sizes for equality.
+ * @param {ol.Size} a Size.
+ * @param {ol.Size} b Size.
+ * @return {boolean} Equals.
+ */
+ol.size.equals = function(a, b) {
+  return a[0] == b[0] && a[1] == b[1];
+};
+
+
+/**
+ * Determines if a size has a positive area.
+ * @param {ol.Size} size The size to test.
+ * @return {boolean} The size has a positive area.
+ */
+ol.size.hasArea = function(size) {
+  return size[0] > 0 && size[1] > 0;
+};
+
+
+/**
+ * Returns a size scaled by a ratio. The result will be an array of integers.
+ * @param {ol.Size} size Size.
+ * @param {number} ratio Ratio.
+ * @param {ol.Size=} opt_size Optional reusable size array.
+ * @return {ol.Size} The scaled size.
+ */
+ol.size.scale = function(size, ratio, opt_size) {
+  if (opt_size === undefined) {
+    opt_size = [0, 0];
+  }
+  opt_size[0] = (size[0] * ratio + 0.5) | 0;
+  opt_size[1] = (size[1] * ratio + 0.5) | 0;
+  return opt_size;
+};
+
+
+/**
+ * Returns an `ol.Size` array for the passed in number (meaning: square) or
+ * `ol.Size` array.
+ * (meaning: non-square),
+ * @param {number|ol.Size} size Width and height.
+ * @param {ol.Size=} opt_size Optional reusable size array.
+ * @return {ol.Size} Size.
+ * @api stable
+ */
+ol.size.toSize = function(size, opt_size) {
+  if (Array.isArray(size)) {
+    return size;
+  } else {
+    goog.asserts.assert(goog.isNumber(size));
+    if (opt_size === undefined) {
+      opt_size = [size, size];
+    } else {
+      opt_size[0] = size;
+      opt_size[1] = size;
+    }
+    return opt_size;
+  }
+};
+
 goog.provide('ol.source.Source');
 goog.provide('ol.source.State');
 
@@ -34032,16 +34604,6 @@ ol.source.State = {
 
 
 /**
- * @typedef {{attributions: (olx.source.AttributionOption|undefined),
- *            logo: (string|olx.LogoOptions|undefined),
- *            projection: ol.proj.ProjectionLike,
- *            state: (ol.source.State|undefined),
- *            wrapX: (boolean|undefined)}}
- */
-ol.source.SourceOptions;
-
-
-/**
  * @classdesc
  * Abstract base class; normally only used for creating subclasses and not
  * instantiated in apps.
@@ -34051,7 +34613,7 @@ ol.source.SourceOptions;
  *
  * @constructor
  * @extends {ol.Object}
- * @param {ol.source.SourceOptions} options Source options.
+ * @param {ol.SourceSourceOptions} options Source options.
  * @api stable
  */
 ol.source.Source = function(options) {
@@ -34095,7 +34657,7 @@ goog.inherits(ol.source.Source, ol.Object);
 /**
  * Turns various ways of defining an attribution to an array of `ol.Attributions`.
  *
- * @param {olx.source.AttributionOption|undefined}
+ * @param {ol.AttributionLike|undefined}
  *     attributionLike The attributions as string, array of strings,
  *     `ol.Attribution`, array of `ol.Attribution` or undefined.
  * @return {Array.<ol.Attribution>} The array of `ol.Attribution` or null if
@@ -34202,7 +34764,7 @@ ol.source.Source.prototype.refresh = function() {
 
 /**
  * Set the attributions of the source.
- * @param {olx.source.AttributionOption|undefined} attributions Attributions.
+ * @param {ol.AttributionLike|undefined} attributions Attributions.
  *     Can be passed as `string`, `Array<string>`, `{@link ol.Attribution}`,
  *     `Array<{@link ol.Attribution}>` or `undefined`.
  * @api
@@ -34232,21 +34794,10 @@ ol.source.Source.prototype.setState = function(state) {
   this.changed();
 };
 
-
-/**
- * Set the projection of the source.
- * @param {ol.proj.Projection} projection Projection.
- */
-ol.source.Source.prototype.setProjection = function(projection) {
-  this.projection_ = projection;
-};
-
 goog.provide('ol.tilegrid.TileGrid');
 
 goog.require('goog.asserts');
 goog.require('ol');
-goog.require('ol.Coordinate');
-goog.require('ol.TileCoord');
 goog.require('ol.TileRange');
 goog.require('ol.array');
 goog.require('ol.extent');
@@ -34359,6 +34910,12 @@ ol.tilegrid.TileGrid = function(options) {
    */
   this.fullTileRanges_ = null;
 
+  /**
+   * @private
+   * @type {ol.Size}
+   */
+  this.tmpSize_ = [0, 0];
+
   if (options.sizes !== undefined) {
     goog.asserts.assert(options.sizes.length == this.resolutions_.length,
         'number of sizes and resolutions must be equal');
@@ -34378,12 +34935,6 @@ ol.tilegrid.TileGrid = function(options) {
   } else if (extent) {
     this.calculateTileRanges_(extent);
   }
-
-  /**
-   * @private
-   * @type {ol.Size}
-   */
-  this.tmpSize_ = [0, 0];
 
 };
 
@@ -34715,10 +35266,15 @@ ol.tilegrid.TileGrid.prototype.getFullTileRange = function(z) {
 
 /**
  * @param {number} resolution Resolution.
+ * @param {number=} opt_direction If 0, the nearest resolution will be used.
+ *     If 1, the nearest lower resolution will be used. If -1, the nearest
+ *     higher resolution will be used. Default is 0.
  * @return {number} Z.
  */
-ol.tilegrid.TileGrid.prototype.getZForResolution = function(resolution) {
-  var z = ol.array.linearFindNearest(this.resolutions_, resolution, 0);
+ol.tilegrid.TileGrid.prototype.getZForResolution = function(
+    resolution, opt_direction) {
+  var z = ol.array.linearFindNearest(this.resolutions_, resolution,
+      opt_direction || 0);
   return ol.math.clamp(z, this.minZoom, this.maxZoom);
 };
 
@@ -34863,12 +35419,10 @@ ol.tilegrid.extentFromProjection = function(projection) {
 
 goog.provide('ol.source.Tile');
 goog.provide('ol.source.TileEvent');
-goog.provide('ol.source.TileOptions');
 
 goog.require('goog.asserts');
 goog.require('ol.events.Event');
 goog.require('ol');
-goog.require('ol.Extent');
 goog.require('ol.TileCache');
 goog.require('ol.TileRange');
 goog.require('ol.TileState');
@@ -34880,21 +35434,6 @@ goog.require('ol.tilegrid.TileGrid');
 
 
 /**
- * @typedef {{attributions: (olx.source.AttributionOption|undefined),
- *            cacheSize: (number|undefined),
- *            extent: (ol.Extent|undefined),
- *            logo: (string|olx.LogoOptions|undefined),
- *            opaque: (boolean|undefined),
- *            tilePixelRatio: (number|undefined),
- *            projection: ol.proj.ProjectionLike,
- *            state: (ol.source.State|undefined),
- *            tileGrid: (ol.tilegrid.TileGrid|undefined),
- *            wrapX: (boolean|undefined)}}
- */
-ol.source.TileOptions;
-
-
-/**
  * @classdesc
  * Abstract base class; normally only used for creating subclasses and not
  * instantiated in apps.
@@ -34902,7 +35441,7 @@ ol.source.TileOptions;
  *
  * @constructor
  * @extends {ol.source.Source}
- * @param {ol.source.TileOptions} options Tile source options.
+ * @param {ol.SourceTileOptions} options Tile source options.
  * @api
  */
 ol.source.Tile = function(options) {
@@ -34946,6 +35485,12 @@ ol.source.Tile = function(options) {
    * @type {ol.Size}
    */
   this.tmpSize = [0, 0];
+
+  /**
+   * @private
+   * @type {string}
+   */
+  this.key_ = '';
 
 };
 goog.inherits(ol.source.Tile, ol.source.Source);
@@ -35018,13 +35563,25 @@ ol.source.Tile.prototype.getGutter = function(projection) {
 
 
 /**
- * Return the "parameters" key, a string composed of the source's
- * parameters/dimensions.
- * @return {string} The parameters key.
+ * Return the key to be used for all tiles in the source.
+ * @return {string} The key for all tiles.
  * @protected
  */
-ol.source.Tile.prototype.getKeyParams = function() {
-  return '';
+ol.source.Tile.prototype.getKey = function() {
+  return this.key_;
+};
+
+
+/**
+ * Set the value to be used as the key for all tiles in the source.
+ * @param {string} key The key for tiles.
+ * @protected
+ */
+ol.source.Tile.prototype.setKey = function(key) {
+  if (this.key_ !== key) {
+    this.key_ = key;
+    this.changed();
+  }
 };
 
 
@@ -35530,10 +36087,14 @@ ol.control.Attribution.prototype.insertLogos_ = function(frameState) {
 
   var image, logoElement, logoKey;
   for (logoKey in logos) {
+    var logoValue = logos[logoKey];
+    if (logoValue instanceof HTMLElement) {
+      this.logoLi_.appendChild(logoValue);
+      logoElements[logoKey] = logoValue;
+    }
     if (!(logoKey in logoElements)) {
       image = new Image();
       image.src = logoKey;
-      var logoValue = logos[logoKey];
       if (logoValue === '') {
         logoElement = image;
       } else {
@@ -35670,7 +36231,7 @@ ol.control.Rotate = function(opt_options) {
         'ol-compass', label);
   } else {
     this.label_ = label;
-    this.label_.classList.add(this.label_, 'ol-compass');
+    this.label_.classList.add('ol-compass');
   }
 
   var tipLabel = options.tipLabel ? options.tipLabel : 'Reset rotation';
@@ -35843,9 +36404,8 @@ ol.control.Zoom = function(opt_options) {
     'title': zoomInTipLabel
   }, zoomInLabel);
 
-  ol.events.listen(inElement,
-      ol.events.EventType.CLICK, goog.partial(
-          ol.control.Zoom.prototype.handleClick_, delta), this);
+  ol.events.listen(inElement, ol.events.EventType.CLICK,
+      ol.control.Zoom.prototype.handleClick_.bind(this, delta));
 
   var outElement = goog.dom.createDom('BUTTON', {
     'class': className + '-out',
@@ -35853,9 +36413,8 @@ ol.control.Zoom = function(opt_options) {
     'title': zoomOutTipLabel
   }, zoomOutLabel);
 
-  ol.events.listen(outElement,
-      ol.events.EventType.CLICK, goog.partial(
-          ol.control.Zoom.prototype.handleClick_, -delta), this);
+  ol.events.listen(outElement, ol.events.EventType.CLICK,
+      ol.control.Zoom.prototype.handleClick_.bind(this, -delta));
 
   var cssClasses = className + ' ' + ol.css.CLASS_UNSELECTABLE + ' ' +
       ol.css.CLASS_CONTROL;
@@ -36284,22 +36843,11 @@ ol.control.FullScreen.prototype.setMap = function(map) {
   goog.base(this, 'setMap', map);
   if (map) {
     this.listenerKeys.push(
-        ol.events.listen(goog.global.document, goog.dom.fullscreen.EventType.CHANGE,
+        ol.events.listen(ol.global.document, goog.dom.fullscreen.EventType.CHANGE,
           this.handleFullScreenChange_, this)
     );
   }
 };
-
-goog.provide('ol.Pixel');
-
-
-/**
- * An array with two elements, representing a pixel. The first element is the
- * x-coordinate, the second the y-coordinate of the pixel.
- * @typedef {Array.<number>}
- * @api stable
- */
-ol.Pixel;
 
 // FIXME should listen on appropriate pane, once it is defined
 
@@ -36307,10 +36855,7 @@ goog.provide('ol.control.MousePosition');
 
 goog.require('ol.events');
 goog.require('ol.events.EventType');
-goog.require('ol.CoordinateFormatType');
 goog.require('ol.Object');
-goog.require('ol.Pixel');
-goog.require('ol.TransformFunction');
 goog.require('ol.control.Control');
 goog.require('ol.proj');
 goog.require('ol.proj.Projection');
@@ -37746,7 +38291,7 @@ ol.dom.canUseCssTransform = (function() {
     if (canUseCssTransform === undefined) {
       goog.asserts.assert(document.body,
           'document.body should not be null');
-      goog.asserts.assert(goog.global.getComputedStyle,
+      goog.asserts.assert(ol.global.getComputedStyle,
           'getComputedStyle is required (unsupported browser?)');
 
       var el = document.createElement('P'),
@@ -37762,7 +38307,7 @@ ol.dom.canUseCssTransform = (function() {
       for (var t in transforms) {
         if (t in el.style) {
           el.style[t] = 'translate(1px,1px)';
-          has2d = goog.global.getComputedStyle(el).getPropertyValue(
+          has2d = ol.global.getComputedStyle(el).getPropertyValue(
               transforms[t]);
         }
       }
@@ -37787,7 +38332,7 @@ ol.dom.canUseCssTransform3D = (function() {
     if (canUseCssTransform3D === undefined) {
       goog.asserts.assert(document.body,
           'document.body should not be null');
-      goog.asserts.assert(goog.global.getComputedStyle,
+      goog.asserts.assert(ol.global.getComputedStyle,
           'getComputedStyle is required (unsupported browser?)');
 
       var el = document.createElement('P'),
@@ -37803,7 +38348,7 @@ ol.dom.canUseCssTransform3D = (function() {
       for (var t in transforms) {
         if (t in el.style) {
           el.style[t] = 'translate3d(1px,1px,1px)';
-          has3d = goog.global.getComputedStyle(el).getPropertyValue(
+          has3d = ol.global.getComputedStyle(el).getPropertyValue(
               transforms[t]);
         }
       }
@@ -37902,7 +38447,7 @@ ol.dom.transformElement2D = function(element, transform, opt_precision) {
  */
 ol.dom.outerWidth = function(element) {
   var width = element.offsetWidth;
-  var style = element.currentStyle || goog.global.getComputedStyle(element);
+  var style = element.currentStyle || ol.global.getComputedStyle(element);
   width += parseInt(style.marginLeft, 10) + parseInt(style.marginRight, 10);
 
   return width;
@@ -37918,7 +38463,7 @@ ol.dom.outerWidth = function(element) {
  */
 ol.dom.outerHeight = function(element) {
   var height = element.offsetHeight;
-  var style = element.currentStyle || goog.global.getComputedStyle(element);
+  var style = element.currentStyle || ol.global.getComputedStyle(element);
   height += parseInt(style.marginTop, 10) + parseInt(style.marginBottom, 10);
 
   return height;
@@ -38006,7 +38551,7 @@ ol.has.MAC = ua.indexOf('macintosh') !== -1;
  * @type {number}
  * @api stable
  */
-ol.has.DEVICE_PIXEL_RATIO = goog.global.devicePixelRatio || 1;
+ol.has.DEVICE_PIXEL_RATIO = ol.global.devicePixelRatio || 1;
 
 
 /**
@@ -38028,7 +38573,7 @@ ol.has.CANVAS = ol.ENABLE_CANVAS && (
      * @return {boolean} Canvas supported.
      */
     function() {
-      if (!('HTMLCanvasElement' in goog.global)) {
+      if (!('HTMLCanvasElement' in ol.global)) {
         return false;
       }
       try {
@@ -38053,7 +38598,7 @@ ol.has.CANVAS = ol.ENABLE_CANVAS && (
  * @type {boolean}
  * @api stable
  */
-ol.has.DEVICE_ORIENTATION = 'DeviceOrientationEvent' in goog.global;
+ol.has.DEVICE_ORIENTATION = 'DeviceOrientationEvent' in ol.global;
 
 
 /**
@@ -38070,7 +38615,7 @@ ol.has.DOM = ol.ENABLE_DOM;
  * @type {boolean}
  * @api stable
  */
-ol.has.GEOLOCATION = 'geolocation' in goog.global.navigator;
+ol.has.GEOLOCATION = 'geolocation' in ol.global.navigator;
 
 
 /**
@@ -38079,7 +38624,7 @@ ol.has.GEOLOCATION = 'geolocation' in goog.global.navigator;
  * @type {boolean}
  * @api stable
  */
-ol.has.TOUCH = ol.ASSUME_TOUCH || 'ontouchstart' in goog.global;
+ol.has.TOUCH = ol.ASSUME_TOUCH || 'ontouchstart' in ol.global;
 
 
 /**
@@ -38087,7 +38632,7 @@ ol.has.TOUCH = ol.ASSUME_TOUCH || 'ontouchstart' in goog.global;
  * @const
  * @type {boolean}
  */
-ol.has.POINTER = 'PointerEvent' in goog.global;
+ol.has.POINTER = 'PointerEvent' in ol.global;
 
 
 /**
@@ -38095,7 +38640,7 @@ ol.has.POINTER = 'PointerEvent' in goog.global;
  * @const
  * @type {boolean}
  */
-ol.has.MSPOINTER = !!(goog.global.navigator.msPointerEnabled);
+ol.has.MSPOINTER = !!(ol.global.navigator.msPointerEnabled);
 
 
 /**
@@ -38114,7 +38659,7 @@ ol.has.WEBGL;
     var textureSize;
     var /** @type {Array.<string>} */ extensions = [];
 
-    if ('WebGLRenderingContext' in goog.global) {
+    if ('WebGLRenderingContext' in ol.global) {
       try {
         var canvas = /** @type {HTMLCanvasElement} */
             (document.createElement('CANVAS'));
@@ -38917,7 +39462,7 @@ ol.pointer.TouchSource.prototype.removePrimaryPointer_ = function(inPointer) {
  * @private
  */
 ol.pointer.TouchSource.prototype.resetClickCount_ = function() {
-  this.resetId_ = goog.global.setTimeout(
+  this.resetId_ = ol.global.setTimeout(
       this.resetClickCountHandler_.bind(this),
       ol.pointer.TouchSource.CLICK_COUNT_TIMEOUT);
 };
@@ -38937,7 +39482,7 @@ ol.pointer.TouchSource.prototype.resetClickCountHandler_ = function() {
  */
 ol.pointer.TouchSource.prototype.cancelResetClickCount_ = function() {
   if (this.resetId_ !== undefined) {
-    goog.global.clearTimeout(this.resetId_);
+    ol.global.clearTimeout(this.resetId_);
   }
 };
 
@@ -39209,7 +39754,7 @@ ol.pointer.TouchSource.prototype.dedupSynthMouse_ = function(inEvent) {
     var lt = [t.clientX, t.clientY];
     lts.push(lt);
 
-    goog.global.setTimeout(function() {
+    ol.global.setTimeout(function() {
       // remove touch after timeout
       ol.array.remove(lts, lt);
     }, ol.pointer.TouchSource.DEDUP_TIMEOUT);
@@ -39682,9 +40227,7 @@ goog.provide('ol.MapBrowserPointerEvent');
 
 goog.require('goog.asserts');
 goog.require('ol');
-goog.require('ol.Coordinate');
 goog.require('ol.MapEvent');
-goog.require('ol.Pixel');
 goog.require('ol.events');
 goog.require('ol.events.EventTarget');
 goog.require('ol.events.EventType');
@@ -39900,14 +40443,14 @@ ol.MapBrowserEventHandler.prototype.emulateClick_ = function(pointerEvent) {
   this.dispatchEvent(newEvent);
   if (this.clickTimeoutId_ !== 0) {
     // double-click
-    goog.global.clearTimeout(this.clickTimeoutId_);
+    ol.global.clearTimeout(this.clickTimeoutId_);
     this.clickTimeoutId_ = 0;
     newEvent = new ol.MapBrowserPointerEvent(
         ol.MapBrowserEvent.EventType.DBLCLICK, this.map_, pointerEvent);
     this.dispatchEvent(newEvent);
   } else {
     // click
-    this.clickTimeoutId_ = goog.global.setTimeout(function() {
+    this.clickTimeoutId_ = ol.global.setTimeout(function() {
       this.clickTimeoutId_ = 0;
       var newEvent = new ol.MapBrowserPointerEvent(
           ol.MapBrowserEvent.EventType.SINGLECLICK, this.map_, pointerEvent);
@@ -40158,7 +40701,6 @@ ol.MapBrowserEvent.EventType = {
 
 goog.provide('ol.layer.Base');
 goog.provide('ol.layer.LayerProperty');
-goog.provide('ol.layer.LayerState');
 
 goog.require('ol');
 goog.require('ol.Object');
@@ -40179,20 +40721,6 @@ ol.layer.LayerProperty = {
   MIN_RESOLUTION: 'minResolution',
   SOURCE: 'source'
 };
-
-
-/**
- * @typedef {{layer: ol.layer.Layer,
- *            opacity: number,
- *            sourceState: ol.source.State,
- *            visible: boolean,
- *            managed: boolean,
- *            extent: (ol.Extent|undefined),
- *            zIndex: number,
- *            maxResolution: number,
- *            minResolution: number}}
- */
-ol.layer.LayerState;
 
 
 /**
@@ -40233,7 +40761,7 @@ goog.inherits(ol.layer.Base, ol.Object);
 
 
 /**
- * @return {ol.layer.LayerState} Layer state.
+ * @return {ol.LayerState} Layer state.
  */
 ol.layer.Base.prototype.getLayerState = function() {
   var opacity = this.getOpacity();
@@ -40266,9 +40794,9 @@ ol.layer.Base.prototype.getLayersArray = goog.abstractMethod;
 
 
 /**
- * @param {Array.<ol.layer.LayerState>=} opt_states Optional list of layer
+ * @param {Array.<ol.LayerState>=} opt_states Optional list of layer
  *     states (to be modified in place).
- * @return {Array.<ol.layer.LayerState>} List of layer states.
+ * @return {Array.<ol.LayerState>} List of layer states.
  */
 ol.layer.Base.prototype.getLayerStatesArray = goog.abstractMethod;
 
@@ -40700,7 +41228,7 @@ goog.inherits(ol.layer.Layer, ol.layer.Base);
  * Return `true` if the layer is visible, and if the passed resolution is
  * between the layer's minResolution and maxResolution. The comparison is
  * inclusive for `minResolution` and exclusive for `maxResolution`.
- * @param {ol.layer.LayerState} layerState Layer state.
+ * @param {ol.LayerState} layerState Layer state.
  * @param {number} resolution Resolution.
  * @return {boolean} The layer is visible at the given resolution.
  */
@@ -40833,7 +41361,6 @@ goog.require('goog.asserts');
 goog.require('ol.events.EventTarget');
 goog.require('ol.events.EventType');
 goog.require('ol.Attribution');
-goog.require('ol.Extent');
 
 
 /**
@@ -41229,18 +41756,20 @@ ol.renderer.Layer.prototype.renderIfReadyAndVisible = function() {
  */
 ol.renderer.Layer.prototype.scheduleExpireCache = function(frameState, tileSource) {
   if (tileSource.canExpireCache()) {
+    /**
+     * @param {ol.source.Tile} tileSource Tile source.
+     * @param {ol.Map} map Map.
+     * @param {olx.FrameState} frameState Frame state.
+     */
+    var postRenderFunction = function(tileSource, map, frameState) {
+      var tileSourceKey = goog.getUid(tileSource).toString();
+      tileSource.expireCache(frameState.viewState.projection,
+                             frameState.usedTiles[tileSourceKey]);
+    }.bind(null, tileSource);
+
     frameState.postRenderFunctions.push(
-        /** @type {ol.PostRenderFunction} */ (goog.partial(
-            /**
-             * @param {ol.source.Tile} tileSource Tile source.
-             * @param {ol.Map} map Map.
-             * @param {olx.FrameState} frameState Frame state.
-             */
-            function(tileSource, map, frameState) {
-              var tileSourceKey = goog.getUid(tileSource).toString();
-              tileSource.expireCache(frameState.viewState.projection,
-                                     frameState.usedTiles[tileSourceKey]);
-            }, tileSource)));
+      /** @type {ol.PostRenderFunction} */ (postRenderFunction)
+    );
   }
 };
 
@@ -41389,16 +41918,6 @@ ol.style.ImageState = {
   LOADED: 2,
   ERROR: 3
 };
-
-
-/**
- * @typedef {{opacity: number,
- *            rotateWithView: boolean,
- *            rotation: number,
- *            scale: number,
- *            snapToPixel: boolean}}
- */
-ol.style.ImageOptions;
 
 
 /**
@@ -42745,8 +43264,8 @@ ol.renderer.Map.prototype.scheduleRemoveUnusedLayerRenderers = function(frameSta
 
 
 /**
- * @param {ol.layer.LayerState} state1 First layer state.
- * @param {ol.layer.LayerState} state2 Second layer state.
+ * @param {ol.LayerState} state1 First layer state.
+ * @param {ol.LayerState} state2 Second layer state.
  * @return {number} The zIndex difference.
  */
 ol.renderer.Map.sortByZIndex = function(state1, state2) {
@@ -43054,21 +43573,13 @@ ol.structs.PriorityQueue.prototype.reprioritize = function() {
   this.heapify_();
 };
 
-goog.provide('ol.TilePriorityFunction');
 goog.provide('ol.TileQueue');
 
 goog.require('goog.asserts');
 goog.require('ol.events');
 goog.require('ol.events.EventType');
-goog.require('ol.Coordinate');
 goog.require('ol.TileState');
 goog.require('ol.structs.PriorityQueue');
-
-
-/**
- * @typedef {function(ol.Tile, string, ol.Coordinate, number): number}
- */
-ol.TilePriorityFunction;
 
 
 /**
@@ -43188,8 +43699,6 @@ ol.TileQueue.prototype.loadMoreTiles = function(maxTotalLoading, maxNewLoads) {
 
 goog.provide('ol.Kinetic');
 
-goog.require('ol.Coordinate');
-goog.require('ol.PreRenderFunction');
 goog.require('ol.animation');
 
 
@@ -43653,23 +44162,12 @@ ol.interaction.DoubleClickZoom.handleEvent = function(mapBrowserEvent) {
   return !stopEvent;
 };
 
-goog.provide('ol.events.ConditionType');
 goog.provide('ol.events.condition');
 
 goog.require('goog.asserts');
 goog.require('ol.functions');
 goog.require('ol.MapBrowserEvent.EventType');
 goog.require('ol.MapBrowserPointerEvent');
-
-
-/**
- * A function that takes an {@link ol.MapBrowserEvent} and returns a
- * `{boolean}`. If the condition is met, true should be returned.
- *
- * @typedef {function(ol.MapBrowserEvent): boolean}
- * @api stable
- */
-ol.events.ConditionType;
 
 
 /**
@@ -43877,12 +44375,26 @@ ol.events.condition.mouseOnly = function(mapBrowserEvent) {
   return mapBrowserEvent.pointerEvent.pointerType == 'mouse';
 };
 
+
+/**
+ * Return `true` if the event originates from a primary pointer in
+ * contact with the surface or if the left mouse button is pressed.
+ * @see http://www.w3.org/TR/pointerevents/#button-states
+ *
+ * @param {ol.MapBrowserEvent} mapBrowserEvent Map browser event.
+ * @return {boolean} True if the event originates from a primary pointer.
+ * @api
+ */
+ol.events.condition.primaryAction = function(mapBrowserEvent) {
+  var pointerEvent = mapBrowserEvent.pointerEvent;
+  return pointerEvent.isPrimary && pointerEvent.button === 0;
+};
+
 goog.provide('ol.interaction.Pointer');
 
 goog.require('ol');
 goog.require('ol.MapBrowserEvent.EventType');
 goog.require('ol.MapBrowserPointerEvent');
-goog.require('ol.Pixel');
 goog.require('ol.interaction.Interaction');
 goog.require('ol.object');
 
@@ -44101,8 +44613,7 @@ goog.provide('ol.interaction.DragPan');
 
 goog.require('goog.asserts');
 goog.require('ol.Kinetic');
-goog.require('ol.Pixel');
-goog.require('ol.PreRenderFunction');
+
 goog.require('ol.ViewHint');
 goog.require('ol.coordinate');
 goog.require('ol.functions');
@@ -44272,7 +44783,6 @@ goog.provide('ol.interaction.DragRotate');
 goog.require('ol');
 goog.require('ol.ViewHint');
 goog.require('ol.functions');
-goog.require('ol.events.ConditionType');
 goog.require('ol.events.condition');
 goog.require('ol.interaction.Interaction');
 goog.require('ol.interaction.Pointer');
@@ -44546,7 +45056,6 @@ goog.provide('ol.interaction.DragBox');
 
 goog.require('ol.events.Event');
 goog.require('ol');
-goog.require('ol.events.ConditionType');
 goog.require('ol.events.condition');
 goog.require('ol.interaction.Pointer');
 goog.require('ol.render.Box');
@@ -44620,16 +45129,6 @@ ol.DragBoxEvent = function(type, coordinate, mapBrowserEvent) {
 
 };
 goog.inherits(ol.DragBoxEvent, ol.events.Event);
-
-
-/**
- * A function that takes a {@link ol.MapBrowserEvent} and two
- * {@link ol.Pixel}s and returns a `{boolean}`. If the condition is met,
- * true should be returned.
- * @typedef {function(ol.MapBrowserEvent, ol.Pixel, ol.Pixel):boolean}
- * @api
- */
-ol.interaction.DragBoxEndConditionType;
 
 
 /**
@@ -44894,7 +45393,6 @@ goog.provide('ol.interaction.KeyboardPan');
 goog.require('goog.asserts');
 goog.require('ol');
 goog.require('ol.coordinate');
-goog.require('ol.events.ConditionType');
 goog.require('ol.events.EventType');
 goog.require('ol.events.KeyCode');
 goog.require('ol.events.condition');
@@ -44932,8 +45430,8 @@ ol.interaction.KeyboardPan = function(opt_options) {
    * @return {boolean} Combined condition result.
    */
   this.defaultCondition_ = function(mapBrowserEvent) {
-    return ol.events.condition.noModifierKeys.call(this, mapBrowserEvent) &&
-      ol.events.condition.targetNotEditable.call(this, mapBrowserEvent)
+    return ol.events.condition.noModifierKeys(mapBrowserEvent) &&
+      ol.events.condition.targetNotEditable(mapBrowserEvent);
   }
 
   /**
@@ -45005,7 +45503,6 @@ ol.interaction.KeyboardPan.handleEvent = function(mapBrowserEvent) {
 goog.provide('ol.interaction.KeyboardZoom');
 
 goog.require('goog.asserts');
-goog.require('ol.events.ConditionType');
 goog.require('ol.events.EventType');
 goog.require('ol.events.condition');
 goog.require('ol.interaction.Interaction');
@@ -45094,7 +45591,6 @@ goog.provide('ol.interaction.MouseWheelZoom');
 
 goog.require('goog.asserts');
 goog.require('ol');
-goog.require('ol.Coordinate');
 goog.require('ol.events.EventType');
 goog.require('ol.interaction.Interaction');
 goog.require('ol.math');
@@ -45183,10 +45679,10 @@ ol.interaction.MouseWheelZoom.handleEvent = function(mapBrowserEvent) {
     if (mapBrowserEvent.type == ol.events.EventType.WHEEL) {
       delta = wheelEvent.deltaY;
       if (ol.has.FIREFOX &&
-          wheelEvent.deltaMode === goog.global.WheelEvent.DOM_DELTA_PIXEL) {
+          wheelEvent.deltaMode === ol.global.WheelEvent.DOM_DELTA_PIXEL) {
         delta /= ol.has.DEVICE_PIXEL_RATIO;
       }
-      if (wheelEvent.deltaMode === goog.global.WheelEvent.DOM_DELTA_LINE) {
+      if (wheelEvent.deltaMode === ol.global.WheelEvent.DOM_DELTA_LINE) {
         delta *= 40;
       }
     } else if (mapBrowserEvent.type == ol.events.EventType.MOUSEWHEEL) {
@@ -45205,8 +45701,8 @@ ol.interaction.MouseWheelZoom.handleEvent = function(mapBrowserEvent) {
     var duration = ol.MOUSEWHEELZOOM_TIMEOUT_DURATION;
     var timeLeft = Math.max(duration - (Date.now() - this.startTime_), 0);
 
-    goog.global.clearTimeout(this.timeoutId_);
-    this.timeoutId_ = goog.global.setTimeout(
+    ol.global.clearTimeout(this.timeoutId_);
+    this.timeoutId_ = ol.global.setTimeout(
         this.doZoom_.bind(this, map), timeLeft);
 
     mapBrowserEvent.preventDefault();
@@ -45255,7 +45751,6 @@ goog.provide('ol.interaction.PinchRotate');
 
 goog.require('goog.asserts');
 goog.require('ol');
-goog.require('ol.Coordinate');
 goog.require('ol.functions');
 goog.require('ol.ViewHint');
 goog.require('ol.interaction.Interaction');
@@ -45429,7 +45924,6 @@ goog.provide('ol.interaction.PinchZoom');
 
 goog.require('goog.asserts');
 goog.require('ol');
-goog.require('ol.Coordinate');
 goog.require('ol.functions');
 goog.require('ol.ViewHint');
 goog.require('ol.interaction.Interaction');
@@ -46343,31 +46837,6 @@ goog.provide('ol.render.canvas');
 
 
 /**
- * @typedef {{fillStyle: ol.ColorLike}}
- */
-ol.render.canvas.FillState;
-
-
-/**
- * @typedef {{lineCap: string,
- *            lineDash: Array.<number>,
- *            lineJoin: string,
- *            lineWidth: number,
- *            miterLimit: number,
- *            strokeStyle: string}}
- */
-ol.render.canvas.StrokeState;
-
-
-/**
- * @typedef {{font: string,
- *            textAlign: string,
- *            textBaseline: string}}
- */
-ol.render.canvas.TextState;
-
-
-/**
  * @const
  * @type {string}
  */
@@ -46453,7 +46922,6 @@ ol.render.canvas.rotateAtOffset = function(context, rotation, offsetX, offsetY) 
 
 goog.provide('ol.style.Fill');
 
-goog.require('ol.ColorLike');
 goog.require('ol.color');
 
 
@@ -47460,6 +47928,7 @@ goog.require('goog.asserts');
 goog.require('ol');
 goog.require('ol.color');
 goog.require('ol.colorlike');
+goog.require('ol.dom');
 goog.require('ol.has');
 goog.require('ol.render.canvas');
 goog.require('ol.style.Fill');
@@ -47683,13 +48152,6 @@ ol.style.Circle.prototype.unlistenImageChange = ol.nullFunction;
 
 
 /**
- * @typedef {{strokeStyle: (string|undefined), strokeWidth: number,
- *   size: number, lineDash: Array.<number>}}
- */
-ol.style.Circle.RenderOptions;
-
-
-/**
  * @private
  * @param {ol.style.AtlasManager|undefined} atlasManager An atlas manager.
  */
@@ -47714,7 +48176,7 @@ ol.style.Circle.prototype.render_ = function(atlasManager) {
 
   var size = 2 * (this.radius_ + strokeWidth) + 1;
 
-  /** @type {ol.style.Circle.RenderOptions} */
+  /** @type {ol.style.CircleRenderOptions} */
   var renderOptions = {
     strokeStyle: strokeStyle,
     strokeWidth: strokeWidth,
@@ -47724,18 +48186,14 @@ ol.style.Circle.prototype.render_ = function(atlasManager) {
 
   if (atlasManager === undefined) {
     // no atlas manager is used, create a new canvas
-    this.canvas_ = /** @type {HTMLCanvasElement} */
-        (document.createElement('CANVAS'));
-    this.canvas_.height = size;
-    this.canvas_.width = size;
+    var context = ol.dom.createCanvasContext2D(size, size);
+    this.canvas_ = context.canvas;
 
     // canvas.width and height are rounded to the closest integer
     size = this.canvas_.width;
     imageSize = size;
 
     // draw the circle on the canvas
-    var context = /** @type {CanvasRenderingContext2D} */
-        (this.canvas_.getContext('2d'));
     this.draw_(renderOptions, context, 0, 0);
 
     this.createHitDetectionCanvas_(renderOptions);
@@ -47779,7 +48237,7 @@ ol.style.Circle.prototype.render_ = function(atlasManager) {
 
 /**
  * @private
- * @param {ol.style.Circle.RenderOptions} renderOptions Render options.
+ * @param {ol.style.CircleRenderOptions} renderOptions Render options.
  * @param {CanvasRenderingContext2D} context The rendering context.
  * @param {number} x The origin for the symbol (x).
  * @param {number} y The origin for the symbol (y).
@@ -47814,7 +48272,7 @@ ol.style.Circle.prototype.draw_ = function(renderOptions, context, x, y) {
 
 /**
  * @private
- * @param {ol.style.Circle.RenderOptions} renderOptions Render options.
+ * @param {ol.style.CircleRenderOptions} renderOptions Render options.
  */
 ol.style.Circle.prototype.createHitDetectionCanvas_ = function(renderOptions) {
   this.hitDetectionImageSize_ = [renderOptions.size, renderOptions.size];
@@ -47825,22 +48283,16 @@ ol.style.Circle.prototype.createHitDetectionCanvas_ = function(renderOptions) {
 
   // if no fill style is set, create an extra hit-detection image with a
   // default fill style
-  this.hitDetectionCanvas_ = /** @type {HTMLCanvasElement} */
-      (document.createElement('CANVAS'));
-  var canvas = this.hitDetectionCanvas_;
+  var context = ol.dom.createCanvasContext2D(renderOptions.size, renderOptions.size);
+  this.hitDetectionCanvas_ = context.canvas;
 
-  canvas.height = renderOptions.size;
-  canvas.width = renderOptions.size;
-
-  var context = /** @type {CanvasRenderingContext2D} */
-      (canvas.getContext('2d'));
   this.drawHitDetectionCanvas_(renderOptions, context, 0, 0);
 };
 
 
 /**
  * @private
- * @param {ol.style.Circle.RenderOptions} renderOptions Render options.
+ * @param {ol.style.CircleRenderOptions} renderOptions Render options.
  * @param {CanvasRenderingContext2D} context The context.
  * @param {number} x The origin for the symbol (x).
  * @param {number} y The origin for the symbol (y).
@@ -47894,9 +48346,7 @@ ol.style.Circle.prototype.getChecksum = function() {
   return this.checksums_[0];
 };
 
-goog.provide('ol.style.GeometryFunction');
 goog.provide('ol.style.Style');
-goog.provide('ol.style.StyleFunction');
 goog.provide('ol.style.defaultGeometryFunction');
 
 goog.require('goog.asserts');
@@ -48090,18 +48540,6 @@ ol.style.Style.prototype.setZIndex = function(zIndex) {
 
 
 /**
- * A function that takes an {@link ol.Feature} and a `{number}` representing
- * the view's resolution. The function should return an array of
- * {@link ol.style.Style}. This way e.g. a vector layer can be styled.
- *
- * @typedef {function((ol.Feature|ol.render.Feature), number):
- *     (ol.style.Style|Array.<ol.style.Style>)}
- * @api
- */
-ol.style.StyleFunction;
-
-
-/**
  * Convert the provided object into a style function.  Functions passed through
  * unchanged.  Arrays of ol.style.Style or single style objects wrapped in a
  * new style function.
@@ -48245,17 +48683,6 @@ ol.style.createDefaultEditingStyles = function() {
 
   return styles;
 };
-
-
-/**
- * A function that takes an {@link ol.Feature} as argument and returns an
- * {@link ol.geom.Geometry} that will be rendered and styled for the feature.
- *
- * @typedef {function((ol.Feature|ol.render.Feature)):
- *     (ol.geom.Geometry|ol.render.Feature|undefined)}
- * @api
- */
-ol.style.GeometryFunction;
 
 
 /**
@@ -48458,6 +48885,7 @@ ol.layer.Vector.prototype.setStyle = function(style) {
 
 goog.provide('ol.layer.VectorTile');
 
+goog.require('goog.asserts');
 goog.require('ol.layer.Vector');
 goog.require('ol.object');
 
@@ -48468,6 +48896,26 @@ goog.require('ol.object');
 ol.layer.VectorTileProperty = {
   PRELOAD: 'preload',
   USE_INTERIM_TILES_ON_ERROR: 'useInterimTilesOnError'
+};
+
+
+/**
+ * @enum {string}
+ * Render mode for vector tiles:
+ *  * `'image'`: Vector tiles are rendered as images. Great performance, but
+ *    point symbols and texts are always rotated with the view and pixels are
+ *    scaled during zoom animations.
+ *  * `'hybrid'`: Polygon and line elements are rendered as images, so pixels
+ *    are scaled during zoom animations. Point symbols and texts are accurately
+ *    rendered as vectors and can stay upright on rotated views.
+ *  * `'vector'`: Vector tiles are rendered as vectors. Most accurate rendering
+ *    even during animations, but slower performance than the other options.
+ * @api
+ */
+ol.layer.VectorTileRenderType = {
+  IMAGE: 'image',
+  HYBRID: 'hybrid',
+  VECTOR: 'vector'
 };
 
 
@@ -48496,6 +48944,18 @@ ol.layer.VectorTile = function(opt_options) {
   this.setUseInterimTilesOnError(options.useInterimTilesOnError ?
       options.useInterimTilesOnError : true);
 
+  goog.asserts.assert(options.renderMode == undefined ||
+      options.renderMode == ol.layer.VectorTileRenderType.IMAGE ||
+      options.renderMode == ol.layer.VectorTileRenderType.HYBRID ||
+      options.renderMode == ol.layer.VectorTileRenderType.VECTOR,
+      'renderMode needs to be \'image\', \'hybrid\' or \'vector\'');
+
+  /**
+   * @private
+   * @type {ol.layer.VectorTileRenderType|string}
+   */
+  this.renderMode_ = options.renderMode || ol.layer.VectorTileRenderType.HYBRID;
+
 };
 goog.inherits(ol.layer.VectorTile, ol.layer.Vector);
 
@@ -48508,6 +48968,14 @@ goog.inherits(ol.layer.VectorTile, ol.layer.Vector);
  */
 ol.layer.VectorTile.prototype.getPreload = function() {
   return /** @type {number} */ (this.get(ol.layer.VectorTileProperty.PRELOAD));
+};
+
+
+/**
+ * @return {ol.layer.VectorTileRenderType|string} The render mode.
+ */
+ol.layer.VectorTile.prototype.getRenderMode = function() {
+  return this.renderMode_;
 };
 
 
@@ -48618,31 +49086,31 @@ ol.render.canvas.Immediate = function(context, pixelRatio, extent, transform, vi
 
   /**
    * @private
-   * @type {?ol.render.canvas.FillState}
+   * @type {?ol.CanvasFillState}
    */
   this.contextFillState_ = null;
 
   /**
    * @private
-   * @type {?ol.render.canvas.StrokeState}
+   * @type {?ol.CanvasStrokeState}
    */
   this.contextStrokeState_ = null;
 
   /**
    * @private
-   * @type {?ol.render.canvas.TextState}
+   * @type {?ol.CanvasTextState}
    */
   this.contextTextState_ = null;
 
   /**
    * @private
-   * @type {?ol.render.canvas.FillState}
+   * @type {?ol.CanvasFillState}
    */
   this.fillState_ = null;
 
   /**
    * @private
-   * @type {?ol.render.canvas.StrokeState}
+   * @type {?ol.CanvasStrokeState}
    */
   this.strokeState_ = null;
 
@@ -48750,19 +49218,19 @@ ol.render.canvas.Immediate = function(context, pixelRatio, extent, transform, vi
 
   /**
    * @private
-   * @type {?ol.render.canvas.FillState}
+   * @type {?ol.CanvasFillState}
    */
   this.textFillState_ = null;
 
   /**
    * @private
-   * @type {?ol.render.canvas.StrokeState}
+   * @type {?ol.CanvasStrokeState}
    */
   this.textStrokeState_ = null;
 
   /**
    * @private
-   * @type {?ol.render.canvas.TextState}
+   * @type {?ol.CanvasTextState}
    */
   this.textState_ = null;
 
@@ -49247,7 +49715,7 @@ ol.render.canvas.Immediate.prototype.drawMultiPolygon = function(geometry) {
 
 
 /**
- * @param {ol.render.canvas.FillState} fillState Fill state.
+ * @param {ol.CanvasFillState} fillState Fill state.
  * @private
  */
 ol.render.canvas.Immediate.prototype.setContextFillState_ = function(fillState) {
@@ -49267,7 +49735,7 @@ ol.render.canvas.Immediate.prototype.setContextFillState_ = function(fillState) 
 
 
 /**
- * @param {ol.render.canvas.StrokeState} strokeState Stroke state.
+ * @param {ol.CanvasStrokeState} strokeState Stroke state.
  * @private
  */
 ol.render.canvas.Immediate.prototype.setContextStrokeState_ = function(strokeState) {
@@ -49319,7 +49787,7 @@ ol.render.canvas.Immediate.prototype.setContextStrokeState_ = function(strokeSta
 
 
 /**
- * @param {ol.render.canvas.TextState} textState Text state.
+ * @param {ol.CanvasTextState} textState Text state.
  * @private
  */
 ol.render.canvas.Immediate.prototype.setContextTextState_ = function(textState) {
@@ -49535,7 +50003,7 @@ goog.inherits(ol.renderer.canvas.Layer, ol.renderer.Layer);
 
 /**
  * @param {olx.FrameState} frameState Frame state.
- * @param {ol.layer.LayerState} layerState Layer state.
+ * @param {ol.LayerState} layerState Layer state.
  * @param {CanvasRenderingContext2D} context Context.
  */
 ol.renderer.canvas.Layer.prototype.composeFrame = function(frameState, layerState, context) {
@@ -49704,7 +50172,7 @@ ol.renderer.canvas.Layer.prototype.getTransform = function(frameState, offsetX) 
 
 /**
  * @param {olx.FrameState} frameState Frame state.
- * @param {ol.layer.LayerState} layerState Layer state.
+ * @param {ol.LayerState} layerState Layer state.
  * @return {boolean} whether composeFrame should be called.
  */
 ol.renderer.canvas.Layer.prototype.prepareFrame = goog.abstractMethod;
@@ -51318,19 +51786,19 @@ ol.render.canvas.TextReplay = function(tolerance, maxExtent, resolution) {
 
   /**
    * @private
-   * @type {?ol.render.canvas.FillState}
+   * @type {?ol.CanvasFillState}
    */
   this.replayFillState_ = null;
 
   /**
    * @private
-   * @type {?ol.render.canvas.StrokeState}
+   * @type {?ol.CanvasStrokeState}
    */
   this.replayStrokeState_ = null;
 
   /**
    * @private
-   * @type {?ol.render.canvas.TextState}
+   * @type {?ol.CanvasTextState}
    */
   this.replayTextState_ = null;
 
@@ -51366,19 +51834,19 @@ ol.render.canvas.TextReplay = function(tolerance, maxExtent, resolution) {
 
   /**
    * @private
-   * @type {?ol.render.canvas.FillState}
+   * @type {?ol.CanvasFillState}
    */
   this.textFillState_ = null;
 
   /**
    * @private
-   * @type {?ol.render.canvas.StrokeState}
+   * @type {?ol.CanvasStrokeState}
    */
   this.textStrokeState_ = null;
 
   /**
    * @private
-   * @type {?ol.render.canvas.TextState}
+   * @type {?ol.CanvasTextState}
    */
   this.textState_ = null;
 
@@ -51418,7 +51886,7 @@ ol.render.canvas.TextReplay.prototype.drawText = function(flatCoordinates, offse
 
 
 /**
- * @param {ol.render.canvas.FillState} fillState Fill state.
+ * @param {ol.CanvasFillState} fillState Fill state.
  * @private
  */
 ol.render.canvas.TextReplay.prototype.setReplayFillState_ = function(fillState) {
@@ -51442,7 +51910,7 @@ ol.render.canvas.TextReplay.prototype.setReplayFillState_ = function(fillState) 
 
 
 /**
- * @param {ol.render.canvas.StrokeState} strokeState Stroke state.
+ * @param {ol.CanvasStrokeState} strokeState Stroke state.
  * @private
  */
 ol.render.canvas.TextReplay.prototype.setReplayStrokeState_ = function(strokeState) {
@@ -51484,7 +51952,7 @@ ol.render.canvas.TextReplay.prototype.setReplayStrokeState_ = function(strokeSta
 
 
 /**
- * @param {ol.render.canvas.TextState} textState Text state.
+ * @param {ol.CanvasTextState} textState Text state.
  * @private
  */
 ol.render.canvas.TextReplay.prototype.setReplayTextState_ = function(textState) {
@@ -51775,41 +52243,41 @@ ol.render.canvas.ReplayGroup.prototype.isEmpty = function() {
  * @param {number} viewRotation View rotation.
  * @param {Object.<string, boolean>} skippedFeaturesHash Ids of features
  *     to skip.
- * @param {boolean=} opt_clip Clip at `maxExtent`. Default is true.
+ * @param {Array.<ol.render.ReplayType>=} opt_replayTypes Ordered replay types
+ *     to replay. Default is {@link ol.render.REPLAY_ORDER}
  */
 ol.render.canvas.ReplayGroup.prototype.replay = function(context, pixelRatio,
-    transform, viewRotation, skippedFeaturesHash, opt_clip) {
+    transform, viewRotation, skippedFeaturesHash, opt_replayTypes) {
 
   /** @type {Array.<number>} */
   var zs = Object.keys(this.replaysByZIndex_).map(Number);
   zs.sort(ol.array.numberSafeCompareFunction);
 
-  if (opt_clip !== false) {
-    // setup clipping so that the parts of over-simplified geometries are not
-    // visible outside the current extent when panning
-    var maxExtent = this.maxExtent_;
-    var minX = maxExtent[0];
-    var minY = maxExtent[1];
-    var maxX = maxExtent[2];
-    var maxY = maxExtent[3];
-    var flatClipCoords = [minX, minY, minX, maxY, maxX, maxY, maxX, minY];
-    ol.geom.flat.transform.transform2D(
-        flatClipCoords, 0, 8, 2, transform, flatClipCoords);
-    context.save();
-    context.beginPath();
-    context.moveTo(flatClipCoords[0], flatClipCoords[1]);
-    context.lineTo(flatClipCoords[2], flatClipCoords[3]);
-    context.lineTo(flatClipCoords[4], flatClipCoords[5]);
-    context.lineTo(flatClipCoords[6], flatClipCoords[7]);
-    context.closePath();
-    context.clip();
-  }
+  // setup clipping so that the parts of over-simplified geometries are not
+  // visible outside the current extent when panning
+  var maxExtent = this.maxExtent_;
+  var minX = maxExtent[0];
+  var minY = maxExtent[1];
+  var maxX = maxExtent[2];
+  var maxY = maxExtent[3];
+  var flatClipCoords = [minX, minY, minX, maxY, maxX, maxY, maxX, minY];
+  ol.geom.flat.transform.transform2D(
+      flatClipCoords, 0, 8, 2, transform, flatClipCoords);
+  context.save();
+  context.beginPath();
+  context.moveTo(flatClipCoords[0], flatClipCoords[1]);
+  context.lineTo(flatClipCoords[2], flatClipCoords[3]);
+  context.lineTo(flatClipCoords[4], flatClipCoords[5]);
+  context.lineTo(flatClipCoords[6], flatClipCoords[7]);
+  context.closePath();
+  context.clip();
 
+  var replayTypes = opt_replayTypes ? opt_replayTypes : ol.render.REPLAY_ORDER;
   var i, ii, j, jj, replays, replay;
   for (i = 0, ii = zs.length; i < ii; ++i) {
     replays = this.replaysByZIndex_[zs[i].toString()];
-    for (j = 0, jj = ol.render.REPLAY_ORDER.length; j < jj; ++j) {
-      replay = replays[ol.render.REPLAY_ORDER[j]];
+    for (j = 0, jj = replayTypes.length; j < jj; ++j) {
+      replay = replays[replayTypes[j]];
       if (replay !== undefined) {
         replay.replay(context, pixelRatio, transform, viewRotation,
             skippedFeaturesHash);
@@ -52463,21 +52931,8 @@ ol.ImageCanvas.prototype.getImage = function(opt_context) {
   return this.canvas_;
 };
 
-
-/**
- * A function that is called to trigger asynchronous canvas drawing.  It is
- * called with a "done" callback that should be called when drawing is done.
- * If any error occurs during drawing, the "done" callback should be called with
- * that error.
- *
- * @typedef {function(function(Error))}
- */
-ol.ImageCanvasLoader;
-
 goog.provide('ol.reproj');
 
-goog.require('goog.labs.userAgent.browser');
-goog.require('goog.labs.userAgent.platform');
 goog.require('ol.dom');
 goog.require('ol.extent');
 goog.require('ol.math');
@@ -52494,8 +52949,18 @@ goog.require('ol.proj');
  * @type {boolean}
  * @private
  */
-ol.reproj.browserAntialiasesClip_ = !goog.labs.userAgent.browser.isChrome() ||
-                                    goog.labs.userAgent.platform.isIos();
+ol.reproj.browserAntialiasesClip_ = (function(winNav, winChrome) {
+  // Adapted from http://stackoverflow.com/questions/4565112/javascript-how-to-find-out-if-the-user-browser-is-chrome
+  var isOpera = winNav.userAgent.indexOf('OPR') > -1;
+  var isIEedge = winNav.userAgent.indexOf('Edge') > -1;
+  return !(
+    !winNav.userAgent.match('CriOS') &&  // Not Chrome on iOS
+    winChrome !== null && winChrome !== undefined && // Has chrome in window
+    winNav.vendor === 'Google Inc.' && // Vendor is Google.
+    isOpera == false && // Not Opera
+    isIEedge == false // Not Edge
+  );
+})(goog.global.navigator, goog.global.chrome)
 
 
 /**
@@ -52745,15 +53210,6 @@ goog.require('ol.proj');
 
 
 /**
- * Single triangle; consists of 3 source points and 3 target points.
- *
- * @typedef {{source: Array.<ol.Coordinate>,
- *            target: Array.<ol.Coordinate>}}
- */
-ol.reproj.Triangle;
-
-
-/**
  * @classdesc
  * Class containing triangulation of the given target extent.
  * Used for determining source data and the reprojection itself.
@@ -52810,7 +53266,7 @@ ol.reproj.Triangulation = function(sourceProj, targetProj, targetExtent,
   this.errorThresholdSquared_ = errorThreshold * errorThreshold;
 
   /**
-   * @type {Array.<ol.reproj.Triangle>}
+   * @type {Array.<ol.ReprojTriangle>}
    * @private
    */
   this.triangles_ = [];
@@ -53071,14 +53527,13 @@ ol.reproj.Triangulation.prototype.calculateSourceExtent = function() {
 
 
 /**
- * @return {Array.<ol.reproj.Triangle>} Array of the calculated triangles.
+ * @return {Array.<ol.ReprojTriangle>} Array of the calculated triangles.
  */
 ol.reproj.Triangulation.prototype.getTriangles = function() {
   return this.triangles_;
 };
 
 goog.provide('ol.reproj.Image');
-goog.provide('ol.reproj.ImageFunctionType');
 
 goog.require('goog.asserts');
 goog.require('ol.events');
@@ -53089,12 +53544,6 @@ goog.require('ol.extent');
 goog.require('ol.proj');
 goog.require('ol.reproj');
 goog.require('ol.reproj.Triangulation');
-
-
-/**
- * @typedef {function(ol.Extent, number, number) : ol.ImageBase}
- */
-ol.reproj.ImageFunctionType;
 
 
 /**
@@ -53109,7 +53558,7 @@ ol.reproj.ImageFunctionType;
  * @param {ol.Extent} targetExtent Target extent.
  * @param {number} targetResolution Target resolution.
  * @param {number} pixelRatio Pixel ratio.
- * @param {ol.reproj.ImageFunctionType} getImageFunction
+ * @param {ol.ReprojImageFunctionType} getImageFunction
  *     Function returning source images (extent, resolution, pixelRatio).
  */
 ol.reproj.Image = function(sourceProj, targetProj,
@@ -53301,17 +53750,6 @@ goog.require('ol.source.Source');
 
 
 /**
- * @typedef {{attributions: (olx.source.AttributionOption|undefined),
- *            extent: (null|ol.Extent|undefined),
- *            logo: (string|olx.LogoOptions|undefined),
- *            projection: ol.proj.ProjectionLike,
- *            resolutions: (Array.<number>|undefined),
- *            state: (ol.source.State|undefined)}}
- */
-ol.source.ImageOptions;
-
-
-/**
  * @classdesc
  * Abstract base class; normally only used for creating subclasses and not
  * instantiated in apps.
@@ -53319,7 +53757,7 @@ ol.source.ImageOptions;
  *
  * @constructor
  * @extends {ol.source.Source}
- * @param {ol.source.ImageOptions} options Single image source options.
+ * @param {ol.SourceImageOptions} options Single image source options.
  * @api
  */
 ol.source.Image = function(options) {
@@ -53535,7 +53973,6 @@ ol.source.ImageEventType = {
 
 goog.provide('ol.source.ImageCanvas');
 
-goog.require('ol.CanvasFunctionType');
 goog.require('ol.ImageCanvas');
 goog.require('ol.extent');
 goog.require('ol.source.Image');
@@ -53623,7 +54060,6 @@ ol.source.ImageCanvas.prototype.getImageInternal = function(extent, resolution, 
 };
 
 goog.provide('ol.Feature');
-goog.provide('ol.FeatureStyleFunction');
 
 goog.require('goog.asserts');
 goog.require('ol.events');
@@ -53909,18 +54345,6 @@ ol.Feature.prototype.setGeometryName = function(name) {
 
 
 /**
- * A function that returns an array of {@link ol.style.Style styles} given a
- * resolution. The `this` keyword inside the function references the
- * {@link ol.Feature} to be styled.
- *
- * @typedef {function(this: ol.Feature, number):
- *     (ol.style.Style|Array.<ol.style.Style>)}
- * @api stable
- */
-ol.FeatureStyleFunction;
-
-
-/**
  * Convert the provided object into a feature style function.  Functions passed
  * through unchanged.  Arrays of ol.style.Style or single style objects wrapped
  * in a new feature style function.
@@ -53952,36 +54376,12 @@ ol.Feature.createStyleFunction = function(obj) {
   return styleFunction;
 };
 
-goog.provide('ol.TileLoadFunctionType');
-
-
-/**
- * A function that takes an {@link ol.Tile} for the tile and a `{string}` for
- * the url as arguments.
- *
- * @typedef {function(ol.Tile, string)}
- * @api
- */
-ol.TileLoadFunctionType;
-
 goog.provide('ol.VectorTile');
 
 goog.require('ol.Tile');
-goog.require('ol.TileCoord');
-goog.require('ol.TileLoadFunctionType');
 goog.require('ol.TileState');
 goog.require('ol.dom');
 goog.require('ol.proj.Projection');
-
-
-/**
- * @typedef {{
- *     dirty: boolean,
- *     renderedRenderOrder: (null|function(ol.Feature, ol.Feature):number),
- *     renderedRevision: number,
- *     replayGroup: ol.render.IReplayGroup}}
- */
-ol.TileReplayState;
 
 
 /**
@@ -54036,7 +54436,9 @@ ol.VectorTile = function(tileCoord, state, src, format, tileLoadFunction) {
     dirty: false,
     renderedRenderOrder: null,
     renderedRevision: -1,
-    replayGroup: null
+    renderedTileRevision: -1,
+    replayGroup: null,
+    skippedFeatures: []
   };
 
   /**
@@ -54066,8 +54468,9 @@ ol.VectorTile.prototype.getContext = function() {
 /**
  * @inheritDoc
  */
-ol.VectorTile.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
+ol.VectorTile.prototype.getImage = function() {
+  return this.replayState_.renderedTileRevision == -1 ?
+      null : this.context_.canvas;
 };
 
 
@@ -54184,27 +54587,6 @@ goog.require('ol.array');
 
 
 /**
- * When using {@link ol.xml.makeChildAppender} or
- * {@link ol.xml.makeSimpleNodeFactory}, the top `objectStack` item needs to
- * have this structure.
- * @typedef {{node:Node}}
- */
-ol.xml.NodeStackItem;
-
-
-/**
- * @typedef {function(Node, Array.<*>)}
- */
-ol.xml.Parser;
-
-
-/**
- * @typedef {function(Node, *, Array.<*>)}
- */
-ol.xml.Serializer;
-
-
-/**
  * This document should be used when creating nodes for XML serializations. This
  * document is also used by {@link ol.xml.createElementNS} and
  * {@link ol.xml.setAttributeNS}
@@ -54242,9 +54624,9 @@ ol.xml.getAllTextContent = function(node, normalizeWhitespace) {
  * @param {Node} node Node.
  * @param {boolean} normalizeWhitespace Normalize whitespace: remove all line
  * breaks.
- * @param {Array.<String|string>} accumulator Accumulator.
+ * @param {Array.<string>} accumulator Accumulator.
  * @private
- * @return {Array.<String|string>} Accumulator.
+ * @return {Array.<string>} Accumulator.
  */
 ol.xml.getAllTextContent_ = function(node, normalizeWhitespace, accumulator) {
   if (node.nodeType == goog.dom.NodeType.CDATA_SECTION ||
@@ -54322,7 +54704,7 @@ ol.xml.parse = function(xml) {
  * @param {function(this: T, Node, Array.<*>): (Array.<*>|undefined)}
  *     valueReader Value reader.
  * @param {T=} opt_this The object to use as `this` in `valueReader`.
- * @return {ol.xml.Parser} Parser.
+ * @return {ol.XmlParser} Parser.
  * @template T
  */
 ol.xml.makeArrayExtender = function(valueReader, opt_this) {
@@ -54351,7 +54733,7 @@ ol.xml.makeArrayExtender = function(valueReader, opt_this) {
  * object stack.
  * @param {function(this: T, Node, Array.<*>): *} valueReader Value reader.
  * @param {T=} opt_this The object to use as `this` in `valueReader`.
- * @return {ol.xml.Parser} Parser.
+ * @return {ol.XmlParser} Parser.
  * @template T
  */
 ol.xml.makeArrayPusher = function(valueReader, opt_this) {
@@ -54378,7 +54760,7 @@ ol.xml.makeArrayPusher = function(valueReader, opt_this) {
  * top of the stack.
  * @param {function(this: T, Node, Array.<*>): *} valueReader Value reader.
  * @param {T=} opt_this The object to use as `this` in `valueReader`.
- * @return {ol.xml.Parser} Parser.
+ * @return {ol.XmlParser} Parser.
  * @template T
  */
 ol.xml.makeReplacer = function(valueReader, opt_this) {
@@ -54403,7 +54785,7 @@ ol.xml.makeReplacer = function(valueReader, opt_this) {
  * @param {function(this: T, Node, Array.<*>): *} valueReader Value reader.
  * @param {string=} opt_property Property.
  * @param {T=} opt_this The object to use as `this` in `valueReader`.
- * @return {ol.xml.Parser} Parser.
+ * @return {ol.XmlParser} Parser.
  * @template T
  */
 ol.xml.makeObjectPropertyPusher = function(valueReader, opt_property, opt_this) {
@@ -54441,7 +54823,7 @@ ol.xml.makeObjectPropertyPusher = function(valueReader, opt_property, opt_this) 
  * @param {function(this: T, Node, Array.<*>): *} valueReader Value reader.
  * @param {string=} opt_property Property.
  * @param {T=} opt_this The object to use as `this` in `valueReader`.
- * @return {ol.xml.Parser} Parser.
+ * @return {ol.XmlParser} Parser.
  * @template T
  */
 ol.xml.makeObjectPropertySetter = function(valueReader, opt_property, opt_this) {
@@ -54471,11 +54853,11 @@ ol.xml.makeObjectPropertySetter = function(valueReader, opt_property, opt_this) 
 /**
  * Create a serializer that appends nodes written by its `nodeWriter` to its
  * designated parent. The parent is the `node` of the
- * {@link ol.xml.NodeStackItem} at the top of the `objectStack`.
+ * {@link ol.XmlNodeStackItem} at the top of the `objectStack`.
  * @param {function(this: T, Node, V, Array.<*>)}
  *     nodeWriter Node writer.
  * @param {T=} opt_this The object to use as `this` in `nodeWriter`.
- * @return {ol.xml.Serializer} Serializer.
+ * @return {ol.XmlSerializer} Serializer.
  * @template T, V
  */
 ol.xml.makeChildAppender = function(nodeWriter, opt_this) {
@@ -54504,7 +54886,7 @@ ol.xml.makeChildAppender = function(nodeWriter, opt_this) {
  * @param {function(this: T, Node, V, Array.<*>)}
  *     nodeWriter Node writer.
  * @param {T=} opt_this The object to use as `this` in `nodeWriter`.
- * @return {ol.xml.Serializer} Serializer.
+ * @return {ol.XmlSerializer} Serializer.
  * @template T, V
  */
 ol.xml.makeArraySerializer = function(nodeWriter, opt_this) {
@@ -54621,7 +55003,7 @@ ol.xml.makeStructureNS = function(namespaceURIs, structure, opt_structureNS) {
 
 /**
  * Parse a node using the parsers and object stack.
- * @param {Object.<string, Object.<string, ol.xml.Parser>>} parsersNS
+ * @param {Object.<string, Object.<string, ol.XmlParser>>} parsersNS
  *     Parsers by namespace.
  * @param {Node} node Node.
  * @param {Array.<*>} objectStack Object stack.
@@ -54644,7 +55026,7 @@ ol.xml.parseNode = function(parsersNS, node, objectStack, opt_this) {
 /**
  * Push an object on top of the stack, parse and return the popped object.
  * @param {T} object Object.
- * @param {Object.<string, Object.<string, ol.xml.Parser>>} parsersNS
+ * @param {Object.<string, Object.<string, ol.XmlParser>>} parsersNS
  *     Parsers by namespace.
  * @param {Node} node Node.
  * @param {Array.<*>} objectStack Object stack.
@@ -54662,7 +55044,7 @@ ol.xml.pushParseAndPop = function(
 
 /**
  * Walk through an array of `values` and call a serializer for each value.
- * @param {Object.<string, Object.<string, ol.xml.Serializer>>} serializersNS
+ * @param {Object.<string, Object.<string, ol.XmlSerializer>>} serializersNS
  *     Namespaced serializers.
  * @param {function(this: T, *, Array.<*>, (string|undefined)): (Node|undefined)} nodeFactory
  *     Node factory. The `nodeFactory` creates the node whose namespace and name
@@ -54702,7 +55084,7 @@ ol.xml.serialize = function(
 
 /**
  * @param {O} object Object.
- * @param {Object.<string, Object.<string, ol.xml.Serializer>>} serializersNS
+ * @param {Object.<string, Object.<string, ol.XmlSerializer>>} serializersNS
  *     Namespaced serializers.
  * @param {function(this: T, *, Array.<*>, (string|undefined)): (Node|undefined)} nodeFactory
  *     Node factory. The `nodeFactory` creates the node whose namespace and name
@@ -54731,8 +55113,6 @@ ol.xml.pushSerializeAndPop = function(object,
   return objectStack.pop();
 };
 
-goog.provide('ol.FeatureLoader');
-goog.provide('ol.FeatureUrlFunction');
 goog.provide('ol.featureloader');
 
 goog.require('goog.asserts');
@@ -54742,38 +55122,6 @@ goog.require('ol.format.FormatType');
 goog.require('ol.proj');
 goog.require('ol.proj.Projection');
 goog.require('ol.xml');
-
-
-/**
- * {@link ol.source.Vector} sources use a function of this type to load
- * features.
- *
- * This function takes an {@link ol.Extent} representing the area to be loaded,
- * a `{number}` representing the resolution (map units per pixel) and an
- * {@link ol.proj.Projection} for the projection  as arguments. `this` within
- * the function is bound to the {@link ol.source.Vector} it's called from.
- *
- * The function is responsible for loading the features and adding them to the
- * source.
- * @api
- * @typedef {function(this:ol.source.Vector, ol.Extent, number,
- *                    ol.proj.Projection)}
- */
-ol.FeatureLoader;
-
-
-/**
- * {@link ol.source.Vector} sources use a function of this type to get the url
- * to load features from.
- *
- * This function takes an {@link ol.Extent} representing the area to be loaded,
- * a `{number}` representing the resolution (map units per pixel) and an
- * {@link ol.proj.Projection} for the projection  as arguments and returns a
- * `{string}` representing the URL.
- * @api
- * @typedef {function(ol.Extent, number, ol.proj.Projection) : string}
- */
-ol.FeatureUrlFunction;
 
 
 /**
@@ -54891,17 +55239,7 @@ ol.featureloader.xhr = function(url, format) {
       }, /* FIXME handle error */ ol.nullFunction);
 };
 
-goog.provide('ol.LoadingStrategy');
 goog.provide('ol.loadingstrategy');
-
-goog.require('ol.TileCoord');
-
-
-/**
- * @typedef {function(ol.Extent, number): Array.<ol.Extent>}
- * @api
- */
-ol.LoadingStrategy;
 
 
 /**
@@ -54981,8 +55319,6 @@ var define;
 'use strict';
 
 function rbush(maxEntries, format) {
-
-    // jshint newcap: false, validthis: true
     if (!(this instanceof rbush)) return new rbush(maxEntries, format);
 
     // max entries in a node is 9 by default; min node fill is 40% for best performance
@@ -55273,7 +55609,7 @@ rbush.prototype = {
                 }
             }
 
-            node = targetNode;
+            node = targetNode || node.children[0];
         }
 
         return node;
@@ -55440,8 +55776,6 @@ rbush.prototype = {
         // uses eval-type function compilation instead of just accepting a toBBox function
         // because the algorithms are very sensitive to sorting functions performance,
         // so they should be dead simple and without inner calls
-
-        // jshint evil: true
 
         var compareArr = ['return a', ' - b', ';'];
 
@@ -55865,10 +56199,7 @@ goog.require('goog.asserts');
 goog.require('ol');
 goog.require('ol.Collection');
 goog.require('ol.CollectionEventType');
-goog.require('ol.Extent');
 goog.require('ol.Feature');
-goog.require('ol.FeatureLoader');
-goog.require('ol.LoadingStrategy');
 goog.require('ol.ObjectEventType');
 goog.require('ol.array');
 goog.require('ol.events');
@@ -56468,10 +56799,13 @@ ol.source.Vector.prototype.getFeaturesInExtent = function(extent) {
  * This method is not available when the source is configured with
  * `useSpatialIndex` set to `false`.
  * @param {ol.Coordinate} coordinate Coordinate.
+ * @param {function(ol.Feature):boolean=} opt_filter Feature filter function.
+ *     The filter function will receive one argument, the {@link ol.Feature feature}
+ *     and it should return a boolean value. By default, no filtering is made.
  * @return {ol.Feature} Closest feature.
  * @api stable
  */
-ol.source.Vector.prototype.getClosestFeatureToCoordinate = function(coordinate) {
+ol.source.Vector.prototype.getClosestFeatureToCoordinate = function(coordinate, opt_filter) {
   // Find the closest feature using branch and bound.  We start searching an
   // infinite extent, and find the distance from the first feature found.  This
   // becomes the closest feature.  We then compute a smaller extent which any
@@ -56488,28 +56822,31 @@ ol.source.Vector.prototype.getClosestFeatureToCoordinate = function(coordinate) 
   goog.asserts.assert(this.featuresRtree_,
       'getClosestFeatureToCoordinate does not work with useSpatialIndex set ' +
       'to false');
+  var filter = opt_filter ? opt_filter : ol.functions.TRUE;
   this.featuresRtree_.forEachInExtent(extent,
       /**
        * @param {ol.Feature} feature Feature.
        */
       function(feature) {
-        var geometry = feature.getGeometry();
-        goog.asserts.assert(geometry,
-            'feature geometry is defined and not null');
-        var previousMinSquaredDistance = minSquaredDistance;
-        minSquaredDistance = geometry.closestPointXY(
-            x, y, closestPoint, minSquaredDistance);
-        if (minSquaredDistance < previousMinSquaredDistance) {
-          closestFeature = feature;
-          // This is sneaky.  Reduce the extent that it is currently being
-          // searched while the R-Tree traversal using this same extent object
-          // is still in progress.  This is safe because the new extent is
-          // strictly contained by the old extent.
-          var minDistance = Math.sqrt(minSquaredDistance);
-          extent[0] = x - minDistance;
-          extent[1] = y - minDistance;
-          extent[2] = x + minDistance;
-          extent[3] = y + minDistance;
+        if (filter(feature)) {
+          var geometry = feature.getGeometry();
+          goog.asserts.assert(geometry,
+              'feature geometry is defined and not null');
+          var previousMinSquaredDistance = minSquaredDistance;
+          minSquaredDistance = geometry.closestPointXY(
+              x, y, closestPoint, minSquaredDistance);
+          if (minSquaredDistance < previousMinSquaredDistance) {
+            closestFeature = feature;
+            // This is sneaky.  Reduce the extent that it is currently being
+            // searched while the R-Tree traversal using this same extent object
+            // is still in progress.  This is safe because the new extent is
+            // strictly contained by the old extent.
+            var minDistance = Math.sqrt(minSquaredDistance);
+            extent[0] = x - minDistance;
+            extent[1] = y - minDistance;
+            extent[2] = x + minDistance;
+            extent[3] = y + minDistance;
+          }
         }
       });
   return closestFeature;
@@ -57268,9 +57605,9 @@ goog.require('ol.TileState');
 goog.require('ol.array');
 goog.require('ol.dom');
 goog.require('ol.extent');
-goog.require('ol.layer.Tile');
 goog.require('ol.render.EventType');
 goog.require('ol.renderer.canvas.Layer');
+goog.require('ol.size');
 goog.require('ol.source.Tile');
 goog.require('ol.vec.Mat4');
 
@@ -57278,35 +57615,47 @@ goog.require('ol.vec.Mat4');
 /**
  * @constructor
  * @extends {ol.renderer.canvas.Layer}
- * @param {ol.layer.Tile} tileLayer Tile layer.
+ * @param {ol.layer.Tile|ol.layer.VectorTile} tileLayer Tile layer.
  */
 ol.renderer.canvas.TileLayer = function(tileLayer) {
 
   goog.base(this, tileLayer);
 
   /**
-   * @private
+   * @protected
    * @type {CanvasRenderingContext2D}
    */
-  this.context_ = ol.dom.createCanvasContext2D();
+  this.context = ol.dom.createCanvasContext2D();
 
   /**
-   * @private
+   * @protected
    * @type {Array.<ol.Tile|undefined>}
    */
-  this.renderedTiles_ = null;
+  this.renderedTiles = null;
+
+  /**
+   * @protected
+   * @type {ol.Extent}
+   */
+  this.tmpExtent = ol.extent.createEmpty();
 
   /**
    * @private
-   * @type {ol.Extent}
+   * @type {ol.TileCoord}
    */
-  this.tmpExtent_ = ol.extent.createEmpty();
+  this.tmpTileCoord_ = [0, 0, 0];
 
   /**
    * @private
    * @type {!goog.vec.Mat4.Number}
    */
   this.imageTransform_ = goog.vec.Mat4.createNumber();
+
+  /**
+   * @protected
+   * @type {number}
+   */
+  this.zDirection = 0;
 
 };
 goog.inherits(ol.renderer.canvas.TileLayer, ol.renderer.canvas.Layer);
@@ -57317,127 +57666,9 @@ goog.inherits(ol.renderer.canvas.TileLayer, ol.renderer.canvas.Layer);
  */
 ol.renderer.canvas.TileLayer.prototype.composeFrame = function(
     frameState, layerState, context) {
-  var pixelRatio = frameState.pixelRatio;
-  var viewState = frameState.viewState;
-  var center = viewState.center;
-  var projection = viewState.projection;
-  var resolution = viewState.resolution;
-  var rotation = viewState.rotation;
-  var size = frameState.size;
-  var offsetX = Math.round(pixelRatio * size[0] / 2);
-  var offsetY = Math.round(pixelRatio * size[1] / 2);
-  var pixelScale = pixelRatio / resolution;
-  var layer = this.getLayer();
-  var source = layer.getSource();
-  goog.asserts.assertInstanceof(source, ol.source.Tile,
-      'source is an ol.source.Tile');
-  var tileGutter = source.getGutter(projection);
-
   var transform = this.getTransform(frameState, 0);
-
   this.dispatchPreComposeEvent(context, frameState, transform);
-
-  var renderContext = context;
-  var hasRenderListeners = layer.hasListener(ol.render.EventType.RENDER);
-  var drawOffsetX, drawOffsetY, drawScale, drawSize;
-  if (rotation || hasRenderListeners) {
-    renderContext = this.context_;
-    var renderCanvas = renderContext.canvas;
-    var tilePixelRatio = source.getTilePixelRatio(pixelRatio);
-    drawScale = tilePixelRatio / pixelRatio;
-    var width = context.canvas.width * drawScale;
-    var height = context.canvas.height * drawScale;
-    // Make sure the canvas is big enough for all possible rotation angles
-    drawSize = Math.round(Math.sqrt(width * width + height * height));
-    if (renderCanvas.width != drawSize) {
-      renderCanvas.width = renderCanvas.height = drawSize;
-    } else {
-      renderContext.clearRect(0, 0, drawSize, drawSize);
-    }
-    drawOffsetX = (drawSize - width) / 2 / drawScale;
-    drawOffsetY = (drawSize - height) / 2 / drawScale;
-    pixelScale *= drawScale;
-    offsetX = Math.round(drawScale * (offsetX + drawOffsetX))
-    offsetY = Math.round(drawScale * (offsetY + drawOffsetY));
-  }
-
-  // for performance reasons, context.save / context.restore is not used
-  // to save and restore the transformation matrix and the opacity.
-  // see http://jsperf.com/context-save-restore-versus-variable
-  var alpha = renderContext.globalAlpha;
-  renderContext.globalAlpha = layerState.opacity;
-
-  var tileGrid = source.getTileGridForProjection(projection);
-  var tilesToDraw = this.renderedTiles_;
-
-  var pixelExtents;
-  var opaque = source.getOpaque(projection) && layerState.opacity == 1;
-  if (!opaque) {
-    tilesToDraw.reverse();
-    pixelExtents = [];
-  }
-  for (var i = 0, ii = tilesToDraw.length; i < ii; ++i) {
-    var tile = tilesToDraw[i];
-    var tileCoord = tile.getTileCoord();
-    var tileExtent = tileGrid.getTileCoordExtent(tileCoord, this.tmpExtent_);
-    var currentZ = tileCoord[0];
-    // Calculate all insert points by tile widths from a common origin to avoid
-    // gaps caused by rounding
-    var origin = ol.extent.getBottomLeft(tileGrid.getTileCoordExtent(
-        tileGrid.getTileCoordForCoordAndZ(center, currentZ)));
-    var w = Math.round(ol.extent.getWidth(tileExtent) * pixelScale);
-    var h = Math.round(ol.extent.getHeight(tileExtent) * pixelScale);
-    var left = Math.round((tileExtent[0] - origin[0]) * pixelScale / w) * w +
-        offsetX + Math.round((origin[0] - center[0]) * pixelScale);
-    var top = Math.round((origin[1] - tileExtent[3]) * pixelScale / h) * h +
-        offsetY + Math.round((center[1] - origin[1]) * pixelScale);
-    if (!opaque) {
-      var pixelExtent = [left, top, left + w, top + h];
-      // Create a clip mask for regions in this low resolution tile that are
-      // already filled by a higher resolution tile
-      renderContext.save();
-      for (var j = 0, jj = pixelExtents.length; j < jj; ++j) {
-        var clipExtent = pixelExtents[j];
-        if (ol.extent.intersects(pixelExtent, clipExtent)) {
-          renderContext.beginPath();
-          // counter-clockwise (outer ring) for current tile
-          renderContext.moveTo(pixelExtent[0], pixelExtent[1]);
-          renderContext.lineTo(pixelExtent[0], pixelExtent[3]);
-          renderContext.lineTo(pixelExtent[2], pixelExtent[3]);
-          renderContext.lineTo(pixelExtent[2], pixelExtent[1]);
-          // clockwise (inner ring) for higher resolution tile
-          renderContext.moveTo(clipExtent[0], clipExtent[1]);
-          renderContext.lineTo(clipExtent[2], clipExtent[1]);
-          renderContext.lineTo(clipExtent[2], clipExtent[3]);
-          renderContext.lineTo(clipExtent[0], clipExtent[3]);
-          renderContext.closePath();
-          renderContext.clip();
-        }
-      }
-      pixelExtents.push(pixelExtent);
-    }
-    var tilePixelSize = source.getTilePixelSize(currentZ, pixelRatio, projection);
-    renderContext.drawImage(tile.getImage(), tileGutter, tileGutter,
-        tilePixelSize[0], tilePixelSize[1], left, top, w, h);
-    if (!opaque) {
-      renderContext.restore();
-    }
-  }
-
-  if (hasRenderListeners) {
-    var dX = drawOffsetX - offsetX / drawScale + offsetX;
-    var dY = drawOffsetY - offsetY / drawScale + offsetY;
-    var imageTransform = ol.vec.Mat4.makeTransform2D(this.imageTransform_,
-        drawSize / 2 - dX, drawSize / 2 - dY, pixelScale, -pixelScale,
-        -rotation, -center[0] + dX / pixelScale, -center[1] - dY / pixelScale);
-    this.dispatchRenderEvent(renderContext, frameState, imageTransform);
-  }
-  if (rotation || hasRenderListeners) {
-    context.drawImage(renderContext.canvas, -Math.round(drawOffsetX),
-        -Math.round(drawOffsetY), drawSize / drawScale, drawSize / drawScale);
-  }
-  renderContext.globalAlpha = alpha;
-
+  this.renderTileImages(context, frameState, layerState);
   this.dispatchPostComposeEvent(context, frameState, transform);
 };
 
@@ -57453,11 +57684,11 @@ ol.renderer.canvas.TileLayer.prototype.prepareFrame = function(
   var projection = viewState.projection;
 
   var tileLayer = this.getLayer();
-  goog.asserts.assertInstanceof(tileLayer, ol.layer.Tile,
-      'layer is an instance of ol.layer.Tile');
   var tileSource = tileLayer.getSource();
+  goog.asserts.assertInstanceof(tileSource, ol.source.Tile,
+      'source is an ol.source.Tile');
   var tileGrid = tileSource.getTileGridForProjection(projection);
-  var z = tileGrid.getZForResolution(viewState.resolution);
+  var z = tileGrid.getZForResolution(viewState.resolution, this.zDirection);
   var tileResolution = tileGrid.getResolution(z);
   var center = viewState.center;
   var extent;
@@ -57544,7 +57775,7 @@ ol.renderer.canvas.TileLayer.prototype.prepareFrame = function(
       }
     }
   }
-  this.renderedTiles_ = renderables;
+  this.renderedTiles = renderables;
 
   this.updateUsedTiles(frameState.usedTiles, tileSource, z, tileRange);
   this.manageTilePyramid(frameState, tileSource, tileGrid, pixelRatio,
@@ -57561,13 +57792,13 @@ ol.renderer.canvas.TileLayer.prototype.prepareFrame = function(
  */
 ol.renderer.canvas.TileLayer.prototype.forEachLayerAtPixel = function(
     pixel, frameState, callback, thisArg) {
-  var canvas = this.context_.canvas;
+  var canvas = this.context.canvas;
   var size = frameState.size;
   canvas.width = size[0];
   canvas.height = size[1];
-  this.composeFrame(frameState, this.getLayer().getLayerState(), this.context_);
+  this.composeFrame(frameState, this.getLayer().getLayerState(), this.context);
 
-  var imageData = this.context_.getImageData(
+  var imageData = this.context.getImageData(
       pixel[0], pixel[1], 1, 1).data;
 
   if (imageData[3] > 0) {
@@ -57576,6 +57807,140 @@ ol.renderer.canvas.TileLayer.prototype.forEachLayerAtPixel = function(
     return undefined;
   }
 };
+
+
+/**
+ * @param {CanvasRenderingContext2D} context Context.
+ * @param {olx.FrameState} frameState Frame state.
+ * @param {ol.LayerState} layerState Layer state.
+ * @protected
+ */
+ol.renderer.canvas.TileLayer.prototype.renderTileImages = function(context, frameState, layerState) {
+  var pixelRatio = frameState.pixelRatio;
+  var viewState = frameState.viewState;
+  var center = viewState.center;
+  var projection = viewState.projection;
+  var resolution = viewState.resolution;
+  var rotation = viewState.rotation;
+  var size = frameState.size;
+  var offsetX = Math.round(pixelRatio * size[0] / 2);
+  var offsetY = Math.round(pixelRatio * size[1] / 2);
+  var pixelScale = pixelRatio / resolution;
+  var layer = this.getLayer();
+  var source = layer.getSource();
+  goog.asserts.assertInstanceof(source, ol.source.Tile,
+      'source is an ol.source.Tile');
+  var tileGutter = source.getGutter(projection);
+  var tileGrid = source.getTileGridForProjection(projection);
+
+  var hasRenderListeners = layer.hasListener(ol.render.EventType.RENDER);
+  var renderContext = context;
+  var drawOffsetX, drawOffsetY, drawScale, drawSize;
+  if (rotation || hasRenderListeners) {
+    renderContext = this.context;
+    var renderCanvas = renderContext.canvas;
+    var drawZ = tileGrid.getZForResolution(resolution);
+    var drawTileSize = source.getTilePixelSize(drawZ, pixelRatio, projection);
+    var tileSize = ol.size.toSize(tileGrid.getTileSize(drawZ));
+    drawScale = drawTileSize[0] / tileSize[0];
+    var width = context.canvas.width * drawScale;
+    var height = context.canvas.height * drawScale;
+    // Make sure the canvas is big enough for all possible rotation angles
+    drawSize = Math.round(Math.sqrt(width * width + height * height));
+    if (renderCanvas.width != drawSize) {
+      renderCanvas.width = renderCanvas.height = drawSize;
+    } else {
+      renderContext.clearRect(0, 0, drawSize, drawSize);
+    }
+    drawOffsetX = (drawSize - width) / 2 / drawScale;
+    drawOffsetY = (drawSize - height) / 2 / drawScale;
+    pixelScale *= drawScale;
+    offsetX = Math.round(drawScale * (offsetX + drawOffsetX))
+    offsetY = Math.round(drawScale * (offsetY + drawOffsetY));
+  }
+  // for performance reasons, context.save / context.restore is not used
+  // to save and restore the transformation matrix and the opacity.
+  // see http://jsperf.com/context-save-restore-versus-variable
+  var alpha = renderContext.globalAlpha;
+  renderContext.globalAlpha = layerState.opacity;
+
+  var tilesToDraw = this.renderedTiles;
+
+  var pixelExtents;
+  var opaque = source.getOpaque(projection) && layerState.opacity == 1;
+  if (!opaque) {
+    tilesToDraw.reverse();
+    pixelExtents = [];
+  }
+  for (var i = 0, ii = tilesToDraw.length; i < ii; ++i) {
+    var tile = tilesToDraw[i];
+    var tileCoord = tile.getTileCoord();
+    var tileExtent = tileGrid.getTileCoordExtent(tileCoord, this.tmpExtent);
+    var currentZ = tileCoord[0];
+    // Calculate all insert points by tile widths from a common origin to avoid
+    // gaps caused by rounding
+    var origin = ol.extent.getBottomLeft(tileGrid.getTileCoordExtent(
+        tileGrid.getTileCoordForCoordAndZ(center, currentZ, this.tmpTileCoord_)));
+    var w = Math.round(ol.extent.getWidth(tileExtent) * pixelScale);
+    var h = Math.round(ol.extent.getHeight(tileExtent) * pixelScale);
+    var left = Math.round((tileExtent[0] - origin[0]) * pixelScale / w) * w +
+        offsetX + Math.round((origin[0] - center[0]) * pixelScale);
+    var top = Math.round((origin[1] - tileExtent[3]) * pixelScale / h) * h +
+        offsetY + Math.round((center[1] - origin[1]) * pixelScale);
+    if (!opaque) {
+      var pixelExtent = [left, top, left + w, top + h];
+      // Create a clip mask for regions in this low resolution tile that are
+      // already filled by a higher resolution tile
+      renderContext.save();
+      for (var j = 0, jj = pixelExtents.length; j < jj; ++j) {
+        var clipExtent = pixelExtents[j];
+        if (ol.extent.intersects(pixelExtent, clipExtent)) {
+          renderContext.beginPath();
+          // counter-clockwise (outer ring) for current tile
+          renderContext.moveTo(pixelExtent[0], pixelExtent[1]);
+          renderContext.lineTo(pixelExtent[0], pixelExtent[3]);
+          renderContext.lineTo(pixelExtent[2], pixelExtent[3]);
+          renderContext.lineTo(pixelExtent[2], pixelExtent[1]);
+          // clockwise (inner ring) for higher resolution tile
+          renderContext.moveTo(clipExtent[0], clipExtent[1]);
+          renderContext.lineTo(clipExtent[2], clipExtent[1]);
+          renderContext.lineTo(clipExtent[2], clipExtent[3]);
+          renderContext.lineTo(clipExtent[0], clipExtent[3]);
+          renderContext.closePath();
+          renderContext.clip();
+        }
+      }
+      pixelExtents.push(pixelExtent);
+    }
+    var tilePixelSize = source.getTilePixelSize(currentZ, pixelRatio, projection);
+    renderContext.drawImage(tile.getImage(), tileGutter, tileGutter,
+        tilePixelSize[0], tilePixelSize[1], left, top, w, h);
+    if (!opaque) {
+      renderContext.restore();
+    }
+  }
+
+  if (hasRenderListeners) {
+    var dX = drawOffsetX - offsetX / drawScale + offsetX;
+    var dY = drawOffsetY - offsetY / drawScale + offsetY;
+    var imageTransform = ol.vec.Mat4.makeTransform2D(this.imageTransform_,
+        drawSize / 2 - dX, drawSize / 2 - dY, pixelScale, -pixelScale,
+        -rotation, -center[0] + dX / pixelScale, -center[1] - dY / pixelScale);
+    this.dispatchRenderEvent(renderContext, frameState, imageTransform);
+  }
+  if (rotation || hasRenderListeners) {
+    context.drawImage(renderContext.canvas, -Math.round(drawOffsetX),
+        -Math.round(drawOffsetY), drawSize / drawScale, drawSize / drawScale);
+  }
+  renderContext.globalAlpha = alpha;
+};
+
+
+/**
+ * @function
+ * @return {ol.layer.Tile|ol.layer.VectorTile}
+ */
+ol.renderer.canvas.TileLayer.prototype.getLayer;
 
 goog.provide('ol.renderer.canvas.VectorLayer');
 
@@ -57924,36 +58289,10 @@ ol.renderer.canvas.VectorLayer.prototype.renderFeature = function(feature, resol
 };
 
 goog.provide('ol.TileUrlFunction');
-goog.provide('ol.TileUrlFunctionType');
 
 goog.require('goog.asserts');
-goog.require('ol.TileCoord');
 goog.require('ol.math');
 goog.require('ol.tilecoord');
-
-
-/**
- * {@link ol.source.Tile} sources use a function of this type to get the url
- * that provides a tile for a given tile coordinate.
- *
- * This function takes an {@link ol.TileCoord} for the tile coordinate, a
- * `{number}` representing the pixel ratio and an {@link ol.proj.Projection} for
- * the projection  as arguments and returns a `{string}` representing the tile
- * URL, or undefined if no tile should be requested for the passed tile
- * coordinate.
- *
- * @typedef {function(ol.TileCoord, number,
- *           ol.proj.Projection): (string|undefined)}
- * @api
- */
-ol.TileUrlFunctionType;
-
-
-/**
- * @typedef {function(ol.TileCoord, ol.proj.Projection, ol.TileCoord=):
- *     ol.TileCoord}
- */
-ol.TileCoordTransformType;
 
 
 /**
@@ -58075,32 +58414,10 @@ ol.TileUrlFunction.expandUrl = function(url) {
 goog.provide('ol.source.UrlTile');
 
 goog.require('ol.events');
-goog.require('ol.TileLoadFunctionType');
 goog.require('ol.TileState');
 goog.require('ol.TileUrlFunction');
-goog.require('ol.TileUrlFunctionType');
-goog.require('ol.proj');
 goog.require('ol.source.Tile');
 goog.require('ol.source.TileEvent');
-
-
-/**
- * @typedef {{attributions: (olx.source.AttributionOption|undefined),
- *            cacheSize: (number|undefined),
- *            extent: (ol.Extent|undefined),
- *            logo: (string|olx.LogoOptions|undefined),
- *            opaque: (boolean|undefined),
- *            projection: ol.proj.ProjectionLike,
- *            state: (ol.source.State|undefined),
- *            tileGrid: (ol.tilegrid.TileGrid|undefined),
- *            tileLoadFunction: ol.TileLoadFunctionType,
- *            tilePixelRatio: (number|undefined),
- *            tileUrlFunction: (ol.TileUrlFunctionType|undefined),
- *            url: (string|undefined),
- *            urls: (Array.<string>|undefined),
- *            wrapX: (boolean|undefined)}}
- */
-ol.source.UrlTileOptions;
 
 
 /**
@@ -58110,7 +58427,7 @@ ol.source.UrlTileOptions;
  * @constructor
  * @fires ol.source.TileEvent
  * @extends {ol.source.Tile}
- * @param {ol.source.UrlTileOptions} options Image tile options.
+ * @param {ol.SourceUrlTileOptions} options Image tile options.
  */
 ol.source.UrlTile = function(options) {
 
@@ -58239,15 +58556,16 @@ ol.source.UrlTile.prototype.setTileLoadFunction = function(tileLoadFunction) {
 /**
  * Set the tile URL function of the source.
  * @param {ol.TileUrlFunctionType} tileUrlFunction Tile URL function.
+ * @param {string=} opt_key Optional new tile key for the source.
  * @api
  */
-ol.source.UrlTile.prototype.setTileUrlFunction = function(tileUrlFunction) {
-  // FIXME It should be possible to be more intelligent and avoid clearing the
-  // FIXME cache.  The tile URL function would need to be incorporated into the
-  // FIXME cache key somehow.
-  this.tileCache.clear();
+ol.source.UrlTile.prototype.setTileUrlFunction = function(tileUrlFunction, opt_key) {
   this.tileUrlFunction = tileUrlFunction;
-  this.changed();
+  if (typeof opt_key !== 'undefined') {
+    this.setKey(opt_key);
+  } else {
+    this.changed();
+  }
 };
 
 
@@ -58260,7 +58578,7 @@ ol.source.UrlTile.prototype.setUrl = function(url) {
   var urls = this.urls = ol.TileUrlFunction.expandUrl(url);
   this.setTileUrlFunction(this.fixedTileUrlFunction ?
       this.fixedTileUrlFunction.bind(this) :
-      ol.TileUrlFunction.createFromTemplates(urls, this.tileGrid));
+      ol.TileUrlFunction.createFromTemplates(urls, this.tileGrid), url);
 };
 
 
@@ -58271,9 +58589,10 @@ ol.source.UrlTile.prototype.setUrl = function(url) {
  */
 ol.source.UrlTile.prototype.setUrls = function(urls) {
   this.urls = urls;
+  var key = urls.join('\n');
   this.setTileUrlFunction(this.fixedTileUrlFunction ?
       this.fixedTileUrlFunction.bind(this) :
-      ol.TileUrlFunction.createFromTemplates(urls, this.tileGrid));
+      ol.TileUrlFunction.createFromTemplates(urls, this.tileGrid), key);
 };
 
 
@@ -58294,6 +58613,7 @@ goog.require('ol.VectorTile');
 goog.require('ol.events');
 goog.require('ol.events.EventType');
 goog.require('ol.featureloader');
+goog.require('ol.size');
 goog.require('ol.source.UrlTile');
 
 
@@ -58320,7 +58640,7 @@ ol.source.VectorTile = function(options) {
     cacheSize: options.cacheSize !== undefined ? options.cacheSize : 128,
     extent: options.extent,
     logo: options.logo,
-    opaque: options.opaque,
+    opaque: false,
     projection: options.projection,
     state: options.state,
     tileGrid: options.tileGrid,
@@ -58378,6 +58698,15 @@ ol.source.VectorTile.prototype.getTile = function(z, x, y, pixelRatio, projectio
 
 
 /**
+ * @inheritDoc
+ */
+ol.source.VectorTile.prototype.getTilePixelSize = function(z, pixelRatio, projection) {
+  var tileSize = ol.size.toSize(this.tileGrid.getTileSize(z));
+  return [tileSize[0] * pixelRatio, tileSize[1] * pixelRatio];
+};
+
+
+/**
  * @param {ol.VectorTile} vectorTile Vector tile.
  * @param {string} url URL.
  */
@@ -58391,20 +58720,16 @@ goog.require('goog.asserts');
 goog.require('ol.events');
 goog.require('goog.vec.Mat4');
 goog.require('ol.Feature');
-goog.require('ol.TileRange');
-goog.require('ol.TileState');
 goog.require('ol.VectorTile');
-goog.require('ol.ViewHint');
 goog.require('ol.array');
-goog.require('ol.dom');
 goog.require('ol.extent');
-goog.require('ol.geom.flat.transform');
 goog.require('ol.layer.VectorTile');
 goog.require('ol.proj');
 goog.require('ol.proj.Units');
 goog.require('ol.render.EventType');
+goog.require('ol.render.canvas');
 goog.require('ol.render.canvas.ReplayGroup');
-goog.require('ol.renderer.canvas.Layer');
+goog.require('ol.renderer.canvas.TileLayer');
 goog.require('ol.renderer.vector');
 goog.require('ol.size');
 goog.require('ol.source.VectorTile');
@@ -58412,19 +58737,33 @@ goog.require('ol.vec.Mat4');
 
 
 /**
+ * @const
+ * @type {!Object.<string, Array.<ol.render.ReplayType>>}
+ */
+ol.renderer.canvas.IMAGE_REPLAYS = {
+  'image': ol.render.REPLAY_ORDER,
+  'hybrid': [ol.render.ReplayType.POLYGON, ol.render.ReplayType.LINE_STRING]
+};
+
+
+/**
+ * @const
+ * @type {!Object.<string, Array.<ol.render.ReplayType>>}
+ */
+ol.renderer.canvas.VECTOR_REPLAYS = {
+  'hybrid': [ol.render.ReplayType.IMAGE, ol.render.ReplayType.TEXT],
+  'vector': ol.render.REPLAY_ORDER
+};
+
+
+/**
  * @constructor
- * @extends {ol.renderer.canvas.Layer}
+ * @extends {ol.renderer.canvas.TileLayer}
  * @param {ol.layer.VectorTile} layer VectorTile layer.
  */
 ol.renderer.canvas.VectorTileLayer = function(layer) {
 
   goog.base(this, layer);
-
-  /**
-   * @private
-   * @type {CanvasRenderingContext2D}
-   */
-  this.context_ = ol.dom.createCanvasContext2D();
 
   /**
    * @private
@@ -58434,48 +58773,56 @@ ol.renderer.canvas.VectorTileLayer = function(layer) {
 
   /**
    * @private
-   * @type {Array.<ol.VectorTile>}
-   */
-  this.renderedTiles_ = [];
-
-  /**
-   * @private
-   * @type {ol.Extent}
-   */
-  this.tmpExtent_ = ol.extent.createEmpty();
-
-  /**
-   * @private
-   * @type {ol.Size}
-   */
-  this.tmpSize_ = [NaN, NaN];
-
-  /**
-   * @private
    * @type {!goog.vec.Mat4.Number}
    */
   this.tmpTransform_ = goog.vec.Mat4.createNumber();
 
+  // Use lower resolution for pure vector rendering. Closest resolution otherwise.
+  this.zDirection =
+      layer.getRenderMode() == ol.layer.VectorTileRenderType.VECTOR ? 1 : 0;
+
 };
-goog.inherits(ol.renderer.canvas.VectorTileLayer, ol.renderer.canvas.Layer);
+goog.inherits(ol.renderer.canvas.VectorTileLayer, ol.renderer.canvas.TileLayer);
 
 
 /**
  * @inheritDoc
  */
-ol.renderer.canvas.VectorTileLayer.prototype.composeFrame = function(frameState, layerState, context) {
+ol.renderer.canvas.VectorTileLayer.prototype.composeFrame = function(
+    frameState, layerState, context) {
+  var transform = this.getTransform(frameState, 0);
+  this.dispatchPreComposeEvent(context, frameState, transform);
+  var renderMode = this.getLayer().getRenderMode();
+  if (renderMode !== ol.layer.VectorTileRenderType.VECTOR) {
+    this.renderTileImages(context, frameState, layerState);
+  }
+  if (renderMode !== ol.layer.VectorTileRenderType.IMAGE) {
+    this.renderTileReplays_(context, frameState, layerState);
+  }
+  this.dispatchPostComposeEvent(context, frameState, transform);
+};
 
+
+/**
+ * @param {CanvasRenderingContext2D} context Context.
+ * @param {olx.FrameState} frameState Frame state.
+ * @param {ol.LayerState} layerState Layer state.
+ * @private
+ */
+ol.renderer.canvas.VectorTileLayer.prototype.renderTileReplays_ = function(
+    context, frameState, layerState) {
+
+  var layer = this.getLayer();
+  var replays = ol.renderer.canvas.VECTOR_REPLAYS[layer.getRenderMode()];
   var pixelRatio = frameState.pixelRatio;
   var skippedFeatureUids = layerState.managed ?
       frameState.skippedFeatureUids : {};
   var viewState = frameState.viewState;
   var center = viewState.center;
-  var projection = viewState.projection;
   var resolution = viewState.resolution;
   var rotation = viewState.rotation;
   var size = frameState.size;
   var pixelScale = pixelRatio / resolution;
-  var layer = this.getLayer();
   var source = layer.getSource();
   goog.asserts.assertInstanceof(source, ol.source.VectorTile,
       'Source is an ol.source.VectorTile');
@@ -58483,14 +58830,12 @@ ol.renderer.canvas.VectorTileLayer.prototype.composeFrame = function(frameState,
 
   var transform = this.getTransform(frameState, 0);
 
-  this.dispatchPreComposeEvent(context, frameState, transform);
-
   var replayContext;
   if (layer.hasListener(ol.render.EventType.RENDER)) {
     // resize and clear
-    this.context_.canvas.width = context.canvas.width;
-    this.context_.canvas.height = context.canvas.height;
-    replayContext = this.context_;
+    this.context.canvas.width = context.canvas.width;
+    this.context.canvas.height = context.canvas.height;
+    replayContext = this.context;
   } else {
     replayContext = context;
   }
@@ -58500,80 +58845,39 @@ ol.renderer.canvas.VectorTileLayer.prototype.composeFrame = function(frameState,
   var alpha = replayContext.globalAlpha;
   replayContext.globalAlpha = layerState.opacity;
 
-  var tilesToDraw = this.renderedTiles_;
+  var tilesToDraw = this.renderedTiles;
   var tileGrid = source.getTileGrid();
 
-  var currentZ, height, i, ii, insertPoint, insertTransform, offsetX, offsetY;
-  var origin, pixelSpace, replayState, resolutionRatio, tile, tileCenter;
-  var tileContext, tileExtent, tilePixelResolution, tilePixelSize;
-  var tileResolution, tileSize, tileTransform, width;
+  var currentZ, i, ii, offsetX, offsetY, origin, pixelSpace, replayState;
+  var tile, tileExtent, tilePixelResolution, tileResolution, tileTransform;
   for (i = 0, ii = tilesToDraw.length; i < ii; ++i) {
     tile = tilesToDraw[i];
     replayState = tile.getReplayState();
     tileExtent = tileGrid.getTileCoordExtent(
-        tile.getTileCoord(), this.tmpExtent_);
+        tile.getTileCoord(), this.tmpExtent);
     currentZ = tile.getTileCoord()[0];
-    tileSize = ol.size.toSize(tileGrid.getTileSize(currentZ), this.tmpSize_);
     pixelSpace = tile.getProjection().getUnits() == ol.proj.Units.TILE_PIXELS;
     tileResolution = tileGrid.getResolution(currentZ);
     tilePixelResolution = tileResolution / tilePixelRatio;
-    resolutionRatio = tileResolution / resolution;
     offsetX = Math.round(pixelRatio * size[0] / 2);
     offsetY = Math.round(pixelRatio * size[1] / 2);
-    width = tileSize[0] * pixelRatio * resolutionRatio;
-    height = tileSize[1] * pixelRatio * resolutionRatio;
-    var unscaledPixelTileSize = tileSize[0] * pixelRatio;
-    if (width < unscaledPixelTileSize / 4 || width > unscaledPixelTileSize * 4) {
-      if (pixelSpace) {
-        origin = ol.extent.getTopLeft(tileExtent);
-        tileTransform = ol.vec.Mat4.makeTransform2D(this.tmpTransform_,
-            offsetX, offsetY,
-            pixelScale * tilePixelResolution,
-            pixelScale * tilePixelResolution,
-            rotation,
-            (origin[0] - center[0]) / tilePixelResolution,
-            (center[1] - origin[1]) / tilePixelResolution);
-      } else {
-        tileTransform = transform;
-      }
-      replayState.replayGroup.replay(replayContext, pixelRatio,
-          tileTransform, rotation, skippedFeatureUids);
+
+    if (pixelSpace) {
+      origin = ol.extent.getTopLeft(tileExtent);
+      tileTransform = ol.vec.Mat4.makeTransform2D(this.tmpTransform_,
+          offsetX, offsetY,
+          pixelScale * tilePixelResolution,
+          pixelScale * tilePixelResolution,
+          rotation,
+          (origin[0] - center[0]) / tilePixelResolution,
+          (center[1] - origin[1]) / tilePixelResolution);
     } else {
-      tilePixelSize = source.getTilePixelSize(currentZ, pixelRatio, projection);
-      if (pixelSpace) {
-        tileTransform = ol.vec.Mat4.makeTransform2D(this.tmpTransform_,
-            0, 0,
-            pixelScale * tilePixelResolution, pixelScale * tilePixelResolution,
-            rotation,
-            -tilePixelSize[0] / 2, -tilePixelSize[1] / 2);
-      } else {
-        tileCenter = ol.extent.getCenter(tileExtent);
-        tileTransform = ol.vec.Mat4.makeTransform2D(this.tmpTransform_,
-            0, 0,
-            pixelScale, -pixelScale,
-            -rotation,
-            -tileCenter[0], -tileCenter[1]);
-      }
-      tileContext = tile.getContext();
-      if (replayState.resolution !== resolution ||
-          replayState.rotation !== rotation) {
-        replayState.resolution = resolution;
-        replayState.rotation = rotation;
-        tileContext.canvas.width = width + 0.5;
-        tileContext.canvas.height = height + 0.5;
-        tileContext.translate(width / 2, height / 2);
-        tileContext.rotate(-rotation);
-        replayState.replayGroup.replay(tileContext, pixelRatio,
-            tileTransform, rotation, skippedFeatureUids, false);
-      }
-      insertTransform = ol.vec.Mat4.makeTransform2D(this.tmpTransform_,
-          0, 0, pixelScale, -pixelScale, 0, -center[0], -center[1]);
-      insertPoint = ol.geom.flat.transform.transform2D(
-          ol.extent.getTopLeft(tileExtent), 0, 1, 2, insertTransform);
-      replayContext.drawImage(tileContext.canvas,
-          Math.round(insertPoint[0] + offsetX),
-          Math.round(insertPoint[1]) + offsetY);
+      tileTransform = transform;
     }
+    ol.render.canvas.rotateAtOffset(replayContext, -rotation, offsetX, offsetY);
+    replayState.replayGroup.replay(replayContext, pixelRatio,
+        tileTransform, rotation, skippedFeatureUids, replays);
+    ol.render.canvas.rotateAtOffset(replayContext, rotation, offsetX, offsetY);
   }
 
   if (replayContext != context) {
@@ -58581,19 +58885,18 @@ ol.renderer.canvas.VectorTileLayer.prototype.composeFrame = function(frameState,
     context.drawImage(replayContext.canvas, 0, 0);
   }
   replayContext.globalAlpha = alpha;
-
-  this.dispatchPostComposeEvent(context, frameState, transform);
 };
 
 
 /**
  * @param {ol.VectorTile} tile Tile.
- * @param {ol.layer.VectorTile} layer Vector tile layer.
- * @param {number} pixelRatio Pixel ratio.
- * @param {ol.proj.Projection} projection Projection.
+ * @param {olx.FrameState} frameState Frame state.
  */
 ol.renderer.canvas.VectorTileLayer.prototype.createReplayGroup = function(tile,
-    layer, pixelRatio, projection) {
+    frameState) {
+  var layer = this.getLayer();
+  var pixelRatio = frameState.pixelRatio;
+  var projection = frameState.viewState.projection;
   var revision = layer.getRevision();
   var renderOrder = layer.getRenderOrder() || null;
 
@@ -58613,21 +58916,20 @@ ol.renderer.canvas.VectorTileLayer.prototype.createReplayGroup = function(tile,
   var tileCoord = tile.getTileCoord();
   var tileProjection = tile.getProjection();
   var pixelSpace = tileProjection.getUnits() == ol.proj.Units.TILE_PIXELS;
-  var extent, reproject;
+  var resolution = tileGrid.getResolution(tileCoord[0]);
+  var extent, reproject, tileResolution;
   if (pixelSpace) {
-    var tilePixelSize = source.getTilePixelSize(tileCoord[0], pixelRatio,
-        tile.getProjection());
-    extent = [0, 0, tilePixelSize[0], tilePixelSize[1]];
+    var tilePixelRatio = tileResolution = source.getTilePixelRatio(pixelRatio);
+    var tileSize = ol.size.toSize(tileGrid.getTileSize(tileCoord[0]));
+    extent = [0, 0, tileSize[0] * tilePixelRatio, tileSize[1] * tilePixelRatio];
   } else {
+    tileResolution = resolution;
     extent = tileGrid.getTileCoordExtent(tileCoord);
     if (!ol.proj.equivalent(projection, tileProjection)) {
       reproject = true;
       tile.setProjection(projection);
     }
   }
-  var resolution = tileGrid.getResolution(tileCoord[0]);
-  var tileResolution =
-      pixelSpace ? source.getTilePixelRatio(pixelRatio) : resolution;
   replayState.dirty = false;
   var replayGroup = new ol.render.canvas.ReplayGroup(0, extent,
       tileResolution, layer.getRenderBuffer());
@@ -58694,7 +58996,7 @@ ol.renderer.canvas.VectorTileLayer.prototype.forEachFeatureAtCoordinate = functi
   /** @type {Object.<string, boolean>} */
   var features = {};
 
-  var replayables = this.renderedTiles_;
+  var replayables = this.renderedTiles;
   var source = layer.getSource();
   goog.asserts.assertInstanceof(source, ol.source.VectorTile,
       'Source is an ol.source.VectorTile');
@@ -58706,7 +59008,7 @@ ol.renderer.canvas.VectorTileLayer.prototype.forEachFeatureAtCoordinate = functi
     tile = replayables[i];
     tileCoord = tile.getTileCoord();
     tileExtent = source.getTileGrid().getTileCoordExtent(tileCoord,
-        this.tmpExtent_);
+        this.tmpExtent);
     if (!ol.extent.containsCoordinate(tileExtent, coordinate)) {
       continue;
     }
@@ -58756,116 +59058,17 @@ ol.renderer.canvas.VectorTileLayer.prototype.handleStyleImageChange_ = function(
  * @inheritDoc
  */
 ol.renderer.canvas.VectorTileLayer.prototype.prepareFrame = function(frameState, layerState) {
-  var layer = /** @type {ol.layer.Vector} */ (this.getLayer());
-  goog.asserts.assertInstanceof(layer, ol.layer.VectorTile,
-      'layer is an instance of ol.layer.VectorTile');
-  var source = layer.getSource();
-  goog.asserts.assertInstanceof(source, ol.source.VectorTile,
-      'Source is an ol.source.VectorTile');
-
-  this.updateAttributions(
-      frameState.attributions, source.getAttributions());
-  this.updateLogos(frameState, source);
-
-  var animating = frameState.viewHints[ol.ViewHint.ANIMATING];
-  var interacting = frameState.viewHints[ol.ViewHint.INTERACTING];
-  var updateWhileAnimating = layer.getUpdateWhileAnimating();
-  var updateWhileInteracting = layer.getUpdateWhileInteracting();
-
-  if (!this.dirty_ && (!updateWhileAnimating && animating) ||
-      (!updateWhileInteracting && interacting)) {
-    return true;
-  }
-
-  var extent = frameState.extent;
-  if (layerState.extent) {
-    extent = ol.extent.getIntersection(extent, layerState.extent);
-  }
-  if (ol.extent.isEmpty(extent)) {
-    // Return false to prevent the rendering of the layer.
-    return false;
-  }
-
-  var viewState = frameState.viewState;
-  var projection = viewState.projection;
-  var resolution = viewState.resolution;
-  var pixelRatio = frameState.pixelRatio;
-
-  var tileGrid = source.getTileGrid();
-  var resolutions = tileGrid.getResolutions();
-  var z = resolutions.length - 1;
-  while (z > 0 && resolutions[z] < resolution) {
-    --z;
-  }
-  var tileRange = tileGrid.getTileRangeForExtentAndZ(extent, z);
-  this.updateUsedTiles(frameState.usedTiles, source, z, tileRange);
-  this.manageTilePyramid(frameState, source, tileGrid, pixelRatio,
-      projection, extent, z, layer.getPreload());
-  this.scheduleExpireCache(frameState, source);
-
-  /**
-   * @type {Object.<number, Object.<string, ol.VectorTile>>}
-   */
-  var tilesToDrawByZ = {};
-  tilesToDrawByZ[z] = {};
-
-  var findLoadedTiles = this.createLoadedTileFinder(source, projection,
-      tilesToDrawByZ);
-
-  var useInterimTilesOnError = layer.getUseInterimTilesOnError();
-
-  var tmpExtent = this.tmpExtent_;
-  var tmpTileRange = new ol.TileRange(0, 0, 0, 0);
-  var childTileRange, fullyLoaded, tile, tileState, x, y;
-  for (x = tileRange.minX; x <= tileRange.maxX; ++x) {
-    for (y = tileRange.minY; y <= tileRange.maxY; ++y) {
-
-      tile = source.getTile(z, x, y, pixelRatio, projection);
-      goog.asserts.assertInstanceof(tile, ol.VectorTile,
-          'Tile is an ol.VectorTile');
-      tileState = tile.getState();
-      if (tileState == ol.TileState.LOADED ||
-          tileState == ol.TileState.EMPTY ||
-          (tileState == ol.TileState.ERROR && !useInterimTilesOnError)) {
-        tilesToDrawByZ[z][tile.tileCoord.toString()] = tile;
-        continue;
-      }
-
-      fullyLoaded = tileGrid.forEachTileCoordParentTileRange(
-          tile.tileCoord, findLoadedTiles, null, tmpTileRange, tmpExtent);
-      if (!fullyLoaded) {
-        childTileRange = tileGrid.getTileCoordChildTileRange(
-            tile.tileCoord, tmpTileRange, tmpExtent);
-        if (childTileRange) {
-          findLoadedTiles(z + 1, childTileRange);
-        }
-      }
-
+  var prepared = goog.base(this, 'prepareFrame', frameState, layerState);
+  if (prepared) {
+    var skippedFeatures = Object.keys(frameState.skippedFeatureUids_ || {});
+    for (var i = 0, ii = this.renderedTiles.length; i < ii; ++i) {
+      var tile = this.renderedTiles[i];
+      goog.asserts.assertInstanceof(tile, ol.VectorTile, 'got an ol.VectorTile');
+      this.createReplayGroup(tile, frameState);
+      this.renderTileImage_(tile, frameState, layerState, skippedFeatures);
     }
   }
-
-  this.dirty_ = false;
-
-  /** @type {Array.<number>} */
-  var zs = Object.keys(tilesToDrawByZ).map(Number);
-  zs.sort(ol.array.numberSafeCompareFunction);
-  var replayables = [];
-  var i, ii, currentZ, tileCoordKey, tilesToDraw;
-  for (i = 0, ii = zs.length; i < ii; ++i) {
-    currentZ = zs[i];
-    tilesToDraw = tilesToDrawByZ[currentZ];
-    for (tileCoordKey in tilesToDraw) {
-      tile = tilesToDraw[tileCoordKey];
-      if (tile.getState() == ol.TileState.LOADED) {
-        replayables.push(tile);
-        this.createReplayGroup(tile, layer, pixelRatio, projection);
-      }
-    }
-  }
-
-  this.renderedTiles_ = replayables;
-
-  return true;
+  return prepared;
 };
 
 
@@ -58896,6 +59099,70 @@ ol.renderer.canvas.VectorTileLayer.prototype.renderFeature = function(feature, s
   return loading;
 };
 
+
+/**
+ * @param {ol.VectorTile} tile Tile.
+ * @param {olx.FrameState} frameState Frame state.
+ * @param {ol.LayerState} layerState Layer state.
+ * @param {Array.<string>} skippedFeatures Skipped features.
+ * @private
+ */
+ol.renderer.canvas.VectorTileLayer.prototype.renderTileImage_ = function(
+    tile, frameState, layerState, skippedFeatures) {
+  var layer = this.getLayer();
+  var replays = ol.renderer.canvas.IMAGE_REPLAYS[layer.getRenderMode()];
+  if (!replays) {
+    // do not create an image in 'vector' mode
+    return;
+  }
+  var pixelRatio = frameState.pixelRatio;
+  var replayState = tile.getReplayState();
+  var revision = layer.getRevision();
+  if (!ol.array.equals(replayState.skippedFeatures, skippedFeatures) ||
+      replayState.renderedTileRevision !== revision) {
+    replayState.skippedFeatures = skippedFeatures;
+    replayState.renderedTileRevision = revision;
+    var tileContext = tile.getContext();
+    var source = layer.getSource();
+    var tileGrid = source.getTileGrid();
+    var currentZ = tile.getTileCoord()[0];
+    var resolution = tileGrid.getResolution(currentZ);
+    var tileSize = ol.size.toSize(tileGrid.getTileSize(currentZ));
+    var tileResolution = tileGrid.getResolution(currentZ);
+    var resolutionRatio = tileResolution / resolution;
+    var width = tileSize[0] * pixelRatio * resolutionRatio;
+    var height = tileSize[1] * pixelRatio * resolutionRatio;
+    tileContext.canvas.width = width / resolutionRatio + 0.5;
+    tileContext.canvas.height = height / resolutionRatio + 0.5;
+    tileContext.scale(1 / resolutionRatio, 1 / resolutionRatio);
+    tileContext.translate(width / 2, height / 2);
+    var pixelSpace = tile.getProjection().getUnits() == ol.proj.Units.TILE_PIXELS;
+    var pixelScale = pixelRatio / resolution;
+    var tilePixelRatio = source.getTilePixelRatio(pixelRatio);
+    var tilePixelResolution = tileResolution / tilePixelRatio;
+    var tileExtent = tileGrid.getTileCoordExtent(
+        tile.getTileCoord(), this.tmpExtent);
+    var tileTransform;
+    if (pixelSpace) {
+      tileTransform = ol.vec.Mat4.makeTransform2D(this.tmpTransform_,
+          0, 0,
+          pixelScale * tilePixelResolution, pixelScale * tilePixelResolution,
+          0,
+          -tileSize[0] * tilePixelRatio / 2, -tileSize[1] * tilePixelRatio / 2);
+    } else {
+      var tileCenter = ol.extent.getCenter(tileExtent);
+      tileTransform = ol.vec.Mat4.makeTransform2D(this.tmpTransform_,
+          0, 0,
+          pixelScale, -pixelScale,
+          0,
+          -tileCenter[0], -tileCenter[1]);
+    }
+
+    replayState.replayGroup.replay(tileContext, pixelRatio,
+        tileTransform, 0, frameState.skippedFeatureUids || {}, replays);
+  }
+}
+
 // FIXME offset panning
 
 goog.provide('ol.renderer.canvas.Map');
@@ -58909,7 +59176,6 @@ goog.require('ol.RendererType');
 goog.require('ol.array');
 goog.require('ol.css');
 goog.require('ol.dom');
-goog.require('ol.extent');
 goog.require('ol.layer.Image');
 goog.require('ol.layer.Layer');
 goog.require('ol.layer.Tile');
@@ -58947,12 +59213,6 @@ ol.renderer.canvas.Map = function(container, map) {
 
   /**
    * @private
-   * @type {CanvasRenderingContext2D}
-   */
-  this.renderContext_ = ol.dom.createCanvasContext2D();
-
-  /**
-   * @private
    * @type {HTMLCanvasElement}
    */
   this.canvas_ = this.context_.canvas;
@@ -58961,24 +59221,6 @@ ol.renderer.canvas.Map = function(container, map) {
   this.canvas_.style.height = '100%';
   this.canvas_.className = ol.css.CLASS_UNSELECTABLE;
   goog.dom.insertChildAt(container, this.canvas_, 0);
-
-  /**
-   * @private
-   * @type {HTMLCanvasElement}
-   */
-  this.renderCanvas_ = this.renderContext_.canvas;
-
-  /**
-   * @private
-   * @type {ol.Coordinate}
-   */
-  this.pixelCenter_ = [0, 0];
-
-  /**
-   * @private
-   * @type {ol.Extent}
-   */
-  this.pixelExtent_ = ol.extent.createEmpty();
 
   /**
    * @private
@@ -59166,7 +59408,7 @@ ol.renderer.dom.Layer.prototype.clearFrame = ol.nullFunction;
 
 /**
  * @param {olx.FrameState} frameState Frame state.
- * @param {ol.layer.LayerState} layerState Layer state.
+ * @param {ol.LayerState} layerState Layer state.
  */
 ol.renderer.dom.Layer.prototype.composeFrame = ol.nullFunction;
 
@@ -59181,7 +59423,7 @@ ol.renderer.dom.Layer.prototype.getTarget = function() {
 
 /**
  * @param {olx.FrameState} frameState Frame state.
- * @param {ol.layer.LayerState} layerState Layer state.
+ * @param {ol.LayerState} layerState Layer state.
  * @return {boolean} whether composeFrame should be called.
  */
 ol.renderer.dom.Layer.prototype.prepareFrame = goog.abstractMethod;
@@ -59355,8 +59597,6 @@ goog.require('goog.dom');
 goog.require('goog.style');
 goog.require('goog.vec.Mat4');
 goog.require('ol');
-goog.require('ol.Coordinate');
-goog.require('ol.TileCoord');
 goog.require('ol.TileRange');
 goog.require('ol.TileState');
 goog.require('ol.ViewHint');
@@ -62870,13 +63110,6 @@ goog.require('ol.webgl.WebGLContextEventType');
 
 
 /**
- * @typedef {{buf: ol.webgl.Buffer,
- *            buffer: WebGLBuffer}}
- */
-ol.webgl.BufferCacheEntry;
-
-
-/**
  * @classdesc
  * A WebGL context for accessing low-level WebGL capabilities.
  *
@@ -62901,7 +63134,7 @@ ol.webgl.Context = function(canvas, gl) {
 
   /**
    * @private
-   * @type {Object.<string, ol.webgl.BufferCacheEntry>}
+   * @type {Object.<string, ol.WebglBufferCacheEntry>}
    */
   this.bufferCache_ = {};
 
@@ -64838,20 +65071,21 @@ ol.renderer.webgl.Layer.prototype.bindFramebuffer = function(frameState, framebu
 
   if (this.framebufferDimension === undefined ||
       this.framebufferDimension != framebufferDimension) {
+    /**
+     * @param {WebGLRenderingContext} gl GL.
+     * @param {WebGLFramebuffer} framebuffer Framebuffer.
+     * @param {WebGLTexture} texture Texture.
+     */
+    var postRenderFunction = function(gl, framebuffer, texture) {
+      if (!gl.isContextLost()) {
+        gl.deleteFramebuffer(framebuffer);
+        gl.deleteTexture(texture);
+      }
+    }.bind(null, gl, this.framebuffer, this.texture);
 
     frameState.postRenderFunctions.push(
-        /** @type {ol.PostRenderFunction} */ (goog.partial(
-            /**
-             * @param {WebGLRenderingContext} gl GL.
-             * @param {WebGLFramebuffer} framebuffer Framebuffer.
-             * @param {WebGLTexture} texture Texture.
-             */
-            function(gl, framebuffer, texture) {
-              if (!gl.isContextLost()) {
-                gl.deleteFramebuffer(framebuffer);
-                gl.deleteTexture(texture);
-              }
-            }, gl, this.framebuffer, this.texture)));
+      /** @type {ol.PostRenderFunction} */ (postRenderFunction)
+    );
 
     var texture = ol.webgl.Context.createEmptyTexture(
         gl, framebufferDimension, framebufferDimension);
@@ -64874,7 +65108,7 @@ ol.renderer.webgl.Layer.prototype.bindFramebuffer = function(frameState, framebu
 
 /**
  * @param {olx.FrameState} frameState Frame state.
- * @param {ol.layer.LayerState} layerState Layer state.
+ * @param {ol.LayerState} layerState Layer state.
  * @param {ol.webgl.Context} context Context.
  */
 ol.renderer.webgl.Layer.prototype.composeFrame = function(frameState, layerState, context) {
@@ -64987,7 +65221,7 @@ ol.renderer.webgl.Layer.prototype.handleWebGLContextLost = function() {
 
 /**
  * @param {olx.FrameState} frameState Frame state.
- * @param {ol.layer.LayerState} layerState Layer state.
+ * @param {ol.LayerState} layerState Layer state.
  * @param {ol.webgl.Context} context Context.
  * @return {boolean} whether composeFrame should be called.
  */
@@ -64998,8 +65232,6 @@ goog.provide('ol.renderer.webgl.ImageLayer');
 goog.require('goog.asserts');
 goog.require('goog.vec.Mat4');
 goog.require('goog.webgl');
-goog.require('ol.Coordinate');
-goog.require('ol.Extent');
 goog.require('ol.ImageBase');
 goog.require('ol.ViewHint');
 goog.require('ol.dom');
@@ -65133,17 +65365,18 @@ ol.renderer.webgl.ImageLayer.prototype.prepareFrame = function(frameState, layer
         image = image_;
         texture = this.createTexture_(image_);
         if (this.texture) {
+          /**
+           * @param {WebGLRenderingContext} gl GL.
+           * @param {WebGLTexture} texture Texture.
+           */
+          var postRenderFunction = function(gl, texture) {
+            if (!gl.isContextLost()) {
+              gl.deleteTexture(texture);
+            }
+          }.bind(null, gl, this.texture);
           frameState.postRenderFunctions.push(
-              /** @type {ol.PostRenderFunction} */ (goog.partial(
-                  /**
-                   * @param {WebGLRenderingContext} gl GL.
-                   * @param {WebGLTexture} texture Texture.
-                   */
-                  function(gl, texture) {
-                    if (!gl.isContextLost()) {
-                      gl.deleteTexture(texture);
-                    }
-                  }, gl, this.texture)));
+            /** @type {ol.PostRenderFunction} */ (postRenderFunction)
+          );
         }
       }
     }
@@ -65907,7 +66140,7 @@ ol.renderer.webgl.VectorLayer = function(mapRenderer, vectorLayer) {
   /**
    * The last layer state.
    * @private
-   * @type {?ol.layer.LayerState}
+   * @type {?ol.LayerState}
    */
   this.layerState_ = null;
 
@@ -66197,12 +66430,6 @@ goog.require('ol.webgl.WebGLContextEventType');
 
 
 /**
- * @typedef {{magFilter: number, minFilter: number, texture: WebGLTexture}}
- */
-ol.renderer.webgl.TextureCacheEntry;
-
-
-/**
  * @constructor
  * @extends {ol.renderer.Map}
  * @param {Element} container Container.
@@ -66273,7 +66500,7 @@ ol.renderer.webgl.Map = function(container, map) {
 
   /**
    * @private
-   * @type {ol.structs.LRUCache.<ol.renderer.webgl.TextureCacheEntry|null>}
+   * @type {ol.structs.LRUCache.<ol.WebglTextureCacheEntry|null>}
    */
   this.textureCache_ = new ol.structs.LRUCache();
 
@@ -66463,7 +66690,7 @@ ol.renderer.webgl.Map.prototype.disposeInternal = function() {
   if (!gl.isContextLost()) {
     this.textureCache_.forEach(
         /**
-         * @param {?ol.renderer.webgl.TextureCacheEntry} textureCacheEntry
+         * @param {?ol.WebglTextureCacheEntry} textureCacheEntry
          *     Texture cache entry.
          */
         function(textureCacheEntry) {
@@ -66612,7 +66839,7 @@ ol.renderer.webgl.Map.prototype.renderFrame = function(frameState) {
 
   this.dispatchComposeEvent_(ol.render.EventType.PRECOMPOSE, frameState);
 
-  /** @type {Array.<ol.layer.LayerState>} */
+  /** @type {Array.<ol.LayerState>} */
   var layerStatesToDraw = [];
   var layerStatesArray = frameState.layerStatesArray;
   ol.array.stableSort(layerStatesArray, ol.renderer.Map.sortByZIndex);
@@ -66799,11 +67026,7 @@ goog.require('ol.MapEventType');
 goog.require('ol.Object');
 goog.require('ol.ObjectEvent');
 goog.require('ol.ObjectEventType');
-goog.require('ol.Pixel');
-goog.require('ol.PostRenderFunction');
-goog.require('ol.PreRenderFunction');
 goog.require('ol.RendererType');
-goog.require('ol.Size');
 goog.require('ol.TileQueue');
 goog.require('ol.View');
 goog.require('ol.ViewHint');
@@ -67357,12 +67580,12 @@ ol.Map.prototype.disposeInternal = function() {
   ol.events.unlisten(this.viewport_, ol.events.EventType.MOUSEWHEEL,
       this.handleBrowserEvent, this);
   if (this.handleResize_ !== undefined) {
-    goog.global.removeEventListener(ol.events.EventType.RESIZE,
+    ol.global.removeEventListener(ol.events.EventType.RESIZE,
         this.handleResize_, false);
     this.handleResize_ = undefined;
   }
   if (this.animationDelayKey_) {
-    goog.global.cancelAnimationFrame(this.animationDelayKey_);
+    ol.global.cancelAnimationFrame(this.animationDelayKey_);
     this.animationDelayKey_ = undefined;
   }
   this.setTarget(null);
@@ -67856,7 +68079,7 @@ ol.Map.prototype.handleTargetChanged_ = function() {
   if (!targetElement) {
     goog.dom.removeNode(this.viewport_);
     if (this.handleResize_ !== undefined) {
-      goog.global.removeEventListener(ol.events.EventType.RESIZE,
+      ol.global.removeEventListener(ol.events.EventType.RESIZE,
           this.handleResize_, false);
       this.handleResize_ = undefined;
     }
@@ -67874,7 +68097,7 @@ ol.Map.prototype.handleTargetChanged_ = function() {
 
     if (!this.handleResize_) {
       this.handleResize_ = this.updateSize.bind(this);
-      goog.global.addEventListener(ol.events.EventType.RESIZE,
+      ol.global.addEventListener(ol.events.EventType.RESIZE,
           this.handleResize_, false);
     }
   }
@@ -67978,7 +68201,7 @@ ol.Map.prototype.isRendered = function() {
  */
 ol.Map.prototype.renderSync = function() {
   if (this.animationDelayKey_) {
-    goog.global.cancelAnimationFrame(this.animationDelayKey_);
+    ol.global.cancelAnimationFrame(this.animationDelayKey_);
   }
   this.animationDelay_();
 };
@@ -67990,7 +68213,7 @@ ol.Map.prototype.renderSync = function() {
  */
 ol.Map.prototype.render = function() {
   if (this.animationDelayKey_ === undefined) {
-    this.animationDelayKey_ = goog.global.requestAnimationFrame(
+    this.animationDelayKey_ = ol.global.requestAnimationFrame(
         this.animationDelay_);
   }
 };
@@ -68062,10 +68285,11 @@ ol.Map.prototype.renderFrame_ = function(time) {
 
   var size = this.getSize();
   var view = this.getView();
+  var extent = ol.extent.createEmpty();
   /** @type {?olx.FrameState} */
   var frameState = null;
   if (size !== undefined && ol.size.hasArea(size) && view && view.isDef()) {
-    var viewHints = view.getHints();
+    var viewHints = view.getHints(this.frameState_ ? this.frameState_.viewHints : undefined);
     var layerStatesArray = this.getLayerGroup().getLayerStatesArray();
     var layerStates = {};
     for (i = 0, ii = layerStatesArray.length; i < ii; ++i) {
@@ -68076,7 +68300,7 @@ ol.Map.prototype.renderFrame_ = function(time) {
       animate: false,
       attributions: {},
       coordinateToPixelMatrix: this.coordinateToPixelMatrix_,
-      extent: null,
+      extent: extent,
       focus: !this.focus_ ? viewState.center : this.focus_,
       index: this.frameIndex_++,
       layerStates: layerStates,
@@ -68108,7 +68332,7 @@ ol.Map.prototype.renderFrame_ = function(time) {
     preRenderFunctions.length = n;
 
     frameState.extent = ol.extent.getForViewAndSize(viewState.center,
-        viewState.resolution, viewState.rotation, frameState.size);
+        viewState.resolution, viewState.rotation, frameState.size, extent);
   }
 
   this.frameState_ = frameState;
@@ -68225,19 +68449,6 @@ ol.Map.prototype.unskipFeature = function(feature) {
 
 
 /**
- * @typedef {{controls: ol.Collection.<ol.control.Control>,
- *            interactions: ol.Collection.<ol.interaction.Interaction>,
- *            keyboardEventTarget: (Element|Document),
- *            logos: Object.<string, string>,
- *            overlays: ol.Collection.<ol.Overlay>,
- *            rendererConstructor:
- *                function(new: ol.renderer.Map, Element, ol.Map),
- *            values: Object.<string, *>}}
- */
-ol.MapOptionsInternal;
-
-
-/**
  * @param {olx.MapOptions} options Map options.
  * @return {ol.MapOptionsInternal} Internal map options.
  */
@@ -68268,6 +68479,8 @@ ol.Map.createOptionsInternal = function(options) {
     var logo = options.logo;
     if (typeof logo === 'string') {
       logos[logo] = '';
+    } else if (logo instanceof HTMLElement) {
+      logos[goog.getUid(logo).toString()] = logo;
     } else if (goog.isObject(logo)) {
       goog.asserts.assertString(logo.href, 'logo.href should be a string');
       goog.asserts.assertString(logo.src, 'logo.src should be a string');
@@ -68389,7 +68602,6 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('ol.events');
 goog.require('goog.style');
-goog.require('ol.Coordinate');
 goog.require('ol.Map');
 goog.require('ol.MapEventType');
 goog.require('ol.Object');
@@ -69776,7 +69988,6 @@ goog.require('ol.events');
 goog.require('ol.events.Event');
 goog.require('ol.events.EventType');
 goog.require('ol.pointer.PointerEventHandler');
-goog.require('ol.Size');
 goog.require('ol.ViewHint');
 goog.require('ol.animation');
 goog.require('ol.control.Control');
@@ -70452,7 +70663,7 @@ ol.DeviceOrientation.prototype.handleTrackingChanged_ = function() {
   if (ol.has.DEVICE_ORIENTATION) {
     var tracking = this.getTracking();
     if (tracking && !this.listenerKey_) {
-      this.listenerKey_ = ol.events.listen(goog.global, 'deviceorientation',
+      this.listenerKey_ = ol.events.listen(ol.global, 'deviceorientation',
           this.orientationChange_, this);
     } else if (!tracking && this.listenerKey_ !== null) {
       ol.events.unlistenByKey(this.listenerKey_);
@@ -74334,13 +74545,13 @@ ol.format.GMLBase.ONLY_WHITESPACE_RE_ = /^[\s\xa0]*$/;
 /**
  * @param {Node} node Node.
  * @param {Array.<*>} objectStack Object stack.
- * @return {Array.<ol.Feature>} Features.
+ * @return {Array.<ol.Feature> | undefined} Features.
  */
 ol.format.GMLBase.prototype.readFeaturesInternal = function(node, objectStack) {
   goog.asserts.assert(node.nodeType == goog.dom.NodeType.ELEMENT,
       'node.nodeType should be ELEMENT');
   var localName = node.localName;
-  var features;
+  var features = null;
   if (localName == 'FeatureCollection') {
     if (node.namespaceURI === 'http://www.opengis.net/wfs') {
       features = ol.xml.pushParseAndPop([],
@@ -74382,8 +74593,11 @@ ol.format.GMLBase.prototype.readFeaturesInternal = function(node, objectStack) {
           }
         }
       }
-      context['featureType'] = featureType;
-      context['featureNS'] = featureNS;
+      if (localName != 'featureMember') {
+        // recheck featureType for each featureMember
+        context['featureType'] = featureType;
+        context['featureNS'] = featureNS;
+      }
     }
     if (typeof featureNS === 'string') {
       var ns = featureNS;
@@ -74406,9 +74620,13 @@ ol.format.GMLBase.prototype.readFeaturesInternal = function(node, objectStack) {
       }
       parsersNS[featureNS[p]] = parsers;
     }
-    features = ol.xml.pushParseAndPop([], parsersNS, node, objectStack);
+    if (localName == 'featureMember') {
+      features = ol.xml.pushParseAndPop(undefined, parsersNS, node, objectStack);
+    } else {
+      features = ol.xml.pushParseAndPop([], parsersNS, node, objectStack);
+    }
   }
-  if (!features) {
+  if (features === null) {
     features = [];
   }
   return features;
@@ -74728,7 +74946,7 @@ ol.format.GMLBase.prototype.readFlatCoordinatesFromNode_ = function(node, object
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GMLBase.prototype.MULTIPOINT_PARSERS_ = {
@@ -74743,7 +74961,7 @@ ol.format.GMLBase.prototype.MULTIPOINT_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GMLBase.prototype.MULTILINESTRING_PARSERS_ = {
@@ -74758,7 +74976,7 @@ ol.format.GMLBase.prototype.MULTILINESTRING_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GMLBase.prototype.MULTIPOLYGON_PARSERS_ = {
@@ -74773,7 +74991,7 @@ ol.format.GMLBase.prototype.MULTIPOLYGON_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GMLBase.prototype.POINTMEMBER_PARSERS_ = {
@@ -74786,7 +75004,7 @@ ol.format.GMLBase.prototype.POINTMEMBER_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GMLBase.prototype.LINESTRINGMEMBER_PARSERS_ = {
@@ -74799,7 +75017,7 @@ ol.format.GMLBase.prototype.LINESTRINGMEMBER_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GMLBase.prototype.POLYGONMEMBER_PARSERS_ = {
@@ -74812,7 +75030,7 @@ ol.format.GMLBase.prototype.POLYGONMEMBER_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @protected
  */
 ol.format.GMLBase.prototype.RING_PARSERS = {
@@ -74856,7 +75074,8 @@ ol.format.GMLBase.prototype.readFeaturesFromNode = function(node, opt_options) {
   if (opt_options) {
     ol.object.assign(options, this.getReadOptions(node, opt_options));
   }
-  return this.readFeaturesInternal(node, [options]);
+  var features = this.readFeaturesInternal(node, [options]);
+  return features || [];
 };
 
 
@@ -74871,9 +75090,9 @@ ol.format.GMLBase.prototype.readProjectionFromNode = function(node) {
 goog.provide('ol.format.XSD');
 
 goog.require('goog.asserts');
-goog.require('goog.string');
 goog.require('ol');
 goog.require('ol.xml');
+goog.require('ol.string');
 
 
 /**
@@ -75012,11 +75231,11 @@ ol.format.XSD.writeBooleanTextNode = function(node, bool) {
 ol.format.XSD.writeDateTimeTextNode = function(node, dateTime) {
   var date = new Date(dateTime * 1000);
   var string = date.getUTCFullYear() + '-' +
-      goog.string.padNumber(date.getUTCMonth() + 1, 2) + '-' +
-      goog.string.padNumber(date.getUTCDate(), 2) + 'T' +
-      goog.string.padNumber(date.getUTCHours(), 2) + ':' +
-      goog.string.padNumber(date.getUTCMinutes(), 2) + ':' +
-      goog.string.padNumber(date.getUTCSeconds(), 2) + 'Z';
+      ol.string.padNumber(date.getUTCMonth() + 1, 2) + '-' +
+      ol.string.padNumber(date.getUTCDate(), 2) + 'T' +
+      ol.string.padNumber(date.getUTCHours(), 2) + ':' +
+      ol.string.padNumber(date.getUTCMinutes(), 2) + ':' +
+      ol.string.padNumber(date.getUTCSeconds(), 2) + 'Z';
   node.appendChild(ol.xml.DOCUMENT.createTextNode(string));
 };
 
@@ -75220,7 +75439,7 @@ ol.format.GML2.prototype.outerBoundaryIsParser_ = function(node, objectStack) {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GML2.prototype.GEOMETRY_FLAT_COORDINATES_PARSERS_ = {
@@ -75233,7 +75452,7 @@ ol.format.GML2.prototype.GEOMETRY_FLAT_COORDINATES_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GML2.prototype.FLAT_LINEAR_RINGS_PARSERS_ = {
@@ -75246,7 +75465,7 @@ ol.format.GML2.prototype.FLAT_LINEAR_RINGS_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GML2.prototype.BOX_PARSERS_ = {
@@ -75259,7 +75478,7 @@ ol.format.GML2.prototype.BOX_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GML2.prototype.GEOMETRY_PARSERS_ = {
@@ -75732,7 +75951,7 @@ ol.format.GML3.prototype.readFlatPosList_ = function(node, objectStack) {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GML3.prototype.GEOMETRY_FLAT_COORDINATES_PARSERS_ = {
@@ -75745,7 +75964,7 @@ ol.format.GML3.prototype.GEOMETRY_FLAT_COORDINATES_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GML3.prototype.FLAT_LINEAR_RINGS_PARSERS_ = {
@@ -75758,7 +75977,7 @@ ol.format.GML3.prototype.FLAT_LINEAR_RINGS_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GML3.prototype.GEOMETRY_PARSERS_ = {
@@ -75788,7 +76007,7 @@ ol.format.GML3.prototype.GEOMETRY_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GML3.prototype.MULTICURVE_PARSERS_ = {
@@ -75803,7 +76022,7 @@ ol.format.GML3.prototype.MULTICURVE_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GML3.prototype.MULTISURFACE_PARSERS_ = {
@@ -75818,7 +76037,7 @@ ol.format.GML3.prototype.MULTISURFACE_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GML3.prototype.CURVEMEMBER_PARSERS_ = {
@@ -75832,7 +76051,7 @@ ol.format.GML3.prototype.CURVEMEMBER_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GML3.prototype.SURFACEMEMBER_PARSERS_ = {
@@ -75845,7 +76064,7 @@ ol.format.GML3.prototype.SURFACEMEMBER_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GML3.prototype.SURFACE_PARSERS_ = {
@@ -75857,7 +76076,7 @@ ol.format.GML3.prototype.SURFACE_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GML3.prototype.CURVE_PARSERS_ = {
@@ -75869,7 +76088,7 @@ ol.format.GML3.prototype.CURVE_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GML3.prototype.ENVELOPE_PARSERS_ = {
@@ -75884,7 +76103,7 @@ ol.format.GML3.prototype.ENVELOPE_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GML3.prototype.PATCHES_PARSERS_ = {
@@ -75897,7 +76116,7 @@ ol.format.GML3.prototype.PATCHES_PARSERS_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GML3.prototype.SEGMENTS_PARSERS_ = {
@@ -75994,7 +76213,7 @@ ol.format.GML3.prototype.writePoint_ = function(node, geometry, objectStack) {
 
 
 /**
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.GML3.ENVELOPE_SERIALIZERS_ = {
@@ -76020,7 +76239,7 @@ ol.format.GML3.prototype.writeEnvelope = function(node, extent, objectStack) {
   }
   var keys = ['lowerCorner', 'upperCorner'];
   var values = [extent[0] + ' ' + extent[1], extent[2] + ' ' + extent[3]];
-  ol.xml.pushSerializeAndPop(/** @type {ol.xml.NodeStackItem} */
+  ol.xml.pushSerializeAndPop(/** @type {ol.XmlNodeStackItem} */
       ({node: node}), ol.format.GML3.ENVELOPE_SERIALIZERS_,
       ol.xml.OBJECT_PROPERTY_NODE_FACTORY,
       values,
@@ -76301,7 +76520,7 @@ ol.format.GML3.prototype.writeGeometryElement = function(node, geometry, objectS
     value =
         ol.format.Feature.transformWithOptions(geometry, true, context);
   }
-  ol.xml.pushSerializeAndPop(/** @type {ol.xml.NodeStackItem} */
+  ol.xml.pushSerializeAndPop(/** @type {ol.XmlNodeStackItem} */
       (item), ol.format.GML3.GEOMETRY_SERIALIZERS_,
       this.GEOMETRY_NODE_FACTORY_, [value],
       objectStack, undefined, this);
@@ -76348,7 +76567,7 @@ ol.format.GML3.prototype.writeFeatureElement = function(node, feature, objectSta
   }
   var item = ol.object.assign({}, context);
   item.node = node;
-  ol.xml.pushSerializeAndPop(/** @type {ol.xml.NodeStackItem} */
+  ol.xml.pushSerializeAndPop(/** @type {ol.XmlNodeStackItem} */
       (item), context.serializers,
       ol.xml.makeSimpleNodeFactory(undefined, featureNS),
       values,
@@ -76373,7 +76592,7 @@ ol.format.GML3.prototype.writeFeatureMembers_ = function(node, features, objectS
       this.writeFeatureElement, this);
   var item = ol.object.assign({}, context);
   item.node = node;
-  ol.xml.pushSerializeAndPop(/** @type {ol.xml.NodeStackItem} */
+  ol.xml.pushSerializeAndPop(/** @type {ol.XmlNodeStackItem} */
       (item),
       serializers,
       ol.xml.makeSimpleNodeFactory(featureType, featureNS), features,
@@ -76382,7 +76601,7 @@ ol.format.GML3.prototype.writeFeatureMembers_ = function(node, features, objectS
 
 
 /**
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.GML3.SURFACEORPOLYGONMEMBER_SERIALIZERS_ = {
@@ -76396,7 +76615,7 @@ ol.format.GML3.SURFACEORPOLYGONMEMBER_SERIALIZERS_ = {
 
 
 /**
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.GML3.POINTMEMBER_SERIALIZERS_ = {
@@ -76408,7 +76627,7 @@ ol.format.GML3.POINTMEMBER_SERIALIZERS_ = {
 
 
 /**
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.GML3.LINESTRINGORCURVEMEMBER_SERIALIZERS_ = {
@@ -76422,7 +76641,7 @@ ol.format.GML3.LINESTRINGORCURVEMEMBER_SERIALIZERS_ = {
 
 
 /**
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.GML3.RING_SERIALIZERS_ = {
@@ -76434,7 +76653,7 @@ ol.format.GML3.RING_SERIALIZERS_ = {
 
 
 /**
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.GML3.GEOMETRY_SERIALIZERS_ = {
@@ -76920,7 +77139,7 @@ ol.format.GPX.FEATURE_READER_ = {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GPX.GPX_PARSERS_ = ol.xml.makeStructureNS(
@@ -76933,7 +77152,7 @@ ol.format.GPX.GPX_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GPX.LINK_PARSERS_ = ol.xml.makeStructureNS(
@@ -76947,7 +77166,7 @@ ol.format.GPX.LINK_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GPX.RTE_PARSERS_ = ol.xml.makeStructureNS(
@@ -76967,7 +77186,7 @@ ol.format.GPX.RTE_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GPX.RTEPT_PARSERS_ = ol.xml.makeStructureNS(
@@ -76979,7 +77198,7 @@ ol.format.GPX.RTEPT_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GPX.TRK_PARSERS_ = ol.xml.makeStructureNS(
@@ -76999,7 +77218,7 @@ ol.format.GPX.TRK_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GPX.TRKSEG_PARSERS_ = ol.xml.makeStructureNS(
@@ -77010,7 +77229,7 @@ ol.format.GPX.TRKSEG_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GPX.TRKPT_PARSERS_ = ol.xml.makeStructureNS(
@@ -77022,7 +77241,7 @@ ol.format.GPX.TRKPT_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.GPX.WPT_PARSERS_ = ol.xml.makeStructureNS(
@@ -77167,7 +77386,7 @@ ol.format.GPX.writeLink_ = function(node, value, objectStack) {
     properties['linkText'],
     properties['linkType']
   ];
-  ol.xml.pushSerializeAndPop(/** @type {ol.xml.NodeStackItem} */ ({node: node}),
+  ol.xml.pushSerializeAndPop(/** @type {ol.XmlNodeStackItem} */ ({node: node}),
       ol.format.GPX.LINK_SERIALIZERS_, ol.xml.OBJECT_PROPERTY_NODE_FACTORY,
       link, objectStack, ol.format.GPX.LINK_SEQUENCE_);
 };
@@ -77212,7 +77431,7 @@ ol.format.GPX.writeWptType_ = function(node, coordinate, objectStack) {
   }
   var orderedKeys = ol.format.GPX.WPT_TYPE_SEQUENCE_[namespaceURI];
   var values = ol.xml.makeSequence(properties, orderedKeys);
-  ol.xml.pushSerializeAndPop(/** @type {ol.xml.NodeStackItem} */
+  ol.xml.pushSerializeAndPop(/** @type {ol.XmlNodeStackItem} */
       ({node: node, 'properties': properties}),
       ol.format.GPX.WPT_TYPE_SERIALIZERS_, ol.xml.OBJECT_PROPERTY_NODE_FACTORY,
       values, objectStack, orderedKeys);
@@ -77256,7 +77475,7 @@ ol.format.GPX.writeRte_ = function(node, feature, objectStack) {
 ol.format.GPX.writeTrk_ = function(node, feature, objectStack) {
   var options = /** @type {olx.format.WriteOptions} */ (objectStack[0]);
   var properties = feature.getProperties();
-  /** @type {ol.xml.NodeStackItem} */
+  /** @type {ol.XmlNodeStackItem} */
   var context = {node: node, 'properties': properties};
   var geometry = feature.getGeometry();
   if (geometry) {
@@ -77282,7 +77501,7 @@ ol.format.GPX.writeTrk_ = function(node, feature, objectStack) {
  * @private
  */
 ol.format.GPX.writeTrkSeg_ = function(node, lineString, objectStack) {
-  /** @type {ol.xml.NodeStackItem} */
+  /** @type {ol.XmlNodeStackItem} */
   var context = {node: node, 'geometryLayout': lineString.getLayout(),
     'properties': {}};
   ol.xml.pushSerializeAndPop(context,
@@ -77323,7 +77542,7 @@ ol.format.GPX.LINK_SEQUENCE_ = ['text', 'type'];
 
 
 /**
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.GPX.LINK_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -77346,7 +77565,7 @@ ol.format.GPX.RTE_SEQUENCE_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.GPX.RTE_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -77377,7 +77596,7 @@ ol.format.GPX.TRK_SEQUENCE_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.GPX.TRK_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -77405,7 +77624,7 @@ ol.format.GPX.TRKSEG_NODE_FACTORY_ = ol.xml.makeSimpleNodeFactory('trkpt');
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.GPX.TRKSEG_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -77428,7 +77647,7 @@ ol.format.GPX.WPT_TYPE_SEQUENCE_ = ol.xml.makeStructureNS(
 
 
 /**
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.GPX.WPT_TYPE_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -77496,7 +77715,7 @@ ol.format.GPX.GPX_NODE_FACTORY_ = function(value, objectStack, opt_nodeName) {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.GPX.GPX_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -77536,7 +77755,7 @@ ol.format.GPX.prototype.writeFeaturesNode = function(features, opt_options) {
   //FIXME Serialize metadata
   var gpx = ol.xml.createElementNS('http://www.topografix.com/GPX/1/1', 'gpx');
 
-  ol.xml.pushSerializeAndPop(/** @type {ol.xml.NodeStackItem} */
+  ol.xml.pushSerializeAndPop(/** @type {ol.XmlNodeStackItem} */
       ({node: gpx}), ol.format.GPX.GPX_SERIALIZERS_,
       ol.format.GPX.GPX_NODE_FACTORY_, features, [opt_options]);
   return gpx;
@@ -77885,7 +78104,6 @@ ol.format.IGC.prototype.readFeatureFromText = function(text, opt_options) {
         m = ol.format.IGC.H_RECORD_RE_.exec(line);
         if (m) {
           properties[m[1]] = m[2].trim();
-          m = ol.format.IGC.HFDTE_RECORD_RE_.exec(line);
         }
       }
     }
@@ -82949,7 +83167,6 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.object');
 goog.require('ol');
 goog.require('ol.Feature');
-goog.require('ol.FeatureStyleFunction');
 goog.require('ol.array');
 goog.require('ol.color');
 goog.require('ol.format.Feature');
@@ -82978,20 +83195,6 @@ goog.require('ol.style.Stroke');
 goog.require('ol.style.Style');
 goog.require('ol.style.Text');
 goog.require('ol.xml');
-
-
-/**
- * @typedef {{x: number, xunits: (ol.style.IconAnchorUnits|undefined),
- *            y: number, yunits: (ol.style.IconAnchorUnits|undefined)}}
- */
-ol.format.KMLVec2_;
-
-
-/**
- * @typedef {{flatCoordinates: Array.<number>,
- *            whens: Array.<number>}}
- */
-ol.format.KMLGxTrackObject_;
 
 
 /**
@@ -83467,7 +83670,7 @@ ol.format.KML.readURI_ = function(node) {
 /**
  * @param {Node} node Node.
  * @private
- * @return {ol.format.KMLVec2_} Vec2.
+ * @return {ol.KMLVec2_} Vec2.
  */
 ol.format.KML.readVec2_ = function(node) {
   var xunits = node.getAttribute('xunits');
@@ -83542,7 +83745,7 @@ ol.format.KML.IconStyleParser_ = function(node, objectStack) {
     src = ol.format.KML.DEFAULT_IMAGE_STYLE_SRC_;
   }
   var anchor, anchorXUnits, anchorYUnits;
-  var hotSpot = /** @type {ol.format.KMLVec2_|undefined} */
+  var hotSpot = /** @type {ol.KMLVec2_|undefined} */
       (object['hotSpot']);
   if (hotSpot) {
     anchor = [hotSpot.x, hotSpot.y];
@@ -83736,7 +83939,7 @@ ol.format.KML.gxCoordParser_ = function(node, objectStack) {
       ol.format.KML.GX_NAMESPACE_URIS_, node.namespaceURI),
       'namespaceURI of the node should be known to the KML parser');
   goog.asserts.assert(node.localName == 'coord', 'localName should be coord');
-  var gxTrackObject = /** @type {ol.format.KMLGxTrackObject_} */
+  var gxTrackObject = /** @type {ol.KMLGxTrackObject_} */
       (objectStack[objectStack.length - 1]);
   goog.asserts.assert(goog.isObject(gxTrackObject),
       'gxTrackObject should be an Object');
@@ -83795,7 +83998,7 @@ ol.format.KML.readGxTrack_ = function(node, objectStack) {
       'namespaceURI of the node should be known to the KML parser');
   goog.asserts.assert(node.localName == 'Track', 'localName should be Track');
   var gxTrackObject = ol.xml.pushParseAndPop(
-      /** @type {ol.format.KMLGxTrackObject_} */ ({
+      /** @type {ol.KMLGxTrackObject_} */ ({
         flatCoordinates: [],
         whens: []
       }), ol.format.KML.GX_TRACK_PARSERS_, node, objectStack);
@@ -84321,7 +84524,7 @@ ol.format.KML.whenParser_ = function(node, objectStack) {
   goog.asserts.assert(node.nodeType == goog.dom.NodeType.ELEMENT,
       'node.nodeType should be ELEMENT');
   goog.asserts.assert(node.localName == 'when', 'localName should be when');
-  var gxTrackObject = /** @type {ol.format.KMLGxTrackObject_} */
+  var gxTrackObject = /** @type {ol.KMLGxTrackObject_} */
       (objectStack[objectStack.length - 1]);
   goog.asserts.assert(goog.isObject(gxTrackObject),
       'gxTrackObject should be an Object');
@@ -84354,7 +84557,7 @@ ol.format.KML.whenParser_ = function(node, objectStack) {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.DATA_PARSERS_ = ol.xml.makeStructureNS(
@@ -84365,7 +84568,7 @@ ol.format.KML.DATA_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.EXTENDED_DATA_PARSERS_ = ol.xml.makeStructureNS(
@@ -84377,7 +84580,7 @@ ol.format.KML.EXTENDED_DATA_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.EXTRUDE_AND_ALTITUDE_MODE_PARSERS_ = ol.xml.makeStructureNS(
@@ -84389,7 +84592,7 @@ ol.format.KML.EXTRUDE_AND_ALTITUDE_MODE_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.FLAT_LINEAR_RING_PARSERS_ = ol.xml.makeStructureNS(
@@ -84400,7 +84603,7 @@ ol.format.KML.FLAT_LINEAR_RING_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.FLAT_LINEAR_RINGS_PARSERS_ = ol.xml.makeStructureNS(
@@ -84412,7 +84615,7 @@ ol.format.KML.FLAT_LINEAR_RINGS_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.GX_TRACK_PARSERS_ = ol.xml.makeStructureNS(
@@ -84426,7 +84629,7 @@ ol.format.KML.GX_TRACK_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.GEOMETRY_FLAT_COORDINATES_PARSERS_ = ol.xml.makeStructureNS(
@@ -84437,7 +84640,7 @@ ol.format.KML.GEOMETRY_FLAT_COORDINATES_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.ICON_PARSERS_ = ol.xml.makeStructureNS(
@@ -84454,7 +84657,7 @@ ol.format.KML.ICON_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.ICON_STYLE_PARSERS_ = ol.xml.makeStructureNS(
@@ -84468,7 +84671,7 @@ ol.format.KML.ICON_STYLE_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.INNER_BOUNDARY_IS_PARSERS_ = ol.xml.makeStructureNS(
@@ -84479,7 +84682,7 @@ ol.format.KML.INNER_BOUNDARY_IS_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.LABEL_STYLE_PARSERS_ = ol.xml.makeStructureNS(
@@ -84491,7 +84694,7 @@ ol.format.KML.LABEL_STYLE_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.LINE_STYLE_PARSERS_ = ol.xml.makeStructureNS(
@@ -84503,7 +84706,7 @@ ol.format.KML.LINE_STYLE_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.MULTI_GEOMETRY_PARSERS_ = ol.xml.makeStructureNS(
@@ -84518,7 +84721,7 @@ ol.format.KML.MULTI_GEOMETRY_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.GX_MULTITRACK_GEOMETRY_PARSERS_ = ol.xml.makeStructureNS(
@@ -84529,7 +84732,7 @@ ol.format.KML.GX_MULTITRACK_GEOMETRY_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.NETWORK_LINK_PARSERS_ = ol.xml.makeStructureNS(
@@ -84547,7 +84750,7 @@ ol.format.KML.NETWORK_LINK_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.LINK_PARSERS_ = ol.xml.makeStructureNS(
@@ -84558,7 +84761,7 @@ ol.format.KML.LINK_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.OUTER_BOUNDARY_IS_PARSERS_ = ol.xml.makeStructureNS(
@@ -84569,7 +84772,7 @@ ol.format.KML.OUTER_BOUNDARY_IS_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.PAIR_PARSERS_ = ol.xml.makeStructureNS(
@@ -84582,7 +84785,7 @@ ol.format.KML.PAIR_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.PLACEMARK_PARSERS_ = ol.xml.makeStructureNS(
@@ -84619,7 +84822,7 @@ ol.format.KML.PLACEMARK_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.POLY_STYLE_PARSERS_ = ol.xml.makeStructureNS(
@@ -84632,7 +84835,7 @@ ol.format.KML.POLY_STYLE_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.SCHEMA_DATA_PARSERS_ = ol.xml.makeStructureNS(
@@ -84643,7 +84846,7 @@ ol.format.KML.SCHEMA_DATA_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.STYLE_PARSERS_ = ol.xml.makeStructureNS(
@@ -84657,7 +84860,7 @@ ol.format.KML.STYLE_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.KML.STYLE_MAP_PARSERS_ = ol.xml.makeStructureNS(
@@ -84807,7 +85010,9 @@ ol.format.KML.prototype.readSharedStyleMap_ = function(node, objectStack) {
 
 
 /**
- * Read the first feature from a KML source.
+ * Read the first feature from a KML source. MultiGeometries are converted into
+ * GeometryCollections if they are a mix of geometry types, and into MultiPoint/
+ * MultiLineString/MultiPolygon if they are all of the same type.
  *
  * @function
  * @param {Document|Node|Object|string} source Source.
@@ -84840,7 +85045,9 @@ ol.format.KML.prototype.readFeatureFromNode = function(node, opt_options) {
 
 
 /**
- * Read all features from a KML source.
+ * Read all features from a KML source. MultiGeometries are converted into
+ * GeometryCollections if they are a mix of geometry types, and into MultiPoint/
+ * MultiLineString/MultiPolygon if they are all of the same type.
  *
  * @function
  * @param {Document|Node|Object|string} source Source.
@@ -85110,7 +85317,7 @@ ol.format.KML.writeCoordinatesTextNode_ = function(node, coordinates, objectStac
  * @private
  */
 ol.format.KML.writeDocument_ = function(node, features, objectStack) {
-  var /** @type {ol.xml.NodeStackItem} */ context = {node: node};
+  var /** @type {ol.XmlNodeStackItem} */ context = {node: node};
   ol.xml.pushSerializeAndPop(context, ol.format.KML.DOCUMENT_SERIALIZERS_,
       ol.format.KML.DOCUMENT_NODE_FACTORY_, features, objectStack, undefined,
       this);
@@ -85124,7 +85331,7 @@ ol.format.KML.writeDocument_ = function(node, features, objectStack) {
  * @private
  */
 ol.format.KML.writeIcon_ = function(node, icon, objectStack) {
-  var /** @type {ol.xml.NodeStackItem} */ context = {node: node};
+  var /** @type {ol.XmlNodeStackItem} */ context = {node: node};
   var parentNode = objectStack[objectStack.length - 1].node;
   var orderedKeys = ol.format.KML.ICON_SEQUENCE_[parentNode.namespaceURI];
   var values = ol.xml.makeSequence(icon, orderedKeys);
@@ -85146,7 +85353,7 @@ ol.format.KML.writeIcon_ = function(node, icon, objectStack) {
  * @private
  */
 ol.format.KML.writeIconStyle_ = function(node, style, objectStack) {
-  var /** @type {ol.xml.NodeStackItem} */ context = {node: node};
+  var /** @type {ol.XmlNodeStackItem} */ context = {node: node};
   var properties = {};
   var src = style.getSrc();
   var size = style.getSize();
@@ -85167,7 +85374,7 @@ ol.format.KML.writeIconStyle_ = function(node, style, objectStack) {
     }
 
     if (anchor && anchor[0] !== 0 && anchor[1] !== size[1]) {
-      var /** @type {ol.format.KMLVec2_} */ hotSpot = {
+      var /** @type {ol.KMLVec2_} */ hotSpot = {
         x: anchor[0],
         xunits: ol.style.IconAnchorUnits.PIXELS,
         y: size[1] - anchor[1],
@@ -85204,7 +85411,7 @@ ol.format.KML.writeIconStyle_ = function(node, style, objectStack) {
  * @private
  */
 ol.format.KML.writeLabelStyle_ = function(node, style, objectStack) {
-  var /** @type {ol.xml.NodeStackItem} */ context = {node: node};
+  var /** @type {ol.XmlNodeStackItem} */ context = {node: node};
   var properties = {};
   var fill = style.getFill();
   if (fill) {
@@ -85230,7 +85437,7 @@ ol.format.KML.writeLabelStyle_ = function(node, style, objectStack) {
  * @private
  */
 ol.format.KML.writeLineStyle_ = function(node, style, objectStack) {
-  var /** @type {ol.xml.NodeStackItem} */ context = {node: node};
+  var /** @type {ol.XmlNodeStackItem} */ context = {node: node};
   var properties = {
     'color': style.getColor(),
     'width': style.getWidth()
@@ -85251,19 +85458,23 @@ ol.format.KML.writeLineStyle_ = function(node, style, objectStack) {
  */
 ol.format.KML.writeMultiGeometry_ = function(node, geometry, objectStack) {
   goog.asserts.assert(
+      (geometry instanceof ol.geom.GeometryCollection) ||
       (geometry instanceof ol.geom.MultiPoint) ||
       (geometry instanceof ol.geom.MultiLineString) ||
       (geometry instanceof ol.geom.MultiPolygon),
-      'geometry should be one of: ol.geom.MultiPoint, ' +
-      'ol.geom.MultiLineString or ol.geom.MultiPolygon');
-  /** @type {ol.xml.NodeStackItem} */
+      'geometry should be one of: ol.geom.GeometryCollection, ' +
+      'ol.geom.MultiPoint, ol.geom.MultiLineString or ol.geom.MultiPolygon');
+  /** @type {ol.XmlNodeStackItem} */
   var context = {node: node};
   var type = geometry.getType();
   /** @type {Array.<ol.geom.Geometry>} */
   var geometries;
   /** @type {function(*, Array.<*>, string=): (Node|undefined)} */
   var factory;
-  if (type == ol.geom.GeometryType.MULTI_POINT) {
+  if (type == ol.geom.GeometryType.GEOMETRY_COLLECTION) {
+    geometries = geometry.getGeometries();
+    factory = ol.format.KML.GEOMETRY_NODE_FACTORY_;
+  } else if (type == ol.geom.GeometryType.MULTI_POINT) {
     geometries =
         (/** @type {ol.geom.MultiPoint} */ (geometry)).getPoints();
     factory = ol.format.KML.POINT_NODE_FACTORY_;
@@ -85291,7 +85502,7 @@ ol.format.KML.writeMultiGeometry_ = function(node, geometry, objectStack) {
  * @private
  */
 ol.format.KML.writeBoundaryIs_ = function(node, linearRing, objectStack) {
-  var /** @type {ol.xml.NodeStackItem} */ context = {node: node};
+  var /** @type {ol.XmlNodeStackItem} */ context = {node: node};
   ol.xml.pushSerializeAndPop(context,
       ol.format.KML.BOUNDARY_IS_SERIALIZERS_,
       ol.format.KML.LINEAR_RING_NODE_FACTORY_, [linearRing], objectStack);
@@ -85308,7 +85519,7 @@ ol.format.KML.writeBoundaryIs_ = function(node, linearRing, objectStack) {
  * @private
  */
 ol.format.KML.writePlacemark_ = function(node, feature, objectStack) {
-  var /** @type {ol.xml.NodeStackItem} */ context = {node: node};
+  var /** @type {ol.XmlNodeStackItem} */ context = {node: node};
 
   // set id
   if (feature.getId()) {
@@ -85366,7 +85577,7 @@ ol.format.KML.writePrimitiveGeometry_ = function(node, geometry, objectStack) {
       'geometry should be one of ol.geom.Point, ol.geom.LineString ' +
       'or ol.geom.LinearRing');
   var flatCoordinates = geometry.getFlatCoordinates();
-  var /** @type {ol.xml.NodeStackItem} */ context = {node: node};
+  var /** @type {ol.XmlNodeStackItem} */ context = {node: node};
   context['layout'] = geometry.getLayout();
   context['stride'] = geometry.getStride();
   ol.xml.pushSerializeAndPop(context,
@@ -85389,7 +85600,7 @@ ol.format.KML.writePolygon_ = function(node, polygon, objectStack) {
   goog.asserts.assert(linearRings.length > 0,
       'linearRings should not be empty');
   var outerRing = linearRings.shift();
-  var /** @type {ol.xml.NodeStackItem} */ context = {node: node};
+  var /** @type {ol.XmlNodeStackItem} */ context = {node: node};
   // inner rings
   ol.xml.pushSerializeAndPop(context,
       ol.format.KML.POLYGON_SERIALIZERS_,
@@ -85410,7 +85621,7 @@ ol.format.KML.writePolygon_ = function(node, polygon, objectStack) {
  * @private
  */
 ol.format.KML.writePolyStyle_ = function(node, style, objectStack) {
-  var /** @type {ol.xml.NodeStackItem} */ context = {node: node};
+  var /** @type {ol.XmlNodeStackItem} */ context = {node: node};
   ol.xml.pushSerializeAndPop(context, ol.format.KML.POLY_STYLE_SERIALIZERS_,
       ol.format.KML.COLOR_NODE_FACTORY_, [style.getColor()], objectStack);
 };
@@ -85435,7 +85646,7 @@ ol.format.KML.writeScaleTextNode_ = function(node, scale) {
  * @private
  */
 ol.format.KML.writeStyle_ = function(node, style, objectStack) {
-  var /** @type {ol.xml.NodeStackItem} */ context = {node: node};
+  var /** @type {ol.XmlNodeStackItem} */ context = {node: node};
   var properties = {};
   var fillStyle = style.getFill();
   var strokeStyle = style.getStroke();
@@ -85463,7 +85674,7 @@ ol.format.KML.writeStyle_ = function(node, style, objectStack) {
 
 /**
  * @param {Node} node Node to append a TextNode with the Vec2 to.
- * @param {ol.format.KMLVec2_} vec2 Vec2.
+ * @param {ol.KMLVec2_} vec2 Vec2.
  * @private
  */
 ol.format.KML.writeVec2_ = function(node, vec2) {
@@ -85487,7 +85698,7 @@ ol.format.KML.KML_SEQUENCE_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.KML.KML_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -85499,7 +85710,7 @@ ol.format.KML.KML_SERIALIZERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.KML.DOCUMENT_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -85520,7 +85731,8 @@ ol.format.KML.GEOMETRY_TYPE_TO_NODENAME_ = {
   'Polygon': 'Polygon',
   'MultiPoint': 'MultiGeometry',
   'MultiLineString': 'MultiGeometry',
-  'MultiPolygon': 'MultiGeometry'
+  'MultiPolygon': 'MultiGeometry',
+  'GeometryCollection': 'MultiGeometry'
 };
 
 
@@ -85540,7 +85752,7 @@ ol.format.KML.ICON_SEQUENCE_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.KML.ICON_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -85568,7 +85780,7 @@ ol.format.KML.ICON_STYLE_SEQUENCE_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.KML.ICON_STYLE_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -85593,7 +85805,7 @@ ol.format.KML.LABEL_STYLE_SEQUENCE_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.KML.LABEL_STYLE_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -85616,7 +85828,7 @@ ol.format.KML.LINE_STYLE_SEQUENCE_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.KML.LINE_STYLE_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -85628,7 +85840,7 @@ ol.format.KML.LINE_STYLE_SERIALIZERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.KML.BOUNDARY_IS_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -85640,7 +85852,7 @@ ol.format.KML.BOUNDARY_IS_SERIALIZERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.KML.MULTI_GEOMETRY_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -85649,7 +85861,9 @@ ol.format.KML.MULTI_GEOMETRY_SERIALIZERS_ = ol.xml.makeStructureNS(
           ol.format.KML.writePrimitiveGeometry_),
       'Point': ol.xml.makeChildAppender(
           ol.format.KML.writePrimitiveGeometry_),
-      'Polygon': ol.xml.makeChildAppender(ol.format.KML.writePolygon_)
+      'Polygon': ol.xml.makeChildAppender(ol.format.KML.writePolygon_),
+      'GeometryCollection': ol.xml.makeChildAppender(
+          ol.format.KML.writeMultiGeometry_)
     });
 
 
@@ -85667,7 +85881,7 @@ ol.format.KML.PLACEMARK_SEQUENCE_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.KML.PLACEMARK_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -85697,7 +85911,7 @@ ol.format.KML.PLACEMARK_SERIALIZERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.KML.PRIMITIVE_GEOMETRY_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -85709,7 +85923,7 @@ ol.format.KML.PRIMITIVE_GEOMETRY_SERIALIZERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.KML.POLYGON_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -85723,7 +85937,7 @@ ol.format.KML.POLYGON_SERIALIZERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.KML.POLY_STYLE_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -85745,7 +85959,7 @@ ol.format.KML.STYLE_SEQUENCE_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.KML.STYLE_SERIALIZERS_ = ol.xml.makeStructureNS(
@@ -85892,7 +86106,8 @@ ol.format.KML.OUTER_BOUNDARY_NODE_FACTORY_ =
 
 
 /**
- * Encode an array of features in the KML format.
+ * Encode an array of features in the KML format. GeometryCollections, MultiPoints,
+ * MultiLineStrings, and MultiPolygons are output as MultiGeometries.
  *
  * @function
  * @param {Array.<ol.Feature>} features Features.
@@ -85904,7 +86119,8 @@ ol.format.KML.prototype.writeFeatures;
 
 
 /**
- * Encode an array of features in the KML format as an XML node.
+ * Encode an array of features in the KML format as an XML node. GeometryCollections,
+ * MultiPoints, MultiLineStrings, and MultiPolygons are output as MultiGeometries.
  *
  * @param {Array.<ol.Feature>} features Features.
  * @param {olx.format.WriteOptions=} opt_options Options.
@@ -85922,7 +86138,7 @@ ol.format.KML.prototype.writeFeaturesNode = function(features, opt_options) {
   ol.xml.setAttributeNS(kml, xmlSchemaInstanceUri, 'xsi:schemaLocation',
       ol.format.KML.SCHEMA_LOCATION_);
 
-  var /** @type {ol.xml.NodeStackItem} */ context = {node: kml};
+  var /** @type {ol.XmlNodeStackItem} */ context = {node: kml};
   var properties = {};
   if (features.length > 1) {
     properties['Document'] = features;
@@ -86799,10 +87015,10 @@ VectorTileFeature.prototype.toGeoJSON = function(x, y, z) {
         x0 = this.extent * x,
         y0 = this.extent * y,
         coords = this.loadGeometry(),
-        type = VectorTileFeature.types[this.type];
+        type = VectorTileFeature.types[this.type],
+        i, j;
 
-    for (var i = 0; i < coords.length; i++) {
-        var line = coords[i];
+    function project(line) {
         for (var j = 0; j < line.length; j++) {
             var p = line[j], y2 = 180 - (p.y + y0) * 360 / size;
             line[j] = [
@@ -86812,15 +87028,36 @@ VectorTileFeature.prototype.toGeoJSON = function(x, y, z) {
         }
     }
 
-    if (type === 'Point' && coords.length === 1) {
-        coords = coords[0][0];
-    } else if (type === 'Point') {
+    switch (this.type) {
+    case 1:
+        var points = [];
+        for (i = 0; i < coords.length; i++) {
+            points[i] = coords[i][0];
+        }
+        coords = points;
+        project(coords);
+        break;
+
+    case 2:
+        for (i = 0; i < coords.length; i++) {
+            project(coords[i]);
+        }
+        break;
+
+    case 3:
+        coords = classifyRings(coords);
+        for (i = 0; i < coords.length; i++) {
+            for (j = 0; j < coords[i].length; j++) {
+                project(coords[i][j]);
+            }
+        }
+        break;
+    }
+
+    if (coords.length === 1) {
         coords = coords[0];
-        type = 'MultiPoint';
-    } else if (type === 'LineString' && coords.length === 1) {
-        coords = coords[0];
-    } else if (type === 'LineString') {
-        type = 'MultiLineString';
+    } else {
+        type = 'Multi' + type;
     }
 
     var result = {
@@ -86838,6 +87075,46 @@ VectorTileFeature.prototype.toGeoJSON = function(x, y, z) {
 
     return result;
 };
+
+// classifies an array of rings into polygons with outer rings and holes
+
+function classifyRings(rings) {
+    var len = rings.length;
+
+    if (len <= 1) return [rings];
+
+    var polygons = [],
+        polygon,
+        ccw;
+
+    for (var i = 0; i < len; i++) {
+        var area = signedArea(rings[i]);
+        if (area === 0) continue;
+
+        if (ccw === undefined) ccw = area < 0;
+
+        if (ccw === area < 0) {
+            if (polygon) polygons.push(polygon);
+            polygon = [rings[i]];
+
+        } else {
+            polygon.push(rings[i]);
+        }
+    }
+    if (polygon) polygons.push(polygon);
+
+    return polygons;
+}
+
+function signedArea(ring) {
+    var sum = 0;
+    for (var i = 0, len = ring.length, j = len - 1, p1, p2; i < len; j = i++) {
+        p1 = ring[i];
+        p2 = ring[j];
+        sum += (p2.x - p1.x) * (p1.y + p2.y);
+    }
+    return sum;
+}
 
 },{"point-geometry":5}],4:[function(_dereq_,module,exports){
 'use strict';
@@ -87189,6 +87466,7 @@ ol.format.MVT.prototype.readRenderFeature_ = function(rawFeature, layer) {
 
 /**
  * @inheritDoc
+ * @api
  */
 ol.format.MVT.prototype.readFeatures = function(source, opt_options) {
   goog.asserts.assertInstanceof(source, ArrayBuffer);
@@ -87222,6 +87500,7 @@ ol.format.MVT.prototype.readFeatures = function(source, opt_options) {
 
 /**
  * @inheritDoc
+ * @api
  */
 ol.format.MVT.prototype.readProjection = function(source) {
   return this.defaultDataProjection;
@@ -87298,6 +87577,645 @@ ol.format.MVT.readGeometry_ = function(rawFeature) {
 
   return geom;
 };
+
+goog.provide('ol.format.ogc.filter');
+goog.provide('ol.format.ogc.filter.Filter');
+goog.provide('ol.format.ogc.filter.Logical');
+goog.provide('ol.format.ogc.filter.LogicalBinary');
+goog.provide('ol.format.ogc.filter.And');
+goog.provide('ol.format.ogc.filter.Or');
+goog.provide('ol.format.ogc.filter.Not');
+goog.provide('ol.format.ogc.filter.Bbox');
+goog.provide('ol.format.ogc.filter.Comparison');
+goog.provide('ol.format.ogc.filter.ComparisonBinary');
+goog.provide('ol.format.ogc.filter.EqualTo');
+goog.provide('ol.format.ogc.filter.NotEqualTo');
+goog.provide('ol.format.ogc.filter.LessThan');
+goog.provide('ol.format.ogc.filter.LessThanOrEqualTo');
+goog.provide('ol.format.ogc.filter.GreaterThan');
+goog.provide('ol.format.ogc.filter.GreaterThanOrEqualTo');
+goog.provide('ol.format.ogc.filter.IsNull');
+goog.provide('ol.format.ogc.filter.IsBetween');
+goog.provide('ol.format.ogc.filter.IsLike');
+
+goog.require('ol.Extent');
+goog.require('ol.Object');
+
+
+/**
+ * Create a logical `<And>` operator between two filter conditions.
+ *
+ * @param {!ol.format.ogc.filter.Filter} conditionA First filter condition.
+ * @param {!ol.format.ogc.filter.Filter} conditionB Second filter condition.
+ * @returns {!ol.format.ogc.filter.And} `<And>` operator.
+ * @api
+ */
+ol.format.ogc.filter.and = function(conditionA, conditionB) {
+  return new ol.format.ogc.filter.And(conditionA, conditionB);
+};
+
+
+/**
+ * Create a logical `<Or>` operator between two filter conditions.
+ *
+ * @param {!ol.format.ogc.filter.Filter} conditionA First filter condition.
+ * @param {!ol.format.ogc.filter.Filter} conditionB Second filter condition.
+ * @returns {!ol.format.ogc.filter.Or} `<Or>` operator.
+ * @api
+ */
+ol.format.ogc.filter.or = function(conditionA, conditionB) {
+  return new ol.format.ogc.filter.Or(conditionA, conditionB);
+};
+
+
+/**
+ * Represents a logical `<Not>` operator for a filter condition.
+ *
+ * @param {!ol.format.ogc.filter.Filter} condition Filter condition.
+ * @returns {!ol.format.ogc.filter.Not} `<Not>` operator.
+ * @api
+ */
+ol.format.ogc.filter.not = function(condition) {
+  return new ol.format.ogc.filter.Not(condition);
+};
+
+
+/**
+ * Create a `<BBOX>` operator to test whether a geometry-valued property
+ * intersects a fixed bounding box
+ *
+ * @param {!string} geometryName Geometry name to use.
+ * @param {!ol.Extent} extent Extent.
+ * @param {string=} opt_srsName SRS name. No srsName attribute will be
+ *    set on geometries when this is not provided.
+ * @returns {!ol.format.ogc.filter.Bbox} `<BBOX>` operator.
+ * @api
+ */
+ol.format.ogc.filter.bbox = function(geometryName, extent, opt_srsName) {
+  return new ol.format.ogc.filter.Bbox(geometryName, extent, opt_srsName);
+};
+
+
+/**
+ * Creates a `<PropertyIsEqualTo>` comparison operator.
+ *
+ * @param {!string} propertyName Name of the context property to compare.
+ * @param {!(string|number)} expression The value to compare.
+ * @param {boolean=} opt_matchCase Case-sensitive?
+ * @returns {!ol.format.ogc.filter.EqualTo} `<PropertyIsEqualTo>` operator.
+ * @api
+ */
+ol.format.ogc.filter.equalTo = function(propertyName, expression, opt_matchCase) {
+  return new ol.format.ogc.filter.EqualTo(propertyName, expression, opt_matchCase);
+};
+
+
+/**
+ * Creates a `<PropertyIsNotEqualTo>` comparison operator.
+ *
+ * @param {!string} propertyName Name of the context property to compare.
+ * @param {!(string|number)} expression The value to compare.
+ * @param {boolean=} opt_matchCase Case-sensitive?
+ * @returns {!ol.format.ogc.filter.NotEqualTo} `<PropertyIsNotEqualTo>` operator.
+ * @api
+ */
+ol.format.ogc.filter.notEqualTo = function(propertyName, expression, opt_matchCase) {
+  return new ol.format.ogc.filter.NotEqualTo(propertyName, expression, opt_matchCase);
+};
+
+
+/**
+ * Creates a `<PropertyIsLessThan>` comparison operator.
+ *
+ * @param {!string} propertyName Name of the context property to compare.
+ * @param {!number} expression The value to compare.
+ * @returns {!ol.format.ogc.filter.LessThan} `<PropertyIsLessThan>` operator.
+ * @api
+ */
+ol.format.ogc.filter.lessThan = function(propertyName, expression) {
+  return new ol.format.ogc.filter.LessThan(propertyName, expression);
+};
+
+
+/**
+ * Creates a `<PropertyIsLessThanOrEqualTo>` comparison operator.
+ *
+ * @param {!string} propertyName Name of the context property to compare.
+ * @param {!number} expression The value to compare.
+ * @returns {!ol.format.ogc.filter.LessThanOrEqualTo} `<PropertyIsLessThanOrEqualTo>` operator.
+ * @api
+ */
+ol.format.ogc.filter.lessThanOrEqualTo = function(propertyName, expression) {
+  return new ol.format.ogc.filter.LessThanOrEqualTo(propertyName, expression);
+};
+
+
+/**
+ * Creates a `<PropertyIsGreaterThan>` comparison operator.
+ *
+ * @param {!string} propertyName Name of the context property to compare.
+ * @param {!number} expression The value to compare.
+ * @returns {!ol.format.ogc.filter.GreaterThan} `<PropertyIsGreaterThan>` operator.
+ * @api
+ */
+ol.format.ogc.filter.greaterThan = function(propertyName, expression) {
+  return new ol.format.ogc.filter.GreaterThan(propertyName, expression);
+};
+
+
+/**
+ * Creates a `<PropertyIsGreaterThanOrEqualTo>` comparison operator.
+ *
+ * @param {!string} propertyName Name of the context property to compare.
+ * @param {!number} expression The value to compare.
+ * @returns {!ol.format.ogc.filter.GreaterThanOrEqualTo} `<PropertyIsGreaterThanOrEqualTo>` operator.
+ * @api
+ */
+ol.format.ogc.filter.greaterThanOrEqualTo = function(propertyName, expression) {
+  return new ol.format.ogc.filter.GreaterThanOrEqualTo(propertyName, expression);
+};
+
+
+/**
+ * Creates a `<PropertyIsNull>` comparison operator to test whether a property value
+ * is null.
+ *
+ * @param {!string} propertyName Name of the context property to compare.
+ * @returns {!ol.format.ogc.filter.IsNull} `<PropertyIsNull>` operator.
+ * @api
+ */
+ol.format.ogc.filter.isNull = function(propertyName) {
+  return new ol.format.ogc.filter.IsNull(propertyName);
+};
+
+
+/**
+ * Creates a `<PropertyIsBetween>` comparison operator to test whether an expression
+ * value lies within a range given by a lower and upper bound (inclusive).
+ *
+ * @param {!string} propertyName Name of the context property to compare.
+ * @param {!number} lowerBoundary The lower bound of the range.
+ * @param {!number} upperBoundary The upper bound of the range.
+ * @returns {!ol.format.ogc.filter.IsBetween} `<PropertyIsBetween>` operator.
+ * @api
+ */
+ol.format.ogc.filter.between = function(propertyName, lowerBoundary, upperBoundary) {
+  return new ol.format.ogc.filter.IsBetween(propertyName, lowerBoundary, upperBoundary);
+};
+
+
+/**
+ * Represents a `<PropertyIsLike>` comparison operator that matches a string property
+ * value against a text pattern.
+ *
+ * @param {!string} propertyName Name of the context property to compare.
+ * @param {!string} pattern Text pattern.
+ * @param {string=} opt_wildCard Pattern character which matches any sequence of
+ *    zero or more string characters. Default is '*'.
+ * @param {string=} opt_singleChar pattern character which matches any single
+ *    string character. Default is '.'.
+ * @param {string=} opt_escapeChar Escape character which can be used to escape
+ *    the pattern characters. Default is '!'.
+ * @param {boolean=} opt_matchCase Case-sensitive?
+ * @returns {!ol.format.ogc.filter.IsLike} `<PropertyIsLike>` operator.
+ * @api
+ */
+ol.format.ogc.filter.like = function(propertyName, pattern,
+    opt_wildCard, opt_singleChar, opt_escapeChar, opt_matchCase) {
+  return new ol.format.ogc.filter.IsLike(propertyName, pattern,
+    opt_wildCard, opt_singleChar, opt_escapeChar, opt_matchCase);
+};
+
+
+/**
+ * @classdesc
+ * Abstract class; normally only used for creating subclasses and not instantiated in apps.
+ * Base class for WFS GetFeature filters.
+ *
+ * @constructor
+ * @param {!string} tagName The XML tag name for this filter.
+ * @extends {ol.Object}
+ * @api
+ */
+ol.format.ogc.filter.Filter = function(tagName) {
+
+  goog.base(this);
+
+  /**
+   * @private
+   * @type {!string}
+   */
+  this.tagName_ = tagName;
+};
+goog.inherits(ol.format.ogc.filter.Filter, ol.Object);
+
+/**
+ * The XML tag name for a filter.
+ * @returns {!string} Name.
+ */
+ol.format.ogc.filter.Filter.prototype.getTagName = function() {
+  return this.tagName_;
+};
+
+
+// Logical filters
+
+
+/**
+ * @classdesc
+ * Abstract class; normally only used for creating subclasses and not instantiated in apps.
+ * Base class for WFS GetFeature logical filters.
+ *
+ * @constructor
+ * @param {!string} tagName The XML tag name for this filter.
+ * @extends {ol.format.ogc.filter.Filter}
+ */
+ol.format.ogc.filter.Logical = function(tagName) {
+  goog.base(this, tagName);
+};
+goog.inherits(ol.format.ogc.filter.Logical, ol.format.ogc.filter.Filter);
+
+
+/**
+ * @classdesc
+ * Abstract class; normally only used for creating subclasses and not instantiated in apps.
+ * Base class for WFS GetFeature binary logical filters.
+ *
+ * @constructor
+ * @param {!string} tagName The XML tag name for this filter.
+ * @param {!ol.format.ogc.filter.Filter} conditionA First filter condition.
+ * @param {!ol.format.ogc.filter.Filter} conditionB Second filter condition.
+ * @extends {ol.format.ogc.filter.Logical}
+ */
+ol.format.ogc.filter.LogicalBinary = function(tagName, conditionA, conditionB) {
+
+  goog.base(this, tagName);
+
+  /**
+   * @public
+   * @type {!ol.format.ogc.filter.Filter}
+   */
+  this.conditionA = conditionA;
+
+  /**
+   * @public
+   * @type {!ol.format.ogc.filter.Filter}
+   */
+  this.conditionB = conditionB;
+
+};
+goog.inherits(ol.format.ogc.filter.LogicalBinary, ol.format.ogc.filter.Logical);
+
+
+/**
+ * @classdesc
+ * Represents a logical `<And>` operator between two filter conditions.
+ *
+ * @constructor
+ * @param {!ol.format.ogc.filter.Filter} conditionA First filter condition.
+ * @param {!ol.format.ogc.filter.Filter} conditionB Second filter condition.
+ * @extends {ol.format.ogc.filter.LogicalBinary}
+ * @api
+ */
+ol.format.ogc.filter.And = function(conditionA, conditionB) {
+  goog.base(this, 'And', conditionA, conditionB);
+};
+goog.inherits(ol.format.ogc.filter.And, ol.format.ogc.filter.LogicalBinary);
+
+
+/**
+ * @classdesc
+ * Represents a logical `<Or>` operator between two filter conditions.
+ *
+ * @constructor
+ * @param {!ol.format.ogc.filter.Filter} conditionA First filter condition.
+ * @param {!ol.format.ogc.filter.Filter} conditionB Second filter condition.
+ * @extends {ol.format.ogc.filter.LogicalBinary}
+ * @api
+ */
+ol.format.ogc.filter.Or = function(conditionA, conditionB) {
+  goog.base(this, 'Or', conditionA, conditionB);
+};
+goog.inherits(ol.format.ogc.filter.Or, ol.format.ogc.filter.LogicalBinary);
+
+
+/**
+ * @classdesc
+ * Represents a logical `<Not>` operator for a filter condition.
+ *
+ * @constructor
+ * @param {!ol.format.ogc.filter.Filter} condition Filter condition.
+ * @extends {ol.format.ogc.filter.Logical}
+ * @api
+ */
+ol.format.ogc.filter.Not = function(condition) {
+
+  goog.base(this, 'Not');
+
+  /**
+   * @public
+   * @type {!ol.format.ogc.filter.Filter}
+   */
+  this.condition = condition;
+};
+goog.inherits(ol.format.ogc.filter.Not, ol.format.ogc.filter.Logical);
+
+
+// Spatial filters
+
+
+/**
+ * @classdesc
+ * Represents a `<BBOX>` operator to test whether a geometry-valued property
+ * intersects a fixed bounding box
+ *
+ * @constructor
+ * @param {!string} geometryName Geometry name to use.
+ * @param {!ol.Extent} extent Extent.
+ * @param {string=} opt_srsName SRS name. No srsName attribute will be
+ *    set on geometries when this is not provided.
+ * @extends {ol.format.ogc.filter.Filter}
+ * @api
+ */
+ol.format.ogc.filter.Bbox = function(geometryName, extent, opt_srsName) {
+
+  goog.base(this, 'BBOX');
+
+  /**
+   * @public
+   * @type {!string}
+   */
+  this.geometryName = geometryName;
+
+  /**
+   * @public
+   * @type {!ol.Extent}
+   */
+  this.extent = extent;
+
+  /**
+   * @public
+   * @type {string|undefined}
+   */
+  this.srsName = opt_srsName;
+};
+goog.inherits(ol.format.ogc.filter.Bbox, ol.format.ogc.filter.Filter);
+
+
+// Property comparison filters
+
+
+/**
+ * @classdesc
+ * Abstract class; normally only used for creating subclasses and not instantiated in apps.
+ * Base class for WFS GetFeature property comparison filters.
+ *
+ * @constructor
+ * @param {!string} tagName The XML tag name for this filter.
+ * @param {!string} propertyName Name of the context property to compare.
+ * @extends {ol.format.ogc.filter.Filter}
+ * @api
+ */
+ol.format.ogc.filter.Comparison = function(tagName, propertyName) {
+
+  goog.base(this, tagName);
+
+  /**
+   * @public
+   * @type {!string}
+   */
+  this.propertyName = propertyName;
+};
+goog.inherits(ol.format.ogc.filter.Comparison, ol.format.ogc.filter.Filter);
+
+
+/**
+ * @classdesc
+ * Abstract class; normally only used for creating subclasses and not instantiated in apps.
+ * Base class for WFS GetFeature property binary comparison filters.
+ *
+ * @constructor
+ * @param {!string} tagName The XML tag name for this filter.
+ * @param {!string} propertyName Name of the context property to compare.
+ * @param {!(string|number)} expression The value to compare.
+ * @param {boolean=} opt_matchCase Case-sensitive?
+ * @extends {ol.format.ogc.filter.Comparison}
+ * @api
+ */
+ol.format.ogc.filter.ComparisonBinary = function(
+    tagName, propertyName, expression, opt_matchCase) {
+
+  goog.base(this, tagName, propertyName);
+
+  /**
+   * @public
+   * @type {!(string|number)}
+   */
+  this.expression = expression;
+
+  /**
+   * @public
+   * @type {boolean|undefined}
+   */
+  this.matchCase = opt_matchCase;
+};
+goog.inherits(ol.format.ogc.filter.ComparisonBinary, ol.format.ogc.filter.Comparison);
+
+
+/**
+ * @classdesc
+ * Represents a `<PropertyIsEqualTo>` comparison operator.
+ *
+ * @constructor
+ * @param {!string} propertyName Name of the context property to compare.
+ * @param {!(string|number)} expression The value to compare.
+ * @param {boolean=} opt_matchCase Case-sensitive?
+ * @extends {ol.format.ogc.filter.ComparisonBinary}
+ * @api
+ */
+ol.format.ogc.filter.EqualTo = function(propertyName, expression, opt_matchCase) {
+  goog.base(this, 'PropertyIsEqualTo', propertyName, expression, opt_matchCase);
+};
+goog.inherits(ol.format.ogc.filter.EqualTo, ol.format.ogc.filter.ComparisonBinary);
+
+
+/**
+ * @classdesc
+ * Represents a `<PropertyIsNotEqualTo>` comparison operator.
+ *
+ * @constructor
+ * @param {!string} propertyName Name of the context property to compare.
+ * @param {!(string|number)} expression The value to compare.
+ * @param {boolean=} opt_matchCase Case-sensitive?
+ * @extends {ol.format.ogc.filter.ComparisonBinary}
+ * @api
+ */
+ol.format.ogc.filter.NotEqualTo = function(propertyName, expression, opt_matchCase) {
+  goog.base(this, 'PropertyIsNotEqualTo', propertyName, expression, opt_matchCase);
+};
+goog.inherits(ol.format.ogc.filter.NotEqualTo, ol.format.ogc.filter.ComparisonBinary);
+
+
+/**
+ * @classdesc
+ * Represents a `<PropertyIsLessThan>` comparison operator.
+ *
+ * @constructor
+ * @param {!string} propertyName Name of the context property to compare.
+ * @param {!number} expression The value to compare.
+ * @extends {ol.format.ogc.filter.ComparisonBinary}
+ * @api
+ */
+ol.format.ogc.filter.LessThan = function(propertyName, expression) {
+  goog.base(this, 'PropertyIsLessThan', propertyName, expression);
+};
+goog.inherits(ol.format.ogc.filter.LessThan, ol.format.ogc.filter.ComparisonBinary);
+
+
+/**
+ * @classdesc
+ * Represents a `<PropertyIsLessThanOrEqualTo>` comparison operator.
+ *
+ * @constructor
+ * @param {!string} propertyName Name of the context property to compare.
+ * @param {!number} expression The value to compare.
+ * @extends {ol.format.ogc.filter.ComparisonBinary}
+ * @api
+ */
+ol.format.ogc.filter.LessThanOrEqualTo = function(propertyName, expression) {
+  goog.base(this, 'PropertyIsLessThanOrEqualTo', propertyName, expression);
+};
+goog.inherits(ol.format.ogc.filter.LessThanOrEqualTo, ol.format.ogc.filter.ComparisonBinary);
+
+
+/**
+ * @classdesc
+ * Represents a `<PropertyIsGreaterThan>` comparison operator.
+ *
+ * @constructor
+ * @param {!string} propertyName Name of the context property to compare.
+ * @param {!number} expression The value to compare.
+ * @extends {ol.format.ogc.filter.ComparisonBinary}
+ * @api
+ */
+ol.format.ogc.filter.GreaterThan = function(propertyName, expression) {
+  goog.base(this, 'PropertyIsGreaterThan', propertyName, expression);
+};
+goog.inherits(ol.format.ogc.filter.GreaterThan, ol.format.ogc.filter.ComparisonBinary);
+
+
+/**
+ * @classdesc
+ * Represents a `<PropertyIsGreaterThanOrEqualTo>` comparison operator.
+ *
+ * @constructor
+ * @param {!string} propertyName Name of the context property to compare.
+ * @param {!number} expression The value to compare.
+ * @extends {ol.format.ogc.filter.ComparisonBinary}
+ * @api
+ */
+ol.format.ogc.filter.GreaterThanOrEqualTo = function(propertyName, expression) {
+  goog.base(this, 'PropertyIsGreaterThanOrEqualTo', propertyName, expression);
+};
+goog.inherits(ol.format.ogc.filter.GreaterThanOrEqualTo, ol.format.ogc.filter.ComparisonBinary);
+
+
+/**
+ * @classdesc
+ * Represents a `<PropertyIsNull>` comparison operator.
+ *
+ * @constructor
+ * @param {!string} propertyName Name of the context property to compare.
+ * @extends {ol.format.ogc.filter.Comparison}
+ * @api
+ */
+ol.format.ogc.filter.IsNull = function(propertyName) {
+  goog.base(this, 'PropertyIsNull', propertyName);
+};
+goog.inherits(ol.format.ogc.filter.IsNull, ol.format.ogc.filter.Comparison);
+
+
+/**
+ * @classdesc
+ * Represents a `<PropertyIsBetween>` comparison operator.
+ *
+ * @constructor
+ * @param {!string} propertyName Name of the context property to compare.
+ * @param {!number} lowerBoundary The lower bound of the range.
+ * @param {!number} upperBoundary The upper bound of the range.
+ * @extends {ol.format.ogc.filter.Comparison}
+ * @api
+ */
+ol.format.ogc.filter.IsBetween = function(propertyName, lowerBoundary, upperBoundary) {
+  goog.base(this, 'PropertyIsBetween', propertyName);
+
+  /**
+   * @public
+   * @type {!number}
+   */
+  this.lowerBoundary = lowerBoundary;
+
+  /**
+   * @public
+   * @type {!number}
+   */
+  this.upperBoundary = upperBoundary;
+};
+goog.inherits(ol.format.ogc.filter.IsBetween, ol.format.ogc.filter.Comparison);
+
+
+/**
+ * @classdesc
+ * Represents a `<PropertyIsLike>` comparison operator.
+ *
+ * @constructor
+ * @param {!string} propertyName Name of the context property to compare.
+ * @param {!string} pattern Text pattern.
+ * @param {string=} opt_wildCard Pattern character which matches any sequence of
+ *    zero or more string characters. Default is '*'.
+ * @param {string=} opt_singleChar pattern character which matches any single
+ *    string character. Default is '.'.
+ * @param {string=} opt_escapeChar Escape character which can be used to escape
+ *    the pattern characters. Default is '!'.
+ * @param {boolean=} opt_matchCase Case-sensitive?
+ * @extends {ol.format.ogc.filter.Comparison}
+ * @api
+ */
+ol.format.ogc.filter.IsLike = function(propertyName, pattern,
+    opt_wildCard, opt_singleChar, opt_escapeChar, opt_matchCase) {
+  goog.base(this, 'PropertyIsLike', propertyName);
+
+  /**
+   * @public
+   * @type {!string}
+   */
+  this.pattern = pattern;
+
+  /**
+   * @public
+   * @type {!string}
+   */
+  this.wildCard = (opt_wildCard !== undefined) ? opt_wildCard : '*';
+
+  /**
+   * @public
+   * @type {!string}
+   */
+  this.singleChar = (opt_singleChar !== undefined) ? opt_singleChar : '.';
+
+  /**
+   * @public
+   * @type {!string}
+   */
+  this.escapeChar = (opt_escapeChar !== undefined) ? opt_escapeChar : '!';
+
+  /**
+   * @public
+   * @type {boolean|undefined}
+   */
+  this.matchCase = opt_matchCase;
+};
+goog.inherits(ol.format.ogc.filter.IsLike, ol.format.ogc.filter.Comparison);
 
 // FIXME add typedef for stack state objects
 goog.provide('ol.format.OSMXML');
@@ -87466,7 +88384,7 @@ ol.format.OSMXML.NAMESPACE_URIS_ = [
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.OSMXML.WAY_PARSERS_ = ol.xml.makeStructureNS(
@@ -87478,7 +88396,7 @@ ol.format.OSMXML.WAY_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.OSMXML.PARSERS_ = ol.xml.makeStructureNS(
@@ -87490,7 +88408,7 @@ ol.format.OSMXML.PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.OSMXML.NODE_PARSERS_ = ol.xml.makeStructureNS(
@@ -87912,7 +88830,7 @@ ol.format.OWS.NAMESPACE_URIS_ = [
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.OWS.PARSERS_ = ol.xml.makeStructureNS(
@@ -87928,7 +88846,7 @@ ol.format.OWS.PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.OWS.ADDRESS_PARSERS_ = ol.xml.makeStructureNS(
@@ -87947,7 +88865,7 @@ ol.format.OWS.ADDRESS_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.OWS.ALLOWED_VALUES_PARSERS_ = ol.xml.makeStructureNS(
@@ -87958,7 +88876,7 @@ ol.format.OWS.ALLOWED_VALUES_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.OWS.CONSTRAINT_PARSERS_ = ol.xml.makeStructureNS(
@@ -87970,7 +88888,7 @@ ol.format.OWS.CONSTRAINT_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.OWS.CONTACT_INFO_PARSERS_ = ol.xml.makeStructureNS(
@@ -87982,7 +88900,7 @@ ol.format.OWS.CONTACT_INFO_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.OWS.DCP_PARSERS_ = ol.xml.makeStructureNS(
@@ -87993,7 +88911,7 @@ ol.format.OWS.DCP_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.OWS.HTTP_PARSERS_ = ol.xml.makeStructureNS(
@@ -88005,7 +88923,7 @@ ol.format.OWS.HTTP_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.OWS.OPERATION_PARSERS_ = ol.xml.makeStructureNS(
@@ -88016,7 +88934,7 @@ ol.format.OWS.OPERATION_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.OWS.OPERATIONS_METADATA_PARSERS_ = ol.xml.makeStructureNS(
@@ -88027,7 +88945,7 @@ ol.format.OWS.OPERATIONS_METADATA_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.OWS.PHONE_PARSERS_ = ol.xml.makeStructureNS(
@@ -88039,7 +88957,7 @@ ol.format.OWS.PHONE_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.OWS.REQUEST_METHOD_PARSERS_ = ol.xml.makeStructureNS(
@@ -88051,7 +88969,7 @@ ol.format.OWS.REQUEST_METHOD_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.OWS.SERVICE_CONTACT_PARSERS_ =
@@ -88067,7 +88985,7 @@ ol.format.OWS.SERVICE_CONTACT_PARSERS_ =
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.OWS.SERVICE_IDENTIFICATION_PARSERS_ =
@@ -88082,7 +89000,7 @@ ol.format.OWS.SERVICE_IDENTIFICATION_PARSERS_ =
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.OWS.SERVICE_PROVIDER_PARSERS_ =
@@ -88949,6 +89867,14 @@ goog.require('goog.dom.NodeType');
 goog.require('ol');
 goog.require('ol.format.GML3');
 goog.require('ol.format.GMLBase');
+goog.require('ol.format.ogc.filter');
+goog.require('ol.format.ogc.filter.Bbox');
+goog.require('ol.format.ogc.filter.ComparisonBinary');
+goog.require('ol.format.ogc.filter.LogicalBinary');
+goog.require('ol.format.ogc.filter.Not');
+goog.require('ol.format.ogc.filter.IsBetween');
+goog.require('ol.format.ogc.filter.IsNull');
+goog.require('ol.format.ogc.filter.IsLike');
 goog.require('ol.format.XMLFeature');
 goog.require('ol.format.XSD');
 goog.require('ol.geom.Geometry');
@@ -89019,26 +89945,6 @@ ol.format.WFS.XMLNS = 'http://www.w3.org/2000/xmlns/';
 
 
 /**
- * Number of features; bounds/extent.
- * @typedef {{numberOfFeatures: number,
- *            bounds: ol.Extent}}
- * @api stable
- */
-ol.format.WFS.FeatureCollectionMetadata;
-
-
-/**
- * Total deleted; total inserted; total updated; array of insert ids.
- * @typedef {{totalDeleted: number,
- *            totalInserted: number,
- *            totalUpdated: number,
- *            insertIds: Array.<string>}}
- * @api stable
- */
-ol.format.WFS.TransactionResponse;
-
-
-/**
  * @const
  * @type {string}
  */
@@ -89086,7 +89992,7 @@ ol.format.WFS.prototype.readFeaturesFromNode = function(node, opt_options) {
  * Read transaction response of the source.
  *
  * @param {Document|Node|Object|string} source Source.
- * @return {ol.format.WFS.TransactionResponse|undefined} Transaction response.
+ * @return {ol.WFSTransactionResponse|undefined} Transaction response.
  * @api stable
  */
 ol.format.WFS.prototype.readTransactionResponse = function(source) {
@@ -89109,7 +90015,7 @@ ol.format.WFS.prototype.readTransactionResponse = function(source) {
  * Read feature collection metadata of the source.
  *
  * @param {Document|Node|Object|string} source Source.
- * @return {ol.format.WFS.FeatureCollectionMetadata|undefined}
+ * @return {ol.WFSFeatureCollectionMetadata|undefined}
  *     FeatureCollection metadata.
  * @api stable
  */
@@ -89132,7 +90038,7 @@ ol.format.WFS.prototype.readFeatureCollectionMetadata = function(source) {
 
 /**
  * @param {Document} doc Document.
- * @return {ol.format.WFS.FeatureCollectionMetadata|undefined}
+ * @return {ol.WFSFeatureCollectionMetadata|undefined}
  *     FeatureCollection metadata.
  */
 ol.format.WFS.prototype.readFeatureCollectionMetadataFromDocument = function(doc) {
@@ -89149,7 +90055,7 @@ ol.format.WFS.prototype.readFeatureCollectionMetadataFromDocument = function(doc
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WFS.FEATURE_COLLECTION_PARSERS_ = {
@@ -89162,7 +90068,7 @@ ol.format.WFS.FEATURE_COLLECTION_PARSERS_ = {
 
 /**
  * @param {Node} node Node.
- * @return {ol.format.WFS.FeatureCollectionMetadata|undefined}
+ * @return {ol.WFSFeatureCollectionMetadata|undefined}
  *     FeatureCollection metadata.
  */
 ol.format.WFS.prototype.readFeatureCollectionMetadataFromNode = function(node) {
@@ -89175,14 +90081,14 @@ ol.format.WFS.prototype.readFeatureCollectionMetadataFromNode = function(node) {
       node.getAttribute('numberOfFeatures'));
   result['numberOfFeatures'] = value;
   return ol.xml.pushParseAndPop(
-      /** @type {ol.format.WFS.FeatureCollectionMetadata} */ (result),
+      /** @type {ol.WFSFeatureCollectionMetadata} */ (result),
       ol.format.WFS.FEATURE_COLLECTION_PARSERS_, node, [], this.gmlFormat_);
 };
 
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WFS.TRANSACTION_SUMMARY_PARSERS_ = {
@@ -89211,7 +90117,7 @@ ol.format.WFS.readTransactionSummary_ = function(node, objectStack) {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WFS.OGC_FID_PARSERS_ = {
@@ -89235,7 +90141,7 @@ ol.format.WFS.fidParser_ = function(node, objectStack) {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WFS.INSERT_RESULTS_PARSERS_ = {
@@ -89259,7 +90165,7 @@ ol.format.WFS.readInsertResults_ = function(node, objectStack) {
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WFS.TRANSACTION_RESPONSE_PARSERS_ = {
@@ -89274,7 +90180,7 @@ ol.format.WFS.TRANSACTION_RESPONSE_PARSERS_ = {
 
 /**
  * @param {Document} doc Document.
- * @return {ol.format.WFS.TransactionResponse|undefined} Transaction response.
+ * @return {ol.WFSTransactionResponse|undefined} Transaction response.
  */
 ol.format.WFS.prototype.readTransactionResponseFromDocument = function(doc) {
   goog.asserts.assert(doc.nodeType == goog.dom.NodeType.DOCUMENT,
@@ -89290,7 +90196,7 @@ ol.format.WFS.prototype.readTransactionResponseFromDocument = function(doc) {
 
 /**
  * @param {Node} node Node.
- * @return {ol.format.WFS.TransactionResponse|undefined} Transaction response.
+ * @return {ol.WFSTransactionResponse|undefined} Transaction response.
  */
 ol.format.WFS.prototype.readTransactionResponseFromNode = function(node) {
   goog.asserts.assert(node.nodeType == goog.dom.NodeType.ELEMENT,
@@ -89298,13 +90204,13 @@ ol.format.WFS.prototype.readTransactionResponseFromNode = function(node) {
   goog.asserts.assert(node.localName == 'TransactionResponse',
       'localName should be TransactionResponse');
   return ol.xml.pushParseAndPop(
-      /** @type {ol.format.WFS.TransactionResponse} */({}),
+      /** @type {ol.WFSTransactionResponse} */({}),
       ol.format.WFS.TRANSACTION_RESPONSE_PARSERS_, node, []);
 };
 
 
 /**
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.WFS.QUERY_SERIALIZERS_ = {
@@ -89453,7 +90359,7 @@ ol.format.WFS.writeNative_ = function(node, nativeElement, objectStack) {
 
 
 /**
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.WFS.TRANSACTION_SERIALIZERS_ = {
@@ -89495,24 +90401,163 @@ ol.format.WFS.writeQuery_ = function(node, featureType, objectStack) {
       ol.format.WFS.QUERY_SERIALIZERS_,
       ol.xml.makeSimpleNodeFactory('PropertyName'), propertyNames,
       objectStack);
-  var bbox = context['bbox'];
-  if (bbox) {
+  var filter = context['filter'];
+  if (filter) {
     var child = ol.xml.createElementNS('http://www.opengis.net/ogc', 'Filter');
-    ol.format.WFS.writeOgcBBOX_(child, bbox, objectStack);
     node.appendChild(child);
+    ol.format.WFS.writeFilterCondition_(child, filter, objectStack);
   }
 };
 
 
 /**
  * @param {Node} node Node.
- * @param {string} value PropertyName value.
+ * @param {ol.format.ogc.filter.Filter} filter Filter.
  * @param {Array.<*>} objectStack Node stack.
  * @private
  */
-ol.format.WFS.writeOgcPropertyName_ = function(node, value, objectStack) {
-  var property = ol.xml.createElementNS('http://www.opengis.net/ogc',
-      'PropertyName');
+ol.format.WFS.writeFilterCondition_ = function(node, filter, objectStack) {
+  var item = {node: node};
+  ol.xml.pushSerializeAndPop(item,
+      ol.format.WFS.GETFEATURE_SERIALIZERS_,
+      ol.xml.makeSimpleNodeFactory(filter.getTagName()),
+      [filter], objectStack);
+};
+
+
+/**
+ * @param {Node} node Node.
+ * @param {ol.format.ogc.filter.Filter} filter Filter.
+ * @param {Array.<*>} objectStack Node stack.
+ * @private
+ */
+ol.format.WFS.writeBboxFilter_ = function(node, filter, objectStack) {
+  goog.asserts.assertInstanceof(filter, ol.format.ogc.filter.Bbox,
+    'must be bbox filter');
+
+  var context = objectStack[objectStack.length - 1];
+  goog.asserts.assert(goog.isObject(context), 'context should be an Object');
+  context.srsName = filter.srsName;
+
+  ol.format.WFS.writeOgcPropertyName_(node, filter.geometryName);
+  ol.format.GML3.prototype.writeGeometryElement(node, filter.extent, objectStack);
+};
+
+
+/**
+ * @param {Node} node Node.
+ * @param {ol.format.ogc.filter.Filter} filter Filter.
+ * @param {Array.<*>} objectStack Node stack.
+ * @private
+ */
+ol.format.WFS.writeLogicalFilter_ = function(node, filter, objectStack) {
+  goog.asserts.assertInstanceof(filter, ol.format.ogc.filter.LogicalBinary,
+    'must be logical filter');
+  var item = {node: node};
+  var conditionA = filter.conditionA;
+  ol.xml.pushSerializeAndPop(item,
+      ol.format.WFS.GETFEATURE_SERIALIZERS_,
+      ol.xml.makeSimpleNodeFactory(conditionA.getTagName()),
+      [conditionA], objectStack);
+  var conditionB = filter.conditionB;
+  ol.xml.pushSerializeAndPop(item,
+      ol.format.WFS.GETFEATURE_SERIALIZERS_,
+      ol.xml.makeSimpleNodeFactory(conditionB.getTagName()),
+      [conditionB], objectStack);
+};
+
+
+/**
+ * @param {Node} node Node.
+ * @param {ol.format.ogc.filter.Filter} filter Filter.
+ * @param {Array.<*>} objectStack Node stack.
+ * @private
+ */
+ol.format.WFS.writeNotFilter_ = function(node, filter, objectStack) {
+  goog.asserts.assertInstanceof(filter, ol.format.ogc.filter.Not,
+    'must be Not filter');
+  var item = {node: node};
+  var condition = filter.condition;
+  ol.xml.pushSerializeAndPop(item,
+      ol.format.WFS.GETFEATURE_SERIALIZERS_,
+      ol.xml.makeSimpleNodeFactory(condition.getTagName()),
+      [condition], objectStack);
+};
+
+
+/**
+ * @param {Node} node Node.
+ * @param {ol.format.ogc.filter.Filter} filter Filter.
+ * @param {Array.<*>} objectStack Node stack.
+ * @private
+ */
+ol.format.WFS.writeComparisonFilter_ = function(node, filter, objectStack) {
+  goog.asserts.assertInstanceof(filter, ol.format.ogc.filter.ComparisonBinary,
+    'must be binary comparison filter');
+  if (filter.matchCase !== undefined) {
+    node.setAttribute('matchCase', filter.matchCase.toString());
+  }
+  ol.format.WFS.writeOgcPropertyName_(node, filter.propertyName);
+  ol.format.WFS.writeOgcLiteral_(node, '' + filter.expression);
+};
+
+
+/**
+ * @param {Node} node Node.
+ * @param {ol.format.ogc.filter.Filter} filter Filter.
+ * @param {Array.<*>} objectStack Node stack.
+ * @private
+ */
+ol.format.WFS.writeIsNullFilter_ = function(node, filter, objectStack) {
+  goog.asserts.assertInstanceof(filter, ol.format.ogc.filter.IsNull,
+    'must be IsNull comparison filter');
+  ol.format.WFS.writeOgcPropertyName_(node, filter.propertyName);
+};
+
+
+/**
+ * @param {Node} node Node.
+ * @param {ol.format.ogc.filter.Filter} filter Filter.
+ * @param {Array.<*>} objectStack Node stack.
+ * @private
+ */
+ol.format.WFS.writeIsBetweenFilter_ = function(node, filter, objectStack) {
+  goog.asserts.assertInstanceof(filter, ol.format.ogc.filter.IsBetween,
+    'must be IsBetween comparison filter');
+  ol.format.WFS.writeOgcPropertyName_(node, filter.propertyName);
+  ol.format.WFS.writeOgcExpression_('LowerBoundary', node, '' + filter.lowerBoundary);
+  ol.format.WFS.writeOgcExpression_('UpperBoundary', node, '' + filter.upperBoundary);
+};
+
+
+/**
+ * @param {Node} node Node.
+ * @param {ol.format.ogc.filter.Filter} filter Filter.
+ * @param {Array.<*>} objectStack Node stack.
+ * @private
+ */
+ol.format.WFS.writeIsLikeFilter_ = function(node, filter, objectStack) {
+  goog.asserts.assertInstanceof(filter, ol.format.ogc.filter.IsLike,
+    'must be IsLike comparison filter');
+  node.setAttribute('wildCard', filter.wildCard);
+  node.setAttribute('singleChar', filter.singleChar);
+  node.setAttribute('escapeChar', filter.escapeChar);
+  if (filter.matchCase !== undefined) {
+    node.setAttribute('matchCase', filter.matchCase.toString());
+  }
+  ol.format.WFS.writeOgcPropertyName_(node, filter.propertyName);
+  ol.format.WFS.writeOgcLiteral_(node, '' + filter.pattern);
+};
+
+
+/**
+ * @param {string} tagName Tag name.
+ * @param {Node} node Node.
+ * @param {string} value Value.
+ * @private
+ */
+ol.format.WFS.writeOgcExpression_ = function(tagName, node, value) {
+  var property = ol.xml.createElementNS('http://www.opengis.net/ogc', tagName);
   ol.format.XSD.writeStringTextNode(property, value);
   node.appendChild(property);
 };
@@ -89520,29 +90565,46 @@ ol.format.WFS.writeOgcPropertyName_ = function(node, value, objectStack) {
 
 /**
  * @param {Node} node Node.
- * @param {ol.Extent} bbox Bounding box.
- * @param {Array.<*>} objectStack Node stack.
+ * @param {string} value PropertyName value.
  * @private
  */
-ol.format.WFS.writeOgcBBOX_ = function(node, bbox, objectStack) {
-  var context = objectStack[objectStack.length - 1];
-  goog.asserts.assert(goog.isObject(context), 'context should be an Object');
-  var geometryName = context['geometryName'];
-  var bboxNode = ol.xml.createElementNS('http://www.opengis.net/ogc', 'BBOX');
-  node.appendChild(bboxNode);
-  ol.format.WFS.writeOgcPropertyName_(bboxNode, geometryName, objectStack);
-  ol.format.GML3.prototype.writeGeometryElement(bboxNode, bbox, objectStack);
+ol.format.WFS.writeOgcPropertyName_ = function(node, value) {
+  ol.format.WFS.writeOgcExpression_('PropertyName', node, value);
 };
 
 
 /**
- * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ * @param {Node} node Node.
+ * @param {string} value PropertyName value.
+ * @private
+ */
+ol.format.WFS.writeOgcLiteral_ = function(node, value) {
+  ol.format.WFS.writeOgcExpression_('Literal', node, value);
+};
+
+
+/**
+ * @type {Object.<string, Object.<string, ol.XmlSerializer>>}
  * @private
  */
 ol.format.WFS.GETFEATURE_SERIALIZERS_ = {
   'http://www.opengis.net/wfs': {
-    'Query': ol.xml.makeChildAppender(
-        ol.format.WFS.writeQuery_)
+    'Query': ol.xml.makeChildAppender(ol.format.WFS.writeQuery_)
+  },
+  'http://www.opengis.net/ogc': {
+    'And': ol.xml.makeChildAppender(ol.format.WFS.writeLogicalFilter_),
+    'Or': ol.xml.makeChildAppender(ol.format.WFS.writeLogicalFilter_),
+    'Not': ol.xml.makeChildAppender(ol.format.WFS.writeNotFilter_),
+    'BBOX': ol.xml.makeChildAppender(ol.format.WFS.writeBboxFilter_),
+    'PropertyIsEqualTo': ol.xml.makeChildAppender(ol.format.WFS.writeComparisonFilter_),
+    'PropertyIsNotEqualTo': ol.xml.makeChildAppender(ol.format.WFS.writeComparisonFilter_),
+    'PropertyIsLessThan': ol.xml.makeChildAppender(ol.format.WFS.writeComparisonFilter_),
+    'PropertyIsLessThanOrEqualTo': ol.xml.makeChildAppender(ol.format.WFS.writeComparisonFilter_),
+    'PropertyIsGreaterThan': ol.xml.makeChildAppender(ol.format.WFS.writeComparisonFilter_),
+    'PropertyIsGreaterThanOrEqualTo': ol.xml.makeChildAppender(ol.format.WFS.writeComparisonFilter_),
+    'PropertyIsNull': ol.xml.makeChildAppender(ol.format.WFS.writeIsNullFilter_),
+    'PropertyIsBetween': ol.xml.makeChildAppender(ol.format.WFS.writeIsBetweenFilter_),
+    'PropertyIsLike': ol.xml.makeChildAppender(ol.format.WFS.writeIsLikeFilter_)
   }
 };
 
@@ -89577,6 +90639,7 @@ ol.format.WFS.prototype.writeGetFeature = function(options) {
       'GetFeature');
   node.setAttribute('service', 'WFS');
   node.setAttribute('version', '1.1.0');
+  var filter;
   if (options) {
     if (options.handle) {
       node.setAttribute('handle', options.handle);
@@ -89596,6 +90659,19 @@ ol.format.WFS.prototype.writeGetFeature = function(options) {
     if (options.count !== undefined) {
       node.setAttribute('count', options.count);
     }
+    filter = options.filter;
+    if (options.bbox) {
+      goog.asserts.assert(options.geometryName,
+        'geometryName must be set when using bbox filter');
+      var bbox = ol.format.ogc.filter.bbox(
+          options.geometryName, options.bbox, options.srsName);
+      if (filter) {
+        // if bbox and filter are both set, combine the two into a single filter
+        filter = ol.format.ogc.filter.and(filter, bbox);
+      } else {
+        filter = bbox;
+      }
+    }
   }
   ol.xml.setAttributeNS(node, 'http://www.w3.org/2001/XMLSchema-instance',
       'xsi:schemaLocation', this.schemaLocation_);
@@ -89605,7 +90681,7 @@ ol.format.WFS.prototype.writeGetFeature = function(options) {
     featureNS: options.featureNS ? options.featureNS : this.featureNS_,
     featurePrefix: options.featurePrefix,
     geometryName: options.geometryName,
-    bbox: options.bbox,
+    filter: filter,
     propertyNames: options.propertyNames ? options.propertyNames : []
   };
   goog.asserts.assert(Array.isArray(options.featureTypes),
@@ -90098,12 +91174,6 @@ ol.format.WKT.prototype.writeGeometryText = function(geometry, opt_options) {
 
 
 /**
- * @typedef {{type: number, value: (number|string|undefined), position: number}}
- */
-ol.format.WKT.Token;
-
-
-/**
  * @const
  * @enum {number}
  */
@@ -90182,7 +91252,7 @@ ol.format.WKT.Lexer.prototype.nextChar_ = function() {
 
 /**
  * Fetch and return the next token.
- * @return {!ol.format.WKT.Token} Next string token.
+ * @return {!ol.WKTToken} Next string token.
  */
 ol.format.WKT.Lexer.prototype.nextToken = function() {
   var c = this.nextChar_();
@@ -90268,7 +91338,7 @@ ol.format.WKT.Parser = function(lexer) {
   this.lexer_ = lexer;
 
   /**
-   * @type {ol.format.WKT.Token}
+   * @type {ol.WKTToken}
    * @private
    */
   this.token_;
@@ -90292,7 +91362,7 @@ ol.format.WKT.Parser.prototype.consume_ = function() {
 
 /**
  * If the given type matches the current token, consume it.
- * @param {ol.format.WKT.TokenType.<number>} type Token type.
+ * @param {ol.format.WKT.TokenType} type Token type.
  * @return {boolean} Whether the token matches the given type.
  */
 ol.format.WKT.Parser.prototype.match = function(type) {
@@ -90569,7 +91639,7 @@ ol.format.WKT.Parser.prototype.formatErrorMessage_ = function() {
 
 
 /**
- * @enum {function (new:ol.geom.Geometry, Array, ol.geom.GeometryLayout.<string>=)}
+ * @enum {function (new:ol.geom.Geometry, Array, ol.geom.GeometryLayout)}
  * @private
  */
 ol.format.WKT.Parser.GeometryConstructor_ = {
@@ -91165,7 +92235,7 @@ ol.format.WMSCapabilities.NAMESPACE_URIS_ = [
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMSCapabilities.PARSERS_ = ol.xml.makeStructureNS(
@@ -91179,7 +92249,7 @@ ol.format.WMSCapabilities.PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMSCapabilities.CAPABILITY_PARSERS_ = ol.xml.makeStructureNS(
@@ -91195,7 +92265,7 @@ ol.format.WMSCapabilities.CAPABILITY_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMSCapabilities.SERVICE_PARSERS_ = ol.xml.makeStructureNS(
@@ -91223,7 +92293,7 @@ ol.format.WMSCapabilities.SERVICE_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMSCapabilities.CONTACT_INFORMATION_PARSERS_ = ol.xml.makeStructureNS(
@@ -91245,7 +92315,7 @@ ol.format.WMSCapabilities.CONTACT_INFORMATION_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMSCapabilities.CONTACT_PERSON_PARSERS_ = ol.xml.makeStructureNS(
@@ -91259,7 +92329,7 @@ ol.format.WMSCapabilities.CONTACT_PERSON_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMSCapabilities.CONTACT_ADDRESS_PARSERS_ = ol.xml.makeStructureNS(
@@ -91276,7 +92346,7 @@ ol.format.WMSCapabilities.CONTACT_ADDRESS_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMSCapabilities.EXCEPTION_PARSERS_ = ol.xml.makeStructureNS(
@@ -91287,7 +92357,7 @@ ol.format.WMSCapabilities.EXCEPTION_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMSCapabilities.LAYER_PARSERS_ = ol.xml.makeStructureNS(
@@ -91328,7 +92398,7 @@ ol.format.WMSCapabilities.LAYER_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMSCapabilities.ATTRIBUTION_PARSERS_ = ol.xml.makeStructureNS(
@@ -91343,7 +92413,7 @@ ol.format.WMSCapabilities.ATTRIBUTION_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMSCapabilities.EX_GEOGRAPHIC_BOUNDING_BOX_PARSERS_ =
@@ -91361,7 +92431,7 @@ ol.format.WMSCapabilities.EX_GEOGRAPHIC_BOUNDING_BOX_PARSERS_ =
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMSCapabilities.REQUEST_PARSERS_ = ol.xml.makeStructureNS(
@@ -91377,7 +92447,7 @@ ol.format.WMSCapabilities.REQUEST_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMSCapabilities.OPERATIONTYPE_PARSERS_ = ol.xml.makeStructureNS(
@@ -91390,7 +92460,7 @@ ol.format.WMSCapabilities.OPERATIONTYPE_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMSCapabilities.DCPTYPE_PARSERS_ = ol.xml.makeStructureNS(
@@ -91402,7 +92472,7 @@ ol.format.WMSCapabilities.DCPTYPE_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMSCapabilities.HTTP_PARSERS_ = ol.xml.makeStructureNS(
@@ -91416,7 +92486,7 @@ ol.format.WMSCapabilities.HTTP_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMSCapabilities.STYLE_PARSERS_ = ol.xml.makeStructureNS(
@@ -91435,7 +92505,7 @@ ol.format.WMSCapabilities.STYLE_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMSCapabilities.FORMAT_ONLINERESOURCE_PARSERS_ =
@@ -91448,7 +92518,7 @@ ol.format.WMSCapabilities.FORMAT_ONLINERESOURCE_PARSERS_ =
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMSCapabilities.KEYWORDLIST_PARSERS_ = ol.xml.makeStructureNS(
@@ -91607,10 +92677,7 @@ ol.format.WMSGetFeatureInfo.prototype.readFeatures;
  * @inheritDoc
  */
 ol.format.WMSGetFeatureInfo.prototype.readFeaturesFromNode = function(node, opt_options) {
-  var options = {
-    'featureType': this.featureType,
-    'featureNS': this.featureNS
-  };
+  var options = {};
   if (opt_options) {
     ol.object.assign(options, this.getReadOptions(node, opt_options));
   }
@@ -91896,7 +92963,7 @@ ol.format.WMTSCapabilities.OWS_NAMESPACE_URIS_ = [
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMTSCapabilities.PARSERS_ = ol.xml.makeStructureNS(
@@ -91908,7 +92975,7 @@ ol.format.WMTSCapabilities.PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMTSCapabilities.CONTENTS_PARSERS_ = ol.xml.makeStructureNS(
@@ -91922,7 +92989,7 @@ ol.format.WMTSCapabilities.CONTENTS_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMTSCapabilities.LAYER_PARSERS_ = ol.xml.makeStructureNS(
@@ -91951,7 +93018,7 @@ ol.format.WMTSCapabilities.LAYER_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMTSCapabilities.STYLE_PARSERS_ = ol.xml.makeStructureNS(
@@ -91968,7 +93035,7 @@ ol.format.WMTSCapabilities.STYLE_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMTSCapabilities.TMS_LINKS_PARSERS_ = ol.xml.makeStructureNS(
@@ -91980,7 +93047,7 @@ ol.format.WMTSCapabilities.TMS_LINKS_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMTSCapabilities.DIMENSION_PARSERS_ = ol.xml.makeStructureNS(
@@ -91997,7 +93064,7 @@ ol.format.WMTSCapabilities.DIMENSION_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMTSCapabilities.WGS84_BBOX_READERS_ = ol.xml.makeStructureNS(
@@ -92011,7 +93078,7 @@ ol.format.WMTSCapabilities.WGS84_BBOX_READERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMTSCapabilities.TMS_PARSERS_ = ol.xml.makeStructureNS(
@@ -92030,7 +93097,7 @@ ol.format.WMTSCapabilities.TMS_PARSERS_ = ol.xml.makeStructureNS(
 
 /**
  * @const
- * @type {Object.<string, Object.<string, ol.xml.Parser>>}
+ * @type {Object.<string, Object.<string, ol.XmlParser>>}
  * @private
  */
 ol.format.WMTSCapabilities.TM_PARSERS_ = ol.xml.makeStructureNS(
@@ -92059,7 +93126,6 @@ goog.provide('ol.GeolocationProperty');
 
 goog.require('ol.events');
 goog.require('ol.events.EventType');
-goog.require('ol.Coordinate');
 goog.require('ol.Object');
 goog.require('ol.geom.Geometry');
 goog.require('ol.geom.Polygon');
@@ -92189,12 +93255,12 @@ ol.Geolocation.prototype.handleTrackingChanged_ = function() {
   if (ol.has.GEOLOCATION) {
     var tracking = this.getTracking();
     if (tracking && this.watchId_ === undefined) {
-      this.watchId_ = goog.global.navigator.geolocation.watchPosition(
+      this.watchId_ = ol.global.navigator.geolocation.watchPosition(
           this.positionChange_.bind(this),
           this.positionError_.bind(this),
           this.getTrackingOptions());
     } else if (!tracking && this.watchId_ !== undefined) {
-      goog.global.navigator.geolocation.clearWatch(this.watchId_);
+      ol.global.navigator.geolocation.clearWatch(this.watchId_);
       this.watchId_ = undefined;
     }
   }
@@ -92674,7 +93740,6 @@ ol.geom.Circle.prototype.transform;
 goog.provide('ol.geom.flat.geodesic');
 
 goog.require('goog.asserts');
-goog.require('ol.TransformFunction');
 goog.require('ol.math');
 goog.require('ol.proj');
 
@@ -93548,34 +94613,10 @@ ol.Image.prototype.unlistenImage_ = function() {
   this.imageListenerKeys_ = null;
 };
 
-goog.provide('ol.ImageLoadFunctionType');
-
-
-/**
- * A function that takes an {@link ol.Image} for the image and a `{string}` for
- * the src as arguments. It is supposed to make it so the underlying image
- * {@link ol.Image#getImage} is assigned the content specified by the src. If
- * not specified, the default is
- *
- *     function(image, src) {
- *       image.getImage().src = src;
- *     }
- *
- * Providing a custom `imageLoadFunction` can be useful to load images with
- * post requests or - in general - through XHR requests, where the src of the
- * image element would be set to a data URI when the content is loaded.
- *
- * @typedef {function(ol.Image, string)}
- * @api
- */
-ol.ImageLoadFunctionType;
-
 goog.provide('ol.ImageTile');
 
 goog.require('goog.asserts');
 goog.require('ol.Tile');
-goog.require('ol.TileCoord');
-goog.require('ol.TileLoadFunctionType');
 goog.require('ol.TileState');
 goog.require('ol.events');
 goog.require('ol.events.EventType');
@@ -93816,7 +94857,7 @@ ol.interaction.DragAndDrop.handleDrop_ = function(event) {
     file = files.item(i);
     var reader = new FileReader();
     reader.addEventListener(ol.events.EventType.LOAD,
-        goog.partial(this.handleResult_, file).bind(this));
+        this.handleResult_.bind(this, file));
     reader.readAsText(file);
   }
 };
@@ -93981,7 +95022,6 @@ goog.provide('ol.interaction.DragRotateAndZoom');
 
 goog.require('ol');
 goog.require('ol.ViewHint');
-goog.require('ol.events.ConditionType');
 goog.require('ol.events.condition');
 goog.require('ol.interaction.Interaction');
 goog.require('ol.interaction.Pointer');
@@ -94130,14 +95170,12 @@ ol.interaction.DragRotateAndZoom.handleDownEvent_ = function(mapBrowserEvent) {
 goog.provide('ol.interaction.Draw');
 goog.provide('ol.interaction.DrawEvent');
 goog.provide('ol.interaction.DrawEventType');
-goog.provide('ol.interaction.DrawGeometryFunctionType');
 goog.provide('ol.interaction.DrawMode');
 
 goog.require('goog.asserts');
 goog.require('ol.events');
 goog.require('ol.events.Event');
 goog.require('ol.Collection');
-goog.require('ol.Coordinate');
 goog.require('ol.Feature');
 goog.require('ol.MapBrowserEvent');
 goog.require('ol.MapBrowserEvent.EventType');
@@ -94288,6 +95326,13 @@ ol.interaction.Draw = function(options) {
    * @private
    */
   this.maxPoints_ = options.maxPoints ? options.maxPoints : Infinity;
+
+  /**
+   * A function to decide if a potential finish coordinate is permissable
+   * @private
+   * @type {ol.events.ConditionType}
+   */
+  this.finishCondition_ = options.finishCondition ? options.finishCondition : ol.functions.TRUE;
 
   var geometryFunction = options.geometryFunction;
   if (!geometryFunction) {
@@ -94533,7 +95578,9 @@ ol.interaction.Draw.handleUpEvent_ = function(event) {
     } else if (this.mode_ === ol.interaction.DrawMode.CIRCLE) {
       this.finishDrawing();
     } else if (this.atFinish_(event)) {
-      this.finishDrawing();
+      if (this.finishCondition_(event)) {
+        this.finishDrawing();
+      }
     } else {
       this.addToDrawing_(event);
     }
@@ -94973,19 +96020,6 @@ ol.interaction.Draw.getMode_ = function(type) {
 
 
 /**
- * Function that takes coordinates and an optional existing geometry as
- * arguments, and returns a geometry. The optional existing geometry is the
- * geometry that is returned when the function is called without a second
- * argument.
- * @typedef {function(!(ol.Coordinate|Array.<ol.Coordinate>|
- *     Array.<Array.<ol.Coordinate>>), ol.geom.SimpleGeometry=):
- *     ol.geom.SimpleGeometry}
- * @api
- */
-ol.interaction.DrawGeometryFunctionType;
-
-
-/**
  * Draw mode.  This collapses multi-part geometry types with their single-part
  * cousins.
  * @enum {string}
@@ -95004,7 +96038,6 @@ goog.require('goog.asserts');
 goog.require('ol.events');
 goog.require('ol.events.Event');
 goog.require('ol.events.EventType');
-goog.require('goog.functions');
 goog.require('ol');
 goog.require('ol.Collection');
 goog.require('ol.CollectionEventType');
@@ -95083,16 +96116,6 @@ goog.inherits(ol.interaction.ModifyEvent, ol.events.Event);
 
 
 /**
- * @typedef {{depth: (Array.<number>|undefined),
- *            feature: ol.Feature,
- *            geometry: ol.geom.SimpleGeometry,
- *            index: (number|undefined),
- *            segment: Array.<ol.Extent>}}
- */
-ol.interaction.SegmentDataType;
-
-
-/**
  * @classdesc
  * Interaction for modifying feature geometries.
  *
@@ -95112,14 +96135,29 @@ ol.interaction.Modify = function(options) {
   });
 
   /**
+   * @private
+   * @type {ol.events.ConditionType}
+   */
+  this.condition_ = options.condition ?
+      options.condition : ol.events.condition.primaryAction;
+
+
+  /**
+   * @private
+   * @param {ol.MapBrowserEvent} mapBrowserEvent Browser event.
+   * @return {boolean} Combined condition result.
+   */
+  this.defaultDeleteCondition_ = function(mapBrowserEvent) {
+    return ol.events.condition.noModifierKeys(mapBrowserEvent) &&
+      ol.events.condition.singleClick(mapBrowserEvent);
+  }
+
+  /**
    * @type {ol.events.ConditionType}
    * @private
    */
   this.deleteCondition_ = options.deleteCondition ?
-      options.deleteCondition :
-      /** @type {ol.events.ConditionType} */ (goog.functions.and(
-          ol.events.condition.noModifierKeys,
-          ol.events.condition.singleClick));
+      options.deleteCondition : this.defaultDeleteCondition_;
 
   /**
    * Editing vertex.
@@ -95187,7 +96225,7 @@ ol.interaction.Modify = function(options) {
    * @type {Array}
    * @private
    */
-  this.dragSegments_ = null;
+  this.dragSegments_ = [];
 
   /**
    * Draw overlay where sketch features are drawn.
@@ -95232,6 +96270,12 @@ ol.interaction.Modify = function(options) {
       this.handleFeatureAdd_, this);
   ol.events.listen(this.features_, ol.CollectionEventType.REMOVE,
       this.handleFeatureRemove_, this);
+
+  /**
+   * @type {ol.MapBrowserPointerEvent}
+   * @private
+   */
+  this.lastPointerEvent_ = null;
 
 };
 goog.inherits(ol.interaction.Modify, ol.interaction.Pointer);
@@ -95539,8 +96583,11 @@ ol.interaction.Modify.compareIndexes_ = function(a, b) {
  * @private
  */
 ol.interaction.Modify.handleDownEvent_ = function(evt) {
+  if (!this.condition_(evt)) {
+    return false;
+  }
   this.handlePointerAtPixel_(evt.pixel, evt.map);
-  this.dragSegments_ = [];
+  this.dragSegments_.length = 0;
   this.modified_ = false;
   var vertexFeature = this.vertexFeature_;
   if (vertexFeature) {
@@ -95689,6 +96736,7 @@ ol.interaction.Modify.handleEvent = function(mapBrowserEvent) {
   if (!(mapBrowserEvent instanceof ol.MapBrowserPointerEvent)) {
     return true;
   }
+  this.lastPointerEvent_ = mapBrowserEvent;
 
   var handled;
   if (!mapBrowserEvent.map.getView().getHints()[ol.ViewHint.INTERACTING] &&
@@ -95702,11 +96750,7 @@ ol.interaction.Modify.handleEvent = function(mapBrowserEvent) {
       var geometry = this.vertexFeature_.getGeometry();
       goog.asserts.assertInstanceof(geometry, ol.geom.Point,
           'geometry should be an ol.geom.Point');
-      this.willModifyFeatures_(mapBrowserEvent);
-      handled = this.removeVertex_();
-      this.dispatchEvent(new ol.interaction.ModifyEvent(
-          ol.ModifyEventType.MODIFYEND, this.features_, mapBrowserEvent));
-      this.modified_ = false;
+      handled = this.removePoint();
     } else {
       handled = true;
     }
@@ -95872,6 +96916,23 @@ ol.interaction.Modify.prototype.insertVertex_ = function(segmentData, vertex) {
   this.ignoreNextSingleClick_ = true;
 };
 
+/**
+ * Removes the vertex currently being pointed.
+ * @return {boolean} True when a vertex was removed.
+ * @api
+ */
+ol.interaction.Modify.prototype.removePoint = function() {
+  var handled = false;
+  if (this.lastPointerEvent_ && this.lastPointerEvent_.type != ol.MapBrowserEvent.EventType.POINTERDRAG) {
+    var evt = this.lastPointerEvent_;
+    this.willModifyFeatures_(evt);
+    handled = this.removeVertex_();
+    this.dispatchEvent(new ol.interaction.ModifyEvent(
+        ol.ModifyEventType.MODIFYEND, this.features_, evt));
+    this.modified_ = false;
+  }
+  return handled;
+};
 
 /**
  * Removes a vertex from all matching features.
@@ -95882,93 +96943,111 @@ ol.interaction.Modify.prototype.removeVertex_ = function() {
   var dragSegments = this.dragSegments_;
   var segmentsByFeature = {};
   var component, coordinates, dragSegment, geometry, i, index, left;
-  var newIndex, newSegment, right, segmentData, uid, deleted;
+  var newIndex, right, segmentData, uid, deleted;
   for (i = dragSegments.length - 1; i >= 0; --i) {
     dragSegment = dragSegments[i];
     segmentData = dragSegment[0];
-    geometry = segmentData.geometry;
-    coordinates = geometry.getCoordinates();
     uid = goog.getUid(segmentData.feature);
     if (segmentData.depth) {
       // separate feature components
       uid += '-' + segmentData.depth.join('-');
     }
-    left = right = index = undefined;
-    if (dragSegment[1] === 0) {
-      right = segmentData;
-      index = segmentData.index;
-    } else if (dragSegment[1] == 1) {
-      left = segmentData;
-      index = segmentData.index + 1;
-    }
     if (!(uid in segmentsByFeature)) {
-      segmentsByFeature[uid] = [left, right, index];
+      segmentsByFeature[uid] = {};
     }
-    newSegment = segmentsByFeature[uid];
+    if (dragSegment[1] === 0) {
+      segmentsByFeature[uid].right = segmentData;
+      segmentsByFeature[uid].index = segmentData.index;
+    } else if (dragSegment[1] == 1) {
+      segmentsByFeature[uid].left = segmentData;
+      segmentsByFeature[uid].index = segmentData.index + 1;
+    }
+
+  }
+  for (uid in segmentsByFeature) {
+    right = segmentsByFeature[uid].right;
+    left = segmentsByFeature[uid].left;
+    index = segmentsByFeature[uid].index;
+    newIndex = index - 1;
     if (left !== undefined) {
-      newSegment[0] = left;
+      segmentData = left;
+    } else {
+      segmentData = right;
     }
-    if (right !== undefined) {
-      newSegment[1] = right;
+    if (newIndex < 0) {
+      newIndex = 0;
     }
-    if (newSegment[0] !== undefined && newSegment[1] !== undefined) {
-      component = coordinates;
-      deleted = false;
-      newIndex = index - 1;
-      switch (geometry.getType()) {
-        case ol.geom.GeometryType.MULTI_LINE_STRING:
+    geometry = segmentData.geometry;
+    coordinates = geometry.getCoordinates();
+    component = coordinates;
+    deleted = false;
+    switch (geometry.getType()) {
+      case ol.geom.GeometryType.MULTI_LINE_STRING:
+        if (coordinates[segmentData.depth[0]].length > 2) {
           coordinates[segmentData.depth[0]].splice(index, 1);
           deleted = true;
-          break;
-        case ol.geom.GeometryType.LINE_STRING:
+        }
+        break;
+      case ol.geom.GeometryType.LINE_STRING:
+        if (coordinates.length > 2) {
           coordinates.splice(index, 1);
           deleted = true;
-          break;
-        case ol.geom.GeometryType.MULTI_POLYGON:
-          component = component[segmentData.depth[1]];
-          /* falls through */
-        case ol.geom.GeometryType.POLYGON:
-          component = component[segmentData.depth[0]];
-          if (component.length > 4) {
-            if (index == component.length - 1) {
-              index = 0;
-            }
-            component.splice(index, 1);
-            deleted = true;
-            if (index === 0) {
-              // close the ring again
-              component.pop();
-              component.push(component[0]);
-              newIndex = component.length - 1;
-            }
+        }
+        break;
+      case ol.geom.GeometryType.MULTI_POLYGON:
+        component = component[segmentData.depth[1]];
+        /* falls through */
+      case ol.geom.GeometryType.POLYGON:
+        component = component[segmentData.depth[0]];
+        if (component.length > 4) {
+          if (index == component.length - 1) {
+            index = 0;
           }
-          break;
-        default:
-          // pass
-      }
+          component.splice(index, 1);
+          deleted = true;
+          if (index === 0) {
+            // close the ring again
+            component.pop();
+            component.push(component[0]);
+            newIndex = component.length - 1;
+          }
+        }
+        break;
+      default:
+        // pass
+    }
 
-      if (deleted) {
-        this.rBush_.remove(newSegment[0]);
-        this.rBush_.remove(newSegment[1]);
-        this.setGeometryCoordinates_(geometry, coordinates);
+    if (deleted) {
+      this.setGeometryCoordinates_(geometry, coordinates);
+      var segments = [];
+      if (left !== undefined) {
+        this.rBush_.remove(left);
+        segments.push(left.segment[0]);
+      }
+      if (right !== undefined) {
+        this.rBush_.remove(right);
+        segments.push(right.segment[1]);
+      }
+      if (left !== undefined && right !== undefined) {
         goog.asserts.assert(newIndex >= 0, 'newIndex should be larger than 0');
+
         var newSegmentData = /** @type {ol.interaction.SegmentDataType} */ ({
           depth: segmentData.depth,
           feature: segmentData.feature,
           geometry: segmentData.geometry,
           index: newIndex,
-          segment: [newSegment[0].segment[0], newSegment[1].segment[1]]
+          segment: segments
         });
         this.rBush_.insert(ol.extent.boundingExtent(newSegmentData.segment),
             newSegmentData);
-        this.updateSegmentIndices_(geometry, index, segmentData.depth, -1);
-
-        if (this.vertexFeature_) {
-          this.overlay_.getSource().removeFeature(this.vertexFeature_);
-          this.vertexFeature_ = null;
-        }
+      }
+      this.updateSegmentIndices_(geometry, index, segmentData.depth, -1);
+      if (this.vertexFeature_) {
+        this.overlay_.getSource().removeFeature(this.vertexFeature_);
+        this.vertexFeature_ = null;
       }
     }
+
   }
   return true;
 };
@@ -96019,7 +97098,6 @@ ol.interaction.Modify.getDefaultStyleFunction = function() {
 goog.provide('ol.interaction.Select');
 goog.provide('ol.interaction.SelectEvent');
 goog.provide('ol.interaction.SelectEventType');
-goog.provide('ol.interaction.SelectFilterFunction');
 
 goog.require('goog.asserts');
 goog.require('ol.functions');
@@ -96047,17 +97125,6 @@ ol.interaction.SelectEventType = {
    */
   SELECT: 'select'
 };
-
-
-/**
- * A function that takes an {@link ol.Feature} or {@link ol.render.Feature} and
- * an {@link ol.layer.Layer} and returns `true` if the feature may be selected
- * or `false` otherwise.
- * @typedef {function((ol.Feature|ol.render.Feature), ol.layer.Layer):
- *     boolean}
- * @api
- */
-ol.interaction.SelectFilterFunction;
 
 
 /**
@@ -96298,6 +97365,7 @@ ol.interaction.Select.handleEvent = function(mapBrowserEvent) {
     // Replace the currently selected feature(s) with the feature(s) at the
     // pixel, or clear the selected feature(s) if there is no feature at
     // the pixel.
+    ol.object.clear(this.featureLayerAssociation_);
     map.forEachFeatureAtPixel(mapBrowserEvent.pixel,
         /**
          * @param {ol.Feature|ol.render.Feature} feature Feature.
@@ -96321,16 +97389,6 @@ ol.interaction.Select.handleEvent = function(mapBrowserEvent) {
         features.clear();
       }
       features.extend(selected);
-      // Modify object this.featureLayerAssociation_
-      if (selected.length === 0) {
-        ol.object.clear(this.featureLayerAssociation_);
-      } else {
-        if (deselected.length > 0) {
-          deselected.forEach(function(feature) {
-            this.removeFeatureLayerAssociation_(feature);
-          }, this);
-        }
-      }
     }
   } else {
     // Modify the currently selected feature(s).
@@ -96456,7 +97514,6 @@ goog.require('ol');
 goog.require('ol.Collection');
 goog.require('ol.CollectionEvent');
 goog.require('ol.CollectionEventType');
-goog.require('ol.Extent');
 goog.require('ol.Feature');
 goog.require('ol.Object');
 goog.require('ol.Observable');
@@ -96580,7 +97637,7 @@ ol.interaction.Snap = function(opt_options) {
       options.pixelTolerance : 10;
 
   /**
-   * @type {function(ol.interaction.Snap.SegmentDataType, ol.interaction.Snap.SegmentDataType): number}
+   * @type {function(ol.interaction.SnapSegmentDataType, ol.interaction.SnapSegmentDataType): number}
    * @private
    */
   this.sortByDistance_ = ol.interaction.Snap.sortByDistance.bind(this);
@@ -96588,7 +97645,7 @@ ol.interaction.Snap = function(opt_options) {
 
   /**
   * Segment RTree for each layer
-  * @type {ol.structs.RBush.<ol.interaction.Snap.SegmentDataType>}
+  * @type {ol.structs.RBush.<ol.interaction.SnapSegmentDataType>}
   * @private
   */
   this.rBush_ = new ol.structs.RBush();
@@ -96622,25 +97679,30 @@ goog.inherits(ol.interaction.Snap, ol.interaction.Pointer);
  */
 ol.interaction.Snap.prototype.addFeature = function(feature, opt_listen) {
   var listen = opt_listen !== undefined ? opt_listen : true;
+  var feature_uid = goog.getUid(feature);
   var geometry = feature.getGeometry();
-  var segmentWriter = this.SEGMENT_WRITERS_[geometry.getType()];
-  if (segmentWriter) {
-    var feature_uid = goog.getUid(feature);
-    this.indexedFeaturesExtents_[feature_uid] = geometry.getExtent(
-        ol.extent.createEmpty());
-    segmentWriter.call(this, feature, geometry);
+  if (geometry) {
+    var segmentWriter = this.SEGMENT_WRITERS_[geometry.getType()];
+    if (segmentWriter) {
+      this.indexedFeaturesExtents_[feature_uid] = geometry.getExtent(
+          ol.extent.createEmpty());
+      segmentWriter.call(this, feature, geometry);
 
-    if (listen) {
-      this.geometryModifyListenerKeys_[feature_uid] = ol.events.listen(
-          geometry,
-          ol.events.EventType.CHANGE,
-          this.handleGeometryModify_.bind(this, feature),
-          this);
-      this.geometryChangeListenerKeys_[feature_uid] = ol.events.listen(
-          feature,
-          ol.Object.getChangeEventType(feature.getGeometryName()),
-          this.handleGeometryChange_, this);
+      if (listen) {
+        this.geometryModifyListenerKeys_[feature_uid] = ol.events.listen(
+            geometry,
+            ol.events.EventType.CHANGE,
+            this.handleGeometryModify_.bind(this, feature),
+            this);
+      }
     }
+  }
+
+  if (listen) {
+    this.geometryChangeListenerKeys_[feature_uid] = ol.events.listen(
+        feature,
+        ol.Object.getChangeEventType(feature.getGeometryName()),
+        this.handleGeometryChange_, this);
   }
 };
 
@@ -96767,10 +97829,12 @@ ol.interaction.Snap.prototype.removeFeature = function(feature, opt_unlisten) {
     if (unlisten) {
       ol.Observable.unByKey(this.geometryModifyListenerKeys_[feature_uid]);
       delete this.geometryModifyListenerKeys_[feature_uid];
-
-      ol.Observable.unByKey(this.geometryChangeListenerKeys_[feature_uid]);
-      delete this.geometryChangeListenerKeys_[feature_uid];
     }
+  }
+
+  if (unlisten) {
+    ol.Observable.unByKey(this.geometryChangeListenerKeys_[feature_uid]);
+    delete this.geometryChangeListenerKeys_[feature_uid];
   }
 };
 
@@ -96822,7 +97886,7 @@ ol.interaction.Snap.prototype.shouldStopEvent = ol.functions.FALSE;
  * @param {ol.Pixel} pixel Pixel
  * @param {ol.Coordinate} pixelCoordinate Coordinate
  * @param {ol.Map} map Map.
- * @return {ol.interaction.Snap.ResultType} Snap result
+ * @return {ol.interaction.SnapResultType} Snap result
  */
 ol.interaction.Snap.prototype.snapTo = function(pixel, pixelCoordinate, map) {
 
@@ -96881,7 +97945,7 @@ ol.interaction.Snap.prototype.snapTo = function(pixel, pixelCoordinate, map) {
       vertexPixel = [Math.round(vertexPixel[0]), Math.round(vertexPixel[1])];
     }
   }
-  return /** @type {ol.interaction.Snap.ResultType} */ ({
+  return /** @type {ol.interaction.SnapResultType} */ ({
     snapped: snapped,
     vertex: vertex,
     vertexPixel: vertexPixel
@@ -96923,7 +97987,7 @@ ol.interaction.Snap.prototype.writeLineStringGeometry_ = function(feature, geome
   var i, ii, segment, segmentData;
   for (i = 0, ii = coordinates.length - 1; i < ii; ++i) {
     segment = coordinates.slice(i, i + 2);
-    segmentData = /** @type {ol.interaction.Snap.SegmentDataType} */ ({
+    segmentData = /** @type {ol.interaction.SnapSegmentDataType} */ ({
       feature: feature,
       segment: segment
     });
@@ -96944,7 +98008,7 @@ ol.interaction.Snap.prototype.writeMultiLineStringGeometry_ = function(feature, 
     coordinates = lines[j];
     for (i = 0, ii = coordinates.length - 1; i < ii; ++i) {
       segment = coordinates.slice(i, i + 2);
-      segmentData = /** @type {ol.interaction.Snap.SegmentDataType} */ ({
+      segmentData = /** @type {ol.interaction.SnapSegmentDataType} */ ({
         feature: feature,
         segment: segment
       });
@@ -96964,7 +98028,7 @@ ol.interaction.Snap.prototype.writeMultiPointGeometry_ = function(feature, geome
   var coordinates, i, ii, segmentData;
   for (i = 0, ii = points.length; i < ii; ++i) {
     coordinates = points[i];
-    segmentData = /** @type {ol.interaction.Snap.SegmentDataType} */ ({
+    segmentData = /** @type {ol.interaction.SnapSegmentDataType} */ ({
       feature: feature,
       segment: [coordinates, coordinates]
     });
@@ -96987,7 +98051,7 @@ ol.interaction.Snap.prototype.writeMultiPolygonGeometry_ = function(feature, geo
       coordinates = rings[j];
       for (i = 0, ii = coordinates.length - 1; i < ii; ++i) {
         segment = coordinates.slice(i, i + 2);
-        segmentData = /** @type {ol.interaction.Snap.SegmentDataType} */ ({
+        segmentData = /** @type {ol.interaction.SnapSegmentDataType} */ ({
           feature: feature,
           segment: segment
         });
@@ -97005,7 +98069,7 @@ ol.interaction.Snap.prototype.writeMultiPolygonGeometry_ = function(feature, geo
  */
 ol.interaction.Snap.prototype.writePointGeometry_ = function(feature, geometry) {
   var coordinates = geometry.getCoordinates();
-  var segmentData = /** @type {ol.interaction.Snap.SegmentDataType} */ ({
+  var segmentData = /** @type {ol.interaction.SnapSegmentDataType} */ ({
     feature: feature,
     segment: [coordinates, coordinates]
   });
@@ -97025,7 +98089,7 @@ ol.interaction.Snap.prototype.writePolygonGeometry_ = function(feature, geometry
     coordinates = rings[j];
     for (i = 0, ii = coordinates.length - 1; i < ii; ++i) {
       segment = coordinates.slice(i, i + 2);
-      segmentData = /** @type {ol.interaction.Snap.SegmentDataType} */ ({
+      segmentData = /** @type {ol.interaction.SnapSegmentDataType} */ ({
         feature: feature,
         segment: segment
       });
@@ -97033,25 +98097,6 @@ ol.interaction.Snap.prototype.writePolygonGeometry_ = function(feature, geometry
     }
   }
 };
-
-
-/**
- * @typedef {{
- *     snapped: {boolean},
- *     vertex: (ol.Coordinate|null),
- *     vertexPixel: (ol.Pixel|null)
- * }}
- */
-ol.interaction.Snap.ResultType;
-
-
-/**
- * @typedef {{
- *     feature: ol.Feature,
- *     segment: Array.<ol.Coordinate>
- * }}
- */
-ol.interaction.Snap.SegmentDataType;
 
 
 /**
@@ -97089,8 +98134,8 @@ ol.interaction.Snap.handleUpEvent_ = function(evt) {
 
 /**
  * Sort segments by distance, helper function
- * @param {ol.interaction.Snap.SegmentDataType} a The first segment data.
- * @param {ol.interaction.Snap.SegmentDataType} b The second segment data.
+ * @param {ol.interaction.SnapSegmentDataType} a The first segment data.
+ * @param {ol.interaction.SnapSegmentDataType} b The second segment data.
  * @return {number} The difference in distance.
  * @this {ol.interaction.Snap}
  */
@@ -97104,6 +98149,7 @@ ol.interaction.Snap.sortByDistance = function(a, b) {
 goog.provide('ol.interaction.Translate');
 goog.provide('ol.interaction.TranslateEvent');
 
+goog.require('goog.asserts');
 goog.require('ol.events');
 goog.require('ol.events.Event');
 goog.require('ol.array');
@@ -97208,6 +98254,37 @@ ol.interaction.Translate = function(options) {
    * @private
    */
   this.features_ = options.features !== undefined ? options.features : null;
+
+  var layerFilter;
+  if (options.layers) {
+    if (goog.isFunction(options.layers)) {
+      /**
+       * @param {ol.layer.Layer} layer Layer.
+       * @return {boolean} Include.
+       */
+      layerFilter = function(layer) {
+        goog.asserts.assertFunction(options.layers);
+        return options.layers(layer);
+      };
+    } else {
+      var layers = options.layers;
+      /**
+       * @param {ol.layer.Layer} layer Layer.
+       * @return {boolean} Include.
+       */
+      layerFilter = function(layer) {
+        return ol.array.includes(layers, layer);
+      };
+    }
+  } else {
+    layerFilter = ol.functions.TRUE;
+  }
+
+  /**
+   * @private
+   * @type {function(ol.layer.Layer): boolean}
+   */
+  this.layerFilter_ = layerFilter;
 
   /**
    * @type {ol.Feature}
@@ -97345,7 +98422,7 @@ ol.interaction.Translate.prototype.featuresAtPixel_ = function(pixel, map) {
   var intersectingFeature = map.forEachFeatureAtPixel(pixel,
       function(feature) {
         return feature;
-      });
+      }, this, this.layerFilter_);
 
   if (this.features_ &&
       ol.array.includes(this.features_.getArray(), intersectingFeature)) {
@@ -97671,30 +98748,29 @@ goog.provide('ol.net');
  *     callback. Default is 'callback'.
  */
 ol.net.jsonp = function(url, callback, opt_errback, opt_callbackParam) {
-  var script = goog.global.document.createElement('script');
+  var script = ol.global.document.createElement('script');
   var key = 'olc_' + goog.getUid(callback);
   function cleanup() {
-    delete goog.global[key];
+    delete ol.global[key];
     script.parentNode.removeChild(script);
   }
   script.async = true;
   script.src = url + (url.indexOf('?') == -1 ? '?' : '&') +
       (opt_callbackParam || 'callback') + '=' + key;
-  var timer = goog.global.setTimeout(function() {
+  var timer = ol.global.setTimeout(function() {
     cleanup();
     if (opt_errback) {
       opt_errback();
     }
   }, 10000);
-  goog.global[key] = function(data) {
-    goog.global.clearTimeout(timer);
+  ol.global[key] = function(data) {
+    ol.global.clearTimeout(timer);
     cleanup();
     callback(data);
   };
-  goog.global.document.getElementsByTagName('head')[0].appendChild(script);
+  ol.global.document.getElementsByTagName('head')[0].appendChild(script);
 };
 
-goog.provide('ol.raster.Operation');
 goog.provide('ol.raster.OperationType');
 
 
@@ -97707,35 +98783,6 @@ ol.raster.OperationType = {
   PIXEL: 'pixel',
   IMAGE: 'image'
 };
-
-
-/**
- * A function that takes an array of input data, performs some operation, and
- * returns an array of ouput data.  For `'pixel'` type operations, functions
- * will be called with an array of {@link ol.raster.Pixel} data and should
- * return an array of the same.  For `'image'` type operations, functions will
- * be called with an array of {@link ImageData
- * https://developer.mozilla.org/en-US/docs/Web/API/ImageData} and should return
- * an array of the same.  The operations are called with a second "data"
- * argument, which can be used for storage.  The data object is accessible
- * from raster events, where it can be initialized in "beforeoperations" and
- * accessed again in "afteroperations".
- *
- * @typedef {function((Array.<ol.raster.Pixel>|Array.<ImageData>), Object):
- *     (Array.<ol.raster.Pixel>|Array.<ImageData>)}
- * @api
- */
-ol.raster.Operation;
-
-goog.provide('ol.raster.Pixel');
-
-
-/**
- * An array of numbers representing pixel values.
- * @typedef {Array.<number>} ol.raster.Pixel
- * @api
- */
-ol.raster.Pixel;
 
 goog.provide('ol.render');
 
@@ -97783,7 +98830,6 @@ ol.render.toContext = function(context, opt_options) {
 };
 
 goog.provide('ol.reproj.Tile');
-goog.provide('ol.reproj.TileFunctionType');
 
 goog.require('goog.asserts');
 goog.require('ol.Tile');
@@ -97796,12 +98842,6 @@ goog.require('ol.object');
 goog.require('ol.proj');
 goog.require('ol.reproj');
 goog.require('ol.reproj.Triangulation');
-
-
-/**
- * @typedef {function(number, number, number, number) : ol.Tile}
- */
-ol.reproj.TileFunctionType;
 
 
 /**
@@ -97819,7 +98859,7 @@ ol.reproj.TileFunctionType;
  * @param {ol.TileCoord} wrappedTileCoord Coordinate of the tile wrapped in X.
  * @param {number} pixelRatio Pixel ratio.
  * @param {number} gutter Gutter of the source tiles.
- * @param {ol.reproj.TileFunctionType} getTileFunction
+ * @param {ol.ReprojTileFunctionType} getTileFunction
  *     Function returning source tiles (z, x, y, pixelRatio).
  * @param {number=} opt_errorThreshold Acceptable reprojection error (in px).
  * @param {boolean=} opt_renderEdges Render reprojection edges.
@@ -98115,7 +99155,7 @@ ol.reproj.Tile.prototype.load = function() {
     });
 
     if (leftToLoad === 0) {
-      goog.global.setTimeout(this.reproject_.bind(this), 0);
+      ol.global.setTimeout(this.reproject_.bind(this), 0);
     }
   }
 };
@@ -98412,19 +99452,19 @@ ol.source.TileImage.prototype.getTile = function(z, x, y, pixelRatio, projection
 ol.source.TileImage.prototype.getTileInternal = function(z, x, y, pixelRatio, projection) {
   var /** @type {ol.Tile} */ tile = null;
   var tileCoordKey = this.getKeyZXY(z, x, y);
-  var paramsKey = this.getKeyParams();
+  var key = this.getKey();
   if (!this.tileCache.containsKey(tileCoordKey)) {
     goog.asserts.assert(projection, 'argument projection is truthy');
-    tile = this.createTile_(z, x, y, pixelRatio, projection, paramsKey);
+    tile = this.createTile_(z, x, y, pixelRatio, projection, key);
     this.tileCache.set(tileCoordKey, tile);
   } else {
     tile = /** @type {!ol.Tile} */ (this.tileCache.get(tileCoordKey));
-    if (tile.key != paramsKey) {
+    if (tile.key != key) {
       // The source's params changed. If the tile has an interim tile and if we
       // can use it then we use it. Otherwise we create a new tile.  In both
       // cases we attempt to assign an interim tile to the new tile.
       var /** @type {ol.Tile} */ interimTile = tile;
-      if (tile.interimTile && tile.interimTile.key == paramsKey) {
+      if (tile.interimTile && tile.interimTile.key == key) {
         goog.asserts.assert(tile.interimTile.getState() == ol.TileState.LOADED);
         goog.asserts.assert(tile.interimTile.interimTile === null);
         tile = tile.interimTile;
@@ -98432,7 +99472,7 @@ ol.source.TileImage.prototype.getTileInternal = function(z, x, y, pixelRatio, pr
           tile.interimTile = interimTile;
         }
       } else {
-        tile = this.createTile_(z, x, y, pixelRatio, projection, paramsKey);
+        tile = this.createTile_(z, x, y, pixelRatio, projection, key);
         if (interimTile.getState() == ol.TileState.LOADED) {
           tile.interimTile = interimTile;
         } else if (interimTile.interimTile &&
@@ -98702,10 +99742,11 @@ goog.require('ol.source.TileImage');
  *
  * @constructor
  * @extends {ol.source.TileImage}
- * @param {olx.source.XYZOptions} options XYZ options.
+ * @param {olx.source.XYZOptions=} opt_options XYZ options.
  * @api stable
  */
-ol.source.XYZ = function(options) {
+ol.source.XYZ = function(opt_options) {
+  var options = opt_options || {};
   var projection = options.projection !== undefined ?
       options.projection : 'EPSG:3857';
 
@@ -98739,6 +99780,7 @@ goog.inherits(ol.source.XYZ, ol.source.TileImage);
 
 goog.provide('ol.source.CartoDB');
 
+goog.require('ol.object');
 goog.require('ol.source.State');
 goog.require('ol.source.XYZ');
 
@@ -98767,7 +99809,7 @@ ol.source.CartoDB = function(options) {
   this.mapId_ = options.map || '';
 
   /**
-   * @type {Object}
+   * @type {!Object}
    * @private
    */
   this.config_ = options.config || {};
@@ -98786,6 +99828,7 @@ ol.source.CartoDB = function(options) {
     maxZoom: options.maxZoom !== undefined ? options.maxZoom : 18,
     minZoom: options.minZoom,
     projection: options.projection,
+    state: ol.source.State.LOADING,
     wrapX: options.wrapX
   });
   this.initializeMap_();
@@ -98795,7 +99838,7 @@ goog.inherits(ol.source.CartoDB, ol.source.XYZ);
 
 /**
  * Returns the current config.
- * @return {Object} The current configuration.
+ * @return {!Object} The current configuration.
  * @api
  */
 ol.source.CartoDB.prototype.getConfig = function() {
@@ -98810,9 +99853,7 @@ ol.source.CartoDB.prototype.getConfig = function() {
  * @api
  */
 ol.source.CartoDB.prototype.updateConfig = function(config) {
-  for (var key in config) {
-    this.config_[key] = config[key];
-  }
+  ol.object.assign(this.config_, config);
   this.initializeMap_();
 };
 
@@ -98822,6 +99863,7 @@ ol.source.CartoDB.prototype.updateConfig = function(config) {
  * @param {Object} config In the case of anonymous maps, a CartoDB configuration
  *     object.
  * If using named maps, a key-value lookup with the template parameters.
+ * @api
  */
 ol.source.CartoDB.prototype.setConfig = function(config) {
   this.config_ = config || {};
@@ -98839,8 +99881,7 @@ ol.source.CartoDB.prototype.initializeMap_ = function() {
     this.applyTemplate_(this.templateCache_[paramHash]);
     return;
   }
-  var mapUrl = 'https://' + this.account_ +
-      '.cartodb.com/api/v1/map';
+  var mapUrl = 'https://' + this.account_ + '.cartodb.com/api/v1/map';
 
   if (this.mapId_) {
     mapUrl += '/named/' + this.mapId_;
@@ -98874,6 +99915,7 @@ ol.source.CartoDB.prototype.handleInitResponse_ = function(paramHash, event) {
     }
     this.applyTemplate_(response);
     this.templateCache_[paramHash] = response;
+    this.setState(ol.source.State.READY);
   } else {
     this.setState(ol.source.State.ERROR);
   }
@@ -99081,13 +100123,280 @@ ol.source.Cluster.prototype.createCluster_ = function(features) {
   return cluster;
 };
 
+goog.provide('ol.source.ImageArcGISRest');
+
+goog.require('goog.asserts');
+goog.require('goog.uri.utils');
+goog.require('ol');
+goog.require('ol.Image');
+goog.require('ol.events');
+goog.require('ol.events.EventType');
+goog.require('ol.extent');
+goog.require('ol.object');
+goog.require('ol.proj');
+goog.require('ol.source.Image');
+
+
+/**
+ * @classdesc
+ * Source for data from ArcGIS Rest services providing single, untiled images.
+ * Useful when underlying map service has labels.
+ *
+ * If underlying map service is not using labels,
+ * take advantage of ol image caching and use
+ * {@link ol.source.TileArcGISRest} data source.
+ *
+ * @constructor
+ * @fires ol.source.ImageEvent
+ * @extends {ol.source.Image}
+ * @param {olx.source.ImageArcGISRestOptions=} opt_options Image ArcGIS Rest Options.
+ * @api
+ */
+ol.source.ImageArcGISRest = function(opt_options) {
+
+  var options = opt_options || {};
+
+  goog.base(this, {
+    attributions: options.attributions,
+    logo: options.logo,
+    projection: options.projection,
+    resolutions: options.resolutions
+  });
+
+  /**
+   * @private
+   * @type {?string}
+   */
+  this.crossOrigin_ =
+      options.crossOrigin !== undefined ? options.crossOrigin : null;
+
+  /**
+   * @private
+   * @type {string|undefined}
+   */
+  this.url_ = options.url;
+
+  /**
+   * @private
+   * @type {ol.ImageLoadFunctionType}
+   */
+  this.imageLoadFunction_ = options.imageLoadFunction !== undefined ?
+      options.imageLoadFunction : ol.source.Image.defaultImageLoadFunction;
+
+
+  /**
+   * @private
+   * @type {!Object}
+   */
+  this.params_ = options.params || {};
+
+  /**
+   * @private
+   * @type {ol.Image}
+   */
+  this.image_ = null;
+
+  /**
+   * @private
+   * @type {ol.Size}
+   */
+  this.imageSize_ = [0, 0];
+
+
+  /**
+   * @private
+   * @type {number}
+   */
+  this.renderedRevision_ = 0;
+
+  /**
+   * @private
+   * @type {number}
+   */
+  this.ratio_ = options.ratio !== undefined ? options.ratio : 1.5;
+
+};
+goog.inherits(ol.source.ImageArcGISRest, ol.source.Image);
+
+
+/**
+ * Get the user-provided params, i.e. those passed to the constructor through
+ * the "params" option, and possibly updated using the updateParams method.
+ * @return {Object} Params.
+ * @api stable
+ */
+ol.source.ImageArcGISRest.prototype.getParams = function() {
+  return this.params_;
+};
+
+
+/**
+ * @inheritDoc
+ */
+ol.source.ImageArcGISRest.prototype.getImageInternal = function(extent, resolution, pixelRatio, projection) {
+
+  if (this.url_ === undefined) {
+    return null;
+  }
+
+  resolution = this.findNearestResolution(resolution);
+
+  var image = this.image_;
+  if (image &&
+      this.renderedRevision_ == this.getRevision() &&
+      image.getResolution() == resolution &&
+      image.getPixelRatio() == pixelRatio &&
+      ol.extent.containsExtent(image.getExtent(), extent)) {
+    return image;
+  }
+
+  var params = {
+    'F': 'image',
+    'FORMAT': 'PNG32',
+    'TRANSPARENT': true
+  };
+  ol.object.assign(params, this.params_);
+
+  extent = extent.slice();
+  var centerX = (extent[0] + extent[2]) / 2;
+  var centerY = (extent[1] + extent[3]) / 2;
+  if (this.ratio_ != 1) {
+    var halfWidth = this.ratio_ * ol.extent.getWidth(extent) / 2;
+    var halfHeight = this.ratio_ * ol.extent.getHeight(extent) / 2;
+    extent[0] = centerX - halfWidth;
+    extent[1] = centerY - halfHeight;
+    extent[2] = centerX + halfWidth;
+    extent[3] = centerY + halfHeight;
+  }
+
+  var imageResolution = resolution / pixelRatio;
+
+  // Compute an integer width and height.
+  var width = Math.ceil(ol.extent.getWidth(extent) / imageResolution);
+  var height = Math.ceil(ol.extent.getHeight(extent) / imageResolution);
+
+  // Modify the extent to match the integer width and height.
+  extent[0] = centerX - imageResolution * width / 2;
+  extent[2] = centerX + imageResolution * width / 2;
+  extent[1] = centerY - imageResolution * height / 2;
+  extent[3] = centerY + imageResolution * height / 2;
+
+  this.imageSize_[0] = width;
+  this.imageSize_[1] = height;
+
+  var url = this.getRequestUrl_(extent, this.imageSize_, pixelRatio,
+      projection, params);
+
+  this.image_ = new ol.Image(extent, resolution, pixelRatio,
+      this.getAttributions(), url, this.crossOrigin_, this.imageLoadFunction_);
+
+  this.renderedRevision_ = this.getRevision();
+
+  ol.events.listen(this.image_, ol.events.EventType.CHANGE,
+      this.handleImageChange, this);
+
+  return this.image_;
+
+};
+
+
+/**
+ * Return the image load function of the source.
+ * @return {ol.ImageLoadFunctionType} The image load function.
+ * @api
+ */
+ol.source.ImageArcGISRest.prototype.getImageLoadFunction = function() {
+  return this.imageLoadFunction_;
+};
+
+
+/**
+ * @param {ol.Extent} extent Extent.
+ * @param {ol.Size} size Size.
+ * @param {number} pixelRatio Pixel ratio.
+ * @param {ol.proj.Projection} projection Projection.
+ * @param {Object} params Params.
+ * @return {string} Request URL.
+ * @private
+ */
+ol.source.ImageArcGISRest.prototype.getRequestUrl_ = function(extent, size, pixelRatio, projection, params) {
+
+  goog.asserts.assert(this.url_ !== undefined, 'url is defined');
+
+  // ArcGIS Server only wants the numeric portion of the projection ID.
+  var srid = projection.getCode().split(':').pop();
+
+  params['SIZE'] = size[0] + ',' + size[1];
+  params['BBOX'] = extent.join(',');
+  params['BBOXSR'] = srid;
+  params['IMAGESR'] = srid;
+  params['DPI'] = 90 * pixelRatio;
+
+  var url = this.url_;
+
+  var modifiedUrl = url
+    .replace(/MapServer\/?$/, 'MapServer/export')
+    .replace(/ImageServer\/?$/, 'ImageServer/exportImage');
+  if (modifiedUrl == url) {
+    goog.asserts.fail('Unknown Rest Service', url);
+  }
+  return goog.uri.utils.appendParamsFromMap(modifiedUrl, params);
+};
+
+
+/**
+ * Return the URL used for this ArcGIS source.
+ * @return {string|undefined} URL.
+ * @api stable
+ */
+ol.source.ImageArcGISRest.prototype.getUrl = function() {
+  return this.url_;
+};
+
+
+/**
+ * Set the image load function of the source.
+ * @param {ol.ImageLoadFunctionType} imageLoadFunction Image load function.
+ * @api
+ */
+ol.source.ImageArcGISRest.prototype.setImageLoadFunction = function(imageLoadFunction) {
+  this.image_ = null;
+  this.imageLoadFunction_ = imageLoadFunction;
+  this.changed();
+};
+
+
+/**
+ * Set the URL to use for requests.
+ * @param {string|undefined} url URL.
+ * @api stable
+ */
+ol.source.ImageArcGISRest.prototype.setUrl = function(url) {
+  if (url != this.url_) {
+    this.url_ = url;
+    this.image_ = null;
+    this.changed();
+  }
+};
+
+
+/**
+ * Update the user-provided params.
+ * @param {Object} params Params.
+ * @api stable
+ */
+ol.source.ImageArcGISRest.prototype.updateParams = function(params) {
+  ol.object.assign(this.params_, params);
+  this.image_ = null;
+  this.changed();
+};
+
 goog.provide('ol.source.ImageMapGuide');
 
 goog.require('ol.events');
 goog.require('ol.events.EventType');
 goog.require('goog.uri.utils');
 goog.require('ol.Image');
-goog.require('ol.ImageLoadFunctionType');
 goog.require('ol.extent');
 goog.require('ol.object');
 goog.require('ol.source.Image');
@@ -99327,8 +100636,8 @@ goog.provide('ol.source.ImageStatic');
 goog.require('ol.events');
 goog.require('ol.events.EventType');
 goog.require('ol.Image');
-goog.require('ol.ImageLoadFunctionType');
 goog.require('ol.ImageState');
+goog.require('ol.dom');
 goog.require('ol.extent');
 goog.require('ol.proj');
 goog.require('ol.source.Image');
@@ -99402,17 +100711,16 @@ ol.source.ImageStatic.prototype.handleImageChange = function(evt) {
       imageWidth = this.imageSize_[0];
       imageHeight = this.imageSize_[1];
     } else {
-      imageWidth = image.width;
-      imageHeight = image.height;
+      // TODO: remove the type cast when a closure-compiler > 20160315 is used.
+      // see: https://github.com/google/closure-compiler/pull/1664
+      imageWidth = /** @type {number} */ (image.width);
+      imageHeight = /** @type {number} */ (image.height);
     }
     var resolution = ol.extent.getHeight(imageExtent) / imageHeight;
     var targetWidth = Math.ceil(ol.extent.getWidth(imageExtent) / resolution);
     if (targetWidth != imageWidth) {
-      var canvas = /** @type {HTMLCanvasElement} */
-          (document.createElement('canvas'));
-      canvas.width = targetWidth;
-      canvas.height = /** @type {number} */ (imageHeight);
-      var context = canvas.getContext('2d');
+      var context = ol.dom.createCanvasContext2D(targetWidth, imageHeight);
+      var canvas = context.canvas;
       context.drawImage(image, 0, 0, imageWidth, imageHeight,
           0, 0, canvas.width, canvas.height);
       this.image_.setImage(canvas);
@@ -99444,11 +100752,9 @@ ol.source.wms.ServerType = {
 goog.provide('ol.source.ImageWMS');
 
 goog.require('goog.asserts');
-goog.require('goog.string');
 goog.require('goog.uri.utils');
 goog.require('ol');
 goog.require('ol.Image');
-goog.require('ol.ImageLoadFunctionType');
 goog.require('ol.events');
 goog.require('ol.events.EventType');
 goog.require('ol.extent');
@@ -99457,6 +100763,7 @@ goog.require('ol.proj');
 goog.require('ol.source.Image');
 goog.require('ol.source.wms');
 goog.require('ol.source.wms.ServerType');
+goog.require('ol.string');
 
 
 /**
@@ -99716,7 +101023,7 @@ ol.source.ImageWMS.prototype.getRequestUrl_ = function(extent, size, pixelRatio,
   params[this.v13_ ? 'CRS' : 'SRS'] = projection.getCode();
 
   if (!('STYLES' in this.params_)) {
-    params['STYLES'] = new String('');
+    params['STYLES'] = '';
   }
 
   if (pixelRatio != 1) {
@@ -99813,7 +101120,7 @@ ol.source.ImageWMS.prototype.updateParams = function(params) {
  */
 ol.source.ImageWMS.prototype.updateV13_ = function() {
   var version = this.params_['VERSION'] || ol.DEFAULT_WMS_VERSION;
-  this.v13_ = goog.string.compareVersions(version, '1.3') >= 0;
+  this.v13_ = ol.string.compareVersions(version, '1.3') >= 0;
 };
 
 goog.provide('ol.source.OSM');
@@ -100393,7 +101700,7 @@ ol.source.Raster = function(options) {
 
   /**
    * The most recently rendered state.
-   * @type {?ol.source.Raster.RenderedState}
+   * @type {?ol.SourceRasterRenderedState}
    * @private
    */
   this.renderedState_ = null;
@@ -100521,15 +101828,16 @@ ol.source.Raster.prototype.getImage = function(extent, resolution, pixelRatio, p
     return null;
   }
 
-  if (!this.isDirty_(extent, resolution)) {
+  var currentExtent = extent.slice();
+  if (!this.isDirty_(currentExtent, resolution)) {
     return this.renderedImageCanvas_;
   }
 
   var context = this.canvasContext_;
   var canvas = context.canvas;
 
-  var width = Math.round(ol.extent.getWidth(extent) / resolution);
-  var height = Math.round(ol.extent.getHeight(extent) / resolution);
+  var width = Math.round(ol.extent.getWidth(currentExtent) / resolution);
+  var height = Math.round(ol.extent.getHeight(currentExtent) / resolution);
 
   if (width !== canvas.width ||
       height !== canvas.height) {
@@ -100537,16 +101845,16 @@ ol.source.Raster.prototype.getImage = function(extent, resolution, pixelRatio, p
     canvas.height = height;
   }
 
-  var frameState = this.updateFrameState_(extent, resolution, projection);
+  var frameState = this.updateFrameState_(currentExtent, resolution, projection);
 
   var imageCanvas = new ol.ImageCanvas(
-      extent, resolution, 1, this.getAttributions(), canvas,
+      currentExtent, resolution, 1, this.getAttributions(), canvas,
       this.composeFrame_.bind(this, frameState));
 
   this.renderedImageCanvas_ = imageCanvas;
 
   this.renderedState_ = {
-    extent: extent,
+    extent: currentExtent,
     resolution: resolution,
     revision: this.getRevision()
   };
@@ -100641,7 +101949,7 @@ ol.source.Raster.prototype.onWorkerComplete_ = function(frameState, callback, er
  * Get image data from a renderer.
  * @param {ol.renderer.canvas.Layer} renderer Layer renderer.
  * @param {olx.FrameState} frameState The frame state.
- * @param {ol.layer.LayerState} layerState The layer state.
+ * @param {ol.LayerState} layerState The layer state.
  * @return {ImageData} The image data.
  * @private
  */
@@ -100677,7 +101985,7 @@ ol.source.Raster.context_ = null;
 /**
  * Get a list of layer states from a list of renderers.
  * @param {Array.<ol.renderer.canvas.Layer>} renderers Layer renderers.
- * @return {Array.<ol.layer.LayerState>} The layer states.
+ * @return {Array.<ol.LayerState>} The layer states.
  * @private
  */
 ol.source.Raster.getLayerStatesArray_ = function(renderers) {
@@ -100744,14 +102052,6 @@ ol.source.Raster.createTileRenderer_ = function(source) {
   var layer = new ol.layer.Tile({source: source});
   return new ol.renderer.canvas.TileLayer(layer);
 };
-
-
-/**
- * @typedef {{revision: number,
- *            resolution: number,
- *            extent: ol.Extent}}
- */
-ol.source.Raster.RenderedState;
 
 
 /**
@@ -100951,7 +102251,6 @@ goog.provide('ol.source.TileArcGISRest');
 goog.require('goog.asserts');
 goog.require('goog.uri.utils');
 goog.require('ol');
-goog.require('ol.TileCoord');
 goog.require('ol.extent');
 goog.require('ol.object');
 goog.require('ol.math');
@@ -101124,7 +102423,6 @@ ol.source.TileArcGISRest.prototype.updateParams = function(params) {
 goog.provide('ol.source.TileDebug');
 
 goog.require('ol.Tile');
-goog.require('ol.TileCoord');
 goog.require('ol.TileState');
 goog.require('ol.dom');
 goog.require('ol.size');
@@ -101456,8 +102754,23 @@ ol.source.TileUTFGrid = function(options) {
    */
   this.template_ = undefined;
 
+  /**
+   * @private
+   * @type {boolean}
+   */
+  this.jsonp_ = options.jsonp || false;
+
   if (options.url) {
-    ol.net.jsonp(options.url, this.handleTileJSONResponse.bind(this));
+    if (this.jsonp_) {
+      ol.net.jsonp(options.url, this.handleTileJSONResponse.bind(this),
+          this.handleTileJSONError.bind(this));
+    } else {
+      var client = new XMLHttpRequest();
+      client.addEventListener('load', this.onXHRLoad_.bind(this));
+      client.addEventListener('error', this.onXHRError_.bind(this));
+      client.open('GET', options.url);
+      client.send();
+    }
   } else if (options.tileJSON) {
     this.handleTileJSONResponse(options.tileJSON);
   } else {
@@ -101465,6 +102778,36 @@ ol.source.TileUTFGrid = function(options) {
   }
 };
 goog.inherits(ol.source.TileUTFGrid, ol.source.Tile);
+
+
+/**
+ * @private
+ * @param {Event} event The load event.
+ */
+ol.source.TileUTFGrid.prototype.onXHRLoad_ = function(event) {
+  var client = /** @type {XMLHttpRequest} */ (event.target);
+  if (client.status >= 200 && client.status < 300) {
+    var response;
+    try {
+      response = /** @type {TileJSON} */(JSON.parse(client.responseText));
+    } catch (err) {
+      this.handleTileJSONError();
+      return;
+    }
+    this.handleTileJSONResponse(response);
+  } else {
+    this.handleTileJSONError();
+  }
+};
+
+
+/**
+ * @private
+ * @param {Event} event The error event.
+ */
+ol.source.TileUTFGrid.prototype.onXHRError_ = function(event) {
+  this.handleTileJSONError();
+};
 
 
 /**
@@ -101483,7 +102826,7 @@ ol.source.TileUTFGrid.prototype.getTemplate = function() {
  * in case of an error).
  * @param {ol.Coordinate} coordinate Coordinate.
  * @param {number} resolution Resolution.
- * @param {function(this: T, Object)} callback Callback.
+ * @param {function(this: T, *)} callback Callback.
  * @param {T=} opt_this The object to use as `this` in the callback.
  * @param {boolean=} opt_request If `true` the callback is always async.
  *                               The tile data is requested if not yet loaded.
@@ -101507,6 +102850,14 @@ ol.source.TileUTFGrid.prototype.forDataAtCoordinateAndResolution = function(
       callback.call(opt_this, null);
     }
   }
+};
+
+
+/**
+ * @protected
+ */
+ol.source.TileUTFGrid.prototype.handleTileJSONError = function() {
+  this.setState(ol.source.State.ERROR);
 };
 
 
@@ -101592,7 +102943,8 @@ ol.source.TileUTFGrid.prototype.getTile = function(z, x, y, pixelRatio, projecti
         tileUrl !== undefined ? ol.TileState.IDLE : ol.TileState.EMPTY,
         tileUrl !== undefined ? tileUrl : '',
         this.tileGrid.getTileCoordExtent(tileCoord),
-        this.preemptive_);
+        this.preemptive_,
+        this.jsonp_);
     this.tileCache.set(tileCoordKey, tile);
     return tile;
   }
@@ -101618,9 +102970,10 @@ ol.source.TileUTFGrid.prototype.useTile = function(z, x, y) {
  * @param {string} src Image source URI.
  * @param {ol.Extent} extent Extent of the tile.
  * @param {boolean} preemptive Load the tile when visible (before it's needed).
+ * @param {boolean} jsonp Load the tile as a script.
  * @private
  */
-ol.source.TileUTFGridTile_ = function(tileCoord, state, src, extent, preemptive) {
+ol.source.TileUTFGridTile_ = function(tileCoord, state, src, extent, preemptive, jsonp) {
 
   goog.base(this, tileCoord, state);
 
@@ -101659,6 +103012,14 @@ ol.source.TileUTFGridTile_ = function(tileCoord, state, src, extent, preemptive)
    * @type {Object.<string, Object>|undefined}
    */
   this.data_ = null;
+
+
+  /**
+   * @private
+   * @type {boolean}
+   */
+  this.jsonp_ = jsonp;
+
 };
 goog.inherits(ol.source.TileUTFGridTile_, ol.Tile);
 
@@ -101677,10 +103038,10 @@ ol.source.TileUTFGridTile_.prototype.getImage = function(opt_context) {
 /**
  * Synchronously returns data at given coordinate (if available).
  * @param {ol.Coordinate} coordinate Coordinate.
- * @return {Object} The data.
+ * @return {*} The data.
  */
 ol.source.TileUTFGridTile_.prototype.getData = function(coordinate) {
-  if (!this.grid_ || !this.keys_ || !this.data_) {
+  if (!this.grid_ || !this.keys_) {
     return null;
   }
   var xRelative = (coordinate[0] - this.extent_[0]) /
@@ -101703,7 +103064,16 @@ ol.source.TileUTFGridTile_.prototype.getData = function(coordinate) {
   }
   code -= 32;
 
-  return (code in this.keys_) ? this.data_[this.keys_[code]] : null;
+  var data = null;
+  if (code in this.keys_) {
+    var id = this.keys_[code];
+    if (this.data_ && id in this.data_) {
+      data = this.data_[id];
+    } else {
+      data = id;
+    }
+  }
+  return data;
 };
 
 
@@ -101711,7 +103081,7 @@ ol.source.TileUTFGridTile_.prototype.getData = function(coordinate) {
  * Calls the callback (synchronously by default) with the available data
  * for given coordinate (or `null` if not yet loaded).
  * @param {ol.Coordinate} coordinate Coordinate.
- * @param {function(this: T, Object)} callback Callback.
+ * @param {function(this: T, *)} callback Callback.
  * @param {T=} opt_this The object to use as `this` in the callback.
  * @param {boolean=} opt_request If `true` the callback is always async.
  *                               The tile data is requested if not yet loaded.
@@ -101772,9 +103142,47 @@ ol.source.TileUTFGridTile_.prototype.handleLoad_ = function(json) {
 ol.source.TileUTFGridTile_.prototype.loadInternal_ = function() {
   if (this.state == ol.TileState.IDLE) {
     this.state = ol.TileState.LOADING;
-    ol.net.jsonp(this.src_, this.handleLoad_.bind(this),
-        this.handleError_.bind(this));
+    if (this.jsonp_) {
+      ol.net.jsonp(this.src_, this.handleLoad_.bind(this),
+          this.handleError_.bind(this));
+    } else {
+      var client = new XMLHttpRequest();
+      client.addEventListener('load', this.onXHRLoad_.bind(this));
+      client.addEventListener('error', this.onXHRError_.bind(this));
+      client.open('GET', this.src_);
+      client.send();
+    }
   }
+};
+
+
+/**
+ * @private
+ * @param {Event} event The load event.
+ */
+ol.source.TileUTFGridTile_.prototype.onXHRLoad_ = function(event) {
+  var client = /** @type {XMLHttpRequest} */ (event.target);
+  if (client.status >= 200 && client.status < 300) {
+    var response;
+    try {
+      response = /** @type {!UTFGridJSON} */(JSON.parse(client.responseText));
+    } catch (err) {
+      this.handleError_();
+      return;
+    }
+    this.handleLoad_(response);
+  } else {
+    this.handleError_();
+  }
+};
+
+
+/**
+ * @private
+ * @param {Event} event The error event.
+ */
+ol.source.TileUTFGridTile_.prototype.onXHRError_ = function(event) {
+  this.handleError_();
 };
 
 
@@ -101794,10 +103202,8 @@ ol.source.TileUTFGridTile_.prototype.load = function() {
 goog.provide('ol.source.TileWMS');
 
 goog.require('goog.asserts');
-goog.require('goog.string');
 goog.require('goog.uri.utils');
 goog.require('ol');
-goog.require('ol.TileCoord');
 goog.require('ol.extent');
 goog.require('ol.object');
 goog.require('ol.math');
@@ -101807,6 +103213,7 @@ goog.require('ol.source.TileImage');
 goog.require('ol.source.wms');
 goog.require('ol.source.wms.ServerType');
 goog.require('ol.tilecoord');
+goog.require('ol.string');
 
 
 /**
@@ -101855,13 +103262,6 @@ ol.source.TileWMS = function(opt_options) {
 
   /**
    * @private
-   * @type {string}
-   */
-  this.paramsKey_ = '';
-  this.resetParamsKey_();
-
-  /**
-   * @private
    * @type {boolean}
    */
   this.v13_ = true;
@@ -101893,6 +103293,7 @@ ol.source.TileWMS = function(opt_options) {
   this.tmpExtent_ = ol.extent.createEmpty();
 
   this.updateV13_();
+  this.setKey(this.getKeyForParams_());
 
 };
 goog.inherits(ol.source.TileWMS, ol.source.TileImage);
@@ -101975,14 +103376,6 @@ ol.source.TileWMS.prototype.getGutterInternal = function() {
 /**
  * @inheritDoc
  */
-ol.source.TileWMS.prototype.getKeyParams = function() {
-  return this.paramsKey_;
-};
-
-
-/**
- * @inheritDoc
- */
 ol.source.TileWMS.prototype.getKeyZXY = function(z, x, y) {
   return this.coordKeyPrefix_ + goog.base(this, 'getKeyZXY', z, x, y);
 };
@@ -102023,7 +103416,7 @@ ol.source.TileWMS.prototype.getRequestUrl_ = function(tileCoord, tileSize, tileE
   params[this.v13_ ? 'CRS' : 'SRS'] = projection.getCode();
 
   if (!('STYLES' in this.params_)) {
-    params['STYLES'] = new String('');
+    params['STYLES'] = '';
   }
 
   if (pixelRatio != 1) {
@@ -102101,14 +103494,15 @@ ol.source.TileWMS.prototype.resetCoordKeyPrefix_ = function() {
 
 /**
  * @private
+ * @return {string} The key for the current params.
  */
-ol.source.TileWMS.prototype.resetParamsKey_ = function() {
+ol.source.TileWMS.prototype.getKeyForParams_ = function() {
   var i = 0;
   var res = [];
   for (var key in this.params_) {
     res[i++] = key + '-' + this.params_[key];
   }
-  this.paramsKey_ = res.join('/');
+  return res.join('/');
 };
 
 
@@ -102168,9 +103562,8 @@ ol.source.TileWMS.prototype.fixedTileUrlFunction = function(tileCoord, pixelRati
 ol.source.TileWMS.prototype.updateParams = function(params) {
   ol.object.assign(this.params_, params);
   this.resetCoordKeyPrefix_();
-  this.resetParamsKey_();
   this.updateV13_();
-  this.changed();
+  this.setKey(this.getKeyForParams_());
 };
 
 
@@ -102179,7 +103572,7 @@ ol.source.TileWMS.prototype.updateParams = function(params) {
  */
 ol.source.TileWMS.prototype.updateV13_ = function() {
   var version = this.params_['VERSION'] || ol.DEFAULT_WMS_VERSION;
-  this.v13_ = goog.string.compareVersions(version, '1.3') >= 0;
+  this.v13_ = ol.string.compareVersions(version, '1.3') >= 0;
 };
 
 goog.provide('ol.tilegrid.WMTS');
@@ -102323,7 +103716,6 @@ goog.provide('ol.source.WMTSRequestEncoding');
 goog.require('goog.asserts');
 goog.require('goog.uri.utils');
 goog.require('ol.TileUrlFunction');
-goog.require('ol.TileUrlFunctionType');
 goog.require('ol.array');
 goog.require('ol.extent');
 goog.require('ol.object');
@@ -102373,13 +103765,6 @@ ol.source.WMTS = function(options) {
    * @type {!Object}
    */
   this.dimensions_ = options.dimensions !== undefined ? options.dimensions : {};
-
-  /**
-   * @private
-   * @type {string}
-   */
-  this.dimensionsKey_ = '';
-  this.resetDimensionsKey_();
 
   /**
    * @private
@@ -102507,6 +103892,8 @@ ol.source.WMTS = function(options) {
     wrapX: options.wrapX !== undefined ? options.wrapX : false
   });
 
+  this.setKey(this.getKeyForDimensions_());
+
 };
 goog.inherits(ol.source.WMTS, ol.source.TileImage);
 
@@ -102530,14 +103917,6 @@ ol.source.WMTS.prototype.getDimensions = function() {
  */
 ol.source.WMTS.prototype.getFormat = function() {
   return this.format_;
-};
-
-
-/**
- * @inheritDoc
- */
-ol.source.WMTS.prototype.getKeyParams = function() {
-  return this.dimensionsKey_;
 };
 
 
@@ -102593,14 +103972,15 @@ ol.source.WMTS.prototype.getVersion = function() {
 
 /**
  * @private
+ * @return {string} The key for the current dimensions.
  */
-ol.source.WMTS.prototype.resetDimensionsKey_ = function() {
+ol.source.WMTS.prototype.getKeyForDimensions_ = function() {
   var i = 0;
   var res = [];
   for (var key in this.dimensions_) {
     res[i++] = key + '-' + this.dimensions_[key];
   }
-  this.dimensionsKey_ = res.join('/');
+  return res.join('/');
 };
 
 
@@ -102611,8 +103991,7 @@ ol.source.WMTS.prototype.resetDimensionsKey_ = function() {
  */
 ol.source.WMTS.prototype.updateDimensions = function(dimensions) {
   ol.object.assign(this.dimensions_, dimensions);
-  this.resetDimensionsKey_();
-  this.changed();
+  this.setKey(this.getKeyForDimensions_());
 };
 
 
@@ -102809,7 +104188,6 @@ goog.provide('ol.source.Zoomify');
 goog.require('goog.asserts');
 goog.require('ol');
 goog.require('ol.ImageTile');
-goog.require('ol.TileCoord');
 goog.require('ol.TileState');
 goog.require('ol.dom');
 goog.require('ol.extent');
@@ -102998,16 +104376,7 @@ goog.provide('ol.style.AtlasManager');
 
 goog.require('goog.asserts');
 goog.require('ol');
-
-/**
- * Provides information for an image inside an atlas manager.
- * `offsetX` and `offsetY` is the position of the image inside
- * the atlas image `image` and the position of the hit-detection image
- * inside the hit-detection atlas image `hitImage`.
- * @typedef {{offsetX: number, offsetY: number, image: HTMLCanvasElement,
- *    hitImage: HTMLCanvasElement}}
- */
-ol.style.AtlasManagerInfo;
+goog.require('ol.dom');
 
 
 /**
@@ -103234,15 +104603,6 @@ ol.style.AtlasManager.prototype.add_ = function(isHitAtlas, id, width, height,
 
 
 /**
- * Provides information for an image inside an atlas.
- * `offsetX` and `offsetY` are the position of the image inside
- * the atlas image `image`.
- * @typedef {{offsetX: number, offsetY: number, image: HTMLCanvasElement}}
- */
-ol.style.AtlasInfo;
-
-
-/**
  * This class facilitates the creation of image atlases.
  *
  * Images added to an atlas will be rendered onto a single
@@ -103269,7 +104629,7 @@ ol.style.Atlas = function(size, space) {
 
   /**
    * @private
-   * @type {Array.<ol.style.Atlas.Block>}
+   * @type {Array.<ol.style.AtlasBlock>}
    */
   this.emptyBlocks_ = [{x: 0, y: 0, width: size, height: size}];
 
@@ -103281,19 +104641,15 @@ ol.style.Atlas = function(size, space) {
 
   /**
    * @private
-   * @type {HTMLCanvasElement}
+   * @type {CanvasRenderingContext2D}
    */
-  this.canvas_ = /** @type {HTMLCanvasElement} */
-      (document.createElement('CANVAS'));
-  this.canvas_.width = size;
-  this.canvas_.height = size;
+  this.context_ = ol.dom.createCanvasContext2D(size, size);
 
   /**
    * @private
-   * @type {CanvasRenderingContext2D}
+   * @type {HTMLCanvasElement}
    */
-  this.context_ = /** @type {CanvasRenderingContext2D} */
-      (this.canvas_.getContext('2d'));
+  this.canvas_ = this.context_.canvas;
 };
 
 
@@ -103349,7 +104705,7 @@ ol.style.Atlas.prototype.add = function(id, width, height, renderCallback, opt_t
 /**
  * @private
  * @param {number} index The index of the block.
- * @param {ol.style.Atlas.Block} block The block to split.
+ * @param {ol.style.AtlasBlock} block The block to split.
  * @param {number} width The width of the entry to insert.
  * @param {number} height The height of the entry to insert.
  */
@@ -103357,9 +104713,9 @@ ol.style.Atlas.prototype.split_ = function(index, block, width, height) {
   var deltaWidth = block.width - width;
   var deltaHeight = block.height - height;
 
-  /** @type {ol.style.Atlas.Block} */
+  /** @type {ol.style.AtlasBlock} */
   var newBlock1;
-  /** @type {ol.style.Atlas.Block} */
+  /** @type {ol.style.AtlasBlock} */
   var newBlock2;
 
   if (deltaWidth > deltaHeight) {
@@ -103408,8 +104764,8 @@ ol.style.Atlas.prototype.split_ = function(index, block, width, height) {
  * blocks (that are potentially smaller) are filled first.
  * @private
  * @param {number} index The index of the block to remove.
- * @param {ol.style.Atlas.Block} newBlock1 The 1st block to add.
- * @param {ol.style.Atlas.Block} newBlock2 The 2nd block to add.
+ * @param {ol.style.AtlasBlock} newBlock1 The 1st block to add.
+ * @param {ol.style.AtlasBlock} newBlock2 The 2nd block to add.
  */
 ol.style.Atlas.prototype.updateBlocks_ = function(index, newBlock1, newBlock2) {
   var args = [index, 1];
@@ -103422,18 +104778,13 @@ ol.style.Atlas.prototype.updateBlocks_ = function(index, newBlock1, newBlock2) {
   this.emptyBlocks_.splice.apply(this.emptyBlocks_, args);
 };
 
-
-/**
- * @typedef {{x: number, y: number, width: number, height: number}}
- */
-ol.style.Atlas.Block;
-
 goog.provide('ol.style.RegularShape');
 
 goog.require('goog.asserts');
 goog.require('ol');
 goog.require('ol.color');
 goog.require('ol.colorlike');
+goog.require('ol.dom');
 goog.require('ol.has');
 goog.require('ol.render.canvas');
 goog.require('ol.style.AtlasManager');
@@ -103719,20 +105070,6 @@ ol.style.RegularShape.prototype.unlistenImageChange = ol.nullFunction;
 
 
 /**
- * @typedef {{
- *   strokeStyle: (string|undefined),
- *   strokeWidth: number,
- *   size: number,
- *   lineCap: string,
- *   lineDash: Array.<number>,
- *   lineJoin: string,
- *   miterLimit: number
- * }}
- */
-ol.style.RegularShape.RenderOptions;
-
-
-/**
  * @private
  * @param {ol.style.AtlasManager|undefined} atlasManager An atlas manager.
  */
@@ -103771,7 +105108,7 @@ ol.style.RegularShape.prototype.render_ = function(atlasManager) {
 
   var size = 2 * (this.radius_ + strokeWidth) + 1;
 
-  /** @type {ol.style.RegularShape.RenderOptions} */
+  /** @type {ol.style.RegularShapeRenderOptions} */
   var renderOptions = {
     strokeStyle: strokeStyle,
     strokeWidth: strokeWidth,
@@ -103784,18 +105121,13 @@ ol.style.RegularShape.prototype.render_ = function(atlasManager) {
 
   if (atlasManager === undefined) {
     // no atlas manager is used, create a new canvas
-    this.canvas_ = /** @type {HTMLCanvasElement} */
-        (document.createElement('CANVAS'));
-
-    this.canvas_.height = size;
-    this.canvas_.width = size;
+    var context = ol.dom.createCanvasContext2D(size, size);
+    this.canvas_ = context.canvas;
 
     // canvas.width and height are rounded to the closest integer
     size = this.canvas_.width;
     imageSize = size;
 
-    var context = /** @type {CanvasRenderingContext2D} */
-        (this.canvas_.getContext('2d'));
     this.draw_(renderOptions, context, 0, 0);
 
     this.createHitDetectionCanvas_(renderOptions);
@@ -103839,7 +105171,7 @@ ol.style.RegularShape.prototype.render_ = function(atlasManager) {
 
 /**
  * @private
- * @param {ol.style.RegularShape.RenderOptions} renderOptions Render options.
+ * @param {ol.style.RegularShapeRenderOptions} renderOptions Render options.
  * @param {CanvasRenderingContext2D} context The rendering context.
  * @param {number} x The origin for the symbol (x).
  * @param {number} y The origin for the symbol (y).
@@ -103884,7 +105216,7 @@ ol.style.RegularShape.prototype.draw_ = function(renderOptions, context, x, y) {
 
 /**
  * @private
- * @param {ol.style.RegularShape.RenderOptions} renderOptions Render options.
+ * @param {ol.style.RegularShapeRenderOptions} renderOptions Render options.
  */
 ol.style.RegularShape.prototype.createHitDetectionCanvas_ = function(renderOptions) {
   this.hitDetectionImageSize_ = [renderOptions.size, renderOptions.size];
@@ -103895,22 +105227,16 @@ ol.style.RegularShape.prototype.createHitDetectionCanvas_ = function(renderOptio
 
   // if no fill style is set, create an extra hit-detection image with a
   // default fill style
-  this.hitDetectionCanvas_ = /** @type {HTMLCanvasElement} */
-      (document.createElement('CANVAS'));
-  var canvas = this.hitDetectionCanvas_;
+  var context = ol.dom.createCanvasContext2D(renderOptions.size, renderOptions.size);
+  this.hitDetectionCanvas_ = context.canvas;
 
-  canvas.height = renderOptions.size;
-  canvas.width = renderOptions.size;
-
-  var context = /** @type {CanvasRenderingContext2D} */
-      (canvas.getContext('2d'));
   this.drawHitDetectionCanvas_(renderOptions, context, 0, 0);
 };
 
 
 /**
  * @private
- * @param {ol.style.RegularShape.RenderOptions} renderOptions Render options.
+ * @param {ol.style.RegularShapeRenderOptions} renderOptions Render options.
  * @param {CanvasRenderingContext2D} context The context.
  * @param {number} x The origin for the symbol (x).
  * @param {number} y The origin for the symbol (y).
@@ -104034,25 +105360,16 @@ goog.require('ol.Attribution');
 goog.require('ol.Collection');
 goog.require('ol.CollectionEvent');
 goog.require('ol.CollectionEventType');
-goog.require('ol.Color');
-goog.require('ol.ColorLike');
-goog.require('ol.Coordinate');
-goog.require('ol.CoordinateFormatType');
 goog.require('ol.DeviceOrientation');
 goog.require('ol.DeviceOrientationProperty');
 goog.require('ol.DragBoxEvent');
-goog.require('ol.Extent');
 goog.require('ol.Feature');
-goog.require('ol.FeatureLoader');
-goog.require('ol.FeatureStyleFunction');
-goog.require('ol.FeatureUrlFunction');
 goog.require('ol.Geolocation');
 goog.require('ol.GeolocationProperty');
 goog.require('ol.Graticule');
 goog.require('ol.Image');
 goog.require('ol.ImageTile');
 goog.require('ol.Kinetic');
-goog.require('ol.LoadingStrategy');
 goog.require('ol.Map');
 goog.require('ol.MapBrowserEvent');
 goog.require('ol.MapBrowserEvent.EventType');
@@ -104068,7 +105385,6 @@ goog.require('ol.Observable');
 goog.require('ol.Overlay');
 goog.require('ol.OverlayPositioning');
 goog.require('ol.OverlayProperty');
-goog.require('ol.Size');
 goog.require('ol.Sphere');
 goog.require('ol.Tile');
 goog.require('ol.TileState');
@@ -104094,7 +105410,6 @@ goog.require('ol.control.ZoomSlider');
 goog.require('ol.control.ZoomToExtent');
 goog.require('ol.coordinate');
 goog.require('ol.easing');
-goog.require('ol.events.ConditionType');
 goog.require('ol.events.Event');
 goog.require('ol.events.condition');
 goog.require('ol.extent');
@@ -104121,6 +105436,25 @@ goog.require('ol.format.WKT');
 goog.require('ol.format.WMSCapabilities');
 goog.require('ol.format.WMSGetFeatureInfo');
 goog.require('ol.format.WMTSCapabilities');
+goog.require('ol.format.ogc.filter');
+goog.require('ol.format.ogc.filter.And');
+goog.require('ol.format.ogc.filter.Bbox');
+goog.require('ol.format.ogc.filter.Comparison');
+goog.require('ol.format.ogc.filter.ComparisonBinary');
+goog.require('ol.format.ogc.filter.EqualTo');
+goog.require('ol.format.ogc.filter.Filter');
+goog.require('ol.format.ogc.filter.GreaterThan');
+goog.require('ol.format.ogc.filter.GreaterThanOrEqualTo');
+goog.require('ol.format.ogc.filter.IsBetween');
+goog.require('ol.format.ogc.filter.IsLike');
+goog.require('ol.format.ogc.filter.IsNull');
+goog.require('ol.format.ogc.filter.LessThan');
+goog.require('ol.format.ogc.filter.LessThanOrEqualTo');
+goog.require('ol.format.ogc.filter.Logical');
+goog.require('ol.format.ogc.filter.LogicalBinary');
+goog.require('ol.format.ogc.filter.Not');
+goog.require('ol.format.ogc.filter.NotEqualTo');
+goog.require('ol.format.ogc.filter.Or');
 goog.require('ol.geom.Circle');
 goog.require('ol.geom.Geometry');
 goog.require('ol.geom.GeometryCollection');
@@ -104147,7 +105481,6 @@ goog.require('ol.interaction.DragZoom');
 goog.require('ol.interaction.Draw');
 goog.require('ol.interaction.DrawEvent');
 goog.require('ol.interaction.DrawEventType');
-goog.require('ol.interaction.DrawGeometryFunctionType');
 goog.require('ol.interaction.DrawMode');
 goog.require('ol.interaction.Interaction');
 goog.require('ol.interaction.InteractionProperty');
@@ -104162,7 +105495,6 @@ goog.require('ol.interaction.Pointer');
 goog.require('ol.interaction.Select');
 goog.require('ol.interaction.SelectEvent');
 goog.require('ol.interaction.SelectEventType');
-goog.require('ol.interaction.SelectFilterFunction');
 goog.require('ol.interaction.Snap');
 goog.require('ol.interaction.SnapProperty');
 goog.require('ol.interaction.Translate');
@@ -104173,7 +105505,6 @@ goog.require('ol.layer.Heatmap');
 goog.require('ol.layer.Image');
 goog.require('ol.layer.Layer');
 goog.require('ol.layer.LayerProperty');
-goog.require('ol.layer.LayerState');
 goog.require('ol.layer.Tile');
 goog.require('ol.layer.Vector');
 goog.require('ol.layer.VectorTile');
@@ -104181,7 +105512,6 @@ goog.require('ol.loadingstrategy');
 goog.require('ol.proj');
 goog.require('ol.proj.METERS_PER_UNIT');
 goog.require('ol.proj.Projection');
-goog.require('ol.proj.ProjectionLike');
 goog.require('ol.proj.Units');
 goog.require('ol.proj.common');
 goog.require('ol.render');
@@ -104196,6 +105526,7 @@ goog.require('ol.source.BingMaps');
 goog.require('ol.source.CartoDB');
 goog.require('ol.source.Cluster');
 goog.require('ol.source.Image');
+goog.require('ol.source.ImageArcGISRest');
 goog.require('ol.source.ImageCanvas');
 goog.require('ol.source.ImageEvent');
 goog.require('ol.source.ImageMapGuide');
@@ -104216,7 +105547,6 @@ goog.require('ol.source.TileDebug');
 goog.require('ol.source.TileEvent');
 goog.require('ol.source.TileImage');
 goog.require('ol.source.TileJSON');
-goog.require('ol.source.TileOptions');
 goog.require('ol.source.TileUTFGrid');
 goog.require('ol.source.TileWMS');
 goog.require('ol.source.UrlTile');
@@ -104232,7 +105562,6 @@ goog.require('ol.style.Atlas');
 goog.require('ol.style.AtlasManager');
 goog.require('ol.style.Circle');
 goog.require('ol.style.Fill');
-goog.require('ol.style.GeometryFunction');
 goog.require('ol.style.Icon');
 goog.require('ol.style.IconAnchorUnits');
 goog.require('ol.style.IconImageCache');
@@ -104242,7 +105571,6 @@ goog.require('ol.style.ImageState');
 goog.require('ol.style.RegularShape');
 goog.require('ol.style.Stroke');
 goog.require('ol.style.Style');
-goog.require('ol.style.StyleFunction');
 goog.require('ol.style.Text');
 goog.require('ol.style.defaultGeometryFunction');
 goog.require('ol.tilegrid.TileGrid');
@@ -104697,6 +106025,11 @@ goog.exportSymbol(
     ol.events.condition.mouseOnly,
     OPENLAYERS);
 
+goog.exportSymbol(
+    'ol.events.condition.primaryAction',
+    ol.events.condition.primaryAction,
+    OPENLAYERS);
+
 goog.exportProperty(
     ol.events.Event.prototype,
     'type',
@@ -105139,8 +106472,163 @@ goog.exportSymbol(
 
 goog.exportProperty(
     ol.format.MVT.prototype,
+    'readFeatures',
+    ol.format.MVT.prototype.readFeatures);
+
+goog.exportProperty(
+    ol.format.MVT.prototype,
+    'readProjection',
+    ol.format.MVT.prototype.readProjection);
+
+goog.exportProperty(
+    ol.format.MVT.prototype,
     'setLayers',
     ol.format.MVT.prototype.setLayers);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.and',
+    ol.format.ogc.filter.and,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.or',
+    ol.format.ogc.filter.or,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.not',
+    ol.format.ogc.filter.not,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.bbox',
+    ol.format.ogc.filter.bbox,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.equalTo',
+    ol.format.ogc.filter.equalTo,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.notEqualTo',
+    ol.format.ogc.filter.notEqualTo,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.lessThan',
+    ol.format.ogc.filter.lessThan,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.lessThanOrEqualTo',
+    ol.format.ogc.filter.lessThanOrEqualTo,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.greaterThan',
+    ol.format.ogc.filter.greaterThan,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.greaterThanOrEqualTo',
+    ol.format.ogc.filter.greaterThanOrEqualTo,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.isNull',
+    ol.format.ogc.filter.isNull,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.between',
+    ol.format.ogc.filter.between,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.like',
+    ol.format.ogc.filter.like,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.Filter',
+    ol.format.ogc.filter.Filter,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.And',
+    ol.format.ogc.filter.And,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.Or',
+    ol.format.ogc.filter.Or,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.Not',
+    ol.format.ogc.filter.Not,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.Bbox',
+    ol.format.ogc.filter.Bbox,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.Comparison',
+    ol.format.ogc.filter.Comparison,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.ComparisonBinary',
+    ol.format.ogc.filter.ComparisonBinary,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.EqualTo',
+    ol.format.ogc.filter.EqualTo,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.NotEqualTo',
+    ol.format.ogc.filter.NotEqualTo,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.LessThan',
+    ol.format.ogc.filter.LessThan,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.LessThanOrEqualTo',
+    ol.format.ogc.filter.LessThanOrEqualTo,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.GreaterThan',
+    ol.format.ogc.filter.GreaterThan,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.GreaterThanOrEqualTo',
+    ol.format.ogc.filter.GreaterThanOrEqualTo,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.IsNull',
+    ol.format.ogc.filter.IsNull,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.IsBetween',
+    ol.format.ogc.filter.IsBetween,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'ol.format.ogc.filter.IsLike',
+    ol.format.ogc.filter.IsLike,
+    OPENLAYERS);
 
 goog.exportSymbol(
     'ol.format.OSMXML',
@@ -106122,6 +107610,11 @@ goog.exportSymbol(
     ol.interaction.Modify.handleEvent,
     OPENLAYERS);
 
+goog.exportProperty(
+    ol.interaction.Modify.prototype,
+    'removePoint',
+    ol.interaction.Modify.prototype.removePoint);
+
 goog.exportSymbol(
     'ol.interaction.MouseWheelZoom',
     ol.interaction.MouseWheelZoom,
@@ -107077,6 +108570,11 @@ goog.exportProperty(
     'updateConfig',
     ol.source.CartoDB.prototype.updateConfig);
 
+goog.exportProperty(
+    ol.source.CartoDB.prototype,
+    'setConfig',
+    ol.source.CartoDB.prototype.setConfig);
+
 goog.exportSymbol(
     'ol.source.Cluster',
     ol.source.Cluster,
@@ -107086,6 +108584,41 @@ goog.exportProperty(
     ol.source.Cluster.prototype,
     'getSource',
     ol.source.Cluster.prototype.getSource);
+
+goog.exportSymbol(
+    'ol.source.ImageArcGISRest',
+    ol.source.ImageArcGISRest,
+    OPENLAYERS);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'getParams',
+    ol.source.ImageArcGISRest.prototype.getParams);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'getImageLoadFunction',
+    ol.source.ImageArcGISRest.prototype.getImageLoadFunction);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'getUrl',
+    ol.source.ImageArcGISRest.prototype.getUrl);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'setImageLoadFunction',
+    ol.source.ImageArcGISRest.prototype.setImageLoadFunction);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'setUrl',
+    ol.source.ImageArcGISRest.prototype.setUrl);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'updateParams',
+    ol.source.ImageArcGISRest.prototype.updateParams);
 
 goog.exportSymbol(
     'ol.source.ImageCanvas',
@@ -108116,6 +109649,11 @@ goog.exportProperty(
     ol.View.prototype,
     'getResolution',
     ol.View.prototype.getResolution);
+
+goog.exportProperty(
+    ol.View.prototype,
+    'getResolutions',
+    ol.View.prototype.getResolutions);
 
 goog.exportProperty(
     ol.View.prototype,
@@ -109231,6 +110769,1176 @@ goog.exportProperty(
     ol.format.GML.prototype,
     'readFeatures',
     ol.format.GML.prototype.readFeatures);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Filter.prototype,
+    'get',
+    ol.format.ogc.filter.Filter.prototype.get);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Filter.prototype,
+    'getKeys',
+    ol.format.ogc.filter.Filter.prototype.getKeys);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Filter.prototype,
+    'getProperties',
+    ol.format.ogc.filter.Filter.prototype.getProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Filter.prototype,
+    'set',
+    ol.format.ogc.filter.Filter.prototype.set);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Filter.prototype,
+    'setProperties',
+    ol.format.ogc.filter.Filter.prototype.setProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Filter.prototype,
+    'unset',
+    ol.format.ogc.filter.Filter.prototype.unset);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Filter.prototype,
+    'changed',
+    ol.format.ogc.filter.Filter.prototype.changed);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Filter.prototype,
+    'dispatchEvent',
+    ol.format.ogc.filter.Filter.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Filter.prototype,
+    'getRevision',
+    ol.format.ogc.filter.Filter.prototype.getRevision);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Filter.prototype,
+    'on',
+    ol.format.ogc.filter.Filter.prototype.on);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Filter.prototype,
+    'once',
+    ol.format.ogc.filter.Filter.prototype.once);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Filter.prototype,
+    'un',
+    ol.format.ogc.filter.Filter.prototype.un);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Filter.prototype,
+    'unByKey',
+    ol.format.ogc.filter.Filter.prototype.unByKey);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Logical.prototype,
+    'get',
+    ol.format.ogc.filter.Logical.prototype.get);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Logical.prototype,
+    'getKeys',
+    ol.format.ogc.filter.Logical.prototype.getKeys);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Logical.prototype,
+    'getProperties',
+    ol.format.ogc.filter.Logical.prototype.getProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Logical.prototype,
+    'set',
+    ol.format.ogc.filter.Logical.prototype.set);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Logical.prototype,
+    'setProperties',
+    ol.format.ogc.filter.Logical.prototype.setProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Logical.prototype,
+    'unset',
+    ol.format.ogc.filter.Logical.prototype.unset);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Logical.prototype,
+    'changed',
+    ol.format.ogc.filter.Logical.prototype.changed);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Logical.prototype,
+    'dispatchEvent',
+    ol.format.ogc.filter.Logical.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Logical.prototype,
+    'getRevision',
+    ol.format.ogc.filter.Logical.prototype.getRevision);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Logical.prototype,
+    'on',
+    ol.format.ogc.filter.Logical.prototype.on);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Logical.prototype,
+    'once',
+    ol.format.ogc.filter.Logical.prototype.once);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Logical.prototype,
+    'un',
+    ol.format.ogc.filter.Logical.prototype.un);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Logical.prototype,
+    'unByKey',
+    ol.format.ogc.filter.Logical.prototype.unByKey);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LogicalBinary.prototype,
+    'get',
+    ol.format.ogc.filter.LogicalBinary.prototype.get);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LogicalBinary.prototype,
+    'getKeys',
+    ol.format.ogc.filter.LogicalBinary.prototype.getKeys);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LogicalBinary.prototype,
+    'getProperties',
+    ol.format.ogc.filter.LogicalBinary.prototype.getProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LogicalBinary.prototype,
+    'set',
+    ol.format.ogc.filter.LogicalBinary.prototype.set);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LogicalBinary.prototype,
+    'setProperties',
+    ol.format.ogc.filter.LogicalBinary.prototype.setProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LogicalBinary.prototype,
+    'unset',
+    ol.format.ogc.filter.LogicalBinary.prototype.unset);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LogicalBinary.prototype,
+    'changed',
+    ol.format.ogc.filter.LogicalBinary.prototype.changed);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LogicalBinary.prototype,
+    'dispatchEvent',
+    ol.format.ogc.filter.LogicalBinary.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LogicalBinary.prototype,
+    'getRevision',
+    ol.format.ogc.filter.LogicalBinary.prototype.getRevision);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LogicalBinary.prototype,
+    'on',
+    ol.format.ogc.filter.LogicalBinary.prototype.on);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LogicalBinary.prototype,
+    'once',
+    ol.format.ogc.filter.LogicalBinary.prototype.once);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LogicalBinary.prototype,
+    'un',
+    ol.format.ogc.filter.LogicalBinary.prototype.un);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LogicalBinary.prototype,
+    'unByKey',
+    ol.format.ogc.filter.LogicalBinary.prototype.unByKey);
+
+goog.exportProperty(
+    ol.format.ogc.filter.And.prototype,
+    'get',
+    ol.format.ogc.filter.And.prototype.get);
+
+goog.exportProperty(
+    ol.format.ogc.filter.And.prototype,
+    'getKeys',
+    ol.format.ogc.filter.And.prototype.getKeys);
+
+goog.exportProperty(
+    ol.format.ogc.filter.And.prototype,
+    'getProperties',
+    ol.format.ogc.filter.And.prototype.getProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.And.prototype,
+    'set',
+    ol.format.ogc.filter.And.prototype.set);
+
+goog.exportProperty(
+    ol.format.ogc.filter.And.prototype,
+    'setProperties',
+    ol.format.ogc.filter.And.prototype.setProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.And.prototype,
+    'unset',
+    ol.format.ogc.filter.And.prototype.unset);
+
+goog.exportProperty(
+    ol.format.ogc.filter.And.prototype,
+    'changed',
+    ol.format.ogc.filter.And.prototype.changed);
+
+goog.exportProperty(
+    ol.format.ogc.filter.And.prototype,
+    'dispatchEvent',
+    ol.format.ogc.filter.And.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.format.ogc.filter.And.prototype,
+    'getRevision',
+    ol.format.ogc.filter.And.prototype.getRevision);
+
+goog.exportProperty(
+    ol.format.ogc.filter.And.prototype,
+    'on',
+    ol.format.ogc.filter.And.prototype.on);
+
+goog.exportProperty(
+    ol.format.ogc.filter.And.prototype,
+    'once',
+    ol.format.ogc.filter.And.prototype.once);
+
+goog.exportProperty(
+    ol.format.ogc.filter.And.prototype,
+    'un',
+    ol.format.ogc.filter.And.prototype.un);
+
+goog.exportProperty(
+    ol.format.ogc.filter.And.prototype,
+    'unByKey',
+    ol.format.ogc.filter.And.prototype.unByKey);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Or.prototype,
+    'get',
+    ol.format.ogc.filter.Or.prototype.get);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Or.prototype,
+    'getKeys',
+    ol.format.ogc.filter.Or.prototype.getKeys);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Or.prototype,
+    'getProperties',
+    ol.format.ogc.filter.Or.prototype.getProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Or.prototype,
+    'set',
+    ol.format.ogc.filter.Or.prototype.set);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Or.prototype,
+    'setProperties',
+    ol.format.ogc.filter.Or.prototype.setProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Or.prototype,
+    'unset',
+    ol.format.ogc.filter.Or.prototype.unset);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Or.prototype,
+    'changed',
+    ol.format.ogc.filter.Or.prototype.changed);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Or.prototype,
+    'dispatchEvent',
+    ol.format.ogc.filter.Or.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Or.prototype,
+    'getRevision',
+    ol.format.ogc.filter.Or.prototype.getRevision);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Or.prototype,
+    'on',
+    ol.format.ogc.filter.Or.prototype.on);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Or.prototype,
+    'once',
+    ol.format.ogc.filter.Or.prototype.once);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Or.prototype,
+    'un',
+    ol.format.ogc.filter.Or.prototype.un);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Or.prototype,
+    'unByKey',
+    ol.format.ogc.filter.Or.prototype.unByKey);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Not.prototype,
+    'get',
+    ol.format.ogc.filter.Not.prototype.get);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Not.prototype,
+    'getKeys',
+    ol.format.ogc.filter.Not.prototype.getKeys);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Not.prototype,
+    'getProperties',
+    ol.format.ogc.filter.Not.prototype.getProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Not.prototype,
+    'set',
+    ol.format.ogc.filter.Not.prototype.set);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Not.prototype,
+    'setProperties',
+    ol.format.ogc.filter.Not.prototype.setProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Not.prototype,
+    'unset',
+    ol.format.ogc.filter.Not.prototype.unset);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Not.prototype,
+    'changed',
+    ol.format.ogc.filter.Not.prototype.changed);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Not.prototype,
+    'dispatchEvent',
+    ol.format.ogc.filter.Not.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Not.prototype,
+    'getRevision',
+    ol.format.ogc.filter.Not.prototype.getRevision);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Not.prototype,
+    'on',
+    ol.format.ogc.filter.Not.prototype.on);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Not.prototype,
+    'once',
+    ol.format.ogc.filter.Not.prototype.once);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Not.prototype,
+    'un',
+    ol.format.ogc.filter.Not.prototype.un);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Not.prototype,
+    'unByKey',
+    ol.format.ogc.filter.Not.prototype.unByKey);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Bbox.prototype,
+    'get',
+    ol.format.ogc.filter.Bbox.prototype.get);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Bbox.prototype,
+    'getKeys',
+    ol.format.ogc.filter.Bbox.prototype.getKeys);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Bbox.prototype,
+    'getProperties',
+    ol.format.ogc.filter.Bbox.prototype.getProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Bbox.prototype,
+    'set',
+    ol.format.ogc.filter.Bbox.prototype.set);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Bbox.prototype,
+    'setProperties',
+    ol.format.ogc.filter.Bbox.prototype.setProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Bbox.prototype,
+    'unset',
+    ol.format.ogc.filter.Bbox.prototype.unset);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Bbox.prototype,
+    'changed',
+    ol.format.ogc.filter.Bbox.prototype.changed);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Bbox.prototype,
+    'dispatchEvent',
+    ol.format.ogc.filter.Bbox.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Bbox.prototype,
+    'getRevision',
+    ol.format.ogc.filter.Bbox.prototype.getRevision);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Bbox.prototype,
+    'on',
+    ol.format.ogc.filter.Bbox.prototype.on);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Bbox.prototype,
+    'once',
+    ol.format.ogc.filter.Bbox.prototype.once);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Bbox.prototype,
+    'un',
+    ol.format.ogc.filter.Bbox.prototype.un);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Bbox.prototype,
+    'unByKey',
+    ol.format.ogc.filter.Bbox.prototype.unByKey);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Comparison.prototype,
+    'get',
+    ol.format.ogc.filter.Comparison.prototype.get);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Comparison.prototype,
+    'getKeys',
+    ol.format.ogc.filter.Comparison.prototype.getKeys);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Comparison.prototype,
+    'getProperties',
+    ol.format.ogc.filter.Comparison.prototype.getProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Comparison.prototype,
+    'set',
+    ol.format.ogc.filter.Comparison.prototype.set);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Comparison.prototype,
+    'setProperties',
+    ol.format.ogc.filter.Comparison.prototype.setProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Comparison.prototype,
+    'unset',
+    ol.format.ogc.filter.Comparison.prototype.unset);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Comparison.prototype,
+    'changed',
+    ol.format.ogc.filter.Comparison.prototype.changed);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Comparison.prototype,
+    'dispatchEvent',
+    ol.format.ogc.filter.Comparison.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Comparison.prototype,
+    'getRevision',
+    ol.format.ogc.filter.Comparison.prototype.getRevision);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Comparison.prototype,
+    'on',
+    ol.format.ogc.filter.Comparison.prototype.on);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Comparison.prototype,
+    'once',
+    ol.format.ogc.filter.Comparison.prototype.once);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Comparison.prototype,
+    'un',
+    ol.format.ogc.filter.Comparison.prototype.un);
+
+goog.exportProperty(
+    ol.format.ogc.filter.Comparison.prototype,
+    'unByKey',
+    ol.format.ogc.filter.Comparison.prototype.unByKey);
+
+goog.exportProperty(
+    ol.format.ogc.filter.ComparisonBinary.prototype,
+    'get',
+    ol.format.ogc.filter.ComparisonBinary.prototype.get);
+
+goog.exportProperty(
+    ol.format.ogc.filter.ComparisonBinary.prototype,
+    'getKeys',
+    ol.format.ogc.filter.ComparisonBinary.prototype.getKeys);
+
+goog.exportProperty(
+    ol.format.ogc.filter.ComparisonBinary.prototype,
+    'getProperties',
+    ol.format.ogc.filter.ComparisonBinary.prototype.getProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.ComparisonBinary.prototype,
+    'set',
+    ol.format.ogc.filter.ComparisonBinary.prototype.set);
+
+goog.exportProperty(
+    ol.format.ogc.filter.ComparisonBinary.prototype,
+    'setProperties',
+    ol.format.ogc.filter.ComparisonBinary.prototype.setProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.ComparisonBinary.prototype,
+    'unset',
+    ol.format.ogc.filter.ComparisonBinary.prototype.unset);
+
+goog.exportProperty(
+    ol.format.ogc.filter.ComparisonBinary.prototype,
+    'changed',
+    ol.format.ogc.filter.ComparisonBinary.prototype.changed);
+
+goog.exportProperty(
+    ol.format.ogc.filter.ComparisonBinary.prototype,
+    'dispatchEvent',
+    ol.format.ogc.filter.ComparisonBinary.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.format.ogc.filter.ComparisonBinary.prototype,
+    'getRevision',
+    ol.format.ogc.filter.ComparisonBinary.prototype.getRevision);
+
+goog.exportProperty(
+    ol.format.ogc.filter.ComparisonBinary.prototype,
+    'on',
+    ol.format.ogc.filter.ComparisonBinary.prototype.on);
+
+goog.exportProperty(
+    ol.format.ogc.filter.ComparisonBinary.prototype,
+    'once',
+    ol.format.ogc.filter.ComparisonBinary.prototype.once);
+
+goog.exportProperty(
+    ol.format.ogc.filter.ComparisonBinary.prototype,
+    'un',
+    ol.format.ogc.filter.ComparisonBinary.prototype.un);
+
+goog.exportProperty(
+    ol.format.ogc.filter.ComparisonBinary.prototype,
+    'unByKey',
+    ol.format.ogc.filter.ComparisonBinary.prototype.unByKey);
+
+goog.exportProperty(
+    ol.format.ogc.filter.EqualTo.prototype,
+    'get',
+    ol.format.ogc.filter.EqualTo.prototype.get);
+
+goog.exportProperty(
+    ol.format.ogc.filter.EqualTo.prototype,
+    'getKeys',
+    ol.format.ogc.filter.EqualTo.prototype.getKeys);
+
+goog.exportProperty(
+    ol.format.ogc.filter.EqualTo.prototype,
+    'getProperties',
+    ol.format.ogc.filter.EqualTo.prototype.getProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.EqualTo.prototype,
+    'set',
+    ol.format.ogc.filter.EqualTo.prototype.set);
+
+goog.exportProperty(
+    ol.format.ogc.filter.EqualTo.prototype,
+    'setProperties',
+    ol.format.ogc.filter.EqualTo.prototype.setProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.EqualTo.prototype,
+    'unset',
+    ol.format.ogc.filter.EqualTo.prototype.unset);
+
+goog.exportProperty(
+    ol.format.ogc.filter.EqualTo.prototype,
+    'changed',
+    ol.format.ogc.filter.EqualTo.prototype.changed);
+
+goog.exportProperty(
+    ol.format.ogc.filter.EqualTo.prototype,
+    'dispatchEvent',
+    ol.format.ogc.filter.EqualTo.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.format.ogc.filter.EqualTo.prototype,
+    'getRevision',
+    ol.format.ogc.filter.EqualTo.prototype.getRevision);
+
+goog.exportProperty(
+    ol.format.ogc.filter.EqualTo.prototype,
+    'on',
+    ol.format.ogc.filter.EqualTo.prototype.on);
+
+goog.exportProperty(
+    ol.format.ogc.filter.EqualTo.prototype,
+    'once',
+    ol.format.ogc.filter.EqualTo.prototype.once);
+
+goog.exportProperty(
+    ol.format.ogc.filter.EqualTo.prototype,
+    'un',
+    ol.format.ogc.filter.EqualTo.prototype.un);
+
+goog.exportProperty(
+    ol.format.ogc.filter.EqualTo.prototype,
+    'unByKey',
+    ol.format.ogc.filter.EqualTo.prototype.unByKey);
+
+goog.exportProperty(
+    ol.format.ogc.filter.NotEqualTo.prototype,
+    'get',
+    ol.format.ogc.filter.NotEqualTo.prototype.get);
+
+goog.exportProperty(
+    ol.format.ogc.filter.NotEqualTo.prototype,
+    'getKeys',
+    ol.format.ogc.filter.NotEqualTo.prototype.getKeys);
+
+goog.exportProperty(
+    ol.format.ogc.filter.NotEqualTo.prototype,
+    'getProperties',
+    ol.format.ogc.filter.NotEqualTo.prototype.getProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.NotEqualTo.prototype,
+    'set',
+    ol.format.ogc.filter.NotEqualTo.prototype.set);
+
+goog.exportProperty(
+    ol.format.ogc.filter.NotEqualTo.prototype,
+    'setProperties',
+    ol.format.ogc.filter.NotEqualTo.prototype.setProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.NotEqualTo.prototype,
+    'unset',
+    ol.format.ogc.filter.NotEqualTo.prototype.unset);
+
+goog.exportProperty(
+    ol.format.ogc.filter.NotEqualTo.prototype,
+    'changed',
+    ol.format.ogc.filter.NotEqualTo.prototype.changed);
+
+goog.exportProperty(
+    ol.format.ogc.filter.NotEqualTo.prototype,
+    'dispatchEvent',
+    ol.format.ogc.filter.NotEqualTo.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.format.ogc.filter.NotEqualTo.prototype,
+    'getRevision',
+    ol.format.ogc.filter.NotEqualTo.prototype.getRevision);
+
+goog.exportProperty(
+    ol.format.ogc.filter.NotEqualTo.prototype,
+    'on',
+    ol.format.ogc.filter.NotEqualTo.prototype.on);
+
+goog.exportProperty(
+    ol.format.ogc.filter.NotEqualTo.prototype,
+    'once',
+    ol.format.ogc.filter.NotEqualTo.prototype.once);
+
+goog.exportProperty(
+    ol.format.ogc.filter.NotEqualTo.prototype,
+    'un',
+    ol.format.ogc.filter.NotEqualTo.prototype.un);
+
+goog.exportProperty(
+    ol.format.ogc.filter.NotEqualTo.prototype,
+    'unByKey',
+    ol.format.ogc.filter.NotEqualTo.prototype.unByKey);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThan.prototype,
+    'get',
+    ol.format.ogc.filter.LessThan.prototype.get);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThan.prototype,
+    'getKeys',
+    ol.format.ogc.filter.LessThan.prototype.getKeys);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThan.prototype,
+    'getProperties',
+    ol.format.ogc.filter.LessThan.prototype.getProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThan.prototype,
+    'set',
+    ol.format.ogc.filter.LessThan.prototype.set);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThan.prototype,
+    'setProperties',
+    ol.format.ogc.filter.LessThan.prototype.setProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThan.prototype,
+    'unset',
+    ol.format.ogc.filter.LessThan.prototype.unset);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThan.prototype,
+    'changed',
+    ol.format.ogc.filter.LessThan.prototype.changed);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThan.prototype,
+    'dispatchEvent',
+    ol.format.ogc.filter.LessThan.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThan.prototype,
+    'getRevision',
+    ol.format.ogc.filter.LessThan.prototype.getRevision);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThan.prototype,
+    'on',
+    ol.format.ogc.filter.LessThan.prototype.on);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThan.prototype,
+    'once',
+    ol.format.ogc.filter.LessThan.prototype.once);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThan.prototype,
+    'un',
+    ol.format.ogc.filter.LessThan.prototype.un);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThan.prototype,
+    'unByKey',
+    ol.format.ogc.filter.LessThan.prototype.unByKey);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype,
+    'get',
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype.get);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype,
+    'getKeys',
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype.getKeys);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype,
+    'getProperties',
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype.getProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype,
+    'set',
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype.set);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype,
+    'setProperties',
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype.setProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype,
+    'unset',
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype.unset);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype,
+    'changed',
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype.changed);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype,
+    'dispatchEvent',
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype,
+    'getRevision',
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype.getRevision);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype,
+    'on',
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype.on);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype,
+    'once',
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype.once);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype,
+    'un',
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype.un);
+
+goog.exportProperty(
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype,
+    'unByKey',
+    ol.format.ogc.filter.LessThanOrEqualTo.prototype.unByKey);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThan.prototype,
+    'get',
+    ol.format.ogc.filter.GreaterThan.prototype.get);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThan.prototype,
+    'getKeys',
+    ol.format.ogc.filter.GreaterThan.prototype.getKeys);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThan.prototype,
+    'getProperties',
+    ol.format.ogc.filter.GreaterThan.prototype.getProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThan.prototype,
+    'set',
+    ol.format.ogc.filter.GreaterThan.prototype.set);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThan.prototype,
+    'setProperties',
+    ol.format.ogc.filter.GreaterThan.prototype.setProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThan.prototype,
+    'unset',
+    ol.format.ogc.filter.GreaterThan.prototype.unset);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThan.prototype,
+    'changed',
+    ol.format.ogc.filter.GreaterThan.prototype.changed);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThan.prototype,
+    'dispatchEvent',
+    ol.format.ogc.filter.GreaterThan.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThan.prototype,
+    'getRevision',
+    ol.format.ogc.filter.GreaterThan.prototype.getRevision);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThan.prototype,
+    'on',
+    ol.format.ogc.filter.GreaterThan.prototype.on);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThan.prototype,
+    'once',
+    ol.format.ogc.filter.GreaterThan.prototype.once);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThan.prototype,
+    'un',
+    ol.format.ogc.filter.GreaterThan.prototype.un);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThan.prototype,
+    'unByKey',
+    ol.format.ogc.filter.GreaterThan.prototype.unByKey);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype,
+    'get',
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype.get);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype,
+    'getKeys',
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype.getKeys);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype,
+    'getProperties',
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype.getProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype,
+    'set',
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype.set);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype,
+    'setProperties',
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype.setProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype,
+    'unset',
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype.unset);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype,
+    'changed',
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype.changed);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype,
+    'dispatchEvent',
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype,
+    'getRevision',
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype.getRevision);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype,
+    'on',
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype.on);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype,
+    'once',
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype.once);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype,
+    'un',
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype.un);
+
+goog.exportProperty(
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype,
+    'unByKey',
+    ol.format.ogc.filter.GreaterThanOrEqualTo.prototype.unByKey);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsNull.prototype,
+    'get',
+    ol.format.ogc.filter.IsNull.prototype.get);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsNull.prototype,
+    'getKeys',
+    ol.format.ogc.filter.IsNull.prototype.getKeys);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsNull.prototype,
+    'getProperties',
+    ol.format.ogc.filter.IsNull.prototype.getProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsNull.prototype,
+    'set',
+    ol.format.ogc.filter.IsNull.prototype.set);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsNull.prototype,
+    'setProperties',
+    ol.format.ogc.filter.IsNull.prototype.setProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsNull.prototype,
+    'unset',
+    ol.format.ogc.filter.IsNull.prototype.unset);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsNull.prototype,
+    'changed',
+    ol.format.ogc.filter.IsNull.prototype.changed);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsNull.prototype,
+    'dispatchEvent',
+    ol.format.ogc.filter.IsNull.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsNull.prototype,
+    'getRevision',
+    ol.format.ogc.filter.IsNull.prototype.getRevision);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsNull.prototype,
+    'on',
+    ol.format.ogc.filter.IsNull.prototype.on);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsNull.prototype,
+    'once',
+    ol.format.ogc.filter.IsNull.prototype.once);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsNull.prototype,
+    'un',
+    ol.format.ogc.filter.IsNull.prototype.un);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsNull.prototype,
+    'unByKey',
+    ol.format.ogc.filter.IsNull.prototype.unByKey);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsBetween.prototype,
+    'get',
+    ol.format.ogc.filter.IsBetween.prototype.get);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsBetween.prototype,
+    'getKeys',
+    ol.format.ogc.filter.IsBetween.prototype.getKeys);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsBetween.prototype,
+    'getProperties',
+    ol.format.ogc.filter.IsBetween.prototype.getProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsBetween.prototype,
+    'set',
+    ol.format.ogc.filter.IsBetween.prototype.set);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsBetween.prototype,
+    'setProperties',
+    ol.format.ogc.filter.IsBetween.prototype.setProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsBetween.prototype,
+    'unset',
+    ol.format.ogc.filter.IsBetween.prototype.unset);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsBetween.prototype,
+    'changed',
+    ol.format.ogc.filter.IsBetween.prototype.changed);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsBetween.prototype,
+    'dispatchEvent',
+    ol.format.ogc.filter.IsBetween.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsBetween.prototype,
+    'getRevision',
+    ol.format.ogc.filter.IsBetween.prototype.getRevision);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsBetween.prototype,
+    'on',
+    ol.format.ogc.filter.IsBetween.prototype.on);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsBetween.prototype,
+    'once',
+    ol.format.ogc.filter.IsBetween.prototype.once);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsBetween.prototype,
+    'un',
+    ol.format.ogc.filter.IsBetween.prototype.un);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsBetween.prototype,
+    'unByKey',
+    ol.format.ogc.filter.IsBetween.prototype.unByKey);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsLike.prototype,
+    'get',
+    ol.format.ogc.filter.IsLike.prototype.get);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsLike.prototype,
+    'getKeys',
+    ol.format.ogc.filter.IsLike.prototype.getKeys);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsLike.prototype,
+    'getProperties',
+    ol.format.ogc.filter.IsLike.prototype.getProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsLike.prototype,
+    'set',
+    ol.format.ogc.filter.IsLike.prototype.set);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsLike.prototype,
+    'setProperties',
+    ol.format.ogc.filter.IsLike.prototype.setProperties);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsLike.prototype,
+    'unset',
+    ol.format.ogc.filter.IsLike.prototype.unset);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsLike.prototype,
+    'changed',
+    ol.format.ogc.filter.IsLike.prototype.changed);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsLike.prototype,
+    'dispatchEvent',
+    ol.format.ogc.filter.IsLike.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsLike.prototype,
+    'getRevision',
+    ol.format.ogc.filter.IsLike.prototype.getRevision);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsLike.prototype,
+    'on',
+    ol.format.ogc.filter.IsLike.prototype.on);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsLike.prototype,
+    'once',
+    ol.format.ogc.filter.IsLike.prototype.once);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsLike.prototype,
+    'un',
+    ol.format.ogc.filter.IsLike.prototype.un);
+
+goog.exportProperty(
+    ol.format.ogc.filter.IsLike.prototype,
+    'unByKey',
+    ol.format.ogc.filter.IsLike.prototype.unByKey);
 
 goog.exportProperty(
     ol.Geolocation.prototype,
@@ -115021,6 +117729,101 @@ goog.exportProperty(
     ol.source.Image.prototype,
     'unByKey',
     ol.source.Image.prototype.unByKey);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'getAttributions',
+    ol.source.ImageArcGISRest.prototype.getAttributions);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'getLogo',
+    ol.source.ImageArcGISRest.prototype.getLogo);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'getProjection',
+    ol.source.ImageArcGISRest.prototype.getProjection);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'getState',
+    ol.source.ImageArcGISRest.prototype.getState);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'refresh',
+    ol.source.ImageArcGISRest.prototype.refresh);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'setAttributions',
+    ol.source.ImageArcGISRest.prototype.setAttributions);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'get',
+    ol.source.ImageArcGISRest.prototype.get);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'getKeys',
+    ol.source.ImageArcGISRest.prototype.getKeys);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'getProperties',
+    ol.source.ImageArcGISRest.prototype.getProperties);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'set',
+    ol.source.ImageArcGISRest.prototype.set);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'setProperties',
+    ol.source.ImageArcGISRest.prototype.setProperties);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'unset',
+    ol.source.ImageArcGISRest.prototype.unset);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'changed',
+    ol.source.ImageArcGISRest.prototype.changed);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'dispatchEvent',
+    ol.source.ImageArcGISRest.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'getRevision',
+    ol.source.ImageArcGISRest.prototype.getRevision);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'on',
+    ol.source.ImageArcGISRest.prototype.on);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'once',
+    ol.source.ImageArcGISRest.prototype.once);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'un',
+    ol.source.ImageArcGISRest.prototype.un);
+
+goog.exportProperty(
+    ol.source.ImageArcGISRest.prototype,
+    'unByKey',
+    ol.source.ImageArcGISRest.prototype.unByKey);
 
 goog.exportProperty(
     ol.source.ImageCanvas.prototype,

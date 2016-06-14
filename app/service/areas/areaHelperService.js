@@ -1,4 +1,17 @@
-angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaMapService, spatialRestService, areaAlertService, areaRestService, areaClickerService) {
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc service
+ * @name areaHelperService
+ * @param locale {service} angular locale service
+ * @param areaMapService {service} area map service<p>{@link unionvmsWeb.areaMapService}</p>
+ * @param spatialRestService {service} Spatial REST API service
+ * @param areaAlertService {service} alert service for the area management tab
+ * @param areaRestService {service} Area REST API service
+ * @param areaClickerService {service} area map click service
+ * @description
+ *  Service to control the map on the liveview of the reporting tab
+ */
+angular.module('unionvmsWeb').factory('areaHelperService',function(locale, $interval, areaMapService, spatialRestService, areaAlertService, areaRestService, areaClickerService) {
 
 	var areaHelperService = {
 	    isEditing: false,
@@ -112,18 +125,33 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	};
 	
 	//USER AREA LAYER
+	var stopLayerInterval = function(obj){
+        $interval.cancel(obj.layerInterval);
+        obj.layerInterval = undefined;
+    }; 
+    
     var getUserAreaLayer = function(obj){
+        obj.layerInterval = $interval(function(){
+            if (angular.isDefined(areaMapService.map)){
+                getUserAreaLayerFromRest(obj);
+                stopLayerInterval(obj);
+            }
+        }, 10);
+    };
+    
+    var getUserAreaLayerFromRest = function(obj){
         spatialRestService.getUserAreaLayer().then(function(response){
             if (!angular.isDefined(areaMapService.getLayerByType('USERAREA'))){
                 areaMapService.addUserAreasWMS(response.data);
                 obj.displayedLayerType = response.data.typeName;
+                areaAlertService.removeLoading();
             }
         }, function(error){
             areaAlertService.setError();
             areaAlertService.alertMessage = locale.getString('areas.error_getting_user_area_layer');
             areaAlertService.hideAlert();
         });
-    };
+    }
     
     //area location layers for combo in sysareas    
     var getAreaLocationLayers = function(obj){

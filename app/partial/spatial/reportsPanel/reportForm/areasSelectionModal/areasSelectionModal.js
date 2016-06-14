@@ -1,50 +1,4 @@
-var resetLayerCqlFilter = function(opt_options){
-    var options = opt_options || {};
-    
-    var btn = document.createElement('button');
-    btn.title = options.label;
-    var icon = document.createElement('span');
-    icon.className = 'fa fa-refresh';
-    icon.style.fontSize = '13px';
-    btn.appendChild(icon);
-    
-    var this_ = this;
-    
-    var resetFilter = function(e){
-        var layers = this_.getMap().getLayers();
-        if (layers.getLength() > 1){
-            var layer = layers.getArray().find(function(layer){
-                return layer.get('type') !== 'osm';
-            });
-            
-            var cql = null;
-            if (layer.get('type') === 'USERAREA'){
-                var currentPams = layer.getSource().getParams();
-                var cqlComps = currentPams.cql_filter.split(' and');
-                cql = cqlComps[0];
-            }
-            
-            layer.getSource().updateParams({
-                'cql_filter': cql
-            });
-        }
-    };
-    
-    btn.addEventListener('click', resetFilter, false);
-    
-    var element = document.createElement('div');
-    element.className = 'ol-resetCql ol-unselectable ol-control';
-    element.appendChild(btn);
-    
-    ol.control.Control.call(this, {
-        element: element,
-        target: options.target
-    });
-};
-    
-ol.inherits(resetLayerCqlFilter, ol.control.Control);
-
-angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($scope, $modalInstance, $timeout, locale, selectedAreas, spatialRestService, Area, userService){
+angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($scope, $modalInstance, $timeout, locale, genericMapService, selectedAreas, spatialRestService, Area, userService, projectionService){
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
     };
@@ -164,20 +118,15 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     
     //MAP
     function setMap(){
-        var osm = new ol.layer.Tile({
-            type: 'osm',
-            source: new ol.source.OSM()
-        });
+        var osm = genericMapService.defineOsm();
         
-        var projection = new ol.proj.Projection({
-            code: 'EPSG:3857',
-            units: 'm',
-            global: false
-        });
+        //FIXME fetch this through service
+        var projObj = projectionService.getFullProjByEpsg('3857');
+        var projection = genericMapService.setProjection(projObj);
         
         var view = new ol.View({
             projection: projection,
-            center: ol.proj.transform([10, 40], 'EPSG:4326', 'EPSG:3857'),
+            center: ol.proj.transform([10, 40], 'EPSG:4326', 'EPSG:3857'), //FIXME
             zoom: 1,
             maxZoom: 19,
             enableRotation: false
@@ -256,21 +205,21 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     };
     
     $scope.addWms = function(item){
-        var layer = new ol.layer.Tile({
+        var mapExtent = $scope.map.getView().getProjection().getExtent();
+        var config = {
             type: item.typeName,
-            source: new ol.source.TileWMS({
-                url: item.serviceUrl,
-                serverType: 'geoserver',
-                params: {
-                    time_: (new Date()).getTime(),
-                    'LAYERS': item.geoName,
-                    'TILED': true,
-                    'STYLES': item.style,
-                    'cql_filter': angular.isDefined(item.cql) ? item.cql : null 
-                }
-            })
-        });
-        
+            url: item.serviceUrl,
+            serverType: 'geoserver',
+            params: {
+                time_: (new Date()).getTime(),
+                'LAYERS': item.geoName,
+                'TILED': true,
+                'TILESORIGIN': mapExtent[0] + ',' + mapExtent[1],
+                'STYLES': item.style,
+                'cql_filter': angular.isDefined(item.cql) ? item.cql : null
+            }
+        };
+        var layer = genericMapService.defineWms(config);
         $scope.map.addLayer(layer);
     };
     

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale, $modal, projectionService, UserArea, areaHelperService, areaMapService, areaRestService, areaAlertService, spatialRestService, unitConversionService, userService){
+angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale, $modal, projectionService, UserArea, areaHelperService, areaMapService, areaRestService, spatialRestService, unitConversionService, userService){
     $scope.createBtnTitle = undefined;
     $scope.editBtnTitle = undefined;
     $scope.selectedProj = undefined;
@@ -328,7 +328,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     $scope.$watch('coordVisible', function(newVal, oldVal){
         var selProj = $scope.projections.getProjectionEpsgById($scope.selectedProj);
         var proj;
-        if (!angular.isDefined(selProj)){
+        if (!angular.isDefined(selProj) && newVal){ //FIXME 
             proj = areaMapService.getMapProjectionCode();
         } else {
             proj =  'EPSG:' + selProj;

@@ -54,9 +54,15 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	    }
 	    
 	    var filtersForObject;
+	    //This is for user areas only
 	    if (angular.isDefined(src.filters)){
-	        filtersForObject = buildCqlContext(src.filters);
+	        filtersForObject = buildCqlContext(src.filters, 'USERAREAS');
         }
+	    
+	    //This is for system areas and port data
+	    if (angular.isDefined(src.groupFilter)){
+	        filtersForObject = buildCqlContext(src.groupFilter, 'REFDATA');
+	    }
 	    
 	    if (src.isBaseLayer === true){
 	        baseLayerCounter += 1;
@@ -82,7 +88,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	            attribution: src.shortCopyright,
 	            longAttribution: angular.isDefined(src.longCopyright) ? src.longCopyright : undefined,
 	            url: src.url,
-	            serverType: src.serverType,
+	            serverType: angular.isDefined(src.serverType) ? src.serverType : undefined,
 	            params: {
 	                time_: (new Date()).getTime(),
 	                'LAYERS': src.layerGeoName,
@@ -93,7 +99,6 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	            }
 	        }
 	    };
-	    
 	    
 	    if (angular.isDefined(filtersForObject)){
             node.data.contextItems =  filtersForObject;
@@ -125,6 +130,12 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	var buildAreaNode = function(src){
 	    var node;
 	    if (src.areaType === 'SYSAREA'){
+	        if (angular.isDefined(src.cql)){
+	            src.groupFilter = {
+	                baseCql: src.cql,
+	                allCql: null
+	            };
+	        }
 	        node = buildWmsNode(src);
 	    } else if (src.areaType === 'AREAGROUP'){
 	        node = buildUserAreaGroupNode(src);
@@ -200,32 +211,44 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	    return finalStyles;
 	};
 	
-	
-	//Cql options, mainly for user area group layers
-	var buildCqlContext = function(filters){
+	//Cql options for user area group layers (type is USERAREAS), and for ref data (type is REFDATA)
+	var buildCqlContext = function(filters, type){
 	    var cqlContext = {
             cqlHeader: {
                 name: locale.getString('spatial.layer_tree_context_menu_show_title'),
                 disabled: true,
                 className: 'layer-menu-header'
             }
-	    };
+        }; 
+	    
+	    var name_1, name_2, cql_1, cql_2;
+	    if (type === 'USERAREAS'){
+	        name_1 = locale.getString('spatial.layer_tree_context_menu_active_areas_title');
+	        cql_1 = filters.baseCql + ' AND ' + filters.allCql + ' AND ' + filters.activeCql;
+	        name_2 = locale.getString('spatial.layer_tree_context_menu_all_areas_title');
+	        cql_2 = filters.baseCql + ' AND ' + filters.allCql;
+	    } else {
+	        name_1 = locale.getString('spatial.layer_tree_context_menu_active_groups_title');
+            cql_1 = filters.baseCql;
+            name_2 = locale.getString('spatial.layer_tree_context_menu_all_groups_title');
+            cql_2 = filters.allCql;
+	    }
 	    
 	    cqlContext.activeAreas = {
-            name: locale.getString('spatial.layer_tree_context_menu_active_areas_title'),
+            name: name_1,
             type: 'radio',
             radio: 'filter',
             value: 'activeAreas',
-            cql: filters.baseCql + ' AND ' + filters.allCql + ' AND ' + filters.activeCql,
+            cql: cql_1,
             selected: true
         };
 	    
 	    cqlContext.allAreas = {
-	        name: locale.getString('spatial.layer_tree_context_menu_all_areas_title'),
+	        name: name_2,
 	        type: 'radio',
 	        radio: 'filter',
 	        value: 'allAreas',
-	        cql: filters.baseCql + ' AND ' + filters.allCql,
+	        cql: cql_2,
 	        selected: false
 	    };
 	
@@ -302,12 +325,26 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	    return nodeArray;
 	};
 	
+	//Check if ports and port areas have been configured with group selection
+	var setAdditionalPortSettings = function(data){
+	    angular.forEach(data, function(rec) {
+	    	if (angular.isDefined(rec.cql)){
+	    	    rec.groupFilter = {
+                    baseCql: rec.cql,
+                    allCql: null
+                };
+	    	}
+	    });
+	    
+	    return data;
+	};
+	
 	TreeModel.prototype.fromConfig = function(config){
 	    var tree = [];
 
 	    //Ports
 	    if (angular.isDefined(config.port)){
-	        var portNodes = loopAndBuildNode(config.port);
+	        var portNodes = loopAndBuildNode(setAdditionalPortSettings(config.port));
 	        tree.push({
               title: locale.getString('spatial.layer_tree_ports'),
               folder: true,

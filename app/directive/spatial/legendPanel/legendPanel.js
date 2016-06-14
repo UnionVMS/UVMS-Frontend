@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapService, unitConversionService) {
+angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapService, unitConversionService, $localStorage) {
 	return {
 		restrict: 'EA',
 		replace: true,
@@ -7,30 +7,64 @@ angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapServi
 		controller: function(){
 		    //For WMS layers
 		    this.buildRecWMS = function(layer){
+		        var isInternal = layer.get('isInternal'); 
 		        var record = {
-		            isLabelOnly: false,
+		            isLabelOnly: false
 		        };
                 var src = layer.getSource();
                 var params  = src.getParams();
                 
-                record.url = src.getUrls()[0] + '?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=25&HEIGHT=25&LAYER=' + params.LAYERS;
+                var url = src.getUrls()[0] + '?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=25&HEIGHT=25&LAYER=' + params.LAYERS;
                 if (params.STYLES !== '' && angular.isDefined(params.STYLES)){
                     if (params.STYLES.indexOf('label') !== -1 && params.STYLES.indexOf('geom') === -1){
-                        record.url = undefined;
+                        url = undefined;
                         record.isLabelOnly = true;
                     } else {
-                        record.url += '&STYLE=' + params.STYLES;
+                        url += '&STYLE=' + params.STYLES;
                     }
                 }
                 
-                if (angular.isDefined(record.url)){
-                    record.url += '&SCALE=' + mapService.getCurrentScale();
+                if (angular.isDefined(url)){
+                    url += '&SCALE=' + mapService.getCurrentScale();
+                    
+                    if (isInternal){
+                        this.getLegendWithUsm(url, record);
+                    } else {
+                        record.src = url;
+                    }
                 }
+                
                 record.title = layer.get('title');
                 record.type = 'wms';
                 record.visibility = layer.get('visible');
                 
                 return record;
+		    };
+		    
+		    this.getLegendWithUsm = function(url, record){
+		        var xhr = new XMLHttpRequest();
+		        xhr.open('GET', url, true);
+		        xhr.withCredentials = true;
+		        xhr.setRequestHeader('Authorization', $localStorage.token);
+		        xhr.responseType = 'arraybuffer';
+		        xhr.onload = function(){
+	                if (typeof window.btoa === 'function'){
+	                    if (this.status === 200){
+	                        var uInt8Array = new Uint8Array(this.response);
+	                        var i = uInt8Array.length;
+	                        var binaryString = new Array(i);
+	                        while (i--){
+	                            binaryString[i] = String.fromCharCode(uInt8Array[i]);
+	                        }
+	                        var data = binaryString.join('');
+	                        var type = xhr.getResponseHeader('content-type');
+	                        if (type.indexOf('image') === 0) {
+	                            record.src = 'data:' + type + ';base64,' + window.btoa(data);
+	                        }
+	                    }
+	                }
+	            };
+	            xhr.send();
 		    };
 		    
 		    //VMS positions

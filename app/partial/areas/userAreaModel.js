@@ -1,5 +1,18 @@
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc service
+ * @name UserArea
+ * @param unitConversionService {service} unit conversion service
+ * @description
+ *  A factory that returns UserArea class to allow the definition of user areas, including vectorial geometry and attributes. 
+ */
 angular.module('unionvmsWeb').factory('UserArea',function(unitConversionService) {
-
+    /**
+     * Creates a new User Area
+     * 
+     * @memberof UserArea
+     * @class
+     */
     var UserArea = {
         id: undefined,
         name: undefined,

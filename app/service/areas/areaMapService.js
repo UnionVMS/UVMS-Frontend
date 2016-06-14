@@ -1,72 +1,31 @@
-var resetLayerFilter = function(opt_options){
-    var options = opt_options || {};
-    
-    var btn = document.createElement('button');
-    btn.title = options.label;
-    var icon = document.createElement('span');
-    icon.className = 'fa fa-refresh';
-    icon.style.fontSize = '13px';
-    btn.appendChild(icon);
-    
-    var this_ = this;
-    
-    var resetFilter = function(e){
-        var layers = this_.getMap().getLayers();
-        if (layers.getLength() > 1){
-            layers = layers.getArray().filter(function(layer){
-                return layer.get('type') !== 'osm' && layer.getSource() instanceof ol.source.TileWMS && layer.get('visible') === true;
-            });
-            
-            for (var i = 0; i < layers.length; i++){
-                var cql;
-                var baseCql = layers[i].get('baseCql');
-                if (angular.isDefined(baseCql)){ //USER AREAS and USER AREAS GROUPS
-                    cql = baseCql;
-                    var groupCql = layers[i].get('groupCql');
-                    if (angular.isDefined(groupCql)){
-                        cql += groupCql;
-                    }
-                } else {
-                    cql = null;
-                }
-                
-                if (angular.isDefined(cql)){
-                    layers[i].getSource().updateParams({
-                        time_: (new Date()).getTime(),
-                        'cql_filter': cql
-                    });
-                }
-            }
-        }
-    };
-    
-    btn.addEventListener('click', resetFilter, false);
-    
-    var element = document.createElement('div');
-    element.className = 'ol-resetCql ol-unselectable ol-control';
-    element.appendChild(btn);
-    
-    ol.control.Control.call(this, {
-        element: element,
-        target: options.target,
-    });
-};
-    
-ol.inherits(resetLayerFilter, ol.control.Control);
-
-angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea, userService, areaClickerService) {
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc service
+ * @name areaMapService
+ * @param locale {service} angular locale service
+ * @param genericMapService {service} generic map service<p>{@link unionvmsWeb.genericMapService}</p>
+ * @param projectionService {service} projection service <p>{@link unionvmsWeb.projectionService}</p>
+ * @param UserArea {service} user area service
+ * @param userService {service} USM user service
+ * @param areaClickerService {service} area map click service
+ * @description
+ *  Service to control the map on the area management tab
+ */
+angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericMapService, projectionService, UserArea, userService, areaClickerService) {
 
 	var areaMs = {};
 	
 	areaMs.setMap = function(){
-	    var view = new ol.View({
-	       projection: 'EPSG:3857',
-	       center: ol.proj.transform([-1.81185, 52.44314], 'EPSG:4326', 'EPSG:3857'),
-	       zoom: 3,
-	       maxZoom: 19,
-	       enableRotation: false
-	    });
-	    
+	    var projObj;
+	    if (!angular.isDefined(genericMapService.mapBasicConfigs)){
+	        //FIXME Fallback mode 
+	        projObj = projectionService.getFullProjByEpsg('3857');
+	    } else {
+	        projObj = genericMapService.mapBasicConfigs.projection;
+	    }
+        
+        var view = genericMapService.createView(projObj);
+        
 	    var map = new ol.Map({
 	        target: 'areaMap',
 	        controls: areaMs.getControls(),
@@ -94,66 +53,110 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
 	    map.setView(view);
 	    areaMs.map = map;
 	    
-	    areaMs.addOSM();
+	    areaMs.addBaseLayers();
 	    areaMs.addVector();
 	};
 	
-
-	
 	//LAYERS
-	areaMs.addOSM =  function(){
-	    var layer = new ol.layer.Tile({
-	        type: 'osm',
-            source: new ol.source.OSM()
-        });
-	    
+	/**
+	 * Add base layers to the map
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 */
+	areaMs.addBaseLayers = function(){
+	    if (!angular.isDefined(genericMapService.mapBasicConfigs.layers.baseLayers)){
+	        areaMs.addOSM();
+	    } else {
+	        angular.forEach(genericMapService.mapBasicConfigs.layers.baseLayers, function(layerConf) {
+	            switch (layerConf.type) {
+	                case 'OSM':
+	                    areaMs.addOSM(layerConf);
+	                    break;
+	            }
+	        });
+	    }
+	};
+	
+	/**
+	 * Adds OpenStreeMap layer to the map
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 * @alias addOSM
+	 * @param {Object} [config={}] - The layer configuration object
+	 */
+	areaMs.addOSM =  function(config){
+	    if (!angular.isDefined(config)){
+            config = {};
+        }
+	    var layer = genericMapService.defineOsm(config);
 	    areaMs.map.addLayer(layer);
 	};
 	
-	//User areas wms
+	/**
+	 * Adds UserAreas WMS layer to the map
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 * @alias addUserAreasWMS
+	 * @param {Object} def - The layer defintion object
+	 */
 	areaMs.addUserAreasWMS = function(def){
 	    var cql = "(user_name = '" + userService.getUserName() + "' OR scopes ilike '%#" + userService.getCurrentContext().scope.scopeName +"#%')";
 	    var finalCql = cql;
 	    if (angular.isDefined(def.groupCql)){
 	        finalCql += def.groupCql;
 	    }
-	    var layer = new ol.layer.Tile({
+	    
+	    var mapExtent = areaMs.map.getView().getProjection().getExtent();
+	    var config = {
 	        type: def.typeName,
-	        baseCql: cql,
-	        groupCql: angular.isDefined(def.groupCql) ? def.groupCql : undefined,
-	        source: new ol.source.TileWMS({
-	            url: def.serviceUrl,
-	            serverType: 'geoserver',
-	            crossOrigin: 'anonymous',
-	            params: {
-	                time_: (new Date()).getTime(),
-                    'LAYERS': def.geoName,
-                    'TILED': true,
-                    'STYLES': def.style,
-                    'cql_filter': finalCql
-                }
-	        })
-	    });
+            url: def.serviceUrl,
+            serverType: 'geoserver',
+            params: {
+                time_: (new Date()).getTime(),
+                'LAYERS': def.geoName,
+                'TILED': true,
+                'TILESORIGIN': mapExtent[0] + ',' + mapExtent[1],
+                'STYLES': def.style,
+                'cql_filter': finalCql
+            }
+        };
+	    
+	    var layer = genericMapService.defineWms(config);
+	    
+	    layer.set('baseCql', cql);
+	    var groupCql = angular.isDefined(def.groupCql) ? def.groupCql : undefined;
+	    layer.set('groupCql', groupCql);
 	    
 	    areaMs.map.addLayer(layer);
 	};
 	
-	//Add generic WMS
+	/**
+	 * Adds generic WMS layer to the map. It is used for system areas.
+	 * 
+	 * @memberof areaMapService
+     * @public
+     * @alias addWMS
+     * @param {Object} def - The layer defintion object
+	 */
 	areaMs.addWMS = function(def){
-	    var layer = new ol.layer.Tile({
-	        type: def.typeName,
-	        source: new ol.source.TileWMS({
-	            url: def.serviceUrl,
-	            serverType: 'geoserver',
-	            params: {
-	                time_: (new Date()).getTime(),
-	                'LAYERS': def.geoName,
-	                'TILED': true,
-	                'STYLES': def.style,
-	                'cql_filter': angular.isDefined(def.cql) ? def.cql : null
-	            }
-	        })
-	    });
+	    var mapExtent = areaMs.map.getView().getProjection().getExtent();
+	    var config = {
+            type: def.typeName,
+            url: def.serviceUrl,
+            serverType: 'geoserver',
+            params: {
+                time_: (new Date()).getTime(),
+                'LAYERS': def.geoName,
+                'TILED': true,
+                'TILESORIGIN': mapExtent[0] + ',' + mapExtent[1],
+                'STYLES': def.style,
+                'cql_filter': angular.isDefined(def.cql) ? def.cql : null
+            }
+        };
+	    var layer = genericMapService.defineWms(config);
 	    
 	    areaMs.map.addLayer(layer);
 	};
@@ -498,12 +501,16 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
     };
 	
 	//GENERIC FUNCTIONS
-	//Refresh WMS layer
+    /**
+     * Refresh WMS layer in the map
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias refreshWMSLayer
+     * @param {String} type - The layer type
+     */
 	areaMs.refreshWMSLayer = function(type){
-	    var layer = areaMs.getLayerByType(type);
-        if (angular.isDefined(layer)){
-            layer.getSource().updateParams({time_: (new Date()).getTime()});
-        }
+	    genericMapService.refreshWMSLayer(type, areaMs.map);
 	};
 	
 	//Set layer opacity
@@ -521,30 +528,40 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
 	    layer.set('visible', !currentVis);
 	};
 	
-	//Update map size
+	/**
+	 * Force a recalculation of the map viewport size
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 * @alias updateMapSize
+	 */
 	areaMs.updateMapSize = function(){
-	    if (!areaMs.map) {
-            return;
-        }
-	    areaMs.map.updateSize();
+	    genericMapService.updateMapSize(areaMs.map);
 	};
 	
-	//Get layer by type
+	/**
+	 * Get the first layer with the specified type
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 * @alias getLayerByType
+	 * @param {String} type - The type of the layer to find
+	 * @returns {ol.layer} The OL layer
+	 */
     areaMs.getLayerByType = function(type){
-        var layers = areaMs.map.getLayers().getArray();
-        var layer = layers.filter(function(layer){
-            return layer.get('type') === type;
-        });
-
-        return layer[0];
+        return genericMapService.getLayerByType(type, areaMs.map);
     };
     
-    //Remove layer by type
+    /**
+     * Remove layer from map by type
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias removeLayerByType
+     * @param {String} type - The type of the layer to remove from map
+     */
     areaMs.removeLayerByType = function(type){
-        var layer = areaMs.getLayerByType(type);
-        if (angular.isDefined(layer)){
-            areaMs.map.removeLayer(layer);
-        }
+        genericMapService.removeLayerByType(type, areaMs.map);
     };
     
     //Bring layer to the top of the map
@@ -566,8 +583,16 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, UserArea
     };
 	
 	//Get map projection
+    /**
+     * Gets the base projection of the map
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias getMapProjectionCode
+     * @returns {String} Map base projection code  (e.g. 'EPSG:4326')
+     */
     areaMs.getMapProjectionCode = function(){
-        return areaMs.map.getView().getProjection().getCode();
+        return genericMapService.getMapProjectionCode(areaMs.map);
     };
     
     //Zoom to geom

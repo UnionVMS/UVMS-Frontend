@@ -107,6 +107,17 @@ module.exports = function (grunt) {
           }
       }
     },
+    jsdoc: {
+        dist: {
+            src: ['app/service/spatial/*', 'app/service/areas/*', '!*-spec.js'],
+            options: {
+                destination: 'dist/docs',
+                configure: 'node_modules/angular-jsdoc/common/conf.json',
+                template: 'node_modules/angular-jsdoc/angular-template',
+                readme: './README_docs.md'
+            }
+        }
+    },
     watch: {
       main: {
         options: {
@@ -430,6 +441,7 @@ module.exports = function (grunt) {
   grunt.registerTask('default',['build-dev']);
   grunt.registerTask('serve', ['dom_munger:read','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development', 'watch']);
   grunt.registerTask('serve-copy', ['copy:serve', 'serve']);
+  grunt.registerTask('build-docs', ['jsdoc']);
 
     grunt.event.on('watch', function(action, filepath) {
         if (filepath.lastIndexOf('.js') !== -1 && filepath.lastIndexOf('.js') === filepath.length - 3) {

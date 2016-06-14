@@ -97,12 +97,9 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                     if(scope.initialtext){
                         scope.currentItemLabel = scope.initialtext;
                     }else if(!scope.multiple){
-                        if (scope.ngModel){
+                        if (scope.ngModel && scope.loadedItems){
                     		scope.currentItemLabel = scope.getItemLabel(scope.ngModel);
-                        }else{
-                            if (scope.loadedItems){
-                                scope.currentItemLabel = scope.getItemLabel(scope.loadedItems[0]);
-                            }
+                    		scope.currentItemLabel = scope.getItemLabel(scope.loadedItems[0]);
                         }
                     }
                 }

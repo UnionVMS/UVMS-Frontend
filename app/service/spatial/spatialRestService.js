@@ -86,6 +86,13 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
                 }
             });
         },
+        getBasicMapConfigurations: function(){
+            return $resource('/spatial/rest/config/basic', {}, {
+                'get': {
+                    method: 'GET'
+                }
+            });
+        },
         getUserDefinedAreas: function(){
           return $resource('/spatial/rest/userareaslist', {}, {
                 'get': {
@@ -258,6 +265,17 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
                 deferred.resolve(response.data);
             }, function(error){
                 console.log('Error getting map configurations for report');
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        },
+        getBasicMapConfigurations: function(id){
+            var deferred = $q.defer();
+            spatialRestFactory.getBasicMapConfigurations().get(function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.log('Error getting basic map configurations');
                 deferred.reject(error);
             });
 

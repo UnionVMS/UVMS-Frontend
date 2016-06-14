@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, locale, areaMapService, areaAlertService, areaHelperService, areaRestService, userService){
+angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $interval, locale, genericMapService, areaMapService, projectionService, areaAlertService, areaHelperService, areaRestService, userService){
     $scope.selectedTab = 'USERAREAS';
     $scope.alert = areaAlertService;
     $scope.helper = areaHelperService;
@@ -42,7 +42,16 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, l
         return userService.isAllowed(feature, module, true);
     };
     
+    $scope.stopInitInterval = function(){
+        $interval.cancel($scope.initInterval);
+        $scope.initInterval = undefined;
+    };
+    
     locale.ready('areas').then(function(){
+        areaAlertService.setLoading(locale.getString('areas.inital_loading'));
+        genericMapService.getMapBasicConfigs();
+        projectionService.getProjections();
+        
         $scope.tabs = setTabs();
         if (!angular.isDefined($scope.selectedTab)){
             var userAreas = _.findWhere($scope.tabs, {tabId: 'USERAREAS'});
@@ -54,8 +63,14 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, l
                 $scope.selectedTab = 'SYSAREAS';
             }
         }
-        areaMapService.setMap();
-        areaHelperService.clearHelperService();
+        
+        $scope.initInterval = $interval(function(){
+            if (projectionService.srcProjections.length !== 0 && genericMapService.mapBasicConfigs !== null && !_.isEqual(genericMapService.mapBasicConfigs, {})){
+                areaMapService.setMap();
+                areaHelperService.clearHelperService();
+                $scope.stopInitInterval();
+            }
+        }, 10);
     });
 
     $scope.updateContainerSize = function(){

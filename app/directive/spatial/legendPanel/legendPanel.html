@@ -3,7 +3,7 @@
 		<div ng-if="record.visibility">
 			<span class="legend-text">{{ record.title }}</span>
 			<span class="legend-text-subtitle" ng-if="record.subtitle">{{record.subtitle}}</span>
-			<img class="legend-bottom-space" ng-src="{{record.url}}" ng-if="record.type === 'wms' && !record.isLabelOnly" />
+			<img class="legend-bottom-space" ng-src="{{record.src}}" ng-if="record.type === 'wms' && !record.isLabelOnly" />
 			<div ng-if="record.type === 'wms' && record.isLabelOnly" class="legend-bottom-space-vector">
 				<span class="fa fa-font fontMargin labelStyle"></span>
 				<span class="legend-labels">{{'spatial.legend_panel_labels_only' | i18n}}</span>

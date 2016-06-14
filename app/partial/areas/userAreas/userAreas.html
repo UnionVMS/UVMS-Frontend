@@ -25,7 +25,7 @@
                      <div class="tr row" ng-show="!tableLoading && !displayedUserAreas.length">
                          <div class="th col-md-12"><table-alert type="'info'" msg="'areas.table_no_data'" visible="!displayedUserAreas.length && !tableLoading"></table-alert></div>
                      </div>
-					 <div class="tr row" ng-if="tableLoading">
+					 <div class="tr row" ng-if="tableLoading && !alert.isLoading">
                          <div class="th col-md-12 loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
                      </div>
                  </div>

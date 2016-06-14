@@ -1,147 +1,25 @@
-//OL Navigation History custom control
-ol.control.HistoryControl = function(opt_options){
-    var options = opt_options || {};
-
-    var this_ = this;
-
-    this_.backBtn = document.createElement('button');
-    this_.backBtn.className = 'ol-history-back';
-    this_.backBtn.title = options.backLabel;
-    var backIcon = document.createElement('span');
-    backIcon.className = 'fa fa-long-arrow-left';
-    backIcon.style.fontSize = '13px';
-    this_.backBtn.appendChild(backIcon);
-
-
-    this_.forwardBtn = document.createElement('button');
-    this_.forwardBtn.className = 'ol-history-forward';
-    this_.forwardBtn.title = options.forwardLabel;
-    var forwardIcon = document.createElement('span');
-    forwardIcon.className = 'fa fa-long-arrow-right';
-    forwardIcon.style.fontSize = '13px';
-    this_.forwardBtn.appendChild(forwardIcon);
-
-    this_.historyArray = [];
-    this_.historyLimit = 50;
-    this_.updateByClick = false;
-
-    //Calculate map state object describing the map view state
-    this_.calculateMapState = function(){
-        var view = this_.getMap().getView();
-        var center = view.getCenter();
-        return {
-            zoom:  view.getZoom(),
-            center: {
-                x: Math.round(center[0] * 100) / 100,
-                y: Math.round(center[1] * 100) / 100
-            }
-        };
-    };
-
-    //Update history array
-    this_.updateHistory = function(){
-        if (this_.updateByClick === false){
-            var newMapState = this_.calculateMapState();
-            if (typeof this_.historyIndex === 'undefined'){
-                this_.historyArray.push(newMapState);
-                this_.historyIndex = 0;
-            } else {
-                var oldMapState = this_.getMapState(this_.historyIndex);
-                //Check if the new state is not equal to the current index (we need this to avoid
-                // pushing new states when the screen is being resized)
-                if (this_.compareMapState(oldMapState, newMapState) === false){
-                    if (this_.historyIndex < this_.historyArray.length - 1){
-                        this_.historyArray.splice(this_.historyIndex + 1, this_.historyArray.length - 1 - this_.historyIndex);
-                    }
-                    this_.historyArray.push(newMapState);
-                    this_.historyIndex += 1;
-                }
-                this_.checkHistoryLength();
-            }
-        } else {
-            this_.updateByClick = false;
-        }
-    };
-
-    //Get the state object of the map at the specified index
-    this_.getMapState = function(idx){
-        return this_.historyArray[idx];
-    };
-
-    //Check if new map state is equal to the current history index state
-    this_.compareMapState = function(oldState, newState){
-        var isEqual = true;
-        for (var key in oldState){
-            var value = oldState[key];
-            if (typeof value === 'object'){
-                if (value.x !== newState[key].x || value.y !== newState[key].y){
-                    isEqual = false;
-                }
-            } else {
-                if (value !== newState[key]){
-                    isEqual = false;
-                }
-            }
-        }
-
-        return isEqual;
-    };
-
-    //Check length of history array and remove items if needed
-    this_.checkHistoryLength = function(){
-        if (this_.historyArray.length > this_.historyLimit){
-            this_.historyArray.shift();
-            if (this_.historyIndex !== 0){
-                this_.historyIndex -= 1;
-            }
-        }
-    };
-
-    //Set map view by index
-    this_.setMapView = function(idx){
-        this_.updateByClick = true;
-        var view = this_.getMap().getView();
-        var viewData = this_.getMapState(idx);
-        view.setZoom(viewData.zoom);
-        view.setCenter([viewData.center.x, viewData.center.y]);
-    };
-
-    //Click event listeners for the buttons
-    var backClick = function(e){
-        if (this_.historyIndex > 0){
-            this_.setMapView(this_.historyIndex - 1);
-            this_.historyIndex -= 1;
-        }
-    };
-
-    var forwardClick = function(e){
-        if (this_.historyIndex < this_.historyArray.length - 1){
-            this_.setMapView(this_.historyIndex + 1);
-            this_.historyIndex += 1;
-        }
-    };
-
-    this_.backBtn.addEventListener('click', backClick, false);
-    this_.forwardBtn.addEventListener('click', forwardClick, false);
-
-    var element = document.createElement('div');
-    element.className = 'ol-history ol-unselectable ol-control';
-    element.appendChild(this_.backBtn);
-    element.appendChild(this_.forwardBtn);
-
-    ol.control.Control.call(this, {
-        element: element,
-        target: options.target
-    });
-};
-ol.inherits(ol.control.HistoryControl, ol.control.Control);
-
-ol.control.HistoryControl.prototype.resetHistory = function(){
-    this.historyArray = [];
-    this.historyIndex = undefined;
-};
-
-angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope, $window, $timeout, $interval, $templateRequest, $filter, spatialHelperService, globalSettingsService, unitConversionService, coordinateFormatService, MapFish) {
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc service
+ * @name mapService
+ * @param locale {service} angular locale service
+ * @param $rootScope {service} angular rootScope service
+ * @param $window {service} angular window service
+ * @param $localStorage {service} angular local storage service
+ * @param $timeout {service} angular timeout service
+ * @param $interval {service} angular interval service
+ * @param $templateRequest {service} angular template request service
+ * @param $filter {service} angular filter service
+ * @param spatialHelperService {service} spatial helper service
+ * @param globalSettingsService {service} global settings service
+ * @param unitConversionService {service} unit conversion service
+ * @param coordinateFormatService {service} coordinate format service
+ * @param MapFish {service} Mapfish service
+ * @param genericMapService {service} generic map service<p>{@link unionvmsWeb.genericMapService}</p>
+ * @description
+ *  Service to control the map on the liveview of the reporting tab
+ */
+angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope, $window, $localStorage, $timeout, $interval, $templateRequest, $filter, spatialHelperService, globalSettingsService, unitConversionService, coordinateFormatService, MapFish, genericMapService) {
 	var ms = {};
 	ms.sp = spatialHelperService;
 
@@ -347,12 +225,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ms.map.setView(view);
 	};
 	
-	//Remove all layers
+	/**
+	 * Remove all layers from the map
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias removeAllLayers
+	 */
 	ms.removeAllLayers = function(){
-	    var layers = ms.map.getLayers();
-	    if (layers.getLength() > 0){
-	        layers.clear();
-	    }
+	    genericMapService.removeAllLayers(ms.map);
 	    
 	    //Always add blank layer
 	    ms.addBlankLayer();
@@ -407,81 +288,62 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         return ( layer );
     };
     
-    //Create OSM layer
+    /**
+     * Create OpenStreeMap layer
+     * 
+     * @memberof mapService
+     * @public
+     * @alias createOsm
+     * @param {Object} config - The layer configuration object 
+     * @returns {ol.layer.Tile} The OSM layer
+     */
     ms.createOsm = function( config ){
-        var layer = new ol.layer.Tile({
-            type: config.type,
-            title: config.title,
-            isBaseLayer: config.isBaseLayer,
-            source: new ol.source.OSM()
-        });
-
+        var layer = genericMapService.defineOsm(config);
         return ( layer );
     };
 
-    //Create OpenSeaMap layer
+    /**
+     * Create OpenSeaMap layer
+     * 
+     * @memberof mapService
+     * @public
+     * @alias createOseam
+     * @param {Object} config - The layer configuration object
+     * @returns {ol.layer.Tile} The OpenSeaMap layer
+     */
     ms.createOseam = function(config){
-        var layer = new ol.layer.Tile({
-            type: config.type,
-            title: config.title,
-            isBaseLayer: config.isBaseLayer,
-            source: new ol.source.OSM({
-                attributions:[
-                    new ol.Attribution({
-                        html: '&copy; <a href="http://www.openseamap.org/">OpenSeaMap</a> contributors.'
-                    })
-                ],
-                url: 'http://tiles.openseamap.org/seamark/{z}/{x}/{y}.png',
-                crossOrigin: null
-            })
-        });
-
+        var layer = genericMapService.defineOseam(config);
         return (layer);
     };
     
-    //Create Bing layers
+    /**
+     * Create BING layers
+     * 
+     * @memberof mapService
+     * @public
+     * @alias createBing
+     * @param {Object} config - The layer configuration object
+     * @returns {ol.layer.Tile} - The BING layer
+     */
     ms.createBing = function(config){
-        var layer = new ol.layer.Tile({
-            type: config.type,
-            title: config.title,
-            isBaseLayer: config.isBaseLayer,
-            //preload: Infinity,
-            source: new ol.source.BingMaps({
-                key: config.apiKey,
-                imagerySet: config.layerGeoName,
-                maxZoom: 19
-            })
-        });
-        
+        var layer = genericMapService.defineBing(config);
         return (layer);
     };
 
     //create WMS tile layer
+    /**
+     * Create WMS layers
+     * 
+     * @memberof mapService
+     * @public
+     * @alias createWms
+     * @param {Object} config - The layer configuration object
+     * @returns {ol.layer.Tile} - The WMS layer 
+     */
     ms.createWms = function( config ){
-        var source, layer,
-            attribution = new ol.Attribution({
-                html: config.attribution
-            });
-
-        source = new ol.source.TileWMS({
-            attributions: [ attribution ],
-            url: config.url,
-            serverType: config.serverType,
-            params: config.params,
-            crossOrigin: 'anonymous'
-        });
+        var layer = genericMapService.defineWms(config);
+        layer.set('serverType', config.serverType); //TODO check where we use this 
         
-
-        layer = new ol.layer.Tile({
-            title: config.title,
-            type: 'WMS',
-            longAttribution: config.longAttribution,
-            isBaseLayer: config.isBaseLayer,
-            source: source
-        });
-        
-        layer.set('serverType', config.serverType); 
-
         return ( layer );
     };
     
@@ -1337,47 +1199,66 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    }
 	};
 
-	//Find layers by title
+	/**
+	 * Get the first layer with the specified title
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias getLayerByTitle
+	 * @params {String} title - The title of the layer to find
+	 * @returns {ol.layer} The OL layer
+	 */
 	ms.getLayerByTitle = function(title){
-	    var layers = ms.map.getLayers().getArray();
-	    var layer = layers.filter(function(layer){
-	        return layer.get('title') === title;
-	    });
-
-	    return layer[0];
+	    return genericMapService.getLayerByTitle(title, ms.map);
 	};
 
-	//Find layers by type
+	/**
+     * Get the first layer with the specified type
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getLayerByType 
+     * @param {String} type - The type of the layer to find
+     * @returns {ol.layer} The OL layer
+     */
     ms.getLayerByType = function(type){
-        var layers = ms.map.getLayers().getArray();
-        var layer = layers.filter(function(layer){
-            return layer.get('type') === type;
-        });
-
-        return layer[0];
+        return genericMapService.getLayerByType(type, ms.map);
     };
     
+    /**
+     * Calculates the numeric scale of the current view of the map
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getCurrentScale
+     * @returns {Number} The numerical scale
+     */
     ms.getCurrentScale = function(){
-        var view = ms.map.getView();
-        var res = view.getResolution();
-        var units = view.getProjection().getUnits();
-        var dpi = 25.4 / 0.28;
-        var mpu = ol.proj.METERS_PER_UNIT[units];
-        
-        return res * mpu * 39.37 * dpi;
+        return genericMapService.getCurrentScale(ms.map);
     };
 
-    //Get map projection
+    /**
+     * Gets the base projection of the map
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getMapProjectionCode
+     * @returns {String} Map base projection code  (e.g. 'EPSG:4326')
+     */
     ms.getMapProjectionCode = function(){
-        return ms.map.getView().getProjection().getCode();
+        return genericMapService.getMapProjectionCode(ms.map);
     };
 
-    //Recalculate map size
+    /**
+     * Force a recalculation of the map viewport size
+     * 
+     * @memberof mapService
+     * @public
+     * @alias updateMapSize
+     * @param {ol.Map} map - The input OL map
+     */
     ms.updateMapSize = function(){
-        if (!ms.map) {
-            return;
-        }
-        ms.map.updateSize();
+        genericMapService.updateMapSize(ms.map);
     };
     
     ms.updateMapContainerSize = function(evt) {
@@ -1489,19 +1370,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
 
     //SETTERS
-	//Set map projections
+    /**
+     * Set map projection
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setProjection
+     * @param {Object} proj - The definition of the projection
+     * @returns {ol.prol.Projection} The OL projection
+     */
 	ms.setProjection = function(proj){
-	    var ext = proj.extent.split(';');
-        var projection = new ol.proj.Projection({
-            code: 'EPSG:' + proj.epsgCode,
-            units: proj.units,
-            axisOrientation: proj.axis,
-            global: proj.global,
-            extent: [parseFloat(ext[0]), parseFloat(ext[1]), parseFloat(ext[2]), parseFloat(ext[3])],
-            worldExtent: [-180, -89.99, 180, 89.99]
-        });
-
-        return projection;
+	    return genericMapService.setProjection(proj);
 	};
 
 	//Set map controls
@@ -1584,24 +1463,30 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ms.addedControls = _.union(ctrlsToAdd, ctrlsToUpdate);
 	};
 	
-	//Get array of controls by type
+	/**
+     * Get list of controls by type
+     *
+     * @memberof mapService
+     * @public
+     * @alias getControlsByType
+     * @param {String} type - The type of the controls to find
+     * @returns {Array<ol.control>} The list of controls
+     */
 	ms.getControlsByType = function(type){
-	    var controls = ms.map.getControls().getArray();
-	    var ctrls = controls.filter(function(ctrl){
-	        return ctrl instanceof ol.control[type] === true;
-	    });
-	    
-	    return ctrls;
+	    return genericMapService.getControlsByType(type, ms.map);
 	};
 	
-	//Get array of interactions by type
+	/**
+     * Get list of interactions by type
+     *
+     * @memberof mapService
+     * @public
+     * @alias getInteractionsByType
+     * @param {String} type - The type of the interactions to find
+     * @returns {Array<ol.interaction>} The list of interactions
+     */
     ms.getInteractionsByType = function(type){
-        var interactions = ms.map.getInteractions().getArray();
-        var ints = interactions.filter(function(int){
-            return int instanceof ol.interaction[type] === true;
-        });
-        
-        return ints;
+        return genericMapService.getInteractionsByType(type, ms.map);
     };
     
     //Get custom interactions by type
