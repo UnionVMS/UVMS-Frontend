@@ -39,7 +39,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 
 				scope.$parent.$broadcast('reloadLegend');
 			};
-			
+
 			var loopFolderNodes = function(parent){
                 $.each(parent.children, function(index, node){
                     if (node.hasChildren()){
@@ -50,7 +50,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
                     }
                 });
             };
-			
+
             //Be sure to close labels and popups when we toggle layer visibility
 			var vmsVisibilityListener = function(node){
 			    //Deal with labels
@@ -61,7 +61,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 	                    target = $(node.span).children('.fancytree-title').children('.fa.fa-tags');
 	                    className = 'label-selected-' + node.data.type;
 			        }
-			        
+
 			        //Opened clusters should be closed automatically
 			        var select = mapService.getInteractionsByType('Select')[0];
 			        if (angular.isDefined(select)){
@@ -69,17 +69,17 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 		                selFeatures.clear();
 			        }
                 }
-                
+
                 if (node.data.type === 'vmsseg' && mapService.vmssegLabels.active === true && node.isSelected() === false){
                     mapService.deactivateVectorLabels('vmsseg');
                     target = $(node.span).children('.fancytree-title').children('.fa.fa-tags');
                     className = 'label-selected-' + node.data.type;
                 }
-                
+
                 if (angular.isDefined(target) && target.hasClass(className)){
                     target.removeClass(className);
                 }
-                
+
                 //Deal with popups
                 if (mapService.activeLayerType === node.data.type && angular.isDefined(mapService.overlay) && node.isSelected() === false){
                     mapService.closePopup();
@@ -105,40 +105,40 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				if ( data.node.data.popupEnabled === true ) {
 					addInfo( data );
 				}
-				
+
 				if (data.node.data.labelEnabled === true){
 				    addLabel( data );
 				}
-				
+
 			};
-			
+
 			//add label button for vectors
 			var addLabel = function(data){
 			    var tip,
 			        $title = $(data.node.span).children('.fancytree-title'),
 			        $info = $title.children('.fa.fa-tags');
-			    
+
 			    if ($info.length > 0){
 			        return;
 			    }
-			    
+
 			    tip = locale.getString(data.node.data.labelTip);
 			    var cls = 'fa fa-tags fancytree-clickable';
-			    
+
 			    var empty = false;
 			    if ((data.node.data.type === 'vmspos' && mapService.labelVisibility.positions.length === 0) || (data.node.data.type === 'vmsseg' && mapService.labelVisibility.segments.length === 0)){
 			        tip = locale.getString('spatial.layer_tree_empty_popup_label_visibility_settings');
 			        empty = true;
 			        cls += ' label-disabled';
 			    }
-			    
+
 			    $('<span class="' + cls + '" title="'+tip+'"></span>')
 			        .appendTo($title)
 			        .on('click', function(event){
 			            var layer = data.node.data.mapLayer;
 			            var node = $.ui.fancytree.getNode( event.target ),
 			                $target = $(event.target);
-			                
+
 			            if (!empty){
 			                var active = $target.hasClass('label-selected-' + data.node.data.type);
 			                if (layer.get('visible') === true){
@@ -166,19 +166,19 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 
 				tip = locale.getString(data.node.data.popupTip);
 				var cls = 'fa fa-info fancytree-clickable';
-                
+
                 var empty = false;
                 if ((data.node.data.type === 'vmspos' && mapService.popupVisibility.positions.length === 0) || (data.node.data.type === 'vmsseg' && mapService.popupVisibility.segments.length === 0)){
                     tip = locale.getString('spatial.layer_tree_empty_popup_label_visibility_settings');
                     empty = true;
                     cls += ' info-disabled';
                 }
-                
+
 				$( '<span class="' + cls + '" title="'+tip+'"></span>' )
 					.appendTo( $title )
 					.on( 'click', function(event){
 						var node, $target = $( event.target );
-								
+
 						if (!empty){
 						    var active = $target.hasClass( 'info-selected' );
 						    if (data.node.isSelected() === true){
@@ -219,12 +219,14 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				if ( !scope.$tree || !angular.isDefined(mapService.map)) {
 					return;
 				}
-				
+
 				source = scope.$tree.toDict( true ).children;
-				reverseTreeSource( source );
-				mapLayers = mapService.map.getLayers().getArray();
-				addLayers( source );
-				scope.$parent.$broadcast('reloadLegend');
+				if (angular.isDefined(source)) {
+                    reverseTreeSource( source );
+                    mapLayers = mapService.map.getLayers().getArray();
+                    addLayers( source );
+                    scope.$parent.$broadcast('reloadLegend');
+                }
 			};
 
 			// reverse nested array
@@ -251,7 +253,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 
 					layersByTitle = mapLayers.filter( function( layer ){
 					    var found = true;
-					    
+
 					    if (layer.get('type') === 'WMS'){
 					        var params = layer.getSource().getParams();
 					        if (angular.isDefined(params) && angular.isDefined(value.data.params) && params.LAYERS !== value.data.params.LAYERS){
@@ -339,23 +341,23 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				root.addChildren( node, scope.$tree.getFirstChild() );
 				updateMap();
 			};
-			
+
 			var removeVmsNodes = function(event){
 				var root = scope.$tree.getRootNode();
 				var nodesOfInterest = ['vmsdata', 'alarms'];
-				
+
 				angular.forEach(nodesOfInterest, function(item) {
 					var target = root.findAll(function(node){
 					    return node.data.type === item;
 					});
-					
+
 					for (var i = 0; i < target.length; i++){
 					    root.removeChild(target[i]);
 					}
 				});
-				
+
 			};
-			
+
 			//Get layer index in the ol layers collection
 			var getLayerIdx = function(mapLayer){
                 var layers = mapService.map.getLayers();
@@ -365,19 +367,19 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
                         lyrIdx = idx;
                     }
                 });
-                
+
                 return lyrIdx;
             };
-            
+
             //Support for node dragging inside folder
             var changeLayerOrder = function(node){
                 var layers = mapService.map.getLayers();
                 for (var i in scope.startState){
                     layers.remove(scope.startState[i].layer);
                 }
-                
+
                 var numLayersRemoved = _.keys(scope.startState).length;
-                
+
                 var startIdx;
                 var counter = 0;
                 for (i in scope.endState){
@@ -387,7 +389,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
                     layers.insertAt(startIdx,scope.startState[i].layer);
                     counter += 1;
                 }
-                
+
                 scope.startState = {};
                 scope.endState = {};
             };
@@ -432,7 +434,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
                     loading: 'fa fa-spinner fa-pulse'
 				}
 			};
-			
+
 			// initially create tree
 			var createTree = function( source ){
 
@@ -448,7 +450,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 									node.data.excludeDnd ) {
 								return false;
 							}
-							
+
 							var childNodes = node.parent.children;
 							for (var i = 0; i < childNodes.length; i++){
 							    scope.startState[childNodes[i].title + childNodes[i].key] = {
@@ -457,7 +459,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 							       layer: childNodes[i].data.mapLayer
 							    };
 							}
-							
+
 							return true;
 						},
 						dragEnter: function( node, data ) {
@@ -480,12 +482,12 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 						dragStop: function( node, data ) {},
 						dragDrop: function( node, data ) {
 							data.otherNode.moveTo( node, data.hitMode );
-							
+
 							var childNodes = node.parent.children;
 							for (var i = 0; i < childNodes.length; i++){
                                 scope.endState[childNodes[i].title + childNodes[i].key] = {
                                    idxTree: i,
-                                   idxMap: scope.startState[childNodes[i].title + childNodes[i].key].idxMap + (scope.startState[childNodes[i].title + childNodes[i].key].idxTree - i) 
+                                   idxMap: scope.startState[childNodes[i].title + childNodes[i].key].idxMap + (scope.startState[childNodes[i].title + childNodes[i].key].idxTree - i)
                                 };
                             }
 							changeLayerOrder();
