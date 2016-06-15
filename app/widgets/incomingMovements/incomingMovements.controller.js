@@ -19,6 +19,7 @@
 
 		function reloadList() {
 			searchService.reset();
+			searchService.getListRequest().listSize = 10;
 			searchService.searchMovements().then(function(page) {
 				$scope.currentSearchResults = page;
 			});
