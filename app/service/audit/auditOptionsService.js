@@ -21,7 +21,7 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
             ASSET_GROUP : 'Asset Group',
             MOBILE_TERMINAL : 'Mobile Terminal',
             POLL : 'Poll',
-            POLLING_PROGRAM : 'Polling program',
+            POLLING_PROGRAM : 'Program poll',
         },
         POSITION_REPORTS : {
             AUTOMATIC_POSITION_REPORT : 'Automatic position report',

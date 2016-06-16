@@ -113,76 +113,15 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
     $scope.showComment = function(audit){
         var deferred = $q.defer();
         var id = audit.affectedObject;
-        var textLabel;
-
-        //GET THE COMMENT
-        var errorMessage = locale.getString('audit.show_comment_error_text');
-        var getListRequest = new GetListRequest(1, 1,true, []);
-
-        switch(audit.objectType){
-            //POLL
-            case TYPES.ASSETS_AND_TERMINALS.POLL:
-                getListRequest.addSearchCriteria('POLL_ID', id);
-                pollingRestService.getPollList(getListRequest).then(
-                    function(searchResultsListPage){
-                        if(searchResultsListPage.items.length > 0 && angular.isDefined(searchResultsListPage.items[0].poll)){
-                            deferred.resolve(searchResultsListPage.items[0].poll.comment);
-                        }else{
-                            deferred.reject(errorMessage);
-                        }
-                    },function(){
-                        deferred.reject(errorMessage);
-                    }
-                );
-                break;
-
-            //Mobile terminal
-            case TYPES.ASSETS_AND_TERMINALS.MOBILE_TERMINAL:
-                mobileTerminalRestService.getHistoryForMobileTerminalByGUID(id).then(
-                    function(historyList){
-                        if(historyList.length > 0){
-                            //Find the matching historyItem by comparing dates
-                            var auditDate = audit.date;
-                            var historyDate, matchingHistoryItem;
-                            _.sortBy(historyList, function(item){return - item.changeDate;});
-                            for(var i = 0; i <  historyList.length; i++){
-                                historyDate = historyList[i].changeDate;
-                                //Audit date should be slightly (milliseconds) later than the mobile history date
-                                if(auditDate >= historyDate){
-                                    matchingHistoryItem = historyList[i];
-                                }
-                                //No need to look more
-                                if(auditDate < historyDate){
-                                    break;
-                                }
-                            }
-                            //Found matching item?
-                            if(matchingHistoryItem){
-                                deferred.resolve(matchingHistoryItem.comment);
-                            }else{
-                                deferred.reject(errorMessage);
-                            }
-                        }else{
-                            deferred.reject(errorMessage);
-                        }
-                    },function(){
-                        deferred.reject(errorMessage);
-                    }
-                );
-                break;
-            default:
-                textLabel = audit.comment;
-                break;
-        }
 
         //Open comments modal
         var options = {
             titleLabel : locale.getString('common.comment'),
         };
-        if(angular.isDefined(textLabel)){
-            options.textLabel = textLabel;
+        if(angular.isDefined(audit.comment)){
+            options.textLabel = audit.comment;
         }else{
-            options.textLabelPromise = deferred.promise;
+            options.textLabel = locale.getString('audit.show_comment_error_text');
         }
         modalInstance = infoModal.open(options);
     };
