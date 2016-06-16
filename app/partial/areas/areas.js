@@ -45,6 +45,7 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
     $scope.stopInitInterval = function(){
         $interval.cancel($scope.initInterval);
         $scope.initInterval = undefined;
+        areaAlertService.removeLoading();
     };
     
     locale.ready('areas').then(function(){
@@ -68,6 +69,9 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
             if (projectionService.srcProjections.length !== 0 && genericMapService.mapBasicConfigs !== null && !_.isEqual(genericMapService.mapBasicConfigs, {})){
                 areaMapService.setMap();
                 areaHelperService.clearHelperService();
+                if ($scope.selectedTab === 'USERAREAS'){
+                    areaHelperService.lazyLoadUserAreas();
+                }
                 $scope.stopInitInterval();
             }
         }, 10);

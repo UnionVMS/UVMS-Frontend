@@ -22,7 +22,7 @@
  * @description
  *  Service to control the map on the liveview of the reporting tab
  */
-angular.module('unionvmsWeb').factory('areaHelperService',function(locale, $interval, areaMapService, spatialRestService, areaAlertService, areaRestService, areaClickerService) {
+angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaMapService, spatialRestService, areaAlertService, areaRestService, areaClickerService) {
 	var areaHelperService = {
 	    isEditing: false,
 	    displayedLayerType: undefined,
@@ -106,7 +106,6 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, $inte
 	                if (this.sysAreasEditingType === 'dataset'){
 	                    areaClickerService.active = true;
 	                }
-	                areaAlertService.removeLoading();
 	            }else if(destTab ===  'AREAGROUPS'){
 	            	getUserAreasGroupsList(this);
 	            	if (angular.isDefined(this.displayedUserAreaGroup)){
@@ -125,6 +124,15 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, $inte
 	     */
 	    getUserAreaGroupLayer: function(type){
 	        getUserAreaGroupLayer(this, type);
+	    },
+	    /**
+	     * Load user areas layer on initial map setup
+	     * 
+	     * @memberof areaHelperService
+	     * @public
+	     */
+	    lazyLoadUserAreas: function(){
+	        getUserAreaLayer(this);
 	    }
 	};
 	
@@ -181,18 +189,6 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, $inte
 	    
 	};
 	
-	/**
-	 * Stop interval that is checking if map is defined to add layers
-	 * 
-	 * @memberof areaHelperService
-	 * @private
-	 * @param {Object} obj - areaHelperService object
-	 */
-	var stopLayerInterval = function(obj){
-        $interval.cancel(obj.layerInterval);
-        obj.layerInterval = undefined;
-    }; 
-    
     /**
      * Get user area layer definitions from REST and it to the map
      * 
@@ -201,22 +197,19 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, $inte
      * @param {Object} obj - areaHelperService object
      */
     var getUserAreaLayer = function(obj){
-        obj.layerInterval = $interval(function(){
-            if (angular.isDefined(areaMapService.map && areaMapService.map.getLayers().getLength() !== 0)){
-                spatialRestService.getUserAreaLayer().then(function(response){
-                    if (!angular.isDefined(areaMapService.getLayerByType('USERAREA'))){
-                        areaMapService.addUserAreasWMS(response.data);
-                        obj.displayedLayerType = response.data.typeName;
-                        areaAlertService.removeLoading();
-                    }
-                }, function(error){
-                    areaAlertService.setError();
-                    areaAlertService.alertMessage = locale.getString('areas.error_getting_user_area_layer');
-                    areaAlertService.hideAlert();
-                });
-                stopLayerInterval(obj);
-            }
-        }, 10);
+        if (angular.isDefined(areaMapService.map)){ //&& areaMapService.map.getLayers().getLength() !== 0
+            spatialRestService.getUserAreaLayer().then(function(response){
+                if (!angular.isDefined(areaMapService.getLayerByType('USERAREA'))){
+                    areaMapService.addUserAreasWMS(response.data);
+                    obj.displayedLayerType = response.data.typeName;
+                    areaAlertService.removeLoading();
+                }
+            }, function(error){
+                areaAlertService.setError();
+                areaAlertService.alertMessage = locale.getString('areas.error_getting_user_area_layer');
+                areaAlertService.hideAlert();
+            });
+        }
     };
     
     /**
