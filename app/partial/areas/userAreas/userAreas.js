@@ -302,8 +302,16 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     
     //PROJECTION LISTENER
     $scope.changeProjection = function(newVal){
-        $scope.selectedProj = newVal;
-        var selProj = 'EPSG:' + $scope.projections.getProjectionEpsgById(newVal);
+        var selProj;
+        if (angular.isDefined(newVal)){
+            $scope.selectedProj = newVal;
+            selProj = 'EPSG:' + $scope.projections.getProjectionEpsgById(newVal);
+            if (!angular.isDefined($scope.lastSelectedProj)){
+                var mapProj = areaMapService.getMapProjectionCode()
+                $scope.lastSelectedProj = mapProj.split(':')[1];
+            }
+        }
+        
         if (newVal !== $scope.lastSelectedProj && selProj !== $scope.userArea.coordsProj && $scope.lastSelectedProj !== undefined){
             $scope.warpCoords(selProj);
         }
@@ -328,7 +336,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     $scope.$watch('coordVisible', function(newVal, oldVal){
         var selProj = $scope.projections.getProjectionEpsgById($scope.selectedProj);
         var proj;
-        if (!angular.isDefined(selProj) && newVal){ //FIXME 
+        if (!angular.isDefined(selProj) && newVal){ 
             proj = areaMapService.getMapProjectionCode();
         } else {
             proj =  'EPSG:' + selProj;

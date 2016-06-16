@@ -141,9 +141,10 @@ ol.control.HistoryControl.prototype.resetHistory = function(){
     this.historyIndex = undefined;
 };
 
-// Reset control for area management map - areamapservice
-var resetLayerFilter = function(opt_options){
+// Reset control for area management map - areamapservice 
+ol.control.ResetLayerFilter= function(opt_options){
     var options = opt_options || {};
+    var className = options.controlClass ? options.controlClass : undefined;
     
     var btn = document.createElement('button');
     btn.title = options.label;
@@ -154,7 +155,7 @@ var resetLayerFilter = function(opt_options){
     
     var this_ = this;
     
-    var resetFilter = function(e){
+    var resetFilterAreaMapService = function(e){
         var layers = this_.getMap().getLayers();
         if (layers.getLength() > 1){
             layers = layers.getArray().filter(function(layer){
@@ -184,33 +185,7 @@ var resetLayerFilter = function(opt_options){
         }
     };
     
-    btn.addEventListener('click', resetFilter, false);
-    
-    var element = document.createElement('div');
-    element.className = 'ol-resetCql ol-unselectable ol-control';
-    element.appendChild(btn);
-    
-    ol.control.Control.call(this, {
-        element: element,
-        target: options.target,
-    });
-};
-ol.inherits(resetLayerFilter, ol.control.Control);
-
-//Reset control for area selection - areasselectionmodal
-var resetLayerCqlFilter = function(opt_options){
-    var options = opt_options || {};
-    
-    var btn = document.createElement('button');
-    btn.title = options.label;
-    var icon = document.createElement('span');
-    icon.className = 'fa fa-refresh';
-    icon.style.fontSize = '13px';
-    btn.appendChild(icon);
-    
-    var this_ = this;
-    
-    var resetFilter = function(e){
+    var resetFilterAreaSelectionModal = function(e){
         var layers = this_.getMap().getLayers();
         if (layers.getLength() > 1){
             var layer = layers.getArray().find(function(layer){
@@ -230,17 +205,25 @@ var resetLayerCqlFilter = function(opt_options){
         }
     };
     
-    btn.addEventListener('click', resetFilter, false);
+    if (options.type === 'areamapservice'){
+        btn.addEventListener('click', resetFilterAreaMapService, false);
+    } else if (options.type === 'areaselectionmodal'){
+        btn.addEventListener('click', resetFilterAreaSelectionModal, false);
+    }
+    
     
     var element = document.createElement('div');
-    element.className = 'ol-resetCql ol-unselectable ol-control';
+    element.className = 'ol-resetCql ol-unselectable ol-control ';
+    if (className){
+        element.className += className;
+    } else {
+        element.className += 'ol-resetCql-default';
+    }
     element.appendChild(btn);
     
     ol.control.Control.call(this, {
         element: element,
-        target: options.target
+        target: options.target,
     });
 };
-    
-ol.inherits(resetLayerCqlFilter, ol.control.Control);
-
+ol.inherits(ol.control.ResetLayerFilter, ol.control.Control);

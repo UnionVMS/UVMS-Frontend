@@ -4,12 +4,15 @@
  * @name genericMapService
  * @param $localStorage {service} angular local storage service
  * @param $location {service} angular location service
+ * @param $window {service} angular window service
+ * @param locale {service} angular locale service
  * @param spatialRestService {service} Spatial REST API service
+ * @attr {Object} mapBasicConfigs - A property object that will contain basic map configurations (not used in the liveview map)
  * @description
  *  Service for map generic functions that can be used in all maps throughout the application
  */
 
-angular.module('unionvmsWeb').factory('genericMapService',function($localStorage, $location, spatialRestService) {
+angular.module('unionvmsWeb').factory('genericMapService',function($localStorage, $location, $window, locale, spatialRestService) {
     /**
      * Gets the base projection of the map
      * 
@@ -313,6 +316,73 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
     };
     
     /**
+     * Build the configuration object for WMS base layers
+     * 
+     * @memberof genericMapService
+     * @public
+     * @param {Object} def - The initial layer definition object
+     * @param {ol.Map} map - The OL map
+     * @returns {Object} The final layer configuration object
+     */
+    var getBaseLayerConfig = function(def, map){
+        var mapExtent = map.getView().getProjection().getExtent();
+        var style = null;
+        if (angular.isDefined(def.styles)){
+            angular.forEach(def.styles, function(sldName, styleName) {
+                if (styleName === 'labelGeom'){
+                    style = sldName;
+                } else if (styleName === 'geom' && style === null){
+                    style = sldName;
+                }
+            });
+        }
+        
+        var config = {
+            title: def.title,
+            type: def.type,
+            url: def.url,
+            serverType: 'geoserver',
+            params: {
+                time_: (new Date()).getTime(),
+                'LAYERS': def.layerGeoName,
+                'TILED': true,
+                'TILESORIGIN': mapExtent[0] + ',' + mapExtent[1],
+                'STYLES': style
+            }   
+        };
+        
+        return config;
+    };
+    
+    /**
+     * Build the configuration object for WMS overlay layers
+     * 
+     * @memberof genericMapService
+     * @public
+     * @param {Object} def - The initial layer definition object
+     * @param {ol.Map} map - The OL map
+     * @returns {Object} The final layer configuration object
+     */
+    var getGenericLayerConfig = function(def, map){
+        var mapExtent = map.getView().getProjection().getExtent();
+        var config = {
+            type: def.typeName,
+            url: def.serviceUrl,
+            serverType: 'geoserver',
+            params: {
+                time_: (new Date()).getTime(),
+                'LAYERS': def.geoName,
+                'TILED': true,
+                'TILESORIGIN': mapExtent[0] + ',' + mapExtent[1],
+                'STYLES': def.style,
+                'cql_filter': angular.isDefined(def.cql) ? def.cql : null
+            }   
+        };
+        
+        return config;
+    };
+    
+    /**
      * Define WMS layer
      * 
      * @memberof genericMapService
@@ -383,7 +453,7 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
      * @memberof genericMapService
      * @public
      */
-    var getMapBasicConfigs = function(){
+    var setMapBasicConfigs = function(){
         var self = this;
         self.mapBasicConfigs = {};
         spatialRestService.getBasicMapConfigurations().then(function(response){
@@ -429,14 +499,83 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         var view = this.createView(config);
         map.setView(view);
     };
+    
+    /**
+     * Create OL Zoom control
+     * 
+     * @memberof genericMapService
+     * @public
+     * @returns {ol.control.Zoom} The OL Zoom control
+     */
+    
+    var createZoomCtrl = function(customClass){
+        var ctrl = new ol.control.Zoom({
+            className: angular.isDefined(customClass) ? customClass : undefined, 
+            zoomInTipLabel: locale.getString('spatial.map_tip_zoomin'),
+            zoomOutTipLabel: locale.getString('spatial.map_tip_zoomout')
+        });
 
+        return ctrl;
+    };
+    
+    /**
+     * Create all OL Zoom interactions
+     * 
+     * @memberof genericMapService
+     * @public
+     * @returns {Array<ol.interaction>} An array with zoom related interactions
+     */
+    var createZoomInteractions = function(){
+        var interactions = [];
+        interactions.push(new ol.interaction.MouseWheelZoom());
+        interactions.push(new ol.interaction.KeyboardZoom());
+        interactions.push(new ol.interaction.DoubleClickZoom());
+        interactions.push(new ol.interaction.DragZoom());
+        interactions.push(new ol.interaction.DragZoom({
+            out: true,
+            condition: ol.events.condition.altKeyOnly
+        }));
+        
+        return interactions;
+    };
+    
+    /**
+     * Create all OL Pan interactions
+     * 
+     * @memberof genericMapService
+     * @public
+     * @returns {Array<ol.interaction>} An array with pan related interactions
+     */
+    var createPanInteractions = function(){
+        var interactions = [];
+        interactions.push(new ol.interaction.DragPan());
+        interactions.push(new ol.interaction.KeyboardPan());
+        
+        return interactions;
+    };
+    
+    /**
+     * Focus to map div
+     * 
+     * @memberof genericMapService
+     * @public
+     * @param {String} mapId - The id of the div containing the map
+     */
+    var focusMap = function(mapId){
+        var mapElement = $window.document.getElementById(mapId);
+        if(mapElement){
+            mapElement.focus();
+        }
+    };
+    
 	var genericMapService = {
 	    mapBasicConfigs: {},
-	    getMapBasicConfigs: getMapBasicConfigs, 
+	    setMapBasicConfigs: setMapBasicConfigs, 
 	    getMapProjectionCode: getMapProjectionCode,
 	    createView: createView,
 	    updateMapView: updateMapView,
 	    updateMapSize: updateMapSize,
+	    focusMap: focusMap,
 	    getCurrentScale: getCurrentScale,
 	    getLayerByTitle: getLayerByTitle,
 	    getLayerByType: getLayerByType,
@@ -448,8 +587,13 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
 	    defineOsm: defineOsm,
 	    defineOseam: defineOseam,
 	    defineBing: defineBing,
+	    getBaseLayerConfig: getBaseLayerConfig,
+	    getGenericLayerConfig: getGenericLayerConfig,
 	    defineWms: defineWms,
-	    refreshWMSLayer: refreshWMSLayer
+	    refreshWMSLayer: refreshWMSLayer,
+	    createZoomCtrl: createZoomCtrl,
+	    createZoomInteractions: createZoomInteractions,
+	    createPanInteractions: createPanInteractions
 	};
 
 	return genericMapService;

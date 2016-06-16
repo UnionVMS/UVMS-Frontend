@@ -30,7 +30,11 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
             value: false
 		},
 		isLoadingSearchReferenceData: {
-		    message: 'spatial.search_ref_data_loading_message',
+		    message: 'spatial.loading_data',
+            value: false
+		},
+		isLoadingAreaSelectionModal: {
+		    message: 'spatial.loading_data',
             value: false
 		}
 	};

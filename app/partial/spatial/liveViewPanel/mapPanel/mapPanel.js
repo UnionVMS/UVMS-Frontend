@@ -465,7 +465,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         $scope.showGazetteer = true;
         $timeout(function(){
             $('.gazetteer-container').find('input').focus();
-        });
+        }, 50);
     };
     
     $scope.gazetteerDisable = function(){
@@ -642,14 +642,3 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 //        console.log('disable other');
 //    };
 });
-
-//angular.module('unionvmsWeb').controller('MappanelCtrl',function($scope, locale, mapService, spatialHelperService, defaultMapConfigs){
-//    locale.ready('spatial').then(function(){
-//        if (!angular.isDefined(mapService.map)){
-//            mapService.resetLabelContainers();
-//            mapService.setMap(defaultMapConfigs);
-//            $scope.map = mapService.map;
-//            spatialHelperService.setToolbarControls(defaultMapConfigs);
-//        }
-//    });
-//});

@@ -18,7 +18,7 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	areaMs.setMap = function(){
 	    var projObj;
 	    if (!angular.isDefined(genericMapService.mapBasicConfigs)){
-	        //FIXME Fallback mode 
+	        //Fallback mode 
 	        projObj = projectionService.getFullProjByEpsg('3857');
 	    } else {
 	        projObj = genericMapService.mapBasicConfigs.projection;
@@ -55,6 +55,8 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	    
 	    areaMs.addBaseLayers();
 	    areaMs.addVector();
+	    
+	    areaMs.addLayerSwitcher();
 	};
 	
 	//LAYERS
@@ -72,6 +74,9 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	            switch (layerConf.type) {
 	                case 'OSM':
 	                    areaMs.addOSM(layerConf);
+	                    break;
+	                case 'WMS':
+	                    areaMs.addWMS(layerConf, true);
 	                    break;
 	            }
 	        });
@@ -91,6 +96,7 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
             config = {};
         }
 	    var layer = genericMapService.defineOsm(config);
+	    layer.set('switchertype', 'base'); //Necessary for the layerswitcher control
 	    areaMs.map.addLayer(layer);
 	};
 	
@@ -140,23 +146,21 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
      * @public
      * @alias addWMS
      * @param {Object} def - The layer defintion object
+     * @param {Boolean} isBaselayer - True if layer is a base layer
 	 */
-	areaMs.addWMS = function(def){
-	    var mapExtent = areaMs.map.getView().getProjection().getExtent();
-	    var config = {
-            type: def.typeName,
-            url: def.serviceUrl,
-            serverType: 'geoserver',
-            params: {
-                time_: (new Date()).getTime(),
-                'LAYERS': def.geoName,
-                'TILED': true,
-                'TILESORIGIN': mapExtent[0] + ',' + mapExtent[1],
-                'STYLES': def.style,
-                'cql_filter': angular.isDefined(def.cql) ? def.cql : null
-            }
-        };
+	areaMs.addWMS = function(def, isBaseLayer){
+	    var config;
+	    if (isBaseLayer){
+	        config = genericMapService.getBaseLayerConfig(def, areaMs.map);
+	    } else {
+	        config = genericMapService.getGenericLayerConfig(def, areaMs.map);
+	    }
+	    
 	    var layer = genericMapService.defineWms(config);
+	    
+	    if (isBaseLayer){
+	        layer.set('switchertype', 'base'); //Necessary for the layerswitcher control
+	    }
 	    
 	    areaMs.map.addLayer(layer);
 	};
@@ -446,7 +450,14 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
         areaMs.map.removeInteraction(areaMs.getInteractionsByType('Translate')[0]);
     };
 	
-	//Default controls
+    /**
+     * Get default map controls
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias getControls
+     * @returns {ol.Collection} The OL collection of map controls
+     */
 	areaMs.getControls = function(){
 	    var ctrls = [];
 	    
@@ -455,35 +466,48 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
             collapsed: false
         }));
 	    
-	    ctrls.push(new ol.control.Zoom({
-            zoomInTipLabel: locale.getString('areas.map_tip_zoomin'),
-            zoomOutTipLabel: locale.getString('areas.map_tip_zoomout')
-        }));
+	    ctrls.push(genericMapService.createZoomCtrl('ol-zoom-right-side'));
 	    
-	    ctrls.push(new resetLayerFilter({
+	    ctrls.push(new ol.control.ResetLayerFilter({
+	        controlClass: 'ol-resetCql-right-side',
+	        type: 'areamapservice',
             label: locale.getString('areas.map_tip_reset_layer_filter')
         }));
 	    
 	    return new ol.Collection(ctrls);
 	};
 	
-	//Default interactions
+	/**
+	 * Get the default map interactions
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 * @alias getInteractions
+	 * @returns {ol.Collection} The OL collection of map interactions
+	 */
 	areaMs.getInteractions = function(){
-	    var interactions = [];
-	    
-	    interactions.push(new ol.interaction.MouseWheelZoom());
-	    interactions.push(new ol.interaction.KeyboardZoom());
-	    interactions.push(new ol.interaction.DoubleClickZoom());
-	    interactions.push(new ol.interaction.DragZoom());
-	    interactions.push(new ol.interaction.DragZoom({
-	        out: true,
-            condition: ol.events.condition.altKeyOnly
-	    }));
-	    interactions.push(new ol.interaction.DragPan());
-	    interactions.push(new ol.interaction.KeyboardPan());
+	    var interactions = genericMapService.createZoomInteractions();
+	    interactions = interactions.concat(genericMapService.createPanInteractions());
 	    
 	    return new ol.Collection(interactions);
 	};
+	
+	/**
+	 * Add layer switcher control for base layers
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 * @alias addLayerSwitcher
+	 */
+	areaMs.addLayerSwitcher = function(){
+        var layers = areaMs.map.getLayers();
+        if (layers.getLength() > 1){
+            var switcher = new ol.control.LayerSwitcher({
+                controlClass: 'right-side'
+            });
+            areaMs.map.addControl(switcher);
+        }
+    };
 	
 	//TURF
 	areaMs.pointCoordsToTurf = function(coords){
