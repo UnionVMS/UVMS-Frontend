@@ -1,11 +1,11 @@
 angular.module('unionvmsWeb').factory('mapFishPrintRestFactory', function($resource) {
 
-    var appName = "/mapfish/";
+    var appName = "/mapfish-print/";
     var mapFishUrl =  appName + 'print';
 
     return {
         ping: function(){
-            return $resource(appName + '/metrics/ping', {}, {
+            return $resource(appName + 'metrics/ping', {}, {
                 'get': {
                     method: 'GET'
                 }
@@ -132,7 +132,7 @@ angular.module('unionvmsWeb').factory('mapFishPrintRestFactory', function($resou
             }, function(error){
                 console.log('Error getting icons and legends ids.');
                 deferred.reject(error);
-            }); 
+            });
 
             return deferred.promise;
         }

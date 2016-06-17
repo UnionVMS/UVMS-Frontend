@@ -23,7 +23,7 @@ describe('mapFishPrintRestServiceTest', function() {
 
     it('should return array with templates', inject(function() {
 
-        $httpBackend.expectGET('/mapfish/print/apps.json')
+        $httpBackend.expectGET('/mapfish-print/print/apps.json')
             .respond(201, ['template_1', 'template_2']);
 
         printRestService.getTemplates().then(function(response) {
@@ -35,7 +35,7 @@ describe('mapFishPrintRestServiceTest', function() {
 
     it('should return the capabilities of the template', inject(function() {
 
-        $httpBackend.expectGET('/mapfish/print/template_1/capabilities.json')
+        $httpBackend.expectGET('/mapfish-print/print/template_1/capabilities.json')
             .respond(200, {app: "template_1", formats: ['pdf']});
 
         printRestService.getCapabilities('template_1').then(function(response) {
@@ -47,7 +47,7 @@ describe('mapFishPrintRestServiceTest', function() {
 
     it('should create print job', inject(function() {
 
-        $httpBackend.expectPOST('/mapfish/print/template_1/report.pdf', {layout: 'A4 Portrait'})
+        $httpBackend.expectPOST('/mapfish-print/print/template_1/report.pdf', {layout: 'A4 Portrait'})
             .respond(200, {
                 ref: '15179fee-618d-4356-8114-cfd8f146e273@3067ade6-0768-4fc6-b41d-40422d0cdb8b',
                 statusURL: '/print/status/15179fee-618d-4356-8114-cfd8f146e273.json',
@@ -87,7 +87,7 @@ describe('mapFishPrintRestServiceTest', function() {
 
     it('should cancel the print job', inject(function() {
 
-        $httpBackend.expectDELETE('/mapfish/print/cancel/15179fee-618d-4356-8114-cfd8f146e273@3067ade6-0768-4fc6-b41d-40422d0cdb8b')
+        $httpBackend.expectDELETE('/mapfish-print/print/cancel/15179fee-618d-4356-8114-cfd8f146e273@3067ade6-0768-4fc6-b41d-40422d0cdb8b')
             .respond(200, {});
 
         printRestService.cancelPrintJob('15179fee-618d-4356-8114-cfd8f146e273@3067ade6-0768-4fc6-b41d-40422d0cdb8b').then(function(response) {
