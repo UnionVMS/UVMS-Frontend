@@ -174,6 +174,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
         if(angular.isDefined($scope.configModel.layerSettings)){
         	angular.copy($scope.userConfig.layerSettings, $scope.configModel.layerSettings);
         }
+		$scope.loadedAllSettings = true;
 
         if($scope.isReportConfig){
 		    $location.hash('mapConfigurationModal');

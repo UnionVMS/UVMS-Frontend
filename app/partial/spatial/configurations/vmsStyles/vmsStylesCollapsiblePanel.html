@@ -21,9 +21,12 @@
 						</div>
 					</div>
 				</div>
-				<div ng-show="isMenuSelected('POSITIONS')" ng-include="'partial/spatial/configurations/vmsStyles/positionStyles/positionStyles.html'"></div>
-				<div ng-show="isMenuSelected('SEGMENTS')" ng-include="'partial/spatial/configurations/vmsStyles/segmentStyles/segmentStyles.html'"></div>
-				<div ng-show="isMenuSelected('ALARMS')" ng-include="'partial/spatial/configurations/vmsStyles/alarmStyles/alarmStyles.html'"></div>
+
+				<div ng-repeat="styleTab in headerMenus" ng-include="'partial/spatial/configurations/vmsStyles/stylesSettingsTab/stylesSettingsTab.html'" ng-show="isMenuSelected(styleTab.menu)"></div>
+
+				<!--<div ng-show="isMenuSelected('position')" ng-include="'partial/spatial/configurations/vmsStyles/stylesSettingsTab/stylesSettingsTab.html'" ng-init="tabName='position'"></div>
+				<div ng-show="isMenuSelected('segment')" ng-include="'partial/spatial/configurations/vmsStyles/stylesSettingsTab/stylesSettingsTab.html'" ng-init="tabName='segment'"></div>
+				<div ng-show="isMenuSelected('alarm')"  ng-include="'partial/spatial/configurations/vmsStyles/stylesSettingsTab/stylesSettingsTab.html'" ng-init="tabName='alarm'"></div>-->
 				<div class="col-md-12 col-btn-no-padding" ng-if="isUserPreference || isReportConfig">
 					<button type="button" class="btn btn-default pull-right" ng-click="reset()">{{'spatial.settings_reset_btn' | i18n}}</button>
 				</div>

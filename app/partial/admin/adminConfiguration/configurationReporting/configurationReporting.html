@@ -3,14 +3,15 @@
 	    <div class="row containerWithTopBottomPadding containerCollapsible">
 	    	<loading-panel type="Preferences"></loading-panel>
 	    	<loading-panel type="SavePreferences"></loading-panel>
-	    	<form name="configurationReportForm" novalidate>
+	    	<ng-form name="configurationReportForm" novalidate>
 		    	<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/generalSettings/generalSettings.html'"></div>
 				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/mapSettingsPanel/mapSettingsCollapsiblePanel.html'"></div>
 				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/vmsStyles/vmsStylesCollapsiblePanel.html'"></div>
 				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/visibilitySettings/visibilitySettings.html'"></div>
 				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/layerSettings/layerSettings.html'"></div>
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/referenceDataSettings/referenceDataSettings.html'"></div>
 				<button type="button" class="btn btn-primary pull-right saveBtn btn-action" ng-click="save()">{{'common.save' | i18n}}</button>
-			</form>
+			</ng-form>
 		</div>
 	</div>
 </div>

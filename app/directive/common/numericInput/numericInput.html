@@ -1,5 +1,5 @@
 <div ng-class="{'numeric-input': true}">
 	<input type="text" ng-model="textValue" ng-keypress="removeSpaces($event)" ng-keydown="checkKeys($event)" ng-keyup="mouseUp()" ng-blur="mouseUp()" ng-disabled="ngDisabled" text-input-status>
-	<input type="number" ng-model="ngModelNumber" ng-show="false" ng-required="ngRequired" numeric-input-status>
+	<input type="number" name="{{name}}" ng-model="ngModelNumber" ng-show="false" ng-required="ngRequired">
 	<div class="numeric-input-spinner-container"><a class="numeric-input-spinner" ng-mousedown="spinnerAction('+')" ng-mouseup="mouseUp()" ng-mouseleave="mouseUp()"><i class="fa fa-caret-up"></i></a><a class="numeric-input-spinner" ng-mousedown="spinnerAction('-')" ng-mouseup="mouseUp()" ng-mouseleave="mouseUp()"><i class="fa fa-caret-down"></i></a></div>
 </div>

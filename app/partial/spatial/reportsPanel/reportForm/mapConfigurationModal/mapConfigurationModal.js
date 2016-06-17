@@ -33,192 +33,14 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 
     $scope.exportMapConfiguration = function () {
     	var exported = {};
-    	if(angular.isDefined($scope.mapConfigurationForm) && $scope.mapConfigurationForm.$dirty){
-    		exported.mapSettings = {};
-    		if(angular.isDefined($scope.mapConfigurationForm.mapsettingsForm) && $scope.mapConfigurationForm.mapsettingsForm.$dirty){
-    			exported.mapSettings.spatialConnectId = $scope.configModel.mapSettings.spatialConnectId;
-    			exported.mapSettings.mapProjectionId = $scope.configModel.mapSettings.mapProjectionId;
-    			exported.mapSettings.displayProjectionId = $scope.configModel.mapSettings.displayProjectionId;
-    			exported.mapSettings.coordinatesFormat = $scope.configModel.mapSettings.coordinatesFormat;
-    			exported.mapSettings.scaleBarUnits = $scope.configModel.mapSettings.scaleBarUnits;
-    		}else if(!angular.isDefined($scope.mapConfigurationForm.mapsettingsForm) || (angular.isDefined($scope.mapConfigurationForm.mapsettingsForm) && $scope.mapConfigurationForm.mapsettingsForm.$pristine && $scope.configModel.mapSettings.reseted)){
-    			exported.mapSettings.spatialConnectId = undefined;
-    			exported.mapSettings.mapProjectionId = undefined;
-    			exported.mapSettings.displayProjectionId = undefined;
-    			exported.mapSettings.coordinatesFormat = undefined;
-    			exported.mapSettings.scaleBarUnits = undefined;
-    		}else{
-    			exported.mapSettings.spatialConnectId = reportConfigs.mapConfiguration.spatialConnectId;
-    			exported.mapSettings.mapProjectionId = reportConfigs.mapConfiguration.mapProjectionId;
-    			exported.mapSettings.displayProjectionId = reportConfigs.mapConfiguration.displayProjectionId;
-    			exported.mapSettings.coordinatesFormat = reportConfigs.mapConfiguration.coordinatesFormat;
-    			exported.mapSettings.scaleBarUnits = reportConfigs.mapConfiguration.scaleBarUnits;
-    		}
-    		
-    		if(angular.isDefined($scope.mapConfigurationForm.vmsstylesForm) && $scope.mapConfigurationForm.vmsstylesForm.$dirty){
-    			exported.mapSettings.stylesSettings = $scope.checkStylesSettings();
-    		}else{
-    			exported.mapSettings.stylesSettings = !angular.isDefined($scope.mapConfigurationForm.vmsstylesForm) || $scope.configModel.stylesSettings.reseted ? undefined : reportConfigs.mapConfiguration.stylesSettings;
-    		}
-    		
-    		if(angular.isDefined($scope.mapConfigurationForm.layersettingsForm) && $scope.mapConfigurationForm.layersettingsForm.$dirty){
-    			exported.mapSettings.layerSettings = $scope.configModel.layerSettings;
-    		}else{
-    			exported.mapSettings.layerSettings = !angular.isDefined($scope.mapConfigurationForm.layersettingsForm) || $scope.configModel.layerSettings.reseted ? undefined : reportConfigs.mapConfiguration.layerSettings;
-    		}
-    		
-    		if(angular.isDefined($scope.mapConfigurationForm.visibilitysettingsForm) && $scope.mapConfigurationForm.visibilitysettingsForm.$dirty){
-    			exported.mapSettings.visibilitySettings = $scope.checkVisibilitySettings();
-    		}else{
-    			exported.mapSettings.visibilitySettings = !angular.isDefined($scope.mapConfigurationForm.visibilitysettingsForm) || $scope.configModel.visibilitySettings.reseted ? undefined : reportConfigs.mapConfiguration.visibilitySettings;
-    		}
-    		
-    	}else if($scope.configModel.mapSettings.reseted || $scope.configModel.stylesSettings.reseted || $scope.configModel.layerSettings.reseted || $scope.configModel.visibilitySettings.reseted){
-    		exported.mapSettings = {};
-    		angular.forEach(_.keys($scope.configModel.mapSettings), function(value, key) {
-    			if(value === 'reseted' && $scope.configModel.mapSettings[value] === true){
-    				exported.mapSettings.spatialConnectId = undefined;
-        			exported.mapSettings.mapProjectionId = undefined;
-        			exported.mapSettings.displayProjectionId = undefined;
-        			exported.mapSettings.coordinatesFormat = undefined;
-        			exported.mapSettings.scaleBarUnits = undefined;
-    			}else if(angular.isDefined($scope.configModel.mapSettings[value]) && $scope.configModel.mapSettings[value].reseted === true){
-    				exported.mapSettings[value] = undefined;
-    			}
-    		});
-    	}else{
-    		exported.mapSettings = reportConfigs.mapConfiguration;
-    	}
-    	
+    	exported = $scope.configModel.forReportConfig($scope.mapConfigurationForm,$scope.userConfig);
+
         return exported;
-    };
-    
-    $scope.checkStylesSettings = function() {
-    	if (angular.isDefined($scope.configModel.positionStyle)){
-	    	var positionProperties = {};
-	    	positionProperties.attribute = $scope.configModel.positionStyle.attribute;
-	    	positionProperties.style = {};
-            
-            if($scope.mapConfigurationForm && $scope.mapConfigurationForm.vmsstylesForm.positionsForm && $scope.mapConfigurationForm.vmsstylesForm.positionsForm.$dirty){
-	            switch (positionProperties.attribute) {
-					case "reportedSpeed":
-					case "calculatedSpeed":
-					case "reportedCourse":
-						angular.forEach($scope.configModel.positionStyle.style, function(item){
-							positionProperties.style[item.propertyFrom + "-" + item.propertyTo] = item.color;
-		                });
-						positionProperties.style["default"] = $scope.configModel.positionStyle.defaultColor;
-						break;
-					case "countryCode":
-						angular.forEach($scope.configModel.positionStyle.style, function(item){
-							positionProperties.style[item.code] = item.color;
-		                });
-						break;
-					case "activity":
-					case "type":
-						angular.forEach($scope.configModel.positionStyle.style, function(item){
-							positionProperties.style[item.code] = item.color;
-		                });
-						positionProperties.style["default"] = $scope.configModel.positionStyle.defaultColor;
-						break;
-					default:
-						break;
-				}
-	            $scope.configModel.stylesSettings.positions = positionProperties;
-            }
-	    }
-	    
-	    if(angular.isDefined($scope.configModel.segmentStyle)){
-            var segmentProperties = {};
-            segmentProperties.attribute = $scope.configModel.segmentStyle.attribute;
-            segmentProperties.style = {};
-            
-            if($scope.mapConfigurationForm && $scope.mapConfigurationForm.vmsstylesForm.segmentsForm && $scope.mapConfigurationForm.vmsstylesForm.segmentsForm.$dirty){
-            	segmentProperties.style.lineStyle = $scope.configModel.segmentStyle.lineStyle;
-            	segmentProperties.style.lineWidth = "" + $scope.configModel.segmentStyle.lineWidth;
-	            switch (segmentProperties.attribute) {
-					case "speedOverGround":
-					case "distance":
-					case "duration":
-					case "courseOverGround":
-						angular.forEach($scope.configModel.segmentStyle.style, function(item){
-		                    segmentProperties.style[item.propertyFrom + "-" + item.propertyTo] = item.color;
-		                });
-		                segmentProperties.style["default"] = $scope.configModel.segmentStyle.defaultColor;
-						break;
-					case "countryCode":
-						angular.forEach($scope.configModel.segmentStyle.style, function(item){
-		                    segmentProperties.style[item.code] = item.color;
-		                });
-						break;
-					case "segmentCategory":
-						angular.forEach($scope.configModel.segmentStyle.style, function(item){
-		                    segmentProperties.style[item.code] = item.color;
-		                });
-						segmentProperties.style["default"] = $scope.configModel.segmentStyle.defaultColor;
-						break;
-					default:
-						break;
-				}
-	            $scope.configModel.stylesSettings.segments = segmentProperties;
-            }
-        }
-	    
-	    if(angular.isDefined($scope.configModel.alarmStyle)){
-            var alarmProperties = {};
-            if($scope.mapConfigurationForm && $scope.mapConfigurationForm.vmsstylesForm.alarmsForm && $scope.mapConfigurationForm.vmsstylesForm.alarmsForm.$dirty){
-            	alarmProperties.size = $scope.configModel.alarmStyle.size;
-    			for (var i = 0; i < $scope.configModel.alarmStyle.style.length; i++){
-    				alarmProperties[$scope.configModel.alarmStyle.style[i].id] = $scope.configModel.alarmStyle.style[i].color;
-                }
-	            $scope.configModel.stylesSettings.alarms = alarmProperties;
-            }
-        }
-	    return $scope.configModel.stylesSettings;
-    };
-    
-    $scope.checkVisibilitySettings = function(){
-	    var visibilitySettings = $scope.configModel.visibilitySettings;
-	    var visibilityTypes = ['position','segment','track'];
-	    var contentTypes = ['Table','Popup','Label'];
-	    
-	    angular.forEach(visibilityTypes, function(visibType) {
-	    	angular.forEach(contentTypes, function(contentType) {
-	    		if(visibType !== 'track' || visibType === 'track' && contentType === 'Table'){
-		    		var visibilities = {};
-		    		visibilities.values = [];
-		    		visibilities.order = [];
-		    		var visibilityCurrentSettings = visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
-		    		var visibilityCurrentAttrs = visibilitySettings[visibType + contentType + 'Attrs'];
-		    		var content;
-		    		for(var i = 0; i < visibilityCurrentAttrs.length; i++){
-	    	    		visibilities.order.push(visibilityCurrentAttrs[i].value);
-		    		}
-		    		
-		    		if(visibilityCurrentSettings.values){
-		    			$scope.sortArray(visibilityCurrentSettings.values);
-		    		}
-		    		
-		    		if(angular.isDefined(visibilityCurrentSettings.values)){
-			    		for(var j = 0; j < visibilities.order.length; j++){
-		    				if(visibilityCurrentSettings.values.indexOf(visibilities.order[j]) !== -1){
-		    					visibilities.values.push(visibilities.order[j]);
-		    				}
-			    		}
-			    		visibilities.isAttributeVisible = visibilityCurrentSettings.isAttributeVisible;
-			    		angular.copy(visibilities,visibilityCurrentSettings);
-		    		}
-	    		}
-	    		delete visibilitySettings[visibType + contentType + 'Attrs'];
-		    });
-	    });
-	    
-        return $scope.configModel.visibilitySettings;
     };
     
     var mergePreferences = function(){
     	if(!angular.isDefined($scope.initialConfig) || _.isEmpty($scope.initialConfig)){
-    		$scope.configModel = {};
+			$scope.configModel = new SpatialConfig();
     		angular.copy($scope.userConfig, $scope.configModel);
     	}
     	if(!angular.isDefined($scope.initialConfig) || !angular.isDefined($scope.initialConfig.stylesSettings) || _.isEmpty($scope.initialConfig.stylesSettings)){
@@ -256,6 +78,11 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     		$scope.configModel.visibilitySettings = {};
     		angular.copy($scope.userConfig.visibilitySettings, $scope.configModel.visibilitySettings);
     	}
+
+		if(!angular.isDefined($scope.initialConfig) || !angular.isDefined($scope.initialConfig.referenceDataSettings) || _.isEmpty($scope.initialConfig.referenceDataSettings)){
+    		$scope.configModel.referenceDataSettings = {};
+    		angular.copy($scope.userConfig.referenceDataSettings, $scope.configModel.referenceDataSettings);
+    	}
     };
     
     var getConfigsSuccess = function(response){
@@ -286,12 +113,10 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     var init = function(){
     	loadingStatus.isLoading('Preferences',true);
     	$scope.configModel = new SpatialConfig();
-    	$scope.initialConfig = reportConfigs.mapConfiguration;
-        if (!angular.equals({}, reportConfigs.mapConfiguration)){
-        	$scope.configModel = $scope.configModel.forReportConfigFromJson(reportConfigs);
-        } else {
-            $scope.configModel = $scope.configModel.forReportConfig();
-        } 
+    	$scope.initialConfig = reportConfigs.mapConfiguration || {};
+        if(!angular.equals({}, reportConfigs.mapConfiguration)){
+        	$scope.configModel = $scope.configModel.forReportConfigFromJson(reportConfigs.mapConfiguration);
+        }
     	
     	if(!angular.isDefined($scope.initialConfig) || !angular.isDefined($scope.initialConfig.stylesSettings) || !angular.isDefined($scope.initialConfig.layerSettings) ||
     		!angular.isDefined($scope.initialConfig.visibilitySettings) || !angular.isDefined($scope.initialConfig.spatialConnectId) ||

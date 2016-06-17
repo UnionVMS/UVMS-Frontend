@@ -1,0 +1,86 @@
+<div ng-controller="StylessettingstabCtrl" ng-init="init(styleTab.menu)">
+    <ng-form name="{{styleTab.menu}}sForm" novalidate>
+		<div class="row" ng-if="styleTab.menu !== 'alarm'">
+			<div class="form-group col-md-4" ng-class="{'has-error': {{styleTab.menu}}sForm.{{styleTab.menu}}Property.$invalid}">
+				<combobox ng-model="configModel[styleTab.menu + 'Style'].attribute" initialtext="{{'spatial.' + styleTab.menu + '_property' | i18n }}" items="properties" ng-change="changeProperty()" name="{{styleTab.menu}}Property" ng-required="true"></combobox>
+			</div>
+			<div class="form-group col-md-4 btn-add" ng-show="configModel[styleTab.menu + 'Style'].attribute && ['reportedSpeed','calculatedSpeed','reportedCourse','courseOverGround','speedOverGround','distance'].indexOf(configModel[styleTab.menu + 'Style'].attribute) !== -1">
+				<button class="btn btn-default" ng-class="{ disabled: !isRulesFormValid()}" ng-click="addNewRule()" ng-disabled="!isRulesFormValid()" title="{{'spatial.property_add_rule' | i18n }}">
+					<span class="fa fa-plus"></span>&nbsp;{{'spatial.property_add_rule' | i18n }}
+				</button>
+			</div>
+		</div>
+        <div class="row" ng-if="styleTab.menu === 'alarm'">
+			<div class="col-md-12 alarm-styles-title">{{'spatial.preferences_alarm_status_category_title' | i18n | uppercase}}</div>
+		</div>
+        <div class="row rulesList">
+			<ng-form name="ruleslistForm">
+				<div ng-if="styleTab.menu !== 'alarm' && configModel[styleTab.menu + 'Style'].attribute === 'countryCode'" ng-include="'partial/spatial/configurations/vmsStyles/generalStyles/countryStyles/countryStyles.html'" ng-init="lastComponentStyle = styleTab.menu" class="col-md-12"></div>
+				<div ng-repeat="item in configModel[styleTab.menu + 'Style'].style" ng-include="'partial/spatial/configurations/vmsStyles/generalStyles/ruleRow/ruleRow.html'" ng-if="styleTab.menu !== 'alarm' && configModel[styleTab.menu + 'Style'].attribute !== 'countryCode'" ng-init="lastComponentStyle = styleTab.menu"></div>
+				<ng-form name="alarmsListForm" ng-if="styleTab.menu === 'alarm'" novalidate>
+					<div class="row col-md-12" ng-repeat="item in configModel.alarmStyle.style">
+						<div class="form-group col-md-2">
+							{{item.code}}
+						</div>
+						<div class="form-group col-md-3" ng-class="{'has-error': !isAlarmColorValid(item)}">
+							<div class="colorPickerComponent">
+								<div ng-style="{'background-color': item.color && item.color.length > 3 && item.color.length <= 7 && item.color.indexOf('#') != -1 ? item.color : '#fff'}" class="form-control pickedcolor">
+									<i class="fa fa-ban" ng-hide="item.color && item.color.length > 3 && item.color.length <= 7 && item.color.indexOf('#') != -1"></i>
+								</div>
+								<input class="form-control" colorpicker ng-model="item.color" type="text" ng-change="validatePropertyColor(item,'alarmsListForm');" name="propertyColor{{item.id}}" autocomplete="off"/>
+							</div>
+						</div>
+						<div ng-messages="alarmsListForm['propertyColor' + item.id].$error" ng-show="!isAlarmColorValid(item)">
+							<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
+							<div ng-message="segPropColor">{{'spatial.invalid_color_error_message' | i18n }}</div>
+						</div>
+					</div>
+				</ng-form>
+			</ng-form>
+		</div>
+
+        <div class="row defaultItem" ng-if="styleTab.menu === 'segment' || styleTab.menu === 'position' && configModel.positionStyle.attribute && ['countryCode','type','activity'].indexOf(configModel.positionStyle.attribute) === -1">
+			<ng-form name="defaultForm" novalidate>
+				<div class="row col-md-12">
+					<div class="form-group col-md-3" ng-if="['countryCode','segmentCategory'].indexOf(configModel[styleTab.menu + 'Style'].attribute) === -1" ng-class="{'has-error': defaultForm.defaultColor.$error.hasError && (defaultForm.defaultColor.$dirty || submitedWithErrors)}">
+						<label>{{'spatial.default_color' | i18n}}</label>
+						<div class="colorPickerComponent">
+							<div ng-style="{'background-color': configModel[styleTab.menu + 'Style'].defaultColor && configModel[styleTab.menu + 'Style'].defaultColor.length > 3 && configModel[styleTab.menu + 'Style'].defaultColor.length <= 7 && configModel.{{styleTab.menu}}Style.defaultColor.indexOf('#') != -1 ? configModel[styleTab.menu + 'Style'].defaultColor : '#fff'}" class="form-control pickedcolor">
+					       		<i class="fa fa-ban" ng-hide="configModel[styleTab.menu + 'Style'].defaultColor && configModel[styleTab.menu + 'Style'].defaultColor.length > 3 && configModel[styleTab.menu + 'Style'].defaultColor.length <= 7 && configModel.{{styleTab.menu}}Style.defaultColor.indexOf('#') != -1"></i>
+					        </div>
+					        <input class="form-control" name="defaultColor" colorpicker ng-model="configModel[styleTab.menu + 'Style'].defaultColor" type="text" ng-change="validateDefaultColor();" autocomplete="off"/>
+						</div>
+						<div class="belowErrorMessages" ng-messages="defaultForm.defaultColor.$error" ng-show="defaultForm.defaultColor.$dirty || submitedWithErrors">
+                            <div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
+                            <div ng-message="segDefColor">{{'spatial.invalid_color_error_message' | i18n }}</div>
+                        </div>
+					</div>
+                    <div class="form-group col-md-3" ng-if="styleTab.menu === 'segment'">
+						<label>{{'spatial.line_style' | i18n}}</label>
+						<combobox ng-model="configModel.segmentStyle.lineStyle" line-style="true"></combobox>
+					</div>
+					<div class="form-group col-md-2" ng-class="{'has-error': defaultForm.lineWidth.$error.hasError && (defaultForm.lineWidth.$dirty || submitedWithErrors)}" ng-if="styleTab.menu === 'segment'">
+						<label>{{'spatial.line_width' | i18n}}</label>
+						<numeric-input class="form-control" ng-model="configModel.segmentStyle.lineWidth" ng-required="true" name="lineWidth" ng-change="validateLineWidth();"></numeric-input>
+						<div class="belowErrorMessages" ng-messages="defaultForm.lineWidth.$error" ng-show="defaultForm.lineWidth.$dirty || submitedWithErrors">
+							<div ng-message="requiredField">{{'spatial.required_field_error_message' | i18n }}</div>
+							<div ng-message="rangeError">{{'spatial.invalid_range_error_message' | i18n }}</div>
+						</div>
+					</div>
+                    <div class="form-group col-md-2" ng-if="styleTab.menu === 'alarm'" ng-class="{'has-error': defaultForm.alarmSize.$invalid && (defaultForm.alarmSize.$dirty || submitedWithErrors)}">
+						<label>{{'spatial.size' | i18n}}</label>
+						<numeric-input class="form-control" ng-model="configModel.alarmStyle.size" ng-required="true" name="alarmSize" min="1" max="6" ></numeric-input> <!-- ng-change="validateLineWidth();" -->
+						<div class="belowErrorMessages" ng-messages="defaultForm.alarmSize.$error" ng-show="defaultForm.alarmSize.$dirty || submitedWithErrors">
+							<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
+							<div ng-message="invalidNumber">{{'spatial.not_numeric_error_message' | i18n }}</div>
+							<div ng-message="min">{{'spatial.invalid_range_error_message_2' | i18n }}</div>
+							<div ng-message="max">{{'spatial.invalid_range_error_message_2' | i18n }}</div>
+						</div>
+					</div>
+				</div>
+			</ng-form>	
+		</div>
+
+
+    </ng-form>
+</div>

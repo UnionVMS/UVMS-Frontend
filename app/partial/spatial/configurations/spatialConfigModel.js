@@ -62,6 +62,7 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     //Admin level configs
     SpatialConfig.prototype.forAdminConfigFromJson = function(data, ports){
         var config = new SpatialConfig();
+        config.toolSettings = undefined;
         
         config.systemSettings = data.systemSettings;
         config.mapSettings = data.mapSettings;
@@ -69,167 +70,20 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         config.stylesSettings = data.stylesSettings;
         config.toolSettings = data.toolSettings;
         config.layerSettings = data.layerSettings;
+        config.referenceDataSettings = data.referenceDataSettings;
         
         return config;
     };
     
-    SpatialConfig.prototype.forAdminConfigToJson = function(srcConfig){
-        var config = {};
-        angular.copy(srcConfig, config);
-        var i = 0;
-        if (angular.isDefined(config.positionStyle)){
-        	var positionProperties = {};
-        	positionProperties.attribute = config.positionStyle.attribute;
-        	positionProperties.style = {};
-            if(["reportedSpeed","calculatedSpeed","reportedCourse"].indexOf(positionProperties.attribute) !== -1){
-    			angular.forEach(config.positionStyle.style, function(item){
-    				positionProperties.style[item.propertyFrom + "-" + item.propertyTo] = item.color;
-    			});
-    			positionProperties.style["default"] = config.positionStyle.defaultColor;
-            }else if(["activity","type"].indexOf(positionProperties.attribute) !== -1){
-				for (i = 0; i < config.positionStyle.style.length; i++){
-					positionProperties.style[config.positionStyle.style[i].code] = config.positionStyle.style[i].color;
-                }
-				positionProperties.style["default"] = config.positionStyle.defaultColor;
-    		}else{
-	            for (i = 0; i < config.positionStyle.style.length; i++){
-	            	positionProperties.style[config.positionStyle.style[i].code] = config.positionStyle.style[i].color;
-	            }
-    		}
-            
-            config.stylesSettings.positions = positionProperties;
-            srcConfig.stylesSettings.positions = positionProperties;
-            config.positionStyle = undefined;
-        }
-        if(angular.isDefined(config.segmentStyle)){
-    		var segmentProperties = {};
-    		segmentProperties.attribute = config.segmentStyle.attribute;
-    		segmentProperties.style = {};
-    		segmentProperties.style.lineStyle = config.segmentStyle.lineStyle;
-        	segmentProperties.style.lineWidth = "" + config.segmentStyle.lineWidth;
-    		if(["speedOverGround","distance","duration","courseOverGround"].indexOf(segmentProperties.attribute) !== -1){
-    			angular.forEach(config.segmentStyle.style, function(item){
-    				segmentProperties.style[item.propertyFrom + "-" + item.propertyTo] = item.color;
-    			});
-    			segmentProperties.style["default"] = config.segmentStyle.defaultColor;
-    		}else if(["segmentCategory"].indexOf(segmentProperties.attribute) !== -1){
-				for (i = 0; i < config.segmentStyle.style.length; i++){
-    				segmentProperties.style[config.segmentStyle.style[i].code] = config.segmentStyle.style[i].color;
-                }
-				segmentProperties.style["default"] = config.segmentStyle.defaultColor;
-    		}else{
-    			for (i = 0; i < config.segmentStyle.style.length; i++){
-    				segmentProperties.style[config.segmentStyle.style[i].code] = config.segmentStyle.style[i].color;
-                }
-    		}
-    		config.stylesSettings.segments = segmentProperties;
-    		srcConfig.stylesSettings.segments = segmentProperties;
-    		config.segmentStyle = undefined;
-		}
-        if(angular.isDefined(config.alarmStyle)){
-    		var alarmProperties = {};
-    		alarmProperties = {};
-    		alarmProperties.size = config.alarmStyle.size;
-			for (i = 0; i < config.alarmStyle.style.length; i++){
-				alarmProperties[config.alarmStyle.style[i].id] = config.alarmStyle.style[i].color;
-            }
+    SpatialConfig.prototype.forAdminConfigToJson = function(form){
+        var config = new SpatialConfig();
 
-			config.stylesSettings.alarms = alarmProperties;
-    		srcConfig.stylesSettings.alarms = alarmProperties;
-    		config.alarmStyle = undefined;
-		}
-        
-        if(angular.isDefined(config.visibilitySettings)){
-    	    var visibilityTypes = ['position','segment','track'];
-    	    var contentTypes = ['Table','Popup','Label'];
-    	    
-    	    angular.forEach(visibilityTypes, function(visibType) {
-    	    	angular.forEach(contentTypes, function(contentType) {
-    	    		if(visibType !== 'track' || visibType === 'track' && contentType === 'Table'){
-    	    			var visibilityCurrentSettings = config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
-    		    		var visibilityCurrentAttrs = config.visibilitySettings[visibType + contentType + 'Attrs'];
-    	    			var visibilities = {};
-    		    		visibilities.values = [];
-    		    		visibilities.order = [];
-    		    		visibilities.isAttributeVisible = visibilityCurrentSettings.isAttributeVisible;
-    		    		var content;
-    		    		
-    		    		for(var i = 0; i < visibilityCurrentAttrs.length; i++){
-    	    	    		visibilities.order.push(visibilityCurrentAttrs[i].value);
-    		    		}
-    		    		
-    		    		if(angular.isDefined(visibilityCurrentSettings.values)){
-	    		    		for(var j = 0; j < visibilities.order.length; j++){
-	    	    				if(visibilityCurrentSettings.values.indexOf(visibilities.order[j]) !== -1){
-	    	    					visibilities.values.push(visibilities.order[j]);
-	    	    				}
-	    		    		}
-	    		    		angular.copy(visibilities,visibilityCurrentSettings);
-    		    		}
-    	    		}
-    	    		delete config.visibilitySettings[visibType + contentType + 'Attrs'];
-    		    });
-    	    });
-        }
-
-        if(angular.isDefined(config.layerSettings)){
-        	if(angular.isDefined(config.layerSettings.portLayers) && !_.isEmpty(config.layerSettings.portLayers)){
-        		var ports = [];
-        		angular.forEach(config.layerSettings.portLayers, function(value,key) {
-        			var port = {'serviceLayerId': value.serviceLayerId, 'order': key};
-    	    		ports.push(port);
-    	    	});
-        		angular.copy(ports,config.layerSettings.portLayers);
-        	}else{
-    			config.layerSettings.portLayers = undefined;
-    		}
-        	
-        	if(angular.isDefined(config.layerSettings.areaLayers) && !_.isEmpty(config.layerSettings.areaLayers)){
-	    		var areas = [];
-	    		angular.forEach(config.layerSettings.areaLayers, function(value,key) {
-	    			var area;
-	    			switch (value.areaType) {
-    	    			case 'sysarea':
-    	    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'order': key};
-    	    				break;
-    	    			case 'userarea':
-    	    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'gid': value.gid, 'order': key};
-    	    				break;
-    	    			case 'areagroup':
-    	    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'areaGroupName': value.name, 'order': key};
-    	    				break;
-    	    		}
-	    			areas.push(area);
-		    	});
-	    		angular.copy(areas,config.layerSettings.areaLayers);
-    		}else{
-    			config.layerSettings.areaLayers = undefined;
-    		}
-        	
-        	if(angular.isDefined(config.layerSettings.additionalLayers) && !_.isEmpty(config.layerSettings.additionalLayers)){
-        		var additionals = [];
-        		angular.forEach(config.layerSettings.additionalLayers, function(value,key) {
-        			var additional = {'serviceLayerId': value.serviceLayerId, 'order': key};
-        			additionals.push(additional);
-    	    	});
-        		config.layerSettings.additionalLayers = [];
-        		angular.copy(additionals,config.layerSettings.additionalLayers);
-        	}else{
-    			config.layerSettings.additionalLayers = undefined;
-    		}
-        	
-        	if(angular.isDefined(config.layerSettings.baseLayers) && !_.isEmpty(config.layerSettings.baseLayers)){
-        		var bases = [];
-        		angular.forEach(config.layerSettings.baseLayers, function(value,key) {
-        			var base = {'serviceLayerId': value.serviceLayerId, 'order': key};
-        			bases.push(base);
-    	    	});
-        		config.layerSettings.baseLayers = [];
-        		angular.copy(bases,config.layerSettings.baseLayers);
-        	}else{
-    			config.layerSettings.baseLayers = undefined;
-    		}
-        }
+        config = checkSystemSettings(this,config);
+        config = checkMapSettings(this,'admin',config,form.mapsettingsForm.$dirty);
+        config = checkStylesSettings(this,'admin',config,form.vmsstylesForm.$dirty);
+        config = checkVisibilitySettings(this,'admin',config,form.visibilitysettingsForm.$dirty);
+        config = checkLayerSettings(this,'admin',config,form.layersettingsForm.$dirty);
+        config = checkReferenceDataSettings(this,'admin',config,form.systemAreasSettingsForm.$dirty);
 
         return angular.toJson(config);  
     };
@@ -239,14 +93,13 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         var config = new SpatialConfig();
         config.toolSettings = undefined;
         config.systemSettings = undefined;
-        config.layerSettings = undefined;
-        
-        if (angular.isDefined(data.stylesSettings)){
-            config.stylesSettings = data.stylesSettings;
-        }
         
         if (angular.isDefined(data.mapSettings)){
             config.mapSettings = data.mapSettings;
+        }
+
+        if (angular.isDefined(data.stylesSettings)){
+            config.stylesSettings = data.stylesSettings;
         }
         
         if (angular.isDefined(data.visibilitySettings)){
@@ -256,54 +109,320 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         if (angular.isDefined(data.layerSettings)){
             config.layerSettings = data.layerSettings;
         }
+
+        if (angular.isDefined(data.referenceDataSettings)){
+            config.referenceDataSettings = data.referenceDataSettings;
+        }
         
         return config;
     };
     
-    SpatialConfig.prototype.forUserPrefToServer = function(){
+    SpatialConfig.prototype.forUserPrefToServer = function(form){
         var config = new SpatialConfig();
         config.toolSettings = undefined;
         config.systemSettings = undefined;
-        config.layerSettings = undefined;
         
-        return config;
+        config = checkMapSettings(this,'user',config,form.mapsettingsForm.$dirty);
+        config = checkStylesSettings(this,'user',config,form.vmsstylesForm.$dirty);
+        config = checkVisibilitySettings(this,'user',config,form.visibilitysettingsForm.$dirty);
+        config = checkLayerSettings(this,'user',config,form.layersettingsForm.$dirty);
+        config = checkReferenceDataSettings(this,'user',config,form.systemAreasSettingsForm.$dirty);
+        
+        return angular.toJson(config);
     };
     
     //Report level configs
-    SpatialConfig.prototype.forReportConfig = function(){
-        var srcConfig = new SpatialConfig();
-        var finalConfig = {
-            mapSettings: {
-                mapProjectionId: srcConfig.mapSettings.mapProjectionId,
-                displayProjectionId: srcConfig.mapSettings.displayProjectionId,
-                coordinatesFormat: srcConfig.mapSettings.coordinatesFormat,
-                scaleBarUnits: srcConfig.mapSettings.scaleBarUnits
-            },
-            stylesSettings: srcConfig.stylesSettings,
-            visibilitySettings: srcConfig.visibilitySettings,
-            layerSettings: srcConfig.layerSettings
-        };
+    SpatialConfig.prototype.forReportConfig = function(form,userConfig){
+        var config = {};
         
-        return finalConfig;
+        if(userConfig.mapSettings.spatialConnectId !== this.mapSettings.spatialConnectId || userConfig.mapSettings.mapProjectionId !== this.mapSettings.mapProjectionId ||
+        userConfig.mapSettings.displayProjectionId !== this.mapSettings.displayProjectionId || userConfig.mapSettings.coordinatesFormat !== this.mapSettings.coordinatesFormat ||
+        userConfig.mapSettings.scaleBarUnits !== this.mapSettings.scaleBarUnits || form.mapsettingsForm.$dirty){
+            config = checkMapSettings(this,'report',config,form.mapsettingsForm.$dirty);
+        }else{
+            config.mapSettings = {};
+        }
+
+        if(!angular.equals(userConfig.stylesSettings,this.stylesSettings) || form.vmsstylesForm.$dirty){
+            config.mapSettings = checkStylesSettings(this,'report',config.mapSettings,form.vmsstylesForm.$dirty);
+        }
+
+        if(!angular.equals(userConfig.visibilitySettings.positions,this.visibilitySettings.positions) ||
+        !angular.equals(userConfig.visibilitySettings.segments,this.visibilitySettings.segments) ||
+        !angular.equals(userConfig.visibilitySettings.tracks,this.visibilitySettings.tracks) ||
+        form.visibilitysettingsForm.$dirty){
+            config.mapSettings = checkVisibilitySettings(this,'report',config.mapSettings,form.visibilitysettingsForm.$dirty);
+        }
+
+        removeLayerIds(this.layerSettings);
+        if((!angular.equals(userConfig.layerSettings,this.layerSettings) || form.layersettingsForm.$dirty) && !this.layerSettings.reseted){
+            config.mapSettings = checkLayerSettings(this,'report',config.mapSettings,form.layersettingsForm.$dirty);
+        }
+
+        if(!angular.equals(userConfig.referenceDataSettings,this.referenceDataSettings) || form.systemAreasSettingsForm.$dirty){
+            config.mapSettings = checkReferenceDataSettings(this,'report',config.mapSettings,form.systemAreasSettingsForm.$dirty);
+        }
+
+        return config;
     };
     
     //Used in the report form map configuration modal
     SpatialConfig.prototype.forReportConfigFromJson = function(data){
-        var config = {
-            mapSettings: {
-                spatialConnectId: angular.isDefined(data.mapConfiguration.spatialConnectId) ? angular.copy(data.mapConfiguration.spatialConnectId) : undefined,
-                mapProjectionId: angular.isDefined(data.mapConfiguration.mapProjectionId) ? angular.copy(data.mapConfiguration.mapProjectionId) : undefined,
-                displayProjectionId: angular.isDefined(data.mapConfiguration.displayProjectionId) ? angular.copy(data.mapConfiguration.displayProjectionId) : undefined,
-                coordinatesFormat: angular.isDefined(data.mapConfiguration.coordinatesFormat) ? angular.copy(data.mapConfiguration.coordinatesFormat.toLowerCase()) : undefined,
-                scaleBarUnits: angular.isDefined(data.mapConfiguration.scaleBarUnits) ? angular.copy(data.mapConfiguration.scaleBarUnits.toLowerCase()) : undefined
-            },
-            stylesSettings: angular.isDefined(data.mapConfiguration.stylesSettings) ? angular.copy(data.mapConfiguration.stylesSettings) : this.stylesSettings,
-            visibilitySettings: angular.isDefined(data.mapConfiguration.visibilitySettings) ? angular.copy(data.mapConfiguration.visibilitySettings) : this.visibilitySettings,
-            layerSettings: angular.isDefined(data.mapConfiguration.layerSettings) ? angular.copy(data.mapConfiguration.layerSettings) : this.layerSettings
-        };
-        
+        var config = new SpatialConfig();
+        config.toolSettings = undefined;
+        config.systemSettings = undefined;
+
+        if (angular.isDefined(data)){
+            config.mapSettings = {};
+            config.mapSettings.spatialConnectId = data.spatialConnectId;
+            config.mapSettings.mapProjectionId = data.mapProjectionId;
+            config.mapSettings.displayProjectionId = data.displayProjectionId;
+            config.mapSettings.coordinatesFormat = data.coordinatesFormat;
+            config.mapSettings.scaleBarUnits = data.scaleBarUnits;
+
+            if (angular.isDefined(data.stylesSettings)){
+                config.stylesSettings = data.stylesSettings;
+            }
+            
+            if (angular.isDefined(data.visibilitySettings)){
+                config.visibilitySettings = data.visibilitySettings;
+            }
+            
+            if (angular.isDefined(data.layerSettings)){
+                config.layerSettings = data.layerSettings;
+            }
+
+            if (angular.isDefined(data.referenceDataSettings)){
+                config.referenceDataSettings = data.referenceDataSettings;
+            }
+        }
+
+        return config;
+    };
+
+    var checkSystemSettings = function(model,config){
+        config.systemSettings = model.systemSettings;
+        return config;
+    };
+
+    var checkMapSettings = function(model,settingsLevel,config,changed){
+        if(!changed && model.mapSettings && model.mapSettings.reseted){
+            config.mapSettings = undefined;
+        }else if(changed && model.mapSettings){
+            config.mapSettings = {};
+            if(settingsLevel !== 'report'){
+                config.mapSettings.refreshStatus = model.mapSettings.refreshStatus;
+                config.mapSettings.refreshRate = model.mapSettings.refreshRate;
+            }
+            config.mapSettings.spatialConnectId = model.mapSettings.spatialConnectId;
+            config.mapSettings.mapProjectionId = model.mapSettings.mapProjectionId;
+            config.mapSettings.displayProjectionId = model.mapSettings.displayProjectionId;
+            config.mapSettings.coordinatesFormat = model.mapSettings.coordinatesFormat;
+            config.mapSettings.scaleBarUnits = model.mapSettings.scaleBarUnits;
+        }else if(!changed){
+            if(settingsLevel === 'user'){
+                config.mapSettings = undefined;
+            }else{
+                config.mapSettings = {};
+                if(settingsLevel === 'admin'){
+                    config.mapSettings.refreshStatus = model.mapSettings.refreshStatus;
+                    config.mapSettings.refreshRate = model.mapSettings.refreshRate;
+                }
+                config.mapSettings.spatialConnectId = model.mapSettings.spatialConnectId;
+                config.mapSettings.mapProjectionId = model.mapSettings.mapProjectionId;
+                config.mapSettings.displayProjectionId = model.mapSettings.displayProjectionId;
+                config.mapSettings.coordinatesFormat = model.mapSettings.coordinatesFormat;
+                config.mapSettings.scaleBarUnits = model.mapSettings.scaleBarUnits;
+            }
+        }
+
+        if(settingsLevel === 'report' && !angular.isDefined(config.mapSettings)){
+            config.mapSettings = {};
+        }
+
         return config;
     };
     
+    var checkStylesSettings = function(model,settingsLevel,config,changed){
+        if(!changed && model.stylesSettings && model.stylesSettings.reseted){
+            config.stylesSettings = undefined;
+        }else if(changed && model.stylesSettings){
+            config.stylesSettings = {};
+            var styleTypes = ['position','segment','alarm'];
+
+            angular.forEach(styleTypes,function(item){
+                if (angular.isDefined(model[item + 'Style'])){
+                    var properties = {};
+                    properties.attribute = model[item + 'Style'].attribute;
+
+                    if(item==='alarm'){
+                        properties.size = model.alarmStyle.size;
+                        for (var i = 0; i < model.alarmStyle.style.length; i++){
+                            properties[model.alarmStyle.style[i].id] = model.alarmStyle.style[i].color;
+                        }
+                    }else{
+                        properties.style = {};
+                        
+                        if(item==='segment'){
+                            properties.style.lineStyle = model.segmentStyle.lineStyle;
+                            properties.style.lineWidth = model.segmentStyle.lineWidth;
+                        }
+
+                        switch (properties.attribute) {
+                            case "speedOverGround":
+                            case "distance":
+                            case "duration":
+                            case "courseOverGround":
+                            case "reportedSpeed":
+                            case "calculatedSpeed":
+                            case "reportedCourse":
+                                angular.forEach(model[item + 'Style'].style, function(item){
+                                    properties.style[item.propertyFrom + "-" + item.propertyTo] = item.color;
+                                });
+                                properties.style["default"] = model[item + 'Style'].defaultColor;
+                                break;
+                            case "countryCode":
+                                angular.forEach(model[item + 'Style'].style, function(item){
+                                    properties.style[item.code] = item.color;
+                                });
+                                break;
+                            case "activity":
+                            case "type":
+                            case "segmentCategory":
+                                angular.forEach(model[item + 'Style'].style, function(item){
+                                    properties.style[item.code] = item.color;
+                                });
+                                properties.style["default"] = model[item + 'Style'].defaultColor;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    config.stylesSettings[item + 's'] = properties;
+                }
+            });
+        }else if(!changed){
+            if(settingsLevel === 'user'){
+                config.stylesSettings = undefined;
+            }else{
+                config.stylesSettings = model.stylesSettings;
+                delete config.stylesSettings.positionStyle;
+                delete config.stylesSettings.segmentStyle;
+                delete config.stylesSettings.alarmStyle;
+            }
+        }
+
+	    return config;
+	};
+
+    var checkVisibilitySettings = function(model,settingsLevel,config,changed){
+        if(!changed && (model.visibilitySettings && model.visibilitySettings.reseted || settingsLevel === 'user')){
+            config.visibilitySettings = undefined;
+        }else if((changed && model.visibilitySettings) || (!changed && settingsLevel !== 'user')){
+            var visibilityTypes = ['position','segment','track'];
+            var contentTypes = ['Table','Popup','Label'];
+            config.visibilitySettings = {};
+            
+            angular.forEach(visibilityTypes, function(visibType) {
+                config.visibilitySettings[visibType + 's'] = {};
+                angular.forEach(contentTypes, function(contentType) {
+                    config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()] = [];
+                    if(visibType !== 'track' || visibType === 'track' && contentType === 'Table'){
+                        var visibilityCurrentSettings = model.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
+                        var visibilityCurrentAttrs = model.visibilitySettings[visibType + contentType + 'Attrs'];
+                        var visibilities = {};
+                        visibilities.values = [];
+                        visibilities.order = [];
+                        visibilities.isAttributeVisible = visibilityCurrentSettings.isAttributeVisible;
+                        var content;
+                        for(var i = 0; i < visibilityCurrentAttrs.length; i++){
+                            visibilities.order.push(visibilityCurrentAttrs[i].value);
+                        }
+                        
+                        if(angular.isDefined(visibilityCurrentSettings.values)){
+                            for(var j = 0; j < visibilities.order.length; j++){
+                                if(visibilityCurrentSettings.values.indexOf(visibilities.order[j]) !== -1){
+                                    visibilities.values.push(visibilities.order[j]);
+                                }
+                            }
+                            angular.copy(visibilities,visibilityCurrentSettings);
+                        }
+                    }
+                    config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()] =
+                    model.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
+                    delete config.visibilitySettings[visibType + contentType + 'Attrs'];
+                });
+            });
+        }
+        return config;
+    };
+
+
+    var checkLayerSettings = function(model,settingsLevel,config,changed){
+        if(settingsLevel === 'report'){
+            config.layerSettings = model.layerSettings;
+        }else if(!changed && (model.layerSettings && model.layerSettings.reseted || settingsLevel === 'user')){
+    		config.layerSettings = undefined;
+    	}else if((changed && model.layerSettings) || (!changed && settingsLevel !== 'user')){
+            config.layerSettings = {};
+            var layerTypes = ['port','area','additional','base'];
+
+            angular.forEach(layerTypes,function(item){
+                if(angular.isDefined(model.layerSettings[item + 'Layers']) && !_.isEmpty(model.layerSettings[item + 'Layers'])){
+                    var layers = [];
+                    angular.forEach(model.layerSettings[item + 'Layers'], function(value,key) {
+                        var layer;
+                        if(item === 'area'){
+                            switch (value.areaType) {
+                                case 'sysarea':
+                                    layer = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'order': key};
+                                    break;
+                                case 'userarea':
+                                    layer = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'gid': value.gid, 'order': key};
+                                    break;
+                                case 'areagroup':
+                                    layer = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'areaGroupName': value.name, 'order': key};
+                                    break;
+                            }
+                        }else{
+                            layer = {'serviceLayerId': value.serviceLayerId, 'order': key};
+                        }
+                        layers.push(layer);
+                    });
+                    config.layerSettings[item + 'Layers'] = [];
+                    angular.copy(layers,config.layerSettings[item + 'Layers']);
+                }else{
+                    config.layerSettings[item + 'Layers'] = undefined;
+                }
+            });
+	    }
+        return config;
+    };
+
+    var checkReferenceDataSettings = function(model,settingsLevel,config,changed){
+    	if(!changed && (model.referenceDataSettings && model.referenceDataSettings.reseted || settingsLevel === 'user')){
+            config.referenceDataSettings = undefined;
+        }else if((changed && model.referenceDataSettings) || (!changed && settingsLevel !== 'user')){
+            config.referenceDataSettings = model.referenceDataSettings;
+        }
+        return config;
+    };
+    
+    var sortArray = function(data){
+        var temp = _.clone(data);
+        temp.sort();
+        
+        return temp;
+    };
+
+    var removeLayerIds = function(obj){
+        angular.forEach(obj, function(type) {
+            angular.forEach(type, function(item) {
+                delete item.$$hashKey;
+                delete item.gid;
+            });
+    	});
+    };
+
 	return SpatialConfig;
 });

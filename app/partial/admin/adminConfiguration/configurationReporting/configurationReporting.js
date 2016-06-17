@@ -3,7 +3,7 @@ angular.module('unionvmsWeb').controller('ConfigurationreportingCtrl',function($
 	$scope.save = function(){
     	if(_.keys($scope.configurationReportForm.$error).length === 0){
     		loadingStatus.isLoading('SavePreferences',true);
-	        var finalConfig = $scope.configModel.forAdminConfigToJson($scope.configModel);
+	        var finalConfig = $scope.configModel.forAdminConfigToJson($scope.configurationReportForm);
 	        spatialConfigRestService.saveAdminConfigs(finalConfig).then(function(response){
 	        	$anchorScroll();
 	            alertService.showSuccessMessageWithTimeout(locale.getString('common.global_setting_save_success_message'));

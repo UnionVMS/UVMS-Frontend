@@ -1,18 +1,18 @@
 <div ng-controller="RulerowCtrl" ng-init="componentStyle = lastComponentStyle">
 	<ng-form name="rowstylesForm{{item.id}}" novalidate>
-		<div class="row col-md-12" ng-if="componentStyle === 'segment' && ['distance','duration','speedOverGround','courseOverGround'].indexOf(configModel.segmentStyle.attribute) !== -1 || componentStyle === 'positions' && ['reportedSpeed','calculatedSpeed','reportedCourse'].indexOf(configModel.positionStyle.attribute) !== -1">
-			<div class="form-group col-md-2" ng-class="{'has-error': rowstylesForm{{item.id}}.propertyFrom.$error.hasError && $first && (rowstylesForm{{item.id}}.propertyFrom.$dirty || submitedWithErrors), 'degree-input' : componentStyle === 'segment' && configModel.segmentStyle.attribute === 'courseOverGround' || componentStyle === 'positions' && configModel.positionStyle.attribute === 'reportedCourse'}">
+		<div class="row col-md-12" ng-if="componentStyle === 'segment' && ['distance','duration','speedOverGround','courseOverGround'].indexOf(configModel.segmentStyle.attribute) !== -1 || componentStyle === 'position' && ['reportedSpeed','calculatedSpeed','reportedCourse'].indexOf(configModel.positionStyle.attribute) !== -1">
+			<div class="form-group col-md-2" ng-class="{'has-error': !isPropertyFromValid($first), 'degree-input' : componentStyle === 'segment' && configModel.segmentStyle.attribute === 'courseOverGround' || componentStyle === 'position' && configModel.positionStyle.attribute === 'reportedCourse'}">
 				<numeric-input class="form-control cancel" placeholder="{{'spatial.property_from' | i18n }}" ng-model="item.propertyFrom" name="propertyFrom" step="0.00001" ng-change="validatePropertyFrom($first);" ng-disabled="!$first"></numeric-input>
 			</div>
-			<div class="form-group col-md-2" ng-class="{'has-error': rowstylesForm{{item.id}}.propertyTo.$error.hasError && (rowstylesForm{{item.id}}.propertyTo.$dirty || submitedWithErrors), 'degree-input' : componentStyle === 'segment' && configModel.segmentStyle.attribute === 'courseOverGround' || componentStyle === 'positions' && configModel.positionStyle.attribute === 'reportedCourse'}">
-				<numeric-input class="form-control cancel" placeholder="{{'spatial.property_to' | i18n }}" ng-model="item.propertyTo" name="propertyTo" step="0.00001" ng-change="validatePropertyTo();updateNextRule();"></numeric-input>
+			<div class="form-group col-md-2" ng-class="{'has-error': !isPropertyToValid(), 'degree-input' : componentStyle === 'segment' && configModel.segmentStyle.attribute === 'courseOverGround' || componentStyle === 'position' && configModel.positionStyle.attribute === 'reportedCourse'}">
+				<numeric-input class="form-control cancel" placeholder="{{'spatial.property_to' | i18n }}" ng-model="item.propertyTo" name="propertyTo" step="0.00001" ng-change="validatePropertyTo();updateNextRule($index+1);"></numeric-input>
 			</div>
-			<div class="form-group col-md-3" ng-class="{'has-error': rowstylesForm{{item.id}}.propertyColor.$error.hasError && (rowstylesForm{{item.id}}.propertyColor.$dirty || submitedWithErrors)}">
+			<div class="form-group col-md-3" ng-class="{'has-error': ruleslistForm['rowstylesForm' + item.id].propertyColor.$error.hasError && (ruleslistForm['rowstylesForm' + item.id].propertyColor.$dirty || submitedWithErrors)}">
 				<div class="colorPickerComponent">
 					<div ng-style="{'background-color': item.color && item.color.length > 3 && item.color.length <= 7 && item.color.indexOf('#') != -1 ? item.color : '#fff'}" class="form-control pickedcolor">
 			       		<i class="fa fa-ban" ng-hide="item.color && item.color.length > 3 && item.color.length <= 7 && item.color.indexOf('#') != -1"></i>
 			        </div>
-			        <input class="form-control" colorpicker ng-model="item.color" type="text" ng-change="validatePropertyColor();" name="propertyColor" autocomplete="off"/>
+			        <input class="form-control" colorpicker ng-model="item.color" type="text" ng-change="validatePropertyColor(item,'rowstylesForm');" name="propertyColor" autocomplete="off"/>
 				</div>
 			</div>
 			<div class="form-group col-md-1 btn-rm">
@@ -20,33 +20,33 @@
 					<span class="fa fa-trash"></span>
 				</button>
 			</div>
-			<div ng-messages="rowstylesForm{{item.id}}.propertyFrom.$error" ng-show="(rowstylesForm{{item.id}}.propertyFrom.$dirty || submitedWithErrors) && rowstylesForm{{item.id}}.propertyFrom.$error.hasError">
+			<div ng-messages="ruleslistForm['rowstylesForm' + item.id].propertyFrom.$error" ng-show="(ruleslistForm['rowstylesForm' + item.id].propertyFrom.$dirty || submitedWithErrors) && ruleslistForm['rowstylesForm' + item.id].propertyFrom.$error.hasError">
 				<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
 				<div ng-message="segPropMinFrom">{{'spatial.prop_min_from_error_message' | i18n }}</div>
 			</div>
-			<div ng-messages="rowstylesForm{{item.id}}.propertyTo.$error" ng-show="rowstylesForm{{item.id}}.propertyTo.$error.hasError && (rowstylesForm{{item.id}}.propertyTo.$dirty || submitedWithErrors) && (!rowstylesForm{{item.id}}.propertyFrom.$error.hasError || !rowstylesForm{{item.id}}.propertyFrom.$dirty)">
+			<div ng-messages="ruleslistForm['rowstylesForm' + item.id].propertyTo.$error" ng-show="ruleslistForm['rowstylesForm' + item.id].propertyTo.$error.hasError && (ruleslistForm['rowstylesForm' + item.id].propertyTo.$dirty || submitedWithErrors) && (!ruleslistForm['rowstylesForm' + item.id].propertyFrom.$error.hasError || !ruleslistForm['rowstylesForm' + item.id].propertyFrom.$dirty)">
 				<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
 				<div ng-message="segPropToMax">{{'spatial.prop_to_max_error_message' | i18n }}</div>
 				<div ng-message="segPropTo">{{'spatial.prop_to_error_message' | i18n }}</div>
 			</div>
-			<div ng-messages="rowstylesForm{{item.id}}.propertyColor.$error" ng-show="rowstylesForm{{item.id}}.propertyColor.$error.hasError && (rowstylesForm{{item.id}}.propertyColor.$dirty || submitedWithErrors) && (!rowstylesForm{{item.id}}.propertyFrom.$error.hasError || !rowstylesForm{{item.id}}.propertyFrom.$dirty) && (!rowstylesForm{{item.id}}.propertyTo.$error.hasError || !rowstylesForm{{item.id}}.propertyTo.$dirty)">
+			<div ng-messages="ruleslistForm['rowstylesForm' + item.id].propertyColor.$error" ng-show="ruleslistForm['rowstylesForm' + item.id].propertyColor.$error.hasError && (ruleslistForm['rowstylesForm' + item.id].propertyColor.$dirty || submitedWithErrors) && (!ruleslistForm['rowstylesForm' + item.id].propertyFrom.$error.hasError || !ruleslistForm['rowstylesForm' + item.id].propertyFrom.$dirty) && (!ruleslistForm['rowstylesForm' + item.id].propertyTo.$error.hasError || !ruleslistForm['rowstylesForm' + item.id].propertyTo.$dirty)">
 				<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
 				<div ng-message="segPropColor">{{'spatial.invalid_color_error_message' | i18n }}</div>
 			</div>
 		</div>
-		<div class="row col-md-12" ng-if="componentStyle === 'segment' && configModel.segmentStyle.attribute === 'segmentCategory' || componentStyle === 'positions' && ['activity','type'].indexOf(configModel.positionStyle.attribute) !== -1">
+		<div class="row col-md-12" ng-if="componentStyle === 'segment' && configModel.segmentStyle.attribute === 'segmentCategory' || componentStyle === 'position' && ['activity','type'].indexOf(configModel.positionStyle.attribute) !== -1">
 			<div class="form-group col-md-2">
 				{{item.code}}
 			</div>
-			<div class="form-group col-md-3" ng-class="{'has-error': (rowstylesForm{{item.id}}.propertyColor.$error.requiredField || rowstylesForm{{item.id}}.propertyColor.$error.segPropColor) && (rowstylesForm{{item.id}}.propertyColor.$dirty || submitedWithErrors)}">
+			<div class="form-group col-md-3" ng-class="{'has-error': (ruleslistForm['rowstylesForm' + item.id].propertyColor.$error.requiredField || ruleslistForm['rowstylesForm' + item.id].propertyColor.$error.segPropColor) && (ruleslistForm['rowstylesForm' + item.id].propertyColor.$dirty || submitedWithErrors)}">
 				<div class="colorPickerComponent">
 					<div ng-style="{'background-color': item.color && item.color.length > 3 && item.color.length <= 7 && item.color.indexOf('#') != -1 ? item.color : '#fff'}" class="form-control pickedcolor">
 			       		<i class="fa fa-ban" ng-hide="item.color && item.color.length > 3 && item.color.length <= 7 && item.color.indexOf('#') != -1"></i>
 			        </div>
-			        <input class="form-control" colorpicker ng-model="item.color" type="text" ng-change="validatePropertyColor();" name="propertyColor" autocomplete="off"/>
+			        <input class="form-control" colorpicker ng-model="item.color" type="text" ng-change="validatePropertyColor(item,'rowstylesForm');" name="propertyColor" autocomplete="off"/>
 				</div>
 			</div>
-			<div ng-messages="rowstylesForm{{item.id}}.propertyColor.$error" ng-show="rowstylesForm{{item.id}}.propertyColor.$error.hasError && (rowstylesForm{{item.id}}.propertyColor.$dirty || submitedWithErrors)">
+			<div ng-messages="ruleslistForm['rowstylesForm' + item.id].propertyColor.$error" ng-show="ruleslistForm['rowstylesForm' + item.id].propertyColor.$error.hasError && (ruleslistForm['rowstylesForm' + item.id].propertyColor.$dirty || submitedWithErrors)">
 				<div ng-message="requiredField">{{'spatial.required_error_message' | i18n }}</div>
 				<div ng-message="segPropColor">{{'spatial.invalid_color_error_message' | i18n }}</div>
 			</div>

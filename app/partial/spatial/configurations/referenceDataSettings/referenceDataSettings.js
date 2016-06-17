@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($scope, locale, $localStorage, $interval, $timeout, genericMapService, projectionService, spatialRestService, comboboxService){
+angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($scope, locale, $localStorage, $interval, $timeout, genericMapService, projectionService, spatialRestService, comboboxService, spatialConfigAlertService, $anchorScroll, loadingStatus, spatialConfigRestService, SpatialConfig, $location){
     $scope.status = {
         isOpen: false
     };
@@ -48,7 +48,7 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
     $scope.isLoading = false; //to use on map click
     
     //Ref data type change
-    $scope.changeSelectedArea = function(){
+    $scope.$watch('currentSelection.selectedAreaType',function(newVal,oldVal){
         $scope.displayCodes = [];
         $scope.clearSearchProps();
         $scope.currentSelection.selectionType = 'map';
@@ -83,7 +83,7 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
         } else {
             $scope.isAreaSelectorComboVisible = false;
         }
-    };
+    });
     
     //Selection type change
     $scope.changeSelectionType = function(){
@@ -101,7 +101,7 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
         spatialRestService.getAreaLocationLayers().then(function(response){
             $scope.srcSysAreas = response.data;
             angular.forEach(response.data, function(item) {
-            	$scope.systemAreaItems.push({"text": item.typeName, "code": item.typeName});
+            	$scope.systemAreaItems.push({"text": item.typeName, "code": item.typeName.toLowerCase()});
             });
             $scope.isLoadingAreaTypes = false;
         }, function(error){
@@ -415,4 +415,96 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
             }
         });
     }
+
+    $scope.reset = function(){
+		loadingStatus.isLoading('ResetPreferences',true);
+        var item = {
+            referenceDataSettings: {}
+        };
+        
+        if($scope.isUserPreference){
+	        spatialConfigRestService.resetSettings(item).then(resetSuccess, resetFailure);
+		}else if($scope.isReportConfig){
+	    	spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
+	    }
+    };
+
+    var resetSuccess = function(response){
+        $scope.configModel.referenceDataSettings = response.referenceDataSettings;
+        if (angular.isDefined($scope.configCopy)){
+            angular.copy($scope.configModel.referenceDataSettings, $scope.configCopy.referenceDataSettings);
+        }
+        $anchorScroll();
+        spatialConfigAlertService.hasAlert = true;
+        spatialConfigAlertService.hasSuccess = true;
+        spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_layers_success');
+        spatialConfigAlertService.hideAlert();
+        
+        $scope.currentSelection = {
+            selectedAreaType: undefined,
+            areaSelector: 'all',
+            selectionType: 'map',
+            searchString: undefined
+        };
+
+		if(angular.isDefined($scope.systemAreasSettingsForm)){
+        	$scope.systemAreasSettingsForm.$setPristine();
+		}
+        $scope.configModel.referenceDataSettings.reseted = true;
+        loadingStatus.isLoading('ResetPreferences',false);
+    };
+    
+    var resetFailure = function(error){
+        $anchorScroll();
+        spatialConfigAlertService.hasAlert = true;
+        spatialConfigAlertService.hasError = true;
+        spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_layers_failure');
+        spatialConfigAlertService.hideAlert();
+        loadingStatus.isLoading('ResetPreferences',false);
+    };
+
+    var getConfigsSuccess = function(response){
+	    $scope.srcConfigObj = response;
+	    var model = new SpatialConfig();
+	    $scope.userConfig = model.forUserPrefFromJson(response);
+	    $scope.configModel.referenceDataSettings = {};
+        if(angular.isDefined($scope.configModel.referenceDataSettings)){
+        	angular.copy($scope.userConfig.referenceDataSettings, $scope.configModel.referenceDataSettings);
+        }
+
+        if($scope.isReportConfig){
+		    $location.hash('mapConfigurationModal');
+			$anchorScroll();
+			$location.hash('');
+        }
+        
+        $anchorScroll();
+	    spatialConfigAlertService.hasAlert = true;
+	    spatialConfigAlertService.hasSuccess = true;
+	    spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_layers_success');
+        spatialConfigAlertService.hideAlert();
+        
+        $scope.currentSelection = {
+            selectedAreaType: undefined,
+            areaSelector: 'all',
+            selectionType: 'map',
+            searchString: undefined
+        };
+
+        if(angular.isDefined($scope.systemAreasSettingsForm)){
+        	$scope.systemAreasSettingsForm.$setPristine();
+		}
+        $scope.configModel.referenceDataSettings.reseted = true;
+        loadingStatus.isLoading('ResetPreferences',false);
+	};
+	
+	var getConfigsFailure = function(error){
+	    $anchorScroll();
+	    $scope.alert.hasAlert = true;
+	    $scope.alert.hasError = true;
+	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_reset_layers_failure');
+	    $scope.alert.hideAlert();
+	    loadingStatus.isLoading('ResetPreferences',false);
+	};
+
 });

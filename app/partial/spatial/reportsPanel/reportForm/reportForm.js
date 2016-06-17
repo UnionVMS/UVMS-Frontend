@@ -207,8 +207,14 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             size: 'lg',
             resolve: {
                 reportConfigs: function(){
-                    if(!angular.isDefined($scope.report.currentConfig)){
+                    if(!angular.isDefined($scope.report.currentConfig) || !angular.isDefined($scope.report.currentConfig.mapConfiguration)){
                         $scope.report.currentConfig = {'mapConfiguration': {}};
+                    }else{
+                        angular.forEach(_.keys($scope.report.currentConfig.mapConfiguration),function(value,key){
+                            if(!angular.isDefined(value)){
+                                delete $scope.report.currentConfig.mapConfiguration[key];
+                            }
+                        });
                     }
                     return $scope.report.currentConfig;
                 },
@@ -379,6 +385,9 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 	    	}
 			if(!angular.equals(report.mapConfiguration.layerSettings, report.currentConfig.mapConfiguration.layerSettings)){
 				report.mapConfiguration.layerSettings = report.currentConfig.mapConfiguration.layerSettings;
+	    	}
+            if(!angular.equals(report.mapConfiguration.referenceDataSettings, report.currentConfig.mapConfiguration.referenceDataSettings)){
+				report.mapConfiguration.referenceDataSettings = report.currentConfig.mapConfiguration.referenceDataSettings;
 	    	}
     	}
 		return report;

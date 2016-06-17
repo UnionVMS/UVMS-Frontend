@@ -4,20 +4,20 @@ angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',functio
 		isOpen: false
 	};
 	
-	$scope.selectedMenu = 'POSITIONS';
+	$scope.selectedMenu = 'position';
 
 	var setMenus = function(){
 	        return [
 	            {
-	                'menu': 'POSITIONS',
+	                'menu': 'position',
 	                'title': locale.getString('spatial.tab_movements')
 	            },
 	            {
-	                'menu': 'SEGMENTS',
+	                'menu': 'segment',
 	                'title': locale.getString('spatial.tab_segments')
 	            },
 	            {
-	            	'menu': 'ALARMS',
+	            	'menu': 'alarm',
 	                'title': locale.getString('spatial.tab_alarms')
 	            }
 	        ];

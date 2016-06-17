@@ -1,4 +1,4 @@
-<div ng-controller="CountrystylesCtrl" ng-init="componentStyle = lastComponentStyle">
+<div ng-controller="CountrystylesCtrl" ng-init="componentStyle = lastComponentStyle + 's'">
 	<div class="form-group table-responsive-force" st-table="displayedRecords" st-safe-src="loadedStyles">
 		<div class="row col-md-6 searchField">
 			<input type="text" class="form-control" ng-model="searchString" st-search="" placeholder="{{'spatial.reports_table_search_header' | i18n}}">

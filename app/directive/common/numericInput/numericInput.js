@@ -11,7 +11,8 @@ angular.module('unionvmsWeb').directive('numericInput',['$compile', function($co
             max: '@',
             ngRequired: '=',
             step: '@',
-			ngDisabled: '='
+			ngDisabled: '=',
+			name: '@'
 		},
 		templateUrl: 'directive/common/numericInput/numericInput.html',
 		link: function(scope, element, attrs, ctrl) {
@@ -51,6 +52,10 @@ angular.module('unionvmsWeb').controller('numericInputCtrl',['$scope','$interval
 	
 	//Watch for changes to the ngModelNumber and validate value
 	$scope.$watch(function() { return $scope.ngModelNumber;}, function(newVal, oldVal) {
+		if(_.isString(newVal)){
+			$scope.ngModelNumber = parseFloat(newVal);
+			return;
+		}
 		if($scope.ngChange){
 			try{
 				$scope.$eval($scope.ngChange);
@@ -249,22 +254,6 @@ angular.module('unionvmsWeb').controller('numericInputCtrl',['$scope','$interval
 	}
     
 }]);
-
-angular.module('unionvmsWeb').directive('numericInputStatus',function() {
-  return {
-      restrict: 'A',
-      require: 'ngModel',
-      link: function(scope, elm, attrs, ctrl) {
-
-    	  var updateFieldStatus = function(value) {
-              ctrl.$setDirty();
-              ctrl.$setTouched();
-              return value;
-          };
-          ctrl.$parsers.push(updateFieldStatus);
-      }
-  };
-});
 
 angular.module('unionvmsWeb').directive('textInputStatus',function() {
 	  return {

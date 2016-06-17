@@ -8,7 +8,7 @@
         <h4 class="modal-title">{{'spatial.report_configuration_modal_title' | i18n}}</h4>
     </div>
     <div class="modal-body">
-    	<div class="col-md-12 containerWithTopBottomPadding spatial-error" ng-if="alert.hasAlert">
+    	<div class="containerWithTopBottomPadding spatial-error" ng-if="alert.hasAlert">
 			<div class="alert alert-container" role="alert" ng-class="{'alert-danger': alert.hasError, 'alert-success': alert.hasSuccess, 'alert-warning': alert.hasWarning}">
 				<span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasError"></span>
 				<span class="fa fa-check-circle" aria-hidden="true" ng-show="alert.hasSuccess"></span>
@@ -19,12 +19,13 @@
 		    </div>
 		</div>
        	<div class="row containerCollapsible">
-	    	<form name="mapConfigurationForm" novalidate>
+	    	<ng-form name="mapConfigurationForm" novalidate>
 	    	    <div class="collapsiblePanel" ng-include="'partial/spatial/configurations/mapSettingsPanel/mapSettingsCollapsiblePanel.html'" ng-if="hasMap"></div>
 				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/vmsStyles/vmsStylesCollapsiblePanel.html'" ng-if="hasMap"></div>
 				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/visibilitySettings/visibilitySettings.html'"></div>
 				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/layerSettings/layerSettings.html'" ng-if="hasMap"></div>
-			</form>
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/referenceDataSettings/referenceDataSettings.html'" ng-if="hasMap"></div>
+			</ng-form>
 		</div>
     </div>
     <!-- FOOTER -->
