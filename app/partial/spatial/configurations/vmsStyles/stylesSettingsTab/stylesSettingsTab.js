@@ -43,9 +43,7 @@ angular.module('unionvmsWeb').controller('StylessettingstabCtrl',function($scope
     };
 
     $scope.addNewRule = function(){
-		
-
-		$scope.vmsstylesForm.$setDirty();
+		$scope.stylesSettingsForm.$setDirty();
 		var nextFrom;
 		if($scope.configModel[$scope.tabName + 'Style'].style && $scope.configModel[$scope.tabName + 'Style'].style.length > 0){
 			nextFrom = _.last($scope.configModel[$scope.tabName + 'Style'].style).propertyTo;
@@ -333,8 +331,8 @@ angular.module('unionvmsWeb').controller('StylessettingstabCtrl',function($scope
 	$scope.$watch('loadedAllSettings', function() {
 		if($scope.loadedAllSettings && $scope.configModel && $scope.configModel.stylesSettings && $scope.configModel.stylesSettings[$scope.tabName + 's'] && ($scope.tabName === 'alarm' || $scope.configModel.stylesSettings[$scope.tabName + 's'].style)){
 			$scope.loadProperties();
-			if(angular.isDefined($scope.vmsstylesForm)){
-				$scope.vmsstylesForm.$setPristine();
+			if(angular.isDefined($scope.stylesSettingsForm)){
+				$scope.stylesSettingsForm.$setPristine();
 			}
 		}
 	});

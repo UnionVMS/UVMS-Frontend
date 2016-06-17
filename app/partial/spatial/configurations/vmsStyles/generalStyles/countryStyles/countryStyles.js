@@ -89,8 +89,4 @@ angular.module('unionvmsWeb').controller('CountrystylesCtrl',function($scope, sp
 	};
 	
 	$scope.prepareRecordsForCountryCode();
-	
-   $scope.$on('loadCountries', function(event){
-	   $scope.setFsStyleArray($scope.componentStyle);
-   });
 });
