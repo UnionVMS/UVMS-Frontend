@@ -55,8 +55,6 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
         $scope.clickResultsMap = true;
         if (angular.isDefined($scope.currentSelection.selectedAreaType)){
             $scope.isAreaSelectorComboVisible = true;
-            //TODO copy to model
-            
             if (!angular.isDefined($scope.configModel.referenceDataSettings[$scope.currentSelection.selectedAreaType])){
                 $scope.configModel.referenceDataSettings[$scope.currentSelection.selectedAreaType] = {
                     selection: 'all',
@@ -75,7 +73,7 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
             }
             
             //Clear map
-            $scope.removeWMS($scope.currentSelection.selectedAreaType);
+            $scope.removeWMS($scope.currentSelection.selectedAreaType.toUpperCase());
             
             if ($scope.currentSelection.areaSelector === 'custom'){
                 $scope.updateMap();
@@ -101,7 +99,7 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
         spatialRestService.getAreaLocationLayers().then(function(response){
             $scope.srcSysAreas = response.data;
             angular.forEach(response.data, function(item) {
-            	$scope.systemAreaItems.push({"text": item.typeName, "code": item.typeName.toLowerCase()});
+            	$scope.systemAreaItems.push({"text": item.typeName, "code": item.typeName.toUpperCase()});
             });
             $scope.isLoadingAreaTypes = false;
         }, function(error){
@@ -132,7 +130,7 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
     $scope.selectAreaFromMap = function(data){
         spatialRestService.getAreaDetails(data).then(function(response){
             var area;
-            $scope.isLoading = false;
+            loadingStatus.isLoading('SearchReferenceData',false);
             $scope.clickResults = response.data.length;
             if ($scope.clickResults > 0){
                 if ($scope.clickResults === 1){
@@ -301,13 +299,19 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
     //MAP 
     $scope.updateMap = function(){
         if (!angular.isDefined($scope.map)){
-            setMap();
+            loadingStatus.isLoading('SearchReferenceData',true);
+            genericMapService.setMapBasicConfigs();
             $scope.mapInterval = $interval(function(){
+                if (!_.isEqual(genericMapService.mapBasicConfigs, {})){
+                    setMap();
+                }
+                
                 var mapEl = angular.element('#sys-areas-map');
-                if (mapEl.length > 0){
+                if (angular.isDefined($scope.map) && mapEl.length > 0){
                     $scope.stopInterval();
                     $scope.map.updateSize();
                     $scope.addWMS();
+                    loadingStatus.isLoading('SearchReferenceData',false);
                 }
             }, 10);
         } else {
@@ -324,65 +328,72 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
         if (angular.isDefined($scope.map)){
             var layers = $scope.map.getLayers().getArray();
             angular.forEach(layers, function(layer) {
-                if (layer.get('type') === 'WMS' && layer.get('areaType') !== selectedAreaType){
+                if (!angular.isDefined(layer.get('switchertype')) && layer.get('type') !== selectedAreaType){
                     $scope.map.removeLayer(layer);
                 }
             });
         }
     };
     
-    $scope.addWMS = function(){
-        var layerDef = _.findWhere($scope.srcSysAreas, {typeName: $scope.currentSelection.selectedAreaType});
-        if (angular.isDefined(layerDef)){
-            var mapExtent = $scope.map.getView().getProjection().getExtent();
-            var config = {
-                url: layerDef.serviceUrl,
-                serverType: 'geoserver',
-                params: {
-                    time_: (new Date()).getTime(),
-                    'LAYERS': layerDef.geoName,
-                    'TILED': true,
-                    'TILESORIGIN': mapExtent[0] + ',' + mapExtent[1],
-                    'STYLES': angular.isDefined(layerDef.style) ? layerDef.style : ''
-                }
-            };
-            var layer = genericMapService.defineWms(config);
-            $scope.map.addLayer(layer);
+    /**
+     * Adds generic WMS layer to the map.
+     * 
+     * @memberof referenceDataSettings
+     * @public
+     * @alias addWMS
+     * @param {Object} def - The layer defintion object
+     * @param {Boolean} isBaselayer - True if layer is a base layer
+     */
+    $scope.addWMS = function(def, isBaseLayer){
+        var config;
+        
+        if (!angular.isDefined(def)){
+            def = _.findWhere($scope.srcSysAreas, {typeName: $scope.currentSelection.selectedAreaType.toUpperCase()});
         }
+        
+        if (!angular.isDefined(isBaseLayer)){
+            isBaseLayer = false;
+        }
+        
+        if (isBaseLayer){
+            config = genericMapService.getBaseLayerConfig(def, $scope.map);
+        } else {
+            config = genericMapService.getGenericLayerConfig(def, $scope.map);
+        }
+        
+        var layer = genericMapService.defineWms(config);
+        
+        if (isBaseLayer){
+            layer.set('switchertype', 'base'); //Necessary for the layerswitcher control
+        } 
+        
+        $scope.map.addLayer(layer);
     };
     
-    
     function setMap(){
-        var osm = genericMapService.defineOsm();
+        var projObj;
+        if (angular.isDefined(genericMapService.mapBasicConfigs.success)){
+            if (genericMapService.mapBasicConfigs.success){
+                projObj = genericMapService.mapBasicConfigs.projection;
+            } else {
+                //Fallback mode
+                projObj = projectionService.getStaticProjMercator();
+            }
+        }
         
-        //FIXME fetch this through service
-        var projObj = projectionService.getFullProjByEpsg('3857');
-        var projection = genericMapService.setProjection(projObj);
-        
-        var view = new ol.View({
-            projection: projection,
-            center: ol.proj.transform([10, 40], 'EPSG:4326', 'EPSG:3857'), //FIXME
-            zoom: 1,
-            maxZoom: 19,
-            enableRotation: false
-        });
+        var view = genericMapService.createView(projObj);
         
         var controls = [];
-        var interactions = [];
         controls.push(new ol.control.Attribution({
             collapsible: false,
             collapsed: false
         }));
         
-        controls.push(new ol.control.Zoom({
-            zoomInTipLabel: locale.getString('spatial.map_tip_zoomin'),
-            zoomOutTipLabel: locale.getString('spatial.map_tip_zoomout')
-        }));
+        controls.push(genericMapService.createZoomCtrl()); //'ol-zoom-right-side'
         
-        interactions.push(new ol.interaction.DragPan());
-        interactions.push(new ol.interaction.MouseWheelZoom());
-        interactions.push(new ol.interaction.DoubleClickZoom());
-
+        var interactions = genericMapService.createZoomInteractions();
+        interactions = interactions.concat(genericMapService.createPanInteractions());
+       
         var map = new ol.Map({
             target: 'sys-areas-map',
             controls: controls,
@@ -394,14 +405,14 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
             map.updateSize();
         });
         
-        map.addLayer(osm);
         map.setView(view);
-        
         $scope.map = map;
+        
+        addBaseLayers();
         
         map.on('singleclick', function(evt){
             if ($scope.currentSelection.selectionType === 'map' && angular.isDefined($scope.currentSelection.selectedAreaType) && $scope.currentSelection.areaSelector === 'custom'){
-                $scope.isLoading = true;
+                loadingStatus.isLoading('SearchReferenceData',true);
                 var projection = $scope.map.getView().getProjection().getCode();
                 var requestData = {
                     areaType: $scope.currentSelection.selectedAreaType,
@@ -415,6 +426,40 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
             }
         });
     }
+    
+    function addBaseLayers(){
+        if (!genericMapService.mapBasicConfigs.success){
+            $scope.addOSM();
+        } else {
+            angular.forEach(genericMapService.mapBasicConfigs.layers.baseLayers, function(layerConf) {
+                switch (layerConf.type) {
+                    case 'OSM':
+                        $scope.addOSM(layerConf);
+                        break;
+                    case 'WMS':
+                        $scope.addWMS(layerConf, true);
+                        break;
+                }
+            });
+        }
+    }
+    
+    /**
+     * Adds OpenStreeMap layer to the map
+     * 
+     * @memberof referenceDataSettings
+     * @public
+     * @alias addOSM
+     * @param {Object} [config={}] - The layer configuration object
+     */
+    $scope.addOSM =  function(config){
+        if (!angular.isDefined(config)){
+            config = {};
+        }
+        var layer = genericMapService.defineOsm(config);
+        layer.set('switchertype', 'base'); //Necessary for the layerswitcher control
+        $scope.map.addLayer(layer);
+    };
 
     $scope.reset = function(){
 		loadingStatus.isLoading('ResetPreferences',true);

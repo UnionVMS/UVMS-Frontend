@@ -119,11 +119,13 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     //MAP
     function setMap(){
         var projObj;
-        if (!angular.isDefined(genericMapService.mapBasicConfigs)){
-            //Fallback mode 
-            projObj = projectionService.getFullProjByEpsg('3857');
-        } else {
-            projObj = genericMapService.mapBasicConfigs.projection;
+        if (angular.isDefined(genericMapService.mapBasicConfigs.success)){
+            if (genericMapService.mapBasicConfigs.success){
+                projObj = genericMapService.mapBasicConfigs.projection;
+            } else {
+                //Fallback mode
+                projObj = projectionService.getStaticProjMercator();
+            }
         }
         
         var view = genericMapService.createView(projObj);
@@ -169,8 +171,6 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
             map.addControl(switcher);
         }
         
-        $scope.map = map;
-        
         map.on('singleclick', function(evt){
             if ((($scope.sysSelection === 'map' && $scope.selectedTab === 'SYSTEM') || ($scope.userSelection === 'map' && $scope.selectedTab === 'USER')) && map.getLayers().getLength() > 1){
                 var areaType = angular.isDefined($scope.sysAreaType)? $scope.sysAreaType : $scope.userAreaType.typeName;
@@ -188,14 +188,14 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
             }
         });
         
-        $scope.map.updateSize();
+        //$scope.map.updateSize();
         loadingStatus.isLoading('AreaSelectionModal',false);
     }
     
     function getSettingsAndSetMap(){
         genericMapService.setMapBasicConfigs();
         $scope.initInterval = $interval(function(){
-            if (projectionService.srcProjections.length !== 0 && genericMapService.mapBasicConfigs !== null && !_.isEqual(genericMapService.mapBasicConfigs, {})){
+            if (!_.isEqual(genericMapService.mapBasicConfigs, {})){
                 setMap();
                 $scope.stopInitInterval();
             }
@@ -203,7 +203,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     }
     
     function addBaseLayers(){
-        if (!angular.isDefined(genericMapService.mapBasicConfigs.layers.baseLayers)){
+        if (!genericMapService.mapBasicConfigs.success){
             $scope.addOSM();
         } else {
             angular.forEach(genericMapService.mapBasicConfigs.layers.baseLayers, function(layerConf) {

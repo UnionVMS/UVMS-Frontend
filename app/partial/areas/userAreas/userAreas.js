@@ -307,7 +307,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
             $scope.selectedProj = newVal;
             selProj = 'EPSG:' + $scope.projections.getProjectionEpsgById(newVal);
             if (!angular.isDefined($scope.lastSelectedProj)){
-                var mapProj = areaMapService.getMapProjectionCode()
+                var mapProj = areaMapService.getMapProjectionCode();
                 $scope.lastSelectedProj = mapProj.split(':')[1];
             }
         }

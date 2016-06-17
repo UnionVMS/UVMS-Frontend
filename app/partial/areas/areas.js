@@ -66,7 +66,7 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
         }
         
         $scope.initInterval = $interval(function(){
-            if (projectionService.srcProjections.length !== 0 && genericMapService.mapBasicConfigs !== null && !_.isEqual(genericMapService.mapBasicConfigs, {})){
+            if (!_.isEqual(genericMapService.mapBasicConfigs, {})){
                 areaMapService.setMap();
                 areaHelperService.clearHelperService();
                 if ($scope.selectedTab === 'USERAREAS'){

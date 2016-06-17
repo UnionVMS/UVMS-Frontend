@@ -175,6 +175,24 @@ angular.module('unionvmsWeb').factory('projectionService',function(locale, $inte
                     }
                 }
             }
+	    },
+	    /**
+	     * Get Spherical Mercator projection definition for fallback modes
+	     * 
+	     * @memberof projectionService
+	     * @public
+	     * @returns {Object} The object containing the projection properties
+	     */
+	    getStaticProjMercator: function(){
+	        return {
+	            axis: 'enu',
+	            epsgCode : 3857,
+	            extent : '-20026376.39;-20048966.10;20026376.39;20048966.10',
+	            formats : 'm',
+	            global : true,
+	            name : 'Spherical Mercator',
+	            units : 'm'
+	        };
 	    }
 	};
 	

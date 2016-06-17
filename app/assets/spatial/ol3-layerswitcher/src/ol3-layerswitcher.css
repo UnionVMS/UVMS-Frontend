@@ -40,7 +40,7 @@
     box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.09);
     background-color: white;
     display: none;
-    max-height: 100%;
+    max-height: 200px;
     overflow-y: auto;
     font-size: 14px ;
     color: #333333;

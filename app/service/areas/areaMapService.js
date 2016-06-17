@@ -17,11 +17,13 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	
 	areaMs.setMap = function(){
 	    var projObj;
-	    if (!angular.isDefined(genericMapService.mapBasicConfigs)){
-	        //Fallback mode 
-	        projObj = projectionService.getFullProjByEpsg('3857');
-	    } else {
-	        projObj = genericMapService.mapBasicConfigs.projection;
+	    if (angular.isDefined(genericMapService.mapBasicConfigs.success)){
+	        if (genericMapService.mapBasicConfigs.success){
+	            projObj = genericMapService.mapBasicConfigs.projection;
+	        } else {
+	            //Fallback mode
+	            projObj = projectionService.getStaticProjMercator();
+	        }
 	    }
         
         var view = genericMapService.createView(projObj);
@@ -67,7 +69,7 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	 * @public
 	 */
 	areaMs.addBaseLayers = function(){
-	    if (!angular.isDefined(genericMapService.mapBasicConfigs.layers.baseLayers)){
+	    if (!genericMapService.mapBasicConfigs.success){
 	        areaMs.addOSM();
 	    } else {
 	        angular.forEach(genericMapService.mapBasicConfigs.layers.baseLayers, function(layerConf) {
@@ -501,7 +503,7 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	 */
 	areaMs.addLayerSwitcher = function(){
         var layers = areaMs.map.getLayers();
-        if (layers.getLength() > 1){
+        if (layers.getLength() > 3){ // areaMs always has drawlayer, pointdraw and one base layer
             var switcher = new ol.control.LayerSwitcher({
                 controlClass: 'right-side'
             });
