@@ -35,6 +35,7 @@
 		"Mustache": true,
 		"turf": true,
         "jsPDF": true,
-		"L": true
+		"L": true,
+		"saveAs": true
     }
 }

@@ -374,16 +374,14 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 					if (disposition && disposition.indexOf('attachment') !== -1) {
 						var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
 						var matches = filenameRegex.exec(disposition);
-						if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+						if (matches !== null && matches[1]){filename = matches[1].replace(/['"]/g, '');}
 					}
 					var type = xhr.getResponseHeader('Content-Type');
 
 					var blob = new Blob([this.response], { type: type });
                     saveAs(blob, filename);
                 }
-            } else {
-                img.src = src;
-            }
+            } 
         };
         xhr.send();
     };

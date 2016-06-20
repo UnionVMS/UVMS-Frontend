@@ -16,6 +16,10 @@
  * @param coordinateFormatService {service} coordinate format service
  * @param MapFish {service} Mapfish service
  * @param genericMapService {service} generic map service<p>{@link unionvmsWeb.genericMapService}</p>
+ * @attr {ol.Graticule} mapGraticule - The OL map graticule
+ * @attr {Number} mapPrintResolution - The current map resolution to use while printing
+ * @attr {Object} styles - An object containing the styles definitions for vms positions, segments and alarms
+ * @attr {Array<ol.control>} addedControls - An array containing all the controls added to the map
  * @description
  *  Service to control the map on the liveview of the reporting tab
  */
@@ -23,7 +27,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	var ms = {};
 	ms.sp = spatialHelperService;
 
-	//Initialize the map
+	/**
+	 * Set liveview map according to report/preferences configurations
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias setMap
+	 * @param {Object} config -  An object containing the configurations of the map
+	 */
 	ms.setMap = function(config){
 	    ms.controls = [];
 	    ms.interactions = [];
@@ -187,20 +198,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         });
 	};
 	
-	//Create map view
+	/**
+	 * Create a OL map view from config object
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias createView
+	 * @param {Object} config - The map configuration object
+	 * @returns {ol.View} The OL map view 
+	 */
 	ms.createView = function(config){
-	    var center = ol.proj.transform([-1.81185, 52.44314], 'EPSG:4326', 'EPSG:' + config.epsgCode);
-	    
-	    var view = new ol.View({
-            projection: ms.setProjection(config),
-            center: center,
-//            extent: [-2734750,3305132,1347335,5935055],
-//            loadTilesWhileInteracting: true,
-            zoom: 3,
-            maxZoom: 19,
-//            minZoom: 3,
-            enableRotation: false
-        });
+	    var view = genericMapService.createView(config);
 	    
 	    view.on('change:resolution', function(evt){
             //Clear features on expanded clusters when zooming
@@ -219,7 +227,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    return view;
 	};
 	
-	//Change map view with new config
+	/**
+	 * Update map view with new configuration object
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias updateMapView
+	 * @param {Object} config - The map configuration object
+	 */
 	ms.updateMapView = function(config){
 	    var view = ms.createView(config);
 	    ms.map.setView(view);
@@ -240,7 +255,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	};
 	
 	//Add layers
-	//Create and add blank base layer
+	/**
+	 * Create and add a blank base layer to the map
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias addBlankLayers
+	 */
 	ms.addBlankLayer = function(){
 	    var proj = ms.map.getView().getProjection(); 
 	    var layer = new ol.layer.Image({
@@ -323,7 +344,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      * @public
      * @alias createBing
      * @param {Object} config - The layer configuration object
-     * @returns {ol.layer.Tile} - The BING layer
+     * @returns {ol.layer.Tile} The BING layer
      */
     ms.createBing = function(config){
         var layer = genericMapService.defineBing(config);
@@ -349,6 +370,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     
     //Map graticule
     ms.mapGraticule = new ol.Graticule({});
+    /**
+     * Set mapGraticule in the current map according to a specified visibility status
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setGraticule
+     * @param {Boolean} status - Whether the graticule is visible or not in the current map
+     */
     ms.setGraticule = function(status){
         if (!status){
             ms.mapGraticule.setMap(null);
@@ -358,6 +387,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //Add alarms layer
+    /**
+     * Create alarms layer
+     * 
+     * @memberof mapService
+     * @public
+     * @alias createAlarmsLayer
+     * @param {Object} config - The configuration object for the alarms map layer
+     * @returns {ol.layer.Vector} The alarms vector layer
+     */
     ms.createAlarmsLayer = function(config){
         var attribution = new ol.Attribution({
             html: locale.getString('spatial.alarms_copyright')
@@ -380,7 +418,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         return( layer );
     };
 
-    //Add VMS positions layer
+    /**
+     * Create VMS positions layer
+     * 
+     * @memberof mapService
+     * @public
+     * @alias createPositionsLayer
+     * @param {Object} config - The configuration object for the VMS positions map layer
+     * @returns {ol.layer.Vector} The VMS positions vector layer
+     */
     ms.createPositionsLayer = function( config ) {
         var features = (new ol.format.GeoJSON()).readFeatures(config.geoJson, {
             dataProjection: 'EPSG:4326',
@@ -443,6 +489,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         return( layer );
     };
     
+    /**
+     * Zoom to the extent containing all VMS positions
+     * 
+     * @memberof mapService
+     * @public
+     * @alias zoomToPositionsLayer
+     */
     ms.zoomToPositionsLayer = function(){
         var layerSrc = ms.getLayerByType('vmspos').getSource();
         var changeListenerKey = layerSrc.on('change', function(e){
@@ -457,12 +510,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         });
     };
     
-    ms.cancelZoomPromise = function(){
-        $interval.cancel(ms.zoomPromise);
-        ms.zoomPromise = undefined;
-    };
-    
-    //Interaction to open cluster on click
+    /**
+     * Create and add map interaction to explode the clusters (VMS positions)
+     * 
+     * @memberof mapService
+     * @public
+     * @alias addClusterExploder
+     * @param {ol.layer.Vector} layer - The OL vector layer with which the exploder interaction will work with
+     */
     ms.addClusterExploder = function(layer){
         var exploder = new ol.interaction.Select({
             layers: [layer],
@@ -475,7 +530,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         ms.map.addInteraction(exploder);
     };
     
-    //Add VMS segments layer
+    /**
+     * Create VMS segements layer
+     * 
+     * @memberof mapService
+     * @public
+     * @alias createSegmentsLayer
+     * @param {Object} config - The configuration object for the VMS segments map layer
+     * @returns {ol.layer.Vector} The VMS segments vector layer
+     */
     ms.createSegmentsLayer = function( config ) {
         var attribution = new ol.Attribution({
             html: locale.getString('spatial.vms_segments_copyright')
@@ -496,12 +559,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             style: ms.setSegStyle
         });
         
-        //ms.calculateJenkinsIntervals(config.geoJson);
-
         return( layer );
     };
     
     //Clear vms data from layers
+    /**
+     * Clear vms data from vector layers (VMS positions and segments)
+     * 
+     * @memberof mapService
+     * @public
+     * @alias clearVmsLayers
+     */
     ms.clearVmsLayers = function(){
         var layers = [ms.getLayerByType('vmspos'), ms.getLayerByType('vmsseg')];
         for (var i = 0; i < layers.length; i++){
@@ -513,6 +581,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     
     //MAPFISH PRINT
     //Add printing extent layer
+    /**
+     * Create and add map layer to show the printing extent supported by the mapfish print server
+     * 
+     * @memberof mapService
+     * @public
+     * @alias addPrintLayer
+     */
     ms.addPrintLayer = function(){
         var layer = new ol.layer.Vector({
             type: 'print',
@@ -527,6 +602,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     ms.mapPrintResolution = undefined;
+    
+    /**
+     * Add print extent vector feature to the printing layer
+     * 
+     * @memberof mapService
+     * @public
+     * @alias addPrintExtent
+     */
     ms.addPrintExtent = function(){
         ms.mapPrintResolution = ms.map.getView().getResolution();
         
@@ -552,7 +635,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         layer.addFeature(printFeature);
     };
     
-    //Nominatim layer for gazetteer search results
+    /**
+     * Create and add a vector layer to display OSM Nominatim search results
+     * 
+     *  @memberof mapService
+     *  @public
+     *  @alias addNominatimLayer
+     *  @returns {ol.layer.Vector} The OL vector layer
+     */
     ms.addNominatimLayer = function(){
         var layer = new ol.layer.Vector({
             type: 'nominatim',
@@ -568,7 +658,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         return layer;
     };
     
-    //Add highlight layer
+    /**
+     * Create and add vector layer used to highlight vector features in the map
+     * 
+     * @memberof mapService
+     * @public
+     * @alias  addFeatureOverlay
+     */
     ms.addFeatureOverlay = function(){
         var layer = new ol.layer.Vector({
             type: 'highlight',
@@ -582,7 +678,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         ms.map.addLayer(layer);
     };
 
-    //Add highlight feature, geometry should be passed using the same projection of the map
+    /**
+     * Highlight feature in the map
+     * 
+     * @memberof mapService
+     * @public
+     * @alias highlightFeature
+     * @param {ol.geom.Geometry} geom - The geometry of the feature to highlight
+     */
     ms.highlightFeature = function(geom){
         var feature = new ol.Feature({
             geometry: geom
@@ -593,7 +696,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         layer.addFeature(feature);
     };
     
-    //Add vector layer for measuring purposes
+    /**
+     * Create and add a vector layer for measurement controls
+     * 
+     * @memberof mapService
+     * @public
+     * @alias addMeasureLayer
+     * @returns {ol.layer.Vector} The OL vector layer
+     */
     ms.addMeasureLayer = function(){
         var layer = new ol.layer.Vector({
             type: 'measure-vector',
@@ -606,7 +716,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //STYLES
-    //Print style
+    /**
+     * Set print style
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setPrintStyle
+     * @param {ol.Feature} feature - The OL feature to style
+     * @returns {Array<ol.style.Style>} An array with all styles to be applied
+     */
     ms.setPrintStyle = function(feature){
         var style = new ol.style.Style({
             stroke: new ol.style.Stroke({
@@ -622,6 +740,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //Highlight styles
+    /**
+     * Set the highlight style
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setHighlightStyle
+     * @param {ol.Feature} feature - The OL feature to style
+     * @param {Number} resolution - The OL view's resolution
+     * @returns {Array<ol.style.Style>} An array with all styles to be applied
+     */
     ms.setHighlightStyle = function(feature, resolution){
         var style;
         var color = '#3399CC';
@@ -654,6 +782,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //Measure styles
+    /**
+     * Set the measurement styles
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setMeasureStyle
+     * @param {ol.Feature} feature - The OL feature to style
+     * @param {Number} resolution - The OL view's resolution
+     * @returns {Array<ol.style.Style>} An array with all styles to be applied
+     */
     ms.setMeasureStyle = function(feature, resolution){
         var styles = [];
         var coords = feature.getGeometry().getCoordinates();
@@ -695,7 +833,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         return styles;
     };
     
-    //Nominatim styles
+    /**
+     * Set the Nominatim styles
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setNominatimStyle
+     * @param {ol.Feature} feature - The OL feature to style
+     * @param {Number} resolution - The OL view's resolution
+     * @returns {Array<ol.style.Style>} An array with all styles to be applied
+     */
     ms.setNominatimStyle = function(feature, resolution){
         var style = new ol.style.Style({
             text: new ol.style.Text({
@@ -725,11 +872,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     
-    var sortIntervals = function(a,b){
-        return (a[0] < b[0]) ? -1 : 1;
-    };
-    
-    //Build breaks object for range classification on VMS data
+    /**
+     * Calculate breaks for range classification on VMS data. Stores the breaks under each type style object
+     * 
+     * @memberof mapService
+     * @public
+     * @alias calculateBreaks
+     * @param {String} type - The VMS type. Possible values are: <b>positions</b> or <b>segments</b>
+     * @param {Object} style - The style object containing all porperties for the classification of the data
+     */
     ms.calculateBreaks = function(type, style){
         var breaks = {
             defaultColor: undefined,
@@ -768,11 +919,29 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //COLORING BY ATTRIBUTES
-    //Colors by countryCode
+    /**
+     * Get color definition by Flag State
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getColorByFlagState
+     * @param {Object} src - The source styles object containing all style definitions 
+     * @param {String} fs - The countryCode of the desired Flag State 
+     * @returns {String} The hexadecimal color code  
+     */
     ms.getColorByFlagState = function(src, fs){
         return src.style[fs.toUpperCase()];
     };
     
+    /**
+     * Set the displayed flag state codes in the styles object
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setDisplayedFlagStateCodes
+     * @param {String} type - The VMS type. Possible values are: <b>positions</b> or <b>segments</b>
+     * @param {Object} data - The data object converted from GeoJSON
+     */
     ms.setDisplayedFlagStateCodes = function(type, data){
         var src = ms.styles[type];
         if (!angular.isDefined(src.displayedCodes)){
@@ -786,7 +955,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }, src);
     };
     
-    //Color by range field
+    /**
+     * Get color code for a specific value of a field that is classified by range 
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getColorByRange
+     * @param {Object} src - The source styles object containing all style definitions 
+     * @param {Number} value - The property value to match within an interval
+     * @returns {String} The hexadecimal color code
+     */
     ms.getColorByRange = function(src, value){
         var intervals = src.breaks.intervals;
         var color;
@@ -804,7 +982,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
     };
     
-    //Color by MovementType, ActivityType, SegmentCategory
+    /**
+     * Get color code to style fields with discrete classification (such as MovementType, ActivityType, SegmentCategory)
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getColorByStaticFields
+     * @param {Object} src - The source styles object containing all style definitions
+     * @param {String} type - The field value
+     * @returns {String} The hexadecimal color code
+     */
     ms.getColorByStaticFields = function(src, type){
         if (type === ''){
             return src.style['default'];
@@ -813,7 +1000,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
     };
     
-    //Styles methods for positions
+    /**
+     * Set the styles object for VMS positions
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setPositionStylesObj
+     * @param {Object} styles - The styles object from report/user preferences
+     */
     ms.setPositionStylesObj = function(styles){
         ms.styles.positions = styles;
         
@@ -823,6 +1017,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
     };
     
+    /**
+     * Get color code for each VMS position according to the styles definitions of report/user preferences
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getColorForPosition
+     * @param {ol.Feature} feature - The OL vector feature
+     * @returns {String} The hexadecimal color code
+     */
     ms.getColorForPosition = function(feature){
         switch (ms.styles.positions.attribute) {
             case 'countryCode':
@@ -849,6 +1052,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.clusterMinFeatureCount = 100000;
     
     //Calculate necessary max and min amount of features of the available map clusters at each resolution
+    /**
+     * Calculate the maximum and minimum cluster sizes (number of features inside clusters) at the current map resolution
+     * 
+     * @memberof mapService
+     * @public
+     * @alias calculateClusterInfo
+     */
     ms.calculateClusterInfo = function(){
         var layer = ms.getLayerByType('vmspos');
         var features = layer.getSource().getFeatures();
@@ -864,7 +1074,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
     };
     
-    //Apply the default style to the cluster
+    /**
+     * Set the cluster styles
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setClusterStyle
+     * @param {ol.Feature} The OL feature to style
+     * @param {Number} resolution - The current map view's resolution
+     * @returns {Array<ol.style.Style>} An array with all styles to be applied
+     */
     ms.setClusterStyle = function(feature, resolution){
         if (resolution !== ms.currentResolution || !angular.isDefined(ms.currentResolution)) {
             ms.calculateClusterInfo();
@@ -922,6 +1141,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //Set style for positons when cluster is expanded
+    /**
+     * Set the style for unclustered style
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setUnclusteredStyle
+     * @param {ol.Feature} The OL feature to style
+     * @returns {Array<ol.style.Style>} An array with all styles to be applied
+     */
     ms.setUnclusteredStyle = function(feature){
         var positions = feature.get('features');
         if (positions.length > 1){
@@ -960,7 +1188,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         
     };
     
-    //Build spider style for expanded clusters
+    /**
+     * Set the spider style for unclustered data
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setSpiderStyle
+     * @param {ol.Feature} The OL feature to style
+     * @param {ol.Coordinate} pointCoords - The point coordinates in the spider style
+     * @returns {Array<ol.style.Style>} An array with all styles to be applied
+     */
     ms.setSpiderStyle = function(feature, pointCoords){
         var pointStyle = new ol.style.Style({
             text: new ol.style.Text({
@@ -1008,7 +1245,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         return [pointStyle, lineStyle, centerStyle];
     };
     
-    //OL VMS positions style
+    /**
+     * Set the style for VMS positions
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setPosStyle
+     * @param {ol.Feature} The OL feature to style
+     * @returns {Array<ol.style.Style>} An array with all styles to be applied
+     */
     ms.setPosStyle = function(feature){
         var style = new ol.style.Style({
             text: new ol.style.Text({
@@ -1026,7 +1271,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         return style;
     };
     
-    //Styles methods for segments
+    /**
+     * Set the styles object for VMS segments
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setSegmentStylesObj
+     * @param {Object} styles - The styles object from report/user preferences
+     */
     ms.setSegmentStylesObj = function(styles){
         ms.styles.segments = styles;
         
@@ -1036,6 +1288,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
     };
     
+    /**
+     * Get color code for each VMS segment according to the styles definitions of report/user preferences
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getColorForSegment
+     * @param {ol.Feature} feature - The OL vector feature
+     * @returns {String} The hexadecimal color code
+     */
     ms.getColorForSegment = function(feature){
         switch (ms.styles.segments.attribute) {
             case 'countryCode':
@@ -1070,7 +1331,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 //        }
 //    };
     
-    //OL VMS segments style
+    /**
+     * Set the style of VMS segments
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setSegStyle
+     * @param {ol.Feature} The OL feature to style
+     * @param {Number} resolution - The current map view's resolution
+     * @returns {Array<ol.style.Style>} An array with all styles to be applied
+     */
     ms.setSegStyle = function(feature, resolution){
         var geometry = feature.getGeometry();
         var color = ms.getColorForSegment(feature);
@@ -1137,15 +1407,41 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         return style;
     };
     
-    //Styles methods for alarms
+    /**
+     * Set the styles object for VMS alarms
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setAlarmsStylesObj
+     * @param {Object} styles - The styles object from report/user preferences
+     */
     ms.setAlarmsStylesObj = function(styles){
         ms.styles.alarms = styles;
     };
     
+    /**
+     * Get color code by alarm status
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getColorByStatus
+     * @param {Object} src - The source style object containing style definitions for alarms
+     * @param {String} status - The alarm status
+     * @returns {String} The hexadecimal color code
+     */
     ms.getColorByStatus = function(src, status){
         return src[status.toLowerCase()];
     };
     
+    /**
+     * 
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setAlarmsStyle
+     * @param {ol.Feature} The OL feature to style
+     * @returns {Array<ol.style.Style>} An array with all styles to be applied
+     */
     ms.setAlarmsStyle = function(feature, resolution){
         var color = ms.getColorByStatus(ms.styles.alarms, feature.get('ticketStatus'));
         var style = new ol.style.Style({
@@ -1179,8 +1475,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };*/
 
     //MAP FUNCTIONS
-	//Clear map before running a new report
-	ms.clearVectorLayers = function(config){
+    /**
+     * Clear and remove all vector layers from the map as well as reseting the cluster styles.
+     * This function is used before running a new report.
+     * 
+     * @memberof mapService
+     * @public
+     * @alias clearVectorLayers
+     */
+	ms.clearVectorLayers = function(){
 	    var layers = [ms.getLayerByType('highlight'), ms.getLayerByType('vmspos'), ms.getLayerByType('vmsseg'), ms.getLayerByType('alarms')];
         for (var i = 0; i < layers.length; i++){
             if (angular.isDefined(layers[i])){
@@ -1261,6 +1564,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         genericMapService.updateMapSize(ms.map);
     };
     
+    /**
+     * Update map div container size
+     * 
+     * @memberof mapService
+     * @public
+     * @alias updateMapContainerSize
+     * @param {Event} evt
+     */
     ms.updateMapContainerSize = function(evt) {
     	
     	setTimeout(function() {
@@ -1302,12 +1613,29 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
   	};
 
     //GENERIC FUNCTIONS FOR CONTROLS AND STYLES
-	//Convert degrees to radians
+  	/**
+  	 * Convert degrees to radians
+  	 * 
+  	 * @memberof mapService
+  	 * @public
+  	 * @alias degToRad
+  	 * @param {Number} degrees - The input degrees
+  	 * @returns {Number} The output radians
+  	 */
 	ms.degToRad = function(degrees){
 	    return degrees * Math.PI / 180;
 	};
 
-	//Calculate middle point in a linestring geometry
+	/**
+	 * Calculates the middle point between the first and last coordinate of a geometry.
+	 * To be used with linestring geometries representing segments.
+	 * 
+	 * @memberof mapService
+     * @public
+     * @alias getMiddlePoint
+     * @param {ol.geom.Geometry} geometry - The OL geometry 
+     * @returns {ol.Coordinate} The coordinates of the middle point
+	 */
 	ms.getMiddlePoint = function(geometry){
 	    var sourceProj = ms.getMapProjectionCode();
 	    var p1 = ms.pointCoordsToTurf(ol.proj.transform(geometry.getFirstCoordinate(), sourceProj, 'EPSG:4326'));
@@ -1318,7 +1646,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    return geometry.getClosestPoint(middlePoint.getCoordinates());
 	};
 
-	//Calculate rotation to display arrow on segments according to the geometry direction
+	/**
+	 * Calculate the rotation of the arrows added in the segments symbology. Rotation is calculated taking into consideration
+	 * the linestring geometry direction
+	 * 
+	 * @memberof mapService
+     * @public
+     * @alias getRotationForArrow
+     * @param {ol.geom.Geometry} geometry - The OL geometry 
+     * @returns {Number} The rotation
+	 */
 	ms.getRotationForArrow = function(geometry){
 	    var p1 = geometry.getFirstCoordinate();
         var p2 = geometry.getLastCoordinate();
@@ -1329,7 +1666,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         return Math.atan2(dy, dx) * -1;
 	};
 
-	//Format mouse position coordinates according to the configuration
+	/**
+	 * Format mouse position coordinates according to the report/user preferences
+	 * 
+	 * @memberof mapService
+     * @public
+     * @alias formatCoords
+     * @param {Array<Number>} coord - The pair of coordinates to convert
+     * @param {Object} ctrl - The object conatining the definitions to appy in the mouse coordinates contrl
+     * @returns {String} The converted coordinates
+	 */
     ms.formatCoords = function(coord, ctrl){
         var x,y;
         if (ctrl.epsgCode === 4326){
@@ -1349,7 +1695,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
     };
 
-    //Convert coordinate to DMS
+    /**
+     * Convert coordinates from Decimal Degrees to Degrees Minutes Seconds
+     * 
+     * @memberof mapService
+     * @public
+     * @alias coordToDMS
+     * @param {Number} degrees
+     * @param {String} hemispheres
+     * @returns {String} The coordinate formated in DMS
+     */
     ms.coordToDMS = function(degrees, hemispheres){
         var normalized = (degrees + 180) % 360 - 180;
         var x = Math.abs(Math.round(3600 * normalized));
@@ -1359,7 +1714,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             hemispheres.charAt(normalized < 0 ? 1 : 0);
     };
 
-    //Convert coordinate to DDM
+    /**
+     * Convert coordinates from Decimal Degrees to Degrees Decimal Minutes
+     * 
+     * @memberof mapService
+     * @public
+     * @alias coordToDDM
+     * @param {Number} degrees
+     * @param {String} hemispheres
+     * @returns {String} The coordinate formated in DDM
+     */
     ms.coordToDDM = function(degrees, hemispheres){
         var normalized = (degrees + 180) % 360 - 180;
         var x = Math.abs(Math.round(3600 * normalized));
@@ -1385,6 +1749,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
 	//Set map controls
 	ms.addedControls = []; //quick reference to added controls
+	/**
+	 * Set the controls in the map
+	 * 
+	 * @memberof mapService
+     * @public
+     * @alias setControls
+     * @param {Array} controls - An array containing the controls tha should be added to the map
+     * @returns {Array<ol.Collection>} An array containing controls and interactions collections
+	 */
 	ms.setControls = function(controls){
 	    for (var i = 0; i < controls.length; i++){
 	        var ctrl = controls[i];
@@ -1403,6 +1776,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	};
 	
 	//Update map controls according to configuration from server
+	/**
+	 * Update all map controls using configurations from report/user preferences.
+	 * 
+	 * @memberof mapService
+     * @public
+     * @alias setControls
+     * @param {Array} controls - An array containing the controls tha should be added to the map
+	 */
 	ms.updateMapControls = function(controls){
 	    var tempControls = [];
 	    var mousecoordsCtrl, scaleCtrl;
@@ -1490,6 +1871,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //Get custom interactions by type
+    /**
+     * @memberof mapService
+     * @public
+     * @alias getCustomInteraction
+     * @param {String} olType - The OL interaction type
+     * @param {String} type - The custom type of the interaction
+     * @returns {ol.Collection} Collection with custom interactions
+     */
     ms.getCustomInteraction = function(olType, type){
         var interactions = ms.map.getInteractions().getArray();
         var ints = interactions.filter(function(int){
@@ -1499,12 +1888,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         return ints;
     };
 
-	//Add map controls
+    /**
+     * Add zoom controls and interactions to the map
+     * 
+     * @memberof mapService
+     * @public
+     * @alias addZoom
+     * @param {Object} ctrl - An object containing the definitions for controls
+     * @param {Boolean} initial - Whether it is the initial setup or an update
+     */
 	ms.addZoom = function(ctrl, initial){
-        var olCtrl = new ol.control.Zoom({
-            zoomInTipLabel: locale.getString('spatial.map_tip_zoomin'),
-            zoomOutTipLabel: locale.getString('spatial.map_tip_zoomout')
-        });
+        var olCtrl = genericMapService.createZoomCtrl();
         
         var iconSpan = document.createElement('span');
         iconSpan.className = 'fa fa-globe';
@@ -1513,35 +1907,28 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             tipLabel: locale.getString('spatial.map_tip_full_extent')
         });
         
-        var mouseWheel =  new ol.interaction.MouseWheelZoom();
-        var keyboardZoom = new ol.interaction.KeyboardZoom();
-        var dblClickZoom = new ol.interaction.DoubleClickZoom();
-        var dragZoomIn = new ol.interaction.DragZoom();
-        var dragZoomOut = new ol.interaction.DragZoom({
-            out: true,
-            condition: ol.events.condition.altKeyOnly
-        });
-        
+        var interactions = genericMapService.createZoomInteractions();
         
         if (initial){
             ms.controls.push(olCtrl);
             ms.controls.push(fullExtent);
-            ms.interactions.push(mouseWheel);
-            ms.interactions.push(keyboardZoom);
-            ms.interactions.push(dblClickZoom);
-            ms.interactions.push(dragZoomIn);
-            ms.interactions.push(dragZoomOut);
+            ms.interactions = ms.interactions.concat(interactions);
         } else {
             ms.map.addControl(olCtrl);
             ms.map.addControl(fullExtent);
-            ms.map.addInteraction(mouseWheel);
-            ms.map.addInteraction(keyboardZoom);
-            ms.map.addInteraction(dblClickZoom);
-            ms.map.addInteraction(dragZoomIn);
-            ms.map.addInteraction(dragZoomOut);
+            for (var i = 0; i < interactions.length; i++){
+                ms.map.addInteraction(interactions[i]);
+            } 
         }
 	};
 	
+	/**
+	 * Remove all zoom controls and interactions from map
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias removeZoom
+	 */
 	ms.removeZoom = function(){
 	    ms.map.removeControl(ms.getControlsByType('Zoom')[0]);
 	    ms.map.removeControl(ms.getControlsByType('ZoomToExtent')[0]);
@@ -1553,7 +1940,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	        ms.map.removeInteraction(zoomInteractions[i]);
 	    }
 	};
-
+	
+	/**
+	 * Creates and adds the navigation history control to the map
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias addHistory
+	 * @param {Object} ctrl - An object containing the definitions for controls
+     * @param {Boolean} initial - Whether it is the initial setup or an update
+	 */
 	ms.addHistory = function(ctrl, initial){
         var olCtrl = new ol.control.HistoryControl({
             backLabel: locale.getString('spatial.map_tip_go_back'),
@@ -1567,10 +1963,26 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
     };
     
+    /**
+     * Removes the navigation history control from the map
+     * 
+     * @memberof mapService
+     * @public
+     * @alias removeHistory
+     */
     ms.removeHistory = function(){
         ms.map.removeControl(ms.getControlsByType('HistoryControl')[0]);
     };
-
+    
+    /**
+     * Creates and adds the scale control to the map
+     * 
+     * @memberof mapService
+     * @public
+     * @alias addHistory
+     * @param {Object} ctrl - An object containing the definitions for controls
+     * @param {Boolean} initial - Whether it is the initial setup or an update
+     */
 	ms.addScale = function(ctrl, initial){
 	    var olCtrl = new ol.control.ScaleLine({
             units: ctrl.units,
@@ -1585,33 +1997,73 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    }
 	};
 	
+	
+	/**
+     * Updates the scale control of the map
+     * 
+     * @memberof mapService
+     * @public
+     * @alias updateScale
+     * @param {Object} config - An object containing the scale definitions
+     */
 	ms.updateScale = function(config){
 	    ms.map.removeControl(ms.getControlsByType('ScaleLine')[0]);
         ms.addScale(config, false);
 	};
 	
+	/**
+     * Removes the scale control from the map
+     * 
+     * @memberof mapService
+     * @public
+     * @alias removeScale
+     */
 	ms.removeScale = function(){
 	    ms.map.removeControl(ms.getControlsByType('ScaleLine')[0]);
 	};
-
+	
+	/**
+     * Creates and adds all drag related interactions to the map
+     * 
+     * @memberof mapService
+     * @public
+     * @alias addDrag
+     * @param {Object} ctrl - An object containing the definitions for controls
+     * @param {Boolean} initial - Whether it is the initial setup or an update
+     */
 	ms.addDrag = function(ctrl, initial){
-	    var dragPan = new ol.interaction.DragPan();
-	    var keyboardPan = new ol.interaction.KeyboardPan();
+	    var interactions = genericMapService.createPanInteractions();
 	    if (initial){
-	        ms.interactions.push(dragPan);
-	        ms.interactions.push(keyboardPan);
+	        ms.interactions = ms.interactions.concat(interactions);
 	    } else {
-	        ms.map.addInteraction(dragPan);
-	        ms.map.addInteraction(keyboardPan);
+	        for (var i = 0; i < interactions.length; i++){
+	            ms.map.addInteraction(interactions[i]);
+	        }
 	    }
 	    
 	};
 	
+	/**
+	 * Removes all drag related interactions from the map
+	 *  
+	 * @memberof mapService
+     * @public
+     * @alias removeDrag
+	 */
 	ms.removeDrag = function(){
 	    ms.map.removeInteraction(ms.getInteractionsByType('DragPan')[0]);
 	    ms.map.removeInteraction(ms.getInteractionsByType('KeyboardPan')[0]);
 	};
-
+	
+	/**
+	 * Create and add Mouse Coordinates control to the map
+	 * 
+	 * @memberof mapService
+     * @public
+     * @alias addMousecoords
+     * @param {Object} ctrl - An object containing the definitions for controls
+     * @param {Boolean} initial - Whether it is the initial setup or an update
+	 */
 	ms.addMousecoords = function(ctrl, initial){
 	    var olCtrl =  new ol.control.MousePosition({
             projection: 'EPSG:' + ctrl.epsgCode,
@@ -1629,16 +2081,39 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    }
     };
     
+    /**
+     * Updates the mouse coordinates control of the map
+     * 
+     * @memberof mapService
+     * @public
+     * @alias updateMousecoords
+     * @param {Object} config - An object containing the scale definitions
+     */
     ms.updateMousecoords = function (config){
         ms.map.removeControl(ms.getControlsByType('MousePosition')[0]);
         ms.addMousecoords(config, false);
     };
     
+    /**
+     * Removes the mouse coordinates control from the map
+     * 
+     * @memberof mapService
+     * @public
+     * @alias removeMousecoords
+     */
     ms.removeMousecoords = function(){
         ms.map.removeControl(ms.getControlsByType('MousePosition')[0]);
     };
 
-	//Zoom to geometry control
+    /**
+     * Zoom to a specified geometry
+     * 
+     * @memberof mapService
+     * @public
+     * @alias zoomTo
+     * @param {ol.geom.Geometry} geom - The OL geometry to zoom to
+     * @param {Boolean} nearest - Zoom to nearest zoom level possible. Default is <b>false</b> 
+     */
 	ms.zoomTo = function(geom, nearest){
 	    var opt = {
 	        maxZoom: 19,
@@ -1650,18 +2125,38 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ms.map.getView().fit(geom, ms.map.getSize(), opt);
 	};
 
-	//Pan to coordinates control
+	/**
+	 * Pan map to specified coordinates
+	 * 
+	 * @memberof mapService
+     * @public
+     * @alias panTo
+     * @param {Array|ol.Coordinates}
+	 */
 	ms.panTo = function(coords){
 	    ms.map.getView().setCenter(coords);
 	};
 	
-	//Add Print drag interaction
+	/**
+	 * Add drag interaction for the print extent feature
+	 * 
+	 * @memberof mapService
+     * @public
+     * @alias addDragPrintExtent
+	 */
 	ms.addDragPrintExtent = function(){
 	    var ctrl = new ms.dragExtent();
 	    ms.map.addInteraction(ctrl);
 	};
 	
 	//Custum drag interaction for print extent
+	/**
+	 * Creates the custom drag print extent interaction
+	 * 
+	 * @memberof mapService
+     * @public
+     * @alias dragExtent
+	 */
 	ms.dragExtent = function(){
 	    ol.interaction.Pointer.call(this, {
 	        handleDownEvent: ms.dragExtent.prototype.handleDownEvent,

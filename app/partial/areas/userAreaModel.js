@@ -47,7 +47,6 @@ angular.module('unionvmsWeb').factory('UserArea',function(unitConversionService)
         },
         setPropertiesFromJson: function(data){
             var id = parseInt(data.id);
-            
             this.id = isNaN(id) ? parseInt(data.gid) : id;  
             this.name = data.name;
             this.scopeSelection = data.scopeSelection;

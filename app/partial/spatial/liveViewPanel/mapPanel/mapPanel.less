@@ -30,12 +30,15 @@
 #map-toolbar {
 	display: flex;
 	border: 1px solid #DDD;
-	background-color: #F5F5F5;
+	background-color: rgba(51, 51, 51, 0.09);
 	> div {
 		padding: 0 3px;
 	}
 	.btn-group {
 		margin-left: 6px;
+		.btn {
+			padding: 0; 
+		}
 	}
 	.btn-group-left,
 	.btn-group-right {
@@ -44,12 +47,23 @@
 		padding-left: 4px;
 		>div button {
 			margin-top: 3px;
-			color: white;
 			margin-bottom: 3px;
 			margin-left: 2px;
+			color: @profileColor_blue;
+			font-size: 14px;
+			background-color: #fff;
+			border: solid 1px #c2c9cc;
+    		border-radius: 2px;
+    		box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.09);
+			&:focus,
+			&.active,
+			&:active,
+			&:hover {
+				background-color: #f2f2f2;
+			}
 		}
 		>div button:first-child {
-			margin-left: 0px;
+			margin-left: -2px;
 		}
 	}
 	.btn-group-left {
@@ -66,25 +80,6 @@
 		font-size: 12px;
 		font-weight: 100;
 	}
-}
-
-.btn-toolbar {
-	background-color: rgba(0,60,136,0.5);
-	width: 22px !important;
-	height: 23px !important;
-	border: none !important;
-}
-
-.btn-toolbar:focus {
-	background-color: rgba(0,60,136,0.5);
-}
-
-.btn-toolbar.active {
-	background-color: rgba(0,60,136,0.7) !important;
-}
-
-.btn-toolbar:hover {
-	background-color: rgba(0,60,136,0.7) !important;
 }
 
 //Map bottom bar
@@ -260,20 +255,29 @@
 	border-radius: 0px 0px 2px 2px !important;
 }
 
-.ol-history-back:focus,
-.ol-history-forward:focus {
-	background-color: rgba(0,60,136,0.5) !important;
-}
-
-.ol-history-back:hover,
-.ol-history-forward:hover {
-	background-color: rgba(0,60,136,0.7) !important;
-}
-
 //Full extent
 .ol-zoom-extent {
 	top: 123px;
 }
+
+//Toolbar map toolbar controls
+.btn-toolbar {
+	width: 25px !important;
+	height: 25px !important;
+}
+
+/*
+.btn-toolbar:focus {
+	background-color: rgba(0,60,136,0.5);
+}
+
+.btn-toolbar.active {
+	background-color: rgba(0,60,136,0.7) !important;
+}
+
+.btn-toolbar:hover {
+	background-color: rgba(0,60,136,0.7) !important;
+}*/
 
 //Vector labels
 .vector-label {
