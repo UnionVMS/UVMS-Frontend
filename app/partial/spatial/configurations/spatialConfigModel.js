@@ -79,11 +79,11 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         var config = new SpatialConfig();
 
         config = checkSystemSettings(this,config);
-        config = checkMapSettings(this,'admin',config,form.mapsettingsForm.$dirty);
-        config = checkStylesSettings(this,'admin',config,form.vmsstylesForm.$dirty);
-        config = checkVisibilitySettings(this,'admin',config,form.visibilitysettingsForm.$dirty);
+        config = checkMapSettings(this,'admin',config,form.mapSettingsForm.$dirty);
+        config = checkStylesSettings(this,'admin',config,form.stylesSettingsForm.$dirty);
+        config = checkVisibilitySettings(this,'admin',config,form.visibilitySettingsForm.$dirty);
         config = checkLayerSettings(this,'admin',config,form.layersettingsForm.$dirty);
-        config = checkReferenceDataSettings(this,'admin',config,form.systemAreasSettingsForm.$dirty);
+        config = checkReferenceDataSettings(this,'admin',config,form.referenceDataSettingsForm.$dirty);
 
         return angular.toJson(config);  
     };
@@ -122,11 +122,11 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         config.toolSettings = undefined;
         config.systemSettings = undefined;
         
-        config = checkMapSettings(this,'user',config,form.mapsettingsForm.$dirty);
-        config = checkStylesSettings(this,'user',config,form.vmsstylesForm.$dirty);
-        config = checkVisibilitySettings(this,'user',config,form.visibilitysettingsForm.$dirty);
-        config = checkLayerSettings(this,'user',config,form.layersettingsForm.$dirty);
-        config = checkReferenceDataSettings(this,'user',config,form.systemAreasSettingsForm.$dirty);
+        config = checkMapSettings(this,'user',config,form.mapSettingsForm.$dirty);
+        config = checkStylesSettings(this,'user',config,form.stylesSettingsForm.$dirty);
+        config = checkVisibilitySettings(this,'user',config,form.visibilitySettingsForm.$dirty);
+        config = checkLayerSettings(this,'user',config,form.layerSettingsForm.$dirty);
+        config = checkReferenceDataSettings(this,'user',config,form.referenceDataSettingsForm.$dirty);
         
         return angular.toJson(config);
     };
@@ -137,30 +137,30 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         
         if(userConfig.mapSettings.spatialConnectId !== this.mapSettings.spatialConnectId || userConfig.mapSettings.mapProjectionId !== this.mapSettings.mapProjectionId ||
         userConfig.mapSettings.displayProjectionId !== this.mapSettings.displayProjectionId || userConfig.mapSettings.coordinatesFormat !== this.mapSettings.coordinatesFormat ||
-        userConfig.mapSettings.scaleBarUnits !== this.mapSettings.scaleBarUnits || form.mapsettingsForm.$dirty){
-            config = checkMapSettings(this,'report',config,form.mapsettingsForm.$dirty);
+        userConfig.mapSettings.scaleBarUnits !== this.mapSettings.scaleBarUnits || form.mapSettingsForm.$dirty){
+            config = checkMapSettings(this,'report',config,form.mapSettingsForm.$dirty);
         }else{
             config.mapSettings = {};
         }
 
-        if(!angular.equals(userConfig.stylesSettings,this.stylesSettings) || form.vmsstylesForm.$dirty){
-            config.mapSettings = checkStylesSettings(this,'report',config.mapSettings,form.vmsstylesForm.$dirty);
+        if(!angular.equals(userConfig.stylesSettings,this.stylesSettings) || form.stylesSettingsForm.$dirty){
+            config.mapSettings = checkStylesSettings(this,'report',config.mapSettings,form.stylesSettingsForm.$dirty);
         }
 
         if(!angular.equals(userConfig.visibilitySettings.positions,this.visibilitySettings.positions) ||
         !angular.equals(userConfig.visibilitySettings.segments,this.visibilitySettings.segments) ||
         !angular.equals(userConfig.visibilitySettings.tracks,this.visibilitySettings.tracks) ||
-        form.visibilitysettingsForm.$dirty){
-            config.mapSettings = checkVisibilitySettings(this,'report',config.mapSettings,form.visibilitysettingsForm.$dirty);
+        form.visibilitySettingsForm.$dirty){
+            config.mapSettings = checkVisibilitySettings(this,'report',config.mapSettings,form.visibilitySettingsForm.$dirty);
         }
 
         removeLayerIds(this.layerSettings);
-        if((!angular.equals(userConfig.layerSettings,this.layerSettings) || form.layersettingsForm.$dirty) && !this.layerSettings.reseted){
-            config.mapSettings = checkLayerSettings(this,'report',config.mapSettings,form.layersettingsForm.$dirty);
+        if((!angular.equals(userConfig.layerSettings,this.layerSettings) || form.layerSettingsForm.$dirty) && !this.layerSettings.reseted){
+            config.mapSettings = checkLayerSettings(this,'report',config.mapSettings,form.layerSettingsForm.$dirty);
         }
 
-        if(!angular.equals(userConfig.referenceDataSettings,this.referenceDataSettings) || form.systemAreasSettingsForm.$dirty){
-            config.mapSettings = checkReferenceDataSettings(this,'report',config.mapSettings,form.systemAreasSettingsForm.$dirty);
+        if(!angular.equals(userConfig.referenceDataSettings,this.referenceDataSettings) || form.referenceDataSettingsForm.$dirty){
+            config.mapSettings = checkReferenceDataSettings(this,'report',config.mapSettings,form.referenceDataSettingsForm.$dirty);
         }
 
         return config;

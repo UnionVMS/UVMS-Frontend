@@ -1,12 +1,13 @@
-angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, $timeout, locale, reportConfigs, $modalInstance, SpatialConfig, spatialRestService, spatialConfigAlertService, $anchorScroll, $location, spatialConfigRestService, loadingStatus, hasMap) {
+angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, $timeout, locale, reportConfigs, $modalInstance, SpatialConfig, spatialRestService, spatialConfigAlertService, $anchorScroll, $location, spatialConfigRestService, loadingStatus, hasMap, PreferencesService) {
 	$scope.isReportConfig = true;
 	$scope.alert = spatialConfigAlertService;
 	$scope.alert.hasAlert = false;
 	$scope.alert.hasError = false;
 	$scope.alert.hasSuccess = false;
 	$scope.alert.hasWarning = false;
-	$scope.loadedAllSettings = false;
 	$scope.hasMap = hasMap;
+	$scope.prefService = PreferencesService;
+	var userConfig;
 	
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
@@ -33,7 +34,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 
     $scope.exportMapConfiguration = function () {
     	var exported = {};
-    	exported = $scope.configModel.forReportConfig($scope.mapConfigurationForm,$scope.userConfig);
+    	exported = $scope.configModel.forReportConfig($scope.mapConfigurationForm,userConfig);
 
         return exported;
     };
@@ -41,23 +42,23 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     var mergePreferences = function(){
     	if(!angular.isDefined($scope.initialConfig) || _.isEmpty($scope.initialConfig)){
 			$scope.configModel = new SpatialConfig();
-    		angular.copy($scope.userConfig, $scope.configModel);
+    		angular.copy(userConfig, $scope.configModel);
     	}
     	if(!angular.isDefined($scope.initialConfig) || !angular.isDefined($scope.initialConfig.stylesSettings) || _.isEmpty($scope.initialConfig.stylesSettings)){
     		$scope.configModel.stylesSettings = {};
-    		angular.copy($scope.userConfig.stylesSettings, $scope.configModel.stylesSettings);
+    		angular.copy(userConfig.stylesSettings, $scope.configModel.stylesSettings);
     	}else{
     		if(!angular.isDefined($scope.initialConfig.stylesSettings.positions) || _.isEmpty($scope.initialConfig.stylesSettings.positions) || !angular.isDefined($scope.initialConfig.stylesSettings.positions.attribute)){
     			$scope.configModel.stylesSettings.positions = {};
-        		angular.copy($scope.userConfig.stylesSettings.positions, $scope.configModel.stylesSettings.positions);
+        		angular.copy(userConfig.stylesSettings.positions, $scope.configModel.stylesSettings.positions);
     		}
     		if(!angular.isDefined($scope.initialConfig.stylesSettings.segments) || _.isEmpty($scope.initialConfig.stylesSettings.segments) || !angular.isDefined($scope.initialConfig.stylesSettings.segments.attribute)){
     			$scope.configModel.stylesSettings.segments = {};
-        		angular.copy($scope.userConfig.stylesSettings.segments, $scope.configModel.stylesSettings.segments);
+        		angular.copy(userConfig.stylesSettings.segments, $scope.configModel.stylesSettings.segments);
     		}
     		if(!angular.isDefined($scope.initialConfig.stylesSettings.alarms) || _.isEmpty($scope.initialConfig.stylesSettings.alarms)){
     			$scope.configModel.stylesSettings.alarms = {};
-        		angular.copy($scope.userConfig.stylesSettings.alarms, $scope.configModel.stylesSettings.alarms);
+        		angular.copy(userConfig.stylesSettings.alarms, $scope.configModel.stylesSettings.alarms);
     		}
     	}
     	
@@ -66,31 +67,30 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     			(!angular.isDefined($scope.initialConfig.layerSettings.baseLayers) || _.isEmpty($scope.initialConfig.layerSettings.baseLayers)) &&
     			(!angular.isDefined($scope.initialConfig.layerSettings.additionalLayers) || _.isEmpty($scope.initialConfig.layerSettings.additionalLayers)))){
     		$scope.configModel.layerSettings = {};
-    		angular.copy($scope.userConfig.layerSettings, $scope.configModel.layerSettings);
+    		angular.copy(userConfig.layerSettings, $scope.configModel.layerSettings);
     	}
     	if(!angular.isDefined($scope.initialConfig) || !angular.isDefined($scope.initialConfig.mapProjectionId) && 
     			!angular.isDefined($scope.initialConfig.displayProjectionId) && !angular.isDefined($scope.initialConfig.coordinatesFormat) && 
     			!angular.isDefined($scope.initialConfig.scaleBarUnits)){
     		$scope.configModel.mapSettings = {};
-    		angular.copy($scope.userConfig.mapSettings, $scope.configModel.mapSettings);
+    		angular.copy(userConfig.mapSettings, $scope.configModel.mapSettings);
     	}
     	if(!angular.isDefined($scope.initialConfig) || !angular.isDefined($scope.initialConfig.visibilitySettings) || _.isEmpty($scope.initialConfig.visibilitySettings)){
     		$scope.configModel.visibilitySettings = {};
-    		angular.copy($scope.userConfig.visibilitySettings, $scope.configModel.visibilitySettings);
+    		angular.copy(userConfig.visibilitySettings, $scope.configModel.visibilitySettings);
     	}
 
 		if(!angular.isDefined($scope.initialConfig) || !angular.isDefined($scope.initialConfig.referenceDataSettings) || _.isEmpty($scope.initialConfig.referenceDataSettings)){
     		$scope.configModel.referenceDataSettings = {};
-    		angular.copy($scope.userConfig.referenceDataSettings, $scope.configModel.referenceDataSettings);
+    		angular.copy(userConfig.referenceDataSettings, $scope.configModel.referenceDataSettings);
     	}
     };
     
     var getConfigsSuccess = function(response){
-	    $scope.srcConfigObj = response;
+	    var srcConfigObj = response;
 	    var model = new SpatialConfig();
-        $scope.userConfig = model.forUserPrefFromJson(response);
+        userConfig = model.forUserPrefFromJson(response);
         mergePreferences();
-        $scope.loadedAllSettings = true;
         loadingStatus.isLoading('Preferences',false);
 	};
 	
@@ -124,7 +124,6 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     		!angular.isDefined($scope.initialConfig.coordinatesFormat) || !angular.isDefined($scope.initialConfig.scaleBarUnits)){
     		spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
     	}else{
-    		$scope.loadedAllSettings = true;
     		loadingStatus.isLoading('Preferences',false);
     	}
     	

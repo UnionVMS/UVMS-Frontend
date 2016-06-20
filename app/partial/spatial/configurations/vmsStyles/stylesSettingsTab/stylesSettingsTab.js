@@ -16,6 +16,15 @@ angular.module('unionvmsWeb').controller('StylessettingstabCtrl',function($scope
 				$scope.categoryTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'CATEGORY_TYPE'), 'CATEGORY_TYPE', 'MOVEMENT');
 				break;
 		}
+
+		$scope.$watch('configModel.stylesSettings.' + $scope.tabName + 's', function(newVal,oldVal) {
+			if(newVal && $scope.configModel && $scope.configModel.stylesSettings && $scope.configModel.stylesSettings[$scope.tabName + 's'] && ($scope.tabName === 'alarm' || $scope.configModel.stylesSettings[$scope.tabName + 's'].style)){
+				$scope.loadProperties();
+				if(angular.isDefined($scope.stylesSettingsForm)){
+					$scope.stylesSettingsForm.$setPristine();
+				}
+			}
+		});
 	};
 	
 
@@ -197,10 +206,12 @@ angular.module('unionvmsWeb').controller('StylessettingstabCtrl',function($scope
                 if(angular.isDefined($scope.configModel) && angular.isDefined($scope.configModel.stylesSettings) && angular.isDefined($scope.configModel.stylesSettings[$scope.tabName + 's'])){
                     $scope.loadedProperties = {};
                     angular.copy($scope.configModel.stylesSettings[$scope.tabName + 's'], $scope.loadedProperties);
-                    $scope.configModel[$scope.tabName + 'Style'] = {};
-
-                    loadPositionOrSegmentProperties();
-                    $scope.validateDefaultColor();
+					$scope.configModel[$scope.tabName + 'Style'] = {};
+					
+					$timeout(function() {
+						loadPositionOrSegmentProperties();
+						$scope.validateDefaultColor();
+					}, 100);
                 }else{
                     initializeProperties();
                 }
@@ -209,13 +220,15 @@ angular.module('unionvmsWeb').controller('StylessettingstabCtrl',function($scope
                 if(angular.isDefined($scope.configModel) && angular.isDefined($scope.configModel.stylesSettings) && angular.isDefined($scope.configModel.stylesSettings[$scope.tabName + 's'])){
                     $scope.loadedProperties = {};
                     angular.copy($scope.configModel.stylesSettings[$scope.tabName + 's'], $scope.loadedProperties);
-                    $scope.configModel[$scope.tabName + 'Style'] = {};
+					$scope.configModel[$scope.tabName + 'Style'] = {};
 
-                    loadLineProperties();
-                    loadPositionOrSegmentProperties();
-                    $scope.validateDefaultColor();
 					$timeout(function() {
-						$scope.validateLineWidth();
+						loadLineProperties();
+						loadPositionOrSegmentProperties();
+						$scope.validateDefaultColor();
+						$timeout(function() {
+							$scope.validateLineWidth();
+						}, 100);
 					}, 100);
                 }else{
                     initializeProperties();
@@ -250,6 +263,7 @@ angular.module('unionvmsWeb').controller('StylessettingstabCtrl',function($scope
 					break;
 				case "countryCode":
 					$scope.configModel[$scope.tabName + 'Style'].attribute = $scope.loadedProperties.attribute;
+					$scope.changeProperty();
 					break;
                 case "activity":
 				case "type":
@@ -325,16 +339,5 @@ angular.module('unionvmsWeb').controller('StylessettingstabCtrl',function($scope
 		}
 		return nrErrors;
 	};
-
-
-
-	$scope.$watch('loadedAllSettings', function() {
-		if($scope.loadedAllSettings && $scope.configModel && $scope.configModel.stylesSettings && $scope.configModel.stylesSettings[$scope.tabName + 's'] && ($scope.tabName === 'alarm' || $scope.configModel.stylesSettings[$scope.tabName + 's'].style)){
-			$scope.loadProperties();
-			if(angular.isDefined($scope.stylesSettingsForm)){
-				$scope.stylesSettingsForm.$setPristine();
-			}
-		}
-	});
 
 });

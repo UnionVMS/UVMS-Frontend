@@ -128,11 +128,16 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
 	       });
 	       return deferred.promise;
 	    },
-	    getUserConfigs: function(){
+	    getUserConfigs: function(settingsType,configModel,form,isReportConfig){
             var deferred = $q.defer();
             spatialConfigRestFactory.getUserConfigs().get(function(response){
+                response.data.settingsType = settingsType;
+                response.data.configModel = configModel;
+                response.data.form = form;
+                response.data.isReportConfig = isReportConfig;
                 deferred.resolve(response.data);
             }, function(error){
+                error.settingsType = settingsType;
                 console.error('Error getting user configurations');
                 deferred.reject(error);
             });
@@ -158,11 +163,16 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
             });
             return deferred.promise;
         },
-        resetSettings: function(settingsSection){
+        resetSettings: function(settingsSection,settingsType,configModel,configCopy,form){
             var deferred = $q.defer();
             spatialConfigRestFactory.resetSettings().reset(angular.toJson(settingsSection), function(response){
-               deferred.resolve(response.data); 
+                response.data.settingsType = settingsType;
+                response.data.configModel = configModel;
+                response.data.configCopy = configCopy;
+                response.data.form = form;
+                deferred.resolve(response.data); 
             }, function(error){
+                error.settingsType = settingsType;
                 console.error('Error reseting settings to defaults');
                 deferred.reject(error);
             });

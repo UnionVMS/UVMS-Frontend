@@ -480,6 +480,10 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     	if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.visibilitySettings)){
     		mergedReport.currentConfig.mapConfiguration.visibilitySettings = userConfig.visibilitySettings;
     	}
+
+		if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.referenceDataSettings)){
+    		mergedReport.currentConfig.mapConfiguration.referenceDataSettings = userConfig.referenceDataSettings;
+    	}
     	
     	return mergedReport;
     };

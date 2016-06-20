@@ -122,7 +122,9 @@ angular.module('unionvmsWeb').controller('numericInputCtrl',['$scope','$interval
      };
      
     var spinnerChange = function(){
-    	var aux;
+		$scope.ctrl.$setDirty();
+
+		var aux;
     		
 		if(angular.isDefined($scope.ngModelNumber) && $scope.ngModelNumber !== null){
 			aux = angular.copy($scope.ngModelNumber);
@@ -260,7 +262,7 @@ angular.module('unionvmsWeb').directive('textInputStatus',function() {
 	      restrict: 'A',
 	      require: 'ngModel',
 	      link: function(scope, elm, attrs, ctrl) {
-
+			  scope.ctrl = ctrl;
 	    	  var updateFieldStatus = function(value) {
 	    		  var re = /^[-]?\d+(\.?\d*)?$/g;
 	    		  if(re.test(value) || !value){

@@ -39,47 +39,6 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	   return $scope.selectedMenu === menu;
 	};
 	
-	$scope.reset = function(){
-		loadingStatus.isLoading('ResetPreferences',true);
-		$scope.loadedAllSettings = false;
-        var item = {
-            layerSettings: {}
-        };
-        
-        if($scope.isUserPreference){
-	        spatialConfigRestService.resetSettings(item).then(resetSuccess, resetFailure);
-		}else if($scope.isReportConfig){
-	    	spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
-	    }
-    };
-    
-    var resetSuccess = function(response){
-        $scope.configModel.layerSettings = response.layerSettings;
-        if (angular.isDefined($scope.configCopy)){
-            angular.copy($scope.configModel.layerSettings, $scope.configCopy.layerSettings);
-	        $scope.loadedAllSettings = true;
-        }
-        $anchorScroll();
-        spatialConfigAlertService.hasAlert = true;
-        spatialConfigAlertService.hasSuccess = true;
-        spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_layers_success');
-        spatialConfigAlertService.hideAlert();
-		if(angular.isDefined($scope.layersettingsForm)){
-        	$scope.layersettingsForm.$setPristine();
-		}
-        $scope.configModel.layerSettings.reseted = true;
-        loadingStatus.isLoading('ResetPreferences',false);
-    };
-    
-    var resetFailure = function(error){
-        $anchorScroll();
-        spatialConfigAlertService.hasAlert = true;
-        spatialConfigAlertService.hasError = true;
-        spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_layers_failure');
-        spatialConfigAlertService.hideAlert();
-        loadingStatus.isLoading('ResetPreferences',false);
-    };
-    
     $scope.checkIfExists = function(item,list,isBaseList) {
     	for(var i=0;i<list.length;i++){
     		if(angular.isDefined(item.areaType)){
@@ -108,12 +67,12 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 				}
     		}
     	}
-		if(angular.isDefined($scope.layersettingsForm)){
-    		$scope.layersettingsForm.$setDirty();
+		if(angular.isDefined($scope.layerSettingsForm)){
+    		$scope.layerSettingsForm.$setDirty();
 			if(isBaseList || (!isBaseList && !_.isEmpty($scope.selectedBases))){
-				$scope.layersettingsForm.baseLayers.$setValidity('empty',true);
+				$scope.layerSettingsForm.baseLayers.$setValidity('empty',true);
 			}else{
-				$scope.layersettingsForm.baseLayers.$setValidity('empty',false);
+				$scope.layerSettingsForm.baseLayers.$setValidity('empty',false);
 			}
 		}
     	
@@ -166,48 +125,11 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
     	}
     });
     
-    var getConfigsSuccess = function(response){
-	    $scope.srcConfigObj = response;
-	    var model = new SpatialConfig();
-	    $scope.userConfig = model.forUserPrefFromJson(response);
-	    $scope.configModel.layerSettings = {};
-        if(angular.isDefined($scope.configModel.layerSettings)){
-        	angular.copy($scope.userConfig.layerSettings, $scope.configModel.layerSettings);
-        }
-		$scope.loadedAllSettings = true;
-
-        if($scope.isReportConfig){
-		    $location.hash('mapConfigurationModal');
-			$anchorScroll();
-			$location.hash('');
-        }
-        
-        $anchorScroll();
-	    spatialConfigAlertService.hasAlert = true;
-	    spatialConfigAlertService.hasSuccess = true;
-	    spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_layers_success');
-        spatialConfigAlertService.hideAlert();
-        if(angular.isDefined($scope.layersettingsForm)){
-        	$scope.layersettingsForm.$setPristine();
-		}
-        $scope.configModel.layerSettings.reseted = true;
-        loadingStatus.isLoading('ResetPreferences',false);
-	};
-	
-	var getConfigsFailure = function(error){
-	    $anchorScroll();
-	    $scope.alert.hasAlert = true;
-	    $scope.alert.hasError = true;
-	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_reset_layers_failure');
-	    $scope.alert.hideAlert();
-	    loadingStatus.isLoading('ResetPreferences',false);
-	};
-	
 	$scope.validateBackGroundLayers = function(){
 		if(_.isEmpty($scope.selectedBases)){
-			$scope.layersettingsForm.baseLayers.$setValidity('empty',false);
+			$scope.layerSettingsForm.baseLayers.$setValidity('empty',false);
 		}else{
-			$scope.layersettingsForm.baseLayers.$setValidity('empty',true);
+			$scope.layerSettingsForm.baseLayers.$setValidity('empty',true);
 		}
 	};
     

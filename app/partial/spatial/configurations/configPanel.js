@@ -1,9 +1,9 @@
-angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anchorScroll, locale, SpatialConfig, spatialConfigRestService, spatialConfigAlertService, loadingStatus){
+angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anchorScroll, locale, SpatialConfig, spatialConfigRestService, spatialConfigAlertService, loadingStatus, PreferencesService){
     $scope.isUserPreference = true;
 	$scope.isConfigVisible= false;
 	$scope.alert = spatialConfigAlertService;
-	$scope.loadedAllSettings = false;
 	$scope.isAdminConfig = false;
+	$scope.prefService = PreferencesService;
 	
 	$scope.toggleUserPreferences = function(){
 		$scope.isConfigVisible = !$scope.isConfigVisible;
@@ -101,12 +101,11 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	};
 	
 	var getConfigsSuccess = function(response){
-	    $scope.srcConfigObj = response;
+	    var srcConfigObj = response;
 	    var model = new SpatialConfig();
         $scope.configModel = model.forUserPrefFromJson(response);
         $scope.configCopy = {};
         angular.copy($scope.configModel, $scope.configCopy);
-        $scope.loadedAllSettings = true;
         loadingStatus.isLoading('Preferences',false);
 	};
 	

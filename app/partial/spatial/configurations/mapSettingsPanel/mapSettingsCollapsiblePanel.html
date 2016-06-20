@@ -1,11 +1,11 @@
 <div class="col-md-12 collapsibleRow" ng-controller="MapsettingscollapsiblepanelCtrl">
-	<ng-form name="mapsettingsForm" novalidate>
+	<ng-form name="mapSettingsForm" novalidate>
 		<accordion close-others="oneAtATime">
 			<accordion-group is-open="status.isOpen">
 				<accordion-heading>
 					<div class="panel-title-link" ng-click="toggleOpen()">
 						{{'spatial.map_settings' | i18n }}
-						<div class="accordionError" ng-show="submitedWithErrors && mapsettingsForm.$invalid">
+						<div class="accordionError" ng-show="submitedWithErrors && mapSettingsForm.$invalid">
 							<div class="fa fa-exclamation-circle"></div>
 							{{'spatial.section_errors' | i18n }}
 						</div>
@@ -15,7 +15,7 @@
 				<div ng-include="'partial/spatial/configurations/mapSettingsPanel/refreshSettingsForm/refreshSettingsForm.html'" ng-if="!isReportConfig"></div>
 				<div ng-include="'partial/spatial/configurations/mapSettingsPanel/mapProjectionSettings/mapProjectionSettings.html'"></div>
 				<div class="col-md-12 col-btn-no-padding" ng-if="isUserPreference || isReportConfig">
-					<button type="button" class="btn btn-default pull-right" ng-click="reset()">{{'spatial.settings_reset_btn' | i18n}}</button>
+					<button type="button" class="btn btn-default pull-right" ng-click="prefService.reset('map',mapSettingsForm,configModel,configCopy,isUserPreference,isReportConfig)">{{'spatial.settings_reset_btn' | i18n}}</button>
 				</div>
 			</accordion-group>
 		</accordion>
