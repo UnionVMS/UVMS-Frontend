@@ -65,7 +65,7 @@ describe('mapFishPrintRestServiceTest', function() {
 
     it('should return the status of the print job', inject(function() {
 
-        $httpBackend.expectGET('/mapfish/print/status/15179fee-618d-4356-8114-cfd8f146e273@3067ade6-0768-4fc6-b41d-40422d0cdb8b.json')
+        $httpBackend.expectGET('/mapfish-print/print/status/15179fee-618d-4356-8114-cfd8f146e273@3067ade6-0768-4fc6-b41d-40422d0cdb8b.json')
             .respond(200, {
                 "done": false,
                 "status": "running",
