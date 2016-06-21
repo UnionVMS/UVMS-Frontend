@@ -281,7 +281,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     	var url = $state.href('app.reporting-id', {id: repId, guid: guid});
     	$window.open(url,'_blank');
     };
-    
+
     function generateGUID() {
       function s4() {
         return Math.floor((1 + Math.random()) * 0x10000)

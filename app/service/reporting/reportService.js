@@ -451,6 +451,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    rep.alertType = 'danger';
         rep.message = locale.getString('spatial.user_preferences_error_getting_configs');
 	    rep.isReportRefreshing = false;
+		rep.isReportExecuting = false;
 	};
 	
 	var mergeSettings = function(userConfig){
@@ -526,6 +527,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 			stylesSettings: rep.mergedReport.currentConfig.mapConfiguration.stylesSettings,
 			layerSettings: rep.mergedReport.currentConfig.mapConfiguration.layerSettings,
 			visibilitySettings: rep.mergedReport.currentConfig.mapConfiguration.visibilitySettings,
+			referenceDataSettings: rep.mergedReport.currentConfig.mapConfiguration.referenceDataSettings,
 			reportProperties: {
 		        startDate : rep.mergedReport.startDateTime === undefined ? undefined : moment.utc(rep.mergedReport.startDateTime, globalSettingsService.getDateFormat()).format('YYYY-MM-DDTHH:mm:ss'),
 		        endDate : rep.mergedReport.endDateTime === undefined ? undefined : moment.utc(rep.mergedReport.endDateTime, globalSettingsService.getDateFormat()).format('YYYY-MM-DDTHH:mm:ss')
@@ -550,6 +552,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    rep.alertType = 'danger';
         rep.message = locale.getString('spatial.user_preferences_error_getting_configs');
 	    rep.isReportRefreshing = false;
+		rep.isReportExecuting = false;
 	};
 	
 	rep.checkLayerSettings = function(layerSettings) {

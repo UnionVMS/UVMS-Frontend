@@ -287,6 +287,10 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     };
     
     $scope.$on('openReportForm', function(e, args){
+        if(args && args.isLoaded){
+            $scope.formMode = 'EDIT-FROM-LIVEVIEW';
+            return;
+        }
         $scope.init();
         
         if (angular.isDefined(args)){
@@ -395,6 +399,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     
     $scope.resetReport = function(){
     	if($scope.reportForm.$dirty){
+            loadingStatus.isLoading('ResetReport',true);
 	    	$scope.reportForm.$setPristine();
 	    	reportRestService.getReport($scope.report.id).then(function(response){
 	    		$scope.init();
@@ -402,10 +407,12 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 	    	    $scope.report.currentConfig = {mapConfiguration: {}};
 	    	    angular.copy($scope.report.mapConfiguration,$scope.report.currentConfig.mapConfiguration);
 	    	    $scope.reportOwner = response.createdBy;
+                loadingStatus.isLoading('ResetReport',false);
 	    	}, function(error){
 	    		$anchorScroll();
 	    		$scope.formAlert.msg = locale.getString('spatial.error_entry_not_found');
 	    		$scope.formAlert.visible = true;
+                loadingStatus.isLoading('ResetReport',false);
 	    	});
     	}
     };

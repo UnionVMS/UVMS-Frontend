@@ -21,6 +21,10 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 			message: 'spatial.saving_report_message',
             value: false
 		},
+		isLoadingResetReport: {
+			message: 'spatial.reseting_report_message',
+            value: false
+		},
 		isLoadingGetAttrToMap: {
 			message: 'areas.getting_attributes_to_map',
             value: false

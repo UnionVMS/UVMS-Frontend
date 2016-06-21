@@ -11,9 +11,6 @@
 			<div class="col-md-2 pull-right textAlignRight" ng-click="toggleReportForm('CLOSE')"> 
 	            <i class="fa fa-sign-out signouticon signouticon-extented" title="{{'common.close' | i18n}}"></i>
 	        </div>
-			<div class="col-md-3 pull-right" ng-show="getFormMode('EDIT') || getFormMode('EDIT-FROM-LIVEVIEW')"> 
-				<button class="btn btn-primary button" type="button" ng-click="resetReport()" ng-disabled="reportForm.$pristine" ng-class="{'disabled': reportForm.$pristine}">{{"spatial.reset" | i18n }}</button>
-			</div>
         </div>
 	</div>
 	<div class="row">
@@ -139,6 +136,7 @@
 	   					<div class="formBtnGroup">
 	   						<a class="button" ng-click="toggleReportForm('CLOSE')">{{"common.cancel" | i18n }}</a> &nbsp;
 	   						<a class="button" ng-click="resetForm()" ng-show="getFormMode('CREATE')">{{"spatial.reports_form_clear_btn" | i18n }}</a>
+							<a class="button" ng-show="(getFormMode('EDIT') || getFormMode('EDIT-FROM-LIVEVIEW')) && reportForm.$dirty" ng-click="resetReport()">{{"spatial.reset" | i18n }}</a>
 	   					</div>
 	   					<div class="formSubmitBtn">
 	   						<button class="btn btn-primary button btn-action" type="button" ng-show="getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="runReport()">{{"spatial.reports_table_run_label" | i18n }}</button>

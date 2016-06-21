@@ -1,5 +1,6 @@
 <div class="containerWrapper" ng-controller="ReportspanelCtrl">
 	<loading-panel type="SaveReport"></loading-panel>
+	<loading-panel type="ResetReport"></loading-panel>
 	<div class="container">
 		<div ng-include="'partial/spatial/reportsPanel/reportsList/reportsList.html'" ng-show="isVisible.reportsList"></div>
 		<div class="containerWithTopBottomPadding" ng-include="'partial/spatial/reportsPanel/reportForm/reportForm.html'" ng-show="isVisible.reportForm"></div>
