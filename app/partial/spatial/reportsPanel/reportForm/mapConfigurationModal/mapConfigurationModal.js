@@ -90,7 +90,9 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 	    var srcConfigObj = response;
 	    var model = new SpatialConfig();
         userConfig = model.forUserPrefFromJson(response);
-        mergePreferences();
+		if(response.merge){
+        	mergePreferences();
+		}
         loadingStatus.isLoading('Preferences',false);
 	};
 	
@@ -117,16 +119,15 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
         if(!angular.equals({}, reportConfigs.mapConfiguration)){
         	$scope.configModel = $scope.configModel.forReportConfigFromJson(reportConfigs.mapConfiguration);
         }
-    	
-    	if(!angular.isDefined($scope.initialConfig) || !angular.isDefined($scope.initialConfig.stylesSettings) || !angular.isDefined($scope.initialConfig.layerSettings) ||
-    		!angular.isDefined($scope.initialConfig.visibilitySettings) || !angular.isDefined($scope.initialConfig.spatialConnectId) ||
-    		!angular.isDefined($scope.initialConfig.mapProjectionId) || !angular.isDefined($scope.initialConfig.displayProjectionId) ||
-    		!angular.isDefined($scope.initialConfig.coordinatesFormat) || !angular.isDefined($scope.initialConfig.scaleBarUnits)){
-    		spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
+
+    	if(angular.isDefined($scope.initialConfig) && angular.isDefined($scope.initialConfig.stylesSettings) && angular.isDefined($scope.initialConfig.layerSettings) &&
+    		angular.isDefined($scope.initialConfig.visibilitySettings) && angular.isDefined($scope.initialConfig.referenceDataSettings) && angular.isDefined($scope.initialConfig.spatialConnectId) &&
+    		angular.isDefined($scope.initialConfig.mapProjectionId) && angular.isDefined($scope.initialConfig.displayProjectionId) &&
+    		angular.isDefined($scope.initialConfig.coordinatesFormat) && angular.isDefined($scope.initialConfig.scaleBarUnits)){
+			spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
     	}else{
-    		loadingStatus.isLoading('Preferences',false);
-    	}
-    	
+			spatialConfigRestService.getUserConfigs(undefined,undefined,undefined,undefined,true).then(getConfigsSuccess, getConfigsFailure);
+		}
     };
     
     init();

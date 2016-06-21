@@ -173,7 +173,6 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
                 filter: $scope.currentSelection.searchString
             };
             spatialRestService.getAreasByCode(requestData).then(function(response){
-                $scope.isLoading = false;
                 if (response.data.length > 0){
                     $scope.refDataRecords = $scope.convertRefData(response.data, false);
                 } else {
@@ -182,12 +181,13 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
                     $scope.alert.alertMessage = locale.getString('spatial.ref_data_empty_search_by_prop_msg');
                     $scope.alert.hideAlert();
                 }
-            }, function(error){
                 $scope.isLoading = false;
+            }, function(error){
                 $scope.errorMessage = locale.getString('spatial.get_ref_data_details_error');
                 $scope.hasError = true;
                 $scope.hideAlert();
                 $scope.mapLoading = false;
+                $scope.isLoading = false;
             });
         }
     };

@@ -253,7 +253,6 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
             angular.forEach(styleTypes,function(item){
                 if (angular.isDefined(model[item + 'Style'])){
                     var properties = {};
-                    properties.attribute = model[item + 'Style'].attribute;
 
                     if(item==='alarm'){
                         properties.size = model.alarmStyle.size;
@@ -261,6 +260,7 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
                             properties[model.alarmStyle.style[i].id] = model.alarmStyle.style[i].color;
                         }
                     }else{
+                        properties.attribute = model[item + 'Style'].attribute;
                         properties.style = {};
                         
                         if(item==='segment'){
