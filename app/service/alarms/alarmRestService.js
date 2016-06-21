@@ -206,7 +206,8 @@ angular.module('unionvmsWeb')
                 ticket.vessel = vessel;
                 deferred.resolve(ticket);
             }, function(error) {
-                deferred.reject("Could not get vessel for ticket");
+                //deferred.reject("Could not get vessel for ticket");
+                deferred.resolve(ticket);
             });
         },
         function(error) {
