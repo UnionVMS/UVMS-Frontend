@@ -367,7 +367,10 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             mapService.clearVectorLayers();
             
             //Reset history control
-            mapService.getControlsByType('HistoryControl')[0].resetHistory();
+            var history = mapService.getControlsByType('HistoryControl')[0];
+            if (angular.isDefined(history)){
+                history.resetHistory();
+            }
             
             //Close overlays
             if (angular.isDefined(mapService.overlay)){

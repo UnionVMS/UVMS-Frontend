@@ -25,7 +25,7 @@
 						<th st-sort="createdBy" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_owner' | i18n }}</th>
 						<th st-sort="executedOn" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_last_executed' | i18n }}</th>
 						<th st-sort="visibility" st-skip-natural="true"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc" class="dt-center" >{{'spatial.reports_table_header_visibility' | i18n }}</th>
-						<th style="min-width: 135px;"></th>
+						<th style="min-width: 135px;">{{'spatial.table_header_actions' | i18n }}</th>
 					</tr>
 					<tr>
 						<th colspan="7" ng-if="!isLoading && (tableAlert.visible || !reports.length)">
@@ -58,10 +58,10 @@
 									<li><a ng-click="openMapOnNewTab(report.id)">{{'spatial.reports_table_run_new_tab_label' | i18n }}</a></li>
 								</ul>
 							</div>
-							<button type="button" class="btn btn-default btn-xs" title="{{'spatial.reports_table_config_label' | i18n }}" ng-click="showFilters($index)"><span class="fa fa-cog"></span></button>
 							<button type="button" class="btn btn-xs" ng-class="{'btn-default': !report.isDefault, 'btn-warning': report.isDefault}" ng-attr-title="{{report.isDefault ? removeDefaultTooltip : makeDefaultTooltip}}" ng-click="makeDefault($index)">
 								<span class="fa fa-star"></span>
 							</button>
+							<button type="button" class="btn btn-default btn-xs" title="{{'spatial.reports_table_config_label' | i18n }}" ng-click="repServ.outOfDate=false;showFilters($index)"><span class="fa fa-pencil"></span></button>
 							<div class="btn-group" ng-show="{{report.shareable && report.shareable.length > 0}}">
 							<!--<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >-->
 							<button type="button" class="btn btn-default btn-xs" title="{{'spatial.reports_table_share_label' | i18n }}" data-toggle="dropdown" aria-haspopup="true" ><span class="fa fa-share-alt"></span></button>

@@ -7,6 +7,7 @@ span.fancytree-title {
   padding: 0px;
   margin: 0px;
   padding-right: 5px;
+  line-height: 23px;
 }
 
 #fancytree-drop-marker.fancytree-drop-after, #fancytree-drop-marker.fancytree-drop-before {
@@ -20,16 +21,22 @@ span.fancytree-clickable {
   text-align: center;
   margin-left: 5px;
   color: @profileColor_darkgray;
-  &.fa-info,
-  &.fa-tags {
+  font-size: 13px;
+  line-height: 25px;
+  &.fa-info-circle,
+  &.fa-tags,
+  &.fancytree-context-menu-btn {
   	position: absolute;
-  	top: 3px;
   }
-  &.fa-info {
-  	right: 30px;
+  &.fa-info-circle {
+  	right: 25px;
   }
-  &.fa-tags {
-  	right: 10px;
+  &.fa-tags,
+  &.fancytree-context-menu-btn {
+  	right: 5px;
+  }
+  &.fancytree-context-menu-btn.context-menu-active {
+    color: @primaryColor !important;
   }
 }
 
@@ -65,11 +72,6 @@ span.fancytree-clickable.label-selected-vmsseg {
   span.fancytree-title {
     padding-left: 22px !important;
   }
-}
-
-span.fancytree-clickable.fancytree-context-menu-btn {
-	border: 1px solid @primaryColor;
-	color: @primaryColor;
 }
 
 ul.fancytree-container.ui-fancytree {

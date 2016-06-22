@@ -82,7 +82,7 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         config = checkMapSettings(this,'admin',config,form.mapSettingsForm.$dirty);
         config = checkStylesSettings(this,'admin',config,form.stylesSettingsForm.$dirty);
         config = checkVisibilitySettings(this,'admin',config,form.visibilitySettingsForm.$dirty);
-        config = checkLayerSettings(this,'admin',config,form.layersettingsForm.$dirty);
+        config = checkLayerSettings(this,'admin',config,form.layerSettingsForm.$dirty);
         config = checkReferenceDataSettings(this,'admin',config,form.referenceDataSettingsForm.$dirty);
 
         return angular.toJson(config);  
@@ -201,6 +201,13 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     };
 
     var checkSystemSettings = function(model,config){
+        //Validate geoserver URL
+        if (angular.isDefined(model.systemSettings.geoserverUrl)){
+            var lastLetter = model.systemSettings.geoserverUrl.substr(model.systemSettings.geoserverUrl.length - 1);
+            if (lastLetter !== '/'){
+                model.systemSettings.geoserverUrl += '/';
+            }
+        }
         config.systemSettings = model.systemSettings;
         return config;
     };

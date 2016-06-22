@@ -152,7 +152,6 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     //MAPFISH STUFF
     //Initialization
     (function () {
-        $log.debug("Init MapCtrl");
         MapFish.reset();
         mapFishPrintRestService.ping().then(
             function (data) {
@@ -269,18 +268,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     	$scope.submittedMapFishPrint = true;
     	if($scope.mapForm.printForm.$valid){
 	    	if($scope.mapFish.jobStatusData.status === 'running'){
-	    		if (ref === undefined) {
-	                return;
-	            }
-	            mapFishPrintRestService.cancelPrintJob(ref).then(
-	                function(data){
-	                    $log.debug(data);
-	                    $scope.isRequestingImage = false;
-	                },function(error){
-	                    $log.error(error);
-	                    $scope.isRequestingImage = false;
-	                }
-	            );
+	    	    $scope.cancelPrint(ref);
 	    	}else{
 		        $log.debug("Requesting print job");
 

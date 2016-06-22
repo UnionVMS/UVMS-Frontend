@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,projectionService,areaAlertService,areaRestService,spatialRestService,areaMapService,areaHelperService,areaClickerService,locale,Area,$modal,loadingStatus){
+angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,genericMapService,projectionService,areaAlertService,areaRestService,spatialRestService,areaMapService,areaHelperService,areaClickerService,locale,Area,$modal,loadingStatus){
     $scope.alert = areaAlertService;
 	$scope.sysAreaType = "";
 	$scope.dataConfig = {selectedProj: "", name: "", code: ""};

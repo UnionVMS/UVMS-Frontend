@@ -84,7 +84,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
                 if (mapService.activeLayerType === node.data.type && angular.isDefined(mapService.overlay) && node.isSelected() === false){
                     mapService.closePopup();
                     mapService.activeLayerType = undefined;
-                    target = $(node.span).children('.fancytree-title').children('.fa.fa-info');
+                    target = $(node.span).children('.fancytree-title').children('.fa.fa-info-circle');
                     if (target.hasClass('info-selected')){
                         target.removeClass('info-selected');
                     }
@@ -158,14 +158,14 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			var addInfo = function( data ) {
 				var	tip,
 						$title = $( data.node.span ).children( '.fancytree-title' ),
-						$info = $title.children('.fa.fa-info');
+						$info = $title.children('.fa.fa-info-circle');
 
 				if ( $info.length > 0 ) {
 					return;
 				}
 
 				tip = locale.getString(data.node.data.popupTip);
-				var cls = 'fa fa-info fancytree-clickable';
+				var cls = 'fa fa-info-circle fancytree-clickable';
 
                 var empty = false;
                 if ((data.node.data.type === 'vmspos' && mapService.popupVisibility.positions.length === 0) || (data.node.data.type === 'vmsseg' && mapService.popupVisibility.segments.length === 0)){
@@ -209,7 +209,7 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 				tip = data.node.data.contextTip;
 				$title
 					.addClass( 'layertree-menu' )
-					.append( '<span class="fa fa-caret-down fancytree-clickable fancytree-context-menu-btn" title="'+tip+'"></span>' );
+					.append( '<span class="fa fa-cog fancytree-clickable fancytree-context-menu-btn" title="'+tip+'"></span>' );
 			};
 
 			// Update map on layer select and initial creation
