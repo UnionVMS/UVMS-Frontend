@@ -203,13 +203,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
             var exportItems;
             //Export only selected items
             var selectedItems = $scope.getSelectedItems();
-            if(selectedItems.length > 0){
-                exportItems = selectedItems;
-            }
-            //Export all logs in the table
-            else{
-                exportItems = $scope.currentSearchResults.items;
-            }
+            exportItems = selectedItems;
             return exportItems.reduce(
                 function(csvObject, item){
                     var csvRow = [
@@ -226,7 +220,50 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
         };
 
         //Create and download the file
-        csvService.downloadCSVFile(getData(), header, filename);
+        if ($scope.getSelectedItems() > 0) {
+            csvService.downloadCSVFile(getData(), header, filename);
+        } else {
+            $scope.fetchAllItems(function(exportItems) {
+                csvService.downloadCSVFile(exportItems, header, filename);
+            })
+        }
+    };
+
+    $scope.fetchAllItems = function(callback) {
+        var resultList = [];
+        $scope.fetchingAll = true;
+        var search = function(page) {
+            $scope.currentSearchResults.setLoading(true);
+            searchService.setPage(page);
+            searchService.searchAuditLogs().then(function(searchResultListPage) {
+                resultList = resultList.concat(searchResultListPage.items);
+                if (searchResultListPage.currentPage < searchResultListPage.totalNumberOfPages) {
+                    search(searchResultListPage.currentPage + 1);
+                } else {
+                    var exportItems = resultList.reduce(
+                        function(csvObject, item){
+                              var csvRow = [
+                                  item.username,
+                                  item.operation,
+                                  item.objectType,
+                                  $filter('confDateFormat')(item.date),
+                                  item.affectedObject
+                              ];
+                              csvObject.push(csvRow);
+                              return csvObject;
+                          },[]
+                      );
+                    $scope.currentSearchResults.setLoading(false);
+                    callback(exportItems);
+                }
+            },
+            function(error) {
+                console.log(error);
+                $scope.currentSearchResults.setLoading(false);
+                $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
+            });
+        }
+        search(1);
     };
 
     //Check all/none
