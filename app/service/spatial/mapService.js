@@ -2452,17 +2452,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	};
 	
 	ms.pointCoordsToTurf = function(coords){
-	    var format = new ol.format.GeoJSON();
-        var point = new ol.Feature(
-            new ol.geom.Point(coords)
-        );
-        
-        return format.writeFeatureObject(point);
+	    var geom = new ol.geom.Point(coords);
+	    return genericMapService.geomToGeoJson(geom);
 	};
 	
 	ms.turfToOlGeom = function(feature){
-        var format = new ol.format.GeoJSON();
-        return format.readFeature(feature).getGeometry().transform('EPSG:4326', ms.getMapProjectionCode());
+	    var geom = genericMapService.geoJsonToOlGeom(feature);
+        return geom.transform('EPSG:4326', ms.getMapProjectionCode());
     };
     
     //VECTOR LABELS

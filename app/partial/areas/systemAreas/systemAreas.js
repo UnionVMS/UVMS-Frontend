@@ -312,7 +312,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,proje
         var area = areaList[index];
         var format = new ol.format.WKT();
         var geom = format.readFeature(area.extent).getGeometry();
-        geom.transform('EPSG:4326', 'EPSG:3857');
+        geom = genericMapService.intersectGeomWithProj(geom, $scope.map);
         areaMapService.map.getView().fit(geom, areaMapService.map.getSize(), {nearest: false});
         
         var layers = areaMapService.map.getLayers();

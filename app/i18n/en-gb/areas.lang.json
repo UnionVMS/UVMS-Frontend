@@ -84,7 +84,8 @@
 	"area_upload_modal_wkt_no_multipolygon": "You have provided a MULTIPOLYGON geometry. Parsing this is possible but it will only extract the first POLYGON geometry.",
 	"area_upload_modal_form_errors": "There are errors in your settings. Please fix them and try again.",
 	
-	"metadata_area_description_title": "Area description",
+	"metadata_ref_title": "Title",
+	"metadata_ref_description": "Description",
 	"metadata_short_copyright_title": "Short copyright notice",
 	"metadata_long_copyright_title": "Long copyright notice",
 	"update_metadata_btn": "Save metadata",

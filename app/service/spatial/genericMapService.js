@@ -12,7 +12,7 @@
  *  Service for map generic functions that can be used in all maps throughout the application
  */
 
-angular.module('unionvmsWeb').factory('genericMapService',function($localStorage, $location, $window, locale, spatialRestService) {
+angular.module('unionvmsWeb').factory('genericMapService',function($localStorage, $location, $window, locale, spatialRestService, projectionService) {
     /**
      * Gets the base projection of the map
      * 
@@ -569,6 +569,68 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         }
     };
     
+    /**
+     * Calculates the intersection between a given geometry and the map projection extent.
+     * The input geometry must be in WGS 84 ('EPSG:4326'). The returned geometry will have the 
+     * projection of the source map.
+     * 
+     * @memberof genericMapService
+     * @public
+     * @param {ol.geom.Geometry} geom - The input geometry
+     * @param {ol.Map} map - The OL map to be used
+     * @returns {ol.geom.Geometry} The output geometry whic is an intersection between the input geometry and the map extent
+     */
+    var intersectGeomWithProj = function(geom, map){
+        var reproject = false;
+        var projObj = map.getView().getProjection();
+        var projCode = projObj.getCode();
+        var extent = projObj.getExtent();
+        var polygon = new ol.geom.Polygon.fromExtent(extent);
+        
+        if (projCode.indexOf('4326') === -1){
+            reproject = true;
+            polygon.transform(projCode, 'EPSG:4326');
+        }
+        
+        var intersection = turf.intersect(geomToGeoJson(polygon), geomToGeoJson(geom));
+        intersection = geoJsonToOlGeom(intersection);
+        
+        if (reproject){
+            intersection.transform('EPSG:4326', projCode);
+        }
+        
+        return intersection;
+    };
+    
+    /**
+     * Convert an OL geometry to a GeoJSON feature object
+     * 
+     * @memberof genericMapService
+     * @public
+     * @param {ol.geom.Geometry} geom - The input OL geometry
+     * @returns {Object} The GeoJSON fetaure
+     */
+    var geomToGeoJson = function(geom){
+        var format = new ol.format.GeoJSON();
+        var feature = new ol.Feature();
+        feature.setGeometry(geom);
+        
+        return format.writeFeatureObject(feature);
+    };
+    
+    /**
+     * Convert a GeoJSON feature object to an OL geometry
+     * 
+     * @memberof genericMapService
+     * @public
+     * @param {Object} feature - The GeoJSON feature object
+     * @returns {ol.geom.Geometry} The OL geometry
+     */
+    var geoJsonToOlGeom = function(feature){
+        var format = new ol.format.GeoJSON();
+        return format.readFeature(feature).getGeometry();
+    };
+    
 	var genericMapService = {
 	    mapBasicConfigs: {},
 	    setMapBasicConfigs: setMapBasicConfigs, 
@@ -594,7 +656,10 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
 	    refreshWMSLayer: refreshWMSLayer,
 	    createZoomCtrl: createZoomCtrl,
 	    createZoomInteractions: createZoomInteractions,
-	    createPanInteractions: createPanInteractions
+	    createPanInteractions: createPanInteractions,
+	    intersectGeomWithProj: intersectGeomWithProj,
+	    geomToGeoJson: geomToGeoJson,
+	    geoJsonToOlGeom: geoJsonToOlGeom
 	};
 
 	return genericMapService;

@@ -185,14 +185,14 @@
 				<ng-form name="metadataForm">
 					<div class="row form-container metadata-container">
 						<div class="form-group col-md-12 metadata-group" ng-class="{'has-error': metadataForm.areaName.$dirty && metadataForm.areaName.$invalid}">
-							<label for="areaName">{{'areas.metadata_area_description_title' | i18n}}</label>
+							<label for="areaName">{{'areas.metadata_ref_title' | i18n}}</label>
 							<input type="text" class="form-control" name="areaName" ng-model="helper.metadata.areaName" ng-required="true">
 							<div class="innerErrorMessagesInputWithUpLabel" ng-messages="metadataForm.areaName.$error" ng-show="metadataForm.areaName.$dirty && metadataForm.areaName.$invalid">
 								<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 							</div>
 						</div>
 						<div class="form-group col-md-12 metadata-group">
-							<label for="areaDesc">{{'areas.metadata_area_description_title' | i18n}}</label>
+							<label for="areaDesc">{{'areas.metadata_ref_description' | i18n}}</label>
 							<textarea class="form-control" name="areaDesc" ng-model="helper.metadata.areaDesc"></textarea>
 						</div>
 						<div class="form-group col-md-12 metadata-group">
