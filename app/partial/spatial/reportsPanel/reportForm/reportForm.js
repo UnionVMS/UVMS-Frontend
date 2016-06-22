@@ -289,8 +289,23 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     $scope.$on('openReportForm', function(e, args){
         if(args && args.isLoaded){
             $scope.formMode = 'EDIT-FROM-LIVEVIEW';
+            if(reportService.outOfDate && $scope.reportTemp){
+                $scope.report = {};
+                angular.copy($scope.reportTemp,$scope.report);
+                delete $scope.reportTemp;
+            }
             return;
         }
+
+        if(reportService.outOfDate && !$scope.reportTemp){
+            $scope.reportTemp = {};
+            angular.copy($scope.report,$scope.reportTemp);
+        }
+
+        if(!reportService.outOfDate && $scope.reportTemp){
+            delete $scope.reportTemp;
+        }
+
         $scope.init();
         
         if (angular.isDefined(args)){
@@ -299,11 +314,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         
         $scope.formMode = 'CREATE';
         if (args){
-        	if(args.report.isFromLiveView){
-        		$scope.formMode = 'EDIT-FROM-LIVEVIEW';
-        	}else{
-        		$scope.formMode = 'EDIT';
-        	}
+            $scope.formMode = 'EDIT';
             angular.copy($scope.report.fromJson(args.report),$scope.report);
         }
         $scope.report.currentConfig = {mapConfiguration: {}};

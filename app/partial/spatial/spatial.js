@@ -115,9 +115,8 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    
    //Get Report Configs Success callback
    var getReportSuccess = function(response){
-	   response.isFromLiveView = true;
 	   $scope.$broadcast('openReportForm', {'report': response});
-       $scope.$broadcast('goToReportForm','EDIT-FROM-LIVEVIEW');
+       $scope.$broadcast('goToReportForm','EDIT');
    };
 	   
    //Get Report Configs Failure callback
