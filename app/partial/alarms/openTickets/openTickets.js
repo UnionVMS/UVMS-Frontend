@@ -235,6 +235,25 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         });
     };
 
+    var csvReduce = function(csvObject, item){
+        var affectedObjectText;
+        if(angular.isDefined(item.vessel)){
+            affectedObjectText = item.vessel.name;
+        }else if(angular.isDefined(item.vesselGuid)){
+            affectedObjectText = item.vesselGuid;
+        }
+        var csvRow = [
+            $filter('confDateFormat')(item.openDate),
+            affectedObjectText,
+            item.ruleName,
+            $filter('confDateFormat')(item.getResolvedDate()),
+            item.getResolvedBy(),
+            item.status
+        ];
+        csvObject.push(csvRow);
+        return csvObject;
+    };
+
     //Export data as CSV file
     $scope.exportItemsAsCSVFile = function(onlySelectedItems){
         var filename = 'notifications.csv';
@@ -251,39 +270,47 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
 
         //Set the data columns
         var getData = function() {
-            var exportItems;
-            //Export only selected items
-            if(onlySelectedItems){
-                exportItems = $scope.selectedItems;
-            }
-            //Export all logs in the table
-            else{
-                exportItems = $scope.currentSearchResults.items;
-            }
-            return exportItems.reduce(
-                function(csvObject, item){
-                    var affectedObjectText;
-                    if(angular.isDefined(item.vessel)){
-                        affectedObjectText = item.vessel.name;
-                    }else if(angular.isDefined(item.vesselGuid)){
-                        affectedObjectText = item.vesselGuid;
-                    }
-                    var csvRow = [
-                        $filter('confDateFormat')(item.openDate),
-                        affectedObjectText,
-                        item.ruleName,
-                        $filter('confDateFormat')(item.getResolvedDate()),
-                        item.getResolvedBy(),
-                        item.status
-                    ];
-                    csvObject.push(csvRow);
-                    return csvObject;
-                },[]
-            );
+            return $scope.selectedItems.reduce(csvReduce,[]);
         };
 
         //Create and download the file
-        csvService.downloadCSVFile(getData(), header, filename);
+        if (onlySelectedItems || $scope.selectedItems.length) {
+            csvService.downloadCSVFile(getData(), header, filename);
+        } else {
+            $scope.fetchAllItems(function(exportItems) {
+                csvService.downloadCSVFile(exportItems, header, filename);
+            });
+        }
+    };
+
+    $scope.fetchAllItems = function(callback) {
+        var resultList = [];
+        $scope.fetchingAll = true;
+        var search = function(page) {
+            $scope.currentSearchResults.setLoading(true);
+            searchService.setPage(page);
+            searchService.searchTickets().then(function(searchResultListPage) {
+                if (searchResultListPage.totalNumberOfPages > 1) {
+                    searchService.getListRequest().listSize = searchResultListPage.items.length * (searchResultListPage.totalNumberOfPages + 1);
+                    search(searchResultListPage.currentPage);
+                } else {
+                    resultList = resultList.concat(searchResultListPage.items);
+                    if (searchResultListPage.currentPage < searchResultListPage.totalNumberOfPages) {
+                        search(searchResultListPage.currentPage + 1);
+                    } else {
+                        var exportItems = resultList.reduce(csvReduce,[]);
+                        $scope.currentSearchResults.setLoading(false);
+                        callback(exportItems);
+                    }
+                }
+            },
+            function(error) {
+                console.log(error);
+                $scope.currentSearchResults.setLoading(false);
+                $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
+            });
+        }
+        search(1);
     };
 
     //Callback function for the "edit selection" dropdown

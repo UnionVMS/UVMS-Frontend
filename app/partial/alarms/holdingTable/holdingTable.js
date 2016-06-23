@@ -189,8 +189,44 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
 
     //Export data as CSV file
     $scope.exportItemsAsCSVFile = function(onlySelectedItems){
+        if (onlySelectedItems || $scope.selectedItems.length > 0) {
+            alarmCsvService.exportAlarms($scope.selectedItems);
+        } else {
+            $scope.fetchAllItems(function(exportItems) {
+                alarmCsvService.exportAlarms(exportItems);
+            });
+        }
         var itemsToExport = onlySelectedItems ? $scope.selectedItems : $scope.currentSearchResults.items;
-        alarmCsvService.exportAlarms(itemsToExport);
+
+    };
+
+    $scope.fetchAllItems = function(callback) {
+        var resultList = [];
+        $scope.fetchingAll = true;
+        var search = function(page) {
+            $scope.currentSearchResults.setLoading(true);
+            searchService.setPage(page);
+            searchService.searchAlarms().then(function(searchResultListPage) {
+                if (searchResultListPage.totalNumberOfPages > 1) {
+                    searchService.getListRequest().listSize = searchResultListPage.items.length * (searchResultListPage.totalNumberOfPages + 1);
+                    search(searchResultListPage.currentPage);
+                } else {
+                    resultList = resultList.concat(searchResultListPage.items);
+                    if (searchResultListPage.currentPage < searchResultListPage.totalNumberOfPages) {
+                        search(searchResultListPage.currentPage + 1);
+                    } else {
+                        $scope.currentSearchResults.setLoading(false);
+                        callback(resultList);
+                    }
+                }
+            },
+            function(error) {
+                console.log(error);
+                $scope.currentSearchResults.setLoading(false);
+                $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
+            });
+        }
+        search(1);
     };
 
     //Callback function for the "edit selection" dropdown
