@@ -116,6 +116,16 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
                     method: 'POST'
                 }
             });
+        },
+        updateAreaGroupDate: function(){
+            return $resource('/spatial/rest/userarea/updatedate', {}, {
+                'update': {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            });
         }
     };
 })
@@ -268,7 +278,17 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
                     deferred.reject(error);
                 });
             return deferred.promise;
-        }
+        },
+        updateAreaGroupDate: function(areaGroup){
+	        var deferred = $q.defer();
+            areaRestFactory.updateAreaGroupDate().update(areaGroup, function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.error('Error creating new dataset.');
+                deferred.reject(error);
+            });
+            return deferred.promise;
+	    }
 	};
 
 	return areaRestService;

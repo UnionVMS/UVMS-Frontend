@@ -40,6 +40,10 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 		isLoadingAreaSelectionModal: {
 		    message: 'spatial.loading_data',
             value: false
+		},
+		isLoadingEditAreaGroupModal: {
+		    message: 'spatial.loading_data',
+            value: false
 		}
 	};
 	

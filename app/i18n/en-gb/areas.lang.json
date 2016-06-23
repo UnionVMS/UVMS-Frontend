@@ -153,6 +153,10 @@
 	"area_group": "Area group",
 	"edit_area_group": "Edit area group",
 	"confirm_area_group_edit": "Do you really want to set this active range? This properties will be applied to all areas in this area group accessible by you.",
+	"confirm_area_group_edit_all": "Do you really want to set this active range? This properties will be applied to all areas in this area group(including the ones from other scopes).",
+	"saving_area_group": "Saving area group",
+	"edit_area_group_success": "The area group range date was successfully saved",
+	"edit_area_group_error": "Error saving the area group range date. Please try again",
 	
 	"select_data_upload": "Select data to upload",
 	"data_configurations": "Data configurations",

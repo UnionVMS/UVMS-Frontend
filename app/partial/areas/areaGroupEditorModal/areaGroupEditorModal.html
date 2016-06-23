@@ -1,4 +1,5 @@
 <div class="area-group-editor-modal">
+	<loading-panel type="EditAreaGroupModal"></loading-panel>
 	<!--  HEADER -->
 	<div class="modal-header">
         <div class="pointer pull-right" ng-click="cancel()">
@@ -8,25 +9,23 @@
     </div>
     <!-- BODY -->
     <div class="modal-body">
-    	<div class="alert alert-warning" ng-show="isSaving">
-			{{'areas.confirm_area_group_edit' | i18n }}
+		<div class="alert alert-container" role="alert" ng-class="{'alert-danger': alert.alertType === 'danger', 'alert-warning': alert.alertType === 'warning'}" ng-show="alert.hasAlert">
+			<span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.alertType === 'danger'"></span>
+			<span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.alertType === 'warning'"></span>
+			<span class="alert-message">
+				<span>{{alert.alertMessage}}</span>          
+			</span>
 		</div>
-    	<label class="area-group-name-label">{{'areas.area_group' | i18n | uppercase}} - {{areaGroupName}}</label>
+    	<label class="area-group-name-label">{{'areas.area_group' | i18n | uppercase}} - {{areaGroup.type}}</label>
 		<div class="row form-group datesGroup">
 			<ng-form name="areaGroupActiveForm">
 				<div class="col-md-6 withoutPadding rightPadding" ng-class="{'has-error': areaGroupActiveForm.areaGroupFrom.$invalid && (areaGroupActiveForm.areaGroupFrom.$dirty || isSubmitted)}">
 					<label for="areaGroupFrom">{{'areas.user_area_valid_from' | i18n }}</label>
-					<datepicker-input time="true" model="userArea.startDate" name="areaGroupFrom" max-date="userArea.endDate" ng-change-callback="resetDateTimePicker" input-field-id="area-group-start-date-picker" ng-required="true"></datepicker-input>
-					<div class="innerErrorMessagesDateWithUpLabel" ng-messages="areaGroupActiveForm.areaGroupFrom.$error" ng-show="(areaGroupActiveForm.areaGroupFrom.$dirty || isSubmitted === true) && areaGroupActiveForm.areaGroupFrom.$invalid">
-						<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
-					</div>
+					<datepicker-input time="true" model="areaGroup.startDate" name="areaGroupFrom" max-date="areaGroup.endDate" ng-change-callback="resetDateTimePicker" input-field-id="area-group-start-date-picker"></datepicker-input>
 				</div>
 				<div class="col-md-6 withoutPadding leftPadding" ng-class="{'has-error': areaGroupActiveForm.areaGroupTo.$invalid && (areaGroupActiveForm.areaGroupTo.$dirty || isSubmitted)}">
 					<label for="areaGroupTo">{{'areas.user_area_valid_to' | i18n }}</label>
-					<datepicker-input time="true" model="userArea.endDate" name="areaGroupTo" min-date="userArea.startDate" ng-change-callback="resetDateTimePicker" input-field-id="area-group-end-date-picker" ng-required="true"></datepicker-input>
-					<div class="innerErrorMessagesDateWithUpLabel" ng-messages="areaGroupActiveForm.areaGroupTo.$error" ng-show="(areaGroupActiveForm.areaGroupTo.$dirty || isSubmitted === true) && areaGroupActiveForm.areaGroupTo.$invalid">
-						<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
-					</div>
+					<datepicker-input time="true" model="areaGroup.endDate" name="areaGroupTo" min-date="areaGroup.startDate" ng-change-callback="resetDateTimePicker" input-field-id="area-group-end-date-picker"></datepicker-input>
 				</div>
 			</ng-form>
 		</div>
@@ -36,8 +35,8 @@
         <div class="row">
         	<div class="col-md-12">
         		<button class="btn btn-default btn-action" type="button" ng-click="cancel()">{{'common.cancel' | i18n}}</button>
-				<button class="btn btn-primary btn-action" type="button" ng-click="save()" ng-show="!isSaving">{{'common.save' | i18n}}</button>
-        		<button class="btn btn-warning btn-action" type="button" ng-click="confirm()" ng-show="isSaving">{{'common.confirm' | i18n}}</button>
+				<button class="btn btn-primary btn-action" type="button" ng-click="save()" ng-show="!isConfirming">{{'common.save' | i18n}}</button>
+        		<button class="btn btn-warning btn-action" type="button" ng-click="confirm()" ng-show="isConfirming">{{'common.confirm' | i18n}}</button>
         	</div>
         </div>
     </div>

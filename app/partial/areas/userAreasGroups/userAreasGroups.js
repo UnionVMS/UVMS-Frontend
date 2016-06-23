@@ -92,6 +92,14 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
                 }
             }
          });
+
+         modalInstance.result.then(function(data){
+        	if(data !== 'cancel'){
+        		$scope.alert.setSuccess();
+                $scope.alert.alertMessage = data;
+                $scope.alert.hideAlert();
+        	}
+        });
     };
 	
     init();
