@@ -12,7 +12,7 @@
 					<i class="fa fa-pencil"></i>&nbsp;
 					<span>{{'spatial.reports_edit_report' | i18n}}</span>
 				</button>
-				<button type="button" class="btn btn-primary btn-sm btn-preferences" ng-click="selectMenu('PREFERENCES')" ng-show="isAllowed('Spatial', 'ALLOW_USER_SPATIAL_CONFIGURATIONS') && curState !== 'app.reporting-id'">
+				<button type="button" class="btn btn-primary btn-sm btn-preferences" ng-click="selectMenu('PREFERENCES')" ng-if="isAllowed('Spatial', 'ALLOW_USER_SPATIAL_CONFIGURATIONS') && curState !== 'app.reporting-id'">
 					<i class="fa fa-cog"></i>&nbsp;
 					<span>{{'spatial.user_preferences' | i18n}}</span>
 				</button>
