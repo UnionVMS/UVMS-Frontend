@@ -28,9 +28,9 @@
 						<th style="min-width: 135px;">{{'spatial.table_header_actions' | i18n }}</th>
 					</tr>
 					<tr>
-						<th colspan="7" ng-if="!isLoading && (tableAlert.visible || !reports.length)">
+						<th colspan="7" ng-if="!isLoading && (tableAlert.visible || !displayedRecords.length)">
 							<table-alert type="tableAlert.type" msg="tableAlert.msg" visible="tableAlert.visible" timeout="tableAlert.timeout"></table-alert>
-							<table-alert type="'info'" msg="'spatial.table_no_data'" visible="!tableAlert.visible && !isLoading && !reports.length"></table-alert>
+							<table-alert type="'info'" msg="'spatial.table_no_data'" visible="!tableAlert.visible && !isLoading && !displayedRecords.length"></table-alert>
 						</th>
 					</tr>
 					<tr ng-if="isLoading">

@@ -1106,10 +1106,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             
             //Normalize radius to scale between maxRadius and minRadius
             var radius = Math.round((maxRadius - minRadius) * (feature.get('featNumber') - ms.clusterMinFeatureCount) / (ms.clusterMaxFeatureCount - ms.clusterMinFeatureCount));
-            if (isNaN(radius) || !isFinite(value)){
+            if (isNaN(radius) || !isFinite(radius)){
                 radius = 0;
             }
-            radius += minRadius
+            radius += minRadius;
             feature.set('radius', radius);
             
             //Apply cluster style
