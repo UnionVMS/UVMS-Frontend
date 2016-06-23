@@ -179,7 +179,8 @@ angular.module('unionvmsWeb')
     GetListRequest.prototype.DTOForAlarms = function(){
         return{
             alarmSearchCriteria : this.criterias,
-            pagination: {page: this.page, listSize: this.listSize}
+            pagination: {page: this.page, listSize: this.listSize},
+            dynamic: this.isDynamic
         };
     };
 

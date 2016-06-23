@@ -148,21 +148,5 @@ describe('HoldingtableCtrl', function() {
         scope.$destroy();
         expect(alertSpy).toHaveBeenCalled();
     }));
-
-    it('exportItemsAsCSVFile should call service for exporting to csv file', inject(function(Alarm, alarmCsvService) {
-        var controller = createController();
-
-        //Create fake result
-        var alarm = new Alarm();
-        scope.currentSearchResults.items.push(alarm);
-
-        var csvSpy = spyOn(alarmCsvService, "exportAlarms").andCallFake(function(alarms) {
-            expect(alarms.length).toEqual(1);
-        });
-
-        scope.exportItemsAsCSVFile(false);
-
-        expect(csvSpy).toHaveBeenCalled();
-    }));
 });
 
