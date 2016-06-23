@@ -70,6 +70,11 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 		        return loadings['isLoading' + type ].message[idx];
 		    } 
 			return loadings['isLoading' + type ].message;
+		},
+		resetState: function(){
+		    angular.forEach(loadings, function(item){
+		       item.value = false; 
+		    });
 		}
 	};
 

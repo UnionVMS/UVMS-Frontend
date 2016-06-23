@@ -382,6 +382,9 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             data: {
                 pageTitle: 'header.page_title_configuration'
+            },
+            onExit: function(loadingStatus){
+                loadingStatus.resetState();
             }
         })
         .state('app.reporting', {
@@ -399,6 +402,9 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             data: {
                 pageTitle: 'header.page_title_reports'
+            },
+            onExit: function(loadingStatus){
+                loadingStatus.resetState();
             }
         })
         .state('app.reporting-id', {
@@ -416,6 +422,9 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             data: {
                 pageTitle: 'header.page_title_reports'
+            },
+            onExit: function(loadingStatus){
+                loadingStatus.resetState();
             }
         })
         .state('app.areas', {
@@ -429,6 +438,9 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             data: {
                 access: 'VIEW_AREA_MANAGEMENT_UI',
                 pageTitle: 'header.page_title_areas'
+            },
+            onExit: function(loadingStatus){
+                loadingStatus.resetState();
             }
         })
         .state('app.exchange', {

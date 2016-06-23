@@ -62,7 +62,6 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     //Admin level configs
     SpatialConfig.prototype.forAdminConfigFromJson = function(data, ports){
         var config = new SpatialConfig();
-        config.toolSettings = undefined;
         
         config.systemSettings = data.systemSettings;
         config.mapSettings = data.mapSettings;
@@ -84,6 +83,7 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         config = checkVisibilitySettings(this,'admin',config,form.visibilitySettingsForm.$dirty);
         config = checkLayerSettings(this,'admin',config,form.layerSettingsForm.$dirty);
         config = checkReferenceDataSettings(this,'admin',config,form.referenceDataSettingsForm.$dirty);
+        config.toolSettings = this.toolSettings;
 
         return angular.toJson(config);  
     };
