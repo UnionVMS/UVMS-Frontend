@@ -8,11 +8,11 @@
 							{{'spatial.visibility_configuration_table' | i18n}}
 							<input type="checkbox" ng-model="selectAll.positions.table" ng-change="selectAllChange('positions','table')">
 						</th>
-						<th ng-if="!isReportConfig || (isReportConfig && hasMap)">
+						<th ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && hasMap)">
 							{{'spatial.visibility_configuration_popup' | i18n}}
 							<input type="checkbox" ng-model="selectAll.positions.popup" ng-change="selectAllChange('positions','popup')">
 						</th>
-						<th ng-if="!isReportConfig || (isReportConfig && hasMap)">
+						<th ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && hasMap)">
 							{{'spatial.visibility_configuration_label' | i18n}}
 							<input type="checkbox" ng-model="selectAll.positions.label" ng-change="selectAllChange('positions','label')">
 						</th>
@@ -36,7 +36,7 @@
 								</li>
 							</ul>
 						</td>
-						<td ng-if="!isReportConfig || (isReportConfig && hasMap)">
+						<td ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && hasMap)">
 							<ul dnd-list="configModel.visibilitySettings.positionPopupAttrs" dnd-allowed-types="['Popup']">
 								<li ng-repeat="attr in configModel.visibilitySettings.positionPopupAttrs"
 								dnd-draggable="attr"
@@ -49,7 +49,7 @@
 								</li>
 							</ul>
 						</td>
-						<td ng-if="!isReportConfig || (isReportConfig && hasMap)">
+						<td ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && hasMap)">
 							<ul dnd-list="configModel.visibilitySettings.positionLabelAttrs" dnd-allowed-types="['Label']">
 								<li ng-repeat="attr in configModel.visibilitySettings.positionLabelAttrs"
 								dnd-draggable="attr"
@@ -65,11 +65,11 @@
 					</tr>
 					<tr ng-if="!isPositionVisLoading">
 						<td></td>
-						<td class="is-attr-visible-row" ng-if="!isReportConfig || (isReportConfig && hasMap)">
+						<td class="is-attr-visible-row" ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && hasMap)">
 							<span>{{'spatial.visibility_show_attr_names' | i18n}}</span>
 							<input type="checkbox" ng-model="configModel.visibilitySettings.positions.popup.isAttributeVisible">
 						</td>
-						<td class="is-attr-visible-row" ng-if="!isReportConfig || (isReportConfig && hasMap)">
+						<td class="is-attr-visible-row" ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && hasMap)">
 							<span>{{'spatial.visibility_show_attr_names' | i18n}}</span>
 							<input type="checkbox" ng-model="configModel.visibilitySettings.positions.labels.isAttributeVisible">
 						</td>

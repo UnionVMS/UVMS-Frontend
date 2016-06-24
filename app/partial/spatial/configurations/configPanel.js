@@ -1,8 +1,7 @@
 angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anchorScroll, locale, SpatialConfig, spatialConfigRestService, spatialConfigAlertService, loadingStatus, PreferencesService){
-    $scope.isUserPreference = true;
+    $scope.settingsLevel = 'user';
 	$scope.isConfigVisible= false;
 	$scope.alert = spatialConfigAlertService;
-	$scope.isAdminConfig = false;
 	$scope.prefService = PreferencesService;
 	
 	$scope.toggleUserPreferences = function(){

@@ -57,7 +57,7 @@ angular.module('unionvmsWeb').controller('AreaslayersCtrl',function($scope,spati
 			$scope.isLoadingSysAreas = false;
 		});
 		
-		if(!$scope.isAdminConfig){
+		if($scope.settingsLevel !== 'admin'){
 			$scope.areas.containers[1].lists[0].items = [];
 			$scope.areas.containers[2].lists[0].items = [];
 			$scope.isLoadingUserAreas = true;

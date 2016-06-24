@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, $timeout, locale, reportConfigs, $modalInstance, SpatialConfig, spatialRestService, spatialConfigAlertService, $anchorScroll, $location, spatialConfigRestService, loadingStatus, hasMap, PreferencesService) {
-	$scope.isReportConfig = true;
+	$scope.settingsLevel = 'report';
 	$scope.alert = spatialConfigAlertService;
 	$scope.alert.hasAlert = false;
 	$scope.alert.hasError = false;

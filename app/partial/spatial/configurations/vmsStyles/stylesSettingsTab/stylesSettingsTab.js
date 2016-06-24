@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('StylessettingstabCtrl',function($scope,locale,configurationService,$timeout){
+angular.module('unionvmsWeb').controller('StylessettingstabCtrl',function($scope,locale,configurationService,$timeout,PreferencesService){
 	
 	$scope.init = function(name){
 		$scope.tabName = name;
@@ -19,6 +19,7 @@ angular.module('unionvmsWeb').controller('StylessettingstabCtrl',function($scope
 
 		$scope.$watch('configModel.stylesSettings.' + $scope.tabName + 's', function(newVal,oldVal) {
 			if(newVal && $scope.configModel && $scope.configModel.stylesSettings && $scope.configModel.stylesSettings[$scope.tabName + 's'] && ($scope.tabName === 'alarm' || $scope.configModel.stylesSettings[$scope.tabName + 's'].style)){
+				PreferencesService.clearStylesErrors($scope.settingsLevel);
 				$scope.loadProperties();
 				if(angular.isDefined($scope.stylesSettingsForm)){
 					$scope.stylesSettingsForm.$setPristine();

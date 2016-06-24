@@ -1,6 +1,6 @@
 <div class="row layer-selector-container" ng-controller="AreaslayersCtrl">
 	<div class="col-md-12 areas-selector">
-		<div ng-if="!isAdminConfig">
+		<div ng-if="settingsLevel !== 'admin'">
 			<div class="col-md-4">
 				<span>{{'spatial.layer_settings_system_areas' | i18n}}</span>
 				<input type="radio" ng-model="selectedAreaType.name" value="sysarea">

@@ -84,16 +84,36 @@ angular.module('unionvmsWeb').factory('PreferencesService',function(loadingStatu
 	};
 
 	var PreferencesService = {
-		reset : function(settingsType,form,configModel,configCopy,isUserPreference,isReportConfig){
+		stylesErrors : {
+			admin: {
+				positions: {},
+				segments: {}
+			},
+			user: {
+				positions: {},
+				segments: {}
+			},
+			report: {
+				positions: {},
+				segments: {}
+			}
+		},
+		reset : function(settingsType,form,configModel,configCopy,settingsLevel){
 			loadingStatus.isLoading('ResetPreferences',true);
 			var item = {};
 			item[settingsType + 'Settings'] = {};
 			
-			if(isUserPreference){
+			if(settingsLevel === 'user'){
 				spatialConfigRestService.resetSettings(item,settingsType,configModel,configCopy,form).then(resetSuccess, resetFailure);
-			}else if(isReportConfig){
-				spatialConfigRestService.getUserConfigs(settingsType,configModel,form,isReportConfig).then(getConfigsSuccess, getConfigsFailure);
+			}else if(settingsLevel === 'report'){
+				spatialConfigRestService.getUserConfigs(settingsType,configModel,form,true).then(getConfigsSuccess, getConfigsFailure);
 			}
+		},
+		clearStylesErrors : function(level){
+			this.stylesErrors[level] = {
+				positions: {},
+				segments: {}
+			};
 		}
 	};
 

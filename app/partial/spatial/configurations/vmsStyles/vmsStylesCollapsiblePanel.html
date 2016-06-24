@@ -24,8 +24,8 @@
 
 				<div ng-repeat="styleTab in headerMenus" ng-include="'partial/spatial/configurations/vmsStyles/stylesSettingsTab/stylesSettingsTab.html'" ng-show="isMenuSelected(styleTab.menu)"></div>
 
-				<div class="col-md-12 col-btn-no-padding" ng-if="isUserPreference || isReportConfig">
-					<button type="button" class="btn btn-default pull-right" ng-click="prefService.reset('styles',stylesSettingsForm,configModel,configCopy,isUserPreference,isReportConfig)">{{'spatial.settings_reset_btn' | i18n}}</button>
+				<div class="col-md-12 col-btn-no-padding" ng-if="settingsLevel !== 'admin'">
+					<button type="button" class="btn btn-default pull-right" ng-click="prefService.reset('styles',stylesSettingsForm,configModel,configCopy,settingsLevel)">{{'spatial.settings_reset_btn' | i18n}}</button>
 				</div>
 			</accordion-group>
 		</accordion>

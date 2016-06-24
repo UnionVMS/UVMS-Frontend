@@ -12,7 +12,7 @@
 						<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isOpen, 'glyphicon-chevron-right': !status.isOpen}"></i>
 					</div>
 				</accordion-heading>
-				<div class="row" ng-class="{'layerUserConfig': !isAdminConfig}">
+				<div class="row" ng-class="{'layerUserConfig': settingsLevel !== 'admin'}">
 					<div class="accordionError baseLayersError" ng-show="(submitedWithErrors || layerSettingsForm.$dirty) && layerSettingsForm.baseLayers.$invalid">
 						<div class="fa fa-exclamation-circle"></div>
 						{{'spatial.base_layers_error' | i18n }}
@@ -106,8 +106,8 @@
 					    </div>
 					</div>
 				</div>
-				<div class="col-md-12 col-btn-no-padding" ng-if="isUserPreference || isReportConfig">
-					<button type="button" class="btn btn-default pull-right" ng-click="prefService.reset('layer',layerSettingsForm,configModel,configCopy,isUserPreference,isReportConfig)">{{'spatial.settings_reset_btn' | i18n}}</button>
+				<div class="col-md-12 col-btn-no-padding" ng-if="settingsLevel !== 'admin'">
+					<button type="button" class="btn btn-default pull-right" ng-click="prefService.reset('layer',layerSettingsForm,configModel,configCopy,settingsLevel)">{{'spatial.settings_reset_btn' | i18n}}</button>
 				</div>
 			</accordion-group>
 		</accordion>

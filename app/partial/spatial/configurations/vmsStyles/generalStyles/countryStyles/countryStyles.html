@@ -21,26 +21,24 @@
 				       	<div class="loading-spinner-cl th col-md-12"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
 			        </div>
 			    </div>
-			    <div class="tbody container-fluid row">
-			        <div ng-repeat="report in displayedRecords" ng-show="displayedRecords && displayedRecords.length > 0 && !isLoading" class="tr row">
-						<ng-form name="countryForm{{$index}}" novalidate>
-				        	<div class="td col-md-6">{{ report.name }}</div>
-				            <div class="td col-md-2">{{ report.code }}</div>
-				            <div class="td col-md-4">
-				            	<div class="form-group noBottomPadding" ng-class="{'has-error': (countryForm{{$index}}.countryColor.$error.required{{$index}} || countryForm{{$index}}.countryColor.$error.posColor{{$index}}) && (countryForm{{$index}}.countryColor.$dirty || submitedWithErrors)}">
-					            	<div class="colorPickerComponent">
-							            <div ng-style="{'background-color': report.color && report.color.length > 3  && report.color.length <= 7 && report.color.indexOf('#') != -1 ? report.color : '#fff'}" class="form-control pickedcolor">
-							            	<i class="fa fa-ban" ng-hide="report.color && report.color.length > 3 && report.color.length <= 7 && report.color.indexOf('#') != -1"></i>
-							            </div>
-							            <input class="form-control" colorpicker ng-model="report.color" type="text" ng-change="validateColor($index);" name="countryColor" autocomplete="off">
-							            <div class="innerErrorMessages" ng-messages="countryForm{{$index}}.countryColor.$error" ng-show="countryForm{{$index}}.countryColor.$dirty || submitedWithErrors">
-											<div ng-message="required{{$index}}">{{'spatial.required_field_error_message' | i18n }}</div>
-											<div ng-message="posColor{{$index}}">{{'spatial.invalid_color_error_message' | i18n }}</div>
-										</div>
-						            </div>
-					            </div>
-					        </div>
-				        </ng-form>
+			    <div class="tbody container-fluid row" ng-show="displayedRecords && displayedRecords.length > 0 && !isLoading">
+			        <div ng-repeat="report in displayedRecords" class="tr row">
+						<div class="td col-md-6">{{ report.name }}</div>
+						<div class="td col-md-2">{{ report.code }}</div>
+						<div class="td col-md-4">
+							<div class="form-group noBottomPadding" ng-class="{'has-error': prefServ.stylesErrors[settingsLevel][componentStyle][loadedStyles.indexOf(report)]}">
+								<div class="colorPickerComponent">
+									<div ng-style="{'background-color': report.color && report.color.length > 3  && report.color.length <= 7 && report.color.indexOf('#') != -1 ? report.color : '#fff'}" class="form-control pickedcolor">
+										<i class="fa fa-ban" ng-hide="report.color && report.color.length > 3 && report.color.length <= 7 && report.color.indexOf('#') != -1"></i>
+									</div>
+									<input class="form-control" colorpicker ng-model="report.color" type="text" ng-change="validateColor(loadedStyles.indexOf(report));" name="countryColor" autocomplete="off">
+									<div class="innerErrorMessages" ng-show="prefServ.stylesErrors[settingsLevel][componentStyle][loadedStyles.indexOf(report)]">
+										<div ng-show="prefServ.stylesErrors[settingsLevel][componentStyle][loadedStyles.indexOf(report)].required">{{'spatial.required_field_error_message' | i18n }}</div>
+										<div ng-show="!prefServ.stylesErrors[settingsLevel][componentStyle][loadedStyles.indexOf(report)].required && prefServ.stylesErrors[settingsLevel][componentStyle][loadedStyles.indexOf(report)].posColor">{{'spatial.invalid_color_error_message' | i18n }}</div>
+									</div>
+								</div>
+							</div>
+						</div>
 			        </div>
 			    </div>
 				<div class="stFooterPagination tfoot container-fluid row" ng-if="!isLoading && displayedRecords.length">

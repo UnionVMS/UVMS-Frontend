@@ -1,4 +1,4 @@
-<div class="col-md-12 collapsibleRow visibilitySettings" ng-controller="VisibilitysettingsCtrl" ng-init="status.isOpen = isReportConfig && !hasMap">
+<div class="col-md-12 collapsibleRow visibilitySettings" ng-controller="VisibilitysettingsCtrl" ng-init="status.isOpen = settingsLevel === 'report' && !hasMap">
 	<ng-form name="visibilitySettingsForm">
 		<accordion close-others="oneAtATime">
 			<accordion-group is-open="status.isOpen">
@@ -24,8 +24,8 @@
 				<div ng-show="isMenuSelected('POSITIONS')" ng-include="'partial/spatial/configurations/visibilitySettings/positionsVisibility/positionsVisibility.html'"></div>
 				<div ng-show="isMenuSelected('SEGMENTS')" ng-include="'partial/spatial/configurations/visibilitySettings/segmentsVisibility/segmentsVisibility.html'"></div>
 				<div ng-show="isMenuSelected('TRACKS')" ng-include="'partial/spatial/configurations/visibilitySettings/tracksVisibility/tracksVisibility.html'"></div>
-				<div class="col-md-12 col-btn-no-padding" ng-if="isUserPreference || isReportConfig">
-					<button type="button" class="btn btn-default pull-right" ng-click="prefService.reset('visibility',visibilitySettingsForm,configModel,configCopy,isUserPreference,isReportConfig)">{{'spatial.settings_reset_btn' | i18n}}</button>
+				<div class="col-md-12 col-btn-no-padding" ng-if="settingsLevel !== 'admin'">
+					<button type="button" class="btn btn-default pull-right" ng-click="prefService.reset('visibility',visibilitySettingsForm,configModel,configCopy,settingsLevel)">{{'spatial.settings_reset_btn' | i18n}}</button>
 				</div>
 			</accordion-group>
 		</accordion>

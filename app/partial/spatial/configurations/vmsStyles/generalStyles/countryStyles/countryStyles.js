@@ -1,26 +1,28 @@
-angular.module('unionvmsWeb').controller('CountrystylesCtrl',function($scope, spatialConfigRestService){
+angular.module('unionvmsWeb').controller('CountrystylesCtrl',function($scope, spatialConfigRestService, PreferencesService){
 	$scope.itemsByPage = 25;
 	$scope.searchString = '';
 	$scope.countryList = [];
+	$scope.prefServ = PreferencesService;
 	
 	//Setup data for display
-    $scope.prepareRecordsForCountryCode = function(){
+    var prepareRecordsForCountryCode = function(){
     	$scope.isLoading = true;
         if ($scope.countryList.length === 0){
-            $scope.getCountriesList();
+            getCountriesList();
         }
     };
 	
     //Get list of countries
-    $scope.getCountriesList = function(){
+    var getCountriesList = function(){
         spatialConfigRestService.getCountriesList().then(function(response){
         	$scope.countryList = response;
-    		$scope.setFsStyleArray($scope.componentStyle);
+    		setFsStyleArray($scope.componentStyle);
+			validateCountryStyles();
         });
     };
     
     //Set proper array for styles based on countryCodes
-    $scope.setFsStyleArray = function(type){
+    var setFsStyleArray = function(type){
     	if(type === 'segments' && (!$scope.configModel.stylesSettings || !$scope.configModel.stylesSettings[type] || !$scope.configModel.stylesSettings[type].style) && $scope.configModel.stylesSettings[type].attribute === 'countryCode'){
     		type = 'position';
     	}else{
@@ -53,40 +55,48 @@ angular.module('unionvmsWeb').controller('CountrystylesCtrl',function($scope, sp
     
     //validate the color field of the country
     $scope.validateColor = function(index){
-    	var indexOnModel;
-    	if($scope.componentStyle === 'positions'){
-    		indexOnModel = $scope.loadedStyles.indexOf($scope.displayedRecords[index]);
-    	}else if($scope.componentStyle === 'segments'){
-    		indexOnModel = $scope.loadedStyles.indexOf($scope.displayedRecords[index]);
-    	}else{
-    		return;
-    	}
-    	if($scope.displayedRecords[index].color && ($scope.displayedRecords[index].color.length <= 3 || $scope.displayedRecords[index].color.length > 7 || $scope.displayedRecords[index].color.indexOf('#') === -1)){
-			$scope.countryListForm['countryForm' + index].countryColor.$setValidity('posColor' + indexOnModel, false);
-		}else{
-			$scope.countryListForm['countryForm' + index].countryColor.$setValidity('posColor' + indexOnModel, true);
+		if(!angular.isDefined($scope.prefServ.stylesErrors[$scope.settingsLevel][$scope.componentStyle][index])){
+			$scope.prefServ.stylesErrors[$scope.settingsLevel][$scope.componentStyle][index] = {};
 		}
-		if($scope.displayedRecords[index].color !== ''){
-			$scope.countryListForm['countryForm' + index].countryColor.$setValidity('required' + indexOnModel, true);
+
+    	if($scope.loadedStyles[index].color && ($scope.loadedStyles[index].color.length <= 3 || $scope.loadedStyles[index].color.length > 7 || $scope.loadedStyles[index].color.indexOf('#') === -1)){
+			addCountryError('posColor',index);
 		}else{
-			$scope.countryListForm['countryForm' + index].countryColor.$setValidity('required' + indexOnModel, false);
+			rmCountryError('posColor',index);
 		}
-		if($scope.countryListForm.$valid || $scope.getNrErrors() === 1 && $scope.countryListForm.$error.hasError){
-			$scope.countryListForm.$setValidity('hasError', true);
+		if($scope.loadedStyles[index].color !== ''){
+			rmCountryError('required',index);
 		}else{
+			addCountryError('required',index);
+		}
+
+		if(_.isEmpty($scope.prefServ.stylesErrors[$scope.settingsLevel][$scope.componentStyle][index])){
+			delete $scope.prefServ.stylesErrors[$scope.settingsLevel][$scope.componentStyle][index];
+		}
+
+		validateCountryStyles();
+	};
+
+	var addCountryError = function(errType,index){
+		$scope.prefServ.stylesErrors[$scope.settingsLevel][$scope.componentStyle][index][errType] = true;
+	};
+
+	var rmCountryError = function(errType,index){
+		if(angular.isDefined($scope.prefServ.stylesErrors[$scope.settingsLevel][$scope.componentStyle][index]) && angular.isDefined($scope.prefServ.stylesErrors[$scope.settingsLevel][$scope.componentStyle][index][errType])){
+			delete $scope.prefServ.stylesErrors[$scope.settingsLevel][$scope.componentStyle][index][errType];
+		}
+	};
+
+	var validateCountryStyles = function(){
+		var errors = _.filter($scope.prefServ.stylesErrors[$scope.settingsLevel][$scope.componentStyle], function(item){
+			return _.keys(item).length > 0;
+		});
+		if(errors && errors.length>0){
 			$scope.countryListForm.$setValidity('hasError', false);
+		}else{
+			$scope.countryListForm.$setValidity('hasError', true);
 		}
 	};
 	
-	$scope.getNrErrors = function() {
-		var nrErrors = 0;
-		if (angular.isDefined($scope.countryListForm)){
-			angular.forEach(_.allKeys($scope.countryListForm.$error), function(item){
-				nrErrors += $scope.countryListForm.$error[item].length;
-			});
-		}
-		return nrErrors;
-	};
-	
-	$scope.prepareRecordsForCountryCode();
+	prepareRecordsForCountryCode();
 });

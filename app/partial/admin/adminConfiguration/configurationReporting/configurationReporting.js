@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb').controller('ConfigurationreportingCtrl',function($scope, locale, SpatialConfig, spatialConfigRestService, alertService, $anchorScroll, loadingStatus){
-	$scope.isAdminConfig = true;
+	$scope.settingsLevel = 'admin';
 	$scope.save = function(){
     	if(_.keys($scope.configurationReportForm.$error).length === 0){
     		loadingStatus.isLoading('SavePreferences',true);
