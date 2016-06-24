@@ -14,7 +14,11 @@ angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapServi
                 var src = layer.getSource();
                 var params  = src.getParams();
                 
-                var url = src.getUrls()[0] + '?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=25&HEIGHT=25&LAYER=' + params.LAYERS;
+                var url = src.getUrls()[0];
+                if (url.substr(url.length - 1) !== '?'){
+                    url += '?';
+                }
+                url += 'REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=25&HEIGHT=25&LAYER=' + params.LAYERS;
                 if (params.STYLES !== '' && angular.isDefined(params.STYLES)){
                     if (params.STYLES.indexOf('label') !== -1 && params.STYLES.indexOf('geom') === -1){
                         url = undefined;

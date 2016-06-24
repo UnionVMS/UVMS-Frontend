@@ -412,6 +412,14 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
         
         addBaseLayers();
         
+        var layers = map.getLayers();
+        if (layers.getLength() > 1){
+            var switcher = new ol.control.LayerSwitcher({
+                controlClass: 'left-side-up'
+            });
+            map.addControl(switcher);
+        }
+        
         map.on('singleclick', function(evt){
             if ($scope.currentSelection.selectionType === 'map' && angular.isDefined($scope.currentSelection.selectedAreaType) && $scope.currentSelection.areaSelector === 'custom'){
                 loadingStatus.isLoading('SearchReferenceData',true);
@@ -433,13 +441,17 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
         if (!genericMapService.mapBasicConfigs.success){
             $scope.addOSM();
         } else {
-            angular.forEach(genericMapService.mapBasicConfigs.layers.baseLayers, function(layerConf) {
+            angular.forEach(genericMapService.mapBasicConfigs.layers.baseLayers.reverse(), function(layerConf) {
                 switch (layerConf.type) {
                     case 'OSM':
                         $scope.addOSM(layerConf);
                         break;
                     case 'WMS':
                         $scope.addWMS(layerConf, true);
+                        break;
+                    case 'BING':
+                        layerConf.title = locale.getString('spatial.layer_tree_' + layerConf.title);
+                        $scope.addBing(layerConf, true);
                         break;
                 }
             });
@@ -459,6 +471,23 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
             config = {};
         }
         var layer = genericMapService.defineOsm(config);
+        layer.set('switchertype', 'base'); //Necessary for the layerswitcher control
+        $scope.map.addLayer(layer);
+    };
+    
+    /**
+     * Adds BING layers to the map
+     * 
+     * @memberof referenceDataSettings
+     * @public
+     * @alias addBing
+     * @param {Object} [config={}] - The layer configuration object
+     */
+    $scope.addBing = function(config){
+        if (!angular.isDefined(config)){
+            config = {};
+        }
+        var layer = genericMapService.defineBing(config);
         layer.set('switchertype', 'base'); //Necessary for the layerswitcher control
         $scope.map.addLayer(layer);
     };

@@ -28,6 +28,11 @@
     left: 7px;
 }
 
+.layer-switcher.left-side-up {
+    top: 65px;
+    left: 7px;
+}
+
 .layer-switcher.shown {
     bottom: 3em;
 }
