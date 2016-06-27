@@ -216,7 +216,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
         };
 
         //Create and download the file
-        if ($scope.getSelectedItems().length > 0) {
+        if ($scope.getSelectedItems().length > 0 && !$scope.isAllChecked()) {
             csvService.downloadCSVFile(getData(), header, filename);
         } else {
             $scope.fetchAllItems(function(exportItems) {

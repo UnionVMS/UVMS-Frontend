@@ -189,7 +189,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
 
     //Export data as CSV file
     $scope.exportItemsAsCSVFile = function(onlySelectedItems){
-        if (onlySelectedItems || $scope.selectedItems.length > 0) {
+        if ((onlySelectedItems || $scope.selectedItems.length > 0) && !$scope.isAllChecked()) {
             alarmCsvService.exportAlarms($scope.selectedItems);
         } else {
             $scope.fetchAllItems(function(exportItems) {
@@ -236,17 +236,24 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
                 $scope.exportItemsAsCSVFile(true);
             }
             else if(selectedItem.code === 'REPROCESS_REPORTS'){
-                var alarmGuids = $scope.selectedItems.reduce(function(guids, alarm){
+                var processItems = function(items) {
+                    var alarmGuids = items.reduce(function(guids, alarm){
                         guids.push(alarm.guid);
                         return guids;
                     }, []);
-                if(alarmGuids.length > 0){
-                    alertService.showInfoMessage(locale.getString('alarms.holding_table_reprocess_reports_waiting_for_response_message'));
-                    alarmRestService.reprocessAlarms(alarmGuids).then(function(){
-                        alertService.showSuccessMessageWithTimeout(locale.getString('alarms.holding_table_reprocess_reports_success_message'));
-                    }, function(err){
-                        alertService.showErrorMessage(locale.getString('alarms.holding_table_reprocess_reports_error_message'));
-                    });
+                    if(alarmGuids.length > 0){
+                        alertService.showInfoMessage(locale.getString('alarms.holding_table_reprocess_reports_waiting_for_response_message'));
+                        alarmRestService.reprocessAlarms(alarmGuids).then(function(){
+                            alertService.showSuccessMessageWithTimeout(locale.getString('alarms.holding_table_reprocess_reports_success_message'));
+                        }, function(err){
+                            alertService.showErrorMessage(locale.getString('alarms.holding_table_reprocess_reports_error_message'));
+                        });
+                    }
+                }
+                if ($scope.isAllChecked()) {
+                    $scope.fetchAllItems(processItems);
+                } else {
+                    processItems($scope.selectedItems);
                 }
             }
         }else{
