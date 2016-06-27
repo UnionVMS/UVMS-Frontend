@@ -77,7 +77,7 @@
 							<tfoot class="stFooterPagination" ng-if="!vesselSearchLoading && displayedUserAreasSearch.length">
 								<tr>
 									<td colspan="7" class="text-right">
-										<div st-pagination st-items-by-page="vesselsByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
+										<div st-pagination st-items-by-page="vesselsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
 									</td>
 								</tr>
 							</tfoot>
@@ -129,7 +129,7 @@
 								<tfoot class="stFooterPagination" ng-if="displayedRecordsSelection.length">
 									<tr>
 										<td colspan="4" class="text-right">
-											<div st-pagination st-items-by-page="vesselsSelectionByPage" st-displayed-pages="7" st-template="partial/spatial/templates/reportsPagination.html"></div>
+											<div st-pagination st-items-by-page="vesselsSelectionByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
 										</td>
 									</tr>
 								</tfoot>
