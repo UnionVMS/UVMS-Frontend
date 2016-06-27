@@ -12,7 +12,7 @@
     <karma.phase>integration-test</karma.phase>
   </properties>
   <profiles>
-  
+
     <profile>
       <id>proxy</id>
       <activation>
@@ -49,13 +49,13 @@
       </properties>
     </profile>
     <profile>
-  
+
       <id>wildfly</id>
       <activation>
         <activeByDefault>false</activeByDefault>
       </activation>
       <properties>
-        <!-- these properties can get ovewritten by setting them in your 
+        <!-- these properties can get ovewritten by setting them in your
           maven user settings -->
         <wf.host>localhost</wf.host>
         <wf.port>8080</wf.port>
@@ -206,7 +206,7 @@
             </goals>
             <phase>generate-resources</phase>
             <configuration>
-              <arguments>build</arguments>
+              <arguments>build build-docs</arguments>
               <outputdir>${basedir}/dist</outputdir>
             </configuration>
           </execution>
@@ -236,10 +236,10 @@
 					  <includes>
                 <include>**/config.js*</include>
 					  </includes>
-					</resource>				
+					</resource>
 					<resource>
               <directory>${basedir}/WebContent</directory>
-					</resource>				
+					</resource>
 				</webResources>
 			</configuration>
 		</plugin>
