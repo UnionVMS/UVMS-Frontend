@@ -1,10 +1,27 @@
-angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapService, unitConversionService, $localStorage) {
+angular.module('unionvmsWeb').directive('imageOnLoad', function(){
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs){
+            element.bind('error', function(){
+                scope.$emit('legendError', scope.$parent.$parent.record);
+            });
+        },
+        controller: function($scope){
+            var record = $scope.$parent.$parent.record; 
+            $scope.$parent.$on('legendError', function(evt, record){
+               record.visibility = false;
+            });
+        }
+    };
+})
+.directive('legendPanel', function(locale, mapService, unitConversionService, $localStorage, $compile) {
 	return {
 		restrict: 'EA',
 		replace: true,
 		scope: false,
 		templateUrl: 'directive/spatial/legendPanel/legendPanel.html',
 		controller: function(){
+		    
 		    //For WMS layers
 		    this.buildRecWMS = function(layer){
 		        var isInternal = layer.get('isInternal'); 
@@ -33,8 +50,10 @@ angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapServi
                     
                     if (isInternal){
                         this.getLegendWithUsm(url, record);
+                        record.isInternal = true;
                     } else {
                         record.src = url;
+                        record.isInternal = false;
                     }
                 }
                 
@@ -261,11 +280,16 @@ angular.module('unionvmsWeb').directive('legendPanel', function(locale, mapServi
 		    };
 		},
 		link: function(scope, element, attrs, ctrl) {
-		    scope.legendRecords = ctrl.init();
-		    
-		    scope.$on('reloadLegend', function(){
+		    if(!scope.initialized){
+		        scope.initialized = true;
 		        scope.legendRecords = ctrl.init();
-		    });
+	            
+	            scope.$on('reloadLegend', function(){
+	                scope.legendRecords = ctrl.init();
+	            });
+		        $compile(element)(scope);
+            }
+		    
 		}
 	};
 });

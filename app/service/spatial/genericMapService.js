@@ -337,11 +337,16 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             });
         }
         
+        var serverType;
+        if (angular.isDefined(def.serverType)){
+            serverType = def.serverType;
+        }
+        
         var config = {
             title: def.title,
             type: def.type,
             url: def.url,
-            serverType: 'geoserver',
+            serverType: serverType,
             params: {
                 time_: (new Date()).getTime(),
                 'LAYERS': def.layerGeoName,
