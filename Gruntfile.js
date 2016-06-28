@@ -52,7 +52,8 @@ module.exports = function (grunt) {
   grunt.initConfig({
     connect: {
       options: {
-        port: 9001
+        port: 9001,
+        keepalive: true
       },
       rules: [
           // Internal rewrite
@@ -439,7 +440,7 @@ module.exports = function (grunt) {
   grunt.registerTask('test',['dom_munger:read', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
-  grunt.registerTask('serve', ['dom_munger:read','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development', 'watch']);
+  grunt.registerTask('serve', ['dom_munger:read','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development']);
   grunt.registerTask('serve-copy', ['copy:serve', 'serve']);
   grunt.registerTask('build-docs', ['jsdoc']);
 

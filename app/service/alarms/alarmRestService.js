@@ -34,6 +34,11 @@ angular.module('unionvmsWeb')
                     update: { method: 'PUT' }
                 });
             },
+            ticketStatusQuery : function() {
+                return $resource('/rules/rest/tickets/status/:userName/:status', {}, {
+                    update: { method: 'POST' }
+                });
+            },
             reprocessAlarms : function(){
                 return $resource('/rules/rest/alarms/reprocess', {}, {
                     reprocess: {method: 'POST'}
@@ -169,6 +174,31 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
+    var updateTicketStatusQuery = function(tickets, status){
+        var deferred = $q.defer();
+        alarmRestFactory.ticketStatusQuery().update({userName: userService.getUserName(), status: status}, tickets, function(response) {
+            if(response.code !== 200){
+                deferred.reject("Invalid response status");
+                return;
+            }
+            var tickets = [],
+                searchResultListPage;
+
+            if(angular.isArray(response.data)) {
+                for (var i = 0; i < response.data.length; i++) {
+                    tickets.push(Ticket.fromDTO(response.data[i]));
+                }
+            }
+
+            deferred.resolve(tickets);
+        }, function(error) {
+            $log.error("Error updating ticket status");
+            $log.error(error);
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    };
+
     var getAlarmReport = function(guid) {
         var deferred = $q.defer();
         alarmRestFactory.getAlarm().get({guid:guid}, function(response) {
@@ -270,6 +300,7 @@ angular.module('unionvmsWeb')
         getAlarmsList: getAlarmsList,
         getTicketsListForCurrentUser: getTicketsListForCurrentUser,
         updateTicketStatus: updateTicketStatus,
+        updateTicketStatusQuery: updateTicketStatusQuery,
         reprocessAlarms: reprocessAlarms,
         getAlarmReport: getAlarmReport,
         getTicket: getTicket,

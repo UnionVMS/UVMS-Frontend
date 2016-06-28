@@ -122,7 +122,7 @@
     "rules_definition_then_action_notification_all_users" : "Create notification for all users",
     "rules_definition_then_action_notification" : "Create notification",
 
-    
+
     "rules_rule_as_text_action_SEND_TO_FLUX" : "SEND TO FLUX",
     "rules_rule_as_text_action_SEND_TO_NAF" : "SEND TO NAF",
     "rules_rule_as_text_action_EMAIL" : "SEND EMAIL TO",
@@ -170,6 +170,7 @@
     "position_report_loading_movement_error" : "Failed to load position.",
 
     "notifications_table_close_title" : "Close notification",
+    "notifications_table_close_tickets" : "Close notifications",
     "close_notification_reason_placeholder": "Reason for closing this notification.",
     "notifications_close_error_message" : "Failed to close the notification. Please try again.",
 

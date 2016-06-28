@@ -7,7 +7,8 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
     var modalInstance;
 
     $scope.editSelectionDropdownItems = [
-        {text:locale.getString('common.export_selection'), code : 'EXPORT'}
+        {text:locale.getString('common.export_selection'), code : 'EXPORT'},
+        {text:locale.getString('alarms.notifications_table_close_tickets'), code : 'CLOSE'}
     ];
 
     $scope.currentSearchResults = new SearchResults('openDate', true);
@@ -277,13 +278,13 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         if ((onlySelectedItems || $scope.selectedItems.length) && !$scope.isAllChecked()){
             csvService.downloadCSVFile(getData(), header, filename);
         } else {
-            $scope.fetchAllItems(function(exportItems) {
+            $scope.fetchAllItems(true, function(exportItems) {
                 csvService.downloadCSVFile(exportItems, header, filename);
             });
         }
     };
 
-    $scope.fetchAllItems = function(callback) {
+    $scope.fetchAllItems = function(reduce, callback) {
         var resultList = [];
         $scope.fetchingAll = true;
         var search = function(page) {
@@ -298,7 +299,12 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
                     if (searchResultListPage.currentPage < searchResultListPage.totalNumberOfPages) {
                         search(searchResultListPage.currentPage + 1);
                     } else {
-                        var exportItems = resultList.reduce(csvReduce,[]);
+                        var exportItems;
+                        if (reduce) {
+                            exportItems = resultList.reduce(csvReduce,[]);
+                        } else {
+                            exportItems = resultList;
+                        }
                         $scope.currentSearchResults.setLoading(false);
                         callback(exportItems);
                     }
@@ -318,9 +324,43 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         if($scope.selectedItems.length){
             if(selectedItem.code === 'EXPORT'){
                 $scope.exportItemsAsCSVFile(true);
+            } else if (selectedItem.code === 'CLOSE') {
+                $scope.batchCloseTickets();
             }
         }else{
             alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
+        }
+    };
+
+    $scope.batchCloseTickets = function() {
+        var close = function(tickets) {
+            $scope.currentSearchResults.setLoading(true);
+            var guids = [];
+            for (var i = 0; i < tickets.length; i++) {
+                var ticket = $scope.selectedItems[i];
+                guids.push({"key":"TICKET_GUID", "value":ticket.guid});
+            }
+            var query = {"ticketSearchCriteria":guids,"pagination":{"page":1,"listSize":20}};
+
+            alarmRestService.updateTicketStatusQuery(query, "CLOSED").then(function(updated) {
+                $scope.selectedItems;
+                for (var i = 0; i < $scope.selectedItems.length; i++) {
+                    var ticket = $scope.selectedItems[i];
+                    ticket.status = updated[0].status;
+                    ticket.updated = updated[0].updated;
+                    ticket.updatedBy = updated[0].updatedBy;
+                }
+                $scope.selectedItems = [];
+                $scope.currentSearchResults.setLoading(false);
+            }, function(error) {
+                console.log(error);
+                $scope.currentSearchResults.setLoading(false);
+            });
+        };
+        if ($scope.selectedItems.length && !$scope.isAllChecked()) {
+            close($scope.selectedItems);
+        } else {
+            $scope.fetchAllItems(false, close);
         }
     };
 
