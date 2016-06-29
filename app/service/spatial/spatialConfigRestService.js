@@ -52,42 +52,42 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
             });
         },
         getSysArea: function(){
-            return $resource('/spatial/rest/servicelayers/sysarea', {}, {
+            return $resource('/spatial/rest/servicelayer/layer/sysarea', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getUserArea: function(){
-            return $resource('/spatial/rest/servicelayers/userarea', {}, {
+            return $resource('/spatial/rest/servicelayer/layer/userarea', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getAreaGroup: function(){
-            return $resource('/spatial/rest/servicelayers/AREAGROUP', {}, {
+            return $resource('/spatial/rest/servicelayer/layer/AREAGROUP', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getBackground: function(){
-            return $resource('/spatial/rest/servicelayers/background', {}, {
+            return $resource('/spatial/rest/servicelayer/layer/background', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getAdditionalCartography: function(){
-            return $resource('/spatial/rest/servicelayers/additional', {}, {
+            return $resource('/spatial/rest/servicelayer/layer/additional', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getPorts: function(){
-            return $resource('/spatial/rest/servicelayers/port', {}, {
+            return $resource('/spatial/rest/servicelayer/layer/port', {}, {
                 'get': {
                     method: 'GET'
                 }

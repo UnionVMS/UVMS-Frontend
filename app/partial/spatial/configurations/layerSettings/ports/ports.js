@@ -27,6 +27,8 @@ angular.module('unionvmsWeb').controller('PortsCtrl',function($scope,spatialConf
 		    		item.serviceLayerId = "" + item.serviceLayerId;
 		    	});
 			 $scope.isLoadingPorts = false;
+		},function(error){
+			$scope.isLoadingPorts = false;
 		});
     };
     loadPorts();

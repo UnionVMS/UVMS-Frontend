@@ -139,11 +139,11 @@
 	"reports_form_report_components": "Report components:",
 	"reports_form_map_component_checkbox": "Include map",
 	"reports_form_vms_component_checkbox": "VMS table",
-	"reports_form_vessel_fieldset_label": "Assets",
+	"reports_form_vessel_fieldset_label": "Select specific assets",
 	"reports_form_current_selection": "Current assets selection",
 	"reports_form_simple_search": "Simple search",
 	"reports_form_advanced_search": "Advanced search",
-	"reports_form_vms_fieldset_label": "VMS",
+	"reports_form_vms_fieldset_label": "Select specific VMS data",
 	"reports_form_clear_btn": "Clear",
 	"reports_form_save_btn": "Save report",
 	"reports_form_save_as_btn": "Save report as...",
@@ -151,7 +151,6 @@
 	"reports_form_vessel_selection_table_header_type": "Type",
 	"reports_form_vessel_selection_table_delete_btn_title": "Delete",
 	"reports_form_vessel_selection_table_delete_all_btn": "Delete entire selection",
-	"reports_form_vessel_selection_table_details_btn": "Details",
 	"reports_form_vessels_search_by_vessel": "Asset",
 	"reports_form_vessels_search_by_group": "Assets group",
 	"reports_form_vessels_search_text": "Search text",
@@ -440,7 +439,10 @@
 	"clear_all_btn": "Clear all",
 	"add_all_btn": "Add all",
 	
-	
 	"saving_report_message": "Saving report",
-	"reseting_report_message": "Reseting report"
+	"reseting_report_message": "Reseting report",
+
+	"assets_selection": "Assets Selection",
+	"assets": "Assets",
+	"asset_groups": "Asset Groups"
 }

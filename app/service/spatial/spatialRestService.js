@@ -1,22 +1,22 @@
 angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$http) {
     return {
         getAreaLayers: function(){
-            return $resource('/spatial/rest/arealayers', {}, {
+            return $resource('/spatial/rest/area/layers', {}, {
                 'get': {method: 'GET'}
             });
         },
         getAreaLocationLayers: function(){
-            return $resource('/spatial/rest/arealocationlayers', {}, {
+            return $resource('/spatial/rest/area/locationlayers', {}, {
                 'get': {method: 'GET'}
             });
         },
         getUserAreaLayer: function(){
-            return $resource('/spatial/rest/userarealayers', {}, {
+            return $resource('/spatial/rest/userarea/layers', {}, {
                 'get': {method: 'GET'}
             });
         },
         getAreaDetails: function(){
-            return $resource('/spatial/rest/areadetails', {}, {
+            return $resource('/spatial/rest/area/details', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
@@ -26,7 +26,7 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
             });
         },
         getAreasByFilter: function(){
-            return $resource('/spatial/rest/areasbyfilter', {}, {
+            return $resource('/spatial/rest/area/byfilter', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
@@ -36,7 +36,7 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
             });
         },
         getAreasByCode: function(){
-            return $resource('/spatial/rest/areabycode', {}, {
+            return $resource('/spatial/rest/area/bycode', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
@@ -46,7 +46,7 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
             });
         },
         getAreaProperties: function(){
-            return $resource('/spatial/rest/areaproperties', {}, {
+            return $resource('/spatial/rest/area/properties', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
@@ -94,7 +94,7 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
             });
         },
         getUserDefinedAreas: function(){
-          return $resource('/spatial/rest/userareaslist', {}, {
+          return $resource('/spatial/rest/userarea/list', {}, {
                 'get': {
                     method: 'GET'
                 }

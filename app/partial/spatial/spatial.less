@@ -160,8 +160,12 @@ div.td:extend(td all) {}
 		display: block;
 		div.tr:extend(.table > tbody > tr all) {}
 		> .tr {
+			&:not(:first-child){
+				border-top: 1px solid #dddddd;
+			}
 			div.td:extend(.table > tbody > tr > td all) {
 				display: table-cell;
+				border-top: 0;
 			}
 			div.td:last-child {
 				border-right-width: 0;
@@ -294,6 +298,12 @@ div.td:extend(td all) {}
 	
 	table,
 	.table {
+		.tablerow-has-btn {
+			th,
+			td {
+				line-height: 30px;
+			}
+		}
 		td,
 		.td {
 			vertical-align: middle;
@@ -339,11 +349,13 @@ div.td:extend(td all) {}
 
 	::-webkit-scrollbar {
         width: 8px;
+		height: 8px;
     }
 
     ::-webkit-scrollbar-track {
         background-color:#F1F1F1;
         width: 4px;
+		height: 4px;
     }
 
     ::-webkit-scrollbar-thumb {

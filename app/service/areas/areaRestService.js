@@ -1,14 +1,14 @@
 angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
     return {
         getUserAreaTypes: function(){
-            return $resource('/spatial/rest/userareatypes', {}, {
+            return $resource('/spatial/rest/userarea/types', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getUserAreaAsGeoJSON: function(){
-            return $resource('/spatial/rest/userareadetails', {}, {
+            return $resource('/spatial/rest/userarea/details', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
@@ -18,7 +18,7 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
             });
         },
         getUserAreaAsJSON: function(){
-            return $resource('/spatial/rest/userareadetails', {}, {
+            return $resource('/spatial/rest/userarea/details', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
@@ -72,7 +72,7 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
             });
         },
         getAreasByType: function(){
-            return $resource('/spatial/rest/userareaslist/:type', {}, {
+            return $resource('/spatial/rest/userarea/list/:type', {}, {
                 'get': {
                     method: 'GET'
                 }

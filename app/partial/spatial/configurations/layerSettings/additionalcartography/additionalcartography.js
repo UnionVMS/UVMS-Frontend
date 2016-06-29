@@ -28,6 +28,8 @@ angular.module('unionvmsWeb').controller('AdditionalcartographyCtrl',function($s
 	    		item.serviceLayerId = "" + item.serviceLayerId;
 	    	});
 			$scope.isLoadingAdditionals = false;
+		},function(error){
+			$scope.isLoadingAdditionals = false;
 		});
     };
     

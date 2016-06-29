@@ -28,7 +28,7 @@ angular.module('unionvmsWeb')
                 return $resource('/rules/rest/config');
             },
             getAreaTypes: function() {
-                return $resource('/spatial/rest/areatypes');
+                return $resource('/spatial/rest/area/types');
             }
         };
     })

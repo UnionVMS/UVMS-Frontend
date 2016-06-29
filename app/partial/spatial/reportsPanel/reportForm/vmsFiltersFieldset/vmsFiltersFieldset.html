@@ -2,8 +2,8 @@
 	<div class="row">
 		<fieldset class="fieldsetStyle col-md-12">
 			<legend class="fieldsetLegendStyle">
-				<a data-toggle="collapse">{{'spatial.reports_form_vms_fieldset_label' | i18n }}</a>
 				<input class="checkbox-margin" type="checkbox" ng-model="report.hasVmsFilter" ng-checked="report.hasVmsFilter" ng-change="onActivateVmsFilter('all',report.hasVmsFilter)">
+				<a data-toggle="collapse" ng-click="report.hasVmsFilter = !report.hasVmsFilter;onActivateVmsFilter('all',report.hasVmsFilter)">{{'spatial.reports_form_vms_fieldset_label' | i18n }}</a>
 			</legend>
 			<div ng-show="report.hasVmsFilter">
 				<!-- <div class="row">

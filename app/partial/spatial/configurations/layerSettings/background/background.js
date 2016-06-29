@@ -28,6 +28,8 @@ angular.module('unionvmsWeb').controller('BackgroundCtrl',function($scope,spatia
 	    		item.serviceLayerId = "" + item.serviceLayerId;
 	    	});
 			$scope.isLoadingBackgrounds = false;
+		},function(error){
+			$scope.isLoadingBackgrounds = false;
 		});
     };
     

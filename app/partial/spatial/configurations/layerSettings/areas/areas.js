@@ -55,6 +55,8 @@ angular.module('unionvmsWeb').controller('AreaslayersCtrl',function($scope,spati
 	    		item.areaType = 'sysarea';
 	    	});
 			$scope.isLoadingSysAreas = false;
+		},function(error){
+			$scope.isLoadingSysAreas = false;
 		});
 		
 		if($scope.settingsLevel !== 'admin'){
@@ -74,7 +76,10 @@ angular.module('unionvmsWeb').controller('AreaslayersCtrl',function($scope,spati
 					$scope.areas.containers[1].lists[0].items = [];
 				}
 				$scope.isLoadingUserAreas = false;
+			},function(error){
+				$scope.isLoadingSysAreas = false;
 			});
+
 			spatialConfigRestService.getAreaGroup().then(function(response){
 				if(angular.isDefined(response[0]) && angular.isDefined(response[0].data) && response[0].data.length){
 					angular.copy(response[0].data,$scope.areas.containers[2].lists[0].items);
@@ -89,6 +94,8 @@ angular.module('unionvmsWeb').controller('AreaslayersCtrl',function($scope,spati
 					$scope.areas.containers[2].lists[0].items = [];
 				}
 				$scope.isLoadingAreaGroups = false;
+			},function(error){
+				$scope.isLoadingSysAreas = false;
 			});
 		}
 		$scope.selectedAreaType = {'name': 'sysarea'};
