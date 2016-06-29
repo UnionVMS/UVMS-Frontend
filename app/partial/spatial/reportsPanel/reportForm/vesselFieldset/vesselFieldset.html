@@ -18,21 +18,19 @@
 				<div class="row fieldesetGroupMargin" ng-show="isVesselMenuVisible('SIMPLE')">
 					<div class="col-md-8 search-section">
 						<div class="form-group col-md-3">
-			   				<combobox ng-model="shared.vesselSearchBy" items="vesselSearchItems"></combobox>
+							<combobox ng-model="shared.vesselSearchBy" items="vesselSearchItems"></combobox>
 						</div>
-						<div class="col-md-12 col-no-padding">
-							<div ng-hide="shared.vesselSearchBy === 'vgroup'">
-								<div class="form-group col-md-6">
-									<input type="text" ng-model="shared.searchVesselString" class="form-control searchText" placeholder="{{'spatial.reports_form_vessels_search_text' | i18n }}">
-								</div>
-								<div class="form-group col-md-6">
-									<button type="button" class="btn btn-primary btn-sm btn-action" style="min-width: 100px;" ng-click="searchVessels()">
-										<span>{{'spatial.reports_form_vessels_search_button' | i18n }}</span>
-									</button>
-									<button type="button" class="btn btn-default btn-sm btn-action" style="min-width: 100px;" ng-click="clearSearchProps()">
-										<span>{{'spatial.reset' | i18n }}</span>
-									</button>
-								</div>
+						<div ng-hide="shared.vesselSearchBy === 'vgroup'">
+							<div class="form-group col-md-3">
+								<input type="text" ng-model="shared.searchVesselString" class="form-control searchText" placeholder="{{'spatial.reports_form_vessels_search_text' | i18n }}">
+							</div>
+							<div class="form-group col-md-6">
+								<button type="button" class="btn btn-primary btn-sm btn-action" style="min-width: 100px;" ng-click="searchVessels()">
+									<span>{{'spatial.reports_form_vessels_search_button' | i18n }}</span>
+								</button>
+								<button type="button" class="btn btn-default btn-sm btn-action" style="min-width: 100px;" ng-click="clearSearchProps()">
+									<span>{{'spatial.reset' | i18n }}</span>
+								</button>
 							</div>
 						</div>
 						<div class="form-group col-md-12 search-table" st-table="displayedRecords" st-safe-src="shared.vessels">
