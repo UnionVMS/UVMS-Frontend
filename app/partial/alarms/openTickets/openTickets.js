@@ -338,7 +338,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
             $scope.currentSearchResults.setLoading(true);
             var guids = [];
             for (var i = 0; i < tickets.length; i++) {
-                var ticket = $scope.selectedItems[i];
+                var ticket = tickets[i];
                 guids.push({"key":"TICKET_GUID", "value":ticket.guid});
             }
             var query = {"ticketSearchCriteria":guids,"pagination":{"page":1,"listSize":20}};
