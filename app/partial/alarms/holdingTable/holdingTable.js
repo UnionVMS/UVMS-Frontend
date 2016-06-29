@@ -216,6 +216,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
                         search(searchResultListPage.currentPage + 1);
                     } else {
                         $scope.currentSearchResults.setLoading(false);
+                        searchService.getListRequest().listSize = 20;
                         callback(resultList);
                     }
                 }

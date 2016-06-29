@@ -306,6 +306,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
                             exportItems = resultList;
                         }
                         $scope.currentSearchResults.setLoading(false);
+                        searchService.getListRequest().listSize = 20;
                         callback(exportItems);
                     }
                 }

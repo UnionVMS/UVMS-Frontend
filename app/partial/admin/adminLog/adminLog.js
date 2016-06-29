@@ -247,6 +247,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
                     } else {
                         var exportItems = resultList.reduce(csvReduce,[]);
                         $scope.currentSearchResults.setLoading(false);
+                        searchService.getListRequest().listSize = 20;
                         callback(exportItems);
                     }
                 }
