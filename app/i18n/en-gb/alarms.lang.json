@@ -15,7 +15,7 @@
     "open_tickets" : "Notifications",
 
     "alarms_table_status" : "Status",
-    "alarms_table_date_openend" : "Date triggered",
+    "alarms_table_date_openend" : "Date triggered (UTC)",
     "alarms_table_object_affected" : "Object affected",
     "alarms_table_rule" : "Rule",
     "alarms_table_sender" : "Sender",
