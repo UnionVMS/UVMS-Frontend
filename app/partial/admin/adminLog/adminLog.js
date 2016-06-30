@@ -190,8 +190,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
             item.username,
             item.operation,
             item.objectType,
-            $filter('confDateFormat')(item.date),
-            item.affectedObject
+            $filter('confDateFormat')(item.date)
         ];
         csvObject.push(csvRow);
         return csvObject;
@@ -206,8 +205,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
             locale.getString('audit.column_username'),
             locale.getString('audit.column_operation'),
             locale.getString('audit.column_object_type'),
-            locale.getString('audit.column_date'),
-            locale.getString('audit.column_object_affected'),
+            locale.getString('audit.column_date')
         ];
 
         //Set the data columns
