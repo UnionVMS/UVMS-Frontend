@@ -463,6 +463,7 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         self.mapBasicConfigs = {};
         spatialRestService.getBasicMapConfigurations().then(function(response){
             self.mapBasicConfigs = response.map;
+            self.mapBasicConfigs.layers.baseLayers.reverse();
             self.mapBasicConfigs.success = true;
         }, function(error){
             self.mapBasicConfigs = {success: false};

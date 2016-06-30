@@ -72,7 +72,7 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	    if (!genericMapService.mapBasicConfigs.success){
 	        areaMs.addOSM();
 	    } else {
-	        angular.forEach(genericMapService.mapBasicConfigs.layers.baseLayers.reverse(), function(layerConf) {
+	        angular.forEach(genericMapService.mapBasicConfigs.layers.baseLayers, function(layerConf) {
 	            switch (layerConf.type) {
 	                case 'OSM':
 	                    areaMs.addOSM(layerConf);

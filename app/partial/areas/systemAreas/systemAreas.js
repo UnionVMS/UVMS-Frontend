@@ -33,7 +33,6 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,gener
 		}
 	};
 	
-	
 	//Uploading new file
     $scope.save = function(){
         $scope.isSaving = true;
@@ -307,6 +306,12 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,gener
         $scope.SysareasForm.$setPristine();
     };
     
+    var resetUploadConfig = function(){
+        $scope.selectedAttrs = [];
+        $scope.dataConfig = {selectedProj: "", name: "", code: ""};
+        $scope.SysareasForm.dataConfigForm.$setPristine();
+    };
+    
     $scope.mergeParamsWms = function(index, displayedAreasList, areaList){
     	index = areaList.indexOf(displayedAreasList[index]);
         var area = areaList[index];
@@ -339,6 +344,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,gener
             };
             areaRestService.getAttributesToMap(objTest).then(
                 function (data) {
+                    resetUploadConfig();
                     loadAttrsOnCombo(data.domain,'dbAttrs');
                     loadAttrsOnCombo(data.file,'shpAttrs');
                     
@@ -347,6 +353,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,gener
                     $scope.wizardStep += 1;
                     loadingStatus.isLoading('GetAttrToMap',false);
                 }, function(error) {
+                    resetUploadConfig();
                     loadingStatus.isLoading('GetAttrToMap',false);
                 }
             );
@@ -360,6 +367,7 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,gener
                     $scope.alert.setSuccess();
                     $scope.alert.alertMessage = locale.getString('areas.saving_system_area_success');
                     loadingStatus.isLoading('SavingSystemArea',false);
+                    genericMapService.refreshWMSLayer($scope.sysAreaType, areaMapService.map);
                 }, function(error) {
                     $scope.alert.setError();
                     $scope.alert.alertMessage = locale.getString('areas.saving_system_area_error');

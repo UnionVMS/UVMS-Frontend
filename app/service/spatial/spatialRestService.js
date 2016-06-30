@@ -35,6 +35,16 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
                 }
             });
         },
+        getUserAreasByFilter: function(){
+            return $resource('/spatial/rest/userarea/byfilter', {}, {
+                'get': {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            });
+        },
         getAreasByCode: function(){
             return $resource('/spatial/rest/area/bycode', {}, {
                 'get': {
@@ -202,6 +212,16 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
 	        });
 	        return deferred.promise;
 	    },
+	    getUserAreasByFilter: function(data){
+            var deferred = $q.defer();
+            spatialRestFactory.getUserAreasByFilter().get(angular.toJson(data), function(response){
+                deferred.resolve(response);
+            }, function(error){
+                console.log('Error getting areas by search filter');
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
 	    getAreasByCode: function(data){
             var deferred = $q.defer();
             spatialRestFactory.getAreasByCode().get(angular.toJson(data), function(response){

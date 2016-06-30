@@ -1,4 +1,4 @@
-<div class="areasSelesctionModal">
+<div class="areasSelectionModal">
     <div class="modal-header">
         <div class="pointer pull-right" ng-click="cancel()">
              <i class="fa fa-times closeicon"></i>
@@ -7,224 +7,143 @@
     </div>
     <!-- INITIAL LOADING -->
    	<loading-panel type="AreaSelectionModal"></loading-panel>
+   	<!-- BODY -->
     <div class="modal-body">
-        <!-- ERROR MESSAGE -->
-        <div class="row">
-        	<div class="col-md-12" ng-show="hasError">
-        		<div class="alert alert-danger" role="alert">
-    				<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
-    				<span class="alert-message">
-    					<span>{{errorMessage}}</span>
-    				</span>
-    		    </div>
-        	</div>
-        </div>
-        <!-- TABS -->
         <div class="row">
         	<div class="col-md-12">
         		<ul class="nav nav-pills" role="tablist">
-    	    		<li ng-repeat="tab in areaTabs" ng-click="selectAreaTab(tab.tab)" class="areaTab" ng-class="{'active': selectedTab === '{{tab.tab}}'}"><a>{{tab.title}}</a></li>
+    	    		<li ng-repeat="tab in areaTabs" ng-click="selectTab(tab.tab)" class="areaTab" ng-class="{'active': selectedTab === '{{tab.tab}}'}"><a>{{tab.title}}</a></li>
     	    	</ul>
         	</div>
         </div>
-        <div class="row">
-        	<!-- SYSTEM WIDE AREAS -->
-        	<div class="col-md-6 section" ng-show="isAreaTabSelected('SYSTEM')">
-        		<div class="form-group col-md-12 noPadding">
-       				<combobox ng-model="sysAreaType" items="systemItems" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n}}" is-loading="isLoadingAreaLayers"></combobox>
-       			</div>
-       			<div class="form-group col-md-12 noPadding" ng-show="sysAreaType !== undefined">
-       				<label class="radio-inline radioselector">
-       					<input type="radio" name="sysSelect" value="map" ng-model="sysSelection">
-       					{{'spatial.area_selection_modal_select_on_map_radio' | i18n}}
-       				</label>
-       				<label class="radio-inline radioselector">
-       					<input type="radio" name="sysSelect" value="search" ng-model="sysSelection">
-       					{{'spatial.area_selection_modal_search_area' | i18n}}
-       				</label>
-       			</div>
-       			<div ng-show="sysSelection === 'search' || (sysSelection === 'map' && clickResults > 1)">
-    	   			<div class="form-group" ng-hide="sysSelection === 'map'">
-    	   				<div class="form-group col-md-12 searchInput noPadding">
-    		   				<input type="text" ng-model="searchSysString" class="form-control" placeholder="{{'spatial.reports_form_vessels_search_text' | i18n }}">
-							<button type="button" class="btn btn-primary btn-sm pull-right btn-search btn-action" style="min-width: 100px;" ng-click="searchSysAreas()">
-								<span>{{'spatial.reports_form_vessels_search_button' | i18n }}</span>
-    		   				</button>
-    		   			</div>
-    	   			</div>
-    	   			<!-- Search results table -->
-    	   			<div class="table-responsive-force form-group col-md-12 noPadding" st-table="displayedRecordsArea" st-safe-src="sysAreaSearch">
-    	   				<table class="table table-striped table-condensed">
-    	   					<thead>
-    	   						<tr class="stColumnHeaders">
-    	   							<th st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_name_header' | i18n}}</th>
-    	   							<th st-sort="code" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_code_header' | i18n}}</th>
-    	   							<th style="min-width: 80px;"></th>
-    	   						</tr>
-    	   						<tr ng-if="searchLoading">
-    					        	<th colspan="3" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
-    					        </tr>
-								<tr ng-if="!displayedRecordsArea.length && !searchLoading">
-    								<th colspan="3"><table-alert type="'info'" msg="'spatial.table_no_data'" visible="!searchLoading && !displayedRecordsArea.length"></table-alert></th>
-    							</tr>
-    	   					</thead>
-    	   					<tbody>
-    	   						<tr ng-repeat="sysArea in displayedRecordsArea">
-    	   							<td>{{sysArea.name}}</td>
-    	   							<td>{{sysArea.code}}</td>
-    	   							<td style="min-width: 80px;">
-    	   								<button type="button" class="btn btn-default btn-xs pull-right" title="{{'spatial.area_selection_modal_add_area_btn' | i18n }}" ng-click="addAreaToSelection($index, displayedRecordsArea, sysAreaSearch)"> <span class="fa fa-plus"></span></button>
-    	   								<button type="button" class="btn btn-default btn-xs pull-right btnMargin" title="{{'spatial.area_selection_modal_see_on_map_btn' | i18n }}" ng-click="mergeParamsWms($index, displayedRecordsArea, sysAreaSearch)"> <span class="fa fa-globe"></span></button>
-    	   							</td>
-    	   						</tr>
-    	   					</tbody>
-    	   					<tfoot class="stFooterPagination" ng-if="displayedRecordsArea.length && !searchLoading">
-    							<tr>
-    								<td colspan="3" class="text-right">
-    									<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
-    								</td>
-    							</tr>
-    						</tfoot>
-    	   				</table>
-    	   			</div>
-    	   		</div>
-        	</div>
-        	<!-- USER DEFINED AREAS -->
-        	<div class="col-md-6 section" ng-show="isAreaTabSelected('USER')" >
-        		<div class="form-group col-md-12 noPadding">
-       				<label class="radio-inline radioselector">
-       					<input type="radio" name="userSelect" value="map" ng-model="userSelection">
-       					{{'spatial.area_selection_modal_select_on_map_radio' | i18n}}
-       				</label>
-       				<label class="radio-inline radioselector">
-       					<input type="radio" name="userSelect" value="search" ng-model="userSelection">
-       					{{'spatial.area_selection_modal_search_area' | i18n}}
-       				</label>
-       			</div>
-       			
-       			<!-- MULTIPLE AREAS BY CLICK TABLE -->
-                <div class="table-responsive-force form-group col-md-12 noPadding" ng-show="userSelection === 'map' && userAreasSearch.length > 0 && clickResults > 1" st-table="displayedUserAreasSearch" st-safe-src="userAreasSearch">
-                    <table class="table table-striped table-condensed">
-                        <thead>
-                            <tr class="stColumnHeaders">
-                                <th st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_name_header' | i18n}}</th>
-                                <th st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_desc_header' | i18n}}</th>
-                                <th style="min-width: 80px;"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="userArea in displayedUserAreasSearch">
-                                <td>{{userArea.name}}</td>
-                                <td>{{userArea.desc}}</td>
-                                <td style="min-width: 80px;">
-                                    <button type="button" class="btn btn-default btn-xs pull-right" title="{{'spatial.area_selection_modal_add_area_btn' | i18n }}" ng-click="addAreaToSelection($index, displayedUserAreasSearch, userAreasSearch)"> <span class="fa fa-plus"></span></button>
-                                    <button type="button" class="btn btn-default btn-xs pull-right btnMargin" title="{{'spatial.area_selection_modal_see_on_map_btn' | i18n }}" ng-click="mergeParamsWms($index, displayedUserAreasSearch, userAreasSearch)"> <span class="fa fa-globe"></span></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot class="stFooterPagination" ng-if="displayedUserAreasSearch.length">
-                            <tr>
-                                <td colspan="3" class="text-right">
-                                    <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-                
-                <!-- ALL USER AREAS -->
-                <div class="table-responsive-force form-group col-md-12 noPadding" ng-show="userSelection === 'search'" st-table="displayedUserAreas" st-safe-src="userAreasList">
-                    <!-- Search field-->
-                    <div class="form-group col-md-12 noPadding">
-                        <input st-search ng-model="userAreaSearchItem" placeholder="{{'spatial.reports_table_search_header' | i18n}}" class="input-sm form-control" type="search"/>
-                    </div>
-
-                    <!-- list of user areas-->
-                    <table class="table table-striped table-condensed">
-                        <thead>
-                            <tr class="stColumnHeaders">
-                                <th st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_name_header' | i18n}}</th>
-                                <th st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_desc_header' | i18n}}</th>
-                                <th style="min-width: 80px;"></th>
-                            </tr>
-							<tr ng-if="!displayedUserAreas.length && !searchLoading">
-                                <th colspan="3"><table-alert type="'info'" msg="'spatial.table_no_data'" visible="!searchLoading && !displayedUserAreas.length"></table-alert></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-							<tr ng-if="searchLoading">
-                                <td colspan="3" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></td>
-                            </tr>
-                            <tr ng-repeat="userArea in displayedUserAreas">
-                                <td>{{userArea.name}}</td>
-                                <td>{{userArea.desc}}</td>
-                                <td style="min-width: 80px;">
-                                    <button type="button" class="btn btn-default btn-xs pull-right" title="{{'spatial.area_selection_modal_add_area_btn' | i18n }}" ng-click="addAreaToSelection($index, displayedUserAreas, userAreasList)"> <span class="fa fa-plus"></span></button>
-                                    <button type="button" class="btn btn-default btn-xs pull-right btnMargin" title="{{'spatial.area_selection_modal_see_on_map_btn' | i18n }}" ng-click="mergeParamsWms($index, displayedUserAreas, userAreasList)"> <span class="fa fa-globe"></span></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot class="stFooterPagination" ng-if="!searchLoading && displayedUserAreas.length">
-                            <tr>
-                                <td colspan="3" class="text-right">
-                                    <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-
-        	</div>
-        	<!-- MAP SECTION -->
-        	<div class="col-md-6 section">
-        		<div id="areaDisplay" class="areaMap"></div>
-        		<div class="loadingMap" ng-show="mapLoading">
-        			<i class="fa fa-spinner fa-spin"></i>
-    	   		</div>
-        	</div>
-        </div>
         <div class="row" ng-show="showWarning">
-        	<div class="col-md-12">
-        		<div class="alert alert-warning" role="alert">
-    	    		<span class="fa fa-exclamation-triangle" aria-hidden="true"></span>
-    	       		<span >
+        	<div class="col-md-12 left-component">
+        		<div class="alert" role="alert" ng-class="{'alert-danger': hasError, 'alert-warning': !hasError}">
+    	    		<span class="fa fa-exclamation-triangle" aria-hidden="true" ng-show="hasError"></span>
+    	    		<span class="fa fa-exclamation-circle" aria-hidden="true" ng-hide="hasError"></span>
+    	       		<span>
     	           		<span>{{ warningMessage }}</span>
     	       		</span>
     	       	</div>
         	</div>
         </div>
-        <!-- CURRENT SELECTION -->
         <div class="row">
-        	<div class="table-responsive-force col-md-12" st-table="displayedRecordsSelection" st-safe-src="selectedAreas">
-        		<div><span class="currentSelectionSection">{{'spatial.area_selection_modal_current_selection' | i18n}}</span></div>
-        		<table class="table table-striped table-condensed">
-        			<thead>
-    					<tr class="stColumnHeaders">
-    						<th st-sort="areaType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" style="min-width: 100px;">{{'spatial.area_selection_modal_table_area_type_header' | i18n}}</th>
-    						<th st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_name_header' | i18n}}</th>
-    						<th st-sort="code" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_code_header' | i18n}}</th>
-    						<th></th>
-    					</tr>
-    				</thead>
-    				<tbody>
-    					<tr ng-repeat="area in displayedRecordsSelection">
-    						<td style="min-width: 100px;">{{area.areaType}}</td>
-    						<td>{{area.name}}</td>
-    						<td>{{area.code}}</td>
-    						<td>
-    							<button type="button" class="btn btn-danger btn-xs pull-right" title="{{'spatial.reports_form_vessel_selection_table_delete_btn_title' | i18n }}" ng-click="deleteArea($index)"> <span class="fa fa-trash"></span></button>
-    						</td>
-    					</tr>
-    				</tbody>
-    				<tfoot class="stFooterPagination" ng-if="displayedRecordsSelection.length">
-    					<tr>
-    						<td colspan="4" class="text-right">
-    							<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
-    						</td>
-    					</tr>
-    				</tfoot>
-        		</table>
-            </div>
+        	<div class="col-md-8 left-component">
+        		<!-- SYSTEM WIDE AREAS COMBOBOX-->
+        		<div ng-show="isTabSelected('SYSTEM')">
+	        		<div class="form-group col-md-12">
+	       				<combobox ng-model="sysAreaType" items="systemItems" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n}}" is-loading="isLoadingAreaLayers"></combobox>
+	       			</div>
+	       		</div>
+	       		<!-- SELECTION TYPE -->
+	       		<div class="form-group col-md-12" ng-show="(sysAreaType !== undefined && isTabSelected('SYSTEM')) || isTabSelected('USER') ">
+       				<label class="radio-inline radioselector">
+       					<input type="radio" value="map" ng-model="selectionType[selectedTab]">
+       					{{'spatial.area_selection_modal_select_on_map_radio' | i18n}}
+       				</label>
+       				<label class="radio-inline radioselector">
+       					<input type="radio" value="search" ng-model="selectionType[selectedTab]">
+       					{{'spatial.area_selection_modal_search_area' | i18n}}
+       				</label>
+       			</div>
+       			<!-- MAP SECTION -->
+	        	<div id="area-selection-map" class="col-md-12 area-map" destroy-map-scope ng-if="((sysAreaType !== undefined && isTabSelected('SYSTEM')) || isTabSelected('USER')) && selectionType[selectedTab] === 'map' && clickResults < 2" ng-init="setMap()"></div>
+	        	<!-- SEARCH BY PROPERTIES SECTION -->
+	        	<div class="col-md-12" ng-show="selectionType[selectedTab] === 'search' || clickResults > 1">
+	        		<!-- SEARCH INPUT, SEARCH BUTTON, RESET BUTTON -->
+	        		<div class="searchRow" ng-show="selectionType[selectedTab] === 'search'">
+	   	   				<div class="col-md-6 noPadding">
+	   		   				<input type="text" ng-model="searchString" class="form-control" placeholder="{{'spatial.reports_form_vessels_search_text' | i18n }}">
+	   		   			</div>
+	   		   			<div class="col-md-3 with-left-padding">
+	   		   				<button type="button" class="btn btn-primary btn-sm"  ng-click="searchByProps()">
+	  			   					<span>{{'spatial.reports_form_vessels_search_button' | i18n }}</span>
+	   		   				</button>
+	   		   			</div>
+	   		   			<div class="col-md-3 with-left-padding">
+	   		   				<button type="button" class="btn btn-default btn-sm" ng-click="clearSearchProps()">
+	   		   					<span>{{'spatial.reset' | i18n }}</span>
+	   		   				</button>
+	   		   			</div>
+	   		   		</div>
+	   		   		<!-- BACK TO MAP BUTTON -->
+	   		   		<div class="searchRow col-md-12 noPadding" ng-show="selectionType[selectedTab] === 'map' && clickResults > 1">
+						<button type="button" class="btn btn-primary btn-sm" style="min-width: 120px; width: 25%" ng-click="goBackToMap()">
+							<span class="fa fa-map" aria-hidden="true"></span>&nbsp;
+   		   					<span>{{'spatial.ref_data_go_back_to_map' | i18n}}</span>
+   		   				</button>
+					</div>
+   		   			<!-- TABLE -->
+   		   			<div st-table="displayedAreas" st-safe-src="searchedAreas">
+	   		   			<div class="col-md-12 table table-striped tableSmart table-condensed" >
+	   		   				<!-- THEAD -->
+	   		   				<div class="thead container-fluid row">
+	   		   					<div class="tr row" ng-class="{'tablerow-has-btn': displayedAreas.length > 0}">
+	   		   						<div class="th col-md-6" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_name_header' | i18n}}</div>
+	   		   						<div class="th" ng-if="isTabSelected('SYSTEM')" ng-class="{'col-md-4': isTabSelected('SYSTEM')}" st-sort="code" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_code_header' | i18n}}</div>
+	   		   						<div class="th" ng-if="isTabSelected('USER')" ng-class="{'col-md-4': isTabSelected('USER')}" st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_desc_header' | i18n}}</div>
+	   		   						<div class="th col-md-2">
+	   		   							<button type="button" class="btn btn-sm btn-success check-all-btn" ng-click="selectAllAreasFromTable()" ng-show="searchedAreas.length > 0">
+											<span class="fa fa-plus"></span>&nbsp;
+											{{'spatial.add_all_btn' | i18n}}
+										</button>
+	   		   						</div>
+	   		   					</div>
+	   		   				</div>
+	   		   				<!-- TBODY -->
+	   		   				<div class="tbody container-fluid row area-selection-table">
+	   		   					<div ng-repeat="rec in displayedAreas" class="tr row">
+	   		   						<div class="td col-md-6">
+	   		   							{{rec.name}}
+	   		   						</div>
+	   		   						<div class="td" ng-if="isTabSelected('SYSTEM')" ng-class="{'col-md-4': isTabSelected('SYSTEM')}">
+	   		   							{{rec.code}}
+	   		   						</div>
+	   		   						<div class="td" ng-if="isTabSelected('USER')" ng-class="{'col-md-4': isTabSelected('USER')}">
+	   		   							{{rec.desc}}
+	   		   						</div>
+	   		   						<div class="td col-md-2">
+	   		   							<button type="button" class="btn btn-sm check-btn" ng-click="selectAreaFromTable(rec)" ng-class="{'btn-default': !rec.isSelected, 'btn-success': rec.isSelected}" title="{{'spatial.area_selection_modal_add_area_btn' | i18n }}"><span class="fa fa-check"></button>
+	   		   						</div>
+	   		   					</div>
+	   		   				</div>
+	   		   			</div>
+	   		   			<div class="stFooterPagination tfoot container-fluid row" ng-if="displayedAreas.length">
+							<div class="tr">
+								<div class="td col-md-12">
+									<div class="pull-right footer-with-no-bottom-margin" st-pagination st-items-by-page="itemsByPage" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+	        	</div>
+        	</div>
+        	<!-- SELECTION CARD -->
+        	<div class="col-md-4">
+        		<div class="card with-small-card-header selectionContainer">
+					<div class="row card-header">
+						<div class="col-md-8">
+							<h5>
+								{{'spatial.area_selection_modal_current_selection' | i18n}}
+								<span class="badge blue-badge" title="{{getSelectionTip(selectedAreas.length)}}">{{selectedAreas.length}}</span>
+							</h5>
+						</div>
+						<div class="col-md-4 textAlignRight textAlignMiddle">
+							<a ng-click="removeAllAreas()" >{{'spatial.clear_all_btn' | i18n}}</a>
+						</div>
+					</div>
+					<div class="scroller">
+						<ul class="group-list">
+							<li ng-repeat="area in selectedAreas">
+								<div class="pointer pull-right" ng-click="removeArea(area, true)">
+				    		    	<i class="fa fa-times"></i>
+				    		   	</div>
+				    			<p>{{ area.name }} ({{ area.areaType }})</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+        	</div>
         </div>
     </div>
     <!-- FOOTER -->

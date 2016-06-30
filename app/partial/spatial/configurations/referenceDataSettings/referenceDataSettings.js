@@ -441,7 +441,7 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
         if (!genericMapService.mapBasicConfigs.success){
             $scope.addOSM();
         } else {
-            angular.forEach(genericMapService.mapBasicConfigs.layers.baseLayers.reverse(), function(layerConf) {
+            angular.forEach(genericMapService.mapBasicConfigs.layers.baseLayers, function(layerConf) {
                 switch (layerConf.type) {
                     case 'OSM':
                         $scope.addOSM(layerConf);
