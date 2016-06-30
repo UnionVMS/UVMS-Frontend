@@ -444,5 +444,6 @@
 
 	"assets_selection": "Assets Selection",
 	"assets": "Assets",
-	"asset_groups": "Asset Groups"
+	"asset_groups": "Asset Groups",
+	"asset_groups_title": "Asset Group(s)"
 }

@@ -2,12 +2,12 @@
 	<div class="row">
 		<fieldset class="fieldsetStyle col-md-12">
 			<legend class="fieldsetLegendStyle">
-				<input class="checkbox-margin" type="checkbox" ng-model="report.hasVesselFilter" ng-checked="report.hasVesselFilter" ng-change="clearSearchProps()">
-				<a data-toggle="collapse" ng-click="report.hasVesselFilter = !report.hasVesselFilter;clearSearchProps()">{{'spatial.reports_form_vessel_fieldset_label' | i18n }}</a>
-				<span class="badge red-badge" title="{{report.vesselsSelection.length}}">{{report.vesselsSelection.length}}</span>
+				<input class="checkbox-margin" type="checkbox" ng-model="report.showVesselFilter" ng-checked="report.showVesselFilter" ng-change="clearSearchProps()">
+				<a data-toggle="collapse" ng-click="report.showVesselFilter = !report.showVesselFilter;clearSearchProps()">{{'spatial.reports_form_vessel_fieldset_label' | i18n }}</a>
+				<span class="badge red-badge" ng-if="report.vesselsSelection.length" title="{{countSelectedItems('asset')}} {{'spatial.assets' | i18n}}&#013;{{countSelectedItems('vgroup')}} {{'spatial.asset_groups_title' | i18n}}">{{report.vesselsSelection.length}}</span>
 			</legend>
 			
-			<div ng-show="report.hasVesselFilter">
+			<div ng-show="report.showVesselFilter">
 				<!-- <div class="row">
 					<div class="form-group col-md-12 fieldsetMenu">
 						<a ng-class="{'menuActive': selectedVesselMenu === 'SIMPLE'}" ng-click="toggleVesselMenuType('SIMPLE')">{{'spatial.reports_form_simple_search' | i18n }}</a> &nbsp; 
@@ -101,9 +101,9 @@
 										<span title="{{report.vesselsSelection.length}}">{{'spatial.asset_groups' | i18n}}</span>
 									</div>
 									<div class="col-md-6">
-										<span class="badge blue-badge" title="{{countSelectedItems('asset')}}">{{countSelectedItems('asset')}}</span>
+										<span class="badge blue-badge" title="{{countSelectedItems('asset')}} {{'spatial.assets' | i18n}}">{{countSelectedItems('asset')}}</span>
 										<br/>
-										<span class="badge green-badge" title="{{countSelectedItems('vgroup')}}">{{countSelectedItems('vgroup')}}</span>
+										<span class="badge green-badge" title="{{countSelectedItems('vgroup')}} {{'spatial.asset_groups_title' | i18n}}">{{countSelectedItems('vgroup')}}</span>
 									</div>
 								</div>
 							</div>

@@ -1,6 +1,7 @@
 angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, $anchorScroll, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService, reportService, SpatialConfig, spatialConfigRestService, userService, loadingStatus, reportFormService){
     //Report form mode
     $scope.formMode = 'CREATE';
+    $scope.showVesselFilter = false;
 
     $scope.getFormMode = function(mode){
         return mode === $scope.formMode;
@@ -62,6 +63,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         $scope.submitingReport = false;
         $scope.vesselsSelectionIsValid = true;
         $scope.report.vesselsSelection = [];
+        $scope.showVesselFilter = false;
 
         $scope.shared = {
             vesselSearchBy: 'asset',

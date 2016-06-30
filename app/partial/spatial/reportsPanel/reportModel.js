@@ -15,7 +15,6 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
 
 	    //Vessel filter
 	    this.vesselsSelection = [];
-	    this.hasVesselFilter = false;
 
 	    //VNS filter
 	    this.hasVmsFilter = false;
@@ -104,9 +103,6 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
 
 	        //Vessel filters
 	        report.vesselsSelection = filter.assets;
-	        if (filter.assets.length > 0){
-	            report.hasVesselFilter = true;
-	        }
 
 	        //VMS positions filters
 	        if (angular.isDefined(filter.vms) && angular.isDefined(filter.vms.vmsposition)){
@@ -210,7 +206,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
             areas: this.areas
 	    };
 
-	    if (this.hasVesselFilter){
+	    if (angular.isDefined(this.vesselsSelection) && this.vesselsSelection.length){
             filter.assets = this.vesselsSelection;
         }
 	    
@@ -275,7 +271,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
 		    });
         }
         
-        if (this.hasVesselFilter === true){
+        if (angular.isDefined(this.vesselsSelection) && this.vesselsSelection.length){
         	report.filterExpression.assets = [];
             angular.forEach(this.vesselsSelection, function(item) {
             	report.filterExpression.assets.push({
