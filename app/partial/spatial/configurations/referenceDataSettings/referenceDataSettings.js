@@ -328,19 +328,18 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
         if (!angular.isDefined(mapReference.refData.map)){
             loadingStatus.isLoading('SearchReferenceData',true);
             
-            $scope.mapInterval = $interval(function(){
-//                if (!_.isEqual(genericMapService.mapBasicConfigs, {})){
-//                    setMap();
-//                }
-                
-                var mapEl = angular.element('#sys-areas-map');
-                if (angular.isDefined(mapReference.refData.map) && mapEl.length > 0){
-                    $scope.stopInterval();
-                    mapReference.refData.map.updateSize();
-                    $scope.addWMS();
-                    loadingStatus.isLoading('SearchReferenceData',false);
-                }
-            }, 10);
+            angular.element('#sys-areas-map').ready(function(){
+                $scope.mapInterval = $interval(function(){
+                    if (angular.isDefined(mapReference.refData.map)){
+                        $scope.stopInterval();
+                        $scope.addWMS();
+                        loadingStatus.isLoading('SearchReferenceData',false);
+                        $timeout(function(){
+                            mapReference.refData.map.updateSize();
+                        });
+                    }
+                }, 10);
+            });
         } else {
             $scope.addWMS();
         }

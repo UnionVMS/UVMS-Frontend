@@ -46,7 +46,7 @@
 								</label>
 							</div>
 							<!-- MAP -->
-							<div id="sys-areas-map" class="areas-visualizer" destroy-map-scope="refData" ng-if="currentSelection.selectionType === 'map' && currentSelection.areaSelector === 'custom' && currentSelection.selectedAreaType && clickResultsMap" ng-init="setMap()"></div>
+							<div id="sys-areas-map" class="areas-visualizer" destroy-map-scope="refData" ng-if="currentSelection.selectionType === 'map' && currentSelection.areaSelector === 'custom' && currentSelection.selectedAreaType !== undefined && clickResultsMap" ng-init="setMap()"></div>
 							<!-- SEARCH TABLE -->
 							<div class="row">
 								<!-- SEARCH INPUT, SEARCH BUTTON, RESET BUTTON -->
@@ -100,6 +100,7 @@
 														<span class="badge" title="{{getGroupTip(rec)}}">{{rec.areaNames.length}}</span>
 													</div>
 													<div class="td col-md-2">
+														<wms-preview></wms-preview>
 														<button type="button" class="btn btn-sm check-btn" ng-click="selectAreaFromTable(rec)" ng-class="{'btn-default': !rec.isSelected, 'btn-success': rec.isSelected}"><span class="fa fa-check"></button>
 													</div>
 													<div class="td td-details col-md-12" ng-show="rec.isExpanded">
