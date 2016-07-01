@@ -370,6 +370,12 @@ div.td:extend(td all) {}
             border-color: darken(#A8A8A8, 10%);
         }
     }
+
+	.required-field::after {
+		content: "*";
+		color: @profileColor_red;
+		margin-left: 3px;
+	}
 }
 
 .info-qtip {

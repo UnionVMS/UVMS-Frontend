@@ -25,7 +25,7 @@ angular.module('unionvmsWeb').directive('numericInput',['$compile', function($co
 			if(_.keys(attrs.$attr).length){
 				var inputNumber = element.find('input[type="number"]');
 				angular.forEach(attrs.$attr, function(value,key) {
-					if(value==='class' || value==='ng-class'){
+					if(value==='class'){
 						element.find('input[type="text"]').attr(value, attrs[key]);
 					}else if(value!=='ng-model' && value!=='ng-required'){
 						inputNumber.attr(value, attrs[key]);

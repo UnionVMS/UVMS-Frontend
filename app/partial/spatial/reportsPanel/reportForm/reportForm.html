@@ -1,19 +1,6 @@
 <div ng-controller="ReportformCtrl">
 	<!-- Warnings -->
 	<div class="row">
-		<div class="col-md-6" ng-show="getFormMode('CREATE')">
-			<h3 class="pull-left">{{'spatial.reports_form_title_new_report' | i18n }}</h3>
-		</div>
-		<div class="col-md-6" ng-show="getFormMode('EDIT') || getFormMode('EDIT-FROM-LIVEVIEW')">
-			<h3 class="pull-left">{{'spatial.reports_form_title_edit_report' | i18n }}</h3>
-		</div>
-		<div class="col-md-6">
-			<div class="col-md-2 pull-right textAlignRight" ng-click="toggleReportForm('CLOSE')"> 
-	            <i class="fa fa-sign-out signouticon signouticon-extented" title="{{'common.close' | i18n}}"></i>
-	        </div>
-        </div>
-	</div>
-	<div class="row">
 		<div class="form-group col-md-12" ng-if="formAlert.visible">
 			<div class="alert alert-danger alert-container" role="alert">
 				<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
@@ -23,129 +10,142 @@
 		    </div>
 		</div>
 	</div>
-	<div class="card reportFormContainer table-responsive-force">
-		<div class="reportForm col-md-12">
-			<form name="reportForm" id="reportForm" novalidate>
-				<div class="row">
-					<div class="col-md-4">
-						<label for="reportName">{{'spatial.reports_form_report_name' | i18n }}</label>
-					</div>
-					<div class="col-md-8">
-						<label for="reportDesc">{{'spatial.reports_form_report_description' | i18n}}</label>
-					</div>
+	<div class="card col-md-12 reportFormContainer">
+		<div class="col-md-12 report-form-header">
+			<div class="row btn-container">
+				<div class="col-md-6" ng-show="getFormMode('CREATE')">
+					<h3>{{'spatial.reports_form_title_new_report' | i18n }}</h3>
 				</div>
-				<div class="row general-form">
-					<div class="form-group col-md-4">
-						<div class="form-group report-name-group" ng-class="{'has-error': (reportForm.reportName.$dirty || submitingReport === true) && reportForm.reportName.$invalid}">
-							<input id="reportName" type="text" class="form-control" name="reportName" ng-required="true" ng-model="report.name" maxlength="255"/>
-							<div class="innerErrorMessages" ng-messages="reportForm.reportName.$error" ng-show="(reportForm.reportName.$dirty || submitingReport === true) && reportForm.reportName.$invalid">
-								<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
-							</div>
-						</div>		
-						<div class="form-group">
-							<label for="reportVisibility">{{'spatial.reports_form_report_visibility' | i18n }}</label>
-							<combobox id="reportVisibility" name="reportVisibility" ng-model="report.visibility" items="visibilities" />
+				<div class="col-md-6" ng-show="getFormMode('EDIT') || getFormMode('EDIT-FROM-LIVEVIEW')">
+					<h3>{{'spatial.reports_form_title_edit_report' | i18n }}</h3>
+				</div>
+				<div class="col-md-6 formSubmitBtn">
+					<button class="btn btn-default button btn-action" type="button" ng-click="toggleReportForm('CLOSE')">{{"common.cancel" | i18n }}</button>
+					<button class="btn btn-primary button btn-action" type="button" ng-click="saveReport()" ng-show="showSaveBtn()">{{"spatial.reports_form_save_btn" | i18n }}</button>
+				</div>
+			</div>
+		</div>
+		<form name="reportForm" id="reportForm" class="reportForm col-md-12" novalidate>
+			<div class="general-form row">
+				<div class="form-group col-md-3">
+					<div class="form-group report-name-group" ng-class="{'has-error': (reportForm.reportName.$dirty || submitingReport === true) && reportForm.reportName.$invalid}">
+						<label for="reportName" class="required-field">{{'spatial.reports_form_report_name' | i18n }}</label>
+						<input id="reportName" type="text" class="form-control" name="reportName" ng-required="true" ng-model="report.name" maxlength="255"/>
+						<div class="innerErrorMessages" ng-messages="reportForm.reportName.$error" ng-show="(reportForm.reportName.$dirty || submitingReport === true) && reportForm.reportName.$invalid">
+							<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 						</div>
 					</div>
-					<div class="col-md-8 reportDescContainer">
+					<div class="form-group">
+						<label for="reportDesc">{{'spatial.reports_form_report_description' | i18n}}</label>
 						<textarea class="form-control reportDesc" name="reportDesc" ng-model="report.desc" maxlength="255"></textarea>
 					</div>
 				</div>
-				<ng-form name="reportBodyForm">
+				<div class="col-md-6">
 					<div class="row">
-						<div class="form-group col-md-2">
-		    				<label>{{'spatial.reports_form_positions_selector_label' | i18n}}</label>
-		    				<combobox ng-model="report.positionSelector" items="positionItems"></combobox>
-		    			</div>
-		    			<div class="col-md-4 col-no-padding">
-		    				<div ng-show="report.positionSelector === 'last'" style="width: 100%;">
-			    				<div class="form-group col-md-6 field-noLabel" ng-class="{'has-error': (reportForm.reportBodyForm.xValue.$dirty || submitingReport === true) && reportForm.reportBodyForm.xValue.$invalid}">
-			    					<!-- <label for="positionsCounter">{{'spatial.reports_form_positions_x_value' | i18n}}</label> -->
-			    					<numeric-input id="positionsCounter" class="form-control" min="0" name="xValue" ng-required="report.positionSelector !== 'all' && report" ng-model="report.xValue"></numeric-input>
-			    					<div class="innerErrorMessagesTimer positions-counter-input-msg" ng-messages="reportForm.reportBodyForm.xValue.$error" ng-show="(reportForm.reportBodyForm.xValue.$dirty || submitingReport === true) && reportForm.reportBodyForm.xValue.$invalid">
+						<div class="form-group col-md-6">
+							<label>{{'spatial.reports_form_positions_selector_label' | i18n}}</label>
+							<combobox ng-model="report.positionSelector" items="positionItems"></combobox>
+						</div>
+						<div class="form-group col-md-6">
+							<div ng-show="report.positionSelector === 'last'" style="width: 100%;">
+								<div class="form-group input-with-combo field-noLabel" ng-class="{'has-error': (reportForm.reportBodyForm.xValue.$dirty || submitingReport === true) && reportForm.reportBodyForm.xValue.$invalid}">
+									<!-- <label for="positionsCounter">{{'spatial.reports_form_positions_x_value' | i18n}}</label> -->
+									<numeric-input id="positionsCounter" class="form-control" min="0" name="xValue" ng-required="report.positionSelector !== 'all' && report" ng-model="report.xValue"></numeric-input>
+									<combobox ng-model="report.positionTypeSelector" items="positionTypeItems"></combobox>
+									<div class="innerErrorMessagesTimer positions-counter-input-msg" ng-messages="reportForm.reportBodyForm.xValue.$error" ng-show="(reportForm.reportBodyForm.xValue.$dirty || submitingReport === true) && reportForm.reportBodyForm.xValue.$invalid">
 										<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 										<div ng-message="invalidNumber">{{'spatial.not_numeric_error_message' | i18n }}</div>
 										<div ng-message="min">{{'spatial.min_value_1_error_message' | i18n }}</div>
 									</div>
-				    			</div>
-				    			<div class="form-group col-md-6 field-noLabel">
-				    				<!-- <label>{{'spatial.reports_form_positions_selector_label' | i18n}}</label> -->
-				    				<combobox ng-model="report.positionTypeSelector" items="positionTypeItems"></combobox>
-				    			</div>
-			    			</div>
-		    			</div>
-		    			<div class="form-group col-md-3" ng-hide="report.positionSelector === 'last' && report.positionTypeSelector === 'hours'"  ng-class="{'has-error': (reportForm.reportBodyForm.startDateTime.$dirty || submitingReport === true) && reportForm.reportBodyForm.startDateTime.$invalid}">
-		    				<label for="reportStartDate">{{'spatial.reports_form_start_date_label' | i18n}}</label>
-		    				<!-- <datepicker-input id="reportStartDate" time="true" model="report.startDateTime" name="startDateTime" ng-required="report.positionSelector === 'all'"></datepicker-input> -->
-		    				<datepicker-input id="reportStartDate" time="true" model="report.startDateTime" name="startDateTime" max-date="report.endDateTime"  ng-required="report.positionSelector === 'all'" input-field-id="report-start-date-picker" update-when="default"></datepicker-input>
-		    				<div class="innerErrorMessagesDateWithUpLabel" ng-messages="reportForm.reportBodyForm.startDateTime.$error" ng-show="(reportForm.reportBodyForm.startDateTime.$dirty || submitingReport === true) && reportForm.reportBodyForm.startDateTime.$invalid">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-md-6" ng-hide="report.positionSelector === 'last' && report.positionTypeSelector === 'hours'"  ng-class="{'has-error': (reportForm.reportBodyForm.startDateTime.$dirty || submitingReport === true) && reportForm.reportBodyForm.startDateTime.$invalid}">
+							<label for="reportStartDate" ng-class="{'required-field': report.positionSelector === 'all'}">{{'spatial.reports_form_start_date_label' | i18n}}</label>
+							<!-- <datepicker-input id="reportStartDate" time="true" model="report.startDateTime" name="startDateTime" ng-required="report.positionSelector === 'all'"></datepicker-input> -->
+							<datepicker-input id="reportStartDate" time="true" model="report.startDateTime" name="startDateTime" max-date="report.endDateTime"  ng-required="report.positionSelector === 'all'" input-field-id="report-start-date-picker" update-when="default"></datepicker-input>
+							<div class="innerErrorMessagesDateWithUpLabel" ng-messages="reportForm.reportBodyForm.startDateTime.$error" ng-show="(reportForm.reportBodyForm.startDateTime.$dirty || submitingReport === true) && reportForm.reportBodyForm.startDateTime.$invalid">
 								<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 							</div>
-		    			</div>
-		    			<div class="form-group col-md-3" ng-hide="report.positionSelector === 'last' && report.positionTypeSelector === 'hours'" ng-class="{'has-error': (reportForm.reportBodyForm.endDateTime.$dirty || submitingReport === true) && reportForm.reportBodyForm.endDateTime.$invalid}">
-		    				<label for="reportEndDate">{{'spatial.reports_form_end_date_label' | i18n}}</label>
-		    				<!-- <datepicker-input id="reportEndDate" time="true" model="report.endDateTime" name="endDateTime" ng-required="report.positionSelector === 'all'"></datepicker-input> -->
-		    				<datepicker-input id="reportEndDate" time="true" model="report.endDateTime" name="endDateTime" min-date="report.startDateTime" ng-required="report.positionSelector === 'all'" input-field-id="report-end-date-picker"></datepicker-input>
-		    				<div class="innerErrorMessagesDateWithUpLabel" ng-messages="reportForm.reportBodyForm.endDateTime.$error" ng-show="(reportForm.reportBodyForm.endDateTime.$dirty || submitingReport === true) && reportForm.reportBodyForm.endDateTime.$invalid">
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-md-6" ng-hide="report.positionSelector === 'last' && report.positionTypeSelector === 'hours'" ng-class="{'has-error': (reportForm.reportBodyForm.endDateTime.$dirty || submitingReport === true) && reportForm.reportBodyForm.endDateTime.$invalid}">
+							<label for="reportEndDate" ng-class="{'required-field': report.positionSelector === 'all'}">{{'spatial.reports_form_end_date_label' | i18n}}</label>
+							<!-- <datepicker-input id="reportEndDate" time="true" model="report.endDateTime" name="endDateTime" ng-required="report.positionSelector === 'all'"></datepicker-input> -->
+							<datepicker-input id="reportEndDate" time="true" model="report.endDateTime" name="endDateTime" min-date="report.startDateTime" ng-required="report.positionSelector === 'all'" input-field-id="report-end-date-picker"></datepicker-input>
+							<div class="innerErrorMessagesDateWithUpLabel" ng-messages="reportForm.reportBodyForm.endDateTime.$error" ng-show="(reportForm.reportBodyForm.endDateTime.$dirty || submitingReport === true) && reportForm.reportBodyForm.endDateTime.$invalid">
 								<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 							</div>
-		    			</div>
-		    		</div>
-	    			
-	   				<!-- Report components -->
-	   				<div class="form-group row">
-	   					<div class="form-group col-md-6 report-components">
-	   						<label>{{'spatial.reports_form_report_components' | i18n }}</label> &nbsp; &nbsp;
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3 report-configuration-form">
+					<div class="col-md-12">
+						<!-- Report components -->
+						<div class="row form-group">
+							<label>{{'spatial.reports_form_report_configuration' | i18n }}</label> &nbsp; &nbsp;
+						</div>
+						<div class="row form-group">
+							<label for="reportVisibility">{{'spatial.reports_form_report_availability' | i18n }}</label>
+							<combobox id="reportVisibility" name="reportVisibility" ng-model="report.visibility" items="visibilities" />
+						</div>
+						<div class="row form-group">
 							<label class="checkbox-inline checkbox-options">
 								<input type="checkbox" ng-model="report.withMap" ng-checked="report.withMap || !report">
 								{{'spatial.reports_form_map_component_checkbox' | i18n }}
 							</label>
-							<!-- <label class="checkbox-inline checkbox-options">
-								<input type="checkbox" ng-model="report.components.vms" ng-checked="report.components.vms || !report">
-								{{'spatial.reports_form_vms_component_checkbox' | i18n }}
-							</label> -->
-	   					</div>
-	   					<!-- Area selection -->
-		   				<div class="form-group col-md-3">
-		   					<button type="button" class="btn btn-primary btn-sm" style="width:100%;" ng-click="openAreaSelectionModal()">
-			                    <span class="fa fa-map-marker" aria-hidden="true"></span> &nbsp;
-			                    <span>{{'spatial.reports_form_select_areas' | i18n }}</span>
-			                </button>
-		   				</div>
-		   				<!-- Map configuration -->
-		   				<div class="form-group col-md-3">
-<!-- 		   				 ng-show="isAllowed('Spatial', 'ALLOW_USER_SPATIAL_REPORT_CONFIGURATIONS')"> -->
-		   					<button type="button" class="btn btn-primary btn-sm" style="width:100%;" ng-click="openMapConfigurationModal()" ng-switch="report.withMap">
-			                    <span class="fa fa-cog" aria-hidden="true"></span> &nbsp;
-			                    <span>{{'spatial.reports_form_map_configuration' | i18n }}</span>
-			                </button>
-		   				</div>
-	   				</div>
-	   				
-	   				<!-- Fieldset Vessels -->
-	   				<div class="form-group row fieldsetPadding" ng-include="'partial/spatial/reportsPanel/reportForm/vesselFieldset/vesselFieldset.html'"></div>
-	   				
-	   				<!-- Fieldset VMS Filters -->
-	   				<div class="form-group row fieldsetPadding vmsFiltersFieldset" ng-include="'partial/spatial/reportsPanel/reportForm/vmsFiltersFieldset/vmsFiltersFieldset.html'"></div>
-   				
-   				</ng-form>
-   				
-   				<!-- Buttons -->
-   				<div class="form-group row">
-   					<div class="row">
-	   					<div class="formBtnGroup">
-	   						<a class="button" ng-click="toggleReportForm('CLOSE')">{{"common.cancel" | i18n }}</a> &nbsp;
-	   						<a class="button" ng-click="resetForm()" ng-show="getFormMode('CREATE')">{{"spatial.reports_form_clear_btn" | i18n }}</a>
+						</div>
+						<div class="row">
+							<!-- Map configuration -->
+							<div class="form-group">
+								<button type="button" class="btn btn-primary btn-sm" style="width:100%;" ng-click="openMapConfigurationModal()" ng-switch="report.withMap">
+									<span class="fa" ng-class="{'fa-map': report.withMap,'fa-eye': !report.withMap}" aria-hidden="true"></span> &nbsp;
+									<span ng-switch-when="true">{{'spatial.reports_form_map_configuration' | i18n }}</span>
+									<span ng-switch-when="false">{{'spatial.visibility_settings' | i18n }}</span>
+								</button>
+							</div>
+							<div class="form-group">
+								<!-- Area selection -->
+								<button type="button" class="btn btn-primary btn-sm" style="width:100%;" ng-click="openAreaSelectionModal()">
+									<span class="fa fa-map-marker" aria-hidden="true"></span> &nbsp;
+									<span>{{'spatial.reports_form_select_areas' | i18n }}</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<ng-form name="reportBodyForm" class="col-md-12">
+				<div class="row filter-section">
+					<h3 class="row">{{'spatial.reports_form_filters' | i18n }}</h3>
+					<!-- Fieldset Vessels -->
+					<div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/vesselFieldset/vesselFieldset.html'"></div>
+					
+					<!-- Fieldset VMS Filters -->
+					<div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/vmsFiltersFieldset/vmsFiltersFieldset.html'"></div>
+				</div>
+			</ng-form>
+			
+			<!-- Buttons -->
+			<div class="col-md-12 form-group report-form-footer">
+				<div class="row">
+					<div class="row btn-container">
+						<div class="col-md-6 formBtnGroup">
+							<a class="button" ng-click="resetForm()" ng-show="getFormMode('CREATE')">{{"spatial.reports_form_clear_btn" | i18n }}</a>
 							<a class="button" ng-show="(getFormMode('EDIT') || getFormMode('EDIT-FROM-LIVEVIEW')) && reportForm.$dirty" ng-click="resetReport()">{{"spatial.reset" | i18n }}</a>
-	   					</div>
-	   					<div class="formSubmitBtn">
-	   						<button class="btn btn-primary button btn-action" type="button" ng-show="getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="runReport()">{{"spatial.reports_table_run_label" | i18n }}</button>
-	   						<button class="btn btn-primary button btn-action" type="button" ng-show="getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="saveAsReport()">{{"spatial.reports_form_save_as_btn" | i18n }}</button>
-	   						<button class="btn btn-primary button btn-action" type="button" ng-click="saveReport()" ng-show="showSaveBtn()">{{"spatial.reports_form_save_btn" | i18n }}</button>
-	   					</div>
-	   				</div>
-   				</div>
-			</form>
-		</div>
+						</div>
+						<div class="col-md-6 formSubmitBtn">
+							<button class="btn btn-default button btn-action" type="button" ng-click="toggleReportForm('CLOSE')">{{"common.cancel" | i18n }}</button>
+							<button class="btn btn-success button btn-action" type="button" ng-show="getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="runReport()">{{"spatial.reports_table_run_label" | i18n }}</button>
+							<button class="btn btn-primary button btn-action" type="button" ng-show="getFormMode('EDIT-FROM-LIVEVIEW')" ng-click="saveAsReport()">{{"spatial.reports_form_save_as_btn" | i18n }}</button>
+							<button class="btn btn-primary button btn-action" type="button" ng-click="saveReport()" ng-show="showSaveBtn()">{{"spatial.reports_form_save_btn" | i18n }}</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
 	</div>
 </div>
