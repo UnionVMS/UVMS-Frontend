@@ -46,7 +46,7 @@
 								</label>
 							</div>
 							<!-- MAP -->
-							<div id="sys-areas-map" class="areas-visualizer" ng-show="currentSelection.selectionType === 'map' && currentSelection.selectedAreaType && clickResultsMap"></div>
+							<div id="sys-areas-map" class="areas-visualizer" destroy-map-scope="refData" ng-if="currentSelection.selectionType === 'map' && currentSelection.areaSelector === 'custom' && currentSelection.selectedAreaType && clickResultsMap" ng-init="setMap()"></div>
 							<!-- SEARCH TABLE -->
 							<div class="row">
 								<!-- SEARCH INPUT, SEARCH BUTTON, RESET BUTTON -->

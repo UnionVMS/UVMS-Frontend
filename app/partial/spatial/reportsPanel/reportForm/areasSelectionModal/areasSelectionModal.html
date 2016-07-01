@@ -47,7 +47,7 @@
        				</label>
        			</div>
        			<!-- MAP SECTION -->
-	        	<div id="area-selection-map" class="col-md-12 area-map" destroy-map-scope ng-if="((sysAreaType !== undefined && isTabSelected('SYSTEM')) || isTabSelected('USER')) && selectionType[selectedTab] === 'map' && clickResults < 2" ng-init="setMap()"></div>
+	        	<div id="area-selection-map" class="col-md-12 area-map" destroy-map-scope="areaSelection" ng-if="((sysAreaType !== undefined && isTabSelected('SYSTEM')) || isTabSelected('USER')) && selectionType[selectedTab] === 'map' && clickResults < 2" ng-init="setMap()"></div>
 	        	<!-- SEARCH BY PROPERTIES SECTION -->
 	        	<div class="col-md-12" ng-show="selectionType[selectedTab] === 'search' || clickResults > 1">
 	        		<!-- SEARCH INPUT, SEARCH BUTTON, RESET BUTTON -->

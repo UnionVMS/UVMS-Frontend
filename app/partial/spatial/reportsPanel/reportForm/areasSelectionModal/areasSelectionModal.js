@@ -7,6 +7,7 @@
  * @param $interval {service} angular interval service
  * @param $timeout {service} angular timeout service
  * @param locale {service} angular locale service
+ * @param mapReference {service} Service containing the reference of the map
  * @param loadingStatus {service} loading message service
  * @param genericMapService {service} generic map service <p>{@link unionvmsWeb.genericMapService}</p>
  * @param selectedAreas {Array} An array containing all report selected areas passed through the resolve function of the modalInstance 
@@ -26,11 +27,12 @@
  * @attr hasError {Boolean} Whether the warning is an error or not. Deafult is <b>false</b>
  * @attr searchString {String} The search string to search areas by properties. Default is <b>undefined</b>
  * @attr searchedAreas {Array} An array containing all the areas that were fetched by property search  
- * @attr map {ol.Map} The map to display areas
  * @description
  *  The controller of the area selection modal used in the report form
  */
-angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($scope, $modalInstance, $interval, $timeout, locale, loadingStatus, genericMapService, selectedAreas, spatialRestService, Area, userService, projectionService){
+angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($scope, $modalInstance, $interval, $timeout, locale, mapReference, loadingStatus, genericMapService, selectedAreas, spatialRestService, Area, userService, projectionService){
+    mapReference.areaSelection = {};
+    
     /**
      * Cancel and close modal without persisting any changes 
      * 
@@ -286,7 +288,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     var selectionTypeChange = function(newVal, oldVal){
         $scope.clickResults = 0;
         $scope.clearSearchProps();
-        if (newVal === 'map' && angular.isDefined($scope.map)){
+        if (newVal === 'map'){
             lazyLoadWMSLayer();
         }
     };
@@ -636,7 +638,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
         });
         
         map.setView(view);
-        $scope.map = map;
+        mapReference.areaSelection.map = map;
         
         addBaseLayers();
         
@@ -707,7 +709,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
         }
         var layer = genericMapService.defineOsm(config);
         layer.set('switchertype', 'base'); //Necessary for the layerswitcher control
-        $scope.map.addLayer(layer);
+        mapReference.areaSelection.map.addLayer(layer);
     };
     
     /**
@@ -724,7 +726,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
         }
         var layer = genericMapService.defineBing(config);
         layer.set('switchertype', 'base'); //Necessary for the layerswitcher control
-        $scope.map.addLayer(layer);
+        mapReference.areaSelection.map.addLayer(layer);
     };
     
     /**
@@ -739,9 +741,9 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     $scope.addWMS = function(def, isBaseLayer){
         var config;
         if (isBaseLayer){
-            config = genericMapService.getBaseLayerConfig(def, $scope.map);
+            config = genericMapService.getBaseLayerConfig(def, mapReference.areaSelection.map);
         } else {
-            config = genericMapService.getGenericLayerConfig(def, $scope.map);
+            config = genericMapService.getGenericLayerConfig(def, mapReference.areaSelection.map);
         }
         
         var layer = genericMapService.defineWms(config);
@@ -750,7 +752,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
             layer.set('switchertype', 'base'); //Necessary for the layerswitcher control
         }
         
-        $scope.map.addLayer(layer);
+        mapReference.areaSelection.map.addLayer(layer);
     };
     
     /**
@@ -774,7 +776,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
         var item, layerType;
         if (angular.isDefined($scope.sysAreaType) && $scope.isTabSelected('SYSTEM')){
             item = $scope.getFullDefForItem($scope.sysAreaType);
-            layerType = $scope.sysAreaType
+            layerType = $scope.sysAreaType;
         }
         
         if (angular.isDefined($scope.userAreaType) && $scope.isTabSelected('USER')){
@@ -786,8 +788,8 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
         if (angular.isDefined(item)){
             if (!angular.isDefined($scope.addWMSInterval)){
                 $scope.addWMSInterval = $interval(function(){
-                    if (angular.isDefined($scope.map)){
-                        var layer = genericMapService.getLayerByType(layerType, $scope.map);
+                    if (angular.isDefined(mapReference.areaSelection.map)){
+                        var layer = genericMapService.getLayerByType(layerType, mapReference.areaSelection.map);
                         if (!angular.isDefined(layer)){
                             $scope.addWMS(item);
                         }
@@ -807,13 +809,13 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
      * @param {String} layerType - The layer type to be removed
      */
     $scope.removeLayerByType = function(layerType){
-        if (angular.isDefined($scope.map)){
-            var mapLayers = $scope.map.getLayers();
+        if (angular.isDefined(mapReference.areaSelection.map)){
+            var mapLayers = mapReference.areaSelection.map.getLayers();
             if (mapLayers.getLength() > 1){
                 var layer = mapLayers.getArray().find(function(layer){
                     return layer.get('type') === layerType;
                 });
-                $scope.map.removeLayer(layer);
+                mapReference.areaSelection.map.removeLayer(layer);
             }
         }
     };

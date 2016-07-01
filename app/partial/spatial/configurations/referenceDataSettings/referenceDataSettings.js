@@ -1,4 +1,5 @@
-angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($scope, locale, $localStorage, $interval, $timeout, genericMapService, projectionService, spatialRestService, comboboxService, spatialConfigAlertService, $anchorScroll, loadingStatus, spatialConfigRestService, SpatialConfig, $location){
+angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($scope, locale, $localStorage, $interval, $timeout, mapReference, genericMapService, projectionService, spatialRestService, comboboxService, spatialConfigAlertService, $anchorScroll, loadingStatus, spatialConfigRestService, SpatialConfig, $location){
+    mapReference.refData = {};
     $scope.status = {
         isOpen: false
     };
@@ -39,6 +40,8 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
     ];
     
     $scope.isLoading = false; //to use on map click
+    
+    genericMapService.setMapBasicConfigs();
     
     //Ref data type change
     $scope.$watch('currentSelection.selectedAreaType',function(newVal,oldVal){
@@ -124,8 +127,27 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
         $scope.clearSearchProps();
         if (angular.isDefined(newVal) && newVal === 'map'){
             $scope.clickResultsMap = true;
+            if (angular.isDefined($scope.currentSelection.selectedAreaType) && $scope.currentSelection.areaSelector === 'custom'){
+                lazyLoadWMSLayer();
+            }
         }
     });
+    
+    var lazyLoadWMSLayer = function(){
+        if (!angular.isDefined($scope.addWMSInterval)){
+            $scope.addWMSInterval = $interval(function(){
+                if (angular.isDefined(mapReference.refData.map)){
+                    $scope.addWMS();
+                    stopWMSInterval();
+                }
+            }, 10);
+        }
+    };
+    
+    var stopWMSInterval = function(){
+        $interval.cancel($scope.addWMSInterval);
+        delete $scope.addWMSInterval;
+    };
     
     //SELECT ON MAP
     $scope.clickResultsMap = true;
@@ -158,6 +180,9 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
     
     $scope.goBackToMap = function(){
         $scope.clickResultsMap = true;
+        if (angular.isDefined($scope.currentSelection.selectedAreaType) && $scope.currentSelection.areaSelector === 'custom'){
+            lazyLoadWMSLayer();
+        }
     };
     
     //SELECT TABLE
@@ -300,18 +325,18 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
     
     //MAP 
     $scope.updateMap = function(){
-        if (!angular.isDefined($scope.map)){
+        if (!angular.isDefined(mapReference.refData.map)){
             loadingStatus.isLoading('SearchReferenceData',true);
-            genericMapService.setMapBasicConfigs();
+            
             $scope.mapInterval = $interval(function(){
-                if (!_.isEqual(genericMapService.mapBasicConfigs, {})){
-                    setMap();
-                }
+//                if (!_.isEqual(genericMapService.mapBasicConfigs, {})){
+//                    setMap();
+//                }
                 
                 var mapEl = angular.element('#sys-areas-map');
-                if (angular.isDefined($scope.map) && mapEl.length > 0){
+                if (angular.isDefined(mapReference.refData.map) && mapEl.length > 0){
                     $scope.stopInterval();
-                    $scope.map.updateSize();
+                    mapReference.refData.map.updateSize();
                     $scope.addWMS();
                     loadingStatus.isLoading('SearchReferenceData',false);
                 }
@@ -327,11 +352,11 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
     };
     
     $scope.removeWMS = function(selectedAreaType){
-        if (angular.isDefined($scope.map)){
-            var layers = $scope.map.getLayers().getArray();
+        if (angular.isDefined(mapReference.refData.map)){
+            var layers = mapReference.refData.map.getLayers().getArray();
             angular.forEach(layers, function(layer) {
                 if (!angular.isDefined(layer.get('switchertype')) && layer.get('type') !== selectedAreaType){
-                    $scope.map.removeLayer(layer);
+                    mapReference.refData.map.removeLayer(layer);
                 }
             });
         }
@@ -358,9 +383,9 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
         }
         
         if (isBaseLayer){
-            config = genericMapService.getBaseLayerConfig(def, $scope.map);
+            config = genericMapService.getBaseLayerConfig(def, mapReference.refData.map);
         } else {
-            config = genericMapService.getGenericLayerConfig(def, $scope.map);
+            config = genericMapService.getGenericLayerConfig(def, mapReference.refData.map);
         }
         
         var layer = genericMapService.defineWms(config);
@@ -369,18 +394,16 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
             layer.set('switchertype', 'base'); //Necessary for the layerswitcher control
         } 
         
-        $scope.map.addLayer(layer);
+        mapReference.refData.map.addLayer(layer);
     };
     
-    function setMap(){
+    $scope.setMap = function(){
         var projObj;
-        if (angular.isDefined(genericMapService.mapBasicConfigs.success)){
-            if (genericMapService.mapBasicConfigs.success){
-                projObj = genericMapService.mapBasicConfigs.projection;
-            } else {
-                //Fallback mode
-                projObj = projectionService.getStaticProjMercator();
-            }
+        if (angular.isDefined(genericMapService.mapBasicConfigs) && genericMapService.mapBasicConfigs.success){
+            projObj = genericMapService.mapBasicConfigs.projection;
+        } else {
+            //Fallback mode
+            projObj = projectionService.getStaticProjMercator();
         }
         
         var view = genericMapService.createView(projObj);
@@ -408,7 +431,7 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
         });
         
         map.setView(view);
-        $scope.map = map;
+        mapReference.refData.map = map; 
         
         addBaseLayers();
         
@@ -423,7 +446,7 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
         map.on('singleclick', function(evt){
             if ($scope.currentSelection.selectionType === 'map' && angular.isDefined($scope.currentSelection.selectedAreaType) && $scope.currentSelection.areaSelector === 'custom'){
                 loadingStatus.isLoading('SearchReferenceData',true);
-                var projection = $scope.map.getView().getProjection().getCode();
+                var projection = mapReference.refData.map.getView().getProjection().getCode();
                 var requestData = {
                     areaType: $scope.currentSelection.selectedAreaType,
                     isGeom: false,
@@ -435,7 +458,7 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
                 $scope.selectAreaFromMap(requestData);
             }
         });
-    }
+    };
     
     function addBaseLayers(){
         if (!genericMapService.mapBasicConfigs.success){
@@ -472,7 +495,7 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
         }
         var layer = genericMapService.defineOsm(config);
         layer.set('switchertype', 'base'); //Necessary for the layerswitcher control
-        $scope.map.addLayer(layer);
+        mapReference.refData.map.addLayer(layer);
     };
     
     /**
@@ -489,7 +512,7 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
         }
         var layer = genericMapService.defineBing(config);
         layer.set('switchertype', 'base'); //Necessary for the layerswitcher control
-        $scope.map.addLayer(layer);
+        mapReference.refData.map.addLayer(layer);
     };
 
     $scope.initializeCurrentSelection();
