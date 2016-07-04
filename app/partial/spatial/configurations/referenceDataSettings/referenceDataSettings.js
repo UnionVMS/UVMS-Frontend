@@ -39,7 +39,6 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
        {"text": locale.getString('spatial.area_selection_type_custom'), "code": "custom"}
     ];
     
-    $scope.isLoading = false; //to use on map click
     
     genericMapService.setMapBasicConfigs();
     
@@ -152,30 +151,33 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
     //SELECT ON MAP
     $scope.clickResultsMap = true;
     $scope.selectAreaFromMap = function(data){
-        spatialRestService.getAreaDetails(data).then(function(response){
-            var area;
-            loadingStatus.isLoading('SearchReferenceData',false);
-            $scope.clickResults = response.data.length;
-            if ($scope.clickResults > 0){
-                if ($scope.clickResults === 1){
-                    $scope.checkAndAddToSelection(response.data[0].code);
+        if ($scope.currentSelection.selectedAreaType === 'PORT'){
+            //TODO
+        } else {
+            spatialRestService.getAreaDetails(data).then(function(response){
+                loadingStatus.isLoading('SearchReferenceData',false);
+                $scope.clickResults = response.data.length;
+                if ($scope.clickResults > 0){
+                    if ($scope.clickResults === 1){
+                        $scope.checkAndAddToSelection(response.data[0].code);
+                    } else {
+                        $scope.refDataRecords = $scope.convertRefData(response.data, true);
+                        $scope.clickResultsMap = false;
+                    }
                 } else {
-                    $scope.refDataRecords = $scope.convertRefData(response.data, true);
-                    $scope.clickResultsMap = false;
+                    $scope.alert.hasAlert = true;
+                    $scope.alert.hasWarning = true;
+                    $scope.alert.alertMessage = locale.getString('spatial.ref_data_empty_search_by_click_msg');
+                    $scope.alert.hideAlert();
                 }
-            } else {
+            }, function(error){
+                loadingStatus.isLoading('SearchReferenceData',false);
                 $scope.alert.hasAlert = true;
-                $scope.alert.hasWarning = true;
-                $scope.alert.alertMessage = locale.getString('spatial.ref_data_empty_search_by_click_msg');
+                $scope.alert.hasError = true;
+                $scope.alert.alertMessage = locale.getString('spatial.get_ref_data_details_error');
                 $scope.alert.hideAlert();
-            }
-        }, function(error){
-            $scope.isLoading = false;
-            $scope.errorMessage = locale.getString('spatial.get_ref_data_details_error');
-            $scope.hasError = true;
-            $scope.hideAlert();
-            $scope.mapLoading = false;
-        });
+            });
+        }
     };
     
     $scope.goBackToMap = function(){
@@ -191,7 +193,7 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
     $scope.displayedRefDataRecords = [].concat($scope.refDataRecords);
     $scope.searchByProps = function(){
         if (angular.isDefined($scope.currentSelection.searchString) && $scope.currentSelection.searchString !== ''){
-            $scope.isLoading = true;
+            loadingStatus.isLoading('SearchReferenceData',true);
             $scope.refDataRecords = [];
             var requestData = {
                 areaType: $scope.currentSelection.selectedAreaType,
@@ -206,13 +208,12 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
                     $scope.alert.alertMessage = locale.getString('spatial.ref_data_empty_search_by_prop_msg');
                     $scope.alert.hideAlert();
                 }
-                $scope.isLoading = false;
+                loadingStatus.isLoading('SearchReferenceData',false);
             }, function(error){
-                $scope.errorMessage = locale.getString('spatial.get_ref_data_details_error');
-                $scope.hasError = true;
-                $scope.hideAlert();
-                $scope.mapLoading = false;
-                $scope.isLoading = false;
+                $scope.alert.alertMessage = locale.getString('spatial.get_ref_data_details_error');
+                $scope.alert.hasError = true;
+                $scope.alert.hideAlert();
+                loadingStatus.isLoading('SearchReferenceData',false);
             });
         }
     };
@@ -396,6 +397,40 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
         mapReference.refData.map.addLayer(layer);
     };
     
+    /**
+     * Get area layer properties so that they can be used for the tooltips showing the area image
+     * 
+     * @memberof referenceDataSettings
+     * @public
+     * @alias getPropsForToolTip
+     */
+    $scope.getPropsForToolTip = function(){
+        var def =  _.findWhere($scope.srcSysAreas, {typeName: $scope.currentSelection.selectedAreaType.toUpperCase()});
+        var includeStyle = false;
+        
+        if ($scope.currentSelection.selectedAreaType === 'PORT' || $scope.currentSelection.selectedAreaType === 'STATRECT'){
+            includeStyle = true;
+        }
+        
+        if (angular.isDefined(def)){
+            return {
+                url: def.serviceUrl,
+                layer: def.geoName,
+                style: angular.isDefined(def.style) ? def.style : null,
+                cqlProperty: 'code',
+                propertyType: 'string',
+                includeStyle: includeStyle
+            };
+        }
+    };
+    
+    /**
+     * Setup the map
+     * 
+     * @memberof referenceDataSettings
+     * @public
+     * @alias setMap
+     */
     $scope.setMap = function(){
         var projObj;
         if (angular.isDefined(genericMapService.mapBasicConfigs) && genericMapService.mapBasicConfigs.success){
@@ -447,12 +482,18 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
                 loadingStatus.isLoading('SearchReferenceData',true);
                 var projection = mapReference.refData.map.getView().getProjection().getCode();
                 var requestData = {
-                    areaType: $scope.currentSelection.selectedAreaType,
                     isGeom: false,
                     longitude: evt.coordinate[0],
                     latitude: evt.coordinate[1],
                     crs: projection.split(':')[1]
                 };
+                
+                if ($scope.currentSelection.selectedAreaType === 'PORT'){
+                    requestData.locationType = $scope.currentSelection.selectedAreaType;
+                } else {
+                    requestData.areaType = $scope.currentSelection.selectedAreaType;
+                }
+                
                 
                 $scope.selectAreaFromMap(requestData);
             }

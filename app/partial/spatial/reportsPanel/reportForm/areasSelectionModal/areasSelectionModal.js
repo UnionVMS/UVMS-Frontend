@@ -264,6 +264,7 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
     $scope.$watch('sysAreaType', function(newVal, oldVal){
         if (angular.isDefined(newVal) && newVal !== oldVal){
             $scope.clickResults = 0;
+            $scope.clearSearchProps();
             $scope.removeLayerByType(oldVal);
             if ($scope.selectionType[$scope.selectedTab] === 'map'){
                 lazyLoadWMSLayer();
@@ -310,6 +311,33 @@ angular.module('unionvmsWeb').controller('AreasselectionmodalCtrl',function($sco
             }
         }
         return item;
+    };
+    
+    /**
+     * Get area layer properties so that they can be used for the tooltips showing the area image
+     * 
+     * @memberof AreasselectionmodalCtrl
+     * @public
+     * @alias getPropsForToolTip
+     */
+    $scope.getPropsForToolTip = function(){
+        var def;
+        if ($scope.selectedTab === 'SYSTEM'){
+            def = $scope.getFullDefForItem($scope.sysAreaType);
+        } else {
+            def = $scope.userAreaType; 
+        }
+        
+        if (angular.isDefined(def)){
+            return {
+                url: def.serviceUrl,
+                layer: def.geoName,
+                style: angular.isDefined(def.style) ? def.style : null,
+                cqlProperty: 'gid',
+                propertyType: 'number',
+                includeStyle: false
+            };
+        }
     };
     
     /**

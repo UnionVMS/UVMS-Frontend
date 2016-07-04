@@ -82,8 +82,8 @@
 	   		   						<div class="th col-md-6" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_name_header' | i18n}}</div>
 	   		   						<div class="th" ng-if="isTabSelected('SYSTEM')" ng-class="{'col-md-4': isTabSelected('SYSTEM')}" st-sort="code" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_code_header' | i18n}}</div>
 	   		   						<div class="th" ng-if="isTabSelected('USER')" ng-class="{'col-md-4': isTabSelected('USER')}" st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_desc_header' | i18n}}</div>
-	   		   						<div class="th col-md-2">
-	   		   							<button type="button" class="btn btn-sm btn-success check-all-btn" ng-click="selectAllAreasFromTable()" ng-show="searchedAreas.length > 0">
+	   		   						<div class="th col-md-2 check-btn-column">
+	   		   							<button type="button" class="btn btn-sm btn-success" ng-click="selectAllAreasFromTable()" ng-show="searchedAreas.length > 0">
 											<span class="fa fa-plus"></span>&nbsp;
 											{{'spatial.add_all_btn' | i18n}}
 										</button>
@@ -102,8 +102,9 @@
 	   		   						<div class="td" ng-if="isTabSelected('USER')" ng-class="{'col-md-4': isTabSelected('USER')}">
 	   		   							{{rec.desc}}
 	   		   						</div>
-	   		   						<div class="td col-md-2">
-	   		   							<button type="button" class="btn btn-sm check-btn" ng-click="selectAreaFromTable(rec)" ng-class="{'btn-default': !rec.isSelected, 'btn-success': rec.isSelected}" title="{{'spatial.area_selection_modal_add_area_btn' | i18n }}"><span class="fa fa-check"></button>
+	   		   						<div class="td col-md-2" style="text-align: right;">
+	   		   							<wms-preview record="rec" get-layer-type-def="getPropsForToolTip()"></wms-preview>
+	   		   							<button type="button" class="btn btn-sm" ng-click="selectAreaFromTable(rec)" ng-class="{'btn-default': !rec.isSelected, 'btn-success': rec.isSelected}" title="{{'spatial.area_selection_modal_add_area_btn' | i18n }}"><span class="fa fa-check"></button>
 	   		   						</div>
 	   		   					</div>
 	   		   				</div>

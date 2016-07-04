@@ -14,5 +14,5 @@ angular.module('unionvmsWeb').factory('mapReference', function(){
                 delete mapReference[scope.destroyMapScope].map;
             });
         }
-    }
+    };
 });

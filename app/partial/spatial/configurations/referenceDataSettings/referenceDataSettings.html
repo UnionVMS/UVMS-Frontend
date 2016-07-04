@@ -80,16 +80,13 @@
 											<div class="thead container-fluid row">
 												<div class="tr row">
 													<div class="th col-md-10" st-sort="code" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">Code</div>
-													<div class="th col-md-2">
-														<button type="button" class="btn btn-sm btn-success check-all-btn" ng-click="selectAllAreasFromTable()" ng-show="refDataRecords.length > 0">
+													<div class="th col-md-2 check-btn-column">
+														<button type="button" class="btn btn-sm btn-success" ng-click="selectAllAreasFromTable()" ng-show="refDataRecords.length > 0">
 															<span class="fa fa-plus"></span>&nbsp;
 															{{'spatial.add_all_btn' | i18n}}
 														</button>
 													</div>
 										        </div>
-												<div class="tr" ng-if="isLoading">
-													<div class="loading-spinner-cl th col-md-12"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
-												</div>
 											</div>
 											<!-- TBODY -->
 											<div class="tbody container-fluid row ref-data-table" ng-show="!isLoading">
@@ -99,8 +96,8 @@
 														{{rec.code}}
 														<span class="badge" title="{{getGroupTip(rec)}}">{{rec.areaNames.length}}</span>
 													</div>
-													<div class="td col-md-2">
-														<wms-preview></wms-preview>
+													<div class="td col-md-2" style="text-align: right;">
+														<wms-preview record="rec" get-layer-type-def="getPropsForToolTip()"></wms-preview>
 														<button type="button" class="btn btn-sm check-btn" ng-click="selectAreaFromTable(rec)" ng-class="{'btn-default': !rec.isSelected, 'btn-success': rec.isSelected}"><span class="fa fa-check"></button>
 													</div>
 													<div class="td td-details col-md-12" ng-show="rec.isExpanded">
