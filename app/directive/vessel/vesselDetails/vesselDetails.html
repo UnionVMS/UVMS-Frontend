@@ -3,7 +3,7 @@
         <div class="row">
 
             <div class="col-md-1 form-group smallerpaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.countryCode.$dirty) && vesselForm.countryCode.$invalid}">
-                <label>{{ 'vessel.vessel_details_flagstate' | i18n }}</label>
+                <label><span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span>{{ 'vessel.vessel_details_flagstate' | i18n }}</label>
                 <dropdown name="countryCode" ng-model="vessel.countryCode" initialtext="{{ 'vessel.vessel_details_flagstate' | i18n }}" items="vesselFlagState" required ng-if="!countryCode"></dropdown>
                 <dropdown name="countryCode" ng-model="vessel.countryCode" initialtext="{{countryCode}}" items="vesselFlagState" required ng-if="countryCode"></dropdown>
                 <input-validation-message types="required" input="vesselForm.countryCode"></input-validation-message>
@@ -15,13 +15,13 @@
             </div>
 
             <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.name.$dirty) && vesselForm.name.$invalid}">
-                <label>{{ 'vessel.vessel_details_name' | i18n }}</label>
+                <label><span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span>{{ 'vessel.vessel_details_name' | i18n }}</label>
                 <input type="text" name="name" class="form-control" ng-model="vessel.name" ng-maxlength="40" required>
                 <input-validation-message types="required,maxlength" input="vesselForm.name" custom-messages="{{getMaxLengthMessage(40)}}"></input-validation-message>
             </div>
 
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.externalMarking.$dirty) && vesselForm.externalMarking.$invalid}">
-                <label>{{ 'vessel.vessel_details_ext_marking' | i18n }}</label>
+                <label><span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span>{{ 'vessel.vessel_details_ext_marking' | i18n }}</label>
                 <input type="text" name="externalMarking" class="form-control" ng-model="vessel.externalMarking" ng-maxlength="14" required>
                 <input-validation-message types="required,maxlength" input="vesselForm.externalMarking" custom-messages="{{getMaxLengthMessage(14)}}"></input-validation-message>
             </div>
@@ -47,7 +47,7 @@
             </div>
 
             <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.gearType.$dirty) && vesselForm.gearType.$invalid}">
-                <label>{{ 'vessel.vessel_details_gear_type' | i18n }}</label>
+                <label><span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span>{{ 'vessel.vessel_details_gear_type' | i18n }}</label>
                 <dropdown name="gearType" ng-model="vessel.gearType" initialtext="{{ 'vessel.vessel_details_gear_type' | i18n }}" items="vesselGearTypes" required></dropdown>
                 <!--TODO: Add required to type input when enabling it!-->
                 <input-validation-message types="required" input="vesselForm.gearType"></input-validation-message>
@@ -59,7 +59,7 @@
                 <input-validation-message types="pattern, unique" input="vesselForm.mmsi" custom-messages="{{mmsiValidationMessages}}"></input-validation-message >
             </div>
             <div class="col-md-4 smallerpaddingleft form-group" ng-class="{'has-error': (submitAttempted || vesselForm.licenseType.$dirty) && vesselForm.licenseType.$invalid}">
-                <label>{{ 'vessel.vessel_details_license_type' | i18n }}</label>
+                <label><span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span>{{ 'vessel.vessel_details_license_type' | i18n }}</label>
                 <dropdown name="licenseType" ng-model="vessel.licenseType" initialtext="{{ 'vessel.vessel_details_license_type' | i18n }}" items="vesselLicensTypes" required></dropdown>
                 <input-validation-message types="required" input="vesselForm.licenseType"></input-validation-message>
             </div>
@@ -68,7 +68,7 @@
 
             <div class="col-md-3 smallerpaddingright">
                 <div class="col-md-8 nopaddingleft nopaddingright form-group" ng-class="{'has-error': (submitAttempted || vesselForm.lengthValue.$dirty) && vesselForm.lengthValue.$invalid}">
-                    <label>{{ 'vessel.vessel_details_length' | i18n }}</label>
+                    <label><span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span>{{ 'vessel.vessel_details_length' | i18n }}</label>
                     <div class="unit-input">
                         <input name="lengthValue" class="form-control" ng-model="vessel.lengthValue" numeric ng-maxlength="7" ng-pattern="maxTwoDecimalsRegExp" transform-length>
                         <div class="unit-box">{{"common.short_length_unit_" + lengthUnit | i18n}}</div>

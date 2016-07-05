@@ -134,5 +134,6 @@
     "speed_unit_kts": "kts",
     "speed_unit_kph": "km/h",
     "speed_unit_mph": "mph",
-    "clear": "Clear"
+    "clear": "Clear",
+    "mandatory_field":"*"
 }

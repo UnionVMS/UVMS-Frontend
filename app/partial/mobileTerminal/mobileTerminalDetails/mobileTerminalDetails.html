@@ -20,7 +20,7 @@
                 <div ng-show="currentMobileTerminal.type">
                     <div class="row">
                         <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.SERIAL_NUMBER" ng-class="{'has-error': mobileTerminalForm.serialNumber.$invalid && (submitAttempted || mobileTerminalForm.serialNumber.$dirty)}">
-                            <label>{{'mobileTerminal.form_inmarsatc_serial_no_label' | i18n}}</label>
+                            <label><span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span>{{'mobileTerminal.form_inmarsatc_serial_no_label' | i18n}}</label>
                             <input type="text" name="serialNumber" class="form-control" ng-model="currentMobileTerminal.attributes.SERIAL_NUMBER" ng-required="getTerminalConfig().terminalFields.SERIAL_NUMBER" ng-disabled="!isCreateNewMode()" existing="existingSerialNumber"/>
                             <input-validation-message types="required" input="mobileTerminalForm.serialNumber"></input-validation-message>
                         </div>
@@ -70,10 +70,10 @@
                             </div>
                         </div>
                         <div class="col-md-1 smallerpadding" ng-show="getTerminalConfig().channelFields.DNID">
-                            <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_dnid_label' | i18n}}</label>
+                            <label><span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_dnid_label' | i18n}}</label>
                         </div>
                         <div class="col-md-1 smallerpadding" ng-show="getTerminalConfig().channelFields.MEMBER_NUMBER">
-                            <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_member_no_label' | i18n}}</label>
+                            <label><span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_member_no_label' | i18n}}</label>
                         </div>
                         <div class="col-md-1 smallerpadding" ng-show="getTerminalConfig().channelFields.LES_DESCRIPTION">
                             <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_land_station_label' | i18n}}</label>
