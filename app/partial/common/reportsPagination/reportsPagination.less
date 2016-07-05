@@ -5,6 +5,12 @@
             padding: 1px 10px;
             input {
                 width: 50px;
+                &[disabled] {
+                    &:focus,
+                    &:hover {
+                        border: 1px solid #c2c9cc;
+                    }
+                }
             }
         }
     }
