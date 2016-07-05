@@ -31,7 +31,7 @@
 					<div class="form-group report-name-group" ng-class="{'has-error': (reportForm.reportName.$dirty || submitingReport === true) && reportForm.reportName.$invalid}">
 						<label for="reportName" class="required-field">{{'spatial.reports_form_report_name' | i18n }}</label>
 						<input id="reportName" type="text" class="form-control" name="reportName" ng-required="true" ng-model="report.name" maxlength="255"/>
-						<div class="innerErrorMessages" ng-messages="reportForm.reportName.$error" ng-show="(reportForm.reportName.$dirty || submitingReport === true) && reportForm.reportName.$invalid">
+						<div class="innerErrorMessagesInputWithUpLabel" ng-messages="reportForm.reportName.$error" ng-show="(reportForm.reportName.$dirty || submitingReport === true) && reportForm.reportName.$invalid">
 							<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 						</div>
 					</div>
@@ -48,11 +48,11 @@
 						</div>
 						<div class="form-group col-md-6">
 							<div ng-show="report.positionSelector === 'last'" style="width: 100%;">
-								<div class="form-group input-with-combo field-noLabel" ng-class="{'has-error': (reportForm.reportBodyForm.xValue.$dirty || submitingReport === true) && reportForm.reportBodyForm.xValue.$invalid}">
+								<div class="form-group input-with-combo field-noLabel" ng-class="{'has-error': (reportForm.xValue.$dirty || submitingReport === true) && reportForm.xValue.$invalid}">
 									<!-- <label for="positionsCounter">{{'spatial.reports_form_positions_x_value' | i18n}}</label> -->
 									<numeric-input id="positionsCounter" class="form-control" min="0" name="xValue" ng-required="report.positionSelector !== 'all' && report" ng-model="report.xValue"></numeric-input>
 									<combobox ng-model="report.positionTypeSelector" items="positionTypeItems"></combobox>
-									<div class="innerErrorMessagesTimer positions-counter-input-msg" ng-messages="reportForm.reportBodyForm.xValue.$error" ng-show="(reportForm.reportBodyForm.xValue.$dirty || submitingReport === true) && reportForm.reportBodyForm.xValue.$invalid">
+									<div class="innerErrorMessages" ng-messages="reportForm.xValue.$error" ng-show="(reportForm.xValue.$dirty || submitingReport === true) && reportForm.xValue.$invalid">
 										<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 										<div ng-message="invalidNumber">{{'spatial.not_numeric_error_message' | i18n }}</div>
 										<div ng-message="min">{{'spatial.min_value_1_error_message' | i18n }}</div>
@@ -62,21 +62,21 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="form-group col-md-6" ng-hide="report.positionSelector === 'last' && report.positionTypeSelector === 'hours'"  ng-class="{'has-error': (reportForm.reportBodyForm.startDateTime.$dirty || submitingReport === true) && reportForm.reportBodyForm.startDateTime.$invalid}">
+						<div class="form-group col-md-6" ng-hide="report.positionSelector === 'last' && report.positionTypeSelector === 'hours'"  ng-class="{'has-error': (reportForm.startDateTime.$dirty || submitingReport === true) && reportForm.startDateTime.$invalid}">
 							<label for="reportStartDate" ng-class="{'required-field': report.positionSelector === 'all'}">{{'spatial.reports_form_start_date_label' | i18n}}</label>
 							<!-- <datepicker-input id="reportStartDate" time="true" model="report.startDateTime" name="startDateTime" ng-required="report.positionSelector === 'all'"></datepicker-input> -->
 							<datepicker-input id="reportStartDate" time="true" model="report.startDateTime" name="startDateTime" max-date="report.endDateTime"  ng-required="report.positionSelector === 'all'" input-field-id="report-start-date-picker" update-when="default"></datepicker-input>
-							<div class="innerErrorMessagesDateWithUpLabel" ng-messages="reportForm.reportBodyForm.startDateTime.$error" ng-show="(reportForm.reportBodyForm.startDateTime.$dirty || submitingReport === true) && reportForm.reportBodyForm.startDateTime.$invalid">
+							<div class="innerErrorMessagesDateWithUpLabel" ng-messages="reportForm.startDateTime.$error" ng-show="(reportForm.startDateTime.$dirty || submitingReport === true) && reportForm.startDateTime.$invalid">
 								<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 							</div>
 						</div>
 					</div>
 					<div class="row">
-						<div class="form-group col-md-6" ng-hide="report.positionSelector === 'last' && report.positionTypeSelector === 'hours'" ng-class="{'has-error': (reportForm.reportBodyForm.endDateTime.$dirty || submitingReport === true) && reportForm.reportBodyForm.endDateTime.$invalid}">
+						<div class="form-group col-md-6" ng-hide="report.positionSelector === 'last' && report.positionTypeSelector === 'hours'" ng-class="{'has-error': (reportForm.endDateTime.$dirty || submitingReport === true) && reportForm.endDateTime.$invalid}">
 							<label for="reportEndDate" ng-class="{'required-field': report.positionSelector === 'all'}">{{'spatial.reports_form_end_date_label' | i18n}}</label>
 							<!-- <datepicker-input id="reportEndDate" time="true" model="report.endDateTime" name="endDateTime" ng-required="report.positionSelector === 'all'"></datepicker-input> -->
 							<datepicker-input id="reportEndDate" time="true" model="report.endDateTime" name="endDateTime" min-date="report.startDateTime" ng-required="report.positionSelector === 'all'" input-field-id="report-end-date-picker"></datepicker-input>
-							<div class="innerErrorMessagesDateWithUpLabel" ng-messages="reportForm.reportBodyForm.endDateTime.$error" ng-show="(reportForm.reportBodyForm.endDateTime.$dirty || submitingReport === true) && reportForm.reportBodyForm.endDateTime.$invalid">
+							<div class="innerErrorMessagesDateWithUpLabel" ng-messages="reportForm.endDateTime.$error" ng-show="(reportForm.endDateTime.$dirty || submitingReport === true) && reportForm.endDateTime.$invalid">
 								<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 							</div>
 						</div>
