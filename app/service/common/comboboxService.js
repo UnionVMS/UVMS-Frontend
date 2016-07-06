@@ -29,7 +29,7 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
 			$(activeCombo.comboContainer).width($(activeCombo.element).find('.comboButtonContainer').outerWidth());
     		
     		var comboMenu = $('#' + activeCombo.comboboxId + '>.dropdown-menu');
-    		var footerTop = $(window).height() - angular.element('footer')[0].offsetHeight;
+    		var footerTop = angular.element('footer').length>0 ? $(window).height() - angular.element('footer')[0].offsetHeight : $(window).height();
     		var bottomSpace = footerTop - buttonPosition.top;
     		var topSpace = $(activeCombo.element).offset().top;
     		if($('.fullscreen').length > 0){
@@ -53,11 +53,15 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
     	}
     };
     
-    var closeCombo = function() {
+    var closeCombo = function(evt) {
     	if(activeCombo){
-	    	activeCombo.$apply(function(){
-	        	activeCombo.isOpen = false;
-	        });
+			if(angular.isDefined(evt)){
+				activeCombo.isOpen = false;
+			}else{
+				activeCombo.$apply(function(){
+					activeCombo.isOpen = false;
+				});
+			}
 	    	if(activeCombo.componentsWithScroll){
 	    		var scrollableElements = activeCombo.componentsWithScroll.split(',');
     			angular.forEach(scrollableElements, function(item) {
@@ -72,8 +76,8 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
 		$(window).off("scroll", closeCombo);
     };
     
-    cb.closeCurrentCombo = function(){
-    	closeCombo();
+    cb.closeCurrentCombo = function(evt){
+    	closeCombo(evt);
     };
 	
 	cb.setActiveCombo = function(comboScope){

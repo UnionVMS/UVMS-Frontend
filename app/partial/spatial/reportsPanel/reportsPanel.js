@@ -48,7 +48,11 @@ angular.module('unionvmsWeb').controller('ReportspanelCtrl',function($scope, $an
         	$scope.selectMenu('REPORTS');
         	//Call function from parent to toggle menu visibility
             $scope.toggleMenuVisibility();
-            $scope.$broadcast('openReportForm', {isLoaded: true});
+            if($scope.editMode === 'CREATE'){
+                $scope.$broadcast('openReportForm');
+            }else{
+                $scope.$broadcast('openReportForm', {isLoaded: true});
+            }
             reportService.isReportExecuting = false;
         });
     });

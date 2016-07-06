@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, spatialHelperService, reportRestService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage){
+angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, spatialHelperService, reportRestService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage, comboboxService){
     $scope.isMenuVisible = true;
     $scope.selectedMenu = 'REPORTS';
     $scope.reports = [];
@@ -6,6 +6,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     $scope.repServ = reportService;
     $scope.loadingStatus = loadingStatus;
     $scope.currentContext = userService.getCurrentContext();
+    $scope.comboServ = comboboxService;
     
     //reset repServ
     $scope.repServ.clearVmsData();
@@ -111,6 +112,12 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
 	   }else{
 		   $scope.$broadcast('goToReportForm','EDIT-FROM-LIVEVIEW');
 	   }
+   };
+
+   //Create new report from liveview
+   $scope.createReportFromLiveview = function(evt){
+       $scope.comboServ.closeCurrentCombo(evt);
+       $scope.$broadcast('goToReportForm','CREATE');
    };
    
    //Get Report Configs Success callback

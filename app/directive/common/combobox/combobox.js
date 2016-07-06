@@ -19,7 +19,9 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             initialtext : '@',
             isLoading : '=',
             group: '@',
-            name: '@'
+            name: '@',
+            comboSection: '@',
+            initCallback: '='
 		},
         templateUrl: 'directive/common/combobox/combobox.html',
 		link: function(scope, element, attrs, ctrl) {
@@ -346,6 +348,9 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             };
 
             init();
+            if(angular.isDefined(scope.initCallback)){
+                scope.initCallback(scope.comboboxId);
+            }
 		}
 	};
 });

@@ -3,6 +3,9 @@
         <div ng-include="'partial/spatial/liveViewPanel/mapPanel/layerPanel/layerPanel.html'"></div>
         <div id="map-toolbar">
             <div class="btn-group-left">
+				<div class="col-md-6">
+					<combobox ng-model="selectedHistory" items="reportsHistory" combo-section="true" callback="selectHistory" init-callback="initComboHistory"></combobox>
+				</div>
                 <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
                     <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_refresh_report' | i18n }}" ng-click="refreshReport()"><span class="fa fa-refresh"></span></button>
                     <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_clear_map' | i18n }}" ng-click="clearMapHighlights()"><span class="fa fa-eraser"></span></button>
