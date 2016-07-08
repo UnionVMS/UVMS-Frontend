@@ -1,42 +1,32 @@
 angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $timeout,$window, mapService, locale){
-    $scope.expanded = false;
-
+    $scope.expanded = true;
     $scope.tab = "LAYERTREE";
-  
-    $scope.toggle = function() {
-        $scope.expanded = !$scope.expanded;
-        if ($scope.expanded) {
-        	$( '#layer-panel-wrapper' ).addClass('expanded');
-            $timeout($scope.setHeight, 150);
-        }else{
-        	$( '#layer-panel-wrapper' ).removeClass('expanded');
-        }
-        $timeout(mapService.updateMapSize, 50);
-    };
-
-    angular.element( $window ).bind( 'resize', function(){
-        $timeout($scope.setHeight, 150);
+    $scope.tabTitle = undefined;
+    
+    locale.ready('spatial').then(function(){
+         setTabTitle();
     });
 
+    var setTabTitle = function(){
+        switch ($scope.tab) {
+            case 'LEGEND':
+                $scope.tabTitle = locale.getString('spatial.layer_panel_legend');
+                break;
+            case 'COPYRIGHT':
+                $scope.tabTitle = locale.getString('spatial.layer_panel_copyright');
+                break;
+            default:
+                $scope.tabTitle = locale.getString('spatial.layer_panel_layers');
+                break;
+        }
+    };
+    
+    $scope.switchCollapse = function(){
+        $scope.expanded = !$scope.expanded;
+    };
+    
     $scope.tabClick = function( tab ) {
         $scope.tab = tab;
+        setTabTitle();
     };
-
-    $scope.setHeight = function() {
-    	setTimeout(function() {
-	    	var wh = $( '#layer-panel-wrapper' ).height();
-	        var th = $( '#layer-tabs-container' ).height()+2;
-	        $( '.fancytree-container' ).css( 'height', wh-th+'px' );
-    	}, 100);
-    };
-    
-	$('.layer-panel').on('transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd', function(e) {
-		mapService.updateMapSize();
-    });
-    
-    angular.element(document).ready(function () {
-        if (angular.isDefined(mapService.map)){
-            mapService.updateMapContainerSize();
-        }
-    });
 });

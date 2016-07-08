@@ -205,6 +205,7 @@
     <script src="partial/spatial/reportsPanel/reportsPanel.js"></script>
     <script src="partial/spatial/liveViewPanel/mapPanel/mapPanel.js"></script>
     <script src="partial/spatial/liveViewPanel/vmsPanel/vmsPanel.js"></script>
+    <script src="partial/spatial/liveViewPanel/vmsPanel/vmsPanelModal.js"></script>
     <script src="partial/spatial/liveViewPanel/mapPanel/layerPanel/layerPanel.js"></script>
     <script src="partial/spatial/reportsPanel/reportsList/reportsList.js"></script>
     <script src="service/reporting/reportRestService.js"></script>
@@ -442,6 +443,6 @@
         </div>
     </div>
 
-    <div ui-view name="unionvmsFooter"></div>
+    <div ui-view name="unionvmsFooter" ng-if="currentStateName !== 'app.reporting' && currentStateName !== 'app.reporting-id'"></div>
 </body>
 </html>

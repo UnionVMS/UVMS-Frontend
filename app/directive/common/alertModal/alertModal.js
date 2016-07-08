@@ -37,6 +37,7 @@ angular.module('unionvmsWeb').directive('alertModal', function($modal, $timeout)
 	                keyboard: false,
 	                size: 'lg',
 	                windowClass: 'alert-modal-content',
+	                backdropClass: 'alert-modal-backdrop',
 	                resolve: function(){
 	                    return scope.data;
 	                }

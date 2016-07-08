@@ -64,9 +64,9 @@ angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $t
 //       }
    });
    
-   $scope.$on('mapAction', function(){
-       $scope.selectedTab = 'MAP';
-   });
+//   $scope.$on('mapAction', function(){
+//       $scope.selectedTab = 'MAP';
+//   });
    
    locale.ready('spatial').then(function(){
        $scope.tabMenu = setTabs();

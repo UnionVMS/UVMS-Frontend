@@ -1,9 +1,11 @@
-angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, globalSettingsService, reportService, mapService, csvWKTService, unitConversionService, vmsVisibilityService){
+angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, globalSettingsService, reportService, mapService, csvWKTService, unitConversionService, vmsVisibilityService, userService){
     $scope.selectedVmsTab = 'MOVEMENTS';
     $scope.isPosFilterVisible = false;
     $scope.isSegFilterVisible = false;
     $scope.isTrackFilterVisible = false;
     $scope.itemsByPage = 25;
+    $scope.itemsByPageModal = 15;
+    $scope.modalCollapsed = false;
     $scope.executedReport = reportService;
     $scope.startDate = undefined;
     $scope.endDate = undefined;
@@ -35,10 +37,15 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    
    $scope.selectVmsTab = function(tab){
        $scope.selectedVmsTab = tab;
+       $scope.modalCollapsed = false;
    };
    
    $scope.isVmsTabSelected = function(tab){
        return $scope.selectedVmsTab === tab;
+   };
+   
+   $scope.toggleCollapse = function(){
+       $scope.modalCollapsed = !$scope.modalCollapsed;
    };
    
    $scope.toggleFiltersRow = function(type){
@@ -75,6 +82,11 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    
    //Tracks table config
    $scope.displayedTracks = [].concat($scope.executedReport.tracks);
+   
+   
+   $scope.isAllowed = function(module, feature){
+       return userService.isAllowed(feature, module, true);
+   };
    
    $scope.buildTrackGeomFromId = function(id, extent){
        var segLayer = mapService.getLayerByType('vmsseg');
@@ -118,8 +130,8 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            mapService.highlightFeature(trackGeom);
        }
        
+       $scope.modalCollapsed = true;
        mapService.zoomTo(geom);
-       $scope.$emit('mapAction');
    };
    
    $scope.panTo = function(index, geomType){
@@ -143,8 +155,9 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            geom.set('GeometryType', 'MultiLineString');
            mapService.highlightFeature(geom);
        }
+       
+       $scope.modalCollapsed = true;
        mapService.panTo(coords);
-       $scope.$emit('mapAction');
    };
    
    $scope.getFilters = function(type){

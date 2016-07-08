@@ -1580,37 +1580,26 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     	
     	setTimeout(function() {
 	        var w = angular.element(window);
-	        
 	        if(evt && (angular.element('.mapPanelContainer.fullscreen').length > 0 ||
 	        		(angular.element('.mapPanelContainer.fullscreen').length === 0 && evt.type.toUpperCase().indexOf("FULLSCREENCHANGE") !== -1))){
 	        	
 	        	
-	    		$('.map-container').css('height', w.height() - parseInt($('.map-bottom').css('height')) + 'px');
-	    		$('.layer-panel').css('height', w.height() - parseInt($('#map-toolbar').css('height')) + 'px');
-	            $('#map').css('height', w.height() - parseInt($('#map-toolbar').css('height')) - parseInt($('.map-bottom').css('height')) + 'px');
+	    		$('.map-container').css('height', w.height() + 'px');
+	            $('#map').css('height', w.height() + 'px');
 	            ms.updateMapSize();
-	      	  return;
+	            return;
 	        }
 	        
 	        var offset = 120;
-	        var minHeight = 340;
-	        var footerHeight = angular.element('footer')[0].offsetHeight;
+	        var minHeight = 400;
 	        var headerHeight = angular.element('header')[0].offsetHeight;
-	        var newHeight = w.height() - headerHeight - footerHeight - offset;
+	        var newHeight = w.height() - headerHeight;
 	        
 	        if (newHeight < minHeight) {
 	            newHeight = minHeight;
 	        }
 	        
 	        $('.map-container').css('height', newHeight);
-	        $('.layer-panel').css('height', newHeight);
-	
-	        var mapToolbarHeight = parseInt($('#map-toolbar').css('height'));
-	        if(mapToolbarHeight > 31){
-	        	$('#map').css('height', newHeight - (mapToolbarHeight - 31) - parseInt($('.map-bottom').css('height')) + 'px');
-	        }else{
-	        	$('#map').css('height', newHeight - parseInt($('.map-bottom').css('height')) + 'px');
-	        }
 	        
 	        ms.updateMapSize();
         }, 100);
@@ -1684,15 +1673,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var x,y;
         if (ctrl.epsgCode === 4326){
             if (ctrl.format === 'dd'){
-                return ol.coordinate.format(coord, '<b>Lon:</b> {x}\u00b0 \u0090 <b>Lat:</b> {y}\u00b0' , 4);
+                return ol.coordinate.format(coord, '<b>LON:</b> {x}\u00b0 \u0090 <b>LAT:</b> {y}\u00b0' , 4);
             } else if (ctrl.format === 'dms'){
                 x = ms.coordToDMS(coord[0], 'EW');
                 y = ms.coordToDMS(coord[1], 'NS');
-                return '<b>Lon:</b> ' + x + '\u0090 <b>Lat:</b> ' + y;
+                return '<b>LON:</b> ' + x + '\u0090 <b>LAT:</b> ' + y;
             } else {
                 x = ms.coordToDDM(coord[0], 'EW');
                 y = ms.coordToDDM(coord[1], 'NS');
-                return '<b>Lon:</b> ' + x + '\u0090 <b>Lat:</b> ' + y;
+                return '<b>LON:</b> ' + x + '\u0090 <b>LAT:</b> ' + y;
             }
         } else {
             return ol.coordinate.format(coord, '<b>X:</b> {x} m \u0090 <b>Y:</b> {y} m' , 4);
@@ -1902,7 +1891,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      * @param {Boolean} initial - Whether it is the initial setup or an update
      */
 	ms.addZoom = function(ctrl, initial){
-        var olCtrl = genericMapService.createZoomCtrl();
+        var olCtrl = genericMapService.createZoomCtrl('ol-zoom-liveview');
         
         var iconSpan = document.createElement('span');
         iconSpan.className = 'fa fa-globe';
@@ -1990,7 +1979,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	ms.addScale = function(ctrl, initial){
 	    var olCtrl = new ol.control.ScaleLine({
             units: ctrl.units,
-            target: angular.element('#map-scale')[0],
             className: 'ol-scale-line'
         });
 	    

@@ -1,15 +1,19 @@
 <div ng-controller="MapCtrl" class="mapPanelContainer" ngsf-fullscreen="fullscreenCtrl">
     <div class="map-container">
-        <div ng-include="'partial/spatial/liveViewPanel/mapPanel/layerPanel/layerPanel.html'"></div>
         <div id="map-toolbar">
             <div class="btn-group-left">
 				<combobox ng-model="repServ.selectedHistory" initialtext="{{repServ.name}}" items="repServ.reportsHistory" combo-section="true" callback="selectHistory" init-callback="initComboHistory"
 				is-loading="repServ.loadingReportHistory" class="combo-report-history" no-placeholder-on-list="true"></combobox>
                 <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
-                    <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_refresh_report' | i18n }}" ng-click="refreshReport()"><span class="fa fa-refresh"></span></button>
+                	<div class="btn btn-default refresh-container" ng-class="{disabled: !checkSpatialConfigPermission()}">
+						<span>{{'spatial.map_label_auto_refresh_status' | i18n }}</span>
+						<toggle-switch ng-model="repServ.refresh.status" ng-change="changeRefreshStatus()"></toggle-switch>
+					</div>
+                    <button type="button" class="btn btn-default btn-toolbar refresh-btn" title="{{'spatial.map_tip_refresh_report' | i18n }}" ng-click="refreshReport()"><span class="fa fa-refresh"></span></button>
                     <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_clear_map' | i18n }}" ng-click="clearMapHighlights()"><span class="fa fa-eraser"></span></button>
                     <button type="button" class="btn btn-default btn-toolbar" ng-class="{active: graticuleActivated}" title="{{graticuleTip}}" ng-click="toggleGraticule()"><span class="fa fa-th"></span></button>
                     <button type="button" class="btn btn-default btn-toolbar" title="{{ 'spatial.map_tip_get_alarms' | i18n }}" ng-click="getAlarms()" ng-show="isAllowed('Rules', 'viewAlarmRules')"><span class="fa fa-exclamation-triangle alarms-icon"></span></button>
+                    <button type="button" class="btn btn-default btn-toolbar" title="{{ 'spatial.map_tip_tabular_view' | i18n }}" ng-click="showDataTables()"><span class="fa fa-table"></span></button>
                 </div>
                 <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
                 	<button type="button" id="bookmarks-btn" ng-class="{active: activeControl === 'bookmarks'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_bookmarks' | i18n }}" ng-click="toggleToolbarBtn('bookmarks')"><span class="fa fa-bookmark"></span></button>
@@ -20,6 +24,7 @@
                 </div>
             </div>
             <div class="btn-group-right">
+            	<div id="map-coordinates"></div>
                 <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
                     <button type="button" class="btn btn-default btn-toolbar btn-fullscreen" title="{{'spatial.map_tip_fullscreen' | i18n }}" ng-click="fullscreenCtrl.toggleFullscreen();" ng-show="tbControl.fullscreen"><span class="fa fa-arrows-alt"></span></button>
                     <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_open_new_tab' | i18n }}" ng-click="openMapOnNewTab();" ng-show="tbControl.newTab"><span class="fa fa-external-link"></span></button>
@@ -28,6 +33,7 @@
         </div>
         <ng-form name="mapForm">
 	        <div id="map" class="map" tabIndex="0">
+	        	<div ng-include="'partial/spatial/liveViewPanel/mapPanel/layerPanel/layerPanel.html'"></div>
 	        	<gazetteer-search ng-if="showGazetteer" placeholder="{{'spatial.map_tip_gazetteer' | i18n}}"></gazetteer-search>
 	        	<!-- BOOKMARKS -->
 	        	<div id="bookmarks" class="map-toolbar-control-panel" ng-show="showBookmarksWin">
@@ -262,20 +268,6 @@
 				    <li class="fa fa-chevron-left" ng-click="changeDisplayedRecord('previous')" ng-class="{disabled: popupRecContainer.currentIdx === 0}"></li>
 				    <li class="fa fa-chevron-right" ng-click="changeDisplayedRecord('next')" ng-class="{disabled: popupRecContainer.currentIdx === popupRecContainer.records.length - 1}"></li>
 			  	</ul>
-            </div>
-        </div>
-    </div>
-    <div class="container map-bottom">
-        <div class="row">
-            <div class="col-md-2 col-xs-5 refresh-container" ng-class="{disabled: !checkSpatialConfigPermission()}">
-				<b>{{'spatial.map_label_auto_refresh_status' | i18n }} </b>
-				<toggle-switch ng-model="repServ.status" ng-change="changeRefreshStatus()"></toggle-switch>
-			</div>
-            <div class="col-md-3 col-xs-5">
-                <div id="map-scale" class="scale-line"></div>
-            </div>
-            <div class="col-md-6 col-xs-13 pull-right">
-                <div id="map-coordinates"></div>
             </div>
         </div>
     </div>

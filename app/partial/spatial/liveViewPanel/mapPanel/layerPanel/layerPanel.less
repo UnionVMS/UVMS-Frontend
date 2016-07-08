@@ -1,111 +1,94 @@
 .layer-panel {
-  float: left;
-  -webkit-transition: width 0.3s;
-  -moz-transition: width 0.3s;
-  -o-transition: width 0.3s;
-  -ms-transition: width 0.3s;
-  transition: width 0.3s;
-}
-
-.layer-panel.layer-collapsed {
-  width: 10px;
-  overflow: hidden;
-  .ui-fancytree {
-  	overflow: hidden;
-  }
-}
-
-.layer-panel.layer-expanded {
-  width: 250px;
-  &.ng-animate {
-	  overflow: hidden;
-	  .ui-fancytree {
-	  	overflow: hidden;
-	  }
-  }
-}
-
-.layer-panel .tabbed-view {
-  overflow: hidden;
-  height: 100%;
-  border: 1px solid #DDD;
-}
-
-.layer-panel .handle {
-  float: right;
-  width: 10px;
-  height: 100%;
-  background-color: @profileColor_blue;
-  cursor: pointer;
-  padding: 0 2px;
-  &:hover {
-  	background-color: darken(@profileColor_blue, 5%);
-  }
-  > i {
-  	position: absolute;
-  	top: 50%;
-  	font-weight: bold;
-  	font-size: 10px;
-  	color: #fff;
-  }
-}
-
-.layer-panel-tabs {
-	border: none !important;
-	> a {
-		color: @profileColor_blue !important;
-		background-color: #ecf0f1;
-		border-bottom: 1px solid #ddd !important;
-		border-right: 1px solid #ddd !important;
-		font-weight: normal;
-	}
-}
-
-.layer-panel-tabs.active{
-	> a {
-		border: none !important;
-		border-right: 1px solid #ddd !important;
-		border-bottom: none !important;
-    	background-color: @primaryColor !important;
-		font-weight: bold;
-		color: #FFFFFF !important;
-	}
-}
-
-.layer-panel-tabs>a:hover {
-	background-color: white !important;
-}
-
-.layer-panel-tabs.active>a:hover {
-	background-color: @primaryColor !important;
-}
-
-.legend-panel {
-	background-color: #FFFFFF;
-	height: calc(~"100% - 42px");
-	overflow-y: auto;
-}
-
-#layer-tabs-container {
-	background-color: @pageBackgroundColor;
-    overflow: hidden;
-	height: 42px;
-}
-
-.layer-panel {
-	#layer-panel-wrapper {
-		display: none;
-		&.expanded {
-			display:block;
+	width: 250px;
+	min-height: 300px;
+	
+	position: absolute;
+	top: 56px;
+	bottom: 200px;
+	left: 10px;
+	z-index: 1035;
+	
+	border: 1px solid @profileColor_gray;
+    border-radius: 6px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+	background-color: white;
+	&.panel-collapsed {
+		height: 30px;
+		min-height: 30px;
+		width: auto;
+		.layer-panel-content {
+			height: 0;
+			width: 0;
+			overflow: hidden;
 		}
 	}
-	&.ng-animate {
-		#layer-panel-wrapper {
-			display:block;
+	.panel-header {
+		color: @profileColor_blue;
+		border-bottom: 1px solid @profileColor_gray;
+		height: 30px;
+		.title {
+			float: left;
+			line-height: 30px;
+			margin-left: 10px;
+			margin-right: 10px;
+			text-transform: uppercase;
+			font-weight: bold;
+		}
+		.collapse-btn {
+			float: right;
+			width: 30px;
+			line-height: 30px;
+			border-left: 1px solid @profileColor_gray;
+			text-align: center;
+			cursor: pointer;
+		} 
+	}
+	.layer-panel-content {
+		height: 100%;
+		width: 100%;
+	}
+	.dynamic-content {
+		padding-left: 7px;
+		padding-right: 7px;
+		height: calc(~'100% - 90px');
+		overflow: auto;
+		padding-bottom: 15px;
+	}
+	.dynamic-switcher, 
+	.panel-component-item {
+		border: 1px solid @profileColor_gray;
+		border-left: none;
+		border-right: none;
+		height: 30px;
+		padding-left: 7px;
+		&.item-clickable {
+			cursor: pointer;
+			&:hover {
+				background-color: @profileColor_lightgray;
+			}
 		}
 	}
-}
-
-ul.fancytree-container {
-	border-color: transparent;
+	.dynamic-switcher {
+		ul li {
+			line-height: 28px;
+			width: 49%;
+			color: @primaryColor;
+			span {
+				color: @primaryColor;
+			}
+			&.item-right {
+				text-align: right;
+			}
+			&:hover {
+				background-color: @profileColor_lightgray;
+			}
+		}
+	}
+	.panel-component-item {
+		color: @profileColor_blue;
+		border-top: 0;
+		span {
+			line-height: 30px;
+		}
+	}
 }

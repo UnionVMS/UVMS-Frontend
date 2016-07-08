@@ -1,6 +1,8 @@
 <div class="containerWrapper" ng-controller="LiveviewpanelCtrl">
-	<div class="container spatialpages">
-		<div class="spatialtabpanel">
+	<div id="liveview-panel" ng-include="'partial/spatial/liveViewPanel/mapPanel/mapPanel.html'"></div>
+	<!-- <div class="container spatialpages">
+		SIDE TABS
+		<div class="spatialtabpanel"> 
 			<ul class="nav nav-tabs tabs-left sideways" role="tablist">
 				<li ng-repeat="tab in tabMenu" class="sourcetab" ng-click="selectTab(tab.tab)" ng-class="{'active': selectedTab === '{{tab.tab}}'}" ng-if="tab.visible"><a>{{tab.title}}</a></li>
 			</ul>
@@ -13,5 +15,5 @@
 				<div ng-include="'partial/spatial/liveViewPanel/vmsPanel/vmsPanel.html'"></div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 </div>

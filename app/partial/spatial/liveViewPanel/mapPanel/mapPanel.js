@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, $modal, mapService, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window, projectionService, $state, $localStorage, reportFormService,$compile,comboboxService,userService){
+angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, $modal, mapService, loadingStatus, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window, projectionService, $state, $localStorage, reportFormService, $compile,comboboxService,userService){
     $scope.activeControl = '';
     $scope.showMeasureConfigWin = false;
     $scope.showMapFishConfigWin = false;
@@ -70,6 +70,17 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
             }
         }
     });
+    
+    //Open modal with vms data
+    $scope.showDataTables = function(){
+        loadingStatus.isLoading('LiveviewMap',true,2);
+        var modalInstance = $modal.open({
+            templateUrl: 'partial/spatial/liveViewPanel/vmsPanel/vmsPanelModal.html',
+            controller: 'VmspanelmodalCtrl',
+            backdrop: false,
+            size: 'lg'
+        });
+    };
 
     //Get vessel details from within the positions popup
     $scope.getVesselDetails = function(){
@@ -409,9 +420,10 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         }
         var mapEl = mapService.map.getTargetElement();
         var mapRect = mapEl.getBoundingClientRect();
-        win[0].style.marginTop = '8px';
+        win[0].style.marginTop = angular.element('#map-toolbar').height() + 6 + 'px';
         win[0].style.top = 'auto';
         win[0].style.left = buttonPosition.left + 'px';
+        win[0].style.zIndex = 1038;
     };
 
     //Expand or collapse draggable windows

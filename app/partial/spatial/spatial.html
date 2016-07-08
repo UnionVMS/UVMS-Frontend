@@ -1,6 +1,7 @@
 <div class="spatialModule">
 	<loading-panel type="LiveviewMap" ng-model="repServ.isReportExecuting" class="liveview-loading"></loading-panel>
-	<div class="container containerWithTopBottomPadding" ng-show="isMenuVisible">
+	<!-- NAV MENU -->
+	<!-- <div class="container containerWithTopBottomPadding" ng-show="isMenuVisible">
 		<div class="row">
 			<div class="col-md-8 pageMenu">
 				<ul class="horizontal pipeSeparator">
@@ -18,7 +19,7 @@
 				</button>
 			</div>
 		</div>
-	</div>
+	</div> -->
 	<alert-modal ng-model="repServ.hasAlert" display-msg="repServ.message" target-el-id="liveview-panel" display-type="repServ.alertType"></alert-modal>
 	
 	<div ng-include="'partial/spatial/liveViewPanel/liveViewPanel.html'" ng-show="isMenuSelected('LIVEVIEW')"></div>

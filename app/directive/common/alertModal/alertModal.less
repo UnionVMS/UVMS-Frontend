@@ -4,6 +4,7 @@
   .modal-lg {
     width: 100%;
   }
+  z-index: 1049 !important;
   .modal-dialog {
     padding: 0px;
     margin: 0px;
@@ -14,6 +15,16 @@
     .modal-body {
       padding: 0px;
       .alert {
+        padding: 4px;
+        .close {
+          line-height: 30px;
+          top: 4px;
+          right: 5px;
+          font-size: 18px;
+        }
+        span.fa {
+          margin-left: 5px;
+        }
         .alert-message {
         	padding-left: 5px;
         }
@@ -51,4 +62,8 @@
       }
     }
   }
+}
+.alert-modal-backdrop {
+	background-color: rgba(221, 221, 221, 0.4);
+	z-index: 1048 !important;
 }

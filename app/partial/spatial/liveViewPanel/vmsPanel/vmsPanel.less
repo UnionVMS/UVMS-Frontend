@@ -1,3 +1,76 @@
+.tabular-view {
+	.modal-header {
+		height: 65px;
+		padding: 0 !important;
+		.pointer {
+			padding-top: 20px;
+			padding-right: 30px;
+		}
+		.collapseicon {
+			padding-right: 5px;
+		}
+	}
+	.top-tabs {
+		height: 65px;
+		li {
+			&.active {
+				background-color: white;
+				border-bottom: 0;
+				a {
+					background-color: white;
+					color: @profileColor_darkgray;
+					border-bottom: 1px solid white;
+					&:hover {
+						background-color: white;
+						color: @profileColor_darkgray;
+						border-bottom: 1px solid white;
+					}
+				}
+			}
+			a {
+				padding: 0 15px;
+				line-height: 64px;
+				color: @primaryColor;
+				background-color: @profileColor_lightgray;
+				border: 1px solid @profileColor_neutralgray;
+				border-top: 0;
+				border-right: 0;
+				&:hover {
+					border: 1px solid @profileColor_neutralgray;
+					border-top: 0;
+					border-right: 0;
+				}
+			}
+			&:last-child {
+				a {
+					border-right: 1px solid @profileColor_neutralgray;	
+				}
+			}
+		}
+	}
+	.modal-body {
+		padding-top: 10px !important;
+		.table-tools {
+			cursor: auto !important;
+		}
+		.btnTools {
+			height: 25px;
+			width: 25px;
+			float: right;
+			margin-right: 17px;
+			i {
+				line-height: 25px;
+				font-size: 14px;
+				color: @primaryColor;
+				text-align: center;
+			}
+		}
+		.no-border {
+			border: 0;
+		}
+	}
+}
+
 .vmspages {
 	padding-top: 2px !important;
 	padding-left: 5px !important;
@@ -13,9 +86,10 @@
 
 .vms-search-btns {
 	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
-.vmssourcetab {
+/*.vmssourcetab {
 	>a {
 		font-weight: bold;
 	}
@@ -33,7 +107,7 @@
 	>a {
 		background-color: #fff !important;
 	}
-}
+}*/
 
 .vmstab-content {
 	margin-top: 5px;
@@ -113,7 +187,7 @@ input[name="lat|dd"] {
 .table-tools {
 	cursor: auto !important;
 	i {
-		color: #428bca;
+		color: @primaryColor;
 		cursor: pointer;
 		font-style: normal;
 	}
