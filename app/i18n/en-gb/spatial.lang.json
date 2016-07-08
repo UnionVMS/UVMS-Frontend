@@ -447,5 +447,10 @@
 	"assets_selection": "Assets Selection",
 	"assets": "Assets",
 	"asset_groups": "Asset Groups",
-	"asset_groups_title": "Asset Group(s)"
+	"asset_groups_title": "Asset Group(s)",
+
+	"report_history_your_reports": "your reports",
+	"report_history_shared_reports": "shared reports",
+	"error_loading_report_history": "Error loading report history",
+	"report_list_modal_title": "Report list"
 }

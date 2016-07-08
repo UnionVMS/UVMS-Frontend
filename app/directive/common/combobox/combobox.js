@@ -21,7 +21,8 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             group: '@',
             name: '@',
             comboSection: '@',
-            initCallback: '='
+            initCallback: '=',
+            noPlaceholderOnList: '@'
 		},
         templateUrl: 'directive/common/combobox/combobox.html',
 		link: function(scope, element, attrs, ctrl) {
@@ -39,7 +40,7 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
 
             //Should be able to select the initial text item?
             scope.initialtextSelectable = false;
-            if('initialtextSelectable' in attrs){
+            if(scope.initialtextSelectable){
                 scope.initialtextSelectable = true;
             }
             
@@ -206,7 +207,7 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
 	                			}
 	                		});
                 		}
-                	}else{                	
+                	}else if(!angular.isDefined(scope.initialtext)){                	
                 		var item = getItemObjectByCode(scope.ngModel);
 	                    if (angular.isDefined(item)){
 	                        scope.currentItemLabel = scope.getItemLabel(item);
@@ -214,6 +215,10 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                 	}
                 }
             },true);
+
+            scope.$watch('initialtext',function(newVal,oldVal){
+                scope.currentItemLabel = newVal;
+            });
             
             //Select item in dropdown
             scope.selectVal = function(item){

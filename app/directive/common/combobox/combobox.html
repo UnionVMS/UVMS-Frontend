@@ -32,7 +32,7 @@
 	<div class="comboList fullWidthDropdown" ng-class="{'open': isOpen, 'comboLineStyle': lineStyle === true, 'combo-section': comboSection}">
 		<ul class="dropdown-menu" role="menu">
 			<!--PLACEHOLDER-->
-			<li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue && !multiple && !isLoading" ng-click="selectVal(initialValue)">
+			<li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue && !multiple && !isLoading" ng-click="selectVal(initialValue)" ng-if="!noPlaceholderOnList">
 				<a role="menuitem" tabindex="-1" ng-bind="initialValue.text"></a>
 			</li>
 			<!--BASIC COMBO-->
@@ -41,7 +41,7 @@
 			</li>
 			<!--COMBO WITH SECTIONS-->
 			<li class="disabled" ng-repeat="section in loadedItems" role="presentation" ng-show="!isLoading" ng-if="comboSection && !isLoading">
-				<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(section)"></a>
+				<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(section) | uppercase"></a>
 				<ul class="dropdown-submenu" role="menu">
 					<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in section.items" role="presentation" ng-click="selectVal(item,$index)">
 						<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>

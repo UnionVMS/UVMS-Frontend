@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService) {
 
     var rep = {
        id: undefined,
@@ -186,6 +186,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	//Get Spatial config Error callback
 	var getConfigError = function(error){
+        rep.loadReportHistory();
 	    rep.isReportExecuting = false;
 	    rep.isReportRefreshing = false;
 	    rep.hasAlert = true;
@@ -258,6 +259,8 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	//Get VMS data Success callback
 	var getVmsDataSuccess = function(data){
+		rep.loadReportHistory();
+
 		rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
@@ -308,6 +311,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     
     //Get VMS data Failure callback
     var getVmsDataError = function(error){
+        rep.loadReportHistory();
         rep.positions = [];
         rep.segments = [];
         rep.tracks = [];
@@ -550,6 +554,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	};
 	
 	var getMapConfigsFromReportFailure = function(error){
+        rep.loadReportHistory();
 	    $anchorScroll();
 	    rep.hasAlert = true;
 	    rep.alertType = 'danger';
@@ -557,6 +562,49 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    rep.isReportRefreshing = false;
 		rep.isReportExecuting = false;
 	};
+
+	rep.loadReportHistory = function(){
+       rep.loadingReportHistory = true;
+        reportRestService.getLastExecuted(10).then(function(response){
+            getReportHistory(response);
+            rep.loadingReportHistory = false;
+        }, function(error){
+            $anchorScroll();
+			rep.hasAlert = true;
+            rep.alertType = 'danger';
+            rep.message = locale.getString('spatial.error_loading_report_history');
+            rep.loadingReportHistory = false;
+        });
+    };
+
+    var getReportHistory = function(response){
+        rep.reportsHistory = [];
+        var username = userService.getUserName();
+        var sectionMine = {'text': locale.getString('spatial.report_history_your_reports'), 'items': []};
+        var sectionShared = {'text': locale.getString('spatial.report_history_shared_reports'), 'items': []};
+
+        angular.forEach(response.data,function(item) {
+            var newItem;
+            if(username === item.createdBy){
+                newItem = item;
+                newItem.code = item.id;
+                newItem.text = item.name;
+                sectionMine.items.push(newItem);
+            }else if(item.visibility !== 'private'){
+                newItem = item;
+                newItem.code = item.id;
+                newItem.text = item.name;
+                sectionShared.items.push(newItem);
+            }
+        });
+
+        if(sectionMine.items.length){
+            rep.reportsHistory.push(sectionMine);
+        }
+        if(sectionShared.items.length){
+            rep.reportsHistory.push(sectionShared);
+        }
+    };
 	
 	rep.checkLayerSettings = function(layerSettings) {
         

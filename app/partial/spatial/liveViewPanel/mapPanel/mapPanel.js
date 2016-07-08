@@ -9,7 +9,6 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     //$scope.bufferConfigs = spatialHelperService.buffer;
     $scope.mapFish = MapFish;
     $scope.tbControl = spatialHelperService.tbControl;
-    $scope.refresh = reportService.refresh;
     $scope.mapFishLocalConfig = {};
     $scope.popupRecContainer = {};
     $scope.bookmarksByPage = 3;
@@ -492,7 +491,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 
     //Fetch alarms
     $scope.getAlarms = function(){
-        reportService.getAlarms();
+        $scope.repServ.getAlarms();
     };
 
     //Bookmarks control
@@ -577,7 +576,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 
     //Refresh report control
     $scope.refreshReport = function () {
-        reportService.refreshReport();
+        $scope.repServ.refreshReport();
     };
 
     //Clear highlight features control
@@ -589,17 +588,17 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     };
 
     $scope.changeRefreshStatus = function() {
-	    if ($scope.refresh.status === true) {
-	    	reportService.setAutoRefresh();
+	    if ($scope.repServ.refresh.status === true) {
+	    	$scope.repServ.setAutoRefresh();
 	    }
     };
 
     $scope.openMapOnNewTab = function(){
     	var guid = generateGUID();
-    	if(reportService.outOfDate){
-    		$localStorage['report' + reportService.id + '-' + guid] = angular.copy(reportFormService.report);
+    	if($scope.repServ.outOfDate){
+    		$localStorage['report' + $scope.repServ.id + '-' + guid] = angular.copy(reportFormService.report);
     	}
-    	var url = $state.href('app.reporting-id', {id: reportService.id, guid: guid});
+    	var url = $state.href('app.reporting-id', {id: $scope.repServ.id, guid: guid});
     	$window.open(url,'_blank');
     };
 
@@ -607,13 +606,34 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         var report = angular.copy(item);
         delete report.code;
         delete report.text;
-        reportService.runReport(report);
+        $scope.repServ.runReport(report);
     };
 
     $scope.initComboHistory = function(comboId){
-        var comboFooter = angular.element('<li class="combo-history-footer"><div class="footer-item"><span>Edit List</span></div><div class="footer-item" ng-click="createReportFromLiveview($event)"><span>Create new</span></div></li>');
+        var comboFooter = angular.element('<li class="combo-history-footer"><div class="footer-item" ng-click="openReportList($event)"><span>Edit List</span></div><div class="footer-item" ng-click="createReportFromLiveview($event)"><span>Create new</span></div></li>');
         angular.element('#' + comboId + '>.dropdown-menu').append(comboFooter);
         $compile(comboFooter)($scope);
+    };
+
+    $scope.openReportList = function(evt){
+        $scope.comboServ.closeCurrentCombo(evt);
+        var modalInstance = $modal.open({
+            templateUrl: 'partial/spatial/reportsPanel/reportsListModal/reportsListModal.html',
+            controller: 'ReportslistmodalCtrl',
+            size: 'lg'
+            /*resolve: {
+                selectedAreas: function(){
+                    return $scope.report.areas;
+                }
+            }*/
+        });
+
+        modalInstance.result.then(function(data){
+        	/*if(!angular.equals($scope.report.areas,data)){
+        		$scope.reportForm.$setDirty();
+            	$scope.report.areas = data;
+        	}*/
+        });
     };
 
     function generateGUID() {
@@ -648,40 +668,6 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     angular.element(document).ready(function () {
         mapService.updateMapContainerSize();
     });
-
-
-    var response = {"data":[{"id":5,"name":"asd","visibility":"private","createdOn":"2016-07-05T12:47:20","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":6,"name":"aaa","visibility":"private","createdOn":"2016-07-05T12:47:31","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":7,"name":"da","visibility":"private","createdOn":"2016-07-05T12:47:40","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":8,"name":"asdasd","visibility":"private","createdOn":"2016-07-05T12:47:56","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":9,"name":"asdddfd","visibility":"private","createdOn":"2016-07-05T12:48:05","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":10,"name":"aacccc","visibility":"private","createdOn":"2016-07-05T12:48:16","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":11,"name":"vvvvvvvvvv","visibility":"public","createdOn":"2016-07-05T12:48:38","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":12,"name":"gg44","visibility":"public","createdOn":"2016-07-05T12:48:58","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":13,"name":"ppppp","visibility":"public","createdOn":"2016-07-05T12:49:21","executedOn":null,"createdBy":"rep_private","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":14,"name":"ljk58","visibility":"private","createdOn":"2016-07-05T12:49:43","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":15,"name":"poo","visibility":"public","createdOn":"2016-07-05T12:50:01","executedOn":null,"createdBy":"rep_private","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":16,"name":"kknnn","visibility":"public","createdOn":"2016-07-05T12:50:19","executedOn":null,"createdBy":"rep_private","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":17,"name":"pppp","visibility":"public","createdOn":"2016-07-05T12:51:02","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":18,"name":"bnhg","visibility":"public","createdOn":"2016-07-05T12:51:15","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":19,"name":"ppqqq","visibility":"scope","createdOn":"2016-07-05T12:51:31","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":20,"name":"mmm","desc":"aksjdhaskjdhaskjxcncvkjdfhamcnasjjjjjjjjjjjjjjjjjjjj aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","visibility":"scope","createdOn":"2016-07-05T12:52:01","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":21,"name":"bbbbbbbbbbbb","visibility":"scope","createdOn":"2016-07-05T12:52:21","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":22,"name":"jjjdajdsbn","visibility":"scope","createdOn":"2016-07-05T12:52:56","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":23,"name":"tyur","visibility":"scope","createdOn":"2016-07-05T12:53:19","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":24,"name":"ddd","visibility":"scope","createdOn":"2016-07-05T12:55:09","executedOn":null,"createdBy":"rep_private","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":25,"name":"fff","visibility":"scope","createdOn":"2016-07-05T12:55:32","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":26,"name":"444","visibility":"scope","createdOn":"2016-07-05T12:55:44","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":27,"name":"test111","visibility":"scope","createdOn":"2016-07-05T13:43:21","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":28,"name":"vvvv","visibility":"public","createdOn":"2016-07-05T13:43:47","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":29,"name":"zzzz","visibility":"private","createdOn":"2016-07-05T14:14:58","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":30,"name":"mmm","visibility":"private","createdOn":"2016-07-05T14:17:19","executedOn":"2016-07-05T15:21:33","createdBy":"rep_power","withMap":true,"isDefault":true,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true}],"code":200};
-
-    $scope.reportsHistory = [];
-    var username = userService.getUserName();
-    var sectionMine = {'text': 'YOUR REPORTS', 'items': []};
-    var sectionShared = {'text': 'PUBLIC REPORTS', 'items': []};
-
-    var nrMine = 0;
-    var nrShared = 0;
-    angular.forEach(response.data,function(item) {
-        var newItem;
-        if(username === item.createdBy && nrMine < 3){
-            newItem = item;
-            newItem.code = item.id;
-            newItem.text = item.name;
-            sectionMine.items.push(newItem);
-            nrMine += 1; 
-        }else if(item.visibility !== 'private' && nrShared < 3){
-            newItem = item;
-            newItem.code = item.id;
-            newItem.text = item.name;
-            sectionShared.items.push(newItem);
-            nrShared += 1; 
-        }
-    });
-
-    if(nrMine){
-        $scope.reportsHistory.push(sectionMine);
-    }
-    if(nrShared){
-        $scope.reportsHistory.push(sectionShared);
-    }
 
     //Other controls
 //    $scope.otherEnable = function(){
